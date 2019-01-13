@@ -1,0 +1,20 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+//RotateRightBitmap
+
+package 
+{
+    import flash.display.BitmapData;
+
+    public dynamic class RotateRightBitmap extends BitmapData 
+    {
+
+        public function RotateRightBitmap(_arg_1:int=30, _arg_2:int=30)
+        {
+            super(_arg_1, _arg_2);
+        }
+
+    }
+}//package 
+

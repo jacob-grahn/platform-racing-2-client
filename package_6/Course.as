@@ -1,0 +1,471 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+//package_6.Course = package_6.class_30
+
+package package_6
+{
+	import background.class_10;
+    import page.GamePage;
+    import package_8.Racer;
+    import flash.display.Sprite;
+    import background.DrawableBackground;
+    import background.Map;
+    import background.class_87;
+    import background.class_75;
+    import blocks.FinishBlock;
+    import flash.events.Event;
+    import data.CommandHandler;
+    import flash.geom.Point;
+    import package_8.Character;
+    import package_9.class_82;
+    import sounds.SoundEffects;
+    import flash.net.URLVariables;
+    import flash.display.StageQuality;
+
+    public class Course extends GamePage 
+    {
+
+        public static var course:Course;
+
+        protected var courseID:int;
+        protected var version:int;
+        public var var_197:Array = new Array();
+        public var var_313:Array = new Array();
+        public var var_40:Array = new Array(); // playerArray?
+        public var var_9:Racer;
+        protected var holder:Sprite = new Sprite();
+        public var timer:CourseTimer;
+        protected var miniMap:MiniMap = new MiniMap();
+        protected var itemDisplay:ItemDisplay = new ItemDisplay();
+        public var musicSelection:MusicSelection = new MusicSelection();
+        protected var var_61:CountdownGraphic;
+        protected var hearts:Hearts; // var_60
+        protected var bg:class_10;
+        public var bg1:DrawableBackground;
+        protected var bg2:DrawableBackground;
+        protected var bg3:DrawableBackground;
+        protected var bg4:DrawableBackground;
+        protected var bg5:DrawableBackground;
+        public var blockBackground:Map;
+        public var var_201:class_87;
+        public var frontBackground:class_75;
+        public var backBackground:class_75;
+        protected var var_689:Number = 0;
+        protected var var_678:Number = 0;
+        private var var_348:String;
+        private var var_545:Boolean = false;
+        public var var_649:Boolean = false;
+
+        public function Course()
+        {
+            FinishBlock.var_228 = 0;
+        }
+
+        override public function initialize()
+        {
+            super.initialize();
+            Course.course = this;
+            addChild(this.holder);
+            this.timer = new CourseTimer(this);
+            this.timer.x = 215;
+            this.timer.y = -198;
+            this.timer.mouseChildren = this.timer.mouseEnabled = false;
+            this.holder.addChild(this.timer);
+            this.miniMap.x = -195;
+            this.miniMap.y = -198;
+            this.miniMap.mouseChildren = this.miniMap.mouseEnabled = false;
+            this.holder.addChild(this.miniMap);
+            this.itemDisplay.x = -273;
+            this.itemDisplay.y = -198;
+            this.itemDisplay.mouseChildren = this.itemDisplay.mouseEnabled = false;
+            this.holder.addChild(this.itemDisplay);
+            this.musicSelection.x = -71;
+            this.musicSelection.y = 162;
+            this.holder.addChild(this.musicSelection);
+            this.hearts = new Hearts();
+            this.hearts.x = 465 - 225;
+            this.hearts.y = 45 - 200;
+            this.hearts.visible = false;
+            this.hearts.mouseChildren = this.hearts.mouseEnabled = false;
+            this.holder.addChild(this.hearts);
+            Main.stage.focus = Main.stage;
+            addEventListener(Event.ENTER_FRAME, this.method_85);
+            CommandHandler.commandHandler.defineCommand("beginRace", this.beginRace);
+            this.attachBackgrounds();
+        }
+
+        public function method_514(_arg_1:int, _arg_2:Point)
+        {
+            this.var_197[_arg_1] = _arg_2;
+            this.method_80();
+        }
+
+        protected function method_80()
+        {
+            var _local_3:Point;
+            var _local_4:Character;
+            var _local_1:int = this.var_40.length;
+            var _local_2:int;
+            while (_local_2 < _local_1) {
+                _local_3 = this.method_753(_local_2);
+                if (_local_3 != null) {
+                    _local_4 = this.var_40[_local_2];
+                    _local_4.setPos(_local_3.x, _local_3.y);
+                    this.frontBackground.addChild(_local_4);
+                }
+                _local_2++;
+            }
+        }
+
+        private function method_753(_arg_1:int):Point
+        {
+            var _local_3:Point;
+            var _local_2:int = _arg_1;
+            if (Main.server.tournament == 1) {
+                _local_2 = 0;
+            }
+            if (this.var_197[_local_2] != null) {
+                _local_3 = this.var_197[_local_2];
+            }
+            return (_local_3);
+        }
+
+        public function setEggSeed(arr:Array)
+        {
+            class_82.method_333(int(arr[0]));
+        }
+
+        public function addEggs(arr:Array)
+        {
+            if (this.gameMode == "egg") {
+                var _local_2:int = arr[0];
+                while (_local_2 > 0) {
+                    new class_82();
+                    _local_2--;
+                }
+            }
+        }
+
+        public function collectEgg(_arg_1:int)
+        {
+        }
+
+        public function setLife(_arg_1:int)
+        {
+            if (this.gameMode == "deathmatch") {
+                this.hearts.visible = true;
+                this.hearts.method_798(_arg_1);
+            }
+        }
+
+        public function method_842():int
+        {
+            return (this.hearts.method_758());
+        }
+
+        override public function setGameMode(_arg_1:String)
+        {
+            super.setGameMode(_arg_1);
+            if (_arg_1 == "deathmatch") {
+                this.setLife(3);
+            }
+        }
+
+        public function method_206():int
+        {
+            return (this.courseID);
+        }
+
+        protected function method_85(_arg_1:Event)
+        {
+            keyScroll(_arg_1);
+            if (this.var_545 && var_133.length <= 0) {
+                this.endIntro();
+            }
+        }
+
+        protected function endIntro()
+        {
+            removeEventListener(Event.ENTER_FRAME, this.method_85);
+            addEventListener(Event.ENTER_FRAME, keyScroll);
+        }
+
+        protected function method_82(_arg_1:Event)
+        {
+            var _local_2:Number;
+            var _local_3:Number;
+            var _local_4:Number;
+            var _local_5:Number;
+            if (this.var_9 != null) {
+                _local_2 = -this.var_9.x;
+                _local_3 = -this.var_9.y + 45;
+                _local_4 = _local_2 - posX;
+                _local_5 = _local_3 - posY;
+                posX = posX + (_local_4 * 0.5);
+                posY = posY + (_local_5 * 0.4);
+                this.setPos(posX, posY);
+            }
+        }
+
+        public function beginRace(_arg_1:Array)
+        {
+            removeEventListener(Event.ENTER_FRAME, this.method_85);
+            removeEventListener(Event.ENTER_FRAME, keyScroll);
+            addEventListener(Event.ENTER_FRAME, this.method_82);
+            setZoom(1);
+            this.timer.init();
+            this.var_61 = new CountdownGraphic();
+            this.var_61.addEventListener("count", this.method_369, false, 0, true);
+            this.var_61.addEventListener("finish", this.onCountdownFinish, false, 0, true);
+            addChild(this.var_61);
+            if (this.var_9 != null && this.var_9.var_4.getBool(Character.const_27)) {
+                this.var_9.init();
+            }
+        }
+
+        private function method_369(_arg_1:Event)
+        {
+            SoundEffects.playSound(new ReadySound(), 0.4);
+        }
+
+        protected function onCountdownFinish(_arg_1:Event)
+        {
+            SoundEffects.playSound(new GoSound(), 0.5);
+            if (this.var_9 != null) {
+                this.var_9.init();
+            }
+            this.blockBackground.method_578();
+            this.var_649 = true;
+        }
+
+        override public function setVariables(v:URLVariables)
+        {
+            this.var_545 = true;
+            super.setVariables(v);
+        }
+
+        override public function setMaxTime(_arg_1:String)
+        {
+            super.setMaxTime(_arg_1);
+            this.timer.setTime(Number(_arg_1));
+        }
+
+        override public function setGravity(_arg_1:String)
+        {
+            super.setGravity(_arg_1);
+            if (this.var_9 != null) {
+                this.var_9.setGravity(Number(_arg_1));
+            }
+        }
+
+        override protected function attachBackgrounds()
+        {
+            this.bg = new class_10(this);
+            this.bg1 = new DrawableBackground(this);
+            this.bg2 = new DrawableBackground(this);
+            this.bg3 = new DrawableBackground(this);
+            this.bg4 = new DrawableBackground(this);
+            this.bg5 = new DrawableBackground(this);
+            this.backBackground = new class_75(this);
+            this.blockBackground = new Map(this.miniMap, this);
+            this.frontBackground = new class_75(this);
+            this.var_201 = new class_87(this);
+            this.bg1.setScale(1);
+            this.bg2.setScale(0.5);
+            this.bg3.setScale(0.25);
+            this.bg4.setScale(1);
+            this.bg5.setScale(2);
+            var_14.addChild(this.bg);
+            var_14.addChild(this.bg3);
+            var_14.addChild(this.bg2);
+            var_14.addChild(this.bg1);
+            var_14.addChild(this.backBackground);
+            var_14.addChild(this.blockBackground);
+            var_14.addChild(this.frontBackground);
+            var_14.addChild(this.var_201);
+            var_14.addChild(this.bg4);
+            var_14.addChild(this.bg5);
+            this.setColor(12303325);
+        }
+
+        override protected function removeBackgrounds()
+        {
+            this.bg.remove();
+            this.bg1.remove();
+            this.bg2.remove();
+            this.bg3.remove();
+            this.bg4.remove();
+            this.bg5.remove();
+            this.blockBackground.remove();
+            this.var_201.remove();
+            this.frontBackground.remove();
+            this.backBackground.remove();
+            this.bg = null;
+            this.bg1 = null;
+            this.bg2 = null;
+            this.bg3 = null;
+            this.bg4 = null;
+            this.bg5 = null;
+            this.blockBackground = null;
+            this.var_201 = null;
+            this.frontBackground = null;
+            this.backBackground = null;
+        }
+
+        override public function setPos(_arg_1:Number, _arg_2:Number)
+        {
+            this.bg1.setPos(_arg_1, _arg_2);
+            this.bg2.setPos(_arg_1, _arg_2);
+            this.bg3.setPos(_arg_1, _arg_2);
+            this.bg4.setPos(_arg_1, _arg_2);
+            this.bg5.setPos(_arg_1, _arg_2);
+            this.blockBackground.setPos(_arg_1, _arg_2);
+            this.var_201.setPos(_arg_1, _arg_2);
+            this.frontBackground.setPos(_arg_1, _arg_2);
+            this.backBackground.setPos(_arg_1, _arg_2);
+        }
+
+        override public function setColor(_arg_1:Number=0)
+        {
+            this.bg.setColor(_arg_1);
+            this.bg1.setColor(_arg_1);
+            this.bg2.setColor(_arg_1);
+            this.bg3.setColor(_arg_1);
+            this.bg4.setColor(_arg_1);
+            this.bg5.setColor(_arg_1);
+            this.blockBackground.setColor(_arg_1);
+            this.var_201.setColor(_arg_1);
+            this.frontBackground.setColor(_arg_1);
+            this.backBackground.setColor(_arg_1);
+        }
+
+        // _loc2 = arr
+        override public function setSaveString(s:String)
+        {
+            var arr:Array = s.split("`");
+            this.setColor(Number(arr[0]));
+            this.blockBackground.setSaveString(arr[1]);
+            this.bg1.setSaveString(arr[5] + "," + arr[2], false);
+            this.bg2.setSaveString(arr[6] + "," + arr[3], false);
+            this.bg3.setSaveString(arr[7] + "," + arr[4], false);
+            this.bg4.setSaveString(arr[11] + "," + arr[9], false);
+            this.bg5.setSaveString(arr[12] + "," + arr[10], false);
+            this.bg.setSaveString(arr[8], false);
+        }
+
+        override public function setSong(_arg_1:String)
+        {
+            super.setSong(_arg_1);
+            this.musicSelection.setSong(_arg_1);
+        }
+
+        override protected function glideToScale(e:Event)
+        {
+            super.glideToScale(e);
+            this.bg.scaleX = this.bg.scaleY = this.holder.scaleX = this.holder.scaleY = 1 / scale;
+        }
+
+        public function method_654(s:String)
+        {
+            this.var_348 = s;
+            addEventListener(Event.ENTER_FRAME, this.rotate);
+            this.bg1.method_86();
+            this.bg2.method_86();
+            this.bg3.method_86();
+            this.bg4.method_86();
+            this.bg5.method_86();
+            Main.stage.quality = StageQuality.LOW;
+        }
+
+        private function rotate(_arg_1:Event)
+        {
+            var _local_4:Character;
+            var _local_2:Boolean;
+            var _local_3:Number = 3;
+            if (this.var_348 == "right") {
+                rotation = rotation + _local_3;
+                if (rotation >= 90) {
+                    _local_2 = true;
+                }
+            } else {
+                rotation = rotation - _local_3;
+                if (rotation <= -90) {
+                    _local_2 = true;
+                }
+            }
+            if (_local_2) {
+                rotation = 0;
+                this.bg.rotation = 0;
+                this.bg1.method_74();
+                this.bg2.method_74();
+                this.bg3.method_74();
+                this.bg4.method_74();
+                this.bg5.method_74();
+                Main.stage.quality = StageQuality.HIGH;
+                if (this.var_348 == "right") {
+                    this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation + 90;
+                    this.miniMap.rotate(this.blockBackground.rotation);
+                } else {
+                    this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation - 90;
+                    this.miniMap.rotate(this.blockBackground.rotation);
+                }
+                for each (_local_4 in this.var_40) {
+                    _local_4.rotate(this.var_348);
+                }
+                this.method_82(new Event(Event.ENTER_FRAME));
+                removeEventListener(Event.ENTER_FRAME, this.rotate);
+            }
+            this.bg.rotation = this.holder.rotation = -rotation;
+            if (this.var_9 != null) {
+                this.var_9.method_483(-rotation);
+            }
+        }
+
+        public function outOfTimeHandler()
+        {
+        }
+
+        public function finish(_arg_1:int=-1, _arg_2:int=0, _arg_3:int=0)
+        {
+        }
+
+        override public function remove()
+        {
+            var _local_1:Character;
+            CommandHandler.commandHandler.defineCommand("beginRace", null);
+            removeEventListener(Event.ENTER_FRAME, this.method_85);
+            removeEventListener(Event.ENTER_FRAME, this.rotate);
+            removeEventListener(Event.ENTER_FRAME, this.method_82);
+            if (this.timer != null) {
+                this.timer.remove();
+                this.timer = null;
+            }
+            if (this.var_61 != null) {
+                this.var_61.removeEventListener("count", this.method_369);
+                this.var_61.removeEventListener("finish", this.onCountdownFinish);
+                if (this.var_61.parent != null) {
+                    this.var_61.parent.removeChild(this.var_61);
+                }
+                this.var_61.stop();
+                this.var_61 = null;
+            }
+            this.musicSelection.remove();
+            this.musicSelection = null;
+            this.miniMap.remove();
+            this.miniMap = null;
+            this.hearts.remove();
+            this.hearts = null;
+            this.itemDisplay = null;
+            Course.course = null;
+            for each (_local_1 in this.var_40) {
+                _local_1.remove();
+            }
+            this.var_40 = null;
+            this.var_197 = null;
+            super.remove();
+        }
+
+
+    }
+}

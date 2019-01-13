@@ -1,0 +1,83 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+// ui.MuteButton = ui.class_13
+
+package ui
+{
+    import flash.events.MouseEvent;
+    import flash.media.SoundTransform;
+    import flash.media.SoundMixer;
+    import flash.geom.ColorTransform;
+
+    public class MuteButton extends class_7 
+    {
+
+        public static var muted:Boolean = true; // var_58
+
+        private var m:MuteButtonGraphic = new MuteButtonGraphic();
+
+        public function MuteButton()
+        {
+            addChild(this.m);
+            addEventListener(MouseEvent.CLICK, this.onClick, false, 0, true);
+            addEventListener(MouseEvent.MOUSE_OVER, this.hoverOverColorChange, false, 0, true);
+            addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutColorChange);
+            this.doToggle(false);
+        }
+
+        public function toggle()
+        {
+            this.doToggle(!MuteButton.muted);
+        }
+
+        // _loc2 = st
+        // method_202 = doToggle
+        public function doToggle(bool:Boolean)
+        {
+            var st:SoundTransform = new SoundTransform();
+            MuteButton.muted = bool;
+            this.m.button.waves.visible = !MuteButton.muted;
+            if (MuteButton.muted) {
+                st.volume = 0;
+            } else {
+                st.volume = 1;
+            }
+            SoundMixer.soundTransform = st;
+        }
+
+        private function onClick(e:MouseEvent)
+        {
+            this.toggle();
+        }
+
+        // _loc2 = ct
+        // method_224 = hoverOverColorChange
+        private function hoverOverColorChange(e:MouseEvent)
+        {
+            var ct:ColorTransform = new ColorTransform(0.5, 0.5, 0.5, 1, 127, 127, 127, 0);
+            this.m.button.transform.colorTransform = ct;
+        }
+
+        // _loc2 = ct
+        // method_246 = hoverOutColorChange
+        private function hoverOutColorChange(e:MouseEvent)
+        {
+            var ct:ColorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0, 0);
+            this.m.button.transform.colorTransform = ct;
+        }
+
+        override public function remove()
+        {
+            removeEventListener(MouseEvent.CLICK, this.onClick);
+            removeEventListener(MouseEvent.MOUSE_OVER, this.hoverOverColorChange);
+            removeEventListener(MouseEvent.MOUSE_OUT, this.hoverOutColorChange);
+            removeChild(this.m);
+            this.m = null;
+            super.remove();
+        }
+
+
+    }
+}//package ui
+

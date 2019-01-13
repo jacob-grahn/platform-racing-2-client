@@ -1,0 +1,214 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+// menu.CheckServers = menu.class_14
+
+package menu
+{
+    import fl.controls.ComboBox;
+    import flash.utils.setInterval;
+    import flash.utils.clearInterval;
+    import flash.net.URLRequest;
+    import flash.events.Event;
+
+    public class CheckServers 
+    {
+
+        private static var interval:uint; // var_416
+        private static var target:ComboBox;
+        private static var servers:Array;
+        private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // var_123
+        private static var activated:Boolean = false; // var_71
+
+
+        public static function activate()
+        {
+            if (!activated) {
+                deactivate();
+                activated = true;
+                interval = setInterval(load, 60000);
+                load();
+            }
+        }
+
+        public static function deactivate()
+        {
+            clearInterval(interval);
+            activated = false;
+        }
+
+        private static function load()
+        {
+            var request:URLRequest = new URLRequest(Main.baseURL + "/files/server_status_2.txt");
+            superLoader.addEventListener(SuperLoader.d, parseData);
+            superLoader.load(request);
+        }
+
+        // _loc2 = server
+        // parseData = method_774
+        private static function parseData(e:Event)
+        {
+            var server:Object;
+            servers = superLoader.parsedData.servers;
+            for each (server in servers) {
+                server.guild_id = parseInt(server.guild_id);
+                server.server_id = parseInt(server.server_id);
+                server.population = parseInt(server.population);
+                server.port = parseInt(server.port);
+            }
+            if (target != null) {
+                selectServer(target);
+            }
+        }
+
+        // method_397 = determineServer
+        public static function determineServer(box:ComboBox)
+        {
+            target = box;
+            if (servers != null) {
+                selectServer(target);
+            }
+        }
+
+        // method_323 = removeBox
+        public static function removeBox()
+        {
+            target = null;
+        }
+
+        // _loc2 = complete
+        // _loc3 = i
+        // _loc4 = boxLength
+        // _loc5 = boxItem
+        // _loc6 = server
+        // method_91 = selectServer
+        private static function selectServer(box:ComboBox)
+        {
+            var complete:Boolean = false;
+            var boxLength:int = box.length;
+            if (boxLength > 0) {
+                complete = true;
+            }
+            servers.sort(CheckServers.sortServers);
+            for each (var server:Object in servers) {
+                addToList(box, server);
+            }
+            if (!complete) {
+                var boxItem:Object;
+
+                // sets a user's private server
+                var i:int = 0;
+                while (i < boxLength) {
+                    boxItem = box.getItemAt(i);
+                    if (boxItem.server.guild_id != 0 && boxItem.server.guild_id == Main.guild) {
+                        box.selectedItem = boxItem;
+                        complete = true;
+                        box.validateNow();
+                        return;
+                    }
+                    i++;
+                }
+
+                // sets a server that's open, public, and under 180 players
+                i = 0;
+                while (i < boxLength) {
+                    boxItem = box.getItemAt(i);
+                    if (boxItem.server.guild_id == 0 && boxItem.server.status == "open" && boxItem.server.population < 180) {
+                        box.selectedItem = boxItem;
+                        complete = true;
+                        box.validateNow();
+                        return;
+                    }
+                    i++;
+                }
+            }
+        }
+
+        // _loc3 = ret
+        // method_583 = sortServers
+        private static function sortServers(s1:Object, s2:Object):int
+        {
+            if (Main.guild != 0) {
+                if (s1.guild_id == Main.guild) {
+                    return -1;
+                }
+                if (s2.guild_id == Main.guild) {
+                    return 1;
+                }
+            }
+            var ret:int;
+            if (s1.guild_id == 0 && s2.guild_id != 0) {
+                ret = -1;
+            }
+            if (s2.guild_id != 1 && s2.guild_id == 0) {
+                ret = 1;
+            }
+            if (s1.guild_id == 0 && s2.guild_id == 0) {
+                if (int(s1.port) < int(s2.port)) {
+                    ret = -1;
+                } else {
+                    ret = 1;
+                }
+            }
+            if (s1.guild_id != 0 && s2.guild_id != 0) {
+                if (int(s1.population) > int(s2.population)) {
+                    ret = -1;
+                } else {
+                    ret = 1;
+                }
+            }
+            return ret;
+        }
+
+        // _loc3 = dropdownItem
+        // _loc4 = serverStatus
+        // _loc5 = serverName
+        // method_454 = addToList
+        private static function addToList(dropdown:ComboBox, server:Object)
+        {
+            var dropdownItem:Object = getServerFromId(server.server_id, dropdown);
+            var serverStatus:String = server.status;
+            if (serverStatus == "open") {
+                serverStatus = server.population + " online";
+            }
+            var serverName:String = server.server_name + " (" + serverStatus + ")";
+            if (server.happy_hour == 1) {
+                serverName = "!! " + serverName;
+            }
+            if (server.guild_id != 0) {
+                serverName = "* " + serverName;
+            }
+            if (dropdownItem == null) {
+                dropdownItem = {
+                    "label":serverName,
+                    "server":server
+                }
+                dropdown.addItem(dropdownItem);
+            }
+        }
+
+        // _loc3 = server
+        // _loc4 = boxLength
+        // _loc5 = i
+        // _loc6 = boxItem
+        // method_410 = getServerFromId
+        private static function getServerFromId(id:int, box:ComboBox):Object
+        {
+            var i:int = 0;
+            var boxLength:int = box.length;
+            var boxItem:Object;
+            while (i < boxLength) {
+                boxItem = box.getItemAt(i);
+                if (boxItem.server.server_id == id) {
+                    var server:Object = boxItem;
+                    break;
+                }
+                i++;
+            }
+            return server;
+        }
+
+
+    }
+}//package menu
+
