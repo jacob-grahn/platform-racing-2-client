@@ -34,10 +34,10 @@ package
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
         public static const testing:Boolean = true;
-        public static const version:String = "24-dec-2018-v152";
-        public static const baseURL:String = "https://pr2hub.local"; // "https://pr2hub.com"
-        public static const levelsURL:String = "https://pr2hub.com/levels"; // "https://pr2hub.com/levels" const_71
-        public static const listsURL:String = "https://pr2hub.com/files/lists"; // "https://pr2hub.com/files/lists"
+        public static const version:String = "14-jan-2019-v152";
+        public static const baseURL:String = "https://pr2hub.com"; //"https://pr2hub.local";
+        public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
+        public static const listsURL:String = "https://pr2hub.com/files/lists";
         public static var stage:Stage;
         public static var instance:Main;
         public static var token:String = "";
