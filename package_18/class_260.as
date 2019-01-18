@@ -234,7 +234,7 @@ package package_18
 
         private function method_331(_arg_1:MouseEvent)
         {
-            new class_290(this.var_5, this.var_158, this.var_190);
+            new LoadoutsPopup(this.var_5, this.var_158, this.var_190);
         }
 
         private function reset()
