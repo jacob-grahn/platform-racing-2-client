@@ -97,7 +97,7 @@ package
         private function init(e:Event = null)
         {
             removeEventListener(Event.ADDED_TO_STAGE, this.init);
-            if (Main.testing || parent != stage && !Main.initialized && (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE) {
+            if (Main.testing || (parent != stage && !Main.initialized && (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE)) {
                 Main.initialized = true;
                 Main.stage = stage;
                 Main.instance = this;
@@ -137,7 +137,7 @@ package
             } else if (protocol == "http" || protocol == "https") {
                 var afterProtocol:Number = url.indexOf("//");
                 site = url.substr(afterProtocol + 2, url.indexOf("/", afterProtocol + 2) - afterProtocol - 2);
-                site = domain.toLowerCase();
+                site = site.toLowerCase();
                 if (site.indexOf("www.") != -1) {
                     site = site.substr(site.indexOf("www.") + 4, site.length);
                 }
