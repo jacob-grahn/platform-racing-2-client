@@ -49,7 +49,7 @@ package lobby
             Main.stage.quality = StageQuality.HIGH;
             this.bottom_bts = new LobbyBottomButtonsGraphic();
             if (Main.siteMode == "kongregate") {
-                if (Main.group != 0) {
+                if (Main.domain.indexOf("kongregate.com") != -1 && Main.group != 0) {
                     this.bottom_bts.gotoAndStop("kongregateSite");
                 } else {
                     this.bottom_bts.gotoAndStop("miscSite");
