@@ -33,6 +33,7 @@ package package_21
             this.m.roomBox.addEventListener(KeyboardEvent.KEY_DOWN, this.roomBoxListenForEnter, false, 0, true);
             this.m.chatInput.addEventListener(KeyboardEvent.KEY_DOWN, this.chatInputListenForEnter, false, 0, true);
 			this.m.chatInput.addEventListener(FocusEvent.FOCUS_IN, this.lockToBottom, false, 0, true);
+			this.m.textBox.addEventListener(FocusEvent.FOCUS_OUT, this.lockToBottom, false, 0, true);
             this.m.send_bt.addEventListener(MouseEvent.CLICK, this.clickSend, false, 0, true);
             this.m.joinRoom_bt.addEventListener(MouseEvent.CLICK, this.clickJoinRoom, false, 0, true);
             //this.m.textBox.addEventListener(ScrollEvent.SCROLL, this.method_440, false, 0, true);

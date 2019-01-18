@@ -51,6 +51,31 @@ package items
             }
         }
 
+        public static function getCodeFromItem(item:Item):int
+        {
+            if (item is LaserGun) {
+                return laserGun;
+            } else if (item is Mine) {
+                return mine;
+            } else if (item is Lightning) {
+                return lightning;
+            } else if (item is Teleport) {
+                return teleport;
+            } else if (item is SuperJump) {
+                return superJump;
+            } else if (item is JetPack) {
+                return jetPack;
+            } else if (item is SpeedBurst) {
+                return speedBurst;
+            } else if (item is Sword) {
+                return sword;
+            } else if (item is IceWave) {
+                return iceWave;
+            } else {
+                return 0;
+            }
+        }
+
         // method_330 = getNameFromCode
         public static function getNameFromCode(code:int):String
         {

@@ -246,7 +246,7 @@ package package_8
                     }
                     if (this.curItem != this.var_623) {
                         this.var_623 = this.curItem;
-                        this.socket.write("set_var`item`" + this.curItem);
+                        this.socket.write("set_var`item`" + Items.getCodeFromItem(this.curItem));
                     }
                 }
                 this.method_704();

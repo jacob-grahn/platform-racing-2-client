@@ -23,7 +23,8 @@ package package_15
             m.textBox.text = "Loading...";
             var request:URLRequest = new URLRequest(Main.levelsURL + "/" + this.levelID + ".txt?version=" + this.version);
             loader.useRandomNum = false;
-            loader = new SuperLoader(true, 'json');
+            loader = new SuperLoader();
+            loader.addEventListener(SuperLoader.d, onComplete);
             loader.load(request);
         }
 
@@ -52,6 +53,7 @@ package package_15
                 LE.setVariables(LEVars);
             }
             super.onComplete(e);
+            super.parsedDataHandler(e);
         }
 
         override public function remove()

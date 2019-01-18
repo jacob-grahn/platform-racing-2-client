@@ -50,22 +50,22 @@ package package_18
             return (presets[(_arg_1 - 1)]);
         }
 
-        public static function apply(_arg_1:class_263, _arg_2:Character, _arg_3:StatsSelect, _arg_4:class_262)
+        public static function apply(_arg_1:class_263, c:Character, ss:StatsSelect, _arg_4:class_262)
         {
-            if (_arg_3 != null) {
-                _arg_3.method_46({
+            if (ss != null) {
+                ss.setStats({
                     "speed":1,
                     "acceleration":1,
                     "jumping":1
                 });
-                _arg_3.method_46(_arg_1);
+                ss.setStats(_arg_1);
             }
-            if (_arg_2 != null) {
-                _arg_2.method_395(_arg_1.hat);
-                _arg_2.method_250(_arg_1.head);
-                _arg_2.method_217(_arg_1.body);
-                _arg_2.method_326(_arg_1.feet);
-                _arg_2.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
+            if (c != null) {
+                c.method_395(_arg_1.hat);
+                c.method_250(_arg_1.head);
+                c.method_217(_arg_1.body);
+                c.method_326(_arg_1.feet);
+                c.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
             }
             if (_arg_4 != null) {
                 _arg_4.var_130.setValue(_arg_1.hat);

@@ -7,6 +7,7 @@ package package_15
 {
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
+	import flash.events.Event;
     import flash.events.IOErrorEvent;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
@@ -50,13 +51,19 @@ package package_15
                     var request:URLRequest = new URLRequest(Main.baseURL + "/upload_level.php");
                     request.method = URLRequestMethod.POST;
                     request.data = lVars;
-                    loader = new SuperLoader(true, 'json');
+                    loader = new SuperLoader();
+                    loader.addEventListener(SuperLoader.d, this.onParse);
                     loader.load(request);
                 }
             } else {
                 clearTimeout(this.waitTimeout);
                 this.waitTimeout = setTimeout(this.uploadLevel, 1000);
             }
+        }
+
+        private function onParse(e:Event)
+        {
+            super.parsedDataHandler(e);
         }
 
         override public function remove()
@@ -67,5 +74,4 @@ package package_15
 
 
     }
-}//package package_15
-
+}

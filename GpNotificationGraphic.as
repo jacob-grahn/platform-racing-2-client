@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//GpNotificationGraphic
+﻿// GpNotificationGraphic
 
 package 
 {
@@ -14,10 +11,10 @@ package
 
         public function GpNotificationGraphic()
         {
-            addFrameScript(71, this.method_604);
+            addFrameScript(70, this.frame71);
         }
 
-        internal function method_604():*
+        private function frame71()
         {
             stop();
             if (parent != null) {
@@ -27,5 +24,4 @@ package
 
 
     }
-}//package 
-
+}
