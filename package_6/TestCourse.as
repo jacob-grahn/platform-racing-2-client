@@ -116,7 +116,7 @@ package package_6
         {
             Main.stage.focus = Main.stage;
             blockBackground.rotation = (bg1.rotation = (bg2.rotation = (bg3.rotation = 0)));
-            timer.setTime(Number(var_378));
+            timer.setTime(Number(maxTime));
             var_201.clear();
             blockBackground.clear();
             miniMap.clear();
