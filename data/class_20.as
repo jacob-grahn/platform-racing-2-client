@@ -30,13 +30,15 @@ package data
             return (_local_3);
         }
 
-        public function method_15(_arg_1:String, _arg_2:Boolean)
+        // _loc3 = int
+        // method_15 = setBool
+        public function setBool(s:String, bool:Boolean)
         {
-            var _local_3:int;
-            if (_arg_2) {
-                _local_3 = 1;
+            var num:int = 0;
+            if (bool) {
+                num = 1;
             }
-            this.setNumber(_arg_1, _local_3);
+            this.setNumber(s, num);
         }
 
         // _loc2 = num

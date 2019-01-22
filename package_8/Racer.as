@@ -110,6 +110,7 @@ package package_8
         private var var_577:String;
         private var var_623:int;
         private var var_232:Boolean = false;
+        private var origGrav:Number;
 
         public function Racer(tId:int, c:Course, ma:Map, _arg_4:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
@@ -118,6 +119,7 @@ package package_8
             var_4.setNumber(SuperJump, 0);
             var_4.setNumber(DefaultGravity, 0.7);
             this.setStats(s, a, j);
+            this.origGrav = var_4.getNumber(DefaultGravity) * grav;
             this.setGravity(grav);
             this.tempID = tId;
             this.course = c;
@@ -179,8 +181,12 @@ package package_8
 
         public function setGravity(_arg_1:Number)
         {
-            var _local_2:Number = var_4.getNumber(DefaultGravity);
-            var_4.setNumber(GravityMultiplied, _local_2 * _arg_1);
+            var_4.setNumber(GravityMultiplied, var_4.getNumber(DefaultGravity) * _arg_1);
+        }
+
+        private function resetGravity()
+        {
+            var_4.setNumber(GravityMultiplied, this.origGrav);
         }
 
         // method_799 = squash
@@ -195,7 +201,7 @@ package package_8
         public function zap(a:Array)
         {
             new Zap(this, true);
-            if (!var_4.getBool(const_56)) {
+            if (!var_4.getBool(PARTY)) {
                 this.setMode("hurt");
             }
         }
@@ -261,7 +267,7 @@ package package_8
         // doSquash?
         private function method_704()
         {
-            if (velY > 0 && var_4.getBool(const_51)) {
+            if (velY > 0 && var_4.getBool(JIGG)) {
                 for each (var _local_1:Character in this.course.var_40) {
                     if (_local_1 is class_91 && _local_1.state != "crouch" && _local_1.state != "crouchWalk" && _local_1.x > (x - 20) && _local_1.x < (x + 20) && _local_1.y > (y + 35) && _local_1.y < (y + 65) && _local_1.rotation == this.rotation) {
                         _local_1.changeState("crouch");
@@ -347,7 +353,7 @@ package package_8
             y = y + velY;
             this.method_76();
             this.var_240--;
-            if (var_4.getBool(const_13) && !this.var_42) {
+            if (var_4.getBool(COWBOY) && !this.var_42) {
                 this.var_240 = 1;
             }
             if (this.var_240 <= 0) {
@@ -432,7 +438,7 @@ package package_8
                 }
             }
             this.method_76();
-            if (var_4.getBool(const_13) && this.var_42 == false) {
+            if (var_4.getBool(COWBOY) && this.var_42 == false) {
                 this.var_240 = 2;
                 this.setMode("water");
                 changeState("swim");
@@ -507,7 +513,7 @@ package package_8
                     this.course.frontBackground.addChild(this);
                 }
                 velY = velY + var_4.getNumber(GravityMultiplied);
-                if (this.up && var_4.getBool(const_52) && velY > 0) {
+                if (this.up && var_4.getBool(PROP) && velY > 0) {
                     velY = velY * 0.85;
                 }
                 this.var_24 = this.var_24 * this.friction;
@@ -554,7 +560,7 @@ package package_8
             if (this.map != null) {
                 this.method_41();
                 this.method_261();
-                if (var_4.getBool(const_11)) {
+                if (var_4.getBool(SANTA)) {
                     _local_3 = this.map.method_24(x, y, true);
                     if (_local_3 != null && ((_local_3 is WaterBlock && this.mode != "water") || _local_3 is SafetyBlock)) {
                         _local_3.onStand(this);
@@ -661,7 +667,7 @@ package package_8
         {
             if (this.map != null) {
                 var block:Block = this.map.method_24(_arg_1, _arg_2, _arg_3);
-                if (block == null || !block.method_23() || (var_4.getBool(const_55) && block is VanishBlock && !_arg_4)) {
+                if (block == null || !block.method_23() || (var_4.getBool(TOP) && block is VanishBlock && !_arg_4)) {
                     return null;
                 }
                 return block;
@@ -736,10 +742,10 @@ package package_8
         public function hit(_arg_1:Number=0, _arg_2:Number=0)
         {
             var _local_3:Object;
-            if ((!var_4.getBool(const_31) || this.course.gameMode == "deathmatch") && !this.var_435) {
+            if ((!var_4.getBool(CROWN) || this.course.gameMode == "deathmatch") && !this.var_435) {
                 velX = velX + _arg_1;
                 velY = velY + _arg_2;
-                if (!var_4.getBool(const_31)) {
+                if (!var_4.getBool(CROWN)) {
                     method_51(50);
                     if (!this.frozenSolid) {
                         this.setMode("hurt");
@@ -867,50 +873,65 @@ package package_8
             }
         }
 
+        // _loc2 = hadJS
+        // _loc3 = hadCB
+        // _loc4 = hadSanta
+        // _loc5 = hadArti
+        // _loc6 = cTimer
+        // _loc7 = zap
         override public function setHats(_arg_1:Array)
         {
-            var _local_6:CourseTimer;
-            var _local_7:Zap;
-            var _local_2:Boolean = var_4.getBool(const_27);
-            var _local_3:Boolean = var_4.getBool(const_13);
-            var _local_4:Boolean = var_4.getBool(const_11);
-            var _local_5:Boolean = var_4.getBool(const_25);
+            var hadJS:Boolean = var_4.getBool(JUMP_START);
+            var hadCB:Boolean = var_4.getBool(COWBOY);
+            var hadMoon:Boolean = var_4.getBool(MOON);
+            var hadSanta:Boolean = var_4.getBool(SANTA);
+            var hadArti:Boolean = var_4.getBool(ARTIFACT);
             super.setHats(_arg_1);
-            if (_local_3 && !var_4.getBool(const_13)) {
+            if (hadMoon && !var_4.getBool(MOON)) {
+                this.resetGravity();
+            }
+            if (hadCB && !var_4.getBool(COWBOY)) {
                 this.resetStats();
             }
-            if (_local_4 && !var_4.getBool(const_11)) {
+            if (hadSanta && !var_4.getBool(SANTA)) {
                 this.resetStats();
             }
-            if (_local_5 && !var_4.getBool(const_25)) {
+            if (hadArti && !var_4.getBool(ARTIFACT)) {
                 if (this.curItem == Items.speedBurst) {
                     this.setItem(0);
                 }
                 var_241 = false;
             }
             this.method_358();
-            if (var_4.getBool(const_11)) {
-                this.maxVelX = this.maxVelX + 1;
+            if (var_4.getBool(SANTA)) {
+                if (!hadSanta) {
+                    this.maxVelX = this.maxVelX + 1;
+                }
             }
-            if (var_4.getBool(const_27)) {
-                if (!_local_2) {
+            if (var_4.getBool(JUMP_START)) {
+                if (!hadJS) {
                     this.setItem(Items.speedBurst);
                     SpeedBurst(this.curItem).duration = 2000;
                     this.curItem.useItem();
                 }
             }
-            if (var_4.getBool(const_25)) {
-                if (!_local_5) {
+            if (var_4.getBool(MOON)) {
+                if (!hadMoon) {
+                    this.setGravity(this.origGrav * .85);
+                }
+            }
+            if (var_4.getBool(ARTIFACT)) {
+                if (!hadArti) {
                     this.setItem(Items.speedBurst);
                     SpeedBurst(this.curItem).duration = 30000;
                     this.curItem.useItem();
-                    _local_6 = Course.course.timer;
-                    if (_local_6.getTime() > 30) {
-                        _local_6.setTime(30);
-                        _local_6.init();
+                    var cTimer:CourseTimer = Course.course.timer;
+                    if (cTimer.getTime() > 30) {
+                        cTimer.setTime(30);
+                        cTimer.init();
                     }
-                    _local_7 = new Zap(this, false, false);
-                    _local_7.transform.colorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0xFF, 0);
+                    var zap:Zap = new Zap(this, false, false);
+                    zap.transform.colorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0xFF, 0);
                     SoundEffects.playSound(new YeahSound());
                     Course.course.musicSelection.dropdown.gotArtifact();
                     var_241 = true;
@@ -920,7 +941,7 @@ package package_8
 
         private function method_358()
         {
-            if (var_4.getBool(const_13) && this.curItem != Items.speedBurst) {
+            if (var_4.getBool(COWBOY) && this.curItem != Items.speedBurst) {
                 this.maxVelX = 12;
                 this.accel = 1.86;
                 var_4.setNumber(SuperJump, 4.5);

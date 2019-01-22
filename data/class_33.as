@@ -21,9 +21,9 @@ package data
             return (h.getNumber(_arg_1));
         }
 
-        public static function method_15(_arg_1:String, _arg_2:Boolean)
+        public static function setBool(_arg_1:String, _arg_2:Boolean)
         {
-            h.method_15(_arg_1, _arg_2);
+            h.setBool(_arg_1, _arg_2);
         }
 
         public static function getBool(_arg_1:String):Boolean

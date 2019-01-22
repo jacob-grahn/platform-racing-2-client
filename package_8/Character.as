@@ -18,15 +18,16 @@ package package_8
     public class Character extends class_7 
     {
 
-        public static const const_52:String = "p";
-        public static const const_31:String = "c";
-        public static const const_13:String = "g";
-        public static const const_11:String = "s";
-        public static const const_56:String = "a";
-        public static const const_55:String = "t";
-        public static const const_27:String = "h";
-        public static const const_51:String = "j";
-        public static const const_25:String = "b";
+        public static const PROP:String = 'p'; // const_52
+        public static const CROWN:String = 'c'; // const_31
+        public static const COWBOY:String = 'g'; // const_13 (gallon)
+        public static const SANTA:String = 's'; // const_11
+        public static const PARTY:String = 'a'; // const_56
+        public static const TOP:String = 't'; // const_55
+        public static const JUMP_START:String = 'h'; // const_27
+        public static const MOON:String = 'm';
+        public static const JIGG:String = 'j'; // const_51
+        public static const ARTIFACT:String = 'b'; // const_25
 
         private var var_387:class_127;
         private var var_140:SoundChannel;
@@ -80,13 +81,11 @@ package package_8
             this.head = headId;
             this.body = bodyId;
             this.feet = feetId;
-            var _local_5:Date = new Date();
-            var _local_6:String = class_28.getDateStr(_local_5.getTime());
-            if (_local_6 == "Apr 1") {
+            if (class_28.getDateStr(new Date().getTime()) === "Apr 1") {
                 this.var_241 = true;
             }
             this.var_4 = new class_20();
-            this.method_375();
+            this.resetHats();
             this.changeState("stand");
             this.method_25();
             addChild(this.m);
@@ -100,74 +99,79 @@ package package_8
             this.method_90(_arg_7, _arg_8);
         }
 
-        private function method_375()
+        // method_375 = resetHats
+        private function resetHats()
         {
-            this.var_4.method_15(const_52, false);
-            this.var_4.method_15(const_31, false);
-            this.var_4.method_15(const_13, false);
-            this.var_4.method_15(const_11, false);
-            this.var_4.method_15(const_56, false);
-            this.var_4.method_15(const_55, false);
-            this.var_4.method_15(const_27, false);
-            this.var_4.method_15(const_51, false);
-            this.var_4.method_15(const_25, false);
+            this.var_4.setBool(PROP, false);
+            this.var_4.setBool(CROWN, false);
+            this.var_4.setBool(COWBOY, false);
+            this.var_4.setBool(SANTA, false);
+            this.var_4.setBool(PARTY, false);
+            this.var_4.setBool(TOP, false);
+            this.var_4.setBool(JUMP_START, false);
+            this.var_4.setBool(MOON, false);
+            this.var_4.setBool(JIGG, false);
+            this.var_4.setBool(ARTIFACT, false);
         }
 
-        public function setHats(_arg_1:Array)
+        // _loc2 = hatId
+        // _loc3 = hatColor
+        // _loc4 = hatColor2
+        // _loc5 = hatSlot
+        public function setHats(hatArray:Array)
         {
-            var _local_2:int;
-            var _local_3:int;
-            var _local_4:int;
             this.hat1 = this.hat2 = this.hat3 = this.hat4 = 1;
             this.hat1Color = this.hat2Color = this.hat3Color = this.hat4Color = 0xFFFFFF;
             this.hat1Color2 = this.hat2Color2 = this.hat3Color2 = this.hat4Color2 = -1;
-            this.method_375();
-            var _local_5:int = 1;
-            var _local_6:int = _arg_1.length;
+            this.resetHats();
+            var hatSlot:int = 1;
+            var _local_6:int = hatArray.length;
             var _local_7:int;
             while (_local_7 < _local_6) {
-                _local_2 = int(_arg_1[_local_7]);
-                _local_3 = int(_arg_1[(_local_7 + 1)]);
-                _local_4 = int(_arg_1[(_local_7 + 2)]);
-                if (_local_5 == 1) {
-                    this.hat1 = _local_2;
-                    this.hat1Color = _local_3;
-                    this.hat1Color2 = _local_4;
-                } else if (_local_5 == 2) {
-                    this.hat2 = _local_2;
-                    this.hat2Color = _local_3;
-                    this.hat2Color2 = _local_4;
-                } else if (_local_5 == 3) {
-                    this.hat3 = _local_2;
-                    this.hat3Color = _local_3;
-                    this.hat3Color2 = _local_4;
-                } else if (_local_5 == 4) {
-                    this.hat4 = _local_2;
-                    this.hat4Color = _local_3;
-                    this.hat4Color2 = _local_4;
+                var hatId:int = int(hatArray[_local_7]);
+                var hatColor:int = int(hatArray[_local_7 + 1]);
+                var hatColor2:int = int(hatArray[_local_7 + 2]);
+                if (hatSlot === 1) {
+                    this.hat1 = hatId;
+                    this.hat1Color = hatColor;
+                    this.hat1Color2 = hatColor2;
+                } else if (hatSlot === 2) {
+                    this.hat2 = hatId;
+                    this.hat2Color = hatColor;
+                    this.hat2Color2 = hatColor2;
+                } else if (hatSlot === 3) {
+                    this.hat3 = hatId;
+                    this.hat3Color = hatColor;
+                    this.hat3Color2 = hatColor2;
+                } else if (hatSlot === 4) {
+                    this.hat4 = hatId;
+                    this.hat4Color = hatColor;
+                    this.hat4Color2 = hatColor2;
                 }
 
-                if (_local_2 == 4) {
-                    this.var_4.method_15(const_52, true);
-                } else if (_local_2 == 5) {
-                    this.var_4.method_15(const_13, true);
-                } else if (_local_2 == 6) {
-                    this.var_4.method_15(const_31, true);
-                } else if (_local_2 == 7) {
-                    this.var_4.method_15(const_11, true);
-                } else if (_local_2 == 8) {
-                    this.var_4.method_15(const_56, true);
-                } else if (_local_2 == 9) {
-                    this.var_4.method_15(const_55, true);
-                } else if (_local_2 == 10) {
-                    this.var_4.method_15(const_27, true);
-                } else if (_local_2 == 13) {
-                    this.var_4.method_15(const_51, true);
-                } else if (_local_2 == 14) {
-                    this.var_4.method_15(const_25, true);
+                if (hatId === 4) {
+                    this.var_4.setBool(PROP, true);
+                } else if (hatId === 5) {
+                    this.var_4.setBool(COWBOY, true);
+                } else if (hatId === 6) {
+                    this.var_4.setBool(CROWN, true);
+                } else if (hatId === 7) {
+                    this.var_4.setBool(SANTA, true);
+                } else if (hatId === 8) {
+                    this.var_4.setBool(PARTY, true);
+                } else if (hatId === 9) {
+                    this.var_4.setBool(TOP, true);
+                } else if (hatId === 10) {
+                    this.var_4.setBool(JUMP_START, true);
+                } else if (hatId === 11) {
+                    this.var_4.setBool(MOON, true);
+                } else if (hatId === 13) {
+                    this.var_4.setBool(JIGG, true);
+                } else if (hatId === 14) {
+                    this.var_4.setBool(ARTIFACT, true);
                 }
-                _local_5++;
-                _local_7 = (_local_7 + 3);
+                hatSlot++;
+                _local_7 = _local_7 + 3;
             }
             this.method_25();
         }

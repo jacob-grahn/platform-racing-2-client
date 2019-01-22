@@ -219,7 +219,7 @@ package package_6
             this.var_61.addEventListener("count", this.method_369, false, 0, true);
             this.var_61.addEventListener("finish", this.onCountdownFinish, false, 0, true);
             addChild(this.var_61);
-            if (this.var_9 != null && this.var_9.var_4.getBool(Character.const_27)) {
+            if (this.var_9 != null && this.var_9.var_4.getBool(Character.JUMP_START)) {
                 this.var_9.init();
             }
         }
@@ -251,11 +251,15 @@ package package_6
             this.timer.setTime(Number(_arg_1));
         }
 
-        override public function setGravity(_arg_1:String)
+        override public function setGravity(s:String)
         {
-            super.setGravity(_arg_1);
+            var newGrav:Number = Number(s);
+            if (this.var_9 != null && this.var_9.var_4.getBool(Character.MOON)) {
+                newGrav = newGrav * .95;
+            }
+            super.setGravity(newGrav);
             if (this.var_9 != null) {
-                this.var_9.setGravity(Number(_arg_1));
+                this.var_9.setGravity(newGrav);
             }
         }
 
