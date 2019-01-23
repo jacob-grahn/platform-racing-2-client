@@ -5,6 +5,7 @@
 
 package package_15
 {
+    import data.class_28;
     import flash.events.Event;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
@@ -53,7 +54,7 @@ package package_15
         override protected function deleteListing(_arg_1:class_229)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(_arg_1);
-            new ConfirmPopup(this.method_73, "Are you sure you want to delete \"" + item.title + "\"?");
+            new ConfirmPopup(this.method_73, "Are you sure you want to delete \"" + class_28.escapeString(item.title) + "\"?");
         }
 
         // _loc1 = item

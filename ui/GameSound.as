@@ -46,8 +46,14 @@ package ui
             addItem({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"109884_Brunzolaitis___Flowerz_n_H.mp3"});
             addItem({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"128701_Instrumental__4.mp3"});
             addItem({"id":"15", "label":"Prismatic - Lunanova", "file":"Prismatic.mp3"});
+            addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
             addEventListener(Event.CHANGE, this.startSong, false, 0, true);
             this.enableMusicInt = setInterval(this.checkSetting, 500);
+        }
+
+        private function focusStage(e:Event = null)
+        {
+            Main.stage.focus = Main.stage;
         }
 
         // method_629 = gotArtifact

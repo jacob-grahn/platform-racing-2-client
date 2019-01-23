@@ -100,6 +100,7 @@ package package_18
             } else {
                 this.m.guildBox.htmlText = "Guild: ";
                 this.guildName = new GuildName(Main.guild, Main.guildName, Main.emblem, true);
+                this.guildName.makeWidth(145);
                 this.guildName.x = 40;
                 this.guildName.y = 54;
                 this.m.addChild(this.guildName);
@@ -134,7 +135,7 @@ package package_18
         private function method_34(_arg_1:String):Array
         {
             var _local_2:Array;
-            if (((!(_arg_1 == null)) && (!(_arg_1 == "")))) {
+            if (_arg_1 != null && _arg_1 != "") {
                 _local_2 = _arg_1.split(",");
             } else {
                 _local_2 = new Array();
@@ -204,29 +205,29 @@ package package_18
             this.method_148();
         }
 
-        private function keyDownHandler(_arg_1:KeyboardEvent)
+        private function keyDownHandler(e:KeyboardEvent)
         {
             var _local_5:TextField;
             var _local_6:class_263;
-            var _local_2:int = _arg_1.keyCode;
+            var _local_2:int = e.keyCode;
             var _local_3:int = -1;
             var _local_4:Boolean = true;
-            if (((_local_2 == 49) || (_local_2 == 97))) {
+            if (_local_2 == 49 || _local_2 == 97) {
                 _local_3 = 1;
             }
-            if (((_local_2 == 50) || (_local_2 == 98))) {
+            if (_local_2 == 50 || _local_2 == 98) {
                 _local_3 = 2;
             }
-            if (((_local_2 == 51) || (_local_2 == 99))) {
+            if (_local_2 == 51 || _local_2 == 99) {
                 _local_3 = 3;
             }
-            if ((_arg_1.target is TextField)) {
-                _local_5 = (_arg_1.target as TextField);
+            if (e.target is TextField) {
+                _local_5 = e.target as TextField;
                 if (_local_5.type === TextFieldType.INPUT) {
                     _local_4 = false;
                 }
             }
-            if (((!(_local_3 == -1)) && (_local_4))) {
+            if (_local_3 != -1 && _local_4) {
                 _local_6 = class_211.method_513(_local_3);
                 class_211.apply(_local_6, this.var_5, this.var_158, this.var_190);
             }

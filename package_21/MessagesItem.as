@@ -70,7 +70,7 @@ package package_21
 
         private function clickDelete(e:MouseEvent)
         {
-            new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete this message from " + this.userName + "?");
+            new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete this message from " + class_28.escapeString(this.userName) + "?");
         }
 
         // _loc2 = replyStr

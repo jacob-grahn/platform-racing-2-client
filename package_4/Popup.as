@@ -10,6 +10,8 @@ package package_4
 
     public class Popup extends class_7 
     {
+        public static var LOADED = 'loaded';
+        public static var REMOVED = 'removed';
 
         public var notActive:Boolean = false; // var_304 = notActive
 
@@ -39,6 +41,7 @@ package package_4
             if (alpha >= 1) {
                 alpha = 1;
                 removeEventListener(Event.ENTER_FRAME, this.fadeIn);
+                dispatchEvent(new Event(LOADED));
             }
         }
 
@@ -47,6 +50,7 @@ package package_4
             alpha = alpha - 0.15;
             if (alpha <= 0) {
                 this.remove();
+                dispatchEvent(new Event(REMOVED));
             }
         }
 

@@ -22,11 +22,17 @@ package package_4
             this.m.nameBox.text = name;
             this.m.textBox.text = message;
             addChild(this.m);
-            Main.stage.focus = this.m.textBox;
             if (this.isGuildMessage) {
                 this.m.nameBox.editable = false;
                 this.m.nameBox.alpha = 0.5;
             }
+            addEventListener(LOADED, this.focusTextBox);
+        }
+
+        private function focusTextBox(e:Event)
+        {
+            removeEventListener(LOADED, this.focusTextBox);
+            Main.stage.focus = this.m.textBox;
         }
 
         // method_264 = clickSend

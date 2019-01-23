@@ -6,11 +6,11 @@
 package package_4
 {
     import data.Settings;
-    import flash.events.MouseEvent;
     import flash.display.DisplayObject;
-    import flash.net.URLRequest;
-    import flash.events.Event;
     import flash.display.MovieClip;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.net.URLRequest;
 
     public class OptionsPopup extends Popup 
     {
@@ -78,20 +78,27 @@ package package_4
         // method_471 = clickLeaveGuild
         private function clickLeaveGuild(e:MouseEvent)
         {
-            new ConfirmPopup(this.doLeaveGuild, "Are you sure you want to leave your guild?");
+            new ConfirmPopup(this.confirmLeaveGuild, "Are you sure you want to leave your guild?");
         }
 
-        // method_579 = doLeaveGuild
-        private function doLeaveGuild()
+        // method_579 = confirmLeaveGuild
+        private function confirmLeaveGuild()
         {
-            var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
-            superLoader.load(new URLRequest(Main.baseURL + "/guild_leave.php"));
-            Main.guild = 0;
-            Main.guildOwner = 0;
-            Main.emblem = "";
-            Main.guildName = "";
-            Main.instance.dispatchEvent(new Event(Main.accountChange));
+            var uploadingPopup:UploadingPopup = new UploadingPopup(new URLRequest(Main.baseURL + "/guild_leave.php"), 'json');
+            uploadingPopup.addEventListener(Event.COMPLETE, this.doLeaveGuild, false, 0, true);
             startFadeOut();
+        }
+
+        private function doLeaveGuild(e:Event)
+        {
+			var ret:Object = JSON.parse(e.target.data);
+			if (ret && ret.success === true) {
+                Main.guild = 0;
+                Main.guildOwner = 0;
+                Main.emblem = "";
+                Main.guildName = "";
+                Main.instance.dispatchEvent(new Event(Main.accountChange));
+			}
         }
 
         // method_296 = clickGuildCreate

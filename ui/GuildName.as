@@ -33,6 +33,11 @@ package ui
             addEventListener(MouseEvent.CLICK, this.clickHandler, false, 0, true);
         }
 
+        public function makeWidth(n:Number)
+        {
+            this.m.nameBox.width = n;
+        }
+
         private function clickHandler(_arg_1:MouseEvent)
         {
             new GuildPopup(this.guildId);

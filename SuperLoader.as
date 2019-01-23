@@ -22,6 +22,7 @@ package
         public var useRandomNum:Boolean;
         public var parsedData:Object;
         private var readMode:String; // var_346
+        private var toURL:String;
 
         public function SuperLoader(rand:Boolean=true, read:String="url")
         {
@@ -34,6 +35,7 @@ package
 
         override public function load(request:URLRequest):void
         {
+            this.toURL = request.url;
             if (this.useRandomNum) {
                 var rand:int = int(Math.random() * 10000000);
                 if (request.data is URLVariables) {
@@ -99,7 +101,9 @@ package
             } else {
                 errPrefix = 'Error: ';
             }
-            new MessagePopup(errPrefix + err.text);
+            if (this.toURL.indexOf("server_status_2.txt") == -1) {
+                new MessagePopup(errPrefix + err.text);
+            }
             dispatchEvent(new Event(e));
         }
 

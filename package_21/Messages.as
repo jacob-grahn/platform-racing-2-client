@@ -66,7 +66,6 @@ package package_21
             vars.start = (this.var_167 - 1) * this.var_564;
             vars.count = this.var_564;
             var request:URLRequest = new URLRequest(Main.baseURL + "/messages_get.php");
-            request.method = URLRequestMethod.POST;
             request.data = vars;
             this.loader.load(request);
             addChild(this.loadingGraphic);
