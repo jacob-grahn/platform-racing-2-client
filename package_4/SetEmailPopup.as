@@ -42,7 +42,7 @@ package package_4
                 var obj:Object = new Object();
                 obj.email = this.m.email1Box.text;
                 obj.pass = this.m.passBox.text;
-                var jsonString:String = JSON.stringify(o);
+                var jsonString:String = JSON.stringify(obj);
                 var encryptor:Encryptor = new Encryptor();
                 encryptor.setKey(Env.CHANGE_EMAIL_KEY);
                 encryptor.setIV(Env.CHANGE_EMAIL_IV);
