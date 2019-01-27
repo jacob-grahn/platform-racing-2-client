@@ -15,7 +15,7 @@ package package_19
         private var m:SizePickerMenuGraphic = new SizePickerMenuGraphic();
         private var target:SizePicker;
 
-        public function SizePickerMenu(sp:SizePicker, s:Number=4)
+        public function SizePickerMenu(sp:SizePicker, s:Number = 4)
         {
             this.target = sp;
             this.setSize(s);
@@ -40,12 +40,8 @@ package package_19
         private function setSize(size:Number)
         {
             size = Math.round(size);
-            if (size < 1) {
-                size = 1;
-            }
-            if (size > 0xFF) {
-                size = 0xFF;
-            }
+            size = size < 1 ? 1 : size;
+            size = size > 255 ? 255 : size;
             this.m.textBox.text = size.toString();
             this.m.slider.value = size;
             this.target.setSize(size);

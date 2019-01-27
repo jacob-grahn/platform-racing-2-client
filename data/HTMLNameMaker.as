@@ -40,11 +40,11 @@ package data
             /*if (name.toLowerCase() == "fred the g. cactus") { // could be a future addition...
                 groupColor = "#83C141";
             }*/
-            name = class_28.escapeString(name);
-            dispText = class_28.escapeString(dispText);
             if (dispText == "") {
                 dispText = name;
             }
+            name = class_28.escapeString(name);
+            dispText = class_28.escapeString(dispText);
             return '<u><font color="' + groupColor + '"><a href="event:user`' + group + "`" + name + '">' + dispText + "</a></font></u>";
         }
 

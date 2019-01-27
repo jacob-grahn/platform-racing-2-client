@@ -22,7 +22,7 @@ package package_14
         private var colorPicker:ColorPicker = new ColorPicker(); // var_12
         private var brush:Brush = new Brush(); // var_114
         private var eraser:Eraser = new Eraser(); // var_203
-        private var sizePicker:SizePicker; // var_571
+        private var sizePicker:SizePicker = new SizePicker(this, Tools.size); // var_571
         private var brushButton:BrushButtonGraphic = new BrushButtonGraphic(); // var_351
         private var eraserButton:EraserButtonGraphic = new EraserButtonGraphic(); // var_354
         private var var_71:Boolean = false;
@@ -30,14 +30,13 @@ package package_14
         public function Tools()
         {
             addItem(new Landscape(), "Landscape Mode", "Switch to the landscape toolbar.");
-            this.sizePicker = new SizePicker(this, Tools.size);
             addItem(this.brushButton, "Brush", "Draw things, yay!");
             addItem(this.eraserButton, "Eraser", "Erase the things you have drawn, yay!");
             addItem(this.sizePicker, "Size Picker", "Change the size of the brush and eraser.");
+            addItem(this.colorPicker, "Color Picker", "Choose your color with wisdom.");
             this.colorPicker.width = this.colorPicker.height = 30;
             this.colorPicker.var_419 = ColorPicker.LEFT;
             this.colorPicker.addEventListener(Event.CLOSE, this.chooseColor);
-            addItem(this.colorPicker, "Color Picker", "Choose your color with wisdom.");
             this.brushButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onBrushDown);
             this.eraserButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onEraserDown);
             this.brush.setSize(Tools.size);

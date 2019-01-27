@@ -48,7 +48,7 @@ package page
             } else {
                 messageText = class_28.escapeString(messageText); // prevents nuking, escapes problematic chars
             }
-            var chatMessageName:String = this.htmlNameMaker.makeName(userName, group, class_28.escapeString(userName));
+            var chatMessageName:String = this.htmlNameMaker.makeName(userName, group);
             var fullMessage:String = chatMessageName + "<font color='#666666'>: " + messageText + "</font><br/>";
             this.displayMessage(fullMessage);
         }
