@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// package_15.DeletingLevelPopup = package_15.class_231
+﻿// package_15.DeletingLevelPopup = package_15.class_231
 
 package package_15
 {
@@ -25,6 +22,7 @@ package package_15
             request.method = URLRequestMethod.POST;
             request.data = vars;
             loader = new SuperLoader(true, 'json');
+            loader.addEventListener(SuperLoader.d, this.onComplete);
             loader.load(request);
         }
 
@@ -32,6 +30,7 @@ package package_15
         {
             new GetLevels();
             super.onComplete(e);
+            super.parsedDataHandler(e);
         }
 
 
