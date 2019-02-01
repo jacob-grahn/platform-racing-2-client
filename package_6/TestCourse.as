@@ -7,7 +7,7 @@ package package_6
 {
     import flash.net.URLVariables;
     import ui.StatsSelect;
-    import levelEditor.class_224;
+    import levelEditor.HatPicker;
     import flash.geom.Point;
     import flash.events.MouseEvent;
     import package_8.Racer;
@@ -22,7 +22,7 @@ package package_6
         private var m:TestCourseGraphic = new TestCourseGraphic();
         private var variables:URLVariables;
         private var var_158:StatsSelect;
-        private var var_130:class_224;
+        private var var_130:HatPicker;
 
         public function TestCourse(v:URLVariables)
         {
@@ -46,7 +46,7 @@ package package_6
             this.var_158.y = 90;
             this.var_158.scaleX = this.var_158.scaleY = 0.66;
             holder.addChild(this.var_158);
-            this.var_130 = new class_224(var_9);
+            this.var_130 = new HatPicker(var_9);
             this.var_130.x = -260;
             this.var_130.y = 65;
             this.var_130.scaleX = this.var_130.scaleY = 0.7;

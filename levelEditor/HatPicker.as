@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//levelEditor.class_224
+﻿// levelEditor.HatPicker = levelEditor.class_224
 
 package levelEditor
 {
@@ -9,19 +6,19 @@ package levelEditor
     import package_8.Racer;
     import flash.events.MouseEvent;
 
-    public class class_224 extends Sprite 
+    public class HatPicker extends Sprite 
     {
 
-        private var m:class_272;
+        private var m:HatPickerGraphic;
         private var c:Racer;
         private var var_538:int = 1;
         private var var_620:int = 13;
         private var var_75:int = 2;
 
-        public function class_224(_arg_1:Racer)
+        public function HatPicker(_arg_1:Racer)
         {
             this.c = _arg_1;
-            this.m = new class_272();
+            this.m = new HatPickerGraphic();
             this.m.var_173.var_333.addEventListener(MouseEvent.CLICK, this.method_372, false, 0, true);
             this.m.var_173.var_381.addEventListener(MouseEvent.CLICK, this.method_214, false, 0, true);
             addChild(this.m);
