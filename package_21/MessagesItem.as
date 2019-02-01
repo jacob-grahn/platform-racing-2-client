@@ -37,7 +37,7 @@ package package_21
             }
             this.messageText = body;
             if (group < 3) {
-                body = class_28.escapeString(body);
+                body = class_28.escapeString(body, true);
             }
             body = class_28.parseLinks(body);
             body = body.replace(/\r/g, "<br>");

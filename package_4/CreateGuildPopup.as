@@ -27,6 +27,7 @@ package package_4
             super();
             this.guildId = id;
             this.m = new CreateGuildPopupGraphic();
+            this.m.transfer_bg.visible = this.m.transfer_bt.visible = false;
             addChild(this.m);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.confirm_bt.addEventListener(MouseEvent.CLICK, this.clickConfirm, false, 0, true);

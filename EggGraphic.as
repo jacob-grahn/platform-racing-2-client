@@ -1,9 +1,6 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
+﻿// EggGraphic
 
-//EggGraphic
-
-package 
+package
 {
     import flash.display.MovieClip;
 
@@ -16,20 +13,19 @@ package
 
         public function EggGraphic()
         {
-            addFrameScript(24, this.frame25, 46, this.frame47);
+            addFrameScript(24, this.frame25, 45, this.frame46);
         }
 
-        internal function frame25():*
+        private function frame25()
         {
             gotoAndPlay("walk");
         }
 
-        internal function frame47():*
+        private function frame46()
         {
             stop();
         }
 
 
     }
-}//package 
-
+}

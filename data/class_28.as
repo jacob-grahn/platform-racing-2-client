@@ -143,9 +143,9 @@ package data
         }
 
         // method_312 = escapeString
-        public static function escapeString(s:String):String
+        public static function escapeString(s:String, preserveNewLine:Boolean = false):String
         {
-            s = class_28.trimWhitespace(s);
+            s = class_28.trimWhitespace(s, preserveNewLine);
             s = class_28.escapeChars(s);
             return s;
         }
@@ -162,11 +162,11 @@ package data
         }
 
         // method_164 = trimWhitespace
-        public static function trimWhitespace(s:String):String
+        public static function trimWhitespace(s:String, keepNL:Boolean = false):String
         {
             s = (s == null) ? '' : s;
             s = s.replace(/^\s+|\s+$/g, "");
-	        return s.replace(/(\t|\n|\r|\v|\f)/gi, " ");
+	        return keepNL ? s.replace(/(\t|\f)/gi, " ") : s.replace(/(\t|\n|\r|\v|\f)/gi, " ");
 	    }
 
         // method_168 = filterSwears
