@@ -1,36 +1,50 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// package_4.OptionsPopup = package_4.class_200
+﻿// package_4.OptionsPopup = package_4.class_200
 
 package package_4
 {
+    import data.class_28;
     import data.Settings;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.events.Event;
     import flash.events.MouseEvent;
+    import fl.events.SliderEvent;
     import flash.net.URLRequest;
+    import sounds.SoundEffects;
 
     public class OptionsPopup extends Popup 
     {
 
         private var m:OptionsPopupGraphic = new OptionsPopupGraphic();
-        private var var_437:int = -22;
+        private var drawArt:Boolean = Main.drawBackgrounds;
+        private var filterSwears:Boolean = Settings.method_135(Settings.filterSwears, true);
+        private var hTrueY:Number = -74;
+        private var hFalseY:Number = -46;
+        private var buttonStartPos:int = 78; // var_437
 
         public function OptionsPopup()
         {
             addChild(this.m);
+            this.m.musicSlider.value = Main.musicLevel;
+            this.m.musicSlider.addEventListener(SliderEvent.CHANGE, musicSliderChange);
+            this.m.soundSlider.value = Main.soundLevel;
+            this.m.soundSlider.addEventListener(SliderEvent.CHANGE, soundSliderChange);
+            this.m.soundSlider.addEventListener(SliderEvent.THUMB_RELEASE, soundSliderRelease);
+            this.m.musicPercentBox.text = Main.musicLevel + '%';
+            this.m.soundPercentBox.text = Main.soundLevel + '%';
             this.m.wasdUp.maxChars = this.m.wasdRight.maxChars = this.m.wasdDown.maxChars = this.m.wasdLeft.maxChars = this.m.wasdItem.maxChars = 1;
-            this.m.wasdUp.restrict = this.m.wasdRight.restrict = this.m.wasdDown.restrict = this.m.wasdLeft.restrict = this.m.wasdItem.restrict = "0-9 A-Z a-Z";
-            this.m.wasdUp.text = String.fromCharCode(Main.wasdUp).toLowerCase();
-            this.m.wasdRight.text = String.fromCharCode(Main.wasdRight).toLowerCase();
-            this.m.wasdDown.text = String.fromCharCode(Main.wasdDown).toLowerCase();
-            this.m.wasdLeft.text = String.fromCharCode(Main.wasdLeft).toLowerCase();
-            this.m.wasdItem.text = String.fromCharCode(Main.wasdItem).toLowerCase();
-            this.m.toggleMusic.selected = (Main.musicLevel != "none");
-            this.m.toggleBGs.selected = Main.drawBackgrounds;
-            this.m.toggleSwears.selected = Settings.method_135(Settings.filterSwears, true);
+            this.m.wasdUp.restrict = this.m.wasdRight.restrict = this.m.wasdDown.restrict = this.m.wasdLeft.restrict = this.m.wasdItem.restrict = "0-9 A-Z";
+            this.m.wasdUp.text = String.fromCharCode(Main.wasdUp).toUpperCase();
+            this.m.wasdRight.text = String.fromCharCode(Main.wasdRight).toUpperCase();
+            this.m.wasdDown.text = String.fromCharCode(Main.wasdDown).toUpperCase();
+            this.m.wasdLeft.text = String.fromCharCode(Main.wasdLeft).toUpperCase();
+            this.m.wasdItem.text = String.fromCharCode(Main.wasdItem).toUpperCase();
+            this.m.artHighlight.y = this.drawArt === false ? this.hFalseY : this.hTrueY;
+            this.m.filterHighlight.y = this.filterSwears === false ? this.hFalseY : this.hTrueY;
+            this.m.artOn_bt.addEventListener(MouseEvent.CLICK, toggleArtOn);
+            this.m.artOff_bt.addEventListener(MouseEvent.CLICK, toggleArtOff);
+            this.m.filterOn_bt.addEventListener(MouseEvent.CLICK, toggleFilterOn);
+            this.m.filterOff_bt.addEventListener(MouseEvent.CLICK, toggleFilterOff);
             this.m.removeChild(this.m.changePass_bt);
             this.m.removeChild(this.m.changeEmail_bt);
             this.m.removeChild(this.m.guildLeave_bt);
@@ -51,12 +65,58 @@ package package_4
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
         }
 
+        private function musicSliderChange(e:SliderEvent)
+        {
+            var newLevel:int = class_28.numLimit(e.value, 0, 100);
+            if (Main.musicLevel === 0 && newLevel > 0) {
+                Main.noodleTown.startPlaying();
+            }
+            Main.musicLevel = newLevel;
+            this.m.musicPercentBox.text = Main.musicLevel + '%';
+            Main.noodleTown.setTargetVolume(0.6 * (Main.musicLevel / 100));
+        }
+
+        private function soundSliderChange(e:SliderEvent)
+        {
+            Main.soundLevel = class_28.numLimit(e.value, 0, 100);
+            this.m.soundPercentBox.text = Main.soundLevel + '%';
+        }
+
+        private function soundSliderRelease(e:SliderEvent)
+        {
+            SoundEffects.playSound(new JumpSound(), 0.75 * (Main.soundLevel / 100));
+        }
+
+        private function toggleArtOn(e:MouseEvent)
+        {
+            this.m.artHighlight.y = this.hTrueY;
+            this.drawArt = true;
+        }
+
+        private function toggleArtOff(e:MouseEvent)
+        {
+            this.m.artHighlight.y = this.hFalseY;
+            this.drawArt = false;
+        }
+
+        private function toggleFilterOn(e:MouseEvent)
+        {
+            this.m.filterHighlight.y = this.hTrueY;
+            this.filterSwears = true;
+        }
+
+        private function toggleFilterOff(e:MouseEvent)
+        {
+            this.m.filterHighlight.y = this.hFalseY;
+            this.filterSwears = false;
+        }
+
         // method_75 = addOptionsButton
         private function addOptionsButton(button:DisplayObject, fn:Function)
         {
             this.m.addChild(button);
-            button.y = this.var_437;
-            this.var_437 = this.var_437 + 20;
+            button.y = this.buttonStartPos;
+            this.buttonStartPos = this.buttonStartPos - 20;
             button.addEventListener(MouseEvent.CLICK, fn, false, 0, true);
         }
 
@@ -136,37 +196,27 @@ package package_4
             this.m.guildCreate_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildCreate);
             this.m.guildEdit_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildEdit);
             if (this.m.wasdUp.text == "") {
-                this.m.wasdUp.text = "w";
+                this.m.wasdUp.text = "W";
             }
             if (this.m.wasdRight.text == "") {
-                this.m.wasdRight.text = "d";
+                this.m.wasdRight.text = "D";
             }
             if (this.m.wasdDown.text == "") {
-                this.m.wasdDown.text = "s";
+                this.m.wasdDown.text = "S";
             }
             if (this.m.wasdLeft.text == "") {
-                this.m.wasdLeft.text = "a";
+                this.m.wasdLeft.text = "A";
             }
             if (this.m.wasdItem.text == "") {
-                this.m.wasdItem.text = "i";
+                this.m.wasdItem.text = "I";
             }
             Main.wasdUp = this.m.wasdUp.text.toUpperCase().charCodeAt(0);
             Main.wasdRight = this.m.wasdRight.text.toUpperCase().charCodeAt(0);
             Main.wasdDown = this.m.wasdDown.text.toUpperCase().charCodeAt(0);
             Main.wasdLeft = this.m.wasdLeft.text.toUpperCase().charCodeAt(0);
             Main.wasdItem = this.m.wasdItem.text.toUpperCase().charCodeAt(0);
-            if (this.m.toggleMusic.selected) {
-                if (Main.musicLevel == "none") {
-                    Main.noodleTown.startPlaying();
-                    Main.noodleTown.setTargetVolume(0.6);
-                }
-                Main.musicLevel = "medium";
-            } else {
-                Main.noodleTown.setTargetVolume(0);
-                Main.musicLevel = "none";
-            }
-            Main.drawBackgrounds = this.m.toggleBGs.selected;
-            Settings.method_390(Settings.filterSwears, this.m.toggleSwears.selected);
+            Main.drawBackgrounds = this.drawArt;
+            Settings.method_390(Settings.filterSwears, this.filterSwears);
             removeChild(this.m);
             this.m = null;
             super.remove();

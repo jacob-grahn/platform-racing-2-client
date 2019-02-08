@@ -27,7 +27,7 @@ package blocks
                 _local_3 = Course.course.var_86[_local_2];
                 _arg_1.setItem(_local_3);
             }
-            SoundEffects.playSound(new StarSound(), 0.6);
+            SoundEffects.playSound(new StarSound(), 0.6 * (Main.soundLevel / 100));
         }
 
 

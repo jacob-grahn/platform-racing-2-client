@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// ServerSelectPopup = menu.class_72
+﻿// ServerSelectPopup = menu.class_72
 
 package menu
 {
@@ -26,11 +23,12 @@ package menu
             this.serverSelect.width = 150;
             CheckServers.determineServer(this.serverSelect);
             if (this.serverSelect.length <= 1) {
-                this.method_165(new MouseEvent("click"));
+                this.serverSelect.selectedItem = this.serverSelect.dataProvider.getItemAt(0);
+                this.clickLogIn(new MouseEvent("click"));
             }
         }
 
-        private function clickLogIn(_arg_1:MouseEvent)
+        private function clickLogIn(e:MouseEvent)
         {
             if (this.serverSelect.length > 0) {
                 Main.server = this.serverSelect.selectedItem.server;
@@ -39,7 +37,7 @@ package menu
             }
         }
 
-        private function clickCancel(_arg_1:MouseEvent)
+        private function clickCancel(e:MouseEvent)
         {
             startFadeOut();
         }
@@ -54,5 +52,4 @@ package menu
 
 
     }
-}//package menu
-
+}

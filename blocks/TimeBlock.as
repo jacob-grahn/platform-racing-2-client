@@ -21,7 +21,7 @@ package blocks
         override protected function useSupply(_arg_1:Racer)
         {
             super.useSupply(_arg_1);
-            SoundEffects.playSound(new TickTockSound(), 1);
+            SoundEffects.playSound(new TickTockSound(), 1 * (Main.soundLevel / 100));
             Course.course.timer.method_500(10);
         }
 

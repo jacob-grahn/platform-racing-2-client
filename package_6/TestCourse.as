@@ -98,7 +98,7 @@ package package_6
             } else {
                 miniMap.removeFinish(finishX, finishY);
             }
-            SoundEffects.playSound(new VictorySound());
+            SoundEffects.playSound(new VictorySound(), 1 * (Main.soundLevel / 100));
         }
 
         // teleport fn

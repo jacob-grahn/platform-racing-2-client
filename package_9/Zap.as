@@ -22,7 +22,7 @@ package package_9
             addEventListener(Event.ENTER_FRAME, this.go);
             this.pos();
             if (_arg_3) {
-                SoundEffects.playSound(new ZapSound());
+                SoundEffects.playSound(new ZapSound(), 1 * (Main.soundLevel / 100));
             }
         }
 

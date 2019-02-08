@@ -42,9 +42,9 @@ package lobby
             addChild(this.m);
             addChild(this.left);
             addChild(this.right);
-            if (Main.musicLevel != "none") {
+            if (Main.musicLevel > 0) {
                 Main.noodleTown.startPlaying();
-                Main.noodleTown.setTargetVolume(0.6);
+                Main.noodleTown.setTargetVolume(0.6 * (Main.musicLevel / 100));
             }
             Main.stage.quality = StageQuality.HIGH;
             this.bottom_bts = new LobbyBottomButtonsGraphic();

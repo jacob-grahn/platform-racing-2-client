@@ -44,7 +44,7 @@ package sounds
                 vol = vol * _local_11;
                 pan = _local_8 / _local_7;
                 pan = class_74.numLimit(pan, -_local_7, _local_7);
-                return playSound(sound, vol, pan, loops);
+                return playSound(sound, vol * (Main.soundLevel / 100), pan, loops);
             }
             return null;
         }

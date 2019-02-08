@@ -226,12 +226,12 @@ package package_6
 
         private function method_369(_arg_1:Event)
         {
-            SoundEffects.playSound(new ReadySound(), 0.4);
+            SoundEffects.playSound(new ReadySound(), 0.4 * (Main.soundLevel / 100));
         }
 
         protected function onCountdownFinish(_arg_1:Event)
         {
-            SoundEffects.playSound(new GoSound(), 0.5);
+            SoundEffects.playSound(new GoSound(), 0.5 * (Main.soundLevel / 100));
             if (this.var_9 != null) {
                 this.var_9.init();
             }

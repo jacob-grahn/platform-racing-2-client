@@ -21,7 +21,7 @@ package blocks
         {
             super.useSupply(_arg_1);
             _arg_1.method_392(-5);
-            SoundEffects.playSound(new BumpSadSound(), 0.75);
+            SoundEffects.playSound(new BumpSadSound(), 0.75 * (Main.soundLevel / 100));
         }
 
 

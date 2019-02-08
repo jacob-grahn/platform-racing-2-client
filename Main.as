@@ -57,7 +57,8 @@ package
         public static var emblem:String = "";
         public static var lastAuthTime:Time = new Time(); // var_363
         public static var server:Object;
-        public static var musicLevel:String = "medium"; // var_156
+        public static var musicLevel:int = 100; // var_156
+        public static var soundLevel:int = 100;
         public static var drawBackgrounds:Boolean = true; // var_250
         public static var commandHandler:CommandHandler = new CommandHandler();
         public static var socket:PR2Socket;

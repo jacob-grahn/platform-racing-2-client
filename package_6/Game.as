@@ -287,7 +287,7 @@ package package_6
                     this.method_682();
                     timer.pause();
                 }
-                SoundEffects.playSound(new VictorySound());
+                SoundEffects.playSound(new VictorySound(), 1 * (Main.soundLevel / 100));
             }
         }
 

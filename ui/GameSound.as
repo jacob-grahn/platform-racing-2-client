@@ -4,6 +4,7 @@ package ui
 {
     import fl.controls.ComboBox;
     import flash.media.SoundChannel;
+    import flash.media.SoundTransform;
     import flash.events.Event;
     import flash.utils.setInterval;
     import flash.utils.clearTimeout;
@@ -74,7 +75,7 @@ package ui
         // method_211 = musicEnabled
         private function musicEnabled():Boolean
         {
-            if (Main.musicLevel != "none" && MuteButton.muted == false && selectedItem != null && selectedItem.id != 0 && this.soundChannel == null) {
+            if (Main.musicLevel > 0 && MuteButton.muted == false && selectedItem != null && selectedItem.id != 0 && this.soundChannel == null) {
                 return true;
             }
             return false;
@@ -126,7 +127,9 @@ package ui
                 var request:URLRequest = new URLRequest(fileUrl);
                 var slc:SoundLoaderContext = new SoundLoaderContext(3000, false);
                 var song:Sound = new Sound(request, slc);
-                this.soundChannel = song.play(0, 9999);
+                var st:SoundTransform = new SoundTransform();
+                st.volume = Main.musicLevel / 100;
+                this.soundChannel = song.play(0, 9999, st);
                 this.soundChannel.addEventListener(Event.SOUND_COMPLETE, this.loopSong, false, 0, true);
             }
             Main.stage.focus = Main.stage;

@@ -201,6 +201,17 @@ package data
             return s;
         }
 
+        public static function numLimit(value:Number, minimum:Number, maximum:Number)
+        {
+            if (value > maximum) {
+                value = maximum;
+            }
+            if (value < minimum) {
+                value = minimum;
+            }
+            return value;
+        }
+
         public static function method_9(_arg_1:Number, _arg_2:Number, _arg_3:Number):Point
         {
             var _local_4:int = _arg_1;

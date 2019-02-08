@@ -19,7 +19,7 @@ package items
         override public function useItem()
         {
             if (!racer.crouching) {
-                SoundEffects.playSound(new SuperJumpSound());
+                SoundEffects.playSound(new SuperJumpSound(), 1 * (Main.soundLevel / 100));
                 racer.velY = racer.velY - 25;
                 super.useItem();
             }

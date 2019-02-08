@@ -410,7 +410,7 @@ package package_8
                 if (this.var_150 > 25) {
                     velY = -this.var_150 * 0.24;
                     this.var_281 = false;
-                    SoundEffects.playSound(new SuperJumpSound());
+                    SoundEffects.playSound(new SuperJumpSound(), 1 * (Main.soundLevel / 100));
                 }
                 this.var_150 = 0;
             }
@@ -932,7 +932,7 @@ package package_8
                     }
                     var zap:Zap = new Zap(this, false, false);
                     zap.transform.colorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0xFF, 0);
-                    SoundEffects.playSound(new YeahSound());
+                    SoundEffects.playSound(new YeahSound(), 1 * (Main.soundLevel / 100));
                     Course.course.musicSelection.dropdown.gotArtifact();
                     var_241 = true;
                 }

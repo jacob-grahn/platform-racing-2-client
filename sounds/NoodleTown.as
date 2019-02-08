@@ -92,9 +92,9 @@ package sounds
             }
         }
 
-        public function setTargetVolume(_arg_1:Number)
+        public function setTargetVolume(n:Number)
         {
-            this.var_187 = _arg_1;
+            this.var_187 = n;
             addEventListener(Event.ENTER_FRAME, this.method_124);
         }
 

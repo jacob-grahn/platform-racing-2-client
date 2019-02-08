@@ -35,8 +35,10 @@ package ui
 
         private function outHandler(e:MouseEvent)
         {
-            this.m.textBox1.text = this.m.textBox2.text = this.str;
-            this.m.alpha = 0.75;
+            if (this.m != null && this.str != null) {
+                this.m.textBox1.text = this.m.textBox2.text = this.str;
+                this.m.alpha = 0.75;
+            }
         }
 
         override public function remove()
