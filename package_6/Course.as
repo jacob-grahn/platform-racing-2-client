@@ -254,9 +254,6 @@ package package_6
         override public function setGravity(s:String)
         {
             var newGrav:Number = Number(s);
-            if (this.var_9 != null && this.var_9.var_4.getBool(Character.MOON)) {
-                //newGrav = newGrav * .95;
-            }
             super.setGravity(newGrav);
             if (this.var_9 != null) {
                 this.var_9.setGravity(newGrav);

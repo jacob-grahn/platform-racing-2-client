@@ -34,6 +34,7 @@ package package_8
     import package_6.Course;
     import package_6.RaceChat;
     import package_9.Zap;
+    import page.GamePage;
 
     public class Racer extends Character 
     {
@@ -110,7 +111,6 @@ package package_8
         private var var_577:String;
         private var var_623:int;
         private var var_232:Boolean = false;
-        private var rawGrav:Number;
 
         public function Racer(tId:int, c:Course, ma:Map, _arg_4:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
@@ -119,8 +119,7 @@ package package_8
             var_4.setNumber(SuperJump, 0);
             var_4.setNumber(DefaultGravity, 0.7);
             this.setStats(s, a, j);
-            this.rawGrav = grav;
-            this.setGravity(this.rawGrav);
+            this.setGravity(grav);
             this.tempID = tId;
             this.course = c;
             this.map = ma;
@@ -186,7 +185,7 @@ package package_8
 
         private function resetGravity()
         {
-            var_4.setNumber(GravityMultiplied, var_4.getNumber(DefaultGravity) * this.rawGrav);
+            var_4.setNumber(GravityMultiplied, var_4.getNumber(DefaultGravity) * GamePage.course.gravity);
         }
 
         // method_799 = squash
@@ -917,7 +916,7 @@ package package_8
             }
             if (var_4.getBool(MOON)) {
                 if (!hadMoon) {
-                    this.setGravity(this.rawGrav * .85);
+                    this.setGravity(GamePage.course.gravity * .85);
                 }
             }
             if (var_4.getBool(ARTIFACT)) {
