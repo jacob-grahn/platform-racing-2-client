@@ -327,8 +327,8 @@ package background
             textBox.multiline = true;
             textBox.textColor = textColor;
             textBox.text = class_131.method_192(textStr);
-            textBox.scaleX = (textScaleX / 1.33) * scale;
-            textBox.scaleY = (textScaleY / 1.27) * scale;
+            textBox.scaleX = textScaleX * scale; //(textScaleX / 1.33) * scale;
+            textBox.scaleY = textScaleY * scale; //(textScaleY / 1.27) * scale;
             textBox.height = 24;
             textBox.x = textX * scale;
             textBox.y = textY * scale;

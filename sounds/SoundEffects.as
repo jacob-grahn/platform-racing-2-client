@@ -19,12 +19,14 @@ package sounds
         // method_19 = playSound
         public static function playSound(sound:Sound, vol:Number = 1, pan:Number = 0, loops:Number = 0):SoundChannel
         {
-            if (vol > 0.05) {
+            //if (vol > 0.05) {
+            if (vol > 0.0001) {
                 var st:SoundTransform = new SoundTransform();
                 st.volume = vol;
                 st.pan = pan;
                 return sound.play(0, loops, st);
             }
+            //}
             return null;
         }
 
@@ -44,7 +46,9 @@ package sounds
                 vol = vol * _local_11;
                 pan = _local_8 / _local_7;
                 pan = class_74.numLimit(pan, -_local_7, _local_7);
-                return playSound(sound, vol * (Main.soundLevel / 100), pan, loops);
+                if (vol * (Main.soundLevel / 100) > 0.0001) {
+                    return playSound(sound, vol * (Main.soundLevel / 100), pan, loops);
+                }
             }
             return null;
         }

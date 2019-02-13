@@ -896,7 +896,7 @@ package package_8
                 this.resetStats();
             }
             if (hadArti && !var_4.getBool(ARTIFACT)) {
-                if (this.curItem == Items.speedBurst) {
+                if (Items.getCodeFromItem(this.curItem) == Items.speedBurst) {
                     this.setItem(0);
                 }
                 var_241 = false;
