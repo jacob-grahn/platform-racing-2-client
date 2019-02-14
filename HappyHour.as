@@ -18,6 +18,7 @@ package
         internal function frame100():*
         {
             stop();
+            parent.removeChild(this);
         }
 
 
