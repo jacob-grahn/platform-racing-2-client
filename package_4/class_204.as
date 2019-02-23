@@ -28,7 +28,7 @@ package package_4
                 contentBox.y = titleBox.height + titleBox.y + 5;
                 var bg:ShadowBG = new ShadowBG();
                 bg.width = width + 10;
-                bg.height = height + 10;
+                bg.height = height + 12;
                 addChildAt(bg, 0);
                 super(d);
                 Main.stage.addChild(this);

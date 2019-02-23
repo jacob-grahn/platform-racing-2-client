@@ -20,7 +20,7 @@ package package_18
             this.statsSelect = ss;
             this.var_495 = _arg_3;
             this.var_454 = 68;
-            m.titleBox.text = "--- Loadouts ---";
+            m.titleBox.text = "-- Loadouts --";
             m.delete_bt.label = "Save";
             hideLoadingGraphic();
             this.method_751();

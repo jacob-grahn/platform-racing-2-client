@@ -30,13 +30,17 @@ package package_6
         // _loc9 = courseName
         public function finishRace(arr:Array)
         {
-            //this.clear();
+            this.clear();
             var i:int = 0;
             var key:int = 0;
             while ((key + 1) < arr.length) {
+                if (this.m.info1["nameBox0"].text == '' && i > 0) {
+                    i--;
+                }
                 var name:String = arr[key];
                 var time:String = arr[key + 1];
-                var stillHere:Boolean = Boolean(arr[key + 2]);
+                var drawing:Boolean = Boolean(arr[key + 2]);
+                var stillHere:Boolean = Boolean(arr[key + 3]);
                 if (name.toLowerCase() == Main.loggedInAs.toLowerCase() && time != "forfeit") {
                     var courseID:int = Course.course.method_206();
                     var courseName:String = "";
@@ -74,7 +78,9 @@ package package_6
                     }
                 }
                 var timeText:String = "";
-                if (time != "forfeit" && Course.course != null && Course.course.gameMode != "egg") {
+                if (drawing && timeText == '') {
+                    this.m.info1["anim" + i].visible = this.m.info2["anim" + i].visible = true;
+                } else if (time > 0 && time != "forfeit" && Course.course != null && Course.course.gameMode != "egg") {
                     timeText = class_28.formatTime(Number(time), "decimal");
                 } else {
                     timeText = time;
@@ -85,7 +91,13 @@ package package_6
                 this.m.info1["timeBox" + i].text = this.m.info2["timeBox" + i].text = timeText;
                 this.m.info1["nameBox" + i].text = this.m.info2["nameBox" + i].text = name;
                 i++;
-                key = key + 3;
+                key = key + 4;
+            }
+            while (i < 4) {
+                this.m.info1["timeBox" + i].text = this.m.info2["timeBox" + i].text = '';
+                this.m.info1["nameBox" + i].text = this.m.info2["nameBox" + i].text = '';
+                this.m.info1["anim" + i].visible = this.m.info2["anim" + i].visible = false;
+                i++;
             }
         }
 
@@ -112,8 +124,9 @@ package package_6
                     this.m.info1["nameBox" + i].text = this.m.info2["nameBox" + i].text = "";
                 }
                 if (this.m.info1["anim" + i].parent == this.m.info1) {
-                    this.m.info1.removeChild(this.m.info1["anim" + i]);
-                    this.m.info2.removeChild(this.m.info2["anim" + i]);
+                    this.m.info1["anim" + i].visible = this.m.info2["anim" + i].visible = false;
+                    //this.m.info1.removeChild(this.m.info1["anim" + i]);
+                    //this.m.info2.removeChild(this.m.info2["anim" + i]);
                 }
                 i++;
             }
