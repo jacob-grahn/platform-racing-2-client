@@ -38,6 +38,7 @@ package data
             this.defineCommand("becomeFullMod", this.becomeFullMod);
             this.defineCommand("demoteMod", this.demoteMod);
             this.defineCommand("areYouHuman", this.areYouHuman);
+            this.defineCommand("tournamentMode", this.tournamentMode);
         }
 
         // _loc2 = endPos
@@ -158,6 +159,11 @@ package data
         private function areYouHuman(a:Array)
         {
             new CatCaptcha();
+        }
+
+        private function tournamentMode(a:Array)
+        {
+            Main.server.tournament = Boolean(int(a[0]));
         }
 
 

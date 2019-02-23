@@ -35,7 +35,7 @@ package package_6
             var key:int = 0;
             while ((key + 1) < arr.length) {
                 if (this.m.info1["nameBox0"].text == '' && i > 0) {
-                    i--;
+                    i = 0;
                 }
                 var name:String = arr[key];
                 var time:String = arr[key + 1];
