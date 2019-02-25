@@ -5,24 +5,24 @@
 
 package package_6
 {
-    import flash.net.URLVariables;
-    import ui.StatsSelect;
-    import levelEditor.HatPicker;
-    import flash.geom.Point;
-    import flash.events.MouseEvent;
-    import package_8.Racer;
     import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.geom.Point;
+    import flash.net.URLVariables;
+    import levelEditor.HatPicker;
     import levelEditor.LevelEditor;
-    import sounds.SoundEffects;
+    import package_8.Racer;
     import package_9.TeleportPop;
+    import sounds.SoundEffects;
+    import ui.StatsSelect;
 
     public class TestCourse extends Course 
     {
 
         private var m:TestCourseGraphic = new TestCourseGraphic();
         private var variables:URLVariables;
-        private var var_158:StatsSelect;
-        private var var_130:HatPicker;
+        private var statsSelect:StatsSelect; // var_158
+        private var hatPicker:HatPicker; // var_130
 
         public function TestCourse(v:URLVariables)
         {
@@ -41,16 +41,16 @@ package package_6
             var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
             var_9.testMode = true;
             var_40.push(var_9);
-            this.var_158 = new StatsSelect(300, 50, 50, 50, var_9);
-            this.var_158.x = -265;
-            this.var_158.y = 90;
-            this.var_158.scaleX = this.var_158.scaleY = 0.66;
-            holder.addChild(this.var_158);
-            this.var_130 = new HatPicker(var_9);
-            this.var_130.x = -260;
-            this.var_130.y = 65;
-            this.var_130.scaleX = this.var_130.scaleY = 0.7;
-            holder.addChild(this.var_130);
+            this.statsSelect = new StatsSelect(300, 50, 50, 50, var_9);
+            this.statsSelect.x = -265;
+            this.statsSelect.y = 90;
+            this.statsSelect.scaleX = this.statsSelect.scaleY = 0.66;
+            holder.addChild(this.statsSelect);
+            this.hatPicker = new HatPicker(var_9);
+            this.hatPicker.x = -260;
+            this.hatPicker.y = 65;
+            this.hatPicker.scaleX = this.hatPicker.scaleY = 0.7;
+            holder.addChild(this.hatPicker);
             var _local_1:Point = var_197[0];
             var_9.setPos(_local_1.x, _local_1.y);
             posX = -_local_1.x;
@@ -121,6 +121,7 @@ package package_6
             blockBackground.clear();
             miniMap.clear();
             blockBackground.draw();
+            blockBackground.method_578();
             var _local_1:Point = var_197[0];
             var_9.setPos(_local_1.x, _local_1.y);
             var_9.setLife(3);
@@ -129,15 +130,16 @@ package package_6
 
         override public function remove()
         {
+            blockBackground.clearMoveInterval();
             var_14.removeEventListener(MouseEvent.CLICK, this.method_430);
             removeEventListener(Event.ENTER_FRAME, this.go);
             this.m.var_81.removeEventListener(MouseEvent.CLICK, this.method_354);
             this.m.var_92.removeEventListener(MouseEvent.CLICK, this.method_371);
-            this.var_158.remove();
-            this.var_130.remove();
-            this.var_130 = null;
+            this.statsSelect.remove();
+            this.hatPicker.remove();
+            this.hatPicker = null;
             this.m = null;
-            this.var_158 = null;
+            this.statsSelect = null;
             this.variables = null;
             super.remove();
         }

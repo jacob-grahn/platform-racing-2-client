@@ -235,6 +235,11 @@ package background
             return occupies;
         }
 
+        public function clearMoveInterval()
+        {
+            clearTimeout(this.var_496);
+        }
+
         override public function clear()
         {
             var _local_1:Block;
@@ -251,7 +256,7 @@ package background
         {
             CommandHandler.commandHandler.defineCommand("activate", null);
             this.var_196 = null;
-            clearTimeout(this.var_496);
+            this.clearMoveInterval();
             this.miniMap = null;
             super.remove();
         }
