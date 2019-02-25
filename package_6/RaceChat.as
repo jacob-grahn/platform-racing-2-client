@@ -21,12 +21,12 @@ package package_6
         {
             addChild(this.m);
             maxMessages = 7;
-            //this.m.top.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
-            //this.m.bg.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
             this.m.top.textBox1.mouseWheelEnabled = false;
             this.m.bg.textBox2.mouseWheelEnabled = false;
-            //this.m.top.textBox1.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
-            //this.m.bg.textBox2.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
+            this.m.top.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
+            this.m.bg.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
+            this.m.top.textBox1.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
+            this.m.bg.textBox2.addEventListener(MouseEvent.MOUSE_WHEEL, this.onScroll);
             Main.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, false, 0, true);
             Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true); // focusOrSend = method_374
             htmlNameMaker.listenForLink(this.m.top.textBox1);
@@ -38,12 +38,12 @@ package package_6
             displayMessage("<i><font color='#3E8697'>" + arr[0] + "</font></i><br/>");
         }
 
-        /*private function onScroll(e:MouseEvent)
+        private function onScroll(e:MouseEvent)
         {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
-        }*/
+        }
 
         private function mouseDownHandler(e:MouseEvent)
         {
