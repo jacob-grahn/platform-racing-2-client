@@ -84,7 +84,7 @@ package package_8
         private var var_281:Boolean = false;
         private var var_150:Number = 0;
         private var segSize:Number = 30;
-        private var var_249:Number = 0;
+        private var hurtTime:Number = 0; // var_249
         private var var_368:Number = 0;
         public var var_240:Number = 0;
         private var var_630:Block = null;
@@ -215,7 +215,7 @@ package package_8
                 this.var_174.y = _local_4.y;
             }
             method_58(this.map.rotation);
-            this.var_249--;
+            this.hurtTime--;
             if (this.course.var_40.length > 1) {
                 var_215++;
                 if (var_215 >= var_448) {
@@ -290,7 +290,7 @@ package package_8
             this.var_24 = 0;
             this.position();
             this.method_76();
-            if (this.var_249 <= 0) {
+            if (this.hurtTime <= 0) {
                 this.setMode("land");
             }
         }
@@ -698,8 +698,8 @@ package package_8
 
         private function method_448()
         {
-            if (this.var_249 <= 0) {
-                this.var_249 = 60;
+            if (this.hurtTime <= 0) {
+                this.hurtTime = 56;
                 method_51(65);
                 if (this.course.gameMode == "deathmatch") {
                     this.life--;
@@ -728,7 +728,7 @@ package package_8
         override public function becomeInvincible(_arg_1:int)
         {
             super.becomeInvincible(_arg_1);
-            this.var_249 = _arg_1;
+            this.hurtTime = _arg_1;
             this.var_435 = true;
         }
 
