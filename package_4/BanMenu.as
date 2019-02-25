@@ -34,6 +34,7 @@ package package_4
             this.userName = name;
             this.target = playerPopup;
             //this.m.banMinuteButton.addEventListener(MouseEvent.CLICK, this.banMinute, false, 0, true); 
+            this.m.viewPriorsButton.addEventListener(MouseEvent.CLICK, this.viewPriors);
             this.m.banHourButton.addEventListener(MouseEvent.CLICK, this.banHour, false, 0, true);
             this.m.banDayButton.addEventListener(MouseEvent.CLICK, this.banDay, false, 0, true);
             if (Main.isTrialMod == false) {
@@ -55,6 +56,11 @@ package package_4
         {
             this.confirmBan(this.minSecs);
         }*/
+
+        private function viewPriors(e:MouseEvent)
+        {
+            Main.socket.write('view_priors`' + this.userName);
+        }
 
         // method_468 = banHour
         private function banHour(e:MouseEvent)
