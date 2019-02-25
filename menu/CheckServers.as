@@ -183,7 +183,9 @@ package menu
                     "label":serverName,
                     "server":server
                 }
-                dropdown.addItem(dropdownItem);
+                if (Main.beta == false || (Main.beta == true && server.guild_id == 205)) {
+                    dropdown.addItem(dropdownItem);
+                }
             }
         }
 
