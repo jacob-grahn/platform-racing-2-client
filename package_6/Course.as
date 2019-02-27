@@ -18,7 +18,7 @@ package package_6
     import data.CommandHandler;
     import flash.geom.Point;
     import package_8.Character;
-    import package_9.class_82;
+    import package_9.Egg;
     import sounds.SoundEffects;
     import flash.net.URLVariables;
     import flash.display.StageQuality;
@@ -133,7 +133,7 @@ package package_6
 
         public function setEggSeed(arr:Array)
         {
-            class_82.method_333(int(arr[0]));
+            Egg.method_333(int(arr[0]));
         }
 
         public function addEggs(arr:Array)
@@ -141,7 +141,7 @@ package package_6
             if (this.gameMode == "egg") {
                 var _local_2:int = arr[0];
                 while (_local_2 > 0) {
-                    new class_82();
+                    new Egg();
                     _local_2--;
                 }
             }

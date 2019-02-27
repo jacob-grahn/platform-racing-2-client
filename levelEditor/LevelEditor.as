@@ -8,7 +8,7 @@ package levelEditor
 	import background.class_10;
     import background.class_75;
     import background.class_77;
-    import background.class_78;
+    import background.BlockBackground;
     import background.DrawableBackground;
     import background.LineBackground;
     import data.class_28;
@@ -42,7 +42,7 @@ package levelEditor
         public var draw4:DrawableBackground;
         public var draw5:DrawableBackground;
         public var bg:class_10;
-        public var blockBG:class_78;
+        public var blockBG:BlockBackground;
         public var var_171:LineBackground;
         public var live:Number = 0;
         public var minRank:String = "0"; // minLevel
@@ -99,7 +99,7 @@ package levelEditor
             this.draw5 = new DrawableBackground(this);
             this.bg = new class_10(this);
             this.var_171 = new LineBackground(this);
-            this.blockBG = new class_78(this);
+            this.blockBG = new BlockBackground(this);
             this.bg1.setScale(1);
             this.draw1.setScale(1);
             this.bg2.setScale(0.5);

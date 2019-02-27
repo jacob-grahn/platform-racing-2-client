@@ -53,6 +53,14 @@ package blocks
             this.map.method_53(this, new Point(segPointX, segPointY));
         }
 
+        public function isInitialized():Boolean
+        {
+            if (this.map == null) {
+                return false;
+            }
+            return true;
+        }
+
         public function getSeg():Point
         {
             return new Point(this.segX, this.segY);
@@ -304,15 +312,20 @@ package blocks
             }
         }
 
-        protected function move(_arg_1:int, _arg_2:int)
+        // _loc3 = curPoint
+        // _loc4 = newPoint
+        protected function move(_arg_1:int, _arg_2:int, ensureMap:Map)
         {
-            var _local_3:Point = new Point(this.segX, this.segY);
-            var _local_4:Point = new Point((this.segX + _arg_1), (this.segY + _arg_2));
-            var _local_5:Block = this.map.method_67(_local_4.x, _local_4.y);
+            if (this.map == null) {
+                this.map = ensureMap;
+            }
+            var curPoint:Point = new Point(this.segX, this.segY);
+            var newPoint:Point = new Point(this.segX + _arg_1, this.segY + _arg_2);
+            var _local_5:Block = this.map.getBlockFromPoint(newPoint.x, newPoint.y);
             if (_local_5 is PushBlock) {
                 _local_5.move(_arg_1, _arg_2);
             }
-            this.map.moveBlock(_local_3, _local_4);
+            this.map.moveBlock(curPoint, newPoint);
         }
 
         private function method_406()

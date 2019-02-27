@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_9.class_82
+// package_9.Egg = package_9.class_82
 
 package package_9
 {
@@ -18,7 +18,7 @@ package package_9
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
 
-    public class class_82 extends class_81 
+    public class Egg extends class_81 
     {
 
         private static var var_406:int = 0;
@@ -40,20 +40,20 @@ package package_9
         private var id:int;
         private var var_382:int = 0;
 
-        public function class_82()
+        public function Egg()
         {
             addChild(this.m);
             alpha = 0;
             this.id = var_223++;
             CommandHandler.commandHandler.defineCommand(("removeEgg" + this.id), this.method_744);
             var _local_1:Map = Course.course.blockBackground;
-            var _local_2:int = rand.method_55(_local_1.minX, _local_1.maxX);
-            var _local_3:int = rand.method_55(_local_1.minY, _local_1.maxY);
-            var _local_4:int = (rand.method_55(-1, 3) * 90);
+            var _local_2:int = rand.nextMinMax(_local_1.minX, _local_1.maxX);
+            var _local_3:int = rand.nextMinMax(_local_1.minY, _local_1.maxY);
+            var _local_4:int = (rand.nextMinMax(-1, 3) * 90);
             var _local_5:Point = class_28.method_9(_local_2, _local_3, -(_local_4));
             super(_local_5.x, _local_5.y, _local_4);
-            this.method_324();
-            if (rand.method_55(0, 2) == 1) {
+            this.setLimits();
+            if (rand.nextMinMax(0, 2) == 1) {
                 velX = 1;
             } else {
                 velX = -1;
@@ -83,27 +83,31 @@ package package_9
         {
             rand = new Random(_arg_1);
             var_223 = 1;
-            mode = rand.method_55(0, 5);
+            mode = rand.nextMinMax(0, 5);
             if (mode > 3) {
                 mode = 3;
             }
         }
 
 
-        public function method_324()
+        // _loc1 = map
+        // _loc2 = minPoint
+        // _loc3 = maxPoint
+        // method_324 = setLimits
+        public function setLimits()
         {
             var _local_4:int;
-            var _local_1:Map = Course.course.blockBackground;
-            this.maxX = (_local_1.maxX + 300);
-            this.minX = (_local_1.minX - 300);
-            this.maxY = (_local_1.maxY + 300);
-            this.minY = (_local_1.minY - 300);
-            var _local_2:Point = class_28.method_9(this.minX, this.minY, -(rot));
-            var _local_3:Point = class_28.method_9(this.maxX, this.maxY, -(rot));
-            this.maxX = _local_3.x;
-            this.maxY = _local_3.y;
-            this.minX = _local_2.x;
-            this.minY = _local_2.y;
+            var map:Map = Course.course.blockBackground;
+            this.maxX = map.maxX + 300;
+            this.minX = map.minX - 300;
+            this.maxY = map.maxY + 300;
+            this.minY = map.minY - 300;
+            var minPoint:Point = class_28.method_9(this.minX, this.minY, -rot);
+            var maxPoint:Point = class_28.method_9(this.maxX, this.maxY, -rot);
+            this.maxX = maxPoint.x;
+            this.maxY = maxPoint.y;
+            this.minX = minPoint.x;
+            this.minY = minPoint.y;
             if (this.maxX < this.minX) {
                 _local_4 = this.maxX;
                 this.maxX = this.minX;

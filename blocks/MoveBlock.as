@@ -1,17 +1,14 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//blocks.MoveBlock = blocks.class_47
+﻿// blocks.MoveBlock = blocks.class_47
 
 package blocks
 {
     import data.Objects;
+    import background.Map;
 
     public class MoveBlock extends Block 
     {
 
-        private var var_672:int = 0;
-        private var var_675:int = 0;
+        // removed: var_672, var_675 (unused)
         private var arrow:MoveArrow = new MoveArrow();
         private var dir:int;
 
@@ -21,54 +18,45 @@ package blocks
             var_34 = false;
         }
 
-        public function method_731(_arg_1:int)
+        // method_731 = setDirection
+        public function setDirection(i:int)
         {
-            this.dir = _arg_1;
-            this.method_634();
+            this.dir = i;
+            this.displayArrow();
         }
 
-        public function shift()
+        public function shift(map:Map)
         {
-            this.method_367();
+            this.removeArrow();
             if (this.dir == 3) {
-                move(-1, 0);
-            } else {
-                if (this.dir == 2) {
-                    move(1, 0);
-                } else {
-                    if (this.dir == 1) {
-                        move(0, -1);
-                    } else {
-                        if (this.dir == 0) {
-                            move(0, 1);
-                        }
-                    }
-                }
+                move(-1, 0, map);
+            } else if (this.dir == 2) {
+                move(1, 0, map);
+            } else if (this.dir == 1) {
+                move(0, -1, map);
+            } else if (this.dir == 0) {
+                move(0, 1, map);
             }
         }
 
-        private function method_634()
+        // method_634 = displayArrow
+        private function displayArrow()
         {
             addChild(this.arrow);
-            this.arrow.x = (this.arrow.y = 15);
+            this.arrow.x = this.arrow.y = 15;
             if (this.dir == 3) {
                 this.arrow.rotation = 270;
-            } else {
-                if (this.dir == 2) {
-                    this.arrow.rotation = 90;
-                } else {
-                    if (this.dir == 1) {
-                        this.arrow.rotation = 0;
-                    } else {
-                        if (this.dir == 0) {
-                            this.arrow.rotation = 180;
-                        }
-                    }
-                }
+            } else if (this.dir == 2) {
+                this.arrow.rotation = 90;
+            } else if (this.dir == 1) {
+                this.arrow.rotation = 0;
+            } else if (this.dir == 0) {
+                this.arrow.rotation = 180;
             }
         }
 
-        private function method_367()
+        // method_367 = removeArrow
+        private function removeArrow()
         {
             if (this.arrow.parent != null) {
                 this.arrow.parent.removeChild(this.arrow);
@@ -77,11 +65,10 @@ package blocks
 
         override public function remove()
         {
-            this.method_367();
+            this.removeArrow();
             super.remove();
         }
 
 
     }
-}//package blocks
-
+}

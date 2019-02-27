@@ -12,7 +12,7 @@ package package_6
     import package_8.Character;
     import package_8.class_91;
     import package_8.Racer;
-    import package_9.class_82;
+    import package_9.Egg;
 
     public class Game extends Course 
     {
@@ -40,7 +40,7 @@ package package_6
             this.version = v;
             this.quitButton = new QuitButton(this);
             this.placeArtifact = new PlaceArtifact(Main.stage);
-            class_82.method_333(0);
+            Egg.method_333(0);
         }
 
         override public function initialize()

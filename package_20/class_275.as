@@ -5,7 +5,7 @@
 
 package package_20
 {
-    import background.class_78;
+    import background.BlockBackground;
     import levelEditor.LevelEditor;
     import background.class_77;
     import flash.geom.Point;
@@ -15,7 +15,7 @@ package package_20
     public class class_275 extends class_269 
     {
 
-        private var blockBackground:class_78 = LevelEditor.editor.blockBG;
+        private var blockBackground:BlockBackground = LevelEditor.editor.blockBG;
 
         public function class_275(_arg_1:int)
         {

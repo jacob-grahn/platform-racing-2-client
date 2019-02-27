@@ -57,36 +57,36 @@ package background
 
         public function method_821(_arg_1:int, _arg_2:int, _arg_3:int)
         {
-            method_14(((((("o" + _arg_1) + ";") + _arg_2) + ";") + _arg_3));
+            method_14("o" + _arg_1 + ";" + _arg_2 + ";" + _arg_3);
         }
 
         public function method_606(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int)
         {
-            method_14((((((((("u" + _arg_1) + ";") + _arg_2) + ";") + _arg_3) + ";") + _arg_4) + ";100;100"));
+            method_14("u" + _arg_1 + ";" + _arg_2 + ";" + _arg_3 + ";" + _arg_4 + ";100;100");
         }
 
         public function recordChangeText(_arg_1:class_131)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14(((((("y" + _local_2) + ";") + _arg_1.method_184()) + ";") + _arg_1.method_12()));
+            method_14("y" + _local_2 + ";" + _arg_1.method_184() + ";" + _arg_1.method_12());
         }
 
         public function method_761(_arg_1:class_130)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14(((((("m" + _local_2) + ";") + _arg_1.x) + ";") + _arg_1.y));
+            method_14("m" + _local_2 + ";" + _arg_1.x + ";" + _arg_1.y);
         }
 
         public function recordDelete(_arg_1:class_130)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14(("d" + _local_2));
+            method_14("d" + _local_2);
         }
 
         public function method_686(_arg_1:class_130)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14(((((("r" + _local_2) + ";") + _arg_1.scaleX) + ";") + _arg_1.scaleY));
+            method_14("r" + _local_2 + ";" + _arg_1.scaleX + ";" + _arg_1.scaleY);
         }
 
         // _loc6 = drawStart
@@ -124,7 +124,7 @@ package background
                     _local_2++;
                     var drawDateEnd:Date = new Date();
                     var drawEnd:Number = drawDateEnd.getTime();
-                    if ((drawEnd - drawStart) > 50) {
+                    if (drawEnd - drawStart > 50) {
                         break;
                     }
                 }

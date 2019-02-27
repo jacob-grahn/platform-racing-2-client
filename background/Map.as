@@ -19,34 +19,34 @@ package background
     import package_6.Course;
     import package_6.MiniMap;
     import package_8.Character;
-    import package_9.class_82;
+    import package_9.Egg;
     //import __AS3__.vec.*;
     //import __AS3__.vec.Vector;
 
-    public class Map extends class_78 
+    public class Map extends BlockBackground 
     {
 
-        private var var_400:int = 0;
+        // removed var_688 (unused)
+        private var startBlockNum:int = 0; // var_400
         private var miniMap:MiniMap;
-        private var var_496:uint;
+        private var moveInterval:uint; // var_296
         private var segSize:Number = 30;
-        public var var_688:Boolean = false;
         public var maxY:Number = -9999999;
         public var minY:Number = 9999999;
         public var maxX:Number = -9999999;
         public var minX:Number = 9999999;
-        private var var_196:Vector.<MoveBlock> = new Vector.<MoveBlock>();
+        private var moveBlocksArray:Vector.<MoveBlock> = new Vector.<MoveBlock>(); // var_196
         private var startTime:int;
-        private var var_506:int = 0;
-        private var var_534:int = 5000;
+        private var moves:int = 0; // var_506
+        private var moveTime:int = 5000; // var_534
         private var rand:Random = new Random(1);
         private var var_446:int = 0;
         private var var_379:Array = new Array();
 
-        public function Map(_arg_1:MiniMap, _arg_2:Course)
+        public function Map(m:MiniMap, c:Course)
         {
-            this.miniMap = _arg_1;
-            super(_arg_2);
+            this.miniMap = m;
+            super(c);
             CommandHandler.commandHandler.defineCommand("activate", this.activate);
         }
 
@@ -55,7 +55,7 @@ package background
             var _local_2:int = int(_arg_1[0]);
             var _local_3:int = int(_arg_1[1]);
             var _local_4:String = _arg_1[2];
-            var _local_5:Block = method_67(_local_2, _local_3);
+            var _local_5:Block = getBlockFromPoint(_local_2, _local_3);
             if (_local_5 != null) {
                 _local_5.remoteActivate(_local_4);
             }
@@ -65,53 +65,56 @@ package background
         {
         }
 
-        public function method_488(_arg_1:int, _arg_2:Number, _arg_3:Number)
+        // method_488 = placeBlock
+        public function placeBlock(_arg_1:int, _arg_2:Number, _arg_3:Number)
         {
             this.attachObject(_arg_1, _arg_2, _arg_3);
         }
 
-        override protected function attachObject(_arg_1:int, _arg_2:int, _arg_3:int)
+        // _loc5 = block
+        // _loc6 = finishBlock
+        override protected function attachObject(blockCode:int, x:int, y:int)
         {
-            var _local_5:Block;
-            var _local_6:FinishBlock;
-            if (_arg_1 < 100) {
-                _arg_1 = _arg_1 + 100;
+            if (blockCode < 100) {
+                blockCode += 100;
             }
-            var _local_4:Point = method_52(_arg_2, _arg_3);
-            if (_arg_1 == Objects.EggMinionBlockCode) {
-                this.var_379.push(new Point(_arg_2, _arg_3));
+            var _local_4:Point = method_52(x, y);
+            if (blockCode == Objects.EggMinionBlockCode) {
+                this.var_379.push(new Point(x, y));
             } else {
-                _local_5 = Block(Objects.getFromCode(_arg_1));
-                if ((_local_5 is StartBlock)) {
-                    this.setStartPos(this.var_400, (_arg_2 + 15), (_arg_3 + 15));
-                    this.var_400++;
+                var block:Block = Block(Objects.getFromCode(blockCode));
+                if (block is StartBlock) {
+                    this.setStartPos(this.startBlockNum, x + 15, y + 15);
+                    this.startBlockNum++;
                 } else {
-                    if (_local_5 is FinishBlock) {
-                        _local_6 = FinishBlock(_local_5);
-                        this.method_516(_local_6.getId(), (_arg_2 + 15), (_arg_3 + 15));
+                    if (block is FinishBlock) {
+                        var finishBlock:FinishBlock = FinishBlock(block);
+                        this.method_516(finishBlock.getId(), x + 15, y + 15);
                     }
-                    method_53(_local_5, _local_4);
-                    _local_5.initialize(_local_4.x, _local_4.y, this);
+                    method_53(block, _local_4);
+                    if (!block.isInitialized()) {
+                        block.initialize(_local_4.x, _local_4.y, this);
+                    }
                     if (method_32(_local_4.x, _local_4.y)) {
-                        addChild(_local_5);
+                        addChild(block);
                     }
-                    if ((_local_5 is MoveBlock)) {
-                        this.var_196.push(_local_5);
+                    if (block is MoveBlock) {
+                        this.moveBlocksArray.push(block);
                     }
-                    this.miniMap.method_680(_arg_1, _arg_2, _arg_3);
+                    this.miniMap.method_680(blockCode, x, y);
                 }
             }
-            if (_arg_3 > this.maxY) {
-                this.maxY = _arg_3;
+            if (y > this.maxY) {
+                this.maxY = y;
             }
-            if (_arg_3 < this.minY) {
-                this.minY = _arg_3;
+            if (y < this.minY) {
+                this.minY = y;
             }
-            if (_arg_2 > this.maxX) {
-                this.maxX = _arg_2;
+            if (x > this.maxX) {
+                this.maxX = x;
             }
-            if (_arg_2 < this.minX) {
-                this.minX = _arg_2;
+            if (x < this.minX) {
+                this.minX = x;
             }
         }
 
@@ -124,15 +127,15 @@ package background
             this.var_379 = new Array();
         }
 
-        private function method_552(_arg_1:int, _arg_2:int)
+        // _loc3 = egg
+        private function method_552(eggX:int, eggY:int)
         {
-            var _local_3:class_82;
             if (this.var_446 < 25) {
-                _local_3 = new class_82();
-                _local_3.posX = (_arg_1 + 15);
-                _local_3.posY = (_arg_2 + 15);
-                _local_3.rot = 0;
-                _local_3.method_324();
+                var egg:Egg = new Egg();
+                egg.posX = eggX + 15;
+                egg.posY = eggY + 15;
+                egg.rot = 0;
+                egg.setLimits();
                 this.var_446++;
             }
         }
@@ -164,45 +167,45 @@ package background
         public function method_578()
         {
             this.startTime = new Date().time;
-            this.method_416();
+            this.determineMoveBlockDirection();
             this.method_485();
         }
 
-        private function method_416()
+        // _loc1 = i
+        // _loc2 = totalMoveBlocks
+        // _loc3 = block
+        // _loc4 = dir
+        // deleted _loc5&6 (unused)
+        // method_416 = determineMoveBlockDirection
+        private function determineMoveBlockDirection()
         {
-            var _local_1:int;
-            var _local_3:MoveBlock;
-            var _local_4:int;
-            var _local_5:int;
-            var _local_6:String;
-            var _local_2:int = this.var_196.length;
-            _local_1 = 0;
-            while (_local_1 < _local_2) {
-                _local_3 = this.var_196[_local_1];
-                _local_4 = this.rand.method_55(0, 4);
-                _local_3.method_731(_local_4);
-                _local_1++;
+            var totalMoveBlocks:int = this.moveBlocksArray.length;
+            var i:int = 0;
+            while (i < totalMoveBlocks) {
+                var block:MoveBlock = this.moveBlocksArray[i];
+                var dir:int = this.rand.nextMinMax(0, 4);
+                block.setDirection(dir);
+                i++;
             }
-            this.var_496 = setTimeout(this.method_784, 1000);
+            this.moveInterval = setTimeout(this.doMoveBlocks, 1000);
         }
 
-        private function method_784()
+        // _loc1 = i
+        // removed _loc2 (unneeded)
+        // _loc3 = block
+        // method_784 = doMoveBlocks
+        private function doMoveBlocks()
         {
-            var _local_1:int;
-            var _local_3:MoveBlock;
-            var _local_2:int = this.var_196.length;
-            _local_1 = 0;
-            while (_local_1 < _local_2) {
-                _local_3 = this.var_196[_local_1];
-                _local_3.shift();
-                _local_1++;
+            for (var i:int = 0; i < this.moveBlocksArray.length; i++) {
+                var block:MoveBlock = this.moveBlocksArray[i];
+                block.shift(this);
             }
-            var _local_4:int = ((this.startTime + (this.var_506 * this.var_534)) - new Date().time);
+            var _local_4:int = this.startTime + (this.moves * this.moveTime) - new Date().time;
             if (_local_4 < 1) {
                 _local_4 = 1;
             }
-            this.var_496 = setTimeout(this.method_416, (_local_4 + this.var_534));
-            this.var_506++;
+            this.moveInterval = setTimeout(this.determineMoveBlockDirection, _local_4 + this.moveTime);
+            this.moves++;
         }
 
         override public function testMove(_arg_1:int, _arg_2:int):Boolean
@@ -214,7 +217,7 @@ package background
             return (_local_3);
         }
 
-		// _loc5 = occupies
+        // _loc5 = occupies
         public function characterOccupiesSpace(xVal:int, yVal:int):Boolean
         {
             var _local_3:Point;
@@ -237,7 +240,7 @@ package background
 
         public function clearMoveInterval()
         {
-            clearTimeout(this.var_496);
+            clearTimeout(this.moveInterval);
         }
 
         override public function clear()
@@ -255,7 +258,7 @@ package background
         override public function remove()
         {
             CommandHandler.commandHandler.defineCommand("activate", null);
-            this.var_196 = null;
+            this.moveBlocksArray = null;
             this.clearMoveInterval();
             this.miniMap = null;
             super.remove();

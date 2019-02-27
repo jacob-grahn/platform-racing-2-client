@@ -13,6 +13,7 @@ package
     import flash.display.Sprite;
     import flash.display.Stage;
     import flash.events.Event;
+    import flash.external.ExternalInterface;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
     import flash.system.Capabilities;
@@ -35,7 +36,7 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = true; // DISABLE IN PRODUCTION
         public static const testing:Boolean = true; // DISABLE IN PRODUCTION
-        public static const version:String = "14-feb-2019-v153-1";
+        public static const version:String = "27-feb-2019-v153-2";
         public static const baseURL:String = "https://pr2hub.com"; //"https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
         public static const listsURL:String = "https://pr2hub.com/files/lists";
@@ -193,6 +194,14 @@ package
             Main.instance.kongAPI = recv;
             Main.instance.kongAPI.services.connect();
             Security.allowDomain(Main.instance.kongAPI.loaderInfo.url);
+        }
+
+        public static function traceExt(s:*)
+        {
+            trace(s);
+            if (ExternalInterface.available == true && beta == true) {
+                ExternalInterface.call('console.log', 'Flash traceExt: ' + s);
+            }
         }
 
 

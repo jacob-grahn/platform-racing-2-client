@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//background.class_78
+// background.class_78 = background.BlockBackground
 
 package background
 {
@@ -11,16 +11,16 @@ package background
     import data.class_28;
     import flash.display.DisplayObject;
 
-    public class class_78 extends class_77 
+    public class BlockBackground extends class_77 
     {
 
         private var segSize:Number = 30;
         protected var blockArray:Array = new Array();
         public var var_323:int = 0;
 
-        public function class_78(_arg_1:GamePage)
+        public function BlockBackground(gp:GamePage)
         {
-            super(_arg_1);
+            super(gp);
             this.addStartPositions();
             var_367 = 30;
             var_379 = -100;
@@ -105,7 +105,7 @@ package background
             var _local_3:Boolean = true;
             var _local_4:int = int(Math.round((_arg_1 / 30)));
             var _local_5:int = int(Math.round((_arg_2 / 30)));
-            var _local_6:class_132 = this.method_67(_local_4, _local_5);
+            var _local_6:class_132 = this.getBlockFromPoint(_local_4, _local_5);
             if (_local_6 != null) {
                 _local_3 = false;
             }
@@ -121,11 +121,12 @@ package background
                 _local_4 = new Point(_arg_1, _arg_2);
             }
             var _local_5:Point = this.method_52(_local_4.x, _local_4.y);
-            var _local_6:* = this.method_67(_local_5.x, _local_5.y);
+            var _local_6:* = this.getBlockFromPoint(_local_5.x, _local_5.y);
             return (_local_6);
         }
 
-        public function method_67(_arg_1:int, _arg_2:int):*
+        // method_67 = getBlockFromPoint
+        public function getBlockFromPoint(_arg_1:int, _arg_2:int):*
         {
             var _local_3:*;
             var _local_4:Array;
@@ -207,7 +208,7 @@ package background
             var _local_3:*;
             if (this.blockArray[_arg_1.x] != null) {
                 _local_3 = this.blockArray[_arg_1.x][_arg_1.y];
-                if (((!(_local_3 == null)) && (this.testMove(_arg_2.x, _arg_2.y)))) {
+                if (_local_3 != null && this.testMove(_arg_2.x, _arg_2.y)) {
                     this.method_53(null, _arg_1);
                     this.method_53(_local_3, _arg_2);
                     _local_3.setSeg(_arg_2.x, _arg_2.y);
