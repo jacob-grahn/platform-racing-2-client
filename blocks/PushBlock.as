@@ -54,25 +54,19 @@ package blocks
         {
             if (_arg_1 == "down") {
                 this.method_93(0, 1);
-            } else {
-                if (_arg_1 == "up") {
-                    this.method_93(0, -1);
-                } else {
-                    if (_arg_1 == "right") {
-                        this.method_93(1, 0);
-                    } else {
-                        if (_arg_1 == "left") {
-                            this.method_93(-1, 0);
-                        }
-                    }
-                }
+            } else if (_arg_1 == "up") {
+                this.method_93(0, -1);
+            } else if (_arg_1 == "right") {
+                this.method_93(1, 0);
+            } else if (_arg_1 == "left") {
+                this.method_93(-1, 0);
             }
         }
 
         private function method_93(_arg_1:int, _arg_2:int)
         {
             var _local_3:Point = class_28.method_9(_arg_1, _arg_2, map.rotation);
-            move(_local_3.x, _local_3.y);
+            move(_local_3.x, _local_3.y, map);
         }
 
 

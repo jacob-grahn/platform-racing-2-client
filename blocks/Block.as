@@ -323,7 +323,7 @@ package blocks
             var newPoint:Point = new Point(this.segX + _arg_1, this.segY + _arg_2);
             var _local_5:Block = this.map.getBlockFromPoint(newPoint.x, newPoint.y);
             if (_local_5 is PushBlock) {
-                _local_5.move(_arg_1, _arg_2);
+                _local_5.move(_arg_1, _arg_2, ensureMap);
             }
             this.map.moveBlock(curPoint, newPoint);
         }
