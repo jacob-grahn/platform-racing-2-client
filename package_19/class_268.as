@@ -16,7 +16,7 @@ package package_19
     {
 
         private var m:ModeMenuGraphic = new ModeMenuGraphic();
-        private var var_63:ComboBox = m.var_131;
+        private var var_63:ComboBox = m.modeSelect;
         private var open:Boolean = false;
 
         public function class_268(_arg_1:DisplayObject)

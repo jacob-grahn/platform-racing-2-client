@@ -3,14 +3,14 @@
 
 // LobbyBottomButtonsGraphic = class_202
 
-package 
+package
 {
     import flash.display.MovieClip;
     import fl.controls.Button;
     import flash.utils.Dictionary;
     import flash.events.Event;
 
-    public dynamic class LobbyBottomButtonsGraphic extends MovieClip 
+    public dynamic class LobbyBottomButtonsGraphic extends MovieClip
     {
 
         public var creditsButton:Button;
@@ -127,7 +127,7 @@ package
             this.method_762(_local_2);
             this.method_650(_local_2);
             this.method_722(_local_2);*/
-			this.logoutButton.label = "Logout";
+            this.logoutButton.label = "Logout";
             this.levelEditorButton.label = "Level Editor";
             this.optionsButton.label = "Options";
             this.creditsButton.label = "Credits";
@@ -142,5 +142,4 @@ package
 
 
     }
-}//package 
-
+}//package

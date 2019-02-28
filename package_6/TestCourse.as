@@ -33,8 +33,8 @@ package package_6
         {
             super.initialize();
             setVariables(this.variables);
-            this.m.var_81.addEventListener(MouseEvent.CLICK, this.method_354);
-            this.m.var_92.addEventListener(MouseEvent.CLICK, this.method_371);
+            this.m.back_bt.addEventListener(MouseEvent.CLICK, this.method_354);
+            this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.method_371);
             holder.addChild(this.m);
             musicSelection.x = -130;
             var_9 = new Racer(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
@@ -133,8 +133,8 @@ package package_6
             blockBackground.clearMoveInterval();
             var_14.removeEventListener(MouseEvent.CLICK, this.method_430);
             removeEventListener(Event.ENTER_FRAME, this.go);
-            this.m.var_81.removeEventListener(MouseEvent.CLICK, this.method_354);
-            this.m.var_92.removeEventListener(MouseEvent.CLICK, this.method_371);
+            this.m.back_bt.removeEventListener(MouseEvent.CLICK, this.method_354);
+            this.m.restart_bt.removeEventListener(MouseEvent.CLICK, this.method_371);
             this.statsSelect.remove();
             this.hatPicker.remove();
             this.hatPicker = null;

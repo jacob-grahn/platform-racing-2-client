@@ -8,7 +8,7 @@ package package_14
     import levelEditor.LevelEditor;
     import package_19.class_218;
     import package_19.class_216;
-    import package_19.class_217;
+    import package_19.ValueButton;
     import package_19.class_219;
 
     public class Settings extends SideBar 
@@ -29,22 +29,22 @@ package package_14
         // minimum rank for level entry (optional)
         private var rankTitle:String = "Minimum Rank"; // var_548
         private var rankDesc:String = "Players below this rank will not be able to race on this course."; // var_596
-        public var minRankButton:class_217 = new class_217("rank", rankTitle, rankDesc, "0", editor.method_142, 2); // minLevelButton
+        public var minRankButton:ValueButton = new ValueButton("rank", rankTitle, rankDesc, "0", editor.method_142, 2); // minLevelButton
 
         // gravity multiplier
         private var gravityTitle:String = "Gravity Multiplier"; // var_626
         private var gravityDesc:String = "Normal gravity will be multiplied by the number you provide."; // var_617
-        public var gravityButton:class_217 = new class_217("grav", gravityTitle, gravityDesc, "1.0", editor.setGravity, 4, "-.0123456789");
+        public var gravityButton:ValueButton = new ValueButton("grav", gravityTitle, gravityDesc, "1.0", editor.setGravity, 4, "-.0123456789");
 
         // time limit
         private var timeTitle:String = "Time Limit"; // var_532
         private var timeDesc:String = "Racers will have this amount of seconds to complete this course. Enter 0 for infinite time."; // var_619
-        public var timeButton:class_217 = new class_217("time", timeTitle, timeDesc, "120", editor.setMaxTime, 4);
+        public var timeButton:ValueButton = new ValueButton("time", timeTitle, timeDesc, "120", editor.setMaxTime, 4);
 
         // password (optional)
         private var passTitle:String = "Secret Password"; // var_521
         private var passDesc:String = "This password lets players play your course while unpublished."; // var_580
-        public var passButton:class_217 = new class_217("pass", passTitle, passDesc, "", editor.method_121, 32, null, "", false);
+        public var passButton:ValueButton = new ValueButton("pass", passTitle, passDesc, "", editor.method_121, 32, null, "", false);
 
         // game mode
         private var modeTitle:String = "Game Mode"; // var_637
@@ -54,7 +54,7 @@ package package_14
         // SFCM chance
         private var sfcmTitle:String = "Chance of Cowboy Mode"; // var_591
         private var sfcmDesc:String = "Super Flying Cowboy Mode will appear this often out of 100."; // var_519
-        public var sfcmButton:class_217 = new class_217("sfcm", sfcmTitle, sfcmDesc, "5", editor.setCowboyChance, 3); // var_499
+        public var sfcmButton:ValueButton = new ValueButton("sfcm", sfcmTitle, sfcmDesc, "5", editor.setCowboyChance, 3); // var_499
 
         public function Settings()
         {

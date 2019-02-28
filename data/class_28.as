@@ -11,7 +11,7 @@ package data
     import flash.display.MovieClip;
     import flash.geom.Point;
 
-    public class class_28 
+    public class class_28
     {
 
         public static var md5:MD5 = new MD5();
@@ -175,7 +175,7 @@ package data
             s = s.replace(/damn/gi, class_28.randArrayKey(class_28.damnArray));
             s = s.replace(/fuck/gi, class_28.randArrayKey(class_28.fuckArray));
             s = s.replace(/nigg(a|er)/gi, class_28.randArrayKey(class_28.niggaArray));
-            s = s.replace(/spic /gi, class_28.randArrayKey(class_28.niggaArray));
+            s = s.replace(/\b(spic)\b/gi, class_28.randArrayKey(class_28.niggaArray));
             s = s.replace(/shit/gi, class_28.randArrayKey(class_28.shitArray));
             s = s.replace(/bitch/gi, class_28.randArrayKey(class_28.bitchArray));
             s = s.replace(/cunt/gi, class_28.randArrayKey(class_28.bitchArray));
@@ -277,4 +277,3 @@ package data
 
     }
 }//package data
-

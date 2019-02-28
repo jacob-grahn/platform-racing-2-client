@@ -23,7 +23,7 @@ package package_19
         public function setValue(_arg_1:String)
         {
             this.value = _arg_1;
-            this.m.var_18.text = _arg_1;
+            this.m.valueBox.text = _arg_1;
         }
 
         override protected function onClick(_arg_1:MouseEvent)

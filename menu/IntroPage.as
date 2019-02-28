@@ -69,7 +69,7 @@ package menu
                     this.currentIntro = new KongregateIntroGraphic();
                 }
                 this.currentIntro.addEventListener(Event.COMPLETE, this.onComplete, false, 0, true);
-                this.m.var_526.addChild(this.currentIntro);
+                this.m.introHolder.addChild(this.currentIntro);
             }
         }
 
@@ -79,7 +79,7 @@ package menu
                 this.currentIntro.stop();
                 this.currentIntro.soundTransform = this.mute;
                 this.currentIntro.removeEventListener(Event.COMPLETE, this.onComplete);
-                this.m.var_526.removeChild(this.currentIntro);
+                this.m.introHolder.removeChild(this.currentIntro);
                 this.currentIntro = null;
             }
         }

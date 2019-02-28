@@ -24,6 +24,7 @@ package package_6
         public function CourseTimer(c:Course)
         {
             this.target = c;
+            this.m.holder.timeBox.text = '';
             addChild(this.m);
         }
 

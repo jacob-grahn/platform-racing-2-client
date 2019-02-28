@@ -29,17 +29,17 @@ package package_18
         private function method_751()
         {
             var _local_2:class_263;
-            var _local_3:class_306;
+            var _local_3:PresetListing;
             var _local_1:Vector.<class_263> = class_211.method_766();
             for each (_local_2 in _local_1) {
-                _local_3 = new class_306(_local_2);
+                _local_3 = new PresetListing(_local_2);
                 this.method_455(_local_3);
             }
         }
 
         override protected function loadListing(_arg_1:class_229)
         {
-            var _local_2:class_306 = class_306(_arg_1);
+            var _local_2:PresetListing = PresetListing(_arg_1);
             var _local_3:class_263 = _local_2.method_239();
             class_211.apply(_local_3, this.character, this.statsSelect, this.var_495);
             startFadeOut();
@@ -47,7 +47,7 @@ package package_18
 
         override protected function deleteListing(_arg_1:class_229)
         {
-            var _local_2:class_306 = class_306(_arg_1);
+            var _local_2:PresetListing = PresetListing(_arg_1);
             var _local_3:Object = _local_2.method_239();
             var _local_4:Object = this.statsSelect.getStats();
             _local_3.speed = _local_4.speed;

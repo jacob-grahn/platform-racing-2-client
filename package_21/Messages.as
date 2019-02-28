@@ -41,8 +41,8 @@ package package_21
             this.scrollBar.init(this.m.var_295, 340, 330);
             addChild(this.scrollBar);
             this.pageNavigation.x = 33;
-            this.m.var_93.addEventListener(MouseEvent.CLICK, this.method_295, false, 0, true);
-            this.m.var_108.addEventListener(MouseEvent.CLICK, this.method_245, false, 0, true);
+            this.m.sendMessage_bt.addEventListener(MouseEvent.CLICK, this.method_295, false, 0, true);
+            this.m.deleteAll_bt.addEventListener(MouseEvent.CLICK, this.method_245, false, 0, true);
             addChild(this.m);
             this.loadingGraphic.x = 88;
             this.loadingGraphic.y = 150;
@@ -181,8 +181,8 @@ package package_21
         override public function remove()
         {
             this.method_170();
-            this.m.var_93.removeEventListener(MouseEvent.CLICK, this.method_295);
-            this.m.var_108.removeEventListener(MouseEvent.CLICK, this.method_245);
+            this.m.sendMessage_bt.removeEventListener(MouseEvent.CLICK, this.method_295);
+            this.m.deleteAll_bt.removeEventListener(MouseEvent.CLICK, this.method_245);
             this.loader.removeEventListener(SuperLoader.d, this.method_228);
             this.loader.remove();
             this.loader = null;

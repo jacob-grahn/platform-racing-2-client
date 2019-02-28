@@ -21,7 +21,7 @@ package package_17
         private var var_513:int = 3;
         private var var_640:int = 137;
         private var var_632:int = 160;
-        private var listings:Vector.<class_257> = new Vector.<class_257>();
+        private var listings:Vector.<StoreListing> = new Vector.<StoreListing>();
         private var scroll:CustomScrollBar;
         private var var_289:LoadingGraphic;
         private var superLoader:SuperLoader; // var_123
@@ -59,13 +59,13 @@ package package_17
             }
         }
 
-        private function method_179(_arg_1:Object):class_257
+        private function method_179(_arg_1:Object):StoreListing
         {
-            var _local_2:class_257 = new class_257(_arg_1);
+            var _local_2:StoreListing = new StoreListing(_arg_1);
             if (_local_2.method_668()) {
-                _local_2.addEventListener(class_257.EVENT_PURCHASE, this.method_360);
+                _local_2.addEventListener(StoreListing.EVENT_PURCHASE, this.method_360);
             }
-            _local_2.addEventListener(class_257.EVENT_INFO, this.method_396);
+            _local_2.addEventListener(StoreListing.EVENT_INFO, this.method_396);
             _local_2.x = (this.listings.length % this.var_513) * this.var_640;
             _local_2.y = Math.floor(this.listings.length / this.var_513) * this.var_632;
             this.m.itemsHolder.addChild(_local_2);
@@ -75,7 +75,7 @@ package package_17
 
         private function method_360(_arg_1:Event)
         {
-            var _local_2:String = class_257(_arg_1.target).method_738();
+            var _local_2:String = StoreListing(_arg_1.target).method_738();
             if (_local_2 == "stats-boost") {
                 this.method_678();
                 this.remove();
@@ -86,7 +86,7 @@ package package_17
 
         private function method_396(_arg_1:Event)
         {
-            var _local_2:class_257 = class_257(_arg_1.target);
+            var _local_2:StoreListing = StoreListing(_arg_1.target);
             var _local_3:Object = _local_2.method_653();
             new MessagePopup("--- " + _local_3.title + " FAQ --- \n\n" + _local_3.longDescription);
         }
@@ -134,10 +134,10 @@ package package_17
 
         private function clear()
         {
-            var _local_1:class_257;
+            var _local_1:StoreListing;
             for each (_local_1 in this.listings) {
-                _local_1.removeEventListener(class_257.EVENT_PURCHASE, this.method_360);
-                _local_1.removeEventListener(class_257.EVENT_INFO, this.method_396);
+                _local_1.removeEventListener(StoreListing.EVENT_PURCHASE, this.method_360);
+                _local_1.removeEventListener(StoreListing.EVENT_INFO, this.method_396);
                 _local_1.remove();
             }
         }
