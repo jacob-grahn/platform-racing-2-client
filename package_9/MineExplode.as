@@ -1,18 +1,18 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_9.class_108
+// package_9.MineExplode = class_108
 
 package package_9
 {
     import sounds.SoundEffects;
 
-    public class class_108 extends class_80 
+    public class MineExplode extends class_80 
     {
 
-        private var m:class_160 = new class_160();
+        private var m:MineExplodeAnimation = new MineExplodeAnimation();
 
-        public function class_108(_arg_1:Number, _arg_2:Number)
+        public function MineExplode(_arg_1:Number, _arg_2:Number)
         {
             x = _arg_1;
             y = _arg_2;

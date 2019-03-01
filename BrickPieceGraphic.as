@@ -1,16 +1,16 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//class_105
+// BrickPieceGraphic = class_105
 
 package 
 {
     import flash.display.MovieClip;
 
-    public dynamic class class_105 extends MovieClip 
+    public dynamic class BrickPieceGraphic extends MovieClip 
     {
 
-        public function class_105()
+        public function BrickPieceGraphic()
         {
             addFrameScript(0, this.frame1);
         }

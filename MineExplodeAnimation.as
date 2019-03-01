@@ -1,16 +1,16 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//class_160
+// MineExplodeAnimation = class_160
 
 package 
 {
     import flash.display.MovieClip;
 
-    public dynamic class class_160 extends MovieClip 
+    public dynamic class MineExplodeAnimation extends MovieClip 
     {
 
-        public function class_160()
+        public function MineExplodeAnimation()
         {
             addFrameScript(13, this.frame14);
         }

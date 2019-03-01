@@ -1,16 +1,16 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//class_107
+// MinePieceGraphic = class_107
 
 package 
 {
     import flash.display.MovieClip;
 
-    public dynamic class class_107 extends MovieClip 
+    public dynamic class MinePieceGraphic extends MovieClip 
     {
 
-        public function class_107()
+        public function MinePieceGraphic()
         {
             addFrameScript(0, this.frame1);
         }

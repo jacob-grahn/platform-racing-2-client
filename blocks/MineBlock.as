@@ -9,7 +9,7 @@ package blocks
     import package_8.Racer;
     import package_9.class_106;
     import flash.geom.Point;
-    import package_9.class_108;
+    import package_9.MineExplode;
 
     public class MineBlock extends Block 
     {
@@ -59,19 +59,19 @@ package blocks
         override protected function activate(_arg_1:String="")
         {
             var _local_2:class_106;
-            var _local_3:class_107;
+            var _local_3:MinePieceGraphic;
             var _local_4:Number;
             var _local_5:Number;
             var _local_6:Point = method_18();
             var _local_7:int;
             while (_local_7 < 10) {
-                _local_3 = new class_107();
+                _local_3 = new MinePieceGraphic();
                 _local_4 = ((Math.random() * 30) + _local_6.x);
                 _local_5 = ((Math.random() * 30) + _local_6.y);
                 _local_2 = new class_106(_local_3, 0.75, 0.95, 0.05, 30, 30, 50, _local_4, _local_5);
                 _local_7++;
             }
-            new class_108(_local_6.x, _local_6.y);
+            new MineExplode(_local_6.x, _local_6.y);
             remove();
         }
 
