@@ -1,9 +1,9 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_16.class_279
+// com.jiggmin.ColorPicker.CursorEyedropper = package_16.class_279
 
-package package_16
+package com.jiggmin.ColorPicker
 {
     import ui.class_8;
     import flash.display.BitmapData;
@@ -14,7 +14,7 @@ package package_16
     import flash.ui.Mouse;
     import flash.events.Event;
 
-    public class class_279 extends class_8 
+    public class CursorEyedropper extends class_8
     {
 
         public var color:int;
@@ -23,7 +23,7 @@ package package_16
         private var var_266:Timer;
         private var var_248:Timer;
 
-        public function class_279()
+        public function CursorEyedropper()
         {
             visible = false;
             addChild(new CursorEyedropperGraphic());
@@ -147,4 +147,3 @@ package package_16
 
     }
 }//package package_16
-

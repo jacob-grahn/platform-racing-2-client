@@ -1,13 +1,13 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_16.class_280
+// com.jiggmin.ColorPicker.class_280 = package_16.class_280
 
-package package_16
+package com.jiggmin.ColorPicker
 {
     import data.class_122;
 
-    public class class_280 
+    public class class_280
     {
 
 
@@ -32,21 +32,21 @@ package package_16
                     _local_8 = 0;
                     while (_local_3 <= 0xFF) {
                         _local_5 = class_122.method_265(_local_2, _local_3, _local_4);
-                        _local_11 = (((_local_6 * 6) + _local_8) + 4);
-                        _local_12 = ((_local_7 * 6) + _local_9);
+                        _local_11 = (_local_6 * 6) + _local_8 + 4;
+                        _local_12 = (_local_7 * 6) + _local_9;
                         _local_1[_local_11][_local_12] = _local_5;
                         _local_8++;
-                        _local_3 = (_local_3 + 51);
+                        _local_3 = _local_3 + 51;
                     }
                     _local_9++;
-                    _local_4 = (_local_4 + 51);
+                    _local_4 = _local_4 + 51;
                 }
                 _local_2 = (_local_2 + 51);
                 if (++_local_6 > 2) {
                     _local_6 = 0;
                     _local_7++;
                 }
-                _local_8 = (_local_9 = 0);
+                _local_8 = _local_9 = 0;
             }
             var _local_10:int;
             while (_local_10 < 12) {
@@ -65,7 +65,7 @@ package package_16
             _local_1[2][9] = 0xFFFF00;
             _local_1[2][10] = 0xFFFF;
             _local_1[2][11] = 0xFF00FF;
-            return (_local_1);
+            return _local_1;
         }
 
         public static function method_258(_arg_1:int, _arg_2:int):Array
@@ -84,10 +84,9 @@ package package_16
                 _local_3[_local_4] = _local_5;
                 _local_4++;
             }
-            return (_local_3);
+            return _local_3;
         }
 
 
     }
-}//package package_16
-
+}

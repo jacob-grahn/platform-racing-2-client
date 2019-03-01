@@ -6,11 +6,11 @@
 package package_19
 {
     import flash.display.Sprite;
-    import package_16.ColorPicker;
+    import com.jiggmin.ColorPicker.ColorPicker;
     import levelEditor.LevelEditor;
     import flash.events.Event;
 
-    public class class_220 extends Sprite 
+    public class class_220 extends Sprite
     {
 
         private var cp:ColorPicker = new ColorPicker(); // var_12

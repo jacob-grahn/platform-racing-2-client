@@ -3,7 +3,7 @@
 package package_14
 {
     import flash.display.Stage;
-    import package_16.ColorPicker;
+    import com.jiggmin.ColorPicker.ColorPicker;
     import package_20.Brush;
     import package_20.Eraser;
     import package_19.SizePicker;
@@ -12,7 +12,7 @@ package package_14
     import flash.events.MouseEvent;
     import ui.class_8;
 
-    public class Tools extends SideBar 
+    public class Tools extends SideBar
     {
 
         private static var color:Number = 0;

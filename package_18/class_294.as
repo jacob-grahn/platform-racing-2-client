@@ -7,11 +7,11 @@ package package_18
 {
     import flash.display.Sprite;
     import ui.class_311;
-    import package_16.ColorPicker;
+    import com.jiggmin.ColorPicker.ColorPicker;
     import flash.display.DisplayObject;
     import flash.events.Event;
 
-    public class class_294 extends Sprite 
+    public class class_294 extends Sprite
     {
 
         private var var_173:class_311;
@@ -164,4 +164,3 @@ package package_18
 
     }
 }//package package_18
-

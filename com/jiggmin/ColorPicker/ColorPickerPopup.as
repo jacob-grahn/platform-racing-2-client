@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_16.class_241
+// com.jiggmin.ColorPicker.ColorPickerPopup = package_16.class_241
 
-package package_16
+package com.jiggmin.ColorPicker
 {
     import package_4.Popup;
     import flash.display.Sprite;
@@ -19,10 +19,10 @@ package package_16
     import flash.geom.Rectangle;
     import flash.display.Bitmap;
 
-    public class class_241 extends Popup 
+    public class ColorPickerPopup extends Popup
     {
 
-        private var var_89:class_279;
+        private var var_89:CursorEyedropper;
         private var var_27:Sprite;
         private var var_145:Array;
         private var var_48:Sprite;
@@ -44,15 +44,15 @@ package package_16
         private var me:MouseEvent;
         private var m:ColorPickerPopupGraphic;
 
-        public function class_241(_arg_1:int)
+        public function ColorPickerPopup(_arg_1:int)
         {
             var _local_2:Sprite;
             var _local_3:Sprite;
             super(false);
             this.m = new ColorPickerPopupGraphic();
             addChild(this.m);
-            this.m.var_3.addEventListener(MouseEvent.CLICK, this.method_363, false, 0, true);
-            this.m.var_1.addEventListener(MouseEvent.CLICK, this.method_400, false, 0, true);
+            this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOK, false, 0, true);
+            this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.textBox.restrict = "0123456789abcdefABCDEF#x";
             this.m.textBox.addEventListener(Event.CHANGE, this.method_415, false, 0, true);
             this.var_69 = this.method_814(60, 60);
@@ -61,7 +61,7 @@ package package_16
             addChild(this.var_69);
             this.method_532(this.var_69);
             this.var_124 = this.method_755(15, 60);
-            this.var_124.x = ((this.var_69.x + this.var_69.width) + 10);
+            this.var_124.x = this.var_69.x + this.var_69.width + 10;
             this.var_124.y = this.var_69.y;
             addChild(this.var_124);
             _local_2 = this.method_141(15, 60);
@@ -103,7 +103,7 @@ package package_16
 
         public function init()
         {
-            this.var_89 = new class_279();
+            this.var_89 = new CursorEyedropper();
             this.var_89.method_101(this);
             this.var_89.addEventListener(Event.CHANGE, this.method_212, false, 0, true);
             this.var_89.addEventListener(Event.COMPLETE, this.method_275, false, 0, true);
@@ -114,13 +114,13 @@ package package_16
             class_8.method_28(this.var_89);
             stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
             if ((x + width) > Main.stage.stageWidth) {
-                x = (Main.stage.stageWidth - width);
+                x = Main.stage.stageWidth - width;
             }
             if (x < 0) {
                 x = 0;
             }
-            if ((y + height) > Main.stage.stageHeight) {
-                y = (Main.stage.stageHeight - height);
+            if (y + height > Main.stage.stageHeight) {
+                y = Main.stage.stageHeight - height;
             }
             if (y < 0) {
                 y = 0;
@@ -134,12 +134,12 @@ package package_16
                 this.color = _arg_1;
                 _local_2 = class_122.hex24tohsb(_arg_1);
                 this.hue = _local_2.hue;
-                this.var_146.y = Math.round((60 - ((this.hue / 360) * 60)));
+                this.var_146.y = Math.round(60 - ((this.hue / 360) * 60));
                 this.method_382(this.hue);
                 this.saturation = _local_2.saturation;
-                this.var_100.x = Math.round(((this.saturation / 100) * 60));
+                this.var_100.x = Math.round((this.saturation / 100) * 60);
                 this.brightness = _local_2.brightness;
-                this.var_100.y = Math.round((60 - ((this.brightness / 100) * 60)));
+                this.var_100.y = Math.round(60 - ((this.brightness / 100) * 60));
                 this.method_40();
             }
         }
@@ -150,7 +150,7 @@ package package_16
                 _arg_1 = class_122.method_68(this.hue, this.saturation, this.brightness);
             }
             if (stage.focus != this.m.textBox.textField) {
-                this.m.textBox.text = ("#" + class_122.method_712(_arg_1).substr(2));
+                this.m.textBox.text = "#" + class_122.method_712(_arg_1).substr(2);
             }
             this.method_765(this.var_121, _arg_1);
             dispatchEvent(new Event(Event.CHANGE));
@@ -159,9 +159,9 @@ package package_16
         public function method_12():int
         {
             if (this.var_188 != -1) {
-                return (this.var_188);
+                return this.var_188;
             }
-            return (this.color);
+            return this.color;
         }
 
         public function method_101(_arg_1:DisplayObject)
@@ -192,8 +192,8 @@ package package_16
                     _local_4 = this.var_145[_local_6][_local_7];
                     if (_local_4 == this.color) {
                         this.var_48.visible = true;
-                        this.var_48.x = (_local_6 * _local_5);
-                        this.var_48.y = (_local_7 * _local_5);
+                        this.var_48.x = _local_6 * _local_5;
+                        this.var_48.y = _local_7 * _local_5;
                     }
                     _local_7++;
                 }
@@ -234,8 +234,8 @@ package package_16
             _local_4 = class_74.numLimit(_local_4, 0, 60);
             this.var_100.x = Math.round(_local_3);
             this.var_100.y = Math.round(_local_4);
-            this.saturation = (100 * (_local_3 / 60));
-            this.brightness = (100 - (100 * (_local_4 / 60)));
+            this.saturation = 100 * (_local_3 / 60);
+            this.brightness = 100 - (100 * (_local_4 / 60));
             this.color = class_122.method_68(this.hue, this.saturation, this.brightness);
             this.method_40();
             this.var_48.visible = false;
@@ -249,7 +249,7 @@ package package_16
             _local_3 = _local_2.y;
             _local_3 = class_74.numLimit(_local_3, 0, 60);
             this.var_146.y = Math.round(_local_3);
-            this.hue = (360 - (360 * (_local_3 / 60)));
+            this.hue = 360 - (360 * (_local_3 / 60));
             this.color = class_122.method_68(this.hue, this.saturation, this.brightness);
             this.method_40();
             this.var_48.visible = false;
@@ -282,8 +282,8 @@ package package_16
             var _local_4:int = int(Math.floor((_local_2.y / 10)));
             _local_3 = class_74.numLimit(_local_3, 0, 21);
             _local_4 = class_74.numLimit(_local_4, 0, 11);
-            this.var_144.x = (_local_3 * 10);
-            this.var_144.y = (_local_4 * 10);
+            this.var_144.x = _local_3 * 10;
+            this.var_144.y = _local_4 * 10;
             this.var_144.visible = true;
             this.var_188 = this.var_145[_local_3][_local_4];
             this.method_40(this.var_188);
@@ -295,8 +295,8 @@ package package_16
             var _local_2:int = int((this.var_144.x / 10));
             var _local_3:int = int((this.var_144.y / 10));
             this.setColor(this.var_145[_local_2][_local_3]);
-            this.var_48.x = (_local_2 * 10);
-            this.var_48.y = (_local_3 * 10);
+            this.var_48.x = _local_2 * 10;
+            this.var_48.y = _local_3 * 10;
             this.var_48.visible = true;
             this.remove();
         }
@@ -327,12 +327,14 @@ package package_16
             }
         }
 
-        private function method_363(_arg_1:MouseEvent)
+        // method_363 = clickOK
+        private function clickOK(e:MouseEvent)
         {
             this.remove();
         }
 
-        private function method_400(_arg_1:MouseEvent)
+        // method_400 = clickCancel
+        private function clickCancel(e:MouseEvent)
         {
             this.color = this.var_598;
             dispatchEvent(new Event(Event.CHANGE));
@@ -359,8 +361,8 @@ package package_16
                     _local_5 = this.var_145[_local_6][_local_7];
                     if (_local_5 == this.color) {
                         this.var_48.visible = true;
-                        this.var_48.x = (_local_6 * _local_4);
-                        this.var_48.y = (_local_7 * _local_4);
+                        this.var_48.x = _local_6 * _local_4;
+                        this.var_48.y = _local_7 * _local_4;
                     }
                     this.var_27.graphics.beginFill(_local_5);
                     this.var_27.graphics.drawRect((_local_6 * _local_4), (_local_7 * _local_4), _local_4, _local_4);
@@ -376,7 +378,7 @@ package package_16
             var _local_1:Sprite = new Sprite();
             _local_1.graphics.lineStyle(1, 0xFFFFFF, 1, true);
             _local_1.graphics.drawRect(0, 0, 10, 10);
-            return (_local_1);
+            return _local_1;
         }
 
         private function method_755(_arg_1:int, _arg_2:int):Sprite
@@ -392,9 +394,9 @@ package package_16
                 _local_6++;
             }
             this.var_146 = new ColorPickerHueArrowGraphic();
-            this.var_146.x = (_arg_1 + 1);
+            this.var_146.x = _arg_1 + 1;
             this.var_146.y = _arg_2;
-            this.var_146.mouseEnabled = (this.var_146.mouseChildren = false);
+            this.var_146.mouseEnabled = this.var_146.mouseChildren = false;
             var _local_7:Sprite = new Sprite();
             _local_7.graphics.beginFill(0, 0);
             _local_7.graphics.drawRect(0, 0, (_arg_1 + 10), _arg_2);
@@ -403,7 +405,7 @@ package package_16
             _local_8.addChild(new Bitmap(_local_3));
             _local_8.addChild(this.var_146);
             _local_8.addChild(_local_7);
-            return (_local_8);
+            return _local_8;
         }
 
         private function method_814(_arg_1:int, _arg_2:int):Sprite
@@ -411,12 +413,12 @@ package package_16
             this.var_326 = new BitmapData(_arg_1, _arg_2, false, 0);
             var _local_3:Bitmap = new Bitmap(this.var_326);
             this.var_100 = new ColorPickerCrosshairsGraphic();
-            this.var_100.mouseEnabled = (this.var_100.mouseChildren = false);
-            this.var_100.x = (this.var_100.y = 20);
+            this.var_100.mouseEnabled = this.var_100.mouseChildren = false;
+            this.var_100.x = this.var_100.y = 20;
             var _local_4:Sprite = new Sprite();
             _local_4.addChild(_local_3);
             _local_4.addChild(this.var_100);
-            return (_local_4);
+            return _local_4;
         }
 
         private function method_382(_arg_1:Number)
@@ -431,10 +433,10 @@ package package_16
             var _local_4:int = _local_2.height;
             var _local_9:int;
             while (_local_9 < _local_3) {
-                _local_6 = ((_local_9 / _local_3) * 100);
+                _local_6 = (_local_9 / _local_3) * 100;
                 _local_10 = 0;
                 while (_local_10 < _local_4) {
-                    _local_7 = (100 - ((_local_10 / _local_4) * 100));
+                    _local_7 = 100 - ((_local_10 / _local_4) * 100);
                     _local_5 = class_122.method_68(_arg_1, _local_6, _local_7);
                     _local_2.setPixel(_local_9, _local_10, _local_5);
                     _local_10++;
@@ -449,7 +451,7 @@ package package_16
             _local_2.x = _arg_1.x;
             _local_2.y = _arg_1.y;
             addChild(_local_2);
-            return (_local_2);
+            return _local_2;
         }
 
         private function method_141(_arg_1:int, _arg_2:int):Sprite
@@ -462,7 +464,7 @@ package package_16
             _local_3.graphics.lineStyle(1, 0xFFFFFF, 1, true);
             _local_3.graphics.lineTo(_arg_1, _arg_2);
             _local_3.graphics.lineTo(0, _arg_2);
-            return (_local_3);
+            return _local_3;
         }
 
         override public function remove()
@@ -479,8 +481,8 @@ package package_16
                 this.var_27.removeEventListener(MouseEvent.MOUSE_OUT, this.method_417);
                 this.var_89.removeEventListener(Event.CHANGE, this.method_212);
                 this.var_89.removeEventListener(Event.COMPLETE, this.method_275);
-                this.m.var_3.removeEventListener(MouseEvent.CLICK, this.method_363);
-                this.m.var_1.removeEventListener(MouseEvent.CLICK, this.method_400);
+                this.m.ok_bt.removeEventListener(MouseEvent.CLICK, this.clickOK);
+                this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
                 this.m.textBox.removeEventListener(Event.CHANGE, this.method_415);
                 this.var_326.dispose();
                 if (class_8.instance != null) {
@@ -509,5 +511,4 @@ package package_16
 
 
     }
-}//package package_16
-
+}

@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_18.class_260
+// package_18.AccountInfo = package_18.class_260
 
 package package_18
 {
@@ -19,14 +19,14 @@ package package_18
     import flash.text.TextFieldType;
     import flash.events.Event;
 
-    public class class_260 extends Page 
+    public class AccountInfo extends Page
     {
 
         private var var_5:Character;
         private var var_158:StatsSelect;
         private var var_190:class_262;
         private var stageRef:Stage = Main.stage;
-        private var m:class_289 = new class_289();
+        private var m:AccountInfoGraphic = new AccountInfoGraphic();
         private var var_117:int = 0;
         private var var_439:int = 0;
         private var rank:int = 0;
@@ -35,7 +35,7 @@ package package_18
         private var var_635:int = 95;
         private var var_566:String;
 
-        public function class_260()
+        public function AccountInfo()
         {
             CommandHandler.commandHandler.defineCommand("setCustomizeInfo", this.setCustomizeInfo);
             Main.socket.write("get_customize_info`");
@@ -276,4 +276,3 @@ package package_18
 
     }
 }//package package_18
-

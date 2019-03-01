@@ -1,16 +1,16 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_16.ColorPicker = class_182
+// com.jiggmin.ColorPicker.ColorPicker = package_16.class_182
 
-package package_16
+package com.jiggmin.ColorPicker
 {
     import flash.events.MouseEvent;
     import flash.geom.ColorTransform;
     import flash.events.Event;
     import flash.geom.Point;
 
-    public class ColorPicker extends class_7 
+    public class ColorPicker extends class_7
     {
 
         public static const RIGHT:String = "right";
@@ -19,7 +19,7 @@ package package_16
 
         public var var_419:String = "right";
         protected var color:int;
-        private var package_4:class_241;
+        private var package_4:ColorPickerPopup;
         private var m:ColorPickerGraphic;
 
         public function ColorPicker()
@@ -73,7 +73,7 @@ package package_16
             this.method_71();
             var _local_1:Point = new Point(0, 0);
             var _local_2:Point = this.localToGlobal(_local_1);
-            this.package_4 = new class_241(this.color);
+            this.package_4 = new ColorPickerPopup(this.color);
             if (this.var_419 == RIGHT) {
                 this.package_4.x = _local_2.x + width + 5;
             } else {

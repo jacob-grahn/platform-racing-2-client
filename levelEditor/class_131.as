@@ -6,14 +6,14 @@
 package levelEditor
 {
     import flash.text.TextField;
-    import package_16.ColorPicker;
+    import com.jiggmin.ColorPicker.ColorPicker;
     import data.Objects;
     import flash.text.TextFieldAutoSize;
     import flash.text.TextFieldType;
     import flash.events.Event;
     import flash.events.MouseEvent;
 
-    public class class_131 extends class_130 
+    public class class_131 extends class_130
     {
 
         public static var var_380:int = 0;

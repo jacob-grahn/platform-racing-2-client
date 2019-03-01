@@ -67,7 +67,6 @@ package package_17
 
         private function method_191(_arg_1:Number)
         {
-            var _local_14:Character;
             var _local_2:int = int(Math.ceil(Math.random() * 12));
             var _local_3:int = int(Math.ceil(Math.random() * 39));
             var _local_4:int = int(Math.ceil(Math.random() * 39));
@@ -80,7 +79,7 @@ package package_17
             var _local_11:int = int(Math.round(Math.random() * 0xFFFFFF));
             var _local_12:int = int(Math.round(Math.random() * 0xFFFFFF));
             var _local_13:int = int(Math.round(Math.random() * 0xFFFFFF));
-            _local_14 = new Character(_local_2, _local_3, _local_4, _local_5);
+            var _local_14:Character = new Character(_local_2, _local_3, _local_4, _local_5);
             this.m.addChildAt(_local_14, 2);
             _local_14.method_133(_local_6, _local_7);
             _local_14.method_132(_local_8, _local_9);

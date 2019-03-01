@@ -10,7 +10,7 @@ package lobby
     import package_21.ChatInstance;
     import package_21.Messages;
     import package_23.PlayersTab;
-    import package_18.class_260;
+    import package_18.AccountInfo;
 
     public class LobbyLeft extends class_196 
     {
@@ -52,7 +52,7 @@ package lobby
 
         private function changeTabAccount()
         {
-            changePage(new class_260());
+            changePage(new AccountInfo());
         }
 
         override public function remove()
