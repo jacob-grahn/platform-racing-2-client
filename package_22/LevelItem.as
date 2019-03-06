@@ -307,7 +307,7 @@ package package_22
                 this.infoPopup.remove();
             }
             if (this.superLoader != null) {
-                this.superLoader.removeEventListener(Event.COMPLETE, this.method_198);
+                this.superLoader.removeEventListener(Event.COMPLETE, this.validateResponse);
                 this.superLoader.remove();
                 this.superLoader = null;
             }
