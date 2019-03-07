@@ -61,22 +61,23 @@ package blocks
 
         override protected function activate(_arg_1:String="")
         {
-            var _local_2:Number = Number(_arg_1);
-            _local_2 = Math.floor((_local_2 / 4));
-            this.life = (this.life - _local_2);
-            this.method_294((_local_2 * 2));
+            var _local_2 = Math.floor(Number(_arg_1) / 4);
+            this.life = this.life - _local_2;
+            this.throwPieces(_local_2 * 2);
             if (this.life <= 0) {
-                this.method_707();
+                this.doCrumble();
             }
         }
 
-        private function method_707()
+        // method_707 = doCrumble
+        private function doCrumble()
         {
-            this.method_294(10);
+            this.throwPieces(10);
             remove();
         }
 
-        private function method_294(_arg_1:Number)
+        // method_294 = throwPieces
+        private function throwPieces(_arg_1:Number)
         {
             var _local_2:CrumblePieceGraphic;
             var _local_3:class_106;
