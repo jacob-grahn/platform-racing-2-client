@@ -699,7 +699,7 @@ package package_8
         private function method_448()
         {
             if (this.hurtTime <= 0) {
-                this.hurtTime = 56;
+                this.hurtTime = 60;
                 method_51(65);
                 if (this.course.gameMode == "deathmatch") {
                     this.life--;
