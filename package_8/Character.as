@@ -424,6 +424,11 @@ package package_8
             }
         }
 
+        public function djinnUpdateAlpha(newAlpha:Number)
+        {
+            this.var_387.newAlpha(newAlpha);
+        }
+
         public function gainHeart()
         {
             SoundEffects.playGameSound(new BumpHappySound(), x, y, 0.75);

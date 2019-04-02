@@ -68,14 +68,14 @@ package package_18
                 c.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
             }
             if (_arg_4 != null) {
-                _arg_4.var_130.setValue(_arg_1.hat);
-                _arg_4.var_119.setValue(_arg_1.head);
-                _arg_4.var_113.setValue(_arg_1.body);
-                _arg_4.var_129.setValue(_arg_1.feet);
-                _arg_4.var_130.setColors(_arg_1.hatColor, _arg_1.hatColor2);
-                _arg_4.var_119.setColors(_arg_1.headColor, _arg_1.headColor2);
-                _arg_4.var_113.setColors(_arg_1.bodyColor, _arg_1.bodyColor2);
-                _arg_4.var_129.setColors(_arg_1.feetColor, _arg_1.feetColor2);
+                _arg_4.hatSelect.setValue(_arg_1.hat);
+                _arg_4.headSelect.setValue(_arg_1.head);
+                _arg_4.bodySelect.setValue(_arg_1.body);
+                _arg_4.feetSelect.setValue(_arg_1.feet);
+                _arg_4.hatSelect.setColors(_arg_1.hatColor, _arg_1.hatColor2);
+                _arg_4.headSelect.setColors(_arg_1.headColor, _arg_1.headColor2);
+                _arg_4.bodySelect.setColors(_arg_1.bodyColor, _arg_1.bodyColor2);
+                _arg_4.feetSelect.setColors(_arg_1.feetColor, _arg_1.feetColor2);
             }
         }
 

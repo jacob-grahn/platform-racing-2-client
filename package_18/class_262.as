@@ -6,68 +6,94 @@
 package package_18
 {
     import package_8.Character;
+    import package_18.PartInfo.*;
     import flash.events.Event;
+    import flash.events.MouseEvent;
 
     public class class_262 extends class_7 
     {
 
-        private var var_5:Character;
-        private var var_388:Number = 24;
-        public var var_130:class_294;
-        public var var_119:class_294;
-        public var var_113:class_294;
-        public var var_129:class_294;
+        private var char:Character; // var_5
+        private var yStart:Number = 24; // var_388
+        public var hatSelect:PartSelector; // var_130
+        public var headSelect:PartSelector; // var_119
+        public var bodySelect:PartSelector; // var_113
+        public var feetSelect:PartSelector; // var_129
 
-        public function class_262(_arg_1:Character, _arg_2:Array, _arg_3:Array, _arg_4:Array, _arg_5:Array, _arg_6:int, _arg_7:int, _arg_8:int, _arg_9:int, _arg_10:int, _arg_11:int, _arg_12:int, _arg_13:int, _arg_14:Array, _arg_15:Array, _arg_16:Array, _arg_17:Array, _arg_18:int, _arg_19:int, _arg_20:int, _arg_21:int)
+        public function class_262(c:Character, hatArray:Array, headArray:Array, bodyArray:Array, feetArray:Array, hatSel:int, headSel:int, bodySel:int, feetSel:int, hatCol:int, headCol:int, bodyCol:int, feetCol:int, hatArray2:Array, headArray2:Array, bodyArray2:Array, feetArray2:Array, hatCol2:int, headCol2:int, bodyCol2:int, feetCol2:int)
         {
-            this.var_5 = _arg_1;
-            this.var_130 = new class_294(_arg_2, _arg_6, _arg_10, _arg_14, _arg_18);
-            this.var_119 = new class_294(_arg_3, _arg_7, _arg_11, _arg_15, _arg_19);
-            this.var_113 = new class_294(_arg_4, _arg_8, _arg_12, _arg_16, _arg_20);
-            this.var_129 = new class_294(_arg_5, _arg_9, _arg_13, _arg_17, _arg_21);
-            this.var_130.y = (this.var_388 * 0);
-            this.var_119.y = (this.var_388 * 1);
-            this.var_113.y = (this.var_388 * 2);
-            this.var_129.y = (this.var_388 * 3);
-            this.var_130.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.var_119.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.var_113.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.var_129.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            if (_arg_2.length > 1) {
-                addChild(this.var_130);
+            this.char = c;
+            this.hatSelect = new PartSelector(hatArray, hatSel, hatCol, hatArray2, hatCol2);
+            this.headSelect = new PartSelector(headArray, headSel, headCol, headArray2, headCol2);
+            this.bodySelect = new PartSelector(bodyArray, bodySel, bodyCol, bodyArray2, bodyCol2);
+            this.feetSelect = new PartSelector(feetArray, feetSel, feetCol, feetArray2, feetCol2);
+            this.hatSelect.y = this.yStart * 0;
+            this.headSelect.y = this.yStart * 1;
+            this.bodySelect.y = this.yStart * 2;
+            this.feetSelect.y = this.yStart * 3;
+            this.hatSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
+            this.headSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
+            this.bodySelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
+            this.feetSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
+            this.hatSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHatInfoClick);
+            this.headSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHeadInfoClick);
+            this.bodySelect.infoButton.addEventListener(MouseEvent.CLICK, this.onBodyInfoClick);
+            this.feetSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onFeetInfoClick);
+            if (hatArray.length > 1) {
+                addChild(this.hatSelect);
             }
-            addChild(this.var_119);
-            addChild(this.var_113);
-            addChild(this.var_129);
+            addChild(this.headSelect);
+            addChild(this.bodySelect);
+            addChild(this.feetSelect);
             this.method_65(new Event(Event.CHANGE));
         }
 
-        private function method_65(_arg_1:Event)
+        private function method_65(e:Event)
         {
-            this.var_5.method_395(this.var_130.getValue());
-            this.var_5.method_250(this.var_119.getValue());
-            this.var_5.method_217(this.var_113.getValue());
-            this.var_5.method_326(this.var_129.getValue());
-            this.var_5.method_133(this.var_130.method_12(), this.var_130.getColor2());
-            this.var_5.method_132(this.var_119.method_12(), this.var_119.getColor2());
-            this.var_5.method_134(this.var_113.method_12(), this.var_113.getColor2());
-            this.var_5.method_90(this.var_129.method_12(), this.var_129.getColor2());
+            this.char.method_395(this.hatSelect.getValue());
+            this.char.method_250(this.headSelect.getValue());
+            this.char.method_217(this.bodySelect.getValue());
+            this.char.method_326(this.feetSelect.getValue());
+            this.char.method_133(this.hatSelect.getColor(), this.hatSelect.getColor2());
+            this.char.method_132(this.headSelect.getColor(), this.headSelect.getColor2());
+            this.char.method_134(this.bodySelect.getColor(), this.bodySelect.getColor2());
+            this.char.method_90(this.feetSelect.getColor(), this.feetSelect.getColor2());
         }
 
-        private function method_111(_arg_1:class_294)
+        private function onHatInfoClick(e:Event)
         {
-            _arg_1.removeEventListener(Event.CHANGE, this.method_65);
-            _arg_1.remove();
-            _arg_1 = null;
+            new PartInfoPopup('hat', this.hatSelect.partArray, this.hatSelect.epicArray);
+        }
+
+        private function onHeadInfoClick(e:Event)
+        {
+            new PartInfoPopup('head', this.headSelect.partArray, this.headSelect.epicArray);
+        }
+
+        private function onBodyInfoClick(e:Event)
+        {
+            new PartInfoPopup('body', this.bodySelect.partArray, this.bodySelect.epicArray);
+        }
+
+        private function onFeetInfoClick(e:Event)
+        {
+            new PartInfoPopup('feet', this.feetSelect.partArray, this.feetSelect.epicArray);
+        }
+
+        private function method_111(ps:PartSelector)
+        {
+            ps.removeEventListener(Event.CHANGE, this.method_65);
+            ps.remove();
+            ps = null;
         }
 
         override public function remove()
         {
-            this.var_5 = null;
-            this.method_111(this.var_130);
-            this.method_111(this.var_119);
-            this.method_111(this.var_113);
-            this.method_111(this.var_129);
+            this.char = null;
+            this.method_111(this.hatSelect);
+            this.method_111(this.headSelect);
+            this.method_111(this.bodySelect);
+            this.method_111(this.feetSelect);
             super.remove();
         }
 

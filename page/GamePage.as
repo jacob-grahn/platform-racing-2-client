@@ -77,7 +77,8 @@ package page
             this.color = _arg_1;
         }
 
-        public function method_12():int
+        // method_12 = getColor
+        public function getColor():int
         {
             return this.color;
         }

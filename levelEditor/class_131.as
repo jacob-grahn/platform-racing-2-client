@@ -78,7 +78,8 @@ package levelEditor
             this.method_475(method_192(_arg_1));
         }
 
-        public function method_12():int
+        // method_12 = getColor
+        public function getColor():int
         {
             return this.textField.textColor;
         }
@@ -99,7 +100,7 @@ package levelEditor
             addChild(this.var_56);
             addChild(this.var_12);
             this.var_565 = this.method_47();
-            this.var_563 = this.method_12();
+            this.var_563 = this.getColor();
         }
 
         override public function deselect()
@@ -110,7 +111,7 @@ package levelEditor
             if (this.var_12 != null) {
                 removeChild(this.var_12);
             }
-            if (this.method_47() != this.var_565 || this.method_12() != this.var_563) {
+            if (this.method_47() != this.var_565 || this.getColor() != this.var_563) {
                 editor.cur.recordChangeText(this);
             }
         }
@@ -191,7 +192,7 @@ package levelEditor
         {
             if (this.var_12 == null) {
                 this.var_12 = new ColorPicker();
-                this.var_12.setColor(this.method_12());
+                this.var_12.setColor(this.getColor());
                 this.var_12.addEventListener(MouseEvent.MOUSE_DOWN, this.method_432, false, 0, true);
                 this.var_12.addEventListener(Event.CLOSE, this.method_364, false, 0, true);
             }
@@ -217,8 +218,8 @@ package levelEditor
         private function method_364(_arg_1:Event)
         {
             this.var_483 = false;
-            class_131.var_380 = this.var_12.method_12();
-            this.setColor(this.var_12.method_12());
+            class_131.var_380 = this.var_12.getColor();
+            this.setColor(this.var_12.getColor());
         }
 
         private function method_169(_arg_1:Event)

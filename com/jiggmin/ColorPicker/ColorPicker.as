@@ -19,7 +19,7 @@ package com.jiggmin.ColorPicker
 
         public var var_419:String = "right";
         protected var color:int;
-        private var package_4:ColorPickerPopup;
+        private var mPop:ColorPickerPopup;
         private var m:ColorPickerGraphic;
 
         public function ColorPicker()
@@ -31,7 +31,8 @@ package com.jiggmin.ColorPicker
             addEventListener(MouseEvent.CLICK, this.clickHandler, false, 0, true);
         }
 
-        public function method_12():int
+        // method_12 = getColor
+        public function getColor():int
         {
             return this.color;
         }
@@ -51,7 +52,7 @@ package com.jiggmin.ColorPicker
         private function clickHandler(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            if (this.package_4 != null && !this.package_4.method_20()) {
+            if (this.mPop != null && !this.mPop.method_20()) {
                 this.method_71();
             } else {
                 this.method_740();
@@ -60,7 +61,7 @@ package com.jiggmin.ColorPicker
 
         private function method_290(e:Event)
         {
-            this.setColor(this.package_4.method_12());
+            this.setColor(this.mPop.getColor());
         }
 
         private function method_242(e:Event)
@@ -73,34 +74,34 @@ package com.jiggmin.ColorPicker
             this.method_71();
             var _local_1:Point = new Point(0, 0);
             var _local_2:Point = this.localToGlobal(_local_1);
-            this.package_4 = new ColorPickerPopup(this.color);
+            this.mPop = new ColorPickerPopup(this.color);
             if (this.var_419 == RIGHT) {
-                this.package_4.x = _local_2.x + width + 5;
+                this.mPop.x = _local_2.x + width + 5;
             } else {
-                this.package_4.x = _local_2.x - this.package_4.width - 5;
+                this.mPop.x = _local_2.x - this.mPop.width - 5;
             }
-            this.package_4.addEventListener(Event.CHANGE, this.method_290, false, 0, true);
-            this.package_4.addEventListener(class_7.REMOVE, this.method_242, false, 0, true);
-            stage.addChild(this.package_4);
-            this.package_4.init();
-            this.package_4.method_101(this);
-            this.package_4.y = _local_2.y;
-            if (this.package_4.y > Main.clientHeight - this.package_4.height) {
-                this.package_4.y = Main.clientHeight - this.package_4.height;
+            this.mPop.addEventListener(Event.CHANGE, this.method_290, false, 0, true);
+            this.mPop.addEventListener(class_7.REMOVE, this.method_242, false, 0, true);
+            stage.addChild(this.mPop);
+            this.mPop.init();
+            this.mPop.method_101(this);
+            this.mPop.y = _local_2.y;
+            if (this.mPop.y > Main.clientHeight - this.mPop.height) {
+                this.mPop.y = Main.clientHeight - this.mPop.height;
             }
-            this.package_4.x = Math.round(this.package_4.x);
-            this.package_4.y = Math.round(this.package_4.y);
+            this.mPop.x = Math.round(this.mPop.x);
+            this.mPop.y = Math.round(this.mPop.y);
             dispatchEvent(new Event(Event.OPEN));
         }
 
         public function method_71()
         {
-            if (this.package_4 != null) {
-                this.setColor(this.package_4.method_12());
-                this.package_4.removeEventListener(Event.CHANGE, this.method_290);
-                this.package_4.removeEventListener(class_7.REMOVE, this.method_242);
-                this.package_4.method_136();
-                this.package_4 = null;
+            if (this.mPop != null) {
+                this.setColor(this.mPop.getColor());
+                this.mPop.removeEventListener(Event.CHANGE, this.method_290);
+                this.mPop.removeEventListener(class_7.REMOVE, this.method_242);
+                this.mPop.method_136();
+                this.mPop = null;
                 if (var_265.indexOf(this.color) == -1) {
                     var_265.unshift(this.color);
                     var_265.pop();

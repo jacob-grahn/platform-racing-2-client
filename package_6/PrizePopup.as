@@ -67,6 +67,9 @@ package package_6
                 this.target.colorMC2.gotoAndStop(id);
             }
             var aOrAn:String = class_28.aOrAn(prizeName);
+            if (type == "feet") {
+                aOrAn = 'a pair of';
+            }
             if (finished) {
                 this.m.textBox.text = "You won " + aOrAn + ":";
             } else {
@@ -76,7 +79,7 @@ package package_6
                     this.m.textBox.text = "The winner of this race will earn " + aOrAn + ":";
                 }
             }
-            this.m.titleBox.text = "--- " + prizeName + " ---";
+            this.m.titleBox.text = "--- " + prizeName + "! ---";
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
             addChild(this.m);
         }

@@ -35,7 +35,7 @@ package
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
-        public static const testing:Boolean = false; // DISABLE IN PRODUCTION
+        public static const testing:Boolean = true; // DISABLE IN PRODUCTION
         public static const version:String = "28-mar-2019-v153-2-2";
         public static const baseURL:String = "https://pr2hub.com"; //"https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
@@ -105,6 +105,7 @@ package
                 Main.stage = stage;
                 Main.instance = this;
                 Blocks.init();
+                Parts.makeParts();
                 Keys.initialize(stage);
                 class_8.stageRef = stage;
                 CheckServers.activate();

@@ -8,70 +8,78 @@ package package_8
     public class class_127 
     {
 
-        private var var_5:Character;
+        private var char:Character; // var_5
         private var hat:class_125;
         private var head:class_125;
         private var body:class_125;
         private var foot1:class_125;
         private var foot2:class_125;
-        private var var_25:Object;
-        private var var_26:Object;
+        private var djinnBody:Object; // var_25
+        private var djinnFeet:Object; // var_26
 
-        public function class_127(_arg_1:Character)
+        public function class_127(c:Character)
         {
-            this.var_5 = _arg_1;
-            this.var_25 = new Object();
-            this.var_25.graphic = "DjinnIceGraphic";
-            this.var_25.colors = new Array(_arg_1.bodyColor, _arg_1.bodyColor2);
-            this.var_25.life = 16;
-            this.var_25.startAlpha = 0.1;
-            this.var_25.minVelAlpha = 0;
-            this.var_25.maxVelAlpha = 0.5;
-            this.var_25.minVelY = 2;
-            this.var_25.maxVelY = 3;
-            this.var_25.velScaleX = 0.1;
-            this.var_25.velScaleY = 0.1;
-            this.var_25.fricY = 0.9;
-            this.var_25.fricX = 1.05;
-            this.var_25.minOffsetX = -5;
-            this.var_25.maxOffsetX = 5;
-            this.var_25.minOffsetY = -10;
-            this.var_25.maxOffsetY = 10;
-            this.var_25.minScale = -1;
-            this.var_25.maxScale = -0.75;
-            this.var_26 = new Object();
-            this.var_26.graphic = "DjinnIceGraphic";
-            this.var_26.colors = new Array(_arg_1.feetColor, _arg_1.feetColor2);
-            this.var_26.life = 8;
-            this.var_26.startAlpha = 0.1;
-            this.var_26.minVelAlpha = 0;
-            this.var_26.maxVelAlpha = 0.5;
-            this.var_26.minVelX = -2;
-            this.var_26.maxVelX = 2;
-            this.var_26.velScaleX = 0.1;
-            this.var_26.velScaleY = 0.1;
-            this.var_26.minOffsetX = -5;
-            this.var_26.maxOffsetX = 5;
-            this.var_26.minOffsetY = -5;
-            this.var_26.maxOffsetY = 5;
-            this.var_26.minScale = 0.075;
-            this.var_26.maxScale = 0.1;
+            this.char = c;
+            this.djinnBody = new Object();
+            this.djinnBody.graphic = "DjinnIceGraphic";
+            this.djinnBody.colors = new Array(this.char.bodyColor, this.char.bodyColor2);
+            this.djinnBody.life = 16;
+            this.djinnBody.startAlpha = 0.1;
+            this.djinnBody.minVelAlpha = 0;
+            this.djinnBody.maxVelAlpha = 0.5;
+            this.djinnBody.minVelY = 2;
+            this.djinnBody.maxVelY = 3;
+            this.djinnBody.velScaleX = 0.1;
+            this.djinnBody.velScaleY = 0.1;
+            this.djinnBody.fricY = 0.9;
+            this.djinnBody.fricX = 1.05;
+            this.djinnBody.minOffsetX = -5;
+            this.djinnBody.maxOffsetX = 5;
+            this.djinnBody.minOffsetY = -10;
+            this.djinnBody.maxOffsetY = 10;
+            this.djinnBody.minScale = -1;
+            this.djinnBody.maxScale = -0.75;
+            this.djinnFeet = new Object();
+            this.djinnFeet.graphic = "DjinnIceGraphic";
+            this.djinnFeet.colors = new Array(this.char.feetColor, this.char.feetColor2);
+            this.djinnFeet.life = 8;
+            this.djinnFeet.startAlpha = 0.1;
+            this.djinnFeet.minVelAlpha = 0;
+            this.djinnFeet.maxVelAlpha = 0.5;
+            this.djinnFeet.minVelX = -2;
+            this.djinnFeet.maxVelX = 2;
+            this.djinnFeet.velScaleX = 0.1;
+            this.djinnFeet.velScaleY = 0.1;
+            this.djinnFeet.minOffsetX = -5;
+            this.djinnFeet.maxOffsetX = 5;
+            this.djinnFeet.minOffsetY = -5;
+            this.djinnFeet.maxOffsetY = 5;
+            this.djinnFeet.minScale = 0.075;
+            this.djinnFeet.maxScale = 0.1;
         }
 
         public function update()
         {
             this.clear();
-            if (((this.var_5.parent) && (this.var_5.var_301))) {
-                if (this.var_5.body == 35) {
-                    this.var_25.colors = new Array(this.var_5.bodyColor, this.var_5.bodyColor2);
-                    this.body = new class_179(75, 9999999999, this.var_5.var_301.body, this.var_5.parent, this.var_25, -15, -10);
+            if (this.char.parent && this.char.var_301) {
+                if (this.char.body == 35) {
+                    this.djinnBody.colors = new Array(this.char.bodyColor, this.char.bodyColor2);
+                    this.body = new class_179(75, 9999999999, this.char.var_301.body, this.char.parent, this.djinnBody, -15, -10);
                 }
-                if (this.var_5.feet == 35) {
-                    this.var_26.colors = new Array(this.var_5.feetColor, this.var_5.feetColor2);
-                    this.foot1 = new class_179(75, 9999999999, this.var_5.var_301.foot1, this.var_5.parent, this.var_26);
-                    this.foot2 = new class_179(75, 9999999999, this.var_5.var_301.foot2, this.var_5.parent, this.var_26);
+                if (this.char.feet == 35) {
+                    this.djinnFeet.colors = new Array(this.char.feetColor, this.char.feetColor2);
+                    this.foot1 = new class_179(75, 9999999999, this.char.var_301.foot1, this.char.parent, this.djinnFeet);
+                    this.foot2 = new class_179(75, 9999999999, this.char.var_301.foot2, this.char.parent, this.djinnFeet);
                 }
             }
+        }
+
+        public function newAlpha(num:Number)
+        {
+            this.djinnBody.startAlpha = this.djinnFeet.startAlpha = num / 5;
+            this.djinnBody.minVelAlpha = this.djinnFeet.minVelAlpha = 0;
+            this.djinnBody.maxVelAlpha = this.djinnFeet.maxVelAlpha = num;
+            
         }
 
         public function clear()
@@ -101,7 +109,7 @@ package package_8
         public function remove()
         {
             this.clear();
-            this.var_5 = null;
+            this.char = null;
         }
 
 

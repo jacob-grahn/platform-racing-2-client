@@ -19,7 +19,7 @@ package package_19
         {
             this.cp.width = this.cp.height = 30;
             this.cp.var_419 = ColorPicker.LEFT;
-            this.cp.setColor(LevelEditor.editor.method_12());
+            this.cp.setColor(LevelEditor.editor.getColor());
             addChild(this.cp);
             this.cp.addEventListener(Event.CLOSE, this.onClose, false, 0, true);
         }
@@ -27,7 +27,7 @@ package package_19
         // method_307 = onClose
         private function onClose(e:Event)
         {
-            LevelEditor.editor.setColor(this.cp.method_12());
+            LevelEditor.editor.setColor(this.cp.getColor());
             Main.stage.focus = Main.stage;
         }
 

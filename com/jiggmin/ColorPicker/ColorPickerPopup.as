@@ -156,7 +156,8 @@ package com.jiggmin.ColorPicker
             dispatchEvent(new Event(Event.CHANGE));
         }
 
-        public function method_12():int
+        // method_12 = getColor
+        public function getColor():int
         {
             if (this.var_188 != -1) {
                 return this.var_188;

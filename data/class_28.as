@@ -37,6 +37,12 @@ package data
             return ret;
         }
 
+        // convert string to uppercase first 
+        public static function ucfirst(s:String)
+        {
+            return (s.substr(0,1).toUpperCase() + (s.substr(1, s.length)).toLowerCase());
+        }
+
         // method_26 = getTime
         public static function getTime():Number
         {

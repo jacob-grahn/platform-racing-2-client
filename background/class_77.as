@@ -68,7 +68,7 @@ package background
         public function recordChangeText(_arg_1:class_131)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14("y" + _local_2 + ";" + _arg_1.method_184() + ";" + _arg_1.method_12());
+            method_14("y" + _local_2 + ";" + _arg_1.method_184() + ";" + _arg_1.getColor());
         }
 
         public function method_761(_arg_1:class_130)
@@ -265,7 +265,7 @@ package background
                             _local_14 = _local_6.scaleY * 100;
                             _local_16 = class_131(_local_6);
                             if (_local_16.method_47() != "" && _local_16.method_47() != " ") {
-                                _local_2 = (_local_11 + ";" + _local_12 + ";" + "t" + ";" + _local_16.method_184() + ";" + _local_16.method_12() + ";" + _local_13 + ";" + _local_14);
+                                _local_2 = (_local_11 + ";" + _local_12 + ";" + "t" + ";" + _local_16.method_184() + ";" + _local_16.getColor() + ";" + _local_13 + ";" + _local_14);
                             } else {
                                 _local_2 = "";
                             }

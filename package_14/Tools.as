@@ -75,7 +75,7 @@ package package_14
         // method_280 = chooseColor
         private function chooseColor(e:Event)
         {
-            Tools.color = this.colorPicker.method_12();
+            Tools.color = this.colorPicker.getColor();
             this.brush.setColor(Tools.color);
             this.stageRef.focus = this.stageRef;
         }

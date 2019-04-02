@@ -44,6 +44,14 @@ package data
             }
         }
 
+        public function isEmpty() : Boolean
+        {
+            if (this.items.length <= 0) {
+                return true;
+            }
+            return false;
+        }
+
         public function addItem(_arg_1:DisplayObject)
         {
             this.items.push(_arg_1);
