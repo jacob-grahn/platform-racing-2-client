@@ -7,6 +7,7 @@ package menu
 {
     import data.class_28;
     import data.class_33;
+    import data.Settings;
     import page.Page;
     import package_4.ConfirmPopup;
     import package_4.LogoutPassPopup;
@@ -70,9 +71,9 @@ package menu
 
         override public function initialize()
         {
-            if (Main.musicLevel > 0) {
+            if (Settings.musicLevel > 0) {
                 Main.noodleTown.startPlaying();
-                Main.noodleTown.setTargetVolume(1 * (Main.musicLevel / 100));
+                Main.noodleTown.setTargetVolume(1 * (Settings.musicLevel / 100));
             }
             Main.stage.quality = StageQuality.HIGH;
             Main.userPass = "";

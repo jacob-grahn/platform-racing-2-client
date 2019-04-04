@@ -9,6 +9,7 @@ package background
     import flash.display.Bitmap;
     import page.GamePage;
     import data.Objects;
+    import data.Settings;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.geom.ColorTransform;
@@ -94,7 +95,7 @@ package background
         {
             // drawbg true; string is not any of these: -1, square, null, and empty (ORIGINAL)
             // drawbg + isLE false; string is either -1, square, null, or empty
-            if ((!Main.drawBackgrounds && !fromLE) || s == "-1" || s == "Square" || s == null || s == "") {
+            if ((!Settings.getValue(Settings.DRAW_ART, true) && !fromLE) || s == "-1" || s == "Square" || s == null || s == "") {
                 return;
             }
             if (s.indexOf("BG") != -1) {

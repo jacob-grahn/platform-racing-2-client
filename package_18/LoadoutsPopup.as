@@ -23,17 +23,18 @@ package package_18
             m.titleBox.text = "-- Loadouts --";
             m.delete_bt.label = "Save";
             hideLoadingGraphic();
-            this.method_751();
+            this.populate();
         }
 
-        private function method_751()
+        // _loc3 = listing
+        // method_751 = populate
+        private function populate()
         {
             var _local_2:class_263;
-            var _local_3:PresetListing;
             var _local_1:Vector.<class_263> = class_211.method_766();
             for each (_local_2 in _local_1) {
-                _local_3 = new PresetListing(_local_2);
-                this.method_455(_local_3);
+                var listing:PresetListing = new PresetListing(_local_2);
+                this.method_455(listing);
             }
         }
 

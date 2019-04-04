@@ -6,6 +6,7 @@
 package blocks
 {
     import data.Objects;
+    import data.Settings;
     import sounds.SoundEffects;
     import package_6.Course;
     import package_8.Racer;
@@ -21,7 +22,7 @@ package blocks
         override protected function useSupply(_arg_1:Racer)
         {
             super.useSupply(_arg_1);
-            SoundEffects.playSound(new TickTockSound(), 1 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new TickTockSound(), 1 * (Settings.soundLevel / 100));
             Course.course.timer.method_500(10);
         }
 

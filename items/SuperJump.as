@@ -5,6 +5,7 @@
 
 package items
 {
+    import data.Settings;
     import package_8.Racer;
     import sounds.SoundEffects;
 
@@ -19,7 +20,7 @@ package items
         override public function useItem()
         {
             if (!racer.crouching) {
-                SoundEffects.playSound(new SuperJumpSound(), 1 * (Main.soundLevel / 100));
+                SoundEffects.playSound(new SuperJumpSound(), 1 * (Settings.soundLevel / 100));
                 racer.velY = racer.velY - 25;
                 super.useItem();
             }

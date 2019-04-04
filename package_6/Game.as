@@ -4,6 +4,7 @@ package package_6
 {
     import com.adobe.crypto.MD5;
     import data.CommandHandler;
+    import data.Settings;
     import flash.events.Event;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
@@ -287,7 +288,7 @@ package package_6
                     this.method_682();
                     timer.pause();
                 }
-                SoundEffects.playSound(new VictorySound(), 1 * (Main.soundLevel / 100));
+                SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));
             }
         }
 

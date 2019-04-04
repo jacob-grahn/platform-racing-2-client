@@ -13,6 +13,7 @@ package package_8
     import data.class_28;
     import data.CommandHandler;
     import data.PR2Socket;
+    import data.Settings;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.events.Event;
@@ -111,6 +112,7 @@ package package_8
         private var var_577:String;
         private var var_623:int;
         private var var_232:Boolean = false;
+        private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
 
         public function Racer(tId:int, c:Course, ma:Map, _arg_4:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
@@ -409,7 +411,7 @@ package package_8
                 if (this.var_150 > 25) {
                     velY = -this.var_150 * 0.24;
                     this.var_281 = false;
-                    SoundEffects.playSound(new SuperJumpSound(), 1 * (Main.soundLevel / 100));
+                    SoundEffects.playSound(new SuperJumpSound(), 1 * (Settings.soundLevel / 100));
                 }
                 this.var_150 = 0;
             }
@@ -468,21 +470,21 @@ package package_8
                 this.space = true;
             }
             if (Main.stage.focus == null || Main.stage.focus != RaceChat.textBox) {
-                if (Keys.isPressed(Main.wasdRight)) {
+                if (Keys.isPressed(this.altCtrl.right)) {
                     this.right = true;
                     scaleX = 1;
                 }
-                if (Keys.isPressed(Main.wasdLeft)) {
+                if (Keys.isPressed(this.altCtrl.left)) {
                     this.left = true;
                     scaleX = -1;
                 }
-                if (Keys.isPressed(Main.wasdUp)) {
+                if (Keys.isPressed(this.altCtrl.up)) {
                     this.up = true;
                 }
-                if (Keys.isPressed(Main.wasdDown)) {
+                if (Keys.isPressed(this.altCtrl.down)) {
                     this.down = true;
                 }
-                if (Keys.isPressed(Main.wasdItem)) {
+                if (Keys.isPressed(this.altCtrl.item)) {
                     this.space = true;
                 }
             }
@@ -931,7 +933,7 @@ package package_8
                     }
                     var zap:Zap = new Zap(this, false, false);
                     zap.transform.colorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0xFF, 0);
-                    SoundEffects.playSound(new YeahSound(), 1 * (Main.soundLevel / 100));
+                    SoundEffects.playSound(new YeahSound(), 1 * (Settings.soundLevel / 100));
                     Course.course.musicSelection.dropdown.gotArtifact();
                     var_241 = true;
                 }

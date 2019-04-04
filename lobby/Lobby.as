@@ -2,6 +2,7 @@
 
 package lobby
 {
+    import data.Settings;
     import page.Page;
     import package_4.class_204;
     import flash.display.MovieClip;
@@ -28,7 +29,7 @@ package lobby
         private var left:LobbyLeft;
         private var right:LobbyRight;
         private var m:LobbyGraphic = new LobbyGraphic();
-        private var var_234:class_204;
+        private var hover:class_204; // var_234
         private var bottom_bts:LobbyBottomButtonsGraphic; // var_20
 
         public function Lobby()
@@ -42,10 +43,10 @@ package lobby
             addChild(this.m);
             addChild(this.left);
             addChild(this.right);
-            if (Main.musicLevel > 0) {
+            if (Settings.musicLevel > 0) {
                 Main.noodleTown.startPlaying();
-                Main.noodleTown.setTargetVolume(0.6 * (Main.musicLevel / 100));
             }
+            Main.noodleTown.setTargetVolume(0.6 * (Settings.musicLevel / 100));
             Main.stage.quality = StageQuality.HIGH;
             this.bottom_bts = new LobbyBottomButtonsGraphic();
             if (Main.siteMode == "kongregate") {
@@ -60,14 +61,14 @@ package lobby
             /*if (Main.testing) {
                 this.bottom_bts.gotoAndStop("kongregateSite");
             }*/
-            this.bottom_bts.logoutButton.addEventListener(MouseEvent.CLICK, this.method_328, false, 0, true);
-            this.bottom_bts.levelEditorButton.addEventListener(MouseEvent.CLICK, this.method_233, false, 0, true);
-            this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.CLICK, this.method_437, false, 0, true);
-            this.bottom_bts.optionsButton.addEventListener(MouseEvent.CLICK, this.method_433, false, 0, true);
-            this.bottom_bts.vaultButton.addEventListener(MouseEvent.CLICK, this.method_428, false, 0, true);
-            this.bottom_bts.creditsButton.addEventListener(MouseEvent.CLICK, this.method_413, false, 0, true);
-            this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OVER, this.method_291, false, 0, true);
-            this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OUT, this.method_353, false, 0, true);
+            this.bottom_bts.logoutButton.addEventListener(MouseEvent.CLICK, this.clickLogout, false, 0, true);
+            this.bottom_bts.levelEditorButton.addEventListener(MouseEvent.CLICK, this.clickLE, false, 0, true);
+            this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.CLICK, this.clickKong, false, 0, true);
+            this.bottom_bts.optionsButton.addEventListener(MouseEvent.CLICK, this.clickOptions, false, 0, true);
+            this.bottom_bts.vaultButton.addEventListener(MouseEvent.CLICK, this.clickStore, false, 0, true);
+            this.bottom_bts.creditsButton.addEventListener(MouseEvent.CLICK, this.clickCredits, false, 0, true);
+            this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OVER, this.hoverKong, false, 0, true);
+            this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutKong, false, 0, true);
             addChild(this.bottom_bts);
             this.method_547();
         }
@@ -89,7 +90,8 @@ package lobby
             }
         }
 
-        private function method_328(e:MouseEvent)
+        // method_328 = clickLogout
+        private function clickLogout(e:MouseEvent)
         {
             if (!Main.remember) {
                 var vars:URLVariables = new URLVariables();
@@ -106,53 +108,60 @@ package lobby
             Main.socket.close();
         }
 
-        private function method_233(e:MouseEvent)
+        // method_233 = clickLE
+        private function clickLE(e:MouseEvent)
         {
             Main.pageHolder.changePage(new LevelEditor(null));
             Main.socket.close();
         }
 
-        private function method_437(e:MouseEvent)
+        // method_437 = clickKong
+        private function clickKong(e:MouseEvent)
         {
             navigateToURL(new URLRequest("http://www.kongregate.com/games/jiggmin/platform-racing-2/?gamereferral=platformracing2"), "_blank");
         }
 
-        private function method_433(e:MouseEvent)
+        // method_433 = clickOptions
+        private function clickOptions(e:MouseEvent)
         {
             new OptionsPopup();
         }
 
-        private function method_428(e:MouseEvent)
+        // method_428 = clickStore
+        private function clickStore(e:MouseEvent)
         {
             new StorePopup();
         }
 
-        private function method_413(e:MouseEvent)
+        // method_413 = clickCredits
+        private function clickCredits(e:MouseEvent)
         {
             new CreditsPopup();
         }
 
-        private function method_291(e:MouseEvent)
+        // method_291 = hoverKong
+        private function hoverKong(e:MouseEvent)
         {
-            this.var_234 = new class_204("Kong Hat", "Players from Kongregate automatically get a hat that increases your experience gain by 25%!", this.bottom_bts.moreGamesButton);
+            this.hover = new class_204("Kong Hat", "Players from Kongregate automatically get a hat that increases your experience gain by 25%!", this.bottom_bts.moreGamesButton);
         }
 
-        private function method_353(e:MouseEvent)
+        // method_353 = hoverOutKong
+        private function hoverOutKong(e:MouseEvent)
         {
-            this.var_234.remove();
-            this.var_234 = null;
+            this.hover.remove();
+            this.hover = null;
         }
 
         override public function remove()
         {
-            this.bottom_bts.logoutButton.removeEventListener(MouseEvent.CLICK, this.method_328);
-            this.bottom_bts.levelEditorButton.removeEventListener(MouseEvent.CLICK, this.method_233);
-            this.bottom_bts.moreGamesButton.removeEventListener(MouseEvent.CLICK, this.method_437);
-            this.bottom_bts.optionsButton.removeEventListener(MouseEvent.CLICK, this.method_433);
-            this.bottom_bts.vaultButton.removeEventListener(MouseEvent.CLICK, this.method_428);
-            this.bottom_bts.creditsButton.removeEventListener(MouseEvent.CLICK, this.method_413);
-            this.bottom_bts.moreGamesButton.removeEventListener(MouseEvent.MOUSE_OVER, this.method_291);
-            this.bottom_bts.moreGamesButton.removeEventListener(MouseEvent.MOUSE_OUT, this.method_353);
+            this.bottom_bts.logoutButton.removeEventListener(MouseEvent.CLICK, this.clickLogout);
+            this.bottom_bts.levelEditorButton.removeEventListener(MouseEvent.CLICK, this.clickLE);
+            this.bottom_bts.moreGamesButton.removeEventListener(MouseEvent.CLICK, this.clickKong);
+            this.bottom_bts.optionsButton.removeEventListener(MouseEvent.CLICK, this.clickOptions);
+            this.bottom_bts.vaultButton.removeEventListener(MouseEvent.CLICK, this.clickStore);
+            this.bottom_bts.creditsButton.removeEventListener(MouseEvent.CLICK, this.clickCredits);
+            this.bottom_bts.moreGamesButton.removeEventListener(MouseEvent.MOUSE_OVER, this.hoverKong);
+            this.bottom_bts.moreGamesButton.removeEventListener(MouseEvent.MOUSE_OUT, this.hoverOutKong);
             removeChild(this.bottom_bts);
             this.bottom_bts = null;
             this.left.remove();
@@ -161,9 +170,9 @@ package lobby
             this.m = null;
             this.left = null;
             this.right = null;
-            if (this.var_234 != null) {
-                this.var_234.remove();
-                this.var_234 = null;
+            if (this.hover != null) {
+                this.hover.remove();
+                this.hover = null;
             }
             Main.noodleTown.setTargetVolume(0);
             super.remove();

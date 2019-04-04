@@ -9,6 +9,7 @@ package package_18.PartInfo
     import data.class_153;
     import flash.display.MovieClip;
     import flash.text.TextFieldAutoSize;
+    import package_4.MessagePopup;
     import package_8.Character;
     import flash.events.MouseEvent;
     import flash.events.Event;
@@ -25,7 +26,7 @@ package package_18.PartInfo
         {
             this.listing = o;
             this.hasEE = ee;
-            //this.activate();
+            this.activate();
             this.showPart();
             addChild(this.m);
             this.m.bg.visible = false;
@@ -123,7 +124,7 @@ package package_18.PartInfo
         private function clickHandler(e:MouseEvent)
         {
             // popup with more information
-            new MessagePopup("--- " + listing.name + " FAQ --- \n\n" + listing.desc);
+            new PartPopup(this.listing, this.hasEE);
         }
 
         public function deactivate()

@@ -16,8 +16,9 @@ package package_4
     {
 
         private var m:OptionsPopupGraphic = new OptionsPopupGraphic();
-        private var drawArt:Boolean = Main.drawBackgrounds;
-        private var filterSwears:Boolean = Settings.method_135(Settings.filterSwears, true);
+        private var drawArt:Boolean = Settings.getValue(Settings.DRAW_ART, true);
+        private var filterSwears:Boolean = Settings.getValue(Settings.FILTER_SWEARS, true);
+        private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var hTrueY:Number = -74;
         private var hFalseY:Number = -46;
         private var buttonStartPos:int = 78; // var_437
@@ -25,20 +26,20 @@ package package_4
         public function OptionsPopup()
         {
             addChild(this.m);
-            this.m.musicSlider.value = Main.musicLevel;
+            this.m.musicSlider.value = Settings.musicLevel;
             this.m.musicSlider.addEventListener(SliderEvent.CHANGE, musicSliderChange);
-            this.m.soundSlider.value = Main.soundLevel;
+            this.m.soundSlider.value = Settings.soundLevel;
             this.m.soundSlider.addEventListener(SliderEvent.CHANGE, soundSliderChange);
             this.m.soundSlider.addEventListener(SliderEvent.THUMB_RELEASE, soundSliderRelease);
-            this.m.musicPercentBox.text = Main.musicLevel + '%';
-            this.m.soundPercentBox.text = Main.soundLevel + '%';
+            this.m.musicPercentBox.text = Settings.musicLevel + '%';
+            this.m.soundPercentBox.text = Settings.soundLevel + '%';
             this.m.wasdUp.maxChars = this.m.wasdRight.maxChars = this.m.wasdDown.maxChars = this.m.wasdLeft.maxChars = this.m.wasdItem.maxChars = 1;
             this.m.wasdUp.restrict = this.m.wasdRight.restrict = this.m.wasdDown.restrict = this.m.wasdLeft.restrict = this.m.wasdItem.restrict = "0-9 A-Z";
-            this.m.wasdUp.text = String.fromCharCode(Main.wasdUp).toUpperCase();
-            this.m.wasdRight.text = String.fromCharCode(Main.wasdRight).toUpperCase();
-            this.m.wasdDown.text = String.fromCharCode(Main.wasdDown).toUpperCase();
-            this.m.wasdLeft.text = String.fromCharCode(Main.wasdLeft).toUpperCase();
-            this.m.wasdItem.text = String.fromCharCode(Main.wasdItem).toUpperCase();
+            this.m.wasdUp.text = String.fromCharCode(this.altCtrl.up).toUpperCase();
+            this.m.wasdRight.text = String.fromCharCode(this.altCtrl.right).toUpperCase();
+            this.m.wasdDown.text = String.fromCharCode(this.altCtrl.down).toUpperCase();
+            this.m.wasdLeft.text = String.fromCharCode(this.altCtrl.left).toUpperCase();
+            this.m.wasdItem.text = String.fromCharCode(this.altCtrl.item).toUpperCase();
             this.m.artHighlight.y = this.drawArt === false ? this.hFalseY : this.hTrueY;
             this.m.filterHighlight.y = this.filterSwears === false ? this.hFalseY : this.hTrueY;
             this.m.artOn_bt.addEventListener(MouseEvent.CLICK, toggleArtOn);
@@ -68,23 +69,23 @@ package package_4
         private function musicSliderChange(e:SliderEvent)
         {
             var newLevel:int = class_28.numLimit(e.value, 0, 100);
-            if (Main.musicLevel === 0 && newLevel > 0) {
+            if (Settings.musicLevel === 0 && newLevel > 0) {
                 Main.noodleTown.startPlaying();
             }
-            Main.musicLevel = newLevel;
-            this.m.musicPercentBox.text = Main.musicLevel + '%';
-            Main.noodleTown.setTargetVolume(0.6 * (Main.musicLevel / 100));
+            Settings.setValue(Settings.MUSIC_VOLUME, newLevel);
+            this.m.musicPercentBox.text = Settings.musicLevel + '%';
+            Main.noodleTown.setTargetVolume(0.6 * (Settings.musicLevel / 100));
         }
 
         private function soundSliderChange(e:SliderEvent)
         {
-            Main.soundLevel = class_28.numLimit(e.value, 0, 100);
-            this.m.soundPercentBox.text = Main.soundLevel + '%';
+            Settings.setValue(Settings.SOUND_VOLUME, class_28.numLimit(e.value, 0, 100));
+            this.m.soundPercentBox.text = Settings.soundLevel + '%';
         }
 
         private function soundSliderRelease(e:SliderEvent)
         {
-            SoundEffects.playSound(new JumpSound(), 0.75 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new JumpSound(), 0.75 * (Settings.soundLevel / 100));
         }
 
         private function toggleArtOn(e:MouseEvent)
@@ -210,13 +211,14 @@ package package_4
             if (this.m.wasdItem.text == "") {
                 this.m.wasdItem.text = "I";
             }
-            Main.wasdUp = this.m.wasdUp.text.toUpperCase().charCodeAt(0);
-            Main.wasdRight = this.m.wasdRight.text.toUpperCase().charCodeAt(0);
-            Main.wasdDown = this.m.wasdDown.text.toUpperCase().charCodeAt(0);
-            Main.wasdLeft = this.m.wasdLeft.text.toUpperCase().charCodeAt(0);
-            Main.wasdItem = this.m.wasdItem.text.toUpperCase().charCodeAt(0);
-            Main.drawBackgrounds = this.drawArt;
-            Settings.method_390(Settings.filterSwears, this.filterSwears);
+            this.altCtrl.up = this.m.wasdUp.text.toUpperCase().charCodeAt(0);
+            this.altCtrl.right = this.m.wasdRight.text.toUpperCase().charCodeAt(0);
+            this.altCtrl.down = this.m.wasdDown.text.toUpperCase().charCodeAt(0);
+            this.altCtrl.left = this.m.wasdLeft.text.toUpperCase().charCodeAt(0);
+            this.altCtrl.item = this.m.wasdItem.text.toUpperCase().charCodeAt(0);
+            Settings.setValue(Settings.ALTERNATE_CONTROLS, this.altCtrl);
+            Settings.setValue(Settings.DRAW_ART, this.drawArt);
+            Settings.setValue(Settings.FILTER_SWEARS, this.filterSwears);
             removeChild(this.m);
             this.m = null;
             super.remove();

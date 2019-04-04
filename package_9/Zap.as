@@ -2,8 +2,9 @@
 
 package package_9
 {
-    import package_8.Racer;
+    import data.Settings;
     import flash.events.Event;
+    import package_8.Racer;
     import sounds.SoundEffects;
 
     public class Zap extends class_80 
@@ -22,7 +23,7 @@ package package_9
             addEventListener(Event.ENTER_FRAME, this.go);
             this.pos();
             if (_arg_3) {
-                SoundEffects.playSound(new ZapSound(), 1 * (Main.soundLevel / 100));
+                SoundEffects.playSound(new ZapSound(), 1 * (Settings.soundLevel / 100));
             }
         }
 

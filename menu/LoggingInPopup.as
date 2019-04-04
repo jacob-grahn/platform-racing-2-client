@@ -84,7 +84,6 @@ package menu
                 Main.userName = "";
                 Main.userPass = "";
             }*/
-            Settings.init(Main.loggedInAs);
             this.socketOK = true;
             this.maybeSwitchToLobby();
         }
@@ -118,6 +117,7 @@ package menu
         private function maybeSwitchToLobby()
         {
             if (this.socketOK && this.httpOK) {
+                Settings.init(Main.loggedInAs);
                 class_211.load();
                 Main.pageHolder.changePage(new Lobby());
                 startFadeOut();

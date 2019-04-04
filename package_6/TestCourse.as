@@ -5,6 +5,7 @@
 
 package package_6
 {
+    import data.Settings;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.geom.Point;
@@ -98,7 +99,7 @@ package package_6
             } else {
                 miniMap.removeFinish(finishX, finishY);
             }
-            SoundEffects.playSound(new VictorySound(), 1 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));
         }
 
         // teleport fn

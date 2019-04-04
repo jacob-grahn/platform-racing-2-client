@@ -32,7 +32,7 @@ package package_21
             var htmlName:String = this.htmlNameMaker.makeName(name, group);
             this.htmlNameMaker.listenForLink(this.m.nameBox);
             this.htmlNameMaker.listenForLink(this.m.textBox);
-            if (Settings.method_135(Settings.filterSwears, true)) {
+            if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
                 body = class_28.filterSwears(body);
             }
             this.messageText = body;

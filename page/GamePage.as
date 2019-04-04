@@ -5,6 +5,7 @@
 
 package page
 {
+    import data.Settings;
     import flash.display.Sprite;
     import background.class_75;
     import items.Items;
@@ -44,6 +45,7 @@ package page
         public var var_239:int = 60000;
         public var var_362:int = 60000;
         public var drawing:Boolean = false;
+        private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
 
         public function GamePage()
         {
@@ -419,16 +421,16 @@ package page
         protected function keyScroll(e:Event)
         {
             if (!(Main.stage.focus is TextField)) {
-                if (Keys.isPressed(Keyboard.DOWN) || Keys.isPressed(Main.wasdDown)) {
+                if (Keys.isPressed(Keyboard.DOWN) || Keys.isPressed(this.altCtrl.down)) {
                     this.velY = this.velY - this.accel;
                 }
-                if (Keys.isPressed(Keyboard.UP) || Keys.isPressed(Main.wasdUp)) {
+                if (Keys.isPressed(Keyboard.UP) || Keys.isPressed(this.altCtrl.up)) {
                     this.velY = this.velY + this.accel;
                 }
-                if (Keys.isPressed(Keyboard.LEFT) || Keys.isPressed(Main.wasdLeft)) {
+                if (Keys.isPressed(Keyboard.LEFT) || Keys.isPressed(this.altCtrl.left)) {
                     this.velX = this.velX + this.accel;
                 }
-                if (Keys.isPressed(Keyboard.RIGHT) || Keys.isPressed(Main.wasdRight)) {
+                if (Keys.isPressed(Keyboard.RIGHT) || Keys.isPressed(this.altCtrl.right)) {
                     this.velX = this.velX - this.accel;
                 }
                 this.velX = this.velX * this.friction;

@@ -16,6 +16,7 @@ package background
     import flash.geom.Point;
     import data.class_28;
     import data.Objects;
+    import data.Settings;
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
     import levelEditor.class_131;
@@ -74,7 +75,7 @@ package background
 
         override public function setSaveString(saveStr:String, fromLE:Boolean = true)
         {
-            if (!Main.drawBackgrounds && !fromLE) {
+            if (!Settings.getValue(Settings.DRAW_ART, true) && !fromLE) {
                 saveStr = "";
             }
             super.setSaveString(saveStr);

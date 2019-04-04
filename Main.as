@@ -36,7 +36,7 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = true; // DISABLE IN PRODUCTION
-        public static const version:String = "28-mar-2019-v153-2-2";
+        public static const version:String = "4-apr-2019-v154";
         public static const baseURL:String = "https://pr2hub.com"; //"https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
         public static const listsURL:String = "https://pr2hub.com/files/lists";
@@ -59,9 +59,6 @@ package
         public static var emblem:String = "";
         public static var lastAuthTime:Time = new Time(); // var_363
         public static var server:Object;
-        public static var musicLevel:int = 100; // var_156
-        public static var soundLevel:int = 100;
-        public static var drawBackgrounds:Boolean = true; // var_250
         public static var commandHandler:CommandHandler = new CommandHandler();
         public static var socket:PR2Socket;
         public static var noodleTown:NoodleTown = new NoodleTown(); // var_143
@@ -79,12 +76,12 @@ package
         private static var protocol:String; // protocol = var_389
         private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // superLoader = var_358
 
-        // wasd controls
-        public static var wasdUp:int = 87; // up, var_255
+        // options
+        /*public static var wasdUp:int = 87; // up, var_255
         public static var wasdRight:int = 68; // right, var_235
         public static var wasdDown:int = 83; // down, var_256
         public static var wasdLeft:int = 65; // left, var_246
-        public static var wasdItem:int = 73; // item, var_314
+        public static var wasdItem:int = 73; // item, var_314*/
 
         public var kongAPI:*;
 

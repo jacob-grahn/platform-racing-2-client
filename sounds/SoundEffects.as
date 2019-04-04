@@ -5,6 +5,7 @@
 
 package sounds
 {
+    import data.Settings;
     import flash.media.SoundTransform;
     import flash.media.SoundChannel;
     import flash.media.Sound;
@@ -46,8 +47,8 @@ package sounds
                 vol = vol * _local_11;
                 pan = _local_8 / _local_7;
                 pan = class_74.numLimit(pan, -_local_7, _local_7);
-                if (vol * (Main.soundLevel / 100) > 0.0001) {
-                    return playSound(sound, vol * (Main.soundLevel / 100), pan, loops);
+                if (vol * (Settings.soundLevel / 100) > 0.0001) {
+                    return playSound(sound, vol * (Settings.soundLevel / 100), pan, loops);
                 }
             }
             return null;

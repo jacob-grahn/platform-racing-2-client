@@ -16,6 +16,7 @@ package package_6
     import blocks.FinishBlock;
     import flash.events.Event;
     import data.CommandHandler;
+    import data.Settings;
     import flash.geom.Point;
     import package_8.Character;
     import package_9.Egg;
@@ -226,12 +227,12 @@ package package_6
 
         private function method_369(_arg_1:Event)
         {
-            SoundEffects.playSound(new ReadySound(), 0.4 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new ReadySound(), 0.4 * (Settings.soundLevel / 100));
         }
 
         protected function onCountdownFinish(_arg_1:Event)
         {
-            SoundEffects.playSound(new GoSound(), 0.5 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new GoSound(), 0.5 * (Settings.soundLevel / 100));
             if (this.var_9 != null) {
                 this.var_9.init();
             }

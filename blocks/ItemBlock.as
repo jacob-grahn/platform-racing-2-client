@@ -5,6 +5,7 @@
 
 package blocks
 {
+    import data.Settings;
     import package_6.Course;
     import sounds.SoundEffects;
     import package_8.Racer;
@@ -27,7 +28,7 @@ package blocks
                 _local_3 = Course.course.var_86[_local_2];
                 _arg_1.setItem(_local_3);
             }
-            SoundEffects.playSound(new StarSound(), 0.6 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new StarSound(), 0.6 * (Settings.soundLevel / 100));
         }
 
 

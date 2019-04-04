@@ -6,6 +6,7 @@
 package blocks
 {
     import data.Objects;
+    import data.Settings;
     import sounds.SoundEffects;
     import package_8.Racer;
 
@@ -21,7 +22,7 @@ package blocks
         {
             super.useSupply(_arg_1);
             _arg_1.method_392(5);
-            SoundEffects.playSound(new BumpHappySound(), 0.75 * (Main.soundLevel / 100));
+            SoundEffects.playSound(new BumpHappySound(), 0.75 * (Settings.soundLevel / 100));
         }
 
 

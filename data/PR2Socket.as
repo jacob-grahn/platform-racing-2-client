@@ -52,8 +52,8 @@ package data
                 this.sendNum = 0;
                 CommandHandler.commandHandler.sendNum = -1;
             }
-            delete Memory.memory["coursePageNumcampaign"];
-            delete Memory.memory["campaignInfo" + Campaign.campaignPage];
+            delete Memory.memory["coursePageNumcampaign"]; // delete campaign page from memory
+            delete Memory.memory["campaignInfo" + Campaign.campaignPage]; // delete today's campaign information from memory
         }
 
         public function write(str:String)

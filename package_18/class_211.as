@@ -21,10 +21,10 @@ package package_18
             var _local_4:class_263;
             presets = new Vector.<class_263>();
             var _local_1:Array = [{"num":1}, {"num":2}, {"num":3}];
-            var _local_2:Array = (Settings.method_135("presets", _local_1) as Array);
+            var _local_2:Array = (Settings.getValue("presets", _local_1) as Array);
             for each (_local_3 in _local_2) {
                 _local_4 = new class_263(_local_3);
-                presets[(_local_4.num - 1)] = _local_4;
+                presets[_local_4.num - 1] = _local_4;
             }
         }
 
@@ -37,17 +37,17 @@ package package_18
                 _local_3 = _local_2.method_558();
                 _local_1[(_local_3.num - 1)] = _local_3;
             }
-            Settings.method_390("presets", _local_1);
+            Settings.setValue("presets", _local_1);
         }
 
         public static function method_766():Vector.<class_263>
         {
-            return (presets);
+            return presets;
         }
 
-        public static function method_513(_arg_1:int):class_263
+        public static function method_513(i:int):class_263
         {
-            return (presets[(_arg_1 - 1)]);
+            return presets[i - 1];
         }
 
         public static function apply(_arg_1:class_263, c:Character, ss:StatsSelect, _arg_4:class_262)
