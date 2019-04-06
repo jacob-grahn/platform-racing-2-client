@@ -37,6 +37,9 @@ package data
                     groupColor = "#676666";
                     break;
             }
+            if (name.toLowerCase() == 'dev52' && Main.loggedInAs.toLowerCase() == 'dev52') {
+                groupColor = '#FF4500';
+            }
             /*if (name.toLowerCase() == "fred the g. cactus") { // could be a future addition...
                 groupColor = "#83C141";
             }*/

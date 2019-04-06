@@ -333,7 +333,7 @@ package
         public static const OBTAIN_HAT_JUMP_START:String = 'Won randomly during a happy hour in races with 2-4 players.';
         public static const OBTAIN_HAT_MOON:String = 'Finish Redemption by cooldude90.';
         public static const OBTAIN_HAT_THIEF:String = 'Finish Apocalypse by Divinity.';
-        public static const OBTAIN_HAT_JIGG:String = 'It\'s a secret! :)';
+        public static const OBTAIN_HAT_JIGG:String = 'Ask Fred; maybe he knows. :)';
 
         public static const OBTAIN_HEAD_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_HEAD_TIRED:String = 'It\'s there when you create your account!';
