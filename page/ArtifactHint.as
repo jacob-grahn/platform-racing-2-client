@@ -27,9 +27,20 @@ package page
         private function parseHint(e:Event)
         {
             var ret:Object = this.superLoader.parsedData;
-            this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, "Here\'s what I remember: " + ret.hint + ". Maybe I can remember more later!!"]);
+            var hintMsg:String = "Here\'s what I remember: " + ret.hint + ". Maybe I can remember more later!!";
+            this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, hintMsg]);
             if (ret.finder_name != "") {
-                this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, "The first person to find this artifact was " + ret.finder_name + "!!"]);
+                var foundMsg:String = "The first person to find this artifact was " + ret.finder_name + "!";
+                this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, foundMsg]);
+                var bubMsg:String = "";
+                if (ret.bubbles_name == "") {
+                    bubMsg = "The bubble set will be awarded to the first person to find the artifact that doesn\'t have the set already!";
+                } else if (ret.bubbles_name != "" && ret.finder_name != ret.bubbles_name) {
+                    bubMsg = "Since they already have the bubble set, the prize was awarded to " + ret.bubbles_name + " instead!";
+                }
+                if (bubMsg != "") {
+                    this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, bubMsg]);
+                }
             }
         }
 

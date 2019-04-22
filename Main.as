@@ -18,6 +18,7 @@ package
     import flash.net.URLVariables;
     import flash.system.Capabilities;
     import flash.system.Security;
+    import flash.ui.ContextMenu;
     import flash.utils.setTimeout;
     import menu.CheckServers;
     import menu.class_4;
@@ -35,8 +36,8 @@ package
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
-        public static const testing:Boolean = true; // DISABLE IN PRODUCTION
-        public static const version:String = "4-apr-2019-v154";
+        public static const testing:Boolean = false; // DISABLE IN PRODUCTION
+        public static const version:String = "22-apr-2019-v155";
         public static const baseURL:String = "https://pr2hub.com"; //"https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
         public static const listsURL:String = "https://pr2hub.com/files/lists";
@@ -87,6 +88,7 @@ package
 
         public function Main()
         {
+            hideContextMenu();
             if (stage) {
                 this.init();
             } else {
@@ -124,6 +126,13 @@ package
                 addChild(new Doughnut());
                 addChild(muteButton);
             }
+        }
+
+        private function hideContextMenu()
+        {
+            var my_menu:ContextMenu = new ContextMenu();
+            my_menu.hideBuiltInItems();
+            contextMenu = my_menu;
         }
 
         // _loc1 = domain

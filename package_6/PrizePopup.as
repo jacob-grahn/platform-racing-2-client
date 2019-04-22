@@ -29,7 +29,7 @@ package package_6
             this.m.foot.visible = false;
             this.m.flavorBg.visible = false;
             this.m.flavor.visible = false;
-            if (desc != "") {
+            if (desc != "" && type != "exp") {
                 this.m.flavorBg.visible = true;
                 this.m.flavor.visible = true;
                 this.m.flavor.text = desc;
@@ -53,11 +53,18 @@ package package_6
                 this.target = this.m.foot;
             }
             if (type == "exp") {
+                this.m.titleBox.y = -105;
                 this.target = this.m.exp;
+                if (desc != '') {
+                    this.target.y = -80;
+                    this.target.textBox.text = desc;
+                } else {
+                    this.target.textBox.text = 'You already have this prize, so here are ' + class_28.formatNumber(id) + ' experience points instead!';
+                }
             }
             if (type == "eHat" || type == "eHead" || type == "eBody" || type == "eFeet") {
                 this.activateEpicAnimation();
-            } else {
+            } else if (type != "exp") {
                 this.target.colorMC2.visible = false;
             }
             this.target.visible = true;
