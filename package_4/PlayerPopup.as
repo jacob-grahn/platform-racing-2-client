@@ -42,7 +42,7 @@ package package_4
             this.superLoader = new SuperLoader(true, SuperLoader.j);
             var vars:URLVariables = new URLVariables();
             vars.name = name;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/get_player_info_2.php");
+            var request:URLRequest = new URLRequest(Main.baseURL + "/get_player_info.php");
             request.data = vars;
             this.superLoader.load(request);
             this.superLoader.addEventListener(SuperLoader.d, this.applyReturnData, false, 0, true);
