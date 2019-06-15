@@ -27,7 +27,7 @@ package levelEditor
 
         private var drawingPop:DrawingPopup; // var_221
         public var var_364:Sprite;
-        public var menu:class_123;
+        public var menu:LevelEditorMenu;
         public var var_225:class_75;
         public var cur:class_77;
         public var var_220:DrawableBackground;
@@ -63,7 +63,7 @@ package levelEditor
             this.var_364 = new Sprite();
             this.var_364.mouseEnabled = false;
             this.var_364.mouseChildren = false;
-            this.menu = new class_123();
+            this.menu = new LevelEditorMenu();
             this.menu.init();
             this.attachBackgrounds();
             addChild(this.menu);

@@ -4,7 +4,7 @@ package package_20
 {
     import background.class_77;
     import flash.geom.Point;
-    import levelEditor.class_131;
+    import levelEditor.TextObject;
 
     public class TextTool extends class_269 
     {
@@ -16,14 +16,15 @@ package package_20
             method_332();
         }
 
+        // _loc5 = textObj
         override protected function dropObject(_arg_1:int, _arg_2:int)
         {
             var _local_3:class_77 = editor.cur;
             var _local_4:Point = new Point((_arg_1 - 5), (_arg_2 - 16));
             _local_4 = editor.cur.globalToLocal(_local_4);
-            var _local_5:class_131 = _local_3.method_129(" ", _local_4.x, _local_4.y, class_131.var_380, true);
-            _local_5.select();
-            _local_5.method_270();
+            var textObj:TextObject = _local_3.method_129(" ", _local_4.x, _local_4.y, TextObject.var_380, true);
+            textObj.select();
+            textObj.startEditing();
             remove();
         }
 

@@ -6,7 +6,7 @@
 package background
 {
     import page.GamePage;
-    import levelEditor.class_132;
+    import levelEditor.BlockObject;
     import flash.geom.Point;
     import data.class_28;
     import flash.display.DisplayObject;
@@ -53,7 +53,7 @@ package background
             if (_arg_1 < 100) {
                 _arg_1 = (_arg_1 + 100);
             }
-            var _local_4:class_132 = new class_132(_arg_1, _arg_2, _arg_3);
+            var _local_4:BlockObject = new BlockObject(_arg_1, _arg_2, _arg_3);
             var_10.push(_local_4);
             this.var_323++;
             var _local_5:Point = new Point(Math.round((_arg_2 / 30)), Math.round((_arg_3 / 30)));
@@ -86,14 +86,14 @@ package background
             this.blockArray[_arg_2.x][_arg_2.y] = _arg_1;
         }
 
-        public function getBlockAt(_arg_1:Number, _arg_2:Number):class_132
+        public function getBlockAt(_arg_1:Number, _arg_2:Number):BlockObject
         {
-            var _local_3:class_132;
+            var _local_3:BlockObject;
             var _local_4:int = int(Math.round((_arg_1 / 30)));
             var _local_5:int = int(Math.round((_arg_2 / 30)));
             var _local_6:Array = this.blockArray[_local_4];
             if (_local_6 != null) {
-                _local_3 = class_132(_local_6[_local_5]);
+                _local_3 = BlockObject(_local_6[_local_5]);
             } else {
                 _local_3 = null;
             }
@@ -105,7 +105,7 @@ package background
             var _local_3:Boolean = true;
             var _local_4:int = int(Math.round((_arg_1 / 30)));
             var _local_5:int = int(Math.round((_arg_2 / 30)));
-            var _local_6:class_132 = this.getBlockFromPoint(_local_4, _local_5);
+            var _local_6:BlockObject = this.getBlockFromPoint(_local_4, _local_5);
             if (_local_6 != null) {
                 _local_3 = false;
             }
@@ -145,7 +145,7 @@ package background
         {
             var _local_3:Point = new Point(_arg_1, _arg_2);
             _local_3 = this.globalToLocal(_local_3);
-            var _local_4:class_132 = this.getBlockAt((_local_3.x - 15), (_local_3.y - 15));
+            var _local_4:BlockObject = this.getBlockAt((_local_3.x - 15), (_local_3.y - 15));
             if (((!(_local_4 == null)) && (_local_4.deleteable))) {
                 recordDelete(_local_4);
                 _local_4.remove();
@@ -159,7 +159,7 @@ package background
             var _local_4:Number = Number(_local_2[1]);
             var _local_5:Number = Number(_local_2[2]);
             var _local_6:Point = this.method_52(_local_4, _local_5);
-            var _local_7:class_132 = class_132(var_10[_local_3]);
+            var _local_7:BlockObject = BlockObject(var_10[_local_3]);
             if (_local_7 != null) {
                 this.moveBlock(new Point(_local_7.segX, _local_7.segY), _local_6);
             }
@@ -187,7 +187,7 @@ package background
 
         public function method_753():Point
         {
-            var _local_1:class_132 = var_10[0];
+            var _local_1:BlockObject = var_10[0];
             return (new Point(_local_1.x, _local_1.y));
         }
 

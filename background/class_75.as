@@ -7,7 +7,7 @@ package background
 {
     import flash.display.Sprite;
     import page.GamePage;
-    import levelEditor.class_123;
+    import levelEditor.LevelEditorMenu;
     import levelEditor.LevelEditor;
     import data.class_122;
     import flash.geom.ColorTransform;
@@ -80,7 +80,7 @@ package background
 
         public function method_14(_arg_1:String)
         {
-            var _local_2:class_123;
+            var _local_2:LevelEditorMenu;
             this.var_15.push(_arg_1);
             this.method_817();
             if (LevelEditor.editor != null) {

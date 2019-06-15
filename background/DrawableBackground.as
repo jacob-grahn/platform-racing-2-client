@@ -19,7 +19,7 @@ package background
     import data.Settings;
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
-    import levelEditor.class_131;
+    import levelEditor.TextObject;
 
     public class DrawableBackground extends class_75 
     {
@@ -327,7 +327,7 @@ package background
             textBox.autoSize = TextFieldAutoSize.LEFT;
             textBox.multiline = true;
             textBox.textColor = textColor;
-            textBox.text = class_131.method_192(textStr);
+            textBox.text = TextObject.method_192(textStr);
             textBox.scaleX = textScaleX * scale; //(textScaleX / 1.33) * scale;
             textBox.scaleY = textScaleY * scale; //(textScaleY / 1.27) * scale;
             textBox.height = 24;

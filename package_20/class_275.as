@@ -9,7 +9,7 @@ package package_20
     import levelEditor.LevelEditor;
     import background.class_77;
     import flash.geom.Point;
-    import levelEditor.class_132;
+    import levelEditor.BlockObject;
     import flash.events.MouseEvent;
 
     public class class_275 extends class_269 
@@ -26,7 +26,7 @@ package package_20
         {
             var _local_4:class_77;
             var _local_5:Point;
-            var _local_3:class_132 = this.getBlock(_arg_1, _arg_2);
+            var _local_3:BlockObject = this.getBlock(_arg_1, _arg_2);
             if (_local_3 == null) {
                 _local_4 = editor.cur;
                 _local_5 = new Point(_arg_1, _arg_2);
@@ -49,11 +49,11 @@ package package_20
             }
         }
 
-        private function getBlock(_arg_1:int, _arg_2:int):class_132
+        private function getBlock(_arg_1:int, _arg_2:int):BlockObject
         {
             var _local_3:Point = new Point(_arg_1, _arg_2);
             _local_3 = this.blockBackground.globalToLocal(_local_3);
-            var _local_4:class_132 = this.blockBackground.getBlockAt((_local_3.x - 15), (_local_3.y - 15));
+            var _local_4:BlockObject = this.blockBackground.getBlockAt((_local_3.x - 15), (_local_3.y - 15));
             return (_local_4);
         }
 

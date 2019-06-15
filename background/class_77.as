@@ -7,8 +7,8 @@ package background
 {
     import flash.display.Sprite;
     import page.GamePage;
-    import levelEditor.class_130;
-    import levelEditor.class_131;
+    import levelEditor.PlaceableObject;
+    import levelEditor.TextObject;
 
     public class class_77 extends class_75 
     {
@@ -35,16 +35,16 @@ package background
 
         protected function attachObject(_arg_1:int, _arg_2:int, _arg_3:int)
         {
-            var _local_4:class_130 = new class_130(_arg_1, _arg_2, _arg_3);
+            var _local_4:PlaceableObject = new PlaceableObject(_arg_1, _arg_2, _arg_3);
             this.var_84.addChild(_local_4);
             this.var_10.push(_local_4);
         }
 
-        public function method_129(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:Boolean=false):class_131
+        public function method_129(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:Boolean=false):TextObject
         {
-            var _local_6:class_131;
+            var _local_6:TextObject;
             if (this.var_10.length < this.var_356) {
-                _local_6 = new class_131(_arg_1, _arg_2, _arg_3, _arg_4);
+                _local_6 = new TextObject(_arg_1, _arg_2, _arg_3, _arg_4);
                 this.var_84.addChild(_local_6);
                 this.var_10.push(_local_6);
                 if (_arg_5) {
@@ -65,25 +65,25 @@ package background
             method_14("u" + _arg_1 + ";" + _arg_2 + ";" + _arg_3 + ";" + _arg_4 + ";100;100");
         }
 
-        public function recordChangeText(_arg_1:class_131)
+        public function recordChangeText(_arg_1:TextObject)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
             method_14("y" + _local_2 + ";" + _arg_1.method_184() + ";" + _arg_1.getColor());
         }
 
-        public function method_761(_arg_1:class_130)
+        public function method_761(_arg_1:PlaceableObject)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
             method_14("m" + _local_2 + ";" + _arg_1.x + ";" + _arg_1.y);
         }
 
-        public function recordDelete(_arg_1:class_130)
+        public function recordDelete(_arg_1:PlaceableObject)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
             method_14("d" + _local_2);
         }
 
-        public function method_686(_arg_1:class_130)
+        public function method_686(_arg_1:PlaceableObject)
         {
             var _local_2:int = this.var_10.indexOf(_arg_1);
             method_14("r" + _local_2 + ";" + _arg_1.scaleX + ";" + _arg_1.scaleY);
@@ -141,7 +141,7 @@ package background
             var _local_6:int;
             var _local_7:Number;
             var _local_8:Number;
-            var _local_9:class_131;
+            var _local_9:TextObject;
             if (this.var_10.length < this.var_356) {
                 _local_2 = _arg_1.split(";");
                 _local_3 = String(_local_2[0]);
@@ -177,12 +177,12 @@ package background
         protected function moveDrawObject(_arg_1:String)
         {
             var _local_5:Number;
-            var _local_6:class_130;
+            var _local_6:PlaceableObject;
             var _local_2:Array = _arg_1.split(";");
             var _local_3:Number = Number(_local_2[0]);
             var _local_4:Number = Number(_local_2[1]);
             _local_5 = Number(_local_2[2]);
-            _local_6 = class_130(this.var_10[_local_3]);
+            _local_6 = PlaceableObject(this.var_10[_local_3]);
             if (_local_6 != null) {
                 _local_6.x = _local_4;
                 _local_6.y = _local_5;
@@ -195,7 +195,7 @@ package background
             var _local_3:int = int(_local_2[0]);
             var _local_4:String = String(_local_2[1]);
             var _local_5:int = int(_local_2[2]);
-            var _local_6:class_131 = class_131(this.var_10[_local_3]);
+            var _local_6:TextObject = TextObject(this.var_10[_local_3]);
             _local_6.method_262(_local_4);
             _local_6.setColor(_local_5);
         }
@@ -203,7 +203,7 @@ package background
         protected function method_476(_arg_1:String)
         {
             var _local_2:Number = Number(_arg_1);
-            var _local_3:class_130 = class_130(this.var_10[_local_2]);
+            var _local_3:PlaceableObject = PlaceableObject(this.var_10[_local_2]);
             _local_3.remove();
         }
 
@@ -213,7 +213,7 @@ package background
             var _local_3:Number = Number(_local_2[0]);
             var _local_4:Number = Number(_local_2[1]);
             var _local_5:Number = Number(_local_2[2]);
-            var _local_6:class_130 = class_130(this.var_10[_local_3]);
+            var _local_6:PlaceableObject = PlaceableObject(this.var_10[_local_3]);
             _local_6.scaleX = _local_4;
             _local_6.scaleY = _local_5;
         }
@@ -224,7 +224,7 @@ package background
             var _local_3:int;
             var _local_4:int;
             var _local_5:Array;
-            var _local_6:class_130;
+            var _local_6:PlaceableObject;
             var _local_7:int;
             var _local_8:int;
             var _local_9:int;
@@ -234,7 +234,7 @@ package background
             var _local_13:int;
             var _local_14:int;
             var _local_15:int;
-            var _local_16:class_131;
+            var _local_16:TextObject;
             var _local_1:* = "";
             if (this.var_10.length > 0) {
                 _local_2 = "";
@@ -260,10 +260,10 @@ package background
                             _local_14 = _local_6.scaleY * 100;
                             _local_2 = _local_2 + ";" + _local_13 + ";" + _local_14;
                         }
-                        if (_local_6 is class_131) {
+                        if (_local_6 is TextObject) {
                             _local_13 = _local_6.scaleX * 100;
                             _local_14 = _local_6.scaleY * 100;
-                            _local_16 = class_131(_local_6);
+                            _local_16 = TextObject(_local_6);
                             if (_local_16.method_47() != "" && _local_16.method_47() != " ") {
                                 _local_2 = (_local_11 + ";" + _local_12 + ";" + "t" + ";" + _local_16.method_184() + ";" + _local_16.getColor() + ";" + _local_13 + ";" + _local_14);
                             } else {
@@ -292,7 +292,7 @@ package background
 
         public function removeObjectsTouchingPoint(_arg_1:Number, _arg_2:Number)
         {
-            var _local_5:class_130;
+            var _local_5:PlaceableObject;
             var _local_3:int;
             var _local_4:int = this.var_10.length;
             _local_3 = 0;
@@ -316,7 +316,7 @@ package background
 
         override public function clear()
         {
-            var _local_4:class_130;
+            var _local_4:PlaceableObject;
             var _local_1:Array = new Array();
             var _local_2:int;
             var _local_3:int = this.var_10.length;
@@ -346,4 +346,3 @@ package background
 
     }
 }//package background
-
