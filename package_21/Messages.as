@@ -26,7 +26,7 @@ package package_21
         private var loadingGraphic:LoadingGraphic = new LoadingGraphic();
         private var pageNavigation:PageNavigation;
         private var loader:SuperLoader;
-        private var var_178:Array;
+        private var messagesArray:Array; // var_178
         private var uploading:UploadingPopup; // var_148
         private var var_167:int = 1;
         private var var_564:int = 10;
@@ -35,33 +35,35 @@ package package_21
         {
             this.pageNavigation = new PageNavigation(this, "minimal", 1, 99, 110);
             this.loader = new SuperLoader(true, SuperLoader.j);
-            this.var_178 = new Array();
-            super();
+            this.messagesArray = new Array();
+            // super();
             this.scrollBar.x = 176;
             this.scrollBar.init(this.m.var_295, 340, 330);
             addChild(this.scrollBar);
             this.pageNavigation.x = 33;
-            this.m.sendMessage_bt.addEventListener(MouseEvent.CLICK, this.method_295, false, 0, true);
-            this.m.deleteAll_bt.addEventListener(MouseEvent.CLICK, this.method_245, false, 0, true);
+            this.m.sendMessage_bt.addEventListener(MouseEvent.CLICK, this.clickSend, false, 0, true);
+            this.m.deleteAll_bt.addEventListener(MouseEvent.CLICK, this.clickDeleteAll, false, 0, true);
             addChild(this.m);
             this.loadingGraphic.x = 88;
             this.loadingGraphic.y = 150;
-            this.loader.addEventListener(SuperLoader.d, this.method_228);
+            this.loader.addEventListener(SuperLoader.d, this.handleData);
             this.loader.addEventListener(SuperLoader.e, this.handleError);
-            this.method_453();
+            this.getMessages();
             UnreadNotif.method_692();
         }
 
-        private function method_295(e:MouseEvent)
+        // method_295 = clickSend
+        private function clickSend(e:MouseEvent)
         {
             new SendMessagePopup();
         }
 
         // _loc1 = vars
         // _loc2 = request
-        private function method_453()
+        // method_453 = getMessages
+        private function getMessages()
         {
-            this.method_170();
+            this.removeMessages();
             var vars:URLVariables = new URLVariables();
             vars.start = (this.var_167 - 1) * this.var_564;
             vars.count = this.var_564;
@@ -73,44 +75,50 @@ package package_21
 
         // _loc2 = message
         // _loc3 = item
-        private function method_228(e:Event)
+        // method_228 = handleData
+        private function handleData(e:Event)
         {
             removeChild(this.loadingGraphic);
             this.pageNavigation.y = 50;
             this.m.var_295.addChild(this.pageNavigation);
             this.scrollBar.position(0);
             for each (var message:Object in this.loader.parsedData.messages) {
-                var item:MessagesItem = new MessagesItem(this, message.message_id, message.name, message.group, message.message, message.time, message.user_id);
-                this.var_178.push(item);
+                var item:MessagesItem = new MessagesItem(this, message.message_id, message.name, message.group, message.message, message.guild_message, message.time, message.user_id);
+                this.messagesArray.push(item);
             }
-            this.method_528();
+            this.populateMessages();
         }
 
-        private function method_528()
+        // _loc1 = message
+        // _loc2 = nextY
+        // _loc3 = i
+        // method_528 = populateMessages
+        private function populateMessages()
         {
-            var _local_1:MessagesItem;
-            var _local_2:Number = 0;
-            var _local_3:int;
-            while (_local_3 < this.var_178.length) {
-                _local_1 = this.var_178[_local_3];
-                _local_1.y = _local_2;
-                this.m.var_295.addChild(_local_1);
-                _local_2 = (_local_2 + (Math.round(_local_1.height) + 18));
-                _local_3++;
+            var nextY:Number = 0;
+            var i:int = 0;
+            while (i < this.messagesArray.length) {
+                var message:MessagesItem = this.messagesArray[i];
+                message.y = nextY;
+                this.m.var_295.addChild(message);
+                nextY += Math.round(message.height) + 18;
+                i++;
             }
-            this.pageNavigation.y = (_local_2 + 10);
+            this.pageNavigation.y = nextY + 10;
         }
 
-        private function method_170()
+        // _loc1 = message
+        // _loc2 = i
+        // method_170 = removeMessages
+        private function removeMessages()
         {
-            var _local_1:MessagesItem;
-            var _local_2:int;
-            while (_local_2 < this.var_178.length) {
-                _local_1 = this.var_178[_local_2];
-                _local_1.remove();
-                _local_2++;
+            var i:int = 0;
+            while (i < this.messagesArray.length) {
+                var message:MessagesItem = this.messagesArray[i];
+                message.remove();
+                i++;
             }
-            this.var_178 = new Array();
+            this.messagesArray = new Array();
             if (this.pageNavigation.parent == this.m.var_295) {
                 this.m.var_295.removeChild(this.pageNavigation);
             }
@@ -118,7 +126,8 @@ package package_21
 
         // _loc2 = vars
         // _loc3 = request
-        public function method_670(item:MessagesItem)
+        // method_670 = doReport
+        public function doReport(item:MessagesItem)
         {
             item.alpha = 0.5;
             var vars:URLVariables = new URLVariables();
@@ -127,12 +136,12 @@ package package_21
             request.method = URLRequestMethod.POST;
             request.data = vars;
             this.uploading = new UploadingPopup(request, 'json');
-            //this.uploading.addEventListener(Event.COMPLETE, this.method_386, false, 0, true);
         }
 
         // _loc2 = vars
         // _loc3 = request
-        public function method_521(item:MessagesItem)
+        // method_521 = doDelete
+        public function doDelete(item:MessagesItem)
         {
             item.alpha = 0.25;
             var vars:URLVariables = new URLVariables();
@@ -141,7 +150,6 @@ package package_21
             request.method = URLRequestMethod.POST;
             request.data = vars;
             this.uploading = new UploadingPopup(request, 'json');
-            //this.uploading.addEventListener(Event.COMPLETE, this.method_443, false, 0, true);
         }
 
         private function handleError(e:Event)
@@ -149,50 +157,43 @@ package package_21
             removeChild(this.loadingGraphic);
         }
 
-        private function method_386(e:Event)
+        // method_245 = clickDeleteAll
+        private function clickDeleteAll(e:MouseEvent)
         {
+            new ConfirmPopup(this.doDeleteAll, "Are you sure you want to delete all of your messages?");
         }
 
-        private function method_443(e:Event)
-        {
-        }
-
-        private function method_245(e:MouseEvent)
-        {
-            new ConfirmPopup(this.method_530, "Are you sure you want to delete all of your messages?");
-        }
-
-        public function method_530()
+        // method_530 = doDeleteAll
+        public function doDeleteAll()
         {
             var vars:URLVariables = new URLVariables();
             var request:URLRequest = new URLRequest(Main.baseURL + "/messages_delete_all.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
             new UploadingPopup(request, 'json');
-            this.method_170();
+            this.removeMessages();
         }
 
         public function setPageNum(_arg_1:int)
         {
             this.var_167 = _arg_1;
-            this.method_453();
+            this.getMessages();
         }
 
         override public function remove()
         {
-            this.method_170();
-            this.m.sendMessage_bt.removeEventListener(MouseEvent.CLICK, this.method_295);
-            this.m.deleteAll_bt.removeEventListener(MouseEvent.CLICK, this.method_245);
-            this.loader.removeEventListener(SuperLoader.d, this.method_228);
+            this.removeMessages();
+            this.m.sendMessage_bt.removeEventListener(MouseEvent.CLICK, this.clickSend);
+            this.m.deleteAll_bt.removeEventListener(MouseEvent.CLICK, this.clickDeleteAll);
+            this.loader.removeEventListener(SuperLoader.d, this.handleData);
+			this.loader.removeEventListener(SuperLoader.e, this.handleError);
             this.loader.remove();
             this.loader = null;
             this.pageNavigation.remove();
             this.scrollBar.remove();
-            this.var_178 = new Array();
+            this.messagesArray = new Array();
             if (this.uploading != null) {
-                this.uploading.removeEventListener(Event.COMPLETE, this.method_386);
-                this.uploading.removeEventListener(Event.COMPLETE, this.method_443);
-                this.uploading.method_136();
+                this.uploading.remove();
                 this.uploading = null;
             }
             super.remove();

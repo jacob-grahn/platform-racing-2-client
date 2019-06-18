@@ -24,7 +24,7 @@ package package_21
 
         // _loc8 = htmlName
         // _loc9 = date
-        public function MessagesItem(messages:Messages, _arg_2:Number, name:String, group:Number, body:String, time:Number, userId:Number)
+        public function MessagesItem(messages:Messages, _arg_2:Number, name:String, group:Number, body:String, gm:Boolean, time:Number, userId:Number)
         {
             this.target = messages;
             this.var_451 = _arg_2;
@@ -41,15 +41,16 @@ package package_21
             }
             body = class_28.parseLinks(body);
             body = body.replace(/\r/g, "<br>");
-            var date:Date = new Date();
-            date.setTime(time * 1000);
-            this.m.textBox.autoSize = "left";
             this.m.nameBox.htmlText = htmlName;
             this.m.textBox.htmlText = body;
-            this.m.timeBox.text = date.toLocaleDateString();
+            this.m.textBox.autoSize = "left";
             this.m.bg.height = this.m.textBox.height + 6;
-            this.reportButton.y = this.deleteButton.y = this.replyButton.y = this.m.textBox.height + 42;
+            this.m.guildMsgIcon.visible = gm;
+            var date:Date = new Date();
+            date.setTime(time * 1000);
+            this.m.timeBox.text = date.toLocaleDateString();
             this.m.timeBox.y = this.m.textBox.height + 32;
+            this.reportButton.y = this.deleteButton.y = this.replyButton.y = this.m.textBox.height + 42;
             this.reportButton.x = 15;
             this.deleteButton.x = 37;
             this.replyButton.x = 59;
@@ -89,13 +90,13 @@ package package_21
         // method_573 = confirmReport
         private function confirmReport()
         {
-            this.target.method_670(this);
+            this.target.doReport(this);
         }
 
         // method_73 = confirmDelete
         public function confirmDelete()
         {
-            this.target.method_521(this);
+            this.target.doDelete(this);
         }
 
         override public function remove()
