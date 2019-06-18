@@ -54,8 +54,14 @@ package package_4
                 request.data = vars;
                 request.method = URLRequestMethod.POST;
                 var uploading:UploadingPopup = new UploadingPopup(request, 'json');
-                uploading.addEventListener(Event.COMPLETE, this.clickCancel);
+                uploading.addEventListener(SuperLoader.d, this.clickCancel);
+                uploading.addEventListener(SuperLoader.e, this.onError);
             }
+        }
+
+        private function onError(e:*)
+        {
+            return;
         }
 
         private function clickCancel(e:*)

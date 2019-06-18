@@ -53,6 +53,12 @@ package package_4
             startFadeOut();
         }
 
+        protected function errorHandler(e:Event)
+        {
+            dispatchEvent(e);
+            startFadeOut();
+        }
+
         protected function onProgress(loadObj:ProgressEvent)
         {
             this.progressBar.incProgress(loadObj.bytesLoaded / loadObj.bytesTotal);

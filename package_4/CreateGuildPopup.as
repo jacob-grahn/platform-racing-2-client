@@ -17,7 +17,7 @@ package package_4
 
         private var m:CreateGuildPopupGraphic;
         private var guildId:int;
-        private var editMode:Boolean = false; // var_289
+        private var loading:Boolean = false; // var_289
         private var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
         private var infoLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // var_204
         private var emblem:EmblemLoader; // var_46
@@ -43,7 +43,7 @@ package package_4
             this.m.changeEmblem_bt.addEventListener(MouseEvent.CLICK, this.clickChangeEmblem, false, 0, true);
             this.m.deleteEmblem_bt.visible = false;
             if (this.guildId != 0) {
-                this.editMode = true;
+                this.loading = true;
                 this.m.titleBox.text = "-- Edit Guild --";
                 var vars:URLVariables = new URLVariables();
                 vars.id = this.guildId;
@@ -87,7 +87,7 @@ package package_4
                 this.m.deleteEmblem_bt.visible = true;
                 this.m.deleteEmblem_bt.addEventListener(MouseEvent.CLICK, this.clickDeleteEmblem, false, 0, true);
             }
-            this.editMode = false;
+            this.loading = false;
         }
 
         // method_336 = clickChangeEmblem
@@ -104,8 +104,8 @@ package package_4
         // method_149 = clickConfirm
         private function clickConfirm(e:MouseEvent)
         {
-            if (!this.editMode) {
-                this.editMode = true;
+            if (!this.loading) {
+                this.loading = true;
                 this.m.confirm_bt.alpha = 0.33;
                 if (this.emblem.isLoading()) {
                     this.emblem.addEventListener(EmblemLoader.finishLoading, this.emblemFinished, false, 0, true);
@@ -148,11 +148,7 @@ package package_4
         // method_320 = confirmResponseError
         private function confirmResponseError(e:Event)
         {
-            if (this.editMode && (Main.guild != this.guildId || Main.guildOwner == 0)) {
-                startFadeOut();
-                return;
-            }
-            this.editMode = false;
+            this.loading = false;
             this.m.confirm_bt.alpha = 1;
         }
 
@@ -160,7 +156,7 @@ package package_4
         // method_464 = accChangeHandler
         private function accChangeHandler(e:Event)
         {
-            if (this.editMode && Main.guild != this.guildId) {
+            if (this.loading && Main.guild != this.guildId) {
                 startFadeOut();
                 return; // mod edited, don't update their account
             }
