@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_8.class_91
+// package_8.RemoteCharacter = package_8.class_91
 
 package package_8
 {
@@ -17,12 +17,12 @@ package package_8
     import blocks.VanishBlock;
     import blocks.WaterBlock;
 
-    public class class_91 extends Character 
+    public class RemoteCharacter extends Character
     {
 
         private var var_19:Array = new Array();
         private var commandHandler:CommandHandler = CommandHandler.commandHandler;
-        private var var_174:class_138;
+        private var mapDot:MiniMapDot; // var_174
         private var map:Map = Course.course.blockBackground;
         private var var_180:Number = 1;
         private var posX:Number = 0;
@@ -34,11 +34,11 @@ package package_8
         private var var_189:Number = 10;
         private var var_325:Number = 55;
 
-        public function class_91(tId:int, _arg_2:class_138, _arg_3:String, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:int)
+        public function RemoteCharacter(tId:int, dot:MiniMapDot, _arg_3:String, hatId:int, headId:int, bodyId:int, feetId:int)
         {
-            super(_arg_4, _arg_5, _arg_6, _arg_7);
+            super(hatId, headId, bodyId, feetId);
             this.tempID = tId;
-            this.var_174 = _arg_2;
+            this.mapDot = dot;
             this.var_180 = var_448 + 1;
             m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = _arg_3;
             this.commandHandler.defineCommand("p" + this.tempID.toString(), this.pos);
@@ -83,8 +83,8 @@ package package_8
                 x = _local_5.x;
                 y = _local_5.y;
                 _local_5 = class_28.method_9(this.posX, this.posY, -(this.rot));
-                this.var_174.x = _local_5.x;
-                this.var_174.y = _local_5.y;
+                this.mapDot.x = _local_5.x;
+                this.mapDot.y = _local_5.y;
                 method_58(this.map.rotation);
                 rotation = ((this.map.rotation + this.rot) + this.rotMod);
                 _local_2 = this.var_19.shift();
@@ -264,11 +264,11 @@ package package_8
                 this.commandHandler.defineCommand(("setHats" + tempID.toString()), null);
                 this.commandHandler.defineCommand(("heart" + tempID), null);
             }
-            if (this.var_174 != null) {
-                if (this.var_174.parent != null) {
-                    this.var_174.parent.removeChild(this.var_174);
+            if (this.mapDot != null) {
+                if (this.mapDot.parent != null) {
+                    this.mapDot.parent.removeChild(this.mapDot);
                 }
-                this.var_174 = null;
+                this.mapDot = null;
             }
             this.var_19 = null;
             this.map = null;

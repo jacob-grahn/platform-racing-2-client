@@ -270,7 +270,7 @@ package package_8
         {
             if (velY > 0 && var_4.getBool(JIGG)) {
                 for each (var _local_1:Character in this.course.var_40) {
-                    if (_local_1 is class_91 && _local_1.state != "crouch" && _local_1.state != "crouchWalk" && _local_1.x > (x - 20) && _local_1.x < (x + 20) && _local_1.y > (y + 35) && _local_1.y < (y + 65) && _local_1.rotation == this.rotation) {
+                    if (_local_1 is RemoteCharacter && _local_1.state != "crouch" && _local_1.state != "crouchWalk" && _local_1.x > (x - 20) && _local_1.x < (x + 20) && _local_1.y > (y + 35) && _local_1.y < (y + 65) && _local_1.rotation == this.rotation) {
                         _local_1.changeState("crouch");
                         SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
                         this.socket.write("squash`" + _local_1.tempID + "`" + x + "`" + y);

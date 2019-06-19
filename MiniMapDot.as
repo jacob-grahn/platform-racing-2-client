@@ -1,16 +1,16 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//class_138
+// MiniMapDot = class_138
 
 package 
 {
     import flash.display.MovieClip;
 
-    public dynamic class class_138 extends MovieClip 
+    public dynamic class MiniMapDot extends MovieClip 
     {
 
-        public function class_138()
+        public function MiniMapDot()
         {
             addFrameScript(1, this.frame2);
         }

@@ -11,7 +11,7 @@ package package_6
     import sounds.SoundEffects;
     import package_4.MessagePopup;
     import package_8.Character;
-    import package_8.class_91;
+    import package_8.RemoteCharacter;
     import package_8.Racer;
     import package_9.Egg;
 
@@ -195,7 +195,7 @@ package package_6
             var _local_13:Number = Number(_arg_1[11]);
             var _local_14:Number = Number(_arg_1[12]);
             var _local_15:Number = Number(_arg_1[13]);
-            var _local_16:class_91 = new class_91(_local_2, miniMap.getDot(), _local_3, _local_8, _local_9, _local_10, _local_11);
+            var _local_16:RemoteCharacter = new RemoteCharacter(_local_2, miniMap.getDot(), _local_3, _local_8, _local_9, _local_10, _local_11);
             _local_16.setColors(_local_4, _local_12, _local_5, _local_13, _local_6, _local_14, _local_7, _local_15);
             var_40[_local_2] = _local_16;
             this.drawingInfo.method_138(_local_3, _local_2);

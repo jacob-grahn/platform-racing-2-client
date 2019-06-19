@@ -74,9 +74,9 @@ package package_6
             this.var_16.graphics.endFill();
         }
 
-        public function getDot():class_138
+        public function getDot():MiniMapDot
         {
-            var _local_1:class_138 = new class_138();
+            var _local_1:MiniMapDot = new MiniMapDot();
             this.var_134.addChild(_local_1);
             this.method_182(this.var_134, this.holder.scaleX, 4);
             return (_local_1);
