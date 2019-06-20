@@ -49,7 +49,7 @@ package package_8
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var course:Course;
         private var map:Map;
-        private var var_174:MovieClip;
+        private var mapDot:MovieClip; // var_174
         private var itemDisplay:ItemDisplay;
         private var var_573:uint = setInterval(method_796, 5000);
         private var var_535:uint = setInterval(method_358, 1000);
@@ -114,7 +114,7 @@ package package_8
         private var var_232:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
 
-        public function LocalCharacter(tId:int, c:Course, ma:Map, _arg_4:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
+        public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
             super(ha, h, b, f);
             var_4.setNumber(const_12, 0);
@@ -125,10 +125,10 @@ package package_8
             this.tempID = tId;
             this.course = c;
             this.map = ma;
-            this.var_174 = _arg_4;
+            this.mapDot = dot;
             this.itemDisplay = itd;
             type = "local";
-            _arg_4.gotoAndStop("local");
+            this.mapDot.gotoAndStop("local");
             if (Main.instance.kongAPI != null && Main.instance.kongAPI.stats != null) {
                 if (h == 17 && b == 13 && f == 12) {
                     Main.instance.kongAPI.stats.submit("Stickman", 1);
@@ -172,11 +172,12 @@ package package_8
             this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
         }
 
-        public function method_392(_arg_1:int)
+        // method_392 = statsChange
+        public function statsChange(changeAmt:int)
         {
-            this.speedStat = this.speedStat + _arg_1;
-            this.accelStat = this.accelStat + _arg_1;
-            this.jumpnStat = this.jumpnStat + _arg_1;
+            this.speedStat = this.speedStat + changeAmt;
+            this.accelStat = this.accelStat + changeAmt;
+            this.jumpnStat = this.jumpnStat + changeAmt;
             this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
         }
 
@@ -213,8 +214,8 @@ package package_8
             var _local_3:int = y = Math.round(y);
             if (this.map != null) {
                 var _local_4:Point = class_28.method_9(_local_2, _local_3, this.map.rotation);
-                this.var_174.x = _local_4.x;
-                this.var_174.y = _local_4.y;
+                this.mapDot.x = _local_4.x;
+                this.mapDot.y = _local_4.y;
             }
             method_58(this.map.rotation);
             this.hurtTime--;
@@ -999,11 +1000,11 @@ package package_8
             }
             this.course = null;
             this.map = null;
-            if (this.var_174 != null) {
-                if (this.var_174.parent != null) {
-                    this.var_174.parent.removeChild(this.var_174);
+            if (this.mapDot != null) {
+                if (this.mapDot.parent != null) {
+                    this.mapDot.parent.removeChild(this.mapDot);
                 }
-                this.var_174 = null;
+                this.mapDot = null;
             }
             this.itemDisplay = null;
             this.var_390 = null;

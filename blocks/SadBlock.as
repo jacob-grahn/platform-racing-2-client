@@ -21,7 +21,7 @@ package blocks
         override protected function useSupply(_arg_1:LocalCharacter)
         {
             super.useSupply(_arg_1);
-            _arg_1.method_392(-5);
+            _arg_1.statsChange(-5);
             SoundEffects.playSound(new BumpSadSound(), 0.75 * (Settings.soundLevel / 100));
         }
 
