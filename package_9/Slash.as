@@ -6,7 +6,7 @@
 package package_9
 {
     import package_6.Course;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import sounds.SoundEffects;
     import data.class_28;
     import flash.geom.Point;
@@ -17,7 +17,7 @@ package package_9
 
         private var m:SlashAnimation = new SlashAnimation();
         private var course:Course = Course.course;
-        private var var_5:Racer = Course.course.var_9;
+        private var var_5:LocalCharacter = Course.course.var_9;
         private var var_154:int = 29;
         private var var_609:int;
 

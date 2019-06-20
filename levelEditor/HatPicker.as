@@ -3,19 +3,19 @@
 package levelEditor
 {
     import flash.display.Sprite;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.events.MouseEvent;
 
     public class HatPicker extends Sprite 
     {
 
         private var m:HatPickerGraphic;
-        private var c:Racer;
+        private var c:LocalCharacter;
         private var var_538:int = 1;
         private var var_620:int = 13;
         private var var_75:int = 2;
 
-        public function HatPicker(_arg_1:Racer)
+        public function HatPicker(_arg_1:LocalCharacter)
         {
             this.c = _arg_1;
             this.m = new HatPickerGraphic();

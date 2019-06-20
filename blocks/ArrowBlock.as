@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class ArrowBlock extends Block 
     {
@@ -32,7 +32,7 @@ package blocks
             return (this.var_79);
         }
 
-        override public function onStand(_arg_1:Racer)
+        override public function onStand(_arg_1:LocalCharacter)
         {
             super.onStand(_arg_1);
             var _local_2:Number = this.method_125();
@@ -46,7 +46,7 @@ package blocks
             this.method_87();
         }
 
-        override public function onBump(_arg_1:Racer)
+        override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
             var _local_2:Number = this.method_125();
@@ -62,7 +62,7 @@ package blocks
             this.method_87();
         }
 
-        override public function onLeftHit(_arg_1:Racer)
+        override public function onLeftHit(_arg_1:LocalCharacter)
         {
             super.onLeftHit(_arg_1);
             var _local_2:Number = this.method_125();
@@ -70,7 +70,7 @@ package blocks
             this.method_87();
         }
 
-        override public function onRightHit(_arg_1:Racer)
+        override public function onRightHit(_arg_1:LocalCharacter)
         {
             super.onRightHit(_arg_1);
             var _local_2:Number = this.method_125();
@@ -97,7 +97,7 @@ package blocks
             return (_local_1);
         }
 
-        private function push(_arg_1:Racer, _arg_2:Number)
+        private function push(_arg_1:LocalCharacter, _arg_2:Number)
         {
             if (_arg_2 == 0) {
                 if (_arg_1.crouching == false) {

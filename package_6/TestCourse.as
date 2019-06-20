@@ -12,7 +12,7 @@ package package_6
     import flash.net.URLVariables;
     import levelEditor.HatPicker;
     import levelEditor.LevelEditor;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import package_9.TeleportPop;
     import sounds.SoundEffects;
     import ui.StatsSelect;
@@ -38,7 +38,7 @@ package package_6
             this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.method_371);
             holder.addChild(this.m);
             musicSelection.x = -130;
-            var_9 = new Racer(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
+            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
             var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
             var_9.testMode = true;
             var_40.push(var_9);

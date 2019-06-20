@@ -3,7 +3,7 @@
 package blocks
 {
     import data.Objects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import package_9.class_106;
     import flash.geom.Point;
 
@@ -16,7 +16,7 @@ package blocks
             var_34 = false;
         }
 
-        override public function onBump(_arg_1:Racer)
+        override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
             if (!var_37) {

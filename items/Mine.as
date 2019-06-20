@@ -10,13 +10,13 @@ package items
     import data.class_28;
     import flash.geom.Point;
     import package_6.Course;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import package_9.MineAppear;
 
     public class Mine extends Item 
     {
 
-        public function Mine(r:Racer)
+        public function Mine(r:LocalCharacter)
         {
             super(r);
         }

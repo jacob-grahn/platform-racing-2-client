@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import data.class_33;
     import flash.utils.setTimeout;
     import flash.geom.Point;
@@ -15,13 +15,13 @@ package items
     public class Item extends class_7 
     {
 
-        protected var racer:Racer; // var_5
+        protected var racer:LocalCharacter; // var_5
         protected var space:Boolean = false;
         protected var reloading:Boolean = false; // var_410
         private var reloadListener:uint; // var_581
         private var available:Boolean = false; // var_572
 
-        public function Item(r:Racer)
+        public function Item(r:LocalCharacter)
         {
             this.racer = r;
             this.method_45(10);

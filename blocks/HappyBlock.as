@@ -8,7 +8,7 @@ package blocks
     import data.Objects;
     import data.Settings;
     import sounds.SoundEffects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class HappyBlock extends class_39 
     {
@@ -18,7 +18,7 @@ package blocks
             super(Objects.HappyBlockCode);
         }
 
-        override protected function useSupply(_arg_1:Racer)
+        override protected function useSupply(_arg_1:LocalCharacter)
         {
             super.useSupply(_arg_1);
             _arg_1.method_392(5);

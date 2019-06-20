@@ -10,7 +10,7 @@ package package_9
     import blocks.Block;
     import package_6.Course;
     import data.class_28;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class class_81 extends class_80 
     {
@@ -95,7 +95,7 @@ package package_9
         protected function method_181(_arg_1:int, _arg_2:int):Boolean
         {
             var _local_3:Boolean;
-            var _local_4:Racer = Course.course.var_9;
+            var _local_4:LocalCharacter = Course.course.var_9;
             if (((!(_local_4 == null)) && (!(_local_4.var_214)))) {
                 if ((((Math.abs((_local_4.x - _arg_1)) < 25) && (_local_4.y > (_arg_2 - 5))) && (((!(_local_4.crouching)) && (_local_4.y < (_arg_2 + 65))) || ((_local_4.crouching) && (_local_4.y < (_arg_2 + 25)))))) {
                     _local_3 = true;

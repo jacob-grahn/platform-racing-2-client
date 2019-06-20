@@ -6,7 +6,7 @@
 package blocks
 {
     import data.Objects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class IceBlock extends Block 
     {
@@ -16,7 +16,7 @@ package blocks
             super(Objects.IceBlockCode);
         }
 
-        override public function onStand(_arg_1:Racer)
+        override public function onStand(_arg_1:LocalCharacter)
         {
             super.onStand(_arg_1);
             _arg_1.var_147 = 0.05;

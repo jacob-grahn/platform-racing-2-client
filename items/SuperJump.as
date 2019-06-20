@@ -6,13 +6,13 @@
 package items
 {
     import data.Settings;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
     public class SuperJump extends Item 
     {
 
-        public function SuperJump(r:Racer)
+        public function SuperJump(r:LocalCharacter)
         {
             super(r);
         }

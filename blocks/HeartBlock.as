@@ -6,7 +6,7 @@
 package blocks
 {
     import data.Objects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class HeartBlock extends class_39 
     {
@@ -16,7 +16,7 @@ package blocks
             super(Objects.HeartBlockCode);
         }
 
-        override protected function useSupply(_arg_1:Racer)
+        override protected function useSupply(_arg_1:LocalCharacter)
         {
             super.useSupply(_arg_1);
             _arg_1.gainHeart();

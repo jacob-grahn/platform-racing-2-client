@@ -6,14 +6,14 @@
 package items
 {
     import data.class_33;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class JetPack extends Item 
     {
 
         private var var_592:Boolean = false;
 
-        public function JetPack(r:Racer)
+        public function JetPack(r:LocalCharacter)
         {
             super(r);
             class_33.setNumber("totFuel", 200);

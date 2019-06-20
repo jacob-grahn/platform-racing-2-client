@@ -9,7 +9,7 @@ package blocks
     import data.Settings;
     import sounds.SoundEffects;
     import package_6.Course;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class TimeBlock extends class_39 
     {
@@ -19,7 +19,7 @@ package blocks
             super(Objects.TimeBlockCode);
         }
 
-        override protected function useSupply(_arg_1:Racer)
+        override protected function useSupply(_arg_1:LocalCharacter)
         {
             super.useSupply(_arg_1);
             SoundEffects.playSound(new TickTockSound(), 1 * (Settings.soundLevel / 100));

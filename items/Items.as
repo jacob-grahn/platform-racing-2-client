@@ -3,7 +3,7 @@
 package items
 {
     //import __AS3__.vec.Vector;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import items.*;
 
     public class Items 
@@ -26,7 +26,7 @@ package items
         }
 
         // method_29 = getFromCode
-        public static function getFromCode(code:int, c:Racer):Item
+        public static function getFromCode(code:int, c:LocalCharacter):Item
         {
             if (code == laserGun) {
                 return new LaserGun(c);

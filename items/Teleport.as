@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import package_6.Course;
     import blocks.Block;
     import package_9.TeleportPop;
@@ -13,7 +13,7 @@ package items
     public class Teleport extends Item 
     {
 
-        public function Teleport(r:Racer)
+        public function Teleport(r:LocalCharacter)
         {
             super(r);
         }

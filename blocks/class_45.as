@@ -6,7 +6,7 @@
 package blocks
 {
     import package_6.Course;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class class_45 extends Block 
     {
@@ -18,7 +18,7 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(_arg_1:Racer)
+        override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
             if (!var_37) {

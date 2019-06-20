@@ -11,7 +11,7 @@ package package_9
     import flash.geom.Point;
     import blocks.Block;
     import package_8.Character;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class class_135 extends class_80 
     {
@@ -122,7 +122,7 @@ package package_9
         protected function hitPlayer(_arg_1:Character)
         {
             if (_arg_1.type == "local") {
-                Racer(_arg_1).hit(this.velX, this.velY);
+                LocalCharacter(_arg_1).hit(this.velX, this.velY);
             }
             x = (_arg_1.x - this.velX);
             this.hitAnything();

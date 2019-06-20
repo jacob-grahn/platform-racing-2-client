@@ -15,7 +15,7 @@ package blocks
     import data.class_28;
     import flash.events.Event;
     import package_8.Character;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
     public class Block extends Sprite 
@@ -158,7 +158,7 @@ package blocks
         }
 
         // _loc2 = point
-        public function onStand(_arg_1:Racer)
+        public function onStand(_arg_1:LocalCharacter)
         {
             if (!this.var_37 && this.method_777() > 4 && _arg_1.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
                 this.freeze();
@@ -182,7 +182,7 @@ package blocks
             }
         }
 
-        public function onBump(_arg_1:Racer)
+        public function onBump(_arg_1:LocalCharacter)
         {
             var _local_2:Point;
             var _local_3:Point;
@@ -195,7 +195,7 @@ package blocks
                     _arg_1.y = _local_2.y + this.size + _local_3.y + _arg_1.var_325;
                 }
                 _arg_1.velY = (_arg_1.velY * -0.25);
-                _arg_1.var_4.setNumber(Racer.const_12, 0);
+                _arg_1.var_4.setNumber(LocalCharacter.const_12, 0);
                 if (this.var_490) {
                     this.method_315(0, -15);
                 }
@@ -203,7 +203,7 @@ package blocks
         }
 
         // _loc2 = point
-        public function onLeftHit(_arg_1:Racer)
+        public function onLeftHit(_arg_1:LocalCharacter)
         {
             if (this.method_23()) {
                 var point:Point = this.method_18();
@@ -218,7 +218,7 @@ package blocks
         }
 
         // _loc2 = point
-        public function onRightHit(_arg_1:Racer)
+        public function onRightHit(_arg_1:LocalCharacter)
         {
             if (this.method_23()) {
                 var point:Point = this.method_18();
@@ -232,7 +232,7 @@ package blocks
             }
         }
 
-        public function onTouch(_arg_1:Racer)
+        public function onTouch(_arg_1:LocalCharacter)
         {
         }
 

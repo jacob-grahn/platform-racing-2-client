@@ -7,7 +7,7 @@ package package_6
 {
 	import background.class_10;
     import page.GamePage;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.display.Sprite;
     import background.DrawableBackground;
     import background.Map;
@@ -34,7 +34,7 @@ package package_6
         public var var_197:Array = new Array();
         public var var_313:Array = new Array();
         public var var_40:Array = new Array(); // playerArray?
-        public var var_9:Racer;
+        public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
         protected var miniMap:MiniMap = new MiniMap();

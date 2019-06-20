@@ -7,7 +7,7 @@ package blocks
 {
     import data.Objects;
     import flash.geom.Point;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class SafetyBlock extends Block 
     {
@@ -19,7 +19,7 @@ package blocks
             var_71 = false;
         }
 
-        override public function onTouch(_arg_1:Racer)
+        override public function onTouch(_arg_1:LocalCharacter)
         {
             var _local_2:Point;
             super.onTouch(_arg_1);

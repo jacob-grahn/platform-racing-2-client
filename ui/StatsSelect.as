@@ -2,7 +2,7 @@
 
 package ui
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.display.Stage;
     import flash.events.MouseEvent;
 
@@ -14,10 +14,10 @@ package ui
         private var accelSlider:StatSlider; // var_62
         private var jumpnSlider:StatSlider; // var_66
         private var totalPoints:int; // var_334
-        private var c:Racer; // var_5
+        private var c:LocalCharacter; // var_5
         private var stageRef:Stage = Main.stage;
 
-        public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, r:Racer)
+        public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, r:LocalCharacter)
         {
             this.totalPoints = tot;
             this.c = r;

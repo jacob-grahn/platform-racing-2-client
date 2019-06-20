@@ -4,16 +4,16 @@ package package_9
 {
     import data.Settings;
     import flash.events.Event;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
     public class Zap extends class_80 
     {
 
         private var m:ZapGraphic = new ZapGraphic();
-        private var c:Racer; // var_5
+        private var c:LocalCharacter; // var_5
 
-        public function Zap(r:Racer, _arg_2:Boolean=true, _arg_3:Boolean=true)
+        public function Zap(r:LocalCharacter, _arg_2:Boolean=true, _arg_3:Boolean=true)
         {
             this.c = r;
             if (!_arg_2) {

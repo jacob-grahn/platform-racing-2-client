@@ -6,7 +6,7 @@
 package blocks
 {
     import data.Objects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.geom.Point;
     import flash.events.Event;
     import flash.utils.setTimeout;
@@ -23,25 +23,25 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(_arg_1:Racer)
+        override public function onStand(_arg_1:LocalCharacter)
         {
             super.onStand(_arg_1);
             this.activate();
         }
 
-        override public function onBump(_arg_1:Racer)
+        override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
             this.activate();
         }
 
-        override public function onLeftHit(_arg_1:Racer)
+        override public function onLeftHit(_arg_1:LocalCharacter)
         {
             super.onLeftHit(_arg_1);
             this.activate();
         }
 
-        override public function onRightHit(_arg_1:Racer)
+        override public function onRightHit(_arg_1:LocalCharacter)
         {
             super.onRightHit(_arg_1);
             this.activate();

@@ -8,7 +8,7 @@ package blocks
     import data.Settings;
     import package_6.Course;
     import sounds.SoundEffects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class ItemBlock extends class_39 
     {
@@ -18,7 +18,7 @@ package blocks
             super(_arg_1);
         }
 
-        override protected function useSupply(_arg_1:Racer)
+        override protected function useSupply(_arg_1:LocalCharacter)
         {
             var _local_2:Number;
             var _local_3:int;

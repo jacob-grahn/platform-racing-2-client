@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.geom.Point;
     import package_6.Course;
     import package_9.LaserShot;
@@ -13,7 +13,7 @@ package items
     public class LaserGun extends Item 
     {
 
-        public function LaserGun(r:Racer)
+        public function LaserGun(r:LocalCharacter)
         {
             super(r);
             method_48(3);

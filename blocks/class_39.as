@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.geom.ColorTransform;
 
     public class class_39 extends Block 
@@ -18,7 +18,7 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(_arg_1:Racer)
+        override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
             if (!var_37) {
@@ -32,7 +32,7 @@ package blocks
             }
         }
 
-        protected function useSupply(_arg_1:Racer)
+        protected function useSupply(_arg_1:LocalCharacter)
         {
         }
 

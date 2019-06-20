@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_8.class_86 = package_8.Racer
+// package_8.class_86 = package_8.LocalCharacter
 
 package package_8
 {
@@ -37,7 +37,7 @@ package package_8
     import package_9.Zap;
     import page.GamePage;
 
-    public class Racer extends Character 
+    public class LocalCharacter extends Character 
     {
 
         public static const const_12:String = "njv";
@@ -114,7 +114,7 @@ package package_8
         private var var_232:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
 
-        public function Racer(tId:int, c:Course, ma:Map, _arg_4:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
+        public function LocalCharacter(tId:int, c:Course, ma:Map, _arg_4:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
             super(ha, h, b, f);
             var_4.setNumber(const_12, 0);

@@ -7,7 +7,7 @@ package blocks
 {
     import data.Objects;
     import package_6.Course;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
 
     public class FinishBlock extends class_39 
     {
@@ -28,7 +28,7 @@ package blocks
             return this.id;
         }
 
-        override protected function useSupply(_arg_1:Racer)
+        override protected function useSupply(_arg_1:LocalCharacter)
         {
             var _local_2:int = method_50() + 15;
             var _local_3:int = method_44() + 15;

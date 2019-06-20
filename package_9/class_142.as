@@ -8,7 +8,7 @@ package package_9
     import data.Objects;
     import blocks.IceBlock;
     import blocks.Block;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import package_8.Character;
 
     public class class_142 extends class_135 
@@ -74,9 +74,9 @@ package package_9
 
         override protected function hitPlayer(_arg_1:Character)
         {
-            var _local_2:Racer;
-            if ((_arg_1 is Racer)) {
-                _local_2 = Racer(_arg_1);
+            var _local_2:LocalCharacter;
+            if ((_arg_1 is LocalCharacter)) {
+                _local_2 = LocalCharacter(_arg_1);
                 if (!_local_2.isFrozen()) {
                     _local_2.freeze();
                 }

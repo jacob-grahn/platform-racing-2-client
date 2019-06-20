@@ -5,14 +5,14 @@
 
 package items
 {
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import flash.geom.Point;
     import package_9.Slash;
 
     public class Sword extends Item 
     {
 
-        public function Sword(r:Racer)
+        public function Sword(r:LocalCharacter)
         {
             super(r);
             method_48(3);

@@ -6,7 +6,7 @@
 package blocks
 {
     import data.Objects;
-    import package_8.Racer;
+    import package_8.LocalCharacter;
     import package_9.class_106;
     import flash.geom.Point;
     import package_9.MineExplode;
@@ -20,31 +20,31 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(_arg_1:Racer)
+        override public function onStand(_arg_1:LocalCharacter)
         {
             super.onStand(_arg_1);
             this.method_81(_arg_1);
         }
 
-        override public function onBump(_arg_1:Racer)
+        override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
             this.method_81(_arg_1);
         }
 
-        override public function onLeftHit(_arg_1:Racer)
+        override public function onLeftHit(_arg_1:LocalCharacter)
         {
             super.onLeftHit(_arg_1);
             this.method_81(_arg_1);
         }
 
-        override public function onRightHit(_arg_1:Racer)
+        override public function onRightHit(_arg_1:LocalCharacter)
         {
             super.onRightHit(_arg_1);
             this.method_81(_arg_1);
         }
 
-        override public function onTouch(_arg_1:Racer)
+        override public function onTouch(_arg_1:LocalCharacter)
         {
             super.onTouch(_arg_1);
             this.method_81(_arg_1);
@@ -75,7 +75,7 @@ package blocks
             remove();
         }
 
-        private function method_81(_arg_1:Racer)
+        private function method_81(_arg_1:LocalCharacter)
         {
             var _local_2:Number;
             var _local_3:Number;
