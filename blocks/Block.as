@@ -26,7 +26,7 @@ package blocks
         private var posY:Number;
         private var segX:int;
         private var segY:int;
-        private var var_214:Boolean = false;
+        private var removed:Boolean = false; // var_214
         private var var_177:Point;
         private var m:Bitmap;
         protected var var_79:int = 0;
@@ -99,7 +99,7 @@ package blocks
 
         public function method_20():Boolean
         {
-            return this.var_214;
+            return this.removed;
         }
 
         public function method_18(_arg_1:Number = NaN):Point
@@ -338,7 +338,7 @@ package blocks
 
         public function remove()
         {
-            this.var_214 = true;
+            this.removed = true;
             this.var_71 = false;
             removeEventListener(Event.ENTER_FRAME, this.method_153);
             removeEventListener(Event.ENTER_FRAME, this.method_161);

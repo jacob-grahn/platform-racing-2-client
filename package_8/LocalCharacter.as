@@ -103,7 +103,7 @@ package package_8
         private var curItem:Item; // var_99 | removed (unused): var_680:LaserGun, var_674:Mine, superJump:SuperJump, lightning:Lightning, var_682:Teleport, jetPack:JetPack, sword:Sword
         private var speedBurst:SpeedBurst; // var_668
         private var life:int = 3;
-        private var var_435:Boolean = false;
+        private var invincible:Boolean = false; // var_435
         private var frozenSolid:Boolean = false;
         private var var_340:uint;
         private var var_530:Number;
@@ -147,7 +147,7 @@ package package_8
 
         public function init()
         {
-            if (!this.initialized && !var_214 && !var_304) {
+            if (!this.initialized && !removed && !var_304) {
                 this.initialized = true;
                 addEventListener(Event.ENTER_FRAME, this.go, false, 0, true);
                 this.setMode("land");
@@ -220,7 +220,7 @@ package package_8
             method_58(this.map.rotation);
             this.hurtTime--;
             if (this.course.var_40.length > 1) {
-                var_215++;
+                var_215++; // setting this to a static value above 23 will send wholly instant position updates to players
                 if (var_215 >= var_448) {
                     if (this.method_779() || var_215 >= 23) {
                         var_215 = 0;
@@ -304,7 +304,7 @@ package package_8
             this.position();
             this.method_76();
             this.method_193();
-            if (!this.var_214) {
+            if (!this.removed) {
                 if (this.up && this.var_42 && !this.crouching) {
                     velY = velY - var_4.getNumber(SuperJump);
                 }
@@ -728,23 +728,23 @@ package package_8
             this.course.setLife(this.life);
         }
 
-        override public function becomeInvincible(_arg_1:int)
+        override public function becomeInvincible(duration:int)
         {
-            super.becomeInvincible(_arg_1);
-            this.hurtTime = _arg_1;
-            this.var_435 = true;
+            super.becomeInvincible(duration);
+            this.hurtTime = duration;
+            this.invincible = true;
         }
 
         override protected function endRecovery()
         {
             super.endRecovery();
-            this.var_435 = false;
+            this.invincible = false;
         }
 
         public function hit(_arg_1:Number=0, _arg_2:Number=0)
         {
             var _local_3:Object;
-            if ((!var_4.getBool(CROWN) || this.course.gameMode == "deathmatch") && !this.var_435) {
+            if ((!var_4.getBool(CROWN) || this.course.gameMode == "deathmatch") && !this.invincible) {
                 velX = velX + _arg_1;
                 velY = velY + _arg_2;
                 if (!var_4.getBool(CROWN)) {
@@ -834,7 +834,8 @@ package package_8
             var _local_1:Array = Course.course.var_40;
             var _local_2:Boolean;
             for each (_local_3 in _local_1) {
-                if (_local_3 != this && Math.abs(_local_3.x - x) < 1000 && Math.abs(_local_3.y - y) < 1000) {
+                // uncommenting below disables near-instant updates for other players when farther than 1000px in either direction
+                if (_local_3 != this /*&& Math.abs(_local_3.x - x) < 1000 && Math.abs(_local_3.y - y) < 1000*/) {
                     _local_2 = true;
                     break;
                 }

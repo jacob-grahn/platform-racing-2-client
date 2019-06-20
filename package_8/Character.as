@@ -33,7 +33,7 @@ package package_8
         private var var_140:SoundChannel;
         public var m:CharacterGraphic = new CharacterGraphic();
         public var var_301:MovieClip;
-        private var var_217:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim);
+        private var stateAnims:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim); // var_217
         public var curWeapon:MovieClip;
         public var hat1:int;
         public var hat2:int = 1;
@@ -70,7 +70,7 @@ package package_8
         protected var var_448:int = 5;
         protected var var_215:int = 0;
         protected var var_304:Boolean = false;
-        public var var_214:Boolean = false;
+        public var removed:Boolean = false; // var_214
         public var var_4:class_20;
         private var var_375:class_125;
 
@@ -264,7 +264,7 @@ package package_8
                 if (_arg_2.indexOf("hat") != -1) {
                     _local_6 = "hat";
                 }
-                for each (_local_7 in this.var_217) {
+                for each (_local_7 in this.stateAnims) {
                     _local_8 = this[_arg_2];
                     if (_local_6 == "hat") {
                         if (this.body == 29) {
@@ -292,7 +292,7 @@ package package_8
         private function method_562()
         {
             var _local_1:MovieClip;
-            for each (_local_1 in this.var_217) {
+            for each (_local_1 in this.stateAnims) {
                 if (this.body == 29) {
                     _local_1.head.visible = false;
                     _local_1.foot1.visible = false;
@@ -315,7 +315,7 @@ package package_8
         // _loc1 = mc
         private function method_229()
         {
-            for each (var mc:MovieClip in this.var_217) {
+            for each (var mc:MovieClip in this.stateAnims) {
                 mc.weapon.gotoAndStop(Items.getNameFromCode(this.item));
             }
         }
@@ -408,7 +408,7 @@ package package_8
                 this.state = s;
                 if (this.m != null) {
                     var mc:MovieClip;
-                    for each (mc in this.var_217) {
+                    for each (mc in this.stateAnims) {
                         mc.stop();
                         if (mc.parent != null) {
                             mc.parent.removeChild(mc);
@@ -492,7 +492,7 @@ package package_8
                 this.var_140.stop();
                 this.var_140 = null;
             }
-            for each (_local_1 in this.var_217) {
+            for each (_local_1 in this.stateAnims) {
                 if (_local_1.weapon.jetPack != null) {
                     _local_1.weapon.jetPack.gotoAndStop("off");
                 }
@@ -518,10 +518,10 @@ package package_8
             var _local_2:int;
             var _local_3:int = 4;
             while (_local_3 >= 1) {
-                if (this[("hat" + _local_3)] != 1) {
-                    _local_1 = this[("hat" + _local_3)];
-                    _local_2 = this[(("hat" + _local_3) + "Color")];
-                    this[("hat" + _local_3)] = 1;
+                if (this["hat" + _local_3] != 1) {
+                    _local_1 = this["hat" + _local_3];
+                    _local_2 = this["hat" + _local_3 + "Color"];
+                    this["hat" + _local_3] = 1;
                     break;
                 }
                 _local_3--;
@@ -530,7 +530,7 @@ package package_8
             var _local_4:Object = new Object();
             _local_4.hatNum = _local_1;
             _local_4.hatColor = _local_2;
-            return (_local_4);
+            return _local_4;
         }
 
         public function method_576()
@@ -563,7 +563,7 @@ package package_8
         public function beginRemove()
         {
             this.removeListeners();
-            if (!this.var_304 && !this.var_214) {
+            if (!this.var_304 && !this.removed) {
                 this.var_304 = true;
                 addEventListener(Event.ENTER_FRAME, this.fadeOut, false, 0, true);
             }
@@ -581,8 +581,8 @@ package package_8
             this.removeListeners();
             this.method_190();
             this.var_387.remove();
-            if (!this.var_214) {
-                this.var_214 = this.var_304 = true;
+            if (!this.removed) {
+                this.removed = this.var_304 = true;
                 removeEventListener(Event.ENTER_FRAME, this.fadeOut);
                 if (this.var_140 != null) {
                     this.var_140.stop();
@@ -590,7 +590,7 @@ package package_8
                 }
                 this.m = null;
                 this.curWeapon = null;
-                this.var_217 = new Array();
+                this.stateAnims = new Array();
                 this.var_4.remove();
                 this.var_4 = null;
                 super.remove();

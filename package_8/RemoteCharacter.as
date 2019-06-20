@@ -86,7 +86,7 @@ package package_8
                 this.mapDot.x = _local_5.x;
                 this.mapDot.y = _local_5.y;
                 method_58(this.map.rotation);
-                rotation = ((this.map.rotation + this.rot) + this.rotMod);
+                rotation = this.map.rotation + this.rot + this.rotMod;
                 _local_2 = this.var_19.shift();
                 if (_local_2.state != null) {
                     changeState(_local_2.state);

@@ -96,7 +96,7 @@ package package_9
             var _local_4:Character;
             var _local_3:Character;
             for each (_local_4 in this.course.var_40) {
-                if (((((!(_local_4.tempID == this.var_357)) && (_local_4.y > _arg_2)) && (_local_4.y < (_arg_2 + 60))) && (!(_local_4.var_214)))) {
+                if (((((!(_local_4.tempID == this.var_357)) && (_local_4.y > _arg_2)) && (_local_4.y < (_arg_2 + 60))) && (!(_local_4.removed)))) {
                     if (((((scaleX == 1) && (_local_4.x > (_arg_1 - 60))) && (_local_4.x < _arg_1)) || (((scaleX == -1) && (_local_4.x < (_arg_1 + 60))) && (_local_4.x > _arg_1)))) {
                         _local_3 = _local_4;
                         break;

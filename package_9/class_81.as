@@ -96,7 +96,7 @@ package package_9
         {
             var _local_3:Boolean;
             var _local_4:LocalCharacter = Course.course.var_9;
-            if (((!(_local_4 == null)) && (!(_local_4.var_214)))) {
+            if (((!(_local_4 == null)) && (!(_local_4.removed)))) {
                 if ((((Math.abs((_local_4.x - _arg_1)) < 25) && (_local_4.y > (_arg_2 - 5))) && (((!(_local_4.crouching)) && (_local_4.y < (_arg_2 + 65))) || ((_local_4.crouching) && (_local_4.y < (_arg_2 + 25)))))) {
                     _local_3 = true;
                 }
