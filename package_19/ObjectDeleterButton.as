@@ -6,7 +6,7 @@ package package_19
     import ui.class_8;
     import package_20.ObjectDeleter;
 
-    public class ObjectDeleterButton extends class_7 
+    public class ObjectDeleterButton extends Removable 
     {
 
         private var m:ObjectDeleterButtonGraphic = new ObjectDeleterButtonGraphic();

@@ -2,7 +2,7 @@
 
 package package_6
 {
-    public class ItemDisplay extends class_7 
+    public class ItemDisplay extends Removable 
     {
 
         private var m:ItemDisplayGraphic = new ItemDisplayGraphic();

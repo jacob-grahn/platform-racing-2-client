@@ -15,7 +15,7 @@ package package_8
     import flash.events.Event;
     import sounds.SoundEffects;
 
-    public class Character extends class_7 
+    public class Character extends Removable 
     {
 
         public static const PROP:String = 'p'; // const_52

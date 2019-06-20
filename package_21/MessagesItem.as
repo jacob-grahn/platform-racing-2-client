@@ -9,7 +9,7 @@ package package_21
     import package_4.ConfirmPopup;
     import package_4.SendMessagePopup;
 
-    public class MessagesItem extends class_7 
+    public class MessagesItem extends Removable 
     {
 
         private var m:MessagesItemGraphic = new MessagesItemGraphic();

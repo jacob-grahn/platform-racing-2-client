@@ -13,7 +13,7 @@ package package_4
     import flash.net.URLRequestMethod;
     import flash.events.Event;
 
-    public class BanMenu extends class_7 
+    public class BanMenu extends Removable 
     {
 
         private var m:BanMenuGraphic = new BanMenuGraphic();

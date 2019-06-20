@@ -5,7 +5,7 @@ package package_6
     import data.CommandHandler;
     import data.class_28;
 
-    public class DrawingInfo extends class_7 
+    public class DrawingInfo extends Removable 
     {
 
         private var m:DrawingInfoGraphic = new DrawingInfoGraphic();

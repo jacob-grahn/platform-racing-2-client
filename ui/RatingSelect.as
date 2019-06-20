@@ -12,7 +12,7 @@ package ui
     import flash.net.URLRequestMethod;
     import flash.geom.Point;
 
-    public class RatingSelect extends class_7 
+    public class RatingSelect extends Removable 
     {
 
         private var m:RatingSelectGraphic = new RatingSelectGraphic();

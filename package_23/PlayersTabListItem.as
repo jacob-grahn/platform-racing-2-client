@@ -7,7 +7,7 @@ package package_23
 {
     import data.HTMLNameMaker;
 
-    public class PlayersTabListItem extends class_7 
+    public class PlayersTabListItem extends Removable 
     {
 
         protected var m:PlayersTabListItemGraphic = new PlayersTabListItemGraphic();

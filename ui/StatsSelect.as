@@ -6,7 +6,7 @@ package ui
     import flash.display.Stage;
     import flash.events.MouseEvent;
 
-    public class StatsSelect extends class_7 
+    public class StatsSelect extends Removable 
     {
 
         private var m:PointsRemainingGraphic = new PointsRemainingGraphic();

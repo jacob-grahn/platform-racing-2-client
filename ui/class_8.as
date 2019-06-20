@@ -10,7 +10,7 @@ package ui
     import flash.ui.Mouse;
     import flash.display.DisplayObject;
 
-    public class class_8 extends class_7 
+    public class class_8 extends Removable 
     {
 
         public static var stageRef:Stage;

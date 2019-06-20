@@ -10,7 +10,7 @@ package ui
     import flash.events.MouseEvent;
     import package_4.GuildPopup;
 
-    public class GuildName extends class_7 
+    public class GuildName extends Removable 
     {
 
         private var m:GuildNameGraphic;

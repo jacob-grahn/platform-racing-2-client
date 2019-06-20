@@ -8,7 +8,7 @@ package package_4
     import data.HTMLNameMaker;
     import data.class_28;
 
-    public class GuildMemberName extends class_7 
+    public class GuildMemberName extends Removable 
     {
 
         private var m:GuildMemberNameGraphic = new GuildMemberNameGraphic();

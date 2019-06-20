@@ -4,7 +4,7 @@ package package_6
 {
     import flash.events.Event;
 
-    public class ExpGain extends class_7 
+    public class ExpGain extends Removable 
     {
 
         private var m:ExpGainGraphic = new ExpGainGraphic();

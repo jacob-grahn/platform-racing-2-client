@@ -84,7 +84,7 @@ package background
         override public function clear()
         {
             while (numChildren > 0) {
-                class_7(getChildAt((numChildren - 1))).remove();
+                Removable(getChildAt((numChildren - 1))).remove();
             }
         }
 

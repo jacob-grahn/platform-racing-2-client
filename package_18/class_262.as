@@ -10,7 +10,7 @@ package package_18
     import flash.events.Event;
     import flash.events.MouseEvent;
 
-    public class class_262 extends class_7 
+    public class class_262 extends Removable 
     {
 
         private var char:Character; // var_5

@@ -10,7 +10,7 @@ package package_6
     import flash.utils.setInterval;
     import flash.events.Event;
 
-    public class CourseTimer extends class_7 
+    public class CourseTimer extends Removable 
     {
 
         private var m:TimerGraphic = new TimerGraphic();

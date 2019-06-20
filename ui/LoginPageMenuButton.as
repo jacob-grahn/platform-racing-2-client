@@ -7,7 +7,7 @@ package ui
 {
     import flash.events.MouseEvent;
 
-    public class LoginPageMenuButton extends class_7 
+    public class LoginPageMenuButton extends Removable 
     {
 
         private var m:TextButtonGraphic = new TextButtonGraphic();

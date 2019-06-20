@@ -8,7 +8,7 @@ package ui
     import data.class_28;
     import flash.events.TextEvent;
 
-    public class PageNavigation extends class_7 
+    public class PageNavigation extends Removable 
     {
 
         private var target:*;

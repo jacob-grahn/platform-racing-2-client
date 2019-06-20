@@ -7,7 +7,7 @@ package package_4
 {
     import flash.events.MouseEvent;
 
-    public class TempModMenu extends class_7 
+    public class TempModMenu extends Removable 
     {
 
         private var m:TempModMenuGraphic = new TempModMenuGraphic();

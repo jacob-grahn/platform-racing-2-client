@@ -14,7 +14,7 @@ package package_18.PartInfo
     import flash.events.MouseEvent;
     import flash.events.Event;
 
-    public class PartInfoListing extends class_7 
+    public class PartInfoListing extends Removable 
     {
 
         private var m:PartInfoListingGraphic = new PartInfoListingGraphic();

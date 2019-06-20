@@ -2,7 +2,7 @@
 
 package page
 {
-    public class PageHolder extends class_7 
+    public class PageHolder extends Removable 
     {
 
         private var currentPage:Page;

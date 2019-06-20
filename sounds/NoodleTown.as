@@ -12,7 +12,7 @@ package sounds
     import flash.events.Event;
     import flash.media.SoundTransform;
 
-    public class NoodleTown extends class_7 
+    public class NoodleTown extends Removable 
     {
 
         private var song1:Sound = new NoodleTown2();

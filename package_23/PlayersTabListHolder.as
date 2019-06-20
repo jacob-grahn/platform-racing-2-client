@@ -51,7 +51,7 @@ package package_23
 
         public function clear()
         {
-            var _local_1:class_7;
+            var _local_1:Removable;
             for each (_local_1 in this.listings) {
                 _local_1.remove();
             }
@@ -67,7 +67,7 @@ package package_23
         public function method_545()
         {
             var _local_1:int;
-            var _local_3:class_7;
+            var _local_3:Removable;
             var _local_2:int = this.listings.length;
             _local_1 = 0;
             while (_local_1 < _local_2) {

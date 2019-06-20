@@ -5,7 +5,7 @@
 
 package package_22
 {
-    public class class_286 extends class_7 
+    public class class_286 extends Removable 
     {
 
         public function class_286(_arg_1:Object)

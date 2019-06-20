@@ -7,7 +7,7 @@ package ui
 {
     import flash.events.MouseEvent;
 
-    public class LobbyTab extends class_7 
+    public class LobbyTab extends Removable 
     {
 
         private var m:LobbyTabGraphic = new LobbyTabGraphic();

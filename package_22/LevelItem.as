@@ -19,7 +19,7 @@ package package_22
     import flash.net.URLRequestMethod;
     import package_4.UploadingPopup;
 
-    public class LevelItem extends class_7 
+    public class LevelItem extends Removable 
     {
 
         private static var unlocked:Boolean = false; // var_332

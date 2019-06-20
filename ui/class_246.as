@@ -7,7 +7,7 @@ package ui
 {
     import flash.events.MouseEvent;
 
-    public class class_246 extends class_7 
+    public class class_246 extends Removable 
     {
 
         private static var memory:Object = new Object();

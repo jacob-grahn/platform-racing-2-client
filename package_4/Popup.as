@@ -8,7 +8,7 @@ package package_4
     import flash.geom.ColorTransform;
     import flash.events.Event;
 
-    public class Popup extends class_7 
+    public class Popup extends Removable 
     {
         public static var LOADED = 'loaded';
         public static var REMOVED = 'removed';

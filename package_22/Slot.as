@@ -7,7 +7,7 @@ package package_22
 {
     import flash.events.MouseEvent;
 
-    public class Slot extends class_7 
+    public class Slot extends Removable 
     {
 
         private var target:LevelItem;

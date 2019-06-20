@@ -10,7 +10,7 @@ package ui
     import flash.media.SoundMixer;
     import flash.geom.ColorTransform;
 
-    public class MuteButton extends class_7 
+    public class MuteButton extends Removable 
     {
 
         public static var muted:Boolean = true; // var_58

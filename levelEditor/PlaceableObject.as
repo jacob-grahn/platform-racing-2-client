@@ -16,7 +16,7 @@ package levelEditor
     import flash.events.MouseEvent;
     import flash.geom.Point;
 
-    public class PlaceableObject extends class_7 
+    public class PlaceableObject extends Removable 
     {
 
         private var var_621:Number;

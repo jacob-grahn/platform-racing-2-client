@@ -7,7 +7,7 @@ package package_4
 {
     import flash.events.MouseEvent;
 
-    public class AdminMenu extends class_7 
+    public class AdminMenu extends Removable 
     {
 
         private var m:AdminMenuGraphic = new AdminMenuGraphic();

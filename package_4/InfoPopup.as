@@ -8,7 +8,7 @@ package package_4
     import flash.geom.Rectangle;
     import flash.display.DisplayObject;
 
-    public class InfoPopup extends class_7 
+    public class InfoPopup extends Removable 
     {
 
         // _loc2 = stageBounds

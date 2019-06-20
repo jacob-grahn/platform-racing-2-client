@@ -13,7 +13,7 @@ package package_6
     import flash.display.DisplayObject;
     import flash.geom.Rectangle;
 
-    public class MiniMap extends class_7 
+    public class MiniMap extends Removable 
     {
 
         private var bitmapData:BitmapData;

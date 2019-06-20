@@ -9,7 +9,7 @@ package package_9
     import flash.utils.setTimeout;
     import flash.utils.clearTimeout;
 
-    public class class_80 extends class_7 
+    public class class_80 extends Removable 
     {
 
         private var var_529:uint;

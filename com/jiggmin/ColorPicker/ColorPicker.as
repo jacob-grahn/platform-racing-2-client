@@ -10,7 +10,7 @@ package com.jiggmin.ColorPicker
     import flash.events.Event;
     import flash.geom.Point;
 
-    public class ColorPicker extends class_7
+    public class ColorPicker extends Removable
     {
 
         public static const RIGHT:String = "right";
@@ -81,7 +81,7 @@ package com.jiggmin.ColorPicker
                 this.mPop.x = _local_2.x - this.mPop.width - 5;
             }
             this.mPop.addEventListener(Event.CHANGE, this.method_290, false, 0, true);
-            this.mPop.addEventListener(class_7.REMOVE, this.method_242, false, 0, true);
+            this.mPop.addEventListener(Removable.REMOVE, this.method_242, false, 0, true);
             stage.addChild(this.mPop);
             this.mPop.init();
             this.mPop.method_101(this);
@@ -99,7 +99,7 @@ package com.jiggmin.ColorPicker
             if (this.mPop != null) {
                 this.setColor(this.mPop.getColor());
                 this.mPop.removeEventListener(Event.CHANGE, this.method_290);
-                this.mPop.removeEventListener(class_7.REMOVE, this.method_242);
+                this.mPop.removeEventListener(Removable.REMOVE, this.method_242);
                 this.mPop.method_136();
                 this.mPop = null;
                 if (var_265.indexOf(this.color) == -1) {

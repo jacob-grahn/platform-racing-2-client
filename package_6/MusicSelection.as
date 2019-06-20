@@ -4,7 +4,7 @@ package package_6
 {
     import ui.GameSound;
 
-    public class MusicSelection extends class_7 
+    public class MusicSelection extends Removable 
     {
 
         private var m:MusicSelectionGraphic = new MusicSelectionGraphic();

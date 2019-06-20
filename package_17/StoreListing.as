@@ -13,7 +13,7 @@ package package_17
     import flash.events.MouseEvent;
     import flash.events.Event;
 
-    public class StoreListing extends class_7 
+    public class StoreListing extends Removable 
     {
 
         public static const EVENT_PURCHASE:String = "itemPurchase";

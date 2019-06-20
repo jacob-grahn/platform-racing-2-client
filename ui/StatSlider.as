@@ -4,7 +4,7 @@ package ui
 {
     import flash.events.Event;
 
-    public class StatSlider extends class_7 
+    public class StatSlider extends Removable 
     {
 
         private var m:StatSliderGraphic = new StatSliderGraphic();

@@ -12,7 +12,7 @@ package items
     import background.class_87;
     import flash.utils.clearTimeout;
 
-    public class Item extends class_7 
+    public class Item extends Removable 
     {
 
         protected var racer:LocalCharacter; // var_5
