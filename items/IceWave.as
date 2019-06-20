@@ -16,8 +16,8 @@ package items
         public function IceWave(r:LocalCharacter)
         {
             super(r);
-            method_48(3);
-            method_45(1000);
+            setUses(3);
+            setReloadTime(1000);
         }
 
         // _loc6 = rot

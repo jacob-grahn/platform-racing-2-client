@@ -16,7 +16,7 @@ package data
         private var items:Vector.<DisplayObject> = new Vector.<DisplayObject>();
         private var var_416:int;
         private var var_444:int;
-        private var var_71:Boolean = false;
+        private var active:Boolean = false; // var_71
 
         public function class_153(_arg_1:int=500)
         {
@@ -27,19 +27,19 @@ package data
         {
             clearInterval(this.var_416);
             this.var_416 = setInterval(this.method_554, this.var_444);
-            this.var_71 = true;
+            this.active = true;
         }
 
         public function stop()
         {
             clearInterval(this.var_416);
-            this.var_71 = false;
+            this.active = false;
         }
 
         public function method_580(_arg_1:int)
         {
             this.var_444 = _arg_1;
-            if (this.var_71) {
+            if (this.active) {
                 this.start();
             }
         }

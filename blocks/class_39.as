@@ -18,13 +18,13 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(c:LocalCharacter)
         {
-            super.onBump(_arg_1);
-            if (!var_37) {
+            super.onBump(c);
+            if (!frozen) {
                 if (this.var_243 > 0) {
                     this.var_243--;
-                    this.useSupply(_arg_1);
+                    this.useSupply(c);
                 }
                 if (this.var_243 <= 0) {
                     this.method_789();

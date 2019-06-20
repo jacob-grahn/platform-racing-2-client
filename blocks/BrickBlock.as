@@ -19,7 +19,7 @@ package blocks
         override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
-            if (!var_37) {
+            if (!frozen) {
                 localActivate();
             }
         }
@@ -27,7 +27,7 @@ package blocks
         override public function onDamage(_arg_1:Number)
         {
             super.onDamage(_arg_1);
-            if (!var_37) {
+            if (!frozen) {
                 localActivate();
             }
         }

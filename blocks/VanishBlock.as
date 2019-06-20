@@ -60,9 +60,9 @@ package blocks
                 alpha = 0.2;
                 this.clear();
                 addEventListener(Event.ENTER_FRAME, this.method_117, false, 0, true);
-                var_71 = true;
+                active = true;
             } else {
-                var_71 = false;
+                active = false;
                 this.activate();
             }
         }
@@ -72,7 +72,7 @@ package blocks
             alpha = (alpha - 0.1);
             if (alpha <= 0) {
                 alpha = 0;
-                var_71 = false;
+                active = false;
                 this.clear();
                 this.var_602 = setTimeout(this.method_594, 2000);
             }
@@ -89,7 +89,7 @@ package blocks
 
         override protected function activate(_arg_1:String="")
         {
-            if (!var_37) {
+            if (!frozen) {
                 this.clear();
                 addEventListener(Event.ENTER_FRAME, this.fadeOut, false, 0, true);
             }

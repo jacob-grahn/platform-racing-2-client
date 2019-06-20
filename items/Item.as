@@ -24,8 +24,8 @@ package items
         public function Item(r:LocalCharacter)
         {
             this.racer = r;
-            this.method_45(10);
-            this.method_48(1);
+            this.setReloadTime(10);
+            this.setUses(1);
         }
 
         // _loc2 = uses
@@ -41,15 +41,17 @@ package items
             }
         }
 
-        protected function method_48(uses:int)
+        // method_48 = setUses
+        protected function setUses(uses:int)
         {
             class_33.setNumber("uses", uses);
             this.racer.setAmmo(uses);
         }
 
-        protected function method_45(_arg_1:int)
+        // method_45 = setReloadTime
+        protected function setReloadTime(time:int)
         {
-            class_33.setNumber("reloadTime", _arg_1);
+            class_33.setNumber("reloadTime", time);
         }
 
         // _loc1 = uses

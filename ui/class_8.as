@@ -16,7 +16,7 @@ package ui
         public static var stageRef:Stage;
         public static var instance:class_8;
 
-        private var var_71:Boolean = false;
+        private var active:Boolean = false; // var_71
         private var me:MouseEvent;
         private var var_487:Boolean;
         private var var_371:Boolean = false;
@@ -69,7 +69,7 @@ package ui
 
         public function init()
         {
-            this.var_71 = true;
+            this.active = true;
             visible = true;
             if (this.var_371) {
                 Mouse.hide();
@@ -83,7 +83,7 @@ package ui
 
         public function pause()
         {
-            this.var_71 = false;
+            this.active = false;
             visible = false;
             if (this.var_371) {
                 Mouse.show();
@@ -97,7 +97,7 @@ package ui
 
         public function method_23():Boolean
         {
-            return (this.var_71);
+            return (this.active);
         }
 
         public function method_92():MouseEvent

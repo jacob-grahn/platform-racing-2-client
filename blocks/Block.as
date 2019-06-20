@@ -30,11 +30,11 @@ package blocks
         private var var_177:Point;
         private var m:Bitmap;
         protected var var_79:int = 0;
-        protected var var_71:Boolean = true;
+        protected var active:Boolean = true;
         protected var var_34:Boolean = true;
         protected var var_490:Boolean = true;
         protected var map:Map;
-        protected var var_37:Boolean = false;
+        protected var frozen:Boolean = false; // var_37
         private var var_110:Bitmap;
         private var var_455:Number = 0.1;
         private var var_600:int = 0;
@@ -83,7 +83,7 @@ package blocks
 
         public function getCode():int
         {
-            if (this.var_37) {
+            if (this.frozen) {
                 return Objects.IceBlockCode;
             }
             return this.var_79;
@@ -91,10 +91,10 @@ package blocks
 
         public function method_23():Boolean
         {
-            if (this.var_37) {
+            if (this.frozen) {
                 return true;
             }
-            return this.var_71;
+            return this.active;
         }
 
         public function method_20():Boolean
@@ -141,8 +141,8 @@ package blocks
 
         public function freeze(_arg_1:Boolean=false)
         {
-            if (!this.var_37) {
-                this.var_37 = true;
+            if (!this.frozen) {
+                this.frozen = true;
                 this.var_600 = class_28.getMS();
                 this.var_110 = new Bitmap(Blocks.iceBitmap);
                 addChild(this.var_110);
@@ -160,10 +160,10 @@ package blocks
         // _loc2 = point
         public function onStand(_arg_1:LocalCharacter)
         {
-            if (!this.var_37 && this.method_777() > 4 && _arg_1.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
+            if (!this.frozen && this.method_777() > 4 && _arg_1.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
                 this.freeze();
             }
-            if (this.var_37) {
+            if (this.frozen) {
                 _arg_1.var_147 = 0.05;
             }
             if (this.method_23()) {
@@ -182,20 +182,20 @@ package blocks
             }
         }
 
-        public function onBump(_arg_1:LocalCharacter)
+        public function onBump(c:LocalCharacter)
         {
             var _local_2:Point;
             var _local_3:Point;
             if (this.method_23()) {
                 _local_2 = this.method_18();
                 _local_3 = class_28.method_9((x - this.posX), (y - this.posY), this.map.rotation);
-                if (_arg_1.crouching) {
-                    _arg_1.y = _local_2.y + this.size + _local_3.y + (_arg_1.var_325 / 2);
+                if (c.crouching) {
+                    c.y = _local_2.y + this.size + _local_3.y + (c.var_325 / 2);
                 } else {
-                    _arg_1.y = _local_2.y + this.size + _local_3.y + _arg_1.var_325;
+                    c.y = _local_2.y + this.size + _local_3.y + c.var_325;
                 }
-                _arg_1.velY = (_arg_1.velY * -0.25);
-                _arg_1.var_4.setNumber(LocalCharacter.const_12, 0);
+                c.velY = c.velY * -0.25;
+                c.var_4.setNumber(LocalCharacter.const_12, 0);
                 if (this.var_490) {
                     this.method_315(0, -15);
                 }
@@ -292,7 +292,7 @@ package blocks
                 if (this.var_110.alpha <= 0.05) {
                     removeEventListener(Event.ENTER_FRAME, this.method_153);
                     this.method_406();
-                    this.var_37 = false;
+                    this.frozen = false;
                 }
             }
         }
@@ -339,7 +339,7 @@ package blocks
         public function remove()
         {
             this.removed = true;
-            this.var_71 = false;
+            this.active = false;
             removeEventListener(Event.ENTER_FRAME, this.method_153);
             removeEventListener(Event.ENTER_FRAME, this.method_161);
             this.map.method_259(this);

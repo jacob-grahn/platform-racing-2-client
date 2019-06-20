@@ -21,7 +21,7 @@ package blocks
         override public function onBump(_arg_1:LocalCharacter)
         {
             super.onBump(_arg_1);
-            if (!var_37) {
+            if (!frozen) {
                 _arg_1.setMode("freeze");
                 _arg_1.velX = (_arg_1.velY = 0);
                 Course.course.method_654(this.dir);

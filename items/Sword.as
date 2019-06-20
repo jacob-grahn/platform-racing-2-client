@@ -15,8 +15,8 @@ package items
         public function Sword(r:LocalCharacter)
         {
             super(r);
-            method_48(3);
-            method_45(800);
+            setUses(3);
+            setReloadTime(800);
         }
 
         // _loc1 = direction

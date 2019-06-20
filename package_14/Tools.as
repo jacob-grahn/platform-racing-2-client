@@ -25,7 +25,7 @@ package package_14
         private var sizePicker:SizePicker = new SizePicker(this, Tools.size); // var_571
         private var brushButton:BrushButtonGraphic = new BrushButtonGraphic(); // var_351
         private var eraserButton:EraserButtonGraphic = new EraserButtonGraphic(); // var_354
-        private var var_71:Boolean = false;
+        private var active:Boolean = false; // var_71
 
         public function Tools()
         {
@@ -84,7 +84,7 @@ package package_14
         {
             class_8.init();
             class_8.method_28(this.brush);
-            this.var_71 = true;
+            this.active = true;
         }
 
         override public function exit()
@@ -92,7 +92,7 @@ package package_14
             this.colorPicker.method_71();
             class_8.pause();
             super.exit();
-            this.var_71 = false;
+            this.active = false;
         }
 
         override public function remove()

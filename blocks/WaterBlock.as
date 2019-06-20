@@ -20,7 +20,7 @@ package blocks
         {
             super(Objects.WaterBlockCode);
             var_34 = false;
-            var_71 = false;
+            active = false;
         }
 
         override public function onTouch(_arg_1:LocalCharacter)
@@ -28,7 +28,7 @@ package blocks
             var _local_2:Point;
             var _local_3:Point;
             super.onTouch(_arg_1);
-            if (!var_37) {
+            if (!frozen) {
                 if ((((!(_arg_1.var_42)) && (!(_arg_1.mode == "freeze"))) && (!(_arg_1.mode == "hurt")))) {
                     _arg_1.setMode("water");
                     _arg_1.var_240 = 2;

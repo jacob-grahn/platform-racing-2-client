@@ -18,14 +18,14 @@ package menu
         private static var target:ComboBox;
         private static var servers:Array;
         private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // var_123
-        private static var activated:Boolean = false; // var_71
+        private static var active:Boolean = false; // var_71
 
 
         public static function activate()
         {
-            if (!activated) {
+            if (!active) {
                 deactivate();
-                activated = true;
+                active = true;
                 interval = setInterval(load, 60000);
                 load();
             }
@@ -34,7 +34,7 @@ package menu
         public static function deactivate()
         {
             clearInterval(interval);
-            activated = false;
+            active = false;
         }
 
         private static function load()

@@ -45,7 +45,7 @@ package blocks
 
         override protected function localActivate(_arg_1:String="")
         {
-            if (!var_37) {
+            if (!frozen) {
                 super.localActivate(_arg_1);
             }
         }

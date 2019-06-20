@@ -83,7 +83,7 @@ package blocks
             var _local_5:Number;
             var _local_6:Number;
             var _local_7:Number;
-            if (!var_37) {
+            if (!frozen) {
                 _local_2 = 50;
                 _local_3 = (_arg_1.x - (x + 15));
                 _local_4 = ((_arg_1.y - (_arg_1.var_325 / 2)) - (y + 15));
