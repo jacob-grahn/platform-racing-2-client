@@ -29,6 +29,11 @@ package items
             }
         }
 
+        public function isUsed()
+        {
+            return this.used;
+        }
+
         // method_699 = slowDown
         private function slowDown()
         {

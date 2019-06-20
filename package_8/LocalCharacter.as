@@ -178,6 +178,9 @@ package package_8
             this.speedStat = this.speedStat + changeAmt;
             this.accelStat = this.accelStat + changeAmt;
             this.jumpnStat = this.jumpnStat + changeAmt;
+            if (this.curItem is SpeedBurst && this.curItem.isUsed()) {
+                return; // wait to set stats until after the speed burst ends and calls resetStats()
+            }
             this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
         }
 
