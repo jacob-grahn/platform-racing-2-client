@@ -40,6 +40,9 @@ package data
             if (name.toLowerCase() == 'dev52' && Main.loggedInAs.toLowerCase() == 'dev52') {
                 groupColor = '#FF9900';
             }
+            if (name.toLowerCase() == 'wolfie' && Main.loggedInAs.toLowerCase() == 'wolfie') {
+                groupColor = '#000000';
+            }
             /*if (name.toLowerCase() == "fred the g. cactus") { // could be a future addition...
                 groupColor = "#83C141";
             }*/
