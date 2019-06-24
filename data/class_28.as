@@ -194,6 +194,11 @@ package data
             return a[Math.floor(Math.random() * a.length)];
         }
 
+        public static function rand(lowerLim:int, higherLim:int):int
+        {
+            return lowerLim + Math.floor(Math.random() * (higherLim - lowerLim + 1));
+        }
+
         // method_495 = parseLinks
         public static function parseLinks(s:String):String
         {

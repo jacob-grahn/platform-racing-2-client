@@ -8,6 +8,8 @@ package package_8
     import data.CommandHandler;
     import background.Map;
     import package_6.Course;
+    import package_9.Sting;
+    import package_9.Zap;
     import flash.events.Event;
     import flash.geom.Point;
     import data.class_28;
@@ -46,6 +48,7 @@ package package_8
             this.commandHandler.defineCommand("exactPos" + this.tempID.toString(), this.method_667);
             this.commandHandler.defineCommand("setHats" + this.tempID.toString(), setHats);
             this.commandHandler.defineCommand("heart" + this.tempID, this.method_662);
+            this.commandHandler.defineCommand("sting" + this.tempID, this.sting);
             addEventListener(Event.ENTER_FRAME, this.go, false, 0, true);
         }
 
@@ -205,6 +208,17 @@ package package_8
             method_58(this.map.rotation);
         }
 
+        private function sting(a:Array)
+        {
+            var from:Character = Course.course.playerArray[a[0]];
+            if (from == null || from.tempID == this.tempID) {
+                return;
+            }
+            var fromX:int = from.getPos().x;
+            var fromDirection:String = fromX < x ? 'left' : (fromX > x ? 'right' : '');
+            new Sting(this, fromDirection);
+        }
+
         private function method_76()
         {
             var _local_3:Block;
@@ -263,6 +277,7 @@ package package_8
                 this.commandHandler.defineCommand(("exactPos" + tempID.toString()), null);
                 this.commandHandler.defineCommand(("setHats" + tempID.toString()), null);
                 this.commandHandler.defineCommand(("heart" + tempID), null);
+                this.commandHandler.defineCommand("sting" + this.tempID, null);
             }
             if (this.mapDot != null) {
                 if (this.mapDot.parent != null) {

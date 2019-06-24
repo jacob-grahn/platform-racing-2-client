@@ -11,7 +11,7 @@ package background
     import package_9.Slash;
     import package_9.MineAppear;
     import package_9.class_143;
-    import package_9.class_142;
+    import package_9.IceWaveShot;
     import sounds.SoundEffects;
 
     public class class_87 extends class_75 
@@ -75,9 +75,9 @@ package background
 
         public function method_622(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int)
         {
-            new class_142(_arg_1, _arg_2, _arg_3, _arg_4, _arg_5, _arg_3);
-            new class_142(_arg_1, _arg_2, (_arg_3 + 30), _arg_4, _arg_5, _arg_3);
-            new class_142(_arg_1, _arg_2, (_arg_3 - 30), _arg_4, _arg_5, _arg_3);
+            new IceWaveShot(_arg_1, _arg_2, _arg_3, _arg_4, _arg_5, _arg_3);
+            new IceWaveShot(_arg_1, _arg_2, (_arg_3 + 30), _arg_4, _arg_5, _arg_3);
+            new IceWaveShot(_arg_1, _arg_2, (_arg_3 - 30), _arg_4, _arg_5, _arg_3);
             SoundEffects.playGameSound(new IceWaveSound(), _arg_1, _arg_2, 1.5);
         }
 

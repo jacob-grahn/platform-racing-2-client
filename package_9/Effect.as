@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_9.class_80
+// package_9.Effect = package_9.class_80
 
 package package_9
 {
@@ -9,12 +9,12 @@ package package_9
     import flash.utils.setTimeout;
     import flash.utils.clearTimeout;
 
-    public class class_80 extends Removable 
+    public class Effect extends Removable 
     {
 
         private var var_529:uint;
 
-        public function class_80(_arg_1:Number=0, _arg_2:Number=0)
+        public function Effect(_arg_1:Number=0, _arg_2:Number=0)
         {
             x = _arg_1;
             y = _arg_2;

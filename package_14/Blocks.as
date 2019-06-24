@@ -36,8 +36,8 @@ package package_14
             addItem(new class_228(Objects.RotateRightBlockCode), "Rotate Right Block", "The wheels on the bus go round and round, round and round, round and round.");
             addItem(new class_228(Objects.RotateLeftBlockCode), "Rotate Left Block", "The wheels on the bus go round and round, round and round, round and round.");
             addItem(new class_228(Objects.PushBlockCode), "Push Block", "This block can be pushed around.");
-            addItem(new class_228(Objects.HappyBlockCode), "Happy Block", "Bump this to increase your stats for the rest of the race. (Design by Jacob K.)");
-            addItem(new class_228(Objects.SadBlockCode), "Sad Block", "Bumping one of these will decrease your stats for the rest of the race. (Design by Jacob K.)");
+            addItem(new class_228(Objects.HappyBlockCode), "Happy Block", "Bump this to increase your stats for the rest of the race.");
+            addItem(new class_228(Objects.SadBlockCode), "Sad Block", "Bumping one of these will decrease your stats for the rest of the race.");
             addItem(new class_228(Objects.SafetyBlockCode), "Safety Net", "Touching this will teleport you back to your last safe location. It's the same as falling off of the course.");
             addItem(new class_228(Objects.HeartBlockCode), "Heart Block", "This block grants you one extra heart in Deathmatch mode, and renders you invincible for five fantastic seconds.");
             addItem(new class_228(Objects.TimeBlockCode), "Time Block", "Adds 10 seconds to your timer.");

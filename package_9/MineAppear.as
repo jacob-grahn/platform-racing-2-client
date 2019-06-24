@@ -8,7 +8,7 @@ package package_9
     import sounds.SoundEffects;
     import data.Objects;
 
-    public class MineAppear extends class_80 
+    public class MineAppear extends Effect 
     {
 
         private var m:MineAppearAnimation = new MineAppearAnimation();

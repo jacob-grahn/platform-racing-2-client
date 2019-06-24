@@ -51,7 +51,6 @@ package package_4
                 var encryptedStr:String = encryptor.encrypt(sendStr);
                 var vars:URLVariables = new URLVariables();
                 vars.i = encryptedStr;
-                vars.version = Main.version;
                 var request:URLRequest = new URLRequest(Main.baseURL + "/change_password.php");
                 request.data = vars;
                 request.method = URLRequestMethod.POST;

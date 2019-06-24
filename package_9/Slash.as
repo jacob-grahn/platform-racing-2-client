@@ -12,7 +12,7 @@ package package_9
     import flash.geom.Point;
     import blocks.Block;
 
-    public class Slash extends class_80 
+    public class Slash extends Effect 
     {
 
         private var m:SlashAnimation = new SlashAnimation();

@@ -34,6 +34,7 @@ package package_8
     import package_6.CourseTimer;
     import package_6.Course;
     import package_6.RaceChat;
+    import package_9.Sting;
     import package_9.Zap;
     import page.GamePage;
 
@@ -86,7 +87,8 @@ package package_8
         private var var_150:Number = 0;
         private var segSize:Number = 30;
         private var hurtTime:Number = 0; // var_249
-        private var var_368:Number = 0;
+        private var squashedTime:Number = 0; // var_368
+        private var stingCooldown:int = 135;
         public var var_240:Number = 0;
         private var var_630:Block = null;
         private var var_469:Block = null;
@@ -143,6 +145,7 @@ package package_8
             this.cm.defineCommand("zap", this.zap);
             this.cm.defineCommand("setHats" + this.tempID.toString(), this.setHats);
             this.cm.defineCommand("squash" + this.tempID.toString(), this.squash);
+            this.cm.defineCommand("sting" + this.tempID.toString(), this.sting);
         }
 
         public function init()
@@ -203,11 +206,36 @@ package package_8
             }
         }
 
+        public function sting(a:Array)
+        {
+            var from:Character = this.course.playerArray[a[0]];
+            if (from == null || from is LocalCharacter || from.tempID == this.tempID) {
+                return; // shouldn't happen
+            }
+            var fromPos:Object = from.getPos();
+            var fromDirection:String = fromPos.x < x ? 'left' : (fromPos.x > x ? 'right' : '');
+            new Sting(this, fromDirection);
+            if (!var_4.getBool(PARTY) && !var_4.getBool(JELLYFISH)) {
+                this.setMode('hurt');
+            }
+        }
+
         public function zap(a:Array)
         {
-            new Zap(this, true);
-            if (!var_4.getBool(PARTY)) {
-                this.setMode("hurt");
+            // show zap on other players
+            for each (var c:Character in this.course.playerArray) {
+                if (a[0] != c.tempID) {
+                    new Zap(c, true, false, false);
+                }
+            }
+
+            if (a[0] == this.tempID) { // skip my zap if I was the one that sent it
+                return;
+            } else { // zap me
+                new Zap(this, true);
+                if (!var_4.getBool(PARTY)) {
+                    this.setMode("hurt");
+                }
             }
         }
 
@@ -222,7 +250,7 @@ package package_8
             }
             method_58(this.map.rotation);
             this.hurtTime--;
-            if (this.course.var_40.length > 1) {
+            if (this.course.playerArray.length > 1) {
                 var_215++; // setting this to a static value above 23 will send wholly instant position updates to players
                 if (var_215 >= var_448) {
                     if (this.method_779() || var_215 >= 23) {
@@ -260,7 +288,14 @@ package package_8
                         this.socket.write("set_var`item`" + Items.getCodeFromItem(this.curItem));
                     }
                 }
-                this.method_704();
+                if (velY > 0 && var_4.getBool(JIGG)) {
+                    this.maybeSquash();
+                }
+                if (this.stingCooldown > 0) {
+                    this.stingCooldown--;
+                } else if (var_4.getBool(JELLYFISH) && class_28.rand(1, 35) === 1) { // should happen within a second or so
+                    this.maybeSting();
+                }
             }
         }
 
@@ -269,18 +304,28 @@ package package_8
             this.var_232 = true;
         }
 
-        // doSquash?
-        private function method_704()
+        // _loc1 = c
+        // method_704 = maybeSquash
+        private function maybeSquash()
         {
-            if (velY > 0 && var_4.getBool(JIGG)) {
-                for each (var _local_1:Character in this.course.var_40) {
-                    if (_local_1 is RemoteCharacter && _local_1.state != "crouch" && _local_1.state != "crouchWalk" && _local_1.x > (x - 20) && _local_1.x < (x + 20) && _local_1.y > (y + 35) && _local_1.y < (y + 65) && _local_1.rotation == this.rotation) {
-                        _local_1.changeState("crouch");
-                        SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
-                        this.socket.write("squash`" + _local_1.tempID + "`" + x + "`" + y);
-                        velY = -3;
-                        this.var_42 = true;
-                    }
+            for each (var c:Character in this.course.playerArray) {
+                if (c is RemoteCharacter && c.state != "crouch" && c.state != "crouchWalk" && c.x > (x - 20) && c.x < (x + 20) && c.y > (y + 35) && c.y < (y + 65) && c.rotation == this.rotation) {
+                    c.changeState("crouch");
+                    SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
+                    this.socket.write("squash`" + c.tempID + "`" + x + "`" + y);
+                    velY = -3;
+                    this.var_42 = true;
+                }
+            }
+        }
+    
+        // sting another player
+        private function maybeSting()
+        {
+            for each (var c:Character in this.course.playerArray) {
+                if (c is RemoteCharacter && c.state != "bumped" && c.x > (x - 75) && c.x < (x + 75) && c.y > (y - 100) && c.y < (y + 100)) {
+                    Main.socket.write('sting`' + c.tempID + '`' + x + '`' + y); // remote tempID, local x, local y
+                    this.stingCooldown = 135; // 5 seconds
                 }
             }
         }
@@ -323,8 +368,8 @@ package package_8
         {
             this.crouching = true;
             this.landGo(e);
-            this.var_368--;
-            if (this.var_368 <= 0) {
+            this.squashedTime--;
+            if (this.squashedTime <= 0) {
                 velY = -5;
                 this.setMode("land");
             }
@@ -555,7 +600,7 @@ package package_8
             y = this.var_224;
             velX = 0;
             velY = 0;
-            this.method_448();
+            this.bumpPlayer();
         }
 
         private function method_76()
@@ -690,19 +735,20 @@ package package_8
                 this.var_24 = 0;
                 if (this.mode == "hurt") {
                     changeState("bumped");
-                    this.method_448();
+                    this.bumpPlayer();
                 }
                 if (this.mode == "water" && this.state != "bumped") {
                     changeState("swim");
                 }
                 if (this.mode == "squashed") {
-                    this.var_368 = 60;
+                    this.squashedTime = 60;
                     method_51(70);
                 }
             }
         }
 
-        private function method_448()
+        // method_448 = bumpPlayer
+        private function bumpPlayer()
         {
             if (this.hurtTime <= 0) {
                 this.hurtTime = 60;
@@ -834,7 +880,7 @@ package package_8
         private function method_779():Boolean
         {
             var _local_3:Character;
-            var _local_1:Array = Course.course.var_40;
+            var _local_1:Array = Course.course.playerArray;
             var _local_2:Boolean;
             for each (_local_3 in _local_1) {
                 // uncommenting below disables near-instant updates for other players when farther than 1000px in either direction
@@ -1000,6 +1046,7 @@ package package_8
                 this.cm.defineCommand("setHats" + tempID.toString(), null);
                 this.cm.defineCommand("zap", null);
                 this.cm.defineCommand("squash" + tempID.toString(), null);
+                this.cm.defineCommand("sting" + this.tempID.toString(), null);
                 this.cm = null;
             }
             this.course = null;

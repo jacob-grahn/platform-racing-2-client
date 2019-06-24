@@ -47,7 +47,7 @@ package menu
                 var send:Object = new Object();
                 send.user_name = Main.userName;
                 send.user_pass = Main.userPass;
-                send.version = Main.version;
+                send.build = Main.build;
                 send.server = Main.server;
                 send.domain = Main.domain;
                 send.remember = Main.remember;
@@ -59,7 +59,7 @@ package menu
                 var encryptedStr:String = encryptor.encrypt(sendStr);
                 var vars:URLVariables = new URLVariables();
                 vars.i = encryptedStr;
-                vars.version = Main.version;
+                vars.build = Main.build;
                 var request:URLRequest = new URLRequest(Main.baseURL + "/login.php");
                 request.data = vars;
                 request.method = URLRequestMethod.POST;

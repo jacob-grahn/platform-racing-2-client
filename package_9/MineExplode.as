@@ -7,7 +7,7 @@ package package_9
 {
     import sounds.SoundEffects;
 
-    public class MineExplode extends class_80 
+    public class MineExplode extends Effect 
     {
 
         private var m:MineExplodeAnimation = new MineExplodeAnimation();

@@ -1,5 +1,3 @@
-﻿// package_9.Zap = package_9.class_140
-
 package package_9
 {
     import data.Settings;
@@ -7,33 +5,30 @@ package package_9
     import package_8.Character;
     import sounds.SoundEffects;
 
-    public class Zap extends Effect 
+    public class Sting extends Effect 
     {
 
-        private var m:ZapGraphic = new ZapGraphic();
+        private var m:StingGraphic = new StingGraphic();
         private var c:Character; // var_5
 
-        public function Zap(character:Character, showBolt:Boolean=true, playSound:Boolean=true, showFlash:Boolean=true)
+        public function Sting(r:Character, dir:String = '')
         {
-            this.c = character;
-            if (!showBolt) {
-                this.m.removeChild(this.m.lightning);
-            }
-            if (!showFlash) {
-                this.m.removeChild(this.m.bg);
-            }
+            this.c = r;
+            if (dir === 'right') {
+                this.m.removeChild(this.m.leftSting);
+            } else if (dir === 'left') {
+                this.m.removeChild(this.m.rightSting);
+            } // keep both if same x ^^
             addChild(this.m);
             addEventListener(Event.ENTER_FRAME, this.go);
             this.pos();
-            if (playSound) {
-                SoundEffects.playSound(new ZapSound(), 1 * (Settings.soundLevel / 100));
-            }
+            SoundEffects.playSound(new StingSound(), 1 * (Settings.soundLevel / 100));
         }
 
         private function go(e:Event)
         {
             this.pos();
-            alpha = alpha - 0.1;
+            alpha = alpha - 0.05;
             if (alpha <= 0) {
                 this.remove();
             }

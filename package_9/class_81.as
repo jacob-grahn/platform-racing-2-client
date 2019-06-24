@@ -12,7 +12,7 @@ package package_9
     import data.class_28;
     import package_8.LocalCharacter;
 
-    public class class_81 extends class_80 
+    public class class_81 extends Effect 
     {
 
         protected var velX:Number = 0;

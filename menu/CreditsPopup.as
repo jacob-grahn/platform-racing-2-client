@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// menu.CreditsPopup = menu.class_68
+﻿// menu.CreditsPopup = menu.class_68
 
 package menu
 {
@@ -15,6 +12,9 @@ package menu
 
         public function CreditsPopup()
         {
+            this.m.versionBox.text = 'PR2 v' + Main.version;
+            this.m.versionBox.text = Main.beta === true ? this.m.versionBox.text + ' Beta' : this.m.versionBox.text;
+            this.m.buildBox.text = 'Build: ' + Main.build;
             addChild(this.m);
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose);
         }
@@ -35,5 +35,4 @@ package menu
 
 
     }
-}//package menu
-
+}

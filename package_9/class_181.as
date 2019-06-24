@@ -7,7 +7,7 @@ package package_9
 {
     import flash.events.Event;
 
-    public class class_181 extends class_80 
+    public class class_181 extends Effect 
     {
 
         private var m:Arrow2Graphic = new Arrow2Graphic();

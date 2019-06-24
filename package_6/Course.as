@@ -33,7 +33,7 @@ package package_6
         protected var version:int;
         public var var_197:Array = new Array();
         public var var_313:Array = new Array();
-        public var var_40:Array = new Array(); // playerArray?
+        public var playerArray:Array = new Array(); // var_40
         public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
@@ -106,12 +106,12 @@ package package_6
         {
             var _local_3:Point;
             var _local_4:Character;
-            var _local_1:int = this.var_40.length;
+            var _local_1:int = this.playerArray.length;
             var _local_2:int;
             while (_local_2 < _local_1) {
                 _local_3 = this.method_753(_local_2);
                 if (_local_3 != null) {
-                    _local_4 = this.var_40[_local_2];
+                    _local_4 = this.playerArray[_local_2];
                     _local_4.setPos(_local_3.x, _local_3.y);
                     this.frontBackground.addChild(_local_4);
                 }
@@ -412,7 +412,7 @@ package package_6
                     this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation - 90;
                     this.miniMap.rotate(this.blockBackground.rotation);
                 }
-                for each (_local_4 in this.var_40) {
+                for each (_local_4 in this.playerArray) {
                     _local_4.rotate(this.var_348);
                 }
                 this.method_82(new Event(Event.ENTER_FRAME));
@@ -460,10 +460,10 @@ package package_6
             this.hearts = null;
             this.itemDisplay = null;
             Course.course = null;
-            for each (_local_1 in this.var_40) {
+            for each (_local_1 in this.playerArray) {
                 _local_1.remove();
             }
-            this.var_40 = null;
+            this.playerArray = null;
             this.var_197 = null;
             super.remove();
         }

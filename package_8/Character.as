@@ -28,6 +28,7 @@ package package_8
         public static const MOON:String = 'm';
         public static const JIGG:String = 'j'; // const_51
         public static const ARTIFACT:String = 'b'; // const_25
+        public static const JELLYFISH:String = 'f'; // (fish)
 
         private var var_387:class_127;
         private var var_140:SoundChannel;
@@ -112,6 +113,7 @@ package package_8
             this.var_4.setBool(MOON, false);
             this.var_4.setBool(JIGG, false);
             this.var_4.setBool(ARTIFACT, false);
+            this.var_4.setBool(JELLYFISH, false);
         }
 
         // _loc2 = hatId
@@ -169,6 +171,8 @@ package package_8
                     this.var_4.setBool(JIGG, true);
                 } else if (hatId === 14) {
                     this.var_4.setBool(ARTIFACT, true);
+                } else if (hatId === 15) {
+                    this.var_4.setBool(JELLYFISH, true);
                 }
                 hatSlot++;
                 _local_7 = _local_7 + 3;
@@ -318,6 +322,16 @@ package package_8
             for each (var mc:MovieClip in this.stateAnims) {
                 mc.weapon.gotoAndStop(Items.getNameFromCode(this.item));
             }
+        }
+
+
+
+        public function getPos()
+        {
+            var pos:Object = new Object();
+            pos.x = x;
+            pos.y = y;
+            return pos;
         }
 
         public function setPos(_arg_1:Number, _arg_2:Number)

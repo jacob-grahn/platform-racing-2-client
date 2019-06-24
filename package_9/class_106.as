@@ -8,7 +8,7 @@ package package_9
     import flash.events.Event;
     import flash.display.DisplayObject;
 
-    public class class_106 extends class_80 
+    public class class_106 extends Effect 
     {
 
         private var velX:Number;

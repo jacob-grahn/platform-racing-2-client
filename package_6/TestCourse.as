@@ -41,7 +41,7 @@ package package_6
             var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
             var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
             var_9.testMode = true;
-            var_40.push(var_9);
+            playerArray.push(var_9);
             this.statsSelect = new StatsSelect(300, 50, 50, 50, var_9);
             this.statsSelect.x = -265;
             this.statsSelect.y = 90;

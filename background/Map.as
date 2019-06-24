@@ -224,7 +224,7 @@ package background
             var _local_4:Point;
             var occupies:Boolean = false;
             if (Course.course != null) {
-                for each (var _local_6:Character in Course.course.var_40) {
+                for each (var _local_6:Character in Course.course.playerArray) {
                     if (_local_6 != null) {
                         _local_3 = _local_6.seg1;
                         _local_4 = _local_6.seg2;

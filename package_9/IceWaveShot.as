@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_9.class_142
+// package_9.IceWaveShot = package_9.class_142
 
 package package_9
 {
@@ -11,19 +11,19 @@ package package_9
     import package_8.LocalCharacter;
     import package_8.Character;
 
-    public class class_142 extends class_135 
+    public class IceWaveShot extends ShotEffect 
     {
 
         private static var var_168:int = 0;
 
-        private var m:IceWaveEffectGraphic = new IceWaveEffectGraphic();
+        private var m:IceWaveGraphic = new IceWaveGraphic();
         private var var_322:Number;
         private var var_278:Number;
 
-        public function class_142(_arg_1:Number, _arg_2:Number, _arg_3:Number, _arg_4:int, _arg_5:int, _arg_6:Number, _arg_7:int=75)
+        public function IceWaveShot(_arg_1:Number, _arg_2:Number, _arg_3:Number, _arg_4:int, tempID:int, _arg_6:Number, _arg_7:int=75)
         {
             var_168++;
-            super(_arg_1, _arg_2, _arg_3, _arg_4, _arg_5);
+            super(_arg_1, _arg_2, _arg_3, _arg_4, tempID, 'ice');
             var_493 = true;
             this.life = _arg_7;
             this.var_278 = _arg_3;
@@ -61,10 +61,10 @@ package package_9
                     _local_4 = class_74.numLimit((this.var_278 + 30), _local_2, _local_3);
                     _local_5 = class_74.numLimit((this.var_278 - 30), _local_2, _local_3);
                     if (_local_4 != this.var_278) {
-                        new class_142(x, y, _local_4, var_377, var_357, this.var_322, (life / 2));
+                        new IceWaveShot(x, y, _local_4, var_377, shooterID, this.var_322, (life / 2));
                     }
                     if (_local_5 != this.var_278) {
-                        new class_142(x, y, _local_5, var_377, var_357, this.var_322, (life / 2));
+                        new IceWaveShot(x, y, _local_5, var_377, shooterID, this.var_322, (life / 2));
                     }
                     life = (life - 5);
                     this.method_219();

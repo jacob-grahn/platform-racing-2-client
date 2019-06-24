@@ -5,7 +5,7 @@
 
 package package_9
 {
-    public class class_178 extends class_80 
+    public class class_178 extends Effect 
     {
 
         private var m:class_239 = new class_239();

@@ -7,7 +7,7 @@ package package_9
 {
     import sounds.SoundEffects;
 
-    public class TeleportPop extends class_80 
+    public class TeleportPop extends Effect 
     {
 
         private var m:TeleportAnimation = new TeleportAnimation();
