@@ -7,12 +7,13 @@ package package_22
 {
     import data.class_28;
     import data.Memory;
+    import flash.events.Event;
+    import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.utils.setTimeout;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
-    import flash.events.Event;
     import flash.utils.clearTimeout;
 
     public class Search extends LevelListing 
@@ -27,7 +28,8 @@ package package_22
             mode = "search";
             this.m.x = 36;
             this.m.y = 8;
-            this.m.search_bt.addEventListener(MouseEvent.CLICK, this.clickSearch);
+            this.m.search_bt.addEventListener(MouseEvent.CLICK, this.doSearch);
+            this.m.searchBox.addEventListener(KeyboardEvent.KEY_DOWN, this.doSearch);
             class_10.addChild(this.m);
             loadingGraphic.visible = false;
             if (this.memory.searchStr != null) {
@@ -79,8 +81,16 @@ package package_22
             }
         }
 
-        private function clickSearch(_arg_1:MouseEvent)
+        // clickSearch = doSearch
+        private function doSearch(e:Event)
         {
+            if (e is KeyboardEvent) {
+                if (e.keyCode !== 13) {
+                    return;
+                } else {
+                    Main.stage.focus = Main.stage;
+                }
+            }
             if (this.m.searchBox.text != "") {
                 pageNavigation.setPageNum(1);
             }
@@ -93,7 +103,8 @@ package package_22
             this.memory.searchOrderIndex = this.m.order_cb.selectedIndex;
             this.memory.searchDirIndex = this.m.dir_cb.selectedIndex;
             clearTimeout(this.var_421);
-            this.m.search_bt.removeEventListener(MouseEvent.CLICK, this.clickSearch);
+            this.m.search_bt.removeEventListener(MouseEvent.CLICK, this.doSearch);
+            this.m.searchBox.removeEventListener(KeyboardEvent.KEY_DOWN, this.doSearch);
             super.remove();
         }
 

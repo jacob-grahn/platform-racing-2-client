@@ -7,11 +7,11 @@ package
 
         // general
         private static var init:Boolean = false;
-        private static const GREATEST_ID:int = 41;
+        private static const GREATEST_ID:int = 43;
         private static const TYPES:Array = ['HAT', 'HEAD', 'BODY', 'FEET'];
 
         // hats
-        private static const VARS_HAT:Array = ['NONE', 'EXP', 'KONG', 'PROP', 'COWBOY', 'CROWN', 'SANTA', 'PARTY', 'TOP', 'JUMP_START', 'MOON', 'THIEF', 'JIGG', 'ARTIFACT'];
+        private static const VARS_HAT:Array = ['NONE', 'EXP', 'KONG', 'PROP', 'COWBOY', 'CROWN', 'SANTA', 'PARTY', 'TOP', 'JUMP_START', 'MOON', 'THIEF', 'JIGG', 'ARTIFACT', 'JELLYFISH'];
         public static const HAT_NONE:int = 1;
         public static const HAT_EXP:int = 2;
         public static const HAT_KONG:int = 3;
@@ -26,9 +26,10 @@ package
         public static const HAT_THIEF:int = 12;
         public static const HAT_JIGG:int = 13;
         public static const HAT_ARTIFACT:int = 14;
+        public static const HAT_JELLYFISH:int = 15;
 
         // heads
-        private static const VARS_HEAD:Array = ['CLASSIC', 'TIRED', 'SMILER', 'FLOWER', 'CLASSIC_GIRL', 'GOOF', 'DOWNER', 'BALLOON', 'WORM', 'UNICORN', 'BIRD', 'SUN', 'CANDY', 'INVISIBLE', 'FOOTBALL_HELMET', 'BASKETBALL', 'STICK', 'CAT', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'BUBBLE', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'TACO', 'SLENDER', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT'];
+        private static const VARS_HEAD:Array = ['CLASSIC', 'TIRED', 'SMILER', 'FLOWER', 'CLASSIC_GIRL', 'GOOF', 'DOWNER', 'BALLOON', 'WORM', 'UNICORN', 'BIRD', 'SUN', 'CANDY', 'INVISIBLE', 'FOOTBALL_HELMET', 'BASKETBALL', 'STICK', 'CAT', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'BUBBLE', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'TACO', 'SLENDER', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW'];
         public static const HEAD_CLASSIC:int = 1;
         public static const HEAD_TIRED:int = 2;
         public static const HEAD_SMILER:int = 3;
@@ -70,9 +71,11 @@ package
         public static const HEAD_BUNNY:int = 39;
         public static const HEAD_GECKO:int = 40;
         public static const HEAD_BAT:int = 41;
+        public static const HEAD_SEA:int = 42;
+        public static const HEAD_BREW:int = 43;
 
         // bodies
-        private static const VARS_BODY:Array = ['CLASSIC', 'STRAP', 'DRESS', 'PEC', 'GUT', 'COLLAR', 'MISS_PR2', 'BELT', 'SNAKE', 'BIRD', 'INVISIBLE', 'BEE', 'STICK', 'CAT', 'CAR', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'BUBBLE', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'FRED', 'VERY_INVISIBLE', 'TACO', 'SLENDER', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT'];
+        private static const VARS_BODY:Array = ['CLASSIC', 'STRAP', 'DRESS', 'PEC', 'GUT', 'COLLAR', 'MISS_PR2', 'BELT', 'SNAKE', 'BIRD', 'INVISIBLE', 'BEE', 'STICK', 'CAT', 'CAR', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'BUBBLE', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'FRED', 'VERY_INVISIBLE', 'TACO', 'SLENDER', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW'];
         public static const BODY_CLASSIC:int = 1;
         public static const BODY_STRAP:int = 2;
         public static const BODY_DRESS:int = 3;
@@ -113,9 +116,11 @@ package
         public static const BODY_BUNNY:int = 39;
         public static const BODY_GECKO:int = 40;
         public static const BODY_BAT:int = 41;
+        public static const BODY_SEA:int = 42;
+        public static const BODY_BREW:int = 43;
 
         // feet
-        private static const VARS_FEET:Array = ['CLASSIC', 'HEEL', 'LOAFER', 'CLEAT', 'MAGNET', 'TINY', 'SANDAL', 'BARE', 'NICE', 'BIRD', 'INVISIBLE', 'STICK', 'CAT', 'TIRE', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'BUBBLE', 'TACO', 'SLENDER', '', '', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT'];
+        private static const VARS_FEET:Array = ['CLASSIC', 'HEEL', 'LOAFER', 'CLEAT', 'MAGNET', 'TINY', 'SANDAL', 'BARE', 'NICE', 'BIRD', 'INVISIBLE', 'STICK', 'CAT', 'TIRE', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'BUBBLE', 'TACO', 'SLENDER', '', '', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW'];
         public static const FEET_CLASSIC:int = 1;
         public static const FEET_HEEL:int = 2;
         public static const FEET_LOAFER:int = 3;
@@ -154,6 +159,8 @@ package
         public static const FEET_BUNNY:int = 39;
         public static const FEET_GECKO:int = 40;
         public static const FEET_BAT:int = 41;
+        public static const FEET_SEA:int = 42;
+        public static const FEET_BREW:int = 43;
 
         // sets
         public static const SET_CLASSIC:Array = [HEAD_CLASSIC, BODY_CLASSIC, FEET_CLASSIC];
@@ -184,6 +191,8 @@ package
         public static const SET_BUNNY:Array = [HEAD_BUNNY, BODY_BUNNY, FEET_BUNNY];
         public static const SET_GECKO:Array = [HEAD_GECKO, BODY_GECKO, FEET_GECKO];
         public static const SET_BAT:Array = [HEAD_BAT, BODY_BAT, FEET_BAT];
+        public static const SET_SEA:Array = [HEAD_SEA, BODY_SEA, FEET_SEA];
+        public static const SET_BREW:Array = [HEAD_BREW, BODY_BREW, FEET_BREW];
 
         // descriptions
         public static const DESC_HAT_EXP:String = 'If you finish a race with this hat, it will increase your EXP gain by 100%!';
@@ -198,6 +207,7 @@ package
         public static const DESC_HAT_MOON:String = 'Soar to new heights by defying the laws of gravity!';
         public static const DESC_HAT_THIEF:String = 'Steal other player\'s hats --even crowns!';
         public static const DESC_HAT_JIGG:String = 'Bounce on the heads of your opponents!';
+        public static const DESC_HAT_JELLYFISH:String = 'Give nearby opponents a nasty sting!';
 
         public static const DESC_HEAD_CLASSIC:String = 'Rock it old school.';
         public static const DESC_HEAD_TIRED:String = 'Did you stay up late playing PR2?';
@@ -240,6 +250,8 @@ package
         public static const DESC_HEAD_BUNNY:String = 'No easter eggs here!';
         public static const DESC_HEAD_GECKO:String = '...slither?';
         public static const DESC_HEAD_BAT:String = '...echolocate?';
+        public static const DESC_HEAD_SEA:String = 'We got the spirit, you got to hear it, under the sea!';
+        public static const DESC_HEAD_BREW:String = 'Hydration is key.';
 
         public static const DESC_BODY_CLASSIC:String = 'Rock it old school.';
         public static const DESC_BODY_STRAP:String = 'Strapping!';
@@ -281,6 +293,8 @@ package
         public static const DESC_BODY_BUNNY:String = 'No easter eggs here!';
         public static const DESC_BODY_GECKO:String = '...slither?';
         public static const DESC_BODY_BAT:String = '...echolocate?';
+        public static const DESC_BODY_SEA:String = 'We got the spirit, you got to hear it, under the sea!';
+        public static const DESC_BODY_BREW:String = 'Hydration is key.';
 
         public static const DESC_FEET_CLASSIC:String = 'Rock it old school.';
         public static const DESC_FEET_HEEL:String = 'Very dressy.';
@@ -320,6 +334,8 @@ package
         public static const DESC_FEET_BUNNY:String = 'No easter eggs here!';
         public static const DESC_FEET_GECKO:String = '...slither?';
         public static const DESC_FEET_BAT:String = '...echolocate?';
+        public static const DESC_FEET_SEA:String = 'We got the spirit, you got to hear it, under the sea!';
+        public static const DESC_FEET_BREW:String = 'Hydration is key.';
 
         // how to obtain
         public static const OBTAIN_HAT_EXP:String = 'Won randomly in races with 2-4 players.';
@@ -334,6 +350,7 @@ package
         public static const OBTAIN_HAT_MOON:String = 'Finish Redemption by cooldude90.';
         public static const OBTAIN_HAT_THIEF:String = 'Finish Apocalypse by Divinity.';
         public static const OBTAIN_HAT_JIGG:String = 'Ask Fred; maybe he knows. :)';
+        public static const OBTAIN_HAT_JELLYFISH:String = 'Currently unobtainable.';
 
         public static const OBTAIN_HEAD_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_HEAD_TIRED:String = 'It\'s there when you create your account!';
@@ -370,12 +387,14 @@ package
         public static const OBTAIN_HEAD_SLENDER:String = 'Has a 1 in 3 chance of appearing on Deliverance by -changelings-.';
         public static const OBTAIN_HEAD_SANTA:String = 'Log into your PR2 account on Christmas Eve or Day.';
         public static const OBTAIN_HEAD_FROST_DJINN:String = 'Purchased in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
-        public static const OBTAIN_HEAD_REINDEER:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_HEAD_CROCODILE:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_HEAD_REINDEER:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_HEAD_CROCODILE:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_HEAD_VALENTINE:String = 'Log into your PR2 account on Valentine\'s Day.';
         public static const OBTAIN_HEAD_BUNNY:String = 'Log into your PR2 account during Easter Weekend.';
-        public static const OBTAIN_HEAD_GECKO:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_HEAD_BAT:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_HEAD_GECKO:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_HEAD_BAT:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_HEAD_SEA:String = 'We got the spirit, you got to hear it, <i>under the sea!</i>';
+        public static const OBTAIN_HEAD_BREW:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
 
         public static const OBTAIN_BODY_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_BODY_STRAP:String = 'It\'s there when you create your account!';
@@ -411,12 +430,15 @@ package
         public static const OBTAIN_BODY_SLENDER:String = 'Has a 1 in 3 chance of appearing on Deliverance by -changelings-.';
         public static const OBTAIN_BODY_SANTA:String = 'Log into your PR2 account on Christmas Eve or Day.';
         public static const OBTAIN_BODY_FROST_DJINN:String = 'Purchased in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
-        public static const OBTAIN_BODY_REINDEER:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_BODY_CROCODILE:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_BODY_REINDEER:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_BODY_CROCODILE:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_BODY_VALENTINE:String = 'Log into your PR2 account on Valentine\'s Day.';
         public static const OBTAIN_BODY_BUNNY:String = 'Log into your PR2 account during Easter Weekend.';
-        public static const OBTAIN_BODY_GECKO:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_BODY_BAT:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_BODY_GECKO:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_BODY_BAT:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_BODY_SEA:String = 'We got the spirit, you got to hear it, <i>under the sea!</i>';
+        public static const OBTAIN_BODY_BREW:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+
 
         public static const OBTAIN_FEET_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_FEET_HEEL:String = 'It\'s there when you create your account!';
@@ -450,24 +472,27 @@ package
         public static const OBTAIN_FEET_SLENDER:String = 'Has a 1 in 3 chance of appearing on Deliverance by -changelings-.';
         public static const OBTAIN_FEET_SANTA:String = 'Log into your PR2 account on Christmas Eve or Day.';
         public static const OBTAIN_FEET_FROST_DJINN:String = 'Purchased in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
-        public static const OBTAIN_FEET_REINDEER:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_FEET_CROCODILE:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_FEET_REINDEER:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_FEET_CROCODILE:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_FEET_VALENTINE:String = 'Log into your PR2 account on Valentine\'s Day.';
         public static const OBTAIN_FEET_BUNNY:String = 'Log into your PR2 account on Easter Weekend.';
-        public static const OBTAIN_FEET_GECKO:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_FEET_BAT:String = 'Won in various contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_FEET_GECKO:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_FEET_BAT:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+        public static const OBTAIN_FEET_SEA:String = 'We got the spirit, you got to hear it, <i>under the sea!</i>';
+        public static const OBTAIN_FEET_BREW:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
+
 
 
         // arrays
-        private static var HAT_ARRAY:Array = [HAT_EXP, HAT_KONG, HAT_PROP, HAT_COWBOY, HAT_CROWN, HAT_SANTA, HAT_PARTY, HAT_TOP, HAT_JUMP_START, HAT_MOON, HAT_THIEF, HAT_JIGG];
-        private static var HEAD_ARRAY:Array = [HEAD_CLASSIC, HEAD_TIRED, HEAD_SMILER, HEAD_FLOWER, HEAD_CLASSIC_GIRL, HEAD_GOOF, HEAD_DOWNER, HEAD_BALLOON, HEAD_WORM, HEAD_UNICORN, HEAD_BIRD, HEAD_SUN, HEAD_CANDY, HEAD_INVISIBLE, HEAD_FOOTBALL_HELMET, HEAD_BASKETBALL, HEAD_STICK, HEAD_CAT, HEAD_ELEPHANT, HEAD_ANT, HEAD_ASTRONAUT, HEAD_ALIEN, HEAD_DINO, HEAD_ARMOR, HEAD_FAIRY, HEAD_GINGERBREAD, HEAD_BUBBLE, HEAD_KING, HEAD_QUEEN, HEAD_SIR, /*HEAD_VERY_INVISIBLE,*/ HEAD_TACO, HEAD_SLENDER, HEAD_SANTA, HEAD_FROST_DJINN, HEAD_REINDEER, HEAD_CROCODILE, HEAD_VALENTINE, HEAD_BUNNY, HEAD_GECKO, HEAD_BAT];
-        private static var BODY_ARRAY:Array = [BODY_CLASSIC, BODY_STRAP, BODY_DRESS, BODY_PEC, BODY_GUT, BODY_COLLAR, BODY_MISS_PR2, BODY_BELT, BODY_SNAKE, BODY_BIRD, BODY_INVISIBLE, BODY_BEE, BODY_STICK, BODY_CAT, BODY_CAR, BODY_ELEPHANT, BODY_ANT, BODY_ASTRONAUT, BODY_ALIEN, BODY_GALAXY, BODY_BUBBLE, BODY_DINO, BODY_ARMOR, BODY_FAIRY, BODY_GINGERBREAD, BODY_KING, BODY_QUEEN, BODY_SIR, /*BODY_FRED, BODY_VERY_INVISIBLE,*/ BODY_TACO, BODY_SLENDER, BODY_SANTA, BODY_FROST_DJINN, BODY_REINDEER, BODY_CROCODILE, BODY_VALENTINE, BODY_BUNNY, BODY_GECKO, BODY_BAT];
-        private static var FEET_ARRAY:Array = [FEET_CLASSIC, FEET_HEEL, FEET_LOAFER, FEET_CLEAT, FEET_MAGNET, FEET_TINY, FEET_SANDAL, FEET_BARE, FEET_NICE, FEET_BIRD, FEET_INVISIBLE, FEET_STICK, FEET_CAT, FEET_TIRE, FEET_ELEPHANT, FEET_ANT, FEET_ASTRONAUT, FEET_ALIEN, FEET_GALAXY, FEET_DINO, FEET_ARMOR, FEET_FAIRY, FEET_GINGERBREAD, FEET_KING, FEET_QUEEN, FEET_SIR, /*FEET_VERY_INVISIBLE,*/ FEET_BUBBLE, FEET_TACO, FEET_SLENDER, FEET_SANTA, FEET_FROST_DJINN, FEET_REINDEER, FEET_CROCODILE, FEET_VALENTINE, FEET_BUNNY, FEET_GECKO, FEET_BAT];
+        private static var HAT_ARRAY:Array = [HAT_EXP, HAT_KONG, HAT_PROP, HAT_COWBOY, HAT_CROWN, HAT_SANTA, HAT_PARTY, HAT_TOP, HAT_JUMP_START, HAT_MOON, HAT_THIEF, HAT_JIGG, HAT_JELLYFISH];
+        private static var HEAD_ARRAY:Array = [HEAD_CLASSIC, HEAD_TIRED, HEAD_SMILER, HEAD_FLOWER, HEAD_CLASSIC_GIRL, HEAD_GOOF, HEAD_DOWNER, HEAD_BALLOON, HEAD_WORM, HEAD_UNICORN, HEAD_BIRD, HEAD_SUN, HEAD_CANDY, HEAD_INVISIBLE, HEAD_FOOTBALL_HELMET, HEAD_BASKETBALL, HEAD_STICK, HEAD_CAT, HEAD_ELEPHANT, HEAD_ANT, HEAD_ASTRONAUT, HEAD_ALIEN, HEAD_DINO, HEAD_ARMOR, HEAD_FAIRY, HEAD_GINGERBREAD, HEAD_BUBBLE, HEAD_KING, HEAD_QUEEN, HEAD_SIR, /*HEAD_VERY_INVISIBLE,*/ HEAD_TACO, HEAD_SLENDER, HEAD_SANTA, HEAD_FROST_DJINN, HEAD_REINDEER, HEAD_CROCODILE, HEAD_VALENTINE, HEAD_BUNNY, HEAD_GECKO, HEAD_BAT, HEAD_SEA, HEAD_BREW];
+        private static var BODY_ARRAY:Array = [BODY_CLASSIC, BODY_STRAP, BODY_DRESS, BODY_PEC, BODY_GUT, BODY_COLLAR, BODY_MISS_PR2, BODY_BELT, BODY_SNAKE, BODY_BIRD, BODY_INVISIBLE, BODY_BEE, BODY_STICK, BODY_CAT, BODY_CAR, BODY_ELEPHANT, BODY_ANT, BODY_ASTRONAUT, BODY_ALIEN, BODY_GALAXY, BODY_BUBBLE, BODY_DINO, BODY_ARMOR, BODY_FAIRY, BODY_GINGERBREAD, BODY_KING, BODY_QUEEN, BODY_SIR, /*BODY_FRED, BODY_VERY_INVISIBLE,*/ BODY_TACO, BODY_SLENDER, BODY_SANTA, BODY_FROST_DJINN, BODY_REINDEER, BODY_CROCODILE, BODY_VALENTINE, BODY_BUNNY, BODY_GECKO, BODY_BAT, BODY_SEA, BODY_BREW];
+        private static var FEET_ARRAY:Array = [FEET_CLASSIC, FEET_HEEL, FEET_LOAFER, FEET_CLEAT, FEET_MAGNET, FEET_TINY, FEET_SANDAL, FEET_BARE, FEET_NICE, FEET_BIRD, FEET_INVISIBLE, FEET_STICK, FEET_CAT, FEET_TIRE, FEET_ELEPHANT, FEET_ANT, FEET_ASTRONAUT, FEET_ALIEN, FEET_GALAXY, FEET_DINO, FEET_ARMOR, FEET_FAIRY, FEET_GINGERBREAD, FEET_KING, FEET_QUEEN, FEET_SIR, /*FEET_VERY_INVISIBLE,*/ FEET_BUBBLE, FEET_TACO, FEET_SLENDER, FEET_SANTA, FEET_FROST_DJINN, FEET_REINDEER, FEET_CROCODILE, FEET_VALENTINE, FEET_BUNNY, FEET_GECKO, FEET_BAT, FEET_SEA, FEET_BREW];
 
-        public static const HAT_NAMES_ARRAY:Array = ['', 'EXP', 'Kongregate', 'Propeller', 'Cowboy', 'Crown', 'Santa', 'Party', 'Top', 'Jump Start', 'Moon', 'Thief', 'Jigg', 'Artifact'];
-        public static const HEAD_NAMES_ARRAY:Array = ['Classic', 'Tired', 'Smiling', 'Flower', 'Lady', 'Goof', 'Downer', 'Balloon', 'Worm', 'Unicorn', 'Giant Bird', 'Cool Sun', 'Candy', 'Invisible', 'Helmet', 'Basketball', 'Stick', 'Cat', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Bubble', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Taco', 'Slender', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat'];
-        public static const BODY_NAMES_ARRAY:Array = ['Classic', 'Strap', 'Dress', 'Pec', 'Gut', 'Collar', 'Miss PR2', 'Belt', 'Snake', 'Giant Bird', 'Invisible', 'Bee', 'Stick', 'Cat', 'Car', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Galaxy', 'Bubble', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Wise King', 'Wise Queen', 'Sir', 'Fred', 'Very Invisible', 'Taco', 'Slender', '', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat'];
-        public static const FEET_NAMES_ARRAY:Array = ['Classic', 'Heel', 'Loafer', 'Cleat', 'Magnet', 'Tiny', 'Sandal', 'Bare', 'Nice', 'Giant Bird', 'Invisible', 'Stick', 'Cat', 'Tire', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Galaxy', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Bubble', 'Taco', 'Slender', '', '', '', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat'];
+        public static const HAT_NAMES_ARRAY:Array = ['', 'EXP', 'Kongregate', 'Propeller', 'Cowboy', 'Crown', 'Santa', 'Party', 'Top', 'Jump Start', 'Moon', 'Thief', 'Jigg', 'Artifact', 'Jellyfish'];
+        public static const HEAD_NAMES_ARRAY:Array = ['Classic', 'Tired', 'Smiling', 'Flower', 'Lady', 'Goof', 'Downer', 'Balloon', 'Worm', 'Unicorn', 'Giant Bird', 'Cool Sun', 'Candy', 'Invisible', 'Helmet', 'Basketball', 'Stick', 'Cat', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Bubble', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Taco', 'Slender', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew'];
+        public static const BODY_NAMES_ARRAY:Array = ['Classic', 'Strap', 'Dress', 'Pec', 'Gut', 'Collar', 'Miss PR2', 'Belt', 'Snake', 'Giant Bird', 'Invisible', 'Bee', 'Stick', 'Cat', 'Car', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Galaxy', 'Bubble', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Wise King', 'Wise Queen', 'Sir', 'Fred', 'Very Invisible', 'Taco', 'Slender', '', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew'];
+        public static const FEET_NAMES_ARRAY:Array = ['Classic', 'Heel', 'Loafer', 'Cleat', 'Magnet', 'Tiny', 'Sandal', 'Bare', 'Nice', 'Giant Bird', 'Invisible', 'Stick', 'Cat', 'Tire', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Galaxy', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Bubble', 'Taco', 'Slender', '', '', '', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew'];
 
 
         // handle type

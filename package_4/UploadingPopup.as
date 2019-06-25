@@ -71,12 +71,14 @@ package package_4
 
         override public function remove()
         {
-            this.loader.removeEventListener(ProgressEvent.PROGRESS, this.onProgress);
-            this.loader.removeEventListener(Event.COMPLETE, this.onComplete);
-            this.loader.removeEventListener(SuperLoader.d, this.parsedDataHandler);
-            this.loader.removeEventListener(SuperLoader.e, this.clickClose);
-            this.loader.remove();
-            this.loader = null;
+            if (this.loader != null) {
+                this.loader.removeEventListener(ProgressEvent.PROGRESS, this.onProgress);
+                this.loader.removeEventListener(Event.COMPLETE, this.onComplete);
+                this.loader.removeEventListener(SuperLoader.d, this.parsedDataHandler);
+                this.loader.removeEventListener(SuperLoader.e, this.clickClose);
+                this.loader.remove();
+                this.loader = null;
+            }
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
             this.progressBar.remove();
             super.remove();
