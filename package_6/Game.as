@@ -338,6 +338,11 @@ package package_6
             }
         }
 
+        public function isDonePlaying() : Boolean
+        {
+            return this.var_370;
+        }
+
         override public function remove()
         {
             this.cm.defineCommand("createRemoteCharacter", null);

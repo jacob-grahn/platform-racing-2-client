@@ -2,7 +2,9 @@
 
 package package_6
 {
+    import package_4.ConfirmPopup;
     import page.Page;
+    import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
 
     public class QuitButton extends Page 
@@ -15,13 +17,24 @@ package package_6
         {
             this.game = g;
             addChild(this.m);
-            this.m.quit_bt.addEventListener(MouseEvent.CLICK, this.clickQuit);
+            this.m.quit_bt.addEventListener(KeyboardEvent.KEY_UP, this.invokeQuit);
+            this.m.quit_bt.addEventListener(MouseEvent.MOUSE_UP, this.invokeQuit);
         }
 
-        // method_414 = clickQuit
-        private function clickQuit(e:MouseEvent)
+        // method_414 = invokeQuit
+        private function invokeQuit(e:*)
         {
-            this.game.quitGame();
+            if (e is KeyboardEvent) {
+                if (e.keyCode === 32) {
+                    if (this.game.isDonePlaying() === false) {
+                        new ConfirmPopup(this.game.quitGame, 'Do you really want to quit the game?');
+                    } else {
+                        this.game.quitGame();
+                    }
+                }
+            } else {
+                this.game.quitGame();
+            }
         }
 
         // method_808 = startGlow
@@ -39,7 +52,8 @@ package package_6
         override public function remove()
         {
             this.game = null;
-            this.m.quit_bt.removeEventListener(MouseEvent.CLICK, this.clickQuit);
+            this.m.quit_bt.removeEventListener(MouseEvent.MOUSE_UP, this.invokeQuit);
+            this.m.quit_bt.removeEventListener(KeyboardEvent.KEY_UP, this.invokeQuit);
             super.remove();
         }
 

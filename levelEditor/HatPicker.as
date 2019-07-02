@@ -11,13 +11,13 @@ package levelEditor
 
         private var m:HatPickerGraphic;
         private var c:LocalCharacter;
-        private var var_538:int = 1;
-        private var var_620:int = 13;
-        private var var_75:int = 2;
+        private var min:int = 1; // var_538
+        private var max:int = 15; // var_620
+        private var pickedHat:int = 2; // var_75
 
-        public function HatPicker(_arg_1:LocalCharacter)
+        public function HatPicker(l:LocalCharacter)
         {
-            this.c = _arg_1;
+            this.c = l;
             this.m = new HatPickerGraphic();
             this.m.var_173.var_333.addEventListener(MouseEvent.CLICK, this.method_372, false, 0, true);
             this.m.var_173.var_381.addEventListener(MouseEvent.CLICK, this.method_214, false, 0, true);
@@ -27,31 +27,40 @@ package levelEditor
 
         private function method_372(_arg_1:MouseEvent)
         {
-            this.var_75--;
-            if (this.var_75 < this.var_538) {
-                this.var_75 = this.var_620;
+            this.pickedHat--;
+            if (this.pickedHat === 14) {
+                this.pickedHat = 13;
+            }
+            if (this.pickedHat < this.min) {
+                this.pickedHat = this.max;
             }
             this.display();
         }
 
         private function method_214(_arg_1:MouseEvent)
         {
-            this.var_75++;
-            if (this.var_75 > this.var_620) {
-                this.var_75 = this.var_538;
+            this.pickedHat++;
+            if (this.pickedHat === 14) {
+                this.pickedHat = 15;
+            }
+            if (this.pickedHat > this.max) {
+                this.pickedHat = this.min;
             }
             this.display();
         }
 
+        // _loc1 = colorMC
+        // _loc2 = colorMC2
+        // _loc3 = a
         private function display()
         {
-            this.m.hat.gotoAndStop(this.var_75);
-            this.m.hat.colorMC.gotoAndStop(this.var_75);
+            this.m.hat.gotoAndStop(this.pickedHat);
+            this.m.hat.colorMC.gotoAndStop(this.pickedHat);
             this.m.hat.colorMC2.visible = false;
-            var _local_1:int = int(Math.round((Math.random() * 0xFFFFFF)));
-            var _local_2:int = -1;
-            var _local_3:Array = new Array(this.var_75, _local_1, _local_2);
-            this.c.setHats(_local_3);
+            var colorMC:int = int(Math.round((Math.random() * 0xFFFFFF)));
+            var colorMC2:int = -1;
+            var a:Array = new Array(this.pickedHat, colorMC, colorMC2);
+            this.c.setHats(a);
         }
 
         public function remove()

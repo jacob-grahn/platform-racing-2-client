@@ -6,23 +6,23 @@
 package package_6
 {
 	import background.class_10;
-    import page.GamePage;
-    import package_8.LocalCharacter;
-    import flash.display.Sprite;
-    import background.DrawableBackground;
-    import background.Map;
     import background.class_87;
     import background.class_75;
+    import background.DrawableBackground;
+    import background.Map;
     import blocks.FinishBlock;
-    import flash.events.Event;
     import data.CommandHandler;
     import data.Settings;
-    import flash.geom.Point;
-    import package_8.Character;
-    import package_9.Egg;
-    import sounds.SoundEffects;
-    import flash.net.URLVariables;
+    import flash.display.Sprite;
     import flash.display.StageQuality;
+    import flash.events.Event;
+    import flash.geom.Point;
+    import flash.net.URLVariables;
+    import package_8.Character;
+    import package_8.LocalCharacter;
+    import package_9.Egg;
+    import page.GamePage;
+    import sounds.SoundEffects;
 
     public class Course extends GamePage 
     {
