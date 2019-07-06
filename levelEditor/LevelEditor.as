@@ -358,6 +358,7 @@ package levelEditor
 
         override public function setGameMode(gMode:String)
         {
+            gMode = gMode === 'eggs' ? 'egg' : gMode;
             this.menu.settings.modeButton.setValue(gMode);
             super.setGameMode(gMode);
         }
@@ -388,7 +389,7 @@ package levelEditor
             vars.max_time = maxTime;
             vars.items = var_86.join("`");
             vars.hasPass = this.hasPass;
-            vars.gameMode = gameMode;
+            vars.gameMode = gameMode === 'eggs' ? 'egg' : gameMode;
             vars.cowboyChance = cowboyChance;
             if (this.pass != null && this.pass.replace(/\*/g, "").length > 0) {
                 vars.passHash = class_28.hash(this.pass + Env.LEVEL_PASS_SALT);

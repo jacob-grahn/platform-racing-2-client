@@ -146,9 +146,9 @@ package page
             this.song = _arg_1;
         }
 
-        public function setGameMode(_arg_1:String)
+        public function setGameMode(mode:String)
         {
-            this.gameMode = _arg_1;
+            this.gameMode = mode === 'eggs' ? 'egg' : mode;
         }
 
         public function setCowboyChance(_arg_1:String)

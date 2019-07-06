@@ -165,10 +165,11 @@ package package_6
             return (this.hearts.method_758());
         }
 
-        override public function setGameMode(_arg_1:String)
+        override public function setGameMode(mode:String)
         {
-            super.setGameMode(_arg_1);
-            if (_arg_1 == "deathmatch") {
+            mode = mode === 'eggs' ? 'egg' : mode;
+            super.setGameMode(mode);
+            if (mode == "deathmatch") {
                 this.setLife(3);
             }
         }
