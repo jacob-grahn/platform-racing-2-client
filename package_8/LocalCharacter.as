@@ -942,10 +942,10 @@ package package_8
             if (hadMoon && !var_4.getBool(MOON)) {
                 this.resetGravity();
             }
-            if (hadCB && !var_4.getBool(COWBOY)) {
+            if (hadCB && !var_4.getBool(COWBOY) && this.curItem != Items.speedBurst) {
                 this.resetStats();
             }
-            if (hadSanta && !var_4.getBool(SANTA)) {
+            if (hadSanta && !var_4.getBool(SANTA) && this.curItem != Items.speedBurst) {
                 this.resetStats();
             }
             if (hadArti && !var_4.getBool(ARTIFACT)) {
