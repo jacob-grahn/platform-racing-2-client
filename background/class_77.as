@@ -5,6 +5,7 @@
 
 package background
 {
+    import package_4.MessagePopup;
     import flash.display.Sprite;
     import page.GamePage;
     import levelEditor.PlaceableObject;
@@ -15,7 +16,7 @@ package background
 
         public var var_84:Sprite;
         public var var_10:Array = new Array();
-        private var var_356:int = 20000;
+        private var blockLimit:int = 50000; // var_356
         protected var var_0379:int = 0; // class_10
         protected var var_367:int = 1;
 
@@ -27,9 +28,11 @@ package background
 
         public function addObject(_arg_1:int, _arg_2:int, _arg_3:int)
         {
-            if (this.var_10.length < this.var_356) {
+            if (this.var_10.length < this.blockLimit) {
                 this.attachObject(_arg_1, _arg_2, _arg_3);
                 this.method_821(_arg_1, _arg_2, _arg_3);
+            } else {
+                new MessagePopup("Error: Block limit reached.");
             }
         }
 
@@ -43,7 +46,7 @@ package background
         public function method_129(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:Boolean=false):TextObject
         {
             var _local_6:TextObject;
-            if (this.var_10.length < this.var_356) {
+            if (this.var_10.length < this.blockLimit) {
                 _local_6 = new TextObject(_arg_1, _arg_2, _arg_3, _arg_4);
                 this.var_84.addChild(_local_6);
                 this.var_10.push(_local_6);
@@ -142,7 +145,7 @@ package background
             var _local_7:Number;
             var _local_8:Number;
             var _local_9:TextObject;
-            if (this.var_10.length < this.var_356) {
+            if (this.var_10.length < this.blockLimit) {
                 _local_2 = _arg_1.split(";");
                 _local_3 = String(_local_2[0]);
                 _local_4 = int(_local_2[1]);
@@ -162,7 +165,7 @@ package background
             var _local_3:int;
             var _local_4:Number;
             var _local_5:Number;
-            if (this.var_10.length < this.var_356) {
+            if (this.var_10.length < this.blockLimit) {
                 var arr:Array = s.split(";");
                 _local_3 = int(arr[0]);
                 _local_4 = Number(arr[1]);
