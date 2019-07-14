@@ -1,7 +1,8 @@
-package package_18.PartInfo
+﻿package package_18.PartInfo
 {
     import data.class_28;
     import data.class_153;
+    import data.HTMLNameMaker;
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
     import package_4.Popup;
@@ -9,23 +10,79 @@ package package_18.PartInfo
 
     public class PartPopup extends Popup 
     {
+        public static var instance:PartPopup;
 
         private var m:PartPopupGraphic = new PartPopupGraphic();
         private var listing:Object;
         private var hasEE:Boolean = false;
 		private var target:MovieClip;
         private var epicFlash:class_153 = new class_153();
+        private var nameMaker:HTMLNameMaker = new HTMLNameMaker();
 
         public function PartPopup(l:Object, ee:Boolean = false)
         {
+            if (PartPopup.instance != null) {
+                PartPopup.instance.startFadeOut();
+            }
+            PartPopup.instance = this;
             this.listing = l;
             this.hasEE = ee;
             this.m.titleBox.text = '-- ' + this.listing.name + ' ' + class_28.ucfirst(this.listing.type) + ' --';
             this.m.descBox.htmlText = this.listing.desc;
             this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain;
+            this.dynamicObtain();
             this.showPart();
             addChild(this.m);
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose); // method_149
+        }
+
+        private function dynamicObtain()
+        {
+            var name:String = this.listing.name;
+            var isHat:Boolean = this.listing.type.toLowerCase() === 'hat';
+
+            // prop
+            if (name == 'Propeller' && isHat) {
+                var propName1:String = this.nameMaker.makeName('Jiggmin', 3);
+                var propName2:String = this.nameMaker.makeName('Pounce', 1);
+                var topObtain:String = this.listing.obtain.replace('Jiggmin', propName1);
+                topObtain = topObtain.replace('Pounce', propName2);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + topObtain;
+            } // top
+            else if (name == 'Top' && isHat) {
+                var topName:String = this.nameMaker.makeName('-Shadowfax-', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('-Shadowfax-', topName);
+            } // moon
+            else if (name == 'Moon' && isHat) {
+                var moonName:String = this.nameMaker.makeName('cooldude90', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('cooldude90', moonName);
+            } // thief
+            else if (name == 'Thief' && isHat) {
+                var thiefName:String = this.nameMaker.makeName('Divinity', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('Divinity', thiefName);
+            } // jigg
+            else if (name == 'Jigg' && isHat) {
+                var jiggName:String = this.nameMaker.makeName('ZePHiR', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('ZePHiR', jiggName);
+            } // jellyfish
+            else if (name == 'Jellyfish' && isHat) {
+                var jfName:String = this.nameMaker.makeName('Sothal', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('Sothal', jfName);
+            } // slender
+            else if (name == 'Slender' && !isHat) {
+                var slenderName:String = this.nameMaker.makeName('-changelings-', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('-changelings-', slenderName);
+            } // sea
+            else if (name == 'Sea' && !isHat) {
+                var seaName:String = this.nameMaker.makeName('Rammjet', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('Rammjet', seaName);
+            } // none of the above
+            else {
+                return;
+            }
+
+            // listen for name clicks
+            this.nameMaker.listenForLink(this.m.obtainBox);
         }
 
         private function showPart()
@@ -103,9 +160,13 @@ package package_18.PartInfo
 
         override public function remove()
         {
+            if (PartPopup.instance === this) {
+                PartPopup.instance = null;
+            }
             removeChild(this.m);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
             this.m = null;
+            this.nameMaker.remove();
             super.remove();
         }
 

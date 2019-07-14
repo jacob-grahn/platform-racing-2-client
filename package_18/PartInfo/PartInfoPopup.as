@@ -12,6 +12,7 @@ package package_18.PartInfo
 
     public class PartInfoPopup extends Popup 
     {
+        public static var instance:PartInfoPopup;
 
         private var m:StorePopupGraphic = new StorePopupGraphic();
         private var mode:String;
@@ -29,6 +30,10 @@ package package_18.PartInfo
 
         public function PartInfoPopup(type:String, parts:Array, epics:Array)
         {
+            if (PartInfoPopup.instance != null) {
+                PartInfoPopup.instance.startFadeOut();
+            }
+            PartInfoPopup.instance = this;
             this.mode = type;
             this.ownedParts = parts;
             this.ownedEpics = epics;
@@ -112,6 +117,9 @@ package package_18.PartInfo
 
         override public function remove()
         {
+            if (PartInfoPopup.instance === this) {
+                PartInfoPopup.instance = null;
+            }
             removeChild(this.m);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.onClose);
             this.m = null;

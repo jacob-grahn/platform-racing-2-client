@@ -60,10 +60,10 @@ package data
             return '<u><font color="#0000FF"><a href="event:guild`' + id + '">' + name + "</a></font></u>";
         }
 
-        public function listenForLink(e:*)
+        public function listenForLink(textbox:*)
         {
-            this.array.push(e);
-            e.addEventListener(TextEvent.LINK, this.clickLink, false, 0, true);
+            this.array.push(textbox);
+            textbox.addEventListener(TextEvent.LINK, this.clickLink, false, 0, true);
         }
 
         // _loc2 = arr

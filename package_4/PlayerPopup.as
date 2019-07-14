@@ -10,6 +10,8 @@ package package_4
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import package_8.Character;
+    import package_18.PartInfo.PartInfoPopup;
+    import package_18.PartInfo.PartPopup;
     import flash.events.Event;
     import lobby.LobbyRight;
     import flash.net.URLRequestMethod;
@@ -209,6 +211,12 @@ package package_4
 			if (GuildPopup.instance != null) {
 			    GuildPopup.instance.startFadeOut();
 			}
+            if (PartPopup.instance != null) {
+                PartPopup.instance.startFadeOut();
+            }
+            if (PartInfoPopup.instance != null) {
+                PartInfoPopup.instance.startFadeOut();
+            }
             startFadeOut();
         }
 

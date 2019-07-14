@@ -349,8 +349,8 @@ package
         public static const OBTAIN_HAT_JUMP_START:String = 'Won randomly during a happy hour in races with 2-4 players.';
         public static const OBTAIN_HAT_MOON:String = 'Finish Redemption by cooldude90.';
         public static const OBTAIN_HAT_THIEF:String = 'Finish Apocalypse by Divinity.';
-        public static const OBTAIN_HAT_JIGG:String = 'Ask Fred; maybe he knows. :)';
-        public static const OBTAIN_HAT_JELLYFISH:String = 'Currently unobtainable.';
+        public static const OBTAIN_HAT_JIGG:String = 'Finish Buto (EXACT) by ZePHiR after finding the hidden Jigg Hat.';
+        public static const OBTAIN_HAT_JELLYFISH:String = 'Finish Deeper by Sothal.';
 
         public static const OBTAIN_HEAD_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_HEAD_TIRED:String = 'It\'s there when you create your account!';
@@ -393,7 +393,7 @@ package
         public static const OBTAIN_HEAD_BUNNY:String = 'Log into your PR2 account during Easter Weekend.';
         public static const OBTAIN_HEAD_GECKO:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_HEAD_BAT:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_HEAD_SEA:String = 'We got the spirit, you got to hear it, <i>under the sea!</i>';
+        public static const OBTAIN_HEAD_SEA:String = 'Has a 1 in 3 chance of appearing on ~Under the sea~ by Rammjet.';
         public static const OBTAIN_HEAD_BREW:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
 
         public static const OBTAIN_BODY_CLASSIC:String = 'It\'s there when you create your account!';
@@ -436,7 +436,7 @@ package
         public static const OBTAIN_BODY_BUNNY:String = 'Log into your PR2 account during Easter Weekend.';
         public static const OBTAIN_BODY_GECKO:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_BODY_BAT:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_BODY_SEA:String = 'We got the spirit, you got to hear it, <i>under the sea!</i>';
+        public static const OBTAIN_BODY_SEA:String = 'Has a 1 in 3 chance of appearing on ~Under the sea~ by Rammjet.';
         public static const OBTAIN_BODY_BREW:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
 
 
@@ -478,7 +478,7 @@ package
         public static const OBTAIN_FEET_BUNNY:String = 'Log into your PR2 account on Easter Weekend.';
         public static const OBTAIN_FEET_GECKO:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_FEET_BAT:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_FEET_SEA:String = 'We got the spirit, you got to hear it, <i>under the sea!</i>';
+        public static const OBTAIN_FEET_SEA:String = 'Has a 1 in 3 chance of appearing on ~Under the sea~ by Rammjet.';
         public static const OBTAIN_FEET_BREW:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
 
 
