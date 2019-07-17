@@ -100,7 +100,7 @@ package menu
                 var i:int = 0;
                 while (i < boxLength) {
                     boxItem = box.getItemAt(i);
-                    if (boxItem.server.guild_id != 0 && boxItem.server.guild_id == Main.guild) {
+                    if (boxItem.server.guild_id != 0 && boxItem.server.guild_id == Main.guild && boxItem.server.status == "open") {
                         box.selectedItem = boxItem;
                         complete = true;
                         box.validateNow();
@@ -129,35 +129,33 @@ package menu
         private static function sortServers(s1:Object, s2:Object):int
         {
             if (Main.guild != 0) {
-                if (s1.guild_id == Main.guild) {
+                if (s1.guild_id == Main.guild && s1.status !== 'down') {
                     return -1;
                 }
                 if (s2.guild_id == Main.guild) {
                     return 1;
                 }
             }
-            var ret:int;
             if (s1.guild_id == 0 && s2.guild_id != 0) {
-                ret = -1;
+                return -1; // if it's a regular vs private server, favor the first
             }
-            if (s2.guild_id != 1 && s2.guild_id == 0) {
-                ret = 1;
+            if (s1.guild_id != 0 && s2.guild_id == 0) {
+                return 1; // if it's a private vs regular server, favor the second
             }
-            if (s1.guild_id == 0 && s2.guild_id == 0) {
-                if (int(s1.port) < int(s2.port)) {
-                    ret = -1;
+            if (s1.guild_id == 0 && s2.guild_id == 0) { // if both the servers are public
+                if (int(s1.port) < int(s2.port)) { // put the lowest port number first
+                    return -1;
                 } else {
-                    ret = 1;
+                    return 1;
                 }
             }
-            if (s1.guild_id != 0 && s2.guild_id != 0) {
-                if (int(s1.population) > int(s2.population)) {
-                    ret = -1;
+            if (s1.guild_id != 0 && s2.guild_id != 0) { // if both the servers are private
+                if (int(s1.population) > int(s2.population)) { // put the highest population first
+                    return -1;
                 } else {
-                    ret = 1;
+                    return 1;
                 }
             }
-            return ret;
         }
 
         // _loc3 = dropdownItem
