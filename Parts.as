@@ -375,7 +375,7 @@ package
         public static const OBTAIN_HEAD_ASTRONAUT:String = 'Won in Campaign #3 Level #1 with 4 players.';
         public static const OBTAIN_HEAD_ALIEN:String = 'Won in Campaign #3 Level #4 with 4 players.';
         public static const OBTAIN_HEAD_DINO:String = 'Won in Campaign #4 Level #3 with 4 players.';
-        public static const OBTAIN_HEAD_ARMOR:String = 'Disclaimer: This won\'t make you a knight.';
+        public static const OBTAIN_HEAD_ARMOR:String = 'Won randomly in races with 2-4 players.';
         public static const OBTAIN_HEAD_FAIRY:String = 'Won in Campaign #4 Level #6 with 4 players.';
         public static const OBTAIN_HEAD_GINGERBREAD:String = 'Won randomly in races with 2-4 players.';
         public static const OBTAIN_HEAD_BUBBLE:String = 'Find the artifact first. <u><font color="#0000FF"><a href="https://jiggmin2.com/forums/showthread.php?tid=1677" target="_blank">Here\'s some more information!</a></font></u>';
