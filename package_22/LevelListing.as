@@ -16,6 +16,7 @@ package package_22
     import flash.utils.setTimeout;
     import page.Page;
     import ui.PageNavigation;
+    import data.CommandHandler;
 
     public class LevelListing extends Page
     {
@@ -31,6 +32,7 @@ package package_22
         protected var pageNum:int = 1; // var_195
         protected var mode:String = "best";
         protected var superLoader:SuperLoader;
+        private var cm:CommandHandler = CommandHandler.commandHandler;
 
         public function LevelListing()
         {
@@ -46,6 +48,9 @@ package package_22
             addChild(this.pageNavigation);
             this.superLoader.addEventListener(Event.COMPLETE, this.loadHandler);
             Main.socket.write("set_right_room`none");
+            LevelListing.levelListing = this;
+            this.cm.defineCommand('addPageHighlight', this.addPageHighlight);
+            this.cm.defineCommand('removePageHighlight', this.removePageHighlight);
         }
 
         // _loc1 = existingPageNum
@@ -126,12 +131,36 @@ package package_22
             this.loadingGraphic.visible = true;
         }
 
+        public function getPageNum()
+        {
+            return this.pageNum;
+        }
+
         public function setPageNum(n:int)
         {
             this.pageNum = n;
             Memory.memory["coursePageNum" + this.mode] = this.pageNum;
             this.removeLevels();
             this.requestCourses();
+        }
+
+        public function addPageHighlight(a:Array)
+        {
+            if (this.mode !== 'search') {
+                this.pageNavigation.addPageHighlight(a[0]);
+            }
+        }
+
+        public function removePageHighlight(a:Array)
+        {
+            if (this.mode !== 'search') {
+                this.pageNavigation.removePageHighlight(a[0]);
+            }
+        }
+
+        public function refreshHighlights()
+        {
+            Main.socket.write('refresh_highlights`');
         }
 
         // _loc1 = levelItem
