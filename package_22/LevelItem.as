@@ -18,6 +18,7 @@ package package_22
     import package_4.ConfirmPopup;
     import flash.net.URLRequestMethod;
     import package_4.UploadingPopup;
+    import ui.PageNavigation;
 
     public class LevelItem extends Removable 
     {
@@ -208,7 +209,8 @@ package package_22
         // method_618 = sendFillSlot
         public function sendFillSlot(slotNum:int)
         {
-            Main.socket.write("fill_slot`" + this.courseID + "_" + this.version + "`" + slotNum);
+            var pageNum:int = LevelListing.levelListing.getPageNum();
+            Main.socket.write("fill_slot`" + this.courseID + "_" + this.version + "`" + slotNum + "`" + pageNum);
         }
 
         // method_180 = sendClearSlot
@@ -267,7 +269,7 @@ package package_22
             }
         }
 
-        private function overInfoHandler(_arg_1:MouseEvent)
+        private function overInfoHandler(e:MouseEvent)
         {
             var popupTitle:String = "-- " + class_28.escapeString(this.title) + " --";
             var byText:String = "By: " + class_28.escapeString(this.userName) + "<br/>";
@@ -277,13 +279,13 @@ package package_22
             var ratingText:String = "Rating: " + this.rating;
             var noteText:String = "";
             if (class_28.escapeString(this.note) != "") {
-                noteText = "<br/>-----<br/>" + class_28.escapeString(this.note);
+                noteText = "<br/>-----<br/>" + class_28.escapeString(this.note, true);
             }
             var levelInfoText:String = byText + versionText + minRankText + playsText + ratingText + noteText;
             this.infoPopup = new class_204(popupTitle, levelInfoText, this.m.infoButton);
         }
 
-        private function outInfoHandler(_arg_1:MouseEvent)
+        private function outInfoHandler(e:MouseEvent)
         {
             this.infoPopup.remove();
             this.infoPopup = null;

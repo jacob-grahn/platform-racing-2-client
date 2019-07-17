@@ -13,7 +13,7 @@ package ui
 
         private var target:*;
         private var navButtonArray:Array = new Array(); // var_45
-        private var selected:int; // var_167
+        public var selected:int; // var_167
         private var count:int; // var_584
         private var w:Number;
         private var mode:String;
@@ -113,7 +113,7 @@ package ui
             var i:int = 0;
             while (i < this.navButtonArray.length) {
                 var m:PageNumberGraphic = this.navButtonArray[i];
-                m.textBox.removeEventListener(TextEvent.LINK, this.method_273);
+                m.textBox.removeEventListener(TextEvent.LINK, this.clickPage);
                 removeChild(m);
                 m = null;
                 i++;
@@ -129,7 +129,7 @@ package ui
             m.textBox.autoSize = "left";
             if (clickable) {
                 m.textBox.htmlText = "<a href='event:" + num + "'><font color='#325638'><u>" + class_28.escapeString(title) + "</u></font></a>";
-                m.textBox.addEventListener(TextEvent.LINK, this.method_273, false, 0, true);
+                m.textBox.addEventListener(TextEvent.LINK, this.clickPage, false, 0, true);
             } else {
                 m.textBox.text = title;
             }
@@ -137,7 +137,8 @@ package ui
             this.navButtonArray.push(m);
         }
 
-        private function method_273(e:TextEvent)
+        // method_273 = clickPage
+        private function clickPage(e:TextEvent)
         {
             this.setPageNum(int(e.text));
         }
@@ -147,6 +148,31 @@ package ui
             this.selected = i;
             this.draw();
             this.target.setPageNum(i);
+        }
+
+        public function addPageHighlight(i:int)
+        {
+            if ((this.mode != 'vertical' && this.mode != 'full') || i > this.count || i < 1 || this.selected === i) {
+                return; // for level pages only
+            }
+            if (this.navButtonArray[i - 1] != null) {
+                this.navButtonArray[i - 1].textBox.htmlText = "<a href='event:" + i + "'><font color='#FFFFFF'><u>" + i + "</u></font></a>";
+            }
+        }
+
+        public function removePageHighlight(i:int)
+        {
+            if ((this.mode != 'vertical' && this.mode != 'full') || i > this.count || i < 1 || this.selected === i) {
+                return; // for level pages only
+            }
+            var isSelected:Boolean = this.selected === i;
+            if (this.navButtonArray[i - 1] != null) {
+                if (isSelected) {
+                    this.navButtonArray[i - 1].textBox.text = i;
+                } else {
+                    this.navButtonArray[i - 1].textBox.htmlText = "<a href='event:" + i + "'><font color='#325638'><u>" + i + "</u></font></a>";
+                }
+            }
         }
 
         override public function remove()
