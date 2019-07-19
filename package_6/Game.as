@@ -23,10 +23,11 @@ package package_6
         private var chatBox:RaceChat; // chatBox = var_305
         private var cm:CommandHandler = CommandHandler.commandHandler;
         protected var drawingInfo:DrawingInfo; // var_125
-        private var prizePop:PrizePopup; // var_198
+        public var prize:Object;
+        //private var prizePop:PrizePopup; // var_198 REMOVED AFTER PrizePopup GOT A STATIC SELF REFERENCE
         private var luxPop:LuxPopup; // var_350
         private var levelHash:String = ""; // var_579
-        private var placeArtifact:PlaceArtifact; // var_436
+        private var specialEvent:SpecialEvent; // var_436, then placeArtifact, then SpecialEvent
         private var var_634:Array = new Array();
         private var var_370:Boolean = false;
         public var var_202:FinishedPage;
@@ -40,7 +41,7 @@ package package_6
             this.courseID = id;
             this.version = v;
             this.quitButton = new QuitButton(this);
-            this.placeArtifact = new PlaceArtifact(Main.stage);
+            this.specialEvent = new SpecialEvent(Main.stage, this);
             Egg.method_333(0);
         }
 
@@ -61,6 +62,7 @@ package package_6
             this.cm.defineCommand("setExpGain", this.setExpGain);
             this.cm.defineCommand("setLuxGain", this.setLuxGain);
             this.cm.defineCommand("setPrize", this.setPrize);
+            this.cm.defineCommand('cancelPrize', this.cancelPrize);
             this.cm.defineCommand("winPrize", this.winPrize);
             this.cm.defineCommand("cowboyMode", this.cowboyMode);
             this.cm.defineCommand("happyHour", this.happyHour);
@@ -73,8 +75,8 @@ package package_6
 
         override protected function onCountdownFinish(e:Event)
         {
-            if (this.prizePop != null) {
-                this.prizePop.startFadeOut();
+            if (PrizePopup.instance != null) {
+                PrizePopup.instance.startFadeOut();
             }
             super.onCountdownFinish(e);
         }
@@ -148,17 +150,23 @@ package package_6
         // _loc3 = prize
         public function setPrize(arr:Array)
         {
-            var prize:Object = JSON.parse(arr[0]);
-            this.prizePop = new PrizePopup(prize.type, prize.id, prize.name, prize.desc, prize.universal, false);
+            this.prize = JSON.parse(arr[0]);
+            new PrizePopup(this.prize.type, this.prize.id, this.prize.name, this.prize.desc, this.prize.universal, false);
+        }
+
+        public function cancelPrize(arr:Array)
+        {
+            this.prize = null;
+            new PrizePopup('cancel', 0, 'Prize Cancelled', arr[0]);
         }
 
         // _loc3 = prize
         public function winPrize(arr:Array)
         {
-            var prize:Object = JSON.parse(arr[0]);
-            this.prizePop = new PrizePopup(prize.type, prize.id, prize.name, prize.desc, prize.universal, true);
-            if (Main.instance.kongAPI != null && prize.type == "hat") {
-                Main.instance.kongAPI.stats.submit(prize.name, 1);
+            this.prize = JSON.parse(arr[0]);
+            new PrizePopup(this.prize.type, this.prize.id, this.prize.name, this.prize.desc, this.prize.universal, true);
+            if (Main.instance.kongAPI != null && this.prize.type == "hat") {
+                Main.instance.kongAPI.stats.submit(this.prize.name, 1);
             }
         }
 
@@ -351,6 +359,7 @@ package package_6
             this.cm.defineCommand("setExpGain", null);
             this.cm.defineCommand("setLuxGain", null);
             this.cm.defineCommand("setPrize", null);
+            this.cm.defineCommand('cancelPrize', null);
             this.cm.defineCommand("winPrize", null);
             this.cm.defineCommand("cowboyMode", null);
             this.cm.defineCommand("setEggSeed", null);
@@ -367,9 +376,9 @@ package package_6
                 this.superLoader.remove();
                 this.superLoader = null;
             }
-            if (this.prizePop != null) {
-                this.prizePop.remove();
-                this.prizePop = null;
+            this.prize = null;
+            if (PrizePopup.instance !== null) {
+                PrizePopup.instance.startFadeOut();
             }
             if (this.luxPop != null) {
                 this.luxPop.remove();
@@ -377,8 +386,8 @@ package package_6
             }
             this.quitButton.remove();
             this.chatBox.remove();
-            this.placeArtifact.remove();
-            this.placeArtifact = null;
+            this.specialEvent.remove();
+            this.specialEvent = null;
             super.remove();
         }
 

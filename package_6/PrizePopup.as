@@ -14,6 +14,7 @@ package package_6
 
     public class PrizePopup extends Popup 
     {
+        public static var instance:PrizePopup;
 
         private var m:PrizePopupGraphic = new PrizePopupGraphic();
         private var target:MovieClip;
@@ -21,6 +22,9 @@ package package_6
 
         public function PrizePopup(type:String, id:int, prizeName:String, desc:String = "", universal:Boolean = false, finished:Boolean = false)
         {
+            if (PrizePopup.instance !== null) {
+                PrizePopup.instance.remove();
+            }
             super(false);
             this.m.exp.visible = false;
             this.m.hat.visible = false;
@@ -29,7 +33,7 @@ package package_6
             this.m.foot.visible = false;
             this.m.flavorBg.visible = false;
             this.m.flavor.visible = false;
-            if (desc != "" && type != "exp") {
+            if (desc != "" && type != "exp" && type != 'cancel') {
                 this.m.flavorBg.visible = true;
                 this.m.flavor.visible = true;
                 this.m.flavor.text = desc;
@@ -62,13 +66,23 @@ package package_6
                     this.target.textBox.text = 'You already have this prize, so here are ' + class_28.formatNumber(id) + ' experience points instead!';
                 }
             }
+            if (type == 'cancel') {
+                this.m.bg.y = -120;
+                this.m.bg.height = 150;
+                this.m.titleBox.y = -105;
+                this.m.textBox.visible = false;
+                this.m.close_bt.y = -10;
+                this.target = this.m.exp;
+                this.target.y = -80;
+                this.target.textBox.text = desc + ' cancelled the prize for finishing this race.';
+            }
             if (type == "eHat" || type == "eHead" || type == "eBody" || type == "eFeet") {
                 this.activateEpicAnimation();
-            } else if (type != "exp") {
+            } else if (type != "exp" && type != 'cancel') {
                 this.target.colorMC2.visible = false;
             }
             this.target.visible = true;
-            if (type != "exp") {
+            if (type != "exp" && type != 'cancel') {
                 this.target.gotoAndStop(id);
                 this.target.colorMC.gotoAndStop(id);
                 this.target.colorMC2.gotoAndStop(id);
@@ -86,9 +100,10 @@ package package_6
                     this.m.textBox.text = "The winner of this race will earn " + aOrAn + ":";
                 }
             }
-            this.m.titleBox.text = "--- " + prizeName + "! ---";
+            this.m.titleBox.text = type === 'cancel' ? '-- ' + prizeName + ' --' : "--- " + prizeName + "! ---";
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
             addChild(this.m);
+            PrizePopup.instance = this;
         }
 
         // method_714 = activateEpicAnimation
@@ -107,6 +122,7 @@ package package_6
 
         override public function remove()
         {
+            PrizePopup.instance = null;
             if (this.var_207 != null) {
                 this.var_207.remove();
                 this.var_207 = null;

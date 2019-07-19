@@ -33,8 +33,6 @@ package menu
 
         public function LoginPage()
         {
-            Main.isTempMod = false;
-            Main.isTrialMod = false;
             addChild(this.m);
             this.addToMenu(new LoginPageMenuButton("Log In", this.clickLogIn));
             this.addToMenu(new LoginPageMenuButton("Play as Guest", this.clickGuest));

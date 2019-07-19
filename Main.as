@@ -50,6 +50,7 @@ package
         public static var userPass:String = ""; // var_169
         public static var remember:Boolean = false;
         public static var group:int = 0;
+        public static var isSpecialUser:Boolean = false;
         public static var isTempMod:Boolean = false; // var_270
         public static var isTrialMod:Boolean = false;
         public static var hasEmail:Boolean = false; // var_338
