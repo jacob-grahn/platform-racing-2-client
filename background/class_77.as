@@ -8,6 +8,7 @@ package background
     import package_4.MessagePopup;
     import flash.display.Sprite;
     import page.GamePage;
+    import levelEditor.LevelEditor;
     import levelEditor.PlaceableObject;
     import levelEditor.TextObject;
 
@@ -32,6 +33,7 @@ package background
                 this.attachObject(_arg_1, _arg_2, _arg_3);
                 this.method_821(_arg_1, _arg_2, _arg_3);
             } else {
+                LevelEditor.editor.menu.reset();
                 new MessagePopup("Error: Block limit reached.");
             }
         }
