@@ -15,6 +15,7 @@ package package_6
     import data.Settings;
     import flash.display.Sprite;
     import flash.display.StageQuality;
+    import flash.errors.Error;
     import flash.events.Event;
     import flash.geom.Point;
     import flash.net.URLVariables;
@@ -247,10 +248,13 @@ package package_6
             super.setVariables(v);
         }
 
-        override public function setMaxTime(_arg_1:String)
+        override public function setMaxTime(s:String)
         {
-            super.setMaxTime(_arg_1);
-            this.timer.setTime(Number(_arg_1));
+            if (s == 999 && this.updatedTime < 1358640000) {
+                s = '0'; // if before infinite time motley monday and time is 999, make infinite
+            }
+            super.setMaxTime(s);
+            this.timer.setTime(Number(s));
         }
 
         override public function setGravity(s:String)

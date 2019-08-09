@@ -29,6 +29,7 @@ package page
         public var scale:Number = 1;
         public var credits:Array = new Array();
         public var levelID:Number;
+        public var updatedTime:Number;
         public var title:String = "";
         public var note:String = "";
         public var song:String = "";
@@ -136,9 +137,13 @@ package page
             this.gravity = _arg_1;
         }
 
-        public function setMaxTime(_arg_1:String)
+        public function setMaxTime(s:String)
         {
-            this.maxTime = _arg_1;
+            var t:String = s;
+            if (t == 999 && this.updatedTime < 1358640000) {
+                t = '0';
+            }
+            this.maxTime = s;
         }
 
         public function setSong(_arg_1:String)
@@ -199,6 +204,7 @@ package page
 
         public function setVariables(vars:URLVariables)
         {
+            this.updatedTime = vars.time is Array ? vars.time[0] : vars.time;
             this.method_828(vars.credits);
             this.setSaveString(this.method_645(vars.data));
             this.title = vars.title;
