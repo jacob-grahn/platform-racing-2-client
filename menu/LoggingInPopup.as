@@ -5,19 +5,19 @@
 
 package menu
 {
-    import package_4.Popup;
-    import data.PR2Socket;
-    import data.Encryptor;
-    import flash.net.URLVariables;
-    import flash.net.URLRequest;
-    import flash.events.Event;
     import data.CommandHandler;
-    import flash.net.URLRequestMethod;
-    import flash.events.MouseEvent;
+    import data.Encryptor;
+    import data.PR2Socket;
     import data.Settings;
     import data.UnreadNotif;
-    import package_18.class_211;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.net.URLRequest;
+    import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
     import lobby.Lobby;
+    import package_18.class_211;
+    import package_4.Popup;
 
     public class LoggingInPopup extends Popup 
     {
@@ -107,10 +107,28 @@ package menu
             this.maybeSwitchToLobby();
         }
 
+        private function maybeClearUserData()
+        {
+            if (Main.remember === false && Main.loggedInAs !== "") {
+                Main.loggedInAs = "";
+                Main.group = 0;
+                Main.userId = 0;
+                Main.hasEmail = false;
+                Main.hasAnt = false;
+                Main.token = "";
+                Main.guild = 0;
+                Main.guildOwner = 0;
+                Main.guildName = "";
+                Main.emblem = "";
+            }
+        }
+
         // method_254 = onError
         private function onError(e:Event)
         {
             startFadeOut();
+            Main.socket.remove();
+            this.maybeClearUserData();
         }
 
         // method_456 = maybeSwitchToLobby
