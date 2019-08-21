@@ -5,18 +5,18 @@
 
 package package_22
 {
-    import data.CommandHandler;
-    import data.HTMLNameMaker;
-    import package_4.class_204;
-    import flash.events.MouseEvent;
-    import data.class_33;
-    import flash.net.URLRequest;
     import data.class_28;
-    import flash.events.Event;
+    import data.class_33;
+    import data.CommandHandler;
     import data.Encryptor;
-    import flash.net.URLVariables;
-    import package_4.ConfirmPopup;
+    import data.HTMLNameMaker;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
+    import package_4.class_204;
+    import package_4.ConfirmPopup;
     import package_4.UploadingPopup;
     import ui.PageNavigation;
 
@@ -41,13 +41,14 @@ package package_22
         private var group:Number;
         private var pass:Boolean;
         private var type:String;
+        private var lastUpdated:Date;
         private var maxSlots:Number = 4; // var_590
         private var superLoader:SuperLoader; // var_80
         private var uploading:UploadingPopup;
 
         // _loc12 = htmlName
         // _loc13 = myRank
-        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:Number, hasPass:Boolean, gMode:String)
+        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:Number, hasPass:Boolean, gMode:String, time:int)
         {
             this.courseID = id;
             this.version = v;
@@ -60,6 +61,7 @@ package package_22
             this.group = uGroup;
             this.pass = hasPass;
             this.type = gMode;
+            this.lastUpdated = new Date(time * 1000);
             this.minRank = class_74.numLimit(this.minRank, 0, 99);
             var htmlName:String = this.htmlNameMaker.makeName(uName, uGroup);
             this.m.titleBox.text = this.title;
@@ -276,12 +278,13 @@ package package_22
             var versionText:String = "Version: " + this.version + "<br/>";
             var minRankText:String = "Min Rank: " + this.minRank + "<br/>";
             var playsText:String = "Plays: " + this.playCount + "<br/>";
-            var ratingText:String = "Rating: " + this.rating;
+            var ratingText:String = "Rating: " + this.rating + "<br/>";
+            var updatedText:String = "Updated: "  + this.lastUpdated.date + '/' + class_28.getMonthStr(this.lastUpdated.month) + '/' + this.lastUpdated.fullYear;
             var noteText:String = "";
             if (class_28.escapeString(this.note) != "") {
                 noteText = "<br/>-----<br/>" + class_28.escapeString(this.note, true);
             }
-            var levelInfoText:String = byText + versionText + minRankText + playsText + ratingText + noteText;
+            var levelInfoText:String = byText + versionText + minRankText + playsText + ratingText + updatedText + noteText;
             this.infoPopup = new class_204(popupTitle, levelInfoText, this.m.infoButton);
         }
 

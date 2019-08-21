@@ -87,7 +87,7 @@ package package_22
                     if ((spriteHeight + (levelOnPage * 112)) > 224) {
                         break; // prevent "phantom" rows below the intended final row of levels on a page
                     }
-                    var levelItem:LevelItem = new LevelItem(vars["levelID" + i], vars["version" + i], vars["title" + i], vars["rating" + i], vars["playCount" + i], vars["minLevel" + i], vars["note" + i], vars["userName" + i], vars["group" + i], vars["pass" + i], vars["type" + i]);
+                    var levelItem:LevelItem = new LevelItem(vars["levelID" + i], vars["version" + i], vars["title" + i], vars["rating" + i], vars["playCount" + i], vars["minLevel" + i], vars["note" + i], vars["userName" + i], vars["group" + i], vars["pass" + i], vars["type" + i], vars["time" + i]);
                     levelItem.x = 2 + (levelInRow * 109);
                     levelItem.y = spriteHeight + (levelOnPage * 112);
                     this.levelArray.push(levelItem);
@@ -127,7 +127,7 @@ package package_22
 
         protected function requestCourses()
         {
-            this.superLoader.load(new URLRequest(Main.levelsURL.substr(0, 18) + "/files/lists/" + this.mode + "/" + this.pageNum));
+            this.superLoader.load(new URLRequest(Main.levelsURL.substr(0, -7) + "/files/lists/" + this.mode + "/" + this.pageNum));
             this.loadingGraphic.visible = true;
         }
 

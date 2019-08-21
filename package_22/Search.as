@@ -67,7 +67,7 @@ package package_22
                 vars.dir = this.m.dir_cb.selectedItem.data;
             }
             vars.page = pageNum;
-            var request:URLRequest = new URLRequest(Main.levelsURL.substr(0, 18) + "/search_levels.php");
+            var request:URLRequest = new URLRequest(Main.levelsURL.substr(0, -7) + "/search_levels.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
             superLoader.load(request);

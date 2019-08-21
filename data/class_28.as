@@ -92,9 +92,14 @@ package data
         {
             var date:Date = new Date();
             date.setTime(t);
+            var monthName:String = class_28.getMonthStr(date.month);
+            return monthName + " " + date.date;
+        }
+
+        public static function getMonthStr(m:int):String
+        {
             var monthArray:Array = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
-            var monthName:String = monthArray[date.getMonth()];
-            return monthName + " " + date.getDate();
+            return monthArray[m];
         }
 
         // _loc2 = c
