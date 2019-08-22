@@ -16,7 +16,7 @@ package menu
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
     import lobby.Lobby;
-    import package_18.class_211;
+    import package_18.Presets;
     import package_4.Popup;
 
     public class LoggingInPopup extends Popup 
@@ -136,7 +136,7 @@ package menu
         {
             if (this.socketOK && this.httpOK) {
                 Settings.init(Main.loggedInAs);
-                class_211.load();
+                Presets.load();
                 Main.pageHolder.changePage(new Lobby());
                 startFadeOut();
             }

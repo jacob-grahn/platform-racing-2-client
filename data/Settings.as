@@ -12,6 +12,7 @@ package data
     public class Settings 
     {
 
+        public static const PRESETS:String = "presets";
         public static const MUSIC_VOLUME:String = "musicLevel";
         public static const SOUND_VOLUME:String = "soundLevel";
         public static const DRAW_ART:String = "drawArt";
@@ -19,8 +20,9 @@ package data
         public static const ALTERNATE_CONTROLS:String = "altCtrl";
         public static const DEFAULT_ALT_CONTROLS:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
 
-        private static const SETTINGS:Array = [MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, FILTER_SWEARS, ALTERNATE_CONTROLS];
+        private static const SETTINGS:Array = [PRESETS, MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, FILTER_SWEARS, ALTERNATE_CONTROLS];
 
+        private static var presets:Object = null;
         public static var musicLevel:int = 100;
         public static var soundLevel:int = 100;
         private static var drawArt:Boolean = true;
@@ -28,7 +30,7 @@ package data
         private static var altCtrl:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
 
         private static var userName:String;
-        private static var dataArr:Object = new Object(); // var_179
+        private static var dataArr:Object; // var_179
 
         // _loc2 = cookie
         // _loc3 = setting
@@ -45,6 +47,12 @@ package data
                     dataArr[i] = Settings[i]; // if the setting wasn't found in a cookie, set it from recent or default setting
                 }
             }
+        }
+
+        public static function clear()
+        {
+            userName = null;
+            dataArr = null;
         }
 
         private static function handleControls(obj:Object)

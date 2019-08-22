@@ -1,11 +1,11 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_18.class_263
+// package_18.class_263 = package_18.Preset
 
 package package_18
 {
-    public class class_263 
+    public class Preset 
     {
 
         public var num:int = 1;
@@ -25,7 +25,7 @@ package package_18
         public var bodyColor2:int = -1;
         public var feetColor2:int = -1;
 
-        public function class_263(_arg_1:Object)
+        public function Preset(_arg_1:Object)
         {
             this.method_529(_arg_1);
         }
@@ -42,29 +42,30 @@ package package_18
             }
         }
 
-        public function method_558():Object
+        // _loc1 = data
+        // method_558 = getPresetData
+        public function getPresetData():Object
         {
-            var _local_1:Object = new Object();
-            _local_1.num = this.num;
-            _local_1.speed = this.speed;
-            _local_1.acceleration = this.acceleration;
-            _local_1.jumping = this.jumping;
-            _local_1.hat = this.hat;
-            _local_1.head = this.head;
-            _local_1.body = this.body;
-            _local_1.feet = this.feet;
-            _local_1.hatColor = this.hatColor;
-            _local_1.headColor = this.headColor;
-            _local_1.bodyColor = this.bodyColor;
-            _local_1.feetColor = this.feetColor;
-            _local_1.hatColor2 = this.hatColor2;
-            _local_1.headColor2 = this.headColor2;
-            _local_1.bodyColor2 = this.bodyColor2;
-            _local_1.feetColor2 = this.feetColor2;
-            return (_local_1);
+            var data:Object = new Object();
+            data.num = this.num;
+            data.speed = this.speed;
+            data.acceleration = this.acceleration;
+            data.jumping = this.jumping;
+            data.hat = this.hat;
+            data.head = this.head;
+            data.body = this.body;
+            data.feet = this.feet;
+            data.hatColor = this.hatColor;
+            data.headColor = this.headColor;
+            data.bodyColor = this.bodyColor;
+            data.feetColor = this.feetColor;
+            data.hatColor2 = this.hatColor2;
+            data.headColor2 = this.headColor2;
+            data.bodyColor2 = this.bodyColor2;
+            data.feetColor2 = this.feetColor2;
+            return data;
         }
 
 
     }
-}//package package_18
-
+}

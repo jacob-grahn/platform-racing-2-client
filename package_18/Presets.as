@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_18.class_211
+// package_18.class_211 = package_18.Presets
 
 package package_18
 {
@@ -9,48 +9,53 @@ package package_18
     import package_8.Character;
     import ui.StatsSelect;
 
-    public class class_211 
+    public class Presets 
     {
 
-        private static var presets:Vector.<class_263>;
+        private static var presets:Vector.<Preset>;
 
 
+        // _loc2 = presets
+        // _loc3 = presetData
+        // _loc4 = preset
         public static function load()
         {
-            var _local_3:Object;
-            var _local_4:class_263;
-            presets = new Vector.<class_263>();
+            presets = new Vector.<Preset>();
             var _local_1:Array = [{"num":1}, {"num":2}, {"num":3}];
-            var _local_2:Array = (Settings.getValue("presets", _local_1) as Array);
-            for each (_local_3 in _local_2) {
-                _local_4 = new class_263(_local_3);
-                presets[_local_4.num - 1] = _local_4;
+            var presetsArray:Array = (Settings.getValue(Settings.PRESETS, _local_1) as Array);
+            for each (var presetData:Object in presetsArray) {
+                var preset:Preset = new Preset(presetData);
+                presets[preset.num - 1] = preset;
             }
         }
 
-        public static function method_533()
+        // _loc1 = presetsArray
+        // _loc2 = preset
+        // _loc3 = presetData
+        // method_533 = savePresets
+        public static function savePresets()
         {
-            var _local_2:class_263;
-            var _local_3:Object;
-            var _local_1:Array = new Array();
-            for each (_local_2 in presets) {
-                _local_3 = _local_2.method_558();
-                _local_1[(_local_3.num - 1)] = _local_3;
+            var presetsArray:Array = new Array();
+            for each (var preset:Preset in presets) {
+                var presetData:Object = preset.getPresetData();
+                presetsArray[(presetData.num - 1)] = presetData;
             }
-            Settings.setValue("presets", _local_1);
+            Settings.setValue(Settings.PRESETS, presetsArray);
         }
 
-        public static function method_766():Vector.<class_263>
+        // method_766 = getPresets
+        public static function getPresets():Vector.<Preset>
         {
             return presets;
         }
 
-        public static function method_513(i:int):class_263
+        // method_513 = getPreset
+        public static function getPreset(i:int):Preset
         {
             return presets[i - 1];
         }
 
-        public static function apply(_arg_1:class_263, c:Character, ss:StatsSelect, _arg_4:class_262)
+        public static function apply(_arg_1:Preset, c:Character, ss:StatsSelect, _arg_4:class_262)
         {
             if (ss != null) {
                 ss.setStats({

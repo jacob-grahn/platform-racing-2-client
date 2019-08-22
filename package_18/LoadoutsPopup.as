@@ -26,47 +26,54 @@ package package_18
             this.populate();
         }
 
+        // _loc1 = presets
+        // _loc2 = preset
         // _loc3 = listing
         // method_751 = populate
         private function populate()
         {
-            var _local_2:class_263;
-            var _local_1:Vector.<class_263> = class_211.method_766();
-            for each (_local_2 in _local_1) {
-                var listing:PresetListing = new PresetListing(_local_2);
+            var presets:Vector.<Preset> = Presets.getPresets();
+            for each (var preset:Preset in presets) {
+                var listing:PresetListing = new PresetListing(preset);
                 this.method_455(listing);
             }
         }
 
+        // _loc2 = listing
+        // _loc3 = preset
         override protected function loadListing(_arg_1:class_229)
         {
-            var _local_2:PresetListing = PresetListing(_arg_1);
-            var _local_3:class_263 = _local_2.method_239();
-            class_211.apply(_local_3, this.character, this.statsSelect, this.var_495);
+            var listing:PresetListing = PresetListing(_arg_1);
+            var preset:Preset = listing.getPreset();
+            Presets.apply(preset, this.character, this.statsSelect, this.var_495);
             startFadeOut();
         }
 
+        // _loc2 = loadout
+        // _loc3 = preset
+        // _loc4 = stats
+        // actually saves; named deleteListing to replace the delete button on GetLevelsPopup
         override protected function deleteListing(_arg_1:class_229)
         {
-            var _local_2:PresetListing = PresetListing(_arg_1);
-            var _local_3:Object = _local_2.method_239();
-            var _local_4:Object = this.statsSelect.getStats();
-            _local_3.speed = _local_4.speed;
-            _local_3.acceleration = _local_4.acceleration;
-            _local_3.jumping = _local_4.jumping;
-            _local_3.hat = this.character.hat1;
-            _local_3.head = this.character.head;
-            _local_3.body = this.character.body;
-            _local_3.feet = this.character.feet;
-            _local_3.hatColor = this.character.hat1Color;
-            _local_3.headColor = this.character.headColor;
-            _local_3.bodyColor = this.character.bodyColor;
-            _local_3.feetColor = this.character.feetColor;
-            _local_3.hatColor2 = this.character.hat1Color2;
-            _local_3.headColor2 = this.character.headColor2;
-            _local_3.bodyColor2 = this.character.bodyColor2;
-            _local_3.feetColor2 = this.character.feetColor2;
-            class_211.method_533();
+            var listing:PresetListing = PresetListing(_arg_1);
+            var preset:Object = listing.getPreset();
+            var stats:Object = this.statsSelect.getStats();
+            preset.speed = stats.speed;
+            preset.acceleration = stats.acceleration;
+            preset.jumping = stats.jumping;
+            preset.hat = this.character.hat1;
+            preset.head = this.character.head;
+            preset.body = this.character.body;
+            preset.feet = this.character.feet;
+            preset.hatColor = this.character.hat1Color;
+            preset.headColor = this.character.headColor;
+            preset.bodyColor = this.character.bodyColor;
+            preset.feetColor = this.character.feetColor;
+            preset.hatColor2 = this.character.hat1Color2;
+            preset.headColor2 = this.character.headColor2;
+            preset.bodyColor2 = this.character.bodyColor2;
+            preset.feetColor2 = this.character.feetColor2;
+            Presets.savePresets();
             startFadeOut();
         }
 

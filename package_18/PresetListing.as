@@ -2,45 +2,46 @@
 
 package package_18
 {
-    import ui.class_229;
     import package_8.Character;
+    import ui.class_229;
 
     public class PresetListing extends class_229 
     {
 
-        private var var_518:class_263;
-        private var var_5:Character;
+        private var preset:Preset; // var_518
+        private var c:Character; // var_5
         private var m:PresetListingGraphic;
 
-        public function PresetListing(_arg_1:class_263)
+        public function PresetListing(p:Preset)
         {
-            this.var_518 = _arg_1;
+            this.preset = p;
             this.mouseChildren = false;
             this.doubleClickEnabled = true;
             this.m = new PresetListingGraphic();
             addChild(this.m);
             super(this.m);
-            this.var_5 = new Character(_arg_1.hat, _arg_1.head, _arg_1.body, _arg_1.feet);
-            this.m.addChild(this.var_5);
-            this.var_5.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
-            this.var_5.scaleX = this.var_5.scaleY = 0.13 * (1 / 0.15);
-            this.var_5.x = 58;
-            this.var_5.y = 61;
-            this.m.loadoutSpeed.text = "Speed: " + _arg_1.speed;
-            this.m.loadoutAccel.text = "Acceleration: " + _arg_1.acceleration;
-            this.m.loadoutJump.text = "Jumping: " + _arg_1.jumping;
-            this.m.loadoutNum.text = _arg_1.num.toString();
+            this.c = new Character(this.preset.hat, this.preset.head, this.preset.body, this.preset.feet);
+            this.m.addChild(this.c);
+            this.c.setColors(this.preset.hatColor, this.preset.hatColor2, this.preset.headColor, this.preset.headColor2, this.preset.bodyColor, this.preset.bodyColor2, this.preset.feetColor, this.preset.feetColor2);
+            this.c.scaleX = this.c.scaleY = 0.13 * (1 / 0.15);
+            this.c.x = 58;
+            this.c.y = 61;
+            this.m.loadoutSpeed.text = "Speed: " + this.preset.speed;
+            this.m.loadoutAccel.text = "Acceleration: " + this.preset.acceleration;
+            this.m.loadoutJump.text = "Jumping: " + this.preset.jumping;
+            this.m.loadoutNum.text = this.preset.num.toString();
         }
 
-        public function method_239():class_263
+        // method_239 = getPreset
+        public function getPreset():Preset
         {
-            return this.var_518;
+            return this.preset;
         }
 
         override public function remove()
         {
-            this.var_5.remove();
-            this.var_5 = null;
+            this.c.remove();
+            this.c = null;
             removeChild(this.m);
             this.m = null;
             super.remove();

@@ -205,20 +205,18 @@ package package_18
             this.method_148();
         }
 
+        // _loc2 = e.keyCode
         private function keyDownHandler(e:KeyboardEvent)
         {
             var _local_5:TextField;
-            var _local_6:class_263;
-            var _local_2:int = e.keyCode;
+            var _local_6:Preset;
             var _local_3:int = -1;
             var _local_4:Boolean = true;
-            if (_local_2 == 49 || _local_2 == 97) {
+            if (e.keyCode == 49 || e.keyCode == 97) {
                 _local_3 = 1;
-            }
-            if (_local_2 == 50 || _local_2 == 98) {
+            } else if (e.keyCode == 50 || e.keyCode == 98) {
                 _local_3 = 2;
-            }
-            if (_local_2 == 51 || _local_2 == 99) {
+            } else if (e.keyCode == 51 || e.keyCode == 99) {
                 _local_3 = 3;
             }
             if (e.target is TextField) {
@@ -228,8 +226,8 @@ package package_18
                 }
             }
             if (_local_3 != -1 && _local_4) {
-                _local_6 = class_211.method_513(_local_3);
-                class_211.apply(_local_6, this.var_5, this.var_158, this.var_190);
+                _local_6 = Presets.getPreset(_local_3);
+                Presets.apply(_local_6, this.var_5, this.var_158, this.var_190);
             }
         }
 
