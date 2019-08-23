@@ -57,7 +57,6 @@ package data
             Main.isSpecialUser = false;
             Main.isTempMod = false;
             Main.isTrialMod = false;
-            Settings.clear();
         }
 
         public function write(str:String)

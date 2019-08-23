@@ -59,9 +59,7 @@
         {
             var ret:Object = JSON.parse(e.target.data);
             if (ret.errorType != "pass") {
-                Main.loggedInAs = "";
-                Main.guild = 0;
-                Main.remember = false;
+                Main.clearUserData();
                 startFadeOut();
             }
         }

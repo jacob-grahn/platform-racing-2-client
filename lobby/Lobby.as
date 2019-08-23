@@ -101,8 +101,7 @@ package lobby
                 request.method = URLRequestMethod.POST;
                 var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
                 superLoader.load(request);
-                Main.loggedInAs = "";
-                Main.token = "";
+                Main.clearUserData();
             }
             Main.pageHolder.changePage(new LoginPage());
             Main.socket.close();

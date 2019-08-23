@@ -33,6 +33,7 @@ package menu
 
         public function LoginPage()
         {
+            Settings.clear();
             addChild(this.m);
             this.addToMenu(new LoginPageMenuButton("Log In", this.clickLogIn));
             this.addToMenu(new LoginPageMenuButton("Play as Guest", this.clickGuest));
@@ -167,9 +168,7 @@ package menu
         {
             var ret:Object = SuperLoader(e.target).parsedData;
             if (ret.success === true) {
-                Main.loggedInAs = "";
-                Main.token = "";
-                Main.guild = 0;
+                Main.clearUserData();
                 this.showHideLoggedInAs();
             } else {
                 this.logoutErrorHandler(new Event(SuperLoader.e));

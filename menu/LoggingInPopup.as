@@ -110,16 +110,7 @@ package menu
         private function maybeClearUserData()
         {
             if (Main.remember === false && Main.loggedInAs !== "") {
-                Main.loggedInAs = "";
-                Main.group = 0;
-                Main.userId = 0;
-                Main.hasEmail = false;
-                Main.hasAnt = false;
-                Main.token = "";
-                Main.guild = 0;
-                Main.guildOwner = 0;
-                Main.guildName = "";
-                Main.emblem = "";
+                Main.clearUserData();
             }
         }
 
