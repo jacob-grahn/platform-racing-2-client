@@ -35,7 +35,7 @@ package
         private static const clientWidth:int = 550; // const_92
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
-        public static const beta:Boolean = true; // DISABLE IN PRODUCTION
+        public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
         public static const build:String = "22-aug-2019-v157";
         public static const version:String = '157';
