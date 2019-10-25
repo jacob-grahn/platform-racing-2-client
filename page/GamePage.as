@@ -427,6 +427,7 @@ package page
         protected function keyScroll(e:Event)
         {
             if (!(Main.stage.focus is TextField)) {
+                this.accel = Keys.isPressed(Keyboard.SHIFT) ? 20 : 10;
                 if (Keys.isPressed(Keyboard.DOWN) || Keys.isPressed(this.altCtrl.down)) {
                     this.velY = this.velY - this.accel;
                 }
