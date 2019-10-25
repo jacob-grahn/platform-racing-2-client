@@ -37,10 +37,30 @@ package menu
             active = false;
         }
 
+        public static function reload()
+        {
+            load();
+        }
+
+        private static function maybeLoad()
+        {
+            if (servers.length == 0) {
+                load();
+            } else {
+                target.enabled = true;
+                target.prompt = '';
+            }
+        }
+
         private static function load()
         {
+            if (target != null) {
+                target.enabled = false;
+                target.prompt = 'Loading...';
+            }
             var request:URLRequest = new URLRequest(Main.baseURL + "/files/server_status_2.txt");
             superLoader.addEventListener(SuperLoader.d, parseData);
+            superLoader.addEventListener(SuperLoader.e, handleError);
             superLoader.load(request);
         }
 
@@ -50,6 +70,16 @@ package menu
         {
             var server:Object;
             servers = superLoader.parsedData.servers;
+            if (target != null) {
+                if (servers.length == 0) {
+                    target.enabled = false;
+                    target.prompt = 'No servers found. :(';
+                    return;
+                } else {
+                    target.enabled = true;
+                    target.prompt = '';
+                }
+            }
             for each (server in servers) {
                 server.guild_id = parseInt(server.guild_id);
                 server.server_id = parseInt(server.server_id);
@@ -61,10 +91,19 @@ package menu
             }
         }
 
+        private static function handleError(e:Event)
+        {
+            if (target != null) {
+                target.enabled = false;
+                target.prompt = 'No servers found. :(';
+            }
+        }
+
         // method_397 = determineServer
         public static function determineServer(box:ComboBox)
         {
             target = box;
+            maybeLoad();
             if (servers != null) {
                 selectServer(target);
             }
