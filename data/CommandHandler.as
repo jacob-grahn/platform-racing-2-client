@@ -52,6 +52,9 @@ package data
             while (endPos != -1) {
                 var dataStr:String = this.inBuffer.substring(0, endPos);
                 this.inBuffer = this.inBuffer.substr(endPos + 1);
+                if (Main.testing == true) {
+                    trace('Read: ' + dataStr);
+                }
                 this.handleResponse(dataStr);
                 endPos = this.inBuffer.indexOf(this.EOL);
             }

@@ -77,6 +77,9 @@ package data
                 subHash = hashStr.substr(0, 3);
                 str = subHash + "`" + str + this.endChar;
                 try {
+                    if (Main.testing == true) {
+                        trace('Write: ' + str);
+                    }
                     writeUTFBytes(str);
                     flush();
                 } catch(e:IOError) {
