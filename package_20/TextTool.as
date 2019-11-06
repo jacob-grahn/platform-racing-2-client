@@ -12,8 +12,8 @@ package package_20
         public function TextTool()
         {
             super(-1);
-            method_63(new TextToolCursorGraphic());
-            method_332();
+            applyCursorGraphic(new TextToolCursorGraphic());
+            hideMouse();
         }
 
         // _loc5 = textObj

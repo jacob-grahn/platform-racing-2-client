@@ -44,7 +44,7 @@ package package_9
         {
             var _local_3:Point = class_28.method_9(_arg_1, _arg_2, this.course.blockBackground.rotation);
             var _local_4:Block = this.course.blockBackground.method_24(_local_3.x, _local_3.y);
-            if (_local_4 != null && _local_4.method_23()) {
+            if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.var_154);
             }
             if (this.var_5 != null && this.var_5.tempID != this.var_609 && this.var_5.y > _arg_2 - 14 && this.var_5.y < _arg_2 + 74) {

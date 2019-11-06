@@ -717,7 +717,7 @@ package package_8
         {
             if (this.map != null) {
                 var block:Block = this.map.method_24(_arg_1, _arg_2, _arg_3);
-                if (block == null || !block.method_23() || (var_4.getBool(TOP) && block is VanishBlock && !_arg_4)) {
+                if (block == null || !block.isActive() || (var_4.getBool(TOP) && block is VanishBlock && !_arg_4)) {
                     return null;
                 }
                 return block;

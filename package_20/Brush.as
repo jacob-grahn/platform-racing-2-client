@@ -5,7 +5,7 @@
 
 package package_20
 {
-    import ui.class_8;
+    import ui.CustomCursor;
     import background.DrawableBackground;
     import flash.geom.Point;
     import flash.events.Event;
@@ -15,7 +15,7 @@ package package_20
     import levelEditor.LevelEditor;
     import flash.events.MouseEvent;
 
-    public class Brush extends class_8 
+    public class Brush extends CustomCursor 
     {
 
         private var circle:Circle = new Circle();

@@ -5,7 +5,7 @@
 
 package com.jiggmin.ColorPicker
 {
-    import ui.class_8;
+    import ui.CustomCursor;
     import flash.display.BitmapData;
     import flash.utils.Timer;
     import flash.events.TimerEvent;
@@ -14,7 +14,7 @@ package com.jiggmin.ColorPicker
     import flash.ui.Mouse;
     import flash.events.Event;
 
-    public class CursorEyedropper extends class_8
+    public class CursorEyedropper extends CustomCursor
     {
 
         public var color:int;
@@ -60,7 +60,7 @@ package com.jiggmin.ColorPicker
         {
             var _local_3:DisplayObject;
             var _local_2:Boolean = true;
-            var _local_4:MouseEvent = method_92();
+            var _local_4:MouseEvent = getMouse();
             if (_local_4 != null) {
                 _local_3 = DisplayObject(_local_4.target);
             }
@@ -91,10 +91,10 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        override protected function mouseDownHandler(_arg_1:MouseEvent)
+        override protected function mouseDownHandler(e:MouseEvent)
         {
             if (visible) {
-                _arg_1.stopImmediatePropagation();
+                e.stopImmediatePropagation();
                 this.method_167();
                 this.method_418();
                 dispatchEvent(new Event(Event.COMPLETE));
@@ -127,7 +127,7 @@ package com.jiggmin.ColorPicker
 
         private function method_418()
         {
-            var _local_1:MouseEvent = method_92();
+            var _local_1:MouseEvent = getMouse();
             var _local_2:int = Math.floor(_local_1.stageX);
             var _local_3:int = Math.floor(_local_1.stageY);
             this.color = this.var_331.getPixel(_local_2, _local_3);

@@ -10,7 +10,7 @@ package package_14
     import package_19.Landscape;
     import flash.events.Event;
     import flash.events.MouseEvent;
-    import ui.class_8;
+    import ui.CustomCursor;
 
     public class Tools extends SideBar
     {
@@ -62,14 +62,14 @@ package package_14
         private function onBrushDown(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            class_8.method_28(this.brush);
+            CustomCursor.change(this.brush);
         }
 
         // method_424 = onEraserDown
         private function onEraserDown(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            class_8.method_28(this.eraser);
+            CustomCursor.change(this.eraser);
         }
 
         // method_280 = chooseColor
@@ -82,15 +82,15 @@ package package_14
 
         override public function init()
         {
-            class_8.init();
-            class_8.method_28(this.brush);
+            CustomCursor.init();
+            CustomCursor.change(this.brush);
             this.active = true;
         }
 
         override public function exit()
         {
             this.colorPicker.method_71();
-            class_8.pause();
+            CustomCursor.pause();
             super.exit();
             this.active = false;
         }
@@ -98,7 +98,7 @@ package package_14
         override public function remove()
         {
             this.exit();
-            class_8.method_112();
+            CustomCursor.unsetInstance();
             this.colorPicker.removeEventListener(Event.CLOSE, this.chooseColor);
             this.colorPicker.remove();
             this.colorPicker = null;

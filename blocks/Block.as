@@ -89,7 +89,8 @@ package blocks
             return this.var_79;
         }
 
-        public function method_23():Boolean
+        // method_23 = isActive
+        public function isActive():Boolean
         {
             if (this.frozen) {
                 return true;
@@ -166,7 +167,7 @@ package blocks
             if (this.frozen) {
                 _arg_1.var_147 = 0.05;
             }
-            if (this.method_23()) {
+            if (this.isActive()) {
                 var point:Point = this.method_18();
                 _arg_1.y = point.y + this.posY - y;
                 _arg_1.velY = 0;
@@ -186,7 +187,7 @@ package blocks
         {
             var _local_2:Point;
             var _local_3:Point;
-            if (this.method_23()) {
+            if (this.isActive()) {
                 _local_2 = this.method_18();
                 _local_3 = class_28.method_9((x - this.posX), (y - this.posY), this.map.rotation);
                 if (c.crouching) {
@@ -205,7 +206,7 @@ package blocks
         // _loc2 = point
         public function onLeftHit(_arg_1:LocalCharacter)
         {
-            if (this.method_23()) {
+            if (this.isActive()) {
                 var point:Point = this.method_18();
                 _arg_1.x = point.x - _arg_1.var_189;
                 if (_arg_1.velX > 0) {
@@ -220,7 +221,7 @@ package blocks
         // _loc2 = point
         public function onRightHit(_arg_1:LocalCharacter)
         {
-            if (this.method_23()) {
+            if (this.isActive()) {
                 var point:Point = this.method_18();
                 _arg_1.x = point.x + this.size + _arg_1.var_189;
                 if (_arg_1.velX < 0) {

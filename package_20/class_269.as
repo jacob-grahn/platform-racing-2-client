@@ -5,7 +5,7 @@
 
 package package_20
 {
-    import ui.class_8;
+    import ui.CustomCursor;
     import levelEditor.LevelEditor;
     import flash.display.DisplayObject;
     import data.Objects;
@@ -14,21 +14,21 @@ package package_20
     import background.class_77;
     import flash.geom.Point;
 
-    public class class_269 extends class_8 
+    public class class_269 extends CustomCursor 
     {
 
         protected var displayCode:int;
         protected var editor:LevelEditor = LevelEditor.editor;
 
-        public function class_269(_arg_1:int)
+        // _loc2 = obj
+        public function class_269(i:int)
         {
-            var _local_2:DisplayObject;
             super();
-            this.displayCode = _arg_1;
-            if (_arg_1 >= 0) {
-                _local_2 = Objects.getFromCode(_arg_1);
-                _local_2.alpha = 0.5;
-                method_63(_local_2);
+            this.displayCode = i;
+            if (i >= 0) {
+                var obj:DisplayObject = Objects.getFromCode(i);
+                obj.alpha = 0.5;
+                applyCursorGraphic(obj);
                 this.method_458();
             }
             addEventListener(Event.ENTER_FRAME, this.method_152, false, 0, true);
@@ -36,8 +36,8 @@ package package_20
 
         private function method_458()
         {
-            scaleX = (this.editor.scaleX * this.editor.cur.scaleX);
-            scaleY = (this.editor.scaleY * this.editor.cur.scaleY);
+            scaleX = this.editor.scaleX * this.editor.cur.scaleX;
+            scaleY = this.editor.scaleY * this.editor.cur.scaleY;
         }
 
         private function method_152(_arg_1:Event)
@@ -45,14 +45,14 @@ package package_20
             this.method_458();
         }
 
-        override protected function mouseDownHandler(_arg_1:MouseEvent)
+        override protected function mouseDownHandler(e:MouseEvent)
         {
-            super.mouseDownHandler(_arg_1);
-            if ((((_arg_1.target is BrushGraphic) || (this.editor.menu.hitTestPoint(_arg_1.stageX, _arg_1.stageY, true))) || (this.editor.cur.hitTestPoint(_arg_1.stageX, _arg_1.stageY, true)))) {
+            super.mouseDownHandler(e);
+            if (e.target is BrushGraphic || this.editor.menu.hitTestPoint(e.stageX, e.stageY, true) || this.editor.cur.hitTestPoint(e.stageX, e.stageY, true)) {
                 this.remove();
             } else {
-                _arg_1.stopImmediatePropagation();
-                this.dropObject(_arg_1.stageX, _arg_1.stageY);
+                e.stopImmediatePropagation();
+                this.dropObject(e.stageX, e.stageY);
             }
         }
 
@@ -67,6 +67,11 @@ package package_20
             _local_5.x = Math.round(_local_5.x);
             _local_5.y = Math.round(_local_5.y);
             _local_3.addObject(this.displayCode, _local_5.x, _local_5.y);
+        }
+
+        public function getID() : int
+        {
+            return displayCode;
         }
 
         override public function remove()

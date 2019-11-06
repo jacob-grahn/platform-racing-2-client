@@ -2,7 +2,7 @@
 
 package package_19
 {
-    import ui.class_8;
+    import ui.CustomCursor;
     import package_20.TextTool;
     import flash.events.MouseEvent;
 
@@ -19,7 +19,7 @@ package package_19
         override protected function onClick(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            class_8.method_28(new TextTool());
+            CustomCursor.change(new TextTool());
         }
 
         override public function remove()

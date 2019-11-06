@@ -5,13 +5,13 @@
 
 package package_20
 {
-    import ui.class_8;
+    import ui.CustomCursor;
     import background.class_77;
     import levelEditor.LevelEditor;
     import flash.events.Event;
     import flash.events.MouseEvent;
 
-    public class ObjectDeleter extends class_8 
+    public class ObjectDeleter extends CustomCursor 
     {
 
         private var var_151:class_77;
@@ -19,7 +19,7 @@ package package_20
 
         public function ObjectDeleter()
         {
-            method_63(new ObjectDeleterButtonGraphic());
+            applyCursorGraphic(new ObjectDeleterButtonGraphic());
             addEventListener(Event.ENTER_FRAME, this.method_152, false, 0, true);
         }
 
@@ -48,7 +48,7 @@ package package_20
         override protected function mouseMoveHandler(e:MouseEvent)
         {
             super.mouseMoveHandler(e);
-            if (method_131()) {
+            if (isMouseDown()) {
                 this.var_151.removeObjectsTouchingPoint(e.stageX, e.stageY);
             }
         }

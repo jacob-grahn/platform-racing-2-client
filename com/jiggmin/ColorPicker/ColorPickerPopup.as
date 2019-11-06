@@ -8,7 +8,7 @@ package com.jiggmin.ColorPicker
     import package_4.Popup;
     import flash.display.Sprite;
     import flash.display.BitmapData;
-    import ui.class_8;
+    import ui.CustomCursor;
     import flash.events.MouseEvent;
     import flash.events.Event;
     import data.class_122;
@@ -40,7 +40,7 @@ package com.jiggmin.ColorPicker
         private var var_326:BitmapData;
         private var var_146:ColorPickerHueArrowGraphic;
         private var var_100:ColorPickerCrosshairsGraphic;
-        private var var_194:class_8;
+        private var var_194:CustomCursor;
         private var me:MouseEvent;
         private var m:ColorPickerPopupGraphic;
 
@@ -107,11 +107,11 @@ package com.jiggmin.ColorPicker
             this.var_89.method_101(this);
             this.var_89.addEventListener(Event.CHANGE, this.method_212, false, 0, true);
             this.var_89.addEventListener(Event.COMPLETE, this.method_275, false, 0, true);
-            if (class_8.instance != null) {
-                this.var_194 = class_8.instance;
+            if (CustomCursor.instance != null) {
+                this.var_194 = CustomCursor.instance;
                 this.var_194.pause();
             }
-            class_8.method_28(this.var_89);
+            CustomCursor.change(this.var_89);
             stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
             if ((x + width) > Main.stage.stageWidth) {
                 x = Main.stage.stageWidth - width;
@@ -486,10 +486,10 @@ package com.jiggmin.ColorPicker
                 this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
                 this.m.textBox.removeEventListener(Event.CHANGE, this.method_415);
                 this.var_326.dispose();
-                if (class_8.instance != null) {
-                    class_8.method_112();
+                if (CustomCursor.instance != null) {
+                    CustomCursor.unsetInstance();
                     if (this.var_194 != null) {
-                        class_8.method_28(this.var_194);
+                        CustomCursor.change(this.var_194);
                         this.var_194.init();
                     }
                 } else {

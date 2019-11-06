@@ -26,7 +26,7 @@ package
     import sounds.NoodleTown;
     import page.PageHolder;
     import ui.MuteButton;
-    import ui.class_8;
+    import ui.CustomCursor;
 
     public class Main extends Sprite
     {
@@ -107,7 +107,7 @@ package
                 Blocks.init();
                 Parts.makeParts();
                 Keys.initialize(stage);
-                class_8.stageRef = stage;
+                CustomCursor.stageRef = stage;
                 CheckServers.activate();
                 GpNotification.init(stage);
                 class_4.init();

@@ -3,7 +3,7 @@
 package package_19
 {
     import flash.events.MouseEvent;
-    import ui.class_8;
+    import ui.CustomCursor;
     import package_20.ObjectDeleter;
 
     public class ObjectDeleterButton extends Removable 
@@ -20,7 +20,7 @@ package package_19
         protected function select(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            class_8.method_28(new ObjectDeleter());
+            CustomCursor.change(new ObjectDeleter());
         }
 
         override public function remove()

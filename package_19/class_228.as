@@ -6,7 +6,7 @@
 package package_19
 {
     import flash.display.DisplayObject;
-    import ui.class_8;
+    import ui.CustomCursor;
     import package_20.class_275;
     import flash.events.MouseEvent;
 
@@ -25,7 +25,7 @@ package package_19
         override protected function select(_arg_1:MouseEvent)
         {
             _arg_1.stopImmediatePropagation();
-            class_8.method_28(new class_275(displayCode));
+            CustomCursor.change(new class_275(displayCode));
         }
 
 

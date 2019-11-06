@@ -9,7 +9,7 @@ package package_19
     import data.Objects;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
-    import ui.class_8;
+    import ui.CustomCursor;
     import package_20.class_269;
 
     public class class_221 extends Sprite 
@@ -45,7 +45,7 @@ package package_19
         protected function select(_arg_1:MouseEvent)
         {
             _arg_1.stopImmediatePropagation();
-            class_8.method_28(new class_269(this.displayCode));
+            CustomCursor.change(new class_269(this.displayCode));
         }
 
         public function remove()

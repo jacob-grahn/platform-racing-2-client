@@ -42,7 +42,7 @@ package package_20
         override protected function mouseMoveHandler(_arg_1:MouseEvent)
         {
             super.mouseMoveHandler(_arg_1);
-            if (method_131()) {
+            if (isMouseDown()) {
                 if (!editor.cur.hitTestPoint(_arg_1.stageX, _arg_1.stageY, true)) {
                     this.dropObject(_arg_1.stageX, _arg_1.stageY);
                 }
