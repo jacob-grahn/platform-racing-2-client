@@ -59,7 +59,7 @@ package levelEditor
 
         internal function init()
         {
-            this.m.zoomSelect.selectedIndex = 2;
+            this.m.zoomSelect.selectedIndex = 3;
             if (Main.group <= 0) {
                 this.m.saveButton.enabled = false;
                 this.m.loadButton.enabled = false;
