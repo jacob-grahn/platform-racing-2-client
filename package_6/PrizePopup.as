@@ -39,6 +39,12 @@ package package_6
                 this.m.flavor.text = desc;
                 this.m.flavor.autoSize = "left";
                 this.m.flavorBg.height = this.m.flavor.height + 15;
+            } else if ((type == "eHat" || type == "eHead" || type == "eBody" || type == "eFeet") && desc == '' && finished == true) {
+                this.m.flavorBg.visible = true;
+                this.m.flavor.visible = true;
+                this.m.flavor.htmlText = 'This is an epic upgrade, not a part. For more information, please see <a href="https://jiggmin2.com/forums/showthread.php?tid=123" target="_blank"><font color="#0000FF">this guide</font></a>.';
+                this.m.flavor.autoSize = 'left';
+                this.m.flavorBg.height = this.m.flavor.height + 15;
             }
             this.m.head.hat1.visible = false;
             this.m.head.hat2.visible = false;
