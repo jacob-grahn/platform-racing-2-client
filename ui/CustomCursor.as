@@ -12,6 +12,7 @@ package ui
     import flash.display.Stage;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
+    import flash.ui.Keyboard;
     import flash.ui.Mouse;
     import flash.utils.getDefinitionByName;
     import flash.utils.getQualifiedClassName;
@@ -19,6 +20,7 @@ package ui
     import package_20.class_275;
     import package_20.ObjectDeleter;
     import package_20.TextTool;
+    import flash.events.TouchEvent;
 
     public class CustomCursor extends Removable 
     {
@@ -91,8 +93,32 @@ package ui
             stageRef.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
             stageRef.addEventListener(MouseEvent.MOUSE_OVER, this.method_269, false, 0, true);
             stageRef.addEventListener(MouseEvent.MOUSE_OUT, this.method_378, false, 0, true);
+            stageRef.addEventListener(TouchEvent.TOUCH_MOVE, this.touchHandler);
+            stageRef.addEventListener(TouchEvent.TOUCH_BEGIN, this.touchHandler);
+            stageRef.addEventListener(TouchEvent.TOUCH_END, this.touchHandler);
+            stageRef.addEventListener(TouchEvent.TOUCH_ROLL_OVER, this.touchHandler);
+            stageRef.addEventListener(TouchEvent.TOUCH_ROLL_OUT, this.touchHandler);
             stageRef.addEventListener(KeyboardEvent.KEY_DOWN, this.keyHandler);
             stageRef.addEventListener(KeyboardEvent.KEY_UP, this.keyHandler);
+        }
+
+        private function touchHandler(e:TouchEvent)
+        {
+            var evStr:String = null;
+            if (e.type == TouchEvent.TOUCH_MOVE) { // mouseMove
+                evStr = MouseEvent.MOUSE_MOVE;
+            } else if (e.type == TouchEvent.TOUCH_BEGIN) { // mouseDown
+                evStr = MouseEvent.MOUSE_DOWN;
+            } else if (e.type == TouchEvent.TOUCH_END) { // mouseUp
+                evStr = MouseEvent.MOUSE_UP;
+            } else if (e.type == TouchEvent.TOUCH_ROLL_OVER) { // mouseOver
+                evStr = MouseEvent.MOUSE_OVER;
+            } else if (e.type == TouchEvent.TOUCH_ROLL_OUT) { // mouseOut
+                evStr = MouseEvent.MOUSE_OUT;
+            }
+            if (evStr != null) {
+                dispatchEvent(new MouseEvent(evStr));
+            }
         }
 
         public function pause()
@@ -107,6 +133,11 @@ package ui
             stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
             stageRef.removeEventListener(MouseEvent.MOUSE_OVER, this.method_269);
             stageRef.removeEventListener(MouseEvent.MOUSE_OUT, this.method_378);
+            stageRef.removeEventListener(TouchEvent.TOUCH_MOVE, this.touchHandler);
+            stageRef.removeEventListener(TouchEvent.TOUCH_BEGIN, this.touchHandler);
+            stageRef.removeEventListener(TouchEvent.TOUCH_END, this.touchHandler);
+            stageRef.removeEventListener(TouchEvent.TOUCH_ROLL_OVER, this.touchHandler);
+            stageRef.removeEventListener(TouchEvent.TOUCH_ROLL_OUT, this.touchHandler);
             stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyHandler);
             stageRef.removeEventListener(KeyboardEvent.KEY_UP, this.keyHandler);
         }
@@ -162,21 +193,28 @@ package ui
             this.mouseDown = false;
         }
 
-        public function keyHandler(e:KeyboardEvent)
+        public function keyHandler(e:KeyboardEvent) // Arrow keys trigger this fn continuously. Add active variable to be checked before changing to deleter? Or remove else?
         {
+            var err:Error = new Error();
+            Main.traceExt('Generated Fake ' + err.getStackTrace());
             if (LevelEditor.editor == null || instance == null || instance is TextTool || instance is Brush || instance is CursorEyedropper) {
                 return;
             }
-            if (e.ctrlKey === true && !(instance is ObjectDeleter)) {
+            Main.traceExt('Instance Type: ' + instance);
+            Main.traceExt('Event Type: ' + e.type);
+            if (e.type == 'keyDown' && (e.keyCode == Keyboard.COMMAND || e.keyCode == Keyboard.CONTROL) && !(instance is ObjectDeleter)) {
                 Memory.memory.leCursorTempInstanceType = getQualifiedClassName(instance); //fullType.substr(fullType.lastIndexOf(':') + 1, fullType.length);
                 Memory.memory.leCursorTempInstanceID = instance.getID();
+                Main.traceExt('changing to deleter');
                 change(new ObjectDeleter());
             } else if (Memory.memory.leCursorTempInstanceType != null && Memory.memory.leCursorTempInstanceType.indexOf('ObjectDeleter') == -1) {
                 var tempItem = getDefinitionByName(Memory.memory.leCursorTempInstanceType) as Class;
+                Main.traceExt('changing back to tool');
                 change(new tempItem(Memory.memory.leCursorTempInstanceID));
                 Memory.memory.leCursorTempInstanceType = null;
                 Memory.memory.leCursorTempInstanceID = null;
             } else {
+                Main.traceExt('clear');
                 Memory.memory.leCursorTempInstanceType = null;
                 Memory.memory.leCursorTempInstanceID = null;
             }
