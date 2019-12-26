@@ -51,12 +51,12 @@ package com.jiggmin.ColorPicker
             this.var_248.removeEventListener(TimerEvent.TIMER, this.method_279);
         }
 
-        public function method_101(_arg_1:DisplayObject)
+        public function method_101(d:DisplayObject)
         {
-            this.var_352.push(_arg_1);
+            this.var_352.push(d);
         }
 
-        private function method_379(_arg_1:TimerEvent)
+        private function method_379(e:TimerEvent)
         {
             var _local_3:DisplayObject;
             var _local_2:Boolean = true;
@@ -99,10 +99,10 @@ package com.jiggmin.ColorPicker
                 this.method_418();
                 dispatchEvent(new Event(Event.COMPLETE));
             }
-            super.mouseDownHandler(_arg_1);
+            super.mouseDownHandler(e);
         }
 
-        private function method_279(_arg_1:TimerEvent)
+        private function method_279(e:TimerEvent)
         {
             this.method_167();
         }
@@ -116,9 +116,9 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        private function method_612(_arg_1:DisplayObject):Boolean
+        private function method_612(d:DisplayObject):Boolean
         {
-            var _local_2:int = this.var_352.indexOf(_arg_1);
+            var _local_2:int = this.var_352.indexOf(d);
             if (_local_2 == -1) {
                 return (false);
             }
