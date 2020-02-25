@@ -78,7 +78,7 @@ package
         public static const HEAD_SNOWMAN:int = 46;
 
         // bodies
-        private static const VARS_BODY:Array = ['CLASSIC', 'STRAP', 'DRESS', 'PEC', 'GUT', 'COLLAR', 'MISS_PR2', 'BELT', 'SNAKE', 'BIRD', 'INVISIBLE', 'BEE', 'STICK', 'CAT', 'CAR', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'BUBBLE', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'FRED', 'VERY_INVISIBLE', 'TACO', 'SLENDER', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', 'XMAS', 'SNOWMAN'];
+        private static const VARS_BODY:Array = ['CLASSIC', 'STRAP', 'DRESS', 'PEC', 'GUT', 'COLLAR', 'MISS_PR2', 'BELT', 'SNAKE', 'BIRD', 'INVISIBLE', 'BEE', 'STICK', 'CAT', 'CAR', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'BUBBLE', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'FRED', 'VERY_INVISIBLE', 'TACO', 'SLENDER', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', '', 'XMAS', 'SNOWMAN'];
         public static const BODY_CLASSIC:int = 1;
         public static const BODY_STRAP:int = 2;
         public static const BODY_DRESS:int = 3;
@@ -125,7 +125,7 @@ package
         public static const BODY_SNOWMAN:int = 46;
 
         // feet
-        private static const VARS_FEET:Array = ['CLASSIC', 'HEEL', 'LOAFER', 'CLEAT', 'MAGNET', 'TINY', 'SANDAL', 'BARE', 'NICE', 'BIRD', 'INVISIBLE', 'STICK', 'CAT', 'TIRE', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'BUBBLE', 'TACO', 'SLENDER', '', '', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', 'XMAS', 'SNOWMAN'];
+        private static const VARS_FEET:Array = ['CLASSIC', 'HEEL', 'LOAFER', 'CLEAT', 'MAGNET', 'TINY', 'SANDAL', 'BARE', 'NICE', 'BIRD', 'INVISIBLE', 'STICK', 'CAT', 'TIRE', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'BUBBLE', 'TACO', 'SLENDER', '', '', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', '', 'XMAS', 'SNOWMAN'];
         public static const FEET_CLASSIC:int = 1;
         public static const FEET_HEEL:int = 2;
         public static const FEET_LOAFER:int = 3;
