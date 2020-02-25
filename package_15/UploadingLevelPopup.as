@@ -16,6 +16,7 @@ package package_15
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import levelEditor.LevelEditor;
+    import package_4.ConfirmPopup;
     import package_4.MessagePopup;
     import package_4.UploadingPopup;
 
@@ -25,9 +26,9 @@ package package_15
         private var editor:LevelEditor = LevelEditor.editor;
         private var waitTimeout:uint;
 
-        public function UploadingLevelPopup()
+        public function UploadingLevelPopup(overwriteExisting = false)
         {
-            this.uploadLevel();
+            this.uploadLevel(overwriteExisting);
         }
 
         // _loc1 = md5
@@ -37,7 +38,7 @@ package package_15
         // deleted _loc5 (put on the same line as lVars.hash)
         // _loc6 = request
         // method_240 = uploadLevel
-        private function uploadLevel()
+        private function uploadLevel(overwriteExisting = false)
         {
             if (!this.editor.drawing) {
                 var md5:MD5 = new MD5();
@@ -48,6 +49,9 @@ package package_15
                     var unhashedStr:String = lVars.title + Main.loggedInAs.toLowerCase() + lVars.data + Env.LEVEL_SALT;
                     var byteHash:ByteArray = md5.hash(Hex.toArray(Hex.fromString(unhashedStr)));
                     lVars.hash = Hex.fromArray(byteHash);
+                    if (overwriteExisting) {
+                        lVars.overwrite_existing = '1';
+                    }
                     var request:URLRequest = new URLRequest(Main.baseURL + "/upload_level.php");
                     request.method = URLRequestMethod.POST;
                     request.data = lVars;
@@ -64,6 +68,14 @@ package package_15
         private function onParse(e:Event)
         {
             super.parsedDataHandler(e);
+            if (parsedData.status == 'exists') {
+                new ConfirmPopup(overwriteConfirmUploadLevel, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
+            }
+        }
+
+        private function overwriteConfirmUploadLevel()
+        {
+            new UploadingLevelPopup(true);
         }
 
         override public function remove()
