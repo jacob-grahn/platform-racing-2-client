@@ -160,13 +160,15 @@ package package_8
         }
 
         // method_46 = setStats
-        public function setStats(s:int, a:int, j:int)
+        public function setStats(s:int, a:int, j:int, fromSpeedBurst = false)
         {
             this.speedStat = class_74.numLimit(s, 0, 100);
             this.accelStat = class_74.numLimit(a, 0, 100);
             this.jumpnStat = class_74.numLimit(j, 0, 100);
-            this.maxVelX = 2 + (this.speedStat / 10);
-            this.accel = 0.2 + (this.accelStat / 60);
+            if (!fromSpeedBurst) { // only apply speed change if a speed burst isn't active
+                this.maxVelX = 2 + (this.speedStat / 10);
+                this.accel = 0.2 + (this.accelStat / 60);
+            }
             var_4.setNumber(SuperJump, 2 + (this.jumpnStat / 40));
         }
 
@@ -178,13 +180,14 @@ package package_8
         // method_392 = statsChange
         public function statsChange(changeAmt:int)
         {
+            var fromSpeedBurst:Boolean = false;
             this.speedStat = this.speedStat + changeAmt;
             this.accelStat = this.accelStat + changeAmt;
             this.jumpnStat = this.jumpnStat + changeAmt;
             if (this.curItem is SpeedBurst && this.curItem.isUsed()) {
-                return; // wait to set stats until after the speed burst ends and calls resetStats()
+                fromSpeedBurst = true; // wait to apply speed/accel change until after the speed burst ends and calls resetStats()
             }
-            this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
+            this.setStats(this.speedStat, this.accelStat, this.jumpnStat, fromSpeedBurst);
         }
 
         public function setGravity(_arg_1:Number)
