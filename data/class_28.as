@@ -190,6 +190,7 @@ package data
             s = s.replace(/shit/gi, class_28.randArrayKey(class_28.shitArray));
             s = s.replace(/bitch/gi, class_28.randArrayKey(class_28.bitchArray));
             s = s.replace(/cunt/gi, class_28.randArrayKey(class_28.bitchArray));
+            s = s.replace(/whore/gi, class_28.randArrayKey(class_28.bitchArray));
             return s;
         }
 
