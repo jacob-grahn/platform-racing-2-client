@@ -64,7 +64,7 @@ package package_8
         public var velY:Number = 0;
         public var type:String = "remote";
         public var var_670:Number;
-        protected var var_241:Boolean = false;
+        protected var reversedControls:Boolean = false; // var_241
         public var state:String;
         public var var_269:Number = 0;
         public var tempID:int;
@@ -83,7 +83,7 @@ package package_8
             this.body = bodyId;
             this.feet = feetId;
             if (class_28.getDateStr(new Date().getTime()) === "Apr 1") {
-                this.var_241 = true;
+                this.reversedControls = true;
             }
             this.var_4 = new class_20();
             this.resetHats();

@@ -23,7 +23,7 @@ package package_9
         private var time:Number;
         private var var_681:Number;
         private var var_683:Number;
-        private var var_42:Boolean = false;
+        private var grounded:Boolean = false; // var_42
 
         public function class_81(_arg_1:int, _arg_2:int, _arg_3:int)
         {
@@ -72,7 +72,7 @@ package package_9
             }
             _local_3 = Course.course.blockBackground.method_24(_local_2.x, _local_2.y, true);
             if (((!(_local_3 == null)) && (_local_3.isActive()))) {
-                this.var_42 = true;
+                this.grounded = true;
                 _local_4 = _local_3.method_18(this.rot);
                 if (this.velY < 0) {
                     this.velY = (this.velY * -0.5);
@@ -82,7 +82,7 @@ package package_9
                     this.posY = _local_4.y;
                 }
             } else {
-                this.var_42 = false;
+                this.grounded = false;
             }
             if (this.method_181(x, y)) {
                 this.onTouchLocalPlayer();
@@ -114,7 +114,7 @@ package package_9
 
         public function method_311():Boolean
         {
-            return (this.var_42);
+            return (this.grounded);
         }
 
         override public function remove()

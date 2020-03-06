@@ -158,28 +158,29 @@ package blocks
             }
         }
 
+        // _arg1 = c
         // _loc2 = point
-        public function onStand(_arg_1:LocalCharacter)
+        public function onStand(c:LocalCharacter)
         {
-            if (!this.frozen && this.method_777() > 4 && _arg_1.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
+            if (!this.frozen && this.method_777() > 4 && c.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
                 this.freeze();
             }
             if (this.frozen) {
-                _arg_1.var_147 = 0.05;
+                c.var_147 = 0.05;
             }
             if (this.isActive()) {
                 var point:Point = this.method_18();
-                _arg_1.y = point.y + this.posY - y;
-                _arg_1.velY = 0;
-                _arg_1.var_42 = true;
+                c.y = point.y + this.posY - y;
+                c.velY = 0;
+                c.grounded = true;
                 if (this.var_34) {
-                    _arg_1.var_205 = point.x + 15;
-                    _arg_1.var_224 = point.y;
-                    _arg_1.var_407 = this.segX;
-                    _arg_1.var_366 = this.segY;
+                    c.var_205 = point.x + 15;
+                    c.var_224 = point.y;
+                    c.var_407 = this.segX;
+                    c.var_366 = this.segY;
                 }
             } else {
-                _arg_1.var_42 = false;
+                c.grounded = false;
             }
         }
 
@@ -203,37 +204,40 @@ package blocks
             }
         }
 
+        // _arg1 = c
         // _loc2 = point
-        public function onLeftHit(_arg_1:LocalCharacter)
+        public function onLeftHit(c:LocalCharacter)
         {
             if (this.isActive()) {
                 var point:Point = this.method_18();
-                _arg_1.x = point.x - _arg_1.var_189;
-                if (_arg_1.velX > 0) {
-                    _arg_1.velX = _arg_1.velX * -0.05;
+                c.x = point.x - c.var_189;
+                if (c.velX > 0) {
+                    c.velX = c.velX * -0.05;
                 }
-                if (_arg_1.var_24 > 0) {
-                    _arg_1.var_24 = 0;
+                if (c.var_24 > 0) {
+                    c.var_24 = 0;
                 }
             }
         }
 
+        // _arg1 = c
         // _loc2 = point
-        public function onRightHit(_arg_1:LocalCharacter)
+        public function onRightHit(c:LocalCharacter)
         {
             if (this.isActive()) {
                 var point:Point = this.method_18();
-                _arg_1.x = point.x + this.size + _arg_1.var_189;
-                if (_arg_1.velX < 0) {
-                    _arg_1.velX = _arg_1.velX * -0.05;
+                c.x = point.x + this.size + c.var_189;
+                if (c.velX < 0) {
+                    c.velX = c.velX * -0.05;
                 }
-                if (_arg_1.var_24 < 0) {
-                    _arg_1.var_24 = 0;
+                if (c.var_24 < 0) {
+                    c.var_24 = 0;
                 }
             }
         }
 
-        public function onTouch(_arg_1:LocalCharacter)
+        // _arg1 = c
+        public function onTouch(c:LocalCharacter)
         {
         }
 
@@ -286,7 +290,7 @@ package blocks
             }
         }
 
-        private function method_153(_arg_1:Event)
+        private function method_153(e:Event)
         {
             if (this.var_110 != null) {
                 this.var_110.alpha = this.var_110.alpha - this.var_455;

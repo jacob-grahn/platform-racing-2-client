@@ -23,28 +23,28 @@ package blocks
             active = false;
         }
 
-        override public function onTouch(_arg_1:LocalCharacter)
+        override public function onTouch(c:LocalCharacter)
         {
             var _local_2:Point;
             var _local_3:Point;
-            super.onTouch(_arg_1);
+            super.onTouch(c);
             if (!frozen) {
-                if ((((!(_arg_1.var_42)) && (!(_arg_1.mode == "freeze"))) && (!(_arg_1.mode == "hurt")))) {
-                    _arg_1.setMode("water");
-                    _arg_1.var_240 = 2;
+                if (!c.grounded && c.mode != "freeze" && c.mode != "hurt") {
+                    c.setMode("water");
+                    c.var_240 = 2;
                 } else {
-                    _arg_1.var_24 = (_arg_1.var_24 * 0.9);
-                    _arg_1.var_147 = 0.1;
+                    c.var_24 = (c.var_24 * 0.9);
+                    c.var_147 = 0.1;
                 }
-                if (_arg_1.parent == Course.course.frontBackground) {
-                    Course.course.backBackground.addChild(_arg_1);
+                if (c.parent == Course.course.frontBackground) {
+                    Course.course.backBackground.addChild(c);
                 }
                 _local_2 = method_18();
                 _local_3 = getSeg();
-                _arg_1.var_407 = _local_3.x;
-                _arg_1.var_366 = _local_3.y;
-                _arg_1.var_205 = (_local_2.x + 15);
-                _arg_1.var_224 = (_local_2.y + 15);
+                c.var_407 = _local_3.x;
+                c.var_366 = _local_3.y;
+                c.var_205 = _local_2.x + 15;
+                c.var_224 = _local_2.y + 15;
                 this.method_339();
             }
         }

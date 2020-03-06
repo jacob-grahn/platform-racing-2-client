@@ -75,7 +75,7 @@ package package_8
         public var var_157:Number = 28;
         private var initialized:Boolean = false;
         public var testMode:Boolean = false;
-        public var var_42:Boolean = false;
+        public var grounded:Boolean = false; // var_42
         public var crouching:Boolean = false;
         public var up:Boolean = false;
         public var down:Boolean = false;
@@ -317,7 +317,7 @@ package package_8
                     SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
                     this.socket.write("squash`" + c.tempID + "`" + x + "`" + y);
                     velY = -3;
-                    this.var_42 = true;
+                    this.grounded = true;
                 }
             }
         }
@@ -354,9 +354,9 @@ package package_8
             this.var_24 = 0;
             this.position();
             this.method_76();
-            this.method_193();
+            this.updateKeys();
             if (!this.removed) {
-                if (this.up && this.var_42 && !this.crouching) {
+                if (this.up && this.grounded && !this.crouching) {
                     velY = velY - var_4.getNumber(SuperJump);
                 }
                 if (!this.frozenSolid) {
@@ -384,7 +384,7 @@ package package_8
 
         private function waterGo(_arg_1:Event)
         {
-            this.method_193();
+            this.updateKeys();
             if (this.right) {
                 velX = velX + (this.accel * 0.5);
             }
@@ -406,7 +406,7 @@ package package_8
             y = y + velY;
             this.method_76();
             this.var_240--;
-            if (var_4.getBool(COWBOY) && !this.var_42) {
+            if (var_4.getBool(COWBOY) && !this.grounded) {
                 this.var_240 = 1;
             }
             if (this.var_240 <= 0) {
@@ -421,7 +421,7 @@ package package_8
 
         private function landGo(e:Event)
         {
-            this.method_193();
+            this.updateKeys();
             if (this.right) {
                 this.var_24 = this.var_24 + this.accel;
             }
@@ -432,7 +432,7 @@ package package_8
                 this.var_24 = 0;
             }
             if (this.up) {
-                if (this.var_42 && !this.crouching) {
+                if (this.grounded && !this.crouching) {
                     this.var_281 = true;
                     velY = velY - var_4.getNumber(SuperJump);
                     var_4.setNumber(const_12, -(var_4.getNumber(SuperJump)));
@@ -447,7 +447,7 @@ package package_8
             }
             if (this.down) {
                 if (!this.crouching) {
-                    if (!this.var_42) {
+                    if (!this.grounded) {
                         velY = velY + 0.5;
                         this.var_150 = 0;
                     } else {
@@ -469,7 +469,7 @@ package package_8
             }
             this.position();
             scaleY = 1;
-            if (!this.var_42) {
+            if (!this.grounded) {
                 changeState("jump");
             } else {
                 if (this.var_150 > 25) {
@@ -491,65 +491,45 @@ package package_8
                 }
             }
             this.method_76();
-            if (var_4.getBool(COWBOY) && this.var_42 == false) {
+            if (var_4.getBool(COWBOY) && this.grounded == false) {
                 this.var_240 = 2;
                 this.setMode("water");
                 changeState("swim");
             }
         }
 
-        private function method_193()
+        // _loc1 = tempRight
+        // method_193 = updateKeys
+        private function updateKeys()
         {
-            var _local_1:Boolean;
             this.up = false;
             this.down = false;
             this.right = false;
             this.left = false;
             this.space = false;
-            if (Keys.isPressed(Keyboard.RIGHT)) {
-                this.right = true;
-            }
-            if (Keys.isPressed(Keyboard.LEFT)) {
-                this.left = true;
-            }
-            if (Keys.isPressed(Keyboard.UP)) {
-                this.up = true;
-            }
-            if (Keys.isPressed(Keyboard.DOWN)) {
-                this.down = true;
-            }
-            if (Keys.isPressed(Keyboard.SPACE)) {
-                this.space = true;
-            }
             if (Main.stage.focus == null || Main.stage.focus != RaceChat.textBox) {
-                if (Keys.isPressed(this.altCtrl.right)) {
+                if (Keys.isPressed(Keyboard.RIGHT) || Keys.isPressed(this.altCtrl.right)) {
                     this.right = true;
                     scaleX = 1;
                 }
-                if (Keys.isPressed(this.altCtrl.left)) {
+                if (Keys.isPressed(Keyboard.LEFT) || Keys.isPressed(this.altCtrl.left)) {
                     this.left = true;
                     scaleX = -1;
                 }
-                if (Keys.isPressed(this.altCtrl.up)) {
+                if (Keys.isPressed(Keyboard.UP) || Keys.isPressed(this.altCtrl.up)) {
                     this.up = true;
                 }
-                if (Keys.isPressed(this.altCtrl.down)) {
+                if (Keys.isPressed(Keyboard.DOWN) || Keys.isPressed(this.altCtrl.down)) {
                     this.down = true;
                 }
-                if (Keys.isPressed(this.altCtrl.item)) {
+                if (Keys.isPressed(Keyboard.SPACE) || Keys.isPressed(this.altCtrl.item)) {
                     this.space = true;
                 }
             }
-            if (this.right) {
-                scaleX = 1;
-            }
-            if (this.left) {
-                scaleX = -1;
-            }
-            if (var_241) {
-                _local_1 = this.right;
+            if (reversedControls) {
+                var tempRight:Boolean = this.right;
                 this.right = this.left;
-                this.left = _local_1;
+                this.left = tempRight;
             }
             if (this.curItem != null) {
                 this.curItem.setSpace(this.space);
@@ -632,7 +612,7 @@ package package_8
                     }
                 }
                 if (velY < 0) {
-                    if (this.var_42) {
+                    if (this.grounded) {
                         this.crouching = true;
                     }
                     if (this.mode != "water" && this.var_262 != null && this.getBlock(this.var_262.method_50(), this.var_262.method_44() + 30) == null) {
@@ -650,13 +630,13 @@ package package_8
                         }
                     }
                 }
-                if (!this.var_42) {
+                if (!this.grounded) {
                     this.method_261();
                 }
                 var _local_1:Block = null;
                 var _local_2:Block = null;
                 this.crouching = false;
-                if (this.var_42 == true) {
+                if (this.grounded == true) {
                     _local_1 = this.getBlock(x, y - 40);
                     _local_2 = this.getBlock(x, y - 10);
                     if (_local_1 != null && _local_2 == null) {
@@ -690,9 +670,9 @@ package package_8
             if (this.var_469 != null && this.var_262 == null) {
                 this.var_469.onStand(this);
                 this.method_41();
-                this.var_42 = true;
+                this.grounded = true;
             } else {
-                this.var_42 = false;
+                this.grounded = false;
             }
         }
 
@@ -955,7 +935,7 @@ package package_8
                 if (Items.getCodeFromItem(this.curItem) == Items.speedBurst) {
                     this.setItem(0);
                 }
-                var_241 = false;
+                reversedControls = false;
             }
             this.method_358();
             if (var_4.getBool(SANTA)) {
@@ -989,7 +969,7 @@ package package_8
                     zap.transform.colorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0xFF, 0);
                     SoundEffects.playSound(new YeahSound(), 1 * (Settings.soundLevel / 100));
                     Course.course.musicSelection.dropdown.gotArtifact();
-                    var_241 = true;
+                    reversedControls = true;
                 }
             }
         }
