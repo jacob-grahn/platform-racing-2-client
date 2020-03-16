@@ -23,7 +23,7 @@ package page
 
         public var var_86:Vector.<int>;
         public var var_14:Sprite = new Sprite();
-        protected var color:Number = 0;
+        protected var color:Number = 12303325; //0;
         protected var var_133:Array = new Array();
         protected var var_233:Number = 1;
         public var scale:Number = 1;
