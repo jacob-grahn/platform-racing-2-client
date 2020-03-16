@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_19.class_267
+//package_19.MusicMenu = package_19.class_267
 
 package package_19
 {
@@ -10,13 +10,13 @@ package package_19
     import flash.events.Event;
     import levelEditor.LevelEditor;
 
-    public class class_267 extends class_264 
+    public class MusicMenu extends class_264 
     {
 
         private var list:GameSound = new GameSound(true);
-        private var target:class_218;
+        private var target:MusicMenuButton;
 
-        public function class_267(_arg_1:class_218, _arg_2:String)
+        public function MusicMenu(_arg_1:MusicMenuButton, _arg_2:String)
         {
             this.target = _arg_1;
             this.list.x = (-(this.list.width) / 2);

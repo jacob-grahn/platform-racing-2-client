@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_19.class_265
+//package_19.ItemMenu = package_19.class_265
 
 package package_19
 {
@@ -13,14 +13,14 @@ package package_19
     //import __AS3__.vec.Vector;
     //import __AS3__.vec.*;
 
-    public class class_265 extends class_264 
+    public class ItemMenu extends class_264 
     {
         private var m:ItemMenuGraphic = new ItemMenuGraphic();
         private var var_445:int = Items.method_188().length;
 
-        public function class_265(_arg_1:class_216)
+        public function ItemMenu(_arg_1:ItemMenuButton)
         {
-            class_265.instance = this;
+            ItemMenu.instance = this;
 
             var _local_3:CheckBox;
             addChild(this.m);

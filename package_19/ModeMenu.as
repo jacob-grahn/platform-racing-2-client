@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_19.class_268
+//package_19.ModeMenu = package_19.class_268
 
 package package_19
 {
@@ -12,14 +12,14 @@ package package_19
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
 
-    public class class_268 extends class_264 
+    public class ModeMenu extends class_264 
     {
 
         private var m:ModeMenuGraphic = new ModeMenuGraphic();
         private var var_63:ComboBox = m.modeSelect;
         private var open:Boolean = false;
 
-        public function class_268(_arg_1:DisplayObject)
+        public function ModeMenu(_arg_1:DisplayObject)
         {
             var _local_2:Object;
             var _local_3:int = this.var_63.length;

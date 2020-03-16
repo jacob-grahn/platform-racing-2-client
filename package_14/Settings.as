@@ -6,10 +6,10 @@
 package package_14
 {
     import levelEditor.LevelEditor;
-    import package_19.class_218;
-    import package_19.class_216;
+    import package_19.MusicMenuButton;
+    import package_19.ItemMenuButton;
     import package_19.ValueButton;
-    import package_19.class_219;
+    import package_19.ModeMenuButton;
 
     public class Settings extends SideBar 
     {
@@ -19,12 +19,12 @@ package package_14
         // music (optional)
         private var musicTitle:String = "Music"; // var_653
         private var musicDesc:String = "This song will play by default for users playing your course."; // var_636
-        public var musicButton:class_218 = new class_218();
+        public var musicButton:MusicMenuButton = new MusicMenuButton();
 
         // available items
         private var itemsTitle:String = "Items"; // var_645
         private var itemsDesc:String = "These items will be available to players in your course\'s item boxes."; // var_664
-        public var itemsButton:class_216 = new class_216(); // var_576
+        public var itemsButton:ItemMenuButton = new ItemMenuButton(); // var_576
 
         // minimum rank for level entry (optional)
         private var rankTitle:String = "Minimum Rank"; // var_548
@@ -49,7 +49,7 @@ package package_14
         // game mode
         private var modeTitle:String = "Game Mode"; // var_637
         private var modeDesc:String = "Each game mode has a different goal and method of winning."; // var_627
-        public var modeButton:class_219 = new class_219();
+        public var modeButton:ModeMenuButton = new ModeMenuButton();
 
         // SFCM chance
         private var sfcmTitle:String = "Chance of Cowboy Mode"; // var_591

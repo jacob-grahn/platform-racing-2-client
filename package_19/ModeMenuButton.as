@@ -1,19 +1,19 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_19.class_219
+//package_19.ModeMenuButton = package_19.class_219
 
 package package_19
 {
     import flash.events.MouseEvent;
 
-    public class class_219 extends class_215 
+    public class ModeMenuButton extends class_215 
     {
 
         private var m:ValueButtonGraphic = new ValueButtonGraphic();
         private var value:String;
 
-        public function class_219()
+        public function ModeMenuButton()
         {
             addChild(this.m);
             this.m.titleBox.text = "mode";
@@ -28,7 +28,7 @@ package package_19
 
         override protected function onClick(_arg_1:MouseEvent)
         {
-            new class_268(this);
+            new ModeMenu(this);
         }
 
 

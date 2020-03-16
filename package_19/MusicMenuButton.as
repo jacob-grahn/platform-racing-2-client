@@ -1,15 +1,15 @@
-﻿//package_19.class_218
+﻿//package_19.MusicMenuButton = package_19.class_218
 
 package package_19
 {
     import flash.events.MouseEvent;
 
-    public class class_218 extends class_215 
+    public class MusicMenuButton extends class_215 
     {
 
         private var song:String = "random";
 
-        public function class_218(_arg_1:Number=0)
+        public function MusicMenuButton(_arg_1:Number=0)
         {
             addChild(new MusicNoteGraphic());
         }
@@ -21,7 +21,7 @@ package package_19
 
         override protected function onClick(_arg_1:MouseEvent)
         {
-            new class_267(this, this.song);
+            new MusicMenu(this, this.song);
         }
 
 
