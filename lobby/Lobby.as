@@ -4,7 +4,7 @@ package lobby
 {
     import data.Settings;
     import page.Page;
-    import package_4.class_204;
+    import package_4.HoverPopup;
     import flash.display.MovieClip;
     import flash.display.StageQuality;
     import flash.events.MouseEvent;
@@ -29,7 +29,7 @@ package lobby
         private var left:LobbyLeft;
         private var right:LobbyRight;
         private var m:LobbyGraphic = new LobbyGraphic();
-        private var hover:class_204; // var_234
+        private var hover:HoverPopup; // var_234
         private var bottom_bts:LobbyBottomButtonsGraphic; // var_20
 
         public function Lobby()
@@ -141,7 +141,7 @@ package lobby
         // method_291 = hoverKong
         private function hoverKong(e:MouseEvent)
         {
-            this.hover = new class_204("Kong Hat", "Players from Kongregate automatically get a hat that increases your experience gain by 25%!", this.bottom_bts.moreGamesButton);
+            this.hover = new HoverPopup("Kong Hat", "Players from Kongregate automatically get a hat that increases your experience gain by 25%!", this.bottom_bts.moreGamesButton);
         }
 
         // method_353 = hoverOutKong

@@ -2,7 +2,7 @@
 
 package package_21
 {
-    public class ReportMessageButton extends class_213 
+    public class ReportMessageButton extends HoverDelayPopup 
     {
 
         private var m:ReportMessageButtonGraphic = new ReportMessageButtonGraphic();

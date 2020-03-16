@@ -2,7 +2,7 @@
 
 package package_21
 {
-    public class DeleteMessageButton extends class_213 
+    public class DeleteMessageButton extends HoverDelayPopup 
     {
 
         private var m:DeleteMessageButtonGraphic = new DeleteMessageButtonGraphic();

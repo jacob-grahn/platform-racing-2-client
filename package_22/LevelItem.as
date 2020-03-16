@@ -15,7 +15,7 @@ package package_22
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
-    import package_4.class_204;
+    import package_4.HoverPopup;
     import package_4.ConfirmPopup;
     import package_4.UploadingPopup;
     import ui.PageNavigation;
@@ -28,7 +28,7 @@ package package_22
         private var m:LevelItemGraphic = new LevelItemGraphic();
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
-        private var infoPopup:class_204;
+        private var infoPopup:HoverPopup;
         private var slotArray:Array = new Array(); // var_127
         public var courseID:int;
         public var version:int;
@@ -285,7 +285,7 @@ package package_22
                 noteText = "<br/>-----<br/>" + class_28.escapeString(this.note, true);
             }
             var levelInfoText:String = byText + versionText + minRankText + playsText + ratingText + updatedText + noteText;
-            this.infoPopup = new class_204(popupTitle, levelInfoText, this.m.infoButton);
+            this.infoPopup = new HoverPopup(popupTitle, levelInfoText, this.m.infoButton);
         }
 
         private function outInfoHandler(e:MouseEvent)

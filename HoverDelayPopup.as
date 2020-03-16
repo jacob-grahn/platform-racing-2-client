@@ -1,29 +1,31 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//class_213
+//HoverDelayPopup = class_213
 
 package 
 {
     import flash.display.Sprite;
-    import package_4.class_204;
+    import package_4.HoverPopup;
     import flash.events.MouseEvent;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
 
-    public class class_213 extends Sprite 
+    public class HoverDelayPopup extends Sprite 
     {
 
         private var title:String;
         private var content:String;
+        private var time:int = 500;
         protected var var_559:Boolean = true;
         private var var_292:uint;
-        private var var_8:class_204;
+        private var hover:HoverPopup; // var_8
 
-        public function class_213(_arg_1:String="", _arg_2:String="")
+        public function HoverDelayPopup(_arg_1:String="", _arg_2:String="", _arg_3:int=500)
         {
             this.title = _arg_1;
             this.content = _arg_2;
+            this.time = _arg_3;
             addEventListener(MouseEvent.MOUSE_OVER, this.overHandler, false, 0, true);
             addEventListener(MouseEvent.MOUSE_OUT, this.outHandler, false, 0, true);
             addEventListener(MouseEvent.MOUSE_DOWN, this.downHandler, false, 0, true);
@@ -32,7 +34,7 @@ package
         protected function overHandler(_arg_1:MouseEvent)
         {
             clearTimeout(this.var_292);
-            this.var_292 = setTimeout(this.method_655, 500);
+            this.var_292 = setTimeout(this.method_655, this.time);
             this.method_69();
         }
 
@@ -52,14 +54,14 @@ package
         {
             this.method_69();
             if (this.var_559 == true) {
-                this.var_8 = new class_204(this.title, this.content, this);
+                this.hover = new HoverPopup(this.title, this.content, this);
             }
         }
 
         private function method_69()
         {
-            if (this.var_8 != null) {
-                this.var_8.remove();
+            if (this.hover != null) {
+                this.hover.remove();
             }
         }
 

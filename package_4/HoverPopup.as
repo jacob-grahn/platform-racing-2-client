@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_4.class_204
+//package_4.HoverPopup = package_4.class_204
 
 package package_4
 {
@@ -11,13 +11,13 @@ package package_4
     import flash.text.TextFieldAutoSize;
     import flash.text.AntiAliasType;
 
-    public class class_204 extends InfoPopup 
+    public class HoverPopup extends InfoPopup 
     {
 
         // _loc4 = titleBox
         // _loc5 = contentBox
         // _loc6 = bg
-        public function class_204(title:String, content:String, d:DisplayObject)
+        public function HoverPopup(title:String, content:String, d:DisplayObject)
         {
             if (title != "" || content != "") {
                 var titleBox:TextField = this.generateTextBox();

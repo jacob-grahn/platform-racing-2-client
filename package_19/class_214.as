@@ -10,7 +10,7 @@ package package_19
     import flash.geom.ColorTransform;
     import flash.events.MouseEvent;
 
-    public class class_214 extends class_213 
+    public class class_214 extends HoverDelayPopup 
     {
 
         private var bg:MovieClip = new SquareBG(); // var_274

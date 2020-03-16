@@ -5,7 +5,7 @@
 
 package package_21
 {
-    public class ReplyMessageButton extends class_213 
+    public class ReplyMessageButton extends HoverDelayPopup 
     {
 
         private var m:ReplyMessageButtonGraphic = new ReplyMessageButtonGraphic();
