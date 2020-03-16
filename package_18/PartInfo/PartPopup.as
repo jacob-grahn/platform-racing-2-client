@@ -70,8 +70,8 @@
                 this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('Sothal', jfName);
             } // slender
             else if (name == 'Slender' && !isHat) {
-                var slenderName:String = this.nameMaker.makeName('-changelings-', 1);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('-changelings-', slenderName);
+                var slenderName:String = this.nameMaker.makeName('changelings', 1);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain.replace('changelings', slenderName);
             } // sea
             else if (name == 'Sea' && !isHat) {
                 var seaName:String = this.nameMaker.makeName('Rammjet', 1);
