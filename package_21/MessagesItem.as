@@ -18,7 +18,7 @@ package package_21
         private var replyButton:ReplyMessageButton = new ReplyMessageButton(); // var_222
         private var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
         private var userName:String;
-        public var var_451:Number;
+        public var messageId:Number; // var_451
         private var target:Messages;
         private var messageText:String; // var_588
 
@@ -27,7 +27,7 @@ package package_21
         public function MessagesItem(messages:Messages, _arg_2:Number, name:String, group:Number, body:String, gm:Boolean, time:Number, userId:Number)
         {
             this.target = messages;
-            this.var_451 = _arg_2;
+            this.messageId = _arg_2;
             this.userName = name;
             var htmlName:String = this.htmlNameMaker.makeName(name, group);
             this.htmlNameMaker.listenForLink(this.m.nameBox);

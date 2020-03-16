@@ -131,7 +131,7 @@ package package_21
         {
             item.alpha = 0.5;
             var vars:URLVariables = new URLVariables();
-            vars.message_id = item.var_451;
+            vars.message_id = item.messageId;
             var request:URLRequest = new URLRequest(Main.baseURL + "/message_report.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
@@ -145,7 +145,7 @@ package package_21
         {
             item.alpha = 0.25;
             var vars:URLVariables = new URLVariables();
-            vars.message_id = item.var_451;
+            vars.message_id = item.messageId;
             var request:URLRequest = new URLRequest(Main.baseURL + "/message_delete.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
