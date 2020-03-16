@@ -5,10 +5,11 @@
 
 package package_15
 {
-    import package_4.Popup;
-    import levelEditor.LevelEditor;
+    import flash.events.Event;
     import flash.events.MouseEvent;
+    import levelEditor.LevelEditor;
     import package_4.MessagePopup;
+    import package_4.Popup;
 
     public class SaveLevelPopup extends Popup 
     {
@@ -20,12 +21,19 @@ package package_15
         {
             this.m.titleBox.text = this.editor.title;
             this.m.noteBox.text = this.editor.note;
+            this.m.noteCharsRemaining.text = "0 / 255";
+            this.m.noteBox.addEventListener(Event.CHANGE, this.noteCountChars);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
             this.m.save_bt.addEventListener(MouseEvent.CLICK, this.clickSave);
             if (this.editor.live == 1) {
                 this.m.publish_chk.selected = true;
             }
             addChild(this.m);
+        }
+
+        private function noteCountChars(e:Event)
+        {
+            this.m.noteCharsRemaining.text = this.m.noteBox.length + " / 255";
         }
 
         private function clickCancel(e:MouseEvent)
@@ -52,6 +60,7 @@ package package_15
 
         override public function remove()
         {
+            this.m.noteBox.removeEventListener(Event.CHANGE, this.noteCountChars);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
             this.m.save_bt.removeEventListener(MouseEvent.CLICK, this.clickSave);
             super.remove();
