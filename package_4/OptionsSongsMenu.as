@@ -1,0 +1,45 @@
+// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+//package_19.ItemMenu = package_19.class_265
+
+package package_4
+{
+    import fl.controls.CheckBox;
+    import package_4.class_264;
+    import flash.display.DisplayObject;
+    import data.Settings;
+
+    public class OptionsSongsMenu extends class_264 
+    {
+        private var m:OptionsSongsMenuGraphic = new OptionsSongsMenuGraphic();
+
+        public function OptionsSongsMenu(d:DisplayObject)
+        {
+            y -= 35;
+            addChild(this.m);
+            super(d);
+            var blacklist:Array = Settings.getValue('disabledSongs');
+            for (var i in blacklist) {
+                this.m['song' + blacklist[i]].selected = false;
+            }
+        }
+
+        override public function remove()
+        {
+            var blacklist:Array = [];
+            for (var i:int = 1; i <= 15; i++) {
+                if (i == 9) {
+                    continue; // skip song #9 (desert rose)
+                }
+                if (this.m['song' + i].selected == false) {
+                    blacklist.push(i);
+                }
+            }
+            Settings.setValue('disabledSongs', blacklist);
+            super.remove();
+        }
+
+
+    }
+}

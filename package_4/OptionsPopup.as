@@ -22,6 +22,7 @@ package package_4
         private var hTrueY:Number = -74;
         private var hFalseY:Number = -46;
         private var buttonStartPos:int = 78; // var_437
+        private var musicHover:HoverPopup;
 
         public function OptionsPopup()
         {
@@ -46,6 +47,9 @@ package package_4
             this.m.artOff_bt.addEventListener(MouseEvent.CLICK, toggleArtOff);
             this.m.filterOn_bt.addEventListener(MouseEvent.CLICK, toggleFilterOn);
             this.m.filterOff_bt.addEventListener(MouseEvent.CLICK, toggleFilterOff);
+            this.m.music_bt.addEventListener(MouseEvent.CLICK, clickMusic);
+            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OVER, hoverMusic);
+            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic);
             this.m.removeChild(this.m.changePass_bt);
             this.m.removeChild(this.m.changeEmail_bt);
             this.m.removeChild(this.m.guildLeave_bt);
@@ -110,6 +114,22 @@ package package_4
         {
             this.m.filterHighlight.y = this.hFalseY;
             this.filterSwears = false;
+        }
+
+        private function clickMusic(e:MouseEvent)
+        {
+            new OptionsSongsMenu(e.currentTarget);
+        }
+
+        private function hoverMusic(e:MouseEvent)
+        {
+            this.musicHover = new HoverPopup("Choose Music", "Choose which songs are allowed to play in a level.", this.m.music_bt);
+        }
+
+        private function hoverOutMusic(e:MouseEvent)
+        {
+            this.musicHover.remove();
+            this.musicHover = null;
         }
 
         // method_75 = addOptionsButton
@@ -196,6 +216,13 @@ package package_4
             this.m.guildLeave_bt.removeEventListener(MouseEvent.CLICK, this.clickLeaveGuild);
             this.m.guildCreate_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildCreate);
             this.m.guildEdit_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildEdit);
+            this.m.music_bt.removeEventListener(MouseEvent.CLICK, clickMusic);
+            this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OVER, hoverMusic);
+            this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic);
+            if (this.musicHover != null) {
+                this.musicHover.remove();
+                this.musicHover = null;
+            }
             if (this.m.wasdUp.text == "") {
                 this.m.wasdUp.text = "W";
             }

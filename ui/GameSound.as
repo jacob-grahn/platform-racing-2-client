@@ -30,27 +30,40 @@ package ui
             this.inLE = LE;
             width = 200;
             rowCount = 4;
-            addItem({"id":"0", "label":"None", "file":""});
+            addSong({"id":"0", "label":"None", "file":""});
             if (this.inLE) {
-                addItem({"id":"random", "label":"Random", "file":""});
+                addSong({"id":"random", "label":"Random", "file":""});
             }
-            addItem({"id":"1", "label":"Miniature Fantasy - Dreamscaper", "file":"6698_newgrounds_miniat.mp3"});
-            addItem({"id":"2", "label":"Under Fire - AP", "file":"105435_under_fire.mp3"});
-            addItem({"id":"3", "label":"Paradise on E - API", "file":"32772_newgrounds_-api-_.mp3"});
-            addItem({"id":"4", "label":"Crying Soul - Bounc3", "file":"102483_B0UNC3___Crying_Soul__Frui.mp3"});
-            addItem({"id":"5", "label":"My Vision - MrMaestro", "file":"44613_newgrounds_my_vis.mp3"});
-            addItem({"id":"6", "label":"Switchblade - SKAzini", "file":"59342_newgrounds_01_swi.mp3"});
-            addItem({"id":"7", "label":"The Wires - Cheez-R-Us", "file":"74690_newgrounds_the_wi.mp3"});
-            addItem({"id":"8", "label":"Before Mydnite - F-777", "file":"108133_Before_Mydnite.mp3"});
-            addItem({"id":"10", "label":"Broked It - SWiTCH", "file":"51265_newgrounds_broked.mp3"});
-            addItem({"id":"11", "label":"Hello? - TMM43", "file":"83720_newgrounds_hello.mp3"});
-            addItem({"id":"12", "label":"Pyrokinesis - Sean Tucker", "file":"98624_Pyrokinesis.mp3"});
-            addItem({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"109884_Brunzolaitis___Flowerz_n_H.mp3"});
-            addItem({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"128701_Instrumental__4.mp3"});
-            addItem({"id":"15", "label":"Prismatic - Lunanova", "file":"Prismatic.mp3"});
+            addSong({"id":"1", "label":"Miniature Fantasy - Dreamscaper", "file":"6698_newgrounds_miniat.mp3"});
+            addSong({"id":"2", "label":"Under Fire - AP", "file":"105435_under_fire.mp3"});
+            addSong({"id":"3", "label":"Paradise on E - API", "file":"32772_newgrounds_-api-_.mp3"});
+            addSong({"id":"4", "label":"Crying Soul - Bounc3", "file":"102483_B0UNC3___Crying_Soul__Frui.mp3"});
+            addSong({"id":"5", "label":"My Vision - MrMaestro", "file":"44613_newgrounds_my_vis.mp3"});
+            addSong({"id":"6", "label":"Switchblade - SKAzini", "file":"59342_newgrounds_01_swi.mp3"});
+            addSong({"id":"7", "label":"The Wires - Cheez-R-Us", "file":"74690_newgrounds_the_wi.mp3"});
+            addSong({"id":"8", "label":"Before Mydnite - F-777", "file":"108133_Before_Mydnite.mp3"});
+            addSong({"id":"10", "label":"Broked It - SWiTCH", "file":"51265_newgrounds_broked.mp3"});
+            addSong({"id":"11", "label":"Hello? - TMM43", "file":"83720_newgrounds_hello.mp3"});
+            addSong({"id":"12", "label":"Pyrokinesis - Sean Tucker", "file":"98624_Pyrokinesis.mp3"});
+            addSong({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"109884_Brunzolaitis___Flowerz_n_H.mp3"});
+            addSong({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"128701_Instrumental__4.mp3"});
+            addSong({"id":"15", "label":"Prismatic - Lunanova", "file":"Prismatic.mp3"});
             addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
             addEventListener(Event.CHANGE, this.startSong, false, 0, true);
             this.enableMusicInt = setInterval(this.checkSetting, 500);
+        }
+
+        private function addSong(song:Object)
+        {
+            var blacklist:Array = Settings.getValue('disabledSongs');
+            if (this.inLE == false && song.id < 16 && song.id != 'random' && song.id != 0 && song.id != '') {
+                for (var i in blacklist) {
+                    if (blacklist[i] == song.id) {
+                        return;
+                    }
+                }
+            }
+            addItem(song);
         }
 
         private function focusStage(e:Event = null)
@@ -61,7 +74,7 @@ package ui
         // method_629 = gotArtifact
         public function gotArtifact()
         {
-            addItem({"id":"16", "label":"We Are Loud - Dynamedion", "file":"we-are-loud.mp3"});
+            addSong({"id":"16", "label":"We Are Loud - Dynamedion", "file":"we-are-loud.mp3"});
             this.setSong("16");
         }
 
@@ -90,19 +103,27 @@ package ui
         // _loc3 = i
         public function setSong(s:String)
         {
+            var selectId:int = 0;
             if ((s == "random" || s == "") && !this.inLE) {
-                selectedIndex = Math.floor(Math.random() * (length - 1)) + 1;
+                selectId = Math.floor(Math.random() * (length - 1)) + 1;
             } else {
                 var i:int = 0;
                 while (i < length) {
                     var item:Object = getItemAt(i);
                     if (item.id == s) {
-                        selectedIndex = i;
+                        selectId = i;
                         break;
                     }
                     i++;
                 }
             }
+            if (s != "0" && selectId == 0) { // if selected song isn't present, go random
+                selectId = Math.floor(Math.random() * (length - 1)) + 1;
+            }
+            if (selectId > 0 && length == 1) { // if selected song isn't present and list length is 1, go none
+                selectId = 0;
+            }
+            selectedIndex = selectId; // set from var
             if (s != "0" && s != "random" && s != "") {
                 this.startSong();
             }

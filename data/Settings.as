@@ -13,6 +13,7 @@ package data
     {
 
         public static const PRESETS:String = "presets";
+        public static const DISABLED_SONGS:String = "disabledSongs";
         public static const MUSIC_VOLUME:String = "musicLevel";
         public static const SOUND_VOLUME:String = "soundLevel";
         public static const DRAW_ART:String = "drawArt";
@@ -20,9 +21,10 @@ package data
         public static const ALTERNATE_CONTROLS:String = "altCtrl";
         public static const DEFAULT_ALT_CONTROLS:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
 
-        private static const SETTINGS:Array = [PRESETS, MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, FILTER_SWEARS, ALTERNATE_CONTROLS];
+        private static const SETTINGS:Array = [PRESETS, DISABLED_SONGS, MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, FILTER_SWEARS, ALTERNATE_CONTROLS];
 
         private static var presets:Object = null;
+        public static var disabledSongs:Array = [];
         public static var musicLevel:int = 100;
         public static var soundLevel:int = 100;
         private static var drawArt:Boolean = true;
