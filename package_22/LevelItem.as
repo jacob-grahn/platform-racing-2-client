@@ -248,8 +248,8 @@ package package_22
                 slot.fillSlot(name, rank, me);
             }
             if (me == "me") {
-                Main.var_583 = this.courseID;
-                Main.var_514 = this.version;
+                Main.filledSlotCourseID = this.courseID;
+                Main.filledSlotCourseVersion = this.version;
             }
         }
 

@@ -172,8 +172,8 @@ package package_4
         // method_288 = clickSendPM
         private function clickSendPM(e:MouseEvent)
         {
-            new SendMessagePopup(this.userName);
             startFadeOut();
+            new SendMessagePopup(this.userName);
         }
 
         // method_356 = clickAddFriend

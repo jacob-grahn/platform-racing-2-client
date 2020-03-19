@@ -36,7 +36,7 @@ package
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
-        public static const testing:Boolean = false; // DISABLE IN PRODUCTION
+        public static const testing:Boolean = true; // DISABLE IN PRODUCTION
         public static const build:String = "10-mar-2020-v158";
         public static const version:String = '158.0';
         public static const baseURL:String = "https://pr2hub.com/"; // "https://pr2hub.local";
@@ -66,8 +66,8 @@ package
         public static var noodleTown:NoodleTown = new NoodleTown(); // var_143
         public static var pageHolder:PageHolder;
         public static var muteButton:MuteButton = new MuteButton(); // var_58
-        public static var var_583:int;
-        public static var var_514:int;
+        public static var filledSlotCourseID:int; // var_583
+        public static var filledSlotCourseVersion:int; // var_514
         public static var stats:SWFStats;
         public static var bitmapArray:Array = new Array();
         public static var var_184:int = 0; // referenced in background.DrawableBackground class

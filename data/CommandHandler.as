@@ -107,9 +107,9 @@ package data
         private function startGame(a:Array)
         {
             var courseID:int = a[0];
-            if (Main.var_583 != courseID) { // is this a decompilation error?
+            if (Main.filledSlotCourseID == courseID) {
+                Main.pageHolder.changePage(new Game(courseID, Main.filledSlotCourseVersion));
             }
-            Main.pageHolder.changePage(new Game(courseID, Main.var_514));
         }
 
         private function setRank(a:Array)
