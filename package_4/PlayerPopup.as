@@ -217,6 +217,9 @@ package package_4
             if (PartInfoPopup.instance != null) {
                 PartInfoPopup.instance.startFadeOut();
             }
+            if (LevelInfoPopup.instance != null) {
+                LevelInfoPopup.instance.startFadeOut();
+            }
             startFadeOut();
         }
 

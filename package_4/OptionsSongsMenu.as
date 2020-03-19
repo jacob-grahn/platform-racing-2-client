@@ -12,10 +12,15 @@ package package_4
 
     public class OptionsSongsMenu extends class_264 
     {
+        public static var instance;
         private var m:OptionsSongsMenuGraphic = new OptionsSongsMenuGraphic();
 
         public function OptionsSongsMenu(d:DisplayObject)
         {
+            if (OptionsSongsMenu.instance != null) {
+                OptionsSongsMenu.instance.remove();
+            }
+            OptionsSongsMenu.instance = this;
             y -= 35;
             addChild(this.m);
             super(d);
@@ -27,6 +32,9 @@ package package_4
 
         override public function remove()
         {
+            if (OptionsSongsMenu.instance === this) {
+                OptionsSongsMenu.instance = null;
+            }
             var blacklist:Array = [];
             for (var i:int = 1; i <= 15; i++) {
                 if (i == 9) {

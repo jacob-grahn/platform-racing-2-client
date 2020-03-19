@@ -19,6 +19,7 @@ package package_22
     import package_4.ConfirmPopup;
     import package_4.UploadingPopup;
     import ui.PageNavigation;
+    import package_4.LevelInfoPopup;
 
     public class LevelItem extends Removable 
     {
@@ -69,6 +70,7 @@ package package_22
             this.m.ratingStars.bar.scaleX = this.rating / 5;
             this.m.infoButton.addEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler, false, 0, true);
             this.m.infoButton.addEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler, false, 0, true);
+            this.m.infoButton.addEventListener(MouseEvent.CLICK, this.clickInfoHandler, false, 0, true);
             if (Main.group >= 2 && Main.isTrialMod == false) {
                 this.m.deleteButton.addEventListener(MouseEvent.CLICK, this.clickDelete, false, 0, true);
             } else {
@@ -275,16 +277,16 @@ package package_22
         {
             var popupTitle:String = "-- " + class_28.escapeString(this.title) + " --";
             var byText:String = "By: " + class_28.escapeString(this.userName) + "<br/>";
-            var versionText:String = "Version: " + this.version + "<br/>";
+            var versionText:String = "Version: " + class_28.formatNumber(this.version) + "<br/>";
+            var updatedText:String = "Updated: "  + this.lastUpdated.date + '/' + class_28.getMonthStr(this.lastUpdated.month) + '/' + this.lastUpdated.fullYear + '<br/>';
             var minRankText:String = "Min Rank: " + this.minRank + "<br/>";
-            var playsText:String = "Plays: " + this.playCount + "<br/>";
-            var ratingText:String = "Rating: " + this.rating + "<br/>";
-            var updatedText:String = "Updated: "  + this.lastUpdated.date + '/' + class_28.getMonthStr(this.lastUpdated.month) + '/' + this.lastUpdated.fullYear;
+            var playsText:String = "Plays: " + class_28.formatNumber(this.playCount) + "<br/>";
+            var ratingText:String = "Rating: " + this.rating;
             var noteText:String = "";
             if (class_28.escapeString(this.note) != "") {
                 noteText = "<br/>-----<br/>" + class_28.escapeString(this.note, true);
             }
-            var levelInfoText:String = byText + versionText + minRankText + playsText + ratingText + updatedText + noteText;
+            var levelInfoText:String = byText + versionText + updatedText + minRankText + playsText + ratingText + noteText;
             this.infoPopup = new HoverPopup(popupTitle, levelInfoText, this.m.infoButton);
         }
 
@@ -292,6 +294,11 @@ package package_22
         {
             this.infoPopup.remove();
             this.infoPopup = null;
+        }
+
+        private function clickInfoHandler(e:MouseEvent)
+        {
+            new LevelInfoPopup(this.courseID);
         }
 
         // ?
@@ -303,6 +310,7 @@ package package_22
         {
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler);
+            this.m.infoButton.removeEventListener(MouseEvent.CLICK, this.clickInfoHandler);
             if (this.m.deleteButton != null) {
                 this.m.deleteButton.removeEventListener(MouseEvent.CLICK, this.clickDelete);
             }

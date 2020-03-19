@@ -211,6 +211,9 @@ package package_4
 
         override public function remove()
         {
+            if (OptionsSongsMenu.instance != null) {
+                OptionsSongsMenu.instance.remove();
+            }
             this.m.changePass_bt.removeEventListener(MouseEvent.CLICK, this.clickChangePass);
             this.m.changeEmail_bt.removeEventListener(MouseEvent.CLICK, this.clickChangeEmail);
             this.m.guildLeave_bt.removeEventListener(MouseEvent.CLICK, this.clickLeaveGuild);
