@@ -8,6 +8,7 @@
     import data.class_28;
     import data.class_33;
     import flash.net.URLRequestMethod;
+    import package_6.Game;
 
     public class LevelInfoPopup extends Popup 
     {
@@ -23,6 +24,8 @@
         private var hasPass:Boolean = true; // has_pass
         
         private var userId:int = 0; // user_id
+        private var userName:String = "";
+        private var userGroup:int = 0;
 
         private var title:String = ''; // title
         private var note:String = ''; // note
@@ -80,6 +83,8 @@
             this.live = ret.live;
             this.hasPass = ret.has_pass;
             this.userId = ret.user_id;
+            this.userName = ret.user_name;
+            this.userGroup = ret.user_group;
             this.rating = ret.rating;
             this.updated = new Date(ret.time * 1000);
             this.gravity = ret.gravity;
@@ -276,8 +281,8 @@
 
         private function clickShare(e:MouseEvent)
         {
-            new MessagePopup('Placeholder!');
-            // some code for a pm
+            var message:String = "Hey, check out this level! \n\n[level=" + this.levelId + "]" + this.title + "[/level] by [user group=" + this.userGroup + "]" + this.userName + "[/user]";
+            new SendMessagePopup("", message, false, true);
         }
 
         private function clickRemove(e:MouseEvent)
@@ -315,10 +320,23 @@
 
         private function clickPlay(e:MouseEvent)
         {
+            // add validation + server code
+            /*
+            Flow:
+             - Client sends socket command to manually start the game
+             - Server gets the socket command and routes to a fn
+             - Response to socket command:
+                - Somewhat replicate flow in CourseBox.php
+                - Also check to see if the user is in a course box rn
+                - Validate as you see fit
+             - Server sends back startGame.
+            */
+            //startFadeOut();
+            //Main.pageHolder.changePage(new Game(this.levelId, this.version));
             new MessagePopup('Placeholder!'); // code to automatically start the race
         }
 
-        private function clickClose(e:MouseEvent)
+        private function clickClose(e:*)
         {
             startFadeOut();
         }

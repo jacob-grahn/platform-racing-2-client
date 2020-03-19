@@ -14,7 +14,7 @@ package package_4
         private var m:SendMessagePopupGraphic = new SendMessagePopupGraphic();
         private var isGuildMessage:Boolean = false; // var_622
 
-        public function SendMessagePopup(name:String = "", message:String = "", guild:Boolean = false)
+        public function SendMessagePopup(name:String = "", message:String = "", guild:Boolean = false, level:Boolean = false)
         {
             this.isGuildMessage = guild;
             this.m.send_bt.addEventListener(MouseEvent.CLICK, this.clickSend);
@@ -26,7 +26,17 @@ package package_4
                 this.m.nameBox.editable = false;
                 this.m.nameBox.alpha = 0.5;
             }
-            addEventListener(LOADED, this.focusTextBox);
+            if (level) {
+                addEventListener(LOADED, this.focusNameBox);
+            } else {
+                addEventListener(LOADED, this.focusTextBox);
+            }
+        }
+
+        private function focusNameBox(e:Event)
+        {
+            removeEventListener(LOADED, this.focusNameBox);
+            Main.stage.focus = this.m.nameBox;
         }
 
         private function focusTextBox(e:Event)
