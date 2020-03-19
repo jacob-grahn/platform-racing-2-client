@@ -15,6 +15,7 @@ package data
     {
 
         public static var md5:MD5 = new MD5();
+        private static var groupColors:Array = new Array("#676666", "#047B7B", "#1C369F", "#870A6F");
         private static var damnArray:Array = new Array("dang", "dingy-goo", "condemnation"); // var_397
         private static var fuckArray:Array = new Array("fooey", "fingilly", "funk-master", "freak monster", "jiminy cricket"); // var_449
         private static var shitArray:Array = new Array("shoot", "shewet"); // var_434
@@ -208,7 +209,9 @@ package data
         // method_495 = parseLinks
         public static function parseLinks(s:String):String
         {
-            s = s.replace(/(\[guildlink=)(\d+)(\])(.+)(\[\/guildlink\])/gi, "<a href='event:guild`$2'><u><font color='#0000FF'>$4</font></u></a>");
+            s = parseUser(s);
+            s = s.replace(/(\[level=)(\d{1,8})(\])(.+)(\[\/level\])/gi, "<a href='event:level`$2'><u><font color='#0000FF'>$4</font></u></a>");
+            s = s.replace(/(\[guildlink=)(\d{1,6})(\])(.+)(\[\/guildlink\])/gi, "<a href='event:guild`$2'><u><font color='#0000FF'>$4</font></u></a>");
             s = s.replace(/(\[invitelink=)(\d+)(\])(.+)(\[\/invitelink\])/gi, "<a href='event:invite`$2'><u><font color='#0000FF'>$4</font></u></a>");
             s = s.replace(/(\[color=)(#[0-9a-fA-F]{6})(\])(.+)(\[\/color\])/gi, "<font color='$2'>$4</font>");
             s = s.replace(/(\[b\])(.+)(\[\/b\])/gi, "<b>$2</b>");
@@ -216,6 +219,21 @@ package data
             s = s.replace(/(\[medium\])(.+)(\[\/medium\])/gi, "<font size='12'>$2</font>");
             s = s.replace(/(\[large\])(.+)(\[\/large\])/gi, "<font size='24'>$2</font>");
             return s;
+        }
+
+        private static function parseUser(oldStr:String):String
+        {
+            var newStr:String = oldStr.replace(/(\[(user group|user power|user)=)(\d{1})(\])([a-zA-Z0-9-.:;=?~! ]+)(\[\/user\])/gi, "<a href='event:user`$3`$5`1'><u><font color='<*>$3<*>'>$5</font></u></a>");
+            if (oldStr == newStr) {
+                return oldStr;
+            }
+
+            var arr:Array = newStr.split('<*>');
+            for (var i = 1; i < arr.length; i += 2) {
+                arr[i] = groupColors[numLimit(int(arr[i]), 0, 3)];
+            }
+
+            return arr.join('');
         }
 
         public static function numLimit(value:Number, minimum:Number, maximum:Number)

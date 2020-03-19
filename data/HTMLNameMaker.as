@@ -10,6 +10,7 @@ package data
     import package_4.PlayerGuestPopup;
     import package_4.GuildPopup;
     import package_4.GuildJoinPopup;
+    import package_4.LevelInfoPopup;
 
     public class HTMLNameMaker 
     {
@@ -75,12 +76,14 @@ package data
         private function clickLink(e:TextEvent)
         {
             var guildId:int;
+            var levelId:int;
             var arr:Array = e.text.split("`");
             var mode:String = arr[0];
             if (mode == "user") {
                 var group:int = arr[1];
                 var userName:String = arr[2];
-                if (group > 0) {
+                var forcePlayer:Boolean = Boolean(int(arr[3]));
+                if (group > 0 || forcePlayer) {
                     new PlayerPopup(userName);
                 } else {
                     new PlayerGuestPopup(userName);
@@ -91,6 +94,9 @@ package data
             } else if (mode == "invite") {
                 guildId = arr[1];
                 new GuildJoinPopup(guildId);
+            } else if (mode == "level") {
+                levelId = arr[1];
+                new LevelInfoPopup(levelId);
             }
         }
 
