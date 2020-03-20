@@ -387,7 +387,7 @@ package levelEditor
             vars.song = song;
             vars.gravity = gravity;
             vars.max_time = maxTime;
-            vars.items = var_86.join("`");
+            vars.items = allowedItems.join("`");
             vars.hasPass = this.hasPass;
             vars.gameMode = gameMode === 'eggs' ? 'egg' : gameMode;
             vars.cowboyChance = cowboyChance;
@@ -426,7 +426,7 @@ package levelEditor
             this.setSong("");
             this.setGravity("1");
             this.setMaxTime("120");
-            method_96("all");
+            setItems("all");
             this.setGameMode("race");
             this.setCowboyChance("5");
             title = "";

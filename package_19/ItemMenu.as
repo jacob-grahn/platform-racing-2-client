@@ -16,16 +16,14 @@ package package_19
     public class ItemMenu extends class_264 
     {
         private var m:ItemMenuGraphic = new ItemMenuGraphic();
-        private var var_445:int = Items.method_188().length;
+        private var var_445:int = Items.getAllCodes().length;
 
         public function ItemMenu(_arg_1:ItemMenuButton)
         {
-            ItemMenu.instance = this;
-
             var _local_3:CheckBox;
             addChild(this.m);
             super(_arg_1);
-            var _local_2:Vector.<int> = GamePage.course.var_86;
+            var _local_2:Vector.<int> = GamePage.course.allowedItems;
             var _local_4:int = 1;
             while (_local_4 <= this.var_445) {
                 _local_3 = this.m["check" + _local_4];
@@ -40,12 +38,12 @@ package package_19
         {
             if (GamePage.course != null) {
                 var _local_1:CheckBox;
-                GamePage.course.var_86 = new Vector.<int>();
+                GamePage.course.allowedItems = new Vector.<int>();
                 var _local_2:int = 1;
                 while (_local_2 <= this.var_445) {
                     _local_1 = this.m["check" + _local_2];
                     if (_local_1.selected) {
-                        GamePage.course.var_86.push(_local_2);
+                        GamePage.course.allowedItems.push(_local_2);
                     }
                     _local_2++;
                 }

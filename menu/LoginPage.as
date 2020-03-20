@@ -26,7 +26,7 @@ package menu
     {
 
         private var m:LoginPageGraphic = new LoginPageGraphic();
-        private var itemsArray:Array = new Array(); // itemsArray = var_45
+        private var buttons:Array = new Array(); // buttons = var_45
         private var posX:Number = 275;
         private var posY:Number = 228;
         private var showHideInterval:uint;
@@ -84,7 +84,7 @@ package menu
         // method_77 = addToMenu
         private function addToMenu(pageButton:LoginPageMenuButton)
         {
-            this.itemsArray.push(pageButton);
+            this.buttons.push(pageButton);
             pageButton.x = this.posX;
             pageButton.y = this.posY;
             addChild(pageButton);
@@ -181,12 +181,12 @@ package menu
             this.m.kongLogo.removeEventListener(MouseEvent.CLICK, this.clickKong);
             this.m.loggedInAs.logoutButton.removeEventListener(MouseEvent.CLICK, this.clickLogout);
             clearInterval(this.showHideInterval);
-            for each (var item:LoginPageMenuButton in this.itemsArray) {
+            for each (var item:LoginPageMenuButton in this.buttons) {
                 item.remove();
                 item = null;
             }
-            this.itemsArray = new Array();
-            this.itemsArray = null;
+            this.buttons = new Array();
+            this.buttons = null;
             this.m.bg.bg1.stop();
             this.m.bg.bg2.stop();
             this.m.bg.bg3.stop();

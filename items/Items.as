@@ -20,7 +20,8 @@ package items
         public static const iceWave:int = 9; // const_40
 
 
-        public static function method_188():Vector.<int>
+        // method_188 = getAllCodes
+        public static function getAllCodes():Vector.<int>
         {
             return new <int>[laserGun, mine, lightning, teleport, superJump, jetPack, speedBurst, sword, iceWave];
         }

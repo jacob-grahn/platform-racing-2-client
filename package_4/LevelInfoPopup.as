@@ -50,7 +50,7 @@
         private var hoverCowboyChance:HoverPopup;
         private var hoverMaxTime:HoverPopup;
         private var hoverGravity:HoverPopup;
-        private var hoverItems:HoverPopup;
+        private var hoverItems:InfoPopup;
 
         // uploading popup
         private var uploadingRemove:UploadingPopup;
@@ -230,12 +230,13 @@
 
         private function overItemsHandler(e:MouseEvent)
         {
-
+            this.hoverItems = new ItemMenu(this.items, this.m.levelInfo.items);
         }
 
         private function outItemsHandler(e:*)
         {
-            
+            this.hoverItems.remove();
+            this.hoverItems = null;
         }
 
         private function determineMode(mode:String)

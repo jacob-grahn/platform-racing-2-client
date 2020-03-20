@@ -21,7 +21,7 @@ package page
 
         public static var course:GamePage;
 
-        public var var_86:Vector.<int>;
+        public var allowedItems:Vector.<int>; // var_86
         public var var_14:Sprite = new Sprite();
         protected var color:Number = 12303325; //0;
         protected var var_133:Array = new Array();
@@ -60,7 +60,7 @@ package page
             addChild(this.var_14);
             Main.stage.focus = Main.stage;
             super.initialize();
-            this.method_96("all");
+            this.setItems("all");
         }
 
         protected function attachBackgrounds()
@@ -169,35 +169,32 @@ package page
             this.cowboyChance = _arg_1;
         }
 
-        public function method_96(_arg_1:String)
+        // _loc2 = items
+        // _loc3 = i
+        // _loc5 = itemName
+        // _loc6 = itemCode
+        // removed _loc4 (itemsArr.length), _loc7 (Items.getAllCodes().length)
+        // method_96 = setItems
+        public function setItems(itemsStr:String)
         {
-            var _local_2:Array;
-            var _local_3:int;
-            var _local_4:int;
-            var _local_5:String;
-            var _local_6:int;
-            var _local_7:int;
-            if (_arg_1 == "") {
-                this.var_86 = new Vector.<int>();
-            } else if (_arg_1 == "all" || _arg_1 == null) {
-                this.var_86 = Items.method_188();
+            if (itemsStr == "") {
+                this.allowedItems = new Vector.<int>();
+            } else if (itemsStr == "all" || itemsStr == null) {
+                this.allowedItems = Items.getAllCodes();
             } else {
-                this.var_86 = new Vector.<int>();
-                _local_2 = _arg_1.split("`");
-                _local_4 = _local_2.length;
-                _local_7 = Items.method_188().length;
-                _local_3 = 0;
-                while (_local_3 < _local_4) {
-                    _local_5 = _local_2[_local_3];
-                    if (_local_5.length > 1) {
-                        _local_6 = Items.getCodeFromName(_local_5);
+                this.allowedItems = new Vector.<int>();
+                var itemsArr:Array = itemsStr.split("`");
+                for (var i = 0; i < itemsArr.length; i++) {
+                    var itemName:String = itemsArr[i];
+                    var itemCode:int;
+                    if (itemName.length > 1) {
+                        itemCode = Items.getCodeFromName(itemName);
                     } else {
-                        _local_6 = Number(_local_5);
+                        itemCode = Number(itemName);
                     }
-                    if (!isNaN(_local_6) && _local_6 >= 1 && _local_6 <= _local_7) {
-                        this.var_86.push(_local_6);
+                    if (!isNaN(itemCode) && itemCode >= 1 && itemCode <= Items.getAllCodes().length) {
+                        this.allowedItems.push(itemCode);
                     }
-                    _local_3++;
                 }
             }
         }
@@ -231,7 +228,7 @@ package page
             _local_5 = class_74.numLimit(_local_5, 0, 9999);
             _local_4 = String(_local_5);
             this.setMaxTime(_local_4);
-            this.method_96(vars.items);
+            this.setItems(vars.items);
             this.levelID = vars.level_id;
         }
 
