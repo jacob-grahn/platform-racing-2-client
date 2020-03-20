@@ -30,7 +30,8 @@
         private var title:String = ''; // title
         private var note:String = ''; // note
         private var version:int = 1; // version
-        private var updated:Date; // time
+        private var time:int = 0; // time
+        private var updated:Date;
         private var plays:int = 0; // play_count
         private var rating:Number = 0.0; // rating
 
@@ -64,6 +65,8 @@
 
             this.levelId = id;
             this.m.levelInfo.visible = false;
+            this.m.levelInfo.rating.buttonMode = this.m.levelInfo.gameMode.buttonMode = true;
+            this.m.levelInfo.rating.cover.visible = this.m.levelInfo.gameMode.cover.visible = false;
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
             addChild(this.m);
             this.superLoader = new SuperLoader(true, SuperLoader.j);
@@ -86,7 +89,8 @@
             this.userName = ret.user_name;
             this.userGroup = ret.user_group;
             this.rating = ret.rating;
-            this.updated = new Date(ret.time * 1000);
+            this.time = ret.time;
+            this.updated = new Date(this.time * 1000);
             this.gravity = ret.gravity;
             this.maxTime = ret.max_time;
             this.items = ret.items;
@@ -104,11 +108,11 @@
             this.m.levelInfo.author.htmlText = 'by: ' + this.htmlNameMaker.makeName(ret.user_name, ret.user_group);
             this.htmlNameMaker.listenForLink(this.m.levelInfo.author);
             this.m.levelInfo.updated.text = this.updated.date + '/' + class_28.getMonthStr(this.updated.month) + '/' + this.updated.fullYear;
-            this.m.levelInfo.ratingStars.bar.scaleX = this.rating / 5;
+            this.m.levelInfo.rating.stars.bar.scaleX = this.rating / 5;
 
             // hover events
-            this.m.levelInfo.ratingStars.addEventListener(MouseEvent.MOUSE_OVER, this.overRatingHandler, false, 0, true);
-            this.m.levelInfo.ratingStars.addEventListener(MouseEvent.MOUSE_OUT, this.outRatingHandler, false, 0, true);
+            this.m.levelInfo.rating.addEventListener(MouseEvent.MOUSE_OVER, this.overRatingHandler, false, 0, true);
+            this.m.levelInfo.rating.addEventListener(MouseEvent.MOUSE_OUT, this.outRatingHandler, false, 0, true);
             this.m.levelInfo.gameMode.addEventListener(MouseEvent.MOUSE_OVER, this.overGameModeHandler, false, 0, true);
             this.m.levelInfo.gameMode.addEventListener(MouseEvent.MOUSE_OUT, this.outGameModeHandler, false, 0, true);
             this.m.levelInfo.song.addEventListener(MouseEvent.MOUSE_OVER, this.overSongHandler, false, 0, true);
@@ -156,22 +160,26 @@
 
         private function overRatingHandler(e:MouseEvent)
         {
-            this.hoverRating = new HoverPopup('Rating', this.rating, this.m.levelInfo.ratingStars);
+            this.m.levelInfo.rating.cover.visible = true;
+            this.hoverRating = new HoverPopup('Rating', this.rating, this.m.levelInfo.rating);
         }
 
         private function outRatingHandler(e:*)
         {
+            this.m.levelInfo.rating.cover.visible = false;
             this.hoverRating.remove();
             this.hoverRating = null;
         }
 
         private function overGameModeHandler(e:MouseEvent)
         {
+            this.m.levelInfo.gameMode.cover.visible = true;
             this.hoverGameMode = new HoverPopup('Game Mode', this.gameMode, this.m.levelInfo.gameMode);
         }
 
         private function outGameModeHandler(e:*)
         {
+            this.m.levelInfo.gameMode.cover.visible = false;
             this.hoverGameMode.remove();
             this.hoverGameMode = null;
         }
@@ -200,7 +208,7 @@
 
         private function overMaxTimeHandler(e:MouseEvent)
         {
-            this.hoverMaxTime = new HoverPopup('Time Limit', this.maxTime == 0 || (this.maxTime == 999 && ret.time < 1358640000) ? 'Infinite' : class_28.formatTime(this.maxTime) + " (" + class_28.formatNumber(this.maxTime) + " seconds)", this.m.levelInfo.maxTime);
+            this.hoverMaxTime = new HoverPopup('Time Limit', this.maxTime == 0 || (this.maxTime == 999 && this.time < 1358640000) ? 'Infinite' : class_28.formatTime(this.maxTime) + " (" + class_28.formatNumber(this.maxTime) + " seconds)", this.m.levelInfo.maxTime);
         }
 
         private function outMaxTimeHandler(e:*)
@@ -234,16 +242,16 @@
         {
             if (mode == 'deathmatch' || mode == 'dm' || mode == 'd') {
                 mode = 'Deathmatch';
-                this.m.levelInfo.gameMode.gotoAndStop(2);
+                this.m.levelInfo.gameMode.modeSym.gotoAndStop(2);
             } else if (mode == 'eggs' || mode == 'egg' || mode == 'e') {
                 mode = 'Alien Eggs';
-                this.m.levelInfo.gameMode.gotoAndStop(3);
+                this.m.levelInfo.gameMode.modeSym.gotoAndStop(3);
             } else if (mode == 'objective' || mode == 'obj' || mode == 'o') {
                 mode = 'Objective';
-                this.m.levelInfo.gameMode.gotoAndStop(4);
+                this.m.levelInfo.gameMode.modeSym.gotoAndStop(4);
             } else {
                 mode = 'Race';
-                this.m.levelInfo.gameMode.gotoAndStop(1);
+                this.m.levelInfo.gameMode.modeSym.gotoAndStop(1);
             }
             return mode;
         }
@@ -372,8 +380,8 @@
                 LevelInfoPopup.instance = null;
             }
             this.closeHoverPopups();
-            this.m.levelInfo.ratingStars.removeEventListener(MouseEvent.MOUSE_OVER, this.overRatingHandler);
-            this.m.levelInfo.ratingStars.removeEventListener(MouseEvent.MOUSE_OUT, this.outRatingHandler);
+            this.m.levelInfo.rating.removeEventListener(MouseEvent.MOUSE_OVER, this.overRatingHandler);
+            this.m.levelInfo.rating.removeEventListener(MouseEvent.MOUSE_OUT, this.outRatingHandler);
             this.m.levelInfo.gameMode.removeEventListener(MouseEvent.MOUSE_OVER, this.overGameModeHandler);
             this.m.levelInfo.gameMode.removeEventListener(MouseEvent.MOUSE_OUT, this.outGameModeHandler);
             this.m.levelInfo.song.removeEventListener(MouseEvent.MOUSE_OVER, this.overSongHandler);

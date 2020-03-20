@@ -61,6 +61,12 @@ package data
             return '<u><font color="#0000FF"><a href="event:guild`' + id + '">' + name + "</a></font></u>";
         }
 
+        public function makeLevel(name:String, id:int):String
+        {
+            name = class_28.escapeString(name);
+            return '<u><font color="#0000FF"><a href="event:level`' + id + '">' + name + "</a></font></u>";
+        }
+
         public function listenForLink(textbox:*)
         {
             this.array.push(textbox);

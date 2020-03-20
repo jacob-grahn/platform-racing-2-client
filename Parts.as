@@ -400,7 +400,7 @@ package
         public static const OBTAIN_HEAD_SIR:String = 'Won randomly in races with 2-4 players.';
         public static const OBTAIN_HEAD_VERY_INVISIBLE:String = 'Cannot be obtained; rented in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_HEAD_TACO:String = 'Won randomly in races with 2-4 players.';
-        public static const OBTAIN_HEAD_SLENDER:String = 'Has a 1 in 3 chance of appearing on Deliverance by changelings.';
+        public static const OBTAIN_HEAD_SLENDER:String = 'Has a 1 in 3 chance of appearing on -Deliverance- by changelings.';
         public static const OBTAIN_HEAD_SANTA:String = 'Log into your PR2 account on Christmas Eve or Day.';
         public static const OBTAIN_HEAD_FROST_DJINN:String = 'Purchased in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_HEAD_REINDEER:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
@@ -446,7 +446,7 @@ package
         public static const OBTAIN_BODY_FRED:String = 'Cannot be obtained; rented in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_BODY_VERY_INVISIBLE:String = 'Cannot be obtained; rented in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_BODY_TACO:String = 'Won randomly in races with 2-4 players.';
-        public static const OBTAIN_BODY_SLENDER:String = 'Has a 1 in 3 chance of appearing on Deliverance by changelings.';
+        public static const OBTAIN_BODY_SLENDER:String = 'Has a 1 in 3 chance of appearing on -Deliverance- by changelings.';
         public static const OBTAIN_BODY_SANTA:String = 'Log into your PR2 account on Christmas Eve or Day.';
         public static const OBTAIN_BODY_FROST_DJINN:String = 'Purchased in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_BODY_REINDEER:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
@@ -490,7 +490,7 @@ package
         public static const OBTAIN_FEET_VERY_INVISIBLE:String = 'Cannot be obtained; rented in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_FEET_BUBBLE:String = 'Find the artifact first. <u><font color="#0000FF"><a href="https://jiggmin2.com/forums/showthread.php?tid=1677" target="_blank">Here\'s some more information!</a></font></u>';
         public static const OBTAIN_FEET_TACO:String = 'Won randomly in races with 2-4 players.';
-        public static const OBTAIN_FEET_SLENDER:String = 'Has a 1 in 3 chance of appearing on Deliverance by changelings.';
+        public static const OBTAIN_FEET_SLENDER:String = 'Has a 1 in 3 chance of appearing on -Deliverance- by changelings.';
         public static const OBTAIN_FEET_SANTA:String = 'Log into your PR2 account on Christmas Eve or Day.';
         public static const OBTAIN_FEET_FROST_DJINN:String = 'Purchased in the Vault of Magics. Log into <u><font color="#0000FF"><a href="http://www.kongregate.com/games/Jiggmin/platform-racing-2?gamereferral=platformracing2" target="_blank">Kongregate</a></font></u> to use the vault!';
         public static const OBTAIN_FEET_REINDEER:String = 'Won in contests. <u><font color="#0000FF"><a href="https://pr2hub.com/contests" target="_blank">Here\'s some more information!</a></font></u>';
