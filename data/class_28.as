@@ -209,26 +209,51 @@ package data
         // method_495 = parseLinks
         public static function parseLinks(s:String):String
         {
+            // user link: [user=group]display text[/user] -- user group=, user power=, userlink=
             s = parseUser(s);
+            
+            // urls: [url]link[/url], [url=link]display text[/url]
+            s = s.replace(/\[[uU][rR][lL]\]((http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$1</font></u></a>");
+            s = s.replace(/\[[uU][rR][lL]=((http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\](.+?)\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$6</font></u></a>");
+
+            // level: [level=id]display text[/level]
             s = s.replace(/(\[level=)(\d{1,8})(\])(.+)(\[\/level\])/gi, "<a href='event:level`$2'><u><font color='#0000FF'>$4</font></u></a>");
+
+            // guild link: [guild=id]display text[/guild], [guildlink=id]display text[/guildlink]
+            s = s.replace(/(\[guild=)(\d{1,6})(\])(.+)(\[\/guild\])/gi, "<a href='event:guild`$2'><u><font color='#0000FF'>$4</font></u></a>");
             s = s.replace(/(\[guildlink=)(\d{1,6})(\])(.+)(\[\/guildlink\])/gi, "<a href='event:guild`$2'><u><font color='#0000FF'>$4</font></u></a>");
-            s = s.replace(/(\[invitelink=)(\d+)(\])(.+)(\[\/invitelink\])/gi, "<a href='event:invite`$2'><u><font color='#0000FF'>$4</font></u></a>");
+
+            // invite link: [invite=guildid]display text[/invite], [invitelink=guildid]display text[/invite]
+            s = s.replace(/(\[invite=)(\d+)(\])(.+)(\[\/invite\])/gi, "<a href='event:invite`$2'><u><font color='#0000FF'>$4</font></u></a>"); // [invite=id]text[/invite]
+            s = s.replace(/(\[invitelink=)(\d+)(\])(.+)(\[\/invitelink\])/gi, "<a href='event:invite`$2'><u><font color='#0000FF'>$4</font></u></a>"); // [invitelink=id]text[/invitelink]
+
+            // text color: [color=#hex]text[/color]
             s = s.replace(/(\[color=)(#[0-9a-fA-F]{6})(\])(.+)(\[\/color\])/gi, "<font color='$2'>$4</font>");
+
+            // bold text: [b]text[/b], [bold]text[/bold]
             s = s.replace(/(\[b\])(.+)(\[\/b\])/gi, "<b>$2</b>");
+            s = s.replace(/(\[bold\])(.+)(\[\/bold\])/gi, "<b>$2</b>");
+
+            // text sizing: [small]text[/small], [medium]text[/medium], [large]text[/large] (or big)
             s = s.replace(/(\[small\])(.+)(\[\/small\])/gi, "<font size='6'>$2</font>");
             s = s.replace(/(\[medium\])(.+)(\[\/medium\])/gi, "<font size='12'>$2</font>");
             s = s.replace(/(\[large\])(.+)(\[\/large\])/gi, "<font size='24'>$2</font>");
+            s = s.replace(/(\[big\])(.+)(\[\/big\])/gi, "<font size='24'>$2</font>");
+
             return s;
         }
 
-        private static function parseUser(oldStr:String):String
+        private static function parseUser(s:String):String
         {
-            var newStr:String = oldStr.replace(/(\[(user group|user power|user)=)(\d{1})(\])([a-zA-Z0-9-.:;=?~! ]+)(\[\/user\])/gi, "<a href='event:user`$3`$5`1'><u><font color='<*>$3<*>'>$5</font></u></a>");
-            if (oldStr == newStr) {
-                return oldStr;
+            var sNew:String = s.replace(/(\[user=)(\d{1})(\])([a-zA-Z0-9-.:;=?~! ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
+            sNew = sNew.replace(/(\[user group=)(\d{1})(\])([a-zA-Z0-9-.:;=?~! ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
+            sNew = sNew.replace(/(\[user power=)(\d{1})(\])([a-zA-Z0-9-.:;=?~! ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
+            sNew = sNew.replace(/(\[userlink=)(\d{1})(\])([a-zA-Z0-9-.:;=?~! ]+)(\[\/userlink\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
+            if (s == sNew) {
+                return s;
             }
 
-            var arr:Array = newStr.split('<*>');
+            var arr:Array = sNew.split('<*>');
             for (var i = 1; i < arr.length; i += 2) {
                 arr[i] = groupColors[numLimit(int(arr[i]), 0, 3)];
             }

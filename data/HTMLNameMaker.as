@@ -11,6 +11,9 @@ package data
     import package_4.GuildPopup;
     import package_4.GuildJoinPopup;
     import package_4.LevelInfoPopup;
+    import package_4.ExternalLinkPopup;
+    import flash.net.navigateToURL;
+    import flash.net.URLRequest;
 
     public class HTMLNameMaker 
     {
@@ -67,6 +70,13 @@ package data
             return '<u><font color="#0000FF"><a href="event:level`' + id + '">' + name + "</a></font></u>";
         }
 
+        public function makeLink(disp:String, url:String):String
+        {
+            disp = class_28.escapeString(disp);
+            url = encodeURI(class_28.escapeString(url));
+            return '<u><font color="#0000FF"><a href="event:url`' + url + '">' + disp + "</a></font></u>";
+        }
+
         public function listenForLink(textbox:*)
         {
             this.array.push(textbox);
@@ -82,7 +92,6 @@ package data
         private function clickLink(e:TextEvent)
         {
             var guildId:int;
-            var levelId:int;
             var arr:Array = e.text.split("`");
             var mode:String = arr[0];
             if (mode == "user") {
@@ -101,8 +110,11 @@ package data
                 guildId = arr[1];
                 new GuildJoinPopup(guildId);
             } else if (mode == "level") {
-                levelId = arr[1];
+                var levelId:int = arr[1];
                 new LevelInfoPopup(levelId);
+            } else if (mode == "url") {
+                var url:String = arr[1];
+                new ExternalLinkPopup(url);
             }
         }
 

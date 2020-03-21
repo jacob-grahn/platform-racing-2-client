@@ -62,6 +62,7 @@ package package_4
                     if (Main.guildOwner == 0) {
                         this.addOptionsButton(this.m.guildLeave_bt, this.clickLeaveGuild);
                     } else {
+                        this.addOptionsButton(this.m.guildTransfer_bt, this.clickGuildTransfer);
                         this.addOptionsButton(this.m.guildEdit_bt, this.clickGuildEdit);
                     }
                 } else {
@@ -197,6 +198,15 @@ package package_4
             startFadeOut();
         }
 
+        private function clickGuildTransfer(e:MouseEvent)
+        {
+            if (Main.remember == true) {
+                flash.net.navigateToURL(new URLRequest(Main.baseURL + '/guild_transfer.php'));
+            } else {
+                new MessagePopup("Psst... I won't work if you\'re not logged in with remember me. Log back in with remember me enabled and click me again! :)");
+            }
+        }
+
         // method_292 = clickClose
         private function clickClose(e:MouseEvent)
         {
@@ -220,6 +230,7 @@ package package_4
             this.m.guildLeave_bt.removeEventListener(MouseEvent.CLICK, this.clickLeaveGuild);
             this.m.guildCreate_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildCreate);
             this.m.guildEdit_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildEdit);
+            this.m.guildTransfer_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildTransfer);
             this.m.music_bt.removeEventListener(MouseEvent.CLICK, clickMusic);
             this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OVER, hoverMusic);
             this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic);
