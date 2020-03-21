@@ -9,6 +9,7 @@
     import data.class_33;
     import flash.net.URLRequestMethod;
     import package_6.Game;
+    import lobby.LobbyRight;
 
     public class LevelInfoPopup extends Popup 
     {
@@ -127,12 +128,12 @@
             this.m.levelInfo.items.addEventListener(MouseEvent.MOUSE_OUT, this.outItemsHandler, false, 0, true);
 
             // enable play button
-            var myRank:Number = class_33.getNumber("userRank");
+            /*var myRank:Number = class_33.getNumber("userRank");
             myRank = isNaN(myRank) || myRank < 0 ? 0 : myRank;
             if ((this.live && !this.hasPass && this.minRank <= myRank) || Main.group >= 2) {
                 this.m.play_bt.enabled = true;
                 this.m.play_bt.addEventListener(MouseEvent.CLICK, this.clickPlay, false, 0, true);
-            }
+            }*/
 
             // buttons
             if (Main.group >= 1) {
@@ -145,7 +146,8 @@
                     this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.CLICK, this.clickRemove, false, 0, true);
                 } else if (Main.group == 1) {
                     this.m.levelInfo.removeChild(this.m.levelInfo.unpublish_bt);
-                    this.m.levelInfo.report_bt.addEventListener(MouseEvent.CLICK, this.clickReport, false, 0, true);
+                    this.m.levelInfo.removeChild(this.m.levelInfo.report_bt); // disable before 160
+                    //this.m.levelInfo.report_bt.addEventListener(MouseEvent.CLICK, this.clickReport, false, 0, true);
                 }
             } else {
                 this.m.levelInfo.removeChild(this.m.levelInfo.report_bt);
@@ -342,7 +344,9 @@
             */
             //startFadeOut();
             //Main.pageHolder.changePage(new Game(this.levelId, this.version));
-            new MessagePopup('Placeholder!'); // code to automatically start the race
+            LobbyRight.lobbyRight.lookupLevel(this.levelId);
+            startFadeOut();
+            //new MessagePopup('Placeholder!'); // code to automatically start the race
         }
 
         private function clickClose(e:*)
