@@ -59,12 +59,13 @@ package package_4
                 this.addOptionsButton(this.m.changePass_bt, this.clickChangePass);
                 this.addOptionsButton(this.m.changeEmail_bt, this.clickChangeEmail);
                 if (Main.guild != 0) {
-                    this.addOptionsButton(this.m.guildLeave_bt, this.clickLeaveGuild);
+                    if (Main.guildOwner == 0) {
+                        this.addOptionsButton(this.m.guildLeave_bt, this.clickLeaveGuild);
+                    } else {
+                        this.addOptionsButton(this.m.guildEdit_bt, this.clickGuildEdit);
+                    }
                 } else {
                     this.addOptionsButton(this.m.guildCreate_bt, this.clickGuildCreate);
-                }
-                if (Main.guildOwner == 1) {
-                    this.addOptionsButton(this.m.guildEdit_bt, this.clickGuildEdit);
                 }
             }
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
