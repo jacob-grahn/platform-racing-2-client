@@ -23,7 +23,7 @@ package package_22
         private var memory:Object = Memory.memory;
         private var var_421:uint;
 
-        public function Search(s:String = "")
+        public function Search(s:String = '', search_mode:String = 'user')
         {
             mode = "search";
             this.m.x = 36;
@@ -43,9 +43,21 @@ package package_22
             }
             if (s != "") {
                 this.m.searchBox.text = s;
-                this.m.mode_cb.selectedIndex = 0;
+                this.setSearchMode(search_mode);
                 this.var_421 = setTimeout(this.requestCourses, 10);
             }
+        }
+
+        private function setSearchMode(s:String = 'user')
+        {
+            var option:int = 0; // user; default
+            for (var key:int = 0; key < this.m.mode_cb.dataProvider.length; key++) {
+                if (this.m.mode_cb.dataProvider.getItemAt(key).data == s) {
+                    option = key;
+                    break;
+                }
+            }
+            this.m.mode_cb.selectedIndex = option;
         }
 
         // _loc1 = vars

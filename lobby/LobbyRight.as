@@ -70,6 +70,12 @@ package lobby
             changePage(new Search(userName));
         }
 
+        public function lookupLevel(levelID:String = "")
+        {
+            this.searchTab.select();
+            changePage(new Search(levelID, 'id'));
+        }
+
         override public function remove()
         {
             LobbyRight.lobbyRight = null;
