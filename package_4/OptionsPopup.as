@@ -55,6 +55,7 @@ package package_4
             this.m.removeChild(this.m.guildLeave_bt);
             this.m.removeChild(this.m.guildCreate_bt);
             this.m.removeChild(this.m.guildEdit_bt);
+            this.m.removeChild(this.m.guildTransfer_bt);
             if (Main.group != 0) {
                 this.addOptionsButton(this.m.changePass_bt, this.clickChangePass);
                 this.addOptionsButton(this.m.changeEmail_bt, this.clickChangeEmail);
