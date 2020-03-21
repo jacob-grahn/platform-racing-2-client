@@ -129,11 +129,11 @@
 
             // enable play button
             /*var myRank:Number = class_33.getNumber("userRank");
-            myRank = isNaN(myRank) || myRank < 0 ? 0 : myRank;
-            if ((this.live && !this.hasPass && this.minRank <= myRank) || Main.group >= 2) {
+            myRank = isNaN(myRank) || myRank < 0 ? 0 : myRank;*/
+            //if ((this.live && !this.hasPass && this.minRank <= myRank) || Main.group >= 2) {
                 this.m.play_bt.enabled = true;
                 this.m.play_bt.addEventListener(MouseEvent.CLICK, this.clickPlay, false, 0, true);
-            }*/
+            //}
 
             // buttons
             if (Main.group >= 1) {
