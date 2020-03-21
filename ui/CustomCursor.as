@@ -98,8 +98,8 @@ package ui
             stageRef.addEventListener(TouchEvent.TOUCH_END, this.touchHandler);
             stageRef.addEventListener(TouchEvent.TOUCH_ROLL_OVER, this.touchHandler);
             stageRef.addEventListener(TouchEvent.TOUCH_ROLL_OUT, this.touchHandler);
-            stageRef.addEventListener(KeyboardEvent.KEY_DOWN, this.keyHandler);
-            stageRef.addEventListener(KeyboardEvent.KEY_UP, this.keyHandler);
+            stageRef.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
+            stageRef.addEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler);
         }
 
         private function touchHandler(e:TouchEvent)
@@ -138,8 +138,8 @@ package ui
             stageRef.removeEventListener(TouchEvent.TOUCH_END, this.touchHandler);
             stageRef.removeEventListener(TouchEvent.TOUCH_ROLL_OVER, this.touchHandler);
             stageRef.removeEventListener(TouchEvent.TOUCH_ROLL_OUT, this.touchHandler);
-            stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyHandler);
-            stageRef.removeEventListener(KeyboardEvent.KEY_UP, this.keyHandler);
+            stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
+            stageRef.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler);
         }
 
         // method_23 = isActive
@@ -193,28 +193,26 @@ package ui
             this.mouseDown = false;
         }
 
-        public function keyHandler(e:KeyboardEvent) // Arrow keys trigger this fn continuously. Add active variable to be checked before changing to deleter? Or remove else?
+        public function keyDownHandler(e:KeyboardEvent)
         {
-            var err:Error = new Error();
-            Main.traceExt('Generated Fake ' + err.getStackTrace());
             if (LevelEditor.editor == null || instance == null || instance is TextTool || instance is Brush || instance is CursorEyedropper) {
                 return;
             }
-            Main.traceExt('Instance Type: ' + instance);
-            Main.traceExt('Event Type: ' + e.type);
-            if (e.type == 'keyDown' && (e.keyCode == Keyboard.COMMAND || e.keyCode == Keyboard.CONTROL) && !(instance is ObjectDeleter)) {
-                Memory.memory.leCursorTempInstanceType = getQualifiedClassName(instance); //fullType.substr(fullType.lastIndexOf(':') + 1, fullType.length);
+            if ((e.keyCode == Keyboard.COMMAND || e.keyCode == Keyboard.CONTROL) && !(instance is ObjectDeleter)) {
+                Memory.memory.leCursorTempInstanceType = getQualifiedClassName(instance);
                 Memory.memory.leCursorTempInstanceID = instance.getID();
-                Main.traceExt('changing to deleter');
                 change(new ObjectDeleter());
-            } else if (Memory.memory.leCursorTempInstanceType != null && Memory.memory.leCursorTempInstanceType.indexOf('ObjectDeleter') == -1) {
+            }
+        }
+
+        public function keyUpHandler(e:KeyboardEvent)
+        {
+            if (LevelEditor.editor == null || instance == null || instance is TextTool || instance is Brush || instance is CursorEyedropper) {
+                return;
+            }
+            if (Memory.memory.leCursorTempInstanceType != null && Memory.memory.leCursorTempInstanceType.indexOf('ObjectDeleter') == -1) {
                 var tempItem = getDefinitionByName(Memory.memory.leCursorTempInstanceType) as Class;
-                Main.traceExt('changing back to tool');
                 change(new tempItem(Memory.memory.leCursorTempInstanceID));
-                Memory.memory.leCursorTempInstanceType = null;
-                Memory.memory.leCursorTempInstanceID = null;
-            } else {
-                Main.traceExt('clear');
                 Memory.memory.leCursorTempInstanceType = null;
                 Memory.memory.leCursorTempInstanceID = null;
             }
