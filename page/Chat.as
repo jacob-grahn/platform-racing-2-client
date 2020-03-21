@@ -12,6 +12,7 @@ package page
     import package_4.PlayerPopup;
     import package_4.GuildPopup;
     import package_4.SendMessagePopup;
+    import package_4.LevelInfoPopup;
 
     public class Chat extends Page 
     {
@@ -73,6 +74,8 @@ package page
                 new GuildPopup(0, message.substr(7));
             } else if (message.indexOf("/pm ") == 0) {
                 new SendMessagePopup(message.substr(4));
+            } else if (message.indexOf("/level ") == 0) {
+                new LevelInfoPopup(message.substr(7));
             } else {
                 message = message.replace("", "");
                 message = message.replace("\n", "");
