@@ -64,8 +64,8 @@ package package_22
         // _loc2 = request
         override protected function requestCourses()
         {
-            if (class_28.trimWhitespace(this.m.searchBox.text) == '') {
-                return; // don't send a request with a blank search string
+            if (class_28.trimWhitespace(this.m.searchBox.text) == '' || (this.m.mode_cb.selectedItem.data == 'id' && pageNum > 1)) {
+                return; // don't send a request with a blank search string, or on a page higher than one while searching by id
             }
             var vars:URLVariables = new URLVariables();
             vars.search_str = this.m.searchBox.text;
