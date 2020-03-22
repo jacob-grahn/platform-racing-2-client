@@ -213,8 +213,8 @@ package data
             s = parseUser(s);
             
             // urls: [url]link[/url], [url=link]display text[/url]
-            s = s.replace(/\[[uU][rR][lL]\]((http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$1</font></u></a>");
-            s = s.replace(/\[[uU][rR][lL]=((http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\](.+?)\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$6</font></u></a>");
+            s = s.replace(/\[[uU][rR][lL]\](https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$1</font></u></a>");
+            s = s.replace(/\[[uU][rR][lL]=(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\](.+?)\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$4</font></u></a>");
 
             // level: [level=id]display text[/level]
             s = s.replace(/(\[level=)(\d{1,8})(\])(.+)(\[\/level\])/gi, "<a href='event:level`$2'><u><font color='#0000FF'>$4</font></u></a>");
