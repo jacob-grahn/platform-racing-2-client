@@ -6,12 +6,17 @@
 
     public class ExternalLinkPopup extends Popup 
     {
+        private static var instance:ExternalLinkPopup;
 
         private var m:ExternalLinkPopupGraphic = new ExternalLinkPopupGraphic();
         private var url:String;
 
         public function ExternalLinkPopup(link:String)
         {
+            if (ExternalLinkPopup.instance != null) {
+                ExternalLinkPopup.instance.startFadeOut();
+            }
+            ExternalLinkPopup.instance = this;
             this.url = link;
             this.m.linkBox.text = this.url;
             this.m.proceed_bt.addEventListener(MouseEvent.CLICK, this.clickGo, false, 0, true);
@@ -33,6 +38,9 @@
 
         override public function remove()
         {
+            if (ExternalLinkPopup.instance === this) {
+                ExternalLinkPopup.instance = null;
+            }
             this.m.proceed_bt.removeEventListener(MouseEvent.CLICK, this.clickGo);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
             super.remove();
