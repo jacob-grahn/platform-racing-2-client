@@ -344,6 +344,12 @@
             */
             //startFadeOut();
             //Main.pageHolder.changePage(new Game(this.levelId, this.version));
+            if (PartPopup.instance != null) {
+                PartPopup.instance.startFadeOut();
+            }
+            if (PartInfoPopup.instance != null) {
+                PartInfoPopup.instance.startFadeOut();
+            }
             LobbyRight.lobbyRight.lookupLevel(this.levelId);
             startFadeOut();
             //new MessagePopup('Placeholder!'); // code to automatically start the race
