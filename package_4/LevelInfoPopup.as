@@ -164,7 +164,10 @@
         private function overRatingHandler(e:MouseEvent)
         {
             this.m.levelInfo.rating.cover.visible = true;
-            this.hoverRating = new HoverPopup('Rating', this.rating, this.m.levelInfo.rating);
+            this.hoverRating = new HoverPopup('', this.rating, this.m.levelInfo.rating);
+            this.hoverRating.x += 238;
+            this.hoverRating.y -= 15;
+            this.hoverRating.width /= 2;
         }
 
         private function outRatingHandler(e:*)
@@ -190,6 +193,7 @@
         private function overSongHandler(e:MouseEvent)
         {
             this.hoverSong = new HoverPopup('Music', this.song, this.m.levelInfo.song);
+            this.hoverSong.x += 193;
         }
 
         private function outSongHandler(e:*)
