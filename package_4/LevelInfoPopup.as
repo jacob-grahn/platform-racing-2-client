@@ -9,6 +9,7 @@
     import data.class_33;
     import flash.net.URLRequestMethod;
     import package_6.Game;
+    import package_18.PartInfo.*;
     import lobby.LobbyRight;
 
     public class LevelInfoPopup extends Popup 
