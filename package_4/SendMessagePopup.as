@@ -21,6 +21,7 @@ package package_4
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
             this.m.nameBox.text = name;
             this.m.textBox.text = message;
+            this.m.textBox.addEventListener(Event.CHANGE, this.countChars);
             addChild(this.m);
             if (this.isGuildMessage) {
                 this.m.nameBox.editable = false;
@@ -31,6 +32,7 @@ package package_4
             } else {
                 addEventListener(LOADED, this.focusTextBox);
             }
+            this.countChars();
         }
 
         private function focusNameBox(e:Event)
@@ -43,6 +45,11 @@ package package_4
         {
             removeEventListener(LOADED, this.focusTextBox);
             Main.stage.focus = this.m.textBox;
+        }
+
+        private function countChars(e:Event = null)
+        {
+            this.m.messageCharsRemaining.text = this.m.textBox.length + " / 1000";
         }
 
         // method_264 = clickSend
@@ -81,6 +88,7 @@ package package_4
 
         override public function remove()
         {
+            this.m.textBox.removeEventListener(Event.CHANGE, this.countChars);
             this.m.send_bt.removeEventListener(MouseEvent.CLICK, this.clickSend);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
             super.remove();

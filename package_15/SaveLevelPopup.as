@@ -21,7 +21,9 @@ package package_15
         {
             this.m.titleBox.text = this.editor.title;
             this.m.noteBox.text = this.editor.note;
+            this.m.titleCharsRemaining.text = "0 / 50";
             this.m.noteCharsRemaining.text = "0 / 255";
+            this.m.titleBox.addEventListener(Event.CHANGE, this.titleCountChars);
             this.m.noteBox.addEventListener(Event.CHANGE, this.noteCountChars);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
             this.m.save_bt.addEventListener(MouseEvent.CLICK, this.clickSave);
@@ -34,6 +36,11 @@ package package_15
         private function noteCountChars(e:Event)
         {
             this.m.noteCharsRemaining.text = this.m.noteBox.length + " / 255";
+        }
+
+        private function titleCountChars(e:Event)
+        {
+            this.m.titleCharsRemaining.text = this.m.titleBox.length + " / 50";
         }
 
         private function clickCancel(e:MouseEvent)
@@ -60,6 +67,7 @@ package package_15
 
         override public function remove()
         {
+            this.m.titleBox.removeEventListener(Event.CHANGE, this.titleCountChars);
             this.m.noteBox.removeEventListener(Event.CHANGE, this.noteCountChars);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
             this.m.save_bt.removeEventListener(MouseEvent.CLICK, this.clickSave);
