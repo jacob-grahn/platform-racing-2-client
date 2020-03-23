@@ -213,8 +213,7 @@ package data
             s = parseUser(s);
             
             // urls: [url]link[/url], [url=link]display text[/url]
-            s = s.replace(/\[[uU][rR][lL]\](https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$1</font></u></a>");
-            s = s.replace(/\[[uU][rR][lL]=(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*))\](.+?)\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$4</font></u></a>");
+            s = parseURL(s);
 
             // level: [level=id]display text[/level]
             s = s.replace(/(\[level=)(\d{1,8})(\])(.+)(\[\/level\])/gi, "<a href='event:level`$2'><u><font color='#0000FF'>$4</font></u></a>");
@@ -253,9 +252,27 @@ package data
                 return s;
             }
 
+            // replace power value with corresponding group color
             var arr:Array = sNew.split('<*>');
             for (var i = 1; i < arr.length; i += 2) {
                 arr[i] = groupColors[numLimit(int(arr[i]), 0, 3)];
+            }
+
+            return arr.join('');
+        }
+
+        private static function parseURL(s:String):String
+        {
+            var sNew:String = s.replace(/\[[uU][rR][lL]\](https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(((?:&amp;)|[-a-zA-Z0-9@:%_\+.~#?&\/=])*))\[\/[uU][rR][lL]\]/g, "<a href='event:url`<*>$1<*>'><u><font color='#0000FF'><*>$1<*></font></u></a>");
+            sNew = sNew.replace(/\[[uU][rR][lL]=(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(((?:&amp;)|[-a-zA-Z0-9@:%_\+.~#?&\/=])*))\](.+?)\[\/[uU][rR][lL]\]/g, "<a href='event:url`$1'><u><font color='#0000FF'>$5</font></u></a>");
+            if (s == sNew) {
+                return s;
+            }
+
+            // replace &amp; with &
+            var arr:Array = sNew.split('<*>');
+            for (var i = 1; i < arr.length; i += 2) {
+                arr[i] = arr[i].replace(/(?:&amp;)/gi, '&');
             }
 
             return arr.join('');
