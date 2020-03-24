@@ -61,6 +61,9 @@ package
         private function onComplete(event:Event)
         {
             if (data != "") {
+                if (Main.testing == true) {
+                    trace('HTTP Response: ' + data);
+                }
                 try {
                     if (this.readMode == u) {
                         this.parsedData = new URLVariables(data);
