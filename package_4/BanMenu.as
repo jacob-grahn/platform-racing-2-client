@@ -20,46 +20,56 @@ package package_4
         private var target:Popup;
         private var userName:String;
         private var banSecs:int; // var_488
-        //private var minSecs:int = 60; // var_539
+        /*private var minSecs:int = 60; // var_539
         private var hourSecs:int = 3600; // var_501
         private var daySecs:int = 86400; // var_440
         private var weekSecs:int = 604800; // var_475
         private var monthSecs:int = 2592000; // var_343
         private var yearSecs:int = 31536000; // var_605
-        private var eternSecs:int = 145152000; // var_647
+        private var eternSecs:int = 145152000; // var_647*/
         private var uploading:UploadingPopup;
 
         public function BanMenu(name:String, playerPopup:Popup)
         {
             this.userName = name;
             this.target = playerPopup;
-            //this.m.banMinuteButton.addEventListener(MouseEvent.CLICK, this.banMinute, false, 0, true); 
             this.m.viewPriorsButton.addEventListener(MouseEvent.CLICK, this.viewPriors);
-            this.m.banHourButton.addEventListener(MouseEvent.CLICK, this.banHour, false, 0, true);
-            this.m.banDayButton.addEventListener(MouseEvent.CLICK, this.banDay, false, 0, true);
-            if (Main.isTrialMod == false) {
+            //this.m.banMinuteButton.addEventListener(MouseEvent.CLICK, this.banMinute, false, 0, true);
+            //this.m.banHourButton.addEventListener(MouseEvent.CLICK, this.banHour, false, 0, true);
+            //this.m.banDayButton.addEventListener(MouseEvent.CLICK, this.banDay, false, 0, true);
+            /*if (Main.isTrialMod == false) {
                 this.m.banWeekButton.addEventListener(MouseEvent.CLICK, this.banWeek, false, 0, true);
                 this.m.banMonthButton.addEventListener(MouseEvent.CLICK, this.banMonth, false, 0, true);
                 this.m.banYearButton.addEventListener(MouseEvent.CLICK, this.banYear, false, 0, true);
             } else {
                 this.m.banWeekButton.enabled = this.m.banMonthButton.enabled = this.m.banYearButton.enabled = false;
+            }*/
+            if (Main.isTrialMod == false) {
+                this.m.duration.addItem({"label":"One Week", "data":604800});
+                this.m.duration.addItem({"label":"One Month", "data":2592000});
+                this.m.duration.addItem({"label":"Six Months", "data":15768000});
+                this.m.duration.addItem({"label":"One Year", "data":31536000});
+                this.m.scope.addItemAt({"label":"Entire Game", "data":"game"}, 0);
+                this.m.scope.enabled = true;
             }
             this.m.warning1Button.addEventListener(MouseEvent.CLICK, this.clickWarning1, false, 0, true);
             this.m.warning2Button.addEventListener(MouseEvent.CLICK, this.clickWarning2, false, 0, true);
             this.m.warning3Button.addEventListener(MouseEvent.CLICK, this.clickWarning3, false, 0, true);
             this.m.kickButton.addEventListener(MouseEvent.CLICK, this.clickKick, false, 0, true);
+            this.m.banButton.addEventListener(MouseEvent.CLICK, this.confirmBan, false, 0, true);
             addChild(this.m);
         }
-
-        // method_388 = banMinute
-        /*private function banMinute(e:MouseEvent)
-        {
-            this.confirmBan(this.minSecs);
-        }*/
 
         private function viewPriors(e:MouseEvent)
         {
             Main.socket.write('view_priors`' + this.userName);
+        }
+
+        /*
+        // method_388 = banMinute
+        private function banMinute(e:MouseEvent)
+        {
+            this.confirmBan(this.minSecs);
         }
 
         // method_468 = banHour
@@ -90,12 +100,16 @@ package package_4
         private function banYear(e:MouseEvent)
         {
             this.confirmBan(this.yearSecs);
-        }
+        }*/
 
         // method_60 = confirmBan
-        private function confirmBan(secs:int)
+        private function confirmBan(e:MouseEvent)
         {
-            this.banSecs = secs;
+            this.banSecs = this.m.duration.selectedItem.data;
+            if (this.banSecs == 0) {
+                new MessagePopup("Error: You must specify a ban length.");
+                return;
+            }
             new ConfirmPopup(this.banUser, "Are you sure you want to ban " + class_28.escapeString(this.userName) + "?");
         }
 
@@ -105,7 +119,7 @@ package package_4
         // method_797 = banUser
         public function banUser()
         {
-            Main.socket.write("ban`" + this.userName + "`" + this.banSecs + "`" + this.m.reasonBox.text);
+            Main.socket.write("ban`" + this.userName + "`" + this.banSecs + "`" + this.m.scope.selectedItem.data + "`" + this.m.reason.text);
             var chatRecord:String = "";
             if (ChatInstance.instance != null) {
                 chatRecord = ChatInstance.instance.getChatRecord();
@@ -113,7 +127,9 @@ package package_4
             var vars:URLVariables = new URLVariables();
             vars.banned_name = this.userName;
             vars.duration = this.banSecs;
-            vars.reason = this.m.reasonBox.text;
+            vars.reason = this.m.reason.text;
+            vars.type = this.m.type.selectedItem.data;
+            vars.scope = this.m.scope.selectedItem.data;
             vars.record = chatRecord;
             var request:URLRequest = new URLRequest(Main.baseURL + "/ban_user.php");
             request.data = vars;
@@ -162,12 +178,13 @@ package package_4
 
         override public function remove()
         {
-            //this.m.banMinuteButton.removeEventListener(MouseEvent.CLICK, this.banMinute);
+            /*this.m.banMinuteButton.removeEventListener(MouseEvent.CLICK, this.banMinute);
             this.m.banHourButton.removeEventListener(MouseEvent.CLICK, this.banHour);
             this.m.banDayButton.removeEventListener(MouseEvent.CLICK, this.banDay);
             this.m.banWeekButton.removeEventListener(MouseEvent.CLICK, this.banWeek);
             this.m.banMonthButton.removeEventListener(MouseEvent.CLICK, this.banMonth);
-            this.m.banYearButton.removeEventListener(MouseEvent.CLICK, this.banYear);
+            this.m.banYearButton.removeEventListener(MouseEvent.CLICK, this.banYear);*/
+            this.m.banButton.removeEventListener(MouseEvent.CLICK, this.confirmBan);
             this.m.warning1Button.removeEventListener(MouseEvent.CLICK, this.clickWarning1);
             this.m.warning2Button.removeEventListener(MouseEvent.CLICK, this.clickWarning2);
             this.m.warning3Button.removeEventListener(MouseEvent.CLICK, this.clickWarning3);

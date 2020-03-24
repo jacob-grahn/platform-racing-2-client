@@ -52,11 +52,11 @@ package package_4
             if (Main.group >= 2) {
                 this.banMenu = new BanMenu(name, this);
                 addChild(this.banMenu);
-                this.banMenu.x = (this.banMenu.width / 2) + 45; //(this.banMenu.width / 2) + 3;
+                this.banMenu.x = (this.banMenu.width / 2) + 39; //(this.banMenu.width / 2) + 3;
                 this.m.x = this.m.x - 106; //-(this.m.width / 2) - 3;
                 if (Main.group >= 3) {
                     this.m.x = -(this.m.width / 2) - 19.5; //this.m.x - 15;
-                    this.banMenu.x = (this.banMenu.width / 2) - 13.5; //this.banMenu.x - 15;
+                    this.banMenu.x = (this.banMenu.width / 2) - 19.5; //this.banMenu.x - 15;
                     this.adminMenu = new AdminMenu(name, this);
                     this.adminMenu.x = 216.5;
                     addChild(this.adminMenu);
