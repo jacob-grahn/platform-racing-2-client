@@ -209,7 +209,7 @@ package data
         // method_495 = parseLinks
         public static function parseLinks(s:String):String
         {
-            // user link: [user=group]display text[/user] -- user group=, user power=, userlink=
+            // user link: [user=group]display text[/user]
             s = parseUser(s);
             
             // urls: [url]link[/url], [url=link]display text[/url]
@@ -245,9 +245,6 @@ package data
         private static function parseUser(s:String):String
         {
             var sNew:String = s.replace(/(\[user=)(\d{1})(\])([a-zA-Z0-9-.:;=?~!()@*,+$#% ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
-            sNew = sNew.replace(/(\[user group=)(\d{1})(\])([a-zA-Z0-9-.:;=?~!()@*,+$#% ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
-            sNew = sNew.replace(/(\[user power=)(\d{1})(\])([a-zA-Z0-9-.:;=?~!()@*,+$#% ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
-            sNew = sNew.replace(/(\[userlink=)(\d{1})(\])([a-zA-Z0-9-.:;=?~!()@*,+$#% ]+)(\[\/userlink\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
             if (s == sNew) {
                 return s;
             }

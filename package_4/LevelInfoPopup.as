@@ -297,7 +297,7 @@
 
         private function clickShare(e:MouseEvent)
         {
-            var message:String = "Hey, check out this level! \n\n[level=" + this.levelId + "]" + this.title + "[/level] by [user group=" + this.userGroup + "]" + this.userName + "[/user]";
+            var message:String = "Hey, check out this level! \n\n[level=" + this.levelId + "]" + this.title + "[/level] by [user]" + this.userName + "[/user]";
             new SendMessagePopup("", message, false, true);
         }
 
