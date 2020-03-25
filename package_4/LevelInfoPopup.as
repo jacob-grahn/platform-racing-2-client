@@ -98,6 +98,7 @@
             this.items = ret.items;
             this.song = this.determineSong(ret.song);
             this.gameMode = this.determineMode(ret.gameMode);
+            this.cowboyChance = ret.cowboyChance;
 
             // apply straight to mc
             this.m.levelInfo.title.text = this.title = ret.title;
@@ -355,7 +356,9 @@
             if (PartInfoPopup.instance != null) {
                 PartInfoPopup.instance.startFadeOut();
             }
-            LobbyRight.lobbyRight.lookupLevel(this.levelId);
+            if (LobbyRight.lobbyRight != null) {
+                LobbyRight.lobbyRight.lookupLevel(this.levelId);
+            }
             startFadeOut();
             //new MessagePopup('Placeholder!'); // code to automatically start the race
         }
