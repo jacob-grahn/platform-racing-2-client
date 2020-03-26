@@ -74,7 +74,7 @@
             this.superLoader = new SuperLoader(true, SuperLoader.j);
             var vars:URLVariables = new URLVariables();
             vars.level_id = this.levelId;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/level_data.php");
+            var request:URLRequest = new URLRequest(Main.levelsURL.substr(0, -7) + "/level_data.php");
             request.data = vars;
             this.superLoader.load(request);
             this.superLoader.addEventListener(SuperLoader.d, this.applyReturnData, false, 0, true);
