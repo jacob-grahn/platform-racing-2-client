@@ -22,6 +22,7 @@ package package_22
         private var m:SearchGraphic = new SearchGraphic();
         private var memory:Object = Memory.memory;
         private var var_421:uint;
+        private var firstRun:Boolean = true;
 
         public function Search(s:String = '', search_mode:String = 'user')
         {
@@ -64,9 +65,16 @@ package package_22
         // _loc2 = request
         override protected function requestCourses()
         {
-            if (class_28.trimWhitespace(this.m.searchBox.text) == '' || (this.m.mode_cb.selectedItem.data == 'id' && pageNum > 1)) {
-                return; // don't send a request with a blank search string, or on a page higher than one while searching by id
+            if (class_28.trimWhitespace(this.m.searchBox.text) == '') {
+                return; // don't send a request with a blank search string
             }
+            if (this.m.mode_cb.selectedItem.data == 'id' && pageNum > 1) { // while level id is the search mode
+                if (this.firstRun) {
+                    pageNavigation.setPageNum(1); // set page = 1 if search tab is init with a page > 1
+                }
+                return; // don't send a request on a page > 1 while searching by id
+            }
+            this.firstRun = false;
             var vars:URLVariables = new URLVariables();
             vars.search_str = this.m.searchBox.text;
             if (this.m.mode_cb.selectedItem != null) {
