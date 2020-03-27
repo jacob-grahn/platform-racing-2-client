@@ -34,6 +34,8 @@ package data
             this.defineCommand("resend", this.resend);
             this.defineCommand("pmNotify", this.pmNotify);
             this.defineCommand('becomeSpecialUser', this.becomeSpecialUser);
+            this.defineCommand('becomePrizer', this.becomePrizer);
+            this.defineCommand('demotePrizer', this.demotePrizer);
             this.defineCommand("becomeTempMod", this.becomeTempMod);
             this.defineCommand("becomeTrialMod", this.becomeTrialMod);
             this.defineCommand("becomeFullMod", this.becomeFullMod);
@@ -131,6 +133,21 @@ package data
             UnreadNotif.setLastRecv(int(a[0]));
         }
 
+        private function becomeSpecialUser(a:Array)
+        {
+            Main.isSpecialUser = true;
+        }
+
+        private function becomePrizer(a:Array)
+        {
+            Main.isPrizer = true;
+        }
+
+        private function demotePrizer(a:Array)
+        {
+            Main.isPrizer = false;
+        }
+
         private function becomeTempMod(a:Array)
         {
             Main.group = 1;
@@ -157,11 +174,6 @@ package data
             Main.group = 1;
             Main.isTempMod = false;
             Main.isTrialMod = false;
-        }
-
-        private function becomeSpecialUser(a:Array)
-        {
-            Main.isSpecialUser = true;
         }
 
         // method_710 = areYouHuman

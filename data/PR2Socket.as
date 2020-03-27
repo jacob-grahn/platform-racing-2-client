@@ -55,6 +55,7 @@ package data
             delete Memory.memory["coursePageNumcampaign"]; // delete campaign page from memory
             delete Memory.memory["campaignInfo" + Campaign.campaignPage]; // delete today's campaign information from memory
             Main.isSpecialUser = false;
+            Main.isPrizer = false;
             Main.isTempMod = false;
             Main.isTrialMod = false;
         }

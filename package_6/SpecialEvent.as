@@ -42,10 +42,12 @@ package package_6
                 request.method = URLRequestMethod.POST;
                 this.uploading = new UploadingPopup(request, 'json');
             } else if (Keys.isPressed(Keyboard.C) && Keys.isPressed(Keyboard.X)) { // cancel current prize
-                if (this.gameRef.prize !== null && (Main.group == 3 || Main.isSpecialUser === true)) {
-                    Main.socket.write('cancel_prize`');
-                } else {
-                    new MessagePopup('Error: You lack the power to perform this action.');
+                if (this.gameRef.prize !== null) {
+                    if (Main.group == 3 || Main.isSpecialUser === true || Main.isPrizer === true) {
+                        Main.socket.write('cancel_prize`');
+                    } else {
+                        new MessagePopup('Error: You lack the power to perform this action.');
+                    }
                 }
             }
         }
