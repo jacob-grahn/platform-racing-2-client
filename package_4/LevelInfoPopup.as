@@ -277,10 +277,10 @@
             var songArr = [
                 "None",
                 "Miniature Fantasy - Dreamscaper",
-                "Under Fire - AP",
+                "Code - Stefano Maccarelli",
                 "Paradise on E - API",
-                "Crying Soul - Bounc3",
-                "My Vision - MrMaestro",
+                "Crying Soul (FL Mix) - Pyroific",
+                "My Vision - David Orr",
                 "Switchblade - SKAzini",
                 "The Wires - Cheez-R-Us",
                 "Before Mydnite - F-777",
@@ -291,7 +291,8 @@
                 "Flowerz 'n' Herbz - Brunzolaitis",
                 "Instrumental #4 - Reasoner",
                 "Prismatic - Lunanova",
-                "We Are Loud - Dynamedion" // should never be triggered; song can't be set to we are loud
+                "We Are Loud - Dynamedion"//, // should never be triggered; song can't be set to we are loud
+                //"PR2 Jam - Jonathan Mack"
             ];
             return songArr[song];
         }

@@ -35,10 +35,10 @@ package ui
                 addSong({"id":"random", "label":"Random", "file":""});
             }
             addSong({"id":"1", "label":"Miniature Fantasy - Dreamscaper", "file":"6698_newgrounds_miniat.mp3"});
-            addSong({"id":"2", "label":"Under Fire - AP", "file":"105435_under_fire.mp3"});
+            addSong({"id":"2", "label":"Code - Stefano Maccarelli", "file":"105435_under_fire.mp3"});
             addSong({"id":"3", "label":"Paradise on E - API", "file":"32772_newgrounds_-api-_.mp3"});
-            addSong({"id":"4", "label":"Crying Soul - Bounc3", "file":"102483_B0UNC3___Crying_Soul__Frui.mp3"});
-            addSong({"id":"5", "label":"My Vision - MrMaestro", "file":"44613_newgrounds_my_vis.mp3"});
+            addSong({"id":"4", "label":"Crying Soul (FL Mix) - Pyroific", "file":"102483_B0UNC3___Crying_Soul__Frui.mp3"});
+            addSong({"id":"5", "label":"My Vision - David Orr", "file":"44613_newgrounds_my_vis.mp3"});
             addSong({"id":"6", "label":"Switchblade - SKAzini", "file":"59342_newgrounds_01_swi.mp3"});
             addSong({"id":"7", "label":"The Wires - Cheez-R-Us", "file":"74690_newgrounds_the_wi.mp3"});
             addSong({"id":"8", "label":"Before Mydnite - F-777", "file":"108133_Before_Mydnite.mp3"});
@@ -48,6 +48,7 @@ package ui
             addSong({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"109884_Brunzolaitis___Flowerz_n_H.mp3"});
             addSong({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"128701_Instrumental__4.mp3"});
             addSong({"id":"15", "label":"Prismatic - Lunanova", "file":"Prismatic.mp3"});
+            //addSong({"id":"17", "label":"PR2 Jam - Jonathan Mack", "file":"TEST_FILE-jmack.mp3"});
             addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
             addEventListener(Event.CHANGE, this.startSong, false, 0, true);
             this.enableMusicInt = setInterval(this.checkSetting, 500);
@@ -56,7 +57,7 @@ package ui
         private function addSong(song:Object)
         {
             var blacklist:Array = Settings.getValue('disabledSongs');
-            if (this.inLE == false && song.id < 16 && song.id != 'random' && song.id != 0 && song.id != '') {
+            if (this.inLE == false && song.id != 16 && song.id <= 17 && song.id != 'random' && song.id != 0 && song.id != '') {
                 for (var i in blacklist) {
                     if (blacklist[i] == song.id) {
                         return;
