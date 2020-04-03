@@ -21,6 +21,7 @@ package package_4
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.nameBox.text = name;
             this.m.textBox.text = message;
+            this.countChars();
             this.m.textBox.addEventListener(Event.CHANGE, this.countChars, false, 0, true);
             addChild(this.m);
             if (this.isGuildMessage) {
@@ -32,7 +33,6 @@ package package_4
             } else {
                 addEventListener(LOADED, this.focusTextBox, false, 0, true);
             }
-            this.countChars();
         }
 
         private function focusNameBox(e:Event)
