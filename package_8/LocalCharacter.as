@@ -935,7 +935,9 @@ package package_8
                 if (Items.getCodeFromItem(this.curItem) == Items.speedBurst) {
                     this.setItem(0);
                 }
-                reversedControls = false;
+                if (class_28.getDateStr(new Date().getTime()) !== "Apr 1") {
+                    reversedControls = false; // preserve reversed controls on Apr 1
+                }
             }
             this.method_358();
             if (var_4.getBool(SANTA)) {
