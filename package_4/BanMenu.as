@@ -6,6 +6,7 @@
 package package_4
 {
     import data.class_28;
+    import data.Memory;
     import flash.events.MouseEvent;
     import package_21.ChatInstance;
     import flash.net.URLVariables;
@@ -130,7 +131,9 @@ package package_4
             vars.reason = this.m.reason.text;
             vars.type = this.m.type.selectedItem.data;
             vars.scope = this.m.scope.selectedItem.data;
-            vars.record = chatRecord;
+            if (Memory.memory.chatRoom !== 'mod' && Memory.memory.chatRoom !== 'admin') {
+                vars.record = chatRecord;
+            }
             var request:URLRequest = new URLRequest(Main.baseURL + "/ban_user.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
