@@ -18,9 +18,9 @@
         public function LogoutPassPopup(fn:Function)
         {
             this.hideGraphic = fn;
-            this.m.logout_bt.addEventListener(MouseEvent.CLICK, this.clickLogOut);
-            this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
-            this.m.passBox.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnter);
+            this.m.logout_bt.addEventListener(MouseEvent.CLICK, this.clickLogOut, false, 0, true);
+            this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
+            this.m.passBox.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnter, false, 0, true);
             addChild(this.m);
         }
 
@@ -75,9 +75,9 @@
                 removeEventListener(Event.COMPLETE, this.receiveResult);
                 this.uploadingPopup = null;
             }
-            this.m.logout_bt.addEventListener(MouseEvent.CLICK, this.clickLogOut);
-            this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
-            this.m.passBox.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnter);
+            this.m.logout_bt.removeEventListener(MouseEvent.CLICK, this.clickLogOut);
+            this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
+            this.m.passBox.removeEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnter);
             super.remove();
         }
 

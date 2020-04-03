@@ -43,8 +43,8 @@ package ui
 
         override public function remove()
         {
-            this.m.addEventListener(MouseEvent.MOUSE_OVER, this.overHandler);
-            this.m.addEventListener(MouseEvent.MOUSE_OUT, this.outHandler);
+            this.m.removeEventListener(MouseEvent.MOUSE_OVER, this.overHandler);
+            this.m.removeEventListener(MouseEvent.MOUSE_OUT, this.outHandler);
             this.m.removeEventListener(MouseEvent.CLICK, this.clickHandler);
             removeChild(this.m);
             this.m.textBox1.text = this.m.textBox2.text = "";

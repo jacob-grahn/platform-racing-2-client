@@ -17,20 +17,20 @@ package package_4
         public function SendMessagePopup(name:String = "", message:String = "", guild:Boolean = false, level:Boolean = false)
         {
             this.isGuildMessage = guild;
-            this.m.send_bt.addEventListener(MouseEvent.CLICK, this.clickSend);
-            this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
+            this.m.send_bt.addEventListener(MouseEvent.CLICK, this.clickSend, false, 0, true);
+            this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.nameBox.text = name;
             this.m.textBox.text = message;
-            this.m.textBox.addEventListener(Event.CHANGE, this.countChars);
+            this.m.textBox.addEventListener(Event.CHANGE, this.countChars, false, 0, true);
             addChild(this.m);
             if (this.isGuildMessage) {
                 this.m.nameBox.editable = false;
                 this.m.nameBox.alpha = 0.5;
             }
             if (level) {
-                addEventListener(LOADED, this.focusNameBox);
+                addEventListener(LOADED, this.focusNameBox, false, 0, true);
             } else {
-                addEventListener(LOADED, this.focusTextBox);
+                addEventListener(LOADED, this.focusTextBox, false, 0, true);
             }
             this.countChars();
         }
@@ -71,8 +71,8 @@ package package_4
                 request.data = vars;
                 request.method = URLRequestMethod.POST;
                 var uploading:UploadingPopup = new UploadingPopup(request, 'json');
-                uploading.addEventListener(SuperLoader.d, this.clickCancel);
-                uploading.addEventListener(SuperLoader.e, this.onError);
+                uploading.addEventListener(SuperLoader.d, this.clickCancel, false, 0, true);
+                uploading.addEventListener(SuperLoader.e, this.onError, false, 0, true);
             }
         }
 

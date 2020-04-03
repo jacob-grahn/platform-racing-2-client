@@ -59,8 +59,8 @@ package menu
                 target.prompt = 'Loading...';
             }
             var request:URLRequest = new URLRequest(Main.baseURL + "/files/server_status_2.txt");
-            superLoader.addEventListener(SuperLoader.d, parseData);
-            superLoader.addEventListener(SuperLoader.e, handleError);
+            superLoader.addEventListener(SuperLoader.d, parseData, false, 0, true);
+            superLoader.addEventListener(SuperLoader.e, handleError, false, 0, true);
             superLoader.load(request);
         }
 

@@ -56,7 +56,7 @@ package package_15
                     request.method = URLRequestMethod.POST;
                     request.data = lVars;
                     loader = new SuperLoader();
-                    loader.addEventListener(SuperLoader.d, this.onParse);
+                    loader.addEventListener(SuperLoader.d, this.onParse, false, 0, true);
                     loader.load(request);
                 }
             } else {

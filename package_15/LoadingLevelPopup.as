@@ -24,7 +24,7 @@ package package_15
             var request:URLRequest = new URLRequest(Main.levelsURL + "/" + this.levelID + ".txt?version=" + this.version);
             loader.useRandomNum = false;
             loader = new SuperLoader();
-            loader.addEventListener(SuperLoader.d, onComplete);
+            loader.addEventListener(SuperLoader.d, onComplete, false, 0, true);
             loader.load(request);
         }
 

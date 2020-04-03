@@ -28,10 +28,10 @@ package package_4
         {
             addChild(this.m);
             this.m.musicSlider.value = Settings.musicLevel;
-            this.m.musicSlider.addEventListener(SliderEvent.CHANGE, musicSliderChange);
+            this.m.musicSlider.addEventListener(SliderEvent.CHANGE, musicSliderChange, false, 0, true);
             this.m.soundSlider.value = Settings.soundLevel;
-            this.m.soundSlider.addEventListener(SliderEvent.CHANGE, soundSliderChange);
-            this.m.soundSlider.addEventListener(SliderEvent.THUMB_RELEASE, soundSliderRelease);
+            this.m.soundSlider.addEventListener(SliderEvent.CHANGE, soundSliderChange, false, 0, true);
+            this.m.soundSlider.addEventListener(SliderEvent.THUMB_RELEASE, soundSliderRelease, false, 0, true);
             this.m.musicPercentBox.text = Settings.musicLevel + '%';
             this.m.soundPercentBox.text = Settings.soundLevel + '%';
             this.m.wasdUp.maxChars = this.m.wasdRight.maxChars = this.m.wasdDown.maxChars = this.m.wasdLeft.maxChars = this.m.wasdItem.maxChars = 1;
@@ -43,13 +43,13 @@ package package_4
             this.m.wasdItem.text = String.fromCharCode(this.altCtrl.item).toUpperCase();
             this.m.artHighlight.y = this.drawArt === false ? this.hFalseY : this.hTrueY;
             this.m.filterHighlight.y = this.filterSwears === false ? this.hFalseY : this.hTrueY;
-            this.m.artOn_bt.addEventListener(MouseEvent.CLICK, toggleArtOn);
-            this.m.artOff_bt.addEventListener(MouseEvent.CLICK, toggleArtOff);
-            this.m.filterOn_bt.addEventListener(MouseEvent.CLICK, toggleFilterOn);
-            this.m.filterOff_bt.addEventListener(MouseEvent.CLICK, toggleFilterOff);
-            this.m.music_bt.addEventListener(MouseEvent.CLICK, clickMusic);
-            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OVER, hoverMusic);
-            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic);
+            this.m.artOn_bt.addEventListener(MouseEvent.CLICK, toggleArtOn, false, 0, true);
+            this.m.artOff_bt.addEventListener(MouseEvent.CLICK, toggleArtOff, false, 0, true);
+            this.m.filterOn_bt.addEventListener(MouseEvent.CLICK, toggleFilterOn, false, 0, true);
+            this.m.filterOff_bt.addEventListener(MouseEvent.CLICK, toggleFilterOff, false, 0, true);
+            this.m.music_bt.addEventListener(MouseEvent.CLICK, clickMusic, false, 0, true);
+            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OVER, hoverMusic, false, 0, true);
+            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic, false, 0, true);
             this.m.removeChild(this.m.changePass_bt);
             this.m.removeChild(this.m.changeEmail_bt);
             this.m.removeChild(this.m.guildLeave_bt);

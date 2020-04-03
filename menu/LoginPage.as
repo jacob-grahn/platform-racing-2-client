@@ -161,7 +161,7 @@ package menu
             request.method = URLRequestMethod.POST;
             var superLoader:SuperLoader = new SuperLoader(true, "json");
             superLoader.load(request);
-            superLoader.addEventListener(SuperLoader.d, this.logoutSuccessHandler);
+            superLoader.addEventListener(SuperLoader.d, this.logoutSuccessHandler, false, 0, true);
         }
 
         private function logoutSuccessHandler(e:Event)

@@ -35,10 +35,10 @@ package package_18
             this.headSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
             this.bodySelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
             this.feetSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.hatSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHatInfoClick);
-            this.headSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHeadInfoClick);
-            this.bodySelect.infoButton.addEventListener(MouseEvent.CLICK, this.onBodyInfoClick);
-            this.feetSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onFeetInfoClick);
+            this.hatSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHatInfoClick, false, 0, true);
+            this.headSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHeadInfoClick, false, 0, true);
+            this.bodySelect.infoButton.addEventListener(MouseEvent.CLICK, this.onBodyInfoClick, false, 0, true);
+            this.feetSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onFeetInfoClick, false, 0, true);
             if (hatArray.length > 1) {
                 addChild(this.hatSelect);
             }

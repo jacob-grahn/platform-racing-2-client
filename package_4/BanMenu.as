@@ -33,7 +33,6 @@ package package_4
         {
             this.userName = name;
             this.target = playerPopup;
-            this.m.viewPriorsButton.addEventListener(MouseEvent.CLICK, this.viewPriors);
             //this.m.banMinuteButton.addEventListener(MouseEvent.CLICK, this.banMinute, false, 0, true);
             //this.m.banHourButton.addEventListener(MouseEvent.CLICK, this.banHour, false, 0, true);
             //this.m.banDayButton.addEventListener(MouseEvent.CLICK, this.banDay, false, 0, true);
@@ -57,6 +56,7 @@ package package_4
             this.m.warning3Button.addEventListener(MouseEvent.CLICK, this.clickWarning3, false, 0, true);
             this.m.kickButton.addEventListener(MouseEvent.CLICK, this.clickKick, false, 0, true);
             this.m.banButton.addEventListener(MouseEvent.CLICK, this.confirmBan, false, 0, true);
+            this.m.viewPriorsButton.addEventListener(MouseEvent.CLICK, this.viewPriors, false, 0, true);
             addChild(this.m);
         }
 
@@ -184,6 +184,7 @@ package package_4
             this.m.banWeekButton.removeEventListener(MouseEvent.CLICK, this.banWeek);
             this.m.banMonthButton.removeEventListener(MouseEvent.CLICK, this.banMonth);
             this.m.banYearButton.removeEventListener(MouseEvent.CLICK, this.banYear);*/
+            this.m.viewPriorsButton.removeEventListener(MouseEvent.CLICK, this.viewPriors);
             this.m.banButton.removeEventListener(MouseEvent.CLICK, this.confirmBan);
             this.m.warning1Button.removeEventListener(MouseEvent.CLICK, this.clickWarning1);
             this.m.warning2Button.removeEventListener(MouseEvent.CLICK, this.clickWarning2);

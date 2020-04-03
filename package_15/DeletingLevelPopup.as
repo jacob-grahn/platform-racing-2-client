@@ -22,7 +22,7 @@ package package_15
             request.method = URLRequestMethod.POST;
             request.data = vars;
             loader = new SuperLoader(true, 'json');
-            loader.addEventListener(SuperLoader.d, this.onComplete);
+            loader.addEventListener(SuperLoader.d, this.onComplete, false, 0, true);
             loader.load(request);
         }
 
