@@ -21,7 +21,7 @@ package package_4
                 OptionsSongsMenu.instance.remove();
             }
             OptionsSongsMenu.instance = this;
-            y -= 35;
+            y -= 45;
             addChild(this.m);
             super(d);
             var blacklist:Array = Settings.getValue('disabledSongs');
@@ -36,9 +36,9 @@ package package_4
                 OptionsSongsMenu.instance = null;
             }
             var blacklist:Array = [];
-            for (var i:int = 1; i <= 15; i++) {
-                if (i == 9) {
-                    continue; // skip song #9 (desert rose)
+            for (var i:int = 1; i <= 17; i++) {
+                if (i == 9 || i == 16) {
+                    continue; // skip songs #9 (desert rose) and #16 (we are loud)
                 }
                 if (this.m['song' + i].selected == false) {
                     blacklist.push(i);

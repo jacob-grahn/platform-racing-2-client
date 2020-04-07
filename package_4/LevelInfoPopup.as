@@ -291,8 +291,8 @@
                 "Flowerz 'n' Herbz - Brunzolaitis",
                 "Instrumental #4 - Reasoner",
                 "Prismatic - Lunanova",
-                "We Are Loud - Dynamedion"//, // should never be triggered; song can't be set to we are loud
-                //"PR2 Jam - Jonathan Mack"
+                "We Are Loud - Dynamedion", // should never be triggered; song can't be set to we are loud
+                "Toodaloo - mustangman"
             ];
             return songArr[song];
         }

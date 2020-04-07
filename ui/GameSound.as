@@ -42,13 +42,14 @@ package ui
             addSong({"id":"6", "label":"Switchblade - SKAzini", "file":"59342_newgrounds_01_swi.mp3"});
             addSong({"id":"7", "label":"The Wires - Cheez-R-Us", "file":"74690_newgrounds_the_wi.mp3"});
             addSong({"id":"8", "label":"Before Mydnite - F-777", "file":"108133_Before_Mydnite.mp3"});
+            // desert rose (REMOVED)
             addSong({"id":"10", "label":"Broked It - SWiTCH", "file":"51265_newgrounds_broked.mp3"});
             addSong({"id":"11", "label":"Hello? - TMM43", "file":"83720_newgrounds_hello.mp3"});
             addSong({"id":"12", "label":"Pyrokinesis - Sean Tucker", "file":"98624_Pyrokinesis.mp3"});
             addSong({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"109884_Brunzolaitis___Flowerz_n_H.mp3"});
             addSong({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"128701_Instrumental__4.mp3"});
             addSong({"id":"15", "label":"Prismatic - Lunanova", "file":"Prismatic.mp3"});
-            //addSong({"id":"17", "label":"PR2 Jam - Jonathan Mack", "file":"TEST_FILE-jmack.mp3"});
+            addSong({"id":"17", "label":"Toodaloo - mustangman", "file":"17_Toodaloo.mp3"});
             addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
             addEventListener(Event.CHANGE, this.startSong, false, 0, true);
             this.enableMusicInt = setInterval(this.checkSetting, 500);
