@@ -22,7 +22,7 @@ package package_9
             addChild(this.m);
             addEventListener(Event.ENTER_FRAME, this.go);
             this.pos();
-            SoundEffects.playSound(new StingSound(), 1 * (Settings.soundLevel / 100));
+            SoundEffects.playGameSound(new StingSound(), x, y, 0.66);
         }
 
         private function go(e:Event)
