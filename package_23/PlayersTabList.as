@@ -68,7 +68,7 @@ package package_23
         private function sortPlayersBy()
         {
             if (this.sortMode == "userName") {
-                super.sortOn(this.sortMode);
+                super.sortOn(this.sortMode, (Array.CASEINSENSITIVE));
             } else {
                 super.sortOn(this.sortMode, (Array.NUMERIC | Array.DESCENDING));
             }
