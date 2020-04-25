@@ -179,26 +179,26 @@ package package_4
         // method_356 = clickAddFriend
         private function clickAddFriend(e:MouseEvent)
         {
-            this.handleURL(Main.baseURL + "/add_friend.php");
+            this.handleUserListURL('friends', 'add');
         }
 
         // method_391 = clickRemoveFriend
         private function clickRemoveFriend(e:MouseEvent)
         {
-            this.handleURL(Main.baseURL + "/remove_friend.php");
+            this.handleUserListURL('friends', 'remove');
         }
 
         // method_257 = clickIgnore
         private function clickIgnore(e:MouseEvent)
         {
-            this.handleURL(Main.baseURL + "/ignore_user.php");
+            this.handleUserListURL('ignored', 'add');
             Main.socket.write("ignore_user`" + this.userName);
         }
 
         // method_385 = clickUnIgnore
         private function clickUnIgnore(e:MouseEvent)
         {
-            this.handleURL(Main.baseURL + "/un_ignore_user.php");
+            this.handleUserListURL('ignored', 'remove');
             Main.socket.write("un_ignore_user`" + this.userName);
         }
 
@@ -226,6 +226,21 @@ package package_4
         // method_292 = clickClose
         private function clickClose(e:*)
         {
+            startFadeOut();
+        }
+
+        private function handleUserListURL(list:String, mode:String)
+        {
+            var url:String = Main.baseURL + "/user_list_modify.php";
+            var vars:URLVariables = new URLVariables();
+            vars.target_name = this.userName;
+            vars.user_id = this.userId;
+            vars.list = list;
+            vars.mode = mode;
+            var request:URLRequest = new URLRequest(url);
+            request.method = URLRequestMethod.POST;
+            request.data = vars;
+            new UploadingPopup(request, 'json');
             startFadeOut();
         }
 

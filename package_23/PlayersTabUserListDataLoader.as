@@ -18,7 +18,7 @@ package package_23
         {
             var vars:URLVariables = new URLVariables();
             vars.mode = mode;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/get_user_list.php");
+            var request:URLRequest = new URLRequest(Main.baseURL + "/user_list_get.php");
             request.data = vars;
             this.superLoader.load(request);
             this.superLoader.addEventListener(Event.COMPLETE, this.populateList);
