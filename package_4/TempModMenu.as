@@ -21,7 +21,7 @@ package package_4
             this.m.warning1Button.addEventListener(MouseEvent.CLICK, this.clickWarning1, false, 0, true);
             this.m.warning2Button.addEventListener(MouseEvent.CLICK, this.clickWarning2, false, 0, true);
             this.m.warning3Button.addEventListener(MouseEvent.CLICK, this.clickWarning3, false, 0, true);
-            this.m.kickButton.addEventListener(MouseEvent.CLICK, this.kickUser, false, 0, true); // method_442
+            this.m.kickButton.addEventListener(MouseEvent.CLICK, this.clickKick, false, 0, true); // method_442
             addChild(this.m);
         }
 
@@ -47,6 +47,11 @@ package package_4
             this.target.startFadeOut();
         }
 
+        private function clickKick(e:MouseEvent)
+        {
+            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + class_28.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
+        }
+
         private function kickUser(e:MouseEvent)
         {
             Main.socket.write("kick`" + this.userName);
@@ -58,7 +63,7 @@ package package_4
             this.m.warning1Button.removeEventListener(MouseEvent.CLICK, this.clickWarning1);
             this.m.warning2Button.removeEventListener(MouseEvent.CLICK, this.clickWarning2);
             this.m.warning3Button.removeEventListener(MouseEvent.CLICK, this.clickWarning3);
-            this.m.kickButton.removeEventListener(MouseEvent.CLICK, this.kickUser);
+            this.m.kickButton.removeEventListener(MouseEvent.CLICK, this.clickKick);
             this.target = null;
             super.remove();
         }

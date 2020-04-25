@@ -47,9 +47,8 @@ package package_4
             if (Main.isTrialMod == false) {
                 this.m.duration.addItem({"label":"One Week", "data":604800});
                 this.m.duration.addItem({"label":"One Month", "data":2592000});
-                this.m.duration.addItem({"label":"Six Months", "data":15768000});
                 this.m.duration.addItem({"label":"One Year", "data":31536000});
-                this.m.scope.addItemAt({"label":"Entire Game", "data":"game"}, 0);
+                this.m.scope.addItemAt({"label":"Game", "data":"game"}, 0);
                 this.m.scope.enabled = true;
             }
             this.m.warning1Button.addEventListener(MouseEvent.CLICK, this.clickWarning1, false, 0, true);
@@ -111,7 +110,14 @@ package package_4
                 new MessagePopup("Error: You must specify a ban length.");
                 return;
             }
-            new ConfirmPopup(this.banUser, "Are you sure you want to ban " + class_28.escapeString(this.userName) + "?");
+            var scope:String = this.m.scope.selectedItem.data === 'game' ? 'ban' : 'socially ban';
+            var msg:String = "Are you sure you want to " + scope + " " + class_28.escapeString(this.userName) + "?";
+            if (this.m.scope.selectedItem.data === 'game') {
+                msg += " They won't be able to log onto PR2 or use any of the pages on pr2hub.com.";
+            } else {
+                msg += " They won't be able to use any messaging or guild-related features. They also won't be able to publish or rate levels.";
+            }
+            new ConfirmPopup(this.banUser, msg);
         }
 
         // chatRecord = _loc1
@@ -170,7 +176,7 @@ package package_4
 
         private function clickKick(e:MouseEvent)
         {
-            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + class_28.escapeString(this.userName) + "?");
+            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + class_28.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
         }
 
         public function kickUser()
