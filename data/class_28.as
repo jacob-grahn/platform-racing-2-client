@@ -275,6 +275,13 @@ package data
             return arr.join('');
         }
 
+        public static function urlify(url:String, disp:String, color:String = '#0000FF')
+        {
+            link = escapeString(link);
+            disp = escapeString(disp);
+            return '<a href="' + link + '" target="_blank"><u><font color="' + $color + '">' + disp + '</font></u></a>';
+        }
+
         public static function numLimit(value:Number, minimum:Number, maximum:Number)
         {
             if (value > maximum) {

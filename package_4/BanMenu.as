@@ -115,7 +115,7 @@ package package_4
             if (this.m.scope.selectedItem.data === 'game') {
                 msg += " They won't be able to log onto PR2 or use any of the pages on pr2hub.com.";
             } else {
-                msg += " They won't be able to use any messaging or guild-related features. They also won't be able to publish or rate levels.";
+                msg += " They won't be able to register new accounts, use guest accounts, or use any messaging, contest, or guild-related features. They also won't be able to publish or rate levels.";
             }
             new ConfirmPopup(this.banUser, msg);
         }
