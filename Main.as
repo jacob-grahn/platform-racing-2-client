@@ -52,6 +52,7 @@ package
         public static var isSpecialUser:Boolean = false;
         public static var isTempMod:Boolean = false; // var_270
         public static var isTrialMod:Boolean = false;
+        public static var isPrizer:Boolean = false;
         public static var hasEmail:Boolean = false; // var_338
         public static var hasAnt:Boolean = false; // hasAnt = var_317
         public static var userId:int = 0;
