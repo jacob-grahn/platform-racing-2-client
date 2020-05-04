@@ -15,6 +15,7 @@ package package_23
         private var m:PlayersTabListGraphic = new PlayersTabListGraphic();
         private var sortInterval:uint; // var_570
         private var sortMode:String = "rank"; // var_229
+        private var sortOrder:String = 'desc';
         private var updateSort:Boolean = false; // var_412
 
         public function PlayersTabList()
@@ -30,22 +31,19 @@ package package_23
         // method_276 = clickName
         private function clickName(e:MouseEvent)
         {
-            this.sortMode = "userName";
-            this.sortPlayersBy();
+            this.sortPlayersBy('userName');
         }
 
         // method_436 = clickRank
         private function clickRank(e:MouseEvent)
         {
-            this.sortMode = "rank";
-            this.sortPlayersBy();
+            this.sortPlayersBy('rank');
         }
 
         // method_243 = clickHats
         private function clickHats(e:MouseEvent)
         {
-            this.sortMode = "hats";
-            this.sortPlayersBy();
+            this.sortPlayersBy('hats');
         }
 
         protected function method_138(_arg_1:String, _arg_2:Number, _arg_3:Number, _arg_4:int, _arg_5:String="")
@@ -65,12 +63,38 @@ package package_23
         }
 
         // method_110 = sortPlayersBy
-        private function sortPlayersBy()
+        private function sortPlayersBy(newSort:String = null)
         {
-            if (this.sortMode == "userName") {
-                super.sortOn(this.sortMode, (Array.CASEINSENSITIVE));
-            } else {
-                super.sortOn(this.sortMode, (Array.NUMERIC | Array.DESCENDING));
+            var sort1:String, sort2:String;
+            if (newSort != this.sortMode || newSort == null) {
+                this.sortMode = newSort != null ? newSort : this.sortMode;
+                if (this.sortMode == "userName") {
+                    this.sortOrder = 'asc';
+                    super.sortOn(this.sortMode, Array.CASEINSENSITIVE);
+                } else {
+                    this.sortOrder = 'desc';
+                    sort1 = this.sortMode;
+                    sort2 = this.sortMode == 'rank' ? 'hats' : 'rank';
+                    super.sortOn([sort1, sort2, 'userName'], Array.NUMERIC | Array.DESCENDING);
+                }
+            } else if (newSort == this.sortMode) {
+                // toggle sort order
+                this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
+
+                // determine the option that corresponds to the mode
+                var modeOpt:uint = this.sortMode == 'userName' ? Array.CASEINSENSITIVE : Array.NUMERIC;
+
+                // determine the ordering to use
+                var sortOpts = this.sortOrder == 'desc' ? modeOpt | Array.DESCENDING : modeOpt;
+
+                // do the sort
+                if (this.sortMode == 'userName') {
+                    super.sortOn(this.sortMode, sortOpts);
+                } else {
+                    sort1 = this.sortMode;
+                    sort2 = this.sortMode == 'rank' ? 'hats' : 'rank';
+                    super.sortOn([sort1, sort2, 'userName'], [sortOpts, sortOpts, Array.CASEINSENSITIVE]);
+                } // There's a problem here. Alpha is always broken. Find something to fix this.
             }
         }
 

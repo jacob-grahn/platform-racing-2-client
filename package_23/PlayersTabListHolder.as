@@ -58,7 +58,7 @@ package package_23
             this.listings = new Array();
         }
 
-        public function sortOn(key:String, options:int=0)
+        public function sortOn(key:*, options:*=0)
         {
             this.listings.sortOn(key, options);
             this.method_545();
