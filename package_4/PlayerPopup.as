@@ -15,6 +15,7 @@ package package_4
     import flash.events.Event;
     import lobby.LobbyRight;
     import flash.net.URLRequestMethod;
+    import package_6.ExpGain;
 
     public class PlayerPopup extends Popup 
     {
@@ -29,6 +30,7 @@ package package_4
         private var guildName:GuildName;
         private var userId:int;
         private var userName:String;
+        private var expGain:ExpGain;
 
         public function PlayerPopup(name:String)
         {
@@ -97,6 +99,8 @@ package package_4
             this.m.playerInfo.statusBox.text = "" + ret.status;
             this.m.playerInfo.hatBox.text = "Hats: " + ret.hats;
             this.m.playerInfo.rankBox.text = "Rank: " + ret.rank;
+            this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox, false, 0, true);
+            this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox, false, 0, true);
             this.m.playerInfo.dateBox.text = "Joined: " + regDate;
             this.m.playerInfo.lastLoginBox.text = "Active: " + ret.loginDate;
             this.m.playerInfo.groupBox.text = "Group: " + groupText;
@@ -118,6 +122,11 @@ package package_4
             c.scaleX = c.scaleY = 2;
             c.x = -75;
             c.y = 135;
+            this.m.playerInfo.expBg.visible = false;
+            this.expGain = new ExpGain();
+            this.expGain.x = this.m.playerInfo.x;
+            this.expGain.y = this.m.playerInfo.expBg.y + 3;
+            this.expGain.start(ret.exp_points, ret.exp_points, ret.exp_to_rank);
             this.m.playerInfo.inviteButton.visible = false;
             this.m.playerInfo.kickButton.visible = false;
             this.m.playerInfo.kickBg.visible = false;
@@ -155,6 +164,18 @@ package package_4
             }
             this.m.playerInfo.visible = true;
             this.m.loadingGraphic.visible = false;
+        }
+
+        private function mouseOverRankBox(e:MouseEvent)
+        {
+            this.m.playerInfo.expBg.visible = true;
+            this.m.playerInfo.addChild(this.expGain);
+        }
+
+        private function mouseOutRankBox(e:MouseEvent)
+        {
+            this.m.playerInfo.expBg.visible = false;
+            this.m.playerInfo.removeChild(this.expGain);
         }
 
         // method_419 = clickInvite
@@ -264,6 +285,8 @@ package package_4
             if (PlayerPopup.instance === this) {
                 PlayerPopup.instance = null;
             }
+            this.m.playerInfo.rankBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox);
+            this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox);
             this.m.playerInfo.messageButton.removeEventListener(MouseEvent.CLICK, this.clickSendPM);
             this.m.playerInfo.levelsButton.removeEventListener(MouseEvent.CLICK, this.clickViewLevels);
             this.m.playerInfo.friendButton.removeEventListener(MouseEvent.CLICK, this.clickAddFriend);
