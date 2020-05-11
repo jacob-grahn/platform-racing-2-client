@@ -62,7 +62,11 @@ package package_4
 
         private function viewPriors(e:MouseEvent)
         {
-            Main.socket.write('view_priors`' + this.userName);
+            if (Main.socket.connected) {
+                Main.socket.write('view_priors`' + this.userName);
+            } else {
+                new MessagePopup('Error: You are not connected to a server. Please log in and try again.');
+            }
         }
 
         /*
