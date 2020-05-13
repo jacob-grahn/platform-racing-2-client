@@ -19,6 +19,8 @@ package lobby
     import package_4.OptionsPopup;
     import package_17.StorePopup;
     import menu.CreditsPopup;
+    import package_4.ConfirmPopup;
+    import data.class_28;
 
     public class Lobby extends Page 
     {
@@ -91,8 +93,15 @@ package lobby
         }
 
         // method_328 = clickLogout
-        private function clickLogout(e:MouseEvent)
+        private function clickLogout(e:MouseEvent = null)
         {
+            if (e != null && Main.isTempMod && Main.server.server_id > 20) { // the server id can change when there's a difference between server owners and temps in the client
+                new ConfirmPopup(clickLogout, 'You\'re currently a temporary moderator. Logging out will automatically demote you back to a member. Do you really want to proceed?');
+                return;
+            }
+            if (Main.isTempMod && Main.server.server_id > 20) {
+                new MessagePopup('You are now logged out. If you haven\'t already done so, please notify a member of the staff team that you\'ve ended your moderation session.');
+            }
             if (!Main.remember) {
                 var vars:URLVariables = new URLVariables();
                 vars.from_lobby = '1';
@@ -108,8 +117,15 @@ package lobby
         }
 
         // method_233 = clickLE
-        private function clickLE(e:MouseEvent)
+        private function clickLE(e:MouseEvent = null)
         {
+            if (e != null && Main.isTempMod && Main.server.server_id > 20) { // the server id can change when there's a difference between server owners and temps in the client
+                new ConfirmPopup(clickLE, 'You\'re currently a temporary moderator. Entering the level editor will log you out, which will automatically demote you back to a member. Do you really want to proceed?');
+                return;
+            }
+            if (Main.isTempMod && Main.server.server_id > 20) {
+                new MessagePopup('You are now logged out. If you haven\'t already done so, please notify a member of the staff team that you\'ve ended your moderation session.');
+            }
             Main.pageHolder.changePage(new LevelEditor(null));
             Main.socket.close();
         }
