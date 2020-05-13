@@ -14,7 +14,7 @@ package package_4
         private var m:GuildMemberNameGraphic = new GuildMemberNameGraphic();
         private var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
 
-        public function GuildMemberName(name:String, group:int, gpToday:int, gpTotal:int, owner:Boolean)
+        public function GuildMemberName(name:String, group:String, gpToday:int, gpTotal:int, owner:Boolean)
         {
             addChild(this.m);
             this.m.nameBox.htmlText = this.htmlNameMaker.makeName(name, group);

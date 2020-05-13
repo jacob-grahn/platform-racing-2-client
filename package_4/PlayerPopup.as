@@ -16,6 +16,7 @@ package package_4
     import lobby.LobbyRight;
     import flash.net.URLRequestMethod;
     import package_6.ExpGain;
+    import data.CommandHandler;
 
     public class PlayerPopup extends Popup 
     {
@@ -31,6 +32,7 @@ package package_4
         private var userId:int;
         private var userName:String;
         private var expGain:ExpGain;
+        private var cm:CommandHandler = CommandHandler.commandHandler;
 
         public function PlayerPopup(name:String)
         {
@@ -38,19 +40,18 @@ package package_4
                 PlayerPopup.instance.startFadeOut();
             }
             PlayerPopup.instance = this;
+
             this.userName = name;
             this.m.nameBox.text = "-- " + name + " --";
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
             this.m.playerInfo.visible = false;
             addChild(this.m);
-            this.superLoader = new SuperLoader(true, SuperLoader.j);
-            var vars:URLVariables = new URLVariables();
-            vars.name = name;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/get_player_info.php");
-            request.data = vars;
-            this.superLoader.load(request);
-            this.superLoader.addEventListener(SuperLoader.d, this.applyReturnData, false, 0, true);
-            this.superLoader.addEventListener(SuperLoader.e, this.clickClose, false, 0, true);
+
+            // try to get player info from socket first
+            this.cm.defineCommand("playerInfo", this.playerInfoFromSocket);
+            Main.socket.write("get_player_info`" + name);
+
+            // add privileged menus
             if (Main.group >= 2) {
                 this.banMenu = new BanMenu(name, this);
                 addChild(this.banMenu);
@@ -71,24 +72,62 @@ package package_4
             } 
         }
 
+
+        private function playerInfoFromSocket(a:Array)
+        {
+            this.cm.defineCommand("playerInfo", null);
+            try {
+                var ret:String = a[0];
+                if (ret == 0) {
+                    throw new Error();
+                }
+                var data:Object = JSON.parse(ret);
+                this.applyReturnData(data);
+            } catch (e:Error) {
+                this.superLoader = new SuperLoader(true, SuperLoader.j);
+                var vars:URLVariables = new URLVariables();
+                vars.name = this.userName;
+                var request:URLRequest = new URLRequest(Main.baseURL + "/get_player_info.php");
+                request.data = vars;
+                this.superLoader.load(request);
+                this.superLoader.addEventListener(SuperLoader.d, this.playerInfoFromHTTP, false, 0, true);
+                this.superLoader.addEventListener(SuperLoader.e, this.clickClose, false, 0, true);
+            }
+        }
+
+        private function playerInfoFromHTTP(e:Event)
+        {
+            this.applyReturnData(SuperLoader(e.target).parsedData);
+        }
+
+        /*private function isPlayerTemp(a:Array)
+        {
+            this.userIsTemp = Boolean(int(a[0]));
+            var group = int(a[1]);
+            if (!this.userIsTemp && group == 1) {
+                this.m.playerInfo.groupBox.text = 'Group: Member';
+            }
+        }*/
+
         // _loc2 = ret
         // _loc3 = regDate
         // _loc4 = group
         // _loc5 = groupText
         // method_281 = applyReturnData
-        private function applyReturnData(e:Event)
+        private function applyReturnData(ret:Object)
         {
-            var ret:Object = SuperLoader(e.target).parsedData;
             this.userId = int(ret.userId);
-            var regDate:String = ret.registerDate;
-            if (regDate == '1/Jan/1970') {
-                regDate = "Age of Heroes";
-            }
             var group:int = ret.group;
             if (group == 1) {
                 groupText = 'Member';
             } else if (group == 2) {
-                groupText = 'Moderator';
+                if (ret.temp_mod != null && ret.temp_mod == true) {
+                    groupText = 'Temp Mod';
+                } else if (ret.trial_mod == true) {
+                    groupText = 'Trial Moderator';
+                } else {
+                    groupText = 'Moderator';
+                }
             } else if (group == 3) {
                 groupText = 'Admin';
             } else {
@@ -96,14 +135,14 @@ package package_4
                 new PlayerGuestPopup(this.userName);
                 return;
             }
-            this.m.playerInfo.statusBox.text = "" + ret.status;
-            this.m.playerInfo.hatBox.text = "Hats: " + ret.hats;
+            this.m.playerInfo.statusBox.text = ret.status;
+            this.m.playerInfo.groupBox.text = "Group: " + groupText;
             this.m.playerInfo.rankBox.text = "Rank: " + ret.rank;
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox, false, 0, true);
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox, false, 0, true);
-            this.m.playerInfo.dateBox.text = "Joined: " + regDate;
+            this.m.playerInfo.hatBox.text = "Hats: " + ret.hats;
+            this.m.playerInfo.dateBox.text = "Joined: " + (ret.registerDate == '1/Jan/1970' ? 'Age of Heroes' : ret.registerDate);
             this.m.playerInfo.lastLoginBox.text = "Active: " + ret.loginDate;
-            this.m.playerInfo.groupBox.text = "Group: " + groupText;
             if (ret.guildId == 0) {
                 this.m.playerInfo.guildBox.text = "Guild: none";
             } else {
@@ -201,12 +240,14 @@ package package_4
         private function clickAddFriend(e:MouseEvent)
         {
             this.handleUserListURL('friends', 'add');
+            Main.socket.write("add_friend`" + this.userName);
         }
 
         // method_391 = clickRemoveFriend
         private function clickRemoveFriend(e:MouseEvent)
         {
             this.handleUserListURL('friends', 'remove');
+            Main.socket.write("remove_friend`" + this.userName);
         }
 
         // method_257 = clickIgnore
@@ -314,7 +355,11 @@ package package_4
             }
             removeChild(this.m);
             this.m = null;
-            this.superLoader.remove();
+            this.cm.defineCommand("playerInfo", null);
+            this.cm = null;
+            if (this.superLoader != null) {
+                this.superLoader.remove();
+            }
             super.remove();
         }
 

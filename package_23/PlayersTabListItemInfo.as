@@ -12,7 +12,7 @@ package package_23
         public var rank:int;
         public var hats:int;
 
-        public function PlayersTabListItemInfo(name:String, group:int, rankNum:int, hatCount:int, server:String)
+        public function PlayersTabListItemInfo(name:String, group:String, rankNum:int, hatCount:int, server:String)
         {
             var nameLink:String;
             super();

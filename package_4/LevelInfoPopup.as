@@ -27,7 +27,7 @@
         
         private var userId:int = 0; // user_id
         private var userName:String = "";
-        private var userGroup:int = 0;
+        private var userGroup:String = '0';
 
         private var title:String = ''; // title
         private var note:String = ''; // note
@@ -108,7 +108,7 @@
             this.m.levelInfo.minRank.text = this.minRank = ret.min_rank;
 
             // make strings/data to give to mc
-            this.m.levelInfo.author.htmlText = 'by: ' + this.htmlNameMaker.makeName(ret.user_name, ret.user_group);
+            this.m.levelInfo.author.htmlText = 'by: ' + this.htmlNameMaker.makeName(this.userName, this.userGroup);
             this.htmlNameMaker.listenForLink(this.m.levelInfo.author);
             this.m.levelInfo.updated.text = this.updated.date + '/' + class_28.getMonthStr(this.updated.month) + '/' + this.updated.fullYear;
             this.m.levelInfo.rating.stars.bar.scaleX = this.rating / 5;

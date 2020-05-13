@@ -21,10 +21,10 @@ package package_22
             var serverId:int = Main.server.server_id;
             var day:int = Main.lastAuthTime.getDay();
             Campaign.campaignPage = this.pageNum = ((serverId + day) % 6) + 1;
-            var vars:URLVariables = Memory.memory["campaignInfo" + Campaign.campaignPage];
-            if (vars != null) {
+            var levels:Array = Memory.memory["campaignInfo" + Campaign.campaignPage];
+            if (levels != null) {
                 clearTimeout(var_280);
-                var_280 = setTimeout(this.showCourses, 250, vars);
+                var_280 = setTimeout(this.showCourses, 250, levels);
             } else {
                 requestCourses();
             }
@@ -35,10 +35,10 @@ package package_22
             addChild(pageNavigation);
         }
 
-        override protected function showCourses(vars:URLVariables)
+        override protected function showCourses(levels:Array)
         {
-            Memory.memory["campaignInfo" + Campaign.campaignPage] = vars;
-            super.showCourses(vars);
+            Memory.memory["campaignInfo" + Campaign.campaignPage] = levels;
+            super.showCourses(levels);
         }
 
 

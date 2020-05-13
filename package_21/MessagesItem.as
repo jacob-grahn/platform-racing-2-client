@@ -24,7 +24,7 @@ package package_21
 
         // _loc8 = htmlName
         // _loc9 = date
-        public function MessagesItem(messages:Messages, _arg_2:Number, name:String, group:Number, body:String, gm:Boolean, time:Number, userId:Number)
+        public function MessagesItem(messages:Messages, _arg_2:Number, name:String, group:String, body:String, gm:Boolean, time:Number, userId:Number)
         {
             this.target = messages;
             this.messageId = _arg_2;

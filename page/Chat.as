@@ -42,7 +42,7 @@ package page
         public function handleMessageFromArray(chatMessageArray:Array)
         {
             var userName:String = chatMessageArray[0];
-            var group:Number = Number(chatMessageArray[1]);
+            var group:String = chatMessageArray[1];
             var messageText:String = chatMessageArray[2];
             if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
                 messageText = class_28.escapeAndFilterString(messageText); // filters swears, prevents nuking, escapes problematic chars

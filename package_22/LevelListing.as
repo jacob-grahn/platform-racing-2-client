@@ -17,6 +17,7 @@ package package_22
     import page.Page;
     import ui.PageNavigation;
     import data.CommandHandler;
+    import flash.utils.ByteArray;
 
     public class LevelListing extends Page
     {
@@ -37,7 +38,7 @@ package package_22
         public function LevelListing()
         {
             this.pageNavigation = new PageNavigation(this, "vertical", 1, 9, 283);
-            this.superLoader = new SuperLoader();
+            this.superLoader = new SuperLoader(true, SuperLoader.j);
             super();
             addChild(this.class_10);
             this.loadingGraphic.x = 164;
@@ -47,6 +48,7 @@ package package_22
             this.pageNavigation.y = 26;
             addChild(this.pageNavigation);
             this.superLoader.addEventListener(Event.COMPLETE, this.loadHandler);
+            this.superLoader.addEventListener(SuperLoader.e, this.errorHandler);
             Main.socket.write("set_right_room`none");
             LevelListing.levelListing = this;
             this.cm.defineCommand('addPageHighlight', this.addPageHighlight);
@@ -68,10 +70,10 @@ package package_22
         // _loc8 = levelItem
         // _loc9 = i
         // deleted _loc4,6,7 - hardcoded unchanging integers at levelItem.x/y modifiers
-        protected function showCourses(vars:URLVariables)
+        protected function showCourses(levels:Array)
         {
             if (class_33.getNumber("userRank") < 0) {
-                this.var_280 = setTimeout(this.showCourses, 250, vars);
+                this.var_280 = setTimeout(this.showCourses, 250, levels);
             } else {
                 if (this.pageNavigation.parent == this.class_10) {
                     this.class_10.removeChild(this.pageNavigation);
@@ -82,12 +84,12 @@ package package_22
                 if (spriteHeight != 0) {
                     spriteHeight = spriteHeight + 20;
                 }
-                var i:int = 0;
-                while (vars["levelID" + i] != null) {
+                for (var i:int = 0; i < levels.length; i++) {
+                    var level:Object = levels[i];
                     if ((spriteHeight + (levelOnPage * 112)) > 224) {
                         break; // prevent "phantom" rows below the intended final row of levels on a page
                     }
-                    var levelItem:LevelItem = new LevelItem(vars["levelID" + i], vars["version" + i], vars["title" + i], vars["rating" + i], vars["playCount" + i], vars["minLevel" + i], vars["note" + i], vars["userName" + i], vars["group" + i], vars["pass" + i], vars["type" + i], vars["time" + i]);
+                    var levelItem:LevelItem = new LevelItem(level.level_id, level.version, level.title, level.rating, level.play_count, level.min_level, level.note, level.user_name, level.group, level.pass, level.type, level.time);
                     levelItem.x = 2 + (levelInRow * 109);
                     levelItem.y = spriteHeight + (levelOnPage * 112);
                     this.levelArray.push(levelItem);
@@ -98,7 +100,6 @@ package package_22
                         levelOnPage++;
                         levelInRow = 0;
                     }
-                    i++;
                 }
                 Main.socket.write("set_right_room`" + this.mode);
                 this.loadingGraphic.visible = false;
@@ -113,15 +114,20 @@ package package_22
         {
             var ret:String = e.target.data;
             if (ret != "") {
-                var vars:URLVariables = new URLVariables(ret);
-                if (vars.hash != null) {
-                    var retNoHash:String = ret.substr(0, ret.length - 38);
-                    var gameHash:String = MD5.hash(retNoHash + Env.LEVEL_LIST_SALT);
-                    if (vars.hash == gameHash) {
-                        this.showCourses(vars);
+                var obj:Object = JSON.parse(ret);
+                if (obj.hash != null) {
+                    var levelsStr:String = ret.substr(10, ret.length - 53); // janky way to preserve utf-8 char codes from php for hash validation
+                    var gameHash:String = MD5.hash(levelsStr + Env.LEVEL_LIST_SALT);
+                    if (obj.hash == gameHash) {
+                        this.showCourses(obj.levels);
                     }
                 }
             }
+            this.loadingGraphic.visible = false;
+        }
+
+        protected function errorHandler(e:Event)
+        {
             this.loadingGraphic.visible = false;
         }
 

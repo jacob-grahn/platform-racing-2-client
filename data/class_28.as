@@ -16,6 +16,7 @@ package data
 
         public static var md5:MD5 = new MD5();
         private static var groupColors:Array = new Array("#676666", "#047B7B", "#1C369F", "#870A6F");
+        private static var modGroupColors:Array = new Array("#006400", "#0092FF", "#1C369F");
         private static var damnArray:Array = new Array("dang", "dingy-goo", "condemnation"); // var_397
         private static var fuckArray:Array = new Array("fooey", "fingilly", "funk-master", "freak monster", "jiminy cricket"); // var_449
         private static var shitArray:Array = new Array("shoot", "shewet"); // var_434
@@ -244,7 +245,7 @@ package data
 
         private static function parseUser(s:String):String
         {
-            var sNew:String = s.replace(/(\[user=)(\d{1})(\])([a-zA-Z0-9-.:;=?~!()@*,+$#% ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
+            var sNew:String = s.replace(/(\[user=)(\d{1}(?:\,\d{1}){0,1})(\])([a-zA-Z0-9-.:;=?~!()@*,+$#% ]+)(\[\/user\])/gi, "<a href='event:user`$2`$4`1'><u><font color='<*>$2<*>'>$4</font></u></a>");
             if (s == sNew) {
                 return s;
             }
@@ -252,7 +253,12 @@ package data
             // replace power value with corresponding group color
             var arr:Array = sNew.split('<*>');
             for (var i = 1; i < arr.length; i += 2) {
-                arr[i] = groupColors[numLimit(int(arr[i]), 0, 3)];
+                if (arr[i].indexOf(',') == -1) {
+                    arr[i] = groupColors[numLimit(int(arr[i]), 0, 3)];
+                } else {
+                    var mod_power:* = arr[i].split(',');
+                    arr[i] = modGroupColors[numLimit(int(mod_power[1]), 0, 2)];
+                }
             }
 
             return arr.join('');

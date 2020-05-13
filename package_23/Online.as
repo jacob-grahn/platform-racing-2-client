@@ -19,13 +19,17 @@ package package_23
             Main.socket.write("get_online_list`");
         }
 
-        public function addUser(_arg_1:Array)
+        // _loc2 = name
+        // _loc3 = group
+        // _loc4 = rank
+        // _loc5 = hats
+        public function addUser(a:Array)
         {
-            var _local_2:String = _arg_1[0];
-            var _local_3:int = int(_arg_1[1]);
-            var _local_4:int = int(_arg_1[2]);
-            var _local_5:int = int(_arg_1[3]);
-            method_138(_local_2, _local_3, _local_4, _local_5);
+            var name:String = a[0];
+            var group:String = a[1];
+            var rank:int = int(a[2]);
+            var hats:int = int(a[3]);
+            method_138(name, group, rank, hats);
         }
 
         override public function remove()

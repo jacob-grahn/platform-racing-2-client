@@ -39,7 +39,7 @@ package package_22
         private var minRank:Number;
         private var note:String;
         private var userName:String;
-        private var group:Number;
+        private var group:String;
         private var pass:Boolean;
         private var type:String;
         private var lastUpdated:Date;
@@ -49,7 +49,7 @@ package package_22
 
         // _loc12 = htmlName
         // _loc13 = myRank
-        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:Number, hasPass:Boolean, gMode:String, time:int)
+        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:String, hasPass:Boolean, gMode:String, time:int)
         {
             this.courseID = id;
             this.version = v;
@@ -64,7 +64,7 @@ package package_22
             this.type = gMode;
             this.lastUpdated = new Date(time * 1000);
             this.minRank = class_74.numLimit(this.minRank, 0, 99);
-            var htmlName:String = this.htmlNameMaker.makeName(uName, uGroup);
+            var htmlName:String = this.htmlNameMaker.makeName(this.userName, this.group);
             this.m.titleBox.text = this.title;
             this.m.authorBox.htmlText = "by " + htmlName;
             this.m.ratingStars.bar.scaleX = this.rating / 5;

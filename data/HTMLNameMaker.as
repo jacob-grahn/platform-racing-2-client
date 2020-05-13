@@ -24,22 +24,26 @@ package data
         {
         }
 
-        public function makeName(name:String, group:int, dispText:String = ""):String
+        public function makeName(name:String, group:String, dispText:String = ""):String
         {
             var groupColor:String;
-            switch (group) {
-                case 1:
-                    groupColor = "#047B7B";
-                    break;
-                case 2:
-                    groupColor = "#1C369F";
-                    break;
-                case 3:
-                    groupColor = "#870A6F";
-                    break;
-                default:
-                    groupColor = "#676666";
-                    break;
+            if (group == 1) {
+                groupColor = "#047B7B";
+            } else if (group == 2) {
+                groupColor = "#1C369F";
+            } else if (group.indexOf(',') != -1) {
+                var mod_vars:Array = group.split(',');
+                if (mod_vars[1] == 0) { // temp
+                    groupColor = '#006400';
+                } else if (mod_vars[1] == 1) { // trial
+                    groupColor = '#0092FF';
+                } else if (mod_vars[0] == 2) { // handle perma exception
+                    groupColor = '#1C369F';
+                }
+            } else if (group == 3) {
+                groupColor = "#870A6F";
+            } else {
+                groupColor = "#676666";
             }
             if (name.toLowerCase() == 'dev52' && Main.loggedInAs.toLowerCase() == 'dev52') {
                 groupColor = '#FF9900';
@@ -47,9 +51,9 @@ package data
             if (name.toLowerCase() == 'wolfie' && Main.loggedInAs.toLowerCase() == 'wolfie') {
                 groupColor = '#000000';
             }
-            /*if (name.toLowerCase() == "fred the g. cactus") { // could be a future addition...
+            if (name.toLowerCase() == "fred the g. cactus") {
                 groupColor = "#83C141";
-            }*/
+            }
             if (dispText == "") {
                 dispText = name;
             }
@@ -95,9 +99,13 @@ package data
             var arr:Array = e.text.split("`");
             var mode:String = arr[0];
             if (mode == "user") {
-                var group:int = arr[1];
+                var group:String = arr[1];
                 var userName:String = arr[2];
                 var forcePlayer:Boolean = Boolean(int(arr[3]));
+                if (group.indexOf(',') != -1) {
+                    var mod_power:* = group.split(',');
+                    group = int(mod_power[0]);
+                }
                 if (group > 0 || forcePlayer) {
                     new PlayerPopup(userName);
                 } else {

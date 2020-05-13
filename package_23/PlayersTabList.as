@@ -46,9 +46,9 @@ package package_23
             this.sortPlayersBy('hats');
         }
 
-        protected function method_138(_arg_1:String, _arg_2:Number, _arg_3:Number, _arg_4:int, _arg_5:String="")
+        protected function method_138(name:String, group:String, rank:Number, hats:int, status:String="")
         {
-            var listName:PlayersTabListItemInfo = new PlayersTabListItemInfo(_arg_1, _arg_2, _arg_3, _arg_4, _arg_5);
+            var listName:PlayersTabListItemInfo = new PlayersTabListItemInfo(name, group, rank, hats, status);
             super.method_179(listName);
             this.updateSort = true;
         }
