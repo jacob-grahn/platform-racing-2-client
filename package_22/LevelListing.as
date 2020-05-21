@@ -89,7 +89,7 @@ package package_22
                     if ((spriteHeight + (levelOnPage * 112)) > 224) {
                         break; // prevent "phantom" rows below the intended final row of levels on a page
                     }
-                    var levelItem:LevelItem = new LevelItem(level.level_id, level.version, level.title, level.rating, level.play_count, level.min_level, level.note, level.user_name, level.group, level.pass, level.type, level.time);
+                    var levelItem:LevelItem = new LevelItem(level.level_id, level.version, level.title, level.rating, level.play_count, level.min_level, level.note, level.user_name, level.user_group, level.pass, level.type, level.time);
                     levelItem.x = 2 + (levelInRow * 109);
                     levelItem.y = spriteHeight + (levelOnPage * 112);
                     this.levelArray.push(levelItem);
