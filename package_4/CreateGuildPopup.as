@@ -161,8 +161,8 @@ package package_4
                 return; // mod edited, don't update their account
             }
             var ret:Object = this.loader.parsedData;
-            Main.guild = ret.guildId;
-            Main.guildName = ret.guildName;
+            Main.guild = ret.guild_id;
+            Main.guildName = ret.guild_name;
             Main.emblem = ret.emblem;
             Main.guildOwner = 1;
             Main.instance.dispatchEvent(new Event(Main.accountChange));

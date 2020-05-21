@@ -12,6 +12,7 @@ package data
     import package_4.MessagePopup;
     import package_6.Game;
     import package_6.CatCaptcha;
+    import flash.events.Event;
 
     public class CommandHandler
     {
@@ -42,6 +43,7 @@ package data
             this.defineCommand("demoteMod", this.demoteMod);
             this.defineCommand("areYouHuman", this.areYouHuman);
             this.defineCommand("tournamentMode", this.tournamentMode);
+            this.defineCommand("guildChange", this.guildChange);
         }
 
         // _loc2 = endPos
@@ -185,6 +187,15 @@ package data
         private function tournamentMode(a:Array)
         {
             Main.server.tournament = Boolean(int(a[0]));
+        }
+
+        private function guildChange(a:Array)
+        {
+            var ret:Object = JSON.parse(a[0]);
+            Main.guild = ret.guild_id;
+            Main.guildName = ret.guild_name;
+            Main.guildOwner = ret.is_owner;
+            Main.instance.dispatchEvent(new Event(Main.accountChange));
         }
 
 

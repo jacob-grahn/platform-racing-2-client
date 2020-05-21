@@ -26,9 +26,9 @@ package package_4
         override protected function parsedDataHandler(e:Event)
         {
             var ret:Object = loader.parsedData;
-            Main.guild = ret.guildId;
+            Main.guild = ret.guild_id;
             Main.emblem = ret.emblem;
-            Main.guildName = ret.guildName;
+            Main.guildName = ret.guild_name;
             Main.guildOwner = 0;
             super.parsedDataHandler(e);
         }
