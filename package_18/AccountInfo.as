@@ -27,8 +27,8 @@ package package_18
         private var var_190:class_262;
         private var stageRef:Stage = Main.stage;
         private var m:AccountInfoGraphic = new AccountInfoGraphic();
-        private var var_117:int = 0;
-        private var var_439:int = 0;
+        private var rankTokensUsed:int = 0; // var_117
+        private var rankTokensAvailable:int = 0; // var_439
         private var rank:int = 0;
         private var guildName:GuildName; // guildName
         private var var_510:int = 65;
@@ -44,55 +44,60 @@ package package_18
             Main.stage.focus = Main.stage;
         }
 
-        public function setCustomizeInfo(_arg_1:Array)
+        // _loc2 = hatColor
+        // _loc3 = headColor
+        // _loc4 = bodyColor
+        // _loc5 = feetColor
+        // _loc6 = hat
+        // _loc7 = head
+        // _loc8 = body
+        // _loc9 = feet
+        // _loc10 = hatArray
+        // _loc11 = headArray
+        // _loc12 = bodyArray
+        // _loc13 = feetArray
+        // _loc14 = speed
+        // _loc15 = accel
+        // _loc16 = jumpn
+        // _loc17 = hatColor2
+        // _loc18 = headColor2
+        // _loc19 = bodyColor2
+        // _loc20 = feetColor2
+        // _loc21 = epicHats
+        // _loc22 = epicHeads
+        // _loc23 = epicBodies
+        // _loc24 = epicFeet
+        public function setCustomizeInfo(a:Array)
         {
-            var _local_2:int;
-            var _local_3:int;
-            var _local_4:int;
-            var _local_5:int;
-            var _local_6:int;
-            var _local_7:int;
-            var _local_8:int;
-            var _local_9:int;
-            var _local_10:Array;
-            var _local_11:Array;
-            var _local_12:Array;
-            var _local_13:Array;
-            var _local_14:int;
-            var _local_17:int;
-            var _local_18:int;
-            var _local_21:Array;
-            var _local_23:Array;
-            var _local_24:Array;
-            var _local_25:Sprite;
-            _local_2 = int(_arg_1[0]);
-            _local_3 = int(_arg_1[1]);
-            _local_4 = int(_arg_1[2]);
-            _local_5 = int(_arg_1[3]);
-            _local_6 = int(_arg_1[4]);
-            _local_7 = int(_arg_1[5]);
-            _local_8 = int(_arg_1[6]);
-            _local_9 = int(_arg_1[7]);
-            _local_10 = this.method_34(_arg_1[8]);
-            _local_11 = this.method_34(_arg_1[9]);
-            _local_12 = this.method_34(_arg_1[10]);
-            _local_13 = this.method_34(_arg_1[11]);
-            _local_14 = int(_arg_1[12]);
-            var _local_15:int = int(_arg_1[13]);
-            var _local_16:int = int(_arg_1[14]);
-            this.rank = int(_arg_1[15]);
-            this.var_117 = int(_arg_1[16]);
-            this.var_439 = int(_arg_1[17]);
-            _local_17 = int(_arg_1[18]);
-            _local_18 = int(_arg_1[19]);
-            var _local_19:int = int(_arg_1[20]);
-            var _local_20:int = int(_arg_1[21]);
-            _local_21 = this.method_34(_arg_1[22]);
-            var _local_22:Array = this.method_34(_arg_1[23]);
-            _local_23 = this.method_34(_arg_1[24]);
-            _local_24 = this.method_34(_arg_1[25]);
+            var hatColor:int = int(a[0]);
+            var headColor:int = int(a[1]);
+            var bodyColor:int = int(a[2]);
+            var feetColor:int = int(a[3]);
+            var hat:int = int(a[4]);
+            var head:int = int(a[5]);
+            var body:int = int(a[6]);
+            var feet:int = int(a[7]);
+            var hatArray:Array = this.method_34(a[8]);
+            var headArray:Array = this.method_34(a[9]);
+            var bodyArray:Array = this.method_34(a[10]);
+            var feetArray:Array = this.method_34(a[11]);
+            var speed:int = int(a[12]);
+            var accel:int = int(a[13]);
+            var jumpn:int = int(a[14]);
+            this.rank = int(a[15]);
+            this.rankTokensUsed = int(a[16]);
+            this.rankTokensAvailable = int(a[17]);
+            var hatColor2:int = int(a[18]);
+            var headColor2:int = int(a[19]);
+            var bodyColor2:int = int(a[20]);
+            var feetColor2:int = int(a[21]);
+            var epicHats:Array = this.method_34(a[22]);
+            var epicHeads:Array = this.method_34(a[23]);
+            var epicBodies:Array = this.method_34(a[24]);
+            var epicFeet:Array = this.method_34(a[25]);
+            var isHappyHour:Boolean = Boolean(int(a[26]));
             this.m.nameBox.htmlText = "Welcome, <b>" + class_28.escapeString(Main.loggedInAs) + "</b>";
-            this.m.hatBox.htmlText = "Hats: <b>" + (_local_10.length - 1) + "</b>";
+            this.m.hatBox.htmlText = "Hats: <b>" + (hatArray.length - 1) + "</b>";
             this.method_194();
             this.reset();
             if (Main.guild == 0) {
@@ -105,18 +110,19 @@ package package_18
                 this.guildName.y = 54;
                 this.m.addChild(this.guildName);
             }
-            this.var_5 = new Character(_local_6, _local_7, _local_8, _local_9);
-            _local_25 = new Sprite();
+            this.var_5 = new Character(hat, head, body, feet);
+            var _local_25:Sprite = new Sprite();
             _local_25.addChild(this.var_5);
             _local_25.x = 80;
             _local_25.y = (140 + 42);
             _local_25.scaleX = (_local_25.scaleY = 1.5);
             addChild(_local_25);
-            this.var_158 = new StatsSelect((150 + this.rank), _local_14, _local_15, _local_16, null);
+            var availableStats:int = isHappyHour ? 300 : 150 + this.rank;
+            this.var_158 = new StatsSelect(availableStats, speed, accel, jumpn, null);
             this.var_158.x = 20;
             this.var_158.y = 207;
             addChild(this.var_158);
-            this.var_190 = new class_262(this.var_5, _local_10, _local_11, _local_12, _local_13, _local_6, _local_7, _local_8, _local_9, _local_2, _local_3, _local_4, _local_5, _local_21, _local_22, _local_23, _local_24, _local_17, _local_18, _local_19, _local_20);
+            this.var_190 = new class_262(this.var_5, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
             this.var_190.x = 23;
             this.var_190.y = (58 + 37);
             addChild(this.var_190);
@@ -145,7 +151,7 @@ package package_18
 
         private function method_148()
         {
-            var _local_1:int = (this.var_439 - this.var_117);
+            var _local_1:int = (this.rankTokensAvailable - this.rankTokensUsed);
             this.m.var_159.visible = false;
             this.m.var_115.visible = false;
             if (_local_1 > 0) {
@@ -153,10 +159,10 @@ package package_18
                 this.m.var_159.textBox.text = _local_1.toString();
                 this.m.var_159.x = this.var_510;
             }
-            if (this.var_117 > 0) {
+            if (this.rankTokensUsed > 0) {
                 this.m.var_115.visible = true;
                 this.m.var_115.arrow.rotation = 180;
-                this.m.var_115.textBox.text = this.var_117.toString();
+                this.m.var_115.textBox.text = this.rankTokensUsed.toString();
                 if (this.m.var_159.visible) {
                     this.m.var_115.x = this.var_635;
                 } else {
@@ -183,8 +189,8 @@ package package_18
 
         private function method_298(_arg_1:MouseEvent)
         {
-            if (this.var_117 < this.var_439) {
-                this.var_117++;
+            if (this.rankTokensUsed < this.rankTokensAvailable) {
+                this.rankTokensUsed++;
                 this.rank++;
                 Main.socket.write("use_rank_token`");
                 Main.socket.write("get_customize_info`");
@@ -195,8 +201,8 @@ package package_18
 
         private function method_221(_arg_1:MouseEvent)
         {
-            if (this.var_117 > 0) {
-                this.var_117--;
+            if (this.rankTokensUsed > 0) {
+                this.rankTokensUsed--;
                 this.rank--;
                 Main.socket.write("unuse_rank_token`");
                 Main.socket.write("get_customize_info`");
