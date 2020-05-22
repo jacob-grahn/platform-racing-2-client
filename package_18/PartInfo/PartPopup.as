@@ -176,8 +176,8 @@
             var feet:int = type == 'FEET' ? 35 : 33;
             var c:Character = new Character(1, 31, body, feet);
             this.m.addChildAt(c, 2);
-            c.method_134(255, 3329330);
-            c.method_90(255, 3329330);
+            c.setBodyColors(255, 3329330);
+            c.setFeetColors(255, 3329330);
             c.scaleX = c.scaleY = 1;
             c.x = -130;
             c.y = 10;

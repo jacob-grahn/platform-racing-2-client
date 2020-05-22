@@ -66,10 +66,10 @@ package package_18
                 ss.setStats(_arg_1);
             }
             if (c != null) {
-                c.method_395(_arg_1.hat);
-                c.method_250(_arg_1.head);
-                c.method_217(_arg_1.body);
-                c.method_326(_arg_1.feet);
+                c.setHatId(_arg_1.hat);
+                c.setHeadId(_arg_1.head);
+                c.setBodyId(_arg_1.body);
+                c.setFeetId(_arg_1.feet);
                 c.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
             }
             if (_arg_4 != null) {

@@ -154,10 +154,10 @@ package package_4
             }
             var c:Character = new Character(ret.hat, ret.head, ret.body, ret.feet);
             this.m.playerInfo.addChild(c);
-            c.method_133(ret.hatColor, ret.hatColor2);
-            c.method_132(ret.headColor, ret.headColor2);
-            c.method_134(ret.bodyColor, ret.bodyColor2);
-            c.method_90(ret.feetColor, ret.feetColor2);
+            c.setHatColors(ret.hatColor, ret.hatColor2);
+            c.setHeadColors(ret.headColor, ret.headColor2);
+            c.setBodyColors(ret.bodyColor, ret.bodyColor2);
+            c.setFeetColors(ret.feetColor, ret.feetColor2);
             c.scaleX = c.scaleY = 2;
             c.x = -75;
             c.y = 135;

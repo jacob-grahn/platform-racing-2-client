@@ -34,7 +34,7 @@ package package_8
         private var var_140:SoundChannel;
         public var m:CharacterGraphic = new CharacterGraphic();
         public var var_301:MovieClip;
-        private var stateAnims:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim); // var_217
+        private var characterStatesArray:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim); // var_217
         public var curWeapon:MovieClip;
         public var hat1:int;
         public var hat2:int = 1;
@@ -88,16 +88,16 @@ package package_8
             this.var_4 = new class_20();
             this.resetHats();
             this.changeState("stand");
-            this.method_25();
+            this.applyAppearance();
             addChild(this.m);
         }
 
         public function setColors(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:int, _arg_8:int)
         {
-            this.method_133(_arg_1, _arg_2);
-            this.method_132(_arg_3, _arg_4);
-            this.method_134(_arg_5, _arg_6);
-            this.method_90(_arg_7, _arg_8);
+            this.setHatColors(_arg_1, _arg_2);
+            this.setHeadColors(_arg_3, _arg_4);
+            this.setBodyColors(_arg_5, _arg_6);
+            this.setFeetColors(_arg_7, _arg_8);
         }
 
         // method_375 = resetHats
@@ -177,154 +177,167 @@ package package_8
                 hatSlot++;
                 _local_7 = _local_7 + 3;
             }
-            this.method_25();
+            this.applyAppearance();
         }
 
-        public function method_395(_arg_1:Number)
+        // method_395 = setHatId
+        public function setHatId(id:Number)
         {
-            this.hat1 = _arg_1;
-            this.method_25();
+            this.hat1 = id;
+            this.applyAppearance();
         }
 
-        public function method_250(_arg_1:Number)
+        // method_250 = setHeadId
+        public function setHeadId(id:Number)
         {
-            this.head = _arg_1;
-            this.method_25();
+            this.head = id;
+            this.applyAppearance();
         }
 
-        public function method_217(_arg_1:Number)
+        // method_217 = setBodyId
+        public function setBodyId(id:Number)
         {
-            this.body = _arg_1;
-            this.method_25();
+            this.body = id;
+            this.applyAppearance();
         }
 
-        public function method_326(_arg_1:Number)
+        // method_326 = setFeetId
+        public function setFeetId(id:Number)
         {
-            this.feet = _arg_1;
-            this.method_25();
+            this.feet = id;
+            this.applyAppearance();
         }
 
-        public function method_133(_arg_1:int, _arg_2:int)
+        // method_133 = setHatColors
+        public function setHatColors(color:int, epic:int)
         {
-            this.hat1Color = _arg_1;
-            this.hat1Color2 = _arg_2;
-            this.method_25();
+            this.hat1Color = color;
+            this.hat1Color2 = epic;
+            this.applyAppearance();
         }
 
-        public function method_132(_arg_1:int, _arg_2:int)
+        // method_132 = setHeadColors
+        public function setHeadColors(color:int, epic:int)
         {
-            this.headColor = _arg_1;
-            this.headColor2 = _arg_2;
-            this.method_25();
+            this.headColor = color;
+            this.headColor2 = epic;
+            this.applyAppearance();
         }
 
-        public function method_134(_arg_1:int, _arg_2:int)
+        // method_134 = setBodyColors
+        public function setBodyColors(color:int, epic:int)
         {
-            this.bodyColor = _arg_1;
-            this.bodyColor2 = _arg_2;
-            this.method_25();
+            this.bodyColor = color;
+            this.bodyColor2 = epic;
+            this.applyAppearance();
         }
 
-        public function method_90(_arg_1:int, _arg_2:int)
+        // method_90 = setFeetColors
+        public function setFeetColors(color:int, epic:int)
         {
-            this.feetColor = _arg_1;
-            this.feetColor2 = _arg_2;
-            this.method_25();
+            this.feetColor = color;
+            this.feetColor2 = epic;
+            this.applyAppearance();
         }
 
         public function setItem(_arg_1:int)
         {
             this.item = _arg_1;
-            this.method_229();
+            this.applyItem();
         }
 
-        private function method_25()
+        // method_25 = applyAppearance
+        private function applyAppearance()
         {
-            this.method_39("head", "head");
-            this.method_39("body", "body");
-            this.method_39("foot1", "feet");
-            this.method_39("foot2", "feet");
-            this.method_39("hat1", "hat1");
-            this.method_39("hat2", "hat2");
-            this.method_39("hat3", "hat3");
-            this.method_39("hat4", "hat4");
-            this.method_229();
-            this.method_562();
+            this.updatePartMC("head", "head");
+            this.updatePartMC("body", "body");
+            this.updatePartMC("foot1", "feet");
+            this.updatePartMC("foot2", "feet");
+            this.updatePartMC("hat1", "hat1");
+            this.updatePartMC("hat2", "hat2");
+            this.updatePartMC("hat3", "hat3");
+            this.updatePartMC("hat4", "hat4");
+            this.applyItem();
+            this.hideHeadFeetIfFredBody();
             this.var_387.update();
         }
 
-        private function method_39(_arg_1:String, _arg_2:String)
+        // _loc3 = part
+        // _loc4 = color
+        // _loc5 = color2
+        // _loc6 = type
+        // _loc7 = character
+        // _loc8 = partId
+        // method_39 = updatePartMC
+        private function updatePartMC(propName:String, partType:String)
         {
-            var _local_3:MovieClip;
-            var _local_4:int;
-            var _local_5:int;
-            var _local_6:String;
-            var _local_7:MovieClip;
-            var _local_8:int;
+            var part:MovieClip;
             if (this.m != null) {
-                _local_4 = this[_arg_2 + "Color"];
-                _local_5 = this[_arg_2 + "Color2"];
-                _local_6 = _arg_2;
-                if (_arg_2.indexOf("hat") != -1) {
-                    _local_6 = "hat";
+                var color:int = this[partType + "Color"];
+                var color2:int = this[partType + "Color2"];
+                var type:String = partType;
+                if (partType.indexOf("hat") != -1) {
+                    type = "hat";
                 }
-                for each (_local_7 in this.stateAnims) {
-                    _local_8 = this[_arg_2];
-                    if (_local_6 == "hat") {
+                for each (var character:MovieClip in this.characterStatesArray) {
+                    var partId:int = this[partType];
+                    if (type == "hat") {
                         if (this.body == 29) {
-                            _local_3 = _local_7.body[_arg_2];
+                            part = character.body[partType]; // get hat from bodyMC if fred body is selected
                         } else {
-                            _local_3 = _local_7.head[_arg_2];
+                            part = character.head[partType]; // otherwise, get hat from headMC
                         }
                     } else {
-                        _local_3 = _local_7[_arg_1];
+                        part = character[propName];
                     }
-                    _local_3.gotoAndStop(_local_8);
-                    _local_3.colorMC.gotoAndStop(_local_8);
-                    _local_3.colorMC2.gotoAndStop(_local_8);
-                    this.method_383(_local_3.colorMC, _local_4);
-                    if (_local_5 != -1) {
-                        _local_3.colorMC2.visible = true;
-                        this.method_383(_local_3.colorMC2, _local_5);
+                    part.gotoAndStop(partId);
+                    part.colorMC.gotoAndStop(partId);
+                    part.colorMC2.gotoAndStop(partId);
+                    this.applyPartColor(part.colorMC, color);
+                    if (color2 != -1) {
+                        part.colorMC2.visible = true;
+                        this.applyPartColor(part.colorMC2, color2);
                     } else {
-                        _local_3.colorMC2.visible = false;
+                        part.colorMC2.visible = false;
                     }
                 }
             }
         }
 
-        private function method_562()
+        // _loc1 = character
+        // method_562 = hideHeadFeetIfFredBody
+        private function hideHeadFeetIfFredBody()
         {
-            var _local_1:MovieClip;
-            for each (_local_1 in this.stateAnims) {
+            for each (var character:MovieClip in this.characterStatesArray) {
                 if (this.body == 29) {
-                    _local_1.head.visible = false;
-                    _local_1.foot1.visible = false;
-                    _local_1.foot2.visible = false;
+                    character.head.visible = false;
+                    character.foot1.visible = false;
+                    character.foot2.visible = false;
                 } else {
-                    _local_1.head.visible = true;
-                    _local_1.foot1.visible = true;
-                    _local_1.foot2.visible = true;
+                    character.head.visible = true;
+                    character.foot1.visible = true;
+                    character.foot2.visible = true;
                 }
             }
         }
 
-        private function method_383(_arg_1:MovieClip, _arg_2:int)
+        // _loc3 = ct
+        // method_383 = applyPartColor
+        private function applyPartColor(mc:MovieClip, color:int)
         {
-            var _local_3:ColorTransform = new ColorTransform();
-            _local_3.color = _arg_2;
-            _arg_1.transform.colorTransform = _local_3;
+            var ct:ColorTransform = new ColorTransform();
+            ct.color = color;
+            mc.transform.colorTransform = ct;
         }
 
-        // _loc1 = mc
-        private function method_229()
+        // _loc1 = character
+        // method_229 = applyItem
+        private function applyItem()
         {
-            for each (var mc:MovieClip in this.stateAnims) {
-                mc.weapon.gotoAndStop(Items.getNameFromCode(this.item));
+            for each (var character:MovieClip in this.characterStatesArray) {
+                character.weapon.gotoAndStop(Items.getNameFromCode(this.item));
             }
         }
-
-
 
         public function getPos()
         {
@@ -403,7 +416,7 @@ package package_8
             removeEventListener(Event.ENTER_FRAME, this.method_106);
         }
 
-        // _loc2 = mc
+        // _loc2 = character
         // method_11 = changeState
         public function changeState(s:String)
         {
@@ -421,18 +434,17 @@ package package_8
                 }
                 this.state = s;
                 if (this.m != null) {
-                    var mc:MovieClip;
-                    for each (mc in this.stateAnims) {
-                        mc.stop();
-                        if (mc.parent != null) {
-                            mc.parent.removeChild(mc);
+                    for each (var characterMC:MovieClip in this.characterStatesArray) {
+                        characterMC.stop();
+                        if (characterMC.parent != null) {
+                            characterMC.parent.removeChild(characterMC);
                         }
                     }
-                    mc = this.m[this.state + "Anim"];
-                    this.m.addChild(mc);
-                    this.curWeapon = mc.weapon;
-                    mc.gotoAndPlay(1);
-                    this.var_301 = mc;
+                    characterMC = this.m[this.state + "Anim"];
+                    this.m.addChild(characterMC);
+                    this.curWeapon = characterMC.weapon;
+                    characterMC.gotoAndPlay(1);
+                    this.var_301 = characterMC;
                 }
                 this.var_387.update();
             }
@@ -506,7 +518,7 @@ package package_8
                 this.var_140.stop();
                 this.var_140 = null;
             }
-            for each (_local_1 in this.stateAnims) {
+            for each (_local_1 in this.characterStatesArray) {
                 if (_local_1.weapon.jetPack != null) {
                     _local_1.weapon.jetPack.gotoAndStop("off");
                 }
@@ -540,7 +552,7 @@ package package_8
                 }
                 _local_3--;
             }
-            this.method_25();
+            this.applyAppearance();
             var _local_4:Object = new Object();
             _local_4.hatNum = _local_1;
             _local_4.hatColor = _local_2;
@@ -604,7 +616,7 @@ package package_8
                 }
                 this.m = null;
                 this.curWeapon = null;
-                this.stateAnims = new Array();
+                this.characterStatesArray = new Array();
                 this.var_4.remove();
                 this.var_4 = null;
                 super.remove();

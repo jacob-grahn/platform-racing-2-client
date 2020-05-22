@@ -81,10 +81,10 @@ package package_17
             var _local_13:int = int(Math.round(Math.random() * 0xFFFFFF));
             var _local_14:Character = new Character(_local_2, _local_3, _local_4, _local_5);
             this.m.addChildAt(_local_14, 2);
-            _local_14.method_133(_local_6, _local_7);
-            _local_14.method_132(_local_8, _local_9);
-            _local_14.method_134(_local_10, _local_11);
-            _local_14.method_90(_local_12, _local_13);
+            _local_14.setHatColors(_local_6, _local_7);
+            _local_14.setHeadColors(_local_8, _local_9);
+            _local_14.setBodyColors(_local_10, _local_11);
+            _local_14.setFeetColors(_local_12, _local_13);
             _local_14.scaleX = _local_14.scaleY = 1;
             _local_14.x = _arg_1;
             _local_14.y = 85;

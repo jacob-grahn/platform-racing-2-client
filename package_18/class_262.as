@@ -50,14 +50,14 @@ package package_18
 
         private function method_65(e:Event)
         {
-            this.char.method_395(this.hatSelect.getValue());
-            this.char.method_250(this.headSelect.getValue());
-            this.char.method_217(this.bodySelect.getValue());
-            this.char.method_326(this.feetSelect.getValue());
-            this.char.method_133(this.hatSelect.getColor(), this.hatSelect.getColor2());
-            this.char.method_132(this.headSelect.getColor(), this.headSelect.getColor2());
-            this.char.method_134(this.bodySelect.getColor(), this.bodySelect.getColor2());
-            this.char.method_90(this.feetSelect.getColor(), this.feetSelect.getColor2());
+            this.char.setHatId(this.hatSelect.getValue());
+            this.char.setHeadId(this.headSelect.getValue());
+            this.char.setBodyId(this.bodySelect.getValue());
+            this.char.setFeetId(this.feetSelect.getValue());
+            this.char.setHatColors(this.hatSelect.getColor(), this.hatSelect.getColor2());
+            this.char.setHeadColors(this.headSelect.getColor(), this.headSelect.getColor2());
+            this.char.setBodyColors(this.bodySelect.getColor(), this.bodySelect.getColor2());
+            this.char.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
         }
 
         private function onHatInfoClick(e:Event)
