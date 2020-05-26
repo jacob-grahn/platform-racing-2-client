@@ -212,28 +212,30 @@ package package_18
         }
 
         // _loc2 = e.keyCode
+        // _loc3 = presetNum
+        // _loc4 = applyPreset
+        // _loc5 = textBox
+        // _loc6 = preset
         private function keyDownHandler(e:KeyboardEvent)
         {
-            var _local_5:TextField;
-            var _local_6:Preset;
-            var _local_3:int = -1;
-            var _local_4:Boolean = true;
+            var presetNum:int = -1;
+            var applyPreset:Boolean = true;
             if (e.keyCode == 49 || e.keyCode == 97) {
-                _local_3 = 1;
+                presetNum = 1;
             } else if (e.keyCode == 50 || e.keyCode == 98) {
-                _local_3 = 2;
+                presetNum = 2;
             } else if (e.keyCode == 51 || e.keyCode == 99) {
-                _local_3 = 3;
+                presetNum = 3;
             }
             if (e.target is TextField) {
-                _local_5 = e.target as TextField;
-                if (_local_5.type === TextFieldType.INPUT) {
-                    _local_4 = false;
+                var textBox:TextField = e.target as TextField;
+                if (textBox.type === TextFieldType.INPUT) {
+                    applyPreset = false; // preserve manually typing stats in textboxes (instead of using slider)
                 }
             }
-            if (_local_3 != -1 && _local_4) {
-                _local_6 = Presets.getPreset(_local_3);
-                Presets.apply(_local_6, this.var_5, this.var_158, this.var_190);
+            if (presetNum != -1 && applyPreset) {
+                var preset:Preset = Presets.getPreset(presetNum);
+                Presets.apply(preset, this.var_5, this.var_158, this.var_190);
             }
         }
 

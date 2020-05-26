@@ -90,7 +90,10 @@ package package_18
 
         public function setValue(_arg_1:int)
         {
-            this.value = this.arrows.value = _arg_1;
+            this.value = _arg_1;
+            this.arrows.setValue(this.value);
+            this.cpEpicCheck();
+            dispatchEvent(new Event(Event.CHANGE));
         }
 
         public function setColors(_arg_1:int, _arg_2:int)

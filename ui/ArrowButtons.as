@@ -17,22 +17,24 @@ package ui
         private var index:int = 0;
         public var value:int;
 
-        public function ArrowButtons(_arg_1:Array, _arg_2:int)
+        public function ArrowButtons(a:Array, val:int)
         {
-            this.array = _arg_1;
-            this.setValue(_arg_2);
+            this.array = a;
+            this.setValue(val);
             addChild(this.m);
-            this.m.var_333.addEventListener(MouseEvent.CLICK, this.method_462);
-            this.m.var_381.addEventListener(MouseEvent.CLICK, this.method_361);
+            this.m.left.addEventListener(MouseEvent.CLICK, this.clickLeft); // this.m.var_333
+            this.m.right.addEventListener(MouseEvent.CLICK, this.clickRight); // this.m.var_381
         }
 
-        private function method_462(_arg_1:MouseEvent)
+        // method_462 = clickLeft
+        private function clickLeft(e:MouseEvent)
         {
             this.index--;
             this.method_402();
         }
 
-        private function method_361(_arg_1:MouseEvent)
+        // method_361 = clickRight
+        private function clickRight(e:MouseEvent)
         {
             this.index++;
             this.method_402();
@@ -47,33 +49,35 @@ package ui
                 this.index = 0;
             }
             this.value = this.array[this.index];
-            var _local_1:Event = new Event(Event.CHANGE);
-            dispatchEvent(_local_1);
+            dispatchEvent(new Event(Event.CHANGE));
         }
 
-        public function setValue(_arg_1:int)
+        // _loc2 = arrayPos
+        // _loc3 = i
+        public function setValue(val:int)
         {
-            var _local_2:int = -1;
-            var _local_3:int;
-            while (_local_3 < this.array.length) {
-                if (_arg_1 == this.array[_local_3]) {
-                    _local_2 = _local_3;
+            var arrayPos:int = -1;
+            var i:int;
+            while (i < this.array.length) {
+                if (val == this.array[i]) {
+                    arrayPos = i;
                     break;
                 }
-                _local_3++;
+                i++;
             }
-            if (_local_2 == -1) {
-                _local_2 = 0;
+            if (arrayPos == -1) {
+                arrayPos = 0;
             } else {
-                this.value = _arg_1;
-                this.index = _local_2;
+                this.value = val;
+                this.index = arrayPos;
             }
+            dispatchEvent(new Event(Event.CHANGE));
         }
 
         public function remove()
         {
-            this.m.var_333.removeEventListener(MouseEvent.CLICK, this.method_462);
-            this.m.var_381.removeEventListener(MouseEvent.CLICK, this.method_361);
+            this.m.left.removeEventListener(MouseEvent.CLICK, this.clickLeft);
+            this.m.right.removeEventListener(MouseEvent.CLICK, this.clickRight);
             removeChild(this.m);
             this.m = null;
             parent.removeChild(this);
