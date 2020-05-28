@@ -12,15 +12,15 @@ package levelEditor
         private var m:HatPickerGraphic;
         private var c:LocalCharacter;
         private var min:int = 1; // var_538
-        private var max:int = 15; // var_620
+        private var max:int = 16; // var_620
         private var pickedHat:int = 2; // var_75
 
         public function HatPicker(l:LocalCharacter)
         {
             this.c = l;
             this.m = new HatPickerGraphic();
-            this.m.var_173.var_333.addEventListener(MouseEvent.CLICK, this.method_372, false, 0, true);
-            this.m.var_173.var_381.addEventListener(MouseEvent.CLICK, this.method_214, false, 0, true);
+            this.m.var_173.left.addEventListener(MouseEvent.CLICK, this.method_372, false, 0, true);
+            this.m.var_173.right.addEventListener(MouseEvent.CLICK, this.method_214, false, 0, true);
             addChild(this.m);
             this.display();
         }
@@ -56,17 +56,17 @@ package levelEditor
         {
             this.m.hat.gotoAndStop(this.pickedHat);
             this.m.hat.colorMC.gotoAndStop(this.pickedHat);
-            this.m.hat.colorMC2.visible = false;
-            var colorMC:int = int(Math.round((Math.random() * 0xFFFFFF)));
-            var colorMC2:int = -1;
+            this.m.hat.colorMC2.visible = this.pickedHat == 16;
+            var colorMC:int = Math.round(Math.random() * 0xFFFFFF);
+            var colorMC2:int = 0;
             var a:Array = new Array(this.pickedHat, colorMC, colorMC2);
             this.c.setHats(a);
         }
 
         public function remove()
         {
-            this.m.var_173.var_333.removeEventListener(MouseEvent.CLICK, this.method_372);
-            this.m.var_173.var_381.removeEventListener(MouseEvent.CLICK, this.method_214);
+            this.m.var_173.left.removeEventListener(MouseEvent.CLICK, this.method_372);
+            this.m.var_173.right.removeEventListener(MouseEvent.CLICK, this.method_214);
             this.m = null;
             this.c = null;
         }
