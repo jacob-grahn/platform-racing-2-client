@@ -53,7 +53,7 @@ package package_8
         private var mapDot:MovieClip; // var_174
         private var itemDisplay:ItemDisplay;
         private var var_573:uint = setInterval(method_796, 5000);
-        private var var_535:uint = setInterval(method_358, 1000);
+        private var var_535:uint = setInterval(limitMaxCowboyStats, 1000);
         private var var_390:DisplayObject = parent;
         private var speedStat:int; // var_245
         private var accelStat:int; // var_261
@@ -286,8 +286,8 @@ package package_8
                             this.socket.write("set_var`parent`backBackground");
                         }
                     }
-                    if (this.curItem != this.var_623) {
-                        this.var_623 = this.curItem;
+                    if (Items.getCodeFromItem(this.curItem) != this.var_623) {
+                        this.var_623 = Items.getCodeFromItem(this.curItem);
                         this.socket.write("set_var`item`" + Items.getCodeFromItem(this.curItem));
                     }
                 }
@@ -925,10 +925,10 @@ package package_8
             if (hadMoon && !var_4.getBool(MOON)) {
                 this.resetGravity();
             }
-            if (hadCB && !var_4.getBool(COWBOY) && this.curItem != Items.speedBurst) {
+            if (hadCB && !var_4.getBool(COWBOY) && Items.getCodeFromItem(this.curItem) != Items.speedBurst) {
                 this.resetStats();
             }
-            if (hadSanta && !var_4.getBool(SANTA) && this.curItem != Items.speedBurst) {
+            if (hadSanta && !var_4.getBool(SANTA) && Items.getCodeFromItem(this.curItem) != Items.speedBurst) {
                 this.resetStats();
             }
             if (hadArti && !var_4.getBool(ARTIFACT)) {
@@ -939,7 +939,7 @@ package package_8
                     reversedControls = false; // preserve reversed controls on Apr 1
                 }
             }
-            this.method_358();
+            this.limitMaxCowboyStats();
             if (var_4.getBool(SANTA)) {
                 if (!hadSanta) {
                     this.maxVelX = this.maxVelX + 1;
@@ -976,9 +976,10 @@ package package_8
             }
         }
 
-        private function method_358()
+        // method_358 = limitMaxCowboyStats
+        private function limitMaxCowboyStats()
         {
-            if (var_4.getBool(COWBOY) && this.curItem != Items.speedBurst) {
+            if (var_4.getBool(COWBOY) && Items.getCodeFromItem(this.curItem) != Items.speedBurst) {
                 this.maxVelX = 12;
                 this.accel = 1.86;
                 var_4.setNumber(SuperJump, 4.5);
