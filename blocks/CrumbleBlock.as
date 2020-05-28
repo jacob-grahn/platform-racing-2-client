@@ -6,6 +6,7 @@
 package blocks
 {
     import data.Objects;
+    import package_8.Character;
     import package_8.LocalCharacter;
     import package_9.class_106;
     import flash.geom.Point;
@@ -21,35 +22,39 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(_arg_1:LocalCharacter)
+        override public function onStand(c:LocalCharacter)
         {
-            localActivate(Math.round((_arg_1.velY * 2)).toString());
+            var force:Number = this.cheeseHandler(c, Math.round(c.velY * 2));
+            localActivate(force.toString());
             if (!method_20()) {
-                super.onStand(_arg_1);
+                super.onStand(c);
             }
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(c:LocalCharacter)
         {
-            localActivate(Math.round(-(_arg_1.velY)).toString());
+            var force:Number = this.cheeseHandler(c, Math.round(-c.velY));
+            localActivate(force.toString());
             if (!method_20()) {
-                super.onBump(_arg_1);
+                super.onBump(c);
             }
         }
 
-        override public function onLeftHit(_arg_1:LocalCharacter)
+        override public function onLeftHit(c:LocalCharacter)
         {
-            localActivate(Math.round((_arg_1.velX * 1.75)).toString());
+            var force:Number = this.cheeseHandler(c, Math.round(c.velX * 1.75));
+            localActivate(force.toString());
             if (!method_20()) {
-                super.onLeftHit(_arg_1);
+                super.onLeftHit(c);
             }
         }
 
-        override public function onRightHit(_arg_1:LocalCharacter)
+        override public function onRightHit(c:LocalCharacter)
         {
-            localActivate(Math.round((-(_arg_1.velX) * 1.75)).toString());
+            var force:Number = this.cheeseHandler(c, Math.round(-c.velX * 1.75));
+            localActivate(force.toString());
             if (!method_20()) {
-                super.onRightHit(_arg_1);
+                super.onRightHit(c);
             }
         }
 
@@ -67,6 +72,14 @@ package blocks
             if (this.life <= 0) {
                 this.doCrumble();
             }
+        }
+
+        private function cheeseHandler(c:LocalCharacter, hitForce:Number)
+        {
+            if (hitForce > 0 && c.var_4.getBool(Character.CHEESE)) {
+                return 50;
+            }
+            return hitForce;
         }
 
         // method_707 = doCrumble

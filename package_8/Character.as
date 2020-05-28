@@ -29,6 +29,7 @@ package package_8
         public static const JIGG:String = 'j'; // const_51
         public static const ARTIFACT:String = 'b'; // const_25
         public static const JELLYFISH:String = 'f'; // (fish)
+        public static const CHEESE:String = 'ch';
 
         private var var_387:class_127;
         private var var_140:SoundChannel;
@@ -114,6 +115,7 @@ package package_8
             this.var_4.setBool(JIGG, false);
             this.var_4.setBool(ARTIFACT, false);
             this.var_4.setBool(JELLYFISH, false);
+            this.var_4.setBool(CHEESE, false);
         }
 
         // _loc2 = hatId
@@ -173,6 +175,8 @@ package package_8
                     this.var_4.setBool(ARTIFACT, true);
                 } else if (hatId === 15) {
                     this.var_4.setBool(JELLYFISH, true);
+                } else if (hatId === 16) {
+                    this.var_4.setBool(CHEESE, true);
                 }
                 hatSlot++;
                 _local_7 = _local_7 + 3;
@@ -294,6 +298,7 @@ package package_8
                     part.colorMC.gotoAndStop(partId);
                     part.colorMC2.gotoAndStop(partId);
                     this.applyPartColor(part.colorMC, color);
+                    color2 = type == 'hat' && partId == 16 && color2 == -1 ? 0 : color2; // transparency workaround for cheese hat. I am being so lazy with this... but do I care???
                     if (color2 != -1) {
                         part.colorMC2.visible = true;
                         this.applyPartColor(part.colorMC2, color2);

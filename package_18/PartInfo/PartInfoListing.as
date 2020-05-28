@@ -66,7 +66,7 @@ package package_18.PartInfo
             }
             this.target.visible = true;
             this.target.alpha = 0.1; // doesn't have
-            this.target.colorMC2.visible = false; // doesn't have epic
+            this.target.colorMC2.visible = type == 'HAT' && this.listing.id == 16; // doesn't have epic and isn't cheese hat
             this.target.gotoAndStop(this.listing.id);
             this.target.colorMC.gotoAndStop(this.listing.id);
             this.target.colorMC2.gotoAndStop(this.listing.id);

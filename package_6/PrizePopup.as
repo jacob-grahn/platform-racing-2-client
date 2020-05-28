@@ -85,7 +85,7 @@ package package_6
             if (type == "eHat" || type == "eHead" || type == "eBody" || type == "eFeet") {
                 this.activateEpicAnimation();
             } else if (type != "exp" && type != 'cancel') {
-                this.target.colorMC2.visible = false;
+                this.target.colorMC2.visible = type == 'hat' && id == 16; // cheese hat workaround
             }
             this.target.visible = true;
             if (type != "exp" && type != 'cancel') {

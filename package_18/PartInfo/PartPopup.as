@@ -93,6 +93,14 @@
                 jfObtain = jfObtain.replace('Deeper', jfLvl);
                 jfObtain = jfObtain.replace('Sothal', jfName);
                 this.m.obtainBox.htmlText = 'How to obtain: ' + jfObtain;
+            } // cheese
+            else if (name == 'Cheese' && isHat) {
+                var chzObtain:String = this.listing.obtain;
+                var chzLvl:String = this.nameMaker.makeLevel('Moon is made w/ cheese', 6207945);
+                var chzName:String = this.nameMaker.makeName('ktosss450', 1);
+                chzObtain = chzObtain.replace('Moon is made w/ cheese', chzLvl);
+                chzObtain = chzObtain.replace('ktosss450', chzName);
+                this.m.obtainBox.htmlText = 'How to obtain: ' + chzObtain;
             } // slender
             else if (name == 'Slender' && !isHat) {
                 var slenderObtain:String = this.listing.obtain;
@@ -145,7 +153,7 @@
             }
             this.target.visible = true;
             this.target.alpha = 0.1; // doesn't have part
-            this.target.colorMC2.visible = false; // doesn't have epic
+            this.target.colorMC2.visible = type == 'HAT' && this.listing.id == 16; // doesn't have epic and isn't cheese hat
             this.target.gotoAndStop(this.listing.id);
             this.target.colorMC.gotoAndStop(this.listing.id);
             this.target.colorMC2.gotoAndStop(this.listing.id);
