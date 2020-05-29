@@ -18,13 +18,17 @@ package package_23
         private var loadingGraphic:LoadingGraphic = new LoadingGraphic();
         private var listings:Array = new Array();
         private var listingHeight:Number = 16; // var_388
+        
+        // for numSort
+        private var sortKeys:Array = new Array();
+        private var sortOrder:String = 'desc';
 
-        public function PlayersTabListHolder(_arg_1:DisplayObjectContainer)
+        public function PlayersTabListHolder(d:DisplayObjectContainer)
         {
-            this.holder = _arg_1;
+            this.holder = d;
             this.scrollBar.x = 175;
             this.scrollBar.y = 20;
-            this.scrollBar.init(_arg_1, 330, 325);
+            this.scrollBar.init(this.holder, 330, 325);
             addChild(this.scrollBar);
             this.loadingGraphic.x = 85;
             this.loadingGraphic.y = 140;
@@ -49,11 +53,11 @@ package package_23
             this.holder.addChild(d);
         }
 
+        // _loc1 = listing
         public function clear()
         {
-            var _local_1:Removable;
-            for each (_local_1 in this.listings) {
-                _local_1.remove();
+            for each (var listing:Removable in this.listings) {
+                listing.remove();
             }
             this.listings = new Array();
         }
@@ -61,19 +65,71 @@ package package_23
         public function sortOn(key:*, options:*=0)
         {
             this.listings.sortOn(key, options);
-            this.method_545();
+            this.populate();
         }
 
-        public function method_545()
+        public function numSort(keys:Array, direction:String = 'desc')
         {
-            var _local_1:int;
-            var _local_3:Removable;
-            var _local_2:int = this.listings.length;
-            _local_1 = 0;
-            while (_local_1 < _local_2) {
-                _local_3 = this.listings[_local_1];
-                _local_3.y = (_local_1 * this.listingHeight);
-                _local_1++;
+            this.sortKeys = keys;
+            this.sortOrder = direction;
+            this.listings.sort(this.doNumSort);
+            this.populate();
+        }
+
+        private function doNumSort(a:Removable, b:Removable)
+        {
+            var key1:String = this.sortKeys[0];
+            var key2:String = this.sortKeys[1];
+            var name:String = 'userName' in a ? 'userName' : 'guildName';
+
+            if (this.sortOrder == 'desc') {
+                if (a[key1] !== b[key1]) {
+                    if (a[key1] > b[key1]) {
+                        return -1;
+                    } else if (a[key1] < b[key1]) {
+                        return 1;
+                    }
+                } else if (a[key2] !== b[key2]) {
+                    if (a[key2] > b[key2]) {
+                        return -1;
+                    } else if (a[key2] < b[key2]) {
+                        return 1;
+                    }
+                } else {
+                    return a[name].toLowerCase().localeCompare(b[name].toLowerCase());
+                }
+            } else if (this.sortOrder == 'asc') {
+                if (a[key1] !== b[key1]) {
+                    if (a[key1] > b[key1]) {
+                        return 1;
+                    } else if (a[key1] < b[key1]) {
+                        return -1;
+                    }
+                } else if (a[key2] !== b[key2]) {
+                    if (a[key2] > b[key2]) {
+                        return 1;
+                    } else if (a[key2] < b[key2]) {
+                        return -1;
+                    }
+                } else {
+                    return b[name].toLowerCase().localeCompare(a[name].toLowerCase());
+                }
+            }
+            
+        }
+
+        // _loc1 = i
+        // _loc2 = this.listings.length (deleted)
+        // _loc3 = listing
+        // changed public -> private
+        // method_545 = populate
+        private function populate()
+        {
+            var i:int = 0;
+            while (i < this.listings.length) {
+                var listing:Removable = this.listings[i];
+                listing.y = (i * this.listingHeight);
+                i++;
             }
         }
 

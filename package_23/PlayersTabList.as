@@ -75,26 +75,21 @@ package package_23
                     this.sortOrder = 'desc';
                     sort1 = this.sortMode;
                     sort2 = this.sortMode == 'rank' ? 'hats' : 'rank';
-                    super.sortOn([sort1, sort2, 'userName'], Array.NUMERIC | Array.DESCENDING);
+                    super.numSort([sort1, sort2], this.sortOrder);
                 }
             } else if (newSort == this.sortMode) {
                 // toggle sort order
                 this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
 
-                // determine the option that corresponds to the mode
-                var modeOpt:uint = this.sortMode == 'userName' ? Array.CASEINSENSITIVE : Array.NUMERIC;
-
-                // determine the ordering to use
-                var sortOpts = this.sortOrder == 'desc' ? modeOpt | Array.DESCENDING : modeOpt;
-
                 // do the sort
                 if (this.sortMode == 'userName') {
-                    super.sortOn(this.sortMode, sortOpts);
+                    var opts:uint = this.sortOrder == 'desc' ? 3 : 1;
+                    super.sortOn(this.sortMode, opts);
                 } else {
                     sort1 = this.sortMode;
                     sort2 = this.sortMode == 'rank' ? 'hats' : 'rank';
-                    super.sortOn([sort1, sort2, 'userName'], [sortOpts, sortOpts, Array.CASEINSENSITIVE]);
-                } // There's a problem here. Alpha is always broken. Find something to fix this.
+                    super.numSort([sort1, sort2], this.sortOrder);
+                }
             }
         }
 

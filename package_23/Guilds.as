@@ -17,6 +17,7 @@ package package_23
         private var m:PlayersTabListGraphic = new PlayersTabListGraphic();
         private var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
         private var sortMode:String = "gpToday"; // var_229
+        private var sortOrder:String = 'desc';
 
         public function Guilds()
         {
@@ -32,31 +33,49 @@ package package_23
         // method_276 = clickNameButton
         private function clickNameButton(e:MouseEvent)
         {
-            this.sortMode = "guildName";
-            this.sortGuildsBy();
+            this.sortGuildsBy('guildName');
         }
 
         // method_366 = clickActiveButton
         private function clickActiveButton(e:MouseEvent)
         {
-            this.sortMode = "activeMembers";
-            this.sortGuildsBy();
+            this.sortGuildsBy('activeMembers');
         }
 
         // method_408 = clickGPButton
         private function clickGPButton(e:MouseEvent)
         {
-            this.sortMode = "gpToday";
-            this.sortGuildsBy();
+            this.sortGuildsBy('gpToday');
         }
 
         // method_110 = sortGuildsBy
-        private function sortGuildsBy()
+        private function sortGuildsBy(newSort:String = null)
         {
-            if (this.sortMode == "guildName") {
-                super.sortOn(this.sortMode);
-            } else {
-                super.sortOn(this.sortMode, (Array.NUMERIC | Array.DESCENDING));
+            var sort1:String, sort2:String;
+            if (newSort != this.sortMode || newSort == null) {
+                this.sortMode = newSort != null ? newSort : this.sortMode;
+                if (this.sortMode == 'guildName') {
+                    this.sortOrder = 'asc';
+                    super.sortOn(this.sortMode, Array.CASEINSENSITIVE);
+                } else {
+                    this.sortOrder = 'desc';
+                    sort1 = this.sortMode;
+                    sort2 = this.sortMode == 'gpToday' ? 'activeMembers' : 'gpToday';
+                    super.numSort([sort1, sort2], this.sortOrder);
+                }
+            } else if (newSort == this.sortMode) {
+                // toggle sort order
+                this.sortOrder = this.sortOrder == 'desc' ? 'asc' : 'desc';
+
+                // do the sort
+                if (this.sortMode == 'guildName') {
+                    var opts:uint = this.sortOrder == 'desc' ? 3 : 1;
+                    super.sortOn(this.sortMode, opts);
+                } else {
+                    sort1 = this.sortMode;
+                    sort2 = this.sortMode == 'gpToday' ? 'activeMembers' : 'gpToday';
+                    super.numSort([sort1, sort2], this.sortOrder);
+                }
             }
         }
 
