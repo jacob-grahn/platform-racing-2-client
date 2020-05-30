@@ -15,6 +15,7 @@ package page
     import flash.text.TextField;
     import flash.ui.Keyboard;
     import background.*;
+    import package_22.CourseMenu;
 
     public class GamePage extends Page 
     {
@@ -61,6 +62,9 @@ package page
             Main.stage.focus = Main.stage;
             super.initialize();
             this.setItems("all");
+            if (CourseMenu.instance != null) {
+                CourseMenu.instance.staticCloseMenu(); // should never be needed, but just in case
+            }
         }
 
         protected function attachBackgrounds()

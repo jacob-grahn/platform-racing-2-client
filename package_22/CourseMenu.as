@@ -12,6 +12,7 @@ package package_22
 
     public class CourseMenu extends class_264 
     {
+        public static var instance:CourseMenu = null;
 
         private var m:CourseMenuGraphic = new CourseMenuGraphic();
         private var slot:Slot; // var_384
@@ -22,6 +23,11 @@ package package_22
 
         public function CourseMenu(s:Slot)
         {
+            if (CourseMenu.instance != null) {
+                CourseMenu.instance.staticCloseMenu();
+            }
+            CourseMenu.instance = this;
+
             this.slot = s;
             this.m.play_bt.validateNow();
             this.m.cancel_bt.validateNow();
@@ -88,8 +94,16 @@ package package_22
             this.remove();
         }
 
+        public function staticCloseMenu()
+        {
+            this.closeMenu(null);
+        }
+
         override public function remove()
         {
+            if (CourseMenu.instance === this) {
+                CourseMenu.instance = null;
+            }
             CommandHandler.commandHandler.defineCommand("forceTime", null);
             CommandHandler.commandHandler.defineCommand("closeCourseMenu", null);
             this.m.play_bt.removeEventListener(MouseEvent.CLICK, this.clickPlay);
