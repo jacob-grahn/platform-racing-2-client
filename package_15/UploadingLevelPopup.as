@@ -55,8 +55,8 @@ package package_15
                     var unhashedStr:String = lVars.title + Main.loggedInAs.toLowerCase() + lVars.data + Env.LEVEL_SALT;
                     var byteHash:ByteArray = md5.hash(Hex.toArray(Hex.fromString(unhashedStr)));
                     lVars.hash = Hex.fromArray(byteHash);
-                    lVars.override_banned = parseInt(this.overrideBanConfirmed); // if banned
-                    lVars.overwrite_existing = parseInt(this.overwriteExistingConfirmed); // if overwriting an existing level
+                    lVars.override_banned = int(this.overrideBanConfirmed); // if banned
+                    lVars.overwrite_existing = int(this.overwriteExistingConfirmed); // if overwriting an existing level
                     var request:URLRequest = new URLRequest(Main.baseURL + "/upload_level.php");
                     request.method = URLRequestMethod.POST;
                     request.data = lVars;
@@ -75,9 +75,9 @@ package package_15
             super.parsedDataHandler(e);
             if (parsedData.status == 'banned') {
                 var banLang:String = parsedData.scope === 's' ? 'socially ' : '';
-                new ConfirmPopup(overrideBanConfirmUploadLevel, "You are currently " + class_28.urlify(Main.baseURL + '/bans/show_record.php?ban_id=' + parsedData.ban_id, banLang + 'banned') + ". You can still save this level, but it won't be published. If this level is already published, continuing will unpublish it.<br /><br />Do you want to proceed?");
+                new ConfirmPopup(this.overrideBanConfirmUploadLevel, "You are currently " + class_28.urlify(Main.baseURL + '/bans/show_record.php?ban_id=' + parsedData.ban_id, banLang + 'banned') + ". You can still save this level, but it won't be published. If this level is already published, continuing will unpublish it.<br /><br />Do you want to proceed?");
             } else if (parsedData.status == 'exists') {
-                new ConfirmPopup(overwriteConfirmUploadLevel, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
+                new ConfirmPopup(this.overwriteConfirmUploadLevel, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
             }
         }
 
