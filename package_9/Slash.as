@@ -43,7 +43,7 @@ package package_9
         private function method_66(_arg_1:int, _arg_2:int)
         {
             var _local_3:Point = class_28.method_9(_arg_1, _arg_2, this.course.blockBackground.rotation);
-            var _local_4:Block = this.course.blockBackground.method_24(_local_3.x, _local_3.y);
+            var _local_4:Block = this.course.blockBackground.getBlockFromPos(_local_3.x, _local_3.y);
             if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.var_154);
             }

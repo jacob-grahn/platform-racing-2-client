@@ -22,9 +22,9 @@ package blocks
     {
 
         private var size:Number = 30;
-        private var posX:Number;
+        private var posX:Number; // pos is the exact coordinates (pixels)
         private var posY:Number;
-        private var segX:int;
+        private var segX:int; // seg is the block coodinates
         private var segY:int;
         private var removed:Boolean = false; // var_214
         private var var_177:Point;
@@ -66,17 +66,20 @@ package blocks
             return new Point(this.segX, this.segY);
         }
 
-        public function method_850():Point
+        // method_850 = getPos
+        public function getPos():Point
         {
             return new Point(this.posX, this.posY);
         }
 
-        public function method_50():int
+        // method_50 = getPosX
+        public function getPosX():int
         {
             return this.posX;
         }
 
-        public function method_44():int
+        // method_44 = getPosY
+        public function getPosY():int
         {
             return this.posY;
         }
@@ -326,7 +329,7 @@ package blocks
             }
             var curPoint:Point = new Point(this.segX, this.segY);
             var newPoint:Point = new Point(this.segX + _arg_1, this.segY + _arg_2);
-            var _local_5:Block = this.map.getBlockFromPoint(newPoint.x, newPoint.y);
+            var _local_5:Block = this.map.getBlockFromSeg(newPoint.x, newPoint.y);
             if (_local_5 is PushBlock) {
                 _local_5.move(_arg_1, _arg_2, ensureMap);
             }

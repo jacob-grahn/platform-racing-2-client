@@ -245,7 +245,7 @@ package package_8
             var _local_4:int = int((_arg_2 / 30));
             var _local_5:Point = class_28.method_9(_local_3, _local_4, this.map.rotation);
             if (this.map.method_32(_local_5.x, _local_5.y)) {
-                _local_6 = Block(this.map.getBlockFromPoint(_local_5.x, _local_5.y));
+                _local_6 = Block(this.map.getBlockFromSeg(_local_5.x, _local_5.y)); // PUSH BLOCK NOT HERE
                 if ((_local_6 is ArrowBlock)) {
                     ArrowBlock(_local_6).method_87();
                 }

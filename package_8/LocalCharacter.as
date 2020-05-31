@@ -594,19 +594,19 @@ package package_8
                 this.method_41();
                 this.method_261();
                 if (var_4.getBool(SANTA)) {
-                    _local_3 = this.map.method_24(x, y, true);
+                    _local_3 = this.map.getBlockFromPos(x, y, true);
                     if (_local_3 != null && ((_local_3 is WaterBlock && this.mode != "water") || _local_3 is SafetyBlock)) {
                         _local_3.onStand(this);
                     }
                 }
                 if (velX >= -1) {
-                    if (this.var_296 != null && this.getBlock(this.var_296.method_50() - 30, this.var_296.method_44()) == null) {
+                    if (this.var_296 != null && this.getBlock(this.var_296.getPosX() - 30, this.var_296.getPosY()) == null) {
                         this.var_296.onLeftHit(this);
                         this.method_41();
                     }
                 }
                 if (velX <= 1) {
-                    if (this.var_329 != null && this.getBlock(this.var_329.method_50() + 30, this.var_329.method_44()) == null) {
+                    if (this.var_329 != null && this.getBlock(this.var_329.getPosX() + 30, this.var_329.getPosY()) == null) {
                         this.var_329.onRightHit(this);
                         this.method_41();
                     }
@@ -615,15 +615,15 @@ package package_8
                     if (this.grounded) {
                         this.crouching = true;
                     }
-                    if (this.mode != "water" && this.var_262 != null && this.getBlock(this.var_262.method_50(), this.var_262.method_44() + 30) == null) {
+                    if (this.mode != "water" && this.var_262 != null && this.getBlock(this.var_262.getPosX(), this.var_262.getPosY() + 30) == null) {
                         this.var_262.onBump(this);
                         this.method_41();
                     } else {
-                        if (this.mode != "water" && this.var_306 != null && this.getBlock(this.var_306.method_50(), this.var_306.method_44() + 30) == null) {
+                        if (this.mode != "water" && this.var_306 != null && this.getBlock(this.var_306.getPosX(), this.var_306.getPosY() + 30) == null) {
                             this.var_306.onBump(this);
                             this.method_41();
                         } else {
-                            if (this.var_297 != null && this.getBlock(this.var_297.method_50(), this.var_297.method_44() + 30) == null) {
+                            if (this.var_297 != null && this.getBlock(this.var_297.getPosX(), this.var_297.getPosY() + 30) == null) {
                                 this.var_297.onBump(this);
                                 this.method_41();
                             }
@@ -652,12 +652,12 @@ package package_8
                         }
                     }
                 }
-                _local_1 = this.map.method_24(x, y - 15, true);
+                _local_1 = this.map.getBlockFromPos(x, y - 15, true);
                 if (_local_1 != null) {
                     _local_1.onTouch(this);
                 }
                 if (!this.crouching) {
-                    _local_1 = this.map.method_24(x, y - 45, true);
+                    _local_1 = this.map.getBlockFromPos(x, y - 45, true);
                     if (_local_1 != null) {
                         _local_1.onTouch(this);
                     }
@@ -699,7 +699,7 @@ package package_8
         private function getBlock(_arg_1:Number, _arg_2:Number, _arg_3:Boolean=true, _arg_4:Boolean=false):Block
         {
             if (this.map != null) {
-                var block:Block = this.map.method_24(_arg_1, _arg_2, _arg_3);
+                var block:Block = this.map.getBlockFromPos(_arg_1, _arg_2, _arg_3);
                 if (block == null || !block.isActive() || (var_4.getBool(TOP) && block is VanishBlock && !_arg_4)) {
                     return null;
                 }

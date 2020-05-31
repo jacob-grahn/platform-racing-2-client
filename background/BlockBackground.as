@@ -67,7 +67,7 @@ package background
         {
             super.setPos(_arg_1, _arg_2);
             var _local_3:Point = class_28.method_9(GamePage.course.posX, GamePage.course.posY, rotation);
-            var _local_4:Point = this.method_52(_local_3.x, _local_3.y);
+            var _local_4:Point = this.getSegFromPos(_local_3.x, _local_3.y);
             method_118(-(_local_4.x), -(_local_4.y), 11, 9, 8, 6, this, this.blockArray);
         }
 
@@ -105,36 +105,39 @@ package background
             var _local_3:Boolean = true;
             var _local_4:int = int(Math.round((_arg_1 / 30)));
             var _local_5:int = int(Math.round((_arg_2 / 30)));
-            var _local_6:BlockObject = this.getBlockFromPoint(_local_4, _local_5);
+            var _local_6:BlockObject = this.getBlockFromSeg(_local_4, _local_5);
             if (_local_6 != null) {
                 _local_3 = false;
             }
             return (_local_3);
         }
 
-        public function method_24(_arg_1:Number, _arg_2:Number, _arg_3:Boolean=false):*
+        // _loc4 = pos
+        // _loc5 = seg
+        // deleted _loc6 (merge w/ return statement)
+        // method_24 = getBlockFromPos
+        public function getBlockFromPos(x:Number, y:Number, rotMod:Boolean=false):*
         {
-            var _local_4:Point;
-            if (_arg_3) {
-                _local_4 = class_28.method_9(_arg_1, _arg_2, rotation);
+            var pos:Point;
+            if (rotMod) {
+                pos = class_28.method_9(x, y, rotation);
             } else {
-                _local_4 = new Point(_arg_1, _arg_2);
+                pos = new Point(x, y);
             }
-            var _local_5:Point = this.method_52(_local_4.x, _local_4.y);
-            var _local_6:* = this.getBlockFromPoint(_local_5.x, _local_5.y);
-            return (_local_6);
+            var seg:Point = this.getSegFromPos(pos.x, pos.y);
+            return this.getBlockFromSeg(seg.x, seg.y);
         }
 
-        // method_67 = getBlockFromPoint
-        public function getBlockFromPoint(_arg_1:int, _arg_2:int):*
+        // method_67 = getBlockFromSeg
+        public function getBlockFromSeg(x:int, y:int):*
         {
             var _local_3:*;
             var _local_4:Array;
-            if (this.blockArray.length >= _arg_1) {
-                _local_4 = this.blockArray[_arg_1];
+            if (this.blockArray.length >= x) {
+                _local_4 = this.blockArray[x];
             }
             if (_local_4 != null) {
-                _local_3 = _local_4[_arg_2];
+                _local_3 = _local_4[y];
             } else {
                 _local_3 = null;
             }
@@ -158,7 +161,7 @@ package background
             var _local_3:Number = Number(_local_2[0]);
             var _local_4:Number = Number(_local_2[1]);
             var _local_5:Number = Number(_local_2[2]);
-            var _local_6:Point = this.method_52(_local_4, _local_5);
+            var _local_6:Point = this.getSegFromPos(_local_4, _local_5);
             var _local_7:BlockObject = BlockObject(var_10[_local_3]);
             if (_local_7 != null) {
                 this.moveBlock(new Point(_local_7.segX, _local_7.segY), _local_6);
@@ -169,7 +172,7 @@ package background
         {
         }
 
-        public function method_52(_arg_1:Number, _arg_2:Number):Point
+        public function getSegFromPos(_arg_1:Number, _arg_2:Number):Point
         {
             var _local_3:Number = Math.floor((_arg_1 / this.segSize));
             var _local_4:Number = Math.floor((_arg_2 / this.segSize));

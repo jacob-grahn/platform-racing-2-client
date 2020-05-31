@@ -28,7 +28,7 @@ package package_9
         {
             if (Course.course != null) {
                 var _local_1:Point = class_28.method_9(x, y, Course.course.blockBackground.rotation);
-                if (Course.course.blockBackground.method_24(_local_1.x, _local_1.y) == null) {
+                if (Course.course.blockBackground.getBlockFromPos(_local_1.x, _local_1.y) == null) {
                     Course.course.blockBackground.placeBlock(Objects.MineBlockCode, _local_1.x, _local_1.y);
                 }
             }

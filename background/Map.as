@@ -55,7 +55,7 @@ package background
             var _local_2:int = int(_arg_1[0]);
             var _local_3:int = int(_arg_1[1]);
             var _local_4:String = _arg_1[2];
-            var _local_5:Block = getBlockFromPoint(_local_2, _local_3);
+            var _local_5:Block = getBlockFromSeg(_local_2, _local_3);
             if (_local_5 != null) {
                 _local_5.remoteActivate(_local_4);
             }
@@ -78,7 +78,7 @@ package background
             if (blockCode < 100) {
                 blockCode += 100;
             }
-            var _local_4:Point = method_52(x, y);
+            var _local_4:Point = getSegFromPos(x, y);
             if (blockCode == Objects.EggMinionBlockCode) {
                 this.var_379.push(new Point(x, y));
             } else {

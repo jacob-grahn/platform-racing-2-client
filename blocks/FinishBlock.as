@@ -30,8 +30,8 @@ package blocks
 
         override protected function useSupply(_arg_1:LocalCharacter)
         {
-            var _local_2:int = method_50() + 15;
-            var _local_3:int = method_44() + 15;
+            var _local_2:int = getPosX() + 15;
+            var _local_3:int = getPosY() + 15;
             Course.course.finish(this.id, _local_2, _local_3);
         }
 

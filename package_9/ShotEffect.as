@@ -83,7 +83,7 @@ package package_9
 
         private function method_253()
         {
-            var _local_1:Block = this.course.blockBackground.method_24(x, y, true);
+            var _local_1:Block = this.course.blockBackground.getBlockFromPos(x, y, true);
             if (_local_1 != null && (this.var_493 || _local_1.isActive())) {
                 this.hitBlock(_local_1);
             }

@@ -59,7 +59,7 @@ package package_9
             _local_2 = class_28.method_9(this.posX, this.posY, -(rotation));
             if (this.velX != 0) {
                 _local_5 = class_28.method_9((this.posX + this.velX), (this.posY - 10), -(rotation));
-                _local_3 = Course.course.blockBackground.method_24(_local_5.x, _local_5.y, true);
+                _local_3 = Course.course.blockBackground.getBlockFromPos(_local_5.x, _local_5.y, true);
                 if (((!(_local_3 == null)) && (_local_3.isActive()))) {
                     _local_4 = _local_3.method_18(this.rot);
                     if (this.velX < 0) {
@@ -70,7 +70,7 @@ package package_9
                     this.onTouchWall();
                 }
             }
-            _local_3 = Course.course.blockBackground.method_24(_local_2.x, _local_2.y, true);
+            _local_3 = Course.course.blockBackground.getBlockFromPos(_local_2.x, _local_2.y, true);
             if (((!(_local_3 == null)) && (_local_3.isActive()))) {
                 this.grounded = true;
                 _local_4 = _local_3.method_18(this.rot);

@@ -30,8 +30,8 @@ package items
             var playerPos:Point = method_37();
             playerPos.x = Math.round(playerPos.x + 15);
             playerPos.y = Math.round(playerPos.y + 10);
-            if (map.method_24(playerPos.x, playerPos.y, true) == null) { // if block isn't occupied
-                var _local_4:Point = map.method_52(playerPos.x, playerPos.y);
+            if (map.getBlockFromPos(playerPos.x, playerPos.y, true) == null) { // if block isn't occupied
+                var _local_4:Point = map.getSegFromPos(playerPos.x, playerPos.y);
                 var _local_5:Point = map.method_497(_local_4.x, _local_4.y);
                 _local_5.x = _local_5.x + 15;
                 _local_5.y = _local_5.y + 15;
