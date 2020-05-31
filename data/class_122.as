@@ -152,13 +152,14 @@ package data
             return (class_122.method_265(_local_4.red, _local_4.green, _local_4.blue));
         }
 
-        public static function method_712(_arg_1:Number):String
+        // _loc2 = hex
+        public static function method_712(num:Number):String
         {
-            var _local_2:String = ("0x" + _arg_1.toString(16).toUpperCase());
-            while (_local_2.length < 8) {
-                _local_2 = (_local_2 + "0");
+            var hex:String = num.toString(16).toUpperCase();
+            while (hex.length < 6) {
+                hex = "0" + hex;
             }
-            return (_local_2);
+            return '0x' + hex;
         }
 
 
