@@ -24,7 +24,7 @@ package blocks
 
         override public function onStand(c:LocalCharacter)
         {
-            var force:Number = this.cheeseHandler(c, Math.round(c.velY * 2));
+            var force:Number = this.cheeseHandler(c, Math.round(c.velY * 2), true);
             localActivate(force.toString());
             if (!method_20()) {
                 super.onStand(c);
@@ -43,6 +43,16 @@ package blocks
         override public function onLeftHit(c:LocalCharacter)
         {
             var force:Number = this.cheeseHandler(c, Math.round(c.velX * 1.75));
+            if (force == 50) { // using cheese, kill crumbles at player's head level when running
+                var seg:Point = getSeg();
+                var blockAbovePlayer:Block = map.getBlockFromSeg(seg.x - 1, seg.y - 1);
+                if (blockAbovePlayer == null && !c.crouching) {
+                    var blockAboveThis:Block = map.getBlockFromSeg(seg.x, seg.y - 1);
+                    if (blockAboveThis != null) {
+                        blockAboveThis.localActivate("50");
+                    }
+                }
+            }
             localActivate(force.toString());
             if (!method_20()) {
                 super.onLeftHit(c);
@@ -52,6 +62,16 @@ package blocks
         override public function onRightHit(c:LocalCharacter)
         {
             var force:Number = this.cheeseHandler(c, Math.round(-c.velX * 1.75));
+            if (force == 50) { // using cheese, kill crumbles at player's head level when running
+                var seg:Point = getSeg();
+                var blockAbovePlayer:Block = map.getBlockFromSeg(seg.x + 1, seg.y - 1);
+                if (blockAbovePlayer == null && !c.crouching) {
+                    var blockAboveThis:Block = map.getBlockFromSeg(seg.x, seg.y - 1);
+                    if (blockAboveThis != null) {
+                        blockAboveThis.localActivate("50");
+                    }
+                }
+            }
             localActivate(force.toString());
             if (!method_20()) {
                 super.onRightHit(c);
@@ -74,10 +94,10 @@ package blocks
             }
         }
 
-        private function cheeseHandler(c:LocalCharacter, hitForce:Number)
+        private function cheeseHandler(c:LocalCharacter, hitForce:Number, stand:Boolean = false)
         {
-            if (hitForce > 0 && c.var_4.getBool(Character.CHEESE)) {
-                return 50;
+            if (hitForce > 1 && c.var_4.getBool(Character.CHEESE)) {
+                return stand ? hitForce * 2 : 50;
             }
             return hitForce;
         }
