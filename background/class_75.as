@@ -273,10 +273,10 @@ package background
 
         public function method_32(_arg_1:int, _arg_2:int):Boolean
         {
-            if (((((_arg_1 >= this.var_104) && (_arg_1 <= this.var_141)) && (_arg_2 >= this.var_118)) && (_arg_2 <= this.var_120))) {
-                return (true);
+            if (_arg_1 >= this.var_104 && _arg_1 <= this.var_141 && _arg_2 >= this.var_118 && _arg_2 <= this.var_120) {
+                return true;
             }
-            return (false);
+            return false;
         }
 
 

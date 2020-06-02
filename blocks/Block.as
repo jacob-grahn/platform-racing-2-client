@@ -322,16 +322,17 @@ package blocks
 
         // _loc3 = curPoint
         // _loc4 = newPoint
-        protected function move(_arg_1:int, _arg_2:int, ensureMap:Map)
+        // _loc5 = block
+        protected function move(xAmt:int, yAmt:int, ensureMap:Map)
         {
             if (this.map == null) {
                 this.map = ensureMap;
             }
             var curPoint:Point = new Point(this.segX, this.segY);
-            var newPoint:Point = new Point(this.segX + _arg_1, this.segY + _arg_2);
-            var _local_5:Block = this.map.getBlockFromSeg(newPoint.x, newPoint.y);
-            if (_local_5 is PushBlock) {
-                _local_5.move(_arg_1, _arg_2, ensureMap);
+            var newPoint:Point = new Point(this.segX + xAmt, this.segY + yAmt);
+            var block:Block = this.map.getBlockFromSeg(newPoint.x, newPoint.y);
+            if (block is PushBlock) {
+                block.move(xAmt, yAmt, ensureMap);
             }
             this.map.moveBlock(curPoint, newPoint);
         }

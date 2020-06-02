@@ -25,7 +25,7 @@ package package_6
             this.m.return_bt.addEventListener(MouseEvent.CLICK, this.clickReturn);
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose);
             addChild(this.m);
-            this.stars = new RatingSelect(this.game.method_206());
+            this.stars = new RatingSelect(this.game.getCourseID());
             this.stars.x = 6;
             this.stars.y = 87;
             addChild(this.stars);

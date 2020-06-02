@@ -42,7 +42,7 @@ package package_6
                 var drawing:Boolean = Boolean(arr[key + 2]);
                 var stillHere:Boolean = Boolean(arr[key + 3]);
                 if (name.toLowerCase() == Main.loggedInAs.toLowerCase() && time != "forfeit") {
-                    var courseID:int = Course.course.method_206();
+                    var courseID:int = Course.course.getCourseID();
                     var courseName:String = "";
                     if (courseID == 50815) {
                         courseName = "Newbieland 2";

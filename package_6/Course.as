@@ -175,9 +175,10 @@ package package_6
             }
         }
 
-        public function method_206():int
+        // method_206 = getCourseID
+        public function getCourseID():int
         {
-            return (this.courseID);
+            return this.courseID;
         }
 
         protected function method_85(_arg_1:Event)

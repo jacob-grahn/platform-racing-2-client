@@ -5,16 +5,15 @@
 
 package page
 {
+    import background.*;
     import data.Settings;
     import flash.display.Sprite;
-    import background.class_75;
-    import items.Items;
     import flash.net.URLVariables;
     import flash.display.StageQuality;
     import flash.events.Event;
     import flash.text.TextField;
     import flash.ui.Keyboard;
-    import background.*;
+    import items.Items;
     import package_22.CourseMenu;
 
     public class GamePage extends Page 
@@ -269,41 +268,42 @@ package page
             return _local_4;
         }
 
-        protected function method_645(_arg_1:String):String
+        // _loc2 = levelData
+        // _loc3 = readMode
+        // deleted _loc4 (decimal value of bg color hex)
+        // deleted _loc5 (decoded string -- levelData.join('`'))
+        protected function method_645(rawlevelData:String):String
         {
-            var _local_4:Number;
-            var _local_5:String;
-            var _local_2:Array = _arg_1.split("`");
-            var _local_3:String = _local_2[0];
-            if (_local_3 == "m1" || _local_3 == "m2" || _local_3 == "m3") {
-                _local_2.splice(0, 1);
-                _local_4 = Number("0x" + _local_2[0]);
-                _local_2[0] = _local_4;
-                if (_local_3 == "m1") {
-                    _local_2[1] = this.method_137(_local_2[1]);
-                    _local_2[2] = this.method_137(_local_2[2]);
-                    _local_2[3] = this.method_137(_local_2[3]);
-                    _local_2[4] = this.method_137(_local_2[4]);
+            var levelData:Array = rawlevelData.split("`");
+            var readMode:String = levelData[0];
+            if (readMode == "m1" || readMode == "m2" || readMode == "m3") {
+                levelData.splice(0, 1);
+                levelData[0] = Number("0x" + levelData[0]); // background color in decimal (_loc2[0] is in hex, typecast to number)
+                if (readMode == "m1") {
+                    levelData[1] = this.decodeObjectString(levelData[1]);
+                    levelData[2] = this.decodeObjectString(levelData[2]);
+                    levelData[3] = this.decodeObjectString(levelData[3]);
+                    levelData[4] = this.decodeObjectString(levelData[4]);
                 }
-                if (_local_3 == "m2" || _local_3 == "m3") {
-                    if (_local_3 == "m2") {
-                        _local_2[1] = this.decodeObjectString2(_local_2[1]);
+                if (readMode == "m2" || readMode == "m3") {
+                    if (readMode == "m2") {
+                        levelData[1] = this.decodeObjectString2(levelData[1]); // blocks
                     } else {
-                        _local_2[1] = this.decodeObjectString2(_local_2[1], 30);
+                        levelData[1] = this.decodeObjectString2(levelData[1], 30); // blocks
                     }
-                    _local_2[2] = this.decodeObjectString2(_local_2[2]);
-                    _local_2[3] = this.decodeObjectString2(_local_2[3]);
-                    _local_2[4] = this.decodeObjectString2(_local_2[4]);
-                    _local_2[9] = this.decodeObjectString2(_local_2[9]);
-                    _local_2[10] = this.decodeObjectString2(_local_2[10]);
+                    levelData[2] = this.decodeObjectString2(levelData[2]); // art1
+                    levelData[3] = this.decodeObjectString2(levelData[3]); // art2
+                    levelData[4] = this.decodeObjectString2(levelData[4]); // art3
+                    levelData[9] = this.decodeObjectString2(levelData[9]); // art0
+                    levelData[10] = this.decodeObjectString2(levelData[10]); // art00
                 }
-                _local_5 = _local_2.join("`");
-                return _local_5;
+                return levelData.join("`");
             }
-            return _arg_1;
+            return rawlevelData;
         }
 
-        private function method_137(_arg_1:String):String
+        // method_137 = decodeObjectString
+        private function decodeObjectString(objectString:String):String
         {
             var _local_6:int;
             var _local_8:String;
@@ -312,7 +312,7 @@ package page
             var _local_11:Number;
             var _local_12:Number;
             var _local_13:int;
-            var _local_2:Array = _arg_1.split(",");
+            var _local_2:Array = objectString.split(",");
             var _local_3:Array = _local_2.shift().split(";");
             var _local_4:Number = Number("0x" + _local_3[0]);
             var _local_5:Number = Number("0x" + _local_3[1]);
@@ -335,68 +335,68 @@ package page
             return _local_14;
         }
 
-        private function decodeObjectString2(_arg_1:String, _arg_2:int=1):String
+        // _loc3 = dataArr
+        // _loc4 = thisObj
+        // _loc5 = decoded
+        // _loc6 = i
+        // deleted _loc7 (dataArr.length)
+        // deleted _loc8 (unused?)
+        // _loc9 = objCode
+        // _loc10 = currentX
+        // _loc11 = currentY
+        // _loc12 = relX
+        // _loc13 = relY
+        // _loc14 = widthPerc
+        // _loc15 = heightPerc
+        // _loc16 = textContent
+        // _loc17 = textColor
+        private function decodeObjectString2(objectString:String, _arg_2:int=1):String
         {
-            var _local_3:Array;
-            var _local_4:Array;
-            var _local_5:String;
-            var _local_6:int;
-            var _local_8:String;
-            var _local_14:Number;
-            var _local_15:Number;
-            var _local_16:String;
-            var _local_17:int;
-            if (_arg_1 == null || _arg_1 == "") {
-                _local_3 = new Array();
+            var widthPerc:Number, heightPerc:Number;
+            var dataArr:Array;
+            if (objectString == null || objectString == "") {
+                dataArr = new Array();
             } else {
-                _local_3 = _arg_1.split(",");
+                dataArr = objectString.split(",");
             }
-            var _local_7:int = _local_3.length;
-            var _local_9:int;
-            var _local_10:int;
-            var _local_11:int;
-            var _local_12:int;
-            var _local_13:int;
-            if (_local_7 > 0) {
-                _local_6 = 0;
-                while (_local_6 < _local_7) {
-                    _local_14 = _local_15 = 0;
-                    _local_4 = _local_3[_local_6].split(";");
-                    _local_12 = Number(_local_4[0]);
-                    _local_13 = Number(_local_4[1]);
-                    _local_10 = _local_10 + _local_12;
-                    _local_11 = _local_11 + _local_13;
-                    if (_local_4[2] == "t") {
-                        _local_16 = _local_4[3];
-                        _local_17 = _local_4[4];
-                        _local_14 = _local_4[5];
-                        _local_15 = _local_4[6];
-                        _local_3[_local_6] = "u" + _local_16 + ";" + _local_10 + ";" + _local_11 + ";" + _local_17 + ";" + _local_14 + ";" + _local_15;
-                    } else {
-                        if (_local_4[4] != null) {
-                            _local_9 = int(_local_4[2]);
-                            _local_14 = Number(_local_4[3]) / 100;
-                            _local_15 = Number(_local_4[4]) / 100;
-                        } else {
-                            if (_local_4[3] != null) {
-                                _local_14 = Number(_local_4[2]) / 100;
-                                _local_15 = Number(_local_4[3]) / 100;
-                            } else {
-                                if (_local_4[2] != null) {
-                                    _local_9 = int(_local_4[2]);
-                                }
-                            }
+            var decoded:String;
+            var objectCode:int, currentX:int = 0, currentY:int = 0;
+            if (dataArr.length > 0) {
+                var i:int = 0;
+                while (i < dataArr.length) {
+                    widthPerc = heightPerc = 0;
+                    var thisObj:Array = dataArr[i].split(";");
+                    var relX:int = Number(thisObj[0]); // x relative to the last block (how far to travel horizontally to the next block)
+                    var relY:int = Number(thisObj[1]); // y relative to the last block (how far to travel vertically to the next block)
+                    currentX = currentX + relX; // updates x "pointer" to the relative position
+                    currentY = currentY + relY; // updates y "pointer" to the relative position
+                    if (thisObj[2] == "t") { // process text
+                        var textContent:String = thisObj[3]; // text value
+                        var textColor:int = thisObj[4]; // textColor in decimal?
+                        widthPerc = thisObj[5]; // width % modifier
+                        heightPerc = thisObj[6]; // height % modifier
+                        dataArr[i] = "u" + textContent + ";" + currentX + ";" + currentY + ";" + textColor + ";" + widthPerc + ";" + heightPerc;
+                    } else { // process other art
+                        if (thisObj[4] != null) { // resizable objects (new object code used)
+                            objectCode = int(thisObj[2]);
+                            widthPerc = Number(thisObj[3]) / 100;
+                            heightPerc = Number(thisObj[4]) / 100;
+                        } else if (thisObj[3] != null) { // takes the prev object code (didn't change)
+                            widthPerc = Number(thisObj[2]) / 100;
+                            heightPerc = Number(thisObj[3]) / 100;
+                        } else if (thisObj[2] != null) { // blocks (new object code used)
+                            objectCode = int(thisObj[2]);
                         }
-                        _local_3[_local_6] = "o" + _local_9 + ";" + (_local_10 * _arg_2) + ";" + (_local_11 * _arg_2);
-                        if (_local_14 != 0 && _local_15 != 0) {
-                            _local_3[_local_6] = _local_3[_local_6] + ";" + _local_14 + ";" + _local_15;
+                        dataArr[i] = "o" + objectCode + ";" + (currentX * _arg_2) + ";" + (currentY * _arg_2);
+                        if (widthPerc != 0 && heightPerc != 0) {
+                            dataArr[i] = dataArr[i] + ";" + widthPerc + ";" + heightPerc;
                         }
                     }
-                    _local_6++;
+                    i++;
                 }
-                _local_5 = _local_3.join(",");
+                decoded = dataArr.join(",");
             }
-            return _local_5;
+            return decoded;
         }
 
         protected function glideToScale(_arg_1:Event)

@@ -238,30 +238,31 @@ package package_8
             }
         }
 
+        // _loc6 = block
         private function method_128(_arg_1:int, _arg_2:int)
         {
-            var _local_6:Block;
             var _local_3:int = int((_arg_1 / 30));
             var _local_4:int = int((_arg_2 / 30));
             var _local_5:Point = class_28.method_9(_local_3, _local_4, this.map.rotation);
             if (this.map.method_32(_local_5.x, _local_5.y)) {
-                _local_6 = Block(this.map.getBlockFromSeg(_local_5.x, _local_5.y)); // PUSH BLOCK NOT HERE
-                if ((_local_6 is ArrowBlock)) {
-                    ArrowBlock(_local_6).method_87();
+                var block:Block = Block(this.map.getBlockFromSeg(_local_5.x, _local_5.y));
+                if (block is ArrowBlock) {
+                    ArrowBlock(block).method_87();
                 }
-                if ((_local_6 is VanishBlock)) {
-                    _local_6.remoteActivate();
+                if (block is VanishBlock) {
+                    block.remoteActivate();
                 }
-                if ((_local_6 is WaterBlock)) {
-                    WaterBlock(_local_6).method_584();
+                if (block is WaterBlock) {
+                    WaterBlock(block).method_584();
                 }
             }
         }
 
-        private function isArrowBlock(_arg_1:*):Boolean
+        // unused
+        /*private function isArrowBlock(_arg_1:*):Boolean
         {
             return (_arg_1 is ArrowBlock);
-        }
+        }*/
 
         public function method_662(_arg_1:Array)
         {
