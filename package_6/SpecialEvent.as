@@ -33,10 +33,12 @@ package package_6
             if (Keys.isPressed(Keyboard.G) && Keys.isPressed(Keyboard.C)) { // place artifact
                 var xPos:int = e.stageX - GamePage.course.posX - GamePage.course.x;
                 var yPos:int = e.stageY - GamePage.course.posY - GamePage.course.y;
+                var rotation:int = Course.course.blockBackground.rotation;
                 var vars:URLVariables = new URLVariables();
                 vars.x = xPos;
                 vars.y = yPos;
-                vars.level_id = Game(GamePage.course).method_206();
+                vars.rot = rotation;
+                vars.level_id = Game(GamePage.course).getCourseID();
                 var request:URLRequest = new URLRequest(Main.baseURL + "/place_artifact.php");
                 request.data = vars;
                 request.method = URLRequestMethod.POST;
