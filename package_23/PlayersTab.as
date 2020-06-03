@@ -16,42 +16,54 @@ package package_23
         private var var_258:class_246;
         private var pageHolder:PageHolder = new PageHolder();
 
+        // _loc1 = online
+        // _loc2 = friends
+        // _loc3 = ignored
+        // _loc4 = guilds
+        // _loc5 = tabs (deleted)
         public function PlayersTab()
         {
-            var _local_5:Array;
             super();
-            var _local_1:LobbyTab = new LobbyTab(this.method_752, "Online");
-            var _local_2:LobbyTab = new LobbyTab(this.method_666, "Friends");
-            var _local_3:LobbyTab = new LobbyTab(this.method_541, "Ignored");
-            var _local_4:LobbyTab = new LobbyTab(this.method_484, "Guilds");
+            var online:LobbyTab = new LobbyTab(this.clickOnline, "Online");
+            var friends:LobbyTab = new LobbyTab(this.clickFriends, "Friends");
+            //var following:LobbyTab = new LobbyTab(this.clickFollowing, "Following");
+            var ignored:LobbyTab = new LobbyTab(this.clickIgnored, "Ignored");
+            var guilds:LobbyTab = new LobbyTab(this.clickGuilds, "Guilds");
             if (Main.group > 0) {
-                _local_5 = new Array(_local_1, _local_2, _local_3, _local_4);
-                this.var_258 = new class_246(_local_5, 0, 186, "playerLists");
+                this.var_258 = new class_246([online, friends, /*following, */ ignored, guilds], 0, 186, "playerLists");
             } else {
-                _local_5 = new Array(_local_1);
-                this.var_258 = new class_246(_local_5, 0, 186, "playerLists");
+                this.var_258 = new class_246([online, guilds], 0, 186, "playerLists");
             }
             addChild(this.var_258);
             this.pageHolder.y = 20;
             addChild(this.pageHolder);
         }
 
-        private function method_752()
+        // method_752 = clickOnline
+        private function clickOnline()
         {
             this.pageHolder.changePage(new Online());
         }
 
-        private function method_666()
+        // method_666 = clickFriends
+        private function clickFriends()
         {
             this.pageHolder.changePage(new Friends());
         }
 
-        private function method_541()
+        /*private function clickFollowing()
+        {
+            this.pageHolder.changePage(new Following());
+        }*/
+
+        // method_541 = clickIgnored
+        private function clickIgnored()
         {
             this.pageHolder.changePage(new Ignored());
         }
 
-        private function method_484()
+        // method_484 = clickGuilds
+        private function clickGuilds()
         {
             this.pageHolder.changePage(new Guilds());
         }
