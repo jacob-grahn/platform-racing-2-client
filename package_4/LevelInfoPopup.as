@@ -148,8 +148,7 @@
                     this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.CLICK, this.clickRemove, false, 0, true);
                 } else if (Main.group == 1) {
                     this.m.levelInfo.removeChild(this.m.levelInfo.unpublish_bt);
-                    this.m.levelInfo.removeChild(this.m.levelInfo.report_bt); // disable before 160
-                    //this.m.levelInfo.report_bt.addEventListener(MouseEvent.CLICK, this.clickReport, false, 0, true);
+                    this.m.levelInfo.report_bt.addEventListener(MouseEvent.CLICK, this.clickReport, false, 0, true);
                 }
             } else {
                 this.m.levelInfo.removeChild(this.m.levelInfo.report_bt);
@@ -303,6 +302,11 @@
             new SendMessagePopup("", message, false, true);
         }
 
+        private function clickReport(e:MouseEvent)
+        {
+            new LevelReportPopup(this.levelId, this.version);
+        }
+
         private function clickRemove(e:MouseEvent)
         {
             new ConfirmPopup(this.confirmRemove, "Are you sure you want to remove this level?");
@@ -316,20 +320,10 @@
             request.method = URLRequestMethod.POST;
             request.data = vars;
             this.uploadingRemove = new UploadingPopup(request, 'json');
-            this.uploadingRemove.addEventListener(SuperLoader.d, this.returnReport, false, 0, true);
+            this.uploadingRemove.addEventListener(SuperLoader.d, this.returnRemove, false, 0, true);
         }
 
-        private function clickReport(e:MouseEvent)
-        {
-            new ConfirmPopup(this.confirmReport, "Are you sure you want to report this level to the moderators? If it contains something inappropriate or mean, then please do report this level.");
-        }
-
-        private function confirmReport()
-        {
-            new MessagePopup('Placeholder!');
-        }
-
-        private function returnReport(e:*)
+        private function returnRemove(e:*)
         {
             if (this.uploadingRemove.parsedData.success === true) {
                 startFadeOut();
@@ -423,7 +417,7 @@
 
             // possibly instantiated?
             if (this.uploadingRemove != null) {
-                this.uploadingRemove.removeEventListener(SuperLoader.d, this.returnReport);
+                this.uploadingRemove.removeEventListener(SuperLoader.d, this.returnRemove);
                 this.uploadingRemove.startFadeOut();
                 this.uploadingRemove = null;
             }
