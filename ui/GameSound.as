@@ -22,7 +22,7 @@ package ui
         private var inLE:Boolean;
         private var enableMusicInt:uint; // var_531
         //private var var_470:uint;
-        private var url:String = Main.baseURL + "/music/56";
+        private var url:String = Main.baseURL + "/music/new";
 
         public function GameSound(LE:Boolean = false)
         {
@@ -34,21 +34,21 @@ package ui
             if (this.inLE) {
                 addSong({"id":"random", "label":"Random", "file":""});
             }
-            addSong({"id":"1", "label":"Orbital Trance - Space Planet", "file":"01_orbital_trance.mp3"});
-            addSong({"id":"2", "label":"Code - Stefano Maccarelli", "file":"105435_under_fire.mp3"});
-            addSong({"id":"3", "label":"Paradise on E - API", "file":"32772_newgrounds_-api-_.mp3"});
-            addSong({"id":"4", "label":"Crying Soul (FL Mix) - Pyroific", "file":"102483_B0UNC3___Crying_Soul__Frui.mp3"});
-            addSong({"id":"5", "label":"My Vision - David Orr", "file":"44613_newgrounds_my_vis.mp3"});
-            addSong({"id":"6", "label":"Switchblade - SKAzini", "file":"59342_newgrounds_01_swi.mp3"});
-            addSong({"id":"7", "label":"The Wires - Cheez-R-Us", "file":"74690_newgrounds_the_wi.mp3"});
-            addSong({"id":"8", "label":"Before Mydnite - F-777", "file":"108133_Before_Mydnite.mp3"});
+            addSong({"id":"1", "label":"Orbital Trance - Space Planet", "file":"01_orbital-trance.mp3"});
+            addSong({"id":"2", "label":"Code - Stefano Maccarelli", "file":"02_code.mp3"});
+            addSong({"id":"3", "label":"Paradise on E - API", "file":"03_paradise-on-e_ng32772.mp3"});
+            addSong({"id":"4", "label":"Crying Soul (FL Mix) - Pyroific", "file":"04_crying-soul_ng102483.mp3"});
+            addSong({"id":"5", "label":"My Vision - David Orr", "file":"05_my-vision_ng44613.mp3"});
+            addSong({"id":"6", "label":"Switchblade - Detective Jabsco", "file":"06_switchblade_ng59342.mp3"});
+            addSong({"id":"7", "label":"The Wires - Cheez-R-Us", "file":"07_the-wires_ng74690.mp3"});
+            addSong({"id":"8", "label":"Before Mydnite - F-777", "file":"08_before-mydnite_ng108133.mp3"});
             // desert rose (REMOVED)
-            addSong({"id":"10", "label":"Broked It - SWiTCH", "file":"51265_newgrounds_broked.mp3"});
-            addSong({"id":"11", "label":"Hello? - TMM43", "file":"83720_newgrounds_hello.mp3"});
-            addSong({"id":"12", "label":"Pyrokinesis - Sean Tucker", "file":"98624_Pyrokinesis.mp3"});
-            addSong({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"109884_Brunzolaitis___Flowerz_n_H.mp3"});
-            addSong({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"128701_Instrumental__4.mp3"});
-            addSong({"id":"15", "label":"Prismatic - Lunanova", "file":"Prismatic.mp3"});
+            addSong({"id":"10", "label":"Broked It - SWiTCH", "file":"10_broked-it_ng51265.mp3"});
+            addSong({"id":"11", "label":"Hello? - TMM43", "file":"11_hello_ng83720.mp3"});
+            addSong({"id":"12", "label":"Pyrokinesis - Sean Tucker", "file":"12_pyrokinesis_ng98624.mp3"});
+            addSong({"id":"13", "label":"Flowerz 'n' Herbz - Brunzolaitis", "file":"13_flowerz-n-herbs_ng109884.mp3"});
+            addSong({"id":"14", "label":"Instrumental #4 - Reasoner", "file":"14_instrumental-4_ng128701.mp3"});
+            addSong({"id":"15", "label":"Prismatic - Lunanova", "file":"15_prismatic.mp3"});
             addSong({"id":"17", "label":"Toodaloo - mustangman", "file":"17_Toodaloo.mp3"});
             addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
             addEventListener(Event.CHANGE, this.startSong, false, 0, true);
@@ -76,7 +76,7 @@ package ui
         // method_629 = gotArtifact
         public function gotArtifact()
         {
-            addSong({"id":"16", "label":"We Are Loud - Dynamedion", "file":"we-are-loud.mp3"});
+            addSong({"id":"16", "label":"We Are Loud - Dynamedion", "file":"16_we-are-loud.mp3"});
             this.setSong("16");
         }
 

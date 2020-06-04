@@ -280,7 +280,7 @@
                 "Paradise on E - API",
                 "Crying Soul (FL Mix) - Pyroific",
                 "My Vision - David Orr",
-                "Switchblade - SKAzini",
+                "Switchblade - Detective Jabsco",
                 "The Wires - Cheez-R-Us",
                 "Before Mydnite - F-777",
                 "", // desert rose
