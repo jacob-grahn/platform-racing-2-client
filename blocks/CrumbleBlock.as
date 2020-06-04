@@ -109,21 +109,23 @@ package blocks
             remove();
         }
 
+        // _loc2 = piece
+        // _loc7 = i
         // method_294 = throwPieces
-        private function throwPieces(_arg_1:Number)
+        private function throwPieces(piecesToThrow:Number)
         {
-            var _local_2:CrumblePieceGraphic;
             var _local_3:class_106;
             var _local_4:Number;
             var _local_5:Number;
             var _local_6:Point = method_18();
-            var _local_7:int;
-            while (_local_7 < _arg_1) {
-                _local_2 = new CrumblePieceGraphic();
-                _local_4 = ((Math.random() * 30) + _local_6.x);
-                _local_5 = ((Math.random() * 30) + _local_6.y);
-                _local_3 = new class_106(_local_2, 0.75, 0.95, 0.05, 5, 5, 15, _local_4, _local_5);
-                _local_7++;
+            piecesToThrow = piecesToThrow > 20 ? 20 : piecesToThrow;
+            var i:int = 0;
+            while (i < piecesToThrow) {
+                var piece:CrumblePieceGraphic = new CrumblePieceGraphic();
+                _local_4 = (Math.random() * 30) + _local_6.x;
+                _local_5 = (Math.random() * 30) + _local_6.y;
+                _local_3 = new class_106(piece, 0.75, 0.95, 0.05, 5, 5, 15, _local_4, _local_5);
+                i++;
             }
         }
 
