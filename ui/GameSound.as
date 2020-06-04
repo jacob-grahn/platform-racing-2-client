@@ -34,7 +34,7 @@ package ui
             if (this.inLE) {
                 addSong({"id":"random", "label":"Random", "file":""});
             }
-            addSong({"id":"1", "label":"Miniature Fantasy - Dreamscaper", "file":"6698_newgrounds_miniat.mp3"});
+            addSong({"id":"1", "label":"Orbital Trance - Space Planet", "file":"01_orbital_trance.mp3"});
             addSong({"id":"2", "label":"Code - Stefano Maccarelli", "file":"105435_under_fire.mp3"});
             addSong({"id":"3", "label":"Paradise on E - API", "file":"32772_newgrounds_-api-_.mp3"});
             addSong({"id":"4", "label":"Crying Soul (FL Mix) - Pyroific", "file":"102483_B0UNC3___Crying_Soul__Frui.mp3"});

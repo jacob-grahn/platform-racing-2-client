@@ -100,6 +100,7 @@ package menu
             Main.guildOwner = ret.guildOwner;
             Main.guildName = ret.guildName;
             Main.emblem = ret.emblem;
+            Main.favoriteLevels = ret.favoriteLevels;
             Main.lastAuthTime.setTime(ret.time);
             UnreadNotif.setLastRead(ret.lastRead);
             UnreadNotif.setLastRecv(ret.lastRecv);

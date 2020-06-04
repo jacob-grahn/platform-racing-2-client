@@ -60,6 +60,7 @@ package
         public static var guildOwner:int = 0;
         public static var guildName:String = "";
         public static var emblem:String = "";
+        public static var favoriteLevels:Array = new Array();
         public static var lastAuthTime:Time = new Time(); // var_363
         public static var server:Object;
         public static var commandHandler:CommandHandler = new CommandHandler();

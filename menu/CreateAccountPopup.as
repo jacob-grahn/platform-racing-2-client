@@ -65,7 +65,7 @@ package menu
         override public function remove()
         {
             if (this.uploadingPopup != null) {
-                removeEventListener(Event.COMPLETE, this.receiveCreateAccountResult);
+                this.uploadingPopup.removeEventListener(SuperLoader.d, this.receiveCreateAccountResult);
                 this.uploadingPopup = null;
             }
             this.m.createAccount_bt.removeEventListener(MouseEvent.CLICK, this.clickCreateAccount);

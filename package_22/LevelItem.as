@@ -20,6 +20,7 @@ package package_22
     import package_4.UploadingPopup;
     import ui.PageNavigation;
     import package_4.LevelInfoPopup;
+    import package_4.MessagePopup;
 
     public class LevelItem extends Removable 
     {
@@ -71,10 +72,17 @@ package package_22
             this.m.infoButton.addEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler, false, 0, true);
             this.m.infoButton.addEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler, false, 0, true);
             this.m.infoButton.addEventListener(MouseEvent.CLICK, this.clickInfoHandler, false, 0, true);
-            if (Main.group >= 2 && Main.isTrialMod == false) {
-                this.m.deleteButton.addEventListener(MouseEvent.CLICK, this.clickDelete, false, 0, true);
+            if (Main.group >= 1) {
+                if (Main.favoriteLevels.indexOf(this.courseID) > -1) {
+                    this.m.minusButton.addEventListener(MouseEvent.CLICK, this.clickMinus, false, 0, true);
+                    this.m.removeChild(this.m.plusButton);
+                } else {
+                    this.m.plusButton.addEventListener(MouseEvent.CLICK, this.clickPlus, false, 0, true);
+                    this.m.removeChild(this.m.minusButton);
+                }
             } else {
-                this.m.removeChild(this.m.deleteButton);
+                this.m.removeChild(this.m.plusButton);
+                this.m.removeChild(this.m.minusButton);
             }
             if (gMode == "r") {
                 this.m.bg.gotoAndStop(1);
@@ -121,7 +129,7 @@ package package_22
                 var enteredPass:String = this.m.accessCover.passBox.text;
                 var hash:String = class_28.hash(enteredPass + Env.LEVEL_PASS_SALT);
                 this.superLoader = new SuperLoader(true, SuperLoader.j);
-                this.superLoader.addEventListener(Event.COMPLETE, this.validateResponse, false, 0, true);
+                this.superLoader.addEventListener(Event.COMPLETE, this.validatePassResponse, false, 0, true);
                 var vars:URLVariables = new URLVariables();
                 vars.course_id = this.courseID;
                 vars.hash = hash;
@@ -135,8 +143,8 @@ package package_22
         // _loc2 = ret
         // _loc3 = encryptor
         // _loc4 = decryptedStr
-        // method_198 = validateResponse
-        private function validateResponse(e:Event)
+        // method_198 = validatePassResponse
+        private function validatePassResponse(e:Event)
         {
             var ret:Object = this.superLoader.parsedData;
             if (ret.success == true) {
@@ -152,7 +160,7 @@ package package_22
                     this.m.accessCover.passBox.text = "nope!";
                 }
             }
-            this.superLoader.removeEventListener(Event.COMPLETE, this.validateResponse);
+            this.superLoader.removeEventListener(Event.COMPLETE, this.validatePassResponse);
             this.superLoader.remove();
             this.superLoader = null;
         }
@@ -192,6 +200,56 @@ package package_22
             }
         }
 
+        private function clickPlus(e:MouseEvent)
+        {
+            if (this.uploading == null) {
+                this.handleFavorite('add');
+            }
+        }
+
+        private function clickMinus(e:MouseEvent)
+        {
+            if (this.uploading == null) {
+                this.handleFavorite('remove');
+            }
+        }
+
+        private function handleFavorite(mode:String)
+        {
+            var vars:URLVariables = new URLVariables();
+            vars.mode = mode;
+            vars.level_id = this.courseID;
+            var request:URLRequest = new URLRequest(Main.baseURL + "/favorite_levels_modify.php");
+            request.method = URLRequestMethod.POST;
+            request.data = vars;
+            this.uploading = new UploadingPopup(request, SuperLoader.j);
+            this.uploading.addEventListener(SuperLoader.d, this.onFavoriteResult, false, 0, true);
+        }
+
+        private function onFavoriteResult(e:Event)
+        {
+            var ret:Object = this.uploading.parsedData;
+            if (ret.mode === 'add') {
+                Main.favoriteLevels.push(this.courseID);
+                this.m.plusButton.removeEventListener(MouseEvent.CLICK, this.clickPlus);
+                this.m.removeChild(this.m.plusButton);
+                this.m.addChild(this.m.minusButton);
+                this.m.minusButton.addEventListener(MouseEvent.CLICK, this.clickMinus, false, 0, true);
+            } else if (ret.mode === 'remove') {
+                Main.favoriteLevels.splice(Main.favoriteLevels.indexOf(this.courseID), 1);
+                this.m.minusButton.removeEventListener(MouseEvent.CLICK, this.clickMinus);
+                this.m.removeChild(this.m.minusButton);
+                this.m.addChild(this.m.plusButton);
+                this.m.plusButton.addEventListener(MouseEvent.CLICK, this.clickPlus, false, 0, true);
+            }
+            if (this.uploading != null) {
+                this.uploading.removeEventListener(SuperLoader.d, this.onFavoriteResult);
+                this.uploading.startFadeOut();
+                this.uploading = null;
+            }
+        }
+
+        /*
         private function clickDelete(e:MouseEvent)
         {
             new ConfirmPopup(this.deleteLevel, "Are you sure you want to remove this level?");
@@ -209,6 +267,7 @@ package package_22
             request.data = vars;
             new UploadingPopup(request, 'json');
         }
+        */
 
         // method_618 = sendFillSlot
         public function sendFillSlot(slotNum:int)
@@ -286,7 +345,8 @@ package package_22
             if (class_28.escapeString(this.note) != "") {
                 noteText = "<br/>-----<br/>" + class_28.escapeString(this.note, true);
             }
-            var levelInfoText:String = byText + versionText + updatedText + minRankText + playsText + ratingText + noteText;
+            var clickText:String = "<br/>-----<br/>(click the \"?\" for more info)";
+            var levelInfoText:String = byText + versionText + updatedText + minRankText + playsText + ratingText + noteText + clickText;
             this.infoPopup = new HoverPopup(popupTitle, levelInfoText, this.m.infoButton);
         }
 
@@ -311,18 +371,22 @@ package package_22
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.CLICK, this.clickInfoHandler);
-            if (this.m.deleteButton != null) {
-                this.m.deleteButton.removeEventListener(MouseEvent.CLICK, this.clickDelete);
-            }
+            this.m.plusButton.removeEventListener(MouseEvent.CLICK, this.clickPlus);
+            this.m.minusButton.removeEventListener(MouseEvent.CLICK, this.clickMinus);
             this.removeSlots();
             this.slotArray = null;
             if (this.infoPopup != null) {
                 this.infoPopup.remove();
             }
             if (this.superLoader != null) {
-                this.superLoader.removeEventListener(Event.COMPLETE, this.validateResponse);
+                this.superLoader.removeEventListener(Event.COMPLETE, this.validatePassResponse);
                 this.superLoader.remove();
                 this.superLoader = null;
+            }
+            if (this.uploading != null) {
+                this.uploading.removeEventListener(SuperLoader.d, this.onFavoriteResult);
+                this.uploading.remove();
+                this.uploading = null;
             }
             this.htmlNameMaker.remove();
             this.htmlNameMaker = null;
