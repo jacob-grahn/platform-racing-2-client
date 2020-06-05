@@ -17,66 +17,69 @@ package
         private var title:String;
         private var content:String;
         private var time:int = 500;
-        protected var var_559:Boolean = true;
-        private var var_292:uint;
+        //protected var var_559:Boolean = true; // unused
+        private var delayTimer:uint; // var_292
         private var hover:HoverPopup; // var_8
 
-        public function HoverDelayPopup(_arg_1:String="", _arg_2:String="", _arg_3:int=500)
+        public function HoverDelayPopup(title:String="", message:String="", delay:int=500)
         {
-            this.title = _arg_1;
-            this.content = _arg_2;
-            this.time = _arg_3;
+            this.title = title;
+            this.content = message;
+            this.time = delay;
             addEventListener(MouseEvent.MOUSE_OVER, this.overHandler, false, 0, true);
             addEventListener(MouseEvent.MOUSE_OUT, this.outHandler, false, 0, true);
             addEventListener(MouseEvent.MOUSE_DOWN, this.downHandler, false, 0, true);
         }
 
-        protected function overHandler(_arg_1:MouseEvent)
+        protected function overHandler(e:MouseEvent)
         {
-            clearTimeout(this.var_292);
-            this.var_292 = setTimeout(this.method_655, this.time);
-            this.method_69();
+            clearTimeout(this.delayTimer);
+            this.delayTimer = setTimeout(this.showPopup, this.time);
+            this.hidePopupIfShown();
         }
 
-        protected function outHandler(_arg_1:MouseEvent)
+        protected function outHandler(e:MouseEvent)
         {
-            clearTimeout(this.var_292);
-            this.method_69();
+            clearTimeout(this.delayTimer);
+            this.hidePopupIfShown();
         }
 
-        protected function downHandler(_arg_1:MouseEvent)
+        protected function downHandler(e:MouseEvent)
         {
-            clearTimeout(this.var_292);
-            this.method_69();
+            clearTimeout(this.delayTimer);
+            this.hidePopupIfShown();
         }
 
-        private function method_655()
+        // method_655 = showPopup
+        private function showPopup()
         {
-            this.method_69();
-            if (this.var_559 == true) {
-                this.hover = new HoverPopup(this.title, this.content, this);
-            }
+            this.hidePopupIfShown();
+            // if (this.var_559 == true) {
+            this.hover = new HoverPopup(this.title, this.content, this);
+            // }
         }
 
-        private function method_69()
+        // method_69 = hidePopupIfShown
+        private function hidePopupIfShown()
         {
             if (this.hover != null) {
                 this.hover.remove();
             }
         }
 
-        public function method_835(_arg_1:Boolean)
+        // unused
+        /*public function method_835(_arg_1:Boolean)
         {
             this.var_559 = _arg_1;
-        }
+        }*/
 
         public function remove()
         {
-            clearTimeout(this.var_292);
+            clearTimeout(this.delayTimer);
             removeEventListener(MouseEvent.MOUSE_OVER, this.overHandler);
             removeEventListener(MouseEvent.MOUSE_OUT, this.outHandler);
             removeEventListener(MouseEvent.MOUSE_DOWN, this.downHandler);
-            this.method_69();
+            this.hidePopupIfShown();
             if (this.parent != null) {
                 parent.removeChild(this);
             }

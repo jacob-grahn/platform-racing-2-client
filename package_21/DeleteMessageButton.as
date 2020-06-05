@@ -10,7 +10,7 @@ package package_21
         public function DeleteMessageButton()
         {
             addChild(this.m);
-            super("Delete Message");
+            super("Delete Message", 'Erase this flimsy correspondence from existence.');
         }
 
     }

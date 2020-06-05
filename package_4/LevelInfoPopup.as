@@ -1,16 +1,19 @@
 ﻿package package_4
 {
-    import flash.events.MouseEvent;
-    import flash.net.URLVariables;
-    import flash.net.URLRequest;
-    import flash.events.Event;
     import data.HTMLNameMaker;
     import data.class_28;
     import data.class_33;
+    import flash.display.DisplayObject;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
+    import flash.utils.clearTimeout;
+    import flash.utils.setTimeout;
+    import lobby.LobbyRight;
     import package_6.Game;
     import package_18.PartInfo.*;
-    import lobby.LobbyRight;
 
     public class LevelInfoPopup extends Popup 
     {
@@ -53,6 +56,11 @@
         private var hoverMaxTime:HoverPopup;
         private var hoverGravity:HoverPopup;
         private var hoverItems:InfoPopup;
+
+        // button events
+        private var hoverActionBt:HoverPopup;
+        private var actionBtTimer:uint;
+        private var actionType:String;
 
         // uploading popup
         private var uploadingRemove:UploadingPopup;
@@ -133,21 +141,27 @@
             /*var myRank:Number = class_33.getNumber("userRank");
             myRank = isNaN(myRank) || myRank < 0 ? 0 : myRank;*/
             //if ((this.live && !this.hasPass && this.minRank <= myRank) || Main.group >= 2) {
-                this.m.play_bt.enabled = true;
-                this.m.play_bt.addEventListener(MouseEvent.CLICK, this.clickPlay, false, 0, true);
+            this.m.play_bt.enabled = true;
+            this.m.play_bt.addEventListener(MouseEvent.CLICK, this.clickPlay, false, 0, true);
             //}
 
             // buttons
             if (Main.group >= 1) {
                 // enable share
+                this.m.levelInfo.share_bt.addEventListener(MouseEvent.MOUSE_OVER, this.overShareBt, false, 0, true);
+                this.m.levelInfo.share_bt.addEventListener(MouseEvent.MOUSE_OUT, this.outActionBt, false, 0, true);
                 this.m.levelInfo.share_bt.addEventListener(MouseEvent.CLICK, this.clickShare, false, 0, true);
 
                 // choose whether to enable report or unpublish
                 if (Main.group >= 2) {
                     this.m.levelInfo.removeChild(this.m.levelInfo.report_bt);
+                    this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.MOUSE_OVER, this.overActionBt, false, 0, true);
+                    this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.MOUSE_OUT, this.outActionBt, false, 0, true);
                     this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.CLICK, this.clickRemove, false, 0, true);
                 } else if (Main.group == 1) {
                     this.m.levelInfo.removeChild(this.m.levelInfo.unpublish_bt);
+                    this.m.levelInfo.report_bt.addEventListener(MouseEvent.MOUSE_OVER, this.overActionBt, false, 0, true);
+                    this.m.levelInfo.report_bt.addEventListener(MouseEvent.MOUSE_OUT, this.outActionBt, false, 0, true);
                     this.m.levelInfo.report_bt.addEventListener(MouseEvent.CLICK, this.clickReport, false, 0, true);
                 }
             } else {
@@ -296,6 +310,46 @@
             return songArr[song];
         }
 
+        private function overShareBt(e:MouseEvent)
+        {
+            this.actionType = 'share';
+            this.actionBtTimer = setTimeout(this.showActionPopup, 500);
+        }
+
+        private function overActionBt(e:MouseEvent)
+        {
+            this.actionType = this.m.levelInfo.contains(this.m.levelInfo.report_bt) ? 'report' : 'unpublish';
+            this.actionBtTimer = setTimeout(this.showActionPopup, 500);
+        }
+
+        private function showActionPopup()
+        {
+            clearTimeout(this.actionBtTimer);
+            var title:String, msg:String;
+            var bt:DisplayObject = this.m.levelInfo[this.actionType + '_bt'];
+            if (this.actionType == 'share') {
+                title = 'Share Level';
+                msg = 'Send this level to another player. Or yourself. You control your own destiny.';
+            } else if (this.actionType == 'report') {
+                title = 'Report Level';
+                msg = 'If this level is inappropriate, you can report it to the moderators.';
+            } else if (this.actionType == 'unpublish') {
+                title = 'Remove Level';
+                msg = 'Unpublish this level.';
+            }
+            this.hoverActionBt = new HoverPopup(title, msg, bt);
+        }
+
+        private function outActionBt(e:MouseEvent)
+        {
+            this.actionType = null;
+            clearTimeout(this.actionBtTimer);
+            if (this.hoverActionBt != null) {
+                this.hoverActionBt.remove();
+                this.hoverActionBt = null;
+            }
+        }
+
         private function clickShare(e:MouseEvent)
         {
             var message:String = "Hey, check out this level! \n\n[level=" + this.levelId + "]" + this.title + "[/level] by [user]" + this.userName + "[/user]";
@@ -411,8 +465,14 @@
 
             // possibly enabled?
             this.m.play_bt.removeEventListener(MouseEvent.CLICK, this.clickPlay);
+            this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.MOUSE_OVER, this.overActionBt);
+            this.m.levelInfo.unpublish_bt.addEventListener(MouseEvent.MOUSE_OUT, this.outActionBt);
             this.m.levelInfo.unpublish_bt.removeEventListener(MouseEvent.CLICK, this.clickRemove);
+            this.m.levelInfo.report_bt.addEventListener(MouseEvent.MOUSE_OVER, this.overActionBt);
+            this.m.levelInfo.report_bt.addEventListener(MouseEvent.MOUSE_OUT, this.outActionBt);
             this.m.levelInfo.report_bt.removeEventListener(MouseEvent.CLICK, this.clickReport);
+            this.m.levelInfo.share_bt.addEventListener(MouseEvent.MOUSE_OVER, this.overShareBt);
+            this.m.levelInfo.share_bt.addEventListener(MouseEvent.MOUSE_OUT, this.outActionBt);
             this.m.levelInfo.share_bt.removeEventListener(MouseEvent.CLICK, this.clickShare);
 
             // possibly instantiated?
@@ -420,6 +480,11 @@
                 this.uploadingRemove.removeEventListener(SuperLoader.d, this.returnRemove);
                 this.uploadingRemove.startFadeOut();
                 this.uploadingRemove = null;
+            }
+            clearTimeout(this.actionBtTimer);
+            if (this.hoverActionBt != null) {
+                this.hoverActionBt.remove();
+                this.hoverActionBt = null;
             }
 
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);

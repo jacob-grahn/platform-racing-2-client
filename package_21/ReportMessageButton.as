@@ -10,7 +10,7 @@ package package_21
         public function ReportMessageButton()
         {
             addChild(this.m);
-            super("Report Message");
+            super("Report Message", 'If this message is inappropriate, you can report it to the moderators.');
         }
 
     }

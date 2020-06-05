@@ -13,7 +13,7 @@ package package_21
         public function ReplyMessageButton()
         {
             addChild(this.m);
-            super("Reply to Message");
+            super("Reply to Message", 'You\'ve got something to say, and someone\'s gonna hear it.');
         }
 
     }
