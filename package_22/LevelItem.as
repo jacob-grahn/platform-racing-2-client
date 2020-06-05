@@ -10,17 +10,20 @@ package package_22
     import data.CommandHandler;
     import data.Encryptor;
     import data.HTMLNameMaker;
+    import flash.display.DisplayObject;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
-    import package_4.HoverPopup;
+    import flash.utils.clearTimeout;
+    import flash.utils.setTimeout;
     import package_4.ConfirmPopup;
-    import package_4.UploadingPopup;
-    import ui.PageNavigation;
+    import package_4.HoverPopup;
     import package_4.LevelInfoPopup;
     import package_4.MessagePopup;
+    import package_4.UploadingPopup;
+    import ui.PageNavigation;
 
     public class LevelItem extends Removable 
     {
@@ -31,6 +34,8 @@ package package_22
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
         private var infoPopup:HoverPopup;
+        private var favBtPopup:HoverPopup;
+        private var favBtTimer:uint;
         private var slotArray:Array = new Array(); // var_127
         public var courseID:int;
         public var version:int;
@@ -74,9 +79,13 @@ package package_22
             this.m.infoButton.addEventListener(MouseEvent.CLICK, this.clickInfoHandler, false, 0, true);
             if (Main.group >= 1) {
                 if (Main.favoriteLevels.indexOf(this.courseID) > -1) {
+                    this.m.minusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt, false, 0, true);
+                    this.m.minusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt, false, 0, true);
                     this.m.minusButton.addEventListener(MouseEvent.CLICK, this.clickMinus, false, 0, true);
                     this.m.removeChild(this.m.plusButton);
                 } else {
+                    this.m.plusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt, false, 0, true);
+                    this.m.plusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt, false, 0, true);
                     this.m.plusButton.addEventListener(MouseEvent.CLICK, this.clickPlus, false, 0, true);
                     this.m.removeChild(this.m.minusButton);
                 }
@@ -231,21 +240,53 @@ package package_22
             var ret:Object = this.uploading.parsedData;
             if (ret.mode === 'add') {
                 Main.favoriteLevels.push(this.courseID);
+                this.m.plusButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+                this.m.plusButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
                 this.m.plusButton.removeEventListener(MouseEvent.CLICK, this.clickPlus);
                 this.m.removeChild(this.m.plusButton);
                 this.m.addChild(this.m.minusButton);
+                this.m.minusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt, false, 0, true);
+                this.m.minusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt, false, 0, true);
                 this.m.minusButton.addEventListener(MouseEvent.CLICK, this.clickMinus, false, 0, true);
             } else if (ret.mode === 'remove') {
                 Main.favoriteLevels.splice(Main.favoriteLevels.indexOf(this.courseID), 1);
+                this.m.minusButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+                this.m.minusButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
                 this.m.minusButton.removeEventListener(MouseEvent.CLICK, this.clickMinus);
                 this.m.removeChild(this.m.minusButton);
                 this.m.addChild(this.m.plusButton);
+                this.m.plusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt, false, 0, true);
+                this.m.plusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt, false, 0, true);
                 this.m.plusButton.addEventListener(MouseEvent.CLICK, this.clickPlus, false, 0, true);
             }
             if (this.uploading != null) {
                 this.uploading.removeEventListener(SuperLoader.d, this.onFavoriteResult);
                 this.uploading.startFadeOut();
                 this.uploading = null;
+            }
+        }
+
+        private function overFavBt(e:MouseEvent)
+        {
+            this.favBtTimer = setTimeout(this.showFavHover, 500);
+        }
+
+        private function showFavHover()
+        {
+            clearTimeout(this.favBtTimer);
+            var bt:DisplayObject = this.m.contains(this.m.plusButton) ? this.m.plusButton : this.m.minusButton;
+            var mode:String = this.m.contains(this.m.plusButton) ? 'add' : 'remove';
+            var title:String = mode === 'add' ? 'Add to Favorites' : 'Remove from Favorites';
+            var msg:String = mode === 'add' ? 'Add this level to your favorites list.' : 'Remove this level from your favorites list.';
+            this.favBtPopup = new HoverPopup(title, msg, bt);
+        }
+
+        private function outFavBt(e:MouseEvent)
+        {
+            clearTimeout(this.favBtTimer);
+            if (this.favBtPopup != null) {
+                this.favBtPopup.remove();
+                this.favBtPopup = null;
             }
         }
 
@@ -371,12 +412,22 @@ package package_22
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.CLICK, this.clickInfoHandler);
+            this.m.plusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+            this.m.plusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
             this.m.plusButton.removeEventListener(MouseEvent.CLICK, this.clickPlus);
+            this.m.minusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+            this.m.minusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
             this.m.minusButton.removeEventListener(MouseEvent.CLICK, this.clickMinus);
             this.removeSlots();
             this.slotArray = null;
             if (this.infoPopup != null) {
                 this.infoPopup.remove();
+                this.infoPopup = null;
+            }
+            clearTimeout(this.favBtTimer);
+            if (this.favBtPopup != null) {
+                this.favBtPopup.remove();
+                this.favBtPopup = null;
             }
             if (this.superLoader != null) {
                 this.superLoader.removeEventListener(Event.COMPLETE, this.validatePassResponse);

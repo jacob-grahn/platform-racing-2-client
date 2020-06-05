@@ -101,7 +101,7 @@ package package_22
                         levelInRow = 0;
                     }
                 }
-                Main.socket.write("set_right_room`" + this.mode);
+                Main.socket.write("set_right_room`" + (this.mode == 'favorites' ? 'search' : this.mode));
                 this.loadingGraphic.visible = false;
             }
         }
@@ -152,14 +152,14 @@ package package_22
 
         public function addPageHighlight(a:Array)
         {
-            if (this.mode !== 'search') {
+            if (this.mode !== 'search' && this.mode !== 'favorites') {
                 this.pageNavigation.addPageHighlight(a[0]);
             }
         }
 
         public function removePageHighlight(a:Array)
         {
-            if (this.mode !== 'search') {
+            if (this.mode !== 'search' && this.mode !== 'favorites') {
                 this.pageNavigation.removePageHighlight(a[0]);
             }
         }
