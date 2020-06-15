@@ -22,20 +22,24 @@ package package_6
 
         private var m:TestCourseGraphic = new TestCourseGraphic();
         private var variables:URLVariables;
+        private var isMod:Boolean = false;
+        private var reportsMode:Boolean = false;
         private var statsSelect:StatsSelect; // var_158
         private var hatPicker:HatPicker; // var_130
 
-        public function TestCourse(v:URLVariables)
+        public function TestCourse(v:URLVariables, mod:Boolean = false, report:Boolean = false)
         {
             this.variables = v;
+            this.isMod = mod;
+            this.reportsMode = report;
         }
 
         override public function initialize()
         {
             super.initialize();
             setVariables(this.variables);
-            this.m.back_bt.addEventListener(MouseEvent.CLICK, this.method_354);
-            this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.method_371);
+            this.m.back_bt.addEventListener(MouseEvent.CLICK, this.clickBack);
+            this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.clickRestart);
             holder.addChild(this.m);
             musicSelection.x = -130;
             var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
@@ -82,12 +86,14 @@ package package_6
             beginRace(new Array());
         }
 
-        private function method_354(e:MouseEvent)
+        // method_354 = clickBack
+        private function clickBack(e:MouseEvent)
         {
-            Main.pageHolder.changePage(new LevelEditor(this.variables));
+            Main.pageHolder.changePage(new LevelEditor(this.variables, this.isMod, this.reportsMode));
         }
 
-        private function method_371(e:MouseEvent)
+        // method_371 = clickRestart
+        private function clickRestart(e:MouseEvent)
         {
             this.method_370();
         }
@@ -116,7 +122,7 @@ package package_6
         private function method_370()
         {
             Main.stage.focus = Main.stage;
-            blockBackground.rotation = (bg1.rotation = (bg2.rotation = (bg3.rotation = 0)));
+            blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = 0;
             timer.setTime(Number(maxTime));
             var_201.clear();
             blockBackground.clear();
@@ -134,8 +140,8 @@ package package_6
             blockBackground.clearMoveInterval();
             var_14.removeEventListener(MouseEvent.CLICK, this.method_430);
             removeEventListener(Event.ENTER_FRAME, this.go);
-            this.m.back_bt.removeEventListener(MouseEvent.CLICK, this.method_354);
-            this.m.restart_bt.removeEventListener(MouseEvent.CLICK, this.method_371);
+            this.m.back_bt.removeEventListener(MouseEvent.CLICK, this.clickBack);
+            this.m.restart_bt.removeEventListener(MouseEvent.CLICK, this.clickRestart);
             this.statsSelect.remove();
             this.hatPicker.remove();
             this.hatPicker = null;

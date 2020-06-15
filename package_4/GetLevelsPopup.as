@@ -36,7 +36,8 @@ package package_4
             this.method_394();
         }
 
-        public function method_321():class_229
+         // method_321 = getSelected
+        public function getSelected():class_229
         {
             return this.selected;
         }

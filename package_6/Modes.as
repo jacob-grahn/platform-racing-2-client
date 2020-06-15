@@ -10,6 +10,17 @@ package package_6
         public static var race:String = "race"; // var_558
         public static var obj:String = "objective"; // var_383
 
-
+        public static function getFullName(str:String)
+        {
+            if (str == 'e' || str == 'eggs' || str == Modes.egg) {
+                return 'Alien Eggs';
+            } else if (str == 'd' || str == 'dm' || str == Modes.dm) {
+                return 'Deathmatch';
+            } else if (str == 'o' || str == 'obj' || str == Modes.obj) {
+                return 'Objective';
+            } else {
+                return 'Race';
+            }
+        }
     }
 }

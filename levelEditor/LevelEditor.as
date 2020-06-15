@@ -49,10 +49,14 @@ package levelEditor
         public var pass:String = null;
         public var hasPass:int = 0;
         private var variables:URLVariables;
+        private var isMod:Boolean = false;
+        private var reportsMode:Boolean = false;
 
-        public function LevelEditor(vars:URLVariables)
+        public function LevelEditor(vars:URLVariables, mod:Boolean = false, report:Boolean = false)
         {
             this.variables = vars;
+            this.isMod = mod;
+            this.reportsMode = report;
         }
 
         override public function initialize()
@@ -67,6 +71,7 @@ package levelEditor
             this.menu.init();
             this.attachBackgrounds();
             addChild(this.menu);
+            this.menu.setReportsMode(this.reportsMode);
             addChild(this.var_364);
             if (this.variables != null) {
                 this.setVariables(this.variables);
@@ -415,6 +420,21 @@ package levelEditor
         {
             super.glideToScale(e);
             this.menu.scaleX = this.menu.scaleY = this.bg.scaleX = this.bg.scaleY = (1 / scale);
+        }
+
+        public function canViewLevelReports() : Boolean
+        {
+            return this.isMod;
+        }
+
+        public function inReportsMode() : Boolean
+        {
+            return this.reportsMode;
+        }
+
+        public function setReportsMode(on:Boolean = false)
+        {
+            this.reportsMode = on;
         }
 
         public function clear()

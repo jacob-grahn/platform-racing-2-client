@@ -13,29 +13,32 @@ package package_15
     import package_4.ConfirmPopup;
     import package_4.GetLevelsPopup;
     import ui.class_229;
+    import levelEditor.LevelEditorMenu;
 
     public class GetLevels extends GetLevelsPopup
     {
 
-        private var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
+        protected var dataURL:String = '/levels_get.php';
+        protected var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
 
         // _loc1 = request
-        public function GetLevels()
+        public function GetLevels(customURL:String = null)
         {
+            m.titleBox.text = '-- My Levels --';
+            this.dataURL = customURL != null ? customURL : this.dataURL;
             this.var_454 = 18;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/get_levels.php");
-            this.loader.addEventListener(Event.COMPLETE, this.onComplete);
+            var request:URLRequest = new URLRequest(Main.baseURL + this.dataURL);
+            this.loader.addEventListener(Event.COMPLETE, this.onComplete, false, 0, true);
             this.loader.load(request);
         }
 
         // _loc3 = item
-        private function onComplete(e:Event)
+        protected function onComplete(e:Event)
         {
             if (e.target.data != "") {
                 var levels:Object = this.loader.parsedData.levels;
-                var level:Object;
-                for each (level in levels) {
-                    var item:GetLevelsPopupItem = new GetLevelsPopupItem(level.level_id, level.version, level.title, level.live);
+                for each (var level:Object in levels) {
+                    var item:GetLevelsPopupItem = new GetLevelsPopupItem(level);
                     this.method_455(item);
                 }
             }
@@ -46,7 +49,7 @@ package package_15
         override protected function loadListing(_arg_1:class_229)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(_arg_1);
-            new LoadingLevelPopup(item.id, item.version);
+            new LoadingLevelPopup(item.level.level_id, item.level.version);
             startFadeOut();
         }
 
@@ -54,14 +57,15 @@ package package_15
         override protected function deleteListing(_arg_1:class_229)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(_arg_1);
-            new ConfirmPopup(this.method_73, "Are you sure you want to delete \"" + class_28.escapeString(item.title) + "\"?");
+            new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + class_28.escapeString(item.level.title) + "\"?");
         }
 
         // _loc1 = item
-        public function method_73()
+        // method_73 = confirmDelete
+        public function confirmDelete()
         {
-            var item:GetLevelsPopupItem = GetLevelsPopupItem(this.method_321());
-            new DeletingLevelPopup(item.id);
+            var item:GetLevelsPopupItem = GetLevelsPopupItem(this.getSelected());
+            new DeletingLevelPopup(item.level.level_id);
             startFadeOut();
         }
 

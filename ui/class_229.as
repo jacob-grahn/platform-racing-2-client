@@ -30,7 +30,8 @@ package ui
             this.display();
         }
 
-        public function method_321():Boolean
+        // method_321 = getSelected
+        public function getSelected():Boolean
         {
             return this.selected;
         }

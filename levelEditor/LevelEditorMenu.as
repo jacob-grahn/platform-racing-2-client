@@ -155,14 +155,24 @@ package levelEditor
 
         private function clickLoad(e:MouseEvent)
         {
-            new GetLevels();
+            if (this.editor.canViewLevelReports() === true) {
+                new ChooseLevelsModePopup();
+            } else {
+                new GetLevels();
+            }
+        }
+
+        public function setReportsMode(on:Boolean = false)
+        {
+            this.m.saveButton.enabled = !on;
+            this.editor.setReportsMode(on);
         }
 
         // method_213 = clickTest
         private function clickTest(e:MouseEvent)
         {
             if (!this.editor.drawing) {
-                Main.pageHolder.changePage(new TestCourse(this.editor.method_344()));
+                Main.pageHolder.changePage(new TestCourse(this.editor.method_344(), this.editor.canViewLevelReports(), this.editor.inReportsMode()));
             }
         }
 

@@ -15,11 +15,13 @@ package package_15
 
         private var levelID:int;
         private var version:int;
+        private var report:Boolean = false;
 
-        public function LoadingLevelPopup(id:int, v:int)
+        public function LoadingLevelPopup(id:int, v:int, report:Boolean = false)
         {
-            this.version = v;
             this.levelID = id;
+            this.version = v;
+            this.report = report;
             m.textBox.text = "Loading...";
             var request:URLRequest = new URLRequest(Main.levelsURL + "/" + this.levelID + ".txt?version=" + this.version);
             loader.useRandomNum = false;
@@ -54,6 +56,7 @@ package package_15
             }
             super.onComplete(e);
             super.parsedDataHandler(e);
+            LevelEditor.editor.menu.setReportsMode(this.report);
         }
 
         override public function remove()

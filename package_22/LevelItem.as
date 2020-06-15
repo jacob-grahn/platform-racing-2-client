@@ -384,7 +384,7 @@ package package_22
             var ratingText:String = "Rating: " + this.rating;
             var noteText:String = "";
             if (class_28.escapeString(this.note) != "") {
-                noteText = "<br/>-----<br/>" + class_28.escapeString(this.note, true);
+                noteText = "<br/>-----<br/><i>" + class_28.escapeString(this.note, true) + "</i>";
             }
             var clickText:String = "<br/>-----<br/>(click the \"?\" for more info)";
             var levelInfoText:String = byText + versionText + updatedText + minRankText + playsText + ratingText + noteText + clickText;

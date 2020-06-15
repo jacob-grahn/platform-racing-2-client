@@ -126,7 +126,8 @@ package lobby
             if (Main.isTempMod && Main.server.server_id > 20) {
                 new MessagePopup('You are now logged out. If you haven\'t already done so, please notify a member of the staff team that you\'ve ended your moderation session.');
             }
-            Main.pageHolder.changePage(new LevelEditor(null));
+            var isMod:Boolean = !Main.isTempMod && Main.group >= 2;
+            Main.pageHolder.changePage(new LevelEditor(null, isMod));
             Main.socket.close();
         }
 
