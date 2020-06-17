@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_18.class_262
+// Package_18.class_262 = package_18.CharacterDisplay
 
 package package_18
 {
@@ -10,7 +10,7 @@ package package_18
     import flash.events.Event;
     import flash.events.MouseEvent;
 
-    public class class_262 extends Removable 
+    public class CharacterDisplay extends Removable 
     {
 
         private var char:Character; // var_5
@@ -20,7 +20,7 @@ package package_18
         public var bodySelect:PartSelector; // var_113
         public var feetSelect:PartSelector; // var_129
 
-        public function class_262(c:Character, hatArray:Array, headArray:Array, bodyArray:Array, feetArray:Array, hatSel:int, headSel:int, bodySel:int, feetSel:int, hatCol:int, headCol:int, bodyCol:int, feetCol:int, hatArray2:Array, headArray2:Array, bodyArray2:Array, feetArray2:Array, hatCol2:int, headCol2:int, bodyCol2:int, feetCol2:int)
+        public function CharacterDisplay(c:Character, hatArray:Array, headArray:Array, bodyArray:Array, feetArray:Array, hatSel:int, headSel:int, bodySel:int, feetSel:int, hatCol:int, headCol:int, bodyCol:int, feetCol:int, hatArray2:Array, headArray2:Array, bodyArray2:Array, feetArray2:Array, hatCol2:int, headCol2:int, bodyCol2:int, feetCol2:int)
         {
             this.char = c;
             this.hatSelect = new PartSelector(hatArray, hatSel, hatCol, hatArray2, hatCol2);
@@ -31,10 +31,10 @@ package package_18
             this.headSelect.y = this.yStart * 1;
             this.bodySelect.y = this.yStart * 2;
             this.feetSelect.y = this.yStart * 3;
-            this.hatSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.headSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.bodySelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.feetSelect.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
+            this.hatSelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
+            this.headSelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
+            this.bodySelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
+            this.feetSelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
             this.hatSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHatInfoClick, false, 0, true);
             this.headSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onHeadInfoClick, false, 0, true);
             this.bodySelect.infoButton.addEventListener(MouseEvent.CLICK, this.onBodyInfoClick, false, 0, true);
@@ -45,10 +45,11 @@ package package_18
             addChild(this.headSelect);
             addChild(this.bodySelect);
             addChild(this.feetSelect);
-            this.method_65(new Event(Event.CHANGE));
+            this.updateDisplay(new Event(Event.CHANGE));
         }
 
-        private function method_65(e:Event)
+        // method_65 = updateDisplay
+        private function updateDisplay(e:Event)
         {
             this.char.setHatId(this.hatSelect.getValue());
             this.char.setHeadId(this.headSelect.getValue());
@@ -80,9 +81,10 @@ package package_18
             new PartInfoPopup('feet', this.feetSelect.partArray, this.feetSelect.epicArray);
         }
 
-        private function method_111(ps:PartSelector)
+        // method_111 = removePartSelector
+        private function removePartSelector(ps:PartSelector)
         {
-            ps.removeEventListener(Event.CHANGE, this.method_65);
+            ps.removeEventListener(Event.CHANGE, this.updateDisplay);
             ps.remove();
             ps = null;
         }
@@ -90,14 +92,13 @@ package package_18
         override public function remove()
         {
             this.char = null;
-            this.method_111(this.hatSelect);
-            this.method_111(this.headSelect);
-            this.method_111(this.bodySelect);
-            this.method_111(this.feetSelect);
+            this.removePartSelector(this.hatSelect);
+            this.removePartSelector(this.headSelect);
+            this.removePartSelector(this.bodySelect);
+            this.removePartSelector(this.feetSelect);
             super.remove();
         }
 
 
     }
-}//package package_18
-
+}

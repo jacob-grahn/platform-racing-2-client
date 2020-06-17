@@ -63,7 +63,7 @@ package package_18
             this.infoButton.x = this.cp.x + 27.5;
             this.infoButton.y = this.cp.y + 3;
             //this.infoButton.addEventListener(MouseEvent.CLICK, this.onHelpClick, false, 0, true);
-            // put event listener in parent; package_18.class_262.
+            // put event listener in parent; package_18.CharacterDisplay.
             addChild(this.infoButton);
         }
 

@@ -12,9 +12,9 @@ package package_18
 
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
-        private var var_495:class_262;
+        private var var_495:CharacterDisplay;
 
-        public function LoadoutsPopup(c:Character, ss:StatsSelect, _arg_3:class_262)
+        public function LoadoutsPopup(c:Character, ss:StatsSelect, _arg_3:CharacterDisplay)
         {
             this.character = c;
             this.statsSelect = ss;

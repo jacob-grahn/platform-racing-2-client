@@ -55,7 +55,7 @@ package package_18
             return presets[i - 1];
         }
 
-        public static function apply(_arg_1:Preset, c:Character, ss:StatsSelect, _arg_4:class_262)
+        public static function apply(_arg_1:Preset, c:Character, ss:StatsSelect, disp:CharacterDisplay)
         {
             if (ss != null) {
                 ss.setStats({
@@ -65,22 +65,22 @@ package package_18
                 });
                 ss.setStats(_arg_1);
             }
+            if (disp != null) {
+                disp.hatSelect.setValue(_arg_1.hat);
+                disp.headSelect.setValue(_arg_1.head);
+                disp.bodySelect.setValue(_arg_1.body);
+                disp.feetSelect.setValue(_arg_1.feet);
+                disp.hatSelect.setColors(_arg_1.hatColor, _arg_1.hatColor2);
+                disp.headSelect.setColors(_arg_1.headColor, _arg_1.headColor2);
+                disp.bodySelect.setColors(_arg_1.bodyColor, _arg_1.bodyColor2);
+                disp.feetSelect.setColors(_arg_1.feetColor, _arg_1.feetColor2);
+            }
             if (c != null) {
                 c.setHatId(_arg_1.hat);
                 c.setHeadId(_arg_1.head);
                 c.setBodyId(_arg_1.body);
                 c.setFeetId(_arg_1.feet);
                 c.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
-            }
-            if (_arg_4 != null) {
-                _arg_4.hatSelect.setValue(_arg_1.hat);
-                _arg_4.headSelect.setValue(_arg_1.head);
-                _arg_4.bodySelect.setValue(_arg_1.body);
-                _arg_4.feetSelect.setValue(_arg_1.feet);
-                _arg_4.hatSelect.setColors(_arg_1.hatColor, _arg_1.hatColor2);
-                _arg_4.headSelect.setColors(_arg_1.headColor, _arg_1.headColor2);
-                _arg_4.bodySelect.setColors(_arg_1.bodyColor, _arg_1.bodyColor2);
-                _arg_4.feetSelect.setColors(_arg_1.feetColor, _arg_1.feetColor2);
             }
         }
 
