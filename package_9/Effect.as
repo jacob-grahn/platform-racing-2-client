@@ -5,7 +5,7 @@
 
 package package_9
 {
-    import background.class_87;
+    import background.EffectBackground;
     import flash.utils.setTimeout;
     import flash.utils.clearTimeout;
 
@@ -18,7 +18,7 @@ package package_9
         {
             x = _arg_1;
             y = _arg_2;
-            class_87.var_276.addChild(this);
+            EffectBackground.instance.addChild(this);
         }
 
         protected function method_2(_arg_1:int)

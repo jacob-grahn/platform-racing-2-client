@@ -166,7 +166,7 @@ package blocks
         public function onStand(c:LocalCharacter)
         {
             if (!this.frozen && this.method_777() > 4 && c.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
-                this.freeze();
+                this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {
                 c.var_147 = 0.05;

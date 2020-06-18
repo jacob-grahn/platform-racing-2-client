@@ -9,7 +9,7 @@ package items
     import data.class_33;
     import flash.utils.setTimeout;
     import flash.geom.Point;
-    import background.class_87;
+    import background.EffectBackground;
     import flash.utils.clearTimeout;
 
     public class Item extends Removable 
@@ -79,7 +79,7 @@ package items
         {
             var _local_1:Point = new Point(this.racer.curWeapon.x, this.racer.curWeapon.y);
             _local_1 = this.racer.curWeapon.parent.localToGlobal(_local_1);
-            return class_87.var_276.globalToLocal(_local_1);
+            return EffectBackground.instance.globalToLocal(_local_1);
         }
 
         override public function remove()

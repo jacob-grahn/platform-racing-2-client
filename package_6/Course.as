@@ -6,7 +6,7 @@
 package package_6
 {
 	import background.class_10;
-    import background.class_87;
+    import background.EffectBackground;
     import background.class_75;
     import background.DrawableBackground;
     import background.Map;
@@ -50,7 +50,7 @@ package package_6
         protected var bg4:DrawableBackground;
         protected var bg5:DrawableBackground;
         public var blockBackground:Map;
-        public var var_201:class_87;
+        public var var_201:EffectBackground;
         public var frontBackground:class_75;
         public var backBackground:class_75;
         protected var var_689:Number = 0;
@@ -278,7 +278,7 @@ package package_6
             this.backBackground = new class_75(this);
             this.blockBackground = new Map(this.miniMap, this);
             this.frontBackground = new class_75(this);
-            this.var_201 = new class_87(this);
+            this.var_201 = new EffectBackground(this);
             this.bg1.setScale(1);
             this.bg2.setScale(0.5);
             this.bg3.setScale(0.25);

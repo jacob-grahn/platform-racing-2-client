@@ -12,7 +12,7 @@ package package_9
     import data.class_28;
     import flash.geom.Point;
     import flash.geom.ColorTransform;
-    import background.class_87;
+    import background.EffectBackground;
     import flash.events.Event;
     import sounds.SoundEffects;
     import flash.utils.clearTimeout;
@@ -182,7 +182,7 @@ package package_9
                 }
                 if (mode == var_406 || _local_11 > 0.66) {
                     _local_8 = "IceWave`" + _local_9 + "`" + _local_10 + "`" + _local_5 + "`" + rot + "`" + _local_7;
-                    class_87.var_276.addEffect(_local_8.split("`"));
+                    EffectBackground.instance.addEffect(_local_8.split("`"));
                 } else {
                     if (mode == var_466 || _local_11 > 0.33) {
                         _local_12 = new Slash(_local_9, _local_10, _local_6, _local_7);

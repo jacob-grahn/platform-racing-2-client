@@ -2,6 +2,7 @@
 // www.as3sorcerer.com
 
 //background.LineBackground
+// Is this the LE Grid?
 
 package background
 {
