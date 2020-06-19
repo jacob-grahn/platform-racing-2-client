@@ -37,6 +37,7 @@ package package_8
     import package_9.Sting;
     import package_9.Zap;
     import page.GamePage;
+    import package_6.Modes;
 
     public class LocalCharacter extends Character 
     {
@@ -776,7 +777,7 @@ package package_8
         public function hit(_arg_1:Number=0, _arg_2:Number=0)
         {
             var _local_3:Object;
-            if ((!var_4.getBool(CROWN) || this.course.gameMode == "deathmatch") && !this.invincible) {
+            if ((!var_4.getBool(CROWN) || this.course.gameMode == Modes.dm || this.course.gameMode == Modes.hat) && !this.invincible) {
                 velX = velX + _arg_1;
                 velY = velY + _arg_2;
                 if (!var_4.getBool(CROWN)) {

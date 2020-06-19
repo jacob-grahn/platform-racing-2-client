@@ -9,6 +9,7 @@ package package_6
         public static var dm:String = "deathmatch"; // var_456
         public static var race:String = "race"; // var_558
         public static var obj:String = "objective"; // var_383
+        public static var hat:String = "hat";
 
         public static function getFullName(str:String)
         {
@@ -18,6 +19,8 @@ package package_6
                 return 'Deathmatch';
             } else if (str == 'o' || str == 'obj' || str == Modes.obj) {
                 return 'Objective';
+            } else if (str == 'h' || str == Modes.hat) {
+                return 'Hat Attack';
             } else {
                 return 'Race';
             }

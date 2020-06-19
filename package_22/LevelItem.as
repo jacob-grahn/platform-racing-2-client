@@ -101,6 +101,8 @@ package package_22
                 this.m.bg.gotoAndStop(3);
             } else if (gMode == "o") {
                 this.m.bg.gotoAndStop(4);
+            } else if (gMode == 'h') {
+                this.m.bg.gotoAndStop(5);
             }
             this.htmlNameMaker.listenForLink(this.m.authorBox);
             addChild(this.m);

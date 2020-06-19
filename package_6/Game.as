@@ -8,6 +8,8 @@ package package_6
     import flash.events.Event;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
+    import flash.utils.clearInterval;
+    import flash.utils.setInterval;
     import sounds.SoundEffects;
     import package_4.MessagePopup;
     import package_8.Character;
@@ -35,6 +37,7 @@ package package_6
         public var var_452:int;
         public var var_465:int;
         public var var_347:int;
+        private var hatCountdown:uint;
 
         public function Game(id:int, v:int)
         {
@@ -69,6 +72,8 @@ package package_6
             this.cm.defineCommand("setEggSeed", setEggSeed);
             this.cm.defineCommand("addEggs", addEggs);
             this.cm.defineCommand("superBooster", this.superBooster);
+            this.cm.defineCommand("startHatCountdown", this.startHatCountdown);
+            this.cm.defineCommand('forceQuit', this.quitGame);
             super.initialize();
             this.getLevelData();
         }
@@ -187,6 +192,23 @@ package package_6
             _local_3.method_576();
         }
 
+        private function startHatCountdown(a:Array = null)
+        {
+            this.cm.defineCommand('cancelHatCountdown', this.cancelHatCountdown);
+            this.hatCountdown = setInterval(this.checkHatCountdown, 1000);
+        }
+
+        private function checkHatCountdown()
+        {
+            Main.socket.write('check_hat_countdown`');
+        }
+
+        private function cancelHatCountdown(a:Array = null)
+        {
+            this.cm.defineCommand('cancelHatCountdown', null);
+            clearInterval(this.hatCountdown);
+        }
+
         private function createRemoteCharacter(_arg_1:Array)
         {
             var _local_2:int = int(_arg_1[0]);
@@ -273,6 +295,7 @@ package package_6
 
         override public function outOfTimeHandler()
         {
+            this.cancelHatCountdown();
             if (this.gameMode == Modes.egg) {
                 this.finish();
                 this.method_196();
@@ -291,17 +314,19 @@ package package_6
                     }
                 } else {
                     Main.socket.write("finish_race`" + finishId + "`" + finishX + "`" + finishY);
-                    this.quitButton.startGlow();
-                    this.method_185();
-                    this.method_682();
-                    timer.pause();
+                    if (this.gameMode != Modes.hat) {
+                        this.quitButton.startGlow();
+                        this.method_185();
+                        this.method_682();
+                        timer.pause();
+                    }
                 }
                 SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));
             }
         }
 
         // method_209 = quitGame
-        public function quitGame()
+        public function quitGame(arr:Array = null)
         {
             if (!this.var_370) {
                 if (this.gameMode == Modes.dm) {
@@ -364,6 +389,9 @@ package package_6
             this.cm.defineCommand("cowboyMode", null);
             this.cm.defineCommand("setEggSeed", null);
             this.cm.defineCommand("addEggs", null);
+            this.cm.defineCommand("superBooster", null);
+            this.cm.defineCommand('startHatCountdown', null); // this.cancelHatCountdown called farther down
+            this.cm.defineCommand('forceQuit', null);
             removeEventListener(Event.ENTER_FRAME, method_85);
             removeEventListener(Event.ENTER_FRAME, method_82);
             removeEventListener(Event.ENTER_FRAME, keyScroll);
@@ -388,6 +416,7 @@ package package_6
             this.chatBox.remove();
             this.specialEvent.remove();
             this.specialEvent = null;
+            this.cancelHatCountdown();
             super.remove();
         }
 

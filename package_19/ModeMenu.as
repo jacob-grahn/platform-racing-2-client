@@ -16,60 +16,64 @@ package package_19
     {
 
         private var m:ModeMenuGraphic = new ModeMenuGraphic();
-        private var var_63:ComboBox = m.modeSelect;
+        private var modeSelect:ComboBox = m.modeSelect; // var_63
         private var open:Boolean = false;
 
-        public function ModeMenu(_arg_1:DisplayObject)
+        // _loc2 = mode
+        // _loc3 = this.modeSelect.length
+        // _loc4 = LevelEditor.editor.gameMode
+        // _loc5 = i
+        public function ModeMenu(d:DisplayObject)
         {
-            var _local_2:Object;
-            var _local_3:int = this.var_63.length;
-            var _local_4:String = LevelEditor.editor.gameMode;
-            var _local_5:int;
-            while (_local_5 < _local_3) {
-                _local_2 = this.var_63.getItemAt(_local_5);
-                if (_local_2.data == _local_4) {
-                    this.var_63.selectedIndex = _local_5;
+            var i:int = 0;
+            while (i < this.modeSelect.length) {
+                var mode:Object = this.modeSelect.getItemAt(i);
+                if (mode.data == LevelEditor.editor.gameMode) {
+                    this.modeSelect.selectedIndex = i;
                     break;
                 }
-                _local_5++;
+                i++;
             }
-            this.var_63.addEventListener(Event.OPEN, this.method_355, false, 0, true);
-            this.var_63.addEventListener(Event.CHANGE, this.method_65, false, 0, true);
-            this.var_63.addEventListener(Event.CLOSE, this.method_407, false, 0, true);
+            this.modeSelect.addEventListener(Event.OPEN, this.onOpen, false, 0, true);
+            this.modeSelect.addEventListener(Event.CHANGE, this.onChange, false, 0, true);
+            this.modeSelect.addEventListener(Event.CLOSE, this.onClose, false, 0, true);
             addChild(this.m);
-            super(_arg_1);
+            super(d);
         }
 
-        private function method_355(_arg_1:Event)
+        // method_355 = onOpen
+        private function onOpen(e:Event)
         {
             this.open = true;
         }
 
-        private function method_407(_arg_1:Event)
+        // method_407 = onClose
+        private function onClose(e:Event)
         {
             this.open = false;
-            this.method_65(_arg_1);
+            this.onChange(e);
         }
 
-        private function method_65(_arg_1:Event)
+        // _loc2 = this.modeSelect.selectedItem.data
+        // method_65 = onChange
+        private function onChange(e:Event)
         {
-            var _local_2:String = this.var_63.selectedItem.data;
-            LevelEditor.editor.setGameMode(_local_2);
+            LevelEditor.editor.setGameMode(this.modeSelect.selectedItem.data);
         }
 
-        override protected function downHandler(_arg_1:MouseEvent)
+        override protected function downHandler(e:MouseEvent)
         {
             if (!this.open) {
-                super.downHandler(_arg_1);
+                super.downHandler(e);
             }
         }
 
         override public function remove()
         {
-            this.var_63.removeEventListener(Event.OPEN, this.method_355);
-            this.var_63.removeEventListener(Event.CHANGE, this.method_65);
-            this.var_63.removeEventListener(Event.CLOSE, this.method_407);
-            this.var_63 = null;
+            this.modeSelect.removeEventListener(Event.OPEN, this.onOpen);
+            this.modeSelect.removeEventListener(Event.CHANGE, this.onChange);
+            this.modeSelect.removeEventListener(Event.CLOSE, this.onClose);
+            this.modeSelect = null;
             Main.stage.focus = Main.stage;
             super.remove();
         }

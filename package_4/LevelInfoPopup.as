@@ -14,6 +14,7 @@
     import lobby.LobbyRight;
     import package_6.Game;
     import package_18.PartInfo.*;
+    import package_6.Modes;
 
     public class LevelInfoPopup extends Popup 
     {
@@ -262,15 +263,18 @@
 
         private function determineMode(mode:String)
         {
-            if (mode == 'deathmatch' || mode == 'dm' || mode == 'd') {
+            if (mode == Modes.dm || mode == 'dm' || mode == 'd') {
                 mode = 'Deathmatch';
                 this.m.levelInfo.gameMode.modeSym.gotoAndStop(2);
-            } else if (mode == 'eggs' || mode == 'egg' || mode == 'e') {
+            } else if (mode == Modes.egg || mode == 'eggs' || mode == 'e') {
                 mode = 'Alien Eggs';
                 this.m.levelInfo.gameMode.modeSym.gotoAndStop(3);
-            } else if (mode == 'objective' || mode == 'obj' || mode == 'o') {
+            } else if (mode == Modes.obj || mode == 'obj' || mode == 'o') {
                 mode = 'Objective';
                 this.m.levelInfo.gameMode.modeSym.gotoAndStop(4);
+            } else if (mode == Modes.hat || mode == 'h') {
+                mode = 'Hat Attack';
+                this.m.levelInfo.gameMode.modeSym.gotoAndStop(5);
             } else {
                 mode = 'Race';
                 this.m.levelInfo.gameMode.modeSym.gotoAndStop(1);
