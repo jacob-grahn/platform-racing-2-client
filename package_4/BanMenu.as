@@ -45,8 +45,11 @@ package package_4
                 this.m.banWeekButton.enabled = this.m.banMonthButton.enabled = this.m.banYearButton.enabled = false;
             }*/
             if (Main.isTrialMod == false) {
+                this.m.duration.addItem({"label":"Three Days", "data":259200});
                 this.m.duration.addItem({"label":"One Week", "data":604800});
+                this.m.duration.addItem({"label":"Two Weeks", "data":1209600});
                 this.m.duration.addItem({"label":"One Month", "data":2592000});
+                this.m.duration.addItem({"label":"Six Months", "data":15768000});
                 this.m.duration.addItem({"label":"One Year", "data":31536000});
                 this.m.scope.addItemAt({"label":"Game", "data":"game"}, 0);
                 this.m.scope.enabled = true;
