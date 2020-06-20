@@ -5,6 +5,7 @@
 
 package package_4
 {
+    import data.class_28;
     import flash.events.MouseEvent;
 
     public class TempModMenu extends Removable 
@@ -52,7 +53,7 @@ package package_4
             new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + class_28.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
         }
 
-        private function kickUser(e:MouseEvent)
+        private function kickUser()
         {
             Main.socket.write("kick`" + this.userName);
             this.target.startFadeOut();
