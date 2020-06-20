@@ -48,7 +48,7 @@ package blocks
                 var blockAbovePlayer:Block = map.getBlockFromSeg(seg.x - 1, seg.y - 1);
                 if (blockAbovePlayer == null && !c.crouching) {
                     var blockAboveThis:Block = map.getBlockFromSeg(seg.x, seg.y - 1);
-                    if (blockAboveThis != null) {
+                    if (blockAboveThis != null && blockAboveThis is CrumbleBlock) {
                         blockAboveThis.localActivate("50");
                     }
                 }
@@ -67,7 +67,7 @@ package blocks
                 var blockAbovePlayer:Block = map.getBlockFromSeg(seg.x + 1, seg.y - 1);
                 if (blockAbovePlayer == null && !c.crouching) {
                     var blockAboveThis:Block = map.getBlockFromSeg(seg.x, seg.y - 1);
-                    if (blockAboveThis != null) {
+                    if (blockAboveThis != null && blockAboveThis is CrumbleBlock) {
                         blockAboveThis.localActivate("50");
                     }
                 }
