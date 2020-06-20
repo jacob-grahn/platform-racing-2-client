@@ -158,7 +158,7 @@ package lobby
         // method_291 = hoverKong
         private function hoverKong(e:MouseEvent)
         {
-            this.hover = new HoverPopup("Kong Hat", "Players from Kongregate automatically get a hat that increases your experience gain by 25%!", this.bottom_bts.moreGamesButton);
+            this.hover = new HoverPopup("Kong Hat", "Players from Kongregate automatically get a hat that doubles guild points won in each race!", this.bottom_bts.moreGamesButton);
         }
 
         // method_353 = hoverOutKong
