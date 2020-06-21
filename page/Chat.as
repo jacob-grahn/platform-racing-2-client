@@ -34,23 +34,35 @@ package page
         {
         }
 
+        // fred -- artifact hint
+        public function makeLink(type:String, data:Array)
+        {
+            if (('make' + type) in this.htmlNameMaker) {
+                return this.htmlNameMaker['make' + type](data[0], data[1]);
+            }
+            return '';
+        }
+
         // userName = _loc2
         // group = _loc3
         // messageText = _loc4
         // chatMessageName = _loc5
         // method_151 = handleMessageFromArray
-        public function handleMessageFromArray(chatMessageArray:Array)
+        public function handleMessageFromArray(chatMessageArray:Array, fred:Boolean = false)
         {
             var userName:String = chatMessageArray[0];
             var group:String = chatMessageArray[1];
             var messageText:String = chatMessageArray[2];
-            if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
-                messageText = class_28.escapeAndFilterString(messageText); // filters swears, prevents nuking, escapes problematic chars
-            } else {
-                messageText = class_28.escapeString(messageText); // prevents nuking, escapes problematic chars
+            if (!fred) {
+                if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
+                    messageText = class_28.escapeAndFilterString(messageText); // filters swears, prevents nuking, escapes problematic chars
+                } else {
+                    messageText = class_28.escapeString(messageText); // prevents nuking, escapes problematic chars
+                }
             }
             var chatMessageName:String = this.htmlNameMaker.makeName(userName, group);
             var fullMessage:String = chatMessageName + "<font color='#666666'>: " + messageText + "</font><br/>";
+            fullMessage = fred ? '<i>' + fullMessage + '</i>' : fullMessage;
             this.displayMessage(fullMessage);
         }
 
