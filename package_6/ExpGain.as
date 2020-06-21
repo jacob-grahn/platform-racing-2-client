@@ -3,14 +3,15 @@
 package package_6
 {
     import flash.events.Event;
+    import data.class_28;
 
     public class ExpGain extends Removable 
     {
 
         private var m:ExpGainGraphic = new ExpGainGraphic();
         private var expStart:Number; // var_153
-        private var expEnd:int; // var_209
-        private var expToRank:int; // var_330
+        private var expEnd:Number; // var_209
+        private var expToRank:Number; // var_330
         private var var_575:Number;
 
         public function ExpGain()
@@ -19,7 +20,7 @@ package package_6
             this.m.bar.bar.width = 1;
         }
 
-        public function start(s:int, e:int, r:int)
+        public function start(s:Number, e:Number, r:Number)
         {
             this.expStart = s;
             this.expEnd = e;
@@ -43,7 +44,7 @@ package package_6
                 removeEventListener(Event.ENTER_FRAME, this.go);
                 this.expStart = this.expEnd;
             }
-            this.m.textBox.text = Math.floor(this.expStart) + " / " + this.expToRank;
+            this.m.textBox.text = class_28.formatNumber(Math.floor(this.expStart)) + " / " + class_28.formatNumber(this.expToRank);
             this.m.bar.bar.width = 200 * (this.expStart / this.expToRank);
         }
 
