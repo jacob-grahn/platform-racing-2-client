@@ -54,7 +54,7 @@ package package_8
         private var mapDot:MovieClip; // var_174
         private var itemDisplay:ItemDisplay;
         private var var_573:uint = setInterval(method_796, 5000);
-        private var var_535:uint = setInterval(limitMaxCowboyStats, 1000);
+        private var var_535:uint = setInterval(ensureCowboyStats, 250);
         private var var_390:DisplayObject = parent;
         private var speedStat:int; // var_245
         private var accelStat:int; // var_261
@@ -940,7 +940,7 @@ package package_8
                     reversedControls = false; // preserve reversed controls on Apr 1
                 }
             }
-            this.limitMaxCowboyStats();
+            this.ensureCowboyStats();
             if (var_4.getBool(SANTA)) {
                 if (!hadSanta) {
                     this.maxVelX = this.maxVelX + 1;
@@ -977,12 +977,17 @@ package package_8
             }
         }
 
-        // method_358 = limitMaxCowboyStats
-        private function limitMaxCowboyStats()
+        // method_358 = ensureCowboyStats
+        private function ensureCowboyStats()
         {
-            if (var_4.getBool(COWBOY) && Items.getCodeFromItem(this.curItem) != Items.speedBurst) {
-                this.maxVelX = 12;
-                this.accel = 1.86;
+            if (var_4.getBool(COWBOY)
+                /*&& (
+                    Items.getCodeFromItem(this.curItem) != Items.speedBurst
+                    || (Items.getCodeFromItem(this.curItem) == Items.speedBurst && !this.curItem.isUsed())
+                )*/
+            ) {
+                this.maxVelX = this.maxVelX < 12 ? 12 : this.maxVelX;
+                this.accel = this.accel < 1.86 ? 1.86 : this.accel;
                 var_4.setNumber(SuperJump, 4.5);
             }
         }
