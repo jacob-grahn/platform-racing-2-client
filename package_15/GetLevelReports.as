@@ -46,8 +46,8 @@
         // CHANGE CONTENTS OF THIS FN TO DO REPORT HANDLING (popup?)
         override protected function deleteListing(_arg_1:class_229)
         {
-            var item:GetReportedLevelsPopupItem = GetReportedLevelsPopupItem(_arg_1);
             new MessagePopup('Coming soon!');
+            //var item:GetReportedLevelsPopupItem = GetReportedLevelsPopupItem(_arg_1);
             //new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + class_28.escapeString(item.level.title) + "\"?");
         }
 

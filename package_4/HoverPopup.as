@@ -23,7 +23,7 @@ package package_4
                 var titleBox:TextField = this.generateTextBox();
                 titleBox.htmlText = "<b>" + title + "</b>";
                 titleBox.y = 5;
-                contentBox = this.generateTextBox();
+                var contentBox:TextField = this.generateTextBox();
                 contentBox.htmlText = content;
                 contentBox.y = titleBox.height + titleBox.y + 5;
                 var bg:ShadowBG = new ShadowBG();
