@@ -95,11 +95,11 @@ package lobby
         // method_328 = clickLogout
         private function clickLogout(e:MouseEvent = null)
         {
-            if (e != null && Main.isTempMod && Main.server.server_id > 20) { // the server id can change when there's a difference between server owners and temps in the client
+            if (e != null && Main.isTempMod && Main.server.server_id < 20) { // the server id can change when there's a difference between server owners and temps in the client
                 new ConfirmPopup(clickLogout, 'You\'re currently a temporary moderator. Logging out will automatically demote you back to a member. Do you really want to proceed?');
                 return;
             }
-            if (Main.isTempMod && Main.server.server_id > 20) {
+            if (Main.isTempMod && Main.server.server_id < 20) {
                 new MessagePopup('You are now logged out. If you haven\'t already done so, please notify a member of the staff team that you\'ve ended your moderation session.');
             }
             if (!Main.remember) {
@@ -119,11 +119,11 @@ package lobby
         // method_233 = clickLE
         private function clickLE(e:MouseEvent = null)
         {
-            if (e != null && Main.isTempMod && Main.server.server_id > 20) { // the server id can change when there's a difference between server owners and temps in the client
+            if (e != null && Main.isTempMod && Main.server.server_id < 20) { // the server id can change when there's a difference between server owners and temps in the client
                 new ConfirmPopup(clickLE, 'You\'re currently a temporary moderator. Entering the level editor will log you out, which will automatically demote you back to a member. Do you really want to proceed?');
                 return;
             }
-            if (Main.isTempMod && Main.server.server_id > 20) {
+            if (Main.isTempMod && Main.server.server_id < 20) {
                 new MessagePopup('You are now logged out. If you haven\'t already done so, please notify a member of the staff team that you\'ve ended your moderation session.');
             }
             var isMod:Boolean = !Main.isTempMod && Main.group >= 2;
