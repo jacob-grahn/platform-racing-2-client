@@ -1,6 +1,7 @@
 package package_4
 {
     import data.class_28;
+    import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
@@ -11,7 +12,6 @@ package package_4
 
         private var levelId:int = 0;
         private var version:int = 0;
-        private var uploading:UploadingPopup;
         private var m:LevelReportPopupGraphic = new LevelReportPopupGraphic();
 
         public function LevelReportPopup(levelId:int = 0, version:int = 0)
@@ -44,11 +44,11 @@ package package_4
             var request:URLRequest = new URLRequest(Main.baseURL + "/level_report.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            this.uploading = new UploadingPopup(request, 'json');
+            new UploadingPopup(request, 'json');
             startFadeOut();
         }
 
-        private function clickCancel(e:MouseEvent)
+        private function clickCancel(e:*)
         {
             startFadeOut();
         }
@@ -57,10 +57,6 @@ package package_4
         {
             this.m.report_bt.removeEventListener(MouseEvent.CLICK, this.clickReport);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
-            if (this.uploading != null) {
-                this.uploading.remove();
-                this.uploading = null;
-            }
             super.remove();
         }
 
