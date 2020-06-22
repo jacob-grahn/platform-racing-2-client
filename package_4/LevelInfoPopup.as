@@ -309,7 +309,8 @@
                 "Instrumental #4 - Reasoner",
                 "Prismatic - Lunanova",
                 "We Are Loud - Dynamedion", // should never be triggered; song can't be set to we are loud
-                "Toodaloo - mustangman"
+                "Toodaloo - mustangman",
+                "Night Shade - Goliathe"
             ];
             return songArr[song];
         }

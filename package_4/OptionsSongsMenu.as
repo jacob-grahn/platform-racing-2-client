@@ -36,7 +36,7 @@ package package_4
                 OptionsSongsMenu.instance = null;
             }
             var blacklist:Array = [];
-            for (var i:int = 1; i <= 17; i++) {
+            for (var i:int = 1; i <= 18; i++) {
                 if (i == 9 || i == 16) {
                     continue; // skip songs #9 (desert rose) and #16 (we are loud)
                 }
