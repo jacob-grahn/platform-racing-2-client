@@ -56,6 +56,7 @@ package levelEditor
         {
             this.m.hat.gotoAndStop(this.pickedHat);
             this.m.hat.colorMC.gotoAndStop(this.pickedHat);
+            this.m.hat.colorMC2.gotoAndStop(this.pickedHat);
             this.m.hat.colorMC2.visible = this.pickedHat == 16;
             var colorMC:int = Math.round(Math.random() * 0xFFFFFF);
             var colorMC2:int = 0;
