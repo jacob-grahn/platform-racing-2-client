@@ -215,7 +215,7 @@ package package_4
             this.m.kickButton.removeEventListener(MouseEvent.CLICK, this.clickKick);
             this.target = null;
             if (this.uploading != null) {
-                this.uploading.removeEventListener(Event.COMPLETE, this.method_238);
+                this.uploading.removeEventListener(SuperLoader.e, this.method_238);
                 this.uploading.removeEventListener(SuperLoader.d, this.onBanSuccess);
                 this.uploading = null;
             }
