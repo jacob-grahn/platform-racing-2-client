@@ -20,6 +20,7 @@ package package_6
         {
             addChild(this.m);
             maxMessages = 7;
+            this.m.chatInput.restrict = "^`";
             this.m.top.textBox1.addEventListener(Event.ENTER_FRAME, this.ensureBottom);
             this.m.bg.textBox2.addEventListener(Event.ENTER_FRAME, this.ensureBottom);
             Main.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, false, 0, true);

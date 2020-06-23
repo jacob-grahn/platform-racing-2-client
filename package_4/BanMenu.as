@@ -51,7 +51,7 @@ package package_4
                 this.m.duration.addItem({"label":"One Month", "data":2592000});
                 this.m.duration.addItem({"label":"Six Months", "data":15768000});
                 this.m.duration.addItem({"label":"One Year", "data":31536000});
-                this.m.scope.addItemAt({"label":"Game", "data":"game"}, 0);
+                this.m.scope.addItem({"label":"Game", "data":"game"});
                 this.m.scope.enabled = true;
             }
             this.m.warning1Button.addEventListener(MouseEvent.CLICK, this.clickWarning1, false, 0, true);
@@ -133,7 +133,6 @@ package package_4
         // method_797 = banUser
         public function banUser()
         {
-            Main.socket.write("ban`" + this.userName + "`" + this.banSecs + "`" + this.m.scope.selectedItem.data + "`" + this.m.reason.text);
             var chatRecord:String = "";
             if (ChatInstance.instance != null) {
                 chatRecord = ChatInstance.instance.getChatRecord();
@@ -151,11 +150,19 @@ package package_4
             request.data = vars;
             request.method = URLRequestMethod.POST;
             this.uploading = new UploadingPopup(request, 'json');
-            this.uploading.addEventListener(Event.COMPLETE, this.method_238, false, 0, true);
+            this.uploading.addEventListener(SuperLoader.d, this.onBanSuccess, false, 0, true);
+            this.uploading.addEventListener(SuperLoader.e, this.method_238, false, 0, true);
         }
 
         private function method_238(e:Event)
         {
+            this.target.startFadeOut();
+        }
+
+        private function onBanSuccess(e:Event)
+        {
+            var ban_id:int = this.uploading.parsedData.ban_id != null ? this.uploading.parsedData.ban_id : 0;
+            Main.socket.write("ban`" + this.userName + "`" + this.banSecs + "`" + this.m.scope.selectedItem.data + "`" + ban_id + "`" + this.m.reason.text);
             this.target.startFadeOut();
         }
 
@@ -209,6 +216,7 @@ package package_4
             this.target = null;
             if (this.uploading != null) {
                 this.uploading.removeEventListener(Event.COMPLETE, this.method_238);
+                this.uploading.removeEventListener(SuperLoader.d, this.onBanSuccess);
                 this.uploading = null;
             }
             super.remove();
