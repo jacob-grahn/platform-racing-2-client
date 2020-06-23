@@ -75,7 +75,7 @@ package package_15
             super.parsedDataHandler(e);
             if (parsedData.status == 'banned') {
                 var banLang:String = parsedData.scope === 's' ? 'socially ' : '';
-                new ConfirmPopup(this.overrideBanConfirmUploadLevel, "You are currently " + class_28.urlify(Main.baseURL + '/bans/show_record.php?ban_id=' + parsedData.ban_id, banLang + 'banned') + ". You can still save this level, but it won't be published. If this level is already published, continuing will unpublish it.<br /><br />Do you want to proceed?");
+                new ConfirmPopup(this.overrideBanConfirmUploadLevel, "Because you are currently " + class_28.urlify(Main.baseURL + '/bans/show_record.php?ban_id=' + parsedData.ban_id, banLang + 'banned') + ", you can only save this level as unpublished without a password. Is it okay to continue with these settings?");
             } else if (parsedData.status == 'exists') {
                 new ConfirmPopup(this.overwriteConfirmUploadLevel, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
             }
