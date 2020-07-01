@@ -29,7 +29,7 @@ package blocks
         private var removed:Boolean = false; // var_214
         private var var_177:Point;
         private var m:Bitmap;
-        protected var var_79:int = 0;
+        protected var blockCode:int = 0; // var_79
         protected var active:Boolean = true;
         protected var var_34:Boolean = true;
         protected var var_490:Boolean = true;
@@ -89,7 +89,7 @@ package blocks
             if (this.frozen) {
                 return Objects.IceBlockCode;
             }
-            return this.var_79;
+            return this.blockCode;
         }
 
         // method_23 = isActive
@@ -165,7 +165,7 @@ package blocks
         // _loc2 = point
         public function onStand(c:LocalCharacter)
         {
-            if (!this.frozen && this.method_777() > 4 && c.var_4.getBool(Character.SANTA) && this.var_79 != Objects.FinishBlockCode && this.var_79 != Objects.IceBlockCode && this.var_79 != Objects.VanishBlockCode && this.var_79 != Objects.CrumbleBlockCode && this.var_79 != Objects.UpBlockCode && this.var_79 != Objects.LeftBlockCode && this.var_79 != Objects.RightBlockCode && this.var_79 != Objects.DownBlockCode && this.var_79 != Objects.MoveBlockCode) {
+            if (!this.frozen && this.method_777() > 4 && c.var_4.getBool(Character.SANTA) && this.blockCode != Objects.FinishBlockCode && this.blockCode != Objects.IceBlockCode && this.blockCode != Objects.VanishBlockCode && this.blockCode != Objects.CrumbleBlockCode && this.blockCode != Objects.UpBlockCode && this.blockCode != Objects.LeftBlockCode && this.blockCode != Objects.RightBlockCode && this.blockCode != Objects.DownBlockCode && this.blockCode != Objects.MoveBlockCode) {
                 this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {

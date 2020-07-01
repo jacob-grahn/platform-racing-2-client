@@ -10,11 +10,11 @@ package blocks
     public class ArrowBlock extends Block 
     {
 
-        private var var_41:ArrowBlockGraphic = new ArrowBlockGraphic();
-        private var var_651:Number = -1.2;
-        private var var_661:Number = -3;
-        private var var_628:Number = 3;
-        private var var_638:Number = 5;
+        private var arrowMC:ArrowBlockGraphic = new ArrowBlockGraphic(); // var_41
+        /*private var pushVelUp:Number = -1.2; // var_651
+        private var pushVelLeft:Number = -3; // var_661
+        private var pushVelRight:Number = 3; // var_628
+        private var pushVelDown:Number = 5; // var_638*/
         private var rot:Number;
 
         public function ArrowBlock(_arg_1:int, _arg_2:Number)
@@ -22,14 +22,14 @@ package blocks
             this.rot = _arg_2;
             super(_arg_1);
             var_490 = false;
-            this.var_41.rotation = _arg_2;
-            this.var_41.x = (this.var_41.y = 15);
-            addChild(this.var_41);
+            this.arrowMC.rotation = _arg_2;
+            this.arrowMC.x = this.arrowMC.y = 15;
+            addChild(this.arrowMC);
         }
 
         override public function getCode():int
         {
-            return (this.var_79);
+            return this.blockCode;
         }
 
         override public function onStand(_arg_1:LocalCharacter)
@@ -80,11 +80,11 @@ package blocks
 
         public function method_87()
         {
-            if (this.var_41.currentFrame < 5) {
-                this.var_41.gotoAndPlay((this.var_41.currentFrame + 1));
+            if (this.arrowMC.currentFrame < 5) {
+                this.arrowMC.gotoAndPlay((this.arrowMC.currentFrame + 1));
             }
-            if (this.var_41.currentFrame > 5) {
-                this.var_41.gotoAndPlay((this.var_41.currentFrame - 1));
+            if (this.arrowMC.currentFrame > 5) {
+                this.arrowMC.gotoAndPlay((this.arrowMC.currentFrame - 1));
             }
         }
 
@@ -97,29 +97,29 @@ package blocks
             return (_local_1);
         }
 
-        private function push(_arg_1:LocalCharacter, _arg_2:Number)
+        private function push(c:LocalCharacter, deg:Number)
         {
-            if (_arg_2 == 0) {
-                if (_arg_1.crouching == false) {
-                    _arg_1.velY = (_arg_1.velY + this.var_651);
+            if (deg == 0) { // up arrow
+                if (c.crouching == false) {
+                    c.velY = c.velY + -1.2;
                 }
             }
-            if (((_arg_2 == 180) || (_arg_2 == -180))) {
-                _arg_1.velY = (_arg_1.velY + this.var_638);
+            if (deg == 180 || deg == -180) { // down arrow
+                c.velY = c.velY + 5;
             }
-            if (_arg_2 == -90) {
-                _arg_1.velX = (_arg_1.velX + this.var_661);
+            if (deg == -90) { // left arrow
+                c.velX = c.velX + -3;
             }
-            if (_arg_2 == 90) {
-                _arg_1.velX = (_arg_1.velX + this.var_628);
+            if (deg == 90) { // right arrow
+                c.velX = c.velX + 3;
             }
         }
 
         override public function remove()
         {
-            if (this.var_41.parent != null) {
-                this.var_41.parent.removeChild(this.var_41);
-                this.var_41 = null;
+            if (this.arrowMC.parent != null) {
+                this.arrowMC.parent.removeChild(this.arrowMC);
+                this.arrowMC = null;
             }
             super.remove();
         }
