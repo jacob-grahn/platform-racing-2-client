@@ -69,10 +69,18 @@ package data
             cookie.flush();
         }
 
+        public static function isNameSet() : Boolean
+        {
+            return userName != null;
+        }
+
         // _loc3 = cookie
         // method_390 = setValue
         public static function setValue(setting:String, val:*)
         {
+            if (isNameSet()) {
+                return; // don't set if not logged in
+            }
             if (setting == ALTERNATE_CONTROLS) {
                 handleControls(val);
             } else if (dataArr[setting] != val || Settings[setting] != val) {
