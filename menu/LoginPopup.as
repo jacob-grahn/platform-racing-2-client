@@ -15,9 +15,11 @@ package menu
     {
 
         private var m:LoginPopupGraphic = new LoginPopupGraphic();
+        private var ssPopup:ServerSelectPopup = null;
 
-        public function LoginPopup()
+        public function LoginPopup(ssPop:ServerSelectPopup = null)
         {
+            this.ssPopup = ssPop;
             this.m.login_bt.addEventListener(MouseEvent.CLICK, this.login, false, 0, true);
             this.m.reload_bt.addEventListener(MouseEvent.CLICK, this.clickReload);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
@@ -47,6 +49,9 @@ package menu
                 Main.remember = this.m.rememberMe_chk.selected;
                 Main.server = this.m.dropdown.selectedItem.server;
                 new ConnectingPopup();
+                if (this.ssPopup != null) {
+                    this.ssPopup.startFadeOut();
+                }
                 startFadeOut();
             }
         }
@@ -69,6 +74,9 @@ package menu
 
         private function clickCancel(e:MouseEvent)
         {
+            if (this.ssPopup != null) {
+                this.ssPopup.userSelectPopulate();
+            }
             startFadeOut();
         }
 

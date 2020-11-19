@@ -7,10 +7,11 @@ package menu
 {
     import data.class_28;
     import data.class_33;
+    import data.SavedAccounts;
     import data.Settings;
     import page.Page;
     import package_4.ConfirmPopup;
-    import package_4.LogoutPassPopup;
+    //import package_4.LogoutPassPopup;
     import flash.display.StageQuality;
 	import flash.events.Event;
     import flash.events.MouseEvent;
@@ -51,13 +52,14 @@ package menu
             } else if (Main.siteMode == "armorGames") {
                 this.m.armorGamesLogo.visible = true;
             }
-            this.showHideInterval = setInterval(this.showHideLoggedInAs, 500); // var_606 = showHideInterval
-            this.showHideLoggedInAs();
+            this.m.loggedInAs.visible = false; // added due to changes in 161
+            //this.showHideInterval = setInterval(this.showHideLoggedInAs, 500); // var_606 = showHideInterval
+            //this.showHideLoggedInAs();
             CheckServers.activate();
         }
 
         // method_201 = showHideLoggedInAs
-        private function showHideLoggedInAs()
+        /*private function showHideLoggedInAs()
         {
             if (Main.loggedInAs == "" || !Main.remember) {
                 this.m.loggedInAs.visible = false;
@@ -66,7 +68,7 @@ package menu
                 this.m.loggedInAs.textBox.text = "Logged in as " + Main.loggedInAs;
                 this.m.loggedInAs.logoutButton.addEventListener(MouseEvent.CLICK, this.clickLogout, false, 0, true); // method_328 = clickLogout
             }
-        }
+        }*/
 
         override public function initialize()
         {
@@ -95,10 +97,10 @@ package menu
         public function clickLogIn(e:MouseEvent)
         {
             class_33.setNumber("userRank", -1);
-            if (Main.remember && Main.loggedInAs != "") {
+            if (SavedAccounts.getAll().length > 0) { //(Main.remember && Main.loggedInAs != "") {
                 Main.userName = "";
                 Main.userPass = "";
-                new ServerSelectPopup();
+                new ServerSelectPopup(false);
             } else {
                 new LoginPopup();
             }
@@ -107,22 +109,27 @@ package menu
         // method_492 = clickGuest
         public function clickGuest(e:MouseEvent)
         {
-            if (Main.remember && Main.loggedInAs != "") {
+            Main.userName = "Guest";
+            Main.userPass = "";
+            Main.remember = false;
+            class_33.setNumber("userRank", 0);
+            new ServerSelectPopup(true);
+            /*if (Main.remember && Main.loggedInAs != "") {
                 new ConfirmPopup(this.playAsGuest, "It appears you\'re currently logged in as " + class_28.escapeString(Main.loggedInAs) + ". Do you want to log out of your account and log in as a guest?");
                 return;
             } else {
                 this.playAsGuest();
-            }
+            }*/
         }
 
-        public function playAsGuest()
+        /*public function playAsGuest()
         {
             Main.userName = "Guest";
             Main.userPass = "";
             Main.remember = false;
             class_33.setNumber("userRank", 0);
             new ServerSelectPopup();
-        }
+        }*/
 
         // method_644 = clickCreateAccount
         public function clickCreateAccount(e:MouseEvent)
@@ -148,7 +155,7 @@ package menu
             navigateToURL(new URLRequest("http://kongregate.com?gamereferral=platformracing2"), "_blank");
         }
 
-        private function clickLogout(e:MouseEvent)
+        /*private function clickLogout(e:MouseEvent)
         {
             if (Main.token == "") {
                 new LogoutPassPopup(this.showHideLoggedInAs());
@@ -162,9 +169,9 @@ package menu
             var superLoader:SuperLoader = new SuperLoader(true, "json");
             superLoader.load(request);
             superLoader.addEventListener(SuperLoader.d, this.logoutSuccessHandler, false, 0, true);
-        }
+        }*/
 
-        private function logoutSuccessHandler(e:Event)
+        /*private function logoutSuccessHandler(e:Event)
         {
             var ret:Object = SuperLoader(e.target).parsedData;
             if (ret.success === true) {
@@ -173,13 +180,13 @@ package menu
             } else {
                 this.logoutErrorHandler(new Event(SuperLoader.e));
             }
-        }
+        }*/
 
         // _loc1 = item
         override public function remove()
         {
             this.m.kongLogo.removeEventListener(MouseEvent.CLICK, this.clickKong);
-            this.m.loggedInAs.logoutButton.removeEventListener(MouseEvent.CLICK, this.clickLogout);
+            //this.m.loggedInAs.logoutButton.removeEventListener(MouseEvent.CLICK, this.clickLogout);
             clearInterval(this.showHideInterval);
             for each (var item:LoginPageMenuButton in this.buttons) {
                 item.remove();

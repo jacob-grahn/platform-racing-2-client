@@ -10,6 +10,7 @@ package menu
     {
 
         private var artPg:int = 1;
+        private var musicPg:int = 1;
         private var m:CreditsPopupGraphic = new CreditsPopupGraphic();
 
         public function CreditsPopup()
@@ -18,9 +19,11 @@ package menu
             this.m.versionBox.text = Main.beta === true ? this.m.versionBox.text + ' Beta' : this.m.versionBox.text;
             this.m.buildBox.text = 'Build: ' + Main.build;
 
-            this.m.artPg2.visible = false;
-            this.m.nav_bt.htmlText = '<a href="event:artToggle">(more -&gt;)</a>';
-            this.m.nav_bt.addEventListener(TextEvent.LINK, this.clickArtNav, false, 0, true);
+            this.m.artPg2.visible = this.m.musicPg2.visible = false;
+            this.m.art_nav_bt.htmlText = '<a href="event:artToggle">(more -&gt;)</a>';
+            this.m.music_nav_bt.htmlText = '<a href="event:musicToggle">(more -&gt;)</a>';
+            this.m.art_nav_bt.addEventListener(TextEvent.LINK, this.clickArtNav, false, 0, true);
+            this.m.music_nav_bt.addEventListener(TextEvent.LINK, this.clickMusicNav, false, 0, true);
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
             addChild(this.m);
         }
@@ -30,7 +33,15 @@ package menu
             this.m['artPg' + this.artPg].visible = false;
             this.artPg = this.artPg === 1 ? 2 : 1;
             this.m['artPg' + this.artPg].visible = true;
-            this.m.nav_bt.htmlText = '<a href="event:artToggle">' + (this.artPg === 2 ? '(&lt;- back)' : '(more -&gt;)') + '</a>';
+            this.m.art_nav_bt.htmlText = '<a href="event:artToggle">' + (this.artPg === 2 ? '(&lt;- back)' : '(more -&gt;)') + '</a>';
+        }
+
+        private function clickMusicNav(e:TextEvent)
+        {
+            this.m['musicPg' + this.musicPg].visible = false;
+            this.musicPg = this.musicPg === 1 ? 2 : 1;
+            this.m['musicPg' + this.musicPg].visible = true;
+            this.m.music_nav_bt.htmlText = '<a href="event:musicToggle">' + (this.musicPg === 2 ? '(&lt;- back)' : '(more -&gt;)') + '</a>';
         }
 
         // method_292 = clickClose
@@ -41,7 +52,8 @@ package menu
 
         override public function remove()
         {
-            this.m.nav_bt.removeEventListener(TextEvent.LINK, this.clickArtNav);
+            this.m.art_nav_bt.removeEventListener(TextEvent.LINK, this.clickArtNav);
+            this.m.music_nav_bt.removeEventListener(TextEvent.LINK, this.clickMusicNav);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
             removeChild(this.m);
             this.m = null;

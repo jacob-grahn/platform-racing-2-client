@@ -104,14 +104,13 @@ package lobby
             }
             if (!Main.remember) {
                 var vars:URLVariables = new URLVariables();
-                vars.from_lobby = '1';
                 var request:URLRequest = new URLRequest(Main.baseURL + '/logout.php');
                 request.data = vars;
                 request.method = URLRequestMethod.POST;
                 var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
                 superLoader.load(request);
-                Main.clearUserData();
             }
+            Main.clearUserData();
             Main.pageHolder.changePage(new LoginPage());
             Main.socket.close();
         }

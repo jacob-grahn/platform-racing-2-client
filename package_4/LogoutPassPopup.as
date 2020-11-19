@@ -1,4 +1,10 @@
-﻿package package_4
+﻿/*
+
+Made obsolete in 161.
+
+*/
+
+package package_4
 {
     import data.Encryptor;
 	import flash.events.Event;

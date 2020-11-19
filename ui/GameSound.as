@@ -51,6 +51,7 @@ package ui
             addSong({"id":"15", "label":"Prismatic - Lunanova", "file":"15_prismatic.mp3"});
             addSong({"id":"17", "label":"Toodaloo - mustangman", "file":"17_toodaloo.mp3"});
             addSong({"id":"18", "label":"Night Shade - Goliathe", "file":"18_night-shade.mp3"});
+            addSong({"id":"19", "label":"Blizzard! - Majicke", "file":"19_blizzard.mp3"});
             addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
             addEventListener(Event.CHANGE, this.startSong, false, 0, true);
             this.enableMusicInt = setInterval(this.checkSetting, 500);
@@ -59,7 +60,7 @@ package ui
         private function addSong(song:Object)
         {
             var blacklist:Array = Settings.getValue('disabledSongs');
-            if (this.inLE == false && song.id != 16 && song.id <= 18 && song.id != 'random' && song.id != 0 && song.id != '') {
+            if (this.inLE == false && song.id != 16 && song.id <= 19 && song.id != 'random' && song.id != 0 && song.id != '') {
                 for (var i in blacklist) {
                     if (blacklist[i] == song.id) {
                         return;
