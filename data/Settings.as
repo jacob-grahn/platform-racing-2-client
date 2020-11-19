@@ -78,7 +78,7 @@ package data
         // method_390 = setValue
         public static function setValue(setting:String, val:*)
         {
-            if (isNameSet()) {
+            if (!isNameSet()) {
                 return; // don't set if not logged in
             }
             if (setting == ALTERNATE_CONTROLS) {
