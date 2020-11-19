@@ -22,7 +22,7 @@ package data
             var cookie:SharedObject = SharedObject.getLocal(COOKIE_ID);
             for (var i:int = 0; i < cookie.data.accounts.length; i++) {
                 var account:Object = cookie.data.accounts[i];
-                account.name = account.name.replace(/\W+/g, "");
+                account.name = class_28.trimWhitespace(account.name);
                 accounts.push(account);
             }
         }
@@ -51,7 +51,7 @@ package data
         {
             for (var i:int = 0; i < accounts.length; i++) {
                 var account:Object = accounts[i];
-                if (account.name.toLowerCase() === name.replace(/\W+/g, "").toLowerCase()) {
+                if (account.name.toLowerCase() === class_28.trimWhitespace(name).toLowerCase()) {
                     return i;
                 }
             }
@@ -73,7 +73,7 @@ package data
             }
 
             // save the account
-            accounts.unshift({'name': name.replace(/\W+/g, ""), 'token': token});
+            accounts.unshift({'name': class_28.trimWhitespace(name), 'token': token});
             setCookie();
         }
 
