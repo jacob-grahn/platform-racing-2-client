@@ -7,7 +7,7 @@ package
 
         // general
         private static var init:Boolean = false;
-        private static const GREATEST_ID:int = 46;
+        private static const GREATEST_ID:int = 47;
         private static const TYPES:Array = ['HAT', 'HEAD', 'BODY', 'FEET'];
 
         // hats
@@ -30,7 +30,7 @@ package
         public static const HAT_CHEESE:int = 16;
 
         // heads
-        private static const VARS_HEAD:Array = ['CLASSIC', 'TIRED', 'SMILER', 'FLOWER', 'CLASSIC_GIRL', 'GOOF', 'DOWNER', 'BALLOON', 'WORM', 'UNICORN', 'BIRD', 'SUN', 'CANDY', 'INVISIBLE', 'FOOTBALL_HELMET', 'BASKETBALL', 'STICK', 'CAT', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'BUBBLE', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'TACO', 'SLENDER', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', 'JACKOLANTERN', 'XMAS', 'SNOWMAN'];
+        private static const VARS_HEAD:Array = ['CLASSIC', 'TIRED', 'SMILER', 'FLOWER', 'CLASSIC_GIRL', 'GOOF', 'DOWNER', 'BALLOON', 'WORM', 'UNICORN', 'BIRD', 'SUN', 'CANDY', 'INVISIBLE', 'FOOTBALL_HELMET', 'BASKETBALL', 'STICK', 'CAT', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'BUBBLE', 'KING', 'QUEEN', 'SIR', 'VERY_INVISIBLE', 'TACO', 'SLENDER', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', 'JACKOLANTERN', 'XMAS', 'SNOWMAN', 'BLOBFISH'];
         public static const HEAD_CLASSIC:int = 1;
         public static const HEAD_TIRED:int = 2;
         public static const HEAD_SMILER:int = 3;
@@ -77,6 +77,7 @@ package
         public static const HEAD_JACKOLANTERN:int = 44;
         public static const HEAD_XMAS:int = 45;
         public static const HEAD_SNOWMAN:int = 46;
+        public static const HEAD_BLOBFISH:int = 47;
 
         // bodies
         private static const VARS_BODY:Array = ['CLASSIC', 'STRAP', 'DRESS', 'PEC', 'GUT', 'COLLAR', 'MISS_PR2', 'BELT', 'SNAKE', 'BIRD', 'INVISIBLE', 'BEE', 'STICK', 'CAT', 'CAR', 'ELEPHANT', 'ANT', 'ASTRONAUT', 'ALIEN', 'GALAXY', 'BUBBLE', 'DINO', 'ARMOR', 'FAIRY', 'GINGERBREAD', 'KING', 'QUEEN', 'SIR', 'FRED', 'VERY_INVISIBLE', 'TACO', 'SLENDER', '', 'SANTA', 'FROST_DJINN', 'REINDEER', 'CROCODILE', 'VALENTINE', 'BUNNY', 'GECKO', 'BAT', 'SEA', 'BREW', '', 'XMAS', 'SNOWMAN'];
@@ -266,6 +267,7 @@ package
         public static const DESC_HEAD_JACKOLANTERN:String = 'Spook your friends!';
         public static const DESC_HEAD_XMAS:String = 'Twinkle twinkle...';
         public static const DESC_HEAD_SNOWMAN:String = 'Channel your inner frosty.';
+        public static const DESC_HEAD_BLOBFISH:String = 'The world\'s most misunderstood fish.';
 
         public static const DESC_BODY_CLASSIC:String = 'Rock it old school.';
         public static const DESC_BODY_STRAP:String = 'Strapping!';
@@ -417,6 +419,7 @@ package
         public static const OBTAIN_HEAD_JACKOLANTERN:String = 'Log into your PR2 account on Halloween.';
         public static const OBTAIN_HEAD_XMAS:String = 'Won in Campaign #6 Level #3 during the holiday season.';
         public static const OBTAIN_HEAD_SNOWMAN:String = 'Won in Campaign #6 Level #6 during the holiday season.';
+        public static const OBTAIN_HEAD_BLOBFISH:String = 'Finish Underwater World by Odin0030.';
 
         public static const OBTAIN_BODY_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_BODY_STRAP:String = 'It\'s there when you create your account!';
@@ -511,12 +514,12 @@ package
 
         // arrays
         private static var HAT_ARRAY:Array = [HAT_EXP, HAT_KONG, HAT_PROP, HAT_COWBOY, HAT_CROWN, HAT_SANTA, HAT_PARTY, HAT_TOP, HAT_JUMP_START, HAT_MOON, HAT_THIEF, HAT_JIGG, HAT_JELLYFISH, HAT_CHEESE];
-        private static var HEAD_ARRAY:Array = [HEAD_CLASSIC, HEAD_TIRED, HEAD_SMILER, HEAD_FLOWER, HEAD_CLASSIC_GIRL, HEAD_GOOF, HEAD_DOWNER, HEAD_BALLOON, HEAD_WORM, HEAD_UNICORN, HEAD_BIRD, HEAD_SUN, HEAD_CANDY, HEAD_INVISIBLE, HEAD_FOOTBALL_HELMET, HEAD_BASKETBALL, HEAD_STICK, HEAD_CAT, HEAD_ELEPHANT, HEAD_ANT, HEAD_ASTRONAUT, HEAD_ALIEN, HEAD_DINO, HEAD_ARMOR, HEAD_FAIRY, HEAD_GINGERBREAD, HEAD_BUBBLE, HEAD_KING, HEAD_QUEEN, HEAD_SIR, /*HEAD_VERY_INVISIBLE,*/ HEAD_TACO, HEAD_SLENDER, HEAD_SANTA, HEAD_FROST_DJINN, HEAD_REINDEER, HEAD_CROCODILE, HEAD_VALENTINE, HEAD_BUNNY, HEAD_GECKO, HEAD_BAT, HEAD_SEA, HEAD_BREW, HEAD_JACKOLANTERN, HEAD_XMAS, HEAD_SNOWMAN];
+        private static var HEAD_ARRAY:Array = [HEAD_CLASSIC, HEAD_TIRED, HEAD_SMILER, HEAD_FLOWER, HEAD_CLASSIC_GIRL, HEAD_GOOF, HEAD_DOWNER, HEAD_BALLOON, HEAD_WORM, HEAD_UNICORN, HEAD_BIRD, HEAD_SUN, HEAD_CANDY, HEAD_INVISIBLE, HEAD_FOOTBALL_HELMET, HEAD_BASKETBALL, HEAD_STICK, HEAD_CAT, HEAD_ELEPHANT, HEAD_ANT, HEAD_ASTRONAUT, HEAD_ALIEN, HEAD_DINO, HEAD_ARMOR, HEAD_FAIRY, HEAD_GINGERBREAD, HEAD_BUBBLE, HEAD_KING, HEAD_QUEEN, HEAD_SIR, /*HEAD_VERY_INVISIBLE,*/ HEAD_TACO, HEAD_SLENDER, HEAD_SANTA, HEAD_FROST_DJINN, HEAD_REINDEER, HEAD_CROCODILE, HEAD_VALENTINE, HEAD_BUNNY, HEAD_GECKO, HEAD_BAT, HEAD_SEA, HEAD_BREW, HEAD_JACKOLANTERN, HEAD_XMAS, HEAD_SNOWMAN, HEAD_BLOBFISH];
         private static var BODY_ARRAY:Array = [BODY_CLASSIC, BODY_STRAP, BODY_DRESS, BODY_PEC, BODY_GUT, BODY_COLLAR, BODY_MISS_PR2, BODY_BELT, BODY_SNAKE, BODY_BIRD, BODY_INVISIBLE, BODY_BEE, BODY_STICK, BODY_CAT, BODY_CAR, BODY_ELEPHANT, BODY_ANT, BODY_ASTRONAUT, BODY_ALIEN, BODY_GALAXY, BODY_BUBBLE, BODY_DINO, BODY_ARMOR, BODY_FAIRY, BODY_GINGERBREAD, BODY_KING, BODY_QUEEN, BODY_SIR, /*BODY_FRED, BODY_VERY_INVISIBLE,*/ BODY_TACO, BODY_SLENDER, BODY_SANTA, BODY_FROST_DJINN, BODY_REINDEER, BODY_CROCODILE, BODY_VALENTINE, BODY_BUNNY, BODY_GECKO, BODY_BAT, BODY_SEA, BODY_BREW, BODY_XMAS, BODY_SNOWMAN];
         private static var FEET_ARRAY:Array = [FEET_CLASSIC, FEET_HEEL, FEET_LOAFER, FEET_CLEAT, FEET_MAGNET, FEET_TINY, FEET_SANDAL, FEET_BARE, FEET_NICE, FEET_BIRD, FEET_INVISIBLE, FEET_STICK, FEET_CAT, FEET_TIRE, FEET_ELEPHANT, FEET_ANT, FEET_ASTRONAUT, FEET_ALIEN, FEET_GALAXY, FEET_DINO, FEET_ARMOR, FEET_FAIRY, FEET_GINGERBREAD, FEET_KING, FEET_QUEEN, FEET_SIR, /*FEET_VERY_INVISIBLE,*/ FEET_BUBBLE, FEET_TACO, FEET_SLENDER, FEET_SANTA, FEET_FROST_DJINN, FEET_REINDEER, FEET_CROCODILE, FEET_VALENTINE, FEET_BUNNY, FEET_GECKO, FEET_BAT, FEET_SEA, FEET_BREW, FEET_XMAS, FEET_SNOWMAN];
 
         public static const HAT_NAMES_ARRAY:Array = ['', 'EXP', 'Kongregate', 'Propeller', 'Cowboy', 'Crown', 'Santa', 'Party', 'Top', 'Jump Start', 'Moon', 'Thief', 'Jigg', 'Artifact', 'Jellyfish', 'Cheese'];
-        public static const HEAD_NAMES_ARRAY:Array = ['Classic', 'Tired', 'Smiling', 'Flower', 'Lady', 'Goof', 'Downer', 'Balloon', 'Worm', 'Unicorn', 'Giant Bird', 'Cool Sun', 'Candy', 'Invisible', 'Helmet', 'Basketball', 'Stick', 'Cat', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Bubble', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Taco', 'Slender', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew', 'Jack-o\'-Lantern', 'Star', 'Snowman'];
+        public static const HEAD_NAMES_ARRAY:Array = ['Classic', 'Tired', 'Smiling', 'Flower', 'Lady', 'Goof', 'Downer', 'Balloon', 'Worm', 'Unicorn', 'Giant Bird', 'Cool Sun', 'Candy', 'Invisible', 'Helmet', 'Basketball', 'Stick', 'Cat', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Bubble', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Taco', 'Slender', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew', 'Jack-o\'-Lantern', 'Star', 'Snowman', 'Blobfish'];
         public static const BODY_NAMES_ARRAY:Array = ['Classic', 'Strap', 'Dress', 'Pec', 'Gut', 'Collar', 'Miss PR2', 'Belt', 'Snake', 'Giant Bird', 'Invisible', 'Bee', 'Stick', 'Cat', 'Car', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Galaxy', 'Bubble', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Wise King', 'Wise Queen', 'Sir', 'Fred', 'Very Invisible', 'Taco', 'Slender', '', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew', '', 'Christmas Tree', 'Snowman'];
         public static const FEET_NAMES_ARRAY:Array = ['Classic', 'Heel', 'Loafer', 'Cleat', 'Magnet', 'Tiny', 'Sandal', 'Bare', 'Nice', 'Giant Bird', 'Invisible', 'Stick', 'Cat', 'Tire', 'Elephant', 'Ant', 'Astronaut', 'Alien', 'Galaxy', 'Dino', 'Armor', 'Fairy', 'Gingerbread', 'Wise King', 'Wise Queen', 'Sir', 'Very Invisible', 'Bubble', 'Taco', 'Slender', '', '', '', 'Santa', 'Frost Djinn', 'Reindeer', 'Crocodile', 'Valentine', 'Bunny', 'Gecko', 'Bat', 'Sea', 'Brew', '', 'Present', 'Snowman'];
 

@@ -40,89 +40,49 @@
         {
             var name:String = this.listing.name;
             var isHat:Boolean = this.listing.type.toLowerCase() === 'hat';
+            var obtain:String = this.listing.obtain;
 
-            // prop
-            if (name == 'Propeller' && isHat) {
-                var propObtain:String = this.listing.obtain;
-                var propLvl1:String = this.nameMaker.makeLevel('Hat Factory', 84156);
-                var propName1:String = this.nameMaker.makeName('Jiggmin', 3);
-                var propLvl2:String = this.nameMaker.makeLevel('Volcanic Inferno', 4866546);
-                var propName2:String = this.nameMaker.makeName('Pounce', 1);
-                propObtain = propObtain.replace('Hat Factory', propLvl1);
-                propObtain = propObtain.replace('Jiggmin', propName1);
-                propObtain = propObtain.replace('Volcanic Inferno', propLvl2);
-                propObtain = propObtain.replace('Pounce', propName2);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + propObtain;
-            } // top
-            else if (name == 'Top' && isHat) {
-                var topObtain:String = this.listing.obtain;
-                var topLvl:String = this.nameMaker.makeLevel('The Golden Compass', 3236908);
-                var topName:String = this.nameMaker.makeName('-Shadowfax-', 1);
-                topObtain = topObtain.replace('The Golden Compass', topLvl);
-                topObtain = topObtain.replace('-Shadowfax-', topName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + topObtain;
-            } // moon
-            else if (name == 'Moon' && isHat) {
-                var moonObtain:String = this.listing.obtain;
-                var moonLvl:String = this.nameMaker.makeLevel('Redemption', 5793214);
-                var moonName:String = this.nameMaker.makeName('cooldude90', 1);
-                moonObtain = moonObtain.replace('Redemption', moonLvl);
-                moonObtain = moonObtain.replace('cooldude90', moonName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + moonObtain;
-            } // thief
-            else if (name == 'Thief' && isHat) {
-                var thiefObtain:String = this.listing.obtain;
-                var thiefLvl:String = this.nameMaker.makeLevel('Apocalypse', 5877893);
-                var thiefName:String = this.nameMaker.makeName('Divinity', 1);
-                thiefObtain = thiefObtain.replace('Apocalypse', thiefLvl);
-                thiefObtain = thiefObtain.replace('Divinity', thiefName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + thiefObtain;
-            } // jigg
-            else if (name == 'Jigg' && isHat) {
-                var jiggObtain:String = this.listing.obtain;
-                var jiggLvl:String = this.nameMaker.makeLevel('Buto (EXACT)', 1738847);
-                var jiggName:String = this.nameMaker.makeName('ZePHiR', 1);
-                jiggObtain = jiggObtain.replace('Buto (EXACT)', jiggLvl);
-                jiggObtain = jiggObtain.replace('ZePHiR', jiggName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + jiggObtain;
-            } // jellyfish
-            else if (name == 'Jellyfish' && isHat) {
-                var jfObtain:String = this.listing.obtain;
-                var jfLvl:String = this.nameMaker.makeLevel('Deeper', 6493337);
-                var jfName:String = this.nameMaker.makeName('Sothal', 1);
-                jfObtain = jfObtain.replace('Deeper', jfLvl);
-                jfObtain = jfObtain.replace('Sothal', jfName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + jfObtain;
-            } // cheese
-            else if (name == 'Cheese' && isHat) {
-                var chzObtain:String = this.listing.obtain;
-                var chzLvl:String = this.nameMaker.makeLevel('Moon is made w/ cheese', 6207945);
-                var chzName:String = this.nameMaker.makeName('ktosss450', 1);
-                chzObtain = chzObtain.replace('Moon is made w/ cheese', chzLvl);
-                chzObtain = chzObtain.replace('ktosss450', chzName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + chzObtain;
-            } // slender
-            else if (name == 'Slender' && !isHat) {
-                var slenderObtain:String = this.listing.obtain;
-                var slenderLvl:String = this.nameMaker.makeLevel('-Deliverance-', 1896157);
-                var slenderName:String = this.nameMaker.makeName('changelings', 1);
-                slenderObtain = slenderObtain.replace('-Deliverance-', slenderLvl);
-                slenderObtain = slenderObtain.replace('changelings', slenderName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + slenderObtain;
-            } // sea
-            else if (name == 'Sea' && !isHat) {
-                var seaObtain:String = this.listing.obtain;
-                var seaLvl:String = this.nameMaker.makeLevel('~Under the sea~', 2255404);
-                var seaName:String = this.nameMaker.makeName('Rammjet', 1);
-                seaObtain = seaObtain.replace('~Under the sea~', seaLvl);
-                seaObtain = seaObtain.replace('Rammjet', seaName);
-                this.m.obtainBox.htmlText = 'How to obtain: ' + seaObtain;
-            } // none of the above
-            else {
-                return;
+            // replacements
+            if (isHat) { // hats
+                if (name == 'Propeller') {
+                    obtain = obtain.replace('Hat Factory', this.nameMaker.makeLevel('Hat Factory', 84156));
+                    obtain = obtain.replace('Jiggmin', this.nameMaker.makeName('Jiggmin', 3));
+                    obtain = obtain.replace('Volcanic Inferno', this.nameMaker.makeLevel('Volcanic Inferno', 4866546));
+                    obtain = obtain.replace('Pounce', this.nameMaker.makeName('Pounce', 1));
+                } else if (name == 'Top') {
+                    obtain = obtain.replace('The Golden Compass', this.nameMaker.makeLevel('The Golden Compass', 3236908));
+                    obtain = obtain.replace('-Shadowfax-', this.nameMaker.makeName('-Shadowfax-', 1));
+                } else if (name == 'Moon') {
+                    obtain = obtain.replace('Redemption', this.nameMaker.makeLevel('Redemption', 5793214));
+                    obtain = obtain.replace('cooldude90', this.nameMaker.makeName('cooldude90', 1));
+                } else if (name == 'Thief') {
+                    obtain = obtain.replace('Apocalypse', this.nameMaker.makeLevel('Apocalypse', 5877893));
+                    obtain = obtain.replace('Divinity', this.nameMaker.makeName('Divinity', 1));
+                } else if (name == 'Jigg') {
+                    obtain = obtain.replace('Buto (EXACT)', this.nameMaker.makeLevel('Buto (EXACT)', 1738847));
+                    obtain = obtain.replace('ZePHiR', this.nameMaker.makeName('ZePHiR', 1));
+                } else if (name == 'Jellyfish') {
+                    obtain = obtain.replace('Deeper', this.nameMaker.makeLevel('Deeper', 6493337));
+                    obtain = obtain.replace('Sothal', this.nameMaker.makeName('Sothal', 1));
+                } else if (name == 'Cheese') {
+                    obtain = obtain.replace('Moon is made w/ cheese', this.nameMaker.makeLevel('Moon is made w/ cheese', 6207945));
+                    obtain = obtain.replace('ktosss450', this.nameMaker.makeName('ktosss450', 1));
+                }
+            } else { // non-hats
+                if (name == 'Slender') {
+                    obtain = obtain.replace('-Deliverance-', this.nameMaker.makeLevel('-Deliverance-', 1896157));
+                    obtain = obtain.replace('changelings', this.nameMaker.makeName('changelings', 1));
+                } else if (name == 'Sea') {
+                    obtain = obtain.replace('~Under the sea~', this.nameMaker.makeLevel('~Under the sea~', 2255404));
+                    obtain = obtain.replace('Rammjet', this.nameMaker.makeName('Rammjet', 1));
+                } else if (name == 'Blobfish') {
+                    obtain = obtain.replace('Underwater World', this.nameMaker.makeLevel('Underwater World', 5985129));
+                    obtain = obtain.replace('Odin0030', this.nameMaker.makeName('Odin0030', 1));
+                }
             }
 
             // listen for name clicks
+            this.m.obtainBox.htmlText = 'How to obtain: ' + obtain;
             this.nameMaker.listenForLink(this.m.obtainBox);
         }
 
