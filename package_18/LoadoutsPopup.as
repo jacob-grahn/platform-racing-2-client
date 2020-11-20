@@ -62,11 +62,6 @@ package package_18
         // actually saves; named deleteListing to replace the delete button on GetLevelsPopup
         override protected function deleteListing(_arg_1:class_229)
         {
-            if (!Settings.isNameSet()) {
-                new MessagePopup('Error: You are not logged in.');
-                startFadeOut();
-                return;
-            }
             var listing:PresetListing = PresetListing(_arg_1);
             var preset:Object = listing.getPreset();
             var stats:Object = this.statsSelect.getStats();

@@ -19,12 +19,15 @@ package data
         private static function getCookie()
         {
             accounts = [];
-            var cookie:SharedObject = SharedObject.getLocal(COOKIE_ID);
-            for (var i:int = 0; i < cookie.data.accounts.length; i++) {
-                var account:Object = cookie.data.accounts[i];
-                account.name = class_28.trimWhitespace(account.name);
-                accounts.push(account);
-            }
+            try {
+                var cookie:SharedObject = SharedObject.getLocal(COOKIE_ID);
+                for (var i:int = 0; i < cookie.data.accounts.length; i++) {
+                    var account:Object = cookie.data.accounts[i];
+                    account.name = class_28.trimWhitespace(account.name);
+                    accounts.push(account);
+                }
+            } catch (e:Error) {
+            }            
         }
 
         private static function setCookie()
@@ -37,7 +40,6 @@ package data
                 }
                 cookie.flush();
             } catch (e:Error) {
-                new MessagePopup('Error: Could not save account data. Make sure you have allowed cookies to be saved.');
             }
             getCookie();
         }
