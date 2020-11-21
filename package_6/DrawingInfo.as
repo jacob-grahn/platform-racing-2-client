@@ -78,17 +78,13 @@ package package_6
                     }
                 }
                 var timeText:String = "";
-                if (drawing && timeText == '') {
+                if (drawing) {
                     this.m.info1["anim" + i].visible = this.m.info2["anim" + i].visible = true;
                 } else if (Course.course.gameMode == Modes.obj) {
-                    if (time != 'forfeit') {
-                        var timeArr:Array = time.split(',');
-                        timeText = class_28.formatTime(Number(timeArr[0]), "decimal");
-                        if (timeArr[1] != null && timeArr[2] != null) {
-                            timeText += ' (' + int(timeArr[1]) + '/' + int(timeArr[2]) + ')';
-                        }
-                    } else {
-                        timeText = time;
+                    var timeArr:Array = time.split(',');
+                    timeText = timeArr[0] != 'forfeit' ? class_28.formatTime(Number(timeArr[0]), "decimal") : timeArr[0];
+                    if (timeArr[1] != null && timeArr[2] != null) {
+                        timeText += ' (' + int(timeArr[1]) + '/' + int(timeArr[2]) + ')';
                     }
                 } else if (time > 0 && time != "forfeit" && Course.course != null && Course.course.gameMode != "egg") {
                     timeText = class_28.formatTime(Number(time), "decimal");
