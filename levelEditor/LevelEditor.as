@@ -393,6 +393,7 @@ package levelEditor
             vars.gravity = gravity;
             vars.max_time = maxTime;
             vars.items = allowedItems.join("`");
+            vars.badHats = badHats.join(',');
             vars.hasPass = this.hasPass;
             vars.gameMode = gameMode === 'eggs' ? 'egg' : gameMode;
             vars.cowboyChance = cowboyChance;
@@ -447,6 +448,7 @@ package levelEditor
             this.setGravity("1");
             this.setMaxTime("120");
             setItems("all");
+            setBadHats('');
             this.setGameMode("race");
             this.setCowboyChance("5");
             title = "";

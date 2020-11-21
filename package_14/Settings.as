@@ -8,6 +8,7 @@ package package_14
     import levelEditor.LevelEditor;
     import package_19.MusicMenuButton;
     import package_19.ItemMenuButton;
+    import package_19.HatsMenuButton;
     import package_19.ValueButton;
     import package_19.ModeMenuButton;
 
@@ -25,6 +26,11 @@ package package_14
         private var itemsTitle:String = "Items"; // var_645
         private var itemsDesc:String = "These items will be available to players in your course\'s item boxes."; // var_664
         public var itemsButton:ItemMenuButton = new ItemMenuButton(); // var_576
+
+        // hats allowed
+        private var hatsTitle:String = "Hats Allowed";
+        private var hatsDesc:String = "Players may use these hats in your level.";
+        public var hatsButton:HatsMenuButton = new HatsMenuButton();
 
         // minimum rank for level entry (optional)
         private var rankTitle:String = "Minimum Rank"; // var_548
@@ -60,6 +66,7 @@ package package_14
         {
             addItem(this.musicButton, this.musicTitle, this.musicDesc);
             addItem(this.itemsButton, this.itemsTitle, this.itemsDesc);
+            addItem(this.hatsButton, this.hatsTitle, this.hatsDesc);
             addItem(this.minRankButton, this.rankTitle, this.rankDesc);
             addItem(this.gravityButton, this.gravityTitle, this.gravityDesc);
             addItem(this.timeButton, this.timeTitle, this.timeDesc);

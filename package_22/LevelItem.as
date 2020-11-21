@@ -18,12 +18,14 @@ package package_22
     import flash.net.URLVariables;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
+    import lobby.Lobby;
     import package_4.ConfirmPopup;
     import package_4.HoverPopup;
     import package_4.LevelInfoPopup;
     import package_4.MessagePopup;
     import package_4.UploadingPopup;
     import ui.PageNavigation;
+    import package_18.AccountInfo;
 
     public class LevelItem extends Removable 
     {
@@ -48,6 +50,7 @@ package package_22
         private var group:String;
         private var pass:Boolean;
         private var type:String;
+        private var badHats:Vector.<int> = new Vector.<int>;
         private var lastUpdated:Date;
         private var maxSlots:Number = 4; // var_590
         private var superLoader:SuperLoader; // var_80
@@ -55,7 +58,7 @@ package package_22
 
         // _loc12 = htmlName
         // _loc13 = myRank
-        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:String, hasPass:Boolean, gMode:String, time:int)
+        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:String, hasPass:Boolean, gMode:String, badHatsStr:String, time:int)
         {
             this.courseID = id;
             this.version = v;
@@ -104,6 +107,12 @@ package package_22
             } else if (gMode == 'h') {
                 this.m.bg.gotoAndStop(5);
             }
+            var badHatsArr:Array = badHatsStr.split(',');
+            for (var hat:int in badHatsArr) {
+                if (badHatsArr[hat] > 1) {
+                    this.badHats.push(badHatsArr[hat]);
+                }
+            }
             this.htmlNameMaker.listenForLink(this.m.authorBox);
             addChild(this.m);
             this.addSlots();
@@ -122,6 +131,10 @@ package package_22
                     this.m.removeChild(this.m.accessCover);
                     LevelItem.unlocked = true;
                 }
+            } else if (this.badHats.length > 0) {
+                this.m.accessCover.removeChild(this.m.accessCover.passButton);
+                this.m.accessCover.removeChild(this.m.accessCover.passBox);
+                this.checkWornHatAllowed();
             } else {
                 this.m.removeChild(this.m.accessCover);
             }
@@ -404,6 +417,23 @@ package package_22
             new LevelInfoPopup(this.courseID);
         }
 
+        public function checkWornHatAllowed()
+        {
+            trace(this.badHats);
+            if (this.badHats.indexOf(AccountInfo.currentHat) != -1) {
+                unlocked = false;
+                this.m.accessCover.textBox.text = 'Hat Not Allowed';
+                if (!this.m.contains(this.m.accessCover)) {
+                    this.m.addChild(this.m.accessCover);
+                }
+            } else {
+                unlocked = true;
+                if (this.m.contains(this.m.accessCover)) {
+                    this.m.removeChild(this.m.accessCover);
+                }
+            }
+        }
+
         // ?
         /*private function method_847()
         {
@@ -414,11 +444,11 @@ package package_22
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.CLICK, this.clickInfoHandler);
-            this.m.plusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
-            this.m.plusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
+            this.m.plusButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+            this.m.plusButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
             this.m.plusButton.removeEventListener(MouseEvent.CLICK, this.clickPlus);
-            this.m.minusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
-            this.m.minusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
+            this.m.minusButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+            this.m.minusButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
             this.m.minusButton.removeEventListener(MouseEvent.CLICK, this.clickMinus);
             this.removeSlots();
             this.slotArray = null;

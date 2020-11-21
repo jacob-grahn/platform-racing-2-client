@@ -111,6 +111,11 @@
             if (this.listing.id == 35 && (this.listing.type == 'BODY' || this.listing.type == 'FEET')) {
                 this.handleDjinn(this.listing.type, this.listing.has);
             }
+            if (this.listing.id == 29 && this.listing.type == 'BODY') {
+                this.target.y += 10;
+                this.target.width = this.target.width / 1.8;
+                this.target.height = this.target.height / 1.8;
+            }
             this.target.visible = true;
             this.target.alpha = 0.1; // doesn't have part
             this.target.colorMC2.visible = type == 'HAT' && this.listing.id == 16; // doesn't have epic and isn't cheese hat

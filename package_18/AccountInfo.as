@@ -22,6 +22,8 @@ package package_18
     public class AccountInfo extends Page
     {
 
+        public static var currentHat:int;
+
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var var_190:CharacterDisplay;

@@ -5,10 +5,11 @@
 
 package package_18
 {
-    import package_8.Character;
-    import package_18.PartInfo.*;
     import flash.events.Event;
     import flash.events.MouseEvent;
+    import package_8.Character;
+    import package_18.PartInfo.*;
+    import package_22.LevelListing;
 
     public class CharacterDisplay extends Removable 
     {
@@ -59,6 +60,10 @@ package package_18
             this.char.setHeadColors(this.headSelect.getColor(), this.headSelect.getColor2());
             this.char.setBodyColors(this.bodySelect.getColor(), this.bodySelect.getColor2());
             this.char.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
+            if (this.char.hat1 != AccountInfo.currentHat) { // dispatch event to check for bad hats on shown levels
+                AccountInfo.currentHat = this.char.hat1;
+                LevelListing.levelListing.dispatchEvent(new Event('hatChange'));
+            }
         }
 
         private function onHatInfoClick(e:Event)

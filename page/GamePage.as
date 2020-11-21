@@ -22,6 +22,7 @@ package page
         public static var course:GamePage;
 
         public var allowedItems:Vector.<int>; // var_86
+        public var badHats:Vector.<int>;
         public var var_14:Sprite = new Sprite();
         protected var color:Number = 12303325; //0;
         protected var var_133:Array = new Array();
@@ -61,6 +62,7 @@ package page
             Main.stage.focus = Main.stage;
             super.initialize();
             this.setItems("all");
+            this.setBadHats('');
             if (CourseMenu.instance != null) {
                 CourseMenu.instance.staticCloseMenu(); // should never be needed, but just in case
             }
@@ -202,6 +204,22 @@ package page
             }
         }
 
+        public function setBadHats(hatsStr:String)
+        {
+            this.badHats = new Vector.<int>();
+            if (hatsStr == "" || hatsStr == null) {
+                return; // no need to continue if no hats are excluded
+            }
+
+            var hatsArr:Array = hatsStr.split(",");
+            for (var i = 0; i < hatsArr.length; i++) { // loop through and add hat ids to badHats array
+                var hatCode:int = Number(hatsArr[i]);
+                if (!isNaN(hatCode) && hatCode > 1 && hatCode <= Parts.getPartArray('HAT').length + 1) {
+                    this.badHats.push(hatCode);
+                }
+            }
+        }
+
         public function setVariables(vars:URLVariables)
         {
             this.updatedTime = vars.time is Array ? vars.time[0] : vars.time;
@@ -232,6 +250,7 @@ package page
             _local_4 = String(_local_5);
             this.setMaxTime(_local_4);
             this.setItems(vars.items);
+            this.setBadHats(vars.badHats);
             this.levelID = vars.level_id;
         }
 
@@ -242,7 +261,7 @@ package page
             var _local_8:String;
             var _local_9:String;
             var _local_10:String;
-            var _local_2:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=");
+            var _local_2:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats");
             var _local_3:* = "and";
             var _local_4:* = "";
             _arg_1 = _arg_1.replace(/&/g, _local_3);

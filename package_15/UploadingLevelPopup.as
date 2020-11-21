@@ -62,6 +62,7 @@ package package_15
                     request.data = lVars;
                     loader = new SuperLoader();
                     loader.addEventListener(SuperLoader.d, this.onParse, false, 0, true);
+                    loader.addEventListener(SuperLoader.e, this.onError, false, 0, true);
                     loader.load(request);
                 }
             } else {
@@ -79,6 +80,11 @@ package package_15
             } else if (parsedData.status == 'exists') {
                 new ConfirmPopup(this.overwriteConfirmUploadLevel, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
             }
+        }
+
+        private function onError(e:Event)
+        {
+            this.remove();
         }
 
         private function overrideBanConfirmUploadLevel()
