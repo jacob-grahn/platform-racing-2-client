@@ -35,10 +35,10 @@ package menu
             }
             addChild(this.m);
             CheckServers.determineServer(this.m.serverSelect);
-            if (this.m.serverSelect.length <= 1) {
+            /*if (this.m.serverSelect.length <= 1) {
                 this.m.serverSelect.selectedItem = this.m.serverSelect.dataProvider.getItemAt(0);
                 this.clickLogIn(new MouseEvent("click"));
-            }
+            }*/
         }
 
         public function userSelectPopulate()
