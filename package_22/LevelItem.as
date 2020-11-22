@@ -159,9 +159,6 @@ package package_22
             }
 
             // test hat
-            trace('badHats: ' + this.badHats.join());
-            trace('badHats.length: ' + this.badHats.length);
-            trace('indexOf(currentHat): ' + this.badHats.indexOf(AccountInfo.currentHat) != -1);
             if (this.badHats.length > 0 && this.badHats.indexOf(AccountInfo.currentHat) != -1) {
                 this.m.accessCover.textBox.text = 'Hat Not Allowed';
                 if (!this.m.contains(this.m.accessCover)) {

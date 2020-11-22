@@ -75,7 +75,6 @@
                 while (i <= this.highestHatID) {
                     var chk:CheckBox = this.m["hat" + i];
                     if (!chk.selected) {
-                        trace('pushing: ' + i);
                         GamePage.course.badHats.push(i);
                     }
                     i++;
