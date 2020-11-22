@@ -11,7 +11,7 @@ package package_18
 
     public class Presets 
     {
-        private static const NUM_PRESETS:int = 5;
+        public static const NUM_PRESETS:int = 10;
 
         private static var presets:Vector.<Preset>;
 
@@ -22,7 +22,7 @@ package package_18
         public static function load()
         {
             presets = new Vector.<Preset>();
-            var _local_1:Array = [{"num":1}, {"num":2}, {"num":3}, {'num':4}, {'num':5}];
+            var _local_1:Array = [{"num":1}, {"num":2}, {"num":3}, {'num':4}, {'num':5}, {'num':6}, {'num':7}, {'num':8}, {'num':9}, {'num':10}];
             var presetsArray:Array = (Settings.getValue(Settings.PRESETS, _local_1) as Array);
             for each (var presetData:Object in presetsArray) {
                 var preset:Preset = new Preset(presetData);

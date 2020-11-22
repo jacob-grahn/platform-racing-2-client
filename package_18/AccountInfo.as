@@ -18,6 +18,9 @@ package package_18
     import flash.text.TextField;
     import flash.text.TextFieldType;
     import flash.events.Event;
+    import package_4.HoverPopup;
+    import flash.utils.clearTimeout;
+    import flash.utils.setTimeout;
 
     public class AccountInfo extends Page
     {
@@ -36,6 +39,8 @@ package package_18
         private var var_510:int = 65;
         private var var_635:int = 95;
         private var customizeInfo:String; // var_566
+        private var loadoutsHover:HoverPopup;
+        private var loadoutsHoverTimer:uint;
 
         public function AccountInfo()
         {
@@ -134,7 +139,9 @@ package package_18
             this.m.rankTokenDown_bt.buttonMode = true;
             this.m.rankTokenDown_bt.useHandCursor = true;
             this.m.rankTokenDown_bt.addEventListener(MouseEvent.CLICK, this.clickRankTokenDown, false, 0, true); // this.m.var_115
-            this.m.loadouts_bt.addEventListener(MouseEvent.CLICK, this.clickLoadouts, false, 0, true); // this.m.var_533
+            this.m.loadouts_bt.addEventListener(MouseEvent.CLICK, this.loadoutsMouseEvent, false, 0, true); // this.m.var_533
+            this.m.loadouts_bt.addEventListener(MouseEvent.MOUSE_OVER, this.loadoutsMouseEvent, false, 0, true);
+            this.m.loadouts_bt.addEventListener(MouseEvent.MOUSE_OUT, this.loadoutsMouseEvent, false, 0, true);
             this.updatePosRankTokenButtons();
             this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.update, false, 0, true);
             addChild(this.m);
@@ -239,6 +246,16 @@ package package_18
                 presetNum = 4;
             } else if (e.keyCode == 53 || e.keyCode == 101) {
                 presetNum = 5;
+            } else if (e.keyCode == 54 || e.keyCode == 102) {
+                presetNum = 6;
+            } else if (e.keyCode == 55 || e.keyCode == 103) {
+                presetNum = 7;
+            } else if (e.keyCode == 56 || e.keyCode == 104) {
+                presetNum = 8;
+            } else if (e.keyCode == 57 || e.keyCode == 105) {
+                presetNum = 9;
+            } else if (e.keyCode == 48 || e.keyCode == 96) {
+                presetNum = 10;
             }
             if (e.target is TextField) {
                 var textBox:TextField = e.target as TextField;
@@ -252,10 +269,32 @@ package package_18
             }
         }
 
-        // method_331 = clickLoadouts
-        private function clickLoadouts(e:MouseEvent)
+        // method_331 = clickLoadouts -- changed to loadoutsMouseEvent in 161
+        private function loadoutsMouseEvent(e:MouseEvent = null)
         {
-            new LoadoutsPopup(this.character, this.statsSelect, this.var_190);
+            // remove popup if already exists
+            if (this.loadoutsHover != null) {
+                this.loadoutsHover.remove();
+                this.loadoutsHover = null;
+            }
+
+            // if null, it's our trusty timeout cashing in
+            clearTimeout(this.loadoutsHoverTimer); // clear timeout regardless
+            if (e == null) {
+                this.loadoutsHover = new HoverPopup('Loadouts', 'Save up to ' + Presets.NUM_PRESETS + ' of your favorite styles here.', this.m.loadouts_bt);
+                this.loadoutsHover.x += this.loadoutsHover.width + 27.5;
+            }
+
+            // stop here if from clearTimeout or mouseout
+            if (e == null || e.type == MouseEvent.MOUSE_OUT) {
+                return;
+            }
+
+            if (e.type == MouseEvent.CLICK) {
+                new LoadoutsPopup(this.character, this.statsSelect, this.var_190);
+            } else if (e.type == MouseEvent.MOUSE_OVER) {
+                this.loadoutsHoverTimer = setTimeout(this.loadoutsMouseEvent, 500);
+            }
         }
 
         private function reset()
@@ -272,6 +311,7 @@ package package_18
                 this.guildName.remove();
                 this.guildName = null;
             }
+            this.loadoutsMouseEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
         }
 
         // method_284 = getCustomizeInfo
@@ -283,11 +323,14 @@ package package_18
 
         override public function remove()
         {
+            clearTimeout(this.loadoutsHoverTimer);
             Main.instance.removeEventListener(Main.accountChange, this.getCustomizeInfo);
             Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
             this.m.rankTokenUp_bt.removeEventListener(MouseEvent.CLICK, this.clickRankTokenUp);
             this.m.rankTokenDown_bt.removeEventListener(MouseEvent.CLICK, this.clickRankTokenDown);
-            this.m.loadouts_bt.removeEventListener(MouseEvent.CLICK, this.clickLoadouts);
+            this.m.loadouts_bt.removeEventListener(MouseEvent.CLICK, this.loadoutsMouseEvent);
+            this.m.loadouts_bt.removeEventListener(MouseEvent.MOUSE_OVER, this.loadoutsMouseEvent);
+            this.m.loadouts_bt.removeEventListener(MouseEvent.MOUSE_OUT, this.loadoutsMouseEvent);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.update);
             CommandHandler.commandHandler.defineCommand("setCustomizeInfo", null);
             this.reset();
