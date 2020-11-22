@@ -281,7 +281,7 @@ package package_18
             // if null, it's our trusty timeout cashing in
             clearTimeout(this.loadoutsHoverTimer); // clear timeout regardless
             if (e == null) {
-                this.loadoutsHover = new HoverPopup('Loadouts', 'Save up to ' + Presets.NUM_PRESETS + ' of your favorite styles here.', this.m.loadouts_bt);
+                this.loadoutsHover = new HoverPopup('Loadouts', 'Save up to ' + Presets.NUM_PRESETS + ' of your favorite styles. Use the numbers on your keyboard for quick switching.', this.m.loadouts_bt);
                 this.loadoutsHover.x += this.loadoutsHover.width + 27.5;
             }
 
