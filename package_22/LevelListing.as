@@ -169,7 +169,7 @@ package package_22
         private function onHatChange(e:Event)
         {
             for (var level:String in this.levels) {
-                this.levels[level].checkWornHatAllowed();
+                this.levels[level].testAccess();
             }
         }
 

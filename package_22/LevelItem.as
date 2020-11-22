@@ -30,7 +30,7 @@ package package_22
     public class LevelItem extends Removable 
     {
 
-        private static var unlocked:Boolean = false; // var_332
+        //private static var unlocked:Boolean = false; // var_332
 
         private var m:LevelItemGraphic = new LevelItemGraphic();
         private var cm:CommandHandler = CommandHandler.commandHandler;
@@ -44,11 +44,13 @@ package package_22
         private var title:String;
         private var rating:Number;
         private var playCount:Number;
+        private var myRank:Number;
         private var minRank:Number;
         private var note:String;
         private var userName:String;
         private var group:String;
         private var pass:Boolean;
+        private var passOK:Boolean = false;
         private var type:String;
         private var badHats:Vector.<int> = new Vector.<int>;
         private var lastUpdated:Date;
@@ -65,13 +67,16 @@ package package_22
             this.title = t;
             this.rating = r;
             this.playCount = plays;
+            this.myRank = class_33.getNumber("userRank");
             this.minRank = rank;
             this.note = desc;
             this.userName = uName;
             this.group = uGroup;
             this.pass = hasPass;
+            this.passOK = !this.pass;
             this.type = gMode;
             this.lastUpdated = new Date(time * 1000);
+            this.myRank = isNaN(this.myRank) || this.myRank < 0 ? 0 : this.myRank;
             this.minRank = class_74.numLimit(this.minRank, 0, 99);
             var htmlName:String = this.htmlNameMaker.makeName(this.userName, this.group);
             this.m.titleBox.text = this.title;
@@ -116,31 +121,59 @@ package package_22
             this.htmlNameMaker.listenForLink(this.m.authorBox);
             addChild(this.m);
             this.addSlots();
-            var myRank:Number = class_33.getNumber("userRank");
-            if (isNaN(myRank) || myRank < 0) {
-                myRank = 0;
-            }
-            if (hasPass && Main.group < 2) {
-                this.m.accessCover.textBox.text = "Pass Needed";
-                this.m.accessCover.passButton.addEventListener(MouseEvent.CLICK, this.clickPassEnter, false, 0, true);
-            } else if (myRank < this.minRank && !LevelItem.unlocked && Main.group < 2) {
-                this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
-                this.m.accessCover.removeChild(this.m.accessCover.passButton);
-                this.m.accessCover.removeChild(this.m.accessCover.passBox);
-                if (this.m.accessCover.textBox.text == "Rank 0 Needed") {
-                    this.m.removeChild(this.m.accessCover);
-                    LevelItem.unlocked = true;
-                }
-            } else if (this.badHats.length > 0) {
-                this.m.accessCover.removeChild(this.m.accessCover.passButton);
-                this.m.accessCover.removeChild(this.m.accessCover.passBox);
-                this.checkWornHatAllowed();
-            } else {
-                this.m.removeChild(this.m.accessCover);
-            }
+            this.testAccess();
             this.cm.defineCommand("fillSlot" + this.courseID + "_" + this.version, this.fillSlot);
             this.cm.defineCommand("confirmSlot" + this.courseID + "_" + this.version, this.confirmSlot);
             this.cm.defineCommand("clearSlot" + this.courseID + "_" + this.version, this.clearSlot);
+        }
+
+        public function testAccess()
+        {
+            // test password
+            if (this.pass && !this.passOK && Main.group < 2) {
+                if (this.m.accessCover.textBox.text !== 'Pass Needed') {
+                    this.m.accessCover.textBox.text = "Pass Needed";
+                    if (!this.m.accessCover.contains(this.m.accessCover.passButton)) {
+                        this.m.accessCover.addChild(this.m.accessCover.passButton);
+                    }
+                    if (!this.m.accessCover.contains(this.m.accessCover.passBox)) {
+                        this.m.accessCover.addChild(this.m.accessCover.passBox);
+                    }
+                    this.m.accessCover.passButton.addEventListener(MouseEvent.CLICK, this.clickPassEnter, false, 0, true);
+                }
+                return;
+            } else if (!this.pass || (this.pass && this.passOK) || Main.group >= 2) { // pass is OK, make sure all the pass-related stuff is removed
+                if (this.m.accessCover.contains(this.m.accessCover.passButton)) {
+                    this.m.accessCover.passButton.removeEventListener(MouseEvent.CLICK, this.clickPassEnter);
+                    this.m.accessCover.removeChild(this.m.accessCover.passButton);
+                }
+                if (this.m.accessCover.contains(this.m.accessCover.passBox)) {
+                    this.m.accessCover.removeChild(this.m.accessCover.passBox);
+                }
+            }
+
+            // test rank
+            if (this.myRank < this.minRank && Main.group < 2) {
+                this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
+                return;
+            }
+
+            // test hat
+            trace('badHats: ' + this.badHats.join());
+            trace('badHats.length: ' + this.badHats.length);
+            trace('indexOf(currentHat): ' + this.badHats.indexOf(AccountInfo.currentHat) != -1);
+            if (this.badHats.length > 0 && this.badHats.indexOf(AccountInfo.currentHat) != -1) {
+                this.m.accessCover.textBox.text = 'Hat Not Allowed';
+                if (!this.m.contains(this.m.accessCover)) {
+                    this.m.addChild(this.m.accessCover);
+                }
+                return;
+            }
+
+            // success! remove the accessCover
+            if (this.m.contains(this.m.accessCover)) {
+                this.m.removeChild(this.m.accessCover);
+            }
         }
 
         // _loc2 = enteredPass
@@ -161,6 +194,7 @@ package package_22
                 request.method = URLRequestMethod.POST;
                 request.data = vars;
                 this.superLoader.load(request);
+                this.m.accessCover.passBox.text = 'checking...';
             }
         }
 
@@ -178,8 +212,8 @@ package package_22
                 var decryptedStr:String = encryptor.decrypt(ret.result);
                 var obj:Object = JSON.parse(decryptedStr);
                 if (obj.level_id == this.courseID && obj.access == 1) {
-                    this.m.removeChild(this.m.accessCover);
-                    this.m.accessCover.passButton.removeEventListener(MouseEvent.CLICK, this.clickPassEnter);
+                    this.passOK = true;
+                    this.testAccess();
                 } else {
                     this.m.accessCover.passBox.text = "nope!";
                 }
@@ -415,23 +449,6 @@ package package_22
         private function clickInfoHandler(e:MouseEvent)
         {
             new LevelInfoPopup(this.courseID);
-        }
-
-        public function checkWornHatAllowed()
-        {
-            trace(this.badHats);
-            if (this.badHats.indexOf(AccountInfo.currentHat) != -1) {
-                unlocked = false;
-                this.m.accessCover.textBox.text = 'Hat Not Allowed';
-                if (!this.m.contains(this.m.accessCover)) {
-                    this.m.addChild(this.m.accessCover);
-                }
-            } else {
-                unlocked = true;
-                if (this.m.contains(this.m.accessCover)) {
-                    this.m.removeChild(this.m.accessCover);
-                }
-            }
         }
 
         // ?
