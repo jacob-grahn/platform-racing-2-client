@@ -235,6 +235,10 @@ package package_18
                 presetNum = 2;
             } else if (e.keyCode == 51 || e.keyCode == 99) {
                 presetNum = 3;
+            } else if (e.keyCode == 52 || e.keyCode == 100) {
+                presetNum = 4;
+            } else if (e.keyCode == 53 || e.keyCode == 101) {
+                presetNum = 5;
             }
             if (e.target is TextField) {
                 var textBox:TextField = e.target as TextField;
