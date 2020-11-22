@@ -24,10 +24,12 @@ package data
                 for (var i:int = 0; i < cookie.data.accounts.length; i++) {
                     var account:Object = cookie.data.accounts[i];
                     account.name = class_28.trimWhitespace(account.name);
-                    accounts.push(account);
+                    if (account.name != '') {
+                        accounts.push(account);
+                    }
                 }
             } catch (e:Error) {
-            }            
+            }
         }
 
         private static function setCookie()
@@ -68,6 +70,11 @@ package data
 
         public static function add(name:String, token:String)
         {
+            // don't add an account with no name
+            if (class_28.trimWhitespace(name) == '') {
+                return;
+            }
+
             // don't add an account that's already saved
             if (getByName(name) !== null) {
                 moveToTop(name);
