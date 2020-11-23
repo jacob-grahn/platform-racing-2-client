@@ -129,7 +129,7 @@ package package_4
                     groupText = 'Moderator';
                 }
             } else if (group == 3) {
-                groupText = 'Admin';
+                groupText = Main.server.server_owner == this.userId ? 'Server Owner' : 'Admin';
             } else {
                 PlayerPopup.instance.startFadeOut();
                 new PlayerGuestPopup(this.userName);
