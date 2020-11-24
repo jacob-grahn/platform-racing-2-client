@@ -59,6 +59,9 @@ package data
 
         private static function handleControls(obj:Object)
         {
+            if (!canSaveCookie()) {
+                return; // don't set if not logged in or the user is blocking cookies
+            }
             var cookie:SharedObject = SharedObject.getLocal(userName);
             if (cookie.data.altCtrl == null) {
                 cookie.data.altCtrl = DEFAULT_ALT_CONTROLS;
@@ -69,6 +72,22 @@ package data
             cookie.flush();
         }
 
+        public static function isNameSet() : Boolean
+        {
+            return userName != null;
+        }
+
+        private static function canSaveCookie() : Boolean
+        {
+            try {
+                var cookie:SharedObject = SharedObject.getLocal(userName);
+                cookie.flush();
+            } catch (e:Error) {
+                return false;
+            }
+            return isNameSet();
+        }
+
         // _loc3 = cookie
         // method_390 = setValue
         public static function setValue(setting:String, val:*)
@@ -77,9 +96,11 @@ package data
                 handleControls(val);
             } else if (dataArr[setting] != val || Settings[setting] != val) {
                 Settings[setting] = dataArr[setting] = val;
-                var cookie:SharedObject = SharedObject.getLocal(userName);
-                cookie.data[setting] = val;
-                cookie.flush();
+                if (canSaveCookie()) { // only set if logged in and able to save cookies
+                    var cookie:SharedObject = SharedObject.getLocal(userName);
+                    cookie.data[setting] = val;
+                    cookie.flush();
+                }
             }
         }
 

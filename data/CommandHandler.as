@@ -44,6 +44,7 @@ package data
             this.defineCommand("areYouHuman", this.areYouHuman);
             this.defineCommand("tournamentMode", this.tournamentMode);
             this.defineCommand("guildChange", this.guildChange);
+            this.defineCommand('setServerOwner', this.setServerOwner);
         }
 
         // _loc2 = endPos
@@ -196,6 +197,11 @@ package data
             Main.guildName = ret.guild_name;
             Main.guildOwner = ret.is_owner;
             Main.instance.dispatchEvent(new Event(Main.accountChange));
+        }
+
+        private function setServerOwner(a:Array)
+        {
+            Main.server.server_owner = int(a[0]);
         }
 
 

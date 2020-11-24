@@ -7,6 +7,7 @@ package
     import data.PR2Socket;
     import data.CommandHandler;
     import data.GpNotification;
+    import data.SavedAccounts;
     import data.SWFStats;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
@@ -37,8 +38,8 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
-        public static const build:String = "22-jun-2020-v160";
-        public static const version:String = '160.0';
+        public static const build:String = "23-nov-2020-v161";
+        public static const version:String = '161.0';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
         public static var stage:Stage;
@@ -78,7 +79,7 @@ package
         public static var domain:String;
         private static var url:String;
         private static var protocol:String; // protocol = var_389
-        private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // superLoader = var_358
+        //private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // superLoader = var_358
 
         // options
         /*public static var wasdUp:int = 87; // up, var_255
@@ -111,6 +112,7 @@ package
                 Keys.initialize(stage);
                 CustomCursor.stageRef = stage;
                 CheckServers.activate();
+                SavedAccounts.init();
                 GpNotification.init(stage);
                 class_4.init();
                 stats = new SWFStats();
@@ -121,8 +123,8 @@ package
                 muteButton.x = 504;
                 muteButton.y = 380;
                 muteButton.doToggle(Main.testing); // mutes by default if testing mode is enabled
-                superLoader.addEventListener(Event.COMPLETE, this.checkLogin, false, 0, true);
-                superLoader.load(new URLRequest(baseURL + "/check_login.php"));
+                /*superLoader.addEventListener(Event.COMPLETE, this.checkLogin, false, 0, true);
+                superLoader.load(new URLRequest(baseURL + "/check_login.php"));*/
                 setTimeout(this.getKongAPI, 2000);
                 pageHolder = new PageHolder(new IntroPage());
                 addChild(pageHolder);
@@ -186,8 +188,8 @@ package
             }
         }
 
-        // method_548 = checkLogin
-        private function checkLogin(e:Event)
+        // method_548 = checkLogin MADE OBSOLETE IN 161
+        /*private function checkLogin(e:Event)
         {
             var ret:Object = JSON.parse(e.target.data);
             if (ret != null && ret.user_name != null && ret.user_name != "") {
@@ -195,7 +197,7 @@ package
                 Main.guild = ret.guild_id;
                 remember = true;
             }
-        }
+        }*/
 
         public static function clearUserData()
         {
@@ -205,6 +207,7 @@ package
             Main.hasEmail = false;
             Main.hasAnt = false;
             Main.token = "";
+            Main.remember = false;
             Main.guild = 0;
             Main.guildOwner = 0;
             Main.guildName = "";

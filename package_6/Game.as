@@ -278,7 +278,7 @@ package package_6
         {
             var _local_1:String = this.method_742();
             var _local_2:int = var_313.length;
-            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + _local_1 + "`" + _local_2 + "`" + cowboyChance);
+            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + _local_1 + "`" + _local_2 + "`" + cowboyChance + "`" + badHats.join(','));
             super.endIntro();
         }
 

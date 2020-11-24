@@ -61,8 +61,16 @@ package package_18.PartInfo
                 this.target = this.m.foot;
                 this.m.epicBox.y = 23.55;
             }
-            if (this.listing.id == 35 && (this.listing.type == 'BODY' || this.listing.type == 'FEET')) {
+            if (this.listing.id == 35 && (this.listing.type == 'BODY' || this.listing.type == 'FEET')) { // handle djinn
                 this.handleDjinn(this.listing.type, this.listing.has);
+            } else if (this.listing.id == 29 && this.listing.type == 'BODY') { // resize fred
+                this.target.y += 10;
+                this.target.width = this.target.width / 2;
+                this.target.height = this.target.height / 2;
+            } else if (this.listing.id == 14 && this.listing.type == 'HAT') { // resize arti
+                this.target.y += 10;
+                /*this.target.width *= 0.8;
+                this.target.height *= 0.8;*/ // there's literally no reason why these lines shouldn't work... but they don't
             }
             this.target.visible = true;
             this.target.alpha = 0.1; // doesn't have
@@ -76,7 +84,7 @@ package package_18.PartInfo
                 /*this.m.titleBox.text = this.listing.name + ' ' + class_28.ucfirst(this.listing.type);
                 this.m.descBox.htmlText = this.listing.desc;*/ // this would replace the code on lines 36/37
                 if (this.listing.hasEpic == true || this.hasEE == true) {
-                    this.target.colorMC2.visible = true;
+                    //this.target.colorMC2.visible = true;
                     this.m.epicBox.visible = true;
                     if (this.hasEE == false || this.listing.hasEpic == true) {
                         this.m.epicBox.text = 'Upgraded!';

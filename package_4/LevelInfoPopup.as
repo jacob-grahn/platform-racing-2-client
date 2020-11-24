@@ -48,6 +48,7 @@
         private var song:String = ''; // song
         private var gameMode:String = 'race'; // gameMode
         private var cowboyChance:int = 5; // cowboyChance
+        private var badHats:String = ''; // allowed hats
 
         // hovers
         private var hoverRating:HoverPopup;
@@ -57,6 +58,7 @@
         private var hoverMaxTime:HoverPopup;
         private var hoverGravity:HoverPopup;
         private var hoverItems:InfoPopup;
+        private var hoverHats:InfoPopup;
 
         // button events
         private var hoverActionBt:HoverPopup;
@@ -108,6 +110,7 @@
             this.song = this.determineSong(ret.song);
             this.gameMode = this.determineMode(ret.gameMode);
             this.cowboyChance = ret.cowboyChance;
+            this.badHats = ret.badHats;
 
             // apply straight to mc
             this.m.levelInfo.title.text = this.title = ret.title;
@@ -137,6 +140,8 @@
             this.m.levelInfo.gravity.addEventListener(MouseEvent.MOUSE_OUT, this.outGravityHandler, false, 0, true);
             this.m.levelInfo.items.addEventListener(MouseEvent.MOUSE_OVER, this.overItemsHandler, false, 0, true);
             this.m.levelInfo.items.addEventListener(MouseEvent.MOUSE_OUT, this.outItemsHandler, false, 0, true);
+            this.m.levelInfo.hatsAllowed.addEventListener(MouseEvent.MOUSE_OVER, this.overHatsHandler, false, 0, true);
+            this.m.levelInfo.hatsAllowed.addEventListener(MouseEvent.MOUSE_OUT, this.outHatsHandler, false, 0, true);
 
             // enable play button
             /*var myRank:Number = class_33.getNumber("userRank");
@@ -261,6 +266,17 @@
             this.hoverItems = null;
         }
 
+        private function overHatsHandler(e:MouseEvent)
+        {
+            this.hoverHats = new HatsMenu(this.badHats, this.gameMode, this.m.levelInfo.hatsAllowed);
+        }
+
+        private function outHatsHandler(e:*)
+        {
+            this.hoverHats.remove();
+            this.hoverHats = null;
+        }
+
         private function determineMode(mode:String)
         {
             if (mode == Modes.dm || mode == 'dm' || mode == 'd') {
@@ -310,7 +326,8 @@
                 "Prismatic - Lunanova",
                 "We Are Loud - Dynamedion", // should never be triggered; song can't be set to we are loud
                 "Toodaloo - mustangman",
-                "Night Shade - Goliathe"
+                "Night Shade - Goliathe",
+                "Blizzard! - Majicke"
             ];
             return songArr[song];
         }
@@ -445,6 +462,9 @@
             if (this.hoverItems != null) {
                 this.outItemsHandler(dispatchEvent(new Event(Event.CLOSE)));
             }
+            if (this.hoverHats != null) {
+                this.outHatsHandler(dispatchEvent(new Event(Event.CLOSE)));
+            }
         }
 
         override public function remove()
@@ -467,6 +487,8 @@
             this.m.levelInfo.gravity.removeEventListener(MouseEvent.MOUSE_OUT, this.outGravityHandler);
             this.m.levelInfo.items.removeEventListener(MouseEvent.MOUSE_OVER, this.overItemsHandler);
             this.m.levelInfo.items.removeEventListener(MouseEvent.MOUSE_OUT, this.outItemsHandler);
+            this.m.levelInfo.hatsAllowed.removeEventListener(MouseEvent.MOUSE_OVER, this.overHatsHandler);
+            this.m.levelInfo.hatsAllowed.removeEventListener(MouseEvent.MOUSE_OUT, this.outHatsHandler);
 
             // possibly enabled?
             this.m.play_bt.removeEventListener(MouseEvent.CLICK, this.clickPlay);

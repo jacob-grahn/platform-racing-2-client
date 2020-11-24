@@ -8,6 +8,7 @@ package menu
     import data.CommandHandler;
     import data.Encryptor;
     import data.PR2Socket;
+    import data.SavedAccounts;
     import data.Settings;
     import data.UnreadNotif;
     import flash.events.Event;
@@ -104,15 +105,11 @@ package menu
             Main.lastAuthTime.setTime(ret.time);
             UnreadNotif.setLastRead(ret.lastRead);
             UnreadNotif.setLastRecv(ret.lastRecv);
+            if (Main.remember) {
+                SavedAccounts.add(Main.loggedInAs, Main.token);
+            }
             this.httpOK = true;
             this.maybeSwitchToLobby();
-        }
-
-        private function maybeClearUserData()
-        {
-            if (Main.remember === false && Main.loggedInAs !== "") {
-                Main.clearUserData();
-            }
         }
 
         // method_254 = onError
@@ -120,7 +117,7 @@ package menu
         {
             startFadeOut();
             Main.socket.remove();
-            this.maybeClearUserData();
+            Main.clearUserData();
         }
 
         // method_456 = maybeSwitchToLobby

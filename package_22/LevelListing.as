@@ -18,6 +18,7 @@ package package_22
     import ui.PageNavigation;
     import data.CommandHandler;
     import flash.utils.ByteArray;
+    import package_18.AccountInfo;
 
     public class LevelListing extends Page
     {
@@ -51,6 +52,7 @@ package package_22
             this.superLoader.addEventListener(SuperLoader.e, this.errorHandler);
             Main.socket.write("set_right_room`none");
             LevelListing.levelListing = this;
+            addEventListener('hatChange', this.onHatChange, false, 0, true);
             this.cm.defineCommand('addPageHighlight', this.addPageHighlight);
             this.cm.defineCommand('removePageHighlight', this.removePageHighlight);
         }
@@ -89,7 +91,7 @@ package package_22
                     if ((spriteHeight + (levelOnPage * 112)) > 224) {
                         break; // prevent "phantom" rows below the intended final row of levels on a page
                     }
-                    var levelItem:LevelItem = new LevelItem(level.level_id, level.version, level.title, level.rating, level.play_count, level.min_level, level.note, level.user_name, level.user_group, level.pass, level.type, level.time);
+                    var levelItem:LevelItem = new LevelItem(level.level_id, level.version, level.title, level.rating, level.play_count, level.min_level, level.note, level.user_name, level.user_group, level.pass, level.type, level.bad_hats, level.time);
                     levelItem.x = 2 + (levelInRow * 109);
                     levelItem.y = spriteHeight + (levelOnPage * 112);
                     this.levelArray.push(levelItem);
@@ -164,6 +166,13 @@ package package_22
             }
         }
 
+        private function onHatChange(e:Event)
+        {
+            for (var level:String in this.levels) {
+                this.levels[level].testAccess();
+            }
+        }
+
         public function refreshHighlights()
         {
             Main.socket.write('refresh_highlights`');
@@ -187,6 +196,7 @@ package package_22
 
         override public function remove()
         {
+            removeEventListener('hatChange', this.onHatChange);
             this.superLoader.removeEventListener(Event.COMPLETE, this.loadHandler);
             this.superLoader.remove();
             this.pageNavigation.remove();

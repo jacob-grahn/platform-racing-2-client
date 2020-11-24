@@ -18,17 +18,19 @@ package package_22
     import flash.net.URLVariables;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
+    import lobby.Lobby;
     import package_4.ConfirmPopup;
     import package_4.HoverPopup;
     import package_4.LevelInfoPopup;
     import package_4.MessagePopup;
     import package_4.UploadingPopup;
     import ui.PageNavigation;
+    import package_18.AccountInfo;
 
     public class LevelItem extends Removable 
     {
 
-        private static var unlocked:Boolean = false; // var_332
+        //private static var unlocked:Boolean = false; // var_332
 
         private var m:LevelItemGraphic = new LevelItemGraphic();
         private var cm:CommandHandler = CommandHandler.commandHandler;
@@ -42,12 +44,15 @@ package package_22
         private var title:String;
         private var rating:Number;
         private var playCount:Number;
+        private var myRank:Number;
         private var minRank:Number;
         private var note:String;
         private var userName:String;
         private var group:String;
         private var pass:Boolean;
+        private var passOK:Boolean = false;
         private var type:String;
+        private var badHats:Vector.<int> = new Vector.<int>;
         private var lastUpdated:Date;
         private var maxSlots:Number = 4; // var_590
         private var superLoader:SuperLoader; // var_80
@@ -55,20 +60,23 @@ package package_22
 
         // _loc12 = htmlName
         // _loc13 = myRank
-        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:String, hasPass:Boolean, gMode:String, time:int)
+        public function LevelItem(id:int, v:int, t:String, r:Number, plays:int, rank:int, desc:String, uName:String, uGroup:String, hasPass:Boolean, gMode:String, badHatsStr:String, time:int)
         {
             this.courseID = id;
             this.version = v;
             this.title = t;
             this.rating = r;
             this.playCount = plays;
+            this.myRank = class_33.getNumber("userRank");
             this.minRank = rank;
             this.note = desc;
             this.userName = uName;
             this.group = uGroup;
             this.pass = hasPass;
+            this.passOK = !this.pass;
             this.type = gMode;
             this.lastUpdated = new Date(time * 1000);
+            this.myRank = isNaN(this.myRank) || this.myRank < 0 ? 0 : this.myRank;
             this.minRank = class_74.numLimit(this.minRank, 0, 99);
             var htmlName:String = this.htmlNameMaker.makeName(this.userName, this.group);
             this.m.titleBox.text = this.title;
@@ -104,30 +112,65 @@ package package_22
             } else if (gMode == 'h') {
                 this.m.bg.gotoAndStop(5);
             }
+            var badHatsArr:Array = badHatsStr.split(',');
+            for (var hat:int in badHatsArr) {
+                if (badHatsArr[hat] > 1) {
+                    this.badHats.push(badHatsArr[hat]);
+                }
+            }
             this.htmlNameMaker.listenForLink(this.m.authorBox);
             addChild(this.m);
             this.addSlots();
-            var myRank:Number = class_33.getNumber("userRank");
-            if (isNaN(myRank) || myRank < 0) {
-                myRank = 0;
-            }
-            if (hasPass && Main.group < 2) {
-                this.m.accessCover.textBox.text = "Pass Needed";
-                this.m.accessCover.passButton.addEventListener(MouseEvent.CLICK, this.clickPassEnter, false, 0, true);
-            } else if (myRank < this.minRank && !LevelItem.unlocked && Main.group < 2) {
-                this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
-                this.m.accessCover.removeChild(this.m.accessCover.passButton);
-                this.m.accessCover.removeChild(this.m.accessCover.passBox);
-                if (this.m.accessCover.textBox.text == "Rank 0 Needed") {
-                    this.m.removeChild(this.m.accessCover);
-                    LevelItem.unlocked = true;
-                }
-            } else {
-                this.m.removeChild(this.m.accessCover);
-            }
+            this.testAccess();
             this.cm.defineCommand("fillSlot" + this.courseID + "_" + this.version, this.fillSlot);
             this.cm.defineCommand("confirmSlot" + this.courseID + "_" + this.version, this.confirmSlot);
             this.cm.defineCommand("clearSlot" + this.courseID + "_" + this.version, this.clearSlot);
+        }
+
+        public function testAccess()
+        {
+            // test password
+            if (this.pass && !this.passOK && Main.group < 2) {
+                if (this.m.accessCover.textBox.text !== 'Pass Needed') {
+                    this.m.accessCover.textBox.text = "Pass Needed";
+                    if (!this.m.accessCover.contains(this.m.accessCover.passButton)) {
+                        this.m.accessCover.addChild(this.m.accessCover.passButton);
+                    }
+                    if (!this.m.accessCover.contains(this.m.accessCover.passBox)) {
+                        this.m.accessCover.addChild(this.m.accessCover.passBox);
+                    }
+                    this.m.accessCover.passButton.addEventListener(MouseEvent.CLICK, this.clickPassEnter, false, 0, true);
+                }
+                return;
+            } else if (!this.pass || (this.pass && this.passOK) || Main.group >= 2) { // pass is OK, make sure all the pass-related stuff is removed
+                if (this.m.accessCover.contains(this.m.accessCover.passButton)) {
+                    this.m.accessCover.passButton.removeEventListener(MouseEvent.CLICK, this.clickPassEnter);
+                    this.m.accessCover.removeChild(this.m.accessCover.passButton);
+                }
+                if (this.m.accessCover.contains(this.m.accessCover.passBox)) {
+                    this.m.accessCover.removeChild(this.m.accessCover.passBox);
+                }
+            }
+
+            // test rank
+            if (this.myRank < this.minRank && Main.group < 2) {
+                this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
+                return;
+            }
+
+            // test hat
+            if (this.badHats.length > 0 && this.badHats.indexOf(AccountInfo.currentHat) != -1) {
+                this.m.accessCover.textBox.text = 'Hat Not Allowed';
+                if (!this.m.contains(this.m.accessCover)) {
+                    this.m.addChild(this.m.accessCover);
+                }
+                return;
+            }
+
+            // success! remove the accessCover
+            if (this.m.contains(this.m.accessCover)) {
+                this.m.removeChild(this.m.accessCover);
+            }
         }
 
         // _loc2 = enteredPass
@@ -148,6 +191,7 @@ package package_22
                 request.method = URLRequestMethod.POST;
                 request.data = vars;
                 this.superLoader.load(request);
+                this.m.accessCover.passBox.text = 'checking...';
             }
         }
 
@@ -165,8 +209,8 @@ package package_22
                 var decryptedStr:String = encryptor.decrypt(ret.result);
                 var obj:Object = JSON.parse(decryptedStr);
                 if (obj.level_id == this.courseID && obj.access == 1) {
-                    this.m.removeChild(this.m.accessCover);
-                    this.m.accessCover.passButton.removeEventListener(MouseEvent.CLICK, this.clickPassEnter);
+                    this.passOK = true;
+                    this.testAccess();
                 } else {
                     this.m.accessCover.passBox.text = "nope!";
                 }
@@ -414,11 +458,11 @@ package package_22
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.CLICK, this.clickInfoHandler);
-            this.m.plusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
-            this.m.plusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
+            this.m.plusButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+            this.m.plusButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
             this.m.plusButton.removeEventListener(MouseEvent.CLICK, this.clickPlus);
-            this.m.minusButton.addEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
-            this.m.minusButton.addEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
+            this.m.minusButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overFavBt);
+            this.m.minusButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outFavBt);
             this.m.minusButton.removeEventListener(MouseEvent.CLICK, this.clickMinus);
             this.removeSlots();
             this.slotArray = null;
