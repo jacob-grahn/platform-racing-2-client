@@ -24,8 +24,8 @@ package package_22
     import package_4.LevelInfoPopup;
     import package_4.MessagePopup;
     import package_4.UploadingPopup;
-    import ui.PageNavigation;
     import package_18.AccountInfo;
+    import ui.PageNavigation;
 
     public class LevelItem extends Removable 
     {
@@ -181,6 +181,9 @@ package package_22
         {
             if (enable && !this.m.contains(this.m.accessCover)) {
                 this.m.addChild(this.m.accessCover);
+                if (CourseMenu.instance != null) {
+                    CourseMenu.instance.staticCloseMenu();
+                }
             } else if (!enable && this.m.contains(this.m.accessCover)) {
                 this.m.removeChild(this.m.accessCover);
             }
