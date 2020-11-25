@@ -52,7 +52,7 @@ package package_22
             this.superLoader.addEventListener(SuperLoader.e, this.errorHandler);
             Main.socket.write("set_right_room`none");
             LevelListing.levelListing = this;
-            addEventListener('hatChange', this.onHatChange, false, 0, true);
+            addEventListener('testLevelAccess', this.testLevelAccess, false, 0, true);
             this.cm.defineCommand('addPageHighlight', this.addPageHighlight);
             this.cm.defineCommand('removePageHighlight', this.removePageHighlight);
         }
@@ -166,7 +166,7 @@ package package_22
             }
         }
 
-        private function onHatChange(e:Event)
+        private function testLevelAccess(e:Event)
         {
             for (var level:String in this.levels) {
                 this.levels[level].testAccess();
@@ -196,7 +196,7 @@ package package_22
 
         override public function remove()
         {
-            removeEventListener('hatChange', this.onHatChange);
+            removeEventListener('testLevelAccess', this.testLevelAccess);
             this.superLoader.removeEventListener(Event.COMPLETE, this.loadHandler);
             this.superLoader.remove();
             this.pageNavigation.remove();

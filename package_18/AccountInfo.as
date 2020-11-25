@@ -5,22 +5,24 @@
 
 package package_18
 {
-    import page.Page;
-    import package_8.Character;
-    import ui.StatsSelect;
-    import flash.display.Stage;
-    import ui.GuildName;
-    import data.CommandHandler;
     import data.class_28;
-    import flash.events.KeyboardEvent;
+    import data.class_33;
+    import data.CommandHandler;
     import flash.display.Sprite;
+    import flash.display.Stage;
+    import flash.events.Event;
+    import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.text.TextField;
     import flash.text.TextFieldType;
-    import flash.events.Event;
-    import package_4.HoverPopup;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
+    import package_4.HoverPopup;
+    import package_8.Character;
+    import package_22.LevelListing;
+    import page.Page;
+    import ui.GuildName;
+    import ui.StatsSelect;
 
     public class AccountInfo extends Page
     {
@@ -105,6 +107,8 @@ package package_18
             var isHappyHour:Boolean = Boolean(int(a[26]));
             this.m.nameBox.htmlText = "Welcome, <b>" + class_28.escapeString(Main.loggedInAs) + "</b>";
             this.m.hatBox.htmlText = "Hats: <b>" + (hatArray.length - 1) + "</b>";
+            class_33.setNumber("userRank", this.rank);
+            LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
             this.updateRankText();
             this.reset();
             if (Main.guild == 0) {

@@ -39,6 +39,7 @@ package package_22
         private var favBtPopup:HoverPopup;
         private var favBtTimer:uint;
         private var slotArray:Array = new Array(); // var_127
+        private var coverActive = true;
         public var courseID:int;
         public var version:int;
         private var title:String;
@@ -153,24 +154,37 @@ package package_22
             }
 
             // test rank
-            if (this.myRank < this.minRank && Main.group < 2) {
-                this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
-                return;
+            this.myRank = class_33.getNumber("userRank");
+            this.myRank = isNaN(this.myRank) || this.myRank < 0 ? 0 : this.myRank;
+            if (Main.group < 2) {
+                if (this.myRank < this.minRank) {
+                    this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
+                    this.toggleCover(true);
+                    return;
+                } else {
+                    this.toggleCover(false);
+                }
             }
 
             // test hat
             if (this.badHats.length > 0 && this.badHats.indexOf(AccountInfo.currentHat) != -1) {
                 this.m.accessCover.textBox.text = 'Hat Not Allowed';
-                if (!this.m.contains(this.m.accessCover)) {
-                    this.m.addChild(this.m.accessCover);
-                }
+                this.toggleCover(true);
                 return;
             }
 
             // success! remove the accessCover
-            if (this.m.contains(this.m.accessCover)) {
+            this.toggleCover(false);
+        }
+
+        private function toggleCover(enable:Boolean)
+        {
+            if (enable && !this.m.contains(this.m.accessCover)) {
+                this.m.addChild(this.m.accessCover);
+            } else if (!enable && this.m.contains(this.m.accessCover)) {
                 this.m.removeChild(this.m.accessCover);
             }
+            this.coverActive = enable;
         }
 
         // _loc2 = enteredPass
