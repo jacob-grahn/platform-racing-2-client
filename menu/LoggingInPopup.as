@@ -105,9 +105,6 @@ package menu
             Main.lastAuthTime.setTime(ret.time);
             UnreadNotif.setLastRead(ret.lastRead);
             UnreadNotif.setLastRecv(ret.lastRecv);
-            if (Main.remember) {
-                SavedAccounts.add(Main.loggedInAs, Main.token);
-            }
             this.httpOK = true;
             this.maybeSwitchToLobby();
         }
@@ -124,6 +121,9 @@ package menu
         private function maybeSwitchToLobby()
         {
             if (this.socketOK && this.httpOK) {
+                if (Main.remember) {
+                    SavedAccounts.add(Main.loggedInAs, Main.token);
+                }
                 Settings.init(Main.loggedInAs);
                 Presets.load();
                 Main.pageHolder.changePage(new Lobby());
