@@ -3,12 +3,12 @@
 package 
 {
     import blocks.Blocks;
-    import data.Time;
-    import data.PR2Socket;
-    import data.CommandHandler;
-    import data.GpNotification;
-    import data.SavedAccounts;
-    import data.SWFStats;
+    import com.jiggmin.data.Time;
+    import com.jiggmin.data.PR2Socket;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.GpNotification;
+    import com.jiggmin.data.SavedAccounts;
+    import com.jiggmin.data.SWFStats;
     import flash.display.Loader;
     import flash.display.LoaderInfo;
     import flash.display.Sprite;
@@ -38,8 +38,8 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
-        public static const build:String = "26-nov-2020-v161-1";
-        public static const version:String = '161.1';
+        public static const build:String = '6-dec-2020-v161-1-1';
+        public static const version:String = '161.1.1';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
         public static var stage:Stage;
