@@ -8,7 +8,7 @@ package package_20
     import ui.CustomCursor;
     import levelEditor.LevelEditor;
     import flash.display.DisplayObject;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import background.class_77;

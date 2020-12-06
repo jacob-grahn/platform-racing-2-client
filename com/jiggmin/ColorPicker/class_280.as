@@ -5,7 +5,7 @@
 
 package com.jiggmin.ColorPicker
 {
-    import data.class_122;
+    import com.jiggmin.data.class_122;
 
     public class class_280
     {

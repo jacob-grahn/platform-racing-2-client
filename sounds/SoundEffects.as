@@ -5,7 +5,7 @@
 
 package sounds
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import flash.media.SoundTransform;
     import flash.media.SoundChannel;
     import flash.media.Sound;

@@ -14,9 +14,9 @@ package background
     import flash.display.Bitmap;
     import flash.display.BlendMode;
     import flash.geom.Point;
-    import data.class_28;
-    import data.Objects;
-    import data.Settings;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Objects;
+    import com.jiggmin.data.Settings;
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
     import levelEditor.TextObject;
@@ -278,7 +278,7 @@ package background
         override public function setPos(_arg_1:Number, _arg_2:Number)
         {
             super.setPos(_arg_1, _arg_2);
-            var _local_3:Point = class_28.method_9(-(course.posX), -(course.posY), rotation);
+            var _local_3:Point = Data.method_9(-(course.posX), -(course.posY), rotation);
             var _local_4:int = int(Math.floor((_local_3.x * scale) / (this.var_210 * this.var_87)));
             var _local_5:int = int(Math.floor((_local_3.y * scale) / (this.var_210 * this.var_87)));
             method_118(_local_4, _local_5, 2, 2, 1, 1, this.var_122, this.bitmapArray);

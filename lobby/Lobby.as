@@ -2,7 +2,7 @@
 
 package lobby
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import page.Page;
     import package_4.HoverPopup;
     import flash.display.MovieClip;
@@ -20,7 +20,7 @@ package lobby
     import package_17.StorePopup;
     import menu.CreditsPopup;
     import package_4.ConfirmPopup;
-    import data.class_28;
+    import com.jiggmin.data.Data;
 
     public class Lobby extends Page 
     {

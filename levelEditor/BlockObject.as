@@ -6,7 +6,7 @@
 package levelEditor
 {
     import flash.geom.Point;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
 

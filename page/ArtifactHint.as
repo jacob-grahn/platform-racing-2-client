@@ -2,7 +2,7 @@
 
 package page
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.net.URLRequest;
     import flash.events.Event;
 
@@ -30,19 +30,19 @@ package page
             var ret:Object = this.superLoader.parsedData;
             var hintMsg:String = "Here\'s what I remember: " + ret.hint + ". Maybe I can remember more later!!";
             if (ret.level_id != null) {
-                var level:Array = [class_28.escapeString(ret.level_title), ret.level_id];
-                var user:Array = [class_28.escapeString(ret.creator_name), ret.creator_group];
+                var level:Array = [Data.escapeString(ret.level_title), ret.level_id];
+                var user:Array = [Data.escapeString(ret.creator_name), ret.creator_group];
                 hintMsg = 'Thanks for helping me find the artifact! It\'s located at ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + '.';
             }
             this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, hintMsg], true);
             if (ret.finder_name != "") {
-                var foundMsg:String = "The first person to find this artifact was " + class_28.escapeString(ret.finder_name) + "!";
+                var foundMsg:String = "The first person to find this artifact was " + Data.escapeString(ret.finder_name) + "!";
                 this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, foundMsg], true);
                 var bubMsg:String = "";
                 if (ret.bubbles_name == "") {
                     bubMsg = "The bubble set will be awarded to the first person to find the artifact that doesn\'t have the set already!";
                 } else if (ret.bubbles_name != "" && ret.finder_name != ret.bubbles_name) {
-                    bubMsg = "Since they already have the bubble set, the prize was awarded to " + class_28.escapeString(ret.bubbles_name) + " instead!";
+                    bubMsg = "Since they already have the bubble set, the prize was awarded to " + Data.escapeString(ret.bubbles_name) + " instead!";
                 }
                 if (bubMsg != "") {
                     this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, bubMsg], true);

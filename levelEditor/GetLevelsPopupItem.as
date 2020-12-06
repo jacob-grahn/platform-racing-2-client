@@ -5,7 +5,7 @@
 
 package levelEditor
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
     import package_4.HoverPopup;
     import package_6.Modes;
@@ -36,14 +36,14 @@ package levelEditor
         {
             var updated:Date = new Date(level.time * 1000);
 
-            var levelTitle:String = "-- " + class_28.escapeString(level.title) + " --";
+            var levelTitle:String = "-- " + Data.escapeString(level.title) + " --";
             var popText:String = "Game Mode: " + Modes.getFullName(level.type) + "<br/>";
-            popText += "Version: " + class_28.formatNumber(level.version) + "<br/>";
-            popText += "Updated: "  + updated.date + '/' + class_28.getMonthStr(updated.month) + '/' + updated.fullYear + '<br/>';
-            popText += "Plays: " + class_28.formatNumber(level.play_count) + "<br/>";
+            popText += "Version: " + Data.formatNumber(level.version) + "<br/>";
+            popText += "Updated: "  + updated.date + '/' + Data.getMonthStr(updated.month) + '/' + updated.fullYear + '<br/>';
+            popText += "Plays: " + Data.formatNumber(level.play_count) + "<br/>";
             popText += "Rating: " + level.rating;
-            if (class_28.trimWhitespace(level.note) != '') {
-                popText += "<br/>-----<br/><i>" + class_28.escapeString(level.note, true) + "</i>";
+            if (Data.trimWhitespace(level.note) != '') {
+                popText += "<br/>-----<br/><i>" + Data.escapeString(level.note, true) + "</i>";
             }
             this.info = new HoverPopup(levelTitle, popText, this.m);
             this.info.width -= 3;

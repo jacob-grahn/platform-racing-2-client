@@ -3,7 +3,7 @@
 
 // data.Time = data.class_10
 
-package data
+package com.jiggmin.data
 {
     public class Time 
     {
@@ -15,13 +15,13 @@ package data
         public function setTime(n:Number)
         {
             this.var_624 = n * 1000;
-            this.var_568 = class_28.getTime();
+            this.var_568 = Data.getTime();
         }
 
         // method_26 = getTime
         public function getTime():Number
         {
-            return class_28.getTime() - this.var_568 + this.var_624;
+            return Data.getTime() - this.var_568 + this.var_624;
         }
 
         // method_79 = getMS

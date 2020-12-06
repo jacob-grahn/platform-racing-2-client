@@ -5,7 +5,7 @@
 
 package package_4
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
 
     public class TempModMenu extends Removable 
@@ -50,7 +50,7 @@ package package_4
 
         private function clickKick(e:MouseEvent)
         {
-            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + class_28.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
+            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + Data.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
         }
 
         private function kickUser()

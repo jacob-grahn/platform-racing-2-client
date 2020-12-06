@@ -1,6 +1,6 @@
 package package_4
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.net.URLVariables;
@@ -25,7 +25,7 @@ package package_4
 
         private function clickReport(e:MouseEvent)
         {
-            if (this.m.reasonBox.text == null || class_28.trimWhitespace(this.m.reasonBox.text) == '') {
+            if (this.m.reasonBox.text == null || Data.trimWhitespace(this.m.reasonBox.text) == '') {
                 new MessagePopup('Error: Oops, you forgot to write the reason for your report!');
                 return;
             }

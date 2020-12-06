@@ -9,7 +9,7 @@ package package_6
     import flash.display.Bitmap;
     import flash.display.Sprite;
     import flash.geom.ColorTransform;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import flash.display.DisplayObject;
     import flash.geom.Rectangle;
 

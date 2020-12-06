@@ -5,12 +5,12 @@
 
 package menu
 {
-    import data.CommandHandler;
-    import data.Encryptor;
-    import data.PR2Socket;
-    import data.SavedAccounts;
-    import data.Settings;
-    import data.UnreadNotif;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Encryptor;
+    import com.jiggmin.data.PR2Socket;
+    import com.jiggmin.data.SavedAccounts;
+    import com.jiggmin.data.Settings;
+    import com.jiggmin.data.UnreadNotif;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.net.URLRequest;
@@ -104,7 +104,7 @@ package menu
             Main.favoriteLevels = ret.favoriteLevels;
             Main.lastAuthTime.setTime(ret.time);
             UnreadNotif.setLastRead(ret.lastRead);
-            UnreadNotif.setLastRecv(ret.lastRecv);
+            UnreadNotif.notifyUser(ret.lastRecv);
             this.httpOK = true;
             this.maybeSwitchToLobby();
         }

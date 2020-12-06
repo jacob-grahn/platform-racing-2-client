@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import package_6.Course;
     import package_8.LocalCharacter;
 

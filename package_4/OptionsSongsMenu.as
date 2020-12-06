@@ -8,7 +8,7 @@ package package_4
     import fl.controls.CheckBox;
     import package_4.class_264;
     import flash.display.DisplayObject;
-    import data.Settings;
+    import com.jiggmin.data.Settings;
 
     public class OptionsSongsMenu extends class_264 
     {

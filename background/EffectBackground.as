@@ -5,7 +5,7 @@
 
 package background
 {
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import page.GamePage;
     import package_9.LaserShot;
     import package_9.Slash;

@@ -6,8 +6,8 @@
 package package_22
 {
     import com.adobe.crypto.MD5;
-    import data.class_33;
-    import data.Memory;
+    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.Memory;
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.net.URLVariables;
@@ -16,7 +16,7 @@ package package_22
     import flash.utils.setTimeout;
     import page.Page;
     import ui.PageNavigation;
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import flash.utils.ByteArray;
     import package_18.AccountInfo;
 

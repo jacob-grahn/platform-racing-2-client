@@ -5,7 +5,7 @@
 
 package items
 {
-    import data.class_33;
+    import com.jiggmin.data.class_33;
     import package_8.LocalCharacter;
 
     public class JetPack extends Item 

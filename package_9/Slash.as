@@ -8,7 +8,7 @@ package package_9
     import package_6.Course;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
     import blocks.Block;
 
@@ -42,7 +42,7 @@ package package_9
 
         private function method_66(_arg_1:int, _arg_2:int)
         {
-            var _local_3:Point = class_28.method_9(_arg_1, _arg_2, this.course.blockBackground.rotation);
+            var _local_3:Point = Data.method_9(_arg_1, _arg_2, this.course.blockBackground.rotation);
             var _local_4:Block = this.course.blockBackground.getBlockFromPos(_local_3.x, _local_3.y);
             if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.var_154);

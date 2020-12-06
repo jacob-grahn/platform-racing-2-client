@@ -3,7 +3,7 @@
 package package_6
 {
     import flash.events.Event;
-    import data.class_28;
+    import com.jiggmin.data.Data;
 
     public class ExpGain extends Removable 
     {
@@ -44,7 +44,7 @@ package package_6
                 removeEventListener(Event.ENTER_FRAME, this.go);
                 this.expStart = this.expEnd;
             }
-            this.m.textBox.text = class_28.formatNumber(Math.floor(this.expStart)) + " / " + class_28.formatNumber(this.expToRank);
+            this.m.textBox.text = Data.formatNumber(Math.floor(this.expStart)) + " / " + Data.formatNumber(this.expToRank);
             this.m.bar.bar.width = 200 * (this.expStart / this.expToRank);
         }
 

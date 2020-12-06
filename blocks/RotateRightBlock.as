@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
 
     public class RotateRightBlock extends class_45 
     {

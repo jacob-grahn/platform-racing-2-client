@@ -5,10 +5,10 @@
 
 package menu
 {
-    import data.class_28;
-    import data.class_33;
-    import data.SavedAccounts;
-    import data.Settings;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.SavedAccounts;
+    import com.jiggmin.data.Settings;
     import page.Page;
     import package_4.ConfirmPopup;
     //import package_4.LogoutPassPopup;
@@ -115,7 +115,7 @@ package menu
             class_33.setNumber("userRank", 0);
             new ServerSelectPopup(true);
             /*if (Main.remember && Main.loggedInAs != "") {
-                new ConfirmPopup(this.playAsGuest, "It appears you\'re currently logged in as " + class_28.escapeString(Main.loggedInAs) + ". Do you want to log out of your account and log in as a guest?");
+                new ConfirmPopup(this.playAsGuest, "It appears you\'re currently logged in as " + Data.escapeString(Main.loggedInAs) + ". Do you want to log out of your account and log in as a guest?");
                 return;
             } else {
                 this.playAsGuest();

@@ -8,7 +8,7 @@ package background
     import page.GamePage;
     import levelEditor.BlockObject;
     import flash.geom.Point;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.display.DisplayObject;
 
     public class BlockBackground extends class_77 
@@ -66,7 +66,7 @@ package background
         override public function setPos(_arg_1:Number, _arg_2:Number)
         {
             super.setPos(_arg_1, _arg_2);
-            var _local_3:Point = class_28.method_9(GamePage.course.posX, GamePage.course.posY, rotation);
+            var _local_3:Point = Data.method_9(GamePage.course.posX, GamePage.course.posY, rotation);
             var _local_4:Point = this.getSegFromPos(_local_3.x, _local_3.y);
             method_118(-(_local_4.x), -(_local_4.y), 11, 9, 8, 6, this, this.blockArray);
         }
@@ -120,7 +120,7 @@ package background
         {
             var pos:Point;
             if (rotMod) {
-                pos = class_28.method_9(x, y, rotation);
+                pos = Data.method_9(x, y, rotation);
             } else {
                 pos = new Point(x, y);
             }

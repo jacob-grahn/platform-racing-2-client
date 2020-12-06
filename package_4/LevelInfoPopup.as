@@ -1,8 +1,8 @@
 ﻿package package_4
 {
-    import data.HTMLNameMaker;
-    import data.class_28;
-    import data.class_33;
+    import com.jiggmin.data.HTMLNameMaker;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_33;
     import flash.display.DisplayObject;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -115,14 +115,14 @@
             // apply straight to mc
             this.m.levelInfo.title.text = this.title = ret.title;
             this.m.levelInfo.note.text = this.note = ret.note;
-            this.m.levelInfo.version.text = this.version = class_28.formatNumber(ret.version);
-            this.m.levelInfo.plays.text = this.plays = class_28.formatNumber(ret.play_count);
+            this.m.levelInfo.version.text = this.version = Data.formatNumber(ret.version);
+            this.m.levelInfo.plays.text = this.plays = Data.formatNumber(ret.play_count);
             this.m.levelInfo.minRank.text = this.minRank = ret.min_rank;
 
             // make strings/data to give to mc
             this.m.levelInfo.author.htmlText = 'by: ' + this.htmlNameMaker.makeName(this.userName, this.userGroup);
             this.htmlNameMaker.listenForLink(this.m.levelInfo.author);
-            this.m.levelInfo.updated.text = this.updated.date + '/' + class_28.getMonthStr(this.updated.month) + '/' + this.updated.fullYear;
+            this.m.levelInfo.updated.text = this.updated.date + '/' + Data.getMonthStr(this.updated.month) + '/' + this.updated.fullYear;
             this.m.levelInfo.rating.stars.bar.scaleX = this.rating / 5;
 
             // hover events
@@ -235,7 +235,7 @@
 
         private function overMaxTimeHandler(e:MouseEvent)
         {
-            this.hoverMaxTime = new HoverPopup('Time Limit', this.maxTime == 0 || (this.maxTime == 999 && this.time < 1358640000) ? 'Infinite' : class_28.formatTime(this.maxTime) + " (" + class_28.formatNumber(this.maxTime) + " seconds)", this.m.levelInfo.maxTime);
+            this.hoverMaxTime = new HoverPopup('Time Limit', this.maxTime == 0 || (this.maxTime == 999 && this.time < 1358640000) ? 'Infinite' : Data.formatTime(this.maxTime) + " (" + Data.formatNumber(this.maxTime) + " seconds)", this.m.levelInfo.maxTime);
         }
 
         private function outMaxTimeHandler(e:*)

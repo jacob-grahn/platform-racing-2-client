@@ -5,11 +5,11 @@
 
 package package_22
 {
-    import data.class_28;
-    import data.class_33;
-    import data.CommandHandler;
-    import data.Encryptor;
-    import data.HTMLNameMaker;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Encryptor;
+    import com.jiggmin.data.HTMLNameMaker;
     import flash.display.DisplayObject;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -198,7 +198,7 @@ package package_22
         {
             if (this.superLoader == null) {
                 var enteredPass:String = this.m.accessCover.passBox.text;
-                var hash:String = class_28.hash(enteredPass + Env.LEVEL_PASS_SALT);
+                var hash:String = Data.hash(enteredPass + Env.LEVEL_PASS_SALT);
                 this.superLoader = new SuperLoader(true, SuperLoader.j);
                 this.superLoader.addEventListener(Event.COMPLETE, this.validatePassResponse, false, 0, true);
                 var vars:URLVariables = new URLVariables();
@@ -438,16 +438,16 @@ package package_22
 
         private function overInfoHandler(e:MouseEvent)
         {
-            var popupTitle:String = "-- " + class_28.escapeString(this.title) + " --";
-            var byText:String = "By: " + class_28.escapeString(this.userName) + "<br/>";
-            var versionText:String = "Version: " + class_28.formatNumber(this.version) + "<br/>";
-            var updatedText:String = "Updated: "  + this.lastUpdated.date + '/' + class_28.getMonthStr(this.lastUpdated.month) + '/' + this.lastUpdated.fullYear + '<br/>';
+            var popupTitle:String = "-- " + Data.escapeString(this.title) + " --";
+            var byText:String = "By: " + Data.escapeString(this.userName) + "<br/>";
+            var versionText:String = "Version: " + Data.formatNumber(this.version) + "<br/>";
+            var updatedText:String = "Updated: "  + this.lastUpdated.date + '/' + Data.getMonthStr(this.lastUpdated.month) + '/' + this.lastUpdated.fullYear + '<br/>';
             var minRankText:String = "Min Rank: " + this.minRank + "<br/>";
-            var playsText:String = "Plays: " + class_28.formatNumber(this.playCount) + "<br/>";
+            var playsText:String = "Plays: " + Data.formatNumber(this.playCount) + "<br/>";
             var ratingText:String = "Rating: " + this.rating;
             var noteText:String = "";
-            if (class_28.escapeString(this.note) != "") {
-                noteText = "<br/>-----<br/><i>" + class_28.escapeString(this.note, true) + "</i>";
+            if (Data.escapeString(this.note) != "") {
+                noteText = "<br/>-----<br/><i>" + Data.escapeString(this.note, true) + "</i>";
             }
             var clickText:String = "<br/>-----<br/>(click the \"?\" for more info)";
             var levelInfoText:String = byText + versionText + updatedText + minRankText + playsText + ratingText + noteText + clickText;

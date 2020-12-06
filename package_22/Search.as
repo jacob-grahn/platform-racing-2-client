@@ -5,8 +5,8 @@
 
 package package_22
 {
-    import data.class_28;
-    import data.Memory;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Memory;
     import flash.events.Event;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
@@ -65,7 +65,7 @@ package package_22
         // _loc2 = request
         override protected function requestCourses()
         {
-            if (class_28.trimWhitespace(this.m.searchBox.text) == '') {
+            if (Data.trimWhitespace(this.m.searchBox.text) == '') {
                 return; // don't send a request with a blank search string
             }
             if (this.m.mode_cb.selectedItem.data == 'id' && pageNum > 1) { // while level id is the search mode

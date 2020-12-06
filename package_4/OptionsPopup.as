@@ -2,8 +2,8 @@
 
 package package_4
 {
-    import data.class_28;
-    import data.Settings;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Settings;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.events.Event;
@@ -75,7 +75,7 @@ package package_4
 
         private function musicSliderChange(e:SliderEvent)
         {
-            var newLevel:int = class_28.numLimit(e.value, 0, 100);
+            var newLevel:int = Data.numLimit(e.value, 0, 100);
             if (Settings.musicLevel === 0 && newLevel > 0) {
                 Main.noodleTown.startPlaying();
             }
@@ -86,7 +86,7 @@ package package_4
 
         private function soundSliderChange(e:SliderEvent)
         {
-            Settings.setValue(Settings.SOUND_VOLUME, class_28.numLimit(e.value, 0, 100));
+            Settings.setValue(Settings.SOUND_VOLUME, Data.numLimit(e.value, 0, 100));
             this.m.soundPercentBox.text = Settings.soundLevel + '%';
         }
 

@@ -6,7 +6,7 @@
 package items
 {
     import package_8.LocalCharacter;
-    import data.class_33;
+    import com.jiggmin.data.class_33;
     import flash.utils.setTimeout;
     import flash.geom.Point;
     import background.EffectBackground;

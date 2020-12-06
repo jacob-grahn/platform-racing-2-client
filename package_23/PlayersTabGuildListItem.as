@@ -5,7 +5,7 @@
 
 package package_23
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
 
     public class PlayersTabGuildListItem extends PlayersTabListItem
     {
@@ -20,7 +20,7 @@ package package_23
             this.activeMembers = activeCount;
             this.gpToday = gpTodayCount;
             m.nameBox.htmlText = htmlNameMaker.makeGuild(this.guildName, guildId);
-            m.rankBox.text = class_28.formatNumber(this.gpToday);
+            m.rankBox.text = Data.formatNumber(this.gpToday);
             m.hatBox.text = this.activeMembers.toString();
         }
 

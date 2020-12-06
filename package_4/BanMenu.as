@@ -5,8 +5,8 @@
 
 package package_4
 {
-    import data.class_28;
-    import data.Memory;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Memory;
     import flash.events.MouseEvent;
     import package_21.ChatInstance;
     import flash.net.URLVariables;
@@ -118,7 +118,7 @@ package package_4
                 return;
             }
             var scope:String = this.m.scope.selectedItem.data === 'game' ? 'ban' : 'socially ban';
-            var msg:String = "Are you sure you want to " + scope + " " + class_28.escapeString(this.userName) + "?";
+            var msg:String = "Are you sure you want to " + scope + " " + Data.escapeString(this.userName) + "?";
             if (this.m.scope.selectedItem.data === 'game') {
                 msg += " They won't be able to log onto PR2 or use any of the pages on pr2hub.com.";
             } else {
@@ -190,7 +190,7 @@ package package_4
 
         private function clickKick(e:MouseEvent)
         {
-            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + class_28.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
+            new ConfirmPopup(this.kickUser, "Are you sure you want to kick " + Data.escapeString(this.userName) + "? They will not be able to re-enter this server for 30 minutes.");
         }
 
         public function kickUser()

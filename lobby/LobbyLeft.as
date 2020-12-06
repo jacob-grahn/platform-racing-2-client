@@ -6,7 +6,7 @@
 package lobby
 {
     import ui.LobbyTab;
-    import data.UnreadNotif;
+    import com.jiggmin.data.UnreadNotif;
     import package_21.ChatInstance;
     import package_21.Messages;
     import package_23.PlayersTab;
@@ -32,7 +32,7 @@ package lobby
                 lastArrKey = 2;
             }
             super(tabArray, 194, 394, lastArrKey, "lobbyLeft");
-            UnreadNotif.method_524(pmsTab);
+            UnreadNotif.addNotifContainer(pmsTab);
         }
 
         private function changeTabChat()
@@ -57,7 +57,7 @@ package lobby
 
         override public function remove()
         {
-            UnreadNotif.remove();
+            UnreadNotif.reset();
             super.remove();
         }
 

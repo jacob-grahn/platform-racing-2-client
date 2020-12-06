@@ -2,7 +2,7 @@
 
 package package_4
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.display.Loader;
     import flash.events.MouseEvent;
     import flash.events.Event;
@@ -85,8 +85,8 @@ package package_4
             this.ownerId = ret.owner_id;
             this.guildName = ret.guild_name;
             this.m.titleBox.text = "-- " + this.guildName + " --";
-            this.m.gpTodayBox.text = "GP today: " + class_28.formatNumber(ret.gp_today);
-            this.m.gpTotalBox.text = "GP total: " + class_28.formatNumber(ret.gp_total);
+            this.m.gpTodayBox.text = "GP today: " + Data.formatNumber(ret.gp_today);
+            this.m.gpTotalBox.text = "GP total: " + Data.formatNumber(ret.gp_total);
             this.m.membersCount.text = "Members: " + ret.member_count + " (" + ret.active_count + " active)";
             this.m.guildProse.text = ret.note;
             this.loader.load(new URLRequest(Main.baseURL + "/emblems/" + ret.emblem));
@@ -124,7 +124,7 @@ package package_4
         {
             var confirmStr:String = "Are you sure you want to delete this guild?";
             if (this.guildName != "") {
-                confirmStr = "Are you sure you want to delete " + class_28.escapeString(this.guildName) + "?";
+                confirmStr = "Are you sure you want to delete " + Data.escapeString(this.guildName) + "?";
             }
             new ConfirmPopup(this.confirmDelete, confirmStr);
         }

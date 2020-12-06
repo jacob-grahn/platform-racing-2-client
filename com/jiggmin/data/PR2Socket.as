@@ -1,6 +1,6 @@
 ﻿// data.PR2Socket = data.class_9
 
-package data
+package com.jiggmin.data
 {
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
@@ -54,10 +54,8 @@ package data
             }
             delete Memory.memory["coursePageNumcampaign"]; // delete campaign page from memory
             delete Memory.memory["campaignInfo" + Campaign.campaignPage]; // delete today's campaign information from memory
-            Main.isSpecialUser = false;
-            Main.isPrizer = false;
-            Main.isTempMod = false;
-            Main.isTrialMod = false;
+            Main.isSpecialUser = Main.isPrizer = Main.isTempMod = Main.isTrialMod = false;
+            UnreadNotif.reset();
         }
 
         public function write(str:String)

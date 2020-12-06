@@ -6,7 +6,7 @@
 package package_21
 {
     import package_4.InfoPopup;
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import flash.display.DisplayObject;
 
     public class ChatRoomInfoPopup extends InfoPopup 

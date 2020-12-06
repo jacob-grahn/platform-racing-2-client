@@ -7,7 +7,7 @@ package package_17
 {
     import package_4.Popup;
     import ui.CustomScrollBar;
-    import data.class_153;
+    import com.jiggmin.data.class_153;
     import flash.events.MouseEvent;
     import flash.net.URLRequest;
     import flash.events.Event;

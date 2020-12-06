@@ -11,7 +11,7 @@ package com.jiggmin.ColorPicker
     import ui.CustomCursor;
     import flash.events.MouseEvent;
     import flash.events.Event;
-    import data.class_122;
+    import com.jiggmin.data.class_122;
     import flash.display.DisplayObject;
     import flash.geom.ColorTransform;
     import flash.ui.Mouse;

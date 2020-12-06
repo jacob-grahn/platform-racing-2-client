@@ -6,7 +6,7 @@
 package ui
 {
     import com.jiggmin.ColorPicker.CursorEyedropper;
-    import data.Memory;
+    import com.jiggmin.data.Memory;
     import levelEditor.LevelEditor;
     import flash.display.DisplayObject;
     import flash.display.Stage;

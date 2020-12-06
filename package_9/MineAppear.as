@@ -3,10 +3,10 @@
 package package_9
 {
     import package_6.Course;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
     import sounds.SoundEffects;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
 
     public class MineAppear extends Effect 
     {
@@ -17,7 +17,7 @@ package package_9
         public function MineAppear(x:Number, y:Number)
         {
             rotation = Course.course.blockBackground.rotation;
-            var point:Point = class_28.method_9(x, y, -rotation);
+            var point:Point = Data.method_9(x, y, -rotation);
             super(point.x, point.y);
             addChild(this.m);
             method_2(33);
@@ -27,7 +27,7 @@ package package_9
         override public function remove()
         {
             if (Course.course != null) {
-                var _local_1:Point = class_28.method_9(x, y, Course.course.blockBackground.rotation);
+                var _local_1:Point = Data.method_9(x, y, Course.course.blockBackground.rotation);
                 if (Course.course.blockBackground.getBlockFromPos(_local_1.x, _local_1.y) == null) {
                     Course.course.blockBackground.placeBlock(Objects.MineBlockCode, _local_1.x, _local_1.y);
                 }

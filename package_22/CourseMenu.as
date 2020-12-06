@@ -4,7 +4,7 @@ package package_22
 {
     import package_4.class_264;
     import flash.events.MouseEvent;
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import flash.utils.setTimeout;
     import flash.utils.clearInterval;
     import flash.utils.clearTimeout;

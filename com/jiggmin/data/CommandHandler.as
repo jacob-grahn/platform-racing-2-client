@@ -3,7 +3,7 @@
 
 //data.CommandHandler = data.class_12
 
-package data
+package com.jiggmin.data
 {
     import com.hurlant.crypto.hash.MD5;
     import menu.class_4;
@@ -133,7 +133,7 @@ package data
 
         private function pmNotify(a:Array)
         {
-            UnreadNotif.setLastRecv(int(a[0]));
+            UnreadNotif.notifyUser(int(a[0]));
         }
 
         private function becomeSpecialUser(a:Array)

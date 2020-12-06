@@ -5,9 +5,9 @@
 
 package blocks
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import package_8.LocalCharacter;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
 
     public class PushBlock extends Block 
@@ -67,7 +67,7 @@ package blocks
         // method_93 = push
         private function push(incSegX:int, incSegY:int)
         {
-            var newSeg:Point = class_28.method_9(incSegX, incSegY, map.rotation);
+            var newSeg:Point = Data.method_9(incSegX, incSegY, map.rotation);
             move(newSeg.x, newSeg.y, map);
         }
 

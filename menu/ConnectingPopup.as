@@ -6,8 +6,8 @@
 package menu
 {
     import package_4.Popup;
-    import data.PR2Socket;
-    import data.CommandHandler;
+    import com.jiggmin.data.PR2Socket;
+    import com.jiggmin.data.CommandHandler;
     import flash.events.MouseEvent;
     import flash.events.IOErrorEvent;
     import flash.events.SecurityErrorEvent;

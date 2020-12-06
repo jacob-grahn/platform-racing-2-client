@@ -2,7 +2,7 @@
 
 package ui
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import fl.controls.ComboBox;
     import flash.media.SoundChannel;
     import flash.media.SoundTransform;

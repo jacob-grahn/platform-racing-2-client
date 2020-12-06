@@ -3,7 +3,7 @@
 
 //data.class_153
 
-package data
+package com.jiggmin.data
 {
     import flash.display.DisplayObject;
     import flash.utils.clearInterval;
@@ -74,5 +74,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

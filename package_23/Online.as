@@ -5,7 +5,7 @@
 
 package package_23
 {
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
 
     public class Online extends PlayersTabList 
     {

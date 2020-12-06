@@ -6,7 +6,7 @@
 package page
 {
     import background.*;
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.net.URLVariables;
     import flash.display.StageQuality;

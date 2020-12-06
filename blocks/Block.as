@@ -11,8 +11,8 @@ package blocks
     import background.Map;
     import flash.display.BitmapData;
     import flash.display.PixelSnapping;
-    import data.Objects;
-    import data.class_28;
+    import com.jiggmin.data.Objects;
+    import com.jiggmin.data.Data;
     import flash.events.Event;
     import package_8.Character;
     import package_8.LocalCharacter;
@@ -120,12 +120,12 @@ package blocks
             } else if (_arg_1 == -90) {
                 _local_2 = 30;
             }
-            return class_28.method_9(this.posX + _local_2, this.posY + _local_3, -_arg_1);
+            return Data.method_9(this.posX + _local_2, this.posY + _local_3, -_arg_1);
         }
 
         public function method_777():int
         {
-            return (class_28.getMS() - this.var_600);
+            return (Data.getMS() - this.var_600);
         }
 
         public function setSeg(_arg_1:int, _arg_2:int)
@@ -147,7 +147,7 @@ package blocks
         {
             if (!this.frozen) {
                 this.frozen = true;
-                this.var_600 = class_28.getMS();
+                this.var_600 = Data.getMS();
                 this.var_110 = new Bitmap(Blocks.iceBitmap);
                 addChild(this.var_110);
                 if (_arg_1) {
@@ -193,7 +193,7 @@ package blocks
             var _local_3:Point;
             if (this.isActive()) {
                 _local_2 = this.method_18();
-                _local_3 = class_28.method_9((x - this.posX), (y - this.posY), this.map.rotation);
+                _local_3 = Data.method_9((x - this.posX), (y - this.posY), this.map.rotation);
                 if (c.crouching) {
                     c.y = _local_2.y + this.size + _local_3.y + (c.var_325 / 2);
                 } else {
@@ -277,7 +277,7 @@ package blocks
         // _loc3 = point
         private function method_315(_arg_1:Number, _arg_2:Number)
         {
-            var point:Point = class_28.method_9(_arg_1, _arg_2, this.map.rotation);
+            var point:Point = Data.method_9(_arg_1, _arg_2, this.map.rotation);
             this.hit(point.x, point.y);
         }
 

@@ -5,8 +5,8 @@
 
 package blocks
 {
-    import data.Objects;
-    import data.Settings;
+    import com.jiggmin.data.Objects;
+    import com.jiggmin.data.Settings;
     import sounds.SoundEffects;
     import package_6.Course;
     import package_8.LocalCharacter;

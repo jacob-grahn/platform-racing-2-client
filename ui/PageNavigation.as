@@ -5,7 +5,7 @@
 
 package ui
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.events.TextEvent;
 
     public class PageNavigation extends Removable 
@@ -128,7 +128,7 @@ package ui
             var m:PageNumberGraphic = new PageNumberGraphic();
             m.textBox.autoSize = "left";
             if (clickable) {
-                m.textBox.htmlText = "<a href='event:" + num + "'><font color='#325638'><u>" + class_28.escapeString(title) + "</u></font></a>";
+                m.textBox.htmlText = "<a href='event:" + num + "'><font color='#325638'><u>" + Data.escapeString(title) + "</u></font></a>";
                 m.textBox.addEventListener(TextEvent.LINK, this.clickPage, false, 0, true);
             } else {
                 m.textBox.text = title;

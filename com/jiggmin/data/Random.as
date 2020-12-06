@@ -1,6 +1,6 @@
 ﻿// data.Random = data.class_133
 
-package data
+package com.jiggmin.data
 {
     import flash.utils.ByteArray;
 

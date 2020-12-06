@@ -5,8 +5,8 @@
 
 package package_18.PartInfo
 {
-    import data.class_28;
-    import data.class_153;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_153;
     import flash.display.MovieClip;
     import flash.text.TextFieldAutoSize;
     import package_4.MessagePopup;
@@ -30,7 +30,7 @@ package package_18.PartInfo
             this.showPart();
             addChild(this.m);
             this.m.bg.visible = false;
-            this.m.titleBox.text = this.listing.name + ' ' + class_28.ucfirst(this.listing.type);
+            this.m.titleBox.text = this.listing.name + ' ' + Data.ucfirst(this.listing.type);
             this.m.descBox.htmlText = this.listing.desc;
             this.m.bg.mouseEnabled = this.m.titleBox.mouseEnabled = false;
         }
@@ -81,7 +81,7 @@ package package_18.PartInfo
             if (this.listing.has == true) {
                 this.target.alpha = 1;
                 this.m.ownedBox.visible = true;
-                /*this.m.titleBox.text = this.listing.name + ' ' + class_28.ucfirst(this.listing.type);
+                /*this.m.titleBox.text = this.listing.name + ' ' + Data.ucfirst(this.listing.type);
                 this.m.descBox.htmlText = this.listing.desc;*/ // this would replace the code on lines 36/37
                 if (this.listing.hasEpic == true || this.hasEE == true) {
                     //this.target.colorMC2.visible = true;

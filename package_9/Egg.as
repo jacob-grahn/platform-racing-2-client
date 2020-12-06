@@ -5,11 +5,11 @@
 
 package package_9
 {
-    import data.Random;
-    import data.CommandHandler;
+    import com.jiggmin.data.Random;
+    import com.jiggmin.data.CommandHandler;
     import package_6.Course;
     import background.Map;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
     import flash.geom.ColorTransform;
     import background.EffectBackground;
@@ -50,7 +50,7 @@ package package_9
             var _local_2:int = rand.nextMinMax(_local_1.minX, _local_1.maxX);
             var _local_3:int = rand.nextMinMax(_local_1.minY, _local_1.maxY);
             var _local_4:int = (rand.nextMinMax(-1, 3) * 90);
-            var _local_5:Point = class_28.method_9(_local_2, _local_3, -(_local_4));
+            var _local_5:Point = Data.method_9(_local_2, _local_3, -(_local_4));
             super(_local_5.x, _local_5.y, _local_4);
             this.setLimits();
             if (rand.nextMinMax(0, 2) == 1) {
@@ -102,8 +102,8 @@ package package_9
             this.minX = map.minX - 300;
             this.maxY = map.maxY + 300;
             this.minY = map.minY - 300;
-            var minPoint:Point = class_28.method_9(this.minX, this.minY, -rot);
-            var maxPoint:Point = class_28.method_9(this.maxX, this.maxY, -rot);
+            var minPoint:Point = Data.method_9(this.minX, this.minY, -rot);
+            var maxPoint:Point = Data.method_9(this.maxX, this.maxY, -rot);
             this.maxX = maxPoint.x;
             this.maxY = maxPoint.y;
             this.minX = minPoint.x;
@@ -164,7 +164,7 @@ package package_9
             }
             var _local_2:int = posX + (velX * (Math.random() * 100) + 50);
             var _local_3:int = posY;
-            var _local_4:Point = class_28.method_9(_local_2, _local_3, -rotation);
+            var _local_4:Point = Data.method_9(_local_2, _local_3, -rotation);
             if (this.var_382 <= 0 && method_181(_local_4.x, _local_4.y)) {
                 this.var_382 = 120;
                 _local_5 = 0;

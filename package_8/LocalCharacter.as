@@ -10,10 +10,10 @@ package package_8
     import blocks.SafetyBlock;
     import blocks.VanishBlock;
     import blocks.WaterBlock;
-    import data.class_28;
-    import data.CommandHandler;
-    import data.PR2Socket;
-    import data.Settings;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.PR2Socket;
+    import com.jiggmin.data.Settings;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.events.Event;
@@ -248,7 +248,7 @@ package package_8
             var _local_2:int = x = Math.round(x);
             var _local_3:int = y = Math.round(y);
             if (this.map != null) {
-                var _local_4:Point = class_28.method_9(_local_2, _local_3, this.map.rotation);
+                var _local_4:Point = Data.method_9(_local_2, _local_3, this.map.rotation);
                 this.mapDot.x = _local_4.x;
                 this.mapDot.y = _local_4.y;
             }
@@ -297,7 +297,7 @@ package package_8
                 }
                 if (this.stingCooldown > 0) {
                     this.stingCooldown--;
-                } else if (var_4.getBool(JELLYFISH) && class_28.rand(1, 35) === 1) { // should happen within a second or so
+                } else if (var_4.getBool(JELLYFISH) && Data.rand(1, 35) === 1) { // should happen within a second or so
                     this.maybeSting();
                 }
             }
@@ -568,7 +568,7 @@ package package_8
                 velY = class_74.numLimit(velY, -this.var_157, this.var_157);
                 x = x + velX;
                 y = y + velY;
-                _local_2 = class_28.method_9(x, y, this.map.rotation);
+                _local_2 = Data.method_9(x, y, this.map.rotation);
                 _local_3 = 500;
                 if ((_local_2.y > this.map.maxY + _local_3 && this.map.rotation == 0) || (_local_2.y < this.map.minY - _local_3 && Math.abs(this.map.rotation) == 180) || (_local_2.x > this.map.maxX + _local_3 && this.map.rotation == 90) || (_local_2.x < this.map.minX - _local_3 && this.map.rotation == -90)) {
                     this.method_216();
@@ -936,7 +936,7 @@ package package_8
                 if (Items.getCodeFromItem(this.curItem) == Items.speedBurst) {
                     this.setItem(0);
                 }
-                if (class_28.getDateStr(new Date().getTime()) !== "Apr 1") {
+                if (Data.getDateStr(new Date().getTime()) !== "Apr 1") {
                     reversedControls = false; // preserve reversed controls on Apr 1
                 }
             }

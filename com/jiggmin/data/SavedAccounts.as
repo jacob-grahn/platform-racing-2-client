@@ -1,4 +1,4 @@
-package data
+package com.jiggmin.data
 {
     import flash.net.SharedObject;
     import package_4.MessagePopup;
@@ -23,7 +23,7 @@ package data
                 var cookie:SharedObject = SharedObject.getLocal(COOKIE_ID);
                 for (var i:int = 0; i < cookie.data.accounts.length; i++) {
                     var account:Object = cookie.data.accounts[i];
-                    account.name = class_28.trimWhitespace(account.name);
+                    account.name = Data.trimWhitespace(account.name);
                     if (account.name != '') {
                         accounts.push(account);
                     }
@@ -55,7 +55,7 @@ package data
         {
             for (var i:int = 0; i < accounts.length; i++) {
                 var account:Object = accounts[i];
-                if (account.name.toLowerCase() === class_28.trimWhitespace(name).toLowerCase()) {
+                if (account.name.toLowerCase() === Data.trimWhitespace(name).toLowerCase()) {
                     return i;
                 }
             }
@@ -71,7 +71,7 @@ package data
         public static function add(name:String, token:String)
         {
             // don't add an account with no name
-            if (class_28.trimWhitespace(name) == '') {
+            if (Data.trimWhitespace(name) == '') {
                 return;
             }
 
@@ -82,7 +82,7 @@ package data
             }
 
             // save the account
-            accounts.unshift({'name': class_28.trimWhitespace(name), 'token': token});
+            accounts.unshift({'name': Data.trimWhitespace(name), 'token': token});
             setCookie();
         }
 

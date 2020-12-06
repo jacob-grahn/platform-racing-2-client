@@ -1,6 +1,6 @@
 ﻿// data.GpNotification = data.class_17
 
-package data
+package com.jiggmin.data
 {
     import flash.display.DisplayObjectContainer;
 

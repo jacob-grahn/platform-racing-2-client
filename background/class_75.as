@@ -9,11 +9,11 @@ package background
     import page.GamePage;
     import levelEditor.LevelEditorMenu;
     import levelEditor.LevelEditor;
-    import data.class_122;
+    import com.jiggmin.data.class_122;
     import flash.geom.ColorTransform;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
     import flash.display.DisplayObjectContainer;
     import flash.display.DisplayObject;
@@ -164,8 +164,8 @@ package background
         protected function method_118(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:DisplayObjectContainer, _arg_8:Array)
         {
             var _local_16:int;
-            var _local_9:Point = class_28.method_9(_arg_3, _arg_5, rotation);
-            var _local_10:Point = class_28.method_9(_arg_4, _arg_6, rotation);
+            var _local_9:Point = Data.method_9(_arg_3, _arg_5, rotation);
+            var _local_10:Point = Data.method_9(_arg_4, _arg_6, rotation);
             _arg_3 = Math.abs(_local_9.x);
             _arg_4 = Math.abs(_local_10.x);
             _arg_5 = Math.abs(_local_9.y);

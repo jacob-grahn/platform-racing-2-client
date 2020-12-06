@@ -1,6 +1,6 @@
 package
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
 
     public class Parts
     {

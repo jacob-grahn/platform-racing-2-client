@@ -7,7 +7,7 @@ package items
 {
     import background.Map;
     import blocks.Block;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
     import package_6.Course;
     import package_8.LocalCharacter;
@@ -35,7 +35,7 @@ package items
                 var _local_5:Point = map.method_497(_local_4.x, _local_4.y);
                 _local_5.x = _local_5.x + 15;
                 _local_5.y = _local_5.y + 15;
-                _local_5 = class_28.method_9(_local_5.x, _local_5.y, Course.course.blockBackground.rotation);
+                _local_5 = Data.method_9(_local_5.x, _local_5.y, Course.course.blockBackground.rotation);
                 Main.socket.write("add_effect`Mine`" + _local_5.x + "`" + _local_5.y + "`" + Course.course.blockBackground.rotation);
                 new MineAppear(_local_5.x, _local_5.y);
                 super.useItem();

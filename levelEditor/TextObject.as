@@ -7,7 +7,7 @@ package levelEditor
 {
     import flash.text.TextField;
     import com.jiggmin.ColorPicker.ColorPicker;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import flash.text.TextFieldAutoSize;
     import flash.text.TextFieldType;
     import flash.events.Event;

@@ -5,7 +5,7 @@
 
 package package_18
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import package_4.HoverPopup;
@@ -89,7 +89,7 @@ package package_18
             clearTimeout(this.hoverTimer);
             if (e is String) {
                 var pluralType:String = partType == 'body' ? 'bodies' : (partType == 'feet' ? partType : partType + 's');
-                this.hover = new HoverPopup(class_28.ucfirst(partType) + ' Information', 'See and learn how to obtain all the ' + pluralType + ' in Platform Racing 2.', this[partType + 'Select'].infoButton);
+                this.hover = new HoverPopup(Data.ucfirst(partType) + ' Information', 'See and learn how to obtain all the ' + pluralType + ' in Platform Racing 2.', this[partType + 'Select'].infoButton);
                 this.hover.x += this.hover.width + 25;
             }
 

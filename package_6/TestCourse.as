@@ -5,7 +5,7 @@
 
 package package_6
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.geom.Point;

@@ -6,7 +6,7 @@
 package package_19
 {
     import flash.display.Sprite;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
     import ui.CustomCursor;

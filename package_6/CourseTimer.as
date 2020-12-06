@@ -6,7 +6,7 @@
 package package_6
 {
     import flash.utils.clearInterval;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.utils.setInterval;
     import flash.events.Event;
 
@@ -76,7 +76,7 @@ package package_6
             if (timeLeft < 0) {
                 timeLeft = 0;
             }
-            this.m.holder.timeBox.text = class_28.formatTime(timeLeft);
+            this.m.holder.timeBox.text = Data.formatTime(timeLeft);
             if (!this.racing) {
                 if (timeLeft < 30) {
                     this.m.holder.timeBox.textColor = 0xFF0000;

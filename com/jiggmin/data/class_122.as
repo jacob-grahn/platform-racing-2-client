@@ -3,7 +3,7 @@
 
 //data.class_122
 
-package data
+package com.jiggmin.data
 {
     public class class_122 
     {
@@ -164,5 +164,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

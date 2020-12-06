@@ -2,7 +2,7 @@
 
 package package_22
 {
-    import data.Memory;
+    import com.jiggmin.data.Memory;
     import flash.net.URLVariables;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;

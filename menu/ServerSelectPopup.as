@@ -2,8 +2,8 @@
 
 package menu
 {
-    import data.class_28;
-    import data.SavedAccounts;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.SavedAccounts;
     import fl.controls.ComboBox;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -103,7 +103,7 @@ package menu
 
         private function clickUserDelete(e:MouseEvent)
         {
-            var name:String = class_28.escapeString(this.m.userSelect.selectedItem.label);
+            var name:String = Data.escapeString(this.m.userSelect.selectedItem.label);
             new ConfirmPopup(this.doUserDelete, 'Are you sure you want to delete "' + name + '" from your saved accounts?');
         }
 

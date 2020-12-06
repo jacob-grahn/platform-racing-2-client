@@ -3,8 +3,8 @@
 package package_6
 {
     import com.adobe.crypto.MD5;
-    import data.CommandHandler;
-    import data.Settings;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Settings;
     import flash.events.Event;
     import flash.net.URLRequest;
     import flash.net.URLVariables;

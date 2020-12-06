@@ -5,7 +5,7 @@
 
 package package_9
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import blocks.IceBlock;
     import blocks.Block;
     import package_8.LocalCharacter;

@@ -8,8 +8,8 @@ package package_6
     import flash.errors.Error;
     import package_4.Popup;
     import flash.display.MovieClip;
-    import data.class_153;
-    import data.class_28;
+    import com.jiggmin.data.class_153;
+    import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
 
     public class PrizePopup extends Popup 
@@ -69,7 +69,7 @@ package package_6
                     this.target.y = -80;
                     this.target.textBox.text = desc;
                 } else {
-                    this.target.textBox.text = 'You already have this prize, so here are ' + class_28.formatNumber(id) + ' experience points instead!';
+                    this.target.textBox.text = 'You already have this prize, so here are ' + Data.formatNumber(id) + ' experience points instead!';
                 }
             }
             if (type == 'cancel') {
@@ -93,7 +93,7 @@ package package_6
                 this.target.colorMC.gotoAndStop(id);
                 this.target.colorMC2.gotoAndStop(id);
             }
-            var aOrAn:String = class_28.aOrAn(prizeName);
+            var aOrAn:String = Data.aOrAn(prizeName);
             if (type == "feet") {
                 aOrAn = 'a pair of';
             }

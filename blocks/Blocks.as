@@ -3,7 +3,7 @@
 package blocks
 {
     import flash.display.BitmapData;
-    import data.Objects;
+    import com.jiggmin.data.Objects;
 
     public class Blocks 
     {

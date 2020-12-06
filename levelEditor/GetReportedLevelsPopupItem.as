@@ -1,6 +1,6 @@
 ﻿package levelEditor
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import ui.class_229;
     import flash.events.MouseEvent;
     import package_4.HoverPopup;
@@ -18,7 +18,7 @@
             this.level = level;
             var reported:Date = new Date(level.report_time * 1000);
             this.m.titleBox.text = this.level.title;
-            this.m.timeBox.text = reported.date + '/' + class_28.getMonthStr(reported.month) + '/' + reported.fullYear;
+            this.m.timeBox.text = reported.date + '/' + Data.getMonthStr(reported.month) + '/' + reported.fullYear;
             this.doubleClickEnabled = true;
             this.m.mouseEnabled = false;
             this.m.mouseChildren = false;
@@ -29,16 +29,16 @@
 
         private function onMouseOver(e:MouseEvent)
         {
-            var levelTitle:String = "-- " + class_28.escapeString(level.title) + " --";
-            var popText:String = "Creator: " + class_28.escapeString(level.creator) + "<br/>";
-            popText += "Version: " + class_28.formatNumber(level.version);
-            if (class_28.trimWhitespace(level.note) != '') {
-                popText += "<br/>Note: <i>" + class_28.escapeString(level.note, true) + "</i>";
+            var levelTitle:String = "-- " + Data.escapeString(level.title) + " --";
+            var popText:String = "Creator: " + Data.escapeString(level.creator) + "<br/>";
+            popText += "Version: " + Data.formatNumber(level.version);
+            if (Data.trimWhitespace(level.note) != '') {
+                popText += "<br/>Note: <i>" + Data.escapeString(level.note, true) + "</i>";
             }
             popText += "<br/>-----<br/>";
             popText += "Reported: "  + this.m.timeBox.text + '<br/>';
-            popText += "^ By: " + class_28.escapeString(level.reporter) + "<br/>";
-            popText += "Reason: <i>" + class_28.escapeString(level.reason) + "</i>";
+            popText += "^ By: " + Data.escapeString(level.reporter) + "<br/>";
+            popText += "Reason: <i>" + Data.escapeString(level.reason) + "</i>";
             this.info = new HoverPopup(levelTitle, popText, this.m);
             this.info.width -= 3;
             this.info.x = 550 - this.info.width;

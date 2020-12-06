@@ -10,7 +10,7 @@ package package_21
     import ui.PageNavigation;
     import package_4.UploadingPopup;
     import flash.events.MouseEvent;
-    import data.UnreadNotif;
+    import com.jiggmin.data.UnreadNotif;
     import package_4.SendMessagePopup;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
@@ -49,7 +49,7 @@ package package_21
             this.loader.addEventListener(SuperLoader.d, this.handleData);
             this.loader.addEventListener(SuperLoader.e, this.handleError);
             this.getMessages();
-            UnreadNotif.method_692();
+            UnreadNotif.updateLastRead();
         }
 
         // method_295 = clickSend

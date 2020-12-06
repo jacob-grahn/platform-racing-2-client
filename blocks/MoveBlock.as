@@ -2,7 +2,7 @@
 
 package blocks
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import background.Map;
 
     public class MoveBlock extends Block 

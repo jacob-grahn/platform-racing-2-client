@@ -6,7 +6,7 @@ Made obsolete in 161.
 
 package package_4
 {
-    import data.Encryptor;
+    import com.jiggmin.data.Encryptor;
 	import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.events.KeyboardEvent;

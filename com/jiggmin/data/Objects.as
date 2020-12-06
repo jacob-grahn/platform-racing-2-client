@@ -1,6 +1,6 @@
 ﻿// data.Objects = data.class_19
 
-package data
+package com.jiggmin.data
 {
     import flash.display.DisplayObject;
     import blocks.BasicBlock;

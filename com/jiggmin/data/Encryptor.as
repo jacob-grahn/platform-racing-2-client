@@ -3,7 +3,7 @@
 
 // data.Encryptor = data.class_64
 
-package data
+package com.jiggmin.data
 {
     import com.hurlant.crypto.symmetric.AESKey;
     import com.hurlant.crypto.symmetric.CBCMode;
@@ -81,5 +81,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

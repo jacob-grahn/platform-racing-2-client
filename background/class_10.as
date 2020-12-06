@@ -8,8 +8,8 @@ package background
     import flash.display.BitmapData;
     import flash.display.Bitmap;
     import page.GamePage;
-    import data.Objects;
-    import data.Settings;
+    import com.jiggmin.data.Objects;
+    import com.jiggmin.data.Settings;
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.geom.ColorTransform;

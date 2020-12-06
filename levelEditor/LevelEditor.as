@@ -11,7 +11,7 @@ package levelEditor
     import background.BlockBackground;
     import background.DrawableBackground;
     import background.LineBackground;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.display.Sprite;
     import flash.display.StageQuality;
     import flash.events.Event;
@@ -398,7 +398,7 @@ package levelEditor
             vars.gameMode = gameMode === 'eggs' ? 'egg' : gameMode;
             vars.cowboyChance = cowboyChance;
             if (this.pass != null && this.pass.replace(/\*/g, "").length > 0) {
-                vars.passHash = class_28.hash(this.pass + Env.LEVEL_PASS_SALT);
+                vars.passHash = Data.hash(this.pass + Env.LEVEL_PASS_SALT);
             } else {
                 vars.passHash = "";
             }

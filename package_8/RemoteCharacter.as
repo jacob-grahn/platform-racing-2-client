@@ -5,14 +5,14 @@
 
 package package_8
 {
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import background.Map;
     import package_6.Course;
     import package_9.Sting;
     import package_9.Zap;
     import flash.events.Event;
     import flash.geom.Point;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.display.Sprite;
     import blocks.Block;
     import blocks.ArrowBlock;
@@ -78,14 +78,14 @@ package package_8
                     }
                     _local_4++;
                 }
-                _local_5 = class_28.method_9(this.posX, this.posY, -(this.map.rotation + this.rot));
+                _local_5 = Data.method_9(this.posX, this.posY, -(this.map.rotation + this.rot));
                 velX = (this.lastX - x);
                 velY = (this.lastY - y);
                 this.lastX = x;
                 this.lastY = y;
                 x = _local_5.x;
                 y = _local_5.y;
-                _local_5 = class_28.method_9(this.posX, this.posY, -(this.rot));
+                _local_5 = Data.method_9(this.posX, this.posY, -(this.rot));
                 this.mapDot.x = _local_5.x;
                 this.mapDot.y = _local_5.y;
                 method_58(this.map.rotation);
@@ -243,7 +243,7 @@ package package_8
         {
             var _local_3:int = int((_arg_1 / 30));
             var _local_4:int = int((_arg_2 / 30));
-            var _local_5:Point = class_28.method_9(_local_3, _local_4, this.map.rotation);
+            var _local_5:Point = Data.method_9(_local_3, _local_4, this.map.rotation);
             if (this.map.method_32(_local_5.x, _local_5.y)) {
                 var block:Block = Block(this.map.getBlockFromSeg(_local_5.x, _local_5.y));
                 if (block is ArrowBlock) {

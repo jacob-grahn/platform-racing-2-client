@@ -2,9 +2,9 @@
 
 package package_21
 {
-    import data.HTMLNameMaker;
-    import data.Settings;
-    import data.class_28;
+    import com.jiggmin.data.HTMLNameMaker;
+    import com.jiggmin.data.Settings;
+    import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
     import package_4.ConfirmPopup;
     import package_4.SendMessagePopup;
@@ -33,13 +33,13 @@ package package_21
             this.htmlNameMaker.listenForLink(this.m.nameBox);
             this.htmlNameMaker.listenForLink(this.m.textBox);
             if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
-                body = class_28.filterSwears(body);
+                body = Data.filterSwears(body);
             }
             this.messageText = body;
             if (group < 3) {
-                body = class_28.escapeString(body, true);
+                body = Data.escapeString(body, true);
             }
-            body = class_28.parseLinks(body);
+            body = Data.parseLinks(body);
             body = body.replace(/\r/g, "<br>");
             this.m.nameBox.htmlText = htmlName;
             this.m.textBox.htmlText = body;
@@ -71,7 +71,7 @@ package package_21
 
         private function clickDelete(e:MouseEvent)
         {
-            new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete this message from " + class_28.escapeString(this.userName) + "?");
+            new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete this message from " + Data.escapeString(this.userName) + "?");
         }
 
         // _loc2 = replyStr

@@ -5,7 +5,7 @@
 
 package package_23
 {
-    import data.HTMLNameMaker;
+    import com.jiggmin.data.HTMLNameMaker;
 
     public class PlayersTabListItem extends Removable 
     {

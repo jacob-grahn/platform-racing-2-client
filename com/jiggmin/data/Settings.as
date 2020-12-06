@@ -3,7 +3,7 @@
 
 //data.Settings
 
-package data
+package com.jiggmin.data
 {
     import flash.display.MovieClip;
     import flash.errors.Error;
@@ -123,5 +123,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

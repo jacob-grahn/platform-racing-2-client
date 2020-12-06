@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//data.class_28
+// com.jiggmin.data.Data = data.class_28
 
-package data
+package com.jiggmin.data
 {
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
@@ -11,7 +11,7 @@ package data
     import flash.display.MovieClip;
     import flash.geom.Point;
 
-    public class class_28
+    public class Data
     {
 
         public static var md5:MD5 = new MD5();
@@ -77,7 +77,7 @@ package data
 
         public static function hash(s:String):String
         {
-            return Hex.fromArray(class_28.md5.hash(Hex.toArray(Hex.fromString(s))));
+            return Hex.fromArray(Data.md5.hash(Hex.toArray(Hex.fromString(s))));
         }
 
         public static function method_849(a:Array):Array
@@ -94,7 +94,7 @@ package data
         {
             var date:Date = new Date();
             date.setTime(t);
-            var monthName:String = class_28.getMonthStr(date.month);
+            var monthName:String = Data.getMonthStr(date.month);
             return monthName + " " + date.date;
         }
 
@@ -125,9 +125,9 @@ package data
             var mins:Number = Math.floor(timeInput / 60);
             var secs:Number = Math.floor(timeInput % 60);
             var deci:Number = Math.round((timeInput % 1) * 100);
-            var minsStr:String = class_28.padString(1, "0", mins.toString());
-            var secsStr:String = class_28.padString(2, "0", secs.toString());
-            var deciStr:String = class_28.padString(2, "0", deci.toString());
+            var minsStr:String = Data.padString(1, "0", mins.toString());
+            var secsStr:String = Data.padString(2, "0", secs.toString());
+            var deciStr:String = Data.padString(2, "0", deci.toString());
             var str:String = minsStr + ":" + secsStr;
             if (mode == "decimal") {
                 str = str + "." + deciStr;
@@ -148,9 +148,9 @@ package data
         public static function escapeAndFilterString(s:String):String
         {
             if (s != null) {
-                s = class_28.trimWhitespace(s);
-                s = class_28.escapeChars(s);
-                s = class_28.filterSwears(s);
+                s = Data.trimWhitespace(s);
+                s = Data.escapeChars(s);
+                s = Data.filterSwears(s);
             }
             return s;
         }
@@ -158,8 +158,8 @@ package data
         // method_312 = escapeString
         public static function escapeString(s:String, preserveNewLine:Boolean = false):String
         {
-            s = class_28.trimWhitespace(s, preserveNewLine);
-            s = class_28.escapeChars(s);
+            s = Data.trimWhitespace(s, preserveNewLine);
+            s = Data.escapeChars(s);
             return s;
         }
 
@@ -185,14 +185,14 @@ package data
         // method_168 = filterSwears
         public static function filterSwears(s:String):String
         {
-            s = s.replace(/damn/gi, class_28.randArrayKey(class_28.damnArray));
-            s = s.replace(/fuck/gi, class_28.randArrayKey(class_28.fuckArray));
-            s = s.replace(/nigg(a|er)/gi, class_28.randArrayKey(class_28.niggaArray));
-            s = s.replace(/\b(spic)\b/gi, class_28.randArrayKey(class_28.niggaArray));
-            s = s.replace(/shit/gi, class_28.randArrayKey(class_28.shitArray));
-            s = s.replace(/bitch/gi, class_28.randArrayKey(class_28.bitchArray));
-            s = s.replace(/cunt/gi, class_28.randArrayKey(class_28.bitchArray));
-            s = s.replace(/whore/gi, class_28.randArrayKey(class_28.bitchArray));
+            s = s.replace(/damn/gi, Data.randArrayKey(Data.damnArray));
+            s = s.replace(/fuck/gi, Data.randArrayKey(Data.fuckArray));
+            s = s.replace(/nigg(a|er)/gi, Data.randArrayKey(Data.niggaArray));
+            s = s.replace(/\b(spic)\b/gi, Data.randArrayKey(Data.niggaArray));
+            s = s.replace(/shit/gi, Data.randArrayKey(Data.shitArray));
+            s = s.replace(/bitch/gi, Data.randArrayKey(Data.bitchArray));
+            s = s.replace(/cunt/gi, Data.randArrayKey(Data.bitchArray));
+            s = s.replace(/whore/gi, Data.randArrayKey(Data.bitchArray));
             return s;
         }
 
@@ -363,4 +363,4 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data

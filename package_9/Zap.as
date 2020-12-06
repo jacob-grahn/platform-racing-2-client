@@ -2,7 +2,7 @@
 
 package package_9
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import flash.events.Event;
     import package_8.Character;
     import sounds.SoundEffects;

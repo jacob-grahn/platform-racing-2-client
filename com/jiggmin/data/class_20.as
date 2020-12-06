@@ -3,7 +3,7 @@
 
 // data.class_20
 
-package data
+package com.jiggmin.data
 {
     import com.hurlant.util.Base64;
 
@@ -58,8 +58,8 @@ package data
         public function initEncryptor(_arg_1:String, salt:String)
         {
             var encryptor:Encryptor = new Encryptor();
-            encryptor.setKey(Base64.encode(class_28.method_439(16)));
-            encryptor.setIV(Base64.encode(class_28.method_439(16)));
+            encryptor.setKey(Base64.encode(Data.method_439(16)));
+            encryptor.setIV(Base64.encode(Data.method_439(16)));
             this.method_350(_arg_1, encryptor.encrypt(salt), encryptor);
         }
 
@@ -102,5 +102,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

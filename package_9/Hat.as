@@ -6,7 +6,7 @@
 package package_9
 {
     import flash.geom.ColorTransform;
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import package_6.Course;
 
     public class Hat extends class_81 

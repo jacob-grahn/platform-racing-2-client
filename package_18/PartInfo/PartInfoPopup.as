@@ -1,7 +1,7 @@
 package package_18.PartInfo
 {
-    import data.class_28;
-    import data.class_153;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_153;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.net.URLRequest;
@@ -40,7 +40,7 @@ package package_18.PartInfo
             if (this.ownedEpics.indexOf('*') != -1) {
                 this.hasEE = true;
             }
-            this.m.titleBox.text = "-- " + class_28.ucfirst(Parts.getPlural(this.mode)) + " --";
+            this.m.titleBox.text = "-- " + Data.ucfirst(Parts.getPlural(this.mode)) + " --";
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.onClose, false, 0, true);
             addChild(this.m);
             this.scroll = new CustomScrollBar();

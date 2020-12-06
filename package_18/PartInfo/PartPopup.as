@@ -1,8 +1,8 @@
 ﻿package package_18.PartInfo
 {
-    import data.class_28;
-    import data.class_153;
-    import data.HTMLNameMaker;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_153;
+    import com.jiggmin.data.HTMLNameMaker;
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
     import package_4.Popup;
@@ -27,7 +27,7 @@
             PartPopup.instance = this;
             this.listing = l;
             this.hasEE = ee;
-            this.m.titleBox.text = '-- ' + this.listing.name + ' ' + class_28.ucfirst(this.listing.type) + ' --';
+            this.m.titleBox.text = '-- ' + this.listing.name + ' ' + Data.ucfirst(this.listing.type) + ' --';
             this.m.descBox.htmlText = this.listing.desc;
             this.m.obtainBox.htmlText = 'How to obtain: ' + this.listing.obtain;
             this.dynamicObtain();

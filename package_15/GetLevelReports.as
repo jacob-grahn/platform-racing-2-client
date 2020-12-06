@@ -1,6 +1,6 @@
 ﻿package package_15
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
@@ -48,7 +48,7 @@
         {
             new MessagePopup('Coming soon!');
             //var item:GetReportedLevelsPopupItem = GetReportedLevelsPopupItem(_arg_1);
-            //new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + class_28.escapeString(item.level.title) + "\"?");
+            //new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + Data.escapeString(item.level.title) + "\"?");
         }
 
         // _loc1 = item

@@ -7,7 +7,7 @@ package package_9
 {
     import package_6.Course;
     import flash.events.Event;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.Point;
     import blocks.Block;
     import package_8.Character;
@@ -76,7 +76,7 @@ package package_9
 
         protected function position()
         {
-            var _local_1:Point = class_28.method_9(this.posX, this.posY, -(this.course.blockBackground.rotation - this.var_377));
+            var _local_1:Point = Data.method_9(this.posX, this.posY, -(this.course.blockBackground.rotation - this.var_377));
             x = _local_1.x;
             y = _local_1.y;
         }

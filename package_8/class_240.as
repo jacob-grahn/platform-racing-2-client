@@ -7,7 +7,7 @@ package package_8
 {
     import flash.display.Sprite;
     import flash.events.Event;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.geom.ColorTransform;
     import flash.display.DisplayObject;
 
@@ -63,7 +63,7 @@ package package_8
 
         public function setColor(_arg_1:Array)
         {
-            var _local_2:Number = class_28.randArrayKey(_arg_1);
+            var _local_2:Number = Data.randArrayKey(_arg_1);
             var _local_3:ColorTransform = new ColorTransform();
             _local_3.color = _local_2;
             transform.colorTransform = _local_3;

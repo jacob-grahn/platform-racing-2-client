@@ -2,7 +2,7 @@
 
 package package_6
 {
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
     import flash.events.MouseEvent;
 	import lobby.Lobby;
     import package_4.Popup;

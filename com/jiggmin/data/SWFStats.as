@@ -1,6 +1,6 @@
 ﻿// data.SWFStats = class_18
 
-package data
+package com.jiggmin.data
 {
     import flash.display.Sprite;
     import flash.utils.setInterval;

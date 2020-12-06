@@ -3,7 +3,7 @@
 
 //data.class_33
 
-package data
+package com.jiggmin.data
 {
     public class class_33 
     {
@@ -43,5 +43,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

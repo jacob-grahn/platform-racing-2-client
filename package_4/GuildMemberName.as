@@ -5,8 +5,8 @@
 
 package package_4
 {
-    import data.HTMLNameMaker;
-    import data.class_28;
+    import com.jiggmin.data.HTMLNameMaker;
+    import com.jiggmin.data.Data;
 
     public class GuildMemberName extends Removable 
     {
@@ -18,8 +18,8 @@ package package_4
         {
             addChild(this.m);
             this.m.nameBox.htmlText = this.htmlNameMaker.makeName(name, group);
-            this.m.gpTodayBox.text = class_28.formatNumber(gpToday);
-            this.m.gpTotalBox.text = class_28.formatNumber(gpTotal);
+            this.m.gpTodayBox.text = Data.formatNumber(gpToday);
+            this.m.gpTotalBox.text = Data.formatNumber(gpTotal);
             if (owner) {
                 this.m.hat.gotoAndStop(6);
                 this.m.hat.colorMC.gotoAndStop(6);

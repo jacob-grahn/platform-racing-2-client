@@ -8,8 +8,8 @@ package package_8
     import flash.media.SoundChannel;
     import flash.display.MovieClip;
     import flash.geom.Point;
-    import data.class_20;
-    import data.class_28;
+    import com.jiggmin.data.class_20;
+    import com.jiggmin.data.Data;
     import flash.geom.ColorTransform;
     import items.Items;
     import flash.events.Event;
@@ -83,7 +83,7 @@ package package_8
             this.head = headId;
             this.body = bodyId;
             this.feet = feetId;
-            if (class_28.getDateStr(new Date().getTime()) === "Apr 1") {
+            if (Data.getDateStr(new Date().getTime()) === "Apr 1") {
                 this.reversedControls = true;
             }
             this.var_4 = new class_20();
@@ -376,7 +376,7 @@ package package_8
         protected function method_58(_arg_1:Number)
         {
             var _local_2:Point = new Point(Math.floor(x / 30), Math.floor(y / 30));
-            this.seg1 = class_28.method_9(_local_2.x, _local_2.y, _arg_1);
+            this.seg1 = Data.method_9(_local_2.x, _local_2.y, _arg_1);
             this.seg2 = new Point(this.seg1.x, this.seg1.y - 1);
             if (_arg_1 == 90) {
                 this.seg1.x--;

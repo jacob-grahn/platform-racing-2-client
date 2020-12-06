@@ -16,7 +16,7 @@ package package_4
     import lobby.LobbyRight;
     import flash.net.URLRequestMethod;
     import package_6.ExpGain;
-    import data.CommandHandler;
+    import com.jiggmin.data.CommandHandler;
 
     public class PlayerPopup extends Popup 
     {

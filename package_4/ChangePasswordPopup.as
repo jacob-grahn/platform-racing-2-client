@@ -2,7 +2,7 @@
 
 package package_4
 {
-	import data.Encryptor;
+	import com.jiggmin.data.Encryptor;
     import flash.events.MouseEvent;
     import flash.events.KeyboardEvent;
     import flash.net.URLVariables;

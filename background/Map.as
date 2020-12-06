@@ -10,9 +10,9 @@ package background
     import blocks.FinishBlock;
     import blocks.MoveBlock;
     import blocks.StartBlock;
-    import data.Objects;
-    import data.CommandHandler;
-    import data.Random;
+    import com.jiggmin.data.Objects;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Random;
     import flash.geom.Point;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;

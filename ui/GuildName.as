@@ -5,7 +5,7 @@
 
 package ui
 {
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import flash.display.Loader;
     import flash.events.MouseEvent;
     import package_4.GuildPopup;
@@ -26,7 +26,7 @@ package ui
             buttonMode = true;
             mouseChildren = false;
             if (_arg_4) {
-                this.m.nameBox.htmlText = "<b>" + class_28.escapeString(name) + "</b>";
+                this.m.nameBox.htmlText = "<b>" + Data.escapeString(name) + "</b>";
             } else {
                 this.m.nameBox.text = name;
             }

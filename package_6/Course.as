@@ -11,8 +11,8 @@ package package_6
     import background.DrawableBackground;
     import background.Map;
     import blocks.FinishBlock;
-    import data.CommandHandler;
-    import data.Settings;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.display.StageQuality;
     import flash.errors.Error;

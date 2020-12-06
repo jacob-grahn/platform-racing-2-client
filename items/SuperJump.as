@@ -5,7 +5,7 @@
 
 package items
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
 

@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import package_8.LocalCharacter;
     import package_9.class_106;
     import flash.geom.Point;

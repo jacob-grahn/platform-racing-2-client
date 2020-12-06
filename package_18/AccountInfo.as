@@ -5,9 +5,9 @@
 
 package package_18
 {
-    import data.class_28;
-    import data.class_33;
-    import data.CommandHandler;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.CommandHandler;
     import flash.display.Sprite;
     import flash.display.Stage;
     import flash.events.Event;
@@ -105,7 +105,7 @@ package package_18
             var epicBodies:Array = this.parsePartArray(a[24]);
             var epicFeet:Array = this.parsePartArray(a[25]);
             var isHappyHour:Boolean = Boolean(int(a[26]));
-            this.m.nameBox.htmlText = "Welcome, <b>" + class_28.escapeString(Main.loggedInAs) + "</b>";
+            this.m.nameBox.htmlText = "Welcome, <b>" + Data.escapeString(Main.loggedInAs) + "</b>";
             this.m.hatBox.htmlText = "Hats: <b>" + (hatArray.length - 1) + "</b>";
             class_33.setNumber("userRank", this.rank);
             LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));

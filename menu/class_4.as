@@ -2,7 +2,7 @@
 
 package menu
 {
-    import data.class_20;
+    import com.jiggmin.data.class_20;
 
     public class class_4 
     {

@@ -2,7 +2,7 @@
 
 package package_18
 {
-    import data.Settings;
+    import com.jiggmin.data.Settings;
     import package_4.GetLevelsPopup;
     import package_8.Character;
     import ui.StatsSelect;

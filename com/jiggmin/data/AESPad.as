@@ -3,7 +3,7 @@
 
 // data.AESPad = data.class_111
 
-package data
+package com.jiggmin.data
 {
     import com.hurlant.crypto.symmetric.IPad;
     import flash.utils.ByteArray;
@@ -42,5 +42,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

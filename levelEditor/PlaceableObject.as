@@ -5,7 +5,7 @@
 
 package levelEditor
 {
-    import data.Objects;
+    import com.jiggmin.data.Objects;
     import blocks.StartBlock;
     import flash.display.DisplayObject;
     import flash.display.Sprite;

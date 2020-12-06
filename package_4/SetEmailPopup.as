@@ -4,7 +4,7 @@ package package_4
 {
     import flash.events.MouseEvent;
     import flash.events.KeyboardEvent;
-    import data.Encryptor;
+    import com.jiggmin.data.Encryptor;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;

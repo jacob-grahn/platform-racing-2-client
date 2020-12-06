@@ -7,7 +7,7 @@ package package_15
 {
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
-    import data.class_28;
+    import com.jiggmin.data.Data;
 	import flash.events.Event;
     import flash.events.IOErrorEvent;
     import flash.net.URLRequest;
@@ -76,7 +76,7 @@ package package_15
             super.parsedDataHandler(e);
             if (parsedData.status == 'banned') {
                 var banLang:String = parsedData.scope === 's' ? 'socially ' : '';
-                new ConfirmPopup(this.overrideBanConfirmUploadLevel, "Because you are currently " + class_28.urlify(Main.baseURL + '/bans/show_record.php?ban_id=' + parsedData.ban_id, banLang + 'banned') + ", you can only save this level as unpublished without a password. Is it okay to continue with these settings?");
+                new ConfirmPopup(this.overrideBanConfirmUploadLevel, "Because you are currently " + Data.urlify(Main.baseURL + '/bans/show_record.php?ban_id=' + parsedData.ban_id, banLang + 'banned') + ", you can only save this level as unpublished without a password. Is it okay to continue with these settings?");
             } else if (parsedData.status == 'exists') {
                 new ConfirmPopup(this.overwriteConfirmUploadLevel, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
             }

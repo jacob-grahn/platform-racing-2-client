@@ -6,7 +6,7 @@
 package package_21
 {
     import page.Chat;
-    import data.Memory;
+    import com.jiggmin.data.Memory;
 	import flash.events.FocusEvent;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;

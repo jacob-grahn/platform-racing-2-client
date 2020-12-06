@@ -3,7 +3,7 @@
 
 //data.Memory
 
-package data
+package com.jiggmin.data
 {
     public class Memory 
     {
@@ -12,5 +12,5 @@ package data
 
 
     }
-}//package data
+}//package com.jiggmin.data
 

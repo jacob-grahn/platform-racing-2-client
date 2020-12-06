@@ -9,7 +9,7 @@ package package_9
     import flash.geom.Point;
     import blocks.Block;
     import package_6.Course;
-    import data.class_28;
+    import com.jiggmin.data.Data;
     import package_8.LocalCharacter;
 
     public class class_81 extends Effect 
@@ -56,9 +56,9 @@ package package_9
             this.posY = (this.posY + this.velY);
             this.posX = (this.posX + this.velX);
             rotation = (Course.course.blockBackground.rotation - this.rot);
-            _local_2 = class_28.method_9(this.posX, this.posY, -(rotation));
+            _local_2 = Data.method_9(this.posX, this.posY, -(rotation));
             if (this.velX != 0) {
-                _local_5 = class_28.method_9((this.posX + this.velX), (this.posY - 10), -(rotation));
+                _local_5 = Data.method_9((this.posX + this.velX), (this.posY - 10), -(rotation));
                 _local_3 = Course.course.blockBackground.getBlockFromPos(_local_5.x, _local_5.y, true);
                 if (((!(_local_3 == null)) && (_local_3.isActive()))) {
                     _local_4 = _local_3.method_18(this.rot);
@@ -87,7 +87,7 @@ package package_9
             if (this.method_181(x, y)) {
                 this.onTouchLocalPlayer();
             }
-            _local_2 = class_28.method_9(this.posX, this.posY, -(rotation));
+            _local_2 = Data.method_9(this.posX, this.posY, -(rotation));
             x = _local_2.x;
             y = _local_2.y;
         }
