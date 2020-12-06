@@ -121,7 +121,9 @@ package package_18
             this.char.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
             if (this.char.hat1 != AccountInfo.currentHat) { // dispatch event to check for bad hats on shown levels
                 AccountInfo.currentHat = this.char.hat1;
-                LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
+                if (LevelListing.levelListing != null) {
+                    LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
+                }
             }
         }
 

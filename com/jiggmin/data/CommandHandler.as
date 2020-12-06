@@ -5,14 +5,16 @@
 
 package com.jiggmin.data
 {
-    import com.hurlant.crypto.hash.MD5;
     import menu.class_4;
+    import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
+    import flash.events.Event;
     import flash.utils.ByteArray;
     import package_4.MessagePopup;
     import package_6.Game;
     import package_6.CatCaptcha;
-    import flash.events.Event;
+    import package_18.AccountInfo;
+    import package_22.LevelListing;
 
     public class CommandHandler
     {
@@ -45,6 +47,7 @@ package com.jiggmin.data
             this.defineCommand("tournamentMode", this.tournamentMode);
             this.defineCommand("guildChange", this.guildChange);
             this.defineCommand('setServerOwner', this.setServerOwner);
+            this.defineCommand('wearingHat', this.wearingHat);
         }
 
         // _loc2 = endPos
@@ -202,6 +205,14 @@ package com.jiggmin.data
         private function setServerOwner(a:Array)
         {
             Main.server.server_owner = int(a[0]);
+        }
+
+        private function wearingHat(a:Array)
+        {
+            AccountInfo.currentHat = int(a[0]);
+            if (LevelListing.levelListing != null) {
+                LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
+            }
         }
 
 
