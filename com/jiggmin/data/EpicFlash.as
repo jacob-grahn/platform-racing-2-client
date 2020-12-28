@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//data.class_153
+// data.EpicFlash = data.class_153
 
 package com.jiggmin.data
 {
@@ -10,7 +10,7 @@ package com.jiggmin.data
     import flash.utils.setInterval;
     import flash.geom.ColorTransform;
 
-    public class class_153 
+    public class EpicFlash 
     {
 
         private var items:Vector.<DisplayObject> = new Vector.<DisplayObject>();
@@ -18,7 +18,7 @@ package com.jiggmin.data
         private var var_444:int;
         private var active:Boolean = false; // var_71
 
-        public function class_153(_arg_1:int=500)
+        public function EpicFlash(_arg_1:int=500)
         {
             this.var_444 = _arg_1;
         }
@@ -74,5 +74,4 @@ package com.jiggmin.data
 
 
     }
-}//package com.jiggmin.data
-
+}

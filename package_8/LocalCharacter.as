@@ -964,7 +964,7 @@ package package_8
                     SpeedBurst(this.curItem).duration = 30000;
                     this.curItem.useItem();
                     var cTimer:CourseTimer = Course.course.timer;
-                    if (cTimer.getTime() > 30) {
+                    if (cTimer.getMS() > 30) {
                         cTimer.setTime(30);
                         cTimer.init();
                     }

@@ -1,7 +1,7 @@
 package package_18.PartInfo
 {
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_153;
+    import com.jiggmin.data.EpicFlash;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.net.URLRequest;
@@ -26,7 +26,7 @@ package package_18.PartInfo
         private var listings:Vector.<PartInfoListing> = new Vector.<PartInfoListing>();
         private var scroll:CustomScrollBar;
         private var var_289:LoadingGraphic;
-        public var epicFlash:class_153 = new class_153(); // var_207
+        public var epicFlash:EpicFlash = new EpicFlash(); // var_207
 
         public function PartInfoPopup(type:String, parts:Array, epics:Array)
         {

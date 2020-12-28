@@ -144,17 +144,17 @@ package com.jiggmin.data
         public function receivePing(arr:Array)
         {
             var _local_2:Number = Number(arr);
-            var _local_3:Number = this.var_363.getMS();
+            var _local_3:Number = this.var_363.getTimestamp();
             var _local_4:Number = Math.abs(_local_2 - _local_3);
             if (_local_4 > 2) {
                 this.var_363.setTime(_local_2);
             }
         }
 
-        // method_26 = getTime
-        public function getTime():Number
+        // method_26 = getMS
+        public function getMS():Number
         {
-            return this.var_363.getTime();
+            return this.var_363.getMS();
         }
 
         public function remove()

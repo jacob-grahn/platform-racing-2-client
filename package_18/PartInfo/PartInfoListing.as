@@ -6,7 +6,7 @@
 package package_18.PartInfo
 {
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_153;
+    import com.jiggmin.data.EpicFlash;
     import flash.display.MovieClip;
     import flash.text.TextFieldAutoSize;
     import package_4.MessagePopup;
@@ -114,7 +114,7 @@ package package_18.PartInfo
         }
 
         // add the upgraded textbox to the parent epic flash
-        public function addEpicFlash(ef:class_153)
+        public function addEpicFlash(ef:EpicFlash)
         {
             ef.addItem(this.m.epicBox);
         }

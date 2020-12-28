@@ -39,14 +39,14 @@ package package_6
             }
         }
 
-        public function getTime():Number
+        public function getMS():Number
         {
             return this.time;
         }
 
         private function method_189():Number
         {
-            return (Main.socket.getTime() - this.startTime) / 1000;
+            return (Main.socket.getMS() - this.startTime) / 1000;
         }
 
         private function method_362():Number
@@ -105,7 +105,7 @@ package package_6
 
         public function init()
         {
-            this.startTime = Main.socket.getTime();
+            this.startTime = Main.socket.getMS();
             this.method_425();
         }
 
