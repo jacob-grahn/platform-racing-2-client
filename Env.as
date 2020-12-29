@@ -24,6 +24,11 @@ package
         public static var LEVEL_PASS_KEY:String = 'OWdCREBKUkI9JjEpQCNuYg==';
         public static var LEVEL_PASS_IV:String = 'ZiUybmpjc04mNEAkNythbg==';
 
+        public static var URL_PASS_SALT:String = '[%B3+WKxQl'; // salt used in local client headers
+
+        public static var URL_PASS_KEY:String = 'OTkhX24+S0VVaHlAIXhqbA=='; // encryptor key used for superloader requests from local client
+        public static var URL_PASS_IV:String = 'J1N0QSJzSWV6ZT4mIz5vKA=='; // encryptor iv used for superloader requests from local client
+
     }
 
 }

@@ -2,13 +2,19 @@
 
 package
 {
+    import com.jiggmin.data.Encryptor;
+    import com.jiggmin.data.Data;
+    import com.adobe.crypto.MD5;
     import flash.events.ErrorEvent;
     import flash.events.Event;
     import flash.events.IOErrorEvent;
     import flash.events.SecurityErrorEvent;
     import flash.net.URLLoader;
-    import flash.net.URLVariables;
     import flash.net.URLRequest;
+    import flash.net.URLRequestHeader;
+    import flash.net.URLVariables;
+    import flash.system.Capabilities;
+    import flash.system.Security;
     import package_4.MessagePopup;
 
     public class SuperLoader extends URLLoader
@@ -42,12 +48,17 @@ package
                     request.data.rand = rand;
                     request.data.token = Main.token;
                 } else {
-                    if (request.url.indexOf("?") != -1) {
-                        request.url = request.url + "&";
-                    } else {
-                        request.url = request.url + "?";
-                    }
+                    request.url += request.url.indexOf("?") != -1 ? '&' : '?';
                     request.url = request.url + "rand=" + rand + "&token=" + Main.token;
+                }
+
+                // local loader
+                if (Capabilities.playerType == 'StandAlone' && Security.sandboxType === Security.LOCAL_TRUSTED) {
+                    var timestamp:int = Data.getMS();
+                    var encryptor:Encryptor = new Encryptor();
+                    encryptor.setKey(Env.URL_PASS_KEY);
+                    encryptor.setIV(Env.URL_PASS_IV);
+                    request.requestHeaders.push(new URLRequestHeader('Request-Destination', encryptor.encrypt('remote_' + timestamp + '_' + MD5.hash(timestamp + '_' + Env.URL_PASS_SALT + '_' + Main.build + '_' + Capabilities.version.split(' ')[1]))));
                 }
             }
             try {

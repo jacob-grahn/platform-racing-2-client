@@ -103,7 +103,16 @@ package
         private function init(e:Event = null)
         {
             removeEventListener(Event.ADDED_TO_STAGE, this.init);
-            if (Main.testing || (parent != stage && !Main.initialized && (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE)) {
+            if (Main.testing || (
+                    parent != stage
+                    && !Main.initialized
+                    && ( // browser
+                        (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE
+                    ) || ( // local
+                        Capabilities.playerType == 'StandAlone' && Security.sandboxType == Security.LOCAL_TRUSTED
+                    )
+                )
+            ) {
                 Main.initialized = true;
                 Main.stage = stage;
                 Main.instance = this;
