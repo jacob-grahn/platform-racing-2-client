@@ -38,8 +38,8 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
-        public static const build:String = '6-dec-2020-v161-1-1';
-        public static const version:String = '161.1.1';
+        public static const build:String = '29-dec-2020-v161-2';
+        public static const version:String = '161.2';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.local";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
         public static var stage:Stage;
@@ -103,7 +103,16 @@ package
         private function init(e:Event = null)
         {
             removeEventListener(Event.ADDED_TO_STAGE, this.init);
-            if (Main.testing || (parent != stage && !Main.initialized && (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE)) {
+            if (Main.testing || (
+                    parent != stage
+                    && !Main.initialized
+                    && ( // browser
+                        (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE
+                    ) || ( // local
+                        Capabilities.playerType == 'StandAlone' && Security.sandboxType == Security.LOCAL_TRUSTED
+                    )
+                )
+            ) {
                 Main.initialized = true;
                 Main.stage = stage;
                 Main.instance = this;
