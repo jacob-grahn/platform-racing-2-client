@@ -54,7 +54,7 @@ package
 
                 // local loader
                 if (Capabilities.playerType == 'StandAlone' && Security.sandboxType === Security.LOCAL_TRUSTED) {
-                    var timestamp:int = Data.getMS();
+                    var timestamp:int = Data.getTimestamp();
                     var encryptor:Encryptor = new Encryptor();
                     encryptor.setKey(Env.URL_PASS_KEY);
                     encryptor.setIV(Env.URL_PASS_IV);
