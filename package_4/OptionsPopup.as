@@ -11,6 +11,8 @@ package package_4
     import fl.events.SliderEvent;
     import flash.net.URLRequest;
     import sounds.SoundEffects;
+    import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
 
     public class OptionsPopup extends Popup 
     {
@@ -168,7 +170,10 @@ package package_4
         // method_579 = confirmLeaveGuild
         private function confirmLeaveGuild()
         {
-            var uploadingPopup:UploadingPopup = new UploadingPopup(new URLRequest(Main.baseURL + "/guild_leave.php"), 'json');
+            var req:URLRequest = new URLRequest(Main.baseURL + "/guild_leave.php");
+            req.data = new URLVariables();
+            req.method = URLRequestMethod.POST;
+            var uploadingPopup:UploadingPopup = new UploadingPopup(req, 'json');
             uploadingPopup.addEventListener(Event.COMPLETE, this.doLeaveGuild, false, 0, true);
             startFadeOut();
         }

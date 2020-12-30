@@ -14,6 +14,7 @@ package package_15
     import package_4.GetLevelsPopup;
     import ui.class_229;
     import levelEditor.LevelEditorMenu;
+    import flash.net.URLRequestMethod;
 
     public class GetLevels extends GetLevelsPopup
     {
@@ -28,6 +29,8 @@ package package_15
             this.dataURL = customURL != null ? customURL : this.dataURL;
             this.var_454 = 18;
             var request:URLRequest = new URLRequest(Main.baseURL + this.dataURL);
+            request.data = new URLVariables();
+            request.method = URLRequestMethod.POST;
             this.loader.addEventListener(Event.COMPLETE, this.onComplete, false, 0, true);
             this.loader.load(request);
         }
