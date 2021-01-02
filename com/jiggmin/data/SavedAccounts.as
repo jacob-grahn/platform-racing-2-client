@@ -6,13 +6,13 @@ package com.jiggmin.data
     public class SavedAccounts
     {
 
-        private static const COOKIE_ID = 'pr2hub_logged_in';
-
+        private static var cookieId;
         private static var accounts:Array = null;
 
 
         public static function init()
         {
+            cookieId = Main.baseURL.substr(-3) === 'dev' ? 'pr2hub_dev_logged_in' : 'pr2hub_logged_in';
             getCookie();
         }
 
@@ -20,7 +20,7 @@ package com.jiggmin.data
         {
             accounts = [];
             try {
-                var cookie:SharedObject = SharedObject.getLocal(COOKIE_ID);
+                var cookie:SharedObject = SharedObject.getLocal(cookieId);
                 for (var i:int = 0; i < cookie.data.accounts.length; i++) {
                     var account:Object = cookie.data.accounts[i];
                     account.name = Data.trimWhitespace(account.name);
@@ -35,7 +35,7 @@ package com.jiggmin.data
         private static function setCookie()
         {
             try {
-                var cookie:SharedObject = SharedObject.getLocal(COOKIE_ID);
+                var cookie:SharedObject = SharedObject.getLocal(cookieId);
                 cookie.data.accounts = [];
                 for (var i:int = 0; i < accounts.length; i++) {
                     cookie.data.accounts.push(accounts[i]);
