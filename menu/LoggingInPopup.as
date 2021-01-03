@@ -42,32 +42,31 @@ package menu
             this.socket.addEventListener(Event.CLOSE, this.onError, false, 0, true);
             CommandHandler.commandHandler.defineCommand("loginSuccessful", this.loginSuccessful);
             CommandHandler.commandHandler.defineCommand("loginFailure", this.loginFailure);
-            if (Main.userName == "guest") {
-                this.socket.write("guest_login`" + Main.domain + "`" + Main.version);
-            } else {
-                var send:Object = new Object();
-                send.user_name = Main.userName;
-                send.user_pass = Main.userPass;
-                send.build = Main.build;
-                send.server = Main.server;
-                send.domain = Main.domain;
-                send.remember = Main.remember;
-                send.login_id = int(loginId);
-                var sendStr:String = JSON.stringify(send);
-                var encryptor:Encryptor = new Encryptor();
-                encryptor.setKey(Env.LOGIN_KEY);
-                encryptor.setIV(Env.LOGIN_IV);
-                var encryptedStr:String = encryptor.encrypt(sendStr);
-                var vars:URLVariables = new URLVariables();
-                vars.i = encryptedStr;
-                vars.build = Main.build;
-                var request:URLRequest = new URLRequest(Main.baseURL + "/login.php");
-                request.data = vars;
-                request.method = URLRequestMethod.POST;
-                this.loader.addEventListener(SuperLoader.d, this.onHttpSuccess, false, 0, true);
-                this.loader.addEventListener(SuperLoader.e, this.onError, false, 0, true);
-                this.loader.load(request);
-            }
+
+            // send login data to the server
+            var send:Object = new Object();
+            send.user_name = Main.userName;
+            send.user_pass = Main.userPass;
+            send.build = Main.build;
+            send.server = Main.server;
+            send.domain = Main.domain;
+            send.remember = Main.remember;
+            send.login_id = int(loginId);
+            var sendStr:String = JSON.stringify(send);
+            var encryptor:Encryptor = new Encryptor();
+            encryptor.setKey(Env.LOGIN_KEY);
+            encryptor.setIV(Env.LOGIN_IV);
+            var encryptedStr:String = encryptor.encrypt(sendStr);
+            var vars:URLVariables = new URLVariables();
+            vars.i = encryptedStr;
+            vars.build = Main.build;
+            var request:URLRequest = new URLRequest(Main.baseURL + "/login.php");
+            request.data = vars;
+            request.method = URLRequestMethod.POST;
+            this.loader.addEventListener(SuperLoader.d, this.onHttpSuccess, false, 0, true);
+            this.loader.addEventListener(SuperLoader.e, this.onError, false, 0, true);
+            this.loader.load(request);
+
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose);
             addChild(this.m);
         }
@@ -75,16 +74,7 @@ package menu
         public function loginSuccessful(ret:Array)
         {
             Main.group = int(ret[0]);
-            Main.loggedInAs = ret[1];/* disabling this makes badges work!!!!!!!!!
-            Main.userName = "";
-            Main.userPass = "";
-            if (Main.userName != "guest") {
-                if (Main.userName != "") {
-                    Main.loggedInAs = Main.userName;
-                }
-                Main.userName = "";
-                Main.userPass = "";
-            }*/
+            Main.loggedInAs = ret[1];
             this.socketOK = true;
             this.maybeSwitchToLobby();
         }
