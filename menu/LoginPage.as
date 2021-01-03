@@ -152,7 +152,8 @@ package menu
         // method_376 = clickKong
         private function clickKong(e:MouseEvent)
         {
-            navigateToURL(new URLRequest("http://kongregate.com?gamereferral=platformracing2"), "_blank");
+            new KongOutfitPopup();
+            //navigateToURL(new URLRequest("http://kongregate.com?gamereferral=platformracing2"), "_blank");
         }
 
         /*private function clickLogout(e:MouseEvent)

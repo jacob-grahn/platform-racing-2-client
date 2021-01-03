@@ -65,6 +65,7 @@ package lobby
         }
 
         // method_547 = checkAnt
+        // MOVED KONGOUTFITPOPUP TO menu AFTER FLASH EOL
         /*private function checkAnt()
         {
             if (Main.siteMode == "kongregate" && Main.instance.kongAPI != null && !Main.hasAnt) {

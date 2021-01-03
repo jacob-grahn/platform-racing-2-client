@@ -52,6 +52,7 @@ package menu
             send.domain = Main.domain;
             send.remember = Main.remember;
             send.login_id = int(loginId);
+            send.award_kong = Main.awardKongNextLogin;
             var sendStr:String = JSON.stringify(send);
             var encryptor:Encryptor = new Encryptor();
             encryptor.setKey(Env.LOGIN_KEY);
@@ -67,6 +68,7 @@ package menu
             this.loader.addEventListener(SuperLoader.e, this.onError, false, 0, true);
             this.loader.load(request);
 
+            Main.awardKongNextLogin = false;
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose);
             addChild(this.m);
         }
