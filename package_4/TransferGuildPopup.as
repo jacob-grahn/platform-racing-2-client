@@ -1,5 +1,3 @@
-﻿// package_4.SetEmailPopup = package_4.class_254
-
 package package_4
 {
     import flash.events.MouseEvent;
@@ -9,17 +7,18 @@ package package_4
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
 
-    public class SetEmailPopup extends Popup 
+    public class TransferGuildPopup extends Popup 
     {
 
-        private var m:SetEmailPopupGraphic = new SetEmailPopupGraphic();
+        private var m:TransferGuildPopupGraphic = new TransferGuildPopupGraphic();
 
-        public function SetEmailPopup()
+        public function TransferGuildPopup()
         {
             this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOk, false, 0, true);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
-            this.m.email1Box.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey, false, 0, true);
-            this.m.email2Box.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey, false, 0, true);
+            this.m.emailBox.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey, false, 0, true);
+            this.m.passBox.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey, false, 0, true);
+            this.m.nameBox.addEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey, false, 0, true);
             addChild(this.m);
         }
 
@@ -34,14 +33,14 @@ package package_4
         // method_149 = clickOk
         private function clickOk(e:MouseEvent)
         {
-            if (this.m.email1Box.text == "" || this.m.passBox.text == "") {
+            if (this.m.emailBox.text == "" || this.m.passBox.text == "" || this.m.nameBox.text == "") {
                 new MessagePopup("Please fill in all of the fields.");
-            } else if (this.m.email1Box.text != this.m.email2Box.text) {
-                new MessagePopup("The emails don't match. Please re-check them.");
             } else {
                 var obj:Object = new Object();
-                obj.email = this.m.email1Box.text;
+                obj.email = this.m.emailBox.text;
+                obj.name = Main.loggedInAs;
                 obj.pass = this.m.passBox.text;
+                obj.new_owner = this.m.nameBox.text;
                 var jsonString:String = JSON.stringify(obj);
                 var encryptor:Encryptor = new Encryptor();
                 encryptor.setKey(Env.ACCOUNT_CHANGE_KEY);
@@ -49,7 +48,7 @@ package package_4
                 var secureString = encryptor.encrypt(jsonString);
                 var vars:URLVariables = new URLVariables();
                 vars.data = secureString;
-                var request:URLRequest = new URLRequest(Main.baseURL + "/account_change_email.php");
+                var request:URLRequest = new URLRequest(Main.baseURL + "/guild_transfer.php");
                 request.data = vars;
                 request.method = URLRequestMethod.POST;
                 new UploadingPopup(request, SuperLoader.j);
@@ -66,8 +65,9 @@ package package_4
         {
             this.m.ok_bt.removeEventListener(MouseEvent.CLICK, this.clickOk);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
-            this.m.email1Box.removeEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey);
-            this.m.email2Box.removeEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey);
+            this.m.emailBox.removeEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey);
+            this.m.passBox.removeEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey);
+            this.m.nameBox.removeEventListener(KeyboardEvent.KEY_DOWN, this.listenForEnterKey);
             super.remove();
         }
 

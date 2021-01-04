@@ -206,11 +206,8 @@ package package_4
 
         private function clickGuildTransfer(e:MouseEvent)
         {
-            if (Main.remember == true) {
-                flash.net.navigateToURL(new URLRequest(Main.baseURL + '/guild_transfer.php'));
-            } else {
-                new MessagePopup("Psst... I won't work if you\'re not logged in with remember me. Log back in with remember me enabled and click me again! :)");
-            }
+            new TransferGuildPopup()
+            startFadeOut();
         }
 
         // method_292 = clickClose
