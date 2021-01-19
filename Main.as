@@ -148,7 +148,7 @@ package
                 muteButton.doToggle(Main.testing); // mutes by default if testing mode is enabled
                 /*superLoader.addEventListener(Event.COMPLETE, this.checkLogin, false, 0, true);
                 superLoader.load(new URLRequest(baseURL + "/check_login.php"));*/
-                //setTimeout(this.getKongAPI, 2000);
+                //setTimeout(this.getKongApiOnTesting, 2000);
                 pageHolder = new PageHolder(new IntroPage());
                 addChild(pageHolder);
                 addChild(new Doughnut());
@@ -194,8 +194,8 @@ package
         // _loc2 = kongPath
         // _loc3 = request
         // _loc4 = loader
-        // method_689 = getKongAPI
-        /*private function getKongAPI()
+        // method_689 = getKongApiOnTesting
+        private function getKongApiOnTesting()
         {
             if (Main.siteMode == "kongregate" && Main.domain == "local" && Main.kongAPI == null && stage == parent) {
                 var params:Object = LoaderInfo(root.loaderInfo).parameters;
@@ -203,11 +203,11 @@ package
                 Security.allowDomain(kongPath);
                 var request:URLRequest = new URLRequest(kongPath);
                 var loader:Loader = new Loader();
-                loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.kongAPIConnect);
+                loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.receiveKongAPI);
                 loader.load(request);
                 this.addChild(loader);
             }
-        }*/
+        }
 
         // method_548 = checkLogin MADE OBSOLETE IN 161
         /*private function checkLogin(e:Event)
@@ -235,14 +235,14 @@ package
             Main.emblem = "";
         }
 
-        // method_806 = kongAPIConnect
-        /*private function kongAPIConnect(e:Event)
+        // method_806 = receiveKongAPI
+        private function receiveKongAPI(e:Event)
         {
             var recv:* = e.target.content;
             Main.instance.kongAPI = recv;
             Main.instance.kongAPI.services.connect();
             Security.allowDomain(Main.instance.kongAPI.loaderInfo.url);
-        }*/
+        }
 
         public static function traceExt(s:*)
         {
