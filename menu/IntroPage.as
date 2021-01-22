@@ -5,12 +5,12 @@
 
 package menu
 {
-    import page.Page;
+    import com.jiggmin.pixelEffects.PixelEffect1;
     import flash.display.MovieClip;
+    import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.media.SoundTransform;
-    import pixelEffects.class_21;
-    import flash.events.Event;
+    import page.Page;
 
     public class IntroPage extends Page 
     {
@@ -51,7 +51,6 @@ package menu
         // _loc1 = type
         private function method_302()
         {
-            var _local_2:class_21;
             this.method_322();
             if (this.toPlay.length <= 0) {
                 this.endIntro();
@@ -59,7 +58,7 @@ package menu
                 var type:int = this.toPlay.shift();
                 if (type == JIGG_INTRO) {
                     this.currentIntro = new JiggminIntroGraphic();
-                    _local_2 = new class_21(new JiggminLogo(300, 87));
+                    var _local_2:PixelEffect1 = new PixelEffect1(new JiggminLogo(300, 87));
                     this.currentIntro.logo.logo_mc.addChild(_local_2);
                 } else if (type == ARMOR_INTRO) {
                     this.currentIntro = new ArmorIntroGraphic();
