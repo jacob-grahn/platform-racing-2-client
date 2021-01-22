@@ -87,7 +87,6 @@ package menu
             var ret:Object = this.loader.parsedData;
             Main.userId = ret.userId;
             Main.hasEmail = ret.email;
-            Main.hasAnt = ret.ant;
             Main.token = ret.token;
             Main.guild = ret.guild;
             Main.guildOwner = ret.guildOwner;

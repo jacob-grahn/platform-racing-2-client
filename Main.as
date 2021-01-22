@@ -55,7 +55,6 @@ package
         public static var isTrialMod:Boolean = false;
         public static var isPrizer:Boolean = false;
         public static var hasEmail:Boolean = false; // var_338
-        public static var hasAnt:Boolean = false; // hasAnt = var_317
         public static var awardKongNextLogin:Boolean = false;
         public static var userId:int = 0;
         public static var guild:int = 0;
