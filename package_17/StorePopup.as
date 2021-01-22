@@ -54,7 +54,7 @@ package package_17
             this.superLoader = new SuperLoader(true, SuperLoader.j);
             this.superLoader.addEventListener(SuperLoader.d, this.populateList);
             this.superLoader.addEventListener(SuperLoader.e, this.closePopup);
-            this.superLoader.load(new URLRequest(Main.baseURL + "/vault/vault.php"));
+            this.superLoader.load(new URLRequest(Main.baseURL + "/vault/vault.php?beta=" + int(Main.testing ? Main.testing : Main.beta)));
         }
 
         // _loc2 (this.superLoader.parsedData)
@@ -66,7 +66,7 @@ package package_17
             var data:Object = this.superLoader.parsedData;
             var color:String = data.info.user.coins === 0 ? 'BB0000' : '006600';
             StorePopup.userCoins = data.info.user.coins;
-            this.m.coinsLeftBox.htmlText = '<b><font color="#' + color + '">You have ' + Data.formatNumber(StorePopup.userCoins) + ' Coins remaining.</font> ' + Data.urlify(/*Main.baseURL + '/vault/buy_coins.php?token=' + Main.token*/'event:clickNeedMore', 'Need more?') + '</b>';
+            this.m.coinsLeftBox.htmlText = '<b><font color="#' + color + '">You have ' + Data.formatNumber(StorePopup.userCoins) + ' Coins remaining.</font> ' + Data.urlify('event:clickNeedMore', 'Need more?') + '</b>';
             this.m.coinsLeftBox.visible = true;
             if (this.superLoader.parsedData.info.hasOwnProperty('title')) {
                 this.m.titleBox.text = "-- " + this.superLoader.parsedData.info.title.title + " --";
@@ -115,7 +115,7 @@ package package_17
         // method_360 = clickItem
         private function clickItem(e:Event, fromQuantity:Boolean = false)
         {
-            var gameUA:String = Data.urlify(Main.baseURL + '/terms_of_use.php', 'PR2 User Agreement');
+            var gameUA:String = Data.urlify(Main.baseURL + '/terms_of_use.php', 'PR2 Terms of Use');
             if (Main.socket.connected) {
                 var item:StoreListing = StoreListing(e.target);
 
@@ -157,6 +157,8 @@ package package_17
         {
             var send:Object = new Object();
             send.token = Main.token;
+            send.time = Data.getTimestamp();
+            send.rand = int(Math.random() * 10000000);
             var encryptor:Encryptor = new Encryptor();
             encryptor.setKey(Env.URL_PASS_KEY);
             encryptor.setIV(Env.URL_PASS_IV);
