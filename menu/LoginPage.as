@@ -140,7 +140,7 @@ package menu
         // method_793 = clickInstructions
         public function clickInstructions(e:MouseEvent)
         {
-            navigateToURL(new URLRequest(Main.baseURL + "/pr2_instructions.php"), "_blank");
+            navigateToURL(new URLRequest(Main.baseURL + "/instructions.php"), "_blank");
         }
 
         // method_413 = clickCredits
