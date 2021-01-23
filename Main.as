@@ -104,9 +104,7 @@ package
         private function init(e:Event = null)
         {
             removeEventListener(Event.ADDED_TO_STAGE, this.init);
-            if (LoaderInfo(root.loaderInfo).parameters.hasOwnProperty('betaLoader')) {
-                Main.betaLoader = Boolean(int(LoaderInfo(root.loaderInfo).parameters.betaLoader));
-            }
+            Main.betaLoader = LoaderInfo(root.loaderInfo).parameters.hasOwnProperty('betaLoader') ? Boolean(int(LoaderInfo(root.loaderInfo).parameters.betaLoader)) : false;
             if (Main.testing || (
                     parent != stage
                     && !Main.initialized
@@ -116,12 +114,10 @@ package
                         Capabilities.playerType == 'StandAlone' && Security.sandboxType == Security.LOCAL_TRUSTED
                     )
                 ) && (
-                    (
-                        Main.betaLoader !== null &&
-                        (
-                            (Main.betaLoader && Main.beta) ||
-                            (Main.betaLoader && !Main.beta)
-                        )
+                    ( // beta loader (debugger) used to access beta client
+                        Main.betaLoader && Main.beta
+                    ) || ( // regular loader (no debugger) used to access regular client
+                        !Main.betaLoader && !Main.beta
                     )
                 )
             ) {
@@ -141,7 +137,6 @@ package
                 stage.frameRate = 27;
                 Security.loadPolicyFile(baseURL + "/crossdomain.xml");
                 Security.allowDomain("kongregate.com");
-                Security.allowDomain(Main.baseURL.substr(8));
                 muteButton.x = 504;
                 muteButton.y = 380;
                 muteButton.doToggle(Main.testing); // mutes by default if testing mode is enabled
