@@ -42,6 +42,8 @@ package package_18.PartInfo
             }
             this.m.titleBox.text = "-- " + Data.ucfirst(Parts.getPlural(this.mode)) + " --";
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.onClose, false, 0, true);
+            this.m.coinsLeftBg.visible = this.m.coinsLeftBox.visible = false;
+            this.m.y += 20;
             addChild(this.m);
             this.scroll = new CustomScrollBar();
             this.scroll.x = 202;
