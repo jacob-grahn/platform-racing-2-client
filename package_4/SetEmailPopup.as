@@ -44,8 +44,8 @@ package package_4
                 obj.pass = this.m.passBox.text;
                 var jsonString:String = JSON.stringify(obj);
                 var encryptor:Encryptor = new Encryptor();
-                encryptor.setKey(Env.CHANGE_EMAIL_KEY);
-                encryptor.setIV(Env.CHANGE_EMAIL_IV);
+                encryptor.setKey(Env.ACCOUNT_CHANGE_KEY);
+                encryptor.setIV(Env.ACCOUNT_CHANGE_IV);
                 var secureString = encryptor.encrypt(jsonString);
                 var vars:URLVariables = new URLVariables();
                 vars.data = secureString;

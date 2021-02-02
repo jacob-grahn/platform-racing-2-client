@@ -35,13 +35,13 @@ package package_4
         private function clickTrial(e:MouseEvent)
         {
             this.mode = "trial";
-            new ConfirmPopup(this.promoteModerator, "Are you sure you want to promote " + this.userName + " to a trial moderator? They will be able to ban for up to a day and see IP addresses.");
+            new ConfirmPopup(this.promoteModerator, "Are you sure you want to promote " + this.userName + " to a trial moderator? They will only be able to ban for up to a day.");
         }
 
         private function clickPerma(e:MouseEvent)
         {
             this.mode = "permanent";
-            new ConfirmPopup(this.promoteModerator, "Are you sure you want to promote " + this.userName + " to a permanent moderator? They will be able to ban for up to a year, see IP addresses, unpublish levels, and edit guilds.");
+            new ConfirmPopup(this.promoteModerator, "Are you sure you want to promote " + this.userName + " to a permanent moderator? They will be able to ban for up to a year, see IP addresses, unpublish levels, edit guilds, and use the PR2 Hub moderation tools.");
         }
 
         private function clickDemote(e:MouseEvent)

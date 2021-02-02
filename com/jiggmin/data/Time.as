@@ -15,25 +15,25 @@ package com.jiggmin.data
         public function setTime(n:Number)
         {
             this.var_624 = n * 1000;
-            this.var_568 = Data.getTime();
+            this.var_568 = Data.getMS();
         }
 
-        // method_26 = getTime
-        public function getTime():Number
-        {
-            return Data.getTime() - this.var_568 + this.var_624;
-        }
-
-        // method_79 = getMS
+        // method_26 = getMS
         public function getMS():Number
         {
-            return this.getTime() / 1000;
+            return Data.getMS() - this.var_568 + this.var_624;
+        }
+
+        // method_79 = getTimestamp
+        public function getTimestamp():Number
+        {
+            return this.getMS() / 1000;
         }
 
         // _loc1 = ms
         public function getDay():Number
         {
-            var ms:Number = this.getMS();
+            var ms:Number = this.getTimestamp();
             return Math.round((ms / 24) / 60) / 60;
         }
 

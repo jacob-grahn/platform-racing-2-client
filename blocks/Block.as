@@ -125,7 +125,7 @@ package blocks
 
         public function method_777():int
         {
-            return (Data.getMS() - this.var_600);
+            return (Data.getTimestamp() - this.var_600);
         }
 
         public function setSeg(_arg_1:int, _arg_2:int)
@@ -147,7 +147,7 @@ package blocks
         {
             if (!this.frozen) {
                 this.frozen = true;
-                this.var_600 = Data.getMS();
+                this.var_600 = Data.getTimestamp();
                 this.var_110 = new Bitmap(Blocks.iceBitmap);
                 addChild(this.var_110);
                 if (_arg_1) {

@@ -1,7 +1,7 @@
 ﻿package package_18.PartInfo
 {
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_153;
+    import com.jiggmin.data.EpicFlash;
     import com.jiggmin.data.HTMLNameMaker;
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
@@ -16,7 +16,7 @@
         private var listing:Object;
         private var hasEE:Boolean = false;
 		private var target:MovieClip;
-        private var epicFlash:class_153 = new class_153();
+        private var epicFlash:EpicFlash = new EpicFlash();
         private var nameMaker:HTMLNameMaker = new HTMLNameMaker();
 
         public function PartPopup(l:Object, ee:Boolean = false)

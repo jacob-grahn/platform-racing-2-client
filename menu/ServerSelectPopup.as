@@ -21,14 +21,15 @@ package menu
 
         private var m:ServerSelectPopupGraphic = new ServerSelectPopupGraphic();
 
-        public function ServerSelectPopup(guestLogin:Boolean = true)
+        public function ServerSelectPopup(guestLogin:Boolean = true, createdAccount:Boolean = false)
         {
             this.m.login_bt.addEventListener(MouseEvent.CLICK, this.clickLogIn, false, 0, true); // method_165
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.reload_bt.addEventListener(MouseEvent.CLICK, this.clickReload, false, 0, true);
-            if (guestLogin) {
+            if (guestLogin || createdAccount) {
                 this.m.user_del_bt.alpha = 0.1;
                 this.m.user_del_bt.enabled = this.m.userSelect.enabled = false;
+                this.m.userSelect.prompt = createdAccount ? Main.userName : 'Guest';
             } else {
                 this.m.userSelect.addEventListener(Event.CHANGE, this.userChange, false, 0, true);
                 this.userSelectPopulate();

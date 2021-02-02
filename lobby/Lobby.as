@@ -51,18 +51,7 @@ package lobby
             Main.noodleTown.setTargetVolume(0.6 * (Settings.musicLevel / 100));
             Main.stage.quality = StageQuality.HIGH;
             this.bottom_bts = new LobbyBottomButtonsGraphic();
-            if (Main.siteMode == "kongregate") {
-                if (Main.domain.indexOf("kongregate.com") != -1 && Main.group != 0) {
-                    this.bottom_bts.gotoAndStop("kongregateSite");
-                } else {
-                    this.bottom_bts.gotoAndStop("miscSite");
-                }
-            } else {
-                this.bottom_bts.gotoAndStop("sponsoredSite");
-            }
-            /*if (Main.testing) {
-                this.bottom_bts.gotoAndStop("kongregateSite");
-            }*/
+            this.bottom_bts.gotoAndStop(Main.group > 0 ? "kongregateSite" : "sponsoredSite");
             this.bottom_bts.logoutButton.addEventListener(MouseEvent.CLICK, this.clickLogout, false, 0, true);
             this.bottom_bts.levelEditorButton.addEventListener(MouseEvent.CLICK, this.clickLE, false, 0, true);
             this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.CLICK, this.clickKong, false, 0, true);
@@ -72,10 +61,12 @@ package lobby
             this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OVER, this.hoverKong, false, 0, true);
             this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutKong, false, 0, true);
             addChild(this.bottom_bts);
-            this.method_547();
+            //this.checkAnt();
         }
 
-        private function method_547()
+        // method_547 = checkAnt
+        // MOVED KONGOUTFITPOPUP TO menu AFTER FLASH EOL
+        /*private function checkAnt()
         {
             if (Main.siteMode == "kongregate" && Main.instance.kongAPI != null && !Main.hasAnt) {
                 if (Main.instance.kongAPI.services.isGuest() && Main.group != 0) {
@@ -90,7 +81,7 @@ package lobby
                     Main.hasAnt = true;
                 }
             }
-        }
+        }*/
 
         // method_328 = clickLogout
         private function clickLogout(e:MouseEvent = null)
@@ -125,7 +116,7 @@ package lobby
             if (Main.isTempMod && Main.server.server_id < 20) {
                 new MessagePopup('You are now logged out. If you haven\'t already done so, please notify a member of the staff team that you\'ve ended your moderation session.');
             }
-            var isMod:Boolean = !Main.isTempMod && Main.group >= 2;
+            var isMod:Boolean = !Main.isTempMod && !Main.isTrialMod && Main.group >= 2;
             Main.pageHolder.changePage(new LevelEditor(null, isMod));
             Main.socket.close();
         }

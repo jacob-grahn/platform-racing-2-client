@@ -8,7 +8,7 @@ package package_6
     import flash.errors.Error;
     import package_4.Popup;
     import flash.display.MovieClip;
-    import com.jiggmin.data.class_153;
+    import com.jiggmin.data.EpicFlash;
     import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
 
@@ -18,7 +18,7 @@ package package_6
 
         private var m:PrizePopupGraphic = new PrizePopupGraphic();
         private var target:MovieClip;
-        private var var_207:class_153 = new class_153();
+        private var var_207:EpicFlash = new EpicFlash();
 
         public function PrizePopup(type:String, id:int, prizeName:String, desc:String = "", universal:Boolean = false, finished:Boolean = false)
         {

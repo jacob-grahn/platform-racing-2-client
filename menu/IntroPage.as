@@ -5,20 +5,20 @@
 
 package menu
 {
-    import page.Page;
+    import com.jiggmin.pixelEffects.PixelEffect1;
     import flash.display.MovieClip;
+    import flash.events.Event;
     import flash.events.MouseEvent;
     import flash.media.SoundTransform;
-    import pixelEffects.class_21;
-    import flash.events.Event;
+    import page.Page;
 
     public class IntroPage extends Page 
     {
 
-        private static const jiggIntro:int = 1; // const_21
-        private static const armorIntro:int = 2; // const_66
-        private static const bubBoxIntro:int = 3; // const_74
-        private static const kongIntro:int = 4; // const_65
+        private static const JIGG_INTRO:int = 1; // const_21
+        private static const ARMOR_INTRO:int = 2; // const_66
+        private static const BUBBOX_INTRO:int = 3; // const_74
+        private static const KONG_INTRO:int = 4; // const_65
 
         private var toPlay:Array = new Array(); // var_257
         private var m:IntroPageGraphic;
@@ -31,13 +31,13 @@ package menu
             addChild(this.m);
             this.mute.volume = 0;
             if (Main.siteMode == "inXile") {
-                this.toPlay = [jiggIntro];
+                this.toPlay = [JIGG_INTRO];
             } else if (Main.siteMode == "bubbleBox") {
-                this.toPlay = [jiggIntro, bubBoxIntro];
+                this.toPlay = [JIGG_INTRO, BUBBOX_INTRO];
             } else if (Main.siteMode == "kongregate") {
-                this.toPlay = [jiggIntro, kongIntro];
+                this.toPlay = [JIGG_INTRO, KONG_INTRO];
             } else if (Main.siteMode == "armorGames") {
-                this.toPlay = [jiggIntro, armorIntro];
+                this.toPlay = [JIGG_INTRO, ARMOR_INTRO];
             }
             Main.stage.addEventListener(MouseEvent.CLICK, this.onClick, false, 0, true);
             this.method_302();
@@ -51,21 +51,20 @@ package menu
         // _loc1 = type
         private function method_302()
         {
-            var _local_2:class_21;
             this.method_322();
             if (this.toPlay.length <= 0) {
                 this.endIntro();
             } else {
                 var type:int = this.toPlay.shift();
-                if (type == jiggIntro) {
+                if (type == JIGG_INTRO) {
                     this.currentIntro = new JiggminIntroGraphic();
-                    _local_2 = new class_21(new JiggminLogo(300, 87));
+                    var _local_2:PixelEffect1 = new PixelEffect1(new JiggminLogo(300, 87));
                     this.currentIntro.logo.logo_mc.addChild(_local_2);
-                } else if (type == armorIntro) {
+                } else if (type == ARMOR_INTRO) {
                     this.currentIntro = new ArmorIntroGraphic();
-                } else if (type == bubBoxIntro) {
+                } else if (type == BUBBOX_INTRO) {
                     this.currentIntro = new BubbleBoxIntroGraphic();
-                } else if (type == kongIntro) {
+                } else if (type == KONG_INTRO) {
                     this.currentIntro = new KongregateIntroGraphic();
                 }
                 this.currentIntro.addEventListener(Event.COMPLETE, this.onComplete, false, 0, true);

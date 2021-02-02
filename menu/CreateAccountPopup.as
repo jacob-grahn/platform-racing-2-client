@@ -52,7 +52,7 @@ package menu
             if (this.uploadingPopup.parsedData.success == true) {
                 Main.userName = this.m.nameBox.text;
                 Main.userPass = this.m.passBox1.text;
-                new ServerSelectPopup();
+                new ServerSelectPopup(false, true);
                 startFadeOut();
             }
         }

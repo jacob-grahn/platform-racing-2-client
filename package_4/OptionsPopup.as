@@ -11,6 +11,8 @@ package package_4
     import fl.events.SliderEvent;
     import flash.net.URLRequest;
     import sounds.SoundEffects;
+    import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
 
     public class OptionsPopup extends Popup 
     {
@@ -168,7 +170,10 @@ package package_4
         // method_579 = confirmLeaveGuild
         private function confirmLeaveGuild()
         {
-            var uploadingPopup:UploadingPopup = new UploadingPopup(new URLRequest(Main.baseURL + "/guild_leave.php"), 'json');
+            var req:URLRequest = new URLRequest(Main.baseURL + "/guild_leave.php");
+            req.data = new URLVariables();
+            req.method = URLRequestMethod.POST;
+            var uploadingPopup:UploadingPopup = new UploadingPopup(req, 'json');
             uploadingPopup.addEventListener(Event.COMPLETE, this.doLeaveGuild, false, 0, true);
             startFadeOut();
         }
@@ -201,11 +206,8 @@ package package_4
 
         private function clickGuildTransfer(e:MouseEvent)
         {
-            if (Main.remember == true) {
-                flash.net.navigateToURL(new URLRequest(Main.baseURL + '/guild_transfer.php'));
-            } else {
-                new MessagePopup("Psst... I won't work if you\'re not logged in with remember me. Log back in with remember me enabled and click me again! :)");
-            }
+            new TransferGuildPopup()
+            startFadeOut();
         }
 
         // method_292 = clickClose

@@ -9,8 +9,8 @@ package
         public static var LOGIN_KEY:String = 'VUovam5GKndSMHFSSy9kSA=='; // encryptor key for login-related fns
         public static var LOGIN_IV:String = 'JmM5KnkqNXA9MVVOeC9Ucg=='; // encryptor iv for login-related fns
 
-        public static var CHANGE_EMAIL_KEY:String = 'KVhFJSVLNigvKkdhV0RaSw=='; // encryptor key for email changes
-        public static var CHANGE_EMAIL_IV:String = 'QEFUZCskMnhhdk8rYlFLKg=='; // encryptor iv for email changes
+        public static var ACCOUNT_CHANGE_KEY:String = 'KVhFJSVLNigvKkdhV0RaSw=='; // encryptor key for email changes
+        public static var ACCOUNT_CHANGE_IV:String = 'QEFUZCskMnhhdk8rYlFLKg=='; // encryptor iv for email changes
 
         public static var LEVEL_LIST_SALT:String = '984cn98c54$'; // hash salt used when listing levels
 

@@ -35,15 +35,15 @@ package
             this.c.foot2.colorMC.gotoAndStop(16);
             this.c.foot2.colorMC2.gotoAndStop(16);
             this.c.weapon.gotoAndStop("None");
-            this.c.head.hat1.gotoAndStop(1);
+            this.c.head.hat1.gotoAndStop(3);
             this.c.head.hat2.gotoAndStop(1);
             this.c.head.hat3.gotoAndStop(1);
             this.c.head.hat4.gotoAndStop(1);
-            this.c.head.hat1.colorMC.gotoAndStop(1);
+            this.c.head.hat1.colorMC.gotoAndStop(3);
             this.c.head.hat2.colorMC.gotoAndStop(1);
             this.c.head.hat3.colorMC.gotoAndStop(1);
             this.c.head.hat4.colorMC.gotoAndStop(1);
-            this.c.head.hat1.colorMC2.gotoAndStop(1);
+            this.c.head.hat1.colorMC2.gotoAndStop(3);
             this.c.head.hat2.colorMC2.gotoAndStop(1);
             this.c.head.hat3.colorMC2.gotoAndStop(1);
             this.c.head.hat4.colorMC2.gotoAndStop(1);

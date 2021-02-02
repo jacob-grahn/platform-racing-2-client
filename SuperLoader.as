@@ -54,7 +54,7 @@ package
 
                 // local loader
                 if (Capabilities.playerType == 'StandAlone' && Security.sandboxType === Security.LOCAL_TRUSTED) {
-                    var timestamp:int = Data.getMS();
+                    var timestamp:int = Data.getTimestamp();
                     var encryptor:Encryptor = new Encryptor();
                     encryptor.setKey(Env.URL_PASS_KEY);
                     encryptor.setIV(Env.URL_PASS_IV);
@@ -63,7 +63,7 @@ package
             }
             try {
                 super.load(request);
-            } catch(error:SecurityError) {
+            } catch (error:SecurityErrorEvent) {
                 new MessagePopup("SuperLoader::load - A SecurityError has occurred.");
                 dispatchEvent(new Event(e));
             }
@@ -91,7 +91,7 @@ package
                         new MessagePopup("Error: " + this.parsedData.error);
                         dispatchEvent(new Event(e));
                     }
-                } catch(error:Error) {
+                } catch (error:Error) {
                     new MessagePopup("Error: Loaded data was not in expected format. \n\nlocation: SuperLoader::onComplete \n\nreadMode: " + readMode + "\n\ndata: " + data);
                     dispatchEvent(new Event(e));
                 }
@@ -99,10 +99,10 @@ package
         }
 
          // method_426 = securityErrorHandler
-        private function securityErrorHandler(e:SecurityError)
+        private function securityErrorHandler(ev:SecurityErrorEvent)
         {
-            new MessagePopup("Security error. :(");
-            dispatchEvent(new Event(e));
+            new MessagePopup("Error: A security error occurred. :(");
+            dispatchEvent(new Event(ev));
         }
 
         // method_359 = IOErrorHandler

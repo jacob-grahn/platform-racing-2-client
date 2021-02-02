@@ -57,7 +57,6 @@ package lobby
 
         override public function remove()
         {
-            UnreadNotif.reset();
             super.remove();
         }
 

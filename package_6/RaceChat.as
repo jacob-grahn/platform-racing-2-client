@@ -2,12 +2,14 @@
 
 package package_6
 {
-    import page.Chat;
-    import flash.text.TextField;
-	import flash.events.Event;
-    import flash.events.MouseEvent;
-    import flash.events.KeyboardEvent;
+    import com.jiggmin.data.Data;
     import fl.events.ScrollEvent;
+	import flash.events.Event;
+    import flash.events.KeyboardEvent;
+    import flash.events.MouseEvent;
+    import flash.text.TextField;
+    import package_4.LevelInfoPopup;
+    import page.Chat;
 
     public class RaceChat extends Chat 
     {
@@ -53,7 +55,11 @@ package package_6
                     Main.stage.focus = this.m.chatInput;
                     this.m.chatInput.setSelection(0, 0);
                 } else {
-                    this.sendMessage(this.m.chatInput.text);
+                    if (Data.trimWhitespace(this.m.chatInput.text).toLowerCase() === '/level' && Course.course != null && Course.course.getCourseID() > 0) {
+                        new LevelInfoPopup(Course.course.getCourseID());
+                    } else {
+                        this.sendMessage(this.m.chatInput.text);
+                    }
                     this.m.chatInput.text = "";
                     this.focusOnRace(); // focusOnRace = method_223
                 }

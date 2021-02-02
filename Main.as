@@ -38,10 +38,10 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
-        public static const build:String = '29-dec-2020-v161-2';
-        public static const version:String = '161.2';
-        public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.local";
-        public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.local/levels"; // const_71
+        public static const build:String = '1-feb-2021-v162';
+        public static const version:String = '162.0';
+        public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.dev";
+        public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.dev/levels"; // const_71
         public static var stage:Stage;
         public static var instance:Main;
         public static var token:String = "";
@@ -55,7 +55,7 @@ package
         public static var isTrialMod:Boolean = false;
         public static var isPrizer:Boolean = false;
         public static var hasEmail:Boolean = false; // var_338
-        public static var hasAnt:Boolean = false; // hasAnt = var_317
+        public static var awardKongNextLogin:Boolean = false;
         public static var userId:int = 0;
         public static var guild:int = 0;
         public static var guildOwner:int = 0;
@@ -89,6 +89,7 @@ package
         public static var wasdItem:int = 73; // item, var_314*/
 
         public var kongAPI:*;
+        public var betaLoader:Boolean;
 
         public function Main()
         {
@@ -103,6 +104,7 @@ package
         private function init(e:Event = null)
         {
             removeEventListener(Event.ADDED_TO_STAGE, this.init);
+            Main.betaLoader = LoaderInfo(root.loaderInfo).parameters.hasOwnProperty('betaLoader') ? Boolean(int(LoaderInfo(root.loaderInfo).parameters.betaLoader)) : false;
             if (Main.testing || (
                     parent != stage
                     && !Main.initialized
@@ -110,6 +112,12 @@ package
                         (Capabilities.playerType == "ActiveX" || Capabilities.playerType == "PlugIn") && Security.sandboxType == Security.REMOTE
                     ) || ( // local
                         Capabilities.playerType == 'StandAlone' && Security.sandboxType == Security.LOCAL_TRUSTED
+                    )
+                ) && (
+                    ( // beta loader (debugger) used to access beta client
+                        Main.betaLoader && Main.beta
+                    ) || ( // regular loader (no debugger) used to access regular client
+                        !Main.betaLoader && !Main.beta
                     )
                 )
             ) {
@@ -134,7 +142,7 @@ package
                 muteButton.doToggle(Main.testing); // mutes by default if testing mode is enabled
                 /*superLoader.addEventListener(Event.COMPLETE, this.checkLogin, false, 0, true);
                 superLoader.load(new URLRequest(baseURL + "/check_login.php"));*/
-                setTimeout(this.getKongAPI, 2000);
+                //setTimeout(this.getKongApiOnTesting, 2000);
                 pageHolder = new PageHolder(new IntroPage());
                 addChild(pageHolder);
                 addChild(new Doughnut());
@@ -153,12 +161,10 @@ package
         // method_581 = determineSite
         private function determineSite()
         {
-            var site:String = "kongregate";
+            var site:String = "local";
             url = stage.loaderInfo.url;
             protocol = url.substr(0, url.indexOf(":"));
-            if (protocol == "file") {
-                site = "kongregate";
-            } else if (protocol == "http" || protocol == "https") {
+            if (protocol == "http" || protocol == "https") {
                 var afterProtocol:Number = url.indexOf("//");
                 site = url.substr(afterProtocol + 2, url.indexOf("/", afterProtocol + 2) - afterProtocol - 2);
                 site = site.toLowerCase();
@@ -182,8 +188,8 @@ package
         // _loc2 = kongPath
         // _loc3 = request
         // _loc4 = loader
-        // method_689 = getKongAPI
-        private function getKongAPI()
+        // method_689 = getKongApiOnTesting
+        private function getKongApiOnTesting()
         {
             if (Main.siteMode == "kongregate" && Main.domain == "local" && Main.kongAPI == null && stage == parent) {
                 var params:Object = LoaderInfo(root.loaderInfo).parameters;
@@ -191,7 +197,7 @@ package
                 Security.allowDomain(kongPath);
                 var request:URLRequest = new URLRequest(kongPath);
                 var loader:Loader = new Loader();
-                loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.kongAPIConnect);
+                loader.contentLoaderInfo.addEventListener(Event.COMPLETE, this.receiveKongAPI);
                 loader.load(request);
                 this.addChild(loader);
             }
@@ -223,8 +229,8 @@ package
             Main.emblem = "";
         }
 
-        // method_806 = kongAPIConnect
-        private function kongAPIConnect(e:Event)
+        // method_806 = receiveKongAPI
+        private function receiveKongAPI(e:Event)
         {
             var recv:* = e.target.content;
             Main.instance.kongAPI = recv;

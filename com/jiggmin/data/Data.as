@@ -45,17 +45,17 @@ package com.jiggmin.data
             return (s.substr(0,1).toUpperCase() + (s.substr(1, s.length)).toLowerCase());
         }
 
-        // method_26 = getTime
-        public static function getTime():Number
+        // method_26 = getMS
+        public static function getMS():Number
         {
             var date:Date = new Date();
             return date.time;
         }
 
-        // method_79 = getMS
-        public static function getMS():Number
+        // method_79 = getTimestamp
+        public static function getTimestamp():Number
         {
-            return Math.round(getTime() / 1000);
+            return Math.round(getMS() / 1000);
         }
 
         // _loc3 = numStr
