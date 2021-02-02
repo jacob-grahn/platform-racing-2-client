@@ -54,7 +54,7 @@ package package_17
             this.superLoader = new SuperLoader(true, SuperLoader.j);
             this.superLoader.addEventListener(SuperLoader.d, this.populateList);
             this.superLoader.addEventListener(SuperLoader.e, this.closePopup);
-            this.superLoader.load(new URLRequest(Main.baseURL + "/vault/vault.php?beta=" + int(Main.testing ? Main.testing : Main.beta)));
+            this.superLoader.load(new URLRequest(Main.baseURL + "/vault/vault.php"));
         }
 
         // _loc2 (this.superLoader.parsedData)
