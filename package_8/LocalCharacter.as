@@ -33,11 +33,12 @@ package package_8
     import package_6.ItemDisplay;
     import package_6.CourseTimer;
     import package_6.Course;
+    import package_6.Modes;
     import package_6.RaceChat;
+    import package_6.TestCourse;
     import package_9.Sting;
     import package_9.Zap;
     import page.GamePage;
-    import package_6.Modes;
 
     public class LocalCharacter extends Character 
     {
@@ -1013,6 +1014,11 @@ package package_8
         {
             clearTimeout(this.var_340);
             this.frozenSolid = false;
+        }
+
+        public function inLE()
+        {
+            return this.course is TestCourse;
         }
 
         override protected function removeListeners()

@@ -2,9 +2,10 @@
 
 package ui
 {
-    import package_8.LocalCharacter;
+    import com.jiggmin.data.Settings;
     import flash.display.Stage;
     import flash.events.MouseEvent;
+    import package_8.LocalCharacter;
 
     public class StatsSelect extends Removable 
     {
@@ -78,6 +79,13 @@ package ui
 
         private function mouseUpHandler(e:MouseEvent)
         {
+            if (this.c != null && this.c.inLE()) {
+                Settings.setValue(Settings.LE_TEST_STATS, {
+                    "speed": this.speedSlider.value,
+                    "accel": this.accelSlider.value,
+                    "jump": this.jumpnSlider.value
+                });
+            }
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
         }
