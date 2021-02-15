@@ -51,7 +51,7 @@ package package_17
                     rankTokenPrice += 20 * i;
                 }
             }
-            this.totalCost = (this.slug === 'rank_rental' ? rankTokenPrice : this.singlePrice * quantity) * this.item.saleMultiplier;
+            this.totalCost = this.slug === 'rank_rental' ? rankTokenPrice * this.item.saleMultiplier : this.singlePrice * quantity;
             var canAfford:Boolean = this.totalCost <= StorePopup.userCoins;
             var color:String = canAfford ? '006600' : 'BB0000';
             this.m.costBox.htmlText = '<font color="#' + color + '">Cost: ' + this.totalCost + ' Coins</font>';

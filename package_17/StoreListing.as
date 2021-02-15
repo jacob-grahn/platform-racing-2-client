@@ -178,7 +178,7 @@ package package_17
         // returns 1 if no sale
         public function get saleMultiplier():Number
         {
-            return this._listing.available && this._listing.price != 0 && this._listing.sale.active && (this._listing.sale.expires === 0 || this._listing.sale.expires > Data.getTimestamp()) ? this._listing.sale.value : 1.0;
+            return this._listing.available && this._listing.price != 0 && this._listing.sale.active && (this._listing.sale.expires === 0 || this._listing.sale.expires > Data.getTimestamp()) ? (100 - this._listing.sale.value) / 100 : 1.0;
         }
 
         // this is the current price of the item; base price - sale amount.

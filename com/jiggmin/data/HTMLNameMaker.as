@@ -46,7 +46,7 @@ package com.jiggmin.data
                 groupColor = "#676666";
             }
             if (name.toLowerCase() == 'dev52' && Main.loggedInAs.toLowerCase() == 'dev52') {
-                groupColor = '#FF9900';
+                groupColor = '#CC99FF';
             }
             if (name.toLowerCase() == 'wolfie' && Main.loggedInAs.toLowerCase() == 'wolfie') {
                 groupColor = '#000000';
