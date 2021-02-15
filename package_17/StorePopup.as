@@ -135,7 +135,6 @@ package package_17
                 // do by quantity
                 if (item.listing.max_quantity > 1) {
                     if (fromQuantity) {
-                        trace('numSelected: ' + QuantityPopup.instance.numSelected);
                         new ConfirmPopup(function () {
                             purchaseItem(item.slug, QuantityPopup.instance.numSelected);
                         }, 'Are you sure you\'d like to purchase <b>' + QuantityPopup.instance.numSelected + '</b> of this lovely <b>' + item.title + '</b>? Your account will be debited <b>' + QuantityPopup.instance.totalCost + ' coins</b>.\n\nPlease see the ' + gameUA + ' for more information.');
