@@ -41,7 +41,7 @@ package package_6
         protected var miniMap:MiniMap = new MiniMap();
         protected var itemDisplay:ItemDisplay = new ItemDisplay();
         public var musicSelection:MusicSelection = new MusicSelection();
-        protected var var_61:CountdownGraphic;
+        protected var countdown:CountdownGraphic; // var_61
         protected var hearts:Hearts; // var_60
         protected var bg:class_10;
         public var bg1:DrawableBackground;
@@ -56,8 +56,9 @@ package package_6
         protected var var_689:Number = 0;
         protected var var_678:Number = 0;
         private var var_348:String;
-        private var var_545:Boolean = false;
+        private var varsSet:Boolean = false; // var_545
         public var var_649:Boolean = false;
+        protected var playerDone:Boolean = false; // Game.var_370 -- this is either finished or forfeited
 
         public function Course()
         {
@@ -181,10 +182,10 @@ package package_6
             return this.courseID;
         }
 
-        protected function method_85(_arg_1:Event)
+        protected function method_85(e:Event)
         {
-            keyScroll(_arg_1);
-            if (this.var_545 && var_133.length <= 0) {
+            keyScroll(e);
+            if (this.varsSet && var_133.length <= 0) {
                 this.endIntro();
             }
         }
@@ -195,7 +196,7 @@ package package_6
             addEventListener(Event.ENTER_FRAME, keyScroll);
         }
 
-        protected function method_82(_arg_1:Event)
+        protected function method_82(e:Event)
         {
             var _local_2:Number;
             var _local_3:Number;
@@ -215,20 +216,23 @@ package package_6
         public function beginRace(_arg_1:Array)
         {
             removeEventListener(Event.ENTER_FRAME, this.method_85);
-            removeEventListener(Event.ENTER_FRAME, keyScroll);
-            addEventListener(Event.ENTER_FRAME, this.method_82);
+            if (!this.playerDone) {
+                removeEventListener(Event.ENTER_FRAME, keyScroll);
+                addEventListener(Event.ENTER_FRAME, this.method_82);
+            }
             setZoom(1);
             this.timer.init();
-            this.var_61 = new CountdownGraphic();
-            this.var_61.addEventListener("count", this.method_369, false, 0, true);
-            this.var_61.addEventListener("finish", this.onCountdownFinish, false, 0, true);
-            addChild(this.var_61);
+            this.countdown = new CountdownGraphic();
+            this.countdown.addEventListener("count", this.onCountdownCount, false, 0, true);
+            this.countdown.addEventListener("finish", this.onCountdownFinish, false, 0, true);
+            addChild(this.countdown);
             if (this.var_9 != null && this.var_9.var_4.getBool(Character.JUMP_START)) {
                 this.var_9.init();
             }
         }
 
-        private function method_369(_arg_1:Event)
+        // method_369 = onCountdownCount
+        private function onCountdownCount(_arg_1:Event)
         {
             SoundEffects.playSound(new ReadySound(), 0.4 * (Settings.soundLevel / 100));
         }
@@ -245,7 +249,7 @@ package package_6
 
         override public function setVariables(v:URLVariables)
         {
-            this.var_545 = true;
+            this.varsSet = true;
             super.setVariables(v);
         }
 
@@ -449,14 +453,14 @@ package package_6
                 this.timer.remove();
                 this.timer = null;
             }
-            if (this.var_61 != null) {
-                this.var_61.removeEventListener("count", this.method_369);
-                this.var_61.removeEventListener("finish", this.onCountdownFinish);
-                if (this.var_61.parent != null) {
-                    this.var_61.parent.removeChild(this.var_61);
+            if (this.countdown != null) {
+                this.countdown.removeEventListener("count", this.onCountdownCount);
+                this.countdown.removeEventListener("finish", this.onCountdownFinish);
+                if (this.countdown.parent != null) {
+                    this.countdown.parent.removeChild(this.countdown);
                 }
-                this.var_61.stop();
-                this.var_61 = null;
+                this.countdown.stop();
+                this.countdown = null;
             }
             this.musicSelection.remove();
             this.musicSelection = null;
