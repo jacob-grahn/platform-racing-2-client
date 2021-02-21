@@ -4,7 +4,6 @@ package package_6
 {
     import com.jiggmin.data.Data;
     import fl.events.ScrollEvent;
-	import flash.events.Event;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.text.TextField;
@@ -23,8 +22,8 @@ package package_6
             addChild(this.m);
             maxMessages = 7;
             this.m.chatInput.restrict = "^`";
-            this.m.top.textBox1.addEventListener(Event.ENTER_FRAME, this.ensureBottom);
-            this.m.bg.textBox2.addEventListener(Event.ENTER_FRAME, this.ensureBottom);
+            this.m.top.textBox1.mouseWheelEnabled = this.m.bg.textBox2.mouseWheelEnabled = false;
+            this.m.addEventListener(MouseEvent.MOUSE_WHEEL, this.ensureBottom, false, 0, true);
             Main.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, false, 0, true);
             Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true); // focusOrSend = method_374
             htmlNameMaker.listenForLink(this.m.top.textBox1);
@@ -36,9 +35,9 @@ package package_6
             displayMessage("<i><font color='#3E8697'>" + arr[0] + "</font></i><br/>");
         }
 
-        private function ensureBottom(e:Event)
+        private function ensureBottom(e:MouseEvent)
         {
-            this.showMessages();
+            this.m.top.textBox1.scrollV = this.m.bg.textBox2.scrollV = this.m.top.textBox1.maxScrollV;
         }
 
         private function mouseDownHandler(e:MouseEvent)
@@ -85,8 +84,7 @@ package package_6
 
         override public function remove()
         {
-            this.m.top.textBox1.removeEventListener(Event.ENTER_FRAME, this.ensureBottom);
-            this.m.bg.textBox2.removeEventListener(Event.ENTER_FRAME, this.ensureBottom);
+            this.m.removeEventListener(MouseEvent.MOUSE_WHEEL, this.ensureBottom);
             Main.stage.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
             Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend);
             RaceChat.textBox = null;
