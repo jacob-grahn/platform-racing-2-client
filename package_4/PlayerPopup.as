@@ -295,8 +295,7 @@ package package_4
         {
             var url:String = Main.baseURL + "/user_list_modify.php";
             var vars:URLVariables = new URLVariables();
-            vars.target_name = this.userName;
-            vars.user_id = this.userId;
+            vars.target_id = this.userId;
             vars.list = list;
             vars.mode = mode;
             var request:URLRequest = new URLRequest(url);
