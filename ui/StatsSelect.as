@@ -39,8 +39,6 @@ package ui
             addChild(this.speedSlider);
             addChild(this.accelSlider);
             addChild(this.jumpnSlider);
-            addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
-            this.mouseMoveHandler(new MouseEvent("move"));
         }
 
         // _loc1 = stats
@@ -60,7 +58,7 @@ package ui
             this.speedSlider.setValue(stats.speed);
             this.accelSlider.setValue(stats.acceleration);
             this.jumpnSlider.setValue(stats.jumping);
-            this.mouseMoveHandler(new MouseEvent(MouseEvent.MOUSE_MOVE));
+            this.updateStatsDisplay();
         }
 
         // _loc1 = usedPoints
@@ -71,13 +69,8 @@ package ui
             return this.totalPoints - usedPoints;
         }
 
-        private function mouseDownHandler(e:MouseEvent)
-        {
-            this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-            this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-        }
-
-        private function mouseUpHandler(e:MouseEvent)
+        // mouseUpHandler = saveLEStats
+        public function saveLEStats(e:* = null)
         {
             if (this.c != null && this.c.inLE()) {
                 Settings.setValue(Settings.LE_TEST_STATS, {
@@ -86,11 +79,10 @@ package ui
                     "jump": this.jumpnSlider.value
                 });
             }
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
         }
 
-        private function mouseMoveHandler(e:MouseEvent)
+        // mouseMoveHandler = updateStatsDisplay
+        public function updateStatsDisplay()
         {
             this.m.textBox.text = this.getPointsRemaining().toString();
             if (this.c != null) {
@@ -105,9 +97,6 @@ package ui
 
         override public function remove()
         {
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
-            removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
             this.speedSlider.remove();
             this.accelSlider.remove();
             this.jumpnSlider.remove();
