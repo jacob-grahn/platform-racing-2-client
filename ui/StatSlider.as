@@ -98,7 +98,7 @@ package ui
         // _loc2 = remaining
         internal function setValue(v:int)
         {
-            this.value = v;
+            this.value = Data.numLimit(v, 0, 100);
             var remaining:Number = this.target.getPointsRemaining();
             this.value = remaining < 0 ? this.value + remaining : this.value;
             this.m.textBox.text = this.m.slider.value = this.value;
