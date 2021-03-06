@@ -20,12 +20,15 @@ package background
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
     import levelEditor.TextObject;
+    import levelEditor.LevelEditor;
 
     public class DrawableBackground extends Background 
     {
 
-        private var var_210:Number = 200;
-        private var var_541:int = 750;
+        private var var_210:Number = 200; // ART COMPRESSION ONCE PIXELIZATION THRESHOLD HIT?
+        private var var_541:int = 750; //500 + ((1 + Settings.getValue(Settings.ART_QUALITY, 0)) * 250); // PIXELIZATION THRESHOLD?
+        private var losslessQuality:Boolean = false;
+        private var fromLE:Boolean;
         private var var_87:Number = 1;
         private var bitmapArray:Array = new Array();
         public var var_33:Sprite = new Sprite();
@@ -38,9 +41,11 @@ package background
         private var var_298:Number;
         public var drawing:Boolean = false;
 
-        public function DrawableBackground(_arg_1:GamePage)
+        public function DrawableBackground(gp:GamePage)
         {
-            super(_arg_1);
+            super(gp);
+            this.fromLE = LevelEditor.editor != null;
+            this.losslessQuality = Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false);
             this.var_122.cacheAsBitmap = true;
             addChild(this.var_122);
             addChild(this.var_33);
@@ -117,7 +122,7 @@ package background
                 }
                 _local_10 = (_local_10 + _local_5);
             }
-            if (Main.var_184 >= this.var_541) {
+            if (Main.var_184 >= this.var_541 && !this.losslessQuality && !this.fromLE) {
                 this.var_87++;
                 this.clear();
                 this.draw();
@@ -134,7 +139,7 @@ package background
             } else if (_arg_4[_local_6][_local_7] != null) {
                 _local_8 = false;
             }
-            if (!_local_8 || Main.var_184 <= this.var_541) {
+            if (!_local_8 || Main.var_184 <= this.var_541 || this.losslessQuality || this.fromLE) {
                 if (_local_8) {
                     Main.var_184++;
                     trace(Main.var_184);

@@ -17,6 +17,7 @@ package com.jiggmin.data
         public static const MUSIC_VOLUME:String = "musicLevel";
         public static const SOUND_VOLUME:String = "soundLevel";
         public static const DRAW_ART:String = "drawArt";
+        public static const ART_LOSSLESS_QUALITY:String = 'losslessQuality';
         public static const FILTER_SWEARS:String = "filterSwears";
         public static const ALTERNATE_CONTROLS:String = "altCtrl";
         public static const LE_TEST_STATS:String = 'leTestStats';
@@ -24,13 +25,14 @@ package com.jiggmin.data
         public static const DEFAULT_ALT_CONTROLS:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
         public static const DEFAULT_LE_TEST_STATS:Object = {"speed":50,"accel":50,"jump":50};
 
-        private static const SETTINGS:Array = [PRESETS, DISABLED_SONGS, MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, FILTER_SWEARS, ALTERNATE_CONTROLS, LE_TEST_STATS];
+        private static const SETTINGS:Array = [PRESETS, DISABLED_SONGS, MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, ART_LOSSLESS_QUALITY, FILTER_SWEARS, ALTERNATE_CONTROLS, LE_TEST_STATS];
 
         private static var presets:Object = null;
         public static var disabledSongs:Array = [];
         public static var musicLevel:int = 100;
         public static var soundLevel:int = 100;
         private static var drawArt:Boolean = true;
+        private static var losslessQuality:Boolean = false;
         private static var filterSwears:Boolean = true;
         private static var altCtrl:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
         private static var leTestStats:Object = {"speed":50,"accel":50,"jump":50};

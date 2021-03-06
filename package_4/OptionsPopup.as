@@ -18,13 +18,13 @@ package package_4
     {
 
         private var m:OptionsPopupGraphic = new OptionsPopupGraphic();
-        private var drawArt:Boolean = Settings.getValue(Settings.DRAW_ART, true);
         private var filterSwears:Boolean = Settings.getValue(Settings.FILTER_SWEARS, true);
+        private var drawArt:Boolean = Settings.getValue(Settings.DRAW_ART, true);
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var hTrueY:Number = -74;
         private var hFalseY:Number = -46;
         private var buttonStartPos:int = 78; // var_437
-        private var musicHover:HoverPopup;
+        private var hoverActive:HoverPopup;
 
         public function OptionsPopup()
         {
@@ -43,15 +43,16 @@ package package_4
             this.m.wasdDown.text = String.fromCharCode(this.altCtrl.down).toUpperCase();
             this.m.wasdLeft.text = String.fromCharCode(this.altCtrl.left).toUpperCase();
             this.m.wasdItem.text = String.fromCharCode(this.altCtrl.item).toUpperCase();
-            this.m.artHighlight.y = this.drawArt === false ? this.hFalseY : this.hTrueY;
             this.m.filterHighlight.y = this.filterSwears === false ? this.hFalseY : this.hTrueY;
-            this.m.artOn_bt.addEventListener(MouseEvent.CLICK, toggleArtOn, false, 0, true);
-            this.m.artOff_bt.addEventListener(MouseEvent.CLICK, toggleArtOff, false, 0, true);
+            this.m.artHighlight.y = this.drawArt === false ? this.hFalseY : this.hTrueY;
             this.m.filterOn_bt.addEventListener(MouseEvent.CLICK, toggleFilterOn, false, 0, true);
             this.m.filterOff_bt.addEventListener(MouseEvent.CLICK, toggleFilterOff, false, 0, true);
+            this.m.artOn_bt.addEventListener(MouseEvent.CLICK, toggleArtOn, false, 0, true);
+            this.m.artOff_bt.addEventListener(MouseEvent.CLICK, toggleArtOff, false, 0, true);
             this.m.music_bt.addEventListener(MouseEvent.CLICK, clickMusic, false, 0, true);
             this.m.music_bt.addEventListener(MouseEvent.MOUSE_OVER, hoverMusic, false, 0, true);
-            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic, false, 0, true);
+            this.m.music_bt.addEventListener(MouseEvent.MOUSE_OUT, hoverOut, false, 0, true);
+            this.toggleArtBtnListeners(this.drawArt);
             this.m.removeChild(this.m.changePass_bt);
             this.m.removeChild(this.m.changeEmail_bt);
             this.m.removeChild(this.m.guildLeave_bt);
@@ -73,6 +74,20 @@ package package_4
                 }
             }
             this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
+        }
+
+        private function toggleArtBtnListeners(on:Boolean)
+        {
+            this.m.artOffText.visible = !on;
+            this.m.art_bt.visible = on;
+            this.m.art_bt.removeEventListener(MouseEvent.CLICK, clickArt);
+            this.m.art_bt.removeEventListener(MouseEvent.MOUSE_OVER, hoverArt);
+            this.m.art_bt.removeEventListener(MouseEvent.MOUSE_OUT, hoverOut);
+            if (on) {
+                this.m.art_bt.addEventListener(MouseEvent.CLICK, clickArt, false, 0, true);
+                this.m.art_bt.addEventListener(MouseEvent.MOUSE_OVER, hoverArt, false, 0, true);
+                this.m.art_bt.addEventListener(MouseEvent.MOUSE_OUT, hoverOut, false, 0, true);
+            }
         }
 
         private function musicSliderChange(e:SliderEvent)
@@ -97,18 +112,6 @@ package package_4
             SoundEffects.playSound(new JumpSound(), 0.75 * (Settings.soundLevel / 100));
         }
 
-        private function toggleArtOn(e:MouseEvent)
-        {
-            this.m.artHighlight.y = this.hTrueY;
-            this.drawArt = true;
-        }
-
-        private function toggleArtOff(e:MouseEvent)
-        {
-            this.m.artHighlight.y = this.hFalseY;
-            this.drawArt = false;
-        }
-
         private function toggleFilterOn(e:MouseEvent)
         {
             this.m.filterHighlight.y = this.hTrueY;
@@ -121,6 +124,31 @@ package package_4
             this.filterSwears = false;
         }
 
+        private function toggleArtOn(e:MouseEvent)
+        {
+            this.m.artHighlight.y = this.hTrueY;
+            this.drawArt = true;
+            this.toggleArtBtnListeners(true);
+        }
+
+        private function toggleArtOff(e:MouseEvent)
+        {
+            this.m.artHighlight.y = this.hFalseY;
+            this.drawArt = false;
+            this.toggleArtBtnListeners(false);
+        }
+
+        private function clickArt(e:MouseEvent)
+        {
+            new OptionsArtQualityMenu(e.currentTarget);
+        }
+
+        private function hoverArt(e:MouseEvent)
+        {
+            this.hoverActive = new HoverPopup("Choose Art Quality", "Choose whether to draw art with lossless quality. This setting may degrade performance on some systems.", this.m.art_bt);
+            this.hoverActive.x += 5;
+        }
+
         private function clickMusic(e:MouseEvent)
         {
             new OptionsSongsMenu(e.currentTarget);
@@ -128,13 +156,16 @@ package package_4
 
         private function hoverMusic(e:MouseEvent)
         {
-            this.musicHover = new HoverPopup("Choose Music", "Choose which songs are allowed to play in a level.", this.m.music_bt);
+            this.hoverOut();
+            this.hoverActive = new HoverPopup("Choose Music", "Choose which songs are allowed to play in a level.", this.m.music_bt);
         }
 
-        private function hoverOutMusic(e:MouseEvent)
+        private function hoverOut(e:* = null)
         {
-            this.musicHover.remove();
-            this.musicHover = null;
+            if (this.hoverActive != null) {
+                this.hoverActive.remove();
+                this.hoverActive = null;
+            }
         }
 
         // method_75 = addOptionsButton
@@ -236,11 +267,9 @@ package package_4
             this.m.guildTransfer_bt.removeEventListener(MouseEvent.CLICK, this.clickGuildTransfer);
             this.m.music_bt.removeEventListener(MouseEvent.CLICK, clickMusic);
             this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OVER, hoverMusic);
-            this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OUT, hoverOutMusic);
-            if (this.musicHover != null) {
-                this.musicHover.remove();
-                this.musicHover = null;
-            }
+            this.m.music_bt.removeEventListener(MouseEvent.MOUSE_OUT, hoverOut);
+            this.toggleArtBtnListeners(false);
+            this.hoverOut();
             if (this.m.wasdUp.text == "") {
                 this.m.wasdUp.text = "W";
             }
