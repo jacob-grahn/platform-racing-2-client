@@ -10,7 +10,7 @@ package levelEditor
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
 
-    public class BlockObject extends PlaceableObject 
+    public class BlockObject extends DrawObject 
     {
 
         private var segSize:Number = LevelEditor.segSize;
@@ -21,61 +21,64 @@ package levelEditor
         public var posX:Number;
         public var posY:Number;
 
-        public function BlockObject(_arg_1:int, _arg_2:Number, _arg_3:Number)
+        public function BlockObject(blockId:int, blockX:Number, blockY:Number)
         {
-            super(_arg_1, _arg_2, _arg_3);
-            this.displayCode = _arg_1;
-            this.lastX = (x = this.method_103(_arg_2));
-            this.lastY = (y = this.method_103(_arg_3));
-            this.segX = Math.floor((x / 30));
-            this.segY = Math.floor((y / 30));
+            super(blockId, blockX, blockY);
+            this.displayCode = blockId;
+            this.lastX = x = this.method_103(blockX);
+            this.lastY = y = this.method_103(blockY);
+            this.segX = Math.floor(x / 30);
+            this.segY = Math.floor(y / 30);
             this.posX = x;
             this.posY = y;
             resizable = false;
         }
 
-        public function setSeg(_arg_1:int, _arg_2:int)
+        public function setSeg(newX:int, newY:int)
         {
-            this.segX = _arg_1;
-            this.segY = _arg_2;
-            this.posX = (x = (_arg_1 * 30));
-            this.posY = (y = (_arg_2 * 30));
+            this.segX = newX;
+            this.segY = newY;
+            this.posX = x = this.segX * 30;
+            this.posY = y = this.segY * 30;
         }
 
         public function getSeg():Point
         {
-            return (new Point(this.segX, this.segY));
+            return new Point(this.segX, this.segY);
         }
 
-        override protected function endDrag(_arg_1:MouseEvent)
+        // _loc2 = newPtSegX
+        // _loc3 = newPtSegY
+        // _loc4 = blockAtNewPt
+        // _loc5 = overwriteExisting
+        override protected function endDrag(e:MouseEvent)
         {
-            var _local_2:Number;
-            var _local_3:Number;
-            _local_2 = this.method_103(x);
-            _local_3 = this.method_103(y);
+            var newPtSegX:Number = this.method_103(x);
+            var newPtSegY:Number = this.method_103(y);
             x = this.lastX;
             y = this.lastY;
-            var _local_4:BlockObject = editor.blockBG.getBlockAt(_local_2, _local_3);
-            var _local_5:Boolean = true;
-            if (((!(_local_4 == null)) && (!(_local_4 == this)))) {
-                if (((((_local_4.displayCode == Objects.Start1BlockCode) || (_local_4.displayCode == Objects.Start2BlockCode)) || (_local_4.displayCode == Objects.Start3BlockCode)) || (_local_4.displayCode == Objects.Start4BlockCode))) {
-                    _local_5 = false;
+            var blockAtNewPt:BlockObject = editor.blockBG.getBlockAt(newPtSegX, newPtSegY);
+            var overwriteExisting:Boolean = true;
+            if (blockAtNewPt != null && blockAtNewPt != this) {
+                if (blockAtNewPt.displayCode == Objects.Start1BlockCode || blockAtNewPt.displayCode == Objects.Start2BlockCode || blockAtNewPt.displayCode == Objects.Start3BlockCode || blockAtNewPt.displayCode == Objects.Start4BlockCode) {
+                    overwriteExisting = false;
                 } else {
                     editor.cur.recordDelete(this);
-                    _local_4.remove();
+                    blockAtNewPt.remove();
                 }
             }
-            if (_local_5 == true) {
-                this.lastX = (x = _local_2);
-                this.lastY = (y = _local_3);
+            if (overwriteExisting) {
+                this.lastX = x = newPtSegX;
+                this.lastY = y = newPtSegY;
             }
-            editor.blockBG.moveBlock(new Point(this.segX, this.segY), new Point(Math.round((x / 30)), Math.round((y / 30))));
-            super.endDrag(_arg_1);
+            editor.blockBG.moveBlock(new Point(this.segX, this.segY), new Point(Math.round(x / 30), Math.round(y / 30)));
+            super.endDrag(e);
         }
 
+        // converts coordinate number in seg -> pos
         private function method_103(_arg_1:Number):Number
         {
-            return (Math.round((_arg_1 / this.segSize)) * this.segSize);
+            return Math.round(_arg_1 / this.segSize) * this.segSize;
         }
 
         override public function remove()

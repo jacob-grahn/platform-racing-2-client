@@ -1,14 +1,9 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//package_19.ItemMenu = package_19.class_265
-
 package package_4
 {
-    import fl.controls.CheckBox;
-    import package_4.class_264;
-    import flash.display.DisplayObject;
     import com.jiggmin.data.Settings;
+    import fl.controls.CheckBox;
+    import flash.display.DisplayObject;
+    import package_4.class_264;
 
     public class OptionsSongsMenu extends class_264 
     {
@@ -24,7 +19,7 @@ package package_4
             y -= 45;
             addChild(this.m);
             super(d);
-            var blacklist:Array = Settings.getValue('disabledSongs');
+            var blacklist:Array = Settings.getValue(Settings.DISABLED_SONGS);
             for (var i in blacklist) {
                 this.m['song' + blacklist[i]].selected = false;
             }
@@ -44,7 +39,7 @@ package package_4
                     blacklist.push(i);
                 }
             }
-            Settings.setValue('disabledSongs', blacklist);
+            Settings.setValue(Settings.DISABLED_SONGS, blacklist);
             super.remove();
         }
 

@@ -273,23 +273,19 @@ package package_6
             }
         }
 
+        // deleted _loc1 (this.getFinishPositions())
+        // deleted _loc2 (finishBlocks.length)
         override protected function endIntro()
         {
-            var _local_1:String = this.method_742();
-            var _local_2:int = var_313.length;
-            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + _local_1 + "`" + _local_2 + "`" + cowboyChance + "`" + badHats.join(','));
+            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + this.getFinishBlockPositions() + "`" + finishBlocks.length + "`" + cowboyChance + "`" + badHats.join(','));
             super.endIntro();
         }
 
-        private function method_742():String
+        // deleted _loc1 (condensed fn)
+        // method_742 = getFinishBlockPositions
+        private function getFinishBlockPositions():String
         {
-            var _local_1:String;
-            if (var_313.length > 5) {
-                _local_1 = "all";
-            } else {
-                _local_1 = JSON.stringify(var_313);
-            }
-            return (_local_1);
+            return finishBlocks.length > 5 ? 'all' : JSON.stringify(finishBlocks);
         }
 
         override public function outOfTimeHandler()

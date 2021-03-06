@@ -6,9 +6,9 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
-    import package_9.class_106;
     import flash.geom.Point;
+    import package_8.LocalCharacter;
+    import package_9.BlockPiece;
     import package_9.MineExplode;
 
     public class MineBlock extends Block 
@@ -20,77 +20,68 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(_arg_1:LocalCharacter)
+        override public function onStand(lc:LocalCharacter)
         {
-            super.onStand(_arg_1);
-            this.method_81(_arg_1);
+            super.onStand(lc);
+            this.method_81(lc);
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(lc:LocalCharacter)
         {
-            super.onBump(_arg_1);
-            this.method_81(_arg_1);
+            super.onBump(lc);
+            this.method_81(lc);
         }
 
-        override public function onLeftHit(_arg_1:LocalCharacter)
+        override public function onLeftHit(lc:LocalCharacter)
         {
-            super.onLeftHit(_arg_1);
-            this.method_81(_arg_1);
+            super.onLeftHit(lc);
+            this.method_81(lc);
         }
 
-        override public function onRightHit(_arg_1:LocalCharacter)
+        override public function onRightHit(lc:LocalCharacter)
         {
-            super.onRightHit(_arg_1);
-            this.method_81(_arg_1);
+            super.onRightHit(lc);
+            this.method_81(lc);
         }
 
-        override public function onTouch(_arg_1:LocalCharacter)
+        override public function onTouch(lc:LocalCharacter)
         {
-            super.onTouch(_arg_1);
-            this.method_81(_arg_1);
+            super.onTouch(lc);
+            this.method_81(lc);
         }
 
-        override public function onDamage(_arg_1:Number)
+        override public function onDamage(n:Number)
         {
-            super.onDamage(_arg_1);
+            super.onDamage(n);
             localActivate();
         }
 
-        override protected function activate(_arg_1:String="")
+        // _loc3 = piece
+        override protected function activate(s:String="")
         {
-            var _local_2:class_106;
-            var _local_3:MinePieceGraphic;
-            var _local_4:Number;
-            var _local_5:Number;
             var _local_6:Point = method_18();
-            var _local_7:int;
-            while (_local_7 < 10) {
-                _local_3 = new MinePieceGraphic();
-                _local_4 = ((Math.random() * 30) + _local_6.x);
-                _local_5 = ((Math.random() * 30) + _local_6.y);
-                _local_2 = new class_106(_local_3, 0.75, 0.95, 0.05, 30, 30, 50, _local_4, _local_5);
-                _local_7++;
+            var i:int;
+            while (i < 10) {
+                var piece:MinePieceGraphic = new MinePieceGraphic();
+                var _local_4:Number = (Math.random() * 30) + _local_6.x;
+                var _local_5:Number = (Math.random() * 30) + _local_6.y;
+                var _local_2:BlockPiece = new BlockPiece(piece, 0.75, 0.95, 0.05, 30, 30, 50, _local_4, _local_5);
+                i++;
             }
             new MineExplode(_local_6.x, _local_6.y);
             remove();
         }
 
-        private function method_81(_arg_1:LocalCharacter)
+        private function method_81(lc:LocalCharacter)
         {
-            var _local_2:Number;
-            var _local_3:Number;
-            var _local_4:Number;
-            var _local_5:Number;
-            var _local_6:Number;
-            var _local_7:Number;
             if (!frozen) {
-                _local_2 = 50;
-                _local_3 = (_arg_1.x - (x + 15));
-                _local_4 = ((_arg_1.y - (_arg_1.var_325 / 2)) - (y + 15));
-                _local_5 = Math.atan2(_local_4, _local_3);
-                _local_6 = (Math.cos(_local_5) * _local_2);
-                _local_7 = (Math.sin(_local_5) * _local_2);
-                _arg_1.hit(_local_6, _local_7);
+                var _local_2:Number = 50;
+                var _local_3:Number = lc.x - x + 15;
+                var _local_4:Number = lc.y - (lc.var_325 / 2) - y + 15;
+                var _local_5:Number = Math.atan2(_local_4, _local_3);
+                var _local_6:Number = Math.cos(_local_5) * _local_2;
+                var _local_7:Number = Math.sin(_local_5) * _local_2;
+                lc.hit(_local_6, _local_7);
                 localActivate();
             }
         }

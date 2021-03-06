@@ -7,7 +7,7 @@ package package_6
 {
 	import background.class_10;
     import background.EffectBackground;
-    import background.class_75;
+    import background.Background;
     import background.DrawableBackground;
     import background.Map;
     import blocks.FinishBlock;
@@ -33,7 +33,7 @@ package package_6
         protected var courseID:int;
         protected var version:int;
         public var var_197:Array = new Array();
-        public var var_313:Array = new Array();
+        public var finishBlocks:Array = new Array(); // var_313
         public var playerArray:Array = new Array(); // var_40
         public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();
@@ -51,8 +51,8 @@ package package_6
         protected var bg5:DrawableBackground;
         public var blockBackground:Map;
         public var var_201:EffectBackground;
-        public var frontBackground:class_75;
-        public var backBackground:class_75;
+        public var frontBackground:Background;
+        public var backBackground:Background;
         protected var var_689:Number = 0;
         protected var var_678:Number = 0;
         private var var_348:String;
@@ -104,16 +104,14 @@ package package_6
             this.method_80();
         }
 
+        // _loc1 = this.playerArray.length
         protected function method_80()
         {
-            var _local_3:Point;
-            var _local_4:Character;
-            var _local_1:int = this.playerArray.length;
             var _local_2:int;
-            while (_local_2 < _local_1) {
-                _local_3 = this.method_753(_local_2);
+            while (_local_2 < this.playerArray.length) {
+                var _local_3:Point = this.method_753(_local_2);
                 if (_local_3 != null) {
-                    _local_4 = this.playerArray[_local_2];
+                    var _local_4:Character = this.playerArray[_local_2];
                     _local_4.setPos(_local_3.x, _local_3.y);
                     this.frontBackground.addChild(_local_4);
                 }
@@ -131,7 +129,7 @@ package package_6
             if (this.var_197[_local_2] != null) {
                 _local_3 = this.var_197[_local_2];
             }
-            return (_local_3);
+            return _local_3;
         }
 
         public function setEggSeed(arr:Array)
@@ -164,7 +162,7 @@ package package_6
 
         public function method_842():int
         {
-            return (this.hearts.method_758());
+            return this.hearts.method_758();
         }
 
         override public function setGameMode(mode:String)
@@ -198,15 +196,11 @@ package package_6
 
         protected function method_82(e:Event)
         {
-            var _local_2:Number;
-            var _local_3:Number;
-            var _local_4:Number;
-            var _local_5:Number;
             if (this.var_9 != null) {
-                _local_2 = -this.var_9.x;
-                _local_3 = -this.var_9.y + 45;
-                _local_4 = _local_2 - posX;
-                _local_5 = _local_3 - posY;
+                var _local_2:Number = -this.var_9.x;
+                var _local_3:Number = -this.var_9.y + 45;
+                var _local_4:Number = _local_2 - posX;
+                var _local_5:Number = _local_3 - posY;
                 posX = posX + (_local_4 * 0.5);
                 posY = posY + (_local_5 * 0.4);
                 this.setPos(posX, posY);
@@ -279,9 +273,9 @@ package package_6
             this.bg3 = new DrawableBackground(this);
             this.bg4 = new DrawableBackground(this);
             this.bg5 = new DrawableBackground(this);
-            this.backBackground = new class_75(this);
+            this.backBackground = new Background(this);
             this.blockBackground = new Map(this.miniMap, this);
-            this.frontBackground = new class_75(this);
+            this.frontBackground = new Background(this);
             this.var_201 = new EffectBackground(this);
             this.bg1.setScale(1);
             this.bg2.setScale(0.5);
@@ -390,9 +384,8 @@ package package_6
             Main.stage.quality = StageQuality.LOW;
         }
 
-        private function rotate(_arg_1:Event)
+        private function rotate(e:Event)
         {
-            var _local_4:Character;
             var _local_2:Boolean;
             var _local_3:Number = 3;
             if (this.var_348 == "right") {
@@ -422,7 +415,7 @@ package package_6
                     this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation - 90;
                     this.miniMap.rotate(this.blockBackground.rotation);
                 }
-                for each (_local_4 in this.playerArray) {
+                for each (var _local_4:Character in this.playerArray) {
                     _local_4.rotate(this.var_348);
                 }
                 this.method_82(new Event(Event.ENTER_FRAME));
@@ -444,7 +437,6 @@ package package_6
 
         override public function remove()
         {
-            var _local_1:Character;
             CommandHandler.commandHandler.defineCommand("beginRace", null);
             removeEventListener(Event.ENTER_FRAME, this.method_85);
             removeEventListener(Event.ENTER_FRAME, this.rotate);
@@ -470,7 +462,7 @@ package package_6
             this.hearts = null;
             this.itemDisplay = null;
             Course.course = null;
-            for each (_local_1 in this.playerArray) {
+            for each (var _local_1:Character in this.playerArray) {
                 _local_1.remove();
             }
             this.playerArray = null;

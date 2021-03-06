@@ -2,6 +2,7 @@
 // www.as3sorcerer.com
 
 //background.class_10
+// actual level background image
 
 package background
 {
@@ -14,7 +15,7 @@ package background
     import flash.display.MovieClip;
     import flash.geom.ColorTransform;
 
-    public class class_10 extends class_75 
+    public class class_10 extends Background 
     {
 
         private var bitmapData:BitmapData = new BitmapData(550, 400, false, 0);
@@ -50,34 +51,26 @@ package background
                 this.method_536(_local_2);
             }
             this.bitmapData.draw(_local_2);
-            if (((_arg_1 == Objects.BG4Code) || (_arg_1 == Objects.BG5Code))) {
-                scale = 0;
-            } else {
-                scale = 1;
-            }
+            scale = _arg_1 == Objects.BG4Code || _arg_1 == Objects.BG5Code ? 0 : 1;
             method_59();
         }
 
         private function method_536(_arg_1:DisplayObject)
         {
-            var _local_2:MovieClip;
-            var _local_6:Circle;
-            var _local_7:ColorTransform;
-            var _local_9:int;
-            _local_2 = MovieClip(_arg_1);
+            var _local_2:MovieClip = MovieClip(_arg_1);
             var _local_3:int = 50;
-            var _local_4:int = int((550 / _local_3));
-            var _local_5:int = int((400 / _local_3));
-            _local_7 = new ColorTransform();
+            var _local_4:int = int(550 / _local_3);
+            var _local_5:int = int(400 / _local_3);
+            var _local_7:ColorTransform = new ColorTransform();
             var _local_8:int;
             while (_local_8 < _local_4) {
-                _local_9 = 0;
+                var _local_9:int = 0;
                 while (_local_9 < _local_5) {
-                    _local_7.color = (Math.random() * 0xFFFFFF);
-                    _local_6 = new Circle();
-                    _local_6.width = (_local_6.height = 25);
-                    _local_6.x = (((_local_8 * _local_3) + (15 / 2)) + (_local_6.width / 2));
-                    _local_6.y = (((_local_9 * _local_3) + (15 / 2)) + (_local_6.height / 2));
+                    _local_7.color = Math.random() * 0xFFFFFF;
+                    var _local_6:Circle = new Circle();
+                    _local_6.width = _local_6.height = 25;
+                    _local_6.x = (_local_8 * _local_3) + 7.5 + (_local_6.width / 2);
+                    _local_6.y = (_local_9 * _local_3) + 7.5 + (_local_6.height / 2);
                     _local_6.transform.colorTransform = _local_7;
                     _local_2.addChild(_local_6);
                     _local_9++;

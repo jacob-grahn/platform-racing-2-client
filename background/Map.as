@@ -20,8 +20,6 @@ package background
     import package_6.MiniMap;
     import package_8.Character;
     import package_9.Egg;
-    //import __AS3__.vec.*;
-    //import __AS3__.vec.Vector;
 
     public class Map extends BlockBackground 
     {
@@ -50,14 +48,18 @@ package background
             CommandHandler.commandHandler.defineCommand("activate", this.activate);
         }
 
-        public function activate(_arg_1:Array)
+
+        // _loc2 = blockX
+        // _loc3 = blockY
+        // _loc5 = activated
+        public function activate(arr:Array)
         {
-            var _local_2:int = int(_arg_1[0]);
-            var _local_3:int = int(_arg_1[1]);
-            var _local_4:String = _arg_1[2];
-            var _local_5:Block = getBlockFromSeg(_local_2, _local_3);
-            if (_local_5 != null) {
-                _local_5.remoteActivate(_local_4);
+            var blockX:int = int(arr[0]);
+            var blockY:int = int(arr[1]);
+            var _local_4:String = arr[2];
+            var activated:Block = getBlockFromSeg(blockX, blockY);
+            if (activated != null) {
+                activated.remoteActivate(_local_4);
             }
         }
 
@@ -89,7 +91,7 @@ package background
                 } else {
                     if (block is FinishBlock) {
                         var finishBlock:FinishBlock = FinishBlock(block);
-                        this.method_516(finishBlock.getId(), x + 15, y + 15);
+                        this.addFinish(finishBlock.getId(), x + 15, y + 15);
                     }
                     method_53(block, _local_4);
                     if (!block.isInitialized()) {
@@ -106,23 +108,20 @@ package background
             }
             if (y > this.maxY) {
                 this.maxY = y;
-            }
-            if (y < this.minY) {
+            } else if (y < this.minY) {
                 this.minY = y;
             }
             if (x > this.maxX) {
                 this.maxX = x;
-            }
-            if (x < this.minX) {
+            } else if (x < this.minX) {
                 this.minX = x;
             }
         }
 
         private function method_485()
         {
-            var _local_1:Point;
-            for each (_local_1 in this.var_379) {
-                this.method_552((_local_1.x + 15), (_local_1.y + 15));
+            for each (var _local_1:Point in this.var_379) {
+                this.method_552(_local_1.x + 15, _local_1.y + 15);
             }
             this.var_379 = new Array();
         }
@@ -140,19 +139,22 @@ package background
             }
         }
 
+        // _loc4 = course
         private function setStartPos(_arg_1:int, _arg_2:int, _arg_3:int)
         {
-            var _local_4:Course = Course.course;
-            _local_4.method_514(_arg_1, new Point(_arg_2, _arg_3));
+            var course:Course = Course.course;
+            course.method_514(_arg_1, new Point(_arg_2, _arg_3));
         }
 
-        private function method_516(_arg_1:int, _arg_2:int, _arg_3:int)
+        // _loc4 = course
+        // method_516 = addFinish
+        private function addFinish(finishId:int, finishX:int, finishY:int)
         {
-            var _local_4:Course = Course.course;
-            _local_4.var_313.push({
-                "id":_arg_1,
-                "x":_arg_2,
-                "y":_arg_3
+            var course:Course = Course.course;
+            course.finishBlocks.push({
+                "id": finishId,
+                "x": finishX,
+                "y": finishY
             });
         }
 
@@ -208,26 +210,24 @@ package background
             this.moves++;
         }
 
+        // deleted _loc3 (simplified return)
         override public function testMove(_arg_1:int, _arg_2:int):Boolean
         {
-            var _local_3:Boolean;
             if ((blockArray[_arg_1] == null || blockArray[_arg_1][_arg_2] == null) && !this.characterOccupiesSpace(_arg_1, _arg_2)) {
-                _local_3 = true;
+                return true;
             }
-            return (_local_3);
+            return false;
         }
 
         // _loc5 = occupies
         public function characterOccupiesSpace(xVal:int, yVal:int):Boolean
         {
-            var _local_3:Point;
-            var _local_4:Point;
             var occupies:Boolean = false;
             if (Course.course != null) {
                 for each (var _local_6:Character in Course.course.playerArray) {
                     if (_local_6 != null) {
-                        _local_3 = _local_6.seg1;
-                        _local_4 = _local_6.seg2;
+                        var _local_3:Point = _local_6.seg1;
+                        var _local_4:Point = _local_6.seg2;
                         if ((_local_3.x == xVal && _local_3.y == yVal) || (_local_4.x == xVal && _local_4.y == yVal)) {
                             occupies = true;
                             break;
@@ -245,9 +245,8 @@ package background
 
         override public function clear()
         {
-            var _local_1:Block;
             while (numChildren > 0) {
-                _local_1 = Block(getChildAt(0));
+                var _local_1:Block = Block(getChildAt(0));
                 _local_1.remove();
             }
             var_39 = 0;
