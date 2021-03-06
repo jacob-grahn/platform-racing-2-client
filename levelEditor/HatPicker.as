@@ -2,9 +2,10 @@
 
 package levelEditor
 {
+    import com.jiggmin.data.Settings;
     import flash.display.Sprite;
-    import package_8.LocalCharacter;
     import flash.events.MouseEvent;
+    import package_8.LocalCharacter;
 
     public class HatPicker extends Sprite 
     {
@@ -22,6 +23,7 @@ package levelEditor
             this.m.var_173.left.addEventListener(MouseEvent.CLICK, this.clickLeft, false, 0, true);
             this.m.var_173.right.addEventListener(MouseEvent.CLICK, this.clickRight, false, 0, true);
             addChild(this.m);
+            this.pickedHat = Settings.getValue(Settings.LE_TEST_HAT, 2);
             this.display();
         }
 
@@ -64,6 +66,7 @@ package levelEditor
             var colorMC2:int = 0;
             var a:Array = new Array(this.pickedHat, colorMC, colorMC2);
             this.c.setHats(a);
+            Settings.setValue(Settings.LE_TEST_HAT, this.pickedHat);
         }
 
         public function remove()
