@@ -1,8 +1,3 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//package_19.ItemMenu = package_19.class_265
-
 package package_4
 {
     import fl.controls.CheckBox;
