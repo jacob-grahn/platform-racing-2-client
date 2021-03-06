@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import package_8.Character;
     import package_8.LocalCharacter;
-    import package_9.class_106;
+    import package_9.BlockPiece;
     import flash.geom.Point;
 
     public class CrumbleBlock extends Block 
@@ -114,17 +114,14 @@ package blocks
         // method_294 = throwPieces
         private function throwPieces(piecesToThrow:Number)
         {
-            var _local_3:class_106;
-            var _local_4:Number;
-            var _local_5:Number;
             var _local_6:Point = method_18();
             piecesToThrow = piecesToThrow > 20 ? 20 : piecesToThrow;
             var i:int = 0;
             while (i < piecesToThrow) {
                 var piece:CrumblePieceGraphic = new CrumblePieceGraphic();
-                _local_4 = (Math.random() * 30) + _local_6.x;
-                _local_5 = (Math.random() * 30) + _local_6.y;
-                _local_3 = new class_106(piece, 0.75, 0.95, 0.05, 5, 5, 15, _local_4, _local_5);
+                var _local_4:Number = (Math.random() * 30) + _local_6.x;
+                var _local_5:Number = (Math.random() * 30) + _local_6.y;
+                var _local_3:BlockPiece = new BlockPiece(piece, 0.75, 0.95, 0.05, 5, 5, 15, _local_4, _local_5);
                 i++;
             }
         }

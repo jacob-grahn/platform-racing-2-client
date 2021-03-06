@@ -22,7 +22,8 @@ package package_6
             addChild(this.m);
             maxMessages = 7;
             this.m.chatInput.restrict = "^`";
-            this.m.addEventListener(MouseEvent.MOUSE_WHEEL, this.ensureBottom, true, 0, true);
+            this.m.top.textBox1.mouseWheelEnabled = this.m.bg.textBox2.mouseWheelEnabled = false;
+            this.m.addEventListener(MouseEvent.MOUSE_WHEEL, this.ensureBottom, false, 0, true);
             Main.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, false, 0, true);
             Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true); // focusOrSend = method_374
             htmlNameMaker.listenForLink(this.m.top.textBox1);

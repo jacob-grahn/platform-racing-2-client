@@ -51,11 +51,14 @@ package com.jiggmin.data
             return accounts;
         }
 
-        private static function getArrayPosByName(name:String)
+        private static function getArrayPos(data:String, mode:String = 'name')
         {
             for (var i:int = 0; i < accounts.length; i++) {
                 var account:Object = accounts[i];
-                if (account.name.toLowerCase() === Data.trimWhitespace(name).toLowerCase()) {
+                if (
+                    (mode === 'name' && account.name.toLowerCase() === Data.trimWhitespace(data).toLowerCase())
+                    || (mode === 'token' && account.token === data)
+                ) {
                     return i;
                 }
             }
@@ -64,7 +67,7 @@ package com.jiggmin.data
 
         public static function getByName(name:String)
         {
-            var accId:int = getArrayPosByName(name);
+            var accId:int = getArrayPos(name);
             return accId > -1 ? accounts[accId] : null;
         }
 
@@ -77,6 +80,7 @@ package com.jiggmin.data
 
             // don't add an account that's already saved
             if (getByName(name) !== null) {
+                updateToken(name, token);
                 moveToTop(name);
                 return;
             }
@@ -86,10 +90,10 @@ package com.jiggmin.data
             setCookie();
         }
 
-        public static function deleteByName(name:String)
+        public static function deleteAccount(data:String, mode:String = 'name')
         {
             // ensure existing
-            var accId:int = getArrayPosByName(name);
+            var accId:int = getArrayPos(data, mode);
             if (accId === -1) {
                 return false;
             }
@@ -99,9 +103,21 @@ package com.jiggmin.data
             setCookie();
         }
 
+        private static function updateToken(name:String, token:String)
+        {
+            var accId:int = getArrayPos(name);
+            if (accId === -1) {
+                return false;
+            }
+
+            // update the token
+            accounts[accId].token = token;
+            setCookie();
+        }
+
         private static function moveToTop(name:String)
         {
-            var accId:int = getArrayPosByName(name);
+            var accId:int = getArrayPos(name);
             if (accId <= -1) {
                 return false;
             }

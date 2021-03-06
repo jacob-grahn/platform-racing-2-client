@@ -31,7 +31,6 @@ package package_6
         private var levelHash:String = ""; // var_579
         private var specialEvent:SpecialEvent; // var_436, then placeArtifact, then SpecialEvent
         private var var_634:Array = new Array();
-        private var var_370:Boolean = false;
         public var var_202:FinishedPage;
         public var var_463:Array = new Array();
         public var var_452:int;
@@ -274,23 +273,19 @@ package package_6
             }
         }
 
+        // deleted _loc1 (this.getFinishPositions())
+        // deleted _loc2 (finishBlocks.length)
         override protected function endIntro()
         {
-            var _local_1:String = this.method_742();
-            var _local_2:int = var_313.length;
-            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + _local_1 + "`" + _local_2 + "`" + cowboyChance + "`" + badHats.join(','));
+            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + this.getFinishBlockPositions() + "`" + finishBlocks.length + "`" + cowboyChance + "`" + badHats.join(','));
             super.endIntro();
         }
 
-        private function method_742():String
+        // deleted _loc1 (condensed fn)
+        // method_742 = getFinishBlockPositions
+        private function getFinishBlockPositions():String
         {
-            var _local_1:String;
-            if (var_313.length > 5) {
-                _local_1 = "all";
-            } else {
-                _local_1 = JSON.stringify(var_313);
-            }
-            return (_local_1);
+            return finishBlocks.length > 5 ? 'all' : JSON.stringify(finishBlocks);
         }
 
         override public function outOfTimeHandler()
@@ -306,7 +301,7 @@ package package_6
 
         override public function finish(finishId:int=-1, finishX:int=0, finishY:int=0)
         {
-            if (!this.var_370) {
+            if (!playerDone) {
                 if (this.gameMode == Modes.obj) {
                     if (finishId != -1) {
                         miniMap.removeFinish(finishX, finishY);
@@ -328,7 +323,7 @@ package package_6
         // method_209 = quitGame
         public function quitGame(arr:Array = null)
         {
-            if (!this.var_370) {
+            if (!playerDone) {
                 if (this.gameMode == Modes.dm) {
                     this.finish();
                 } else {
@@ -360,8 +355,8 @@ package package_6
 
         private function method_185()
         {
-            if (!this.var_370) {
-                this.var_370 = true;
+            if (!playerDone) {
+                playerDone = true;
                 if (var_9 != null) {
                     var_9.beginRemove();
                 }
@@ -373,7 +368,7 @@ package package_6
 
         public function isDonePlaying() : Boolean
         {
-            return this.var_370;
+            return playerDone;
         }
 
         override public function remove()

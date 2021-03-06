@@ -2,9 +2,10 @@
 
 package levelEditor
 {
+    import com.jiggmin.data.Settings;
     import flash.display.Sprite;
-    import package_8.LocalCharacter;
     import flash.events.MouseEvent;
+    import package_8.LocalCharacter;
 
     public class HatPicker extends Sprite 
     {
@@ -19,13 +20,15 @@ package levelEditor
         {
             this.c = l;
             this.m = new HatPickerGraphic();
-            this.m.var_173.left.addEventListener(MouseEvent.CLICK, this.method_372, false, 0, true);
-            this.m.var_173.right.addEventListener(MouseEvent.CLICK, this.method_214, false, 0, true);
+            this.m.var_173.left.addEventListener(MouseEvent.CLICK, this.clickLeft, false, 0, true);
+            this.m.var_173.right.addEventListener(MouseEvent.CLICK, this.clickRight, false, 0, true);
             addChild(this.m);
+            this.pickedHat = Settings.getValue(Settings.LE_TEST_HAT, 2);
             this.display();
         }
 
-        private function method_372(_arg_1:MouseEvent)
+        // method_372 = clickLeft
+        private function clickLeft(e:MouseEvent)
         {
             this.pickedHat--;
             if (this.pickedHat === 14) {
@@ -37,7 +40,8 @@ package levelEditor
             this.display();
         }
 
-        private function method_214(_arg_1:MouseEvent)
+        // method_214 = clickRight
+        private function clickRight(e:MouseEvent)
         {
             this.pickedHat++;
             if (this.pickedHat === 14) {
@@ -62,12 +66,13 @@ package levelEditor
             var colorMC2:int = 0;
             var a:Array = new Array(this.pickedHat, colorMC, colorMC2);
             this.c.setHats(a);
+            Settings.setValue(Settings.LE_TEST_HAT, this.pickedHat);
         }
 
         public function remove()
         {
-            this.m.var_173.left.removeEventListener(MouseEvent.CLICK, this.method_372);
-            this.m.var_173.right.removeEventListener(MouseEvent.CLICK, this.method_214);
+            this.m.var_173.left.removeEventListener(MouseEvent.CLICK, this.clickLeft);
+            this.m.var_173.right.removeEventListener(MouseEvent.CLICK, this.clickRight);
             this.m = null;
             this.c = null;
         }

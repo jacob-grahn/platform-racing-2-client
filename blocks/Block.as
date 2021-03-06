@@ -106,26 +106,25 @@ package blocks
             return this.removed;
         }
 
-        public function method_18(_arg_1:Number = NaN):Point
+        public function method_18(rot:Number = NaN):Point
         {
-            if (isNaN(_arg_1)) {
-                _arg_1 = this.map.rotation;
+            if (isNaN(rot)) {
+                rot = this.map.rotation;
             }
-            var _local_2:int;
-            var _local_3:int;
-            if (_arg_1 == 90) {
+            var _local_2:int, _local_3:int;
+            if (rot == 90) {
                 _local_3 = 30;
-            } else if (Math.abs(_arg_1) == 180) {
+            } else if (Math.abs(rot) == 180) {
                 _local_2 = _local_3 = 30;
-            } else if (_arg_1 == -90) {
+            } else if (rot == -90) {
                 _local_2 = 30;
             }
-            return Data.method_9(this.posX + _local_2, this.posY + _local_3, -_arg_1);
+            return Data.method_9(this.posX + _local_2, this.posY + _local_3, -rot);
         }
 
         public function method_777():int
         {
-            return (Data.getTimestamp() - this.var_600);
+            return Data.getTimestamp() - this.var_600;
         }
 
         public function setSeg(_arg_1:int, _arg_2:int)
