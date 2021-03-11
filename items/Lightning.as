@@ -2,20 +2,20 @@
 
 package items
 {
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import package_9.Zap;
 
     public class Lightning extends Item 
     {
 
-        public function Lightning(r:LocalCharacter)
+        public function Lightning(p:LocalPlayer)
         {
-            super(r);
+            super(p);
         }
 
         override public function useItem()
         {
-            new Zap(racer, false);
+            new Zap(player, false);
             Main.socket.write("zap`");
             super.useItem();
         }

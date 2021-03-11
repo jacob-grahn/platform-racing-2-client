@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
     import package_6.Course;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import flash.events.Event;
 
     public class WaterBlock extends Block 
@@ -23,28 +23,26 @@ package blocks
             active = false;
         }
 
-        override public function onTouch(c:LocalCharacter)
+        override public function onTouch(player:LocalPlayer)
         {
-            var _local_2:Point;
-            var _local_3:Point;
-            super.onTouch(c);
+            super.onTouch(player);
             if (!frozen) {
-                if (!c.grounded && c.mode != "freeze" && c.mode != "hurt") {
-                    c.setMode("water");
-                    c.var_240 = 2;
+                if (!player.grounded && player.mode != "freeze" && player.mode != "hurt") {
+                    player.setMode("water");
+                    player.var_240 = 2;
                 } else {
-                    c.var_24 = (c.var_24 * 0.9);
-                    c.var_147 = 0.1;
+                    player.var_24 *= 0.9;
+                    player.var_147 = 0.1;
                 }
-                if (c.parent == Course.course.frontBackground) {
-                    Course.course.backBackground.addChild(c);
+                if (player.parent == Course.course.frontBackground) {
+                    Course.course.backBackground.addChild(player);
                 }
-                _local_2 = method_18();
-                _local_3 = getSeg();
-                c.var_407 = _local_3.x;
-                c.var_366 = _local_3.y;
-                c.var_205 = _local_2.x + 15;
-                c.var_224 = _local_2.y + 15;
+                var _local_2:Point = method_18();
+                var _local_3:Point = getSeg();
+                player.var_407 = _local_3.x;
+                player.var_366 = _local_3.y;
+                player.var_205 = _local_2.x + 15;
+                player.var_224 = _local_2.y + 15;
                 this.method_339();
             }
         }
@@ -56,7 +54,7 @@ package blocks
 
         private function method_339()
         {
-            alpha = (alpha - 0.1);
+            alpha -= 0.1;
             if (alpha < 0.5) {
                 alpha = 0.5;
             }
@@ -68,7 +66,7 @@ package blocks
 
         private function method_117(_arg_1:Event)
         {
-            alpha = (alpha + 0.03);
+            alpha += 0.03;
             if (alpha >= 1) {
                 alpha = 1;
                 this.var_484 = false;

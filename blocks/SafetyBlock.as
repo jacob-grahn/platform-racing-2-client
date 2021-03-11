@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class SafetyBlock extends Block 
     {
@@ -19,14 +19,13 @@ package blocks
             active = false;
         }
 
-        override public function onTouch(_arg_1:LocalCharacter)
+        override public function onTouch(player:LocalPlayer)
         {
-            var _local_2:Point;
-            super.onTouch(_arg_1);
+            super.onTouch(player);
             if (!frozen) {
-                _local_2 = getSeg();
-                if (_arg_1.var_407 != _local_2.x || _arg_1.var_366 < _local_2.y || _arg_1.var_366 > (_local_2.y + 2)) {
-                    _arg_1.method_216();
+                var _local_2:Point = getSeg();
+                if (player.var_407 != _local_2.x || player.var_366 < _local_2.y || player.var_366 > _local_2.y + 2) {
+                    player.method_216();
                 }
             }
         }

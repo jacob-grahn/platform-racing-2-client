@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import flash.geom.Point;
     import package_6.Course;
     import background.EffectBackground;
@@ -13,9 +13,9 @@ package items
     public class IceWave extends Item 
     {
 
-        public function IceWave(r:LocalCharacter)
+        public function IceWave(p:LocalPlayer)
         {
-            super(r);
+            super(p);
             setUses(3);
             setReloadTime(1000);
         }
@@ -25,18 +25,18 @@ package items
         // _loc7 = sendStr
         override public function useItem()
         {
-            racer.curWeapon.freezeWave.gotoAndPlay("fire");
+            player.curWeapon.freezeWave.gotoAndPlay("fire");
             var usePos:Point = method_37();
             var _local_2:Number = 20;
             var _local_3:Number = 0;
-            if (racer.scaleX < 0) {
+            if (player.scaleX < 0) {
                 _local_3 = 180;
                 _local_2 = -_local_2;
             }
             var _local_4:int = usePos.x + _local_2;
             var _local_5:int = usePos.y;
             var rot:int = Course.course.blockBackground.rotation;
-            var sendStr:String = "IceWave`" + _local_4 + "`" + _local_5 + "`" + _local_3 + "`" + rot + "`" + racer.tempID;
+            var sendStr:String = "IceWave`" + _local_4 + "`" + _local_5 + "`" + _local_3 + "`" + rot + "`" + player.tempID;
             EffectBackground.instance.addEffect(sendStr.split("`"));
             Main.socket.write("add_effect`" + sendStr);
             super.useItem();

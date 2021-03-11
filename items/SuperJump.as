@@ -6,22 +6,22 @@
 package items
 {
     import com.jiggmin.data.Settings;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import sounds.SoundEffects;
 
     public class SuperJump extends Item 
     {
 
-        public function SuperJump(r:LocalCharacter)
+        public function SuperJump(p:LocalPlayer)
         {
-            super(r);
+            super(p);
         }
 
         override public function useItem()
         {
-            if (!racer.crouching) {
+            if (!player.crouching) {
                 SoundEffects.playSound(new SuperJumpSound(), 1 * (Settings.soundLevel / 100));
-                racer.velY = racer.velY - 25;
+                player.velY = player.velY - 25;
                 super.useItem();
             }
         }

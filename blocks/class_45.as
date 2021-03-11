@@ -6,7 +6,7 @@
 package blocks
 {
     import package_6.Course;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class class_45 extends Block 
     {
@@ -18,12 +18,12 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(player:LocalPlayer)
         {
-            super.onBump(_arg_1);
+            super.onBump(player);
             if (!frozen) {
-                _arg_1.setMode("freeze");
-                _arg_1.velX = (_arg_1.velY = 0);
+                player.setMode("freeze");
+                player.velX = player.velY = 0;
                 Course.course.method_654(this.dir);
             }
         }

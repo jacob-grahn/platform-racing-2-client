@@ -6,7 +6,7 @@
 package package_9
 {
     import package_6.Course;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import sounds.SoundEffects;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
@@ -17,7 +17,7 @@ package package_9
 
         private var m:SlashAnimation = new SlashAnimation();
         private var course:Course = Course.course;
-        private var var_5:LocalCharacter = Course.course.var_9;
+        private var player:LocalPlayer = Course.course.var_9; // var_5
         private var var_154:int = 29;
         private var var_609:int;
 
@@ -35,8 +35,8 @@ package package_9
             this.method_66(x, y + 14);
             this.method_66(x + this.var_154, y - 14);
             this.method_66(x + this.var_154, y + 14);
-            this.method_66(x + (this.var_154 * 2), y - 14);
-            this.method_66(x + (this.var_154 * 2), y + 14);
+            this.method_66(x + this.var_154 * 2, y - 14);
+            this.method_66(x + this.var_154 * 2, y + 14);
             SoundEffects.playGameSound(new SwishSound(), _arg_1, _arg_2);
         }
 
@@ -47,9 +47,9 @@ package package_9
             if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.var_154);
             }
-            if (this.var_5 != null && this.var_5.tempID != this.var_609 && this.var_5.y > _arg_2 - 14 && this.var_5.y < _arg_2 + 74) {
-                if (this.var_5.x > _arg_1 - 14 && this.var_5.x < _arg_1 + 14) {
-                    this.var_5.hit(this.var_154, -9);
+            if (this.player != null && this.player.tempID != this.var_609 && this.player.y > _arg_2 - 14 && this.player.y < _arg_2 + 74) {
+                if (this.player.x > _arg_1 - 14 && this.player.x < _arg_1 + 14) {
+                    this.player.hit(this.var_154, -9);
                 }
             }
         }
@@ -58,7 +58,7 @@ package package_9
         {
             removeChild(this.m);
             this.course = null;
-            this.var_5 = null;
+            this.player = null;
             this.m = null;
             super.remove();
         }

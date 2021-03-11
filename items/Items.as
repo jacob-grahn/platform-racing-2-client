@@ -3,7 +3,7 @@
 package items
 {
     //import __AS3__.vec.Vector;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import items.*;
 
     public class Items 
@@ -27,26 +27,26 @@ package items
         }
 
         // method_29 = getFromCode
-        public static function getFromCode(code:int, c:LocalCharacter):Item
+        public static function getFromCode(code:int, player:LocalPlayer):Item
         {
             if (code == laserGun) {
-                return new LaserGun(c);
+                return new LaserGun(player);
             } else if (code == mine) {
-                return new Mine(c);
+                return new Mine(player);
             } else if (code == lightning) {
-                return new Lightning(c);
+                return new Lightning(player);
             } else if (code == teleport) {
-                return new Teleport(c);
+                return new Teleport(player);
             } else if (code == superJump) {
-                return new SuperJump(c);
+                return new SuperJump(player);
             } else if (code == jetPack) {
-                return new JetPack(c);
+                return new JetPack(player);
             } else if (code == speedBurst) {
-                return new SpeedBurst(c);
+                return new SpeedBurst(player);
             } else if (code == sword) {
-                return new Sword(c);
+                return new Sword(player);
             } else if (code == iceWave) {
-                return new IceWave(c);
+                return new IceWave(player);
             } else {
                 return null;
             }

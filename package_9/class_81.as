@@ -10,7 +10,7 @@ package package_9
     import blocks.Block;
     import package_6.Course;
     import com.jiggmin.data.Data;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class class_81 extends Effect 
     {
@@ -45,38 +45,36 @@ package package_9
 
         protected function go(_arg_1:Event)
         {
-            var _local_2:Point;
             var _local_3:Block;
             var _local_4:Point;
-            var _local_5:Point;
-            this.velY = (this.velY + 0.2);
+            this.velY += 0.2;
             if (this.velY > 8) {
                 this.velY = 8;
             }
-            this.posY = (this.posY + this.velY);
-            this.posX = (this.posX + this.velX);
-            rotation = (Course.course.blockBackground.rotation - this.rot);
-            _local_2 = Data.method_9(this.posX, this.posY, -(rotation));
+            this.posY += this.velY;
+            this.posX += this.velX;
+            rotation = Course.course.blockBackground.rotation - this.rot;
+            var _local_2:Point = Data.method_9(this.posX, this.posY, -rotation);
             if (this.velX != 0) {
-                _local_5 = Data.method_9((this.posX + this.velX), (this.posY - 10), -(rotation));
+                var _local_5:Point = Data.method_9(this.posX + this.velX, this.posY - 10, -rotation);
                 _local_3 = Course.course.blockBackground.getBlockFromPos(_local_5.x, _local_5.y, true);
-                if (((!(_local_3 == null)) && (_local_3.isActive()))) {
+                if (_local_3 != null && _local_3.isActive()) {
                     _local_4 = _local_3.method_18(this.rot);
                     if (this.velX < 0) {
-                        this.posX = (_local_4.x + 31);
+                        this.posX = _local_4.x + 31;
                     } else {
-                        this.posX = (_local_4.x - 1);
+                        this.posX = _local_4.x - 1;
                     }
                     this.onTouchWall();
                 }
             }
             _local_3 = Course.course.blockBackground.getBlockFromPos(_local_2.x, _local_2.y, true);
-            if (((!(_local_3 == null)) && (_local_3.isActive()))) {
+            if (_local_3 != null && _local_3.isActive()) {
                 this.grounded = true;
                 _local_4 = _local_3.method_18(this.rot);
                 if (this.velY < 0) {
-                    this.velY = (this.velY * -0.5);
-                    this.posY = (_local_4.y + 31);
+                    this.velY *= -0.5;
+                    this.posY = _local_4.y + 31;
                 } else {
                     this.velY = 0;
                     this.posY = _local_4.y;
@@ -87,21 +85,22 @@ package package_9
             if (this.method_181(x, y)) {
                 this.onTouchLocalPlayer();
             }
-            _local_2 = Data.method_9(this.posX, this.posY, -(rotation));
+            _local_2 = Data.method_9(this.posX, this.posY, -rotation);
             x = _local_2.x;
             y = _local_2.y;
         }
 
+        // deleted _loc3 (return boolean)
+        // _loc4 = p
         protected function method_181(_arg_1:int, _arg_2:int):Boolean
         {
-            var _local_3:Boolean;
-            var _local_4:LocalCharacter = Course.course.var_9;
-            if (((!(_local_4 == null)) && (!(_local_4.removed)))) {
-                if ((((Math.abs((_local_4.x - _arg_1)) < 25) && (_local_4.y > (_arg_2 - 5))) && (((!(_local_4.crouching)) && (_local_4.y < (_arg_2 + 65))) || ((_local_4.crouching) && (_local_4.y < (_arg_2 + 25)))))) {
-                    _local_3 = true;
+            var p:LocalPlayer = Course.course.var_9;
+            if (p != null && !p.removed) {
+                if (Math.abs(p.x - _arg_1) < 25 && p.y > _arg_2 - 5 && ((!p.crouching && p.y < _arg_2 + 65) || (p.crouching && p.y < _arg_2 + 25))) {
+                    return true;
                 }
             }
-            return (_local_3);
+            return false;
         }
 
         protected function onTouchLocalPlayer()
@@ -114,7 +113,7 @@ package package_9
 
         public function method_311():Boolean
         {
-            return (this.grounded);
+            return this.grounded;
         }
 
         override public function remove()

@@ -6,19 +6,19 @@
 package items
 {
     import com.jiggmin.data.class_33;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class JetPack extends Item 
     {
 
         private var var_592:Boolean = false;
 
-        public function JetPack(r:LocalCharacter)
+        public function JetPack(p:LocalPlayer)
         {
-            super(r);
+            super(p);
             class_33.setNumber("totFuel", 200);
             class_33.setNumber("fuel", 200);
-            r.setAmmo(3);
+            p.setAmmo(3);
         }
 
         // _loc2 = totFuel
@@ -27,29 +27,29 @@ package items
         {
             super.setSpace(space);
             if (_arg_1) {
-                if (!racer.crouching) {
-                    if (racer.velY > -5) {
-                        racer.velY = racer.velY - 1.25;
+                if (!player.crouching) {
+                    if (player.velY > -5) {
+                        player.velY = player.velY - 1.25;
                     } else {
-                        racer.velY = racer.velY - 0.5;
+                        player.velY = player.velY - 0.5;
                     }
                 }
                 var totFuel:Number = class_33.getNumber("totFuel");
                 var remainingFuel:Number = class_33.getNumber("fuel");
                 remainingFuel--;
                 class_33.setNumber("fuel", remainingFuel);
-                racer.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
+                player.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
                 if (remainingFuel <= 0) {
                     super.useItem();
                 }
             }
             if (_arg_1 != this.var_592) {
                 this.var_592 = _arg_1;
-                if (racer != null) {
+                if (player != null) {
                     if (_arg_1) {
-                        racer.beginJet();
+                        player.beginJet();
                     } else {
-                        racer.endJet();
+                        player.endJet();
                     }
                 }
             }
@@ -61,7 +61,7 @@ package items
 
         override public function remove()
         {
-            racer.endJet();
+            player.endJet();
             super.remove();
         }
 

@@ -6,7 +6,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
 
@@ -19,27 +19,27 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(_arg_1:LocalCharacter)
+        override public function onStand(player:LocalPlayer)
         {
-            super.onStand(_arg_1);
+            super.onStand(player);
             this.localActivate("down");
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(player:LocalPlayer)
         {
-            super.onBump(_arg_1);
+            super.onBump(player);
             this.localActivate("up");
         }
 
-        override public function onLeftHit(_arg_1:LocalCharacter)
+        override public function onLeftHit(player:LocalPlayer)
         {
-            super.onLeftHit(_arg_1);
+            super.onLeftHit(player);
             this.localActivate("right");
         }
 
-        override public function onRightHit(_arg_1:LocalCharacter)
+        override public function onRightHit(player:LocalPlayer)
         {
-            super.onRightHit(_arg_1);
+            super.onRightHit(player);
             this.localActivate("left");
         }
 

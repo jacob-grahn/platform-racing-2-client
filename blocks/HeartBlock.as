@@ -6,7 +6,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class HeartBlock extends class_39 
     {
@@ -16,10 +16,10 @@ package blocks
             super(Objects.HeartBlockCode);
         }
 
-        override protected function useSupply(_arg_1:LocalCharacter)
+        override protected function useSupply(player:LocalPlayer)
         {
-            super.useSupply(_arg_1);
-            _arg_1.gainHeart();
+            super.useSupply(player);
+            player.gainHeart();
         }
 
 

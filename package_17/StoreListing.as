@@ -11,7 +11,7 @@ package package_17
     import flash.text.TextFieldAutoSize;
     import flash.events.TextEvent;
     import flash.net.URLRequest;
-    import package_8.Character;
+    import package_8.Player;
     import flash.events.MouseEvent;
     import flash.events.Event;
 
@@ -80,7 +80,7 @@ package package_17
         // _loc8, _loc9 = headColor, headColor2
         // _loc10, _loc11 = bodyColor, bodyColor2
         // _loc12, _loc13 = feetColor, feetColor2
-        // _loc14 = c
+        // _loc14 = player
         // method_191 = generateRandomCharacter
         private function generateRandomCharacter(x:Number)
         {
@@ -96,15 +96,15 @@ package package_17
             var bodyColor2:int = int(Math.round(Math.random() * 0xFFFFFF));
             var feetColor:int = int(Math.round(Math.random() * 0xFFFFFF));
             var feetColor2:int = int(Math.round(Math.random() * 0xFFFFFF));
-            var c:Character = new Character(hat, head, body, feet);
-            this.m.addChildAt(c, 2);
-            c.setHatColors(hatColor, hatColor2);
-            c.setHeadColors(headColor, headColor2);
-            c.setBodyColors(bodyColor, bodyColor2);
-            c.setFeetColors(feetColor, feetColor2);
-            c.scaleX = c.scaleY = 1;
-            c.x = x;
-            c.y = 85;
+            var player:Player = new Player(hat, head, body, feet);
+            this.m.addChildAt(player, 2);
+            player.setHatColors(hatColor, hatColor2);
+            player.setHeadColors(headColor, headColor2);
+            player.setBodyColors(bodyColor, bodyColor2);
+            player.setFeetColors(feetColor, feetColor2);
+            player.scaleX = player.scaleY = 1;
+            player.x = x;
+            player.y = 85;
         }
 
         public function activate()

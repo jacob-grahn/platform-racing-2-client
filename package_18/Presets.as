@@ -6,7 +6,7 @@
 package package_18
 {
     import com.jiggmin.data.Settings;
-    import package_8.Character;
+    import package_8.Player;
     import ui.StatsSelect;
 
     public class Presets 
@@ -62,7 +62,7 @@ package package_18
             return presets[i - 1];
         }
 
-        public static function apply(_arg_1:Preset, c:Character, ss:StatsSelect, disp:CharacterDisplay)
+        public static function apply(preset:Preset, player:Player, ss:StatsSelect, disp:PlayerDisplay)
         {
             if (ss != null) {
                 ss.setStats({
@@ -70,24 +70,24 @@ package package_18
                     "acceleration":1,
                     "jumping":1
                 });
-                ss.setStats(_arg_1);
+                ss.setStats(preset);
             }
             if (disp != null) {
-                disp.hatSelect.setValue(_arg_1.hat);
-                disp.headSelect.setValue(_arg_1.head);
-                disp.bodySelect.setValue(_arg_1.body);
-                disp.feetSelect.setValue(_arg_1.feet);
-                disp.hatSelect.setColors(_arg_1.hatColor, _arg_1.hatColor2);
-                disp.headSelect.setColors(_arg_1.headColor, _arg_1.headColor2);
-                disp.bodySelect.setColors(_arg_1.bodyColor, _arg_1.bodyColor2);
-                disp.feetSelect.setColors(_arg_1.feetColor, _arg_1.feetColor2);
+                disp.hatSelect.setValue(preset.hat);
+                disp.headSelect.setValue(preset.head);
+                disp.bodySelect.setValue(preset.body);
+                disp.feetSelect.setValue(preset.feet);
+                disp.hatSelect.setColors(preset.hatColor, preset.hatColor2);
+                disp.headSelect.setColors(preset.headColor, preset.headColor2);
+                disp.bodySelect.setColors(preset.bodyColor, preset.bodyColor2);
+                disp.feetSelect.setColors(preset.feetColor, preset.feetColor2);
             }
-            if (c != null) {
-                c.setHatId(_arg_1.hat);
-                c.setHeadId(_arg_1.head);
-                c.setBodyId(_arg_1.body);
-                c.setFeetId(_arg_1.feet);
-                c.setColors(_arg_1.hatColor, _arg_1.hatColor2, _arg_1.headColor, _arg_1.headColor2, _arg_1.bodyColor, _arg_1.bodyColor2, _arg_1.feetColor, _arg_1.feetColor2);
+            if (player != null) {
+                player.setHatId(preset.hat);
+                player.setHeadId(preset.head);
+                player.setBodyId(preset.body);
+                player.setFeetId(preset.feet);
+                player.setColors(preset.hatColor, preset.hatColor2, preset.headColor, preset.headColor2, preset.bodyColor, preset.bodyColor2, preset.feetColor, preset.feetColor2);
             }
         }
 

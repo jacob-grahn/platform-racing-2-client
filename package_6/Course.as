@@ -19,8 +19,8 @@ package package_6
     import flash.events.Event;
     import flash.geom.Point;
     import flash.net.URLVariables;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import package_8.Player;
+    import package_8.LocalPlayer;
     import package_9.Egg;
     import page.GamePage;
     import sounds.SoundEffects;
@@ -35,7 +35,7 @@ package package_6
         public var var_197:Array = new Array();
         public var finishBlocks:Array = new Array(); // var_313
         public var playerArray:Array = new Array(); // var_40
-        public var var_9:LocalCharacter;
+        public var var_9:LocalPlayer;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
         protected var miniMap:MiniMap = new MiniMap();
@@ -50,7 +50,7 @@ package package_6
         protected var bg4:DrawableBackground;
         protected var bg5:DrawableBackground;
         public var blockBackground:Map;
-        public var var_201:EffectBackground;
+        public var effectBackground:EffectBackground; // var_201
         public var frontBackground:Background;
         public var backBackground:Background;
         protected var var_689:Number = 0;
@@ -105,15 +105,16 @@ package package_6
         }
 
         // _loc1 = this.playerArray.length
+        // _loc4 = player
         protected function method_80()
         {
             var _local_2:int;
             while (_local_2 < this.playerArray.length) {
                 var _local_3:Point = this.method_753(_local_2);
                 if (_local_3 != null) {
-                    var _local_4:Character = this.playerArray[_local_2];
-                    _local_4.setPos(_local_3.x, _local_3.y);
-                    this.frontBackground.addChild(_local_4);
+                    var player:Player = this.playerArray[_local_2];
+                    player.setPos(_local_3.x, _local_3.y);
+                    this.frontBackground.addChild(player);
                 }
                 _local_2++;
             }
@@ -220,7 +221,7 @@ package package_6
             this.countdown.addEventListener("count", this.onCountdownCount, false, 0, true);
             this.countdown.addEventListener("finish", this.onCountdownFinish, false, 0, true);
             addChild(this.countdown);
-            if (this.var_9 != null && this.var_9.var_4.getBool(Character.JUMP_START)) {
+            if (this.var_9 != null && this.var_9.var_4.getBool(Player.JUMP_START)) {
                 this.var_9.init();
             }
         }
@@ -276,7 +277,7 @@ package package_6
             this.backBackground = new Background(this);
             this.blockBackground = new Map(this.miniMap, this);
             this.frontBackground = new Background(this);
-            this.var_201 = new EffectBackground(this);
+            this.effectBackground = new EffectBackground(this);
             this.bg1.setScale(1);
             this.bg2.setScale(0.5);
             this.bg3.setScale(0.25);
@@ -289,7 +290,7 @@ package package_6
             var_14.addChild(this.backBackground);
             var_14.addChild(this.blockBackground);
             var_14.addChild(this.frontBackground);
-            var_14.addChild(this.var_201);
+            var_14.addChild(this.effectBackground);
             var_14.addChild(this.bg4);
             var_14.addChild(this.bg5);
             this.setColor(12303325);
@@ -304,7 +305,7 @@ package package_6
             this.bg4.remove();
             this.bg5.remove();
             this.blockBackground.remove();
-            this.var_201.remove();
+            this.effectBackground.remove();
             this.frontBackground.remove();
             this.backBackground.remove();
             this.bg = null;
@@ -314,7 +315,7 @@ package package_6
             this.bg4 = null;
             this.bg5 = null;
             this.blockBackground = null;
-            this.var_201 = null;
+            this.effectBackground = null;
             this.frontBackground = null;
             this.backBackground = null;
         }
@@ -327,7 +328,7 @@ package package_6
             this.bg4.setPos(_arg_1, _arg_2);
             this.bg5.setPos(_arg_1, _arg_2);
             this.blockBackground.setPos(_arg_1, _arg_2);
-            this.var_201.setPos(_arg_1, _arg_2);
+            this.effectBackground.setPos(_arg_1, _arg_2);
             this.frontBackground.setPos(_arg_1, _arg_2);
             this.backBackground.setPos(_arg_1, _arg_2);
         }
@@ -341,7 +342,7 @@ package package_6
             this.bg4.setColor(_arg_1);
             this.bg5.setColor(_arg_1);
             this.blockBackground.setColor(_arg_1);
-            this.var_201.setColor(_arg_1);
+            this.effectBackground.setColor(_arg_1);
             this.frontBackground.setColor(_arg_1);
             this.backBackground.setColor(_arg_1);
         }
@@ -384,6 +385,7 @@ package package_6
             Main.stage.quality = StageQuality.LOW;
         }
 
+        // _loc4 = player
         private function rotate(e:Event)
         {
             var _local_2:Boolean;
@@ -415,8 +417,8 @@ package package_6
                     this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation - 90;
                     this.miniMap.rotate(this.blockBackground.rotation);
                 }
-                for each (var _local_4:Character in this.playerArray) {
-                    _local_4.rotate(this.var_348);
+                for each (var player:Player in this.playerArray) {
+                    player.rotate(this.var_348);
                 }
                 this.method_82(new Event(Event.ENTER_FRAME));
                 removeEventListener(Event.ENTER_FRAME, this.rotate);
@@ -435,6 +437,7 @@ package package_6
         {
         }
 
+        // _loc1 = player
         override public function remove()
         {
             CommandHandler.commandHandler.defineCommand("beginRace", null);
@@ -462,8 +465,8 @@ package package_6
             this.hearts = null;
             this.itemDisplay = null;
             Course.course = null;
-            for each (var _local_1:Character in this.playerArray) {
-                _local_1.remove();
+            for each (var player:Player in this.playerArray) {
+                player.remove();
             }
             this.playerArray = null;
             this.var_197 = null;

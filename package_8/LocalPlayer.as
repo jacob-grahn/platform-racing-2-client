@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_8.class_86 = package_8.LocalCharacter
+// package_8.class_86 = package_8.LocalPlayer
 
 package package_8
 {
@@ -40,7 +40,7 @@ package package_8
     import package_9.Zap;
     import page.GamePage;
 
-    public class LocalCharacter extends Character 
+    public class LocalPlayer extends Player 
     {
 
         public static const const_12:String = "njv";
@@ -118,7 +118,7 @@ package package_8
         private var var_232:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
 
-        public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
+        public function LocalPlayer(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
             super(ha, h, b, f);
             var_4.setNumber(const_12, 0);
@@ -213,8 +213,8 @@ package package_8
 
         public function sting(a:Array)
         {
-            var from:Character = this.course.playerArray[a[0]];
-            if (from == null || from is LocalCharacter || from.tempID == this.tempID) {
+            var from:Player = this.course.playerArray[a[0]];
+            if (from == null || from is LocalPlayer || from.tempID == this.tempID) {
                 return; // shouldn't happen
             }
             var fromPos:Object = from.getPos();
@@ -228,9 +228,9 @@ package package_8
         public function zap(a:Array)
         {
             // show zap on other players
-            for each (var c:Character in this.course.playerArray) {
-                if (a[0] != c.tempID) {
-                    new Zap(c, true, false, false);
+            for each (var p:Player in this.course.playerArray) {
+                if (a[0] != p.tempID) {
+                    new Zap(p, true, false, false);
                 }
             }
 
@@ -309,15 +309,15 @@ package package_8
             this.var_232 = true;
         }
 
-        // _loc1 = c
+        // _loc1 = p
         // method_704 = maybeSquash
         private function maybeSquash()
         {
-            for each (var c:Character in this.course.playerArray) {
-                if (c is RemoteCharacter && c.state != "crouch" && c.state != "crouchWalk" && c.x > (x - 20) && c.x < (x + 20) && c.y > (y + 35) && c.y < (y + 65) && c.rotation == this.rotation) {
-                    c.changeState("crouch");
+            for each (var p:Player in this.course.playerArray) {
+                if (p is RemotePlayer && p.state != "crouch" && p.state != "crouchWalk" && p.x > (x - 20) && p.x < (x + 20) && p.y > (y + 35) && p.y < (y + 65) && p.rotation == this.rotation) {
+                    p.changeState("crouch");
                     SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
-                    this.socket.write("squash`" + c.tempID + "`" + x + "`" + y);
+                    this.socket.write("squash`" + p.tempID + "`" + x + "`" + y);
                     velY = -3;
                     this.grounded = true;
                 }
@@ -327,9 +327,9 @@ package package_8
         // sting another player
         private function maybeSting()
         {
-            for each (var c:Character in this.course.playerArray) {
-                if (c is RemoteCharacter && c.state != "bumped" && c.x > (x - 75) && c.x < (x + 75) && c.y > (y - 100) && c.y < (y + 100)) {
-                    Main.socket.write('sting`' + c.tempID + '`' + x + '`' + y); // remote tempID, local x, local y
+            for each (var p:Player in this.course.playerArray) {
+                if (p is RemotePlayer && p.state != "bumped" && p.x > (x - 75) && p.x < (x + 75) && p.y > (y - 100) && p.y < (y + 100)) {
+                    Main.socket.write('sting`' + p.tempID + '`' + x + '`' + y); // remote tempID, local x, local y
                     this.stingCooldown = 135; // 5 seconds
                 }
             }
@@ -862,19 +862,17 @@ package package_8
             this.var_232 = true;
         }
 
+        // deleted _loc1 (Course.course.playerArray)
+        // deleted _loc2 (return values)
         private function method_779():Boolean
         {
-            var _local_3:Character;
-            var _local_1:Array = Course.course.playerArray;
-            var _local_2:Boolean;
-            for each (_local_3 in _local_1) {
+            for each (var _local_3:Player in Course.course.playerArray) {
                 // uncommenting below disables near-instant updates for other players when farther than 1000px in either direction
                 if (_local_3 != this /*&& Math.abs(_local_3.x - x) < 1000 && Math.abs(_local_3.y - y) < 1000*/) {
-                    _local_2 = true;
-                    break;
+                    return true;
                 }
             }
-            return _local_2;
+            return false;
         }
 
         override public function beginSparkles(_arg_1:int=5000)

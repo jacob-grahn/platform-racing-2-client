@@ -12,9 +12,9 @@ package package_6
     import flash.utils.setInterval;
     import sounds.SoundEffects;
     import package_4.MessagePopup;
-    import package_8.Character;
-    import package_8.RemoteCharacter;
-    import package_8.LocalCharacter;
+    import package_8.Player;
+    import package_8.RemotePlayer;
+    import package_8.LocalPlayer;
     import package_9.Egg;
 
     public class Game extends Course 
@@ -187,7 +187,7 @@ package package_6
         private function superBooster(arr:Array)
         {
             var _local_2:int = int(arr[0]);
-            var _local_3:Character = playerArray[_local_2];
+            var _local_3:Player = playerArray[_local_2];
             _local_3.method_576();
         }
 
@@ -224,7 +224,7 @@ package package_6
             var _local_13:Number = Number(_arg_1[11]);
             var _local_14:Number = Number(_arg_1[12]);
             var _local_15:Number = Number(_arg_1[13]);
-            var _local_16:RemoteCharacter = new RemoteCharacter(_local_2, miniMap.getDot(), _local_3, _local_8, _local_9, _local_10, _local_11);
+            var _local_16:RemotePlayer = new RemotePlayer(_local_2, miniMap.getDot(), _local_3, _local_8, _local_9, _local_10, _local_11);
             _local_16.setColors(_local_4, _local_12, _local_5, _local_13, _local_6, _local_14, _local_7, _local_15);
             playerArray[_local_2] = _local_16;
             this.drawingInfo.method_138(_local_3, _local_2);
@@ -249,7 +249,7 @@ package package_6
             var _local_15:Number = Number(_arg_1[13]);
             var _local_16:Number = Number(_arg_1[14]);
             var _local_17:Number = Number(_arg_1[15]);
-            var _local_18:LocalCharacter = new LocalCharacter(_local_2, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), _local_3, _local_4, _local_5, _local_10, _local_11, _local_12, _local_13);
+            var _local_18:LocalPlayer = new LocalPlayer(_local_2, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), _local_3, _local_4, _local_5, _local_10, _local_11, _local_12, _local_13);
             _local_18.setColors(_local_6, _local_14, _local_7, _local_15, _local_8, _local_16, _local_9, _local_17);
             playerArray[_local_2] = _local_18;
             this.drawingInfo.method_138(Main.loggedInAs, _local_2);

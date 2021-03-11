@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import com.jiggmin.data.class_33;
     import flash.utils.setTimeout;
     import flash.geom.Point;
@@ -15,15 +15,15 @@ package items
     public class Item extends Removable 
     {
 
-        protected var racer:LocalCharacter; // var_5
+        protected var player:LocalPlayer; // var_5
         protected var space:Boolean = false;
         protected var reloading:Boolean = false; // var_410
         private var reloadListener:uint; // var_581
         private var available:Boolean = false; // var_572
 
-        public function Item(r:LocalCharacter)
+        public function Item(p:LocalPlayer)
         {
-            this.racer = r;
+            this.player = p;
             this.setReloadTime(10);
             this.setUses(1);
         }
@@ -45,7 +45,7 @@ package items
         protected function setUses(uses:int)
         {
             class_33.setNumber("uses", uses);
-            this.racer.setAmmo(uses);
+            this.player.setAmmo(uses);
         }
 
         // method_45 = setReloadTime
@@ -60,9 +60,9 @@ package items
             var uses:int = class_33.getNumber("uses");
             uses--;
             class_33.setNumber("uses", uses);
-            this.racer.setAmmo(uses);
+            this.player.setAmmo(uses);
             if (uses <= 0) {
-                this.racer.setItem(0);
+                this.player.setItem(0);
             } else {
                 this.reloading = true;
                 this.reloadListener = setTimeout(this.reloadingOnComplete, class_33.getNumber("reloadTime"));
@@ -77,16 +77,16 @@ package items
 
         protected function method_37():Point
         {
-            var _local_1:Point = new Point(this.racer.curWeapon.x, this.racer.curWeapon.y);
-            _local_1 = this.racer.curWeapon.parent.localToGlobal(_local_1);
+            var _local_1:Point = new Point(this.player.curWeapon.x, this.player.curWeapon.y);
+            _local_1 = this.player.curWeapon.parent.localToGlobal(_local_1);
             return EffectBackground.instance.globalToLocal(_local_1);
         }
 
         override public function remove()
         {
             clearTimeout(this.reloadListener);
-            if (this.racer != null) {
-                this.racer = null;
+            if (this.player != null) {
+                this.player = null;
             }
             super.remove();
         }

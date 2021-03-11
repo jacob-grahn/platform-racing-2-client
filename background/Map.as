@@ -18,7 +18,7 @@ package background
     import flash.utils.setTimeout;
     import package_6.Course;
     import package_6.MiniMap;
-    import package_8.Character;
+    import package_8.Player;
     import package_9.Egg;
 
     public class Map extends BlockBackground 
@@ -224,7 +224,7 @@ package background
         {
             var occupies:Boolean = false;
             if (Course.course != null) {
-                for each (var _local_6:Character in Course.course.playerArray) {
+                for each (var _local_6:Player in Course.course.playerArray) {
                     if (_local_6 != null) {
                         var _local_3:Point = _local_6.seg1;
                         var _local_4:Point = _local_6.seg2;

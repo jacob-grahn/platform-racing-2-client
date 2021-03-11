@@ -4,18 +4,18 @@ package package_9
 {
     import com.jiggmin.data.Settings;
     import flash.events.Event;
-    import package_8.Character;
+    import package_8.Player;
     import sounds.SoundEffects;
 
     public class Zap extends Effect 
     {
 
         private var m:ZapGraphic = new ZapGraphic();
-        private var c:Character; // var_5
+        private var player:Player; // var_5
 
-        public function Zap(character:Character, showBolt:Boolean=true, playSound:Boolean=true, showFlash:Boolean=true)
+        public function Zap(p:Player, showBolt:Boolean=true, playSound:Boolean=true, showFlash:Boolean=true)
         {
-            this.c = character;
+            this.player = p;
             if (!showBolt) {
                 this.m.removeChild(this.m.lightning);
             }
@@ -41,8 +41,8 @@ package package_9
 
         private function pos()
         {
-            x = this.c.x;
-            y = this.c.y;
+            x = this.player.x;
+            y = this.player.y;
         }
 
         override public function remove()
@@ -50,7 +50,7 @@ package package_9
             removeEventListener(Event.ENTER_FRAME, this.go);
             removeChild(this.m);
             this.m = null;
-            this.c = null;
+            this.player = null;
             super.remove();
         }
 

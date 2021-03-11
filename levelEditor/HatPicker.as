@@ -5,20 +5,20 @@ package levelEditor
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class HatPicker extends Sprite 
     {
 
         private var m:HatPickerGraphic;
-        private var c:LocalCharacter;
+        private var player:LocalPlayer;
         private var min:int = 1; // var_538
         private var max:int = 16; // var_620
         private var pickedHat:int = 2; // var_75
 
-        public function HatPicker(l:LocalCharacter)
+        public function HatPicker(p:LocalPlayer)
         {
-            this.c = l;
+            this.player = p;
             this.m = new HatPickerGraphic();
             this.m.var_173.left.addEventListener(MouseEvent.CLICK, this.clickLeft, false, 0, true);
             this.m.var_173.right.addEventListener(MouseEvent.CLICK, this.clickRight, false, 0, true);
@@ -65,7 +65,7 @@ package levelEditor
             var colorMC:int = Math.round(Math.random() * 0xFFFFFF);
             var colorMC2:int = 0;
             var a:Array = new Array(this.pickedHat, colorMC, colorMC2);
-            this.c.setHats(a);
+            this.player.setHats(a);
             Settings.setValue(Settings.LE_TEST_HAT, this.pickedHat);
         }
 
@@ -74,7 +74,7 @@ package levelEditor
             this.m.var_173.left.removeEventListener(MouseEvent.CLICK, this.clickLeft);
             this.m.var_173.right.removeEventListener(MouseEvent.CLICK, this.clickRight);
             this.m = null;
-            this.c = null;
+            this.player = null;
         }
 
 

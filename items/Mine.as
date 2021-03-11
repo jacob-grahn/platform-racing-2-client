@@ -10,15 +10,15 @@ package items
     import com.jiggmin.data.Data;
     import flash.geom.Point;
     import package_6.Course;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import package_9.MineAppear;
 
     public class Mine extends Item 
     {
 
-        public function Mine(r:LocalCharacter)
+        public function Mine(p:LocalPlayer)
         {
-            super(r);
+            super(p);
         }
 
         // _loc1 = map

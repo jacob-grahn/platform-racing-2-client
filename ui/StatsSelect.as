@@ -5,7 +5,7 @@ package ui
     import com.jiggmin.data.Settings;
     import flash.display.Stage;
     import flash.events.MouseEvent;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
 
     public class StatsSelect extends Removable 
     {
@@ -15,13 +15,13 @@ package ui
         private var accelSlider:StatSlider; // var_62
         private var jumpnSlider:StatSlider; // var_66
         private var totalPoints:int; // var_334
-        private var c:LocalCharacter; // var_5
+        private var player:LocalPlayer; // var_5
         private var stageRef:Stage = Main.stage;
 
-        public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, r:LocalCharacter)
+        public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, p:LocalPlayer)
         {
             this.totalPoints = tot;
-            this.c = r;
+            this.player = p;
             if (this.totalPoints < speed + accel + jumpn) {
                 this.totalPoints = speed + accel + jumpn;
             }
@@ -72,7 +72,7 @@ package ui
         // mouseUpHandler = saveLEStats
         public function saveLEStats(e:* = null)
         {
-            if (this.c != null && this.c.inLE()) {
+            if (this.player != null && this.player.inLE()) {
                 Settings.setValue(Settings.LE_TEST_STATS, {
                     "speed": this.speedSlider.value,
                     "accel": this.accelSlider.value,
@@ -85,8 +85,8 @@ package ui
         public function updateStatsDisplay()
         {
             this.m.textBox.text = this.getPointsRemaining().toString();
-            if (this.c != null) {
-                this.c.setStats(this.speedSlider.value, this.accelSlider.value, this.jumpnSlider.value);
+            if (this.player != null) {
+                this.player.setStats(this.speedSlider.value, this.accelSlider.value, this.jumpnSlider.value);
             }
         }
 
@@ -103,7 +103,7 @@ package ui
             this.speedSlider = null;
             this.accelSlider = null;
             this.jumpnSlider = null;
-            this.c = null;
+            this.player = null;
             this.stageRef = null;
             super.remove();
         }

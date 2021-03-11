@@ -12,7 +12,7 @@ package package_6
     import flash.net.URLVariables;
     import levelEditor.HatPicker;
     import levelEditor.LevelEditor;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import package_9.TeleportPop;
     import sounds.SoundEffects;
     import ui.StatsSelect;
@@ -43,7 +43,7 @@ package package_6
             this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.clickRestart);
             holder.addChild(this.m);
             musicSelection.x = -130;
-            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
+            var_9 = new LocalPlayer(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
             var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
             var_9.testMode = true;
             playerArray.push(var_9);
@@ -131,7 +131,7 @@ package package_6
             Main.stage.focus = Main.stage;
             blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = 0;
             timer.setTime(Number(maxTime));
-            var_201.clear();
+            effectBackground.clear();
             blockBackground.clear();
             miniMap.clear();
             blockBackground.draw();

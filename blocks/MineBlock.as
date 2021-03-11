@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_8.LocalCharacter;
+    import package_8.LocalPlayer;
     import package_9.BlockPiece;
     import package_9.MineExplode;
 
@@ -20,34 +20,34 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(lc:LocalCharacter)
+        override public function onStand(player:LocalPlayer)
         {
-            super.onStand(lc);
-            this.method_81(lc);
+            super.onStand(player);
+            this.method_81(player);
         }
 
-        override public function onBump(lc:LocalCharacter)
+        override public function onBump(player:LocalPlayer)
         {
-            super.onBump(lc);
-            this.method_81(lc);
+            super.onBump(player);
+            this.method_81(player);
         }
 
-        override public function onLeftHit(lc:LocalCharacter)
+        override public function onLeftHit(player:LocalPlayer)
         {
-            super.onLeftHit(lc);
-            this.method_81(lc);
+            super.onLeftHit(player);
+            this.method_81(player);
         }
 
-        override public function onRightHit(lc:LocalCharacter)
+        override public function onRightHit(player:LocalPlayer)
         {
-            super.onRightHit(lc);
-            this.method_81(lc);
+            super.onRightHit(player);
+            this.method_81(player);
         }
 
-        override public function onTouch(lc:LocalCharacter)
+        override public function onTouch(player:LocalPlayer)
         {
-            super.onTouch(lc);
-            this.method_81(lc);
+            super.onTouch(player);
+            this.method_81(player);
         }
 
         override public function onDamage(n:Number)
@@ -72,16 +72,16 @@ package blocks
             remove();
         }
 
-        private function method_81(lc:LocalCharacter)
+        private function method_81(player:LocalPlayer)
         {
             if (!frozen) {
                 var _local_2:Number = 50;
-                var _local_3:Number = lc.x - x + 15;
-                var _local_4:Number = lc.y - (lc.var_325 / 2) - y + 15;
+                var _local_3:Number = player.x - x + 15;
+                var _local_4:Number = player.y - (player.var_325 / 2) - y + 15;
                 var _local_5:Number = Math.atan2(_local_4, _local_3);
                 var _local_6:Number = Math.cos(_local_5) * _local_2;
                 var _local_7:Number = Math.sin(_local_5) * _local_2;
-                lc.hit(_local_6, _local_7);
+                player.hit(_local_6, _local_7);
                 localActivate();
             }
         }
