@@ -13,7 +13,7 @@ package blocks
 
         public function IceBlock()
         {
-            super(Objects.IceBlockCode);
+            super(Objects.BLOCK_ICE);
         }
 
         override public function onStand(player:LocalPlayer)

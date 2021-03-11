@@ -72,59 +72,59 @@ package blocks
         public static function getBlock(blockCode:int):BitmapData
         {
             var bmpData:BitmapData;
-            if (blockCode == Objects.Basic1BlockCode) {
+            if (blockCode == Objects.BLOCK_BASIC1) {
                 bmpData = basic1Bitmap;
-            } else if (blockCode == Objects.Basic2BlockCode) {
+            } else if (blockCode == Objects.BLOCK_BASIC2) {
                 bmpData = basic2Bitmap;
-            } else if (blockCode == Objects.Basic3BlockCode) {
+            } else if (blockCode == Objects.BLOCK_BASIC3) {
                 bmpData = basic3Bitmap;
-            } else if (blockCode == Objects.Basic4BlockCode) {
+            } else if (blockCode == Objects.BLOCK_BASIC4) {
                 bmpData = basic4Bitmap;
-            } else if (blockCode == Objects.BrickBlockCode) {
+            } else if (blockCode == Objects.BLOCK_BRICK) {
                 bmpData = brickBitmap;
-            } else if (blockCode == Objects.CrumbleBlockCode) {
+            } else if (blockCode == Objects.BLOCK_CRUMBLE) {
                 bmpData = crumbleBitmap;
-            } else if (blockCode == Objects.FinishBlockCode) {
+            } else if (blockCode == Objects.BLOCK_FINISH) {
                 bmpData = finishBitmap;
-            } else if (blockCode == Objects.HappyBlockCode) {
+            } else if (blockCode == Objects.BLOCK_HAPPY) {
                 bmpData = happyBitmap;
-            } else if (blockCode == Objects.IceBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ICE) {
                 bmpData = iceBitmap;
-            } else if (blockCode == Objects.InfItemBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ITEM_INF) {
                 bmpData = infiniteItemBitmap;
-            } else if (blockCode == Objects.ItemBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ITEM) {
                 bmpData = itemBitmap;
-            } else if (blockCode == Objects.MineBlockCode) {
+            } else if (blockCode == Objects.BLOCK_MINE) {
                 bmpData = mineBitmap;
-            } else if (blockCode == Objects.MoveBlockCode) {
+            } else if (blockCode == Objects.BLOCK_MOVE) {
                 bmpData = moveBitmap;
-            } else if (blockCode == Objects.PushBlockCode) {
+            } else if (blockCode == Objects.BLOCK_PUSH) {
                 bmpData = pushBitmap;
-            } else if (blockCode == Objects.RotateLeftBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ROTATE_LEFT) {
                 bmpData = rotateLeftBitmap;
-            } else if (blockCode == Objects.RotateRightBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ROTATE_RIGHT) {
                 bmpData = rotateRightBitmap;
-            } else if (blockCode == Objects.SadBlockCode) {
+            } else if (blockCode == Objects.BLOCK_SAD) {
                 bmpData = sadBitmap;
-            } else if (blockCode == Objects.SafetyBlockCode) {
+            } else if (blockCode == Objects.BLOCK_SAFETY) {
                 bmpData = safetyNetBitmap;
-            } else if (blockCode == Objects.VanishBlockCode) {
+            } else if (blockCode == Objects.BLOCK_VANISH) {
                 bmpData = vanishBitmap;
-            } else if (blockCode == Objects.WaterBlockCode) {
+            } else if (blockCode == Objects.BLOCK_WATER) {
                 bmpData = waterBitmap;
-            } else if (blockCode == Objects.DownBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ARROW_DOWN) {
                 bmpData = basic2Bitmap1;
-            } else if (blockCode == Objects.LeftBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ARROW_LEFT) {
                 bmpData = basic2Bitmap3;
-            } else if (blockCode == Objects.RightBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ARROW_RIGHT) {
                 bmpData = basic2Bitmap4;
-            } else if (blockCode == Objects.UpBlockCode) {
+            } else if (blockCode == Objects.BLOCK_ARROW_UP) {
                 bmpData = basic2Bitmap2;
-            } else if (blockCode == Objects.HeartBlockCode) {
+            } else if (blockCode == Objects.BLOCK_HEART) {
                 bmpData = heartBitmap;
-            } else if (blockCode == Objects.Start1BlockCode || blockCode == Objects.Start2BlockCode || blockCode == Objects.Start3BlockCode || blockCode == Objects.Start4BlockCode) {
+            } else if (blockCode == Objects.BLOCK_START1 || blockCode == Objects.BLOCK_START2 || blockCode == Objects.BLOCK_START3 || blockCode == Objects.BLOCK_START4) {
                 bmpData = startBitmap;
-            } else if (blockCode == Objects.TimeBlockCode) {
+            } else if (blockCode == Objects.BLOCK_TIME) {
                 bmpData = timeBitmap;
             }
             return bmpData;

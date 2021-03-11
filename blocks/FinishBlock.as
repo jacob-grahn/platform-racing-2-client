@@ -19,7 +19,7 @@ package blocks
         public function FinishBlock()
         {
             this.id = var_228++;
-            super(Objects.FinishBlockCode);
+            super(Objects.BLOCK_FINISH);
         }
 
         // method_140 = getId

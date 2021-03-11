@@ -15,7 +15,7 @@ package blocks
 
         public function HappyBlock()
         {
-            super(Objects.HappyBlockCode);
+            super(Objects.BLOCK_HAPPY);
         }
 
         override protected function useSupply(player:LocalPlayer)

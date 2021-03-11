@@ -14,7 +14,7 @@ package blocks
 
         public function SafetyBlock()
         {
-            super(Objects.SafetyBlockCode);
+            super(Objects.BLOCK_SAFETY);
             var_34 = false;
             active = false;
         }

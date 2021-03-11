@@ -21,57 +21,59 @@ package com.jiggmin.data
     import blocks.StartBlock;
     import blocks.VanishBlock;
     import blocks.WaterBlock;
-    import blocks.DownBlock;
-    import blocks.LeftBlock;
-    import blocks.RightBlock;
-    import blocks.UpBlock;
+    import blocks.ArrowDownBlock;
+    import blocks.ArrowLeftBlock;
+    import blocks.ArrowRightBlock;
+    import blocks.ArrowUpBlock;
     import blocks.HeartBlock;
     import blocks.TimeBlock;
 
     public class Objects 
     {
 
-        private static const TreeCode:int = 0; // const_88
-        private static const Tree2Code:int = 1;
-        private static const Tree3Code:int = 2;
-        private static const PetrifiedTreeCode:int = 3; // const_77
-        private static const CactusCode:int = 4; // const_75
-        private static const RockCode:int = 5; // const_81
-        private static const Rock2Code:int = 6; // const_84
-        private static const SpireCode:int = 7; // const_86
-        private static const Spire2Code:int = 8; // const_89
-        private static const Building1Code:int = 9; // const_83
-        public static const Basic1BlockCode:int = 100;
-        public static const Basic2BlockCode:int = 101;
-        public static const Basic3BlockCode:int = 102;
-        public static const Basic4BlockCode:int = 103;
-        public static const BrickBlockCode:int = 104; // const_37
-        public static const DownBlockCode:int = 105; // const_28
-        public static const UpBlockCode:int = 106; // const_16
-        public static const LeftBlockCode:int = 107; // const_20
-        public static const RightBlockCode:int = 108; // const_15
-        public static const MineBlockCode:int = 109; // const_17
-        public static const ItemBlockCode:int = 110; // const_57
-        public static const Start1BlockCode:int = 111;
-        public static const Start2BlockCode:int = 112;
-        public static const Start3BlockCode:int = 113;
-        public static const Start4BlockCode:int = 114;
-        public static const IceBlockCode:int = 115; // const_10
-        public static const FinishBlockCode:int = 116; // const_14
-        public static const CrumbleBlockCode:int = 117; // const_24
-        public static const VanishBlockCode:int = 118; // const_29
-        public static const MoveBlockCode:int = 119; // const_26
-        public static const WaterBlockCode:int = 120; // const_30
-        public static const RotateRightBlockCode:int = 121; // const_41
-        public static const RotateLeftBlockCode:int = 122; // const_47
-        public static const PushBlockCode:int = 123; // const_50
-        public static const SafetyBlockCode:int = 124; // const_33
-        public static const InfItemBlockCode:int = 125; // const_39
-        public static const HappyBlockCode:int = 126; // const_38
-        public static const SadBlockCode:int = 127; // const_32
-        public static const HeartBlockCode:int = 128; // const_43
-        public static const TimeBlockCode:int = 129; // const_42
-        public static const EggMinionBlockCode:int = 130; // const_58
+        private static const STAMP_TREE:int = 0; // const_88
+        private static const STAMP_TREE2:int = 1; // Tree2Code
+        private static const STAMP_TREE3:int = 2; // Tree3Code
+        private static const STAMP_PETRIFIED_TREE:int = 3; // const_77
+        private static const STAMP_CACTUS:int = 4; // const_75
+        private static const STAMP_ROCK:int = 5; // const_81
+        private static const STAMP_ROCK2:int = 6; // const_84
+        private static const STAMP_SPIRE:int = 7; // const_86
+        private static const STAMP_SPIRE2:int = 8; // const_89
+        private static const STAMP_BUILDING1:int = 9; // const_83
+
+        public static const BLOCK_BASIC1:int = 100; // Basic1BlockCode
+        public static const BLOCK_BASIC2:int = 101; // Basic2BlockCode
+        public static const BLOCK_BASIC3:int = 102; // Basic3BlockCode
+        public static const BLOCK_BASIC4:int = 103; // Basic4BlockCode
+        public static const BLOCK_BRICK:int = 104; // const_37
+        public static const BLOCK_ARROW_DOWN:int = 105; // const_28
+        public static const BLOCK_ARROW_UP:int = 106; // const_16
+        public static const BLOCK_ARROW_LEFT:int = 107; // const_20
+        public static const BLOCK_ARROW_RIGHT:int = 108; // const_15
+        public static const BLOCK_MINE:int = 109; // const_17
+        public static const BLOCK_ITEM:int = 110; // const_57
+        public static const BLOCK_START1:int = 111; // Start1BlockCode
+        public static const BLOCK_START2:int = 112; // Start2BlockCode
+        public static const BLOCK_START3:int = 113; // Start3BlockCode
+        public static const BLOCK_START4:int = 114; // Start4BlockCode
+        public static const BLOCK_ICE:int = 115; // const_10
+        public static const BLOCK_FINISH:int = 116; // const_14
+        public static const BLOCK_CRUMBLE:int = 117; // const_24
+        public static const BLOCK_VANISH:int = 118; // const_29
+        public static const BLOCK_MOVE:int = 119; // const_26
+        public static const BLOCK_WATER:int = 120; // const_30
+        public static const BLOCK_ROTATE_RIGHT:int = 121; // const_41
+        public static const BLOCK_ROTATE_LEFT:int = 122; // const_47
+        public static const BLOCK_PUSH:int = 123; // const_50
+        public static const BLOCK_SAFETY:int = 124; // const_33
+        public static const BLOCK_ITEM_INF:int = 125; // const_39
+        public static const BLOCK_HAPPY:int = 126; // const_38
+        public static const BLOCK_SAD:int = 127; // const_32
+        public static const BLOCK_HEART:int = 128; // const_43
+        public static const BLOCK_TIME:int = 129; // const_42
+        public static const BLOCK_MINION_EGG:int = 130; // const_58
+
         public static const BG1Code:int = 201;
         public static const BG2Code:int = 202;
         public static const BG3Code:int = 203;
@@ -79,6 +81,7 @@ package com.jiggmin.data
         public static const BG5Code:int = 205;
         public static const BG6Code:int = 206;
         public static const BG7Code:int = 207;
+
         public static const TextCode:int = 300; // const_61
 
 
@@ -86,87 +89,87 @@ package com.jiggmin.data
         public static function getFromCode(code:int):DisplayObject
         {
             var d:DisplayObject;
-            if (code == TreeCode) {
+            if (code == STAMP_TREE) {
                 d = new Tree();
-            } else if (code == Tree2Code) {
+            } else if (code == STAMP_TREE2) {
                 d = new Tree2();
-            } else if (code == Tree3Code) {
+            } else if (code == STAMP_TREE3) {
                 d = new Tree3();
-            } else if (code == PetrifiedTreeCode) {
+            } else if (code == STAMP_PETRIFIED_TREE) {
                 d = new PetrifiedTree();
-            } else if (code == CactusCode) {
+            } else if (code == STAMP_CACTUS) {
                 d = new Cactus();
-            } else if (code == RockCode) {
+            } else if (code == STAMP_ROCK) {
                 d = new Rock();
-            } else if (code == Rock2Code) {
+            } else if (code == STAMP_ROCK2) {
                 d = new Rock2();
-            } else if (code == SpireCode) {
+            } else if (code == STAMP_SPIRE) {
                 d = new Spire();
-            } else if (code == Spire2Code) {
+            } else if (code == STAMP_SPIRE2) {
                 d = new Spire2();
-            } else if (code == Building1Code) {
+            } else if (code == STAMP_BUILDING1) {
                 d = new Building1();
-            } else if (code == Basic1BlockCode) {
-                d = new BasicBlock(Basic1BlockCode);
-            } else if (code == Basic2BlockCode) {
-                d = new BasicBlock(Basic2BlockCode);
-            } else if (code == Basic3BlockCode) {
-                d = new BasicBlock(Basic3BlockCode);
-            } else if (code == Basic4BlockCode) {
-                d = new BasicBlock(Basic4BlockCode);
-            } else if (code == BrickBlockCode) {
+            } else if (code == BLOCK_BASIC1) {
+                d = new BasicBlock(BLOCK_BASIC1);
+            } else if (code == BLOCK_BASIC2) {
+                d = new BasicBlock(BLOCK_BASIC2);
+            } else if (code == BLOCK_BASIC3) {
+                d = new BasicBlock(BLOCK_BASIC3);
+            } else if (code == BLOCK_BASIC4) {
+                d = new BasicBlock(BLOCK_BASIC4);
+            } else if (code == BLOCK_BRICK) {
                 d = new BrickBlock();
-            } else if (code == CrumbleBlockCode) {
+            } else if (code == BLOCK_CRUMBLE) {
                 d = new CrumbleBlock();
-            } else if (code == FinishBlockCode) {
+            } else if (code == BLOCK_FINISH) {
                 d = new FinishBlock();
-            } else if (code == HappyBlockCode) {
+            } else if (code == BLOCK_HAPPY) {
                 d = new HappyBlock();
-            } else if (code == IceBlockCode) {
+            } else if (code == BLOCK_ICE) {
                 d = new IceBlock();
-            } else if (code == InfItemBlockCode) {
+            } else if (code == BLOCK_ITEM_INF) {
                 d = new InfItemBlock();
-            } else if (code == ItemBlockCode) {
+            } else if (code == BLOCK_ITEM) {
                 d = new ItemBlock();
-            } else if (code == MineBlockCode) {
+            } else if (code == BLOCK_MINE) {
                 d = new MineBlock();
-            } else if (code == MoveBlockCode) {
+            } else if (code == BLOCK_MOVE) {
                 d = new MoveBlock();
-            } else if (code == PushBlockCode) {
+            } else if (code == BLOCK_PUSH) {
                 d = new PushBlock();
-            } else if (code == RotateLeftBlockCode) {
+            } else if (code == BLOCK_ROTATE_LEFT) {
                 d = new RotateLeftBlock();
-            } else if (code == RotateRightBlockCode) {
+            } else if (code == BLOCK_ROTATE_RIGHT) {
                 d = new RotateRightBlock();
-            } else if (code == SadBlockCode) {
+            } else if (code == BLOCK_SAD) {
                 d = new SadBlock();
-            } else if (code == SafetyBlockCode) {
+            } else if (code == BLOCK_SAFETY) {
                 d = new SafetyBlock();
-            } else if (code == Start1BlockCode) {
-                d = new StartBlock(Start1BlockCode, 1);
-            } else if (code == Start2BlockCode) {
-                d = new StartBlock(Start2BlockCode, 2);
-            } else if (code == Start3BlockCode) {
-                d = new StartBlock(Start3BlockCode, 3);
-            } else if (code == Start4BlockCode) {
-                d = new StartBlock(Start4BlockCode, 4);
-            } else if (code == VanishBlockCode) {
+            } else if (code == BLOCK_START1) {
+                d = new StartBlock(BLOCK_START1, 1);
+            } else if (code == BLOCK_START2) {
+                d = new StartBlock(BLOCK_START2, 2);
+            } else if (code == BLOCK_START3) {
+                d = new StartBlock(BLOCK_START3, 3);
+            } else if (code == BLOCK_START4) {
+                d = new StartBlock(BLOCK_START4, 4);
+            } else if (code == BLOCK_VANISH) {
                 d = new VanishBlock();
-            } else if (code == WaterBlockCode) {
+            } else if (code == BLOCK_WATER) {
                 d = new WaterBlock();
-            } else if (code == DownBlockCode) {
-                d = new DownBlock();
-            } else if (code == LeftBlockCode) {
-                d = new LeftBlock();
-            } else if (code == RightBlockCode) {
-                d = new RightBlock();
-            } else if (code == UpBlockCode) {
-                d = new UpBlock();
-            } else if (code == HeartBlockCode) {
+            } else if (code == BLOCK_ARROW_DOWN) {
+                d = new ArrowDownBlock();
+            } else if (code == BLOCK_ARROW_LEFT) {
+                d = new ArrowLeftBlock();
+            } else if (code == BLOCK_ARROW_RIGHT) {
+                d = new ArrowRightBlock();
+            } else if (code == BLOCK_ARROW_UP) {
+                d = new ArrowUpBlock();
+            } else if (code == BLOCK_HEART) {
                 d = new HeartBlock();
-            } else if (code == TimeBlockCode) {
+            } else if (code == BLOCK_TIME) {
                 d = new TimeBlock();
-            } else if (code == EggMinionBlockCode) {
+            } else if (code == BLOCK_MINION_EGG) {
                 d = new EggBlockGraphic();
             } else if (code == BG1Code) {
                 d = new BG1();

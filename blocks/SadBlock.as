@@ -15,7 +15,7 @@ package blocks
 
         public function SadBlock()
         {
-            super(Objects.SadBlockCode);
+            super(Objects.BLOCK_SAD);
         }
 
         override protected function useSupply(player:LocalPlayer)

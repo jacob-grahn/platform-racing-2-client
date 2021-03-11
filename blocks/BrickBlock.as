@@ -12,7 +12,7 @@ package blocks
 
         public function BrickBlock()
         {
-            super(Objects.BrickBlockCode);
+            super(Objects.BLOCK_BRICK);
             var_34 = false;
         }
 

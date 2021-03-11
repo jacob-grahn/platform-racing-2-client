@@ -16,7 +16,7 @@ package blocks
 
         public function MineBlock()
         {
-            super(Objects.MineBlockCode);
+            super(Objects.BLOCK_MINE);
             var_34 = false;
         }
 

@@ -18,7 +18,7 @@ package blocks
 
         public function CrumbleBlock()
         {
-            super(Objects.CrumbleBlockCode);
+            super(Objects.BLOCK_CRUMBLE);
             var_34 = false;
         }
 

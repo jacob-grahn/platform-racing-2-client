@@ -60,7 +60,7 @@ package levelEditor
             var blockAtNewPt:BlockObject = editor.blockBG.getBlockAt(newPtSegX, newPtSegY);
             var overwriteExisting:Boolean = true;
             if (blockAtNewPt != null && blockAtNewPt != this) {
-                if (blockAtNewPt.displayCode == Objects.Start1BlockCode || blockAtNewPt.displayCode == Objects.Start2BlockCode || blockAtNewPt.displayCode == Objects.Start3BlockCode || blockAtNewPt.displayCode == Objects.Start4BlockCode) {
+                if (blockAtNewPt.displayCode == Objects.BLOCK_START1 || blockAtNewPt.displayCode == Objects.BLOCK_START2 || blockAtNewPt.displayCode == Objects.BLOCK_START3 || blockAtNewPt.displayCode == Objects.BLOCK_START4) {
                     overwriteExisting = false;
                 } else {
                     editor.cur.recordDelete(this);

@@ -16,7 +16,7 @@ package blocks
 
         public function TimeBlock()
         {
-            super(Objects.TimeBlockCode);
+            super(Objects.BLOCK_TIME);
         }
 
         override protected function useSupply(player:LocalPlayer)

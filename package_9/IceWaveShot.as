@@ -49,7 +49,7 @@ package package_9
 
         override protected function hitBlock(_arg_1:Block)
         {
-            if (!(_arg_1 is IceBlock) && _arg_1.getCode() != Objects.IceBlockCode) {
+            if (!(_arg_1 is IceBlock) && _arg_1.getCode() != Objects.BLOCK_ICE) {
                 _arg_1.freeze(true);
                 if (var_168 < 10 && life > 10) {
                     var _local_2:Number = this.var_322 - 60;

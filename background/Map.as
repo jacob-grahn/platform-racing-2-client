@@ -81,7 +81,7 @@ package background
                 blockCode += 100;
             }
             var _local_4:Point = getSegFromPos(x, y);
-            if (blockCode == Objects.EggMinionBlockCode) {
+            if (blockCode == Objects.BLOCK_MINION_EGG) {
                 this.var_379.push(new Point(x, y));
             } else {
                 var block:Block = Block(Objects.getFromCode(blockCode));

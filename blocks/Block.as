@@ -83,7 +83,7 @@ package blocks
 
         public function getCode():int
         {
-            return this.frozen ? Objects.IceBlockCode : this.blockCode;
+            return this.frozen ? Objects.BLOCK_ICE : this.blockCode;
         }
 
         // method_23 = isActive
@@ -155,7 +155,7 @@ package blocks
         // _loc2 = point
         public function onStand(player:LocalPlayer)
         {
-            if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Player.SANTA) && this.blockCode != Objects.FinishBlockCode && this.blockCode != Objects.IceBlockCode && this.blockCode != Objects.VanishBlockCode && this.blockCode != Objects.CrumbleBlockCode && this.blockCode != Objects.UpBlockCode && this.blockCode != Objects.LeftBlockCode && this.blockCode != Objects.RightBlockCode && this.blockCode != Objects.DownBlockCode && this.blockCode != Objects.MoveBlockCode) {
+            if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Player.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
                 this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {

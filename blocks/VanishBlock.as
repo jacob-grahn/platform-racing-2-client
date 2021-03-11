@@ -19,7 +19,7 @@ package blocks
 
         public function VanishBlock()
         {
-            super(Objects.VanishBlockCode);
+            super(Objects.BLOCK_VANISH);
             var_34 = false;
         }
 

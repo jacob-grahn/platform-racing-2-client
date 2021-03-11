@@ -13,7 +13,7 @@ package blocks
 
         public function HeartBlock()
         {
-            super(Objects.HeartBlockCode);
+            super(Objects.BLOCK_HEART);
         }
 
         override protected function useSupply(player:LocalPlayer)

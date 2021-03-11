@@ -15,7 +15,7 @@ package blocks
 
         public function PushBlock()
         {
-            super(Objects.PushBlockCode);
+            super(Objects.BLOCK_PUSH);
             var_34 = false;
         }
 
