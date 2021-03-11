@@ -221,6 +221,8 @@ package package_6
             this.countdown.addEventListener("count", this.onCountdownCount, false, 0, true);
             this.countdown.addEventListener("finish", this.onCountdownFinish, false, 0, true);
             addChild(this.countdown);
+            var startPos:Object = this.var_9.getPos(); // this fixes hat attack when quitting during the countdown
+            Main.socket.write('exact_pos`' + startPos.x + '`' + startPos.y);
             if (this.var_9 != null && this.var_9.var_4.getBool(Player.JUMP_START)) {
                 this.var_9.init();
             }
