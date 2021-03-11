@@ -1,4 +1,4 @@
-﻿// data.Objects = data.class_19
+﻿// com.jiggmin.data.Objects = data.class_19
 
 package com.jiggmin.data
 {
@@ -85,110 +85,110 @@ package com.jiggmin.data
         public static const TextCode:int = 300; // const_61
 
 
+        // removed _loc2 (direct return instead)
         // method_29 = getFromCode
         public static function getFromCode(code:int):DisplayObject
         {
-            var d:DisplayObject;
             if (code == STAMP_TREE) {
-                d = new Tree();
+                return new Tree();
             } else if (code == STAMP_TREE2) {
-                d = new Tree2();
+                return new Tree2();
             } else if (code == STAMP_TREE3) {
-                d = new Tree3();
+                return new Tree3();
             } else if (code == STAMP_PETRIFIED_TREE) {
-                d = new PetrifiedTree();
+                return new PetrifiedTree();
             } else if (code == STAMP_CACTUS) {
-                d = new Cactus();
+                return new Cactus();
             } else if (code == STAMP_ROCK) {
-                d = new Rock();
+                return new Rock();
             } else if (code == STAMP_ROCK2) {
-                d = new Rock2();
+                return new Rock2();
             } else if (code == STAMP_SPIRE) {
-                d = new Spire();
+                return new Spire();
             } else if (code == STAMP_SPIRE2) {
-                d = new Spire2();
+                return new Spire2();
             } else if (code == STAMP_BUILDING1) {
-                d = new Building1();
+                return new Building1();
             } else if (code == BLOCK_BASIC1) {
-                d = new BasicBlock(BLOCK_BASIC1);
+                return new BasicBlock(BLOCK_BASIC1);
             } else if (code == BLOCK_BASIC2) {
-                d = new BasicBlock(BLOCK_BASIC2);
+                return new BasicBlock(BLOCK_BASIC2);
             } else if (code == BLOCK_BASIC3) {
-                d = new BasicBlock(BLOCK_BASIC3);
+                return new BasicBlock(BLOCK_BASIC3);
             } else if (code == BLOCK_BASIC4) {
-                d = new BasicBlock(BLOCK_BASIC4);
+                return new BasicBlock(BLOCK_BASIC4);
             } else if (code == BLOCK_BRICK) {
-                d = new BrickBlock();
+                return new BrickBlock();
             } else if (code == BLOCK_CRUMBLE) {
-                d = new CrumbleBlock();
+                return new CrumbleBlock();
             } else if (code == BLOCK_FINISH) {
-                d = new FinishBlock();
+                return new FinishBlock();
             } else if (code == BLOCK_HAPPY) {
-                d = new HappyBlock();
+                return new HappyBlock();
             } else if (code == BLOCK_ICE) {
-                d = new IceBlock();
+                return new IceBlock();
             } else if (code == BLOCK_ITEM_INF) {
-                d = new InfItemBlock();
+                return new InfItemBlock();
             } else if (code == BLOCK_ITEM) {
-                d = new ItemBlock();
+                return new ItemBlock();
             } else if (code == BLOCK_MINE) {
-                d = new MineBlock();
+                return new MineBlock();
             } else if (code == BLOCK_MOVE) {
-                d = new MoveBlock();
+                return new MoveBlock();
             } else if (code == BLOCK_PUSH) {
-                d = new PushBlock();
+                return new PushBlock();
             } else if (code == BLOCK_ROTATE_LEFT) {
-                d = new RotateLeftBlock();
+                return new RotateLeftBlock();
             } else if (code == BLOCK_ROTATE_RIGHT) {
-                d = new RotateRightBlock();
+                return new RotateRightBlock();
             } else if (code == BLOCK_SAD) {
-                d = new SadBlock();
+                return new SadBlock();
             } else if (code == BLOCK_SAFETY) {
-                d = new SafetyBlock();
+                return new SafetyBlock();
             } else if (code == BLOCK_START1) {
-                d = new StartBlock(BLOCK_START1, 1);
+                return new StartBlock(BLOCK_START1, 1);
             } else if (code == BLOCK_START2) {
-                d = new StartBlock(BLOCK_START2, 2);
+                return new StartBlock(BLOCK_START2, 2);
             } else if (code == BLOCK_START3) {
-                d = new StartBlock(BLOCK_START3, 3);
+                return new StartBlock(BLOCK_START3, 3);
             } else if (code == BLOCK_START4) {
-                d = new StartBlock(BLOCK_START4, 4);
+                return new StartBlock(BLOCK_START4, 4);
             } else if (code == BLOCK_VANISH) {
-                d = new VanishBlock();
+                return new VanishBlock();
             } else if (code == BLOCK_WATER) {
-                d = new WaterBlock();
+                return new WaterBlock();
             } else if (code == BLOCK_ARROW_DOWN) {
-                d = new ArrowDownBlock();
+                return new ArrowDownBlock();
             } else if (code == BLOCK_ARROW_LEFT) {
-                d = new ArrowLeftBlock();
+                return new ArrowLeftBlock();
             } else if (code == BLOCK_ARROW_RIGHT) {
-                d = new ArrowRightBlock();
+                return new ArrowRightBlock();
             } else if (code == BLOCK_ARROW_UP) {
-                d = new ArrowUpBlock();
+                return new ArrowUpBlock();
             } else if (code == BLOCK_HEART) {
-                d = new HeartBlock();
+                return new HeartBlock();
             } else if (code == BLOCK_TIME) {
-                d = new TimeBlock();
+                return new TimeBlock();
             } else if (code == BLOCK_MINION_EGG) {
-                d = new EggBlockGraphic();
+                return new EggBlockGraphic();
             } else if (code == BG1Code) {
-                d = new BG1();
+                return new BG1();
             } else if (code == BG2Code) {
-                d = new BG2();
+                return new BG2();
             } else if (code == BG3Code) {
-                d = new BG3();
+                return new BG3();
             } else if (code == BG4Code) {
-                d = new BG4();
+                return new BG4();
             } else if (code == BG5Code) {
-                d = new BG5();
+                return new BG5();
             } else if (code == BG6Code) {
-                d = new BG6();
+                return new BG6();
             } else if (code == BG7Code) {
-                d = new BG7();
+                return new BG7();
             } else if (code == TextCode) {
-                d = new TextObjectGraphic().textBox;
+                return new TextObjectGraphic().textBox;
             }
-            return d;
+            return null;
         }
 
 
