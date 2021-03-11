@@ -57,7 +57,7 @@ package package_6
         protected var var_678:Number = 0;
         private var var_348:String;
         private var varsSet:Boolean = false; // var_545
-        public var var_649:Boolean = false;
+        public var countdownFinished:Boolean = false; // var_649
         protected var playerDone:Boolean = false; // Game.var_370 -- this is either finished or forfeited
 
         public function Course()
@@ -239,7 +239,7 @@ package package_6
                 this.var_9.init();
             }
             this.blockBackground.method_578();
-            this.var_649 = true;
+            this.countdownFinished = true;
         }
 
         override public function setVariables(v:URLVariables)

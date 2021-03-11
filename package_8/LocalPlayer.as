@@ -152,7 +152,7 @@ package package_8
 
         public function init()
         {
-            if (!this.initialized && !removed && !var_304) {
+            if (!this.initialized && !removed && !fadeOutStarted) {
                 this.initialized = true;
                 addEventListener(Event.ENTER_FRAME, this.go, false, 0, true);
                 this.setMode("land");
@@ -775,12 +775,12 @@ package package_8
             this.invincible = false;
         }
 
+        // _loc3 = hat
         public function hit(_arg_1:Number=0, _arg_2:Number=0)
         {
-            var _local_3:Object;
             if ((!var_4.getBool(CROWN) || this.course.gameMode == Modes.dm || this.course.gameMode == Modes.hat) && !this.invincible) {
-                velX = velX + _arg_1;
-                velY = velY + _arg_2;
+                velX += _arg_1;
+                velY += _arg_2;
                 if (!var_4.getBool(CROWN)) {
                     method_51(50);
                     if (!this.frozenSolid) {
@@ -788,8 +788,8 @@ package package_8
                     }
                 }
                 if (this.map != null && !this.testMode) {
-                    _local_3 = method_380();
-                    if (_local_3.hatNum != 1 && _local_3.hatNum != 0 && _local_3.hatNum != null) {
+                    var hat:Object = getHighestHat();
+                    if (hat.hatNum != 1 && hat.hatNum != 0 && hat.hatNum != null) {
                         Main.socket.write("loose_hat`" + x + "`" + (y - 50) + "`" + this.map.rotation);
                     }
                 }

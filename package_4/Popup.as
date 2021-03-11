@@ -13,7 +13,7 @@ package package_4
         public static var LOADED = 'loaded';
         public static var REMOVED = 'removed';
 
-        public var notActive:Boolean = false; // var_304 = notActive
+        public var fadeOutStarted:Boolean = false; // var_304
 
         public function Popup(_arg_1:Boolean = true)
         {
@@ -57,7 +57,7 @@ package package_4
         // method_2 = startFadeOut
         public function startFadeOut()
         {
-            this.notActive = true;
+            this.fadeOutStarted = true;
             removeEventListener(Event.ENTER_FRAME, this.fadeIn);
             addEventListener(Event.ENTER_FRAME, this.fadeOut, false, 0, true);
         }

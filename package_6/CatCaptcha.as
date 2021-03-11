@@ -60,7 +60,7 @@ package package_6
         // _loc2 = img
         private function clickHandler(e:MouseEvent)
         {
-            if (!var_304 && (e.currentTarget is class_101)) {
+            if (!fadeOutStarted && (e.currentTarget is class_101)) {
                 var img:class_101 = class_101(e.currentTarget);
                 this.submit(img.getId());
             }
