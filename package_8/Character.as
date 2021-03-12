@@ -33,7 +33,7 @@ package package_8
 
         private var var_387:class_127;
         private var var_140:SoundChannel;
-        public var m:PlayerGraphic = new PlayerGraphic();
+        public var m:CharacterGraphic = new CharacterGraphic();
         public var var_301:MovieClip;
         private var characterStatesArray:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim); // var_217
         public var curWeapon:MovieClip;
