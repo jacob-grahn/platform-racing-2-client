@@ -17,6 +17,7 @@ package package_4
     import flash.net.URLRequestMethod;
     import package_6.ExpGain;
     import com.jiggmin.data.CommandHandler;
+    import flash.events.KeyboardEvent;
 
     public class PlayerPopup extends Popup 
     {
@@ -31,6 +32,7 @@ package package_4
         private var guildName:GuildName;
         private var userId:int;
         private var userName:String;
+        private var userIdShown:Boolean = false;
         private var expGain:ExpGain;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
@@ -203,6 +205,8 @@ package package_4
             }
             this.m.playerInfo.visible = true;
             this.m.loadingGraphic.visible = false;
+            Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.toggleUserIdShown, false, 0, true);
+            Main.stage.focus = Main.stage;
         }
 
         private function mouseOverRankBox(e:MouseEvent)
@@ -320,11 +324,21 @@ package package_4
             startFadeOut();
         }
 
+        private function toggleUserIdShown(e:KeyboardEvent)
+        {
+            if (e.keyCode !== 16 || e.type !== KeyboardEvent.KEY_DOWN) {
+                return;
+            }
+            this.m.nameBox.text = !this.userIdShown ? '-- User ID: ' + this.userId + ' --' : '-- ' + this.userName + ' --';
+            this.userIdShown = !this.userIdShown;
+        }
+
         override public function remove()
         {
             if (PlayerPopup.instance === this) {
                 PlayerPopup.instance = null;
             }
+            Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.toggleUserIdShown);
             this.m.playerInfo.rankBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox);
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox);
             this.m.playerInfo.messageButton.removeEventListener(MouseEvent.CLICK, this.clickSendPM);
