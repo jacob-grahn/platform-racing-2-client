@@ -36,6 +36,7 @@ package package_8
     import package_6.Modes;
     import package_6.RaceChat;
     import package_6.TestCourse;
+    import package_9.Hat;
     import package_9.Sting;
     import package_9.Zap;
     import page.GamePage;
@@ -70,8 +71,8 @@ package package_8
         public var var_524:Number = var_599;
         public var var_189:Number = 10;
         public var var_325:Number = 55;
-        public var var_205:Number = 0;
-        public var var_224:Number = 0;
+        public var lastSafeX:Number = 0; // var_205
+        public var lastSafeY:Number = 0; // var_224
         public var var_407:int;
         public var var_366:int;
         public var var_157:Number = 28;
@@ -388,24 +389,24 @@ package package_8
         {
             this.updateKeys();
             if (this.right) {
-                velX = velX + (this.accel * 0.5);
+                velX += this.accel * 0.5;
             }
             if (this.left) {
-                velX = velX - (this.accel * 0.5);
+                velX -= this.accel * 0.5;
             }
             if (this.down) {
-                velY = velY + (this.accel * 0.65);
+                velY += this.accel * 0.65;
             }
             if (this.up) {
-                velY = velY - (this.accel * 0.65);
+                velY -= this.accel * 0.65;
             }
-            velY = velY + (var_4.getNumber(DefaultGravity) * 0.25);
-            velX = velX * 0.92;
-            velY = velY * 0.92;
+            velY += var_4.getNumber(DefaultGravity) * 0.25;
+            velX *= 0.92;
+            velY *= 0.92;
             velX = class_74.numLimit(velX, -this.var_157, this.var_157);
             velY = class_74.numLimit(velY, -this.var_157, this.var_157);
-            x = x + velX;
-            y = y + velY;
+            x += velX;
+            y += velY;
             this.method_76();
             this.var_240--;
             if (var_4.getBool(COWBOY) && !this.grounded) {
@@ -413,7 +414,7 @@ package package_8
             }
             if (this.var_240 <= 0) {
                 if (this.up) {
-                    velY = velY - (var_4.getNumber(SuperJump) * 0.5);
+                    velY -= var_4.getNumber(SuperJump) * 0.5;
                     var_4.setNumber(const_12, -(var_4.getNumber(SuperJump)) * 0.5);
                     this.var_281 = true;
                 }
@@ -425,10 +426,10 @@ package package_8
         {
             this.updateKeys();
             if (this.right) {
-                this.var_24 = this.var_24 + this.accel;
+                this.var_24 += this.accel;
             }
             if (this.left) {
-                this.var_24 = this.var_24 - this.accel;
+                this.var_24 -= this.accel;
             }
             if (!this.right && !this.left) {
                 this.var_24 = 0;
@@ -440,7 +441,7 @@ package package_8
                     var_4.setNumber(const_12, -(var_4.getNumber(SuperJump)));
                 } else {
                     if (this.var_281) {
-                        velY = velY + var_4.getNumber(const_12);
+                        velY += var_4.getNumber(const_12);
                         var_4.setNumber(const_12, var_4.getNumber(const_12) * 0.75);
                     }
                 }
@@ -450,11 +451,11 @@ package package_8
             if (this.down) {
                 if (!this.crouching) {
                     if (!this.grounded) {
-                        velY = velY + 0.5;
+                        velY += 0.5;
                         this.var_150 = 0;
                     } else {
                         if (this.var_150 < 100) {
-                            this.var_150 = this.var_150 + 2;
+                            this.var_150 += 2;
                         }
                         if (this.var_150 > 25) {
                             this.var_24 = 0;
@@ -540,63 +541,80 @@ package package_8
 
         private function position()
         {
-            var _local_1:Number;
-            var _local_2:Point;
-            var _local_3:int;
             if (this.map != null) {
                 if (this.course != null && parent != this.course.frontBackground) {
                     this.course.frontBackground.addChild(this);
                 }
-                velY = velY + var_4.getNumber(GravityMultiplied);
+                velY += var_4.getNumber(GravityMultiplied);
                 if (this.up && var_4.getBool(PROP) && velY > 0) {
-                    velY = velY * 0.85;
+                    velY *= 0.85;
                 }
-                this.var_24 = this.var_24 * this.friction;
+                this.var_24 *= this.friction;
                 if (this.crouching) {
-                    this.var_24 = this.var_24 * 0.7;
+                    this.var_24 *= 0.7;
                 }
                 this.var_24 = class_74.numLimit(this.var_24, -this.maxVelX, this.maxVelX);
-                _local_1 = Math.abs(velX) * (1 / this.var_157);
+                var _local_1:Number = Math.abs(velX) / this.var_157;
                 _local_1 = 1 - _local_1;
-                _local_1 = _local_1 * 0.9;
-                _local_1 = _local_1 + 0.1;
-                this.var_147 = this.var_147 * _local_1;
-                if (this.frozenSolid) {
-                    this.var_147 = 0;
-                }
-                velX = velX + ((this.var_24 - velX) * this.var_147);
+                _local_1 *= 0.9;
+                _local_1 += 0.1;
+                this.var_147 *= this.frozenSolid ? 0 : _local_1;
+                velX += (this.var_24 - velX) * this.var_147;
                 velX = class_74.numLimit(velX, -this.var_157, this.var_157);
                 velY = class_74.numLimit(velY, -this.var_157, this.var_157);
-                x = x + velX;
-                y = y + velY;
-                _local_2 = Data.method_9(x, y, this.map.rotation);
-                _local_3 = 500;
+                x += velX;
+                y += velY;
+                var _local_2:Point = Data.method_9(x, y, this.map.rotation);
+                var _local_3:int = 500;
                 if ((_local_2.y > this.map.maxY + _local_3 && this.map.rotation == 0) || (_local_2.y < this.map.minY - _local_3 && Math.abs(this.map.rotation) == 180) || (_local_2.x > this.map.maxX + _local_3 && this.map.rotation == 90) || (_local_2.x < this.map.minX - _local_3 && this.map.rotation == -90)) {
-                    this.method_216();
+                    this.returnToLastSafeSpot();
+                }
+                if (this.course.gameMode === Modes.hat && this.course.looseHats.length > 0) {
+                    this.checkLooseHats();
                 }
                 this.var_147 = this.var_523;
                 this.var_524 = this.var_599;
             }
         }
 
-        public function method_216()
+        // method_216 = returnToLastSafeSpot
+        public function returnToLastSafeSpot()
         {
-            x = this.var_205;
-            y = this.var_224;
+            x = this.lastSafeX;
+            y = this.lastSafeY;
             velX = 0;
             velY = 0;
             this.bumpPlayer();
         }
 
+        private function checkLooseHats()
+        {
+            for each (var hat:Hat in this.course.looseHats) {
+                var hatPos:Point = hat.getPos();
+                var hatRot:int = hat.getRot();
+                hatPos = Data.method_9(hatPos.x, hatPos.y, hatRot);
+                if ((hatPos.y > this.map.maxY + 500 && hatRot == 0) || (hatPos.y < this.map.minY - 500 && Math.abs(hatRot) == 180) || (hatPos.x > this.map.maxX + 500 && hatRot == 90) || (hatPos.x < this.map.minX - 500 && hatRot == -90)) {
+                    this.returnHatToStart(hat.getId());
+                }
+            }
+        }
+
+        private function returnHatToStart(id:int)
+        {
+            var hat:Hat = this.course.looseHats[id];
+            if (hat != null) {
+                hat.returningToStart();
+                Main.socket.write('hat_to_start`' + id);
+            }
+        }
+
         private function method_76()
         {
-            var _local_3:Block;
-            var _local_4:Number;
             if (this.map != null) {
                 this.method_41();
                 this.method_261();
                 if (var_4.getBool(SANTA)) {
-                    _local_3 = this.map.getBlockFromPos(x, y, true);
+                    var _local_3:Block = this.map.getBlockFromPos(x, y, true);
                     if (_local_3 != null && ((_local_3 is WaterBlock && this.mode != "water") || _local_3 is SafetyBlock)) {
                         _local_3.onStand(this);
                     }
@@ -644,7 +662,7 @@ package package_8
                     if (_local_1 != null && _local_2 == null) {
                         this.crouching = true;
                         if (this.up) {
-                            _local_4 = y;
+                            var _local_4:Number = y;
                             _local_1.onBump(this);
                             y = _local_4;
                             velY = 0;
@@ -682,7 +700,7 @@ package package_8
         {
             //var _local_1:Number = y; // not needed?
             if (y < 0) {
-                y = y + 0.001;
+                y += 0.001;
             }
             this.var_630 = this.getBlock(x - this.var_189, y, true, true);
             this.var_469 = this.getBlock(x, y, true, true);
@@ -798,8 +816,8 @@ package package_8
 
         override public function setPos(_arg_1:Number, _arg_2:Number)
         {
-            this.var_205 = _arg_1;
-            this.var_224 = _arg_2;
+            this.lastSafeX = _arg_1;
+            this.lastSafeY = _arg_2;
             super.setPos(_arg_1, _arg_2);
             this.var_443 = _arg_1;
             this.var_453 = _arg_2;
@@ -847,14 +865,14 @@ package package_8
             var _local_3:Number;
             super.rotate(_arg_1);
             if (_arg_1 == "right") {
-                _local_2 = -this.var_224;
-                _local_3 = this.var_205;
+                _local_2 = -this.lastSafeY;
+                _local_3 = this.lastSafeX;
             } else {
-                _local_2 = this.var_224;
-                _local_3 = -this.var_205;
+                _local_2 = this.lastSafeY;
+                _local_3 = -this.lastSafeX;
             }
-            this.var_205 = _local_2;
-            this.var_224 = _local_3;
+            this.lastSafeX = _local_2;
+            this.lastSafeY = _local_3;
             this.setMode("land");
             this.course.posX = -x;
             this.course.posY = -y + 50;

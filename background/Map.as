@@ -139,19 +139,17 @@ package background
             }
         }
 
-        // _loc4 = course
-        private function setStartPos(_arg_1:int, _arg_2:int, _arg_3:int)
+        // deleted _loc4 (Course.course)
+        private function setStartPos(startNum:int, startX:int, startY:int)
         {
-            var course:Course = Course.course;
-            course.method_514(_arg_1, new Point(_arg_2, _arg_3));
+            Course.course.addStartPos(startNum, new Point(startX, startY));
         }
 
-        // _loc4 = course
+        // deleted _loc4 (Course.course)
         // method_516 = addFinish
         private function addFinish(finishId:int, finishX:int, finishY:int)
         {
-            var course:Course = Course.course;
-            course.finishBlocks.push({
+            Course.course.finishBlocks.push({
                 "id": finishId,
                 "x": finishX,
                 "y": finishY

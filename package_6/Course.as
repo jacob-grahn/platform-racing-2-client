@@ -32,7 +32,7 @@ package package_6
 
         protected var courseID:int;
         protected var version:int;
-        public var var_197:Array = new Array();
+        public var startPosArray:Array = new Array(); // var_197
         public var finishBlocks:Array = new Array(); // var_313
         public var playerArray:Array = new Array(); // var_40
         public var var_9:LocalCharacter;
@@ -59,6 +59,7 @@ package package_6
         private var varsSet:Boolean = false; // var_545
         public var countdownFinished:Boolean = false; // var_649
         protected var playerDone:Boolean = false; // Game.var_370 -- this is either finished or forfeited
+        public var looseHats:Array = [];
 
         public function Course()
         {
@@ -98,37 +99,41 @@ package package_6
             this.attachBackgrounds();
         }
 
-        public function method_514(_arg_1:int, _arg_2:Point)
+        // method_514 = addStartPos
+        public function addStartPos(startNum:int, startPt:Point)
         {
-            this.var_197[_arg_1] = _arg_2;
+            this.startPosArray[startNum] = startPt;
             this.method_80();
         }
 
         // _loc1 = this.playerArray.length
+        // _loc2 = tempId
+        // _loc3 = startPos
         // _loc4 = player
         protected function method_80()
         {
-            var _local_2:int;
-            while (_local_2 < this.playerArray.length) {
-                var _local_3:Point = this.method_753(_local_2);
-                if (_local_3 != null) {
-                    var player:Character = this.playerArray[_local_2];
-                    player.setPos(_local_3.x, _local_3.y);
+            var tempId:int;
+            while (tempId < this.playerArray.length) {
+                var startPos:Point = this.getStartPos(tempId);
+                if (startPos != null) {
+                    var player:Character = this.playerArray[tempId];
+                    player.setPos(startPos.x, startPos.y);
                     this.frontBackground.addChild(player);
                 }
-                _local_2++;
+                tempId++;
             }
         }
 
-        private function method_753(_arg_1:int):Point
+        // deleted _loc2 (startNum)
+        // method_753 = getStartPos
+        private function getStartPos(startNum:int):Point
         {
             var _local_3:Point;
-            var _local_2:int = _arg_1;
             if (Main.server.tournament == 1) {
-                _local_2 = 0;
+                startNum = 0;
             }
-            if (this.var_197[_local_2] != null) {
-                _local_3 = this.var_197[_local_2];
+            if (this.startPosArray[startNum] != null) {
+                _local_3 = this.startPosArray[startNum];
             }
             return _local_3;
         }
@@ -471,7 +476,7 @@ package package_6
                 player.remove();
             }
             this.playerArray = null;
-            this.var_197 = null;
+            this.startPosArray = null;
             super.remove();
         }
 

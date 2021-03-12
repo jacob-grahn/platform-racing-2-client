@@ -25,7 +25,7 @@ package blocks
             if (!frozen) {
                 var _local_2:Point = getSeg();
                 if (player.var_407 != _local_2.x || player.var_366 < _local_2.y || player.var_366 > _local_2.y + 2) {
-                    player.method_216();
+                    player.returnToLastSafeSpot();
                 }
             }
         }

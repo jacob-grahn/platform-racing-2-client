@@ -41,8 +41,8 @@ package blocks
                 var _local_3:Point = getSeg();
                 player.var_407 = _local_3.x;
                 player.var_366 = _local_3.y;
-                player.var_205 = _local_2.x + 15;
-                player.var_224 = _local_2.y + 15;
+                player.lastSafeX = _local_2.x + 15;
+                player.lastSafeY = _local_2.y + 15;
                 this.method_339();
             }
         }

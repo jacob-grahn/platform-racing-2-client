@@ -167,8 +167,8 @@ package blocks
                 player.velY = 0;
                 player.grounded = true;
                 if (this.var_34) {
-                    player.var_205 = point.x + 15;
-                    player.var_224 = point.y;
+                    player.lastSafeX = point.x + 15;
+                    player.lastSafeY = point.y;
                     player.var_407 = this.segX;
                     player.var_366 = this.segY;
                 }

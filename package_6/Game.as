@@ -4,8 +4,10 @@ package package_6
 {
     import com.adobe.crypto.MD5;
     import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
     import flash.events.Event;
+    import flash.geom.Point;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
     import flash.utils.clearInterval;
@@ -16,6 +18,7 @@ package package_6
     import package_8.RemoteCharacter;
     import package_8.LocalCharacter;
     import package_9.Egg;
+    import package_9.Hat;
 
     public class Game extends Course 
     {
@@ -71,6 +74,7 @@ package package_6
             this.cm.defineCommand("setEggSeed", setEggSeed);
             this.cm.defineCommand("addEggs", addEggs);
             this.cm.defineCommand("superBooster", this.superBooster);
+            this.cm.defineCommand('maybeReturnHatToStart', this.maybeReturnHatToStart);
             this.cm.defineCommand("startHatCountdown", this.startHatCountdown);
             this.cm.defineCommand('forceQuit', this.quitGame);
             super.initialize();
@@ -191,6 +195,28 @@ package package_6
             var tempId:int = int(arr[0]);
             var c:Character = playerArray[tempId];
             c.method_576();
+        }
+
+        private function maybeReturnHatToStart(a:Array)
+        {
+            var hat:Hat = looseHats[int(a[0])];
+            if (hat != null) {
+                var hatPos:Point = hat.getPos();
+                var hatRot:int = hat.getRot();
+                hatPos = Data.method_9(hatPos.x, hatPos.y, hatRot);
+                if ((hatPos.y > blockBackground.maxY + 500 && hatRot == 0) || (hatPos.y < blockBackground.minY - 500 && Math.abs(hatRot) == 180) || (hatPos.x > blockBackground.maxX + 500 && hatRot == 90) || (hatPos.x < blockBackground.minX - 500 && hatRot == -90)) {
+                    this.returnHatToStart(hat);
+                }
+            }
+        }
+
+        private function returnHatToStart(hat:Hat)
+        {
+            var info:Object = hat.getInfo();
+            hat.remove();
+            if (info.id < startPosArray.length) {
+                new Hat(startPosArray[info.id].x, startPosArray[info.id].y, 0, info.num, info.color, info.color2, info.id);
+            }
         }
 
         private function startHatCountdown(a:Array = null)
@@ -387,6 +413,7 @@ package package_6
             this.cm.defineCommand("setEggSeed", null);
             this.cm.defineCommand("addEggs", null);
             this.cm.defineCommand("superBooster", null);
+            this.cm.defineCommand('maybeReturnHatToStart', null);
             this.cm.defineCommand('startHatCountdown', null); // this.cancelHatCountdown called farther down
             this.cm.defineCommand('forceQuit', null);
             removeEventListener(Event.ENTER_FRAME, method_85);

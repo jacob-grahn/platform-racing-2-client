@@ -58,7 +58,7 @@ package package_6
             this.hatPicker.y = 65;
             this.hatPicker.scaleX = this.hatPicker.scaleY = 0.7;
             holder.addChild(this.hatPicker);
-            var player1Start:Point = var_197[0];
+            var player1Start:Point = startPosArray[0];
             var_9.setPos(player1Start.x, player1Start.y);
             posX = -player1Start.x;
             posY = -player1Start.y;
@@ -136,7 +136,7 @@ package package_6
             miniMap.clear();
             blockBackground.draw();
             blockBackground.method_578();
-            var player1Start:Point = var_197[0];
+            var player1Start:Point = startPosArray[0];
             var_9.setPos(player1Start.x, player1Start.y);
             var_9.setLife(3);
             miniMap.rotate(0);
