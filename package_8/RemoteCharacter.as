@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_8.RemotePlayer = package_8.class_91
+// package_8.RemoteCharacter = package_8.class_91
 
 package package_8
 {
@@ -19,7 +19,7 @@ package package_8
     import blocks.VanishBlock;
     import blocks.WaterBlock;
 
-    public class RemotePlayer extends Character
+    public class RemoteCharacter extends Character
     {
 
         private var var_19:Array = new Array();
@@ -36,7 +36,7 @@ package package_8
         private var var_189:Number = 10;
         private var var_325:Number = 55;
 
-        public function RemotePlayer(tId:int, dot:MiniMapDot, _arg_3:String, hatId:int, headId:int, bodyId:int, feetId:int)
+        public function RemoteCharacter(tId:int, dot:MiniMapDot, _arg_3:String, hatId:int, headId:int, bodyId:int, feetId:int)
         {
             super(hatId, headId, bodyId, feetId);
             this.tempID = tId;

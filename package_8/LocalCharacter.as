@@ -314,7 +314,7 @@ package package_8
         private function maybeSquash()
         {
             for each (var p:Character in this.course.playerArray) {
-                if (p is RemotePlayer && p.state != "crouch" && p.state != "crouchWalk" && p.x > (x - 20) && p.x < (x + 20) && p.y > (y + 35) && p.y < (y + 65) && p.rotation == this.rotation) {
+                if (p is RemoteCharacter && p.state != "crouch" && p.state != "crouchWalk" && p.x > (x - 20) && p.x < (x + 20) && p.y > (y + 35) && p.y < (y + 65) && p.rotation == this.rotation) {
                     p.changeState("crouch");
                     SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
                     this.socket.write("squash`" + p.tempID + "`" + x + "`" + y);
@@ -328,7 +328,7 @@ package package_8
         private function maybeSting()
         {
             for each (var p:Character in this.course.playerArray) {
-                if (p is RemotePlayer && p.state != "bumped" && p.x > (x - 75) && p.x < (x + 75) && p.y > (y - 100) && p.y < (y + 100)) {
+                if (p is RemoteCharacter && p.state != "bumped" && p.x > (x - 75) && p.x < (x + 75) && p.y > (y - 100) && p.y < (y + 100)) {
                     Main.socket.write('sting`' + p.tempID + '`' + x + '`' + y); // remote tempID, local x, local y
                     this.stingCooldown = 135; // 5 seconds
                 }
