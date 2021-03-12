@@ -89,13 +89,14 @@ package package_6
             }
         }
 
-        public function method_500(_arg_1:Number)
+        // method_500 = addTime
+        public function addTime(secs:Number)
         {
             if (this.racing) {
-                this.startTime = this.startTime - (_arg_1 * 1000);
+                this.startTime -= secs * 1000;
                 this.display(this.method_189());
             } else {
-                this.time = this.time + _arg_1;
+                this.time += secs;
                 this.display(this.method_362());
             }
             if (this.var_480) {

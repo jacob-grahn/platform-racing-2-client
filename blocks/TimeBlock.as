@@ -16,14 +16,14 @@ package blocks
 
         public function TimeBlock()
         {
-            super(Objects.TimeBlockCode);
+            super(Objects.BLOCK_TIME);
         }
 
-        override protected function useSupply(_arg_1:LocalCharacter)
+        override protected function useSupply(player:LocalCharacter)
         {
-            super.useSupply(_arg_1);
+            super.useSupply(player);
             SoundEffects.playSound(new TickTockSound(), 1 * (Settings.soundLevel / 100));
-            Course.course.timer.method_500(10);
+            Course.course.timer.addTime(10);
         }
 
 

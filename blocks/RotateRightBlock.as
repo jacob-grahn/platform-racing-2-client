@@ -12,7 +12,7 @@ package blocks
 
         public function RotateRightBlock()
         {
-            super(Objects.RotateRightBlockCode);
+            super(Objects.BLOCK_ROTATE_RIGHT);
             dir = "right";
         }
 

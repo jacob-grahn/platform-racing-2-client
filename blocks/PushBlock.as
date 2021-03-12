@@ -15,31 +15,31 @@ package blocks
 
         public function PushBlock()
         {
-            super(Objects.PushBlockCode);
+            super(Objects.BLOCK_PUSH);
             var_34 = false;
         }
 
-        override public function onStand(_arg_1:LocalCharacter)
+        override public function onStand(player:LocalCharacter)
         {
-            super.onStand(_arg_1);
+            super.onStand(player);
             this.localActivate("down");
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(player:LocalCharacter)
         {
-            super.onBump(_arg_1);
+            super.onBump(player);
             this.localActivate("up");
         }
 
-        override public function onLeftHit(_arg_1:LocalCharacter)
+        override public function onLeftHit(player:LocalCharacter)
         {
-            super.onLeftHit(_arg_1);
+            super.onLeftHit(player);
             this.localActivate("right");
         }
 
-        override public function onRightHit(_arg_1:LocalCharacter)
+        override public function onRightHit(player:LocalCharacter)
         {
-            super.onRightHit(_arg_1);
+            super.onRightHit(player);
             this.localActivate("left");
         }
 

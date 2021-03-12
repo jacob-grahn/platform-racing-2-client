@@ -38,7 +38,7 @@ package package_6
         // _loc4 = finishBox
         public function method_680(blockCode:int, blockX:Number, blockY:Number)
         {
-            if (blockCode == Objects.FinishBlockCode) {
+            if (blockCode == Objects.BLOCK_FINISH) {
                 var finishBox:MiniMapFinishGraphic = new MiniMapFinishGraphic();
                 finishBox.x = blockX + 15;
                 finishBox.y = blockY + 15;

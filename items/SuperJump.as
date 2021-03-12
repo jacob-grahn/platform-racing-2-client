@@ -12,16 +12,16 @@ package items
     public class SuperJump extends Item 
     {
 
-        public function SuperJump(r:LocalCharacter)
+        public function SuperJump(lc:LocalCharacter)
         {
-            super(r);
+            super(lc);
         }
 
         override public function useItem()
         {
-            if (!racer.crouching) {
-                SoundEffects.playSound(new SuperJumpSound(), 1 * (Settings.soundLevel / 100));
-                racer.velY = racer.velY - 25;
+            if (!character.crouching) {
+                SoundEffects.playSound(new SuperJumpSound(), Settings.soundLevel / 100);
+                character.velY -= 25;
                 super.useItem();
             }
         }

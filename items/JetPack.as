@@ -13,12 +13,12 @@ package items
 
         private var var_592:Boolean = false;
 
-        public function JetPack(r:LocalCharacter)
+        public function JetPack(lc:LocalCharacter)
         {
-            super(r);
+            super(lc);
             class_33.setNumber("totFuel", 200);
             class_33.setNumber("fuel", 200);
-            r.setAmmo(3);
+            lc.setAmmo(3);
         }
 
         // _loc2 = totFuel
@@ -27,29 +27,29 @@ package items
         {
             super.setSpace(space);
             if (_arg_1) {
-                if (!racer.crouching) {
-                    if (racer.velY > -5) {
-                        racer.velY = racer.velY - 1.25;
+                if (!character.crouching) {
+                    if (character.velY > -5) {
+                        character.velY = character.velY - 1.25;
                     } else {
-                        racer.velY = racer.velY - 0.5;
+                        character.velY = character.velY - 0.5;
                     }
                 }
                 var totFuel:Number = class_33.getNumber("totFuel");
                 var remainingFuel:Number = class_33.getNumber("fuel");
                 remainingFuel--;
                 class_33.setNumber("fuel", remainingFuel);
-                racer.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
+                character.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
                 if (remainingFuel <= 0) {
                     super.useItem();
                 }
             }
             if (_arg_1 != this.var_592) {
                 this.var_592 = _arg_1;
-                if (racer != null) {
+                if (character != null) {
                     if (_arg_1) {
-                        racer.beginJet();
+                        character.beginJet();
                     } else {
-                        racer.endJet();
+                        character.endJet();
                     }
                 }
             }
@@ -61,7 +61,7 @@ package items
 
         override public function remove()
         {
-            racer.endJet();
+            character.endJet();
             super.remove();
         }
 

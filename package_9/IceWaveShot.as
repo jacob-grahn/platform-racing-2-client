@@ -44,41 +44,37 @@ package package_9
         override protected function move()
         {
             super.move();
-            alpha = (((Math.random() * life) / 100) + 0.25);
+            alpha = (Math.random() * life / 100) + 0.25;
         }
 
         override protected function hitBlock(_arg_1:Block)
         {
-            var _local_2:Number;
-            var _local_3:Number;
-            var _local_4:Number;
-            var _local_5:Number;
-            if (((!(_arg_1 is IceBlock)) && (!(_arg_1.getCode() == Objects.IceBlockCode)))) {
+            if (!(_arg_1 is IceBlock) && _arg_1.getCode() != Objects.BLOCK_ICE) {
                 _arg_1.freeze(true);
-                if (((var_168 < 10) && (life > 10))) {
-                    _local_2 = (this.var_322 - 60);
-                    _local_3 = (this.var_322 + 60);
-                    _local_4 = class_74.numLimit((this.var_278 + 30), _local_2, _local_3);
-                    _local_5 = class_74.numLimit((this.var_278 - 30), _local_2, _local_3);
+                if (var_168 < 10 && life > 10) {
+                    var _local_2:Number = this.var_322 - 60;
+                    var _local_3:Number = this.var_322 + 60;
+                    var _local_4:Number = class_74.numLimit(this.var_278 + 30, _local_2, _local_3);
+                    var _local_5:Number = class_74.numLimit(this.var_278 - 30, _local_2, _local_3);
                     if (_local_4 != this.var_278) {
-                        new IceWaveShot(x, y, _local_4, var_377, shooterID, this.var_322, (life / 2));
+                        new IceWaveShot(x, y, _local_4, var_377, shooterID, this.var_322, life / 2);
                     }
                     if (_local_5 != this.var_278) {
-                        new IceWaveShot(x, y, _local_5, var_377, shooterID, this.var_322, (life / 2));
+                        new IceWaveShot(x, y, _local_5, var_377, shooterID, this.var_322, life / 2);
                     }
-                    life = (life - 5);
+                    life -= 5;
                     this.method_219();
                 }
             }
         }
 
-        override protected function hitPlayer(_arg_1:Character)
+        // _loc2 = player
+        override protected function hitPlayer(p:Character)
         {
-            var _local_2:LocalCharacter;
-            if ((_arg_1 is LocalCharacter)) {
-                _local_2 = LocalCharacter(_arg_1);
-                if (!_local_2.isFrozen()) {
-                    _local_2.freeze();
+            if (p is LocalCharacter) {
+                var player:LocalCharacter = LocalCharacter(p);
+                if (!player.isFrozen()) {
+                    player.freeze();
                 }
             }
         }

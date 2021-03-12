@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// levelEditor.PlaceableObject = levelEditor.class_130
+// levelEditor.DrawObject = levelEditor.class_130
 
 package levelEditor
 {
@@ -16,7 +16,7 @@ package levelEditor
     import flash.events.MouseEvent;
     import flash.geom.Point;
 
-    public class PlaceableObject extends Removable 
+    public class DrawObject extends Removable 
     {
 
         private var var_621:Number;
@@ -31,29 +31,29 @@ package levelEditor
         private var deleteButton:DeleteButton;
         private var resizeButton:ResizeButton; // var_68
         public var m:DisplayObject;
-        private var var_94:Sprite = new Sprite();
+        private var highlightOutline:Sprite = new Sprite(); // var_94
         protected var editor:LevelEditor = LevelEditor.editor;
         protected var stageRef:Stage = Main.stage;
         private var holder:Sprite;
         public var displayCode:int;
-        protected var var_321:Number = 1;
-        protected var var_307:Number = 1;
+        protected var buttonScaleX:Number = 1; // var_321
+        protected var buttonScaleY:Number = 1; // var_307
 
-        public function PlaceableObject(_arg_1:int, _arg_2:Number, _arg_3:Number)
+        public function DrawObject(objId:int, objX:Number, objY:Number)
         {
-            this.displayCode = _arg_1;
-            x = _arg_2;
-            y = _arg_3;
-            this.m = Objects.getFromCode(_arg_1);
+            this.displayCode = objId;
+            x = objX;
+            y = objY;
+            this.m = Objects.getFromCode(this.displayCode);
             if (this.m is StartBlock) {
                 this.deleteable = false;
             }
             if (this is TextObject) {
                 this.textObj = true;
             }
-            this.method_31();
+            this.recordRealDimensions();
             addChild(this.m);
-            this.m.addEventListener(MouseEvent.MOUSE_DOWN, this.method_316);
+            this.m.addEventListener(MouseEvent.MOUSE_DOWN, this.beginDrag);
             addEventListener(Event.ADDED, this.addedHandler, false, 0, true);
         }
 
@@ -62,22 +62,23 @@ package levelEditor
             this.holder = Sprite(parent);
         }
 
-        protected function method_316(_arg_1:MouseEvent)
+        // method_316 = beginDrag
+        protected function beginDrag(e:MouseEvent)
         {
-            this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.method_203);
+            this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.onDrag);
             this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.endDrag);
             this.stageRef.focus = this.stageRef;
-            var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
-            _local_2 = this.holder.globalToLocal(_local_2);
+            var _local_2:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
             this.var_621 = x - _local_2.x;
             this.var_603 = y - _local_2.y;
             this.var_625 = x;
             this.var_582 = y;
-            parent.swapChildren(this, parent.getChildAt((this.holder.numChildren - 1)));
+            parent.swapChildren(this, parent.getChildAt(this.holder.numChildren - 1));
             alpha = 0.75;
         }
 
-        protected function method_31()
+        // method_31 = recordRealDimensions
+        protected function recordRealDimensions()
         {
             var _local_1:Number = scaleX;
             var _local_2:Number = scaleY;
@@ -89,25 +90,26 @@ package levelEditor
             scaleY = _local_2;
         }
 
-        private function method_203(_arg_1:MouseEvent)
+        // _loc2 = newPos
+        // method_203 = onDrag
+        private function onDrag(e:MouseEvent)
         {
-            var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
-            _local_2 = this.holder.globalToLocal(_local_2);
-            _local_2.x = _local_2.x + this.var_621;
-            _local_2.y = _local_2.y + this.var_603;
-            x = _local_2.x;
-            y = _local_2.y;
+            var newPos:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
+            newPos.x = newPos.x + this.var_621;
+            newPos.y = newPos.y + this.var_603;
+            x = newPos.x;
+            y = newPos.y;
         }
 
-        protected function endDrag(_arg_1:MouseEvent)
+        protected function endDrag(e:MouseEvent)
         {
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_203);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.onDrag);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.endDrag);
             alpha = 1;
             x = Math.round(x);
             y = Math.round(y);
             if (x != this.var_625 || y == this.var_582) {
-                this.editor.cur.method_761(this);
+                this.editor.cur.recordMove(this);
             }
             this.holder.addChild(this);
             this.select();
@@ -115,17 +117,17 @@ package levelEditor
 
         public function select()
         {
-            this.method_141();
-            addChild(this.var_94);
+            this.showHighlight();
+            addChild(this.highlightOutline);
             this.stageRef.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
             if (this.deleteable) {
                 if (!this.textObj) {
                     this.stageRef.addEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);
                 }
-                this.method_705();
+                this.showDeleteButton();
             }
             if (this.resizable) {
-                this.method_512();
+                this.showResizeButton();
             }
             this.positionInternals();
         }
@@ -134,9 +136,9 @@ package levelEditor
         {
             this.stageRef.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
             this.stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);
-            removeChild(this.var_94);
-            this.method_469();
-            this.method_346();
+            removeChild(this.highlightOutline);
+            this.hideDeleteButton();
+            this.hideResizeButton();
         }
 
         protected function mouseDownHandler(_arg_1:MouseEvent)
@@ -147,32 +149,31 @@ package levelEditor
         protected function onDelPress(e:KeyboardEvent)
         {
             if (this.deleteable === true && (e.keyCode === 46 || e.keyCode === 8)) {
-                this.method_299();
+                this.deleteObject();
             }
         }
 
-        protected function method_299(e:MouseEvent = null)
+        // method_299 = deleteObject
+        protected function deleteObject(e:MouseEvent = null)
         {
             this.editor.cur.recordDelete(this);
             this.remove();
         }
 
-        // method_412 = onResizeDown
-        private function onResizeDown(e:MouseEvent)
+        // method_412 = onResizePress
+        private function onResizePress(e:MouseEvent)
         {
             this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.resize);
             this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.onResizeUp);
         }
 
-        private function resize(_arg_1:MouseEvent)
+        private function resize(e:MouseEvent)
         {
-            var _local_4:Number;
-            var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
-            _local_2 = this.holder.globalToLocal(_local_2);
-            var _local_3:Number = (_local_2.x - x);
-            _local_4 = (_local_2.y - y);
-            scaleX = (_local_3 * (100 / this.startWidth)) / 100;
-            scaleY = (_local_4 * (100 / this.startHeight)) / 100;
+            var _local_2:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
+            var _local_3:Number = _local_2.x - x;
+            var _local_4:Number = _local_2.y - y;
+            scaleX = _local_3 * (100 / this.startWidth) / 100;
+            scaleY = _local_4 * (100 / this.startHeight) / 100;
         }
 
         // method_146 = onResizeUp
@@ -183,92 +184,99 @@ package levelEditor
             this.select();
             scaleX = Math.round(scaleX * 100) / 100;
             scaleY = Math.round(scaleY * 100) / 100;
-            this.editor.cur.method_686(this);
+            this.editor.cur.recordResize(this);
         }
 
-        private function method_705()
+        // method_705 = showDeleteButton
+        private function showDeleteButton()
         {
             this.deleteButton = new DeleteButton();
-            this.deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, this.method_299, false, 0, true);
+            this.deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, this.deleteObject, false, 0, true);
             addChild(this.deleteButton);
         }
 
-        protected function method_469()
+        // method_469 = hideDeleteButton
+        protected function hideDeleteButton()
         {
             if (this.deleteButton != null) {
-                this.deleteButton.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_299);
+                this.deleteButton.removeEventListener(MouseEvent.MOUSE_DOWN, this.deleteObject);
                 removeChild(this.deleteButton);
                 this.deleteButton = null;
             }
         }
 
-        private function method_512()
+        // method_512 = showResizeButton
+        private function showResizeButton()
         {
             this.resizeButton = new ResizeButton();
             addChild(this.resizeButton);
-            this.resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onResizeDown, false, 0, true);
+            this.resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onResizePress, false, 0, true);
         }
 
-        protected function method_346()
+        // method_346 = hideResizeButton
+        protected function hideResizeButton()
         {
             if (this.resizeButton != null) {
-                this.resizeButton.removeEventListener(MouseEvent.MOUSE_DOWN, this.onResizeDown);
+                this.resizeButton.removeEventListener(MouseEvent.MOUSE_DOWN, this.onResizePress);
                 removeChild(this.resizeButton);
                 this.resizeButton = null;
             }
         }
 
-        private function method_617()
+        // method_617 = setButtonScale
+        private function setButtonScale()
         {
-            this.var_321 = (1 / scaleX) * (1 / parent.scaleX) * (1 / parent.parent.scaleX) * (1 / parent.parent.parent.scaleX);
-            this.var_307 = (1 / scaleY) * (1 / parent.scaleY) * (1 / parent.parent.scaleY) * (1 / parent.parent.parent.scaleY);
+            this.buttonScaleX = (1 / scaleX) * (1 / parent.scaleX) * (1 / parent.parent.scaleX) * (1 / parent.parent.parent.scaleX);
+            this.buttonScaleY = (1 / scaleY) * (1 / parent.scaleY) * (1 / parent.parent.scaleY) * (1 / parent.parent.parent.scaleY);
         }
 
         protected function positionInternals()
         {
-            this.method_617();
+            this.setButtonScale();
             if (this.deleteButton != null) {
                 this.deleteButton.x = 0;
                 this.deleteButton.y = this.m.height;
-                this.deleteButton.scaleX = this.var_321;
-                this.deleteButton.scaleY = this.var_307;
+                this.deleteButton.scaleX = this.buttonScaleX;
+                this.deleteButton.scaleY = this.buttonScaleY;
             }
             if (this.resizeButton != null) {
                 this.resizeButton.x = this.m.width;
                 this.resizeButton.y = this.m.height;
-                this.resizeButton.scaleX = this.var_321;
-                this.resizeButton.scaleY = this.var_307;
+                this.resizeButton.scaleX = this.buttonScaleX;
+                this.resizeButton.scaleY = this.buttonScaleY;
             }
         }
 
-        protected function method_141()
+        // method_141 = showHighlight
+        protected function showHighlight()
         {
-            this.var_94.graphics.clear();
-            this.var_94.graphics.lineStyle(3, 0xFFFFFF, 1, false, "none");
-            this.var_94.graphics.moveTo(0, 0);
-            this.var_94.graphics.lineTo(0, this.m.height);
-            this.var_94.graphics.lineTo(this.m.width, this.m.height);
-            this.var_94.graphics.lineTo(this.m.width, 0);
-            this.var_94.graphics.lineTo(0, 0);
+            this.highlightOutline.graphics.clear();
+            this.highlightOutline.graphics.lineStyle(3, 0xFFFFFF, 1, false, "none");
+            this.highlightOutline.graphics.moveTo(0, 0);
+            this.highlightOutline.graphics.lineTo(0, this.m.height);
+            this.highlightOutline.graphics.lineTo(this.m.width, this.m.height);
+            this.highlightOutline.graphics.lineTo(this.m.width, 0);
+            this.highlightOutline.graphics.lineTo(0, 0);
         }
 
-        protected function method_345()
+        // method_345 = hideHighlight
+        protected function hideHighlight()
         {
-            this.var_94.graphics.clear();
+            this.highlightOutline.graphics.clear();
         }
 
         override public function remove()
         {
             removeEventListener(Event.ADDED, this.addedHandler);
-            this.m.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_316);
+            this.m.removeEventListener(MouseEvent.MOUSE_DOWN, this.beginDrag);
             this.stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.endDrag);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_203);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.onDrag);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.resize);
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.onResizeUp);
-            this.method_346();
-            this.method_469();
+            this.hideResizeButton();
+            this.hideDeleteButton();
             LevelEditor.editor.cur.method_771(this);
             super.remove();
         }

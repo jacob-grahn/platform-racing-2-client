@@ -33,7 +33,7 @@ package package_8
 
         private var var_387:class_127;
         private var var_140:SoundChannel;
-        public var m:CharacterGraphic = new CharacterGraphic();
+        public var m:PlayerGraphic = new PlayerGraphic();
         public var var_301:MovieClip;
         private var characterStatesArray:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim); // var_217
         public var curWeapon:MovieClip;
@@ -71,7 +71,7 @@ package package_8
         public var tempID:int;
         protected var var_448:int = 5;
         protected var var_215:int = 0;
-        protected var var_304:Boolean = false;
+        protected var fadeOutStarted:Boolean = false; // var_304
         public var removed:Boolean = false; // var_214
         public var var_4:class_20;
         private var var_375:class_125;
@@ -402,7 +402,7 @@ package package_8
         private function method_106(_arg_1:Event)
         {
             var _local_2:Number = this.var_269 % 8;
-            if (!this.var_304) {
+            if (!this.fadeOutStarted) {
                 if (_local_2 >= 4) {
                     alpha = 0.5;
                 } else {
@@ -543,24 +543,26 @@ package package_8
             }
         }
 
-        protected function method_380():Object
+        // _loc1 = hatNum
+        // _loc2 = hatColor
+        // _loc3 = hatSlot
+        // method_380 = getHighestHat
+        protected function getHighestHat():Object
         {
-            var _local_1:int;
-            var _local_2:int;
-            var _local_3:int = 4;
-            while (_local_3 >= 1) {
-                if (this["hat" + _local_3] != 1) {
-                    _local_1 = this["hat" + _local_3];
-                    _local_2 = this["hat" + _local_3 + "Color"];
-                    this["hat" + _local_3] = 1;
+            var hatSlot:int = 4;
+            while (hatSlot >= 1) {
+                if (this["hat" + hatSlot] != 1) {
+                    var hatNum:int = this["hat" + hatSlot];
+                    var hatColor:int = this["hat" + hatSlot + "Color"];
+                    this["hat" + hatSlot] = 1;
                     break;
                 }
-                _local_3--;
+                hatSlot--;
             }
             this.applyAppearance();
             var _local_4:Object = new Object();
-            _local_4.hatNum = _local_1;
-            _local_4.hatColor = _local_2;
+            _local_4.hatNum = hatNum;
+            _local_4.hatColor = hatColor;
             return _local_4;
         }
 
@@ -585,7 +587,7 @@ package package_8
 
         private function fadeOut(_arg_1:Event)
         {
-            alpha = (alpha - 0.02);
+            alpha -= 0.02;
             if (alpha <= 0) {
                 this.remove();
             }
@@ -594,8 +596,8 @@ package package_8
         public function beginRemove()
         {
             this.removeListeners();
-            if (!this.var_304 && !this.removed) {
-                this.var_304 = true;
+            if (!this.fadeOutStarted && !this.removed) {
+                this.fadeOutStarted = true;
                 addEventListener(Event.ENTER_FRAME, this.fadeOut, false, 0, true);
             }
         }
@@ -613,7 +615,7 @@ package package_8
             this.method_190();
             this.var_387.remove();
             if (!this.removed) {
-                this.removed = this.var_304 = true;
+                this.removed = this.fadeOutStarted = true;
                 removeEventListener(Event.ENTER_FRAME, this.fadeOut);
                 if (this.var_140 != null) {
                     this.var_140.stop();

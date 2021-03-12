@@ -39,10 +39,10 @@ package com.jiggmin.data
             return ret;
         }
 
-        // convert string to uppercase first 
+        // capitalize first letter of string (and convert the rest to lowercase)
         public static function ucfirst(s:String)
         {
-            return (s.substr(0,1).toUpperCase() + (s.substr(1, s.length)).toLowerCase());
+            return s.substr(0,1).toUpperCase() + s.substr(1, s.length).toLowerCase();
         }
 
         // method_26 = getMS
@@ -149,7 +149,7 @@ package com.jiggmin.data
         {
             if (s != null) {
                 s = Data.trimWhitespace(s);
-                s = Data.escapeChars(s);
+                s = Data.cleanHTML(s);
                 s = Data.filterSwears(s);
             }
             return s;
@@ -159,12 +159,12 @@ package com.jiggmin.data
         public static function escapeString(s:String, preserveNewLine:Boolean = false):String
         {
             s = Data.trimWhitespace(s, preserveNewLine);
-            s = Data.escapeChars(s);
+            s = Data.cleanHTML(s);
             return s;
         }
 
-        // method_88 = escapeChars
-        public static function escapeChars(s:String):String
+        // method_88 = cleanHTML
+        public static function cleanHTML(s:String):String
         {
             s = s.replace(/&/gi, "&amp;");
             s = s.replace(/>/gi, "&gt;");
@@ -292,39 +292,34 @@ package com.jiggmin.data
         {
             if (value > maximum) {
                 value = maximum;
-            }
-            if (value < minimum) {
+            } else if (value < minimum) {
                 value = minimum;
             }
             return value;
         }
 
-        public static function method_9(_arg_1:Number, _arg_2:Number, _arg_3:Number):Point
+
+        // removed _loc6 (combined w/ return)
+        public static function method_9(posX:Number, posY:Number, rot:Number):Point
         {
-            var _local_4:int = _arg_1;
-            var _local_5:int = _arg_2;
-            if (_arg_3 > 180) {
-                _arg_3 = -360 + _arg_3;
+            var _local_4:int = posX;
+            var _local_5:int = posY;
+            if (rot > 180) {
+                rot = -360 + rot;
+            } else if (rot < -180) {
+                rot = 360 + rot;
             }
-            if (_arg_3 < -180) {
-                _arg_3 = 360 + _arg_3;
+            if (rot == 90) {
+                _local_4 = posY;
+                _local_5 = -posX;
+            } else if (Math.abs(rot) == 180) {
+                _local_4 = -posX;
+                _local_5 = -posY;
+            } else if (rot == -90) {
+                _local_4 = -posY;
+                _local_5 = posX;
             }
-            if (_arg_3 == 90) {
-                _local_4 = _arg_2;
-                _local_5 = -_arg_1;
-            } else {
-                if (Math.abs(_arg_3) == 180) {
-                    _local_4 = -_arg_1;
-                    _local_5 = -_arg_2;
-                } else {
-                    if (_arg_3 == -90) {
-                        _local_4 = -_arg_2;
-                        _local_5 = _arg_1;
-                    }
-                }
-            }
-            var _local_6:Point = new Point(_local_4, _local_5);
-            return _local_6;
+            return new Point(_local_4, _local_5);
         }
 
         public static function method_852(_arg_1:int):Object
@@ -346,15 +341,13 @@ package com.jiggmin.data
 
         public static function method_439(_arg_1:int=8):String
         {
-            var _local_6:int;
-            var _local_7:String;
             var _local_2:* = "0123456789_!@#$%&*()-=+/abcdfghjkmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_!@#$%&*()-=+/";
             var _local_3:int = _local_2.length;
             var _local_4:* = "";
             var _local_5:int;
             while (_local_5 < _arg_1) {
-                _local_6 = int(Math.floor(Math.random() * _local_3));
-                _local_7 = _local_2.substr(_local_6, 1);
+                var _local_6:int = int(Math.floor(Math.random() * _local_3));
+                var _local_7:String = _local_2.substr(_local_6, 1);
                 _local_4 = _local_4 + _local_7;
                 _local_5++;
             }

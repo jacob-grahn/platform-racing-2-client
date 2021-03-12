@@ -64,7 +64,7 @@ package com.jiggmin.ColorPicker
             this.var_124.x = this.var_69.x + this.var_69.width + 10;
             this.var_124.y = this.var_69.y;
             addChild(this.var_124);
-            _local_2 = this.method_141(15, 60);
+            _local_2 = this.showHighlight(15, 60);
             _local_2.x = this.var_124.x;
             _local_2.y = this.var_124.y;
             addChild(_local_2);
@@ -87,7 +87,7 @@ package com.jiggmin.ColorPicker
             this.var_121.x = 115;
             this.var_121.y = 185;
             addChild(this.var_121);
-            _local_3 = this.method_141(120, 25);
+            _local_3 = this.showHighlight(120, 25);
             _local_3.x = this.var_121.x;
             _local_3.y = this.var_121.y;
             addChild(_local_3);
@@ -448,14 +448,14 @@ package com.jiggmin.ColorPicker
 
         private function method_532(_arg_1:DisplayObject):Sprite
         {
-            var _local_2:Sprite = this.method_141(Math.round(_arg_1.width), Math.round(_arg_1.height));
+            var _local_2:Sprite = this.showHighlight(Math.round(_arg_1.width), Math.round(_arg_1.height));
             _local_2.x = _arg_1.x;
             _local_2.y = _arg_1.y;
             addChild(_local_2);
             return _local_2;
         }
 
-        private function method_141(_arg_1:int, _arg_2:int):Sprite
+        private function showHighlight(_arg_1:int, _arg_2:int):Sprite
         {
             var _local_3:Sprite = new Sprite();
             _local_3.graphics.lineStyle(1, 0x333333, 1, true);

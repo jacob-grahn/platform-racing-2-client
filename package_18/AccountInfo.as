@@ -31,7 +31,7 @@ package package_18
 
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
-        private var var_190:CharacterDisplay;
+        private var var_190:PlayerDisplay;
         private var stageRef:Stage = Main.stage;
         private var m:AccountInfoGraphic = new AccountInfoGraphic();
         private var rankTokensUsed:int = 0; // var_117
@@ -133,7 +133,7 @@ package package_18
             this.statsSelect.x = 20;
             this.statsSelect.y = 207;
             addChild(this.statsSelect);
-            this.var_190 = new CharacterDisplay(this.character, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
+            this.var_190 = new PlayerDisplay(this.character, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
             this.var_190.x = 23;
             this.var_190.y = (58 + 37);
             addChild(this.var_190);

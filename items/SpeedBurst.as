@@ -13,9 +13,9 @@ package items
         private var used:Boolean = false; // var_522
         public var duration:Number = 5000; // var_335
 
-        public function SpeedBurst(r:LocalCharacter)
+        public function SpeedBurst(lc:LocalCharacter)
         {
-            super(r);
+            super(lc);
         }
 
         override public function useItem()
@@ -23,9 +23,9 @@ package items
             if (!this.used) {
                 this.used = true;
                 this.expireListener = setTimeout(this.slowDown, this.duration);
-                racer.accel = racer.accel * 2;
-                racer.maxVelX = racer.maxVelX * 2;
-                racer.beginSparkles(this.duration);
+                character.accel = character.accel * 2;
+                character.maxVelX = character.maxVelX * 2;
+                character.beginSparkles(this.duration);
             }
         }
 
@@ -37,13 +37,13 @@ package items
         // method_699 = slowDown
         private function slowDown()
         {
-            racer.setItem(0);
+            character.setItem(0);
         }
 
         override public function remove()
         {
-            racer.endSparkles(this.used);
-            racer.resetStats();
+            character.endSparkles(this.used);
+            character.resetStats();
             clearTimeout(this.expireListener);
             super.remove();
         }

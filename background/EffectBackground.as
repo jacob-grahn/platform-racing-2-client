@@ -14,7 +14,7 @@ package background
     import package_9.IceWaveShot;
     import sounds.SoundEffects;
 
-    public class EffectBackground extends class_75 
+    public class EffectBackground extends Background 
     {
 
         public static var instance:EffectBackground; // var_276

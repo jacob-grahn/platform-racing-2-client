@@ -9,11 +9,11 @@ package package_9
     {
 
         private var m:StingGraphic = new StingGraphic();
-        private var c:Character; // var_5
+        private var character:Character; // var_5
 
-        public function Sting(r:Character, dir:String = '')
+        public function Sting(c:Character, dir:String = '')
         {
-            this.c = r;
+            this.character = c;
             if (dir === 'right') {
                 this.m.removeChild(this.m.leftSting);
             } else if (dir === 'left') {
@@ -36,8 +36,8 @@ package package_9
 
         private function pos()
         {
-            x = this.c.x;
-            y = this.c.y;
+            x = this.character.x;
+            y = this.character.y;
         }
 
         override public function remove()
@@ -45,7 +45,7 @@ package package_9
             removeEventListener(Event.ENTER_FRAME, this.go);
             removeChild(this.m);
             this.m = null;
-            this.c = null;
+            this.character = null;
             super.remove();
         }
 

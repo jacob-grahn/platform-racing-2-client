@@ -13,6 +13,7 @@ package package_23
     {
 
         private var m:PlayersTabListGraphic = new PlayersTabListGraphic();
+        private var names:Array = new Array();
         private var sortInterval:uint; // var_570
         private var sortMode:String = "rank"; // var_229
         private var sortOrder:String = 'desc';
@@ -48,6 +49,13 @@ package package_23
 
         protected function method_138(name:String, group:String, rank:Number, hats:int, status:String="")
         {
+            // refuse duplicates
+            if (this.names.indexOf(name) > -1) {
+                return;
+            }
+            this.names.push(name);
+
+            // add to list
             var listName:PlayersTabListItemInfo = new PlayersTabListItemInfo(name, group, rank, hats, status);
             super.method_179(listName);
             this.updateSort = true;

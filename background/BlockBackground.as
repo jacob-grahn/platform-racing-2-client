@@ -28,14 +28,11 @@ package background
 
         protected function addStartPositions()
         {
-            var _local_1:Number;
-            var _local_2:Number;
-            var _local_3:Number = 0;
+            var _local_3:Number = 111;
             var _local_4:Number = 30;
-            _local_3 = 111;
             while (_local_3 <= 114) {
-                _local_1 = ((_local_3 * _local_4) + 10000);
-                _local_2 = ((_local_4 * 2) + 10000);
+                var _local_1:Number = (_local_3 * _local_4) + 10000;
+                var _local_2:Number = (_local_4 * 2) + 10000;
                 this.addObject(_local_3, _local_1, _local_2);
                 _local_3++;
             }
@@ -50,13 +47,11 @@ package background
 
         override protected function attachObject(_arg_1:int, _arg_2:int, _arg_3:int)
         {
-            if (_arg_1 < 100) {
-                _arg_1 = (_arg_1 + 100);
-            }
+            _arg_1 += _arg_1 < 100 ? 100 : 0;
             var _local_4:BlockObject = new BlockObject(_arg_1, _arg_2, _arg_3);
             var_10.push(_local_4);
             this.var_323++;
-            var _local_5:Point = new Point(Math.round((_arg_2 / 30)), Math.round((_arg_3 / 30)));
+            var _local_5:Point = new Point(Math.round(_arg_2 / 30), Math.round(_arg_3 / 30));
             this.method_53(_local_4, _local_5);
             if (method_32(_local_5.x, _local_5.y)) {
                 addChild(_local_4);
@@ -68,7 +63,7 @@ package background
             super.setPos(_arg_1, _arg_2);
             var _local_3:Point = Data.method_9(GamePage.course.posX, GamePage.course.posY, rotation);
             var _local_4:Point = this.getSegFromPos(_local_3.x, _local_3.y);
-            method_118(-(_local_4.x), -(_local_4.y), 11, 9, 8, 6, this, this.blockArray);
+            method_118(-_local_4.x, -_local_4.y, 11, 9, 8, 6, this, this.blockArray);
         }
 
         override public function undo()
@@ -86,30 +81,34 @@ package background
             this.blockArray[_arg_2.x][_arg_2.y] = _arg_1;
         }
 
-        public function getBlockAt(_arg_1:Number, _arg_2:Number):BlockObject
+        // deleted _loc3 (simplified return)
+        // _loc4 = segX
+        // _loc5 = segY
+        // _loc6 = blockColumn (block column)
+        public function getBlockAt(posX:Number, posY:Number):BlockObject
         {
-            var _local_3:BlockObject;
-            var _local_4:int = int(Math.round((_arg_1 / 30)));
-            var _local_5:int = int(Math.round((_arg_2 / 30)));
-            var _local_6:Array = this.blockArray[_local_4];
-            if (_local_6 != null) {
-                _local_3 = BlockObject(_local_6[_local_5]);
-            } else {
-                _local_3 = null;
+            var segX:int = int(Math.round(posX / 30));
+            var segY:int = int(Math.round(posY / 30));
+            var blockColumn:Array = this.blockArray[segX];
+            if (blockColumn != null) {
+                return BlockObject(blockColumn[segY]);
             }
-            return (_local_3);
+            return null;
         }
 
-        public function isOpen(_arg_1:Number, _arg_2:Number):Boolean
+        // deleted _loc3 (simplified return)
+        // _loc4 = segX
+        // _loc5 = segY
+        // _loc6 = block
+        public function isOpen(posX:Number, posY:Number):Boolean
         {
-            var _local_3:Boolean = true;
-            var _local_4:int = int(Math.round((_arg_1 / 30)));
-            var _local_5:int = int(Math.round((_arg_2 / 30)));
-            var _local_6:BlockObject = this.getBlockFromSeg(_local_4, _local_5);
-            if (_local_6 != null) {
-                _local_3 = false;
+            var segX:int = int(Math.round(posX / 30));
+            var segY:int = int(Math.round(posY / 30));
+            var block:BlockObject = this.getBlockFromSeg(segX, segY);
+            if (block != null) {
+                return false;
             }
-            return (_local_3);
+            return true;
         }
 
         // _loc4 = pos
@@ -141,17 +140,18 @@ package background
             } else {
                 _local_3 = null;
             }
-            return (_local_3);
+            return _local_3;
         }
 
-        override public function removeObjectsTouchingPoint(_arg_1:Number, _arg_2:Number)
+        // _loc3 = point
+        // _loc4 = block
+        override public function removeObjectsTouchingPoint(x:Number, y:Number)
         {
-            var _local_3:Point = new Point(_arg_1, _arg_2);
-            _local_3 = this.globalToLocal(_local_3);
-            var _local_4:BlockObject = this.getBlockAt((_local_3.x - 15), (_local_3.y - 15));
-            if (((!(_local_4 == null)) && (_local_4.deleteable))) {
-                recordDelete(_local_4);
-                _local_4.remove();
+            var point:Point = this.globalToLocal(new Point(x, y));
+            var block:BlockObject = this.getBlockAt(point.x - 15, point.y - 15);
+            if (block != null && block.deleteable) {
+                recordDelete(block);
+                block.remove();
             }
         }
 
@@ -172,26 +172,31 @@ package background
         {
         }
 
-        public function getSegFromPos(_arg_1:Number, _arg_2:Number):Point
+        // _loc3 = segX
+        // _loc4 = segY
+        // deleted _loc5 (combined w/ return)
+        public function getSegFromPos(posX:Number, posY:Number):Point
         {
-            var _local_3:Number = Math.floor((_arg_1 / this.segSize));
-            var _local_4:Number = Math.floor((_arg_2 / this.segSize));
-            var _local_5:Point = new Point(_local_3, _local_4);
-            return (_local_5);
+            var segX:Number = Math.floor(posX / this.segSize);
+            var segY:Number = Math.floor(posY / this.segSize);
+            return new Point(segX, segY);
         }
 
-        public function method_497(_arg_1:Number, _arg_2:Number):Point
+        // _loc3 = posX
+        // _loc4 = posY
+        // deleted _loc5 (combined w/ return)
+        // method_497 = getPosFromSeg
+        public function getPosFromSeg(segX:Number, segY:Number):Point
         {
-            var _local_3:Number = (_arg_1 * this.segSize);
-            var _local_4:Number = (_arg_2 * this.segSize);
-            var _local_5:Point = new Point(_local_3, _local_4);
-            return (_local_5);
+            var posX:Number = segX * this.segSize;
+            var posY:Number = segY * this.segSize;
+            return new Point(posX, posY);
         }
 
         public function method_753():Point
         {
             var _local_1:BlockObject = var_10[0];
-            return (new Point(_local_1.x, _local_1.y));
+            return new Point(_local_1.x, _local_1.y);
         }
 
         public function method_259(_arg_1:*)
@@ -217,21 +222,19 @@ package background
                     _local_3.setSeg(_arg_2.x, _arg_2.y);
                     if (method_32(_arg_2.x, _arg_2.y)) {
                         addChild(_local_3);
-                    } else {
-                        if (_local_3.parent != null) {
-                            _local_3.parent.removeChild(_local_3);
-                        }
+                    } else if (_local_3.parent != null) {
+                        _local_3.parent.removeChild(_local_3);
                     }
                     _arg_1.x = _arg_2.x;
                     _arg_1.y = _arg_2.y;
                 }
             }
-            return (_arg_1);
+            return _arg_1;
         }
 
         public function testMove(_arg_1:int, _arg_2:int):Boolean
         {
-            return (true);
+            return true;
         }
 
         override public function clear()
@@ -243,8 +246,8 @@ package background
         override public function remove()
         {
             this.clear();
-            if (this.var_323 != 0) {
-            }
+            /*if (this.var_323 != 0) {
+            }*/
             super.remove();
         }
 

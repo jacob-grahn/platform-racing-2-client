@@ -16,9 +16,9 @@ package items
     public class Mine extends Item 
     {
 
-        public function Mine(r:LocalCharacter)
+        public function Mine(lc:LocalCharacter)
         {
-            super(r);
+            super(lc);
         }
 
         // _loc1 = map
@@ -32,7 +32,7 @@ package items
             playerPos.y = Math.round(playerPos.y + 10);
             if (map.getBlockFromPos(playerPos.x, playerPos.y, true) == null) { // if block isn't occupied
                 var _local_4:Point = map.getSegFromPos(playerPos.x, playerPos.y);
-                var _local_5:Point = map.method_497(_local_4.x, _local_4.y);
+                var _local_5:Point = map.getPosFromSeg(_local_4.x, _local_4.y);
                 _local_5.x = _local_5.x + 15;
                 _local_5.y = _local_5.y + 15;
                 _local_5 = Data.method_9(_local_5.x, _local_5.y, Course.course.blockBackground.rotation);

@@ -19,18 +19,18 @@ package package_20
     {
 
         private var circle:Circle = new Circle();
-        private var var_151:DrawableBackground;
-        private var var_211:Point = new Point();
-        private var var_441:uint;
+        private var drawableBG:DrawableBackground; // var_151
+        private var mousePos:Point = new Point(); // var_211
+        private var rdInt:uint; // var_441
         protected var size:Number = 4;
         protected var color:Number = 0;
         protected var mode:String = "draw";
-        protected var var_574:Number = 1;
+        protected var zoomMultiplier:Number = 1; // var_574
         protected var drawing:Boolean = false;
         private var lastX:Number = -1;
         private var lastY:Number = -1;
-        private var var_550:int;
-        private var var_587:int;
+        private var drawStartX:int; // var_550
+        private var drawStartY:int; // var_587
 
         public function Brush()
         {
@@ -43,30 +43,30 @@ package package_20
         {
             super.init();
             addEventListener(Event.ENTER_FRAME, this.go);
-            clearInterval(this.var_441);
-            this.var_441 = setInterval(this.method_304, 10000);
+            clearInterval(this.rdInt);
+            this.rdInt = setInterval(this.restartDrawing, 10000);
         }
 
         override public function pause()
         {
             super.pause();
             removeEventListener(Event.ENTER_FRAME, this.go);
-            clearInterval(this.var_441);
+            clearInterval(this.rdInt);
         }
 
-        private function go(_arg_1:Event)
+        // _loc2 = currentPos
+        private function go(e:Event)
         {
-            var _local_2:Point;
             if (this.drawing == true) {
-                if (!this.var_151.drawing) {
-                    _local_2 = this.method_398(this.var_211);
-                    if (((!(_local_2.x == this.lastX)) || (!(_local_2.y == this.lastY)))) {
-                        this.var_151.lineTo(_local_2.x, _local_2.y);
-                        this.lastX = _local_2.x;
-                        this.lastY = _local_2.y;
+                if (!this.drawableBG.drawing) {
+                    var currentPos:Point = this.roundPoint(this.mousePos);
+                    if (currentPos.x != this.lastX || currentPos.y != this.lastY) {
+                        this.drawableBG.lineTo(currentPos.x, currentPos.y);
+                        this.lastX = currentPos.x;
+                        this.lastY = currentPos.y;
                     }
-                    if (Math.abs(this.var_550 - _local_2.x) > 400 || Math.abs(this.var_587 - _local_2.y) > 400) {
-                        this.method_304();
+                    if (Math.abs(this.drawStartX - currentPos.x) > 400 || Math.abs(this.drawStartY - currentPos.y) > 400) {
+                        this.restartDrawing();
                     }
                 } else {
                     this.stopDrawing();
@@ -74,7 +74,8 @@ package package_20
             }
         }
 
-        private function method_304()
+        // method_304 = restartDrawing
+        private function restartDrawing()
         {
             if (this.drawing == true) {
                 this.stopDrawing();
@@ -82,72 +83,70 @@ package package_20
             }
         }
 
-        public function setSize(_arg_1:Number=4)
+        public function setSize(s:Number = 4)
         {
-            this.size = _arg_1;
-            this.circle.width = (this.circle.height = (_arg_1 * this.var_574));
+            this.size = s;
+            this.circle.width = this.circle.height = this.size * this.zoomMultiplier;
         }
 
-        public function setColor(_arg_1:Number=0)
+        // _loc2 = ct
+        public function setColor(c:Number=0)
         {
-            this.color = _arg_1;
-            var _local_2:ColorTransform = new ColorTransform();
-            _local_2.color = _arg_1;
-            this.circle.transform.colorTransform = _local_2;
+            this.color = c;
+            var ct:ColorTransform = new ColorTransform();
+            ct.color = c;
+            this.circle.transform.colorTransform = ct;
         }
 
-        public function setZoom(_arg_1:Number)
+        public function setZoom(z:Number)
         {
-            this.var_574 = _arg_1;
+            this.zoomMultiplier = z;
             this.setSize(this.size);
         }
 
-        override protected function mouseDownHandler(_arg_1:MouseEvent)
+        // _loc2 = objClicked
+        override protected function mouseDownHandler(e:MouseEvent)
         {
-            var _local_2:String;
-            super.mouseDownHandler(_arg_1);
-            if (_arg_1.target.parent != null) {
-                _local_2 = _arg_1.target.parent.toString();
-                if ((((_local_2 == "[object DrawableBackground]") || (_local_2 == "[object LevelEditor]")) || (_arg_1.target.toString() == "[object LineBackground]"))) {
-                    if (!LevelEditor.editor.menu.hitTestPoint(_arg_1.stageX, _arg_1.stageY, true)) {
-                        this.var_211 = new Point(_arg_1.stageX, _arg_1.stageY);
+            super.mouseDownHandler(e);
+            if (e.target.parent != null) {
+                var objClicked:String = e.target.parent.toString();
+                if (objClicked == "[object DrawableBackground]" || objClicked == "[object LevelEditor]" || e.target.toString() == "[object LineBackground]") {
+                    if (!LevelEditor.editor.menu.hitTestPoint(e.stageX, e.stageY, true)) {
+                        this.mousePos = new Point(e.stageX, e.stageY);
                         this.startDrawing();
                     }
                 }
             }
         }
 
-        override protected function mouseUpHandler(_arg_1:MouseEvent)
+        override protected function mouseUpHandler(e:MouseEvent)
         {
-            super.mouseUpHandler(_arg_1);
+            super.mouseUpHandler(e);
             if (this.drawing) {
                 this.stopDrawing();
             }
         }
 
-        override protected function mouseMoveHandler(_arg_1:MouseEvent)
+        override protected function mouseMoveHandler(e:MouseEvent)
         {
-            super.mouseMoveHandler(_arg_1);
-            this.var_211.x = _arg_1.stageX;
-            this.var_211.y = _arg_1.stageY;
-            if (LevelEditor.editor.menu.hitTestPoint(_arg_1.stageX, _arg_1.stageY, true)) {
-                visible = false;
-            } else {
-                visible = true;
-            }
+            super.mouseMoveHandler(e);
+            this.mousePos.x = e.stageX;
+            this.mousePos.y = e.stageY;
+            visible = !LevelEditor.editor.menu.hitTestPoint(e.stageX, e.stageY, true);
         }
 
+        // _loc1 = startPt
         protected function startDrawing()
         {
             this.drawing = true;
-            this.var_151 = LevelEditor.editor.var_220;
-            this.var_151.method_585(this.color);
-            this.var_151.method_708(this.size);
-            this.var_151.setMode(this.mode);
-            var _local_1:Point = this.method_398(this.var_211);
-            this.var_151.moveTo(_local_1.x, _local_1.y);
-            this.var_550 = _local_1.x;
-            this.var_587 = _local_1.y;
+            this.drawableBG = LevelEditor.editor.var_220;
+            this.drawableBG.method_585(this.color);
+            this.drawableBG.method_708(this.size);
+            this.drawableBG.setMode(this.mode);
+            var startPt:Point = this.roundPoint(this.mousePos);
+            this.drawableBG.moveTo(startPt.x, startPt.y);
+            this.drawStartX = startPt.x;
+            this.drawStartY = startPt.y;
         }
 
         protected function stopDrawing()
@@ -156,19 +155,20 @@ package package_20
             LevelEditor.editor.var_220.rasterize();
         }
 
-        private function method_398(_arg_1:Point):Point
+        // method_398 = roundPoint
+        private function roundPoint(pt:Point):Point
         {
-            _arg_1 = this.var_151.globalToLocal(_arg_1);
-            _arg_1.x = Math.round(_arg_1.x);
-            _arg_1.y = Math.round(_arg_1.y);
-            return (_arg_1);
+            pt = this.drawableBG.globalToLocal(pt);
+            pt.x = Math.round(pt.x);
+            pt.y = Math.round(pt.y);
+            return pt;
         }
 
         override public function remove()
         {
             this.circle = null;
-            this.var_151 = null;
-            this.var_211 = null;
+            this.drawableBG = null;
+            this.mousePos = null;
             super.remove();
         }
 

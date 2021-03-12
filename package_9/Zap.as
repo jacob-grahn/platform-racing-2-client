@@ -11,11 +11,11 @@ package package_9
     {
 
         private var m:ZapGraphic = new ZapGraphic();
-        private var c:Character; // var_5
+        private var character:Character; // var_5
 
-        public function Zap(character:Character, showBolt:Boolean=true, playSound:Boolean=true, showFlash:Boolean=true)
+        public function Zap(c:Character, showBolt:Boolean=true, playSound:Boolean=true, showFlash:Boolean=true)
         {
-            this.c = character;
+            this.character = c;
             if (!showBolt) {
                 this.m.removeChild(this.m.lightning);
             }
@@ -33,7 +33,7 @@ package package_9
         private function go(e:Event)
         {
             this.pos();
-            alpha = alpha - 0.1;
+            alpha -= 0.1;
             if (alpha <= 0) {
                 this.remove();
             }
@@ -41,8 +41,8 @@ package package_9
 
         private function pos()
         {
-            x = this.c.x;
-            y = this.c.y;
+            x = this.character.x;
+            y = this.character.y;
         }
 
         override public function remove()
@@ -50,7 +50,7 @@ package package_9
             removeEventListener(Event.ENTER_FRAME, this.go);
             removeChild(this.m);
             this.m = null;
-            this.c = null;
+            this.character = null;
             super.remove();
         }
 

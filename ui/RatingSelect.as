@@ -5,12 +5,14 @@
 
 package ui
 {
-    import package_4.UploadingPopup;
+    import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
+    import flash.geom.Point;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
-    import flash.geom.Point;
+    import package_4.ConfirmPopup;
+    import package_4.UploadingPopup;
 
     public class RatingSelect extends Removable 
     {
@@ -43,11 +45,18 @@ package ui
             this.method_175(_local_2);
         }
 
-        // _loc2 = vars
-        // _loc3 = request
         private function clickHandler(e:MouseEvent)
         {
             this.rating = this.method_274(e.stageX);
+            new ConfirmPopup(function () {
+                rateLevel();
+            }, 'Are you sure you want to rate this level ' + this.rating + '?');
+        }
+
+        // _loc2 = vars
+        // _loc3 = request
+        private function rateLevel()
+        {
             var vars:URLVariables = new URLVariables();
             vars.level_id = this.courseID;
             vars.rating = this.rating;
@@ -74,19 +83,13 @@ package ui
             this.star.x = (_arg_1 - 1) * this.starWidth;
         }
 
+        // deleted _loc4 (combined w/ return)
         private function method_274(_arg_1:Number):Number
         {
             var _local_2:Point = new Point(0, 0);
             _local_2 = this.localToGlobal(_local_2);
             var _local_3:Number = _arg_1 - _local_2.x;
-            var _local_4:Number = Math.ceil(_local_3 / (this.m.width * scaleX) * 5);
-            if (_local_4 > 5) {
-                _local_4 = 5;
-            }
-            if (_local_4 < 1) {
-                _local_4 = 1;
-            }
-            return _local_4;
+            return Data.numLimit(Math.ceil(_local_3 / (this.m.width * scaleX) * 5), 1, 5);
         }
 
         override public function remove()

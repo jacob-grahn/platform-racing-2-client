@@ -14,7 +14,7 @@ package levelEditor
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
 
-    public class TextObject extends PlaceableObject
+    public class TextObject extends DrawObject
     {
 
         public static var var_380:int = 0;
@@ -24,38 +24,40 @@ package levelEditor
         private var editButton:EditTextButton; // var_56
         private var cp:ColorPicker; // var_12
         private var editing:Boolean = false; // var_483
-        private var var_565:String;
-        private var var_563:int;
+        private var text:String; // var_565
+        private var color:int; // var_563
 
-        public function TextObject(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int)
+        public function TextObject(_arg_1:String, objX:int, objY:int, objColor:int)
         {
-            super(Objects.TextCode, _arg_2, _arg_3);
+            super(Objects.TextCode, objX, objY);
             this.textField = TextField(m);
             this.textField.wordWrap = false;
             this.textField.autoSize = TextFieldAutoSize.LEFT;
             this.textField.multiline = true;
-            this.textField.textColor = _arg_4;
-            this.method_262(_arg_1);
-            method_31();
+            this.textField.textColor = objColor;
+            this.showParsedText(_arg_1);
+            recordRealDimensions();
         }
 
         override protected function onDelPress(e:KeyboardEvent)
         {
             if ((this.editing === false || this.editableTextField.text === '') && (e.keyCode === 46 || e.keyCode === 8)) {
-                method_299();
+                deleteObject();
             }
         }
 
-        public static function method_343(_arg_1:String):String
+        // method_343 = escapeText
+        public static function escapeText(s:String):String
         {
-            _arg_1 = _arg_1.replace(/#/g, "#35");
-            _arg_1 = _arg_1.replace(/`/g, "#96");
-            _arg_1 = _arg_1.replace(/&/g, "#38");
-            _arg_1 = _arg_1.replace(/,/g, "#44");
-            return (_arg_1.replace(/;/g, "#59"));
+            s = s.replace(/#/g, "#35");
+            s = s.replace(/`/g, "#96");
+            s = s.replace(/&/g, "#38");
+            s = s.replace(/,/g, "#44");
+            return s.replace(/;/g, "#59");
         }
 
-        public static function method_192(s:String):String
+        // method_192 = parseText
+        public static function parseText(s:String):String
         {
             s = s.replace(/#96/g, "`");
             s = s.replace(/#38/g, "&");
@@ -64,26 +66,29 @@ package levelEditor
             return s.replace(/#35/g, "#");
         }
 
-
-        public function method_47():String
+        // method_47 = getText
+        public function getText():String
         {
             return this.textField.text;
         }
 
-        public function method_475(s:String)
+        // method_475 = setText
+        public function setText(s:String)
         {
             this.textField.text = s;
-            method_31();
+            recordRealDimensions();
         }
 
-        public function method_184():String
+        // method_184 = getEscapedText
+        public function getEscapedText():String
         {
-            return method_343(this.method_47());
+            return escapeText(this.getText());
         }
 
-        public function method_262(s:String)
+        // method_262 = showParsedText
+        public function showParsedText(s:String)
         {
-            this.method_475(method_192(s));
+            this.setText(parseText(s));
         }
 
         // method_12 = getColor
@@ -92,11 +97,11 @@ package levelEditor
             return this.textField.textColor;
         }
 
-        public function setColor(_arg_1:int)
+        public function setColor(tc:int)
         {
-            this.textField.textColor = _arg_1;
+            this.textField.textColor = tc;
             if (this.editableTextField != null) {
-                this.editableTextField.textColor = _arg_1;
+                this.editableTextField.textColor = this.textField.textColor;
             }
         }
 
@@ -107,8 +112,8 @@ package levelEditor
             super.select();
             addChild(this.editButton);
             addChild(this.cp);
-            this.var_565 = this.method_47();
-            this.var_563 = this.getColor();
+            this.text = this.getText();
+            this.color = this.getColor();
             stageRef.addEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);
         }
 
@@ -120,7 +125,7 @@ package levelEditor
             if (this.cp != null) {
                 removeChild(this.cp);
             }
-            if (this.method_47() != this.var_565 || this.getColor() != this.var_563) {
+            if (this.getText() != this.text || this.getColor() != this.color) {
                 editor.cur.recordChangeText(this);
             }
             stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);
@@ -142,9 +147,9 @@ package levelEditor
                 this.textField.visible = true;
                 this.textField.text = this.editableTextField.text;
                 this.removeEditBox();
-                method_31();
+                recordRealDimensions();
                 if (this.textField.text.replace(/^\s+|\s+$/g, '') === '') {
-                    method_299();
+                    deleteObject();
                 }
             }
         }
@@ -249,8 +254,8 @@ package levelEditor
 
         private function method_169(_arg_1:Event)
         {
-            method_31();
-            method_345();
+            recordRealDimensions();
+            hideHighlight();
             this.positionInternals();
         }
 
@@ -267,12 +272,12 @@ package levelEditor
             if (this.editButton != null) {
                 this.editButton.x = 0;
                 this.editButton.y = 0;
-                this.editButton.scaleX = var_321;
-                this.editButton.scaleY = var_307;
+                this.editButton.scaleX = buttonScaleX;
+                this.editButton.scaleY = buttonScaleY;
             }
             if (this.cp != null) {
-                this.cp.scaleX = var_321 * 0.4;
-                this.cp.scaleY = var_307 * 0.4;
+                this.cp.scaleX = buttonScaleX * 0.4;
+                this.cp.scaleY = buttonScaleY * 0.4;
                 if (this.cp.scaleX > 0) {
                     this.cp.x = m.width - (this.cp.width / 2);
                 } else {

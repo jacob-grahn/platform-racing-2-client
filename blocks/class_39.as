@@ -18,13 +18,13 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(c:LocalCharacter)
+        override public function onBump(player:LocalCharacter)
         {
-            super.onBump(c);
+            super.onBump(player);
             if (!frozen) {
                 if (this.var_243 > 0) {
                     this.var_243--;
-                    this.useSupply(c);
+                    this.useSupply(player);
                 }
                 if (this.var_243 <= 0) {
                     this.method_789();
@@ -32,7 +32,7 @@ package blocks
             }
         }
 
-        protected function useSupply(_arg_1:LocalCharacter)
+        protected function useSupply(player:LocalCharacter)
         {
         }
 

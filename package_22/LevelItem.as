@@ -197,10 +197,13 @@ package package_22
         private function clickPassEnter(e:MouseEvent)
         {
             if (this.superLoader == null) {
+                this.m.accessCover.passButton.enabled = this.m.accessCover.passBox.enabled = false;
+                this.m.accessCover.passBox.text = 'checking...';
                 var enteredPass:String = this.m.accessCover.passBox.text;
                 var hash:String = Data.hash(enteredPass + Env.LEVEL_PASS_SALT);
                 this.superLoader = new SuperLoader(true, SuperLoader.j);
-                this.superLoader.addEventListener(Event.COMPLETE, this.validatePassResponse, false, 0, true);
+                this.superLoader.addEventListener(SuperLoader.d, this.validatePassResponse, false, 0, true);
+                this.superLoader.addEventListener(SuperLoader.e, this.passResponseError, false, 0, true);
                 var vars:URLVariables = new URLVariables();
                 vars.course_id = this.courseID;
                 vars.hash = hash;
@@ -208,7 +211,6 @@ package package_22
                 request.method = URLRequestMethod.POST;
                 request.data = vars;
                 this.superLoader.load(request);
-                this.m.accessCover.passBox.text = 'checking...';
             }
         }
 
@@ -230,9 +232,21 @@ package package_22
                     this.testAccess();
                 } else {
                     this.m.accessCover.passBox.text = "nope!";
+                    this.m.accessCover.passButton.enabled = this.m.accessCover.passBox.enabled = true;
                 }
             }
-            this.superLoader.removeEventListener(Event.COMPLETE, this.validatePassResponse);
+            this.superLoader.removeEventListener(SuperLoader.d, this.validatePassResponse);
+            this.superLoader.removeEventListener(SuperLoader.e, this.passResponseError);
+            this.superLoader.remove();
+            this.superLoader = null;
+        }
+
+        private function passResponseError(e:Event)
+        {
+            this.m.accessCover.passBox.text = "";
+            this.m.accessCover.passButton.enabled = this.m.accessCover.passBox.enabled = true;
+            this.superLoader.removeEventListener(SuperLoader.d, this.validatePassResponse);
+            this.superLoader.removeEventListener(SuperLoader.e, this.passResponseError);
             this.superLoader.remove();
             this.superLoader = null;
         }
