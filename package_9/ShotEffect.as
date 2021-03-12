@@ -36,7 +36,7 @@ package package_9
             this.posX = _arg_1;
             this.posY = _arg_2;
             this.method_775(_arg_3);
-            this.rotation = _arg_3 + (this.course.blockBackground.rotation - _arg_4);
+            this.rotation = _arg_3 + this.course.blockBackground.rotation - _arg_4;
             this.var_377 = _arg_4;
             this.shooterID = tempID;
             this.type = item;
@@ -70,15 +70,16 @@ package package_9
 
         protected function move()
         {
-            this.posX = (this.posX + this.velX);
-            this.posY = (this.posY + this.velY);
+            this.posX += this.velX;
+            this.posY += this.velY;
         }
 
+        // _loc1 = pos
         protected function position()
         {
-            var _local_1:Point = Data.method_9(this.posX, this.posY, -(this.course.blockBackground.rotation - this.var_377));
-            x = _local_1.x;
-            y = _local_1.y;
+            var pos:Point = Data.method_9(this.posX, this.posY, -(this.course.blockBackground.rotation - this.var_377));
+            x = pos.x;
+            y = pos.y;
         }
 
         private function method_253()
@@ -94,26 +95,25 @@ package package_9
         }
 
         
+        // deleted _loc3 (replaced by return)
         // _loc4 = c
         protected function method_782(x:int, y:int):Character
         {
-            var _local_3:Character;
-            for each (var c:Character in this.course.playerArray) {
-                if (c.tempID != this.shooterID && c.y > y && c.y < y + 60 && !c.removed) {
-                    if ((scaleX == 1 && c.x > x - 60 && c.x < x) || (scaleX == -1 && c.x < x + 60 && c.x > x)) {
-                        _local_3 = c;
-                        break;
+            for each (var p:Character in this.course.playerArray) {
+                if (p.tempID != this.shooterID && p.y > y && p.y < y + 60 && !p.removed) {
+                    if ((scaleX == 1 && p.x > x - 60 && p.x < x) || (scaleX == -1 && p.x < x + 60 && p.x > x)) {
+                        return p;
                     }
                 }
             }
-            return _local_3;
+            return null;
         }
 
         protected function method_389()
         {
-            var _local_1:Number = (this.var_278 * class_74.const_78);
-            this.velX = (Math.cos(_local_1) * this.var_154);
-            this.velY = (Math.sin(_local_1) * this.var_154);
+            var _local_1:Number = this.var_278 * class_74.const_78;
+            this.velX = Math.cos(_local_1) * this.var_154;
+            this.velY = Math.sin(_local_1) * this.var_154;
         }
 
         protected function hitBlock(_arg_1:Block)
@@ -122,12 +122,12 @@ package package_9
             this.hitAnything();
         }
 
-        protected function hitPlayer(c:Character)
+        protected function hitPlayer(player:Character)
         {
-            if (c.type == "local") {
-                c.hit(this.velX, this.velY);
+            if (player.type == "local") {
+                player.hit(this.velX, this.velY);
             }
-            x = c.x - this.velX;
+            x = player.x - this.velX;
             this.hitAnything();
         }
 

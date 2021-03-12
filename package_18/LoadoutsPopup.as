@@ -14,9 +14,9 @@ package package_18
 
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
-        private var var_495:CharacterDisplay;
+        private var var_495:PlayerDisplay;
 
-        public function LoadoutsPopup(c:Character, ss:StatsSelect, _arg_3:CharacterDisplay)
+        public function LoadoutsPopup(c:Character, ss:StatsSelect, _arg_3:PlayerDisplay)
         {
             this.character = c;
             this.statsSelect = ss;

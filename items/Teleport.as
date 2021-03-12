@@ -13,28 +13,24 @@ package items
     public class Teleport extends Item 
     {
 
-        public function Teleport(r:LocalCharacter)
+        public function Teleport(lc:LocalCharacter)
         {
-            super(r);
+            super(lc);
         }
 
+        // _loc1 = teleportDistance
         override public function useItem()
         {
-            var _local_3:int;
-            var _local_4:int;
-            var _local_1:int = -120;
-            if (racer.scaleX > 0) {
-                _local_1 = 120;
-            }
-            var _local_2:Block = Course.course.blockBackground.getBlockFromPos(racer.x + _local_1, racer.y - 5, true);
+            var teleportDistance:int = character.scaleX > 0 ? 120 : -120;
+            var _local_2:Block = Course.course.blockBackground.getBlockFromPos(character.x + teleportDistance, character.y - 5, true);
             if (_local_2 == null || !_local_2.isActive()) {
-                _local_3 = racer.x;
-                _local_4 = racer.y - 25;
+                var _local_3:int = character.x;
+                var _local_4:int = character.y - 25;
                 new TeleportPop(_local_3, _local_4);
                 Main.socket.write("add_effect`Teleport`" + _local_3 + "`" + _local_4);
-                racer.x = racer.x + _local_1;
-                _local_3 = racer.x;
-                _local_4 = racer.y - 25;
+                character.x = character.x + teleportDistance;
+                _local_3 = character.x;
+                _local_4 = character.y - 25;
                 new TeleportPop(_local_3, _local_4);
                 Main.socket.write("add_effect`Teleport`" + _local_3 + "`" + _local_4);
                 super.useItem();

@@ -8,7 +8,7 @@ package package_8
     public class class_127 
     {
 
-        private var char:Character; // var_5
+        private var character:Character; // var_5
         private var hat:class_125;
         private var head:class_125;
         private var body:class_125;
@@ -19,10 +19,10 @@ package package_8
 
         public function class_127(c:Character)
         {
-            this.char = c;
+            this.character = c;
             this.djinnBody = new Object();
             this.djinnBody.graphic = "DjinnIceGraphic";
-            this.djinnBody.colors = new Array(this.char.bodyColor, this.char.bodyColor2);
+            this.djinnBody.colors = new Array(this.character.bodyColor, this.character.bodyColor2);
             this.djinnBody.life = 16;
             this.djinnBody.startAlpha = 0.1;
             this.djinnBody.minVelAlpha = 0;
@@ -41,7 +41,7 @@ package package_8
             this.djinnBody.maxScale = -0.75;
             this.djinnFeet = new Object();
             this.djinnFeet.graphic = "DjinnIceGraphic";
-            this.djinnFeet.colors = new Array(this.char.feetColor, this.char.feetColor2);
+            this.djinnFeet.colors = new Array(this.character.feetColor, this.character.feetColor2);
             this.djinnFeet.life = 8;
             this.djinnFeet.startAlpha = 0.1;
             this.djinnFeet.minVelAlpha = 0;
@@ -61,15 +61,15 @@ package package_8
         public function update()
         {
             this.clear();
-            if (this.char.parent && this.char.var_301) {
-                if (this.char.body == 35) {
-                    this.djinnBody.colors = new Array(this.char.bodyColor, this.char.bodyColor2);
-                    this.body = new class_179(75, 9999999999, this.char.var_301.body, this.char.parent, this.djinnBody, -15, -10);
+            if (this.character.parent && this.character.var_301) {
+                if (this.character.body == 35) {
+                    this.djinnBody.colors = new Array(this.character.bodyColor, this.character.bodyColor2);
+                    this.body = new class_179(75, 9999999999, this.character.var_301.body, this.character.parent, this.djinnBody, -15, -10);
                 }
-                if (this.char.feet == 35) {
-                    this.djinnFeet.colors = new Array(this.char.feetColor, this.char.feetColor2);
-                    this.foot1 = new class_179(75, 9999999999, this.char.var_301.foot1, this.char.parent, this.djinnFeet);
-                    this.foot2 = new class_179(75, 9999999999, this.char.var_301.foot2, this.char.parent, this.djinnFeet);
+                if (this.character.feet == 35) {
+                    this.djinnFeet.colors = new Array(this.character.feetColor, this.character.feetColor2);
+                    this.foot1 = new class_179(75, 9999999999, this.character.var_301.foot1, this.character.parent, this.djinnFeet);
+                    this.foot2 = new class_179(75, 9999999999, this.character.var_301.foot2, this.character.parent, this.djinnFeet);
                 }
             }
         }
@@ -109,7 +109,7 @@ package package_8
         public function remove()
         {
             this.clear();
-            this.char = null;
+            this.character = null;
         }
 
 

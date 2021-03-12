@@ -5,8 +5,8 @@
 
 package levelEditor
 {
-	import background.class_10;
-    import background.class_75;
+    import background.class_10;
+    import background.Background;
     import background.class_77;
     import background.BlockBackground;
     import background.DrawableBackground;
@@ -28,7 +28,7 @@ package levelEditor
         private var drawingPop:DrawingPopup; // var_221
         public var var_364:Sprite;
         public var menu:LevelEditorMenu;
-        public var var_225:class_75;
+        public var var_225:Background;
         public var cur:class_77;
         public var var_220:DrawableBackground;
         public var bg1:class_77;
@@ -220,7 +220,7 @@ package levelEditor
             this.setStartPos();
         }
 
-        override public function startDrawing(_arg_1:class_75)
+        override public function startDrawing(_arg_1:Background)
         {
             super.startDrawing(_arg_1);
             if (this.drawingPop == null) {
@@ -228,7 +228,7 @@ package levelEditor
             }
         }
 
-        override public function finishDrawing(_arg_1:class_75)
+        override public function finishDrawing(_arg_1:Background)
         {
             super.finishDrawing(_arg_1);
             if (var_133.length <= 0 && this.drawingPop != null) {
@@ -252,7 +252,7 @@ package levelEditor
             posY = -point.y - 50;
         }
 
-        public function focusOn(_arg_1:class_75)
+        public function focusOn(_arg_1:Background)
         {
             this.blockBG.method_22();
             this.bg1.method_22();
@@ -386,7 +386,7 @@ package levelEditor
             vars.title = title;
             vars.note = note;
             vars.data = this.getSaveString();
-            vars.credits = method_403();
+            vars.credits = getCredits();
             vars.live = this.live;
             vars.min_level = this.minRank;
             vars.song = song;

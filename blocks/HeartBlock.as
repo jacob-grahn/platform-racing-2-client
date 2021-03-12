@@ -13,13 +13,13 @@ package blocks
 
         public function HeartBlock()
         {
-            super(Objects.HeartBlockCode);
+            super(Objects.BLOCK_HEART);
         }
 
-        override protected function useSupply(_arg_1:LocalCharacter)
+        override protected function useSupply(player:LocalCharacter)
         {
-            super.useSupply(_arg_1);
-            _arg_1.gainHeart();
+            super.useSupply(player);
+            player.gainHeart();
         }
 
 

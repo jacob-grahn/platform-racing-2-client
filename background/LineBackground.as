@@ -8,7 +8,7 @@ package background
 {
     import page.GamePage;
 
-    public class LineBackground extends class_75 
+    public class LineBackground extends Background 
     {
 
         private var segSize:Number = 30;

@@ -105,6 +105,13 @@ package menu
         {
             startFadeOut();
             Main.socket.remove();
+            try {
+                var ret:Object = JSON.parse(e.target.data);
+                if ('resetToken' in ret && ret.resetToken) {
+                    SavedAccounts.deleteAccount(Main.token, 'token');
+                }
+            } catch (e:Error) {
+            }
             Main.clearUserData();
         }
 

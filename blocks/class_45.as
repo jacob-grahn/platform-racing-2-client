@@ -18,12 +18,12 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(_arg_1:LocalCharacter)
+        override public function onBump(player:LocalCharacter)
         {
-            super.onBump(_arg_1);
+            super.onBump(player);
             if (!frozen) {
-                _arg_1.setMode("freeze");
-                _arg_1.velX = (_arg_1.velY = 0);
+                player.setMode("freeze");
+                player.velX = player.velY = 0;
                 Course.course.method_654(this.dir);
             }
         }

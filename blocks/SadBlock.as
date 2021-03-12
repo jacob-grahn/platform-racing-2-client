@@ -15,13 +15,13 @@ package blocks
 
         public function SadBlock()
         {
-            super(Objects.SadBlockCode);
+            super(Objects.BLOCK_SAD);
         }
 
-        override protected function useSupply(_arg_1:LocalCharacter)
+        override protected function useSupply(player:LocalCharacter)
         {
-            super.useSupply(_arg_1);
-            _arg_1.statsChange(-5);
+            super.useSupply(player);
+            player.statsChange(-5);
             SoundEffects.playSound(new BumpSadSound(), 0.75 * (Settings.soundLevel / 100));
         }
 

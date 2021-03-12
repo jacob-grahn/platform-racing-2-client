@@ -4,8 +4,10 @@ package package_6
 {
     import com.adobe.crypto.MD5;
     import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
     import flash.events.Event;
+    import flash.geom.Point;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
     import flash.utils.clearInterval;
@@ -16,6 +18,7 @@ package package_6
     import package_8.RemoteCharacter;
     import package_8.LocalCharacter;
     import package_9.Egg;
+    import package_9.Hat;
 
     public class Game extends Course 
     {
@@ -31,7 +34,6 @@ package package_6
         private var levelHash:String = ""; // var_579
         private var specialEvent:SpecialEvent; // var_436, then placeArtifact, then SpecialEvent
         private var var_634:Array = new Array();
-        private var var_370:Boolean = false;
         public var var_202:FinishedPage;
         public var var_463:Array = new Array();
         public var var_452:int;
@@ -72,6 +74,7 @@ package package_6
             this.cm.defineCommand("setEggSeed", setEggSeed);
             this.cm.defineCommand("addEggs", addEggs);
             this.cm.defineCommand("superBooster", this.superBooster);
+            this.cm.defineCommand('maybeReturnHatToStart', this.maybeReturnHatToStart);
             this.cm.defineCommand("startHatCountdown", this.startHatCountdown);
             this.cm.defineCommand('forceQuit', this.quitGame);
             super.initialize();
@@ -185,11 +188,35 @@ package package_6
             addChild(new HappyHour());
         }
 
+        // _loc2 = tempId
+        // _loc3 = c
         private function superBooster(arr:Array)
         {
-            var _local_2:int = int(arr[0]);
-            var _local_3:Character = playerArray[_local_2];
-            _local_3.method_576();
+            var tempId:int = int(arr[0]);
+            var c:Character = playerArray[tempId];
+            c.method_576();
+        }
+
+        private function maybeReturnHatToStart(a:Array)
+        {
+            var hat:Hat = looseHats[int(a[0])];
+            if (hat != null) {
+                var hatPos:Point = hat.getPos();
+                var hatRot:int = hat.getRot();
+                hatPos = Data.method_9(hatPos.x, hatPos.y, hatRot);
+                if ((hatPos.y > blockBackground.maxY + 500 && hatRot == 0) || (hatPos.y < blockBackground.minY - 500 && Math.abs(hatRot) == 180) || (hatPos.x > blockBackground.maxX + 500 && hatRot == 90) || (hatPos.x < blockBackground.minX - 500 && hatRot == -90)) {
+                    this.returnHatToStart(hat);
+                }
+            }
+        }
+
+        private function returnHatToStart(hat:Hat)
+        {
+            var info:Object = hat.getInfo();
+            hat.remove();
+            if (info.id < startPosArray.length) {
+                new Hat(startPosArray[info.id].x, startPosArray[info.id].y, 0, info.num, info.color, info.color2, info.id);
+            }
         }
 
         private function startHatCountdown(a:Array = null)
@@ -274,23 +301,19 @@ package package_6
             }
         }
 
+        // deleted _loc1 (this.getFinishPositions())
+        // deleted _loc2 (finishBlocks.length)
         override protected function endIntro()
         {
-            var _local_1:String = this.method_742();
-            var _local_2:int = var_313.length;
-            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + _local_1 + "`" + _local_2 + "`" + cowboyChance + "`" + badHats.join(','));
+            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + this.getFinishBlockPositions() + "`" + finishBlocks.length + "`" + cowboyChance + "`" + badHats.join(','));
             super.endIntro();
         }
 
-        private function method_742():String
+        // deleted _loc1 (condensed fn)
+        // method_742 = getFinishBlockPositions
+        private function getFinishBlockPositions():String
         {
-            var _local_1:String;
-            if (var_313.length > 5) {
-                _local_1 = "all";
-            } else {
-                _local_1 = JSON.stringify(var_313);
-            }
-            return (_local_1);
+            return finishBlocks.length > 5 ? 'all' : JSON.stringify(finishBlocks);
         }
 
         override public function outOfTimeHandler()
@@ -306,7 +329,7 @@ package package_6
 
         override public function finish(finishId:int=-1, finishX:int=0, finishY:int=0)
         {
-            if (!this.var_370) {
+            if (!playerDone) {
                 if (this.gameMode == Modes.obj) {
                     if (finishId != -1) {
                         miniMap.removeFinish(finishX, finishY);
@@ -328,7 +351,7 @@ package package_6
         // method_209 = quitGame
         public function quitGame(arr:Array = null)
         {
-            if (!this.var_370) {
+            if (!playerDone) {
                 if (this.gameMode == Modes.dm) {
                     this.finish();
                 } else {
@@ -360,8 +383,8 @@ package package_6
 
         private function method_185()
         {
-            if (!this.var_370) {
-                this.var_370 = true;
+            if (!playerDone) {
+                playerDone = true;
                 if (var_9 != null) {
                     var_9.beginRemove();
                 }
@@ -373,7 +396,7 @@ package package_6
 
         public function isDonePlaying() : Boolean
         {
-            return this.var_370;
+            return playerDone;
         }
 
         override public function remove()
@@ -390,6 +413,7 @@ package package_6
             this.cm.defineCommand("setEggSeed", null);
             this.cm.defineCommand("addEggs", null);
             this.cm.defineCommand("superBooster", null);
+            this.cm.defineCommand('maybeReturnHatToStart', null);
             this.cm.defineCommand('startHatCountdown', null); // this.cancelHatCountdown called farther down
             this.cm.defineCommand('forceQuit', null);
             removeEventListener(Event.ENTER_FRAME, method_85);

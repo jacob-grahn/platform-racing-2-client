@@ -18,15 +18,15 @@ package blocks
             super(_arg_1);
         }
 
-        override protected function useSupply(_arg_1:LocalCharacter)
+        override protected function useSupply(player:LocalCharacter)
         {
             var _local_2:Number;
             var _local_3:int;
-            super.useSupply(_arg_1);
+            super.useSupply(player);
             if (Course.course.allowedItems.length > 0) {
                 _local_2 = Math.floor((Math.random() * Course.course.allowedItems.length));
                 _local_3 = Course.course.allowedItems[_local_2];
-                _arg_1.setItem(_local_3);
+                player.setItem(_local_3);
             }
             SoundEffects.playSound(new StarSound(), 0.6 * (Settings.soundLevel / 100));
         }

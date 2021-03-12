@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import package_8.Character;
     import package_8.LocalCharacter;
-    import package_9.class_106;
+    import package_9.BlockPiece;
     import flash.geom.Point;
 
     public class CrumbleBlock extends Block 
@@ -18,35 +18,35 @@ package blocks
 
         public function CrumbleBlock()
         {
-            super(Objects.CrumbleBlockCode);
+            super(Objects.BLOCK_CRUMBLE);
             var_34 = false;
         }
 
-        override public function onStand(c:LocalCharacter)
+        override public function onStand(player:LocalCharacter)
         {
-            var force:Number = this.cheeseHandler(c, Math.round(c.velY * 2), true);
+            var force:Number = this.cheeseHandler(player, Math.round(player.velY * 2), true);
             localActivate(force.toString());
             if (!method_20()) {
-                super.onStand(c);
+                super.onStand(player);
             }
         }
 
-        override public function onBump(c:LocalCharacter)
+        override public function onBump(player:LocalCharacter)
         {
-            var force:Number = this.cheeseHandler(c, Math.round(-c.velY));
+            var force:Number = this.cheeseHandler(player, Math.round(-player.velY));
             localActivate(force.toString());
             if (!method_20()) {
-                super.onBump(c);
+                super.onBump(player);
             }
         }
 
-        override public function onLeftHit(c:LocalCharacter)
+        override public function onLeftHit(player:LocalCharacter)
         {
-            var force:Number = this.cheeseHandler(c, Math.round(c.velX * 1.75));
+            var force:Number = this.cheeseHandler(player, Math.round(player.velX * 1.75));
             if (force == 50) { // using cheese, kill crumbles at player's head level when running
                 var seg:Point = getSeg();
                 var blockAbovePlayer:Block = map.getBlockFromSeg(seg.x - 1, seg.y - 1);
-                if (blockAbovePlayer == null && !c.crouching) {
+                if (blockAbovePlayer == null && !player.crouching) {
                     var blockAboveThis:Block = map.getBlockFromSeg(seg.x, seg.y - 1);
                     if (blockAboveThis != null && blockAboveThis is CrumbleBlock) {
                         blockAboveThis.localActivate("50");
@@ -55,17 +55,17 @@ package blocks
             }
             localActivate(force.toString());
             if (!method_20()) {
-                super.onLeftHit(c);
+                super.onLeftHit(player);
             }
         }
 
-        override public function onRightHit(c:LocalCharacter)
+        override public function onRightHit(player:LocalCharacter)
         {
-            var force:Number = this.cheeseHandler(c, Math.round(-c.velX * 1.75));
+            var force:Number = this.cheeseHandler(player, Math.round(-player.velX * 1.75));
             if (force == 50) { // using cheese, kill crumbles at player's head level when running
                 var seg:Point = getSeg();
                 var blockAbovePlayer:Block = map.getBlockFromSeg(seg.x + 1, seg.y - 1);
-                if (blockAbovePlayer == null && !c.crouching) {
+                if (blockAbovePlayer == null && !player.crouching) {
                     var blockAboveThis:Block = map.getBlockFromSeg(seg.x, seg.y - 1);
                     if (blockAboveThis != null && blockAboveThis is CrumbleBlock) {
                         blockAboveThis.localActivate("50");
@@ -74,7 +74,7 @@ package blocks
             }
             localActivate(force.toString());
             if (!method_20()) {
-                super.onRightHit(c);
+                super.onRightHit(player);
             }
         }
 
@@ -87,16 +87,16 @@ package blocks
         override protected function activate(_arg_1:String="")
         {
             var _local_2 = Math.floor(Number(_arg_1) / 4);
-            this.life = this.life - _local_2;
+            this.life -= _local_2;
             this.throwPieces(_local_2 * 2);
             if (this.life <= 0) {
                 this.doCrumble();
             }
         }
 
-        private function cheeseHandler(c:LocalCharacter, hitForce:Number, stand:Boolean = false)
+        private function cheeseHandler(player:LocalCharacter, hitForce:Number, stand:Boolean = false)
         {
-            if (hitForce > 1 && c.var_4.getBool(Character.CHEESE)) {
+            if (hitForce > 1 && player.var_4.getBool(Character.CHEESE)) {
                 return stand ? hitForce * 2 : 50;
             }
             return hitForce;
@@ -114,17 +114,14 @@ package blocks
         // method_294 = throwPieces
         private function throwPieces(piecesToThrow:Number)
         {
-            var _local_3:class_106;
-            var _local_4:Number;
-            var _local_5:Number;
             var _local_6:Point = method_18();
             piecesToThrow = piecesToThrow > 20 ? 20 : piecesToThrow;
             var i:int = 0;
             while (i < piecesToThrow) {
                 var piece:CrumblePieceGraphic = new CrumblePieceGraphic();
-                _local_4 = (Math.random() * 30) + _local_6.x;
-                _local_5 = (Math.random() * 30) + _local_6.y;
-                _local_3 = new class_106(piece, 0.75, 0.95, 0.05, 5, 5, 15, _local_4, _local_5);
+                var _local_4:Number = (Math.random() * 30) + _local_6.x;
+                var _local_5:Number = (Math.random() * 30) + _local_6.y;
+                var _local_3:BlockPiece = new BlockPiece(piece, 0.75, 0.95, 0.05, 5, 5, 15, _local_4, _local_5);
                 i++;
             }
         }

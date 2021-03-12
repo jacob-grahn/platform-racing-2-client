@@ -19,7 +19,7 @@ package blocks
         public function FinishBlock()
         {
             this.id = var_228++;
-            super(Objects.FinishBlockCode);
+            super(Objects.BLOCK_FINISH);
         }
 
         // method_140 = getId
@@ -28,7 +28,7 @@ package blocks
             return this.id;
         }
 
-        override protected function useSupply(_arg_1:LocalCharacter)
+        override protected function useSupply(player:LocalCharacter)
         {
             var _local_2:int = getPosX() + 15;
             var _local_3:int = getPosY() + 15;

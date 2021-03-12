@@ -57,8 +57,8 @@ package com.jiggmin.data
             if (dispText == "") {
                 dispText = name;
             }
-            name = Data.escapeString(name);
-            dispText = Data.escapeString(dispText);
+            name = Data.cleanHTML(name);
+            dispText = Data.cleanHTML(dispText);
             return '<u><font color="' + groupColor + '"><a href="event:user`' + group + "`" + name + '">' + dispText + "</a></font></u>";
         }
 

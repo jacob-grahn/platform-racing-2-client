@@ -34,6 +34,7 @@ package package_6
             this.reportsMode = report;
         }
 
+        // _loc1 = player1Start
         override public function initialize()
         {
             super.initialize();
@@ -57,14 +58,14 @@ package package_6
             this.hatPicker.y = 65;
             this.hatPicker.scaleX = this.hatPicker.scaleY = 0.7;
             holder.addChild(this.hatPicker);
-            var _local_1:Point = var_197[0];
-            var_9.setPos(_local_1.x, _local_1.y);
-            posX = -_local_1.x;
-            posY = -_local_1.y;
+            var player1Start:Point = startPosArray[0];
+            var_9.setPos(player1Start.x, player1Start.y);
+            posX = -player1Start.x;
+            posY = -player1Start.y;
             setPos(posX, posY);
             frontBackground.addChild(var_9);
             addEventListener(Event.ENTER_FRAME, this.go);
-            var_14.addEventListener(MouseEvent.CLICK, this.method_430, false, 0, true);
+            var_14.addEventListener(MouseEvent.CLICK, this.teleportToClickPos, false, 0, true);
             if (gameMode == Modes.egg) {
                 setEggSeed([Math.floor(Math.random() * 9999).toString()]);
                 addEggs([10]);
@@ -96,42 +97,47 @@ package package_6
         // method_371 = clickRestart
         private function clickRestart(e:MouseEvent)
         {
-            this.method_370();
+            this.restart();
         }
 
         override public function finish(finishId:int=-1, finishX:int=0, finishY:int=0)
         {
             if (this.gameMode != Modes.obj) {
-                this.method_370();
+                this.restart();
             } else {
                 miniMap.removeFinish(finishX, finishY);
             }
             SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));
         }
 
-        // teleport fn
-        private function method_430(e:MouseEvent)
+        // _loc2 = target
+        // _loc3 = newX
+        // _loc4 = newY
+        // method_430 = teleportToClickPos
+        private function teleportToClickPos(e:MouseEvent)
         {
-            var _local_2:Point = var_14.globalToLocal(new Point(e.stageX, e.stageY));
-            var _local_3:int = -frontBackground.x + _local_2.x;
-            var _local_4:int = -frontBackground.y + _local_2.y;
+            var target:Point = var_14.globalToLocal(new Point(e.stageX, e.stageY));
+            var newX:int = -frontBackground.x + target.x;
+            var newY:int = -frontBackground.y + target.y;
             new TeleportPop(var_9.x, var_9.y);
-            var_9.setPos(_local_3, _local_4);
+            var_9.setPos(newX, newY);
             new TeleportPop(var_9.x, var_9.y);
         }
 
-        private function method_370()
+        // _loc1 = player1Start
+        // method_370 = restart
+        private function restart()
         {
             Main.stage.focus = Main.stage;
             blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = 0;
             timer.setTime(Number(maxTime));
-            var_201.clear();
+            effectBackground.clear();
             blockBackground.clear();
             miniMap.clear();
             blockBackground.draw();
             blockBackground.method_578();
-            var _local_1:Point = var_197[0];
-            var_9.setPos(_local_1.x, _local_1.y);
+            var player1Start:Point = startPosArray[0];
+            var_9.setPos(player1Start.x, player1Start.y);
             var_9.setLife(3);
             miniMap.rotate(0);
         }
@@ -139,7 +145,7 @@ package package_6
         override public function remove()
         {
             blockBackground.clearMoveInterval();
-            var_14.removeEventListener(MouseEvent.CLICK, this.method_430);
+            var_14.removeEventListener(MouseEvent.CLICK, this.teleportToClickPos);
             removeEventListener(Event.ENTER_FRAME, this.go);
             this.m.back_bt.removeEventListener(MouseEvent.CLICK, this.clickBack);
             this.m.restart_bt.removeEventListener(MouseEvent.CLICK, this.clickRestart);

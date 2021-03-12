@@ -27,6 +27,7 @@ package package_15
             loader.useRandomNum = false;
             loader = new SuperLoader();
             loader.addEventListener(SuperLoader.d, onComplete, false, 0, true);
+            loader.addEventListener(SuperLoader.e, errorHandler, false, 0, true);
             loader.load(request);
         }
 

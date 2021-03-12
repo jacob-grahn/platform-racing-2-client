@@ -126,7 +126,7 @@ package menu
             sl.load(request);
 
             // delete from cookie
-            if (SavedAccounts.deleteByName(listItem.label) === false) {
+            if (SavedAccounts.deleteAccount(listItem.label) === false) {
                 new MessagePopup('Error: Invalid account specified.');
                 return;
             }

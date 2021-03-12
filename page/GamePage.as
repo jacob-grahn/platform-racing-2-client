@@ -56,8 +56,8 @@ package page
         override public function initialize()
         {
             GamePage.course = this;
-            x = (550 / 2);
-            y = (400 / 2);
+            x = 550 / 2;
+            y = 400 / 2;
             addChild(this.var_14);
             Main.stage.focus = Main.stage;
             super.initialize();
@@ -95,7 +95,7 @@ package page
         {
         }
 
-        public function startDrawing(_arg_1:class_75)
+        public function startDrawing(_arg_1:Background)
         {
             var _local_2:int = this.var_133.indexOf(_arg_1);
             if (_local_2 == -1) {
@@ -104,7 +104,7 @@ package page
             this.drawing = true;
         }
 
-        public function finishDrawing(_arg_1:class_75)
+        public function finishDrawing(_arg_1:Background)
         {
             var _local_2:int = this.var_133.indexOf(_arg_1);
             if (_local_2 != -1) {
@@ -115,7 +115,7 @@ package page
             }
         }
 
-        public function goodToDraw(_arg_1:class_75):Boolean
+        public function goodToDraw(_arg_1:Background):Boolean
         {
             var _local_2:Boolean;
             if (this.var_133[0] == _arg_1 || this.var_133.length <= 0) {
@@ -124,16 +124,16 @@ package page
             return _local_2;
         }
 
-        public function method_403():String
+        // method_403 = getCredits
+        public function getCredits():String
         {
             return this.credits.join("`");
         }
 
-        public function method_828(_arg_1:String)
+        // method_828 = setCredits
+        public function setCredits(_arg_1:String)
         {
-            if (_arg_1 == null) {
-                _arg_1 = "";
-            }
+            _arg_1 = _arg_1 == null ? '' : _arg_1;
             this.credits = _arg_1.split("`");
         }
 
@@ -223,7 +223,7 @@ package page
         public function setVariables(vars:URLVariables)
         {
             this.updatedTime = vars.time is Array ? vars.time[0] : vars.time;
-            this.method_828(vars.credits);
+            this.setCredits(vars.credits);
             this.setSaveString(this.method_645(vars.data));
             this.title = vars.title;
             this.note = vars.note;
@@ -254,28 +254,23 @@ package page
             this.levelID = vars.level_id;
         }
 
+        // _loc3 = "and"
         public function method_158(_arg_1:String):String
         {
-            var _local_6:String;
-            var _local_7:Boolean;
-            var _local_8:String;
-            var _local_9:String;
-            var _local_10:String;
-            var _local_2:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats");
-            var _local_3:* = "and";
+            var _local_2:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats=");
             var _local_4:* = "";
-            _arg_1 = _arg_1.replace(/&/g, _local_3);
+            _arg_1 = _arg_1.replace(/&/g, 'and');
             var _local_5:Array = _arg_1.split("and");
-            for each (_local_8 in _local_5) {
-                _local_7 = false;
-                for each (_local_9 in _local_2) {
-                    _local_6 = _local_8.substr(0, _local_9.length);
+            for each (var _local_8:String in _local_5) {
+                var _local_7:Boolean = false;
+                for each (var _local_9:String in _local_2) {
+                    var _local_6:String = _local_8.substr(0, _local_9.length);
                     if (_local_6 == _local_9) {
                         _local_7 = true;
                         break;
                     }
                 }
-                _local_10 = "and";
+                var _local_10:String = "and";
                 if (_local_7) {
                     _local_10 = "&";
                 }
@@ -321,37 +316,34 @@ package page
             return rawlevelData;
         }
 
+        // _loc2 = dataArr
+        // _loc3 = thisObj
+        // _loc6 = i
+        // _loc7 = dataArr.length
+        // deleted _loc8 (unused)
+        // deleted _loc14 (combined w/ return)
         // method_137 = decodeObjectString
         private function decodeObjectString(objectString:String):String
         {
-            var _local_6:int;
-            var _local_8:String;
-            var _local_9:Number;
-            var _local_10:Number;
-            var _local_11:Number;
-            var _local_12:Number;
-            var _local_13:int;
-            var _local_2:Array = objectString.split(",");
-            var _local_3:Array = _local_2.shift().split(";");
-            var _local_4:Number = Number("0x" + _local_3[0]);
-            var _local_5:Number = Number("0x" + _local_3[1]);
-            var _local_7:int = _local_2.length;
-            _local_6 = 0;
-            while (_local_6 < _local_7) {
-                _local_3 = _local_2[_local_6].split(";");
-                _local_13 = Number("0x" + _local_3[0]);
-                _local_9 = Number("0x" + _local_3[1]) + _local_4;
-                _local_10 = Number("0x" + _local_3[2]) + _local_5;
-                _local_2[_local_6] = "o" + _local_13 + ";" + _local_9 + ";" + _local_10;
-                if (_local_3[3] != null) {
-                    _local_11 = Number("0x" + _local_3[3]) / 100;
-                    _local_12 = Number("0x" + _local_3[4]) / 100;
-                    _local_2[_local_6] = _local_2[_local_6] + ";" + _local_11 + ";" + _local_12;
+            var dataArr:Array = objectString.split(",");
+            var thisObj:Array = dataArr.shift().split(";"); // ?
+            var _local_4:Number = Number("0x" + thisObj[0]);
+            var _local_5:Number = Number("0x" + thisObj[1]);
+            var i:int = 0;
+            while (i < dataArr.length) {
+                thisObj = dataArr[i].split(";");
+                var _local_13:int = Number("0x" + thisObj[0]);
+                var _local_9:Number = Number("0x" + thisObj[1]) + _local_4;
+                var _local_10:Number = Number("0x" + thisObj[2]) + _local_5;
+                dataArr[i] = "o" + _local_13 + ";" + _local_9 + ";" + _local_10;
+                if (thisObj[3] != null) {
+                    var _local_11:Number = Number("0x" + thisObj[3]) / 100;
+                    var _local_12:Number = Number("0x" + thisObj[4]) / 100;
+                    dataArr[i] = dataArr[i] + ";" + _local_11 + ";" + _local_12;
                 }
-                _local_6++;
+                i++;
             }
-            var _local_14:String = _local_2.join(",");
-            return _local_14;
+            return dataArr.join(",");
         }
 
         // _loc3 = dataArr
@@ -372,12 +364,7 @@ package page
         private function decodeObjectString2(objectString:String, _arg_2:int=1):String
         {
             var widthPerc:Number, heightPerc:Number;
-            var dataArr:Array;
-            if (objectString == null || objectString == "") {
-                dataArr = new Array();
-            } else {
-                dataArr = objectString.split(",");
-            }
+            var dataArr:Array = objectString == null || objectString == "" ? new Array() : objectString.split(",");
             var decoded:String;
             var objectCode:int, currentX:int = 0, currentY:int = 0;
             if (dataArr.length > 0) {
