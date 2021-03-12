@@ -2,7 +2,7 @@
 
 package items
 {
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import flash.utils.setTimeout;
     import flash.utils.clearTimeout;
 
@@ -13,7 +13,7 @@ package items
         private var used:Boolean = false; // var_522
         public var duration:Number = 5000; // var_335
 
-        public function SpeedBurst(p:LocalPlayer)
+        public function SpeedBurst(p:LocalCharacter)
         {
             super(p);
         }

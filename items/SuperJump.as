@@ -6,13 +6,13 @@
 package items
 {
     import com.jiggmin.data.Settings;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
     public class SuperJump extends Item 
     {
 
-        public function SuperJump(p:LocalPlayer)
+        public function SuperJump(p:LocalCharacter)
         {
             super(p);
         }

@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Settings;
     import sounds.SoundEffects;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class SadBlock extends class_39 
     {
@@ -18,7 +18,7 @@ package blocks
             super(Objects.BLOCK_SAD);
         }
 
-        override protected function useSupply(player:LocalPlayer)
+        override protected function useSupply(player:LocalCharacter)
         {
             super.useSupply(player);
             player.statsChange(-5);

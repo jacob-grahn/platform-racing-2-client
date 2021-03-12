@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Settings;
     import package_6.Course;
     import sounds.SoundEffects;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class ItemBlock extends class_39 
     {
@@ -18,7 +18,7 @@ package blocks
             super(_arg_1);
         }
 
-        override protected function useSupply(player:LocalPlayer)
+        override protected function useSupply(player:LocalCharacter)
         {
             var _local_2:Number;
             var _local_3:int;

@@ -9,7 +9,7 @@ package blocks
     import com.jiggmin.data.Settings;
     import sounds.SoundEffects;
     import package_6.Course;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class TimeBlock extends class_39 
     {
@@ -19,7 +19,7 @@ package blocks
             super(Objects.BLOCK_TIME);
         }
 
-        override protected function useSupply(player:LocalPlayer)
+        override protected function useSupply(player:LocalCharacter)
         {
             super.useSupply(player);
             SoundEffects.playSound(new TickTockSound(), 1 * (Settings.soundLevel / 100));

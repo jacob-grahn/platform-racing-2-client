@@ -10,13 +10,13 @@ package items
     import com.jiggmin.data.Data;
     import flash.geom.Point;
     import package_6.Course;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_9.MineAppear;
 
     public class Mine extends Item 
     {
 
-        public function Mine(p:LocalPlayer)
+        public function Mine(p:LocalCharacter)
         {
             super(p);
         }

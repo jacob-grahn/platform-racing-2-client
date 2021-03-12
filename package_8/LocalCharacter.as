@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_8.class_86 = package_8.LocalPlayer
+// package_8.class_86 = package_8.LocalCharacter
 
 package package_8
 {
@@ -40,7 +40,7 @@ package package_8
     import package_9.Zap;
     import page.GamePage;
 
-    public class LocalPlayer extends Player 
+    public class LocalCharacter extends Player 
     {
 
         public static const const_12:String = "njv";
@@ -118,7 +118,7 @@ package package_8
         private var var_232:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
 
-        public function LocalPlayer(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
+        public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
             super(ha, h, b, f);
             var_4.setNumber(const_12, 0);
@@ -214,7 +214,7 @@ package package_8
         public function sting(a:Array)
         {
             var from:Player = this.course.playerArray[a[0]];
-            if (from == null || from is LocalPlayer || from.tempID == this.tempID) {
+            if (from == null || from is LocalCharacter || from.tempID == this.tempID) {
                 return; // shouldn't happen
             }
             var fromPos:Object = from.getPos();

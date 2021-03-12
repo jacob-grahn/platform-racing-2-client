@@ -10,7 +10,7 @@ package package_9
     import blocks.Block;
     import package_6.Course;
     import com.jiggmin.data.Data;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class class_81 extends Effect 
     {
@@ -94,7 +94,7 @@ package package_9
         // _loc4 = p
         protected function method_181(_arg_1:int, _arg_2:int):Boolean
         {
-            var p:LocalPlayer = Course.course.var_9;
+            var p:LocalCharacter = Course.course.var_9;
             if (p != null && !p.removed) {
                 if (Math.abs(p.x - _arg_1) < 25 && p.y > _arg_2 - 5 && ((!p.crouching && p.y < _arg_2 + 65) || (p.crouching && p.y < _arg_2 + 25))) {
                     return true;

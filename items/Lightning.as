@@ -2,13 +2,13 @@
 
 package items
 {
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_9.Zap;
 
     public class Lightning extends Item 
     {
 
-        public function Lightning(p:LocalPlayer)
+        public function Lightning(p:LocalCharacter)
         {
             super(p);
         }

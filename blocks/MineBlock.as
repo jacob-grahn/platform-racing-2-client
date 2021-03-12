@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_9.BlockPiece;
     import package_9.MineExplode;
 
@@ -20,31 +20,31 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(player:LocalPlayer)
+        override public function onStand(player:LocalCharacter)
         {
             super.onStand(player);
             this.method_81(player);
         }
 
-        override public function onBump(player:LocalPlayer)
+        override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
             this.method_81(player);
         }
 
-        override public function onLeftHit(player:LocalPlayer)
+        override public function onLeftHit(player:LocalCharacter)
         {
             super.onLeftHit(player);
             this.method_81(player);
         }
 
-        override public function onRightHit(player:LocalPlayer)
+        override public function onRightHit(player:LocalCharacter)
         {
             super.onRightHit(player);
             this.method_81(player);
         }
 
-        override public function onTouch(player:LocalPlayer)
+        override public function onTouch(player:LocalCharacter)
         {
             super.onTouch(player);
             this.method_81(player);
@@ -72,7 +72,7 @@ package blocks
             remove();
         }
 
-        private function method_81(player:LocalPlayer)
+        private function method_81(player:LocalCharacter)
         {
             if (!frozen) {
                 var _local_2:Number = 50;

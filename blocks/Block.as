@@ -15,7 +15,7 @@ package blocks
     import com.jiggmin.data.Data;
     import flash.events.Event;
     import package_8.Player;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
     public class Block extends Sprite 
@@ -153,7 +153,7 @@ package blocks
 
         // _arg1 = player
         // _loc2 = point
-        public function onStand(player:LocalPlayer)
+        public function onStand(player:LocalCharacter)
         {
             if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Player.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
                 this.freeze(); // controls santa physics, affected by ice wave
@@ -177,7 +177,7 @@ package blocks
             }
         }
 
-        public function onBump(player:LocalPlayer)
+        public function onBump(player:LocalCharacter)
         {
             if (this.isActive()) {
                 var _local_2:Point = this.method_18();
@@ -188,7 +188,7 @@ package blocks
                     player.y = _local_2.y + this.size + _local_3.y + player.var_325;
                 }
                 player.velY = player.velY * -0.25;
-                player.var_4.setNumber(LocalPlayer.const_12, 0);
+                player.var_4.setNumber(LocalCharacter.const_12, 0);
                 if (this.var_490) {
                     this.method_315(0, -15);
                 }
@@ -197,7 +197,7 @@ package blocks
 
         // _arg1 = player
         // _loc2 = point
-        public function onLeftHit(player:LocalPlayer)
+        public function onLeftHit(player:LocalCharacter)
         {
             if (this.isActive()) {
                 var point:Point = this.method_18();
@@ -213,7 +213,7 @@ package blocks
 
         // _arg1 = player
         // _loc2 = point
-        public function onRightHit(player:LocalPlayer)
+        public function onRightHit(player:LocalCharacter)
         {
             if (this.isActive()) {
                 var point:Point = this.method_18();
@@ -228,7 +228,7 @@ package blocks
         }
 
         // _arg1 = player
-        public function onTouch(player:LocalPlayer)
+        public function onTouch(player:LocalCharacter)
         {
         }
 

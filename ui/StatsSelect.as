@@ -5,7 +5,7 @@ package ui
     import com.jiggmin.data.Settings;
     import flash.display.Stage;
     import flash.events.MouseEvent;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class StatsSelect extends Removable 
     {
@@ -15,10 +15,10 @@ package ui
         private var accelSlider:StatSlider; // var_62
         private var jumpnSlider:StatSlider; // var_66
         private var totalPoints:int; // var_334
-        private var player:LocalPlayer; // var_5
+        private var player:LocalCharacter; // var_5
         private var stageRef:Stage = Main.stage;
 
-        public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, p:LocalPlayer)
+        public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, p:LocalCharacter)
         {
             this.totalPoints = tot;
             this.player = p;

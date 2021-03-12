@@ -3,7 +3,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_9.BlockPiece;
     import flash.geom.Point;
 
@@ -16,7 +16,7 @@ package blocks
             var_34 = false;
         }
 
-        override public function onBump(player:LocalPlayer)
+        override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
             if (!frozen) {

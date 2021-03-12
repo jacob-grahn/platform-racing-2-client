@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class ArrowBlock extends Block 
     {
@@ -32,7 +32,7 @@ package blocks
             return this.blockCode;
         }
 
-        override public function onStand(player:LocalPlayer)
+        override public function onStand(player:LocalCharacter)
         {
             super.onStand(player);
             var _local_2:Number = this.method_125();
@@ -44,7 +44,7 @@ package blocks
             this.method_87();
         }
 
-        override public function onBump(player:LocalPlayer)
+        override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
             var _local_2:Number = this.method_125();
@@ -56,7 +56,7 @@ package blocks
             this.method_87();
         }
 
-        override public function onLeftHit(player:LocalPlayer)
+        override public function onLeftHit(player:LocalCharacter)
         {
             super.onLeftHit(player);
             var _local_2:Number = this.method_125();
@@ -64,7 +64,7 @@ package blocks
             this.method_87();
         }
 
-        override public function onRightHit(player:LocalPlayer)
+        override public function onRightHit(player:LocalCharacter)
         {
             super.onRightHit(player);
             var _local_2:Number = this.method_125();
@@ -90,7 +90,7 @@ package blocks
             return _local_1;
         }
 
-        private function push(player:LocalPlayer, deg:Number)
+        private function push(player:LocalCharacter, deg:Number)
         {
             if (deg == 0 && player.crouching == false) { // up arrow
                 player.velY -= 1.2;

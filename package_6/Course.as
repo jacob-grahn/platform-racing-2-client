@@ -20,7 +20,7 @@ package package_6
     import flash.geom.Point;
     import flash.net.URLVariables;
     import package_8.Player;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_9.Egg;
     import page.GamePage;
     import sounds.SoundEffects;
@@ -35,7 +35,7 @@ package package_6
         public var var_197:Array = new Array();
         public var finishBlocks:Array = new Array(); // var_313
         public var playerArray:Array = new Array(); // var_40
-        public var var_9:LocalPlayer;
+        public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
         protected var miniMap:MiniMap = new MiniMap();

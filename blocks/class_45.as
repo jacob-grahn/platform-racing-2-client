@@ -6,7 +6,7 @@
 package blocks
 {
     import package_6.Course;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class class_45 extends Block 
     {
@@ -18,7 +18,7 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(player:LocalPlayer)
+        override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
             if (!frozen) {

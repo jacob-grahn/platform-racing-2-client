@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import flash.geom.Point;
     import package_6.Course;
     import background.EffectBackground;
@@ -13,7 +13,7 @@ package items
     public class IceWave extends Item 
     {
 
-        public function IceWave(p:LocalPlayer)
+        public function IceWave(p:LocalCharacter)
         {
             super(p);
             setUses(3);

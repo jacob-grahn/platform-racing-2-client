@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import package_8.Player;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_9.BlockPiece;
     import flash.geom.Point;
 
@@ -22,7 +22,7 @@ package blocks
             var_34 = false;
         }
 
-        override public function onStand(player:LocalPlayer)
+        override public function onStand(player:LocalCharacter)
         {
             var force:Number = this.cheeseHandler(player, Math.round(player.velY * 2), true);
             localActivate(force.toString());
@@ -31,7 +31,7 @@ package blocks
             }
         }
 
-        override public function onBump(player:LocalPlayer)
+        override public function onBump(player:LocalCharacter)
         {
             var force:Number = this.cheeseHandler(player, Math.round(-player.velY));
             localActivate(force.toString());
@@ -40,7 +40,7 @@ package blocks
             }
         }
 
-        override public function onLeftHit(player:LocalPlayer)
+        override public function onLeftHit(player:LocalCharacter)
         {
             var force:Number = this.cheeseHandler(player, Math.round(player.velX * 1.75));
             if (force == 50) { // using cheese, kill crumbles at player's head level when running
@@ -59,7 +59,7 @@ package blocks
             }
         }
 
-        override public function onRightHit(player:LocalPlayer)
+        override public function onRightHit(player:LocalCharacter)
         {
             var force:Number = this.cheeseHandler(player, Math.round(-player.velX * 1.75));
             if (force == 50) { // using cheese, kill crumbles at player's head level when running
@@ -94,7 +94,7 @@ package blocks
             }
         }
 
-        private function cheeseHandler(player:LocalPlayer, hitForce:Number, stand:Boolean = false)
+        private function cheeseHandler(player:LocalCharacter, hitForce:Number, stand:Boolean = false)
         {
             if (hitForce > 1 && player.var_4.getBool(Player.CHEESE)) {
                 return stand ? hitForce * 2 : 50;

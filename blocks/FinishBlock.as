@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import package_6.Course;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class FinishBlock extends class_39 
     {
@@ -28,7 +28,7 @@ package blocks
             return this.id;
         }
 
-        override protected function useSupply(player:LocalPlayer)
+        override protected function useSupply(player:LocalCharacter)
         {
             var _local_2:int = getPosX() + 15;
             var _local_3:int = getPosY() + 15;

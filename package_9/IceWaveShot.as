@@ -8,7 +8,7 @@ package package_9
     import com.jiggmin.data.Objects;
     import blocks.IceBlock;
     import blocks.Block;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import package_8.Player;
 
     public class IceWaveShot extends ShotEffect 
@@ -71,8 +71,8 @@ package package_9
         // _loc2 = player
         override protected function hitPlayer(p:Player)
         {
-            if (p is LocalPlayer) {
-                var player:LocalPlayer = LocalPlayer(p);
+            if (p is LocalCharacter) {
+                var player:LocalCharacter = LocalCharacter(p);
                 if (!player.isFrozen()) {
                     player.freeze();
                 }

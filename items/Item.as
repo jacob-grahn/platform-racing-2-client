@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import com.jiggmin.data.class_33;
     import flash.utils.setTimeout;
     import flash.geom.Point;
@@ -15,13 +15,13 @@ package items
     public class Item extends Removable 
     {
 
-        protected var player:LocalPlayer; // var_5
+        protected var player:LocalCharacter; // var_5
         protected var space:Boolean = false;
         protected var reloading:Boolean = false; // var_410
         private var reloadListener:uint; // var_581
         private var available:Boolean = false; // var_572
 
-        public function Item(p:LocalPlayer)
+        public function Item(p:LocalCharacter)
         {
             this.player = p;
             this.setReloadTime(10);

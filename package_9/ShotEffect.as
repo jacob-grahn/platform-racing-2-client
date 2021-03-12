@@ -11,7 +11,7 @@ package package_9
     import flash.geom.Point;
     import blocks.Block;
     import package_8.Player;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class ShotEffect extends Effect 
     {

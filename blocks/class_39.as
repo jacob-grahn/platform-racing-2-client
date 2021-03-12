@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
     import flash.geom.ColorTransform;
 
     public class class_39 extends Block 
@@ -18,7 +18,7 @@ package blocks
             super(_arg_1);
         }
 
-        override public function onBump(player:LocalPlayer)
+        override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
             if (!frozen) {
@@ -32,7 +32,7 @@ package blocks
             }
         }
 
-        protected function useSupply(player:LocalPlayer)
+        protected function useSupply(player:LocalCharacter)
         {
         }
 

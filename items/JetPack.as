@@ -6,14 +6,14 @@
 package items
 {
     import com.jiggmin.data.class_33;
-    import package_8.LocalPlayer;
+    import package_8.LocalCharacter;
 
     public class JetPack extends Item 
     {
 
         private var var_592:Boolean = false;
 
-        public function JetPack(p:LocalPlayer)
+        public function JetPack(p:LocalCharacter)
         {
             super(p);
             class_33.setNumber("totFuel", 200);
