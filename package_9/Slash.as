@@ -17,7 +17,7 @@ package package_9
 
         private var m:SlashAnimation = new SlashAnimation();
         private var course:Course = Course.course;
-        private var player:LocalCharacter = Course.course.var_9; // var_5
+        private var character:LocalCharacter = Course.course.var_9; // var_5
         private var var_154:int = 29;
         private var var_609:int;
 
@@ -47,9 +47,9 @@ package package_9
             if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.var_154);
             }
-            if (this.player != null && this.player.tempID != this.var_609 && this.player.y > _arg_2 - 14 && this.player.y < _arg_2 + 74) {
-                if (this.player.x > _arg_1 - 14 && this.player.x < _arg_1 + 14) {
-                    this.player.hit(this.var_154, -9);
+            if (this.character != null && this.character.tempID != this.var_609 && this.character.y > _arg_2 - 14 && this.character.y < _arg_2 + 74) {
+                if (this.character.x > _arg_1 - 14 && this.character.x < _arg_1 + 14) {
+                    this.character.hit(this.var_154, -9);
                 }
             }
         }
@@ -58,7 +58,7 @@ package package_9
         {
             removeChild(this.m);
             this.course = null;
-            this.player = null;
+            this.character = null;
             this.m = null;
             super.remove();
         }

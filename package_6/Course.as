@@ -19,7 +19,7 @@ package package_6
     import flash.events.Event;
     import flash.geom.Point;
     import flash.net.URLVariables;
-    import package_8.Player;
+    import package_8.Character;
     import package_8.LocalCharacter;
     import package_9.Egg;
     import page.GamePage;
@@ -112,7 +112,7 @@ package package_6
             while (_local_2 < this.playerArray.length) {
                 var _local_3:Point = this.method_753(_local_2);
                 if (_local_3 != null) {
-                    var player:Player = this.playerArray[_local_2];
+                    var player:Character = this.playerArray[_local_2];
                     player.setPos(_local_3.x, _local_3.y);
                     this.frontBackground.addChild(player);
                 }
@@ -223,7 +223,7 @@ package package_6
             addChild(this.countdown);
             var startPos:Object = this.var_9.getPos(); // this fixes hat attack when quitting during the countdown
             Main.socket.write('exact_pos`' + startPos.x + '`' + startPos.y);
-            if (this.var_9 != null && this.var_9.var_4.getBool(Player.JUMP_START)) {
+            if (this.var_9 != null && this.var_9.var_4.getBool(Character.JUMP_START)) {
                 this.var_9.init();
             }
         }
@@ -419,7 +419,7 @@ package package_6
                     this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation - 90;
                     this.miniMap.rotate(this.blockBackground.rotation);
                 }
-                for each (var player:Player in this.playerArray) {
+                for each (var player:Character in this.playerArray) {
                     player.rotate(this.var_348);
                 }
                 this.method_82(new Event(Event.ENTER_FRAME));
@@ -467,7 +467,7 @@ package package_6
             this.hearts = null;
             this.itemDisplay = null;
             Course.course = null;
-            for each (var player:Player in this.playerArray) {
+            for each (var player:Character in this.playerArray) {
                 player.remove();
             }
             this.playerArray = null;

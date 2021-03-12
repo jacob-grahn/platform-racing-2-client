@@ -6,7 +6,7 @@
 package package_18
 {
     import com.jiggmin.data.Settings;
-    import package_8.Player;
+    import package_8.Character;
     import ui.StatsSelect;
 
     public class Presets 
@@ -62,7 +62,7 @@ package package_18
             return presets[i - 1];
         }
 
-        public static function apply(preset:Preset, player:Player, ss:StatsSelect, disp:PlayerDisplay)
+        public static function apply(preset:Preset, c:Character, ss:StatsSelect, disp:PlayerDisplay)
         {
             if (ss != null) {
                 ss.setStats({
@@ -82,12 +82,12 @@ package package_18
                 disp.bodySelect.setColors(preset.bodyColor, preset.bodyColor2);
                 disp.feetSelect.setColors(preset.feetColor, preset.feetColor2);
             }
-            if (player != null) {
-                player.setHatId(preset.hat);
-                player.setHeadId(preset.head);
-                player.setBodyId(preset.body);
-                player.setFeetId(preset.feet);
-                player.setColors(preset.hatColor, preset.hatColor2, preset.headColor, preset.headColor2, preset.bodyColor, preset.bodyColor2, preset.feetColor, preset.feetColor2);
+            if (c != null) {
+                c.setHatId(preset.hat);
+                c.setHeadId(preset.head);
+                c.setBodyId(preset.body);
+                c.setFeetId(preset.feet);
+                c.setColors(preset.hatColor, preset.hatColor2, preset.headColor, preset.headColor2, preset.bodyColor, preset.bodyColor2, preset.feetColor, preset.feetColor2);
             }
         }
 

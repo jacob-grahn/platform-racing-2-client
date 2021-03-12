@@ -12,7 +12,7 @@ package package_6
     import flash.utils.setInterval;
     import sounds.SoundEffects;
     import package_4.MessagePopup;
-    import package_8.Player;
+    import package_8.Character;
     import package_8.RemotePlayer;
     import package_8.LocalCharacter;
     import package_9.Egg;
@@ -184,11 +184,13 @@ package package_6
             addChild(new HappyHour());
         }
 
+        // _loc2 = tempId
+        // _loc3 = c
         private function superBooster(arr:Array)
         {
-            var _local_2:int = int(arr[0]);
-            var _local_3:Player = playerArray[_local_2];
-            _local_3.method_576();
+            var tempId:int = int(arr[0]);
+            var c:Character = playerArray[tempId];
+            c.method_576();
         }
 
         private function startHatCountdown(a:Array = null)

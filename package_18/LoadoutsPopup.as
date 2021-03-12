@@ -4,7 +4,7 @@ package package_18
 {
     import com.jiggmin.data.Settings;
     import package_4.GetLevelsPopup;
-    import package_8.Player;
+    import package_8.Character;
     import ui.StatsSelect;
     import ui.class_229;
     import package_4.MessagePopup;
@@ -12,13 +12,13 @@ package package_18
     public class LoadoutsPopup extends GetLevelsPopup 
     {
 
-        private var player:Player; // var_5
+        private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var var_495:PlayerDisplay;
 
-        public function LoadoutsPopup(p:Player, ss:StatsSelect, _arg_3:PlayerDisplay)
+        public function LoadoutsPopup(c:Character, ss:StatsSelect, _arg_3:PlayerDisplay)
         {
-            this.player = p;
+            this.character = c;
             this.statsSelect = ss;
             this.var_495 = _arg_3;
             this.var_454 = 68;
@@ -52,7 +52,7 @@ package package_18
             }
             var listing:PresetListing = PresetListing(_arg_1);
             var preset:Preset = listing.getPreset();
-            Presets.apply(preset, this.player, this.statsSelect, this.var_495);
+            Presets.apply(preset, this.character, this.statsSelect, this.var_495);
             startFadeOut();
         }
 
@@ -68,25 +68,25 @@ package package_18
             preset.speed = stats.speed;
             preset.acceleration = stats.acceleration;
             preset.jumping = stats.jumping;
-            preset.hat = this.player.hat1;
-            preset.head = this.player.head;
-            preset.body = this.player.body;
-            preset.feet = this.player.feet;
-            preset.hatColor = this.player.hat1Color;
-            preset.headColor = this.player.headColor;
-            preset.bodyColor = this.player.bodyColor;
-            preset.feetColor = this.player.feetColor;
-            preset.hatColor2 = this.player.hat1Color2;
-            preset.headColor2 = this.player.headColor2;
-            preset.bodyColor2 = this.player.bodyColor2;
-            preset.feetColor2 = this.player.feetColor2;
+            preset.hat = this.character.hat1;
+            preset.head = this.character.head;
+            preset.body = this.character.body;
+            preset.feet = this.character.feet;
+            preset.hatColor = this.character.hat1Color;
+            preset.headColor = this.character.headColor;
+            preset.bodyColor = this.character.bodyColor;
+            preset.feetColor = this.character.feetColor;
+            preset.hatColor2 = this.character.hat1Color2;
+            preset.headColor2 = this.character.headColor2;
+            preset.bodyColor2 = this.character.bodyColor2;
+            preset.feetColor2 = this.character.feetColor2;
             Presets.savePresets();
             startFadeOut();
         }
 
         override public function remove()
         {
-            this.player = null;
+            this.character = null;
             this.statsSelect = null;
             this.var_495 = null;
             super.remove();

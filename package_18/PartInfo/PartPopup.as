@@ -6,7 +6,7 @@
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
     import package_4.Popup;
-    import package_8.Player;
+    import package_8.Character;
 
     public class PartPopup extends Popup 
     {
@@ -147,15 +147,15 @@
         {
             var body:int = type == 'BODY' ? 35 : 33;
             var feet:int = type == 'FEET' ? 35 : 33;
-            var p:Player = new Player(1, 31, body, feet);
-            this.m.addChildAt(p, 2);
-            p.setBodyColors(255, 3329330);
-            p.setFeetColors(255, 3329330);
-            p.scaleX = p.scaleY = 1;
-            p.x = -130;
-            p.y = 10;
+            var c:Character = new Character(1, 31, body, feet);
+            this.m.addChildAt(c, 2);
+            c.setBodyColors(255, 3329330);
+            c.setFeetColors(255, 3329330);
+            c.scaleX = c.scaleY = 1;
+            c.x = -130;
+            c.y = 10;
             if (has == false) {
-                p.djinnUpdateAlpha(0.1);
+                c.djinnUpdateAlpha(0.1);
             }
         }
 

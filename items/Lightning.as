@@ -8,14 +8,14 @@ package items
     public class Lightning extends Item 
     {
 
-        public function Lightning(p:LocalCharacter)
+        public function Lightning(lc:LocalCharacter)
         {
-            super(p);
+            super(lc);
         }
 
         override public function useItem()
         {
-            new Zap(player, false);
+            new Zap(character, false);
             Main.socket.write("zap`");
             super.useItem();
         }

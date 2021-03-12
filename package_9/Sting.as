@@ -2,18 +2,18 @@ package package_9
 {
     import com.jiggmin.data.Settings;
     import flash.events.Event;
-    import package_8.Player;
+    import package_8.Character;
     import sounds.SoundEffects;
 
     public class Sting extends Effect 
     {
 
         private var m:StingGraphic = new StingGraphic();
-        private var player:Player; // var_5
+        private var character:Character; // var_5
 
-        public function Sting(r:Player, dir:String = '')
+        public function Sting(c:Character, dir:String = '')
         {
-            this.player = r;
+            this.character = c;
             if (dir === 'right') {
                 this.m.removeChild(this.m.leftSting);
             } else if (dir === 'left') {
@@ -36,8 +36,8 @@ package package_9
 
         private function pos()
         {
-            x = this.player.x;
-            y = this.player.y;
+            x = this.character.x;
+            y = this.character.y;
         }
 
         override public function remove()
@@ -45,7 +45,7 @@ package package_9
             removeEventListener(Event.ENTER_FRAME, this.go);
             removeChild(this.m);
             this.m = null;
-            this.player = null;
+            this.character = null;
             super.remove();
         }
 

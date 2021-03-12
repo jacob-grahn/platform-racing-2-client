@@ -11,7 +11,7 @@ package package_17
     import flash.text.TextFieldAutoSize;
     import flash.events.TextEvent;
     import flash.net.URLRequest;
-    import package_8.Player;
+    import package_8.Character;
     import flash.events.MouseEvent;
     import flash.events.Event;
 
@@ -96,7 +96,7 @@ package package_17
             var bodyColor2:int = int(Math.round(Math.random() * 0xFFFFFF));
             var feetColor:int = int(Math.round(Math.random() * 0xFFFFFF));
             var feetColor2:int = int(Math.round(Math.random() * 0xFFFFFF));
-            var player:Player = new Player(hat, head, body, feet);
+            var player:Character = new Character(hat, head, body, feet);
             this.m.addChildAt(player, 2);
             player.setHatColors(hatColor, hatColor2);
             player.setHeadColors(headColor, headColor2);

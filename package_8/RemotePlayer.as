@@ -19,7 +19,7 @@ package package_8
     import blocks.VanishBlock;
     import blocks.WaterBlock;
 
-    public class RemotePlayer extends Player
+    public class RemotePlayer extends Character
     {
 
         private var var_19:Array = new Array();
@@ -210,7 +210,7 @@ package package_8
 
         private function sting(a:Array)
         {
-            var from:Player = Course.course.playerArray[a[0]];
+            var from:Character = Course.course.playerArray[a[0]];
             if (from == null || from.tempID == this.tempID) {
                 return;
             }

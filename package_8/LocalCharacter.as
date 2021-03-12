@@ -40,7 +40,7 @@ package package_8
     import package_9.Zap;
     import page.GamePage;
 
-    public class LocalCharacter extends Player 
+    public class LocalCharacter extends Character 
     {
 
         public static const const_12:String = "njv";
@@ -213,7 +213,7 @@ package package_8
 
         public function sting(a:Array)
         {
-            var from:Player = this.course.playerArray[a[0]];
+            var from:Character = this.course.playerArray[a[0]];
             if (from == null || from is LocalCharacter || from.tempID == this.tempID) {
                 return; // shouldn't happen
             }
@@ -228,7 +228,7 @@ package package_8
         public function zap(a:Array)
         {
             // show zap on other players
-            for each (var p:Player in this.course.playerArray) {
+            for each (var p:Character in this.course.playerArray) {
                 if (a[0] != p.tempID) {
                     new Zap(p, true, false, false);
                 }
@@ -313,7 +313,7 @@ package package_8
         // method_704 = maybeSquash
         private function maybeSquash()
         {
-            for each (var p:Player in this.course.playerArray) {
+            for each (var p:Character in this.course.playerArray) {
                 if (p is RemotePlayer && p.state != "crouch" && p.state != "crouchWalk" && p.x > (x - 20) && p.x < (x + 20) && p.y > (y + 35) && p.y < (y + 65) && p.rotation == this.rotation) {
                     p.changeState("crouch");
                     SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);
@@ -327,7 +327,7 @@ package package_8
         // sting another player
         private function maybeSting()
         {
-            for each (var p:Player in this.course.playerArray) {
+            for each (var p:Character in this.course.playerArray) {
                 if (p is RemotePlayer && p.state != "bumped" && p.x > (x - 75) && p.x < (x + 75) && p.y > (y - 100) && p.y < (y + 100)) {
                     Main.socket.write('sting`' + p.tempID + '`' + x + '`' + y); // remote tempID, local x, local y
                     this.stingCooldown = 135; // 5 seconds
@@ -866,7 +866,7 @@ package package_8
         // deleted _loc2 (return values)
         private function method_779():Boolean
         {
-            for each (var _local_3:Player in Course.course.playerArray) {
+            for each (var _local_3:Character in Course.course.playerArray) {
                 // uncommenting below disables near-instant updates for other players when farther than 1000px in either direction
                 if (_local_3 != this /*&& Math.abs(_local_3.x - x) < 1000 && Math.abs(_local_3.y - y) < 1000*/) {
                     return true;

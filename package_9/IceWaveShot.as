@@ -9,7 +9,7 @@ package package_9
     import blocks.IceBlock;
     import blocks.Block;
     import package_8.LocalCharacter;
-    import package_8.Player;
+    import package_8.Character;
 
     public class IceWaveShot extends ShotEffect 
     {
@@ -69,7 +69,7 @@ package package_9
         }
 
         // _loc2 = player
-        override protected function hitPlayer(p:Player)
+        override protected function hitPlayer(p:Character)
         {
             if (p is LocalCharacter) {
                 var player:LocalCharacter = LocalCharacter(p);

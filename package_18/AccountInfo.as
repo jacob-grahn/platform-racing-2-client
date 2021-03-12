@@ -18,7 +18,7 @@ package package_18
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import package_4.HoverPopup;
-    import package_8.Player;
+    import package_8.Character;
     import package_22.LevelListing;
     import page.Page;
     import ui.GuildName;
@@ -29,7 +29,7 @@ package package_18
 
         public static var currentHat:int;
 
-        private var player:Player; // var_5
+        private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var var_190:PlayerDisplay;
         private var stageRef:Stage = Main.stage;
@@ -121,9 +121,9 @@ package package_18
                 this.guildName.y = 54;
                 this.m.addChild(this.guildName);
             }
-            this.player = new Player(hat, head, body, feet);
+            this.character = new Character(hat, head, body, feet);
             var _local_25:Sprite = new Sprite();
-            _local_25.addChild(this.player);
+            _local_25.addChild(this.character);
             _local_25.x = 80;
             _local_25.y = (140 + 42);
             _local_25.scaleX = (_local_25.scaleY = 1.5);
@@ -133,7 +133,7 @@ package package_18
             this.statsSelect.x = 20;
             this.statsSelect.y = 207;
             addChild(this.statsSelect);
-            this.var_190 = new PlayerDisplay(this.player, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
+            this.var_190 = new PlayerDisplay(this.character, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
             this.var_190.x = 23;
             this.var_190.y = (58 + 37);
             addChild(this.var_190);
@@ -191,13 +191,13 @@ package package_18
             this.m.rankBox.htmlText = "Rank: <b>" + this.rank + "</b>";
         }
 
-        // _loc2 = p
+        // _loc2 = c
         // _loc3 = partInfo
         // _loc4 = sendStr
         private function update(_arg_1:MouseEvent)
         {
-            var p:Player = this.player;
-            var partInfo:String = p.hat1Color + "`" + p.headColor + "`" + p.bodyColor + "`" + p.feetColor + "`" + p.hat1Color2 + "`" + p.headColor2 + "`" + p.bodyColor2 + "`" + p.feetColor2 + "`" + p.hat1 + "`" + p.head + "`" + p.body + "`" + p.feet;
+            var c:Character = this.character;
+            var partInfo:String = c.hat1Color + "`" + c.headColor + "`" + c.bodyColor + "`" + c.feetColor + "`" + c.hat1Color2 + "`" + c.headColor2 + "`" + c.bodyColor2 + "`" + c.feetColor2 + "`" + c.hat1 + "`" + c.head + "`" + c.body + "`" + c.feet;
             var sendStr:String = "set_customize_info`" + partInfo + "`" + this.statsSelect.getInfoStr();
             if (sendStr != this.customizeInfo) {
                 Main.socket.write(sendStr);
@@ -269,7 +269,7 @@ package package_18
             }
             if (presetNum != -1 && applyPreset) {
                 var preset:Preset = Presets.getPreset(presetNum);
-                Presets.apply(preset, this.player, this.statsSelect, this.var_190);
+                Presets.apply(preset, this.character, this.statsSelect, this.var_190);
             }
         }
 
@@ -295,7 +295,7 @@ package package_18
             }
 
             if (e.type == MouseEvent.CLICK) {
-                new LoadoutsPopup(this.player, this.statsSelect, this.var_190);
+                new LoadoutsPopup(this.character, this.statsSelect, this.var_190);
             } else if (e.type == MouseEvent.MOUSE_OVER) {
                 this.loadoutsHoverTimer = setTimeout(this.loadoutsMouseEvent, 500);
             }
@@ -303,11 +303,11 @@ package package_18
 
         private function reset()
         {
-            if (this.player != null) {
+            if (this.character != null) {
                 this.statsSelect.remove();
                 this.var_190.remove();
-                this.player.remove();
-                this.player = null;
+                this.character.remove();
+                this.character = null;
                 this.var_190 = null;
                 this.statsSelect = null;
             }

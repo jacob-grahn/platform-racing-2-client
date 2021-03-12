@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_8.Player = package_8.class_76
+// package_8.Character = package_8.class_76
 
 package package_8
 {
@@ -15,7 +15,7 @@ package package_8
     import flash.events.Event;
     import sounds.SoundEffects;
 
-    public class Player extends Removable 
+    public class Character extends Removable 
     {
 
         public static const PROP:String = 'p'; // const_52
@@ -76,7 +76,7 @@ package package_8
         public var var_4:class_20;
         private var var_375:class_125;
 
-        public function Player(hatId:int = 1, headId:int = 1, bodyId:int = 1, feetId:int = 1)
+        public function Character(hatId:int = 1, headId:int = 1, bodyId:int = 1, feetId:int = 1)
         {
             this.var_387 = new class_127(this);
             this.hat1 = hatId;

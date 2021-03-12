@@ -15,15 +15,15 @@ package items
     public class Item extends Removable 
     {
 
-        protected var player:LocalCharacter; // var_5
+        protected var character:LocalCharacter; // var_5
         protected var space:Boolean = false;
         protected var reloading:Boolean = false; // var_410
         private var reloadListener:uint; // var_581
         private var available:Boolean = false; // var_572
 
-        public function Item(p:LocalCharacter)
+        public function Item(lc:LocalCharacter)
         {
-            this.player = p;
+            this.character = lc;
             this.setReloadTime(10);
             this.setUses(1);
         }
@@ -45,7 +45,7 @@ package items
         protected function setUses(uses:int)
         {
             class_33.setNumber("uses", uses);
-            this.player.setAmmo(uses);
+            this.character.setAmmo(uses);
         }
 
         // method_45 = setReloadTime
@@ -60,9 +60,9 @@ package items
             var uses:int = class_33.getNumber("uses");
             uses--;
             class_33.setNumber("uses", uses);
-            this.player.setAmmo(uses);
+            this.character.setAmmo(uses);
             if (uses <= 0) {
-                this.player.setItem(0);
+                this.character.setItem(0);
             } else {
                 this.reloading = true;
                 this.reloadListener = setTimeout(this.reloadingOnComplete, class_33.getNumber("reloadTime"));
@@ -77,16 +77,16 @@ package items
 
         protected function method_37():Point
         {
-            var _local_1:Point = new Point(this.player.curWeapon.x, this.player.curWeapon.y);
-            _local_1 = this.player.curWeapon.parent.localToGlobal(_local_1);
+            var _local_1:Point = new Point(this.character.curWeapon.x, this.character.curWeapon.y);
+            _local_1 = this.character.curWeapon.parent.localToGlobal(_local_1);
             return EffectBackground.instance.globalToLocal(_local_1);
         }
 
         override public function remove()
         {
             clearTimeout(this.reloadListener);
-            if (this.player != null) {
-                this.player = null;
+            if (this.character != null) {
+                this.character = null;
             }
             super.remove();
         }

@@ -9,7 +9,7 @@ package package_4
     import flash.events.MouseEvent;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
-    import package_8.Player;
+    import package_8.Character;
     import package_18.PartInfo.PartInfoPopup;
     import package_18.PartInfo.PartPopup;
     import flash.events.Event;
@@ -152,15 +152,15 @@ package package_4
                 this.guildName.y = 42;
                 this.m.playerInfo.addChild(this.guildName);
             }
-            var p:Player = new Player(ret.hat, ret.head, ret.body, ret.feet);
-            this.m.playerInfo.addChild(p);
-            p.setHatColors(ret.hatColor, ret.hatColor2);
-            p.setHeadColors(ret.headColor, ret.headColor2);
-            p.setBodyColors(ret.bodyColor, ret.bodyColor2);
-            p.setFeetColors(ret.feetColor, ret.feetColor2);
-            p.scaleX = p.scaleY = 2;
-            p.x = -75;
-            p.y = 135;
+            var c:Character = new Character(ret.hat, ret.head, ret.body, ret.feet);
+            this.m.playerInfo.addChild(c);
+            c.setHatColors(ret.hatColor, ret.hatColor2);
+            c.setHeadColors(ret.headColor, ret.headColor2);
+            c.setBodyColors(ret.bodyColor, ret.bodyColor2);
+            c.setFeetColors(ret.feetColor, ret.feetColor2);
+            c.scaleX = c.scaleY = 2;
+            c.x = -75;
+            c.y = 135;
             this.m.playerInfo.expBg.visible = false;
             this.expGain = new ExpGain();
             this.expGain.x = this.m.playerInfo.x;

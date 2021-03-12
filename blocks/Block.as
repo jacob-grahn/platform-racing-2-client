@@ -14,7 +14,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Data;
     import flash.events.Event;
-    import package_8.Player;
+    import package_8.Character;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
@@ -155,7 +155,7 @@ package blocks
         // _loc2 = point
         public function onStand(player:LocalCharacter)
         {
-            if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Player.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
+            if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
                 this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {

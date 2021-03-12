@@ -18,7 +18,7 @@ package background
     import flash.utils.setTimeout;
     import package_6.Course;
     import package_6.MiniMap;
-    import package_8.Player;
+    import package_8.Character;
     import package_9.Egg;
 
     public class Map extends BlockBackground 
@@ -219,23 +219,22 @@ package background
             return false;
         }
 
-        // _loc5 = occupies
+        // deleted _loc5 (simplified return)
+        // _loc6 = p
         public function characterOccupiesSpace(xVal:int, yVal:int):Boolean
         {
-            var occupies:Boolean = false;
             if (Course.course != null) {
-                for each (var _local_6:Player in Course.course.playerArray) {
-                    if (_local_6 != null) {
-                        var _local_3:Point = _local_6.seg1;
-                        var _local_4:Point = _local_6.seg2;
+                for each (var p:Character in Course.course.playerArray) {
+                    if (p != null) {
+                        var _local_3:Point = p.seg1;
+                        var _local_4:Point = p.seg2;
                         if ((_local_3.x == xVal && _local_3.y == yVal) || (_local_4.x == xVal && _local_4.y == yVal)) {
-                            occupies = true;
-                            break;
+                            return true;
                         }
                     }
                 }
             }
-            return occupies;
+            return false;
         }
 
         public function clearMoveInterval()

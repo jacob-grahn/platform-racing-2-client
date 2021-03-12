@@ -10,7 +10,7 @@ package package_9
     import com.jiggmin.data.Data;
     import flash.geom.Point;
     import blocks.Block;
-    import package_8.Player;
+    import package_8.Character;
     import package_8.LocalCharacter;
 
     public class ShotEffect extends Effect 
@@ -88,7 +88,7 @@ package package_9
             if (_local_1 != null && (this.var_493 || _local_1.isActive())) {
                 this.hitBlock(_local_1);
             }
-            var _local_2:Player = this.method_782(x, y);
+            var _local_2:Character = this.method_782(x, y);
             if (_local_2 != null) {
                 this.hitPlayer(_local_2);
             }
@@ -97,9 +97,9 @@ package package_9
         
         // deleted _loc3 (replaced by return)
         // _loc4 = c
-        protected function method_782(x:int, y:int):Player
+        protected function method_782(x:int, y:int):Character
         {
-            for each (var p:Player in this.course.playerArray) {
+            for each (var p:Character in this.course.playerArray) {
                 if (p.tempID != this.shooterID && p.y > y && p.y < y + 60 && !p.removed) {
                     if ((scaleX == 1 && p.x > x - 60 && p.x < x) || (scaleX == -1 && p.x < x + 60 && p.x > x)) {
                         return p;
@@ -122,7 +122,7 @@ package package_9
             this.hitAnything();
         }
 
-        protected function hitPlayer(player:Player)
+        protected function hitPlayer(player:Character)
         {
             if (player.type == "local") {
                 player.hit(this.velX, this.velY);

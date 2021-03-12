@@ -13,31 +13,31 @@ package items
     public class LaserGun extends Item 
     {
 
-        public function LaserGun(p:LocalCharacter)
+        public function LaserGun(lc:LocalCharacter)
         {
-            super(p);
+            super(lc);
             setUses(3);
             setReloadTime(800);
         }
 
         override public function useItem()
         {
-            player.curWeapon.gun.gotoAndPlay("shoot");
+            character.curWeapon.gun.gotoAndPlay("shoot");
             var _local_1:Point = method_37();
             var _local_2:Number = 20;
             var _local_3:* = "right";
-            if (player.scaleX < 0) {
+            if (character.scaleX < 0) {
                 _local_2 = -_local_2;
-                player.velX = player.velX + 15;
+                character.velX = character.velX + 15;
                 _local_3 = "left";
             } else {
-                player.velX = player.velX - 15;
+                character.velX = character.velX - 15;
             }
             var _local_4:int = _local_1.x + _local_2;
             var _local_5:int = _local_1.y;
             var _local_6:int = Course.course.blockBackground.rotation;
-            var _local_7:LaserShot = new LaserShot(_local_4, _local_5, _local_3, _local_6, player.tempID);
-            Main.socket.write("add_effect`Laser`" + _local_4 + "`" + _local_5 + "`" + _local_3 + "`" + _local_6 + "`" + player.tempID);
+            var _local_7:LaserShot = new LaserShot(_local_4, _local_5, _local_3, _local_6, character.tempID);
+            Main.socket.write("add_effect`Laser`" + _local_4 + "`" + _local_5 + "`" + _local_3 + "`" + _local_6 + "`" + character.tempID);
             super.useItem();
         }
 

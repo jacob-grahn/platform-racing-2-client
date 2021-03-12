@@ -9,7 +9,7 @@ package package_18
     import flash.events.Event;
     import flash.events.MouseEvent;
     import package_4.HoverPopup;
-    import package_8.Player;
+    import package_8.Character;
     import package_18.PartInfo.*;
     import package_22.LevelListing;
     import flash.utils.clearTimeout;
@@ -18,7 +18,7 @@ package package_18
     public class PlayerDisplay extends Removable 
     {
 
-        private var player:Player; // var_5
+        private var character:Character; // var_5
         private var yStart:Number = 24; // var_388
         public var hatSelect:PartSelector; // var_130
         public var headSelect:PartSelector; // var_119
@@ -27,9 +27,9 @@ package package_18
         private var hover:HoverPopup;
         private var hoverTimer:uint;
 
-        public function PlayerDisplay(p:Player, hatArray:Array, headArray:Array, bodyArray:Array, feetArray:Array, hatSel:int, headSel:int, bodySel:int, feetSel:int, hatCol:int, headCol:int, bodyCol:int, feetCol:int, hatArray2:Array, headArray2:Array, bodyArray2:Array, feetArray2:Array, hatCol2:int, headCol2:int, bodyCol2:int, feetCol2:int)
+        public function PlayerDisplay(c:Character, hatArray:Array, headArray:Array, bodyArray:Array, feetArray:Array, hatSel:int, headSel:int, bodySel:int, feetSel:int, hatCol:int, headCol:int, bodyCol:int, feetCol:int, hatArray2:Array, headArray2:Array, bodyArray2:Array, feetArray2:Array, hatCol2:int, headCol2:int, bodyCol2:int, feetCol2:int)
         {
-            this.player = p;
+            this.character = c;
             this.hatSelect = new PartSelector(hatArray, hatSel, hatCol, hatArray2, hatCol2);
             this.headSelect = new PartSelector(headArray, headSel, headCol, headArray2, headCol2);
             this.bodySelect = new PartSelector(bodyArray, bodySel, bodyCol, bodyArray2, bodyCol2);
@@ -111,16 +111,16 @@ package package_18
         // method_65 = updateDisplay
         private function updateDisplay(e:Event)
         {
-            this.player.setHatId(this.hatSelect.getValue());
-            this.player.setHeadId(this.headSelect.getValue());
-            this.player.setBodyId(this.bodySelect.getValue());
-            this.player.setFeetId(this.feetSelect.getValue());
-            this.player.setHatColors(this.hatSelect.getColor(), this.hatSelect.getColor2());
-            this.player.setHeadColors(this.headSelect.getColor(), this.headSelect.getColor2());
-            this.player.setBodyColors(this.bodySelect.getColor(), this.bodySelect.getColor2());
-            this.player.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
-            if (this.player.hat1 != AccountInfo.currentHat) { // dispatch event to check for bad hats on shown levels
-                AccountInfo.currentHat = this.player.hat1;
+            this.character.setHatId(this.hatSelect.getValue());
+            this.character.setHeadId(this.headSelect.getValue());
+            this.character.setBodyId(this.bodySelect.getValue());
+            this.character.setFeetId(this.feetSelect.getValue());
+            this.character.setHatColors(this.hatSelect.getColor(), this.hatSelect.getColor2());
+            this.character.setHeadColors(this.headSelect.getColor(), this.headSelect.getColor2());
+            this.character.setBodyColors(this.bodySelect.getColor(), this.bodySelect.getColor2());
+            this.character.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
+            if (this.character.hat1 != AccountInfo.currentHat) { // dispatch event to check for bad hats on shown levels
+                AccountInfo.currentHat = this.character.hat1;
                 if (LevelListing.levelListing != null) {
                     LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
                 }
@@ -157,7 +157,7 @@ package package_18
 
         override public function remove()
         {
-            this.player = null;
+            this.character = null;
             this.removePartSelector(this.hatSelect);
             this.removePartSelector(this.headSelect);
             this.removePartSelector(this.bodySelect);

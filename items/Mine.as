@@ -16,9 +16,9 @@ package items
     public class Mine extends Item 
     {
 
-        public function Mine(p:LocalCharacter)
+        public function Mine(lc:LocalCharacter)
         {
-            super(p);
+            super(lc);
         }
 
         // _loc1 = map
