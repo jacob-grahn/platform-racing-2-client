@@ -72,15 +72,15 @@ package blocks
             remove();
         }
 
+        // deleted _loc2 (50)
         private function method_81(player:LocalCharacter)
         {
             if (!frozen) {
-                var _local_2:Number = 50;
-                var _local_3:Number = player.x - x + 15;
-                var _local_4:Number = player.y - (player.var_325 / 2) - y + 15;
+                var _local_3:Number = player.x - (x + 15);
+                var _local_4:Number = (player.y - (player.var_325 / 2)) - (y + 15);
                 var _local_5:Number = Math.atan2(_local_4, _local_3);
-                var _local_6:Number = Math.cos(_local_5) * _local_2;
-                var _local_7:Number = Math.sin(_local_5) * _local_2;
+                var _local_6:Number = Math.cos(_local_5) * 50;
+                var _local_7:Number = Math.sin(_local_5) * 50;
                 player.hit(_local_6, _local_7);
                 localActivate();
             }
