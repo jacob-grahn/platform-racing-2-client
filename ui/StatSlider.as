@@ -60,6 +60,9 @@ package ui
                 this.holdSpeed = 32;
             }
             clearInterval(this.updateInterval);
+            if (this.holdSpeed <= 0) {
+                return;
+            }
             this.updateInterval = setInterval(function () {
                 updateStatFromHeld(mode);
             }, Math.floor(1000 / this.holdSpeed));
