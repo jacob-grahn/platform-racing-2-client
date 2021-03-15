@@ -179,6 +179,9 @@ package background
         // method_416 = determineMoveBlockDirection
         private function determineMoveBlockDirection()
         {
+            if (this.moveBlocksArray == null) {
+                return; // to-do: debug this happenstance
+            }
             var totalMoveBlocks:int = this.moveBlocksArray.length;
             var i:int = 0;
             while (i < totalMoveBlocks) {
