@@ -197,10 +197,10 @@ package package_22
         private function clickPassEnter(e:MouseEvent)
         {
             if (this.superLoader == null) {
-                this.m.accessCover.passButton.enabled = this.m.accessCover.passBox.enabled = false;
-                this.m.accessCover.passBox.text = 'checking...';
                 var enteredPass:String = this.m.accessCover.passBox.text;
                 var hash:String = Data.hash(enteredPass + Env.LEVEL_PASS_SALT);
+                this.m.accessCover.passButton.enabled = this.m.accessCover.passBox.enabled = false;
+                this.m.accessCover.passBox.text = 'checking...';
                 this.superLoader = new SuperLoader(true, SuperLoader.j);
                 this.superLoader.addEventListener(SuperLoader.d, this.validatePassResponse, false, 0, true);
                 this.superLoader.addEventListener(SuperLoader.e, this.passResponseError, false, 0, true);
