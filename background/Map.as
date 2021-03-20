@@ -10,8 +10,8 @@ package background
     import blocks.FinishBlock;
     import blocks.MoveBlock;
     import blocks.StartBlock;
-    import com.jiggmin.data.Objects;
     import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Objects;
     import com.jiggmin.data.Random;
     import flash.geom.Point;
     import flash.utils.clearTimeout;
@@ -38,8 +38,8 @@ package background
         private var moves:int = 0; // var_506
         private var moveTime:int = 5000; // var_534
         private var rand:Random = new Random(1);
-        private var var_446:int = 0;
-        private var var_379:Array = new Array();
+        private var placedEggs:int = 0; // var_446
+        private var eggPtsArray:Array = new Array(); // var_379
 
         public function Map(m:MiniMap, c:Course)
         {
@@ -82,7 +82,7 @@ package background
             }
             var _local_4:Point = getSegFromPos(x, y);
             if (blockCode == Objects.BLOCK_MINION_EGG) {
-                this.var_379.push(new Point(x, y));
+                this.eggPtsArray.push(new Point(x, y));
             } else {
                 var block:Block = Block(Objects.getFromCode(blockCode));
                 if (block is StartBlock) {
@@ -118,24 +118,26 @@ package background
             }
         }
 
-        private function method_485()
+        // method_485 = placeEggs
+        private function placeEggs()
         {
-            for each (var _local_1:Point in this.var_379) {
-                this.method_552(_local_1.x + 15, _local_1.y + 15);
+            for each (var eggPt:Point in this.eggPtsArray) {
+                this.attachEgg(eggPt.x + 15, eggPt.y + 15);
             }
-            this.var_379 = new Array();
+            this.eggPtsArray = new Array();
         }
 
         // _loc3 = egg
-        private function method_552(eggX:int, eggY:int)
+        // method_552 = attachEgg
+        private function attachEgg(eggX:int, eggY:int)
         {
-            if (this.var_446 < 25) {
+            if (this.placedEggs < 25) {
                 var egg:Egg = new Egg();
                 egg.posX = eggX + 15;
                 egg.posY = eggY + 15;
                 egg.rot = 0;
                 egg.setLimits();
-                this.var_446++;
+                this.placedEggs++;
             }
         }
 
@@ -168,7 +170,7 @@ package background
         {
             this.startTime = new Date().time;
             this.determineMoveBlockDirection();
-            this.method_485();
+            this.placeEggs();
         }
 
         // _loc1 = i
