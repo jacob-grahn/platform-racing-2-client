@@ -5,11 +5,11 @@
 
 package package_9
 {
-    import package_6.Course;
-    import flash.events.Event;
-    import com.jiggmin.data.Data;
-    import flash.geom.Point;
     import blocks.Block;
+    import com.jiggmin.data.Data;
+    import flash.events.Event;
+    import flash.geom.Point;
+    import package_6.Course;
     import package_8.Character;
     import package_8.LocalCharacter;
 
@@ -111,7 +111,7 @@ package package_9
 
         protected function method_389()
         {
-            var _local_1:Number = this.var_278 * class_74.const_78;
+            var _local_1:Number = this.var_278 * Data.DEG_RAD;
             this.velX = Math.cos(_local_1) * this.var_154;
             this.velY = Math.sin(_local_1) * this.var_154;
         }

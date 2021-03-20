@@ -9,6 +9,7 @@ package package_6
     import flash.display.Bitmap;
     import flash.display.Sprite;
     import flash.geom.ColorTransform;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
     import flash.display.DisplayObject;
     import flash.geom.Rectangle;
@@ -116,8 +117,8 @@ package package_6
             _local_9 = this.var_16.getBounds(_local_8);
             this.var_49.x = this.var_134.x = this.var_16.x = -_local_9.left;
             this.var_49.y = this.var_134.y = this.var_16.y = -_local_9.top;
-            var _local_10:Number = class_74.numLimit(this.var_16.width, 1, this.var_239);
-            var _local_11:Number = class_74.numLimit(this.var_16.height, 1, this.var_239);
+            var _local_10:Number = Data.numLimit(this.var_16.width, 1, this.var_239);
+            var _local_11:Number = Data.numLimit(this.var_16.height, 1, this.var_239);
             this.bitmapData = new BitmapData(Math.ceil(_local_10), Math.ceil(_local_11), true, 0);
             this.bitmap = new Bitmap(this.bitmapData);
             this.bitmapData.draw(_local_8);
@@ -141,7 +142,7 @@ package package_6
             } else {
                 this.scale = _local_3;
             }
-            this.scale = class_74.numLimit(this.scale, 0, 1);
+            this.scale = Data.numLimit(this.scale, 0, 1);
             this.holder.scaleX = (this.holder.scaleY = this.scale);
             _local_1 = this.bitmap.getBounds(this);
             var _local_4:int = int((this.var_239 - _local_1.width) / 2);

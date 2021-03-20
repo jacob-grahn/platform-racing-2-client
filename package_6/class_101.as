@@ -5,11 +5,12 @@
 
 package package_6
 {
-    import flash.display.Sprite;
+    import com.jiggmin.data.Data;
     import flash.display.Loader;
-    import flash.net.URLVariables;
-    import flash.net.URLRequest;
+    import flash.display.Sprite;
     import flash.events.Event;
+    import flash.net.URLRequest;
+    import flash.net.URLVariables;
 
     public class class_101 extends Sprite 
     {
@@ -53,7 +54,7 @@ package package_6
 
         private function method_566(e:* = null)
         {
-            class_74.method_314(this.img, 200, 200);
+            Data.method_314(this.img, 200, 200);
             this.img.x = Math.round((200 - this.img.width) / 2) + 5;
             this.img.y = Math.round((200 - this.img.height) / 2) + 5;
             this.img.mouseEnabled = this.img.mouseChildren = false;

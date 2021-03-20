@@ -165,9 +165,9 @@ package package_8
         // method_46 = setStats
         public function setStats(s:int, a:int, j:int, fromSpeedBurst = false)
         {
-            this.speedStat = class_74.numLimit(s, 0, 100);
-            this.accelStat = class_74.numLimit(a, 0, 100);
-            this.jumpnStat = class_74.numLimit(j, 0, 100);
+            this.speedStat = Data.numLimit(s, 0, 100);
+            this.accelStat = Data.numLimit(a, 0, 100);
+            this.jumpnStat = Data.numLimit(j, 0, 100);
             if (!fromSpeedBurst) { // only apply speed change if a speed burst isn't active
                 this.maxVelX = 2 + (this.speedStat / 10);
                 this.accel = 0.2 + (this.accelStat / 60);
@@ -403,8 +403,8 @@ package package_8
             velY += var_4.getNumber(DefaultGravity) * 0.25;
             velX *= 0.92;
             velY *= 0.92;
-            velX = class_74.numLimit(velX, -this.var_157, this.var_157);
-            velY = class_74.numLimit(velY, -this.var_157, this.var_157);
+            velX = Data.numLimit(velX, -this.var_157, this.var_157);
+            velY = Data.numLimit(velY, -this.var_157, this.var_157);
             x += velX;
             y += velY;
             this.method_76();
@@ -553,15 +553,15 @@ package package_8
                 if (this.crouching) {
                     this.var_24 *= 0.7;
                 }
-                this.var_24 = class_74.numLimit(this.var_24, -this.maxVelX, this.maxVelX);
+                this.var_24 = Data.numLimit(this.var_24, -this.maxVelX, this.maxVelX);
                 var _local_1:Number = Math.abs(velX) / this.var_157;
                 _local_1 = 1 - _local_1;
                 _local_1 *= 0.9;
                 _local_1 += 0.1;
                 this.var_147 *= this.frozenSolid ? 0 : _local_1;
                 velX += (this.var_24 - velX) * this.var_147;
-                velX = class_74.numLimit(velX, -this.var_157, this.var_157);
-                velY = class_74.numLimit(velY, -this.var_157, this.var_157);
+                velX = Data.numLimit(velX, -this.var_157, this.var_157);
+                velY = Data.numLimit(velY, -this.var_157, this.var_157);
                 x += velX;
                 y += velY;
                 var _local_2:Point = Data.method_9(x, y, this.map.rotation);
@@ -776,7 +776,7 @@ package package_8
 
         public function setLife(l:int)
         {
-            this.life = class_74.numLimit(l, 0, 15);
+            this.life = Data.numLimit(l, 0, 15);
             this.course.setLife(this.life);
         }
 

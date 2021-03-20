@@ -78,7 +78,7 @@ package package_22
             this.type = gMode;
             this.lastUpdated = new Date(time * 1000);
             this.myRank = isNaN(this.myRank) || this.myRank < 0 ? 0 : this.myRank;
-            this.minRank = class_74.numLimit(this.minRank, 0, 99);
+            this.minRank = Data.numLimit(this.minRank, 0, 99);
             var htmlName:String = this.htmlNameMaker.makeName(this.userName, this.group);
             this.m.titleBox.text = this.title;
             this.m.authorBox.htmlText = "by " + htmlName;

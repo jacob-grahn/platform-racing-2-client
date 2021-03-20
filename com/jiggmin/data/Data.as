@@ -7,14 +7,19 @@ package com.jiggmin.data
 {
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
-    import flash.utils.getDefinitionByName;
+    import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.geom.Point;
+    import flash.utils.getDefinitionByName;
 
     public class Data
     {
 
+        public static const RAD_DEG:Number = 180 / Math.PI; // const_93 (from class_74/Maths)
+        public static const DEG_RAD:Number = Math.PI / 180; // const_78 (from class_74/Maths)
+
         public static var md5:MD5 = new MD5();
+
         private static var groupColors:Array = new Array("#676666", "#047B7B", "#1C369F", "#870A6F");
         private static var modGroupColors:Array = new Array("#006400", "#0092FF", "#1C369F");
         private static var damnArray:Array = new Array("dang", "dingy-goo", "condemnation"); // var_397
@@ -80,10 +85,11 @@ package com.jiggmin.data
             return Hex.fromArray(Data.md5.hash(Hex.toArray(Hex.fromString(s))));
         }
 
-        public static function method_849(a:Array):Array
+        // unused??
+        /*public static function method_849(a:Array):Array
         {
             return a.concat();
-        }
+        }*/
 
         // _loc2 = date
         // _loc3 = monthArray
@@ -288,6 +294,12 @@ package com.jiggmin.data
             return '<a href="' + link + '" target="_blank"><u><font color="' + color + '">' + disp + '</font></u></a>';
         }
 
+        // method_232 = pythag (from class_74/Maths)
+        public static function pythag(xDist:Number, yDist:Number):Number
+        {
+            return Math.sqrt(xDist * xDist + yDist * yDist);
+        }
+
         public static function numLimit(value:Number, minimum:Number, maximum:Number)
         {
             if (value > maximum) {
@@ -298,6 +310,22 @@ package com.jiggmin.data
             return value;
         }
 
+        // (from class_74/Maths)
+        public static function method_314(_arg_1:DisplayObject, _arg_2:Number, _arg_3:Number)
+        {
+            var _local_6:Number;
+            var _local_4:Number = (_arg_2 / _arg_1.width);
+            var _local_5:Number = (_arg_3 / _arg_1.height);
+            if (_local_4 < _local_5) {
+                _local_6 = _local_4;
+            } else {
+                _local_6 = _local_5;
+            }
+            if (_local_6 < 1) {
+                _arg_1.width = (_arg_1.width * _local_6);
+                _arg_1.height = (_arg_1.height * _local_6);
+            }
+        }
 
         // removed _loc6 (combined w/ return)
         public static function method_9(posX:Number, posY:Number, rot:Number):Point

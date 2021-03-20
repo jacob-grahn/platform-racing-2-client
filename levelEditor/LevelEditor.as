@@ -85,8 +85,8 @@ package levelEditor
             super.keyScroll(e);
             var _local_2:Number = 275 * (1 / scaleX);
             var _local_3:Number = 200 * (1 / scaleY);
-            posX = class_74.numLimit(posX, -var_239 + _local_2, -_local_2);
-            posY = class_74.numLimit(posY, -var_362 + _local_3, -_local_3);
+            posX = Data.numLimit(posX, -var_239 + _local_2, -_local_2);
+            posY = Data.numLimit(posY, -var_362 + _local_3, -_local_3);
             this.setPos(posX, posY);
         }
 
@@ -134,7 +134,7 @@ package levelEditor
             this.var_171.mouseEnabled = false;
             this.var_171.mouseChildren = false;
             this.setStartPos();
-            this.setZoom(var_233);
+            this.setZoom(zoom);
             this.setColor(12303325);
             this.focusOn(this.blockBG);
             this.menu.reset();

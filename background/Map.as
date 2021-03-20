@@ -68,9 +68,9 @@ package background
         }
 
         // method_488 = placeBlock
-        public function placeBlock(_arg_1:int, _arg_2:Number, _arg_3:Number)
+        public function placeBlock(blockId:int, targetX:Number, targetY:Number) // used to place mines
         {
-            this.attachObject(_arg_1, _arg_2, _arg_3);
+            this.attachObject(blockId, targetX, targetY);
         }
 
         // _loc5 = block

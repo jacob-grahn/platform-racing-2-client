@@ -5,6 +5,7 @@
 
 package sounds
 {
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
     import flash.media.SoundTransform;
     import flash.media.SoundChannel;
@@ -39,14 +40,14 @@ package sounds
                 var _local_7:Number = 700;
                 var _local_8:Number = _arg_2 + Course.course.posX;
                 var _local_9:Number = _arg_3 + Course.course.posY;
-                var _local_10:Number = class_74.method_232(_local_8, _local_9);
+                var _local_10:Number = Data.pythag(_local_8, _local_9);
                 if (_local_10 > 700) {
                     _local_10 = 700;
                 }
                 var _local_11:Number = (_local_7 - _local_10) / _local_7;
                 vol = vol * _local_11;
                 pan = _local_8 / _local_7;
-                pan = class_74.numLimit(pan, -_local_7, _local_7);
+                pan = Data.numLimit(pan, -_local_7, _local_7);
                 if (vol * (Settings.soundLevel / 100) > 0.0001) {
                     return playSound(sound, vol * (Settings.soundLevel / 100), pan, loops);
                 }

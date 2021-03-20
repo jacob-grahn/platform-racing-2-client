@@ -5,15 +5,15 @@
 
 package blocks
 {
-    import flash.display.Sprite;
-    import flash.geom.Point;
-    import flash.display.Bitmap;
     import background.Map;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Objects;
+    import flash.display.Bitmap;
     import flash.display.BitmapData;
     import flash.display.PixelSnapping;
-    import com.jiggmin.data.Objects;
-    import com.jiggmin.data.Data;
+    import flash.display.Sprite;
     import flash.events.Event;
+    import flash.geom.Point;
     import package_8.Character;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
@@ -234,7 +234,7 @@ package blocks
 
         public function onDamage(_arg_1:Number)
         {
-            _arg_1 = class_74.numLimit(_arg_1, -20, 20);
+            _arg_1 = Data.numLimit(_arg_1, -20, 20);
             this.method_315(_arg_1, 0);
         }
 
@@ -274,7 +274,7 @@ package blocks
         {
             this.var_177 = new Point(hitX, hitY);
             addEventListener(Event.ENTER_FRAME, this.method_161);
-            var _local_3:Number = class_74.method_232(hitX, hitY) * 0.06;
+            var _local_3:Number = Data.pythag(hitX, hitY) * 0.06;
             if (Math.abs(x - this.posX) < 1 && Math.abs(y - this.posY) < 1) {
                 var point:Point = this.method_18();
                 SoundEffects.playGameSound(new ThumpSound(), point.x, point.y, _local_3);

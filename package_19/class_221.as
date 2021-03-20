@@ -5,12 +5,13 @@
 
 package package_19
 {
-    import flash.display.Sprite;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
+    import flash.display.Sprite;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
-    import ui.CustomCursor;
     import package_20.class_269;
+    import ui.CustomCursor;
 
     public class class_221 extends Sprite 
     {
@@ -37,7 +38,7 @@ package package_19
         {
             var _local_2:Number;
             _local_2 = 24;
-            class_74.method_314(_arg_1, _local_2, _local_2);
+            Data.method_314(_arg_1, _local_2, _local_2);
             _arg_1.x = (((_local_2 - _arg_1.width) / 2) + 3);
             _arg_1.y = (((_local_2 - _arg_1.height) / 2) + 3);
         }

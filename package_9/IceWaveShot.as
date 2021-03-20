@@ -5,6 +5,7 @@
 
 package package_9
 {
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
     import blocks.IceBlock;
     import blocks.Block;
@@ -54,8 +55,8 @@ package package_9
                 if (var_168 < 10 && life > 10) {
                     var _local_2:Number = this.var_322 - 60;
                     var _local_3:Number = this.var_322 + 60;
-                    var _local_4:Number = class_74.numLimit(this.var_278 + 30, _local_2, _local_3);
-                    var _local_5:Number = class_74.numLimit(this.var_278 - 30, _local_2, _local_3);
+                    var _local_4:Number = Data.numLimit(this.var_278 + 30, _local_2, _local_3);
+                    var _local_5:Number = Data.numLimit(this.var_278 - 30, _local_2, _local_3);
                     if (_local_4 != this.var_278) {
                         new IceWaveShot(x, y, _local_4, var_377, shooterID, this.var_322, life / 2);
                     }
