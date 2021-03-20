@@ -179,9 +179,6 @@ package background
         // method_416 = determineMoveBlockDirection
         private function determineMoveBlockDirection()
         {
-            if (this.moveBlocksArray == null) {
-                return; // to-do: debug this happenstance
-            }
             var totalMoveBlocks:int = this.moveBlocksArray.length;
             var i:int = 0;
             while (i < totalMoveBlocks) {
@@ -190,7 +187,7 @@ package background
                 block.setDirection(dir);
                 i++;
             }
-            this.moveInterval = setTimeout(this.doMoveBlocks, 1000);
+            this.setMoveInterval(this.doMoveBlocks, 1000);
         }
 
         // _loc1 = i
@@ -207,7 +204,7 @@ package background
             if (_local_4 < 1) {
                 _local_4 = 1;
             }
-            this.moveInterval = setTimeout(this.determineMoveBlockDirection, _local_4 + this.moveTime);
+            this.setMoveInterval(this.determineMoveBlockDirection, _local_4 + this.moveTime);
             this.moves++;
         }
 
@@ -236,6 +233,12 @@ package background
                 }
             }
             return false;
+        }
+
+        private function setMoveInterval(fn:Function, secs:int)
+        {
+            this.clearMoveInterval();
+            this.moveInterval = setTimeout(fn, secs);
         }
 
         public function clearMoveInterval()
