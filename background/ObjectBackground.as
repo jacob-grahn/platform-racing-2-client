@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//background.class_77
+// background.ObjectBackground = background.class_77
 
 package background
 {
@@ -12,16 +12,16 @@ package background
     import levelEditor.DrawObject;
     import levelEditor.TextObject;
 
-    public class class_77 extends Background 
+    public class ObjectBackground extends Background 
     {
 
         public var var_84:Sprite;
-        public var var_10:Array = new Array();
+        public var objArray:Array = new Array(); // var_10
         private var objLimit:int = 50000; // var_356
         protected var var_0379:int = 0; // class_10
         protected var var_367:int = 1;
 
-        public function class_77(gp:GamePage)
+        public function ObjectBackground(gp:GamePage)
         {
             this.var_84 = this;
             super(gp);
@@ -29,9 +29,9 @@ package background
 
         public function addObject(objId:int, objX:int, objY:int)
         {
-            if (this.var_10.length < this.objLimit) {
+            if (this.objArray.length < this.objLimit) {
                 this.attachObject(objId, objX, objY);
-                this.method_821(objId, objX, objY);
+                this.recordAddObject(objId, objX, objY);
             } else {
                 LevelEditor.editor.menu.reset();
                 new MessagePopup("Error: Object limit reached.");
@@ -42,70 +42,77 @@ package background
         {
             var _local_4:DrawObject = new DrawObject(objId, objX, objY);
             this.var_84.addChild(_local_4);
-            this.var_10.push(_local_4);
+            this.objArray.push(_local_4);
         }
 
-        public function method_129(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:Boolean=false):TextObject
+        // method_129 = addText
+        public function addText(str:String, textX:int, textY:int, textId:int, record:Boolean=false):TextObject
         {
-            if (this.var_10.length < this.objLimit) {
-                var _local_6:TextObject = new TextObject(_arg_1, _arg_2, _arg_3, _arg_4);
+            if (this.objArray.length < this.objLimit) {
+                var _local_6:TextObject = new TextObject(str, textX, textY, textId);
                 this.var_84.addChild(_local_6);
-                this.var_10.push(_local_6);
-                if (_arg_5) {
-                    this.method_606(_local_6.getEscapedText(), _arg_2, _arg_3, _arg_4);
+                this.objArray.push(_local_6);
+                if (record) {
+                    this.recordAddText(_local_6.getEscapedText(), textX, textY, textId);
                 }
                 return _local_6;
             }
             return null;
         }
 
-        public function method_821(_arg_1:int, _arg_2:int, _arg_3:int)
+        // method_821 = recordAddObject
+        public function recordAddObject(objId:int, objX:int, objY:int)
         {
-            method_14("o" + _arg_1 + ";" + _arg_2 + ";" + _arg_3);
+            recordAction("o" + objId + ";" + objX + ";" + objY);
         }
 
-        public function method_606(_arg_1:String, _arg_2:int, _arg_3:int, _arg_4:int)
+        // method_606 = recordAddText
+        public function recordAddText(str:String, textX:int, textY:int, textId:int)
         {
-            method_14("u" + _arg_1 + ";" + _arg_2 + ";" + _arg_3 + ";" + _arg_4 + ";100;100");
+            recordAction("u" + str + ";" + textX + ";" + textY + ";" + textId + ";100;100");
         }
 
-        public function recordChangeText(_arg_1:TextObject)
+        // _loc2 = textId
+        public function recordChangeText(textObj:TextObject)
         {
-            var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14("y" + _local_2 + ";" + _arg_1.getEscapedText() + ";" + _arg_1.getColor());
+            var textId:int = this.objArray.indexOf(textObj);
+            recordAction("y" + textId + ";" + textObj.getEscapedText() + ";" + textObj.getColor());
         }
 
+        // _loc2 = objId
         // method_761 = recordMove
-        public function recordMove(_arg_1:DrawObject)
+        public function recordMove(obj:DrawObject)
         {
-            var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14("m" + _local_2 + ";" + _arg_1.x + ";" + _arg_1.y);
+            var objId:int = this.objArray.indexOf(obj);
+            recordAction("m" + objId + ";" + obj.x + ";" + obj.y);
         }
 
-        public function recordDelete(_arg_1:DrawObject)
+        // _loc2 = objId
+        public function recordDelete(obj:DrawObject)
         {
-            var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14("d" + _local_2);
+            var objId:int = this.objArray.indexOf(obj);
+            recordAction("d" + objId);
         }
 
+        // _loc2 = objId
         // method_686 = recordResize
-        public function recordResize(_arg_1:DrawObject)
+        public function recordResize(obj:DrawObject)
         {
-            var _local_2:int = this.var_10.indexOf(_arg_1);
-            method_14("r" + _local_2 + ";" + _arg_1.scaleX + ";" + _arg_1.scaleY);
+            var objId:int = this.objArray.indexOf(obj);
+            recordAction("r" + objId + ";" + obj.scaleX + ";" + obj.scaleY);
         }
 
         // _loc6 = drawStart
-        override public function draw(_arg_1:Number=50)
+        // deleted _loc7 (saveArray.length)
+        override public function draw(_arg_1:Number = 50)
         {
             course.startDrawing(this);
             if (course.goodToDraw(this)) {
                 var _local_2:int = 0;
                 var drawDateStart:Date = new Date();
                 var drawStart:Number = drawDateStart.getTime();
-                var _local_7:int = var_15.length;
-                while (var_39 < _local_7) {
-                    var _local_3:String = var_15[var_39];
+                while (var_39 < saveArray.length) {
+                    var _local_3:String = saveArray[var_39];
                     var _local_4:String = _local_3.substr(0, 1);
                     var _local_5:String = _local_3.substr(1);
                     if (_local_4 == "o") {
@@ -135,7 +142,7 @@ package background
 
         protected function drawText(_arg_1:String)
         {
-            if (this.var_10.length < this.objLimit) {
+            if (this.objArray.length < this.objLimit) {
                 var _local_2:Array = _arg_1.split(";");
                 var _local_3:String = String(_local_2[0]);
                 var _local_4:int = int(_local_2[1]);
@@ -143,7 +150,7 @@ package background
                 var _local_6:int = int(_local_2[3]);
                 var _local_7:Number = Number(_local_2[4]) / 100;
                 var _local_8:Number = Number(_local_2[5]) / 100;
-                var _local_9:TextObject = this.method_129(_local_3, _local_4, _local_5, _local_6);
+                var _local_9:TextObject = this.addText(_local_3, _local_4, _local_5, _local_6);
                 _local_9.scaleX = _local_7;
                 _local_9.scaleY = _local_8;
             }
@@ -152,14 +159,14 @@ package background
         // _loc2 = arr
         protected function method_489(s:String)
         {
-            if (this.var_10.length < this.objLimit) {
+            if (this.objArray.length < this.objLimit) {
                 var arr:Array = s.split(";");
                 var _local_3:int = int(arr[0]);
                 var _local_4:Number = Number(arr[1]);
                 var _local_5:Number = Number(arr[2]);
                 this.attachObject(_local_3, _local_4, _local_5);
                 if (arr[3] != null) {
-                    this.method_393((this.var_10.length - 1) + ";" + arr[3] + ";" + arr[4]);
+                    this.method_393((this.objArray.length - 1) + ";" + arr[3] + ";" + arr[4]);
                 }
             }
         }
@@ -170,7 +177,7 @@ package background
             var _local_3:Number = Number(_local_2[0]);
             var _local_4:Number = Number(_local_2[1]);
             var _local_5:Number = Number(_local_2[2]);
-            var _local_6:DrawObject = DrawObject(this.var_10[_local_3]);
+            var _local_6:DrawObject = DrawObject(this.objArray[_local_3]);
             if (_local_6 != null) {
                 _local_6.x = _local_4;
                 _local_6.y = _local_5;
@@ -183,7 +190,7 @@ package background
             var _local_3:int = int(_local_2[0]);
             var _local_4:String = String(_local_2[1]);
             var _local_5:int = int(_local_2[2]);
-            var _local_6:TextObject = TextObject(this.var_10[_local_3]);
+            var _local_6:TextObject = TextObject(this.objArray[_local_3]);
             _local_6.showParsedText(_local_4);
             _local_6.setColor(_local_5);
         }
@@ -191,7 +198,7 @@ package background
         protected function method_476(_arg_1:String)
         {
             var _local_2:Number = Number(_arg_1);
-            var _local_3:DrawObject = DrawObject(this.var_10[_local_2]);
+            var _local_3:DrawObject = DrawObject(this.objArray[_local_2]);
             _local_3.remove();
         }
 
@@ -201,7 +208,7 @@ package background
             var _local_3:Number = Number(_local_2[0]);
             var _local_4:Number = Number(_local_2[1]);
             var _local_5:Number = Number(_local_2[2]);
-            var _local_6:DrawObject = DrawObject(this.var_10[_local_3]);
+            var _local_6:DrawObject = DrawObject(this.objArray[_local_3]);
             _local_6.scaleX = _local_4;
             _local_6.scaleY = _local_5;
         }
@@ -211,12 +218,12 @@ package background
         {
             var saveStr:String = "";
             var _local_4:int, _local_13:int, _local_14:int;
-            if (this.var_10.length > 0) {
+            if (this.objArray.length > 0) {
                 var _local_2:String = "";
                 var _local_5:Array = new Array();
                 var _local_15:int = 0;
-                while (_local_15 < this.var_10.length) {
-                    var _local_6:DrawObject = this.var_10[_local_15];
+                while (_local_15 < this.objArray.length) {
+                    var _local_6:DrawObject = this.objArray[_local_15];
                     if (_local_6 != null) {
                         var _local_7:int = int(_local_6.x / this.var_367);
                         var _local_8:int = int(_local_6.y / this.var_367);
@@ -260,7 +267,7 @@ package background
         {
             this.clear();
             if (_arg_1 != null) {
-                var_15 = _arg_1.split(",");
+                saveArray = _arg_1.split(",");
                 this.draw();
             }
         }
@@ -270,9 +277,9 @@ package background
         public function removeObjectsTouchingPoint(_arg_1:Number, _arg_2:Number)
         {
             var i:int = 0;
-            var _local_4:int = this.var_10.length;
+            var _local_4:int = this.objArray.length;
             while (i < _local_4) {
-                var drawObj:DrawObject = this.var_10[i];
+                var drawObj:DrawObject = this.objArray[i];
                 if (drawObj != null && drawObj.deleteable && drawObj.hitTestPoint(_arg_1, _arg_2, true)) {
                     this.recordDelete(drawObj);
                     drawObj.remove();
@@ -283,9 +290,9 @@ package background
 
         public function method_771(_arg_1:*)
         {
-            var _local_2:int = this.var_10.indexOf(_arg_1);
+            var _local_2:int = this.objArray.indexOf(_arg_1);
             if (_local_2 != -1) {
-                this.var_10.splice(_local_2, 1);
+                this.objArray.splice(_local_2, 1);
             }
         }
 
@@ -294,12 +301,12 @@ package background
         {
             var _local_1:Array = new Array();
             var _local_2:int = 0;
-            var _local_3:int = this.var_10.length;
+            var _local_3:int = this.objArray.length;
             while (_local_2 < _local_3) {
-                _local_1[_local_2] = this.var_10[_local_2];
+                _local_1[_local_2] = this.objArray[_local_2];
                 _local_2++;
             }
-            this.var_10 = new Array();
+            this.objArray = new Array();
             _local_2 = 0;
             while (_local_2 < _local_3) {
                 var drawObj:DrawObject = _local_1[_local_2];

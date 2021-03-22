@@ -221,9 +221,9 @@ package background
                 var _local_6:Number = 0;
                 var _local_7:Number = new Date().time;
                 this.var_33.graphics.lineStyle(this.var_136, this.color);
-                while (var_39 < var_15.length) {
+                while (var_39 < saveArray.length) {
                     _local_8++;
-                    var _local_2:String = var_15[var_39];
+                    var _local_2:String = saveArray[var_39];
                     var _local_3:String = _local_2.substr(0, 1);
                     var _local_4:String = _local_2.substr(1);
                     if (_local_3 == "d") {
@@ -255,7 +255,7 @@ package background
                     }
                 }
             }
-            if (var_39 >= var_15.length) {
+            if (var_39 >= saveArray.length) {
                 this.drawing = false;
             }
             super.draw(_arg_1);
@@ -348,7 +348,7 @@ package background
             if (this.color != _arg_1) {
                 this.color = _arg_1;
                 this.var_33.graphics.lineStyle(this.var_136, _arg_1);
-                method_14("c" + _arg_1.toString(16));
+                recordAction("c" + _arg_1.toString(16));
             }
         }
 
@@ -357,7 +357,7 @@ package background
             if (this.var_136 != _arg_1) {
                 this.var_136 = _arg_1;
                 this.var_33.graphics.lineStyle(_arg_1, this.color);
-                method_14("t" + _arg_1);
+                recordAction("t" + _arg_1);
             }
         }
 
@@ -365,13 +365,13 @@ package background
         {
             if (this.mode != _arg_1) {
                 this.mode = _arg_1;
-                method_14("m" + _arg_1);
+                recordAction("m" + _arg_1);
             }
         }
 
         public function moveTo(_arg_1:Number, _arg_2:Number)
         {
-            method_14("d" + _arg_1 + ";" + _arg_2);
+            recordAction("d" + _arg_1 + ";" + _arg_2);
             if (!this.drawing) {
                 this.method_422(_arg_1, _arg_2);
             }
@@ -381,7 +381,7 @@ package background
         {
             var _local_3:Number = _arg_1 - this.var_302;
             var _local_4:Number = _arg_2 - this.var_298;
-            var_15[var_15.length - 1] = var_15[var_15.length - 1] + ";" + _local_3 + ";" + _local_4;
+            saveArray[saveArray.length - 1] = saveArray[saveArray.length - 1] + ";" + _local_3 + ";" + _local_4;
             if (!this.drawing) {
                 this.method_317(_local_3, _local_4);
             }
@@ -405,12 +405,12 @@ package background
 
         override public function undo()
         {
-            var _local_1:Number = var_15.length - 2;
+            var _local_1:Number = saveArray.length - 2;
             while (_local_1 >= 0) {
-                var _local_2:String = var_15[_local_1];
+                var _local_2:String = saveArray[_local_1];
                 var _local_3:String = _local_2.charAt(0);
                 if (_local_3 == "d") break;
-                var_88.push(var_15.pop());
+                redoArray.push(saveArray.pop());
                 _local_1--;
             }
             super.undo();
@@ -418,14 +418,14 @@ package background
 
         override public function redo()
         {
-            var _local_1:Number = var_88.length - 2;
+            var _local_1:Number = redoArray.length - 2;
             while (_local_1 >= 0) {
-                var _local_2:String = var_88[_local_1];
+                var _local_2:String = redoArray[_local_1];
                 var _local_3:String = _local_2.charAt(0);
                 if (_local_3 == "d") {
                     break;
                 }
-                var_15.push(var_88.pop());
+                saveArray.push(redoArray.pop());
                 _local_1--;
             }
             super.redo();

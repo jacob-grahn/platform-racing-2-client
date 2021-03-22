@@ -11,7 +11,7 @@ package package_20
     import com.jiggmin.data.Objects;
     import flash.events.Event;
     import flash.events.MouseEvent;
-    import background.class_77;
+    import background.ObjectBackground;
     import flash.geom.Point;
 
     public class class_269 extends CustomCursor 
@@ -58,7 +58,7 @@ package package_20
 
         protected function dropObject(_arg_1:int, _arg_2:int)
         {
-            var _local_3:class_77 = this.editor.cur;
+            var _local_3:ObjectBackground = this.editor.cur;
             var _local_4:DisplayObject = Objects.getFromCode(this.displayCode);
             var _local_5:Point = new Point(_arg_1, _arg_2);
             _local_5 = this.editor.cur.globalToLocal(_local_5);

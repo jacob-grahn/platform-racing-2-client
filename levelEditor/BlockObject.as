@@ -27,8 +27,8 @@ package levelEditor
             this.displayCode = blockId;
             this.lastX = x = this.method_103(blockX);
             this.lastY = y = this.method_103(blockY);
-            this.segX = Math.floor(x / 30);
-            this.segY = Math.floor(y / 30);
+            this.segX = Math.floor(x / this.segSize);
+            this.segY = Math.floor(y / this.segSize);
             this.posX = x;
             this.posY = y;
             resizable = false;
@@ -38,8 +38,8 @@ package levelEditor
         {
             this.segX = newX;
             this.segY = newY;
-            this.posX = x = this.segX * 30;
-            this.posY = y = this.segY * 30;
+            this.posX = x = this.segX * this.segSize;
+            this.posY = y = this.segY * this.segSize;
         }
 
         public function getSeg():Point
@@ -71,7 +71,7 @@ package levelEditor
                 this.lastX = x = newPtSegX;
                 this.lastY = y = newPtSegY;
             }
-            editor.blockBG.moveBlock(new Point(this.segX, this.segY), new Point(Math.round(x / 30), Math.round(y / 30)));
+            editor.blockBG.moveBlock(new Point(this.segX, this.segY), new Point(Math.round(x / this.segSize), Math.round(y / this.segSize)));
             super.endDrag(e);
         }
 
@@ -83,8 +83,8 @@ package levelEditor
 
         override public function remove()
         {
-            LevelEditor.editor.blockBG.method_259(this);
-            LevelEditor.editor.blockBG.var_323--;
+            LevelEditor.editor.blockBG.removeBlock(this);
+            LevelEditor.editor.blockBG.blocksAttached--;
             super.remove();
         }
 

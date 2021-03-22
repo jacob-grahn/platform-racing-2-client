@@ -6,7 +6,7 @@
 package package_20
 {
     import ui.CustomCursor;
-    import background.class_77;
+    import background.ObjectBackground;
     import levelEditor.LevelEditor;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -14,7 +14,7 @@ package package_20
     public class ObjectDeleter extends CustomCursor 
     {
 
-        private var var_151:class_77;
+        private var var_151:ObjectBackground;
         private var editor:LevelEditor = LevelEditor.editor;
 
         public function ObjectDeleter()

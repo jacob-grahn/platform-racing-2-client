@@ -93,7 +93,7 @@ package background
                         var finishBlock:FinishBlock = FinishBlock(block);
                         this.addFinish(finishBlock.getId(), x + 15, y + 15);
                     }
-                    method_53(block, _local_4);
+                    addToBlockArray(block, _local_4);
                     if (!block.isInitialized()) {
                         block.initialize(_local_4.x, _local_4.y, this);
                     }
@@ -158,10 +158,10 @@ package background
             });
         }
 
-        override public function draw(_arg_1:Number=50)
+        override public function draw(_arg_1:Number = 50)
         {
             super.draw(_arg_1);
-            if (var_39 >= var_15.length) {
+            if (var_39 >= saveArray.length) {
                 this.miniMap.rasterize();
             }
         }
@@ -211,26 +211,20 @@ package background
         }
 
         // deleted _loc3 (simplified return)
-        override public function testMove(_arg_1:int, _arg_2:int):Boolean
+        override public function testMove(destX:int, destY:int):Boolean
         {
-            if ((blockArray[_arg_1] == null || blockArray[_arg_1][_arg_2] == null) && !this.characterOccupiesSpace(_arg_1, _arg_2)) {
-                return true;
-            }
-            return false;
+            return (blockArray[destX] == null || blockArray[destX][destY] == null) && !this.characterOccupiesSpace(destX, destY);
         }
 
+        // deleted _loc3, _loc4 (p.seg1, p.seg2)
         // deleted _loc5 (simplified return)
         // _loc6 = p
         public function characterOccupiesSpace(xVal:int, yVal:int):Boolean
         {
             if (Course.course != null) {
                 for each (var p:Character in Course.course.playerArray) {
-                    if (p != null) {
-                        var _local_3:Point = p.seg1;
-                        var _local_4:Point = p.seg2;
-                        if ((_local_3.x == xVal && _local_3.y == yVal) || (_local_4.x == xVal && _local_4.y == yVal)) {
-                            return true;
-                        }
+                    if (p != null && ((p.seg1.x == xVal && p.seg1.y == yVal) || (p.seg2.x == xVal && p.seg2.y == yVal))) {
+                        return true;
                     }
                 }
             }
@@ -248,15 +242,16 @@ package background
             clearTimeout(this.moveInterval);
         }
 
+        // _loc1 = block
         override public function clear()
         {
             while (numChildren > 0) {
-                var _local_1:Block = Block(getChildAt(0));
-                _local_1.remove();
+                var block:Block = Block(getChildAt(0));
+                block.remove();
             }
             var_39 = 0;
             blockArray = new Array();
-            var_10 = new Array();
+            objArray = new Array();
         }
 
         override public function remove()

@@ -225,12 +225,12 @@ package levelEditor
 
         public function method_109()
         {
-            if (this.editor.var_225.var_15.length > 0) {
+            if (this.editor.var_225.saveArray.length > 0) {
                 this.m.undoButton.enabled = true;
             } else {
                 this.m.undoButton.enabled = false;
             }
-            if (this.editor.var_225.var_88.length > 0) {
+            if (this.editor.var_225.redoArray.length > 0) {
                 this.m.redoButton.enabled = true;
             } else {
                 this.m.redoButton.enabled = false;

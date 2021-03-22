@@ -7,7 +7,7 @@ package levelEditor
 {
     import background.class_10;
     import background.Background;
-    import background.class_77;
+    import background.ObjectBackground;
     import background.BlockBackground;
     import background.DrawableBackground;
     import background.LineBackground;
@@ -29,13 +29,13 @@ package levelEditor
         public var var_364:Sprite;
         public var menu:LevelEditorMenu;
         public var var_225:Background;
-        public var cur:class_77;
+        public var cur:ObjectBackground; // currently selected layer
         public var var_220:DrawableBackground;
-        public var bg1:class_77;
-        public var bg2:class_77;
-        public var bg3:class_77;
-        public var bg4:class_77;
-        public var bg5:class_77;
+        public var bg1:ObjectBackground;
+        public var bg2:ObjectBackground;
+        public var bg3:ObjectBackground;
+        public var bg4:ObjectBackground;
+        public var bg5:ObjectBackground;
         public var draw1:DrawableBackground;
         public var draw2:DrawableBackground;
         public var draw3:DrawableBackground;
@@ -92,11 +92,11 @@ package levelEditor
 
         override protected function attachBackgrounds()
         {
-            this.bg1 = new class_77(this);
-            this.bg2 = new class_77(this);
-            this.bg3 = new class_77(this);
-            this.bg4 = new class_77(this);
-            this.bg5 = new class_77(this);
+            this.bg1 = new ObjectBackground(this);
+            this.bg2 = new ObjectBackground(this);
+            this.bg3 = new ObjectBackground(this);
+            this.bg4 = new ObjectBackground(this);
+            this.bg5 = new ObjectBackground(this);
             this.draw1 = new DrawableBackground(this);
             this.draw2 = new DrawableBackground(this);
             this.draw3 = new DrawableBackground(this);

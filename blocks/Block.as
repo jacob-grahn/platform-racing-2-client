@@ -50,7 +50,7 @@ package blocks
         {
             this.map = _arg_3;
             this.setSeg(segPointX, segPointY);
-            this.map.method_53(this, new Point(segPointX, segPointY));
+            this.map.addToBlockArray(this, new Point(segPointX, segPointY));
         }
 
         public function isInitialized():Boolean
@@ -339,7 +339,7 @@ package blocks
             this.active = false;
             removeEventListener(Event.ENTER_FRAME, this.method_153);
             removeEventListener(Event.ENTER_FRAME, this.method_161);
-            this.map.method_259(this);
+            this.map.removeBlock(this);
             this.map = null;
             this.method_406();
             this.var_177 = null;
