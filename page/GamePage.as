@@ -287,7 +287,7 @@ package page
         {
             var levelData:Array = rawlevelData.split("`");
             var readMode:String = levelData[0];
-            if (readMode == "m1" || readMode == "m2" || readMode == "m3") {
+            if (readMode == "m1" || readMode == "m2" || readMode == "m3" || readMode == 'm4') {
                 levelData.splice(0, 1);
                 levelData[0] = Number("0x" + levelData[0]); // background color in decimal (_loc2[0] is in hex, typecast to number)
                 if (readMode == "m1") {
@@ -295,11 +295,13 @@ package page
                     levelData[2] = this.decodeObjectString(levelData[2]);
                     levelData[3] = this.decodeObjectString(levelData[3]);
                     levelData[4] = this.decodeObjectString(levelData[4]);
-                } else if (readMode == "m2" || readMode == "m3") {
+                } else if (readMode == "m2" || readMode == "m3" || readMode == 'm4') {
                     if (readMode == "m2") {
                         levelData[1] = this.decodeObjectString2(levelData[1]); // blocks
-                    } else {
+                    } else if (readMode == 'm3') {
                         levelData[1] = this.decodeObjectString2(levelData[1], this.segSize); // blocks
+                    } else {
+                        levelData[1] = this.decodeBlockString(levelData[1]);
                     }
                     levelData[2] = this.decodeObjectString2(levelData[2]); // art1
                     levelData[3] = this.decodeObjectString2(levelData[3]); // art2
@@ -378,7 +380,7 @@ package page
                         widthPerc = thisObj[5]; // width % modifier
                         heightPerc = thisObj[6]; // height % modifier
                         dataArr[i] = "u" + textContent + ";" + currentX + ";" + currentY + ";" + textColor + ";" + widthPerc + ";" + heightPerc;
-                    } else { // process other art
+                    } else { // process other objects
                         if (thisObj[4] != null) { // resizable objects (new object code used)
                             objectCode = int(thisObj[2]);
                             widthPerc = Number(thisObj[3]) / 100;
@@ -391,12 +393,40 @@ package page
                         }
                         dataArr[i] = "o" + objectCode + ";" + (currentX * segMult) + ";" + (currentY * segMult);
                         if (widthPerc != 0 && heightPerc != 0) {
-                            dataArr[i] = dataArr[i] + ";" + widthPerc + ";" + heightPerc;
+                            dataArr[i] += ";" + widthPerc + ";" + heightPerc;
                         }
                     }
                     i++;
                 }
                 decoded = dataArr.join(",");
+            }
+            return decoded;
+        }
+
+        private function decodeBlockString(blockString:String)
+        {
+            var dataArr:Array = blockString == null || blockString == "" ? new Array() : blockString.split(",");
+            var decoded:String;
+            var blockCode:int, currentX:int = 0, currentY:int = 0;
+            if (dataArr.length > 0) {
+                var i:int = 0;
+                while (i < dataArr.length) {
+                    var thisBlock:Array = dataArr[i].split(";");
+                    var relX:int = Number(thisBlock[0]); // x relative to the last block (how far to travel horizontally to the next block)
+                    var relY:int = Number(thisBlock[1]); // y relative to the last block (how far to travel vertically to the next block)
+                    currentX = currentX + relX; // updates x "pointer" to the relative position
+                    currentY = currentY + relY; // updates y "pointer" to the relative position
+                    if (thisBlock[2] != null) { // new block
+                        blockCode = int(thisBlock[2]);
+                    }
+                    var options:String = '';
+                    if (thisBlock[3] != null) { // block options
+                        options = ';' + thisBlock[3];
+                    }
+                    dataArr[i] = "o" + blockCode + ";" + (currentX * this.segSize) + ";" + (currentY * this.segSize) + options;
+                    i++;
+                }
+                decoded = dataArr.join(',');
             }
             return decoded;
         }

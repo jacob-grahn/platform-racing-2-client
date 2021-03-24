@@ -183,13 +183,10 @@ package package_8
         // method_392 = statsChange
         public function statsChange(changeAmt:int)
         {
-            var fromSpeedBurst:Boolean = false;
             this.speedStat = this.speedStat + changeAmt;
             this.accelStat = this.accelStat + changeAmt;
             this.jumpnStat = this.jumpnStat + changeAmt;
-            if (this.curItem is SpeedBurst && this.curItem.isUsed()) {
-                fromSpeedBurst = true; // wait to apply speed/accel change until after the speed burst ends and calls resetStats()
-            }
+            var fromSpeedBurst:Boolean = this.curItem is SpeedBurst && this.curItem.isUsed(); // wait to apply speed/accel change until after the speed burst ends and calls resetStats()
             this.setStats(this.speedStat, this.accelStat, this.jumpnStat, fromSpeedBurst);
         }
 

@@ -23,7 +23,7 @@ package background
         {
             super(gp);
             this.addStartPositions();
-            var_367 = 30;
+            segMult = this.segSize;
             var_379 = -100;
         }
 
@@ -42,19 +42,19 @@ package background
             }
         }
 
-        override public function addObject(blockId:int, blockX:int, blockY:int)
+        override public function addObject(blockId:int, blockX:int, blockY:int, blockOpts:String = '')
         {
             if (this.isOpen(blockX, blockY)) {
-                super.addObject(blockId, blockX, blockY);
+                super.addObject(blockId, blockX, blockY, blockOpts);
             }
         }
 
         // _loc4 = block
         // _loc5 = seg
-        override protected function attachObject(blockId:int, blockX:int, blockY:int)
+        override protected function attachObject(blockId:int, blockX:int, blockY:int, blockOpts:String = '')
         {
             blockId += blockId < 100 ? 100 : 0;
-            var block:BlockObject = new BlockObject(blockId, blockX, blockY);
+            var block:BlockObject = new BlockObject(blockId, blockX, blockY, blockOpts);
             objArray.push(block);
             this.blocksAttached++;
             var seg:Point = new Point(Math.round(blockX / this.segSize), Math.round(blockY / this.segSize));
@@ -137,9 +137,9 @@ package background
 
         // _loc3 = point
         // _loc4 = block
-        override public function removeObjectsTouchingPoint(x:Number, y:Number)
+        override public function removeObjectsTouchingPoint(ptX:Number, ptY:Number)
         {
-            var point:Point = this.globalToLocal(new Point(x, y));
+            var point:Point = this.globalToLocal(new Point(ptX, ptY));
             var block:BlockObject = this.getBlockAt(point.x - 15, point.y - 15);
             if (block != null && block.deleteable) {
                 recordDelete(block);
@@ -187,7 +187,8 @@ package background
         }
 
         // _loc1 = block
-        public function method_753():Point
+        // method_753 = getStartPos
+        public function getStartPos():Point
         {
             var block:BlockObject = objArray[0];
             return new Point(block.x, block.y);

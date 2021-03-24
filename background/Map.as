@@ -73,48 +73,52 @@ package background
             this.attachObject(blockId, targetX, targetY);
         }
 
+        // _loc4 = blockSeg
         // _loc5 = block
         // _loc6 = finishBlock
-        override protected function attachObject(blockCode:int, x:int, y:int)
+        override protected function attachObject(blockCode:int, blockX:int, blockY:int, blockOpts:String = '')
         {
             if (blockCode < 100) {
                 blockCode += 100;
             }
-            var _local_4:Point = getSegFromPos(x, y);
+            var blockSeg:Point = getSegFromPos(blockX, blockY);
             if (blockCode == Objects.BLOCK_MINION_EGG) {
-                this.eggPtsArray.push(new Point(x, y));
+                this.eggPtsArray.push(new Point(blockX, blockY));
             } else {
                 var block:Block = Block(Objects.getFromCode(blockCode));
                 if (block is StartBlock) {
-                    this.setStartPos(this.startBlockNum, x + 15, y + 15);
+                    this.setStartPos(this.startBlockNum, blockX + 15, blockY + 15);
                     this.startBlockNum++;
                 } else {
                     if (block is FinishBlock) {
                         var finishBlock:FinishBlock = FinishBlock(block);
-                        this.addFinish(finishBlock.getId(), x + 15, y + 15);
+                        this.addFinish(finishBlock.getId(), blockX + 15, blockY + 15);
                     }
-                    addToBlockArray(block, _local_4);
+                    if (block.hasOptions && blockOpts != '') {
+                        block.applyOptions(blockOpts);
+                    }
+                    addToBlockArray(block, blockSeg);
                     if (!block.isInitialized()) {
-                        block.initialize(_local_4.x, _local_4.y, this);
+                        block.initialize(blockSeg.x, blockSeg.y, this);
                     }
-                    if (method_32(_local_4.x, _local_4.y)) {
+                    if (method_32(blockSeg.x, blockSeg.y)) {
                         addChild(block);
                     }
                     if (block is MoveBlock) {
                         this.moveBlocksArray.push(block);
                     }
-                    this.miniMap.method_680(blockCode, x, y);
+                    this.miniMap.method_680(blockCode, blockX, blockY);
                 }
             }
-            if (y > this.maxY) {
-                this.maxY = y;
-            } else if (y < this.minY) {
-                this.minY = y;
+            if (blockY > this.maxY) {
+                this.maxY = blockY;
+            } else if (blockY < this.minY) {
+                this.minY = blockY;
             }
-            if (x > this.maxX) {
-                this.maxX = x;
-            } else if (x < this.minX) {
-                this.minX = x;
+            if (blockX > this.maxX) {
+                this.maxX = blockX;
+            } else if (blockX < this.minX) {
+                this.minX = blockX;
             }
         }
 

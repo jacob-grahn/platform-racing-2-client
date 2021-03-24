@@ -142,7 +142,6 @@ package background
             if (!_local_8 || Main.var_184 <= this.var_541 || this.losslessQuality || this.fromLE) {
                 if (_local_8) {
                     Main.var_184++;
-                    trace(Main.var_184);
                     var _local_11:BitmapData = new BitmapData(this.var_210 + 1, this.var_210 + 1, true, 0);
                     var _local_12:Bitmap = new Bitmap(_local_11);
                     _local_12.scaleX = _local_12.scaleY = this.var_87;

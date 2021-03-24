@@ -43,7 +43,7 @@ package levelEditor
         public var draw5:DrawableBackground;
         public var bg:class_10;
         public var blockBG:BlockBackground;
-        public var var_171:LineBackground;
+        public var blockGrid:LineBackground; // var_171
         public var live:Number = 0;
         public var minRank:String = "0"; // minLevel
         public var pass:String = null;
@@ -103,7 +103,7 @@ package levelEditor
             this.draw4 = new DrawableBackground(this);
             this.draw5 = new DrawableBackground(this);
             this.bg = new class_10(this);
-            this.var_171 = new LineBackground(this);
+            this.blockGrid = new LineBackground(this);
             this.blockBG = new BlockBackground(this);
             this.bg1.setScale(1);
             this.draw1.setScale(1);
@@ -122,7 +122,7 @@ package levelEditor
             var_14.addChild(this.bg2);
             var_14.addChild(this.draw1);
             var_14.addChild(this.bg1);
-            var_14.addChild(this.var_171);
+            var_14.addChild(this.blockGrid);
             var_14.addChild(this.blockBG);
             var_14.addChild(this.bg4);
             var_14.addChild(this.draw4);
@@ -131,8 +131,8 @@ package levelEditor
             this.cur = this.blockBG;
             this.var_220 = this.draw1;
             this.var_225 = this.cur;
-            this.var_171.mouseEnabled = false;
-            this.var_171.mouseChildren = false;
+            this.blockGrid.mouseEnabled = false;
+            this.blockGrid.mouseChildren = false;
             this.setStartPos();
             this.setZoom(zoom);
             this.setColor(12303325);
@@ -154,7 +154,7 @@ package levelEditor
             this.draw5.remove();
             this.bg.remove();
             this.blockBG.remove();
-            this.var_171.remove();
+            this.blockGrid.remove();
             this.bg1 = null;
             this.bg2 = null;
             this.bg3 = null;
@@ -180,7 +180,7 @@ package levelEditor
             this.draw3.setPos(x, y);
             this.draw4.setPos(x, y);
             this.draw5.setPos(x, y);
-            this.var_171.setPos(x, y);
+            this.blockGrid.setPos(x, y);
         }
 
         override public function setColor(val:Number = 0)
@@ -240,14 +240,14 @@ package levelEditor
         // _loc1 = a
         public function getSaveString():String
         {
-            var a:Array = new Array("m3", color.toString(16), this.blockBG.getSaveString(), this.bg1.getSaveString(), this.bg2.getSaveString(), this.bg3.getSaveString(), this.draw1.getSaveString(), this.draw2.getSaveString(), this.draw3.getSaveString(), this.bg.getSaveString(), this.bg4.getSaveString(), this.bg5.getSaveString(), this.draw4.getSaveString(), this.draw5.getSaveString());
+            var a:Array = new Array("m4", color.toString(16), this.blockBG.getSaveString(), this.bg1.getSaveString(), this.bg2.getSaveString(), this.bg3.getSaveString(), this.draw1.getSaveString(), this.draw2.getSaveString(), this.draw3.getSaveString(), this.bg.getSaveString(), this.bg4.getSaveString(), this.bg5.getSaveString(), this.draw4.getSaveString(), this.draw5.getSaveString());
             return a.join("`");
         }
 
         // _loc1 = point
         private function setStartPos()
         {
-            var point:Point = this.blockBG.method_753();
+            var point:Point = this.blockBG.getStartPos();
             posX = -point.x - 100;
             posY = -point.y - 50;
         }
@@ -268,11 +268,7 @@ package levelEditor
             _arg_1.focusOn();
             this.var_225 = _arg_1;
             this.menu.method_109();
-            if (_arg_1 == this.blockBG) {
-                this.var_171.visible = true;
-            } else {
-                this.var_171.visible = false;
-            }
+            this.blockGrid.visible = _arg_1 == this.blockBG;
             if (_arg_1 == this.bg1 || _arg_1 == this.draw1) {
                 this.bg1.alpha = this.draw1.alpha = 1;
             }
@@ -408,7 +404,7 @@ package levelEditor
         override public function setZoom(z:Number)
         {
             super.setZoom(z);
-            this.var_171.setZoom(z);
+            this.blockGrid.setZoom(z);
         }
 
         override protected function finishGlide()

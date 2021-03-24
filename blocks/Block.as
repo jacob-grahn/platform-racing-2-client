@@ -35,6 +35,8 @@ package blocks
         protected var var_490:Boolean = true;
         protected var map:Map;
         protected var frozen:Boolean = false; // var_37
+        protected var optionsMenu:Class = null;
+        protected var _options:String = '';
         private var var_110:Bitmap;
         private var var_455:Number = 0.1;
         private var var_600:int = 0;
@@ -56,6 +58,33 @@ package blocks
         public function isInitialized():Boolean
         {
             return this.map != null;
+        }
+
+        public function get hasOptions():Boolean
+        {
+            return this.optionsMenu != null;
+        }
+
+        public function openOptions()
+        {
+            new this.optionsMenu(this);
+        }
+
+        public function get options()
+        {
+            return this._options;
+        }
+
+        protected function set options(optStr:String)
+        {
+            if (this._hasOptions && optStr != this._options) {
+                this._options = optStr;
+            }
+        }
+
+        public function applyOptions(optStr:String)
+        {
+            this.options = this.hasOptions && optStr != this.options ? optStr : this.options;
         }
 
         public function getSeg():Point
@@ -284,7 +313,7 @@ package blocks
         private function method_153(e:Event)
         {
             if (this.var_110 != null) {
-                this.var_110.alpha = this.var_110.alpha - this.var_455;
+                this.var_110.alpha -= this.var_455;
                 if (this.var_110.alpha <= 0.05) {
                     removeEventListener(Event.ENTER_FRAME, this.method_153);
                     this.method_406();
