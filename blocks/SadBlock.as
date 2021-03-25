@@ -29,7 +29,8 @@ package blocks
 
         public function applyOptions(optStr:String)
         {
-            options = this.changeAmt = Data.numLimit(int(optStr), -100, -5);
+            this.changeAmt = Data.numLimit(int(optStr), -100, -5);
+            options = this.changeAmt < -5 ? this.changeAmt : '';
         }
 
         override protected function useSupply(player:LocalCharacter)
