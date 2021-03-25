@@ -5,23 +5,37 @@
 
 package blocks
 {
+    import blocks.options.StatBlockOptions;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Settings;
-    import sounds.SoundEffects;
     import package_8.LocalCharacter;
+    import sounds.SoundEffects;
 
     public class SadBlock extends class_39 
     {
+        private var changeAmt:int = -5;
 
         public function SadBlock()
         {
+            optionsMenu = StatBlockOptions;
             super(Objects.BLOCK_SAD);
+        }
+
+        public function getChangeAmt()
+        {
+            return this.changeAmt;
+        }
+
+        public function applyOptions(optStr:String)
+        {
+            options = this.changeAmt = Data.numLimit(int(optStr), -100, -5);
         }
 
         override protected function useSupply(player:LocalCharacter)
         {
             super.useSupply(player);
-            player.statsChange(-5);
+            player.statsChange(this.changeAmt);
             SoundEffects.playSound(new BumpSadSound(), 0.75 * (Settings.soundLevel / 100));
         }
 

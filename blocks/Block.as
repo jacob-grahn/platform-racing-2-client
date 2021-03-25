@@ -77,14 +77,9 @@ package blocks
 
         protected function set options(optStr:String)
         {
-            if (this._hasOptions && optStr != this._options) {
+            if (this.hasOptions && optStr != this._options) {
                 this._options = optStr;
             }
-        }
-
-        public function applyOptions(optStr:String)
-        {
-            this.options = this.hasOptions && optStr != this.options ? optStr : this.options;
         }
 
         public function getSeg():Point
