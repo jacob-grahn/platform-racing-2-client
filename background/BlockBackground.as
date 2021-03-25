@@ -88,6 +88,19 @@ package background
             this.blockArray[seg.x][seg.y] = block;
         }
 
+        public function getAllBlocksOfType(type:Class)
+        {
+            var ret:Array = [];
+            for (var segX:* in this.blockArray) {
+                for (var segY:* in this.blockArray[segX]) {
+                    if (this.blockArray[segX][segY].m is type) {
+                        ret.push(this.blockArray[segX][segY]);
+                    }
+                }
+            }
+            return ret;
+        }
+
         // deleted _loc3 (simplified return)
         // _loc4 = segX
         // _loc5 = segY

@@ -8,6 +8,7 @@ package blocks
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
     import page.GamePage;
+    import items.Items;
 
     public class ItemBlock extends SupplyBlock
     {
@@ -25,14 +26,24 @@ package blocks
             }
             var newItems:Vector.<int> = Vector.<int>(optsStr.split('-')).sort(Array.NUMERIC);
             var blockItems:Vector.<int> = Vector.<int>(options.split('-')).sort(Array.NUMERIC);
-            if (newItems == blockItems) {
-                return;
-            } else if (newItems.toString() == GamePage.course.allowedItems.sort(Array.NUMERIC).toString()) {
+            if (newItems.toString() == GamePage.course.allowedItems.sort(Array.NUMERIC).toString()) {
                 options = '';
+            } else if (newItems == blockItems) {
+                return;
             } else if (newItems.length == 0 || (newItems.length == 1 && newItems[0] == 0)) {
                 options = 'none';
             } else {
                 options = newItems.join('-');
+            }
+        }
+
+        public function updateGameItems()
+        {
+            var allowedItems:Vector.<int> = GamePage.course.allowedItems.sort(Array.NUMERIC);
+            if (options == '') {
+                return;
+            } else if (options == allowedItems.join('-') || (options == 'none' && allowedItems.length == 0)) {
+                options = '';
             }
         }
 

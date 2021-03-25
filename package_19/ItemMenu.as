@@ -5,13 +5,13 @@
 
 package package_19
 {
+    import blocks.ItemBlock;
     import fl.controls.CheckBox;
     import items.Items;
+    import levelEditor.BlockObject;
     import levelEditor.LevelEditor;
     import package_4.class_264;
     import page.GamePage;
-    //import __AS3__.vec.Vector;
-    //import __AS3__.vec.*;
 
     public class ItemMenu extends class_264 
     {
@@ -44,6 +44,12 @@ package package_19
                         GamePage.course.allowedItems.push(_local_2);
                     }
                     _local_2++;
+                }
+                if (LevelEditor.editor != null) {
+                    var itemBlocks:Array = LevelEditor.editor.blockBG.getAllBlocksOfType(ItemBlock);
+                    for each (var block:BlockObject in itemBlocks) {
+                        block.m.updateGameItems();
+                    }
                 }
             }
             super.remove();
