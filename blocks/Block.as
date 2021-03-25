@@ -36,7 +36,7 @@ package blocks
         protected var map:Map;
         protected var frozen:Boolean = false; // var_37
         protected var optionsMenu:Class = null;
-        protected var _options:String = '';
+        private var _options:String = '';
         private var var_110:Bitmap;
         private var var_455:Number = 0.1;
         private var var_600:int = 0;
@@ -75,7 +75,7 @@ package blocks
             return this._options;
         }
 
-        protected function set options(optStr:String)
+        public function set options(optStr:String) // I'd set visibility to protected but not setting it to public seems to break things
         {
             if (this.hasOptions && optStr != this._options) {
                 this._options = optStr;
