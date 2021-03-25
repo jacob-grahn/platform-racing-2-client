@@ -12,7 +12,7 @@ package blocks
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
-    public class HappyBlock extends class_39 
+    public class HappyBlock extends SupplyBlock 
     {
 
         private var changeAmt:int = 5;

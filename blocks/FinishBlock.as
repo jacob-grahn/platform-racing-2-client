@@ -9,7 +9,7 @@ package blocks
     import package_6.Course;
     import package_8.LocalCharacter;
 
-    public class FinishBlock extends class_39 
+    public class FinishBlock extends SupplyBlock 
     {
 
         public static var var_228:int = 1;

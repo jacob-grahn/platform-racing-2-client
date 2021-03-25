@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import package_8.LocalCharacter;
 
-    public class HeartBlock extends class_39 
+    public class HeartBlock extends SupplyBlock 
     {
 
         public function HeartBlock()

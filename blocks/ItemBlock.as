@@ -9,7 +9,7 @@ package blocks
     import sounds.SoundEffects;
     import page.GamePage;
 
-    public class ItemBlock extends class_39 
+    public class ItemBlock extends SupplyBlock
     {
 
         public function ItemBlock(bCode:int = 110) // single item block code

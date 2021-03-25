@@ -12,7 +12,7 @@ package blocks
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
-    public class SadBlock extends class_39 
+    public class SadBlock extends SupplyBlock 
     {
         private var changeAmt:int = -5;
 

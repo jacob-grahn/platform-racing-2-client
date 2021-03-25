@@ -1,19 +1,16 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//blocks.class_39
+﻿// blocks.SupplyBlock = blocks.class_39
 
 package blocks
 {
     import package_8.LocalCharacter;
     import flash.geom.ColorTransform;
 
-    public class class_39 extends Block 
+    public class SupplyBlock extends Block 
     {
 
-        protected var var_243:int = 1;
+        protected var uses:int = 1; // var_243
 
-        public function class_39(_arg_1:int)
+        public function SupplyBlock(_arg_1:int)
         {
             super(_arg_1);
         }
@@ -22,11 +19,11 @@ package blocks
         {
             super.onBump(player);
             if (!frozen) {
-                if (this.var_243 > 0) {
-                    this.var_243--;
+                if (this.uses > 0) {
+                    this.uses--;
                     this.useSupply(player);
                 }
-                if (this.var_243 <= 0) {
+                if (this.uses <= 0) {
                     this.method_789();
                 }
             }
@@ -44,5 +41,4 @@ package blocks
 
 
     }
-}//package blocks
-
+}

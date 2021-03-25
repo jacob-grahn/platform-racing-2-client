@@ -1,21 +1,21 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//blocks.class_45
+// blocks.RotateBlock = blocks.class_45
 
 package blocks
 {
     import package_6.Course;
     import package_8.LocalCharacter;
 
-    public class class_45 extends Block 
+    public class RotateBlock extends Block 
     {
 
         protected var dir:String;
 
-        public function class_45(_arg_1:int)
+        public function RotateBlock(code:int)
         {
-            super(_arg_1);
+            super(code);
         }
 
         override public function onBump(player:LocalCharacter)
@@ -30,5 +30,4 @@ package blocks
 
 
     }
-}//package blocks
-
+}

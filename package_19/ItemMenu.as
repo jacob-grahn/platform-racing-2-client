@@ -16,17 +16,16 @@ package package_19
     public class ItemMenu extends class_264 
     {
         private var m:ItemMenuGraphic = new ItemMenuGraphic();
-        private var var_445:int = Items.getAllCodes().length;
+        private var numItems:int = Items.getAllCodes().length; // var_445
 
         public function ItemMenu(_arg_1:ItemMenuButton)
         {
-            var _local_3:CheckBox;
             addChild(this.m);
             super(_arg_1);
             var _local_2:Vector.<int> = GamePage.course.allowedItems;
             var _local_4:int = 1;
-            while (_local_4 <= this.var_445) {
-                _local_3 = this.m["check" + _local_4];
+            while (_local_4 <= this.numItems) {
+                var _local_3:CheckBox = this.m["check" + _local_4];
                 if (_local_2.indexOf(_local_4) != -1) {
                     _local_3.selected = true;
                 }
@@ -37,11 +36,10 @@ package package_19
         override public function remove()
         {
             if (GamePage.course != null) {
-                var _local_1:CheckBox;
                 GamePage.course.allowedItems = new Vector.<int>();
                 var _local_2:int = 1;
-                while (_local_2 <= this.var_445) {
-                    _local_1 = this.m["check" + _local_2];
+                while (_local_2 <= this.numItems) {
+                    var _local_1:CheckBox = this.m["check" + _local_2];
                     if (_local_1.selected) {
                         GamePage.course.allowedItems.push(_local_2);
                     }
