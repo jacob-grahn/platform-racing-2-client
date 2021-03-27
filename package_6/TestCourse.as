@@ -129,7 +129,7 @@ package package_6
         private function restart()
         {
             Main.stage.focus = Main.stage;
-            blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = 0;
+            blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = bg4.rotation = bg5.rotation = 0;
             timer.setTime(Number(maxTime));
             effectBackground.clear();
             blockBackground.clear();

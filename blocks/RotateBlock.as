@@ -24,7 +24,7 @@ package blocks
             if (!frozen) {
                 player.setMode("freeze");
                 player.velX = player.velY = 0;
-                Course.course.method_654(this.dir);
+                Course.course.startRotate(this.dir);
             }
         }
 
