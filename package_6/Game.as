@@ -25,7 +25,7 @@ package package_6
 
         private var superLoader:SuperLoader = new SuperLoader(false);
         private var quitButton:QuitButton; // var_285
-        private var chatBox:RaceChat; // chatBox = var_305
+        // moved chatBox to Course and changed visibility from private -> public (var_305)
         private var cm:CommandHandler = CommandHandler.commandHandler;
         protected var drawingInfo:DrawingInfo; // var_125
         public var prize:Object;

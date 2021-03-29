@@ -37,6 +37,10 @@ package blocks
         {
             super.useSupply(player);
             player.statsChange(this.changeAmt);
+            if (Course.course != null && Course.course.chatBox != null && this.changeAmt != -5) {
+                var stats:Object = player.getStats();
+                Course.course.chatBox.receiveSystemMessage(["Your stats were lowered by " + this.changeAmt + ". They are now:\n - Speed: " + stats.speed + "\n - Acceleration: " + stats.accel + "\n - Jump: " + stats.jump]);
+            }
             SoundEffects.playSound(new BumpSadSound(), 0.75 * (Settings.soundLevel / 100));
         }
 

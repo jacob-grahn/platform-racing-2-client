@@ -40,6 +40,7 @@ package package_6
         public var timer:CourseTimer;
         protected var miniMap:MiniMap = new MiniMap();
         protected var itemDisplay:ItemDisplay = new ItemDisplay();
+        public var chatBox:RaceChat; // var_305
         public var musicSelection:MusicSelection = new MusicSelection();
         protected var countdown:CountdownGraphic; // var_61
         protected var hearts:Hearts; // var_60

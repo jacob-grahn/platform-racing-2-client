@@ -190,6 +190,15 @@ package package_8
             this.setStats(this.speedStat, this.accelStat, this.jumpnStat, fromSpeedBurst);
         }
 
+        public function getStats()
+        {
+            return {
+                "speed": this.speedStat,
+                "accel": this.accelStat,
+                "jump": this.jumpnStat
+            };
+        }
+
         public function setGravity(_arg_1:Number)
         {
             var_4.setNumber(GravityMultiplied, var_4.getNumber(DefaultGravity) * _arg_1);
