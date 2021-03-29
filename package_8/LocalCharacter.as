@@ -110,7 +110,7 @@ package package_8
         private var life:int = 3;
         private var invincible:Boolean = false; // var_435
         private var frozenSolid:Boolean = false;
-        private var var_340:uint;
+        private var unfreezeTimer:uint; // var_340
         private var var_530:Number;
         private var var_443:int;
         private var var_453:int;
@@ -171,6 +171,7 @@ package package_8
             if (!fromSpeedBurst) { // only apply speed change if a speed burst isn't active
                 this.maxVelX = 2 + (this.speedStat / 10);
                 this.accel = 0.2 + (this.accelStat / 60);
+                this.ensureSantaStats();
             }
             var_4.setNumber(SuperJump, 2 + (this.jumpnStat / 40));
         }
@@ -966,7 +967,7 @@ package package_8
             this.ensureCowboyStats();
             if (var_4.getBool(SANTA)) {
                 if (!hadSanta) {
-                    this.maxVelX = this.maxVelX + 1;
+                    this.ensureSantaStats();
                 }
             }
             if (var_4.getBool(JUMP_START)) {
@@ -1003,15 +1004,17 @@ package package_8
         // method_358 = ensureCowboyStats
         private function ensureCowboyStats()
         {
-            if (var_4.getBool(COWBOY)
-                /*&& (
-                    Items.getCodeFromItem(this.curItem) != Items.speedBurst
-                    || (Items.getCodeFromItem(this.curItem) == Items.speedBurst && !this.curItem.isUsed())
-                )*/
-            ) {
+            if (var_4.getBool(COWBOY)) {
                 this.maxVelX = this.maxVelX < 12 ? 12 : this.maxVelX;
                 this.accel = this.accel < 1.86 ? 1.86 : this.accel;
                 var_4.setNumber(SuperJump, 4.5);
+            }
+        }
+
+        private function ensureSantaStats()
+        {
+            if (var_4.getBool(SANTA)) {
+                this.maxVelX += 1;
             }
         }
 
@@ -1026,15 +1029,16 @@ package package_8
         { // typo fixed from: this.mode != "frozenSolod"
             if (this.mode != "frozenSolid" && state != "frozenSolid" && !this.frozenSolid) {
                 this.frozenSolid = true;
-                clearTimeout(this.var_340);
-                this.var_340 = setTimeout(this.method_591, 2000);
+                clearTimeout(this.unfreezeTimer);
+                this.unfreezeTimer = setTimeout(this.unfreeze, 2000);
                 this.setMode("frozenSolid");
             }
         }
 
-        private function method_591()
+        // method_591 = unfreeze
+        private function unfreeze()
         {
-            clearTimeout(this.var_340);
+            clearTimeout(this.unfreezeTimer);
             this.frozenSolid = false;
         }
 
@@ -1055,7 +1059,7 @@ package package_8
             removeEventListener(Event.ENTER_FRAME, this.go);
             clearInterval(this.var_573);
             clearInterval(this.var_535);
-            clearTimeout(this.var_340);
+            clearTimeout(this.unfreezeTimer);
         }
 
         override public function remove()
