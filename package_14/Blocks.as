@@ -38,6 +38,7 @@ package package_14
             addItem(new class_228(Objects.BLOCK_PUSH), "Push Block", "This block can be pushed around.");
             addItem(new class_228(Objects.BLOCK_HAPPY), "Happy Block", "Bump this to increase your stats for the rest of the race.");
             addItem(new class_228(Objects.BLOCK_SAD), "Sad Block", "Bumping one of these will decrease your stats for the rest of the race.");
+            addItem(new class_228(Objects.BLOCK_CUSTOM_STATS), "Custom Stats Block", "Bumping this will set the player's stats to what you specify. The default is 50-50-50.");
             addItem(new class_228(Objects.BLOCK_SAFETY), "Safety Net", "Touching this will teleport you back to your last safe location. It's the same as falling off of the course.");
             addItem(new class_228(Objects.BLOCK_HEART), "Heart Block", "This block grants you one extra heart in Deathmatch mode, and renders you invincible for five fantastic seconds.");
             addItem(new class_228(Objects.BLOCK_TIME), "Time Block", "Adds 10 seconds to your timer.");
