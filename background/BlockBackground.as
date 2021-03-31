@@ -93,7 +93,7 @@ package background
             var ret:Array = [];
             for (var segX:* in this.blockArray) {
                 for (var segY:* in this.blockArray[segX]) {
-                    if (this.blockArray[segX][segY].m is type) {
+                    if (this.blockArray[segX][segY] != null && this.blockArray[segX][segY].m is type) {
                         ret.push(this.blockArray[segX][segY]);
                     }
                 }
