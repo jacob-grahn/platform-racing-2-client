@@ -34,7 +34,7 @@ package levelEditor
             this.posX = x;
             this.posY = y;
             resizable = false;
-            if (blockOpts != '') {
+            if (this.displayCode != Objects.BLOCK_MINION_EGG && blockOpts != '') {
                 this.setOptionsString(blockOpts);
             }
         }

@@ -261,7 +261,7 @@ package background
                             if (currentObjCode != lastObjCode || blockOpts != '') {
                                 lastObjCode = currentObjCode;
                                 relCoord += ";" + currentObjCode;
-                                if (blockOpts != '') {
+                                if (blockOpts != null && blockOpts != '') {
                                     relCoord += ';' + blockOpts;
                                 }
                             }
