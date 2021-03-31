@@ -48,7 +48,7 @@ package package_6
             var_9.testMode = true;
             playerArray.push(var_9);
             var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
-            this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.accel, savedStats.jump, var_9);
+            this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.acceleration, savedStats.jumping, var_9);
             this.statsSelect.x = -265;
             this.statsSelect.y = 90;
             this.statsSelect.scaleX = this.statsSelect.scaleY = 0.66;
@@ -122,6 +122,11 @@ package package_6
             new TeleportPop(var_9.x, var_9.y);
             var_9.setPos(newX, newY);
             new TeleportPop(var_9.x, var_9.y);
+        }
+
+        public function statsSelectSetFromCharacter()
+        {
+            this.statsSelect.setStatsFromCharacter();
         }
 
         // _loc1 = player1Start

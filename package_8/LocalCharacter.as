@@ -195,8 +195,8 @@ package package_8
         {
             return {
                 "speed": this.speedStat,
-                "accel": this.accelStat,
-                "jump": this.jumpnStat
+                "acceleration": this.accelStat,
+                "jumping": this.jumpnStat
             };
         }
 

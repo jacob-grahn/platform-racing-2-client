@@ -10,6 +10,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Settings;
     import package_6.Course;
+    import package_6.TestCourse;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
 
@@ -39,9 +40,13 @@ package blocks
         {
             super.useSupply(player);
             player.statsChange(this.changeAmt);
-            if (Course.course != null && Course.course.chatBox != null && this.changeAmt != 5) {
-                var stats:Object = player.getStats();
-                Course.course.chatBox.receiveSystemMessage(["Your stats were raised by " + this.changeAmt + "! They are now:\n - Speed: " + stats.speed + "\n - Acceleration: " + stats.accel + "\n - Jump: " + stats.jump]);
+            if (Course.course != null) {
+                if (Course.course.chatBox != null && this.changeAmt != 5) {
+                    var stats:Object = player.getStats();
+                    Course.course.chatBox.receiveSystemMessage(["Your stats were raised by " + this.changeAmt + "! They are now:\n - Speed: " + stats.speed + "\n - Acceleration: " + stats.acceleration + "\n - Jump: " + stats.jumping]);
+                } else if (Course.course is TestCourse) {
+                    Course.course.statsSelectSetFromCharacter();
+                }
             }
             SoundEffects.playSound(new BumpHappySound(), 0.75 * (Settings.soundLevel / 100));
         }

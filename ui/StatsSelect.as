@@ -52,6 +52,11 @@ package ui
             return stats;
         }
 
+        public function setStatsFromCharacter()
+        {
+            this.setStats(this.character.getStats());
+        }
+
         // method_46 = setStats
         public function setStats(stats:Object)
         {
@@ -73,11 +78,7 @@ package ui
         public function saveLEStats(e:* = null)
         {
             if (this.character != null && this.character.inLE()) {
-                Settings.setValue(Settings.LE_TEST_STATS, {
-                    "speed": this.speedSlider.value,
-                    "accel": this.accelSlider.value,
-                    "jump": this.jumpnSlider.value
-                });
+                Settings.setValue(Settings.LE_TEST_STATS, this.character.getStats());
             }
         }
 

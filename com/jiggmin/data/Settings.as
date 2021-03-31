@@ -24,7 +24,7 @@ package com.jiggmin.data
         public static const LE_TEST_HAT:String = 'leTestHat';
 
         public static const DEFAULT_ALT_CONTROLS:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
-        public static const DEFAULT_LE_TEST_STATS:Object = {"speed":50,"accel":50,"jump":50};
+        public static const DEFAULT_LE_TEST_STATS:Object = {"speed":50,"acceleration":50,"jumping":50};
 
         private static const SETTINGS:Array = [PRESETS, DISABLED_SONGS, MUSIC_VOLUME, SOUND_VOLUME, DRAW_ART, ART_LOSSLESS_QUALITY, FILTER_SWEARS, ALTERNATE_CONTROLS, LE_TEST_STATS, LE_TEST_HAT];
 
@@ -36,7 +36,7 @@ package com.jiggmin.data
         private static var losslessQuality:Boolean = false;
         private static var filterSwears:Boolean = true;
         private static var altCtrl:Object = {"up":87,"right":68,"down":83,"left":65,"item":73};
-        private static var leTestStats:Object = {"speed":50,"accel":50,"jump":50};
+        private static var leTestStats:Object = {"speed":50,"acceleration":50,"jumping":50};
         private static var leTestHat:int = 2;
 
         private static var userName:String;
