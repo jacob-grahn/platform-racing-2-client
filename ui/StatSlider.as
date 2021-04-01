@@ -48,6 +48,7 @@ package ui
             this.holdStart = this.holdSpeed = 0;
             clearInterval(this.updateInterval);
             if (this.target != null) {
+                this.target.updateSavedLEStats = true;
                 this.target.saveLEStats();
             }
         }
@@ -94,12 +95,18 @@ package ui
         private function onSliderChange(e:Event)
         {
             this.setValue(e.target.value);
+            if (this.target != null) {
+                this.target.updateSavedLEStats = true;
+            }
         }
 
         // method_306 = onTextChange
         private function onTextChange(e:Event)
         {
             this.setValue(int(e.target.text));
+            if (this.target != null) {
+                this.target.updateSavedLEStats = true;
+            }
         }
 
         public function getValue()

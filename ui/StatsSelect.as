@@ -17,6 +17,7 @@ package ui
         private var totalPoints:int; // var_334
         private var character:LocalCharacter; // var_5
         private var stageRef:Stage = Main.stage;
+        public var updateSavedLEStats:Boolean = true;
 
         public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, c:LocalCharacter)
         {
@@ -54,6 +55,7 @@ package ui
 
         public function setStatsFromCharacter()
         {
+            this.updateSavedLEStats = false;
             this.setStats(this.character.getStats());
         }
 
@@ -77,7 +79,7 @@ package ui
         // mouseUpHandler = saveLEStats
         public function saveLEStats(e:* = null)
         {
-            if (this.character != null && this.character.inLE()) {
+            if (this.character != null && this.character.inLE() && this.updateSavedLEStats) {
                 Settings.setValue(Settings.LE_TEST_STATS, this.character.getStats());
             }
         }
