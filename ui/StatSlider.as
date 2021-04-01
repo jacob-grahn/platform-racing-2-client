@@ -48,7 +48,7 @@ package ui
             this.holdStart = this.holdSpeed = 0;
             clearInterval(this.updateInterval);
             if (this.target != null) {
-                this.target.updateSavedLEStats = true;
+                this.target.updateSavedLEStats = e === false ? this.target.updateSavedLEStats : true;
                 this.target.saveLEStats();
             }
         }
@@ -133,7 +133,7 @@ package ui
 
         override public function remove()
         {
-            this.arrowBtnUp();
+            this.arrowBtnUp(false);
             this.m.slider.removeEventListener(Event.CHANGE, this.onSliderChange);
             this.m.textBox.removeEventListener(Event.CHANGE, this.onTextChange);
             removeChild(this.m);

@@ -17,7 +17,7 @@ package ui
         private var totalPoints:int; // var_334
         private var character:LocalCharacter; // var_5
         private var stageRef:Stage = Main.stage;
-        public var updateSavedLEStats:Boolean = true;
+        public var updateSavedLEStats:Boolean = false;
 
         public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, c:LocalCharacter)
         {
