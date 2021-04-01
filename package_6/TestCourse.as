@@ -143,6 +143,7 @@ package package_6
             blockBackground.method_578();
             var player1Start:Point = startPosArray[0];
             var_9.setPos(player1Start.x, player1Start.y);
+            var_9.setItem(0);
             var_9.setLife(3);
             var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
             var_9.setStats(savedStats.speed, savedStats.acceleration, savedStats.jumping);
