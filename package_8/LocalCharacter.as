@@ -163,12 +163,12 @@ package package_8
         }
 
         // method_46 = setStats
-        public function setStats(s:int, a:int, j:int)
+        public function setStats(s:int, a:int, j:int, reset:Boolean = false)
         {
             this.speedStat = Data.numLimit(s, 0, 100);
             this.accelStat = Data.numLimit(a, 0, 100);
             this.jumpnStat = Data.numLimit(j, 0, 100);
-            if (!(this.curItem is SpeedBurst && this.curItem.isUsed())) { // only apply speed change if a speed burst isn't active. wait to apply speed/accel change until after the speed burst ends and calls resetStats()
+            if (!(this.curItem is SpeedBurst && this.curItem.isUsed()) || reset) { // only apply speed change if a speed burst isn't active. wait to apply speed/accel change until after the speed burst ends and calls resetStats()
                 this.maxVelX = 2 + (this.speedStat / 10);
                 this.accel = 0.2 + (this.accelStat / 60);
                 this.ensureSantaStats();
@@ -178,7 +178,7 @@ package package_8
 
         public function resetStats()
         {
-            this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
+            this.setStats(this.speedStat, this.accelStat, this.jumpnStat, true);
         }
 
         // method_392 = statsChange
