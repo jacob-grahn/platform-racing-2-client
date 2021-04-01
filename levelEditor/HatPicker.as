@@ -69,6 +69,14 @@ package levelEditor
             Settings.setValue(Settings.LE_TEST_HAT, this.pickedHat);
         }
 
+        public function resetHat()
+        {
+            var colorMC:int = this.c.hat1Color;
+            var colorMC2:int = this.c.hat1Color2;
+            this.c.setHats([]);
+            this.c.setHats([this.pickedHat, colorMC, colorMC2]);
+        }
+
         public function remove()
         {
             this.m.var_173.left.removeEventListener(MouseEvent.CLICK, this.clickLeft);
