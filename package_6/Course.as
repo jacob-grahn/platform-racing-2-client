@@ -17,6 +17,7 @@ package package_6
     import flash.display.StageQuality;
     import flash.errors.Error;
     import flash.events.Event;
+    import flash.events.MouseEvent;
     import flash.geom.Point;
     import flash.net.URLVariables;
     import package_8.Character;
@@ -38,6 +39,7 @@ package package_6
         public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
+        public var statsDisplay:StatsDisplay;
         protected var miniMap:MiniMap = new MiniMap();
         protected var itemDisplay:ItemDisplay = new ItemDisplay();
         public var chatBox:RaceChat; // var_305
@@ -77,6 +79,13 @@ package package_6
             this.timer.y = -198;
             this.timer.mouseChildren = this.timer.mouseEnabled = false;
             this.holder.addChild(this.timer);
+            this.statsDisplay = new StatsDisplay(this);
+            this.statsDisplay.x = 215;
+            this.statsDisplay.y = -166;
+            this.statsDisplay.addEventListener(MouseEvent.MOUSE_OVER, this.statsDisplay.onMouse, false, 0, true);
+            this.statsDisplay.addEventListener(MouseEvent.MOUSE_OUT, this.statsDisplay.onMouse, false, 0, true);
+            this.statsDisplay.mouseChildren = false;
+            this.holder.addChild(this.statsDisplay);
             this.miniMap.x = -195;
             this.miniMap.y = -198;
             this.miniMap.mouseChildren = this.miniMap.mouseEnabled = false;
@@ -453,6 +462,10 @@ package package_6
             if (this.timer != null) {
                 this.timer.remove();
                 this.timer = null;
+            }
+            if (this.statsDisplay != null) {
+                this.statsDisplay.remove();
+                this.statsDisplay = null;
             }
             if (this.countdown != null) {
                 this.countdown.removeEventListener("count", this.onCountdownCount);

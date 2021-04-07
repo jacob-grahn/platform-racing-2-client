@@ -174,6 +174,9 @@ package package_8
                 this.ensureSantaStats();
             }
             var_4.setNumber(SuperJump, 2 + (this.jumpnStat / 40));
+            if (Course.course != null && Course.course.statsDisplay != null) {
+                Course.course.statsDisplay.setStats(this.speedStat, this.accelStat, this.jumpnStat);
+            }
         }
 
         public function resetStats()
