@@ -26,7 +26,8 @@ package blocks
             }
             var newItems:Vector.<int> = Vector.<int>(optsStr.split('-')).sort(Array.NUMERIC);
             var blockItems:Vector.<int> = Vector.<int>(options.split('-')).sort(Array.NUMERIC);
-            if (newItems.toString() == GamePage.course.allowedItems.sort(Array.NUMERIC).toString()) {
+            var gameItems:Vector.<int> = GamePage.course.allowedItems.sort(Array.NUMERIC);
+            if (newItems.toString() == gameItems.toString() || (newItems.toString() == '0' && gameItems.toString() == '')) {
                 options = '';
             } else if (newItems == blockItems) {
                 return;
