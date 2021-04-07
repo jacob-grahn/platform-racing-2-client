@@ -23,7 +23,7 @@ package package_20
         {
             var layer:ObjectBackground = editor.cur;
             var dropPt:Point = editor.cur.globalToLocal(new Point(dropX - 5, dropY - 16));
-            var textObj:TextObject = layer.addText(" ", dropPt.x, dropPt.y, TextObject.var_380, true);
+            var textObj:TextObject = layer.addText("", dropPt.x, dropPt.y, TextObject.var_380, true);
             textObj.select();
             textObj.startEditing();
             remove();
