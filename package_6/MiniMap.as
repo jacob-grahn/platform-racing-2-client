@@ -158,8 +158,6 @@ package package_6
             while (this.var_49.numChildren > 0) {
                 this.var_49.removeChildAt(0);
             }
-            this.var_49 = null;
-            this.var_49 = new Sprite();
         }
 
         override public function remove()
