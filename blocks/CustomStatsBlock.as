@@ -27,25 +27,28 @@
 
         public function applyOptions(optStr:String)
         {
-            var statArr:Array = optStr.split('-');
-            for (var key:int in statArr) {
-                statArr[key] = Data.numLimit(int(statArr[key]), 0, 100);
+            if (optStr != 'reset') {
+                var statArr:Array = optStr.split('-');
+                for (var key:int in statArr) {
+                    statArr[key] = Data.numLimit(int(statArr[key]), 0, 100);
+                }
+                this.customStats = statArr;
+                options = this.customStats != [50, 50, 50] ? this.customStats.join('-') : '';
+            } else {
+                options = 'reset';
             }
-            this.customStats = statArr;
-            options = this.customStats != [50, 50, 50] ? this.customStats.join('-') : '';
         }
 
         override protected function useSupply(player:LocalCharacter)
         {
             super.useSupply(player);
-            player.setStats(this.customStats[0], this.customStats[1], this.customStats[2]);
-            if (Course.course != null) {
-                if (Course.course.chatBox != null) {
-                    var stats:Object = player.getStats();
-                    Course.course.chatBox.receiveSystemMessage(["Your stats were set to:\n - Speed: " + stats.speed + "\n - Acceleration: " + stats.acceleration + "\n - Jump: " + stats.jumping]);
-                } else if (Course.course is TestCourse) {
-                    Course.course.statsSelectSetFromCharacter();
-                }
+            if (options == 'reset') {
+                player.resetStatsToStart();
+            } else {
+                player.setStats(this.customStats[0], this.customStats[1], this.customStats[2]);
+            }
+            if (Course.course != null && Course.course is TestCourse) {
+                Course.course.statsSelectSetFromCharacter();
             }
             SoundEffects.playSound(new StarSound(), 0.6 * (Settings.soundLevel / 100));
         }

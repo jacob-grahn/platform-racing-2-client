@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//blocks.HappyBlock = blocks.class_58
+﻿// blocks.HappyBlock = blocks.class_58
 
 package blocks
 {
@@ -40,17 +37,12 @@ package blocks
         {
             super.useSupply(player);
             player.statsChange(this.changeAmt);
-            if (Course.course != null) {
-                if (Course.course.chatBox != null && this.changeAmt != 5) {
-                    var stats:Object = player.getStats();
-                    Course.course.chatBox.receiveSystemMessage(["Your stats were raised by " + this.changeAmt + "! They are now:\n - Speed: " + stats.speed + "\n - Acceleration: " + stats.acceleration + "\n - Jump: " + stats.jumping]);
-                } else if (Course.course is TestCourse) {
-                    Course.course.statsSelectSetFromCharacter();
-                }
+            if (Course.course != null && Course.course is TestCourse) {
+                Course.course.statsSelectSetFromCharacter();
             }
             SoundEffects.playSound(new BumpHappySound(), 0.75 * (Settings.soundLevel / 100));
         }
 
 
     }
-}//package blocks
+}

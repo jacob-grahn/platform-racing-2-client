@@ -43,11 +43,11 @@ package package_6
             this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.clickRestart);
             holder.addChild(this.m);
             musicSelection.x = -130;
-            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
+            var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
+            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity, savedStats.speed, savedStats.acceleration, savedStats.jumping);
             var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
             var_9.testMode = true;
             playerArray.push(var_9);
-            var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
             this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.acceleration, savedStats.jumping, var_9);
             this.statsSelect.x = -265;
             this.statsSelect.y = 90;

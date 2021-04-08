@@ -118,6 +118,7 @@ package package_8
         private var var_623:int;
         private var var_232:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
+        private var startingStats:Array = null;
 
         public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
@@ -177,11 +178,19 @@ package package_8
             if (Course.course != null && Course.course.statsDisplay != null) {
                 Course.course.statsDisplay.setStats(this.speedStat, this.accelStat, this.jumpnStat);
             }
+            if (this.startingStats == null && Course.course != null) {
+                this.startingStats = [this.speedStat, this.accelStat, this.jumpnStat];
+            }
         }
 
         public function resetStats()
         {
             this.setStats(this.speedStat, this.accelStat, this.jumpnStat, true);
+        }
+
+        public function resetStatsToStart()
+        {
+            this.setStats(this.startingStats[0], this.startingStats[1], this.startingStats[2]);
         }
 
         // method_392 = statsChange
