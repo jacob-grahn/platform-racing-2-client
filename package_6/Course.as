@@ -98,8 +98,8 @@ package package_6
             this.musicSelection.y = 162;
             this.holder.addChild(this.musicSelection);
             this.hearts = new Hearts();
-            this.hearts.x = 465 - 225;
-            this.hearts.y = 45 - 200;
+            this.hearts.x = 240;
+            this.hearts.y = -141;
             this.hearts.visible = false;
             this.hearts.mouseChildren = this.hearts.mouseEnabled = false;
             this.holder.addChild(this.hearts);

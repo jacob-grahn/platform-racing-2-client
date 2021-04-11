@@ -9,8 +9,8 @@ package package_6
     {
 
         private var totalHearts:int = 0; // var_193
-        private var yInc:int = 21; // var_454
-        private var scale:Number = 0.23;
+        private var yInc:int = 20; // var_454
+        private var scale:Number = 0.2;
 
 
         public function method_798(numHearts:int)
