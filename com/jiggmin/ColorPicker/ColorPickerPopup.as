@@ -11,6 +11,7 @@ package com.jiggmin.ColorPicker
     import ui.CustomCursor;
     import flash.events.MouseEvent;
     import flash.events.Event;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.class_122;
     import flash.display.DisplayObject;
     import flash.geom.ColorTransform;
@@ -231,8 +232,8 @@ package com.jiggmin.ColorPicker
             _local_2 = this.var_69.globalToLocal(_local_2);
             var _local_3:int = _local_2.x;
             var _local_4:int = _local_2.y;
-            _local_3 = class_74.numLimit(_local_3, 0, 60);
-            _local_4 = class_74.numLimit(_local_4, 0, 60);
+            _local_3 = Data.numLimit(_local_3, 0, 60);
+            _local_4 = Data.numLimit(_local_4, 0, 60);
             this.var_100.x = Math.round(_local_3);
             this.var_100.y = Math.round(_local_4);
             this.saturation = 100 * (_local_3 / 60);
@@ -248,7 +249,7 @@ package com.jiggmin.ColorPicker
             var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
             _local_2 = this.var_124.globalToLocal(_local_2);
             _local_3 = _local_2.y;
-            _local_3 = class_74.numLimit(_local_3, 0, 60);
+            _local_3 = Data.numLimit(_local_3, 0, 60);
             this.var_146.y = Math.round(_local_3);
             this.hue = 360 - (360 * (_local_3 / 60));
             this.color = class_122.method_68(this.hue, this.saturation, this.brightness);
@@ -281,8 +282,8 @@ package com.jiggmin.ColorPicker
             _local_2 = this.var_27.globalToLocal(_local_2);
             var _local_3:int = int(Math.floor((_local_2.x / 10)));
             var _local_4:int = int(Math.floor((_local_2.y / 10)));
-            _local_3 = class_74.numLimit(_local_3, 0, 21);
-            _local_4 = class_74.numLimit(_local_4, 0, 11);
+            _local_3 = Data.numLimit(_local_3, 0, 21);
+            _local_4 = Data.numLimit(_local_4, 0, 11);
             this.var_144.x = _local_3 * 10;
             this.var_144.y = _local_4 * 10;
             this.var_144.visible = true;

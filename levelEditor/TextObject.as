@@ -125,7 +125,7 @@ package levelEditor
             if (this.cp != null) {
                 removeChild(this.cp);
             }
-            if (this.getText() != this.text || this.getColor() != this.color) {
+            if (this.textField != null && (this.getText() != this.text || this.getColor() != this.color)) {
                 editor.cur.recordChangeText(this);
             }
             stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);

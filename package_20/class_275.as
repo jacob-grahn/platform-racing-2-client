@@ -7,7 +7,7 @@ package package_20
 {
     import background.BlockBackground;
     import levelEditor.LevelEditor;
-    import background.class_77;
+    import background.ObjectBackground;
     import flash.geom.Point;
     import levelEditor.BlockObject;
     import flash.events.MouseEvent;
@@ -24,7 +24,7 @@ package package_20
 
         override protected function dropObject(_arg_1:int, _arg_2:int)
         {
-            var _local_4:class_77;
+            var _local_4:ObjectBackground;
             var _local_5:Point;
             var _local_3:BlockObject = this.getBlock(_arg_1, _arg_2);
             if (_local_3 == null) {

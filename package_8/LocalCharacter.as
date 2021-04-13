@@ -110,7 +110,7 @@ package package_8
         private var life:int = 3;
         private var invincible:Boolean = false; // var_435
         private var frozenSolid:Boolean = false;
-        private var var_340:uint;
+        private var unfreezeTimer:uint; // var_340
         private var var_530:Number;
         private var var_443:int;
         private var var_453:int;
@@ -118,6 +118,7 @@ package package_8
         private var var_623:int;
         private var var_232:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
+        private var startingStats:Array = null;
 
         public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
         {
@@ -163,34 +164,51 @@ package package_8
         }
 
         // method_46 = setStats
-        public function setStats(s:int, a:int, j:int, fromSpeedBurst = false)
+        public function setStats(s:int, a:int, j:int, reset:Boolean = false)
         {
-            this.speedStat = class_74.numLimit(s, 0, 100);
-            this.accelStat = class_74.numLimit(a, 0, 100);
-            this.jumpnStat = class_74.numLimit(j, 0, 100);
-            if (!fromSpeedBurst) { // only apply speed change if a speed burst isn't active
+            this.speedStat = Data.numLimit(s, 0, 100);
+            this.accelStat = Data.numLimit(a, 0, 100);
+            this.jumpnStat = Data.numLimit(j, 0, 100);
+            if (!(this.curItem is SpeedBurst && this.curItem.isUsed()) || reset) { // only apply speed change if a speed burst isn't active. wait to apply speed/accel change until after the speed burst ends and calls resetStats()
                 this.maxVelX = 2 + (this.speedStat / 10);
                 this.accel = 0.2 + (this.accelStat / 60);
+                this.ensureSantaStats();
             }
             var_4.setNumber(SuperJump, 2 + (this.jumpnStat / 40));
+            if (Course.course != null && Course.course.statsDisplay != null) {
+                Course.course.statsDisplay.setStats(this.speedStat, this.accelStat, this.jumpnStat);
+            }
+            if (this.startingStats == null && Course.course != null) {
+                this.startingStats = [this.speedStat, this.accelStat, this.jumpnStat];
+            }
         }
 
         public function resetStats()
         {
-            this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
+            this.setStats(this.speedStat, this.accelStat, this.jumpnStat, true);
+        }
+
+        public function resetStatsToStart()
+        {
+            this.setStats(this.startingStats[0], this.startingStats[1], this.startingStats[2]);
         }
 
         // method_392 = statsChange
         public function statsChange(changeAmt:int)
         {
-            var fromSpeedBurst:Boolean = false;
             this.speedStat = this.speedStat + changeAmt;
             this.accelStat = this.accelStat + changeAmt;
             this.jumpnStat = this.jumpnStat + changeAmt;
-            if (this.curItem is SpeedBurst && this.curItem.isUsed()) {
-                fromSpeedBurst = true; // wait to apply speed/accel change until after the speed burst ends and calls resetStats()
-            }
-            this.setStats(this.speedStat, this.accelStat, this.jumpnStat, fromSpeedBurst);
+            this.setStats(this.speedStat, this.accelStat, this.jumpnStat);
+        }
+
+        public function getStats()
+        {
+            return {
+                "speed": this.speedStat,
+                "acceleration": this.accelStat,
+                "jumping": this.jumpnStat
+            };
         }
 
         public function setGravity(_arg_1:Number)
@@ -403,8 +421,8 @@ package package_8
             velY += var_4.getNumber(DefaultGravity) * 0.25;
             velX *= 0.92;
             velY *= 0.92;
-            velX = class_74.numLimit(velX, -this.var_157, this.var_157);
-            velY = class_74.numLimit(velY, -this.var_157, this.var_157);
+            velX = Data.numLimit(velX, -this.var_157, this.var_157);
+            velY = Data.numLimit(velY, -this.var_157, this.var_157);
             x += velX;
             y += velY;
             this.method_76();
@@ -553,15 +571,15 @@ package package_8
                 if (this.crouching) {
                     this.var_24 *= 0.7;
                 }
-                this.var_24 = class_74.numLimit(this.var_24, -this.maxVelX, this.maxVelX);
+                this.var_24 = Data.numLimit(this.var_24, -this.maxVelX, this.maxVelX);
                 var _local_1:Number = Math.abs(velX) / this.var_157;
                 _local_1 = 1 - _local_1;
                 _local_1 *= 0.9;
                 _local_1 += 0.1;
                 this.var_147 *= this.frozenSolid ? 0 : _local_1;
                 velX += (this.var_24 - velX) * this.var_147;
-                velX = class_74.numLimit(velX, -this.var_157, this.var_157);
-                velY = class_74.numLimit(velY, -this.var_157, this.var_157);
+                velX = Data.numLimit(velX, -this.var_157, this.var_157);
+                velY = Data.numLimit(velY, -this.var_157, this.var_157);
                 x += velX;
                 y += velY;
                 var _local_2:Point = Data.method_9(x, y, this.map.rotation);
@@ -776,7 +794,7 @@ package package_8
 
         public function setLife(l:int)
         {
-            this.life = class_74.numLimit(l, 0, 15);
+            this.life = Data.numLimit(l, 0, 15);
             this.course.setLife(this.life);
         }
 
@@ -960,7 +978,7 @@ package package_8
             this.ensureCowboyStats();
             if (var_4.getBool(SANTA)) {
                 if (!hadSanta) {
-                    this.maxVelX = this.maxVelX + 1;
+                    this.ensureSantaStats();
                 }
             }
             if (var_4.getBool(JUMP_START)) {
@@ -997,15 +1015,17 @@ package package_8
         // method_358 = ensureCowboyStats
         private function ensureCowboyStats()
         {
-            if (var_4.getBool(COWBOY)
-                /*&& (
-                    Items.getCodeFromItem(this.curItem) != Items.speedBurst
-                    || (Items.getCodeFromItem(this.curItem) == Items.speedBurst && !this.curItem.isUsed())
-                )*/
-            ) {
+            if (var_4.getBool(COWBOY)) {
                 this.maxVelX = this.maxVelX < 12 ? 12 : this.maxVelX;
                 this.accel = this.accel < 1.86 ? 1.86 : this.accel;
                 var_4.setNumber(SuperJump, 4.5);
+            }
+        }
+
+        private function ensureSantaStats()
+        {
+            if (var_4.getBool(SANTA)) {
+                this.maxVelX += 1;
             }
         }
 
@@ -1020,15 +1040,16 @@ package package_8
         { // typo fixed from: this.mode != "frozenSolod"
             if (this.mode != "frozenSolid" && state != "frozenSolid" && !this.frozenSolid) {
                 this.frozenSolid = true;
-                clearTimeout(this.var_340);
-                this.var_340 = setTimeout(this.method_591, 2000);
+                clearTimeout(this.unfreezeTimer);
+                this.unfreezeTimer = setTimeout(this.unfreeze, 2000);
                 this.setMode("frozenSolid");
             }
         }
 
-        private function method_591()
+        // method_591 = unfreeze
+        private function unfreeze()
         {
-            clearTimeout(this.var_340);
+            clearTimeout(this.unfreezeTimer);
             this.frozenSolid = false;
         }
 
@@ -1049,7 +1070,7 @@ package package_8
             removeEventListener(Event.ENTER_FRAME, this.go);
             clearInterval(this.var_573);
             clearInterval(this.var_535);
-            clearTimeout(this.var_340);
+            clearTimeout(this.unfreezeTimer);
         }
 
         override public function remove()

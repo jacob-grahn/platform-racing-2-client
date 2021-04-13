@@ -45,12 +45,8 @@ package levelEditor
             x = objX;
             y = objY;
             this.m = Objects.getFromCode(this.displayCode);
-            if (this.m is StartBlock) {
-                this.deleteable = false;
-            }
-            if (this is TextObject) {
-                this.textObj = true;
-            }
+            this.deleteable = !(this.m is StartBlock);
+            this.textObj = this is TextObject;
             this.recordRealDimensions();
             addChild(this.m);
             this.m.addEventListener(MouseEvent.MOUSE_DOWN, this.beginDrag);
@@ -141,7 +137,7 @@ package levelEditor
             this.hideResizeButton();
         }
 
-        protected function mouseDownHandler(_arg_1:MouseEvent)
+        protected function mouseDownHandler(e:MouseEvent)
         {
             this.deselect();
         }

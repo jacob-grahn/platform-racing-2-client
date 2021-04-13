@@ -43,12 +43,12 @@ package package_6
             this.m.restart_bt.addEventListener(MouseEvent.CLICK, this.clickRestart);
             holder.addChild(this.m);
             musicSelection.x = -130;
-            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity);
+            var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
+            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity, savedStats.speed, savedStats.acceleration, savedStats.jumping);
             var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
             var_9.testMode = true;
             playerArray.push(var_9);
-            var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
-            this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.accel, savedStats.jump, var_9);
+            this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.acceleration, savedStats.jumping, var_9);
             this.statsSelect.x = -265;
             this.statsSelect.y = 90;
             this.statsSelect.scaleX = this.statsSelect.scaleY = 0.66;
@@ -124,12 +124,17 @@ package package_6
             new TeleportPop(var_9.x, var_9.y);
         }
 
+        public function statsSelectSetFromCharacter()
+        {
+            this.statsSelect.setStatsFromCharacter();
+        }
+
         // _loc1 = player1Start
         // method_370 = restart
         private function restart()
         {
             Main.stage.focus = Main.stage;
-            blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = 0;
+            blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = bg4.rotation = bg5.rotation = 0;
             timer.setTime(Number(maxTime));
             effectBackground.clear();
             blockBackground.clear();
@@ -138,7 +143,12 @@ package package_6
             blockBackground.method_578();
             var player1Start:Point = startPosArray[0];
             var_9.setPos(player1Start.x, player1Start.y);
+            var_9.setItem(0);
             var_9.setLife(3);
+            this.hatPicker.resetHat();
+            var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
+            var_9.setStats(savedStats.speed, savedStats.acceleration, savedStats.jumping);
+            this.statsSelectSetFromCharacter();
             miniMap.rotate(0);
         }
 

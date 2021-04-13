@@ -35,6 +35,7 @@ package blocks
         public static var sadBitmap:SadBitmap; // var_476
         public static var heartBitmap:HeartBitmap; // var_433
         public static var timeBitmap:TimeBitmap; // var_457
+        public static var customStatsBitmap:CustomStatsBitmap;
 
 
         public static function init()
@@ -66,6 +67,7 @@ package blocks
             sadBitmap = new SadBitmap(30, 30);
             heartBitmap = new HeartBitmap(30, 30);
             timeBitmap = new TimeBitmap(30, 30);
+            customStatsBitmap = new CustomStatsBitmap(30, 30);
         }
 
         // _loc2 = bmpData
@@ -126,6 +128,8 @@ package blocks
                 bmpData = startBitmap;
             } else if (blockCode == Objects.BLOCK_TIME) {
                 bmpData = timeBitmap;
+            } else if (blockCode == Objects.BLOCK_CUSTOM_STATS) {
+                bmpData = customStatsBitmap;
             }
             return bmpData;
         }

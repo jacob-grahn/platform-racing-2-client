@@ -2,19 +2,20 @@
 
 package package_6
 {
+    import com.jiggmin.data.Data;
     import flash.display.Sprite;
 
     public class Hearts extends Sprite 
     {
 
         private var totalHearts:int = 0; // var_193
-        private var yInc:int = 21; // var_454
-        private var scale:Number = 0.23;
+        private var yInc:int = 20; // var_454
+        private var scale:Number = 0.2;
 
 
         public function method_798(numHearts:int)
         {
-            numHearts = class_74.numLimit(numHearts, 0, 15);
+            numHearts = Data.numLimit(numHearts, 0, 15);
             while (this.totalHearts < numHearts) {
                 this.addHeart();
             }

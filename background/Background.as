@@ -25,8 +25,8 @@ package background
         private var var_394:uint;
         private var bgColor:Number = 13092571;
         public var scale:Number = 1;
-        public var var_15:Array = new Array();
-        public var var_88:Array = new Array();
+        public var saveArray:Array = new Array(); // var_15
+        public var redoArray:Array = new Array(); // var_88
         protected var var_39:Number = 0;
         protected var var_104:int;
         protected var var_141:int;
@@ -79,10 +79,11 @@ package background
         }
 
         // _loc2 = leMenu
-        public function method_14(_arg_1:String)
+        // method_14 = recordAction
+        public function recordAction(action:String)
         {
-            this.var_15.push(_arg_1);
-            this.method_817();
+            this.saveArray.push(action);
+            this.redoArray = new Array();
             if (LevelEditor.editor != null) {
                 var leMenu:LevelEditorMenu = LevelEditor.editor.menu;
                 leMenu.m.undoButton.enabled = true;
@@ -90,10 +91,10 @@ package background
             }
         }
 
-        protected function method_817()
+        /*protected function method_817()
         {
-            this.var_88 = new Array();
-        }
+            this.redoArray = new Array();
+        }*/
 
         protected function method_59()
         {
@@ -105,8 +106,8 @@ package background
 
         public function undo()
         {
-            if (this.var_15.length > 0) {
-                this.var_88.push(this.var_15.pop());
+            if (this.saveArray.length > 0) {
+                this.redoArray.push(this.saveArray.pop());
             }
             this.clear();
             this.draw();
@@ -114,8 +115,8 @@ package background
 
         public function redo()
         {
-            if (this.var_88.length > 0) {
-                this.var_15.push(this.var_88.pop());
+            if (this.redoArray.length > 0) {
+                this.saveArray.push(this.redoArray.pop());
             }
             this.clear();
             this.draw();
@@ -129,7 +130,7 @@ package background
 
         public function draw(_arg_1:Number=100)
         {
-            if (this.var_39 < this.var_15.length) {
+            if (this.var_39 < this.saveArray.length) {
                 this.var_394 = setTimeout(this.draw, 10, _arg_1);
             } else {
                 this.course.finishDrawing(this);
@@ -138,12 +139,12 @@ package background
 
         public function getSaveString():String
         {
-            return this.var_15.join(",");
+            return this.saveArray.join(",");
         }
 
         public function setSaveString(_arg_1:String, fromLE:Boolean = true)
         {
-            this.var_15 = _arg_1 != "" && _arg_1 != "," && _arg_1 != null ? _arg_1.split(",") : new Array();
+            this.saveArray = _arg_1 != "" && _arg_1 != "," && _arg_1 != null ? _arg_1.split(",") : new Array();
             this.clear();
             this.draw();
         }
@@ -152,8 +153,8 @@ package background
         {
             this.course = null;
             clearTimeout(this.var_394);
-            this.var_15 = new Array();
-            this.var_88 = new Array();
+            this.saveArray = new Array();
+            this.redoArray = new Array();
             parent.removeChild(this);
         }
 

@@ -17,6 +17,7 @@ package package_6
     import flash.display.StageQuality;
     import flash.errors.Error;
     import flash.events.Event;
+    import flash.events.MouseEvent;
     import flash.geom.Point;
     import flash.net.URLVariables;
     import package_8.Character;
@@ -38,8 +39,10 @@ package package_6
         public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
+        public var statsDisplay:StatsDisplay;
         protected var miniMap:MiniMap = new MiniMap();
         protected var itemDisplay:ItemDisplay = new ItemDisplay();
+        public var chatBox:RaceChat; // var_305
         public var musicSelection:MusicSelection = new MusicSelection();
         protected var countdown:CountdownGraphic; // var_61
         protected var hearts:Hearts; // var_60
@@ -55,7 +58,7 @@ package package_6
         public var backBackground:Background;
         protected var var_689:Number = 0;
         protected var var_678:Number = 0;
-        private var var_348:String;
+        private var rotateDirection:String; // var_348
         private var varsSet:Boolean = false; // var_545
         public var countdownFinished:Boolean = false; // var_649
         protected var playerDone:Boolean = false; // Game.var_370 -- this is either finished or forfeited
@@ -76,6 +79,13 @@ package package_6
             this.timer.y = -198;
             this.timer.mouseChildren = this.timer.mouseEnabled = false;
             this.holder.addChild(this.timer);
+            this.statsDisplay = new StatsDisplay(this);
+            this.statsDisplay.x = 215;
+            this.statsDisplay.y = -166;
+            this.statsDisplay.addEventListener(MouseEvent.MOUSE_OVER, this.statsDisplay.onMouse, false, 0, true);
+            this.statsDisplay.addEventListener(MouseEvent.MOUSE_OUT, this.statsDisplay.onMouse, false, 0, true);
+            this.statsDisplay.mouseChildren = false;
+            this.holder.addChild(this.statsDisplay);
             this.miniMap.x = -195;
             this.miniMap.y = -198;
             this.miniMap.mouseChildren = this.miniMap.mouseEnabled = false;
@@ -88,8 +98,8 @@ package package_6
             this.musicSelection.y = 162;
             this.holder.addChild(this.musicSelection);
             this.hearts = new Hearts();
-            this.hearts.x = 465 - 225;
-            this.hearts.y = 45 - 200;
+            this.hearts.x = 240;
+            this.hearts.y = -141;
             this.hearts.visible = false;
             this.hearts.mouseChildren = this.hearts.mouseEnabled = false;
             this.holder.addChild(this.hearts);
@@ -207,8 +217,8 @@ package package_6
                 var _local_3:Number = -this.var_9.y + 45;
                 var _local_4:Number = _local_2 - posX;
                 var _local_5:Number = _local_3 - posY;
-                posX = posX + (_local_4 * 0.5);
-                posY = posY + (_local_5 * 0.4);
+                posX += _local_4 * 0.5;
+                posY += _local_5 * 0.4;
                 this.setPos(posX, posY);
             }
         }
@@ -357,6 +367,7 @@ package package_6
         // _loc2 = arr
         override public function setSaveString(s:String)
         {
+            //trace(s);
             var arr:Array = s.split("`");
             this.setColor(Number(arr[0]));
             this.blockBackground.setSaveString(arr[1]);
@@ -380,9 +391,10 @@ package package_6
             this.bg.scaleX = this.bg.scaleY = this.holder.scaleX = this.holder.scaleY = 1 / scale;
         }
 
-        public function method_654(s:String)
+        // method_654
+        public function startRotate(s:String)
         {
-            this.var_348 = s;
+            this.rotateDirection = s;
             addEventListener(Event.ENTER_FRAME, this.rotate);
             this.bg1.method_86();
             this.bg2.method_86();
@@ -392,23 +404,20 @@ package package_6
             Main.stage.quality = StageQuality.LOW;
         }
 
+        // _loc2 = rotateDone
         // _loc4 = player
         private function rotate(e:Event)
         {
-            var _local_2:Boolean;
+            var rotateDone:Boolean;
             var _local_3:Number = 3;
-            if (this.var_348 == "right") {
-                rotation = rotation + _local_3;
-                if (rotation >= 90) {
-                    _local_2 = true;
-                }
+            if (this.rotateDirection == "right") {
+                rotation += _local_3;
+                rotateDone = rotation >= 90;
             } else {
-                rotation = rotation - _local_3;
-                if (rotation <= -90) {
-                    _local_2 = true;
-                }
+                rotation -= _local_3;
+                rotateDone = rotation <= -90;
             }
-            if (_local_2) {
+            if (rotateDone) {
                 rotation = 0;
                 this.bg.rotation = 0;
                 this.bg1.method_74();
@@ -417,7 +426,7 @@ package package_6
                 this.bg4.method_74();
                 this.bg5.method_74();
                 Main.stage.quality = StageQuality.HIGH;
-                if (this.var_348 == "right") {
+                if (this.rotateDirection == "right") {
                     this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation + 90;
                     this.miniMap.rotate(this.blockBackground.rotation);
                 } else {
@@ -425,7 +434,7 @@ package package_6
                     this.miniMap.rotate(this.blockBackground.rotation);
                 }
                 for each (var player:Character in this.playerArray) {
-                    player.rotate(this.var_348);
+                    player.rotate(this.rotateDirection);
                 }
                 this.method_82(new Event(Event.ENTER_FRAME));
                 removeEventListener(Event.ENTER_FRAME, this.rotate);
@@ -454,6 +463,10 @@ package package_6
             if (this.timer != null) {
                 this.timer.remove();
                 this.timer = null;
+            }
+            if (this.statsDisplay != null) {
+                this.statsDisplay.remove();
+                this.statsDisplay = null;
             }
             if (this.countdown != null) {
                 this.countdown.removeEventListener("count", this.onCountdownCount);

@@ -10,8 +10,8 @@ package background
     import blocks.FinishBlock;
     import blocks.MoveBlock;
     import blocks.StartBlock;
-    import com.jiggmin.data.Objects;
     import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Objects;
     import com.jiggmin.data.Random;
     import flash.geom.Point;
     import flash.utils.clearTimeout;
@@ -38,8 +38,8 @@ package background
         private var moves:int = 0; // var_506
         private var moveTime:int = 5000; // var_534
         private var rand:Random = new Random(1);
-        private var var_446:int = 0;
-        private var var_379:Array = new Array();
+        private var placedEggs:int = 0; // var_446
+        private var eggPtsArray:Array = new Array(); // var_379
 
         public function Map(m:MiniMap, c:Course)
         {
@@ -68,74 +68,80 @@ package background
         }
 
         // method_488 = placeBlock
-        public function placeBlock(_arg_1:int, _arg_2:Number, _arg_3:Number)
+        public function placeBlock(blockId:int, targetX:Number, targetY:Number) // used to place mines
         {
-            this.attachObject(_arg_1, _arg_2, _arg_3);
+            this.attachObject(blockId, targetX, targetY);
         }
 
+        // _loc4 = blockSeg
         // _loc5 = block
         // _loc6 = finishBlock
-        override protected function attachObject(blockCode:int, x:int, y:int)
+        override protected function attachObject(blockCode:int, blockX:int, blockY:int, blockOpts:String = '')
         {
             if (blockCode < 100) {
                 blockCode += 100;
             }
-            var _local_4:Point = getSegFromPos(x, y);
+            var blockSeg:Point = getSegFromPos(blockX, blockY);
             if (blockCode == Objects.BLOCK_MINION_EGG) {
-                this.var_379.push(new Point(x, y));
+                this.eggPtsArray.push(new Point(blockX, blockY));
             } else {
                 var block:Block = Block(Objects.getFromCode(blockCode));
                 if (block is StartBlock) {
-                    this.setStartPos(this.startBlockNum, x + 15, y + 15);
+                    this.setStartPos(this.startBlockNum, blockX + 15, blockY + 15);
                     this.startBlockNum++;
                 } else {
                     if (block is FinishBlock) {
                         var finishBlock:FinishBlock = FinishBlock(block);
-                        this.addFinish(finishBlock.getId(), x + 15, y + 15);
+                        this.addFinish(finishBlock.getId(), blockX + 15, blockY + 15);
                     }
-                    method_53(block, _local_4);
+                    if (block.hasOptions && blockOpts != '') {
+                        block.applyOptions(blockOpts);
+                    }
+                    addToBlockArray(block, blockSeg);
                     if (!block.isInitialized()) {
-                        block.initialize(_local_4.x, _local_4.y, this);
+                        block.initialize(blockSeg.x, blockSeg.y, this);
                     }
-                    if (method_32(_local_4.x, _local_4.y)) {
+                    if (method_32(blockSeg.x, blockSeg.y)) {
                         addChild(block);
                     }
                     if (block is MoveBlock) {
                         this.moveBlocksArray.push(block);
                     }
-                    this.miniMap.method_680(blockCode, x, y);
+                    this.miniMap.method_680(blockCode, blockX, blockY);
                 }
             }
-            if (y > this.maxY) {
-                this.maxY = y;
-            } else if (y < this.minY) {
-                this.minY = y;
+            if (blockY > this.maxY) {
+                this.maxY = blockY;
+            } else if (blockY < this.minY) {
+                this.minY = blockY;
             }
-            if (x > this.maxX) {
-                this.maxX = x;
-            } else if (x < this.minX) {
-                this.minX = x;
+            if (blockX > this.maxX) {
+                this.maxX = blockX;
+            } else if (blockX < this.minX) {
+                this.minX = blockX;
             }
         }
 
-        private function method_485()
+        // method_485 = placeEggs
+        private function placeEggs()
         {
-            for each (var _local_1:Point in this.var_379) {
-                this.method_552(_local_1.x + 15, _local_1.y + 15);
+            for each (var eggPt:Point in this.eggPtsArray) {
+                this.attachEgg(eggPt.x + 15, eggPt.y + 15);
             }
-            this.var_379 = new Array();
+            this.eggPtsArray = new Array();
         }
 
         // _loc3 = egg
-        private function method_552(eggX:int, eggY:int)
+        // method_552 = attachEgg
+        private function attachEgg(eggX:int, eggY:int)
         {
-            if (this.var_446 < 25) {
+            if (this.placedEggs < 25) {
                 var egg:Egg = new Egg();
                 egg.posX = eggX + 15;
                 egg.posY = eggY + 15;
                 egg.rot = 0;
                 egg.setLimits();
-                this.var_446++;
+                this.placedEggs++;
             }
         }
 
@@ -156,10 +162,10 @@ package background
             });
         }
 
-        override public function draw(_arg_1:Number=50)
+        override public function draw(_arg_1:Number = 50)
         {
             super.draw(_arg_1);
-            if (var_39 >= var_15.length) {
+            if (var_39 >= saveArray.length) {
                 this.miniMap.rasterize();
             }
         }
@@ -168,7 +174,7 @@ package background
         {
             this.startTime = new Date().time;
             this.determineMoveBlockDirection();
-            this.method_485();
+            this.placeEggs();
         }
 
         // _loc1 = i
@@ -179,9 +185,6 @@ package background
         // method_416 = determineMoveBlockDirection
         private function determineMoveBlockDirection()
         {
-            if (this.moveBlocksArray == null) {
-                return; // to-do: debug this happenstance
-            }
             var totalMoveBlocks:int = this.moveBlocksArray.length;
             var i:int = 0;
             while (i < totalMoveBlocks) {
@@ -190,7 +193,7 @@ package background
                 block.setDirection(dir);
                 i++;
             }
-            this.moveInterval = setTimeout(this.doMoveBlocks, 1000);
+            this.setMoveInterval(this.doMoveBlocks, 1000);
         }
 
         // _loc1 = i
@@ -207,35 +210,35 @@ package background
             if (_local_4 < 1) {
                 _local_4 = 1;
             }
-            this.moveInterval = setTimeout(this.determineMoveBlockDirection, _local_4 + this.moveTime);
+            this.setMoveInterval(this.determineMoveBlockDirection, _local_4 + this.moveTime);
             this.moves++;
         }
 
         // deleted _loc3 (simplified return)
-        override public function testMove(_arg_1:int, _arg_2:int):Boolean
+        override public function testMove(destX:int, destY:int):Boolean
         {
-            if ((blockArray[_arg_1] == null || blockArray[_arg_1][_arg_2] == null) && !this.characterOccupiesSpace(_arg_1, _arg_2)) {
-                return true;
-            }
-            return false;
+            return (blockArray[destX] == null || blockArray[destX][destY] == null) && !this.characterOccupiesSpace(destX, destY);
         }
 
+        // deleted _loc3, _loc4 (p.seg1, p.seg2)
         // deleted _loc5 (simplified return)
         // _loc6 = p
         public function characterOccupiesSpace(xVal:int, yVal:int):Boolean
         {
             if (Course.course != null) {
                 for each (var p:Character in Course.course.playerArray) {
-                    if (p != null) {
-                        var _local_3:Point = p.seg1;
-                        var _local_4:Point = p.seg2;
-                        if ((_local_3.x == xVal && _local_3.y == yVal) || (_local_4.x == xVal && _local_4.y == yVal)) {
-                            return true;
-                        }
+                    if (p != null && ((p.seg1.x == xVal && p.seg1.y == yVal) || (p.seg2.x == xVal && p.seg2.y == yVal))) {
+                        return true;
                     }
                 }
             }
             return false;
+        }
+
+        private function setMoveInterval(fn:Function, secs:int)
+        {
+            this.clearMoveInterval();
+            this.moveInterval = setTimeout(fn, secs);
         }
 
         public function clearMoveInterval()
@@ -243,15 +246,16 @@ package background
             clearTimeout(this.moveInterval);
         }
 
+        // _loc1 = block
         override public function clear()
         {
             while (numChildren > 0) {
-                var _local_1:Block = Block(getChildAt(0));
-                _local_1.remove();
+                var block:Block = Block(getChildAt(0));
+                block.remove();
             }
             var_39 = 0;
             blockArray = new Array();
-            var_10 = new Array();
+            objArray = new Array();
         }
 
         override public function remove()

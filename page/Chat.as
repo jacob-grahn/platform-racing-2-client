@@ -26,7 +26,7 @@ package page
 
         public function Chat()
         {
-            this.cm.defineCommand("systemChat", this.recieveSystemMessage);
+            this.cm.defineCommand("systemChat", this.receiveSystemMessage);
             this.cm.defineCommand("chat", this.handleMessageFromArray);
         }
 
@@ -66,7 +66,8 @@ package page
             this.displayMessage(fullMessage);
         }
 
-        public function recieveSystemMessage(arr:Array)
+        // recieveSystemMessage = receiveSystemMessage (typo fix)
+        public function receiveSystemMessage(arr:Array)
         {
             this.displayMessage("<br/><i><font color='#3E8697'>" + arr[0] + "</font></i><br/><br/>");
         }

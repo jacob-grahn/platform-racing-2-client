@@ -32,11 +32,7 @@ package package_6
         {
             clearInterval(this.var_308);
             this.time = t;
-            if (t <= 0) {
-                this.racing = true;
-            } else {
-                this.racing = false;
-            }
+            this.racing = t <= 0;
         }
 
         public function getMS():Number

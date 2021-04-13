@@ -25,12 +25,12 @@ package package_6
             this.m.top.textBox1.mouseWheelEnabled = this.m.bg.textBox2.mouseWheelEnabled = false;
             this.m.addEventListener(MouseEvent.MOUSE_WHEEL, this.ensureBottom, false, 0, true);
             Main.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, false, 0, true);
-            Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true); // focusOrSend = method_374
+            Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true); // method_374
             htmlNameMaker.listenForLink(this.m.top.textBox1);
             RaceChat.textBox = this.m.chatInput;
         }
 
-        override public function recieveSystemMessage(arr:Array)
+        override public function receiveSystemMessage(arr:Array)
         {
             displayMessage("<i><font color='#3E8697'>" + arr[0] + "</font></i><br/>");
         }

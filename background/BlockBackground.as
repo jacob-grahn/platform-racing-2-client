@@ -5,62 +5,68 @@
 
 package background
 {
-    import page.GamePage;
-    import levelEditor.BlockObject;
-    import flash.geom.Point;
     import com.jiggmin.data.Data;
+    import com.jiggmin.data.Objects;
     import flash.display.DisplayObject;
+    import flash.geom.Point;
+    import levelEditor.BlockObject;
+    import page.GamePage;
 
-    public class BlockBackground extends class_77 
+    public class BlockBackground extends ObjectBackground 
     {
 
         private var segSize:Number = 30;
         protected var blockArray:Array = new Array();
-        public var var_323:int = 0;
+        public var blocksAttached:int = 0; // var_323
 
         public function BlockBackground(gp:GamePage)
         {
             super(gp);
             this.addStartPositions();
-            var_367 = 30;
+            segMult = this.segSize;
             var_379 = -100;
         }
 
+        // _loc1 = startX
+        // _loc2 = startY
+        // _loc3 = startBlockId
+        // deleted _loc4 (this.segSize)
         protected function addStartPositions()
         {
-            var _local_3:Number = 111;
-            var _local_4:Number = 30;
-            while (_local_3 <= 114) {
-                var _local_1:Number = (_local_3 * _local_4) + 10000;
-                var _local_2:Number = (_local_4 * 2) + 10000;
-                this.addObject(_local_3, _local_1, _local_2);
-                _local_3++;
+            var startBlockId:Number = Objects.BLOCK_START1; // 111
+            while (startBlockId <= Objects.BLOCK_START4) { // 114
+                var startX:Number = (startBlockId * this.segSize) + 10000;
+                var startY:Number = (this.segSize * 2) + 10000;
+                this.addObject(startBlockId, startX, startY);
+                startBlockId++;
             }
         }
 
-        override public function addObject(_arg_1:int, _arg_2:int, _arg_3:int)
+        override public function addObject(blockId:int, blockX:int, blockY:int, blockOpts:String = '')
         {
-            if (this.isOpen(_arg_2, _arg_3)) {
-                super.addObject(_arg_1, _arg_2, _arg_3);
+            if (this.isOpen(blockX, blockY)) {
+                super.addObject(blockId, blockX, blockY, blockOpts);
             }
         }
 
-        override protected function attachObject(_arg_1:int, _arg_2:int, _arg_3:int)
+        // _loc4 = block
+        // _loc5 = seg
+        override protected function attachObject(blockId:int, blockX:int, blockY:int, blockOpts:String = '')
         {
-            _arg_1 += _arg_1 < 100 ? 100 : 0;
-            var _local_4:BlockObject = new BlockObject(_arg_1, _arg_2, _arg_3);
-            var_10.push(_local_4);
-            this.var_323++;
-            var _local_5:Point = new Point(Math.round(_arg_2 / 30), Math.round(_arg_3 / 30));
-            this.method_53(_local_4, _local_5);
-            if (method_32(_local_5.x, _local_5.y)) {
-                addChild(_local_4);
+            blockId += blockId < 100 ? 100 : 0;
+            var block:BlockObject = new BlockObject(blockId, blockX, blockY, blockOpts);
+            objArray.push(block);
+            this.blocksAttached++;
+            var seg:Point = new Point(Math.round(blockX / this.segSize), Math.round(blockY / this.segSize));
+            this.addToBlockArray(block, seg);
+            if (method_32(seg.x, seg.y)) {
+                addChild(block);
             }
         }
 
-        override public function setPos(_arg_1:Number, _arg_2:Number)
+        override public function setPos(posX:Number, posY:Number)
         {
-            super.setPos(_arg_1, _arg_2);
+            super.setPos(posX, posY);
             var _local_3:Point = Data.method_9(GamePage.course.posX, GamePage.course.posY, rotation);
             var _local_4:Point = this.getSegFromPos(_local_3.x, _local_3.y);
             method_118(-_local_4.x, -_local_4.y, 11, 9, 8, 6, this, this.blockArray);
@@ -68,17 +74,31 @@ package background
 
         override public function undo()
         {
-            if (var_15.length > 4) {
+            if (saveArray.length > 4) {
                 super.undo();
             }
         }
 
-        public function method_53(_arg_1:DisplayObject, _arg_2:Point)
+        // method_53 = addToBlockArray
+        public function addToBlockArray(block:DisplayObject, seg:Point)
         {
-            if (this.blockArray[_arg_2.x] == null) {
-                this.blockArray[_arg_2.x] = new Array();
+            if (this.blockArray[seg.x] == null) {
+                this.blockArray[seg.x] = new Array();
             }
-            this.blockArray[_arg_2.x][_arg_2.y] = _arg_1;
+            this.blockArray[seg.x][seg.y] = block;
+        }
+
+        public function getAllBlocksOfType(type:Class)
+        {
+            var ret:Array = [];
+            for (var segX:* in this.blockArray) {
+                for (var segY:* in this.blockArray[segX]) {
+                    if (this.blockArray[segX][segY] != null && this.blockArray[segX][segY].m is type) {
+                        ret.push(this.blockArray[segX][segY]);
+                    }
+                }
+            }
+            return ret;
         }
 
         // deleted _loc3 (simplified return)
@@ -87,8 +107,8 @@ package background
         // _loc6 = blockColumn (block column)
         public function getBlockAt(posX:Number, posY:Number):BlockObject
         {
-            var segX:int = int(Math.round(posX / 30));
-            var segY:int = int(Math.round(posY / 30));
+            var segX:int = int(Math.round(posX / this.segSize));
+            var segY:int = int(Math.round(posY / this.segSize));
             var blockColumn:Array = this.blockArray[segX];
             if (blockColumn != null) {
                 return BlockObject(blockColumn[segY]);
@@ -102,52 +122,37 @@ package background
         // _loc6 = block
         public function isOpen(posX:Number, posY:Number):Boolean
         {
-            var segX:int = int(Math.round(posX / 30));
-            var segY:int = int(Math.round(posY / 30));
+            var segX:int = int(Math.round(posX / this.segSize));
+            var segY:int = int(Math.round(posY / this.segSize));
             var block:BlockObject = this.getBlockFromSeg(segX, segY);
-            if (block != null) {
-                return false;
-            }
-            return true;
+            return block == null;
         }
 
         // _loc4 = pos
         // _loc5 = seg
         // deleted _loc6 (merge w/ return statement)
         // method_24 = getBlockFromPos
-        public function getBlockFromPos(x:Number, y:Number, rotMod:Boolean=false):*
+        public function getBlockFromPos(posX:Number, posY:Number, rotMod:Boolean=false):*
         {
-            var pos:Point;
-            if (rotMod) {
-                pos = Data.method_9(x, y, rotation);
-            } else {
-                pos = new Point(x, y);
-            }
+            var pos:Point = rotMod ? Data.method_9(posX, posY, rotation) : new Point(posX, posY);
             var seg:Point = this.getSegFromPos(pos.x, pos.y);
             return this.getBlockFromSeg(seg.x, seg.y);
         }
 
+        // deleted _loc3 (simplified return)
+        // _loc4 = blockColumn
         // method_67 = getBlockFromSeg
-        public function getBlockFromSeg(x:int, y:int):*
+        public function getBlockFromSeg(segX:int, segY:int)
         {
-            var _local_3:*;
-            var _local_4:Array;
-            if (this.blockArray.length >= x) {
-                _local_4 = this.blockArray[x];
-            }
-            if (_local_4 != null) {
-                _local_3 = _local_4[y];
-            } else {
-                _local_3 = null;
-            }
-            return _local_3;
+            var blockColumn:Array = this.blockArray.length >= segX ? this.blockArray[segX] : null;
+            return blockColumn != null ? blockColumn[segY] : null;
         }
 
         // _loc3 = point
         // _loc4 = block
-        override public function removeObjectsTouchingPoint(x:Number, y:Number)
+        override public function removeObjectsTouchingPoint(ptX:Number, ptY:Number)
         {
-            var point:Point = this.globalToLocal(new Point(x, y));
+            var point:Point = this.globalToLocal(new Point(ptX, ptY));
             var block:BlockObject = this.getBlockAt(point.x - 15, point.y - 15);
             if (block != null && block.deleteable) {
                 recordDelete(block);
@@ -155,16 +160,17 @@ package background
             }
         }
 
+        // deleted _loc6 (this.getSegFromPos(_local_4, _local_5))
+        // _loc7 = block
         override protected function moveDrawObject(_arg_1:String)
         {
             var _local_2:Array = _arg_1.split(";");
             var _local_3:Number = Number(_local_2[0]);
-            var _local_4:Number = Number(_local_2[1]);
-            var _local_5:Number = Number(_local_2[2]);
-            var _local_6:Point = this.getSegFromPos(_local_4, _local_5);
-            var _local_7:BlockObject = BlockObject(var_10[_local_3]);
-            if (_local_7 != null) {
-                this.moveBlock(new Point(_local_7.segX, _local_7.segY), _local_6);
+            var block:BlockObject = BlockObject(objArray[_local_3]);
+            if (block != null) {
+                var _local_4:Number = Number(_local_2[1]);
+                var _local_5:Number = Number(_local_2[2]);
+                this.moveBlock(new Point(block.segX, block.segY), this.getSegFromPos(_local_4, _local_5));
             }
         }
 
@@ -193,43 +199,47 @@ package background
             return new Point(posX, posY);
         }
 
-        public function method_753():Point
+        // _loc1 = block
+        // method_753 = getStartPos
+        public function getStartPos():Point
         {
-            var _local_1:BlockObject = var_10[0];
-            return new Point(_local_1.x, _local_1.y);
+            var block:BlockObject = objArray[0];
+            return new Point(block.x, block.y);
         }
 
-        public function method_259(_arg_1:*)
+        // _loc2 = seg
+        // method_259 = removeBlock
+        public function removeBlock(block:*)
         {
-            var _local_2:Point = _arg_1.getSeg();
-            if (this.blockArray[_local_2.x] != null) {
-                this.blockArray[_local_2.x][_local_2.y] = null;
+            var seg:Point = block.getSeg();
+            if (this.blockArray[seg.x] != null) {
+                this.blockArray[seg.x][seg.y] = null;
             }
-            var _local_3:int = var_10.indexOf(_arg_1);
+            var _local_3:int = objArray.indexOf(block);
             if (_local_3 != -1) {
-                var_10.splice(_local_3, 1);
+                objArray.splice(_local_3, 1);
             }
         }
 
-        public function moveBlock(_arg_1:Point, _arg_2:Point):Point
+        // _loc3 = block
+        public function moveBlock(originPt:Point, destPt:Point):Point
         {
-            var _local_3:*;
-            if (this.blockArray[_arg_1.x] != null) {
-                _local_3 = this.blockArray[_arg_1.x][_arg_1.y];
-                if (_local_3 != null && this.testMove(_arg_2.x, _arg_2.y)) {
-                    this.method_53(null, _arg_1);
-                    this.method_53(_local_3, _arg_2);
-                    _local_3.setSeg(_arg_2.x, _arg_2.y);
-                    if (method_32(_arg_2.x, _arg_2.y)) {
-                        addChild(_local_3);
-                    } else if (_local_3.parent != null) {
-                        _local_3.parent.removeChild(_local_3);
+            if (this.blockArray[originPt.x] != null) {
+                var block:DisplayObject = this.blockArray[originPt.x][originPt.y];
+                if (block != null && this.testMove(destPt.x, destPt.y)) {
+                    this.addToBlockArray(null, originPt);
+                    this.addToBlockArray(block, destPt);
+                    block.setSeg(destPt.x, destPt.y);
+                    if (method_32(destPt.x, destPt.y)) {
+                        addChild(block);
+                    } else if (block.parent != null) {
+                        block.parent.removeChild(block);
                     }
-                    _arg_1.x = _arg_2.x;
-                    _arg_1.y = _arg_2.y;
+                    originPt.x = destPt.x;
+                    originPt.y = destPt.y;
                 }
             }
-            return _arg_1;
+            return originPt;
         }
 
         public function testMove(_arg_1:int, _arg_2:int):Boolean
@@ -246,8 +256,6 @@ package background
         override public function remove()
         {
             this.clear();
-            /*if (this.var_323 != 0) {
-            }*/
             super.remove();
         }
 

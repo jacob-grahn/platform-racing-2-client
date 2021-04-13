@@ -3,30 +3,7 @@
 package com.jiggmin.data
 {
     import flash.display.DisplayObject;
-    import blocks.BasicBlock;
-    import blocks.BrickBlock;
-    import blocks.CrumbleBlock;
-    import blocks.FinishBlock;
-    import blocks.HappyBlock;
-    import blocks.IceBlock;
-    import blocks.InfItemBlock;
-    import blocks.ItemBlock;
-    import blocks.MineBlock;
-    import blocks.MoveBlock;
-    import blocks.PushBlock;
-    import blocks.RotateLeftBlock;
-    import blocks.RotateRightBlock;
-    import blocks.SadBlock;
-    import blocks.SafetyBlock;
-    import blocks.StartBlock;
-    import blocks.VanishBlock;
-    import blocks.WaterBlock;
-    import blocks.ArrowDownBlock;
-    import blocks.ArrowLeftBlock;
-    import blocks.ArrowRightBlock;
-    import blocks.ArrowUpBlock;
-    import blocks.HeartBlock;
-    import blocks.TimeBlock;
+    import blocks.*;
 
     public class Objects 
     {
@@ -73,6 +50,7 @@ package com.jiggmin.data
         public static const BLOCK_HEART:int = 128; // const_43
         public static const BLOCK_TIME:int = 129; // const_42
         public static const BLOCK_MINION_EGG:int = 130; // const_58
+        public static const BLOCK_CUSTOM_STATS:int = 131;
 
         public static const BG1Code:int = 201;
         public static const BG2Code:int = 202;
@@ -171,6 +149,8 @@ package com.jiggmin.data
                 return new TimeBlock();
             } else if (code == BLOCK_MINION_EGG) {
                 return new EggBlockGraphic();
+            } else if (code == BLOCK_CUSTOM_STATS) {
+                return new CustomStatsBlock();
             } else if (code == BG1Code) {
                 return new BG1();
             } else if (code == BG2Code) {

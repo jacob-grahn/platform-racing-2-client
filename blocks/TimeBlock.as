@@ -11,7 +11,7 @@ package blocks
     import package_6.Course;
     import package_8.LocalCharacter;
 
-    public class TimeBlock extends class_39 
+    public class TimeBlock extends SupplyBlock 
     {
 
         public function TimeBlock()

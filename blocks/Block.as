@@ -5,15 +5,15 @@
 
 package blocks
 {
-    import flash.display.Sprite;
-    import flash.geom.Point;
-    import flash.display.Bitmap;
     import background.Map;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Objects;
+    import flash.display.Bitmap;
     import flash.display.BitmapData;
     import flash.display.PixelSnapping;
-    import com.jiggmin.data.Objects;
-    import com.jiggmin.data.Data;
+    import flash.display.Sprite;
     import flash.events.Event;
+    import flash.geom.Point;
     import package_8.Character;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
@@ -35,6 +35,8 @@ package blocks
         protected var var_490:Boolean = true;
         protected var map:Map;
         protected var frozen:Boolean = false; // var_37
+        protected var optionsMenu:Class = null;
+        private var _options:String = '';
         private var var_110:Bitmap;
         private var var_455:Number = 0.1;
         private var var_600:int = 0;
@@ -50,12 +52,34 @@ package blocks
         {
             this.map = _arg_3;
             this.setSeg(segPointX, segPointY);
-            this.map.method_53(this, new Point(segPointX, segPointY));
+            this.map.addToBlockArray(this, new Point(segPointX, segPointY));
         }
 
         public function isInitialized():Boolean
         {
             return this.map != null;
+        }
+
+        public function get hasOptions():Boolean
+        {
+            return this.optionsMenu != null;
+        }
+
+        public function openOptions()
+        {
+            new this.optionsMenu(this);
+        }
+
+        public function get options()
+        {
+            return this._options;
+        }
+
+        public function set options(optStr:String) // I'd set visibility to protected but not setting it to public seems to break things
+        {
+            if (this.hasOptions && optStr != this._options) {
+                this._options = optStr;
+            }
         }
 
         public function getSeg():Point
@@ -234,7 +258,7 @@ package blocks
 
         public function onDamage(_arg_1:Number)
         {
-            _arg_1 = class_74.numLimit(_arg_1, -20, 20);
+            _arg_1 = Data.numLimit(_arg_1, -20, 20);
             this.method_315(_arg_1, 0);
         }
 
@@ -274,7 +298,7 @@ package blocks
         {
             this.var_177 = new Point(hitX, hitY);
             addEventListener(Event.ENTER_FRAME, this.method_161);
-            var _local_3:Number = class_74.method_232(hitX, hitY) * 0.06;
+            var _local_3:Number = Data.pythag(hitX, hitY) * 0.06;
             if (Math.abs(x - this.posX) < 1 && Math.abs(y - this.posY) < 1) {
                 var point:Point = this.method_18();
                 SoundEffects.playGameSound(new ThumpSound(), point.x, point.y, _local_3);
@@ -284,7 +308,7 @@ package blocks
         private function method_153(e:Event)
         {
             if (this.var_110 != null) {
-                this.var_110.alpha = this.var_110.alpha - this.var_455;
+                this.var_110.alpha -= this.var_455;
                 if (this.var_110.alpha <= 0.05) {
                     removeEventListener(Event.ENTER_FRAME, this.method_153);
                     this.method_406();
@@ -339,7 +363,7 @@ package blocks
             this.active = false;
             removeEventListener(Event.ENTER_FRAME, this.method_153);
             removeEventListener(Event.ENTER_FRAME, this.method_161);
-            this.map.method_259(this);
+            this.map.removeBlock(this);
             this.map = null;
             this.method_406();
             this.var_177 = null;

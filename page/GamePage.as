@@ -6,6 +6,7 @@
 package page
 {
     import background.*;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.net.URLVariables;
@@ -21,12 +22,13 @@ package page
 
         public static var course:GamePage;
 
+        private var segSize:int = 30;
         public var allowedItems:Vector.<int>; // var_86
         public var badHats:Vector.<int>;
         public var var_14:Sprite = new Sprite();
         protected var color:Number = 12303325; //0;
         protected var var_133:Array = new Array();
-        protected var var_233:Number = 1;
+        protected var zoom:Number = 1; // var_233
         public var scale:Number = 1;
         public var credits:Array = new Array();
         public var levelID:Number;
@@ -117,11 +119,7 @@ package page
 
         public function goodToDraw(_arg_1:Background):Boolean
         {
-            var _local_2:Boolean;
-            if (this.var_133[0] == _arg_1 || this.var_133.length <= 0) {
-                _local_2 = true;
-            }
-            return _local_2;
+            return this.var_133[0] == _arg_1 || this.var_133.length <= 0;
         }
 
         // method_403 = getCredits
@@ -161,17 +159,16 @@ package page
             this.gameMode = mode === 'eggs' ? 'egg' : mode;
         }
 
-        public function setCowboyChance(_arg_1:String)
+        // _loc2 = perc
+        public function setCowboyChance(chance:String)
         {
-            var _local_2:int;
-            if (_arg_1 == null || _arg_1 == "") {
-                _local_2 = 5;
-            } else {
-                _local_2 = parseInt(_arg_1);
-                _local_2 = class_74.numLimit(_local_2, 0, 100);
+            var perc:int = 5;
+            if (chance != null && chance != "") {
+                perc = parseInt(chance);
+                perc = Data.numLimit(perc, 0, 100);
             }
-            _arg_1 = _local_2.toString();
-            this.cowboyChance = _arg_1;
+            chance = perc.toString();
+            this.cowboyChance = chance;
         }
 
         // _loc2 = items
@@ -238,7 +235,7 @@ package page
             if (isNaN(_local_3)) {
                 _local_3 = 0;
             }
-            _local_3 = class_74.numLimit(_local_3, -99, 99);
+            _local_3 = Data.numLimit(_local_3, -99, 99);
             _local_2 = String(_local_3);
             if (_local_2.indexOf(".") == -1) {
                 _local_2 = (_local_2 + ".0");
@@ -246,7 +243,7 @@ package page
             this.setGravity(_local_2);
             var _local_4:String = vars.max_time;
             var _local_5:Number = Number(_local_4);
-            _local_5 = class_74.numLimit(_local_5, 0, 9999);
+            _local_5 = Data.numLimit(_local_5, 0, 9999);
             _local_4 = String(_local_5);
             this.setMaxTime(_local_4);
             this.setItems(vars.items);
@@ -290,7 +287,7 @@ package page
         {
             var levelData:Array = rawlevelData.split("`");
             var readMode:String = levelData[0];
-            if (readMode == "m1" || readMode == "m2" || readMode == "m3") {
+            if (readMode == "m1" || readMode == "m2" || readMode == "m3" || readMode == 'm4') {
                 levelData.splice(0, 1);
                 levelData[0] = Number("0x" + levelData[0]); // background color in decimal (_loc2[0] is in hex, typecast to number)
                 if (readMode == "m1") {
@@ -298,12 +295,13 @@ package page
                     levelData[2] = this.decodeObjectString(levelData[2]);
                     levelData[3] = this.decodeObjectString(levelData[3]);
                     levelData[4] = this.decodeObjectString(levelData[4]);
-                }
-                if (readMode == "m2" || readMode == "m3") {
+                } else if (readMode == "m2" || readMode == "m3" || readMode == 'm4') {
                     if (readMode == "m2") {
                         levelData[1] = this.decodeObjectString2(levelData[1]); // blocks
+                    } else if (readMode == 'm3') {
+                        levelData[1] = this.decodeObjectString2(levelData[1], this.segSize); // blocks
                     } else {
-                        levelData[1] = this.decodeObjectString2(levelData[1], 30); // blocks
+                        levelData[1] = this.decodeBlockString(levelData[1]);
                     }
                     levelData[2] = this.decodeObjectString2(levelData[2]); // art1
                     levelData[3] = this.decodeObjectString2(levelData[3]); // art2
@@ -361,7 +359,7 @@ package page
         // _loc15 = heightPerc
         // _loc16 = textContent
         // _loc17 = textColor
-        private function decodeObjectString2(objectString:String, _arg_2:int=1):String
+        private function decodeObjectString2(objectString:String, segMult:int = 1):String
         {
             var widthPerc:Number, heightPerc:Number;
             var dataArr:Array = objectString == null || objectString == "" ? new Array() : objectString.split(",");
@@ -382,7 +380,7 @@ package page
                         widthPerc = thisObj[5]; // width % modifier
                         heightPerc = thisObj[6]; // height % modifier
                         dataArr[i] = "u" + textContent + ";" + currentX + ";" + currentY + ";" + textColor + ";" + widthPerc + ";" + heightPerc;
-                    } else { // process other art
+                    } else { // process other objects
                         if (thisObj[4] != null) { // resizable objects (new object code used)
                             objectCode = int(thisObj[2]);
                             widthPerc = Number(thisObj[3]) / 100;
@@ -393,9 +391,9 @@ package page
                         } else if (thisObj[2] != null) { // blocks (new object code used)
                             objectCode = int(thisObj[2]);
                         }
-                        dataArr[i] = "o" + objectCode + ";" + (currentX * _arg_2) + ";" + (currentY * _arg_2);
+                        dataArr[i] = "o" + objectCode + ";" + (currentX * segMult) + ";" + (currentY * segMult);
                         if (widthPerc != 0 && heightPerc != 0) {
-                            dataArr[i] = dataArr[i] + ";" + widthPerc + ";" + heightPerc;
+                            dataArr[i] += ";" + widthPerc + ";" + heightPerc;
                         }
                     }
                     i++;
@@ -405,11 +403,39 @@ package page
             return decoded;
         }
 
+        private function decodeBlockString(blockString:String)
+        {
+            var dataArr:Array = blockString == null || blockString == "" ? new Array() : blockString.split(",");
+            var decoded:String;
+            var blockCode:int, currentX:int = 0, currentY:int = 0;
+            if (dataArr.length > 0) {
+                var i:int = 0;
+                while (i < dataArr.length) {
+                    var thisBlock:Array = dataArr[i].split(";");
+                    var relX:int = Number(thisBlock[0]); // x relative to the last block (how far to travel horizontally to the next block)
+                    var relY:int = Number(thisBlock[1]); // y relative to the last block (how far to travel vertically to the next block)
+                    currentX = currentX + relX; // updates x "pointer" to the relative position
+                    currentY = currentY + relY; // updates y "pointer" to the relative position
+                    if (thisBlock[2] != null) { // new block
+                        blockCode = int(thisBlock[2]);
+                    }
+                    var options:String = '';
+                    if (thisBlock[3] != null) { // block options
+                        options = ';' + thisBlock[3];
+                    }
+                    dataArr[i] = "o" + blockCode + ";" + (currentX * this.segSize) + ";" + (currentY * this.segSize) + options;
+                    i++;
+                }
+                decoded = dataArr.join(',');
+            }
+            return decoded;
+        }
+
         protected function glideToScale(_arg_1:Event)
         {
             Main.stage.quality = StageQuality.LOW;
-            this.scale = this.scale + (this.var_233 - this.scale) * 0.3;
-            if (Math.abs(this.scale - this.var_233) <= 0.001) {
+            this.scale = this.scale + (this.zoom - this.scale) * 0.3;
+            if (Math.abs(this.scale - this.zoom) <= 0.001) {
                 this.finishGlide();
             }
             scaleX = scaleY = this.scale;
@@ -418,16 +444,16 @@ package page
         protected function finishGlide()
         {
             Main.stage.quality = StageQuality.HIGH;
-            this.scale = this.var_233;
+            this.scale = this.zoom;
             removeEventListener(Event.ENTER_FRAME, this.glideToScale);
         }
 
-        public function setZoom(_arg_1:Number)
+        public function setZoom(z:Number)
         {
-            if (this.var_233 != _arg_1) {
+            if (this.zoom != z) {
                 removeEventListener(Event.ENTER_FRAME, this.glideToScale);
                 addEventListener(Event.ENTER_FRAME, this.glideToScale);
-                this.var_233 = _arg_1;
+                this.zoom = z;
             }
         }
 

@@ -31,8 +31,10 @@ package ui
             this.m.decBtn.addEventListener(MouseEvent.MOUSE_UP, this.arrowBtnUp, false, 0, true);
             this.m.incBtn.addEventListener(MouseEvent.MOUSE_UP, this.arrowBtnUp, false, 0, true);
             this.m.slider.addEventListener(Event.CHANGE, this.onSliderChange, false, 0, true);
-            this.m.slider.addEventListener(SliderEvent.THUMB_RELEASE, this.target.saveLEStats, false, 0, true);
             this.m.textBox.addEventListener(Event.CHANGE, this.onTextChange, false, 0, true);
+            if (this.target != null) {
+                this.m.slider.addEventListener(SliderEvent.THUMB_RELEASE, this.target.saveLEStats, false, 0, true);
+            }
         }
 
         private function arrowBtnDown(e:MouseEvent)
@@ -45,7 +47,10 @@ package ui
         {
             this.holdStart = this.holdSpeed = 0;
             clearInterval(this.updateInterval);
-            this.target.saveLEStats();
+            if (this.target != null) {
+                this.target.updateSavedLEStats = e === false ? this.target.updateSavedLEStats : true;
+                this.target.saveLEStats();
+            }
         }
 
         private function updateHoldSpeed(mode:String)
@@ -90,30 +95,45 @@ package ui
         private function onSliderChange(e:Event)
         {
             this.setValue(e.target.value);
+            if (this.target != null) {
+                this.target.updateSavedLEStats = true;
+            }
         }
 
         // method_306 = onTextChange
         private function onTextChange(e:Event)
         {
             this.setValue(int(e.target.text));
+            if (this.target != null) {
+                this.target.updateSavedLEStats = true;
+            }
+        }
+
+        public function getValue()
+        {
+            return this.value;
         }
 
         // _loc2 = remaining
-        internal function setValue(v:int)
+        public function setValue(v:int)
         {
             this.value = Data.numLimit(v, 0, 100);
-            var remaining:Number = this.target.getPointsRemaining();
-            this.value = remaining < 0 ? this.value + remaining : this.value;
-            this.m.textBox.text = this.m.slider.value = this.value;
-            this.target.updateStatsDisplay();
-            if (remaining <= 0 && this.holdStart > 0) {
-                this.arrowBtnUp();
+            if (this.target != null) {
+                var remaining:Number = this.target.getPointsRemaining();
+                this.value = remaining < 0 ? this.value + remaining : this.value;
+                this.m.textBox.text = this.m.slider.value = this.value;
+                this.target.updateStatsDisplay();
+                if (remaining <= 0 && this.holdStart > 0) {
+                    this.arrowBtnUp();
+                }
+            } else {
+                this.m.textBox.text = this.m.slider.value = this.value;
             }
         }
 
         override public function remove()
         {
-            this.arrowBtnUp();
+            this.arrowBtnUp(false);
             this.m.slider.removeEventListener(Event.CHANGE, this.onSliderChange);
             this.m.textBox.removeEventListener(Event.CHANGE, this.onTextChange);
             removeChild(this.m);
