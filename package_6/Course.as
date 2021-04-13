@@ -367,6 +367,7 @@ package package_6
         // _loc2 = arr
         override public function setSaveString(s:String)
         {
+            //trace(s);
             var arr:Array = s.split("`");
             this.setColor(Number(arr[0]));
             this.blockBackground.setSaveString(arr[1]);
