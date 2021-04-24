@@ -8,13 +8,13 @@ package blocks
     public class StartBlock extends Block 
     {
 
-        // _loc3 = block
-        public function StartBlock(_arg_1:int, num:int)
+        // _loc3 = blockText
+        public function StartBlock(blockId:int, num:int)
         {
-            super(_arg_1);
-            var block:StartBlockText = new StartBlockText();
-            block.textBox.text = num.toString();
-            addChild(block);
+            super(blockId);
+            var blockText:StartBlockText = new StartBlockText();
+            blockText.textBox.text = num.toString();
+            addChild(blockText);
         }
 
     }
