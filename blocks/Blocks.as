@@ -36,6 +36,7 @@ package blocks
         public static var heartBitmap:HeartBitmap; // var_433
         public static var timeBitmap:TimeBitmap; // var_457
         public static var customStatsBitmap:CustomStatsBitmap;
+        public static var teleportBitmap:TeleportBitmap;
 
 
         public static function init()
@@ -68,6 +69,7 @@ package blocks
             heartBitmap = new HeartBitmap(30, 30);
             timeBitmap = new TimeBitmap(30, 30);
             customStatsBitmap = new CustomStatsBitmap(30, 30);
+            teleportBitmap = new TeleportBitmap(30, 30);
         }
 
         // _loc2 = bmpData
@@ -130,6 +132,8 @@ package blocks
                 bmpData = timeBitmap;
             } else if (blockCode == Objects.BLOCK_CUSTOM_STATS) {
                 bmpData = customStatsBitmap;
+            } else if (blockCode == Objects.BLOCK_TELEPORT) {
+                bmpData = teleportBitmap;
             }
             return bmpData;
         }

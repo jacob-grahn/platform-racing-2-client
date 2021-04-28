@@ -28,6 +28,7 @@ package package_14
             addItem(new class_228(Objects.BLOCK_ARROW_RIGHT), "Right Block", "Anyone standing on this will be pushed to the right.");
             addItem(new class_228(Objects.BLOCK_ARROW_UP), "Up Block", "Anyone who stands on this will be bumped upwards.");
             addItem(new class_228(Objects.BLOCK_ARROW_DOWN), "Down Block", "Anyone who stands on this will have difficulty jumping.");
+            addItem(new class_228(Objects.BLOCK_TELEPORT), "Teleport Block", "Bump this to be teleported to another one of these with the same color.");
             addItem(new class_228(Objects.BLOCK_MINE), "Mine Block", "Mines explode rather painfully if you touch them.");
             addItem(new class_228(Objects.BLOCK_CRUMBLE), "Crumble Block", "This will crumble into pieces if it is hit too hard.");
             addItem(new class_228(Objects.BLOCK_VANISH), "Vanish Block", "Don't stand for too long, or you'll find yourself falling through the floor.");

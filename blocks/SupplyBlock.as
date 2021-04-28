@@ -33,10 +33,15 @@ package blocks
         {
         }
 
+        protected function resetSupply(uses:int = 1)
+        {
+            this.uses = uses;
+            transform.colorTransform = new ColorTransform();
+        }
+
         protected function method_789()
         {
-            var _local_1:ColorTransform = new ColorTransform(0.5, 0.5, 0.5);
-            transform.colorTransform = _local_1;
+            transform.colorTransform = new ColorTransform(0.5, 0.5, 0.5);
         }
 
 

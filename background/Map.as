@@ -6,10 +6,6 @@
 package background
 {
     import blocks.*;
-    import blocks.Block;
-    import blocks.FinishBlock;
-    import blocks.MoveBlock;
-    import blocks.StartBlock;
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Random;
@@ -106,6 +102,13 @@ package background
                     }
                     if (block is MoveBlock) {
                         this.moveBlocksArray.push(block);
+                    }
+                    if (block is TeleportBlock) {
+                        var color:int = block.getColor();
+                        if (!(color in Course.course.teleportBlocks)) {
+                            Course.course.teleportBlocks[color] = [];
+                        }
+                        Course.course.teleportBlocks[color].push(block);
                     }
                     this.miniMap.method_680(blockCode, blockX, blockY);
                 }
