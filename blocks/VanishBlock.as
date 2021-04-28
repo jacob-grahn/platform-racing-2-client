@@ -20,7 +20,7 @@ package blocks
         public function VanishBlock()
         {
             super(Objects.BLOCK_VANISH);
-            var_34 = false;
+            safeStand = false;
         }
 
         override public function onStand(player:LocalCharacter)

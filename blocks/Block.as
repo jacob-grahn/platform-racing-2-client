@@ -31,7 +31,7 @@ package blocks
         private var m:Bitmap;
         protected var blockCode:int = 0; // var_79
         protected var active:Boolean = true;
-        protected var var_34:Boolean = true;
+        protected var safeStand:Boolean = true; // var_34
         protected var var_490:Boolean = true;
         protected var map:Map;
         protected var frozen:Boolean = false; // var_37
@@ -190,7 +190,7 @@ package blocks
                 player.y = point.y + this.posY - y;
                 player.velY = 0;
                 player.grounded = true;
-                if (this.var_34) {
+                if (this.safeStand) {
                     player.lastSafeX = point.x + 15;
                     player.lastSafeY = point.y;
                     player.var_407 = this.segX;

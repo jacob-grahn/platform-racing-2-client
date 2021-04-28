@@ -15,7 +15,7 @@ package blocks
         public function SafetyBlock()
         {
             super(Objects.BLOCK_SAFETY);
-            var_34 = false;
+            safeStand = false;
             active = false;
         }
 

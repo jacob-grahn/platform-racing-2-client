@@ -19,7 +19,7 @@ package blocks
         public function CrumbleBlock()
         {
             super(Objects.BLOCK_CRUMBLE);
-            var_34 = false;
+            safeStand = false;
         }
 
         override public function onStand(player:LocalCharacter)
