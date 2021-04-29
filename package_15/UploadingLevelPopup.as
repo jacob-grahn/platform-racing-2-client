@@ -55,6 +55,7 @@ package package_15
                     var unhashedStr:String = lVars.title + Main.loggedInAs.toLowerCase() + lVars.data + Env.LEVEL_SALT;
                     var byteHash:ByteArray = md5.hash(Hex.toArray(Hex.fromString(unhashedStr)));
                     lVars.hash = Hex.fromArray(byteHash);
+                    lVars.to_newest = int(this.editor.toNewest);
                     lVars.override_banned = int(this.overrideBanConfirmed); // if banned
                     lVars.overwrite_existing = int(this.overwriteExistingConfirmed); // if overwriting an existing level
                     var request:URLRequest = new URLRequest(Main.baseURL + "/upload_level.php");
