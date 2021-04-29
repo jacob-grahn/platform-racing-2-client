@@ -18,6 +18,13 @@ package blocks
         override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
+            if (!(this is TeleportBlock)) {
+                this.maybeUseSupply(player);
+            }
+        }
+
+        protected function maybeUseSupply(player:LocalCharacter)
+        {
             if (!frozen) {
                 if (this.uses > 0) {
                     this.uses--;

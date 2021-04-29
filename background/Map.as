@@ -109,6 +109,7 @@ package background
                             Course.course.teleportBlocks[color] = [];
                         }
                         Course.course.teleportBlocks[color].push(block);
+                        block.blockNum = Course.course.teleportBlocks[color].length - 1;
                     }
                     this.miniMap.method_680(blockCode, blockX, blockY);
                 }
