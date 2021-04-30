@@ -432,6 +432,9 @@ package package_6
             if (PrizePopup.instance !== null) {
                 PrizePopup.instance.startFadeOut();
             }
+            if (PlaceArtifact.instance !== null) {
+                PlaceArtifact.instance.startFadeOut();
+            }
             if (this.luxPop != null) {
                 this.luxPop.remove();
                 this.luxPop = null;
