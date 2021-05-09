@@ -80,7 +80,7 @@ package blocks
 
         private function maybeTeleport(player:LocalCharacter)
         {
-            if (TeleportBlock['DISABLED_' + this.color] !== true) {
+            if (!frozen && TeleportBlock['DISABLED_' + this.color] !== true) {
                 TeleportBlock['DISABLED_' + this.color] = true;
                 super.maybeUseSupply(player);
             }
