@@ -30,7 +30,7 @@ package package_6
 
         private function clickHandler(e:MouseEvent)
         {
-            if (Main.group == 3 || Main.isSpecialUser || Main.isPrizer) {
+            if (Main.group == 3 || Main.isSpecialUser || Main.isPrizer || (Main.group == 2 && !Main.isTempMod && !Main.isTrialMod)) {
                 if (Keys.isPressed(Keyboard.G) && Keys.isPressed(Keyboard.C)) { // place artifact
                     var levelId:int = Game(GamePage.course).getCourseID();
                     var xPos:int = e.stageX - GamePage.course.posX - GamePage.course.x;

@@ -1,17 +1,17 @@
 package package_6
 {
+    import com.jiggmin.data.Data;
     import package_4.ConfirmPopup;
     import package_4.Popup;
     import package_4.UploadingPopup;
     import fl.controls.ComboBox;
     import fl.data.DataProvider;
     import flash.events.Event;
+    import flash.events.FocusEvent;
     import flash.events.MouseEvent;
-    import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
-    import com.jiggmin.data.Data;
-    import flash.events.FocusEvent;
+    import flash.net.URLVariables;
 
     public class PlaceArtifact extends Popup
     {
@@ -22,6 +22,7 @@ package package_6
         private var yPos:int;
         private var rot:int;
         private var setTime:int = 0;
+        private var overrideSched:Boolean = false;
         private var uploading:UploadingPopup;
         private var m:PlaceArtifactGraphic = new PlaceArtifactGraphic();
 
@@ -110,7 +111,7 @@ package package_6
             this.m.monthSel.selectedIndex = month;
             this.m.yearSel.selectedIndex = 0;
             this.populateOptions();
-            this.m.daySel.selectedIndex = dayNum + 1;
+            this.m.daySel.selectedIndex = dayNum - 1;
             this.m.hourBox.text = hour === 0 || hour > 12 ? Math.abs(hour - 12) : hour;
             this.m.minBox.text = (min < 10 ? '0' : '') + min;
             this.m.meridSel.selectedIndex = merid;
@@ -141,10 +142,25 @@ package package_6
             vars.y = this.yPos;
             vars.rot = this.rot;
             vars.set_time = this.setTime < Data.getTimestamp() ? 0 : this.setTime;
+            vars.override_sched = int(this.overrideSched);
             var request:URLRequest = new URLRequest(Main.baseURL + "/place_artifact.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
             this.uploading = new UploadingPopup(request, 'json');
+            this.uploading.addEventListener(SuperLoader.d, this.handleResponse, false, 0, true);
+        }
+
+        private function handleResponse(e:Event)
+        {
+            var ret:Object = this.uploading.parsedData;
+            if (!ret.success && ret.status === 'scheduled') {
+                new ConfirmPopup(function () {
+                    overrideSched = true;
+                    placeArtifact();
+                }, 'There is already a scheduled artifact placement. Is it OK to replace it with this one?');
+                return;
+            }
+            startFadeOut();
         }
 
         private function clickCancel(e:MouseEvent)
@@ -156,6 +172,11 @@ package package_6
         {
             if (instance === this) {
                 instance = null;
+            }
+            if (this.uploading != null) {
+                this.uploading.removeEventListener(SuperLoader.d, this.handleResponse);
+                this.uploading.startFadeOut();
+                this.uploading = null;
             }
             super.remove();
         }
