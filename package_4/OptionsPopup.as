@@ -21,9 +21,9 @@ package package_4
         private var filterSwears:Boolean = Settings.getValue(Settings.FILTER_SWEARS, true);
         private var drawArt:Boolean = Settings.getValue(Settings.DRAW_ART, true);
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
-        private var hTrueY:Number = -74;
-        private var hFalseY:Number = -46;
-        private var buttonStartPos:int = 78; // var_437
+        private var hTrueY:Number = -71.5;
+        private var hFalseY:Number = -43.5;
+        private var buttonStartPos:int = 80; // var_437
         private var hoverActive:HoverPopup;
 
         public function OptionsPopup()
