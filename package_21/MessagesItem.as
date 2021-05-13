@@ -6,6 +6,8 @@ package package_21
     import com.jiggmin.data.HTMLNameMaker;
     import com.jiggmin.data.Settings;
     import flash.events.MouseEvent;
+    import flash.ui.Mouse;
+    import flash.ui.MouseCursor;
     import package_4.ConfirmPopup;
     import package_4.HoverPopup;
     import package_4.SendMessagePopup;
@@ -106,11 +108,15 @@ package package_21
 
         private function hoverTime(e:MouseEvent)
         {
+            Mouse.cursor = MouseCursor.BUTTON;
+            this.m.timeBox.textColor = 0x666666;
             this.hover = new HoverPopup("Sent Time", 'This message was sent on ' + Data.getDateTimeStr(this.time, ['long', 'medium']) + '.', this.m.timeBox);
         }
 
         private function hoverOutTime(e:* = null)
         {
+            Mouse.cursor = MouseCursor.AUTO;
+            this.m.timeBox.textColor = 0x000000;
             if (this.hover != null) {
                 this.hover.remove();
                 this.hover = null;
