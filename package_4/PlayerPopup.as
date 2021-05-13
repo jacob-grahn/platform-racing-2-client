@@ -5,19 +5,20 @@
 
 package package_4
 {
-    import ui.GuildName;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Data;
+    import flash.events.Event;
+    import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
-    import flash.net.URLVariables;
     import flash.net.URLRequest;
+    import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
+    import lobby.LobbyRight;
+    import package_6.ExpGain;
     import package_8.Character;
     import package_18.PartInfo.PartInfoPopup;
     import package_18.PartInfo.PartPopup;
-    import flash.events.Event;
-    import lobby.LobbyRight;
-    import flash.net.URLRequestMethod;
-    import package_6.ExpGain;
-    import com.jiggmin.data.CommandHandler;
-    import flash.events.KeyboardEvent;
+    import ui.GuildName;
 
     public class PlayerPopup extends Popup 
     {
@@ -34,6 +35,7 @@ package package_4
         private var userName:String;
         private var userIdShown:Boolean = false;
         private var expGain:ExpGain;
+        private var times:Array;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
         public function PlayerPopup(name:String)
@@ -143,8 +145,15 @@ package package_4
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox, false, 0, true);
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox, false, 0, true);
             this.m.playerInfo.hatBox.text = "Hats: " + ret.hats;
-            this.m.playerInfo.dateBox.text = "Joined: " + (ret.registerDate == '1/Jan/1970' ? 'Age of Heroes' : ret.registerDate);
-            this.m.playerInfo.lastLoginBox.text = "Active: " + ret.loginDate;
+            this.m.playerInfo.registerBox.text = "Joined: " + (ret.registerDate == 0 ? 'Age of Heroes' : Data.getDateTimeStr(ret.registerDate));
+            if (ret.registerDate != 0) {
+                this.m.playerInfo.registerBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRegisterBox, false, 0, true);
+                this.m.playerInfo.registerBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRegisterBox, false, 0, true);
+            }
+            this.m.playerInfo.activeBox.text = "Active: " + Data.getDateTimeStr(ret.loginDate);
+            this.m.playerInfo.activeBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverActiveBox, false, 0, true);
+            this.m.playerInfo.activeBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutActiveBox, false, 0, true);
+            this.times = [ret.registerDate, ret.loginDate];
             if (ret.guildId == 0) {
                 this.m.playerInfo.guildBox.text = "Guild: none";
             } else {
@@ -163,10 +172,10 @@ package package_4
             c.scaleX = c.scaleY = 2;
             c.x = -75;
             c.y = 135;
-            this.m.playerInfo.expBg.visible = false;
+            this.m.playerInfo.supplBg.visible = false;
             this.expGain = new ExpGain();
             this.expGain.x = this.m.playerInfo.x;
-            this.expGain.y = this.m.playerInfo.expBg.y + 3;
+            this.expGain.y = this.m.playerInfo.supplBg.y + 3;
             this.expGain.start(ret.exp_points, ret.exp_points, ret.exp_to_rank);
             this.m.playerInfo.inviteButton.visible = false;
             this.m.playerInfo.kickButton.visible = false;
@@ -211,14 +220,38 @@ package package_4
 
         private function mouseOverRankBox(e:MouseEvent)
         {
-            this.m.playerInfo.expBg.visible = true;
+            this.m.playerInfo.supplBg.visible = true;
             this.m.playerInfo.addChild(this.expGain);
         }
 
         private function mouseOutRankBox(e:MouseEvent)
         {
-            this.m.playerInfo.expBg.visible = false;
+            this.m.playerInfo.supplBg.visible = false;
             this.m.playerInfo.removeChild(this.expGain);
+        }
+
+        private function mouseOverRegisterBox(e:MouseEvent)
+        {
+            this.m.playerInfo.supplBg.visible = true;
+            this.m.playerInfo.supplText.text = Data.getDateTimeStr(times[0], ['long', 'medium']);
+        }
+
+        private function mouseOutRegisterBox(e:MouseEvent)
+        {
+            this.m.playerInfo.supplText.text = '';
+            this.m.playerInfo.supplBg.visible = false;
+        }
+
+        private function mouseOverActiveBox(e:MouseEvent)
+        {
+            this.m.playerInfo.supplBg.visible = true;
+            this.m.playerInfo.supplText.text = Data.getDateTimeStr(times[1], ['long', 'medium']);
+        }
+
+        private function mouseOutActiveBox(e:MouseEvent)
+        {
+            this.m.playerInfo.supplText.text = '';
+            this.m.playerInfo.supplBg.visible = false;
         }
 
         // method_419 = clickInvite

@@ -16,9 +16,8 @@
         {
             super(this.m);
             this.level = level;
-            var reported:Date = new Date(level.report_time * 1000);
             this.m.titleBox.text = this.level.title;
-            this.m.timeBox.text = reported.date + '/' + Data.getMonthStr(reported.month) + '/' + reported.fullYear;
+            this.m.timeBox.text = Data.getDateTimeStr(level.report_time);
             this.doubleClickEnabled = true;
             this.m.mouseEnabled = false;
             this.m.mouseChildren = false;

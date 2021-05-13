@@ -54,7 +54,7 @@ package package_22
         private var passOK:Boolean = false;
         private var type:String;
         private var badHats:Vector.<int> = new Vector.<int>;
-        private var lastUpdated:Date;
+        private var lastUpdated:int;
         private var maxSlots:Number = 4; // var_590
         private var superLoader:SuperLoader; // var_80
         private var uploading:UploadingPopup;
@@ -76,7 +76,7 @@ package package_22
             this.pass = hasPass;
             this.passOK = !this.pass;
             this.type = gMode;
-            this.lastUpdated = new Date(time * 1000);
+            this.lastUpdated = time;
             this.myRank = isNaN(this.myRank) || this.myRank < 0 ? 0 : this.myRank;
             this.minRank = Data.numLimit(this.minRank, 0, 99);
             var htmlName:String = this.htmlNameMaker.makeName(this.userName, this.group);
@@ -455,7 +455,7 @@ package package_22
             var popupTitle:String = "-- " + Data.escapeString(this.title) + " --";
             var byText:String = "By: " + Data.escapeString(this.userName) + "<br/>";
             var versionText:String = "Version: " + Data.formatNumber(this.version) + "<br/>";
-            var updatedText:String = "Updated: "  + this.lastUpdated.date + '/' + Data.getMonthStr(this.lastUpdated.month) + '/' + this.lastUpdated.fullYear + '<br/>';
+            var updatedText:String = "Updated: "  + Data.getDateTimeStr(this.lastUpdated) + '<br/>';
             var minRankText:String = "Min Rank: " + this.minRank + "<br/>";
             var playsText:String = "Plays: " + Data.formatNumber(this.playCount) + "<br/>";
             var ratingText:String = "Rating: " + this.rating;

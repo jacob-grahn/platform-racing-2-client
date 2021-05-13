@@ -130,7 +130,7 @@ package package_6
         {
             var inputDate:Date = this.getDateFromInput();
             this.setTime = inputDate.time / 1000 < Data.getTimestamp() || this.m.now_chk.selected ? 0 : inputDate.time / 1000;
-            var timeStr:String = this.setTime > 0 ? 'on ' + inputDate.date + '/' + Data.getMonthStr(inputDate.month) + '/' + inputDate.fullYear + ' at ' + this.m.hourBox.text + ':' + this.m.minBox.text + ' ' + (this.m.meridSel.selectedItem.data == 0 ? 'AM' : 'PM') + ' (your timezone)' : 'now';
+            var timeStr:String = this.setTime > 0 ? 'on ' + Data.getDateTimeStr(this.setTime, ['long', 'long']) : 'now';
             new ConfirmPopup(this.placeArtifact, 'Are you sure you want to place the artifact ' + timeStr + '?');
         }
 

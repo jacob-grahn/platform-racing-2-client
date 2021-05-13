@@ -34,7 +34,7 @@ package page
             var cur:Object = ret.current;
             var level:Array = [Data.escapeString(cur.level.title), cur.level.id];
             var user:Array = [Data.escapeString(cur.level.author.name), cur.level.author.group];
-            var hintMsg:String = 'The current level of the week is ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + '.';
+            var hintMsg:String = 'The current level of the week is ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + '.' + (!cur.hasOwnProperty('first_finder') ? ' See if you can find the hidden artifact!' : '');
             this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, hintMsg], true);
             if (cur.hasOwnProperty('first_finder')) {
                 var finderName:Array = [Data.escapeString(cur.first_finder.name), cur.first_finder.group];
@@ -55,9 +55,7 @@ package page
                 var sched:Object = ret.scheduled;
                 level = [Data.escapeString(sched.level.title), sched.level.id];
                 user = [Data.escapeString(sched.level.author.name), sched.level.author.group];
-                var schedDate:Date = new Date(sched.set_time * 1000);
-                var dateStr:String = 'on ' + schedDate.date + '/' + Data.getMonthStr(schedDate.month) + '/' + schedDate.fullYear + ' at ' + schedDate.hours + ':' + schedDate.minutes + ' (your timezone)';
-                hintMsg = 'The next level of the week will be ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + ', which will take effect ' + dateStr + '.';
+                hintMsg = 'The next level of the week will be ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + ', which will take effect on ' + Data.getDateTimeStr(sched.set_time, ['long', 'short']) + '.';
                 this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, hintMsg], true);
             }
         }

@@ -2,11 +2,12 @@
 
 package package_21
 {
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.HTMLNameMaker;
     import com.jiggmin.data.Settings;
-    import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
     import package_4.ConfirmPopup;
+    import package_4.HoverPopup;
     import package_4.SendMessagePopup;
 
     public class MessagesItem extends Removable 
@@ -21,6 +22,8 @@ package package_21
         public var messageId:Number; // var_451
         private var target:Messages;
         private var messageText:String; // var_588
+        private var time:int;
+        private var hover:HoverPopup;
 
         // _loc8 = htmlName
         // _loc9 = date
@@ -46,14 +49,16 @@ package package_21
             this.m.textBox.autoSize = "left";
             this.m.bg.height = this.m.textBox.height + 6;
             this.m.guildMsgIcon.visible = gm;
-            var date:Date = new Date();
-            date.setTime(time * 1000);
+            this.time = time;
+            var date:Date = new Date(this.time * 1000);
             this.m.timeBox.text = date.toLocaleDateString();
             this.m.timeBox.y = this.m.textBox.height + 32;
             this.reportButton.y = this.deleteButton.y = this.replyButton.y = this.m.textBox.height + 42;
             this.reportButton.x = 15;
             this.deleteButton.x = 37;
             this.replyButton.x = 59;
+            this.m.timeBox.addEventListener(MouseEvent.MOUSE_OVER, this.hoverTime, false, 0, true);
+            this.m.timeBox.addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutTime, false, 0, true);
             this.reportButton.addEventListener(MouseEvent.CLICK, this.clickReport);
             this.deleteButton.addEventListener(MouseEvent.CLICK, this.clickDelete);
             this.replyButton.addEventListener(MouseEvent.CLICK, this.clickReply);
@@ -99,8 +104,24 @@ package package_21
             this.target.doDelete(this);
         }
 
+        private function hoverTime(e:MouseEvent)
+        {
+            this.hover = new HoverPopup("Sent Time", 'This message was sent on ' + Data.getDateTimeStr(this.time, ['long', 'medium']) + '.', this.m.timeBox);
+        }
+
+        private function hoverOutTime(e:* = null)
+        {
+            if (this.hover != null) {
+                this.hover.remove();
+                this.hover = null;
+            }
+        }
+
         override public function remove()
         {
+            this.hoverOutTime();
+            this.m.timeBox.removeEventListener(MouseEvent.MOUSE_OVER, this.hoverTime);
+            this.m.timeBox.removeEventListener(MouseEvent.MOUSE_OUT, this.hoverOutTime);
             this.reportButton.removeEventListener(MouseEvent.CLICK, this.clickReport);
             this.deleteButton.removeEventListener(MouseEvent.CLICK, this.clickDelete);
             this.replyButton.removeEventListener(MouseEvent.CLICK, this.clickReply);
