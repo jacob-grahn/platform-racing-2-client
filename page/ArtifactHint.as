@@ -20,7 +20,7 @@ package page
 
         public function load()
         {
-            this.superLoader.load(new URLRequest(Main.baseURL + "/files/artifact_hint.txt"));
+            this.superLoader.load(new URLRequest(Main.baseURL + (Main.beta ? "/beta/artifact_hint.php" : '/files/artifact_hint.txt')));
         }
 
         // method_228 = parseHint
@@ -41,7 +41,7 @@ package page
                 var foundMsg:String = "The first person to find the hidden artifact was " + this.chatRoom.makeLink('Name', finderName) + "!";
                 this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, foundMsg], true);
                 var bubMsg:String = "";
-                if (!cur.hasOwnProperty('bubbles_winner')) {
+                if (cur.hasOwnProperty('bubbles_winner') && cur.bubbles_winner.group == 0) {
                     bubMsg = "The bubble set will be awarded to the first person to find the artifact that doesn\'t have the set already!";
                 } else if (cur.hasOwnProperty('bubbles_winner') && cur.first_finder.name != cur.bubbles_winner.name) {
                     var bubName:Array = [Data.escapeString(cur.bubbles_winner.name), cur.bubbles_winner.group];

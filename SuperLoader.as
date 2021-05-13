@@ -45,11 +45,14 @@ package
             if (this.useRandomNum) {
                 var rand:int = int(Math.random() * 10000000);
                 if (request.data is URLVariables) {
+                    if (Main.beta) {
+                        request.data.beta = 1;
+                    }
                     request.data.rand = rand;
                     request.data.token = Main.token;
                 } else {
                     request.url += request.url.indexOf("?") != -1 ? '&' : '?';
-                    request.url = request.url + "rand=" + rand + "&token=" + Main.token;
+                    request.url = request.url + (Main.beta ? 'beta=1&' : '') + "rand=" + rand + "&token=" + Main.token;
                 }
 
                 // local loader
