@@ -105,7 +105,7 @@ package background
                     }
                     if (block is TeleportBlock) {
                         var color:int = block.getColor();
-                        if (!(color in Course.course.teleportBlocks)) {
+                        if (!Course.course.teleportBlocks.hasOwnProperty(color)) {
                             Course.course.teleportBlocks[color] = [];
                         }
                         Course.course.teleportBlocks[color].push(block);

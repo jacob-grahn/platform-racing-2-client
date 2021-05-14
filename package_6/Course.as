@@ -35,7 +35,7 @@ package package_6
         protected var version:int;
         public var startPosArray:Array = new Array(); // var_197
         public var finishBlocks:Array = new Array(); // var_313
-        public var teleportBlocks:Array = new Array();
+        public var teleportBlocks:Object = new Object();
         public var playerArray:Array = new Array(); // var_40
         public var var_9:LocalCharacter;
         protected var holder:Sprite = new Sprite();

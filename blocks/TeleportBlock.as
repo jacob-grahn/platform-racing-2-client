@@ -1,4 +1,4 @@
-package blocks
+﻿package blocks
 {
     import blocks.options.TeleportBlockOptions;
     import com.jiggmin.data.Objects;
@@ -29,6 +29,7 @@ package blocks
             addChild(this.blockBG);
             this.setColor();
             super(Objects.BLOCK_TELEPORT);
+            safeStand = false;
         }
 
         public function getColor()
@@ -96,23 +97,29 @@ package blocks
                     blocksOfThisColor[i].disable();
                 }
             }
-            new TeleportPop(player.x, player.y);
-            Main.socket.write("add_effect`Teleport`" + player.x + "`" + player.y);
+            new TeleportPop(player.x, player.y - 25);
+            Main.socket.write("add_effect`Teleport`" + player.x + "`" + (player.y - 25));
             var blockPos:Point = method_18();
             var newBlockPos:Point = destBlock.method_18();
             var charPos:Object = player.getPos();
             var relCharPos:Point = new Point(charPos.x - blockPos.x, charPos.y - blockPos.y);
-            player.setPos(newBlockPos.x + relCharPos.x, newBlockPos.y + relCharPos.y);
-            new TeleportPop(player.x, player.y);
-            Main.socket.write("add_effect`Teleport`" + player.x + "`" + player.y);
+            player.x = newBlockPos.x + relCharPos.x;
+            player.y = newBlockPos.y + relCharPos.y;
+            new TeleportPop(player.x, player.y - 25);
+            Main.socket.write("add_effect`Teleport`" + player.x + "`" + (player.y - 25));
             this.resetTimeout = setTimeout(function () {
                 resetAllOfColor();
             }, 3000);
         }
 
-        private function resetAllOfColor()
+        public function clearResetTimeout()
         {
             clearTimeout(this.resetTimeout);
+        }
+
+        private function resetAllOfColor()
+        {
+            this.clearResetTimeout();
             var blocksOfThisColor:Array = Course.course.teleportBlocks[this.color];
             for (var i:int = 0; i < blocksOfThisColor.length; i++) {
                 blocksOfThisColor[i].resetSupply();
@@ -120,10 +127,22 @@ package blocks
             TeleportBlock['DISABLED_' + this.color] = false;
         }
 
+        public static function resetAll()
+        {
+            for each (var blocksOfColor:Array in Course.course.teleportBlocks) {
+                for each (var block:TeleportBlock in blocksOfColor) {
+                    block.clearResetTimeout();
+                    block.resetSupply();
+                    TeleportBlock['DISABLED_' + block.getColor()] = false;
+                }
+            }
+            Course.course.teleportBlocks = {};
+        }
+
         override public function remove()
         {
-            clearTimeout(this.resetTimeout);
-            TeleportBlock['DISABLED_' + this.color] = false;
+            this.clearResetTimeout();
+            delete TeleportBlock['DISABLED_' + this.color];
             removeChild(this.blockBG);
             super.remove();
         }
