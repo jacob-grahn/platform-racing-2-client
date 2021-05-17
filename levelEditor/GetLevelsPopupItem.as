@@ -37,7 +37,7 @@ package levelEditor
             var levelTitle:String = "-- " + Data.escapeString(this.level.title) + " --";
             var popText:String = "Game Mode: " + Modes.getFullName(this.level.type) + "<br/>";
             popText += "Version: " + Data.formatNumber(this.level.version) + "<br/>";
-            popText += "Updated: "  + Data.getDateTimeStr(this.level.time) + '<br/>';
+            popText += "Updated: "  + Data.getShortDateStr(this.level.time) + '<br/>';
             popText += "Plays: " + Data.formatNumber(this.level.play_count) + "<br/>";
             popText += "Rating: " + this.level.rating;
             if (Data.trimWhitespace(this.level.note) != '') {

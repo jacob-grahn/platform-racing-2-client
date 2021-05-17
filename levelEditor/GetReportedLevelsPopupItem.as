@@ -17,7 +17,7 @@
             super(this.m);
             this.level = level;
             this.m.titleBox.text = this.level.title;
-            this.m.timeBox.text = Data.getDateTimeStr(level.report_time);
+            this.m.timeBox.text = Data.getShortDateStr(level.report_time);
             this.doubleClickEnabled = true;
             this.m.mouseEnabled = false;
             this.m.mouseChildren = false;

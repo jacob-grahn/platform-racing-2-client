@@ -145,12 +145,12 @@ package package_4
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox, false, 0, true);
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox, false, 0, true);
             this.m.playerInfo.hatBox.text = "Hats: " + ret.hats;
-            this.m.playerInfo.registerBox.text = "Joined: " + (ret.registerDate == 0 ? 'Age of Heroes' : Data.getDateTimeStr(ret.registerDate));
+            this.m.playerInfo.registerBox.text = "Joined: " + (ret.registerDate == 0 ? 'Age of Heroes' : Data.getShortDateStr(ret.registerDate));
             if (ret.registerDate != 0) {
                 this.m.playerInfo.registerBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRegisterBox, false, 0, true);
                 this.m.playerInfo.registerBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRegisterBox, false, 0, true);
             }
-            this.m.playerInfo.activeBox.text = "Active: " + Data.getDateTimeStr(ret.loginDate);
+            this.m.playerInfo.activeBox.text = "Active: " + Data.getShortDateStr(ret.loginDate);
             this.m.playerInfo.activeBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverActiveBox, false, 0, true);
             this.m.playerInfo.activeBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutActiveBox, false, 0, true);
             this.times = [ret.registerDate, ret.loginDate];

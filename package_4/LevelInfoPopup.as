@@ -125,7 +125,7 @@
             // make strings/data to give to mc
             this.m.levelInfo.author.htmlText = 'by: ' + this.htmlNameMaker.makeName(this.userName, this.userGroup);
             this.htmlNameMaker.listenForLink(this.m.levelInfo.author);
-            this.m.levelInfo.updated.text = Data.getDateTimeStr(this.time);
+            this.m.levelInfo.updated.text = Data.getShortDateStr(this.time);
             this.m.levelInfo.rating.stars.bar.scaleX = this.rating / 5;
 
             // hover events

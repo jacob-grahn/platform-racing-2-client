@@ -455,7 +455,7 @@ package package_22
             var popupTitle:String = "-- " + Data.escapeString(this.title) + " --";
             var byText:String = "By: " + Data.escapeString(this.userName) + "<br/>";
             var versionText:String = "Version: " + Data.formatNumber(this.version) + "<br/>";
-            var updatedText:String = "Updated: "  + Data.getDateTimeStr(this.lastUpdated) + '<br/>';
+            var updatedText:String = "Updated: "  + Data.getShortDateStr(this.lastUpdated) + '<br/>';
             var minRankText:String = "Min Rank: " + this.minRank + "<br/>";
             var playsText:String = "Plays: " + Data.formatNumber(this.playCount) + "<br/>";
             var ratingText:String = "Rating: " + this.rating;

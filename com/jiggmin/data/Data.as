@@ -108,10 +108,16 @@ package com.jiggmin.data
             return monthName + " " + date.date;
         }
 
-        public static function getMonthStr(m:int):String
+        private static function getMonthStr(m:int):String
         {
             var monthArray:Array = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
             return monthArray[m];
+        }
+
+        public static function getShortDateStr(t:Number)
+        {
+            var date:Date = new Date(t * 1000);
+            return date.date + '/' + Data.getMonthStr(date.month) + '/' + date.getFullYear();
         }
 
         public static function getDateTimeStr(t:Number, customStyle:Array = null):String
