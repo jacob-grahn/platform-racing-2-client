@@ -4,9 +4,11 @@
     import com.jiggmin.data.EpicFlash;
     import com.jiggmin.data.HTMLNameMaker;
     import flash.display.MovieClip;
+    import flash.events.Event;
     import flash.events.MouseEvent;
     import package_4.Popup;
     import package_8.Character;
+    import package_18.AccountInfo;
 
     public class PartPopup extends Popup 
     {
@@ -130,6 +132,8 @@
                     this.target.colorMC2.visible = true;
                     this.epicFlash.addItem(this.target.colorMC2);
                 }
+                this.m.equip_bt.enabled = true;
+                this.m.equip_bt.addEventListener(MouseEvent.CLICK, this.equipPart, false, 0, true);
             }
             if (this.listing.hasEpic == true) {
                 this.m.epicBox.text = 'You own this epic upgrade!';
@@ -159,6 +163,14 @@
             }
         }
 
+        private function equipPart(e:MouseEvent)
+        {
+            AccountInfo.partToSet = [this.listing.type.toLowerCase(), int(this.listing.id)];
+            Main.instance.dispatchEvent(new Event(AccountInfo.SET_MANUAL_PART));
+            startFadeOut();
+            PartInfoPopup.instance.startFadeOut();
+        }
+
         private function clickClose(e:MouseEvent)
         {
             startFadeOut();
@@ -171,6 +183,7 @@
             }
             removeChild(this.m);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
+            this.m.equip_bt.removeEventListener(MouseEvent.CLICK, this.equipPart);
             this.m = null;
             this.nameMaker.remove();
             super.remove();
