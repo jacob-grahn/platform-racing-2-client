@@ -373,7 +373,11 @@ package package_4
             }
             Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.toggleUserIdShown);
             this.m.playerInfo.rankBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox);
-            this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox);
+            this.m.playerInfo.rankBox.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox);
+            this.m.playerInfo.registerBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRegisterBox);
+            this.m.playerInfo.registerBox.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRegisterBox);
+            this.m.playerInfo.activeBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverActiveBox);
+            this.m.playerInfo.activeBox.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutActiveBox);
             this.m.playerInfo.messageButton.removeEventListener(MouseEvent.CLICK, this.clickSendPM);
             this.m.playerInfo.levelsButton.removeEventListener(MouseEvent.CLICK, this.clickViewLevels);
             this.m.playerInfo.friendButton.removeEventListener(MouseEvent.CLICK, this.clickAddFriend);
