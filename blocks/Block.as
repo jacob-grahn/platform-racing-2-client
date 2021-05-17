@@ -211,7 +211,7 @@ package blocks
                 } else {
                     player.y = _local_2.y + this.size + _local_3.y + player.var_325;
                 }
-                player.velY = player.velY * -0.25;
+                player.velY *= -0.25;
                 player.var_4.setNumber(LocalCharacter.const_12, 0);
                 if (this.var_490) {
                     this.method_315(0, -15);
