@@ -15,7 +15,7 @@
     public dynamic class TeleportBlock extends SupplyBlock 
     {
         public static const DEFAULT_COLOR:int = 0xFF7F50;
-        
+
         // public static variables created for each color of teleport block in the level, with the name DISABLED_*colordecvalue*
 
         public var blockNum:int;
@@ -75,7 +75,11 @@
 
         override public function onBump(player:LocalCharacter)
         {
+            var playerY:int = player.y;
             super.onBump(player);
+            if (player.crouching) {
+                player.y = playerY;
+            }
             this.maybeTeleport(player);
         }
 
@@ -101,10 +105,8 @@
             Main.socket.write("add_effect`Teleport`" + player.x + "`" + (player.y - 25));
             var blockPos:Point = method_18();
             var newBlockPos:Point = destBlock.method_18();
-            var charPos:Object = player.getPos();
-            var relCharPos:Point = new Point(charPos.x - blockPos.x, charPos.y - blockPos.y);
-            player.x = newBlockPos.x + relCharPos.x;
-            player.y = newBlockPos.y + relCharPos.y;
+            player.x += newBlockPos.x - blockPos.x;
+            player.y += newBlockPos.y - blockPos.y;
             new TeleportPop(player.x, player.y - 25);
             Main.socket.write("add_effect`Teleport`" + player.x + "`" + (player.y - 25));
             this.resetTimeout = setTimeout(function () {

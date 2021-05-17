@@ -8,6 +8,7 @@ package package_8
     import background.Map;
     import blocks.Block;
     import blocks.SafetyBlock;
+    import blocks.TeleportBlock;
     import blocks.VanishBlock;
     import blocks.WaterBlock;
     import com.jiggmin.data.Data;
@@ -497,22 +498,14 @@ package package_8
                     changeState("superJump");
                 } else {
                     if (this.left || this.right) {
-                        if (this.crouching) {
-                            changeState("crouchWalk");
-                        } else {
-                            changeState("run");
-                        }
+                        changeState(this.crouching ? 'crouchWalk' : 'run');
                     } else {
-                        if (this.crouching) {
-                            changeState("crouch");
-                        } else {
-                            changeState("stand");
-                        }
+                        changeState(this.crouching ? 'crouch' : 'stand');
                     }
                 }
             }
             this.method_76();
-            if (var_4.getBool(COWBOY) && this.grounded == false) {
+            if (var_4.getBool(COWBOY) && !this.grounded) {
                 this.var_240 = 2;
                 this.setMode("water");
                 changeState("swim");
@@ -523,11 +516,7 @@ package package_8
         // method_193 = updateKeys
         private function updateKeys()
         {
-            this.up = false;
-            this.down = false;
-            this.right = false;
-            this.left = false;
-            this.space = false;
+            this.up = this.down = this.right = this.left = this.space = false;
             if (Main.stage.focus == null || Main.stage.focus != RaceChat.textBox) {
                 if (Keys.isPressed(Keyboard.RIGHT) || Keys.isPressed(this.altCtrl.right)) {
                     this.right = true;
@@ -626,6 +615,9 @@ package package_8
             }
         }
 
+        // _loc1 = topBlock
+        // _loc2 = botBlock
+        // _loc4 = yPriorToBump
         private function method_76()
         {
             if (this.map != null) {
@@ -671,18 +663,18 @@ package package_8
                 if (!this.grounded) {
                     this.method_261();
                 }
-                var _local_1:Block = null;
-                var _local_2:Block = null;
+                var topBlock:Block = null;
+                var botBlock:Block = null;
                 this.crouching = false;
                 if (this.grounded == true) {
-                    _local_1 = this.getBlock(x, y - 40);
-                    _local_2 = this.getBlock(x, y - 10);
-                    if (_local_1 != null && _local_2 == null) {
+                    topBlock = this.getBlock(x, y - 40); // blockAbove? top half of character
+                    botBlock = this.getBlock(x, y - 10); // blockAtBody? bottom half of character
+                    if (topBlock != null && botBlock == null) {
                         this.crouching = true;
                         if (this.up) {
-                            var _local_4:Number = y;
-                            _local_1.onBump(this);
-                            y = _local_4;
+                            var yPriorToBump:Number = y;
+                            topBlock.onBump(this);
+                            y = !(topBlock is TeleportBlock) ? yPriorToBump : y;
                             velY = 0;
                         }
                         if (velY < 0) {
@@ -690,14 +682,14 @@ package package_8
                         }
                     }
                 }
-                _local_1 = this.map.getBlockFromPos(x, y - 15, true);
-                if (_local_1 != null) {
-                    _local_1.onTouch(this);
+                topBlock = this.map.getBlockFromPos(x, y - 15, true);
+                if (topBlock != null) {
+                    topBlock.onTouch(this);
                 }
                 if (!this.crouching) {
-                    _local_1 = this.map.getBlockFromPos(x, y - 45, true);
-                    if (_local_1 != null) {
-                        _local_1.onTouch(this);
+                    topBlock = this.map.getBlockFromPos(x, y - 45, true);
+                    if (topBlock != null) {
+                        topBlock.onTouch(this);
                     }
                 }
             }
