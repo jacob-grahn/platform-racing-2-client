@@ -30,26 +30,15 @@ package package_6
 
         private function clickHandler(e:MouseEvent)
         {
-            if (Keys.isPressed(Keyboard.G) && Keys.isPressed(Keyboard.C)) { // place artifact
-                var xPos:int = e.stageX - GamePage.course.posX - GamePage.course.x;
-                var yPos:int = e.stageY - GamePage.course.posY - GamePage.course.y;
-                var rotation:int = Course.course.blockBackground.rotation;
-                var vars:URLVariables = new URLVariables();
-                vars.x = xPos;
-                vars.y = yPos;
-                vars.rot = rotation;
-                vars.level_id = Game(GamePage.course).getCourseID();
-                var request:URLRequest = new URLRequest(Main.baseURL + "/place_artifact.php");
-                request.data = vars;
-                request.method = URLRequestMethod.POST;
-                this.uploading = new UploadingPopup(request, 'json');
-            } else if (Keys.isPressed(Keyboard.C) && Keys.isPressed(Keyboard.X)) { // cancel current prize
-                if (this.gameRef.prize !== null) {
-                    if (Main.group == 3 || Main.isSpecialUser === true || Main.isPrizer === true) {
-                        Main.socket.write('cancel_prize`');
-                    } else {
-                        new MessagePopup('Error: You lack the power to perform this action.');
-                    }
+            if (Main.group == 3 || Main.isSpecialUser || Main.isPrizer || (Main.group == 2 && !Main.isTempMod && !Main.isTrialMod)) {
+                if (Keys.isPressed(Keyboard.G) && Keys.isPressed(Keyboard.C)) { // place artifact
+                    var levelId:int = Game(GamePage.course).getCourseID();
+                    var xPos:int = e.stageX - GamePage.course.posX - GamePage.course.x;
+                    var yPos:int = e.stageY - GamePage.course.posY - GamePage.course.y;
+                    var rot:int = Course.course.blockBackground.rotation;
+                    new PlaceArtifact(levelId, xPos, yPos, rot);
+                } else if (Keys.isPressed(Keyboard.C) && Keys.isPressed(Keyboard.X) && this.gameRef.prize !== null) {
+                    Main.socket.write('cancel_prize`'); // cancel current prize
                 }
             }
         }

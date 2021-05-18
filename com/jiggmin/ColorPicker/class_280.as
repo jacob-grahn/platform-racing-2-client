@@ -50,7 +50,7 @@ package com.jiggmin.ColorPicker
             }
             var _local_10:int;
             while (_local_10 < 12) {
-                _local_1[0][_local_10] = ColorPicker.var_265[_local_10];
+                _local_1[0][_local_10] = ColorPicker.recentColors[_local_10];
                 _local_10++;
             }
             _local_1[2][0] = 0;

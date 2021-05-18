@@ -177,7 +177,6 @@ package background
         protected function moveDrawObject(_arg_1:String)
         {
             var _local_2:Array = _arg_1.split(";");
-            trace(_local_2);
             var objId:Number = Number(_local_2[0]);
             var newObjX:Number = Number(_local_2[1]);
             var newObjY:Number = Number(_local_2[2]);

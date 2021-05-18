@@ -19,25 +19,27 @@ package items
         }
 
         // _loc1 = teleportDistance
+        // _loc2 = blockAtDest
+        // _loc3 = popX
+        // _loc4 = popY
         override public function useItem()
         {
             var teleportDistance:int = character.scaleX > 0 ? 120 : -120;
-            var _local_2:Block = Course.course.blockBackground.getBlockFromPos(character.x + teleportDistance, character.y - 5, true);
-            if (_local_2 == null || !_local_2.isActive()) {
-                var _local_3:int = character.x;
-                var _local_4:int = character.y - 25;
-                new TeleportPop(_local_3, _local_4);
-                Main.socket.write("add_effect`Teleport`" + _local_3 + "`" + _local_4);
-                character.x = character.x + teleportDistance;
-                _local_3 = character.x;
-                _local_4 = character.y - 25;
-                new TeleportPop(_local_3, _local_4);
-                Main.socket.write("add_effect`Teleport`" + _local_3 + "`" + _local_4);
+            var blockAtDest:Block = Course.course.blockBackground.getBlockFromPos(character.x + teleportDistance, character.y - 5, true);
+            if (blockAtDest == null || !blockAtDest.isActive()) {
+                var popX:int = character.x;
+                var popY:int = character.y - 25;
+                new TeleportPop(popX, popY);
+                Main.socket.write("add_effect`Teleport`" + popX + "`" + popY);
+                character.x += teleportDistance;
+                popX = character.x;
+                popY = character.y - 25;
+                new TeleportPop(popX, popY);
+                Main.socket.write("add_effect`Teleport`" + popX + "`" + popY);
                 super.useItem();
             }
         }
 
 
     }
-}//package items
-
+}

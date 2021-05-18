@@ -20,7 +20,7 @@ package page
 
         public function load()
         {
-            this.superLoader.load(new URLRequest(Main.baseURL + "/files/artifact_hint.txt"));
+            this.superLoader.load(new URLRequest(Main.baseURL + '/files/level_of_the_week.json'));
         }
 
         // method_228 = parseHint
@@ -28,25 +28,35 @@ package page
         private function parseHint(e:Event)
         {
             var ret:Object = this.superLoader.parsedData;
-            var hintMsg:String = "Here\'s what I remember: " + ret.hint + ". Maybe I can remember more later!!";
-            if (ret.level_id != null) {
-                var level:Array = [Data.escapeString(ret.level_title), ret.level_id];
-                var user:Array = [Data.escapeString(ret.creator_name), ret.creator_group];
-                hintMsg = 'Thanks for helping me find the artifact! It\'s located at ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + '.';
+            if (!ret.hasOwnProperty('current')) {
+                return;
             }
+            var cur:Object = ret.current;
+            var level:Array = [Data.escapeString(cur.level.title), cur.level.id];
+            var user:Array = [Data.escapeString(cur.level.author.name), cur.level.author.group];
+            var hintMsg:String = 'The current level of the week is ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + '.' + (!cur.hasOwnProperty('first_finder') ? ' See if you can find the hidden artifact!' : '');
             this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, hintMsg], true);
-            if (ret.finder_name != "") {
-                var foundMsg:String = "The first person to find this artifact was " + Data.escapeString(ret.finder_name) + "!";
+            if (cur.hasOwnProperty('first_finder')) {
+                var finderName:Array = [Data.escapeString(cur.first_finder.name), cur.first_finder.group];
+                var foundMsg:String = "The first person to find the hidden artifact was " + this.chatRoom.makeLink('Name', finderName) + "!";
                 this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, foundMsg], true);
                 var bubMsg:String = "";
-                if (ret.bubbles_name == "") {
+                if (cur.hasOwnProperty('bubbles_winner') && cur.bubbles_winner.group == 0) {
                     bubMsg = "The bubble set will be awarded to the first person to find the artifact that doesn\'t have the set already!";
-                } else if (ret.bubbles_name != "" && ret.finder_name != ret.bubbles_name) {
-                    bubMsg = "Since they already have the bubble set, the prize was awarded to " + Data.escapeString(ret.bubbles_name) + " instead!";
+                } else if (cur.hasOwnProperty('bubbles_winner') && cur.first_finder.name != cur.bubbles_winner.name) {
+                    var bubName:Array = [Data.escapeString(cur.bubbles_winner.name), cur.bubbles_winner.group];
+                    bubMsg = "Since they already have the bubble set, the prize was awarded to " + this.chatRoom.makeLink('Name', bubName) + " instead!";
                 }
                 if (bubMsg != "") {
                     this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, bubMsg], true);
                 }
+            }
+            if (ret.hasOwnProperty('scheduled')) {
+                var sched:Object = ret.scheduled;
+                level = [Data.escapeString(sched.level.title), sched.level.id];
+                user = [Data.escapeString(sched.level.author.name), sched.level.author.group];
+                hintMsg = 'The next level of the week will be ' + this.chatRoom.makeLink('Level', level) + ' by ' + this.chatRoom.makeLink('Name', user) + ', which will take effect on ' + Data.getDateTimeStr(sched.set_time, ['long', 'short']) + '.';
+                this.chatRoom.handleMessageFromArray(["Fred the G. Cactus", 3, hintMsg], true);
             }
         }
 

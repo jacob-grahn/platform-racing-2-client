@@ -19,7 +19,7 @@ package blocks
         public function WaterBlock()
         {
             super(Objects.BLOCK_WATER);
-            var_34 = false;
+            safeStand = false;
             active = false;
         }
 

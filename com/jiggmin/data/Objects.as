@@ -51,6 +51,7 @@ package com.jiggmin.data
         public static const BLOCK_TIME:int = 129; // const_42
         public static const BLOCK_MINION_EGG:int = 130; // const_58
         public static const BLOCK_CUSTOM_STATS:int = 131;
+        public static const BLOCK_TELEPORT:int = 132;
 
         public static const BG1Code:int = 201;
         public static const BG2Code:int = 202;
@@ -151,6 +152,8 @@ package com.jiggmin.data
                 return new EggBlockGraphic();
             } else if (code == BLOCK_CUSTOM_STATS) {
                 return new CustomStatsBlock();
+            } else if (code == BLOCK_TELEPORT) {
+                return new TeleportBlock();
             } else if (code == BG1Code) {
                 return new BG1();
             } else if (code == BG2Code) {

@@ -7,11 +7,12 @@ package background
 {
     import com.jiggmin.data.CommandHandler;
     import page.GamePage;
-    import package_9.LaserShot;
-    import package_9.Slash;
-    import package_9.MineAppear;
     import package_9.Hat;
     import package_9.IceWaveShot;
+    import package_9.LaserShot;
+    import package_9.MineAppear;
+    import package_9.Slash;
+    import package_9.TeleportPop;
     import sounds.SoundEffects;
 
     public class EffectBackground extends Background 
@@ -67,6 +68,8 @@ package background
                 _local_5 = int(a[4]);
                 tempID = int(a[5]);
                 this.generateIceWaveShots(originX, originY, rot, _local_5, tempID);
+            } else if (type == 'Teleport') {
+                new TeleportPop(originX, originY);
             }
         }
 

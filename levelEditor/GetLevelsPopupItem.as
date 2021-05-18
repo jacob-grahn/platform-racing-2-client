@@ -34,16 +34,14 @@ package levelEditor
 
         private function onMouseOver(e:MouseEvent)
         {
-            var updated:Date = new Date(level.time * 1000);
-
-            var levelTitle:String = "-- " + Data.escapeString(level.title) + " --";
-            var popText:String = "Game Mode: " + Modes.getFullName(level.type) + "<br/>";
-            popText += "Version: " + Data.formatNumber(level.version) + "<br/>";
-            popText += "Updated: "  + updated.date + '/' + Data.getMonthStr(updated.month) + '/' + updated.fullYear + '<br/>';
-            popText += "Plays: " + Data.formatNumber(level.play_count) + "<br/>";
-            popText += "Rating: " + level.rating;
-            if (Data.trimWhitespace(level.note) != '') {
-                popText += "<br/>-----<br/><i>" + Data.escapeString(level.note, true) + "</i>";
+            var levelTitle:String = "-- " + Data.escapeString(this.level.title) + " --";
+            var popText:String = "Game Mode: " + Modes.getFullName(this.level.type) + "<br/>";
+            popText += "Version: " + Data.formatNumber(this.level.version) + "<br/>";
+            popText += "Updated: "  + Data.getShortDateStr(this.level.time) + '<br/>';
+            popText += "Plays: " + Data.formatNumber(this.level.play_count) + "<br/>";
+            popText += "Rating: " + this.level.rating;
+            if (Data.trimWhitespace(this.level.note) != '') {
+                popText += "<br/>-----<br/><i>" + Data.escapeString(this.level.note, true) + "</i>";
             }
             this.info = new HoverPopup(levelTitle, popText, this.m);
             this.info.width -= 3;

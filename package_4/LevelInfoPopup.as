@@ -15,6 +15,8 @@
     import package_6.Game;
     import package_18.PartInfo.*;
     import package_6.Modes;
+    import flash.ui.Mouse;
+    import flash.ui.MouseCursor;
 
     public class LevelInfoPopup extends Popup 
     {
@@ -51,6 +53,7 @@
         private var badHats:String = ''; // allowed hats
 
         // hovers
+        private var hoverUpdated:HoverPopup;
         private var hoverRating:HoverPopup;
         private var hoverGameMode:HoverPopup;
         private var hoverSong:HoverPopup;
@@ -122,10 +125,12 @@
             // make strings/data to give to mc
             this.m.levelInfo.author.htmlText = 'by: ' + this.htmlNameMaker.makeName(this.userName, this.userGroup);
             this.htmlNameMaker.listenForLink(this.m.levelInfo.author);
-            this.m.levelInfo.updated.text = this.updated.date + '/' + Data.getMonthStr(this.updated.month) + '/' + this.updated.fullYear;
+            this.m.levelInfo.updated.text = Data.getShortDateStr(this.time);
             this.m.levelInfo.rating.stars.bar.scaleX = this.rating / 5;
 
             // hover events
+            this.m.levelInfo.updated.addEventListener(MouseEvent.MOUSE_OVER, this.overUpdatedHandler, false, 0, true);
+            this.m.levelInfo.updated.addEventListener(MouseEvent.MOUSE_OUT, this.outUpdatedHandler, false, 0, true);
             this.m.levelInfo.rating.addEventListener(MouseEvent.MOUSE_OVER, this.overRatingHandler, false, 0, true);
             this.m.levelInfo.rating.addEventListener(MouseEvent.MOUSE_OUT, this.outRatingHandler, false, 0, true);
             this.m.levelInfo.gameMode.addEventListener(MouseEvent.MOUSE_OVER, this.overGameModeHandler, false, 0, true);
@@ -179,6 +184,22 @@
             // show m.levelInfo
             this.m.loading.visible = false;
             this.m.levelInfo.visible = true;
+        }
+
+        private function overUpdatedHandler(e:MouseEvent)
+        {
+            Mouse.cursor = MouseCursor.BUTTON;
+            this.m.levelInfo.updated.textColor = 0x666666;
+            this.hoverUpdated = new HoverPopup('Last Updated', 'This level was last updated on ' + Data.getDateTimeStr(this.time, ['long', 'medium']) + '.', this.m.levelInfo.updated);
+            this.hoverUpdated.x += (this.hoverUpdated.width * 1.5) + 10;
+        }
+
+        private function outUpdatedHandler(e:*)
+        {
+            Mouse.cursor = MouseCursor.AUTO;
+            this.m.levelInfo.updated.textColor = 0x000000;
+            this.hoverUpdated.remove();
+            this.hoverUpdated = null;
         }
 
         private function overRatingHandler(e:MouseEvent)
@@ -441,6 +462,9 @@
 
         private function closeHoverPopups()
         {
+            if (this.hoverUpdated != null) {
+                this.outUpdatedHandler(dispatchEvent(new Event(Event.CLOSE)));
+            }
             if (this.hoverRating != null) {
                 this.outRatingHandler(dispatchEvent(new Event(Event.CLOSE)));
             }
@@ -473,6 +497,8 @@
                 LevelInfoPopup.instance = null;
             }
             this.closeHoverPopups();
+            this.m.levelInfo.updated.removeEventListener(MouseEvent.MOUSE_OVER, this.overUpdatedHandler);
+            this.m.levelInfo.updated.removeEventListener(MouseEvent.MOUSE_OUT, this.outUpdatedHandler);
             this.m.levelInfo.rating.removeEventListener(MouseEvent.MOUSE_OVER, this.overRatingHandler);
             this.m.levelInfo.rating.removeEventListener(MouseEvent.MOUSE_OUT, this.outRatingHandler);
             this.m.levelInfo.gameMode.removeEventListener(MouseEvent.MOUSE_OVER, this.overGameModeHandler);

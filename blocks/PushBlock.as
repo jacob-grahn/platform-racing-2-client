@@ -16,7 +16,7 @@ package blocks
         public function PushBlock()
         {
             super(Objects.BLOCK_PUSH);
-            var_34 = false;
+            safeStand = false;
         }
 
         override public function onStand(player:LocalCharacter)

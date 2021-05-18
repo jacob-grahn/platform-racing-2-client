@@ -26,8 +26,10 @@ package package_15
             this.m.noteBox.addEventListener(Event.CHANGE, this.countChars, false, 0, true);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.save_bt.addEventListener(MouseEvent.CLICK, this.clickSave, false, 0, true);
+            this.m.publish_chk.addEventListener(Event.CHANGE, this.updateChks, false, 0, true);
             if (this.editor.live == 1) {
-                this.m.publish_chk.selected = true;
+                this.m.publish_chk.selected = this.m.newest_chk.enabled = true;
+                this.m.newest_chk.selected = this.editor.toNewest;
             }
             addChild(this.m);
         }
@@ -36,6 +38,11 @@ package package_15
         {
             this.m.titleCharsRemaining.text = this.m.titleBox.length + " / 50";
             this.m.noteCharsRemaining.text = this.m.noteBox.length + " / 255";
+        }
+
+        private function updateChks(e:Event)
+        {
+            this.m.newest_chk.enabled = this.m.newest_chk.selected = this.m.publish_chk.selected;
         }
 
         private function clickCancel(e:MouseEvent)
@@ -50,11 +57,8 @@ package package_15
             } else {
                 this.editor.title = this.m.titleBox.text;
                 this.editor.note = this.m.noteBox.text;
-                if (this.m.publish_chk.selected == true) {
-                    this.editor.live = 1;
-                } else {
-                    this.editor.live = 0;
-                }
+                this.editor.live = int(this.m.publish_chk.selected);
+                this.editor.toNewest = this.m.newest_chk.selected;
                 new UploadingLevelPopup();
                 startFadeOut();
             }
@@ -66,6 +70,7 @@ package package_15
             this.m.noteBox.removeEventListener(Event.CHANGE, this.countChars);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
             this.m.save_bt.removeEventListener(MouseEvent.CLICK, this.clickSave);
+            this.m.publish_chk.removeEventListener(Event.CHANGE, this.updateChks);
             super.remove();
         }
 

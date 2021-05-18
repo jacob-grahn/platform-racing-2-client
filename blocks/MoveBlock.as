@@ -15,7 +15,7 @@ package blocks
         public function MoveBlock()
         {
             super(Objects.BLOCK_MOVE);
-            var_34 = false;
+            safeStand = false;
         }
 
         // method_731 = setDirection

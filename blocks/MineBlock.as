@@ -17,7 +17,7 @@ package blocks
         public function MineBlock()
         {
             super(Objects.BLOCK_MINE);
-            var_34 = false;
+            safeStand = false;
         }
 
         override public function onStand(player:LocalCharacter)

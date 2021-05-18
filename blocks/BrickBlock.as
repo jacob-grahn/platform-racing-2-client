@@ -13,7 +13,7 @@ package blocks
         public function BrickBlock()
         {
             super(Objects.BLOCK_BRICK);
-            var_34 = false;
+            safeStand = false;
         }
 
         override public function onBump(player:LocalCharacter)

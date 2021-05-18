@@ -15,7 +15,7 @@ package com.jiggmin.ColorPicker
 
         public static const RIGHT:String = "right";
         public static const LEFT:String = "left";
-        internal static var var_265:Array = new Array(0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555);
+        internal static var recentColors:Array = new Array(0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555); // var_265
 
         public var var_419:String = "right";
         protected var color:int;
@@ -102,9 +102,9 @@ package com.jiggmin.ColorPicker
                 this.mPop.removeEventListener(Removable.REMOVE, this.method_242);
                 this.mPop.method_136();
                 this.mPop = null;
-                if (var_265.indexOf(this.color) == -1) {
-                    var_265.unshift(this.color);
-                    var_265.pop();
+                if (recentColors.indexOf(this.color) == -1) {
+                    recentColors.unshift(this.color);
+                    recentColors.pop();
                 }
                 dispatchEvent(new Event(Event.CLOSE));
             }

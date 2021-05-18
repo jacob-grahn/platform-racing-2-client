@@ -27,7 +27,10 @@ package package_18
     public class AccountInfo extends Page
     {
 
+        public static const SET_MANUAL_PART:String = 'manualPart';
+
         public static var currentHat:int;
+        public static var partToSet:Array;
 
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
@@ -49,6 +52,7 @@ package package_18
             CommandHandler.commandHandler.defineCommand("setCustomizeInfo", this.setCustomizeInfo);
             Main.socket.write("get_customize_info`");
             Main.instance.addEventListener(Main.accountChange, this.getCustomizeInfo, false, 0, true);
+            Main.instance.addEventListener(SET_MANUAL_PART, this.update, false, 0, true);
             Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler, false, 0, true);
             Main.stage.focus = Main.stage;
         }
@@ -194,14 +198,21 @@ package package_18
         // _loc2 = c
         // _loc3 = partInfo
         // _loc4 = sendStr
-        private function update(_arg_1:MouseEvent)
+        private function update(e:Event)
         {
             var c:Character = this.character;
-            var partInfo:String = c.hat1Color + "`" + c.headColor + "`" + c.bodyColor + "`" + c.feetColor + "`" + c.hat1Color2 + "`" + c.headColor2 + "`" + c.bodyColor2 + "`" + c.feetColor2 + "`" + c.hat1 + "`" + c.head + "`" + c.body + "`" + c.feet;
+            var hat:int = partToSet.length == 2 && partToSet[0] == 'hat' ? partToSet[1] : c.hat1;
+            var head:int = partToSet.length == 2 && partToSet[0] == 'head' ? partToSet[1] : c.head;
+            var body:int = partToSet.length == 2 && partToSet[0] == 'body' ? partToSet[1] : c.body;
+            var feet:int = partToSet.length == 2 && partToSet[0] == 'feet' ? partToSet[1] : c.feet;
+            var partInfo:String = c.hat1Color + "`" + c.headColor + "`" + c.bodyColor + "`" + c.feetColor + "`" + c.hat1Color2 + "`" + c.headColor2 + "`" + c.bodyColor2 + "`" + c.feetColor2 + "`" + hat + "`" + head + "`" + body + "`" + feet;
             var sendStr:String = "set_customize_info`" + partInfo + "`" + this.statsSelect.getInfoStr();
             if (sendStr != this.customizeInfo) {
                 Main.socket.write(sendStr);
                 this.customizeInfo = sendStr;
+            }
+            if (e.type == SET_MANUAL_PART) {
+                this.getCustomizeInfo(e);
             }
         }
 
@@ -303,6 +314,7 @@ package package_18
 
         private function reset()
         {
+            partToSet = [];
             if (this.character != null) {
                 this.statsSelect.remove();
                 this.var_190.remove();
@@ -329,6 +341,7 @@ package package_18
         {
             clearTimeout(this.loadoutsHoverTimer);
             Main.instance.removeEventListener(Main.accountChange, this.getCustomizeInfo);
+            Main.instance.removeEventListener(SET_MANUAL_PART, this.update);
             Main.stage.removeEventListener(KeyboardEvent.KEY_DOWN, this.keyDownHandler);
             this.m.rankTokenUp_bt.removeEventListener(MouseEvent.CLICK, this.clickRankTokenUp);
             this.m.rankTokenDown_bt.removeEventListener(MouseEvent.CLICK, this.clickRankTokenDown);

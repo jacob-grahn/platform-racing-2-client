@@ -48,6 +48,7 @@ package levelEditor
         public var minRank:String = "0"; // minLevel
         public var pass:String = null;
         public var hasPass:int = 0;
+        public var toNewest:Boolean = true;
         private var variables:URLVariables;
         private var isMod:Boolean = false;
         private var reportsMode:Boolean = false;

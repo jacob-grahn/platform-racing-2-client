@@ -10,6 +10,10 @@ package com.jiggmin.data
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.geom.Point;
+    import flash.globalization.DateTimeFormatter;
+    import flash.globalization.DateTimeStyle;
+    import flash.globalization.LastOperationStatus;
+    import flash.globalization.LocaleID;
     import flash.utils.getDefinitionByName;
 
     public class Data
@@ -19,6 +23,7 @@ package com.jiggmin.data
         public static const DEG_RAD:Number = Math.PI / 180; // const_78 (from class_74/Maths)
 
         public static var md5:MD5 = new MD5();
+        public static var df:DateTimeFormatter = new DateTimeFormatter(LocaleID.DEFAULT, DateTimeStyle.MEDIUM, DateTimeStyle.NONE);
 
         private static var groupColors:Array = new Array("#676666", "#047B7B", "#1C369F", "#870A6F");
         private static var modGroupColors:Array = new Array("#006400", "#0092FF", "#1C369F");
@@ -98,16 +103,43 @@ package com.jiggmin.data
         // method_687 = getDateStr
         public static function getDateStr(t:Number):String
         {
-            var date:Date = new Date();
-            date.setTime(t);
+            var date:Date = new Date(t);
             var monthName:String = Data.getMonthStr(date.month);
             return monthName + " " + date.date;
         }
 
-        public static function getMonthStr(m:int):String
+        private static function getMonthStr(m:int):String
         {
             var monthArray:Array = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
             return monthArray[m];
+        }
+
+        public static function getShortDateStr(t:Number)
+        {
+            var date:Date = new Date(t * 1000);
+            return date.date + '/' + Data.getMonthStr(date.month) + '/' + date.getFullYear();
+        }
+
+        public static function getDateTimeStr(t:Number, customStyle:Array = null):String
+        {
+            var date:Date = new Date(t * 1000);
+            if (customStyle != null && customStyle.length == 2) {
+                df.setDateTimeStyles(customStyle[0], customStyle[1]);
+                if (df.lastOperationStatus != LastOperationStatus.NO_ERROR) {
+                    df.setDateTimeStyles(DateTimeStyle.MEDIUM, DateTimeStyle.NONE);
+                    customStyle = null;
+                }
+            }
+            var ret:String = df.format(date);
+            if (customStyle != null) {
+                df.setDateTimeStyles(DateTimeStyle.MEDIUM, DateTimeStyle.NONE);
+            }
+            return ret;
+        }
+
+        public static function getLocale()
+        {
+            return df.actualLocaleIDName;
         }
 
         // _loc2 = c

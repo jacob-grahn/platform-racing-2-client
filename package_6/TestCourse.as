@@ -5,6 +5,7 @@
 
 package package_6
 {
+    import blocks.TeleportBlock;
     import com.jiggmin.data.Settings;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -134,6 +135,7 @@ package package_6
         private function restart()
         {
             Main.stage.focus = Main.stage;
+            TeleportBlock.resetAll();
             blockBackground.rotation = bg1.rotation = bg2.rotation = bg3.rotation = bg4.rotation = bg5.rotation = 0;
             timer.setTime(Number(maxTime));
             effectBackground.clear();
@@ -155,6 +157,7 @@ package package_6
         override public function remove()
         {
             blockBackground.clearMoveInterval();
+            TeleportBlock.resetAll();
             var_14.removeEventListener(MouseEvent.CLICK, this.teleportToClickPos);
             removeEventListener(Event.ENTER_FRAME, this.go);
             this.m.back_bt.removeEventListener(MouseEvent.CLICK, this.clickBack);
@@ -170,5 +173,4 @@ package package_6
 
 
     }
-}//package package_6
-
+}
