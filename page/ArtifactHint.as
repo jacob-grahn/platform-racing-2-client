@@ -20,7 +20,7 @@ package page
 
         public function load()
         {
-            this.superLoader.load(new URLRequest(Main.baseURL + (Main.beta ? "/beta/artifact_hint.php" : '/files/artifact_hint.txt')));
+            this.superLoader.load(new URLRequest(Main.baseURL + '/files/level_of_the_week.json'));
         }
 
         // method_228 = parseHint
