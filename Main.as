@@ -39,7 +39,7 @@ package
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
         public static const build:String = '29-sep-2021-v165.1';
-        public static const version:String = '165.0';
+        public static const version:String = '165.1';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.dev";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.dev/levels"; // const_71
         public static var stage:Stage;
