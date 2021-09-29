@@ -250,7 +250,7 @@ package com.jiggmin.data
         {
             // user link: [user=group]display text[/user]
             s = parseUser(s);
-            
+
             // urls: [url]link[/url], [url=link]display text[/url]
             s = parseURL(s);
 
@@ -272,8 +272,16 @@ package com.jiggmin.data
             s = s.replace(/(\[b\])(.+)(\[\/b\])/gi, "<b>$2</b>");
             s = s.replace(/(\[bold\])(.+)(\[\/bold\])/gi, "<b>$2</b>");
 
-            // text sizing: [small]text[/small], [medium]text[/medium], [large]text[/large] (or big)
-            s = s.replace(/(\[small\])(.+)(\[\/small\])/gi, "<font size='6'>$2</font>");
+            // italicized text: [i]text[/i], [em]text[/em]
+            s = s.replace(/(\[i\])(.+)(\[\/i\])/gi, "<i>$2</i>");
+            s = s.replace(/(\[em\])(.+)(\[\/em\])/gi, "<i>$2</i>");
+
+            // underlined text: [u]text[/u]
+            s = s.replace(/(\[u\])(.+)(\[\/u\])/gi, "<u>$2</u>");
+
+            // text sizing: [tiny][/tiny] [small]text[/small], [medium]text[/medium], [large]text[/large] (or big)
+            s = s.replace(/(\[tiny\])(.+)(\[\/tiny\])/gi, "<font size='6'>$2</font>");
+            s = s.replace(/(\[small\])(.+)(\[\/small\])/gi, "<font size='9'>$2</font>");
             s = s.replace(/(\[medium\])(.+)(\[\/medium\])/gi, "<font size='12'>$2</font>");
             s = s.replace(/(\[large\])(.+)(\[\/large\])/gi, "<font size='24'>$2</font>");
             s = s.replace(/(\[big\])(.+)(\[\/big\])/gi, "<font size='24'>$2</font>");
