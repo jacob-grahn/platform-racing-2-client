@@ -265,6 +265,9 @@ package com.jiggmin.data
             s = s.replace(/(\[invite=)(\d+)(\])(.+)(\[\/invite\])/gi, "<a href='event:invite`$2'><u><font color='#0000FF'>$4</font></u></a>"); // [invite=id]text[/invite]
             s = s.replace(/(\[invitelink=)(\d+)(\])(.+)(\[\/invitelink\])/gi, "<a href='event:invite`$2'><u><font color='#0000FF'>$4</font></u></a>"); // [invitelink=id]text[/invitelink]
 
+            // discord verification: [discordverif=code]display text[/discordverif]
+            s = s.replace(/(\[discordverif=)(.+)(\])(.+)(\[\/discordverif\])/gi, "<a href='event:discordverify`$2'><u><font color='#0000FF'>$4</font></u></a>");
+
             // text color: [color=#hex]text[/color]
             s = s.replace(/(\[color=)(#[0-9a-fA-F]{6})(\])(.+)(\[\/color\])/gi, "<font color='$2'>$4</font>");
 
