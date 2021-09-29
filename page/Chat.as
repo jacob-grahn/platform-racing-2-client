@@ -75,10 +75,11 @@ package page
         protected function sendMessage(message:String)
         {
             var lowerStr = message.toLowerCase();
+            var trimStr = Data.trimWhitespace(lowerStr);
             if (lowerStr.indexOf("/view ") == 0) {
                 var playerName:String = message.substr(6);
                 new PlayerPopup(playerName);
-            } else if (Data.trimWhitespace(lowerStr) == '/hint') {
+            } else if (trimStr == '/hint' || trimStr == '/lotw' || trimStr == '/arti') {
                 if (this.hint == null) {
                     this.hint = new ArtifactHint(this);
                 }
