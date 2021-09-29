@@ -8,6 +8,7 @@ package
     import flash.display.MovieClip;
     import fl.controls.Button;
     import fl.controls.TextArea;
+    //import com.jiggmin.data.EpicFlash;
 
     public dynamic class KongOutfitPopupGraphic extends MovieClip 
     {
@@ -22,18 +23,24 @@ package
 
         private function frame1()
         {
+            //this.c.y -= 20;
+            //var flash:EpicFlash = new EpicFlash();
             this.c.head.gotoAndStop(20);
             this.c.head.colorMC.gotoAndStop(20);
             this.c.head.colorMC2.gotoAndStop(20);
+            //flash.addItem(this.c.head.colorMC2);
             this.c.body.gotoAndStop(17);
             this.c.body.colorMC.gotoAndStop(17);
             this.c.body.colorMC2.gotoAndStop(17);
+            //flash.addItem(this.c.body.colorMC2);
             this.c.foot1.gotoAndStop(16);
             this.c.foot1.colorMC.gotoAndStop(16);
             this.c.foot1.colorMC2.gotoAndStop(16);
+            //flash.addItem(this.c.foot1.colorMC2);
             this.c.foot2.gotoAndStop(16);
             this.c.foot2.colorMC.gotoAndStop(16);
             this.c.foot2.colorMC2.gotoAndStop(16);
+            //flash.addItem(this.c.foot2.colorMC2);
             this.c.weapon.gotoAndStop("None");
             this.c.head.hat1.gotoAndStop(3);
             this.c.head.hat2.gotoAndStop(1);
@@ -47,6 +54,7 @@ package
             this.c.head.hat2.colorMC2.gotoAndStop(1);
             this.c.head.hat3.colorMC2.gotoAndStop(1);
             this.c.head.hat4.colorMC2.gotoAndStop(1);
+            //flash.start();
         }
 
     }

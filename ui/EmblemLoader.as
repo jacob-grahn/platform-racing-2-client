@@ -23,8 +23,8 @@ package ui
     public class EmblemLoader extends Sprite 
     {
 
-        public static const beginLoading:String = "beginLoading"; // const_87
-        public static const finishLoading:String = "finishLoading"; // finishLoading
+        public static const BEGIN_LOADING:String = "BEGIN_LOADING"; // const_87
+        public static const FINISH_LOADING:String = "FINISH_LOADING"; // finishLoading
 
         private var eWidth:int; // var_239
         private var eHeight:int; // var_362
@@ -65,7 +65,7 @@ package ui
         // method_717 = openBrowse
         public function openBrowse()
         {
-            this.file.browse([new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png;*.JPG;*.JPEG;*.GIF;*.PNG"), new FileFilter("All Files (*.*)", "*.*")]);
+            this.file.browse([new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png;*.JPG;*.JPEG;*.GIF;*.PNG")]);
         }
 
         // method_220 = getImage
@@ -114,7 +114,7 @@ package ui
         private function uploadImage()
         {
             if (!this.loading) {
-                dispatchEvent(new Event(EmblemLoader.beginLoading));
+                dispatchEvent(new Event(EmblemLoader.BEGIN_LOADING));
                 this.loading = true;
                 var request:URLRequest = new URLRequest(this.uploadURL);
                 request.requestHeaders.push(new URLRequestHeader("Content-type", "application/octet-stream"));
@@ -129,14 +129,14 @@ package ui
         {
             this.loading = false;
             this.fileName = this.superLoader.parsedData.filename;
-            dispatchEvent(new Event(EmblemLoader.finishLoading));
+            dispatchEvent(new Event(EmblemLoader.FINISH_LOADING));
         }
 
         // method_459 = fileNameError
         private function fileNameError(e:Event)
         {
             this.loading = false;
-            dispatchEvent(new Event(EmblemLoader.finishLoading));
+            dispatchEvent(new Event(EmblemLoader.FINISH_LOADING));
         }
 
         // not even gonna try with this one

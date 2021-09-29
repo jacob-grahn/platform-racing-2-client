@@ -108,7 +108,7 @@ package package_4
                 this.loading = true;
                 this.m.confirm_bt.alpha = 0.33;
                 if (this.emblem.isLoading()) {
-                    this.emblem.addEventListener(EmblemLoader.finishLoading, this.emblemFinished, false, 0, true);
+                    this.emblem.addEventListener(EmblemLoader.FINISH_LOADING, this.emblemFinished, false, 0, true);
                 } else {
                     this.doConfirm();
                 }
@@ -118,7 +118,7 @@ package package_4
         // method_139 = emblemFinished
         private function emblemFinished(e:Event)
         {
-            this.emblem.removeEventListener(EmblemLoader.finishLoading, this.emblemFinished);
+            this.emblem.removeEventListener(EmblemLoader.FINISH_LOADING, this.emblemFinished);
             this.doConfirm();
         }
 
@@ -175,7 +175,7 @@ package package_4
             this.loader.removeEventListener(SuperLoader.e, this.confirmResponseError);
             this.loader.remove();
             this.loader = null;
-            this.emblem.removeEventListener(EmblemLoader.finishLoading, this.emblemFinished);
+            this.emblem.removeEventListener(EmblemLoader.FINISH_LOADING, this.emblemFinished);
             this.emblem.remove();
             this.emblem = null;
             this.infoLoader.removeEventListener(SuperLoader.d, this.populateResult);

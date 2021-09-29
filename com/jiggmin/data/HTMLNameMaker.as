@@ -6,6 +6,7 @@
 package com.jiggmin.data
 {
     import flash.events.TextEvent;
+    import package_4.DiscordVerificationPopup;
     import package_4.PlayerPopup;
     import package_4.PlayerGuestPopup;
     import package_4.GuildPopup;
@@ -123,6 +124,9 @@ package com.jiggmin.data
             } else if (mode == "url") {
                 var url:String = arr[1];
                 new ExternalLinkPopup(url);
+            } else if (mode == 'discordverify') {
+                var code:String = arr[1];
+                new DiscordVerificationPopup(code);
             }
         }
 
