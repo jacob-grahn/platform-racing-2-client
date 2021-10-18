@@ -226,6 +226,12 @@ package package_22
                 encryptor.setKey(Env.LEVEL_PASS_KEY);
                 encryptor.setIV(Env.LEVEL_PASS_IV);
                 var decryptedStr:String = encryptor.decrypt(ret.result);
+                // added this after mcrypt conversion. to-do: find a real way to fix this
+                if (decryptedStr.substr(1).indexOf("{") != -1) {
+                    decryptedStr = decryptedStr.substring(0, decryptedStr.indexOf("}") + 1);
+                }
+                decryptedStr = Data.trimWhitespace(decryptedStr);
+                // end post-mcrypt addition
                 var obj:Object = JSON.parse(decryptedStr);
                 if (obj.level_id == this.courseID && obj.access == 1) {
                     this.passOK = true;
