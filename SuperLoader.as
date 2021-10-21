@@ -88,14 +88,14 @@ package
                     if (this.parsedData.message != null) {
                         new MessagePopup(this.parsedData.message);
                     }
-                    if (this.parsedData.error == null) {
+                    if (!this.parsedData.hasOwnProperty('error') && (this.parsedData.hasOwnProperty('success') ? this.parsedData.success : true)) {
                         dispatchEvent(new Event(d));
                     } else {
-                        new MessagePopup("Error: " + this.parsedData.error);
+                        new MessagePopup("Error: " + (this.parsedData.hasOwnProperty('error') ? this.parsedData.error : (Main.testing || Main.beta ? 'An error occurred with no error message.\n\ndata: ' + data : 'An unknown error occurred. I suspect evil aliens.')));
                         dispatchEvent(new Event(e));
                     }
                 } catch (error:Error) {
-                    new MessagePopup("Error: Loaded data was not in expected format. \n\nlocation: SuperLoader::onComplete \n\nreadMode: " + readMode + "\n\ndata: " + data);
+                    new MessagePopup("Error: The loaded data was not in the expected format. \n\nlocation: SuperLoader::onComplete \nreadMode: " + readMode + "\ndata: " + data + (Main.testing || Main.beta ? "\n\n-- DEBUG MODE (Flash Stack) --\n\n" + error.getStackTrace() : ''));
                     dispatchEvent(new Event(e));
                 }
             }
