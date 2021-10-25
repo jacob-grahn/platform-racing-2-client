@@ -105,6 +105,16 @@ package package_18
             this.cpEpicCheck();
         }
 
+        public function randomize()
+        {
+            var newVal:int = Math.floor((this.partArray.length - 1) * Math.random());
+            var newCol:int = Math.floor(0xFFFFFF * Math.random());
+            var newEpic:int = Math.floor(0xFFFFFF * Math.random());
+            this.setValue(newVal);
+            this.setColors(newCol, newEpic);
+            dispatchEvent(new Event(Event.CHANGE));
+        }
+
         // method_449 = isPartEpic
         public function isPartEpic() : Boolean
         {
