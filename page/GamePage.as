@@ -16,6 +16,7 @@ package page
     import flash.ui.Keyboard;
     import items.Items;
     import package_22.CourseMenu;
+    import package_4.MessagePopup;
 
     public class GamePage extends Page 
     {
@@ -50,6 +51,7 @@ package page
         public var var_362:int = 60000;
         public var drawing:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
+        private var rasterStopNotified:Boolean = false;
 
         public function GamePage()
         {
@@ -109,6 +111,10 @@ package page
         public function finishDrawing(_arg_1:Background)
         {
             var _local_2:int = this.var_133.indexOf(_arg_1);
+            if (_arg_1 is DrawableBackground && _arg_1.stoppedRasterizing && !this.rasterStopNotified) {
+                new MessagePopup('Error: Some art didn\'t load correctly. Don\'t worry! You can still play the level.\n\nYou can prevent this in the future by enabling lossless art quality in the options menu.');
+                this.rasterStopNotified = true;
+            }
             if (_local_2 != -1) {
                 this.var_133.splice(_local_2, 1);
             }
