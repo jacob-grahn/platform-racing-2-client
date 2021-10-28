@@ -99,9 +99,9 @@ package package_18
         public function setColors(_arg_1:int, _arg_2:int)
         {
             this.cp.setColor(_arg_1);
-            this.cp2.setColor(_arg_2);
+            this.cp2.setColor(_arg_2 == -1 ? this.color2 : _arg_2);
             this.color = _arg_1;
-            this.color2 = _arg_2;
+            this.color2 = _arg_2 == -1 ? this.color2 : _arg_2;
             this.cpEpicCheck();
         }
 
