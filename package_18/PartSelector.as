@@ -88,31 +88,29 @@ package package_18
             return int(this.value);
         }
 
-        public function setValue(_arg_1:int)
+        public function setValue(newVal:int)
         {
-            this.value = _arg_1;
-            this.arrows.setValue(this.value);
+            this.value = newVal;
             this.cpEpicCheck();
-            dispatchEvent(new Event(Event.CHANGE));
+            this.arrows.setValue(this.value);
         }
 
-        public function setColors(_arg_1:int, _arg_2:int)
+        public function setColors(newColor:int, newColor2:int)
         {
-            this.cp.setColor(_arg_1);
-            this.cp2.setColor(_arg_2 == -1 ? this.color2 : _arg_2);
-            this.color = _arg_1;
-            this.color2 = _arg_2 == -1 ? this.color2 : _arg_2;
+            this.cp.setColor(newColor);
+            this.cp2.setColor(newColor2 == -1 ? this.color2 : newColor2);
+            this.color = newColor;
+            this.color2 = newColor2 == -1 ? this.color2 : newColor2;
             this.cpEpicCheck();
         }
 
         public function randomize()
         {
-            var newVal:int = Math.floor((this.partArray.length - 1) * Math.random());
-            var newCol:int = Math.floor(0xFFFFFF * Math.random());
-            var newEpic:int = Math.floor(0xFFFFFF * Math.random());
-            this.setValue(newVal);
+            var newVal:int = this.partArray[Math.floor(Math.random() * this.partArray.length)];
+            var newCol:int = Math.floor(Math.random() * 0xFFFFFF);
+            var newEpic:int = Math.floor(Math.random() * 0xFFFFFF);
             this.setColors(newCol, newEpic);
-            dispatchEvent(new Event(Event.CHANGE));
+            this.setValue(newVal);
         }
 
         // method_449 = isPartEpic
