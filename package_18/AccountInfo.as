@@ -251,26 +251,9 @@ package package_18
         {
             var presetNum:int = -1;
             var applyPreset:Boolean = true;
-            if (e.keyCode == 49 || e.keyCode == 97) {
-                presetNum = 1;
-            } else if (e.keyCode == 50 || e.keyCode == 98) {
-                presetNum = 2;
-            } else if (e.keyCode == 51 || e.keyCode == 99) {
-                presetNum = 3;
-            } else if (e.keyCode == 52 || e.keyCode == 100) {
-                presetNum = 4;
-            } else if (e.keyCode == 53 || e.keyCode == 101) {
-                presetNum = 5;
-            } else if (e.keyCode == 54 || e.keyCode == 102) {
-                presetNum = 6;
-            } else if (e.keyCode == 55 || e.keyCode == 103) {
-                presetNum = 7;
-            } else if (e.keyCode == 56 || e.keyCode == 104) {
-                presetNum = 8;
-            } else if (e.keyCode == 57 || e.keyCode == 105) {
-                presetNum = 9;
-            } else if (e.keyCode == 48 || e.keyCode == 96) {
-                presetNum = 10;
+            if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
+                presetNum = e.keyCode % 48;
+                presetNum = presetNum == 0 ? 10 : presetNum;
             }
             if (e.target is TextField) {
                 var textBox:TextField = e.target as TextField;
