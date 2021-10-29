@@ -73,14 +73,14 @@ package package_18
             return this.color;
         }
 
-        // _loc1 = eColor
+        public function getColorCP2():int
+        {
+            return this.cp2.getColor();
+        }
+
         public function getColor2():int
         {
-            var eColor:int = this.color2;
-            if (!this.isPartEpic()) {
-                eColor = -1;
-            }
-            return eColor;
+            return this.isPartEpic() ? this.color2 : -1;
         }
 
         public function getValue():int

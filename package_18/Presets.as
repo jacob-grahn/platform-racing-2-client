@@ -64,6 +64,10 @@ package package_18
 
         public static function apply(preset:Preset, c:Character, ss:StatsSelect, disp:PlayerDisplay)
         {
+            var hatColor2:int = preset.hatColor2;
+            var headColor2:int = preset.headColor2;
+            var bodyColor2:int = preset.bodyColor2;
+            var feetColor2:int = preset.feetColor2;
             if (ss != null) {
                 ss.setStats({
                     "speed":1,
@@ -81,13 +85,17 @@ package package_18
                 disp.headSelect.setColors(preset.headColor, preset.headColor2);
                 disp.bodySelect.setColors(preset.bodyColor, preset.bodyColor2);
                 disp.feetSelect.setColors(preset.feetColor, preset.feetColor2);
+                hatColor2 = disp.hatSelect.getColor2();
+                headColor2 = disp.headSelect.getColor2();
+                bodyColor2 = disp.bodySelect.getColor2();
+                feetColor2 = disp.feetSelect.getColor2();
             }
             if (c != null) {
                 c.setHatId(preset.hat);
                 c.setHeadId(preset.head);
                 c.setBodyId(preset.body);
                 c.setFeetId(preset.feet);
-                c.setColors(preset.hatColor, preset.hatColor2, preset.headColor, preset.headColor2, preset.bodyColor, preset.bodyColor2, preset.feetColor, preset.feetColor2);
+                c.setColors(preset.hatColor, hatColor2, preset.headColor, headColor2, preset.bodyColor, bodyColor2, preset.feetColor, feetColor2);
             }
         }
 
