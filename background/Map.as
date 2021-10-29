@@ -231,7 +231,7 @@ package background
         {
             if (Course.course != null) {
                 for each (var p:Character in Course.course.playerArray) {
-                    if (p != null && ((p.seg1 != null && p.seg1.x == xVal && p.seg1.y == yVal) || (p.seg2 != null && p.seg2.x == xVal && p.seg2.y == yVal))) {
+                    if (p != null && !p.removed && ((p.seg1 != null && p.seg1.x == xVal && p.seg1.y == yVal) || (p.seg2 != null && p.seg2.x == xVal && p.seg2.y == yVal))) {
                         return true;
                     }
                 }
