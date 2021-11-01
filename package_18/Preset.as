@@ -25,18 +25,19 @@ package package_18
         public var bodyColor2:int = -1;
         public var feetColor2:int = -1;
 
-        public function Preset(_arg_1:Object)
+        public function Preset(o:Object)
         {
-            this.method_529(_arg_1);
+            this.applyPresetData(o);
         }
 
-        public function method_529(_arg_1:Object)
+        // _loc2 = prop
+        // method_529 = applyPresetData
+        private function applyPresetData(obj:Object)
         {
-            var _local_2:String;
-            if (_arg_1 != null) {
-                for (_local_2 in _arg_1) {
-                    if (this[_local_2] != null) {
-                        this[_local_2] = _arg_1[_local_2];
+            if (obj != null) {
+                for (var prop:String in obj) {
+                    if (this[prop] != null) {
+                        this[prop] = obj[prop];
                     }
                 }
             }

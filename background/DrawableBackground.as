@@ -40,6 +40,7 @@ package background
         private var var_302:Number;
         private var var_298:Number;
         public var drawing:Boolean = false;
+        public var stoppedRasterizing:Boolean = false; // stop the rasterization process after 5 attempts to avoid crashing
 
         public function DrawableBackground(gp:GamePage)
         {
@@ -118,14 +119,16 @@ package background
                 _local_11 = _local_7;
                 while (_local_11 < _local_9) {
                     this.method_208(_local_10, _local_11, _arg_1, _arg_2, _arg_3);
-                    _local_11 = (_local_11 + _local_5);
+                    _local_11 += _local_5;
                 }
-                _local_10 = (_local_10 + _local_5);
+                _local_10 += _local_5;
             }
-            if (Main.var_184 >= this.var_541 && !this.losslessQuality && !this.fromLE) {
+            if (!this.losslessQuality && !this.fromLE && this.var_87 < 5 && Main.var_184 >= this.var_541) {
                 this.var_87++;
                 this.clear();
                 this.draw();
+            } else if (this.var_87 >= 5) {
+                this.stoppedRasterizing = true;
             }
         }
 

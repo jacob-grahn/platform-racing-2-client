@@ -60,20 +60,16 @@ package com.jiggmin.data
 
         public function write(str:String)
         {
-            var strToHash:String;
-            var hashArray:ByteArray;
-            var hashStr:String;
-            var subHash:String;
             if (connected) {
                 this.sendNum++;
                 if (this.sendNum == 12) {
                     this.sendNum++;
                 }
                 str = this.sendNum + "`" + str;
-                strToHash = class_4.method_310(Main.server.server_id) + str;
-                hashArray = this.md5.hash(Hex.toArray(Hex.fromString(strToHash)));
-                hashStr = Hex.fromArray(hashArray);
-                subHash = hashStr.substr(0, 3);
+                var strToHash:String = class_4.method_310(Main.server.server_id) + str;
+                var hashArray:ByteArray = this.md5.hash(Hex.toArray(Hex.fromString(strToHash)));
+                var hashStr:String = Hex.fromArray(hashArray);
+                var subHash:String = hashStr.substr(0, 3);
                 str = subHash + "`" + str + this.endChar;
                 try {
                     if (Main.testing == true) {

@@ -14,13 +14,13 @@ package package_18
 
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
-        private var var_495:PlayerDisplay;
+        private var playerDisplay:PlayerDisplay; // var_495
 
-        public function LoadoutsPopup(c:Character, ss:StatsSelect, _arg_3:PlayerDisplay)
+        public function LoadoutsPopup(c:Character, ss:StatsSelect, pd:PlayerDisplay)
         {
             this.character = c;
             this.statsSelect = ss;
-            this.var_495 = _arg_3;
+            this.playerDisplay = pd;
             this.var_454 = 68;
             m.titleBox.text = "-- Loadouts --";
             m.delete_bt.label = "Save";
@@ -36,7 +36,7 @@ package package_18
         {
             var presets:Vector.<Preset> = Presets.getPresets();
             for each (var preset:Preset in presets) {
-                var listing:PresetListing = new PresetListing(preset);
+                var listing:PresetListing = new PresetListing(preset, this.playerDisplay);
                 this.method_455(listing);
             }
         }
@@ -52,7 +52,7 @@ package package_18
             }
             var listing:PresetListing = PresetListing(_arg_1);
             var preset:Preset = listing.getPreset();
-            Presets.apply(preset, this.character, this.statsSelect, this.var_495);
+            Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
             startFadeOut();
         }
 
@@ -76,10 +76,10 @@ package package_18
             preset.headColor = this.character.headColor;
             preset.bodyColor = this.character.bodyColor;
             preset.feetColor = this.character.feetColor;
-            preset.hatColor2 = this.character.hat1Color2;
-            preset.headColor2 = this.character.headColor2;
-            preset.bodyColor2 = this.character.bodyColor2;
-            preset.feetColor2 = this.character.feetColor2;
+            preset.hatColor2 = this.playerDisplay.hasOwnProperty('hatSelect') ? this.playerDisplay.hatSelect.getColorCP2() : this.character.hat1Color2;
+            preset.headColor2 = this.playerDisplay.hasOwnProperty('headSelect') ? this.playerDisplay.headSelect.getColorCP2() : this.character.headColor2;
+            preset.bodyColor2 = this.playerDisplay.hasOwnProperty('bodySelect') ? this.playerDisplay.bodySelect.getColorCP2() : this.character.bodyColor2;
+            preset.feetColor2 = this.playerDisplay.hasOwnProperty('feetSelect') ? this.playerDisplay.feetSelect.getColorCP2() : this.character.feetColor2;
             Presets.savePresets();
             startFadeOut();
         }
@@ -88,7 +88,7 @@ package package_18
         {
             this.character = null;
             this.statsSelect = null;
-            this.var_495 = null;
+            this.playerDisplay = null;
             super.remove();
         }
 

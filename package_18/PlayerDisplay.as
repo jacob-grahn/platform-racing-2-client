@@ -20,6 +20,7 @@ package package_18
 
         private var character:Character; // var_5
         private var yStart:Number = 24; // var_388
+        public var randomButton:RandomizeStyleButton = new RandomizeStyleButton();
         public var hatSelect:PartSelector; // var_130
         public var headSelect:PartSelector; // var_119
         public var bodySelect:PartSelector; // var_113
@@ -34,10 +35,11 @@ package package_18
             this.headSelect = new PartSelector(headArray, headSel, headCol, headArray2, headCol2);
             this.bodySelect = new PartSelector(bodyArray, bodySel, bodyCol, bodyArray2, bodyCol2);
             this.feetSelect = new PartSelector(feetArray, feetSel, feetCol, feetArray2, feetCol2);
-            this.hatSelect.y = this.yStart * 0;
+            this.hatSelect.y = 0;
             this.headSelect.y = this.yStart * 1;
             this.bodySelect.y = this.yStart * 2;
             this.feetSelect.y = this.yStart * 3;
+            this.randomButton.addEventListener(MouseEvent.CLICK, this.onRandomClick, false, 0, true);
             this.hatSelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
             this.headSelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
             this.bodySelect.addEventListener(Event.CHANGE, this.updateDisplay, false, 0, true);
@@ -54,12 +56,17 @@ package package_18
             this.feetSelect.infoButton.addEventListener(MouseEvent.CLICK, this.onInfoMouseEvent, false, 0, true);
             this.feetSelect.infoButton.addEventListener(MouseEvent.MOUSE_OVER, this.onInfoMouseEvent, false, 0, true);
             this.feetSelect.infoButton.addEventListener(MouseEvent.MOUSE_OUT, this.onInfoMouseEvent, false, 0, true);
+            this.randomButton.height = this.randomButton.width = 15;
+            this.randomButton.x += 122.5;
+            this.randomButton.y = ((hatArray.length > 1 ? this.yStart : 0) * -1) + 4.5;
+            addChild(this.randomButton);
             if (hatArray.length > 1) {
                 addChild(this.hatSelect);
             }
             addChild(this.headSelect);
             addChild(this.bodySelect);
             addChild(this.feetSelect);
+            addChild(this.randomButton);
             this.updateDisplay(new Event(Event.CHANGE));
         }
 
@@ -106,6 +113,15 @@ package package_18
             } else if (e.type == MouseEvent.CLICK) {
                 new PartInfoPopup(partType, this[partType + 'Select'].partArray, this[partType + 'Select'].epicArray);
             }
+        }
+
+        private function onRandomClick(e:MouseEvent)
+        {
+            this.hatSelect.randomize();
+            this.headSelect.randomize();
+            this.bodySelect.randomize();
+            this.feetSelect.randomize();
+            this.updateDisplay(e);
         }
 
         // method_65 = updateDisplay
@@ -163,6 +179,7 @@ package package_18
             this.removePartSelector(this.bodySelect);
             this.removePartSelector(this.feetSelect);
             this.onInfoMouseEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+            this.randomButton.removeEventListener(MouseEvent.CLICK, this.onRandomClick);
             super.remove();
         }
 
