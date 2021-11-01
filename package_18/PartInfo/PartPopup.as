@@ -80,6 +80,9 @@
                 } else if (name == 'Blobfish') {
                     obtain = obtain.replace('Underwater World', this.nameMaker.makeLevel('Underwater World', 5985129));
                     obtain = obtain.replace('Odin0030', this.nameMaker.makeName('Odin0030', 1));
+                } else if (name == 'Gladiator') {
+                    obtain = obtain.replace('Romªn Empire', this.nameMaker.makeLevel('Romªn Empire', 3385938));
+                    obtain = obtain.replace('Overbeing', this.nameMaker.makeName('Overbeing', 1));
                 }
             }
 
