@@ -445,7 +445,7 @@ package
         public static const OBTAIN_HEAD_BLOBFISH:String = 'Finish Underwater World by Odin0030.';
         public static const OBTAIN_HEAD_TURKEY:String = 'Log into your PR2 account on Thanksgiving.';
         public static const OBTAIN_HEAD_DOG:String = 'Create a level that becomes Level of the Week. <u><font color="#0000FF"><a href="https://jiggmin2.com/forums/showthread.php?tid=3509" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_HEAD_GLADIATOR:String = 'PLACEHOLDER';
+        public static const OBTAIN_HEAD_GLADIATOR:String = 'Finish Romªn Empire by Overbeing.';
 
         public static const OBTAIN_BODY_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_BODY_STRAP:String = 'It\'s there when you create your account!';
@@ -493,7 +493,7 @@ package
         public static const OBTAIN_BODY_SNOWMAN:String = 'Won in Campaign #6 Level #5 during the holiday season.';
         public static const OBTAIN_BODY_TURKEY:String = 'Log into your PR2 account on Thanksgiving.';
         public static const OBTAIN_BODY_DOG:String = 'Create a level that becomes Level of the Week. <u><font color="#0000FF"><a href="https://jiggmin2.com/forums/showthread.php?tid=3509" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_BODY_GLADIATOR:String = 'PLACEHOLDER';
+        public static const OBTAIN_BODY_GLADIATOR:String = 'Finish Romªn Empire by Overbeing.';
 
         public static const OBTAIN_FEET_CLASSIC:String = 'It\'s there when you create your account!';
         public static const OBTAIN_FEET_HEEL:String = 'It\'s there when you create your account!';
@@ -539,7 +539,7 @@ package
         public static const OBTAIN_FEET_SNOWMAN:String = 'Won in Campaign #6 Level #4 during the holiday season.';
         public static const OBTAIN_FEET_TURKEY:String = 'Log into your PR2 account on Thanksgiving.';
         public static const OBTAIN_FEET_DOG:String = 'Create a level that becomes Level of the Week. <u><font color="#0000FF"><a href="https://jiggmin2.com/forums/showthread.php?tid=3509" target="_blank">Here\'s some more information!</a></font></u>';
-        public static const OBTAIN_FEET_GLADIATOR:String = 'PLACEHOLDER';
+        public static const OBTAIN_FEET_GLADIATOR:String = 'Finish Romªn Empire by Overbeing.';
 
 
 
