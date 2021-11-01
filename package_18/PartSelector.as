@@ -114,9 +114,9 @@ package package_18
         }
 
         // method_449 = isPartEpic
-        public function isPartEpic() : Boolean
+        public function isPartEpic(val:* = null) : Boolean
         {
-            return (this.epicArray.indexOf(this.value.toString()) != -1 || this.epicArray.indexOf("*") != -1);
+            return (this.epicArray.indexOf(val != null ? val.toString() : this.value.toString()) != -1 || this.epicArray.indexOf("*") != -1);
         }
 
         // _loc3 = s

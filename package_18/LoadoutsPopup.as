@@ -36,7 +36,7 @@ package package_18
         {
             var presets:Vector.<Preset> = Presets.getPresets();
             for each (var preset:Preset in presets) {
-                var listing:PresetListing = new PresetListing(preset);
+                var listing:PresetListing = new PresetListing(preset, this.playerDisplay);
                 this.method_455(listing);
             }
         }

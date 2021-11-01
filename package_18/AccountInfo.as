@@ -34,7 +34,7 @@ package package_18
 
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
-        private var var_190:PlayerDisplay;
+        private var playerDisplay:PlayerDisplay; // var_190
         private var stageRef:Stage = Main.stage;
         private var m:AccountInfoGraphic = new AccountInfoGraphic();
         private var rankTokensUsed:int = 0; // var_117
@@ -137,10 +137,10 @@ package package_18
             this.statsSelect.x = 20;
             this.statsSelect.y = 207;
             addChild(this.statsSelect);
-            this.var_190 = new PlayerDisplay(this.character, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
-            this.var_190.x = 23;
-            this.var_190.y = (58 + 37);
-            addChild(this.var_190);
+            this.playerDisplay = new PlayerDisplay(this.character, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
+            this.playerDisplay.x = 23;
+            this.playerDisplay.y = (58 + 37);
+            addChild(this.playerDisplay);
             this.m.rankTokenUp_bt.buttonMode = true;
             this.m.rankTokenUp_bt.useHandCursor = true;
             this.m.rankTokenUp_bt.addEventListener(MouseEvent.CLICK, this.clickRankTokenUp, false, 0, true); // this.m.var_159
@@ -263,7 +263,7 @@ package package_18
             }
             if (presetNum != -1 && applyPreset) {
                 var preset:Preset = Presets.getPreset(presetNum);
-                Presets.apply(preset, this.character, this.statsSelect, this.var_190);
+                Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
             }
         }
 
@@ -289,10 +289,15 @@ package package_18
             }
 
             if (e.type == MouseEvent.CLICK) {
-                new LoadoutsPopup(this.character, this.statsSelect, this.var_190);
+                new LoadoutsPopup(this.character, this.statsSelect, this.playerDisplay);
             } else if (e.type == MouseEvent.MOUSE_OVER) {
                 this.loadoutsHoverTimer = setTimeout(this.loadoutsMouseEvent, 500);
             }
+        }
+
+        public static function getPlayerDisplay()
+        {
+            return hasOwnProperty('playerDisplay') && playerDisplay != null ? playerDisplay : null;
         }
 
         private function reset()
@@ -300,10 +305,10 @@ package package_18
             partToSet = [];
             if (this.character != null) {
                 this.statsSelect.remove();
-                this.var_190.remove();
+                this.playerDisplay.remove();
                 this.character.remove();
                 this.character = null;
-                this.var_190 = null;
+                this.playerDisplay = null;
                 this.statsSelect = null;
             }
             if (this.guildName != null) {
