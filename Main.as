@@ -79,14 +79,6 @@ package
         public static var domain:String;
         private static var url:String;
         private static var protocol:String; // protocol = var_389
-        //private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // superLoader = var_358
-
-        // options
-        /*public static var wasdUp:int = 87; // up, var_255
-        public static var wasdRight:int = 68; // right, var_235
-        public static var wasdDown:int = 83; // down, var_256
-        public static var wasdLeft:int = 65; // left, var_246
-        public static var wasdItem:int = 73; // item, var_314*/
 
         public var kongAPI:*;
         public var betaLoader:Boolean;
@@ -140,9 +132,6 @@ package
                 muteButton.x = 504;
                 muteButton.y = 380;
                 muteButton.doToggle(Main.testing); // mutes by default if testing mode is enabled
-                /*superLoader.addEventListener(Event.COMPLETE, this.checkLogin, false, 0, true);
-                superLoader.load(new URLRequest(baseURL + "/check_login.php"));*/
-                //setTimeout(this.getKongApiOnTesting, 2000);
                 pageHolder = new PageHolder(new IntroPage());
                 addChild(pageHolder);
                 addChild(new Doughnut());
@@ -189,6 +178,7 @@ package
         // _loc3 = request
         // _loc4 = loader
         // method_689 = getKongApiOnTesting
+        // CURRENTLY UNUSED
         private function getKongApiOnTesting()
         {
             if (Main.siteMode == "kongregate" && Main.domain == "local" && Main.kongAPI == null && stage == parent) {
@@ -202,17 +192,6 @@ package
                 this.addChild(loader);
             }
         }
-
-        // method_548 = checkLogin MADE OBSOLETE IN 161
-        /*private function checkLogin(e:Event)
-        {
-            var ret:Object = JSON.parse(e.target.data);
-            if (ret != null && ret.user_name != null && ret.user_name != "") {
-                Main.loggedInAs = ret.user_name;
-                Main.guild = ret.guild_id;
-                remember = true;
-            }
-        }*/
 
         public static function clearUserData()
         {
@@ -230,6 +209,7 @@ package
         }
 
         // method_806 = receiveKongAPI
+        // CURRENTLY UNUSED
         private function receiveKongAPI(e:Event)
         {
             var recv:* = e.target.content;
