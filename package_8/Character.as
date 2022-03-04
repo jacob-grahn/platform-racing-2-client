@@ -93,12 +93,12 @@ package package_8
             addChild(this.m);
         }
 
-        public function setColors(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:int, _arg_8:int)
+        public function setColors(hatColor:int, hatColor2:int, headColor:int, headColor2:int, bodyColor:int, bodyColor2:int, feetColor:int, feetColor2:int)
         {
-            this.setHatColors(_arg_1, _arg_2);
-            this.setHeadColors(_arg_3, _arg_4);
-            this.setBodyColors(_arg_5, _arg_6);
-            this.setFeetColors(_arg_7, _arg_8);
+            this.setHatColors(hatColor, hatColor2);
+            this.setHeadColors(headColor, headColor2);
+            this.setBodyColors(bodyColor, bodyColor2);
+            this.setFeetColors(feetColor, feetColor2);
         }
 
         // method_375 = resetHats
@@ -213,10 +213,11 @@ package package_8
         }
 
         // method_133 = setHatColors
-        public function setHatColors(color:int, epic:int)
+        public function setHatColors(color:int, epic:int, hatNum:int = 1)
         {
-            this.hat1Color = color;
-            this.hat1Color2 = epic;
+            hatNum = Data.numLimit(hatNum, 1, 4);
+            this['hat' + hatNum + 'Color'] = color;
+            this['hat' + hatNum + 'Color2'] = epic;
             this.applyAppearance();
         }
 
