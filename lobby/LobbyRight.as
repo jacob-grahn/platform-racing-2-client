@@ -8,7 +8,7 @@ package lobby
     import ui.LobbyTab;
     import package_22.Campaign;
     import package_22.Best;
-    import package_22.BestToday;
+    import package_22.BestWeek;
     import package_22.Newest;
     import package_22.Search;
     import package_22.Favorites;
@@ -21,7 +21,7 @@ package lobby
 
         private var campaignTab:LobbyTab = new LobbyTab(this.clickCampaign, "Campaign"); 
         private var atbTab:LobbyTab = new LobbyTab(this.clickBest, "All Time Best");
-        private var tbTab:LobbyTab = new LobbyTab(this.clickBestToday, "Today's Best");
+        private var wbTab:LobbyTab = new LobbyTab(this.clickBestWeek, "Week's Best");
         private var newTab:LobbyTab = new LobbyTab(this.clickNew, "Newest");
         private var searchTab:LobbyTab = new LobbyTab(this.clickSearch, "Search");
         private var favsTab:LobbyTab = new LobbyTab(this.clickFavs, "♥");
@@ -32,7 +32,7 @@ package lobby
             LobbyRight.lobbyRight = this;
             x = 200;
             y = 3;
-            var tabsArray:Array = [this.campaignTab, this.atbTab, this.tbTab, this.newTab, this.searchTab];
+            var tabsArray:Array = [this.campaignTab, this.atbTab, this.wbTab, this.newTab, this.searchTab];
             if (Main.group >= 1) {
                 tabsArray.push(this.favsTab);
             }
@@ -51,10 +51,10 @@ package lobby
             changePage(new Best());
         }
 
-        // method_537 = clickBestToday
-        private function clickBestToday()
+        // method_537 = clickBestWeek
+        private function clickBestWeek()
         {
-            changePage(new BestToday());
+            changePage(new BestWeek());
         }
 
         // method_616 = clickNew
@@ -96,7 +96,7 @@ package lobby
         override public function remove()
         {
             LobbyRight.lobbyRight = null;
-            this.campaignTab = this.atbTab = this.tbTab = this.newTab = this.searchTab = this.favsTab = /*this.guildsTab =*/ null;
+            this.campaignTab = this.atbTab = this.wbTab = this.newTab = this.searchTab = this.favsTab = /*this.guildsTab =*/ null;
             super.remove();
         }
 
