@@ -10,6 +10,8 @@ package package_4
 
     public class Popup extends Removable 
     {
+        private static var OPEN_POPUPS:Array = new Array();
+
         public static var LOADED = 'loaded';
         public static var REMOVED = 'removed';
 
@@ -33,6 +35,7 @@ package package_4
             alpha = 0;
             Main.stage.addChild(this);
             addEventListener(Event.ENTER_FRAME, this.fadeIn, false, 0, true); // method_117
+            OPEN_POPUPS.push(this);
         }
 
         private function fadeIn(_arg_1:Event)
@@ -54,6 +57,11 @@ package package_4
             }
         }
 
+        public static function getOpen()
+        {
+            return OPEN_POPUPS;
+        }
+
         // method_2 = startFadeOut
         public function startFadeOut()
         {
@@ -64,6 +72,7 @@ package package_4
 
         override public function remove()
         {
+            OPEN_POPUPS.splice(OPEN_POPUPS.indexOf(this), 1);
             removeEventListener(Event.ENTER_FRAME, this.fadeIn);
             removeEventListener(Event.ENTER_FRAME, this.fadeOut);
             if (stage != null) {
