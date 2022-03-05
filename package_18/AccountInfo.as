@@ -252,7 +252,7 @@ package package_18
         // _loc6 = preset
         private function keyDownHandler(e:KeyboardEvent, confirmed:Boolean = false)
         {
-            if (Popup.getOpen().length > 0 || e.target is TextField) {
+            if ((Popup.getOpen().length > 0 && !confirmed) || e.target is TextField) {
                 e.preventDefault();
                 return;
             }
