@@ -20,7 +20,13 @@ package menu
                 hats: [3, 1, 1, 1],
                 head: 20,
                 body: 17,
-                feet: 16
+                feet: 16,
+                colors: {
+                    hats: [[0x990000, -1]],
+                    head: [0x990000, -1],
+                    body: [0x990000, -1],
+                    feet: [0x990000, -1]
+                }
             };
             super(function () {
                 Main.awardKongNextLogin = true;
