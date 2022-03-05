@@ -11,18 +11,12 @@ package package_18
 
     public class LoadoutsPopup extends GetLevelsPopup 
     {
-        public static var instance:LoadoutsPopup;
-
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var playerDisplay:PlayerDisplay; // var_495
 
         public function LoadoutsPopup(c:Character, ss:StatsSelect, pd:PlayerDisplay)
         {
-            if (instance != null) {
-                instance.startFadeOut();
-            }
-            instance = this;
             this.character = c;
             this.statsSelect = ss;
             this.playerDisplay = pd;
@@ -91,9 +85,6 @@ package package_18
 
         override public function remove()
         {
-            if (instance != null) {
-                instance = null;
-            }
             this.character = null;
             this.statsSelect = null;
             this.playerDisplay = null;

@@ -20,6 +20,7 @@ package package_18
     import package_4.ConfirmPopup;
     import package_4.HoverPopup;
     import package_4.OutfitPopup;
+    import package_4.Popup;
     import package_8.Character;
     import package_22.LevelListing;
     import page.Page;
@@ -251,7 +252,7 @@ package package_18
         // _loc6 = preset
         private function keyDownHandler(e:KeyboardEvent, confirmed:Boolean = false)
         {
-            if (LoadoutsPopup.instance != null) {
+            if (Popup.getOpen().length > 0 || e.target is TextField) {
                 e.preventDefault();
                 return;
             }
@@ -266,12 +267,6 @@ package package_18
                         keyDownHandler(e, true);
                     }, preset.getOutfitFormat(), 'Are you sure you want to apply this loadout? This will clear your current stats and character style.');
                     return;
-                }
-            }
-            if (e.target is TextField) {
-                var textBox:TextField = e.target as TextField;
-                if (textBox.type === TextFieldType.INPUT) {
-                    applyPreset = false; // preserve manually typing stats in textboxes (instead of using slider)
                 }
             }
             if (presetNum != -1 && applyPreset) {
