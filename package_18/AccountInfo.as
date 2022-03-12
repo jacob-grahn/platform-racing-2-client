@@ -257,7 +257,6 @@ package package_18
                 return;
             }
             var presetNum:int = -1, preset:Preset;
-            var applyPreset:Boolean = true;
             if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
                 presetNum = e.keyCode % 48;
                 presetNum = presetNum == 0 ? 10 : presetNum;
@@ -269,7 +268,7 @@ package package_18
                     return;
                 }
             }
-            if (presetNum != -1 && applyPreset) {
+            if (presetNum != -1) {
                 preset = Presets.getPreset(presetNum);
                 Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
             }
