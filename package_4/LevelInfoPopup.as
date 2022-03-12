@@ -69,7 +69,7 @@
         private var actionType:String;
 
         // uploading popup
-        private var uploadingRemove:UploadingPopup;
+        //private var uploadingRemove:UploadingPopup;
 
 
         public function LevelInfoPopup(id:int)
@@ -377,8 +377,8 @@
                 title = 'Report Level';
                 msg = 'If this level is inappropriate, you can report it to the moderators.';
             } else if (this.actionType == 'unpublish') {
-                title = 'Remove Level';
-                msg = 'Unpublish this level.';
+                title = 'Moderate Level';
+                msg = 'Unpublish or restrict this level.';
             }
             this.hoverActionBt = new HoverPopup(title, msg, bt);
         }
@@ -406,25 +406,7 @@
 
         private function clickRemove(e:MouseEvent)
         {
-            new ConfirmPopup(this.confirmRemove, "Are you sure you want to remove this level?");
-        }
-
-        private function confirmRemove()
-        {
-            var vars:URLVariables = new URLVariables();
-            vars.level_id = this.levelId;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/remove_level.php");
-            request.method = URLRequestMethod.POST;
-            request.data = vars;
-            this.uploadingRemove = new UploadingPopup(request, 'json');
-            this.uploadingRemove.addEventListener(SuperLoader.d, this.returnRemove, false, 0, true);
-        }
-
-        private function returnRemove(e:*)
-        {
-            if (this.uploadingRemove.parsedData.success === true) {
-                startFadeOut();
-            }
+            new ChooseLevelModModePopup(this.levelId);
         }
 
         private function clickPlay(e:MouseEvent)
@@ -529,11 +511,6 @@
             this.m.levelInfo.share_bt.removeEventListener(MouseEvent.CLICK, this.clickShare);
 
             // possibly instantiated?
-            if (this.uploadingRemove != null) {
-                this.uploadingRemove.removeEventListener(SuperLoader.d, this.returnRemove);
-                this.uploadingRemove.startFadeOut();
-                this.uploadingRemove = null;
-            }
             clearTimeout(this.actionBtTimer);
             if (this.hoverActionBt != null) {
                 this.hoverActionBt.remove();
