@@ -13,6 +13,8 @@ package package_4
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
+    import flash.utils.clearTimeout;
+    import flash.utils.setTimeout;
     import lobby.LobbyRight;
     import package_6.ExpGain;
     import package_8.Character;
@@ -37,6 +39,9 @@ package package_4
         private var expGain:ExpGain;
         private var times:Array;
         private var cm:CommandHandler = CommandHandler.commandHandler;
+
+        private var hoverSendPM:HoverPopup;
+        private var sendPMBtTimer:uint;
 
         public function PlayerPopup(name:String)
         {
@@ -191,8 +196,17 @@ package package_4
                     this.m.playerInfo.kickButton.addEventListener(MouseEvent.CLICK, this.clickKick, false, 0, true);
                 }
             }
+            this.m.playerInfo.messageButton.addEventListener(MouseEvent.MOUSE_OVER, this.overSendPMBt, false, 0, true);
+            this.m.playerInfo.messageButton.addEventListener(MouseEvent.MOUSE_OUT, this.outSendPMBt, false, 0, true);
             this.m.playerInfo.messageButton.addEventListener(MouseEvent.CLICK, this.clickSendPM, false, 0, true);
             this.m.playerInfo.levelsButton.addEventListener(MouseEvent.CLICK, this.clickViewLevels, false, 0, true);
+            if (ret.following == 1) {
+                this.m.playerInfo.followButton.label = "Unfollow";
+                this.m.playerInfo.followButton.addEventListener(MouseEvent.CLICK, this.clickUnfollow, false, 0, true);
+            } else {
+                this.m.playerInfo.followButton.label = "Follow";
+                this.m.playerInfo.followButton.addEventListener(MouseEvent.CLICK, this.clickFollow, false, 0, true);
+            }
             if (ret.friend == 1) {
                 this.m.playerInfo.friendButton.label = "Remove Friend";
                 this.m.playerInfo.friendButton.addEventListener(MouseEvent.CLICK, this.clickRemoveFriend, false, 0, true);
@@ -201,16 +215,16 @@ package package_4
                 this.m.playerInfo.friendButton.addEventListener(MouseEvent.CLICK, this.clickAddFriend, false, 0, true);
             }
             if (ret.ignored == 1) {
-                this.m.playerInfo.ignoreButton.label = "Un-Ignore";
-                this.m.playerInfo.ignoreButton.addEventListener(MouseEvent.CLICK, this.clickUnIgnore, false, 0, true);
+                this.m.playerInfo.ignoreButton.label = "Unignore";
+                this.m.playerInfo.ignoreButton.addEventListener(MouseEvent.CLICK, this.clickUnignore, false, 0, true);
             } else {
                 this.m.playerInfo.ignoreButton.label = "Ignore";
                 this.m.playerInfo.ignoreButton.addEventListener(MouseEvent.CLICK, this.clickIgnore, false, 0, true);
             }
             if (Main.group <= 0) {
+                this.m.playerInfo.followButton.enabled = false;
                 this.m.playerInfo.friendButton.enabled = false;
                 this.m.playerInfo.ignoreButton.enabled = false;
-                this.m.playerInfo.messageButton.enabled = false;
             }
             this.m.playerInfo.visible = true;
             this.m.loadingGraphic.visible = false;
@@ -273,6 +287,18 @@ package package_4
             new SendMessagePopup(this.userName);
         }
 
+        private function clickFollow(e:MouseEvent)
+        {
+            this.handleUserListURL('following', 'add');
+            Main.socket.write("follow_user`" + this.userName);
+        }
+
+        private function clickUnfollow(e:MouseEvent)
+        {
+            this.handleUserListURL('following', 'remove');
+            Main.socket.write("unfollow_user`" + this.userName);
+        }
+
         // method_356 = clickAddFriend
         private function clickAddFriend(e:MouseEvent)
         {
@@ -294,11 +320,27 @@ package package_4
             Main.socket.write("ignore_user`" + this.userName);
         }
 
-        // method_385 = clickUnIgnore
-        private function clickUnIgnore(e:MouseEvent)
+        // method_385 = clickUnignore
+        private function clickUnignore(e:MouseEvent)
         {
             this.handleUserListURL('ignored', 'remove');
-            Main.socket.write("un_ignore_user`" + this.userName);
+            Main.socket.write("unignore_user`" + this.userName);
+        }
+
+        private function overSendPMBt(e:MouseEvent)
+        {
+            this.sendPMBtTimer = setTimeout(function() {
+                hoverSendPM = new HoverPopup('Send PM', 'Send a PM to this player.', m.playerInfo.messageButton);
+            }, 500);
+        }
+
+        private function outSendPMBt(e:MouseEvent = null)
+        {
+            clearTimeout(this.sendPMBtTimer);
+            if (this.hoverSendPM != null) {
+                this.hoverSendPM.remove();
+                this.hoverSendPM = null;
+            }
         }
 
         // method_404 = clickViewLevels
@@ -378,15 +420,21 @@ package package_4
             this.m.playerInfo.registerBox.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRegisterBox);
             this.m.playerInfo.activeBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverActiveBox);
             this.m.playerInfo.activeBox.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutActiveBox);
+            this.m.playerInfo.messageButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overSendPMBt);
+            this.m.playerInfo.messageButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outSendPMBt);
             this.m.playerInfo.messageButton.removeEventListener(MouseEvent.CLICK, this.clickSendPM);
             this.m.playerInfo.levelsButton.removeEventListener(MouseEvent.CLICK, this.clickViewLevels);
+            this.m.playerInfo.followButton.removeEventListener(MouseEvent.CLICK, this.clickFollow);
+            this.m.playerInfo.followButton.removeEventListener(MouseEvent.CLICK, this.clickUnfollow);
             this.m.playerInfo.friendButton.removeEventListener(MouseEvent.CLICK, this.clickAddFriend);
             this.m.playerInfo.friendButton.removeEventListener(MouseEvent.CLICK, this.clickRemoveFriend);
             this.m.playerInfo.ignoreButton.removeEventListener(MouseEvent.CLICK, this.clickIgnore);
-            this.m.playerInfo.ignoreButton.removeEventListener(MouseEvent.CLICK, this.clickUnIgnore);
+            this.m.playerInfo.ignoreButton.removeEventListener(MouseEvent.CLICK, this.clickUnignore);
             this.m.playerInfo.inviteButton.removeEventListener(MouseEvent.CLICK, this.clickInvite);
             this.m.playerInfo.kickButton.removeEventListener(MouseEvent.CLICK, this.clickKick);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
+            clearTimeout(this.sendPMBtTimer);
+            this.outSendPMBt();
             if (this.banMenu != null) {
                 this.banMenu.remove();
                 this.banMenu = null;
