@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_14.class_170
+//package_14.class_170 = package_14.Backgrounds
 
 package package_14
 {
@@ -9,12 +9,12 @@ package package_14
     import package_19.class_222;
     import com.jiggmin.data.Objects;
 
-    public class class_170 extends SideBar 
+    public class Backgrounds extends SideBar 
     {
 
         public var var_542:class_220 = new class_220();
 
-        public function class_170()
+        public function Backgrounds()
         {
             addItem(this.var_542);
             addItem(new class_222(Objects.BG1Code, 8172673));
