@@ -41,7 +41,8 @@ package com.jiggmin.ColorPicker
         private var var_326:BitmapData;
         private var var_146:ColorPickerHueArrowGraphic;
         private var var_100:ColorPickerCrosshairsGraphic;
-        private var var_194:CustomCursor;
+        private var priorCursor:CustomCursor; // var_194
+        private var priorCursorActive:Boolean;
         private var me:MouseEvent;
         private var m:ColorPickerPopupGraphic;
 
@@ -109,8 +110,9 @@ package com.jiggmin.ColorPicker
             this.var_89.addEventListener(Event.CHANGE, this.method_212, false, 0, true);
             this.var_89.addEventListener(Event.COMPLETE, this.method_275, false, 0, true);
             if (CustomCursor.instance != null) {
-                this.var_194 = CustomCursor.instance;
-                this.var_194.pause();
+                this.priorCursor = CustomCursor.instance;
+                this.priorCursorActive = this.priorCursor.isActive();
+                this.priorCursor.pause();
             }
             CustomCursor.change(this.var_89);
             stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
@@ -489,13 +491,16 @@ package com.jiggmin.ColorPicker
                 this.var_326.dispose();
                 if (CustomCursor.instance != null) {
                     CustomCursor.unsetInstance();
-                    if (this.var_194 != null) {
-                        CustomCursor.change(this.var_194);
-                        this.var_194.init();
+                    if (this.priorCursor != null) {
+                        CustomCursor.change(this.priorCursor);
+                        this.priorCursor.init();
+                        if (!this.priorCursorActive) {
+                            this.priorCursor.pause();
+                        }
                     }
                 } else {
-                    if (this.var_194 != null) {
-                        this.var_194.remove();
+                    if (this.priorCursor != null) {
+                        this.priorCursor.remove();
                     }
                 }
                 this.var_69 = null;
@@ -505,7 +510,7 @@ package com.jiggmin.ColorPicker
                 this.var_146 = null;
                 this.var_100 = null;
                 this.var_89 = null;
-                this.var_194 = null;
+                this.priorCursor = null;
                 this.me = null;
             }
             super.remove();
