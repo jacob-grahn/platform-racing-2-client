@@ -45,26 +45,22 @@ package package_9
             addChild(this.m);
             alpha = 0;
             this.id = var_223++;
-            CommandHandler.commandHandler.defineCommand(("removeEgg" + this.id), this.method_744);
+            CommandHandler.commandHandler.defineCommand("removeEgg" + this.id, this.method_744);
             var _local_1:Map = Course.course.blockBackground;
-            var _local_2:int = rand.nextMinMax(_local_1.minX, _local_1.maxX);
-            var _local_3:int = rand.nextMinMax(_local_1.minY, _local_1.maxY);
-            var _local_4:int = (rand.nextMinMax(-1, 3) * 90);
+            var _local_2:int = rand.nextMinMax(Math.min(_local_1.minX, _local_1.maxX), Math.max(_local_1.minX, _local_1.maxX));
+            var _local_3:int = rand.nextMinMax(Math.min(_local_1.minY, _local_1.maxY), Math.max(_local_1.minY, _local_1.maxY));
+            var _local_4:int = rand.nextMinMax(-1, 3) * 90;
             var _local_5:Point = Data.method_9(_local_2, _local_3, -(_local_4));
             super(_local_5.x, _local_5.y, _local_4);
             this.setLimits();
-            if (rand.nextMinMax(0, 2) == 1) {
-                velX = 1;
-            } else {
-                velX = -1;
-            }
+            velX = rand.nextMinMax(0, 2) == 1 ? 1 : -1;
             var _local_6:ColorTransform = new ColorTransform();
-            _local_6.color = Math.floor((Math.random() * 0xFFFFFF));
+            _local_6.color = Math.floor(Math.random() * 0xFFFFFF);
             var _local_7:ColorTransform = new ColorTransform();
-            _local_7.color = Math.floor((Math.random() * 0xFFFFFF));
+            _local_7.color = Math.floor(Math.random() * 0xFFFFFF);
             var _local_8:ColorTransform = new ColorTransform();
-            _local_8.color = Math.floor((Math.random() * 0xFFFFFF));
-            scaleX = (scaleY = this.scale);
+            _local_8.color = Math.floor(Math.random() * 0xFFFFFF);
+            scaleX = scaleY = this.scale;
             this.m.var_165.gotoAndStop(1);
             this.m.var_152.gotoAndStop(1);
             this.m.var_165.colorMC.gotoAndStop(1);
