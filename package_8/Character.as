@@ -404,11 +404,7 @@ package package_8
         {
             var _local_2:Number = this.var_269 % 8;
             if (!this.fadeOutStarted) {
-                if (_local_2 >= 4) {
-                    alpha = 0.5;
-                } else {
-                    alpha = 0.75;
-                }
+                alpha = _local_2 >= 4 ? 0.5 : 0.75;
             }
             this.var_269--;
             if (this.var_269 <= 0) {
@@ -501,7 +497,7 @@ package package_8
         private function method_156(_arg_1:Event)
         {
             var _local_2:Number = this.m.superJumpAnim.currentFrame / 2;
-            scaleY = (((Math.random() * _local_2) + (100 - (_local_2 / 2))) / 100);
+            scaleY = ((Math.random() * _local_2) + (100 - (_local_2 / 2))) / 100;
         }
 
         public function beginJet()
