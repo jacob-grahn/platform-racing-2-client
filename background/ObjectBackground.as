@@ -5,13 +5,14 @@
 
 package background
 {
-    import package_4.MessagePopup;
+    import com.jiggmin.data.Objects;
     import flash.display.Sprite;
-    import page.GamePage;
-    import levelEditor.LevelEditor;
-    import levelEditor.DrawObject;
-    import levelEditor.TextObject;
     import levelEditor.BlockObject;
+    import levelEditor.DrawObject;
+    import levelEditor.LevelEditor;
+    import levelEditor.TextObject;
+    import package_4.MessagePopup;
+    import page.GamePage;
 
     public class ObjectBackground extends Background 
     {
@@ -199,12 +200,20 @@ package background
             _local_6.setColor(_local_5);
         }
 
+        // _loc3 = drawObj
         // method_476 = deleteObject
         protected function deleteObject(_arg_1:String)
         {
             var _local_2:Number = Number(_arg_1);
-            var _local_3:DrawObject = DrawObject(this.objArray[_local_2]);
-            _local_3.remove();
+            var drawObj:DrawObject = DrawObject(this.objArray[_local_2]);
+            if (
+                drawObj.displayCode != Objects.BLOCK_START1
+                && drawObj.displayCode != Objects.BLOCK_START2
+                && drawObj.displayCode != Objects.BLOCK_START3
+                && drawObj.displayCode != Objects.BLOCK_START4
+            ) {
+                drawObj.remove();
+            }
         }
 
         // method_393 = resizeObject
