@@ -152,8 +152,10 @@ package package_6
         public function clear()
         {
             if (this.bitmapData != null) {
-                var _local_1:Rectangle = new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height);
-                this.bitmapData.fillRect(_local_1, 0);
+                /*var _local_1:Rectangle = new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height);
+                this.bitmapData.fillRect(_local_1, 0);*/
+                this.bitmapData.dispose();
+                this.bitmapData = null;
             }
             while (this.var_49.numChildren > 0) {
                 this.var_49.removeChildAt(0);
