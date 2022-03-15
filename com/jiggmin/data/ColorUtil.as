@@ -163,7 +163,6 @@ package com.jiggmin.data
             return '0x' + hex;
         }
 
-
     }
 }//package com.jiggmin.data
 

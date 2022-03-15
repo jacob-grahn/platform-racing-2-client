@@ -236,52 +236,85 @@ package package_6
             clearInterval(this.hatCountdown);
         }
 
-        private function createRemoteCharacter(_arg_1:Array)
+        // _loc2 = tempId
+        // _loc3 = userName
+        // _loc4 = hatColor
+        // _loc5 = headColor
+        // _loc6 = bodyColor
+        // _loc7 = feetColor
+        // _loc8 = hatId
+        // _loc9 = headId
+        // _loc10 = bodyId
+        // _loc11 = feetId
+        // _loc12 = hatColor2
+        // _loc13 = headColor2
+        // _loc14 = bodyColor2
+        // _loc15 = feetColor2
+        // _loc16 = c
+        private function createRemoteCharacter(a:Array)
         {
-            var _local_2:int = int(_arg_1[0]);
-            var _local_3:String = _arg_1[1];
-            var _local_4:Number = Number(_arg_1[2]);
-            var _local_5:Number = Number(_arg_1[3]);
-            var _local_6:Number = Number(_arg_1[4]);
-            var _local_7:Number = Number(_arg_1[5]);
-            var _local_8:Number = Number(_arg_1[6]);
-            var _local_9:Number = Number(_arg_1[7]);
-            var _local_10:Number = Number(_arg_1[8]);
-            var _local_11:Number = Number(_arg_1[9]);
-            var _local_12:Number = Number(_arg_1[10]);
-            var _local_13:Number = Number(_arg_1[11]);
-            var _local_14:Number = Number(_arg_1[12]);
-            var _local_15:Number = Number(_arg_1[13]);
-            var _local_16:RemoteCharacter = new RemoteCharacter(_local_2, miniMap.getDot(), _local_3, _local_8, _local_9, _local_10, _local_11);
-            _local_16.setColors(_local_4, _local_12, _local_5, _local_13, _local_6, _local_14, _local_7, _local_15);
-            playerArray[_local_2] = _local_16;
-            this.drawingInfo.method_138(_local_3, _local_2);
+            var tempId:int = int(a[0]);
+            var userName:String = a[1];
+            var hatColor:Number = Number(a[2]);
+            var headColor:Number = Number(a[3]);
+            var bodyColor:Number = Number(a[4]);
+            var feetColor:Number = Number(a[5]);
+            var hatId:Number = Number(a[6]);
+            var headId:Number = Number(a[7]);
+            var bodyId:Number = Number(a[8]);
+            var feetId:Number = Number(a[9]);
+            var hatColor2:Number = Number(a[10]);
+            var headColor2:Number = Number(a[11]);
+            var bodyColor2:Number = Number(a[12]);
+            var feetColor2:Number = Number(a[13]);
+            var c:RemoteCharacter = new RemoteCharacter(tempId, miniMap.getDot(), userName, hatId, headId, bodyId, feetId);
+            c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
+            playerArray[tempId] = c;
+            this.drawingInfo.method_138(userName, tempId);
             method_80();
         }
 
-        private function createLocalCharacter(_arg_1:Array)
+        // _loc2 = tempId
+        // _loc3 = userName
+        // _loc4 = speed
+        // _loc5 = accel
+        // _loc6 = jumpn
+        // _loc6 = hatColor
+        // _loc7 = headColor
+        // _loc8 = bodyColor
+        // _loc9 = feetColor
+        // _loc10 = hatId
+        // _loc11 = headId
+        // _loc12 = bodyId
+        // _loc13 = feetId
+        // _loc14 = hatColor2
+        // _loc15 = headColor2
+        // _loc16 = bodyColor2
+        // _loc17 = feetColor2
+        // _loc18 = c
+        private function createLocalCharacter(a:Array)
         {
-            var _local_2:int = int(_arg_1[0]);
-            var _local_3:Number = _arg_1[1];
-            var _local_4:Number = _arg_1[2];
-            var _local_5:Number = _arg_1[3];
-            var _local_6:Number = Number(_arg_1[4]);
-            var _local_7:Number = Number(_arg_1[5]);
-            var _local_8:Number = Number(_arg_1[6]);
-            var _local_9:Number = Number(_arg_1[7]);
-            var _local_10:Number = Number(_arg_1[8]);
-            var _local_11:Number = Number(_arg_1[9]);
-            var _local_12:Number = Number(_arg_1[10]);
-            var _local_13:Number = Number(_arg_1[11]);
-            var _local_14:Number = Number(_arg_1[12]);
-            var _local_15:Number = Number(_arg_1[13]);
-            var _local_16:Number = Number(_arg_1[14]);
-            var _local_17:Number = Number(_arg_1[15]);
-            var _local_18:LocalCharacter = new LocalCharacter(_local_2, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), _local_3, _local_4, _local_5, _local_10, _local_11, _local_12, _local_13);
-            _local_18.setColors(_local_6, _local_14, _local_7, _local_15, _local_8, _local_16, _local_9, _local_17);
-            playerArray[_local_2] = _local_18;
-            this.drawingInfo.method_138(Main.loggedInAs, _local_2);
-            var_9 = _local_18;
+            var tempId:int = int(a[0]);
+            var speed:Number = a[1];
+            var accel:Number = a[2];
+            var jumpn:Number = a[3];
+            var hatColor:Number = Number(a[4]);
+            var headColor:Number = Number(a[5]);
+            var bodyColor:Number = Number(a[6]);
+            var feetColor:Number = Number(a[7]);
+            var hatId:Number = Number(a[8]);
+            var headId:Number = Number(a[9]);
+            var bodyId:Number = Number(a[10]);
+            var feetId:Number = Number(a[11]);
+            var hatColor2:Number = Number(a[12]);
+            var headColor2:Number = Number(a[13]);
+            var bodyColor2:Number = Number(a[14]);
+            var feetColor2:Number = Number(a[15]);
+            var c:LocalCharacter = new LocalCharacter(tempId, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), speed, accel, jumpn, hatId, headId, bodyId, feetId);
+            c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
+            playerArray[tempId] = c;
+            this.drawingInfo.method_138(Main.loggedInAs, tempId);
+            var_9 = c;
             method_80();
         }
 
