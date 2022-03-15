@@ -52,33 +52,27 @@ package package_8
             addEventListener(Event.ENTER_FRAME, this.go, false, 0, true);
         }
 
+        // _loc2 = c
         private function go(_arg_1:Event)
         {
-            var _local_2:Object;
-            var _local_3:Object;
-            var _local_4:int;
-            var _local_5:Point;
-            var _local_6:Point;
-            var _local_7:Number;
-            var _local_8:Number;
             if (this.var_19.length > 0) {
-                this.var_180 = (this.var_180 - 0.01);
-                _local_4 = 0;
+                this.var_180 -= 0.01;
+                var _local_4:int = 0;
                 while (_local_4 < this.var_19.length) {
-                    _local_3 = this.var_19[_local_4];
+                    var _local_3:Object = this.var_19[_local_4];
                     if (_local_3.pos != null) {
-                        _local_6 = _local_3.pos;
-                        _local_7 = (_local_6.x / (_local_4 + 1));
-                        _local_8 = (_local_6.y / (_local_4 + 1));
-                        this.posX = (this.posX + _local_7);
-                        this.posY = (this.posY + _local_8);
-                        _local_6.x = (_local_6.x - _local_7);
-                        _local_6.y = (_local_6.y - _local_8);
+                        var _local_6:Point = _local_3.pos;
+                        var _local_7:Number = _local_6.x / (_local_4 + 1);
+                        var _local_8:Number = _local_6.y / (_local_4 + 1);
+                        this.posX += _local_7;
+                        this.posY += _local_8;
+                        _local_6.x -= _local_7;
+                        _local_6.y -= _local_8;
                         break;
                     }
                     _local_4++;
                 }
-                _local_5 = Data.method_9(this.posX, this.posY, -(this.map.rotation + this.rot));
+                var _local_5:Point = Data.method_9(this.posX, this.posY, -(this.map.rotation + this.rot));
                 velX = (this.lastX - x);
                 velY = (this.lastY - y);
                 this.lastX = x;
@@ -90,53 +84,54 @@ package package_8
                 this.mapDot.y = _local_5.y;
                 method_58(this.map.rotation);
                 rotation = this.map.rotation + this.rot + this.rotMod;
-                _local_2 = this.var_19.shift();
-                if (_local_2.state != null) {
-                    changeState(_local_2.state);
+                var c:Object = this.var_19.shift();
+                if (c.state != null) {
+                    changeState(c.state);
                 }
-                if (_local_2.scaleX != null) {
-                    this.setScaleX(int(_local_2.scaleX));
+                if (c.scaleX != null) {
+                    this.setScaleX(int(c.scaleX));
                 }
-                if (_local_2.parent != null) {
-                    if (Course.course[_local_2.parent] != null) {
-                        Sprite(Course.course[_local_2.parent]).addChild(this);
+                if (c.parent != null) {
+                    if (Course.course[c.parent] != null) {
+                        Sprite(Course.course[c.parent]).addChild(this);
                     }
                 }
-                if (_local_2.x != null) {
-                    this.posX = _local_2.x;
-                    this.posY = _local_2.y;
+                if (c.x != null) {
+                    this.posX = c.x;
+                    this.posY = c.y;
                 }
-                if (_local_2.rotMod != null) {
-                    this.rotMod = int(_local_2.rotMod);
+                if (c.rotMod != null) {
+                    this.rotMod = int(c.rotMod);
                 }
-                if (_local_2.rot != null) {
-                    this.rot = _local_2.rot;
+                if (c.rot != null) {
+                    this.rot = c.rot;
                 }
-                if (_local_2.item != null) {
-                    setItem(_local_2.item);
+                if (c.item != null) {
+                    setItem(c.item);
                 }
-                if (_local_2.sparkle != null) {
-                    if (_local_2.sparkle == "1") {
+                if (c.sparkle != null) {
+                    if (c.sparkle == "1") {
                         beginSparkles();
                     } else {
                         endSparkles();
                     }
                 }
-                if (_local_2.jet != null) {
-                    if (_local_2.jet == "1") {
+                if (c.jet != null) {
+                    (c.jet == '1' ? beginJet() : endJet());
+                    /*if (c.jet == "1") {
                         beginJet();
                     } else {
                         endJet();
-                    }
+                    }*/
                 }
-                if (_local_2.beginRemove != null) {
+                if (c.beginRemove != null) {
                     beginRemove();
                 }
                 if (this.var_19.length > this.var_180) {
                     this.go(new Event(Event.ENTER_FRAME));
                 }
             } else {
-                this.var_180 = (this.var_180 + 0.08);
+                this.var_180 += 0.08;
             }
             if (this.var_180 > 10) {
                 this.var_180 = 10;
@@ -155,12 +150,7 @@ package package_8
 
         public function pos(_arg_1:Array)
         {
-            var _local_2:Point;
-            if (_arg_1[0] == "") {
-                _local_2 = new Point(0, 0);
-            } else {
-                _local_2 = new Point(_arg_1[0], _arg_1[1]);
-            }
+            var _local_2:Point = _arg_1[0] == "" ? new Point(0, 0) : new Point(_arg_1[0], _arg_1[1]);
             var _local_3:int = 1;
             while (_local_3 < var_448) {
                 this.var_19.push(new Object());
@@ -177,12 +167,12 @@ package package_8
             var _local_2:String = _arg_1[0];
             var _local_3:String = _arg_1[1];
             if (this.var_19.length > 0) {
-                if (this.var_19[(this.var_19.length - 1)][_local_2] != null) {
+                if (this.var_19[this.var_19.length - 1][_local_2] != null) {
                     if (this.var_19.length >= 2) {
-                        this.var_19[(this.var_19.length - 2)][_local_2] = this.var_19[(this.var_19.length - 1)][_local_2];
+                        this.var_19[this.var_19.length - 2][_local_2] = this.var_19[this.var_19.length - 1][_local_2];
                     }
                 }
-                this.var_19[(this.var_19.length - 1)][_local_2] = _local_3;
+                this.var_19[this.var_19.length - 1][_local_2] = _local_3;
             } else {
                 _local_4 = new Object();
                 _local_4[_local_2] = _local_3;
@@ -195,8 +185,8 @@ package package_8
             var _local_2:int = int(_arg_1[0]);
             var _local_3:int = int(_arg_1[1]);
             if (this.var_19.length > 0) {
-                this.var_19[(this.var_19.length - 1)].x = _local_2;
-                this.var_19[(this.var_19.length - 1)].y = _local_3;
+                this.var_19[this.var_19.length - 1].x = _local_2;
+                this.var_19[this.var_19.length - 1].y = _local_3;
             }
         }
 
@@ -221,31 +211,31 @@ package package_8
 
         private function method_76()
         {
-            var _local_3:Block;
-            var _local_1:Number = (this.posX - this.lastX);
-            var _local_2:Number = (this.posY - this.lastY);
+            //var _local_3:Block; // unused
+            var _local_1:Number = this.posX - this.lastX;
+            var _local_2:Number = this.posY - this.lastY;
             if (_local_2 <= 0) {
-                this.method_128(x, ((y - this.var_325) - 1));
+                this.method_128(x, y - this.var_325 - 1);
             }
             if (_local_2 >= 0) {
-                this.method_128(x, (y + 1));
+                this.method_128(x, y + 1);
             }
             if (_local_1 >= 0) {
-                this.method_128(((x + this.var_189) + 1), (y - 10));
+                this.method_128(x + this.var_189 + 1, y - 10);
             }
             if (_local_1 <= 0) {
-                this.method_128(((x - this.var_189) - 1), (y - 10));
+                this.method_128(x - this.var_189 - 1, y - 10);
             }
         }
 
+        // removed _loc3, _loc4 (used as 1st and 2nd args in seg constructor)
+        // _loc5 = seg
         // _loc6 = block
-        private function method_128(_arg_1:int, _arg_2:int)
+        private function method_128(posX:int, posY:int)
         {
-            var _local_3:int = int((_arg_1 / 30));
-            var _local_4:int = int((_arg_2 / 30));
-            var _local_5:Point = Data.method_9(_local_3, _local_4, this.map.rotation);
-            if (this.map.method_32(_local_5.x, _local_5.y)) {
-                var block:Block = Block(this.map.getBlockFromSeg(_local_5.x, _local_5.y));
+            var seg:Point = Data.method_9(posX / 30, posY / 30, this.map.rotation);
+            if (this.map.method_32(seg.x, seg.y)) {
+                var block:Block = Block(this.map.getBlockFromSeg(seg.x, seg.y));
                 if (block is ArrowBlock) {
                     ArrowBlock(block).method_87();
                 }
@@ -273,11 +263,11 @@ package package_8
         {
             removeEventListener(Event.ENTER_FRAME, this.go);
             if (this.commandHandler != null) {
-                this.commandHandler.defineCommand(("p" + tempID.toString()), null);
-                this.commandHandler.defineCommand(("var" + tempID.toString()), null);
-                this.commandHandler.defineCommand(("exactPos" + tempID.toString()), null);
-                this.commandHandler.defineCommand(("setHats" + tempID.toString()), null);
-                this.commandHandler.defineCommand(("heart" + tempID), null);
+                this.commandHandler.defineCommand("p" + tempID.toString(), null);
+                this.commandHandler.defineCommand("var" + tempID.toString(), null);
+                this.commandHandler.defineCommand("exactPos" + tempID.toString(), null);
+                this.commandHandler.defineCommand("setHats" + tempID.toString(), null);
+                this.commandHandler.defineCommand("heart" + tempID, null);
                 this.commandHandler.defineCommand("sting" + this.tempID, null);
             }
             if (this.mapDot != null) {
