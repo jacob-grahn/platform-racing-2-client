@@ -5,7 +5,7 @@
 
 package com.jiggmin.ColorPicker
 {
-    import com.jiggmin.data.class_122;
+    import com.jiggmin.data.ColorUtil;
 
     public class class_280
     {
@@ -31,7 +31,7 @@ package com.jiggmin.ColorPicker
                     _local_3 = 0;
                     _local_8 = 0;
                     while (_local_3 <= 0xFF) {
-                        _local_5 = class_122.method_265(_local_2, _local_3, _local_4);
+                        _local_5 = ColorUtil.rgbToHex24(_local_2, _local_3, _local_4);
                         _local_11 = (_local_6 * 6) + _local_8 + 4;
                         _local_12 = (_local_7 * 6) + _local_9;
                         _local_1[_local_11][_local_12] = _local_5;

@@ -9,7 +9,7 @@ package background
     import page.GamePage;
     import levelEditor.LevelEditorMenu;
     import levelEditor.LevelEditor;
-    import com.jiggmin.data.class_122;
+    import com.jiggmin.data.ColorUtil;
     import flash.geom.ColorTransform;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
@@ -103,7 +103,7 @@ package background
 
         protected function method_59()
         {
-            var _local_1:Object = class_122.hex24torgb(this.bgColor);
+            var _local_1:Object = ColorUtil.hex24ToRGB(this.bgColor);
             var _local_2:Number = ((1 - this.scale) * 0.4) + 0.1;
             var _local_3:ColorTransform = new ColorTransform(1 - _local_2, 1 - _local_2, 1 - _local_2, 1, _local_1.red * _local_2, _local_1.green * _local_2, _local_1.blue * _local_2, 0);
             transform.colorTransform = _local_3;
