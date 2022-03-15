@@ -36,13 +36,15 @@ package package_8
         private var var_189:Number = 10;
         private var var_325:Number = 55;
 
-        public function RemoteCharacter(tId:int, dot:MiniMapDot, _arg_3:String, hatId:int, headId:int, bodyId:int, feetId:int)
+        public function RemoteCharacter(tId:int, dot:MiniMapDot, userName:String, hatId:int, headId:int, bodyId:int, feetId:int)
         {
             super(hatId, headId, bodyId, feetId);
             this.tempID = tId;
             this.mapDot = dot;
+            this.mapDot.gotoAndStop("remote" + this.tempID.toString());
             this.var_180 = var_448 + 1;
-            m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = _arg_3;
+            m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
+            setNameColor(this.mapDot.getColor(this.tempID.toString()));
             this.commandHandler.defineCommand("p" + this.tempID.toString(), this.pos);
             this.commandHandler.defineCommand("var" + this.tempID.toString(), this.method_801);
             this.commandHandler.defineCommand("exactPos" + this.tempID.toString(), this.method_667);

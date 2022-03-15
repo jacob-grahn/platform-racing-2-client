@@ -345,6 +345,11 @@ package package_8
             }
         }
 
+        protected function setNameColor(color:int)
+        {
+            m.nameHolder.nameBox.textColor = color;
+        }
+
         public function getPos()
         {
             var pos:Object = new Object();
