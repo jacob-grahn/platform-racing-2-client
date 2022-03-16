@@ -345,6 +345,11 @@ package package_8
             }
         }
 
+        public function getName():String
+        {
+            return m.nameHolder.nameBox.text;
+        }
+
         protected function setNameColor(color:int)
         {
             m.nameHolder.nameBox.textColor = color;

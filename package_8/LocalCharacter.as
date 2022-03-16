@@ -135,7 +135,7 @@ package package_8
             this.mapDot = dot;
             this.itemDisplay = itd;
             type = "local";
-            this.mapDot.gotoAndStop("local");
+            this.mapDot.setTempID(this.tempID, true);
             if (Main.instance.kongAPI != null && Main.instance.kongAPI.stats != null) {
                 if (h == 17 && b == 13 && f == 12) {
                     Main.instance.kongAPI.stats.submit("Stickman", 1);

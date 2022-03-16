@@ -89,7 +89,7 @@ package package_6
             this.holder.addChild(this.statsDisplay);
             this.miniMap.x = -195;
             this.miniMap.y = -198;
-            this.miniMap.mouseChildren = this.miniMap.mouseEnabled = false;
+            //this.miniMap.mouseChildren = this.miniMap.mouseEnabled = false;
             this.holder.addChild(this.miniMap);
             this.itemDisplay.x = -273;
             this.itemDisplay.y = -198;

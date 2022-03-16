@@ -41,7 +41,7 @@ package package_8
             super(hatId, headId, bodyId, feetId);
             this.tempID = tId;
             this.mapDot = dot;
-            this.mapDot.gotoAndStop("remote" + this.tempID.toString());
+            this.mapDot.setTempID(this.tempID.toString());
             this.var_180 = var_448 + 1;
             m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
             setNameColor(this.mapDot.getColor(this.tempID.toString()));
