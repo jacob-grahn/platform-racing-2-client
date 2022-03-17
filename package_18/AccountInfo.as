@@ -22,6 +22,7 @@ package package_18
     import package_4.OutfitPopup;
     import package_4.Popup;
     import package_8.Character;
+    import package_22.CourseMenu;
     import package_22.LevelListing;
     import page.Page;
     import ui.GuildName;
@@ -252,7 +253,7 @@ package package_18
         // _loc6 = preset
         private function keyDownHandler(e:KeyboardEvent, confirmed:Boolean = false)
         {
-            if ((Popup.getOpen().length > 0 && !confirmed) || e.target is TextField) {
+            if ((Popup.getOpen().length > 0 && !confirmed) || (e.target is TextField && e.target.selectable) || CourseMenu.instance != null) {
                 e.preventDefault();
                 return;
             }
