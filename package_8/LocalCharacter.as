@@ -54,7 +54,7 @@ package package_8
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var course:Course;
         private var map:Map;
-        private var mapDot:MovieClip; // var_174
+        private var mapDot:MiniMapDot; // var_174
         private var itemDisplay:ItemDisplay;
         private var var_573:uint = setInterval(method_796, 5000);
         private var var_535:uint = setInterval(ensureCowboyStats, 250);
