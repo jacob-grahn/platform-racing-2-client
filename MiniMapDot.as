@@ -16,8 +16,8 @@ package
 
     public dynamic class MiniMapDot extends MovieClip 
     {
-        private const remote0Color:uint = /*0x0066FF;*/0x10B6DE;
-        private const remote1Color:uint = 0xFFFF00;//0xCC3333;
+        private const remote0Color:uint = 0x10B6DE;//0x0066FF;
+        private const remote1Color:uint = 0xFF0000;//0xCC3333;
         private const remote2Color:uint = 0x00FF00;//0x009900;//0xFF6633;
         private const remote3Color:uint = 0x999999;//FF00FF;//0xCA6EED;
         private const localColor:uint = 0xFFFF00;
@@ -42,7 +42,6 @@ package
             }
         }
 
-        // method_331 = clickLoadouts -- changed to loadoutsMouseEvent in 161
         public function infoMouseEvent(e:MouseEvent = null)
         {
             if ((Course.course == null || !(Course.course is Game)) && e != null) {
@@ -77,6 +76,7 @@ package
         {
             this.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
         }
+
     }
 }//package 
 

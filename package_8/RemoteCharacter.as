@@ -44,7 +44,7 @@ package package_8
             this.mapDot.setTempID(this.tempID);
             this.var_180 = var_448 + 1;
             m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
-            setNameColor(this.mapDot.getColor(this.tempID.toString()));
+            setNameColor(this.mapDot.getColor(this.tempID));
             this.commandHandler.defineCommand("p" + this.tempID.toString(), this.pos);
             this.commandHandler.defineCommand("var" + this.tempID.toString(), this.method_801);
             this.commandHandler.defineCommand("exactPos" + this.tempID.toString(), this.method_667);
