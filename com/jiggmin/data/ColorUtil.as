@@ -154,7 +154,8 @@ package com.jiggmin.data
         }
 
         // _loc2 = hex
-        public static function method_712(num:Number):String
+        // method_712 = decimalToHex
+        public static function decimalToHex(num:Number):String
         {
             var hex:String = num.toString(16).toUpperCase();
             while (hex.length < 6) {

@@ -153,7 +153,7 @@ package com.jiggmin.ColorPicker
                 _arg_1 = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
             }
             if (stage.focus != this.m.textBox.textField) {
-                this.m.textBox.text = "#" + ColorUtil.method_712(_arg_1).substr(2);
+                this.m.textBox.text = "#" + ColorUtil.decimalToHex(_arg_1).substr(2);
             }
             this.method_765(this.var_121, _arg_1);
             dispatchEvent(new Event(Event.CHANGE));
