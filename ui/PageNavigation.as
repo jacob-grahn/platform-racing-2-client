@@ -36,36 +36,22 @@ package ui
             this.clear();
             var clickable:Boolean = true;
             if (this.mode != "vertical") {
-                clickable = true;
-                if (this.selected <= 1) {
-                    clickable = false;
-                }
+                clickable = this.selected > 1;
                 this.makeNavButton("<- Last", this.selected - 1, clickable);
             }
             if (this.mode == "full" || this.mode == "vertical") {
                 var i:int = 1;
                 while (i <= this.count) {
-                    if (i == this.selected) {
-                        clickable = false;
-                    } else {
-                        clickable = true;
-                    }
+                    clickable = i != this.selected;
                     this.makeNavButton(i.toString(), i, clickable);
                     i++;
                 }
             }
             if (this.mode != "vertical") {
-                clickable = true;
-                if (this.selected >= this.count) {
-                    clickable = false;
-                }
+                clickable = this.selected < this.count;
                 this.makeNavButton("Next ->", this.selected + 1, clickable);
             }
-            if (this.mode != "vertical") {
-                this.position("horizontal");
-            } else {
-                this.position("vertical");
-            }
+            this.position(this.mode != 'vertical' ? 'horizontal' : 'vertical');
         }
 
         // _loc3 = i
@@ -77,31 +63,23 @@ package ui
         {
             var i:int = 0;
             var m:PageNumberGraphic;
+            var h:Boolean = direction == 'horizontal';
             var varPos:Number = 0;
             while (i < this.navButtonArray.length) {
                 m = this.navButtonArray[i];
-                if (direction == "horizontal") {
+                if (h) {
                     m.x = varPos;
-                    varPos = varPos + m.width;
+                    varPos += m.width;
                 } else {
                     m.y = varPos;
-                    varPos = varPos + m.height;
+                    varPos += m.height;
                 }
                 i++;
             }
-            var startingPos:Number;
-            if (direction == "horizontal") {
-                startingPos = (width - this.w) / (this.navButtonArray.length - 1);
-            } else {
-                startingPos = (height - this.w) / (this.navButtonArray.length - 1);
-            }
+            var startingPos:Number = ((h ? width : height) - this.w) / (this.navButtonArray.length - 1);
             i = 1;
             while (i < this.navButtonArray.length) {
-                if (direction == "horizontal") {
-                    this.navButtonArray[i].x = (this.navButtonArray[i].x - (startingPos * i));
-                } else {
-                    this.navButtonArray[i].y = (this.navButtonArray[i].y - (startingPos * i));
-                }
+                this.navButtonArray[i][h ? 'x' : 'y'] -= startingPos * i;
                 i++;
             }
         }
@@ -141,6 +119,7 @@ package ui
         private function clickPage(e:TextEvent)
         {
             this.setPageNum(int(e.text));
+            Main.stage.focus = Main.stage;
         }
 
         public function setPageNum(i:int)
