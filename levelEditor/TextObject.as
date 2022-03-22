@@ -53,6 +53,8 @@ package levelEditor
             s = s.replace(/`/g, "#96");
             s = s.replace(/&/g, "#38");
             s = s.replace(/,/g, "#44");
+            s = s.replace(/\+/g, "#43");
+            s = s.replace(/-/g, "#45");
             return s.replace(/;/g, "#59");
         }
 
@@ -63,6 +65,8 @@ package levelEditor
             s = s.replace(/#38/g, "&");
             s = s.replace(/#44/g, ",");
             s = s.replace(/#59/g, ";");
+            s = s.replace(/#43/g, "+");
+            s = s.replace(/#45/g, "-");
             return s.replace(/#35/g, "#");
         }
 

@@ -16,7 +16,7 @@ package levelEditor
     import package_14.Settings;
     import package_14.class_172;
     import package_14.Tools;
-    import package_14.class_170;
+    import package_14.Backgrounds;
     import package_14.SideBar;
     import package_15.SaveLevelPopup;
     import package_15.GetLevels;
@@ -30,7 +30,7 @@ package levelEditor
         public var settings:Settings = new Settings(); // var_132
         public var var_242:class_172 = new class_172();
         public var tools:Tools = new Tools();
-        public var var_508:class_170 = new class_170();
+        public var bg:Backgrounds = new Backgrounds(); // var_508
         public var sideBar:SideBar = blocks;
         private var editor:LevelEditor = LevelEditor.editor;
         public var m:LevelEditorMenuGraphic = new LevelEditorMenuGraphic();
@@ -116,7 +116,7 @@ package levelEditor
         // method_301 = clickBG
         private function clickBG(e:MouseEvent)
         {
-            this.method_43(this.var_508);
+            this.method_43(this.bg);
             this.editor.focusNone();
             this.m.undoButton.enabled = this.m.redoButton.enabled = false;
             this.moveGlow(e.target);
@@ -185,7 +185,7 @@ package levelEditor
         public function method_719()
         {
             this.editor.clear();
-            this.var_508.var_542.updateColor();
+            this.bg.var_542.updateColor();
         }
 
         // method_318 = clickExit

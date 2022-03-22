@@ -93,12 +93,12 @@ package package_8
             addChild(this.m);
         }
 
-        public function setColors(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:int, _arg_8:int)
+        public function setColors(hatColor:int, hatColor2:int, headColor:int, headColor2:int, bodyColor:int, bodyColor2:int, feetColor:int, feetColor2:int)
         {
-            this.setHatColors(_arg_1, _arg_2);
-            this.setHeadColors(_arg_3, _arg_4);
-            this.setBodyColors(_arg_5, _arg_6);
-            this.setFeetColors(_arg_7, _arg_8);
+            this.setHatColors(hatColor, hatColor2);
+            this.setHeadColors(headColor, headColor2);
+            this.setBodyColors(bodyColor, bodyColor2);
+            this.setFeetColors(feetColor, feetColor2);
         }
 
         // method_375 = resetHats
@@ -213,10 +213,11 @@ package package_8
         }
 
         // method_133 = setHatColors
-        public function setHatColors(color:int, epic:int)
+        public function setHatColors(color:int, epic:int, hatNum:int = 1)
         {
-            this.hat1Color = color;
-            this.hat1Color2 = epic;
+            hatNum = Data.numLimit(hatNum, 1, 4);
+            this['hat' + hatNum + 'Color'] = color;
+            this['hat' + hatNum + 'Color2'] = epic;
             this.applyAppearance();
         }
 
@@ -344,6 +345,16 @@ package package_8
             }
         }
 
+        public function getName():String
+        {
+            return m.nameHolder.nameBox.text;
+        }
+
+        protected function setNameColor(color:int)
+        {
+            m.nameHolder.nameBox.textColor = color;
+        }
+
         public function getPos()
         {
             var pos:Object = new Object();
@@ -403,11 +414,7 @@ package package_8
         {
             var _local_2:Number = this.var_269 % 8;
             if (!this.fadeOutStarted) {
-                if (_local_2 >= 4) {
-                    alpha = 0.5;
-                } else {
-                    alpha = 0.75;
-                }
+                alpha = _local_2 >= 4 ? 0.5 : 0.75;
             }
             this.var_269--;
             if (this.var_269 <= 0) {
@@ -500,7 +507,7 @@ package package_8
         private function method_156(_arg_1:Event)
         {
             var _local_2:Number = this.m.superJumpAnim.currentFrame / 2;
-            scaleY = (((Math.random() * _local_2) + (100 - (_local_2 / 2))) / 100);
+            scaleY = ((Math.random() * _local_2) + (100 - (_local_2 / 2))) / 100;
         }
 
         public function beginJet()

@@ -26,11 +26,11 @@ package package_23
             super();
             var online:LobbyTab = new LobbyTab(this.clickOnline, "Online");
             var friends:LobbyTab = new LobbyTab(this.clickFriends, "Friends");
-            //var following:LobbyTab = new LobbyTab(this.clickFollowing, "Following");
+            var following:LobbyTab = new LobbyTab(this.clickFollowing, "Following");
             var ignored:LobbyTab = new LobbyTab(this.clickIgnored, "Ignored");
             var guilds:LobbyTab = new LobbyTab(this.clickGuilds, "Guilds");
             if (Main.group > 0) {
-                this.var_258 = new class_246([online, friends, /*following, */ ignored, guilds], 0, 186, "playerLists");
+                this.var_258 = new class_246([online, friends, following, ignored/*, guilds*/], 0, 186, "playerLists");
             } else {
                 this.var_258 = new class_246([online, guilds], 0, 186, "playerLists");
             }
@@ -51,10 +51,10 @@ package package_23
             this.pageHolder.changePage(new Friends());
         }
 
-        /*private function clickFollowing()
+        private function clickFollowing()
         {
             this.pageHolder.changePage(new Following());
-        }*/
+        }
 
         // method_541 = clickIgnored
         private function clickIgnored()

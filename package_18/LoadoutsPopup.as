@@ -11,7 +11,6 @@ package package_18
 
     public class LoadoutsPopup extends GetLevelsPopup 
     {
-
         private var character:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var playerDisplay:PlayerDisplay; // var_495

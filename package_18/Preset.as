@@ -67,6 +67,25 @@ package package_18
             return data;
         }
 
-
+        public function getOutfitFormat()
+        {
+            return {
+                hats: [this.hat, 1, 1, 1],
+                head: this.head,
+                body: this.body,
+                feet: this.feet,
+                colors: {
+                    hats: [[this.hatColor, this.hatColor2], null, null, null],
+                    head: [this.headColor, this.headColor2],
+                    body: [this.bodyColor, this.bodyColor2],
+                    feet: [this.feetColor, this.feetColor2]
+                },
+                stats: {
+                    speed: this.speed,
+                    accel: this.acceleration,
+                    jumpn: this.jumping
+                }
+            };
+        }
     }
 }

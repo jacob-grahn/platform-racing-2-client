@@ -5,13 +5,14 @@
 
 package package_6
 {
-    import flash.display.BitmapData;
-    import flash.display.Bitmap;
-    import flash.display.Sprite;
-    import flash.geom.ColorTransform;
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
+    import flash.display.Bitmap;
+    import flash.display.BitmapData;
     import flash.display.DisplayObject;
+    import flash.display.Sprite;
+    import flash.events.MouseEvent;
+    import flash.geom.ColorTransform;
     import flash.geom.Rectangle;
 
     public class MiniMap extends Removable 
@@ -22,7 +23,7 @@ package package_6
         private var holder:Sprite = new Sprite();
         private var var_16:Sprite = new Sprite(); // block currently being processed
         private var var_49:Sprite = new Sprite(); // finishes? all blocks? prob all blocks???
-        private var var_134:Sprite = new Sprite(); // players?
+        private var playerDots:Sprite = new Sprite(); // var_134
         private var m:MiniMapGraphic = new MiniMapGraphic();
         //private var var_662:Array = new Array(); // unused?
         private var maxSpaceWidth:int = 400; // var_239
@@ -78,8 +79,8 @@ package package_6
         public function getDot():MiniMapDot
         {
             var dot:MiniMapDot = new MiniMapDot();
-            this.var_134.addChild(dot);
-            this.method_182(this.var_134, this.holder.scaleX, 4);
+            this.playerDots.addChild(dot);
+            this.method_182(this.playerDots, this.holder.scaleX, 4);
             return dot;
         }
 
@@ -94,12 +95,12 @@ package package_6
             var _local_5:Number = _local_1 < _local_3 ? _local_1 : _local_3;
             var _local_6:Number = _local_2 < _local_4 ? _local_2 : _local_4;
             var _local_7:Number = _local_5 > _local_6 ? _local_5 : _local_6;
-            this.var_49.scaleX = this.var_49.scaleY = this.var_134.scaleX = this.var_134.scaleY = this.var_16.scaleX = this.var_16.scaleY = _local_7;
+            this.var_49.scaleX = this.var_49.scaleY = this.playerDots.scaleX = this.playerDots.scaleY = this.var_16.scaleX = this.var_16.scaleY = _local_7;
             var _local_8:Sprite = new Sprite();
             _local_8.addChild(this.var_16);
             var _local_9:Rectangle = this.var_16.getBounds(_local_8);
-            this.var_49.x = this.var_134.x = this.var_16.x = -_local_9.left;
-            this.var_49.y = this.var_134.y = this.var_16.y = -_local_9.top;
+            this.var_49.x = this.playerDots.x = this.var_16.x = -_local_9.left;
+            this.var_49.y = this.playerDots.y = this.var_16.y = -_local_9.top;
             var _local_10:Number = Data.numLimit(this.var_16.width, 1, this.maxSpaceWidth);
             var _local_11:Number = Data.numLimit(this.var_16.height, 1, this.maxSpaceWidth);
             this.bitmapData = new BitmapData(Math.ceil(_local_10), Math.ceil(_local_11), true, 0);
@@ -110,7 +111,7 @@ package package_6
             addChild(this.holder);
             this.holder.addChild(this.bitmap);
             this.holder.addChild(this.var_49);
-            this.holder.addChild(this.var_134);
+            this.holder.addChild(this.playerDots);
             this.method_263();
         }
 
@@ -128,7 +129,7 @@ package package_6
             var _local_5:int = int((this.maxSpaceHeight - _local_1.height) / 2);
             this.holder.x = this.holder.x + (_local_4 - _local_1.left) + 3;
             this.holder.y = this.holder.y + (_local_5 - _local_1.top) + 3;
-            this.method_182(this.var_134, this.scale, 4);
+            this.method_182(this.playerDots, this.scale, 4);
             this.method_182(this.var_49, this.scale, 4);
         }
 
@@ -152,8 +153,10 @@ package package_6
         public function clear()
         {
             if (this.bitmapData != null) {
-                var _local_1:Rectangle = new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height);
-                this.bitmapData.fillRect(_local_1, 0);
+                /*var _local_1:Rectangle = new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height);
+                this.bitmapData.fillRect(_local_1, 0);*/
+                this.bitmapData.dispose();
+                this.bitmapData = null;
             }
             while (this.var_49.numChildren > 0) {
                 this.var_49.removeChildAt(0);
@@ -162,16 +165,21 @@ package package_6
 
         override public function remove()
         {
-            if (this.bitmapData != null) {
+            /*if (this.bitmapData != null) {
                 this.bitmapData.dispose();
                 this.bitmapData = null;
+            }*/
+            this.clear();
+            while (this.playerDots.numChildren > 0) {
+                this.playerDots.getChildAt(0).remove();
+                this.playerDots.removeChildAt(0);
             }
             removeChild(this.m);
             this.bitmap = null;
             this.holder = null;
             this.var_16 = null;
             this.var_49 = null;
-            this.var_134 = null;
+            this.playerDots = null;
             this.m = null;
             super.remove();
         }

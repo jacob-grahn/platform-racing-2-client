@@ -17,8 +17,12 @@ package package_18
     import flash.text.TextFieldType;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
+    import package_4.ConfirmPopup;
     import package_4.HoverPopup;
+    import package_4.OutfitPopup;
+    import package_4.Popup;
     import package_8.Character;
+    import package_22.CourseMenu;
     import package_22.LevelListing;
     import page.Page;
     import ui.GuildName;
@@ -247,22 +251,26 @@ package package_18
         // _loc4 = applyPreset
         // _loc5 = textBox
         // _loc6 = preset
-        private function keyDownHandler(e:KeyboardEvent)
+        private function keyDownHandler(e:KeyboardEvent, confirmed:Boolean = false)
         {
-            var presetNum:int = -1;
-            var applyPreset:Boolean = true;
+            if ((Popup.getOpen().length > 0 && !confirmed) || (e.target is TextField && e.target.selectable) || CourseMenu.instance != null) {
+                e.preventDefault();
+                return;
+            }
+            var presetNum:int = -1, preset:Preset;
             if ((e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105)) {
                 presetNum = e.keyCode % 48;
                 presetNum = presetNum == 0 ? 10 : presetNum;
-            }
-            if (e.target is TextField) {
-                var textBox:TextField = e.target as TextField;
-                if (textBox.type === TextFieldType.INPUT) {
-                    applyPreset = false; // preserve manually typing stats in textboxes (instead of using slider)
+                if (!confirmed) {
+                    preset = Presets.getPreset(presetNum);
+                    new OutfitPopup(function () {
+                        keyDownHandler(e, true);
+                    }, preset.getOutfitFormat(), 'Are you sure you want to apply this loadout? This will clear your current stats and character style.');
+                    return;
                 }
             }
-            if (presetNum != -1 && applyPreset) {
-                var preset:Preset = Presets.getPreset(presetNum);
+            if (presetNum != -1) {
+                preset = Presets.getPreset(presetNum);
                 Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
             }
         }
@@ -293,11 +301,6 @@ package package_18
             } else if (e.type == MouseEvent.MOUSE_OVER) {
                 this.loadoutsHoverTimer = setTimeout(this.loadoutsMouseEvent, 500);
             }
-        }
-
-        public static function getPlayerDisplay()
-        {
-            return hasOwnProperty('playerDisplay') && playerDisplay != null ? playerDisplay : null;
         }
 
         private function reset()

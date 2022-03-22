@@ -61,27 +61,7 @@ package lobby
             this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OVER, this.hoverKong, false, 0, true);
             this.bottom_bts.moreGamesButton.addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutKong, false, 0, true);
             addChild(this.bottom_bts);
-            //this.checkAnt();
         }
-
-        // method_547 = checkAnt
-        // MOVED KONGOUTFITPOPUP TO menu AFTER FLASH EOL
-        /*private function checkAnt()
-        {
-            if (Main.siteMode == "kongregate" && Main.instance.kongAPI != null && !Main.hasAnt) {
-                if (Main.instance.kongAPI.services.isGuest() && Main.group != 0) {
-                    Lobby.lobbyEntrances++;
-                    if (Lobby.lobbyEntrances == 4 || Lobby.lobbyEntrances == 10) {
-                        new KongOutfitPopup();
-                    }
-                } else {
-                    Main.socket.write("award_kong_outfit`");
-                    Main.socket.write("get_customize_info`");
-                    new MessagePopup("Thank you for playing Platform Racing 2 on Kongregate! To say thanks you have been awarded a special Kongregate Solidier Ant outfit. Enjoy!");
-                    Main.hasAnt = true;
-                }
-            }
-        }*/
 
         // method_328 = clickLogout
         private function clickLogout(e:MouseEvent = null)

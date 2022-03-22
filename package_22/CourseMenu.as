@@ -92,6 +92,7 @@ package package_22
         {
             this.confirmed = false;
             this.remove();
+            Main.stage.focus = Main.stage;
         }
 
         public function staticCloseMenu()

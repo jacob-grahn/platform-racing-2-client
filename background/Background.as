@@ -9,7 +9,7 @@ package background
     import page.GamePage;
     import levelEditor.LevelEditorMenu;
     import levelEditor.LevelEditor;
-    import com.jiggmin.data.class_122;
+    import com.jiggmin.data.ColorUtil;
     import flash.geom.ColorTransform;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
@@ -17,6 +17,11 @@ package background
     import flash.geom.Point;
     import flash.display.DisplayObjectContainer;
     import flash.display.DisplayObject;
+    import package_4.MessagePopup;
+    import package_4.Popup;
+    import package_6.Course;
+    import package_6.Game;
+    import package_6.PrizePopup;
 
     public class Background extends Sprite 
     {
@@ -98,7 +103,7 @@ package background
 
         protected function method_59()
         {
-            var _local_1:Object = class_122.hex24torgb(this.bgColor);
+            var _local_1:Object = ColorUtil.hex24ToRGB(this.bgColor);
             var _local_2:Number = ((1 - this.scale) * 0.4) + 0.1;
             var _local_3:ColorTransform = new ColorTransform(1 - _local_2, 1 - _local_2, 1 - _local_2, 1, _local_1.red * _local_2, _local_1.green * _local_2, _local_1.blue * _local_2, 0);
             transform.colorTransform = _local_3;
@@ -131,7 +136,25 @@ package background
         public function draw(_arg_1:Number=100)
         {
             if (this.var_39 < this.saveArray.length) {
-                this.var_394 = setTimeout(this.draw, 10, _arg_1);
+                if (this is DrawableBackground) {
+                    var thisLayer:Background = this;
+                    this.var_394 = setTimeout(function () {
+                        try {
+                            draw(_arg_1);
+                        } catch (e:Error) {
+                            var msg:String = 'Error: Some art didn\'t load correctly. ';
+                            msg += Course.course is Game ? 'Don\'t worry! You can still play the level.' : 'This could be because there\'s too much art on your level. Saving the level now may cause permanent damage to its playability. Try undoing your recent changes until you don\'t get this error, and then saving your work.';
+                            msg += "\n\nIf this persists, please contact a member of the PR2 staff team.";
+                            var openPopups:Array = Popup.getOpen();
+                            if (openPopups.length == 0 || (openPopups.length == 1 && openPopups[0] is PrizePopup)) {
+                                new MessagePopup(msg);
+                            };
+                            course.finishDrawing(thisLayer);
+                        }
+                    }, 10);
+                } else {
+                    this.var_394 = setTimeout(this.draw, 10, _arg_1);
+                }
             } else {
                 this.course.finishDrawing(this);
             }

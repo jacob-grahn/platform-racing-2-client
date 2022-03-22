@@ -12,7 +12,7 @@ package com.jiggmin.ColorPicker
     import flash.events.MouseEvent;
     import flash.events.Event;
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_122;
+    import com.jiggmin.data.ColorUtil;
     import flash.display.DisplayObject;
     import flash.geom.ColorTransform;
     import flash.ui.Mouse;
@@ -41,7 +41,8 @@ package com.jiggmin.ColorPicker
         private var var_326:BitmapData;
         private var var_146:ColorPickerHueArrowGraphic;
         private var var_100:ColorPickerCrosshairsGraphic;
-        private var var_194:CustomCursor;
+        private var priorCursor:CustomCursor; // var_194
+        private var priorCursorActive:Boolean;
         private var me:MouseEvent;
         private var m:ColorPickerPopupGraphic;
 
@@ -109,8 +110,9 @@ package com.jiggmin.ColorPicker
             this.var_89.addEventListener(Event.CHANGE, this.method_212, false, 0, true);
             this.var_89.addEventListener(Event.COMPLETE, this.method_275, false, 0, true);
             if (CustomCursor.instance != null) {
-                this.var_194 = CustomCursor.instance;
-                this.var_194.pause();
+                this.priorCursor = CustomCursor.instance;
+                this.priorCursorActive = this.priorCursor.isActive();
+                this.priorCursor.pause();
             }
             CustomCursor.change(this.var_89);
             stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
@@ -133,7 +135,7 @@ package com.jiggmin.ColorPicker
             var _local_2:Object;
             if (this.color != _arg_1) {
                 this.color = _arg_1;
-                _local_2 = class_122.hex24tohsb(_arg_1);
+                _local_2 = ColorUtil.hex24ToHSB(_arg_1);
                 this.hue = _local_2.hue;
                 this.var_146.y = Math.round(60 - ((this.hue / 360) * 60));
                 this.method_382(this.hue);
@@ -148,10 +150,10 @@ package com.jiggmin.ColorPicker
         private function method_40(_arg_1:int=-1)
         {
             if (_arg_1 == -1) {
-                _arg_1 = class_122.method_68(this.hue, this.saturation, this.brightness);
+                _arg_1 = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
             }
             if (stage.focus != this.m.textBox.textField) {
-                this.m.textBox.text = "#" + class_122.method_712(_arg_1).substr(2);
+                this.m.textBox.text = "#" + ColorUtil.decimalToHex(_arg_1).substr(2);
             }
             this.method_765(this.var_121, _arg_1);
             dispatchEvent(new Event(Event.CHANGE));
@@ -173,7 +175,7 @@ package com.jiggmin.ColorPicker
 
         private function method_765(_arg_1:DisplayObject, _arg_2:int)
         {
-            var _local_3:Object = class_122.hex24torgb(_arg_2);
+            var _local_3:Object = ColorUtil.hex24ToRGB(_arg_2);
             _arg_1.transform.colorTransform = new ColorTransform(0, 0, 0, 1, _local_3.red, _local_3.green, _local_3.blue, 0);
         }
 
@@ -238,7 +240,7 @@ package com.jiggmin.ColorPicker
             this.var_100.y = Math.round(_local_4);
             this.saturation = 100 * (_local_3 / 60);
             this.brightness = 100 - (100 * (_local_4 / 60));
-            this.color = class_122.method_68(this.hue, this.saturation, this.brightness);
+            this.color = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
             this.method_40();
             this.var_48.visible = false;
         }
@@ -252,7 +254,7 @@ package com.jiggmin.ColorPicker
             _local_3 = Data.numLimit(_local_3, 0, 60);
             this.var_146.y = Math.round(_local_3);
             this.hue = 360 - (360 * (_local_3 / 60));
-            this.color = class_122.method_68(this.hue, this.saturation, this.brightness);
+            this.color = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
             this.method_40();
             this.var_48.visible = false;
         }
@@ -391,7 +393,7 @@ package com.jiggmin.ColorPicker
             var _local_6:int;
             while (_local_6 < _arg_2) {
                 _local_4 = int((360 - (360 * (_local_6 / _arg_2))));
-                _local_5 = class_122.method_68(_local_4, 100, 100);
+                _local_5 = ColorUtil.hsbToHex24(_local_4, 100, 100);
                 _local_3.fillRect(new Rectangle(0, _local_6, _arg_1, 1), _local_5);
                 _local_6++;
             }
@@ -439,7 +441,7 @@ package com.jiggmin.ColorPicker
                 _local_10 = 0;
                 while (_local_10 < _local_4) {
                     _local_7 = 100 - ((_local_10 / _local_4) * 100);
-                    _local_5 = class_122.method_68(_arg_1, _local_6, _local_7);
+                    _local_5 = ColorUtil.hsbToHex24(_arg_1, _local_6, _local_7);
                     _local_2.setPixel(_local_9, _local_10, _local_5);
                     _local_10++;
                 }
@@ -489,13 +491,16 @@ package com.jiggmin.ColorPicker
                 this.var_326.dispose();
                 if (CustomCursor.instance != null) {
                     CustomCursor.unsetInstance();
-                    if (this.var_194 != null) {
-                        CustomCursor.change(this.var_194);
-                        this.var_194.init();
+                    if (this.priorCursor != null) {
+                        CustomCursor.change(this.priorCursor);
+                        this.priorCursor.init();
+                        if (!this.priorCursorActive) {
+                            this.priorCursor.pause();
+                        }
                     }
                 } else {
-                    if (this.var_194 != null) {
-                        this.var_194.remove();
+                    if (this.priorCursor != null) {
+                        this.priorCursor.remove();
                     }
                 }
                 this.var_69 = null;
@@ -505,7 +510,7 @@ package com.jiggmin.ColorPicker
                 this.var_146 = null;
                 this.var_100 = null;
                 this.var_89 = null;
-                this.var_194 = null;
+                this.priorCursor = null;
                 this.me = null;
             }
             super.remove();

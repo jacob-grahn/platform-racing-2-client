@@ -54,7 +54,7 @@ package package_8
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var course:Course;
         private var map:Map;
-        private var mapDot:MovieClip; // var_174
+        private var mapDot:MiniMapDot; // var_174
         private var itemDisplay:ItemDisplay;
         private var var_573:uint = setInterval(method_796, 5000);
         private var var_535:uint = setInterval(ensureCowboyStats, 250);
@@ -135,7 +135,7 @@ package package_8
             this.mapDot = dot;
             this.itemDisplay = itd;
             type = "local";
-            this.mapDot.gotoAndStop("local");
+            this.mapDot.setTempID(this.tempID, true);
             if (Main.instance.kongAPI != null && Main.instance.kongAPI.stats != null) {
                 if (h == 17 && b == 13 && f == 12) {
                     Main.instance.kongAPI.stats.submit("Stickman", 1);

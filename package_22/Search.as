@@ -29,7 +29,10 @@ package package_22
             mode = "search";
             this.m.x = 36;
             this.m.y = 8;
-            this.m.search_bt.addEventListener(MouseEvent.CLICK, this.doSearch);
+            this.m.mode_cb.addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
+            this.m.order_cb.addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
+            this.m.dir_cb.addEventListener(Event.CLOSE, this.focusStage, false, 0, true);
+            this.m.search_bt.addEventListener(MouseEvent.CLICK, this.doSearch, false, 0, true);
             this.m.searchBox.addEventListener(KeyboardEvent.KEY_DOWN, this.doSearch);
             class_10.addChild(this.m);
             loadingGraphic.visible = false;
@@ -116,6 +119,11 @@ package package_22
             }
         }
 
+        private function focusStage(e:Event)
+        {
+            Main.stage.focus = Main.stage;
+        }
+
         override public function remove()
         {
             this.memory.searchStr = this.m.searchBox.text;
@@ -123,6 +131,9 @@ package package_22
             this.memory.searchOrderIndex = this.m.order_cb.selectedIndex;
             this.memory.searchDirIndex = this.m.dir_cb.selectedIndex;
             clearTimeout(this.var_421);
+            this.m.mode_cb.removeEventListener(Event.CLOSE, this.focusStage);
+            this.m.order_cb.removeEventListener(Event.CLOSE, this.focusStage);
+            this.m.dir_cb.removeEventListener(Event.CLOSE, this.focusStage);
             this.m.search_bt.removeEventListener(MouseEvent.CLICK, this.doSearch);
             this.m.searchBox.removeEventListener(KeyboardEvent.KEY_DOWN, this.doSearch);
             super.remove();
