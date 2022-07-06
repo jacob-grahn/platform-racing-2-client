@@ -269,7 +269,7 @@ package levelEditor
             this.draw5.method_22();
             _arg_1.focusOn();
             this.var_225 = _arg_1;
-            this.menu.method_109();
+            this.menu.changeUndoRedoState();
             this.blockGrid.visible = _arg_1 == this.blockBG;
             if (_arg_1 == this.bg1 || _arg_1 == this.draw1) {
                 this.bg1.alpha = this.draw1.alpha = 1;
@@ -327,34 +327,26 @@ package levelEditor
             this.menu.settings.timeButton.setValue(this.maxTime);
         }
 
-        public function method_142(r:String)
+        // method_142 = setMinRank
+        public function setMinRank(r:String)
         {
-            if (r == null || r == "") {
-                r = "0";
-            }
+            r = r == null || r == '' ? '0' : r;
             this.minRank = r;
             this.menu.settings.minRankButton.setValue(r);
         }
 
         override public function setCowboyChance(sfcm:String)
         {
-            if (sfcm == null || sfcm == "") {
-                sfcm = "5";
-            }
+            sfcm = sfcm == null || sfcm == '' ? '5' : sfcm;
             super.setCowboyChance(sfcm);
             this.menu.settings.sfcmButton.setValue(this.cowboyChance);
         }
 
-        public function method_121(p:String)
+        // method_121 = setPass
+        public function setPass(p:String)
         {
-            if (p == null) {
-                p = "";
-            }
-            if (p == "") {
-                this.hasPass = 0;
-            } else {
-                this.hasPass = 1;
-            }
+            p = p == null ? '' : p;
+            this.hasPass = int(p != "");
             this.pass = p;
             this.menu.settings.passButton.setValue(p);
         }
@@ -369,13 +361,10 @@ package levelEditor
         override public function setVariables(vars:URLVariables)
         {
             this.live = vars.live;
-            this.method_142(vars.min_level);
-            if (int(vars.has_pass) == 1) {
-                this.method_121("******");
-            } else {
-                this.method_121("");
-            }
+            this.setMinRank(vars.min_level);
+            this.setPass(int(vars.has_pass) == 1 ? '******' : '');
             super.setVariables(vars);
+            this.menu.reset();
         }
 
         public function method_344():URLVariables
@@ -395,11 +384,7 @@ package levelEditor
             vars.hasPass = this.hasPass;
             vars.gameMode = gameMode === 'eggs' ? 'egg' : gameMode;
             vars.cowboyChance = cowboyChance;
-            if (this.pass != null && this.pass.replace(/\*/g, "").length > 0) {
-                vars.passHash = Data.hash(this.pass + Env.LEVEL_PASS_SALT);
-            } else {
-                vars.passHash = "";
-            }
+            vars.passHash = this.pass != null && this.pass.replace(/\*/g, "").length > 0 ? Data.hash(this.pass + Env.LEVEL_PASS_SALT) : '';
             return vars;
         }
 
@@ -440,8 +425,8 @@ package levelEditor
         {
             this.removeBackgrounds();
             this.attachBackgrounds();
-            this.method_142("0");
-            this.method_121("");
+            this.setMinRank("0");
+            this.setPass("");
             this.setSong("");
             this.setGravity("1");
             this.setMaxTime("120");

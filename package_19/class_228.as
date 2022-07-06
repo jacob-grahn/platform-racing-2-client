@@ -10,7 +10,7 @@ package package_19
     import package_20.class_275;
     import flash.events.MouseEvent;
 
-    public class class_228 extends class_221 
+    public class class_228 extends StampButton 
     {
 
         public function class_228(_arg_1:int)

@@ -35,7 +35,7 @@ package package_14
         // minimum rank for level entry (optional)
         private var rankTitle:String = "Minimum Rank"; // var_548
         private var rankDesc:String = "Players below this rank will not be able to race on this course."; // var_596
-        public var minRankButton:ValueButton = new ValueButton("rank", rankTitle, rankDesc, "0", editor.method_142, 2); // minLevelButton
+        public var minRankButton:ValueButton = new ValueButton("rank", rankTitle, rankDesc, "0", editor.setMinRank, 2); // minLevelButton
 
         // gravity multiplier
         private var gravityTitle:String = "Gravity Multiplier"; // var_626
@@ -50,7 +50,7 @@ package package_14
         // password (optional)
         private var passTitle:String = "Secret Password"; // var_521
         private var passDesc:String = "This password lets players play your course while unpublished."; // var_580
-        public var passButton:ValueButton = new ValueButton("pass", passTitle, passDesc, "", editor.method_121, 32, null, "", false);
+        public var passButton:ValueButton = new ValueButton("pass", passTitle, passDesc, "", editor.setPass, 32, null, "", false);
 
         // game mode
         private var modeTitle:String = "Game Mode"; // var_637
