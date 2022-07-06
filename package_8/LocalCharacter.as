@@ -27,9 +27,10 @@ package package_8
     import flash.utils.clearTimeout;
     import flash.utils.setInterval;
     import flash.utils.setTimeout;
-	import items.Item;
-	import items.Items;
-	import items.SpeedBurst;
+    import items.Item;
+    import items.Items;
+    import items.JetPack;
+    import items.SpeedBurst;
     import sounds.SoundEffects;
     import package_6.ItemDisplay;
     import package_6.CourseTimer;
@@ -544,7 +545,7 @@ package package_8
                 this.left = tempRight;
             }
             if (this.curItem != null) {
-                this.curItem.setSpace(this.space);
+                this.curItem.setSpace(this.curItem is JetPack && this.crouching ? false : this.space);
             }
         }
 
@@ -846,8 +847,13 @@ package package_8
                 this.itemDisplay.setItem(Items.getNameFromCode(code));
             }
             if (this.curItem != null) {
-                this.curItem.remove();
-                this.curItem = null;
+                if (code == Items.jetPack && this.curItem is JetPack) {
+                    this.curItem.replenishFuel(this);
+                    return;
+                } else {
+                    this.curItem.remove();
+                    this.curItem = null;
+                }
             }
             this.curItem = Items.getFromCode(code, this);
         }

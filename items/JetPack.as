@@ -11,7 +11,7 @@ package items
     public class JetPack extends Item 
     {
 
-        private var var_592:Boolean = false;
+        private var spaceDown:Boolean = false; // var_592
 
         public function JetPack(lc:LocalCharacter)
         {
@@ -23,17 +23,11 @@ package items
 
         // _loc2 = totFuel
         // _loc3 = remainingFuel
-        override public function setSpace(_arg_1:Boolean)
+        override public function setSpace(pressed:Boolean)
         {
-            super.setSpace(space);
-            if (_arg_1) {
-                if (!character.crouching) {
-                    if (character.velY > -5) {
-                        character.velY = character.velY - 1.25;
-                    } else {
-                        character.velY = character.velY - 0.5;
-                    }
-                }
+            if (pressed && !character.crouching) {
+                super.setSpace(space);
+                character.velY -= character.velY > -5 ? 1.25 : 0.5;
                 var totFuel:Number = class_33.getNumber("totFuel");
                 var remainingFuel:Number = class_33.getNumber("fuel");
                 remainingFuel--;
@@ -43,20 +37,23 @@ package items
                     super.useItem();
                 }
             }
-            if (_arg_1 != this.var_592) {
-                this.var_592 = _arg_1;
+            if (pressed != this.spaceDown) {
+                this.spaceDown = pressed;
                 if (character != null) {
-                    if (_arg_1) {
-                        character.beginJet();
-                    } else {
-                        character.endJet();
-                    }
+                    pressed ? character.beginJet() : character.endJet();
                 }
             }
         }
 
         override public function useItem()
         {
+        }
+
+        public function replenishFuel(lc:LocalCharacter)
+        {
+            class_33.setNumber("totFuel", 200);
+            class_33.setNumber("fuel", 200);
+            lc.setAmmo(3);
         }
 
         override public function remove()
