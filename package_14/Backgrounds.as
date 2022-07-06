@@ -5,18 +5,18 @@
 
 package package_14
 {
-    import package_19.class_220;
+    import package_19.BackgroundColorPickerButton;
     import package_19.class_222;
     import com.jiggmin.data.Objects;
 
     public class Backgrounds extends SideBar 
     {
 
-        public var var_542:class_220 = new class_220();
+        public var cp_btn:BackgroundColorPickerButton = new BackgroundColorPickerButton(); // var_542
 
         public function Backgrounds()
         {
-            addItem(this.var_542);
+            addItem(this.cp_btn);
             addItem(new class_222(Objects.BG1Code, 8172673));
             addItem(new class_222(Objects.BG2Code, 13283754));
             addItem(new class_222(Objects.BG3Code, 528392));
@@ -27,5 +27,4 @@ package package_14
         }
 
     }
-}//package package_14
-
+}

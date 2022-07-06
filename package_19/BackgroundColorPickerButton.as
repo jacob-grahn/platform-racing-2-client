@@ -1,7 +1,7 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_19.class_220
+// package_19.BackgroundColorPickerButton = package_19.class_220
 
 package package_19
 {
@@ -10,12 +10,12 @@ package package_19
     import levelEditor.LevelEditor;
     import flash.events.Event;
 
-    public class class_220 extends Sprite
+    public class BackgroundColorPickerButton extends Sprite
     {
 
         private var cp:ColorPicker = new ColorPicker(); // var_12
 
-        public function class_220()
+        public function BackgroundColorPickerButton()
         {
             this.cp.width = this.cp.height = 30;
             this.cp.var_419 = ColorPicker.LEFT;

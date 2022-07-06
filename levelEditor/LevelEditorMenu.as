@@ -185,7 +185,7 @@ package levelEditor
         public function method_719()
         {
             this.editor.clear();
-            this.bg.var_542.updateColor();
+            this.bg.cp_btn.updateColor();
         }
 
         // method_318 = clickExit

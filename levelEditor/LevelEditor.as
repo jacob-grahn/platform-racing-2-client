@@ -205,6 +205,7 @@ package levelEditor
         {
             var arr:Array = s.split("`");
             this.setColor(Number(arr[0]));
+            this.menu.bg.cp_btn.updateColor();
             this.blockBG.setSaveString(arr[1]);
             this.bg1.setSaveString(arr[2]);
             this.bg2.setSaveString(arr[3]);
