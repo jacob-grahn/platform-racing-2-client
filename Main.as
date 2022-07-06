@@ -36,10 +36,10 @@ package
         private static const clientWidth:int = 550; // const_92
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
-        public static const beta:Boolean = false; // DISABLE IN PRODUCTION
+        public static const beta:Boolean = true; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
-        public static const build:String = '21-mar-2022-v167';
-        public static const version:String = '167.0';
+        public static const build:String = '6-jul-2022-v167_1b-r0';
+        public static const version:String = '167.1';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.dev";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.dev/levels"; // const_71
         public static var stage:Stage;
