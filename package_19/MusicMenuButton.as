@@ -7,19 +7,19 @@ package package_19
     public class MusicMenuButton extends class_215 
     {
 
-        private var song:String = "random";
+        private var song:String = 'random';
 
-        public function MusicMenuButton(_arg_1:Number=0)
+        public function MusicMenuButton()
         {
             addChild(new MusicNoteGraphic());
         }
 
-        public function setSong(_arg_1:String)
+        public function setSong(s:String)
         {
-            this.song = _arg_1;
+            this.song = s === '' ? 'random' : s;
         }
 
-        override protected function onClick(_arg_1:MouseEvent)
+        override protected function onClick(e:MouseEvent)
         {
             new MusicMenu(this, this.song);
         }
