@@ -77,7 +77,7 @@ package levelEditor
             this.editor.focusOn(this.editor.blockBG);
             this.editor.cur = this.editor.blockBG;
             this.changeUndoRedoState();
-            this.moveGlow(e.target);
+            this.moveGlow(this.m.blocksButton);
         }
 
         private function clickLayer00(e:MouseEvent)
@@ -242,8 +242,7 @@ package levelEditor
 
         public function reset()
         {
-            this.moveGlow(this.m.blocksButton);
-            this.changeSideBar(this.blocks);
+            this.clickBlocks(null);
             this.tools.exit();
         }
 
