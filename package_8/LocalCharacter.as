@@ -27,9 +27,10 @@ package package_8
     import flash.utils.clearTimeout;
     import flash.utils.setInterval;
     import flash.utils.setTimeout;
-	import items.Item;
-	import items.Items;
-	import items.SpeedBurst;
+    import items.Item;
+    import items.Items;
+    import items.JetPack;
+    import items.SpeedBurst;
     import sounds.SoundEffects;
     import package_6.ItemDisplay;
     import package_6.CourseTimer;
@@ -170,7 +171,9 @@ package package_8
             this.speedStat = Data.numLimit(s, 0, 100);
             this.accelStat = Data.numLimit(a, 0, 100);
             this.jumpnStat = Data.numLimit(j, 0, 100);
-            if (!(this.curItem is SpeedBurst && this.curItem.isUsed()) || reset) { // only apply speed change if a speed burst isn't active. wait to apply speed/accel change until after the speed burst ends and calls resetStats()
+            // only apply speed/accel change if a speed burst isn't active.
+            // wait to apply speed/accel change until after the speed burst ends and calls resetStats()
+            if (!(this.curItem is SpeedBurst && this.curItem.isUsed()) || reset) {
                 this.maxVelX = 2 + (this.speedStat / 10);
                 this.accel = 0.2 + (this.accelStat / 60);
                 this.ensureSantaStats();
@@ -542,7 +545,7 @@ package package_8
                 this.left = tempRight;
             }
             if (this.curItem != null) {
-                this.curItem.setSpace(this.space);
+                this.curItem.setSpace(this.curItem is JetPack && this.crouching ? false : this.space);
             }
         }
 
@@ -844,8 +847,13 @@ package package_8
                 this.itemDisplay.setItem(Items.getNameFromCode(code));
             }
             if (this.curItem != null) {
-                this.curItem.remove();
-                this.curItem = null;
+                if (code == Items.jetPack && this.curItem is JetPack) {
+                    this.curItem.replenishFuel(this);
+                    return;
+                } else {
+                    this.curItem.remove();
+                    this.curItem = null;
+                }
             }
             this.curItem = Items.getFromCode(code, this);
         }
@@ -949,14 +957,15 @@ package package_8
             var hadMoon:Boolean = var_4.getBool(MOON);
             var hadSanta:Boolean = var_4.getBool(SANTA);
             var hadArti:Boolean = var_4.getBool(ARTIFACT);
+            var sbNotUsed:Boolean = Items.getCodeFromItem(this.curItem) != Items.speedBurst || (Items.getCodeFromItem(this.curItem) == Items.speedBurst && !this.curItem.isUsed());
             super.setHats(_arg_1);
             if (hadMoon && !var_4.getBool(MOON)) {
                 this.resetGravity();
             }
-            if (hadCB && !var_4.getBool(COWBOY) && Items.getCodeFromItem(this.curItem) != Items.speedBurst) {
+            if (hadCB && !var_4.getBool(COWBOY) && sbNotUsed) {
                 this.resetStats();
             }
-            if (hadSanta && !var_4.getBool(SANTA) && Items.getCodeFromItem(this.curItem) != Items.speedBurst) {
+            if (hadSanta && !var_4.getBool(SANTA) && sbNotUsed) {
                 this.resetStats();
             }
             if (hadArti && !var_4.getBool(ARTIFACT)) {

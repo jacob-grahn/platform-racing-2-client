@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// levelEditor.LevelEditorMenu = levelEditor.class_123
+﻿// levelEditor.LevelEditorMenu = levelEditor.class_123
 
 package levelEditor
 {
@@ -14,7 +11,7 @@ package levelEditor
     import package_6.TestCourse;
     import package_14.Blocks;
     import package_14.Settings;
-    import package_14.class_172;
+    import package_14.Stamps;
     import package_14.Tools;
     import package_14.Backgrounds;
     import package_14.SideBar;
@@ -28,7 +25,7 @@ package levelEditor
 
         public var blocks:Blocks = new Blocks();
         public var settings:Settings = new Settings(); // var_132
-        public var var_242:class_172 = new class_172();
+        public var stamps:Stamps = new Stamps(); // var_242
         public var tools:Tools = new Tools();
         public var bg:Backgrounds = new Backgrounds(); // var_508
         public var sideBar:SideBar = blocks;
@@ -76,11 +73,11 @@ package levelEditor
         // method_241 = clickBlocks
         private function clickBlocks(e:MouseEvent)
         {
-            this.method_43(this.blocks);
+            this.changeSideBar(this.blocks);
             this.editor.focusOn(this.editor.blockBG);
             this.editor.cur = this.editor.blockBG;
-            this.method_109();
-            this.moveGlow(e.target);
+            this.changeUndoRedoState();
+            this.moveGlow(this.m.blocksButton);
         }
 
         private function clickLayer00(e:MouseEvent)
@@ -116,7 +113,7 @@ package levelEditor
         // method_301 = clickBG
         private function clickBG(e:MouseEvent)
         {
-            this.method_43(this.bg);
+            this.changeSideBar(this.bg);
             this.editor.focusNone();
             this.m.undoButton.enabled = this.m.redoButton.enabled = false;
             this.moveGlow(e.target);
@@ -125,7 +122,7 @@ package levelEditor
         // method_387 = clickSettings
         private function clickSettings(e:MouseEvent)
         {
-            this.method_43(this.settings);
+            this.changeSideBar(this.settings);
             this.editor.focusNone();
             this.m.undoButton.enabled = this.m.redoButton.enabled = false;
             this.moveGlow(e.target);
@@ -134,12 +131,12 @@ package levelEditor
         // method_83 = setLayer
         private function setLayer(layerNum:Number)
         {
-            if (this.sideBar != this.var_242 && this.sideBar != this.tools) {
-                this.method_43(this.var_242);
+            if (this.sideBar != this.stamps && this.sideBar != this.tools) {
+                this.changeSideBar(this.stamps);
             }
             this.editor.cur = this.editor["bg" + layerNum];
             this.editor.var_220 = this.editor["draw" + layerNum];
-            if (this.sideBar == this.var_242) {
+            if (this.sideBar == this.stamps) {
                 this.editor.focusOn(this.editor.cur);
             } else {
                 if (this.sideBar == this.tools) {
@@ -179,22 +176,24 @@ package levelEditor
         // method_337 = clickNew
         private function clickNew(e:MouseEvent)
         {
-            new ConfirmPopup(this.method_719, "Are you sure you want to clear this level? All unsaved data will be lost.");
+            new ConfirmPopup(this.clearEditor, "Are you sure you want to clear this level? All unsaved data will be lost.");
         }
 
-        public function method_719()
+        // method_719 = clearEditor
+        public function clearEditor()
         {
             this.editor.clear();
-            this.bg.var_542.updateColor();
+            this.bg.cp_btn.updateColor();
         }
 
         // method_318 = clickExit
         private function clickExit(e:MouseEvent)
         {
-            new ConfirmPopup(this.method_683, "Are you sure you want exit? All unsaved data will be lost.");
+            new ConfirmPopup(this.exitEditor, "Are you sure you want exit? All unsaved data will be lost.");
         }
 
-        public function method_683()
+        // method_683 = exitEditor
+        public function exitEditor()
         {
             new ConnectingPopup();
         }
@@ -203,14 +202,14 @@ package levelEditor
         private function clickUndo(e:MouseEvent)
         {
             this.editor.var_225.undo();
-            this.method_109();
+            this.changeUndoRedoState();
         }
 
         // method_234 = clickRedo
         private function clickRedo(e:MouseEvent)
         {
             this.editor.var_225.redo();
-            this.method_109();
+            this.changeUndoRedoState();
         }
 
         // method_340 = chooseZoom
@@ -223,34 +222,27 @@ package levelEditor
             Main.stage.focus = Main.stage;
         }
 
-        public function method_109()
+        // method_109 = changeUndoRedoState
+        public function changeUndoRedoState()
         {
-            if (this.editor.var_225.saveArray.length > 0) {
-                this.m.undoButton.enabled = true;
-            } else {
-                this.m.undoButton.enabled = false;
-            }
-            if (this.editor.var_225.redoArray.length > 0) {
-                this.m.redoButton.enabled = true;
-            } else {
-                this.m.redoButton.enabled = false;
-            }
+            this.m.undoButton.enabled = this.editor.var_225.saveArray.length > 0;
+            this.m.redoButton.enabled = this.editor.var_225.redoArray.length > 0;
         }
 
-        public function method_43(_arg_1:SideBar)
+        // method_43 = changeSideBar
+        public function changeSideBar(sb:SideBar)
         {
             if (this.sideBar != null) {
                 this.sideBar.exit();
             }
-            this.sideBar = _arg_1;
+            this.sideBar = sb;
             this.sideBar.init();
             addChild(this.sideBar);
         }
 
         public function reset()
         {
-            this.moveGlow(this.m.blocksButton);
-            this.method_43(this.blocks);
+            this.clickBlocks(null);
             this.tools.exit();
         }
 
@@ -274,11 +266,10 @@ package levelEditor
             this.m.zoomSelect.removeEventListener(Event.CLOSE, this.chooseZoom);
             this.blocks.remove();
             this.settings.remove();
-            this.var_242.remove();
+            this.stamps.remove();
             this.tools.remove();
         }
 
 
     }
-}//package levelEditor
-
+}

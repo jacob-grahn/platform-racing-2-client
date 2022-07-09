@@ -38,8 +38,8 @@ package
         public static const accountChange:String = "accountChange"; // const_46
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
-        public static const build:String = '21-mar-2022-v167';
-        public static const version:String = '167.0';
+        public static const build:String = '6-jul-2022-v167_1';
+        public static const version:String = '167.1';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.dev";
         public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.dev/levels"; // const_71
         public static var stage:Stage;

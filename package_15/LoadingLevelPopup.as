@@ -51,7 +51,7 @@ package package_15
                 new MessagePopup("Error: The course did not load.");
             } else {
                 var LE:LevelEditor = LevelEditor.editor;
-                levelData = LE.method_158(levelData);
+                levelData = LE.validateSaveString(levelData);
                 var LEVars:URLVariables = new URLVariables(levelData);
                 LE.setVariables(LEVars);
             }

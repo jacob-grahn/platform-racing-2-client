@@ -231,10 +231,7 @@ package page
             this.title = vars.title;
             this.note = vars.note;
             this.setSong(vars.song);
-            if (vars.gameMode == null) {
-                vars.gameMode = "race";
-            }
-            this.setGameMode(vars.gameMode);
+            this.setGameMode(vars.gameMode == null ? 'race' : vars.gameMode);
             this.setCowboyChance(vars.cowboyChance);
             var _local_2:String = vars.gravity;
             var _local_3:Number = Number(_local_2);
@@ -257,32 +254,42 @@ package page
             this.levelID = vars.level_id;
         }
 
+        // _loc2 = allowedParams
         // _loc3 = "and"
-        public function method_158(_arg_1:String):String
+        // _loc4 = ret
+        // _loc5 = lDataSecs (level data sections)
+        // _loc6 = passedParam
+        // _loc7 = allowed
+        // _loc8 = lDataSec
+        // _loc9 = allowedParam
+        // _loc10 = andStr
+        // _arg_1 = levelData
+        // method_158 = validateSaveString
+        public function validateSaveString(levelData:String):String
         {
-            var _local_2:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats=");
-            var _local_4:* = "";
-            _arg_1 = _arg_1.replace(/&/g, 'and');
-            var _local_5:Array = _arg_1.split("and");
-            for each (var _local_8:String in _local_5) {
-                var _local_7:Boolean = false;
-                for each (var _local_9:String in _local_2) {
-                    var _local_6:String = _local_8.substr(0, _local_9.length);
-                    if (_local_6 == _local_9) {
-                        _local_7 = true;
+            var allowedParams:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats=");
+            var ret:* = "";
+            levelData = levelData.replace(/&/g, 'and');
+            var lDataSecs:Array = levelData.split("and");
+            for each (var lDataSec:String in lDataSecs) {
+                var allowed:Boolean = false;
+                for each (var allowedParam:String in allowedParams) {
+                    var passedParam:String = lDataSec.substr(0, allowedParam.length);
+                    if (passedParam == allowedParam) {
+                        allowed = true;
                         break;
                     }
                 }
-                var _local_10:String = "and";
-                if (_local_7) {
-                    _local_10 = "&";
+                var andStr:String = "and";
+                if (allowed) {
+                    andStr = "&";
                 }
-                if (_local_4 == "") {
-                    _local_10 = "";
+                if (ret == "") {
+                    andStr = "";
                 }
-                _local_4 = _local_4 + _local_10 + _local_8;
+                ret += andStr + lDataSec;
             }
-            return _local_4;
+            return ret;
         }
 
         // _loc2 = levelData

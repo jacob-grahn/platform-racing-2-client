@@ -117,7 +117,7 @@ package package_6
             } else {
                 this.superLoader.remove();
                 this.superLoader = null;
-                levelData = method_158(levelData);
+                levelData = validateSaveString(levelData);
                 this.levelHash = MD5.hash(levelData + courseID + version + Env.LEVEL_HASH_SALT);
                 var raceVars:URLVariables = new URLVariables(levelData);
                 setVariables(raceVars);

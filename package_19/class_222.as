@@ -8,7 +8,7 @@ package package_19
     import levelEditor.LevelEditor;
     import flash.events.MouseEvent;
 
-    public class class_222 extends class_221 
+    public class class_222 extends StampButton 
     {
 
         private var color:Number;

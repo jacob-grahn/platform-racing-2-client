@@ -19,7 +19,7 @@ package package_19
 
         private function mouseDownHandler(e:MouseEvent)
         {
-            this.editor.menu.method_43(this.editor.menu.tools);
+            this.editor.menu.changeSideBar(this.editor.menu.tools);
             this.editor.focusOn(this.editor.var_220);
         }
 
