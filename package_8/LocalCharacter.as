@@ -122,7 +122,7 @@ package package_8
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var startingStats:Array = null;
 
-        public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1)
+        public function LocalCharacter(tId:int, c:Course, ma:Map, dot:MovieClip, itd:ItemDisplay, grav:Number, s:int=50, a:int=50, j:int=50, ha:int=1, h:int=1, b:int=1, f:int=1, groupStr:String = '0')
         {
             super(ha, h, b, f);
             var_4.setNumber(const_12, 0);
@@ -137,6 +137,8 @@ package package_8
             this.itemDisplay = itd;
             type = "local";
             this.mapDot.setTempID(this.tempID, true);
+            super.userName = Main.loggedInAs;
+            super.groupStr = groupStr;
             if (Main.instance.kongAPI != null && Main.instance.kongAPI.stats != null) {
                 if (h == 17 && b == 13 && f == 12) {
                     Main.instance.kongAPI.stats.submit("Stickman", 1);

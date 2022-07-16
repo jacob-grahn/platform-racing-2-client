@@ -58,6 +58,8 @@ package package_8
         public var hat2Color2:int = -1;
         public var hat3Color2:int = -1;
         public var hat4Color2:int = -1;
+        public var userName:String = '';
+        public var groupStr:String = '0';
         public var item:int = 0;
         public var seg1:Point;
         public var seg2:Point;
@@ -347,7 +349,12 @@ package package_8
 
         public function getName():String
         {
-            return m.nameHolder.nameBox.text;
+            return this.userName;
+        }
+
+        public function getGroup():String
+        {
+            return this.groupStr;
         }
 
         protected function setNameColor(color:int)

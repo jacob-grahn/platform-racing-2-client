@@ -36,14 +36,15 @@ package package_8
         private var var_189:Number = 10;
         private var var_325:Number = 55;
 
-        public function RemoteCharacter(tId:int, dot:MiniMapDot, userName:String, hatId:int, headId:int, bodyId:int, feetId:int)
+        public function RemoteCharacter(tId:int, dot:MiniMapDot, userName:String, hatId:int, headId:int, bodyId:int, feetId:int, groupStr:String = '0')
         {
             super(hatId, headId, bodyId, feetId);
             this.tempID = tId;
             this.mapDot = dot;
             this.mapDot.setTempID(this.tempID);
+            super.groupStr = groupStr;
             this.var_180 = var_448 + 1;
-            m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
+            super.userName = m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
             setNameColor(this.mapDot.getColor(this.tempID));
             this.commandHandler.defineCommand("p" + this.tempID.toString(), this.pos);
             this.commandHandler.defineCommand("var" + this.tempID.toString(), this.method_801);
@@ -143,7 +144,7 @@ package package_8
 
         public function setScaleX(_arg_1:Number)
         {
-            scaleX = (m.nameHolder.scaleX = _arg_1);
+            scaleX = m.nameHolder.scaleX = _arg_1;
         }
 
         public function setScaleY(_arg_1:Number)
