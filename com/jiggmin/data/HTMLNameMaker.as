@@ -25,6 +25,11 @@ package com.jiggmin.data
         {
         }
 
+        // group codes as of v160
+        // guest: 0
+        // member: 1
+        // mod: 2 = full | 2,0 = temp | 2,1 = trial
+        // admin: 3
         public function makeName(name:String, group:String, dispText:String = ""):String
         {
             var groupColor:String;
