@@ -44,7 +44,7 @@ package menu
 
         private static function maybeLoad()
         {
-            if (servers.length == 0) {
+            if (servers == null || servers.length == 0) {
                 load();
             } else {
                 target.enabled = true;
@@ -71,7 +71,7 @@ package menu
             var server:Object;
             servers = superLoader.parsedData.servers;
             if (target != null) {
-                if (servers.length == 0) {
+                if (servers == null || servers.length == 0) {
                     target.enabled = false;
                     target.prompt = 'No servers found. :(';
                     return;
