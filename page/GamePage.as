@@ -50,7 +50,7 @@ package page
         public var var_239:int = 60000;
         public var var_362:int = 60000;
         public var drawing:Boolean = false;
-        private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
+        protected var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var rasterStopNotified:Boolean = false;
 
         public function GamePage()
