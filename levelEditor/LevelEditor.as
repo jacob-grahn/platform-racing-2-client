@@ -290,6 +290,7 @@ package levelEditor
 
         public function focusNone()
         {
+            this.blockGrid.visible = false;
             this.blockBG.focusNone();
             this.bg1.focusNone();
             this.bg2.focusNone();
