@@ -113,11 +113,12 @@ package package_8
                     setItem(c.item);
                 }
                 if (c.sparkle != null) {
-                    if (c.sparkle == "1") {
+                    (c.sparkle == '1' ? beginSparkles() : endSparkles());
+                    /*if (c.sparkle == "1") {
                         beginSparkles();
                     } else {
                         endSparkles();
-                    }
+                    }*/
                 }
                 if (c.jet != null) {
                     (c.jet == '1' ? beginJet() : endJet());
