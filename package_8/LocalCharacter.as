@@ -57,7 +57,7 @@ package package_8
         private var map:Map;
         private var mapDot:MiniMapDot; // var_174
         private var itemDisplay:ItemDisplay;
-        private var var_573:uint = setInterval(method_796, 5000);
+        private var var_573:uint = setInterval(setEPNU, 5000);
         private var var_535:uint = setInterval(ensureCowboyStats, 250);
         private var var_390:DisplayObject = parent;
         private var speedStat:int; // var_245
@@ -118,7 +118,7 @@ package package_8
         private var var_453:int;
         private var var_577:String;
         private var var_623:int;
-        private var var_232:Boolean = false;
+        private var exactPosNextUpdate:Boolean = false; // var_232
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var startingStats:Array = null;
 
@@ -162,7 +162,7 @@ package package_8
                 this.initialized = true;
                 addEventListener(Event.ENTER_FRAME, this.go, false, 0, true);
                 this.setMode("land");
-                this.var_232 = true;
+                this.exactPosNextUpdate = true;
                 this.socket.write("p`0`0");
             }
         }
@@ -269,33 +269,40 @@ package package_8
             }
         }
 
+        // _loc2 = curX
+        // _loc3 = curY
+        // _loc4 = curPos
+        // _loc5 = deltaX
+        // _loc6 = deltaY
         private function go(e:Event)
         {
-            var _local_2:int = x = Math.round(x);
-            var _local_3:int = y = Math.round(y);
+            var curX:int = x = Math.round(x);
+            var curY:int = y = Math.round(y);
             if (this.map != null) {
-                var _local_4:Point = Data.method_9(_local_2, _local_3, this.map.rotation);
-                this.mapDot.x = _local_4.x;
-                this.mapDot.y = _local_4.y;
+                var curPos:Point = Data.method_9(curX, curY, this.map.rotation);
+                this.mapDot.x = curPos.x;
+                this.mapDot.y = curPos.y;
             }
             method_58(this.map.rotation);
             this.hurtTime--;
             if (this.course.playerArray.length > 1) {
-                var_215++; // setting this to a static value above 23 will send wholly instant position updates to players
+                var_215++; // setting this to a static value greater than 16 (formerly 23) will send wholly instant position updates to players
                 if (var_215 >= var_448) {
-                    if (this.method_779() || var_215 >= 23) {
+                    if (this.playersInPosUpdateRange() || var_215 >= 16) {//23) {
                         var_215 = 0;
-                        var _local_5:int = _local_2 - this.var_443;
-                        var _local_6:int = _local_3 - this.var_453;
-                        this.var_443 = _local_2;
-                        this.var_453 = _local_3;
-                        if (_local_5 != 0 || _local_6 != 0) {
-                            this.socket.write("p`" + _local_5 + "`" + _local_6);
+                    //if (curX != this.var_443 || curY != this.var_453) { // if statement added by me
+                        var deltaX:int = curX - this.var_443;
+                        var deltaY:int = curY - this.var_453;
+                        this.var_443 = curX;
+                        this.var_453 = curY;
+                        if (deltaX != 0 || deltaY != 0) {
+                            this.socket.write("p`" + deltaX + "`" + deltaY);
                         }
-                        if (this.var_232) {
-                            this.var_232 = false;
-                            this.socket.write("exact_pos`" + _local_2 + "`" + _local_3);
+                        if (this.exactPosNextUpdate) {
+                            this.exactPosNextUpdate = false;
+                            this.socket.write("exact_pos`" + curX + "`" + curY);
                         }
+                    // }
                     }
                     if (this.var_530 != scaleX) {
                         this.var_530 = scaleX;
@@ -329,9 +336,11 @@ package package_8
             }
         }
 
-        private function method_796()
+        // tells the game to send the exact player coordinates next update (in this.go)
+        // method_796 = setEPNU
+        private function setEPNU()
         {
-            this.var_232 = true;
+            this.exactPosNextUpdate = true;
         }
 
         // _loc1 = p
@@ -836,7 +845,7 @@ package package_8
             super.setPos(_arg_1, _arg_2);
             this.var_443 = _arg_1;
             this.var_453 = _arg_2;
-            this.var_232 = true;
+            this.exactPosNextUpdate = true;
             Course.course.posX = -_arg_1;
             Course.course.posY = -_arg_2;
             Course.course.setPos(-_arg_1, -_arg_2);
@@ -897,26 +906,32 @@ package package_8
             this.course.posX = -x;
             this.course.posY = -y + 50;
             this.socket.write("set_var`rot`" + -this.map.rotation);
-            this.var_232 = true;
+            this.exactPosNextUpdate = true;
         }
 
+        // this function originally returned if the positions of players should be updated instantly (within 1000px of the player)
+        // since that functionality is disabled, the function has been simplified to return if there are other players present
+        //
         // deleted _loc1 (Course.course.playerArray)
         // deleted _loc2 (return values)
-        private function method_779():Boolean
+        // _loc3 = c
+        // method_779 = playersInPosUpdateRange
+        private function playersInPosUpdateRange():Boolean
         {
-            for each (var _local_3:Character in Course.course.playerArray) {
+            
+            // for each (var c:Character in Course.course.playerArray) {
                 // uncommenting below disables near-instant updates for other players when farther than 1000px in either direction
-                if (_local_3 != this /*&& Math.abs(_local_3.x - x) < 1000 && Math.abs(_local_3.y - y) < 1000*/) {
-                    return true;
+                // if (c != this /*&& Math.abs(c.x - x) < 1000 && Math.abs(c.y - y) < 1000*/) {
+                    /*return true;
                 }
-            }
-            return false;
+            }*/
+            return Course.course.playerArray.length > 1;
         }
 
-        override public function beginSparkles(_arg_1:int=5000)
+        override public function beginSparkles(ms:int = 5000)
         {
             this.socket.write("set_var`sparkle`1");
-            super.beginSparkles(_arg_1);
+            super.beginSparkles(ms);
         }
 
         override public function endSparkles(used:Boolean = false)
