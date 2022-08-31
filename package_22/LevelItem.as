@@ -130,8 +130,10 @@ package package_22
 
         public function testAccess()
         {
+            var byMe:Boolean = Main.loggedInAs.toLowerCase() == this.userName.toLowerCase(); // logged in user is level creator
+
             // test password
-            if (this.pass && !this.passOK && Main.group < 2) {
+            if (this.pass && !this.passOK && Main.group < 2 && !byMe) {
                 if (this.m.accessCover.textBox.text !== 'Pass Needed') {
                     this.m.accessCover.textBox.text = "Pass Needed";
                     if (!this.m.accessCover.contains(this.m.accessCover.passButton)) {
@@ -143,7 +145,7 @@ package package_22
                     this.m.accessCover.passButton.addEventListener(MouseEvent.CLICK, this.clickPassEnter, false, 0, true);
                 }
                 return;
-            } else if (!this.pass || (this.pass && this.passOK) || Main.group >= 2) { // pass is OK, make sure all the pass-related stuff is removed
+            } else if (!this.pass || (this.pass && this.passOK) || Main.group >= 2 || byMe) { // pass is OK or byMe, make sure all the pass-related stuff is removed
                 if (this.m.accessCover.contains(this.m.accessCover.passButton)) {
                     this.m.accessCover.passButton.removeEventListener(MouseEvent.CLICK, this.clickPassEnter);
                     this.m.accessCover.removeChild(this.m.accessCover.passButton);
@@ -156,7 +158,7 @@ package package_22
             // test rank
             this.myRank = class_33.getNumber("userRank");
             this.myRank = isNaN(this.myRank) || this.myRank < 0 ? 0 : this.myRank;
-            if (Main.group < 2) {
+            if (Main.group < 2 && !byMe) {
                 if (this.myRank < this.minRank) {
                     this.m.accessCover.textBox.text = "Rank " + this.minRank + " Needed";
                     this.toggleCover(true);
