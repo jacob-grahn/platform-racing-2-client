@@ -12,7 +12,7 @@ package lobby
     import package_23.PlayersTab;
     import package_18.AccountInfo;
 
-    public class LobbyLeft extends class_196 
+    public class LobbyLeft extends LobbySide 
     {
 
         public function LobbyLeft()
@@ -31,7 +31,7 @@ package lobby
                 tabArray = new Array(chatTab, playersTab, accountTab);
                 lastArrKey = 2;
             }
-            super(tabArray, 194, 394, lastArrKey, "lobbyLeft");
+            super(tabArray, "lobbyLeft", lastArrKey, 194, 394);
             UnreadNotif.addNotifContainer(pmsTab);
         }
 
