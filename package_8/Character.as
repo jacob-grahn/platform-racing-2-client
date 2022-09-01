@@ -376,11 +376,11 @@ package package_8
             y = _arg_2;
         }
 
-        public function rotate(_arg_1:String)
+        public function rotate(direction:String)
         {
             var _local_2:Number;
             var _local_3:Number;
-            if (_arg_1 == "right") {
+            if (direction == "right") {
                 _local_2 = -y;
                 _local_3 = x;
             } else {
