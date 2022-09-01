@@ -485,7 +485,7 @@ package package_6
             }
             this.bg.rotation = this.holder.rotation = -rotation;
             if (this.var_9 != null) {
-                this.var_9.method_483(-rotation);
+                this.var_9.setRotation(-rotation);
             }
         }
 

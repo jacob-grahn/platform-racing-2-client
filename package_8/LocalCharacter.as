@@ -882,18 +882,19 @@ package package_8
             }
         }
 
-        public function method_483(_arg_1:Number)
+        // method_483 = setRotation
+        public function setRotation(r:Number)
         {
-            rotation = Math.round(_arg_1);
+            rotation = Math.round(r);
             this.socket.write("set_var`rotMod`" + rotation);
         }
 
-        override public function rotate(_arg_1:String)
+        override public function rotate(direction:String)
         {
             var _local_2:Number;
             var _local_3:Number;
-            super.rotate(_arg_1);
-            if (_arg_1 == "right") {
+            super.rotate(direction);
+            if (direction == "right") {
                 _local_2 = -this.lastSafeY;
                 _local_3 = this.lastSafeX;
             } else {
@@ -902,9 +903,13 @@ package package_8
             }
             this.lastSafeX = _local_2;
             this.lastSafeY = _local_3;
+            super.setPos(_local_2, _local_3);
+            this.var_443 = _local_2;
+            this.var_453 = _local_3;
             this.setMode("land");
             this.course.posX = -x;
             this.course.posY = -y + 50;
+            this.course.setPos(-x, -y + 50);
             this.socket.write("set_var`rot`" + -this.map.rotation);
             this.exactPosNextUpdate = true;
         }
