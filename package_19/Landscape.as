@@ -22,7 +22,7 @@ package package_19
 
         private function mouseDownHandler(_arg_1:MouseEvent)
         {
-            this.editor.menu.changeSideBar(this.editor.menu.var_242);
+            this.editor.menu.changeSideBar(this.editor.menu.stamps);
             this.editor.focusOn(this.editor.cur);
         }
 
