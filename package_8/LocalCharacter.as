@@ -755,7 +755,7 @@ package package_8
         // removed _loc2; not used
         public function setMode(str:String)
         {
-            if (this.mode != str) {
+            if (this.mode != str && this.mode != "freeze") {
                 removeEventListener(Event.ENTER_FRAME, this[this.mode + "Go"]);
                 addEventListener(Event.ENTER_FRAME, this[str + "Go"], false, 0, true);
                 this.mode = str;
