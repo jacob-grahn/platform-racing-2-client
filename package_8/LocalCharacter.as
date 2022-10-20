@@ -114,8 +114,8 @@ package package_8
         private var frozenSolid:Boolean = false;
         private var unfreezeTimer:uint; // var_340
         private var var_530:Number;
-        private var var_443:int;
-        private var var_453:int;
+        private var exactX:int; // var_443
+        private var exactY:int; // var_453
         private var var_577:String;
         private var var_623:int;
         private var exactPosNextUpdate:Boolean = false; // var_232
@@ -290,11 +290,11 @@ package package_8
                 if (var_215 >= var_448) {
                     if (this.playersInPosUpdateRange() || var_215 >= 16) {//23) {
                         var_215 = 0;
-                    //if (curX != this.var_443 || curY != this.var_453) { // if statement added by me
-                        var deltaX:int = curX - this.var_443;
-                        var deltaY:int = curY - this.var_453;
-                        this.var_443 = curX;
-                        this.var_453 = curY;
+                    //if (curX != this.exactX || curY != this.exactY) { // if statement added by me
+                        var deltaX:int = curX - this.exactX;
+                        var deltaY:int = curY - this.exactY;
+                        this.exactX = curX;
+                        this.exactY = curY;
                         if (deltaX != 0 || deltaY != 0) {
                             this.socket.write("p`" + deltaX + "`" + deltaY);
                         }
@@ -843,8 +843,8 @@ package package_8
             this.lastSafeX = _arg_1;
             this.lastSafeY = _arg_2;
             super.setPos(_arg_1, _arg_2);
-            this.var_443 = _arg_1;
-            this.var_453 = _arg_2;
+            this.exactX = _arg_1;
+            this.exactY = _arg_2;
             this.exactPosNextUpdate = true;
             Course.course.posX = -_arg_1;
             Course.course.posY = -_arg_2;
@@ -889,23 +889,21 @@ package package_8
             this.socket.write("set_var`rotMod`" + rotation);
         }
 
+        // _loc2 = tmpLSX
+        // _loc3 = tmpLSY
         override public function rotate(direction:String)
         {
-            var _local_2:Number;
-            var _local_3:Number;
             super.rotate(direction);
-            if (direction == "right") {
-                _local_2 = -this.lastSafeY;
-                _local_3 = this.lastSafeX;
+            var tmpLSX:Number, tmpLSY:Number;
+            if (direction == 'right') {
+                tmpLSX = -this.lastSafeY;
+                tmpLSY = this.lastSafeX;
             } else {
-                _local_2 = this.lastSafeY;
-                _local_3 = -this.lastSafeX;
+                tmpLSX = this.lastSafeY;
+                tmpLSY = -this.lastSafeX;
             }
-            this.lastSafeX = _local_2;
-            this.lastSafeY = _local_3;
-            super.setPos(_local_2, _local_3);
-            this.var_443 = _local_2;
-            this.var_453 = _local_3;
+            this.lastSafeX = tmpLSX;
+            this.lastSafeY = tmpLSY;
             this.setMode("land");
             this.course.posX = -x;
             this.course.posY = -y + 50;

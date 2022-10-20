@@ -436,9 +436,9 @@ package package_6
         }
 
         // method_654
-        public function startRotate(s:String)
+        public function startRotate(direction:String)
         {
-            this.rotateDirection = s;
+            this.rotateDirection = direction;
             addEventListener(Event.ENTER_FRAME, this.rotate);
             this.bg1.method_86();
             this.bg2.method_86();
