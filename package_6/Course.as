@@ -12,6 +12,7 @@ package package_6
     import background.Map;
     import blocks.FinishBlock;
     import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.display.StageQuality;
@@ -38,11 +39,13 @@ package package_6
         public var teleportBlocks:Object = new Object();
         public var playerArray:Array = new Array(); // var_40
         public var var_9:LocalCharacter;
+        public var playerSpectating:Character;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
         public var statsDisplay:StatsDisplay;
         protected var miniMap:MiniMap = new MiniMap();
         protected var itemDisplay:ItemDisplay = new ItemDisplay();
+        protected var canSpectate:Boolean = false;
         public var chatBox:RaceChat; // var_305
         public var musicSelection:MusicSelection = new MusicSelection();
         protected var countdown:CountdownGraphic; // var_61
@@ -105,7 +108,7 @@ package package_6
             this.hearts.mouseChildren = this.hearts.mouseEnabled = false;
             this.holder.addChild(this.hearts);
             Main.stage.focus = Main.stage;
-            addEventListener(Event.ENTER_FRAME, this.method_85);
+            addEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
             CommandHandler.commandHandler.defineCommand("beginRace", this.beginRace);
             this.attachBackgrounds();
         }
@@ -114,14 +117,15 @@ package package_6
         public function addStartPos(startNum:int, startPt:Point)
         {
             this.startPosArray[startNum] = startPt;
-            this.method_80();
+            this.positionPlayersAtStart();
         }
 
         // _loc1 = this.playerArray.length
         // _loc2 = tempId
         // _loc3 = startPos
         // _loc4 = player
-        protected function method_80()
+        // method_80 = positionPlayersAtStart
+        protected function positionPlayersAtStart()
         {
             var tempId:int;
             while (tempId < this.playerArray.length) {
@@ -139,14 +143,8 @@ package package_6
         // method_753 = getStartPos
         private function getStartPos(startNum:int):Point
         {
-            var _local_3:Point;
-            if (Main.server.tournament == 1) {
-                startNum = 0;
-            }
-            if (this.startPosArray[startNum] != null) {
-                _local_3 = this.startPosArray[startNum];
-            }
-            return _local_3;
+            startNum = Main.server.tournament == 1 ? 0 : startNum;
+            return this.startPosArray[startNum] != null ? this.startPosArray[startNum] : new Point();
         }
 
         public function setEggSeed(arr:Array)
@@ -197,9 +195,11 @@ package package_6
             return this.courseID;
         }
 
-        protected function method_85(e:Event)
+        // This fn processes the keyScroll events while also checking to see if we can stop drawing.
+        // method_85 = maybeEndIntro
+        protected function maybeEndIntro(e:Event)
         {
-            keyScroll(e);
+            //keyScroll(e);
             if (this.varsSet && var_133.length <= 0) {
                 this.endIntro();
             }
@@ -207,29 +207,72 @@ package package_6
 
         protected function endIntro()
         {
-            removeEventListener(Event.ENTER_FRAME, this.method_85);
-            addEventListener(Event.ENTER_FRAME, keyScroll);
+            removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            //addEventListener(Event.ENTER_FRAME, keyScroll);
         }
 
-        protected function method_82(e:Event)
+        // method_82 = cameraFollowPlayer
+        protected function cameraFollowPlayer(e:Event)
         {
-            if (this.var_9 != null) {
-                var _local_2:Number = -this.var_9.x;
-                var _local_3:Number = -this.var_9.y + 45;
+            var c:Character = this.playerSpectating == null ? this.var_9 : this.playerSpectating;
+            if (c != null) {
+                var _local_2:Number = -c.x;
+                var _local_3:Number = -c.y + 45;
                 var _local_4:Number = _local_2 - posX;
                 var _local_5:Number = _local_3 - posY;
                 posX += _local_4 * 0.5;
                 posY += _local_5 * 0.4;
                 this.setPos(posX, posY);
             }
+            if (this.canSpectate) {
+                this.onSpectateKeyPress(e);
+            }
         }
 
-        public function beginRace(_arg_1:Array)
+        // TO-DO: implement this in Game(?). It will supposedly remove the buttons if turning off.
+        protected function toggleSpectatePossible(on:Boolean)
         {
-            removeEventListener(Event.ENTER_FRAME, this.method_85);
-            if (!this.playerDone) {
+            if (this.canSpectate == on) {
+                return;
+            }
+            this.canSpectate = on;
+            this.playerSpectating = null;
+        }
+
+        // TO-DO: after game buttons validation
+        public function changeSpectate(tempId:int)
+        {
+            if (this.playerSpectating != null && tempId == this.playerSpectating.tempID) {
+                return;
+            }
+            this.playerSpectating = this.playerArray[tempId];
+            this.toggleKeyScroll(this.playerSpectating == null);
+        }
+
+        protected function onSpectateKeyPress(e:Event)
+        {
+            this.changeSpectate(-1);
+        }
+
+        protected function toggleKeyScroll(on:Boolean)
+        {
+            removeEventListener(Event.ENTER_FRAME, keyScroll);
+            removeEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer);
+            if (on) {
+                removeEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer);
+                addEventListener(Event.ENTER_FRAME, keyScroll, false, 0, true);
+            } else if (on === false) {
                 removeEventListener(Event.ENTER_FRAME, keyScroll);
-                addEventListener(Event.ENTER_FRAME, this.method_82);
+                addEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer, false, 0, true);
+            }
+        }
+
+        public function beginRace(a:Array)
+        {
+            removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            if (!this.playerDone) {
+                this.toggleSpectatePossible(false);
+                this.toggleKeyScroll(false);
             }
             setZoom(1);
             this.timer.init();
@@ -393,9 +436,9 @@ package package_6
         }
 
         // method_654
-        public function startRotate(s:String)
+        public function startRotate(direction:String)
         {
-            this.rotateDirection = s;
+            this.rotateDirection = direction;
             addEventListener(Event.ENTER_FRAME, this.rotate);
             this.bg1.method_86();
             this.bg2.method_86();
@@ -437,12 +480,12 @@ package package_6
                 for each (var player:Character in this.playerArray) {
                     player.rotate(this.rotateDirection);
                 }
-                this.method_82(new Event(Event.ENTER_FRAME));
+                this.cameraFollowPlayer(new Event(Event.ENTER_FRAME));
                 removeEventListener(Event.ENTER_FRAME, this.rotate);
             }
             this.bg.rotation = this.holder.rotation = -rotation;
             if (this.var_9 != null) {
-                this.var_9.method_483(-rotation);
+                this.var_9.setRotation(-rotation);
             }
         }
 
@@ -458,9 +501,9 @@ package package_6
         override public function remove()
         {
             CommandHandler.commandHandler.defineCommand("beginRace", null);
-            removeEventListener(Event.ENTER_FRAME, this.method_85);
+            removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
             removeEventListener(Event.ENTER_FRAME, this.rotate);
-            removeEventListener(Event.ENTER_FRAME, this.method_82);
+            removeEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer);
             if (this.timer != null) {
                 this.timer.remove();
                 this.timer = null;

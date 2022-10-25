@@ -14,7 +14,7 @@ package lobby
     import package_22.Favorites;
     //import package_22.class_251;
 
-    public class LobbyRight extends class_196 
+    public class LobbyRight extends LobbySide 
     {
 
         public static var lobbyRight:LobbyRight;
@@ -36,7 +36,7 @@ package lobby
             if (Main.group >= 1) {
                 tabsArray.push(this.favsTab);
             }
-            super(tabsArray, 347, 356, 0, "lobbyRight");
+            super(tabsArray, "lobbyRight", 0, 347, 356);
         }
 
         // method_631 = clickCampaign

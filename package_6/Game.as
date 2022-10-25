@@ -10,6 +10,8 @@ package package_6
     import flash.geom.Point;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
+    import flash.text.TextField;
+    import flash.ui.Keyboard;
     import flash.utils.clearInterval;
     import flash.utils.setInterval;
     import sounds.SoundEffects;
@@ -27,6 +29,7 @@ package package_6
         private var quitButton:QuitButton; // var_285
         // moved chatBox to Course and changed visibility from private -> public (var_305)
         private var cm:CommandHandler = CommandHandler.commandHandler;
+        private var spectatePicker:SpectatePicker;
         protected var drawingInfo:DrawingInfo; // var_125
         public var prize:Object;
         //private var prizePop:PrizePopup; // var_198 REMOVED AFTER PrizePopup GOT A STATIC SELF REFERENCE
@@ -81,6 +84,42 @@ package package_6
             this.getLevelData();
         }
 
+        private function initSpectate()
+        {
+            this.spectatePicker = new SpectatePicker();
+            this.spectatePicker.x = -265;
+            this.spectatePicker.y = 30;
+            this.spectatePicker.scaleX = this.spectatePicker.scaleY = 0.9;
+            holder.addChild(this.spectatePicker);
+            this.toggleSpectatePossible(true);
+        }
+
+        override protected function toggleSpectatePossible(on:Boolean)
+        {
+            super.changeSpectate(-1);
+            this.spectatePicker.toggleVisibility(on);
+            super.toggleSpectatePossible(on);
+        }
+
+        override protected function onSpectateKeyPress(e:Event)
+        {
+            if (!(Main.stage.focus is TextField)
+                && (
+                    Keys.isPressed(Keyboard.DOWN)
+                    || Keys.isPressed(altCtrl.down)
+                    || Keys.isPressed(Keyboard.UP)
+                    || Keys.isPressed(altCtrl.up)
+                    || Keys.isPressed(Keyboard.LEFT)
+                    || Keys.isPressed(altCtrl.left)
+                    || Keys.isPressed(Keyboard.RIGHT)
+                    || Keys.isPressed(altCtrl.right)
+                )
+            ) {
+                this.spectatePicker.stopSpectating();
+                super.onSpectateKeyPress(e);
+            }
+        }
+
         override protected function onCountdownFinish(e:Event)
         {
             if (PrizePopup.instance != null) {
@@ -121,6 +160,7 @@ package package_6
                 this.levelHash = MD5.hash(levelData + courseID + version + Env.LEVEL_HASH_SALT);
                 var raceVars:URLVariables = new URLVariables(levelData);
                 setVariables(raceVars);
+                this.initSpectate();
             }
         }
 
@@ -267,11 +307,12 @@ package package_6
             var headColor2:Number = Number(a[11]);
             var bodyColor2:Number = Number(a[12]);
             var feetColor2:Number = Number(a[13]);
-            var c:RemoteCharacter = new RemoteCharacter(tempId, miniMap.getDot(), userName, hatId, headId, bodyId, feetId);
+            var groupStr:String = a[14];
+            var c:RemoteCharacter = new RemoteCharacter(tempId, miniMap.getDot(), userName, hatId, headId, bodyId, feetId, groupStr);
             c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
             playerArray[tempId] = c;
             this.drawingInfo.method_138(userName, tempId);
-            method_80();
+            positionPlayersAtStart();
         }
 
         // _loc2 = tempId
@@ -310,12 +351,13 @@ package package_6
             var headColor2:Number = Number(a[13]);
             var bodyColor2:Number = Number(a[14]);
             var feetColor2:Number = Number(a[15]);
-            var c:LocalCharacter = new LocalCharacter(tempId, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), speed, accel, jumpn, hatId, headId, bodyId, feetId);
+            var groupStr:String = a[16];
+            var c:LocalCharacter = new LocalCharacter(tempId, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), speed, accel, jumpn, hatId, headId, bodyId, feetId, groupStr);
             c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
             playerArray[tempId] = c;
             this.drawingInfo.method_138(Main.loggedInAs, tempId);
             var_9 = c;
-            method_80();
+            positionPlayersAtStart();
         }
 
         override public function collectEgg(_arg_1:int)
@@ -421,8 +463,8 @@ package package_6
                 if (var_9 != null) {
                     var_9.beginRemove();
                 }
-                removeEventListener(Event.ENTER_FRAME, method_82);
-                addEventListener(Event.ENTER_FRAME, keyScroll, false, 0, true);
+                this.toggleSpectatePossible(true);
+                super.toggleKeyScroll(true);
                 Main.stage.focus = Main.stage;
             }
         }
@@ -449,12 +491,16 @@ package package_6
             this.cm.defineCommand('maybeReturnHatToStart', null);
             this.cm.defineCommand('startHatCountdown', null); // this.cancelHatCountdown called farther down
             this.cm.defineCommand('forceQuit', null);
-            removeEventListener(Event.ENTER_FRAME, method_85);
-            removeEventListener(Event.ENTER_FRAME, method_82);
+            removeEventListener(Event.ENTER_FRAME, maybeEndIntro);
+            removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
             removeEventListener(Event.ENTER_FRAME, keyScroll);
             if (this.drawingInfo != null) {
                 this.drawingInfo.remove();
                 this.drawingInfo = null;
+            }
+            if (this.spectatePicker != null) {
+                this.spectatePicker.remove();
+                this.spectatePicker = null;
             }
             if (this.superLoader != null) {
                 this.superLoader.removeEventListener(Event.COMPLETE, this.loadHandler);

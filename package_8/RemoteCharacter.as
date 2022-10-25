@@ -36,14 +36,15 @@ package package_8
         private var var_189:Number = 10;
         private var var_325:Number = 55;
 
-        public function RemoteCharacter(tId:int, dot:MiniMapDot, userName:String, hatId:int, headId:int, bodyId:int, feetId:int)
+        public function RemoteCharacter(tId:int, dot:MiniMapDot, userName:String, hatId:int, headId:int, bodyId:int, feetId:int, groupStr:String = '0')
         {
             super(hatId, headId, bodyId, feetId);
             this.tempID = tId;
             this.mapDot = dot;
             this.mapDot.setTempID(this.tempID);
+            super.groupStr = groupStr;
             this.var_180 = var_448 + 1;
-            m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
+            super.userName = m.nameHolder.nameBox.text = m.nameHolder.nameBox2.text = userName;
             setNameColor(this.mapDot.getColor(this.tempID));
             this.commandHandler.defineCommand("p" + this.tempID.toString(), this.pos);
             this.commandHandler.defineCommand("var" + this.tempID.toString(), this.method_801);
@@ -54,7 +55,7 @@ package package_8
             addEventListener(Event.ENTER_FRAME, this.go, false, 0, true);
         }
 
-        // _loc2 = c
+        // _loc2 = varToSet
         private function go(_arg_1:Event)
         {
             if (this.var_19.length > 0) {
@@ -86,47 +87,48 @@ package package_8
                 this.mapDot.y = _local_5.y;
                 method_58(this.map.rotation);
                 rotation = this.map.rotation + this.rot + this.rotMod;
-                var c:Object = this.var_19.shift();
-                if (c.state != null) {
-                    changeState(c.state);
+                var varToSet:Object = this.var_19.shift();
+                if (varToSet.state != null) {
+                    changeState(varToSet.state);
                 }
-                if (c.scaleX != null) {
-                    this.setScaleX(int(c.scaleX));
+                if (varToSet.scaleX != null) {
+                    this.setScaleX(int(varToSet.scaleX));
                 }
-                if (c.parent != null) {
-                    if (Course.course[c.parent] != null) {
-                        Sprite(Course.course[c.parent]).addChild(this);
+                if (varToSet.parent != null) {
+                    if (Course.course[varToSet.parent] != null) {
+                        Sprite(Course.course[varToSet.parent]).addChild(this);
                     }
                 }
-                if (c.x != null) {
-                    this.posX = c.x;
-                    this.posY = c.y;
+                if (varToSet.x != null) {
+                    this.posX = varToSet.x;
+                    this.posY = varToSet.y;
                 }
-                if (c.rotMod != null) {
-                    this.rotMod = int(c.rotMod);
+                if (varToSet.rotMod != null) {
+                    this.rotMod = int(varToSet.rotMod);
                 }
-                if (c.rot != null) {
-                    this.rot = c.rot;
+                if (varToSet.rot != null) {
+                    this.rot = varToSet.rot;
                 }
-                if (c.item != null) {
-                    setItem(c.item);
+                if (varToSet.item != null) {
+                    setItem(varToSet.item);
                 }
-                if (c.sparkle != null) {
-                    if (c.sparkle == "1") {
+                if (varToSet.sparkle != null) {
+                    (varToSet.sparkle == '1' ? beginSparkles() : endSparkles());
+                    /*if (varToSet.sparkle == "1") {
                         beginSparkles();
                     } else {
                         endSparkles();
-                    }
+                    }*/
                 }
-                if (c.jet != null) {
-                    (c.jet == '1' ? beginJet() : endJet());
-                    /*if (c.jet == "1") {
+                if (varToSet.jet != null) {
+                    (varToSet.jet == '1' ? beginJet() : endJet());
+                    /*if (varToSet.jet == "1") {
                         beginJet();
                     } else {
                         endJet();
                     }*/
                 }
-                if (c.beginRemove != null) {
+                if (varToSet.beginRemove != null) {
                     beginRemove();
                 }
                 if (this.var_19.length > this.var_180) {
@@ -143,7 +145,7 @@ package package_8
 
         public function setScaleX(_arg_1:Number)
         {
-            scaleX = (m.nameHolder.scaleX = _arg_1);
+            scaleX = m.nameHolder.scaleX = _arg_1;
         }
 
         public function setScaleY(_arg_1:Number)

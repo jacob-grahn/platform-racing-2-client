@@ -104,9 +104,6 @@ package levelEditor
         public function setColor(tc:int)
         {
             this.textField.textColor = tc;
-            if (this.editableTextField != null) {
-                this.editableTextField.textColor = this.textField.textColor;
-            }
         }
 
         override public function select()
@@ -174,7 +171,6 @@ package levelEditor
             this.editableTextField.background = true;
             this.editableTextField.border = true;
             this.editableTextField.selectable = true;
-            this.editableTextField.textColor = this.textField.textColor;
             this.editableTextField.width = this.textField.width;
             this.editableTextField.height = this.textField.height;
             this.editableTextField.maxChars = 500;

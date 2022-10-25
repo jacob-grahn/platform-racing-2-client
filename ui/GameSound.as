@@ -148,8 +148,8 @@ package ui
         private function startSong(e:Event = null)
         {
             this.stopSong();
-            if (this.musicEnabled()) {
-                var fileUrl:String = this.url + "/" + selectedItem.file;
+            if (this.musicEnabled() && selectedItem.file != '') {
+                var fileUrl:String = this.url + '/' + selectedItem.file;
                 var request:URLRequest = new URLRequest(fileUrl);
                 var slc:SoundLoaderContext = new SoundLoaderContext(3000, false);
                 var song:Sound = new Sound(request, slc);

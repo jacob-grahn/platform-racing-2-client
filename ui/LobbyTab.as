@@ -11,8 +11,8 @@ package ui
     {
 
         private var m:LobbyTabGraphic = new LobbyTabGraphic();
-        private var var_258:class_246;
-        private var tabFunction:Function; // var_415 = tabFunction
+        private var tabsHolder:TabsHolder; // var_258
+        private var tabFunction:Function; // var_415
 
         public function LobbyTab(tabFn:Function, tabText:String)
         {
@@ -24,9 +24,10 @@ package ui
             this.activate();
         }
 
-        internal function method_671(e:class_246)
+        // method_671 = setTabsHolder
+        internal function setTabsHolder(h:TabsHolder)
         {
-            this.var_258 = e;
+            this.tabsHolder = h;
         }
 
         private function onClick(e:MouseEvent)
@@ -34,20 +35,22 @@ package ui
             this.select();
         }
 
-        private function method_224(_arg_1:MouseEvent)
+        // method_224 = onHover
+        private function onHover(e:MouseEvent)
         {
             this.m.bg.gotoAndStop("over");
-            this.var_258.method_100(this);
+            this.tabsHolder.moveToFront(this);
         }
 
-        private function method_246(_arg_1:MouseEvent)
+        // method_246 = onHoverOut
+        private function onHoverOut(e:MouseEvent)
         {
             this.m.bg.gotoAndStop("up");
         }
 
         public function select()
         {
-            this.var_258.select(this);
+            this.tabsHolder.select(this);
             this.tabFunction();
             this.deactivate();
             this.m.bg.gotoAndStop("selected");
@@ -57,16 +60,16 @@ package ui
         {
             this.deactivate();
             addEventListener(MouseEvent.CLICK, this.onClick);
-            addEventListener(MouseEvent.MOUSE_OVER, this.method_224);
-            addEventListener(MouseEvent.MOUSE_OUT, this.method_246);
+            addEventListener(MouseEvent.MOUSE_OVER, this.onHover);
+            addEventListener(MouseEvent.MOUSE_OUT, this.onHoverOut);
         }
 
         private function deactivate()
         {
             this.m.bg.gotoAndStop("up");
             removeEventListener(MouseEvent.CLICK, this.onClick);
-            removeEventListener(MouseEvent.MOUSE_OVER, this.method_224);
-            removeEventListener(MouseEvent.MOUSE_OUT, this.method_246);
+            removeEventListener(MouseEvent.MOUSE_OVER, this.onHover);
+            removeEventListener(MouseEvent.MOUSE_OUT, this.onHoverOut);
         }
 
         override public function remove()
@@ -74,7 +77,7 @@ package ui
             this.deactivate();
             removeChild(this.m);
             this.m = null;
-            this.var_258 = null;
+            this.tabsHolder = null;
             this.tabFunction = null;
             super.remove();
         }

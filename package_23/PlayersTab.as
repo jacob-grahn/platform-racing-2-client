@@ -6,14 +6,14 @@
 package package_23
 {
     import page.Page;
-    import ui.class_246;
+    import ui.TabsHolder;
     import page.PageHolder;
     import ui.LobbyTab;
 
     public class PlayersTab extends Page 
     {
 
-        private var var_258:class_246;
+        private var tabsHolder:TabsHolder; // var_258
         private var pageHolder:PageHolder = new PageHolder();
 
         // _loc1 = online
@@ -29,12 +29,9 @@ package package_23
             var following:LobbyTab = new LobbyTab(this.clickFollowing, "Following");
             var ignored:LobbyTab = new LobbyTab(this.clickIgnored, "Ignored");
             var guilds:LobbyTab = new LobbyTab(this.clickGuilds, "Guilds");
-            if (Main.group > 0) {
-                this.var_258 = new class_246([online, friends, following, ignored/*, guilds*/], 0, 186, "playerLists");
-            } else {
-                this.var_258 = new class_246([online, guilds], 0, 186, "playerLists");
-            }
-            addChild(this.var_258);
+            var tabs:Array = Main.group > 0 ? [online, friends, following, ignored/*, guilds*/] : [online, guilds];
+            this.tabsHolder = new TabsHolder(tabs, "playerLists", 0, 186);
+            addChild(this.tabsHolder);
             this.pageHolder.y = 20;
             addChild(this.pageHolder);
         }
@@ -70,7 +67,7 @@ package package_23
 
         override public function remove()
         {
-            this.var_258.remove();
+            this.tabsHolder.remove();
             this.pageHolder.remove();
             super.remove();
         }
