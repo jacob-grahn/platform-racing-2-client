@@ -122,9 +122,11 @@
         private function resetAllOfColor()
         {
             this.clearResetTimeout();
-            var blocksOfThisColor:Array = Course.course.teleportBlocks[this.color];
-            for (var i:int = 0; i < blocksOfThisColor.length; i++) {
-                blocksOfThisColor[i].resetSupply();
+            if (Course.course != null) {
+                var blocksOfThisColor:Array = Course.course.teleportBlocks[this.color];
+                for (var i:int = 0; i < blocksOfThisColor.length; i++) {
+                    blocksOfThisColor[i].resetSupply();
+                }
             }
             TeleportBlock['DISABLED_' + this.color] = false;
         }
