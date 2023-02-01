@@ -138,11 +138,14 @@ package package_4
                     groupText = 'Moderator';
                 }
             } else if (group == 3) {
-                groupText = Main.server.server_owner == this.userId ? 'Server Owner' : 'Admin';
+                groupText = 'Admin';
             } else {
                 PlayerPopup.instance.startFadeOut();
                 new PlayerGuestPopup(this.userName);
                 return;
+            }
+            if (Main.server.server_owner == this.userId) {
+                groupText = 'Server Owner';
             }
             this.m.playerInfo.statusBox.text = ret.status;
             this.m.playerInfo.groupBox.text = "Group: " + groupText;
