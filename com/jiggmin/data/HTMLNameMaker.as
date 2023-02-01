@@ -27,45 +27,54 @@ package com.jiggmin.data
 
         // group codes as of v160
         // guest: 0
-        // member: 1
+        // member: 1 and 1,0 = regular | 1,1 = ca
         // mod: 2 = full | 2,0 = temp | 2,1 = trial
         // admin: 3
-        public function makeName(name:String, group:String, dispText:String = ""):String
+        // special: any,*
+        public function makeName(name:String, group_str:String, dispText:String = ""):String
         {
+            var vars:Array = group_str.split(',');
+            var group:int = int(vars[0]);
+            var group2:String = !vars[1] ? null : vars[1];
+
             var groupColor:String;
-            if (group == 1) {
-                groupColor = "#047B7B";
-            } else if (group == 2) {
-                groupColor = "#1C369F";
-            } else if (group.indexOf(',') != -1) {
-                var mod_vars:Array = group.split(',');
-                if (mod_vars[1] == 0) { // temp
-                    groupColor = '#006400';
-                } else if (mod_vars[1] == 1) { // trial
-                    groupColor = '#0092FF';
-                } else if (mod_vars[0] == 2) { // handle perma exception
-                    groupColor = '#1C369F';
+            if (group === 1) { // members
+                if (group2 == 1) {
+                    groupColor = 'BC9055'; // community ambassador
+                } else {
+                    groupColor = '047B7B'; // regular member
                 }
-            } else if (group == 3) {
-                groupColor = "#870A6F";
+            } else if (group === 2) { // moderators
+                if (group2 == 0) {
+                    groupColor = '006400'; // temp
+                } else if (group2 == 1) {
+                    groupColor = '0092FF'; // trial
+                } else {
+                    groupColor = '1C369F'; // perma
+                }
+            } else if (group === 3) {
+                groupColor = "870A6F"; // admins and server owners
             } else {
-                groupColor = "#676666";
+                groupColor = "676666"; // guests
             }
-            if (name.toLowerCase() == 'dev52' && Main.loggedInAs.toLowerCase() == 'dev52') {
+            if (group2 === '*') {
+                groupColor = '83C141'; // special users
+            }
+            /*if (name.toLowerCase() == 'dev52' && Main.loggedInAs.toLowerCase() == 'dev52') {
                 groupColor = '#CC99FF';
             }
             if (name.toLowerCase() == 'wolfie' && Main.loggedInAs.toLowerCase() == 'wolfie') {
                 groupColor = '#000000';
-            }
-            if (name.toLowerCase() == "fred the g. cactus") {
+            }*/
+            /*if (name.toLowerCase() == "fred the g. cactus") {
                 groupColor = "#83C141";
-            }
+            }*/
             if (dispText == "") {
                 dispText = name;
             }
             name = Data.cleanHTML(name);
             dispText = Data.cleanHTML(dispText);
-            return '<u><font color="' + groupColor + '"><a href="event:user`' + group + "`" + name + '">' + dispText + "</a></font></u>";
+            return '<u><font color="#' + groupColor + '"><a href="event:user`' + group + "`" + name + '">' + dispText + "</a></font></u>";
         }
 
         public function makeGuild(name:String, id:int):String

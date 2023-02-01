@@ -13,6 +13,7 @@ package package_4
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
+    import flash.text.TextFormat;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import lobby.LobbyRight;
@@ -125,13 +126,22 @@ package package_4
         // method_281 = applyReturnData
         private function applyReturnData(ret:Object)
         {
+            var tf:TextFormat = new TextFormat();
+            tf.size = 10;
+
             this.userId = int(ret.userId);
             var group:int = ret.group;
             if (group == 1) {
-                groupText = 'Member';
+                if (ret.ca) {
+                    groupText = 'Comm. Ambassador';
+                    this.m.playerInfo.groupBox.defaultTextFormat = tf;
+                } else {
+                    groupText = 'Member';
+                }
             } else if (group == 2) {
                 if (ret.temp_mod != null && ret.temp_mod == true) {
-                    groupText = 'Temp Mod';
+                    groupText = 'Temporary Moderator';
+                    this.m.playerInfo.groupBox.defaultTextFormat = tf;
                 } else if (ret.trial_mod == true) {
                     groupText = 'Trial Moderator';
                 } else {
