@@ -17,7 +17,7 @@ package ui
         private var loader:Loader;
         private var guildId:int;
 
-        public function GuildName(id:int, name:String, _arg_3:String, _arg_4:Boolean=false)
+        public function GuildName(id:int, name:String, emblem:String, boldText:Boolean=false, wide:Boolean=false)
         {
             this.guildId = id;
             this.m = new GuildNameGraphic();
@@ -25,11 +25,12 @@ package ui
             useHandCursor = true;
             buttonMode = true;
             mouseChildren = false;
-            if (_arg_4) {
+            if (boldText) {
                 this.m.nameBox.htmlText = "<b>" + Data.escapeString(name) + "</b>";
             } else {
                 this.m.nameBox.text = name;
             }
+            this.m.nameBox.width = wide ? 145 : 110;
             addEventListener(MouseEvent.CLICK, this.clickHandler, false, 0, true);
         }
 
