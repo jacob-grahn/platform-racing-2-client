@@ -19,7 +19,7 @@ package
         private const remote0Color:uint = 0x10B6DE;//0x0066FF;
         private const remote1Color:uint = 0xFF0000;//0xCC3333;
         private const remote2Color:uint = 0x00FF00;//0x009900;//0xFF6633;
-        private const remote3Color:uint = 0x999999;//FF00FF;//0xCA6EED;
+        private const remote3Color:uint = 0xFF00FF;//0x999999;//FF00FF;//0xCA6EED;
         private const localColor:uint = 0xFFFF00;
 
         private var tempID:int = -1;
