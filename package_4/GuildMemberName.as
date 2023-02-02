@@ -14,12 +14,12 @@ package package_4
         private var m:GuildMemberNameGraphic = new GuildMemberNameGraphic();
         private var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
 
-        public function GuildMemberName(name:String, group:String, gpToday:int, gpTotal:int, owner:Boolean)
+        public function GuildMemberName(member:Object, owner:Boolean)
         {
             addChild(this.m);
-            this.m.nameBox.htmlText = this.htmlNameMaker.makeName(name, group);
-            this.m.gpTodayBox.text = Data.formatNumber(gpToday);
-            this.m.gpTotalBox.text = Data.formatNumber(gpTotal);
+            this.m.nameBox.htmlText = this.htmlNameMaker.makeName(member.name, member.group);
+            this.m.gpTodayBox.text = Data.formatNumber(member.gp_today);
+            this.m.gpTotalBox.text = Data.formatNumber(member.gp_total);
             if (owner) {
                 this.m.hat.gotoAndStop(6);
                 this.m.hat.colorMC.gotoAndStop(6);
