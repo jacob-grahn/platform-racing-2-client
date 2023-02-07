@@ -10,6 +10,7 @@ package package_4
     import flash.events.Event;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
+    import flash.net.navigateToURL;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
@@ -40,6 +41,21 @@ package package_4
         private var expGain:ExpGain;
         private var times:Array;
         private var cm:CommandHandler = CommandHandler.commandHandler;
+
+        private var icons:Object = {
+            hof: {
+                target: this.m.playerInfo.hofIcon,
+                title: 'Hall of Fame',
+                desc: 'This player has been inducted into the Hall of Fame for their exceptional talent and dedication to the PR2 and Jiggmin community.',
+                link: 'https://jiggmin2.com/forums/showthread.php?tid=4226'
+            },
+            verified: {
+                target: this.m.playerInfo.verifiedIcon,
+                title: 'Verified',
+                desc: 'This account is verified due to its notability and prominence in the community.',
+                link: 'https://jiggmin2.com/forums/showthread.php?tid=4227'
+            }
+        }
 
         private var hoverPopup:HoverPopup;
         private var hoverTimer:uint;
@@ -160,12 +176,14 @@ package package_4
             this.m.playerInfo.verifiedIcon.visible = this.m.playerInfo.hofIcon.visible = false;
             if (ret.verified) {
                 this.m.playerInfo.verifiedIcon.visible = this.m.playerInfo.verifiedIcon.buttonMode = this.m.playerInfo.verifiedIcon.useHandCursor = true;
-                this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.MOUSE_OVER, this.overIcon, false, 0, true);
+                this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.CLICK, this.iconEvent, false, 0, true);
+                this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.MOUSE_OVER, this.iconEvent, false, 0, true);
                 this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.MOUSE_OUT, this.outHover, false, 0, true);
             }
             if (ret.hof) {
                 this.m.playerInfo.hofIcon.visible = this.m.playerInfo.hofIcon.buttonMode = this.m.playerInfo.hofIcon.useHandCursor = true;
-                this.m.playerInfo.hofIcon.addEventListener(MouseEvent.MOUSE_OVER, this.overIcon, false, 0, true);
+                this.m.playerInfo.hofIcon.addEventListener(MouseEvent.CLICK, this.iconEvent, false, 0, true);
+                this.m.playerInfo.hofIcon.addEventListener(MouseEvent.MOUSE_OVER, this.iconEvent, false, 0, true);
                 this.m.playerInfo.hofIcon.addEventListener(MouseEvent.MOUSE_OUT, this.outHover, false, 0, true);
                 if (!ret.verified) {
                     this.m.playerInfo.hofIcon.x = -6;
@@ -261,29 +279,20 @@ package package_4
             Main.stage.focus = Main.stage;
         }
 
-        private function overIcon(e:MouseEvent)
+        private function iconEvent(e:MouseEvent)
         {
-            var icons:Object = {
-                hof: {
-                    target: this.m.playerInfo.hofIcon,
-                    title: 'Hall of Fame',
-                    desc: 'This player has been inducted into the Hall of Fame for their outstanding contributions or accomplishments in the PR2 and Jiggmin community.'
-                },
-                verified: {
-                    target: this.m.playerInfo.verifiedIcon,
-                    title: 'Verified',
-                    desc: 'This account is verified due to its notability and prominence in the community.'
-                }
-            }
-
             var icon:Object;
-            for each (var i:Object in icons) {
+            for each (var i:Object in this.icons) {
                 if (e.target === i.target) {
                     icon = i;
                 }
             }
 
-            this.hoverPopup = new HoverPopup(icon.title, icon.desc, icon.target);
+            if (e.type === MouseEvent.MOUSE_OVER) {
+                this.hoverPopup = new HoverPopup(icon.title, icon.desc + ' Click for more information.', icon.target);
+            } else if (e.type === MouseEvent.CLICK) {
+                navigateToURL(new URLRequest(icon.link), "_blank");
+            }
         }
 
         private function mouseOverRankBox(e:MouseEvent)

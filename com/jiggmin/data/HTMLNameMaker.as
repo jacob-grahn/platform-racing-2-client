@@ -13,7 +13,6 @@ package com.jiggmin.data
     import package_4.GuildJoinPopup;
     import package_4.LevelInfoPopup;
     import package_4.ExternalLinkPopup;
-    import flash.net.navigateToURL;
     import flash.net.URLRequest;
 
     public class HTMLNameMaker 
