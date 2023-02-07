@@ -42,21 +42,6 @@ package package_4
         private var times:Array;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
-        private var icons:Object = {
-            hof: {
-                target: this.m.playerInfo.hofIcon,
-                title: 'Hall of Fame',
-                desc: 'This player has been inducted into the Hall of Fame for their exceptional talent and dedication to the PR2 and Jiggmin community.',
-                link: 'https://jiggmin2.com/forums/showthread.php?tid=4226'
-            },
-            verified: {
-                target: this.m.playerInfo.verifiedIcon,
-                title: 'Verified',
-                desc: 'This account is verified due to its notability and prominence in the community.',
-                link: 'https://jiggmin2.com/forums/showthread.php?tid=4227'
-            }
-        }
-
         private var hoverPopup:HoverPopup;
         private var hoverTimer:uint;
 
@@ -81,21 +66,21 @@ package package_4
             if (Main.group >= 2) {
                 this.banMenu = new BanMenu(name, this);
                 addChild(this.banMenu);
-                this.banMenu.x = (this.banMenu.width / 2) + 39; //(this.banMenu.width / 2) + 3;
-                this.m.x = this.m.x - 106; //-(this.m.width / 2) - 3;
+                this.banMenu.x = (this.banMenu.width / 2) + 40;
+                this.m.x = this.m.x - 96;
                 if (Main.group >= 3) {
-                    this.m.x = -(this.m.width / 2) - 19.5; //this.m.x - 15;
-                    this.banMenu.x = (this.banMenu.width / 2) - 19.5; //this.banMenu.x - 15;
+                    this.m.x = -(this.m.width / 2) - 19;
+                    this.banMenu.x = (this.banMenu.width / 2) - 19;
                     this.adminMenu = new AdminMenu(name, this);
-                    this.adminMenu.x = 216.5;
+                    this.adminMenu.x = 215;
                     addChild(this.adminMenu);
                 }
             } else if (Main.group == 1 && Main.isTempMod) {
                 this.tempModMenu = new TempModMenu(name, this);
                 addChild(this.tempModMenu);
-                this.tempModMenu.x = (this.tempModMenu.width / 2) + 48;
-                this.m.x = this.m.x - 102;
-            } 
+                this.tempModMenu.x = (this.tempModMenu.width / 2) + 47;
+                this.m.x = this.m.x - 96;
+            }
         }
 
 
@@ -281,8 +266,23 @@ package package_4
 
         private function iconEvent(e:MouseEvent)
         {
+            var icons:Object = {
+                hof: {
+                    target: this.m.playerInfo.hofIcon,
+                    title: 'Hall of Fame',
+                    desc: 'This player has been inducted into the Hall of Fame for their exceptional talent and dedication to the PR2 and Jiggmin community.',
+                    link: 'https://jiggmin2.com/forums/showthread.php?tid=4226'
+                },
+                verified: {
+                    target: this.m.playerInfo.verifiedIcon,
+                    title: 'Verified',
+                    desc: 'This account is verified due to its notability and prominence in the community.',
+                    link: 'https://jiggmin2.com/forums/showthread.php?tid=4227'
+                }
+            }
+
             var icon:Object;
-            for each (var i:Object in this.icons) {
+            for each (var i:Object in icons) {
                 if (e.target === i.target) {
                     icon = i;
                 }
