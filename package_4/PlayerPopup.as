@@ -201,7 +201,7 @@ package package_4
                 this.m.playerInfo.addChild(this.guildName);
             }
             var c:Character = new Character(ret.hat, ret.head, ret.body, ret.feet);
-            this.m.playerInfo.addChild(c);
+            this.m.playerInfo.addChildAt(c, 1);
             c.setHatColors(ret.hatColor, ret.hatColor2);
             c.setHeadColors(ret.headColor, ret.headColor2);
             c.setBodyColors(ret.bodyColor, ret.bodyColor2);
@@ -209,6 +209,11 @@ package package_4
             c.scaleX = c.scaleY = 2;
             c.x = -75;
             c.y = 135;
+            if (ret.body == 29) {
+                c.scaleX = c.scaleY -= 0.5;
+                c.x -= 5;
+                c.y -= 10;
+            }
             this.m.playerInfo.supplBg.visible = false;
             this.expGain = new ExpGain();
             this.expGain.x = this.m.playerInfo.x;
