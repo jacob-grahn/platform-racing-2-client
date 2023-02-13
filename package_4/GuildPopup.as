@@ -93,7 +93,7 @@ package package_4
             this.m.guildProse.text = ret.note;
             this.loader.load(new URLRequest(Main.baseURL + "/emblems/" + ret.emblem));
             for each (var member:Object in members) {
-                var userName:GuildMemberName = new GuildMemberName(member.name, member.power + (member.trial_mod == 1 ? ',1' : ''), member.gp_today, member.gp_total, (this.ownerId == member.user_id));
+                var userName:GuildMemberName = new GuildMemberName(member, (this.ownerId == member.user_id));
                 userName.y = this.guildMembers.length * 16;
                 this.m.membersHolder.addChild(userName);
                 this.guildMembers.push(userName);

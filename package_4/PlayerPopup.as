@@ -10,9 +10,11 @@ package package_4
     import flash.events.Event;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
+    import flash.net.navigateToURL;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
+    import flash.text.TextFormat;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import lobby.LobbyRight;
@@ -40,8 +42,8 @@ package package_4
         private var times:Array;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
-        private var hoverSendPM:HoverPopup;
-        private var sendPMBtTimer:uint;
+        private var hoverPopup:HoverPopup;
+        private var hoverTimer:uint;
 
         public function PlayerPopup(name:String)
         {
@@ -64,21 +66,21 @@ package package_4
             if (Main.group >= 2) {
                 this.banMenu = new BanMenu(name, this);
                 addChild(this.banMenu);
-                this.banMenu.x = (this.banMenu.width / 2) + 39; //(this.banMenu.width / 2) + 3;
-                this.m.x = this.m.x - 106; //-(this.m.width / 2) - 3;
+                this.banMenu.x = (this.banMenu.width / 2) + 40;
+                this.m.x = this.m.x - 96;
                 if (Main.group >= 3) {
-                    this.m.x = -(this.m.width / 2) - 19.5; //this.m.x - 15;
-                    this.banMenu.x = (this.banMenu.width / 2) - 19.5; //this.banMenu.x - 15;
+                    this.m.x = -(this.m.width / 2) - 19;
+                    this.banMenu.x = (this.banMenu.width / 2) - 19;
                     this.adminMenu = new AdminMenu(name, this);
-                    this.adminMenu.x = 216.5;
+                    this.adminMenu.x = 215;
                     addChild(this.adminMenu);
                 }
             } else if (Main.group == 1 && Main.isTempMod) {
                 this.tempModMenu = new TempModMenu(name, this);
                 addChild(this.tempModMenu);
-                this.tempModMenu.x = (this.tempModMenu.width / 2) + 48;
-                this.m.x = this.m.x - 102;
-            } 
+                this.tempModMenu.x = (this.tempModMenu.width / 2) + 47;
+                this.m.x = this.m.x - 96;
+            }
         }
 
 
@@ -128,48 +130,78 @@ package package_4
             this.userId = int(ret.userId);
             var group:int = ret.group;
             if (group == 1) {
-                groupText = 'Member';
+                if (ret.ca) {
+                    groupText = 'Community Ambassador';
+                    var tf:TextFormat = new TextFormat();
+                    tf.size = 11;
+                    this.m.playerInfo.groupBox.defaultTextFormat = tf;
+                } else {
+                    groupText = 'Member';
+                }
             } else if (group == 2) {
                 if (ret.temp_mod != null && ret.temp_mod == true) {
-                    groupText = 'Temp Mod';
+                    groupText = 'Temporary Moderator';
                 } else if (ret.trial_mod == true) {
                     groupText = 'Trial Moderator';
                 } else {
                     groupText = 'Moderator';
                 }
             } else if (group == 3) {
-                groupText = Main.server.server_owner == this.userId ? 'Server Owner' : 'Admin';
+                groupText = 'Admin';
             } else {
                 PlayerPopup.instance.startFadeOut();
                 new PlayerGuestPopup(this.userName);
                 return;
             }
+            if (Main.server.server_owner == this.userId) {
+                groupText = 'Server Owner';
+            }
             this.m.playerInfo.statusBox.text = ret.status;
-            this.m.playerInfo.groupBox.text = "Group: " + groupText;
-            this.m.playerInfo.rankBox.text = "Rank: " + ret.rank;
+            this.m.playerInfo.groupBox.text = groupText;
+            this.m.playerInfo.verifiedIcon.visible = this.m.playerInfo.hofIcon.visible = false;
+            if (ret.verified) {
+                this.m.playerInfo.verifiedIcon.visible = this.m.playerInfo.verifiedIcon.buttonMode = this.m.playerInfo.verifiedIcon.useHandCursor = true;
+                this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.CLICK, this.iconEvent, false, 0, true);
+                this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.MOUSE_OVER, this.iconEvent, false, 0, true);
+                this.m.playerInfo.verifiedIcon.addEventListener(MouseEvent.MOUSE_OUT, this.outHover, false, 0, true);
+            }
+            if (ret.hof) {
+                this.m.playerInfo.hofIcon.visible = this.m.playerInfo.hofIcon.buttonMode = this.m.playerInfo.hofIcon.useHandCursor = true;
+                this.m.playerInfo.hofIcon.addEventListener(MouseEvent.CLICK, this.iconEvent, false, 0, true);
+                this.m.playerInfo.hofIcon.addEventListener(MouseEvent.MOUSE_OVER, this.iconEvent, false, 0, true);
+                this.m.playerInfo.hofIcon.addEventListener(MouseEvent.MOUSE_OUT, this.outHover, false, 0, true);
+                if (!ret.verified) {
+                    this.m.playerInfo.hofIcon.x = -6;
+                }
+            }
+            this.m.playerInfo.rankBox.text = ret.rank;
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRankBox, false, 0, true);
             this.m.playerInfo.rankBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRankBox, false, 0, true);
-            this.m.playerInfo.hatBox.text = "Hats: " + ret.hats;
-            this.m.playerInfo.registerBox.text = "Joined: " + (ret.registerDate == 0 ? 'Age of Heroes' : Data.getShortDateStr(ret.registerDate));
+            this.m.playerInfo.hatBox.text = ret.hats;
+            this.m.playerInfo.registerBox.text = ret.registerDate == 0 ? 'Age of Heroes' : Data.getShortDateStr(ret.registerDate);
             if (ret.registerDate != 0) {
                 this.m.playerInfo.registerBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverRegisterBox, false, 0, true);
                 this.m.playerInfo.registerBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutRegisterBox, false, 0, true);
             }
-            this.m.playerInfo.activeBox.text = "Active: " + Data.getShortDateStr(ret.loginDate);
+            this.m.playerInfo.activeBox.text = Data.getShortDateStr(ret.loginDate);
             this.m.playerInfo.activeBox.addEventListener(MouseEvent.MOUSE_OVER, this.mouseOverActiveBox, false, 0, true);
             this.m.playerInfo.activeBox.addEventListener(MouseEvent.MOUSE_OUT, this.mouseOutActiveBox, false, 0, true);
             this.times = [ret.registerDate, ret.loginDate];
             if (ret.guildId == 0) {
-                this.m.playerInfo.guildBox.text = "Guild: none";
+                this.m.playerInfo.guildBox.text = /*"Guild: */"none";
             } else {
-                this.m.playerInfo.guildBox.text = "Guild:";
-                this.guildName = new GuildName(ret.guildId, ret.guildName, ret.emblem, true);
-                this.guildName.x = 0;
-                this.guildName.y = 42;
+                /*this.m.playerInfo.guildBox.htmlText = '<a href="event:guild`' + int(ret.guildId) + '">' + Data.cleanHTML(ret.guildName) + '</a>';
+                var clickGuild:Function = function(e:MouseEvent) { new GuildPopup(ret.guildId) };
+                this.m.playerInfo.guildBox.addEventListener(MouseEvent.CLICK, clickGuild, false, 0, true);*/
+                //this.m.playerInfo.guildBox.text = "Guild:";
+                this.m.playerInfo.removeChild(this.m.playerInfo.guildBox);
+                this.guildName = new GuildName(ret.guildId, ret.guildName, ret.emblem, true, true);
+                this.guildName.x = -40;
+                this.guildName.y = 64;
                 this.m.playerInfo.addChild(this.guildName);
             }
             var c:Character = new Character(ret.hat, ret.head, ret.body, ret.feet);
-            this.m.playerInfo.addChild(c);
+            this.m.playerInfo.addChildAt(c, 1);
             c.setHatColors(ret.hatColor, ret.hatColor2);
             c.setHeadColors(ret.headColor, ret.headColor2);
             c.setBodyColors(ret.bodyColor, ret.bodyColor2);
@@ -177,6 +209,11 @@ package package_4
             c.scaleX = c.scaleY = 2;
             c.x = -75;
             c.y = 135;
+            if (ret.body == 29) {
+                c.scaleX = c.scaleY -= 0.5;
+                c.x -= 5;
+                c.y -= 10;
+            }
             this.m.playerInfo.supplBg.visible = false;
             this.expGain = new ExpGain();
             this.expGain.x = this.m.playerInfo.x;
@@ -197,7 +234,7 @@ package package_4
                 }
             }
             this.m.playerInfo.messageButton.addEventListener(MouseEvent.MOUSE_OVER, this.overSendPMBt, false, 0, true);
-            this.m.playerInfo.messageButton.addEventListener(MouseEvent.MOUSE_OUT, this.outSendPMBt, false, 0, true);
+            this.m.playerInfo.messageButton.addEventListener(MouseEvent.MOUSE_OUT, this.outHover, false, 0, true);
             this.m.playerInfo.messageButton.addEventListener(MouseEvent.CLICK, this.clickSendPM, false, 0, true);
             this.m.playerInfo.levelsButton.addEventListener(MouseEvent.CLICK, this.clickViewLevels, false, 0, true);
             if (ret.following == 1) {
@@ -230,6 +267,37 @@ package package_4
             this.m.loadingGraphic.visible = false;
             Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.toggleUserIdShown, false, 0, true);
             Main.stage.focus = Main.stage;
+        }
+
+        private function iconEvent(e:MouseEvent)
+        {
+            var icons:Object = {
+                hof: {
+                    target: this.m.playerInfo.hofIcon,
+                    title: 'Hall of Fame',
+                    desc: 'This player has been inducted into the Hall of Fame for their exceptional talent and dedication to the PR2 and Jiggmin community.',
+                    link: 'https://jiggmin2.com/forums/showthread.php?tid=4226'
+                },
+                verified: {
+                    target: this.m.playerInfo.verifiedIcon,
+                    title: 'Verified',
+                    desc: 'This account is verified due to its notability and prominence in the community.',
+                    link: 'https://jiggmin2.com/forums/showthread.php?tid=4227'
+                }
+            }
+
+            var icon:Object;
+            for each (var i:Object in icons) {
+                if (e.target === i.target) {
+                    icon = i;
+                }
+            }
+
+            if (e.type === MouseEvent.MOUSE_OVER) {
+                this.hoverPopup = new HoverPopup(icon.title, icon.desc + ' Click for more information.', icon.target);
+            } else if (e.type === MouseEvent.CLICK) {
+                navigateToURL(new URLRequest(icon.link), "_blank");
+            }
         }
 
         private function mouseOverRankBox(e:MouseEvent)
@@ -329,17 +397,17 @@ package package_4
 
         private function overSendPMBt(e:MouseEvent)
         {
-            this.sendPMBtTimer = setTimeout(function() {
-                hoverSendPM = new HoverPopup('Send PM', 'Send a PM to this player.', m.playerInfo.messageButton);
+            this.hoverTimer = setTimeout(function() {
+                hoverPopup = new HoverPopup('Send PM', 'Send a PM to this player.', m.playerInfo.messageButton);
             }, 500);
         }
 
-        private function outSendPMBt(e:MouseEvent = null)
+        private function outHover(e:MouseEvent = null)
         {
-            clearTimeout(this.sendPMBtTimer);
-            if (this.hoverSendPM != null) {
-                this.hoverSendPM.remove();
-                this.hoverSendPM = null;
+            clearTimeout(this.hoverTimer);
+            if (this.hoverPopup != null) {
+                this.hoverPopup.remove();
+                this.hoverPopup = null;
             }
         }
 
@@ -421,7 +489,7 @@ package package_4
             this.m.playerInfo.activeBox.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseOverActiveBox);
             this.m.playerInfo.activeBox.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseOutActiveBox);
             this.m.playerInfo.messageButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overSendPMBt);
-            this.m.playerInfo.messageButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outSendPMBt);
+            this.m.playerInfo.messageButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outHover);
             this.m.playerInfo.messageButton.removeEventListener(MouseEvent.CLICK, this.clickSendPM);
             this.m.playerInfo.levelsButton.removeEventListener(MouseEvent.CLICK, this.clickViewLevels);
             this.m.playerInfo.followButton.removeEventListener(MouseEvent.CLICK, this.clickFollow);
@@ -433,8 +501,8 @@ package package_4
             this.m.playerInfo.inviteButton.removeEventListener(MouseEvent.CLICK, this.clickInvite);
             this.m.playerInfo.kickButton.removeEventListener(MouseEvent.CLICK, this.clickKick);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
-            clearTimeout(this.sendPMBtTimer);
-            this.outSendPMBt();
+            clearTimeout(this.hoverTimer);
+            this.outHover();
             if (this.banMenu != null) {
                 this.banMenu.remove();
                 this.banMenu = null;

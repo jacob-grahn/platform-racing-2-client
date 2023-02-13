@@ -348,7 +348,9 @@
                 "We Are Loud - Dynamedion", // should never be triggered; song can't be set to we are loud
                 "Toodaloo - mustangman",
                 "Night Shade - Goliathe",
-                "Blizzard! - Majicke"
+                "Blizzard! - Majicke",
+                "Pasture (Instrumental) - Dangevin",
+                "Sunset Raiders - AVL"
             ];
             return songArr[song];
         }
