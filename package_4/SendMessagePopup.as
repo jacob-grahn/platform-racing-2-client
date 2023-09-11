@@ -13,12 +13,16 @@ package package_4
 
         private var m:SendMessagePopupGraphic = new SendMessagePopupGraphic();
         private var isGuildMessage:Boolean = false; // var_622
+        private var hover:HoverPopup = null;
 
         public function SendMessagePopup(name:String = "", message:String = "", guild:Boolean = false, level:Boolean = false)
         {
             this.isGuildMessage = guild;
             this.m.send_bt.addEventListener(MouseEvent.CLICK, this.clickSend, false, 0, true);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
+            this.m.codes_bt.addEventListener(MouseEvent.CLICK, this.clickCodes, false, 0, true);
+            this.m.codes_bt.addEventListener(MouseEvent.MOUSE_OVER, this.hoverOverCodes, false, 0, true);
+            this.m.codes_bt.addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutCodes, false, 0, true);
             this.m.nameBox.text = name;
             this.m.textBox.text = message;
             this.countChars();
@@ -33,6 +37,24 @@ package package_4
             } else {
                 addEventListener(LOADED, this.focusTextBox, false, 0, true);
             }
+        }
+
+        private function hoverOverCodes(e:MouseEvent)
+        {
+            this.hover = new HoverPopup("Rich Formatting", 'Impress your friends by using rich formatting in PMs! Click to learn more.', this.m.codes_bt);
+        }
+
+        private function hoverOutCodes(e:* = null)
+        {
+            if (this.hover != null) {
+                this.hover.remove();
+                this.hover = null;
+            }
+        }
+
+        private function clickCodes(e:MouseEvent)
+        {
+            new PMRFCodesPopup();
         }
 
         private function focusNameBox(e:Event)
@@ -88,9 +110,13 @@ package package_4
 
         override public function remove()
         {
+            this.hoverOutCodes();
             this.m.textBox.removeEventListener(Event.CHANGE, this.countChars);
             this.m.send_bt.removeEventListener(MouseEvent.CLICK, this.clickSend);
             this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
+            this.m.codes_bt.removeEventListener(MouseEvent.CLICK, this.clickCodes);
+            this.m.codes_bt.removeEventListener(MouseEvent.MOUSE_OVER, this.hoverOverCodes);
+            this.m.codes_bt.removeEventListener(MouseEvent.MOUSE_OUT, this.hoverOutCodes);
             super.remove();
         }
 
