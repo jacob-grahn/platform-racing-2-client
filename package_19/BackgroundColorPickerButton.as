@@ -18,7 +18,7 @@ package package_19
         public function BackgroundColorPickerButton()
         {
             this.cp.width = this.cp.height = 30;
-            this.cp.var_419 = ColorPicker.LEFT;
+            this.cp.direction = ColorPicker.LEFT;
             this.updateColor();
             addChild(this.cp);
             this.cp.addEventListener(Event.CLOSE, this.onClose, false, 0, true);

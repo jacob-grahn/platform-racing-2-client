@@ -26,7 +26,7 @@ package blocks
         {
             var force:Number = this.cheeseHandler(player, Math.round(player.velY * 2), true);
             localActivate(force.toString());
-            if (!method_20()) {
+            if (!isRemoved()) {
                 super.onStand(player);
             }
         }
@@ -35,7 +35,7 @@ package blocks
         {
             var force:Number = this.cheeseHandler(player, Math.round(-player.velY));
             localActivate(force.toString());
-            if (!method_20()) {
+            if (!isRemoved()) {
                 super.onBump(player);
             }
         }
@@ -54,7 +54,7 @@ package blocks
                 }
             }
             localActivate(force.toString());
-            if (!method_20()) {
+            if (!isRemoved()) {
                 super.onLeftHit(player);
             }
         }
@@ -73,7 +73,7 @@ package blocks
                 }
             }
             localActivate(force.toString());
-            if (!method_20()) {
+            if (!isRemoved()) {
                 super.onRightHit(player);
             }
         }

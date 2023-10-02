@@ -113,7 +113,7 @@ package levelEditor
 
         public function select()
         {
-            this.showHighlight();
+            this.makeHighlightOutline();
             addChild(this.highlightOutline);
             this.stageRef.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler);
             if (this.deleteable) {
@@ -243,8 +243,8 @@ package levelEditor
             }
         }
 
-        // method_141 = showHighlight
-        protected function showHighlight()
+        // method_141 = makeHighlightOutline
+        protected function makeHighlightOutline()
         {
             this.highlightOutline.graphics.clear();
             this.highlightOutline.graphics.lineStyle(3, 0xFFFFFF, 1, false, "none");

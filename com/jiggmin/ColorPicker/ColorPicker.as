@@ -17,9 +17,9 @@ package com.jiggmin.ColorPicker
         public static const LEFT:String = "left";
         internal static var recentColors:Array = new Array(0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555); // var_265
 
-        public var var_419:String = "right";
+        public var direction:String = "right"; // var_419
         protected var color:int;
-        private var mPop:ColorPickerPopup;
+        private var popup:ColorPickerPopup;
         private var m:ColorPickerGraphic;
 
         public function ColorPicker()
@@ -38,8 +38,9 @@ package com.jiggmin.ColorPicker
         }
 
         // _loc2 = ct
-        public function setColor(c:int)
+        public function setColor(c:* = null)
         {
+            c = c is Number ? c : this.popup.getColor();
             if (this.color != c) {
                 this.color = c;
                 var ct:ColorTransform = new ColorTransform();
@@ -52,56 +53,53 @@ package com.jiggmin.ColorPicker
         private function clickHandler(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            if (this.mPop != null && !this.mPop.method_20()) {
-                this.method_71();
-            } else {
-                this.method_740();
-            }
+            (this.popup != null && !this.popup.isRemoved() ? this.closePopup() : this.openPopup());
         }
 
-        private function method_290(e:Event)
+        // built into setColor
+        /*private function method_290(e:Event)
         {
-            this.setColor(this.mPop.getColor());
-        }
+            this.setColor(this.popup.getColor());
+        }*/
 
-        private function method_242(e:Event)
+        // built into closePopup
+        /*private function method_242(e:Event)
         {
-            this.method_71();
-        }
+            this.closePopup();
+        }*/
 
-        private function method_740()
+        // deleted _loc1 (combined with _loc2)
+        // _loc2 = origin
+        // method_740 = openPopup
+        private function openPopup()
         {
-            this.method_71();
-            var _local_1:Point = new Point(0, 0);
-            var _local_2:Point = this.localToGlobal(_local_1);
-            this.mPop = new ColorPickerPopup(this.color);
-            if (this.var_419 == RIGHT) {
-                this.mPop.x = _local_2.x + width + 5;
-            } else {
-                this.mPop.x = _local_2.x - this.mPop.width - 5;
+            this.closePopup();
+            var origin:Point = this.localToGlobal(new Point(0, 0));
+            this.popup = new ColorPickerPopup(this.color);
+            this.popup.x = this.direction == RIGHT ? origin.x + width + 5 : origin.x - this.popup.width - 5;
+            this.popup.addEventListener(Event.CHANGE, this.setColor, false, 0, true);
+            this.popup.addEventListener(Removable.REMOVE, this.closePopup, false, 0, true);
+            stage.addChild(this.popup);
+            this.popup.init();
+            this.popup.method_101(this);
+            this.popup.y = origin.y;
+            if (this.popup.y > Main.clientHeight - this.popup.height) {
+                this.popup.y = Main.clientHeight - this.popup.height;
             }
-            this.mPop.addEventListener(Event.CHANGE, this.method_290, false, 0, true);
-            this.mPop.addEventListener(Removable.REMOVE, this.method_242, false, 0, true);
-            stage.addChild(this.mPop);
-            this.mPop.init();
-            this.mPop.method_101(this);
-            this.mPop.y = _local_2.y;
-            if (this.mPop.y > Main.clientHeight - this.mPop.height) {
-                this.mPop.y = Main.clientHeight - this.mPop.height;
-            }
-            this.mPop.x = Math.round(this.mPop.x);
-            this.mPop.y = Math.round(this.mPop.y);
+            this.popup.x = Math.round(this.popup.x);
+            this.popup.y = Math.round(this.popup.y);
             dispatchEvent(new Event(Event.OPEN));
         }
 
-        public function method_71()
+        // method_71 = closePopup
+        public function closePopup(e:* = null)
         {
-            if (this.mPop != null) {
-                this.setColor(this.mPop.getColor());
-                this.mPop.removeEventListener(Event.CHANGE, this.method_290);
-                this.mPop.removeEventListener(Removable.REMOVE, this.method_242);
-                this.mPop.method_136();
-                this.mPop = null;
+            if (this.popup != null) {
+                this.setColor(this.popup.getColor());
+                this.popup.removeEventListener(Event.CHANGE, this.setColor);
+                this.popup.removeEventListener(Removable.REMOVE, this.closePopup);
+                this.popup.method_136();
+                this.popup = null;
                 if (recentColors.indexOf(this.color) == -1) {
                     recentColors.unshift(this.color);
                     recentColors.pop();
@@ -113,7 +111,7 @@ package com.jiggmin.ColorPicker
         override public function remove()
         {
             removeEventListener(MouseEvent.CLICK, this.clickHandler);
-            this.method_71();
+            this.closePopup();
             super.remove();
         }
 

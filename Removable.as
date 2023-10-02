@@ -16,7 +16,8 @@ package
         {
         }
 
-        public function method_20()
+        // method_20 = isRemoved
+        public function isRemoved()
         {
             return this.removed;
         }

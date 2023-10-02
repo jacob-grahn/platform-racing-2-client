@@ -21,6 +21,7 @@ package ui
     import package_20.ObjectDeleter;
     import package_20.TextTool;
     import flash.events.TouchEvent;
+    import flash.ui.MouseCursor;
 
     public class CustomCursor extends Removable 
     {
@@ -86,13 +87,13 @@ package ui
             this.active = true;
             visible = true;
             if (this.mouseHidden) {
-                Mouse.hide();
+                this.hideMouse();
             }
             stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler, false, 0, true);
             stageRef.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, true, 0, true);
             stageRef.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
-            stageRef.addEventListener(MouseEvent.MOUSE_OVER, this.method_269, false, 0, true);
-            stageRef.addEventListener(MouseEvent.MOUSE_OUT, this.method_378, false, 0, true);
+            stageRef.addEventListener(MouseEvent.MOUSE_OVER, this.mouseFocusHandler, false, 0, true);
+            stageRef.addEventListener(MouseEvent.MOUSE_OUT, this.mouseFocusHandler, false, 0, true);
             stageRef.addEventListener(TouchEvent.TOUCH_MOVE, this.touchHandler);
             stageRef.addEventListener(TouchEvent.TOUCH_BEGIN, this.touchHandler);
             stageRef.addEventListener(TouchEvent.TOUCH_END, this.touchHandler);
@@ -126,13 +127,13 @@ package ui
             this.active = false;
             visible = false;
             if (this.mouseHidden) {
-                Mouse.show();
+                this.showMouse();
             }
             stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.mouseMoveHandler);
             stageRef.removeEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, true);
             stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-            stageRef.removeEventListener(MouseEvent.MOUSE_OVER, this.method_269);
-            stageRef.removeEventListener(MouseEvent.MOUSE_OUT, this.method_378);
+            stageRef.removeEventListener(MouseEvent.MOUSE_OVER, this.mouseFocusHandler);
+            stageRef.removeEventListener(MouseEvent.MOUSE_OUT, this.mouseFocusHandler);
             stageRef.removeEventListener(TouchEvent.TOUCH_MOVE, this.touchHandler);
             stageRef.removeEventListener(TouchEvent.TOUCH_BEGIN, this.touchHandler);
             stageRef.removeEventListener(TouchEvent.TOUCH_END, this.touchHandler);
@@ -172,6 +173,8 @@ package ui
         {
             this.mouseHidden = false;
             Mouse.show();
+            Mouse.cursor = MouseCursor.ARROW;
+            Mouse.cursor = MouseCursor.AUTO;
         }
 
         protected function mouseMoveHandler(e:MouseEvent)
@@ -218,15 +221,17 @@ package ui
             }
         }
 
-        protected function method_269(e:MouseEvent)
+        // method_269 = mouseFocusHandler
+        protected function mouseFocusHandler(e:MouseEvent)
         {
             this.me = e;
         }
 
-        protected function method_378(e:MouseEvent)
+        // consolidated into mouseFocusHandler
+        /*protected function method_378(e:MouseEvent)
         {
             this.me = e;
-        }
+        }*/
 
         // method_63 = applyCursorGraphic
         protected function applyCursorGraphic(e:DisplayObject)
