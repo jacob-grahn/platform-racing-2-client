@@ -29,12 +29,12 @@ package background
         private var var_541:int = 750; //500 + ((1 + Settings.getValue(Settings.ART_QUALITY, 0)) * 250); // PIXELIZATION THRESHOLD?
         private var losslessQuality:Boolean = false;
         private var fromLE:Boolean;
-        private var var_87:Number = 1;
+        private var rasterCycles:Number = 1; // var_87
         private var bitmapArray:Array = new Array();
         public var var_33:Sprite = new Sprite();
         public var var_122:Sprite = new Sprite();
-        public var var_84:Sprite = new Sprite();
-        private var var_136:Number = 4;
+        public var objCanvas:Sprite = new Sprite(); // var_84
+        private var brushSize:Number = 4; // var_136
         private var color:Number = 0;
         private var mode:String = "draw";
         private var var_302:Number;
@@ -50,8 +50,8 @@ package background
             this.var_122.cacheAsBitmap = true;
             addChild(this.var_122);
             addChild(this.var_33);
-            addChild(this.var_84);
-            this.var_33.graphics.lineStyle(this.var_136, this.color);
+            addChild(this.objCanvas);
+            this.var_33.graphics.lineStyle(this.brushSize, this.color);
         }
 
         public function method_86()
@@ -66,16 +66,13 @@ package background
             this.method_268(true);
         }
 
+        // _loc2 = i
+        // _loc3 = this.objCanvas.numChildren
         private function method_268(_arg_1:Boolean)
         {
-            var _local_4:DisplayObject;
-            var _local_2:int;
-            var _local_3:int = this.var_84.numChildren;
-            _local_2 = 0;
-            while (_local_2 < _local_3) {
-                _local_4 = this.var_84.getChildAt(_local_2);
+            for (var i:int = 0; i < this.objCanvas.numChildren; i++) {
+                var _local_4:DisplayObject = this.objCanvas.getChildAt(i);
                 _local_4.cacheAsBitmap = _arg_1;
-                _local_2++;
             }
         }
 
@@ -87,9 +84,9 @@ package background
             super.setSaveString(saveStr);
         }
 
-        override public function setScale(_arg_1:Number)
+        override public function setScale(n:Number)
         {
-            scale = _arg_1;
+            scale = n;
             method_59();
         }
 
@@ -102,13 +99,13 @@ package background
         {
             this.method_607(_arg_1, _arg_2, this.var_33);
             this.var_33.graphics.clear();
-            this.var_33.graphics.lineStyle(this.var_136, this.color);
+            this.var_33.graphics.lineStyle(this.brushSize, this.color);
         }
 
         private function method_607(_arg_1:Sprite, _arg_2:Array, _arg_3:Sprite)
         {
             var _local_4:Rectangle = _arg_3.getBounds(this);
-            var _local_5:int = this.var_210 * this.var_87;
+            var _local_5:int = this.var_210 * this.rasterCycles;
             var _local_6:Number = Math.floor(_local_4.x / _local_5) * _local_5;
             var _local_7:Number = Math.floor(_local_4.y / _local_5) * _local_5;
             var _local_8:Number = _local_4.x + _local_4.width;
@@ -123,19 +120,19 @@ package background
                 }
                 _local_10 += _local_5;
             }
-            if (!this.losslessQuality && !this.fromLE && this.var_87 < 5 && Main.var_184 >= this.var_541) {
-                this.var_87++;
+            if (!this.losslessQuality && !this.fromLE && this.rasterCycles < 5 && Main.var_184 >= this.var_541) {
+                this.rasterCycles++;
                 this.clear();
                 this.draw();
-            } else if (this.var_87 >= 5) {
+            } else if (this.rasterCycles >= 5) {
                 this.stoppedRasterizing = true;
             }
         }
 
         private function method_208(_arg_1:Number, _arg_2:Number, _arg_3:Sprite, _arg_4:Array, _arg_5:Sprite)
         {
-            var _local_6:Number = Math.floor(_arg_1 / (this.var_210 * this.var_87));
-            var _local_7:Number = Math.floor(_arg_2 / (this.var_210 * this.var_87));
+            var _local_6:Number = Math.floor(_arg_1 / (this.var_210 * this.rasterCycles));
+            var _local_7:Number = Math.floor(_arg_2 / (this.var_210 * this.rasterCycles));
             var _local_8:Boolean = true;
             if (_arg_4[_local_6] == null) {
                 _arg_4[_local_6] = new Array();
@@ -147,7 +144,7 @@ package background
                     Main.var_184++;
                     var _local_11:BitmapData = new BitmapData(this.var_210 + 1, this.var_210 + 1, true, 0);
                     var _local_12:Bitmap = new Bitmap(_local_11);
-                    _local_12.scaleX = _local_12.scaleY = this.var_87;
+                    _local_12.scaleX = _local_12.scaleY = this.rasterCycles;
                     _arg_4[_local_6][_local_7] = _local_12;
                     if (_arg_3 != this.var_122 || method_32(_local_6, _local_7)) {
                         _arg_3.addChild(_local_12);
@@ -158,9 +155,9 @@ package background
                 var _local_9:DisplayObjectContainer = _arg_5.parent;
                 var _local_10:Sprite = new Sprite();
                 _local_10.addChild(_arg_5);
-                _arg_5.scaleX = _arg_5.scaleY = 1 / this.var_87;
-                _arg_5.x = -(_arg_1 * (1 / this.var_87));
-                _arg_5.y = -(_arg_2 * (1 / this.var_87));
+                _arg_5.scaleX = _arg_5.scaleY = 1 / this.rasterCycles;
+                _arg_5.x = -(_arg_1 * (1 / this.rasterCycles));
+                _arg_5.y = -(_arg_2 * (1 / this.rasterCycles));
                 Bitmap(_arg_4[_local_6][_local_7]).bitmapData.draw(_local_10);
                 _arg_5.x = _arg_5.y = 0;
                 _arg_5.scaleX = _arg_5.scaleY = 1;
@@ -170,6 +167,7 @@ package background
             }
         }
 
+        // _loc5 = _local_3.numChildren
         public function erase()
         {
             var _local_1:Sprite = new Sprite();
@@ -182,12 +180,9 @@ package background
             _local_1.blendMode = BlendMode.ERASE;
             _local_4.addChild(_local_3);
             _local_4.addChild(_local_1);
-            var _local_5:Number = _local_3.numChildren;
-            var _local_7:int;
-            while (_local_7 < _local_5) {
+            for (var _local_7:int = 0; _local_7 < _local_3.numChildren; _local_7++) {
                 var _local_6:Bitmap = Bitmap(_local_3.getChildAt(_local_7));
                 this.method_208(_local_6.x, _local_6.y, this.var_122, this.bitmapArray, _local_4);
-                _local_7++;
             }
             this.method_373(_local_1);
             this.method_373(_local_3);
@@ -197,51 +192,48 @@ package background
 
         private function method_553(_arg_1:Sprite, _arg_2:Array, _arg_3:Array)
         {
-            var _local_4:Number = 0;
-            while (_local_4 < _arg_3.length) {
+            for (var _local_4:int = 0; _local_4 < _arg_3.length; _local_4++) {
                 if (_arg_3[_local_4] != null) {
-                    var _local_5:Number = 0;
-                    while (_local_5 < _arg_3[_local_4].length) {
+                    for (var _local_5:int = 0; _local_5 < _arg_3[_local_4].length; _local_5++) {
                         if (_arg_3[_local_4][_local_5] != null && _arg_2[_local_4] != null && _arg_2[_local_4][_local_5] != null) {
                             _arg_1.addChild(_arg_2[_local_4][_local_5]);
                             _arg_2[_local_4][_local_5] = null;
                         }
-                        _local_5++;
                     }
                 }
-                _local_4++;
             }
         }
 
-        // deleted _loc5
+        // _loc2 = action
+        // _loc3 = type
+        // _loc4 = data
+        // deleted _loc5, _loc6
+        // _loc8 = actionsProcessed
         override public function draw(_arg_1:Number=50)
         {
-            var _local_8:int;
             this.drawing = true;
             course.startDrawing(this);
             if (course.goodToDraw(this)) {
-                var _local_6:Number = 0;
                 var _local_7:Number = new Date().time;
-                this.var_33.graphics.lineStyle(this.var_136, this.color);
-                while (var_39 < saveArray.length) {
-                    _local_8++;
-                    var _local_2:String = saveArray[var_39];
-                    var _local_3:String = _local_2.substr(0, 1);
-                    var _local_4:String = _local_2.substr(1);
-                    if (_local_3 == "d") {
-                        this.method_795(_local_4);
-                    } else if (_local_3 == "c") {
-                        this.color = Number("0x" + _local_4);
-                        this.var_33.graphics.lineStyle(this.var_136, this.color);
-                    } else if (_local_3 == "t") {
-                        this.var_136 = Number(_local_4);
-                        this.var_33.graphics.lineStyle(this.var_136, this.color);
-                    } else if (_local_3 == "m") {
-                        this.mode = _local_4;
-                    } else if (_local_3 == "o") {
-                        this.method_489(_local_4);
-                    } else if (_local_3 == "u") {
-                        this.drawText(_local_4);
+                this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                for (var actionsProcessed:int = 0; var_39 < saveArray.length; ++actionsProcessed) {
+                    var action:String = saveArray[var_39];
+                    var type:String = action.substr(0, 1);
+                    var data:String = action.substr(1);
+                    if (type == "d") { // draw using brush
+                        this.placeStroke(data);
+                    } else if (type == "c") { // change brush color
+                        this.color = Number("0x" + data);
+                        this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                    } else if (type == "t") { // change brush size
+                        this.brushSize = Number(data);
+                        this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                    } else if (type == "m") { // change draw mode
+                        this.mode = data;
+                    } else if (type == "o") { // place an object
+                        this.placeObject(data);
+                    } else if (type == "u") {
+                        this.drawText(data); // place a text object
                     }
                     if (this.mode == "erase") {
                         this.erase();
@@ -250,9 +242,8 @@ package background
                         this.rasterize();
                     }
                     var_39++;
-                    _local_6++;
                     var _local_9:Number = new Date().time - _local_7;
-                    if ((_local_9 > 50 && _local_8 > 20) || _local_9 > 250) {
+                    if ((_local_9 > 50 && actionsProcessed > 20) || _local_9 > 250) {
                         break;
                     }
                 }
@@ -267,29 +258,29 @@ package background
         {
             super.setPos(_arg_1, _arg_2);
             var _local_3:Point = Data.method_9(-course.posX, -course.posY, rotation);
-            var _local_4:int = Math.floor((_local_3.x * scale) / (this.var_210 * this.var_87));
-            var _local_5:int = Math.floor((_local_3.y * scale) / (this.var_210 * this.var_87));
+            var _local_4:int = Math.floor((_local_3.x * scale) / (this.var_210 * this.rasterCycles));
+            var _local_5:int = Math.floor((_local_3.y * scale) / (this.var_210 * this.rasterCycles));
             method_118(_local_4, _local_5, 2, 2, 1, 1, this.var_122, this.bitmapArray);
         }
 
-        protected function method_489(_arg_1:String)
+        // _loc2 = arr
+        // _loc3 = code
+        // method_489 = placeObject
+        protected function placeObject(s:String)
         {
-            var _local_2:Array = _arg_1.split(";");
-            var _local_3:int = _local_2[0];
-            var _local_4:Number = _local_2[1];
-            var _local_5:Number = _local_2[2];
-            var _local_6:Number = _local_2[3];
-            var _local_7:Number = _local_2[4];
-            var _local_8:DisplayObject = Objects.getFromCode(_local_3);
-            _local_8.scaleX = _local_8.scaleY = scale;
-            _local_8.x = _local_4 * scale;
-            _local_8.y = _local_5 * scale;
-            if (!isNaN(_local_6) && !isNaN(_local_7)) {
-                _local_8.scaleX = _local_8.scaleX * _local_6;
-                _local_8.scaleY = _local_8.scaleY * _local_7;
+            var arr:Array = s.split(";");
+            var scaleModX:Number = arr[3];
+            var scaleModY:Number = arr[4];
+            var obj:DisplayObject = Objects.getFromCode(Number(arr[0]));
+            obj.scaleX = obj.scaleY = scale;
+            obj.x = Number(arr[1]) * scale;
+            obj.y = Number(arr[2]) * scale;
+            if (!isNaN(scaleModX) && !isNaN(scaleModY)) {
+                obj.scaleX = obj.scaleX * scaleModX;
+                obj.scaleY = obj.scaleY * scaleModY;
             }
-            _local_8.cacheAsBitmap = true;
-            this.var_84.addChild(_local_8);
+            obj.cacheAsBitmap = true;
+            this.objCanvas.addChild(obj);
         }
 
         // _loc2 = arr
@@ -322,52 +313,55 @@ package background
             textBox.x = textX * scale;
             textBox.y = textY * scale;
             textBox.cacheAsBitmap = true;
-            this.var_84.addChild(textBox);
+            this.objCanvas.addChild(textBox);
         }
 
-        private function method_795(_arg_1:String)
+        // _loc2 = data
+        // _loc3 = i
+        // method_795 = placeStroke
+        private function placeStroke(s:String)
         {
-            var _local_2:Array = _arg_1.split(";");
-            this.method_422(_local_2[0], _local_2[1]);
-            var _local_3:Number = 2;
-            while (_local_3 < _local_2.length) {
-                this.method_317(_local_2[_local_3], _local_2[_local_3 + 1]);
-                _local_3 = _local_3 + 2;
+            var data:Array = s.split(";");
+            this.method_422(data[0], data[1]);
+            for (var i:int = 2; i < data.length; i += 2) {
+                this.drawLine(data[i], data[i + 1]);
             }
         }
 
         // deleted _loc5 (combined w/ return)
-        private function method_838(_arg_1:String):Point
+        /*private function method_838(_arg_1:String):Point
         {
             var _local_2:Number = _arg_1.indexOf(";");
             var _local_3:Number = _arg_1.substring(0, _local_2);
             var _local_4:Number = _arg_1.substr(_local_2 + 1);
             return new Point(_local_3, _local_4);
-        }
+        }*/ // unused?
 
-        public function method_585(_arg_1:Number)
+        // method_585 = recordColor
+        public function recordColor(c:Number)
         {
-            if (this.color != _arg_1) {
-                this.color = _arg_1;
-                this.var_33.graphics.lineStyle(this.var_136, _arg_1);
-                recordAction("c" + _arg_1.toString(16));
+            if (this.color != c) {
+                this.color = c;
+                this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                recordAction("c" + this.color.toString(16));
             }
         }
 
-        public function method_708(_arg_1:Number)
+        // method_708 = setBrushSize
+        public function setBrushSize(n:Number)
         {
-            if (this.var_136 != _arg_1) {
-                this.var_136 = _arg_1;
-                this.var_33.graphics.lineStyle(_arg_1, this.color);
-                recordAction("t" + _arg_1);
+            if (this.brushSize != n) {
+                this.brushSize = n;
+                this.var_33.graphics.lineStyle(n, this.color);
+                recordAction("t" + n);
             }
         }
 
-        public function setMode(_arg_1:String)
+        public function setMode(m:String)
         {
-            if (this.mode != _arg_1) {
-                this.mode = _arg_1;
-                recordAction("m" + _arg_1);
+            if (this.mode != m) {
+                this.mode = m;
+                recordAction("m" + m);
             }
         }
 
@@ -385,7 +379,7 @@ package background
             var _local_4:Number = _arg_2 - this.var_298;
             saveArray[saveArray.length - 1] = saveArray[saveArray.length - 1] + ";" + _local_3 + ";" + _local_4;
             if (!this.drawing) {
-                this.method_317(_local_3, _local_4);
+                this.drawLine(_local_3, _local_4);
             }
         }
 
@@ -398,37 +392,36 @@ package background
             this.var_298 = _arg_2;
         }
 
-        private function method_317(_arg_1:Number, _arg_2:Number)
+        // method_317 = drawLine
+        private function drawLine(_arg_1:Number, _arg_2:Number)
         {
-            this.var_302 = this.var_302 + _arg_1;
-            this.var_298 = this.var_298 + _arg_2;
+            this.var_302 += _arg_1;
+            this.var_298 += _arg_2;
             this.var_33.graphics.lineTo(this.var_302, this.var_298);
         }
 
+        // _loc1 = i
+        // _loc2 = action
+        // deleted _loc3 (action.charAt(0))
         override public function undo()
         {
-            var _local_1:Number = saveArray.length - 2;
-            while (_local_1 >= 0) {
-                var _local_2:String = saveArray[_local_1];
-                var _local_3:String = _local_2.charAt(0);
-                if (_local_3 == "d") break;
+            for (var i:int = saveArray.length - 2; i >= 0; i--) {
+                var action:String = saveArray[i];
+                if (action.charAt(0) == "d") break;
                 redoArray.push(saveArray.pop());
-                _local_1--;
             }
             super.undo();
         }
 
+        // _loc1 = i
+        // _loc2 = redoArray[i]
+        // deleted _loc3 (action.charAt(0))
         override public function redo()
         {
-            var _local_1:Number = redoArray.length - 2;
-            while (_local_1 >= 0) {
-                var _local_2:String = redoArray[_local_1];
-                var _local_3:String = _local_2.charAt(0);
-                if (_local_3 == "d") {
-                    break;
-                }
+            for (var i:Number = redoArray.length - 2; i >= 0; i--) {
+                var action:String = redoArray[i];
+                if (action.charAt(0) == "d") break;
                 saveArray.push(redoArray.pop());
-                _local_1--;
             }
             super.redo();
         }
@@ -439,7 +432,7 @@ package background
             this.bitmapArray = new Array();
             this.var_33.graphics.clear();
             this.color = 0;
-            this.var_136 = 4;
+            this.brushSize = 4;
             this.mode = "draw";
             super.clear();
         }

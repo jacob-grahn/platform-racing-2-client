@@ -17,7 +17,7 @@ package background
     public class ObjectBackground extends Background 
     {
 
-        public var var_84:Sprite;
+        public var objCanvas:Sprite; // var_84
         public var objArray:Array = new Array(); // var_10
         private var objLimit:int = 50000; // var_356
         protected var var_0379:int = 0; // class_10
@@ -25,7 +25,7 @@ package background
 
         public function ObjectBackground(gp:GamePage)
         {
-            this.var_84 = this;
+            this.objCanvas = this;
             super(gp);
         }
 
@@ -43,7 +43,7 @@ package background
         protected function attachObject(objId:int, objX:int, objY:int, blockOpts:String = '')
         {
             var _local_4:DrawObject = new DrawObject(objId, objX, objY);
-            this.var_84.addChild(_local_4);
+            this.objCanvas.addChild(_local_4);
             this.objArray.push(_local_4);
         }
 
@@ -52,7 +52,7 @@ package background
         {
             if (this.objArray.length < this.objLimit) {
                 var _local_6:TextObject = new TextObject(str, textX, textY, textId);
-                this.var_84.addChild(_local_6);
+                this.objCanvas.addChild(_local_6);
                 this.objArray.push(_local_6);
                 if (record) {
                     this.recordAddText(_local_6.getEscapedText(), textX, textY, textId);
@@ -118,7 +118,7 @@ package background
                     var _local_4:String = _local_3.substr(0, 1);
                     var _local_5:String = _local_3.substr(1);
                     if (_local_4 == "o") {
-                        this.method_489(_local_5);
+                        this.placeObject(_local_5);
                     } else if (_local_4 == "m") {
                         this.moveDrawObject(_local_5);
                     } else if (_local_4 == "d") {
@@ -160,7 +160,8 @@ package background
 
         // _loc2 = obj
         // deleted _loc3, _loc4, _loc5 (params in attachObject call)
-        protected function method_489(s:String)
+        // method_489 = placeObject
+        protected function placeObject(s:String)
         {
             if (this.objArray.length < this.objLimit) {
                 var obj:Array = s.split(";");
@@ -171,20 +172,15 @@ package background
             }
         }
 
-        // _loc3 = objId
-        // _loc4 = newObjX
-        // _loc5 = newObjY
-        // _loc6 = obj
-        protected function moveDrawObject(_arg_1:String)
+        // _loc2 = objData
+        // deleted _loc3, _loc4, _loc5 (combined with = calls)
+        protected function moveDrawObject(s:String)
         {
-            var _local_2:Array = _arg_1.split(";");
-            var objId:Number = Number(_local_2[0]);
-            var newObjX:Number = Number(_local_2[1]);
-            var newObjY:Number = Number(_local_2[2]);
-            var obj:DrawObject = DrawObject(this.objArray[objId]);
+            var objData:Array = s.split(";");
+            var obj:DrawObject = DrawObject(this.objArray[Number(objData[0])]);
             if (obj != null) {
-                obj.x = newObjX;
-                obj.y = newObjY;
+                obj.x = Number(objData[1]);
+                obj.y = Number(objData[2]);
             }
         }
 
@@ -200,12 +196,12 @@ package background
             _local_6.setColor(_local_5);
         }
 
+        // _loc2 = int(i)
         // _loc3 = drawObj
         // method_476 = deleteObject
-        protected function deleteObject(_arg_1:String)
+        protected function deleteObject(i:String)
         {
-            var _local_2:Number = Number(_arg_1);
-            var drawObj:DrawObject = DrawObject(this.objArray[_local_2]);
+            var drawObj:DrawObject = DrawObject(this.objArray[int(i)]);
             if (
                 drawObj.displayCode != Objects.BLOCK_START1
                 && drawObj.displayCode != Objects.BLOCK_START2
@@ -216,6 +212,7 @@ package background
             }
         }
 
+        // _loc6 = obj
         // method_393 = resizeObject
         protected function resizeObject(_arg_1:String)
         {
@@ -223,9 +220,9 @@ package background
             var _local_3:Number = Number(_local_2[0]);
             var _local_4:Number = Number(_local_2[1]);
             var _local_5:Number = Number(_local_2[2]);
-            var _local_6:DrawObject = DrawObject(this.objArray[_local_3]);
-            _local_6.scaleX = _local_4;
-            _local_6.scaleY = _local_5;
+            var obj:DrawObject = DrawObject(this.objArray[_local_3]);
+            obj.scaleX = _local_4;
+            obj.scaleY = _local_5;
         }
 
         // _loc1 = saveStr
@@ -251,8 +248,7 @@ package background
             if (this.objArray.length > 0) {
                 var relCoord:String = ""; // x;y relative to last processed object
                 var objSaveArr:Array = new Array();
-                var i:int = 0;
-                while (i < this.objArray.length) {
+                for (var i:int = 0; i < this.objArray.length; i++) {
                     var obj:DrawObject = this.objArray[i];
                     if (obj != null) {
                         var currentX:int = int(obj.x / this.segMult); // current X
@@ -298,7 +294,6 @@ package background
                             objSaveArr.push(relCoord);
                         }
                     }
-                    i++;
                 }
                 saveStr = objSaveArr.join(",");
             }
@@ -319,14 +314,12 @@ package background
         // _loc5 = drawObj
         public function removeObjectsTouchingPoint(ptX:Number, ptY:Number)
         {
-            var i:int = 0;
-            while (i < this.objArray.length) {
+            for (var i:int = 0; i < this.objArray.length; i++) {
                 var drawObj:DrawObject = this.objArray[i];
                 if (drawObj != null && drawObj.deleteable && drawObj.hitTestPoint(ptX, ptY, true)) {
                     this.recordDelete(drawObj);
                     drawObj.remove();
                 }
-                i++;
             }
         }
 
@@ -338,34 +331,23 @@ package background
             }
         }
 
-        // _loc4 = drawObj
+        // refactored
         override public function clear()
         {
-            var _local_1:Array = new Array();
-            var _local_2:int = 0;
-            var _local_3:int = this.objArray.length;
-            while (_local_2 < _local_3) {
-                _local_1[_local_2] = this.objArray[_local_2];
-                _local_2++;
-            }
-            this.objArray = new Array();
-            _local_2 = 0;
-            while (_local_2 < _local_3) {
-                var drawObj:DrawObject = _local_1[_local_2];
+            for (var i:int = 0; i < this.objArray.length; i++) {
+                var drawObj:DrawObject = this.objArray[i];
                 drawObj.remove();
-                _local_2++;
             }
-            _local_1 = null;
             super.clear();
         }
 
         override public function remove()
         {
             this.clear();
-            this.var_84 = null;
+            this.objCanvas = null;
             super.remove();
         }
 
 
     }
-}//package background
+}

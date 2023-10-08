@@ -51,9 +51,9 @@ package background
             this.method_59();
         }
 
-        public function setColor(_arg_1:Number)
+        public function setColor(c:Number)
         {
-            this.bgColor = _arg_1;
+            this.bgColor = c;
             this.method_59();
         }
 
@@ -165,9 +165,9 @@ package background
             return this.saveArray.join(",");
         }
 
-        public function setSaveString(_arg_1:String, fromLE:Boolean = true)
+        public function setSaveString(s:String, fromLE:Boolean = true)
         {
-            this.saveArray = _arg_1 != "" && _arg_1 != "," && _arg_1 != null ? _arg_1.split(",") : new Array();
+            this.saveArray = s != "" && s != "," && s != null ? s.split(",") : new Array();
             this.clear();
             this.draw();
         }
@@ -258,27 +258,22 @@ package background
 
         protected function method_94(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
         {
-            var _local_7:int = _arg_2;
-            while (_local_7 <= _arg_3) {
+            for (var _local_7:int = _arg_2; _local_7 <= _arg_3; _local_7++) {
                 this.method_447(_local_7, _arg_1, _arg_4, _arg_6, _arg_5);
-                _local_7++;
             }
         }
 
         protected function method_64(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
         {
-            var _local_7:int = _arg_2;
-            while (_local_7 <= _arg_3) {
+            for (var _local_7:int = _arg_2; _local_7 <= _arg_3; _local_7++) {
                 this.method_447(_arg_1, _local_7, _arg_4, _arg_6, _arg_5);
-                _local_7++;
             }
         }
 
         protected function method_447(_arg_1:int, _arg_2:int, _arg_3:DisplayObjectContainer, _arg_4:String, _arg_5:Array=null)
         {
-            var _local_6:DisplayObject;
             if (_arg_5[_arg_1] != null && _arg_5[_arg_1][_arg_2] != null) {
-                _local_6 = _arg_5[_arg_1][_arg_2];
+                var _local_6:DisplayObject = _arg_5[_arg_1][_arg_2];
                 if (_arg_4 == "add") {
                     _arg_3.addChild(_local_6);
                 } else if (_local_6.parent == _arg_3) {
@@ -294,5 +289,4 @@ package background
 
 
     }
-}//package background
-
+}

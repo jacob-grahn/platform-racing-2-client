@@ -110,7 +110,7 @@ package package_20
             super.mouseDownHandler(e);
             if (e.target.parent != null) {
                 var objClicked:String = e.target.parent.toString();
-                if (objClicked == "[object DrawableBackground]" || objClicked == "[object LevelEditor]" || e.target.toString() == "[object LineBackground]") {
+                if (objClicked == "[object DrawableBackground]" || objClicked == "[object LevelEditor]" || e.target.toString() == "[object BlockGridLines]") {
                     if (!LevelEditor.editor.menu.hitTestPoint(e.stageX, e.stageY, true)) {
                         this.mousePos = new Point(e.stageX, e.stageY);
                         this.startDrawing();
@@ -140,8 +140,8 @@ package package_20
         {
             this.drawing = true;
             this.drawableBG = LevelEditor.editor.var_220;
-            this.drawableBG.method_585(this.color);
-            this.drawableBG.method_708(this.size);
+            this.drawableBG.recordColor(this.color);
+            this.drawableBG.setBrushSize(this.size);
             this.drawableBG.setMode(this.mode);
             var startPt:Point = this.roundPoint(this.mousePos);
             this.drawableBG.moveTo(startPt.x, startPt.y);
