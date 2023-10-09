@@ -19,6 +19,7 @@ package package_15 {
 
         private var htmlNM:HTMLNameMaker = new HTMLNameMaker();
         private var uploading:UploadingPopup;
+        private var banRet:Object = {};
 
         private var m:HandleLevelReportPopupGraphic = new HandleLevelReportPopupGraphic();
 
@@ -43,13 +44,11 @@ package package_15 {
         private function reopenReportedLevelsPopup(e:Event = null)
         {
             this.uploading.removeEventListener(SuperLoader.d, this.reopenReportedLevelsPopup);
-            this.uploading.removeEventListener(SuperLoader.e, this.reopenReportedLevelsPopup);
             this.reportsPop.startFadeOut();
             new GetLevelReports();
 
-            var ret:Object = SuperLoader(e.target).parsedData;
-            if (message != '') {
-                new MessagePopup(ret.message);
+            if (this.banRet.hasOwnProperty('message')) {
+                new MessagePopup(this.banRet.message);
             }
             startFadeOut();
         }
@@ -99,8 +98,8 @@ package package_15 {
             var request:URLRequest = new URLRequest(Main.baseURL + "/ban_user.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            this.uploading = new UploadingPopup(request, 'json', false);
-            this.uploading.addEventListener(SuperLoader.d, this.reopenReportedLevelsPopup, false, 0, true);
+            this.uploading = new UploadingPopup(request, 'json', 'Unpublishing and banning...', false);
+            this.uploading.addEventListener(SuperLoader.d, this.confirmArchive, false, 0, true);
         }
 
         private function clickCancel(e:MouseEvent)
@@ -113,8 +112,14 @@ package package_15 {
             new ConfirmPopup(this.confirmArchive, 'Are you sure you want to archive this report?');
         }
 
-        private function confirmArchive()
+        private function confirmArchive(e:* = null)
         {
+            if (this.uploading != null) {
+                this.banRet = this.uploading.parsedData;
+                this.uploading.removeEventListener(SuperLoader.d, this.confirmArchive);
+                this.uploading = null;
+            }
+
             var vars:URLVariables = new URLVariables();
             vars.level_id = this.level.level_id;
             vars.version = this.level.version;
@@ -122,12 +127,17 @@ package package_15 {
             var request:URLRequest = new URLRequest(Main.baseURL + "/mod/archive_report.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            this.uploading = new UploadingPopup(request, 'json');
+            this.uploading = new UploadingPopup(request, 'json', 'Archiving report...');
             this.uploading.addEventListener(SuperLoader.d, this.reopenReportedLevelsPopup, false, 0, true);
         }
 
         override public function remove()
         {
+            if (this.uploading != null) {
+                this.uploading.removeEventListener(SuperLoader.d, this.confirmArchive);
+                this.uploading.removeEventListener(SuperLoader.d, this.reopenReportedLevelsPopup);
+                this.uploading = null;
+            }
             this.m.reason.removeEventListener(Event.CHANGE, this.checkIfSelectedOther);
             this.m.other_cancel_bt.removeEventListener(MouseEvent.CLICK, this.checkIfSelectedOther);
             this.m.ban_bt.removeEventListener(MouseEvent.CLICK, this.clickBan);

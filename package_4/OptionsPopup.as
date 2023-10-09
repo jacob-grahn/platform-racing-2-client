@@ -204,7 +204,7 @@ package package_4
             var req:URLRequest = new URLRequest(Main.baseURL + "/guild_leave.php");
             req.data = new URLVariables();
             req.method = URLRequestMethod.POST;
-            var uploadingPopup:UploadingPopup = new UploadingPopup(req, 'json');
+            var uploadingPopup:UploadingPopup = new UploadingPopup(req, 'json', 'Leaving guild...');
             uploadingPopup.addEventListener(Event.COMPLETE, this.doLeaveGuild, false, 0, true);
             startFadeOut();
         }

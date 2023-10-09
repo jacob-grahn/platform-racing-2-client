@@ -44,7 +44,7 @@ package package_4
             var request:URLRequest = new URLRequest(Main.baseURL + "/level_report.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            new UploadingPopup(request, 'json');
+            new UploadingPopup(request, 'json', 'Reporting level...');
             startFadeOut();
         }
 

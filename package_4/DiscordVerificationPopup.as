@@ -18,6 +18,7 @@ package package_4
             request.method = URLRequestMethod.POST;
             request.data = vars;
             super(request, SuperLoader.j);
+            m.textBox.text = 'Verifying...';
         }
 
     }

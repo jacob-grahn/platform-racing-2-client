@@ -40,7 +40,7 @@ package package_4 {
             var request:URLRequest = new URLRequest(Main.baseURL + "/level_moderate.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            this.uploading = new UploadingPopup(request, 'json');
+            this.uploading = new UploadingPopup(request, 'json', action == 'restrict' ? 'Restricting level...' : 'Unpublishing level...');
             this.uploading.addEventListener(SuperLoader.d, this.returnAction, false, 0, true);
         }
 

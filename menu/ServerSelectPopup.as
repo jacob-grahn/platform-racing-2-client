@@ -14,7 +14,6 @@ package menu
     import package_4.Popup;
     import package_4.ConfirmPopup;
     import package_4.MessagePopup;
-    import package_4.UploadingPopup;
 
     public class ServerSelectPopup extends Popup 
     {

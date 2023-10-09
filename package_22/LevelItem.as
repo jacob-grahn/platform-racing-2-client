@@ -316,7 +316,7 @@ package package_22
             var request:URLRequest = new URLRequest(Main.baseURL + "/favorite_levels_modify.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            this.uploading = new UploadingPopup(request, SuperLoader.j);
+            this.uploading = new UploadingPopup(request, SuperLoader.j, (mode == 'add' ? 'Adding to' : 'Removing from') + ' favorites...');
             this.uploading.addEventListener(SuperLoader.d, this.onFavoriteResult, false, 0, true);
         }
 

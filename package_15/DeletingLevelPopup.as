@@ -15,7 +15,8 @@ package package_15
         // _loc3 = request
         public function DeletingLevelPopup(s:String)
         {
-            m.textBox.text = "Deleting...";
+            super();
+            m.textBox.text = "Deleting level...";
             var vars:URLVariables = new URLVariables();
             vars.level_id = s;
             var request:URLRequest = new URLRequest(Main.baseURL + "/delete_level.php");

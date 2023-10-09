@@ -63,7 +63,7 @@ package ui
             var request:URLRequest = new URLRequest(Main.baseURL + "/submit_rating.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            new UploadingPopup(request, 'json');
+            new UploadingPopup(request, 'json', 'Submitting rating...');
         }
 
         private function outHandler(e:MouseEvent)

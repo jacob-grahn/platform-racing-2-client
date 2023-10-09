@@ -146,7 +146,7 @@ package package_6
             var request:URLRequest = new URLRequest(Main.baseURL + "/place_artifact.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            this.uploading = new UploadingPopup(request, 'json');
+            this.uploading = new UploadingPopup(request, 'json', 'Placing artifact...');
             this.uploading.addEventListener(SuperLoader.d, this.handleResponse, false, 0, true);
         }
 

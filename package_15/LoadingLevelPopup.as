@@ -19,10 +19,11 @@ package package_15
 
         public function LoadingLevelPopup(id:int, v:int, report:Boolean = false)
         {
+            super();
             this.levelID = id;
             this.version = v;
             this.report = report;
-            m.textBox.text = "Loading...";
+            m.textBox.text = "Loading level...";
             var request:URLRequest = new URLRequest(Main.levelsURL + "/" + this.levelID + ".txt?version=" + this.version);
             loader.useRandomNum = false;
             loader = new SuperLoader();
