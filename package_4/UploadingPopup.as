@@ -21,9 +21,9 @@ package package_4
         public var data:String;
         public var parsedData:Object;
 
-        public function UploadingPopup(request:URLRequest = null, dataMode:String = "url")
+        public function UploadingPopup(request:URLRequest = null, dataMode:String = "url", aem:Boolean = true)
         {
-            this.loader = new SuperLoader(true, dataMode);
+            this.loader = new SuperLoader(true, dataMode, aem);
             addChild(this.m);
             addChild(this.progressBar);
             this.progressBar.x = -100;

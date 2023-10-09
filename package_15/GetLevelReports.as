@@ -43,22 +43,11 @@
         }
 
         // _loc2 = item
-        // CHANGE CONTENTS OF THIS FN TO DO REPORT HANDLING (popup?)
+        // level report handling function
         override protected function deleteListing(_arg_1:class_229)
         {
-            new MessagePopup('Coming soon!');
-            //var item:GetReportedLevelsPopupItem = GetReportedLevelsPopupItem(_arg_1);
-            //new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + Data.escapeString(item.level.title) + "\"?");
+            new HandleLevelReportPopup(this, _arg_1.level);
         }
-
-        // _loc1 = item
-        // method_73 = confirmDelete
-        /*override public function confirmDelete()
-        {
-            var item:GetReportedLevelsPopupItem = GetReportedLevelsPopupItem(this.getSelected());
-            new MessagePopup('Placeholder!');
-            startFadeOut();
-        }*/
 
         override public function remove()
         {
