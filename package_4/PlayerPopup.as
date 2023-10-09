@@ -40,6 +40,7 @@ package package_4
         private var userIdShown:Boolean = false;
         private var expGain:ExpGain;
         private var times:Array;
+        private var dataMode:String;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
         private var hoverPopup:HoverPopup;
@@ -59,8 +60,12 @@ package package_4
             addChild(this.m);
 
             // try to get player info from socket first
-            this.cm.defineCommand("playerInfo", this.playerInfoFromSocket);
-            Main.socket.write("get_player_info`" + name);
+            if (Main.socket.connected) {
+                this.cm.defineCommand("playerInfo", this.playerInfoFromSocket);
+                Main.socket.write("get_player_info`" + name);
+            } else {
+                this.playerInfoFromHTTP();
+            }
 
             // add privileged menus
             if (Main.group >= 2) {
@@ -92,23 +97,25 @@ package package_4
                 if (ret == 0) {
                     throw new Error();
                 }
+                this.dataMode = 'socket';
                 var data:Object = JSON.parse(ret);
                 this.applyReturnData(data);
             } catch (e:Error) {
-                this.superLoader = new SuperLoader(true, SuperLoader.j);
-                var vars:URLVariables = new URLVariables();
-                vars.name = this.userName;
-                var request:URLRequest = new URLRequest(Main.baseURL + "/get_player_info.php");
-                request.data = vars;
-                this.superLoader.load(request);
-                this.superLoader.addEventListener(SuperLoader.d, this.playerInfoFromHTTP, false, 0, true);
-                this.superLoader.addEventListener(SuperLoader.e, this.clickClose, false, 0, true);
+                this.playerInfoFromHTTP();
             }
         }
 
-        private function playerInfoFromHTTP(e:Event)
+        private function playerInfoFromHTTP()
         {
-            this.applyReturnData(SuperLoader(e.target).parsedData);
+            this.dataMode = 'http';
+            this.superLoader = new SuperLoader(true, SuperLoader.j);
+            var vars:URLVariables = new URLVariables();
+            vars.name = this.userName;
+            var request:URLRequest = new URLRequest(Main.baseURL + "/get_player_info.php");
+            request.data = vars;
+            this.superLoader.load(request);
+            this.superLoader.addEventListener(SuperLoader.d, this.applyReturnData, false, 0, true);
+            this.superLoader.addEventListener(SuperLoader.e, this.clickClose, false, 0, true);
         }
 
         /*private function isPlayerTemp(a:Array)
@@ -125,8 +132,9 @@ package package_4
         // _loc4 = group
         // _loc5 = groupText
         // method_281 = applyReturnData
-        private function applyReturnData(ret:Object)
+        private function applyReturnData(e:*)
         {
+            var ret:Object = this.dataMode == 'http' ? SuperLoader(e.target).parsedData : e;
             this.userId = int(ret.userId);
             var group:int = ret.group;
             if (group == 1) {
