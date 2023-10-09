@@ -134,11 +134,7 @@ package package_4
 
         private function method_394()
         {
-            if (this.selected == null) {
-                this.m.load_bt.enabled = this.m.delete_bt.enabled = false;
-            } else {
-                this.m.load_bt.enabled = this.m.delete_bt.enabled = true;
-            }
+            this.m.load_bt.enabled = this.m.delete_bt.enabled = (this.selected != null);
         }
 
         override public function remove()
