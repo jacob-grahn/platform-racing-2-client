@@ -31,14 +31,14 @@ package background
         private var fromLE:Boolean;
         private var rasterCycles:Number = 1; // var_87
         private var bitmapArray:Array = new Array();
-        public var var_33:Sprite = new Sprite();
+        public var brushCanvas:Sprite = new Sprite(); // var_33
         public var var_122:Sprite = new Sprite();
         public var objCanvas:Sprite = new Sprite(); // var_84
         private var brushSize:Number = 4; // var_136
         private var color:Number = 0;
         private var mode:String = "draw";
-        private var var_302:Number;
-        private var var_298:Number;
+        private var brushX:Number; // var_302
+        private var brushY:Number; // var_298
         public var drawing:Boolean = false;
         public var stoppedRasterizing:Boolean = false; // stop the rasterization process after 5 attempts to avoid crashing
 
@@ -49,9 +49,9 @@ package background
             this.losslessQuality = Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false);
             this.var_122.cacheAsBitmap = true;
             addChild(this.var_122);
-            addChild(this.var_33);
+            addChild(this.brushCanvas);
             addChild(this.objCanvas);
-            this.var_33.graphics.lineStyle(this.brushSize, this.color);
+            this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
         }
 
         public function method_86()
@@ -97,9 +97,9 @@ package background
 
         private function method_446(_arg_1:Sprite, _arg_2:Array)
         {
-            this.method_607(_arg_1, _arg_2, this.var_33);
-            this.var_33.graphics.clear();
-            this.var_33.graphics.lineStyle(this.brushSize, this.color);
+            this.method_607(_arg_1, _arg_2, this.brushCanvas);
+            this.brushCanvas.graphics.clear();
+            this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
         }
 
         private function method_607(_arg_1:Sprite, _arg_2:Array, _arg_3:Sprite)
@@ -187,7 +187,7 @@ package background
             this.method_373(_local_1);
             this.method_373(_local_3);
             addChildAt(this.var_122, 0);
-            addChildAt(this.var_33, 1);
+            addChildAt(this.brushCanvas, 1);
         }
 
         private function method_553(_arg_1:Sprite, _arg_2:Array, _arg_3:Array)
@@ -215,7 +215,7 @@ package background
             course.startDrawing(this);
             if (course.goodToDraw(this)) {
                 var _local_7:Number = new Date().time;
-                this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
                 for (var actionsProcessed:int = 0; var_39 < saveArray.length; ++actionsProcessed) {
                     var action:String = saveArray[var_39];
                     var type:String = action.substr(0, 1);
@@ -224,10 +224,10 @@ package background
                         this.placeStroke(data);
                     } else if (type == "c") { // change brush color
                         this.color = Number("0x" + data);
-                        this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                        this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
                     } else if (type == "t") { // change brush size
                         this.brushSize = Number(data);
-                        this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                        this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
                     } else if (type == "m") { // change draw mode
                         this.mode = data;
                     } else if (type == "o") { // place an object
@@ -322,7 +322,7 @@ package background
         private function placeStroke(s:String)
         {
             var data:Array = s.split(";");
-            this.method_422(data[0], data[1]);
+            this.initBrushMove(data[0], data[1]);
             for (var i:int = 2; i < data.length; i += 2) {
                 this.drawLine(data[i], data[i + 1]);
             }
@@ -342,7 +342,7 @@ package background
         {
             if (this.color != c) {
                 this.color = c;
-                this.var_33.graphics.lineStyle(this.brushSize, this.color);
+                this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
                 recordAction("c" + this.color.toString(16));
             }
         }
@@ -352,7 +352,7 @@ package background
         {
             if (this.brushSize != n) {
                 this.brushSize = n;
-                this.var_33.graphics.lineStyle(n, this.color);
+                this.brushCanvas.graphics.lineStyle(n, this.color);
                 recordAction("t" + n);
             }
         }
@@ -369,35 +369,38 @@ package background
         {
             recordAction("d" + _arg_1 + ";" + _arg_2);
             if (!this.drawing) {
-                this.method_422(_arg_1, _arg_2);
+                this.initBrushMove(_arg_1, _arg_2);
             }
         }
 
-        public function lineTo(_arg_1:Number, _arg_2:Number)
+        // _loc3 = deltaX
+        // _loc4 = deltaY
+        public function lineTo(newX:Number, newY:Number)
         {
-            var _local_3:Number = _arg_1 - this.var_302;
-            var _local_4:Number = _arg_2 - this.var_298;
-            saveArray[saveArray.length - 1] = saveArray[saveArray.length - 1] + ";" + _local_3 + ";" + _local_4;
+            var deltaX:Number = newX - this.brushX;
+            var deltaY:Number = newY - this.brushY;
+            saveArray[saveArray.length - 1] = saveArray[saveArray.length - 1] + ";" + deltaX + ";" + deltaY;
             if (!this.drawing) {
-                this.drawLine(_local_3, _local_4);
+                this.drawLine(deltaX, deltaY);
             }
         }
 
-        private function method_422(_arg_1:Number, _arg_2:Number)
+        // method_422 = initBrushMove
+        private function initBrushMove(startX:Number, startY:Number)
         {
-            this.var_33.graphics.moveTo(_arg_1, _arg_2);
-            this.var_33.graphics.lineTo(_arg_1 - 0.5, _arg_2 - 0.5);
-            this.var_33.graphics.moveTo(_arg_1, _arg_2);
-            this.var_302 = _arg_1;
-            this.var_298 = _arg_2;
+            this.brushCanvas.graphics.moveTo(startX, startY);
+            this.brushCanvas.graphics.lineTo(startX - 0.15, startY); // https://jiggmin2.com/forums/showthread.php?pid=83158
+            this.brushCanvas.graphics.moveTo(startX, startY);
+            this.brushX = startX;
+            this.brushY = startY;
         }
 
         // method_317 = drawLine
-        private function drawLine(_arg_1:Number, _arg_2:Number)
+        private function drawLine(deltaX:Number, deltaY:Number)
         {
-            this.var_302 += _arg_1;
-            this.var_298 += _arg_2;
-            this.var_33.graphics.lineTo(this.var_302, this.var_298);
+            this.brushX += deltaX;
+            this.brushY += deltaY;
+            this.brushCanvas.graphics.lineTo(this.brushX, this.brushY);
         }
 
         // _loc1 = i
@@ -430,7 +433,7 @@ package background
         {
             this.method_812(this.bitmapArray);
             this.bitmapArray = new Array();
-            this.var_33.graphics.clear();
+            this.brushCanvas.graphics.clear();
             this.color = 0;
             this.brushSize = 4;
             this.mode = "draw";
