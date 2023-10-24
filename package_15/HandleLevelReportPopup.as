@@ -2,16 +2,17 @@ package package_15 {
     import com.jiggmin.data.Data;
     import com.jiggmin.data.HTMLNameMaker;
     import fl.controls.ComboBox;
+    import flash.events.Event;
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
-    import package_4.Popup;
-    import flash.events.Event;
     import package_4.ConfirmPopup;
+    import package_4.HoverPopup;
     import package_4.MessagePopup;
+    import package_4.Popup;
     import package_4.UploadingPopup;
-    import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
+    import flash.net.URLVariables;
 
     public class HandleLevelReportPopup extends Popup {
         private var reportsPop:GetLevelReports;
@@ -21,6 +22,8 @@ package package_15 {
         private var uploading:UploadingPopup;
         private var banRet:Object = {};
 
+        private var info:HoverPopup;
+
         private var m:HandleLevelReportPopupGraphic = new HandleLevelReportPopupGraphic();
 
         public function HandleLevelReportPopup(reportsPopup:GetLevelReports, level:Object)
@@ -29,16 +32,42 @@ package package_15 {
             this.level = level;
             this.htmlNM.listenForLink(this.m.titleBox);
             this.m.titleBox.htmlText = this.htmlNM.makeLevel(this.level.title, this.level.level_id) + ' by ' + this.htmlNM.makeName(this.level.creator, this.level.creator_group);
-            this.m.reportReasonBox.text = 'Report reason: ' + this.level.reason;
 
             this.m.otherReasonBox.visible = this.m.other_cancel_bt.visible = false;
             this.m.other_cancel_bt.addEventListener(MouseEvent.CLICK, this.checkIfSelectedOther, false, 0, true);
             this.m.reason.addEventListener(Event.CHANGE, this.checkIfSelectedOther, false, 0, true);
 
+            this.m.info_bt.addEventListener(MouseEvent.MOUSE_OVER, this.addInfoHover, false, 0, true);
+            this.m.info_bt.addEventListener(MouseEvent.MOUSE_OUT, this.removeInfoHover, false, 0, true);
+
             this.m.ban_bt.addEventListener(MouseEvent.CLICK, this.clickBan, false, 0, true);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.archive_bt.addEventListener(MouseEvent.CLICK, this.clickArchive, false, 0, true);
             addChild(this.m);
+        }
+
+        private function addInfoHover(e:MouseEvent)
+        {
+            var levelTitle:String = "-- " + Data.escapeString(level.title) + " --";
+            var popText:String = "Creator: " + Data.escapeString(level.creator) + "<br/>";
+            popText += "Version: " + Data.formatNumber(level.version);
+            if (Data.trimWhitespace(level.note) != '') {
+                popText += "<br/>Note: <i>" + Data.escapeString(level.note, true) + "</i>";
+            }
+            popText += "<br/>-----<br/>";
+            popText += "Reported: "  + Data.getShortDateStr(level.report_time) + '<br/>';
+            popText += "^ By: " + Data.escapeString(level.reporter) + "<br/>";
+            popText += "Reason: <i>" + Data.escapeString(level.reason) + "</i>";
+            this.info = new HoverPopup(levelTitle, popText, this.m.info_bt);
+            this.info.x += this.info.width + 23;
+        }
+
+        private function removeInfoHover(e:MouseEvent = null)
+        {
+            if (this.info) {
+                this.info.remove();
+                this.info = null;
+            }
         }
 
         private function reopenReportedLevelsPopup(e:Event = null)
@@ -138,6 +167,7 @@ package package_15 {
                 this.uploading.removeEventListener(SuperLoader.d, this.reopenReportedLevelsPopup);
                 this.uploading = null;
             }
+            this.removeInfoHover();
             this.m.reason.removeEventListener(Event.CHANGE, this.checkIfSelectedOther);
             this.m.other_cancel_bt.removeEventListener(MouseEvent.CLICK, this.checkIfSelectedOther);
             this.m.ban_bt.removeEventListener(MouseEvent.CLICK, this.clickBan);
