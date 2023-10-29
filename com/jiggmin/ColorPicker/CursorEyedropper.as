@@ -11,7 +11,6 @@ package com.jiggmin.ColorPicker
     import flash.events.TimerEvent;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
-    import flash.ui.Mouse;
     import flash.events.Event;
 
     public class CursorEyedropper extends CustomCursor
@@ -19,36 +18,29 @@ package com.jiggmin.ColorPicker
 
         public var color:int;
         private var var_352:Array = new Array();
-        private var var_331:BitmapData;
-        private var var_266:Timer;
-        private var var_248:Timer;
+        /** Area where the custom cursor graphic can be shown. */
+        private var cursorContainer:BitmapData; // var_331
+        // private var var_266:Timer; // switched to ENTER_FRAME instead
+        // private var var_248:Timer;
 
         public function CursorEyedropper()
         {
             visible = false;
             addChild(new CursorEyedropperGraphic());
-            this.var_331 = new BitmapData(stageRef.stageWidth, stageRef.stageHeight);
-            this.var_266 = new Timer(100, 0);
-            this.var_248 = new Timer(1000, 0);
+            this.cursorContainer = new BitmapData(stageRef.stageWidth, stageRef.stageHeight);
         }
 
         override public function init()
         {
             super.init();
             visible = false;
-            this.var_266.start();
-            this.var_248.start();
-            this.var_266.addEventListener(TimerEvent.TIMER, this.method_379, false, 0, true);
-            this.var_248.addEventListener(TimerEvent.TIMER, this.method_279, false, 0, true);
+            addEventListener(Event.ENTER_FRAME, this.maybeUpdate, false, 0, true);
         }
 
         override public function pause()
         {
             super.pause();
-            this.var_266.stop();
-            this.var_248.stop();
-            this.var_266.removeEventListener(TimerEvent.TIMER, this.method_379);
-            this.var_248.removeEventListener(TimerEvent.TIMER, this.method_279);
+            removeEventListener(Event.ENTER_FRAME, this.maybeUpdate);
         }
 
         public function method_101(d:DisplayObject)
@@ -56,37 +48,36 @@ package com.jiggmin.ColorPicker
             this.var_352.push(d);
         }
 
-        private function method_379(e:TimerEvent)
+        // _loc2 = useEyedropper
+        // _loc3 = pixelToAnalyze
+        // _loc4 = me
+        // method_379 = maybeUpdate
+        private function maybeUpdate(e:Event)
         {
-            var _local_3:DisplayObject;
-            var _local_2:Boolean = true;
-            var _local_4:MouseEvent = getMouse();
-            if (_local_4 != null) {
-                _local_3 = DisplayObject(_local_4.target);
-            }
-            if (_local_3 != null) {
-                while (_local_3.parent != null) {
-                    if (this.method_612(_local_3)) {
-                        _local_2 = false;
+            var me:MouseEvent = getMouse();
+            var targetObj:DisplayObject = me != null ? DisplayObject(me.target) : null;
+            if (targetObj != null) {
+                var useEyedropper:Boolean = true;
+                while (targetObj.parent != null) {
+                    if (this.method_612(targetObj)) {
+                        useEyedropper = false;
                         break;
                     }
-                    _local_3 = _local_3.parent;
+                    targetObj = targetObj.parent;
                 }
-                if (_local_2) {
+                if (useEyedropper) {
                     if (!visible) {
                         visible = true;
-                        Mouse.hide();
-                        this.method_167();
+                        hideMouse();
+                        this.drawEyedropper();
                     }
-                    this.method_418();
+                    this.updateColor();
                     dispatchEvent(new Event(Event.CHANGE));
-                } else {
-                    if (visible) {
-                        visible = false;
-                        Mouse.show();
-                        this.color = -1;
-                        dispatchEvent(new Event(Event.CHANGE));
-                    }
+                } else if (visible) {
+                    visible = false;
+                    showMouse();
+                    this.color = -1;
+                    dispatchEvent(new Event(Event.CHANGE));
                 }
             }
         }
@@ -95,53 +86,50 @@ package com.jiggmin.ColorPicker
         {
             if (visible) {
                 e.stopImmediatePropagation();
-                this.method_167();
-                this.method_418();
+                this.drawEyedropper();
+                this.updateColor();
                 dispatchEvent(new Event(Event.COMPLETE));
             }
             super.mouseDownHandler(e);
         }
 
-        private function method_279(e:TimerEvent)
+        // bypassed by adding default param value to drawEyedropper
+        /*private function method_279(e:TimerEvent)
         {
-            this.method_167();
-        }
+            this.drawEyedropper();
+        }*/
 
-        private function method_167()
+        // method_167 = drawEyedropper
+        private function drawEyedropper(e:TimerEvent = null)
         {
             if (visible) {
                 visible = false;
-                this.var_331.draw(stageRef);
+                this.cursorContainer.draw(stageRef);
                 visible = true;
             }
         }
 
         private function method_612(d:DisplayObject):Boolean
         {
-            var _local_2:int = this.var_352.indexOf(d);
-            if (_local_2 == -1) {
-                return (false);
-            }
-            return (true);
+            return this.var_352.indexOf(d) != -1;
         }
 
-        private function method_418()
+        // _loc1 = me
+        // deleted _loc2 and _loc3, combined with getPixel call
+        // method_418 = updateColor
+        private function updateColor()
         {
-            var _local_1:MouseEvent = getMouse();
-            var _local_2:int = Math.floor(_local_1.stageX);
-            var _local_3:int = Math.floor(_local_1.stageY);
-            this.color = this.var_331.getPixel(_local_2, _local_3);
+            var me:MouseEvent = getMouse();
+            this.color = this.cursorContainer.getPixel(Math.floor(me.stageX), Math.floor(me.stageY));
         }
 
         override public function remove()
         {
+            showMouse();
             super.remove();
-            this.var_331.dispose();
-            this.var_331 = null;
-            this.var_266 = null;
-            this.var_248 = null;
+            this.cursorContainer.dispose();
+            this.cursorContainer = null;
             this.var_352 = null;
-            Mouse.show();
         }
 
 

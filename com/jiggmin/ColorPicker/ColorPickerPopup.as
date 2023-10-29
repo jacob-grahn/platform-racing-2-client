@@ -19,104 +19,117 @@ package com.jiggmin.ColorPicker
     import flash.geom.Point;
     import flash.geom.Rectangle;
     import flash.display.Bitmap;
+    import flash.ui.MouseCursor;
 
     public class ColorPickerPopup extends Popup
     {
 
-        private var var_89:CursorEyedropper;
-        private var var_27:Sprite;
-        private var var_145:Array;
-        private var var_48:Sprite;
-        private var var_144:Sprite;
-        private var var_598:int;
-        private var var_188:int = -1;
+        private var eyedropper:CursorEyedropper; // var_89
+        private var palette:Sprite; // var_27
+        private var colorChoices:Array; // var_145
+        /** Outline on current color (goes around color box if in picker). */
+        private var outlineCC:Sprite; // var_48
+        /** Outline on preview color (goes around color box if in picker). */
+        private var outlinePC:Sprite; // var_144
+        private var initialColor:int; // var_598
+        private var previewColor:int = -1; // var_188
         private var color:int = -1;
         private var hue:Number = 0;
         private var saturation:Number = 0;
         private var brightness:Number = 50;
-        private var var_69:Sprite;
-        private var var_124:Sprite;
-        private var var_121:Sprite;
-        private var var_687:Sprite;
-        private var var_326:BitmapData;
-        private var var_146:ColorPickerHueArrowGraphic;
-        private var var_100:ColorPickerCrosshairsGraphic;
+        private var spectrum:Sprite; // var_69
+        private var hueSlider:Sprite; // var_124
+        private var colorPreviewBox:Sprite; // var_121
+        // private var var_687:Sprite; // unused?
+        private var spectrumBG:BitmapData; // var_326
+        private var hueArrow:ColorPickerHueArrowGraphic; // var_146
+        private var crosshairs:ColorPickerCrosshairsGraphic; // var_100
         private var priorCursor:CustomCursor; // var_194
         private var priorCursorActive:Boolean;
         private var me:MouseEvent;
         private var m:ColorPickerPopupGraphic;
 
-        public function ColorPickerPopup(_arg_1:int)
+        // _loc2 = outlineHS
+        // _loc3 = outlineCPB
+        public function ColorPickerPopup(initialColor:int)
         {
-            var _local_2:Sprite;
-            var _local_3:Sprite;
             super(false);
             this.m = new ColorPickerPopupGraphic();
             addChild(this.m);
             this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOK, false, 0, true);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
+
+            // textbox
             this.m.textBox.restrict = "0123456789abcdefABCDEF#x";
-            this.m.textBox.addEventListener(Event.CHANGE, this.method_415, false, 0, true);
-            this.var_69 = this.method_814(60, 60);
-            this.var_69.x = 15;
-            this.var_69.y = 150;
-            addChild(this.var_69);
-            this.method_532(this.var_69);
-            this.var_124 = this.method_755(15, 60);
-            this.var_124.x = this.var_69.x + this.var_69.width + 10;
-            this.var_124.y = this.var_69.y;
-            addChild(this.var_124);
-            _local_2 = this.showHighlight(15, 60);
-            _local_2.x = this.var_124.x;
-            _local_2.y = this.var_124.y;
-            addChild(_local_2);
-            this.var_48 = this.method_256();
-            this.var_48.visible = false;
-            this.var_144 = this.method_256();
-            this.var_144.visible = false;
-            this.var_27 = new Sprite();
-            this.var_27.x = 15;
-            this.var_27.y = 15;
-            this.var_27.mouseChildren = false;
-            this.var_27.addChild(this.var_48);
-            this.var_27.addChild(this.var_144);
-            this.method_523();
-            addChild(this.var_27);
-            this.var_121 = new Sprite();
-            this.var_121.graphics.beginFill(0);
-            this.var_121.graphics.drawRect(0, 0, 120, 25);
-            this.var_121.graphics.endFill();
-            this.var_121.x = 115;
-            this.var_121.y = 185;
-            addChild(this.var_121);
-            _local_3 = this.showHighlight(120, 25);
-            _local_3.x = this.var_121.x;
-            _local_3.y = this.var_121.y;
-            addChild(_local_3);
-            this.setColor(_arg_1);
-            this.var_598 = _arg_1;
-            this.method_569();
-            this.var_124.addEventListener(MouseEvent.MOUSE_DOWN, this.method_399, false, 0, true);
-            this.var_69.addEventListener(MouseEvent.MOUSE_DOWN, this.method_266, false, 0, true);
-            this.var_27.addEventListener(MouseEvent.MOUSE_MOVE, this.method_334, false, 0, true);
-            this.var_27.addEventListener(MouseEvent.MOUSE_DOWN, this.method_452, false, 0, true);
-            this.var_27.addEventListener(MouseEvent.MOUSE_OUT, this.method_417, false, 0, true);
+            this.m.textBox.addEventListener(Event.CHANGE, this.setColorFromText, false, 0, true);
+
+            // color spectrum and hue slider
+            this.spectrum = this.initSpectrum(60, 60);
+            this.spectrum.x = 15;
+            this.spectrum.y = 150;
+            addChild(this.spectrum);
+            this.showOutline(this.spectrum);
+            this.hueSlider = this.initHueSlider(15, 60);
+            this.hueSlider.x = this.spectrum.x + this.spectrum.width + 10;
+            this.hueSlider.y = this.spectrum.y;
+            addChild(this.hueSlider);
+            var outlineHS:Sprite = this.makeOutline(15, 60);
+            outlineHS.x = this.hueSlider.x;
+            outlineHS.y = this.hueSlider.y;
+            addChild(outlineHS);
+
+            // traditional color picker (palette)
+            this.outlineCC = this.makePickedColorBox();
+            this.outlineCC.visible = false;
+            this.outlinePC = this.makePickedColorBox();
+            this.outlinePC.visible = false;
+            this.palette = new Sprite();
+            this.palette.x = 15;
+            this.palette.y = 15;
+            this.palette.mouseChildren = false;
+            this.palette.addChild(this.outlineCC);
+            this.palette.addChild(this.outlinePC);
+            this.initPalette();
+            addChild(this.palette);
+
+            // color preview box
+            this.colorPreviewBox = new Sprite();
+            this.colorPreviewBox.graphics.beginFill(0);
+            this.colorPreviewBox.graphics.drawRect(0, 0, 120, 25);
+            this.colorPreviewBox.graphics.endFill();
+            this.colorPreviewBox.x = 115;
+            this.colorPreviewBox.y = 185;
+            addChild(this.colorPreviewBox);
+            var outlineCPB:Sprite = this.makeOutline(120, 25);
+            outlineCPB.x = this.colorPreviewBox.x;
+            outlineCPB.y = this.colorPreviewBox.y;
+            addChild(outlineCPB);
+
+            // init
+            this.setColor(initialColor);
+            this.initialColor = initialColor;
+            this.highlightCurrentColorIfInPalette();
+            this.hueSlider.addEventListener(MouseEvent.MOUSE_DOWN, this.clickHueSlider, false, 0, true);
+            this.spectrum.addEventListener(MouseEvent.MOUSE_DOWN, this.onSpectrumDown, false, 0, true);
+            this.palette.addEventListener(MouseEvent.MOUSE_MOVE, this.hoverOverPalette, false, 0, true);
+            this.palette.addEventListener(MouseEvent.MOUSE_DOWN, this.clickPalette, false, 0, true);
+            this.palette.addEventListener(MouseEvent.MOUSE_OUT, this.hoverOutPalette, false, 0, true);
         }
 
         public function init()
         {
-            this.var_89 = new CursorEyedropper();
-            this.var_89.method_101(this);
-            this.var_89.addEventListener(Event.CHANGE, this.method_212, false, 0, true);
-            this.var_89.addEventListener(Event.COMPLETE, this.method_275, false, 0, true);
+            this.eyedropper = new CursorEyedropper();
+            this.eyedropper.method_101(this);
+            this.eyedropper.addEventListener(Event.CHANGE, this.onEyedropperMove, false, 0, true);
+            this.eyedropper.addEventListener(Event.COMPLETE, this.applyColor, false, 0, true);
             if (CustomCursor.instance != null) {
                 this.priorCursor = CustomCursor.instance;
                 this.priorCursorActive = this.priorCursor.isActive();
                 this.priorCursor.pause();
             }
-            CustomCursor.change(this.var_89);
+            CustomCursor.change(this.eyedropper);
             stage.addEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler, false, 0, true);
-            if ((x + width) > Main.stage.stageWidth) {
+            if (x + width > Main.stage.stageWidth) {
                 x = Main.stage.stageWidth - width;
             }
             if (x < 0) {
@@ -130,204 +143,211 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        public function setColor(_arg_1:int)
+        // _loc2 = newColor
+        public function setColor(c:int)
         {
-            var _local_2:Object;
-            if (this.color != _arg_1) {
-                this.color = _arg_1;
-                _local_2 = ColorUtil.hex24ToHSB(_arg_1);
-                this.hue = _local_2.hue;
-                this.var_146.y = Math.round(60 - ((this.hue / 360) * 60));
-                this.method_382(this.hue);
-                this.saturation = _local_2.saturation;
-                this.var_100.x = Math.round((this.saturation / 100) * 60);
-                this.brightness = _local_2.brightness;
-                this.var_100.y = Math.round(60 - ((this.brightness / 100) * 60));
-                this.method_40();
+            if (this.color != c) {
+                this.color = c;
+                var newColor:Object = ColorUtil.hex24ToHSB(c);
+                this.hue = newColor.hue;
+                this.hueArrow.y = Math.round(60 - ((this.hue / 360) * 60));
+                this.updateSpectrumGradient();
+                this.saturation = newColor.saturation;
+                this.crosshairs.x = Math.round((this.saturation / 100) * 60);
+                this.brightness = newColor.brightness;
+                this.crosshairs.y = Math.round(60 - ((this.brightness / 100) * 60));
+                this.updateColorPreview();
             }
         }
 
-        private function method_40(_arg_1:int=-1)
+        // method_40 = updateColorPreview
+        private function updateColorPreview(c:int = -1)
         {
-            if (_arg_1 == -1) {
-                _arg_1 = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
+            if (c == -1) {
+                c = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
             }
             if (stage.focus != this.m.textBox.textField) {
-                this.m.textBox.text = "#" + ColorUtil.decimalToHex(_arg_1).substr(2);
+                this.m.textBox.text = "#" + ColorUtil.decimalToHex(c).substr(2);
             }
-            this.method_765(this.var_121, _arg_1);
+            this.changePreviewBoxColor(this.colorPreviewBox, c);
             dispatchEvent(new Event(Event.CHANGE));
         }
 
         // method_12 = getColor
         public function getColor():int
         {
-            if (this.var_188 != -1) {
-                return this.var_188;
-            }
-            return this.color;
+            return this.previewColor != -1 ? this.previewColor : this.color;
         }
 
-        public function method_101(_arg_1:DisplayObject)
+        public function method_101(d:DisplayObject)
         {
-            this.var_89.method_101(_arg_1);
+            this.eyedropper.method_101(d);
         }
 
-        private function method_765(_arg_1:DisplayObject, _arg_2:int)
+        // _loc3 = newColor
+        // method_765 = changePreviewBoxColor
+        private function changePreviewBoxColor(d:DisplayObject, c:int)
         {
-            var _local_3:Object = ColorUtil.hex24ToRGB(_arg_2);
-            _arg_1.transform.colorTransform = new ColorTransform(0, 0, 0, 1, _local_3.red, _local_3.green, _local_3.blue, 0);
+            var newColor:Object = ColorUtil.hex24ToRGB(c);
+            d.transform.colorTransform = new ColorTransform(0, 0, 0, 1, newColor.red, newColor.green, newColor.blue, 0);
         }
 
-        private function method_569()
+        // deleted _loc1 (this.colorChoices.length)
+        // deleted _loc2 (_local_3.length)
+        // deleted _loc3 (this.colorChoices[j])
+        // deleted _loc4 (this.colorChoices[j][k])
+        // _loc5 = paletteBoxSize
+        // _loc6 = j
+        // _loc7 = k
+        // method_569 = highlightCurrentColorIfInPalette
+        private function highlightCurrentColorIfInPalette()
         {
-            var _local_2:int;
-            var _local_3:Array;
-            var _local_4:int;
-            var _local_7:int;
-            var _local_1:int = this.var_145.length;
-            var _local_5:int = 10;
-            var _local_6:int;
-            while (_local_6 < _local_1) {
-                _local_3 = this.var_145[_local_6];
-                _local_2 = _local_3.length;
-                _local_7 = 0;
-                while (_local_7 < _local_2) {
-                    _local_4 = this.var_145[_local_6][_local_7];
-                    if (_local_4 == this.color) {
-                        this.var_48.visible = true;
-                        this.var_48.x = _local_6 * _local_5;
-                        this.var_48.y = _local_7 * _local_5;
+            var paletteBoxSize:int = 10;
+            for (var j:int = 0; j < this.colorChoices.length; j++) {
+                for (var k:int = 0; k < this.colorChoices[j].length; k++) {
+                    if (this.colorChoices[j][k] == this.color) {
+                        this.outlineCC.visible = true;
+                        this.outlineCC.x = j * paletteBoxSize;
+                        this.outlineCC.y = k * paletteBoxSize;
                     }
-                    _local_7++;
                 }
-                _local_6++;
             }
         }
 
-        private function mouseUpHandler(_arg_1:MouseEvent)
+        private function mouseUpHandler(e:MouseEvent)
         {
             Mouse.show();
-            stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_116);
-            stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_114);
-            removeEventListener(Event.ENTER_FRAME, this.method_155);
+            Mouse.cursor = MouseCursor.ARROW;
+            Mouse.cursor = MouseCursor.AUTO;
+            stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.previewColorAtMouse);
+            stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragHueSlider);
         }
 
-        private function method_266(_arg_1:MouseEvent)
+        // method_266 = onSpectrumDown
+        private function onSpectrumDown(e:MouseEvent)
         {
             Mouse.hide();
-            this.method_116(_arg_1);
-            stage.addEventListener(MouseEvent.MOUSE_MOVE, this.method_116, false, 0, true);
+            this.previewColorAtMouse(e);
+            stage.addEventListener(MouseEvent.MOUSE_MOVE, this.previewColorAtMouse, false, 0, true);
         }
 
-        private function method_399(_arg_1:MouseEvent)
+        // method_399 = clickHueSlider
+        private function clickHueSlider(e:MouseEvent)
         {
             Mouse.hide();
-            this.method_114(_arg_1);
-            stage.addEventListener(MouseEvent.MOUSE_MOVE, this.method_114, false, 0, true);
-            addEventListener(Event.ENTER_FRAME, this.method_155, false, 0, true);
+            this.dragHueSlider(e);
+            stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragHueSlider, false, 0, true);
         }
 
-        private function method_116(_arg_1:MouseEvent)
+        // _loc2 = mousePt
+        // _loc3 = targetX
+        // _loc4 = targetY
+        // method_116 = previewColorAtMouse
+        private function previewColorAtMouse(e:MouseEvent)
         {
-            var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
-            _local_2 = this.var_69.globalToLocal(_local_2);
-            var _local_3:int = _local_2.x;
-            var _local_4:int = _local_2.y;
-            _local_3 = Data.numLimit(_local_3, 0, 60);
-            _local_4 = Data.numLimit(_local_4, 0, 60);
-            this.var_100.x = Math.round(_local_3);
-            this.var_100.y = Math.round(_local_4);
-            this.saturation = 100 * (_local_3 / 60);
-            this.brightness = 100 - (100 * (_local_4 / 60));
+            var mousePt:Point = this.spectrum.globalToLocal(new Point(e.stageX, e.stageY));
+            var targetX:int = Data.numLimit(Math.round(mousePt.x), 0, 60);
+            var targetY:int = Data.numLimit(Math.round(mousePt.y), 0, 60);
+            this.crosshairs.x = targetX;
+            this.crosshairs.y = targetY;
+            this.saturation = 100 * (targetX / 60);
+            this.brightness = 100 - (100 * (targetY / 60));
             this.color = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
-            this.method_40();
-            this.var_48.visible = false;
+            this.updateColorPreview();
+            this.outlineCC.visible = false;
         }
 
-        private function method_114(_arg_1:MouseEvent)
+        // method_114 = dragHueSlider
+        private function dragHueSlider(e:MouseEvent)
         {
-            var _local_3:int;
-            var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
-            _local_2 = this.var_124.globalToLocal(_local_2);
-            _local_3 = _local_2.y;
-            _local_3 = Data.numLimit(_local_3, 0, 60);
-            this.var_146.y = Math.round(_local_3);
+            var _local_2:Point = this.hueSlider.globalToLocal(new Point(e.stageX, e.stageY));
+            var _local_3:int = Data.numLimit(_local_2.y, 0, 60);
+            this.hueArrow.y = Math.round(_local_3);
             this.hue = 360 - (360 * (_local_3 / 60));
             this.color = ColorUtil.hsbToHex24(this.hue, this.saturation, this.brightness);
-            this.method_40();
-            this.var_48.visible = false;
+            this.updateSpectrumGradient();
+            this.updateColorPreview();
+            this.outlineCC.visible = false;
         }
 
-        private function method_155(_arg_1:Event)
+        // removed (combined with updateSpectrumGradient)
+        /*private function method_155(e:Event)
         {
-            this.method_382(this.hue);
+            this.updateSpectrumGradient(this.hue);
+        }*/
+
+        // method_212 = onEyedropperMove
+        private function onEyedropperMove(e:Event)
+        {
+            this.previewColor = this.eyedropper.color;
+            this.updateColorPreview(this.previewColor);
         }
 
-        private function method_212(_arg_1:Event)
+        // method_275 = applyColor
+        private function applyColor(e:Event)
         {
-            this.var_188 = this.var_89.color;
-            this.method_40(this.var_188);
-        }
-
-        private function method_275(_arg_1:Event)
-        {
-            this.var_188 = -1;
-            this.setColor(this.var_89.color);
-            this.method_40();
+            this.previewColor = -1;
+            this.setColor(this.eyedropper.color);
+            this.updateColorPreview();
             method_136();
         }
 
-        private function method_334(_arg_1:MouseEvent)
+        // _loc2 = mousePos
+        // _loc3 = gridX
+        // _loc4 = gridY
+        // method_334 = hoverOverPalette
+        private function hoverOverPalette(e:MouseEvent)
         {
-            var _local_2:Point = new Point(_arg_1.stageX, _arg_1.stageY);
-            _local_2 = this.var_27.globalToLocal(_local_2);
-            var _local_3:int = int(Math.floor((_local_2.x / 10)));
-            var _local_4:int = int(Math.floor((_local_2.y / 10)));
-            _local_3 = Data.numLimit(_local_3, 0, 21);
-            _local_4 = Data.numLimit(_local_4, 0, 11);
-            this.var_144.x = _local_3 * 10;
-            this.var_144.y = _local_4 * 10;
-            this.var_144.visible = true;
-            this.var_188 = this.var_145[_local_3][_local_4];
-            this.method_40(this.var_188);
+            var mousePos:Point = this.palette.globalToLocal(new Point(e.stageX, e.stageY));
+            var gridX:int = Data.numLimit(Math.floor(mousePos.x / 10), 0, 21);
+            var gridY:int = Data.numLimit(Math.floor(mousePos.y / 10), 0, 11);
+            this.outlinePC.x = gridX * 10;
+            this.outlinePC.y = gridY * 10;
+            this.outlinePC.visible = true;
+            this.previewColor = this.colorChoices[gridX][gridY];
+            this.updateColorPreview(this.previewColor);
         }
 
-        private function method_452(_arg_1:MouseEvent)
+        // _loc2 = choiceX
+        // _loc3 = choiceY
+        // method_452 = clickPalette
+        private function clickPalette(e:MouseEvent)
         {
-            _arg_1.stopImmediatePropagation();
-            var _local_2:int = int((this.var_144.x / 10));
-            var _local_3:int = int((this.var_144.y / 10));
-            this.setColor(this.var_145[_local_2][_local_3]);
-            this.var_48.x = _local_2 * 10;
-            this.var_48.y = _local_3 * 10;
-            this.var_48.visible = true;
+            e.stopImmediatePropagation();
+            var choiceX:int = this.outlinePC.x / 10;
+            var choiceY:int = this.outlinePC.y / 10;
+            this.setColor(this.colorChoices[choiceX][choiceY]);
+            this.outlineCC.x = choiceX * 10;
+            this.outlineCC.y = choiceY * 10;
+            this.outlineCC.visible = true;
             this.remove();
         }
 
-        private function method_417(_arg_1:MouseEvent)
+        // method_417 = hoverOutPalette
+        private function hoverOutPalette(e:MouseEvent)
         {
-            this.var_188 = -1;
-            this.var_144.visible = false;
-            this.method_40();
+            this.previewColor = -1;
+            this.outlinePC.visible = false;
+            this.updateColorPreview();
         }
 
-        private function method_415(_arg_1:Event)
+        // _loc2 = hex
+        // _loc3 = c
+        // method_415 = setColorFromText
+        private function setColorFromText(e:Event)
         {
-            var _local_2:String;
-            var _local_3:int;
             if (stage.focus == this.m.textBox.textField) {
-                _local_2 = this.m.textBox.text;
-                _local_3 = 0;
-                if (_local_2 != "") {
-                    _local_2 = _local_2.split("#").join("");
-                    _local_2 = _local_2.split("0x").join("");
-                    _local_3 = Number(("0x" + _local_2));
-                    if (isNaN(_local_3)) {
-                        _local_3 = 0;
+                var hex:String = this.m.textBox.text;
+                var c:int = 0;
+                if (hex != "") {
+                    hex = hex.split("#").join("");
+                    hex = hex.split("0x").join("");
+                    c = Number("0x" + hex);
+                    if (isNaN(c)) {
+                        c = 0;
                     }
                 }
-                this.setColor(_local_3);
+                this.setColor(c);
             }
         }
 
@@ -340,155 +360,146 @@ package com.jiggmin.ColorPicker
         // method_400 = clickCancel
         private function clickCancel(e:MouseEvent)
         {
-            this.color = this.var_598;
+            this.color = this.initialColor;
             dispatchEvent(new Event(Event.CHANGE));
             this.remove();
         }
 
-        private function method_523()
+        // deleted _loc1 (this.colorChoices.length)
+        // deleted _loc2 (_local_3.length)
+        // method_523 = initPalette
+        private function initPalette()
         {
-            var _local_2:int;
-            var _local_3:Array;
-            var _local_5:int;
-            var _local_7:int;
-            this.var_27.graphics.clear();
-            this.var_27.graphics.lineStyle(1, 0, 1, true);
-            this.var_145 = class_280.method_605();
-            var _local_1:int = this.var_145.length;
+            this.palette.graphics.clear();
+            this.palette.graphics.lineStyle(1, 0, 1, true);
+            this.colorChoices = ColorChoices.populate();
             var _local_4:int = 10;
-            var _local_6:int;
-            while (_local_6 < _local_1) {
-                _local_3 = this.var_145[_local_6];
-                _local_2 = _local_3.length;
-                _local_7 = 0;
-                while (_local_7 < _local_2) {
-                    _local_5 = this.var_145[_local_6][_local_7];
+            for (var _local_6:int = 0; _local_6 < this.colorChoices.length; _local_6++) {
+                var _local_3:Array = this.colorChoices[_local_6];
+                for (var _local_7:int = 0; _local_7 < _local_3.length; _local_7++) {
+                    var _local_5:int = this.colorChoices[_local_6][_local_7];
                     if (_local_5 == this.color) {
-                        this.var_48.visible = true;
-                        this.var_48.x = _local_6 * _local_4;
-                        this.var_48.y = _local_7 * _local_4;
+                        this.outlineCC.visible = true;
+                        this.outlineCC.x = _local_6 * _local_4;
+                        this.outlineCC.y = _local_7 * _local_4;
                     }
-                    this.var_27.graphics.beginFill(_local_5);
-                    this.var_27.graphics.drawRect((_local_6 * _local_4), (_local_7 * _local_4), _local_4, _local_4);
-                    this.var_27.graphics.endFill();
-                    _local_7++;
+                    this.palette.graphics.beginFill(_local_5);
+                    this.palette.graphics.drawRect(_local_6 * _local_4, _local_7 * _local_4, _local_4, _local_4);
+                    this.palette.graphics.endFill();
                 }
-                _local_6++;
             }
         }
 
-        private function method_256():Sprite
+        // _loc1 = box
+        // method_256 = makePickedColorBox
+        /**
+         * Draws the white square that goes around one of the colors in the color picker when hovered over or selected.
+         */
+        private function makePickedColorBox():Sprite
         {
-            var _local_1:Sprite = new Sprite();
-            _local_1.graphics.lineStyle(1, 0xFFFFFF, 1, true);
-            _local_1.graphics.drawRect(0, 0, 10, 10);
-            return _local_1;
+            var box:Sprite = new Sprite();
+            box.graphics.lineStyle(1, 0xFFFFFF, 1, true);
+            box.graphics.drawRect(0, 0, 10, 10);
+            return box;
         }
 
-        private function method_755(_arg_1:int, _arg_2:int):Sprite
+        // method_755 = initHueSlider
+        private function initHueSlider(w:int, h:int):Sprite
         {
-            var _local_4:int;
-            var _local_5:Number;
-            var _local_3:BitmapData = new BitmapData(_arg_1, _arg_2, false, 0xFFFFFF);
-            var _local_6:int;
-            while (_local_6 < _arg_2) {
-                _local_4 = int((360 - (360 * (_local_6 / _arg_2))));
-                _local_5 = ColorUtil.hsbToHex24(_local_4, 100, 100);
-                _local_3.fillRect(new Rectangle(0, _local_6, _arg_1, 1), _local_5);
-                _local_6++;
+            var _local_3:BitmapData = new BitmapData(w, h, false, 0xFFFFFF);
+            for (var _local_6:int = 0; _local_6 < h; _local_6++) {
+                var _local_4:int = 360 - (360 * _local_6 / h);
+                var _local_5:Number = ColorUtil.hsbToHex24(_local_4, 100, 100);
+                _local_3.fillRect(new Rectangle(0, _local_6, w, 1), _local_5);
             }
-            this.var_146 = new ColorPickerHueArrowGraphic();
-            this.var_146.x = _arg_1 + 1;
-            this.var_146.y = _arg_2;
-            this.var_146.mouseEnabled = this.var_146.mouseChildren = false;
+            this.hueArrow = new ColorPickerHueArrowGraphic();
+            this.hueArrow.x = w + 1;
+            this.hueArrow.y = h;
+            this.hueArrow.mouseEnabled = this.hueArrow.mouseChildren = false;
             var _local_7:Sprite = new Sprite();
             _local_7.graphics.beginFill(0, 0);
-            _local_7.graphics.drawRect(0, 0, (_arg_1 + 10), _arg_2);
+            _local_7.graphics.drawRect(0, 0, (w + 10), h);
             _local_7.graphics.endFill();
             var _local_8:Sprite = new Sprite();
             _local_8.addChild(new Bitmap(_local_3));
-            _local_8.addChild(this.var_146);
+            _local_8.addChild(this.hueArrow);
             _local_8.addChild(_local_7);
             return _local_8;
         }
 
-        private function method_814(_arg_1:int, _arg_2:int):Sprite
+        // deleted _loc3 (new Bitmap(this.spectrumBG))
+        // method_814 = initSpectrum
+        private function initSpectrum(w:int, h:int):Sprite
         {
-            this.var_326 = new BitmapData(_arg_1, _arg_2, false, 0);
-            var _local_3:Bitmap = new Bitmap(this.var_326);
-            this.var_100 = new ColorPickerCrosshairsGraphic();
-            this.var_100.mouseEnabled = this.var_100.mouseChildren = false;
-            this.var_100.x = this.var_100.y = 20;
+            this.spectrumBG = new BitmapData(w, h, false, 0);
+            this.crosshairs = new ColorPickerCrosshairsGraphic();
+            this.crosshairs.mouseEnabled = this.crosshairs.mouseChildren = false;
+            this.crosshairs.x = this.crosshairs.y = 20;
             var _local_4:Sprite = new Sprite();
-            _local_4.addChild(_local_3);
-            _local_4.addChild(this.var_100);
+            _local_4.addChild(new Bitmap(this.spectrumBG));
+            _local_4.addChild(this.crosshairs);
             return _local_4;
         }
 
-        private function method_382(_arg_1:Number)
+        // deleted _loc2 (this.spectrumBG)
+        // deleted _loc3 (_local_2.width)
+        // deleted _loc4 (_local_2.height)
+        // deleted _loc8 (unused)
+        // method_382 = updateSpectrumGradient
+        private function updateSpectrumGradient()
         {
-            var _local_5:Number;
-            var _local_6:Number;
-            var _local_7:Number;
-            var _local_8:Object;
-            var _local_10:int;
-            var _local_2:BitmapData = this.var_326;
-            var _local_3:int = _local_2.width;
-            var _local_4:int = _local_2.height;
-            var _local_9:int;
-            while (_local_9 < _local_3) {
-                _local_6 = (_local_9 / _local_3) * 100;
-                _local_10 = 0;
-                while (_local_10 < _local_4) {
-                    _local_7 = 100 - ((_local_10 / _local_4) * 100);
-                    _local_5 = ColorUtil.hsbToHex24(_arg_1, _local_6, _local_7);
-                    _local_2.setPixel(_local_9, _local_10, _local_5);
-                    _local_10++;
+            for (var _local_9:int = 0; _local_9 < this.spectrumBG.width; _local_9++) {
+                var _local_6:Number = (_local_9 / this.spectrumBG.width) * 100;
+                for (var _local_10:int = 0; _local_10 < this.spectrumBG.height; _local_10++) {
+                    var _local_7:Number = 100 - ((_local_10 / this.spectrumBG.height) * 100);
+                    var _local_5:Number = ColorUtil.hsbToHex24(this.hue, _local_6, _local_7);
+                    this.spectrumBG.setPixel(_local_9, _local_10, _local_5);
                 }
-                _local_9++;
             }
         }
 
-        private function method_532(_arg_1:DisplayObject):Sprite
+        // _loc2 = hlo
+        // method_532 = showOutline
+        private function showOutline(d:DisplayObject):Sprite
         {
-            var _local_2:Sprite = this.showHighlight(Math.round(_arg_1.width), Math.round(_arg_1.height));
-            _local_2.x = _arg_1.x;
-            _local_2.y = _arg_1.y;
-            addChild(_local_2);
-            return _local_2;
+            var hlo:Sprite = this.makeOutline(Math.round(d.width), Math.round(d.height));
+            hlo.x = d.x;
+            hlo.y = d.y;
+            addChild(hlo);
         }
 
-        private function showHighlight(_arg_1:int, _arg_2:int):Sprite
+        // _loc3 = hlo
+        // method_141 = makeOutline
+        private function makeOutline(_arg_1:int, _arg_2:int):Sprite
         {
-            var _local_3:Sprite = new Sprite();
-            _local_3.graphics.lineStyle(1, 0x333333, 1, true);
-            _local_3.graphics.moveTo(0, _arg_2);
-            _local_3.graphics.lineTo(0, 0);
-            _local_3.graphics.lineTo(_arg_1, 0);
-            _local_3.graphics.lineStyle(1, 0xFFFFFF, 1, true);
-            _local_3.graphics.lineTo(_arg_1, _arg_2);
-            _local_3.graphics.lineTo(0, _arg_2);
-            return _local_3;
+            var hlo:Sprite = new Sprite();
+            hlo.graphics.lineStyle(1, 0x333333, 1, true);
+            hlo.graphics.moveTo(0, _arg_2);
+            hlo.graphics.lineTo(0, 0);
+            hlo.graphics.lineTo(_arg_1, 0);
+            hlo.graphics.lineStyle(1, 0xFFFFFF, 1, true);
+            hlo.graphics.lineTo(_arg_1, _arg_2);
+            hlo.graphics.lineTo(0, _arg_2);
+            return hlo;
         }
 
         override public function remove()
         {
-            if (!method_20()) {
+            if (!isRemoved()) {
                 stage.removeEventListener(MouseEvent.MOUSE_UP, this.mouseUpHandler);
-                stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_116);
-                this.var_69.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_266);
-                this.var_124.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_399);
-                stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_114);
-                removeEventListener(Event.ENTER_FRAME, this.method_155);
-                this.var_27.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_334);
-                this.var_27.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_452);
-                this.var_27.removeEventListener(MouseEvent.MOUSE_OUT, this.method_417);
-                this.var_89.removeEventListener(Event.CHANGE, this.method_212);
-                this.var_89.removeEventListener(Event.COMPLETE, this.method_275);
+                stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.previewColorAtMouse);
+                this.spectrum.removeEventListener(MouseEvent.MOUSE_DOWN, this.onSpectrumDown);
+                this.hueSlider.removeEventListener(MouseEvent.MOUSE_DOWN, this.clickHueSlider);
+                stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragHueSlider);
+                this.palette.removeEventListener(MouseEvent.MOUSE_MOVE, this.hoverOverPalette);
+                this.palette.removeEventListener(MouseEvent.MOUSE_DOWN, this.clickPalette);
+                this.palette.removeEventListener(MouseEvent.MOUSE_OUT, this.hoverOutPalette);
+                this.eyedropper.removeEventListener(Event.CHANGE, this.onEyedropperMove);
+                this.eyedropper.removeEventListener(Event.COMPLETE, this.applyColor);
                 this.m.ok_bt.removeEventListener(MouseEvent.CLICK, this.clickOK);
                 this.m.cancel_bt.removeEventListener(MouseEvent.CLICK, this.clickCancel);
-                this.m.textBox.removeEventListener(Event.CHANGE, this.method_415);
-                this.var_326.dispose();
+                this.m.textBox.removeEventListener(Event.CHANGE, this.setColorFromText);
+                this.spectrumBG.dispose();
                 if (CustomCursor.instance != null) {
                     CustomCursor.unsetInstance();
                     if (this.priorCursor != null) {
@@ -498,18 +509,16 @@ package com.jiggmin.ColorPicker
                             this.priorCursor.pause();
                         }
                     }
-                } else {
-                    if (this.priorCursor != null) {
-                        this.priorCursor.remove();
-                    }
+                } else if (this.priorCursor != null) {
+                    this.priorCursor.remove();
                 }
-                this.var_69 = null;
-                this.var_124 = null;
-                this.var_27 = null;
-                this.var_326 = null;
-                this.var_146 = null;
-                this.var_100 = null;
-                this.var_89 = null;
+                this.spectrum = null;
+                this.hueSlider = null;
+                this.palette = null;
+                this.spectrumBG = null;
+                this.hueArrow = null;
+                this.crosshairs = null;
+                this.eyedropper = null;
                 this.priorCursor = null;
                 this.me = null;
             }

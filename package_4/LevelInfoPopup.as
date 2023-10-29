@@ -68,9 +68,6 @@
         private var actionBtTimer:uint;
         private var actionType:String;
 
-        // uploading popup
-        //private var uploadingRemove:UploadingPopup;
-
 
         public function LevelInfoPopup(id:int)
         {

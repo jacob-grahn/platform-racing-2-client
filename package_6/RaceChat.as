@@ -3,6 +3,7 @@
 package package_6
 {
     import com.jiggmin.data.Data;
+    import fl.controls.TextArea;
     import fl.events.ScrollEvent;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
@@ -49,7 +50,7 @@ package package_6
 
         private function focusOrSend(e:KeyboardEvent)
         {
-            if (e.keyCode == 13) {
+            if (e.keyCode == 13 && !(e.target.parent is TextArea)) { // textarea check fixes new lines in PM popup
                 if (e.target != this && e.target != this.m.chatInput) {
                     Main.stage.focus = this.m.chatInput;
                     this.m.chatInput.setSelection(0, 0);

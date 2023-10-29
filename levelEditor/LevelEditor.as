@@ -10,7 +10,7 @@ package levelEditor
     import background.ObjectBackground;
     import background.BlockBackground;
     import background.DrawableBackground;
-    import background.LineBackground;
+    import background.BlockGridLines;
     import com.jiggmin.data.Data;
     import flash.display.Sprite;
     import flash.display.StageQuality;
@@ -43,7 +43,7 @@ package levelEditor
         public var draw5:DrawableBackground;
         public var bg:class_10;
         public var blockBG:BlockBackground;
-        public var blockGrid:LineBackground; // var_171
+        public var blockGrid:BlockGridLines; // var_171
         public var live:Number = 0;
         public var minRank:String = "0"; // minLevel
         public var pass:String = null;
@@ -104,7 +104,7 @@ package levelEditor
             this.draw4 = new DrawableBackground(this);
             this.draw5 = new DrawableBackground(this);
             this.bg = new class_10(this);
-            this.blockGrid = new LineBackground(this);
+            this.blockGrid = new BlockGridLines(this);
             this.blockBG = new BlockBackground(this);
             this.bg1.setScale(1);
             this.draw1.setScale(1);

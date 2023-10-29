@@ -35,7 +35,7 @@ package package_14
             addItem(this.sizePicker, "Size Picker", "Change the size of the brush and eraser.");
             addItem(this.colorPicker, "Color Picker", "Choose your color with wisdom.");
             this.colorPicker.width = this.colorPicker.height = 30;
-            this.colorPicker.var_419 = ColorPicker.LEFT;
+            this.colorPicker.direction = ColorPicker.LEFT;
             this.colorPicker.addEventListener(Event.CLOSE, this.chooseColor);
             this.brushButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onBrushDown);
             this.eraserButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onEraserDown);
@@ -89,7 +89,7 @@ package package_14
 
         override public function exit()
         {
-            this.colorPicker.method_71();
+            this.colorPicker.closePopup();
             CustomCursor.pause();
             super.exit();
             this.active = false;

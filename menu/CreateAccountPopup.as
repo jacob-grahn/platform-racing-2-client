@@ -41,7 +41,7 @@ package menu
                 request = new URLRequest(Main.baseURL + "/register_user.php");
                 request.data = vars;
                 request.method = "POST";
-                this.uploadingPopup = new UploadingPopup(request, SuperLoader.j);
+                this.uploadingPopup = new UploadingPopup(request, SuperLoader.j, 'Creating account...');
                 this.uploadingPopup.addEventListener(SuperLoader.d, this.receiveCreateAccountResult, false, 0, true);
             }
         }

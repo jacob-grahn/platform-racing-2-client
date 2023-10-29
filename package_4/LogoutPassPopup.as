@@ -56,7 +56,7 @@ package package_4
             var request:URLRequest = new URLRequest(Main.baseURL + "/logout.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            this.uploadingPopup = new UploadingPopup(request, SuperLoader.j);
+            this.uploadingPopup = new UploadingPopup(request, SuperLoader.j, 'Logging out...');
             this.uploadingPopup.addEventListener(Event.COMPLETE, this.receiveResult, false, 0, true);
             startFadeOut();
         }

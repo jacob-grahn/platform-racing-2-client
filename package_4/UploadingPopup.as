@@ -21,9 +21,10 @@ package package_4
         public var data:String;
         public var parsedData:Object;
 
-        public function UploadingPopup(request:URLRequest = null, dataMode:String = "url")
+        public function UploadingPopup(request:URLRequest = null, dataMode:String = "url", dispText:String = 'Uploading...', aem:Boolean = true)
         {
-            this.loader = new SuperLoader(true, dataMode);
+            this.loader = new SuperLoader(true, dataMode, aem);
+            this.m.textBox.text = dispText;
             addChild(this.m);
             addChild(this.progressBar);
             this.progressBar.x = -100;

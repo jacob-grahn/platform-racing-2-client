@@ -10,7 +10,6 @@ package package_6
     import flash.net.URLRequestMethod;
     import flash.ui.Keyboard;
     import package_4.MessagePopup;
-    import package_4.UploadingPopup;
     import page.GamePage;
     import flash.net.URLLoader;
 
@@ -19,7 +18,6 @@ package package_6
 
         private var stageRef:Stage;
 		private var gameRef:Game;
-        private var uploading:UploadingPopup;
 
         public function SpecialEvent(stage:Stage, game:Game)
         {
@@ -43,19 +41,10 @@ package package_6
             }
         }
 
-        /*private function onReturnData(e:Event)
-        {
-            var ret:Object = SuperLoader(e.target).parsedData;
-            if (ret.success == true && ret.error == null) {
-                new MessagePopup(ret.success);
-            }
-        }*/
-
         public function remove()
         {
             this.stageRef.removeEventListener(MouseEvent.CLICK, this.clickHandler);
             this.stageRef = null;
-            this.uploading = null;
         }
 
 

@@ -116,7 +116,8 @@ package blocks
             return this.frozen ? true : this.active;
         }
 
-        public function method_20():Boolean
+        // method_20 = isRemoved
+        public function isRemoved():Boolean
         {
             return this.removed;
         }

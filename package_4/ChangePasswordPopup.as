@@ -54,7 +54,7 @@ package package_4
                 var request:URLRequest = new URLRequest(Main.baseURL + "/change_password.php");
                 request.data = vars;
                 request.method = URLRequestMethod.POST;
-                new UploadingPopup(request, 'json');
+                new UploadingPopup(request, 'json', 'Changing password...');
                 startFadeOut();
             }
         }

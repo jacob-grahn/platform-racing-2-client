@@ -47,7 +47,7 @@ package menu
             var request:URLRequest = new URLRequest(Main.baseURL + "/forgot_password.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            new UploadingPopup(request, 'json');
+            new UploadingPopup(request, 'json', 'Checking your information...');
             startFadeOut();
         }
 

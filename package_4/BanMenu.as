@@ -149,7 +149,7 @@ package package_4
             var request:URLRequest = new URLRequest(Main.baseURL + "/ban_user.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            this.uploading = new UploadingPopup(request, 'json');
+            this.uploading = new UploadingPopup(request, 'json', 'Banning...');
             this.uploading.addEventListener(SuperLoader.d, this.onBanSuccess, false, 0, true);
             this.uploading.addEventListener(SuperLoader.e, this.method_238, false, 0, true);
         }

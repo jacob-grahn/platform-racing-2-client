@@ -29,11 +29,13 @@ package
         public var parsedData:Object;
         private var readMode:String; // var_346
         private var toURL:String;
+        private var autoEchoMessage:Boolean = true;
 
-        public function SuperLoader(rand:Boolean=true, read:String="url")
+        public function SuperLoader(rand:Boolean=true, read:String="url", aem:Boolean = true)
         {
             this.useRandomNum = rand;
             this.readMode = read;
+            this.autoEchoMessage = aem;
             addEventListener(IOErrorEvent.IO_ERROR, this.IOErrorHandler);
             addEventListener(Event.COMPLETE, this.onComplete);
             addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.securityErrorHandler);
@@ -85,7 +87,7 @@ package
                     if (this.readMode == j) {
                         this.parsedData = JSON.parse(data);
                     }
-                    if (this.parsedData.message != null) {
+                    if (this.parsedData.message != null && this.autoEchoMessage) {
                         new MessagePopup(this.parsedData.message);
                     }
                     if (!this.parsedData.hasOwnProperty('error') && (this.parsedData.hasOwnProperty('success') ? this.parsedData.success : true)) {

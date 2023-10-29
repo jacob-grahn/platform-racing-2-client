@@ -35,7 +35,7 @@ package package_9
 
         private function method_219()
         {
-            if (!method_20()) {
+            if (!isRemoved()) {
                 method_62(30);
                 this.move();
                 method_62(5);

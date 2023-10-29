@@ -135,7 +135,7 @@ package package_21
             var request:URLRequest = new URLRequest(Main.baseURL + "/message_report.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            this.uploading = new UploadingPopup(request, 'json');
+            this.uploading = new UploadingPopup(request, 'json', 'Reporting message...');
         }
 
         // _loc2 = vars
@@ -149,7 +149,7 @@ package package_21
             var request:URLRequest = new URLRequest(Main.baseURL + "/message_delete.php");
             request.method = URLRequestMethod.POST;
             request.data = vars;
-            this.uploading = new UploadingPopup(request, 'json');
+            this.uploading = new UploadingPopup(request, 'json', 'Deleting message...');
         }
 
         private function handleError(e:Event)
@@ -170,7 +170,7 @@ package package_21
             var request:URLRequest = new URLRequest(Main.baseURL + "/messages_delete_all.php");
             request.data = vars;
             request.method = URLRequestMethod.POST;
-            new UploadingPopup(request, 'json');
+            new UploadingPopup(request, 'json', 'Deleting messages...');
             this.removeMessages();
         }
 

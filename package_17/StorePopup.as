@@ -191,7 +191,7 @@ package package_17
             var req:URLRequest = new URLRequest(Main.baseURL + "/vault/use_super_booster.php");
             req.method = URLRequestMethod.POST;
             req.data = vars;
-            var uploading:UploadingPopup = new UploadingPopup(req, SuperLoader.j);
+            var uploading:UploadingPopup = new UploadingPopup(req, SuperLoader.j, 'Powering up...');
             uploading.addEventListener(SuperLoader.d, this.onPurchaseComplete, false, 0, true);
         }
 
@@ -206,7 +206,7 @@ package package_17
             var req:URLRequest = new URLRequest(Main.baseURL + '/vault/purchase_item.php');
             req.method = URLRequestMethod.POST;
             req.data = vars;
-            var uploading:UploadingPopup = new UploadingPopup(req, SuperLoader.j);
+            var uploading:UploadingPopup = new UploadingPopup(req, SuperLoader.j, 'Purchasing item...');
             uploading.addEventListener(SuperLoader.d, this.onPurchaseComplete, false, 0, true);
             //this.uploading.addEventListener(SuperLoader.e, this.)
             //new MessagePopup('Placeholder!\n\nSlug: ' + slug + '\nQuantity: ' + quantity);

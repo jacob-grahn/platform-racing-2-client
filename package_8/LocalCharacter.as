@@ -285,7 +285,7 @@ package package_8
             }
             method_58(this.map.rotation);
             this.hurtTime--;
-            if (this.course.playerArray.length > 1) {
+            // if (this.course.playerArray.length > 1) {
                 var_215++; // setting this to a static value greater than 16 (formerly 23) will send wholly instant position updates to players
                 if (var_215 >= var_448) {
                     if (this.playersInPosUpdateRange() || var_215 >= 16) {//23) {
@@ -333,7 +333,7 @@ package package_8
                 } else if (var_4.getBool(JELLYFISH) && Data.rand(1, 35) === 1) { // should happen within a second or so
                     this.maybeSting();
                 }
-            }
+            // }
         }
 
         // tells the game to send the exact player coordinates next update (in this.go)
