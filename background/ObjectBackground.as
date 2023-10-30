@@ -334,10 +334,11 @@ package background
         // refactored
         override public function clear()
         {
-            for (var i:int = 0; i < this.objArray.length; i++) {
+            for (var i:int = this.objArray.length - 1; i >= 0; i--) {
                 var drawObj:DrawObject = this.objArray[i];
                 drawObj.remove();
             }
+            this.objArray = new Array();
             super.clear();
         }
 
