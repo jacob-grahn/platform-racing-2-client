@@ -231,7 +231,7 @@ package com.jiggmin.data
         {
             s = s.replace(/damn/gi, Data.randArrayKey(Data.damnArray));
             s = s.replace(/fuck/gi, Data.randArrayKey(Data.fuckArray));
-            s = s.replace(/nigg(a|er)/gi, Data.randArrayKey(Data.niggaArray));
+            s = s.replace(/\b(nig(?:g(?:a|er)?)?(?:s)?)\b/gi, Data.randArrayKey(Data.niggaArray));
             s = s.replace(/\b(spic)\b/gi, Data.randArrayKey(Data.niggaArray));
             s = s.replace(/shit/gi, Data.randArrayKey(Data.shitArray));
             s = s.replace(/bitch/gi, Data.randArrayKey(Data.bitchArray));
