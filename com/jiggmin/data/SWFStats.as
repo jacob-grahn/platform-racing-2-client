@@ -36,8 +36,8 @@ package com.jiggmin.data
                 _local_4++;
             }
             var _local_5:Number = _local_3 / this.keepCount;
-            if (_local_5 < 900 || Main.stage.frameRate != 27) {
-                Main.stage.frameRate = 27;
+            if (_local_5 < 900 || Main.stage.frameRate != 30) {
+                Main.stage.frameRate = 30;
                 var _local_6:Number = time + 1000;
                 do  {
                 } while (new Date().time < time);

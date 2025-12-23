@@ -126,7 +126,7 @@ package
                 class_4.init();
                 stats = new SWFStats();
                 this.determineSite();
-                stage.frameRate = 27;
+                stage.frameRate = 30;
                 Security.loadPolicyFile(baseURL + "/crossdomain.xml");
                 Security.allowDomain("kongregate.com");
                 muteButton.x = 504;
