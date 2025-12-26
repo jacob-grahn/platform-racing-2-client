@@ -42,6 +42,7 @@ package package_6
         public var var_452:int;
         public var var_465:int;
         public var var_347:int;
+        public var framesPlaying:int = 0;
         private var hatCountdown:uint;
 
         public function Game(id:int, v:int)
@@ -164,10 +165,15 @@ package package_6
             }
         }
 
+        private function incrementFrameCounter(e:Event) {
+            this.framesPlaying++;
+        }
+
         override public function beginRace(_arg_1:Array)
         {
             this.drawingInfo.clear();
             super.beginRace(_arg_1);
+            this.addEventListener(Event.ENTER_FRAME, this.incrementFrameCounter, false, 0, true);
         }
 
         public function award(_arg_1:Array)
@@ -411,6 +417,7 @@ package package_6
                         Main.socket.write("objective_reached`" + finishId + "`" + finishX + "`" + finishY);
                     }
                 } else {
+                    this.removeEventListener(Event.ENTER_FRAME, this.incrementFrameCounter);
                     Main.socket.write("finish_race`" + finishId + "`" + finishX + "`" + finishY);
                     if (this.gameMode != Modes.hat) {
                         this.quitButton.startGlow();
@@ -430,6 +437,7 @@ package package_6
                 if (this.gameMode == Modes.dm) {
                     this.finish();
                 } else {
+                    this.removeEventListener(Event.ENTER_FRAME, this.incrementFrameCounter);
                     Main.socket.write("quit_race`");
                 }
             }
