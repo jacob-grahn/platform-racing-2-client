@@ -4,6 +4,8 @@ package package_6
 {
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Data;
+    import flash.events.MouseEvent;
+    import package_4.HoverPopup;
 
     public class DrawingInfo extends Removable 
     {
@@ -11,6 +13,7 @@ package package_6
         private var m:DrawingInfoGraphic = new DrawingInfoGraphic();
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var names:Array = new Array(); // var_425
+        private var localTimeHover:HoverPopup;
 
         public function DrawingInfo()
         {
@@ -38,10 +41,11 @@ package package_6
                     i = 0;
                 }
                 var name:String = arr[key];
+                var isLoggedInPlayer:Boolean = name.toLowerCase() == Main.loggedInAs.toLowerCase();
                 var time:String = arr[key + 1];
                 var drawing:Boolean = Boolean(arr[key + 2]);
                 var stillHere:Boolean = Boolean(arr[key + 3]);
-                if (name.toLowerCase() == Main.loggedInAs.toLowerCase() && time != "forfeit") {
+                if (isLoggedInPlayer && time != "forfeit") {
                     var courseID:int = Course.course.getCourseID();
                     var courseName:String = "";
                     if (courseID == 50815) {
@@ -94,8 +98,14 @@ package package_6
                 if (!stillHere) {
                     timeText = timeText + " (gone)";
                 }
-                this.m.info1["timeBox" + i].text = this.m.info2["timeBox" + i].text = timeText;
                 this.m.info1["nameBox" + i].text = this.m.info2["nameBox" + i].text = name;
+                if (isLoggedInPlayer && Course.course.gameMode != "egg" && time != 'forfeit') {
+                    this.m.info1["timeBox" + i].text = this.m.info2["timeBox" + i].text = timeText + '*';
+                    this.m.info1['timeBox' + i].addEventListener(MouseEvent.MOUSE_OVER, this.onMouseLoggedInPlayerTime, false, 0, true);
+                    this.m.info1['timeBox' + i].addEventListener(MouseEvent.MOUSE_OUT, this.onMouseLoggedInPlayerTime, false, 0, true);
+                } else {
+                    this.m.info1["timeBox" + i].text = this.m.info2["timeBox" + i].text = timeText;
+                }
                 i++;
                 key = key + 4;
             }
@@ -104,6 +114,24 @@ package package_6
                 this.m.info1["nameBox" + i].text = this.m.info2["nameBox" + i].text = '';
                 this.m.info1["anim" + i].visible = this.m.info2["anim" + i].visible = false;
                 i++;
+            }
+        }
+
+        private function onMouseLoggedInPlayerTime(e:MouseEvent = null) {
+            if (e == null || e.type != MouseEvent.MOUSE_OVER) {
+                if (this.localTimeHover != null) {
+                    this.localTimeHover.remove();
+                    this.localTimeHover = null;
+                }
+            } else {
+                var framesToTime: String = Data.formatTime(Number(Course.course.framesPlaying / Main.stage.frameRate), "decimal");
+                this.localTimeHover = new HoverPopup(
+                    'Timing for Nerds',
+                    'The time listed here is the time the server reports. This includes lag.\n\nSince you played for ' + Course.course.framesPlaying + ' frames at ' + Main.stage.frameRate + 'fps, your no-lag time is ' + framesToTime + '.',
+                    this.m.info1
+                );
+                this.localTimeHover.x = 100;
+                this.localTimeHover.y += 20;
             }
         }
 
@@ -140,6 +168,7 @@ package package_6
 
         override public function remove()
         {
+            this.onMouseLoggedInPlayerTime();
             this.cm.defineCommand("finishTimes", null);
             this.cm.defineCommand("finishDrawing", null);
             this.names = null;
