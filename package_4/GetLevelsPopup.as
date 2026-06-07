@@ -5,7 +5,7 @@
 
 package package_4
 {
-    import ui.class_229;
+    import ui.SelectableButton;
     import ui.CustomScrollBar;
     import flash.events.MouseEvent;
 
@@ -14,9 +14,9 @@ package package_4
 
         protected var m:GetLevelsPopupGraphic = new GetLevelsPopupGraphic();
         protected var itemSpacing:int = 25;
-        protected var listings:Vector.<class_229> = new Vector.<class_229>();
+        protected var listings:Vector.<SelectableButton> = new Vector.<SelectableButton>();
         private var scroll:CustomScrollBar;
-        private var selected:class_229;
+        private var selected:SelectableButton;
 
         public function GetLevelsPopup()
         {
@@ -37,7 +37,7 @@ package package_4
         }
 
          // method_321 = getSelected
-        public function getSelected():class_229
+        public function getSelected():SelectableButton
         {
             return this.selected;
         }
@@ -48,7 +48,7 @@ package package_4
             this.m.removeChild(this.m.loadingGraphic);
         }
 
-        protected function addListing(listing:class_229)
+        protected function addListing(listing:SelectableButton)
         {
             listing.y = this.listings.length * this.itemSpacing;
             this.m.levelsHolder.addChild(listing);
@@ -58,28 +58,28 @@ package package_4
         // _loc1 = listing
         protected function method_539()
         {
-            var listing:class_229;
+            var listing:SelectableButton;
             for each (listing in this.listings) {
-                listing.method_368(false);
+                listing.setSelected(false);
             }
         }
 
         // _loc1 = listing
         protected function method_825()
         {
-            var listing:class_229;
+            var listing:SelectableButton;
             for each (listing in this.listings) {
                 listing.remove();
             }
-            this.listings = new Vector.<class_229>();
+            this.listings = new Vector.<SelectableButton>();
         }
 
-        protected function method_491(listing:class_229)
+        protected function method_491(listing:SelectableButton)
         {
             this.selected = listing;
             this.method_539();
             if (this.selected != null) {
-                this.selected.method_368(true);
+                this.selected.setSelected(true);
                 this.m.load_bt.enabled = this.m.delete_bt.enabled = true;
             } else {
                 this.m.load_bt.enabled = this.m.delete_bt.enabled = false;
@@ -87,11 +87,11 @@ package package_4
             this.method_394();
         }
 
-        protected function loadListing(listing:class_229)
+        protected function loadListing(listing:SelectableButton)
         {
         }
 
-        protected function deleteListing(listing:class_229)
+        protected function deleteListing(listing:SelectableButton)
         {
         }
 
@@ -117,8 +117,8 @@ package package_4
         // _loc2 = listing
         private function method_401(e:MouseEvent)
         {
-            if (e.target is class_229) {
-                var listing:class_229 = class_229(e.target);
+            if (e.target is SelectableButton) {
+                var listing:SelectableButton = SelectableButton(e.target);
                 this.method_491(listing);
             }
         }
@@ -126,8 +126,8 @@ package package_4
         // _loc2 = listing
         private function method_222(e:MouseEvent)
         {
-            if (e.target is class_229) {
-                var listing:class_229 = class_229(e.target);
+            if (e.target is SelectableButton) {
+                var listing:SelectableButton = SelectableButton(e.target);
                 this.loadListing(listing);
             }
         }

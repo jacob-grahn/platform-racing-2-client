@@ -6,13 +6,13 @@
 package lobby
 {
     import ui.LobbyTab;
-    import package_22.Campaign;
-    import package_22.Best;
-    import package_22.BestWeek;
-    import package_22.Newest;
-    import package_22.Search;
-    import package_22.Favorites;
-    //import package_22.class_251;
+    import level_browser.Campaign;
+    import level_browser.Best;
+    import level_browser.BestWeek;
+    import level_browser.Newest;
+    import level_browser.Search;
+    import level_browser.Favorites;
+    //import level_browser.ListingPage;
 
     public class LobbyRight extends LobbySide 
     {
@@ -77,7 +77,7 @@ package lobby
         // method_484 = clickGuilds
         private function clickGuilds()
         {
-            changePage(new class_251());
+            changePage(new ListingPage());
         }
         */
 

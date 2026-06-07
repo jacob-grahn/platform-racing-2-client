@@ -27,44 +27,20 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 - ObjectDeleter: var_151 → objectBG, method_152 → onEnterFrame, method_458 → updateScale
 - CustomCursor: var_411 → disposable
 
-### package_21 → chat (23 method_##, 19 var_##)
-- [ ] `ChatInstance.as`
-- [ ] `ChatRoomInfoPopup.as`
-- [ ] `Messages.as`
-- [ ] `MessagesItem.as`
-- [ ] `DeleteMessageButton.as`
-- [ ] `ReplyMessageButton.as`
-- [ ] `ReportMessageButton.as`
-- [ ] Rename package directory
+### ~~package_21 → chat~~ ✓ DONE
+- ChatInstance: var_655 → timeoutId
+- Messages: var_167 → currentPage, var_564 → itemsPerPage, _arg_1 → pageNum
+- MessagesItem: _arg_2 → messageId
 
-### package_22 → level_browser (23 method_##, 25 var_##)
-- [ ] `Best.as`
-- [ ] `BestWeek.as`
-- [ ] `Campaign.as`
-- [ ] `Newest.as`
-- [ ] `Search.as`
-- [ ] `Favorites.as`
-- [ ] `LevelListing.as`
-- [ ] `LevelItem.as`
-- [ ] `CourseMenu.as`
-- [ ] `Slot.as`
-- [ ] `class_250.as` — LevelListing base with pagination (rename class)
-- [ ] `class_251.as` — unknown listing component (identify + rename)
-- [ ] `class_286.as` — unknown listing component (identify + rename)
-- [ ] Rename package directory
+### ~~package_22 → level_browser~~ ✓ DONE
+- class_250 → PaginatedPage, class_251 → ListingPage, class_286 → ListingEntry
+- LevelListing: var_280 → showCoursesTimeout
+- Search: var_421 → searchTimeout
+- LevelItem: confirmSlot/clearSlot _arg_1→a, _local_2/3→slotNum/slot
+- CourseMenu: forceTime _local_2 → timeRemaining
 
-### package_23 → social (23 method_##, 6 var_##)
-- [ ] `Friends.as`
-- [ ] `Following.as`
-- [ ] `Online.as`
-- [ ] `Guilds.as`
-- [ ] `Ignored.as`
-- [ ] `PlayersTab.as`
-- [ ] `PlayersTabList.as` / `PlayersTabListHolder.as`
-- [ ] `PlayersTabListItem.as` / `PlayersTabListItemInfo.as`
-- [ ] `PlayersTabGuildListItem.as`
-- [ ] `PlayersTabUserListDataLoader.as`
-- [ ] Rename package directory
+### ~~package_23 → social~~ ✓ DONE
+- method_138 → addUser, method_179 → addListing
 
 ---
 
@@ -93,13 +69,10 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 - [ ] All remaining files in package_4 (34 files total)
 - [ ] Rename package directory
 
-### Standalone class files (scattered)
-- [ ] `class_239.as` (root) — star graphic effect → rename
-- [ ] `background/class_10.as` — level background renderer → rename
-- [ ] `ui/class_229.as` — interactive UI element with hover/select → rename
-- [ ] `menu/class_4.as` — command hash/auth helper → rename
-- [ ] `com/jiggmin/data/class_20.as` — value encryption engine → rename
-- [ ] `com/jiggmin/data/class_33.as` — static wrapper for class_20 → rename
+### ~~Standalone class files~~ ✓ DONE
+- class_239 → PointyStar, background/class_10 → LevelBackground (method_338→setArtBackground, method_536→drawCircleGrid)
+- ui/class_229 → SelectableButton (method_368→setSelected), menu/class_4 → CommAuth (method_310→getToken)
+- class_20 → SecureStore (method_350→setEntry, method_162→getEntry), class_33 → SecureData (method_98→initEncryptor)
 
 ---
 

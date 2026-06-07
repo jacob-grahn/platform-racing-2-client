@@ -8,7 +8,7 @@ package package_8
     import flash.media.SoundChannel;
     import flash.display.MovieClip;
     import flash.geom.Point;
-    import com.jiggmin.data.class_20;
+    import com.jiggmin.data.SecureStore;
     import com.jiggmin.data.Data;
     import flash.geom.ColorTransform;
     import items.Items;
@@ -75,7 +75,7 @@ package package_8
         protected var var_215:int = 0;
         protected var fadeOutStarted:Boolean = false; // var_304
         public var removed:Boolean = false; // var_214
-        public var var_4:class_20;
+        public var var_4:SecureStore;
         private var var_375:class_125;
 
         public function Character(hatId:int = 1, headId:int = 1, bodyId:int = 1, feetId:int = 1)
@@ -88,7 +88,7 @@ package package_8
             if (Data.getDateStr(new Date().getTime()) === "Apr 1") {
                 this.reversedControls = true;
             }
-            this.var_4 = new class_20();
+            this.var_4 = new SecureStore();
             this.resetHats();
             this.changeState("stand");
             this.applyAppearance();

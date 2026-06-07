@@ -20,7 +20,7 @@ package editor_tools
         {
             e.stopImmediatePropagation();
             LevelEditor.editor.setColor(this.color);
-            LevelEditor.editor.bg.method_338(displayCode);
+            LevelEditor.editor.bg.setArtBackground(displayCode);
         }
 
 

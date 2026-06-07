@@ -2,7 +2,7 @@
 {
     import com.jiggmin.data.HTMLNameMaker;
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.SecureData;
     import flash.display.DisplayObject;
     import flash.events.Event;
     import flash.events.MouseEvent;
@@ -146,7 +146,7 @@
             this.m.levelInfo.hatsAllowed.addEventListener(MouseEvent.MOUSE_OUT, this.outHatsHandler, false, 0, true);
 
             // enable play button
-            /*var myRank:Number = class_33.getNumber("userRank");
+            /*var myRank:Number = SecureData.getNumber("userRank");
             myRank = isNaN(myRank) || myRank < 0 ? 0 : myRank;*/
             //if ((this.live && !this.hasPass && this.minRank <= myRank) || Main.group >= 2) {
             this.m.play_bt.enabled = true;

@@ -6,7 +6,7 @@ package package_18
     import package_4.GetLevelsPopup;
     import package_8.Character;
     import ui.StatsSelect;
-    import ui.class_229;
+    import ui.SelectableButton;
     import package_4.MessagePopup;
 
     public class LoadoutsPopup extends GetLevelsPopup 
@@ -42,7 +42,7 @@ package package_18
 
         // _loc2 = listing
         // _loc3 = preset
-        override protected function loadListing(_arg_1:class_229)
+        override protected function loadListing(_arg_1:SelectableButton)
         {
             if (!Settings.isNameSet()) {
                 new MessagePopup('Error: You are not logged in.');
@@ -59,7 +59,7 @@ package package_18
         // _loc3 = preset
         // _loc4 = stats
         // actually saves; named deleteListing to replace the delete button on GetLevelsPopup
-        override protected function deleteListing(_arg_1:class_229)
+        override protected function deleteListing(_arg_1:SelectableButton)
         {
             var listing:PresetListing = PresetListing(_arg_1);
             var preset:Object = listing.getPreset();

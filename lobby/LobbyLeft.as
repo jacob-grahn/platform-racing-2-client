@@ -7,9 +7,9 @@ package lobby
 {
     import ui.LobbyTab;
     import com.jiggmin.data.UnreadNotif;
-    import package_21.ChatInstance;
-    import package_21.Messages;
-    import package_23.PlayersTab;
+    import chat.ChatInstance;
+    import chat.Messages;
+    import social.PlayersTab;
     import package_18.AccountInfo;
 
     public class LobbyLeft extends LobbySide 

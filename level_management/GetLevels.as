@@ -11,7 +11,7 @@ package level_management
     import levelEditor.GetLevelsPopupItem;
     import package_4.ConfirmPopup;
     import package_4.GetLevelsPopup;
-    import ui.class_229;
+    import ui.SelectableButton;
     import levelEditor.LevelEditorMenu;
     import flash.net.URLRequestMethod;
 
@@ -48,7 +48,7 @@ package level_management
         }
 
         // _loc2 = item
-        override protected function loadListing(listing:class_229)
+        override protected function loadListing(listing:SelectableButton)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(listing);
             new LoadingLevelPopup(item.level.level_id, item.level.version);
@@ -56,7 +56,7 @@ package level_management
         }
 
         // _loc2 = item
-        override protected function deleteListing(listing:class_229)
+        override protected function deleteListing(listing:SelectableButton)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(listing);
             new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + Data.escapeString(item.level.title) + "\"?");

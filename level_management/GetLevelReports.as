@@ -7,7 +7,7 @@
     import levelEditor.GetReportedLevelsPopupItem;
     import package_4.ConfirmPopup;
     import package_4.GetLevelsPopup;
-    import ui.class_229;
+    import ui.SelectableButton;
     import levelEditor.LevelEditorMenu;
     import package_4.MessagePopup;
 
@@ -35,7 +35,7 @@
         }
 
         // _loc2 = item
-        override protected function loadListing(listing:class_229)
+        override protected function loadListing(listing:SelectableButton)
         {
             var item:GetReportedLevelsPopupItem = GetReportedLevelsPopupItem(listing);
             new LoadingLevelPopup(item.level.level_id, item.level.version, true);
@@ -44,7 +44,7 @@
 
         // _loc2 = item
         // level report handling function
-        override protected function deleteListing(listing:class_229)
+        override protected function deleteListing(listing:SelectableButton)
         {
             new HandleLevelReportPopup(this, listing.level);
         }

@@ -5,7 +5,7 @@
 
 package items
 {
-    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.SecureData;
     import package_8.LocalCharacter;
 
     public class JetPack extends Item 
@@ -16,8 +16,8 @@ package items
         public function JetPack(lc:LocalCharacter)
         {
             super(lc);
-            class_33.setNumber("totFuel", 200);
-            class_33.setNumber("fuel", 200);
+            SecureData.setNumber("totFuel", 200);
+            SecureData.setNumber("fuel", 200);
             lc.setAmmo(3);
         }
 
@@ -28,10 +28,10 @@ package items
             if (pressed && !character.crouching) {
                 super.setSpace(space);
                 character.velY -= character.velY > -5 ? 1.25 : 0.5;
-                var totFuel:Number = class_33.getNumber("totFuel");
-                var remainingFuel:Number = class_33.getNumber("fuel");
+                var totFuel:Number = SecureData.getNumber("totFuel");
+                var remainingFuel:Number = SecureData.getNumber("fuel");
                 remainingFuel--;
-                class_33.setNumber("fuel", remainingFuel);
+                SecureData.setNumber("fuel", remainingFuel);
                 character.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
                 if (remainingFuel <= 0) {
                     super.useItem();
@@ -51,8 +51,8 @@ package items
 
         public function replenishFuel(lc:LocalCharacter)
         {
-            class_33.setNumber("totFuel", 200);
-            class_33.setNumber("fuel", 200);
+            SecureData.setNumber("totFuel", 200);
+            SecureData.setNumber("fuel", 200);
             lc.setAmmo(3);
         }
 

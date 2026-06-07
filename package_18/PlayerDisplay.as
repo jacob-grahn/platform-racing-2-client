@@ -11,7 +11,7 @@ package package_18
     import package_4.HoverPopup;
     import package_8.Character;
     import package_18.PartInfo.*;
-    import package_22.LevelListing;
+    import level_browser.LevelListing;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
 

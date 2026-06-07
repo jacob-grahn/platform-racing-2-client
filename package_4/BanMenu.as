@@ -8,7 +8,7 @@ package package_4
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Memory;
     import flash.events.MouseEvent;
-    import package_21.ChatInstance;
+    import chat.ChatInstance;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;

@@ -22,7 +22,7 @@ package
     import flash.ui.ContextMenu;
     import flash.utils.setTimeout;
     import menu.CheckServers;
-    import menu.class_4;
+    import menu.CommAuth;
     import menu.IntroPage;
     import sounds.NoodleTown;
     import page.PageHolder;
@@ -123,7 +123,7 @@ package
                 CheckServers.activate();
                 SavedAccounts.init();
                 GpNotification.init(stage);
-                class_4.init();
+                CommAuth.init();
                 stats = new SWFStats();
                 this.determineSite();
                 stage.frameRate = 27;

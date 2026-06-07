@@ -6,7 +6,7 @@
 package items
 {
     import package_8.LocalCharacter;
-    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.SecureData;
     import flash.utils.setTimeout;
     import flash.geom.Point;
     import background.EffectBackground;
@@ -35,7 +35,7 @@ package items
             if (!this.space) {
                 this.available = true;
             }
-            var uses:int = class_33.getNumber("uses");
+            var uses:int = SecureData.getNumber("uses");
             if (this.space && uses > 0 && !this.reloading && this.available) {
                 this.useItem();
             }
@@ -44,28 +44,28 @@ package items
         // method_48 = setUses
         protected function setUses(uses:int)
         {
-            class_33.setNumber("uses", uses);
+            SecureData.setNumber("uses", uses);
             this.character.setAmmo(uses);
         }
 
         // method_45 = setReloadTime
         protected function setReloadTime(time:int)
         {
-            class_33.setNumber("reloadTime", time);
+            SecureData.setNumber("reloadTime", time);
         }
 
         // _loc1 = uses
         public function useItem()
         {
-            var uses:int = class_33.getNumber("uses");
+            var uses:int = SecureData.getNumber("uses");
             uses--;
-            class_33.setNumber("uses", uses);
+            SecureData.setNumber("uses", uses);
             this.character.setAmmo(uses);
             if (uses <= 0) {
                 this.character.setItem(0);
             } else {
                 this.reloading = true;
-                this.reloadListener = setTimeout(this.reloadingOnComplete, class_33.getNumber("reloadTime"));
+                this.reloadListener = setTimeout(this.reloadingOnComplete, SecureData.getNumber("reloadTime"));
             }
         }
 

@@ -8,7 +8,7 @@ package package_9
     public class class_178 extends Effect 
     {
 
-        private var m:class_239 = new class_239();
+        private var m:PointyStar = new PointyStar();
 
         public function class_178(_arg_1:Number, _arg_2:Number)
         {

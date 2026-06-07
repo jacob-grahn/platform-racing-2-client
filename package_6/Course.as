@@ -5,7 +5,7 @@
 
 package package_6
 {
-	import background.class_10;
+	import background.LevelBackground;
     import background.EffectBackground;
     import background.Background;
     import background.DrawableBackground;
@@ -50,7 +50,7 @@ package package_6
         public var musicSelection:MusicSelection = new MusicSelection();
         protected var countdown:CountdownGraphic; // var_61
         protected var hearts:Hearts; // var_60
-        protected var bg:class_10;
+        protected var bg:LevelBackground;
         public var bg1:DrawableBackground;
         protected var bg2:DrawableBackground;
         protected var bg3:DrawableBackground;
@@ -329,7 +329,7 @@ package package_6
 
         override protected function attachBackgrounds()
         {
-            this.bg = new class_10(this);
+            this.bg = new LevelBackground(this);
             this.bg1 = new DrawableBackground(this);
             this.bg2 = new DrawableBackground(this);
             this.bg3 = new DrawableBackground(this);

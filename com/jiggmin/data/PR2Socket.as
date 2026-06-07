@@ -13,10 +13,10 @@ package com.jiggmin.data
     import flash.utils.ByteArray;
     import flash.utils.clearInterval;
     import flash.utils.setInterval;
-    import menu.class_4;
+    import menu.CommAuth;
     import menu.LoginPage;
     import package_4.MessagePopup;
-    import package_22.Campaign;
+    import level_browser.Campaign;
 
     public class PR2Socket extends Socket 
     {
@@ -66,7 +66,7 @@ package com.jiggmin.data
                     this.sendNum++;
                 }
                 str = this.sendNum + "`" + str;
-                var strToHash:String = class_4.method_310(Main.server.server_id) + str;
+                var strToHash:String = CommAuth.getToken(Main.server.server_id) + str;
                 var hashArray:ByteArray = this.md5.hash(Hex.toArray(Hex.fromString(strToHash)));
                 var hashStr:String = Hex.fromArray(hashArray);
                 var subHash:String = hashStr.substr(0, 3);

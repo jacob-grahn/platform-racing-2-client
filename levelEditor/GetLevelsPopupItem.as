@@ -9,9 +9,9 @@ package levelEditor
     import flash.events.MouseEvent;
     import package_4.HoverPopup;
     import package_6.Modes;
-    import ui.class_229;
+    import ui.SelectableButton;
 
-    public class GetLevelsPopupItem extends class_229 
+    public class GetLevelsPopupItem extends SelectableButton 
     {
 
         public var level:Object;

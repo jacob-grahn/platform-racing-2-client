@@ -5,7 +5,7 @@
 
 package levelEditor
 {
-    import background.class_10;
+    import background.LevelBackground;
     import background.Background;
     import background.ObjectBackground;
     import background.BlockBackground;
@@ -41,7 +41,7 @@ package levelEditor
         public var draw3:DrawableBackground;
         public var draw4:DrawableBackground;
         public var draw5:DrawableBackground;
-        public var bg:class_10;
+        public var bg:LevelBackground;
         public var blockBG:BlockBackground;
         public var blockGrid:BlockGridLines; // var_171
         public var live:Number = 0;
@@ -103,7 +103,7 @@ package levelEditor
             this.draw3 = new DrawableBackground(this);
             this.draw4 = new DrawableBackground(this);
             this.draw5 = new DrawableBackground(this);
-            this.bg = new class_10(this);
+            this.bg = new LevelBackground(this);
             this.blockGrid = new BlockGridLines(this);
             this.blockBG = new BlockBackground(this);
             this.bg1.setScale(1);

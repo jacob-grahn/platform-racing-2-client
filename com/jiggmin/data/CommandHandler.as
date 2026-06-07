@@ -5,7 +5,7 @@
 
 package com.jiggmin.data
 {
-    import menu.class_4;
+    import menu.CommAuth;
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
     import flash.events.Event;
@@ -14,7 +14,7 @@ package com.jiggmin.data
     import package_6.Game;
     import package_6.CatCaptcha;
     import package_18.AccountInfo;
-    import package_22.LevelListing;
+    import level_browser.LevelListing;
 
     public class CommandHandler
     {
@@ -83,7 +83,7 @@ package com.jiggmin.data
             var num:int = arr[1];
             var command:String = arr[2];
             arr.splice(0, 3);
-            var gameFullStr:String = class_4.method_310(Main.server.server_id) + num + "`" + command + "`" + arr.join("`");
+            var gameFullStr:String = CommAuth.getToken(Main.server.server_id) + num + "`" + command + "`" + arr.join("`");
             var gameHash:String = Hex.fromArray(this.md5.hash(Hex.toArray(Hex.fromString(gameFullStr)))).substr(0, 3);
             if (gameHash == servHash && num > this.sendNum) {
                 this.sendNum = num;
@@ -123,7 +123,7 @@ package com.jiggmin.data
         private function setRank(a:Array)
         {
             var rank:int = a[0];
-            class_33.setNumber("userRank", rank);
+            SecureData.setNumber("userRank", rank);
             if (Main.instance.kongAPI != null) {
                 Main.instance.kongAPI.stats.submit("Rank", rank);
             }

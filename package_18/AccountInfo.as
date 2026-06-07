@@ -6,7 +6,7 @@
 package package_18
 {
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.SecureData;
     import com.jiggmin.data.CommandHandler;
     import flash.display.Sprite;
     import flash.display.Stage;
@@ -22,8 +22,8 @@ package package_18
     import package_4.OutfitPopup;
     import package_4.Popup;
     import package_8.Character;
-    import package_22.CourseMenu;
-    import package_22.LevelListing;
+    import level_browser.CourseMenu;
+    import level_browser.LevelListing;
     import page.Page;
     import ui.GuildName;
     import ui.StatsSelect;
@@ -115,7 +115,7 @@ package package_18
             var isHappyHour:Boolean = Boolean(int(a[26]));
             this.m.nameBox.htmlText = "Welcome, <b>" + Data.escapeString(Main.loggedInAs) + "</b>";
             this.m.hatBox.htmlText = "Hats: <b>" + (hatArray.length - 1) + "</b>";
-            class_33.setNumber("userRank", this.rank);
+            SecureData.setNumber("userRank", this.rank);
             LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
             this.updateRankText();
             this.reset();
