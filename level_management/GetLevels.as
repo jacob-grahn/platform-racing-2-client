@@ -9,8 +9,8 @@ package level_management
     import flash.net.URLRequest;
     import flash.net.URLVariables;
     import levelEditor.GetLevelsPopupItem;
-    import package_4.ConfirmPopup;
-    import package_4.GetLevelsPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.GetLevelsPopup;
     import ui.SelectableButton;
     import levelEditor.LevelEditorMenu;
     import flash.net.URLRequestMethod;

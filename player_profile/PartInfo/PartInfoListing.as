@@ -9,7 +9,7 @@ package player_profile.PartInfo
     import com.jiggmin.data.EpicFlash;
     import flash.display.MovieClip;
     import flash.text.TextFieldAutoSize;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import package_8.Character;
     import flash.events.MouseEvent;
     import flash.events.Event;

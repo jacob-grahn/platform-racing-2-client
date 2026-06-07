@@ -17,10 +17,10 @@ package player_profile
     import flash.text.TextFieldType;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
-    import package_4.ConfirmPopup;
-    import package_4.HoverPopup;
-    import package_4.OutfitPopup;
-    import package_4.Popup;
+    import dialogs.ConfirmPopup;
+    import dialogs.HoverPopup;
+    import dialogs.OutfitPopup;
+    import dialogs.Popup;
     import package_8.Character;
     import level_browser.CourseMenu;
     import level_browser.LevelListing;

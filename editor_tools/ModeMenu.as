@@ -2,14 +2,14 @@
 
 package editor_tools
 {
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
     import fl.controls.ComboBox;
     import levelEditor.LevelEditor;
     import flash.events.Event;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
 
-    public class ModeMenu extends class_264 
+    public class ModeMenu extends AutoDismissPopup 
     {
 
         private var m:ModeMenuGraphic = new ModeMenuGraphic();

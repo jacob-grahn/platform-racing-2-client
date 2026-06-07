@@ -5,15 +5,15 @@ package chat
     import page.Page;
     import ui.CustomScrollBar;
     import ui.PageNavigation;
-    import package_4.UploadingPopup;
+    import dialogs.UploadingPopup;
     import flash.events.MouseEvent;
     import com.jiggmin.data.UnreadNotif;
-    import package_4.SendMessagePopup;
+    import dialogs.SendMessagePopup;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.events.Event;
-    import package_4.ConfirmPopup;
+    import dialogs.ConfirmPopup;
 
     public class Messages extends Page 
     {

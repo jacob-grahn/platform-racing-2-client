@@ -9,10 +9,10 @@ package page
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
-    import package_4.PlayerPopup;
-    import package_4.GuildPopup;
-    import package_4.SendMessagePopup;
-    import package_4.LevelInfoPopup;
+    import dialogs.PlayerPopup;
+    import dialogs.GuildPopup;
+    import dialogs.SendMessagePopup;
+    import dialogs.LevelInfoPopup;
 
     public class Chat extends Page 
     {

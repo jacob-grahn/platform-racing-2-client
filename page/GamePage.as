@@ -16,7 +16,7 @@ package page
     import flash.ui.Keyboard;
     import items.Items;
     import level_browser.CourseMenu;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
 
     public class GamePage extends Page 
     {

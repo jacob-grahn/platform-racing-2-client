@@ -7,9 +7,9 @@ package chat
     import flash.events.MouseEvent;
     import flash.ui.Mouse;
     import flash.ui.MouseCursor;
-    import package_4.ConfirmPopup;
-    import package_4.HoverPopup;
-    import package_4.SendMessagePopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.HoverPopup;
+    import dialogs.SendMessagePopup;
 
     public class MessagesItem extends Removable 
     {

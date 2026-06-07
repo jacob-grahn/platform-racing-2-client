@@ -2,7 +2,7 @@
 
 package package_6
 {
-    import package_4.ConfirmPopup;
+    import dialogs.ConfirmPopup;
     import page.Page;
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;

@@ -5,8 +5,8 @@
 
 package menu
 {
-    import package_4.Popup;
-    import package_4.UploadingPopup;
+    import dialogs.Popup;
+    import dialogs.UploadingPopup;
     import flash.events.MouseEvent;
     import flash.events.KeyboardEvent;
     import flash.net.URLVariables;

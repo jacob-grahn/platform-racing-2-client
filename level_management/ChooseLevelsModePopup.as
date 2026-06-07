@@ -1,7 +1,7 @@
 package level_management {
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
-    import package_4.Popup;
+    import dialogs.Popup;
 
     public class ChooseLevelsModePopup extends Popup {
         private var m:ChooseLevelsModePopupGraphic = new ChooseLevelsModePopupGraphic();

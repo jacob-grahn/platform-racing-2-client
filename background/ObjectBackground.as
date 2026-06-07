@@ -11,7 +11,7 @@ package background
     import levelEditor.DrawObject;
     import levelEditor.LevelEditor;
     import levelEditor.TextObject;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import page.GamePage;
 
     public class ObjectBackground extends Background 

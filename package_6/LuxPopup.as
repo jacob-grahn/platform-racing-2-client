@@ -2,7 +2,7 @@
 
 package package_6
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import flash.display.Loader;
     import flash.events.MouseEvent;
     import flash.net.URLRequest;

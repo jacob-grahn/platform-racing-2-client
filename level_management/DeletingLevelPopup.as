@@ -1,7 +1,7 @@
 
 package level_management
 {
-    import package_4.UploadingPopup;
+    import dialogs.UploadingPopup;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;

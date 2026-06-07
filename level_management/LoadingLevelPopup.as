@@ -6,8 +6,8 @@ package level_management
     import flash.net.URLRequest;
     import flash.net.URLVariables;
     import levelEditor.LevelEditor;
-    import package_4.MessagePopup;
-    import package_4.UploadingPopup;
+    import dialogs.MessagePopup;
+    import dialogs.UploadingPopup;
 
     public class LoadingLevelPopup extends UploadingPopup 
     {

@@ -52,18 +52,12 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 - PartInfoListing: method_653→getListing, method_269→onMouseOver, method_378→onMouseOut
 - PartInfoPopup: var_513→itemsPerRow, var_640→itemColWidth, var_632→itemRowHeight, var_289→loadingGraphic
 
-### package_4 → dialogs (84 method_##, 22 var_##)
-- [ ] `AdminMenu.as`
-- [ ] `ConfirmPopup.as`
-- [ ] `InfoPopup.as`
-- [ ] `MessagePopup.as`
-- [ ] `LevelInfoPopup.as`
-- [ ] `GuildPopup.as` / `GuildJoinPopup.as` / `GuildMemberName.as`
-- [ ] `ExternalLinkPopup.as`
-- [ ] `LevelReportPopup.as` / `GetLevelsPopup.as`
-- [ ] `class_264.as` — auto-dismiss InfoPopup (rename class)
-- [ ] All remaining files in package_4 (34 files total)
-- [ ] Rename package directory
+### ~~package_4 → dialogs~~ ✓ DONE
+- class_264 → AutoDismissPopup
+- GetLevelsPopup: method_539→deselectAll, method_825→clearListings, method_491→selectListing, method_401→onListingClick, method_222→onListingDoubleClick, method_394→updateButtons
+- BanMenu: method_238→onBanError
+- Popup: _arg_1→addOverlay, _local_2/3→ct/overlay, fadeIn/Out _arg_1→e
+- AdminMenu/TempModMenu: _arg_2→popup; PlayerGuestPopup: clickClose _arg_1→e
 
 ### ~~Standalone class files~~ ✓ DONE
 - class_239 → PointyStar, background/class_10 → LevelBackground (method_338→setArtBackground, method_536→drawCircleGrid)

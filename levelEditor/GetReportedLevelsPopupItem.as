@@ -3,7 +3,7 @@
     import com.jiggmin.data.Data;
     import ui.SelectableButton;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
 
     public class GetReportedLevelsPopupItem extends SelectableButton 
     {

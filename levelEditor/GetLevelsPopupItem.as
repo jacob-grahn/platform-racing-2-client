@@ -7,7 +7,7 @@ package levelEditor
 {
     import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import package_6.Modes;
     import ui.SelectableButton;
 

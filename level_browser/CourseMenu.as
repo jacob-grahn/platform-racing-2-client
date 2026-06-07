@@ -1,7 +1,7 @@
 
 package level_browser
 {
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
     import flash.events.MouseEvent;
     import com.jiggmin.data.CommandHandler;
     import flash.utils.setTimeout;
@@ -9,7 +9,7 @@ package level_browser
     import flash.utils.clearTimeout;
     import flash.utils.setInterval;
 
-    public class CourseMenu extends class_264 
+    public class CourseMenu extends AutoDismissPopup 
     {
         public static var instance:CourseMenu = null;
 

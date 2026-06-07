@@ -5,7 +5,7 @@
 
 package menu
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import com.jiggmin.data.PR2Socket;
     import com.jiggmin.data.CommandHandler;
     import flash.events.MouseEvent;

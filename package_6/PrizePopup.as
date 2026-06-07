@@ -6,7 +6,7 @@
 package package_6
 {
     import flash.errors.Error;
-    import package_4.Popup;
+    import dialogs.Popup;
     import flash.display.MovieClip;
     import com.jiggmin.data.EpicFlash;
     import com.jiggmin.data.Data;

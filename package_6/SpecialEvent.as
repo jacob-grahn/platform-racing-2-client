@@ -9,7 +9,7 @@ package package_6
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.ui.Keyboard;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import page.GamePage;
     import flash.net.URLLoader;
 

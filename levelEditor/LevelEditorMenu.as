@@ -7,7 +7,7 @@ package levelEditor
     import flash.events.MouseEvent;
     import flash.events.Event;
     import menu.ConnectingPopup;
-    import package_4.*;
+    import dialogs.*;
     import package_6.TestCourse;
     import editor_sidebar.Blocks;
     import editor_sidebar.Settings;

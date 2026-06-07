@@ -15,7 +15,7 @@ package
     import flash.net.URLVariables;
     import flash.system.Capabilities;
     import flash.system.Security;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
 
     public class SuperLoader extends URLLoader
     {

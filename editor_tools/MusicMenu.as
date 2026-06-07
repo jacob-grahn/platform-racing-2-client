@@ -2,12 +2,12 @@
 
 package editor_tools
 {
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
     import ui.GameSound;
     import flash.events.Event;
     import levelEditor.LevelEditor;
 
-    public class MusicMenu extends class_264 
+    public class MusicMenu extends AutoDismissPopup 
     {
 
         private var list:GameSound = new GameSound(true);

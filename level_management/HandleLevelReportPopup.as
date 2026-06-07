@@ -5,11 +5,11 @@ package level_management {
     import flash.events.Event;
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
-    import package_4.ConfirmPopup;
-    import package_4.HoverPopup;
-    import package_4.MessagePopup;
-    import package_4.Popup;
-    import package_4.UploadingPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.HoverPopup;
+    import dialogs.MessagePopup;
+    import dialogs.Popup;
+    import dialogs.UploadingPopup;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;

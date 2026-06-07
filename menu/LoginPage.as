@@ -10,8 +10,8 @@ package menu
     import com.jiggmin.data.SavedAccounts;
     import com.jiggmin.data.Settings;
     import page.Page;
-    import package_4.ConfirmPopup;
-    //import package_4.LogoutPassPopup;
+    import dialogs.ConfirmPopup;
+    //import dialogs.LogoutPassPopup;
     import flash.display.StageQuality;
 	import flash.events.Event;
     import flash.events.MouseEvent;

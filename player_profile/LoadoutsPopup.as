@@ -3,11 +3,11 @@
 package player_profile
 {
     import com.jiggmin.data.Settings;
-    import package_4.GetLevelsPopup;
+    import dialogs.GetLevelsPopup;
     import package_8.Character;
     import ui.StatsSelect;
     import ui.SelectableButton;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
 
     public class LoadoutsPopup extends GetLevelsPopup 
     {

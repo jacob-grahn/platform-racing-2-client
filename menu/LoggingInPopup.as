@@ -18,7 +18,7 @@ package menu
     import flash.net.URLVariables;
     import lobby.Lobby;
     import player_profile.Presets;
-    import package_4.Popup;
+    import dialogs.Popup;
 
     public class LoggingInPopup extends Popup 
     {

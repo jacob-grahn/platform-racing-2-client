@@ -4,22 +4,22 @@ package lobby
 {
     import com.jiggmin.data.Settings;
     import page.Page;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import flash.display.MovieClip;
     import flash.display.StageQuality;
     import flash.events.MouseEvent;
     import lobby.Lobby;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import menu.LoginPage;
     import levelEditor.LevelEditor;
     import flash.net.navigateToURL;
-    import package_4.OptionsPopup;
+    import dialogs.OptionsPopup;
     import shop.StorePopup;
     import menu.CreditsPopup;
-    import package_4.ConfirmPopup;
+    import dialogs.ConfirmPopup;
     import com.jiggmin.data.Data;
 
     public class Lobby extends Page 

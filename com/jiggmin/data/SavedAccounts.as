@@ -1,7 +1,7 @@
 package com.jiggmin.data
 {
     import flash.net.SharedObject;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
 
     public class SavedAccounts
     {

@@ -5,11 +5,11 @@ package editor_tools
     import flash.events.Event;
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
-    import package_4.class_264;
-    import package_4.HoverPopup;
+    import dialogs.AutoDismissPopup;
+    import dialogs.HoverPopup;
     import page.GamePage;
 
-    public class HatsMenu extends class_264 
+    public class HatsMenu extends AutoDismissPopup 
     {
         private var m:HatsMenuGraphic = new HatsMenuGraphic();
         private var highestHatID:int = Parts.getPartArray('HAT').length + 1;

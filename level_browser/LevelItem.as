@@ -16,11 +16,11 @@ package level_browser
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import lobby.Lobby;
-    import package_4.ConfirmPopup;
-    import package_4.HoverPopup;
-    import package_4.LevelInfoPopup;
-    import package_4.MessagePopup;
-    import package_4.UploadingPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.HoverPopup;
+    import dialogs.LevelInfoPopup;
+    import dialogs.MessagePopup;
+    import dialogs.UploadingPopup;
     import player_profile.AccountInfo;
     import ui.PageNavigation;
 

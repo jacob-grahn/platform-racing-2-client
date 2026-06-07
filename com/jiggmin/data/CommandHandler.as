@@ -10,7 +10,7 @@ package com.jiggmin.data
     import com.hurlant.util.Hex;
     import flash.events.Event;
     import flash.utils.ByteArray;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import package_6.Game;
     import package_6.CatCaptcha;
     import player_profile.AccountInfo;

@@ -5,7 +5,7 @@
 
 package com.jiggmin.ColorPicker
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import flash.display.Sprite;
     import flash.display.BitmapData;
     import ui.CustomCursor;

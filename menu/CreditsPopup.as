@@ -2,7 +2,7 @@
 
 package menu
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import flash.events.MouseEvent;
     import flash.events.TextEvent;
 

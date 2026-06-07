@@ -6,13 +6,13 @@
 package com.jiggmin.data
 {
     import flash.events.TextEvent;
-    import package_4.DiscordVerificationPopup;
-    import package_4.PlayerPopup;
-    import package_4.PlayerGuestPopup;
-    import package_4.GuildPopup;
-    import package_4.GuildJoinPopup;
-    import package_4.LevelInfoPopup;
-    import package_4.ExternalLinkPopup;
+    import dialogs.DiscordVerificationPopup;
+    import dialogs.PlayerPopup;
+    import dialogs.PlayerGuestPopup;
+    import dialogs.GuildPopup;
+    import dialogs.GuildJoinPopup;
+    import dialogs.LevelInfoPopup;
+    import dialogs.ExternalLinkPopup;
     import flash.net.URLRequest;
 
     public class HTMLNameMaker 

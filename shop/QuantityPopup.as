@@ -3,8 +3,8 @@ package shop
     import fl.controls.Slider;
     import flash.events.Event;
     import flash.events.MouseEvent;
-    import package_4.MessagePopup;
-    import package_4.Popup;
+    import dialogs.MessagePopup;
+    import dialogs.Popup;
 
     public class QuantityPopup extends Popup
     {

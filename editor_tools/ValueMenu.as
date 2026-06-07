@@ -2,10 +2,10 @@
 
 package editor_tools
 {
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
     import flash.events.Event;
 
-    public class ValueMenu extends class_264 
+    public class ValueMenu extends AutoDismissPopup 
     {
 
         private var m:ValueMenuGraphic = new ValueMenuGraphic();

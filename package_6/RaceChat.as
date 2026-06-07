@@ -8,7 +8,7 @@ package package_6
     import flash.events.KeyboardEvent;
     import flash.events.MouseEvent;
     import flash.text.TextField;
-    import package_4.LevelInfoPopup;
+    import dialogs.LevelInfoPopup;
     import page.Chat;
 
     public class RaceChat extends Chat 

@@ -6,8 +6,8 @@
 package menu
 {
     import com.jiggmin.data.Data;
-    import package_4.MessagePopup;
-    import package_4.OutfitPopup;
+    import dialogs.MessagePopup;
+    import dialogs.OutfitPopup;
 
     public class KongOutfitPopup extends OutfitPopup 
     {

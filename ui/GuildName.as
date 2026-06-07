@@ -8,7 +8,7 @@ package ui
     import com.jiggmin.data.Data;
     import flash.display.Loader;
     import flash.events.MouseEvent;
-    import package_4.GuildPopup;
+    import dialogs.GuildPopup;
 
     public class GuildName extends Removable 
     {

@@ -2,9 +2,9 @@ package blocks.options
 {
     import blocks.Block;
     import flash.display.MovieClip;
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
 
-    public class BlockOptions extends class_264
+    public class BlockOptions extends AutoDismissPopup
     {
         private static var instance:BlockOptions;
 

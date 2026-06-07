@@ -6,7 +6,7 @@
     import flash.display.MovieClip;
     import flash.events.Event;
     import flash.events.MouseEvent;
-    import package_4.Popup;
+    import dialogs.Popup;
     import package_8.Character;
     import player_profile.AccountInfo;
 

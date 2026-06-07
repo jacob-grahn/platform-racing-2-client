@@ -1,9 +1,9 @@
 package package_6
 {
     import com.jiggmin.data.Data;
-    import package_4.ConfirmPopup;
-    import package_4.Popup;
-    import package_4.UploadingPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.Popup;
+    import dialogs.UploadingPopup;
     import fl.controls.ComboBox;
     import fl.data.DataProvider;
     import flash.events.Event;

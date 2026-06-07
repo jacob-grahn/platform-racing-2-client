@@ -2,11 +2,11 @@
 
 package editor_tools
 {
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
     import fl.events.SliderEvent;
     import flash.events.Event;
 
-    public class SizePickerMenu extends class_264 
+    public class SizePickerMenu extends AutoDismissPopup 
     {
 
         private var m:SizePickerMenuGraphic = new SizePickerMenuGraphic();

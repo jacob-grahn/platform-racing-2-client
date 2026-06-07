@@ -8,7 +8,7 @@ package
     import com.jiggmin.data.ColorUtil;
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import package_6.Course;
     import package_8.Character;
     import package_6.Game;

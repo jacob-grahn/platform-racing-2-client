@@ -8,7 +8,7 @@ package player_profile
     import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import package_8.Character;
     import player_profile.PartInfo.*;
     import level_browser.LevelListing;

@@ -7,8 +7,8 @@ package level_management
     import flash.events.Event;
     import flash.events.MouseEvent;
     import levelEditor.LevelEditor;
-    import package_4.MessagePopup;
-    import package_4.Popup;
+    import dialogs.MessagePopup;
+    import dialogs.Popup;
 
     public class SaveLevelPopup extends Popup 
     {

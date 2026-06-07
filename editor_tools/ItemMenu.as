@@ -7,10 +7,10 @@ package editor_tools
     import items.Items;
     import levelEditor.BlockObject;
     import levelEditor.LevelEditor;
-    import package_4.class_264;
+    import dialogs.AutoDismissPopup;
     import page.GamePage;
 
-    public class ItemMenu extends class_264 
+    public class ItemMenu extends AutoDismissPopup 
     {
         private var m:ItemMenuGraphic = new ItemMenuGraphic();
         private var numItems:int = Items.getAllCodes().length; // var_445

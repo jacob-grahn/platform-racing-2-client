@@ -16,9 +16,9 @@ package level_management
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import levelEditor.LevelEditor;
-    import package_4.ConfirmPopup;
-    import package_4.MessagePopup;
-    import package_4.UploadingPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.MessagePopup;
+    import dialogs.UploadingPopup;
 
     public class UploadingLevelPopup extends UploadingPopup 
     {

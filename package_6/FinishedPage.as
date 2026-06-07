@@ -5,7 +5,7 @@ package package_6
     import com.jiggmin.data.CommandHandler;
     import flash.events.MouseEvent;
 	import lobby.Lobby;
-    import package_4.Popup;
+    import dialogs.Popup;
     import ui.RatingSelect;
 
     public class FinishedPage extends Popup 

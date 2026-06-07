@@ -4,7 +4,7 @@
     import flash.events.MouseEvent;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
 
     public class StatsDisplay extends Removable 
     {

@@ -15,7 +15,7 @@ package com.jiggmin.data
     import flash.utils.setInterval;
     import menu.CommAuth;
     import menu.LoginPage;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import level_browser.Campaign;
 
     public class PR2Socket extends Socket 

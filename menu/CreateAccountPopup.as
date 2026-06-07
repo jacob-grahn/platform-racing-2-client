@@ -5,9 +5,9 @@
 
 package menu
 {
-    import package_4.Popup;
-    import package_4.MessagePopup;
-    import package_4.UploadingPopup;
+    import dialogs.Popup;
+    import dialogs.MessagePopup;
+    import dialogs.UploadingPopup;
     import flash.events.MouseEvent;
     import flash.net.URLVariables;
     import flash.net.URLRequest;

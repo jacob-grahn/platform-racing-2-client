@@ -5,7 +5,7 @@
 
 package package_6
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import flash.net.URLRequest;
     import flash.events.Event;
     import flash.events.MouseEvent;

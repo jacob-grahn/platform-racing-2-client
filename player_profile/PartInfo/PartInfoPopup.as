@@ -6,8 +6,8 @@ package player_profile.PartInfo
     import flash.events.MouseEvent;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
-    import package_4.MessagePopup;
-    import package_4.Popup;
+    import dialogs.MessagePopup;
+    import dialogs.Popup;
     import ui.CustomScrollBar;
 
     public class PartInfoPopup extends Popup 

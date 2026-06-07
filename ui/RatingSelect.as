@@ -11,8 +11,8 @@ package ui
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
-    import package_4.ConfirmPopup;
-    import package_4.UploadingPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.UploadingPopup;
 
     public class RatingSelect extends Removable 
     {

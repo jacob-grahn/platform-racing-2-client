@@ -5,7 +5,7 @@ package package_6
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
 
     public class DrawingInfo extends Removable 
     {

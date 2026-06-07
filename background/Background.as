@@ -17,8 +17,8 @@ package background
     import flash.geom.Point;
     import flash.display.DisplayObjectContainer;
     import flash.display.DisplayObject;
-    import package_4.MessagePopup;
-    import package_4.Popup;
+    import dialogs.MessagePopup;
+    import dialogs.Popup;
     import package_6.Course;
     import package_6.Game;
     import package_6.PrizePopup;

@@ -2,7 +2,7 @@
 
 package chat
 {
-    import package_4.InfoPopup;
+    import dialogs.InfoPopup;
     import com.jiggmin.data.CommandHandler;
     import flash.display.DisplayObject;
 

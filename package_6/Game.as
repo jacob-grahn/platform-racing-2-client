@@ -15,7 +15,7 @@ package package_6
     import flash.utils.clearInterval;
     import flash.utils.setInterval;
     import sounds.SoundEffects;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import package_8.Character;
     import package_8.RemoteCharacter;
     import package_8.LocalCharacter;

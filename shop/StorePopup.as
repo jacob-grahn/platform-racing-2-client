@@ -11,12 +11,12 @@ package shop
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
-    import package_4.Popup;
-    import package_4.MessagePopup;
+    import dialogs.Popup;
+    import dialogs.MessagePopup;
     import ui.CustomScrollBar;
-    import package_4.ConfirmPopup;
+    import dialogs.ConfirmPopup;
     import flash.events.TextEvent;
-    import package_4.UploadingPopup;
+    import dialogs.UploadingPopup;
     import com.jiggmin.data.Encryptor;
 
     public class StorePopup extends Popup 

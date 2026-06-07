@@ -5,11 +5,11 @@
     import flash.net.URLRequest;
     import flash.net.URLVariables;
     import levelEditor.GetReportedLevelsPopupItem;
-    import package_4.ConfirmPopup;
-    import package_4.GetLevelsPopup;
+    import dialogs.ConfirmPopup;
+    import dialogs.GetLevelsPopup;
     import ui.SelectableButton;
     import levelEditor.LevelEditorMenu;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
 
     public class GetLevelReports extends GetLevels
     {

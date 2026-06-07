@@ -11,9 +11,9 @@ package menu
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
     import flash.utils.setTimeout;
-    import package_4.Popup;
-    import package_4.ConfirmPopup;
-    import package_4.MessagePopup;
+    import dialogs.Popup;
+    import dialogs.ConfirmPopup;
+    import dialogs.MessagePopup;
 
     public class ServerSelectPopup extends Popup 
     {
