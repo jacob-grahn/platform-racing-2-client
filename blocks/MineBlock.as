@@ -8,8 +8,8 @@ package blocks
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
     import package_8.LocalCharacter;
-    import package_9.BlockPiece;
-    import package_9.MineExplode;
+    import effects.BlockPiece;
+    import effects.MineExplode;
 
     public class MineBlock extends Block 
     {

@@ -10,7 +10,7 @@
     import flash.utils.setTimeout;
     import package_6.Course;
     import package_8.LocalCharacter;
-    import package_9.TeleportPop;
+    import effects.TeleportPop;
 
     public dynamic class TeleportBlock extends SupplyBlock 
     {

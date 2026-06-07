@@ -7,12 +7,12 @@ package background
 {
     import com.jiggmin.data.CommandHandler;
     import page.GamePage;
-    import package_9.Hat;
-    import package_9.IceWaveShot;
-    import package_9.LaserShot;
-    import package_9.MineAppear;
-    import package_9.Slash;
-    import package_9.TeleportPop;
+    import effects.Hat;
+    import effects.IceWaveShot;
+    import effects.LaserShot;
+    import effects.MineAppear;
+    import effects.Slash;
+    import effects.TeleportPop;
     import sounds.SoundEffects;
 
     public class EffectBackground extends Background 

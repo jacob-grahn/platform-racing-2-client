@@ -6,7 +6,7 @@
 package package_8
 {
     import flash.display.DisplayObject;
-    import package_9.class_181;
+    import effects.ArrowEffect;
     import flash.geom.ColorTransform;
 
     public class class_129 extends class_125 
@@ -19,9 +19,9 @@ package package_8
 
         override protected function createParticle(_arg_1:Number, _arg_2:Number):DisplayObject
         {
-            var _local_3:class_181 = new class_181(_arg_1, _arg_2);
-            _local_3.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random());
-            return (_local_3);
+            var arrow:ArrowEffect = new ArrowEffect(_arg_1, _arg_2);
+            arrow.transform.colorTransform = new ColorTransform(Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random());
+            return (arrow);
         }
 
 

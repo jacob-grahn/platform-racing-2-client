@@ -38,9 +38,9 @@ package package_8
     import package_6.Modes;
     import package_6.RaceChat;
     import package_6.TestCourse;
-    import package_9.Hat;
-    import package_9.Sting;
-    import package_9.Zap;
+    import effects.Hat;
+    import effects.Sting;
+    import effects.Zap;
     import page.GamePage;
 
     public class LocalCharacter extends Character 

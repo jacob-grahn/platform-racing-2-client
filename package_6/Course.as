@@ -23,7 +23,7 @@ package package_6
     import flash.net.URLVariables;
     import package_8.Character;
     import package_8.LocalCharacter;
-    import package_9.Egg;
+    import effects.Egg;
     import page.GamePage;
     import sounds.SoundEffects;
 
@@ -149,7 +149,7 @@ package package_6
 
         public function setEggSeed(arr:Array)
         {
-            Egg.method_333(int(arr[0]));
+            Egg.initRound(int(arr[0]));
         }
 
         public function addEggs(arr:Array)

@@ -7,7 +7,7 @@ package package_8
 {
     import flash.display.DisplayObject;
     import flash.utils.setInterval;
-    import package_9.class_178;
+    import effects.StarEffect;
     import flash.utils.clearInterval;
 
     public class class_125 
@@ -51,7 +51,7 @@ package package_8
 
         protected function createParticle(_arg_1:Number, _arg_2:Number):DisplayObject
         {
-            return (new class_178(_arg_1, _arg_2));
+            return (new StarEffect(_arg_1, _arg_2));
         }
 
         public function remove()

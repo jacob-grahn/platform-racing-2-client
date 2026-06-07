@@ -8,7 +8,7 @@ package items
     import package_8.LocalCharacter;
     import package_6.Course;
     import blocks.Block;
-    import package_9.TeleportPop;
+    import effects.TeleportPop;
 
     public class Teleport extends Item 
     {

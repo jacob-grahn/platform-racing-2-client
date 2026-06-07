@@ -15,7 +15,7 @@ package background
     import package_6.Course;
     import package_6.MiniMap;
     import package_8.Character;
-    import package_9.Egg;
+    import effects.Egg;
 
     public class Map extends BlockBackground 
     {

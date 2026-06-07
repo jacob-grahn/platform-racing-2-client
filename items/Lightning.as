@@ -3,7 +3,7 @@
 package items
 {
     import package_8.LocalCharacter;
-    import package_9.Zap;
+    import effects.Zap;
 
     public class Lightning extends Item 
     {

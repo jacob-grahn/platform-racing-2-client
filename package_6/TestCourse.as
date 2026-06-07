@@ -14,7 +14,7 @@ package package_6
     import levelEditor.HatPicker;
     import levelEditor.LevelEditor;
     import package_8.LocalCharacter;
-    import package_9.TeleportPop;
+    import effects.TeleportPop;
     import sounds.SoundEffects;
     import ui.StatsSelect;
 

@@ -11,7 +11,7 @@ package items
     import flash.geom.Point;
     import package_6.Course;
     import package_8.LocalCharacter;
-    import package_9.MineAppear;
+    import effects.MineAppear;
 
     public class Mine extends Item 
     {

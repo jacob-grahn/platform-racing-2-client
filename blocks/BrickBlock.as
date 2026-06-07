@@ -4,7 +4,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import package_8.LocalCharacter;
-    import package_9.BlockPiece;
+    import effects.BlockPiece;
     import flash.geom.Point;
 
     public class BrickBlock extends Block 

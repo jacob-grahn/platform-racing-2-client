@@ -68,20 +68,17 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 
 ## Tier 4: Heavy Obfuscation (core systems)
 
-### package_9 → effects (70 method_##, 89 var_##)
-- [ ] `Effect.as`
-- [ ] `BlockPiece.as`
-- [ ] `Egg.as`
-- [ ] `Hat.as`
-- [ ] `ZoomableAnimated.as`
-- [ ] `IceWaveShot.as` / `LaserShot.as`
-- [ ] `MineAppear.as` / `MineExplode.as`
-- [ ] `ShotEffect.as` / `Slash.as` / `Sting.as` / `TeleportPop.as` / `Zap.as`
-- [ ] `class_81.as` — projectile physics base (rename class)
-- [ ] `class_178.as` — star particle effect (rename class)
-- [ ] `class_181.as` — unknown effect (identify + rename)
-- [ ] `class_182.as` — unknown effect (identify + rename)
-- [ ] Rename package directory
+### ~~package_9 → effects~~ ✓ DONE
+- class_81 → PhysicsEffect (gravity/bounce/wall base for Hat+Egg)
+- class_178 → StarEffect (PointyStar particle at position)
+- class_181 → ArrowEffect (Arrow2Graphic floating indicator)
+- Effect: var_529→removeTimeout, method_2→scheduleRemove
+- ShotEffect: var_154→speed, var_278→angle, var_377→rot, var_493→hitInactiveBlocks, method_62→setSpeed, method_775→setAngle, method_152→onEnterFrame, method_253/method_782/method_389/method_601→checkCollisions/getPlayerAt/updateVelocity/onLifeEnd
+- IceWaveShot: var_168→activeCount, var_322→baseAngle, var_278→initialAngle, method_219→skipPastSpawn
+- Egg: var_406/466/474/491→MODE_ICE/SLASH/LASER/RANDOM, var_223→nextId, var_486→squashTimeout, var_286→wallCooldown, var_382→attackCooldown, method_333→initRound, method_723→wrapPosition, method_744→remoteRemove
+- Slash: var_154→reach, var_609→shooterID, method_66→hitAt
+- BlockPiece: var_372→rotVel, name_3→fadeRate, params renamed
+- PhysicsEffect: method_720→activate, method_205→deactivate, method_181→isNearLocalPlayer, method_311→isGrounded
 
 ### package_6 → game (111 method_##, 189 var_##)
 - [ ] `Course.as`

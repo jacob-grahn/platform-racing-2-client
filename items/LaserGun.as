@@ -8,7 +8,7 @@ package items
     import package_8.LocalCharacter;
     import flash.geom.Point;
     import package_6.Course;
-    import package_9.LaserShot;
+    import effects.LaserShot;
 
     public class LaserGun extends Item 
     {

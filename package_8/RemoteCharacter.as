@@ -8,8 +8,8 @@ package package_8
     import com.jiggmin.data.CommandHandler;
     import background.Map;
     import package_6.Course;
-    import package_9.Sting;
-    import package_9.Zap;
+    import effects.Sting;
+    import effects.Zap;
     import flash.events.Event;
     import flash.geom.Point;
     import com.jiggmin.data.Data;

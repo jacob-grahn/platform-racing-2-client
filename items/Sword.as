@@ -7,7 +7,7 @@ package items
 {
     import package_8.LocalCharacter;
     import flash.geom.Point;
-    import package_9.Slash;
+    import effects.Slash;
 
     public class Sword extends Item 
     {

@@ -19,8 +19,8 @@ package package_6
     import package_8.Character;
     import package_8.RemoteCharacter;
     import package_8.LocalCharacter;
-    import package_9.Egg;
-    import package_9.Hat;
+    import effects.Egg;
+    import effects.Hat;
 
     public class Game extends Course 
     {
@@ -51,7 +51,7 @@ package package_6
             this.version = v;
             this.quitButton = new QuitButton(this);
             this.specialEvent = new SpecialEvent(Main.stage, this);
-            Egg.method_333(0);
+            Egg.initRound(0);
         }
 
         override public function initialize()
