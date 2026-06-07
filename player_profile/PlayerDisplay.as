@@ -1,16 +1,16 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// Package_18.class_262 = package_18.PlayerDisplay
+// Package_18.class_262 = player_profile.PlayerDisplay
 
-package package_18
+package player_profile
 {
     import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import package_4.HoverPopup;
     import package_8.Character;
-    import package_18.PartInfo.*;
+    import player_profile.PartInfo.*;
     import level_browser.LevelListing;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;

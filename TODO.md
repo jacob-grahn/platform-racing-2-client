@@ -46,15 +46,11 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 
 ## Tier 3: Moderate-High Obfuscation
 
-### package_18 → player_profile (37 method_##, 46 var_##)
-- [ ] `AccountInfo.as`
-- [ ] `PlayerDisplay.as`
-- [ ] `LoadoutsPopup.as`
-- [ ] `Preset.as` / `PresetListing.as` / `Presets.as`
-- [ ] `PartSelector.as`
-- [ ] `PartInfo/` subdirectory files
-- [ ] `RandomizeStyleButton.as`
-- [ ] Rename package directory
+### ~~package_18 → player_profile~~ ✓ DONE
+- AccountInfo: var_510→rankBtnX, var_635→rankBtnDualX
+- PartSelector: method_737→makeTriangleMask, method_809→makeDiagonalLine, var_182→epicOverlay
+- PartInfoListing: method_653→getListing, method_269→onMouseOver, method_378→onMouseOut
+- PartInfoPopup: var_513→itemsPerRow, var_640→itemColWidth, var_632→itemRowHeight, var_289→loadingGraphic
 
 ### package_4 → dialogs (84 method_##, 22 var_##)
 - [ ] `AdminMenu.as`

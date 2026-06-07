@@ -1,9 +1,9 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_18.AccountInfo = package_18.class_260
+// player_profile.AccountInfo = player_profile.class_260
 
-package package_18
+package player_profile
 {
     import com.jiggmin.data.Data;
     import com.jiggmin.data.SecureData;
@@ -45,8 +45,8 @@ package package_18
         private var rankTokensAvailable:int = 0; // var_439
         private var rank:int = 0;
         private var guildName:GuildName; // guildName
-        private var var_510:int = 65;
-        private var var_635:int = 95;
+        private var rankBtnX:int = 65;
+        private var rankBtnDualX:int = 95;
         private var customizeInfo:String; // var_566
         private var loadoutsHover:HoverPopup;
         private var loadoutsHoverTimer:uint;
@@ -130,12 +130,12 @@ package package_18
                 this.m.addChild(this.guildName);
             }
             this.character = new Character(hat, head, body, feet);
-            var _local_25:Sprite = new Sprite();
-            _local_25.addChild(this.character);
-            _local_25.x = 80;
-            _local_25.y = (140 + 42);
-            _local_25.scaleX = (_local_25.scaleY = 1.5);
-            addChild(_local_25);
+            var charSprite:Sprite = new Sprite();
+            charSprite.addChild(this.character);
+            charSprite.x = 80;
+            charSprite.y = (140 + 42);
+            charSprite.scaleX = (charSprite.scaleY = 1.5);
+            addChild(charSprite);
             var availableStats:int = isHappyHour ? 300 : 150 + this.rank;
             this.statsSelect = new StatsSelect(availableStats, speed, accel, jumpn, null);
             this.statsSelect.x = 20;
@@ -179,16 +179,16 @@ package package_18
             if (unusedTokens > 0) {
                 this.m.rankTokenUp_bt.visible = true;
                 this.m.rankTokenUp_bt.textBox.text = unusedTokens.toString();
-                this.m.rankTokenUp_bt.x = this.var_510;
+                this.m.rankTokenUp_bt.x = this.rankBtnX;
             }
             if (this.rankTokensUsed > 0) {
                 this.m.rankTokenDown_bt.visible = true;
                 this.m.rankTokenDown_bt.arrow.rotation = 180;
                 this.m.rankTokenDown_bt.textBox.text = this.rankTokensUsed.toString();
                 if (this.m.rankTokenUp_bt.visible) {
-                    this.m.rankTokenDown_bt.x = this.var_635;
+                    this.m.rankTokenDown_bt.x = this.rankBtnDualX;
                 } else {
-                    this.m.rankTokenDown_bt.x = this.var_510;
+                    this.m.rankTokenDown_bt.x = this.rankBtnX;
                 }
             }
         }
@@ -347,4 +347,4 @@ package package_18
 
 
     }
-}//package package_18
+}//package player_profile

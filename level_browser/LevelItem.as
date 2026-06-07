@@ -21,7 +21,7 @@ package level_browser
     import package_4.LevelInfoPopup;
     import package_4.MessagePopup;
     import package_4.UploadingPopup;
-    import package_18.AccountInfo;
+    import player_profile.AccountInfo;
     import ui.PageNavigation;
 
     public class LevelItem extends Removable 

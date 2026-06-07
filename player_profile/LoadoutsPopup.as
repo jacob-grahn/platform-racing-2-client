@@ -1,6 +1,6 @@
-﻿// package_18.LoadoutsPopup = package_18.class_290
+﻿// player_profile.LoadoutsPopup = player_profile.class_290
 
-package package_18
+package player_profile
 {
     import com.jiggmin.data.Settings;
     import package_4.GetLevelsPopup;
@@ -42,14 +42,14 @@ package package_18
 
         // _loc2 = listing
         // _loc3 = preset
-        override protected function loadListing(_arg_1:SelectableButton)
+        override protected function loadListing(btn:SelectableButton)
         {
             if (!Settings.isNameSet()) {
                 new MessagePopup('Error: You are not logged in.');
                 startFadeOut();
                 return;
             }
-            var listing:PresetListing = PresetListing(_arg_1);
+            var listing:PresetListing = PresetListing(btn);
             var preset:Preset = listing.getPreset();
             Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
             startFadeOut();
@@ -59,9 +59,9 @@ package package_18
         // _loc3 = preset
         // _loc4 = stats
         // actually saves; named deleteListing to replace the delete button on GetLevelsPopup
-        override protected function deleteListing(_arg_1:SelectableButton)
+        override protected function deleteListing(btn:SelectableButton)
         {
-            var listing:PresetListing = PresetListing(_arg_1);
+            var listing:PresetListing = PresetListing(btn);
             var preset:Object = listing.getPreset();
             var stats:Object = this.statsSelect.getStats();
             preset.speed = stats.speed;
@@ -93,5 +93,5 @@ package package_18
 
 
     }
-}//package package_18
+}//package player_profile
 

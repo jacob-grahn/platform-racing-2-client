@@ -1,4 +1,4 @@
-package package_18.PartInfo
+package player_profile.PartInfo
 {
     import com.jiggmin.data.Data;
     import com.jiggmin.data.EpicFlash;
@@ -20,12 +20,12 @@ package package_18.PartInfo
         private var ownedEpics:Array;
         private var hasEE:Boolean = false;
         private var allParts:Array;
-        private var var_513:int = 3;
-        private var var_640:int = 137;
-        private var var_632:int = 160;
+        private var itemsPerRow:int = 3;
+        private var itemColWidth:int = 137;
+        private var itemRowHeight:int = 160;
         private var listings:Vector.<PartInfoListing> = new Vector.<PartInfoListing>();
         private var scroll:CustomScrollBar;
-        private var var_289:LoadingGraphic;
+        private var loadingGraphic:LoadingGraphic;
         public var epicFlash:EpicFlash = new EpicFlash(); // var_207
 
         public function PartInfoPopup(type:String, parts:Array, epics:Array)
@@ -69,8 +69,6 @@ package package_18.PartInfo
             }
         }
 
-        // _loc2 = listing
-        // method_179 = createListing
         private function createListing(part:Object) : PartInfoListing
         {
             // check if part is in array, if epic is in epic array or for ee. add as part.has and part.hasEpic
@@ -84,8 +82,8 @@ package package_18.PartInfo
             }
             var listing:PartInfoListing = new PartInfoListing(part, this.hasEE);
             //listing.addEventListener(MouseEvent.CLICK, this.onClick);
-            listing.x = (this.listings.length % this.var_513) * this.var_640;
-            listing.y = Math.floor(this.listings.length / this.var_513) * this.var_632;
+            listing.x = (this.listings.length % this.itemsPerRow) * this.itemColWidth;
+            listing.y = Math.floor(this.listings.length / this.itemsPerRow) * this.itemRowHeight;
             if (part.hasEpic == true) {
                 listing.addEpicFlash(this.epicFlash);
             }
@@ -99,7 +97,7 @@ package package_18.PartInfo
         /*private function onClick(e:MouseEvent)
         {
             var listing:PartInfoListing = PartInfoListing(e.target);
-            var part:Object = listing.method_653();
+            var part:Object = listing.getListing();
             new MessagePopup("--- " + part.name + " FAQ --- \n\n" + part.desc);
         }*/
 

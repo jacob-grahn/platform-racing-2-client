@@ -1,9 +1,9 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_18.class_211 = package_18.Presets
+// player_profile.class_211 = player_profile.Presets
 
-package package_18
+package player_profile
 {
     import com.jiggmin.data.Settings;
     import package_8.Character;
@@ -22,8 +22,8 @@ package package_18
         public static function load()
         {
             presets = new Vector.<Preset>();
-            var _local_1:Array = [{"num":1}, {"num":2}, {"num":3}, {'num':4}, {'num':5}, {'num':6}, {'num':7}, {'num':8}, {'num':9}, {'num':10}];
-            var presetsArray:Array = (Settings.getValue(Settings.PRESETS, _local_1) as Array);
+            var defaultPresets:Array = [{"num":1}, {"num":2}, {"num":3}, {'num':4}, {'num':5}, {'num':6}, {'num':7}, {'num':8}, {'num':9}, {'num':10}];
+            var presetsArray:Array = (Settings.getValue(Settings.PRESETS, defaultPresets) as Array);
             for each (var presetData:Object in presetsArray) {
                 var preset:Preset = new Preset(presetData);
                 presets[preset.num - 1] = preset;
@@ -101,5 +101,5 @@ package package_18
 
 
     }
-}//package package_18
+}//package player_profile
 

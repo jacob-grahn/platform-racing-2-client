@@ -1,6 +1,6 @@
-﻿// package_18.PresetListing = package_18.class_306
+﻿// player_profile.PresetListing = player_profile.class_306
 
-package package_18
+package player_profile
 {
     import package_8.Character;
     import ui.SelectableButton;

@@ -1,9 +1,9 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_18.PartSelector = package_18.class_294
+// player_profile.PartSelector = player_profile.class_294
 
-package package_18
+package player_profile
 {
     import com.jiggmin.ColorPicker.ColorPicker;
     import flash.display.DisplayObject;
@@ -23,7 +23,7 @@ package package_18
         public var infoButton:InfoButton;
         public var partArray:Array;
         public var epicArray:Array; // var_422
-        private var var_182:DisplayObject;
+        private var epicOverlay:DisplayObject;
 
         public function PartSelector(parts:Array, selected:int, col:int, epics:Array, ecol:int = -1)
         {
@@ -42,15 +42,15 @@ package package_18
             this.cp2.setColor(this.color2);
             this.cp2.x = 120;
             addChild(this.cp2);
-            var _local_6:DisplayObject = this.method_737(this.cp.width, this.cp.height);
-            _local_6.x = this.cp2.x;
-            _local_6.y = this.cp2.y;
-            addChild(_local_6);
-            this.cp2.mask = _local_6;
-            this.var_182 = this.method_809(this.cp.width - 6, this.cp.height - 6);
-            this.var_182.x = this.cp2.x + 3;
-            this.var_182.y = this.cp2.y + 3;
-            addChild(this.var_182);
+            var triangleMask:DisplayObject = this.makeTriangleMask(this.cp.width, this.cp.height);
+            triangleMask.x = this.cp2.x;
+            triangleMask.y = this.cp2.y;
+            addChild(triangleMask);
+            this.cp2.mask = triangleMask;
+            this.epicOverlay = this.makeDiagonalLine(this.cp.width - 6, this.cp.height - 6);
+            this.epicOverlay.x = this.cp2.x + 3;
+            this.epicOverlay.y = this.cp2.y + 3;
+            addChild(this.epicOverlay);
             this.partArray = parts;
             this.epicArray = epics;
             this.cpEpicCheck();
@@ -63,7 +63,7 @@ package package_18
             this.infoButton.x = this.cp.x + 27.5;
             this.infoButton.y = this.cp.y + 3;
             //this.infoButton.addEventListener(MouseEvent.CLICK, this.onHelpClick, false, 0, true);
-            // put event listener in parent; package_18.PlayerDisplay.
+            // put event listener in parent; player_profile.PlayerDisplay.
             addChild(this.infoButton);
         }
 
@@ -119,26 +119,24 @@ package package_18
             return (this.epicArray.indexOf(val != null ? val.toString() : this.value.toString()) != -1 || this.epicArray.indexOf("*") != -1);
         }
 
-        // _loc3 = s
-        private function method_737(_arg_1:int, _arg_2:int) : DisplayObject
+        private function makeTriangleMask(w:int, h:int) : DisplayObject
         {
             var s:Sprite = new Sprite();
             s.graphics.beginFill(0);
-            s.graphics.moveTo(0, _arg_2);
-            s.graphics.lineTo(_arg_1, _arg_2);
-            s.graphics.lineTo(_arg_1, 0);
-            s.graphics.lineTo(0, _arg_2);
+            s.graphics.moveTo(0, h);
+            s.graphics.lineTo(w, h);
+            s.graphics.lineTo(w, 0);
+            s.graphics.lineTo(0, h);
             s.graphics.endFill();
             return s;
         }
 
-        // _loc3 = s
-        private function method_809(_arg_1:int, _arg_2:int) : DisplayObject
+        private function makeDiagonalLine(w:int, h:int) : DisplayObject
         {
             var s:Sprite = new Sprite();
             s.graphics.lineStyle(1, 0);
-            s.graphics.moveTo(0, _arg_2);
-            s.graphics.lineTo(_arg_1, 0);
+            s.graphics.moveTo(0, h);
+            s.graphics.lineTo(w, 0);
             s.alpha = 0.5;
             s.mouseEnabled = false;
             s.mouseChildren = false;
@@ -166,10 +164,10 @@ package package_18
         {
             if (this.isPartEpic()) {
                 this.cp2.visible = true;
-                this.var_182.visible = true;
+                this.epicOverlay.visible = true;
             } else {
                 this.cp2.visible = false;
-                this.var_182.visible = false;
+                this.epicOverlay.visible = false;
             }
         }
 
@@ -186,8 +184,8 @@ package package_18
             this.arrows = null;
             removeChild(this.infoButton);
             this.infoButton = null;
-            removeChild(this.var_182);
-            this.var_182 = null;
+            removeChild(this.epicOverlay);
+            this.epicOverlay = null;
             if (parent != null) {
                 parent.removeChild(this);
             }
@@ -195,4 +193,4 @@ package package_18
 
 
     }
-}//package package_18
+}//package player_profile

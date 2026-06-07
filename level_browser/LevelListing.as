@@ -15,7 +15,7 @@ package level_browser
     import ui.PageNavigation;
     import com.jiggmin.data.CommandHandler;
     import flash.utils.ByteArray;
-    import package_18.AccountInfo;
+    import player_profile.AccountInfo;
 
     public class LevelListing extends Page
     {

@@ -10,7 +10,7 @@ package lobby
     import chat.ChatInstance;
     import chat.Messages;
     import social.PlayersTab;
-    import package_18.AccountInfo;
+    import player_profile.AccountInfo;
 
     public class LobbyLeft extends LobbySide 
     {

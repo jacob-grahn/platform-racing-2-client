@@ -13,7 +13,7 @@ package com.jiggmin.data
     import package_4.MessagePopup;
     import package_6.Game;
     import package_6.CatCaptcha;
-    import package_18.AccountInfo;
+    import player_profile.AccountInfo;
     import level_browser.LevelListing;
 
     public class CommandHandler

@@ -17,7 +17,7 @@ package menu
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
     import lobby.Lobby;
-    import package_18.Presets;
+    import player_profile.Presets;
     import package_4.Popup;
 
     public class LoggingInPopup extends Popup 

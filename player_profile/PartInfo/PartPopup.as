@@ -1,4 +1,4 @@
-﻿package package_18.PartInfo
+﻿package player_profile.PartInfo
 {
     import com.jiggmin.data.Data;
     import com.jiggmin.data.EpicFlash;
@@ -8,7 +8,7 @@
     import flash.events.MouseEvent;
     import package_4.Popup;
     import package_8.Character;
-    import package_18.AccountInfo;
+    import player_profile.AccountInfo;
 
     public class PartPopup extends Popup 
     {

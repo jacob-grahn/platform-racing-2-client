@@ -1,9 +1,9 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_18.class_263 = package_18.Preset
+// player_profile.class_263 = player_profile.Preset
 
-package package_18
+package player_profile
 {
     public class Preset 
     {

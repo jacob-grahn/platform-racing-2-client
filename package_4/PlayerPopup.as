@@ -20,8 +20,8 @@ package package_4
     import lobby.LobbyRight;
     import package_6.ExpGain;
     import package_8.Character;
-    import package_18.PartInfo.PartInfoPopup;
-    import package_18.PartInfo.PartPopup;
+    import player_profile.PartInfo.PartInfoPopup;
+    import player_profile.PartInfo.PartPopup;
     import ui.GuildName;
 
     public class PlayerPopup extends Popup 

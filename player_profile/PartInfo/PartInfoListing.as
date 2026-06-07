@@ -1,9 +1,9 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
+// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
 // package_17.PartInfoListing = package_17.class_257
 
-package package_18.PartInfo
+package player_profile.PartInfo
 {
     import com.jiggmin.data.Data;
     import com.jiggmin.data.EpicFlash;
@@ -123,8 +123,8 @@ package package_18.PartInfo
         {
             this.m.cover.buttonMode = true;
             this.m.cover.useHandCursor = true;
-            this.m.cover.addEventListener(MouseEvent.MOUSE_OVER, this.method_269);
-            this.m.cover.addEventListener(MouseEvent.MOUSE_OUT, this.method_378);
+            this.m.cover.addEventListener(MouseEvent.MOUSE_OVER, this.onMouseOver);
+            this.m.cover.addEventListener(MouseEvent.MOUSE_OUT, this.onMouseOut);
             this.m.cover.addEventListener(MouseEvent.CLICK, this.clickHandler);
             alpha = 1;
         }
@@ -139,23 +139,23 @@ package package_18.PartInfo
         {
             this.m.cover.buttonMode = false;
             this.m.cover.useHandCursor = false;
-            this.m.cover.removeEventListener(MouseEvent.MOUSE_OVER, this.method_269);
-            this.m.cover.removeEventListener(MouseEvent.MOUSE_OUT, this.method_378);
+            this.m.cover.removeEventListener(MouseEvent.MOUSE_OVER, this.onMouseOver);
+            this.m.cover.removeEventListener(MouseEvent.MOUSE_OUT, this.onMouseOut);
             this.m.cover.removeEventListener(MouseEvent.CLICK, this.clickHandler);
             alpha = 1; //0.33;
         }
 
-        public function method_653():Object
+        public function getListing():Object
         {
             return this.listing;
         }
 
-        private function method_269(e:MouseEvent)
+        private function onMouseOver(e:MouseEvent)
         {
             this.m.bg.visible = true;
         }
 
-        private function method_378(e:MouseEvent)
+        private function onMouseOut(e:MouseEvent)
         {
             this.m.bg.visible = false;
         }
