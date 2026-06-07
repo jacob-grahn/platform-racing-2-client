@@ -9,16 +9,16 @@ package levelEditor
     import menu.ConnectingPopup;
     import package_4.*;
     import package_6.TestCourse;
-    import package_14.Blocks;
-    import package_14.Settings;
-    import package_14.Stamps;
-    import package_14.Tools;
-    import package_14.Backgrounds;
-    import package_14.SideBar;
-    import package_15.SaveLevelPopup;
-    import package_15.GetLevels;
-    import package_14.*;
-    import package_15.*;
+    import editor_sidebar.Blocks;
+    import editor_sidebar.Settings;
+    import editor_sidebar.Stamps;
+    import editor_sidebar.Tools;
+    import editor_sidebar.Backgrounds;
+    import editor_sidebar.SideBar;
+    import level_management.SaveLevelPopup;
+    import level_management.GetLevels;
+    import editor_sidebar.*;
+    import level_management.*;
 
     public class LevelEditorMenu extends MovieClip 
     {

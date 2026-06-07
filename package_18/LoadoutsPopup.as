@@ -20,7 +20,7 @@ package package_18
             this.character = c;
             this.statsSelect = ss;
             this.playerDisplay = pd;
-            this.var_454 = 68;
+            this.itemSpacing = 68;
             m.titleBox.text = "-- Loadouts --";
             m.delete_bt.label = "Save";
             hideLoadingGraphic();
@@ -36,7 +36,7 @@ package package_18
             var presets:Vector.<Preset> = Presets.getPresets();
             for each (var preset:Preset in presets) {
                 var listing:PresetListing = new PresetListing(preset, this.playerDisplay);
-                this.method_455(listing);
+                this.addListing(listing);
             }
         }
 

@@ -17,7 +17,7 @@ package lobby
     import levelEditor.LevelEditor;
     import flash.net.navigateToURL;
     import package_4.OptionsPopup;
-    import package_17.StorePopup;
+    import shop.StorePopup;
     import menu.CreditsPopup;
     import package_4.ConfirmPopup;
     import com.jiggmin.data.Data;

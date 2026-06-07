@@ -13,7 +13,7 @@ package package_4
     {
 
         protected var m:GetLevelsPopupGraphic = new GetLevelsPopupGraphic();
-        protected var var_454:int = 25;
+        protected var itemSpacing:int = 25;
         protected var listings:Vector.<class_229> = new Vector.<class_229>();
         private var scroll:CustomScrollBar;
         private var selected:class_229;
@@ -48,9 +48,9 @@ package package_4
             this.m.removeChild(this.m.loadingGraphic);
         }
 
-        protected function method_455(listing:class_229)
+        protected function addListing(listing:class_229)
         {
-            listing.y = this.listings.length * this.var_454;
+            listing.y = this.listings.length * this.itemSpacing;
             this.m.levelsHolder.addChild(listing);
             this.listings.push(listing);
         }
@@ -87,11 +87,11 @@ package package_4
             this.method_394();
         }
 
-        protected function loadListing(_arg_1:class_229)
+        protected function loadListing(listing:class_229)
         {
         }
 
-        protected function deleteListing(_arg_1:class_229)
+        protected function deleteListing(listing:class_229)
         {
         }
 
