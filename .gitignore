@@ -4,6 +4,5 @@
 *.code-workspace
 asconfig.json
 *.swf
-*.fla
 *.swc
 platform-racing-2.app

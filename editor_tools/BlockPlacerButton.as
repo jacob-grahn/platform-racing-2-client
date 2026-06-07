@@ -4,7 +4,7 @@ package editor_tools
 {
     import flash.display.DisplayObject;
     import ui.CustomCursor;
-    import package_20.class_275;
+    import drawing_tools.BlockObjectPlacer;
     import flash.events.MouseEvent;
 
     public class BlockPlacerButton extends StampButton 
@@ -22,7 +22,7 @@ package editor_tools
         override protected function select(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            CustomCursor.change(new class_275(displayCode));
+            CustomCursor.change(new BlockObjectPlacer(displayCode));
         }
 
 

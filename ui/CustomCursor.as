@@ -1,5 +1,3 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
 
 // ui.class_8 = ui.CustomCursor
 
@@ -16,10 +14,10 @@ package ui
     import flash.ui.Mouse;
     import flash.utils.getDefinitionByName;
     import flash.utils.getQualifiedClassName;
-    import package_20.Brush;
-    import package_20.class_275;
-    import package_20.ObjectDeleter;
-    import package_20.TextTool;
+    import drawing_tools.Brush;
+    import drawing_tools.BlockObjectPlacer;
+    import drawing_tools.ObjectDeleter;
+    import drawing_tools.TextTool;
     import flash.events.TouchEvent;
     import flash.ui.MouseCursor;
 
@@ -33,7 +31,7 @@ package ui
         private var me:MouseEvent;
         private var mouseDown:Boolean; // var_487
         private var mouseHidden:Boolean = false; // var_371
-        public var var_411:Boolean = true;
+        public var disposable:Boolean = true;
 
         public function CustomCursor()
         {
@@ -58,7 +56,7 @@ package ui
         public static function unsetInstance()
         {
             if (instance != null) {
-                if (instance.var_411 == true) {
+                if (instance.disposable == true) {
                     instance.remove();
                 } else {
                     instance.pause();

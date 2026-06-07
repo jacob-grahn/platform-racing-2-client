@@ -2,7 +2,7 @@
 package editor_tools
 {
     import ui.CustomCursor;
-    import package_20.TextTool;
+    import drawing_tools.TextTool;
     import flash.events.MouseEvent;
 
     public class TextToolButton extends MenuButton 

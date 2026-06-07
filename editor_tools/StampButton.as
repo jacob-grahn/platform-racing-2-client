@@ -6,7 +6,7 @@ package editor_tools
     import flash.display.Sprite;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
-    import package_20.class_269;
+    import drawing_tools.ObjectPlacer;
     import ui.CustomCursor;
 
     public class StampButton extends Sprite 
@@ -42,7 +42,7 @@ package editor_tools
         protected function select(e:MouseEvent)
         {
             e.stopImmediatePropagation();
-            CustomCursor.change(new class_269(this.displayCode));
+            CustomCursor.change(new ObjectPlacer(this.displayCode));
         }
 
         public function remove()

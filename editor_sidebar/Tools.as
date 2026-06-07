@@ -3,8 +3,8 @@ package editor_sidebar
 {
     import flash.display.Stage;
     import com.jiggmin.ColorPicker.ColorPicker;
-    import package_20.Brush;
-    import package_20.Eraser;
+    import drawing_tools.Brush;
+    import drawing_tools.Eraser;
     import editor_tools.SizePicker;
     import editor_tools.Landscape;
     import flash.events.Event;

@@ -22,14 +22,10 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 ### ~~package_19 → editor_tools~~ ✓ DONE
 - class_214 → SidebarEntry, class_215 → MenuButton, class_222 → BackgroundButton, class_228 → BlockPlacerButton
 
-### package_20 → drawing_tools (13 method_##, 16 var_##)
-- [ ] `Brush.as`
-- [ ] `Eraser.as`
-- [ ] `TextTool.as`
-- [ ] `ObjectDeleter.as`
-- [ ] `class_269.as` — object placement cursor (rename class)
-- [ ] `class_275.as` — unknown cursor class (identify + rename)
-- [ ] Rename package directory
+### ~~package_20 → drawing_tools~~ ✓ DONE
+- class_269 → ObjectPlacer, class_275 → BlockObjectPlacer
+- ObjectDeleter: var_151 → objectBG, method_152 → onEnterFrame, method_458 → updateScale
+- CustomCursor: var_411 → disposable
 
 ### package_21 → chat (23 method_##, 19 var_##)
 - [ ] `ChatInstance.as`

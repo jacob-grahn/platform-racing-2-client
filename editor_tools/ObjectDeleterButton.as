@@ -3,7 +3,7 @@ package editor_tools
 {
     import flash.events.MouseEvent;
     import ui.CustomCursor;
-    import package_20.ObjectDeleter;
+    import drawing_tools.ObjectDeleter;
 
     public class ObjectDeleterButton extends Removable 
     {
