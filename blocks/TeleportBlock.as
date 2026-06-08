@@ -9,7 +9,7 @@
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import effects.TeleportPop;
 
     public dynamic class TeleportBlock extends SupplyBlock 

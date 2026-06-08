@@ -2,7 +2,7 @@
 
 package items
 {
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.utils.setTimeout;
     import flash.utils.clearTimeout;
 
@@ -23,9 +23,9 @@ package items
             if (!this.used) {
                 this.used = true;
                 this.expireListener = setTimeout(this.slowDown, this.duration);
-                character.accel = character.accel * 2;
-                character.maxVelX = character.maxVelX * 2;
-                character.beginSparkles(this.duration);
+                this.localChar.accel = this.localChar.accel * 2;
+                this.localChar.maxVelX = this.localChar.maxVelX * 2;
+                this.localChar.beginSparkles(this.duration);
             }
         }
 
@@ -37,13 +37,13 @@ package items
         // method_699 = slowDown
         private function slowDown()
         {
-            character.setItem(0);
+            this.localChar.setItem(0);
         }
 
         override public function remove()
         {
-            character.endSparkles(this.used);
-            character.resetStats();
+            this.localChar.endSparkles(this.used);
+            this.localChar.resetStats();
             clearTimeout(this.expireListener);
             super.remove();
         }

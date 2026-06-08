@@ -8,8 +8,8 @@ package effects
     import flash.events.Event;
     import flash.geom.Point;
     import gameplay.Course;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.LocalCharacter;
 
     public class ShotEffect extends Effect
     {

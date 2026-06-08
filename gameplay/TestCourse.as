@@ -13,7 +13,7 @@ package gameplay
     import flash.net.URLVariables;
     import levelEditor.HatPicker;
     import levelEditor.LevelEditor;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import effects.TeleportPop;
     import sounds.SoundEffects;
     import ui.StatsSelect;

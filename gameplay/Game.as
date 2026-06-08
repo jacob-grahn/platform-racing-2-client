@@ -16,9 +16,9 @@ package gameplay
     import flash.utils.setInterval;
     import sounds.SoundEffects;
     import dialogs.MessagePopup;
-    import package_8.Character;
-    import package_8.RemoteCharacter;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.RemoteCharacter;
+    import character.LocalCharacter;
     import effects.Egg;
     import effects.Hat;
 
@@ -240,7 +240,7 @@ package gameplay
         {
             var tempId:int = int(arr[0]);
             var c:Character = playerArray[tempId];
-            c.method_576();
+            c.beginArrowSparkles();
         }
 
         private function maybeReturnHatToStart(a:Array)

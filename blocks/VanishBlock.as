@@ -6,7 +6,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.geom.Point;
     import flash.events.Event;
     import flash.utils.setTimeout;

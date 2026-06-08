@@ -5,7 +5,7 @@
 
 package blocks
 {
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class ArrowBlock extends Block 
     {

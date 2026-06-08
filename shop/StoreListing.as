@@ -9,7 +9,7 @@ package shop
     import flash.text.TextFieldAutoSize;
     import flash.events.TextEvent;
     import flash.net.URLRequest;
-    import package_8.Character;
+    import character.Character;
     import flash.events.MouseEvent;
     import flash.events.Event;
 

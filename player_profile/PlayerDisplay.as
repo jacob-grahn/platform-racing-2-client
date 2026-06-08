@@ -5,11 +5,12 @@
 
 package player_profile
 {
+    import Main;
     import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.events.MouseEvent;
     import dialogs.HoverPopup;
-    import package_8.Character;
+    import character.Character;
     import player_profile.PartInfo.*;
     import level_browser.LevelListing;
     import flash.utils.clearTimeout;
@@ -18,7 +19,7 @@ package player_profile
     public class PlayerDisplay extends Removable 
     {
 
-        private var character:Character; // var_5
+        private var charPreview:Character; // var_5
         private var yStart:Number = 24; // var_388
         public var randomButton:RandomizeStyleButton = new RandomizeStyleButton();
         public var hatSelect:PartSelector; // var_130
@@ -30,7 +31,7 @@ package player_profile
 
         public function PlayerDisplay(c:Character, hatArray:Array, headArray:Array, bodyArray:Array, feetArray:Array, hatSel:int, headSel:int, bodySel:int, feetSel:int, hatCol:int, headCol:int, bodyCol:int, feetCol:int, hatArray2:Array, headArray2:Array, bodyArray2:Array, feetArray2:Array, hatCol2:int, headCol2:int, bodyCol2:int, feetCol2:int)
         {
-            this.character = c;
+            this.charPreview = c;
             this.hatSelect = new PartSelector(hatArray, hatSel, hatCol, hatArray2, hatCol2);
             this.headSelect = new PartSelector(headArray, headSel, headCol, headArray2, headCol2);
             this.bodySelect = new PartSelector(bodyArray, bodySel, bodyCol, bodyArray2, bodyCol2);
@@ -127,20 +128,23 @@ package player_profile
         // method_65 = updateDisplay
         private function updateDisplay(e:Event)
         {
-            this.character.setHatId(this.hatSelect.getValue());
-            this.character.setHeadId(this.headSelect.getValue());
-            this.character.setBodyId(this.bodySelect.getValue());
-            this.character.setFeetId(this.feetSelect.getValue());
-            this.character.setHatColors(this.hatSelect.getColor(), this.hatSelect.getColor2());
-            this.character.setHeadColors(this.headSelect.getColor(), this.headSelect.getColor2());
-            this.character.setBodyColors(this.bodySelect.getColor(), this.bodySelect.getColor2());
-            this.character.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
-            if (this.character.hat1 != AccountInfo.currentHat) { // dispatch event to check for bad hats on shown levels
-                AccountInfo.currentHat = this.character.hat1;
-                if (LevelListing.levelListing != null) {
+            Main.log("updateDisplay start");
+            Main.log("1 setHatId"); this.charPreview.setHatId(this.hatSelect.getValue());
+            Main.log("2 setHeadId"); this.charPreview.setHeadId(this.headSelect.getValue());
+            Main.log("3 setBodyId"); this.charPreview.setBodyId(this.bodySelect.getValue());
+            Main.log("4 setFeetId"); this.charPreview.setFeetId(this.feetSelect.getValue());
+            Main.log("5 setHatColors"); this.charPreview.setHatColors(this.hatSelect.getColor(), this.hatSelect.getColor2());
+            Main.log("6 setHeadColors"); this.charPreview.setHeadColors(this.headSelect.getColor(), this.headSelect.getColor2());
+            Main.log("7 setBodyColors"); this.charPreview.setBodyColors(this.bodySelect.getColor(), this.bodySelect.getColor2());
+            Main.log("8 setFeetColors"); this.charPreview.setFeetColors(this.feetSelect.getColor(), this.feetSelect.getColor2());
+            Main.log("9 check hat1"); var hat1val:int = this.charPreview.hat1;
+            Main.log("10 currentHat"); if (hat1val != AccountInfo.currentHat) {
+                AccountInfo.currentHat = hat1val;
+                Main.log("11 levelListing"); if (LevelListing.levelListing != null) {
                     LevelListing.levelListing.dispatchEvent(new Event('testLevelAccess'));
                 }
             }
+            Main.log("updateDisplay done");
         }
 
         private function onHatInfoClick(e:Event)
@@ -173,7 +177,7 @@ package player_profile
 
         override public function remove()
         {
-            this.character = null;
+            this.charPreview = null;
             this.removePartSelector(this.hatSelect);
             this.removePartSelector(this.headSelect);
             this.removePartSelector(this.bodySelect);

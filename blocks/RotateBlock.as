@@ -6,7 +6,7 @@
 package blocks
 {
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class RotateBlock extends Block 
     {

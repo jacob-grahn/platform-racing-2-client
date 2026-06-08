@@ -5,7 +5,7 @@
 
 package items
 {
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import com.jiggmin.data.SecureData;
     import flash.utils.setTimeout;
     import flash.geom.Point;
@@ -15,7 +15,7 @@ package items
     public class Item extends Removable 
     {
 
-        protected var character:LocalCharacter; // var_5
+        protected var localChar:LocalCharacter; // var_5
         protected var space:Boolean = false;
         protected var reloading:Boolean = false; // var_410
         private var reloadListener:uint; // var_581
@@ -23,7 +23,7 @@ package items
 
         public function Item(lc:LocalCharacter)
         {
-            this.character = lc;
+            this.localChar = lc;
             this.setReloadTime(10);
             this.setUses(1);
         }
@@ -45,7 +45,7 @@ package items
         protected function setUses(uses:int)
         {
             SecureData.setNumber("uses", uses);
-            this.character.setAmmo(uses);
+            this.localChar.setAmmo(uses);
         }
 
         // method_45 = setReloadTime
@@ -60,9 +60,9 @@ package items
             var uses:int = SecureData.getNumber("uses");
             uses--;
             SecureData.setNumber("uses", uses);
-            this.character.setAmmo(uses);
+            this.localChar.setAmmo(uses);
             if (uses <= 0) {
-                this.character.setItem(0);
+                this.localChar.setItem(0);
             } else {
                 this.reloading = true;
                 this.reloadListener = setTimeout(this.reloadingOnComplete, SecureData.getNumber("reloadTime"));
@@ -77,16 +77,16 @@ package items
 
         protected function method_37():Point
         {
-            var _local_1:Point = new Point(this.character.curWeapon.x, this.character.curWeapon.y);
-            _local_1 = this.character.curWeapon.parent.localToGlobal(_local_1);
+            var _local_1:Point = new Point(this.localChar.curWeapon.x, this.localChar.curWeapon.y);
+            _local_1 = this.localChar.curWeapon.parent.localToGlobal(_local_1);
             return EffectBackground.instance.globalToLocal(_local_1);
         }
 
         override public function remove()
         {
             clearTimeout(this.reloadListener);
-            if (this.character != null) {
-                this.character = null;
+            if (this.localChar != null) {
+                this.localChar = null;
             }
             super.remove();
         }

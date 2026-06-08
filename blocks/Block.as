@@ -14,8 +14,8 @@ package blocks
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.geom.Point;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
 
     public class Block extends Sprite 
@@ -180,11 +180,11 @@ package blocks
         // _loc2 = point
         public function onStand(player:LocalCharacter)
         {
-            if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
+            if (!this.frozen && this.method_777() > 4 && player.store.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
                 this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {
-                player.var_147 = 0.05;
+                player.accelFactor = 0.05;
             }
             if (this.isActive()) {
                 var point:Point = this.method_18();
@@ -194,8 +194,8 @@ package blocks
                 if (this.safeStand) {
                     player.lastSafeX = point.x + 15;
                     player.lastSafeY = point.y;
-                    player.var_407 = this.segX;
-                    player.var_366 = this.segY;
+                    player.standingSegX = this.segX;
+                    player.standingSegY = this.segY;
                 }
             } else {
                 player.grounded = false;
@@ -208,12 +208,12 @@ package blocks
                 var _local_2:Point = this.method_18();
                 var _local_3:Point = Data.method_9(x - this.posX, y - this.posY, this.map.rotation);
                 if (player.crouching) {
-                    player.y = _local_2.y + this.size + _local_3.y + (player.var_325 / 2);
+                    player.y = _local_2.y + this.size + _local_3.y + (player.charHeight / 2);
                 } else {
-                    player.y = _local_2.y + this.size + _local_3.y + player.var_325;
+                    player.y = _local_2.y + this.size + _local_3.y + player.charHeight;
                 }
                 player.velY *= -0.25;
-                player.var_4.setNumber(LocalCharacter.const_12, 0);
+                player.store.setNumber(LocalCharacter.JUMP_VEL, 0);
                 if (this.var_490) {
                     this.method_315(0, -15);
                 }
@@ -226,12 +226,12 @@ package blocks
         {
             if (this.isActive()) {
                 var point:Point = this.method_18();
-                player.x = point.x - player.var_189;
+                player.x = point.x - player.halfWidth;
                 if (player.velX > 0) {
                     player.velX = player.velX * -0.05;
                 }
-                if (player.var_24 > 0) {
-                    player.var_24 = 0;
+                if (player.targetVelX > 0) {
+                    player.targetVelX = 0;
                 }
             }
         }
@@ -242,12 +242,12 @@ package blocks
         {
             if (this.isActive()) {
                 var point:Point = this.method_18();
-                player.x = point.x + this.size + player.var_189;
+                player.x = point.x + this.size + player.halfWidth;
                 if (player.velX < 0) {
                     player.velX = player.velX * -0.05;
                 }
-                if (player.var_24 < 0) {
-                    player.var_24 = 0;
+                if (player.targetVelX < 0) {
+                    player.targetVelX = 0;
                 }
             }
         }

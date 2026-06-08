@@ -5,7 +5,7 @@ package levelEditor
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class HatPicker extends Sprite 
     {

@@ -3,6 +3,7 @@
 package 
 {
     import blocks.Blocks;
+    import dialogs.MessagePopup;
     import com.jiggmin.data.Time;
     import com.jiggmin.data.PR2Socket;
     import com.jiggmin.data.CommandHandler;
@@ -14,6 +15,7 @@ package
     import flash.display.Sprite;
     import flash.display.Stage;
     import flash.events.Event;
+    import flash.events.UncaughtErrorEvent;
     import flash.external.ExternalInterface;
     import flash.net.URLRequest;
     import flash.net.URLVariables;
@@ -33,6 +35,9 @@ package
     {
 
         private static var initialized:Boolean = false;
+        private var _debugDot:flash.display.Shape;
+        public static var debugLog:String = "";
+        public static function log(s:String):void { debugLog += s + "\n"; }
         private static const clientWidth:int = 550; // const_92
         public static const clientHeight:int = 400; // const_63
         public static const accountChange:String = "accountChange"; // const_46
@@ -96,6 +101,7 @@ package
         private function init(e:Event = null)
         {
             removeEventListener(Event.ADDED_TO_STAGE, this.init);
+            loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, this.onUncaughtError);
             Main.betaLoader = LoaderInfo(root.loaderInfo).parameters.hasOwnProperty('betaLoader') ? Boolean(int(LoaderInfo(root.loaderInfo).parameters.betaLoader)) : false;
             if (Main.testing || (
                     parent != stage
@@ -136,7 +142,33 @@ package
                 addChild(pageHolder);
                 addChild(new Doughnut());
                 addChild(muteButton);
+                _debugDot = new flash.display.Shape();
+                _debugDot.graphics.beginFill(0x00FF00);
+                _debugDot.graphics.drawCircle(0, 0, 6);
+                _debugDot.x = 590; _debugDot.y = 10;
+                addChild(_debugDot);
             }
+        }
+
+        private function onUncaughtError(e:UncaughtErrorEvent):void
+        {
+            var msg:String = "(unknown error)";
+            try {
+                e.preventDefault();
+                var err:Error = e.error as Error;
+                if (err) {
+                    msg = err.name + " #" + err.errorID + ": " + err.message;
+                    var st:String = err.getStackTrace();
+                    if (st) msg += "\n" + st;
+                } else if (e.error != null) {
+                    msg = String(e.error);
+                }
+            } catch (ex:Error) {
+                msg = "handler threw: " + ex.message;
+            }
+            if (debugLog.length > 0) msg += "\n\nDebug log:\n" + debugLog;
+            msg = msg.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
+            new MessagePopup(msg);
         }
 
         private function hideContextMenu()

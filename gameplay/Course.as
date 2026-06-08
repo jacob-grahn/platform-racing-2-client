@@ -21,8 +21,8 @@ package gameplay
     import flash.events.MouseEvent;
     import flash.geom.Point;
     import flash.net.URLVariables;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.LocalCharacter;
     import effects.Egg;
     import page.GamePage;
     import sounds.SoundEffects;
@@ -282,7 +282,7 @@ package gameplay
             addChild(this.countdown);
             var startPos:Object = this.localPlayer.getPos(); // this fixes hat attack when quitting during the countdown
             Main.socket.write('exact_pos`' + startPos.x + '`' + startPos.y);
-            if (this.localPlayer != null && this.localPlayer.var_4.getBool(Character.JUMP_START)) {
+            if (this.localPlayer != null && this.localPlayer.store.getBool(Character.JUMP_START)) {
                 this.localPlayer.init();
             }
         }

@@ -4,20 +4,20 @@ package player_profile
 {
     import com.jiggmin.data.Settings;
     import dialogs.GetLevelsPopup;
-    import package_8.Character;
+    import character.Character;
     import ui.StatsSelect;
     import ui.SelectableButton;
     import dialogs.MessagePopup;
 
     public class LoadoutsPopup extends GetLevelsPopup 
     {
-        private var character:Character; // var_5
+        private var charModel:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var playerDisplay:PlayerDisplay; // var_495
 
         public function LoadoutsPopup(c:Character, ss:StatsSelect, pd:PlayerDisplay)
         {
-            this.character = c;
+            this.charModel = c;
             this.statsSelect = ss;
             this.playerDisplay = pd;
             this.itemSpacing = 68;
@@ -51,7 +51,7 @@ package player_profile
             }
             var listing:PresetListing = PresetListing(btn);
             var preset:Preset = listing.getPreset();
-            Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
+            Presets.apply(preset, this.charModel, this.statsSelect, this.playerDisplay);
             startFadeOut();
         }
 
@@ -67,25 +67,25 @@ package player_profile
             preset.speed = stats.speed;
             preset.acceleration = stats.acceleration;
             preset.jumping = stats.jumping;
-            preset.hat = this.character.hat1;
-            preset.head = this.character.head;
-            preset.body = this.character.body;
-            preset.feet = this.character.feet;
-            preset.hatColor = this.character.hat1Color;
-            preset.headColor = this.character.headColor;
-            preset.bodyColor = this.character.bodyColor;
-            preset.feetColor = this.character.feetColor;
-            preset.hatColor2 = this.playerDisplay.hasOwnProperty('hatSelect') ? this.playerDisplay.hatSelect.getColorCP2() : this.character.hat1Color2;
-            preset.headColor2 = this.playerDisplay.hasOwnProperty('headSelect') ? this.playerDisplay.headSelect.getColorCP2() : this.character.headColor2;
-            preset.bodyColor2 = this.playerDisplay.hasOwnProperty('bodySelect') ? this.playerDisplay.bodySelect.getColorCP2() : this.character.bodyColor2;
-            preset.feetColor2 = this.playerDisplay.hasOwnProperty('feetSelect') ? this.playerDisplay.feetSelect.getColorCP2() : this.character.feetColor2;
+            preset.hat = this.charModel.hat1;
+            preset.head = this.charModel.head;
+            preset.body = this.charModel.body;
+            preset.feet = this.charModel.feet;
+            preset.hatColor = this.charModel.hat1Color;
+            preset.headColor = this.charModel.headColor;
+            preset.bodyColor = this.charModel.bodyColor;
+            preset.feetColor = this.charModel.feetColor;
+            preset.hatColor2 = this.playerDisplay.hasOwnProperty('hatSelect') ? this.playerDisplay.hatSelect.getColorCP2() : this.charModel.hat1Color2;
+            preset.headColor2 = this.playerDisplay.hasOwnProperty('headSelect') ? this.playerDisplay.headSelect.getColorCP2() : this.charModel.headColor2;
+            preset.bodyColor2 = this.playerDisplay.hasOwnProperty('bodySelect') ? this.playerDisplay.bodySelect.getColorCP2() : this.charModel.bodyColor2;
+            preset.feetColor2 = this.playerDisplay.hasOwnProperty('feetSelect') ? this.playerDisplay.feetSelect.getColorCP2() : this.charModel.feetColor2;
             Presets.savePresets();
             startFadeOut();
         }
 
         override public function remove()
         {
-            this.character = null;
+            this.charModel = null;
             this.statsSelect = null;
             this.playerDisplay = null;
             super.remove();

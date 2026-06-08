@@ -3,7 +3,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import effects.BlockPiece;
     import flash.geom.Point;
 

@@ -3,7 +3,7 @@
 package items
 {
     //import __AS3__.vec.Vector;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import items.*;
 
     public class Items 

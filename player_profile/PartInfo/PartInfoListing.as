@@ -10,7 +10,7 @@ package player_profile.PartInfo
     import flash.display.MovieClip;
     import flash.text.TextFieldAutoSize;
     import dialogs.MessagePopup;
-    import package_8.Character;
+    import character.Character;
     import flash.events.MouseEvent;
     import flash.events.Event;
 

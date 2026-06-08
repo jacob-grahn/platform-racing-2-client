@@ -2,14 +2,14 @@
 
 package player_profile
 {
-    import package_8.Character;
+    import character.Character;
     import ui.SelectableButton;
 
     public class PresetListing extends SelectableButton 
     {
 
         private var preset:Preset; // var_518
-        private var character:Character; // var_5
+        private var charModel:Character; // var_5
         private var playerDisplay:PlayerDisplay;
         private var m:PresetListingGraphic;
 
@@ -22,16 +22,16 @@ package player_profile
             this.m = new PresetListingGraphic();
             addChild(this.m);
             super(this.m);
-            this.character = new Character(this.preset.hat, this.preset.head, this.preset.body, this.preset.feet);
-            this.m.addChild(this.character);
+            this.charModel = new Character(this.preset.hat, this.preset.head, this.preset.body, this.preset.feet);
+            this.m.addChild(this.charModel);
             var hatColor2:int = this.playerDisplay.hatSelect.isPartEpic(this.preset.hat) ? this.preset.hatColor2 : -1;
             var headColor2:int = this.playerDisplay.headSelect.isPartEpic(this.preset.head) ? this.preset.headColor2 : -1;
             var bodyColor2:int = this.playerDisplay.bodySelect.isPartEpic(this.preset.body) ? this.preset.bodyColor2 : -1;
             var feetColor2:int = this.playerDisplay.feetSelect.isPartEpic(this.preset.feet) ? this.preset.feetColor2 : -1;
-            this.character.setColors(this.preset.hatColor, hatColor2, this.preset.headColor, headColor2, this.preset.bodyColor, bodyColor2, this.preset.feetColor, feetColor2);
-            this.character.scaleX = this.character.scaleY = 0.13 * (1 / 0.15);
-            this.character.x = 58;
-            this.character.y = 61;
+            this.charModel.setColors(this.preset.hatColor, hatColor2, this.preset.headColor, headColor2, this.preset.bodyColor, bodyColor2, this.preset.feetColor, feetColor2);
+            this.charModel.scaleX = this.charModel.scaleY = 0.13 * (1 / 0.15);
+            this.charModel.x = 58;
+            this.charModel.y = 61;
             this.m.loadoutSpeed.text = "Speed: " + this.preset.speed;
             this.m.loadoutAccel.text = "Acceleration: " + this.preset.acceleration;
             this.m.loadoutJump.text = "Jumping: " + this.preset.jumping;
@@ -46,8 +46,8 @@ package player_profile
 
         override public function remove()
         {
-            this.character.remove();
-            this.character = null;
+            this.charModel.remove();
+            this.charModel = null;
             removeChild(this.m);
             this.m = null;
             super.remove();

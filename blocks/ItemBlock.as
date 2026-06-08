@@ -5,7 +5,7 @@ package blocks
     import blocks.options.ItemBlockOptions;
     import com.jiggmin.data.Settings;
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
     import page.GamePage;
     import items.Items;

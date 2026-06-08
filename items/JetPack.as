@@ -6,7 +6,7 @@
 package items
 {
     import com.jiggmin.data.SecureData;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class JetPack extends Item 
     {
@@ -25,22 +25,22 @@ package items
         // _loc3 = remainingFuel
         override public function setSpace(pressed:Boolean)
         {
-            if (pressed && !character.crouching) {
+            if (pressed && !this.localChar.crouching) {
                 super.setSpace(space);
-                character.velY -= character.velY > -5 ? 1.25 : 0.5;
+                this.localChar.velY -= this.localChar.velY > -5 ? 1.25 : 0.5;
                 var totFuel:Number = SecureData.getNumber("totFuel");
                 var remainingFuel:Number = SecureData.getNumber("fuel");
                 remainingFuel--;
                 SecureData.setNumber("fuel", remainingFuel);
-                character.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
+                this.localChar.setAmmo(Math.ceil((remainingFuel / totFuel) * 3));
                 if (remainingFuel <= 0) {
                     super.useItem();
                 }
             }
             if (pressed != this.spaceDown) {
                 this.spaceDown = pressed;
-                if (character != null) {
-                    pressed ? character.beginJet() : character.endJet();
+                if (this.localChar != null) {
+                    pressed ? this.localChar.beginJet() : this.localChar.endJet();
                 }
             }
         }
@@ -58,7 +58,7 @@ package items
 
         override public function remove()
         {
-            character.endJet();
+            this.localChar.endJet();
             super.remove();
         }
 

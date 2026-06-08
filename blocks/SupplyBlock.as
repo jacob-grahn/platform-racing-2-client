@@ -2,7 +2,7 @@
 
 package blocks
 {
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.geom.ColorTransform;
 
     public class SupplyBlock extends Block 

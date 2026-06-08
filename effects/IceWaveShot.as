@@ -9,8 +9,8 @@ package effects
     import com.jiggmin.data.Objects;
     import blocks.IceBlock;
     import blocks.Block;
-    import package_8.LocalCharacter;
-    import package_8.Character;
+    import character.LocalCharacter;
+    import character.Character;
 
     public class IceWaveShot extends ShotEffect 
     {

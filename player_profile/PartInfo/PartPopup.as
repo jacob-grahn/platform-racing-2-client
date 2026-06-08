@@ -7,7 +7,7 @@
     import flash.events.Event;
     import flash.events.MouseEvent;
     import dialogs.Popup;
-    import package_8.Character;
+    import character.Character;
     import player_profile.AccountInfo;
 
     public class PartPopup extends Popup 

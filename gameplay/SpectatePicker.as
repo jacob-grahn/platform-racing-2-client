@@ -4,8 +4,8 @@
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.LocalCharacter;
 
     public class SpectatePicker extends Sprite 
     {

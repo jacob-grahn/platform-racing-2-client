@@ -19,7 +19,7 @@ package dialogs
     import flash.utils.setTimeout;
     import lobby.LobbyRight;
     import gameplay.ExpGain;
-    import package_8.Character;
+    import character.Character;
     import player_profile.PartInfo.PartInfoPopup;
     import player_profile.PartInfo.PartPopup;
     import ui.GuildName;

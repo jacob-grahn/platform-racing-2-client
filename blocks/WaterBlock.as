@@ -8,7 +8,7 @@ package blocks
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.events.Event;
 
     public class WaterBlock extends Block 
@@ -29,18 +29,18 @@ package blocks
             if (!frozen) {
                 if (!player.grounded && player.mode != "freeze" && player.mode != "hurt") {
                     player.setMode("water");
-                    player.var_240 = 2;
+                    player.waterTicks = 2;
                 } else {
-                    player.var_24 *= 0.9;
-                    player.var_147 = 0.1;
+                    player.targetVelX *= 0.9;
+                    player.accelFactor = 0.1;
                 }
                 if (player.parent == Course.course.frontBackground) {
                     Course.course.backBackground.addChild(player);
                 }
                 var _local_2:Point = method_18();
                 var _local_3:Point = getSeg();
-                player.var_407 = _local_3.x;
-                player.var_366 = _local_3.y;
+                player.standingSegX = _local_3.x;
+                player.standingSegY = _local_3.y;
                 player.lastSafeX = _local_2.x + 15;
                 player.lastSafeY = _local_2.y + 15;
                 this.method_339();

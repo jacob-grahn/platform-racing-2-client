@@ -92,17 +92,20 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 - class_101→CatImage (method_566→onImgLoad); PrizePopup: var_207→epicFlash; ExpGain: var_575→expStep
 - Course: var_9→localPlayer (cross-file: Slash.as, PhysicsEffect.as, TestCourse.as, Game.as)
 
-### package_8 → character (124 method_##, 291 var_##) ← HARDEST
-- [ ] `Character.as`
-- [ ] `LocalCharacter.as`
-- [ ] `RemoteCharacter.as`
-- [ ] `class_125.as` — particle emitter base (rename class)
-- [ ] `class_126.as` — random color particle emitter (rename class)
-- [ ] `class_127.as` — djinn ice effect manager (rename class)
-- [ ] `class_129.as` — unknown character effect (identify + rename)
-- [ ] `class_179.as` — unknown character effect (identify + rename)
-- [ ] `class_240.as` — unknown character effect (identify + rename)
-- [ ] Rename package directory
+### ~~package_8 → character~~ ✓ DONE
+- Character: var_387→djinnEffects, var_140→jetSoundChannel, var_301→curAnim, var_269→recoveryFrames, var_448→updateInterval, var_215→framesSinceUpdate, var_4→store, var_375→activeEmitter
+- Character methods: method_58→updateSegs, method_51→beginRecovery, method_106→recoveryTick, method_623→startSuperJumpWobble, method_820→endSuperJumpWobble, method_156→superJumpWobbleTick, method_207→jetPackTick, method_200→setEmitter, method_190→clearEmitter, method_576→beginArrowSparkles
+- LocalCharacter: const_12→JUMP_VEL, var_573→epnuInterval, var_535→cowboyCheckInterval, var_390→prevParent, var_24→targetVelX, var_240→waterTicks, var_523→baseAccelFactor, var_599→baseVelFactor, var_147→accelFactor, var_524→velFactor, var_189→halfWidth, var_325→charHeight, var_407→standingSegX, var_366→standingSegY, var_157→maxSpeed, var_281→jumpHeld, var_150→crouchCharge
+- LocalCharacter block refs: var_630→floorLeft, var_469→floorCenter, var_657→floorRight, var_329→wallLeft, var_658→midBlock, var_296→wallRight, var_654→ceilLeft, var_262→ceiling, var_631→ceilRight, var_306→headBlock, var_297→topBlock
+- LocalCharacter net state: var_530→lastNetScaleX, var_577→lastNetState, var_623→lastNetItem
+- LocalCharacter methods: method_76→processBlocks, method_261→updateGrounded, method_41→refreshBlockRefs
+- RemoteCharacter: var_19→updateQueue, var_180→catchupRate; method_801→setVar, method_667→setExactPos, method_76→processBlockTouches, method_128→touchBlockAt, method_662→onHeart
+- class_125→ParticleEmitter (var_416→intervalId, var_444→intervalMs, method_571→tick)
+- class_126→RainbowStarEmitter; class_127→DjinnEffects; class_129→ArrowSparkleEmitter
+- class_179→PositionedParticleEmitter (var_128→params, var_567→offsetX, var_608→offsetY, method_470→getTargetPoint)
+- class_240→PhysicsParticle (var_578→maxLife, var_275→curAlpha, method_508→makeGraphic, method_38→randRange, method_251→onEnterFrame)
+- Cross-file: var_24→targetVelX (Block.as, WaterBlock.as), var_407/366→standingSegX/Y (Block.as, SafetyBlock.as, WaterBlock.as), var_189/325→halfWidth/charHeight (Block.as, MineBlock.as), var_4→store (Block.as, CrumbleBlock.as, Course.as), const_12→JUMP_VEL (Block.as), method_576→beginArrowSparkles (Game.as)
+- Dead fields skipped: var_670 (Character), var_669 (LocalCharacter)
 
 ---
 

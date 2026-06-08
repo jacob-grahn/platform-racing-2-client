@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import effects.BlockPiece;
     import effects.MineExplode;
 
@@ -77,7 +77,7 @@ package blocks
         {
             if (!frozen) {
                 var _local_3:Number = player.x - (x + 15);
-                var _local_4:Number = (player.y - (player.var_325 / 2)) - (y + 15);
+                var _local_4:Number = (player.y - (player.charHeight / 2)) - (y + 15);
                 var _local_5:Number = Math.atan2(_local_4, _local_3);
                 var _local_6:Number = Math.cos(_local_5) * 50;
                 var _local_7:Number = Math.sin(_local_5) * 50;

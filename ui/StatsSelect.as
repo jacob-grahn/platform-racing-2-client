@@ -5,7 +5,7 @@ package ui
     import com.jiggmin.data.Settings;
     import flash.display.Stage;
     import flash.events.MouseEvent;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class StatsSelect extends Removable 
     {
@@ -15,14 +15,14 @@ package ui
         private var accelSlider:StatSlider; // var_62
         private var jumpnSlider:StatSlider; // var_66
         private var totalPoints:int; // var_334
-        private var character:LocalCharacter; // var_5
+        private var localChar:LocalCharacter; // var_5
         private var stageRef:Stage = Main.stage;
         public var updateSavedLEStats:Boolean = false;
 
         public function StatsSelect(tot:int, speed:int, accel:int, jumpn:int, c:LocalCharacter)
         {
             this.totalPoints = tot;
-            this.character = c;
+            this.localChar = c;
             if (this.totalPoints < speed + accel + jumpn) {
                 this.totalPoints = speed + accel + jumpn;
             }
@@ -56,7 +56,7 @@ package ui
         public function setStatsFromCharacter()
         {
             this.updateSavedLEStats = false;
-            this.setStats(this.character.getStats());
+            this.setStats(this.localChar.getStats());
         }
 
         // method_46 = setStats
@@ -79,8 +79,8 @@ package ui
         // mouseUpHandler = saveLEStats
         public function saveLEStats(e:* = null)
         {
-            if (this.character != null && this.character.inLE() && this.updateSavedLEStats) {
-                Settings.setValue(Settings.LE_TEST_STATS, this.character.getStats());
+            if (this.localChar != null && this.localChar.inLE() && this.updateSavedLEStats) {
+                Settings.setValue(Settings.LE_TEST_STATS, this.localChar.getStats());
             }
         }
 
@@ -88,8 +88,8 @@ package ui
         public function updateStatsDisplay()
         {
             this.m.textBox.text = this.getPointsRemaining().toString();
-            if (this.character != null) {
-                this.character.setStats(this.speedSlider.value, this.accelSlider.value, this.jumpnSlider.value);
+            if (this.localChar != null) {
+                this.localChar.setStats(this.speedSlider.value, this.accelSlider.value, this.jumpnSlider.value);
             }
         }
 
@@ -106,7 +106,7 @@ package ui
             this.speedSlider = null;
             this.accelSlider = null;
             this.jumpnSlider = null;
-            this.character = null;
+            this.localChar = null;
             this.stageRef = null;
             super.remove();
         }

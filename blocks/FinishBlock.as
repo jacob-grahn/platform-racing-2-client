@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class FinishBlock extends SupplyBlock 
     {

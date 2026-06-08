@@ -6,7 +6,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class IceBlock extends Block 
     {
@@ -19,7 +19,7 @@ package blocks
         override public function onStand(player:LocalCharacter)
         {
             super.onStand(player);
-            player.var_147 = 0.05;
+            player.accelFactor = 0.05;
         }
 
 

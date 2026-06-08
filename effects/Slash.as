@@ -6,7 +6,7 @@
 package effects
 {
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
@@ -17,7 +17,7 @@ package effects
 
         private var m:SlashAnimation = new SlashAnimation();
         private var course:Course = Course.course;
-        private var character:LocalCharacter = Course.course.localPlayer;
+        private var localPlayer:LocalCharacter = Course.course.localPlayer;
         private var reach:int = 29;
         private var shooterID:int;
 
@@ -47,9 +47,9 @@ package effects
             if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.reach);
             }
-            if (this.character != null && this.character.tempID != this.shooterID && this.character.y > py - 14 && this.character.y < py + 74) {
-                if (this.character.x > px - 14 && this.character.x < px + 14) {
-                    this.character.hit(this.reach, -9);
+            if (this.localPlayer != null && this.localPlayer.tempID != this.shooterID && this.localPlayer.y > py - 14 && this.localPlayer.y < py + 74) {
+                if (this.localPlayer.x > px - 14 && this.localPlayer.x < px + 14) {
+                    this.localPlayer.hit(this.reach, -9);
                 }
             }
         }
@@ -58,7 +58,7 @@ package effects
         {
             removeChild(this.m);
             this.course = null;
-            this.character = null;
+            this.localPlayer = null;
             this.m = null;
             super.remove();
         }

@@ -21,7 +21,7 @@ package player_profile
     import dialogs.HoverPopup;
     import dialogs.OutfitPopup;
     import dialogs.Popup;
-    import package_8.Character;
+    import character.Character;
     import level_browser.CourseMenu;
     import level_browser.LevelListing;
     import page.Page;
@@ -36,7 +36,7 @@ package player_profile
         public static var currentHat:int;
         public static var partToSet:Array;
 
-        private var character:Character; // var_5
+        private var charModel:Character; // var_5
         private var statsSelect:StatsSelect; // var_158
         private var playerDisplay:PlayerDisplay; // var_190
         private var stageRef:Stage = Main.stage;
@@ -129,9 +129,9 @@ package player_profile
                 this.guildName.y = 54;
                 this.m.addChild(this.guildName);
             }
-            this.character = new Character(hat, head, body, feet);
+            this.charModel = new Character(hat, head, body, feet);
             var charSprite:Sprite = new Sprite();
-            charSprite.addChild(this.character);
+            charSprite.addChild(this.charModel);
             charSprite.x = 80;
             charSprite.y = (140 + 42);
             charSprite.scaleX = (charSprite.scaleY = 1.5);
@@ -141,7 +141,7 @@ package player_profile
             this.statsSelect.x = 20;
             this.statsSelect.y = 207;
             addChild(this.statsSelect);
-            this.playerDisplay = new PlayerDisplay(this.character, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
+            this.playerDisplay = new PlayerDisplay(this.charModel, hatArray, headArray, bodyArray, feetArray, hat, head, body, feet, hatColor, headColor, bodyColor, feetColor, epicHats, epicHeads, epicBodies, epicFeet, hatColor2, headColor2, bodyColor2, feetColor2);
             this.playerDisplay.x = 23;
             this.playerDisplay.y = (58 + 37);
             addChild(this.playerDisplay);
@@ -204,7 +204,7 @@ package player_profile
         // _loc4 = sendStr
         private function update(e:Event)
         {
-            var c:Character = this.character;
+            var c:Character = this.charModel;
             var hat:int = partToSet.length == 2 && partToSet[0] == 'hat' ? partToSet[1] : c.hat1;
             var head:int = partToSet.length == 2 && partToSet[0] == 'head' ? partToSet[1] : c.head;
             var body:int = partToSet.length == 2 && partToSet[0] == 'body' ? partToSet[1] : c.body;
@@ -271,7 +271,7 @@ package player_profile
             }
             if (presetNum != -1) {
                 preset = Presets.getPreset(presetNum);
-                Presets.apply(preset, this.character, this.statsSelect, this.playerDisplay);
+                Presets.apply(preset, this.charModel, this.statsSelect, this.playerDisplay);
             }
         }
 
@@ -297,7 +297,7 @@ package player_profile
             }
 
             if (e.type == MouseEvent.CLICK) {
-                new LoadoutsPopup(this.character, this.statsSelect, this.playerDisplay);
+                new LoadoutsPopup(this.charModel, this.statsSelect, this.playerDisplay);
             } else if (e.type == MouseEvent.MOUSE_OVER) {
                 this.loadoutsHoverTimer = setTimeout(this.loadoutsMouseEvent, 500);
             }
@@ -306,11 +306,11 @@ package player_profile
         private function reset()
         {
             partToSet = [];
-            if (this.character != null) {
+            if (this.charModel != null) {
                 this.statsSelect.remove();
                 this.playerDisplay.remove();
-                this.character.remove();
-                this.character = null;
+                this.charModel.remove();
+                this.charModel = null;
                 this.playerDisplay = null;
                 this.statsSelect = null;
             }

@@ -9,7 +9,7 @@ package blocks
     import com.jiggmin.data.Settings;
     import sounds.SoundEffects;
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class TimeBlock extends SupplyBlock 
     {

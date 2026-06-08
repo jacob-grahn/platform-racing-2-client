@@ -14,7 +14,7 @@ package background
     import flash.utils.setTimeout;
     import gameplay.Course;
     import gameplay.MiniMap;
-    import package_8.Character;
+    import character.Character;
     import effects.Egg;
 
     public class Map extends BlockBackground 

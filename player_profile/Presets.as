@@ -6,7 +6,7 @@
 package player_profile
 {
     import com.jiggmin.data.Settings;
-    import package_8.Character;
+    import character.Character;
     import ui.StatsSelect;
 
     public class Presets 

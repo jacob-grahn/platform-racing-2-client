@@ -6,7 +6,7 @@
 package items
 {
     import com.jiggmin.data.Settings;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
 
     public class SuperJump extends Item 
@@ -19,9 +19,9 @@ package items
 
         override public function useItem()
         {
-            if (!character.crouching) {
+            if (!this.localChar.crouching) {
                 SoundEffects.playSound(new SuperJumpSound(), Settings.soundLevel / 100);
-                character.velY -= 25;
+                this.localChar.velY -= 25;
                 super.useItem();
             }
         }

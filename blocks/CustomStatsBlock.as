@@ -6,7 +6,7 @@
     import com.jiggmin.data.Settings;
     import gameplay.Course;
     import gameplay.TestCourse;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
 
     public class CustomStatsBlock extends SupplyBlock 

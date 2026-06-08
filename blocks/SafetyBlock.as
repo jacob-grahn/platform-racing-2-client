@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class SafetyBlock extends Block 
     {
@@ -24,7 +24,7 @@ package blocks
             super.onTouch(player);
             if (!frozen) {
                 var _local_2:Point = getSeg();
-                if (player.var_407 != _local_2.x || player.var_366 < _local_2.y || player.var_366 > _local_2.y + 2) {
+                if (player.standingSegX != _local_2.x || player.standingSegY < _local_2.y || player.standingSegY > _local_2.y + 2) {
                     player.returnToLastSafeSpot();
                 }
             }

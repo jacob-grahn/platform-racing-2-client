@@ -6,8 +6,8 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.LocalCharacter;
     import effects.BlockPiece;
     import flash.geom.Point;
 
@@ -96,7 +96,7 @@ package blocks
 
         private function cheeseHandler(player:LocalCharacter, hitForce:Number, stand:Boolean = false)
         {
-            if (hitForce > 1 && player.var_4.getBool(Character.CHEESE)) {
+            if (hitForce > 1 && player.store.getBool(Character.CHEESE)) {
                 return stand ? hitForce * 2 : 50;
             }
             return hitForce;

@@ -8,7 +8,7 @@ package effects
     import blocks.Block;
     import gameplay.Course;
     import com.jiggmin.data.Data;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class PhysicsEffect extends Effect
     {

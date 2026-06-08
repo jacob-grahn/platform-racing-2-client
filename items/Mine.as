@@ -10,7 +10,7 @@ package items
     import com.jiggmin.data.Data;
     import flash.geom.Point;
     import gameplay.Course;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import effects.MineAppear;
 
     public class Mine extends Item 
