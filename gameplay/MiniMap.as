@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_6.MiniMap = package_6.class_84
+// gameplay.MiniMap = gameplay.class_84
 
-package package_6
+package gameplay
 {
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
@@ -21,8 +21,8 @@ package package_6
         private var bitmapData:BitmapData;
         private var bitmap:Bitmap;
         private var holder:Sprite = new Sprite();
-        private var var_16:Sprite = new Sprite(); // block currently being processed
-        private var var_49:Sprite = new Sprite(); // finishes? all blocks? prob all blocks???
+        private var blockSprite:Sprite = new Sprite(); // block currently being processed
+        private var finishSprite:Sprite = new Sprite(); // finishes? all blocks? prob all blocks???
         private var playerDots:Sprite = new Sprite(); // var_134
         private var m:MiniMapGraphic = new MiniMapGraphic();
         //private var var_662:Array = new Array(); // unused?
@@ -34,29 +34,29 @@ package package_6
         public function MiniMap()
         {
             addChild(this.m);
-            this.var_16.graphics.beginFill(0);
+            this.blockSprite.graphics.beginFill(0);
         }
 
         // _loc4 = finishBox
-        public function method_680(blockCode:int, blockX:Number, blockY:Number)
+        public function addBlock(blockCode:int, blockX:Number, blockY:Number)
         {
             if (blockCode == Objects.BLOCK_FINISH) {
                 var finishBox:MiniMapFinishGraphic = new MiniMapFinishGraphic();
                 finishBox.x = blockX + 15;
                 finishBox.y = blockY + 15;
-                this.var_49.addChild(finishBox);
+                this.finishSprite.addChild(finishBox);
             }
             this.drawBlock(blockX, blockY);
         }
 
-        // deleted _loc3 (this.var_49.numChildren)
+        // deleted _loc3 (this.finishSprite.numChildren)
         public function removeFinish(_arg_1:int, _arg_2:int)
         {
             var _local_4:int;
-            while (_local_4 < this.var_49.numChildren) {
-                var _local_5:DisplayObject = this.var_49.getChildAt(_local_4);
+            while (_local_4 < this.finishSprite.numChildren) {
+                var _local_5:DisplayObject = this.finishSprite.getChildAt(_local_4);
                 if (_local_5.x == _arg_1 && _local_5.y == _arg_2) {
-                    this.var_49.removeChild(_local_5);
+                    this.finishSprite.removeChild(_local_5);
                     return;
                 }
                 _local_4++;
@@ -66,13 +66,13 @@ package package_6
         // method_490 = drawBlock
         private function drawBlock(blockX:int, blockY:int)
         {
-            this.var_16.graphics.beginFill(0);
-            this.var_16.graphics.moveTo(blockX, blockY);
-            this.var_16.graphics.lineTo(blockX + 30, blockY);
-            this.var_16.graphics.lineTo(blockX + 30, blockY + 30);
-            this.var_16.graphics.lineTo(blockX, blockY + 30);
-            this.var_16.graphics.lineTo(blockX, blockY);
-            this.var_16.graphics.endFill();
+            this.blockSprite.graphics.beginFill(0);
+            this.blockSprite.graphics.moveTo(blockX, blockY);
+            this.blockSprite.graphics.lineTo(blockX + 30, blockY);
+            this.blockSprite.graphics.lineTo(blockX + 30, blockY + 30);
+            this.blockSprite.graphics.lineTo(blockX, blockY + 30);
+            this.blockSprite.graphics.lineTo(blockX, blockY);
+            this.blockSprite.graphics.endFill();
         }
 
         // _loc1 = dot
@@ -80,42 +80,42 @@ package package_6
         {
             var dot:MiniMapDot = new MiniMapDot();
             this.playerDots.addChild(dot);
-            this.method_182(this.playerDots, this.holder.scaleX, 4);
+            this.scaleChildDots(this.playerDots, this.holder.scaleX, 4);
             return dot;
         }
 
         public function rasterize()
         {
-            this.var_16.graphics.endFill();
-            this.var_16.scaleX = this.var_16.scaleY = 1;
-            var _local_1:Number = this.maxSpaceWidth / this.var_16.width;
-            var _local_2:Number = this.maxSpaceWidth / this.var_16.height;
-            var _local_3:Number = this.maxSpaceHeight / this.var_16.height;
-            var _local_4:Number = this.maxSpaceHeight / this.var_16.width;
+            this.blockSprite.graphics.endFill();
+            this.blockSprite.scaleX = this.blockSprite.scaleY = 1;
+            var _local_1:Number = this.maxSpaceWidth / this.blockSprite.width;
+            var _local_2:Number = this.maxSpaceWidth / this.blockSprite.height;
+            var _local_3:Number = this.maxSpaceHeight / this.blockSprite.height;
+            var _local_4:Number = this.maxSpaceHeight / this.blockSprite.width;
             var _local_5:Number = _local_1 < _local_3 ? _local_1 : _local_3;
             var _local_6:Number = _local_2 < _local_4 ? _local_2 : _local_4;
             var _local_7:Number = _local_5 > _local_6 ? _local_5 : _local_6;
-            this.var_49.scaleX = this.var_49.scaleY = this.playerDots.scaleX = this.playerDots.scaleY = this.var_16.scaleX = this.var_16.scaleY = _local_7;
+            this.finishSprite.scaleX = this.finishSprite.scaleY = this.playerDots.scaleX = this.playerDots.scaleY = this.blockSprite.scaleX = this.blockSprite.scaleY = _local_7;
             var _local_8:Sprite = new Sprite();
-            _local_8.addChild(this.var_16);
-            var _local_9:Rectangle = this.var_16.getBounds(_local_8);
-            this.var_49.x = this.playerDots.x = this.var_16.x = -_local_9.left;
-            this.var_49.y = this.playerDots.y = this.var_16.y = -_local_9.top;
-            var _local_10:Number = Data.numLimit(this.var_16.width, 1, this.maxSpaceWidth);
-            var _local_11:Number = Data.numLimit(this.var_16.height, 1, this.maxSpaceWidth);
+            _local_8.addChild(this.blockSprite);
+            var _local_9:Rectangle = this.blockSprite.getBounds(_local_8);
+            this.finishSprite.x = this.playerDots.x = this.blockSprite.x = -_local_9.left;
+            this.finishSprite.y = this.playerDots.y = this.blockSprite.y = -_local_9.top;
+            var _local_10:Number = Data.numLimit(this.blockSprite.width, 1, this.maxSpaceWidth);
+            var _local_11:Number = Data.numLimit(this.blockSprite.height, 1, this.maxSpaceWidth);
             this.bitmapData = new BitmapData(Math.ceil(_local_10), Math.ceil(_local_11), true, 0);
             this.bitmap = new Bitmap(this.bitmapData);
             this.bitmapData.draw(_local_8);
-            this.var_16.graphics.clear();
-            this.var_16 = new Sprite();
+            this.blockSprite.graphics.clear();
+            this.blockSprite = new Sprite();
             addChild(this.holder);
             this.holder.addChild(this.bitmap);
-            this.holder.addChild(this.var_49);
+            this.holder.addChild(this.finishSprite);
             this.holder.addChild(this.playerDots);
-            this.method_263();
+            this.applyScale();
         }
 
-        private function method_263()
+        private function applyScale()
         {
             this.holder.scaleX = this.holder.scaleY = 1;
             var _local_1:Rectangle = this.bitmap.getBounds(this);
@@ -129,12 +129,12 @@ package package_6
             var _local_5:int = int((this.maxSpaceHeight - _local_1.height) / 2);
             this.holder.x = this.holder.x + (_local_4 - _local_1.left) + 3;
             this.holder.y = this.holder.y + (_local_5 - _local_1.top) + 3;
-            this.method_182(this.playerDots, this.scale, 4);
-            this.method_182(this.var_49, this.scale, 4);
+            this.scaleChildDots(this.playerDots, this.scale, 4);
+            this.scaleChildDots(this.finishSprite, this.scale, 4);
         }
 
         // deleted _loc5 (_arg_1.numChildren)
-        private function method_182(_arg_1:Sprite, _arg_2:Number, _arg_3:Number)
+        private function scaleChildDots(_arg_1:Sprite, _arg_2:Number, _arg_3:Number)
         {
             var _local_4:int = 0;
             while (_local_4 < _arg_1.numChildren) {
@@ -147,7 +147,7 @@ package package_6
         public function rotate(_arg_1:Number)
         {
             this.holder.rotation = _arg_1;
-            this.method_263();
+            this.applyScale();
         }
 
         public function clear()
@@ -158,8 +158,8 @@ package package_6
                 this.bitmapData.dispose();
                 this.bitmapData = null;
             }
-            while (this.var_49.numChildren > 0) {
-                this.var_49.removeChildAt(0);
+            while (this.finishSprite.numChildren > 0) {
+                this.finishSprite.removeChildAt(0);
             }
         }
 
@@ -177,8 +177,8 @@ package package_6
             removeChild(this.m);
             this.bitmap = null;
             this.holder = null;
-            this.var_16 = null;
-            this.var_49 = null;
+            this.blockSprite = null;
+            this.finishSprite = null;
             this.playerDots = null;
             this.m = null;
             super.remove();

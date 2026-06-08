@@ -1,4 +1,4 @@
-﻿package package_6
+﻿package gameplay
 {
     import com.jiggmin.data.HTMLNameMaker;
     import com.jiggmin.data.Settings;

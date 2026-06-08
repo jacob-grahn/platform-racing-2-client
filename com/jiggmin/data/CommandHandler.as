@@ -11,8 +11,8 @@ package com.jiggmin.data
     import flash.events.Event;
     import flash.utils.ByteArray;
     import dialogs.MessagePopup;
-    import package_6.Game;
-    import package_6.CatCaptcha;
+    import gameplay.Game;
+    import gameplay.CatCaptcha;
     import player_profile.AccountInfo;
     import level_browser.LevelListing;
 

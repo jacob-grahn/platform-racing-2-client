@@ -32,12 +32,12 @@ package package_8
     import items.JetPack;
     import items.SpeedBurst;
     import sounds.SoundEffects;
-    import package_6.ItemDisplay;
-    import package_6.CourseTimer;
-    import package_6.Course;
-    import package_6.Modes;
-    import package_6.RaceChat;
-    import package_6.TestCourse;
+    import gameplay.ItemDisplay;
+    import gameplay.CourseTimer;
+    import gameplay.Course;
+    import gameplay.Modes;
+    import gameplay.RaceChat;
+    import gameplay.TestCourse;
     import effects.Hat;
     import effects.Sting;
     import effects.Zap;

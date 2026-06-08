@@ -1,6 +1,6 @@
-﻿// package_6.Modes = package_6.class_93
+﻿// gameplay.Modes = gameplay.class_93
 
-package package_6
+package gameplay
 {
     public class Modes 
     {

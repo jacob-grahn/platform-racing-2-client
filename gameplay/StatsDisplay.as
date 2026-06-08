@@ -1,4 +1,4 @@
-﻿package package_6
+﻿package gameplay
 {
     import com.jiggmin.data.Data;
     import flash.events.MouseEvent;

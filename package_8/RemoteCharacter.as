@@ -7,7 +7,7 @@ package package_8
 {
     import com.jiggmin.data.CommandHandler;
     import background.Map;
-    import package_6.Course;
+    import gameplay.Course;
     import effects.Sting;
     import effects.Zap;
     import flash.events.Event;

@@ -1,6 +1,6 @@
-﻿// package_6.QuitButton = package_6.class_95
+﻿// gameplay.QuitButton = gameplay.class_95
 
-package package_6
+package gameplay
 {
     import dialogs.ConfirmPopup;
     import page.Page;

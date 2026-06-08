@@ -8,7 +8,7 @@ package effects
     import com.jiggmin.data.CommandHandler;
     import flash.geom.ColorTransform;
     import flash.geom.Point;
-    import package_6.Course;
+    import gameplay.Course;
 
     public class Hat extends PhysicsEffect
     {

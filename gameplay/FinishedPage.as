@@ -1,6 +1,6 @@
-﻿// package_6.FinishedPage = package_6.class_96
+﻿// gameplay.FinishedPage = gameplay.class_96
 
-package package_6
+package gameplay
 {
     import com.jiggmin.data.CommandHandler;
     import flash.events.MouseEvent;
@@ -32,11 +32,11 @@ package package_6
             this.expGain.x = 0;
             this.expGain.y = 47;
             addChild(this.expGain);
-            for each (var arr:Array in this.game.var_463) {
+            for each (var arr:Array in this.game.pendingAwards) {
                 this.award(arr);
             }
-            if (this.game.var_347 != 0) {
-                this.setExpGain(this.game.var_452, this.game.var_465, this.game.var_347);
+            if (this.game.expToRank != 0) {
+                this.setExpGain(this.game.expOld, this.game.expNew, this.game.expToRank);
             }
         }
 
@@ -74,7 +74,7 @@ package package_6
 
         override public function remove()
         {
-            this.game.var_202 = null;
+            this.game.finishedPage = null;
             this.expGain.remove();
             this.m.return_bt.removeEventListener(MouseEvent.CLICK, this.clickReturn);
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);

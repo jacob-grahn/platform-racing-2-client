@@ -7,7 +7,7 @@ package items
 {
     import package_8.LocalCharacter;
     import flash.geom.Point;
-    import package_6.Course;
+    import gameplay.Course;
     import background.EffectBackground;
 
     public class IceWave extends Item 

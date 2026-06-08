@@ -4,6 +4,8 @@ De-obfuscate the codebase by renaming obfuscated packages, classes, methods, and
 variables to meaningful names. Ordered from easiest to hardest based on
 obfuscation density.
 
+Run python3 check_fla_linkage.py after each rename cycle
+
 Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable count
 
 ---
@@ -80,19 +82,15 @@ Legend: `method_##` = obfuscated method count, `var_##` = obfuscated variable co
 - BlockPiece: var_372→rotVel, name_3→fadeRate, params renamed
 - PhysicsEffect: method_720→activate, method_205→deactivate, method_181→isNearLocalPlayer, method_311→isGrounded
 
-### package_6 → game (111 method_##, 189 var_##)
-- [ ] `Course.as`
-- [ ] `Game.as`
-- [ ] `CourseTimer.as`
-- [ ] `FinishedPage.as`
-- [ ] `MiniMap.as`
-- [ ] `DrawingInfo.as`
-- [ ] `PlaceArtifact.as` / `SpecialEvent.as`
-- [ ] `RaceChat.as`
-- [ ] `QuitButton.as`
-- [ ] `Hearts.as` / `ExpGain.as` / `LuxPopup.as`
-- [ ] All remaining files in package_6 (22 files total)
-- [ ] Rename package directory
+### ~~package_6 → gameplay~~ ✓ DONE
+- Hearts: method_798→setHearts, method_758→getHeartCount
+- CourseTimer: var_308→tickInterval, var_480→paused, method_189→getElapsedSecs, method_362→getTimeLeft, method_467→tick, method_425→resume, method_588→pulseLowTime
+- Game: var_202→finishedPage, var_463→pendingAwards, var_452→expOld, var_465→expNew, var_347→expToRank, method_196→maybeShowFinishedPage, method_185→markPlayerDone, method_682→submitHatFinishStat
+- DrawingInfo: method_138→addPlayer
+- MiniMap: var_16→blockSprite, var_49→finishSprite, method_680→addBlock, method_263→applyScale, method_182→scaleChildDots
+- CatCaptcha: var_181→captchaLoader, var_191→submitLoader, method_694→loadCaptcha, method_441→onCaptchaLoad, method_561→showCatImages, method_465→onSubmitComplete, method_99→onError
+- class_101→CatImage (method_566→onImgLoad); PrizePopup: var_207→epicFlash; ExpGain: var_575→expStep
+- Course: var_9→localPlayer (cross-file: Slash.as, PhysicsEffect.as, TestCourse.as, Game.as)
 
 ### package_8 → character (124 method_##, 291 var_##) ← HARDEST
 - [ ] `Character.as`

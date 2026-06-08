@@ -1,6 +1,6 @@
-﻿// package_6.ExpGain = package_6.class_151
+﻿// gameplay.ExpGain = gameplay.class_151
 
-package package_6
+package gameplay
 {
     import flash.events.Event;
     import com.jiggmin.data.Data;
@@ -12,7 +12,7 @@ package package_6
         private var expStart:Number; // var_153
         private var expEnd:Number; // var_209
         private var expToRank:Number; // var_330
-        private var var_575:Number;
+        private var expStep:Number;
 
         public function ExpGain()
         {
@@ -32,14 +32,14 @@ package package_6
                 this.expStart = this.expToRank;
             }
             if (this.expStart <= this.expEnd) {
-                this.var_575 = (this.expEnd - this.expStart) / 45;
+                this.expStep = (this.expEnd - this.expStart) / 45;
                 addEventListener(Event.ENTER_FRAME, this.go);
             }
         }
 
         private function go(e:Event)
         {
-            this.expStart = this.expStart + this.var_575;
+            this.expStart = this.expStart + this.expStep;
             if (this.expStart >= this.expEnd) {
                 removeEventListener(Event.ENTER_FRAME, this.go);
                 this.expStart = this.expEnd;

@@ -7,7 +7,7 @@ package effects
     import com.jiggmin.data.Data;
     import flash.events.Event;
     import flash.geom.Point;
-    import package_6.Course;
+    import gameplay.Course;
     import package_8.Character;
     import package_8.LocalCharacter;
 

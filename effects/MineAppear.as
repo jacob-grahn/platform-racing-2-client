@@ -2,7 +2,7 @@
 
 package effects
 {
-    import package_6.Course;
+    import gameplay.Course;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
     import sounds.SoundEffects;

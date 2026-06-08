@@ -8,7 +8,7 @@ package levelEditor
     import flash.events.Event;
     import menu.ConnectingPopup;
     import dialogs.*;
-    import package_6.TestCourse;
+    import gameplay.TestCourse;
     import editor_sidebar.Blocks;
     import editor_sidebar.Settings;
     import editor_sidebar.Stamps;

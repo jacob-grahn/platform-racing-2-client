@@ -1,6 +1,6 @@
 ﻿// RaceChat = class_94
 
-package package_6
+package gameplay
 {
     import com.jiggmin.data.Data;
     import fl.controls.TextArea;

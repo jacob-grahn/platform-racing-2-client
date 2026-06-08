@@ -1,6 +1,6 @@
-﻿// package_6.ItemDisplay = package_6.class_90
+﻿// gameplay.ItemDisplay = gameplay.class_90
 
-package package_6
+package gameplay
 {
     public class ItemDisplay extends Removable 
     {

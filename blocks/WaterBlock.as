@@ -7,7 +7,7 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_6.Course;
+    import gameplay.Course;
     import package_8.LocalCharacter;
     import flash.events.Event;
 

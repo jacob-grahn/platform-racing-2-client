@@ -9,9 +9,9 @@ package
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
     import dialogs.HoverPopup;
-    import package_6.Course;
+    import gameplay.Course;
     import package_8.Character;
-    import package_6.Game;
+    import gameplay.Game;
     import package_8.LocalCharacter;
 
     public dynamic class MiniMapDot extends MovieClip 

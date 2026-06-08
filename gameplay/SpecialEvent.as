@@ -1,6 +1,6 @@
-﻿// package_6.SpecialEvent = package_6.PlaceArtifact = package_6.class_99
+﻿// gameplay.SpecialEvent = gameplay.PlaceArtifact = gameplay.class_99
 
-package package_6
+package gameplay
 {
     import flash.display.Stage;
 	import flash.events.Event;

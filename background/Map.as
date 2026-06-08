@@ -12,8 +12,8 @@ package background
     import flash.geom.Point;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
-    import package_6.Course;
-    import package_6.MiniMap;
+    import gameplay.Course;
+    import gameplay.MiniMap;
     import package_8.Character;
     import effects.Egg;
 
@@ -111,7 +111,7 @@ package background
                         Course.course.teleportBlocks[color].push(block);
                         block.blockNum = Course.course.teleportBlocks[color].length - 1;
                     }
-                    this.miniMap.method_680(blockCode, blockX, blockY);
+                    this.miniMap.addBlock(blockCode, blockX, blockY);
                 }
             }
             if (blockY > this.maxY) {

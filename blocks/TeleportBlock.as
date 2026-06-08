@@ -8,7 +8,7 @@
     import flash.geom.Rectangle;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
-    import package_6.Course;
+    import gameplay.Course;
     import package_8.LocalCharacter;
     import effects.TeleportPop;
 

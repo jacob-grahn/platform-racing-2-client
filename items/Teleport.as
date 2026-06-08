@@ -6,7 +6,7 @@
 package items
 {
     import package_8.LocalCharacter;
-    import package_6.Course;
+    import gameplay.Course;
     import blocks.Block;
     import effects.TeleportPop;
 

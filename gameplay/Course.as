@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-//package_6.Course = package_6.class_30
+//gameplay.Course = gameplay.class_30
 
-package package_6
+package gameplay
 {
 	import background.LevelBackground;
     import background.EffectBackground;
@@ -38,7 +38,7 @@ package package_6
         public var finishBlocks:Array = new Array(); // var_313
         public var teleportBlocks:Object = new Object();
         public var playerArray:Array = new Array(); // var_40
-        public var var_9:LocalCharacter;
+        public var localPlayer:LocalCharacter;
         public var playerSpectating:Character;
         protected var holder:Sprite = new Sprite();
         public var timer:CourseTimer;
@@ -171,13 +171,13 @@ package package_6
         {
             if (this.gameMode == "deathmatch") {
                 this.hearts.visible = true;
-                this.hearts.method_798(_arg_1);
+                this.hearts.setHearts(_arg_1);
             }
         }
 
-        public function method_842():int
+        public function getHeartCount():int
         {
-            return this.hearts.method_758();
+            return this.hearts.getHeartCount();
         }
 
         override public function setGameMode(mode:String)
@@ -214,7 +214,7 @@ package package_6
         // method_82 = cameraFollowPlayer
         protected function cameraFollowPlayer(e:Event)
         {
-            var c:Character = this.playerSpectating == null ? this.var_9 : this.playerSpectating;
+            var c:Character = this.playerSpectating == null ? this.localPlayer : this.playerSpectating;
             if (c != null) {
                 var _local_2:Number = -c.x;
                 var _local_3:Number = -c.y + 45;
@@ -280,10 +280,10 @@ package package_6
             this.countdown.addEventListener("count", this.onCountdownCount, false, 0, true);
             this.countdown.addEventListener("finish", this.onCountdownFinish, false, 0, true);
             addChild(this.countdown);
-            var startPos:Object = this.var_9.getPos(); // this fixes hat attack when quitting during the countdown
+            var startPos:Object = this.localPlayer.getPos(); // this fixes hat attack when quitting during the countdown
             Main.socket.write('exact_pos`' + startPos.x + '`' + startPos.y);
-            if (this.var_9 != null && this.var_9.var_4.getBool(Character.JUMP_START)) {
-                this.var_9.init();
+            if (this.localPlayer != null && this.localPlayer.var_4.getBool(Character.JUMP_START)) {
+                this.localPlayer.init();
             }
         }
 
@@ -296,8 +296,8 @@ package package_6
         protected function onCountdownFinish(_arg_1:Event)
         {
             SoundEffects.playSound(new GoSound(), 0.5 * (Settings.soundLevel / 100));
-            if (this.var_9 != null) {
-                this.var_9.init();
+            if (this.localPlayer != null) {
+                this.localPlayer.init();
             }
             this.blockBackground.method_578();
             this.countdownFinished = true;
@@ -322,8 +322,8 @@ package package_6
         {
             var newGrav:Number = Number(s);
             super.setGravity(newGrav);
-            if (this.var_9 != null) {
-                this.var_9.setGravity(newGrav);
+            if (this.localPlayer != null) {
+                this.localPlayer.setGravity(newGrav);
             }
         }
 
@@ -484,8 +484,8 @@ package package_6
                 removeEventListener(Event.ENTER_FRAME, this.rotate);
             }
             this.bg.rotation = this.holder.rotation = -rotation;
-            if (this.var_9 != null) {
-                this.var_9.setRotation(-rotation);
+            if (this.localPlayer != null) {
+                this.localPlayer.setRotation(-rotation);
             }
         }
 

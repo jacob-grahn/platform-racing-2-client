@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_6.PrizePopup = package_6.class_97
+// gameplay.PrizePopup = gameplay.class_97
 
-package package_6
+package gameplay
 {
     import flash.errors.Error;
     import dialogs.Popup;
@@ -18,7 +18,7 @@ package package_6
 
         private var m:PrizePopupGraphic = new PrizePopupGraphic();
         private var target:MovieClip;
-        private var var_207:EpicFlash = new EpicFlash();
+        private var epicFlash:EpicFlash = new EpicFlash();
 
         public function PrizePopup(type:String, id:int, prizeName:String, desc:String = "", universal:Boolean = false, finished:Boolean = false)
         {
@@ -115,9 +115,9 @@ package package_6
         // method_714 = activateEpicAnimation
         private function activateEpicAnimation()
         {
-            this.var_207.addItem(this.target.colorMC2);
-            this.var_207.method_580(300);
-            this.var_207.start();
+            this.epicFlash.addItem(this.target.colorMC2);
+            this.epicFlash.method_580(300);
+            this.epicFlash.start();
         }
 
         // method_292 = clickClose
@@ -129,9 +129,9 @@ package package_6
         override public function remove()
         {
             PrizePopup.instance = null;
-            if (this.var_207 != null) {
-                this.var_207.remove();
-                this.var_207 = null;
+            if (this.epicFlash != null) {
+                this.epicFlash.remove();
+                this.epicFlash = null;
             }
             this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
             super.remove();
@@ -139,5 +139,5 @@ package package_6
 
 
     }
-}//package package_6
+}//package gameplay
 

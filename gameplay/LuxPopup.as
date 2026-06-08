@@ -1,6 +1,6 @@
-﻿// package_6.LuxPopup = package_6.class_98
+﻿// gameplay.LuxPopup = gameplay.class_98
 
-package package_6
+package gameplay
 {
     import dialogs.Popup;
     import flash.display.Loader;

@@ -9,7 +9,7 @@ package items
     import blocks.Block;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
-    import package_6.Course;
+    import gameplay.Course;
     import package_8.LocalCharacter;
     import effects.MineAppear;
 

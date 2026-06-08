@@ -10,7 +10,7 @@ package sounds
     import flash.media.SoundTransform;
     import flash.media.SoundChannel;
     import flash.media.Sound;
-    import package_6.Course;
+    import gameplay.Course;
 
     public class SoundEffects 
     {

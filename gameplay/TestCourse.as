@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_6.TestCourse = package_6.class_171
+// gameplay.TestCourse = gameplay.class_171
 
-package package_6
+package gameplay
 {
     import blocks.TeleportBlock;
     import com.jiggmin.data.Settings;
@@ -45,26 +45,26 @@ package package_6
             holder.addChild(this.m);
             musicSelection.x = -130;
             var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
-            var_9 = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity, savedStats.speed, savedStats.acceleration, savedStats.jumping);
-            var_9.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
-            var_9.testMode = true;
-            playerArray.push(var_9);
-            this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.acceleration, savedStats.jumping, var_9);
+            localPlayer = new LocalCharacter(0, this, blockBackground, miniMap.getDot(), itemDisplay, this.variables.gravity, savedStats.speed, savedStats.acceleration, savedStats.jumping);
+            localPlayer.setColors(0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1, 0xFFFFFF, -1);
+            localPlayer.testMode = true;
+            playerArray.push(localPlayer);
+            this.statsSelect = new StatsSelect(300, savedStats.speed, savedStats.acceleration, savedStats.jumping, localPlayer);
             this.statsSelect.x = -265;
             this.statsSelect.y = 90;
             this.statsSelect.scaleX = this.statsSelect.scaleY = 0.66;
             holder.addChild(this.statsSelect);
-            this.hatPicker = new HatPicker(var_9);
+            this.hatPicker = new HatPicker(localPlayer);
             this.hatPicker.x = -260;
             this.hatPicker.y = 65;
             this.hatPicker.scaleX = this.hatPicker.scaleY = 0.7;
             holder.addChild(this.hatPicker);
             var player1Start:Point = startPosArray[0];
-            var_9.setPos(player1Start.x, player1Start.y);
+            localPlayer.setPos(player1Start.x, player1Start.y);
             posX = -player1Start.x;
             posY = -player1Start.y;
             setPos(posX, posY);
-            frontBackground.addChild(var_9);
+            frontBackground.addChild(localPlayer);
             addEventListener(Event.ENTER_FRAME, this.go);
             var_14.addEventListener(MouseEvent.CLICK, this.teleportToClickPos, false, 0, true);
             if (gameMode == Modes.egg) {
@@ -120,9 +120,9 @@ package package_6
             var target:Point = var_14.globalToLocal(new Point(e.stageX, e.stageY));
             var newX:int = -frontBackground.x + target.x;
             var newY:int = -frontBackground.y + target.y;
-            new TeleportPop(var_9.x, var_9.y);
-            var_9.setPos(newX, newY);
-            new TeleportPop(var_9.x, var_9.y);
+            new TeleportPop(localPlayer.x, localPlayer.y);
+            localPlayer.setPos(newX, newY);
+            new TeleportPop(localPlayer.x, localPlayer.y);
         }
 
         public function statsSelectSetFromCharacter()
@@ -144,12 +144,12 @@ package package_6
             blockBackground.draw();
             blockBackground.method_578();
             var player1Start:Point = startPosArray[0];
-            var_9.setPos(player1Start.x, player1Start.y);
-            var_9.setItem(0);
-            var_9.setLife(3);
+            localPlayer.setPos(player1Start.x, player1Start.y);
+            localPlayer.setItem(0);
+            localPlayer.setLife(3);
             this.hatPicker.resetHat();
             var savedStats:Object = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
-            var_9.setStats(savedStats.speed, savedStats.acceleration, savedStats.jumping);
+            localPlayer.setStats(savedStats.speed, savedStats.acceleration, savedStats.jumping);
             this.statsSelectSetFromCharacter();
             miniMap.rotate(0);
         }

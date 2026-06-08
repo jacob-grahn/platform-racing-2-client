@@ -8,7 +8,7 @@ package levelEditor
     import com.jiggmin.data.Data;
     import flash.events.MouseEvent;
     import dialogs.HoverPopup;
-    import package_6.Modes;
+    import gameplay.Modes;
     import ui.SelectableButton;
 
     public class GetLevelsPopupItem extends SelectableButton 

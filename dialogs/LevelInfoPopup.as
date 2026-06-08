@@ -12,9 +12,9 @@
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
     import lobby.LobbyRight;
-    import package_6.Game;
+    import gameplay.Game;
     import player_profile.PartInfo.*;
-    import package_6.Modes;
+    import gameplay.Modes;
     import flash.ui.Mouse;
     import flash.ui.MouseCursor;
 

@@ -7,7 +7,7 @@ package effects
 {
     import com.jiggmin.data.Random;
     import com.jiggmin.data.CommandHandler;
-    import package_6.Course;
+    import gameplay.Course;
     import background.Map;
     import com.jiggmin.data.Data;
     import flash.geom.Point;

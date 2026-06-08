@@ -1,6 +1,6 @@
-﻿// package_6.MusicSelection = package_6.class_85
+﻿// gameplay.MusicSelection = gameplay.class_85
 
-package package_6
+package gameplay
 {
     import ui.GameSound;
 

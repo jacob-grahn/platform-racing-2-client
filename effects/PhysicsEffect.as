@@ -6,7 +6,7 @@ package effects
     import flash.events.Event;
     import flash.geom.Point;
     import blocks.Block;
-    import package_6.Course;
+    import gameplay.Course;
     import com.jiggmin.data.Data;
     import package_8.LocalCharacter;
 
@@ -90,7 +90,7 @@ package effects
 
         protected function isNearLocalPlayer(px:int, py:int):Boolean
         {
-            var p:LocalCharacter = Course.course.var_9;
+            var p:LocalCharacter = Course.course.localPlayer;
             if (p != null && !p.removed) {
                 if (Math.abs(p.x - px) < 25 && p.y > py - 5 && ((!p.crouching && p.y < py + 65) || (p.crouching && p.y < py + 25))) {
                     return true;

@@ -19,9 +19,9 @@ package background
     import flash.display.DisplayObject;
     import dialogs.MessagePopup;
     import dialogs.Popup;
-    import package_6.Course;
-    import package_6.Game;
-    import package_6.PrizePopup;
+    import gameplay.Course;
+    import gameplay.Game;
+    import gameplay.PrizePopup;
 
     public class Background extends Sprite 
     {

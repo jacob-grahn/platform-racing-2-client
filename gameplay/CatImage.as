@@ -1,9 +1,9 @@
 ﻿// Decompiled by AS3 Sorcerer 5.98
 // www.as3sorcerer.com
 
-// package_6.class_101
+// gameplay.CatImage
 
-package package_6
+package gameplay
 {
     import com.jiggmin.data.Data;
     import flash.display.Loader;
@@ -12,14 +12,14 @@ package package_6
     import flash.net.URLRequest;
     import flash.net.URLVariables;
 
-    public class class_101 extends Sprite 
+    public class CatImage extends Sprite 
     {
 
         private var bg:BlueSquareButton = new BlueSquareButton();
         private var img:Loader = new Loader();
         private var id:int;
 
-        public function class_101(n:int)
+        public function CatImage(n:int)
         {
             this.id = n;
             addChild(this.bg);
@@ -42,17 +42,17 @@ package package_6
             vars.img = this.id;
             var request:URLRequest = new URLRequest(Main.baseURL + "/cat/cat-img.php");
             request.data = vars;
-            this.img.contentLoaderInfo.addEventListener(Event.COMPLETE, this.method_566, false, 0, true);
+            this.img.contentLoaderInfo.addEventListener(Event.COMPLETE, this.onImgLoad, false, 0, true);
             this.img.load(request);
         }
 
-        // depreciated; using method_566
+        // depreciated; using onImgLoad
         /*private function method_281(_arg_1:Event)
         {
-            this.method_566();
+            this.onImgLoad();
         }*/
 
-        private function method_566(e:* = null)
+        private function onImgLoad(e:* = null)
         {
             Data.method_314(this.img, 200, 200);
             this.img.x = Math.round((200 - this.img.width) / 2) + 5;
@@ -62,7 +62,7 @@ package package_6
 
         public function remove()
         {
-            this.img.removeEventListener(Event.COMPLETE, this.method_566);
+            this.img.removeEventListener(Event.COMPLETE, this.onImgLoad);
             if (parent != null) {
                 parent.removeChild(this);
             }

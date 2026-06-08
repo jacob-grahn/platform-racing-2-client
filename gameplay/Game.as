@@ -1,6 +1,6 @@
-﻿//package_6.Game = package_6.class_31
+﻿//gameplay.Game = gameplay.class_31
 
-package package_6
+package gameplay
 {
     import com.adobe.crypto.MD5;
     import com.jiggmin.data.CommandHandler;
@@ -37,11 +37,11 @@ package package_6
         private var levelHash:String = ""; // var_579
         private var specialEvent:SpecialEvent; // var_436, then placeArtifact, then SpecialEvent
         private var var_634:Array = new Array();
-        public var var_202:FinishedPage;
-        public var var_463:Array = new Array();
-        public var var_452:int;
-        public var var_465:int;
-        public var var_347:int;
+        public var finishedPage:FinishedPage;
+        public var pendingAwards:Array = new Array();
+        public var expOld:int;
+        public var expNew:int;
+        public var expToRank:int;
         public var framesPlaying:int = 0;
         private var hatCountdown:uint;
 
@@ -178,21 +178,21 @@ package package_6
 
         public function award(_arg_1:Array)
         {
-            this.var_463.push(_arg_1);
-            if (this.var_202 != null) {
-                this.var_202.award(_arg_1);
+            this.pendingAwards.push(_arg_1);
+            if (this.finishedPage != null) {
+                this.finishedPage.award(_arg_1);
             }
         }
 
         public function setExpGain(_arg_1:Array)
         {
-            this.var_452 = int(_arg_1[0]);
-            this.var_465 = int(_arg_1[1]);
-            this.var_347 = int(_arg_1[2]);
+            this.expOld = int(_arg_1[0]);
+            this.expNew = int(_arg_1[1]);
+            this.expToRank = int(_arg_1[2]);
             this.finish();
-            this.method_196();
-            if (this.var_202 != null) {
-                this.var_202.setExpGain(this.var_452, this.var_465, this.var_347);
+            this.maybeShowFinishedPage();
+            if (this.finishedPage != null) {
+                this.finishedPage.setExpGain(this.expOld, this.expNew, this.expToRank);
             }
         }
 
@@ -317,7 +317,7 @@ package package_6
             var c:RemoteCharacter = new RemoteCharacter(tempId, miniMap.getDot(), userName, hatId, headId, bodyId, feetId, groupStr);
             c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
             playerArray[tempId] = c;
-            this.drawingInfo.method_138(userName, tempId);
+            this.drawingInfo.addPlayer(userName, tempId);
             positionPlayersAtStart();
         }
 
@@ -361,8 +361,8 @@ package package_6
             var c:LocalCharacter = new LocalCharacter(tempId, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), speed, accel, jumpn, hatId, headId, bodyId, feetId, groupStr);
             c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
             playerArray[tempId] = c;
-            this.drawingInfo.method_138(Main.loggedInAs, tempId);
-            var_9 = c;
+            this.drawingInfo.addPlayer(Main.loggedInAs, tempId);
+            localPlayer = c;
             positionPlayersAtStart();
         }
 
@@ -373,12 +373,12 @@ package package_6
             }
         }
 
-        public function method_196()
+        public function maybeShowFinishedPage()
         {
-            if (this.var_202 == null) {
-                this.method_185();
+            if (this.finishedPage == null) {
+                this.markPlayerDone();
                 this.quitButton.stopGlow();
-                this.var_202 = new FinishedPage(this);
+                this.finishedPage = new FinishedPage(this);
             }
         }
 
@@ -402,7 +402,7 @@ package package_6
             this.cancelHatCountdown();
             if (this.gameMode == Modes.egg) {
                 this.finish();
-                this.method_196();
+                this.maybeShowFinishedPage();
             } else {
                 this.quitGame();
             }
@@ -421,8 +421,8 @@ package package_6
                     Main.socket.write("finish_race`" + finishId + "`" + finishX + "`" + finishY);
                     if (this.gameMode != Modes.hat) {
                         this.quitButton.startGlow();
-                        this.method_185();
-                        this.method_682();
+                        this.markPlayerDone();
+                        this.submitHatFinishStat();
                         timer.pause();
                     }
                 }
@@ -441,18 +441,18 @@ package package_6
                     Main.socket.write("quit_race`");
                 }
             }
-            this.method_185();
-            this.method_196();
+            this.markPlayerDone();
+            this.maybeShowFinishedPage();
         }
 
-        private function method_682()
+        private function submitHatFinishStat()
         {
             var _local_1:int;
             var _local_2:int;
-            if (var_9 != null) {
+            if (localPlayer != null) {
                 _local_1 = 1;
                 while (_local_1 <= 4) {
-                    if (var_9["hat" + _local_1] <= 1) {
+                    if (localPlayer["hat" + _local_1] <= 1) {
                         break;
                     }
                     _local_1++;
@@ -464,12 +464,12 @@ package package_6
             }
         }
 
-        private function method_185()
+        private function markPlayerDone()
         {
             if (!playerDone) {
                 playerDone = true;
-                if (var_9 != null) {
-                    var_9.beginRemove();
+                if (localPlayer != null) {
+                    localPlayer.beginRemove();
                 }
                 this.toggleSpectatePossible(true);
                 super.toggleKeyScroll(true);

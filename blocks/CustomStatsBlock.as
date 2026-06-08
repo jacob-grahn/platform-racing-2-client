@@ -4,8 +4,8 @@
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Settings;
-    import package_6.Course;
-    import package_6.TestCourse;
+    import gameplay.Course;
+    import gameplay.TestCourse;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
 

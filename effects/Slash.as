@@ -5,7 +5,7 @@
 
 package effects
 {
-    import package_6.Course;
+    import gameplay.Course;
     import package_8.LocalCharacter;
     import sounds.SoundEffects;
     import com.jiggmin.data.Data;
@@ -17,7 +17,7 @@ package effects
 
         private var m:SlashAnimation = new SlashAnimation();
         private var course:Course = Course.course;
-        private var character:LocalCharacter = Course.course.var_9;
+        private var character:LocalCharacter = Course.course.localPlayer;
         private var reach:int = 29;
         private var shooterID:int;
 

@@ -1,6 +1,6 @@
-﻿// package_6.Hearts = package_6.class_89
+﻿// gameplay.Hearts = gameplay.class_89
 
-package package_6
+package gameplay
 {
     import com.jiggmin.data.Data;
     import flash.display.Sprite;
@@ -13,7 +13,7 @@ package package_6
         private var scale:Number = 0.2;
 
 
-        public function method_798(numHearts:int)
+        public function setHearts(numHearts:int)
         {
             numHearts = Data.numLimit(numHearts, 0, 15);
             while (this.totalHearts < numHearts) {
@@ -24,7 +24,7 @@ package package_6
             }
         }
 
-        public function method_758():int
+        public function getHeartCount():int
         {
             return this.totalHearts;
         }

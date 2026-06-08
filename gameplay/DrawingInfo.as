@@ -1,6 +1,6 @@
-﻿// package_6.DrawingInfo = package_6.class_100
+﻿// gameplay.DrawingInfo = gameplay.class_100
 
-package package_6
+package gameplay
 {
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Data;
@@ -142,7 +142,7 @@ package package_6
             this.m.info1["anim" + tempID].visible = this.m.info2["anim" + tempID].visible = false;
         }
 
-        public function method_138(name:String, tempID:int)
+        public function addPlayer(name:String, tempID:int)
         {
             this.names[tempID] = name;
             this.m.info1["nameBox" + tempID].text = this.m.info2["nameBox" + tempID].text = name;
