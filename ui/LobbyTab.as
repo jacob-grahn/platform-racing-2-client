@@ -24,7 +24,6 @@ package ui
             this.activate();
         }
 
-        // method_671 = setTabsHolder
         internal function setTabsHolder(h:TabsHolder)
         {
             this.tabsHolder = h;
@@ -35,14 +34,12 @@ package ui
             this.select();
         }
 
-        // method_224 = onHover
         private function onHover(e:MouseEvent)
         {
             this.m.bg.gotoAndStop("over");
             this.tabsHolder.moveToFront(this);
         }
 
-        // method_246 = onHoverOut
         private function onHoverOut(e:MouseEvent)
         {
             this.m.bg.gotoAndStop("up");

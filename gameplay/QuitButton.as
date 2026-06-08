@@ -21,7 +21,6 @@ package gameplay
             this.m.quit_bt.addEventListener(MouseEvent.MOUSE_UP, this.invokeQuit);
         }
 
-        // method_414 = invokeQuit
         private function invokeQuit(e:*)
         {
             if (e is KeyboardEvent) {
@@ -37,13 +36,11 @@ package gameplay
             }
         }
 
-        // method_808 = startGlow
         public function startGlow()
         {
             this.m.glow.gotoAndPlay("on");
         }
 
-        // method_757 = stopGlow
         public function stopGlow()
         {
             this.m.glow.gotoAndStop("off");

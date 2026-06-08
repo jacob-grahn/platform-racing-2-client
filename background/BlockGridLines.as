@@ -20,11 +20,6 @@ package background
             this.drawGrid(z);
         }
 
-        // _loc2 = maxSegsX
-        // _loc3 = maxSegsY
-        // _loc4 = curX
-        // _loc5 = curY
-        // method_325 = drawGrid
         private function drawGrid(zoom:Number)
         {
             var maxSegsX:Number = (550 / zoom) + this.segSize;

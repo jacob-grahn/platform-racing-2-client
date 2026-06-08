@@ -35,44 +35,44 @@ package blocks
         override public function onStand(player:LocalCharacter)
         {
             super.onStand(player);
-            var _local_2:Number = this.method_125();
+            var _local_2:Number = this.getEffectiveRotation();
             if (_local_2 == 0 && !player.crouching) {
                 player.velY -= 10;
             } else {
                 this.push(player, _local_2);
             }
-            this.method_87();
+            this.animateArrow();
         }
 
         override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
-            var _local_2:Number = this.method_125();
+            var _local_2:Number = this.getEffectiveRotation();
             if (_local_2 == 0) {
                 player.velY = player.down == false && player.crouching == false ? -14 : 0;
             } else {
                 this.push(player, _local_2);
             }
-            this.method_87();
+            this.animateArrow();
         }
 
         override public function onLeftHit(player:LocalCharacter)
         {
             super.onLeftHit(player);
-            var _local_2:Number = this.method_125();
+            var _local_2:Number = this.getEffectiveRotation();
             this.push(player, _local_2);
-            this.method_87();
+            this.animateArrow();
         }
 
         override public function onRightHit(player:LocalCharacter)
         {
             super.onRightHit(player);
-            var _local_2:Number = this.method_125();
+            var _local_2:Number = this.getEffectiveRotation();
             this.push(player, _local_2);
-            this.method_87();
+            this.animateArrow();
         }
 
-        public function method_87()
+        public function animateArrow()
         {
             if (this.arrowMC.currentFrame < 5) {
                 this.arrowMC.gotoAndPlay(this.arrowMC.currentFrame + 1);
@@ -81,7 +81,7 @@ package blocks
             }
         }
 
-        private function method_125():Number
+        private function getEffectiveRotation():Number
         {
             var _local_1:Number = map.rotation + this.rot;
             rotation = _local_1;

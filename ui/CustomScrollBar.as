@@ -27,9 +27,9 @@ package ui
         {
             this.m = new CustomScrollBarGraphic();
             addChild(this.m);
-            this.m.thumb.addEventListener(MouseEvent.MOUSE_DOWN, this.method_457, false, 0, true);
-            this.m.upArrow.addEventListener(MouseEvent.MOUSE_DOWN, this.method_381, false, 0, true);
-            this.m.downArrow.addEventListener(MouseEvent.MOUSE_DOWN, this.method_255, false, 0, true);
+            this.m.thumb.addEventListener(MouseEvent.MOUSE_DOWN, this.onThumbDown, false, 0, true);
+            this.m.upArrow.addEventListener(MouseEvent.MOUSE_DOWN, this.onUpArrowDown, false, 0, true);
+            this.m.downArrow.addEventListener(MouseEvent.MOUSE_DOWN, this.onDownArrowDown, false, 0, true);
         }
 
         public function init(_arg_1:DisplayObject, _arg_2:Number, _arg_3:Number)
@@ -44,31 +44,31 @@ package ui
             scaleX = scaleY = 1;
         }
 
-        private function method_457(_arg_1:MouseEvent)
+        private function onThumbDown(_arg_1:MouseEvent)
         {
-            this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.method_199, false, 0, true);
-            this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.method_183, false, 0, true);
+            this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.onThumbUp, false, 0, true);
+            this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.onThumbDrag, false, 0, true);
         }
 
-        private function method_381(_arg_1:MouseEvent)
+        private function onUpArrowDown(_arg_1:MouseEvent)
         {
-            this.method_319(-this.var_586);
+            this.startContinuousScroll(-this.var_586);
         }
 
-        private function method_255(_arg_1:MouseEvent)
+        private function onDownArrowDown(_arg_1:MouseEvent)
         {
-            this.method_319(this.var_586);
+            this.startContinuousScroll(this.var_586);
         }
 
-        private function method_319(_arg_1:Number)
+        private function startContinuousScroll(_arg_1:Number)
         {
             removeEventListener(Event.ENTER_FRAME, this.scroll);
             addEventListener(Event.ENTER_FRAME, this.scroll, false, 0, true);
-            this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.method_347, false, 0, true);
+            this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.onArrowUp, false, 0, true);
             this.var_595 = _arg_1;
         }
 
-        private function method_347(_arg_1:MouseEvent)
+        private function onArrowUp(_arg_1:MouseEvent)
         {
             removeEventListener(Event.ENTER_FRAME, this.scroll);
         }
@@ -78,13 +78,13 @@ package ui
             this.position(this.pos + this.var_595);
         }
 
-        private function method_199(_arg_1:MouseEvent)
+        private function onThumbUp(_arg_1:MouseEvent)
         {
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.method_199);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_183);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.onThumbUp);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.onThumbDrag);
         }
 
-        private function method_183(_arg_1:MouseEvent)
+        private function onThumbDrag(_arg_1:MouseEvent)
         {
             var _local_2:Number = _arg_1.stageY;
             var _local_3:Point = new Point(0, _local_2);
@@ -113,13 +113,13 @@ package ui
 
         public function remove()
         {
-            this.m.thumb.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_457);
-            this.m.upArrow.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_381);
-            this.m.downArrow.removeEventListener(MouseEvent.MOUSE_DOWN, this.method_255);
+            this.m.thumb.removeEventListener(MouseEvent.MOUSE_DOWN, this.onThumbDown);
+            this.m.upArrow.removeEventListener(MouseEvent.MOUSE_DOWN, this.onUpArrowDown);
+            this.m.downArrow.removeEventListener(MouseEvent.MOUSE_DOWN, this.onDownArrowDown);
             removeEventListener(Event.ENTER_FRAME, this.scroll);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.method_347);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.method_199);
-            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.method_183);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.onArrowUp);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.onThumbUp);
+            this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.onThumbDrag);
             this.target = null;
             this.stageRef = null;
             this.m = null;

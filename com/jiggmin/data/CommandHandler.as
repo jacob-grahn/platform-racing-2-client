@@ -50,9 +50,6 @@ package com.jiggmin.data
             this.defineCommand('wearingHat', this.wearingHat);
         }
 
-        // _loc2 = endPos
-        // _loc3 = data
-        // method_129 = addText
         public function addText(s:String)
         {
             this.inBuffer = this.inBuffer + s;
@@ -68,14 +65,6 @@ package com.jiggmin.data
             }
         }
 
-        // _loc2 = arr
-        // _loc3 = servHash
-        // _loc4 = num
-        // _loc5 = command
-        // _loc6 = gameFullStr
-        // _loc9 = gameHash
-        // removed _loc7, _loc8, _loc10, _loc11 (condensed)
-        // method_690 = handleResponse
         private function handleResponse(s:String)
         {
             var arr:Array = s.split("`");
@@ -93,7 +82,6 @@ package com.jiggmin.data
             }
         }
 
-        // defineCommand = defineCommand
         public function defineCommand(s:String, fn:Function)
         {
             this.commands[s] = fn;
@@ -111,7 +99,6 @@ package com.jiggmin.data
             new MessagePopup(a[0]);
         }
 
-        // _loc2 = courseID
         private function startGame(a:Array)
         {
             var courseID:int = a[0];
@@ -182,7 +169,6 @@ package com.jiggmin.data
             Main.isTrialMod = false;
         }
 
-        // method_710 = areYouHuman
         private function areYouHuman(a:Array)
         {
             new CatCaptcha();

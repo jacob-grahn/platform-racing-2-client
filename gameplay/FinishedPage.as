@@ -56,7 +56,6 @@ package gameplay
             }
         }
 
-        // method_451 = clickReturn
         private function clickReturn(e:MouseEvent)
         {
             if (Main.socket.connected) {
@@ -66,7 +65,6 @@ package gameplay
             startFadeOut();
         }
 
-        // method_292 = clickClose
         private function clickClose(e:MouseEvent)
         {
             startFadeOut();

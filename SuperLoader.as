@@ -103,14 +103,12 @@ package
             }
         }
 
-         // method_426 = securityErrorHandler
         private function securityErrorHandler(ev:SecurityErrorEvent)
         {
             new MessagePopup("Error: A security error occurred. :(");
             dispatchEvent(new Event(ev));
         }
 
-        // method_359 = IOErrorHandler
         private function IOErrorHandler(err:ErrorEvent)
         {
             var errPrefix:String;

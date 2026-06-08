@@ -59,7 +59,7 @@ package background
             this.blocksAttached++;
             var seg:Point = new Point(Math.round(blockX / this.segSize), Math.round(blockY / this.segSize));
             this.addToBlockArray(block, seg);
-            if (method_32(seg.x, seg.y)) {
+            if (isInView(seg.x, seg.y)) {
                 addChild(block);
             }
         }
@@ -67,9 +67,9 @@ package background
         override public function setPos(posX:Number, posY:Number)
         {
             super.setPos(posX, posY);
-            var _local_3:Point = Data.method_9(GamePage.course.posX, GamePage.course.posY, rotation);
+            var _local_3:Point = Data.rotatePoint(GamePage.course.posX, GamePage.course.posY, rotation);
             var _local_4:Point = this.getSegFromPos(_local_3.x, _local_3.y);
-            method_118(-_local_4.x, -_local_4.y, 11, 9, 8, 6, this, this.blockArray);
+            updateViewWindow(-_local_4.x, -_local_4.y, 11, 9, 8, 6, this, this.blockArray);
         }
 
         override public function undo()
@@ -79,7 +79,6 @@ package background
             }
         }
 
-        // method_53 = addToBlockArray
         public function addToBlockArray(block:DisplayObject, seg:Point)
         {
             if (this.blockArray[seg.x] == null) {
@@ -128,20 +127,13 @@ package background
             return block == null;
         }
 
-        // _loc4 = pos
-        // _loc5 = seg
-        // deleted _loc6 (merge w/ return statement)
-        // method_24 = getBlockFromPos
         public function getBlockFromPos(posX:Number, posY:Number, rotMod:Boolean=false):*
         {
-            var pos:Point = rotMod ? Data.method_9(posX, posY, rotation) : new Point(posX, posY);
+            var pos:Point = rotMod ? Data.rotatePoint(posX, posY, rotation) : new Point(posX, posY);
             var seg:Point = this.getSegFromPos(pos.x, pos.y);
             return this.getBlockFromSeg(seg.x, seg.y);
         }
 
-        // deleted _loc3 (simplified return)
-        // _loc4 = blockColumn
-        // method_67 = getBlockFromSeg
         public function getBlockFromSeg(segX:int, segY:int)
         {
             var blockColumn:Array = this.blockArray.length >= segX ? this.blockArray[segX] : null;
@@ -188,10 +180,6 @@ package background
             return new Point(segX, segY);
         }
 
-        // _loc3 = posX
-        // _loc4 = posY
-        // deleted _loc5 (combined w/ return)
-        // method_497 = getPosFromSeg
         public function getPosFromSeg(segX:Number, segY:Number):Point
         {
             var posX:Number = segX * this.segSize;
@@ -199,16 +187,12 @@ package background
             return new Point(posX, posY);
         }
 
-        // _loc1 = block
-        // method_753 = getStartPos
         public function getStartPos():Point
         {
             var block:BlockObject = objArray[0];
             return new Point(block.x, block.y);
         }
 
-        // _loc2 = seg
-        // method_259 = removeBlock
         public function removeBlock(block:*)
         {
             var seg:Point = block.getSeg();
@@ -230,7 +214,7 @@ package background
                     this.addToBlockArray(null, originPt);
                     this.addToBlockArray(block, destPt);
                     block.setSeg(destPt.x, destPt.y);
-                    if (method_32(destPt.x, destPt.y)) {
+                    if (isInView(destPt.x, destPt.y)) {
                         addChild(block);
                     } else if (block.parent != null) {
                         block.parent.removeChild(block);

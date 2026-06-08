@@ -113,18 +113,12 @@ package gameplay
             this.attachBackgrounds();
         }
 
-        // method_514 = addStartPos
         public function addStartPos(startNum:int, startPt:Point)
         {
             this.startPosArray[startNum] = startPt;
             this.positionPlayersAtStart();
         }
 
-        // _loc1 = this.playerArray.length
-        // _loc2 = tempId
-        // _loc3 = startPos
-        // _loc4 = player
-        // method_80 = positionPlayersAtStart
         protected function positionPlayersAtStart()
         {
             var tempId:int;
@@ -139,8 +133,6 @@ package gameplay
             }
         }
 
-        // deleted _loc2 (startNum)
-        // method_753 = getStartPos
         private function getStartPos(startNum:int):Point
         {
             startNum = Main.server.tournament == 1 ? 0 : startNum;
@@ -189,14 +181,11 @@ package gameplay
             }
         }
 
-        // method_206 = getCourseID
         public function getCourseID():int
         {
             return this.courseID;
         }
 
-        // This fn processes the keyScroll events while also checking to see if we can stop drawing.
-        // method_85 = maybeEndIntro
         protected function maybeEndIntro(e:Event)
         {
             //keyScroll(e);
@@ -211,7 +200,6 @@ package gameplay
             //addEventListener(Event.ENTER_FRAME, keyScroll);
         }
 
-        // method_82 = cameraFollowPlayer
         protected function cameraFollowPlayer(e:Event)
         {
             var c:Character = this.playerSpectating == null ? this.localPlayer : this.playerSpectating;
@@ -287,7 +275,6 @@ package gameplay
             }
         }
 
-        // method_369 = onCountdownCount
         private function onCountdownCount(_arg_1:Event)
         {
             SoundEffects.playSound(new ReadySound(), 0.4 * (Settings.soundLevel / 100));
@@ -299,7 +286,7 @@ package gameplay
             if (this.localPlayer != null) {
                 this.localPlayer.init();
             }
-            this.blockBackground.method_578();
+            this.blockBackground.startGameplay();
             this.countdownFinished = true;
         }
 
@@ -435,16 +422,15 @@ package gameplay
             this.bg.scaleX = this.bg.scaleY = this.holder.scaleX = this.holder.scaleY = 1 / scale;
         }
 
-        // method_654
         public function startRotate(direction:String)
         {
             this.rotateDirection = direction;
             addEventListener(Event.ENTER_FRAME, this.rotate);
-            this.bg1.method_86();
-            this.bg2.method_86();
-            this.bg3.method_86();
-            this.bg4.method_86();
-            this.bg5.method_86();
+            this.bg1.disableCaching();
+            this.bg2.disableCaching();
+            this.bg3.disableCaching();
+            this.bg4.disableCaching();
+            this.bg5.disableCaching();
             Main.stage.quality = StageQuality.LOW;
         }
 
@@ -464,11 +450,11 @@ package gameplay
             if (rotateDone) {
                 rotation = 0;
                 this.bg.rotation = 0;
-                this.bg1.method_74();
-                this.bg2.method_74();
-                this.bg3.method_74();
-                this.bg4.method_74();
-                this.bg5.method_74();
+                this.bg1.enableCaching();
+                this.bg2.enableCaching();
+                this.bg3.enableCaching();
+                this.bg4.enableCaching();
+                this.bg5.enableCaching();
                 Main.stage.quality = StageQuality.HIGH;
                 if (this.rotateDirection == "right") {
                     this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation + 90;

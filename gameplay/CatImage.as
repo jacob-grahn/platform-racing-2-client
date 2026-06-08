@@ -27,15 +27,11 @@ package gameplay
             this.getImg();
         }
 
-        // method_140 = getId
         public function getId():int
         {
             return this.id;
         }
 
-        // _loc2 = vars
-        // _loc3 = request
-        // method_602 = getImg
         private function getImg()
         {
             var vars:URLVariables = new URLVariables();
@@ -46,15 +42,9 @@ package gameplay
             this.img.load(request);
         }
 
-        // depreciated; using onImgLoad
-        /*private function method_281(_arg_1:Event)
-        {
-            this.onImgLoad();
-        }*/
-
         private function onImgLoad(e:* = null)
         {
-            Data.method_314(this.img, 200, 200);
+            Data.scaleToFit(this.img, 200, 200);
             this.img.x = Math.round((200 - this.img.width) / 2) + 5;
             this.img.y = Math.round((200 - this.img.height) / 2) + 5;
             this.img.mouseEnabled = this.img.mouseChildren = false;

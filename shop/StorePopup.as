@@ -80,8 +80,6 @@ package shop
             }
         }
 
-        // _loc2 = listing
-        // method_179 = addListing
         private function addListing(obj:Object):StoreListing
         {
             var listing:StoreListing = new StoreListing(obj, this.saleFlash);
@@ -109,8 +107,6 @@ package shop
             }, "You will be routed to pr2hub.com in order to complete this transaction.");
         }
 
-        // _loc2 = slug
-        // method_360 = clickItem
         private function clickItem(e:Event, fromQuantity:Boolean = false)
         {
             var gameUA:String = Data.urlify(Main.baseURL + '/terms_of_use.php', 'PR2 Terms of Use');
@@ -168,9 +164,6 @@ package shop
             this.closePopup();
         }
 
-        // _loc2 = item
-        // _loc3 = listing
-        // method_396 = showFAQ
         private function showFAQ(e:Event)
         {
             var item:StoreListing = StoreListing(e.target);
@@ -178,10 +171,6 @@ package shop
             new MessagePopup("<b>--- " + listing.title + " FAQ ---</b> \n\n" + listing.faq);
         }
 
-        // _loc1 = superLoader
-        // _loc2 = vars
-        // _loc3 = req
-        // method_678 = useSuperBooster
         private function useSuperBooster()
         {
             var vars:URLVariables = new URLVariables();
@@ -210,22 +199,6 @@ package shop
             //new MessagePopup('Placeholder!\n\nSlug: ' + slug + '\nQuantity: ' + quantity);
         }
 
-        // method_785 = triggerKongPrompt
-        /*private function triggerKongPrompt(slug:String)
-        {
-            var kongAPI:* = Main.instance.kongAPI;
-            if (kongAPI == null) {
-                new MessagePopup("PR2 requires you to log into Kongregate to use the store.");
-				return;
-            }
-            if (kongAPI.services.isGuest()) {
-                kongAPI.services.showRegistrationBox();
-            } else {
-                kongAPI.mtx.clickItemsRemote(Main.userId + "," + slug, this.onPurchaseComplete);
-            }
-        }*/
-
-        // method_786 = onPurchaseComplete
         private function onPurchaseComplete(e:Event)
         {
             if (e.target.parsedData.success) {
@@ -233,13 +206,6 @@ package shop
             }
         }
 
-        /*
-        private function method_665()
-        {
-            startFadeOut();
-        }*/
-
-        // method_377 = closePopup
         private function closePopup(e:Event = null)
         {
             startFadeOut();

@@ -19,10 +19,10 @@ package dialogs
         {
             this.userName = name;
             this.target = popup;
-            this.m.tempMod_bt.addEventListener(MouseEvent.CLICK, this.clickTemp, false, 0, true); // method_215
-            this.m.trialMod_bt.addEventListener(MouseEvent.CLICK, this.clickTrial, false, 0, true); // method_271
-            this.m.permaMod_bt.addEventListener(MouseEvent.CLICK, this.clickPerma, false, 0, true); // method_300
-            this.m.demote_bt.addEventListener(MouseEvent.CLICK, this.clickDemote, false, 0, true); // method_225
+            this.m.tempMod_bt.addEventListener(MouseEvent.CLICK, this.clickTemp, false, 0, true);
+            this.m.trialMod_bt.addEventListener(MouseEvent.CLICK, this.clickTrial, false, 0, true);
+            this.m.permaMod_bt.addEventListener(MouseEvent.CLICK, this.clickPerma, false, 0, true);
+            this.m.demote_bt.addEventListener(MouseEvent.CLICK, this.clickDemote, false, 0, true);
             addChild(this.m);
         }
 

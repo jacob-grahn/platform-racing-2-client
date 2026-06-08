@@ -178,8 +178,6 @@ package
             contextMenu = my_menu;
         }
 
-        // _loc1 = domain
-        // method_581 = determineSite
         private function determineSite()
         {
             var site:String = "local";
@@ -205,11 +203,6 @@ package
 			}
         }
 
-        // _loc1 = params
-        // _loc2 = kongPath
-        // _loc3 = request
-        // _loc4 = loader
-        // method_689 = getKongApiOnTesting
         // CURRENTLY UNUSED
         private function getKongApiOnTesting()
         {
@@ -240,7 +233,6 @@ package
             Main.emblem = "";
         }
 
-        // method_806 = receiveKongAPI
         // CURRENTLY UNUSED
         private function receiveKongAPI(e:Event)
         {

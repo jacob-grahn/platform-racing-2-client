@@ -38,7 +38,6 @@ package player_profile
             this.m.loadoutNum.text = this.preset.num.toString();
         }
 
-        // method_239 = getPreset
         public function getPreset():Preset
         {
             return this.preset;

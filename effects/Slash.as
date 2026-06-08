@@ -42,7 +42,7 @@ package effects
 
         private function hitAt(px:int, py:int)
         {
-            var _local_3:Point = Data.method_9(px, py, this.course.blockBackground.rotation);
+            var _local_3:Point = Data.rotatePoint(px, py, this.course.blockBackground.rotation);
             var _local_4:Block = this.course.blockBackground.getBlockFromPos(_local_3.x, _local_3.y);
             if (_local_4 != null && _local_4.isActive()) {
                 _local_4.onDamage(this.reach);

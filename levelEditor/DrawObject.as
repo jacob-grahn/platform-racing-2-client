@@ -58,7 +58,6 @@ package levelEditor
             this.holder = Sprite(parent);
         }
 
-        // method_316 = beginDrag
         protected function beginDrag(e:MouseEvent)
         {
             this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.onDrag);
@@ -73,7 +72,6 @@ package levelEditor
             alpha = 0.75;
         }
 
-        // method_31 = recordRealDimensions
         protected function recordRealDimensions()
         {
             var _local_1:Number = scaleX;
@@ -86,8 +84,6 @@ package levelEditor
             scaleY = _local_2;
         }
 
-        // _loc2 = newPos
-        // method_203 = onDrag
         private function onDrag(e:MouseEvent)
         {
             var newPos:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
@@ -149,14 +145,12 @@ package levelEditor
             }
         }
 
-        // method_299 = deleteObject
         protected function deleteObject(e:MouseEvent = null)
         {
             this.editor.cur.recordDelete(this);
             this.remove();
         }
 
-        // method_412 = onResizePress
         private function onResizePress(e:MouseEvent)
         {
             this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.resize);
@@ -172,7 +166,6 @@ package levelEditor
             scaleY = _local_4 * (100 / this.startHeight) / 100;
         }
 
-        // method_146 = onResizeUp
         private function onResizeUp(e:MouseEvent)
         {
             this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.resize);
@@ -183,7 +176,6 @@ package levelEditor
             this.editor.cur.recordResize(this);
         }
 
-        // method_705 = showDeleteButton
         private function showDeleteButton()
         {
             this.deleteButton = new DeleteButton();
@@ -191,7 +183,6 @@ package levelEditor
             addChild(this.deleteButton);
         }
 
-        // method_469 = hideDeleteButton
         protected function hideDeleteButton()
         {
             if (this.deleteButton != null) {
@@ -201,7 +192,6 @@ package levelEditor
             }
         }
 
-        // method_512 = showResizeButton
         private function showResizeButton()
         {
             this.resizeButton = new ResizeButton();
@@ -209,7 +199,6 @@ package levelEditor
             this.resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onResizePress, false, 0, true);
         }
 
-        // method_346 = hideResizeButton
         protected function hideResizeButton()
         {
             if (this.resizeButton != null) {
@@ -219,7 +208,6 @@ package levelEditor
             }
         }
 
-        // method_617 = setButtonScale
         private function setButtonScale()
         {
             this.buttonScaleX = (1 / scaleX) * (1 / parent.scaleX) * (1 / parent.parent.scaleX) * (1 / parent.parent.parent.scaleX);
@@ -243,7 +231,6 @@ package levelEditor
             }
         }
 
-        // method_141 = makeHighlightOutline
         protected function makeHighlightOutline()
         {
             this.highlightOutline.graphics.clear();
@@ -255,7 +242,6 @@ package levelEditor
             this.highlightOutline.graphics.lineTo(0, 0);
         }
 
-        // method_345 = hideHighlight
         protected function hideHighlight()
         {
             this.highlightOutline.graphics.clear();
@@ -273,7 +259,7 @@ package levelEditor
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.onResizeUp);
             this.hideResizeButton();
             this.hideDeleteButton();
-            LevelEditor.editor.cur.method_771(this);
+            LevelEditor.editor.cur.removeDrawObject(this);
             super.remove();
         }
 

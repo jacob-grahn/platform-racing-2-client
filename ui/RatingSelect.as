@@ -36,18 +36,18 @@ package ui
             addEventListener(MouseEvent.CLICK, this.clickHandler, false, 0, true);
             addEventListener(MouseEvent.MOUSE_OUT, this.outHandler, false, 0, true);
             addEventListener(MouseEvent.MOUSE_OVER, this.overHandler, false, 0, true);
-            this.method_175(this.rating);
+            this.displayRating(this.rating);
         }
 
         private function moveHandler(e:MouseEvent)
         {
-            var _local_2:Number = this.method_274(e.stageX);
-            this.method_175(_local_2);
+            var _local_2:Number = this.ratingFromX(e.stageX);
+            this.displayRating(_local_2);
         }
 
         private function clickHandler(e:MouseEvent)
         {
-            this.rating = this.method_274(e.stageX);
+            this.rating = this.ratingFromX(e.stageX);
             new ConfirmPopup(function () {
                 rateLevel();
             }, 'Are you sure you want to rate this level ' + this.rating + '?');
@@ -68,7 +68,7 @@ package ui
 
         private function outHandler(e:MouseEvent)
         {
-            this.method_175(this.rating);
+            this.displayRating(this.rating);
             this.star.gotoAndStop("off");
         }
 
@@ -77,14 +77,14 @@ package ui
             this.star.gotoAndStop("on");
         }
 
-        private function method_175(_arg_1:Number)
+        private function displayRating(_arg_1:Number)
         {
             this.m.bar.scaleX = _arg_1 / 5;
             this.star.x = (_arg_1 - 1) * this.starWidth;
         }
 
         // deleted _loc4 (combined w/ return)
-        private function method_274(_arg_1:Number):Number
+        private function ratingFromX(_arg_1:Number):Number
         {
             var _local_2:Point = new Point(0, 0);
             _local_2 = this.localToGlobal(_local_2);

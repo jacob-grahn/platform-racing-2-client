@@ -52,7 +52,7 @@
         protected function disable()
         {
             uses = 0;
-            method_789();
+            depleteVisuals();
         }
 
         override public function onStand(player:LocalCharacter)
@@ -103,8 +103,8 @@
             }
             new TeleportPop(player.x, player.y - 25);
             Main.socket.write("add_effect`Teleport`" + player.x + "`" + (player.y - 25));
-            var blockPos:Point = method_18();
-            var newBlockPos:Point = destBlock.method_18();
+            var blockPos:Point = getRotatedPos();
+            var newBlockPos:Point = destBlock.getRotatedPos();
             player.x += newBlockPos.x - blockPos.x;
             player.y += newBlockPos.y - blockPos.y;
             new TeleportPop(player.x, player.y - 25);

@@ -103,7 +103,6 @@ package character
             this.setFeetColors(feetColor, feetColor2);
         }
 
-        // method_375 = resetHats
         private function resetHats()
         {
             this.store.setBool(PROP, false);
@@ -186,35 +185,30 @@ package character
             this.applyAppearance();
         }
 
-        // method_395 = setHatId
         public function setHatId(id:Number)
         {
             this.hat1 = id;
             this.applyAppearance();
         }
 
-        // method_250 = setHeadId
         public function setHeadId(id:Number)
         {
             this.head = id;
             this.applyAppearance();
         }
 
-        // method_217 = setBodyId
         public function setBodyId(id:Number)
         {
             this.body = id;
             this.applyAppearance();
         }
 
-        // method_326 = setFeetId
         public function setFeetId(id:Number)
         {
             this.feet = id;
             this.applyAppearance();
         }
 
-        // method_133 = setHatColors
         public function setHatColors(color:int, epic:int, hatNum:int = 1)
         {
             hatNum = Data.numLimit(hatNum, 1, 4);
@@ -223,7 +217,6 @@ package character
             this.applyAppearance();
         }
 
-        // method_132 = setHeadColors
         public function setHeadColors(color:int, epic:int)
         {
             this.headColor = color;
@@ -231,7 +224,6 @@ package character
             this.applyAppearance();
         }
 
-        // method_134 = setBodyColors
         public function setBodyColors(color:int, epic:int)
         {
             this.bodyColor = color;
@@ -239,7 +231,6 @@ package character
             this.applyAppearance();
         }
 
-        // method_90 = setFeetColors
         public function setFeetColors(color:int, epic:int)
         {
             this.feetColor = color;
@@ -253,7 +244,6 @@ package character
             this.applyItem();
         }
 
-        // method_25 = applyAppearance
         private function applyAppearance()
         {
             this.updatePartMC("head", "head");
@@ -269,13 +259,6 @@ package character
             this.djinnEffects.update();
         }
 
-        // _loc3 = part
-        // _loc4 = color
-        // _loc5 = color2
-        // _loc6 = type
-        // _loc7 = charMC
-        // _loc8 = partId
-        // method_39 = updatePartMC
         private function updatePartMC(propName:String, partType:String)
         {
             var part:MovieClip;
@@ -312,8 +295,6 @@ package character
             }
         }
 
-        // _loc1 = charMC
-        // method_562 = hideHeadFeetIfFredBody
         private function hideHeadFeetIfFredBody()
         {
             for each (var charMC:MovieClip in this.characterStatesArray) {
@@ -329,8 +310,6 @@ package character
             }
         }
 
-        // _loc3 = ct
-        // method_383 = applyPartColor
         private function applyPartColor(mc:MovieClip, color:int)
         {
             var ct:ColorTransform = new ColorTransform();
@@ -338,8 +317,6 @@ package character
             mc.transform.colorTransform = ct;
         }
 
-        // _loc1 = charMC
-        // method_229 = applyItem
         private function applyItem()
         {
             for each (var charMC:MovieClip in this.characterStatesArray) {
@@ -394,7 +371,7 @@ package character
         protected function updateSegs(_arg_1:Number)
         {
             var _local_2:Point = new Point(Math.floor(x / 30), Math.floor(y / 30));
-            this.seg1 = Data.method_9(_local_2.x, _local_2.y, _arg_1);
+            this.seg1 = Data.rotatePoint(_local_2.x, _local_2.y, _arg_1);
             this.seg2 = new Point(this.seg1.x, this.seg1.y - 1);
             if (_arg_1 == 90) {
                 this.seg1.x--;
@@ -435,8 +412,6 @@ package character
             removeEventListener(Event.ENTER_FRAME, this.recoveryTick);
         }
 
-        // _loc2 = charMC
-        // method_11 = changeState
         public function changeState(s:String)
         {
             if (this.state != s) {
@@ -557,10 +532,6 @@ package character
             }
         }
 
-        // _loc1 = hatNum
-        // _loc2 = hatColor
-        // _loc3 = hatSlot
-        // method_380 = getHighestHat
         protected function getHighestHat():Object
         {
             var hatSlot:int = 4;

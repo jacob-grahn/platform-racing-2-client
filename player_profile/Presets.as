@@ -16,9 +16,6 @@ package player_profile
         private static var presets:Vector.<Preset>;
 
 
-        // _loc2 = presets
-        // _loc3 = presetData
-        // _loc4 = preset
         public static function load()
         {
             presets = new Vector.<Preset>();
@@ -30,10 +27,6 @@ package player_profile
             }
         }
 
-        // _loc1 = presetsArray
-        // _loc2 = preset
-        // _loc3 = presetData
-        // method_533 = savePresets
         public static function savePresets()
         {
             var presetsArray:Array = new Array();
@@ -44,7 +37,6 @@ package player_profile
             Settings.setValue(Settings.PRESETS, presetsArray);
         }
 
-        // method_766 = getPresets
         public static function getPresets():Vector.<Preset>
         {
             if (presets.length < Presets.NUM_PRESETS) {
@@ -56,7 +48,6 @@ package player_profile
             return presets;
         }
 
-        // method_513 = getPreset
         public static function getPreset(i:int):Preset
         {
             return presets[i - 1];

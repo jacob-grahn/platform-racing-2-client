@@ -47,7 +47,6 @@ package level_browser
             this.changeStatus("empty");
         }
 
-        // method_171 = changeStatus
         private function changeStatus(s:String)
         {
             this.status = s;
@@ -70,13 +69,11 @@ package level_browser
             this.target.sendFillSlot(this.num);
         }
 
-        // method_178 = sendConfirmSlot
         public function sendConfirmSlot()
         {
             this.target.sendConfirmSlot();
         }
 
-        // method_180 = sendClearSlot
         public function sendClearSlot()
         {
             this.target.sendClearSlot();

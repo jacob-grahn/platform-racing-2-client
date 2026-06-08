@@ -26,7 +26,6 @@ package editor_tools
             this.cp.setColor(LevelEditor.editor.getColor());
         }
 
-        // method_307 = onClose
         private function onClose(e:Event)
         {
             LevelEditor.editor.setColor(this.cp.getColor());

@@ -20,13 +20,11 @@ package items
         public static const iceWave:int = 9; // const_40
 
 
-        // method_188 = getAllCodes
         public static function getAllCodes():Vector.<int>
         {
             return new <int>[laserGun, mine, lightning, teleport, superJump, jetPack, speedBurst, sword, iceWave];
         }
 
-        // method_29 = getFromCode
         public static function getFromCode(code:int, player:LocalCharacter):Item
         {
             if (code == laserGun) {
@@ -77,7 +75,6 @@ package items
             }
         }
 
-        // method_330 = getNameFromCode
         public static function getNameFromCode(code:int):String
         {
             if (code == laserGun) {
@@ -103,7 +100,6 @@ package items
             }
         }
 
-        // method_657 = getCodeFromName
         public static function getCodeFromName(item:String):int
         {
             if (item == "Laser" || item == "Laser Gun") {

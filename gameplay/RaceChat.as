@@ -26,7 +26,7 @@ package gameplay
             this.m.top.textBox1.mouseWheelEnabled = this.m.bg.textBox2.mouseWheelEnabled = false;
             this.m.addEventListener(MouseEvent.MOUSE_WHEEL, this.ensureBottom, false, 0, true);
             Main.stage.addEventListener(MouseEvent.MOUSE_DOWN, this.mouseDownHandler, false, 0, true);
-            Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true); // method_374
+            Main.stage.addEventListener(KeyboardEvent.KEY_DOWN, this.focusOrSend, false, 0, true);
             htmlNameMaker.listenForLink(this.m.top.textBox1);
             RaceChat.textBox = this.m.chatInput;
         }
@@ -61,7 +61,7 @@ package gameplay
                         this.sendMessage(this.m.chatInput.text);
                     }
                     this.m.chatInput.text = "";
-                    this.focusOnRace(); // focusOnRace = method_223
+                    this.focusOnRace();
                 }
             }
         }

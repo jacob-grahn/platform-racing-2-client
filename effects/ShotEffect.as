@@ -74,7 +74,7 @@ package effects
 
         protected function position()
         {
-            var pos:Point = Data.method_9(this.posX, this.posY, -(this.course.blockBackground.rotation - this.rot));
+            var pos:Point = Data.rotatePoint(this.posX, this.posY, -(this.course.blockBackground.rotation - this.rot));
             x = pos.x;
             y = pos.y;
         }

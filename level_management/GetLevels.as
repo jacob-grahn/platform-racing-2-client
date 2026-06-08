@@ -21,7 +21,6 @@ package level_management
         protected var dataURL:String = '/levels_get.php';
         protected var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
 
-        // _loc1 = request
         public function GetLevels(customURL:String = null)
         {
             m.titleBox.text = '-- My Levels --';
@@ -34,7 +33,6 @@ package level_management
             this.loader.load(request);
         }
 
-        // _loc3 = item
         protected function onComplete(e:Event)
         {
             if (e.target.data != "") {
@@ -47,7 +45,6 @@ package level_management
             this.hideLoadingGraphic();
         }
 
-        // _loc2 = item
         override protected function loadListing(listing:SelectableButton)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(listing);
@@ -55,15 +52,12 @@ package level_management
             startFadeOut();
         }
 
-        // _loc2 = item
         override protected function deleteListing(listing:SelectableButton)
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(listing);
             new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete \"" + Data.escapeString(item.level.title) + "\"?");
         }
 
-        // _loc1 = item
-        // method_73 = confirmDelete
         public function confirmDelete()
         {
             var item:GetLevelsPopupItem = GetLevelsPopupItem(this.getSelected());

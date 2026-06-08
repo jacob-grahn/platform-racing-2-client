@@ -33,12 +33,6 @@ package social
             addChild(this.loadingGraphic);
         }
 
-        /*public function method_833()
-        {
-            this.loadingGraphic.visible = true;
-        }*/
-
-        // hideLoadingGraphic = hideLoadingGraphic
         public function hideLoadingGraphic(e:* = null)
         {
             this.loadingGraphic.visible = false;
@@ -51,7 +45,6 @@ package social
             this.holder.addChild(d);
         }
 
-        // _loc1 = listing
         public function clear()
         {
             for each (var listing:Removable in this.listings) {
@@ -116,11 +109,7 @@ package social
             
         }
 
-        // _loc1 = i
-        // _loc2 = this.listings.length (deleted)
-        // _loc3 = listing
         // changed public -> private
-        // method_545 = populate
         private function populate()
         {
             var i:int = 0;

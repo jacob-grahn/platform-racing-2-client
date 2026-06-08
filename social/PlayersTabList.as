@@ -27,19 +27,16 @@ package social
             this.sortInterval = setInterval(this.sortListener, 500);
         }
 
-        // method_276 = clickName
         private function clickName(e:MouseEvent)
         {
             this.sortPlayersBy('userName');
         }
 
-        // method_436 = clickRank
         private function clickRank(e:MouseEvent)
         {
             this.sortPlayersBy('rank');
         }
 
-        // method_243 = clickHats
         private function clickHats(e:MouseEvent)
         {
             this.sortPlayersBy('hats');
@@ -59,7 +56,6 @@ package social
             this.updateSort = true;
         }
 
-        // method_486 = sortListener
         private function sortListener()
         {
             if (this.updateSort) {
@@ -68,7 +64,6 @@ package social
             }
         }
 
-        // method_110 = sortPlayersBy
         private function sortPlayersBy(newSort:String = null)
         {
             var sort1:String, sort2:String;

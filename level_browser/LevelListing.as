@@ -54,7 +54,6 @@ package level_browser
             this.cm.defineCommand('removePageHighlight', this.removePageHighlight);
         }
 
-        // _loc1 = existingPageNum
         override public function initialize()
         {
             var existingPageNum:int = Memory.memory["coursePageNum" + this.mode];
@@ -63,11 +62,6 @@ package level_browser
             }
         }
 
-        // _loc2 = levelInRow
-        // _loc3 = levelOnPage
-        // _loc5 = spriteHeight
-        // _loc8 = levelItem
-        // _loc9 = i
         // deleted _loc4,6,7 - hardcoded unchanging integers at levelItem.x/y modifiers
         protected function showCourses(levels:Array)
         {
@@ -105,10 +99,6 @@ package level_browser
             }
         }
 
-        // _loc2 = ret
-        // _loc3 = dataNoHash
-        // _loc4 = gameHash
-        // _loc5 = vars
         protected function loadHandler(e:Event)
         {
             var ret:String = e.target.data;
@@ -175,9 +165,6 @@ package level_browser
             Main.socket.write('refresh_highlights`');
         }
 
-        // _loc1 = levelItem
-        // _loc2 = i
-        // method_260 = removeLevels
         protected function removeLevels()
         {
             var levelItem:LevelItem;

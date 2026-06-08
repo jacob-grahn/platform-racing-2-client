@@ -26,21 +26,18 @@ package ui
             this.m.right.addEventListener(MouseEvent.CLICK, this.clickRight); // this.m.var_381
         }
 
-        // method_462 = clickLeft
         private function clickLeft(e:MouseEvent)
         {
             this.index--;
             this.wrapCheck();
         }
 
-        // method_361 = clickRight
         private function clickRight(e:MouseEvent)
         {
             this.index++;
             this.wrapCheck();
         }
 
-        // method_402 = wrapCheck -> checks to see if we're going back to the beginning after clicking right or vice versa
         private function wrapCheck()
         {
             var lastKey:int = this.array.length - 1;
@@ -49,8 +46,6 @@ package ui
             dispatchEvent(new Event(Event.CHANGE));
         }
 
-        // _loc2 = arrayPos
-        // _loc3 = i
         public function setValue(val:int)
         {
             var arrayPos:int = -1;

@@ -34,13 +34,11 @@ package
             return Boolean(i in keys);
         }
 
-        // method_773
         private static function keyPressed(e:KeyboardEvent)
         {
             keys[e.keyCode] = true;
         }
 
-        // method_756
         private static function keyReleased(e:KeyboardEvent)
         {
             if (e.keyCode in keys) {
@@ -48,7 +46,6 @@ package
             }
         }
 
-        // method_507
         private static function resetKeys(e:*)
         {
             keys = new Object();

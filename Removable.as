@@ -16,13 +16,12 @@ package
         {
         }
 
-        // method_20 = isRemoved
         public function isRemoved()
         {
             return this.removed;
         }
 
-        public function method_136()
+        public function safeRemove()
         {
             if (!this.removed) {
                 this.remove();

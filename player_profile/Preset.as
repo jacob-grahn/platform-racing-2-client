@@ -30,8 +30,6 @@ package player_profile
             this.applyPresetData(o);
         }
 
-        // _loc2 = prop
-        // method_529 = applyPresetData
         private function applyPresetData(obj:Object)
         {
             if (obj != null) {
@@ -43,8 +41,6 @@ package player_profile
             }
         }
 
-        // _loc1 = data
-        // method_558 = getPresetData
         public function getPresetData():Object
         {
             var data:Object = new Object();

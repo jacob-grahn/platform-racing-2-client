@@ -49,15 +49,11 @@ package chat
             UnreadNotif.updateLastRead();
         }
 
-        // method_295 = clickSend
         private function clickSend(e:MouseEvent)
         {
             new SendMessagePopup();
         }
 
-        // _loc1 = vars
-        // _loc2 = request
-        // method_453 = getMessages
         private function getMessages()
         {
             this.removeMessages();
@@ -70,9 +66,6 @@ package chat
             addChild(this.loadingGraphic);
         }
 
-        // _loc2 = message
-        // _loc3 = item
-        // method_228 = handleData
         private function handleData(e:Event)
         {
             removeChild(this.loadingGraphic);
@@ -86,10 +79,6 @@ package chat
             this.populateMessages();
         }
 
-        // _loc1 = message
-        // _loc2 = nextY
-        // _loc3 = i
-        // method_528 = populateMessages
         private function populateMessages()
         {
             var nextY:Number = 0;
@@ -104,9 +93,6 @@ package chat
             this.pageNavigation.y = nextY + 10;
         }
 
-        // _loc1 = message
-        // _loc2 = i
-        // method_170 = removeMessages
         private function removeMessages()
         {
             var i:int = 0;
@@ -121,9 +107,6 @@ package chat
             }
         }
 
-        // _loc2 = vars
-        // _loc3 = request
-        // method_670 = doReport
         public function doReport(item:MessagesItem)
         {
             item.alpha = 0.5;
@@ -135,9 +118,6 @@ package chat
             this.uploading = new UploadingPopup(request, 'json', 'Reporting message...');
         }
 
-        // _loc2 = vars
-        // _loc3 = request
-        // method_521 = doDelete
         public function doDelete(item:MessagesItem)
         {
             item.alpha = 0.25;
@@ -154,13 +134,11 @@ package chat
             removeChild(this.loadingGraphic);
         }
 
-        // method_245 = clickDeleteAll
         private function clickDeleteAll(e:MouseEvent)
         {
             new ConfirmPopup(this.doDeleteAll, "Are you sure you want to delete all of your messages?");
         }
 
-        // method_530 = doDeleteAll
         public function doDeleteAll()
         {
             var vars:URLVariables = new URLVariables();

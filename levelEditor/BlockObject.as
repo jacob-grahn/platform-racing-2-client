@@ -27,8 +27,8 @@ package levelEditor
         {
             super(blockId, blockX, blockY);
             this.displayCode = blockId;
-            this.lastX = x = this.method_103(blockX);
-            this.lastY = y = this.method_103(blockY);
+            this.lastX = x = this.snapToGrid(blockX);
+            this.lastY = y = this.snapToGrid(blockY);
             this.segX = Math.floor(x / this.segSize);
             this.segY = Math.floor(y / this.segSize);
             this.posX = x;
@@ -58,8 +58,8 @@ package levelEditor
         // _loc5 = overwriteExisting
         override protected function endDrag(e:MouseEvent)
         {
-            var newPtSegX:Number = this.method_103(x);
-            var newPtSegY:Number = this.method_103(y);
+            var newPtSegX:Number = this.snapToGrid(x);
+            var newPtSegY:Number = this.snapToGrid(y);
             x = this.lastX;
             y = this.lastY;
             var blockAtNewPt:BlockObject = editor.blockBG.getBlockAt(newPtSegX, newPtSegY);
@@ -139,7 +139,7 @@ package levelEditor
         }
 
         // converts coordinate number in seg -> pos
-        private function method_103(_arg_1:Number):Number
+        private function snapToGrid(_arg_1:Number):Number
         {
             return Math.round(_arg_1 / this.segSize) * this.segSize;
         }

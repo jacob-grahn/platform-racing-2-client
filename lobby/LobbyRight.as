@@ -39,25 +39,21 @@ package lobby
             super(tabsArray, "lobbyRight", 0, 347, 356);
         }
 
-        // method_631 = clickCampaign
         private function clickCampaign()
         {
             changePage(new Campaign());
         }
 
-         // method_555 = clickBest
         private function clickBest()
         {
             changePage(new Best());
         }
 
-        // method_537 = clickBestWeek
         private function clickBestWeek()
         {
             changePage(new BestWeek());
         }
 
-        // method_616 = clickNew
         private function clickNew()
         {
             changePage(new Newest());
@@ -72,14 +68,6 @@ package lobby
         {
             changePage(new Favorites());
         }
-
-        /*
-        // method_484 = clickGuilds
-        private function clickGuilds()
-        {
-            changePage(new ListingPage());
-        }
-        */
 
         public function lookupUser(userName:String = "")
         {

@@ -13,13 +13,11 @@ package com.jiggmin.data
         private static var pmTab:DisplayObjectContainer; // d
 
 
-        // method_745 = setLastRead
         public static function setLastRead(time:Number)
         {
             lastReadTime = time;
         }
 
-        // method_272 = notifyUser
         public static function notifyUser(time:Number)
         {
             if (time > lastReadTime) {
@@ -29,7 +27,6 @@ package com.jiggmin.data
         }
 
         // _loc1 = timeSent
-        // method_692 = updateLastRead
         public static function updateLastRead()
         {
             for each (var timeSent:Number in unreadMessages) {
@@ -41,7 +38,6 @@ package com.jiggmin.data
             removeNotif();
         }
 
-        // method_524 = addNotifContainer
         public static function addNotifContainer(d:DisplayObjectContainer)
         {
             UnreadNotif.pmTab = d;
@@ -50,7 +46,6 @@ package com.jiggmin.data
             }
         }
 
-        // method_127 = addNotif
         private static function addNotif()
         {
             if (pmTab != null) {
@@ -60,7 +55,6 @@ package com.jiggmin.data
             }
         }
 
-        // method_147 = removeNotif
         private static function removeNotif()
         {
             if (m.parent != null) {

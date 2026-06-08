@@ -61,21 +61,17 @@ package com.jiggmin.data
             return s.substr(0,1).toUpperCase() + s.substr(1, s.length).toLowerCase();
         }
 
-        // method_26 = getMS
         public static function getMS():Number
         {
             var date:Date = new Date();
             return date.time;
         }
 
-        // method_79 = getTimestamp
         public static function getTimestamp():Number
         {
             return Math.round(getMS() / 1000);
         }
 
-        // _loc3 = numStr
-        // method_78 = formatNumber
         public static function formatNumber(num:Number):String
         {
             var _local_2:String = num.toString();
@@ -96,17 +92,6 @@ package com.jiggmin.data
             return Hex.fromArray(Data.md5.hash(Hex.toArray(Hex.fromString(s))));
         }
 
-        // unused??
-        /*public static function method_849(a:Array):Array
-        {
-            return a.concat();
-        }*/
-
-        // _loc2 = date
-        // _loc3 = monthArray
-        // _loc4 = monthName
-        // _loc5 moved to return line
-        // method_687 = getDateStr
         public static function getDateStr(t:Number):String
         {
             var date:Date = new Date(t);
@@ -148,22 +133,6 @@ package com.jiggmin.data
             return df.actualLocaleIDName;
         }
 
-        // _loc2 = c
-        // unused??
-        /*public static function method_830(s:String):MovieClip
-        {
-            var c:Class = (getDefinitionByName(s) as Class);
-            return (new (c)());
-        }*/
-
-        // _loc3 = mins
-        // _loc4 = secs
-        // _loc5 = deci
-        // _loc6 = minsStr
-        // _loc7 = secsStr
-        // _loc8 = deciStr
-        // _loc9 = str
-        // method_434 = formatTime
         public static function formatTime(timeInput:Number, mode:String="seconds"):String
         {
             var mins:Number = Math.floor(timeInput / 60);
@@ -179,7 +148,6 @@ package com.jiggmin.data
             return str;
         }
 
-        // method_160 = padString
         public static function padString(minPlaces:Number, paddingChar:String, str:String):String
         {
             while (str.length < minPlaces) {
@@ -188,7 +156,6 @@ package com.jiggmin.data
             return str;
         }
 
-        // method_669 = escapeAndFilterString
         public static function escapeAndFilterString(s:String):String
         {
             if (s != null) {
@@ -199,7 +166,6 @@ package com.jiggmin.data
             return s;
         }
 
-        // method_312 = escapeString
         public static function escapeString(s:String, preserveNewLine:Boolean = false):String
         {
             s = Data.trimWhitespace(s, preserveNewLine);
@@ -207,7 +173,6 @@ package com.jiggmin.data
             return s;
         }
 
-        // method_88 = cleanHTML
         public static function cleanHTML(s:String):String
         {
             s = s.replace(/&/gi, "&amp;");
@@ -218,7 +183,6 @@ package com.jiggmin.data
             return s;
         }
 
-        // method_164 = trimWhitespace
         public static function trimWhitespace(s:String, keepNL:Boolean = false):String
         {
             s = (s == null) ? '' : s;
@@ -226,7 +190,6 @@ package com.jiggmin.data
 	        return keepNL ? s.replace(/(\t|\f)/gi, " ") : s.replace(/(\t|\n|\r|\v|\f)/gi, " ");
 	    }
 
-        // method_168 = filterSwears
         public static function filterSwears(s:String):String
         {
             s = s.replace(/damn/gi, Data.randArrayKey(Data.damnArray));
@@ -240,7 +203,6 @@ package com.jiggmin.data
             return s;
         }
 
-        // method_36 = randArrayKey
         public static function randArrayKey(a:Array):String
         {
             return a[Math.floor(Math.random() * a.length)];
@@ -251,7 +213,6 @@ package com.jiggmin.data
             return lowerLim + Math.floor(Math.random() * (higherLim - lowerLim + 1));
         }
 
-        // method_495 = parseLinks
         public static function parseLinks(s:String):String
         {
             // user link: [user=group]display text[/user]
@@ -345,7 +306,6 @@ package com.jiggmin.data
             return '<a href="' + link + '" target="_blank"><u><font color="' + color + '">' + disp + '</font></u></a>';
         }
 
-        // method_232 = pythag (from class_74/Maths)
         public static function pythag(xDist:Number, yDist:Number):Number
         {
             return Math.sqrt(xDist * xDist + yDist * yDist);
@@ -362,7 +322,7 @@ package com.jiggmin.data
         }
 
         // (from class_74/Maths)
-        public static function method_314(_arg_1:DisplayObject, _arg_2:Number, _arg_3:Number)
+        public static function scaleToFit(_arg_1:DisplayObject, _arg_2:Number, _arg_3:Number)
         {
             var _local_6:Number;
             var _local_4:Number = (_arg_2 / _arg_1.width);
@@ -379,7 +339,7 @@ package com.jiggmin.data
         }
 
         // removed _loc6 (combined w/ return)
-        public static function method_9(posX:Number, posY:Number, rot:Number):Point
+        public static function rotatePoint(posX:Number, posY:Number, rot:Number):Point
         {
             var _local_4:int = posX;
             var _local_5:int = posY;
@@ -401,7 +361,7 @@ package com.jiggmin.data
             return new Point(_local_4, _local_5);
         }
 
-        public static function method_852(_arg_1:int):Object
+        public static function getExpBounds(_arg_1:int):Object
         {
             var _local_2:Number = 25;
             var _local_3:Object = new Object();
@@ -418,7 +378,7 @@ package com.jiggmin.data
             return _local_3;
         }
 
-        public static function method_439(_arg_1:int=8):String
+        public static function randomString(_arg_1:int=8):String
         {
             var _local_2:* = "0123456789_!@#$%&*()-=+/abcdfghjkmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_!@#$%&*()-=+/";
             var _local_3:int = _local_2.length;

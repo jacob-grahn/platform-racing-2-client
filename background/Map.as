@@ -63,7 +63,6 @@ package background
         {
         }
 
-        // method_488 = placeBlock
         public function placeBlock(blockId:int, targetX:Number, targetY:Number) // used to place mines
         {
             this.attachObject(blockId, targetX, targetY);
@@ -97,7 +96,7 @@ package background
                     if (!block.isInitialized()) {
                         block.initialize(blockSeg.x, blockSeg.y, this);
                     }
-                    if (method_32(blockSeg.x, blockSeg.y)) {
+                    if (isInView(blockSeg.x, blockSeg.y)) {
                         addChild(block);
                     }
                     if (block is MoveBlock) {
@@ -126,7 +125,6 @@ package background
             }
         }
 
-        // method_485 = placeEggs
         private function placeEggs()
         {
             for each (var eggPt:Point in this.eggPtsArray) {
@@ -136,7 +134,6 @@ package background
         }
 
         // _loc3 = egg
-        // method_552 = attachEgg
         private function attachEgg(eggX:int, eggY:int)
         {
             if (this.placedEggs < 25) {
@@ -156,7 +153,6 @@ package background
         }
 
         // deleted _loc4 (Course.course)
-        // method_516 = addFinish
         private function addFinish(finishId:int, finishX:int, finishY:int)
         {
             Course.course.finishBlocks.push({
@@ -174,7 +170,7 @@ package background
             }
         }
 
-        public function method_578()
+        public function startGameplay()
         {
             this.startTime = new Date().time;
             this.determineMoveBlockDirection();
@@ -186,7 +182,6 @@ package background
         // _loc3 = block
         // _loc4 = dir
         // deleted _loc5&6 (unused)
-        // method_416 = determineMoveBlockDirection
         private function determineMoveBlockDirection()
         {
             var totalMoveBlocks:int = this.moveBlocksArray.length;
@@ -200,10 +195,6 @@ package background
             this.setMoveInterval(this.doMoveBlocks, 1000);
         }
 
-        // _loc1 = i
-        // removed _loc2 (unneeded)
-        // _loc3 = block
-        // method_784 = doMoveBlocks
         private function doMoveBlocks()
         {
             for (var i:int = 0; i < this.moveBlocksArray.length; i++) {

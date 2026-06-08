@@ -39,7 +39,6 @@ package level_browser
             super(this.slot); // if this doesn't work, use s
         }
 
-        // method_675 = forceTime
         public function forceTime(a:Array)
         {
             var timeRemaining:int = int(a[0]);
@@ -55,7 +54,6 @@ package level_browser
             }
         }
 
-        // method_285 = decrementTimer
         private function decrementTimer()
         {
             this.timer--;
@@ -67,7 +65,6 @@ package level_browser
             this.m.textBox.text = this.timer.toString();
         }
 
-        // method_303 = clickPlay
         private function clickPlay(e:MouseEvent)
         {
             this.confirmed = true;
@@ -75,18 +72,11 @@ package level_browser
             this.slot.sendConfirmSlot();
         }
 
-        // depreciated; use closeMenu
-        /*private function clickCancel(e:MouseEvent)
-        {
-            this.method_157();
-        }*/
-
         public function remoteRemove(a:Array)
         {
             this.remove();
         }
 
-        // method_157 = closeMenu
         private function closeMenu(e:* = null)
         {
             this.confirmed = false;

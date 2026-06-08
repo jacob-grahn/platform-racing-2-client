@@ -168,7 +168,6 @@ package dialogs
             }
         }
 
-        // method_75 = addOptionsButton
         private function addOptionsButton(button:DisplayObject, fn:Function)
         {
             this.m.addChild(button);
@@ -177,14 +176,12 @@ package dialogs
             button.addEventListener(MouseEvent.CLICK, fn, false, 0, true);
         }
 
-        // method_420 = clickChangePass
         private function clickChangePass(e:MouseEvent)
         {
             new ChangePasswordPopup();
             startFadeOut();
         }
 
-        // method_444 = clickChangeEmail
         private function clickChangeEmail(e:MouseEvent)
         {
             new SetEmailPopup();
@@ -192,13 +189,11 @@ package dialogs
             startFadeOut();
         }
 
-        // method_471 = clickLeaveGuild
         private function clickLeaveGuild(e:MouseEvent)
         {
             new ConfirmPopup(this.confirmLeaveGuild, "Are you sure you want to leave your guild?");
         }
 
-        // method_579 = confirmLeaveGuild
         private function confirmLeaveGuild()
         {
             var req:URLRequest = new URLRequest(Main.baseURL + "/guild_leave.php");
@@ -221,14 +216,12 @@ package dialogs
 			}
         }
 
-        // method_296 = clickGuildCreate
         private function clickGuildCreate(e:MouseEvent)
         {
             new CreateGuildPopup(0);
             startFadeOut();
         }
 
-        // method_283 = clickGuildEdit
         private function clickGuildEdit(e:MouseEvent)
         {
             new CreateGuildPopup(Main.guild);
@@ -241,18 +234,10 @@ package dialogs
             startFadeOut();
         }
 
-        // method_292 = clickClose
         private function clickClose(e:MouseEvent)
         {
             startFadeOut();
         }
-
-        // unused?
-        /*private function method_834(_arg_1:Object, _arg_2:MovieClip)
-        {
-            _arg_2.x = _arg_1.x + (_arg_1.width / 2);
-            _arg_2.y = _arg_1.y + (_arg_1.height / 2);
-        }*/
 
         override public function remove()
         {

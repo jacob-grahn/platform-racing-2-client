@@ -47,7 +47,6 @@ package background
             this.objArray.push(_local_4);
         }
 
-        // method_129 = addText
         public function addText(str:String, textX:int, textY:int, textId:int, record:Boolean = false):TextObject
         {
             if (this.objArray.length < this.objLimit) {
@@ -62,13 +61,11 @@ package background
             return null;
         }
 
-        // method_821 = recordAddObject
         public function recordAddObject(objId:int, objX:int, objY:int)
         {
             recordAction("o" + objId + ";" + objX + ";" + objY);
         }
 
-        // method_606 = recordAddText
         public function recordAddText(str:String, textX:int, textY:int, textId:int)
         {
             recordAction("u" + str + ";" + textX + ";" + textY + ";" + textId + ";100;100");
@@ -81,8 +78,6 @@ package background
             recordAction("y" + textId + ";" + textObj.getEscapedText() + ";" + textObj.getColor());
         }
 
-        // _loc2 = objId
-        // method_761 = recordMove
         public function recordMove(obj:DrawObject)
         {
             var objId:int = this.objArray.indexOf(obj);
@@ -96,8 +91,6 @@ package background
             recordAction("d" + objId);
         }
 
-        // _loc2 = objId
-        // method_686 = recordResize
         public function recordResize(obj:DrawObject)
         {
             var objId:int = this.objArray.indexOf(obj);
@@ -158,9 +151,6 @@ package background
             }
         }
 
-        // _loc2 = obj
-        // deleted _loc3, _loc4, _loc5 (params in attachObject call)
-        // method_489 = placeObject
         protected function placeObject(s:String)
         {
             if (this.objArray.length < this.objLimit) {
@@ -184,7 +174,6 @@ package background
             }
         }
 
-        // method_763 = updateText
         protected function updateText(_arg_1:String)
         {
             var _local_2:Array = _arg_1.split(";");
@@ -196,9 +185,6 @@ package background
             _local_6.setColor(_local_5);
         }
 
-        // _loc2 = int(i)
-        // _loc3 = drawObj
-        // method_476 = deleteObject
         protected function deleteObject(i:String)
         {
             var drawObj:DrawObject = DrawObject(this.objArray[int(i)]);
@@ -212,8 +198,6 @@ package background
             }
         }
 
-        // _loc6 = obj
-        // method_393 = resizeObject
         protected function resizeObject(_arg_1:String)
         {
             var _local_2:Array = _arg_1.split(";");
@@ -323,7 +307,7 @@ package background
             }
         }
 
-        public function method_771(_arg_1:*)
+        public function removeDrawObject(_arg_1:*)
         {
             var _local_2:int = this.objArray.indexOf(_arg_1);
             if (_local_2 != -1) {

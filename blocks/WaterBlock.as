@@ -37,22 +37,22 @@ package blocks
                 if (player.parent == Course.course.frontBackground) {
                     Course.course.backBackground.addChild(player);
                 }
-                var _local_2:Point = method_18();
+                var _local_2:Point = getRotatedPos();
                 var _local_3:Point = getSeg();
                 player.standingSegX = _local_3.x;
                 player.standingSegY = _local_3.y;
                 player.lastSafeX = _local_2.x + 15;
                 player.lastSafeY = _local_2.y + 15;
-                this.method_339();
+                this.startRipple();
             }
         }
 
-        public function method_584()
+        public function triggerRipple()
         {
-            this.method_339();
+            this.startRipple();
         }
 
-        private function method_339()
+        private function startRipple()
         {
             alpha -= 0.1;
             if (alpha < 0.5) {
@@ -60,23 +60,23 @@ package blocks
             }
             if (!this.var_484) {
                 this.var_484 = true;
-                addEventListener(Event.ENTER_FRAME, this.method_117, false, 0, true);
+                addEventListener(Event.ENTER_FRAME, this.onRippleFrame, false, 0, true);
             }
         }
 
-        private function method_117(_arg_1:Event)
+        private function onRippleFrame(_arg_1:Event)
         {
             alpha += 0.03;
             if (alpha >= 1) {
                 alpha = 1;
                 this.var_484 = false;
-                removeEventListener(Event.ENTER_FRAME, this.method_117);
+                removeEventListener(Event.ENTER_FRAME, this.onRippleFrame);
             }
         }
 
         override public function remove()
         {
-            removeEventListener(Event.ENTER_FRAME, this.method_117);
+            removeEventListener(Event.ENTER_FRAME, this.onRippleFrame);
             super.remove();
         }
 

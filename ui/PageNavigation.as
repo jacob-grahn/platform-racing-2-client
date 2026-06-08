@@ -28,8 +28,6 @@ package ui
             this.draw();
         }
 
-        // _loc4 = clickable
-        // _loc5 = i
         // removed fn arguments (this.selected, this.count, this.w) because that's what classes are for!
         private function draw()
         {
@@ -54,10 +52,6 @@ package ui
             this.position(this.mode != 'vertical' ? 'horizontal' : 'vertical');
         }
 
-        // _loc3 = i
-        // _loc4 = m
-        // _loc5 = varPos
-        // _loc6 = startingPos
         // removed second argument (this.w) because that's what classes are for!
         private function position(direction:String)
         {
@@ -84,8 +78,6 @@ package ui
             }
         }
 
-        // _loc1 = i
-        // _loc2 = m
         private function clear()
         {
             var i:int = 0;
@@ -99,8 +91,6 @@ package ui
             this.navButtonArray = new Array();
         }
 
-        // _loc4 = m
-        // method_195 = makeNavButton
         private function makeNavButton(title:String, num:int, clickable:Boolean = true)
         {
             var m:PageNumberGraphic = new PageNumberGraphic();
@@ -115,7 +105,6 @@ package ui
             this.navButtonArray.push(m);
         }
 
-        // method_273 = clickPage
         private function clickPage(e:TextEvent)
         {
             this.setPageNum(int(e.text));

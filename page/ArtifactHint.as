@@ -23,8 +23,6 @@ package page
             this.superLoader.load(new URLRequest(Main.baseURL + '/files/level_of_the_week.json'));
         }
 
-        // method_228 = parseHint
-        // _loc2 = ret
         private function parseHint(e:Event)
         {
             var ret:Object = this.superLoader.parsedData;

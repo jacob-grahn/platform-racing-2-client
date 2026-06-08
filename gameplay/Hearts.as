@@ -29,8 +29,6 @@ package gameplay
             return this.totalHearts;
         }
 
-        // _loc1 = m
-        // method_695 = addHeart
         private function addHeart()
         {
             var m:HeartGraphic = new HeartGraphic();
@@ -41,7 +39,6 @@ package gameplay
             this.totalHearts++;
         }
 
-        // method_517 = removeHeart
         private function removeHeart()
         {
             removeChildAt(this.numChildren - 1);

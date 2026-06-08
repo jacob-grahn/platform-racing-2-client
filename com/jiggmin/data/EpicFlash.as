@@ -26,7 +26,7 @@ package com.jiggmin.data
         public function start()
         {
             clearInterval(this.var_416);
-            this.var_416 = setInterval(this.method_554, this.var_444);
+            this.var_416 = setInterval(this.colorTick, this.var_444);
             this.active = true;
         }
 
@@ -36,7 +36,7 @@ package com.jiggmin.data
             this.active = false;
         }
 
-        public function method_580(_arg_1:int)
+        public function setDelay(_arg_1:int)
         {
             this.var_444 = _arg_1;
             if (this.active) {
@@ -57,7 +57,7 @@ package com.jiggmin.data
             this.items.push(_arg_1);
         }
 
-        private function method_554()
+        private function colorTick()
         {
             var _local_2:DisplayObject;
             var _local_1:ColorTransform = new ColorTransform();

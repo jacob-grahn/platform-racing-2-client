@@ -40,13 +40,11 @@ package ui
             addEventListener(MouseEvent.MOUSE_OUT, this.resetTabPositions);
         }
 
-        // method_438 = setLastTab
         public static function setLastTab(holderId:String, tabNum:Number)
         {
             TabsHolder.memory[holderId] = tabNum;
         }
 
-        // method_700 = getLastTab
         public static function getLastTab(holderId:String):Number
         {
             return TabsHolder.memory[holderId];
@@ -56,7 +54,6 @@ package ui
         // _loc3 = tabX
         // _loc4 = i
         // _loc5 = tabW
-        // method_342 = populateTabs
         public function populateTabs(maxW:Number)
         {
             var tab:LobbyTab;
@@ -78,15 +75,8 @@ package ui
             }
         }
 
-        // unnecessary; replaced with resetTabPositions
-        /*private function method_246(e:MouseEvent)
-        {
-            this.resetTabPositions();
-        }*/
-
         // _loc2 = i
         // removed _arg1, replaced with this.selected
-        // method_282 = resetTabPositions
         private function resetTabPositions(e:MouseEvent = null)
         {
             var i:Number = 0;
@@ -120,7 +110,6 @@ package ui
             this.resetTabPositions();
         }
 
-        // method_100 = moveToFront
         internal function moveToFront(tab:LobbyTab)
         {
             addChildAt(tab, numChildren - 1);

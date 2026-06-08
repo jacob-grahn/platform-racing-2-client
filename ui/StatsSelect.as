@@ -42,8 +42,6 @@ package ui
             addChild(this.jumpnSlider);
         }
 
-        // _loc1 = stats
-        // method_550 = getStats
         public function getStats():Object
         {
             var stats:Object = new Object();
@@ -59,7 +57,6 @@ package ui
             this.setStats(this.localChar.getStats());
         }
 
-        // method_46 = setStats
         public function setStats(stats:Object)
         {
             this.speedSlider.setValue(stats.speed);
@@ -68,8 +65,6 @@ package ui
             this.updateStatsDisplay();
         }
 
-        // _loc1 = usedPoints
-        // method_287 = getPointsRemaining
         internal function getPointsRemaining():int
         {
             var usedPoints:int = this.speedSlider.value + this.accelSlider.value + this.jumpnSlider.value;

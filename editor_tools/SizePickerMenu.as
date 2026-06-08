@@ -22,13 +22,11 @@ package editor_tools
             this.m.textBox.addEventListener(Event.CHANGE, this.textChange);
         }
 
-        // method_409 = slideChange
         private function slideChange(se:SliderEvent)
         {
             this.setSize(se.value);
         }
 
-        // method_327 = textChange
         private function textChange(e:Event)
         {
             this.setSize(e.target.text);

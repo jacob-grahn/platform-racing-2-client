@@ -13,7 +13,7 @@ package dialogs
         {
             this.m.textBox.htmlText = str;
             addChild(this.m);
-            this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOk); // method_149
+            this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOk);
         }
 
         private function clickOk(e:MouseEvent)

@@ -160,7 +160,6 @@ package player_profile
         }
 
         // removed _loc2 (originally was an if/else w/ _loc2 being declared as an array type beforehand, simplified to if and returns)
-        // method_34 = parsePartArray
         private function parsePartArray(s:String):Array
         {
             if (s != null && s != "") {
@@ -170,7 +169,6 @@ package player_profile
         }
 
         // _loc1 = unusedTokens
-        // method_148 = updatePosRankTokenButtons
         private function updatePosRankTokenButtons()
         {
             var unusedTokens:int = this.rankTokensAvailable - this.rankTokensUsed;
@@ -193,7 +191,6 @@ package player_profile
             }
         }
 
-        // method_194 = updateRankText
         private function updateRankText()
         {
             this.m.rankBox.htmlText = "Rank: <b>" + this.rank + "</b>";
@@ -220,7 +217,6 @@ package player_profile
             }
         }
 
-        // method_298 = clickRankTokenUp
         private function clickRankTokenUp(e:MouseEvent)
         {
             if (this.rankTokensUsed < this.rankTokensAvailable) {
@@ -233,7 +229,6 @@ package player_profile
             this.updatePosRankTokenButtons();
         }
 
-        // method_221 = clickRankTokenDown
         private function clickRankTokenDown(e:MouseEvent)
         {
             if (this.rankTokensUsed > 0) {
@@ -275,7 +270,6 @@ package player_profile
             }
         }
 
-        // method_331 = clickLoadouts -- changed to loadoutsMouseEvent in 161
         private function loadoutsMouseEvent(e:MouseEvent = null)
         {
             // remove popup if already exists
@@ -321,7 +315,6 @@ package player_profile
             this.loadoutsMouseEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
         }
 
-        // method_284 = getCustomizeInfo
         private function getCustomizeInfo(e:Event)
         {
             this.reset();

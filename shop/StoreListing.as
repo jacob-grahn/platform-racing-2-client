@@ -79,7 +79,6 @@ package shop
         // _loc10, _loc11 = bodyColor, bodyColor2
         // _loc12, _loc13 = feetColor, feetColor2
         // _loc14 = player
-        // method_191 = generateRandomCharacter
         private function generateRandomCharacter(x:Number)
         {
             var hat:int = int(Math.ceil(Math.random() * 12));
@@ -133,7 +132,6 @@ package shop
         // _loc2 = infoBtn
         // _loc3 = purchaseBtn
         // DELETED _loc4 (what's returned), _loc5 (ternary for use/buy text)
-        // method_709 = makeTextButtons
         private function makeTextButtons(item:Object):String
         {
             var purchaseBtn:String = '<u><font color="#4E4EFE"><a href="event:itemPurchase">' + (item.price == 0 ? 'use' : 'buy') + "</a></font></u>";
@@ -141,7 +139,6 @@ package shop
             return (item.available ? purchaseBtn + " / " : '') + infoBtn;
         }
 
-        // method_237 = clickTextLink
         private function clickTextLink(te:TextEvent)
         {
             if (te.text == "itemPurchase") {
@@ -162,7 +159,6 @@ package shop
             return this._listing.slug;
         }
 
-        // method_668 = get available
         public function get available():Boolean
         {
             return this._listing.available;
@@ -185,13 +181,11 @@ package shop
             return int(this.m.priceBox.text);
         }
 
-        // method_269 = onMouseOver
         private function onMouseOver(me:MouseEvent)
         {
             this.m.bg.visible = true;
         }
 
-        // method_378 = onMouseOut
         private function onMouseOut(me:MouseEvent)
         {
             this.m.bg.visible = false;

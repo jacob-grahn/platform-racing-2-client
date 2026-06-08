@@ -50,7 +50,7 @@ package effects
             var _local_2:int = rand.nextMinMax(Math.min(_local_1.minX, _local_1.maxX), Math.max(_local_1.minX, _local_1.maxX));
             var _local_3:int = rand.nextMinMax(Math.min(_local_1.minY, _local_1.maxY), Math.max(_local_1.minY, _local_1.maxY));
             var _local_4:int = rand.nextMinMax(-1, 3) * 90;
-            var _local_5:Point = Data.method_9(_local_2, _local_3, -(_local_4));
+            var _local_5:Point = Data.rotatePoint(_local_2, _local_3, -(_local_4));
             super(_local_5.x, _local_5.y, _local_4);
             this.setLimits();
             velX = rand.nextMinMax(0, 2) == 1 ? 1 : -1;
@@ -89,7 +89,6 @@ package effects
         // _loc1 = map
         // _loc2 = minPoint
         // _loc3 = maxPoint
-        // method_324 = setLimits
         public function setLimits()
         {
             var _local_4:int;
@@ -98,8 +97,8 @@ package effects
             this.minX = map.minX - 300;
             this.maxY = map.maxY + 300;
             this.minY = map.minY - 300;
-            var minPoint:Point = Data.method_9(this.minX, this.minY, -rot);
-            var maxPoint:Point = Data.method_9(this.maxX, this.maxY, -rot);
+            var minPoint:Point = Data.rotatePoint(this.minX, this.minY, -rot);
+            var maxPoint:Point = Data.rotatePoint(this.maxX, this.maxY, -rot);
             this.maxX = maxPoint.x;
             this.maxY = maxPoint.y;
             this.minX = minPoint.x;
@@ -160,7 +159,7 @@ package effects
             }
             var _local_2:int = posX + (velX * (Math.random() * 100) + 50);
             var _local_3:int = posY;
-            var _local_4:Point = Data.method_9(_local_2, _local_3, -rotation);
+            var _local_4:Point = Data.rotatePoint(_local_2, _local_3, -rotation);
             if (this.attackCooldown <= 0 && isNearLocalPlayer(_local_4.x, _local_4.y)) {
                 this.attackCooldown = 120;
                 _local_5 = 0;

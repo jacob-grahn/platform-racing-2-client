@@ -125,7 +125,6 @@ package player_profile
             this.updateDisplay(e);
         }
 
-        // method_65 = updateDisplay
         private function updateDisplay(e:Event)
         {
             Main.log("updateDisplay start");
@@ -167,7 +166,6 @@ package player_profile
             new PartInfoPopup('feet', this.feetSelect.partArray, this.feetSelect.epicArray);
         }
 
-        // method_111 = removePartSelector
         private function removePartSelector(ps:PartSelector)
         {
             ps.removeEventListener(Event.CHANGE, this.updateDisplay);

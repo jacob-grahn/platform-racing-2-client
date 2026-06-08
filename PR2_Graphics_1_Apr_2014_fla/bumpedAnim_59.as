@@ -19,10 +19,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function bumpedAnim_59()
         {
-            addFrameScript(55, this.method_674);
+            addFrameScript(55, this.onAnimComplete);
         }
 
-        internal function method_674():*
+        internal function onAnimComplete():*
         {
             this.var_652 = true;
         }

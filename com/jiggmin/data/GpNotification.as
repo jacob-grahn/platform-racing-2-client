@@ -16,9 +16,6 @@ package com.jiggmin.data
             CommandHandler.commandHandler.defineCommand("gpGain", gpGain);
         }
 
-        // _loc2 = gp
-        // _loc3 = gpNotif
-        // method_750 = gpGain
         public static function gpGain(arr:Array)
         {
             var gp:int = int(arr[0]);

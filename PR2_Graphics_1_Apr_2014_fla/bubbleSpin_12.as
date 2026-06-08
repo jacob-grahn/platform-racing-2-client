@@ -16,10 +16,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function bubbleSpin_12()
         {
-            addFrameScript(20, this.method_143);
+            addFrameScript(20, this.loopToStart);
         }
 
-        internal function method_143():*
+        internal function loopToStart():*
         {
             gotoAndPlay(1);
         }

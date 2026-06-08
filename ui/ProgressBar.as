@@ -18,7 +18,6 @@ package ui
         private var widthPx:Number = 0; // widthPx = var_342
         private var var_597:Number; // 
 
-        // _loc3 = shadow
         public function ProgressBar(px:Number = 200, _arg_2:Number = 0.3)
         {
             this.var_597 = _arg_2;
@@ -37,7 +36,7 @@ package ui
             this.bar.bar.width = this.widthPx;
         }
 
-        public function incProgress(progressDecimal:Number) // method_351 = incProgress
+        public function incProgress(progressDecimal:Number)
         {
             if (progressDecimal > 1) {
                 progressDecimal = 1;

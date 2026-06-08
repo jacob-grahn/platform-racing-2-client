@@ -51,7 +51,6 @@ package gameplay
             return Math.round(this.time - _local_1);
         }
 
-        // _loc1 = timeLeft
         private function tick()
         {
             if (this.racing) {
@@ -85,7 +84,6 @@ package gameplay
             }
         }
 
-        // method_500 = addTime
         public function addTime(secs:Number)
         {
             if (this.racing) {

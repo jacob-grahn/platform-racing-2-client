@@ -34,13 +34,11 @@ package social
             addChild(this.pageHolder);
         }
 
-        // method_752 = clickOnline
         private function clickOnline()
         {
             this.pageHolder.changePage(new Online());
         }
 
-        // method_666 = clickFriends
         private function clickFriends()
         {
             this.pageHolder.changePage(new Friends());
@@ -51,13 +49,11 @@ package social
             this.pageHolder.changePage(new Following());
         }
 
-        // method_541 = clickIgnored
         private function clickIgnored()
         {
             this.pageHolder.changePage(new Ignored());
         }
 
-        // method_484 = clickGuilds
         private function clickGuilds()
         {
             this.pageHolder.changePage(new Guilds());

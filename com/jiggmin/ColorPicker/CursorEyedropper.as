@@ -43,15 +43,11 @@ package com.jiggmin.ColorPicker
             removeEventListener(Event.ENTER_FRAME, this.maybeUpdate);
         }
 
-        public function method_101(d:DisplayObject)
+        public function addExclusion(d:DisplayObject)
         {
             this.var_352.push(d);
         }
 
-        // _loc2 = useEyedropper
-        // _loc3 = pixelToAnalyze
-        // _loc4 = me
-        // method_379 = maybeUpdate
         private function maybeUpdate(e:Event)
         {
             var me:MouseEvent = getMouse();
@@ -59,7 +55,7 @@ package com.jiggmin.ColorPicker
             if (targetObj != null) {
                 var useEyedropper:Boolean = true;
                 while (targetObj.parent != null) {
-                    if (this.method_612(targetObj)) {
+                    if (this.isExcluded(targetObj)) {
                         useEyedropper = false;
                         break;
                     }
@@ -93,13 +89,6 @@ package com.jiggmin.ColorPicker
             super.mouseDownHandler(e);
         }
 
-        // bypassed by adding default param value to drawEyedropper
-        /*private function method_279(e:TimerEvent)
-        {
-            this.drawEyedropper();
-        }*/
-
-        // method_167 = drawEyedropper
         private function drawEyedropper(e:TimerEvent = null)
         {
             if (visible) {
@@ -109,14 +98,11 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        private function method_612(d:DisplayObject):Boolean
+        private function isExcluded(d:DisplayObject):Boolean
         {
             return this.var_352.indexOf(d) != -1;
         }
 
-        // _loc1 = me
-        // deleted _loc2 and _loc3, combined with getPixel call
-        // method_418 = updateColor
         private function updateColor()
         {
             var me:MouseEvent = getMouse();

@@ -101,13 +101,11 @@ package player_profile.PartInfo
             new MessagePopup("--- " + part.name + " FAQ --- \n\n" + part.desc);
         }*/
 
-        // method_377 = onClose
         private function onClose(e:MouseEvent)
         {
             startFadeOut();
         }
 
-        // _loc1 = listing
         private function clear()
         {
             for each (var listing:PartInfoListing in this.listings) {

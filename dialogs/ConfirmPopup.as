@@ -14,7 +14,7 @@ package dialogs
         {
             this.confirmFunction = fn;
             this.m.textBox.htmlText = boxStr;
-            this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOk); // clickOk = method_149
+            this.m.ok_bt.addEventListener(MouseEvent.CLICK, this.clickOk);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
             addChild(this.m);
         }

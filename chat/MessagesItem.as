@@ -69,7 +69,6 @@ package chat
             addChild(this.replyButton);
         }
 
-        // method_760 = clickReport
         private function clickReport(e:MouseEvent)
         {
             new ConfirmPopup(this.confirmReport, "Are you sure you want to report this message to the moderators? If the sender of this message is asking for your password, being a rather mean jerk, or spamming your inbox, then please do report this message.");
@@ -80,9 +79,6 @@ package chat
             new ConfirmPopup(this.confirmDelete, "Are you sure you want to delete this message from " + Data.escapeString(this.userName) + "?");
         }
 
-        // _loc2 = replyStr
-        // _loc3 = maxQuote
-        // method_460 = clickReply
         private function clickReply(e:MouseEvent)
         {
             var replyStr:String = "\n--- \n" + this.messageText;
@@ -93,13 +89,11 @@ package chat
             new SendMessagePopup(this.userName, replyStr);
         }
 
-        // method_573 = confirmReport
         private function confirmReport()
         {
             this.target.doReport(this);
         }
 
-        // method_73 = confirmDelete
         public function confirmDelete()
         {
             this.target.doDelete(this);

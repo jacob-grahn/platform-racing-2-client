@@ -29,8 +29,6 @@ package com.jiggmin.data
             return (_local_3);
         }
 
-        // _loc3 = int
-        // method_15 = setBool
         public function setBool(s:String, bool:Boolean)
         {
             var num:int = 0;
@@ -40,8 +38,6 @@ package com.jiggmin.data
             this.setNumber(s, num);
         }
 
-        // _loc2 = num
-        // _loc3 = bool
         public function getBool(s:String):Boolean
         {
             var num:int = this.getNumber(s);
@@ -52,17 +48,14 @@ package com.jiggmin.data
             return bool;
         }
 
-        // _loc3 = encryptor
-        // method_98 = initEncryptor
         public function initEncryptor(_arg_1:String, salt:String)
         {
             var encryptor:Encryptor = new Encryptor();
-            encryptor.setKey(Base64.encode(Data.method_439(16)));
-            encryptor.setIV(Base64.encode(Data.method_439(16)));
+            encryptor.setKey(Base64.encode(Data.randomString(16)));
+            encryptor.setIV(Base64.encode(Data.randomString(16)));
             this.setEntry(_arg_1, encryptor.encrypt(salt), encryptor);
         }
 
-        // _loc3 = encryptor
         public function getString(_arg_1:String):String
         {
             var _local_2:Object = this.getEntry(_arg_1);

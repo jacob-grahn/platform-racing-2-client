@@ -27,7 +27,6 @@ package levelEditor
             this.display();
         }
 
-        // method_372 = clickLeft
         private function clickLeft(e:MouseEvent)
         {
             this.pickedHat--;
@@ -40,7 +39,6 @@ package levelEditor
             this.display();
         }
 
-        // method_214 = clickRight
         private function clickRight(e:MouseEvent)
         {
             this.pickedHat++;
@@ -53,9 +51,6 @@ package levelEditor
             this.display();
         }
 
-        // _loc1 = colorMC
-        // _loc2 = colorMC2
-        // _loc3 = a
         private function display()
         {
             this.m.hat.gotoAndStop(this.pickedHat);

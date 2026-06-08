@@ -22,7 +22,7 @@ package dialogs
             this.m.warning1Button.addEventListener(MouseEvent.CLICK, this.clickWarning1, false, 0, true);
             this.m.warning2Button.addEventListener(MouseEvent.CLICK, this.clickWarning2, false, 0, true);
             this.m.warning3Button.addEventListener(MouseEvent.CLICK, this.clickWarning3, false, 0, true);
-            this.m.kickButton.addEventListener(MouseEvent.CLICK, this.clickKick, false, 0, true); // method_442
+            this.m.kickButton.addEventListener(MouseEvent.CLICK, this.clickKick, false, 0, true);
             addChild(this.m);
         }
 
@@ -41,7 +41,6 @@ package dialogs
             this.warnUser(3);
         }
 
-        // method_145 = warnUser
         private function warnUser(warnLevel:int)
         {
             Main.socket.write("warn`" + this.userName + "`" + warnLevel);

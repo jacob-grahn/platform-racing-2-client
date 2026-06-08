@@ -50,7 +50,6 @@ package
             this.hidePopupIfShown();
         }
 
-        // method_655 = showPopup
         private function showPopup()
         {
             this.hidePopupIfShown();
@@ -59,19 +58,12 @@ package
             // }
         }
 
-        // method_69 = hidePopupIfShown
         private function hidePopupIfShown()
         {
             if (this.hover != null) {
                 this.hover.remove();
             }
         }
-
-        // unused
-        /*public function method_835(_arg_1:Boolean)
-        {
-            this.var_559 = _arg_1;
-        }*/
 
         public function remove()
         {

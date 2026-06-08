@@ -39,10 +39,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function kongregateButton_314()
         {
-            this.method_565();
+            this.initComponentSettings();
         }
 
-        internal function method_565():*
+        internal function initComponentSettings():*
         {
             try {
                 this.var_163["componentInspectorSetting"] = true;

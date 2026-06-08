@@ -31,7 +31,6 @@ package com.jiggmin.ColorPicker
             addEventListener(MouseEvent.CLICK, this.clickHandler, false, 0, true);
         }
 
-        // method_12 = getColor
         public function getColor():int
         {
             return this.color;
@@ -56,21 +55,6 @@ package com.jiggmin.ColorPicker
             (this.popup != null && !this.popup.isRemoved() ? this.closePopup() : this.openPopup());
         }
 
-        // built into setColor
-        /*private function method_290(e:Event)
-        {
-            this.setColor(this.popup.getColor());
-        }*/
-
-        // built into closePopup
-        /*private function method_242(e:Event)
-        {
-            this.closePopup();
-        }*/
-
-        // deleted _loc1 (combined with _loc2)
-        // _loc2 = origin
-        // method_740 = openPopup
         private function openPopup()
         {
             this.closePopup();
@@ -81,7 +65,7 @@ package com.jiggmin.ColorPicker
             this.popup.addEventListener(Removable.REMOVE, this.closePopup, false, 0, true);
             stage.addChild(this.popup);
             this.popup.init();
-            this.popup.method_101(this);
+            this.popup.addExclusion(this);
             this.popup.y = origin.y;
             if (this.popup.y > Main.clientHeight - this.popup.height) {
                 this.popup.y = Main.clientHeight - this.popup.height;
@@ -91,14 +75,13 @@ package com.jiggmin.ColorPicker
             dispatchEvent(new Event(Event.OPEN));
         }
 
-        // method_71 = closePopup
         public function closePopup(e:* = null)
         {
             if (this.popup != null) {
                 this.setColor(this.popup.getColor());
                 this.popup.removeEventListener(Event.CHANGE, this.setColor);
                 this.popup.removeEventListener(Removable.REMOVE, this.closePopup);
-                this.popup.method_136();
+                this.popup.safeRemove();
                 this.popup = null;
                 if (recentColors.indexOf(this.color) == -1) {
                     recentColors.unshift(this.color);

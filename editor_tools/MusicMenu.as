@@ -25,7 +25,6 @@ package editor_tools
             this.list.addEventListener(Event.CHANGE, this.changeSong, false, 0, true);
         }
 
-        // method_65 = changeSong
         private function changeSong(e:Event)
         {
             LevelEditor.editor.setSong(e.target.selectedItem.id);

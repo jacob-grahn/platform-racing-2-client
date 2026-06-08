@@ -28,25 +28,21 @@ package social
             this.load();
         }
 
-        // method_276 = clickNameButton
         private function clickNameButton(e:MouseEvent)
         {
             this.sortGuildsBy('guildName');
         }
 
-        // method_366 = clickActiveButton
         private function clickActiveButton(e:MouseEvent)
         {
             this.sortGuildsBy('activeMembers');
         }
 
-        // method_408 = clickGPButton
         private function clickGPButton(e:MouseEvent)
         {
             this.sortGuildsBy('gpToday');
         }
 
-        // method_110 = sortGuildsBy
         private function sortGuildsBy(newSort:String = null)
         {
             var sort1:String, sort2:String;
@@ -88,7 +84,6 @@ package social
 
         // _loc2 = guild
         // _loc3 = guildListItem
-        // method_228 = populateList
         private function populateList(e:Event)
         {
             var guild:Object;

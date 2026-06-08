@@ -67,7 +67,6 @@ package player_profile
             addChild(this.infoButton);
         }
 
-        // method_12 = getColor
         public function getColor():int
         {
             return this.color;
@@ -113,7 +112,6 @@ package player_profile
             this.setValue(newVal);
         }
 
-        // method_449 = isPartEpic
         public function isPartEpic(val:* = null) : Boolean
         {
             return (this.epicArray.indexOf(val != null ? val.toString() : this.value.toString()) != -1 || this.epicArray.indexOf("*") != -1);
@@ -143,7 +141,6 @@ package player_profile
             return s;
         }
 
-        // method_120 = onColorChange
         private function onColorChange(e:Event)
         {
             this.color = this.cp.getColor();
@@ -151,7 +148,6 @@ package player_profile
             dispatchEvent(new Event(Event.CHANGE));
         }
 
-        // method_329 = onArrowClick
         private function onArrowClick(e:Event)
         {
             this.value = this.arrows.value;
@@ -159,7 +155,6 @@ package player_profile
             dispatchEvent(new Event(Event.CHANGE));
         }
 
-        // method_159 = cpEpicCheck
         private function cpEpicCheck()
         {
             if (this.isPartEpic()) {

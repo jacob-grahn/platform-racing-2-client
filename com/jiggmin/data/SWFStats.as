@@ -17,9 +17,6 @@ package com.jiggmin.data
             setInterval(this.resetStats, 1000);
         }
 
-        // _loc1 = time
-        // _loc2 = diff
-        // method_696 = resetStats
         private function resetStats()
         {
             var time:Number = new Date().time;

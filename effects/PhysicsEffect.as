@@ -52,12 +52,12 @@ package effects
             this.posY += this.velY;
             this.posX += this.velX;
             rotation = Course.course.blockBackground.rotation - this.rot;
-            var _local_2:Point = Data.method_9(this.posX, this.posY, -rotation);
+            var _local_2:Point = Data.rotatePoint(this.posX, this.posY, -rotation);
             if (this.velX != 0) {
-                var _local_5:Point = Data.method_9(this.posX + this.velX, this.posY - 10, -rotation);
+                var _local_5:Point = Data.rotatePoint(this.posX + this.velX, this.posY - 10, -rotation);
                 _local_3 = Course.course.blockBackground.getBlockFromPos(_local_5.x, _local_5.y, true);
                 if (_local_3 != null && _local_3.isActive()) {
-                    _local_4 = _local_3.method_18(this.rot);
+                    _local_4 = _local_3.getRotatedPos(this.rot);
                     if (this.velX < 0) {
                         this.posX = _local_4.x + 31;
                     } else {
@@ -69,7 +69,7 @@ package effects
             _local_3 = Course.course.blockBackground.getBlockFromPos(_local_2.x, _local_2.y, true);
             if (_local_3 != null && _local_3.isActive()) {
                 this.grounded = true;
-                _local_4 = _local_3.method_18(this.rot);
+                _local_4 = _local_3.getRotatedPos(this.rot);
                 if (this.velY < 0) {
                     this.velY *= -0.5;
                     this.posY = _local_4.y + 31;
@@ -83,7 +83,7 @@ package effects
             if (this.isNearLocalPlayer(x, y)) {
                 this.onTouchLocalPlayer();
             }
-            _local_2 = Data.method_9(this.posX, this.posY, -rotation);
+            _local_2 = Data.rotatePoint(this.posX, this.posY, -rotation);
             x = _local_2.x;
             y = _local_2.y;
         }

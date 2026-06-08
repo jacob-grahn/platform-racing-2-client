@@ -69,7 +69,6 @@ package menu
             super.initialize();
         }
 
-        // method_77 = addToMenu
         private function addToMenu(pageButton:LoginPageMenuButton)
         {
             this.buttons.push(pageButton);
@@ -79,7 +78,6 @@ package menu
             this.posY = this.posY + 22;
         }
 
-        // method_165 = clickLogIn
         public function clickLogIn(e:MouseEvent)
         {
             SecureData.setNumber("userRank", -1);
@@ -92,7 +90,6 @@ package menu
             }
         }
 
-        // method_492 = clickGuest
         public function clickGuest(e:MouseEvent)
         {
             Main.userName = "Guest";
@@ -102,25 +99,21 @@ package menu
             new ServerSelectPopup(true);
         }
 
-        // method_644 = clickCreateAccount
         public function clickCreateAccount(e:MouseEvent)
         {
             new CreateAccountPopup();
         }
 
-        // method_793 = clickInstructions
         public function clickInstructions(e:MouseEvent)
         {
             navigateToURL(new URLRequest(Main.baseURL + "/instructions.php"), "_blank");
         }
 
-        // method_413 = clickCredits
         public function clickCredits(e:MouseEvent)
         {
             new CreditsPopup();
         }
 
-        // method_376 = clickKong
         private function clickKong(e:MouseEvent)
         {
             new KongOutfitPopup();

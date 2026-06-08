@@ -29,12 +29,12 @@ package dialogs
             addChild(this.progressBar);
             this.progressBar.x = -100;
             this.progressBar.y = -5;
-            this.loader.addEventListener(ProgressEvent.PROGRESS, this.onProgress, false, 0, true); // onProgress = method_278
+            this.loader.addEventListener(ProgressEvent.PROGRESS, this.onProgress, false, 0, true);
             this.loader.addEventListener(Event.COMPLETE, this.onComplete, false, 0, true);
             this.loader.addEventListener(SuperLoader.d, this.parsedDataHandler, false, 0, true);
             this.loader.addEventListener(SuperLoader.e, this.errorHandler, false, 0, true);
             this.loader.addEventListener(IOErrorEvent.IO_ERROR, this.errorHandler, false, 0, true);
-            this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true); // clickClose = method_292
+            this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
             if (request != null) {
                 this.loader.load(request);
             }

@@ -12,7 +12,6 @@ package gameplay
 
         private var m:LuxPopupGraphic = new LuxPopupGraphic();
 
-        // _loc2 = loader
         public function LuxPopup(numLux:int)
         {
             super(false);
@@ -26,7 +25,6 @@ package gameplay
             addChild(this.m);
         }
 
-        // method_292 = clickClose
         private function clickClose(e:MouseEvent)
         {
             startFadeOut();

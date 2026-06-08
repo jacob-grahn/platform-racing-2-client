@@ -36,13 +36,11 @@ package dialogs
             this.updateButtons();
         }
 
-         // method_321 = getSelected
         public function getSelected():SelectableButton
         {
             return this.selected;
         }
 
-        // method_57 = hideLoadingGraphic
         protected function hideLoadingGraphic()
         {
             this.m.removeChild(this.m.loadingGraphic);
@@ -55,7 +53,6 @@ package dialogs
             this.listings.push(listing);
         }
 
-        // _loc1 = listing
         protected function deselectAll()
         {
             var listing:SelectableButton;
@@ -64,7 +61,6 @@ package dialogs
             }
         }
 
-        // _loc1 = listing
         protected function clearListings()
         {
             var listing:SelectableButton;
@@ -114,7 +110,6 @@ package dialogs
             }
         }
 
-        // _loc2 = listing
         private function onListingClick(e:MouseEvent)
         {
             if (e.target is SelectableButton) {
@@ -123,7 +118,6 @@ package dialogs
             }
         }
 
-        // _loc2 = listing
         private function onListingDoubleClick(e:MouseEvent)
         {
             if (e.target is SelectableButton) {

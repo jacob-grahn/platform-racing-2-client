@@ -87,19 +87,16 @@ package blocks
             return new Point(this.segX, this.segY);
         }
 
-        // method_850 = getPos
         public function getPos():Point
         {
             return new Point(this.posX, this.posY);
         }
 
-        // method_50 = getPosX
         public function getPosX():int
         {
             return this.posX;
         }
 
-        // method_44 = getPosY
         public function getPosY():int
         {
             return this.posY;
@@ -110,19 +107,17 @@ package blocks
             return this.frozen ? Objects.BLOCK_ICE : this.blockCode;
         }
 
-        // method_23 = isActive
         public function isActive():Boolean
         {
             return this.frozen ? true : this.active;
         }
 
-        // method_20 = isRemoved
         public function isRemoved():Boolean
         {
             return this.removed;
         }
 
-        public function method_18(rot:Number = NaN):Point
+        public function getRotatedPos(rot:Number = NaN):Point
         {
             if (isNaN(rot)) {
                 rot = this.map.rotation;
@@ -135,10 +130,10 @@ package blocks
             } else if (rot == -90) {
                 _local_2 = 30;
             }
-            return Data.method_9(this.posX + _local_2, this.posY + _local_3, -rot);
+            return Data.rotatePoint(this.posX + _local_2, this.posY + _local_3, -rot);
         }
 
-        public function method_777():int
+        public function timeSinceFrozen():int
         {
             return Data.getTimestamp() - this.var_600;
         }
@@ -172,7 +167,7 @@ package blocks
                     this.var_110.alpha = 1;
                     this.var_455 = 0.025;
                 }
-                addEventListener(Event.ENTER_FRAME, this.method_153, false, 0, true);
+                addEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame, false, 0, true);
             }
         }
 
@@ -180,14 +175,14 @@ package blocks
         // _loc2 = point
         public function onStand(player:LocalCharacter)
         {
-            if (!this.frozen && this.method_777() > 4 && player.store.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
+            if (!this.frozen && this.timeSinceFrozen() > 4 && player.store.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
                 this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {
                 player.accelFactor = 0.05;
             }
             if (this.isActive()) {
-                var point:Point = this.method_18();
+                var point:Point = this.getRotatedPos();
                 player.y = point.y + this.posY - y;
                 player.velY = 0;
                 player.grounded = true;
@@ -205,8 +200,8 @@ package blocks
         public function onBump(player:LocalCharacter)
         {
             if (this.isActive()) {
-                var _local_2:Point = this.method_18();
-                var _local_3:Point = Data.method_9(x - this.posX, y - this.posY, this.map.rotation);
+                var _local_2:Point = this.getRotatedPos();
+                var _local_3:Point = Data.rotatePoint(x - this.posX, y - this.posY, this.map.rotation);
                 if (player.crouching) {
                     player.y = _local_2.y + this.size + _local_3.y + (player.charHeight / 2);
                 } else {
@@ -215,7 +210,7 @@ package blocks
                 player.velY *= -0.25;
                 player.store.setNumber(LocalCharacter.JUMP_VEL, 0);
                 if (this.var_490) {
-                    this.method_315(0, -15);
+                    this.hitRotated(0, -15);
                 }
             }
         }
@@ -225,7 +220,7 @@ package blocks
         public function onLeftHit(player:LocalCharacter)
         {
             if (this.isActive()) {
-                var point:Point = this.method_18();
+                var point:Point = this.getRotatedPos();
                 player.x = point.x - player.halfWidth;
                 if (player.velX > 0) {
                     player.velX = player.velX * -0.05;
@@ -241,7 +236,7 @@ package blocks
         public function onRightHit(player:LocalCharacter)
         {
             if (this.isActive()) {
-                var point:Point = this.method_18();
+                var point:Point = this.getRotatedPos();
                 player.x = point.x + this.size + player.halfWidth;
                 if (player.velX < 0) {
                     player.velX = player.velX * -0.05;
@@ -260,7 +255,7 @@ package blocks
         public function onDamage(_arg_1:Number)
         {
             _arg_1 = Data.numLimit(_arg_1, -20, 20);
-            this.method_315(_arg_1, 0);
+            this.hitRotated(_arg_1, 0);
         }
 
         public function remoteActivate(_arg_1:String = "")
@@ -280,7 +275,7 @@ package blocks
 
         // _loc2 = hitX
         // _loc3 = hitY
-        public function method_839(arr:Array)
+        public function remoteHit(arr:Array)
         {
             var hitX:Number = arr[0];
             var hitY:Number = arr[1];
@@ -288,9 +283,9 @@ package blocks
         }
 
         // _loc3 = point
-        private function method_315(_arg_1:Number, _arg_2:Number)
+        private function hitRotated(_arg_1:Number, _arg_2:Number)
         {
-            var point:Point = Data.method_9(_arg_1, _arg_2, this.map.rotation);
+            var point:Point = Data.rotatePoint(_arg_1, _arg_2, this.map.rotation);
             this.hit(point.x, point.y);
         }
 
@@ -298,27 +293,27 @@ package blocks
         private function hit(hitX:Number, hitY:Number)
         {
             this.var_177 = new Point(hitX, hitY);
-            addEventListener(Event.ENTER_FRAME, this.method_161);
+            addEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             var _local_3:Number = Data.pythag(hitX, hitY) * 0.06;
             if (Math.abs(x - this.posX) < 1 && Math.abs(y - this.posY) < 1) {
-                var point:Point = this.method_18();
+                var point:Point = this.getRotatedPos();
                 SoundEffects.playGameSound(new ThumpSound(), point.x, point.y, _local_3);
             }
         }
 
-        private function method_153(e:Event)
+        private function onUnfreezeFrame(e:Event)
         {
             if (this.var_110 != null) {
                 this.var_110.alpha -= this.var_455;
                 if (this.var_110.alpha <= 0.05) {
-                    removeEventListener(Event.ENTER_FRAME, this.method_153);
-                    this.method_406();
+                    removeEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame);
+                    this.removeIceOverlay();
                     this.frozen = false;
                 }
             }
         }
 
-        private function method_161(_arg_1:Event)
+        private function onBounceFrame(_arg_1:Event)
         {
             this.var_177.x = this.var_177.x * 0.5;
             this.var_177.y = this.var_177.y * 0.5;
@@ -329,7 +324,7 @@ package blocks
             if (Math.abs(this.posY - y) < 0.25 && Math.abs(this.posY - x) < 0.25) {
                 y = this.posY;
                 x = this.posX;
-                removeEventListener(Event.ENTER_FRAME, this.method_161);
+                removeEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             }
         }
 
@@ -350,7 +345,7 @@ package blocks
             this.map.moveBlock(curPoint, newPoint);
         }
 
-        private function method_406()
+        private function removeIceOverlay()
         {
             if (this.var_110 != null) {
                 removeChild(this.var_110);
@@ -362,11 +357,11 @@ package blocks
         {
             this.removed = true;
             this.active = false;
-            removeEventListener(Event.ENTER_FRAME, this.method_153);
-            removeEventListener(Event.ENTER_FRAME, this.method_161);
+            removeEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame);
+            removeEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             this.map.removeBlock(this);
             this.map = null;
-            this.method_406();
+            this.removeIceOverlay();
             this.var_177 = null;
             if (this.m != null) {
                 removeChild(this.m);

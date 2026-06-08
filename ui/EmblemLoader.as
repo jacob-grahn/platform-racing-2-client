@@ -62,44 +62,37 @@ package ui
             this.encoder = new JPEGEncoder(90);
         }
 
-        // method_717 = openBrowse
         public function openBrowse()
         {
             this.file.browse([new FileFilter("Images", "*.jpg;*.jpeg;*.gif;*.png;*.JPG;*.JPEG;*.GIF;*.PNG")]);
         }
 
-        // method_220 = getImage
         public function getImage(s:String)
         {
             this.fileName = s;
             this.loader.load(new URLRequest(this.imgDirURL + this.fileName));
         }
 
-        // method_736 = getFileName
         public function getFileName():String
         {
             return this.fileName;
         }
 
-        // method_810 = isLoading
         public function isLoading():Boolean
         {
             return this.loading;
         }
 
-        // method_463 = fileSelected
         private function fileSelected(e:Event)
         {
             this.file.load();
         }
 
-        // method_384 = fileComplete
         private function fileComplete(e:Event)
         {
             this.loader.loadBytes(this.file.data);
         }
 
-        // method_335 = drawAndUpload
         private function drawAndUpload(e:Event)
         {
             this.drawImage();
@@ -108,9 +101,6 @@ package ui
             }
         }
 
-        // _loc3 = request
-        // deleted _loc1 and _loc2; put them in reqHeaders.push and req.data respectively
-        // method_733 = uploadImage
         private function uploadImage()
         {
             if (!this.loading) {
@@ -124,7 +114,6 @@ package ui
             }
         }
 
-        // method_450 = gotFileName
         private function gotFileName(e:Event)
         {
             this.loading = false;
@@ -132,15 +121,12 @@ package ui
             dispatchEvent(new Event(EmblemLoader.FINISH_LOADING));
         }
 
-        // method_459 = fileNameError
         private function fileNameError(e:Event)
         {
             this.loading = false;
             dispatchEvent(new Event(EmblemLoader.FINISH_LOADING));
         }
 
-        // not even gonna try with this one
-        // method_480 = drawImage
         private function drawImage()
         {
             var _local_1:Number = 1;
@@ -165,8 +151,6 @@ package ui
             this.bitmapData.draw(this.loader, _local_6, null, null, null, true);
         }
 
-        // replaced _arg_1 with this.defaultColor because that's what classes are for!
-        // method_308 = makeDefault
         private function makeDefault()
         {
             this.bitmapData.fillRect(new Rectangle(0, 0, this.bitmapData.width, this.bitmapData.height), this.defaultColor);

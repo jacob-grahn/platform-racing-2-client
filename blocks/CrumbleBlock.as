@@ -102,19 +102,15 @@ package blocks
             return hitForce;
         }
 
-        // method_707 = doCrumble
         private function doCrumble()
         {
             this.throwPieces(10);
             remove();
         }
 
-        // _loc2 = piece
-        // _loc7 = i
-        // method_294 = throwPieces
         private function throwPieces(piecesToThrow:Number)
         {
-            var _local_6:Point = method_18();
+            var _local_6:Point = getRotatedPos();
             piecesToThrow = piecesToThrow > 20 ? 20 : piecesToThrow;
             var i:int = 0;
             while (i < piecesToThrow) {

@@ -34,7 +34,6 @@ package items
             return this.used;
         }
 
-        // method_699 = slowDown
         private function slowDown()
         {
             this.localChar.setItem(0);

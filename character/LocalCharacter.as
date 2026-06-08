@@ -167,7 +167,6 @@ package character
             }
         }
 
-        // method_46 = setStats
         public function setStats(s:int, a:int, j:int, reset:Boolean = false)
         {
             this.speedStat = Data.numLimit(s, 0, 100);
@@ -199,7 +198,6 @@ package character
             this.setStats(this.startingStats[0], this.startingStats[1], this.startingStats[2]);
         }
 
-        // method_392 = statsChange
         public function statsChange(changeAmt:int)
         {
             this.speedStat = this.speedStat + changeAmt;
@@ -227,7 +225,6 @@ package character
             store.setNumber(GravityMultiplied, store.getNumber(DefaultGravity) * GamePage.course.gravity);
         }
 
-        // method_799 = squash
         public function squash(a:Array)
         {
             if (this.mode != "squashed" && recoveryFrames <= 0) {
@@ -279,7 +276,7 @@ package character
             var curX:int = x = Math.round(x);
             var curY:int = y = Math.round(y);
             if (this.map != null) {
-                var curPos:Point = Data.method_9(curX, curY, this.map.rotation);
+                var curPos:Point = Data.rotatePoint(curX, curY, this.map.rotation);
                 this.mapDot.x = curPos.x;
                 this.mapDot.y = curPos.y;
             }
@@ -337,14 +334,11 @@ package character
         }
 
         // tells the game to send the exact player coordinates next update (in this.go)
-        // method_796 = setEPNU
         private function setEPNU()
         {
             this.exactPosNextUpdate = true;
         }
 
-        // _loc1 = p
-        // method_704 = maybeSquash
         private function maybeSquash()
         {
             for each (var p:Character in this.course.playerArray) {
@@ -526,8 +520,6 @@ package character
             }
         }
 
-        // _loc1 = tempRight
-        // method_193 = updateKeys
         private function updateKeys()
         {
             this.up = this.down = this.right = this.left = this.space = false;
@@ -585,7 +577,7 @@ package character
                 velY = Data.numLimit(velY, -this.maxSpeed, this.maxSpeed);
                 x += velX;
                 y += velY;
-                var _local_2:Point = Data.method_9(x, y, this.map.rotation);
+                var _local_2:Point = Data.rotatePoint(x, y, this.map.rotation);
                 var _local_3:int = 500;
                 if ((_local_2.y > this.map.maxY + _local_3 && this.map.rotation == 0) || (_local_2.y < this.map.minY - _local_3 && Math.abs(this.map.rotation) == 180) || (_local_2.x > this.map.maxX + _local_3 && this.map.rotation == 90) || (_local_2.x < this.map.minX - _local_3 && this.map.rotation == -90)) {
                     this.returnToLastSafeSpot();
@@ -598,7 +590,6 @@ package character
             }
         }
 
-        // method_216 = returnToLastSafeSpot
         public function returnToLastSafeSpot()
         {
             x = this.lastSafeX;
@@ -613,7 +604,7 @@ package character
             for each (var hat:Hat in this.course.looseHats) {
                 var hatPos:Point = hat.getPos();
                 var hatRot:int = hat.getRot();
-                hatPos = Data.method_9(hatPos.x, hatPos.y, hatRot);
+                hatPos = Data.rotatePoint(hatPos.x, hatPos.y, hatRot);
                 if ((hatPos.y > this.map.maxY + 500 && hatRot == 0) || (hatPos.y < this.map.minY - 500 && Math.abs(hatRot) == 180) || (hatPos.x > this.map.maxX + 500 && hatRot == 90) || (hatPos.x < this.map.minX - 500 && hatRot == -90)) {
                     this.returnHatToStart(hat.getId());
                 }
@@ -774,7 +765,6 @@ package character
             }
         }
 
-        // method_448 = bumpPlayer
         private function bumpPlayer()
         {
             if (this.hurtTime <= 0) {
@@ -882,7 +872,6 @@ package character
             }
         }
 
-        // method_483 = setRotation
         public function setRotation(r:Number)
         {
             rotation = Math.round(r);
@@ -914,11 +903,6 @@ package character
 
         // this function originally returned if the positions of players should be updated instantly (within 1000px of the player)
         // since that functionality is disabled, the function has been simplified to return if there are other players present
-        //
-        // deleted _loc1 (Course.course.playerArray)
-        // deleted _loc2 (return values)
-        // _loc3 = c
-        // method_779 = playersInPosUpdateRange
         private function playersInPosUpdateRange():Boolean
         {
             
@@ -1033,7 +1017,6 @@ package character
             }
         }
 
-        // method_358 = ensureCowboyStats
         private function ensureCowboyStats()
         {
             if (store.getBool(COWBOY)) {
@@ -1050,13 +1033,11 @@ package character
             }
         }
 
-        // method_608 = isFrozen
         public function isFrozen():Boolean
         {
             return this.frozenSolid;
         }
 
-        // method_664 = freeze
         public function freeze()
         { // typo fixed from: this.mode != "frozenSolod"
             if (this.mode != "frozenSolid" && state != "frozenSolid" && !this.frozenSolid) {
@@ -1067,7 +1048,6 @@ package character
             }
         }
 
-        // method_591 = unfreeze
         private function unfreeze()
         {
             clearTimeout(this.unfreezeTimer);

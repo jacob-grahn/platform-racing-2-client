@@ -19,7 +19,6 @@ package items
             setReloadTime(800);
         }
 
-        // _loc1 = direction
         override public function useItem()
         {
             var direction:String = "left";
@@ -30,7 +29,7 @@ package items
                 this.localChar.velX -= 8;
             }
             this.localChar.curWeapon.sword.gotoAndPlay("swing");
-            var _local_2:Point = method_37();
+            var _local_2:Point = getWeaponEffectPos();
             var _local_3:int = _local_2.x;
             var _local_4:int = _local_2.y;
             var _local_5:Slash = new Slash(_local_3, _local_4, direction, this.localChar.tempID);

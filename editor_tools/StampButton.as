@@ -14,8 +14,6 @@ package editor_tools
 
         protected var displayCode:int;
 
-        // _loc2 = bg
-        // _loc3 = stamp
         public function StampButton(code:int)
         {
             super();
@@ -34,7 +32,7 @@ package editor_tools
         protected function fit(stamp:DisplayObject)
         {
             var size:Number = 24;
-            Data.method_314(stamp, size, size);
+            Data.scaleToFit(stamp, size, size);
             stamp.x = ((size - stamp.width) / 2) + 3;
             stamp.y = ((size - stamp.height) / 2) + 3;
         }

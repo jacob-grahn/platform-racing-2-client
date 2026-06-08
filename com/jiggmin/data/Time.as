@@ -18,19 +18,16 @@ package com.jiggmin.data
             this.var_568 = Data.getMS();
         }
 
-        // method_26 = getMS
         public function getMS():Number
         {
             return Data.getMS() - this.var_568 + this.var_624;
         }
 
-        // method_79 = getTimestamp
         public function getTimestamp():Number
         {
             return this.getMS() / 1000;
         }
 
-        // _loc1 = ms
         public function getDay():Number
         {
             var ms:Number = this.getTimestamp();

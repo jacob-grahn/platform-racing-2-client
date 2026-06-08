@@ -101,12 +101,6 @@ package com.jiggmin.data
             textbox.addEventListener(TextEvent.LINK, this.clickLink, false, 0, true);
         }
 
-        // _loc2 = arr
-        // _loc3 = mode
-        // _loc4 = group
-        // _loc5 = userName
-        // _loc6/_loc7 = guildId
-        // method_237 = clickLink
         private function clickLink(e:TextEvent)
         {
             var guildId:int;
@@ -143,9 +137,6 @@ package com.jiggmin.data
             }
         }
 
-        // _loc1 = i
-        // _loc2 = arrayLength
-        // _loc3 = link
         public function remove()
         {
             var arrayLength:int = this.array.length;

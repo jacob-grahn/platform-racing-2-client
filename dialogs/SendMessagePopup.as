@@ -74,7 +74,6 @@ package dialogs
             this.m.messageCharsRemaining.text = this.m.textBox.length + " / 1000";
         }
 
-        // method_264 = clickSend
         private function clickSend(e:MouseEvent)
         {
             if (this.m.nameBox.text == "") {

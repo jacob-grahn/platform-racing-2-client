@@ -16,9 +16,7 @@ package sounds
     {
 
 
-        // _loc5 = st
         // removed _loc6 (condensed)
-        // method_19 = playSound
         public static function playSound(sound:Sound, vol:Number = 1, pan:Number = 0, loops:Number = 0):SoundChannel
         {
             //if (vol > 0.05) {
@@ -33,7 +31,6 @@ package sounds
         }
 
         // removed _loc12 (condensed)
-        // method_16 = playGameSound
         public static function playGameSound(sound:Sound, _arg_2:Number, _arg_3:Number, vol:Number=1, pan:Number=0, loops:Number=0):SoundChannel
         {
             if (Course.course != null) {

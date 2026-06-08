@@ -129,7 +129,6 @@ package gameplay
             super.onCountdownFinish(e);
         }
 
-        // method_647 = getLevelData
         private function getLevelData()
         {
             var URLReq:URLRequest = new URLRequest(Main.levelsURL + "/" + courseID + ".txt?version=" + version);
@@ -249,7 +248,7 @@ package gameplay
             if (hat != null) {
                 var hatPos:Point = hat.getPos();
                 var hatRot:int = hat.getRot();
-                hatPos = Data.method_9(hatPos.x, hatPos.y, hatRot);
+                hatPos = Data.rotatePoint(hatPos.x, hatPos.y, hatRot);
                 if ((hatPos.y > blockBackground.maxY + 500 && hatRot == 0) || (hatPos.y < blockBackground.minY - 500 && Math.abs(hatRot) == 180) || (hatPos.x > blockBackground.maxX + 500 && hatRot == 90) || (hatPos.x < blockBackground.minX - 500 && hatRot == -90)) {
                     this.returnHatToStart(hat);
                 }
@@ -391,7 +390,6 @@ package gameplay
         }
 
         // deleted _loc1 (condensed fn)
-        // method_742 = getFinishBlockPositions
         private function getFinishBlockPositions():String
         {
             return finishBlocks.length > 5 ? 'all' : JSON.stringify(finishBlocks);
@@ -430,7 +428,6 @@ package gameplay
             }
         }
 
-        // method_209 = quitGame
         public function quitGame(arr:Array = null)
         {
             if (!playerDone) {

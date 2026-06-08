@@ -76,7 +76,6 @@ package dialogs
         }
 
         // _loc2 = ret
-        // method_313 = populateResult
         private function populateResult(e:Event)
         {
             var ret:Object = this.infoLoader.parsedData.guild;
@@ -90,7 +89,6 @@ package dialogs
             this.loading = false;
         }
 
-        // method_336 = clickChangeEmblem
         private function clickChangeEmblem(e:MouseEvent)
         {
             this.emblem.openBrowse();
@@ -101,7 +99,6 @@ package dialogs
             startFadeOut();
         }
 
-        // method_149 = clickConfirm
         private function clickConfirm(e:MouseEvent)
         {
             if (!this.loading) {
@@ -115,7 +112,6 @@ package dialogs
             }
         }
 
-        // method_139 = emblemFinished
         private function emblemFinished(e:Event)
         {
             this.emblem.removeEventListener(EmblemLoader.FINISH_LOADING, this.emblemFinished);
@@ -125,7 +121,6 @@ package dialogs
         // _loc1 = vars
         // _loc2 = reqURL
         // _loc3 = request
-        // method_405 = doConfirm
         private function doConfirm()
         {
             var vars:URLVariables = new URLVariables();
@@ -145,7 +140,6 @@ package dialogs
             this.loader.load(request);
         }
 
-        // method_320 = confirmResponseError
         private function confirmResponseError(e:Event)
         {
             this.loading = false;
@@ -153,7 +147,6 @@ package dialogs
         }
 
         // _loc2 = ret
-        // method_464 = accChangeHandler
         private function accChangeHandler(e:Event)
         {
             if (this.loading && Main.guild != this.guildId) {

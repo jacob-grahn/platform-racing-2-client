@@ -33,7 +33,6 @@ package chat
 			this.m.textBox.addEventListener(FocusEvent.FOCUS_OUT, this.lockToBottom, false, 0, true);
             this.m.send_bt.addEventListener(MouseEvent.CLICK, this.clickSend, false, 0, true);
             this.m.joinRoom_bt.addEventListener(MouseEvent.CLICK, this.clickJoinRoom, false, 0, true);
-            //this.m.textBox.addEventListener(ScrollEvent.SCROLL, this.method_440, false, 0, true);
             this.m.infoButton.addEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler, false, 0, true);
             this.m.infoButton.addEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler, false, 0, true);
             addEventListener(KeyboardEvent.KEY_DOWN, this.pauseListener, false, 0, true);
@@ -54,13 +53,11 @@ package chat
             }
         }
 
-        // method_47 = getChatRecord
         public function getChatRecord():String
         {
             return this.m.textBox.text;
         }
 
-        // method_431 = chatInputListenForEnter
         private function chatInputListenForEnter(e:KeyboardEvent)
         {
             if (e.keyCode == 13) {
@@ -68,7 +65,6 @@ package chat
             }
         }
 
-        // method_264 = clickSend
         private function clickSend(e:MouseEvent)
         {
             this.sendMessage(this.m.chatInput.text);
@@ -82,7 +78,6 @@ package chat
             this.lockBot = true;
         }
 
-        // method_236 = roomBoxListenForEnter
         private function roomBoxListenForEnter(e:KeyboardEvent)
         {
             if (e.keyCode == 13) {
@@ -90,13 +85,11 @@ package chat
             }
         }
 
-        // method_230 = clickJoinRoom
         private function clickJoinRoom(e:MouseEvent)
         {
             this.changeRoom();
         }
 
-        // method_429 = changeRoom
         private function changeRoom()
         {
             if (this.m.roomBox.text == "") {
@@ -109,15 +102,6 @@ package chat
             messages = 0;
         }
 
-        // this seems to be causing the scroll glitch...
-        // https://www.youtube.com/watch?v=Kx7J8FA8hjA
-        /*private function method_440(e:ScrollEvent)
-        {
-            if (e.position == 1) {
-                this.lockToBottom();
-            }
-        }*/
-
         override protected function showMessages()
         {
             if (this.updateMessages === true) {
@@ -129,9 +113,6 @@ package chat
             }
         }
 
-        // _loc1 = pos
-        // _loc2 = maxPos
-        // method_559 = maybeLockToBottom
         private function maybeLockToBottom()
         {
             var pos:Number = this.m.textBox.verticalScrollPosition;
@@ -170,7 +151,6 @@ package chat
             this.m.chatInput.removeEventListener(KeyboardEvent.KEY_DOWN, this.chatInputListenForEnter);
             this.m.send_bt.removeEventListener(MouseEvent.CLICK, this.clickSend);
             this.m.joinRoom_bt.removeEventListener(MouseEvent.CLICK, this.clickJoinRoom);
-            //this.m.textBox.removeEventListener(ScrollEvent.SCROLL, this.method_440);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, this.overInfoHandler);
             this.m.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, this.outInfoHandler);
             removeEventListener(KeyboardEvent.KEY_DOWN, this.pauseListener);

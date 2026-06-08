@@ -14,9 +14,6 @@ package dialogs
     public class HoverPopup extends InfoPopup 
     {
 
-        // _loc4 = titleBox
-        // _loc5 = contentBox
-        // _loc6 = bg
         public function HoverPopup(title:String, content:String, d:DisplayObject)
         {
             if (title != "" || content != "") {
@@ -35,7 +32,6 @@ package dialogs
             }
         }
 
-        // method_423 = generateTextBox
         private function generateTextBox():TextField
         {
             var t:TextField = new TextField();

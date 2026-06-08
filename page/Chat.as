@@ -43,11 +43,6 @@ package page
             return '';
         }
 
-        // userName = _loc2
-        // group = _loc3
-        // messageText = _loc4
-        // chatMessageName = _loc5
-        // method_151 = handleMessageFromArray
         public function handleMessageFromArray(chatMessageArray:Array, fred:Boolean = false)
         {
             var userName:String = chatMessageArray[0];
@@ -99,7 +94,6 @@ package page
             }
         }
 
-        // method_107 = displayMessage
         protected function displayMessage(message:String)
         {
             this.messages++;

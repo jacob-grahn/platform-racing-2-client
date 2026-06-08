@@ -18,10 +18,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function jumpAnim_61()
         {
-            addFrameScript(49, this.method_778);
+            addFrameScript(49, this.stopOnLastFrame);
         }
 
-        internal function method_778():*
+        internal function stopOnLastFrame():*
         {
             stop();
         }

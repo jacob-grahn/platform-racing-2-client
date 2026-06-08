@@ -41,14 +41,12 @@ package items
             }
         }
 
-        // method_48 = setUses
         protected function setUses(uses:int)
         {
             SecureData.setNumber("uses", uses);
             this.localChar.setAmmo(uses);
         }
 
-        // method_45 = setReloadTime
         protected function setReloadTime(time:int)
         {
             SecureData.setNumber("reloadTime", time);
@@ -69,13 +67,12 @@ package items
             }
         }
 
-        // method_688 = reloadingOnComplete
         private function reloadingOnComplete()
         {
             this.reloading = false;
         }
 
-        protected function method_37():Point
+        protected function getWeaponEffectPos():Point
         {
             var _local_1:Point = new Point(this.localChar.curWeapon.x, this.localChar.curWeapon.y);
             _local_1 = this.localChar.curWeapon.parent.localToGlobal(_local_1);

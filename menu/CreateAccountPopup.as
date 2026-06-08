@@ -26,9 +26,6 @@ package menu
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
         }
 
-        // _loc6 = vars
-        // _loc7 = request
-        // method_257 = clickCreateAccount
         private function clickCreateAccount(e:MouseEvent)
         {
             if (this.m.passBox1.text != this.m.passBox2.text) {
@@ -46,7 +43,6 @@ package menu
             }
         }
 
-        // method_297 = receiveCreateAccountResult
         private function receiveCreateAccountResult(e:Event)
         {
             if (this.uploadingPopup.parsedData.success == true) {

@@ -16,10 +16,6 @@ package editor_tools
         private var modeSelect:ComboBox = m.modeSelect; // var_63
         private var open:Boolean = false;
 
-        // _loc2 = mode
-        // _loc3 = this.modeSelect.length
-        // _loc4 = LevelEditor.editor.gameMode
-        // _loc5 = i
         public function ModeMenu(d:DisplayObject)
         {
             var i:int = 0;
@@ -38,21 +34,17 @@ package editor_tools
             super(d);
         }
 
-        // method_355 = onOpen
         private function onOpen(e:Event)
         {
             this.open = true;
         }
 
-        // method_407 = onClose
         private function onClose(e:Event)
         {
             this.open = false;
             this.onChange(e);
         }
 
-        // _loc2 = this.modeSelect.selectedItem.data
-        // method_65 = onChange
         private function onChange(e:Event)
         {
             LevelEditor.editor.setGameMode(this.modeSelect.selectedItem.data);

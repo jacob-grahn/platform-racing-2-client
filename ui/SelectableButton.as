@@ -29,7 +29,6 @@ package ui
             this.display();
         }
 
-        // method_321 = getSelected
         public function getSelected():Boolean
         {
             return this.selected;

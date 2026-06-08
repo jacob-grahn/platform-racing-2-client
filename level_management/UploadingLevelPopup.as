@@ -36,18 +36,12 @@ package level_management
             this.uploadLevel();
         }
 
-        // _loc1 = md5
-        // _loc2 = lVars
-        // _loc3 = unhashedStr
-        // _loc4 = byteHash
         // deleted _loc5 (put on the same line as lVars.hash)
-        // _loc6 = request
-        // method_240 = uploadLevel
         private function uploadLevel()
         {
             if (!this.editor.drawing) {
                 var md5:MD5 = new MD5();
-                var lVars:URLVariables = this.editor.method_344();
+                var lVars:URLVariables = this.editor.getLevelVars();
                 if (lVars.data == "" || lVars.data == null) {
                     new MessagePopup("The client is glitching out. Could not save your level.");
                 } else {

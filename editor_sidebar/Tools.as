@@ -57,21 +57,18 @@ package editor_sidebar
             this.brush.setZoom(z);
         }
 
-        // method_249 = onBrushDown
         private function onBrushDown(e:MouseEvent)
         {
             e.stopImmediatePropagation();
             CustomCursor.change(this.brush);
         }
 
-        // method_424 = onEraserDown
         private function onEraserDown(e:MouseEvent)
         {
             e.stopImmediatePropagation();
             CustomCursor.change(this.eraser);
         }
 
-        // method_280 = chooseColor
         private function chooseColor(e:Event)
         {
             Tools.color = this.colorPicker.getColor();

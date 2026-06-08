@@ -63,7 +63,6 @@ package lobby
             addChild(this.bottom_bts);
         }
 
-        // method_328 = clickLogout
         private function clickLogout(e:MouseEvent = null)
         {
             if (Main.isTempMod && Main.server.guild_id == 0) {
@@ -86,7 +85,6 @@ package lobby
             Main.socket.close();
         }
 
-        // method_233 = clickLE
         private function clickLE(e:MouseEvent = null)
         {
             if (Main.isTempMod && Main.server.guild_id == 0) {
@@ -101,37 +99,31 @@ package lobby
             Main.socket.close();
         }
 
-        // method_437 = clickKong
         private function clickKong(e:MouseEvent)
         {
             navigateToURL(new URLRequest("http://www.kongregate.com/games/jiggmin/platform-racing-2/?gamereferral=platformracing2"), "_blank");
         }
 
-        // method_433 = clickOptions
         private function clickOptions(e:MouseEvent)
         {
             new OptionsPopup();
         }
 
-        // method_428 = clickStore
         private function clickStore(e:MouseEvent)
         {
             new StorePopup();
         }
 
-        // method_413 = clickCredits
         private function clickCredits(e:MouseEvent)
         {
             new CreditsPopup();
         }
 
-        // method_291 = hoverKong
         private function hoverKong(e:MouseEvent)
         {
             this.hover = new HoverPopup("Kong Hat", "Players from Kongregate automatically get a hat that doubles guild points won in each race!", this.bottom_bts.moreGamesButton);
         }
 
-        // method_353 = hoverOutKong
         private function hoverOutKong(e:MouseEvent)
         {
             this.hover.remove();

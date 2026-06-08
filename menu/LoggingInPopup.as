@@ -81,7 +81,6 @@ package menu
             this.maybeSwitchToLobby();
         }
 
-        // method_228 = onHttpSuccess
         private function onHttpSuccess(e:Event)
         {
             var ret:Object = this.loader.parsedData;
@@ -100,7 +99,6 @@ package menu
             this.maybeSwitchToLobby();
         }
 
-        // method_254 = onError
         private function onError(e:Event)
         {
             startFadeOut();
@@ -115,7 +113,6 @@ package menu
             Main.clearUserData();
         }
 
-        // method_456 = maybeSwitchToLobby
         private function maybeSwitchToLobby()
         {
             if (this.socketOK && this.httpOK) {
@@ -139,12 +136,6 @@ package menu
         {
             startFadeOut();
         }
-
-        // using onError
-        /*private function method_349(e:Event)
-        {
-            startFadeOut();
-        }*/
 
         override public function remove()
         {

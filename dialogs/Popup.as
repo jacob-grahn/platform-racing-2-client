@@ -34,7 +34,7 @@ package dialogs
             y = (400 / 2);
             alpha = 0;
             Main.stage.addChild(this);
-            addEventListener(Event.ENTER_FRAME, this.fadeIn, false, 0, true); // method_117
+            addEventListener(Event.ENTER_FRAME, this.fadeIn, false, 0, true);
             OPEN_POPUPS.push(this);
         }
 
@@ -62,7 +62,6 @@ package dialogs
             return OPEN_POPUPS;
         }
 
-        // method_2 = startFadeOut
         public function startFadeOut()
         {
             this.fadeOutStarted = true;

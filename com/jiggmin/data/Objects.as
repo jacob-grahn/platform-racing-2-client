@@ -65,7 +65,6 @@ package com.jiggmin.data
 
 
         // removed _loc2 (direct return instead)
-        // method_29 = getFromCode
         public static function getFromCode(code:int):DisplayObject
         {
             if (code == STAMP_TREE) {

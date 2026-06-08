@@ -12,7 +12,6 @@ package com.jiggmin.data
         // _loc4 = red
         // _loc5 = green
         // _loc6 = blue
-        // method_587 = hsbToRGB
         public static function hsbToRGB(hue:Number, saturation:Number, brightness:Number):Object
         {
             var red:Number;
@@ -76,7 +75,6 @@ package com.jiggmin.data
             });
         }
 
-        // method_739 = rgbToHSB
         public static function rgbToHSB(_arg_1:Number, _arg_2:Number, _arg_3:Number):Object
         {
             var _local_8:Number;
@@ -109,7 +107,6 @@ package com.jiggmin.data
             });
         }
 
-        // method_265 = rgbToHex24
         public static function rgbToHex24(r:int, g:int, b:int):uint
         {
             return r << 16 | g << 8 | b;
@@ -124,7 +121,6 @@ package com.jiggmin.data
             };
         }
 
-        // method_840 = argbToHex32
         public static function argbToHex32(r:int, g:int, b:int, a:int):uint
         {
             return a << 24 | r << 16 | g << 8 | b;
@@ -154,7 +150,6 @@ package com.jiggmin.data
         }
 
         // _loc2 = hex
-        // method_712 = decimalToHex
         public static function decimalToHex(num:Number):String
         {
             var hex:String = num.toString(16).toUpperCase();

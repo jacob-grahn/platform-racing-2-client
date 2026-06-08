@@ -256,17 +256,17 @@ package levelEditor
 
         public function focusOn(_arg_1:Background)
         {
-            this.blockBG.method_22();
-            this.bg1.method_22();
-            this.bg2.method_22();
-            this.bg3.method_22();
-            this.bg4.method_22();
-            this.bg5.method_22();
-            this.draw1.method_22();
-            this.draw2.method_22();
-            this.draw3.method_22();
-            this.draw4.method_22();
-            this.draw5.method_22();
+            this.blockBG.unfocus();
+            this.bg1.unfocus();
+            this.bg2.unfocus();
+            this.bg3.unfocus();
+            this.bg4.unfocus();
+            this.bg5.unfocus();
+            this.draw1.unfocus();
+            this.draw2.unfocus();
+            this.draw3.unfocus();
+            this.draw4.unfocus();
+            this.draw5.unfocus();
             _arg_1.focusOn();
             this.var_225 = _arg_1;
             this.menu.changeUndoRedoState();
@@ -328,7 +328,6 @@ package levelEditor
             this.menu.settings.timeButton.setValue(this.maxTime);
         }
 
-        // method_142 = setMinRank
         public function setMinRank(r:String)
         {
             r = r == null || r == '' ? '0' : r;
@@ -343,7 +342,6 @@ package levelEditor
             this.menu.settings.sfcmButton.setValue(this.cowboyChance);
         }
 
-        // method_121 = setPass
         public function setPass(p:String)
         {
             p = p == null ? '' : p;
@@ -368,7 +366,7 @@ package levelEditor
             this.menu.reset();
         }
 
-        public function method_344():URLVariables
+        public function getLevelVars():URLVariables
         {
             var vars:URLVariables = new URLVariables();
             vars.title = title;

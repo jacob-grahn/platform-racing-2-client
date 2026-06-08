@@ -189,10 +189,6 @@ package level_browser
             this.coverActive = enable;
         }
 
-        // _loc2 = enteredPass
-        // _loc3 = hash
-        // _loc4 = request
-        // method_681 = clickPassEnter
         private function clickPassEnter(e:MouseEvent)
         {
             if (this.superLoader == null) {
@@ -213,10 +209,6 @@ package level_browser
             }
         }
 
-        // _loc2 = ret
-        // _loc3 = encryptor
-        // _loc4 = decryptedStr
-        // method_198 = validatePassResponse
         private function validatePassResponse(e:Event)
         {
             var ret:Object = this.superLoader.parsedData;
@@ -256,12 +248,6 @@ package level_browser
             this.superLoader = null;
         }
 
-        // deleted _loc1 (x remains the same at 0px)
-        // _loc2 = y
-        // deleted _loc3 (height incremental increase remains the same at 16px)
-        // _loc4 = slot
-        // _loc5 = i
-        // method_535 = addSlots
         private function addSlots()
         {
             var y:Number = 0;
@@ -277,9 +263,6 @@ package level_browser
             }
         }
 
-        // _loc1 = slot
-        // _loc2 = i
-        // method_826 = removeSlots
         private function removeSlots()
         {
             var slot:Slot;
@@ -372,40 +355,17 @@ package level_browser
             }
         }
 
-        /*
-        private function clickDelete(e:MouseEvent)
-        {
-            new ConfirmPopup(this.deleteLevel, "Are you sure you want to remove this level?");
-        }
-
-        // _loc1 = vars
-        // _loc2 = request
-        // method_816 = deleteLevel
-        public function deleteLevel()
-        {
-            var vars:URLVariables = new URLVariables();
-            vars.level_id = this.courseID;
-            var request:URLRequest = new URLRequest(Main.baseURL + "/remove_level.php");
-            request.method = URLRequestMethod.POST;
-            request.data = vars;
-            new UploadingPopup(request, 'json');
-        }
-        */
-
-        // method_618 = sendFillSlot
         public function sendFillSlot(slotNum:int)
         {
             var pageNum:int = LevelListing.levelListing.getPageNum();
             Main.socket.write("fill_slot`" + this.courseID + "_" + this.version + "`" + slotNum + "`" + pageNum);
         }
 
-        // method_180 = sendClearSlot
         public function sendClearSlot()
         {
             Main.socket.write("clear_slot`");
         }
 
-        // method_178 = sendConfirmSlot
         public function sendConfirmSlot()
         {
             Main.socket.write("confirm_slot`");
@@ -481,11 +441,6 @@ package level_browser
         {
             new LevelInfoPopup(this.courseID);
         }
-
-        // ?
-        /*private function method_847()
-        {
-        }*/
 
         override public function remove()
         {

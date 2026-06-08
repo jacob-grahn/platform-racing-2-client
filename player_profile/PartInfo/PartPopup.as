@@ -35,7 +35,7 @@
             this.dynamicObtain();
             this.showPart();
             addChild(this.m);
-            this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose); // method_149
+            this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose);
         }
 
         private function dynamicObtain()

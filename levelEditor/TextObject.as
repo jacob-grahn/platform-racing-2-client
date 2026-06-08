@@ -46,7 +46,6 @@ package levelEditor
             }
         }
 
-        // method_343 = escapeText
         public static function escapeText(s:String):String
         {
             s = s.replace(/#/g, "#35");
@@ -58,7 +57,6 @@ package levelEditor
             return s.replace(/;/g, "#59");
         }
 
-        // method_192 = parseText
         public static function parseText(s:String):String
         {
             s = s.replace(/#96/g, "`");
@@ -70,32 +68,27 @@ package levelEditor
             return s.replace(/#35/g, "#");
         }
 
-        // method_47 = getText
         public function getText():String
         {
             return this.textField.text;
         }
 
-        // method_475 = setText
         public function setText(s:String)
         {
             this.textField.text = s;
             recordRealDimensions();
         }
 
-        // method_184 = getEscapedText
         public function getEscapedText():String
         {
             return escapeText(this.getText());
         }
 
-        // method_262 = showParsedText
         public function showParsedText(s:String)
         {
             this.setText(parseText(s));
         }
 
-        // method_12 = getColor
         public function getColor():int
         {
             return this.textField.textColor;
@@ -132,16 +125,14 @@ package levelEditor
             stageRef.removeEventListener(KeyboardEvent.KEY_DOWN, this.onDelPress);
         }
 
-        // method_270 = startEditing
         public function startEditing()
         {
             this.textField.visible = false;
             this.addEditBox();
-            this.method_169(null);
+            this.onTextChange(null);
             this.removeEditButton();
         }
 
-        // method_574 = stopEditing
         private function stopEditing()
         {
             if (this.editableTextField != null) {
@@ -155,7 +146,6 @@ package levelEditor
             }
         }
 
-        // method_518 = addEditBox
         private function addEditBox()
         {
             this.removeEditBox();
@@ -178,16 +168,15 @@ package levelEditor
             if (this.editableTextField.width < 100) {
                 this.editableTextField.width = 100;
             }
-            this.editableTextField.addEventListener(Event.CHANGE, this.method_169, false, 0, true);
+            this.editableTextField.addEventListener(Event.CHANGE, this.onTextChange, false, 0, true);
         }
 
-        // method_172 = removeEditBox
         private function removeEditBox()
         {
             this.editing = false;
             if (this.editableTextField != null) {
                 m = this.textField;
-                this.editableTextField.removeEventListener(Event.CHANGE, this.method_169);
+                this.editableTextField.removeEventListener(Event.CHANGE, this.onTextChange);
                 this.editableTextField.text = "";
                 removeChild(this.editableTextField);
                 this.editableTextField = null;
@@ -195,7 +184,6 @@ package levelEditor
             Main.stage.focus = Main.stage;
         }
 
-        // method_788 = addEditButton
         private function addEditButton()
         {
             this.removeEditButton();
@@ -204,7 +192,6 @@ package levelEditor
             addChild(this.editButton);
         }
 
-        // method_105 = removeEditButton
         private function removeEditButton()
         {
             if (this.editButton != null) {
@@ -214,7 +201,6 @@ package levelEditor
             }
         }
 
-        // method_624 = addColorPicker
         private function addColorPicker()
         {
             if (this.cp == null) {
@@ -226,7 +212,6 @@ package levelEditor
             addChild(this.cp);
         }
 
-        // method_768 = removeColorPicker
         private function removeColorPicker()
         {
             if (this.cp != null) {
@@ -237,14 +222,12 @@ package levelEditor
             }
         }
 
-        // method_432 = openColorPicker
         private function openColorPicker(e:MouseEvent)
         {
             this.editing = true;
             e.stopImmediatePropagation();
         }
 
-        // method_364 = closeColorPicker
         private function closeColorPicker(e:Event)
         {
             this.editing = false;
@@ -252,7 +235,7 @@ package levelEditor
             this.setColor(this.cp.getColor());
         }
 
-        private function method_169(_arg_1:Event)
+        private function onTextChange(_arg_1:Event)
         {
             recordRealDimensions();
             hideHighlight();
@@ -291,7 +274,6 @@ package levelEditor
             }
         }
 
-        // method_421 = clickEdit
         private function clickEdit(e:MouseEvent)
         {
             e.stopImmediatePropagation();

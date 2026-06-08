@@ -77,7 +77,6 @@ package dialogs
         // _loc3 = members
         // _loc4 = member
         // _loc5 = userName
-        // method_228 = parseReturn
         private function parseReturn(e:Event)
         {
             this.determineVisuals();
@@ -111,13 +110,11 @@ package dialogs
             Main.stage.focus = Main.stage;
         }
 
-        // method_244 = clickMessage
         private function clickMessage(e:MouseEvent)
         {
             new SendMessagePopup("guild", "", true);
         }
 
-        // method_377 = clickClose
         private function clickClose(e:*)
         {
             startFadeOut();
@@ -129,7 +126,6 @@ package dialogs
             new CreateGuildPopup(this.guildId);
         }
 
-        // method_252 = clickDelete
         private function clickDelete(e:MouseEvent)
         {
             var confirmStr:String = "Are you sure you want to delete this guild?";
@@ -139,7 +135,6 @@ package dialogs
             new ConfirmPopup(this.confirmDelete, confirmStr);
         }
 
-        // method_73 = confirmDelete
         public function confirmDelete()
         {
             var deleteGuildSL:SuperLoader = new SuperLoader(true, SuperLoader.j);

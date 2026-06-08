@@ -53,7 +53,6 @@ package com.jiggmin.pixelEffects.pixels
             }
         }
 
-        // method_582 = settle
         private function settle()
         {
             x = this.finalX;
@@ -68,7 +67,6 @@ package com.jiggmin.pixelEffects.pixels
             alpha = 0.25;
         }
 
-        // method_435 = glint
         private function glint(e:Event)
         {
             this.glintCounter--;

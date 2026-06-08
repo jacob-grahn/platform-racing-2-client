@@ -37,7 +37,6 @@ package page
             super.remove();
         }
 
-        // method_656 = getCurrentPage
         public function getCurrentPage():Page
         {
             return this.currentPage;

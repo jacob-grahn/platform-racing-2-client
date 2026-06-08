@@ -50,7 +50,6 @@ package com.jiggmin.data
 			seed = 1;
         }
 
-        // method_154 = seed
         public function get seed():int
         {
             return this._seed;
@@ -71,7 +70,6 @@ package com.jiggmin.data
         // _loc1 = inext
         // _loc2 = inextp
         // _loc3 = num
-        // method_84 = internalSample
         private function internalSample():int
         {
 			var inext:int = this._inext;
@@ -92,13 +90,11 @@ package com.jiggmin.data
 			return num;
         }
 
-        // method_841 = nextInt
         public function nextInt():int
         {
             return this.internalSample();
         }
 
-        // method_837 = nextMax
         public function nextMax(maxValue:int):int
         {
 			if (maxValue < 0) {
@@ -108,7 +104,6 @@ package com.jiggmin.data
         }
 
         // _loc3 = num
-        // method_55 = nextMinMax
         public function nextMinMax(minValue:int, maxValue:int):int
         {
 			if (minValue > maxValue) {
@@ -122,7 +117,6 @@ package com.jiggmin.data
         }
 
         // _loc3 = i
-        // method_309 = nextBytes
         public function nextBytes(buffer:ByteArray, length:int)
         {
 			if (buffer == null) {
@@ -133,13 +127,11 @@ package com.jiggmin.data
 			}
         }
 
-        // method_853 = nextNumber
         public function nextNumber():Number
         {
             return this.sample();
         }
 
-        // method_166 = sample
         protected function sample():Number
         {
             return (this.internalSample() * 4.6566128752457969E-10);

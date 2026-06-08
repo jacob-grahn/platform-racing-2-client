@@ -43,10 +43,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function clickToDownloadCover_363()
         {
-            this.method_800();
+            this.initComponentSettings();
         }
 
-        internal function method_800():*
+        internal function initComponentSettings():*
         {
             try {
                 this.passButton["componentInspectorSetting"] = true;

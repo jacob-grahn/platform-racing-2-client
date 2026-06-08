@@ -23,31 +23,31 @@ package blocks
         override public function onStand(player:LocalCharacter)
         {
             super.onStand(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onLeftHit(player:LocalCharacter)
         {
             super.onLeftHit(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onRightHit(player:LocalCharacter)
         {
             super.onRightHit(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onTouch(player:LocalCharacter)
         {
             super.onTouch(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onDamage(n:Number)
@@ -59,7 +59,7 @@ package blocks
         // _loc3 = piece
         override protected function activate(s:String="")
         {
-            var _local_6:Point = method_18();
+            var _local_6:Point = getRotatedPos();
             var i:int;
             while (i < 10) {
                 var piece:MinePieceGraphic = new MinePieceGraphic();
@@ -73,7 +73,7 @@ package blocks
         }
 
         // deleted _loc2 (50)
-        private function method_81(player:LocalCharacter)
+        private function hitPlayer(player:LocalCharacter)
         {
             if (!frozen) {
                 var _local_3:Number = player.x - (x + 15);

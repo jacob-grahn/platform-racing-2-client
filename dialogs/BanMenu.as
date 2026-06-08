@@ -72,44 +72,6 @@ package dialogs
             }
         }
 
-        /*
-        // method_388 = banMinute
-        private function banMinute(e:MouseEvent)
-        {
-            this.confirmBan(this.minSecs);
-        }
-
-        // method_468 = banHour
-        private function banHour(e:MouseEvent)
-        {
-            this.confirmBan(this.hourSecs);
-        }
-
-        // method_445 = banDay
-        private function banDay(e:MouseEvent)
-        {
-            this.confirmBan(this.daySecs);
-        }
-
-        // method_286 = banWeek
-        private function banWeek(e:MouseEvent)
-        {
-            this.confirmBan(this.weekSecs);
-        }
-
-        // method_235 = banMonth
-        private function banMonth(e:MouseEvent)
-        {
-            this.confirmBan(this.monthSecs);
-        }
-
-        // method_365 = banYear
-        private function banYear(e:MouseEvent)
-        {
-            this.confirmBan(this.yearSecs);
-        }*/
-
-        // method_60 = confirmBan
         private function confirmBan(e:MouseEvent)
         {
             this.banSecs = this.m.duration.selectedItem.data;
@@ -127,10 +89,6 @@ package dialogs
             new ConfirmPopup(this.banUser, msg);
         }
 
-        // chatRecord = _loc1
-        // vars = _loc2
-        // request = _loc3
-        // method_797 = banUser
         public function banUser()
         {
             var chatRecord:String = "";
@@ -181,7 +139,6 @@ package dialogs
             this.warnUser(3);
         }
 
-        // method_145 = warnUser
         private function warnUser(warnLevel:int)
         {
             Main.socket.write("warn`" + this.userName + "`" + warnLevel);

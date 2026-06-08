@@ -22,7 +22,6 @@ package blocks
             super(Objects.BLOCK_FINISH);
         }
 
-        // method_140 = getId
         public function getId():int
         {
             return this.id;

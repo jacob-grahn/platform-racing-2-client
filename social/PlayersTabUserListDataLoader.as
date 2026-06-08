@@ -22,9 +22,6 @@ package social
             this.superLoader.addEventListener(Event.COMPLETE, this.populateList);
         }
 
-        // _loc2 = request
-        // _loc3 = i
-        // method_281 = populateList
         private function populateList(e:Event)
         {
             var users:Array = this.superLoader.parsedData.users;

@@ -19,10 +19,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function frozenSolidAnim_65()
         {
-            addFrameScript(47, this.method_783);
+            addFrameScript(47, this.onAnimComplete);
         }
 
-        internal function method_783():*
+        internal function onAnimComplete():*
         {
             stop();
             dispatchEvent(new Event(Event.COMPLETE));

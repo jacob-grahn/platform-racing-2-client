@@ -112,15 +112,13 @@ package gameplay
             PrizePopup.instance = this;
         }
 
-        // method_714 = activateEpicAnimation
         private function activateEpicAnimation()
         {
             this.epicFlash.addItem(this.target.colorMC2);
-            this.epicFlash.method_580(300);
+            this.epicFlash.setDelay(300);
             this.epicFlash.start();
         }
 
-        // method_292 = clickClose
         private function clickClose(e:MouseEvent)
         {
             startFadeOut();

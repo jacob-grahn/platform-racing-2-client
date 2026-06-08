@@ -127,11 +127,6 @@ package dialogs
             }
         }*/
 
-        // _loc2 = ret
-        // _loc3 = regDate
-        // _loc4 = group
-        // _loc5 = groupText
-        // method_281 = applyReturnData
         private function applyReturnData(e:*)
         {
             var ret:Object = this.dataMode == 'http' ? SuperLoader(e.target).parsedData : e;
@@ -344,19 +339,16 @@ package dialogs
             this.m.playerInfo.supplBg.visible = false;
         }
 
-        // method_419 = clickInvite
         private function clickInvite(e:MouseEvent)
         {
             this.handleURL(Main.baseURL + "/guild_invite.php");
         }
 
-        // method_231 = clickKick
         private function clickKick(e:MouseEvent)
         {
             this.handleURL(Main.baseURL + "/guild_kick.php");
         }
 
-        // method_288 = clickSendPM
         private function clickSendPM(e:MouseEvent)
         {
             startFadeOut();
@@ -375,28 +367,24 @@ package dialogs
             Main.socket.write("unfollow_user`" + this.userName);
         }
 
-        // method_356 = clickAddFriend
         private function clickAddFriend(e:MouseEvent)
         {
             this.handleUserListURL('friends', 'add');
             Main.socket.write("add_friend`" + this.userName);
         }
 
-        // method_391 = clickRemoveFriend
         private function clickRemoveFriend(e:MouseEvent)
         {
             this.handleUserListURL('friends', 'remove');
             Main.socket.write("remove_friend`" + this.userName);
         }
 
-        // method_257 = clickIgnore
         private function clickIgnore(e:MouseEvent)
         {
             this.handleUserListURL('ignored', 'add');
             Main.socket.write("ignore_user`" + this.userName);
         }
 
-        // method_385 = clickUnignore
         private function clickUnignore(e:MouseEvent)
         {
             this.handleUserListURL('ignored', 'remove');
@@ -419,7 +407,6 @@ package dialogs
             }
         }
 
-        // method_404 = clickViewLevels
         private function clickViewLevels(e:MouseEvent)
         {
 			if (LobbyRight.lobbyRight != null) {
@@ -440,7 +427,6 @@ package dialogs
             startFadeOut();
         }
 
-        // method_292 = clickClose
         private function clickClose(e:*)
         {
             startFadeOut();
@@ -460,9 +446,6 @@ package dialogs
             startFadeOut();
         }
 
-        // _loc3 = vars
-        // _loc4 = request
-        // method_56 = handleURL
         private function handleURL(url:String)
         {
             var vars:URLVariables = new URLVariables();

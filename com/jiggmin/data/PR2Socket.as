@@ -82,19 +82,16 @@ package com.jiggmin.data
             }
         }
 
-        // method_593 = read
         private function read(e:* = null)
         {
             CommandHandler.commandHandler.addText(readUTFBytes(bytesAvailable));
         }
 
-        // method_427 = requestLoginId
         private function requestLoginId(e:Event)
         {
             this.write("request_login_id`");
         }
 
-        // method_307 = closeHandler
         private function closeHandler(e:Event)
         {
             if (!(Main.pageHolder.getCurrentPage() is LoginPage)) {
@@ -112,23 +109,6 @@ package com.jiggmin.data
             this.remove();
         }
 
-        // method_247 = securityErrorHandler
-        /*private function securityErrorHandler(e:SecurityErrorEvent)
-        {
-            this.remove();
-        }
-
-        private function method_519(e:SecurityErrorEvent)
-        {
-        }
-
-        // method_227 = onData (DEPRECIATED; use this.read())
-        private function onData(e:ProgressEvent)
-        {
-            this.read();
-        }*/
-
-        // method_725 = sendPing
         public function sendPing()
         {
             if (connected) {
@@ -136,7 +116,6 @@ package com.jiggmin.data
             }
         }
 
-        // method_824 = receivePing
         public function receivePing(arr:Array)
         {
             var _local_2:Number = Number(arr);
@@ -147,7 +126,6 @@ package com.jiggmin.data
             }
         }
 
-        // method_26 = getMS
         public function getMS():Number
         {
             return this.var_363.getMS();
@@ -162,7 +140,6 @@ package com.jiggmin.data
             removeEventListener(SecurityErrorEvent.SECURITY_ERROR, this.anyErrorHandler);
             removeEventListener(ProgressEvent.SOCKET_DATA, this.read);
             this.close();
-            //addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.method_519, false, 0, true);
         }
 
 

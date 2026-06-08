@@ -51,7 +51,7 @@ package background
             }
             this.bitmapData.draw(bg);
             scale = displayCode == Objects.BG4Code || displayCode == Objects.BG5Code ? 0 : 1;
-            method_59();
+            applyColorTransform();
         }
 
         private function drawCircleGrid(bg:DisplayObject)

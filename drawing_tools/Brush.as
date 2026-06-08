@@ -49,7 +49,6 @@ package drawing_tools
             clearInterval(this.rdInt);
         }
 
-        // _loc2 = currentPos
         private function go(e:Event)
         {
             if (this.drawing == true) {
@@ -69,7 +68,6 @@ package drawing_tools
             }
         }
 
-        // method_304 = restartDrawing
         private function restartDrawing()
         {
             if (this.drawing == true) {
@@ -84,7 +82,6 @@ package drawing_tools
             this.circle.width = this.circle.height = this.size * this.zoomMultiplier;
         }
 
-        // _loc2 = ct
         public function setColor(c:Number=0)
         {
             this.color = c;
@@ -99,7 +96,6 @@ package drawing_tools
             this.setSize(this.size);
         }
 
-        // _loc2 = objClicked
         override protected function mouseDownHandler(e:MouseEvent)
         {
             super.mouseDownHandler(e);
@@ -130,7 +126,6 @@ package drawing_tools
             visible = !LevelEditor.editor.menu.hitTestPoint(e.stageX, e.stageY, true);
         }
 
-        // _loc1 = startPt
         protected function startDrawing()
         {
             this.drawing = true;
@@ -150,7 +145,6 @@ package drawing_tools
             LevelEditor.editor.var_220.rasterize();
         }
 
-        // method_398 = roundPoint
         private function roundPoint(pt:Point):Point
         {
             pt = this.drawableBG.globalToLocal(pt);

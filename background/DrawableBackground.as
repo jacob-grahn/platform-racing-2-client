@@ -54,21 +54,21 @@ package background
             this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
         }
 
-        public function method_86()
+        public function disableCaching()
         {
             this.var_122.cacheAsBitmap = false;
-            this.method_268(false);
+            this.setObjCaching(false);
         }
 
-        public function method_74()
+        public function enableCaching()
         {
             this.var_122.cacheAsBitmap = true;
-            this.method_268(true);
+            this.setObjCaching(true);
         }
 
         // _loc2 = i
         // _loc3 = this.objCanvas.numChildren
-        private function method_268(_arg_1:Boolean)
+        private function setObjCaching(_arg_1:Boolean)
         {
             for (var i:int = 0; i < this.objCanvas.numChildren; i++) {
                 var _local_4:DisplayObject = this.objCanvas.getChildAt(i);
@@ -87,22 +87,22 @@ package background
         override public function setScale(n:Number)
         {
             scale = n;
-            method_59();
+            applyColorTransform();
         }
 
         public function rasterize()
         {
-            this.method_446(this.var_122, this.bitmapArray);
+            this.rasterizeBrush(this.var_122, this.bitmapArray);
         }
 
-        private function method_446(_arg_1:Sprite, _arg_2:Array)
+        private function rasterizeBrush(_arg_1:Sprite, _arg_2:Array)
         {
-            this.method_607(_arg_1, _arg_2, this.brushCanvas);
+            this.rasterizeToBitmaps(_arg_1, _arg_2, this.brushCanvas);
             this.brushCanvas.graphics.clear();
             this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
         }
 
-        private function method_607(_arg_1:Sprite, _arg_2:Array, _arg_3:Sprite)
+        private function rasterizeToBitmaps(_arg_1:Sprite, _arg_2:Array, _arg_3:Sprite)
         {
             var _local_4:Rectangle = _arg_3.getBounds(this);
             var _local_5:int = this.var_210 * this.rasterCycles;
@@ -115,7 +115,7 @@ package background
             while (_local_10 < _local_8) {
                 _local_11 = _local_7;
                 while (_local_11 < _local_9) {
-                    this.method_208(_local_10, _local_11, _arg_1, _arg_2, _arg_3);
+                    this.rasterizeTile(_local_10, _local_11, _arg_1, _arg_2, _arg_3);
                     _local_11 += _local_5;
                 }
                 _local_10 += _local_5;
@@ -129,7 +129,7 @@ package background
             }
         }
 
-        private function method_208(_arg_1:Number, _arg_2:Number, _arg_3:Sprite, _arg_4:Array, _arg_5:Sprite)
+        private function rasterizeTile(_arg_1:Number, _arg_2:Number, _arg_3:Sprite, _arg_4:Array, _arg_5:Sprite)
         {
             var _local_6:Number = Math.floor(_arg_1 / (this.var_210 * this.rasterCycles));
             var _local_7:Number = Math.floor(_arg_2 / (this.var_210 * this.rasterCycles));
@@ -146,7 +146,7 @@ package background
                     var _local_12:Bitmap = new Bitmap(_local_11);
                     _local_12.scaleX = _local_12.scaleY = this.rasterCycles;
                     _arg_4[_local_6][_local_7] = _local_12;
-                    if (_arg_3 != this.var_122 || method_32(_local_6, _local_7)) {
+                    if (_arg_3 != this.var_122 || isInView(_local_6, _local_7)) {
                         _arg_3.addChild(_local_12);
                     }
                     _local_12.x = _arg_1;
@@ -172,9 +172,9 @@ package background
         {
             var _local_1:Sprite = new Sprite();
             var _local_2:Array = new Array();
-            this.method_446(_local_1, _local_2);
+            this.rasterizeBrush(_local_1, _local_2);
             var _local_3:Sprite = new Sprite();
-            this.method_553(_local_3, this.bitmapArray, _local_2);
+            this.collectErasedBitmaps(_local_3, this.bitmapArray, _local_2);
             var _local_4:Sprite = new Sprite();
             _local_4.blendMode = BlendMode.LAYER;
             _local_1.blendMode = BlendMode.ERASE;
@@ -182,15 +182,15 @@ package background
             _local_4.addChild(_local_1);
             for (var _local_7:int = 0; _local_7 < _local_3.numChildren; _local_7++) {
                 var _local_6:Bitmap = Bitmap(_local_3.getChildAt(_local_7));
-                this.method_208(_local_6.x, _local_6.y, this.var_122, this.bitmapArray, _local_4);
+                this.rasterizeTile(_local_6.x, _local_6.y, this.var_122, this.bitmapArray, _local_4);
             }
-            this.method_373(_local_1);
-            this.method_373(_local_3);
+            this.disposeSpriteChildren(_local_1);
+            this.disposeSpriteChildren(_local_3);
             addChildAt(this.var_122, 0);
             addChildAt(this.brushCanvas, 1);
         }
 
-        private function method_553(_arg_1:Sprite, _arg_2:Array, _arg_3:Array)
+        private function collectErasedBitmaps(_arg_1:Sprite, _arg_2:Array, _arg_3:Array)
         {
             for (var _local_4:int = 0; _local_4 < _arg_3.length; _local_4++) {
                 if (_arg_3[_local_4] != null) {
@@ -257,15 +257,12 @@ package background
         override public function setPos(_arg_1:Number, _arg_2:Number)
         {
             super.setPos(_arg_1, _arg_2);
-            var _local_3:Point = Data.method_9(-course.posX, -course.posY, rotation);
+            var _local_3:Point = Data.rotatePoint(-course.posX, -course.posY, rotation);
             var _local_4:int = Math.floor((_local_3.x * scale) / (this.var_210 * this.rasterCycles));
             var _local_5:int = Math.floor((_local_3.y * scale) / (this.var_210 * this.rasterCycles));
-            method_118(_local_4, _local_5, 2, 2, 1, 1, this.var_122, this.bitmapArray);
+            updateViewWindow(_local_4, _local_5, 2, 2, 1, 1, this.var_122, this.bitmapArray);
         }
 
-        // _loc2 = arr
-        // _loc3 = code
-        // method_489 = placeObject
         protected function placeObject(s:String)
         {
             var arr:Array = s.split(";");
@@ -316,9 +313,6 @@ package background
             this.objCanvas.addChild(textBox);
         }
 
-        // _loc2 = data
-        // _loc3 = i
-        // method_795 = placeStroke
         private function placeStroke(s:String)
         {
             var data:Array = s.split(";");
@@ -328,16 +322,6 @@ package background
             }
         }
 
-        // deleted _loc5 (combined w/ return)
-        /*private function method_838(_arg_1:String):Point
-        {
-            var _local_2:Number = _arg_1.indexOf(";");
-            var _local_3:Number = _arg_1.substring(0, _local_2);
-            var _local_4:Number = _arg_1.substr(_local_2 + 1);
-            return new Point(_local_3, _local_4);
-        }*/ // unused?
-
-        // method_585 = recordColor
         public function recordColor(c:Number)
         {
             if (this.color != c) {
@@ -347,7 +331,6 @@ package background
             }
         }
 
-        // method_708 = setBrushSize
         public function setBrushSize(n:Number)
         {
             if (this.brushSize != n) {
@@ -385,7 +368,6 @@ package background
             }
         }
 
-        // method_422 = initBrushMove
         private function initBrushMove(startX:Number, startY:Number)
         {
             this.brushCanvas.graphics.moveTo(startX, startY);
@@ -395,7 +377,6 @@ package background
             this.brushY = startY;
         }
 
-        // method_317 = drawLine
         private function drawLine(deltaX:Number, deltaY:Number)
         {
             this.brushX += deltaX;
@@ -431,7 +412,7 @@ package background
 
         override public function clear()
         {
-            this.method_812(this.bitmapArray);
+            this.disposeBitmapArray(this.bitmapArray);
             this.bitmapArray = new Array();
             this.brushCanvas.graphics.clear();
             this.color = 0;
@@ -440,27 +421,27 @@ package background
             super.clear();
         }
 
-        protected function method_373(_arg_1:Sprite)
+        protected function disposeSpriteChildren(_arg_1:Sprite)
         {
             while (_arg_1.numChildren != 0) {
                 var _local_2:Bitmap = Bitmap(_arg_1.getChildAt(0));
-                this.method_248(_local_2);
+                this.disposeBitmap(_local_2);
             }
         }
 
-        private function method_812(_arg_1:Array)
+        private function disposeBitmapArray(_arg_1:Array)
         {
             for each (var _local_2:Array in _arg_1) {
                 if (_local_2 != null) {
                     for each (var _local_3:DisplayObject in _local_2) {
                         var _local_4:Bitmap = Bitmap(_local_3);
-                        this.method_248(_local_4);
+                        this.disposeBitmap(_local_4);
                     }
                 }
             }
         }
 
-        private function method_248(_arg_1:Bitmap)
+        private function disposeBitmap(_arg_1:Bitmap)
         {
             if (_arg_1 != null) {
                 Main.var_184--;

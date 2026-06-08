@@ -24,7 +24,6 @@ package dialogs
             addChild(this.m);
         }
 
-        // method_54 = listenForEnterKey
         private function listenForEnterKey(e:KeyboardEvent)
         {
             if (e.keyCode == 13) {
@@ -32,7 +31,6 @@ package dialogs
             }
         }
 
-        // method_149 = clickOk
         private function clickOk(e:MouseEvent)
         {
             if (this.m.newPassBox1.text != this.m.newPassBox2.text) {

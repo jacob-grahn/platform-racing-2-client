@@ -27,10 +27,6 @@ package player_profile
             this.populate();
         }
 
-        // _loc1 = presets
-        // _loc2 = preset
-        // _loc3 = listing
-        // method_751 = populate
         private function populate()
         {
             var presets:Vector.<Preset> = Presets.getPresets();
@@ -40,8 +36,6 @@ package player_profile
             }
         }
 
-        // _loc2 = listing
-        // _loc3 = preset
         override protected function loadListing(btn:SelectableButton)
         {
             if (!Settings.isNameSet()) {
@@ -55,9 +49,6 @@ package player_profile
             startFadeOut();
         }
 
-        // _loc2 = loadout
-        // _loc3 = preset
-        // _loc4 = stats
         // actually saves; named deleteListing to replace the delete button on GetLevelsPopup
         override protected function deleteListing(btn:SelectableButton)
         {

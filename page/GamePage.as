@@ -89,7 +89,6 @@ package page
             this.color = _arg_1;
         }
 
-        // method_12 = getColor
         public function getColor():int
         {
             return this.color;
@@ -128,13 +127,11 @@ package page
             return this.var_133[0] == _arg_1 || this.var_133.length <= 0;
         }
 
-        // method_403 = getCredits
         public function getCredits():String
         {
             return this.credits.join("`");
         }
 
-        // method_828 = setCredits
         public function setCredits(_arg_1:String)
         {
             _arg_1 = _arg_1 == null ? '' : _arg_1;
@@ -182,7 +179,6 @@ package page
         // _loc5 = itemName
         // _loc6 = itemCode
         // removed _loc4 (itemsArr.length), _loc7 (Items.getAllCodes().length)
-        // method_96 = setItems
         public function setItems(itemsStr:String)
         {
             if (itemsStr == "") {
@@ -227,7 +223,7 @@ package page
         {
             this.updatedTime = vars.time is Array ? vars.time[0] : vars.time;
             this.setCredits(vars.credits);
-            this.setSaveString(this.method_645(vars.data));
+            this.setSaveString(this.decodeLevelData(vars.data));
             this.title = vars.title;
             this.note = vars.note;
             this.setSong(vars.song);
@@ -264,7 +260,6 @@ package page
         // _loc9 = allowedParam
         // _loc10 = andStr
         // _arg_1 = levelData
-        // method_158 = validateSaveString
         public function validateSaveString(levelData:String):String
         {
             var allowedParams:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats=");
@@ -296,7 +291,7 @@ package page
         // _loc3 = readMode
         // deleted _loc4 (decimal value of bg color hex)
         // deleted _loc5 (decoded string -- levelData.join('`'))
-        protected function method_645(rawlevelData:String):String
+        protected function decodeLevelData(rawlevelData:String):String
         {
             var levelData:Array = rawlevelData.split("`");
             var readMode:String = levelData[0];
@@ -333,7 +328,6 @@ package page
         // _loc7 = dataArr.length
         // deleted _loc8 (unused)
         // deleted _loc14 (combined w/ return)
-        // method_137 = decodeObjectString
         private function decodeObjectString(objectString:String):String
         {
             var dataArr:Array = objectString.split(",");

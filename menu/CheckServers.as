@@ -65,7 +65,6 @@ package menu
         }
 
         // _loc2 = server
-        // parseData = method_774
         private static function parseData(e:Event)
         {
             var server:Object;
@@ -99,7 +98,6 @@ package menu
             }
         }
 
-        // method_397 = determineServer
         public static function determineServer(box:ComboBox)
         {
             target = box;
@@ -109,7 +107,6 @@ package menu
             }
         }
 
-        // method_323 = removeBox
         public static function removeBox()
         {
             target = null;
@@ -120,7 +117,6 @@ package menu
         // _loc4 = boxLength
         // _loc5 = boxItem
         // _loc6 = server
-        // method_91 = selectServer
         private static function selectServer(box:ComboBox)
         {
             var complete:Boolean = false;
@@ -164,7 +160,6 @@ package menu
         }
 
         // _loc3 = ret
-        // method_583 = sortServers
         private static function sortServers(s1:Object, s2:Object):int
         {
             if (Main.guild != 0) {
@@ -200,7 +195,6 @@ package menu
         // _loc3 = dropdownItem
         // _loc4 = serverStatus
         // _loc5 = serverName
-        // method_454 = addToList
         private static function addToList(dropdown:ComboBox, server:Object)
         {
             var dropdownItem:Object = getServerFromId(server.server_id, dropdown);
@@ -230,7 +224,6 @@ package menu
         // _loc4 = boxLength
         // _loc5 = i
         // _loc6 = boxItem
-        // method_410 = getServerFromId
         private static function getServerFromId(id:int, box:ComboBox):Object
         {
             var i:int = 0;

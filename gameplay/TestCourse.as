@@ -35,7 +35,6 @@ package gameplay
             this.reportsMode = report;
         }
 
-        // _loc1 = player1Start
         override public function initialize()
         {
             super.initialize();
@@ -89,13 +88,11 @@ package gameplay
             beginRace(new Array());
         }
 
-        // method_354 = clickBack
         private function clickBack(e:MouseEvent)
         {
             Main.pageHolder.changePage(new LevelEditor(this.variables, this.isMod, this.reportsMode));
         }
 
-        // method_371 = clickRestart
         private function clickRestart(e:MouseEvent)
         {
             this.restart();
@@ -111,10 +108,6 @@ package gameplay
             SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));
         }
 
-        // _loc2 = target
-        // _loc3 = newX
-        // _loc4 = newY
-        // method_430 = teleportToClickPos
         private function teleportToClickPos(e:MouseEvent)
         {
             var target:Point = var_14.globalToLocal(new Point(e.stageX, e.stageY));
@@ -130,8 +123,6 @@ package gameplay
             this.statsSelect.setStatsFromCharacter();
         }
 
-        // _loc1 = player1Start
-        // method_370 = restart
         private function restart()
         {
             Main.stage.focus = Main.stage;
@@ -142,7 +133,7 @@ package gameplay
             blockBackground.clear();
             miniMap.clear();
             blockBackground.draw();
-            blockBackground.method_578();
+            blockBackground.startGameplay();
             var player1Start:Point = startPosArray[0];
             localPlayer.setPos(player1Start.x, player1Start.y);
             localPlayer.setItem(0);

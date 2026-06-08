@@ -26,7 +26,6 @@ package editor_tools
             this.menu = new SizePickerMenu(this, this.size);
         }
 
-        // method_210 = setSize
         public function setSize(s:Number)
         {
             this.size = s;

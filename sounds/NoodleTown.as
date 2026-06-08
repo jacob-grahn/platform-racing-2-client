@@ -44,25 +44,25 @@ package sounds
                 this.channel1 = this.song1.play(0, 9999);
                 this.channel2 = this.song2.play(0, 9999);
                 this.setTargetVolume(this.var_187);
-                this.method_186(this.volume);
+                this.applyVolume(this.volume);
                 clearTimeout(this.waitTimeout);
-                this.method_305();
+                this.scheduleCrossfade();
             }
         }
 
-        private function method_305()
+        private function scheduleCrossfade()
         {
-            this.waitTimeout = setTimeout(this.method_625, Math.random() * 80000);
+            this.waitTimeout = setTimeout(this.startCrossfade, Math.random() * 80000);
         }
 
-        private function method_625()
+        private function startCrossfade()
         {
             this.var_327 = (Math.random() * 0.004) + 0.002;
             if (this.perc1 > this.perc2) {
                 this.var_327 = -this.var_327;
             }
             addEventListener(Event.ENTER_FRAME, this.name_3);
-            this.method_305();
+            this.scheduleCrossfade();
         }
 
         private function name_3(_arg_1:Event)
@@ -79,11 +79,11 @@ package sounds
                 this.perc2 = 0;
                 removeEventListener(Event.ENTER_FRAME, this.name_3);
             }
-            this.method_186(this.volume);
+            this.applyVolume(this.volume);
         }
 
         // removed _loc2, _loc3 (condensed)
-        private function method_186(vol:Number)
+        private function applyVolume(vol:Number)
         {
             this.volume = vol;
             if (this.channel1 != null) {
@@ -95,25 +95,25 @@ package sounds
         public function setTargetVolume(n:Number)
         {
             this.var_187 = n;
-            addEventListener(Event.ENTER_FRAME, this.method_124);
+            addEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
         }
 
-        private function method_124(e:Event)
+        private function volumeFadeTick(e:Event)
         {
             if (this.volume < this.var_187) {
                 this.volume = this.volume + this.var_551;
                 if (this.volume > this.var_187) {
                     this.volume = this.var_187;
-                    removeEventListener(Event.ENTER_FRAME, this.method_124);
+                    removeEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
                 }
             } else {
                 this.volume = this.volume - this.var_551;
                 if (this.volume < this.var_187) {
                     this.volume = this.var_187;
-                    removeEventListener(Event.ENTER_FRAME, this.method_124);
+                    removeEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
                 }
             }
-            this.method_186(this.volume);
+            this.applyVolume(this.volume);
             if (this.volume <= 0 && this.var_187 <= 0) {
                 this.stop();
             }
@@ -127,7 +127,7 @@ package sounds
                 this.channel1 = this.channel2 = null;
             }
             removeEventListener(Event.ENTER_FRAME, this.name_3);
-            removeEventListener(Event.ENTER_FRAME, this.method_124);
+            removeEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
             clearTimeout(this.waitTimeout);
         }
 

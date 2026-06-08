@@ -23,7 +23,7 @@ package items
         override public function useItem()
         {
             this.localChar.curWeapon.gun.gotoAndPlay("shoot");
-            var _local_1:Point = method_37();
+            var _local_1:Point = getWeaponEffectPos();
             var _local_2:Number = 20;
             var _local_3:* = "right";
             if (this.localChar.scaleX < 0) {

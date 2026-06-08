@@ -63,14 +63,12 @@ package levelEditor
             }
         }
 
-        // method_30 = moveGlow
         private function moveGlow(target:Object)
         {
             this.m.selectedGlow.x = target.x + (target.width / 2);
             this.m.selectedGlow.width = target.width + 6;
         }
 
-        // method_241 = clickBlocks
         private function clickBlocks(e:MouseEvent)
         {
             this.changeSideBar(this.blocks);
@@ -110,7 +108,6 @@ package levelEditor
             this.moveGlow(e.target);
         }
 
-        // method_301 = clickBG
         private function clickBG(e:MouseEvent)
         {
             this.changeSideBar(this.bg);
@@ -119,7 +116,6 @@ package levelEditor
             this.moveGlow(e.target);
         }
 
-        // method_387 = clickSettings
         private function clickSettings(e:MouseEvent)
         {
             this.changeSideBar(this.settings);
@@ -128,7 +124,6 @@ package levelEditor
             this.moveGlow(e.target);
         }
 
-        // method_83 = setLayer
         private function setLayer(layerNum:Number)
         {
             if (this.sideBar != this.stamps && this.sideBar != this.tools) {
@@ -165,54 +160,46 @@ package levelEditor
             this.editor.setReportsMode(on);
         }
 
-        // method_213 = clickTest
         private function clickTest(e:MouseEvent)
         {
             if (!this.editor.drawing) {
-                Main.pageHolder.changePage(new TestCourse(this.editor.method_344(), this.editor.canViewLevelReports(), this.editor.inReportsMode()));
+                Main.pageHolder.changePage(new TestCourse(this.editor.getLevelVars(), this.editor.canViewLevelReports(), this.editor.inReportsMode()));
             }
         }
 
-        // method_337 = clickNew
         private function clickNew(e:MouseEvent)
         {
             new ConfirmPopup(this.clearEditor, "Are you sure you want to clear this level? All unsaved data will be lost.");
         }
 
-        // method_719 = clearEditor
         public function clearEditor()
         {
             this.editor.clear();
             this.bg.cp_btn.updateColor();
         }
 
-        // method_318 = clickExit
         private function clickExit(e:MouseEvent)
         {
             new ConfirmPopup(this.exitEditor, "Are you sure you want exit? All unsaved data will be lost.");
         }
 
-        // method_683 = exitEditor
         public function exitEditor()
         {
             new ConnectingPopup();
         }
 
-        // method_277 = clickUndo
         private function clickUndo(e:MouseEvent)
         {
             this.editor.var_225.undo();
             this.changeUndoRedoState();
         }
 
-        // method_234 = clickRedo
         private function clickRedo(e:MouseEvent)
         {
             this.editor.var_225.redo();
             this.changeUndoRedoState();
         }
 
-        // method_340 = chooseZoom
         private function chooseZoom(e:Event)
         {
             var zoomNum:Number = Number(e.target.selectedItem.data);
@@ -222,14 +209,12 @@ package levelEditor
             Main.stage.focus = Main.stage;
         }
 
-        // method_109 = changeUndoRedoState
         public function changeUndoRedoState()
         {
             this.m.undoButton.enabled = this.editor.var_225.saveArray.length > 0;
             this.m.redoButton.enabled = this.editor.var_225.redoArray.length > 0;
         }
 
-        // method_43 = changeSideBar
         public function changeSideBar(sb:SideBar)
         {
             if (this.sideBar != null) {

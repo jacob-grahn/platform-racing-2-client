@@ -18,7 +18,6 @@ package blocks
             safeStand = false;
         }
 
-        // method_731 = setDirection
         public function setDirection(i:int)
         {
             this.dir = i;
@@ -39,7 +38,6 @@ package blocks
             }
         }
 
-        // method_634 = displayArrow
         private function displayArrow()
         {
             addChild(this.arrow);
@@ -55,7 +53,6 @@ package blocks
             }
         }
 
-        // method_367 = removeArrow
         private function removeArrow()
         {
             if (this.arrow.parent != null) {

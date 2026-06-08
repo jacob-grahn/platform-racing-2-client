@@ -119,7 +119,7 @@ package com.jiggmin.ColorPicker
         public function init()
         {
             this.eyedropper = new CursorEyedropper();
-            this.eyedropper.method_101(this);
+            this.eyedropper.addExclusion(this);
             this.eyedropper.addEventListener(Event.CHANGE, this.onEyedropperMove, false, 0, true);
             this.eyedropper.addEventListener(Event.COMPLETE, this.applyColor, false, 0, true);
             if (CustomCursor.instance != null) {
@@ -160,7 +160,6 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        // method_40 = updateColorPreview
         private function updateColorPreview(c:int = -1)
         {
             if (c == -1) {
@@ -173,33 +172,22 @@ package com.jiggmin.ColorPicker
             dispatchEvent(new Event(Event.CHANGE));
         }
 
-        // method_12 = getColor
         public function getColor():int
         {
             return this.previewColor != -1 ? this.previewColor : this.color;
         }
 
-        public function method_101(d:DisplayObject)
+        public function addExclusion(d:DisplayObject)
         {
-            this.eyedropper.method_101(d);
+            this.eyedropper.addExclusion(d);
         }
 
-        // _loc3 = newColor
-        // method_765 = changePreviewBoxColor
         private function changePreviewBoxColor(d:DisplayObject, c:int)
         {
             var newColor:Object = ColorUtil.hex24ToRGB(c);
             d.transform.colorTransform = new ColorTransform(0, 0, 0, 1, newColor.red, newColor.green, newColor.blue, 0);
         }
 
-        // deleted _loc1 (this.colorChoices.length)
-        // deleted _loc2 (_local_3.length)
-        // deleted _loc3 (this.colorChoices[j])
-        // deleted _loc4 (this.colorChoices[j][k])
-        // _loc5 = paletteBoxSize
-        // _loc6 = j
-        // _loc7 = k
-        // method_569 = highlightCurrentColorIfInPalette
         private function highlightCurrentColorIfInPalette()
         {
             var paletteBoxSize:int = 10;
@@ -223,7 +211,6 @@ package com.jiggmin.ColorPicker
             stage.removeEventListener(MouseEvent.MOUSE_MOVE, this.dragHueSlider);
         }
 
-        // method_266 = onSpectrumDown
         private function onSpectrumDown(e:MouseEvent)
         {
             Mouse.hide();
@@ -231,7 +218,6 @@ package com.jiggmin.ColorPicker
             stage.addEventListener(MouseEvent.MOUSE_MOVE, this.previewColorAtMouse, false, 0, true);
         }
 
-        // method_399 = clickHueSlider
         private function clickHueSlider(e:MouseEvent)
         {
             Mouse.hide();
@@ -239,10 +225,6 @@ package com.jiggmin.ColorPicker
             stage.addEventListener(MouseEvent.MOUSE_MOVE, this.dragHueSlider, false, 0, true);
         }
 
-        // _loc2 = mousePt
-        // _loc3 = targetX
-        // _loc4 = targetY
-        // method_116 = previewColorAtMouse
         private function previewColorAtMouse(e:MouseEvent)
         {
             var mousePt:Point = this.spectrum.globalToLocal(new Point(e.stageX, e.stageY));
@@ -257,7 +239,6 @@ package com.jiggmin.ColorPicker
             this.outlineCC.visible = false;
         }
 
-        // method_114 = dragHueSlider
         private function dragHueSlider(e:MouseEvent)
         {
             var _local_2:Point = this.hueSlider.globalToLocal(new Point(e.stageX, e.stageY));
@@ -270,32 +251,20 @@ package com.jiggmin.ColorPicker
             this.outlineCC.visible = false;
         }
 
-        // removed (combined with updateSpectrumGradient)
-        /*private function method_155(e:Event)
-        {
-            this.updateSpectrumGradient(this.hue);
-        }*/
-
-        // method_212 = onEyedropperMove
         private function onEyedropperMove(e:Event)
         {
             this.previewColor = this.eyedropper.color;
             this.updateColorPreview(this.previewColor);
         }
 
-        // method_275 = applyColor
         private function applyColor(e:Event)
         {
             this.previewColor = -1;
             this.setColor(this.eyedropper.color);
             this.updateColorPreview();
-            method_136();
+            safeRemove();
         }
 
-        // _loc2 = mousePos
-        // _loc3 = gridX
-        // _loc4 = gridY
-        // method_334 = hoverOverPalette
         private function hoverOverPalette(e:MouseEvent)
         {
             var mousePos:Point = this.palette.globalToLocal(new Point(e.stageX, e.stageY));
@@ -308,9 +277,6 @@ package com.jiggmin.ColorPicker
             this.updateColorPreview(this.previewColor);
         }
 
-        // _loc2 = choiceX
-        // _loc3 = choiceY
-        // method_452 = clickPalette
         private function clickPalette(e:MouseEvent)
         {
             e.stopImmediatePropagation();
@@ -323,7 +289,6 @@ package com.jiggmin.ColorPicker
             this.remove();
         }
 
-        // method_417 = hoverOutPalette
         private function hoverOutPalette(e:MouseEvent)
         {
             this.previewColor = -1;
@@ -331,9 +296,6 @@ package com.jiggmin.ColorPicker
             this.updateColorPreview();
         }
 
-        // _loc2 = hex
-        // _loc3 = c
-        // method_415 = setColorFromText
         private function setColorFromText(e:Event)
         {
             if (stage.focus == this.m.textBox.textField) {
@@ -351,13 +313,11 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        // method_363 = clickOK
         private function clickOK(e:MouseEvent)
         {
             this.remove();
         }
 
-        // method_400 = clickCancel
         private function clickCancel(e:MouseEvent)
         {
             this.color = this.initialColor;
@@ -365,9 +325,6 @@ package com.jiggmin.ColorPicker
             this.remove();
         }
 
-        // deleted _loc1 (this.colorChoices.length)
-        // deleted _loc2 (_local_3.length)
-        // method_523 = initPalette
         private function initPalette()
         {
             this.palette.graphics.clear();
@@ -391,7 +348,6 @@ package com.jiggmin.ColorPicker
         }
 
         // _loc1 = box
-        // method_256 = makePickedColorBox
         /**
          * Draws the white square that goes around one of the colors in the color picker when hovered over or selected.
          */
@@ -403,7 +359,6 @@ package com.jiggmin.ColorPicker
             return box;
         }
 
-        // method_755 = initHueSlider
         private function initHueSlider(w:int, h:int):Sprite
         {
             var _local_3:BitmapData = new BitmapData(w, h, false, 0xFFFFFF);
@@ -427,8 +382,6 @@ package com.jiggmin.ColorPicker
             return _local_8;
         }
 
-        // deleted _loc3 (new Bitmap(this.spectrumBG))
-        // method_814 = initSpectrum
         private function initSpectrum(w:int, h:int):Sprite
         {
             this.spectrumBG = new BitmapData(w, h, false, 0);
@@ -441,11 +394,6 @@ package com.jiggmin.ColorPicker
             return _local_4;
         }
 
-        // deleted _loc2 (this.spectrumBG)
-        // deleted _loc3 (_local_2.width)
-        // deleted _loc4 (_local_2.height)
-        // deleted _loc8 (unused)
-        // method_382 = updateSpectrumGradient
         private function updateSpectrumGradient()
         {
             for (var _local_9:int = 0; _local_9 < this.spectrumBG.width; _local_9++) {
@@ -458,8 +406,6 @@ package com.jiggmin.ColorPicker
             }
         }
 
-        // _loc2 = hlo
-        // method_532 = showOutline
         private function showOutline(d:DisplayObject):Sprite
         {
             var hlo:Sprite = this.makeOutline(Math.round(d.width), Math.round(d.height));
@@ -468,8 +414,6 @@ package com.jiggmin.ColorPicker
             addChild(hlo);
         }
 
-        // _loc3 = hlo
-        // method_141 = makeOutline
         private function makeOutline(_arg_1:int, _arg_2:int):Sprite
         {
             var hlo:Sprite = new Sprite();

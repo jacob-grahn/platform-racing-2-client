@@ -44,10 +44,6 @@ package com.jiggmin.pixelEffects
             this.drawInterval = setInterval(this.drawPixels, _arg_7);
         }
 
-        // _loc1 = arr
-        // _loc2 = segX
-        // _loc3 = segY
-        // method_572 = createSegArray
         private function createSegArray()
         {
             var arr:Array = new Array();
@@ -64,7 +60,6 @@ package com.jiggmin.pixelEffects
             return arr;
         }
 
-        // method_549 = drawPixels
         private function drawPixels()
         {
             this.drawPixel();
@@ -72,7 +67,6 @@ package com.jiggmin.pixelEffects
             this.drawPixel();
         }
 
-        // method_204 = drawPixel
         private function drawPixel()
         {
             if (this.segArray.length > 0) {

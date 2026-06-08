@@ -20,13 +20,10 @@ package items
             setReloadTime(1000);
         }
 
-        // _loc1 = usePos
-        // _loc6 = rot
-        // _loc7 = sendStr
         override public function useItem()
         {
             this.localChar.curWeapon.freezeWave.gotoAndPlay("fire");
-            var usePos:Point = method_37();
+            var usePos:Point = getWeaponEffectPos();
             var _local_2:Number = 20;
             var _local_3:Number = 0;
             if (this.localChar.scaleX < 0) {

@@ -37,7 +37,6 @@ package gameplay
             this.blockSprite.graphics.beginFill(0);
         }
 
-        // _loc4 = finishBox
         public function addBlock(blockCode:int, blockX:Number, blockY:Number)
         {
             if (blockCode == Objects.BLOCK_FINISH) {
@@ -63,7 +62,6 @@ package gameplay
             }
         }
 
-        // method_490 = drawBlock
         private function drawBlock(blockX:int, blockY:int)
         {
             this.blockSprite.graphics.beginFill(0);
@@ -75,7 +73,6 @@ package gameplay
             this.blockSprite.graphics.endFill();
         }
 
-        // _loc1 = dot
         public function getDot():MiniMapDot
         {
             var dot:MiniMapDot = new MiniMapDot();

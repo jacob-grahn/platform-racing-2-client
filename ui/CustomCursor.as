@@ -41,7 +41,6 @@ package ui
             y = stageRef.mouseY;
         }
 
-        // method_28 = change
         public static function change(c:CustomCursor)
         {
             unsetInstance();
@@ -52,7 +51,6 @@ package ui
             }
         }
 
-        // method_112 = unsetInstance
         public static function unsetInstance()
         {
             if (instance != null) {
@@ -141,32 +139,27 @@ package ui
             stageRef.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler);
         }
 
-        // method_23 = isActive
         public function isActive():Boolean
         {
             return this.active;
         }
 
-        // method_92 = getMouse
         public function getMouse():MouseEvent
         {
             return this.me;
         }
 
-        // method_131 = isMouseDown
         public function isMouseDown():Boolean
         {
             return this.mouseDown;
         }
 
-        // method_332 = hideMouse
         protected function hideMouse()
         {
             this.mouseHidden = true;
             Mouse.hide();
         }
 
-        // method_843 = showMouse
         protected function showMouse()
         {
             this.mouseHidden = false;
@@ -219,19 +212,11 @@ package ui
             }
         }
 
-        // method_269 = mouseFocusHandler
         protected function mouseFocusHandler(e:MouseEvent)
         {
             this.me = e;
         }
 
-        // consolidated into mouseFocusHandler
-        /*protected function method_378(e:MouseEvent)
-        {
-            this.me = e;
-        }*/
-
-        // method_63 = applyCursorGraphic
         protected function applyCursorGraphic(e:DisplayObject)
         {
             e.x = -(e.width / 2);

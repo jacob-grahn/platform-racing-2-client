@@ -75,14 +75,14 @@ package character
                     }
                     _local_4++;
                 }
-                var _local_5:Point = Data.method_9(this.posX, this.posY, -(this.map.rotation + this.rot));
+                var _local_5:Point = Data.rotatePoint(this.posX, this.posY, -(this.map.rotation + this.rot));
                 velX = (this.lastX - x);
                 velY = (this.lastY - y);
                 this.lastX = x;
                 this.lastY = y;
                 x = _local_5.x;
                 y = _local_5.y;
-                _local_5 = Data.method_9(this.posX, this.posY, -(this.rot));
+                _local_5 = Data.rotatePoint(this.posX, this.posY, -(this.rot));
                 this.mapDot.x = _local_5.x;
                 this.mapDot.y = _local_5.y;
                 updateSegs(this.map.rotation);
@@ -237,17 +237,17 @@ package character
         // _loc6 = block
         private function touchBlockAt(posX:int, posY:int)
         {
-            var seg:Point = Data.method_9(posX / 30, posY / 30, this.map.rotation);
-            if (this.map.method_32(seg.x, seg.y)) {
+            var seg:Point = Data.rotatePoint(posX / 30, posY / 30, this.map.rotation);
+            if (this.map.isInView(seg.x, seg.y)) {
                 var block:Block = Block(this.map.getBlockFromSeg(seg.x, seg.y));
                 if (block is ArrowBlock) {
-                    ArrowBlock(block).method_87();
+                    ArrowBlock(block).animateArrow();
                 }
                 if (block is VanishBlock) {
                     block.remoteActivate();
                 }
                 if (block is WaterBlock) {
-                    WaterBlock(block).method_584();
+                    WaterBlock(block).triggerRipple();
                 }
             }
         }

@@ -91,7 +91,6 @@ package ui
             }
         }
 
-        // method_466 = onSliderChange
         private function onSliderChange(e:Event)
         {
             this.setValue(e.target.value);
@@ -100,7 +99,6 @@ package ui
             }
         }
 
-        // method_306 = onTextChange
         private function onTextChange(e:Event)
         {
             this.setValue(int(e.target.text));
@@ -114,7 +112,6 @@ package ui
             return this.value;
         }
 
-        // _loc2 = remaining
         public function setValue(v:int)
         {
             this.value = Data.numLimit(v, 0, 100);

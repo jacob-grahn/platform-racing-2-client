@@ -40,7 +40,7 @@ package menu
                 this.toPlay = [JIGG_INTRO, ARMOR_INTRO];
             }
             Main.stage.addEventListener(MouseEvent.CLICK, this.onClick, false, 0, true);
-            this.method_302();
+            this.playNextIntro();
         }
 
         private function onClick(_arg_1:MouseEvent)
@@ -49,9 +49,9 @@ package menu
         }
 
         // _loc1 = type
-        private function method_302()
+        private function playNextIntro()
         {
-            this.method_322();
+            this.clearCurrentIntro();
             if (this.toPlay.length <= 0) {
                 this.endIntro();
             } else {
@@ -72,7 +72,7 @@ package menu
             }
         }
 
-        private function method_322()
+        private function clearCurrentIntro()
         {
             if (this.currentIntro != null) {
                 this.currentIntro.stop();
@@ -85,19 +85,19 @@ package menu
 
         private function onComplete(_arg_1:Event)
         {
-            this.method_302();
+            this.playNextIntro();
         }
 
         private function endIntro()
         {
-            this.method_322();
+            this.clearCurrentIntro();
             Main.pageHolder.changePage(new LoginPage());
         }
 
         override public function remove()
         {
             Main.stage.removeEventListener(MouseEvent.CLICK, this.onClick);
-            this.method_322();
+            this.clearCurrentIntro();
             this.m = null;
             this.currentIntro = null;
             super.remove();
