@@ -1,0 +1,534 @@
+﻿//gameplay.Game = gameplay.class_31
+
+package gameplay
+{
+    import com.adobe.crypto.MD5;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Settings;
+    import flash.events.Event;
+    import flash.geom.Point;
+    import flash.net.URLRequest;
+    import flash.net.URLVariables;
+    import flash.text.TextField;
+    import flash.ui.Keyboard;
+    import flash.utils.clearInterval;
+    import flash.utils.setInterval;
+    import sounds.SoundEffects;
+    import dialogs.MessagePopup;
+    import character.Character;
+    import character.RemoteCharacter;
+    import character.LocalCharacter;
+    import effects.Egg;
+    import effects.Hat;
+
+    public class Game extends Course 
+    {
+
+        private var superLoader:SuperLoader = new SuperLoader(false);
+        private var quitButton:QuitButton;
+        private var cm:CommandHandler = CommandHandler.commandHandler;
+        private var spectatePicker:SpectatePicker;
+        protected var drawingInfo:DrawingInfo;
+        public var prize:Object;
+        private var luxPop:LuxPopup;
+        private var levelHash:String = "";
+        private var specialEvent:SpecialEvent;
+        private var raceResults:Array = new Array();
+        public var finishedPage:FinishedPage;
+        public var pendingAwards:Array = new Array();
+        public var expOld:int;
+        public var expNew:int;
+        public var expToRank:int;
+        public var framesPlaying:int = 0;
+        private var hatCountdown:uint;
+
+        public function Game(id:int, v:int)
+        {
+            this.courseID = id;
+            this.version = v;
+            this.quitButton = new QuitButton(this);
+            this.specialEvent = new SpecialEvent(Main.stage, this);
+            Egg.initRound(0);
+        }
+
+        override public function initialize()
+        {
+            this.chatBox = new RaceChat();
+            this.chatBox.x = -271;
+            this.chatBox.y = 49;
+            holder.addChild(this.chatBox);
+            this.drawingInfo = new DrawingInfo();
+            this.drawingInfo.x = -273;
+            this.drawingInfo.y = -104;
+            holder.addChild(this.drawingInfo);
+            holder.addChild(this.quitButton);
+            this.cm.defineCommand("createRemoteCharacter", this.createRemoteCharacter);
+            this.cm.defineCommand("createLocalCharacter", this.createLocalCharacter);
+            this.cm.defineCommand("award", this.award);
+            this.cm.defineCommand("setExpGain", this.setExpGain);
+            this.cm.defineCommand("setLuxGain", this.setLuxGain);
+            this.cm.defineCommand("setPrize", this.setPrize);
+            this.cm.defineCommand('cancelPrize', this.cancelPrize);
+            this.cm.defineCommand("winPrize", this.winPrize);
+            this.cm.defineCommand("cowboyMode", this.cowboyMode);
+            this.cm.defineCommand("happyHour", this.happyHour);
+            this.cm.defineCommand("setEggSeed", setEggSeed);
+            this.cm.defineCommand("addEggs", addEggs);
+            this.cm.defineCommand("superBooster", this.superBooster);
+            this.cm.defineCommand('maybeReturnHatToStart', this.maybeReturnHatToStart);
+            this.cm.defineCommand("startHatCountdown", this.startHatCountdown);
+            this.cm.defineCommand('forceQuit', this.quitGame);
+            super.initialize();
+            this.getLevelData();
+        }
+
+        private function initSpectate()
+        {
+            this.spectatePicker = new SpectatePicker();
+            this.spectatePicker.x = -265;
+            this.spectatePicker.y = 30;
+            this.spectatePicker.scaleX = this.spectatePicker.scaleY = 0.9;
+            holder.addChild(this.spectatePicker);
+            this.toggleSpectatePossible(true);
+        }
+
+        override protected function toggleSpectatePossible(on:Boolean)
+        {
+            super.changeSpectate(-1);
+            this.spectatePicker.toggleVisibility(on);
+            super.toggleSpectatePossible(on);
+        }
+
+        override protected function onSpectateKeyPress(e:Event)
+        {
+            if (!(Main.stage.focus is TextField)
+                && (
+                    Keys.isPressed(Keyboard.DOWN)
+                    || Keys.isPressed(altCtrl.down)
+                    || Keys.isPressed(Keyboard.UP)
+                    || Keys.isPressed(altCtrl.up)
+                    || Keys.isPressed(Keyboard.LEFT)
+                    || Keys.isPressed(altCtrl.left)
+                    || Keys.isPressed(Keyboard.RIGHT)
+                    || Keys.isPressed(altCtrl.right)
+                )
+            ) {
+                this.spectatePicker.stopSpectating();
+                super.onSpectateKeyPress(e);
+            }
+        }
+
+        override protected function onCountdownFinish(e:Event)
+        {
+            if (PrizePopup.instance != null) {
+                PrizePopup.instance.startFadeOut();
+            }
+            super.onCountdownFinish(e);
+        }
+
+        private function getLevelData()
+        {
+            var URLReq:URLRequest = new URLRequest(Main.levelsURL + "/" + courseID + ".txt?version=" + version);
+            this.superLoader.addEventListener(Event.COMPLETE, this.loadHandler, false, 0, true);
+            this.superLoader.load(URLReq);
+        }
+
+        // _loc2 = levelTxt
+        // _loc3 = hashPos
+        // _loc4 = levelHash
+        // _loc5 = levelData
+        // _loc7 = gameHash
+        private function loadHandler(e:Event)
+        {
+            this.superLoader.removeEventListener(Event.COMPLETE, this.loadHandler);
+            var levelTxt:String = e.target.data;
+            var hashPos:int = levelTxt.length - 32;
+            var levelHash:String = levelTxt.substr(hashPos);
+            var levelData:String = levelTxt.substr(0, hashPos);
+            var gameHash:String = MD5.hash(version.toString() + courseID.toString() + levelData + Env.LEVEL_SALT_2);
+            if (gameHash != levelHash) {
+                new MessagePopup("Error: The course did not download correctly.");
+            } else if (levelData == "") {
+                new MessagePopup("Error: The course did not load.");
+            } else {
+                this.superLoader.remove();
+                this.superLoader = null;
+                levelData = validateSaveString(levelData);
+                this.levelHash = MD5.hash(levelData + courseID + version + Env.LEVEL_HASH_SALT);
+                var raceVars:URLVariables = new URLVariables(levelData);
+                setVariables(raceVars);
+                this.initSpectate();
+            }
+        }
+
+        private function incrementFrameCounter(e:Event) {
+            this.framesPlaying++;
+        }
+
+        override public function beginRace(_arg_1:Array)
+        {
+            this.drawingInfo.clear();
+            super.beginRace(_arg_1);
+            this.addEventListener(Event.ENTER_FRAME, this.incrementFrameCounter, false, 0, true);
+        }
+
+        public function award(_arg_1:Array)
+        {
+            this.pendingAwards.push(_arg_1);
+            if (this.finishedPage != null) {
+                this.finishedPage.award(_arg_1);
+            }
+        }
+
+        public function setExpGain(_arg_1:Array)
+        {
+            this.expOld = int(_arg_1[0]);
+            this.expNew = int(_arg_1[1]);
+            this.expToRank = int(_arg_1[2]);
+            this.finish();
+            this.maybeShowFinishedPage();
+            if (this.finishedPage != null) {
+                this.finishedPage.setExpGain(this.expOld, this.expNew, this.expToRank);
+            }
+        }
+
+        public function setLuxGain(arr:Array)
+        {
+            this.luxPop = new LuxPopup(int(arr[0]));
+        }
+
+        // _loc3 = prize
+        public function setPrize(arr:Array)
+        {
+            this.prize = JSON.parse(arr[0]);
+            new PrizePopup(this.prize.type, this.prize.id, this.prize.name, this.prize.desc, this.prize.universal, false);
+        }
+
+        public function cancelPrize(arr:Array)
+        {
+            this.prize = null;
+            new PrizePopup('cancel', 0, 'Prize Cancelled', arr[0]);
+        }
+
+        // _loc3 = prize
+        public function winPrize(arr:Array)
+        {
+            this.prize = JSON.parse(arr[0]);
+            new PrizePopup(this.prize.type, this.prize.id, this.prize.name, this.prize.desc, this.prize.universal, true);
+            if (Main.instance.kongAPI != null && this.prize.type == "hat") {
+                Main.instance.kongAPI.stats.submit(this.prize.name, 1);
+            }
+        }
+
+        public function cowboyMode(a:Array)
+        {
+            addChild(new CowboyMode());
+        }
+
+        public function happyHour(a:Array)
+        {
+            addChild(new HappyHour());
+        }
+
+        // _loc2 = tempId
+        // _loc3 = c
+        private function superBooster(arr:Array)
+        {
+            var tempId:int = int(arr[0]);
+            var c:Character = playerArray[tempId];
+            c.beginArrowSparkles();
+        }
+
+        private function maybeReturnHatToStart(a:Array)
+        {
+            var hat:Hat = looseHats[int(a[0])];
+            if (hat != null) {
+                var hatPos:Point = hat.getPos();
+                var hatRot:int = hat.getRot();
+                hatPos = Data.rotatePoint(hatPos.x, hatPos.y, hatRot);
+                if ((hatPos.y > blockBackground.maxY + 500 && hatRot == 0) || (hatPos.y < blockBackground.minY - 500 && Math.abs(hatRot) == 180) || (hatPos.x > blockBackground.maxX + 500 && hatRot == 90) || (hatPos.x < blockBackground.minX - 500 && hatRot == -90)) {
+                    this.returnHatToStart(hat);
+                }
+            }
+        }
+
+        private function returnHatToStart(hat:Hat)
+        {
+            var info:Object = hat.getInfo();
+            hat.remove();
+            if (info.id < startPosArray.length) {
+                new Hat(startPosArray[info.id].x, startPosArray[info.id].y, 0, info.num, info.color, info.color2, info.id);
+            }
+        }
+
+        private function startHatCountdown(a:Array = null)
+        {
+            this.cm.defineCommand('cancelHatCountdown', this.cancelHatCountdown);
+            this.hatCountdown = setInterval(this.checkHatCountdown, 1000);
+        }
+
+        private function checkHatCountdown()
+        {
+            Main.socket.write('check_hat_countdown`');
+        }
+
+        private function cancelHatCountdown(a:Array = null)
+        {
+            this.cm.defineCommand('cancelHatCountdown', null);
+            clearInterval(this.hatCountdown);
+        }
+
+        // _loc2 = tempId
+        // _loc3 = userName
+        // _loc4 = hatColor
+        // _loc5 = headColor
+        // _loc6 = bodyColor
+        // _loc7 = feetColor
+        // _loc8 = hatId
+        // _loc9 = headId
+        // _loc10 = bodyId
+        // _loc11 = feetId
+        // _loc12 = hatColor2
+        // _loc13 = headColor2
+        // _loc14 = bodyColor2
+        // _loc15 = feetColor2
+        // _loc16 = c
+        private function createRemoteCharacter(a:Array)
+        {
+            var tempId:int = int(a[0]);
+            var userName:String = a[1];
+            var hatColor:Number = Number(a[2]);
+            var headColor:Number = Number(a[3]);
+            var bodyColor:Number = Number(a[4]);
+            var feetColor:Number = Number(a[5]);
+            var hatId:Number = Number(a[6]);
+            var headId:Number = Number(a[7]);
+            var bodyId:Number = Number(a[8]);
+            var feetId:Number = Number(a[9]);
+            var hatColor2:Number = Number(a[10]);
+            var headColor2:Number = Number(a[11]);
+            var bodyColor2:Number = Number(a[12]);
+            var feetColor2:Number = Number(a[13]);
+            var groupStr:String = a[14];
+            var c:RemoteCharacter = new RemoteCharacter(tempId, miniMap.getDot(), userName, hatId, headId, bodyId, feetId, groupStr);
+            c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
+            playerArray[tempId] = c;
+            this.drawingInfo.addPlayer(userName, tempId);
+            positionPlayersAtStart();
+        }
+
+        // _loc2 = tempId
+        // _loc3 = userName
+        // _loc4 = speed
+        // _loc5 = accel
+        // _loc6 = jumpn
+        // _loc6 = hatColor
+        // _loc7 = headColor
+        // _loc8 = bodyColor
+        // _loc9 = feetColor
+        // _loc10 = hatId
+        // _loc11 = headId
+        // _loc12 = bodyId
+        // _loc13 = feetId
+        // _loc14 = hatColor2
+        // _loc15 = headColor2
+        // _loc16 = bodyColor2
+        // _loc17 = feetColor2
+        // _loc18 = c
+        private function createLocalCharacter(a:Array)
+        {
+            var tempId:int = int(a[0]);
+            var speed:Number = a[1];
+            var accel:Number = a[2];
+            var jumpn:Number = a[3];
+            var hatColor:Number = Number(a[4]);
+            var headColor:Number = Number(a[5]);
+            var bodyColor:Number = Number(a[6]);
+            var feetColor:Number = Number(a[7]);
+            var hatId:Number = Number(a[8]);
+            var headId:Number = Number(a[9]);
+            var bodyId:Number = Number(a[10]);
+            var feetId:Number = Number(a[11]);
+            var hatColor2:Number = Number(a[12]);
+            var headColor2:Number = Number(a[13]);
+            var bodyColor2:Number = Number(a[14]);
+            var feetColor2:Number = Number(a[15]);
+            var groupStr:String = a[16];
+            var c:LocalCharacter = new LocalCharacter(tempId, this, blockBackground, miniMap.getDot(), itemDisplay, Number(gravity), speed, accel, jumpn, hatId, headId, bodyId, feetId, groupStr);
+            c.setColors(hatColor, hatColor2, headColor, headColor2, bodyColor, bodyColor2, feetColor, feetColor2);
+            playerArray[tempId] = c;
+            this.drawingInfo.addPlayer(Main.loggedInAs, tempId);
+            localPlayer = c;
+            positionPlayersAtStart();
+        }
+
+        override public function collectEgg(_arg_1:int)
+        {
+            if (this.gameMode == "egg") {
+                Main.socket.write("grab_egg`" + _arg_1);
+            }
+        }
+
+        public function maybeShowFinishedPage()
+        {
+            if (this.finishedPage == null) {
+                this.markPlayerDone();
+                this.quitButton.stopGlow();
+                this.finishedPage = new FinishedPage(this);
+            }
+        }
+
+        // deleted _loc1 (this.getFinishPositions())
+        // deleted _loc2 (finishBlocks.length)
+        override protected function endIntro()
+        {
+            Main.socket.write("finish_drawing`" + this.levelHash + "`" + this.gameMode + "`" + this.getFinishBlockPositions() + "`" + finishBlocks.length + "`" + cowboyChance + "`" + badHats.join(','));
+            super.endIntro();
+        }
+
+        // deleted _loc1 (condensed fn)
+        private function getFinishBlockPositions():String
+        {
+            return finishBlocks.length > 5 ? 'all' : JSON.stringify(finishBlocks);
+        }
+
+        override public function outOfTimeHandler()
+        {
+            this.cancelHatCountdown();
+            if (this.gameMode == Modes.egg) {
+                this.finish();
+                this.maybeShowFinishedPage();
+            } else {
+                this.quitGame();
+            }
+        }
+
+        override public function finish(finishId:int=-1, finishX:int=0, finishY:int=0)
+        {
+            if (!playerDone) {
+                if (this.gameMode == Modes.obj) {
+                    if (finishId != -1) {
+                        miniMap.removeFinish(finishX, finishY);
+                        Main.socket.write("objective_reached`" + finishId + "`" + finishX + "`" + finishY);
+                    }
+                } else {
+                    this.removeEventListener(Event.ENTER_FRAME, this.incrementFrameCounter);
+                    Main.socket.write("finish_race`" + finishId + "`" + finishX + "`" + finishY);
+                    if (this.gameMode != Modes.hat) {
+                        this.quitButton.startGlow();
+                        this.markPlayerDone();
+                        this.submitHatFinishStat();
+                        timer.pause();
+                    }
+                }
+                SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));
+            }
+        }
+
+        public function quitGame(arr:Array = null)
+        {
+            if (!playerDone) {
+                if (this.gameMode == Modes.dm) {
+                    this.finish();
+                } else {
+                    this.removeEventListener(Event.ENTER_FRAME, this.incrementFrameCounter);
+                    Main.socket.write("quit_race`");
+                }
+            }
+            this.markPlayerDone();
+            this.maybeShowFinishedPage();
+        }
+
+        private function submitHatFinishStat()
+        {
+            var _local_1:int;
+            var _local_2:int;
+            if (localPlayer != null) {
+                _local_1 = 1;
+                while (_local_1 <= 4) {
+                    if (localPlayer["hat" + _local_1] <= 1) {
+                        break;
+                    }
+                    _local_1++;
+                }
+                _local_2 = _local_1 - 1;
+                if (Main.instance.kongAPI != null) {
+                    Main.instance.kongAPI.stats.submit("Hat Finish", _local_2);
+                }
+            }
+        }
+
+        private function markPlayerDone()
+        {
+            if (!playerDone) {
+                playerDone = true;
+                if (localPlayer != null) {
+                    localPlayer.beginRemove();
+                }
+                this.toggleSpectatePossible(true);
+                super.toggleKeyScroll(true);
+                Main.stage.focus = Main.stage;
+            }
+        }
+
+        public function isDonePlaying() : Boolean
+        {
+            return playerDone;
+        }
+
+        override public function remove()
+        {
+            this.cm.defineCommand("createRemoteCharacter", null);
+            this.cm.defineCommand("createLocalCharacter", null);
+            this.cm.defineCommand("award", null);
+            this.cm.defineCommand("setExpGain", null);
+            this.cm.defineCommand("setLuxGain", null);
+            this.cm.defineCommand("setPrize", null);
+            this.cm.defineCommand('cancelPrize', null);
+            this.cm.defineCommand("winPrize", null);
+            this.cm.defineCommand("cowboyMode", null);
+            this.cm.defineCommand("setEggSeed", null);
+            this.cm.defineCommand("addEggs", null);
+            this.cm.defineCommand("superBooster", null);
+            this.cm.defineCommand('maybeReturnHatToStart', null);
+            this.cm.defineCommand('startHatCountdown', null); // this.cancelHatCountdown called farther down
+            this.cm.defineCommand('forceQuit', null);
+            removeEventListener(Event.ENTER_FRAME, maybeEndIntro);
+            removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+            removeEventListener(Event.ENTER_FRAME, keyScroll);
+            if (this.drawingInfo != null) {
+                this.drawingInfo.remove();
+                this.drawingInfo = null;
+            }
+            if (this.spectatePicker != null) {
+                this.spectatePicker.remove();
+                this.spectatePicker = null;
+            }
+            if (this.superLoader != null) {
+                this.superLoader.removeEventListener(Event.COMPLETE, this.loadHandler);
+                this.superLoader.remove();
+                this.superLoader = null;
+            }
+            this.prize = null;
+            if (PrizePopup.instance !== null) {
+                PrizePopup.instance.startFadeOut();
+            }
+            if (PlaceArtifact.instance !== null) {
+                PlaceArtifact.instance.startFadeOut();
+            }
+            if (this.luxPop != null) {
+                this.luxPop.remove();
+                this.luxPop = null;
+            }
+            this.quitButton.remove();
+            this.chatBox.remove();
+            this.specialEvent.remove();
+            this.specialEvent = null;
+            this.cancelHatCountdown();
+            super.remove();
+        }
+
+
+    }
+}

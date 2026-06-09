@@ -9,9 +9,9 @@ package items
     import blocks.Block;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
-    import package_6.Course;
-    import package_8.LocalCharacter;
-    import package_9.MineAppear;
+    import gameplay.Course;
+    import character.LocalCharacter;
+    import effects.MineAppear;
 
     public class Mine extends Item 
     {
@@ -21,13 +21,11 @@ package items
             super(lc);
         }
 
-        // _loc1 = map
-        // _loc2 = playerPos
         // removed _loc3, _loc6 (condensed)
         override public function useItem()
         {
             var map:Map = Course.course.blockBackground;
-            var playerPos:Point = method_37();
+            var playerPos:Point = getWeaponEffectPos();
             playerPos.x = Math.round(playerPos.x + 15);
             playerPos.y = Math.round(playerPos.y + 10);
             if (map.getBlockFromPos(playerPos.x, playerPos.y, true) == null) { // if block isn't occupied
@@ -35,7 +33,7 @@ package items
                 var _local_5:Point = map.getPosFromSeg(_local_4.x, _local_4.y);
                 _local_5.x = _local_5.x + 15;
                 _local_5.y = _local_5.y + 15;
-                _local_5 = Data.method_9(_local_5.x, _local_5.y, Course.course.blockBackground.rotation);
+                _local_5 = Data.rotatePoint(_local_5.x, _local_5.y, Course.course.blockBackground.rotation);
                 Main.socket.write("add_effect`Mine`" + _local_5.x + "`" + _local_5.y + "`" + Course.course.blockBackground.rotation);
                 new MineAppear(_local_5.x, _local_5.y);
                 super.useItem();

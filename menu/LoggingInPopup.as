@@ -17,16 +17,16 @@ package menu
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
     import lobby.Lobby;
-    import package_18.Presets;
-    import package_4.Popup;
+    import player_profile.Presets;
+    import dialogs.Popup;
 
     public class LoggingInPopup extends Popup 
     {
 
         private var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
         private var m:LoggingInPopupGraphic = new LoggingInPopupGraphic();
-        private var socketOK:Boolean = false; // var_560
-        private var httpOK:Boolean = false; // var_615
+        private var socketOK:Boolean = false;
+        private var httpOK:Boolean = false;
         private var socket:PR2Socket;
 
         // _loc2 = send
@@ -81,7 +81,6 @@ package menu
             this.maybeSwitchToLobby();
         }
 
-        // method_228 = onHttpSuccess
         private function onHttpSuccess(e:Event)
         {
             var ret:Object = this.loader.parsedData;
@@ -100,7 +99,6 @@ package menu
             this.maybeSwitchToLobby();
         }
 
-        // method_254 = onError
         private function onError(e:Event)
         {
             startFadeOut();
@@ -115,7 +113,6 @@ package menu
             Main.clearUserData();
         }
 
-        // method_456 = maybeSwitchToLobby
         private function maybeSwitchToLobby()
         {
             if (this.socketOK && this.httpOK) {
@@ -139,12 +136,6 @@ package menu
         {
             startFadeOut();
         }
-
-        // using onError
-        /*private function method_349(e:Event)
-        {
-            startFadeOut();
-        }*/
 
         override public function remove()
         {

@@ -2,13 +2,13 @@
 
 package blocks
 {
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.geom.ColorTransform;
 
     public class SupplyBlock extends Block 
     {
 
-        protected var uses:int = 1; // var_243
+        protected var uses:int = 1;
 
         public function SupplyBlock(_arg_1:int)
         {
@@ -31,7 +31,7 @@ package blocks
                     this.useSupply(player);
                 }
                 if (this.uses <= 0) {
-                    this.method_789();
+                    this.depleteVisuals();
                 }
             }
         }
@@ -46,7 +46,7 @@ package blocks
             transform.colorTransform = new ColorTransform();
         }
 
-        protected function method_789()
+        protected function depleteVisuals()
         {
             transform.colorTransform = new ColorTransform(0.5, 0.5, 0.5);
         }

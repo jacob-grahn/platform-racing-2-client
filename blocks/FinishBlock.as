@@ -6,23 +6,22 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_6.Course;
-    import package_8.LocalCharacter;
+    import gameplay.Course;
+    import character.LocalCharacter;
 
     public class FinishBlock extends SupplyBlock 
     {
 
-        public static var var_228:int = 1;
+        public static var count:int = 1;
 
-        private var id:int; // var_413
+        private var id:int;
 
         public function FinishBlock()
         {
-            this.id = var_228++;
+            this.id = count++;
             super(Objects.BLOCK_FINISH);
         }
 
-        // method_140 = getId
         public function getId():int
         {
             return this.id;

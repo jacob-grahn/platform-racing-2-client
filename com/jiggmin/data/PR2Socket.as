@@ -13,19 +13,19 @@ package com.jiggmin.data
     import flash.utils.ByteArray;
     import flash.utils.clearInterval;
     import flash.utils.setInterval;
-    import menu.class_4;
+    import menu.CommAuth;
     import menu.LoginPage;
-    import package_4.MessagePopup;
-    import package_22.Campaign;
+    import dialogs.MessagePopup;
+    import level_browser.Campaign;
 
     public class PR2Socket extends Socket 
     {
 
-        private var pingInterval:uint = setInterval(sendPing, 10000); // var_616
+        private var pingInterval:uint = setInterval(sendPing, 10000);
         public var sendNum:int = 0;
-        private var endChar:String = String.fromCharCode(4); // var_478
+        private var endChar:String = String.fromCharCode(4);
         private var md5:MD5 = new MD5();
-        private var var_363:Time = new Time();
+        private var serverTime:Time = new Time();
 
         public function PR2Socket()
         {
@@ -66,7 +66,7 @@ package com.jiggmin.data
                     this.sendNum++;
                 }
                 str = this.sendNum + "`" + str;
-                var strToHash:String = class_4.method_310(Main.server.server_id) + str;
+                var strToHash:String = CommAuth.getToken(Main.server.server_id) + str;
                 var hashArray:ByteArray = this.md5.hash(Hex.toArray(Hex.fromString(strToHash)));
                 var hashStr:String = Hex.fromArray(hashArray);
                 var subHash:String = hashStr.substr(0, 3);
@@ -82,19 +82,16 @@ package com.jiggmin.data
             }
         }
 
-        // method_593 = read
         private function read(e:* = null)
         {
             CommandHandler.commandHandler.addText(readUTFBytes(bytesAvailable));
         }
 
-        // method_427 = requestLoginId
         private function requestLoginId(e:Event)
         {
             this.write("request_login_id`");
         }
 
-        // method_307 = closeHandler
         private function closeHandler(e:Event)
         {
             if (!(Main.pageHolder.getCurrentPage() is LoginPage)) {
@@ -112,23 +109,6 @@ package com.jiggmin.data
             this.remove();
         }
 
-        // method_247 = securityErrorHandler
-        /*private function securityErrorHandler(e:SecurityErrorEvent)
-        {
-            this.remove();
-        }
-
-        private function method_519(e:SecurityErrorEvent)
-        {
-        }
-
-        // method_227 = onData (DEPRECIATED; use this.read())
-        private function onData(e:ProgressEvent)
-        {
-            this.read();
-        }*/
-
-        // method_725 = sendPing
         public function sendPing()
         {
             if (connected) {
@@ -136,21 +116,19 @@ package com.jiggmin.data
             }
         }
 
-        // method_824 = receivePing
         public function receivePing(arr:Array)
         {
             var _local_2:Number = Number(arr);
-            var _local_3:Number = this.var_363.getTimestamp();
+            var _local_3:Number = this.serverTime.getTimestamp();
             var _local_4:Number = Math.abs(_local_2 - _local_3);
             if (_local_4 > 2) {
-                this.var_363.setTime(_local_2);
+                this.serverTime.setTime(_local_2);
             }
         }
 
-        // method_26 = getMS
         public function getMS():Number
         {
-            return this.var_363.getMS();
+            return this.serverTime.getMS();
         }
 
         public function remove()
@@ -162,7 +140,6 @@ package com.jiggmin.data
             removeEventListener(SecurityErrorEvent.SECURITY_ERROR, this.anyErrorHandler);
             removeEventListener(ProgressEvent.SOCKET_DATA, this.read);
             this.close();
-            //addEventListener(SecurityErrorEvent.SECURITY_ERROR, this.method_519, false, 0, true);
         }
 
 

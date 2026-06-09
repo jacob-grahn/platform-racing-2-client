@@ -7,19 +7,17 @@ package com.jiggmin.data
     public class UnreadNotif  
     {
 
-        private static var lastReadTime:Number = 0; // var_192
-        private static var unreadMessages:Array = new Array(); // var_212
-        private static var m:UnreadNotifGraphic = new UnreadNotifGraphic(); // m
-        private static var pmTab:DisplayObjectContainer; // d
+        private static var lastReadTime:Number = 0;
+        private static var unreadMessages:Array = new Array();
+        private static var notificationIcon:UnreadNotifGraphic = new UnreadNotifGraphic();
+        private static var pmTab:DisplayObjectContainer;
 
 
-        // method_745 = setLastRead
         public static function setLastRead(time:Number)
         {
             lastReadTime = time;
         }
 
-        // method_272 = notifyUser
         public static function notifyUser(time:Number)
         {
             if (time > lastReadTime) {
@@ -28,8 +26,6 @@ package com.jiggmin.data
             addNotif();
         }
 
-        // _loc1 = timeSent
-        // method_692 = updateLastRead
         public static function updateLastRead()
         {
             for each (var timeSent:Number in unreadMessages) {
@@ -41,7 +37,6 @@ package com.jiggmin.data
             removeNotif();
         }
 
-        // method_524 = addNotifContainer
         public static function addNotifContainer(d:DisplayObjectContainer)
         {
             UnreadNotif.pmTab = d;
@@ -50,21 +45,19 @@ package com.jiggmin.data
             }
         }
 
-        // method_127 = addNotif
         private static function addNotif()
         {
             if (pmTab != null) {
-                m.x = 26;
-                m.y = 0;
-                pmTab.addChild(m);
+                notificationIcon.x = 26;
+                notificationIcon.y = 0;
+                pmTab.addChild(notificationIcon);
             }
         }
 
-        // method_147 = removeNotif
         private static function removeNotif()
         {
-            if (m.parent != null) {
-                m.parent.removeChild(m);
+            if (notificationIcon.parent != null) {
+                notificationIcon.parent.removeChild(notificationIcon);
             }
         }
 

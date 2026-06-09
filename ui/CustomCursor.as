@@ -1,5 +1,3 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
 
 // ui.class_8 = ui.CustomCursor
 
@@ -16,10 +14,10 @@ package ui
     import flash.ui.Mouse;
     import flash.utils.getDefinitionByName;
     import flash.utils.getQualifiedClassName;
-    import package_20.Brush;
-    import package_20.class_275;
-    import package_20.ObjectDeleter;
-    import package_20.TextTool;
+    import drawing_tools.Brush;
+    import drawing_tools.BlockObjectPlacer;
+    import drawing_tools.ObjectDeleter;
+    import drawing_tools.TextTool;
     import flash.events.TouchEvent;
     import flash.ui.MouseCursor;
 
@@ -29,11 +27,11 @@ package ui
         public static var stageRef:Stage;
         public static var instance:CustomCursor;
 
-        private var active:Boolean = false; // var_71
+        private var active:Boolean = false;
         private var me:MouseEvent;
-        private var mouseDown:Boolean; // var_487
-        private var mouseHidden:Boolean = false; // var_371
-        public var var_411:Boolean = true;
+        private var mouseDown:Boolean;
+        private var mouseHidden:Boolean = false;
+        public var disposable:Boolean = true;
 
         public function CustomCursor()
         {
@@ -43,7 +41,6 @@ package ui
             y = stageRef.mouseY;
         }
 
-        // method_28 = change
         public static function change(c:CustomCursor)
         {
             unsetInstance();
@@ -54,11 +51,10 @@ package ui
             }
         }
 
-        // method_112 = unsetInstance
         public static function unsetInstance()
         {
             if (instance != null) {
-                if (instance.var_411 == true) {
+                if (instance.disposable == true) {
                     instance.remove();
                 } else {
                     instance.pause();
@@ -143,32 +139,27 @@ package ui
             stageRef.removeEventListener(KeyboardEvent.KEY_UP, this.keyUpHandler);
         }
 
-        // method_23 = isActive
         public function isActive():Boolean
         {
             return this.active;
         }
 
-        // method_92 = getMouse
         public function getMouse():MouseEvent
         {
             return this.me;
         }
 
-        // method_131 = isMouseDown
         public function isMouseDown():Boolean
         {
             return this.mouseDown;
         }
 
-        // method_332 = hideMouse
         protected function hideMouse()
         {
             this.mouseHidden = true;
             Mouse.hide();
         }
 
-        // method_843 = showMouse
         protected function showMouse()
         {
             this.mouseHidden = false;
@@ -221,19 +212,11 @@ package ui
             }
         }
 
-        // method_269 = mouseFocusHandler
         protected function mouseFocusHandler(e:MouseEvent)
         {
             this.me = e;
         }
 
-        // consolidated into mouseFocusHandler
-        /*protected function method_378(e:MouseEvent)
-        {
-            this.me = e;
-        }*/
-
-        // method_63 = applyCursorGraphic
         protected function applyCursorGraphic(e:DisplayObject)
         {
             e.x = -(e.width / 2);

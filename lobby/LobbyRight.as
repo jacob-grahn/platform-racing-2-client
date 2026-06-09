@@ -6,13 +6,13 @@
 package lobby
 {
     import ui.LobbyTab;
-    import package_22.Campaign;
-    import package_22.Best;
-    import package_22.BestWeek;
-    import package_22.Newest;
-    import package_22.Search;
-    import package_22.Favorites;
-    //import package_22.class_251;
+    import level_browser.Campaign;
+    import level_browser.Best;
+    import level_browser.BestWeek;
+    import level_browser.Newest;
+    import level_browser.Search;
+    import level_browser.Favorites;
+    //import level_browser.ListingPage;
 
     public class LobbyRight extends LobbySide 
     {
@@ -39,25 +39,21 @@ package lobby
             super(tabsArray, "lobbyRight", 0, 347, 356);
         }
 
-        // method_631 = clickCampaign
         private function clickCampaign()
         {
             changePage(new Campaign());
         }
 
-         // method_555 = clickBest
         private function clickBest()
         {
             changePage(new Best());
         }
 
-        // method_537 = clickBestWeek
         private function clickBestWeek()
         {
             changePage(new BestWeek());
         }
 
-        // method_616 = clickNew
         private function clickNew()
         {
             changePage(new Newest());
@@ -72,14 +68,6 @@ package lobby
         {
             changePage(new Favorites());
         }
-
-        /*
-        // method_484 = clickGuilds
-        private function clickGuilds()
-        {
-            changePage(new class_251());
-        }
-        */
 
         public function lookupUser(userName:String = "")
         {

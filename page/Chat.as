@@ -9,19 +9,19 @@ package page
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Settings;
-    import package_4.PlayerPopup;
-    import package_4.GuildPopup;
-    import package_4.SendMessagePopup;
-    import package_4.LevelInfoPopup;
+    import dialogs.PlayerPopup;
+    import dialogs.GuildPopup;
+    import dialogs.SendMessagePopup;
+    import dialogs.LevelInfoPopup;
 
     public class Chat extends Page 
     {
 
-        protected var existingMessages:String = ""; // var_137
-        protected var maxMessages:int = 40; // var_489
+        protected var existingMessages:String = "";
+        protected var maxMessages:int = 40;
         protected var messages:int = 0;
         protected var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
-        private var hint:ArtifactHint; // var_244
+        private var hint:ArtifactHint;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
         public function Chat()
@@ -43,11 +43,6 @@ package page
             return '';
         }
 
-        // userName = _loc2
-        // group = _loc3
-        // messageText = _loc4
-        // chatMessageName = _loc5
-        // method_151 = handleMessageFromArray
         public function handleMessageFromArray(chatMessageArray:Array, fred:Boolean = false)
         {
             var userName:String = chatMessageArray[0];
@@ -99,7 +94,6 @@ package page
             }
         }
 
-        // method_107 = displayMessage
         protected function displayMessage(message:String)
         {
             this.messages++;

@@ -3,8 +3,8 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
-    import package_9.BlockPiece;
+    import character.LocalCharacter;
+    import effects.BlockPiece;
     import flash.geom.Point;
 
     public class BrickBlock extends Block 
@@ -32,13 +32,9 @@ package blocks
             }
         }
 
-        // _loc3 = piece
-        // _loc5 = posX
-        // _loc6 = posY
-        // _loc7 = i
         override protected function activate(_arg_1:String="")
         {
-            var _local_4:Point = method_18();
+            var _local_4:Point = getRotatedPos();
             var i:int;
             while (i < 6) {
                 var piece:BrickPieceGraphic = new BrickPieceGraphic();

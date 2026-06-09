@@ -8,14 +8,6 @@ package com.jiggmin.ColorPicker
     {
 
 
-        // _loc2 = red
-        // _loc3 = green
-        // _loc4 = blue
-        // _loc5 = color
-        // _loc8 = numG
-        // _loc9 = numB
-        // _loc10 = i
-        // method_605 = populate
         public static function populate():Array
         {
             var colors:Array = makeColorArray(22, 12);
@@ -64,10 +56,7 @@ package com.jiggmin.ColorPicker
             return colors;
         }
 
-        // _loc4 = i
-        // _loc6 = j
         // changed public to private
-        // method_258 = makeColorArray
         private static function makeColorArray(cols:int, rows:int):Array
         {
             var _local_3:Array = [];

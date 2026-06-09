@@ -8,18 +8,15 @@ package com.jiggmin.data
     public class SWFStats extends Sprite 
     {
 
-        private var lastReset:Number = new Date().time; // var_500
-        private var lagArray:Array = new Array(); // var_316
-        private var keepCount:int = 30; // var_392
+        private var lastReset:Number = new Date().time;
+        private var lagArray:Array = new Array();
+        private var keepCount:int = 30;
 
         public function SWFStats()
         {
             setInterval(this.resetStats, 1000);
         }
 
-        // _loc1 = time
-        // _loc2 = diff
-        // method_696 = resetStats
         private function resetStats()
         {
             var time:Number = new Date().time;
@@ -29,16 +26,16 @@ package com.jiggmin.data
             if (this.lagArray.length > this.keepCount) {
                 this.lagArray.shift();
             }
-            var _local_3:Number = 0;
-            var _local_4:int;
-            while (_local_4 < this.keepCount) {
-                _local_3 = _local_3 + this.lagArray[_local_4];
-                _local_4++;
+            var totalLag:Number = 0;
+            var i:int;
+            while (i < this.keepCount) {
+                totalLag = totalLag + this.lagArray[i];
+                i++;
             }
-            var _local_5:Number = _local_3 / this.keepCount;
-            if (_local_5 < 900 || Main.stage.frameRate != 27) {
+            var averageLag:Number = totalLag / this.keepCount;
+            if (averageLag < 900 || Main.stage.frameRate != 27) {
                 Main.stage.frameRate = 27;
-                var _local_6:Number = time + 1000;
+                var targetTime:Number = time + 1000;
                 do  {
                 } while (new Date().time < time);
             }

@@ -1,0 +1,98 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+
+// data.SecureStore
+
+package com.jiggmin.data
+{
+    import com.hurlant.util.Base64;
+
+    public class SecureStore 
+    {
+
+        private var items:Object = new Object();
+
+
+        public function setNumber(_arg_1:String, _arg_2:Number)
+        {
+            var _local_3:Number = Math.ceil(Math.random() * 999999) - 500000;
+            var _local_4:Number = _arg_2 + _local_3;
+            this.setEntry(_arg_1, _local_4, _local_3);
+        }
+
+        public function getNumber(_arg_1:String):Number
+        {
+            var _local_2:Object = this.getEntry(_arg_1);
+            var _local_3:Number = 0;
+            if (_local_2 != null) {
+                _local_3 = _local_2.hidden - _local_2.key;
+            }
+            return (_local_3);
+        }
+
+        public function setBool(s:String, bool:Boolean)
+        {
+            var num:int = 0;
+            if (bool) {
+                num = 1;
+            }
+            this.setNumber(s, num);
+        }
+
+        public function getBool(s:String):Boolean
+        {
+            var num:int = this.getNumber(s);
+            var bool:Boolean = false;
+            if (num === 1) {
+                bool = true;
+            }
+            return bool;
+        }
+
+        public function initEncryptor(_arg_1:String, salt:String)
+        {
+            var encryptor:Encryptor = new Encryptor();
+            encryptor.setKey(Base64.encode(Data.randomString(16)));
+            encryptor.setIV(Base64.encode(Data.randomString(16)));
+            this.setEntry(_arg_1, encryptor.encrypt(salt), encryptor);
+        }
+
+        public function getString(_arg_1:String):String
+        {
+            var _local_2:Object = this.getEntry(_arg_1);
+            if (_local_2 == null) {
+                return null;
+            }
+            var encryptor:Encryptor = Encryptor(_local_2.key);
+            var _local_4:String = encryptor.decrypt(_local_2.hidden);
+            return _local_4;
+        }
+
+        private function setEntry(_arg_1:String, _arg_2:*, _arg_3:*)
+        {
+            var _local_4:Object;
+            _local_4 = this.getEntry(_arg_1);
+            if (_local_4 != null) {
+                _local_4.hidden = _arg_2;
+                _local_4.key = _arg_3;
+            } else {
+                _local_4 = new Object();
+                _local_4.hidden = _arg_2;
+                _local_4.key = _arg_3;
+                this.items[_arg_1] = _local_4;
+            }
+        }
+
+        private function getEntry(_arg_1:String):Object
+        {
+            return this.items[_arg_1];
+        }
+
+        public function remove()
+        {
+            this.items = null;
+        }
+
+
+    }
+}
+

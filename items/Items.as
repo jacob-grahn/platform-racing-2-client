@@ -3,30 +3,28 @@
 package items
 {
     //import __AS3__.vec.Vector;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import items.*;
 
     public class Items 
     {
 
-        public static const laserGun:int = 1; // const_44
-        public static const mine:int = 2; // const_34
-        public static const lightning:int = 3; // const_49
-        public static const teleport:int = 4; // const_35
-        public static const superJump:int = 5; // const_7
-        public static const jetPack:int = 6; // const_45
-        public static const speedBurst:int = 7; // const_9
-        public static const sword:int = 8; // const_48
-        public static const iceWave:int = 9; // const_40
+        public static const laserGun:int = 1;
+        public static const mine:int = 2;
+        public static const lightning:int = 3;
+        public static const teleport:int = 4;
+        public static const superJump:int = 5;
+        public static const jetPack:int = 6;
+        public static const speedBurst:int = 7;
+        public static const sword:int = 8;
+        public static const iceWave:int = 9;
 
 
-        // method_188 = getAllCodes
         public static function getAllCodes():Vector.<int>
         {
             return new <int>[laserGun, mine, lightning, teleport, superJump, jetPack, speedBurst, sword, iceWave];
         }
 
-        // method_29 = getFromCode
         public static function getFromCode(code:int, player:LocalCharacter):Item
         {
             if (code == laserGun) {
@@ -77,7 +75,6 @@ package items
             }
         }
 
-        // method_330 = getNameFromCode
         public static function getNameFromCode(code:int):String
         {
             if (code == laserGun) {
@@ -103,7 +100,6 @@ package items
             }
         }
 
-        // method_657 = getCodeFromName
         public static function getCodeFromName(item:String):int
         {
             if (item == "Laser" || item == "Laser Gun") {

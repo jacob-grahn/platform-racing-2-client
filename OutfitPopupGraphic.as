@@ -8,7 +8,7 @@ package
     import flash.display.MovieClip;
     import fl.controls.Button;
     import fl.controls.TextArea;
-    import package_8.Character;
+    import character.Character;
     //import com.jiggmin.data.EpicFlash;
 
     public dynamic class OutfitPopupGraphic extends MovieClip 

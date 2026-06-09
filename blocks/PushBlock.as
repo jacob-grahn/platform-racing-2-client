@@ -6,7 +6,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import com.jiggmin.data.Data;
     import flash.geom.Point;
 
@@ -63,11 +63,9 @@ package blocks
             }
         }
 
-        // _loc3 = newSeg
-        // method_93 = push
         private function push(incSegX:int, incSegY:int)
         {
-            var newSeg:Point = Data.method_9(incSegX, incSegY, map.rotation);
+            var newSeg:Point = Data.rotatePoint(incSegX, incSegY, map.rotation);
             move(newSeg.x, newSeg.y, map);
         }
 

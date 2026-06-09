@@ -12,30 +12,29 @@ package background
     import flash.geom.Point;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
-    import package_6.Course;
-    import package_6.MiniMap;
-    import package_8.Character;
-    import package_9.Egg;
+    import gameplay.Course;
+    import gameplay.MiniMap;
+    import character.Character;
+    import effects.Egg;
 
     public class Map extends BlockBackground 
     {
 
-        // removed var_688 (unused)
-        private var startBlockNum:int = 0; // var_400
+        private var startBlockNum:int = 0;
         private var miniMap:MiniMap;
-        private var moveInterval:uint; // var_296
+        private var moveInterval:uint;
         private var segSize:Number = 30;
         public var maxY:Number = -9999999;
         public var minY:Number = 9999999;
         public var maxX:Number = -9999999;
         public var minX:Number = 9999999;
-        private var moveBlocksArray:Vector.<MoveBlock> = new Vector.<MoveBlock>(); // var_196
+        private var moveBlocksArray:Vector.<MoveBlock> = new Vector.<MoveBlock>();
         private var startTime:int;
-        private var moves:int = 0; // var_506
-        private var moveTime:int = 5000; // var_534
+        private var moves:int = 0;
+        private var moveTime:int = 5000;
         private var rand:Random = new Random(1);
-        private var placedEggs:int = 0; // var_446
-        private var eggPtsArray:Array = new Array(); // var_379
+        private var placedEggs:int = 0;
+        private var eggPtsArray:Array = new Array();
 
         public function Map(m:MiniMap, c:Course)
         {
@@ -63,7 +62,6 @@ package background
         {
         }
 
-        // method_488 = placeBlock
         public function placeBlock(blockId:int, targetX:Number, targetY:Number) // used to place mines
         {
             this.attachObject(blockId, targetX, targetY);
@@ -97,7 +95,7 @@ package background
                     if (!block.isInitialized()) {
                         block.initialize(blockSeg.x, blockSeg.y, this);
                     }
-                    if (method_32(blockSeg.x, blockSeg.y)) {
+                    if (isInView(blockSeg.x, blockSeg.y)) {
                         addChild(block);
                     }
                     if (block is MoveBlock) {
@@ -111,7 +109,7 @@ package background
                         Course.course.teleportBlocks[color].push(block);
                         block.blockNum = Course.course.teleportBlocks[color].length - 1;
                     }
-                    this.miniMap.method_680(blockCode, blockX, blockY);
+                    this.miniMap.addBlock(blockCode, blockX, blockY);
                 }
             }
             if (blockY > this.maxY) {
@@ -126,7 +124,6 @@ package background
             }
         }
 
-        // method_485 = placeEggs
         private function placeEggs()
         {
             for each (var eggPt:Point in this.eggPtsArray) {
@@ -136,7 +133,6 @@ package background
         }
 
         // _loc3 = egg
-        // method_552 = attachEgg
         private function attachEgg(eggX:int, eggY:int)
         {
             if (this.placedEggs < 25) {
@@ -156,7 +152,6 @@ package background
         }
 
         // deleted _loc4 (Course.course)
-        // method_516 = addFinish
         private function addFinish(finishId:int, finishX:int, finishY:int)
         {
             Course.course.finishBlocks.push({
@@ -169,12 +164,12 @@ package background
         override public function draw(_arg_1:Number = 50)
         {
             super.draw(_arg_1);
-            if (var_39 >= saveArray.length) {
+            if (drawPos >= saveArray.length) {
                 this.miniMap.rasterize();
             }
         }
 
-        public function method_578()
+        public function startGameplay()
         {
             this.startTime = new Date().time;
             this.determineMoveBlockDirection();
@@ -186,7 +181,6 @@ package background
         // _loc3 = block
         // _loc4 = dir
         // deleted _loc5&6 (unused)
-        // method_416 = determineMoveBlockDirection
         private function determineMoveBlockDirection()
         {
             var totalMoveBlocks:int = this.moveBlocksArray.length;
@@ -200,10 +194,6 @@ package background
             this.setMoveInterval(this.doMoveBlocks, 1000);
         }
 
-        // _loc1 = i
-        // removed _loc2 (unneeded)
-        // _loc3 = block
-        // method_784 = doMoveBlocks
         private function doMoveBlocks()
         {
             for (var i:int = 0; i < this.moveBlocksArray.length; i++) {
@@ -257,7 +247,7 @@ package background
                 var block:Block = Block(getChildAt(0));
                 block.remove();
             }
-            var_39 = 0;
+            drawPos = 0;
             blockArray = new Array();
             objArray = new Array();
         }

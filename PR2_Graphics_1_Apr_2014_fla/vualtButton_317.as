@@ -39,10 +39,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function vualtButton_317()
         {
-            this.method_659();
+            this.initComponentSettings();
         }
 
-        internal function method_659():*
+        internal function initComponentSettings():*
         {
             try {
                 this.var_155["componentInspectorSetting"] = true;
@@ -64,4 +64,3 @@ package PR2_Graphics_1_Apr_2014_fla
 
     }
 }//package PR2_Graphics_1_Apr_2014_fla
-

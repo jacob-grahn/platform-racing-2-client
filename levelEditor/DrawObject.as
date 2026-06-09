@@ -19,25 +19,25 @@ package levelEditor
     public class DrawObject extends Removable 
     {
 
-        private var var_621:Number;
-        private var var_603:Number;
-        private var var_625:Number;
-        private var var_582:Number;
+        private var dragOffsetX:Number;
+        private var dragOffsetY:Number;
+        private var dragStartX:Number;
+        private var dragStartY:Number;
         protected var startWidth:Number;
         protected var startHeight:Number;
         private var textObj:Boolean = false;
         public var deleteable:Boolean = true;
-        protected var resizable:Boolean = true; // var_505
+        protected var resizable:Boolean = true;
         private var deleteButton:DeleteButton;
-        private var resizeButton:ResizeButton; // var_68
+        private var resizeButton:ResizeButton;
         public var m:DisplayObject;
-        private var highlightOutline:Sprite = new Sprite(); // var_94
+        private var highlightOutline:Sprite = new Sprite();
         protected var editor:LevelEditor = LevelEditor.editor;
         protected var stageRef:Stage = Main.stage;
         private var holder:Sprite;
         public var displayCode:int;
-        protected var buttonScaleX:Number = 1; // var_321
-        protected var buttonScaleY:Number = 1; // var_307
+        protected var buttonScaleX:Number = 1;
+        protected var buttonScaleY:Number = 1;
 
         public function DrawObject(objId:int, objX:Number, objY:Number)
         {
@@ -58,22 +58,20 @@ package levelEditor
             this.holder = Sprite(parent);
         }
 
-        // method_316 = beginDrag
         protected function beginDrag(e:MouseEvent)
         {
             this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.onDrag);
             this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.endDrag);
             this.stageRef.focus = this.stageRef;
             var _local_2:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
-            this.var_621 = x - _local_2.x;
-            this.var_603 = y - _local_2.y;
-            this.var_625 = x;
-            this.var_582 = y;
+            this.dragOffsetX = x - _local_2.x;
+            this.dragOffsetY = y - _local_2.y;
+            this.dragStartX = x;
+            this.dragStartY = y;
             parent.swapChildren(this, parent.getChildAt(this.holder.numChildren - 1));
             alpha = 0.75;
         }
 
-        // method_31 = recordRealDimensions
         protected function recordRealDimensions()
         {
             var _local_1:Number = scaleX;
@@ -86,13 +84,11 @@ package levelEditor
             scaleY = _local_2;
         }
 
-        // _loc2 = newPos
-        // method_203 = onDrag
         private function onDrag(e:MouseEvent)
         {
             var newPos:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
-            newPos.x = newPos.x + this.var_621;
-            newPos.y = newPos.y + this.var_603;
+            newPos.x = newPos.x + this.dragOffsetX;
+            newPos.y = newPos.y + this.dragOffsetY;
             x = newPos.x;
             y = newPos.y;
         }
@@ -104,7 +100,7 @@ package levelEditor
             alpha = 1;
             x = Math.round(x);
             y = Math.round(y);
-            if (x != this.var_625 || y == this.var_582) {
+            if (x != this.dragStartX || y == this.dragStartY) {
                 this.editor.cur.recordMove(this);
             }
             this.holder.addChild(this);
@@ -149,14 +145,12 @@ package levelEditor
             }
         }
 
-        // method_299 = deleteObject
         protected function deleteObject(e:MouseEvent = null)
         {
             this.editor.cur.recordDelete(this);
             this.remove();
         }
 
-        // method_412 = onResizePress
         private function onResizePress(e:MouseEvent)
         {
             this.stageRef.addEventListener(MouseEvent.MOUSE_MOVE, this.resize);
@@ -172,7 +166,6 @@ package levelEditor
             scaleY = _local_4 * (100 / this.startHeight) / 100;
         }
 
-        // method_146 = onResizeUp
         private function onResizeUp(e:MouseEvent)
         {
             this.stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, this.resize);
@@ -183,7 +176,6 @@ package levelEditor
             this.editor.cur.recordResize(this);
         }
 
-        // method_705 = showDeleteButton
         private function showDeleteButton()
         {
             this.deleteButton = new DeleteButton();
@@ -191,7 +183,6 @@ package levelEditor
             addChild(this.deleteButton);
         }
 
-        // method_469 = hideDeleteButton
         protected function hideDeleteButton()
         {
             if (this.deleteButton != null) {
@@ -201,7 +192,6 @@ package levelEditor
             }
         }
 
-        // method_512 = showResizeButton
         private function showResizeButton()
         {
             this.resizeButton = new ResizeButton();
@@ -209,7 +199,6 @@ package levelEditor
             this.resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onResizePress, false, 0, true);
         }
 
-        // method_346 = hideResizeButton
         protected function hideResizeButton()
         {
             if (this.resizeButton != null) {
@@ -219,7 +208,6 @@ package levelEditor
             }
         }
 
-        // method_617 = setButtonScale
         private function setButtonScale()
         {
             this.buttonScaleX = (1 / scaleX) * (1 / parent.scaleX) * (1 / parent.parent.scaleX) * (1 / parent.parent.parent.scaleX);
@@ -243,7 +231,6 @@ package levelEditor
             }
         }
 
-        // method_141 = makeHighlightOutline
         protected function makeHighlightOutline()
         {
             this.highlightOutline.graphics.clear();
@@ -255,7 +242,6 @@ package levelEditor
             this.highlightOutline.graphics.lineTo(0, 0);
         }
 
-        // method_345 = hideHighlight
         protected function hideHighlight()
         {
             this.highlightOutline.graphics.clear();
@@ -273,7 +259,7 @@ package levelEditor
             this.stageRef.removeEventListener(MouseEvent.MOUSE_UP, this.onResizeUp);
             this.hideResizeButton();
             this.hideDeleteButton();
-            LevelEditor.editor.cur.method_771(this);
+            LevelEditor.editor.cur.removeDrawObject(this);
             super.remove();
         }
 

@@ -5,27 +5,27 @@
 
 package com.jiggmin.data
 {
-    import menu.class_4;
+    import menu.CommAuth;
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;
     import flash.events.Event;
     import flash.utils.ByteArray;
-    import package_4.MessagePopup;
-    import package_6.Game;
-    import package_6.CatCaptcha;
-    import package_18.AccountInfo;
-    import package_22.LevelListing;
+    import dialogs.MessagePopup;
+    import gameplay.Game;
+    import gameplay.CatCaptcha;
+    import player_profile.AccountInfo;
+    import level_browser.LevelListing;
 
     public class CommandHandler
     {
 
         public static var commandHandler:CommandHandler;
 
-        private var EOL:String = String.fromCharCode(4); // var_478
-        private var inBuffer:String = ""; // var_226
-        private var commands:Object = new Object(); // var_360
+        private var EOL:String = String.fromCharCode(4);
+        private var inBuffer:String = "";
+        private var commands:Object = new Object();
         private var md5:MD5 = new MD5();
-        public var sendNum:int = -1; // var_359
+        public var sendNum:int = -1;
 
         public function CommandHandler()
         {
@@ -50,9 +50,6 @@ package com.jiggmin.data
             this.defineCommand('wearingHat', this.wearingHat);
         }
 
-        // _loc2 = endPos
-        // _loc3 = data
-        // method_129 = addText
         public function addText(s:String)
         {
             this.inBuffer = this.inBuffer + s;
@@ -68,14 +65,6 @@ package com.jiggmin.data
             }
         }
 
-        // _loc2 = arr
-        // _loc3 = servHash
-        // _loc4 = num
-        // _loc5 = command
-        // _loc6 = gameFullStr
-        // _loc9 = gameHash
-        // removed _loc7, _loc8, _loc10, _loc11 (condensed)
-        // method_690 = handleResponse
         private function handleResponse(s:String)
         {
             var arr:Array = s.split("`");
@@ -83,7 +72,7 @@ package com.jiggmin.data
             var num:int = arr[1];
             var command:String = arr[2];
             arr.splice(0, 3);
-            var gameFullStr:String = class_4.method_310(Main.server.server_id) + num + "`" + command + "`" + arr.join("`");
+            var gameFullStr:String = CommAuth.getToken(Main.server.server_id) + num + "`" + command + "`" + arr.join("`");
             var gameHash:String = Hex.fromArray(this.md5.hash(Hex.toArray(Hex.fromString(gameFullStr)))).substr(0, 3);
             if (gameHash == servHash && num > this.sendNum) {
                 this.sendNum = num;
@@ -93,7 +82,6 @@ package com.jiggmin.data
             }
         }
 
-        // defineCommand = defineCommand
         public function defineCommand(s:String, fn:Function)
         {
             this.commands[s] = fn;
@@ -111,7 +99,6 @@ package com.jiggmin.data
             new MessagePopup(a[0]);
         }
 
-        // _loc2 = courseID
         private function startGame(a:Array)
         {
             var courseID:int = a[0];
@@ -123,7 +110,7 @@ package com.jiggmin.data
         private function setRank(a:Array)
         {
             var rank:int = a[0];
-            class_33.setNumber("userRank", rank);
+            SecureData.setNumber("userRank", rank);
             if (Main.instance.kongAPI != null) {
                 Main.instance.kongAPI.stats.submit("Rank", rank);
             }
@@ -182,7 +169,6 @@ package com.jiggmin.data
             Main.isTrialMod = false;
         }
 
-        // method_710 = areYouHuman
         private function areYouHuman(a:Array)
         {
             new CatCaptcha();

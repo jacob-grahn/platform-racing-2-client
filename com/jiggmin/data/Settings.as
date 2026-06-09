@@ -40,10 +40,8 @@ package com.jiggmin.data
         private static var leTestHat:int = 2;
 
         private static var userName:String;
-        private static var dataArr:Object; // var_179
+        private static var dataArr:Object;
 
-        // _loc2 = cookie
-        // _loc3 = setting
         public static function init(s:String = "")
         {
             userName = "pr2_" + s.replace(/\W+/g, "");
@@ -107,8 +105,6 @@ package com.jiggmin.data
             return isNameSet();
         }
 
-        // _loc3 = cookie
-        // method_390 = setValue
         public static function setValue(setting:String, val:*)
         {
             if (setting == ALTERNATE_CONTROLS) {
@@ -126,7 +122,6 @@ package com.jiggmin.data
         }
 
         // deleted _loc3 (unneeded)
-        // method_135 = getValue
         public static function getValue(setting:String, val:* = null)
         {
             if (dataArr[setting] == null || Settings[setting] == null) {

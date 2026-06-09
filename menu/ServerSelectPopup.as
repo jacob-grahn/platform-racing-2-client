@@ -11,9 +11,9 @@ package menu
     import flash.net.URLRequestMethod;
     import flash.net.URLVariables;
     import flash.utils.setTimeout;
-    import package_4.Popup;
-    import package_4.ConfirmPopup;
-    import package_4.MessagePopup;
+    import dialogs.Popup;
+    import dialogs.ConfirmPopup;
+    import dialogs.MessagePopup;
 
     public class ServerSelectPopup extends Popup 
     {
@@ -22,7 +22,7 @@ package menu
 
         public function ServerSelectPopup(guestLogin:Boolean = true, createdAccount:Boolean = false)
         {
-            this.m.login_bt.addEventListener(MouseEvent.CLICK, this.clickLogIn, false, 0, true); // method_165
+            this.m.login_bt.addEventListener(MouseEvent.CLICK, this.clickLogIn, false, 0, true);
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel, false, 0, true);
             this.m.reload_bt.addEventListener(MouseEvent.CLICK, this.clickReload, false, 0, true);
             if (guestLogin || createdAccount) {

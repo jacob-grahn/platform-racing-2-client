@@ -6,9 +6,9 @@ package blocks
     import com.jiggmin.data.Data;
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Settings;
-    import package_6.Course;
-    import package_6.TestCourse;
-    import package_8.LocalCharacter;
+    import gameplay.Course;
+    import gameplay.TestCourse;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
 
     public class HappyBlock extends SupplyBlock 

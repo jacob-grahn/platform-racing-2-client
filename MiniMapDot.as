@@ -8,11 +8,11 @@ package
     import com.jiggmin.data.ColorUtil;
     import flash.display.MovieClip;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
-    import package_6.Course;
-    import package_8.Character;
-    import package_6.Game;
-    import package_8.LocalCharacter;
+    import dialogs.HoverPopup;
+    import gameplay.Course;
+    import character.Character;
+    import gameplay.Game;
+    import character.LocalCharacter;
 
     public dynamic class MiniMapDot extends MovieClip 
     {

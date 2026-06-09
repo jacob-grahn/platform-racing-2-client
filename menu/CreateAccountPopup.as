@@ -5,9 +5,9 @@
 
 package menu
 {
-    import package_4.Popup;
-    import package_4.MessagePopup;
-    import package_4.UploadingPopup;
+    import dialogs.Popup;
+    import dialogs.MessagePopup;
+    import dialogs.UploadingPopup;
     import flash.events.MouseEvent;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
@@ -17,7 +17,7 @@ package menu
     {
 
         private var m:CreateAccountPopupGraphic = new CreateAccountPopupGraphic();
-        private var uploadingPopup:UploadingPopup; // var_148
+        private var uploadingPopup:UploadingPopup;
 
         public function CreateAccountPopup()
         {
@@ -26,9 +26,6 @@ package menu
             this.m.cancel_bt.addEventListener(MouseEvent.CLICK, this.clickCancel);
         }
 
-        // _loc6 = vars
-        // _loc7 = request
-        // method_257 = clickCreateAccount
         private function clickCreateAccount(e:MouseEvent)
         {
             if (this.m.passBox1.text != this.m.passBox2.text) {
@@ -46,7 +43,6 @@ package menu
             }
         }
 
-        // method_297 = receiveCreateAccountResult
         private function receiveCreateAccountResult(e:Event)
         {
             if (this.uploadingPopup.parsedData.success == true) {

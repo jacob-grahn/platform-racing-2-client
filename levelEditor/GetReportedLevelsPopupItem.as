@@ -1,11 +1,11 @@
 ﻿package levelEditor
 {
     import com.jiggmin.data.Data;
-    import ui.class_229;
+    import ui.SelectableButton;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
 
-    public class GetReportedLevelsPopupItem extends class_229 
+    public class GetReportedLevelsPopupItem extends SelectableButton 
     {
 
         public var level:Object;

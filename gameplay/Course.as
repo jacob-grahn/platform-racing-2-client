@@ -1,0 +1,526 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+//gameplay.Course = gameplay.class_30
+
+package gameplay
+{
+	import background.LevelBackground;
+    import background.EffectBackground;
+    import background.Background;
+    import background.DrawableBackground;
+    import background.Map;
+    import blocks.FinishBlock;
+    import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.Data;
+    import com.jiggmin.data.Settings;
+    import flash.display.Sprite;
+    import flash.display.StageQuality;
+    import flash.errors.Error;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import flash.geom.Point;
+    import flash.net.URLVariables;
+    import character.Character;
+    import character.LocalCharacter;
+    import effects.Egg;
+    import page.GamePage;
+    import sounds.SoundEffects;
+
+    public class Course extends GamePage 
+    {
+
+        public static var course:Course;
+
+        protected var courseID:int;
+        protected var version:int;
+        public var startPosArray:Array = new Array();
+        public var finishBlocks:Array = new Array();
+        public var teleportBlocks:Object = new Object();
+        public var playerArray:Array = new Array();
+        public var localPlayer:LocalCharacter;
+        public var playerSpectating:Character;
+        protected var holder:Sprite = new Sprite();
+        public var timer:CourseTimer;
+        public var statsDisplay:StatsDisplay;
+        protected var miniMap:MiniMap = new MiniMap();
+        protected var itemDisplay:ItemDisplay = new ItemDisplay();
+        protected var canSpectate:Boolean = false;
+        public var chatBox:RaceChat;
+        public var musicSelection:MusicSelection = new MusicSelection();
+        protected var countdown:CountdownGraphic;
+        protected var hearts:Hearts;
+        protected var bg:LevelBackground;
+        public var bg1:DrawableBackground;
+        protected var bg2:DrawableBackground;
+        protected var bg3:DrawableBackground;
+        protected var bg4:DrawableBackground;
+        protected var bg5:DrawableBackground;
+        public var blockBackground:Map;
+        public var effectBackground:EffectBackground;
+        public var frontBackground:Background;
+        public var backBackground:Background;
+        protected var scrollTargetX:Number = 0;
+        protected var scrollTargetY:Number = 0;
+        private var rotateDirection:String;
+        private var varsSet:Boolean = false;
+        public var countdownFinished:Boolean = false;
+        protected var playerDone:Boolean = false; // true when finished OR forfeited
+        public var looseHats:Array = [];
+
+        public function Course()
+        {
+            FinishBlock.count = 0;
+        }
+
+        override public function initialize()
+        {
+            super.initialize();
+            Course.course = this;
+            addChild(this.holder);
+            this.timer = new CourseTimer(this);
+            this.timer.x = 215;
+            this.timer.y = -198;
+            this.timer.mouseChildren = this.timer.mouseEnabled = false;
+            this.holder.addChild(this.timer);
+            this.statsDisplay = new StatsDisplay(this);
+            this.statsDisplay.x = 215;
+            this.statsDisplay.y = -166;
+            this.statsDisplay.addEventListener(MouseEvent.MOUSE_OVER, this.statsDisplay.onMouse, false, 0, true);
+            this.statsDisplay.addEventListener(MouseEvent.MOUSE_OUT, this.statsDisplay.onMouse, false, 0, true);
+            this.statsDisplay.mouseChildren = false;
+            this.holder.addChild(this.statsDisplay);
+            this.miniMap.x = -195;
+            this.miniMap.y = -198;
+            //this.miniMap.mouseChildren = this.miniMap.mouseEnabled = false;
+            this.holder.addChild(this.miniMap);
+            this.itemDisplay.x = -273;
+            this.itemDisplay.y = -198;
+            this.itemDisplay.mouseChildren = this.itemDisplay.mouseEnabled = false;
+            this.holder.addChild(this.itemDisplay);
+            this.musicSelection.x = -71;
+            this.musicSelection.y = 162;
+            this.holder.addChild(this.musicSelection);
+            this.hearts = new Hearts();
+            this.hearts.x = 240;
+            this.hearts.y = -141;
+            this.hearts.visible = false;
+            this.hearts.mouseChildren = this.hearts.mouseEnabled = false;
+            this.holder.addChild(this.hearts);
+            Main.stage.focus = Main.stage;
+            addEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            CommandHandler.commandHandler.defineCommand("beginRace", this.beginRace);
+            this.attachBackgrounds();
+        }
+
+        public function addStartPos(startNum:int, startPt:Point)
+        {
+            this.startPosArray[startNum] = startPt;
+            this.positionPlayersAtStart();
+        }
+
+        protected function positionPlayersAtStart()
+        {
+            var tempId:int;
+            while (tempId < this.playerArray.length) {
+                var startPos:Point = this.getStartPos(tempId);
+                if (startPos != null) {
+                    var player:Character = this.playerArray[tempId];
+                    player.setPos(startPos.x, startPos.y);
+                    this.frontBackground.addChild(player);
+                }
+                tempId++;
+            }
+        }
+
+        private function getStartPos(startNum:int):Point
+        {
+            startNum = Main.server.tournament == 1 ? 0 : startNum;
+            return this.startPosArray[startNum] != null ? this.startPosArray[startNum] : new Point();
+        }
+
+        public function setEggSeed(arr:Array)
+        {
+            Egg.initRound(int(arr[0]));
+        }
+
+        public function addEggs(arr:Array)
+        {
+            if (this.gameMode == "egg") {
+                var _local_2:int = arr[0];
+                while (_local_2 > 0) {
+                    new Egg();
+                    _local_2--;
+                }
+            }
+        }
+
+        public function collectEgg(_arg_1:int)
+        {
+        }
+
+        public function setLife(_arg_1:int)
+        {
+            if (this.gameMode == "deathmatch") {
+                this.hearts.visible = true;
+                this.hearts.setHearts(_arg_1);
+            }
+        }
+
+        public function getHeartCount():int
+        {
+            return this.hearts.getHeartCount();
+        }
+
+        override public function setGameMode(mode:String)
+        {
+            mode = mode === 'eggs' ? 'egg' : mode;
+            super.setGameMode(mode);
+            if (mode == "deathmatch") {
+                this.setLife(3);
+            }
+        }
+
+        public function getCourseID():int
+        {
+            return this.courseID;
+        }
+
+        protected function maybeEndIntro(e:Event)
+        {
+            //keyScroll(e);
+            if (this.varsSet && drawingBackgrounds.length <= 0) {
+                this.endIntro();
+            }
+        }
+
+        protected function endIntro()
+        {
+            removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            //addEventListener(Event.ENTER_FRAME, keyScroll);
+        }
+
+        protected function cameraFollowPlayer(e:Event)
+        {
+            var c:Character = this.playerSpectating == null ? this.localPlayer : this.playerSpectating;
+            if (c != null) {
+                var _local_2:Number = -c.x;
+                var _local_3:Number = -c.y + 45;
+                var _local_4:Number = _local_2 - posX;
+                var _local_5:Number = _local_3 - posY;
+                posX += _local_4 * 0.5;
+                posY += _local_5 * 0.4;
+                this.setPos(posX, posY);
+            }
+            if (this.canSpectate) {
+                this.onSpectateKeyPress(e);
+            }
+        }
+
+        protected function toggleSpectatePossible(on:Boolean)
+        {
+            if (this.canSpectate == on) {
+                return;
+            }
+            this.canSpectate = on;
+            this.playerSpectating = null;
+        }
+
+        public function changeSpectate(tempId:int)
+        {
+            if (this.playerSpectating != null && tempId == this.playerSpectating.tempID) {
+                return;
+            }
+            this.playerSpectating = this.playerArray[tempId];
+            this.toggleKeyScroll(this.playerSpectating == null);
+        }
+
+        protected function onSpectateKeyPress(e:Event)
+        {
+            this.changeSpectate(-1);
+        }
+
+        protected function toggleKeyScroll(on:Boolean)
+        {
+            removeEventListener(Event.ENTER_FRAME, keyScroll);
+            removeEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer);
+            if (on) {
+                removeEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer);
+                addEventListener(Event.ENTER_FRAME, keyScroll, false, 0, true);
+            } else if (on === false) {
+                removeEventListener(Event.ENTER_FRAME, keyScroll);
+                addEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer, false, 0, true);
+            }
+        }
+
+        public function beginRace(a:Array)
+        {
+            removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            if (!this.playerDone) {
+                this.toggleSpectatePossible(false);
+                this.toggleKeyScroll(false);
+            }
+            setZoom(1);
+            this.timer.init();
+            this.countdown = new CountdownGraphic();
+            this.countdown.addEventListener("count", this.onCountdownCount, false, 0, true);
+            this.countdown.addEventListener("finish", this.onCountdownFinish, false, 0, true);
+            addChild(this.countdown);
+            var startPos:Object = this.localPlayer.getPos(); // this fixes hat attack when quitting during the countdown
+            Main.socket.write('exact_pos`' + startPos.x + '`' + startPos.y);
+            if (this.localPlayer != null && this.localPlayer.store.getBool(Character.JUMP_START)) {
+                this.localPlayer.init();
+            }
+        }
+
+        private function onCountdownCount(_arg_1:Event)
+        {
+            SoundEffects.playSound(new ReadySound(), 0.4 * (Settings.soundLevel / 100));
+        }
+
+        protected function onCountdownFinish(_arg_1:Event)
+        {
+            SoundEffects.playSound(new GoSound(), 0.5 * (Settings.soundLevel / 100));
+            if (this.localPlayer != null) {
+                this.localPlayer.init();
+            }
+            this.blockBackground.startGameplay();
+            this.countdownFinished = true;
+        }
+
+        override public function setVariables(v:URLVariables)
+        {
+            this.varsSet = true;
+            super.setVariables(v);
+        }
+
+        override public function setMaxTime(s:String)
+        {
+            if (s == 999 && this.updatedTime < 1358640000) {
+                s = '0'; // if before infinite time motley monday and time is 999, make infinite
+            }
+            super.setMaxTime(s);
+            this.timer.setTime(Number(s));
+        }
+
+        override public function setGravity(s:String)
+        {
+            var newGrav:Number = Number(s);
+            super.setGravity(newGrav);
+            if (this.localPlayer != null) {
+                this.localPlayer.setGravity(newGrav);
+            }
+        }
+
+        override protected function attachBackgrounds()
+        {
+            this.bg = new LevelBackground(this);
+            this.bg1 = new DrawableBackground(this);
+            this.bg2 = new DrawableBackground(this);
+            this.bg3 = new DrawableBackground(this);
+            this.bg4 = new DrawableBackground(this);
+            this.bg5 = new DrawableBackground(this);
+            this.backBackground = new Background(this);
+            this.blockBackground = new Map(this.miniMap, this);
+            this.frontBackground = new Background(this);
+            this.effectBackground = new EffectBackground(this);
+            this.bg1.setScale(1);
+            this.bg2.setScale(0.5);
+            this.bg3.setScale(0.25);
+            this.bg4.setScale(1);
+            this.bg5.setScale(2);
+            container.addChild(this.bg);
+            container.addChild(this.bg3);
+            container.addChild(this.bg2);
+            container.addChild(this.bg1);
+            container.addChild(this.backBackground);
+            container.addChild(this.blockBackground);
+            container.addChild(this.frontBackground);
+            container.addChild(this.effectBackground);
+            container.addChild(this.bg4);
+            container.addChild(this.bg5);
+            this.setColor(12303325);
+        }
+
+        override protected function removeBackgrounds()
+        {
+            this.bg.remove();
+            this.bg1.remove();
+            this.bg2.remove();
+            this.bg3.remove();
+            this.bg4.remove();
+            this.bg5.remove();
+            this.blockBackground.remove();
+            this.effectBackground.remove();
+            this.frontBackground.remove();
+            this.backBackground.remove();
+            this.bg = null;
+            this.bg1 = null;
+            this.bg2 = null;
+            this.bg3 = null;
+            this.bg4 = null;
+            this.bg5 = null;
+            this.blockBackground = null;
+            this.effectBackground = null;
+            this.frontBackground = null;
+            this.backBackground = null;
+        }
+
+        override public function setPos(_arg_1:Number, _arg_2:Number)
+        {
+            this.bg1.setPos(_arg_1, _arg_2);
+            this.bg2.setPos(_arg_1, _arg_2);
+            this.bg3.setPos(_arg_1, _arg_2);
+            this.bg4.setPos(_arg_1, _arg_2);
+            this.bg5.setPos(_arg_1, _arg_2);
+            this.blockBackground.setPos(_arg_1, _arg_2);
+            this.effectBackground.setPos(_arg_1, _arg_2);
+            this.frontBackground.setPos(_arg_1, _arg_2);
+            this.backBackground.setPos(_arg_1, _arg_2);
+        }
+
+        override public function setColor(_arg_1:Number=0)
+        {
+            this.bg.setColor(_arg_1);
+            this.bg1.setColor(_arg_1);
+            this.bg2.setColor(_arg_1);
+            this.bg3.setColor(_arg_1);
+            this.bg4.setColor(_arg_1);
+            this.bg5.setColor(_arg_1);
+            this.blockBackground.setColor(_arg_1);
+            this.effectBackground.setColor(_arg_1);
+            this.frontBackground.setColor(_arg_1);
+            this.backBackground.setColor(_arg_1);
+        }
+
+        // _loc2 = arr
+        override public function setSaveString(s:String)
+        {
+            //trace(s);
+            var arr:Array = s.split("`");
+            this.setColor(Number(arr[0]));
+            this.blockBackground.setSaveString(arr[1]);
+            this.bg1.setSaveString(arr[5] + "," + arr[2], false);
+            this.bg2.setSaveString(arr[6] + "," + arr[3], false);
+            this.bg3.setSaveString(arr[7] + "," + arr[4], false);
+            this.bg4.setSaveString(arr[11] + "," + arr[9], false);
+            this.bg5.setSaveString(arr[12] + "," + arr[10], false);
+            this.bg.setSaveString(arr[8], false);
+        }
+
+        override public function setSong(_arg_1:String)
+        {
+            super.setSong(_arg_1);
+            this.musicSelection.setSong(_arg_1);
+        }
+
+        override protected function glideToScale(e:Event)
+        {
+            super.glideToScale(e);
+            this.bg.scaleX = this.bg.scaleY = this.holder.scaleX = this.holder.scaleY = 1 / scale;
+        }
+
+        public function startRotate(direction:String)
+        {
+            this.rotateDirection = direction;
+            addEventListener(Event.ENTER_FRAME, this.rotate);
+            this.bg1.disableCaching();
+            this.bg2.disableCaching();
+            this.bg3.disableCaching();
+            this.bg4.disableCaching();
+            this.bg5.disableCaching();
+            Main.stage.quality = StageQuality.LOW;
+        }
+
+        // _loc2 = rotateDone
+        // _loc4 = player
+        private function rotate(e:Event)
+        {
+            var rotateDone:Boolean;
+            var _local_3:Number = 3;
+            if (this.rotateDirection == "right") {
+                rotation += _local_3;
+                rotateDone = rotation >= 90;
+            } else {
+                rotation -= _local_3;
+                rotateDone = rotation <= -90;
+            }
+            if (rotateDone) {
+                rotation = 0;
+                this.bg.rotation = 0;
+                this.bg1.enableCaching();
+                this.bg2.enableCaching();
+                this.bg3.enableCaching();
+                this.bg4.enableCaching();
+                this.bg5.enableCaching();
+                Main.stage.quality = StageQuality.HIGH;
+                if (this.rotateDirection == "right") {
+                    this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation + 90;
+                    this.miniMap.rotate(this.blockBackground.rotation);
+                } else {
+                    this.blockBackground.rotation = this.bg1.rotation = this.bg2.rotation = this.bg3.rotation = this.bg4.rotation = this.bg5.rotation = this.bg5.rotation - 90;
+                    this.miniMap.rotate(this.blockBackground.rotation);
+                }
+                for each (var player:Character in this.playerArray) {
+                    player.rotate(this.rotateDirection);
+                }
+                this.cameraFollowPlayer(new Event(Event.ENTER_FRAME));
+                removeEventListener(Event.ENTER_FRAME, this.rotate);
+            }
+            this.bg.rotation = this.holder.rotation = -rotation;
+            if (this.localPlayer != null) {
+                this.localPlayer.setRotation(-rotation);
+            }
+        }
+
+        public function outOfTimeHandler()
+        {
+        }
+
+        public function finish(_arg_1:int=-1, _arg_2:int=0, _arg_3:int=0)
+        {
+        }
+
+        // _loc1 = player
+        override public function remove()
+        {
+            CommandHandler.commandHandler.defineCommand("beginRace", null);
+            removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            removeEventListener(Event.ENTER_FRAME, this.rotate);
+            removeEventListener(Event.ENTER_FRAME, this.cameraFollowPlayer);
+            if (this.timer != null) {
+                this.timer.remove();
+                this.timer = null;
+            }
+            if (this.statsDisplay != null) {
+                this.statsDisplay.remove();
+                this.statsDisplay = null;
+            }
+            if (this.countdown != null) {
+                this.countdown.removeEventListener("count", this.onCountdownCount);
+                this.countdown.removeEventListener("finish", this.onCountdownFinish);
+                if (this.countdown.parent != null) {
+                    this.countdown.parent.removeChild(this.countdown);
+                }
+                this.countdown.stop();
+                this.countdown = null;
+            }
+            this.musicSelection.remove();
+            this.musicSelection = null;
+            this.miniMap.remove();
+            this.miniMap = null;
+            this.hearts.remove();
+            this.hearts = null;
+            this.itemDisplay = null;
+            Course.course = null;
+            for each (var player:Character in this.playerArray) {
+                player.remove();
+            }
+            this.playerArray = null;
+            this.startPosArray = null;
+            super.remove();
+        }
+
+
+    }
+}

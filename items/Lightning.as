@@ -2,8 +2,8 @@
 
 package items
 {
-    import package_8.LocalCharacter;
-    import package_9.Zap;
+    import character.LocalCharacter;
+    import effects.Zap;
 
     public class Lightning extends Item 
     {
@@ -15,7 +15,7 @@ package items
 
         override public function useItem()
         {
-            new Zap(character, false);
+            new Zap(this.localChar, false);
             Main.socket.write("zap`");
             super.useItem();
         }

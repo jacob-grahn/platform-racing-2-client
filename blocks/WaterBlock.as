@@ -7,14 +7,14 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_6.Course;
-    import package_8.LocalCharacter;
+    import gameplay.Course;
+    import character.LocalCharacter;
     import flash.events.Event;
 
     public class WaterBlock extends Block 
     {
 
-        private var var_484:Boolean = false;
+        private var rippleActive:Boolean = false;
 
         public function WaterBlock()
         {
@@ -29,58 +29,57 @@ package blocks
             if (!frozen) {
                 if (!player.grounded && player.mode != "freeze" && player.mode != "hurt") {
                     player.setMode("water");
-                    player.var_240 = 2;
+                    player.waterTicks = 2;
                 } else {
-                    player.var_24 *= 0.9;
-                    player.var_147 = 0.1;
+                    player.targetVelX *= 0.9;
+                    player.accelFactor = 0.1;
                 }
                 if (player.parent == Course.course.frontBackground) {
                     Course.course.backBackground.addChild(player);
                 }
-                var _local_2:Point = method_18();
+                var _local_2:Point = getRotatedPos();
                 var _local_3:Point = getSeg();
-                player.var_407 = _local_3.x;
-                player.var_366 = _local_3.y;
+                player.standingSegX = _local_3.x;
+                player.standingSegY = _local_3.y;
                 player.lastSafeX = _local_2.x + 15;
                 player.lastSafeY = _local_2.y + 15;
-                this.method_339();
+                this.startRipple();
             }
         }
 
-        public function method_584()
+        public function triggerRipple()
         {
-            this.method_339();
+            this.startRipple();
         }
 
-        private function method_339()
+        private function startRipple()
         {
             alpha -= 0.1;
             if (alpha < 0.5) {
                 alpha = 0.5;
             }
-            if (!this.var_484) {
-                this.var_484 = true;
-                addEventListener(Event.ENTER_FRAME, this.method_117, false, 0, true);
+            if (!this.rippleActive) {
+                this.rippleActive = true;
+                addEventListener(Event.ENTER_FRAME, this.onRippleFrame, false, 0, true);
             }
         }
 
-        private function method_117(_arg_1:Event)
+        private function onRippleFrame(_arg_1:Event)
         {
             alpha += 0.03;
             if (alpha >= 1) {
                 alpha = 1;
-                this.var_484 = false;
-                removeEventListener(Event.ENTER_FRAME, this.method_117);
+                this.rippleActive = false;
+                removeEventListener(Event.ENTER_FRAME, this.onRippleFrame);
             }
         }
 
         override public function remove()
         {
-            removeEventListener(Event.ENTER_FRAME, this.method_117);
+            removeEventListener(Event.ENTER_FRAME, this.onRippleFrame);
             super.remove();
         }
 
 
     }
 }//package blocks
-

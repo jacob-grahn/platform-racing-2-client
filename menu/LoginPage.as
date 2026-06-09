@@ -6,12 +6,12 @@
 package menu
 {
     import com.jiggmin.data.Data;
-    import com.jiggmin.data.class_33;
+    import com.jiggmin.data.SecureData;
     import com.jiggmin.data.SavedAccounts;
     import com.jiggmin.data.Settings;
     import page.Page;
-    import package_4.ConfirmPopup;
-    //import package_4.LogoutPassPopup;
+    import dialogs.ConfirmPopup;
+    //import dialogs.LogoutPassPopup;
     import flash.display.StageQuality;
 	import flash.events.Event;
     import flash.events.MouseEvent;
@@ -27,7 +27,7 @@ package menu
     {
 
         private var m:LoginPageGraphic = new LoginPageGraphic();
-        private var buttons:Array = new Array(); // buttons = var_45
+        private var buttons:Array = new Array();
         private var posX:Number = 275;
         private var posY:Number = 228;
         private var showHideInterval:uint;
@@ -65,11 +65,10 @@ package menu
             Main.stage.quality = StageQuality.HIGH;
             Main.userPass = "";
             Main.group = 0;
-            class_33.setNumber("userRank", 0);
+            SecureData.setNumber("userRank", 0);
             super.initialize();
         }
 
-        // method_77 = addToMenu
         private function addToMenu(pageButton:LoginPageMenuButton)
         {
             this.buttons.push(pageButton);
@@ -79,10 +78,9 @@ package menu
             this.posY = this.posY + 22;
         }
 
-        // method_165 = clickLogIn
         public function clickLogIn(e:MouseEvent)
         {
-            class_33.setNumber("userRank", -1);
+            SecureData.setNumber("userRank", -1);
             if (SavedAccounts.getAll().length > 0) {
                 Main.userName = "";
                 Main.userPass = "";
@@ -92,35 +90,30 @@ package menu
             }
         }
 
-        // method_492 = clickGuest
         public function clickGuest(e:MouseEvent)
         {
             Main.userName = "Guest";
             Main.userPass = "";
             Main.remember = false;
-            class_33.setNumber("userRank", 0);
+            SecureData.setNumber("userRank", 0);
             new ServerSelectPopup(true);
         }
 
-        // method_644 = clickCreateAccount
         public function clickCreateAccount(e:MouseEvent)
         {
             new CreateAccountPopup();
         }
 
-        // method_793 = clickInstructions
         public function clickInstructions(e:MouseEvent)
         {
             navigateToURL(new URLRequest(Main.baseURL + "/instructions.php"), "_blank");
         }
 
-        // method_413 = clickCredits
         public function clickCredits(e:MouseEvent)
         {
             new CreditsPopup();
         }
 
-        // method_376 = clickKong
         private function clickKong(e:MouseEvent)
         {
             new KongOutfitPopup();

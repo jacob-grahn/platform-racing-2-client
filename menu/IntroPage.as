@@ -15,14 +15,14 @@ package menu
     public class IntroPage extends Page 
     {
 
-        private static const JIGG_INTRO:int = 1; // const_21
-        private static const ARMOR_INTRO:int = 2; // const_66
-        private static const BUBBOX_INTRO:int = 3; // const_74
-        private static const KONG_INTRO:int = 4; // const_65
+        private static const JIGG_INTRO:int = 1;
+        private static const ARMOR_INTRO:int = 2;
+        private static const BUBBOX_INTRO:int = 3;
+        private static const KONG_INTRO:int = 4;
 
-        private var toPlay:Array = new Array(); // var_257
+        private var toPlay:Array = new Array();
         private var m:IntroPageGraphic;
-        private var currentIntro:MovieClip; // var_55
+        private var currentIntro:MovieClip;
         private var mute:SoundTransform = new SoundTransform();
 
         public function IntroPage()
@@ -40,7 +40,7 @@ package menu
                 this.toPlay = [JIGG_INTRO, ARMOR_INTRO];
             }
             Main.stage.addEventListener(MouseEvent.CLICK, this.onClick, false, 0, true);
-            this.method_302();
+            this.playNextIntro();
         }
 
         private function onClick(_arg_1:MouseEvent)
@@ -49,9 +49,9 @@ package menu
         }
 
         // _loc1 = type
-        private function method_302()
+        private function playNextIntro()
         {
-            this.method_322();
+            this.clearCurrentIntro();
             if (this.toPlay.length <= 0) {
                 this.endIntro();
             } else {
@@ -72,7 +72,7 @@ package menu
             }
         }
 
-        private function method_322()
+        private function clearCurrentIntro()
         {
             if (this.currentIntro != null) {
                 this.currentIntro.stop();
@@ -85,19 +85,19 @@ package menu
 
         private function onComplete(_arg_1:Event)
         {
-            this.method_302();
+            this.playNextIntro();
         }
 
         private function endIntro()
         {
-            this.method_322();
+            this.clearCurrentIntro();
             Main.pageHolder.changePage(new LoginPage());
         }
 
         override public function remove()
         {
             Main.stage.removeEventListener(MouseEvent.CLICK, this.onClick);
-            this.method_322();
+            this.clearCurrentIntro();
             this.m = null;
             this.currentIntro = null;
             super.remove();

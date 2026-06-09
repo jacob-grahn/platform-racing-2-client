@@ -6,9 +6,9 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.Character;
-    import package_8.LocalCharacter;
-    import package_9.BlockPiece;
+    import character.Character;
+    import character.LocalCharacter;
+    import effects.BlockPiece;
     import flash.geom.Point;
 
     public class CrumbleBlock extends Block 
@@ -96,25 +96,21 @@ package blocks
 
         private function cheeseHandler(player:LocalCharacter, hitForce:Number, stand:Boolean = false)
         {
-            if (hitForce > 1 && player.var_4.getBool(Character.CHEESE)) {
+            if (hitForce > 1 && player.store.getBool(Character.CHEESE)) {
                 return stand ? hitForce * 2 : 50;
             }
             return hitForce;
         }
 
-        // method_707 = doCrumble
         private function doCrumble()
         {
             this.throwPieces(10);
             remove();
         }
 
-        // _loc2 = piece
-        // _loc7 = i
-        // method_294 = throwPieces
         private function throwPieces(piecesToThrow:Number)
         {
-            var _local_6:Point = method_18();
+            var _local_6:Point = getRotatedPos();
             piecesToThrow = piecesToThrow > 20 ? 20 : piecesToThrow;
             var i:int = 0;
             while (i < piecesToThrow) {

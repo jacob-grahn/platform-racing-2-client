@@ -10,19 +10,18 @@ package
 
         public static var REMOVE:String = "remove";
 
-        private var removed:Boolean = false; // var_214
+        private var removed:Boolean = false;
 
         public function Removable()
         {
         }
 
-        // method_20 = isRemoved
         public function isRemoved()
         {
             return this.removed;
         }
 
-        public function method_136()
+        public function safeRemove()
         {
             if (!this.removed) {
                 this.remove();

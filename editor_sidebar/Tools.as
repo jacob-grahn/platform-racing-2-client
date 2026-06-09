@@ -1,0 +1,112 @@
+
+package editor_sidebar
+{
+    import flash.display.Stage;
+    import com.jiggmin.ColorPicker.ColorPicker;
+    import drawing_tools.Brush;
+    import drawing_tools.Eraser;
+    import editor_tools.SizePicker;
+    import editor_tools.Landscape;
+    import flash.events.Event;
+    import flash.events.MouseEvent;
+    import ui.CustomCursor;
+
+    public class Tools extends SideBar
+    {
+
+        private static var color:Number = 0;
+        private static var size:Number = 4;
+
+        private var stageRef:Stage = Main.stage;
+        private var colorPicker:ColorPicker = new ColorPicker();
+        private var brush:Brush = new Brush();
+        private var eraser:Eraser = new Eraser();
+        private var sizePicker:SizePicker = new SizePicker(this, Tools.size);
+        private var brushButton:BrushButtonGraphic = new BrushButtonGraphic();
+        private var eraserButton:EraserButtonGraphic = new EraserButtonGraphic();
+        private var active:Boolean = false;
+
+        public function Tools()
+        {
+            addItem(new Landscape(), "Landscape Mode", "Switch to the landscape toolbar.");
+            addItem(this.brushButton, "Brush", "Draw things, yay!");
+            addItem(this.eraserButton, "Eraser", "Erase the things you have drawn, yay!");
+            addItem(this.sizePicker, "Size Picker", "Change the size of the brush and eraser.");
+            addItem(this.colorPicker, "Color Picker", "Choose your color with wisdom.");
+            this.colorPicker.width = this.colorPicker.height = 30;
+            this.colorPicker.direction = ColorPicker.LEFT;
+            this.colorPicker.addEventListener(Event.CLOSE, this.chooseColor);
+            this.brushButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onBrushDown);
+            this.eraserButton.addEventListener(MouseEvent.MOUSE_DOWN, this.onEraserDown);
+            this.brush.setSize(Tools.size);
+            this.eraser.setSize(Tools.size);
+            this.colorPicker.setColor(Tools.color);
+            this.brush.setColor(Tools.color);
+        }
+
+        public function setSize(s:Number)
+        {
+            Tools.size = s;
+            this.eraser.setSize(Tools.size);
+            this.brush.setSize(Tools.size);
+        }
+
+        public function setZoom(z:Number)
+        {
+            this.eraser.setZoom(z);
+            this.brush.setZoom(z);
+        }
+
+        private function onBrushDown(e:MouseEvent)
+        {
+            e.stopImmediatePropagation();
+            CustomCursor.change(this.brush);
+        }
+
+        private function onEraserDown(e:MouseEvent)
+        {
+            e.stopImmediatePropagation();
+            CustomCursor.change(this.eraser);
+        }
+
+        private function chooseColor(e:Event)
+        {
+            Tools.color = this.colorPicker.getColor();
+            this.brush.setColor(Tools.color);
+            this.stageRef.focus = this.stageRef;
+        }
+
+        override public function init()
+        {
+            CustomCursor.init();
+            CustomCursor.change(this.brush);
+            this.active = true;
+        }
+
+        override public function exit()
+        {
+            this.colorPicker.closePopup();
+            CustomCursor.pause();
+            super.exit();
+            this.active = false;
+        }
+
+        override public function remove()
+        {
+            this.exit();
+            CustomCursor.unsetInstance();
+            this.colorPicker.removeEventListener(Event.CLOSE, this.chooseColor);
+            this.colorPicker.remove();
+            this.colorPicker = null;
+            this.brushButton.removeEventListener(MouseEvent.MOUSE_DOWN, this.onBrushDown);
+            this.eraserButton.removeEventListener(MouseEvent.MOUSE_DOWN, this.onEraserDown);
+            this.brush.remove();
+            this.brush = null;
+            this.eraser.remove();
+            this.eraser = null;
+            super.remove();
+        }
+
+
+    }
+}

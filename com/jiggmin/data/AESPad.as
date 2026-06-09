@@ -12,7 +12,7 @@ package com.jiggmin.data
     {
 
         private var blockSize:uint;
-        private var char0:String = String.fromCharCode(0); // var_492
+        private var char0:String = String.fromCharCode(0);
 
         public function AESPad(i:uint=0)
         {

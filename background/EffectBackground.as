@@ -7,18 +7,18 @@ package background
 {
     import com.jiggmin.data.CommandHandler;
     import page.GamePage;
-    import package_9.Hat;
-    import package_9.IceWaveShot;
-    import package_9.LaserShot;
-    import package_9.MineAppear;
-    import package_9.Slash;
-    import package_9.TeleportPop;
+    import effects.Hat;
+    import effects.IceWaveShot;
+    import effects.LaserShot;
+    import effects.MineAppear;
+    import effects.Slash;
+    import effects.TeleportPop;
     import sounds.SoundEffects;
 
     public class EffectBackground extends Background 
     {
 
-        public static var instance:EffectBackground; // var_276
+        public static var instance:EffectBackground;
 
         public function EffectBackground(_arg_1:GamePage)
         {
@@ -27,16 +27,6 @@ package background
             super(_arg_1);
         }
 
-        // _loc2 = type
-        // _loc3 = originX
-        // _loc4 = originY
-        // _loc6 = direction
-        // _loc7 = tempID
-        // _loc8 = _loc9 = rot
-        // _loc10 = num (hat part number)
-        // _loc11 = color (decimal)
-        // _loc12 = color2
-        // _loc13 = id (hat ID in hats array server-side)
         public function addEffect(a:Array)
         {
             var _local_5:int;
@@ -73,7 +63,6 @@ package background
             }
         }
 
-        // method_622 = generateIceWaveShots
         // public -> private
         private function generateIceWaveShots(originX:int, originY:int, rot:int, _arg_4:int, tempID:int)
         {

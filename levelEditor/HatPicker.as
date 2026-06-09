@@ -5,16 +5,16 @@ package levelEditor
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.events.MouseEvent;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
 
     public class HatPicker extends Sprite 
     {
 
         private var m:HatPickerGraphic;
         private var c:LocalCharacter;
-        private var min:int = 1; // var_538
-        private var max:int = 16; // var_620
-        private var pickedHat:int = 2; // var_75
+        private var min:int = 1;
+        private var max:int = 16;
+        private var pickedHat:int = 2;
 
         public function HatPicker(player:LocalCharacter)
         {
@@ -27,7 +27,6 @@ package levelEditor
             this.display();
         }
 
-        // method_372 = clickLeft
         private function clickLeft(e:MouseEvent)
         {
             this.pickedHat--;
@@ -40,7 +39,6 @@ package levelEditor
             this.display();
         }
 
-        // method_214 = clickRight
         private function clickRight(e:MouseEvent)
         {
             this.pickedHat++;
@@ -53,9 +51,6 @@ package levelEditor
             this.display();
         }
 
-        // _loc1 = colorMC
-        // _loc2 = colorMC2
-        // _loc3 = a
         private function display()
         {
             this.m.hat.gotoAndStop(this.pickedHat);
@@ -88,4 +83,3 @@ package levelEditor
 
     }
 }//package levelEditor
-

@@ -4,35 +4,35 @@ package lobby
 {
     import com.jiggmin.data.Settings;
     import page.Page;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import flash.display.MovieClip;
     import flash.display.StageQuality;
     import flash.events.MouseEvent;
     import lobby.Lobby;
-    import package_4.MessagePopup;
+    import dialogs.MessagePopup;
     import flash.net.URLVariables;
     import flash.net.URLRequest;
     import flash.net.URLRequestMethod;
     import menu.LoginPage;
     import levelEditor.LevelEditor;
     import flash.net.navigateToURL;
-    import package_4.OptionsPopup;
-    import package_17.StorePopup;
+    import dialogs.OptionsPopup;
+    import shop.StorePopup;
     import menu.CreditsPopup;
-    import package_4.ConfirmPopup;
+    import dialogs.ConfirmPopup;
     import com.jiggmin.data.Data;
 
     public class Lobby extends Page 
     {
 
-        public static var var_516:Boolean = false;
-        public static var lobbyEntrances:int = 0; // var_277
+        public static var _unused516:Boolean = false;
+        public static var lobbyEntrances:int = 0;
 
         private var left:LobbyLeft;
         private var right:LobbyRight;
         private var m:LobbyGraphic = new LobbyGraphic();
-        private var hover:HoverPopup; // var_234
-        private var bottom_bts:LobbyBottomButtonsGraphic; // var_20
+        private var hover:HoverPopup;
+        private var bottom_bts:LobbyBottomButtonsGraphic;
 
         public function Lobby()
         {
@@ -63,7 +63,6 @@ package lobby
             addChild(this.bottom_bts);
         }
 
-        // method_328 = clickLogout
         private function clickLogout(e:MouseEvent = null)
         {
             if (Main.isTempMod && Main.server.guild_id == 0) {
@@ -86,7 +85,6 @@ package lobby
             Main.socket.close();
         }
 
-        // method_233 = clickLE
         private function clickLE(e:MouseEvent = null)
         {
             if (Main.isTempMod && Main.server.guild_id == 0) {
@@ -101,37 +99,31 @@ package lobby
             Main.socket.close();
         }
 
-        // method_437 = clickKong
         private function clickKong(e:MouseEvent)
         {
             navigateToURL(new URLRequest("http://www.kongregate.com/games/jiggmin/platform-racing-2/?gamereferral=platformracing2"), "_blank");
         }
 
-        // method_433 = clickOptions
         private function clickOptions(e:MouseEvent)
         {
             new OptionsPopup();
         }
 
-        // method_428 = clickStore
         private function clickStore(e:MouseEvent)
         {
             new StorePopup();
         }
 
-        // method_413 = clickCredits
         private function clickCredits(e:MouseEvent)
         {
             new CreditsPopup();
         }
 
-        // method_291 = hoverKong
         private function hoverKong(e:MouseEvent)
         {
             this.hover = new HoverPopup("Kong Hat", "Players from Kongregate automatically get a hat that doubles guild points won in each race!", this.bottom_bts.moreGamesButton);
         }
 
-        // method_353 = hoverOutKong
         private function hoverOutKong(e:MouseEvent)
         {
             this.hover.remove();

@@ -5,10 +5,10 @@
 
 package items
 {
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.geom.Point;
-    import package_6.Course;
-    import package_9.LaserShot;
+    import gameplay.Course;
+    import effects.LaserShot;
 
     public class LaserGun extends Item 
     {
@@ -22,22 +22,22 @@ package items
 
         override public function useItem()
         {
-            character.curWeapon.gun.gotoAndPlay("shoot");
-            var _local_1:Point = method_37();
+            this.localChar.curWeapon.gun.gotoAndPlay("shoot");
+            var _local_1:Point = getWeaponEffectPos();
             var _local_2:Number = 20;
             var _local_3:* = "right";
-            if (character.scaleX < 0) {
+            if (this.localChar.scaleX < 0) {
                 _local_2 = -_local_2;
-                character.velX = character.velX + 15;
+                this.localChar.velX = this.localChar.velX + 15;
                 _local_3 = "left";
             } else {
-                character.velX = character.velX - 15;
+                this.localChar.velX = this.localChar.velX - 15;
             }
             var _local_4:int = _local_1.x + _local_2;
             var _local_5:int = _local_1.y;
             var _local_6:int = Course.course.blockBackground.rotation;
-            var _local_7:LaserShot = new LaserShot(_local_4, _local_5, _local_3, _local_6, character.tempID);
-            Main.socket.write("add_effect`Laser`" + _local_4 + "`" + _local_5 + "`" + _local_3 + "`" + _local_6 + "`" + character.tempID);
+            var _local_7:LaserShot = new LaserShot(_local_4, _local_5, _local_3, _local_6, this.localChar.tempID);
+            Main.socket.write("add_effect`Laser`" + _local_4 + "`" + _local_5 + "`" + _local_3 + "`" + _local_6 + "`" + this.localChar.tempID);
             super.useItem();
         }
 

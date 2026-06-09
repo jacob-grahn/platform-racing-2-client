@@ -7,10 +7,10 @@ package lobby
 {
     import ui.LobbyTab;
     import com.jiggmin.data.UnreadNotif;
-    import package_21.ChatInstance;
-    import package_21.Messages;
-    import package_23.PlayersTab;
-    import package_18.AccountInfo;
+    import chat.ChatInstance;
+    import chat.Messages;
+    import social.PlayersTab;
+    import player_profile.AccountInfo;
 
     public class LobbyLeft extends LobbySide 
     {
@@ -18,10 +18,10 @@ package lobby
         public function LobbyLeft()
         {
             x = y = 3;
-            var chatTab:LobbyTab = new LobbyTab(this.changeTabChat, "Chat"); // method_472 = changeTabChat
-            var pmsTab:LobbyTab = new LobbyTab(this.changeTabPMs, "PMs"); // method_538 = changeTabPMs
-            var playersTab:LobbyTab = new LobbyTab(this.changeTabPlayers, "Players"); // method_805 = changeTabPlayers
-            var accountTab:LobbyTab = new LobbyTab(this.changeTabAccount, "Account"); // method_510 = changeTabAccount
+            var chatTab:LobbyTab = new LobbyTab(this.changeTabChat, "Chat");
+            var pmsTab:LobbyTab = new LobbyTab(this.changeTabPMs, "PMs");
+            var playersTab:LobbyTab = new LobbyTab(this.changeTabPlayers, "Players");
+            var accountTab:LobbyTab = new LobbyTab(this.changeTabAccount, "Account");
             var tabArray:Array;
             var lastArrKey:int;
             if (Main.group > 0) {

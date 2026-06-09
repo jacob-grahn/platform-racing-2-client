@@ -11,11 +11,11 @@ package
     public dynamic class PlayersTabListGraphic extends MovieClip 
     {
 
-        public var name_bt:SimpleButton; // var_339
-        public var rank_bt:SimpleButton; // var_549
-        public var hats_bt:SimpleButton; // var_556
-        public var gp_bt:SimpleButton; // var_527
-        public var active_bt:SimpleButton; // var_528
+        public var name_bt:SimpleButton;
+        public var rank_bt:SimpleButton;
+        public var hats_bt:SimpleButton;
+        public var gp_bt:SimpleButton;
+        public var active_bt:SimpleButton;
         public var listHolder:MovieClip;
 
         public function PlayersTabListGraphic()

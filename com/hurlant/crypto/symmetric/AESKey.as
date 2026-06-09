@@ -24,10 +24,7 @@ package com.hurlant.crypto.symmetric
 		// AES only supports Nb=4
 		private static const Nb:uint = 4;    // number of columns in the state & expanded key
 		
-		// TODO:
-		//  - move those tables in binary files, then
-		//  - [Embed()] them as ByteArray directly.
-		// (should result in smaller .swf, and faster initialization time.)
+		// AES lookup tables stay inline to match the upstream as3crypto implementation.
 		
 		private static const _Sbox:Array = [ // forward s-box
 		0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,

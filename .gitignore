@@ -1,8 +1,8 @@
 .DS_Store
-RECOVER_platform-racing-2.fla
-RECOVER_platform-racing-2.swf
-platform-racing-2.swf
 *.php
 .vscode/*
 *.code-workspace
 asconfig.json
+*.swf
+*.swc
+platform-racing-2.app

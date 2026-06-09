@@ -5,7 +5,7 @@
 
 package menu
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import fl.controls.ComboBox;
     import flash.events.MouseEvent;
     import flash.events.KeyboardEvent;
@@ -33,7 +33,6 @@ package menu
             }
         }
 
-        // method_113 = listenForEnter
         private function listenForEnter(e:KeyboardEvent)
         {
             if (e.keyCode == 13) {
@@ -80,7 +79,6 @@ package menu
             startFadeOut();
         }
 
-        // method_411 = clickForgotPass
         private function clickForgotPass(e:MouseEvent)
         {
             new ForgotPassPopup(this.m.nameBox.text);

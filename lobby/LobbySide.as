@@ -13,9 +13,7 @@ package lobby
     {
 
         private var bg:HalfSquareBG = new HalfSquareBG();
-        private var tabsHolder:TabsHolder; // var_258
-        //private var var_167:Page; // unused
-
+        private var tabsHolder:TabsHolder;
         public function LobbySide(tabs:Array, hId:String = "", tabSel:Number = 0, maxW:Number = 100, h:Number = 100)
         {
             this.bg.y = 15;

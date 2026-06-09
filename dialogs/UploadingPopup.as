@@ -1,0 +1,90 @@
+﻿// Decompiled by AS3 Sorcerer 5.98
+// www.as3sorcerer.com
+
+// dialogs.UploadingPopup = dialogs.class_117
+
+package dialogs
+{
+    import flash.events.Event;
+    import flash.events.IOErrorEvent;
+    import flash.events.ProgressEvent;
+    import flash.events.MouseEvent;
+    import flash.net.URLRequest;
+    import ui.ProgressBar;
+
+    public class UploadingPopup extends Popup 
+    {
+
+        protected var loader:SuperLoader;
+        private var progressBar:ProgressBar = new ProgressBar();
+        protected var m:UploadingPopupGraphic = new UploadingPopupGraphic();
+        public var data:String;
+        public var parsedData:Object;
+
+        public function UploadingPopup(request:URLRequest = null, dataMode:String = "url", dispText:String = 'Uploading...', aem:Boolean = true)
+        {
+            this.loader = new SuperLoader(true, dataMode, aem);
+            this.m.textBox.text = dispText;
+            addChild(this.m);
+            addChild(this.progressBar);
+            this.progressBar.x = -100;
+            this.progressBar.y = -5;
+            this.loader.addEventListener(ProgressEvent.PROGRESS, this.onProgress, false, 0, true);
+            this.loader.addEventListener(Event.COMPLETE, this.onComplete, false, 0, true);
+            this.loader.addEventListener(SuperLoader.d, this.parsedDataHandler, false, 0, true);
+            this.loader.addEventListener(SuperLoader.e, this.errorHandler, false, 0, true);
+            this.loader.addEventListener(IOErrorEvent.IO_ERROR, this.errorHandler, false, 0, true);
+            this.m.close_bt.addEventListener(MouseEvent.CLICK, this.clickClose, false, 0, true);
+            if (request != null) {
+                this.loader.load(request);
+            }
+        }
+
+        protected function onComplete(e:Event)
+        {
+            this.progressBar.incProgress(1);
+            this.data = e.target.data;
+            dispatchEvent(e);
+        }
+
+        protected function parsedDataHandler(e:Event)
+        {
+            this.parsedData = this.loader.parsedData;
+            dispatchEvent(e);
+            startFadeOut();
+        }
+
+        protected function errorHandler(e:Event)
+        {
+            dispatchEvent(e);
+            startFadeOut();
+        }
+
+        protected function onProgress(loadObj:ProgressEvent)
+        {
+            this.progressBar.incProgress(loadObj.bytesLoaded / loadObj.bytesTotal);
+        }
+
+        private function clickClose(e:MouseEvent)
+        {
+            startFadeOut();
+        }
+
+        override public function remove()
+        {
+            if (this.loader != null) {
+                this.loader.removeEventListener(ProgressEvent.PROGRESS, this.onProgress);
+                this.loader.removeEventListener(Event.COMPLETE, this.onComplete);
+                this.loader.removeEventListener(SuperLoader.d, this.parsedDataHandler);
+                this.loader.removeEventListener(SuperLoader.e, this.clickClose);
+                this.loader.remove();
+                this.loader = null;
+            }
+            this.m.close_bt.removeEventListener(MouseEvent.CLICK, this.clickClose);
+            this.progressBar.remove();
+            super.remove();
+        }
+
+
+    }
+}

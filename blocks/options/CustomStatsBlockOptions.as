@@ -6,7 +6,7 @@ package blocks.options
     import fl.events.SliderEvent;
     import flash.events.Event;
     import flash.events.MouseEvent;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import ui.StatSlider;
 
     public class CustomStatsBlockOptions extends BlockOptions

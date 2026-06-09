@@ -5,8 +5,8 @@
 
 package items
 {
-    import package_8.LocalCharacter;
-    import com.jiggmin.data.class_33;
+    import character.LocalCharacter;
+    import com.jiggmin.data.SecureData;
     import flash.utils.setTimeout;
     import flash.geom.Point;
     import background.EffectBackground;
@@ -15,15 +15,15 @@ package items
     public class Item extends Removable 
     {
 
-        protected var character:LocalCharacter; // var_5
+        protected var localChar:LocalCharacter;
         protected var space:Boolean = false;
-        protected var reloading:Boolean = false; // var_410
-        private var reloadListener:uint; // var_581
-        private var available:Boolean = false; // var_572
+        protected var reloading:Boolean = false;
+        private var reloadListener:uint;
+        private var available:Boolean = false;
 
         public function Item(lc:LocalCharacter)
         {
-            this.character = lc;
+            this.localChar = lc;
             this.setReloadTime(10);
             this.setUses(1);
         }
@@ -35,58 +35,55 @@ package items
             if (!this.space) {
                 this.available = true;
             }
-            var uses:int = class_33.getNumber("uses");
+            var uses:int = SecureData.getNumber("uses");
             if (this.space && uses > 0 && !this.reloading && this.available) {
                 this.useItem();
             }
         }
 
-        // method_48 = setUses
         protected function setUses(uses:int)
         {
-            class_33.setNumber("uses", uses);
-            this.character.setAmmo(uses);
+            SecureData.setNumber("uses", uses);
+            this.localChar.setAmmo(uses);
         }
 
-        // method_45 = setReloadTime
         protected function setReloadTime(time:int)
         {
-            class_33.setNumber("reloadTime", time);
+            SecureData.setNumber("reloadTime", time);
         }
 
         // _loc1 = uses
         public function useItem()
         {
-            var uses:int = class_33.getNumber("uses");
+            var uses:int = SecureData.getNumber("uses");
             uses--;
-            class_33.setNumber("uses", uses);
-            this.character.setAmmo(uses);
+            SecureData.setNumber("uses", uses);
+            this.localChar.setAmmo(uses);
             if (uses <= 0) {
-                this.character.setItem(0);
+                this.localChar.setItem(0);
             } else {
                 this.reloading = true;
-                this.reloadListener = setTimeout(this.reloadingOnComplete, class_33.getNumber("reloadTime"));
+                this.reloadListener = setTimeout(this.reloadingOnComplete, SecureData.getNumber("reloadTime"));
             }
         }
 
-        // method_688 = reloadingOnComplete
         private function reloadingOnComplete()
         {
             this.reloading = false;
         }
 
-        protected function method_37():Point
+        protected function getWeaponEffectPos():Point
         {
-            var _local_1:Point = new Point(this.character.curWeapon.x, this.character.curWeapon.y);
-            _local_1 = this.character.curWeapon.parent.localToGlobal(_local_1);
+            var _local_1:Point = new Point(this.localChar.curWeapon.x, this.localChar.curWeapon.y);
+            _local_1 = this.localChar.curWeapon.parent.localToGlobal(_local_1);
             return EffectBackground.instance.globalToLocal(_local_1);
         }
 
         override public function remove()
         {
             clearTimeout(this.reloadListener);
-            if (this.character != null) {
-                this.character = null;
+            if (this.localChar != null) {
+                this.localChar = null;
             }
             super.remove();
         }

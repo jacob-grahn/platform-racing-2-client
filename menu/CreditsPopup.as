@@ -2,7 +2,7 @@
 
 package menu
 {
-    import package_4.Popup;
+    import dialogs.Popup;
     import flash.events.MouseEvent;
     import flash.events.TextEvent;
 
@@ -56,7 +56,6 @@ package menu
             this.m.music_nav_bt.htmlText = '<a href="event:musicToggle">' + (this.musicPg === 2 ? '(&lt;- back)' : '(more -&gt;)') + '</a>';
         }
 
-        // method_292 = clickClose
         private function clickClose(e:MouseEvent)
         {
             startFadeOut();

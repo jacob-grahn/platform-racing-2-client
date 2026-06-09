@@ -5,8 +5,8 @@
 
 package menu
 {
-    import package_4.Popup;
-    import package_4.UploadingPopup;
+    import dialogs.Popup;
+    import dialogs.UploadingPopup;
     import flash.events.MouseEvent;
     import flash.events.KeyboardEvent;
     import flash.net.URLVariables;
@@ -28,7 +28,6 @@ package menu
             addChild(this.m);
         }
 
-        // method_54 = listenForEnter
         private function listenForEnter(e:KeyboardEvent)
         {
             if (e.keyCode == 13) {
@@ -36,9 +35,6 @@ package menu
             }
         }
 
-        // _loc2 = vars
-        // _loc3 = request
-        // method_149 = sendForgotPass
         private function sendForgotPass(e:*)
         {
             var vars:URLVariables = new URLVariables();

@@ -17,17 +17,17 @@ package com.jiggmin.pixelEffects
     public class PixelEffect1 extends Sprite 
     {
 
-        private var src:BitmapData; // var_236
-        private var product:BitmapData; // var_315
-        private var productBitmap:Bitmap; // var_402
+        private var src:BitmapData;
+        private var product:BitmapData;
+        private var productBitmap:Bitmap;
         private var bgColor:Number;
-        private var spread:Number; // var_299
-        private var pull:Number; // var_267
-        private var pixels:Number; // var_78
-        private var scaleRange:Number; // var_294
-        private var interval:Number; // var_416
-        private var segArray:Array; // var_162
-        private var drawInterval:uint; // var_555
+        private var spread:Number;
+        private var pull:Number;
+        private var pixels:Number;
+        private var scaleRange:Number;
+        private var interval:Number;
+        private var segArray:Array;
+        private var drawInterval:uint;
 
         public function PixelEffect1(_arg_1:BitmapData, _arg_2:Number=0, _arg_3:Number=500, _arg_4:Number=0.19, _arg_5:Number=15, _arg_6:Number=15, _arg_7:Number=55)
         {
@@ -44,10 +44,6 @@ package com.jiggmin.pixelEffects
             this.drawInterval = setInterval(this.drawPixels, _arg_7);
         }
 
-        // _loc1 = arr
-        // _loc2 = segX
-        // _loc3 = segY
-        // method_572 = createSegArray
         private function createSegArray()
         {
             var arr:Array = new Array();
@@ -64,7 +60,6 @@ package com.jiggmin.pixelEffects
             return arr;
         }
 
-        // method_549 = drawPixels
         private function drawPixels()
         {
             this.drawPixel();
@@ -72,7 +67,6 @@ package com.jiggmin.pixelEffects
             this.drawPixel();
         }
 
-        // method_204 = drawPixel
         private function drawPixel()
         {
             if (this.segArray.length > 0) {

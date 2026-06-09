@@ -6,7 +6,7 @@
 package 
 {
     import flash.display.Sprite;
-    import package_4.HoverPopup;
+    import dialogs.HoverPopup;
     import flash.events.MouseEvent;
     import flash.utils.clearTimeout;
     import flash.utils.setTimeout;
@@ -17,9 +17,8 @@ package
         private var title:String;
         private var content:String;
         private var time:int = 500;
-        //protected var var_559:Boolean = true; // unused
-        private var delayTimer:uint; // var_292
-        private var hover:HoverPopup; // var_8
+        private var delayTimer:uint;
+        private var hover:HoverPopup;
 
         public function HoverDelayPopup(title:String="", message:String="", delay:int=500)
         {
@@ -50,28 +49,18 @@ package
             this.hidePopupIfShown();
         }
 
-        // method_655 = showPopup
         private function showPopup()
         {
             this.hidePopupIfShown();
-            // if (this.var_559 == true) {
             this.hover = new HoverPopup(this.title, this.content, this);
-            // }
         }
 
-        // method_69 = hidePopupIfShown
         private function hidePopupIfShown()
         {
             if (this.hover != null) {
                 this.hover.remove();
             }
         }
-
-        // unused
-        /*public function method_835(_arg_1:Boolean)
-        {
-            this.var_559 = _arg_1;
-        }*/
 
         public function remove()
         {

@@ -8,8 +8,6 @@ package ui
     import flash.media.SoundTransform;
     import flash.events.Event;
     import flash.utils.setInterval;
-    import flash.utils.clearTimeout;
-    import flash.utils.setTimeout;
     import flash.net.URLRequest;
     import flash.media.SoundLoaderContext;
     import flash.media.Sound;
@@ -18,10 +16,9 @@ package ui
     public class GameSound extends ComboBox 
     {
 
-        private var soundChannel:SoundChannel; // var_218
+        private var soundChannel:SoundChannel;
         private var inLE:Boolean;
-        private var enableMusicInt:uint; // var_531
-        //private var var_470:uint;
+        private var enableMusicInt:uint;
         private var url:String = Main.baseURL + "/music/new";
 
         public function GameSound(LE:Boolean = false)
@@ -77,14 +74,12 @@ package ui
             Main.stage.focus = Main.stage;
         }
 
-        // method_629 = gotArtifact
         public function gotArtifact()
         {
             addSong({"id":"16", "label":"We Are Loud - Dynamedion", "file":"16_we-are-loud.mp3"});
             this.setSong("16");
         }
 
-        // method_759 = checkSetting
         private function checkSetting()
         {
             if (this.musicEnabled()) {
@@ -92,7 +87,6 @@ package ui
             }
         }
 
-        // method_211 = musicEnabled
         private function musicEnabled():Boolean
         {
             if (Settings.musicLevel > 0 && MuteButton.muted == false && selectedItem != null && selectedItem.id != 0 && this.soundChannel == null) {
@@ -100,10 +94,6 @@ package ui
             }
             return false;
         }
-
-        /*public function method_851(s:String)
-        {
-        }*/
 
         // _loc2 = item
         // _loc3 = i
@@ -135,18 +125,10 @@ package ui
             }
         }
 
-        // depreciated; using startSong for event listeners instead
-        /*private function method_307(e:Event)
-        {
-            clearTimeout(this.var_470);
-            this.var_470 = setTimeout(this.startSong, 25);
-        }*/
-
         // _loc1 = fileUrl
         // _loc2 = request
         // _loc3 = slc
         // _loc4 = song
-        // method_89 = startSong
         private function startSong(e:Event = null)
         {
             this.stopSong();
@@ -163,14 +145,12 @@ package ui
             Main.stage.focus = Main.stage;
         }
 
-        // method_293 = loopSong
         private function loopSong(e:Event)
         {
             this.soundChannel.removeEventListener(Event.SOUND_COMPLETE, this.loopSong);
             this.startSong();
         }
 
-        // method_461 = stopSong
         private function stopSong()
         {
             if (this.soundChannel != null) {
@@ -186,7 +166,6 @@ package ui
             clearInterval(this.enableMusicInt);
             removeEventListener(Event.CHANGE, this.startSong);
             this.stopSong();
-            //clearTimeout(this.var_470);
             if (parent != null) {
                 parent.removeChild(this);
             }

@@ -17,26 +17,26 @@ package background
     import flash.geom.Point;
     import flash.display.DisplayObjectContainer;
     import flash.display.DisplayObject;
-    import package_4.MessagePopup;
-    import package_4.Popup;
-    import package_6.Course;
-    import package_6.Game;
-    import package_6.PrizePopup;
+    import dialogs.MessagePopup;
+    import dialogs.Popup;
+    import gameplay.Course;
+    import gameplay.Game;
+    import gameplay.PrizePopup;
 
     public class Background extends Sprite 
     {
 
         protected var course:GamePage;
-        private var var_394:uint;
+        private var drawTimerId:uint;
         private var bgColor:Number = 13092571;
         public var scale:Number = 1;
-        public var saveArray:Array = new Array(); // var_15
-        public var redoArray:Array = new Array(); // var_88
-        protected var var_39:Number = 0;
-        protected var var_104:int;
-        protected var var_141:int;
-        protected var var_118:int;
-        protected var var_120:int;
+        public var saveArray:Array = new Array();
+        public var redoArray:Array = new Array();
+        protected var drawPos:Number = 0;
+        protected var viewColMin:int;
+        protected var viewColMax:int;
+        protected var viewRowMin:int;
+        protected var viewRowMax:int;
 
         public function Background(c:GamePage)
         {
@@ -48,13 +48,13 @@ package background
         {
             this.scale = _arg_1;
             scaleX = scaleY = _arg_1;
-            this.method_59();
+            this.applyColorTransform();
         }
 
         public function setColor(c:Number)
         {
             this.bgColor = c;
-            this.method_59();
+            this.applyColorTransform();
         }
 
         public function setPos(_arg_1:Number, _arg_2:Number)
@@ -65,7 +65,7 @@ package background
 
         public function focusNone()
         {
-            this.method_22();
+            this.unfocus();
             alpha = 1;
         }
 
@@ -76,15 +76,13 @@ package background
             mouseChildren = true;
         }
 
-        public function method_22()
+        public function unfocus()
         {
             alpha = 0.25;
             mouseEnabled = false;
             mouseChildren = false;
         }
 
-        // _loc2 = leMenu
-        // method_14 = recordAction
         public function recordAction(action:String)
         {
             this.saveArray.push(action);
@@ -96,12 +94,7 @@ package background
             }
         }
 
-        /*protected function method_817()
-        {
-            this.redoArray = new Array();
-        }*/
-
-        protected function method_59()
+        protected function applyColorTransform()
         {
             var _local_1:Object = ColorUtil.hex24ToRGB(this.bgColor);
             var _local_2:Number = ((1 - this.scale) * 0.4) + 0.1;
@@ -129,16 +122,16 @@ package background
 
         public function clear()
         {
-            this.var_39 = 0;
-            clearTimeout(this.var_394);
+            this.drawPos = 0;
+            clearTimeout(this.drawTimerId);
         }
 
         public function draw(_arg_1:Number=100)
         {
-            if (this.var_39 < this.saveArray.length) {
+            if (this.drawPos < this.saveArray.length) {
                 if (this is DrawableBackground) {
                     var thisLayer:Background = this;
-                    this.var_394 = setTimeout(function () {
+                    this.drawTimerId = setTimeout(function () {
                         try {
                             draw(_arg_1);
                         } catch (e:Error) {
@@ -153,7 +146,7 @@ package background
                         }
                     }, 10);
                 } else {
-                    this.var_394 = setTimeout(this.draw, 10, _arg_1);
+                    this.drawTimerId = setTimeout(this.draw, 10, _arg_1);
                 }
             } else {
                 this.course.finishDrawing(this);
@@ -175,17 +168,17 @@ package background
         public function remove()
         {
             this.course = null;
-            clearTimeout(this.var_394);
+            clearTimeout(this.drawTimerId);
             this.saveArray = new Array();
             this.redoArray = new Array();
             parent.removeChild(this);
         }
 
-        protected function method_118(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:DisplayObjectContainer, _arg_8:Array)
+        protected function updateViewWindow(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:int, _arg_5:int, _arg_6:int, _arg_7:DisplayObjectContainer, _arg_8:Array)
         {
             var _local_16:int;
-            var _local_9:Point = Data.method_9(_arg_3, _arg_5, rotation);
-            var _local_10:Point = Data.method_9(_arg_4, _arg_6, rotation);
+            var _local_9:Point = Data.rotatePoint(_arg_3, _arg_5, rotation);
+            var _local_10:Point = Data.rotatePoint(_arg_4, _arg_6, rotation);
             _arg_3 = Math.abs(_local_9.x);
             _arg_4 = Math.abs(_local_10.x);
             _arg_5 = Math.abs(_local_9.y);
@@ -199,78 +192,78 @@ package background
             var _local_13:int = _arg_1 + _arg_4;
             var _local_14:int = _arg_2 - _arg_5;
             var _local_15:int = _arg_2 + _arg_6;
-            if (Math.abs(_local_12 - this.var_104) > 5 || Math.abs(_local_13 - this.var_141) > 5 || Math.abs(_local_14 - this.var_118) > 5 || Math.abs(_local_15 - this.var_120) > 5) {
+            if (Math.abs(_local_12 - this.viewColMin) > 5 || Math.abs(_local_13 - this.viewColMax) > 5 || Math.abs(_local_14 - this.viewRowMin) > 5 || Math.abs(_local_15 - this.viewRowMax) > 5) {
                 _local_16 = 0;
-                while (this.var_104 + _local_16 <= this.var_141) {
-                    this.method_64(this.var_104 + _local_16, this.var_118, this.var_120, _arg_7, _arg_8, "remove");
+                while (this.viewColMin + _local_16 <= this.viewColMax) {
+                    this.updateCol(this.viewColMin + _local_16, this.viewRowMin, this.viewRowMax, _arg_7, _arg_8, "remove");
                     _local_16++;
                 }
                 _local_16 = 0;
                 while (_local_12 + _local_16 <= _local_13) {
-                    this.method_64(_local_12 + _local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
+                    this.updateCol(_local_12 + _local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
                     _local_16++;
                 }
             } else {
                 _local_16 = 0;
-                while (this.var_104 + _local_16 != _local_12) {
-                    if (this.var_104 < _local_12) {
-                        this.method_64(this.var_104 + _local_16, this.var_118, this.var_120, _arg_7, _arg_8, "remove");
+                while (this.viewColMin + _local_16 != _local_12) {
+                    if (this.viewColMin < _local_12) {
+                        this.updateCol(this.viewColMin + _local_16, this.viewRowMin, this.viewRowMax, _arg_7, _arg_8, "remove");
                         _local_16++;
                     } else {
                         _local_16--;
-                        this.method_64(this.var_104 + _local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
+                        this.updateCol(this.viewColMin + _local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
                     }
                 }
                 _local_16 = 0;
-                while (this.var_141 + _local_16 != _local_13) {
-                    if (this.var_141 < _local_13) {
-                        this.method_64(this.var_141 + ++_local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
+                while (this.viewColMax + _local_16 != _local_13) {
+                    if (this.viewColMax < _local_13) {
+                        this.updateCol(this.viewColMax + ++_local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
                     } else {
-                        this.method_64(this.var_141 + _local_16, this.var_118, this.var_120, _arg_7, _arg_8, "remove");
+                        this.updateCol(this.viewColMax + _local_16, this.viewRowMin, this.viewRowMax, _arg_7, _arg_8, "remove");
                         _local_16--;
                     }
                 }
                 _local_16 = 0;
-                while (this.var_118 + _local_16 != _local_14) {
-                    if (this.var_118 < _local_14) {
-                        this.method_94(this.var_118 + _local_16, this.var_104, this.var_141, _arg_7, _arg_8, "remove");
+                while (this.viewRowMin + _local_16 != _local_14) {
+                    if (this.viewRowMin < _local_14) {
+                        this.updateRow(this.viewRowMin + _local_16, this.viewColMin, this.viewColMax, _arg_7, _arg_8, "remove");
                         _local_16++;
                     } else {
                         _local_16--;
-                        this.method_94(this.var_118 + _local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
+                        this.updateRow(this.viewRowMin + _local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
                     }
                 }
                 _local_16 = 0;
-                while (this.var_120 + _local_16 != _local_15) {
-                    if (this.var_120 < _local_15) {
-                        this.method_94(this.var_120 + ++_local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
+                while (this.viewRowMax + _local_16 != _local_15) {
+                    if (this.viewRowMax < _local_15) {
+                        this.updateRow(this.viewRowMax + ++_local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
                     } else {
-                        this.method_94(this.var_120 + _local_16, this.var_104, this.var_141, _arg_7, _arg_8, "remove");
+                        this.updateRow(this.viewRowMax + _local_16, this.viewColMin, this.viewColMax, _arg_7, _arg_8, "remove");
                         _local_16--;
                     }
                 }
             }
-            this.var_104 = _local_12;
-            this.var_141 = _local_13;
-            this.var_118 = _local_14;
-            this.var_120 = _local_15;
+            this.viewColMin = _local_12;
+            this.viewColMax = _local_13;
+            this.viewRowMin = _local_14;
+            this.viewRowMax = _local_15;
         }
 
-        protected function method_94(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
+        protected function updateRow(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
         {
             for (var _local_7:int = _arg_2; _local_7 <= _arg_3; _local_7++) {
-                this.method_447(_local_7, _arg_1, _arg_4, _arg_6, _arg_5);
+                this.updateTile(_local_7, _arg_1, _arg_4, _arg_6, _arg_5);
             }
         }
 
-        protected function method_64(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
+        protected function updateCol(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
         {
             for (var _local_7:int = _arg_2; _local_7 <= _arg_3; _local_7++) {
-                this.method_447(_arg_1, _local_7, _arg_4, _arg_6, _arg_5);
+                this.updateTile(_arg_1, _local_7, _arg_4, _arg_6, _arg_5);
             }
         }
 
-        protected function method_447(_arg_1:int, _arg_2:int, _arg_3:DisplayObjectContainer, _arg_4:String, _arg_5:Array=null)
+        protected function updateTile(_arg_1:int, _arg_2:int, _arg_3:DisplayObjectContainer, _arg_4:String, _arg_5:Array=null)
         {
             if (_arg_5[_arg_1] != null && _arg_5[_arg_1][_arg_2] != null) {
                 var _local_6:DisplayObject = _arg_5[_arg_1][_arg_2];
@@ -282,9 +275,9 @@ package background
             }
         }
 
-        public function method_32(_arg_1:int, _arg_2:int):Boolean
+        public function isInView(_arg_1:int, _arg_2:int):Boolean
         {
-            return _arg_1 >= this.var_104 && _arg_1 <= this.var_141 && _arg_2 >= this.var_118 && _arg_2 <= this.var_120;
+            return _arg_1 >= this.viewColMin && _arg_1 <= this.viewColMax && _arg_2 >= this.viewRowMin && _arg_2 <= this.viewRowMax;
         }
 
 

@@ -6,7 +6,7 @@
 package blocks
 {
     import com.jiggmin.data.Objects;
-    import package_8.LocalCharacter;
+    import character.LocalCharacter;
     import flash.geom.Point;
     import flash.events.Event;
     import flash.utils.setTimeout;
@@ -15,7 +15,7 @@ package blocks
     public class VanishBlock extends Block 
     {
 
-        private var var_602:uint;
+        private var reappearTimeout:uint;
 
         public function VanishBlock()
         {
@@ -53,13 +53,13 @@ package blocks
             this.activate();
         }
 
-        private function method_594()
+        private function tryReappear()
         {
             var _local_1:Point = getSeg();
             if (!map.characterOccupiesSpace(_local_1.x, _local_1.y)) {
                 alpha = 0.2;
                 this.clear();
-                addEventListener(Event.ENTER_FRAME, this.method_117, false, 0, true);
+                addEventListener(Event.ENTER_FRAME, this.fadeIn, false, 0, true);
                 active = true;
             } else {
                 active = false;
@@ -74,11 +74,11 @@ package blocks
                 alpha = 0;
                 active = false;
                 this.clear();
-                this.var_602 = setTimeout(this.method_594, 2000);
+                this.reappearTimeout = setTimeout(this.tryReappear, 2000);
             }
         }
 
-        private function method_117(_arg_1:Event)
+        private function fadeIn(_arg_1:Event)
         {
             alpha = (alpha + 0.1);
             if (alpha >= 1) {
@@ -98,8 +98,8 @@ package blocks
         private function clear()
         {
             removeEventListener(Event.ENTER_FRAME, this.fadeOut);
-            removeEventListener(Event.ENTER_FRAME, this.method_117);
-            clearTimeout(this.var_602);
+            removeEventListener(Event.ENTER_FRAME, this.fadeIn);
+            clearTimeout(this.reappearTimeout);
         }
 
         override public function remove()
@@ -111,4 +111,3 @@ package blocks
 
     }
 }//package blocks
-

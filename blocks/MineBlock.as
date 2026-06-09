@@ -7,9 +7,9 @@ package blocks
 {
     import com.jiggmin.data.Objects;
     import flash.geom.Point;
-    import package_8.LocalCharacter;
-    import package_9.BlockPiece;
-    import package_9.MineExplode;
+    import character.LocalCharacter;
+    import effects.BlockPiece;
+    import effects.MineExplode;
 
     public class MineBlock extends Block 
     {
@@ -23,31 +23,31 @@ package blocks
         override public function onStand(player:LocalCharacter)
         {
             super.onStand(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onBump(player:LocalCharacter)
         {
             super.onBump(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onLeftHit(player:LocalCharacter)
         {
             super.onLeftHit(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onRightHit(player:LocalCharacter)
         {
             super.onRightHit(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onTouch(player:LocalCharacter)
         {
             super.onTouch(player);
-            this.method_81(player);
+            this.hitPlayer(player);
         }
 
         override public function onDamage(n:Number)
@@ -59,7 +59,7 @@ package blocks
         // _loc3 = piece
         override protected function activate(s:String="")
         {
-            var _local_6:Point = method_18();
+            var _local_6:Point = getRotatedPos();
             var i:int;
             while (i < 10) {
                 var piece:MinePieceGraphic = new MinePieceGraphic();
@@ -73,11 +73,11 @@ package blocks
         }
 
         // deleted _loc2 (50)
-        private function method_81(player:LocalCharacter)
+        private function hitPlayer(player:LocalCharacter)
         {
             if (!frozen) {
                 var _local_3:Number = player.x - (x + 15);
-                var _local_4:Number = (player.y - (player.var_325 / 2)) - (y + 15);
+                var _local_4:Number = (player.y - (player.charHeight / 2)) - (y + 15);
                 var _local_5:Number = Math.atan2(_local_4, _local_3);
                 var _local_6:Number = Math.cos(_local_5) * 50;
                 var _local_7:Number = Math.sin(_local_5) * 50;

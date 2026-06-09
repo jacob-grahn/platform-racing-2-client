@@ -4,8 +4,8 @@ package blocks
 {
     import blocks.options.ItemBlockOptions;
     import com.jiggmin.data.Settings;
-    import package_6.Course;
-    import package_8.LocalCharacter;
+    import gameplay.Course;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
     import page.GamePage;
     import items.Items;

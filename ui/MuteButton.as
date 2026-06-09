@@ -13,7 +13,7 @@ package ui
     public class MuteButton extends Removable 
     {
 
-        public static var muted:Boolean = true; // var_58
+        public static var muted:Boolean = true;
 
         private var m:MuteButtonGraphic = new MuteButtonGraphic();
 
@@ -31,8 +31,6 @@ package ui
             this.doToggle(!MuteButton.muted);
         }
 
-        // _loc2 = st
-        // method_202 = doToggle
         public function doToggle(bool:Boolean)
         {
             var st:SoundTransform = new SoundTransform();
@@ -51,16 +49,12 @@ package ui
             this.toggle();
         }
 
-        // _loc2 = ct
-        // method_224 = hoverOverColorChange
         private function hoverOverColorChange(e:MouseEvent)
         {
             var ct:ColorTransform = new ColorTransform(0.5, 0.5, 0.5, 1, 127, 127, 127, 0);
             this.m.button.transform.colorTransform = ct;
         }
 
-        // _loc2 = ct
-        // method_246 = hoverOutColorChange
         private function hoverOutColorChange(e:MouseEvent)
         {
             var ct:ColorTransform = new ColorTransform(1, 1, 1, 1, 0, 0, 0, 0);

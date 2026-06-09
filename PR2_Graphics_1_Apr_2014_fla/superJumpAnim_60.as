@@ -18,10 +18,10 @@ package PR2_Graphics_1_Apr_2014_fla
 
         public function superJumpAnim_60()
         {
-            addFrameScript(50, this.method_592);
+            addFrameScript(50, this.stopOnLastFrame);
         }
 
-        internal function method_592():*
+        internal function stopOnLastFrame():*
         {
             stop();
         }

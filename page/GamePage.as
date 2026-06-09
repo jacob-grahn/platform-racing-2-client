@@ -15,8 +15,8 @@ package page
     import flash.text.TextField;
     import flash.ui.Keyboard;
     import items.Items;
-    import package_22.CourseMenu;
-    import package_4.MessagePopup;
+    import level_browser.CourseMenu;
+    import dialogs.MessagePopup;
 
     public class GamePage extends Page 
     {
@@ -24,12 +24,12 @@ package page
         public static var course:GamePage;
 
         private var segSize:int = 30;
-        public var allowedItems:Vector.<int>; // var_86
+        public var allowedItems:Vector.<int>;
         public var badHats:Vector.<int>;
-        public var var_14:Sprite = new Sprite();
+        public var container:Sprite = new Sprite();
         protected var color:Number = 12303325; //0;
-        protected var var_133:Array = new Array();
-        protected var zoom:Number = 1; // var_233
+        protected var drawingBackgrounds:Array = new Array();
+        protected var zoom:Number = 1;
         public var scale:Number = 1;
         public var credits:Array = new Array();
         public var levelID:Number;
@@ -38,7 +38,7 @@ package page
         public var note:String = "";
         public var song:String = "";
         public var gravity:String = "1";
-        public var maxTime:String = "120"; // var_378
+        public var maxTime:String = "120";
         public var gameMode:String = "race";
         public var cowboyChance:String = "5";
         private var accel:Number = 10;
@@ -47,8 +47,8 @@ package page
         private var velY:Number = 0;
         public var posX:Number = -20000;
         public var posY:Number = -20000;
-        public var var_239:int = 60000;
-        public var var_362:int = 60000;
+        public var levelWidth:int = 60000;
+        public var levelHeight:int = 60000;
         public var drawing:Boolean = false;
         protected var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var rasterStopNotified:Boolean = false;
@@ -62,7 +62,7 @@ package page
             GamePage.course = this;
             x = 550 / 2;
             y = 400 / 2;
-            addChild(this.var_14);
+            addChild(this.container);
             Main.stage.focus = Main.stage;
             super.initialize();
             this.setItems("all");
@@ -89,7 +89,6 @@ package page
             this.color = _arg_1;
         }
 
-        // method_12 = getColor
         public function getColor():int
         {
             return this.color;
@@ -101,40 +100,38 @@ package page
 
         public function startDrawing(_arg_1:Background)
         {
-            var _local_2:int = this.var_133.indexOf(_arg_1);
+            var _local_2:int = this.drawingBackgrounds.indexOf(_arg_1);
             if (_local_2 == -1) {
-                this.var_133.push(_arg_1);
+                this.drawingBackgrounds.push(_arg_1);
             }
             this.drawing = true;
         }
 
         public function finishDrawing(_arg_1:Background)
         {
-            var _local_2:int = this.var_133.indexOf(_arg_1);
+            var _local_2:int = this.drawingBackgrounds.indexOf(_arg_1);
             if (_arg_1 is DrawableBackground && _arg_1.stoppedRasterizing && !this.rasterStopNotified) {
                 new MessagePopup('Error: Some art didn\'t load correctly. Don\'t worry! You can still play the level.\n\nYou can prevent this in the future by enabling lossless art quality in the options menu.');
                 this.rasterStopNotified = true;
             }
             if (_local_2 != -1) {
-                this.var_133.splice(_local_2, 1);
+                this.drawingBackgrounds.splice(_local_2, 1);
             }
-            if (this.var_133.length <= 0) {
+            if (this.drawingBackgrounds.length <= 0) {
                 this.drawing = false;
             }
         }
 
         public function goodToDraw(_arg_1:Background):Boolean
         {
-            return this.var_133[0] == _arg_1 || this.var_133.length <= 0;
+            return this.drawingBackgrounds[0] == _arg_1 || this.drawingBackgrounds.length <= 0;
         }
 
-        // method_403 = getCredits
         public function getCredits():String
         {
             return this.credits.join("`");
         }
 
-        // method_828 = setCredits
         public function setCredits(_arg_1:String)
         {
             _arg_1 = _arg_1 == null ? '' : _arg_1;
@@ -182,7 +179,6 @@ package page
         // _loc5 = itemName
         // _loc6 = itemCode
         // removed _loc4 (itemsArr.length), _loc7 (Items.getAllCodes().length)
-        // method_96 = setItems
         public function setItems(itemsStr:String)
         {
             if (itemsStr == "") {
@@ -227,7 +223,7 @@ package page
         {
             this.updatedTime = vars.time is Array ? vars.time[0] : vars.time;
             this.setCredits(vars.credits);
-            this.setSaveString(this.method_645(vars.data));
+            this.setSaveString(this.decodeLevelData(vars.data));
             this.title = vars.title;
             this.note = vars.note;
             this.setSong(vars.song);
@@ -264,7 +260,6 @@ package page
         // _loc9 = allowedParam
         // _loc10 = andStr
         // _arg_1 = levelData
-        // method_158 = validateSaveString
         public function validateSaveString(levelData:String):String
         {
             var allowedParams:Array = new Array("credits=", "data=", "title=", "note=", "song=", "gravity=", "max_time=", "items=", "level_id=", "live=", "time=", "min_level=", "level_id=", "has_pass=", "gameMode=", "version=", "user_id=", "cowboyChance=", "badHats=");
@@ -296,7 +291,7 @@ package page
         // _loc3 = readMode
         // deleted _loc4 (decimal value of bg color hex)
         // deleted _loc5 (decoded string -- levelData.join('`'))
-        protected function method_645(rawlevelData:String):String
+        protected function decodeLevelData(rawlevelData:String):String
         {
             var levelData:Array = rawlevelData.split("`");
             var readMode:String = levelData[0];
@@ -333,7 +328,6 @@ package page
         // _loc7 = dataArr.length
         // deleted _loc8 (unused)
         // deleted _loc14 (combined w/ return)
-        // method_137 = decodeObjectString
         private function decodeObjectString(objectString:String):String
         {
             var dataArr:Array = objectString.split(",");

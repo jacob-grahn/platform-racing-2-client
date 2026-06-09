@@ -14,8 +14,8 @@ package blocks
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.geom.Point;
-    import package_8.Character;
-    import package_8.LocalCharacter;
+    import character.Character;
+    import character.LocalCharacter;
     import sounds.SoundEffects;
 
     public class Block extends Sprite 
@@ -26,20 +26,20 @@ package blocks
         private var posY:Number;
         private var segX:int; // seg is the block coodinates
         private var segY:int;
-        private var removed:Boolean = false; // var_214
-        private var var_177:Point;
+        private var removed:Boolean = false;
+        private var bounceVel:Point;
         private var m:Bitmap;
-        protected var blockCode:int = 0; // var_79
+        protected var blockCode:int = 0;
         protected var active:Boolean = true;
-        protected var safeStand:Boolean = true; // var_34
-        protected var var_490:Boolean = true;
+        protected var safeStand:Boolean = true;
+        protected var bounceOnBump:Boolean = true;
         protected var map:Map;
-        protected var frozen:Boolean = false; // var_37
+        protected var frozen:Boolean = false;
         protected var optionsMenu:Class = null;
         private var _options:String = '';
-        private var var_110:Bitmap;
-        private var var_455:Number = 0.1;
-        private var var_600:int = 0;
+        private var iceOverlay:Bitmap;
+        private var iceFadeRate:Number = 0.1;
+        private var frozenTime:int = 0;
 
         public function Block(blockCode:int)
         {
@@ -87,19 +87,16 @@ package blocks
             return new Point(this.segX, this.segY);
         }
 
-        // method_850 = getPos
         public function getPos():Point
         {
             return new Point(this.posX, this.posY);
         }
 
-        // method_50 = getPosX
         public function getPosX():int
         {
             return this.posX;
         }
 
-        // method_44 = getPosY
         public function getPosY():int
         {
             return this.posY;
@@ -110,19 +107,17 @@ package blocks
             return this.frozen ? Objects.BLOCK_ICE : this.blockCode;
         }
 
-        // method_23 = isActive
         public function isActive():Boolean
         {
             return this.frozen ? true : this.active;
         }
 
-        // method_20 = isRemoved
         public function isRemoved():Boolean
         {
             return this.removed;
         }
 
-        public function method_18(rot:Number = NaN):Point
+        public function getRotatedPos(rot:Number = NaN):Point
         {
             if (isNaN(rot)) {
                 rot = this.map.rotation;
@@ -135,12 +130,12 @@ package blocks
             } else if (rot == -90) {
                 _local_2 = 30;
             }
-            return Data.method_9(this.posX + _local_2, this.posY + _local_3, -rot);
+            return Data.rotatePoint(this.posX + _local_2, this.posY + _local_3, -rot);
         }
 
-        public function method_777():int
+        public function timeSinceFrozen():int
         {
-            return Data.getTimestamp() - this.var_600;
+            return Data.getTimestamp() - this.frozenTime;
         }
 
         public function setSeg(_arg_1:int, _arg_2:int)
@@ -162,17 +157,17 @@ package blocks
         {
             if (!this.frozen) {
                 this.frozen = true;
-                this.var_600 = Data.getTimestamp();
-                this.var_110 = new Bitmap(Blocks.iceBitmap);
-                addChild(this.var_110);
+                this.frozenTime = Data.getTimestamp();
+                this.iceOverlay = new Bitmap(Blocks.iceBitmap);
+                addChild(this.iceOverlay);
                 if (_arg_1) {
-                    this.var_110.alpha = 1.75;
-                    this.var_455 = 0.01;
+                    this.iceOverlay.alpha = 1.75;
+                    this.iceFadeRate = 0.01;
                 } else {
-                    this.var_110.alpha = 1;
-                    this.var_455 = 0.025;
+                    this.iceOverlay.alpha = 1;
+                    this.iceFadeRate = 0.025;
                 }
-                addEventListener(Event.ENTER_FRAME, this.method_153, false, 0, true);
+                addEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame, false, 0, true);
             }
         }
 
@@ -180,22 +175,22 @@ package blocks
         // _loc2 = point
         public function onStand(player:LocalCharacter)
         {
-            if (!this.frozen && this.method_777() > 4 && player.var_4.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
+            if (!this.frozen && this.timeSinceFrozen() > 4 && player.store.getBool(Character.SANTA) && this.blockCode != Objects.BLOCK_FINISH && this.blockCode != Objects.BLOCK_ICE && this.blockCode != Objects.BLOCK_VANISH && this.blockCode != Objects.BLOCK_CRUMBLE && this.blockCode != Objects.BLOCK_ARROW_UP && this.blockCode != Objects.BLOCK_ARROW_LEFT && this.blockCode != Objects.BLOCK_ARROW_RIGHT && this.blockCode != Objects.BLOCK_ARROW_DOWN && this.blockCode != Objects.BLOCK_MOVE) {
                 this.freeze(); // controls santa physics, affected by ice wave
             }
             if (this.frozen) {
-                player.var_147 = 0.05;
+                player.accelFactor = 0.05;
             }
             if (this.isActive()) {
-                var point:Point = this.method_18();
+                var point:Point = this.getRotatedPos();
                 player.y = point.y + this.posY - y;
                 player.velY = 0;
                 player.grounded = true;
                 if (this.safeStand) {
                     player.lastSafeX = point.x + 15;
                     player.lastSafeY = point.y;
-                    player.var_407 = this.segX;
-                    player.var_366 = this.segY;
+                    player.standingSegX = this.segX;
+                    player.standingSegY = this.segY;
                 }
             } else {
                 player.grounded = false;
@@ -205,17 +200,17 @@ package blocks
         public function onBump(player:LocalCharacter)
         {
             if (this.isActive()) {
-                var _local_2:Point = this.method_18();
-                var _local_3:Point = Data.method_9(x - this.posX, y - this.posY, this.map.rotation);
+                var _local_2:Point = this.getRotatedPos();
+                var _local_3:Point = Data.rotatePoint(x - this.posX, y - this.posY, this.map.rotation);
                 if (player.crouching) {
-                    player.y = _local_2.y + this.size + _local_3.y + (player.var_325 / 2);
+                    player.y = _local_2.y + this.size + _local_3.y + (player.charHeight / 2);
                 } else {
-                    player.y = _local_2.y + this.size + _local_3.y + player.var_325;
+                    player.y = _local_2.y + this.size + _local_3.y + player.charHeight;
                 }
                 player.velY *= -0.25;
-                player.var_4.setNumber(LocalCharacter.const_12, 0);
-                if (this.var_490) {
-                    this.method_315(0, -15);
+                player.store.setNumber(LocalCharacter.JUMP_VEL, 0);
+                if (this.bounceOnBump) {
+                    this.hitRotated(0, -15);
                 }
             }
         }
@@ -225,13 +220,13 @@ package blocks
         public function onLeftHit(player:LocalCharacter)
         {
             if (this.isActive()) {
-                var point:Point = this.method_18();
-                player.x = point.x - player.var_189;
+                var point:Point = this.getRotatedPos();
+                player.x = point.x - player.halfWidth;
                 if (player.velX > 0) {
                     player.velX = player.velX * -0.05;
                 }
-                if (player.var_24 > 0) {
-                    player.var_24 = 0;
+                if (player.targetVelX > 0) {
+                    player.targetVelX = 0;
                 }
             }
         }
@@ -241,13 +236,13 @@ package blocks
         public function onRightHit(player:LocalCharacter)
         {
             if (this.isActive()) {
-                var point:Point = this.method_18();
-                player.x = point.x + this.size + player.var_189;
+                var point:Point = this.getRotatedPos();
+                player.x = point.x + this.size + player.halfWidth;
                 if (player.velX < 0) {
                     player.velX = player.velX * -0.05;
                 }
-                if (player.var_24 < 0) {
-                    player.var_24 = 0;
+                if (player.targetVelX < 0) {
+                    player.targetVelX = 0;
                 }
             }
         }
@@ -260,7 +255,7 @@ package blocks
         public function onDamage(_arg_1:Number)
         {
             _arg_1 = Data.numLimit(_arg_1, -20, 20);
-            this.method_315(_arg_1, 0);
+            this.hitRotated(_arg_1, 0);
         }
 
         public function remoteActivate(_arg_1:String = "")
@@ -280,7 +275,7 @@ package blocks
 
         // _loc2 = hitX
         // _loc3 = hitY
-        public function method_839(arr:Array)
+        public function remoteHit(arr:Array)
         {
             var hitX:Number = arr[0];
             var hitY:Number = arr[1];
@@ -288,48 +283,48 @@ package blocks
         }
 
         // _loc3 = point
-        private function method_315(_arg_1:Number, _arg_2:Number)
+        private function hitRotated(_arg_1:Number, _arg_2:Number)
         {
-            var point:Point = Data.method_9(_arg_1, _arg_2, this.map.rotation);
+            var point:Point = Data.rotatePoint(_arg_1, _arg_2, this.map.rotation);
             this.hit(point.x, point.y);
         }
 
         // _loc4 = point
         private function hit(hitX:Number, hitY:Number)
         {
-            this.var_177 = new Point(hitX, hitY);
-            addEventListener(Event.ENTER_FRAME, this.method_161);
+            this.bounceVel = new Point(hitX, hitY);
+            addEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             var _local_3:Number = Data.pythag(hitX, hitY) * 0.06;
             if (Math.abs(x - this.posX) < 1 && Math.abs(y - this.posY) < 1) {
-                var point:Point = this.method_18();
+                var point:Point = this.getRotatedPos();
                 SoundEffects.playGameSound(new ThumpSound(), point.x, point.y, _local_3);
             }
         }
 
-        private function method_153(e:Event)
+        private function onUnfreezeFrame(e:Event)
         {
-            if (this.var_110 != null) {
-                this.var_110.alpha -= this.var_455;
-                if (this.var_110.alpha <= 0.05) {
-                    removeEventListener(Event.ENTER_FRAME, this.method_153);
-                    this.method_406();
+            if (this.iceOverlay != null) {
+                this.iceOverlay.alpha -= this.iceFadeRate;
+                if (this.iceOverlay.alpha <= 0.05) {
+                    removeEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame);
+                    this.removeIceOverlay();
                     this.frozen = false;
                 }
             }
         }
 
-        private function method_161(_arg_1:Event)
+        private function onBounceFrame(_arg_1:Event)
         {
-            this.var_177.x = this.var_177.x * 0.5;
-            this.var_177.y = this.var_177.y * 0.5;
-            y += this.var_177.y;
+            this.bounceVel.x = this.bounceVel.x * 0.5;
+            this.bounceVel.y = this.bounceVel.y * 0.5;
+            y += this.bounceVel.y;
             y += (this.posY - y) * 0.35;
-            x += this.var_177.x;
+            x += this.bounceVel.x;
             x += (this.posX - x) * 0.35;
             if (Math.abs(this.posY - y) < 0.25 && Math.abs(this.posY - x) < 0.25) {
                 y = this.posY;
                 x = this.posX;
-                removeEventListener(Event.ENTER_FRAME, this.method_161);
+                removeEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             }
         }
 
@@ -350,11 +345,11 @@ package blocks
             this.map.moveBlock(curPoint, newPoint);
         }
 
-        private function method_406()
+        private function removeIceOverlay()
         {
-            if (this.var_110 != null) {
-                removeChild(this.var_110);
-                this.var_110 = null;
+            if (this.iceOverlay != null) {
+                removeChild(this.iceOverlay);
+                this.iceOverlay = null;
             }
         }
 
@@ -362,12 +357,12 @@ package blocks
         {
             this.removed = true;
             this.active = false;
-            removeEventListener(Event.ENTER_FRAME, this.method_153);
-            removeEventListener(Event.ENTER_FRAME, this.method_161);
+            removeEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame);
+            removeEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             this.map.removeBlock(this);
             this.map = null;
-            this.method_406();
-            this.var_177 = null;
+            this.removeIceOverlay();
+            this.bounceVel = null;
             if (this.m != null) {
                 removeChild(this.m);
                 this.m.bitmapData = null;

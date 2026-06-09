@@ -7,13 +7,13 @@ package com.jiggmin.data
     public class Random 
     {
 
-        private var _inext:int; // var_464
-        private var _inextp:int; // var_471
-        private const MBIG:int = 0x7fffffff; // const_96
-        private const MSEED:int = 0x9a4ec86; // const_97
-        private const MZ:int = 0; // const_95
-        private var _seed:int; // var_520
-        private var _seedArray:Vector.<int>; // var_53
+        private var _inext:int;
+        private var _inextp:int;
+        private const MBIG:int = 0x7fffffff;
+        private const MSEED:int = 0x9a4ec86;
+        private const MZ:int = 0;
+        private var _seed:int;
+        private var _seedArray:Vector.<int>;
 
         // _loc2 = num2
         // _loc3 = num3
@@ -50,7 +50,6 @@ package com.jiggmin.data
 			seed = 1;
         }
 
-        // method_154 = seed
         public function get seed():int
         {
             return this._seed;
@@ -71,7 +70,6 @@ package com.jiggmin.data
         // _loc1 = inext
         // _loc2 = inextp
         // _loc3 = num
-        // method_84 = internalSample
         private function internalSample():int
         {
 			var inext:int = this._inext;
@@ -92,13 +90,11 @@ package com.jiggmin.data
 			return num;
         }
 
-        // method_841 = nextInt
         public function nextInt():int
         {
             return this.internalSample();
         }
 
-        // method_837 = nextMax
         public function nextMax(maxValue:int):int
         {
 			if (maxValue < 0) {
@@ -108,7 +104,6 @@ package com.jiggmin.data
         }
 
         // _loc3 = num
-        // method_55 = nextMinMax
         public function nextMinMax(minValue:int, maxValue:int):int
         {
 			if (minValue > maxValue) {
@@ -122,7 +117,6 @@ package com.jiggmin.data
         }
 
         // _loc3 = i
-        // method_309 = nextBytes
         public function nextBytes(buffer:ByteArray, length:int)
         {
 			if (buffer == null) {
@@ -133,13 +127,11 @@ package com.jiggmin.data
 			}
         }
 
-        // method_853 = nextNumber
         public function nextNumber():Number
         {
             return this.sample();
         }
 
-        // method_166 = sample
         protected function sample():Number
         {
             return (this.internalSample() * 4.6566128752457969E-10);

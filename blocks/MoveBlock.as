@@ -8,7 +8,6 @@ package blocks
     public class MoveBlock extends Block 
     {
 
-        // removed: var_672, var_675 (unused)
         private var arrow:MoveArrow = new MoveArrow();
         private var dir:int;
 
@@ -18,7 +17,6 @@ package blocks
             safeStand = false;
         }
 
-        // method_731 = setDirection
         public function setDirection(i:int)
         {
             this.dir = i;
@@ -39,7 +37,6 @@ package blocks
             }
         }
 
-        // method_634 = displayArrow
         private function displayArrow()
         {
             addChild(this.arrow);
@@ -55,7 +52,6 @@ package blocks
             }
         }
 
-        // method_367 = removeArrow
         private function removeArrow()
         {
             if (this.arrow.parent != null) {

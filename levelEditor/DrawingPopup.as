@@ -5,7 +5,7 @@
 
 package levelEditor
 {
-    import package_4.Popup;
+    import dialogs.Popup;
 
     public class DrawingPopup extends Popup 
     {

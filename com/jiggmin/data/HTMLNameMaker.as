@@ -6,19 +6,19 @@
 package com.jiggmin.data
 {
     import flash.events.TextEvent;
-    import package_4.DiscordVerificationPopup;
-    import package_4.PlayerPopup;
-    import package_4.PlayerGuestPopup;
-    import package_4.GuildPopup;
-    import package_4.GuildJoinPopup;
-    import package_4.LevelInfoPopup;
-    import package_4.ExternalLinkPopup;
+    import dialogs.DiscordVerificationPopup;
+    import dialogs.PlayerPopup;
+    import dialogs.PlayerGuestPopup;
+    import dialogs.GuildPopup;
+    import dialogs.GuildJoinPopup;
+    import dialogs.LevelInfoPopup;
+    import dialogs.ExternalLinkPopup;
     import flash.net.URLRequest;
 
     public class HTMLNameMaker 
     {
 
-        private var array:Array = new Array(); // var_282
+        private var array:Array = new Array();
 
         public function HTMLNameMaker()
         {
@@ -101,12 +101,6 @@ package com.jiggmin.data
             textbox.addEventListener(TextEvent.LINK, this.clickLink, false, 0, true);
         }
 
-        // _loc2 = arr
-        // _loc3 = mode
-        // _loc4 = group
-        // _loc5 = userName
-        // _loc6/_loc7 = guildId
-        // method_237 = clickLink
         private function clickLink(e:TextEvent)
         {
             var guildId:int;
@@ -143,9 +137,6 @@ package com.jiggmin.data
             }
         }
 
-        // _loc1 = i
-        // _loc2 = arrayLength
-        // _loc3 = link
         public function remove()
         {
             var arrayLength:int = this.array.length;

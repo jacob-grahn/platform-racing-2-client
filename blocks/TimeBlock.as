@@ -8,8 +8,8 @@ package blocks
     import com.jiggmin.data.Objects;
     import com.jiggmin.data.Settings;
     import sounds.SoundEffects;
-    import package_6.Course;
-    import package_8.LocalCharacter;
+    import gameplay.Course;
+    import character.LocalCharacter;
 
     public class TimeBlock extends SupplyBlock 
     {

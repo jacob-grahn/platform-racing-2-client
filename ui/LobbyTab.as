@@ -11,8 +11,8 @@ package ui
     {
 
         private var m:LobbyTabGraphic = new LobbyTabGraphic();
-        private var tabsHolder:TabsHolder; // var_258
-        private var tabFunction:Function; // var_415
+        private var tabsHolder:TabsHolder;
+        private var tabFunction:Function;
 
         public function LobbyTab(tabFn:Function, tabText:String)
         {
@@ -24,7 +24,6 @@ package ui
             this.activate();
         }
 
-        // method_671 = setTabsHolder
         internal function setTabsHolder(h:TabsHolder)
         {
             this.tabsHolder = h;
@@ -35,14 +34,12 @@ package ui
             this.select();
         }
 
-        // method_224 = onHover
         private function onHover(e:MouseEvent)
         {
             this.m.bg.gotoAndStop("over");
             this.tabsHolder.moveToFront(this);
         }
 
-        // method_246 = onHoverOut
         private function onHoverOut(e:MouseEvent)
         {
             this.m.bg.gotoAndStop("up");
