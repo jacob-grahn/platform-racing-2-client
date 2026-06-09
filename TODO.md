@@ -26,9 +26,8 @@ Current assumptions:
 - [x] Confirm initial stage and timing constants.
   - Flash `Main.as` defines a 550x400 client and sets `stage.frameRate = 27`.
   - The extracted FLA reports 27 FPS.
-  - `tools/pr2driver.py` currently assumes 24 FPS.
+  - `tools/pr2driver.py` uses seconds-based timing and does not own game framerate.
   - Use 27 FPS for the Haxe/OpenFL port unless runtime comparison proves otherwise.
-  - Follow-up: update or parameterize `tools/pr2driver.py` so Flash/OpenFL replay timing is not hard-coded to 24 FPS.
 - [ ] Capture baseline Flash screenshots.
   - Login screen.
   - Server select.
@@ -521,9 +520,9 @@ Acceptance:
   - Keep common sequence JSON format.
   - Support `launch`, `click`, `tap`, `hold`, and `shot`.
   - Normalize captures to 550x400.
-- [ ] Fix or parameterize test framerate.
-  - Do not leave Flash and OpenFL tests using mismatched frame assumptions.
-  - Allow per-target FPS if needed.
+- [x] Remove test-driver framerate assumptions.
+  - Do not make `tools/pr2driver.py` own or parameterize game framerate.
+  - Replay inputs using wall-clock seconds.
 - [ ] Add screenshot comparison.
   - Pixel diff.
   - Perceptual threshold.
@@ -565,7 +564,7 @@ Acceptance:
   - Load fixture or known simple level.
   - Screenshot initial spawn.
 - [ ] `run-right`.
-  - Hold right for fixed frames.
+  - Hold right for a fixed number of seconds.
   - Capture final position.
 - [ ] `jump`.
   - Tap/hold jump.

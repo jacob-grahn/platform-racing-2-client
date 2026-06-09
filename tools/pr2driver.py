@@ -3,20 +3,21 @@
 pr2driver.py — drive the Platform Racing 2 Flash projector for parity testing.
 
 Commands:
+  --app <path>                  launch a specific Flash projector/SWF app
   launch                        open PR2 and wait for window
   shot <out.jpg>                window-only screenshot (auto-crops to game rect)
   click <x> <y>                 click at stage coords (focus-click + action-click)
   tap <key>                     single keypress (key name: left right up down space)
-  hold <key> <frames>           key held for N frames at 24fps
+  hold <key> <seconds>          key held for N seconds
   sequence <script.json>        replay a JSON input timeline (see format below)
 
 Sequence script format:
   [
-    {"frame": 0,  "action": "click", "x": 275, "y": 200},
-    {"frame": 10, "action": "hold",  "key": "right", "frames": 24},
-    {"frame": 50, "action": "shot",  "out": "run.jpg"}
+    {"time": 0.0, "action": "click", "x": 275, "y": 200},
+    {"time": 0.4, "action": "hold",  "key": "right", "seconds": 1.0},
+    {"time": 2.0, "action": "shot",  "out": "run.jpg"}
   ]
-  Actions fire at their frame number (relative to sequence start, 24fps = ~41.7ms/frame).
+  Actions fire at their time in seconds, relative to sequence start.
 
 Key names: left right up down space
 """
@@ -27,7 +28,6 @@ APP_NAME   = "Platform Racing 2"
 APP_PATH   = None        # overridden by --app flag
 PROC_NAME  = "Flash Player"
 TITLE_H    = 28          # Flash Projector title bar height (points)
-FRAME_MS   = 1000 / 24  # PR2 runs at 24 Hz
 
 KEY_MAP = {
     "left":  123,
@@ -174,19 +174,21 @@ def cmd_tap(key):
     _run_swift(_SWIFT_KEYUP, kc)
     print(f"Tapped {key}")
 
-def cmd_hold(key, frames):
+def cmd_hold(key, seconds):
     kc = _resolve_key(key)
-    duration = frames * FRAME_MS / 1000  # seconds
+    if seconds < 0:
+        print("Hold duration must be non-negative.", file=sys.stderr)
+        sys.exit(1)
     _ensure_flash_focus()
     _run_swift(_SWIFT_KEYDOWN, kc)
-    time.sleep(duration)
+    time.sleep(seconds)
     _run_swift(_SWIFT_KEYUP, kc)
-    print(f"Held {key} for {frames} frames ({duration:.3f}s)")
+    print(f"Held {key} for {seconds:.3f}s")
 
 def cmd_sequence(script_path):
     with open(script_path) as f:
         steps = json.load(f)
-    steps = sorted(steps, key=lambda s: s["frame"])
+    steps = sorted(steps, key=lambda s: s["time"])
     t0 = None  # set on first non-launch action
     for step in steps:
         action = step["action"]
@@ -196,7 +198,7 @@ def cmd_sequence(script_path):
             continue
         if t0 is None:
             t0 = time.monotonic()
-        target = t0 + step["frame"] * FRAME_MS / 1000
+        target = t0 + step["time"]
         wait = target - time.monotonic()
         if wait > 0:
             time.sleep(wait)
@@ -205,7 +207,7 @@ def cmd_sequence(script_path):
         elif action == "tap":
             cmd_tap(step["key"])
         elif action == "hold":
-            cmd_hold(step["key"], step["frames"])
+            cmd_hold(step["key"], step["seconds"])
         elif action == "shot":
             cmd_shot(step["out"])
         else:
@@ -218,6 +220,17 @@ def _resolve_key(name):
         sys.exit(1)
     return kc
 
+def _parse_seconds(value):
+    try:
+        seconds = float(value)
+    except ValueError:
+        print(f"Invalid seconds value: {value}", file=sys.stderr)
+        sys.exit(1)
+    if seconds < 0:
+        print("Seconds value must be non-negative.", file=sys.stderr)
+        sys.exit(1)
+    return seconds
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -228,9 +241,13 @@ def main():
     if not args:
         print(__doc__); sys.exit(0)
 
-    if args[0] == "--app":
-        APP_PATH = args[1]
-        args = args[2:]
+    while args and args[0].startswith("--"):
+        flag = args[0]
+        if flag == "--app" and len(args) >= 2:
+            APP_PATH = args[1]
+            args = args[2:]
+        else:
+            print(__doc__); sys.exit(1)
     if not args:
         print(__doc__); sys.exit(0)
 
@@ -244,7 +261,7 @@ def main():
     elif cmd == "tap" and len(args) == 2:
         cmd_tap(args[1])
     elif cmd == "hold" and len(args) == 3:
-        cmd_hold(args[1], int(args[2]))
+        cmd_hold(args[1], _parse_seconds(args[2]))
     elif cmd == "sequence" and len(args) == 2:
         cmd_sequence(args[1])
     else:
