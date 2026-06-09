@@ -11,7 +11,7 @@ package
     public dynamic class GetLevelsPopupItemGraphic extends MovieClip 
     {
 
-        public var statusBox:TextField; // var_552
+        public var statusBox:TextField;
         public var titleBox:TextField;
 
         public function GetLevelsPopupItemGraphic()

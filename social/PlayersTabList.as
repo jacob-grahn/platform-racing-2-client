@@ -12,10 +12,10 @@ package social
 
         private var m:PlayersTabListGraphic = new PlayersTabListGraphic();
         private var names:Array = new Array();
-        private var sortInterval:uint; // var_570
-        private var sortMode:String = "rank"; // var_229
+        private var sortInterval:uint;
+        private var sortMode:String = "rank";
         private var sortOrder:String = 'desc';
-        private var updateSort:Boolean = false; // var_412
+        private var updateSort:Boolean = false;
 
         public function PlayersTabList()
         {

@@ -7,7 +7,6 @@ package com.jiggmin.ColorPicker
 {
     import ui.CustomCursor;
     import flash.display.BitmapData;
-    import flash.utils.Timer;
     import flash.events.TimerEvent;
     import flash.display.DisplayObject;
     import flash.events.MouseEvent;
@@ -17,11 +16,9 @@ package com.jiggmin.ColorPicker
     {
 
         public var color:int;
-        private var var_352:Array = new Array();
+        private var exclusions:Array = new Array();
         /** Area where the custom cursor graphic can be shown. */
-        private var cursorContainer:BitmapData; // var_331
-        // private var var_266:Timer; // switched to ENTER_FRAME instead
-        // private var var_248:Timer;
+        private var cursorContainer:BitmapData;
 
         public function CursorEyedropper()
         {
@@ -45,7 +42,7 @@ package com.jiggmin.ColorPicker
 
         public function addExclusion(d:DisplayObject)
         {
-            this.var_352.push(d);
+            this.exclusions.push(d);
         }
 
         private function maybeUpdate(e:Event)
@@ -100,7 +97,7 @@ package com.jiggmin.ColorPicker
 
         private function isExcluded(d:DisplayObject):Boolean
         {
-            return this.var_352.indexOf(d) != -1;
+            return this.exclusions.indexOf(d) != -1;
         }
 
         private function updateColor()
@@ -115,7 +112,7 @@ package com.jiggmin.ColorPicker
             super.remove();
             this.cursorContainer.dispose();
             this.cursorContainer = null;
-            this.var_352 = null;
+            this.exclusions = null;
         }
 
 

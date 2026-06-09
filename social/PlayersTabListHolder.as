@@ -15,7 +15,7 @@ package social
         private var scrollBar:CustomScrollBar = new CustomScrollBar();
         private var loadingGraphic:LoadingGraphic = new LoadingGraphic();
         private var listings:Array = new Array();
-        private var listingHeight:Number = 16; // var_388
+        private var listingHeight:Number = 16;
         
         // for numSort
         private var sortKeys:Array = new Array();

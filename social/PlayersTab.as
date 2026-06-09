@@ -11,7 +11,7 @@ package social
     public class PlayersTab extends Page 
     {
 
-        private var tabsHolder:TabsHolder; // var_258
+        private var tabsHolder:TabsHolder;
         private var pageHolder:PageHolder = new PageHolder();
 
         // _loc1 = online

@@ -40,7 +40,7 @@ package com.jiggmin.data
         private static var leTestHat:int = 2;
 
         private static var userName:String;
-        private static var dataArr:Object; // var_179
+        private static var dataArr:Object;
 
         public static function init(s:String = "")
         {

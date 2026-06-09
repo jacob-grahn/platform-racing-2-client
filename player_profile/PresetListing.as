@@ -8,8 +8,8 @@ package player_profile
     public class PresetListing extends SelectableButton 
     {
 
-        private var preset:Preset; // var_518
-        private var charModel:Character; // var_5
+        private var preset:Preset;
+        private var charModel:Character;
         private var playerDisplay:PlayerDisplay;
         private var m:PresetListingGraphic;
 

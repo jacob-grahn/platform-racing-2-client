@@ -23,22 +23,22 @@ package ui
     public class EmblemLoader extends Sprite 
     {
 
-        public static const BEGIN_LOADING:String = "BEGIN_LOADING"; // const_87
+        public static const BEGIN_LOADING:String = "BEGIN_LOADING";
         public static const FINISH_LOADING:String = "FINISH_LOADING"; // finishLoading
 
-        private var eWidth:int; // var_239
-        private var eHeight:int; // var_362
+        private var eWidth:int;
+        private var eHeight:int;
         private var file:FileReference;
         private var loader:Loader;
-        private var superLoader:SuperLoader; // var_160
+        private var superLoader:SuperLoader;
         private var bitmap:Bitmap;
         private var bitmapData:BitmapData;
-        private var defaultColor:int = 0xFFFFFF; // var_525
-        private var encoder:JPEGEncoder; // var_450
-        private var uploadURL:String; // var_562
-        private var imgDirURL:String; // var_601
-        private var fileName:String; // var_273
-        private var loading:Boolean = false; // var_279
+        private var defaultColor:int = 0xFFFFFF;
+        private var encoder:JPEGEncoder;
+        private var uploadURL:String;
+        private var imgDirURL:String;
+        private var fileName:String;
+        private var loading:Boolean = false;
 
         public function EmblemLoader(w:int, h:int, u:String, i:String)
         {

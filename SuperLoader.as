@@ -20,14 +20,14 @@ package
     public class SuperLoader extends URLLoader
     {
 
-        public static const j:String = "json"; // const_5
-        public static const u:String = "url"; // const_80
-        public static const d:String = "parsedData"; // const_4
-        public static const e:String = "anyError"; // const_6
+        public static const j:String = "json";
+        public static const u:String = "url";
+        public static const d:String = "parsedData";
+        public static const e:String = "anyError";
 
         public var useRandomNum:Boolean;
         public var parsedData:Object;
-        private var readMode:String; // var_346
+        private var readMode:String;
         private var toURL:String;
         private var autoEchoMessage:Boolean = true;
 

@@ -25,8 +25,8 @@ package gameplay
         private var variables:URLVariables;
         private var isMod:Boolean = false;
         private var reportsMode:Boolean = false;
-        private var statsSelect:StatsSelect; // var_158
-        private var hatPicker:HatPicker; // var_130
+        private var statsSelect:StatsSelect;
+        private var hatPicker:HatPicker;
 
         public function TestCourse(v:URLVariables, mod:Boolean = false, report:Boolean = false)
         {
@@ -65,7 +65,7 @@ package gameplay
             setPos(posX, posY);
             frontBackground.addChild(localPlayer);
             addEventListener(Event.ENTER_FRAME, this.go);
-            var_14.addEventListener(MouseEvent.CLICK, this.teleportToClickPos, false, 0, true);
+            container.addEventListener(MouseEvent.CLICK, this.teleportToClickPos, false, 0, true);
             if (gameMode == Modes.egg) {
                 setEggSeed([Math.floor(Math.random() * 9999).toString()]);
                 addEggs([10]);
@@ -110,7 +110,7 @@ package gameplay
 
         private function teleportToClickPos(e:MouseEvent)
         {
-            var target:Point = var_14.globalToLocal(new Point(e.stageX, e.stageY));
+            var target:Point = container.globalToLocal(new Point(e.stageX, e.stageY));
             var newX:int = -frontBackground.x + target.x;
             var newY:int = -frontBackground.y + target.y;
             new TeleportPop(localPlayer.x, localPlayer.y);
@@ -149,7 +149,7 @@ package gameplay
         {
             blockBackground.clearMoveInterval();
             TeleportBlock.resetAll();
-            var_14.removeEventListener(MouseEvent.CLICK, this.teleportToClickPos);
+            container.removeEventListener(MouseEvent.CLICK, this.teleportToClickPos);
             removeEventListener(Event.ENTER_FRAME, this.go);
             this.m.back_bt.removeEventListener(MouseEvent.CLICK, this.clickBack);
             this.m.restart_bt.removeEventListener(MouseEvent.CLICK, this.clickRestart);

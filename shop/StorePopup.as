@@ -30,9 +30,9 @@ package shop
         private var itemSpacingY:int = 160;
         private var listings:Vector.<StoreListing> = new Vector.<StoreListing>();
         private var scroll:CustomScrollBar;
-        private var loading:LoadingGraphic; // var_289
-        private var superLoader:SuperLoader; // var_123
-        private var saleFlash:EpicFlash = new EpicFlash(); // var_207
+        private var loading:LoadingGraphic;
+        private var superLoader:SuperLoader;
+        private var saleFlash:EpicFlash = new EpicFlash();
 
         private var uploading:UploadingPopup;
 

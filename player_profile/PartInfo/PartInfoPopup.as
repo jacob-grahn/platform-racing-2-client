@@ -26,7 +26,7 @@ package player_profile.PartInfo
         private var listings:Vector.<PartInfoListing> = new Vector.<PartInfoListing>();
         private var scroll:CustomScrollBar;
         private var loadingGraphic:LoadingGraphic;
-        public var epicFlash:EpicFlash = new EpicFlash(); // var_207
+        public var epicFlash:EpicFlash = new EpicFlash();
 
         public function PartInfoPopup(type:String, parts:Array, epics:Array)
         {

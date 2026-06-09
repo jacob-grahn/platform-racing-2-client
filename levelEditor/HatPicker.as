@@ -12,9 +12,9 @@ package levelEditor
 
         private var m:HatPickerGraphic;
         private var c:LocalCharacter;
-        private var min:int = 1; // var_538
-        private var max:int = 16; // var_620
-        private var pickedHat:int = 2; // var_75
+        private var min:int = 1;
+        private var max:int = 16;
+        private var pickedHat:int = 2;
 
         public function HatPicker(player:LocalCharacter)
         {
@@ -83,4 +83,3 @@ package levelEditor
 
     }
 }//package levelEditor
-

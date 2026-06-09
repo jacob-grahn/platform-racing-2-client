@@ -15,14 +15,14 @@ package chat
     {
 
         private var m:MessagesItemGraphic = new MessagesItemGraphic();
-        private var reportButton:ReportMessageButton = new ReportMessageButton(); // var_319
+        private var reportButton:ReportMessageButton = new ReportMessageButton();
         private var deleteButton:DeleteMessageButton = new DeleteMessageButton();
-        private var replyButton:ReplyMessageButton = new ReplyMessageButton(); // var_222
+        private var replyButton:ReplyMessageButton = new ReplyMessageButton();
         private var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
         private var userName:String;
-        public var messageId:Number; // var_451
+        public var messageId:Number;
         private var target:Messages;
-        private var messageText:String; // var_588
+        private var messageText:String;
         private var time:int;
         private var hover:HoverPopup;
 

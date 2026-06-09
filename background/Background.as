@@ -27,16 +27,16 @@ package background
     {
 
         protected var course:GamePage;
-        private var var_394:uint;
+        private var drawTimerId:uint;
         private var bgColor:Number = 13092571;
         public var scale:Number = 1;
-        public var saveArray:Array = new Array(); // var_15
-        public var redoArray:Array = new Array(); // var_88
-        protected var var_39:Number = 0;
-        protected var var_104:int;
-        protected var var_141:int;
-        protected var var_118:int;
-        protected var var_120:int;
+        public var saveArray:Array = new Array();
+        public var redoArray:Array = new Array();
+        protected var drawPos:Number = 0;
+        protected var viewColMin:int;
+        protected var viewColMax:int;
+        protected var viewRowMin:int;
+        protected var viewRowMax:int;
 
         public function Background(c:GamePage)
         {
@@ -122,16 +122,16 @@ package background
 
         public function clear()
         {
-            this.var_39 = 0;
-            clearTimeout(this.var_394);
+            this.drawPos = 0;
+            clearTimeout(this.drawTimerId);
         }
 
         public function draw(_arg_1:Number=100)
         {
-            if (this.var_39 < this.saveArray.length) {
+            if (this.drawPos < this.saveArray.length) {
                 if (this is DrawableBackground) {
                     var thisLayer:Background = this;
-                    this.var_394 = setTimeout(function () {
+                    this.drawTimerId = setTimeout(function () {
                         try {
                             draw(_arg_1);
                         } catch (e:Error) {
@@ -146,7 +146,7 @@ package background
                         }
                     }, 10);
                 } else {
-                    this.var_394 = setTimeout(this.draw, 10, _arg_1);
+                    this.drawTimerId = setTimeout(this.draw, 10, _arg_1);
                 }
             } else {
                 this.course.finishDrawing(this);
@@ -168,7 +168,7 @@ package background
         public function remove()
         {
             this.course = null;
-            clearTimeout(this.var_394);
+            clearTimeout(this.drawTimerId);
             this.saveArray = new Array();
             this.redoArray = new Array();
             parent.removeChild(this);
@@ -192,10 +192,10 @@ package background
             var _local_13:int = _arg_1 + _arg_4;
             var _local_14:int = _arg_2 - _arg_5;
             var _local_15:int = _arg_2 + _arg_6;
-            if (Math.abs(_local_12 - this.var_104) > 5 || Math.abs(_local_13 - this.var_141) > 5 || Math.abs(_local_14 - this.var_118) > 5 || Math.abs(_local_15 - this.var_120) > 5) {
+            if (Math.abs(_local_12 - this.viewColMin) > 5 || Math.abs(_local_13 - this.viewColMax) > 5 || Math.abs(_local_14 - this.viewRowMin) > 5 || Math.abs(_local_15 - this.viewRowMax) > 5) {
                 _local_16 = 0;
-                while (this.var_104 + _local_16 <= this.var_141) {
-                    this.updateCol(this.var_104 + _local_16, this.var_118, this.var_120, _arg_7, _arg_8, "remove");
+                while (this.viewColMin + _local_16 <= this.viewColMax) {
+                    this.updateCol(this.viewColMin + _local_16, this.viewRowMin, this.viewRowMax, _arg_7, _arg_8, "remove");
                     _local_16++;
                 }
                 _local_16 = 0;
@@ -205,48 +205,48 @@ package background
                 }
             } else {
                 _local_16 = 0;
-                while (this.var_104 + _local_16 != _local_12) {
-                    if (this.var_104 < _local_12) {
-                        this.updateCol(this.var_104 + _local_16, this.var_118, this.var_120, _arg_7, _arg_8, "remove");
+                while (this.viewColMin + _local_16 != _local_12) {
+                    if (this.viewColMin < _local_12) {
+                        this.updateCol(this.viewColMin + _local_16, this.viewRowMin, this.viewRowMax, _arg_7, _arg_8, "remove");
                         _local_16++;
                     } else {
                         _local_16--;
-                        this.updateCol(this.var_104 + _local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
+                        this.updateCol(this.viewColMin + _local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
                     }
                 }
                 _local_16 = 0;
-                while (this.var_141 + _local_16 != _local_13) {
-                    if (this.var_141 < _local_13) {
-                        this.updateCol(this.var_141 + ++_local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
+                while (this.viewColMax + _local_16 != _local_13) {
+                    if (this.viewColMax < _local_13) {
+                        this.updateCol(this.viewColMax + ++_local_16, _local_14, _local_15, _arg_7, _arg_8, "add");
                     } else {
-                        this.updateCol(this.var_141 + _local_16, this.var_118, this.var_120, _arg_7, _arg_8, "remove");
+                        this.updateCol(this.viewColMax + _local_16, this.viewRowMin, this.viewRowMax, _arg_7, _arg_8, "remove");
                         _local_16--;
                     }
                 }
                 _local_16 = 0;
-                while (this.var_118 + _local_16 != _local_14) {
-                    if (this.var_118 < _local_14) {
-                        this.updateRow(this.var_118 + _local_16, this.var_104, this.var_141, _arg_7, _arg_8, "remove");
+                while (this.viewRowMin + _local_16 != _local_14) {
+                    if (this.viewRowMin < _local_14) {
+                        this.updateRow(this.viewRowMin + _local_16, this.viewColMin, this.viewColMax, _arg_7, _arg_8, "remove");
                         _local_16++;
                     } else {
                         _local_16--;
-                        this.updateRow(this.var_118 + _local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
+                        this.updateRow(this.viewRowMin + _local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
                     }
                 }
                 _local_16 = 0;
-                while (this.var_120 + _local_16 != _local_15) {
-                    if (this.var_120 < _local_15) {
-                        this.updateRow(this.var_120 + ++_local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
+                while (this.viewRowMax + _local_16 != _local_15) {
+                    if (this.viewRowMax < _local_15) {
+                        this.updateRow(this.viewRowMax + ++_local_16, _local_12, _local_13, _arg_7, _arg_8, "add");
                     } else {
-                        this.updateRow(this.var_120 + _local_16, this.var_104, this.var_141, _arg_7, _arg_8, "remove");
+                        this.updateRow(this.viewRowMax + _local_16, this.viewColMin, this.viewColMax, _arg_7, _arg_8, "remove");
                         _local_16--;
                     }
                 }
             }
-            this.var_104 = _local_12;
-            this.var_141 = _local_13;
-            this.var_118 = _local_14;
-            this.var_120 = _local_15;
+            this.viewColMin = _local_12;
+            this.viewColMax = _local_13;
+            this.viewRowMin = _local_14;
+            this.viewRowMax = _local_15;
         }
 
         protected function updateRow(_arg_1:int, _arg_2:int, _arg_3:int, _arg_4:DisplayObjectContainer, _arg_5:Array, _arg_6:String)
@@ -277,7 +277,7 @@ package background
 
         public function isInView(_arg_1:int, _arg_2:int):Boolean
         {
-            return _arg_1 >= this.var_104 && _arg_1 <= this.var_141 && _arg_2 >= this.var_118 && _arg_2 <= this.var_120;
+            return _arg_1 >= this.viewColMin && _arg_1 <= this.viewColMax && _arg_2 >= this.viewRowMin && _arg_2 <= this.viewRowMax;
         }
 
 

@@ -13,7 +13,7 @@ package editor_tools
     {
 
         private var m:ModeMenuGraphic = new ModeMenuGraphic();
-        private var modeSelect:ComboBox = m.modeSelect; // var_63
+        private var modeSelect:ComboBox = m.modeSelect;
         private var open:Boolean = false;
 
         public function ModeMenu(d:DisplayObject)

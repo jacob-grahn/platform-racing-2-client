@@ -20,14 +20,7 @@ package dialogs
         private var m:BanMenuGraphic = new BanMenuGraphic();
         private var target:Popup;
         private var userName:String;
-        private var banSecs:int; // var_488
-        /*private var minSecs:int = 60; // var_539
-        private var hourSecs:int = 3600; // var_501
-        private var daySecs:int = 86400; // var_440
-        private var weekSecs:int = 604800; // var_475
-        private var monthSecs:int = 2592000; // var_343
-        private var yearSecs:int = 31536000; // var_605
-        private var eternSecs:int = 145152000; // var_647*/
+        private var banSecs:int;
         private var uploading:UploadingPopup;
 
         public function BanMenu(name:String, playerPopup:Popup)

@@ -8,8 +8,8 @@ package gameplay
     public class Hearts extends Sprite 
     {
 
-        private var totalHearts:int = 0; // var_193
-        private var yInc:int = 20; // var_454
+        private var totalHearts:int = 0;
+        private var yInc:int = 20;
         private var scale:Number = 0.2;
 
 

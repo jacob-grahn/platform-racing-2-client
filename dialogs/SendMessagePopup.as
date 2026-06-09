@@ -12,7 +12,7 @@ package dialogs
     {
 
         private var m:SendMessagePopupGraphic = new SendMessagePopupGraphic();
-        private var isGuildMessage:Boolean = false; // var_622
+        private var isGuildMessage:Boolean = false;
         private var hover:HoverPopup = null;
 
         public function SendMessagePopup(name:String = "", message:String = "", guild:Boolean = false, level:Boolean = false)

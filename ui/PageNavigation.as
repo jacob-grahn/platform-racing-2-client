@@ -12,9 +12,9 @@ package ui
     {
 
         private var target:*;
-        private var navButtonArray:Array = new Array(); // var_45
-        public var selected:int; // var_167
-        private var count:int; // var_584
+        private var navButtonArray:Array = new Array();
+        public var selected:int;
+        private var count:int;
         private var w:Number;
         private var mode:String;
 

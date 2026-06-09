@@ -23,13 +23,11 @@ package gameplay
         private var holder:Sprite = new Sprite();
         private var blockSprite:Sprite = new Sprite(); // block currently being processed
         private var finishSprite:Sprite = new Sprite(); // finishes? all blocks? prob all blocks???
-        private var playerDots:Sprite = new Sprite(); // var_134
+        private var playerDots:Sprite = new Sprite();
         private var m:MiniMapGraphic = new MiniMapGraphic();
-        //private var var_662:Array = new Array(); // unused?
-        private var maxSpaceWidth:int = 400; // var_239
-        private var maxSpaceHeight:int = 44; // var_362
+        private var maxSpaceWidth:int = 400;
+        private var maxSpaceHeight:int = 44;
         private var scale:Number;
-        //private var var_660:ColorTransform = new ColorTransform(); // unused?
 
         public function MiniMap()
         {

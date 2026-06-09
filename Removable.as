@@ -10,7 +10,7 @@ package
 
         public static var REMOVE:String = "remove";
 
-        private var removed:Boolean = false; // var_214
+        private var removed:Boolean = false;
 
         public function Removable()
         {

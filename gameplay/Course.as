@@ -34,10 +34,10 @@ package gameplay
 
         protected var courseID:int;
         protected var version:int;
-        public var startPosArray:Array = new Array(); // var_197
-        public var finishBlocks:Array = new Array(); // var_313
+        public var startPosArray:Array = new Array();
+        public var finishBlocks:Array = new Array();
         public var teleportBlocks:Object = new Object();
-        public var playerArray:Array = new Array(); // var_40
+        public var playerArray:Array = new Array();
         public var localPlayer:LocalCharacter;
         public var playerSpectating:Character;
         protected var holder:Sprite = new Sprite();
@@ -46,10 +46,10 @@ package gameplay
         protected var miniMap:MiniMap = new MiniMap();
         protected var itemDisplay:ItemDisplay = new ItemDisplay();
         protected var canSpectate:Boolean = false;
-        public var chatBox:RaceChat; // var_305
+        public var chatBox:RaceChat;
         public var musicSelection:MusicSelection = new MusicSelection();
-        protected var countdown:CountdownGraphic; // var_61
-        protected var hearts:Hearts; // var_60
+        protected var countdown:CountdownGraphic;
+        protected var hearts:Hearts;
         protected var bg:LevelBackground;
         public var bg1:DrawableBackground;
         protected var bg2:DrawableBackground;
@@ -57,20 +57,20 @@ package gameplay
         protected var bg4:DrawableBackground;
         protected var bg5:DrawableBackground;
         public var blockBackground:Map;
-        public var effectBackground:EffectBackground; // var_201
+        public var effectBackground:EffectBackground;
         public var frontBackground:Background;
         public var backBackground:Background;
-        protected var var_689:Number = 0;
-        protected var var_678:Number = 0;
-        private var rotateDirection:String; // var_348
-        private var varsSet:Boolean = false; // var_545
-        public var countdownFinished:Boolean = false; // var_649
-        protected var playerDone:Boolean = false; // Game.var_370 -- this is either finished or forfeited
+        protected var scrollTargetX:Number = 0;
+        protected var scrollTargetY:Number = 0;
+        private var rotateDirection:String;
+        private var varsSet:Boolean = false;
+        public var countdownFinished:Boolean = false;
+        protected var playerDone:Boolean = false; // true when finished OR forfeited
         public var looseHats:Array = [];
 
         public function Course()
         {
-            FinishBlock.var_228 = 0;
+            FinishBlock.count = 0;
         }
 
         override public function initialize()
@@ -189,7 +189,7 @@ package gameplay
         protected function maybeEndIntro(e:Event)
         {
             //keyScroll(e);
-            if (this.varsSet && var_133.length <= 0) {
+            if (this.varsSet && drawingBackgrounds.length <= 0) {
                 this.endIntro();
             }
         }
@@ -217,7 +217,6 @@ package gameplay
             }
         }
 
-        // TO-DO: implement this in Game(?). It will supposedly remove the buttons if turning off.
         protected function toggleSpectatePossible(on:Boolean)
         {
             if (this.canSpectate == on) {
@@ -227,7 +226,6 @@ package gameplay
             this.playerSpectating = null;
         }
 
-        // TO-DO: after game buttons validation
         public function changeSpectate(tempId:int)
         {
             if (this.playerSpectating != null && tempId == this.playerSpectating.tempID) {
@@ -331,16 +329,16 @@ package gameplay
             this.bg3.setScale(0.25);
             this.bg4.setScale(1);
             this.bg5.setScale(2);
-            var_14.addChild(this.bg);
-            var_14.addChild(this.bg3);
-            var_14.addChild(this.bg2);
-            var_14.addChild(this.bg1);
-            var_14.addChild(this.backBackground);
-            var_14.addChild(this.blockBackground);
-            var_14.addChild(this.frontBackground);
-            var_14.addChild(this.effectBackground);
-            var_14.addChild(this.bg4);
-            var_14.addChild(this.bg5);
+            container.addChild(this.bg);
+            container.addChild(this.bg3);
+            container.addChild(this.bg2);
+            container.addChild(this.bg1);
+            container.addChild(this.backBackground);
+            container.addChild(this.blockBackground);
+            container.addChild(this.frontBackground);
+            container.addChild(this.effectBackground);
+            container.addChild(this.bg4);
+            container.addChild(this.bg5);
             this.setColor(12303325);
         }
 

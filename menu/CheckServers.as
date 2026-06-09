@@ -14,11 +14,11 @@ package menu
     public class CheckServers 
     {
 
-        private static var interval:uint; // var_416
+        private static var interval:uint;
         private static var target:ComboBox;
         private static var servers:Array;
-        private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // var_123
-        private static var active:Boolean = false; // var_71
+        private static var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
+        private static var active:Boolean = false;
 
 
         public static function activate()

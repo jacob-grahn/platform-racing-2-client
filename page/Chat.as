@@ -17,11 +17,11 @@ package page
     public class Chat extends Page 
     {
 
-        protected var existingMessages:String = ""; // var_137
-        protected var maxMessages:int = 40; // var_489
+        protected var existingMessages:String = "";
+        protected var maxMessages:int = 40;
         protected var messages:int = 0;
         protected var htmlNameMaker:HTMLNameMaker = new HTMLNameMaker();
-        private var hint:ArtifactHint; // var_244
+        private var hint:ArtifactHint;
         private var cm:CommandHandler = CommandHandler.commandHandler;
 
         public function Chat()

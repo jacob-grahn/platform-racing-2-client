@@ -7,10 +7,10 @@ package com.jiggmin.data
     public class UnreadNotif  
     {
 
-        private static var lastReadTime:Number = 0; // var_192
-        private static var unreadMessages:Array = new Array(); // var_212
-        private static var m:UnreadNotifGraphic = new UnreadNotifGraphic(); // m
-        private static var pmTab:DisplayObjectContainer; // d
+        private static var lastReadTime:Number = 0;
+        private static var unreadMessages:Array = new Array();
+        private static var notificationIcon:UnreadNotifGraphic = new UnreadNotifGraphic();
+        private static var pmTab:DisplayObjectContainer;
 
 
         public static function setLastRead(time:Number)
@@ -26,7 +26,6 @@ package com.jiggmin.data
             addNotif();
         }
 
-        // _loc1 = timeSent
         public static function updateLastRead()
         {
             for each (var timeSent:Number in unreadMessages) {
@@ -49,16 +48,16 @@ package com.jiggmin.data
         private static function addNotif()
         {
             if (pmTab != null) {
-                m.x = 26;
-                m.y = 0;
-                pmTab.addChild(m);
+                notificationIcon.x = 26;
+                notificationIcon.y = 0;
+                pmTab.addChild(notificationIcon);
             }
         }
 
         private static function removeNotif()
         {
-            if (m.parent != null) {
-                m.parent.removeChild(m);
+            if (notificationIcon.parent != null) {
+                notificationIcon.parent.removeChild(notificationIcon);
             }
         }
 

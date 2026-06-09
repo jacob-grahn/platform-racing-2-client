@@ -27,10 +27,10 @@ package ui
         public static var stageRef:Stage;
         public static var instance:CustomCursor;
 
-        private var active:Boolean = false; // var_71
+        private var active:Boolean = false;
         private var me:MouseEvent;
-        private var mouseDown:Boolean; // var_487
-        private var mouseHidden:Boolean = false; // var_371
+        private var mouseDown:Boolean;
+        private var mouseHidden:Boolean = false;
         public var disposable:Boolean = true;
 
         public function CustomCursor()

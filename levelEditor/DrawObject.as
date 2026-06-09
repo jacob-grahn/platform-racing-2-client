@@ -19,25 +19,25 @@ package levelEditor
     public class DrawObject extends Removable 
     {
 
-        private var var_621:Number;
-        private var var_603:Number;
-        private var var_625:Number;
-        private var var_582:Number;
+        private var dragOffsetX:Number;
+        private var dragOffsetY:Number;
+        private var dragStartX:Number;
+        private var dragStartY:Number;
         protected var startWidth:Number;
         protected var startHeight:Number;
         private var textObj:Boolean = false;
         public var deleteable:Boolean = true;
-        protected var resizable:Boolean = true; // var_505
+        protected var resizable:Boolean = true;
         private var deleteButton:DeleteButton;
-        private var resizeButton:ResizeButton; // var_68
+        private var resizeButton:ResizeButton;
         public var m:DisplayObject;
-        private var highlightOutline:Sprite = new Sprite(); // var_94
+        private var highlightOutline:Sprite = new Sprite();
         protected var editor:LevelEditor = LevelEditor.editor;
         protected var stageRef:Stage = Main.stage;
         private var holder:Sprite;
         public var displayCode:int;
-        protected var buttonScaleX:Number = 1; // var_321
-        protected var buttonScaleY:Number = 1; // var_307
+        protected var buttonScaleX:Number = 1;
+        protected var buttonScaleY:Number = 1;
 
         public function DrawObject(objId:int, objX:Number, objY:Number)
         {
@@ -64,10 +64,10 @@ package levelEditor
             this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.endDrag);
             this.stageRef.focus = this.stageRef;
             var _local_2:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
-            this.var_621 = x - _local_2.x;
-            this.var_603 = y - _local_2.y;
-            this.var_625 = x;
-            this.var_582 = y;
+            this.dragOffsetX = x - _local_2.x;
+            this.dragOffsetY = y - _local_2.y;
+            this.dragStartX = x;
+            this.dragStartY = y;
             parent.swapChildren(this, parent.getChildAt(this.holder.numChildren - 1));
             alpha = 0.75;
         }
@@ -87,8 +87,8 @@ package levelEditor
         private function onDrag(e:MouseEvent)
         {
             var newPos:Point = this.holder.globalToLocal(new Point(e.stageX, e.stageY));
-            newPos.x = newPos.x + this.var_621;
-            newPos.y = newPos.y + this.var_603;
+            newPos.x = newPos.x + this.dragOffsetX;
+            newPos.y = newPos.y + this.dragOffsetY;
             x = newPos.x;
             y = newPos.y;
         }
@@ -100,7 +100,7 @@ package levelEditor
             alpha = 1;
             x = Math.round(x);
             y = Math.round(y);
-            if (x != this.var_625 || y == this.var_582) {
+            if (x != this.dragStartX || y == this.dragStartY) {
                 this.editor.cur.recordMove(this);
             }
             this.holder.addChild(this);

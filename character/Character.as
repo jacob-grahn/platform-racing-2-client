@@ -18,16 +18,16 @@ package character
     public class Character extends Removable 
     {
 
-        public static const PROP:String = 'p'; // const_52
-        public static const CROWN:String = 'c'; // const_31
-        public static const COWBOY:String = 'g'; // const_13 (gallon)
-        public static const SANTA:String = 's'; // const_11
-        public static const PARTY:String = 'a'; // const_56
-        public static const TOP:String = 't'; // const_55
-        public static const JUMP_START:String = 'h'; // const_27
+        public static const PROP:String = 'p';
+        public static const CROWN:String = 'c';
+        public static const COWBOY:String = 'g';
+        public static const SANTA:String = 's';
+        public static const PARTY:String = 'a';
+        public static const TOP:String = 't';
+        public static const JUMP_START:String = 'h';
         public static const MOON:String = 'm';
-        public static const JIGG:String = 'j'; // const_51
-        public static const ARTIFACT:String = 'b'; // const_25
+        public static const JIGG:String = 'j';
+        public static const ARTIFACT:String = 'b';
         public static const JELLYFISH:String = 'f'; // (fish)
         public static const CHEESE:String = 'ch';
 
@@ -35,7 +35,7 @@ package character
         private var jetSoundChannel:SoundChannel;
         public var m:CharacterGraphic = new CharacterGraphic();
         public var curAnim:MovieClip;
-        private var characterStatesArray:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim); // var_217
+        private var characterStatesArray:Array = new Array(m.runAnim, m.standAnim, m.jumpAnim, m.superJumpAnim, m.bumpedAnim, m.crouchAnim, m.crouchWalkAnim, m.swimAnim, m.frozenSolidAnim);
         public var curWeapon:MovieClip;
         public var hat1:int;
         public var hat2:int = 1;
@@ -66,15 +66,15 @@ package character
         public var velX:Number = 0;
         public var velY:Number = 0;
         public var type:String = "remote";
-        public var var_670:Number;
-        protected var reversedControls:Boolean = false; // var_241
+        public var _unused670:Number;
+        protected var reversedControls:Boolean = false;
         public var state:String;
         public var recoveryFrames:Number = 0;
         public var tempID:int;
         protected var updateInterval:int = 5;
         protected var framesSinceUpdate:int = 0;
-        protected var fadeOutStarted:Boolean = false; // var_304
-        public var removed:Boolean = false; // var_214
+        protected var fadeOutStarted:Boolean = false;
+        public var removed:Boolean = false;
         public var store:SecureStore;
         private var activeEmitter:ParticleEmitter;
 

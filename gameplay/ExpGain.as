@@ -9,9 +9,9 @@ package gameplay
     {
 
         private var m:ExpGainGraphic = new ExpGainGraphic();
-        private var expStart:Number; // var_153
-        private var expEnd:Number; // var_209
-        private var expToRank:Number; // var_330
+        private var expStart:Number;
+        private var expEnd:Number;
+        private var expToRank:Number;
         private var expStep:Number;
 
         public function ExpGain()

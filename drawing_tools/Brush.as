@@ -14,18 +14,18 @@ package drawing_tools
     {
 
         private var circle:Circle = new Circle();
-        private var drawableBG:DrawableBackground; // var_151
-        private var mousePos:Point = new Point(); // var_211
-        private var rdInt:uint; // var_441
+        private var drawableBG:DrawableBackground;
+        private var mousePos:Point = new Point();
+        private var rdInt:uint;
         protected var size:Number = 4;
         protected var color:Number = 0;
         protected var mode:String = "draw";
-        protected var zoomMultiplier:Number = 1; // var_574
+        protected var zoomMultiplier:Number = 1;
         protected var drawing:Boolean = false;
         private var lastX:Number = -1;
         private var lastY:Number = -1;
-        private var drawStartX:int; // var_550
-        private var drawStartY:int; // var_587
+        private var drawStartX:int;
+        private var drawStartY:int;
 
         public function Brush()
         {
@@ -129,7 +129,7 @@ package drawing_tools
         protected function startDrawing()
         {
             this.drawing = true;
-            this.drawableBG = LevelEditor.editor.var_220;
+            this.drawableBG = LevelEditor.editor.curDraw;
             this.drawableBG.recordColor(this.color);
             this.drawableBG.setBrushSize(this.size);
             this.drawableBG.setMode(this.mode);
@@ -142,7 +142,7 @@ package drawing_tools
         protected function stopDrawing()
         {
             this.drawing = false;
-            LevelEditor.editor.var_220.rasterize();
+            LevelEditor.editor.curDraw.rasterize();
         }
 
         private function roundPoint(pt:Point):Point

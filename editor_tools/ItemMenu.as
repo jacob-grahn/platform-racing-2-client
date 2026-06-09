@@ -13,7 +13,7 @@ package editor_tools
     public class ItemMenu extends AutoDismissPopup 
     {
         private var m:ItemMenuGraphic = new ItemMenuGraphic();
-        private var numItems:int = Items.getAllCodes().length; // var_445
+        private var numItems:int = Items.getAllCodes().length;
 
         public function ItemMenu(button:ItemMenuButton)
         {

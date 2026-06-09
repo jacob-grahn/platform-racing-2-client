@@ -24,27 +24,26 @@ package com.jiggmin.ColorPicker
     public class ColorPickerPopup extends Popup
     {
 
-        private var eyedropper:CursorEyedropper; // var_89
-        private var palette:Sprite; // var_27
-        private var colorChoices:Array; // var_145
+        private var eyedropper:CursorEyedropper;
+        private var palette:Sprite;
+        private var colorChoices:Array;
         /** Outline on current color (goes around color box if in picker). */
-        private var outlineCC:Sprite; // var_48
+        private var outlineCC:Sprite;
         /** Outline on preview color (goes around color box if in picker). */
-        private var outlinePC:Sprite; // var_144
-        private var initialColor:int; // var_598
-        private var previewColor:int = -1; // var_188
+        private var outlinePC:Sprite;
+        private var initialColor:int;
+        private var previewColor:int = -1;
         private var color:int = -1;
         private var hue:Number = 0;
         private var saturation:Number = 0;
         private var brightness:Number = 50;
-        private var spectrum:Sprite; // var_69
-        private var hueSlider:Sprite; // var_124
-        private var colorPreviewBox:Sprite; // var_121
-        // private var var_687:Sprite; // unused?
-        private var spectrumBG:BitmapData; // var_326
-        private var hueArrow:ColorPickerHueArrowGraphic; // var_146
-        private var crosshairs:ColorPickerCrosshairsGraphic; // var_100
-        private var priorCursor:CustomCursor; // var_194
+        private var spectrum:Sprite;
+        private var hueSlider:Sprite;
+        private var colorPreviewBox:Sprite;
+        private var spectrumBG:BitmapData;
+        private var hueArrow:ColorPickerHueArrowGraphic;
+        private var crosshairs:ColorPickerCrosshairsGraphic;
+        private var priorCursor:CustomCursor;
         private var priorCursorActive:Boolean;
         private var me:MouseEvent;
         private var m:ColorPickerPopupGraphic;

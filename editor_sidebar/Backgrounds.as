@@ -9,7 +9,7 @@ package editor_sidebar
     public class Backgrounds extends SideBar 
     {
 
-        public var cp_btn:BackgroundColorPickerButton = new BackgroundColorPickerButton(); // var_542
+        public var cp_btn:BackgroundColorPickerButton = new BackgroundColorPickerButton();
 
         public function Backgrounds()
         {

@@ -15,7 +15,7 @@ package blocks
     public class VanishBlock extends Block 
     {
 
-        private var var_602:uint;
+        private var reappearTimeout:uint;
 
         public function VanishBlock()
         {
@@ -74,7 +74,7 @@ package blocks
                 alpha = 0;
                 active = false;
                 this.clear();
-                this.var_602 = setTimeout(this.tryReappear, 2000);
+                this.reappearTimeout = setTimeout(this.tryReappear, 2000);
             }
         }
 
@@ -99,7 +99,7 @@ package blocks
         {
             removeEventListener(Event.ENTER_FRAME, this.fadeOut);
             removeEventListener(Event.ENTER_FRAME, this.fadeIn);
-            clearTimeout(this.var_602);
+            clearTimeout(this.reappearTimeout);
         }
 
         override public function remove()
@@ -111,4 +111,3 @@ package blocks
 
     }
 }//package blocks
-

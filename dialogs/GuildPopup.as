@@ -18,14 +18,14 @@ package dialogs
         public static var instance:GuildPopup;
 
         private var m:GuildPopupGraphic;
-        private var superLoader:SuperLoader; // var_123
-        private var loader:Loader; // var_293
-        private var guildMembers:Vector.<GuildMemberName> = new Vector.<GuildMemberName>(); // var_309
+        private var superLoader:SuperLoader;
+        private var loader:Loader;
+        private var guildMembers:Vector.<GuildMemberName> = new Vector.<GuildMemberName>();
         private var scroll:CustomScrollBar;
         private var guildName:String;
         private var guildId:int;
         private var guildIdShown:Boolean = false;
-        private var ownerId:int; // var_607
+        private var ownerId:int;
 
         public function GuildPopup(id:int = 0, name:String = "")
         {

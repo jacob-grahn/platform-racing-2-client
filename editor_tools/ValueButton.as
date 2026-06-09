@@ -11,8 +11,8 @@ package editor_tools
         private var description:String;
         private var defineCommand:Function;
         private var maxChars:Number;
-        private var restrictTo:String; // var_553
-        private var defaultVal:String; // var_537
+        private var restrictTo:String;
+        private var defaultVal:String;
         private var displayAsPassword:Boolean;
         private var m:ValueButtonGraphic = new ValueButtonGraphic();
 

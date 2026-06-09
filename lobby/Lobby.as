@@ -25,14 +25,14 @@ package lobby
     public class Lobby extends Page 
     {
 
-        public static var var_516:Boolean = false;
-        public static var lobbyEntrances:int = 0; // var_277
+        public static var _unused516:Boolean = false;
+        public static var lobbyEntrances:int = 0;
 
         private var left:LobbyLeft;
         private var right:LobbyRight;
         private var m:LobbyGraphic = new LobbyGraphic();
-        private var hover:HoverPopup; // var_234
-        private var bottom_bts:LobbyBottomButtonsGraphic; // var_20
+        private var hover:HoverPopup;
+        private var bottom_bts:LobbyBottomButtonsGraphic;
 
         public function Lobby()
         {

@@ -26,20 +26,20 @@ package blocks
         private var posY:Number;
         private var segX:int; // seg is the block coodinates
         private var segY:int;
-        private var removed:Boolean = false; // var_214
-        private var var_177:Point;
+        private var removed:Boolean = false;
+        private var bounceVel:Point;
         private var m:Bitmap;
-        protected var blockCode:int = 0; // var_79
+        protected var blockCode:int = 0;
         protected var active:Boolean = true;
-        protected var safeStand:Boolean = true; // var_34
-        protected var var_490:Boolean = true;
+        protected var safeStand:Boolean = true;
+        protected var bounceOnBump:Boolean = true;
         protected var map:Map;
-        protected var frozen:Boolean = false; // var_37
+        protected var frozen:Boolean = false;
         protected var optionsMenu:Class = null;
         private var _options:String = '';
-        private var var_110:Bitmap;
-        private var var_455:Number = 0.1;
-        private var var_600:int = 0;
+        private var iceOverlay:Bitmap;
+        private var iceFadeRate:Number = 0.1;
+        private var frozenTime:int = 0;
 
         public function Block(blockCode:int)
         {
@@ -135,7 +135,7 @@ package blocks
 
         public function timeSinceFrozen():int
         {
-            return Data.getTimestamp() - this.var_600;
+            return Data.getTimestamp() - this.frozenTime;
         }
 
         public function setSeg(_arg_1:int, _arg_2:int)
@@ -157,15 +157,15 @@ package blocks
         {
             if (!this.frozen) {
                 this.frozen = true;
-                this.var_600 = Data.getTimestamp();
-                this.var_110 = new Bitmap(Blocks.iceBitmap);
-                addChild(this.var_110);
+                this.frozenTime = Data.getTimestamp();
+                this.iceOverlay = new Bitmap(Blocks.iceBitmap);
+                addChild(this.iceOverlay);
                 if (_arg_1) {
-                    this.var_110.alpha = 1.75;
-                    this.var_455 = 0.01;
+                    this.iceOverlay.alpha = 1.75;
+                    this.iceFadeRate = 0.01;
                 } else {
-                    this.var_110.alpha = 1;
-                    this.var_455 = 0.025;
+                    this.iceOverlay.alpha = 1;
+                    this.iceFadeRate = 0.025;
                 }
                 addEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame, false, 0, true);
             }
@@ -209,7 +209,7 @@ package blocks
                 }
                 player.velY *= -0.25;
                 player.store.setNumber(LocalCharacter.JUMP_VEL, 0);
-                if (this.var_490) {
+                if (this.bounceOnBump) {
                     this.hitRotated(0, -15);
                 }
             }
@@ -292,7 +292,7 @@ package blocks
         // _loc4 = point
         private function hit(hitX:Number, hitY:Number)
         {
-            this.var_177 = new Point(hitX, hitY);
+            this.bounceVel = new Point(hitX, hitY);
             addEventListener(Event.ENTER_FRAME, this.onBounceFrame);
             var _local_3:Number = Data.pythag(hitX, hitY) * 0.06;
             if (Math.abs(x - this.posX) < 1 && Math.abs(y - this.posY) < 1) {
@@ -303,9 +303,9 @@ package blocks
 
         private function onUnfreezeFrame(e:Event)
         {
-            if (this.var_110 != null) {
-                this.var_110.alpha -= this.var_455;
-                if (this.var_110.alpha <= 0.05) {
+            if (this.iceOverlay != null) {
+                this.iceOverlay.alpha -= this.iceFadeRate;
+                if (this.iceOverlay.alpha <= 0.05) {
                     removeEventListener(Event.ENTER_FRAME, this.onUnfreezeFrame);
                     this.removeIceOverlay();
                     this.frozen = false;
@@ -315,11 +315,11 @@ package blocks
 
         private function onBounceFrame(_arg_1:Event)
         {
-            this.var_177.x = this.var_177.x * 0.5;
-            this.var_177.y = this.var_177.y * 0.5;
-            y += this.var_177.y;
+            this.bounceVel.x = this.bounceVel.x * 0.5;
+            this.bounceVel.y = this.bounceVel.y * 0.5;
+            y += this.bounceVel.y;
             y += (this.posY - y) * 0.35;
-            x += this.var_177.x;
+            x += this.bounceVel.x;
             x += (this.posX - x) * 0.35;
             if (Math.abs(this.posY - y) < 0.25 && Math.abs(this.posY - x) < 0.25) {
                 y = this.posY;
@@ -347,9 +347,9 @@ package blocks
 
         private function removeIceOverlay()
         {
-            if (this.var_110 != null) {
-                removeChild(this.var_110);
-                this.var_110 = null;
+            if (this.iceOverlay != null) {
+                removeChild(this.iceOverlay);
+                this.iceOverlay = null;
             }
         }
 
@@ -362,7 +362,7 @@ package blocks
             this.map.removeBlock(this);
             this.map = null;
             this.removeIceOverlay();
-            this.var_177 = null;
+            this.bounceVel = null;
             if (this.m != null) {
                 removeChild(this.m);
                 this.m.bitmapData = null;

@@ -15,14 +15,14 @@ package menu
     public class IntroPage extends Page 
     {
 
-        private static const JIGG_INTRO:int = 1; // const_21
-        private static const ARMOR_INTRO:int = 2; // const_66
-        private static const BUBBOX_INTRO:int = 3; // const_74
-        private static const KONG_INTRO:int = 4; // const_65
+        private static const JIGG_INTRO:int = 1;
+        private static const ARMOR_INTRO:int = 2;
+        private static const BUBBOX_INTRO:int = 3;
+        private static const KONG_INTRO:int = 4;
 
-        private var toPlay:Array = new Array(); // var_257
+        private var toPlay:Array = new Array();
         private var m:IntroPageGraphic;
-        private var currentIntro:MovieClip; // var_55
+        private var currentIntro:MovieClip;
         private var mute:SoundTransform = new SoundTransform();
 
         public function IntroPage()

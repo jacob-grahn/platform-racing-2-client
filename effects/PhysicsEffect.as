@@ -19,8 +19,6 @@ package effects
         public var posY:Number;
         public var rot:int;
         private var time:Number;
-        private var var_681:Number;
-        private var var_683:Number;
         private var grounded:Boolean = false;
 
         public function PhysicsEffect(startX:int, startY:int, startRot:int)

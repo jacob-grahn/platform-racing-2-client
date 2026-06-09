@@ -15,9 +15,9 @@ package com.jiggmin.ColorPicker
 
         public static const RIGHT:String = "right";
         public static const LEFT:String = "left";
-        internal static var recentColors:Array = new Array(0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555); // var_265
+        internal static var recentColors:Array = new Array(0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555);
 
-        public var direction:String = "right"; // var_419
+        public var direction:String = "right";
         protected var color:int;
         private var popup:ColorPickerPopup;
         private var m:ColorPickerGraphic;

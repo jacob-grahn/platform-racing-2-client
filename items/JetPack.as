@@ -11,7 +11,7 @@ package items
     public class JetPack extends Item 
     {
 
-        private var spaceDown:Boolean = false; // var_592
+        private var spaceDown:Boolean = false;
 
         public function JetPack(lc:LocalCharacter)
         {

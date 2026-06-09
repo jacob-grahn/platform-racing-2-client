@@ -7,7 +7,7 @@ package menu
     public class CommAuth 
     {
 
-        private static var hashing:SecureStore = new SecureStore(); // var_4
+        private static var hashing:SecureStore = new SecureStore();
 
 
         public static function init()

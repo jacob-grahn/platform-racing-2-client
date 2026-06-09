@@ -8,7 +8,7 @@ package blocks
     public class SupplyBlock extends Block 
     {
 
-        protected var uses:int = 1; // var_243
+        protected var uses:int = 1;
 
         public function SupplyBlock(_arg_1:int)
         {

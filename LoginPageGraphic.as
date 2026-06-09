@@ -13,9 +13,9 @@ package
 
         public var bg:MovieClip;
         public var loggedInAs:MovieClip;
-        public var kongLogo:SimpleButton; // kongLogo = var_349
-        public var bubbleBoxLogo:MovieClip; // bubbleBoxLogo = var_593
-        public var armorGamesLogo:MovieClip; // armorGamesLogo = var_614
+        public var kongLogo:SimpleButton;
+        public var bubbleBoxLogo:MovieClip;
+        public var armorGamesLogo:MovieClip;
 
         public function LoginPageGraphic()
         {

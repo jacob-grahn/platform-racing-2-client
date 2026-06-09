@@ -19,13 +19,13 @@ package player_profile
     public class PlayerDisplay extends Removable 
     {
 
-        private var charPreview:Character; // var_5
-        private var yStart:Number = 24; // var_388
+        private var charPreview:Character;
+        private var yStart:Number = 24;
         public var randomButton:RandomizeStyleButton = new RandomizeStyleButton();
-        public var hatSelect:PartSelector; // var_130
-        public var headSelect:PartSelector; // var_119
-        public var bodySelect:PartSelector; // var_113
-        public var feetSelect:PartSelector; // var_129
+        public var hatSelect:PartSelector;
+        public var headSelect:PartSelector;
+        public var bodySelect:PartSelector;
+        public var feetSelect:PartSelector;
         private var hover:HoverPopup;
         private var hoverTimer:uint;
 

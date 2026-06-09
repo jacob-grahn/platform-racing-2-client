@@ -18,7 +18,7 @@ package background
     public class EffectBackground extends Background 
     {
 
-        public static var instance:EffectBackground; // var_276
+        public static var instance:EffectBackground;
 
         public function EffectBackground(_arg_1:GamePage)
         {

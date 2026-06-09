@@ -8,33 +8,33 @@ package blocks
     public class Blocks 
     {
 
-        public static var startBitmap:StartBitmap; // var_420
+        public static var startBitmap:StartBitmap;
         public static var basic1Bitmap:Basic1Bitmap;
         public static var basic2Bitmap:Basic2Bitmap;
         public static var basic3Bitmap:Basic3Bitmap;
         public static var basic4Bitmap:Basic4Bitmap;
-        public static var brickBitmap:BrickBitmap; // var_391
-        public static var basic2Bitmap1:Basic2Bitmap; // var_494
-        public static var basic2Bitmap2:Basic2Bitmap; // var_426
-        public static var basic2Bitmap3:Basic2Bitmap; // var_485
-        public static var basic2Bitmap4:Basic2Bitmap; // var_417
-        public static var mineBitmap:MineBitmap; // var_504
-        public static var itemBitmap:ItemBitmap; // var_458
-        public static var iceBitmap:IceBitmap; // var_110
-        public static var finishBitmap:FinishBitmap; // var_461
-        public static var crumbleBitmap:CrumbleBitmap; // var_430
-        public static var vanishBitmap:VanishBitmap; // var_442
-        public static var moveBitmap:MoveBitmap; // var_401
-        public static var waterBitmap:WaterBitmap; // var_404
-        public static var rotateRightBitmap:RotateRightBitmap; // var_409
-        public static var rotateLeftBitmap:RotateLeftBitmap; // var_398
-        public static var pushBitmap:PushBitmap; // var_473
-        public static var safetyNetBitmap:SafetyNetBitmap; // var_498
-        public static var infiniteItemBitmap:InfiniteItemBitmap; // var_462
-        public static var happyBitmap:HappyBitmap; // var_408
-        public static var sadBitmap:SadBitmap; // var_476
-        public static var heartBitmap:HeartBitmap; // var_433
-        public static var timeBitmap:TimeBitmap; // var_457
+        public static var brickBitmap:BrickBitmap;
+        public static var basic2Bitmap1:Basic2Bitmap;
+        public static var basic2Bitmap2:Basic2Bitmap;
+        public static var basic2Bitmap3:Basic2Bitmap;
+        public static var basic2Bitmap4:Basic2Bitmap;
+        public static var mineBitmap:MineBitmap;
+        public static var itemBitmap:ItemBitmap;
+        public static var iceBitmap:IceBitmap;
+        public static var finishBitmap:FinishBitmap;
+        public static var crumbleBitmap:CrumbleBitmap;
+        public static var vanishBitmap:VanishBitmap;
+        public static var moveBitmap:MoveBitmap;
+        public static var waterBitmap:WaterBitmap;
+        public static var rotateRightBitmap:RotateRightBitmap;
+        public static var rotateLeftBitmap:RotateLeftBitmap;
+        public static var pushBitmap:PushBitmap;
+        public static var safetyNetBitmap:SafetyNetBitmap;
+        public static var infiniteItemBitmap:InfiniteItemBitmap;
+        public static var happyBitmap:HappyBitmap;
+        public static var sadBitmap:SadBitmap;
+        public static var heartBitmap:HeartBitmap;
+        public static var timeBitmap:TimeBitmap;
         public static var customStatsBitmap:CustomStatsBitmap;
         public static var teleportBitmap:TeleportBitmap;
 

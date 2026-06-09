@@ -11,8 +11,8 @@ package ui
     {
 
         private var m:LobbyTabGraphic = new LobbyTabGraphic();
-        private var tabsHolder:TabsHolder; // var_258
-        private var tabFunction:Function; // var_415
+        private var tabsHolder:TabsHolder;
+        private var tabFunction:Function;
 
         public function LobbyTab(tabFn:Function, tabText:String)
         {

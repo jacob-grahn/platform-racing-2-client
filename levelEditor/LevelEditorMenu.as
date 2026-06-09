@@ -24,10 +24,10 @@ package levelEditor
     {
 
         public var blocks:Blocks = new Blocks();
-        public var settings:Settings = new Settings(); // var_132
-        public var stamps:Stamps = new Stamps(); // var_242
+        public var settings:Settings = new Settings();
+        public var stamps:Stamps = new Stamps();
         public var tools:Tools = new Tools();
-        public var bg:Backgrounds = new Backgrounds(); // var_508
+        public var bg:Backgrounds = new Backgrounds();
         public var sideBar:SideBar = blocks;
         private var editor:LevelEditor = LevelEditor.editor;
         public var m:LevelEditorMenuGraphic = new LevelEditorMenuGraphic();
@@ -130,12 +130,12 @@ package levelEditor
                 this.changeSideBar(this.stamps);
             }
             this.editor.cur = this.editor["bg" + layerNum];
-            this.editor.var_220 = this.editor["draw" + layerNum];
+            this.editor.curDraw = this.editor["draw" + layerNum];
             if (this.sideBar == this.stamps) {
                 this.editor.focusOn(this.editor.cur);
             } else {
                 if (this.sideBar == this.tools) {
-                    this.editor.focusOn(this.editor.var_220);
+                    this.editor.focusOn(this.editor.curDraw);
                 }
             }
         }
@@ -190,13 +190,13 @@ package levelEditor
 
         private function clickUndo(e:MouseEvent)
         {
-            this.editor.var_225.undo();
+            this.editor.focusedBG.undo();
             this.changeUndoRedoState();
         }
 
         private function clickRedo(e:MouseEvent)
         {
-            this.editor.var_225.redo();
+            this.editor.focusedBG.redo();
             this.changeUndoRedoState();
         }
 
@@ -211,8 +211,8 @@ package levelEditor
 
         public function changeUndoRedoState()
         {
-            this.m.undoButton.enabled = this.editor.var_225.saveArray.length > 0;
-            this.m.redoButton.enabled = this.editor.var_225.redoArray.length > 0;
+            this.m.undoButton.enabled = this.editor.focusedBG.saveArray.length > 0;
+            this.m.redoButton.enabled = this.editor.focusedBG.redoArray.length > 0;
         }
 
         public function changeSideBar(sb:SideBar)

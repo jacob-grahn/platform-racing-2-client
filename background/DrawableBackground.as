@@ -25,20 +25,20 @@ package background
     public class DrawableBackground extends Background 
     {
 
-        private var var_210:Number = 200; // ART COMPRESSION ONCE PIXELIZATION THRESHOLD HIT?
-        private var var_541:int = 750; //500 + ((1 + Settings.getValue(Settings.ART_QUALITY, 0)) * 250); // PIXELIZATION THRESHOLD?
+        private var rasterTileSize:Number = 200; // ART COMPRESSION ONCE PIXELIZATION THRESHOLD HIT?
+        private var rasterTileLimit:int = 750; //500 + ((1 + Settings.getValue(Settings.ART_QUALITY, 0)) * 250); // PIXELIZATION THRESHOLD?
         private var losslessQuality:Boolean = false;
         private var fromLE:Boolean;
-        private var rasterCycles:Number = 1; // var_87
+        private var rasterCycles:Number = 1;
         private var bitmapArray:Array = new Array();
-        public var brushCanvas:Sprite = new Sprite(); // var_33
-        public var var_122:Sprite = new Sprite();
-        public var objCanvas:Sprite = new Sprite(); // var_84
-        private var brushSize:Number = 4; // var_136
+        public var brushCanvas:Sprite = new Sprite();
+        public var rasterCanvas:Sprite = new Sprite();
+        public var objCanvas:Sprite = new Sprite();
+        private var brushSize:Number = 4;
         private var color:Number = 0;
         private var mode:String = "draw";
-        private var brushX:Number; // var_302
-        private var brushY:Number; // var_298
+        private var brushX:Number;
+        private var brushY:Number;
         public var drawing:Boolean = false;
         public var stoppedRasterizing:Boolean = false; // stop the rasterization process after 5 attempts to avoid crashing
 
@@ -47,8 +47,8 @@ package background
             super(gp);
             this.fromLE = LevelEditor.editor != null;
             this.losslessQuality = Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false);
-            this.var_122.cacheAsBitmap = true;
-            addChild(this.var_122);
+            this.rasterCanvas.cacheAsBitmap = true;
+            addChild(this.rasterCanvas);
             addChild(this.brushCanvas);
             addChild(this.objCanvas);
             this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
@@ -56,13 +56,13 @@ package background
 
         public function disableCaching()
         {
-            this.var_122.cacheAsBitmap = false;
+            this.rasterCanvas.cacheAsBitmap = false;
             this.setObjCaching(false);
         }
 
         public function enableCaching()
         {
-            this.var_122.cacheAsBitmap = true;
+            this.rasterCanvas.cacheAsBitmap = true;
             this.setObjCaching(true);
         }
 
@@ -92,7 +92,7 @@ package background
 
         public function rasterize()
         {
-            this.rasterizeBrush(this.var_122, this.bitmapArray);
+            this.rasterizeBrush(this.rasterCanvas, this.bitmapArray);
         }
 
         private function rasterizeBrush(_arg_1:Sprite, _arg_2:Array)
@@ -105,7 +105,7 @@ package background
         private function rasterizeToBitmaps(_arg_1:Sprite, _arg_2:Array, _arg_3:Sprite)
         {
             var _local_4:Rectangle = _arg_3.getBounds(this);
-            var _local_5:int = this.var_210 * this.rasterCycles;
+            var _local_5:int = this.rasterTileSize * this.rasterCycles;
             var _local_6:Number = Math.floor(_local_4.x / _local_5) * _local_5;
             var _local_7:Number = Math.floor(_local_4.y / _local_5) * _local_5;
             var _local_8:Number = _local_4.x + _local_4.width;
@@ -120,7 +120,7 @@ package background
                 }
                 _local_10 += _local_5;
             }
-            if (!this.losslessQuality && !this.fromLE && this.rasterCycles < 5 && Main.var_184 >= this.var_541) {
+            if (!this.losslessQuality && !this.fromLE && this.rasterCycles < 5 && Main.bitmapTileCount >= this.rasterTileLimit) {
                 this.rasterCycles++;
                 this.clear();
                 this.draw();
@@ -131,22 +131,22 @@ package background
 
         private function rasterizeTile(_arg_1:Number, _arg_2:Number, _arg_3:Sprite, _arg_4:Array, _arg_5:Sprite)
         {
-            var _local_6:Number = Math.floor(_arg_1 / (this.var_210 * this.rasterCycles));
-            var _local_7:Number = Math.floor(_arg_2 / (this.var_210 * this.rasterCycles));
+            var _local_6:Number = Math.floor(_arg_1 / (this.rasterTileSize * this.rasterCycles));
+            var _local_7:Number = Math.floor(_arg_2 / (this.rasterTileSize * this.rasterCycles));
             var _local_8:Boolean = true;
             if (_arg_4[_local_6] == null) {
                 _arg_4[_local_6] = new Array();
             } else if (_arg_4[_local_6][_local_7] != null) {
                 _local_8 = false;
             }
-            if (!_local_8 || Main.var_184 <= this.var_541 || this.losslessQuality || this.fromLE) {
+            if (!_local_8 || Main.bitmapTileCount <= this.rasterTileLimit || this.losslessQuality || this.fromLE) {
                 if (_local_8) {
-                    Main.var_184++;
-                    var _local_11:BitmapData = new BitmapData(this.var_210 + 1, this.var_210 + 1, true, 0);
+                    Main.bitmapTileCount++;
+                    var _local_11:BitmapData = new BitmapData(this.rasterTileSize + 1, this.rasterTileSize + 1, true, 0);
                     var _local_12:Bitmap = new Bitmap(_local_11);
                     _local_12.scaleX = _local_12.scaleY = this.rasterCycles;
                     _arg_4[_local_6][_local_7] = _local_12;
-                    if (_arg_3 != this.var_122 || isInView(_local_6, _local_7)) {
+                    if (_arg_3 != this.rasterCanvas || isInView(_local_6, _local_7)) {
                         _arg_3.addChild(_local_12);
                     }
                     _local_12.x = _arg_1;
@@ -182,11 +182,11 @@ package background
             _local_4.addChild(_local_1);
             for (var _local_7:int = 0; _local_7 < _local_3.numChildren; _local_7++) {
                 var _local_6:Bitmap = Bitmap(_local_3.getChildAt(_local_7));
-                this.rasterizeTile(_local_6.x, _local_6.y, this.var_122, this.bitmapArray, _local_4);
+                this.rasterizeTile(_local_6.x, _local_6.y, this.rasterCanvas, this.bitmapArray, _local_4);
             }
             this.disposeSpriteChildren(_local_1);
             this.disposeSpriteChildren(_local_3);
-            addChildAt(this.var_122, 0);
+            addChildAt(this.rasterCanvas, 0);
             addChildAt(this.brushCanvas, 1);
         }
 
@@ -216,8 +216,8 @@ package background
             if (course.goodToDraw(this)) {
                 var _local_7:Number = new Date().time;
                 this.brushCanvas.graphics.lineStyle(this.brushSize, this.color);
-                for (var actionsProcessed:int = 0; var_39 < saveArray.length; ++actionsProcessed) {
-                    var action:String = saveArray[var_39];
+                for (var actionsProcessed:int = 0; drawPos < saveArray.length; ++actionsProcessed) {
+                    var action:String = saveArray[drawPos];
                     var type:String = action.substr(0, 1);
                     var data:String = action.substr(1);
                     if (type == "d") { // draw using brush
@@ -241,14 +241,14 @@ package background
                     if (this.mode == "draw") {
                         this.rasterize();
                     }
-                    var_39++;
+                    drawPos++;
                     var _local_9:Number = new Date().time - _local_7;
                     if ((_local_9 > 50 && actionsProcessed > 20) || _local_9 > 250) {
                         break;
                     }
                 }
             }
-            if (var_39 >= saveArray.length) {
+            if (drawPos >= saveArray.length) {
                 this.drawing = false;
             }
             super.draw(_arg_1);
@@ -258,9 +258,9 @@ package background
         {
             super.setPos(_arg_1, _arg_2);
             var _local_3:Point = Data.rotatePoint(-course.posX, -course.posY, rotation);
-            var _local_4:int = Math.floor((_local_3.x * scale) / (this.var_210 * this.rasterCycles));
-            var _local_5:int = Math.floor((_local_3.y * scale) / (this.var_210 * this.rasterCycles));
-            updateViewWindow(_local_4, _local_5, 2, 2, 1, 1, this.var_122, this.bitmapArray);
+            var _local_4:int = Math.floor((_local_3.x * scale) / (this.rasterTileSize * this.rasterCycles));
+            var _local_5:int = Math.floor((_local_3.y * scale) / (this.rasterTileSize * this.rasterCycles));
+            updateViewWindow(_local_4, _local_5, 2, 2, 1, 1, this.rasterCanvas, this.bitmapArray);
         }
 
         protected function placeObject(s:String)
@@ -444,7 +444,7 @@ package background
         private function disposeBitmap(_arg_1:Bitmap)
         {
             if (_arg_1 != null) {
-                Main.var_184--;
+                Main.bitmapTileCount--;
                 _arg_1.bitmapData.dispose();
                 _arg_1.bitmapData = null;
                 if (_arg_1.parent != null) {

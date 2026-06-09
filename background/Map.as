@@ -20,22 +20,21 @@ package background
     public class Map extends BlockBackground 
     {
 
-        // removed var_688 (unused)
-        private var startBlockNum:int = 0; // var_400
+        private var startBlockNum:int = 0;
         private var miniMap:MiniMap;
-        private var moveInterval:uint; // var_296
+        private var moveInterval:uint;
         private var segSize:Number = 30;
         public var maxY:Number = -9999999;
         public var minY:Number = 9999999;
         public var maxX:Number = -9999999;
         public var minX:Number = 9999999;
-        private var moveBlocksArray:Vector.<MoveBlock> = new Vector.<MoveBlock>(); // var_196
+        private var moveBlocksArray:Vector.<MoveBlock> = new Vector.<MoveBlock>();
         private var startTime:int;
-        private var moves:int = 0; // var_506
-        private var moveTime:int = 5000; // var_534
+        private var moves:int = 0;
+        private var moveTime:int = 5000;
         private var rand:Random = new Random(1);
-        private var placedEggs:int = 0; // var_446
-        private var eggPtsArray:Array = new Array(); // var_379
+        private var placedEggs:int = 0;
+        private var eggPtsArray:Array = new Array();
 
         public function Map(m:MiniMap, c:Course)
         {
@@ -165,7 +164,7 @@ package background
         override public function draw(_arg_1:Number = 50)
         {
             super.draw(_arg_1);
-            if (var_39 >= saveArray.length) {
+            if (drawPos >= saveArray.length) {
                 this.miniMap.rasterize();
             }
         }
@@ -248,7 +247,7 @@ package background
                 var block:Block = Block(getChildAt(0));
                 block.remove();
             }
-            var_39 = 0;
+            drawPos = 0;
             blockArray = new Array();
             objArray = new Array();
         }

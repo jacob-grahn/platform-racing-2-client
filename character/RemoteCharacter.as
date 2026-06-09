@@ -24,7 +24,7 @@ package character
 
         private var updateQueue:Array = new Array();
         private var commandHandler:CommandHandler = CommandHandler.commandHandler;
-        private var mapDot:MiniMapDot; // var_174
+        private var mapDot:MiniMapDot;
         private var map:Map = Course.course.blockBackground;
         private var catchupRate:Number = 1;
         private var posX:Number = 0;

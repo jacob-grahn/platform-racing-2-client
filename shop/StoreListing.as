@@ -21,7 +21,7 @@ package shop
         public static const EVENT_INFO:String = "itemInfo";
 
         private var m:StoreListingGraphic = new StoreListingGraphic();
-        private var _listing:Object; // var_315
+        private var _listing:Object;
         private var loader:Loader;
 
         public function StoreListing(o:Object, flash:EpicFlash = null)

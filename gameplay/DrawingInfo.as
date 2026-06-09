@@ -12,7 +12,7 @@ package gameplay
 
         private var m:DrawingInfoGraphic = new DrawingInfoGraphic();
         private var cm:CommandHandler = CommandHandler.commandHandler;
-        private var names:Array = new Array(); // var_425
+        private var names:Array = new Array();
         private var localTimeHover:HoverPopup;
 
         public function DrawingInfo()

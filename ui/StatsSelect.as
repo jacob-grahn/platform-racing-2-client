@@ -11,11 +11,11 @@ package ui
     {
 
         private var m:PointsRemainingGraphic = new PointsRemainingGraphic();
-        private var speedSlider:StatSlider; // var_70
-        private var accelSlider:StatSlider; // var_62
-        private var jumpnSlider:StatSlider; // var_66
-        private var totalPoints:int; // var_334
-        private var localChar:LocalCharacter; // var_5
+        private var speedSlider:StatSlider;
+        private var accelSlider:StatSlider;
+        private var jumpnSlider:StatSlider;
+        private var totalPoints:int;
+        private var localChar:LocalCharacter;
         private var stageRef:Stage = Main.stage;
         public var updateSavedLEStats:Boolean = false;
 

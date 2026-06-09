@@ -8,7 +8,6 @@ package blocks
     public class MoveBlock extends Block 
     {
 
-        // removed: var_672, var_675 (unused)
         private var arrow:MoveArrow = new MoveArrow();
         private var dir:int;
 

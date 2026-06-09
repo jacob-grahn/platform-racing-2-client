@@ -18,13 +18,13 @@ package editor_sidebar
         private static var size:Number = 4;
 
         private var stageRef:Stage = Main.stage;
-        private var colorPicker:ColorPicker = new ColorPicker(); // var_12
-        private var brush:Brush = new Brush(); // var_114
-        private var eraser:Eraser = new Eraser(); // var_203
-        private var sizePicker:SizePicker = new SizePicker(this, Tools.size); // var_571
-        private var brushButton:BrushButtonGraphic = new BrushButtonGraphic(); // var_351
-        private var eraserButton:EraserButtonGraphic = new EraserButtonGraphic(); // var_354
-        private var active:Boolean = false; // var_71
+        private var colorPicker:ColorPicker = new ColorPicker();
+        private var brush:Brush = new Brush();
+        private var eraser:Eraser = new Eraser();
+        private var sizePicker:SizePicker = new SizePicker(this, Tools.size);
+        private var brushButton:BrushButtonGraphic = new BrushButtonGraphic();
+        private var eraserButton:EraserButtonGraphic = new EraserButtonGraphic();
+        private var active:Boolean = false;
 
         public function Tools()
         {

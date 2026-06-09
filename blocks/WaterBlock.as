@@ -14,7 +14,7 @@ package blocks
     public class WaterBlock extends Block 
     {
 
-        private var var_484:Boolean = false;
+        private var rippleActive:Boolean = false;
 
         public function WaterBlock()
         {
@@ -58,8 +58,8 @@ package blocks
             if (alpha < 0.5) {
                 alpha = 0.5;
             }
-            if (!this.var_484) {
-                this.var_484 = true;
+            if (!this.rippleActive) {
+                this.rippleActive = true;
                 addEventListener(Event.ENTER_FRAME, this.onRippleFrame, false, 0, true);
             }
         }
@@ -69,7 +69,7 @@ package blocks
             alpha += 0.03;
             if (alpha >= 1) {
                 alpha = 1;
-                this.var_484 = false;
+                this.rippleActive = false;
                 removeEventListener(Event.ENTER_FRAME, this.onRippleFrame);
             }
         }
@@ -83,4 +83,3 @@ package blocks
 
     }
 }//package blocks
-

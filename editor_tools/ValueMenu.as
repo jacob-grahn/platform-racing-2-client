@@ -10,7 +10,7 @@ package editor_tools
 
         private var m:ValueMenuGraphic = new ValueMenuGraphic();
         private var defineCommand:Function;
-        private var defaultVal:String; // var_537
+        private var defaultVal:String;
 
         public function ValueMenu(vb:ValueButton, title:String, desc:String, value:String, command:Function, maxChars:Number=9, restrict:String="0123456789", defaultVal:String="0", displayAsPassword:Boolean=false)
         {

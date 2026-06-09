@@ -23,7 +23,7 @@ package dialogs
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var hTrueY:Number = -71.5;
         private var hFalseY:Number = -43.5;
-        private var buttonStartPos:int = 80; // var_437
+        private var buttonStartPos:int = 80;
         private var hoverActive:HoverPopup;
 
         public function OptionsPopup()

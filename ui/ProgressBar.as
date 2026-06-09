@@ -13,14 +13,14 @@ package ui
     {
 
         private var bar:ProgressBarGraphic = new ProgressBarGraphic();
-        private var totalPx:Number = 0; // totalPx = var_509
-        private var percentComplete:Number = 0; // percentComplete = var_557
-        private var widthPx:Number = 0; // widthPx = var_342
-        private var var_597:Number; // 
+        private var totalPx:Number = 0;
+        private var percentComplete:Number = 0;
+        private var widthPx:Number = 0;
+        private var lerpFactor:Number;
 
         public function ProgressBar(px:Number = 200, _arg_2:Number = 0.3)
         {
-            this.var_597 = _arg_2;
+            this.lerpFactor = _arg_2;
             var shadow:DropShadowFilter = new DropShadowFilter(2, 45, 0, 1, 2, 2);
             this.bar.filters = new Array(shadow);
             addChild(this.bar);
@@ -32,7 +32,7 @@ package ui
 
         private function go(e:Event)
         {
-            this.widthPx = this.widthPx + ((this.percentComplete - this.widthPx) * this.var_597);
+            this.widthPx = this.widthPx + ((this.percentComplete - this.widthPx) * this.lerpFactor);
             this.bar.bar.width = this.widthPx;
         }
 
@@ -62,4 +62,3 @@ package ui
 
     }
 }//package ui
-

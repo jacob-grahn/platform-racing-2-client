@@ -14,7 +14,7 @@ package
     {
 
         private static var initialized:Boolean = false;
-        private static var keys:Object = new Object(); // var_183
+        private static var keys:Object = new Object();
 
 
         public static function initialize(stage:Stage)

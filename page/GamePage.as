@@ -24,12 +24,12 @@ package page
         public static var course:GamePage;
 
         private var segSize:int = 30;
-        public var allowedItems:Vector.<int>; // var_86
+        public var allowedItems:Vector.<int>;
         public var badHats:Vector.<int>;
-        public var var_14:Sprite = new Sprite();
+        public var container:Sprite = new Sprite();
         protected var color:Number = 12303325; //0;
-        protected var var_133:Array = new Array();
-        protected var zoom:Number = 1; // var_233
+        protected var drawingBackgrounds:Array = new Array();
+        protected var zoom:Number = 1;
         public var scale:Number = 1;
         public var credits:Array = new Array();
         public var levelID:Number;
@@ -38,7 +38,7 @@ package page
         public var note:String = "";
         public var song:String = "";
         public var gravity:String = "1";
-        public var maxTime:String = "120"; // var_378
+        public var maxTime:String = "120";
         public var gameMode:String = "race";
         public var cowboyChance:String = "5";
         private var accel:Number = 10;
@@ -47,8 +47,8 @@ package page
         private var velY:Number = 0;
         public var posX:Number = -20000;
         public var posY:Number = -20000;
-        public var var_239:int = 60000;
-        public var var_362:int = 60000;
+        public var levelWidth:int = 60000;
+        public var levelHeight:int = 60000;
         public var drawing:Boolean = false;
         protected var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var rasterStopNotified:Boolean = false;
@@ -62,7 +62,7 @@ package page
             GamePage.course = this;
             x = 550 / 2;
             y = 400 / 2;
-            addChild(this.var_14);
+            addChild(this.container);
             Main.stage.focus = Main.stage;
             super.initialize();
             this.setItems("all");
@@ -100,31 +100,31 @@ package page
 
         public function startDrawing(_arg_1:Background)
         {
-            var _local_2:int = this.var_133.indexOf(_arg_1);
+            var _local_2:int = this.drawingBackgrounds.indexOf(_arg_1);
             if (_local_2 == -1) {
-                this.var_133.push(_arg_1);
+                this.drawingBackgrounds.push(_arg_1);
             }
             this.drawing = true;
         }
 
         public function finishDrawing(_arg_1:Background)
         {
-            var _local_2:int = this.var_133.indexOf(_arg_1);
+            var _local_2:int = this.drawingBackgrounds.indexOf(_arg_1);
             if (_arg_1 is DrawableBackground && _arg_1.stoppedRasterizing && !this.rasterStopNotified) {
                 new MessagePopup('Error: Some art didn\'t load correctly. Don\'t worry! You can still play the level.\n\nYou can prevent this in the future by enabling lossless art quality in the options menu.');
                 this.rasterStopNotified = true;
             }
             if (_local_2 != -1) {
-                this.var_133.splice(_local_2, 1);
+                this.drawingBackgrounds.splice(_local_2, 1);
             }
-            if (this.var_133.length <= 0) {
+            if (this.drawingBackgrounds.length <= 0) {
                 this.drawing = false;
             }
         }
 
         public function goodToDraw(_arg_1:Background):Boolean
         {
-            return this.var_133[0] == _arg_1 || this.var_133.length <= 0;
+            return this.drawingBackgrounds[0] == _arg_1 || this.drawingBackgrounds.length <= 0;
         }
 
         public function getCredits():String

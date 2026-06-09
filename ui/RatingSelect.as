@@ -18,9 +18,9 @@ package ui
     {
 
         private var m:RatingSelectGraphic = new RatingSelectGraphic();
-        private var star:HighlightStar = new HighlightStar(); // var_139
+        private var star:HighlightStar = new HighlightStar();
         private var rating:Number = 3;
-        private var starWidth:Number = m.width / 5; // var_517
+        private var starWidth:Number = m.width / 5;
         private var courseID:int;
 
         public function RatingSelect(id:int)

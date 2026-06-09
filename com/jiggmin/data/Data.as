@@ -19,8 +19,8 @@ package com.jiggmin.data
     public class Data
     {
 
-        public static const RAD_DEG:Number = 180 / Math.PI; // const_93 (from class_74/Maths)
-        public static const DEG_RAD:Number = Math.PI / 180; // const_78 (from class_74/Maths)
+        public static const RAD_DEG:Number = 180 / Math.PI;
+        public static const DEG_RAD:Number = Math.PI / 180;
 
         public static var md5:MD5 = new MD5();
         public static var df:DateTimeFormatter = new DateTimeFormatter(LocaleID.DEFAULT, DateTimeStyle.MEDIUM, DateTimeStyle.NONE);
@@ -33,11 +33,11 @@ package com.jiggmin.data
         ];
         //private static var groupColors:Array = new Array("#676666", "#047B7B", "#1C369F", "#870A6F");
         private static var modGroupColors:Array = new Array("#006400", "#0092FF", "#1C369F");
-        private static var damnArray:Array = new Array("dang", "dingy-goo", "condemnation"); // var_397
-        private static var fuckArray:Array = new Array("fooey", "fingilly", "funk-master", "freak monster", "jiminy cricket"); // var_449
-        private static var shitArray:Array = new Array("shoot", "shewet"); // var_434
-        private static var niggaArray:Array = new Array("someone cooler than me", "ladies magnet", "cooler race"); // var_355
-        private static var bitchArray:Array = new Array("cooler gender", "female dog"); // var_373
+        private static var damnArray:Array = new Array("dang", "dingy-goo", "condemnation");
+        private static var fuckArray:Array = new Array("fooey", "fingilly", "funk-master", "freak monster", "jiminy cricket");
+        private static var shitArray:Array = new Array("shoot", "shewet");
+        private static var niggaArray:Array = new Array("someone cooler than me", "ladies magnet", "cooler race");
+        private static var bitchArray:Array = new Array("cooler gender", "female dog");
 
 
         // _loc2 = ret

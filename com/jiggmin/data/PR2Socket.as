@@ -21,11 +21,11 @@ package com.jiggmin.data
     public class PR2Socket extends Socket 
     {
 
-        private var pingInterval:uint = setInterval(sendPing, 10000); // var_616
+        private var pingInterval:uint = setInterval(sendPing, 10000);
         public var sendNum:int = 0;
-        private var endChar:String = String.fromCharCode(4); // var_478
+        private var endChar:String = String.fromCharCode(4);
         private var md5:MD5 = new MD5();
-        private var var_363:Time = new Time();
+        private var serverTime:Time = new Time();
 
         public function PR2Socket()
         {
@@ -119,16 +119,16 @@ package com.jiggmin.data
         public function receivePing(arr:Array)
         {
             var _local_2:Number = Number(arr);
-            var _local_3:Number = this.var_363.getTimestamp();
+            var _local_3:Number = this.serverTime.getTimestamp();
             var _local_4:Number = Math.abs(_local_2 - _local_3);
             if (_local_4 > 2) {
-                this.var_363.setTime(_local_2);
+                this.serverTime.setTime(_local_2);
             }
         }
 
         public function getMS():Number
         {
-            return this.var_363.getMS();
+            return this.serverTime.getMS();
         }
 
         public function remove()

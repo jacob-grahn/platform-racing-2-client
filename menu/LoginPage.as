@@ -27,7 +27,7 @@ package menu
     {
 
         private var m:LoginPageGraphic = new LoginPageGraphic();
-        private var buttons:Array = new Array(); // buttons = var_45
+        private var buttons:Array = new Array();
         private var posX:Number = 275;
         private var posY:Number = 228;
         private var showHideInterval:uint;

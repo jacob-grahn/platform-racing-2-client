@@ -9,7 +9,7 @@ package effects
     {
 
         private var m:StingGraphic = new StingGraphic();
-        private var owner:Character; // var_5
+        private var owner:Character;
 
         public function Sting(c:Character, dir:String = '')
         {

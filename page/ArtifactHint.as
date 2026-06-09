@@ -9,7 +9,7 @@ package page
     public class ArtifactHint 
     {
 
-        private var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // var_123
+        private var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
         private var chatRoom:Chat; // target
 
         public function ArtifactHint(room:Chat)

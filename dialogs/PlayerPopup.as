@@ -31,7 +31,7 @@ package dialogs
 
         private var superLoader:SuperLoader;
         private var m:PlayerPopupGraphic = new PlayerPopupGraphic();
-        private var banMenu:BanMenu; // var_200
+        private var banMenu:BanMenu;
         private var adminMenu:AdminMenu; // adminMenu
         private var tempModMenu:TempModMenu; // tempModMenu
         private var guildName:GuildName;

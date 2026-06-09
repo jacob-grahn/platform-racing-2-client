@@ -15,13 +15,13 @@ package ui
         private var m:CustomScrollBarGraphic;
         private var target:DisplayObject;
         private var stageRef:Stage = Main.stage;
-        private var var_312:Number;
-        private var var_353:Number;
-        private var var_337:Number;
-        private var var_610:Number;
+        private var thumbMinY:Number;
+        private var thumbMaxY:Number;
+        private var targetInitialY:Number;
+        private var viewHeight:Number;
         private var pos:Number = 0;
-        private var var_586:Number = 5;
-        private var var_595:Number;
+        private var scrollStep:Number = 5;
+        private var scrollDelta:Number;
 
         public function CustomScrollBar()
         {
@@ -36,11 +36,11 @@ package ui
         {
             this.m.track.height = _arg_2 - 15;
             this.m.downArrow.y = _arg_2 - this.m.downArrow.height;
-            this.var_353 = this.m.downArrow.y - this.m.thumb.height / 2;
-            this.var_312 = this.m.upArrow.height + this.m.thumb.height / 2;
-            this.var_337 = _arg_1.y;
+            this.thumbMaxY = this.m.downArrow.y - this.m.thumb.height / 2;
+            this.thumbMinY = this.m.upArrow.height + this.m.thumb.height / 2;
+            this.targetInitialY = _arg_1.y;
             this.target = _arg_1;
-            this.var_610 = _arg_3;
+            this.viewHeight = _arg_3;
             scaleX = scaleY = 1;
         }
 
@@ -52,12 +52,12 @@ package ui
 
         private function onUpArrowDown(_arg_1:MouseEvent)
         {
-            this.startContinuousScroll(-this.var_586);
+            this.startContinuousScroll(-this.scrollStep);
         }
 
         private function onDownArrowDown(_arg_1:MouseEvent)
         {
-            this.startContinuousScroll(this.var_586);
+            this.startContinuousScroll(this.scrollStep);
         }
 
         private function startContinuousScroll(_arg_1:Number)
@@ -65,7 +65,7 @@ package ui
             removeEventListener(Event.ENTER_FRAME, this.scroll);
             addEventListener(Event.ENTER_FRAME, this.scroll, false, 0, true);
             this.stageRef.addEventListener(MouseEvent.MOUSE_UP, this.onArrowUp, false, 0, true);
-            this.var_595 = _arg_1;
+            this.scrollDelta = _arg_1;
         }
 
         private function onArrowUp(_arg_1:MouseEvent)
@@ -75,7 +75,7 @@ package ui
 
         private function scroll(_arg_1:Event)
         {
-            this.position(this.pos + this.var_595);
+            this.position(this.pos + this.scrollDelta);
         }
 
         private function onThumbUp(_arg_1:MouseEvent)
@@ -95,18 +95,18 @@ package ui
 
         public function position(_arg_1:Number)
         {
-            if (_arg_1 > this.var_353) {
-                _arg_1 = this.var_353;
+            if (_arg_1 > this.thumbMaxY) {
+                _arg_1 = this.thumbMaxY;
             }
-            if (_arg_1 < this.var_312) {
-                _arg_1 = this.var_312;
+            if (_arg_1 < this.thumbMinY) {
+                _arg_1 = this.thumbMinY;
             }
             this.m.thumb.y = this.pos = _arg_1;
-            var _local_2:Number = (this.m.thumb.y - this.var_312) / (this.var_353 - this.var_312);
-            var _local_3:Number = this.target.height - this.var_610;
-            this.target.y = this.var_337 - (_local_2 * _local_3);
-            if (this.target.y > this.var_337) {
-                this.target.y = this.var_337;
+            var _local_2:Number = (this.m.thumb.y - this.thumbMinY) / (this.thumbMaxY - this.thumbMinY);
+            var _local_3:Number = this.target.height - this.viewHeight;
+            this.target.y = this.targetInitialY - (_local_2 * _local_3);
+            if (this.target.y > this.targetInitialY) {
+                this.target.y = this.targetInitialY;
             }
             this.target.y = Math.round(this.target.y);
         }

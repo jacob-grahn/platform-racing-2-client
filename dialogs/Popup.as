@@ -15,7 +15,7 @@ package dialogs
         public static var LOADED = 'loaded';
         public static var REMOVED = 'removed';
 
-        public var fadeOutStarted:Boolean = false; // var_304
+        public var fadeOutStarted:Boolean = false;
 
         public function Popup(addOverlay:Boolean = true)
         {

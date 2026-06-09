@@ -14,7 +14,7 @@ package gameplay
     public class RaceChat extends Chat 
     {
 
-        public static var textBox:TextField; // textBox = var_423
+        public static var textBox:TextField;
 
         private var m:RaceChatGraphic = new RaceChatGraphic();
 

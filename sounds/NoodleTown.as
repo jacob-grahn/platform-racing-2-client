@@ -21,11 +21,11 @@ package sounds
         private var channel2:SoundChannel;
         private var perc1:Number;
         private var perc2:Number;
-        private var var_327:Number;
+        private var crossfadeRate:Number;
         private var waitTimeout:uint;
-        private var var_551:Number = 0.05;
+        private var volumeStep:Number = 0.05;
         private var volume:Number = 0;
-        private var var_187:Number = 1;
+        private var targetVolume:Number = 1;
 
         public function NoodleTown()
         {
@@ -43,7 +43,7 @@ package sounds
                 }
                 this.channel1 = this.song1.play(0, 9999);
                 this.channel2 = this.song2.play(0, 9999);
-                this.setTargetVolume(this.var_187);
+                this.setTargetVolume(this.targetVolume);
                 this.applyVolume(this.volume);
                 clearTimeout(this.waitTimeout);
                 this.scheduleCrossfade();
@@ -57,9 +57,9 @@ package sounds
 
         private function startCrossfade()
         {
-            this.var_327 = (Math.random() * 0.004) + 0.002;
+            this.crossfadeRate = (Math.random() * 0.004) + 0.002;
             if (this.perc1 > this.perc2) {
-                this.var_327 = -this.var_327;
+                this.crossfadeRate = -this.crossfadeRate;
             }
             addEventListener(Event.ENTER_FRAME, this.name_3);
             this.scheduleCrossfade();
@@ -67,8 +67,8 @@ package sounds
 
         private function name_3(_arg_1:Event)
         {
-            this.perc1 = this.perc1 + this.var_327;
-            this.perc2 = this.perc2 - this.var_327;
+            this.perc1 = this.perc1 + this.crossfadeRate;
+            this.perc2 = this.perc2 - this.crossfadeRate;
             if (this.perc1 <= 0) {
                 this.perc1 = 0;
                 this.perc2 = 1;
@@ -94,27 +94,27 @@ package sounds
 
         public function setTargetVolume(n:Number)
         {
-            this.var_187 = n;
+            this.targetVolume = n;
             addEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
         }
 
         private function volumeFadeTick(e:Event)
         {
-            if (this.volume < this.var_187) {
-                this.volume = this.volume + this.var_551;
-                if (this.volume > this.var_187) {
-                    this.volume = this.var_187;
+            if (this.volume < this.targetVolume) {
+                this.volume = this.volume + this.volumeStep;
+                if (this.volume > this.targetVolume) {
+                    this.volume = this.targetVolume;
                     removeEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
                 }
             } else {
-                this.volume = this.volume - this.var_551;
-                if (this.volume < this.var_187) {
-                    this.volume = this.var_187;
+                this.volume = this.volume - this.volumeStep;
+                if (this.volume < this.targetVolume) {
+                    this.volume = this.targetVolume;
                     removeEventListener(Event.ENTER_FRAME, this.volumeFadeTick);
                 }
             }
             this.applyVolume(this.volume);
-            if (this.volume <= 0 && this.var_187 <= 0) {
+            if (this.volume <= 0 && this.targetVolume <= 0) {
                 this.stop();
             }
         }

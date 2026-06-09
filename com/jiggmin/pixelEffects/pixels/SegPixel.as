@@ -15,13 +15,13 @@ package com.jiggmin.pixelEffects.pixels
     {
 
         private var bitmap:Bitmap;
-        private var src:BitmapData; // var_236
-        private var product:BitmapData; // var_315
-        private var finalX:Number; // var_291
-        private var finalY:Number; // var_328
-        private var pull:Number; // var_267
-        private var glintFrames:int = 20; // var_547
-        private var glintCounter:Number = glintFrames; // var_318
+        private var src:BitmapData;
+        private var product:BitmapData;
+        private var finalX:Number;
+        private var finalY:Number;
+        private var pull:Number;
+        private var glintFrames:int = 20;
+        private var glintCounter:Number = glintFrames;
 
         public function SegPixel(_arg_1:BitmapData, _arg_2:BitmapData, _arg_3:Number, _arg_4:Number, _arg_5:Number, _arg_6:Number, _arg_7:Number, _arg_8:Number, _arg_9:Number)
         {

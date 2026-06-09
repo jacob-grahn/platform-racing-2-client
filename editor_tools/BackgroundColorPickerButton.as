@@ -10,7 +10,7 @@ package editor_tools
     public class BackgroundColorPickerButton extends Sprite
     {
 
-        private var cp:ColorPicker = new ColorPicker(); // var_12
+        private var cp:ColorPicker = new ColorPicker();
 
         public function BackgroundColorPickerButton()
         {

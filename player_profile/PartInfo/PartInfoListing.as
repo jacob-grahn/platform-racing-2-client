@@ -18,7 +18,7 @@ package player_profile.PartInfo
     {
 
         private var m:PartInfoListingGraphic = new PartInfoListingGraphic();
-        private var listing:Object; // var_315
+        private var listing:Object;
         private var hasEE:Boolean = false;
         private var target:MovieClip;
 

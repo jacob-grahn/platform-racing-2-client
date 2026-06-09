@@ -14,14 +14,11 @@ package drawing_tools
             hideMouse();
         }
 
-        // _loc3 = layer
-        // _loc4 = dropPt
-        // _loc5 = textObj
         override protected function dropObject(dropX:int, dropY:int)
         {
             var layer:ObjectBackground = editor.cur;
             var dropPt:Point = editor.cur.globalToLocal(new Point(dropX - 5, dropY - 16));
-            var textObj:TextObject = layer.addText("", dropPt.x, dropPt.y, TextObject.var_380, true);
+            var textObj:TextObject = layer.addText("", dropPt.x, dropPt.y, TextObject.lastColor, true);
             textObj.select();
             textObj.startEditing();
             remove();

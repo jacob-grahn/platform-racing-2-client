@@ -17,7 +17,7 @@ package menu
     {
 
         private var m:CreateAccountPopupGraphic = new CreateAccountPopupGraphic();
-        private var uploadingPopup:UploadingPopup; // var_148
+        private var uploadingPopup:UploadingPopup;
 
         public function CreateAccountPopup()
         {

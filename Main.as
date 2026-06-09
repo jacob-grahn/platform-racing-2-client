@@ -38,28 +38,28 @@ package
         private var _debugDot:flash.display.Shape;
         public static var debugLog:String = "";
         public static function log(s:String):void { debugLog += s + "\n"; }
-        private static const clientWidth:int = 550; // const_92
-        public static const clientHeight:int = 400; // const_63
-        public static const accountChange:String = "accountChange"; // const_46
+        private static const clientWidth:int = 550;
+        public static const clientHeight:int = 400;
+        public static const accountChange:String = "accountChange";
         public static const beta:Boolean = false; // DISABLE IN PRODUCTION
         public static const testing:Boolean = false; // DISABLE IN PRODUCTION
         public static const build:String = '29-oct-2023-v168_2_1';
         public static const version:String = '168.2.1';
         public static const baseURL:String = "https://pr2hub.com"; // "https://pr2hub.dev";
-        public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.dev/levels"; // const_71
+        public static const levelsURL:String = "https://pr2hub.com/levels"; //"https://pr2hub.dev/levels";
         public static var stage:Stage;
         public static var instance:Main;
         public static var token:String = "";
         public static var loggedInAs:String = "";
         public static var userName:String = "";
-        public static var userPass:String = ""; // var_169
+        public static var userPass:String = "";
         public static var remember:Boolean = false;
         public static var group:int = 0;
         public static var isSpecialUser:Boolean = false;
-        public static var isTempMod:Boolean = false; // var_270
+        public static var isTempMod:Boolean = false;
         public static var isTrialMod:Boolean = false;
         public static var isPrizer:Boolean = false;
-        public static var hasEmail:Boolean = false; // var_338
+        public static var hasEmail:Boolean = false;
         public static var awardKongNextLogin:Boolean = false;
         public static var userId:int = 0;
         public static var guild:int = 0;
@@ -67,23 +67,23 @@ package
         public static var guildName:String = "";
         public static var emblem:String = "";
         public static var favoriteLevels:Array = new Array();
-        public static var lastAuthTime:Time = new Time(); // var_363
+        public static var lastAuthTime:Time = new Time();
         public static var server:Object;
         public static var commandHandler:CommandHandler = new CommandHandler();
         public static var socket:PR2Socket;
-        public static var noodleTown:NoodleTown = new NoodleTown(); // var_143
+        public static var noodleTown:NoodleTown = new NoodleTown();
         public static var pageHolder:PageHolder;
-        public static var muteButton:MuteButton = new MuteButton(); // var_58
-        public static var filledSlotCourseID:int; // var_583
-        public static var filledSlotCourseVersion:int; // var_514
+        public static var muteButton:MuteButton = new MuteButton();
+        public static var filledSlotCourseID:int;
+        public static var filledSlotCourseVersion:int;
         public static var stats:SWFStats;
         public static var bitmapArray:Array = new Array();
-        public static var var_184:int = 0; // referenced in background.DrawableBackground class
+        public static var bitmapTileCount:int = 0;
         public static var blockArray:Array = new Array();
         public static var siteMode:String = "kongregate";
         public static var domain:String;
         private static var url:String;
-        private static var protocol:String; // protocol = var_389
+        private static var protocol:String;
 
         public var kongAPI:*;
         public var betaLoader:Boolean;

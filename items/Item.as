@@ -15,11 +15,11 @@ package items
     public class Item extends Removable 
     {
 
-        protected var localChar:LocalCharacter; // var_5
+        protected var localChar:LocalCharacter;
         protected var space:Boolean = false;
-        protected var reloading:Boolean = false; // var_410
-        private var reloadListener:uint; // var_581
-        private var available:Boolean = false; // var_572
+        protected var reloading:Boolean = false;
+        private var reloadListener:uint;
+        private var available:Boolean = false;
 
         public function Item(lc:LocalCharacter)
         {

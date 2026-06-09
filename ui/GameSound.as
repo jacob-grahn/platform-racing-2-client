@@ -8,8 +8,6 @@ package ui
     import flash.media.SoundTransform;
     import flash.events.Event;
     import flash.utils.setInterval;
-    import flash.utils.clearTimeout;
-    import flash.utils.setTimeout;
     import flash.net.URLRequest;
     import flash.media.SoundLoaderContext;
     import flash.media.Sound;
@@ -18,10 +16,9 @@ package ui
     public class GameSound extends ComboBox 
     {
 
-        private var soundChannel:SoundChannel; // var_218
+        private var soundChannel:SoundChannel;
         private var inLE:Boolean;
-        private var enableMusicInt:uint; // var_531
-        //private var var_470:uint;
+        private var enableMusicInt:uint;
         private var url:String = Main.baseURL + "/music/new";
 
         public function GameSound(LE:Boolean = false)
@@ -169,7 +166,6 @@ package ui
             clearInterval(this.enableMusicInt);
             removeEventListener(Event.CHANGE, this.startSong);
             this.stopSong();
-            //clearTimeout(this.var_470);
             if (parent != null) {
                 parent.removeChild(this);
             }

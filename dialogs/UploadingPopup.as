@@ -16,7 +16,7 @@ package dialogs
     {
 
         protected var loader:SuperLoader;
-        private var progressBar:ProgressBar = new ProgressBar(); // progressBar = var_206
+        private var progressBar:ProgressBar = new ProgressBar();
         protected var m:UploadingPopupGraphic = new UploadingPopupGraphic();
         public var data:String;
         public var parsedData:Object;

@@ -18,7 +18,7 @@ package gameplay
         private var startTime:Number;
         private var tickInterval:uint;
         private var target:Course;
-        private var racing:Boolean = false; // var_300
+        private var racing:Boolean = false;
         private var paused:Boolean = true;
 
         public function CourseTimer(c:Course)

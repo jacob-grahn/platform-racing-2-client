@@ -11,7 +11,7 @@ package effects
     {
 
         private var m:ZapGraphic = new ZapGraphic();
-        private var owner:Character; // var_5
+        private var owner:Character;
 
         public function Zap(c:Character, showBolt:Boolean=true, playSound:Boolean=true, showFlash:Boolean=true)
         {

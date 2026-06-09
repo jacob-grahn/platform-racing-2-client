@@ -22,8 +22,8 @@ package ui
             this.array = a;
             this.setValue(val);
             addChild(this.m);
-            this.m.left.addEventListener(MouseEvent.CLICK, this.clickLeft); // this.m.var_333
-            this.m.right.addEventListener(MouseEvent.CLICK, this.clickRight); // this.m.var_381
+            this.m.left.addEventListener(MouseEvent.CLICK, this.clickLeft);
+            this.m.right.addEventListener(MouseEvent.CLICK, this.clickRight);
         }
 
         private function clickLeft(e:MouseEvent)

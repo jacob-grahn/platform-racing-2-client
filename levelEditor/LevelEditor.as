@@ -25,12 +25,12 @@ package levelEditor
         public static var segSize:Number = 30;
         public static var editor:LevelEditor;
 
-        private var drawingPop:DrawingPopup; // var_221
-        public var var_364:Sprite;
+        private var drawingPop:DrawingPopup;
+        public var overlayLayer:Sprite;
         public var menu:LevelEditorMenu;
-        public var var_225:Background;
+        public var focusedBG:Background;
         public var cur:ObjectBackground; // currently selected layer
-        public var var_220:DrawableBackground;
+        public var curDraw:DrawableBackground;
         public var bg1:ObjectBackground;
         public var bg2:ObjectBackground;
         public var bg3:ObjectBackground;
@@ -43,7 +43,7 @@ package levelEditor
         public var draw5:DrawableBackground;
         public var bg:LevelBackground;
         public var blockBG:BlockBackground;
-        public var blockGrid:BlockGridLines; // var_171
+        public var blockGrid:BlockGridLines;
         public var live:Number = 0;
         public var minRank:String = "0"; // minLevel
         public var pass:String = null;
@@ -65,15 +65,15 @@ package levelEditor
             super.initialize();
             LevelEditor.editor = this;
             Main.stage.quality = StageQuality.HIGH;
-            this.var_364 = new Sprite();
-            this.var_364.mouseEnabled = false;
-            this.var_364.mouseChildren = false;
+            this.overlayLayer = new Sprite();
+            this.overlayLayer.mouseEnabled = false;
+            this.overlayLayer.mouseChildren = false;
             this.menu = new LevelEditorMenu();
             this.menu.init();
             this.attachBackgrounds();
             addChild(this.menu);
             this.menu.setReportsMode(this.reportsMode);
-            addChild(this.var_364);
+            addChild(this.overlayLayer);
             if (this.variables != null) {
                 this.setVariables(this.variables);
                 this.variables = null;
@@ -86,8 +86,8 @@ package levelEditor
             super.keyScroll(e);
             var _local_2:Number = 275 * (1 / scaleX);
             var _local_3:Number = 200 * (1 / scaleY);
-            posX = Data.numLimit(posX, -var_239 + _local_2, -_local_2);
-            posY = Data.numLimit(posY, -var_362 + _local_3, -_local_3);
+            posX = Data.numLimit(posX, -levelWidth + _local_2, -_local_2);
+            posY = Data.numLimit(posY, -levelHeight + _local_3, -_local_3);
             this.setPos(posX, posY);
         }
 
@@ -116,22 +116,22 @@ package levelEditor
             this.draw4.setScale(1);
             this.bg5.setScale(2);
             this.draw5.setScale(2);
-            var_14.addChild(this.bg);
-            var_14.addChild(this.draw3);
-            var_14.addChild(this.bg3);
-            var_14.addChild(this.draw2);
-            var_14.addChild(this.bg2);
-            var_14.addChild(this.draw1);
-            var_14.addChild(this.bg1);
-            var_14.addChild(this.blockGrid);
-            var_14.addChild(this.blockBG);
-            var_14.addChild(this.bg4);
-            var_14.addChild(this.draw4);
-            var_14.addChild(this.bg5);
-            var_14.addChild(this.draw5);
+            container.addChild(this.bg);
+            container.addChild(this.draw3);
+            container.addChild(this.bg3);
+            container.addChild(this.draw2);
+            container.addChild(this.bg2);
+            container.addChild(this.draw1);
+            container.addChild(this.bg1);
+            container.addChild(this.blockGrid);
+            container.addChild(this.blockBG);
+            container.addChild(this.bg4);
+            container.addChild(this.draw4);
+            container.addChild(this.bg5);
+            container.addChild(this.draw5);
             this.cur = this.blockBG;
-            this.var_220 = this.draw1;
-            this.var_225 = this.cur;
+            this.curDraw = this.draw1;
+            this.focusedBG = this.cur;
             this.blockGrid.mouseEnabled = false;
             this.blockGrid.mouseChildren = false;
             this.setStartPos();
@@ -218,7 +218,7 @@ package levelEditor
             this.draw4.setSaveString(arr[11]);
             this.draw5.setSaveString(arr[12]);
             this.bg.setSaveString(arr[8]);
-            this.focusOn(this.var_225);
+            this.focusOn(this.focusedBG);
             this.setStartPos();
         }
 
@@ -233,7 +233,7 @@ package levelEditor
         override public function finishDrawing(_arg_1:Background)
         {
             super.finishDrawing(_arg_1);
-            if (var_133.length <= 0 && this.drawingPop != null) {
+            if (drawingBackgrounds.length <= 0 && this.drawingPop != null) {
                 this.drawingPop.startFadeOut();
                 this.drawingPop = null;
             }
@@ -268,7 +268,7 @@ package levelEditor
             this.draw4.unfocus();
             this.draw5.unfocus();
             _arg_1.focusOn();
-            this.var_225 = _arg_1;
+            this.focusedBG = _arg_1;
             this.menu.changeUndoRedoState();
             this.blockGrid.visible = _arg_1 == this.blockBG;
             if (_arg_1 == this.bg1 || _arg_1 == this.draw1) {

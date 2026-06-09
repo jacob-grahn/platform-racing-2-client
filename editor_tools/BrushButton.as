@@ -19,7 +19,7 @@ package editor_tools
         private function mouseDownHandler(e:MouseEvent)
         {
             this.editor.menu.changeSideBar(this.editor.menu.tools);
-            this.editor.focusOn(this.editor.var_220);
+            this.editor.focusOn(this.editor.curDraw);
         }
 
         public function remove()

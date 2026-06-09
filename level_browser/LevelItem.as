@@ -27,7 +27,7 @@ package level_browser
     public class LevelItem extends Removable 
     {
 
-        //private static var unlocked:Boolean = false; // var_332
+        //private static var unlocked:Boolean = false;
 
         private var m:LevelItemGraphic = new LevelItemGraphic();
         private var cm:CommandHandler = CommandHandler.commandHandler;
@@ -35,7 +35,7 @@ package level_browser
         private var infoPopup:HoverPopup;
         private var favBtPopup:HoverPopup;
         private var favBtTimer:uint;
-        private var slotArray:Array = new Array(); // var_127
+        private var slotArray:Array = new Array();
         private var coverActive = true;
         public var courseID:int;
         public var version:int;
@@ -52,8 +52,8 @@ package level_browser
         private var type:String;
         private var badHats:Vector.<int> = new Vector.<int>;
         private var lastUpdated:int;
-        private var maxSlots:Number = 4; // var_590
-        private var superLoader:SuperLoader; // var_80
+        private var maxSlots:Number = 4;
+        private var superLoader:SuperLoader;
         private var uploading:UploadingPopup;
 
         // _loc12 = htmlName

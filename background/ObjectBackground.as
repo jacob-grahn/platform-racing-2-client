@@ -17,11 +17,11 @@ package background
     public class ObjectBackground extends Background 
     {
 
-        public var objCanvas:Sprite; // var_84
-        public var objArray:Array = new Array(); // var_10
-        private var objLimit:int = 50000; // var_356
-        protected var var_0379:int = 0; // class_10
-        protected var segMult:int = 1; // var_367
+        public var objCanvas:Sprite;
+        public var objArray:Array = new Array();
+        private var objLimit:int = 50000;
+        protected var saveCodeOffset:int = 0; // class_10
+        protected var segMult:int = 1;
 
         public function ObjectBackground(gp:GamePage)
         {
@@ -106,8 +106,8 @@ package background
                 var _local_2:int = 0;
                 var drawDateStart:Date = new Date();
                 var drawStart:Number = drawDateStart.getTime();
-                while (var_39 < saveArray.length) {
-                    var _local_3:String = saveArray[var_39];
+                while (drawPos < saveArray.length) {
+                    var _local_3:String = saveArray[drawPos];
                     var _local_4:String = _local_3.substr(0, 1);
                     var _local_5:String = _local_3.substr(1);
                     if (_local_4 == "o") {
@@ -123,7 +123,7 @@ package background
                     } else if (_local_4 == "y") {
                         this.updateText(_local_5);
                     }
-                    var_39++;
+                    drawPos++;
                     _local_2++;
                     var drawDateEnd:Date = new Date();
                     var drawEnd:Number = drawDateEnd.getTime();
@@ -241,7 +241,7 @@ package background
                         var relY:int = currentY - lastY; // "pointer" for objY (difference in y between new obj and old one)
                         var lastX:int = currentX; // last X (for relative positioning in save string)
                         var lastY:int = currentY; // last Y (for relative positioning in save string)
-                        var currentObjCode:int = obj.displayCode + this.var_0379;
+                        var currentObjCode:int = obj.displayCode + this.saveCodeOffset;
                         relCoord = relX + ";" + relY;
                         if (obj is BlockObject && this is BlockBackground) {
                             var blockObj:BlockObject = BlockObject(obj);

@@ -48,39 +48,39 @@ package character
 
         public static const JUMP_VEL:String = "njv";
         public static const SuperJump:String = "nj";
-        public static const DefaultGravity:String = "gr"; // const_53
-        public static const GravityMultiplied:String = "grm"; // const_59
+        public static const DefaultGravity:String = "gr";
+        public static const GravityMultiplied:String = "grm";
 
         private var socket:PR2Socket = Main.socket;
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var course:Course;
         private var map:Map;
-        private var mapDot:MiniMapDot; // var_174
+        private var mapDot:MiniMapDot;
         private var itemDisplay:ItemDisplay;
         private var epnuInterval:uint = setInterval(setEPNU, 5000);
         private var cowboyCheckInterval:uint = setInterval(ensureCowboyStats, 250);
         private var prevParent:DisplayObject = parent;
-        private var speedStat:int; // var_245
-        private var accelStat:int; // var_261
-        private var jumpnStat:int; // var_247
+        private var speedStat:int;
+        private var accelStat:int;
+        private var jumpnStat:int;
         public var accel:Number;
         public var maxVelX:Number;
         public var targetVelX:Number = 0;
-        public var var_669:Number = 0;
+        public var targetVelY:Number = 0;
         private var baseAccelFactor:Number = 0.35;
         private var baseVelFactor:Number = 1;
         public var accelFactor:Number = baseAccelFactor;
         public var velFactor:Number = baseVelFactor;
         public var halfWidth:Number = 10;
         public var charHeight:Number = 55;
-        public var lastSafeX:Number = 0; // var_205
-        public var lastSafeY:Number = 0; // var_224
+        public var lastSafeX:Number = 0;
+        public var lastSafeY:Number = 0;
         public var standingSegX:int;
         public var standingSegY:int;
         public var maxSpeed:Number = 28;
         private var initialized:Boolean = false;
         public var testMode:Boolean = false;
-        public var grounded:Boolean = false; // var_42
+        public var grounded:Boolean = false;
         public var crouching:Boolean = false;
         public var up:Boolean = false;
         public var down:Boolean = false;
@@ -91,8 +91,8 @@ package character
         private var jumpHeld:Boolean = false;
         private var crouchCharge:Number = 0;
         private var segSize:Number = 30;
-        private var hurtTime:Number = 0; // var_249
-        private var squashedTime:Number = 0; // var_368
+        private var hurtTime:Number = 0;
+        private var squashedTime:Number = 0;
         private var stingCooldown:int = 135;
         public var waterTicks:Number = 0;
         private var floorLeft:Block = null;
@@ -107,18 +107,18 @@ package character
         private var headBlock:Block = null;
         private var topBlock:Block = null;
         public var mode:String = "wait";
-        private var curItem:Item; // var_99 | removed (unused): var_680:LaserGun, var_674:Mine, superJump:SuperJump, lightning:Lightning, var_682:Teleport, jetPack:JetPack, sword:Sword
-        private var speedBurst:SpeedBurst; // var_668
+        private var curItem:Item;
+        private var speedBurst:SpeedBurst;
         private var life:int = 3;
-        private var invincible:Boolean = false; // var_435
+        private var invincible:Boolean = false;
         private var frozenSolid:Boolean = false;
-        private var unfreezeTimer:uint; // var_340
+        private var unfreezeTimer:uint;
         private var lastNetScaleX:Number;
-        private var exactX:int; // var_443
-        private var exactY:int; // var_453
+        private var exactX:int;
+        private var exactY:int;
         private var lastNetState:String;
         private var lastNetItem:int;
-        private var exactPosNextUpdate:Boolean = false; // var_232
+        private var exactPosNextUpdate:Boolean = false;
         private var altCtrl:Object = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
         private var startingStats:Array = null;
 

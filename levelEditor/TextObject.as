@@ -17,15 +17,15 @@ package levelEditor
     public class TextObject extends DrawObject
     {
 
-        public static var var_380:int = 0;
+        public static var lastColor:int = 0;
 
         private var textField:TextField;
-        private var editableTextField:TextField; // var_13
-        private var editButton:EditTextButton; // var_56
-        private var cp:ColorPicker; // var_12
-        private var editing:Boolean = false; // var_483
-        private var text:String; // var_565
-        private var color:int; // var_563
+        private var editableTextField:TextField;
+        private var editButton:EditTextButton;
+        private var cp:ColorPicker;
+        private var editing:Boolean = false;
+        private var text:String;
+        private var color:int;
 
         public function TextObject(_arg_1:String, objX:int, objY:int, objColor:int)
         {
@@ -231,7 +231,7 @@ package levelEditor
         private function closeColorPicker(e:Event)
         {
             this.editing = false;
-            TextObject.var_380 = this.cp.getColor();
+            TextObject.lastColor = this.cp.getColor();
             this.setColor(this.cp.getColor());
         }
 

@@ -8,14 +8,14 @@ package character
     public class DjinnEffects 
     {
 
-        private var owner:Character; // var_5
+        private var owner:Character;
         private var hat:ParticleEmitter;
         private var head:ParticleEmitter;
         private var body:ParticleEmitter;
         private var foot1:ParticleEmitter;
         private var foot2:ParticleEmitter;
-        private var djinnBody:Object; // var_25
-        private var djinnFeet:Object; // var_26
+        private var djinnBody:Object;
+        private var djinnFeet:Object;
 
         public function DjinnEffects(c:Character)
         {

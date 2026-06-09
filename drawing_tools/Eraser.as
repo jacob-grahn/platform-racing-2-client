@@ -14,10 +14,9 @@ package drawing_tools
         override protected function stopDrawing()
         {
             drawing = false;
-            LevelEditor.editor.var_220.erase();
+            LevelEditor.editor.curDraw.erase();
         }
 
 
     }
 }//package drawing_tools
-

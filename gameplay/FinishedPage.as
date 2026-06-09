@@ -12,11 +12,11 @@ package gameplay
     {
 
         private var m:FinishedPageGraphic = new FinishedPageGraphic();
-        private var stars:RatingSelect; // var_344
+        private var stars:RatingSelect;
         private var cm:CommandHandler = CommandHandler.commandHandler;
-        private var curAwardLine:int = 1; // var_376
-        private var game:Game; // var_427
-        private var expGain:ExpGain = new ExpGain(); // var_238
+        private var curAwardLine:int = 1;
+        private var game:Game;
+        private var expGain:ExpGain = new ExpGain();
 
         public function FinishedPage(g:Game)
         {

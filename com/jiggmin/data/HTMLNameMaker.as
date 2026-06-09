@@ -18,7 +18,7 @@ package com.jiggmin.data
     public class HTMLNameMaker 
     {
 
-        private var array:Array = new Array(); // var_282
+        private var array:Array = new Array();
 
         public function HTMLNameMaker()
         {

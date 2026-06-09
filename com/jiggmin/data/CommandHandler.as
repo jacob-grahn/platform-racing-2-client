@@ -21,11 +21,11 @@ package com.jiggmin.data
 
         public static var commandHandler:CommandHandler;
 
-        private var EOL:String = String.fromCharCode(4); // var_478
-        private var inBuffer:String = ""; // var_226
-        private var commands:Object = new Object(); // var_360
+        private var EOL:String = String.fromCharCode(4);
+        private var inBuffer:String = "";
+        private var commands:Object = new Object();
         private var md5:MD5 = new MD5();
-        public var sendNum:int = -1; // var_359
+        public var sendNum:int = -1;
 
         public function CommandHandler()
         {

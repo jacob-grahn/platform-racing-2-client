@@ -14,10 +14,10 @@ package level_browser
         public static var instance:CourseMenu = null;
 
         private var m:CourseMenuGraphic = new CourseMenuGraphic();
-        private var slot:Slot; // var_384
-        private var secondInterval:uint; // var_361
+        private var slot:Slot;
+        private var secondInterval:uint;
         private var waitTimeout:uint;
-        private var confirmed:Boolean = false; // var_515
+        private var confirmed:Boolean = false;
         private var timer:int;
 
         public function CourseMenu(s:Slot)

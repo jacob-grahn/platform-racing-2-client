@@ -17,9 +17,8 @@ package
         private var title:String;
         private var content:String;
         private var time:int = 500;
-        //protected var var_559:Boolean = true; // unused
-        private var delayTimer:uint; // var_292
-        private var hover:HoverPopup; // var_8
+        private var delayTimer:uint;
+        private var hover:HoverPopup;
 
         public function HoverDelayPopup(title:String="", message:String="", delay:int=500)
         {
@@ -53,9 +52,7 @@ package
         private function showPopup()
         {
             this.hidePopupIfShown();
-            // if (this.var_559 == true) {
             this.hover = new HoverPopup(this.title, this.content, this);
-            // }
         }
 
         private function hidePopupIfShown()

@@ -36,18 +36,18 @@ package player_profile
         public static var currentHat:int;
         public static var partToSet:Array;
 
-        private var charModel:Character; // var_5
-        private var statsSelect:StatsSelect; // var_158
-        private var playerDisplay:PlayerDisplay; // var_190
+        private var charModel:Character;
+        private var statsSelect:StatsSelect;
+        private var playerDisplay:PlayerDisplay;
         private var stageRef:Stage = Main.stage;
         private var m:AccountInfoGraphic = new AccountInfoGraphic();
-        private var rankTokensUsed:int = 0; // var_117
-        private var rankTokensAvailable:int = 0; // var_439
+        private var rankTokensUsed:int = 0;
+        private var rankTokensAvailable:int = 0;
         private var rank:int = 0;
         private var guildName:GuildName; // guildName
         private var rankBtnX:int = 65;
         private var rankBtnDualX:int = 95;
-        private var customizeInfo:String; // var_566
+        private var customizeInfo:String;
         private var loadoutsHover:HoverPopup;
         private var loadoutsHoverTimer:uint;
 
@@ -147,11 +147,11 @@ package player_profile
             addChild(this.playerDisplay);
             this.m.rankTokenUp_bt.buttonMode = true;
             this.m.rankTokenUp_bt.useHandCursor = true;
-            this.m.rankTokenUp_bt.addEventListener(MouseEvent.CLICK, this.clickRankTokenUp, false, 0, true); // this.m.var_159
+            this.m.rankTokenUp_bt.addEventListener(MouseEvent.CLICK, this.clickRankTokenUp, false, 0, true);
             this.m.rankTokenDown_bt.buttonMode = true;
             this.m.rankTokenDown_bt.useHandCursor = true;
-            this.m.rankTokenDown_bt.addEventListener(MouseEvent.CLICK, this.clickRankTokenDown, false, 0, true); // this.m.var_115
-            this.m.loadouts_bt.addEventListener(MouseEvent.CLICK, this.loadoutsMouseEvent, false, 0, true); // this.m.var_533
+            this.m.rankTokenDown_bt.addEventListener(MouseEvent.CLICK, this.clickRankTokenDown, false, 0, true);
+            this.m.loadouts_bt.addEventListener(MouseEvent.CLICK, this.loadoutsMouseEvent, false, 0, true);
             this.m.loadouts_bt.addEventListener(MouseEvent.MOUSE_OVER, this.loadoutsMouseEvent, false, 0, true);
             this.m.loadouts_bt.addEventListener(MouseEvent.MOUSE_OUT, this.loadoutsMouseEvent, false, 0, true);
             this.updatePosRankTokenButtons();

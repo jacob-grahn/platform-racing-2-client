@@ -17,10 +17,10 @@ package dialogs
 
         private var m:CreateGuildPopupGraphic;
         private var guildId:int;
-        private var loading:Boolean = false; // var_289
+        private var loading:Boolean = false;
         private var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
-        private var infoLoader:SuperLoader = new SuperLoader(true, SuperLoader.j); // var_204
-        private var emblem:EmblemLoader; // var_46
+        private var infoLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
+        private var emblem:EmblemLoader;
 
         public function CreateGuildPopup(id:int = 0)
         {

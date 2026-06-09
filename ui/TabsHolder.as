@@ -12,10 +12,9 @@ package ui
 
         private static var memory:Object = new Object();
 
-        public var tabArr:Array; // var_43
+        public var tabArr:Array;
         private var selected:Number;
-        //private var maxWidth:Number; // var_239 // removed -- using local var from constructor
-        private var holderId:String; // var_405
+        private var holderId:String;
 
         // _loc5 = tabNum
         // _loc6 = tab

@@ -14,7 +14,7 @@ package social
 
         private var m:PlayersTabListGraphic = new PlayersTabListGraphic();
         private var superLoader:SuperLoader = new SuperLoader(true, SuperLoader.j);
-        private var sortMode:String = "gpToday"; // var_229
+        private var sortMode:String = "gpToday";
         private var sortOrder:String = 'desc';
 
         public function Guilds()

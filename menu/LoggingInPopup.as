@@ -25,8 +25,8 @@ package menu
 
         private var loader:SuperLoader = new SuperLoader(true, SuperLoader.j);
         private var m:LoggingInPopupGraphic = new LoggingInPopupGraphic();
-        private var socketOK:Boolean = false; // var_560
-        private var httpOK:Boolean = false; // var_615
+        private var socketOK:Boolean = false;
+        private var httpOK:Boolean = false;
         private var socket:PR2Socket;
 
         // _loc2 = send

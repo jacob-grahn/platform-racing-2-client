@@ -7,13 +7,13 @@ package com.jiggmin.data
     public class Random 
     {
 
-        private var _inext:int; // var_464
-        private var _inextp:int; // var_471
-        private const MBIG:int = 0x7fffffff; // const_96
-        private const MSEED:int = 0x9a4ec86; // const_97
-        private const MZ:int = 0; // const_95
-        private var _seed:int; // var_520
-        private var _seedArray:Vector.<int>; // var_53
+        private var _inext:int;
+        private var _inextp:int;
+        private const MBIG:int = 0x7fffffff;
+        private const MSEED:int = 0x9a4ec86;
+        private const MZ:int = 0;
+        private var _seed:int;
+        private var _seedArray:Vector.<int>;
 
         // _loc2 = num2
         // _loc3 = num3

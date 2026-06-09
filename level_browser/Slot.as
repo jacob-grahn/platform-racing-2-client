@@ -8,7 +8,7 @@ package level_browser
     {
 
         private var target:LevelItem;
-        public var courseMenu:CourseMenu; // var_253
+        public var courseMenu:CourseMenu;
         private var m:SlotGraphic = new SlotGraphic();
         private var status:String = "empty";
         private var num:Number;

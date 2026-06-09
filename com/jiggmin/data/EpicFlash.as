@@ -14,31 +14,31 @@ package com.jiggmin.data
     {
 
         private var items:Vector.<DisplayObject> = new Vector.<DisplayObject>();
-        private var var_416:int;
-        private var var_444:int;
-        private var active:Boolean = false; // var_71
+        private var intervalId:int;
+        private var intervalDelay:int;
+        private var active:Boolean = false;
 
-        public function EpicFlash(_arg_1:int=500)
+        public function EpicFlash(delay:int=500)
         {
-            this.var_444 = _arg_1;
+            this.intervalDelay = delay;
         }
 
         public function start()
         {
-            clearInterval(this.var_416);
-            this.var_416 = setInterval(this.colorTick, this.var_444);
+            clearInterval(this.intervalId);
+            this.intervalId = setInterval(this.colorTick, this.intervalDelay);
             this.active = true;
         }
 
         public function stop()
         {
-            clearInterval(this.var_416);
+            clearInterval(this.intervalId);
             this.active = false;
         }
 
-        public function setDelay(_arg_1:int)
+        public function setDelay(delay:int)
         {
-            this.var_444 = _arg_1;
+            this.intervalDelay = delay;
             if (this.active) {
                 this.start();
             }
@@ -52,18 +52,17 @@ package com.jiggmin.data
             return false;
         }
 
-        public function addItem(_arg_1:DisplayObject)
+        public function addItem(item:DisplayObject)
         {
-            this.items.push(_arg_1);
+            this.items.push(item);
         }
 
         private function colorTick()
         {
-            var _local_2:DisplayObject;
-            var _local_1:ColorTransform = new ColorTransform();
-            _local_1.color = Math.round(Math.random() * 0xFFFFFF);
-            for each (_local_2 in this.items) {
-                _local_2.transform.colorTransform = _local_1;
+            var colorTransform:ColorTransform = new ColorTransform();
+            colorTransform.color = Math.round(Math.random() * 0xFFFFFF);
+            for each (var item:DisplayObject in this.items) {
+                item.transform.colorTransform = colorTransform;
             }
         }
 

@@ -10,7 +10,7 @@ package editor_tools
     public class SidebarEntry extends HoverDelayPopup 
     {
 
-        private var bg:MovieClip = new SquareBG(); // var_274
+        private var bg:MovieClip = new SquareBG();
         private var m:DisplayObject;
 
         public function SidebarEntry(icon:DisplayObject, title:String="", desc:String="")

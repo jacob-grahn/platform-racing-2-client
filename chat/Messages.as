@@ -23,8 +23,8 @@ package chat
         private var loadingGraphic:LoadingGraphic = new LoadingGraphic();
         private var pageNavigation:PageNavigation;
         private var loader:SuperLoader;
-        private var messagesArray:Array; // var_178
-        private var uploading:UploadingPopup; // var_148
+        private var messagesArray:Array;
+        private var uploading:UploadingPopup;
         private var currentPage:int = 1;
         private var itemsPerPage:int = 10;
 
@@ -177,4 +177,3 @@ package chat
 
     }
 }//package chat
-

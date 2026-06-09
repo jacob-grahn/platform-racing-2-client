@@ -13,7 +13,7 @@ package ui
     public class MuteButton extends Removable 
     {
 
-        public static var muted:Boolean = true; // var_58
+        public static var muted:Boolean = true;
 
         private var m:MuteButtonGraphic = new MuteButtonGraphic();
 

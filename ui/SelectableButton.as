@@ -13,7 +13,7 @@ package ui
 
         private var m:MovieClip;
         private var selected:Boolean = false;
-        private var hovering:Boolean = false; // var_428
+        private var hovering:Boolean = false;
 
         public function SelectableButton(mc:MovieClip)
         {

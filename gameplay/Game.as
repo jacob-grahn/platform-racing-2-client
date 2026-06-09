@@ -26,17 +26,15 @@ package gameplay
     {
 
         private var superLoader:SuperLoader = new SuperLoader(false);
-        private var quitButton:QuitButton; // var_285
-        // moved chatBox to Course and changed visibility from private -> public (var_305)
+        private var quitButton:QuitButton;
         private var cm:CommandHandler = CommandHandler.commandHandler;
         private var spectatePicker:SpectatePicker;
-        protected var drawingInfo:DrawingInfo; // var_125
+        protected var drawingInfo:DrawingInfo;
         public var prize:Object;
-        //private var prizePop:PrizePopup; // var_198 REMOVED AFTER PrizePopup GOT A STATIC SELF REFERENCE
-        private var luxPop:LuxPopup; // var_350
-        private var levelHash:String = ""; // var_579
-        private var specialEvent:SpecialEvent; // var_436, then placeArtifact, then SpecialEvent
-        private var var_634:Array = new Array();
+        private var luxPop:LuxPopup;
+        private var levelHash:String = "";
+        private var specialEvent:SpecialEvent;
+        private var raceResults:Array = new Array();
         public var finishedPage:FinishedPage;
         public var pendingAwards:Array = new Array();
         public var expOld:int;

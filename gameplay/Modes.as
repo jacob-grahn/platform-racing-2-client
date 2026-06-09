@@ -5,10 +5,10 @@ package gameplay
     public class Modes 
     {
 
-        public static var egg:String = "egg"; // var_345
-        public static var dm:String = "deathmatch"; // var_456
-        public static var race:String = "race"; // var_558
-        public static var obj:String = "objective"; // var_383
+        public static var egg:String = "egg";
+        public static var dm:String = "deathmatch";
+        public static var race:String = "race";
+        public static var obj:String = "objective";
         public static var hat:String = "hat";
 
         public static function getFullName(str:String)

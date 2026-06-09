@@ -14,15 +14,15 @@ package player_profile
     public class PartSelector extends Sprite
     {
 
-        private var arrows:ArrowButtons; // var_173
-        private var cp:ColorPicker; // var_12
+        private var arrows:ArrowButtons;
+        private var cp:ColorPicker;
         private var cp2:ColorPicker;
         private var color:int = 0;
         private var color2:int = 0;
         private var value:int = 0;
         public var infoButton:InfoButton;
         public var partArray:Array;
-        public var epicArray:Array; // var_422
+        public var epicArray:Array;
         private var epicOverlay:DisplayObject;
 
         public function PartSelector(parts:Array, selected:int, col:int, epics:Array, ecol:int = -1)

@@ -9,9 +9,9 @@ package items
     public class SpeedBurst extends Item 
     {
 
-        private var expireListener:uint; // var_511
-        private var used:Boolean = false; // var_522
-        public var duration:Number = 5000; // var_335
+        private var expireListener:uint;
+        private var used:Boolean = false;
+        public var duration:Number = 5000;
 
         public function SpeedBurst(lc:LocalCharacter)
         {

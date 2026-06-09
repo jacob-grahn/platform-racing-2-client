@@ -10,18 +10,14 @@ package blocks
     public class ArrowBlock extends Block 
     {
 
-        private var arrowMC:ArrowBlockGraphic = new ArrowBlockGraphic(); // var_41
-        /*private var pushVelUp:Number = -1.2; // var_651
-        private var pushVelLeft:Number = -3; // var_661
-        private var pushVelRight:Number = 3; // var_628
-        private var pushVelDown:Number = 5; // var_638*/
+        private var arrowMC:ArrowBlockGraphic = new ArrowBlockGraphic();
         private var rot:Number;
 
         public function ArrowBlock(blockId:int, r:Number)
         {
             this.rot = r;
             super(blockId);
-            var_490 = false;
+            bounceOnBump = false;
             this.arrowMC.rotation = this.rot;
             this.arrowMC.x = this.arrowMC.y = 15;
             addChild(this.arrowMC);
@@ -118,4 +114,3 @@ package blocks
 
     }
 }//package blocks
-

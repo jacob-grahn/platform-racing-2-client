@@ -17,7 +17,7 @@ package chat
         public static var instance:ChatInstance;
 
         private var m:ChatGraphic = new ChatGraphic();
-        private var lockBot:Boolean = true; // var_365
+        private var lockBot:Boolean = true;
         private var memory:Object = Memory.memory;
         private var infoPopup:ChatRoomInfoPopup;
         private var timeoutId:uint;

@@ -11,9 +11,9 @@ package player_profile
 
     public class LoadoutsPopup extends GetLevelsPopup 
     {
-        private var charModel:Character; // var_5
-        private var statsSelect:StatsSelect; // var_158
-        private var playerDisplay:PlayerDisplay; // var_495
+        private var charModel:Character;
+        private var statsSelect:StatsSelect;
+        private var playerDisplay:PlayerDisplay;
 
         public function LoadoutsPopup(c:Character, ss:StatsSelect, pd:PlayerDisplay)
         {

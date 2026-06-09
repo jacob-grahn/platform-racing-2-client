@@ -20,15 +20,15 @@ package level_browser
     public class LevelListing extends Page
     {
 
-        public static var levelListing:LevelListing; // var_667
+        public static var levelListing:LevelListing;
 
         public var class_10:Sprite = new Sprite();
         protected var loadingGraphic:LoadingGraphic = new LoadingGraphic();
         protected var pageNavigation:PageNavigation;
         protected var showCoursesTimeout:uint;
-        private var levelArray:Array = new Array(); // var_303
-        public var levels:Object = new Object(); // var_393
-        protected var pageNum:int = 1; // var_195
+        private var levelArray:Array = new Array();
+        public var levels:Object = new Object();
+        protected var pageNum:int = 1;
         protected var mode:String = "best";
         protected var superLoader:SuperLoader;
         private var cm:CommandHandler = CommandHandler.commandHandler;
