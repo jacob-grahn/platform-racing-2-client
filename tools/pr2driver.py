@@ -37,6 +37,8 @@ KEY_MAP = {
     "space":  49,
 }
 
+XCODE_SWIFT = "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swift"
+
 # ---------------------------------------------------------------------------
 # Window geometry (always queried live — window can move)
 # ---------------------------------------------------------------------------
@@ -105,7 +107,16 @@ def _write_swift(code):
 def _run_swift(code, *args):
     path = _write_swift(code)
     try:
-        subprocess.run(["swift", path, *[str(a) for a in args]], check=True, capture_output=True)
+        swift = os.environ.get("PR2DRIVER_SWIFT")
+        if not swift:
+            swift = XCODE_SWIFT if os.path.exists(XCODE_SWIFT) else "swift"
+        result = subprocess.run([swift, path, *[str(a) for a in args]], text=True, capture_output=True)
+        if result.returncode != 0:
+            if result.stderr:
+                print(result.stderr, file=sys.stderr, end="")
+            if result.stdout:
+                print(result.stdout, file=sys.stderr, end="")
+            result.check_returncode()
     finally:
         os.unlink(path)
 

@@ -19,16 +19,12 @@ Current assumptions:
   - Use extracted XFL/XML files under `flash/platform-racing-2-xfl/` as the primary reference for assets, timelines, symbol names, frame labels, linkage, and authoring structure.
   - Generated normalized assets/classes should be deterministic build artifacts. Decide case-by-case whether specific generated outputs are committed once the pipeline shape is known.
   - Ensure the normal port build does not depend on Adobe Animate.
-- [ ] Choose the old-game runtime comparison target.
-  - Use `flash/platform-racing-2.swf` or a Flash projector app only when we need to compare actual old-game behavior, screenshots, timing, networking, or input response.
-  - Record Flash Player/projector version.
-  - Confirm whether `flash/build.swf` or `flash/platform-racing-2.swf` is the better behavior comparison target.
 - [x] Confirm initial stage and timing constants.
   - Flash `Main.as` defines a 550x400 client and sets `stage.frameRate = 27`.
   - The extracted FLA reports 27 FPS.
   - `tools/pr2driver.py` uses seconds-based timing and does not own game framerate.
   - Use 27 FPS for the Haxe/OpenFL port unless runtime comparison proves otherwise.
-- [ ] Capture baseline Flash screenshots.
+- [x] Capture baseline Flash screenshots.
   - Login screen.
   - Server select.
   - Lobby.
@@ -36,7 +32,10 @@ Current assumptions:
   - Character customization.
   - Empty/test course.
   - Running, jumping, crouching, swimming, item usage.
-- [ ] Store baseline captures in a stable directory.
+  - Initial Flash baseline subset captured under `test/baselines/flash/` from `flash/platform-racing-2.app`.
+  - Captured: intro, login, guest server-select dialog, lobby popup, unobstructed lobby/level browser/customization, campaign level entry, gameplay start, running, jump/down-held movement attempts, swimming, level-editor item/setup reference, and held-item HUD references for Laser, Jet Pack, Lightning, Teleport, Ice Wave, Speed Burst, Super Jump, Sword, and Mine.
+  - Clean crouch and active item-effect captures are intentionally out of scope for this baseline pass.
+- [x] Store baseline captures in a stable directory.
   - Suggested: `test/baselines/flash/`.
 - [ ] Define initial playable scope.
   - Real server connectivity should be tested early.
