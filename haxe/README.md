@@ -40,3 +40,15 @@ The initial skeleton uses the Flash/XFL constants confirmed in the source:
 - XFL source of truth: `flash/platform-racing-2-xfl/`
 
 Generated build output is written under `export/`.
+
+## XFL Metadata
+
+The first asset-pipeline helper extracts deterministic JSON metadata from the
+Adobe-free XFL source:
+
+```sh
+python3 tools/xfl_metadata.py --summary
+```
+
+Use the full output without `--summary` when a later pipeline step needs the
+library folders, media records, symbol includes, and linkage class list.

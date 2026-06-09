@@ -93,7 +93,8 @@ Acceptance:
   - Output: generated Haxe/OpenFL-friendly asset data and/or classes.
   - The tool must run with open tooling only.
   - The tool must not require Adobe Animate, SWF export, or an Adobe subscription.
-- [ ] Parse XFL document metadata.
+- [x] Parse XFL document metadata.
+  - Added `tools/xfl_metadata.py` to emit deterministic JSON from the extracted XFL.
   - `DOMDocument.xml`.
   - Stage size.
   - Frame rate.
