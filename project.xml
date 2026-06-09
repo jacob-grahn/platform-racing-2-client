@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<meta title="Platform Racing 2" package="com.jiggmin.pr2" version="0.0.1" company="Jiggmin" />
+
+	<app main="Main" path="export" file="PlatformRacing2" />
+
+	<source path="haxe/src" />
+	<assets path="assets" rename="assets" if="html5" />
+	<assets path="assets" rename="assets" unless="html5" />
+
+	<haxelib name="openfl" />
+
+	<window width="550" height="400" fps="27" background="#242A3A" resizable="false" />
+</project>

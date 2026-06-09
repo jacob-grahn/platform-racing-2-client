@@ -7,22 +7,28 @@ Current assumptions:
 - Primary implementation: Haxe + OpenFL.
 - Primary target: browser/HTML5.
 - Secondary targets: Android and iOS after browser parity.
-- Asset strategy: try OpenFL SWF import first; fall back to an XFL-derived asset pipeline only if needed.
+- Asset strategy: use the unzipped FLA/XFL as the primary asset and authoring-structure reference, then build from extracted XFL/XML assets with open tooling. SWFs are runtime behavior references only, not port build inputs.
+- Build constraint: normal development and CI must not require Adobe Animate or an Adobe subscription.
 - Networking strategy: test against the real PR2 server early.
 - Initial visual goal: close enough to feel like PR2, not strict pixel-perfect parity.
 - Testing strategy: replay the same scripted inputs against Flash and the OpenFL port, then compare screenshots and state where possible.
 
 ## 0. Baseline And Scope
 
-- [ ] Choose the canonical Flash reference build.
-  - Use `flash/platform-racing-2.swf` or a Flash projector app.
+- [x] Define the port asset source of truth.
+  - Use extracted XFL/XML files under `flash/platform-racing-2-xfl/` as the primary reference for assets, timelines, symbol names, frame labels, linkage, and authoring structure.
+  - Generated normalized assets/classes should be deterministic build artifacts. Decide case-by-case whether specific generated outputs are committed once the pipeline shape is known.
+  - Ensure the normal port build does not depend on Adobe Animate.
+- [ ] Choose the old-game runtime comparison target.
+  - Use `flash/platform-racing-2.swf` or a Flash projector app only when we need to compare actual old-game behavior, screenshots, timing, networking, or input response.
   - Record Flash Player/projector version.
-  - Confirm whether `flash/build.swf` or `flash/platform-racing-2.swf` is the better behavior reference.
-- [ ] Confirm stage and timing constants.
-  - `tools/pr2driver.py` assumes a 550x400 stage.
+  - Confirm whether `flash/build.swf` or `flash/platform-racing-2.swf` is the better behavior comparison target.
+- [x] Confirm initial stage and timing constants.
+  - Flash `Main.as` defines a 550x400 client and sets `stage.frameRate = 27`.
   - The extracted FLA reports 27 FPS.
   - `tools/pr2driver.py` currently assumes 24 FPS.
-  - Decide which timing source matches the running game.
+  - Use 27 FPS for the Haxe/OpenFL port unless runtime comparison proves otherwise.
+  - Follow-up: update or parameterize `tools/pr2driver.py` so Flash/OpenFL replay timing is not hard-coded to 24 FPS.
 - [ ] Capture baseline Flash screenshots.
   - Login screen.
   - Server select.
@@ -39,28 +45,38 @@ Current assumptions:
 
 Acceptance:
 
-- Flash reference can be launched repeatably.
+- Extracted FLA/XFL is treated as the primary source for asset structure.
+- Flash runtime reference can be launched repeatably when behavior comparison is needed.
 - Scripted inputs can be replayed.
 - Screenshots can be captured at known stage coordinates.
 - Framerate assumptions are documented.
 
 ## 1. OpenFL Project Skeleton
 
-- [ ] Add Haxe/OpenFL project files.
+- [x] Install local Haxe/OpenFL toolchain.
+  - Haxe 4.3.7 installed via Homebrew.
+  - haxelib 4.1.1 configured to repo-local `.haxelib/`.
+  - Lime 8.3.2 and OpenFL 9.5.2 installed.
+  - Use `haxelib run openfl ...` because the optional `openfl` command shim is not on PATH.
+- [x] Add Haxe/OpenFL project files.
   - `project.xml`.
-  - `src/Main.hx`.
+  - `haxe/src/Main.hx`.
+  - `haxe/src/pr2/Constants.hx`.
   - `assets/`.
   - Build instructions.
-- [ ] Create a minimal OpenFL app.
+- [x] Create a minimal OpenFL app.
   - 550x400 logical stage.
-  - Matching background color.
-  - Fixed logical update loop.
+  - Initial background color.
+  - Deterministic frame counter.
   - Keyboard input logging.
   - Mouse input logging.
-- [ ] Verify browser build.
-  - `openfl test html5`.
+- [x] Verify browser build compiles.
+  - `haxelib run openfl build html5`.
+  - Generated output: `export/html5/bin/index.html`.
+- [ ] Manually verify browser runtime.
+  - `haxelib run openfl test html5`.
   - Confirm stage dimensions in browser.
-  - Confirm inputs work.
+  - Confirm keyboard and mouse inputs work.
 - [ ] Add optional native desktop target.
   - Useful for debugging and screenshot comparison.
 
@@ -71,15 +87,63 @@ Acceptance:
 - Keyboard and mouse events are received.
 - A deterministic frame counter is visible or loggable.
 
-## 2. OpenFL SWF Asset Feasibility Spike
+## 2. Adobe-Free XFL Asset Pipeline Spike
 
-- [ ] Add PR2 SWF as an OpenFL asset.
-  - Start with `flash/platform-racing-2.swf`.
-  - If needed, generate a reduced SWF containing only character assets.
-- [ ] Load simple exported symbols through OpenFL.
-  - Verify `Assets.getMovieClip(...)`.
-  - Verify root timeline loading if useful.
-- [ ] Test critical timeline APIs.
+- [ ] Create an asset conversion tool.
+  - Input: extracted XFL/XML library data.
+  - Output: generated Haxe/OpenFL-friendly asset data and/or classes.
+  - The tool must run with open tooling only.
+  - The tool must not require Adobe Animate, SWF export, or an Adobe subscription.
+- [ ] Parse XFL document metadata.
+  - `DOMDocument.xml`.
+  - Stage size.
+  - Frame rate.
+  - Library item list.
+  - Linkage class names.
+  - Bitmap and sound metadata.
+- [ ] Parse symbol timelines.
+  - `DOMSymbolItem`.
+  - `DOMTimeline`.
+  - `DOMLayer`.
+  - `DOMFrame`.
+  - Frame indices.
+  - Frame durations.
+  - Frame labels.
+  - Layer ordering.
+- [ ] Parse display instances.
+  - `DOMSymbolInstance`.
+  - `DOMBitmapInstance`.
+  - `DOMShape`.
+  - Instance names.
+  - Library item references.
+  - Symbol type.
+  - Loop mode.
+  - Transformation points.
+  - Matrices.
+  - Visibility.
+  - Color transforms.
+- [ ] Parse vector drawing data.
+  - Solid fills.
+  - Linear gradients.
+  - Radial gradients.
+  - Bitmap fills.
+  - Strokes.
+  - Cubic/quadratic path data.
+  - Shape bounds.
+- [ ] Generate a runtime asset graph.
+  - Stable symbol ids.
+  - Symbol names.
+  - Linkage class names.
+  - Child instance definitions.
+  - Timeline frames.
+  - Labels.
+  - Referenced bitmaps/sounds.
+- [ ] Generate or implement a PR2 MovieClip runtime layer.
+  - May wrap OpenFL `MovieClip`, or may use custom `Sprite`/`Timeline` classes.
+  - Must support named child lookup.
+  - Must support timeline-controlled child placement.
+  - Must support nested timelines.
+- [ ] Test critical timeline APIs in the generated runtime.
   - `play()`.
   - `stop()`.
   - `gotoAndPlay(frame)`.
@@ -88,9 +152,12 @@ Acceptance:
   - `currentFrame`.
   - `totalFrames`.
   - `currentLabels`.
-  - `addFrameScript(...)` or equivalent generated behavior.
-- [ ] Test critical PR2 symbols.
-  - `CharacterGraphic`.
+  - Frame-script hooks mapped from generated/decompiled AS3 classes.
+- [ ] Render leaf vector symbols.
+  - First target: direct OpenFL vector drawing if practical.
+  - Fallback target: rasterize leaf symbols to generated PNG/texture assets.
+  - Keep timelines dynamic even if leaf art is rasterized.
+- [ ] Test critical PR2 character symbols.
   - `runAnim`.
   - `standAnim`.
   - `jumpAnim`.
@@ -135,7 +202,9 @@ Acceptance:
 
 Acceptance:
 
-- One OpenFL screen can render a customizable PR2 character.
+- The port can build character assets without Adobe Animate.
+- Generated assets/classes are deterministic.
+- One OpenFL screen can render a customizable PR2 character from XFL-derived data.
 - Part ids can be changed.
 - Colors can be changed.
 - Several animation states play or stop correctly.
@@ -423,8 +492,9 @@ Acceptance:
 ## 10. Sound And Music
 
 - [ ] Extract/import sound assets.
-  - FLA/XFL sounds.
-  - SWF embedded sounds.
+  - XFL sound library entries.
+  - Referenced files under the extracted XFL `bin/` directory.
+  - SWF may be used as a reference to identify missing sounds, but not as a normal build input.
 - [ ] Port `SoundEffects`.
   - One-shot effects.
   - Looping effects.
