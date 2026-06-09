@@ -72,10 +72,12 @@ Acceptance:
 - [x] Verify browser build compiles.
   - `haxelib run openfl build html5`.
   - Generated output: `export/html5/bin/index.html`.
-- [ ] Manually verify browser runtime.
+- [x] Manually verify browser runtime.
   - `haxelib run openfl test html5`.
-  - Confirm stage dimensions in browser.
-  - Confirm keyboard and mouse inputs work.
+  - Confirmed app loads in browser at `http://127.0.0.1:3000`.
+  - Confirmed 550x400 stage dimensions.
+  - Confirmed deterministic frame counter advances.
+  - Confirmed keyboard and mouse inputs update the HUD/log.
 - [ ] Add optional native desktop target.
   - Useful for debugging and screenshot comparison.
 
@@ -101,15 +103,10 @@ Acceptance:
   - Library item list.
   - Linkage class names.
   - Bitmap and sound metadata.
-- [ ] Parse symbol timelines.
-  - `DOMSymbolItem`.
-  - `DOMTimeline`.
-  - `DOMLayer`.
-  - `DOMFrame`.
-  - Frame indices.
-  - Frame durations.
-  - Frame labels.
-  - Layer ordering.
+- [x] Parse symbol timelines.
+  - `tools/xfl_metadata.py` now emits each symbol's `DOMTimeline`, ordered `DOMLayer` records, and `DOMFrame` records.
+  - Captures frame indices, durations, frame labels, label types, layer ordering, layer visibility/locking/type metadata, frame element counts, and frame element type summaries.
+  - `python3 tools/xfl_metadata.py --summary` verifies 988 symbol timelines, 2,587 layers, 11,511 timeline frames, 116 labels, and a max timeline length of 1,508 frames.
 - [ ] Parse display instances.
   - `DOMSymbolInstance`.
   - `DOMBitmapInstance`.

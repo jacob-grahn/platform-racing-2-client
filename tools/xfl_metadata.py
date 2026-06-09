@@ -35,6 +35,18 @@ def child_elements(root, name):
             yield element
 
 
+def direct_children(parent, name):
+    for child in list(parent):
+        if local_name(child.tag) == name:
+            yield child
+
+
+def first_direct_child(parent, name):
+    for child in direct_children(parent, name):
+        return child
+    return None
+
+
 def text_for(parent, name):
     for child in list(parent):
         if local_name(child.tag) == name and child.text is not None:
@@ -65,6 +77,131 @@ def item_record(element):
 
 def compact_record(record):
     return {key: value for key, value in record.items() if value not in (None, "")}
+
+
+def parse_bool(value):
+    if value == "true":
+        return True
+    if value == "false":
+        return False
+    return None
+
+
+def parse_frame(frame):
+    attrs = frame.attrib
+    label = attrs.get("name")
+    element_types = []
+
+    elements = first_direct_child(frame, "elements")
+    if elements is not None:
+        element_types = sorted({local_name(element.tag) for element in list(elements)})
+
+    return compact_record(
+        {
+            "index": maybe_int(attrs.get("index")),
+            "duration": maybe_int(attrs.get("duration")),
+            "label": label,
+            "labelType": attrs.get("labelType"),
+            "keyMode": maybe_int(attrs.get("keyMode")),
+            "motionTweenScale": parse_bool(attrs.get("motionTweenScale")),
+            "elementCount": len(list(elements)) if elements is not None else 0,
+            "elementTypes": element_types,
+        }
+    )
+
+
+def parse_layer(layer, layer_index):
+    attrs = layer.attrib
+    frames_parent = first_direct_child(layer, "frames")
+    frames = []
+    if frames_parent is not None:
+        frames = [parse_frame(frame) for frame in direct_children(frames_parent, "DOMFrame")]
+
+    return compact_record(
+        {
+            "index": layer_index,
+            "name": attrs.get("name"),
+            "color": attrs.get("color"),
+            "visible": parse_bool(attrs.get("visible")),
+            "locked": parse_bool(attrs.get("locked")),
+            "layerType": attrs.get("layerType"),
+            "frameCount": len(frames),
+            "frames": frames,
+        }
+    )
+
+
+def parse_timeline(timeline):
+    layers_parent = first_direct_child(timeline, "layers")
+    layers = []
+    if layers_parent is not None:
+        layers = [
+            parse_layer(layer, index)
+            for index, layer in enumerate(direct_children(layers_parent, "DOMLayer"))
+        ]
+
+    total_frames = 0
+    labels = []
+    for layer in layers:
+        for frame in layer.get("frames", []):
+            index = frame.get("index", 0)
+            duration = frame.get("duration", 1)
+            total_frames = max(total_frames, index + duration)
+            if frame.get("label"):
+                labels.append(
+                    compact_record(
+                        {
+                            "name": frame.get("label"),
+                            "type": frame.get("labelType"),
+                            "frame": index,
+                            "layer": layer.get("index"),
+                        }
+                    )
+                )
+
+    return compact_record(
+        {
+            "name": timeline.attrib.get("name"),
+            "layerCount": len(layers),
+            "frameCount": total_frames,
+            "labels": labels,
+            "layers": layers,
+        }
+    )
+
+
+def parse_timelines(root):
+    timelines = []
+    timeline_parent = first_direct_child(root, "timeline")
+    if timeline_parent is None:
+        return timelines
+
+    for timeline in direct_children(timeline_parent, "DOMTimeline"):
+        timelines.append(parse_timeline(timeline))
+
+    return timelines
+
+
+def timeline_counts(timelines):
+    layers = 0
+    frames = 0
+    labels = 0
+    max_total_frames = 0
+
+    for timeline in timelines:
+        layers += timeline.get("layerCount", 0)
+        labels += len(timeline.get("labels", []))
+        max_total_frames = max(max_total_frames, timeline.get("frameCount", 0))
+        for layer in timeline.get("layers", []):
+            frames += layer.get("frameCount", 0)
+
+    return {
+        "timelines": len(timelines),
+        "layers": layers,
+        "frames": frames,
+        "labels": labels,
+        "maxTotalFrames": max_total_frames,
+    }
 
 
 def parse_publish_settings(path):
@@ -139,9 +276,7 @@ def parse_dom_document(path):
             )
         )
 
-    timelines = []
-    for timeline in child_elements(root, "DOMTimeline"):
-        timelines.append(compact_record({"name": timeline.attrib.get("name")}))
+    timelines = parse_timelines(root)
 
     linkage_classes = sorted(
         {
@@ -196,6 +331,7 @@ def parse_symbol_linkages(xfl_dir, symbol_includes):
             "itemID": attrs.get("itemID"),
             "linkageClassName": attrs.get("linkageClassName"),
             "linkageIdentifier": attrs.get("linkageIdentifier"),
+            "timelines": parse_timelines(root),
         }
         records.append(compact_record(record))
 
@@ -216,6 +352,13 @@ def build_metadata(xfl_dir):
     dom = parse_dom_document(dom_path)
     publish = parse_publish_settings(publish_path)
     symbol_linkages = parse_symbol_linkages(xfl_dir, dom["symbolIncludes"])
+    document_timeline_counts = timeline_counts(dom["timelines"])
+    symbol_timelines = [
+        timeline
+        for symbol in symbol_linkages
+        for timeline in symbol.get("timelines", [])
+    ]
+    symbol_timeline_counts = timeline_counts(symbol_timelines)
 
     all_linkages = {
         item["linkageClassName"]
@@ -239,7 +382,15 @@ def build_metadata(xfl_dir):
             "symbolFiles": len(symbol_linkages),
             "missingSymbolFiles": sum(1 for item in symbol_linkages if item.get("missing")),
             "linkageClasses": len(all_linkages),
-            "timelines": len(dom["timelines"]),
+            "documentTimelines": document_timeline_counts["timelines"],
+            "symbolTimelines": symbol_timeline_counts["timelines"],
+            "timelineLayers": document_timeline_counts["layers"] + symbol_timeline_counts["layers"],
+            "timelineFrames": document_timeline_counts["frames"] + symbol_timeline_counts["frames"],
+            "timelineLabels": document_timeline_counts["labels"] + symbol_timeline_counts["labels"],
+            "maxTimelineFrames": max(
+                document_timeline_counts["maxTotalFrames"],
+                symbol_timeline_counts["maxTotalFrames"],
+            ),
         },
         "folders": dom["folders"],
         "fonts": dom["fonts"],
