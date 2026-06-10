@@ -179,12 +179,13 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function renderFrame(frame:RuntimeFrame):Void {
+		var reusableClips:Map<String, Array<PR2MovieClip>> = collectReusableClips();
 		while (numChildren > 0) {
 			removeChildAt(numChildren - 1);
 		}
 
 		for (element in frame.elements) {
-			var child = createDisplayObject(element);
+			var child = createDisplayObject(element, takeReusableClip(reusableClips, element));
 			applyElementProperties(child, element);
 			addChild(child);
 		}
@@ -208,7 +209,42 @@ class PR2MovieClip extends Sprite {
 		runningFrameScripts = false;
 	}
 
-	private function createDisplayObject(element:DisplayElementDef):DisplayObject {
+	private function collectReusableClips():Map<String, Array<PR2MovieClip>> {
+		var reusableClips:Map<String, Array<PR2MovieClip>> = new Map();
+		for (i in 0...numChildren) {
+			var clip = Std.downcast(getChildAt(i), PR2MovieClip);
+			if (clip == null || clip.name == null || clip.symbol.name == null) {
+				continue;
+			}
+
+			var key = reusableClipKey(clip.name, clip.symbol.name);
+			var clips = reusableClips.get(key);
+			if (clips == null) {
+				clips = [];
+				reusableClips.set(key, clips);
+			}
+			clips.push(clip);
+		}
+		return reusableClips;
+	}
+
+	private function takeReusableClip(reusableClips:Map<String, Array<PR2MovieClip>>, element:DisplayElementDef):Null<PR2MovieClip> {
+		if (element.name == null || element.libraryItemName == null) {
+			return null;
+		}
+
+		var clips = reusableClips.get(reusableClipKey(element.name, element.libraryItemName));
+		if (clips == null || clips.length == 0) {
+			return null;
+		}
+		return clips.shift();
+	}
+
+	private function reusableClipKey(name:String, symbolName:String):String {
+		return name + "\n" + symbolName;
+	}
+
+	private function createDisplayObject(element:DisplayElementDef, reusableClip:Null<PR2MovieClip>):DisplayObject {
 		if (element.libraryItemName != null) {
 			var childSymbol = AssetLibrary.getSymbol(element.libraryItemName);
 			if (childSymbol != null) {
@@ -216,10 +252,10 @@ class PR2MovieClip extends Sprite {
 					return createPlaceholder(element);
 				}
 
-				var clip = new PR2MovieClip(childSymbol, {maxNestedDepth: maxNestedDepth}, nestedDepth + 1);
+				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {maxNestedDepth: maxNestedDepth}, nestedDepth + 1);
 				if (element.loop == "single frame") {
 					clip.gotoAndStop((element.firstFrame == null ? 0 : element.firstFrame) + 1);
-				} else if (element.loop == "play once" || element.loop == "loop") {
+				} else if (reusableClip == null && (element.loop == "play once" || element.loop == "loop")) {
 					clip.gotoAndPlay((element.firstFrame == null ? 0 : element.firstFrame) + 1);
 				}
 				return clip;

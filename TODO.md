@@ -214,11 +214,14 @@ Acceptance:
   - Alpha/transparency cases.
   - Added runtime assertions for complete OpenFL `ColorTransform` multiplier/offset mapping, alpha-zero transparency, hidden tinted children, identity defaults, and generated PR2 primary/secondary `colorMC`/`colorMC2` children.
   - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
-- [ ] Test timeline composition.
+- [x] Test timeline composition.
   - Switch animation state.
   - Switch part id with `gotoAndStop(partId)`.
   - Advance frames.
-  - Compare representative screenshots against Flash.
+  - Added runtime assertions that generated character animation clips preserve selected `headsMC`/`bodyMC` frames across parent timeline advances.
+  - Added coverage that `single frame` symbol instances still follow parent `firstFrame` changes.
+  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
+- [ ] Compare representative character composition screenshots against Flash.
 
 Acceptance:
 

@@ -13,6 +13,7 @@ class PR2MovieClipRuntimeTest {
 		testNamedChildAccessAndElementProperties();
 		testColorTransforms();
 		testGeneratedCharacterNamedChildren();
+		testTimelineCompositionPreservesPartSelection();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
 	}
 
@@ -136,6 +137,33 @@ class PR2MovieClipRuntimeTest {
 		assertNamedChildren(bodySelector, ["hat1", "hat2", "hat3", "hat4"], "bodyMC frame 29 exposes hat children");
 	}
 
+	private static function testTimelineCompositionPreservesPartSelection():Void {
+		var runAnim = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.jumpAnim_61", {maxNestedDepth: 2});
+		var head = requireClipChild(runAnim, "head");
+		var body = requireClipChild(runAnim, "body");
+
+		head.gotoAndStop("gladiator");
+		body.gotoAndStop("gladiator");
+		var selectedHeadFrame = head.currentFrame;
+		var selectedBodyFrame = body.currentFrame;
+
+		runAnim.dispatchEvent(new Event(Event.ENTER_FRAME));
+		var advancedHead = requireClipChild(runAnim, "head");
+		var advancedBody = requireClipChild(runAnim, "body");
+
+		assertEquals(2, runAnim.currentFrame, "generated animation advances parent timeline");
+		assertEquals(selectedHeadFrame, advancedHead.currentFrame, "head part frame survives parent timeline advance");
+		assertEquals(selectedBodyFrame, advancedBody.currentFrame, "body part frame survives parent timeline advance");
+		assertNotNull(findDescendantByTimelineName(advancedHead, "colorMC"), "selected head color layer remains addressable after advance");
+		assertNotNull(findDescendantByTimelineName(advancedBody, "colorMC2"), "selected body color layer remains addressable after advance");
+
+		var clip = new PR2MovieClip(makeSingleFrameChildParentSymbol());
+		var selector = requireClipChild(clip, "selector");
+		selector.gotoAndStop(3);
+		clip.gotoAndStop(2);
+		assertEquals(2, requireClipChild(clip, "selector").currentFrame, "single-frame child instances follow parent firstFrame");
+	}
+
 	private static function assertNamedChildren(clip:PR2MovieClip, childNames:Array<String>, message:String):Void {
 		for (childName in childNames) {
 			assertNotNull(clip.getChildByTimelineName(childName), '$message: missing $childName');
@@ -172,6 +200,12 @@ class PR2MovieClipRuntimeTest {
 	private static function requireChild(clip:PR2MovieClip, name:String):DisplayObject {
 		var child = clip.getChildByTimelineName(name);
 		assertNotNull(child, 'missing child $name');
+		return child;
+	}
+
+	private static function requireClipChild(clip:PR2MovieClip, name:String):PR2MovieClip {
+		var child = Std.downcast(requireChild(clip, name), PR2MovieClip);
+		assertNotNull(child, 'child $name is not a PR2MovieClip');
 		return child;
 	}
 
@@ -321,6 +355,58 @@ class PR2MovieClipRuntimeTest {
 								type: "DOMShape",
 								name: "identityColor",
 								bounds: {left: 0, top: 0, right: 10, bottom: 10}
+							}]
+						}
+					]
+				}]
+			}]
+		};
+	}
+
+	private static function makeSingleFrameChildParentSymbol():SymbolAssetDef {
+		return {
+			href: "SingleFrameChildParent.xml",
+			type: "movie clip",
+			name: "SingleFrameChildParent",
+			linkageClassName: "SingleFrameChildParent",
+			linkageIdentifier: "SingleFrameChildParent",
+			timelines: [{
+				name: "SingleFrameChildParent",
+				layerCount: 1,
+				frameCount: 2,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 2,
+					frames: [
+						{
+							index: 0,
+							duration: 1,
+							elementCount: 1,
+							elementTypes: ["DOMSymbolInstance"],
+							elements: [{
+								type: "DOMSymbolInstance",
+								name: "selector",
+								libraryItemName: "Parts/Heads/headsMC",
+								loop: "single frame",
+								firstFrame: 0
+							}]
+						},
+						{
+							index: 1,
+							duration: 1,
+							elementCount: 1,
+							elementTypes: ["DOMSymbolInstance"],
+							elements: [{
+								type: "DOMSymbolInstance",
+								name: "selector",
+								libraryItemName: "Parts/Heads/headsMC",
+								loop: "single frame",
+								firstFrame: 1
 							}]
 						}
 					]
