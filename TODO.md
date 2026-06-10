@@ -232,13 +232,15 @@ Acceptance:
 
 ## 3. Early Real Server Connectivity
 
-- [ ] Inventory networking code.
+- [x] Inventory networking code.
   - `flash/com/jiggmin/data/PR2Socket.as`.
   - `flash/com/jiggmin/data/CommandHandler.as`.
   - `flash/SuperLoader.as`.
   - `flash/com/jiggmin/data/Encryptor.as`.
   - `flash/com/jiggmin/data/SecureData.as`.
   - Login and server selection classes.
+  - Documented in `docs/networking-inventory.md`.
+  - Covered `PR2Socket`, `CommandHandler`, `SuperLoader`, `Encryptor`, `SecureData`, `SecureStore`, `CommAuth`, `Main`, `CheckServers`, `ServerSelectPopup`, `ConnectingPopup`, and `LoggingInPopup`.
 - [ ] Identify browser blockers.
   - Raw TCP sockets versus WebSocket/HTTP.
   - CORS.
