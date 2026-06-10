@@ -92,3 +92,11 @@ To compile-check the generated package directly:
 ```sh
 haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output
 ```
+
+## Runtime Tests
+
+Run the lightweight Haxe runtime tests without starting the OpenFL app:
+
+```sh
+haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp
+```

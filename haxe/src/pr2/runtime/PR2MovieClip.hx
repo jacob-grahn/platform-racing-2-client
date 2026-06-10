@@ -34,6 +34,8 @@ class PR2MovieClip extends Sprite {
 	private var playing:Bool = false;
 	private var maxNestedDepth:Int;
 	private var nestedDepth:Int;
+	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
+	private var runningFrameScripts:Bool = false;
 
 	public static function fromSymbolName(name:String, ?options:PR2MovieClipOptions):PR2MovieClip {
 		return new PR2MovieClip(AssetLibrary.requireSymbol(name), options);
@@ -97,6 +99,19 @@ class PR2MovieClip extends Sprite {
 		return null;
 	}
 
+	public function setFrameScript(frameIndex:Int, script:Null<Void->Void>):Void {
+		var frameNumber = frameIndex + 1;
+		if (frameNumber < 1 || frameNumber > totalFrames) {
+			throw 'Frame script out of range for ${symbol.name}: $frameIndex';
+		}
+
+		if (script == null) {
+			frameScripts.remove(frameNumber);
+		} else {
+			frameScripts.set(frameNumber, [script]);
+		}
+	}
+
 	private function buildTimeline(source:TimelineDef):Void {
 		totalFrames = source.frameCount < 1 ? 1 : source.frameCount;
 		for (i in 0...totalFrames) {
@@ -149,6 +164,7 @@ class PR2MovieClip extends Sprite {
 
 		currentFrame = frameNumber;
 		renderFrame(frames[frameNumber - 1]);
+		runFrameScripts(frameNumber);
 	}
 
 	private function resolveFrame(frame:Dynamic):Int {
@@ -172,6 +188,24 @@ class PR2MovieClip extends Sprite {
 			applyElementProperties(child, element);
 			addChild(child);
 		}
+	}
+
+	private function runFrameScripts(frameNumber:Int):Void {
+		var scripts = frameScripts.get(frameNumber);
+		if (scripts == null || runningFrameScripts) {
+			return;
+		}
+
+		runningFrameScripts = true;
+		try {
+			for (script in scripts.copy()) {
+				script();
+			}
+		} catch (error:Dynamic) {
+			runningFrameScripts = false;
+			throw error;
+		}
+		runningFrameScripts = false;
 	}
 
 	private function createDisplayObject(element:DisplayElementDef):DisplayObject {

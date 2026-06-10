@@ -167,7 +167,7 @@ Acceptance:
   - Runtime consumes committed generated `SymbolAssetDef` records directly.
   - Supports symbol/linkage lookup, frame expansion from layer durations, nested symbol instances, labels, playback controls, current frame/total frame APIs, transforms/color transforms, and named timeline children.
   - Leaf vector art is represented by bounds placeholders until the vector rendering milestone.
-- [ ] Test critical timeline APIs in the generated runtime.
+- [x] Test critical timeline APIs in the generated runtime.
   - `play()`.
   - `stop()`.
   - `gotoAndPlay(frame)`.
@@ -177,6 +177,8 @@ Acceptance:
   - `totalFrames`.
   - `currentLabels`.
   - Frame-script hooks mapped from generated/decompiled AS3 classes.
+  - Added `haxe/test/pr2/runtime/PR2MovieClipRuntimeTest.hx`, covering timeline playback, stop behavior, numeric and label seeks, frame wrapping, labels, frame-script hooks, named child lookup, transforms, color transforms, visibility, and invalid frame errors.
+  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
 - [ ] Render leaf vector symbols.
   - First target: direct OpenFL vector drawing if practical.
   - Fallback target: rasterize leaf symbols to generated PNG/texture assets.
@@ -215,14 +217,6 @@ Acceptance:
   - Switch part id with `gotoAndStop(partId)`.
   - Advance frames.
   - Compare representative screenshots against Flash.
-- [ ] Document failures.
-  - Missing symbols.
-  - Missing named children.
-  - Incorrect vector rendering.
-  - Incorrect gradients.
-  - Incorrect filters/blends.
-  - Incorrect frame labels.
-  - Performance problems.
 
 Acceptance:
 
