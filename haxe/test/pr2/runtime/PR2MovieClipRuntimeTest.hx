@@ -11,6 +11,7 @@ class PR2MovieClipRuntimeTest {
 		testTimelineControls();
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();
+		testColorTransforms();
 		testGeneratedCharacterNamedChildren();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
 	}
@@ -87,6 +88,22 @@ class PR2MovieClipRuntimeTest {
 		assertNotNull(clip.getChildByTimelineName("middleMarker"), "new frame children are rendered");
 	}
 
+	private static function testColorTransforms():Void {
+		var clip = new PR2MovieClip(makeColorSymbol());
+
+		assertColorTransform(requireChild(clip, "primaryColor"), 0.25, 0.5, 0.75, 1, 12, 34, 56, 0, "primary color layer transform");
+		assertColorTransform(requireChild(clip, "secondaryColor"), 1, 0.8, 0.6, 0.4, 0, 8, 16, 24, "secondary color layer transform");
+		assertColorTransform(requireChild(clip, "transparent"), 1, 1, 1, 0, 0, 0, 0, 0, "alpha-zero transform");
+
+		var hiddenTint = requireChild(clip, "hiddenTint");
+		assertEquals(false, hiddenTint.visible, "hidden color layer visibility is applied");
+		assertColorTransform(hiddenTint, 0, 0, 0, 0.5, 4, 3, 2, 1, "hidden color layer keeps its transform");
+
+		clip.gotoAndStop(2);
+		assertEquals(null, clip.getChildByTimelineName("primaryColor"), "color children are replaced on frame changes");
+		assertColorTransform(requireChild(clip, "identityColor"), 1, 1, 1, 1, 0, 0, 0, 0, "missing color transform defaults to identity");
+	}
+
 	private static function testGeneratedCharacterNamedChildren():Void {
 		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 2});
 
@@ -152,6 +169,12 @@ class PR2MovieClipRuntimeTest {
 		return null;
 	}
 
+	private static function requireChild(clip:PR2MovieClip, name:String):DisplayObject {
+		var child = clip.getChildByTimelineName(name);
+		assertNotNull(child, 'missing child $name');
+		return child;
+	}
+
 	private static function makeSymbol():SymbolAssetDef {
 		return {
 			href: "TestSymbol.xml",
@@ -213,6 +236,99 @@ class PR2MovieClipRuntimeTest {
 		};
 	}
 
+	private static function makeColorSymbol():SymbolAssetDef {
+		return {
+			href: "ColorSymbol.xml",
+			type: "movie clip",
+			name: "ColorSymbol",
+			linkageClassName: "ColorSymbol",
+			linkageIdentifier: "ColorSymbol",
+			timelines: [{
+				name: "ColorSymbol",
+				layerCount: 1,
+				frameCount: 2,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 2,
+					frames: [
+						{
+							index: 0,
+							duration: 1,
+							elementCount: 4,
+							elementTypes: ["DOMShape", "DOMShape", "DOMShape", "DOMShape"],
+							elements: [
+								{
+									type: "DOMShape",
+									name: "primaryColor",
+									bounds: {left: 0, top: 0, right: 10, bottom: 10},
+									color: {
+										redMultiplier: 0.25,
+										greenMultiplier: 0.5,
+										blueMultiplier: 0.75,
+										redOffset: 12,
+										greenOffset: 34,
+										blueOffset: 56
+									}
+								},
+								{
+									type: "DOMShape",
+									name: "secondaryColor",
+									bounds: {left: 0, top: 0, right: 10, bottom: 10},
+									color: {
+										alphaMultiplier: 0.4,
+										greenMultiplier: 0.8,
+										blueMultiplier: 0.6,
+										greenOffset: 8,
+										blueOffset: 16,
+										alphaOffset: 24
+									}
+								},
+								{
+									type: "DOMShape",
+									name: "transparent",
+									bounds: {left: 0, top: 0, right: 10, bottom: 10},
+									color: {alphaMultiplier: 0}
+								},
+								{
+									type: "DOMShape",
+									name: "hiddenTint",
+									visible: false,
+									bounds: {left: 0, top: 0, right: 10, bottom: 10},
+									color: {
+										alphaMultiplier: 0.5,
+										redMultiplier: 0,
+										greenMultiplier: 0,
+										blueMultiplier: 0,
+										alphaOffset: 1,
+										redOffset: 4,
+										greenOffset: 3,
+										blueOffset: 2
+									}
+								}
+							]
+						},
+						{
+							index: 1,
+							duration: 1,
+							elementCount: 1,
+							elementTypes: ["DOMShape"],
+							elements: [{
+								type: "DOMShape",
+								name: "identityColor",
+								bounds: {left: 0, top: 0, right: 10, bottom: 10}
+							}]
+						}
+					]
+				}]
+			}]
+		};
+	}
+
 	private static function assertNotNull(value:Dynamic, message:String):Void {
 		assertions++;
 		if (value == null) {
@@ -232,6 +348,29 @@ class PR2MovieClipRuntimeTest {
 		if (Math.abs(expected - actual) > 0.0001) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertColorTransform(
+		child:DisplayObject,
+		redMultiplier:Float,
+		greenMultiplier:Float,
+		blueMultiplier:Float,
+		alphaMultiplier:Float,
+		redOffset:Float,
+		greenOffset:Float,
+		blueOffset:Float,
+		alphaOffset:Float,
+		message:String
+	):Void {
+		var color = child.transform.colorTransform;
+		assertClose(redMultiplier, color.redMultiplier, '$message redMultiplier');
+		assertClose(greenMultiplier, color.greenMultiplier, '$message greenMultiplier');
+		assertClose(blueMultiplier, color.blueMultiplier, '$message blueMultiplier');
+		assertClose(alphaMultiplier, color.alphaMultiplier, '$message alphaMultiplier');
+		assertClose(redOffset, color.redOffset, '$message redOffset');
+		assertClose(greenOffset, color.greenOffset, '$message greenOffset');
+		assertClose(blueOffset, color.blueOffset, '$message blueOffset');
+		assertClose(alphaOffset, color.alphaOffset, '$message alphaOffset');
 	}
 
 	private static function assertThrows(action:Void->Void, message:String):Void {

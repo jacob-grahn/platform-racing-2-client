@@ -207,11 +207,13 @@ Acceptance:
   - `colorMC`.
   - `colorMC2`.
   - Hat children on head/body.
-- [ ] Test color transforms.
+- [x] Test color transforms.
   - Primary color layer.
   - Secondary color layer.
   - Visibility toggles.
   - Alpha/transparency cases.
+  - Added runtime assertions for complete OpenFL `ColorTransform` multiplier/offset mapping, alpha-zero transparency, hidden tinted children, identity defaults, and generated PR2 primary/secondary `colorMC`/`colorMC2` children.
+  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
 - [ ] Test timeline composition.
   - Switch animation state.
   - Switch part id with `gotoAndStop(partId)`.
