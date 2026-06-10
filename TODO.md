@@ -15,40 +15,12 @@ Current assumptions:
 
 ## 0. Baseline And Scope
 
-- [x] Define the port asset source of truth.
-  - Use extracted XFL/XML files under `flash/platform-racing-2-xfl/` as the primary migration reference for assets, timelines, symbol names, frame labels, linkage, and authoring structure.
-  - Generate normalized Haxe classes and supporting assets once, then commit and maintain those outputs as normal source/assets.
-  - The generator should not be part of the normal build pipeline after the migration output is produced.
-  - JSON metadata is useful for inspection/debugging, but the runtime port should not depend on importing JSON asset graphs.
-  - Ensure the normal port build does not depend on Adobe Animate.
-  - Ensure normal development does not require rerunning the XFL generator.
-- [x] Confirm initial stage and timing constants.
-  - Flash `Main.as` defines a 550x400 client and sets `stage.frameRate = 27`.
-  - The extracted FLA reports 27 FPS.
-  - `tools/pr2driver.py` uses seconds-based timing and does not own game framerate.
-  - Use 27 FPS for the Haxe/OpenFL port unless runtime comparison proves otherwise.
-- [x] Capture baseline Flash screenshots.
-  - Login screen.
-  - Server select.
-  - Lobby.
-  - Level browser.
-  - Character customization.
-  - Empty/test course.
-  - Running, jumping, crouching, swimming, item usage.
-  - Initial Flash baseline subset captured under `test/baselines/flash/` from `flash/platform-racing-2.app`.
-  - Captured: intro, login, guest server-select dialog, lobby popup, unobstructed lobby/level browser/customization, campaign level entry, gameplay start, running, jump/down-held movement attempts, swimming, level-editor item/setup reference, and held-item HUD references for Laser, Jet Pack, Lightning, Teleport, Ice Wave, Speed Burst, Super Jump, Sword, and Mine.
-  - Clean crouch and active item-effect captures are intentionally out of scope for this baseline pass.
-- [x] Store baseline captures in a stable directory.
-  - Suggested: `test/baselines/flash/`.
-- [x] Define initial playable scope.
-  - Documented in `docs/initial-playable-scope.md`.
-  - First playable milestone is a browser gameplay harness that launches
-    directly into a local fixture level.
-  - Scope includes one local player, fixed 27 FPS movement, basic solid blocks,
-    start/finish, restart, and deterministic debug state export.
-  - Real server connectivity remains a separate early track; login, lobby,
-    multiplayer, items, and full level browsing are out of scope for this
-    milestone.
+- [x] Baseline and scope defined.
+  - XFL/XML under `flash/platform-racing-2-xfl/` is the migration source; committed Haxe/OpenFL output becomes normal maintained source.
+  - Normal development/builds must not require Adobe Animate, SWF export, or rerunning the generator.
+  - Stage/timing baseline is 550x400 at 27 FPS.
+  - Flash reference captures live under `test/baselines/flash/`; clean crouch and active item-effect captures remain out of scope for the initial baseline pass.
+  - Initial playable scope is documented in `docs/initial-playable-scope.md`: a browser gameplay harness with one local player, fixed 27 FPS movement, basic blocks, start/finish, restart, and debug state export.
 
 Acceptance:
 
@@ -60,40 +32,12 @@ Acceptance:
 
 ## 1. OpenFL Project Skeleton
 
-- [x] Install local Haxe/OpenFL toolchain.
-  - Haxe 4.3.7 installed via Homebrew.
-  - haxelib 4.1.1 configured to repo-local `.haxelib/`.
-  - Lime 8.3.2 and OpenFL 9.5.2 installed.
-  - Use `haxelib run openfl ...` because the optional `openfl` command shim is not on PATH.
-- [x] Add Haxe/OpenFL project files.
-  - `project.xml`.
-  - `haxe/src/Main.hx`.
-  - `haxe/src/pr2/Constants.hx`.
-  - `assets/`.
-  - Build instructions.
-- [x] Create a minimal OpenFL app.
-  - 550x400 logical stage.
-  - Initial background color.
-  - Deterministic frame counter.
-  - Keyboard input logging.
-  - Mouse input logging.
-- [x] Verify browser build compiles.
-  - `haxelib run openfl build html5`.
-  - Generated output: `export/html5/bin/index.html`.
-- [x] Manually verify browser runtime.
-  - `haxelib run openfl test html5`.
-  - Confirmed app loads in browser at `http://127.0.0.1:3000`.
-  - Confirmed 550x400 stage dimensions.
-  - Confirmed deterministic frame counter advances.
-  - Confirmed keyboard and mouse inputs update the HUD/log.
-- [x] Add optional native desktop target.
-  - Useful for debugging and screenshot comparison.
-  - OpenFL mac target resolves with `haxelib run openfl display mac`.
-  - Native output uses `export/macos/` and keeps normal browser builds unchanged.
-  - Verified local native compile with `MACOSX_VER=26.5 haxelib run openfl build mac`.
-  - Xcode 26.5 exposes `macosx26.5`; passing `MACOSX_VER=26.5` avoids hxcpp's failed
-    `macosx26` lookup.
-  - Keep this target optional; do not require Xcode for normal development or CI.
+- [x] OpenFL skeleton complete.
+  - Toolchain: Haxe 4.3.7, haxelib 4.1.1, Lime 8.3.2, OpenFL 9.5.2; use `haxelib run openfl ...`.
+  - Added `project.xml`, `haxe/src/Main.hx`, `haxe/src/pr2/Constants.hx`, `assets/`, and build instructions.
+  - Minimal app verifies 550x400 stage, deterministic frame counter, and keyboard/mouse logging.
+  - Browser build verified with `haxelib run openfl build html5`; runtime verified with `haxelib run openfl test html5`.
+  - Optional mac target is available for debugging; local compile uses `MACOSX_VER=26.5 haxelib run openfl build mac`.
 
 Acceptance:
 
@@ -104,133 +48,22 @@ Acceptance:
 
 ## 2. Adobe-Free XFL Asset Pipeline Spike
 
-- [x] Create an asset conversion tool.
-  - Input: extracted XFL/XML library data.
-  - Output: generated Haxe/OpenFL-friendly asset classes and any supporting bitmap/sound/vector assets.
-  - Generated Haxe should be included by `project.xml` as native source, not loaded through a runtime JSON import step.
-  - Treat this as a migration tool, not as a required normal build step.
-  - The tool must run with open tooling only.
-  - The tool must not require Adobe Animate, SWF export, or an Adobe subscription.
-  - Added `tools/generate_haxe_assets.py`, which consumes `tools/xfl_metadata.py` and writes deterministic Haxe source under `haxe/src/pr2/generated/assets/`.
-  - The first generated catalog includes schema typedefs, constants, media records, linkage classes, symbols, timelines, layers, frames, labels, display instances, transforms, color transforms, and shape summary bounds/counts.
-  - Raw vector fill/stroke/edge streams remain in the metadata exporter and are deferred to the leaf vector rendering task.
-- [x] Parse XFL document metadata.
-  - Added `tools/xfl_metadata.py` to emit deterministic JSON from the extracted XFL.
-  - `DOMDocument.xml`.
-  - Stage size.
-  - Frame rate.
-  - Library item list.
-  - Linkage class names.
-  - Bitmap and sound metadata.
-- [x] Parse symbol timelines.
-  - `tools/xfl_metadata.py` now emits each symbol's `DOMTimeline`, ordered `DOMLayer` records, and `DOMFrame` records.
-  - Captures frame indices, durations, frame labels, label types, layer ordering, layer visibility/locking/type metadata, frame element counts, and frame element type summaries.
-  - `python3 tools/xfl_metadata.py --summary` verifies 988 symbol timelines, 2,587 layers, 11,511 timeline frames, 116 labels, and a max timeline length of 1,508 frames.
-- [x] Parse display instances.
-  - `DOMSymbolInstance`.
-  - `DOMBitmapInstance`.
-  - `DOMShape`.
-  - Instance names.
-  - Library item references.
-  - Symbol type.
-  - Loop mode.
-  - Transformation points.
-  - Matrices.
-  - Visibility.
-  - Color transforms.
-  - Added lightweight frame `elements` trees in `tools/xfl_metadata.py`, including nested `DOMGroup` members.
-- [x] Parse vector drawing data.
-  - Solid fills.
-  - Linear gradients.
-  - Radial gradients.
-  - Bitmap fills.
-  - Strokes.
-  - Raw edge/cubic command streams for later path decoding.
-  - Approximate numeric shape bounds from parsed edge streams.
-- [x] Generate native Haxe asset graph source.
-  - Generate under a dedicated package such as `pr2.generated.assets`.
-  - Emit typed Haxe structures/classes for library symbols, timelines, layers, frames, child instances, transforms, color transforms, labels, and referenced media.
-  - Keep the generated source deterministic and diffable.
-  - Commit the generated Haxe/source assets after review, then treat them as the editable Haxe/OpenFL baseline.
-  - Do not wire this generation into `haxelib run openfl build ...` or normal CI builds.
-  - Keep JSON output as an optional diagnostic/export mode only.
-  - Stable symbol ids.
-  - Symbol names.
-  - Linkage class names.
-  - Child instance definitions.
-  - Timeline frames.
-  - Labels.
-  - Referenced bitmaps/sounds.
-  - Generated package: `pr2.generated.assets`.
-  - Verification: `haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output`.
-- [x] Generate or implement a PR2 MovieClip runtime layer.
-  - Consume generated Haxe asset definitions directly.
-  - May wrap OpenFL `MovieClip`, or may use custom `Sprite`/`Timeline` classes.
-  - Must support named child lookup.
-  - Must support timeline-controlled child placement.
-  - Must support nested timelines.
+- [x] XFL metadata and Haxe asset generation complete.
+  - `tools/xfl_metadata.py` parses document metadata, library items, symbol timelines, display instances, transforms/color transforms, and raw vector fill/stroke/edge data.
+  - `tools/generate_haxe_assets.py` emits deterministic Haxe under `haxe/src/pr2/generated/assets/`; JSON remains diagnostic only.
+  - Generated package `pr2.generated.assets` verifies with `haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output`.
+- [x] Generated MovieClip runtime complete.
   - Added `pr2.runtime.AssetLibrary` and `pr2.runtime.PR2MovieClip`.
-  - Runtime consumes committed generated `SymbolAssetDef` records directly.
-  - Supports symbol/linkage lookup, frame expansion from layer durations, nested symbol instances, labels, playback controls, current frame/total frame APIs, transforms/color transforms, and named timeline children.
-  - Leaf vector art is represented by bounds placeholders until the vector rendering milestone.
-- [x] Test critical timeline APIs in the generated runtime.
-  - `play()`.
-  - `stop()`.
-  - `gotoAndPlay(frame)`.
-  - `gotoAndStop(frame)`.
-  - `gotoAndStop(label)`.
-  - `currentFrame`.
-  - `totalFrames`.
-  - `currentLabels`.
-  - Frame-script hooks mapped from generated/decompiled AS3 classes.
-  - Added `haxe/test/pr2/runtime/PR2MovieClipRuntimeTest.hx`, covering timeline playback, stop behavior, numeric and label seeks, frame wrapping, labels, frame-script hooks, named child lookup, transforms, color transforms, visibility, and invalid frame errors.
+  - Runtime supports symbol/linkage lookup, nested timelines, named child lookup, labels, playback controls, current frame APIs, transforms/color transforms, visibility, and frame-script hooks.
+  - Leaf vector art is still represented by bounds placeholders until the vector rendering task.
+- [x] Generated runtime tests cover timeline APIs and PR2 character composition basics.
+  - Coverage lives in `haxe/test/pr2/runtime/PR2MovieClipRuntimeTest.hx`.
+  - Verifies playback/stop/seek behavior, labels, frame wrapping, named children, transforms/color transforms, visibility, frame-script hooks, invalid frame errors, character animation children, part selector frame ranges, color layers, weapon/jetpack labels, and selected part persistence.
   - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
 - [ ] Render leaf vector symbols.
   - First target: direct OpenFL vector drawing if practical.
   - Fallback target: rasterize leaf symbols to generated PNG/texture assets.
   - Keep timelines dynamic even if leaf art is rasterized.
-- [x] Test critical PR2 character symbols.
-  - `runAnim`.
-  - `standAnim`.
-  - `jumpAnim`.
-  - `superJumpAnim`.
-  - `bumpedAnim`.
-  - `crouchAnim`.
-  - `crouchWalkAnim`.
-  - `swimAnim`.
-  - `frozenSolidAnim`.
-  - `headsMC`.
-  - `bodyMC`.
-  - `footMC`.
-  - `hatsMC`.
-  - Weapon clips.
-  - Added generated-runtime assertions for CharacterGraphic animation children,
-    hidden frozen-solid source metadata, part selector frame ranges/color layers,
-    hat selector color layers, and weapon/jetpack linkage labels.
-  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
-- [x] Test named child access.
-  - `head`.
-  - `body`.
-  - `foot1`.
-  - `foot2`.
-  - `weapon`.
-  - `colorMC`.
-  - `colorMC2`.
-  - Hat children on head/body.
-- [x] Test color transforms.
-  - Primary color layer.
-  - Secondary color layer.
-  - Visibility toggles.
-  - Alpha/transparency cases.
-  - Added runtime assertions for complete OpenFL `ColorTransform` multiplier/offset mapping, alpha-zero transparency, hidden tinted children, identity defaults, and generated PR2 primary/secondary `colorMC`/`colorMC2` children.
-  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
-- [x] Test timeline composition.
-  - Switch animation state.
-  - Switch part id with `gotoAndStop(partId)`.
-  - Advance frames.
-  - Added runtime assertions that generated character animation clips preserve selected `headsMC`/`bodyMC` frames across parent timeline advances.
-  - Added coverage that `single frame` symbol instances still follow parent `firstFrame` changes.
-  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
 - [ ] Compare representative character composition screenshots against Flash.
 
 Acceptance:
@@ -246,33 +79,48 @@ Acceptance:
 ## 3. Early Real Server Connectivity
 
 - [x] Inventory networking code.
-  - `flash/com/jiggmin/data/PR2Socket.as`.
-  - `flash/com/jiggmin/data/CommandHandler.as`.
-  - `flash/SuperLoader.as`.
-  - `flash/com/jiggmin/data/Encryptor.as`.
-  - `flash/com/jiggmin/data/SecureData.as`.
-  - Login and server selection classes.
   - Documented in `docs/networking-inventory.md`.
-  - Covered `PR2Socket`, `CommandHandler`, `SuperLoader`, `Encryptor`, `SecureData`, `SecureStore`, `CommAuth`, `Main`, `CheckServers`, `ServerSelectPopup`, `ConnectingPopup`, and `LoggingInPopup`.
+  - Covers socket protocol, command handling, HTTP loader flow, auth/crypto helpers, server selection, connection, and login classes.
 - [ ] Identify browser blockers.
-  - Raw TCP sockets versus WebSocket/HTTP.
+  - Browser OpenFL/Haxe must use WebSockets for live socket traffic; browsers
+    cannot connect to the existing raw TCP PR2 socket directly.
   - CORS.
   - TLS/mixed-content issues.
   - Crossdomain policy replacement needs.
+  - Production WebSocket pathing should use same-origin HTTPS/TLS endpoints
+    such as `wss://platformracing.com/servers/derron` to avoid cross-domain,
+    mixed-content, and exposed-port concerns.
+- [ ] Prerequisite: add server-side WebSocket support in the server repo.
+  - External repo work; track here only as a dependency for browser client
+    networking tasks.
+  - Route same-origin paths like `/servers/<server_name>` to the appropriate
+    PR2 game server.
+  - Preserve the existing PR2 command protocol payload semantics over the
+    WebSocket connection so the Haxe client can share protocol handling with
+    the Flash socket inventory.
+  - Serve endpoints over `wss://platformracing.com/...` in production.
+  - Confirm browser-visible CORS/origin, TLS, and proxy headers are compatible
+    with the deployed site.
 - [ ] Build minimal OpenFL networking spike.
   - Request server list or a harmless endpoint.
+  - Connect to a configured WebSocket URL, initially matching the planned
+    production shape such as `wss://platformracing.com/servers/derron`.
   - Attempt login flow if credentials are available.
   - Attempt lobby/list data fetch.
-- [ ] Decide whether a proxy is required.
-  - If browser cannot talk directly to the real server, define a small proxy/shim.
-  - Keep proxy protocol minimal and documented.
+- [ ] Document browser WebSocket client contract.
+  - Server-list entries must resolve to WebSocket paths/URLs the browser can
+    open without mixed content or cross-origin failures.
+  - Keep any path-to-server mapping outside this repo unless client selection
+    metadata is needed.
+  - Keep the browser protocol minimal and documented.
 - [ ] Add safe test credentials/config handling.
   - No credentials committed.
   - Local `.env` or ignored config file if needed.
 
 Acceptance:
 
-- OpenFL browser build can reach the real server directly, or the need for a proxy is proven.
+- OpenFL browser build can reach the real server through the server-provided
+  WebSocket path.
 - At least one real server response is parsed.
 - Login feasibility is known early.
 
@@ -557,8 +405,7 @@ Acceptance:
   - Support `launch`, `click`, `tap`, `hold`, and `shot`.
   - Normalize captures to 550x400.
 - [x] Remove test-driver framerate assumptions.
-  - Do not make `tools/pr2driver.py` own or parameterize game framerate.
-  - Replay inputs using wall-clock seconds.
+  - `tools/pr2driver.py` replays inputs using wall-clock seconds and does not own game framerate.
 - [ ] Add screenshot comparison.
   - Pixel diff.
   - Perceptual threshold.
