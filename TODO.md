@@ -40,9 +40,15 @@ Current assumptions:
   - Clean crouch and active item-effect captures are intentionally out of scope for this baseline pass.
 - [x] Store baseline captures in a stable directory.
   - Suggested: `test/baselines/flash/`.
-- [ ] Define initial playable scope.
-  - Real server connectivity should be tested early.
-  - First full gameplay milestone can still be a simple real or fixture level.
+- [x] Define initial playable scope.
+  - Documented in `docs/initial-playable-scope.md`.
+  - First playable milestone is a browser gameplay harness that launches
+    directly into a local fixture level.
+  - Scope includes one local player, fixed 27 FPS movement, basic solid blocks,
+    start/finish, restart, and deterministic debug state export.
+  - Real server connectivity remains a separate early track; login, lobby,
+    multiplayer, items, and full level browsing are out of scope for this
+    milestone.
 
 Acceptance:
 
