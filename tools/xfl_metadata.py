@@ -63,6 +63,15 @@ def maybe_int(value):
         return None
 
 
+def maybe_float(value):
+    if value is None or value == "":
+        return None
+    try:
+        return float(value)
+    except ValueError:
+        return None
+
+
 def item_record(element):
     attrs = element.attrib
     return {
@@ -87,16 +96,157 @@ def parse_bool(value):
     return None
 
 
+def parse_float_attrs(element, names):
+    record = {}
+    if element is None:
+        return record
+    for name in names:
+        value = maybe_float(element.attrib.get(name))
+        if value is not None:
+            record[name] = value
+    return record
+
+
+def parse_direct_float_child(parent, wrapper_name, value_name, attrs):
+    wrapper = first_direct_child(parent, wrapper_name)
+    if wrapper is None:
+        return None
+
+    value = first_direct_child(wrapper, value_name)
+    if value is None:
+        return None
+
+    return compact_record(parse_float_attrs(value, attrs))
+
+
+def parse_matrix(element):
+    matrix = parse_direct_float_child(
+        element,
+        "matrix",
+        "Matrix",
+        ("a", "b", "c", "d", "tx", "ty"),
+    )
+    return matrix
+
+
+def parse_point(element):
+    point = parse_direct_float_child(
+        element,
+        "transformationPoint",
+        "Point",
+        ("x", "y"),
+    )
+    return point
+
+
+def parse_color_transform(element):
+    color = parse_direct_float_child(
+        element,
+        "color",
+        "Color",
+        (
+            "alphaMultiplier",
+            "redMultiplier",
+            "greenMultiplier",
+            "blueMultiplier",
+            "alphaOffset",
+            "redOffset",
+            "greenOffset",
+            "blueOffset",
+        ),
+    )
+    return color
+
+
+def parse_common_display_attrs(element):
+    attrs = element.attrib
+    record = {
+        "type": local_name(element.tag),
+        "name": attrs.get("name"),
+        "libraryItemName": attrs.get("libraryItemName"),
+        "symbolType": attrs.get("symbolType"),
+        "loop": attrs.get("loop"),
+        "firstFrame": maybe_int(attrs.get("firstFrame")),
+        "visible": parse_bool(attrs.get("visible")),
+        "blendMode": attrs.get("blendMode"),
+        "centerPoint3DX": maybe_float(attrs.get("centerPoint3DX")),
+        "centerPoint3DY": maybe_float(attrs.get("centerPoint3DY")),
+    }
+
+    matrix = parse_matrix(element)
+    if matrix:
+        record["matrix"] = matrix
+
+    point = parse_point(element)
+    if point:
+        record["transformationPoint"] = point
+
+    color = parse_color_transform(element)
+    if color:
+        record["color"] = color
+
+    return compact_record(record)
+
+
+def parse_shape_summary(element):
+    record = parse_common_display_attrs(element)
+    fills = first_direct_child(element, "fills")
+    strokes = first_direct_child(element, "strokes")
+    edges = first_direct_child(element, "edges")
+
+    record.update(
+        compact_record(
+            {
+                "fillStyleCount": len(list(fills)) if fills is not None else 0,
+                "strokeStyleCount": len(list(strokes)) if strokes is not None else 0,
+                "edgeCount": len(list(edges)) if edges is not None else 0,
+            }
+        )
+    )
+    return compact_record(record)
+
+
+def parse_display_element(element):
+    name = local_name(element.tag)
+    if name in ("DOMSymbolInstance", "DOMBitmapInstance"):
+        return parse_common_display_attrs(element)
+
+    if name == "DOMShape":
+        return parse_shape_summary(element)
+
+    if name == "DOMGroup":
+        record = parse_common_display_attrs(element)
+        members = first_direct_child(element, "members")
+        if members is not None:
+            children = parse_display_elements(members)
+            if children:
+                record["children"] = children
+        return compact_record(record)
+
+    return compact_record({"type": name})
+
+
+def parse_display_elements(parent):
+    elements = []
+    for element in list(parent):
+        name = local_name(element.tag)
+        if name in ("DOMSymbolInstance", "DOMBitmapInstance", "DOMShape", "DOMGroup"):
+            elements.append(parse_display_element(element))
+    return elements
+
+
 def parse_frame(frame):
     attrs = frame.attrib
     label = attrs.get("name")
     element_types = []
+    display_elements = []
 
     elements = first_direct_child(frame, "elements")
     if elements is not None:
         element_types = sorted({local_name(element.tag) for element in list(elements)})
+        display_elements = parse_display_elements(elements)
 
-    return compact_record(
+    record = compact_record(
         {
             "index": maybe_int(attrs.get("index")),
             "duration": maybe_int(attrs.get("duration")),
@@ -108,6 +258,9 @@ def parse_frame(frame):
             "elementTypes": element_types,
         }
     )
+    if display_elements:
+        record["elements"] = display_elements
+    return record
 
 
 def parse_layer(layer, layer_index):

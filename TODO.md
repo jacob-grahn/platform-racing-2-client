@@ -106,7 +106,7 @@ Acceptance:
   - `tools/xfl_metadata.py` now emits each symbol's `DOMTimeline`, ordered `DOMLayer` records, and `DOMFrame` records.
   - Captures frame indices, durations, frame labels, label types, layer ordering, layer visibility/locking/type metadata, frame element counts, and frame element type summaries.
   - `python3 tools/xfl_metadata.py --summary` verifies 988 symbol timelines, 2,587 layers, 11,511 timeline frames, 116 labels, and a max timeline length of 1,508 frames.
-- [ ] Parse display instances.
+- [x] Parse display instances.
   - `DOMSymbolInstance`.
   - `DOMBitmapInstance`.
   - `DOMShape`.
@@ -118,6 +118,7 @@ Acceptance:
   - Matrices.
   - Visibility.
   - Color transforms.
+  - Added lightweight frame `elements` trees in `tools/xfl_metadata.py`, including nested `DOMGroup` members.
 - [ ] Parse vector drawing data.
   - Solid fills.
   - Linear gradients.
