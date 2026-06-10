@@ -157,12 +157,16 @@ Acceptance:
   - Referenced bitmaps/sounds.
   - Generated package: `pr2.generated.assets`.
   - Verification: `haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output`.
-- [ ] Generate or implement a PR2 MovieClip runtime layer.
+- [x] Generate or implement a PR2 MovieClip runtime layer.
   - Consume generated Haxe asset definitions directly.
   - May wrap OpenFL `MovieClip`, or may use custom `Sprite`/`Timeline` classes.
   - Must support named child lookup.
   - Must support timeline-controlled child placement.
   - Must support nested timelines.
+  - Added `pr2.runtime.AssetLibrary` and `pr2.runtime.PR2MovieClip`.
+  - Runtime consumes committed generated `SymbolAssetDef` records directly.
+  - Supports symbol/linkage lookup, frame expansion from layer durations, nested symbol instances, labels, playback controls, current frame/total frame APIs, transforms/color transforms, and named timeline children.
+  - Leaf vector art is represented by bounds placeholders until the vector rendering milestone.
 - [ ] Test critical timeline APIs in the generated runtime.
   - `play()`.
   - `stop()`.

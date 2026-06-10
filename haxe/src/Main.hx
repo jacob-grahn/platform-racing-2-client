@@ -12,13 +12,16 @@ import openfl.ui.Keyboard;
 import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
 import pr2.Constants;
+import pr2.runtime.PR2MovieClip;
 
 class Main extends Sprite {
 	private var background:Shape;
+	private var demoClip:PR2MovieClip;
 	private var frameCounter:Int = 0;
 	private var pressedKeys:Map<Int, Bool> = new Map();
 	private var inputLog:Array<String> = [];
 	private var statusText:TextField;
+	private var demoText:TextField;
 	private var pointerText:TextField;
 
 	public function new() {
@@ -39,6 +42,7 @@ class Main extends Sprite {
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 
 		drawBackground();
+		createFlaTimelineDemo();
 		createHud();
 		addEventListeners();
 		logInput("boot stage=" + Constants.STAGE_WIDTH + "x" + Constants.STAGE_HEIGHT + " fps=" + Constants.FRAME_RATE);
@@ -50,6 +54,21 @@ class Main extends Sprite {
 		background.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		background.graphics.endFill();
 		addChild(background);
+	}
+
+	private function createFlaTimelineDemo():Void {
+		demoClip = PR2MovieClip.fromLinkage("TeleportAnimation", {maxNestedDepth: 1});
+		demoClip.x = 275;
+		demoClip.y = 190;
+		demoClip.scaleX = 1.8;
+		demoClip.scaleY = 1.8;
+		addChild(demoClip);
+
+		demoText = makeTextField(320, 14, 210, 92, 0xD7E8FF);
+		demoText.text = "FLA timeline demo\n"
+			+ "linkage=TeleportAnimation\n"
+			+ "art=placeholder bounds";
+		addChild(demoText);
 	}
 
 	private function createHud():Void {
@@ -89,6 +108,7 @@ class Main extends Sprite {
 		frameCounter++;
 		statusText.text = "Platform Racing 2 OpenFL port\n"
 			+ "frame=" + frameCounter + " fixedDt=" + Constants.FIXED_TIMESTEP_SECONDS + "\n"
+			+ "flaDemoFrame=" + demoClip.currentFrame + "/" + demoClip.totalFrames + "\n"
 			+ "keys=" + describePressedKeys() + "\n\n"
 			+ inputLog.join("\n");
 	}
