@@ -7,7 +7,7 @@ Current assumptions:
 - Primary implementation: Haxe + OpenFL.
 - Primary target: browser/HTML5.
 - Secondary targets: Android and iOS after browser parity.
-- Asset strategy: use the unzipped FLA/XFL as the primary asset and authoring-structure reference, then build from extracted XFL/XML assets with open tooling. SWFs are runtime behavior references only, not port build inputs.
+- Asset strategy: use the unzipped FLA/XFL as a one-time migration source and authoring-structure reference, then generate initial Haxe/OpenFL source/assets from extracted XFL/XML with open tooling. After migration, leave the FLA/XFL behind and do future development directly in Haxe/OpenFL. SWFs are runtime behavior references only, not port build inputs.
 - Build constraint: normal development and CI must not require Adobe Animate or an Adobe subscription.
 - Networking strategy: test against the real PR2 server early.
 - Initial visual goal: close enough to feel like PR2, not strict pixel-perfect parity.
@@ -16,9 +16,12 @@ Current assumptions:
 ## 0. Baseline And Scope
 
 - [x] Define the port asset source of truth.
-  - Use extracted XFL/XML files under `flash/platform-racing-2-xfl/` as the primary reference for assets, timelines, symbol names, frame labels, linkage, and authoring structure.
-  - Generated normalized assets/classes should be deterministic build artifacts. Decide case-by-case whether specific generated outputs are committed once the pipeline shape is known.
+  - Use extracted XFL/XML files under `flash/platform-racing-2-xfl/` as the primary migration reference for assets, timelines, symbol names, frame labels, linkage, and authoring structure.
+  - Generate normalized Haxe classes and supporting assets once, then commit and maintain those outputs as normal source/assets.
+  - The generator should not be part of the normal build pipeline after the migration output is produced.
+  - JSON metadata is useful for inspection/debugging, but the runtime port should not depend on importing JSON asset graphs.
   - Ensure the normal port build does not depend on Adobe Animate.
+  - Ensure normal development does not require rerunning the XFL generator.
 - [x] Confirm initial stage and timing constants.
   - Flash `Main.as` defines a 550x400 client and sets `stage.frameRate = 27`.
   - The extracted FLA reports 27 FPS.
@@ -91,7 +94,9 @@ Acceptance:
 
 - [ ] Create an asset conversion tool.
   - Input: extracted XFL/XML library data.
-  - Output: generated Haxe/OpenFL-friendly asset data and/or classes.
+  - Output: generated Haxe/OpenFL-friendly asset classes and any supporting bitmap/sound/vector assets.
+  - Generated Haxe should be included by `project.xml` as native source, not loaded through a runtime JSON import step.
+  - Treat this as a migration tool, not as a required normal build step.
   - The tool must run with open tooling only.
   - The tool must not require Adobe Animate, SWF export, or an Adobe subscription.
 - [x] Parse XFL document metadata.
@@ -127,7 +132,13 @@ Acceptance:
   - Strokes.
   - Cubic/quadratic path data.
   - Shape bounds.
-- [ ] Generate a runtime asset graph.
+- [ ] Generate native Haxe asset graph source.
+  - Generate under a dedicated package such as `pr2.generated.assets`.
+  - Emit typed Haxe structures/classes for library symbols, timelines, layers, frames, child instances, transforms, color transforms, labels, and referenced media.
+  - Keep the generated source deterministic and diffable.
+  - Commit the generated Haxe/source assets after review, then treat them as the editable Haxe/OpenFL baseline.
+  - Do not wire this generation into `haxelib run openfl build ...` or normal CI builds.
+  - Keep JSON output as an optional diagnostic/export mode only.
   - Stable symbol ids.
   - Symbol names.
   - Linkage class names.
@@ -136,6 +147,7 @@ Acceptance:
   - Labels.
   - Referenced bitmaps/sounds.
 - [ ] Generate or implement a PR2 MovieClip runtime layer.
+  - Consume generated Haxe asset definitions directly.
   - May wrap OpenFL `MovieClip`, or may use custom `Sprite`/`Timeline` classes.
   - Must support named child lookup.
   - Must support timeline-controlled child placement.
