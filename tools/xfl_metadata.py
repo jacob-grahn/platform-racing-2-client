@@ -9,11 +9,13 @@ code generation inputs. It uses only Python's standard library.
 import argparse
 import json
 import os
+import re
 import sys
 import xml.etree.ElementTree as ET
 
 
 DEFAULT_XFL_DIR = os.path.join("flash", "platform-racing-2-xfl")
+EDGE_NUMBER_RE = re.compile(r"(?<![#A-Za-z])-?\d+(?:\.\d+)?")
 
 
 def local_name(tag):
@@ -158,6 +160,129 @@ def parse_color_transform(element):
     return color
 
 
+def parse_indexed_style(style):
+    record = compact_record({"index": maybe_int(style.attrib.get("index"))})
+    value = first_style_value(style)
+    if value is not None:
+        record["value"] = parse_style_value(value)
+    return compact_record(record)
+
+
+def first_style_value(style):
+    for child in list(style):
+        name = local_name(child.tag)
+        if name not in ("matrix",):
+            return child
+    return None
+
+
+def parse_gradient_entries(element):
+    entries = []
+    for entry in direct_children(element, "GradientEntry"):
+        entries.append(
+            compact_record(
+                {
+                    "ratio": maybe_float(entry.attrib.get("ratio")),
+                    "color": entry.attrib.get("color"),
+                    "alpha": maybe_float(entry.attrib.get("alpha")),
+                }
+            )
+        )
+    return entries
+
+
+def parse_style_value(element):
+    name = local_name(element.tag)
+    record = {"type": name}
+
+    for key, value in sorted(element.attrib.items()):
+        parsed = maybe_float(value)
+        if key in ("bitmapIsClipped", "pixelHinting"):
+            parsed_bool = parse_bool(value)
+            record[key] = parsed_bool if parsed_bool is not None else value
+        elif parsed is not None and key not in ("color", "bitmapPath", "scaleMode", "caps", "joints", "solidStyle"):
+            record[key] = parsed
+        else:
+            record[key] = value
+
+    matrix = parse_matrix(element)
+    if matrix:
+        record["matrix"] = matrix
+
+    entries = parse_gradient_entries(element)
+    if entries:
+        record["entries"] = entries
+
+    fill = first_direct_child(element, "fill")
+    if fill is not None:
+        fill_value = first_style_value(fill)
+        if fill_value is not None:
+            record["fill"] = parse_style_value(fill_value)
+
+    return compact_record(record)
+
+
+def parse_shape_styles(element, wrapper_name, style_name):
+    wrapper = first_direct_child(element, wrapper_name)
+    if wrapper is None:
+        return []
+    return [parse_indexed_style(style) for style in direct_children(wrapper, style_name)]
+
+
+def parse_edge(element):
+    record = {
+        "fillStyle0": maybe_int(element.attrib.get("fillStyle0")),
+        "fillStyle1": maybe_int(element.attrib.get("fillStyle1")),
+        "strokeStyle": maybe_int(element.attrib.get("strokeStyle")),
+        "edges": element.attrib.get("edges"),
+        "cubics": element.attrib.get("cubics"),
+    }
+    return compact_record(record)
+
+
+def parse_shape_edges(element):
+    wrapper = first_direct_child(element, "edges")
+    if wrapper is None:
+        return []
+    return [parse_edge(edge) for edge in direct_children(wrapper, "Edge")]
+
+
+def edge_numbers(edge_record):
+    text = " ".join(
+        value
+        for value in (edge_record.get("edges"), edge_record.get("cubics"))
+        if value
+    )
+    return [maybe_float(match.group(0)) for match in EDGE_NUMBER_RE.finditer(text)]
+
+
+def parse_shape_bounds(edges):
+    min_x = None
+    min_y = None
+    max_x = None
+    max_y = None
+
+    for edge in edges:
+        numbers = [number for number in edge_numbers(edge) if number is not None]
+        for index in range(0, len(numbers) - 1, 2):
+            x = numbers[index]
+            y = numbers[index + 1]
+            min_x = x if min_x is None else min(min_x, x)
+            min_y = y if min_y is None else min(min_y, y)
+            max_x = x if max_x is None else max(max_x, x)
+            max_y = y if max_y is None else max(max_y, y)
+
+    if min_x is None:
+        return None
+
+    return {
+        "left": min_x,
+        "top": min_y,
+        "right": max_x,
+        "bottom": max_y,
+    }
+
+
 def parse_common_display_attrs(element):
     attrs = element.attrib
     record = {
@@ -190,19 +315,28 @@ def parse_common_display_attrs(element):
 
 def parse_shape_summary(element):
     record = parse_common_display_attrs(element)
-    fills = first_direct_child(element, "fills")
-    strokes = first_direct_child(element, "strokes")
-    edges = first_direct_child(element, "edges")
+    fills = parse_shape_styles(element, "fills", "FillStyle")
+    strokes = parse_shape_styles(element, "strokes", "StrokeStyle")
+    edges = parse_shape_edges(element)
+    bounds = parse_shape_bounds(edges)
 
     record.update(
         compact_record(
             {
-                "fillStyleCount": len(list(fills)) if fills is not None else 0,
-                "strokeStyleCount": len(list(strokes)) if strokes is not None else 0,
-                "edgeCount": len(list(edges)) if edges is not None else 0,
+                "fillStyleCount": len(fills),
+                "strokeStyleCount": len(strokes),
+                "edgeCount": len(edges),
             }
         )
     )
+    if fills:
+        record["fills"] = fills
+    if strokes:
+        record["strokes"] = strokes
+    if edges:
+        record["edges"] = edges
+    if bounds:
+        record["bounds"] = bounds
     return compact_record(record)
 
 

@@ -124,14 +124,14 @@ Acceptance:
   - Visibility.
   - Color transforms.
   - Added lightweight frame `elements` trees in `tools/xfl_metadata.py`, including nested `DOMGroup` members.
-- [ ] Parse vector drawing data.
+- [x] Parse vector drawing data.
   - Solid fills.
   - Linear gradients.
   - Radial gradients.
   - Bitmap fills.
   - Strokes.
-  - Cubic/quadratic path data.
-  - Shape bounds.
+  - Raw edge/cubic command streams for later path decoding.
+  - Approximate numeric shape bounds from parsed edge streams.
 - [ ] Generate native Haxe asset graph source.
   - Generate under a dedicated package such as `pr2.generated.assets`.
   - Emit typed Haxe structures/classes for library symbols, timelines, layers, frames, child instances, transforms, color transforms, labels, and referenced media.

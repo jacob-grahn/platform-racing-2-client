@@ -51,4 +51,7 @@ python3 tools/xfl_metadata.py --summary
 ```
 
 Use the full output without `--summary` when a later pipeline step needs the
-library folders, media records, symbol includes, and linkage class list.
+library folders, media records, symbol includes, linkage class list, display
+instances, and vector shape metadata. `DOMShape` entries include fill styles,
+stroke styles, raw edge/cubic command streams, and approximate numeric bounds
+for later rendering work.
