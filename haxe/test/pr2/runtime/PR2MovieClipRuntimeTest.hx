@@ -109,11 +109,20 @@ class PR2MovieClipRuntimeTest {
 		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 2});
 
 		for (childName in ["runAnim", "standAnim", "jumpAnim", "superJumpAnim", "bumpedAnim", "crouchAnim", "crouchWalkAnim", "swimAnim"]) {
-			assertNotNull(character.getChildByTimelineName(childName), 'CharacterGraphic exposes $childName');
+			var child = Std.downcast(character.getChildByTimelineName(childName), PR2MovieClip);
+			assertNotNull(child, 'CharacterGraphic exposes $childName as a movie clip');
+			assertAtLeast(1, child.totalFrames, '$childName has timeline frames');
 		}
 		assertEquals(null, character.getChildByTimelineName("frozenSolidAnim"), "invisible CharacterGraphic layers are not rendered");
+		assertHiddenTimelineChild(
+			AssetLibrary.requireSymbolByLinkage("CharacterGraphic"),
+			"frozenSolidAnim",
+			"MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 896",
+			"CharacterGraphic keeps frozenSolidAnim on an invisible source layer"
+		);
 
 		for (linkage in [
+			"PR2_Graphics_1_Apr_2014_fla.frozenSolidAnim_65",
 			"PR2_Graphics_1_Apr_2014_fla.jumpAnim_61",
 			"PR2_Graphics_1_Apr_2014_fla.superJumpAnim_60",
 			"PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59"
@@ -127,14 +136,36 @@ class PR2MovieClipRuntimeTest {
 		assertNestedNamedChildren(headSelector, ["colorMC", "colorMC2"], "headsMC gladiator frame exposes color layers");
 
 		var bodySelector = PR2MovieClip.fromSymbolName("Parts/Bodies/bodyMC", {maxNestedDepth: 2});
+		assertEquals(69, bodySelector.totalFrames, "bodyMC exposes all generated body frames");
 		bodySelector.gotoAndStop("gladiator");
 		assertNestedNamedChildren(bodySelector, ["colorMC", "colorMC2"], "bodyMC gladiator frame exposes color layers");
+
+		var footSelector = PR2MovieClip.fromSymbolName("Parts/Feet/footMC", {maxNestedDepth: 2});
+		assertEquals(101, footSelector.totalFrames, "footMC exposes all generated foot frames");
+		footSelector.gotoAndStop("gladiator");
+		assertNestedNamedChildren(footSelector, ["colorMC"], "footMC gladiator frame exposes color layer");
+
+		var hatSelector = PR2MovieClip.fromLinkage("HatGraphic", {maxNestedDepth: 2});
+		assertEquals(62, hatSelector.totalFrames, "hatsMC exposes all generated hat frames");
+		hatSelector.gotoAndStop(24);
+		assertNestedNamedChildren(hatSelector, ["colorMC"], "hatsMC colorable frame exposes color layer");
 
 		headSelector.gotoAndStop(1);
 		assertNamedChildren(headSelector, ["hat1"], "headsMC frame 1 exposes hat children");
 
 		bodySelector.gotoAndStop(29);
 		assertNamedChildren(bodySelector, ["hat1", "hat2", "hat3", "hat4"], "bodyMC frame 29 exposes hat children");
+
+		assertLinkedClip("PR2_Graphics_1_Apr_2014_fla.gunFireAnim_40", 16, "shoot", 2);
+		assertLinkedClip("PR2_Graphics_1_Apr_2014_fla.swordAnim_53", 14, "swing", 2);
+		assertLinkedClip("PR2_Graphics_1_Apr_2014_fla.iceWaveFireAnim_55", 51, "fire", 2);
+
+		var jetPack = assertLinkedClip("PR2_Graphics_1_Apr_2014_fla.jetPackStates_47", 11, "off", 1);
+		assertHasLabel(jetPack, "on", 6);
+		jetPack.gotoAndStop("off");
+		assertNotNull(jetPack.getChildByTimelineName("anim"), "jetPackStates off frame exposes anim child");
+		jetPack.gotoAndStop("on");
+		assertNotNull(jetPack.getChildByTimelineName("anim"), "jetPackStates on frame exposes anim child");
 	}
 
 	private static function testTimelineCompositionPreservesPartSelection():Void {
@@ -174,6 +205,44 @@ class PR2MovieClipRuntimeTest {
 		for (childName in childNames) {
 			assertNotNull(findDescendantByTimelineName(clip, childName), '$message: missing $childName');
 		}
+	}
+
+	private static function assertLinkedClip(linkage:String, totalFrames:Int, labelName:String, labelFrame:Int):PR2MovieClip {
+		var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 1});
+		assertEquals(totalFrames, clip.totalFrames, '$linkage totalFrames');
+		assertHasLabel(clip, labelName, labelFrame);
+		clip.gotoAndStop(labelName);
+		assertEquals(labelFrame, clip.currentFrame, '$linkage gotoAndStop resolves $labelName');
+		return clip;
+	}
+
+	private static function assertHasLabel(clip:PR2MovieClip, labelName:String, labelFrame:Int):Void {
+		for (label in clip.currentLabels) {
+			if (label.name == labelName) {
+				assertEquals(labelFrame, label.frame, '${clip.symbol.name} label $labelName frame');
+				return;
+			}
+		}
+		throw '${clip.symbol.name} missing label $labelName';
+	}
+
+	private static function assertHiddenTimelineChild(symbol:SymbolAssetDef, childName:String, libraryItemName:String, message:String):Void {
+		for (timeline in symbol.timelines) {
+			for (layer in timeline.layers) {
+				for (frame in layer.frames) {
+					var elements = frame.elements == null ? [] : frame.elements;
+					for (element in elements) {
+						if (element.name == childName) {
+							assertEquals(false, layer.visible, '$message layer visibility');
+							assertEquals(libraryItemName, element.libraryItemName, '$message library item');
+							assertNotNull(PR2MovieClip.fromSymbolName(libraryItemName, {maxNestedDepth: 1}), '$message symbol can instantiate directly');
+							return;
+						}
+					}
+				}
+			}
+		}
+		throw '$message missing source child $childName';
 	}
 
 	private static function findDescendantByTimelineName(clip:PR2MovieClip, name:String):Null<DisplayObject> {
@@ -426,6 +495,13 @@ class PR2MovieClipRuntimeTest {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertAtLeast(minimum:Float, actual:Float, message:String):Void {
+		assertions++;
+		if (actual < minimum) {
+			throw '$message: expected at least $minimum, got $actual';
 		}
 	}
 

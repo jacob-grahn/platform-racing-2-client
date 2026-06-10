@@ -189,7 +189,7 @@ Acceptance:
   - First target: direct OpenFL vector drawing if practical.
   - Fallback target: rasterize leaf symbols to generated PNG/texture assets.
   - Keep timelines dynamic even if leaf art is rasterized.
-- [ ] Test critical PR2 character symbols.
+- [x] Test critical PR2 character symbols.
   - `runAnim`.
   - `standAnim`.
   - `jumpAnim`.
@@ -204,6 +204,10 @@ Acceptance:
   - `footMC`.
   - `hatsMC`.
   - Weapon clips.
+  - Added generated-runtime assertions for CharacterGraphic animation children,
+    hidden frozen-solid source metadata, part selector frame ranges/color layers,
+    hat selector color layers, and weapon/jetpack linkage labels.
+  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
 - [x] Test named child access.
   - `head`.
   - `body`.
