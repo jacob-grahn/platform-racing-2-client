@@ -24,11 +24,27 @@ From the repository root:
 haxelib run openfl test html5
 ```
 
-Optional native desktop target for faster local debugging:
+OpenFL can also generate an optional native desktop target for faster local
+debugging and screenshot comparison:
 
 ```sh
-haxelib run openfl test mac
+haxelib run openfl display mac
+MACOSX_VER=26.5 haxelib run openfl test mac
 ```
+
+`display mac` verifies the OpenFL/Haxe target setup without invoking the native
+compiler. `test mac` and `build mac` require a working local Xcode command-line
+toolchain. On Xcode versions that expose a minor macOS SDK such as
+`macosx26.5`, pass the exact SDK suffix through `MACOSX_VER`; otherwise hxcpp
+may request `macosx26` and fail before compiling project code:
+
+```text
+xcodebuild: error: SDK "macosx26" cannot be located.
+xcrun: error: unable to find utility "clang++", not a developer tool or in PATH
+```
+
+Use `xcodebuild -showsdks` to see the installed macOS SDK suffix. The browser
+target remains the required development path.
 
 `openfl ...` also works if you install the optional OpenFL command shim, but
 `haxelib run openfl ...` works with the repo-local haxelib setup.

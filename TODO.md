@@ -80,8 +80,14 @@ Acceptance:
   - Confirmed 550x400 stage dimensions.
   - Confirmed deterministic frame counter advances.
   - Confirmed keyboard and mouse inputs update the HUD/log.
-- [ ] Add optional native desktop target.
+- [x] Add optional native desktop target.
   - Useful for debugging and screenshot comparison.
+  - OpenFL mac target resolves with `haxelib run openfl display mac`.
+  - Native output uses `export/macos/` and keeps normal browser builds unchanged.
+  - Verified local native compile with `MACOSX_VER=26.5 haxelib run openfl build mac`.
+  - Xcode 26.5 exposes `macosx26.5`; passing `MACOSX_VER=26.5` avoids hxcpp's failed
+    `macosx26` lookup.
+  - Keep this target optional; do not require Xcode for normal development or CI.
 
 Acceptance:
 
