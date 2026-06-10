@@ -98,13 +98,16 @@ Acceptance:
 
 ## 2. Adobe-Free XFL Asset Pipeline Spike
 
-- [ ] Create an asset conversion tool.
+- [x] Create an asset conversion tool.
   - Input: extracted XFL/XML library data.
   - Output: generated Haxe/OpenFL-friendly asset classes and any supporting bitmap/sound/vector assets.
   - Generated Haxe should be included by `project.xml` as native source, not loaded through a runtime JSON import step.
   - Treat this as a migration tool, not as a required normal build step.
   - The tool must run with open tooling only.
   - The tool must not require Adobe Animate, SWF export, or an Adobe subscription.
+  - Added `tools/generate_haxe_assets.py`, which consumes `tools/xfl_metadata.py` and writes deterministic Haxe source under `haxe/src/pr2/generated/assets/`.
+  - The first generated catalog includes schema typedefs, constants, media records, linkage classes, symbols, timelines, layers, frames, labels, display instances, transforms, color transforms, and shape summary bounds/counts.
+  - Raw vector fill/stroke/edge streams remain in the metadata exporter and are deferred to the leaf vector rendering task.
 - [x] Parse XFL document metadata.
   - Added `tools/xfl_metadata.py` to emit deterministic JSON from the extracted XFL.
   - `DOMDocument.xml`.
@@ -138,7 +141,7 @@ Acceptance:
   - Strokes.
   - Raw edge/cubic command streams for later path decoding.
   - Approximate numeric shape bounds from parsed edge streams.
-- [ ] Generate native Haxe asset graph source.
+- [x] Generate native Haxe asset graph source.
   - Generate under a dedicated package such as `pr2.generated.assets`.
   - Emit typed Haxe structures/classes for library symbols, timelines, layers, frames, child instances, transforms, color transforms, labels, and referenced media.
   - Keep the generated source deterministic and diffable.
@@ -152,6 +155,8 @@ Acceptance:
   - Timeline frames.
   - Labels.
   - Referenced bitmaps/sounds.
+  - Generated package: `pr2.generated.assets`.
+  - Verification: `haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output`.
 - [ ] Generate or implement a PR2 MovieClip runtime layer.
   - Consume generated Haxe asset definitions directly.
   - May wrap OpenFL `MovieClip`, or may use custom `Sprite`/`Timeline` classes.

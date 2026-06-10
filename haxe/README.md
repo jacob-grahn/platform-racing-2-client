@@ -71,3 +71,24 @@ library folders, media records, symbol includes, linkage class list, display
 instances, and vector shape metadata. `DOMShape` entries include fill styles,
 stroke styles, raw edge/cubic command streams, and approximate numeric bounds
 for later rendering work.
+
+## Generated Asset Catalog
+
+Generate the first native Haxe asset graph catalog from the XFL metadata:
+
+```sh
+python3 tools/generate_haxe_assets.py
+```
+
+This writes deterministic source under `haxe/src/pr2/generated/assets/`. The
+generated catalog includes media records, linkage classes, symbols, timelines,
+layers, frames, labels, display instances, transforms, color transforms, and
+shape summary bounds/counts. Raw vector fill/stroke/edge streams are still
+available from `tools/xfl_metadata.py`; they are intentionally deferred until
+the vector rendering milestone.
+
+To compile-check the generated package directly:
+
+```sh
+haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output
+```
