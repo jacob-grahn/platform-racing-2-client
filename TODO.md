@@ -198,7 +198,7 @@ Acceptance:
   - `footMC`.
   - `hatsMC`.
   - Weapon clips.
-- [ ] Test named child access.
+- [x] Test named child access.
   - `head`.
   - `body`.
   - `foot1`.

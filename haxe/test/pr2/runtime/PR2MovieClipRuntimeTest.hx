@@ -11,6 +11,7 @@ class PR2MovieClipRuntimeTest {
 		testTimelineControls();
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();
+		testGeneratedCharacterNamedChildren();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
 	}
 
@@ -84,6 +85,71 @@ class PR2MovieClipRuntimeTest {
 		clip.gotoAndStop(3);
 		assertEquals(null, clip.getChildByTimelineName("marker"), "old frame children are removed");
 		assertNotNull(clip.getChildByTimelineName("middleMarker"), "new frame children are rendered");
+	}
+
+	private static function testGeneratedCharacterNamedChildren():Void {
+		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 2});
+
+		for (childName in ["runAnim", "standAnim", "jumpAnim", "superJumpAnim", "bumpedAnim", "crouchAnim", "crouchWalkAnim", "swimAnim"]) {
+			assertNotNull(character.getChildByTimelineName(childName), 'CharacterGraphic exposes $childName');
+		}
+		assertEquals(null, character.getChildByTimelineName("frozenSolidAnim"), "invisible CharacterGraphic layers are not rendered");
+
+		for (linkage in [
+			"PR2_Graphics_1_Apr_2014_fla.jumpAnim_61",
+			"PR2_Graphics_1_Apr_2014_fla.superJumpAnim_60",
+			"PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59"
+		]) {
+			var animation = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 1});
+			assertNamedChildren(animation, ["weapon", "head", "body", "foot1", "foot2"], '$linkage exposes character part children');
+		}
+
+		var headSelector = PR2MovieClip.fromSymbolName("Parts/Heads/headsMC", {maxNestedDepth: 2});
+		headSelector.gotoAndStop("gladiator");
+		assertNestedNamedChildren(headSelector, ["colorMC", "colorMC2"], "headsMC gladiator frame exposes color layers");
+
+		var bodySelector = PR2MovieClip.fromSymbolName("Parts/Bodies/bodyMC", {maxNestedDepth: 2});
+		bodySelector.gotoAndStop("gladiator");
+		assertNestedNamedChildren(bodySelector, ["colorMC", "colorMC2"], "bodyMC gladiator frame exposes color layers");
+
+		headSelector.gotoAndStop(1);
+		assertNamedChildren(headSelector, ["hat1"], "headsMC frame 1 exposes hat children");
+
+		bodySelector.gotoAndStop(29);
+		assertNamedChildren(bodySelector, ["hat1", "hat2", "hat3", "hat4"], "bodyMC frame 29 exposes hat children");
+	}
+
+	private static function assertNamedChildren(clip:PR2MovieClip, childNames:Array<String>, message:String):Void {
+		for (childName in childNames) {
+			assertNotNull(clip.getChildByTimelineName(childName), '$message: missing $childName');
+		}
+	}
+
+	private static function assertNestedNamedChildren(clip:PR2MovieClip, childNames:Array<String>, message:String):Void {
+		for (childName in childNames) {
+			assertNotNull(findDescendantByTimelineName(clip, childName), '$message: missing $childName');
+		}
+	}
+
+	private static function findDescendantByTimelineName(clip:PR2MovieClip, name:String):Null<DisplayObject> {
+		var direct = clip.getChildByTimelineName(name);
+		if (direct != null) {
+			return direct;
+		}
+
+		for (i in 0...clip.numChildren) {
+			var childClip = Std.downcast(clip.getChildAt(i), PR2MovieClip);
+			if (childClip == null) {
+				continue;
+			}
+
+			var descendant = findDescendantByTimelineName(childClip, name);
+			if (descendant != null) {
+				return descendant;
+			}
+		}
+
+		return null;
 	}
 
 	private static function makeSymbol():SymbolAssetDef {
