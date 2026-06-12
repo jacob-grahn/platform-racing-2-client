@@ -65,6 +65,51 @@ Acceptance:
   - Gradient/bitmap styles currently fall back to a representative solid color; rasterization remains an option if visual parity needs it.
   - Keep timelines dynamic even if leaf art is rasterized.
 - [ ] Compare representative character composition screenshots against Flash.
+- [ ] Wire committed SVG raster output into the OpenFL character renderer.
+  - Current asset state:
+    - SVG source exports are committed under `vector-art/svg/`.
+    - Rasterizer script exists at `tools/rasterize_vector_art.py`.
+    - Generated individual PNGs live under `vector-art/png/`.
+    - Generated atlas PNG/JSON files live under `vector-art/atlases/`.
+    - Raster manifest lives at `vector-art/raster-manifest.json`.
+    - Last verified output: 632 individual PNGs, 19 atlas PNG pages, 19 atlas JSON files.
+  - Regenerate rasters with:
+    ```sh
+    python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
+    ```
+  - Validation command from last session:
+    ```sh
+    python3 - <<'PY'
+    import json
+    from pathlib import Path
+    from PIL import Image
+
+    with open('vector-art/raster-manifest.json') as f:
+        manifest = json.load(f)
+
+    pngs = sorted(Path('vector-art/png').rglob('*.png'))
+    atlas_pngs = sorted(Path('vector-art/atlases').rglob('*.png'))
+    atlas_jsons = sorted(Path('vector-art/atlases').rglob('*.json'))
+    assert len(manifest['pngs']) == 632
+    assert len(pngs) == 632
+    assert len(manifest['atlases']) == 19
+    assert len(atlas_pngs) == 19
+    assert len(atlas_jsons) == 19
+    for path in atlas_pngs:
+        image = Image.open(path)
+        assert image.width <= 4096 and image.height <= 4096, (path, image.size)
+        assert image.getbbox() is not None, path
+    print('verified', len(pngs), 'pngs,', len(atlas_pngs), 'atlas pages')
+    PY
+    ```
+  - Next implementation steps:
+    - Decide whether atlas JSON should be consumed directly at runtime or converted into generated Haxe metadata during the existing asset generation step.
+    - Add the atlas PNGs to the OpenFL asset manifest/project configuration.
+    - Build a small Haxe loader for atlas JSON frames with `frame` and `sourceTrim`.
+    - Replace or selectively bypass generated vector drawing for character part leaf art with atlas-backed bitmaps.
+    - Preserve `static`, `primary`, and `secondary` as independently drawable/tintable layers; keep `composite` for previews/debug/non-tinted fallback.
+    - Verify one known character part first, preferably `hat/002_exp`, because it previously exposed negative-coordinate SVG export behavior.
+    - Then test a full character composition with mixed parts/colors against the existing OpenFL harness and representative Flash screenshots.
 
 Acceptance:
 

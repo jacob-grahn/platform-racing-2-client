@@ -1,0 +1,301 @@
+{
+  "channel": "composite",
+  "frames": {
+    "001_none": {
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 1403,
+        "y": 1267
+      },
+      "id": 1,
+      "png": "vector-art/png/character/hat/001_none/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "002_exp": {
+      "frame": {
+        "height": 516,
+        "width": 612,
+        "x": 2429,
+        "y": 2
+      },
+      "id": 2,
+      "png": "vector-art/png/character/hat/002_exp/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 516,
+        "width": 612,
+        "x": -368,
+        "y": -373
+      }
+    },
+    "003_kong": {
+      "frame": {
+        "height": 431,
+        "width": 540,
+        "x": 836,
+        "y": 764
+      },
+      "id": 3,
+      "png": "vector-art/png/character/hat/003_kong/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 431,
+        "width": 540,
+        "x": -271,
+        "y": -375
+      }
+    },
+    "004_prop": {
+      "frame": {
+        "height": 506,
+        "width": 766,
+        "x": 3043,
+        "y": 2
+      },
+      "id": 4,
+      "png": "vector-art/png/character/hat/004_prop/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 506,
+        "width": 766,
+        "x": -337,
+        "y": -458
+      }
+    },
+    "005_cowboy": {
+      "frame": {
+        "height": 418,
+        "width": 584,
+        "x": 1920,
+        "y": 764
+      },
+      "id": 5,
+      "png": "vector-art/png/character/hat/005_cowboy/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 418,
+        "width": 584,
+        "x": -286,
+        "y": -390
+      }
+    },
+    "006_crown": {
+      "frame": {
+        "height": 376,
+        "width": 476,
+        "x": 3110,
+        "y": 764
+      },
+      "id": 6,
+      "png": "vector-art/png/character/hat/006_crown/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 376,
+        "width": 476,
+        "x": -273,
+        "y": -394
+      }
+    },
+    "007_santa": {
+      "frame": {
+        "height": 413,
+        "width": 602,
+        "x": 2506,
+        "y": 764
+      },
+      "id": 7,
+      "png": "vector-art/png/character/hat/007_santa/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 413,
+        "width": 602,
+        "x": -351,
+        "y": -362
+      }
+    },
+    "008_party": {
+      "frame": {
+        "height": 460,
+        "width": 297,
+        "x": 537,
+        "y": 764
+      },
+      "id": 8,
+      "png": "vector-art/png/character/hat/008_party/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 460,
+        "width": 297,
+        "x": -132,
+        "y": -450
+      }
+    },
+    "009_top": {
+      "frame": {
+        "height": 501,
+        "width": 533,
+        "x": 2,
+        "y": 764
+      },
+      "id": 9,
+      "png": "vector-art/png/character/hat/009_top/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 501,
+        "width": 533,
+        "x": -287,
+        "y": -439
+      }
+    },
+    "010_jump_start": {
+      "frame": {
+        "height": 760,
+        "width": 583,
+        "x": 2,
+        "y": 2
+      },
+      "id": 10,
+      "png": "vector-art/png/character/hat/010_jump_start/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 760,
+        "width": 583,
+        "x": -318,
+        "y": -443
+      }
+    },
+    "011_moon": {
+      "frame": {
+        "height": 589,
+        "width": 482,
+        "x": 1945,
+        "y": 2
+      },
+      "id": 11,
+      "png": "vector-art/png/character/hat/011_moon/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 589,
+        "width": 482,
+        "x": -275,
+        "y": -286
+      }
+    },
+    "012_thief": {
+      "frame": {
+        "height": 289,
+        "width": 836,
+        "x": 565,
+        "y": 1267
+      },
+      "id": 12,
+      "png": "vector-art/png/character/hat/012_thief/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 289,
+        "width": 836,
+        "x": -516,
+        "y": -219
+      }
+    },
+    "013_jigg": {
+      "frame": {
+        "height": 431,
+        "width": 540,
+        "x": 1378,
+        "y": 764
+      },
+      "id": 13,
+      "png": "vector-art/png/character/hat/013_jigg/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 431,
+        "width": 540,
+        "x": -271,
+        "y": -375
+      }
+    },
+    "014_artifact": {
+      "frame": {
+        "height": 707,
+        "width": 773,
+        "x": 587,
+        "y": 2
+      },
+      "id": 14,
+      "png": "vector-art/png/character/hat/014_artifact/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 707,
+        "width": 773,
+        "x": -455,
+        "y": -655
+      }
+    },
+    "015_jellyfish": {
+      "frame": {
+        "height": 698,
+        "width": 581,
+        "x": 1362,
+        "y": 2
+      },
+      "id": 15,
+      "png": "vector-art/png/character/hat/015_jellyfish/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 698,
+        "width": 581,
+        "x": -253,
+        "y": -335
+      }
+    },
+    "016_cheese": {
+      "frame": {
+        "height": 376,
+        "width": 561,
+        "x": 2,
+        "y": 1267
+      },
+      "id": 16,
+      "png": "vector-art/png/character/hat/016_cheese/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 376,
+        "width": 561,
+        "x": -257,
+        "y": -292
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/hat/composite@4x.png",
+  "kind": "hat",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 1645,
+    "width": 3811
+  }
+}

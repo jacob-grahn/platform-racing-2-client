@@ -36,8 +36,8 @@ out of the game-facing export set.
 Export paths follow this pattern:
 
 ```text
-character/<kind>/<id>_<name>/<channel>.svg
-character/<kind>/<id>_<name>/<channel>@4x.png
+vector-art/svg/character/<kind>/<id>_<name>/<channel>.svg
+vector-art/png/character/<kind>/<id>_<name>/<channel>@4x.png
 ```
 
 Examples:
@@ -121,12 +121,41 @@ open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" export/vector-
 ```
 
 The full export uses the same command with `export-character-svg.jsfl`. The SVG
-outputs are written under:
+outputs are committed under:
 
 ```text
-export/vector-art/svg/
+vector-art/svg/
 ```
 
 The smoke batch has been validated with `hat/002_exp`: the generated SVGs
 contain real `<path>` data for `static`, `primary`, `secondary`, and synthesized
 `composite` exports.
+
+## Rasterization
+
+Rasterize the committed SVGs with Inkscape:
+
+```sh
+python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
+```
+
+The rasterizer queries each SVG's drawing bounds with Inkscape before exporting.
+This is important because some Animate SVGs contain negative coordinates outside
+the nominal stage viewBox. The output PNGs are transparent-trimmed 4x rasters,
+and the manifest records the original drawing bounds plus the trim rectangle.
+
+Sprite sheets are grouped by character kind and channel:
+
+```text
+vector-art/atlases/character/<kind>/<channel>@4x.png
+vector-art/atlases/character/<kind>/<channel>@4x.json
+```
+
+Large groups are split into page-suffixed files, such as
+`composite@4x-p01.png`, when a single 4096px atlas would be too large.
+
+This grouping is intentional for the character renderer: `static`, `primary`,
+and `secondary` can be drawn or tinted independently, while `composite` is useful
+for previews, debugging, and non-tinted fallbacks. Later non-character exports
+should use separate atlas groups by gameplay area or screen: static blocks,
+items/effects, UI, and large backgrounds should not all share one global sheet.

@@ -1,0 +1,391 @@
+{
+  "channel": "composite",
+  "frames": {
+    "001_classic": {
+      "frame": {
+        "height": 581,
+        "width": 268,
+        "x": 1328,
+        "y": 2
+      },
+      "id": 1,
+      "png": "vector-art/png/character/body/001_classic/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 581,
+        "width": 268,
+        "x": -134,
+        "y": -291
+      }
+    },
+    "002_strap": {
+      "frame": {
+        "height": 581,
+        "width": 268,
+        "x": 1598,
+        "y": 2
+      },
+      "id": 2,
+      "png": "vector-art/png/character/body/002_strap/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 581,
+        "width": 268,
+        "x": -134,
+        "y": -291
+      }
+    },
+    "004_pec": {
+      "frame": {
+        "height": 550,
+        "width": 285,
+        "x": 821,
+        "y": 594
+      },
+      "id": 4,
+      "png": "vector-art/png/character/body/004_pec/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 550,
+        "width": 285,
+        "x": -134,
+        "y": -290
+      }
+    },
+    "005_gut": {
+      "frame": {
+        "height": 576,
+        "width": 374,
+        "x": 3445,
+        "y": 2
+      },
+      "id": 5,
+      "png": "vector-art/png/character/body/005_gut/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 576,
+        "width": 374,
+        "x": -152,
+        "y": -291
+      }
+    },
+    "007_miss_pr2": {
+      "frame": {
+        "height": 581,
+        "width": 268,
+        "x": 1868,
+        "y": 2
+      },
+      "id": 7,
+      "png": "vector-art/png/character/body/007_miss_pr2/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 581,
+        "width": 268,
+        "x": -134,
+        "y": -291
+      }
+    },
+    "008_belt": {
+      "frame": {
+        "height": 582,
+        "width": 303,
+        "x": 1023,
+        "y": 2
+      },
+      "id": 8,
+      "png": "vector-art/png/character/body/008_belt/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 582,
+        "width": 303,
+        "x": -134,
+        "y": -291
+      }
+    },
+    "011_invisible": {
+      "frame": {
+        "height": 581,
+        "width": 268,
+        "x": 2138,
+        "y": 2
+      },
+      "id": 11,
+      "png": "vector-art/png/character/body/011_invisible/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 581,
+        "width": 268,
+        "x": -134,
+        "y": -291
+      }
+    },
+    "019_alien": {
+      "frame": {
+        "height": 537,
+        "width": 195,
+        "x": 1108,
+        "y": 594
+      },
+      "id": 19,
+      "png": "vector-art/png/character/body/019_alien/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 537,
+        "width": 195,
+        "x": -71,
+        "y": -286
+      }
+    },
+    "021_bubble": {
+      "frame": {
+        "height": 514,
+        "width": 542,
+        "x": 2726,
+        "y": 594
+      },
+      "id": 21,
+      "png": "vector-art/png/character/body/021_bubble/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 514,
+        "width": 542,
+        "x": -235,
+        "y": -275
+      }
+    },
+    "023_armor": {
+      "frame": {
+        "height": 583,
+        "width": 393,
+        "x": 628,
+        "y": 2
+      },
+      "id": 23,
+      "png": "vector-art/png/character/body/023_armor/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 583,
+        "width": 393,
+        "x": -183,
+        "y": -301
+      }
+    },
+    "025_gingerbread": {
+      "frame": {
+        "height": 552,
+        "width": 318,
+        "x": 501,
+        "y": 594
+      },
+      "id": 25,
+      "png": "vector-art/png/character/body/025_gingerbread/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 552,
+        "width": 318,
+        "x": -141,
+        "y": -302
+      }
+    },
+    "030_very_invisible": {
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 4019,
+        "y": 594
+      },
+      "id": 30,
+      "png": "vector-art/png/character/body/030_very_invisible/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "032_slender": {
+      "frame": {
+        "height": 577,
+        "width": 553,
+        "x": 2890,
+        "y": 2
+      },
+      "id": 32,
+      "png": "vector-art/png/character/body/032_slender/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 577,
+        "width": 553,
+        "x": -329,
+        "y": -291
+      }
+    },
+    "035_frost_djinn": {
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 4022,
+        "y": 594
+      },
+      "id": 35,
+      "png": "vector-art/png/character/body/035_frost_djinn/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "036_reindeer": {
+      "frame": {
+        "height": 531,
+        "width": 429,
+        "x": 1692,
+        "y": 594
+      },
+      "id": 36,
+      "png": "vector-art/png/character/body/036_reindeer/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 531,
+        "width": 429,
+        "x": -227,
+        "y": -290
+      }
+    },
+    "038_valentine": {
+      "frame": {
+        "height": 590,
+        "width": 624,
+        "x": 2,
+        "y": 2
+      },
+      "id": 38,
+      "png": "vector-art/png/character/body/038_valentine/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 590,
+        "width": 624,
+        "x": -255,
+        "y": -298
+      }
+    },
+    "039_bunny": {
+      "frame": {
+        "height": 497,
+        "width": 747,
+        "x": 3270,
+        "y": 594
+      },
+      "id": 39,
+      "png": "vector-art/png/character/body/039_bunny/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 497,
+        "width": 747,
+        "x": -189,
+        "y": -268
+      }
+    },
+    "040_gecko": {
+      "frame": {
+        "height": 534,
+        "width": 385,
+        "x": 1305,
+        "y": 594
+      },
+      "id": 40,
+      "png": "vector-art/png/character/body/040_gecko/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 534,
+        "width": 385,
+        "x": -213,
+        "y": -258
+      }
+    },
+    "042_sea": {
+      "frame": {
+        "height": 553,
+        "width": 497,
+        "x": 2,
+        "y": 594
+      },
+      "id": 42,
+      "png": "vector-art/png/character/body/042_sea/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 553,
+        "width": 497,
+        "x": -204,
+        "y": -295
+      }
+    },
+    "043_brew": {
+      "frame": {
+        "height": 581,
+        "width": 480,
+        "x": 2408,
+        "y": 2
+      },
+      "id": 43,
+      "png": "vector-art/png/character/body/043_brew/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 581,
+        "width": 480,
+        "x": -278,
+        "y": -296
+      }
+    },
+    "048_turkey": {
+      "frame": {
+        "height": 527,
+        "width": 601,
+        "x": 2123,
+        "y": 594
+      },
+      "id": 48,
+      "png": "vector-art/png/character/body/048_turkey/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 527,
+        "width": 601,
+        "x": -467,
+        "y": -286
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/body/composite@4x-p02.png",
+  "kind": "body",
+  "page": 2,
+  "pages": 2,
+  "size": {
+    "height": 1149,
+    "width": 4025
+  }
+}
