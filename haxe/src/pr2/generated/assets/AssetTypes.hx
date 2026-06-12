@@ -38,6 +38,21 @@ typedef ColorTransformDef = {
 	@:optional var blueOffset:Float;
 }
 
+typedef StyleValueDef = Dynamic;
+
+typedef IndexedStyleDef = {
+	@:optional var index:Int;
+	@:optional var value:StyleValueDef;
+}
+
+typedef EdgeDef = {
+	@:optional var fillStyle0:Int;
+	@:optional var fillStyle1:Int;
+	@:optional var strokeStyle:Int;
+	@:optional var edges:String;
+	@:optional var cubics:String;
+}
+
 typedef DisplayElementDef = {
 	var type:String;
 	@:optional var name:String;
@@ -55,6 +70,9 @@ typedef DisplayElementDef = {
 	@:optional var fillStyleCount:Int;
 	@:optional var strokeStyleCount:Int;
 	@:optional var edgeCount:Int;
+	@:optional var fills:Array<IndexedStyleDef>;
+	@:optional var strokes:Array<IndexedStyleDef>;
+	@:optional var edges:Array<EdgeDef>;
 	@:optional var bounds:BoundsDef;
 	@:optional var children:Array<DisplayElementDef>;
 }

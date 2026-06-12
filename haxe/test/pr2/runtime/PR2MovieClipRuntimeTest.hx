@@ -1,6 +1,7 @@
 package pr2.runtime;
 
 import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 import openfl.events.Event;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 
@@ -12,6 +13,7 @@ class PR2MovieClipRuntimeTest {
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();
 		testColorTransforms();
+		testLeafVectorShapes();
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
@@ -103,6 +105,19 @@ class PR2MovieClipRuntimeTest {
 		clip.gotoAndStop(2);
 		assertEquals(null, clip.getChildByTimelineName("primaryColor"), "color children are replaced on frame changes");
 		assertColorTransform(requireChild(clip, "identityColor"), 1, 1, 1, 1, 0, 0, 0, 0, "missing color transform defaults to identity");
+	}
+
+	private static function testLeafVectorShapes():Void {
+		var clip = new PR2MovieClip(makeVectorSymbol());
+
+		var vectorShape = requireChild(clip, "vectorShape");
+		assertAtLeast(19, vectorShape.width, "DOMShape edge data renders vector width instead of placeholder");
+		assertAtLeast(19, vectorShape.height, "DOMShape edge data renders vector height instead of placeholder");
+
+		var group = Std.downcast(requireChild(clip, "group"), Sprite);
+		assertNotNull(group, "DOMGroup renders as a sprite");
+		assertEquals(1, group.numChildren, "DOMGroup renders member shapes");
+		assertAtLeast(9, group.getChildAt(0).width, "DOMGroup member shape renders vector width");
 	}
 
 	private static function testGeneratedCharacterNamedChildren():Void {
@@ -427,6 +442,53 @@ class PR2MovieClipRuntimeTest {
 							}]
 						}
 					]
+				}]
+			}]
+		};
+	}
+
+	private static function makeVectorSymbol():SymbolAssetDef {
+		return {
+			href: "VectorSymbol.xml",
+			type: "movie clip",
+			name: "VectorSymbol",
+			linkageClassName: "VectorSymbol",
+			linkageIdentifier: "VectorSymbol",
+			timelines: [{
+				name: "VectorSymbol",
+				layerCount: 1,
+				frameCount: 1,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 1,
+					frames: [{
+						index: 0,
+						duration: 1,
+						elementCount: 2,
+						elementTypes: ["DOMGroup", "DOMShape"],
+						elements: [
+							{
+								type: "DOMShape",
+								name: "vectorShape",
+								fills: [{index: 1, value: {type: "SolidColor", color: "#FF0000"}}],
+								edges: [{fillStyle1: 1, edges: "!0 0|20 0!20 0|20 20!20 20|0 20!0 20|0 0"}]
+							},
+							{
+								type: "DOMGroup",
+								name: "group",
+								children: [{
+									type: "DOMShape",
+									fills: [{index: 1, value: {type: "SolidColor", color: "#00FF00"}}],
+									edges: [{fillStyle0: 1, edges: "!0 0[10 0 10 10!10 10|0 10!0 10|0 0"}]
+								}]
+							}
+						]
+					}]
 				}]
 			}]
 		};

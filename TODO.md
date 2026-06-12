@@ -60,9 +60,9 @@ Acceptance:
   - Coverage lives in `haxe/test/pr2/runtime/PR2MovieClipRuntimeTest.hx`.
   - Verifies playback/stop/seek behavior, labels, frame wrapping, named children, transforms/color transforms, visibility, frame-script hooks, invalid frame errors, character animation children, part selector frame ranges, color layers, weapon/jetpack labels, and selected part persistence.
   - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
-- [ ] Render leaf vector symbols.
-  - First target: direct OpenFL vector drawing if practical.
-  - Fallback target: rasterize leaf symbols to generated PNG/texture assets.
+- [x] Render leaf vector symbols.
+  - Direct OpenFL vector drawing now handles XFL solid fill/stroke edge paths and grouped shape members.
+  - Gradient/bitmap styles currently fall back to a representative solid color; rasterization remains an option if visual parity needs it.
   - Keep timelines dynamic even if leaf art is rasterized.
 - [ ] Compare representative character composition screenshots against Flash.
 
@@ -81,7 +81,7 @@ Acceptance:
 - [x] Inventory networking code.
   - Documented in `docs/networking-inventory.md`.
   - Covers socket protocol, command handling, HTTP loader flow, auth/crypto helpers, server selection, connection, and login classes.
-- [ ] Identify browser blockers.
+- [x] Identify browser blockers.
   - Browser OpenFL/Haxe must use WebSockets for live socket traffic; browsers
     cannot connect to the existing raw TCP PR2 socket directly.
   - CORS.
@@ -90,6 +90,7 @@ Acceptance:
   - Production WebSocket pathing should use same-origin HTTPS/TLS endpoints
     such as `wss://platformracing.com/servers/derron` to avoid cross-domain,
     mixed-content, and exposed-port concerns.
+  - Documented in `docs/browser-networking-blockers.md`.
 - [ ] Prerequisite: add server-side WebSocket support in the server repo.
   - External repo work; track here only as a dependency for browser client
     networking tasks.

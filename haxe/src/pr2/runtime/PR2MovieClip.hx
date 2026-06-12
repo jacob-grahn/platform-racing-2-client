@@ -262,6 +262,23 @@ class PR2MovieClip extends Sprite {
 			}
 		}
 
+		if (element.type == "DOMShape") {
+			var vectorShape = VectorShapeRenderer.render(element);
+			if (vectorShape != null) {
+				return vectorShape;
+			}
+		}
+
+		if (element.type == "DOMGroup" && element.children != null) {
+			var group = new Sprite();
+			for (childElement in element.children) {
+				var child = createDisplayObject(childElement, null);
+				applyElementProperties(child, childElement);
+				group.addChild(child);
+			}
+			return group;
+		}
+
 		return createPlaceholder(element);
 	}
 
