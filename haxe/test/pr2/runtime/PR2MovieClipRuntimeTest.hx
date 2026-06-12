@@ -3,6 +3,7 @@ package pr2.runtime;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 
 class PR2MovieClipRuntimeTest {
@@ -16,6 +17,7 @@ class PR2MovieClipRuntimeTest {
 		testLeafVectorShapes();
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
+		testGeneratedCharacterPartIdSelection();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
 	}
 
@@ -208,6 +210,25 @@ class PR2MovieClipRuntimeTest {
 		selector.gotoAndStop(3);
 		clip.gotoAndStop(2);
 		assertEquals(2, requireClipChild(clip, "selector").currentFrame, "single-frame child instances follow parent firstFrame");
+	}
+
+	private static function testGeneratedCharacterPartIdSelection():Void {
+		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
+		CharacterAppearance.applyPartIds(character, {hat: 1, head: 1, body: 1, feet: 1});
+
+		var runAnim = requireClipChild(character, "runAnim");
+		assertEquals(1, requireClipChild(runAnim, "head").currentFrame, "head id 1 selects head frame 1");
+		assertEquals(1, requireClipChild(runAnim, "body").currentFrame, "body id 1 selects body frame 1");
+		assertEquals(1, requireClipChild(runAnim, "foot1").currentFrame, "feet id 1 selects foot1 frame 1");
+		assertEquals(1, requireClipChild(runAnim, "foot2").currentFrame, "feet id 1 selects foot2 frame 1");
+		assertEquals(1, requireClipChild(requireClipChild(runAnim, "head"), "hat1").currentFrame, "hat id 1 selects head hat1 frame 1");
+
+		runAnim.advanceOneFrame();
+		var advancedHead = requireClipChild(runAnim, "head");
+		assertEquals(1, advancedHead.currentFrame, "head id 1 survives run timeline advance");
+		assertEquals(1, requireClipChild(runAnim, "body").currentFrame, "body id 1 survives run timeline advance");
+		assertEquals(1, requireClipChild(runAnim, "foot1").currentFrame, "feet id 1 survives run timeline advance");
+		assertEquals(1, requireClipChild(advancedHead, "hat1").currentFrame, "hat id 1 survives run timeline advance");
 	}
 
 	private static function assertNamedChildren(clip:PR2MovieClip, childNames:Array<String>, message:String):Void {

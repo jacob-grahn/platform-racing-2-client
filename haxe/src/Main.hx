@@ -1,10 +1,14 @@
 package;
 
+#if js
+import js.Browser;
+#end
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.Lib;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
@@ -12,17 +16,28 @@ import openfl.ui.Keyboard;
 import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
 import pr2.Constants;
+import pr2.character.CharacterAppearance;
 import pr2.runtime.PR2MovieClip;
 
 class Main extends Sprite {
 	private var background:Shape;
-	private var demoClip:PR2MovieClip;
+	private var characterClip:PR2MovieClip;
+	private var runAnim:PR2MovieClip;
 	private var frameCounter:Int = 0;
 	private var pressedKeys:Map<Int, Bool> = new Map();
 	private var inputLog:Array<String> = [];
 	private var statusText:TextField;
-	private var demoText:TextField;
+	private var harnessText:TextField;
 	private var pointerText:TextField;
+	private var fpsWindowStartMs:Int = 0;
+	private var fpsWindowFrames:Int = 0;
+	private var observedFps:Int = 0;
+	private var fpsSamples:Array<Int> = [];
+	private static inline var CHARACTER_SCALE:Float = 0.30;
+	private static inline var TEST_HAT_ID:Int = 1;
+	private static inline var TEST_HEAD_ID:Int = 1;
+	private static inline var TEST_BODY_ID:Int = 1;
+	private static inline var TEST_FEET_ID:Int = 1;
 
 	public function new() {
 		super();
@@ -42,9 +57,10 @@ class Main extends Sprite {
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 
 		drawBackground();
-		createFlaTimelineDemo();
+		createCharacterRunHarness();
 		createHud();
 		addEventListeners();
+		fpsWindowStartMs = Lib.getTimer();
 		logInput("boot stage=" + Constants.STAGE_WIDTH + "x" + Constants.STAGE_HEIGHT + " fps=" + Constants.FRAME_RATE);
 	}
 
@@ -54,21 +70,69 @@ class Main extends Sprite {
 		background.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		background.graphics.endFill();
 		addChild(background);
+
+		var ground = new Shape();
+		ground.graphics.beginFill(0x303950);
+		ground.graphics.drawRect(0, 304, Constants.STAGE_WIDTH, 96);
+		ground.graphics.endFill();
+		ground.graphics.lineStyle(2, 0x6D7FA8, 0.75);
+		ground.graphics.moveTo(0, 304);
+		ground.graphics.lineTo(Constants.STAGE_WIDTH, 304);
+		addChild(ground);
 	}
 
-	private function createFlaTimelineDemo():Void {
-		demoClip = PR2MovieClip.fromLinkage("TeleportAnimation", {maxNestedDepth: 1});
-		demoClip.x = 275;
-		demoClip.y = 190;
-		demoClip.scaleX = 1.8;
-		demoClip.scaleY = 1.8;
-		addChild(demoClip);
+	private function createCharacterRunHarness():Void {
+		characterClip = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
+		characterClip.x = 276;
+		characterClip.y = 268;
+		characterClip.scaleX = CHARACTER_SCALE;
+		characterClip.scaleY = CHARACTER_SCALE;
+		addChild(characterClip);
 
-		demoText = makeTextField(320, 14, 210, 92, 0xD7E8FF);
-		demoText.text = "FLA timeline demo\n"
-			+ "linkage=TeleportAnimation\n"
-			+ "art=placeholder bounds";
-		addChild(demoText);
+		showOnlyCharacterState("runAnim");
+		if (runAnim != null) {
+			runAnim.gotoAndStop(1);
+		}
+		CharacterAppearance.applyPartIds(characterClip, {
+			hat: TEST_HAT_ID,
+			head: TEST_HEAD_ID,
+			body: TEST_BODY_ID,
+			feet: TEST_FEET_ID
+		});
+
+		harnessText = makeTextField(350, 14, 190, 90, 0xD7E8FF);
+		harnessText.text = "Character harness\n"
+			+ "linkage=CharacterGraphic\n"
+			+ "state=runAnim\n"
+			+ "hat/head/body/feet=1\n"
+			+ "fps=" + Constants.FRAME_RATE;
+		addChild(harnessText);
+	}
+
+	private function showOnlyCharacterState(activeChildName:String):Void {
+		var stateNames = [
+			"runAnim",
+			"standAnim",
+			"jumpAnim",
+			"superJumpAnim",
+			"bumpedAnim",
+			"crouchAnim",
+			"crouchWalkAnim",
+			"swimAnim",
+			"frozenSolidAnim"
+		];
+
+		for (stateName in stateNames) {
+			var child = characterClip.getChildByTimelineName(stateName);
+			if (child != null) {
+				child.visible = stateName == activeChildName;
+				var childClip = Std.downcast(child, PR2MovieClip);
+				if (childClip != null) {
+					childClip.stopAll();
+				}
+			}
+		}
+		runAnim = Std.downcast(characterClip.getChildByTimelineName(activeChildName), PR2MovieClip);
 	}
 
 	private function createHud():Void {
@@ -106,11 +170,42 @@ class Main extends Sprite {
 
 	private function onEnterFrame(event:Event):Void {
 		frameCounter++;
+		if (runAnim != null) {
+			runAnim.advanceOneFrame();
+		}
+		updateObservedFps();
 		statusText.text = "Platform Racing 2 OpenFL port\n"
 			+ "frame=" + frameCounter + " fixedDt=" + Constants.FIXED_TIMESTEP_SECONDS + "\n"
-			+ "flaDemoFrame=" + demoClip.currentFrame + "/" + demoClip.totalFrames + "\n"
+			+ "observedFps=" + observedFps + " target=" + Constants.FRAME_RATE + "\n"
+			+ "characterFrame=" + characterClip.currentFrame + "/" + characterClip.totalFrames + "\n"
+			+ "runAnimFrame=" + (runAnim == null ? "(missing)" : runAnim.currentFrame + "/" + runAnim.totalFrames) + "\n"
 			+ "keys=" + describePressedKeys() + "\n\n"
 			+ inputLog.join("\n");
+	}
+
+	private function updateObservedFps():Void {
+		fpsWindowFrames++;
+		var now = Lib.getTimer();
+		var elapsed = now - fpsWindowStartMs;
+		if (elapsed < 1000) {
+			return;
+		}
+
+		observedFps = Math.round(fpsWindowFrames * 1000 / elapsed);
+		fpsWindowFrames = 0;
+		fpsWindowStartMs = now;
+		fpsSamples.push(observedFps);
+		if (fpsSamples.length > 60) {
+			fpsSamples.shift();
+		}
+
+		var message = 'observedFps=$observedFps target=${Constants.FRAME_RATE} samples=${fpsSamples.join(",")}';
+		trace(message);
+		#if js
+		Browser.console.log(message);
+		Browser.document.body.setAttribute("data-pr2-observed-fps", Std.string(observedFps));
+		Browser.document.body.setAttribute("data-pr2-fps-samples", fpsSamples.join(","));
+		#end
 	}
 
 	private function onKeyDown(event:KeyboardEvent):Void {

@@ -79,6 +79,27 @@ class PR2MovieClip extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, advanceFrame);
 	}
 
+	public function stopAll():Void {
+		stop();
+		for (i in 0...numChildren) {
+			var childClip = Std.downcast(getChildAt(i), PR2MovieClip);
+			if (childClip != null) {
+				childClip.stopAll();
+			}
+		}
+	}
+
+	public function dispose():Void {
+		stop();
+		while (numChildren > 0) {
+			var child = removeChildAt(numChildren - 1);
+			var childClip = Std.downcast(child, PR2MovieClip);
+			if (childClip != null) {
+				childClip.dispose();
+			}
+		}
+	}
+
 	public function gotoAndPlay(frame:Dynamic):Void {
 		gotoFrame(frame);
 		play();
@@ -87,6 +108,14 @@ class PR2MovieClip extends Sprite {
 	public function gotoAndStop(frame:Dynamic):Void {
 		gotoFrame(frame);
 		stop();
+	}
+
+	public function advanceOneFrame():Void {
+		var next = currentFrame + 1;
+		if (next > totalFrames) {
+			next = 1;
+		}
+		gotoFrame(next);
 	}
 
 	public function getChildByTimelineName(name:String):Null<DisplayObject> {
@@ -149,11 +178,7 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function advanceFrame(event:Event):Void {
-		var next = currentFrame + 1;
-		if (next > totalFrames) {
-			next = 1;
-		}
-		gotoFrame(next);
+		advanceOneFrame();
 	}
 
 	private function gotoFrame(frame:Dynamic):Void {
@@ -189,6 +214,7 @@ class PR2MovieClip extends Sprite {
 			applyElementProperties(child, element);
 			addChild(child);
 		}
+		disposeUnusedReusableClips(reusableClips);
 	}
 
 	private function runFrameScripts(frameNumber:Int):Void {
@@ -238,6 +264,14 @@ class PR2MovieClip extends Sprite {
 			return null;
 		}
 		return clips.shift();
+	}
+
+	private function disposeUnusedReusableClips(reusableClips:Map<String, Array<PR2MovieClip>>):Void {
+		for (clips in reusableClips) {
+			for (clip in clips) {
+				clip.dispose();
+			}
+		}
 	}
 
 	private function reusableClipKey(name:String, symbolName:String):String {
