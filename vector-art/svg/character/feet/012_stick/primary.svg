@@ -1,0 +1,19 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="MovieClips_Symbol_228_11_Layer1_0_FILL">
+<path fill="#000000" stroke="none" d="
+M 14.65 -4.35
+L 11.75 -3.8 11.95 38.8 58.5 39.3 58.55 32.05
+Q 38.85 28.9 19.2 31.85
+L 19.25 31.5
+Q 20.45 13.05 14.65 -4.35 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, -28.15,-10.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_228_11_Layer1_0_FILL"/>
+</g>
+</g>
+</svg>

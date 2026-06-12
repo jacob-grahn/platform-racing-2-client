@@ -1,0 +1,19 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="Parts_Heads_headColorMC_11_Layer1_0_FILL">
+<path fill="#00CC33" stroke="none" d="
+M 128.1 88.8
+L 128.05 89.15 132.95 87.45 128.55 73.1 121.3 76.05 128.1 88.8
+M 109.65 93.55
+L 104.9 80.05
+Q 82 81.05 94.8 101.6 103.5 98.95 109.65 93.55 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, -75.4,-101.9) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Parts_Heads_headColorMC_11_Layer1_0_FILL"/>
+</g>
+</g>
+</svg>
