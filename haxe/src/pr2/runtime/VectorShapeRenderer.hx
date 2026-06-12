@@ -95,6 +95,8 @@ class VectorShapeRenderer {
 }
 
 private class EdgePathParser {
+	private static inline var TWIPS_PER_PIXEL:Float = 20;
+
 	private var text:String;
 	private var graphics:Graphics;
 	private var pos:Int = 0;
@@ -184,7 +186,7 @@ private class EdgePathParser {
 		if (x == null || y == null) {
 			return null;
 		}
-		return {x: x, y: y};
+		return {x: x / TWIPS_PER_PIXEL, y: y / TWIPS_PER_PIXEL};
 	}
 
 	private function readNumber():Null<Float> {

@@ -3,6 +3,7 @@ package pr2.runtime;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.geom.Point;
 import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 
@@ -18,6 +19,7 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
 		testGeneratedCharacterPartIdSelection();
+		testGeneratedRunAnimationPartPlacement();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
 	}
 
@@ -231,6 +233,56 @@ class PR2MovieClipRuntimeTest {
 		assertEquals(1, requireClipChild(advancedHead, "hat1").currentFrame, "hat id 1 survives run timeline advance");
 	}
 
+	private static function testGeneratedRunAnimationPartPlacement():Void {
+		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
+		CharacterAppearance.applyPartIds(character, {hat: 1, head: 1, body: 1, feet: 1});
+
+		var runAnim = requireClipChild(character, "runAnim");
+		var firstHeadY = Math.NaN;
+		var firstFoot1X = Math.NaN;
+		var firstFoot1Center:Point = null;
+		var firstFoot2Center:Point = null;
+		var sawHeadMotion = false;
+		var sawFootMotion = false;
+		var sawFoot1BoundsMotion = false;
+		var sawFoot2BoundsMotion = false;
+
+		for (frame in 1...runAnim.totalFrames + 1) {
+			runAnim.gotoAndStop(frame);
+			var head = requireClipChild(runAnim, "head");
+			var body = requireClipChild(runAnim, "body");
+			var foot1 = requireClipChild(runAnim, "foot1");
+			var foot2 = requireClipChild(runAnim, "foot2");
+			var hat1 = requireClipChild(head, "hat1");
+
+			assertAbove(head, body, 'run frame $frame head is above body');
+			assertAbove(body, foot1, 'run frame $frame body is above foot1');
+			assertAbove(body, foot2, 'run frame $frame body is above foot2');
+			assertNotOrigin(head, 'run frame $frame head transform is not origin');
+			assertNotOrigin(body, 'run frame $frame body transform is not origin');
+			assertNotOrigin(foot1, 'run frame $frame foot1 transform is not origin');
+			assertNotOrigin(foot2, 'run frame $frame foot2 transform is not origin');
+			assertNotOrigin(hat1, 'run frame $frame hat1 transform is not origin inside head');
+
+			if (frame == 1) {
+				firstHeadY = head.transform.matrix.ty;
+				firstFoot1X = foot1.transform.matrix.tx;
+				firstFoot1Center = boundsCenter(foot1, character);
+				firstFoot2Center = boundsCenter(foot2, character);
+			} else {
+				sawHeadMotion = sawHeadMotion || Math.abs(head.transform.matrix.ty - firstHeadY) > 0.0001;
+				sawFootMotion = sawFootMotion || Math.abs(foot1.transform.matrix.tx - firstFoot1X) > 0.0001;
+				sawFoot1BoundsMotion = sawFoot1BoundsMotion || centerMoved(firstFoot1Center, boundsCenter(foot1, character), 0.5);
+				sawFoot2BoundsMotion = sawFoot2BoundsMotion || centerMoved(firstFoot2Center, boundsCenter(foot2, character), 0.5);
+			}
+		}
+
+		assertEquals(true, sawHeadMotion, "run animation moves head y across frames");
+		assertEquals(true, sawFootMotion, "run animation moves foot1 x across frames");
+		assertEquals(true, sawFoot1BoundsMotion, "run animation moves rendered foot1 bounds across frames");
+		assertEquals(true, sawFoot2BoundsMotion, "run animation moves rendered foot2 bounds across frames");
+	}
+
 	private static function assertNamedChildren(clip:PR2MovieClip, childNames:Array<String>, message:String):Void {
 		for (childName in childNames) {
 			assertNotNull(clip.getChildByTimelineName(childName), '$message: missing $childName');
@@ -312,6 +364,32 @@ class PR2MovieClipRuntimeTest {
 		var child = Std.downcast(requireChild(clip, name), PR2MovieClip);
 		assertNotNull(child, 'child $name is not a PR2MovieClip');
 		return child;
+	}
+
+	private static function assertAbove(upper:DisplayObject, lower:DisplayObject, message:String):Void {
+		assertions++;
+		var upperY = upper.transform.concatenatedMatrix.ty;
+		var lowerY = lower.transform.concatenatedMatrix.ty;
+		if (upperY >= lowerY) {
+			throw '$message: expected ${upper.name}.globalTy $upperY < ${lower.name}.globalTy $lowerY';
+		}
+	}
+
+	private static function assertNotOrigin(child:DisplayObject, message:String):Void {
+		assertions++;
+		var matrix = child.transform.matrix;
+		if (Math.abs(matrix.tx) <= 0.0001 && Math.abs(matrix.ty) <= 0.0001) {
+			throw '$message: ${child.name} matrix tx/ty are both zero';
+		}
+	}
+
+	private static function boundsCenter(child:DisplayObject, coordinateSpace:DisplayObject):Point {
+		var bounds = child.getBounds(coordinateSpace);
+		return new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+	}
+
+	private static function centerMoved(first:Point, current:Point, minimumDelta:Float):Bool {
+		return Math.abs(current.x - first.x) > minimumDelta || Math.abs(current.y - first.y) > minimumDelta;
 	}
 
 	private static function makeSymbol():SymbolAssetDef {
@@ -497,7 +575,7 @@ class PR2MovieClipRuntimeTest {
 								type: "DOMShape",
 								name: "vectorShape",
 								fills: [{index: 1, value: {type: "SolidColor", color: "#FF0000"}}],
-								edges: [{fillStyle1: 1, edges: "!0 0|20 0!20 0|20 20!20 20|0 20!0 20|0 0"}]
+								edges: [{fillStyle1: 1, edges: "!0 0|400 0!400 0|400 400!400 400|0 400!0 400|0 0"}]
 							},
 							{
 								type: "DOMGroup",
@@ -505,7 +583,7 @@ class PR2MovieClipRuntimeTest {
 								children: [{
 									type: "DOMShape",
 									fills: [{index: 1, value: {type: "SolidColor", color: "#00FF00"}}],
-									edges: [{fillStyle0: 1, edges: "!0 0[10 0 10 10!10 10|0 10!0 10|0 0"}]
+									edges: [{fillStyle0: 1, edges: "!0 0[200 0 200 200!200 200|0 200!0 200|0 0"}]
 								}]
 							}
 						]

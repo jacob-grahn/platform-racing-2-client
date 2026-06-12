@@ -4,10 +4,12 @@ package;
 import js.Browser;
 #end
 import openfl.display.Shape;
+import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.Point;
 import openfl.Lib;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -29,11 +31,13 @@ class Main extends Sprite {
 	private var statusText:TextField;
 	private var harnessText:TextField;
 	private var pointerText:TextField;
+	private var latestPartTransformLog:String = "";
+	private var partBaselineCenters:Map<String, Point> = new Map();
 	private var fpsWindowStartMs:Int = 0;
 	private var fpsWindowFrames:Int = 0;
 	private var observedFps:Int = 0;
 	private var fpsSamples:Array<Int> = [];
-	private static inline var CHARACTER_SCALE:Float = 0.30;
+	private static inline var CHARACTER_SCALE:Float = 6.0;
 	private static inline var TEST_HAT_ID:Int = 1;
 	private static inline var TEST_HEAD_ID:Int = 1;
 	private static inline var TEST_BODY_ID:Int = 1;
@@ -99,6 +103,7 @@ class Main extends Sprite {
 			body: TEST_BODY_ID,
 			feet: TEST_FEET_ID
 		});
+		recordRunPartBaselineCenters();
 
 		harnessText = makeTextField(350, 14, 190, 90, 0xD7E8FF);
 		harnessText.text = "Character harness\n"
@@ -173,6 +178,7 @@ class Main extends Sprite {
 		if (runAnim != null) {
 			runAnim.advanceOneFrame();
 		}
+		logRunPartTransforms();
 		updateObservedFps();
 		statusText.text = "Platform Racing 2 OpenFL port\n"
 			+ "frame=" + frameCounter + " fixedDt=" + Constants.FIXED_TIMESTEP_SECONDS + "\n"
@@ -181,6 +187,83 @@ class Main extends Sprite {
 			+ "runAnimFrame=" + (runAnim == null ? "(missing)" : runAnim.currentFrame + "/" + runAnim.totalFrames) + "\n"
 			+ "keys=" + describePressedKeys() + "\n\n"
 			+ inputLog.join("\n");
+	}
+
+	private function logRunPartTransforms():Void {
+		if (runAnim == null) {
+			return;
+		}
+
+		var shouldLog = frameCounter <= runAnim.totalFrames * 2 || frameCounter % 30 == 0;
+		var head = Std.downcast(runAnim.getChildByTimelineName("head"), PR2MovieClip);
+		var body = Std.downcast(runAnim.getChildByTimelineName("body"), PR2MovieClip);
+		var foot1 = Std.downcast(runAnim.getChildByTimelineName("foot1"), PR2MovieClip);
+		var foot2 = Std.downcast(runAnim.getChildByTimelineName("foot2"), PR2MovieClip);
+		var hat1 = head == null ? null : Std.downcast(head.getChildByTimelineName("hat1"), PR2MovieClip);
+		latestPartTransformLog = "parts "
+			+ describePartTransform("head", head) + " "
+			+ describePartTransform("body", body) + " "
+			+ describePartTransform("foot1", foot1) + " "
+			+ describePartTransform("foot2", foot2) + " "
+			+ describePartTransform("hat1", hat1);
+
+		if (!shouldLog) {
+			return;
+		}
+
+		var message = 'runPartTransforms harnessFrame=$frameCounter runFrame=${runAnim.currentFrame}/${runAnim.totalFrames} $latestPartTransformLog';
+		trace(message);
+		#if js
+		Browser.console.log(message);
+		Browser.document.body.setAttribute("data-pr2-run-part-transforms", message);
+		#end
+	}
+
+	private function recordRunPartBaselineCenters():Void {
+		if (runAnim == null) {
+			return;
+		}
+
+		var head = Std.downcast(runAnim.getChildByTimelineName("head"), PR2MovieClip);
+		recordPartBaselineCenter("head", head);
+		recordPartBaselineCenter("body", runAnim.getChildByTimelineName("body"));
+		recordPartBaselineCenter("foot1", runAnim.getChildByTimelineName("foot1"));
+		recordPartBaselineCenter("foot2", runAnim.getChildByTimelineName("foot2"));
+		recordPartBaselineCenter("hat1", head == null ? null : head.getChildByTimelineName("hat1"));
+	}
+
+	private function recordPartBaselineCenter(label:String, child:Null<DisplayObject>):Void {
+		if (child == null || stage == null) {
+			return;
+		}
+
+		var bounds = child.getBounds(stage);
+		partBaselineCenters.set(label, new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2));
+	}
+
+	private function describePartTransform(label:String, child:Null<DisplayObject>):String {
+		if (child == null) {
+			return label + "=(missing)";
+		}
+
+		var matrix = child.transform.matrix;
+		var stagePoint = child.localToGlobal(new Point());
+		var bounds = child.getBounds(stage);
+		var center = new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+		var baseline = partBaselineCenters.get(label);
+		var delta = baseline == null ? new Point(0, 0) : new Point(center.x - baseline.x, center.y - baseline.y);
+		return label
+			+ "={local:"
+			+ formatFloat(matrix.tx) + "," + formatFloat(matrix.ty)
+			+ " matrix:" + formatFloat(matrix.a) + "," + formatFloat(matrix.b) + "," + formatFloat(matrix.c) + "," + formatFloat(matrix.d)
+			+ " stage:" + formatFloat(stagePoint.x) + "," + formatFloat(stagePoint.y)
+			+ " boundsCenter:" + formatFloat(center.x) + "," + formatFloat(center.y)
+			+ " boundsDelta:" + formatFloat(delta.x) + "," + formatFloat(delta.y)
+			+ "}";
+	}
+
+	private function formatFloat(value:Float):String {
+		return Std.string(Math.round(value * 100) / 100);
 	}
 
 	private function updateObservedFps():Void {
