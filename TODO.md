@@ -112,14 +112,15 @@ Acceptance for this section:
 Character rendering is important, but it should serve the playable harness
 rather than becoming an open-ended art project.
 
-- [ ] Decide how the character atlas metadata enters Haxe.
+- [x] Decide how the character atlas metadata enters Haxe.
   - Option A: load atlas JSON directly at runtime.
   - Option B: convert atlas JSON into generated Haxe metadata.
-  - Prefer the simpler path unless runtime loading creates target issues.
-- [ ] Add character atlas PNGs to OpenFL assets.
+  - Chosen path: load atlas JSON directly at runtime through
+    `pr2.character.CharacterAtlas`.
+- [x] Add character atlas PNGs to OpenFL assets.
   - Include `vector-art/atlases/character/**/*.png`.
   - Include atlas JSON if loading directly.
-- [ ] Implement a small atlas frame loader.
+- [x] Implement a small atlas frame loader.
   - Read `frame` rectangles.
   - Read `sourceTrim`.
   - Preserve part id, kind, channel, page, and scale.
