@@ -137,6 +137,11 @@ python3 tools/generate_block_bitmap_jsfl.py
 open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-block-bitmaps.jsfl
 ```
 
+Animated effects are intentionally not exported as per-frame SVG sequences.
+The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested
+symbols, transforms, visibility, and customization. The exported effect SVGs
+are reusable symbol images for runtime composition and fallback rendering.
+
 ## SVG To PNG Rasterization
 
 Rasterize committed SVGs to 4x PNGs and sprite sheets:
@@ -151,13 +156,11 @@ Rasterize only character art:
 python3 tools/rasterize_vector_art.py --sheets --category character --manifest vector-art/raster-manifest.json
 ```
 
-Rasterize non-character categories once their SVGs are exported and committed:
+Rasterize the exported non-character SVGs. Backgrounds and effect symbols remain
+standalone PNGs; stamps and item icons are packed into separate atlases:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category backgrounds --manifest vector-art/raster-manifest-backgrounds.json
-python3 tools/rasterize_vector_art.py --sheets --category stamps --manifest vector-art/raster-manifest-stamps.json
-python3 tools/rasterize_vector_art.py --sheets --category effects --manifest vector-art/raster-manifest-effects.json
-python3 tools/rasterize_vector_art.py --sheets --category items --manifest vector-art/raster-manifest-items.json
+python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category stamps --category effects --category items --manifest vector-art/raster-manifest-other.json
 ```
 
 The rasterizer uses Inkscape. The default path is:

@@ -1,0 +1,910 @@
+{
+  "atlases": [
+    {
+      "atlasGroup": "items/display",
+      "category": "items",
+      "frames": 10,
+      "image": "vector-art/atlases/items/display@4x.png",
+      "json": "vector-art/atlases/items/display@4x.json",
+      "page": 1,
+      "pages": 1
+    },
+    {
+      "atlasGroup": "stamps/stamps",
+      "category": "stamps",
+      "frames": 8,
+      "image": "vector-art/atlases/stamps/stamps@4x.png",
+      "json": "vector-art/atlases/stamps/stamps@4x.json",
+      "page": 1,
+      "pages": 1
+    }
+  ],
+  "pngs": [
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 400.0,
+        "width": 550.0,
+        "x": -275.0,
+        "y": -200.0
+      },
+      "png": "vector-art/png/backgrounds/bg1@4x.png",
+      "scale": 4,
+      "slug": "bg1",
+      "source": "vector-art/svg/backgrounds/bg1.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1600,
+        "width": 2200,
+        "x": -1100,
+        "y": -800
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 400.0,
+        "width": 550.0,
+        "x": -275.0,
+        "y": -200.0
+      },
+      "png": "vector-art/png/backgrounds/bg2@4x.png",
+      "scale": 4,
+      "slug": "bg2",
+      "source": "vector-art/svg/backgrounds/bg2.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1600,
+        "width": 2200,
+        "x": -1100,
+        "y": -800
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 400.0,
+        "width": 550.0,
+        "x": -275.0,
+        "y": -200.0
+      },
+      "png": "vector-art/png/backgrounds/bg3@4x.png",
+      "scale": 4,
+      "slug": "bg3",
+      "source": "vector-art/svg/backgrounds/bg3.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1600,
+        "width": 2200,
+        "x": -1100,
+        "y": -800
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 406.1,
+        "width": 558.05,
+        "x": -279.0,
+        "y": -203.05
+      },
+      "png": "vector-art/png/backgrounds/bg4@4x.png",
+      "scale": 4,
+      "slug": "bg4",
+      "source": "vector-art/svg/backgrounds/bg4.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1625,
+        "width": 2233,
+        "x": -1116,
+        "y": -813
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 400.0,
+        "width": 550.0,
+        "x": -275.0,
+        "y": -200.0
+      },
+      "png": "vector-art/png/backgrounds/bg5@4x.png",
+      "scale": 4,
+      "slug": "bg5",
+      "source": "vector-art/svg/backgrounds/bg5.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1600,
+        "width": 2200,
+        "x": -1100,
+        "y": -800
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 463.01,
+        "width": 591.0,
+        "x": -295.5,
+        "y": -231.5
+      },
+      "png": "vector-art/png/backgrounds/bg6@4x.png",
+      "scale": 4,
+      "slug": "bg6",
+      "source": "vector-art/svg/backgrounds/bg6.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1852,
+        "width": 2364,
+        "x": -1182,
+        "y": -926
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "backgrounds",
+      "drawingBounds": {
+        "height": 425.85,
+        "width": 623.85,
+        "x": -311.9,
+        "y": -212.9
+      },
+      "png": "vector-art/png/backgrounds/bg7@4x.png",
+      "scale": 4,
+      "slug": "bg7",
+      "source": "vector-art/svg/backgrounds/bg7.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1704,
+        "width": 2496,
+        "x": -1248,
+        "y": -852
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 63.5416,
+        "width": 39.4189,
+        "x": -19.7095,
+        "y": -31.7708
+      },
+      "png": "vector-art/png/effects/laser_shot@4x.png",
+      "scale": 4,
+      "slug": "laser_shot",
+      "source": "vector-art/svg/effects/laser_shot.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 255,
+        "width": 158,
+        "x": -79,
+        "y": -128
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 799.965,
+        "width": 1100.0,
+        "x": -550.0,
+        "y": -399.9
+      },
+      "png": "vector-art/png/effects/lightning_bolt@4x.png",
+      "scale": 4,
+      "slug": "lightning_bolt",
+      "source": "vector-art/svg/effects/lightning_bolt.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 3200,
+        "width": 4400,
+        "x": -2200,
+        "y": -1600
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 129.197,
+        "width": 128.847,
+        "x": -64.4,
+        "y": -64.6
+      },
+      "png": "vector-art/png/effects/mine_appear@4x.png",
+      "scale": 4,
+      "slug": "mine_appear",
+      "source": "vector-art/svg/effects/mine_appear.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 104.645,
+        "width": 54.1077,
+        "x": -27.05,
+        "y": -52.3
+      },
+      "png": "vector-art/png/effects/mine_explosion@4x.png",
+      "scale": 4,
+      "slug": "mine_explosion",
+      "source": "vector-art/svg/effects/mine_explosion.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 420,
+        "width": 217,
+        "x": -109,
+        "y": -210
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 16.45,
+        "width": 12.85,
+        "x": -6.4,
+        "y": -8.2
+      },
+      "png": "vector-art/png/effects/mine_piece@4x.png",
+      "scale": 4,
+      "slug": "mine_piece",
+      "source": "vector-art/svg/effects/mine_piece.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 67,
+        "width": 52,
+        "x": -26,
+        "y": -33
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 68.2018,
+        "width": 58.1756,
+        "x": -29.0574,
+        "y": -34.1056
+      },
+      "png": "vector-art/png/effects/slash@4x.png",
+      "scale": 4,
+      "slug": "slash",
+      "source": "vector-art/svg/effects/slash.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 273,
+        "width": 233,
+        "x": -117,
+        "y": -137
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 19.9001,
+        "width": 19.9998,
+        "x": -9.9999,
+        "y": -9.9731
+      },
+      "png": "vector-art/png/effects/speed_burst@4x.png",
+      "scale": 4,
+      "slug": "speed_burst",
+      "source": "vector-art/svg/effects/speed_burst.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 80,
+        "width": 80,
+        "x": -40,
+        "y": -40
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 18.45,
+        "width": 18.5,
+        "x": -9.25,
+        "y": -9.2
+      },
+      "png": "vector-art/png/effects/speed_burst_star@4x.png",
+      "scale": 4,
+      "slug": "speed_burst_star",
+      "source": "vector-art/svg/effects/speed_burst_star.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 74,
+        "width": 74,
+        "x": -37,
+        "y": -37
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 44.8003,
+        "width": 159.999,
+        "x": -79.9997,
+        "y": 5.43514
+      },
+      "png": "vector-art/png/effects/sting@4x.png",
+      "scale": 4,
+      "slug": "sting",
+      "source": "vector-art/svg/effects/sting.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 179,
+        "width": 640,
+        "x": -320,
+        "y": 21
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 105.639,
+        "width": 105.639,
+        "x": -52.8193,
+        "y": -52.8193
+      },
+      "png": "vector-art/png/effects/teleport@4x.png",
+      "scale": 4,
+      "slug": "teleport",
+      "source": "vector-art/svg/effects/teleport.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 423,
+        "width": 423,
+        "x": -212,
+        "y": -212
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/ice_wave@4x.png",
+      "scale": 4,
+      "slug": "ice_wave",
+      "source": "vector-art/svg/items/display/ice_wave.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/jet_pack@4x.png",
+      "scale": 4,
+      "slug": "jet_pack",
+      "source": "vector-art/svg/items/display/jet_pack.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/laser@4x.png",
+      "scale": 4,
+      "slug": "laser",
+      "source": "vector-art/svg/items/display/laser.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/lightning@4x.png",
+      "scale": 4,
+      "slug": "lightning",
+      "source": "vector-art/svg/items/display/lightning.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/mine@4x.png",
+      "scale": 4,
+      "slug": "mine",
+      "source": "vector-art/svg/items/display/mine.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/none@4x.png",
+      "scale": 4,
+      "slug": "none",
+      "source": "vector-art/svg/items/display/none.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/speed_burst@4x.png",
+      "scale": 4,
+      "slug": "speed_burst",
+      "source": "vector-art/svg/items/display/speed_burst.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/super_jump@4x.png",
+      "scale": 4,
+      "slug": "super_jump",
+      "source": "vector-art/svg/items/display/super_jump.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/sword@4x.png",
+      "scale": 4,
+      "slug": "sword",
+      "source": "vector-art/svg/items/display/sword.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "items/display",
+      "category": "items",
+      "drawingBounds": {
+        "height": 68.2345,
+        "width": 75.0222,
+        "x": -52.5104,
+        "y": -36.2528
+      },
+      "group": "display",
+      "png": "vector-art/png/items/display/teleport@4x.png",
+      "scale": 4,
+      "slug": "teleport",
+      "source": "vector-art/svg/items/display/teleport.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 101.706,
+        "width": 77.15,
+        "x": -38.55,
+        "y": -50.85
+      },
+      "png": "vector-art/png/stamps/petrified_tree@4x.png",
+      "scale": 4,
+      "slug": "petrified_tree",
+      "source": "vector-art/svg/stamps/petrified_tree.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 407,
+        "width": 309,
+        "x": -155,
+        "y": -204
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 91.0,
+        "width": 87.2,
+        "x": -43.6,
+        "y": -45.5
+      },
+      "png": "vector-art/png/stamps/rock1@4x.png",
+      "scale": 4,
+      "slug": "rock1",
+      "source": "vector-art/svg/stamps/rock1.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 364,
+        "width": 349,
+        "x": -175,
+        "y": -182
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 118.296,
+        "width": 125.604,
+        "x": -62.8,
+        "y": -59.1268
+      },
+      "png": "vector-art/png/stamps/rock2@4x.png",
+      "scale": 4,
+      "slug": "rock2",
+      "source": "vector-art/svg/stamps/rock2.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 474,
+        "width": 503,
+        "x": -252,
+        "y": -237
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 319.816,
+        "width": 114.0,
+        "x": -57.0,
+        "y": -159.91
+      },
+      "png": "vector-art/png/stamps/spire1@4x.png",
+      "scale": 4,
+      "slug": "spire1",
+      "source": "vector-art/svg/stamps/spire1.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1279,
+        "width": 456,
+        "x": -228,
+        "y": -640
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 268.287,
+        "width": 294.1,
+        "x": -147.05,
+        "y": -134.15
+      },
+      "png": "vector-art/png/stamps/spire2@4x.png",
+      "scale": 4,
+      "slug": "spire2",
+      "source": "vector-art/svg/stamps/spire2.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1074,
+        "width": 1177,
+        "x": -589,
+        "y": -537
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 172.732,
+        "width": 227.991,
+        "x": -113.991,
+        "y": -86.3316
+      },
+      "png": "vector-art/png/stamps/tree1@4x.png",
+      "scale": 4,
+      "slug": "tree1",
+      "source": "vector-art/svg/stamps/tree1.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 691,
+        "width": 912,
+        "x": -456,
+        "y": -346
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 248.882,
+        "width": 187.8,
+        "x": -93.9,
+        "y": -124.45
+      },
+      "png": "vector-art/png/stamps/tree2@4x.png",
+      "scale": 4,
+      "slug": "tree2",
+      "source": "vector-art/svg/stamps/tree2.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 997,
+        "width": 752,
+        "x": -376,
+        "y": -498
+      }
+    },
+    {
+      "atlas_group": "stamps/stamps",
+      "category": "stamps",
+      "drawingBounds": {
+        "height": 236.594,
+        "width": 194.0,
+        "x": -97.0,
+        "y": -118.294
+      },
+      "png": "vector-art/png/stamps/tree3@4x.png",
+      "scale": 4,
+      "slug": "tree3",
+      "source": "vector-art/svg/stamps/tree3.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 946,
+        "width": 776,
+        "x": -388,
+        "y": -474
+      }
+    }
+  ],
+  "schema": "pr2-rasterized-vector-art-v1"
+}

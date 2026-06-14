@@ -1,0 +1,149 @@
+{
+  "atlasGroup": "stamps/stamps",
+  "category": "stamps",
+  "frames": {
+    "petrified_tree": {
+      "frame": {
+        "height": 407,
+        "width": 309,
+        "x": 507,
+        "y": 1283
+      },
+      "png": "vector-art/png/stamps/petrified_tree@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 407,
+        "width": 309,
+        "x": -155,
+        "y": -204
+      }
+    },
+    "rock1": {
+      "frame": {
+        "height": 364,
+        "width": 349,
+        "x": 818,
+        "y": 1283
+      },
+      "png": "vector-art/png/stamps/rock1@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 364,
+        "width": 349,
+        "x": -175,
+        "y": -182
+      }
+    },
+    "rock2": {
+      "frame": {
+        "height": 474,
+        "width": 503,
+        "x": 2,
+        "y": 1283
+      },
+      "png": "vector-art/png/stamps/rock2@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 474,
+        "width": 503,
+        "x": -252,
+        "y": -237
+      }
+    },
+    "spire1": {
+      "frame": {
+        "height": 1279,
+        "width": 456,
+        "x": 2,
+        "y": 2
+      },
+      "png": "vector-art/png/stamps/spire1@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 1279,
+        "width": 456,
+        "x": -228,
+        "y": -640
+      }
+    },
+    "spire2": {
+      "frame": {
+        "height": 1074,
+        "width": 1177,
+        "x": 460,
+        "y": 2
+      },
+      "png": "vector-art/png/stamps/spire2@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 1074,
+        "width": 1177,
+        "x": -589,
+        "y": -537
+      }
+    },
+    "tree1": {
+      "frame": {
+        "height": 691,
+        "width": 912,
+        "x": 3171,
+        "y": 2
+      },
+      "png": "vector-art/png/stamps/tree1@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 691,
+        "width": 912,
+        "x": -456,
+        "y": -346
+      }
+    },
+    "tree2": {
+      "frame": {
+        "height": 997,
+        "width": 752,
+        "x": 1639,
+        "y": 2
+      },
+      "png": "vector-art/png/stamps/tree2@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 997,
+        "width": 752,
+        "x": -376,
+        "y": -498
+      }
+    },
+    "tree3": {
+      "frame": {
+        "height": 946,
+        "width": 776,
+        "x": 2393,
+        "y": 2
+      },
+      "png": "vector-art/png/stamps/tree3@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 946,
+        "width": 776,
+        "x": -388,
+        "y": -474
+      }
+    }
+  },
+  "image": "vector-art/atlases/stamps/stamps@4x.png",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 1759,
+    "width": 4085
+  }
+}

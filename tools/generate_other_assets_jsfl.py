@@ -5,7 +5,7 @@ Generate a JSFL batch script to export non-character PR2 vector assets as SVGs.
 Categories exported:
   backgrounds  - bg1-bg7 (single frame each)
   stamps       - decorative level objects (single frame each)
-  effects      - in-game visual effects (all frames exported individually)
+  effects      - in-game visual effect symbols (one SVG per reusable symbol)
   items        - ItemDisplay icon frames (one per label)
 
 The generated JSFL should be run inside Adobe Animate the same way as the
@@ -52,58 +52,49 @@ STAMPS = [
     {"slug": "tree3",          "symbol": "UI/Pages/Levels/Stamps/tree3"},
 ]
 
-# Animated effects: all frames exported individually.
-# frame_count is the number of frames to export (0-based index up to frame_count-1).
+# Effect timelines are exported as reusable symbol artwork, not as baked frame
+# sequences. Haxe/OpenFL owns timeline playback, labels, scripts, and nested
+# composition; these SVGs are fallback/static leaf assets for the runtime.
 EFFECTS = [
     {
-        "slug":        "laser_shot",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/LaserShot",
-        "frame_count": 18,
+        "slug":   "laser_shot",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/LaserShot",
     },
     {
-        "slug":        "lightning_bolt",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/LightningBolt",
-        "frame_count": 1,
+        "slug":   "lightning_bolt",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/LightningBolt",
     },
     {
-        "slug":        "slash",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/Slash",
-        "frame_count": 6,
+        "slug":   "slash",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/Slash",
     },
     {
-        "slug":        "sting",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/Sting",
-        "frame_count": 1,
+        "slug":   "sting",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/Sting",
     },
     {
-        "slug":        "teleport",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/Teleport",
-        "frame_count": 16,
+        "slug":   "teleport",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/Teleport",
     },
     {
-        "slug":        "speed_burst",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/SpeedBurst/SpeedBurst",
-        "frame_count": 16,
+        "slug":   "speed_burst",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/SpeedBurst/SpeedBurst",
     },
     {
-        "slug":        "speed_burst_star",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/SpeedBurst/SpeedBurstStar",
-        "frame_count": 1,
+        "slug":   "speed_burst_star",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/SpeedBurst/SpeedBurstStar",
     },
     {
-        "slug":        "mine_piece",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/Mine/Symbol 472",
-        "frame_count": 6,
+        "slug":   "mine_piece",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/Mine/Symbol 472",
     },
     {
-        "slug":        "mine_explosion",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/Mine/Symbol 976",
-        "frame_count": 14,
+        "slug":   "mine_explosion",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/Mine/Symbol 976",
     },
     {
-        "slug":        "mine_appear",
-        "symbol":      "UI/Pages/Levels/In-Game/Effects/Mine/Symbol 1020",
-        "frame_count": 33,
+        "slug":   "mine_appear",
+        "symbol": "UI/Pages/Levels/In-Game/Effects/Mine/Symbol 1020",
     },
 ]
 
@@ -158,17 +149,15 @@ def build_jobs(svg_dir):
         })
 
     for effect in EFFECTS:
-        for frame_idx in range(effect["frame_count"]):
-            export_path = f"effects/{effect['slug']}/frame_{frame_idx:02d}.svg"
-            jobs.append({
-                "category":   "effects",
-                "slug":       effect["slug"],
-                "symbolName": effect["symbol"],
-                "frame":      frame_idx,
-                "frameIndex": frame_idx,
-                "exportPath": export_path,
-                "outputUri":  (root / export_path).as_uri(),
-            })
+        export_path = f"effects/{effect['slug']}.svg"
+        jobs.append({
+            "category":   "effects",
+            "slug":       effect["slug"],
+            "symbolName": effect["symbol"],
+            "frame":      0,
+            "exportPath": export_path,
+            "outputUri":  (root / export_path).as_uri(),
+        })
 
     for label in ITEM_DISPLAY_LABELS:
         export_path = f"items/display/{label['slug']}.svg"

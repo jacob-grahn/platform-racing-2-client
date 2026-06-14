@@ -28,8 +28,10 @@ DEFAULT_STAGE_WIDTH = 550
 DEFAULT_STAGE_HEIGHT = 400
 DEFAULT_MAX_ATLAS_SIZE = 4096
 CHANNELS = ("static", "primary", "secondary", "composite")
-# Categories that produce individual PNGs with no atlas.
-NO_ATLAS_CATEGORIES = frozenset({"backgrounds"})
+# Categories that produce individual PNGs with no atlas. Large timeline-driven
+# effect symbols can exceed the default atlas page and are animated by metadata
+# rather than by atlas frame sequencing.
+NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "effects"})
 
 
 def parse_svg_path(svg_root, path):
@@ -83,7 +85,18 @@ def parse_svg_path(svg_root, path):
         }
 
     if category == "effects":
-        # effects/<slug>/frame_NN.svg
+        # effects/<slug>.svg is the current timeline-driven export shape:
+        # one reusable image per effect symbol. The older
+        # effects/<slug>/frame_NN.svg form is still accepted so existing local
+        # experiments can be rasterized intentionally.
+        if len(parts) == 2:
+            return {
+                "category": "effects",
+                "rel": rel,
+                "slug": path.stem,
+                "frame": None,
+                "atlas_group": None,
+            }
         if len(parts) != 3:
             return None
         slug = parts[1]
@@ -197,6 +210,8 @@ def png_path_for(png_root, job, scale):
     if cat == "stamps":
         return png_root / "stamps" / f"{job['slug']}@{scale}x.png"
     if cat == "effects":
+        if job.get("frame") is None:
+            return png_root / "effects" / f"{job['slug']}@{scale}x.png"
         return png_root / "effects" / job["slug"] / f"{job['frame']}@{scale}x.png"
     if cat == "items":
         return png_root / "items" / job["group"] / f"{job['slug']}@{scale}x.png"
@@ -241,7 +256,8 @@ def rasterize_jobs(jobs, args):
                 record["slug"] = job["slug"]
             elif cat == "effects":
                 record["slug"] = job["slug"]
-                record["frame"] = job["frame"]
+                if job.get("frame") is not None:
+                    record["frame"] = job["frame"]
             elif cat == "items":
                 record["group"] = job["group"]
                 record["slug"] = job["slug"]
@@ -302,7 +318,7 @@ def entry_sort_key(record):
     """Stable sort key for atlas packing: character parts by id, others by slug."""
     if record.get("category") == "character":
         return (record.get("id") or 0, record.get("part", ""), record.get("channel", ""))
-    return (0, record.get("frame", record.get("slug", "")), "")
+    return (0, record.get("frame") or record.get("slug", ""), "")
 
 
 def entry_name(record):
@@ -313,7 +329,7 @@ def entry_name(record):
     if cat in ("backgrounds", "stamps"):
         return record["slug"]
     if cat == "effects":
-        return record["frame"]
+        return record.get("frame") or record["slug"]
     if cat == "items":
         return record["slug"]
     return record.get("slug", "unknown")

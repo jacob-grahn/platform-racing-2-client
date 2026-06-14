@@ -76,9 +76,21 @@ The inventory also classifies included symbols into broad buckets:
 - `character_internal`
 - `uncategorized`
 
-Only character channels have final export paths in the current manifest. The
-next pass should promote block, item/effect, UI, and background linkage classes
-into explicit SVG/PNG export targets.
+Additional export scripts now cover the first gameplay-facing non-character
+asset families:
+
+- `tools/generate_other_assets_jsfl.py`
+  - backgrounds: 7 SVGs
+  - stamps: 8 SVGs
+  - effect symbols: 10 SVGs, one reusable symbol image each
+  - item display icons: 10 SVGs
+- `tools/generate_block_bitmap_jsfl.py`
+  - block bitmap tiles: 26 PNGs
+
+Animated effects are intentionally not exported as per-frame SVG sequences.
+The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested
+symbols, transforms, visibility, and customization. The exported effect SVGs
+are reusable symbol images for runtime composition and fallback rendering.
 
 ## Animate Automation Contract
 
@@ -165,6 +177,8 @@ Large groups are split into page-suffixed files, such as
 
 This grouping is intentional for the character renderer: `static`, `primary`,
 and `secondary` can be drawn or tinted independently, while `composite` is useful
-for previews, debugging, and non-tinted fallbacks. Later non-character exports
-should use separate atlas groups by gameplay area or screen: static blocks,
-items/effects, UI, and large backgrounds should not all share one global sheet.
+for previews, debugging, and non-tinted fallbacks. Non-character exports use
+separate asset groups by gameplay area or screen. The current raster pass leaves
+backgrounds and effect symbols standalone, and packs stamps plus item display
+icons into their own atlases. Static block bitmaps are exported directly to
+`vector-art/png/blocks/`.

@@ -1,0 +1,183 @@
+{
+  "atlasGroup": "items/display",
+  "category": "items",
+  "frames": {
+    "ice_wave": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 2,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/ice_wave@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "jet_pack": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 305,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/jet_pack@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "laser": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 608,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/laser@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "lightning": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 911,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/lightning@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "mine": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 1214,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/mine@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "none": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 1517,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/none@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "speed_burst": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 1820,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/speed_burst@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "super_jump": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 2123,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/super_jump@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "sword": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 2426,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/sword@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    },
+    "teleport": {
+      "frame": {
+        "height": 274,
+        "width": 301,
+        "x": 2729,
+        "y": 2
+      },
+      "png": "vector-art/png/items/display/teleport@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 274,
+        "width": 301,
+        "x": -211,
+        "y": -146
+      }
+    }
+  },
+  "image": "vector-art/atlases/items/display@4x.png",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 278,
+    "width": 3032
+  }
+}

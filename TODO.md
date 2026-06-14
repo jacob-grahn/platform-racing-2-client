@@ -147,7 +147,7 @@ Acceptance for this section:
 These assets matter for visual completeness, but most can happen after the
 local playable harness has placeholder rendering.
 
-- [ ] Export and rasterize non-character vector art.
+- [x] Export and rasterize non-character vector art.
   - Generate JSFL:
     ```sh
     python3 tools/generate_other_assets_jsfl.py
@@ -156,14 +156,14 @@ local playable harness has placeholder rendering.
     ```sh
     "/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-other-assets-svg.jsfl
     ```
-  - Rasterize categories after SVGs are committed:
+  - Rasterize exported categories:
     ```sh
-    python3 tools/rasterize_vector_art.py --sheets --category backgrounds --manifest vector-art/raster-manifest-backgrounds.json
-    python3 tools/rasterize_vector_art.py --sheets --category stamps --manifest vector-art/raster-manifest-stamps.json
-    python3 tools/rasterize_vector_art.py --sheets --category effects --manifest vector-art/raster-manifest-effects.json
-    python3 tools/rasterize_vector_art.py --sheets --category items --manifest vector-art/raster-manifest-items.json
+    python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category stamps --category effects --category items --manifest vector-art/raster-manifest-other.json
     ```
-- [ ] Export block bitmap tiles.
+  - Exported: 7 backgrounds, 8 stamps, 10 effect symbols, and 10 item icons.
+  - Effect animations are not baked as per-frame SVG sequences; the Haxe
+    timeline runtime should drive animation from symbol/timeline metadata.
+- [x] Export block bitmap tiles.
   - Generate JSFL:
     ```sh
     python3 tools/generate_block_bitmap_jsfl.py
@@ -173,9 +173,10 @@ local playable harness has placeholder rendering.
     "/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-block-bitmaps.jsfl
     ```
   - Output target: `vector-art/png/blocks/`.
-- [ ] Decide which asset families become runtime atlases.
-  - Blocks/items/effects likely benefit from atlases.
-  - Large backgrounds should probably stay as standalone images.
+- [x] Decide initial runtime atlas grouping.
+  - Stamps and item display icons are atlased.
+  - Large backgrounds and timeline-driven effect symbols stay standalone.
+  - Block bitmaps stay as direct PNG tiles for now.
   - UI assets can be grouped later by screen or feature.
 
 Acceptance for this section:
@@ -183,6 +184,65 @@ Acceptance for this section:
 - Needed gameplay assets are available from committed files.
 - The browser build can load them without Adobe Animate.
 - Asset regeneration commands are documented and reproducible.
+
+Follow-up asset coverage audit:
+
+- [ ] Export gameplay block overlays and block-piece graphics not covered by
+  block bitmap tiles.
+  - `ArrowBlockGraphic`
+  - `EggBlockGraphic`
+  - `Arrow2Graphic`
+  - `BrickPieceGraphic`
+  - `CrumblePieceGraphic`
+  - `StartBlockText`
+- [ ] Export remaining gameplay/item effect symbols as reusable timeline-driven
+  assets, not per-frame SVG sequences.
+  - `CountdownGraphic`
+  - `EggGraphic`
+  - `HeartGraphic`
+  - `IceWaveGraphic`
+  - `DjinnIceGraphic`
+  - `PR2_Graphics_1_Apr_2014_fla.jetPackStates_47`
+  - `PR2_Graphics_1_Apr_2014_fla.swordAnim_53`
+  - `PR2_Graphics_1_Apr_2014_fla.gunFireAnim_40`
+  - `PR2_Graphics_1_Apr_2014_fla.iceWaveFireAnim_55`
+  - `PR2_Graphics_1_Apr_2014_fla.superJumpAnim_60`
+  - `PR2_Graphics_1_Apr_2014_fla.jumpAnim_61`
+  - `PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59`
+  - `PR2_Graphics_1_Apr_2014_fla.frozenSolidAnim_65`
+- [ ] Export in-game HUD/page graphics once the playable harness needs them.
+  - `FinishedPageGraphic`
+  - `ExpGainGraphic`
+  - `DrawingInfoGraphic`
+  - `StatsDisplayGraphic`
+  - `RaceChatGraphic`
+  - `MiniMapGraphic`
+  - `MiniMapDot`
+  - `PrizePopupGraphic`
+  - `QuitButtonGraphic`
+  - `MusicSelectionGraphic`
+- [ ] Export editor/lobby/menu graphics by screen as those screens are ported.
+  - Initial candidates: `LevelEditorMenuGraphic`, `DrawingPopupGraphic`,
+    `HatPickerGraphic`, `LobbyGraphic`, `LobbyBottomButtonsGraphic`,
+    `PlayersTabListGraphic`, `GetLevelsPopupGraphic`, and `StorePopupGraphic`.
+- [ ] Decide how to handle intro/logo animations.
+  - Candidates include `JiggminIntroGraphic`, `KongregateIntroGraphic`,
+    `ArmorIntroGraphic`, `BubbleBoxIntroGraphic`,
+    `PR2_Graphics_1_Apr_2014_fla.logoAnim_258`, and
+    `PR2_Graphics_1_Apr_2014_fla.ag_intro_mc_247`.
+- [ ] Audit the five unexported bitmap media entries.
+  - 31 bitmap items exist in the XFL; 26 block tile bitmaps are exported.
+  - `Images/bitmap379.jpg` exists as a normal XFL image file and appears to be
+    the Kongregate logo.
+  - `Images/bitmap1249.png`, `Images/bitmap371.png`,
+    `Images/bitmap386.png`, and `Images/bitmap97.jpg` are referenced as
+    embedded bitmap payloads but do not exist as normal files under
+    `LIBRARY/Images/`.
+- [ ] Keep broad Flash component skins and low-priority UI linkage symbols out
+  of early gameplay batches unless a ported screen depends on them.
+  - The latest audit found 258 non-character linkage-exported symbols not
+    exported as standalone assets yet: 3 `backgrounds`, 8 `blocks`,
+    41 `components`, 10 `items_effects`, 144 `ui`, and 52 `uncategorized`.
 
 ## AS3 To Haxe Porting Track
 

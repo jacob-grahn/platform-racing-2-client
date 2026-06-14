@@ -1,0 +1,227 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="-0.4750000000000014" y1="50.15" x2="100.775" y2="50.15" spreadMethod="pad">
+<stop  offset="0%" stop-color="#9D9D9D" stop-opacity="0.4"/>
+
+<stop  offset="100%" stop-color="#FFFFFF" stop-opacity="0.6470588235294118"/>
+</linearGradient>
+
+<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="-0.4750000000000014" y1="50.15" x2="100.775" y2="50.15" spreadMethod="pad">
+<stop  offset="0%" stop-color="#333333"/>
+
+<stop  offset="100%" stop-color="#999999"/>
+</linearGradient>
+
+<filter id="Filter_1" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+<feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" result="result1"/>
+</filter>
+
+<g id="UI_Popups__outside_levels__BG_0_Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 95.8 -0.45
+L 4.55 -0.45
+Q -0.45 -0.45 -0.45 4.55
+L -0.45 95.8
+Q -0.45 100.8 4.55 100.8
+L 95.8 100.8
+Q 100.8 100.8 100.8 95.8
+L 100.8 4.55
+Q 100.8 -0.45 95.8 -0.45 Z"/>
+</g>
+
+<g id="MovieClips_Symbol_916_0_Layer0_0_FILL">
+<path fill="#FFFFFF" stroke="none" d="
+M 35.35 -35.35
+Q 20.7 -50 0 -50 -20.65 -50 -35.3 -35.35 -50 -20.7 -50 0 -50 20.7 -35.3 35.35 -20.65 50 0 50 20.7 50 35.35 35.35 50 20.7 50 0 50 -20.7 35.35 -35.35 Z"/>
+</g>
+
+<g id="Graphics_Symbol_866_0_Layer2_0_FILL">
+<path fill="#666666" stroke="none" d="
+M -7.3 25.35
+L -3.75 25.35 -3.65 22.9 -7.3 25.35
+M -13.95 19.35
+L -17.8 19.85 -16.2 25.35 -10.2 25.35 -12.45 23.9 -13.5 25 -15.9 24.9 -13.95 19.35
+M 18.35 17.3
+L 11.25 24.45 18.8 24.75 18.35 17.3
+M -13.85 -14.85
+L -11.7 -12.05 -17.8 17.35 -16.3 15.7
+Q -11.9 10.5 -10.5 14.25
+L -6.15 10.45 -3 15 -11.85 23.2 -0.3 13.75 -1.4 17.55 -1.25 19.2
+Q 2.4 13.95 5.25 12.5
+L 5.25 14.25 7 13
+Q 8.25 13.25 9.75 14.75 3.95 20.85 -1.15 25.3
+L 3.15 25.3
+Q 6.6 15.65 15.65 12.45
+L 15.75 15.05
+Q 16.9 13.65 17.7 13.2 16.55 5.2 14.65 -2.65 5.95 -38.35 -13.85 -14.85
+M 5.25 25.25
+L 6.75 24.75 6.35 24.55 5.25 25.25 Z"/>
+
+<path fill="#FFFF00" stroke="none" d="
+M -10.5 14.25
+Q -10.5 18.1 -13.95 19.35
+L -15.9 24.9 -13.5 25 -12.45 23.9 -11.85 23.2 -3 15 -6.15 10.45 -10.5 14.25
+M 17.7 13.2
+Q 16.9 13.65 15.75 15.05 14.6 17.55 9.3 24.4
+L 10.8 24.9 11.25 24.45 18.35 17.3 19.95 14.65 19.7 12.95 17.7 13.2
+M 5.25 14.25
+L 5.25 12.5
+Q 2.4 13.95 -1.25 19.2 -1.35 21.45 -3.55 22.85
+L -3.65 22.9 -3.75 25.35 -1.15 25.3
+Q 3.95 20.85 9.75 14.75 8.25 13.25 7 13
+L 5.25 14.25 Z"/>
+
+<path fill="#000000" stroke="none" d="
+M -11.7 -12.05
+L -13.85 -14.85
+Q 5.95 -38.35 14.65 -2.65 16.55 5.2 17.7 13.2
+L 19.7 12.95
+Q 18.85 -10.75 2.4 -25.25 -2.15 -29.25 -6.85 -24.35 -22.1 -8.4 -20.75 14.75
+L -20.6 20.2 -22.75 22.5 -21 21.2 -21.45 26.8 21.3 26.9 19.95 14.65 18.35 17.3 18.8 24.75 11.25 24.45 10.8 24.9 9.3 24.4
+Q 14.6 17.55 15.75 15.05
+L 15.65 12.45
+Q 6.6 15.65 3.15 25.3
+L -1.15 25.3 -3.75 25.35 -7.3 25.35 -3.65 22.9 -3.55 22.85
+Q -1.35 21.45 -1.25 19.2
+L -1.4 17.55 -0.3 13.75 -11.85 23.2 -12.45 23.9 -10.2 25.35 -16.2 25.35 -17.8 19.85 -13.95 19.35
+Q -10.5 18.1 -10.5 14.25 -11.9 10.5 -16.3 15.7
+L -17.8 17.35 -11.7 -12.05
+M 6.75 24.75
+L 5.25 25.25 6.35 24.55 6.75 24.75 Z"/>
+</g>
+
+<g id="Graphics_Symbol_866_0_Layer1_0_FILL">
+<path fill="#000000" fill-opacity="0.25098039215686274" stroke="none" d="
+M 20.5 25.75
+L 21.4 23.55
+Q 18.95 1.6 7.05 -16.65 -6.15 -36.9 -14.3 -14.65 -22.95 8.95 -11.05 25.4 -10.15 26.65 -8.35 26.55
+L 0.15 26.9 -2.2 26.5 14.25 25 11.05 26.4 20.5 25.75
+M 11.4 10.75
+Q 11.55 13.65 12 16.5 5.6 18.55 -1.3 17.5
+L -6.9 16.65
+Q -8.45 16.1 -9.5 14.7 -12.55 6.4 -10.65 -1.7 -7.6 -14.7 1.75 -20.5 10.5 -6.8 11.4 10.75 Z"/>
+</g>
+
+<g id="Graphics_Symbol_866_0_Layer0_0_FILL">
+<path fill="#FFFFFF" fill-opacity="0.25098039215686274" stroke="none" d="
+M 6.95 -11.4
+Q 4.25 -22.25 2.5 -22.25
+L 0.5 -22
+Q 1.1 -20.2 -0.1 -19.6 -1.5 -18.9 -1.5 -17.35 -1.5 -15.25 3.9 -4.9 9.2 5.15 10.75 6.5
+L 11.5 5.25
+Q 10.5 2.8 6.95 -11.4 Z"/>
+</g>
+
+<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 0.005554962158203114 95.05616683959961
+L 0.005554962158203114 4.93258972167969
+Q 0.005554962158203114 -0.005688476562497158 4.9438331604003904 -0.005688476562497158
+L 95.06741027832031 -0.005688476562497158
+Q 100.0056884765625 -0.005688476562497158 100.0056884765625 4.93258972167969
+L 100.0056884765625 95.05616683959961
+Q 100.0056884765625 99.9944450378418 95.06741027832031 99.9944450378418
+L 4.9438331604003904 99.9944450378418
+Q 0.005554962158203114 99.9944450378418 0.005554962158203114 95.05616683959961 Z"/>
+
+<font horiz-adv-x="2048">
+<!--  Font Name: Verdana
+Vendor ID: MS  
+© 2006 Microsoft Corporation. All Rights Reserved.
+http://www.microsoft.com/typography/fonts/
+URL for more Information: http://www.adobe.com/go/font_vendor_id?ID=MS&Name=Verdana&PSName=Verdana&applanguage=en_US-->
+<font-face font-family="Verdana_Regular" units-per-em="2048" ascent="2059" descent="430"/>
+
+<glyph unicode="N" horiz-adv-x="1532" d="
+M 1336 1489
+L 1151 1489 1151 273 507 1489 200 1489 200 0 385 0 385 1332 1091 0 1336 0 1336 1489 Z"/>
+
+<glyph unicode="o" horiz-adv-x="1243" d="
+M 858 238
+Q 772 131 622 131 470 131 385 239 300 348 300 558 300 775 385 880 469 986 622 986 773 986 858 880 943 775 943 558 943 346 858 238 Z
+M 997 989
+Q 857 1148 622 1148 385 1148 246 989 106 831 106 558 106 285 246 127 385 -31 622 -31 857 -31 997 127 1137 285 1137 558 1137 831 997 989 Z"/>
+
+<glyph unicode="n" horiz-adv-x="1296" d="
+M 1119 725
+Q 1119 930 1024 1039 929 1148 748 1148 649 1148 555 1107 461 1066 373 993
+L 373 1117 185 1117 185 0 373 0 373 834
+Q 450 893 534 931 618 969 695 969 770 969 817 948 864 928 889 886 913 848 922 780
+L 931 636 931 0 1119 0 1119 725 Z"/>
+
+<glyph unicode="e" horiz-adv-x="1220" d="
+M 1120 641
+Q 1120 884 998 1016 875 1148 649 1148 405 1148 256 987 106 826 106 552 106 275 262 124 418 -26 696 -26 805 -26 904 1 1003 28 1098 68
+L 1098 273 1088 273
+Q 1039 229 924 183 808 138 694 138 608 138 537 162 465 186 413 234 359 283 328 359 297 436 297 539
+L 1120 539 1120 641 Z
+M 297 683
+Q 309 815 399 904 488 993 639 993 789 993 863 912 936 831 937 683
+L 297 683 Z"/>
+</font>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, -52.5,-36.25) ">
+<g id="holder2" transform="matrix( 1, 0, 0, 1, 1,54) ">
+<g id="textBox" transform="matrix( 1, 0, 0, 1, 2,2) ">
+<clipPath id="Mask_Mask_1">
+<rect x="-2" y="-2" width="104" height="18.55" fill="#FFFFFF" stroke="none"/>
+</clipPath>
+
+<text clip-path="url(#Mask_Mask_1)" writing-mode="lr"><tspan x="0" y="12.05" baseline-shift="0%" kerning="auto" font-family="Verdana_Regular" font-size="12" fill="#ffffff" fill-opacity="0.4980392156862745" xml:space="preserve">None</tspan></text>
+</g>
+</g>
+
+<g transform="matrix( 0.749847412109375, 0, 0, 0.4998626708984375, 0,0) ">
+<g transform="matrix( 0, -0.9876556396484375, 0.9876556396484375, 0, 0.45,99.55) ">
+<use xlink:href="#UI_Popups__outside_levels__BG_0_Layer0_0_FILL"/>
+
+<use xlink:href="#UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" transform="matrix( 0, 1.0124969482421875, -1.0124969482421875, 0, 100.75,-0.45) "/>
+</g>
+</g>
+
+<g id="holder1" transform="matrix( 1, 0, 0, 1, 0,53) ">
+<g id="textBox_FL" transform="matrix( 1, 0, 0, 1, 2,2) ">
+<clipPath id="Mask_Mask_2">
+<rect x="-2" y="-2" width="104" height="18.55" fill="#FFFFFF" stroke="none"/>
+</clipPath>
+
+<text clip-path="url(#Mask_Mask_2)" writing-mode="lr"><tspan x="0" y="12.05" baseline-shift="0%" kerning="auto" font-family="Verdana_Regular" font-size="12" fill="#000000" fill-opacity="0.4980392156862745" xml:space="preserve">None</tspan></text>
+</g>
+</g>
+
+<g id="a3" transform="matrix( 0.0999908447265625, 0, 0, 0.0999908447265625, 58,10) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use filter="url(#Filter_1)" xlink:href="#MovieClips_Symbol_916_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g id="a2" transform="matrix( 0.0999908447265625, 0, 0, 0.0999908447265625, 58,25) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use filter="url(#Filter_1)" xlink:href="#MovieClips_Symbol_916_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g id="a1" transform="matrix( 0.0999908447265625, 0, 0, 0.0999908447265625, 58,40) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use filter="url(#Filter_1)" xlink:href="#MovieClips_Symbol_916_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 0.72503662109375, 0, 0, 0.724609375, 25.6,25.1) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_866_0_Layer2_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_866_0_Layer1_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_866_0_Layer0_0_FILL"/>
+</g>
+</g>
+</g>
+</g>
+</svg>
