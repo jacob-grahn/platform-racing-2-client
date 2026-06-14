@@ -124,15 +124,26 @@ rather than becoming an open-ended art project.
   - Read `frame` rectangles.
   - Read `sourceTrim`.
   - Preserve part id, kind, channel, page, and scale.
-- [ ] Render one known part from the atlas.
+- [x] Render one known part from the atlas.
   - Start with `hat/002_exp`; it previously exposed negative-coordinate SVG
     behavior.
   - Confirm placement matches the existing generated MovieClip composition well
     enough to continue.
+  - Implemented `CharacterAtlasFrameSprite`, which crops the frame from the
+    atlas PNG and applies `sourceTrim` at atlas scale so negative source
+    coordinates are preserved; the gameplay harness renders `hat/002_exp` over
+    the local player placeholder.
 - [ ] Render one full customizable character.
   - Static, primary, and secondary layers remain separate.
   - Primary and secondary layers can be tinted independently.
   - Composite layer remains available for preview/debug/fallback.
+  - In progress: `CharacterDisplay` uses the generated `CharacterGraphic`
+    timelines as the animation skeleton for run, stand, jump, super jump,
+    bumped, crouch, crouch-walk, swim, and frozen states, then renders
+    atlas-backed hat/head/body/feet static, primary, and secondary layers into
+    the named part slots.
+  - Remaining: add explicit composite fallback/debug mode and Flash screenshot
+    comparisons for representative outfits.
 - [ ] Compare representative character screenshots against Flash.
   - Default outfit.
   - Outfit with primary and secondary color changes.

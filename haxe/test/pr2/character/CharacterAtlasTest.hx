@@ -30,6 +30,8 @@ class CharacterAtlasTest {
 		assertEquals(false, exp.sourceTrim.empty, "002_exp sourceTrim empty");
 		assertEquals(-356, exp.sourceTrim.x, "002_exp sourceTrim x");
 		assertEquals(-351, exp.sourceTrim.y, "002_exp sourceTrim y");
+		assertEquals("002_exp", atlas.getFrameNameById(2), "frame name by id");
+		assertEquals(null, atlas.getFrameNameById(999), "missing frame name by id");
 	}
 
 	private static function assertNotNull(value:Dynamic, message:String):Void {

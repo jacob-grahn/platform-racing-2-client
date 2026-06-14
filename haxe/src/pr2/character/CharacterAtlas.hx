@@ -58,6 +58,16 @@ class CharacterAtlas {
 		return frames.get(name);
 	}
 
+	public function getFrameNameById(id:Int):Null<String> {
+		for (name in frames.keys()) {
+			var frame = frames.get(name);
+			if (frame != null && frame.id == id) {
+				return name;
+			}
+		}
+		return null;
+	}
+
 	private static function parseFrames(data:Dynamic):Map<String, CharacterAtlasFrame> {
 		var frames:Map<String, CharacterAtlasFrame> = new Map();
 		for (name in Reflect.fields(data)) {

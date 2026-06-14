@@ -1,5 +1,6 @@
 package pr2.runtime;
 
+import haxe.ds.ObjectMap;
 import openfl.display.DisplayObject;
 import openfl.display.FrameLabel;
 import openfl.display.Shape;
@@ -205,14 +206,32 @@ class PR2MovieClip extends Sprite {
 
 	private function renderFrame(frame:RuntimeFrame):Void {
 		var reusableClips:Map<String, Array<PR2MovieClip>> = collectReusableClips();
-		while (numChildren > 0) {
-			removeChildAt(numChildren - 1);
-		}
+		var desiredChildren:Array<DisplayObject> = [];
+		var desiredChildSet:ObjectMap<DisplayObject, Bool> = new ObjectMap();
 
 		for (element in frame.elements) {
 			var child = createDisplayObject(element, takeReusableClip(reusableClips, element));
 			applyElementProperties(child, element);
-			addChild(child);
+			desiredChildren.push(child);
+			desiredChildSet.set(child, true);
+		}
+
+		var index = numChildren - 1;
+		while (index >= 0) {
+			var child = getChildAt(index);
+			if (!desiredChildSet.exists(child)) {
+				removeChildAt(index);
+			}
+			index--;
+		}
+
+		for (i in 0...desiredChildren.length) {
+			var child = desiredChildren[i];
+			if (child.parent == this) {
+				setChildIndex(child, i);
+			} else {
+				addChildAt(child, i);
+			}
 		}
 		disposeUnusedReusableClips(reusableClips);
 	}

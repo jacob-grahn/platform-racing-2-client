@@ -13,6 +13,7 @@ import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.character.CharacterDisplay;
 import pr2.level.FixtureLevel;
 import pr2.level.LevelFixtureParser;
 
@@ -25,6 +26,7 @@ class GameplayHarness extends Sprite {
 	private var frameCounter:Int = 0;
 	private var statusText:TextField;
 	private var playerDisplay:Sprite;
+	private var characterDisplay:CharacterDisplay;
 
 	public function new(?level:FixtureLevel) {
 		super();
@@ -54,11 +56,14 @@ class GameplayHarness extends Sprite {
 
 	private function createPlayerDisplay():Void {
 		playerDisplay = new Sprite();
-		playerDisplay.graphics.beginFill(0xFFFFFF, 0.95);
-		playerDisplay.graphics.drawRect(0, 0, LocalPlayerController.STANDING_WIDTH, LocalPlayerController.STANDING_HEIGHT);
-		playerDisplay.graphics.endFill();
-		playerDisplay.graphics.lineStyle(2, 0x243B7A, 0.95);
-		playerDisplay.graphics.drawRect(1, 1, LocalPlayerController.STANDING_WIDTH - 2, LocalPlayerController.STANDING_HEIGHT - 2);
+
+		characterDisplay = new CharacterDisplay({hat: 2, head: 1, body: 1, feet: 1}, {primary: 0x2F86FF, secondary: 0xFFCC33});
+		characterDisplay.x = LocalPlayerController.STANDING_WIDTH / 2;
+		characterDisplay.y = LocalPlayerController.STANDING_HEIGHT;
+		characterDisplay.scaleX = 0.9;
+		characterDisplay.scaleY = 0.9;
+		playerDisplay.addChild(characterDisplay);
+
 		addChild(playerDisplay);
 		updatePlayerDisplay();
 	}
@@ -109,6 +114,20 @@ class GameplayHarness extends Sprite {
 		playerDisplay.x = player.x - LocalPlayerController.STANDING_WIDTH / 2;
 		playerDisplay.y = player.y - height;
 		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
+		characterDisplay.setState(characterStateName(player.debugState().animation));
+		characterDisplay.advanceOneFrame();
+	}
+
+	private function characterStateName(animationName:String):String {
+		return switch (animationName) {
+			case "run": "runAnim";
+			case "stand": "standAnim";
+			case "jump" | "fall": "jumpAnim";
+			case "superJump": "superJumpAnim";
+			case "crouch": "crouchAnim";
+			case "crouchWalk": "crouchWalkAnim";
+			default: "standAnim";
+		}
 	}
 
 	private function onAddedToStage(event:Event):Void {
