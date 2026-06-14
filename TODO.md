@@ -390,10 +390,10 @@ Acceptance for this section:
   - Add browser/OpenFL backend.
   - Common sequence format for launch, click, tap, hold, wait, screenshot.
   - Normalize captures to 550x400.
-- [ ] Add screenshot comparison.
-  - Pixel/perceptual diff.
-  - Ignored regions for live data and blinking UI.
-  - Store expected, actual, and diff images.
+- [x] Add screenshot comparison.
+  - `tools/compare_screenshots.py` compares PNG/JPEG screenshots with RGB
+    pixel metrics, repeated ignored rectangles, threshold failures, amplified
+    diff PNG output, and JSON metrics output.
 - [ ] Add debug-state comparison for OpenFL.
   - Movement state.
   - Current level/fixture state.

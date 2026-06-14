@@ -212,6 +212,12 @@ Capture an OpenFL screenshot after launching the app:
 python3 tools/openfl_driver.py --delay 2.0 shot test/baselines/openfl/run_harness.png
 ```
 
+Compare two stage screenshots and write diff artifacts:
+
+```sh
+python3 tools/compare_screenshots.py expected.png actual.png --diff test/output/diff.png --metrics test/output/metrics.json --threshold-percent 1 --threshold-rms 8
+```
+
 Check approximate OpenFL frame rate:
 
 ```sh
