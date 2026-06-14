@@ -78,7 +78,10 @@ until movement, rendering, and fixture loading are debuggable.
   - Use generated/raster block assets if ready; otherwise use clear temporary
     colored blocks and keep the renderer replaceable.
   - Preserve PR2 scale and coordinates.
-- [ ] Port minimum local character movement.
+- [x] Port minimum local character movement.
+  - Current implementation uses Flash-derived `LocalCharacter` land physics for
+    basic solid blocks: foot-center coordinates, target velocity/friction,
+    jump hold, crouch charge, grounded checks, wall hits, and ceiling bumps.
   - Fixed 27 FPS update step.
   - Left/right acceleration.
   - Gravity.
@@ -86,13 +89,13 @@ until movement, rendering, and fixture loading are debuggable.
   - Down/crouch.
   - Grounded state.
   - Collision against basic solid tiles.
-- [ ] Add deterministic debug state export.
+- [x] Add deterministic debug state export.
   - Position.
   - Velocity.
   - Grounded/crouching state.
   - Current animation/state name.
   - Touched block type.
-- [ ] Add one scripted movement verification.
+- [x] Add one scripted movement verification.
   - Run right on the flat fixture for a fixed duration.
   - Jump and land on the flat fixture.
   - Assert stable final debug state.

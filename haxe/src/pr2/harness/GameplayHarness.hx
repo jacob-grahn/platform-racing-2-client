@@ -6,9 +6,11 @@ import js.Browser;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
+import openfl.ui.Keyboard;
 import openfl.utils.Assets;
 import pr2.Constants;
 import pr2.level.FixtureLevel;
@@ -18,17 +20,22 @@ class GameplayHarness extends Sprite {
 	private static inline var FIXTURE_PATH:String = "assets/fixtures/flat-level.json";
 
 	private final level:FixtureLevel;
+	private final player:LocalPlayerController;
+	private final input:LocalPlayerInput = new LocalPlayerInput();
 	private var frameCounter:Int = 0;
 	private var statusText:TextField;
+	private var playerDisplay:Sprite;
 
 	public function new(?level:FixtureLevel) {
 		super();
 		this.level = level == null ? loadDefaultFixture() : level;
+		player = new LocalPlayerController(this.level);
 
 		drawStageBackground();
 		addChild(new FixtureLevelRenderer(this.level));
-		drawPlayerStartMarker();
+		createPlayerDisplay();
 		createHud();
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		exportDebugState();
 	}
@@ -45,17 +52,15 @@ class GameplayHarness extends Sprite {
 		addChild(background);
 	}
 
-	private function drawPlayerStartMarker():Void {
-		var marker = new Shape();
-		var tileSize = level.tileSize;
-		marker.graphics.beginFill(0xFFFFFF, 0.9);
-		marker.graphics.drawCircle(tileSize / 2, tileSize / 2, tileSize * 0.28);
-		marker.graphics.endFill();
-		marker.graphics.lineStyle(2, 0x243B7A, 0.9);
-		marker.graphics.drawCircle(tileSize / 2, tileSize / 2, tileSize * 0.28);
-		marker.x = level.playerStart.x * tileSize;
-		marker.y = level.playerStart.y * tileSize;
-		addChild(marker);
+	private function createPlayerDisplay():Void {
+		playerDisplay = new Sprite();
+		playerDisplay.graphics.beginFill(0xFFFFFF, 0.95);
+		playerDisplay.graphics.drawRect(0, 0, LocalPlayerController.STANDING_WIDTH, LocalPlayerController.STANDING_HEIGHT);
+		playerDisplay.graphics.endFill();
+		playerDisplay.graphics.lineStyle(2, 0x243B7A, 0.95);
+		playerDisplay.graphics.drawRect(1, 1, LocalPlayerController.STANDING_WIDTH - 2, LocalPlayerController.STANDING_HEIGHT - 2);
+		addChild(playerDisplay);
+		updatePlayerDisplay();
 	}
 
 	private function createHud():Void {
@@ -76,23 +81,60 @@ class GameplayHarness extends Sprite {
 
 	private function onEnterFrame(event:Event):Void {
 		frameCounter++;
+		player.step(input.copy());
+		updatePlayerDisplay();
 		updateStatusText();
 		exportDebugState();
 	}
 
 	private function updateStatusText():Void {
+		var playerState = player.debugState();
 		statusText.text = "Platform Racing 2 local gameplay harness\n"
 			+ 'fixture=${level.id} ${level.widthTiles}x${level.heightTiles} tile=${level.tileSize}\n'
 			+ 'frame=$frameCounter fixedDt=${Constants.FIXED_TIMESTEP_SECONDS}\n'
-			+ 'start=${level.playerStart.x},${level.playerStart.y} finish=${level.finish.x},${level.finish.y}\n'
-			+ 'blocks=${level.blocks.length}';
+			+ 'player ${playerState.serialize()}\n'
+			+ 'finish=${level.finish.x},${level.finish.y} blocks=${level.blocks.length}';
 	}
 
 	private function exportDebugState():Void {
-		var state = 'fixture=${level.id};frame=$frameCounter;start=${level.playerStart.x},${level.playerStart.y};finish=${level.finish.x},${level.finish.y};blocks=${level.blocks.length}';
+		var state = 'fixture=${level.id};frame=$frameCounter;${player.debugState().serialize()};finish=${level.finish.x},${level.finish.y};blocks=${level.blocks.length}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-harness", "gameplay");
 		Browser.document.body.setAttribute("data-pr2-debug-state", state);
 		#end
+	}
+
+	private function updatePlayerDisplay():Void {
+		var height = player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT;
+		playerDisplay.x = player.x - LocalPlayerController.STANDING_WIDTH / 2;
+		playerDisplay.y = player.y - height;
+		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
+	}
+
+	private function onAddedToStage(event:Event):Void {
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+	}
+
+	private function onKeyDown(event:KeyboardEvent):Void {
+		setKey(event.keyCode, true);
+	}
+
+	private function onKeyUp(event:KeyboardEvent):Void {
+		setKey(event.keyCode, false);
+	}
+
+	private function setKey(keyCode:UInt, pressed:Bool):Void {
+		switch (keyCode) {
+			case Keyboard.LEFT | Keyboard.A:
+				input.left = pressed;
+			case Keyboard.RIGHT | Keyboard.D:
+				input.right = pressed;
+			case Keyboard.UP | Keyboard.W | Keyboard.SPACE:
+				input.jump = pressed;
+			case Keyboard.DOWN | Keyboard.S:
+				input.down = pressed;
+			default:
+		}
 	}
 }

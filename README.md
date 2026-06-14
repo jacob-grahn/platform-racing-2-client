@@ -24,6 +24,7 @@ Run the lightweight runtime tests:
 
 ```sh
 haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp
+haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.harness.LocalPlayerControllerTest --interp
 ```
 
 ## Project Layout
