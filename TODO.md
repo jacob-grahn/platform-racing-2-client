@@ -141,9 +141,9 @@ rather than becoming an open-ended art project.
     timelines as the animation skeleton for run, stand, jump, super jump,
     bumped, crouch, crouch-walk, swim, and frozen states, then renders
     atlas-backed hat/head/body/feet static, primary, and secondary layers into
-    the named part slots.
-  - Remaining: add explicit composite fallback/debug mode and Flash screenshot
-    comparisons for representative outfits.
+    the named part slots. It also has an explicit composite render mode for
+    fallback/debug preview, and the gameplay harness can toggle it with `C`.
+  - Remaining: add Flash screenshot comparisons for representative outfits.
 - [ ] Compare representative character screenshots against Flash.
   - Default outfit.
   - Outfit with primary and secondary color changes.

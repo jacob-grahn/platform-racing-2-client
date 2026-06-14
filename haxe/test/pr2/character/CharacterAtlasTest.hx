@@ -7,6 +7,7 @@ class CharacterAtlasTest {
 
 	public static function main():Void {
 		testParsesHatPrimaryAtlas();
+		testParsesRenderMode();
 		trace('CharacterAtlasTest passed $assertions assertions');
 	}
 
@@ -32,6 +33,14 @@ class CharacterAtlasTest {
 		assertEquals(-351, exp.sourceTrim.y, "002_exp sourceTrim y");
 		assertEquals("002_exp", atlas.getFrameNameById(2), "frame name by id");
 		assertEquals(null, atlas.getFrameNameById(999), "missing frame name by id");
+	}
+
+	private static function testParsesRenderMode():Void {
+		assertEquals(CharacterRenderMode.Layered, CharacterRenderMode.parse(null), "null render mode defaults to layered");
+		assertEquals(CharacterRenderMode.Layered, CharacterRenderMode.parse("layered"), "layered render mode");
+		assertEquals(CharacterRenderMode.Composite, CharacterRenderMode.parse(" composite "), "composite render mode");
+		assertEquals(CharacterRenderMode.Composite, CharacterRenderMode.parse("debug"), "debug render mode alias");
+		assertEquals("composite", CharacterRenderMode.Composite.toLabel(), "render mode label");
 	}
 
 	private static function assertNotNull(value:Dynamic, message:String):Void {

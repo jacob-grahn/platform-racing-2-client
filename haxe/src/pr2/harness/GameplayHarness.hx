@@ -14,6 +14,7 @@ import openfl.ui.Keyboard;
 import openfl.utils.Assets;
 import pr2.Constants;
 import pr2.character.CharacterDisplay;
+import pr2.character.CharacterRenderMode;
 import pr2.level.FixtureLevel;
 import pr2.level.LevelFixtureParser;
 
@@ -98,11 +99,12 @@ class GameplayHarness extends Sprite {
 			+ 'fixture=${level.id} ${level.widthTiles}x${level.heightTiles} tile=${level.tileSize}\n'
 			+ 'frame=$frameCounter fixedDt=${Constants.FIXED_TIMESTEP_SECONDS}\n'
 			+ 'player ${playerState.serialize()}\n'
-			+ 'finish=${level.finish.x},${level.finish.y} blocks=${level.blocks.length}';
+			+ 'finish=${level.finish.x},${level.finish.y} blocks=${level.blocks.length}\n'
+			+ 'characterRender=${characterDisplay.renderMode.toLabel()}';
 	}
 
 	private function exportDebugState():Void {
-		var state = 'fixture=${level.id};frame=$frameCounter;${player.debugState().serialize()};finish=${level.finish.x},${level.finish.y};blocks=${level.blocks.length}';
+		var state = 'fixture=${level.id};frame=$frameCounter;${player.debugState().serialize()};finish=${level.finish.x},${level.finish.y};blocks=${level.blocks.length};characterRender=${characterDisplay.renderMode.toLabel()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-harness", "gameplay");
 		Browser.document.body.setAttribute("data-pr2-debug-state", state);
@@ -153,7 +155,19 @@ class GameplayHarness extends Sprite {
 				input.jump = pressed;
 			case Keyboard.DOWN | Keyboard.S:
 				input.down = pressed;
+			case Keyboard.C:
+				if (pressed) {
+					toggleCharacterRenderMode();
+				}
 			default:
 		}
+	}
+
+	private function toggleCharacterRenderMode():Void {
+		characterDisplay.setRenderMode(characterDisplay.renderMode == CharacterRenderMode.Composite
+			? CharacterRenderMode.Layered
+			: CharacterRenderMode.Composite);
+		updateStatusText();
+		exportDebugState();
 	}
 }
