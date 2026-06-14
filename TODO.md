@@ -63,7 +63,7 @@ details belong in `docs/vector-art-export-plan.md`.
 This is the shortest path to a working port. Keep it local and deterministic
 until movement, rendering, and fixture loading are debuggable.
 
-- [ ] Add a gameplay harness mode reachable from `Main`.
+- [x] Add a gameplay harness mode reachable from `Main`.
   - It can launch directly for development.
   - It should not require login, lobby, server data, or real level loading.
   - It should keep the logical 550x400 stage.
@@ -73,7 +73,7 @@ until movement, rendering, and fixture loading are debuggable.
   - Finish position.
   - Gravity/stat defaults.
   - One committed flat-level fixture.
-- [ ] Render the fixture level.
+- [x] Render the fixture level.
   - Draw basic solid blocks, start, and finish.
   - Use generated/raster block assets if ready; otherwise use clear temporary
     colored blocks and keep the renderer replaceable.

@@ -19,6 +19,7 @@ import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
 import pr2.Constants;
 import pr2.character.CharacterAppearance;
+import pr2.harness.GameplayHarness;
 import pr2.runtime.PR2MovieClip;
 
 class Main extends Sprite {
@@ -60,10 +61,7 @@ class Main extends Sprite {
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 
-		drawBackground();
-		createCharacterRunHarness();
-		createHud();
-		addEventListeners();
+		addChild(new GameplayHarness());
 		fpsWindowStartMs = Lib.getTimer();
 		logInput("boot stage=" + Constants.STAGE_WIDTH + "x" + Constants.STAGE_HEIGHT + " fps=" + Constants.FRAME_RATE);
 	}
