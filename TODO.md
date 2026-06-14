@@ -1,362 +1,262 @@
 # Platform Racing 2 Haxe/OpenFL Port TODO
 
-This plan ports Platform Racing 2 from Flash/Adobe Animate AS3 to Haxe/OpenFL.
+This is the working roadmap for getting the Flash client ported to a playable
+Haxe/OpenFL browser build. Keep this file focused on what moves the port
+forward; detailed command references belong in `README.md`, and asset-pipeline
+details belong in `docs/vector-art-export-plan.md`.
 
-Current assumptions:
+## Direction
 
-- Primary implementation: Haxe + OpenFL.
-- Primary target: browser/HTML5.
+- Primary target: browser/HTML5 with Haxe + OpenFL.
 - Secondary targets: Android and iOS after browser parity.
-- Asset strategy: use the unzipped FLA/XFL as a one-time migration source and authoring-structure reference, then generate initial Haxe/OpenFL source/assets from extracted XFL/XML with open tooling. After migration, leave the FLA/XFL behind and do future development directly in Haxe/OpenFL. SWFs are runtime behavior references only, not port build inputs.
-- Build constraint: normal development and CI must not require Adobe Animate or an Adobe subscription.
-- Networking strategy: test against the real PR2 server early.
-- Initial visual goal: close enough to feel like PR2, not strict pixel-perfect parity.
-- Testing strategy: replay the same scripted inputs against Flash and the OpenFL port, then compare screenshots and state where possible.
+- First playable goal: launch into a local fixture level, render a simple
+  course, and move one local character with PR2-like timing.
+- Normal development and CI should not require Adobe Animate. Animate is only a
+  migration tool for regenerating source assets.
+- Visual goal for the first playable milestone is close enough to recognize and
+  debug PR2, not pixel-perfect parity.
+- Testing direction: deterministic fixture runs first, then Flash/OpenFL
+  screenshot and debug-state comparisons, then real-server checks.
 
-## 0. Baseline And Scope
+## Done Foundation
 
-- [x] Baseline and scope defined.
-  - XFL/XML under `flash/platform-racing-2-xfl/` is the migration source; committed Haxe/OpenFL output becomes normal maintained source.
-  - Normal development/builds must not require Adobe Animate, SWF export, or rerunning the generator.
-  - Stage/timing baseline is 550x400 at 27 FPS.
-  - Flash reference captures live under `test/baselines/flash/`; clean crouch and active item-effect captures remain out of scope for the initial baseline pass.
-  - Initial playable scope is documented in `docs/initial-playable-scope.md`: a browser gameplay harness with one local player, fixed 27 FPS movement, basic blocks, start/finish, restart, and debug state export.
-
-Acceptance:
-
-- Extracted FLA/XFL is treated as the primary source for asset structure.
-- Flash runtime reference can be launched repeatably when behavior comparison is needed.
-- Scripted inputs can be replayed.
-- Screenshots can be captured at known stage coordinates.
-- Framerate assumptions are documented.
-
-## 1. OpenFL Project Skeleton
-
-- [x] OpenFL skeleton complete.
-  - Toolchain: Haxe 4.3.7, haxelib 4.1.1, Lime 8.3.2, OpenFL 9.5.2; use `haxelib run openfl ...`.
-  - Added `project.xml`, `haxe/src/Main.hx`, `haxe/src/pr2/Constants.hx`, `assets/`, and build instructions.
-  - Minimal app verifies 550x400 stage, deterministic frame counter, and keyboard/mouse logging.
-  - Browser build verified with `haxelib run openfl build html5`; runtime verified with `haxelib run openfl test html5`.
-  - Optional mac target is available for debugging; local compile uses `MACOSX_VER=26.5 haxelib run openfl build mac`.
-
-Acceptance:
-
-- OpenFL app opens in browser.
-- Stage size matches Flash.
-- Keyboard and mouse events are received.
-- A deterministic frame counter is visible or loggable.
-
-## 2. Adobe-Free XFL Asset Pipeline Spike
-
-- [x] XFL metadata and Haxe asset generation complete.
-  - `tools/xfl_metadata.py` parses document metadata, library items, symbol timelines, display instances, transforms/color transforms, and raw vector fill/stroke/edge data.
-  - `tools/generate_haxe_assets.py` emits deterministic Haxe under `haxe/src/pr2/generated/assets/`; JSON remains diagnostic only.
-  - Generated package `pr2.generated.assets` verifies with `haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output`.
-- [x] Generated MovieClip runtime complete.
-  - Added `pr2.runtime.AssetLibrary` and `pr2.runtime.PR2MovieClip`.
-  - Runtime supports symbol/linkage lookup, nested timelines, named child lookup, labels, playback controls, current frame APIs, transforms/color transforms, visibility, and frame-script hooks.
-  - Leaf vector art is still represented by bounds placeholders until the vector rendering task.
-- [x] Generated runtime tests cover timeline APIs and PR2 character composition basics.
-  - Coverage lives in `haxe/test/pr2/runtime/PR2MovieClipRuntimeTest.hx`.
-  - Verifies playback/stop/seek behavior, labels, frame wrapping, named children, transforms/color transforms, visibility, frame-script hooks, invalid frame errors, character animation children, part selector frame ranges, color layers, weapon/jetpack labels, and selected part persistence.
-  - Verification: `haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp`.
-- [x] Render leaf vector symbols.
-  - Direct OpenFL vector drawing now handles XFL solid fill/stroke edge paths and grouped shape members.
-  - Gradient/bitmap styles currently fall back to a representative solid color; rasterization remains an option if visual parity needs it.
-  - Keep timelines dynamic even if leaf art is rasterized.
-- [ ] Compare representative character composition screenshots against Flash.
-- [ ] Wire committed SVG raster output into the OpenFL character renderer.
-  - Current asset state:
-    - SVG source exports are committed under `vector-art/svg/`.
-    - Rasterizer script exists at `tools/rasterize_vector_art.py`.
-    - Generated individual PNGs live under `vector-art/png/`.
-    - Generated atlas PNG/JSON files live under `vector-art/atlases/`.
-    - Raster manifest lives at `vector-art/raster-manifest.json`.
-    - Last verified output: 632 individual PNGs, 19 atlas PNG pages, 19 atlas JSON files.
-  - Regenerate rasters with:
+- [x] Baseline and scope documented.
+  - Stage baseline: 550x400 at 27 FPS.
+  - Initial playable scope: `docs/initial-playable-scope.md`.
+  - Flash and OpenFL harness helpers exist under `tools/`.
+- [x] OpenFL project skeleton exists.
+  - Root `project.xml`.
+  - Haxe source under `haxe/src/`.
+  - Browser build path is `haxelib run openfl test html5`.
+  - Runtime test command is documented in `README.md`.
+- [x] XFL metadata and generated Haxe asset catalog exist.
+  - `tools/xfl_metadata.py`.
+  - `tools/generate_haxe_assets.py`.
+  - Generated `pr2.generated.assets` package compile-checks.
+- [x] Generated MovieClip runtime exists.
+  - `AssetLibrary` and `PR2MovieClip` support nested timelines, labels,
+    playback, frame scripts, transforms, visibility, and named children.
+  - Runtime tests cover core timeline and character-composition behavior.
+- [x] Basic XFL vector rendering exists.
+  - Solid fill/stroke path rendering works for many leaf symbols.
+  - Gradient/bitmap style parity is still incomplete, which is why the raster
+    asset path remains important.
+- [x] Character SVG exports and raster assets exist.
+  - Character SVGs are under `vector-art/svg/character/`.
+  - Character PNGs are under `vector-art/png/character/`.
+  - Character atlases are under `vector-art/atlases/character/`.
+  - Last verified character output: 632 individual PNGs, 19 atlas PNG pages,
+    and 19 atlas JSON files.
+- [x] Adobe Animate JSFL invocation is verified.
+  - Direct command works:
     ```sh
-    python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
+    "/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-character-svg-smoke.jsfl
     ```
-  - Validation command from last session:
-    ```sh
-    python3 - <<'PY'
-    import json
-    from pathlib import Path
-    from PIL import Image
+  - It executes the JSFL and writes to tracked `vector-art/...` paths.
+  - Caveat: the process stays attached while Animate remains open.
+- [x] Browser networking risks are documented.
+  - Browser client needs WebSocket support from the server/proxy side.
+  - Raw TCP PR2 sockets cannot be opened directly from browser OpenFL.
 
-    with open('vector-art/raster-manifest.json') as f:
-        manifest = json.load(f)
+## Current Priority: Get A Local Playable Harness
 
-    pngs = sorted(Path('vector-art/png').rglob('*.png'))
-    atlas_pngs = sorted(Path('vector-art/atlases').rglob('*.png'))
-    atlas_jsons = sorted(Path('vector-art/atlases').rglob('*.json'))
-    assert len(manifest['pngs']) == 632
-    assert len(pngs) == 632
-    assert len(manifest['atlases']) == 19
-    assert len(atlas_pngs) == 19
-    assert len(atlas_jsons) == 19
-    for path in atlas_pngs:
-        image = Image.open(path)
-        assert image.width <= 4096 and image.height <= 4096, (path, image.size)
-        assert image.getbbox() is not None, path
-    print('verified', len(pngs), 'pngs,', len(atlas_pngs), 'atlas pages')
-    PY
-    ```
-  - Next implementation steps:
-    - Decide whether atlas JSON should be consumed directly at runtime or converted into generated Haxe metadata during the existing asset generation step.
-    - Add the atlas PNGs to the OpenFL asset manifest/project configuration.
-    - Build a small Haxe loader for atlas JSON frames with `frame` and `sourceTrim`.
-    - Replace or selectively bypass generated vector drawing for character part leaf art with atlas-backed bitmaps.
-    - Preserve `static`, `primary`, and `secondary` as independently drawable/tintable layers; keep `composite` for previews/debug/non-tinted fallback.
-    - Verify one known character part first, preferably `hat/002_exp`, because it previously exposed negative-coordinate SVG export behavior.
-    - Then test a full character composition with mixed parts/colors against the existing OpenFL harness and representative Flash screenshots.
+This is the shortest path to a working port. Keep it local and deterministic
+until movement, rendering, and fixture loading are debuggable.
 
-Acceptance:
-
-- The port can build character assets without Adobe Animate.
-- Generated assets/classes are deterministic.
-- One OpenFL screen can render a customizable PR2 character from XFL-derived data.
-- Part ids can be changed.
-- Colors can be changed.
-- Several animation states play or stop correctly.
-- Visual output is close enough for an initial browser port.
-
-## 3. Early Real Server Connectivity
-
-- [x] Inventory networking code.
-  - Documented in `docs/networking-inventory.md`.
-  - Covers socket protocol, command handling, HTTP loader flow, auth/crypto helpers, server selection, connection, and login classes.
-- [x] Identify browser blockers.
-  - Browser OpenFL/Haxe must use WebSockets for live socket traffic; browsers
-    cannot connect to the existing raw TCP PR2 socket directly.
-  - CORS.
-  - TLS/mixed-content issues.
-  - Crossdomain policy replacement needs.
-  - Production WebSocket pathing should use same-origin HTTPS/TLS endpoints
-    such as `wss://platformracing.com/servers/derron` to avoid cross-domain,
-    mixed-content, and exposed-port concerns.
-  - Documented in `docs/browser-networking-blockers.md`.
-- [ ] Prerequisite: add server-side WebSocket support in the server repo.
-  - External repo work; track here only as a dependency for browser client
-    networking tasks.
-  - Route same-origin paths like `/servers/<server_name>` to the appropriate
-    PR2 game server.
-  - Preserve the existing PR2 command protocol payload semantics over the
-    WebSocket connection so the Haxe client can share protocol handling with
-    the Flash socket inventory.
-  - Serve endpoints over `wss://platformracing.com/...` in production.
-  - Confirm browser-visible CORS/origin, TLS, and proxy headers are compatible
-    with the deployed site.
-- [ ] Build minimal OpenFL networking spike.
-  - Request server list or a harmless endpoint.
-  - Connect to a configured WebSocket URL, initially matching the planned
-    production shape such as `wss://platformracing.com/servers/derron`.
-  - Attempt login flow if credentials are available.
-  - Attempt lobby/list data fetch.
-- [ ] Document browser WebSocket client contract.
-  - Server-list entries must resolve to WebSocket paths/URLs the browser can
-    open without mixed content or cross-origin failures.
-  - Keep any path-to-server mapping outside this repo unless client selection
-    metadata is needed.
-  - Keep the browser protocol minimal and documented.
-- [ ] Add safe test credentials/config handling.
-  - No credentials committed.
-  - Local `.env` or ignored config file if needed.
-
-Acceptance:
-
-- OpenFL browser build can reach the real server through the server-provided
-  WebSocket path.
-- At least one real server response is parsed.
-- Login feasibility is known early.
-
-## 4. AS3 To Haxe Port Foundation
-
-- [ ] Establish package mapping.
-  - Keep package names close to AS3 where practical.
-  - Preserve class names during the mechanical port.
-- [ ] Set up porting conventions.
-  - AS3 `Number` -> Haxe `Float`.
-  - AS3 `int`/`uint` -> Haxe `Int` where safe.
-  - AS3 `Array` -> Haxe `Array<T>` or `Array<Dynamic>` initially.
-  - Dynamic MovieClip fields may need `Reflect.field` or typed wrappers.
-- [ ] Create compatibility shims.
-  - `SecureStore`.
-  - `Data`.
-  - `SuperLoader`.
-  - `PR2Socket`.
-  - `CommandHandler`.
-  - `SoundEffects`.
-  - `Settings`.
-  - `EpicFlash`.
-  - `Objects`.
-  - `Random`.
-  - `Time`.
-- [ ] Port leaf/data classes first.
-  - Constants.
-  - Utility functions.
-  - Simple model classes.
-- [ ] Port rendering classes next.
-  - Graphic wrapper classes.
-  - UI controls.
-  - Character display classes.
-- [ ] Port gameplay classes after the display foundation works.
-  - Blocks.
-  - Backgrounds.
-  - Items.
-  - Character physics.
-  - Course/game state.
-
-Acceptance:
-
-- A useful subset of classes compiles in Haxe.
-- Compatibility shims isolate Flash/OpenFL differences.
-- No broad rewrites before behavior is understood.
-
-## 5. Character Rendering Milestone
-
-- [ ] Port `Character`.
-  - Constructor.
-  - `resetHats`.
-  - `setColors`.
-  - `setHatColors`.
-  - `setHeadColors`.
-  - `setBodyColors`.
-  - `setFeetColors`.
-  - `applyAppearance`.
-  - `updatePartMC`.
-  - `applyPartColor`.
-  - `changeState`.
-  - Weapon display updates.
-- [ ] Build character test harness.
-  - Display one character centered on the stage.
-  - Controls to cycle animation states.
-  - Controls to cycle hat/head/body/feet ids.
-  - Controls to cycle primary/secondary colors.
-  - Deterministic frame stepping.
-- [ ] Compare against Flash.
-  - Same part ids.
-  - Same colors.
-  - Same animation frame.
-  - Same position and scale.
-- [ ] Create representative character cases.
-  - Default outfit.
-  - Multi-hat outfit.
-  - Secondary color outfit.
-  - Cheese hat transparency workaround.
-  - Fred/body-specific hat placement.
-  - Epic parts if available.
-
-Acceptance:
-
-- Character customization works in the port.
-- Common outfits look close enough to Flash.
-- Animation state switching behaves like Flash.
-
-## 6. Core Runtime Loop
-
-- [ ] Port frame/update behavior.
-  - Enter-frame events.
-  - Timer behavior.
-  - `setTimeout`.
-  - `clearTimeout`.
-  - `setInterval`.
-  - `clearInterval`.
-- [ ] Port keyboard state handling.
-  - Left/right/up/down/space.
-  - Any alternate keys used by PR2.
-  - Prevent browser-default key behavior where needed.
-- [ ] Port mouse handling.
-  - Stage coordinates.
-  - Button rollover/out/down/up/click.
-  - Text field focus.
-- [ ] Port main display hierarchy.
-  - `Main`.
-  - `Page`.
-  - `PageHolder`.
-  - `GamePage`.
-  - Minimal page transition flow.
-
-Acceptance:
-
-- Main app can switch between a minimal menu/page and gameplay harness.
-- Frame-dependent logic advances deterministically.
-- Input state matches expected Flash behavior.
-
-## 7. Level Data And Rendering
-
-- [ ] Inventory level format.
-  - Course data fields.
-  - Block data.
-  - Background data.
-  - Draw objects.
-  - Text objects.
-  - Stamps.
-  - Settings and game modes.
-- [ ] Port level parsing.
-  - Real server level payloads.
-  - Local fixture payloads.
-  - Error handling for malformed data.
-- [ ] Port block rendering.
-  - Basic blocks.
-  - Start/finish.
-  - Water/ice.
-  - Crumble/vanish.
-  - Mine.
-  - Item/supply.
-  - Teleport.
-  - Arrow/rotate/move.
-  - Custom stats.
-- [ ] Port background rendering.
-  - Block background.
-  - Object background.
-  - Drawable background.
-  - Effect background.
-  - Minimap data if tied to rendering.
-- [ ] Create fixture levels.
-  - Empty flat level.
-  - Blocks-only level.
-  - Special block showcase.
-  - Item showcase.
-  - Moving/rotating block showcase.
-
-Acceptance:
-
-- Fixture levels render at the correct scale and coordinates.
-- At least one real server level can be loaded and displayed.
-
-## 8. Physics And Gameplay
-
-- [ ] Port character movement.
+- [ ] Add a gameplay harness mode reachable from `Main`.
+  - It can launch directly for development.
+  - It should not require login, lobby, server data, or real level loading.
+  - It should keep the logical 550x400 stage.
+- [ ] Define a tiny fixture level format.
+  - Blocks with tile coordinates and block type.
+  - Player start position.
+  - Finish position.
+  - Gravity/stat defaults.
+  - One committed flat-level fixture.
+- [ ] Render the fixture level.
+  - Draw basic solid blocks, start, and finish.
+  - Use generated/raster block assets if ready; otherwise use clear temporary
+    colored blocks and keep the renderer replaceable.
+  - Preserve PR2 scale and coordinates.
+- [ ] Port minimum local character movement.
+  - Fixed 27 FPS update step.
+  - Left/right acceleration.
   - Gravity.
-  - Acceleration.
-  - Friction.
-  - Jumping.
-  - Crouching.
-  - Swimming.
-  - Bumping.
-  - Recovery frames.
-  - Frozen state.
-- [ ] Port collision detection.
-  - Solid blocks.
-  - Slopes or special geometry if present.
-  - Moving blocks.
-  - Rotating blocks.
-  - Edge cases around corners.
-- [ ] Port block interactions.
-  - Start/finish.
+  - Jump.
+  - Down/crouch.
+  - Grounded state.
+  - Collision against basic solid tiles.
+- [ ] Add deterministic debug state export.
+  - Position.
+  - Velocity.
+  - Grounded/crouching state.
+  - Current animation/state name.
+  - Touched block type.
+- [ ] Add one scripted movement verification.
+  - Run right on the flat fixture for a fixed duration.
+  - Jump and land on the flat fixture.
+  - Assert stable final debug state.
+
+Acceptance for this section:
+
+- `haxelib run openfl build html5` succeeds.
+- Browser build can enter the fixture level without network access.
+- Local player can run, jump, crouch, land, and reach a finish block.
+- Debug state is deterministic for a scripted input sequence.
+
+## Character Rendering
+
+Character rendering is important, but it should serve the playable harness
+rather than becoming an open-ended art project.
+
+- [ ] Decide how the character atlas metadata enters Haxe.
+  - Option A: load atlas JSON directly at runtime.
+  - Option B: convert atlas JSON into generated Haxe metadata.
+  - Prefer the simpler path unless runtime loading creates target issues.
+- [ ] Add character atlas PNGs to OpenFL assets.
+  - Include `vector-art/atlases/character/**/*.png`.
+  - Include atlas JSON if loading directly.
+- [ ] Implement a small atlas frame loader.
+  - Read `frame` rectangles.
+  - Read `sourceTrim`.
+  - Preserve part id, kind, channel, page, and scale.
+- [ ] Render one known part from the atlas.
+  - Start with `hat/002_exp`; it previously exposed negative-coordinate SVG
+    behavior.
+  - Confirm placement matches the existing generated MovieClip composition well
+    enough to continue.
+- [ ] Render one full customizable character.
+  - Static, primary, and secondary layers remain separate.
+  - Primary and secondary layers can be tinted independently.
+  - Composite layer remains available for preview/debug/fallback.
+- [ ] Compare representative character screenshots against Flash.
+  - Default outfit.
+  - Outfit with primary and secondary color changes.
+  - Hat/head/body/feet mix.
+  - Known tricky parts such as cheese hat and Fred/body-specific placement.
+
+Acceptance for this section:
+
+- Character customization works in the OpenFL harness.
+- Common outfits look close enough to Flash for gameplay work.
+- Character animation state switching remains compatible with the MovieClip
+  runtime.
+
+## Remaining Asset Migration
+
+These assets matter for visual completeness, but most can happen after the
+local playable harness has placeholder rendering.
+
+- [ ] Export and rasterize non-character vector art.
+  - Generate JSFL:
+    ```sh
+    python3 tools/generate_other_assets_jsfl.py
+    ```
+  - Run in Animate:
+    ```sh
+    "/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-other-assets-svg.jsfl
+    ```
+  - Rasterize categories after SVGs are committed:
+    ```sh
+    python3 tools/rasterize_vector_art.py --sheets --category backgrounds --manifest vector-art/raster-manifest-backgrounds.json
+    python3 tools/rasterize_vector_art.py --sheets --category stamps --manifest vector-art/raster-manifest-stamps.json
+    python3 tools/rasterize_vector_art.py --sheets --category effects --manifest vector-art/raster-manifest-effects.json
+    python3 tools/rasterize_vector_art.py --sheets --category items --manifest vector-art/raster-manifest-items.json
+    ```
+- [ ] Export block bitmap tiles.
+  - Generate JSFL:
+    ```sh
+    python3 tools/generate_block_bitmap_jsfl.py
+    ```
+  - Run in Animate:
+    ```sh
+    "/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-block-bitmaps.jsfl
+    ```
+  - Output target: `vector-art/png/blocks/`.
+- [ ] Decide which asset families become runtime atlases.
+  - Blocks/items/effects likely benefit from atlases.
+  - Large backgrounds should probably stay as standalone images.
+  - UI assets can be grouped later by screen or feature.
+
+Acceptance for this section:
+
+- Needed gameplay assets are available from committed files.
+- The browser build can load them without Adobe Animate.
+- Asset regeneration commands are documented and reproducible.
+
+## AS3 To Haxe Porting Track
+
+Port only what the playable milestones need first. Avoid broad mechanical ports
+that do not compile into a useful screen.
+
+- [ ] Establish minimal compatibility shims.
+  - Timing helpers.
+  - Keyboard/mouse input wrappers.
+  - Basic event dispatch differences.
+  - Asset lookup helpers.
+- [ ] Port gameplay-facing data classes.
+  - Constants/stat defaults.
+  - Level fixture models.
+  - Block type definitions.
+  - Character state model.
+- [ ] Port display classes as needed by the harness.
+  - Character display wrapper.
+  - Block display wrapper.
+  - Minimal game page/container.
+- [ ] Defer full UI shell until gameplay harness works.
+  - Login.
+  - Lobby.
+  - Level browser.
+  - Editor.
+  - Full customization UI.
+
+Acceptance for this section:
+
+- New ported classes compile.
+- Each ported class is exercised by the harness, tests, or asset pipeline.
+- Flash/OpenFL differences stay isolated behind wrappers.
+
+## Level Loading And Rendering
+
+- [ ] Inventory real PR2 level payload format.
+  - Course data fields.
+  - Block grid data.
+  - Background/stamp/draw/text object data.
+  - Settings and game modes.
+- [ ] Build local fixture loader first.
+  - Flat level.
+  - Blocks-only showcase.
+  - Special block showcase when interactions are ready.
+- [ ] Add real level parser after fixture renderer works.
+  - Parse saved/server payloads.
+  - Handle malformed data.
+  - Load at least one known real level into the renderer.
+- [ ] Expand rendering coverage.
+  - Backgrounds.
+  - Stamps/draw objects.
+  - Text objects.
+  - Minimap if required for gameplay.
+
+Acceptance for this section:
+
+- Fixture levels render correctly.
+- At least one real level can be loaded and displayed without gameplay parity.
+
+## Gameplay Expansion
+
+After the flat fixture is playable, add mechanics in small testable batches.
+
+- [ ] Special block interactions.
+  - Ice.
+  - Water.
   - Crumble.
   - Vanish.
   - Mine.
-  - Ice.
-  - Water.
-  - Move.
-  - Rotate.
-  - Arrows.
   - Teleport.
   - Item blocks.
-  - Custom stats blocks.
-- [ ] Port items.
+  - Move/rotate blocks.
+  - Custom stats.
+- [ ] Items.
   - Sword.
   - Laser gun.
   - Mine.
@@ -366,237 +266,108 @@ Acceptance:
   - Ice wave.
   - Teleport.
   - Lightning.
-- [ ] Add debug state export.
-  - Character position.
-  - Velocity.
-  - Animation state.
-  - Current animation frame.
-  - Current item.
-  - Collision/block state.
+- [ ] Movement edge cases.
+  - Swimming.
+  - Bumping/recovery.
+  - Frozen state.
+  - Moving/rotating block collisions.
+  - Corner cases.
 
-Acceptance:
+Acceptance for this section:
 
-- Running and jumping on a flat fixture level feels close to Flash.
-- Special block interactions work on fixture levels.
-- Debug state can be compared across deterministic test runs.
+- Each mechanic has a fixture level.
+- Debug state exposes enough information to compare behavior.
+- Common movement feels close to Flash.
 
-## 9. UI, Menus, And Real Server Flow
+## Networking And Real Server Flow
 
-- [ ] Port intro/login shell.
-  - Intro animation or acceptable equivalent.
-  - Login form.
+Do not block local gameplay on this, but keep it moving because browser
+deployment depends on server/proxy compatibility.
+
+- [ ] Add server-side WebSocket support in the server repo.
+  - Same-origin paths such as `/servers/<server_name>`.
+  - Preserve existing PR2 command payload semantics.
+  - Production endpoint should be `wss://...`.
+- [ ] Build a minimal OpenFL networking spike.
+  - Request server list or a harmless endpoint.
+  - Connect to a configured WebSocket URL.
+  - Parse at least one real response.
+- [ ] Add safe local configuration.
+  - No credentials committed.
+  - Ignored local config or environment variables if needed.
+- [ ] Port real flow after local harness is useful.
+  - Login.
   - Server selection.
-  - Error popups.
-- [ ] Wire real server login.
-  - Login success.
-  - Login failure.
-  - Guest flow if supported.
-  - Session persistence if needed.
-- [ ] Port lobby.
-  - Lobby left/right/bottom regions.
-  - Chat display.
-  - Player list.
-  - Server/lobby commands.
-- [ ] Port level browser.
-  - Campaign.
-  - Newest.
-  - Best.
-  - Best week.
-  - Search.
-  - Favorites.
-  - Level listing UI.
-- [ ] Port player profile/customization UI.
-  - Part selector.
-  - Color picker.
-  - Presets.
-  - Loadouts.
-- [ ] Port editor shell later unless needed earlier.
+  - Lobby.
+  - Level browser.
+  - Load one real level.
 
-Acceptance:
+Acceptance for this section:
 
-- User can connect to the real server.
-- User can reach lobby or equivalent real-server screen.
-- User can browse/load at least one real level.
+- Browser build can reach a real server path through WebSocket.
+- At least one real response is parsed.
+- Login feasibility is known before full UI porting.
 
-## 10. Sound And Music
-
-- [ ] Extract/import sound assets.
-  - XFL sound library entries.
-  - Referenced files under the extracted XFL `bin/` directory.
-  - SWF may be used as a reference to identify missing sounds, but not as a normal build input.
-- [ ] Port `SoundEffects`.
-  - One-shot effects.
-  - Looping effects.
-  - Sound transforms.
-- [ ] Port music playback.
-  - Course music.
-  - Menu music if present.
-  - Mute behavior.
-  - Volume behavior.
-- [ ] Handle browser autoplay restrictions.
-  - Start audio only after user gesture.
-  - Fail gracefully if audio is blocked.
-
-Acceptance:
-
-- Gameplay sound effects trigger at expected events.
-- Music and mute behavior work in browser.
-
-## 11. E2E Test Framework
+## Testing
 
 - [ ] Generalize `tools/pr2driver.py`.
-  - Keep current Flash backend.
+  - Keep Flash backend.
   - Add browser/OpenFL backend.
-  - Keep common sequence JSON format.
-  - Support `launch`, `click`, `tap`, `hold`, and `shot`.
+  - Common sequence format for launch, click, tap, hold, wait, screenshot.
   - Normalize captures to 550x400.
-- [x] Remove test-driver framerate assumptions.
-  - `tools/pr2driver.py` replays inputs using wall-clock seconds and does not own game framerate.
 - [ ] Add screenshot comparison.
-  - Pixel diff.
-  - Perceptual threshold.
-  - Ignored regions for blinking cursors, timestamps, chat, live server data.
-  - Save actual, expected, and diff images.
-- [ ] Add state comparison where possible.
-  - Port can expose debug state.
-  - Flash may only be screenshot-based unless instrumentation is added.
-- [ ] Add deterministic controls.
-  - Fixed random seed in port.
-  - Disable optional particle randomness in test mode if needed.
-  - Test fixture levels.
-  - Mock server fixtures for deterministic tests.
-- [ ] Keep real-server tests separate.
-  - Real server tests verify connectivity and broad behavior.
-  - Mock/fixture tests verify deterministic parity.
+  - Pixel/perceptual diff.
+  - Ignored regions for live data and blinking UI.
+  - Store expected, actual, and diff images.
+- [ ] Add debug-state comparison for OpenFL.
+  - Movement state.
+  - Current level/fixture state.
+  - Current character appearance state.
+- [ ] Keep deterministic and real-server tests separate.
+  - Fixture tests verify parity.
+  - Real-server tests verify connectivity and broad behavior only.
 
-Acceptance:
+Initial suites:
 
-- One command can run a sequence against Flash.
-- One command can run the same sequence against OpenFL.
-- Screenshots are compared with useful diff artifacts.
+- [ ] `harness-boot`
+- [ ] `character-customization`
+- [ ] `level-load-flat`
+- [ ] `run-right`
+- [ ] `jump`
+- [ ] `crouch`
+- [ ] `finish-race`
+- [ ] `real-server-connect`
 
-## 12. E2E Test Suites
+Acceptance for this section:
 
-- [ ] `boot-login-screen`.
-  - Launch.
-  - Wait.
-  - Screenshot login screen.
-- [ ] `real-server-connect`.
-  - Launch port.
-  - Request server/login data.
-  - Verify non-empty response or expected login result.
-- [ ] `character-customization`.
-  - Open customization harness or UI.
-  - Change parts/colors.
-  - Screenshot representative states.
-- [ ] `level-load-flat`.
-  - Load fixture or known simple level.
-  - Screenshot initial spawn.
-- [ ] `run-right`.
-  - Hold right for a fixed number of seconds.
-  - Capture final position.
-- [ ] `jump`.
-  - Tap/hold jump.
-  - Capture apex and landing.
-- [ ] `crouch`.
-  - Hold down.
-  - Capture animation/state.
-- [ ] `ice-slide`.
-  - Run onto ice.
-  - Capture slide behavior.
-- [ ] `water-swim`.
-  - Enter water.
-  - Capture swim movement.
-- [ ] `mine-hit`.
-  - Trigger mine.
-  - Capture explosion/bump/recovery.
-- [ ] `teleport`.
-  - Enter teleport.
-  - Capture destination.
-- [ ] `item-use`.
-  - Pick up item.
-  - Use item.
-  - Capture effect.
-- [ ] `finish-race`.
-  - Reach finish.
-  - Capture finish UI/state.
+- One command can run a useful scripted sequence against OpenFL.
+- Failures produce screenshots and debug output that are easy to inspect.
 
-Acceptance:
+## Later Work
 
-- Core suites pass with close-enough visual thresholds.
-- Failures produce screenshots and diffs that are easy to inspect.
-
-## 13. Mobile Targets
-
-- [ ] Preserve 550x400 logical game coordinates.
-- [ ] Add responsive browser wrapper.
-  - Scale to fit.
-  - Fullscreen option.
-  - No clipping.
-- [ ] Add touch controls.
-  - Left.
-  - Right.
-  - Jump.
-  - Down/crouch.
-  - Item.
-  - Chat/menu controls.
-- [ ] Build Android target.
-  - OpenFL Android setup.
-  - Input latency test.
-  - Asset memory test.
-- [ ] Build iOS target.
-  - OpenFL iOS setup.
+- [ ] Sound and music.
+  - Extract/import sound assets.
+  - Port `SoundEffects`.
+  - Handle browser autoplay restrictions.
+- [ ] Full UI polish.
+  - Login shell.
+  - Lobby.
+  - Level browser.
+  - Customization UI.
+  - Editor shell if needed.
+- [ ] Performance and compatibility.
+  - Profile browser rendering.
+  - Optimize after behavior works.
+  - Test Chrome, Firefox, Safari, mobile Safari, and Android Chrome.
+  - Watch memory across repeated level loads.
+- [ ] Mobile targets.
+  - Responsive browser wrapper.
   - Touch controls.
-  - Audio behavior.
-  - App lifecycle pause/resume.
-
-Acceptance:
-
-- A simple level is playable on Android and iOS.
-- Browser parity remains the priority until stable.
-
-## 14. Performance And Compatibility
-
-- [ ] Profile browser rendering.
-  - Character timelines.
-  - Vector-heavy UI.
-  - Large levels.
-  - Many particles/effects.
-  - Multiple remote players.
-- [ ] Optimize only after behavior works.
-  - Cache static vectors.
-  - Rasterize expensive leaf symbols if needed.
-  - Reduce unnecessary display-list churn.
-  - Pool effects/particles.
-- [ ] Test browsers.
-  - Chrome.
-  - Firefox.
-  - Safari.
-  - Mobile Safari.
-  - Android Chrome.
-- [ ] Test memory stability.
-  - Repeated level loads.
-  - Repeated race starts.
-  - Lobby to game to lobby cycles.
-
-Acceptance:
-
-- Browser build runs smoothly enough for normal play.
-- No major memory growth across repeated sessions.
-
-## 15. Release Readiness
-
-- [ ] Add production build command.
-- [ ] Add asset cache/versioning.
-- [ ] Add loading/error screens.
-- [ ] Add basic telemetry or error logging if desired.
-- [ ] Document server/proxy requirements.
-- [ ] Document browser/mobile support.
-- [ ] Publish a test build.
-- [ ] Run core E2E suites before release.
-
-Acceptance:
-
-- Public browser build can connect, load, and play.
-- Core parity tests pass.
-- Known limitations are documented.
+  - Android build.
+  - iOS build.
+- [ ] Release readiness.
+  - Production build command.
+  - Asset cache/versioning.
+  - Loading/error screens.
+  - Server/proxy docs.
+  - Public test build.

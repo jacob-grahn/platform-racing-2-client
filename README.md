@@ -1,0 +1,223 @@
+# Platform Racing 2 Client
+
+This repository is the Haxe/OpenFL port of the Platform Racing 2 Flash client.
+The current migration source is the extracted Adobe Animate XFL under
+`flash/platform-racing-2-xfl/`. Normal development should build from committed
+Haxe/OpenFL source and committed generated assets, without requiring Adobe
+Animate.
+
+## Quick Start
+
+Run the browser build from the repository root:
+
+```sh
+haxelib run openfl test html5
+```
+
+Build without launching:
+
+```sh
+haxelib run openfl build html5
+```
+
+Run the lightweight runtime tests:
+
+```sh
+haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp
+```
+
+## Project Layout
+
+- `project.xml`: OpenFL project file.
+- `haxe/src/`: Haxe/OpenFL source.
+- `haxe/test/`: Haxe test entry points.
+- `assets/`: OpenFL app assets.
+- `flash/platform-racing-2-xfl/`: extracted Animate/XFL migration source.
+- `tools/`: asset extraction, generation, rasterization, and harness helpers.
+- `vector-art/svg/`: SVG exports from Animate.
+- `vector-art/png/`: generated 4x PNGs from SVG vector art.
+- `vector-art/atlases/`: generated sprite sheets and frame JSON.
+- `docs/`: migration notes and inventories.
+- `TODO.md`: current porting plan and next steps.
+
+## Haxe/OpenFL Commands
+
+Browser development path:
+
+```sh
+haxelib run openfl test html5
+haxelib run openfl build html5
+```
+
+Optional macOS target for local debugging:
+
+```sh
+haxelib run openfl display mac
+MACOSX_VER=26.5 haxelib run openfl test mac
+MACOSX_VER=26.5 haxelib run openfl build mac
+```
+
+If your installed macOS SDK suffix differs, check it with:
+
+```sh
+xcodebuild -showsdks
+```
+
+## Generated Haxe Assets
+
+Extract XFL metadata summary:
+
+```sh
+python3 tools/xfl_metadata.py --summary
+```
+
+Regenerate the Haxe asset catalog:
+
+```sh
+python3 tools/generate_haxe_assets.py
+```
+
+Compile-check the generated package:
+
+```sh
+haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output
+```
+
+## Vector Art Inventory
+
+Regenerate the vector-art inventory:
+
+```sh
+python3 tools/vector_art_inventory.py
+```
+
+The default inventory output is `docs/vector-art-inventory.json`.
+
+## Adobe Animate SVG Export
+
+Adobe Animate is only needed when regenerating SVGs from the original XFL/FLA
+source. Normal OpenFL builds should not require it.
+
+Regenerate the character SVG export JSFL:
+
+```sh
+python3 tools/generate_animate_svg_export_jsfl.py
+```
+
+Generate a small smoke-test JSFL:
+
+```sh
+python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out vector-art/export-character-svg-smoke.jsfl
+```
+
+Run a JSFL file through Adobe Animate on macOS:
+
+```sh
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-character-svg.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-character-svg-smoke.jsfl
+```
+
+The direct Animate executable also runs JSFL scripts:
+
+```sh
+"/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-character-svg-smoke.jsfl
+```
+
+This was verified with the smoke export. The command stays attached while
+Animate remains open, so unattended automation still needs a quit/wrapper
+decision.
+
+Other generated JSFL entry points:
+
+```sh
+python3 tools/generate_other_assets_jsfl.py
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-other-assets-svg.jsfl
+
+python3 tools/generate_block_bitmap_jsfl.py
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-block-bitmaps.jsfl
+```
+
+## SVG To PNG Rasterization
+
+Rasterize committed SVGs to 4x PNGs and sprite sheets:
+
+```sh
+python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
+```
+
+Rasterize only character art:
+
+```sh
+python3 tools/rasterize_vector_art.py --sheets --category character --manifest vector-art/raster-manifest.json
+```
+
+Rasterize non-character categories once their SVGs are exported and committed:
+
+```sh
+python3 tools/rasterize_vector_art.py --sheets --category backgrounds --manifest vector-art/raster-manifest-backgrounds.json
+python3 tools/rasterize_vector_art.py --sheets --category stamps --manifest vector-art/raster-manifest-stamps.json
+python3 tools/rasterize_vector_art.py --sheets --category effects --manifest vector-art/raster-manifest-effects.json
+python3 tools/rasterize_vector_art.py --sheets --category items --manifest vector-art/raster-manifest-items.json
+```
+
+The rasterizer uses Inkscape. The default path is:
+
+```text
+/Applications/Inkscape.app/Contents/MacOS/inkscape
+```
+
+Check Inkscape availability:
+
+```sh
+/Applications/Inkscape.app/Contents/MacOS/inkscape --version
+```
+
+## Raster Asset Verification
+
+Verify the current character raster output:
+
+```sh
+python3 - <<'PY'
+import json
+from pathlib import Path
+from PIL import Image
+
+with open('vector-art/raster-manifest.json') as f:
+    manifest = json.load(f)
+
+pngs = sorted(Path('vector-art/png').rglob('*.png'))
+atlas_pngs = sorted(Path('vector-art/atlases').rglob('*.png'))
+atlas_jsons = sorted(Path('vector-art/atlases').rglob('*.json'))
+assert len(manifest['pngs']) == 632
+assert len(pngs) == 632
+assert len(manifest['atlases']) == len(atlas_pngs)
+assert len(atlas_pngs) == len(atlas_jsons)
+for path in atlas_pngs:
+    image = Image.open(path)
+    assert image.width <= 4096 and image.height <= 4096, (path, image.size)
+    assert image.getbbox() is not None, path
+print('verified', len(pngs), 'pngs,', len(atlas_pngs), 'atlas pages')
+PY
+```
+
+## Harness Helpers
+
+Capture an OpenFL screenshot after launching the app:
+
+```sh
+python3 tools/openfl_driver.py --delay 2.0 shot test/baselines/openfl/run_harness.png
+```
+
+Check approximate OpenFL frame rate:
+
+```sh
+python3 tools/openfl_driver.py --fps-duration 30 --fps-target 27 --fps-tolerance 5 fps
+```
+
+## Useful References
+
+- `TODO.md`: active migration plan and resume notes.
+- `docs/vector-art-export-plan.md`: vector export and rasterization details.
+- `docs/initial-playable-scope.md`: initial playable target.
+- `docs/networking-inventory.md`: Flash networking inventory.
+- `docs/browser-networking-blockers.md`: browser networking constraints.

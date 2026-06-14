@@ -91,13 +91,13 @@ python3 tools/generate_animate_svg_export_jsfl.py
 This writes the full character export script to:
 
 ```text
-export/vector-art/export-character-svg.jsfl
+vector-art/export-character-svg.jsfl
 ```
 
 For a small proof run:
 
 ```sh
-python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out export/vector-art/export-character-svg-smoke.jsfl
+python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out vector-art/export-character-svg-smoke.jsfl
 ```
 
 The generated JSFL consumes `characterExports` from the JSON manifest and
@@ -117,8 +117,17 @@ At a high level:
 To run a generated JSFL file through Animate on macOS:
 
 ```sh
-open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" export/vector-art/export-character-svg-smoke.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-character-svg-smoke.jsfl
 ```
+
+The direct Animate executable also works:
+
+```sh
+"/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-character-svg-smoke.jsfl
+```
+
+The direct command executes the JSFL and writes outputs into `vector-art/svg/`,
+but it stays attached while Animate remains open.
 
 The full export uses the same command with `export-character-svg.jsfl`. The SVG
 outputs are committed under:

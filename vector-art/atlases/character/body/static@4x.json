@@ -1,7 +1,7 @@
 {
-  "atlasGroup": "character/body/secondary",
+  "atlasGroup": "character/body/static",
   "category": "character",
-  "channel": "secondary",
+  "channel": "static",
   "frames": {
     "001_classic": {
       "frame": {
@@ -11,7 +11,7 @@
         "y": 2
       },
       "id": 1,
-      "png": "vector-art/png/character/body/001_classic/secondary@4x.png",
+      "png": "vector-art/png/character/body/001_classic/static@4x.png",
       "scale": 4,
       "sourceTrim": {
         "empty": false,
@@ -22,7 +22,7 @@
       }
     }
   },
-  "image": "vector-art/atlases/character/body/secondary@4x.png",
+  "image": "vector-art/atlases/character/body/static@4x.png",
   "kind": "body",
   "page": 1,
   "pages": 1,
