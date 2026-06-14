@@ -67,7 +67,7 @@ until movement, rendering, and fixture loading are debuggable.
   - It can launch directly for development.
   - It should not require login, lobby, server data, or real level loading.
   - It should keep the logical 550x400 stage.
-- [ ] Define a tiny fixture level format.
+- [x] Define a tiny fixture level format.
   - Blocks with tile coordinates and block type.
   - Player start position.
   - Finish position.
