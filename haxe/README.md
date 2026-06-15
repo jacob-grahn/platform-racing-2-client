@@ -93,6 +93,29 @@ To compile-check the generated package directly:
 haxe -cp haxe/src --macro 'include("pr2.generated.assets")' --no-output
 ```
 
+## Campaign Level Test (Live Server Data)
+
+`?screen=campaign` fetches a real campaign course list from the PR2 server and
+reports the first level. pr2hub.com sends no CORS headers, so a browser cannot
+read its responses cross-origin. Run the dev proxy, which serves the build and
+forwards `/api/*` to `https://pr2hub.com/*` from the same origin:
+
+```sh
+haxelib run openfl build html5
+python3 tools/dev_proxy.py            # serves export/html5/bin on :8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/?screen=campaign&apiHost=/api
+```
+
+The client builds level URLs on `apiHost`, so requests stay same-origin. Without
+`apiHost` it hits pr2hub.com directly, which the browser blocks (the screen will
+show a CORS error). `tools/dev_proxy.py` uses certifi's CA bundle, working around
+the missing system CA store on python.org macOS builds.
+
 ## Runtime Tests
 
 Run the lightweight Haxe runtime tests without starting the OpenFL app:

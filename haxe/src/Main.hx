@@ -11,7 +11,9 @@ import openfl.events.Event;
 import pr2.Constants;
 import pr2.app.QueryParams;
 import pr2.app.Screen;
+import pr2.net.ServerConfig;
 import pr2.harness.GameplayHarness;
+import pr2.page.CampaignTestScreen;
 import pr2.page.IntroPage;
 import pr2.page.LoginPage;
 import pr2.page.PageHolder;
@@ -41,6 +43,9 @@ class Main extends Sprite {
 
 		try {
 			var query = currentQuery();
+			// pr2hub.com sends no CORS headers; `?apiHost=/api` points level
+			// fetches at a same-origin dev proxy (tools/dev_proxy.py).
+			ServerConfig.setHost(QueryParams.get(query, "apiHost"));
 			addChild(buildScreen(Screen.fromQuery(query), query));
 		} catch (error:Dynamic) {
 			reportFatalError(error);
@@ -67,6 +72,7 @@ class Main extends Sprite {
 	private function buildScreen(screen:Screen, query:Null<String>):DisplayObject {
 		return switch (screen) {
 			case Harness: new GameplayHarness();
+			case Campaign: new CampaignTestScreen(QueryParams.get(query, "page"));
 			case Login: new PageHolder(new LoginPage());
 			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")));
 		};

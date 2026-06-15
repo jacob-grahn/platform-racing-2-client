@@ -333,6 +333,75 @@ Acceptance for this section:
 - Fixture levels render correctly.
 - At least one real level can be loaded and displayed without gameplay parity.
 
+### Server Campaign Level Test Harness
+
+A second, more complex test (beyond the hardcoded flat fixture): fetch a real
+campaign level list from the PR2 server, load the first level, render it, and
+drop our character in. Built incrementally — reachable via `?screen=campaign`.
+
+Server pipeline confirmed from the Flash source:
+
+- Campaign list: `GET https://pr2hub.com/files/lists/campaign/{page}` returns
+  JSON `{levels:[{level_id, version, title, ...}], hash}`. The Flash client
+  validates `hash == MD5(ret.substr(10, len-53) + LEVEL_LIST_SALT)`
+  (`LEVEL_LIST_SALT = "984cn98c54$"`). `page = ((server_id + day) % 6) + 1` in
+  Flash; we can just pick a fixed page for the test.
+- Level data: `GET https://pr2hub.com/levels/{id}.txt?version={v}` returns
+  `levelData + 32charMD5`. Validate
+  `MD5(version + id + levelData + LEVEL_SALT_2)` (`LEVEL_SALT_2 = "0kg4%dsw"`).
+- `levelData` is `&`-joined URL-encoded vars (`data`, `title`, `gravity`,
+  `max_time`, `items`, `song`, `gameMode`, ...). Pass through
+  `validateSaveString` (whitelist of allowed params) first.
+- The `data` field is backtick-delimited. `data[0]` = read mode (`m1`..`m4`),
+  `data[1]` = encoded block string. Block string is relative-coordinate; decode
+  per `decodeLevelData`/`decodeObjectString`/`decodeObjectString2`/
+  `decodeBlockString` in `flash/page/GamePage.as` into
+  `o{blockCode};{x};{y};{opts}` tokens at pixel coords (segSize 30). Block codes
+  100-132 map to block types (`flash/com/jiggmin/data/Objects.as`).
+
+Bits (take one at a time):
+
+- [ ] Bit 1 — Networking + campaign list fetch.
+  - Async text loader over `openfl.net.URLLoader` (maps to XHR on html5).
+  - Server config: base/levels URLs and salts.
+  - `CampaignListClient`: fetch page, validate list hash, parse into
+    `CampaignLevelInfo` entries.
+  - `?screen=campaign` shows fetch status + first level title/id/version.
+- [x] Bit 2 — Fetch + verify raw level data for the first level.
+  - `LevelDataClient`: split trailing 32-char hash, validate
+    `MD5(version+id+levelData+LEVEL_SALT_2)`, run `validateSaveString`, parse
+    the `&`-joined vars into `ServerLevelData` (exposes title/gravity/max_time/
+    items/gameMode + the raw `data` blob and read mode).
+  - Verified on real data (level 50815 "Newbieland 2"): hashValid=true, mode m3,
+    dataLen 22234, 8 items. Unit test covers the `validateSaveString` "and"
+    round-trip + hash mismatch (`LevelDataClientTest`, 13 assertions).
+- [x] Bit 3 — Decode the block string (modes m1-m4) into a block list.
+  - `ServerLevelDecoder` ports `decodeLevelData` + `decodeObjectString`/
+    `decodeObjectString2`/`decodeBlockString`; emits `DecodedBlock{code, x, y,
+    opts}` at absolute pixel coords into a `ServerLevel` (bg color + bounds +
+    start/finish helpers). `ObjectCodes` ports the 100-132 block codes and the
+    `<100 -> +100` resolution.
+  - Verified on real data (level 50815): 516 blocks, bg 0xE0C8B8, 4 starts +
+    1 finish, bounds 10530x1650px — byte-identical to an independent Python
+    reference port. Unit test covers m1/m2/m3/m4 + bad mode
+    (`ServerLevelDecoderTest`, 31 assertions).
+  - Art/draw/text layers (the other backtick sections) still deferred to Bit 4.
+- [ ] Bit 4 — Render the decoded server level.
+  - Pixel coords, background color, map block codes to block art assets.
+  - Camera/scale so the level fits or scrolls.
+- [ ] Bit 5 — Place the character into the loaded level.
+  - Spawn `CharacterDisplay` at the start block (code 111); reuse harness
+    wiring; collision against decoded blocks if practical.
+- [x] Cross-cutting — CORS / cross-origin access to pr2hub.com.
+  - Confirmed: pr2hub.com sends no `Access-Control-Allow-Origin`, so a browser
+    cannot read its responses cross-origin.
+  - Resolved for dev: `tools/dev_proxy.py` serves the build and proxies
+    `/api/* -> https://pr2hub.com/*` same-origin; `ServerConfig` host is
+    configurable via `?apiHost=/api`. Verified the proxy returns the list and a
+    level txt (id 50815 "Newbieland 2") with HTTP 200.
+  - Still open for production: a real deploy needs either a server-side proxy
+    or CORS on the level host. Not needed for the local test harness.
+
 ## Gameplay Expansion
 
 After the flat fixture is playable, add mechanics in small testable batches.
