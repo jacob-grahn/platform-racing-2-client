@@ -9,6 +9,7 @@
 	<assets path="assets" rename="assets" unless="html5" />
 	<assets path="vector-art/png/blocks" rename="assets/blocks" />
 	<assets path="vector-art/atlases/character" rename="assets/character/atlases" />
+	<assets path="vector-art/atlases/intro" rename="assets/intro/atlases" />
 
 	<haxelib name="openfl" />
 

@@ -159,8 +159,12 @@ class PR2MovieClip extends Sprite {
 			currentLabels.push(new FrameLabel(label.name, frameNumber));
 		}
 
-		for (layer in source.layers) {
-			applyLayer(layer);
+		// Animate/XFL serializes layers from top to bottom. OpenFL display
+		// children are painted from index 0 upward, so apply bottom layers first.
+		var layerIndex = source.layers.length - 1;
+		while (layerIndex >= 0) {
+			applyLayer(source.layers[layerIndex]);
+			layerIndex--;
 		}
 	}
 
@@ -304,6 +308,11 @@ class PR2MovieClip extends Sprite {
 
 	private function createDisplayObject(element:DisplayElementDef, reusableClip:Null<PR2MovieClip>):DisplayObject {
 		if (element.libraryItemName != null) {
+			var baked = BakedSymbolAtlas.create(element.libraryItemName);
+			if (baked != null) {
+				return baked;
+			}
+
 			var childSymbol = AssetLibrary.getSymbol(element.libraryItemName);
 			if (childSymbol != null) {
 				if (nestedDepth >= maxNestedDepth) {

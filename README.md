@@ -176,6 +176,14 @@ standalone PNGs; stamps and item icons are packed into separate atlases:
 python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category stamps --category effects --category items --manifest vector-art/raster-manifest-other.json
 ```
 
+Rasterize the baked intro symbols. The Kongregate intro keeps its original
+timeline transforms in Haxe, while the difficult nested vector symbols are
+loaded from this atlas:
+
+```sh
+python3 tools/rasterize_vector_art.py --sheets --category intro --manifest vector-art/raster-manifest-intro.json
+```
+
 The rasterizer uses Inkscape. The default path is:
 
 ```text

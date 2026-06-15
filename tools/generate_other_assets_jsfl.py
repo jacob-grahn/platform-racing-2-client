@@ -7,6 +7,7 @@ Categories exported:
   stamps       - decorative level objects (single frame each)
   effects      - in-game visual effect symbols (one SVG per reusable symbol)
   items        - ItemDisplay icon frames (one per label)
+  intro        - baked leaf/composite art used by intro timelines
 
 The generated JSFL should be run inside Adobe Animate the same way as the
 character export JSFL. Outputs land directly in vector-art/svg/<category>/.
@@ -113,6 +114,24 @@ ITEM_DISPLAY_LABELS = [
 ]
 ITEM_DISPLAY_SYMBOL = "UI/Pages/Levels/In-Game/ItemDisplay"
 
+KONGREGATE_INTRO_SYMBOLS = [
+    {"slug": "symbol_27", "symbol": "MovieClips/Symbol 27"},
+    {"slug": "symbol_30", "symbol": "MovieClips/Symbol 30"},
+    {"slug": "symbol_32", "symbol": "MovieClips/Symbol 32"},
+    {"slug": "symbol_34", "symbol": "MovieClips/Symbol 34"},
+    {"slug": "symbol_36", "symbol": "MovieClips/Symbol 36"},
+    {"slug": "symbol_38", "symbol": "MovieClips/Symbol 38"},
+    {"slug": "symbol_40", "symbol": "MovieClips/Symbol 40"},
+    {"slug": "symbol_41", "symbol": "MovieClips/Symbol 41"},
+    {"slug": "symbol_44", "symbol": "MovieClips/Symbol 44"},
+    {"slug": "symbol_47", "symbol": "MovieClips/Symbol 47"},
+    {"slug": "symbol_49", "symbol": "MovieClips/Symbol 49"},
+    {"slug": "symbol_52", "symbol": "MovieClips/Symbol 52"},
+    {"slug": "graphic_28", "symbol": "Graphics/Symbol 28"},
+    {"slug": "graphic_42", "symbol": "Graphics/Symbol 42"},
+    {"slug": "graphic_43", "symbol": "Graphics/Symbol 43"},
+]
+
 
 def file_uri(path):
     return Path(path).resolve().as_uri()
@@ -166,6 +185,18 @@ def build_jobs(svg_dir):
             "slug":       label["slug"],
             "symbolName": ITEM_DISPLAY_SYMBOL,
             "frame":      label["frame"],
+            "exportPath": export_path,
+            "outputUri":  (root / export_path).as_uri(),
+        })
+
+    for entry in KONGREGATE_INTRO_SYMBOLS:
+        export_path = f"intro/kongregate/{entry['slug']}.svg"
+        jobs.append({
+            "category":   "intro",
+            "group":      "kongregate",
+            "slug":       entry["slug"],
+            "symbolName": entry["symbol"],
+            "frame":      0,
             "exportPath": export_path,
             "outputUri":  (root / export_path).as_uri(),
         })

@@ -14,6 +14,7 @@ class PR2MovieClipRuntimeTest {
 		testTimelineControls();
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();
+		testSourceLayerOrderRendersTopLayersAboveBottomLayers();
 		testColorTransforms();
 		testLeafVectorShapes();
 		testGeneratedCharacterNamedChildren();
@@ -94,6 +95,16 @@ class PR2MovieClipRuntimeTest {
 		assertEquals(null, clip.getChildByTimelineName("marker"), "old frame children are removed");
 		assertNotNull(clip.getChildByTimelineName("middleMarker"), "new frame children are rendered");
 	}
+
+	private static function testSourceLayerOrderRendersTopLayersAboveBottomLayers():Void {
+		var clip = new PR2MovieClip(makeLayeredSymbol());
+
+		assertEquals(3, clip.numChildren, "layered symbol renders one child per layer");
+		assertEquals("bottom", clip.getChildAt(0).name, "last source layer renders at the bottom");
+		assertEquals("middle", clip.getChildAt(1).name, "middle source layer renders in the middle");
+		assertEquals("top", clip.getChildAt(2).name, "first source layer renders at the top");
+	}
+
 
 	private static function testColorTransforms():Void {
 		var clip = new PR2MovieClip(makeColorSymbol());
@@ -541,6 +552,49 @@ class PR2MovieClipRuntimeTest {
 							}]
 						}
 					]
+				}]
+			}]
+		};
+	}
+
+	private static function makeLayeredSymbol():SymbolAssetDef {
+		return {
+			href: "LayeredSymbol.xml",
+			type: "movie clip",
+			name: "LayeredSymbol",
+			linkageClassName: "LayeredSymbol",
+			linkageIdentifier: "LayeredSymbol",
+			timelines: [{
+				name: "LayeredSymbol",
+				layerCount: 3,
+				frameCount: 1,
+				labels: [],
+				layers: [
+					makeSingleShapeLayer(0, "Top Layer", "top"),
+					makeSingleShapeLayer(1, "Middle Layer", "middle"),
+					makeSingleShapeLayer(2, "Bottom Layer", "bottom")
+				]
+			}]
+		};
+	}
+
+	private static function makeSingleShapeLayer(index:Int, layerName:String, childName:String):Dynamic {
+		return {
+			index: index,
+			name: layerName,
+			visible: true,
+			locked: false,
+			layerType: "normal",
+			frameCount: 1,
+			frames: [{
+				index: 0,
+				duration: 1,
+				elementCount: 1,
+				elementTypes: ["DOMShape"],
+				elements: [{
+					type: "DOMShape",
+					name: childName,
+					bounds: {left: 0, top: 0, right: 10, bottom: 10}
 				}]
 			}]
 		};

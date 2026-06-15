@@ -121,6 +121,19 @@ def parse_svg_path(svg_root, path):
             "atlas_group": f"items/{group}",
         }
 
+    if category == "intro":
+        # intro/kongregate/<slug>.svg
+        if len(parts) != 3:
+            return None
+        group = parts[1]
+        return {
+            "category": "intro",
+            "rel": rel,
+            "group": group,
+            "slug": path.stem,
+            "atlas_group": f"intro/{group}",
+        }
+
     return None
 
 
@@ -215,6 +228,8 @@ def png_path_for(png_root, job, scale):
         return png_root / "effects" / job["slug"] / f"{job['frame']}@{scale}x.png"
     if cat == "items":
         return png_root / "items" / job["group"] / f"{job['slug']}@{scale}x.png"
+    if cat == "intro":
+        return png_root / "intro" / job["group"] / f"{job['slug']}@{scale}x.png"
     raise ValueError(f"Unknown category: {cat}")
 
 
@@ -259,6 +274,9 @@ def rasterize_jobs(jobs, args):
                 if job.get("frame") is not None:
                     record["frame"] = job["frame"]
             elif cat == "items":
+                record["group"] = job["group"]
+                record["slug"] = job["slug"]
+            elif cat == "intro":
                 record["group"] = job["group"]
                 record["slug"] = job["slug"]
             records.append(record)
@@ -331,6 +349,8 @@ def entry_name(record):
     if cat == "effects":
         return record.get("frame") or record["slug"]
     if cat == "items":
+        return record["slug"]
+    if cat == "intro":
         return record["slug"]
     return record.get("slug", "unknown")
 
@@ -457,7 +477,7 @@ def parse_args(argv):
     parser.add_argument(
         "--category",
         action="append",
-        choices=("character", "backgrounds", "stamps", "effects", "items"),
+        choices=("character", "backgrounds", "stamps", "effects", "items", "intro"),
         help="repeatable category filter; default: all categories",
     )
     parser.add_argument("--limit", type=int)

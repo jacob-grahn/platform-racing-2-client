@@ -286,6 +286,141 @@ var JOBS = [
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/items/display/ice_wave.svg",
     "slug": "ice_wave",
     "symbolName": "UI/Pages/Levels/In-Game/ItemDisplay"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_27.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_27.svg",
+    "slug": "symbol_27",
+    "symbolName": "MovieClips/Symbol 27"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_30.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_30.svg",
+    "slug": "symbol_30",
+    "symbolName": "MovieClips/Symbol 30"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_32.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_32.svg",
+    "slug": "symbol_32",
+    "symbolName": "MovieClips/Symbol 32"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_34.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_34.svg",
+    "slug": "symbol_34",
+    "symbolName": "MovieClips/Symbol 34"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_36.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_36.svg",
+    "slug": "symbol_36",
+    "symbolName": "MovieClips/Symbol 36"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_38.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_38.svg",
+    "slug": "symbol_38",
+    "symbolName": "MovieClips/Symbol 38"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_40.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_40.svg",
+    "slug": "symbol_40",
+    "symbolName": "MovieClips/Symbol 40"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_41.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_41.svg",
+    "slug": "symbol_41",
+    "symbolName": "MovieClips/Symbol 41"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_44.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_44.svg",
+    "slug": "symbol_44",
+    "symbolName": "MovieClips/Symbol 44"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_47.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_47.svg",
+    "slug": "symbol_47",
+    "symbolName": "MovieClips/Symbol 47"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_49.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_49.svg",
+    "slug": "symbol_49",
+    "symbolName": "MovieClips/Symbol 49"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/symbol_52.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/symbol_52.svg",
+    "slug": "symbol_52",
+    "symbolName": "MovieClips/Symbol 52"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/graphic_28.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/graphic_28.svg",
+    "slug": "graphic_28",
+    "symbolName": "Graphics/Symbol 28"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/graphic_42.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/graphic_42.svg",
+    "slug": "graphic_42",
+    "symbolName": "Graphics/Symbol 42"
+  },
+  {
+    "category": "intro",
+    "exportPath": "intro/kongregate/graphic_43.svg",
+    "frame": 0,
+    "group": "kongregate",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/graphic_43.svg",
+    "slug": "graphic_43",
+    "symbolName": "Graphics/Symbol 43"
   }
 ];
 
