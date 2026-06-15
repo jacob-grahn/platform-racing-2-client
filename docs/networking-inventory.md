@@ -147,12 +147,48 @@ and moderation actions.
 - HTTP flows can likely be ported to `openfl.net.URLLoader` or a Haxe HTTP
   library, but CORS and response headers need to be tested against the live
   service.
-- Raw TCP socket connectivity is the largest browser risk. A browser target will
-  likely need either:
-  - a server-supported WebSocket endpoint that speaks the PR2 command protocol,
-    or
-  - a small proxy that translates WebSocket from the browser to raw TCP for the
-    PR2 server.
+- Browser OpenFL cannot open raw TCP sockets, but the gameserver now supports
+  WebSocket clients on the multiplayer transport. The server sniffs the first
+  bytes of each connection: legacy Flash/raw clients continue down the raw
+  socket path, while WebSocket clients receive an RFC 6455 handshake and then
+  have decoded frame payloads fed into the same PR2 command buffer. The port
+  should keep the PR2 socket command writer/parser nearly identical to Flash and
+  send the same `chr(0x04)`-terminated payloads inside WebSocket text frames.
 - The next networking task should prove whether the browser build can fetch
-  `server_status_2.txt` directly, then separately prove whether the selected PR2
-  game server is reachable without a proxy.
+  `server_status_2.txt` directly, open the configured gameserver WebSocket
+  endpoint, send `request_login_id`, and parse `setLoginID`.
+
+## Browser Transport Notes
+
+- Browser access depends on CORS, WebSocket origin handling, and TLS
+  configuration. Flash `crossdomain.xml` only applies to the Flash runtime.
+- If the client is served over HTTPS, all HTTP requests must use HTTPS and all
+  socket traffic must use WSS.
+- Browser JavaScript cannot set arbitrary forbidden headers. The Flash
+  `Request-Destination` header path should not be treated as portable browser
+  behavior.
+- Browser clients cannot safely hold secret protocol material. Existing client
+  keys and salts from `Env.as` are already client-visible compatibility values,
+  not server-side trust boundaries.
+- The browser client should treat server-list `address` / `port` values as the
+  selected multiplayer server, but it must build a `ws://` or `wss://` URL for
+  browser transport instead of trying to open raw TCP.
+- Production browser socket traffic should use WSS. Any same-origin path,
+  reverse-proxy route, or direct `host:port` URL is a deployment concern; the
+  PR2 application payload should stay unchanged after the WebSocket handshake.
+- The WebSocket endpoint should accept browser upgrades over TLS, preserve PR2
+  command payload semantics, and surface close/error states clearly enough for
+  connection, login, and disconnection UI. Origin validation, routing, and TLS
+  termination may live at the deployment/proxy layer if the multiplayer server
+  is not exposed directly.
+- A WebSocket frame may contain one or more PR2 messages and PR2 messages may be
+  split across frames. The client-side parser should continue using the
+  `chr(0x04)` delimiter after WebSocket payload decode, just as Flash did after
+  socket reads.
+- Initial browser networking spike order:
+  1. Fetch `server_status_2.txt` from a browser build and record CORS behavior.
+  2. Open a configured same-origin or local gameserver WebSocket endpoint.
+  3. Send the normal `request_login_id` command over WebSocket.
+  4. Parse `setLoginID`.
+  5. Attempt `/login.php` only with local, uncommitted credentials.
+  6. Confirm whether socket `loginSuccessful` arrives after the HTTP login step.

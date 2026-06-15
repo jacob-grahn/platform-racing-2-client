@@ -247,4 +247,3 @@ python3 tools/openfl_driver.py --fps-duration 30 --fps-target 27 --fps-tolerance
 - `docs/vector-art-export-plan.md`: vector export and rasterization details.
 - `docs/initial-playable-scope.md`: initial playable target.
 - `docs/networking-inventory.md`: Flash networking inventory.
-- `docs/browser-networking-blockers.md`: browser networking constraints.

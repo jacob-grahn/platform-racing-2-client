@@ -55,7 +55,8 @@ details belong in `docs/vector-art-export-plan.md`.
   - It executes the JSFL and writes to tracked `vector-art/...` paths.
   - Caveat: the process stays attached while Animate remains open.
 - [x] Browser networking risks are documented.
-  - Browser client needs WebSocket support from the server/proxy side.
+  - Browser client must use the gameserver WebSocket endpoint instead of raw
+    TCP.
   - Raw TCP PR2 sockets cannot be opened directly from browser OpenFL.
 
 ## Current Priority: Get A Local Playable Harness
@@ -360,16 +361,20 @@ Acceptance for this section:
 ## Networking And Real Server Flow
 
 Do not block local gameplay on this, but keep it moving because browser
-deployment depends on server/proxy compatibility.
+deployment depends on the real gameserver flow.
 
-- [ ] Add server-side WebSocket support in the server repo.
-  - Same-origin paths such as `/servers/<server_name>`.
-  - Preserve existing PR2 command payload semantics.
-  - Production endpoint should be `wss://...`.
+- [x] Add server-side WebSocket support in the server repo.
+  - The multiplayer server now sniffs raw vs WebSocket connections on the
+    transport and feeds both into the same PR2 command buffer.
+  - The browser port can reuse the PR2 socket protocol code closely; only the
+    browser transport changes from raw TCP to WebSocket frames.
+  - Production endpoint should still be `wss://...`.
 - [ ] Build a minimal OpenFL networking spike.
   - Request server list or a harmless endpoint.
   - Connect to a configured WebSocket URL.
-  - Parse at least one real response.
+  - Send the normal `request_login_id` command with the existing PR2
+    `chr(0x04)` message delimiter.
+  - Parse `setLoginID` from a real response.
 - [ ] Add safe local configuration.
   - No credentials committed.
   - Ignored local config or environment variables if needed.
@@ -448,5 +453,5 @@ Acceptance for this section:
   - Production build command.
   - Asset cache/versioning.
   - Loading/error screens.
-  - Server/proxy docs.
+  - Gameserver WebSocket deployment docs.
   - Public test build.
