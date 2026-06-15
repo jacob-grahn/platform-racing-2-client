@@ -8,6 +8,7 @@ Categories exported:
   effects      - in-game visual effect symbols (one SVG per reusable symbol)
   items        - ItemDisplay icon frames (one per label)
   intro        - baked leaf/composite art used by intro timelines
+  login        - login screen baked page/control artwork
 
 The generated JSFL should be run inside Adobe Animate the same way as the
 character export JSFL. Outputs land directly in vector-art/svg/<category>/.
@@ -132,6 +133,15 @@ KONGREGATE_INTRO_SYMBOLS = [
     {"slug": "graphic_43", "symbol": "Graphics/Symbol 43"},
 ]
 
+LOGIN_SYMBOLS = [
+    {"slug": "login_page", "symbol": "UI/Pages/Login/LoginPage", "frame": 25},
+    {"slug": "mute_button", "symbol": "UI/Global/MuteButton"},
+    {"slug": "bg_sky", "symbol": "MovieClips/Symbol 364"},
+    {"slug": "bg_far", "symbol": "MovieClips/Symbol 366"},
+    {"slug": "bg_mid", "symbol": "MovieClips/Symbol 369"},
+    {"slug": "bg_front", "symbol": "MovieClips/Symbol 374"},
+]
+
 
 def file_uri(path):
     return Path(path).resolve().as_uri()
@@ -197,6 +207,17 @@ def build_jobs(svg_dir):
             "slug":       entry["slug"],
             "symbolName": entry["symbol"],
             "frame":      0,
+            "exportPath": export_path,
+            "outputUri":  (root / export_path).as_uri(),
+        })
+
+    for entry in LOGIN_SYMBOLS:
+        export_path = f"login/{entry['slug']}.svg"
+        jobs.append({
+            "category":   "login",
+            "slug":       entry["slug"],
+            "symbolName": entry["symbol"],
+            "frame":      entry.get("frame", 0),
             "exportPath": export_path,
             "outputUri":  (root / export_path).as_uri(),
         })
@@ -280,6 +301,26 @@ function exportCurrentView(outputUri) {{
 \tfl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", outputUri, true, "", false, false, 0, 0);
 }}
 
+function hideSvgGroup(svg, id) {{
+\tvar needle = "<g id=\\"" + id + "\\"";
+\treturn svg.split(needle).join("<g display=\\"none\\" id=\\"" + id + "\\"");
+}}
+
+function postProcessExport(job) {{
+\tif (job.category != "login" || job.slug != "login_page") {{
+\t\treturn;
+\t}}
+\tvar svg = FLfile.read(job.outputUri);
+\tif (!svg) {{
+\t\treturn;
+\t}}
+\tsvg = hideSvgGroup(svg, "armorGamesLogo");
+\tsvg = hideSvgGroup(svg, "bubbleBoxLogo");
+\tsvg = hideSvgGroup(svg, "loggedInAs");
+\tsvg = hideSvgGroup(svg, "bg");
+\tFLfile.write(job.outputUri, svg);
+}}
+
 function exportJob(doc, job) {{
 \tlog("[" + job.category + "] " + job.exportPath + " from " + job.symbolName + " frame " + job.frame);
 \ttry {{
@@ -289,6 +330,7 @@ function exportJob(doc, job) {{
 \t}}
 \tstageSymbol(doc, job.symbolName, job.frame);
 \texportCurrentView(job.outputUri);
+\tpostProcessExport(job);
 \ttry {{
 \t\tdoc.selectAll();
 \t\tdoc.deleteSelection();

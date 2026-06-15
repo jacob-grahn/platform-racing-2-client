@@ -31,7 +31,7 @@ CHANNELS = ("static", "primary", "secondary", "composite")
 # Categories that produce individual PNGs with no atlas. Large timeline-driven
 # effect symbols can exceed the default atlas page and are animated by metadata
 # rather than by atlas frame sequencing.
-NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "effects"})
+NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "effects", "login"})
 
 
 def parse_svg_path(svg_root, path):
@@ -134,6 +134,17 @@ def parse_svg_path(svg_root, path):
             "atlas_group": f"intro/{group}",
         }
 
+    if category == "login":
+        # login/<slug>.svg
+        if len(parts) != 2:
+            return None
+        return {
+            "category": "login",
+            "rel": rel,
+            "slug": path.stem,
+            "atlas_group": None,
+        }
+
     return None
 
 
@@ -230,6 +241,8 @@ def png_path_for(png_root, job, scale):
         return png_root / "items" / job["group"] / f"{job['slug']}@{scale}x.png"
     if cat == "intro":
         return png_root / "intro" / job["group"] / f"{job['slug']}@{scale}x.png"
+    if cat == "login":
+        return png_root / "login" / f"{job['slug']}@{scale}x.png"
     raise ValueError(f"Unknown category: {cat}")
 
 
@@ -278,6 +291,8 @@ def rasterize_jobs(jobs, args):
                 record["slug"] = job["slug"]
             elif cat == "intro":
                 record["group"] = job["group"]
+                record["slug"] = job["slug"]
+            elif cat == "login":
                 record["slug"] = job["slug"]
             records.append(record)
     return records
@@ -351,6 +366,8 @@ def entry_name(record):
     if cat == "items":
         return record["slug"]
     if cat == "intro":
+        return record["slug"]
+    if cat == "login":
         return record["slug"]
     return record.get("slug", "unknown")
 
@@ -477,7 +494,7 @@ def parse_args(argv):
     parser.add_argument(
         "--category",
         action="append",
-        choices=("character", "backgrounds", "stamps", "effects", "items", "intro"),
+		choices=("character", "backgrounds", "stamps", "effects", "items", "intro", "login"),
         help="repeatable category filter; default: all categories",
     )
     parser.add_argument("--limit", type=int)

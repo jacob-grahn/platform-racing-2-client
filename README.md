@@ -169,11 +169,12 @@ Rasterize only character art:
 python3 tools/rasterize_vector_art.py --sheets --category character --manifest vector-art/raster-manifest.json
 ```
 
-Rasterize the exported non-character SVGs. Backgrounds and effect symbols remain
-standalone PNGs; stamps and item icons are packed into separate atlases:
+Rasterize the exported non-character SVGs. Backgrounds, effect symbols, and
+login page components remain standalone PNGs; stamps and item icons are packed
+into separate atlases:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category stamps --category effects --category items --manifest vector-art/raster-manifest-other.json
+python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category stamps --category effects --category items --category login --manifest vector-art/raster-manifest-other.json
 ```
 
 Rasterize the baked intro symbols. The Kongregate intro keeps its original

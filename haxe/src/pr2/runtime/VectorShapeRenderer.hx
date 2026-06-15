@@ -4,7 +4,6 @@ import openfl.display.Graphics;
 import openfl.display.Shape;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
 import pr2.generated.assets.AssetTypes.EdgeDef;
-import pr2.generated.assets.AssetTypes.IndexedStyleDef;
 import pr2.generated.assets.AssetTypes.StyleValueDef;
 
 class VectorShapeRenderer {

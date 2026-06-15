@@ -421,6 +421,54 @@ var JOBS = [
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/intro/kongregate/graphic_43.svg",
     "slug": "graphic_43",
     "symbolName": "Graphics/Symbol 43"
+  },
+  {
+    "category": "login",
+    "exportPath": "login/login_page.svg",
+    "frame": 25,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/login_page.svg",
+    "slug": "login_page",
+    "symbolName": "UI/Pages/Login/LoginPage"
+  },
+  {
+    "category": "login",
+    "exportPath": "login/mute_button.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/mute_button.svg",
+    "slug": "mute_button",
+    "symbolName": "UI/Global/MuteButton"
+  },
+  {
+    "category": "login",
+    "exportPath": "login/bg_sky.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/bg_sky.svg",
+    "slug": "bg_sky",
+    "symbolName": "MovieClips/Symbol 364"
+  },
+  {
+    "category": "login",
+    "exportPath": "login/bg_far.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/bg_far.svg",
+    "slug": "bg_far",
+    "symbolName": "MovieClips/Symbol 366"
+  },
+  {
+    "category": "login",
+    "exportPath": "login/bg_mid.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/bg_mid.svg",
+    "slug": "bg_mid",
+    "symbolName": "MovieClips/Symbol 369"
+  },
+  {
+    "category": "login",
+    "exportPath": "login/bg_front.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/bg_front.svg",
+    "slug": "bg_front",
+    "symbolName": "MovieClips/Symbol 374"
   }
 ];
 
@@ -489,6 +537,26 @@ function exportCurrentView(outputUri) {
 	fl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", outputUri, true, "", false, false, 0, 0);
 }
 
+function hideSvgGroup(svg, id) {
+	var needle = "<g id=\"" + id + "\"";
+	return svg.split(needle).join("<g display=\"none\" id=\"" + id + "\"");
+}
+
+function postProcessExport(job) {
+	if (job.category != "login" || job.slug != "login_page") {
+		return;
+	}
+	var svg = FLfile.read(job.outputUri);
+	if (!svg) {
+		return;
+	}
+	svg = hideSvgGroup(svg, "armorGamesLogo");
+	svg = hideSvgGroup(svg, "bubbleBoxLogo");
+	svg = hideSvgGroup(svg, "loggedInAs");
+	svg = hideSvgGroup(svg, "bg");
+	FLfile.write(job.outputUri, svg);
+}
+
 function exportJob(doc, job) {
 	log("[" + job.category + "] " + job.exportPath + " from " + job.symbolName + " frame " + job.frame);
 	try {
@@ -498,6 +566,7 @@ function exportJob(doc, job) {
 	}
 	stageSymbol(doc, job.symbolName, job.frame);
 	exportCurrentView(job.outputUri);
+	postProcessExport(job);
 	try {
 		doc.selectAll();
 		doc.deleteSelection();
