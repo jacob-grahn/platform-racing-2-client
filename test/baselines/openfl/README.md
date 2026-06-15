@@ -4,19 +4,20 @@ Captured from the Haxe/OpenFL HTML5 build with `tools/openfl_driver.py`.
 
 - Stage size: `550x400`
 - Runtime path: `export/html5/bin/index.html`
-- Harness: `CharacterGraphic` with only `runAnim` visible
-- Part ids: `hat=1`, `head=1`, `body=1`, `feet=1`
+- Harness: local gameplay fixture with atlas-backed `CharacterDisplay`
+- Default part ids: `hat=2`, `head=1`, `body=1`, `feet=1`
 
 ## Captures
 
-- `run_harness.png` - Generated vector character art with id 1 character
-  parts selected and the run timeline advanced by the root 27 FPS frame loop.
+- `run_harness.png` - Local gameplay harness with the default outfit and the
+  root 27 FPS frame loop.
 
 ## Commands
 
 ```sh
 haxelib run openfl build html5
 python3 tools/openfl_driver.py --delay 1.6 shot test/baselines/openfl/run_harness.png
+python3 tools/openfl_driver.py --delay 2.0 --query 'hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite' shot test/output/openfl-character-outfit.png
 python3 tools/openfl_driver.py --fps-duration 30 --fps-target 27 --fps-tolerance 5 fps
 python3 tools/compare_screenshots.py test/baselines/flash/07_gameplay_start.jpg test/baselines/openfl/run_harness.png --diff test/output/openfl-vs-flash-diff.png --metrics test/output/openfl-vs-flash-metrics.json --threshold-percent 100 --threshold-rms 255
 ```

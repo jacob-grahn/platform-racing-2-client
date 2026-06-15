@@ -10,6 +10,7 @@ Commands:
 Shot options:
   --root <dir>                  HTML root, default export/html5/bin
   --delay <seconds>             wait before capture, default 1.5
+  --query <query>               query string to append to index.html
   --browser <path>              Chrome/Chromium binary path
   --fps-duration <seconds>      FPS validation duration, default 30.0
   --fps-target <fps>            FPS validation target, default 27
@@ -96,12 +97,13 @@ def shutil_which(command):
     return None
 
 
-def capture_shot(out_path, root, delay, browser_path):
+def capture_shot(out_path, root, delay, browser_path, query=""):
     browser = resolve_browser(browser_path)
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     virtual_time_ms = max(0, int(delay * 1000))
 
     with serve(root) as url:
+        url = append_query(url, query)
         command = [
             browser,
             "--headless=new",
@@ -131,10 +133,11 @@ def capture_shot(out_path, root, delay, browser_path):
     )
 
 
-def check_fps(root, duration, target, tolerance, browser_path):
+def check_fps(root, duration, target, tolerance, browser_path, query=""):
     browser = resolve_browser(browser_path)
 
     with serve(root) as url:
+        url = append_query(url, query)
         samples = run_browser_and_read_fps(browser, url, duration)
 
     expected_sample_count = int(duration)
@@ -310,7 +313,13 @@ def run_sequence(script_path, root, browser_path):
         action = step["action"]
         if action != "shot":
             raise SystemExit(f"Unsupported OpenFL sequence action: {action}")
-        capture_shot(step["out"], root, float(step["time"]), browser_path)
+        capture_shot(step["out"], root, float(step["time"]), browser_path, step.get("query", ""))
+
+
+def append_query(url, query):
+    if not query:
+        return url
+    return f"{url}?{query[1:] if query.startswith('?') else query}"
 
 
 def analyze_png(path):
@@ -403,6 +412,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--root", default=DEFAULT_ROOT)
     parser.add_argument("--delay", type=float, default=1.5)
+    parser.add_argument("--query", default="")
     parser.add_argument("--browser")
     parser.add_argument("--fps-duration", type=float, default=30.0)
     parser.add_argument("--fps-target", type=int, default=27)
@@ -419,11 +429,11 @@ def main():
 
     args = parser.parse_args()
     if args.command == "shot":
-        capture_shot(args.out, args.root, args.delay, args.browser)
+        capture_shot(args.out, args.root, args.delay, args.browser, args.query)
     elif args.command == "sequence":
         run_sequence(args.script, args.root, args.browser)
     elif args.command == "fps":
-        check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser)
+        check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser, args.query)
 
 
 if __name__ == "__main__":

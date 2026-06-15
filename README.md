@@ -212,6 +212,12 @@ Capture an OpenFL screenshot after launching the app:
 python3 tools/openfl_driver.py --delay 2.0 shot test/baselines/openfl/run_harness.png
 ```
 
+Capture a representative character outfit for comparison work:
+
+```sh
+python3 tools/openfl_driver.py --delay 2.0 --query 'hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite' shot test/output/openfl-character-outfit.png
+```
+
 Compare two stage screenshots and write diff artifacts:
 
 ```sh

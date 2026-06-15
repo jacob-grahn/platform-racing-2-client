@@ -22,6 +22,7 @@ class GameplayHarness extends Sprite {
 	private static inline var FIXTURE_PATH:String = "assets/fixtures/flat-level.json";
 
 	private final level:FixtureLevel;
+	private final options:GameplayHarnessOptions;
 	private final player:LocalPlayerController;
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 	private var frameCounter:Int = 0;
@@ -29,9 +30,10 @@ class GameplayHarness extends Sprite {
 	private var playerDisplay:Sprite;
 	private var characterDisplay:CharacterDisplay;
 
-	public function new(?level:FixtureLevel) {
+	public function new(?level:FixtureLevel, ?options:GameplayHarnessOptions) {
 		super();
 		this.level = level == null ? loadDefaultFixture() : level;
+		this.options = options == null ? loadDefaultOptions() : options;
 		player = new LocalPlayerController(this.level);
 
 		drawStageBackground();
@@ -47,6 +49,14 @@ class GameplayHarness extends Sprite {
 		return LevelFixtureParser.parse(Assets.getText(FIXTURE_PATH));
 	}
 
+	private static function loadDefaultOptions():GameplayHarnessOptions {
+		#if js
+		return GameplayHarnessOptions.parseQuery(Browser.location.search);
+		#else
+		return GameplayHarnessOptions.defaults();
+		#end
+	}
+
 	private function drawStageBackground():Void {
 		var background = new Shape();
 		background.graphics.beginFill(Constants.BACKGROUND_COLOR);
@@ -58,7 +68,11 @@ class GameplayHarness extends Sprite {
 	private function createPlayerDisplay():Void {
 		playerDisplay = new Sprite();
 
-		characterDisplay = new CharacterDisplay({hat: 2, head: 1, body: 1, feet: 1}, {primary: 0x2F86FF, secondary: 0xFFCC33});
+		characterDisplay = new CharacterDisplay(
+			options.partIds,
+			{primary: options.primaryColor, secondary: options.secondaryColor},
+			options.renderMode
+		);
 		characterDisplay.x = LocalPlayerController.STANDING_WIDTH / 2;
 		characterDisplay.y = LocalPlayerController.STANDING_HEIGHT;
 		characterDisplay.scaleX = 0.9;
@@ -100,11 +114,12 @@ class GameplayHarness extends Sprite {
 			+ 'frame=$frameCounter fixedDt=${Constants.FIXED_TIMESTEP_SECONDS}\n'
 			+ 'player ${playerState.serialize()}\n'
 			+ 'finish=${level.finish.x},${level.finish.y} blocks=${level.blocks.length}\n'
+			+ 'outfit=${options.serialize()}\n'
 			+ 'characterRender=${characterDisplay.renderMode.toLabel()}';
 	}
 
 	private function exportDebugState():Void {
-		var state = 'fixture=${level.id};frame=$frameCounter;${player.debugState().serialize()};finish=${level.finish.x},${level.finish.y};blocks=${level.blocks.length};characterRender=${characterDisplay.renderMode.toLabel()}';
+		var state = 'fixture=${level.id};frame=$frameCounter;${player.debugState().serialize()};finish=${level.finish.x},${level.finish.y};blocks=${level.blocks.length};${options.serialize()};characterRender=${characterDisplay.renderMode.toLabel()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-harness", "gameplay");
 		Browser.document.body.setAttribute("data-pr2-debug-state", state);

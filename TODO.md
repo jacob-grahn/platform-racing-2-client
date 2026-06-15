@@ -143,6 +143,9 @@ rather than becoming an open-ended art project.
     atlas-backed hat/head/body/feet static, primary, and secondary layers into
     the named part slots. It also has an explicit composite render mode for
     fallback/debug preview, and the gameplay harness can toggle it with `C`.
+    Representative outfits can also be selected from the browser query string
+    for screenshot capture, for example
+    `hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite`.
   - Remaining: add Flash screenshot comparisons for representative outfits.
 - [ ] Compare representative character screenshots against Flash.
   - Default outfit.
