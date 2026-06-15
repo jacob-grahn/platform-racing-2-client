@@ -397,10 +397,11 @@ Acceptance for this section:
   - `tools/compare_screenshots.py` compares PNG/JPEG screenshots with RGB
     pixel metrics, repeated ignored rectangles, threshold failures, amplified
     diff PNG output, and JSON metrics output.
-- [ ] Add debug-state comparison for OpenFL.
-  - Movement state.
-  - Current level/fixture state.
-  - Current character appearance state.
+- [x] Add debug-state comparison for OpenFL.
+  - `tools/openfl_driver.py debug-state` reads `data-pr2-debug-state`
+    through Chrome DevTools after a configurable delay.
+  - Repeated `--expect key=value` checks validate movement state, current
+    level/fixture state, and current character appearance/render state.
 - [ ] Keep deterministic and real-server tests separate.
   - Fixture tests verify parity.
   - Real-server tests verify connectivity and broad behavior only.

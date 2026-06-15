@@ -218,6 +218,17 @@ Capture a representative character outfit for comparison work:
 python3 tools/openfl_driver.py --delay 2.0 --query 'hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite' shot test/output/openfl-character-outfit.png
 ```
 
+Read and validate the OpenFL harness debug state:
+
+```sh
+python3 tools/openfl_driver.py --delay 1.0 \
+  --expect fixture=flat-level \
+  --expect x=75 \
+  --expect y=270 \
+  --expect grounded=true \
+  debug-state
+```
+
 Compare two stage screenshots and write diff artifacts:
 
 ```sh

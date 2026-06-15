@@ -5,6 +5,7 @@ openfl_driver.py - drive the PR2 OpenFL HTML5 build for visual checks.
 Commands:
   shot <out.png>                serve export/html5/bin and capture a screenshot
   fps                           run the build and validate logged FPS samples
+  debug-state                   read and optionally validate harness debug state
   sequence <script.json>        replay timed screenshot actions
 
 Shot options:
@@ -15,6 +16,7 @@ Shot options:
   --fps-duration <seconds>      FPS validation duration, default 30.0
   --fps-target <fps>            FPS validation target, default 27
   --fps-tolerance <fps>         FPS validation tolerance, default 5
+  --expect <key=value>          expected debug-state field, repeatable
 
 Sequence script format:
   [
@@ -155,6 +157,82 @@ def check_fps(root, duration, target, tolerance, browser_path, query=""):
         failure_text = ", ".join(f"{second}s={sample}" for second, sample in failures)
         raise SystemExit(f"FPS validation failed: {failure_text}")
     print("FPS validation passed.")
+
+
+def check_debug_state(root, delay, browser_path, query, expected):
+    browser = resolve_browser(browser_path)
+
+    with serve(root) as url:
+        url = append_query(url, query)
+        state_text = run_browser_and_read_debug_state(browser, url, delay)
+
+    state = parse_debug_state(state_text)
+    print("Debug state:", state_text)
+
+    failures = []
+    for expectation in expected:
+        key, expected_value = parse_expectation(expectation)
+        actual_value = state.get(key)
+        if actual_value != expected_value:
+            failures.append((key, expected_value, actual_value))
+
+    if failures:
+        for key, expected_value, actual_value in failures:
+            print(f"Expected {key}={expected_value}, got {actual_value}", file=sys.stderr)
+        raise SystemExit("Debug-state validation failed.")
+
+    if expected:
+        print(f"Debug-state validation passed ({len(expected)} expectations).")
+
+
+def run_browser_and_read_debug_state(browser, url, delay):
+    debug_port = reserve_port()
+    user_data_dir = tempfile.mkdtemp(prefix="pr2-openfl-chrome-")
+    command = [
+        browser,
+        "--headless=new",
+        "--disable-gpu",
+        "--hide-scrollbars",
+        "--window-size=550,400",
+        f"--remote-debugging-port={debug_port}",
+        f"--user-data-dir={user_data_dir}",
+        url,
+    ]
+    process = subprocess.Popen(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        page_ws_url = wait_for_page_websocket(debug_port)
+        time.sleep(delay)
+        state_text = cdp_evaluate(page_ws_url, 'document.body.getAttribute("data-pr2-debug-state") || ""')
+        if not state_text:
+            raise SystemExit("OpenFL harness did not expose data-pr2-debug-state.")
+        return state_text
+    finally:
+        process.terminate()
+        try:
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+        shutil.rmtree(user_data_dir, ignore_errors=True)
+
+
+def parse_debug_state(state_text):
+    state = {}
+    for part in state_text.split(";"):
+        if not part:
+            continue
+        key, separator, value = part.partition("=")
+        if not separator:
+            raise SystemExit(f"Malformed debug-state field: {part}")
+        state[key] = value
+    return state
+
+
+def parse_expectation(expectation):
+    key, separator, value = expectation.partition("=")
+    if not separator or not key:
+        raise SystemExit(f"Expected --expect key=value, got: {expectation}")
+    return key, value
 
 
 def run_browser_and_read_fps(browser, url, duration):
@@ -417,6 +495,7 @@ def main():
     parser.add_argument("--fps-duration", type=float, default=30.0)
     parser.add_argument("--fps-target", type=int, default=27)
     parser.add_argument("--fps-tolerance", type=int, default=5)
+    parser.add_argument("--expect", action="append", default=[])
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     shot = subparsers.add_parser("shot")
@@ -426,6 +505,7 @@ def main():
     sequence.add_argument("script")
 
     subparsers.add_parser("fps")
+    subparsers.add_parser("debug-state")
 
     args = parser.parse_args()
     if args.command == "shot":
@@ -434,6 +514,8 @@ def main():
         run_sequence(args.script, args.root, args.browser)
     elif args.command == "fps":
         check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser, args.query)
+    elif args.command == "debug-state":
+        check_debug_state(args.root, args.delay, args.browser, args.query, args.expect)
 
 
 if __name__ == "__main__":
