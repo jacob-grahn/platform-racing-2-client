@@ -63,7 +63,7 @@ M 255 77.7
 L 260.8 62.85 289.2 64.75 295 80.25 275 93.5 255 77.7 295 80.25"/>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, -263.9,-212.9) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Graphics_Symbol_325_0_Layer3_0_FILL"/>

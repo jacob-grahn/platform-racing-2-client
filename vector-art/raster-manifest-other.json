@@ -26,8 +26,8 @@
       "drawingBounds": {
         "height": 400.0,
         "width": 550.0,
-        "x": -275.0,
-        "y": -200.0
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg1@4x.png",
       "scale": 4,
@@ -41,8 +41,8 @@
         "empty": false,
         "height": 1600,
         "width": 2200,
-        "x": -1100,
-        "y": -800
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -51,8 +51,8 @@
       "drawingBounds": {
         "height": 400.0,
         "width": 550.0,
-        "x": -275.0,
-        "y": -200.0
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg2@4x.png",
       "scale": 4,
@@ -66,8 +66,8 @@
         "empty": false,
         "height": 1600,
         "width": 2200,
-        "x": -1100,
-        "y": -800
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -76,8 +76,8 @@
       "drawingBounds": {
         "height": 400.0,
         "width": 550.0,
-        "x": -275.0,
-        "y": -200.0
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg3@4x.png",
       "scale": 4,
@@ -91,8 +91,8 @@
         "empty": false,
         "height": 1600,
         "width": 2200,
-        "x": -1100,
-        "y": -800
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -101,8 +101,8 @@
       "drawingBounds": {
         "height": 406.1,
         "width": 558.05,
-        "x": -279.0,
-        "y": -203.05
+        "x": -3.05,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg4@4x.png",
       "scale": 4,
@@ -116,8 +116,8 @@
         "empty": false,
         "height": 1625,
         "width": 2233,
-        "x": -1116,
-        "y": -813
+        "x": -13,
+        "y": 0
       }
     },
     {
@@ -126,8 +126,8 @@
       "drawingBounds": {
         "height": 400.0,
         "width": 550.0,
-        "x": -275.0,
-        "y": -200.0
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg5@4x.png",
       "scale": 4,
@@ -141,8 +141,8 @@
         "empty": false,
         "height": 1600,
         "width": 2200,
-        "x": -1100,
-        "y": -800
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -151,8 +151,8 @@
       "drawingBounds": {
         "height": 463.01,
         "width": 591.0,
-        "x": -295.5,
-        "y": -231.5
+        "x": -21.5,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg6@4x.png",
       "scale": 4,
@@ -166,8 +166,8 @@
         "empty": false,
         "height": 1852,
         "width": 2364,
-        "x": -1182,
-        "y": -926
+        "x": -86,
+        "y": 0
       }
     },
     {
@@ -176,8 +176,8 @@
       "drawingBounds": {
         "height": 425.85,
         "width": 623.85,
-        "x": -311.9,
-        "y": -212.9
+        "x": -48.0,
+        "y": 0.0
       },
       "png": "vector-art/png/backgrounds/bg7@4x.png",
       "scale": 4,
@@ -191,8 +191,8 @@
         "empty": false,
         "height": 1704,
         "width": 2496,
-        "x": -1248,
-        "y": -852
+        "x": -192,
+        "y": 0
       }
     },
     {
@@ -201,7 +201,7 @@
       "drawingBounds": {
         "height": 63.5416,
         "width": 39.4189,
-        "x": -19.7095,
+        "x": -62.9595,
         "y": -31.7708
       },
       "png": "vector-art/png/effects/laser_shot@4x.png",
@@ -216,7 +216,7 @@
         "empty": false,
         "height": 255,
         "width": 158,
-        "x": -79,
+        "x": -252,
         "y": -128
       }
     },
@@ -227,7 +227,7 @@
         "height": 799.965,
         "width": 1100.0,
         "x": -550.0,
-        "y": -399.9
+        "y": -401.0
       },
       "png": "vector-art/png/effects/lightning_bolt@4x.png",
       "scale": 4,
@@ -242,7 +242,7 @@
         "height": 3200,
         "width": 4400,
         "x": -2200,
-        "y": -1600
+        "y": -1604
       }
     },
     {
@@ -251,7 +251,7 @@
       "drawingBounds": {
         "height": 129.197,
         "width": 128.847,
-        "x": -64.4,
+        "x": -62.6,
         "y": -64.6
       },
       "png": "vector-art/png/effects/mine_appear@4x.png",
@@ -276,7 +276,7 @@
       "drawingBounds": {
         "height": 104.645,
         "width": 54.1077,
-        "x": -27.05,
+        "x": -27.2,
         "y": -52.3
       },
       "png": "vector-art/png/effects/mine_explosion@4x.png",
@@ -301,8 +301,8 @@
       "drawingBounds": {
         "height": 16.45,
         "width": 12.85,
-        "x": -6.4,
-        "y": -8.2
+        "x": -6.6,
+        "y": -8.25
       },
       "png": "vector-art/png/effects/mine_piece@4x.png",
       "scale": 4,
@@ -316,7 +316,7 @@
         "empty": false,
         "height": 67,
         "width": 52,
-        "x": -26,
+        "x": -27,
         "y": -33
       }
     },
@@ -326,8 +326,8 @@
       "drawingBounds": {
         "height": 68.2018,
         "width": 58.1756,
-        "x": -29.0574,
-        "y": -34.1056
+        "x": -1.10744,
+        "y": -29.1056
       },
       "png": "vector-art/png/effects/slash@4x.png",
       "scale": 4,
@@ -341,8 +341,8 @@
         "empty": false,
         "height": 273,
         "width": 233,
-        "x": -117,
-        "y": -137
+        "x": -5,
+        "y": -117
       }
     },
     {
@@ -402,7 +402,7 @@
         "height": 44.8003,
         "width": 159.999,
         "x": -79.9997,
-        "y": 5.43514
+        "y": -54.7649
       },
       "png": "vector-art/png/effects/sting@4x.png",
       "scale": 4,
@@ -417,7 +417,7 @@
         "height": 179,
         "width": 640,
         "x": -320,
-        "y": 21
+        "y": -220
       }
     },
     {
@@ -426,8 +426,8 @@
       "drawingBounds": {
         "height": 105.639,
         "width": 105.639,
-        "x": -52.8193,
-        "y": -52.8193
+        "x": -53.5193,
+        "y": -53.9193
       },
       "png": "vector-art/png/effects/teleport@4x.png",
       "scale": 4,
@@ -441,8 +441,8 @@
         "empty": false,
         "height": 423,
         "width": 423,
-        "x": -212,
-        "y": -212
+        "x": -215,
+        "y": -216
       }
     },
     {
@@ -451,8 +451,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/ice_wave@4x.png",
@@ -467,8 +467,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -477,8 +477,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/jet_pack@4x.png",
@@ -493,8 +493,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -503,8 +503,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/laser@4x.png",
@@ -519,8 +519,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -529,8 +529,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/lightning@4x.png",
@@ -545,8 +545,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -555,8 +555,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/mine@4x.png",
@@ -571,8 +571,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -581,8 +581,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/none@4x.png",
@@ -597,8 +597,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -607,8 +607,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/speed_burst@4x.png",
@@ -623,8 +623,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -633,8 +633,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/super_jump@4x.png",
@@ -649,8 +649,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -659,8 +659,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/sword@4x.png",
@@ -675,8 +675,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -685,8 +685,8 @@
       "drawingBounds": {
         "height": 68.2345,
         "width": 75.0222,
-        "x": -52.5104,
-        "y": -36.2528
+        "x": -0.0104154,
+        "y": -0.00284346
       },
       "group": "display",
       "png": "vector-art/png/items/display/teleport@4x.png",
@@ -701,8 +701,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     {
@@ -711,8 +711,8 @@
       "drawingBounds": {
         "height": 101.706,
         "width": 77.15,
-        "x": -38.55,
-        "y": -50.85
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/stamps/petrified_tree@4x.png",
       "scale": 4,
@@ -726,8 +726,8 @@
         "empty": false,
         "height": 407,
         "width": 309,
-        "x": -155,
-        "y": -204
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -736,8 +736,8 @@
       "drawingBounds": {
         "height": 91.0,
         "width": 87.2,
-        "x": -43.6,
-        "y": -45.5
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/stamps/rock1@4x.png",
       "scale": 4,
@@ -751,8 +751,8 @@
         "empty": false,
         "height": 364,
         "width": 349,
-        "x": -175,
-        "y": -182
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -761,8 +761,8 @@
       "drawingBounds": {
         "height": 118.296,
         "width": 125.604,
-        "x": -62.8,
-        "y": -59.1268
+        "x": 0.0,
+        "y": 0.0231507
       },
       "png": "vector-art/png/stamps/rock2@4x.png",
       "scale": 4,
@@ -776,8 +776,8 @@
         "empty": false,
         "height": 474,
         "width": 503,
-        "x": -252,
-        "y": -237
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -786,8 +786,8 @@
       "drawingBounds": {
         "height": 319.816,
         "width": 114.0,
-        "x": -57.0,
-        "y": -159.91
+        "x": 0.0,
+        "y": -0.0101626
       },
       "png": "vector-art/png/stamps/spire1@4x.png",
       "scale": 4,
@@ -801,8 +801,8 @@
         "empty": false,
         "height": 1279,
         "width": 456,
-        "x": -228,
-        "y": -640
+        "x": 0,
+        "y": -1
       }
     },
     {
@@ -811,8 +811,8 @@
       "drawingBounds": {
         "height": 268.287,
         "width": 294.1,
-        "x": -147.05,
-        "y": -134.15
+        "x": -0.2,
+        "y": 0.0
       },
       "png": "vector-art/png/stamps/spire2@4x.png",
       "scale": 4,
@@ -826,8 +826,8 @@
         "empty": false,
         "height": 1074,
         "width": 1177,
-        "x": -589,
-        "y": -537
+        "x": -1,
+        "y": 0
       }
     },
     {
@@ -836,8 +836,8 @@
       "drawingBounds": {
         "height": 172.732,
         "width": 227.991,
-        "x": -113.991,
-        "y": -86.3316
+        "x": 0.0088015,
+        "y": 0.0683544
       },
       "png": "vector-art/png/stamps/tree1@4x.png",
       "scale": 4,
@@ -851,8 +851,8 @@
         "empty": false,
         "height": 691,
         "width": 912,
-        "x": -456,
-        "y": -346
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -861,8 +861,8 @@
       "drawingBounds": {
         "height": 248.882,
         "width": 187.8,
-        "x": -93.9,
-        "y": -124.45
+        "x": 0.0,
+        "y": 0.0
       },
       "png": "vector-art/png/stamps/tree2@4x.png",
       "scale": 4,
@@ -876,8 +876,8 @@
         "empty": false,
         "height": 997,
         "width": 752,
-        "x": -376,
-        "y": -498
+        "x": 0,
+        "y": 0
       }
     },
     {
@@ -886,8 +886,8 @@
       "drawingBounds": {
         "height": 236.594,
         "width": 194.0,
-        "x": -97.0,
-        "y": -118.294
+        "x": 0.0,
+        "y": 0.00563166
       },
       "png": "vector-art/png/stamps/tree3@4x.png",
       "scale": 4,
@@ -901,8 +901,8 @@
         "empty": false,
         "height": 946,
         "width": 776,
-        "x": -388,
-        "y": -474
+        "x": 0,
+        "y": 0
       }
     }
   ],

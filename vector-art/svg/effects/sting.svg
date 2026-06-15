@@ -8,7 +8,7 @@ L 83.95 -3.45 44.6 -19.25 0 0 46.4 -4.35 91.45 21.65 105.95 -3.45 141.6 6.75 150
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0,60.2) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g id="rightSting" transform="matrix( 0.4640350341796875, 0, 0, 0.463531494140625, 10,-20) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Parts_Hats_Jellyfish_jellyfishSting_0_Layer0_0_FILL"/>

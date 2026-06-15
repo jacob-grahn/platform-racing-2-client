@@ -15,8 +15,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "jet_pack": {
@@ -32,8 +32,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "laser": {
@@ -49,8 +49,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "lightning": {
@@ -66,8 +66,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "mine": {
@@ -83,8 +83,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "none": {
@@ -100,8 +100,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "speed_burst": {
@@ -117,8 +117,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "super_jump": {
@@ -134,8 +134,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "sword": {
@@ -151,8 +151,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     },
     "teleport": {
@@ -168,8 +168,8 @@
         "empty": false,
         "height": 274,
         "width": 301,
-        "x": -211,
-        "y": -146
+        "x": -1,
+        "y": -1
       }
     }
   },

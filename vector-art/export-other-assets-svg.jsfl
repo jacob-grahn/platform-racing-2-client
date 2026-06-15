@@ -463,6 +463,13 @@ function stageSymbol(doc, symbolName, frame) {
 	if (!instance) {
 		throw new Error("Could not stage library item: " + symbolName);
 	}
+	// `addItemToDocument({x:0,y:0})` places many library items by their visual
+	// center. Resetting the instance matrix preserves the symbol registration
+	// point, which is what timeline matrices in the XFL reference.
+	try {
+		instance.matrix = { a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 };
+	} catch (e) {
+	}
 	try {
 		instance.symbolType = "graphic";
 	} catch (e) {

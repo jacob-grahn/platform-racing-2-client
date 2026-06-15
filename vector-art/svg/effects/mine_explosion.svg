@@ -22,7 +22,7 @@ Q 400 244.45 327.8 172.2 255.55 100 250 0 244.45 100 172.2 172.2 100 244.45 0 25
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0.15,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 0.10821533203125, 0, 0, 0.10821533203125, -27.2,-27.05) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#MovieClips_Symbol_973_0_Layer0_0_FILL"/>

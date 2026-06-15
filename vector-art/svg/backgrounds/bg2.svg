@@ -66,7 +66,7 @@ Q 333.05 209.95 333.8 211.3 Z"/>
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, -275,-200) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#UI_Pages_Levels_Backgrounds_bg2_0_Layer0_0_FILL"/>
 </g>

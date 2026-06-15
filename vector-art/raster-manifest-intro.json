@@ -17,8 +17,8 @@
       "drawingBounds": {
         "height": 144.4,
         "width": 157.25,
-        "x": -78.6,
-        "y": -72.2
+        "x": -84.4,
+        "y": -90.2
       },
       "group": "kongregate",
       "png": "vector-art/png/intro/kongregate/graphic_28@4x.png",
@@ -33,8 +33,8 @@
         "empty": false,
         "height": 578,
         "width": 629,
-        "x": -315,
-        "y": -289
+        "x": -338,
+        "y": -361
       }
     },
     {
@@ -43,8 +43,8 @@
       "drawingBounds": {
         "height": 397.75,
         "width": 549.9,
-        "x": -274.95,
-        "y": -198.85
+        "x": -276.05,
+        "y": -199.5
       },
       "group": "kongregate",
       "png": "vector-art/png/intro/kongregate/graphic_42@4x.png",
@@ -59,8 +59,8 @@
         "empty": false,
         "height": 1591,
         "width": 2200,
-        "x": -1100,
-        "y": -796
+        "x": -1105,
+        "y": -798
       }
     },
     {
@@ -95,7 +95,7 @@
       "drawingBounds": {
         "height": 233.501,
         "width": 240.948,
-        "x": -120.474,
+        "x": -120.424,
         "y": -116.75
       },
       "group": "kongregate",
@@ -174,7 +174,7 @@
         "height": 56.25,
         "width": 61.8,
         "x": -30.9,
-        "y": -28.1
+        "y": -28.15
       },
       "group": "kongregate",
       "png": "vector-art/png/intro/kongregate/symbol_34@4x.png",
@@ -277,8 +277,8 @@
       "drawingBounds": {
         "height": 71.3579,
         "width": 103.611,
-        "x": -51.7813,
-        "y": -33.9956
+        "x": -50.4813,
+        "y": -34.0456
       },
       "group": "kongregate",
       "png": "vector-art/png/intro/kongregate/symbol_41@4x.png",
@@ -293,8 +293,8 @@
         "empty": false,
         "height": 286,
         "width": 415,
-        "x": -208,
-        "y": -136
+        "x": -202,
+        "y": -137
       }
     },
     {
@@ -329,8 +329,8 @@
       "drawingBounds": {
         "height": 389.95,
         "width": 402.95,
-        "x": -201.45,
-        "y": -194.95
+        "x": -221.95,
+        "y": -235.0
       },
       "group": "kongregate",
       "png": "vector-art/png/intro/kongregate/symbol_47@4x.png",
@@ -345,8 +345,8 @@
         "empty": false,
         "height": 1560,
         "width": 1612,
-        "x": -806,
-        "y": -780
+        "x": -888,
+        "y": -940
       }
     },
     {
@@ -381,8 +381,8 @@
       "drawingBounds": {
         "height": 11.5957,
         "width": 128.765,
-        "x": -64.4961,
-        "y": -4.31719
+        "x": -65.1461,
+        "y": -3.51719
       },
       "group": "kongregate",
       "png": "vector-art/png/intro/kongregate/symbol_52@4x.png",
@@ -397,8 +397,8 @@
         "empty": false,
         "height": 46,
         "width": 516,
-        "x": -258,
-        "y": -18
+        "x": -261,
+        "y": -15
       }
     }
   ],

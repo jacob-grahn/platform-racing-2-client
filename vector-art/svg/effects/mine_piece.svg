@@ -22,7 +22,7 @@ L 0.55 -7.25 -1.25 -6.55 1.9 -5.65 -0.85 -4.65 -4.1 1 -2.2 -1.55 -2.6 1.8 0.95 5
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0.2,0.05) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Graphics_Symbol_467_0_Layer2_0_FILL"/>

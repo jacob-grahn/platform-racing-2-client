@@ -190,7 +190,7 @@ M 0.8 240.55
 L 0.3 240.55"/>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, -146.85,-134.15) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Graphics_Symbol_341_0_Layer2_0_FILL"/>

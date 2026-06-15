@@ -114,7 +114,7 @@ L 1627 0 1815 0 1815 725 Z"/>
 </font>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 0.65,-0.8) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, -65.65,-6.45) ">
 <clipPath id="Mask_Mask_1">
 <rect x="-2" y="-2" width="134" height="18.55" fill="#FFFFFF" stroke="none"/>

@@ -930,7 +930,7 @@ Q 409.5 163.8 409.95 167.65 Z"/>
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, -275.95,-203.05) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Graphics_Symbol_337_0_Layer4_0_FILL"/>

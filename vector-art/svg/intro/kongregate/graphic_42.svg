@@ -10,7 +10,7 @@ L 72.85 -90.2 72.85 63.9 -84.4 63.9 -84.4 -90.2 Z"/>
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 1.1,0.65) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Graphics_Symbol_42_0_Layer0_0_FILL"/>
 </g>

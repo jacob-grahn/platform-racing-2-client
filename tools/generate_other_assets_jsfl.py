@@ -254,6 +254,13 @@ function stageSymbol(doc, symbolName, frame) {{
 \tif (!instance) {{
 \t\tthrow new Error("Could not stage library item: " + symbolName);
 \t}}
+\t// `addItemToDocument({{x:0,y:0}})` places many library items by their visual
+\t// center. Resetting the instance matrix preserves the symbol registration
+\t// point, which is what timeline matrices in the XFL reference.
+\ttry {{
+\t\tinstance.matrix = {{ a: 1, b: 0, c: 0, d: 1, tx: 0, ty: 0 }};
+\t}} catch (e) {{
+\t}}
 \ttry {{
 \t\tinstance.symbolType = "graphic";
 \t}} catch (e) {{

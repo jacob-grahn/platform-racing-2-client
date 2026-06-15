@@ -46,7 +46,7 @@ L 453.3 61.85 453.6 62.5 453.4 62.55 Z"/>
 </g>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, -275,-200) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#Graphics_Symbol_327_0_Layer1_0_FILL"/>

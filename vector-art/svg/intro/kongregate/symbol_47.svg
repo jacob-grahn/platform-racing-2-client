@@ -171,7 +171,7 @@ Q -18.05 -12.4 -8.8 -8.4
 L 21.3 6.75 18.95 10.45 Z"/>
 </defs>
 
-<g transform="matrix( 1, 0, 0, 1, 20.5,40.05) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#MovieClips_Symbol_47_0_Layer32_0_FILL"/>
 
