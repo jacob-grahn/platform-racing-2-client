@@ -53,6 +53,21 @@ typedef EdgeDef = {
 	@:optional var cubics:String;
 }
 
+typedef FilterDef = {
+	var type:String;
+	@:optional var blurX:Float;
+	@:optional var blurY:Float;
+	@:optional var strength:Float;
+	@:optional var quality:Int;
+	@:optional var color:Int;
+	@:optional var alpha:Float;
+	@:optional var angle:Float;
+	@:optional var distance:Float;
+	@:optional var inner:Bool;
+	@:optional var knockout:Bool;
+	@:optional var hideObject:Bool;
+}
+
 typedef DisplayElementDef = {
 	var type:String;
 	@:optional var name:String;
@@ -74,6 +89,7 @@ typedef DisplayElementDef = {
 	@:optional var strokes:Array<IndexedStyleDef>;
 	@:optional var edges:Array<EdgeDef>;
 	@:optional var bounds:BoundsDef;
+	@:optional var filters:Array<FilterDef>;
 	@:optional var children:Array<DisplayElementDef>;
 }
 

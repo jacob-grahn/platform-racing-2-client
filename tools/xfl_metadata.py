@@ -141,6 +141,56 @@ def parse_point(element):
     return point
 
 
+# Filter element types we carry through to the runtime. Other Animate filters
+# (Bevel, gradient glow/bevel, adjust color, convolution) are not used by the
+# PR2 library and have no OpenFL mapping here, so they are skipped.
+SUPPORTED_FILTERS = ("BlurFilter", "GlowFilter", "DropShadowFilter")
+FILTER_FLOAT_ATTRS = ("blurX", "blurY", "strength", "alpha", "angle", "distance")
+FILTER_INT_ATTRS = ("quality",)
+FILTER_BOOL_ATTRS = ("inner", "knockout", "hideObject")
+
+
+def parse_color_hex(value):
+    if not value:
+        return None
+    try:
+        return int(value.lstrip("#"), 16)
+    except ValueError:
+        return None
+
+
+def parse_filter(element):
+    record = {"type": local_name(element.tag)}
+    attrs = element.attrib
+    for name in FILTER_FLOAT_ATTRS:
+        value = maybe_float(attrs.get(name))
+        if value is not None:
+            record[name] = value
+    for name in FILTER_INT_ATTRS:
+        value = maybe_int(attrs.get(name))
+        if value is not None:
+            record[name] = value
+    for name in FILTER_BOOL_ATTRS:
+        value = parse_bool(attrs.get(name))
+        if value is not None:
+            record[name] = value
+    color = parse_color_hex(attrs.get("color"))
+    if color is not None:
+        record["color"] = color
+    return record
+
+
+def parse_filters(element):
+    wrapper = first_direct_child(element, "filters")
+    if wrapper is None:
+        return []
+    return [
+        parse_filter(child)
+        for child in list(wrapper)
+        if local_name(child.tag) in SUPPORTED_FILTERS
+    ]
+
+
 def parse_color_transform(element):
     color = parse_direct_float_child(
         element,
@@ -309,6 +359,10 @@ def parse_common_display_attrs(element):
     color = parse_color_transform(element)
     if color:
         record["color"] = color
+
+    filters = parse_filters(element)
+    if filters:
+        record["filters"] = filters
 
     return compact_record(record)
 

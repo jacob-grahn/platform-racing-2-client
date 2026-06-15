@@ -158,6 +158,21 @@ typedef EdgeDef = {
 \t@:optional var cubics:String;
 }
 
+typedef FilterDef = {
+\tvar type:String;
+\t@:optional var blurX:Float;
+\t@:optional var blurY:Float;
+\t@:optional var strength:Float;
+\t@:optional var quality:Int;
+\t@:optional var color:Int;
+\t@:optional var alpha:Float;
+\t@:optional var angle:Float;
+\t@:optional var distance:Float;
+\t@:optional var inner:Bool;
+\t@:optional var knockout:Bool;
+\t@:optional var hideObject:Bool;
+}
+
 typedef DisplayElementDef = {
 \tvar type:String;
 \t@:optional var name:String;
@@ -179,6 +194,7 @@ typedef DisplayElementDef = {
 \t@:optional var strokes:Array<IndexedStyleDef>;
 \t@:optional var edges:Array<EdgeDef>;
 \t@:optional var bounds:BoundsDef;
+\t@:optional var filters:Array<FilterDef>;
 \t@:optional var children:Array<DisplayElementDef>;
 }
 

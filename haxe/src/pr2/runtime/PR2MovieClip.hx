@@ -6,9 +6,14 @@ import openfl.display.FrameLabel;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.filters.BitmapFilter;
+import openfl.filters.BlurFilter;
+import openfl.filters.DropShadowFilter;
+import openfl.filters.GlowFilter;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
+import pr2.generated.assets.AssetTypes.FilterDef;
 import pr2.generated.assets.AssetTypes.FrameDef;
 import pr2.generated.assets.AssetTypes.LabelDef;
 import pr2.generated.assets.AssetTypes.LayerDef;
@@ -385,6 +390,65 @@ class PR2MovieClip extends Sprite {
 				color.blueOffset == null ? 0 : color.blueOffset,
 				color.alphaOffset == null ? 0 : color.alphaOffset
 			);
+		}
+
+		// Reassign filters every frame so a reused clip drops any filter left
+		// over from a previous keyframe; OpenFL only re-renders the filter pass
+		// when the array reference is set.
+		child.filters = element.filters == null ? null : buildFilters(element.filters);
+	}
+
+	private function buildFilters(defs:Array<FilterDef>):Array<BitmapFilter> {
+		var result:Array<BitmapFilter> = [];
+		for (def in defs) {
+			var filter = buildFilter(def);
+			if (filter != null) {
+				result.push(filter);
+			}
+		}
+		return result;
+	}
+
+	/**
+		Maps an XFL filter def to its OpenFL equivalent. Missing attributes fall
+		back to the OpenFL constructor defaults, which match the Flash authoring
+		defaults the XFL omits, so the rendered result matches the original.
+	**/
+	private function buildFilter(def:FilterDef):Null<BitmapFilter> {
+		return switch (def.type) {
+			case "BlurFilter":
+				new BlurFilter(
+					def.blurX == null ? 4 : def.blurX,
+					def.blurY == null ? 4 : def.blurY,
+					def.quality == null ? 1 : def.quality
+				);
+			case "GlowFilter":
+				new GlowFilter(
+					def.color == null ? 0xFF0000 : def.color,
+					def.alpha == null ? 1 : def.alpha,
+					def.blurX == null ? 6 : def.blurX,
+					def.blurY == null ? 6 : def.blurY,
+					def.strength == null ? 2 : def.strength,
+					def.quality == null ? 1 : def.quality,
+					def.inner == null ? false : def.inner,
+					def.knockout == null ? false : def.knockout
+				);
+			case "DropShadowFilter":
+				new DropShadowFilter(
+					def.distance == null ? 4 : def.distance,
+					def.angle == null ? 45 : def.angle,
+					def.color == null ? 0 : def.color,
+					def.alpha == null ? 1 : def.alpha,
+					def.blurX == null ? 4 : def.blurX,
+					def.blurY == null ? 4 : def.blurY,
+					def.strength == null ? 1 : def.strength,
+					def.quality == null ? 1 : def.quality,
+					def.inner == null ? false : def.inner,
+					def.knockout == null ? false : def.knockout,
+					def.hideObject == null ? false : def.hideObject
+				);
+			default:
+				null;
 		}
 	}
 }
