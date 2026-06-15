@@ -244,11 +244,23 @@ Follow-up asset coverage audit:
   - Initial candidates: `LevelEditorMenuGraphic`, `DrawingPopupGraphic`,
     `HatPickerGraphic`, `LobbyGraphic`, `LobbyBottomButtonsGraphic`,
     `PlayersTabListGraphic`, `GetLevelsPopupGraphic`, and `StorePopupGraphic`.
-- [ ] Decide how to handle intro/logo animations.
-  - Candidates include `JiggminIntroGraphic`, `KongregateIntroGraphic`,
-    `ArmorIntroGraphic`, `BubbleBoxIntroGraphic`,
-    `PR2_Graphics_1_Apr_2014_fla.logoAnim_258`, and
-    `PR2_Graphics_1_Apr_2014_fla.ag_intro_mc_247`.
+- [x] Decide how to handle intro/logo animations.
+  - Intro/logo MovieClips are driven by the `PR2MovieClip` timeline runtime,
+    not baked per-frame sequences. The Flash page system is ported under
+    `pr2.page` (`Page`, `PageHolder`, `IntroPage`, stub `LoginPage`), and
+    `IntroPage` reproduces the original `menu.IntroPage` flow: queue intros by
+    site mode, play each one, reproduce its final-frame `COMPLETE` frame
+    script with `setFrameScript`, click-to-skip, then transition to login.
+  - `JiggminIntroGraphic` renders well; its wordmark is the bundled
+    `assets/blocks/jiggmin_logo.png` bitmap injected into `logo.logo_mc` (the
+    original `PixelEffect1` pixel dissolve is not ported yet).
+  - `KongregateIntroGraphic` is wired and plays/transitions correctly but
+    renders blank: its logo is the unexported `bitmap379.jpg` plus nested
+    vector pieces the renderer does not handle yet. See the bitmap audit below.
+  - `ArmorIntroGraphic` / `BubbleBoxIntroGraphic` are reachable by site mode
+    but unverified.
+  - Remaining: port `com.jiggmin.pixelEffects.PixelEffect1` for the Jiggmin
+    dissolve; export/render the Kongregate intro art.
 - [ ] Audit the five unexported bitmap media entries.
   - 31 bitmap items exist in the XFL; 26 block tile bitmaps are exported.
   - `Images/bitmap379.jpg` exists as a normal XFL image file and appears to be
@@ -416,6 +428,8 @@ Initial suites:
 
 - [x] `harness-boot`
 - [x] `character-customization`
+- [ ] `intro-flow` (Jiggmin renders; verify via `data-pr2-intro-state` and
+  click-to-skip; Kongregate render pending its art)
 - [ ] `level-load-flat`
 - [x] `run-right`
 - [x] `jump`

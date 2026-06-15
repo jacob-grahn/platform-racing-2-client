@@ -1,5 +1,5 @@
 {
-  "query": "hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite",
+  "query": "hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite&screen=harness",
   "steps": [
     {
       "time": 2.0,

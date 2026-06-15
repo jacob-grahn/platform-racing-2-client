@@ -3,47 +3,25 @@ package;
 #if js
 import js.Browser;
 #end
-import openfl.display.Shape;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
-import openfl.events.Event;
-import openfl.events.KeyboardEvent;
-import openfl.events.MouseEvent;
-import openfl.geom.Point;
-import openfl.Lib;
-import openfl.text.TextField;
-import openfl.text.TextFieldAutoSize;
-import openfl.text.TextFormat;
-import openfl.ui.Keyboard;
 import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
+import openfl.events.Event;
 import pr2.Constants;
-import pr2.character.CharacterAppearance;
+import pr2.app.QueryParams;
+import pr2.app.Screen;
 import pr2.harness.GameplayHarness;
-import pr2.runtime.PR2MovieClip;
+import pr2.page.IntroPage;
+import pr2.page.LoginPage;
+import pr2.page.PageHolder;
 
+/**
+	Application entry point. Boots into a screen selected by the `?screen=`
+	query flag (default `intro`), which lets development and the OpenFL test
+	harness jump straight to any screen.
+**/
 class Main extends Sprite {
-	private var background:Shape;
-	private var characterClip:PR2MovieClip;
-	private var runAnim:PR2MovieClip;
-	private var frameCounter:Int = 0;
-	private var pressedKeys:Map<Int, Bool> = new Map();
-	private var inputLog:Array<String> = [];
-	private var statusText:TextField;
-	private var harnessText:TextField;
-	private var pointerText:TextField;
-	private var latestPartTransformLog:String = "";
-	private var partBaselineCenters:Map<String, Point> = new Map();
-	private var fpsWindowStartMs:Int = 0;
-	private var fpsWindowFrames:Int = 0;
-	private var observedFps:Int = 0;
-	private var fpsSamples:Array<Int> = [];
-	private static inline var CHARACTER_SCALE:Float = 6.0;
-	private static inline var TEST_HAT_ID:Int = 1;
-	private static inline var TEST_HEAD_ID:Int = 1;
-	private static inline var TEST_BODY_ID:Int = 1;
-	private static inline var TEST_FEET_ID:Int = 1;
-
 	public function new() {
 		super();
 
@@ -61,292 +39,36 @@ class Main extends Sprite {
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 
-		addChild(new GameplayHarness());
-		fpsWindowStartMs = Lib.getTimer();
-		logInput("boot stage=" + Constants.STAGE_WIDTH + "x" + Constants.STAGE_HEIGHT + " fps=" + Constants.FRAME_RATE);
-	}
-
-	private function drawBackground():Void {
-		background = new Shape();
-		background.graphics.beginFill(Constants.BACKGROUND_COLOR);
-		background.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		background.graphics.endFill();
-		addChild(background);
-
-		var ground = new Shape();
-		ground.graphics.beginFill(0x303950);
-		ground.graphics.drawRect(0, 304, Constants.STAGE_WIDTH, 96);
-		ground.graphics.endFill();
-		ground.graphics.lineStyle(2, 0x6D7FA8, 0.75);
-		ground.graphics.moveTo(0, 304);
-		ground.graphics.lineTo(Constants.STAGE_WIDTH, 304);
-		addChild(ground);
-	}
-
-	private function createCharacterRunHarness():Void {
-		characterClip = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
-		characterClip.x = 276;
-		characterClip.y = 268;
-		characterClip.scaleX = CHARACTER_SCALE;
-		characterClip.scaleY = CHARACTER_SCALE;
-		addChild(characterClip);
-
-		showOnlyCharacterState("runAnim");
-		if (runAnim != null) {
-			runAnim.gotoAndStop(1);
+		try {
+			var query = currentQuery();
+			addChild(buildScreen(Screen.fromQuery(query), query));
+		} catch (error:Dynamic) {
+			reportFatalError(error);
 		}
-		CharacterAppearance.applyPartIds(characterClip, {
-			hat: TEST_HAT_ID,
-			head: TEST_HEAD_ID,
-			body: TEST_BODY_ID,
-			feet: TEST_FEET_ID
-		});
-		recordRunPartBaselineCenters();
-
-		harnessText = makeTextField(350, 14, 190, 90, 0xD7E8FF);
-		harnessText.text = "Character harness\n"
-			+ "linkage=CharacterGraphic\n"
-			+ "state=runAnim\n"
-			+ "hat/head/body/feet=1\n"
-			+ "fps=" + Constants.FRAME_RATE;
-		addChild(harnessText);
 	}
 
-	private function showOnlyCharacterState(activeChildName:String):Void {
-		var stateNames = [
-			"runAnim",
-			"standAnim",
-			"jumpAnim",
-			"superJumpAnim",
-			"bumpedAnim",
-			"crouchAnim",
-			"crouchWalkAnim",
-			"swimAnim",
-			"frozenSolidAnim"
-		];
-
-		for (stateName in stateNames) {
-			var child = characterClip.getChildByTimelineName(stateName);
-			if (child != null) {
-				child.visible = stateName == activeChildName;
-				var childClip = Std.downcast(child, PR2MovieClip);
-				if (childClip != null) {
-					childClip.stopAll();
-				}
-			}
-		}
-		runAnim = Std.downcast(characterClip.getChildByTimelineName(activeChildName), PR2MovieClip);
-	}
-
-	private function createHud():Void {
-		statusText = makeTextField(10, 8, 360, 160, 0xFFFFFF);
-		addChild(statusText);
-
-		pointerText = makeTextField(10, Constants.STAGE_HEIGHT - 54, 360, 44, 0xD7E8FF);
-		addChild(pointerText);
-	}
-
-	private function makeTextField(x:Float, y:Float, width:Float, height:Float, color:Int):TextField {
-		var field = new TextField();
-		field.defaultTextFormat = new TextFormat("_sans", 12, color);
-		field.selectable = false;
-		field.mouseEnabled = false;
-		field.multiline = true;
-		field.wordWrap = true;
-		field.autoSize = TextFieldAutoSize.NONE;
-		field.x = x;
-		field.y = y;
-		field.width = width;
-		field.height = height;
-		return field;
-	}
-
-	private function addEventListeners():Void {
-		addEventListener(Event.ENTER_FRAME, onEnterFrame);
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-		stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-		stage.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
-		stage.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-		stage.addEventListener(MouseEvent.CLICK, onMouseClick);
-	}
-
-	private function onEnterFrame(event:Event):Void {
-		frameCounter++;
-		if (runAnim != null) {
-			runAnim.advanceOneFrame();
-		}
-		logRunPartTransforms();
-		updateObservedFps();
-		statusText.text = "Platform Racing 2 OpenFL port\n"
-			+ "frame=" + frameCounter + " fixedDt=" + Constants.FIXED_TIMESTEP_SECONDS + "\n"
-			+ "observedFps=" + observedFps + " target=" + Constants.FRAME_RATE + "\n"
-			+ "characterFrame=" + characterClip.currentFrame + "/" + characterClip.totalFrames + "\n"
-			+ "runAnimFrame=" + (runAnim == null ? "(missing)" : runAnim.currentFrame + "/" + runAnim.totalFrames) + "\n"
-			+ "keys=" + describePressedKeys() + "\n\n"
-			+ inputLog.join("\n");
-	}
-
-	private function logRunPartTransforms():Void {
-		if (runAnim == null) {
-			return;
-		}
-
-		var shouldLog = frameCounter <= runAnim.totalFrames * 2 || frameCounter % 30 == 0;
-		var head = Std.downcast(runAnim.getChildByTimelineName("head"), PR2MovieClip);
-		var body = Std.downcast(runAnim.getChildByTimelineName("body"), PR2MovieClip);
-		var foot1 = Std.downcast(runAnim.getChildByTimelineName("foot1"), PR2MovieClip);
-		var foot2 = Std.downcast(runAnim.getChildByTimelineName("foot2"), PR2MovieClip);
-		var hat1 = head == null ? null : Std.downcast(head.getChildByTimelineName("hat1"), PR2MovieClip);
-		latestPartTransformLog = "parts "
-			+ describePartTransform("head", head) + " "
-			+ describePartTransform("body", body) + " "
-			+ describePartTransform("foot1", foot1) + " "
-			+ describePartTransform("foot2", foot2) + " "
-			+ describePartTransform("hat1", hat1);
-
-		if (!shouldLog) {
-			return;
-		}
-
-		var message = 'runPartTransforms harnessFrame=$frameCounter runFrame=${runAnim.currentFrame}/${runAnim.totalFrames} $latestPartTransformLog';
-		trace(message);
+	private function reportFatalError(error:Dynamic):Void {
+		var message = Std.string(error);
+		trace("Fatal error: " + message);
 		#if js
-		Browser.console.log(message);
-		Browser.document.body.setAttribute("data-pr2-run-part-transforms", message);
+		Browser.console.error(error);
+		Browser.document.body.setAttribute("data-pr2-error", message);
 		#end
 	}
 
-	private function recordRunPartBaselineCenters():Void {
-		if (runAnim == null) {
-			return;
-		}
-
-		var head = Std.downcast(runAnim.getChildByTimelineName("head"), PR2MovieClip);
-		recordPartBaselineCenter("head", head);
-		recordPartBaselineCenter("body", runAnim.getChildByTimelineName("body"));
-		recordPartBaselineCenter("foot1", runAnim.getChildByTimelineName("foot1"));
-		recordPartBaselineCenter("foot2", runAnim.getChildByTimelineName("foot2"));
-		recordPartBaselineCenter("hat1", head == null ? null : head.getChildByTimelineName("hat1"));
-	}
-
-	private function recordPartBaselineCenter(label:String, child:Null<DisplayObject>):Void {
-		if (child == null || stage == null) {
-			return;
-		}
-
-		var bounds = child.getBounds(stage);
-		partBaselineCenters.set(label, new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2));
-	}
-
-	private function describePartTransform(label:String, child:Null<DisplayObject>):String {
-		if (child == null) {
-			return label + "=(missing)";
-		}
-
-		var matrix = child.transform.matrix;
-		var stagePoint = child.localToGlobal(new Point());
-		var bounds = child.getBounds(stage);
-		var center = new Point(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
-		var baseline = partBaselineCenters.get(label);
-		var delta = baseline == null ? new Point(0, 0) : new Point(center.x - baseline.x, center.y - baseline.y);
-		return label
-			+ "={local:"
-			+ formatFloat(matrix.tx) + "," + formatFloat(matrix.ty)
-			+ " matrix:" + formatFloat(matrix.a) + "," + formatFloat(matrix.b) + "," + formatFloat(matrix.c) + "," + formatFloat(matrix.d)
-			+ " stage:" + formatFloat(stagePoint.x) + "," + formatFloat(stagePoint.y)
-			+ " boundsCenter:" + formatFloat(center.x) + "," + formatFloat(center.y)
-			+ " boundsDelta:" + formatFloat(delta.x) + "," + formatFloat(delta.y)
-			+ "}";
-	}
-
-	private function formatFloat(value:Float):String {
-		return Std.string(Math.round(value * 100) / 100);
-	}
-
-	private function updateObservedFps():Void {
-		fpsWindowFrames++;
-		var now = Lib.getTimer();
-		var elapsed = now - fpsWindowStartMs;
-		if (elapsed < 1000) {
-			return;
-		}
-
-		observedFps = Math.round(fpsWindowFrames * 1000 / elapsed);
-		fpsWindowFrames = 0;
-		fpsWindowStartMs = now;
-		fpsSamples.push(observedFps);
-		if (fpsSamples.length > 60) {
-			fpsSamples.shift();
-		}
-
-		var message = 'observedFps=$observedFps target=${Constants.FRAME_RATE} samples=${fpsSamples.join(",")}';
-		trace(message);
+	private function currentQuery():Null<String> {
 		#if js
-		Browser.console.log(message);
-		Browser.document.body.setAttribute("data-pr2-observed-fps", Std.string(observedFps));
-		Browser.document.body.setAttribute("data-pr2-fps-samples", fpsSamples.join(","));
+		return Browser.location.search;
+		#else
+		return null;
 		#end
 	}
 
-	private function onKeyDown(event:KeyboardEvent):Void {
-		if (!pressedKeys.exists(event.keyCode)) {
-			pressedKeys.set(event.keyCode, true);
-			logInput("key down " + keyName(event.keyCode));
-		}
-	}
-
-	private function onKeyUp(event:KeyboardEvent):Void {
-		if (pressedKeys.exists(event.keyCode)) {
-			pressedKeys.remove(event.keyCode);
-		}
-		logInput("key up " + keyName(event.keyCode));
-	}
-
-	private function onMouseMove(event:MouseEvent):Void {
-		pointerText.text = "mouse x=" + Math.round(event.stageX) + " y=" + Math.round(event.stageY);
-	}
-
-	private function onMouseDown(event:MouseEvent):Void {
-		logInput("mouse down x=" + Math.round(event.stageX) + " y=" + Math.round(event.stageY));
-	}
-
-	private function onMouseUp(event:MouseEvent):Void {
-		logInput("mouse up x=" + Math.round(event.stageX) + " y=" + Math.round(event.stageY));
-	}
-
-	private function onMouseClick(event:MouseEvent):Void {
-		logInput("mouse click x=" + Math.round(event.stageX) + " y=" + Math.round(event.stageY));
-	}
-
-	private function logInput(message:String):Void {
-		inputLog.unshift("[" + frameCounter + "] " + message);
-		if (inputLog.length > 8) {
-			inputLog.pop();
-		}
-	}
-
-	private function describePressedKeys():String {
-		var names:Array<String> = [];
-		for (keyCode in pressedKeys.keys()) {
-			names.push(keyName(keyCode));
-		}
-		names.sort(Reflect.compare);
-		return names.length == 0 ? "(none)" : names.join(", ");
-	}
-
-	private function keyName(keyCode:Int):String {
-		return switch (keyCode) {
-			case Keyboard.LEFT: "left";
-			case Keyboard.RIGHT: "right";
-			case Keyboard.UP: "up";
-			case Keyboard.DOWN: "down";
-			case Keyboard.SPACE: "space";
-			case Keyboard.SHIFT: "shift";
-			case Keyboard.CONTROL: "control";
-			case Keyboard.ENTER: "enter";
-			case Keyboard.ESCAPE: "escape";
-			default: Std.string(keyCode);
-		}
+	private function buildScreen(screen:Screen, query:Null<String>):DisplayObject {
+		return switch (screen) {
+			case Harness: new GameplayHarness();
+			case Login: new PageHolder(new LoginPage());
+			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")));
+		};
 	}
 }

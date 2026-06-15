@@ -14,6 +14,18 @@ Run the browser build from the repository root:
 haxelib run openfl test html5
 ```
 
+The client boots into the intro screens by default. A `?screen=` flag selects
+the boot screen so development and automated tests can jump straight to one:
+
+- `?screen=intro` (default): Jiggmin and Kongregate intro flow, then login.
+  - `?intro=jiggmin` or `?intro=kongregate` plays just that one intro (testing).
+- `?screen=login`: the (stub) login page.
+- `?screen=harness`: the local gameplay harness; accepts the character query
+  options (`hat`, `head`, `body`, `feet`, `primary`, `secondary`, `render`).
+
+`IntroPage` publishes its progress to the `data-pr2-intro-state` body attribute
+(`intro-jiggmin`, `intro-kongregate`, `login`) for harness observation.
+
 Build without launching:
 
 ```sh
