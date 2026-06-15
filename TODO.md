@@ -395,9 +395,10 @@ Acceptance for this section:
 
 - [ ] Generalize `tools/pr2driver.py`.
   - Keep Flash backend.
-  - Add browser/OpenFL backend.
-  - Common sequence format for launch, click, tap, hold, wait, screenshot.
-  - Normalize captures to 550x400.
+  - [x] Add browser/OpenFL sequence support for `keyDown`, `keyUp`, `tap`,
+    `hold`, `debug-state`, and `shot` actions in one browser session.
+  - [ ] Common sequence format for Flash and OpenFL launch/click/tap/hold/wait/screenshot actions.
+  - [x] Normalize OpenFL sequence captures to 550x400.
 - [x] Add screenshot comparison.
   - `tools/compare_screenshots.py` compares PNG/JPEG screenshots with RGB
     pixel metrics, repeated ignored rectangles, threshold failures, amplified
@@ -413,12 +414,12 @@ Acceptance for this section:
 
 Initial suites:
 
-- [ ] `harness-boot`
-- [ ] `character-customization`
+- [x] `harness-boot`
+- [x] `character-customization`
 - [ ] `level-load-flat`
-- [ ] `run-right`
-- [ ] `jump`
-- [ ] `crouch`
+- [x] `run-right`
+- [x] `jump`
+- [x] `crouch`
 - [ ] `finish-race`
 - [ ] `real-server-connect`
 

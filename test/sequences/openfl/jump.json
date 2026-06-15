@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "time": 2.0,
+      "action": "tap",
+      "key": "space"
+    },
+    {
+      "time": 3.7,
+      "action": "debug-state",
+      "expect": {
+        "fixture": "flat-level",
+        "x": "75",
+        "y": "270",
+        "grounded": "true",
+        "animation": "stand"
+      }
+    },
+    {
+      "time": 3.8,
+      "action": "shot",
+      "out": "test/output/openfl-jump.png"
+    }
+  ]
+}

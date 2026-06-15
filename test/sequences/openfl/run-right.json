@@ -1,0 +1,25 @@
+{
+  "steps": [
+    {
+      "time": 2.0,
+      "action": "hold",
+      "key": "right",
+      "seconds": 4.5
+    },
+    {
+      "time": 6.0,
+      "action": "debug-state",
+      "expect": {
+        "fixture": "flat-level",
+        "x": "470",
+        "grounded": "true",
+        "touched": "finish"
+      }
+    },
+    {
+      "time": 6.1,
+      "action": "shot",
+      "out": "test/output/openfl-run-right.png"
+    }
+  ]
+}

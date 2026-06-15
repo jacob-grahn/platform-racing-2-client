@@ -19,9 +19,18 @@ Shot options:
   --expect <key=value>          expected debug-state field, repeatable
 
 Sequence script format:
-  [
-    {"time": 0.0, "action": "shot", "out": "test/baselines/openfl/run.png"}
-  ]
+  {
+    "query": "hat=16&render=composite",
+    "steps": [
+      {"time": 0.0, "action": "keyDown", "key": "right"},
+      {"time": 1.0, "action": "keyUp", "key": "right"},
+      {"time": 1.1, "action": "debug-state", "expect": {"grounded": "true"}},
+      {"time": 1.2, "action": "shot", "out": "test/output/run.png"}
+    ]
+  }
+
+  A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
+  tap, hold, shot, debug-state.
 """
 
 import argparse
@@ -54,10 +63,29 @@ DEFAULT_BROWSER_PATHS = [
     "chromium-browser",
 ]
 
+KEY_DEFINITIONS = {
+    "left": {"key": "ArrowLeft", "code": "ArrowLeft", "windowsVirtualKeyCode": 37},
+    "right": {"key": "ArrowRight", "code": "ArrowRight", "windowsVirtualKeyCode": 39},
+    "up": {"key": "ArrowUp", "code": "ArrowUp", "windowsVirtualKeyCode": 38},
+    "down": {"key": "ArrowDown", "code": "ArrowDown", "windowsVirtualKeyCode": 40},
+    "space": {"key": " ", "code": "Space", "windowsVirtualKeyCode": 32, "text": " "},
+    "a": {"key": "a", "code": "KeyA", "windowsVirtualKeyCode": 65, "text": "a"},
+    "d": {"key": "d", "code": "KeyD", "windowsVirtualKeyCode": 68, "text": "d"},
+    "w": {"key": "w", "code": "KeyW", "windowsVirtualKeyCode": 87, "text": "w"},
+    "s": {"key": "s", "code": "KeyS", "windowsVirtualKeyCode": 83, "text": "s"},
+    "c": {"key": "c", "code": "KeyC", "windowsVirtualKeyCode": 67, "text": "c"},
+}
+
 
 class QuietHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
+
+    def handle(self):
+        try:
+            super().handle()
+        except BrokenPipeError:
+            pass
 
 
 @contextlib.contextmanager
@@ -216,6 +244,45 @@ def run_browser_and_read_debug_state(browser, url, delay):
         shutil.rmtree(user_data_dir, ignore_errors=True)
 
 
+@contextlib.contextmanager
+def browser_devtools_session(browser, url):
+    debug_port = reserve_port()
+    user_data_dir = tempfile.mkdtemp(prefix="pr2-openfl-chrome-")
+    command = [
+        browser,
+        "--headless=new",
+        "--disable-gpu",
+        "--hide-scrollbars",
+        "--window-size=550,400",
+        f"--remote-debugging-port={debug_port}",
+        f"--user-data-dir={user_data_dir}",
+        url,
+    ]
+    process = subprocess.Popen(command, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    ws = None
+    try:
+        page_ws_url = wait_for_page_websocket(debug_port)
+        ws = DevToolsSession(page_ws_url)
+        ws.request("Page.bringToFront")
+        ws.request("Emulation.setDeviceMetricsOverride", {
+            "width": 550,
+            "height": 400,
+            "deviceScaleFactor": 1,
+            "mobile": False,
+        })
+        yield ws
+    finally:
+        if ws is not None:
+            ws.close()
+        process.terminate()
+        try:
+            process.wait(timeout=5)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait()
+        shutil.rmtree(user_data_dir, ignore_errors=True)
+
+
 def parse_debug_state(state_text):
     state = {}
     for part in state_text.split(";"):
@@ -287,15 +354,11 @@ def wait_for_page_websocket(debug_port):
 
 
 def cdp_evaluate(ws_url, expression):
-    ws = WebSocket(ws_url)
+    ws = DevToolsSession(ws_url)
     try:
-        response = ws.request({
-            "id": 1,
-            "method": "Runtime.evaluate",
-            "params": {
-                "expression": expression,
-                "returnByValue": True,
-            },
+        response = ws.request("Runtime.evaluate", {
+            "expression": expression,
+            "returnByValue": True,
         })
     finally:
         ws.close()
@@ -303,6 +366,33 @@ def cdp_evaluate(ws_url, expression):
     if "error" in response:
         raise SystemExit(f"Chrome DevTools evaluation failed: {response['error']}")
     return response.get("result", {}).get("result", {}).get("value", "")
+
+
+class DevToolsSession:
+    def __init__(self, url):
+        self.ws = WebSocket(url)
+        self.next_id = 1
+
+    def request(self, method, params=None):
+        request_id = self.next_id
+        self.next_id += 1
+        payload = {"id": request_id, "method": method}
+        if params is not None:
+            payload["params"] = params
+        response = self.ws.request(payload)
+        if "error" in response:
+            raise SystemExit(f"Chrome DevTools {method} failed: {response['error']}")
+        return response
+
+    def evaluate(self, expression):
+        response = self.request("Runtime.evaluate", {
+            "expression": expression,
+            "returnByValue": True,
+        })
+        return response.get("result", {}).get("result", {}).get("value", "")
+
+    def close(self):
+        self.ws.close()
 
 
 class WebSocket:
@@ -384,14 +474,179 @@ class WebSocket:
 
 
 def run_sequence(script_path, root, browser_path):
-    with open(script_path) as file:
-        steps = sorted(json.load(file), key=lambda step: step["time"])
+    browser = resolve_browser(browser_path)
+    query, steps = load_sequence(script_path)
 
-    for step in steps:
+    with serve(root) as url:
+        url = append_query(url, query)
+        with browser_devtools_session(browser, url) as devtools:
+            run_sequence_steps(devtools, steps)
+
+
+def load_sequence(script_path):
+    with open(script_path) as file:
+        data = json.load(file)
+
+    if isinstance(data, list):
+        query = common_step_query(data)
+        raw_steps = data
+    elif isinstance(data, dict):
+        query = data.get("query", "")
+        raw_steps = data.get("steps")
+        if raw_steps is None:
+            raise SystemExit(f"Sequence object must include steps: {script_path}")
+        step_query = common_step_query(raw_steps)
+        if query and step_query and query != step_query:
+            raise SystemExit("Sequence query must be top-level when steps need different query strings.")
+        query = query or step_query
+    else:
+        raise SystemExit(f"Sequence must be a JSON object or list: {script_path}")
+
+    return query, normalize_sequence_steps(raw_steps)
+
+
+def common_step_query(steps):
+    queries = {step.get("query", "") for step in steps if step.get("query", "")}
+    if len(queries) > 1:
+        raise SystemExit("OpenFL sequence can only use one query string per browser session.")
+    return next(iter(queries), "")
+
+
+def normalize_sequence_steps(raw_steps):
+    normalized = []
+    order = 0
+    for step in raw_steps:
+        if "time" not in step or "action" not in step:
+            raise SystemExit(f"Sequence step requires time and action: {step}")
+        step_time = parse_non_negative_float(step["time"], "time")
         action = step["action"]
-        if action != "shot":
-            raise SystemExit(f"Unsupported OpenFL sequence action: {action}")
-        capture_shot(step["out"], root, float(step["time"]), browser_path, step.get("query", ""))
+        if action == "hold":
+            seconds = parse_non_negative_float(step.get("seconds"), "seconds")
+            key = require_key(step)
+            normalized.append({"time": step_time, "action": "keyDown", "key": key, "_order": order})
+            order += 1
+            normalized.append({"time": step_time + seconds, "action": "keyUp", "key": key, "_order": order})
+        else:
+            item = dict(step)
+            item["time"] = step_time
+            item["_order"] = order
+            normalized.append(item)
+        order += 1
+    return sorted(normalized, key=lambda step: (step["time"], step["_order"]))
+
+
+def run_sequence_steps(devtools, steps):
+    start = time.monotonic()
+    for step in steps:
+        wait = start + step["time"] - time.monotonic()
+        if wait > 0:
+            time.sleep(wait)
+        run_sequence_step(devtools, step)
+
+
+def run_sequence_step(devtools, step):
+    action = step["action"]
+    if action == "keyDown":
+        dispatch_key(devtools, "keyDown", require_key(step))
+    elif action == "keyUp":
+        dispatch_key(devtools, "keyUp", require_key(step))
+    elif action == "tap":
+        key = require_key(step)
+        dispatch_key(devtools, "keyDown", key)
+        dispatch_key(devtools, "keyUp", key)
+    elif action == "shot":
+        capture_devtools_shot(devtools, require_field(step, "out"))
+    elif action == "debug-state":
+        validate_sequence_debug_state(devtools, step.get("expect", {}))
+    else:
+        raise SystemExit(f"Unsupported OpenFL sequence action: {action}")
+
+
+def dispatch_key(devtools, event_type, key_name):
+    definition = KEY_DEFINITIONS.get(key_name.lower())
+    if definition is None:
+        raise SystemExit(f"Unknown key '{key_name}'. Valid: {', '.join(sorted(KEY_DEFINITIONS))}")
+    params = dict(definition)
+    params["type"] = event_type
+    params["nativeVirtualKeyCode"] = params["windowsVirtualKeyCode"]
+    if event_type == "keyUp":
+        params.pop("text", None)
+    devtools.request("Input.dispatchKeyEvent", params)
+    print(f"{event_type}: {key_name}")
+
+
+def capture_devtools_shot(devtools, out_path):
+    os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+    response = devtools.request("Page.captureScreenshot", {
+        "format": "png",
+        "captureBeyondViewport": False,
+    })
+    image_data = response.get("result", {}).get("data")
+    if not image_data:
+        raise SystemExit("Chrome DevTools did not return screenshot data.")
+    with open(out_path, "wb") as file:
+        file.write(base64.b64decode(image_data))
+    stats = analyze_png(out_path)
+    print(
+        f"Shot saved: {out_path} "
+        f"({stats['width']}x{stats['height']}, uniqueColors={stats['unique_colors']}, "
+        f"nonBackgroundPixels={stats['non_background_pixels']})"
+    )
+
+
+def validate_sequence_debug_state(devtools, expected):
+    if not isinstance(expected, dict):
+        raise SystemExit("debug-state expect must be an object of key/value pairs.")
+    state_text = wait_for_sequence_debug_state(devtools)
+    if not state_text:
+        raise SystemExit("OpenFL harness did not expose data-pr2-debug-state.")
+    state = parse_debug_state(state_text)
+    print("Debug state:", state_text)
+
+    failures = []
+    for key, expected_value in expected.items():
+        actual_value = state.get(key)
+        expected_value = str(expected_value)
+        if actual_value != expected_value:
+            failures.append((key, expected_value, actual_value))
+
+    if failures:
+        for key, expected_value, actual_value in failures:
+            print(f"Expected {key}={expected_value}, got {actual_value}", file=sys.stderr)
+        raise SystemExit("Debug-state validation failed.")
+    if expected:
+        print(f"Debug-state validation passed ({len(expected)} expectations).")
+
+
+def wait_for_sequence_debug_state(devtools):
+    deadline = time.monotonic() + 5.0
+    while time.monotonic() < deadline:
+        state_text = devtools.evaluate('document.body.getAttribute("data-pr2-debug-state") || ""')
+        if state_text:
+            return state_text
+        time.sleep(0.1)
+    return ""
+
+
+def require_key(step):
+    return require_field(step, "key")
+
+
+def require_field(step, field):
+    value = step.get(field)
+    if value is None or value == "":
+        raise SystemExit(f"Sequence {step.get('action')} step requires {field}: {step}")
+    return value
+
+
+def parse_non_negative_float(value, label):
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        raise SystemExit(f"Invalid sequence {label}: {value}")
+    if parsed < 0:
+        raise SystemExit(f"Sequence {label} must be non-negative: {value}")
+    return parsed
 
 
 def append_query(url, query):

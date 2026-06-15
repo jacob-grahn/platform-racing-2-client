@@ -241,6 +241,17 @@ Check approximate OpenFL frame rate:
 python3 tools/openfl_driver.py --fps-duration 30 --fps-target 27 --fps-tolerance 5 fps
 ```
 
+Run a scripted OpenFL harness sequence:
+
+```sh
+python3 tools/openfl_driver.py sequence test/sequences/openfl/harness-boot.json
+python3 tools/openfl_driver.py sequence test/sequences/openfl/run-right.json
+```
+
+Sequence files keep one browser session open and can combine `keyDown`,
+`keyUp`, `tap`, `hold`, `debug-state`, and `shot` actions. Screenshots and
+diff output should go under ignored `test/output/`.
+
 ## Useful References
 
 - `TODO.md`: active migration plan and resume notes.
