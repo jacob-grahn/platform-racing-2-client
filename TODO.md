@@ -30,8 +30,10 @@ The local playable harness is done. The faithful-port path from here:
 
 1. Verify character rendering against Flash — finish the full customizable
    character and add the screenshot comparisons (Character Rendering section).
-2. Render a real decoded server level and place the character in it — Bits 4
-   and 5, plus Bit 1 to pick levels dynamically (Server Campaign harness).
+2. Continue real server-level support — render coverage now includes the decoded
+   block layer with the character placed at the first start block, and decoded
+   blocks now feed local movement/collision with first-pass ice/arrow behavior;
+   next is remaining special block behavior and dynamic level choice.
 3. Automate the renderer-vs-PNG diff to lock in vector fidelity (Vector
    Renderer section).
 
@@ -103,6 +105,16 @@ Server level harness:
 - `ServerLevelDecoder` decodes the block string (modes m1-m4) into absolute
   pixel-coord `DecodedBlock`s + `ServerLevel`; `ObjectCodes` ports block codes
   100-132. Verified byte-identical to a Python reference (516 blocks).
+- `ServerLevelRenderer` renders a decoded server level's block layer at original
+  PR2 30 px scale using the committed Flash-derived block bitmap tiles, cameras
+  around the first start block, and places a layered `CharacterDisplay` there.
+- `ServerLevelFixtureAdapter` normalizes decoded server coordinates into a
+  `FixtureLevel` so `LocalPlayerController` can move through real level
+  geometry; the campaign screen accepts keyboard input against this converted
+  collision state.
+- `LocalPlayerController` now preserves server block identities for ice and
+  directional arrows and applies their AS3 stand/bump/side-hit movement effects
+  in deterministic tests.
 - Dev CORS proxy `tools/dev_proxy.py` serves the build and proxies
   `/api/* -> pr2hub.com` same-origin (`?apiHost=/api`).
 

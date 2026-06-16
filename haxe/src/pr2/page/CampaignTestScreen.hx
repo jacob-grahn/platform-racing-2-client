@@ -6,10 +6,16 @@ import js.Browser;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
+import openfl.ui.Keyboard;
 import pr2.Constants;
+import pr2.character.CharacterDisplay;
+import pr2.character.CharacterRenderMode;
+import pr2.harness.LocalPlayerController;
+import pr2.harness.LocalPlayerInput;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
 import pr2.net.CampaignLevelInfo;
@@ -17,6 +23,9 @@ import pr2.net.LevelDataClient;
 import pr2.net.ServerLevelData;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevelDecoder;
+import pr2.level.ServerLevelFixtureAdapter;
+import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
+import pr2.level.ServerLevelRenderer;
 
 /**
 	Bit 1 of the server campaign level test harness (see TODO.md). Fetches a real
@@ -30,7 +39,13 @@ class CampaignTestScreen extends Sprite {
 	private static inline var DEFAULT_PAGE:Int = 1;
 
 	private final page:Int;
+	private final input:LocalPlayerInput = new LocalPlayerInput();
 	private var statusText:TextField;
+	private var levelRenderer:ServerLevelRenderer;
+	private var serverFixture:ServerFixtureLevel;
+	private var player:LocalPlayerController;
+	private var characterDisplay:CharacterDisplay;
+	private var lastStatusText:String = "";
 
 	public function new(?page:String) {
 		super();
@@ -40,6 +55,7 @@ class CampaignTestScreen extends Sprite {
 		createStatusText();
 		setStatus("phase=fetching", 'Fetching campaign list page ${this.page}...');
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 
 	private static function parsePage(page:Null<String>):Int {
@@ -52,6 +68,8 @@ class CampaignTestScreen extends Sprite {
 
 	private function onAddedToStage(event:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		CampaignListClient.fetch(page, onList, onError);
 	}
 
@@ -87,10 +105,9 @@ class CampaignTestScreen extends Sprite {
 		var debug = 'phase=levelLoaded;id=${info.levelId};hashValid=${data.hashValid};readMode=${data.readMode()}';
 		try {
 			var level = ServerLevelDecoder.decode(data.data);
+			renderDecodedLevel(level, data);
 			lines.push('decoded: blocks=${level.blocks.length} bg=0x${StringTools.hex(level.bgColor, 6)}');
 			lines.push('starts=${level.startBlocks().length} finishes=${level.finishBlocks().length} bounds=${level.maxX - level.minX}x${level.maxY - level.minY}px');
-			lines.push("");
-			lines.push("Next: render these blocks + drop the character in (TODO Bit 4+).");
 			debug += ';blocks=${level.blocks.length};starts=${level.startBlocks().length}';
 		} catch (error:Dynamic) {
 			lines.push('decode failed: ${Std.string(error)}');
@@ -116,9 +133,31 @@ class CampaignTestScreen extends Sprite {
 		addChild(background);
 	}
 
+	private function renderDecodedLevel(level:ServerLevel, data:ServerLevelData):Void {
+		if (levelRenderer != null && levelRenderer.parent != null) {
+			removeChild(levelRenderer);
+		}
+
+		var startBlocks = level.startBlocks();
+		var focus = startBlocks.length == 0 ? null : startBlocks[0];
+		var renderer = new ServerLevelRenderer(level, focus);
+		levelRenderer = renderer;
+		addChildAt(levelRenderer, 1);
+
+		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(data.levelId), data.title);
+		player = new LocalPlayerController(serverFixture.fixture);
+		characterDisplay = new CharacterDisplay(
+			{hat: 1, head: 1, body: 1, feet: 1},
+			{primary: 0x005CB8, secondary: 0xFFF200},
+			CharacterRenderMode.Layered
+		);
+		levelRenderer.addChild(characterDisplay);
+		updatePlayerDisplay();
+	}
+
 	private function createStatusText():Void {
 		statusText = new TextField();
-		statusText.defaultTextFormat = new TextFormat("_sans", 13, 0xD7E8FF);
+		statusText.defaultTextFormat = new TextFormat("_sans", 12, 0xFFFFFF);
 		statusText.selectable = false;
 		statusText.mouseEnabled = false;
 		statusText.multiline = true;
@@ -127,15 +166,85 @@ class CampaignTestScreen extends Sprite {
 		statusText.x = 16;
 		statusText.y = 16;
 		statusText.width = Constants.STAGE_WIDTH - 32;
-		statusText.height = Constants.STAGE_HEIGHT - 32;
+		statusText.height = 112;
+		statusText.background = true;
+		statusText.backgroundColor = 0x000000;
+		statusText.alpha = 0.82;
 		addChild(statusText);
 	}
 
 	private function setStatus(debugState:String, text:String):Void {
+		lastStatusText = text;
 		statusText.text = text;
 		#if js
 		Browser.document.body.setAttribute("data-pr2-harness", "campaign");
 		Browser.document.body.setAttribute("data-pr2-debug-state", debugState);
 		#end
+	}
+
+	private function onEnterFrame(event:Event):Void {
+		if (player == null) {
+			return;
+		}
+
+		player.step(input.copy());
+		updatePlayerDisplay();
+		var state = player.debugState();
+		statusText.text = lastStatusText + '\nplayer ${state.serialize()}';
+		#if js
+		Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=playable;${state.serialize()}');
+		#end
+	}
+
+	private function updatePlayerDisplay():Void {
+		if (player == null || levelRenderer == null || serverFixture == null || characterDisplay == null) {
+			return;
+		}
+
+		var state = player.debugState();
+		var worldX = serverFixture.fixturePixelToWorldX(player.x);
+		var worldY = serverFixture.fixturePixelToWorldY(player.y);
+		var screen = levelRenderer.worldToScreen(worldX, worldY);
+		characterDisplay.x = screen.x;
+		characterDisplay.y = screen.y;
+		characterDisplay.scaleX = 0.9;
+		characterDisplay.scaleY = (player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT)
+			/ LocalPlayerController.STANDING_HEIGHT * 0.9;
+		characterDisplay.setState(characterStateName(state.animation));
+		characterDisplay.advanceOneFrame();
+	}
+
+	private function characterStateName(animationName:String):String {
+		return switch (animationName) {
+			case "run": "runAnim";
+			case "stand": "standAnim";
+			case "jump" | "fall": "jumpAnim";
+			case "superJump": "superJumpAnim";
+			case "crouch": "crouchAnim";
+			case "crouchWalk": "crouchWalkAnim";
+			default: "standAnim";
+		}
+	}
+
+	private function onKeyDown(event:KeyboardEvent):Void {
+		setKey(event.keyCode, true);
+	}
+
+	private function onKeyUp(event:KeyboardEvent):Void {
+		setKey(event.keyCode, false);
+	}
+
+	private function setKey(keyCode:UInt, pressed:Bool):Void {
+		switch (keyCode) {
+			case Keyboard.LEFT | Keyboard.A:
+				input.left = pressed;
+			case Keyboard.RIGHT | Keyboard.D:
+				input.right = pressed;
+			case Keyboard.UP | Keyboard.W | Keyboard.SPACE:
+				input.jump = pressed;
+			case Keyboard.DOWN | Keyboard.S:
+				input.down = pressed;
+			default:
+		}
 	}
 }

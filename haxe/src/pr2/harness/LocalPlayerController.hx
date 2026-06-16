@@ -2,6 +2,7 @@ package pr2.harness;
 
 import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
+import pr2.level.BlockType;
 
 class LocalPlayerController {
 	public static inline var STANDING_WIDTH:Float = 20;
@@ -28,6 +29,7 @@ class LocalPlayerController {
 	private final jumpVelocity:Float;
 	private final gravity:Float;
 	private var targetVelX:Float = 0;
+	private var accelFactor:Float = BASE_ACCEL_FACTOR;
 	private var jumpHeld:Bool = false;
 	private var jumpVelBoost:Float = 0;
 	private var crouchCharge:Float = 0;
@@ -109,12 +111,13 @@ class LocalPlayerController {
 
 		var velocityRatio = 1 - Math.abs(vx) / MAX_SPEED;
 		velocityRatio = velocityRatio * 0.9 + 0.1;
-		var accelFactor = BASE_ACCEL_FACTOR * velocityRatio;
-		vx += (targetVelX - vx) * accelFactor;
+		var effectiveAccelFactor = accelFactor * velocityRatio;
+		vx += (targetVelX - vx) * effectiveAccelFactor;
 		vx = clamp(vx, -MAX_SPEED, MAX_SPEED);
 		vy = clamp(vy, -MAX_SPEED, MAX_SPEED);
 		x += vx;
 		y += vy;
+		accelFactor = BASE_ACCEL_FACTOR;
 	}
 
 	private function processBlocks(input:LocalPlayerInput):Void {
@@ -142,7 +145,7 @@ class LocalPlayerController {
 				bumpBlock = blockWithOpenSpaceBelow(refs.topBlock);
 			}
 			if (bumpBlock != null) {
-				onBump(bumpBlock);
+				onBump(bumpBlock, input);
 				refs = refreshBlockRefs();
 			}
 		}
@@ -159,7 +162,7 @@ class LocalPlayerController {
 				crouching = true;
 				if (input.jump) {
 					var yPriorToBump = y;
-					onBump(topBlock);
+					onBump(topBlock, input);
 					y = yPriorToBump;
 					vy = 0;
 				}
@@ -210,13 +213,15 @@ class LocalPlayerController {
 		y = block.y * level.tileSize;
 		vy = 0;
 		grounded = true;
+		applyStandEffect(block);
 	}
 
-	private function onBump(block:LevelBlock):Void {
+	private function onBump(block:LevelBlock, input:LocalPlayerInput):Void {
 		touch(block);
 		y = (block.y + 1) * level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
 		vy *= -0.25;
 		jumpVelBoost = 0;
+		applyBumpEffect(block, input);
 	}
 
 	private function onLeftHit(block:LevelBlock):Void {
@@ -228,6 +233,7 @@ class LocalPlayerController {
 		if (targetVelX > 0) {
 			targetVelX = 0;
 		}
+		applySideHitEffect(block);
 	}
 
 	private function onRightHit(block:LevelBlock):Void {
@@ -238,6 +244,57 @@ class LocalPlayerController {
 		}
 		if (targetVelX < 0) {
 			targetVelX = 0;
+		}
+		applySideHitEffect(block);
+	}
+
+	private function applyStandEffect(block:LevelBlock):Void {
+		switch (block.type) {
+			case BlockType.Ice:
+				accelFactor = 0.05;
+			case BlockType.ArrowUp:
+				if (!crouching) {
+					vy -= 10;
+				} else {
+					pushArrow(block.type);
+				}
+			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
+				pushArrow(block.type);
+			default:
+		}
+	}
+
+	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput):Void {
+		switch (block.type) {
+			case BlockType.ArrowUp:
+				vy = !input.down && !crouching ? -14 : 0;
+			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
+				pushArrow(block.type);
+			default:
+		}
+	}
+
+	private function applySideHitEffect(block:LevelBlock):Void {
+		switch (block.type) {
+			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
+				pushArrow(block.type);
+			default:
+		}
+	}
+
+	private function pushArrow(type:BlockType):Void {
+		switch (type) {
+			case BlockType.ArrowUp:
+				if (!crouching) {
+					vy -= 1.2;
+				}
+			case BlockType.ArrowDown:
+				vy += 5;
+			case BlockType.ArrowLeft:
+				vx -= 3;
+			case BlockType.ArrowRight:
+				vx += 3;
+			default:
 		}
 	}
 
