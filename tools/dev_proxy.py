@@ -49,13 +49,27 @@ SSL_CONTEXT = build_ssl_context()
 class Handler(http.server.SimpleHTTPRequestHandler):
     def do_GET(self):
         if self.path == API_PREFIX or self.path.startswith(API_PREFIX + "/"):
-            self.proxy()
+            self.proxy("GET")
         else:
             super().do_GET()
 
-    def proxy(self):
+    def do_POST(self):
+        if self.path == API_PREFIX or self.path.startswith(API_PREFIX + "/"):
+            self.proxy("POST")
+        else:
+            self.send_error(404)
+
+    def proxy(self, method):
         upstream_url = UPSTREAM + self.path[len(API_PREFIX):]
-        request = urllib.request.Request(upstream_url, headers={"User-Agent": USER_AGENT})
+        body = None
+        headers = {"User-Agent": USER_AGENT}
+        if method == "POST":
+            length = int(self.headers.get("Content-Length", "0"))
+            body = self.rfile.read(length)
+            content_type = self.headers.get("Content-Type")
+            if content_type:
+                headers["Content-Type"] = content_type
+        request = urllib.request.Request(upstream_url, data=body, headers=headers, method=method)
         try:
             with urllib.request.urlopen(request, timeout=20, context=SSL_CONTEXT) as response:
                 body = response.read()
@@ -70,7 +84,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             status = 502
             content_type = "text/plain"
 
-        self.log_message("proxy %s -> %s [%s]", self.path, upstream_url, status)
+        self.log_message("proxy %s %s -> %s [%s]", method, self.path, upstream_url, status)
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))

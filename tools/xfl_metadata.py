@@ -346,6 +346,9 @@ def parse_common_display_attrs(element):
         "blendMode": attrs.get("blendMode"),
         "centerPoint3DX": maybe_float(attrs.get("centerPoint3DX")),
         "centerPoint3DY": maybe_float(attrs.get("centerPoint3DY")),
+        "left": maybe_float(attrs.get("left")),
+        "width": maybe_float(attrs.get("width")),
+        "height": maybe_float(attrs.get("height")),
     }
 
     matrix = parse_matrix(element)
@@ -364,6 +367,90 @@ def parse_common_display_attrs(element):
     if filters:
         record["filters"] = filters
 
+    return compact_record(record)
+
+
+def parse_text_attrs(text_run):
+    text_attrs = first_direct_child(text_run, "textAttrs")
+    if text_attrs is None:
+        return {}
+    dom_text_attrs = first_direct_child(text_attrs, "DOMTextAttrs")
+    if dom_text_attrs is None:
+        return {}
+
+    record = {}
+    for key, value in sorted(dom_text_attrs.attrib.items()):
+        parsed_bool = parse_bool(value)
+        parsed_float = maybe_float(value)
+        if parsed_bool is not None:
+            record[key] = parsed_bool
+        elif parsed_float is not None and key not in ("face", "alignment"):
+            record[key] = parsed_float
+        else:
+            record[key] = value
+    return compact_record(record)
+
+
+def parse_static_text(element):
+    record = parse_common_display_attrs(element)
+    text_runs = first_direct_child(element, "textRuns")
+    if text_runs is None:
+        return compact_record(record)
+
+    parts = []
+    first_attrs = {}
+    for text_run in direct_children(text_runs, "DOMTextRun"):
+        chars = text_for(text_run, "characters")
+        if chars is not None:
+            parts.append(chars)
+        if not first_attrs:
+            first_attrs = parse_text_attrs(text_run)
+
+    if parts:
+        record["text"] = "".join(parts)
+    if first_attrs:
+        record["textAttrs"] = first_attrs
+    return compact_record(record)
+
+
+def parse_component_params(element):
+    params = first_direct_child(element, "parametersAsXML")
+    if params is None or params.text is None:
+        return {}
+
+    try:
+        root = ET.fromstring("<root>" + params.text + "</root>")
+    except ET.ParseError:
+        return {}
+
+    record = {}
+    for prop in root.findall("property"):
+        prop_id = prop.attrib.get("id")
+        inspectable = prop.find("Inspectable")
+        if prop_id is None or inspectable is None:
+            continue
+        value = inspectable.attrib.get("defaultValue")
+        value_type = inspectable.attrib.get("type")
+        if value_type == "Boolean":
+            parsed_bool = parse_bool(value)
+            value = parsed_bool if parsed_bool is not None else value
+        elif value_type == "Number":
+            parsed_float = maybe_float(value)
+            value = parsed_float if parsed_float is not None else value
+        record[prop_id] = compact_record(
+            {
+                "value": value,
+                "type": value_type,
+            }
+        )
+    return record
+
+
+def parse_component_instance(element):
+    record = parse_common_display_attrs(element)
+    params = parse_component_params(element)
+    if params:
+        record["componentParams"] = params
     return compact_record(record)
 
 
@@ -446,6 +533,12 @@ def parse_display_element(element):
     if name in ("DOMSymbolInstance", "DOMBitmapInstance"):
         return parse_common_display_attrs(element)
 
+    if name == "DOMStaticText":
+        return parse_static_text(element)
+
+    if name == "DOMComponentInstance":
+        return parse_component_instance(element)
+
     if name == "DOMShape":
         return parse_shape_summary(element)
 
@@ -471,6 +564,8 @@ def parse_display_elements(parent):
         if name in (
             "DOMSymbolInstance",
             "DOMBitmapInstance",
+            "DOMComponentInstance",
+            "DOMStaticText",
             "DOMShape",
             "DOMGroup",
             "DOMRectangleObject",

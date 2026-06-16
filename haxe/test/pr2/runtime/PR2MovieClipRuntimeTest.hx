@@ -1,9 +1,12 @@
 package pr2.runtime;
 
 import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.Point;
+import openfl.text.TextField;
+import openfl.text.TextFieldType;
 import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 
@@ -18,6 +21,7 @@ class PR2MovieClipRuntimeTest {
 		testColorTransforms();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
+		testGeneratedStaticTextAndComponents();
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
 		testGeneratedCharacterPartIdSelection();
@@ -199,6 +203,23 @@ class PR2MovieClipRuntimeTest {
 		assertNotNull(jetPack.getChildByTimelineName("anim"), "jetPackStates on frame exposes anim child");
 	}
 
+	private static function testGeneratedStaticTextAndComponents():Void {
+		var popup = PR2MovieClip.fromLinkage("LoginPopupGraphic", {maxNestedDepth: 2});
+
+		assertNotNull(findTextDescendant(popup, "-- Login --"), "LoginPopupGraphic renders DOMStaticText title");
+		assertNotNull(findTextDescendant(popup, "name:"), "LoginPopupGraphic renders DOMStaticText field labels");
+		assertNotNull(popup.getChildByTimelineName("login_bt"), "LoginPopupGraphic renders named Button component");
+		assertNotNull(popup.getChildByTimelineName("rememberMe_chk"), "LoginPopupGraphic renders named CheckBox component");
+
+		var nameBox = Std.downcast(popup.getChildByTimelineName("nameBox"), TextField);
+		assertNotNull(nameBox, "LoginPopupGraphic renders named TextInput component as TextField");
+		assertEquals(TextFieldType.INPUT, nameBox.type, "TextInput component is editable");
+
+		var passBox = Std.downcast(popup.getChildByTimelineName("passBox"), TextField);
+		assertNotNull(passBox, "LoginPopupGraphic renders password TextInput component as TextField");
+		assertEquals(true, passBox.displayAsPassword, "password TextInput preserves displayAsPassword");
+	}
+
 	private static function testTimelineCompositionPreservesPartSelection():Void {
 		var runAnim = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.jumpAnim_61", {maxNestedDepth: 2});
 		var head = requireClipChild(runAnim, "head");
@@ -363,6 +384,25 @@ class PR2MovieClipRuntimeTest {
 			}
 		}
 
+		return null;
+	}
+
+	private static function findTextDescendant(container:DisplayObjectContainer, text:String):Null<TextField> {
+		for (i in 0...container.numChildren) {
+			var child = container.getChildAt(i);
+			var textField = Std.downcast(child, TextField);
+			if (textField != null && textField.text == text) {
+				return textField;
+			}
+
+			var childContainer = Std.downcast(child, DisplayObjectContainer);
+			if (childContainer != null) {
+				var found = findTextDescendant(childContainer, text);
+				if (found != null) {
+					return found;
+				}
+			}
+		}
 		return null;
 	}
 

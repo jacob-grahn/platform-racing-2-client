@@ -7,6 +7,9 @@ package pr2.net;
 	socket secrets are intentionally left out of the port for now.
 **/
 final class ServerConfig {
+	/** Production build string accepted by the current PR2 server. **/
+	public static inline var BUILD:String = "29-oct-2023-v168_2_1";
+
 	/** Default origin, matching `Main.baseURL` in the Flash client. **/
 	public static inline var DEFAULT_HOST:String = "https://pr2hub.com";
 
@@ -53,5 +56,26 @@ final class ServerConfig {
 	**/
 	public static function levelDataUrl(levelId:Int, version:Int):String {
 		return host + "/levels/" + levelId + ".txt?version=" + version;
+	}
+
+	/**
+		Live multiplayer server status endpoint, matching `CheckServers`.
+	**/
+	public static function serverStatusUrl():String {
+		return host + "/files/server_status_2.txt";
+	}
+
+	/**
+		Account creation endpoint, matching `CreateAccountPopup`.
+	**/
+	public static function registerUserUrl():String {
+		return host + "/register_user.php";
+	}
+
+	/**
+		Encrypted login endpoint, matching `LoggingInPopup`.
+	**/
+	public static function loginUrl():String {
+		return host + "/login.php";
 	}
 }

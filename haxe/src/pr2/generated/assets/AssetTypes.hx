@@ -78,6 +78,9 @@ typedef DisplayElementDef = {
 	@:optional var blendMode:String;
 	@:optional var centerPoint3DX:Float;
 	@:optional var centerPoint3DY:Float;
+	@:optional var left:Float;
+	@:optional var width:Float;
+	@:optional var height:Float;
 	@:optional var matrix:MatrixDef;
 	@:optional var transformationPoint:PointDef;
 	@:optional var color:ColorTransformDef;
@@ -104,6 +107,9 @@ typedef DisplayElementDef = {
 	@:optional var closePath:Bool;
 	@:optional var fill:StyleValueDef;
 	@:optional var stroke:StyleValueDef;
+	@:optional var text:String;
+	@:optional var textAttrs:Dynamic;
+	@:optional var componentParams:Dynamic;
 }
 
 typedef FrameDef = {

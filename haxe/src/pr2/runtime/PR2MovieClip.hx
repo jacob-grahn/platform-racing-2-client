@@ -12,6 +12,11 @@ import openfl.filters.DropShadowFilter;
 import openfl.filters.GlowFilter;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
+import openfl.text.TextField;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFieldType;
+import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
 import pr2.generated.assets.AssetTypes.FilterDef;
 import pr2.generated.assets.AssetTypes.FrameDef;
@@ -307,6 +312,14 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function createDisplayObject(element:DisplayElementDef, reusableClip:Null<PR2MovieClip>):DisplayObject {
+		if (element.type == "DOMStaticText") {
+			return createStaticText(element);
+		}
+
+		if (element.type == "DOMComponentInstance") {
+			return createComponent(element);
+		}
+
 		if (element.libraryItemName != null) {
 			var baked = BakedSymbolAtlas.create(element.libraryItemName);
 			if (baked != null) {
@@ -347,6 +360,206 @@ class PR2MovieClip extends Sprite {
 		}
 
 		return createPlaceholder(element);
+	}
+
+	private function createStaticText(element:DisplayElementDef):DisplayObject {
+		var attrs:Dynamic = element.textAttrs;
+		var field = new TextField();
+		var face = dynamicString(attrs, "face", "_sans");
+		var bold = face.indexOf("Bold") >= 0;
+		var size = Std.int(dynamicFloat(attrs, "size", dynamicFloat(attrs, "lineHeight", 12)));
+		var align = textAlign(dynamicString(attrs, "alignment", "left"));
+		var format = new TextFormat(face, size, 0x000000, bold, false, false, null, null, align);
+		field.defaultTextFormat = format;
+		field.setTextFormat(format);
+		field.text = element.text == null ? "" : element.text;
+		field.x = element.left == null ? 0 : element.left;
+		field.y = 0;
+		field.width = element.width == null ? Math.max(1, field.textWidth + 4) : element.width + 4;
+		field.height = element.height == null ? Math.max(1, field.textHeight + 4) : element.height + 4;
+		field.autoSize = TextFieldAutoSize.NONE;
+		field.selectable = false;
+		field.mouseEnabled = false;
+		return field;
+	}
+
+	private function createComponent(element:DisplayElementDef):DisplayObject {
+		return switch (element.libraryItemName) {
+			case "Components/TextInput":
+				createTextInput(element);
+			case "Components/Button":
+				createButtonComponent(componentString(element, "label", "Button"));
+			case "Components/ComboBox":
+				createComboBoxComponent(componentString(element, "prompt", ""));
+			case "Components/CheckBox":
+				createCheckBoxComponent(
+					componentString(element, "label", ""),
+					componentBool(element, "selected", false)
+				);
+			default:
+				createGenericComponent(element);
+		}
+	}
+
+	private function createTextInput(element:DisplayElementDef):DisplayObject {
+		var field = new TextField();
+		field.type = componentBool(element, "editable", true) ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+		field.defaultTextFormat = new TextFormat("_sans", 12, 0x111111, false, false, false, null, null, TextFormatAlign.LEFT);
+		field.text = componentString(element, "text", "");
+		field.displayAsPassword = componentBool(element, "displayAsPassword", false);
+		field.selectable = true;
+		field.mouseEnabled = true;
+		field.border = true;
+		field.borderColor = 0x7C8EA0;
+		field.background = true;
+		field.backgroundColor = 0xFFFFFF;
+		field.width = 100;
+		field.height = 22;
+		return field;
+	}
+
+	private function createButtonComponent(label:String):DisplayObject {
+		var button = new Sprite();
+		button.buttonMode = true;
+		button.useHandCursor = true;
+		button.mouseChildren = false;
+		drawComponentBox(button, 100, 22, 0xECECEC, 0x777777);
+
+		var text = componentText(label, 100, 20, 0x222222, true, TextFormatAlign.CENTER);
+		text.y = 3;
+		button.addChild(text);
+		return button;
+	}
+
+	private function createComboBoxComponent(prompt:String):DisplayObject {
+		var combo = new Sprite();
+		drawComponentBox(combo, 100, 22, 0xFFFFFF, 0x777777);
+		var text = componentText(prompt == "" ? "Loading..." : prompt, 78, 20, 0x222222, false, TextFormatAlign.LEFT);
+		text.x = 4;
+		text.y = 3;
+		combo.addChild(text);
+
+		var arrow = new Shape();
+		arrow.graphics.beginFill(0x333333);
+		arrow.graphics.moveTo(85, 8);
+		arrow.graphics.lineTo(95, 8);
+		arrow.graphics.lineTo(90, 14);
+		arrow.graphics.lineTo(85, 8);
+		arrow.graphics.endFill();
+		combo.addChild(arrow);
+		return combo;
+	}
+
+	private function createCheckBoxComponent(label:String, selected:Bool):DisplayObject {
+		var holder = new Sprite();
+		holder.buttonMode = true;
+		holder.useHandCursor = true;
+		holder.mouseChildren = false;
+
+		var box = new Shape();
+		box.graphics.beginFill(0xFFFFFF);
+		box.graphics.lineStyle(1, 0x666666);
+		box.graphics.drawRect(0, 3, 13, 13);
+		box.graphics.endFill();
+		if (selected) {
+			box.graphics.lineStyle(2, 0x222222);
+			box.graphics.moveTo(3, 9);
+			box.graphics.lineTo(6, 13);
+			box.graphics.lineTo(12, 5);
+		}
+		holder.addChild(box);
+
+		var text = componentText(label, 110, 20, 0x222222, false, TextFormatAlign.LEFT);
+		text.x = 18;
+		text.y = 2;
+		holder.addChild(text);
+		return holder;
+	}
+
+	private function createGenericComponent(element:DisplayElementDef):DisplayObject {
+		var label = element.name == null ? "component" : element.name;
+		var holder = new Sprite();
+		drawComponentBox(holder, 100, 22, 0xF2F2F2, 0x999999);
+		var text = componentText(label, 100, 20, 0x555555, false, TextFormatAlign.CENTER);
+		text.y = 3;
+		holder.addChild(text);
+		return holder;
+	}
+
+	private function drawComponentBox(target:Sprite, width:Float, height:Float, fill:Int, stroke:Int):Void {
+		target.graphics.beginFill(fill);
+		target.graphics.lineStyle(1, stroke);
+		target.graphics.drawRect(0, 0, width, height);
+		target.graphics.endFill();
+	}
+
+	private function componentText(label:String, width:Float, height:Float, color:Int, bold:Bool, align:TextFormatAlign):TextField {
+		var text = new TextField();
+		text.defaultTextFormat = new TextFormat("_sans", 11, color, bold, false, false, null, null, align);
+		text.width = width;
+		text.height = height;
+		text.text = label;
+		text.selectable = false;
+		text.mouseEnabled = false;
+		return text;
+	}
+
+	private function componentString(element:DisplayElementDef, name:String, fallback:String):String {
+		var params:Dynamic = element.componentParams;
+		if (params == null) {
+			return fallback;
+		}
+		var param:Dynamic = Reflect.field(params, name);
+		if (param == null || !Reflect.hasField(param, "value")) {
+			return fallback;
+		}
+		var value:Dynamic = Reflect.field(param, "value");
+		return value == null ? fallback : Std.string(value);
+	}
+
+	private function componentBool(element:DisplayElementDef, name:String, fallback:Bool):Bool {
+		var params:Dynamic = element.componentParams;
+		if (params == null) {
+			return fallback;
+		}
+		var param:Dynamic = Reflect.field(params, name);
+		if (param == null || !Reflect.hasField(param, "value")) {
+			return fallback;
+		}
+		var value:Dynamic = Reflect.field(param, "value");
+		if (Std.isOfType(value, Bool)) {
+			return value;
+		}
+		var text = Std.string(value).toLowerCase();
+		return text == "true" || text == "1" || text == "yes";
+	}
+
+	private function dynamicString(data:Dynamic, name:String, fallback:String):String {
+		if (data == null) {
+			return fallback;
+		}
+		var value:Dynamic = Reflect.field(data, name);
+		return value == null ? fallback : Std.string(value);
+	}
+
+	private function dynamicFloat(data:Dynamic, name:String, fallback:Float):Float {
+		if (data == null) {
+			return fallback;
+		}
+		var value:Dynamic = Reflect.field(data, name);
+		if (value == null) {
+			return fallback;
+		}
+		var parsed = Std.parseFloat(Std.string(value));
+		return Math.isNaN(parsed) ? fallback : parsed;
+	}
+
+	private function textAlign(value:String):TextFormatAlign {
+		return switch (value) {
+			case "center": TextFormatAlign.CENTER;
+			case "right": TextFormatAlign.RIGHT;
+			default: TextFormatAlign.LEFT;
+		}
 	}
 
 	private function createPlaceholder(element:DisplayElementDef):DisplayObject {

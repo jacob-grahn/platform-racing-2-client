@@ -3,7 +3,11 @@ package pr2.page;
 #if js
 import js.Browser;
 #end
+import haxe.crypto.Md5;
 import openfl.display.Bitmap;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.display.InteractiveObject;
 import openfl.display.PixelSnapping;
 import openfl.display.Shape;
 import openfl.display.Sprite;
@@ -15,8 +19,15 @@ import openfl.media.SoundTransform;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
+import openfl.text.TextFormatAlign;
+import openfl.text.TextFieldType;
 import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.net.AccountCreationClient;
+import pr2.net.LoginAuthClient;
+import pr2.net.ServerInfo;
+import pr2.net.ServerStatusClient;
+import pr2.runtime.PR2MovieClip;
 
 /**
 	Login menu ported from the Flash `menu.LoginPage`.
@@ -40,6 +51,13 @@ class LoginPage extends Page {
 	private var buttons:Array<LoginPageMenuButton> = [];
 	private var muteButton:Null<LoginMuteButton>;
 	private var kongHitArea:Null<Sprite>;
+	private var statusText:Null<TextField>;
+	private var activePopup:Null<LoginFlashPopup>;
+	private var servers:Array<ServerInfo> = [];
+	private var selectedServerIndex:Int = 0;
+	private var socketProbe:Null<LoginSocketProbe>;
+	private var pendingCreatedUserName:String = "";
+	private var pendingCreatedUserPass:String = "";
 
 	public function new() {
 		super();
@@ -52,22 +70,30 @@ class LoginPage extends Page {
 		pageArt = createBitmap(LOGIN_PAGE_ASSET, LOGIN_PAGE_TRIM_X, LOGIN_PAGE_TRIM_Y, LOGIN_PAGE_SCALE);
 		addChild(pageArt);
 
-		addMenuButton("Log In", noop);
-		addMenuButton("Play as Guest", noop);
-		addMenuButton("Create Account", noop);
+		addMenuButton("Log In", openLoginDialog);
+		addMenuButton("Play as Guest", openGuestDialog);
+		addMenuButton("Create Account", openCreateAccountDialog);
 		addMenuButton("Instructions", openInstructions);
-		addMenuButton("Credits", noop);
+		addMenuButton("Credits", openCreditsDialog);
 
-		kongHitArea = createHitArea(5, 364, 183, 31, noop);
+		kongHitArea = createHitArea(5, 364, 183, 31, openKongDialog);
 		addChild(kongHitArea);
 
 		muteButton = new LoginMuteButton();
 		muteButton.x = 491;
 		muteButton.y = 363;
 		addChild(muteButton);
+
+		statusText = makeText(10, 8, 530, 20, 11, 0x20354A, TextFormatAlign.CENTER);
+		statusText.text = "Loading servers...";
+		addChild(statusText);
+		loadServers();
 	}
 
 	override public function remove():Void {
+		closePopup();
+		closeSocketProbe();
+
 		for (button in buttons) {
 			button.remove();
 			if (button.parent != null) {
@@ -88,6 +114,11 @@ class LoginPage extends Page {
 			kongHitArea.parent.removeChild(kongHitArea);
 		}
 		kongHitArea = null;
+
+		if (statusText != null && statusText.parent != null) {
+			statusText.parent.removeChild(statusText);
+		}
+		statusText = null;
 
 		if (pageArt != null && pageArt.parent != null) {
 			pageArt.parent.removeChild(pageArt);
@@ -118,7 +149,271 @@ class LoginPage extends Page {
 		#end
 	}
 
-	private function noop():Void {}
+	private function openLoginDialog():Void {
+		var popup = openPopup("LoginPopupGraphic");
+		var remember = false;
+		var nameInput = popup.input("nameBox");
+		var passInput = popup.input("passBox");
+		var updateServer = function():Void {
+			var server = selectedServer();
+			popup.setComponentLabel("dropdown", server == null ? "No servers" : server.label());
+		};
+		updateServer();
+		popup.bindButton("dropdown", function():Void {
+			shiftServer(1);
+			updateServer();
+		});
+		popup.bindButton("reload_bt", function():Void {
+			loadServers();
+			popup.setMessage("Reloading servers...");
+		});
+		popup.bindButton("rememberMe_chk", function():Void {
+			remember = !remember;
+			popup.setComponentLabel("rememberMe_chk", remember ? "Remember Me: Yes" : "Remember Me");
+		});
+		popup.bindButton("forgotPass", function():Void {
+			popup.setMessage("Password reset is not ported yet.");
+		});
+		popup.bindButton("cancel_bt", closePopup);
+		popup.bindButton("login_bt", function():Void {
+			if (StringTools.trim(nameInput.text) == "" || passInput.text == "") {
+				popup.setMessage("Enter a username and password.");
+				return;
+			}
+			if (selectedServer() == null) {
+				popup.setMessage("No server is available yet.");
+				return;
+			}
+			var userName = StringTools.trim(nameInput.text);
+			var userPass = passInput.text;
+			closePopup();
+			openConnectingPopup(userName, userPass, remember);
+		});
+	}
+
+	private function openGuestDialog():Void {
+		openServerSelectPopup(true, false);
+	}
+
+	private function openCreateAccountDialog():Void {
+		var popup = openPopup("CreateAccountPopupGraphic");
+		var nameInput = popup.input("nameBox");
+		var passInput = popup.input("passBox1");
+		var confirmInput = popup.input("passBox2");
+		var emailInput = popup.input("emailBox");
+		popup.bindButton("cancel_bt", closePopup);
+		popup.bindButton("createAccount_bt", function():Void {
+			var userName = StringTools.trim(nameInput.text);
+			var userPass = passInput.text;
+			if (userName == "" || userPass == "") {
+				popup.setMessage("Fill in username and password.");
+			} else if (userPass != confirmInput.text) {
+				popup.setMessage("The passwords don't match. Please enter your password again.");
+			} else {
+				popup.setMessage("Creating account...");
+				AccountCreationClient.create(userName, userPass, StringTools.trim(emailInput.text), function(result):Void {
+					if (result.success) {
+						pendingCreatedUserName = userName;
+						pendingCreatedUserPass = userPass;
+						openServerSelectPopup(false, true);
+					} else {
+						popup.setMessage(result.message == "" ? "Account creation failed." : result.message);
+					}
+				}, function(message:String):Void {
+					popup.setMessage(message);
+				});
+			}
+		});
+	}
+
+	private function openCreditsDialog():Void {
+		var popup = openPopup("CreditsPopupGraphic");
+		popup.bindButton("close_bt", closePopup);
+	}
+
+	private function openKongDialog():Void {
+		var popup = openPopup("LoggingInPopupGraphic");
+		popup.setMessage("Kongregate outfit linking is not available in this standalone port yet.");
+		popup.bindButton("close_bt", closePopup);
+	}
+
+	private function openServerSelectPopup(guestLogin:Bool, createdAccount:Bool):Void {
+		var popup = openPopup("ServerSelectPopupGraphic");
+		var updateServer = function():Void {
+			var server = selectedServer();
+			popup.setComponentLabel("serverSelect", server == null ? "No servers" : server.label());
+		};
+		updateServer();
+		popup.setComponentLabel("userSelect", guestLogin ? "Guest" : (createdAccount ? pendingCreatedUserName : "Use Other Account..."));
+		var userDelete = popup.child("user_del_bt");
+		if (userDelete != null) {
+			userDelete.alpha = guestLogin || createdAccount ? 0.1 : 1;
+			var userDeleteInteractive = Std.downcast(userDelete, InteractiveObject);
+			if (userDeleteInteractive != null) {
+				userDeleteInteractive.mouseEnabled = !(guestLogin || createdAccount);
+			}
+		}
+		popup.bindButton("serverSelect", function():Void {
+			shiftServer(1);
+			updateServer();
+		});
+		popup.bindButton("reload_bt", function():Void {
+			loadServers();
+			popup.setMessage("Reloading servers...");
+		});
+		popup.bindButton("cancel_bt", closePopup);
+		popup.bindButton("login_bt", function():Void {
+			if (selectedServer() == null) {
+				popup.setMessage("No server is available yet.");
+				return;
+			}
+			closePopup();
+			if (guestLogin) {
+				openConnectingPopup("Guest", "", false);
+			} else if (createdAccount) {
+				openConnectingPopup(pendingCreatedUserName, pendingCreatedUserPass, false);
+			} else {
+				openLoginDialog();
+			}
+		});
+	}
+
+	private function openConnectingPopup(userName:String, userPass:String, remember:Bool):Void {
+		var popup = openPopup("ConnectingPopupGraphic");
+		popup.setMessage('Connecting as $userName...');
+		popup.bindButton("var_1", function():Void {
+			closeSocketProbe();
+			closePopup();
+		});
+		attemptConnection(userName, userPass, remember, popup);
+	}
+
+	private function openLoggingInPopup(loginId:String, userName:String, userPass:String, remember:Bool, server:ServerInfo):Void {
+		var popup = openPopup("LoggingInPopupGraphic");
+		popup.bindButton("close_bt", function():Void {
+			closeSocketProbe();
+			closePopup();
+		});
+		var parsedLoginId = Std.parseInt(loginId);
+		if (parsedLoginId == null) {
+			popup.setMessage('Invalid login id from server: $loginId');
+			return;
+		}
+		popup.setMessage("Sending encrypted login...");
+		LoginAuthClient.login(userName, userPass, server, remember, parsedLoginId, function(result):Void {
+			if (result.success) {
+				var message = userName == "Guest"
+					? "Guest auth accepted. Lobby handoff is not ported yet."
+					: "Account auth accepted. Waiting for socket loginSuccessful/lobby handoff.";
+				popup.setMessage(message);
+				setStatus(message);
+			} else {
+				var message = result.message == "" ? "Login failed." : result.message;
+				popup.setMessage(message);
+				setStatus(message);
+			}
+		}, function(message:String):Void {
+			popup.setMessage(message);
+			setStatus(message);
+		});
+	}
+
+	private function openPopup(linkage:String):LoginFlashPopup {
+		closePopup();
+		var popup = new LoginFlashPopup(linkage);
+		activePopup = popup;
+		addChild(popup);
+		return popup;
+	}
+
+	private function closePopup():Void {
+		if (activePopup != null) {
+			activePopup.remove();
+			if (activePopup.parent != null) {
+				activePopup.parent.removeChild(activePopup);
+			}
+			activePopup = null;
+		}
+	}
+
+	private function loadServers():Void {
+		ServerStatusClient.fetch(function(result):Void {
+			servers = result.servers.filter(function(server):Bool {
+				return server.address != "" && server.port > 0;
+			});
+			selectedServerIndex = 0;
+			setStatus(servers.length == 0 ? "No usable servers found." : 'Loaded ${servers.length} servers. Selected ${servers[0].label()}.');
+			updateActiveServerLabels();
+		}, function(message:String):Void {
+			servers = [];
+			setStatus(message);
+			updateActiveServerLabels();
+		});
+	}
+
+	private function selectedServer():Null<ServerInfo> {
+		if (servers.length == 0) {
+			return null;
+		}
+		if (selectedServerIndex < 0 || selectedServerIndex >= servers.length) {
+			selectedServerIndex = 0;
+		}
+		return servers[selectedServerIndex];
+	}
+
+	private function shiftServer(delta:Int):Void {
+		if (servers.length == 0) {
+			return;
+		}
+		selectedServerIndex = (selectedServerIndex + delta + servers.length) % servers.length;
+		var server = servers[selectedServerIndex];
+		setStatus('Selected ${server.label()}.');
+		updateActiveServerLabels();
+	}
+
+	private function updateActiveServerLabels():Void {
+		if (activePopup == null) {
+			return;
+		}
+		var server = selectedServer();
+		var label = server == null ? "No servers" : server.label();
+		activePopup.setComponentLabel("serverSelect", label);
+		activePopup.setComponentLabel("dropdown", label);
+	}
+
+	private function attemptConnection(userName:String, userPass:String, remember:Bool, popup:LoginFlashPopup):Void {
+		var server = selectedServer();
+		if (server == null) {
+			popup.setMessage("No server is available yet.");
+			return;
+		}
+		closeSocketProbe();
+		popup.setMessage('Connecting to ${server.label()}...');
+		socketProbe = new LoginSocketProbe(server, function(status:LoginProbeStatus):Void {
+			switch (status) {
+				case Message(message):
+					popup.setMessage(message);
+					setStatus(message);
+				case LoginId(loginId):
+					setStatus('Received login id $loginId from ${server.label()}.');
+					openLoggingInPopup(loginId, userName, userPass, remember, server);
+			}
+		});
+		socketProbe.connect();
+	}
+
+	private function closeSocketProbe():Void {
+		if (socketProbe != null) {
+			socketProbe.close();
+			socketProbe = null;
+		}
+	}
+
+	private function setStatus(message:String):Void {
+		if (statusText != null) {
+			statusText.text = message;
+		}
+	}
 
 	private static function createBitmap(assetPath:String, trimX:Int, trimY:Int, scale:Int):Bitmap {
 		var bitmap = new Bitmap(Assets.getBitmapData(assetPath), PixelSnapping.AUTO, true);
@@ -142,6 +437,18 @@ class LoginPage extends Page {
 			clickHandler();
 		});
 		return hitArea;
+	}
+
+	private static function makeText(x:Float, y:Float, width:Float, height:Float, size:Int, color:Int, align:TextFormatAlign):TextField {
+		var text = new TextField();
+		text.defaultTextFormat = new TextFormat("_sans", size, color, false, false, false, null, null, align);
+		text.x = x;
+		text.y = y;
+		text.width = width;
+		text.height = height;
+		text.selectable = false;
+		text.mouseEnabled = false;
+		return text;
 	}
 }
 
@@ -318,6 +625,235 @@ private class LoginPageMenuButton extends Sprite {
 
 	private function onClick(_:MouseEvent):Void {
 		clickHandler();
+	}
+}
+
+private class LoginFlashPopup extends Sprite {
+	private var art:PR2MovieClip;
+	private var messageText:TextField;
+	private var buttonHandlers:Array<{target:DisplayObject, handler:MouseEvent->Void}> = [];
+
+	public function new(linkage:String) {
+		super();
+		graphics.beginFill(0x000000, 0.55);
+		graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		graphics.endFill();
+
+		art = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+		art.x = Constants.STAGE_WIDTH / 2;
+		art.y = Constants.STAGE_HEIGHT / 2;
+		addChild(art);
+
+		messageText = new TextField();
+		messageText.defaultTextFormat = new TextFormat("_sans", 11, 0x7B2D26, false, false, false, null, null, TextFormatAlign.CENTER);
+		messageText.x = 118;
+		messageText.y = 346;
+		messageText.width = 314;
+		messageText.height = 42;
+		messageText.wordWrap = true;
+		messageText.multiline = true;
+		messageText.selectable = false;
+		messageText.mouseEnabled = false;
+		addChild(messageText);
+	}
+
+	public function child(name:String):Null<DisplayObject> {
+		return findByName(art, name);
+	}
+
+	public function input(name:String):TextField {
+		var field = Std.downcast(child(name), TextField);
+		if (field == null) {
+			throw 'Popup ${art.symbol.linkageClassName} missing TextInput $name';
+		}
+		return field;
+	}
+
+	public function bindButton(name:String, clickHandler:Void->Void):Void {
+		var target = child(name);
+		if (target == null) {
+			return;
+		}
+		var interactive = Std.downcast(target, InteractiveObject);
+		if (interactive != null) {
+			interactive.mouseEnabled = true;
+		}
+		var sprite = Std.downcast(target, Sprite);
+		if (sprite != null) {
+			sprite.buttonMode = true;
+			sprite.useHandCursor = true;
+			sprite.mouseChildren = false;
+		}
+		var handler = function(_:MouseEvent):Void {
+			clickHandler();
+		};
+		target.addEventListener(MouseEvent.CLICK, handler);
+		buttonHandlers.push({target: target, handler: handler});
+	}
+
+	public function setComponentLabel(name:String, value:String):Void {
+		var target = Std.downcast(child(name), DisplayObjectContainer);
+		if (target == null) {
+			return;
+		}
+		var text = firstTextField(target);
+		if (text != null) {
+			text.text = value;
+		}
+	}
+
+	public function setMessage(message:String):Void {
+		messageText.text = message;
+	}
+
+	public function remove():Void {
+		for (entry in buttonHandlers) {
+			entry.target.removeEventListener(MouseEvent.CLICK, entry.handler);
+		}
+		buttonHandlers = [];
+		art.dispose();
+	}
+
+	private function findByName(container:DisplayObjectContainer, name:String):Null<DisplayObject> {
+		for (i in 0...container.numChildren) {
+			var display = container.getChildAt(i);
+			if (display.name == name) {
+				return display;
+			}
+			var childContainer = Std.downcast(display, DisplayObjectContainer);
+			if (childContainer != null) {
+				var found = findByName(childContainer, name);
+				if (found != null) {
+					return found;
+				}
+			}
+		}
+		return null;
+	}
+
+	private function firstTextField(container:DisplayObjectContainer):Null<TextField> {
+		for (i in 0...container.numChildren) {
+			var display = container.getChildAt(i);
+			var text = Std.downcast(display, TextField);
+			if (text != null) {
+				return text;
+			}
+			var childContainer = Std.downcast(display, DisplayObjectContainer);
+			if (childContainer != null) {
+				var found = firstTextField(childContainer);
+				if (found != null) {
+					return found;
+				}
+			}
+		}
+		return null;
+	}
+}
+
+private enum LoginProbeStatus {
+	Message(message:String);
+	LoginId(loginId:String);
+}
+
+private class LoginSocketProbe {
+	private static inline var END_CHAR:String = "\x04";
+	private static inline var COMM_PASS:String = "QHE0NSNwKWZZQVEhU19xMA==";
+	private static inline var COMM_PASS_SERVER_10:String = "ayo3JnBGQCZVRiEhVjFAQA==";
+
+	private var server:ServerInfo;
+	private var onStatus:LoginProbeStatus->Void;
+	private var sendNum:Int = 0;
+	private var buffer:String = "";
+	#if js
+	private var socket:Null<js.html.WebSocket>;
+	#end
+
+	public function new(server:ServerInfo, onStatus:LoginProbeStatus->Void) {
+		this.server = server;
+		this.onStatus = onStatus;
+	}
+
+	public function connect():Void {
+		#if js
+		var secure = Browser.location.protocol == "https:";
+		var url = server.websocketUrl(secure);
+		try {
+			socket = new js.html.WebSocket(url);
+			socket.onopen = function(_):Void {
+				onStatus(Message('Connected to ${server.label()}; requesting login id...'));
+				write("request_login_id`");
+			};
+			socket.onmessage = function(event):Void {
+				buffer += Std.string(event.data);
+				readBufferedMessages();
+			};
+			socket.onerror = function(_):Void {
+				onStatus(Message('Could not connect to ${server.label()} over WebSocket.'));
+			};
+			socket.onclose = function(_):Void {
+				if (buffer == "") {
+					onStatus(Message('Connection to ${server.label()} closed.'));
+				}
+			};
+		} catch (error:Dynamic) {
+			onStatus(Message('Could not open WebSocket: ${Std.string(error)}'));
+		}
+		#else
+		onStatus(Message("Server connection probing is available on the html5 target."));
+		#end
+	}
+
+	public function close():Void {
+		#if js
+		if (socket != null) {
+			socket.close();
+			socket = null;
+		}
+		#end
+	}
+
+	private function write(command:String):Void {
+		#if js
+		if (socket == null || socket.readyState != js.html.WebSocket.OPEN) {
+			return;
+		}
+		sendNum++;
+		if (sendNum == 12) {
+			sendNum++;
+		}
+		var payload = sendNum + "`" + command;
+		var hash = Md5.encode(socketToken() + payload).substr(0, 3);
+		socket.send(hash + "`" + payload + END_CHAR);
+		#end
+	}
+
+	private function readBufferedMessages():Void {
+		var endIndex = buffer.indexOf(END_CHAR);
+		while (endIndex >= 0) {
+			var message = buffer.substr(0, endIndex);
+			buffer = buffer.substr(endIndex + 1);
+			handleMessage(message);
+			endIndex = buffer.indexOf(END_CHAR);
+		}
+	}
+
+	private function handleMessage(message:String):Void {
+		var parts = message.split("`");
+		if (parts.length < 3) {
+			return;
+		}
+		var command = parts[2];
+		if (command == "setLoginID" && parts.length >= 4) {
+			onStatus(LoginId(parts[3]));
+		} else if (command == "loginFailure") {
+			onStatus(Message('Server rejected login: ${parts.slice(3).join(" ")}'));
+		} else {
+			onStatus(Message('Received $command from ${server.label()}.'));
+		}
+	}
+
+	private function socketToken():String {
+		return server.serverId == 10 ? COMM_PASS_SERVER_10 : COMM_PASS;
 	}
 }
 
