@@ -50,7 +50,6 @@ typedef EdgeDef = {
 	@:optional var fillStyle1:Int;
 	@:optional var strokeStyle:Int;
 	@:optional var edges:String;
-	@:optional var cubics:String;
 }
 
 typedef FilterDef = {

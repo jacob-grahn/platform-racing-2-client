@@ -155,7 +155,6 @@ typedef EdgeDef = {
 \t@:optional var fillStyle1:Int;
 \t@:optional var strokeStyle:Int;
 \t@:optional var edges:String;
-\t@:optional var cubics:String;
 }
 
 typedef FilterDef = {

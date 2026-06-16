@@ -258,10 +258,25 @@ Next steps:
     structure of the Adobe `@4x.png`. Runtime tests cover a stroked rounded
     rectangle and a solid-filled oval (`PR2MovieClipRuntimeTest`, now 345
     assertions); other suites still pass.
-- [ ] Handle the `cubics` edge format and the `/`/`]` commands.
-  - `EdgeDef.cubics` is used by ~23k records as an alternative to `edges` (cubic
-    Bezier form with `(`, `)`, `;`, `q`, `Q` tokens, same twip scale). The
-    parser currently only fully handles the `edges` form.
+- [x] Handle the `cubics` edge format and the `/`/`]` commands.
+  - Finding: the XFL `cubics` attribute is a redundant cubic-Bezier copy of
+    geometry the styled quadratic `edges` already fully describe. Across all 88
+    library `DOMShape`s, every shape with cubics also has styled `edges`, no
+    `cubics` edge carries a fill/stroke style, and no shape is cubics-only.
+    Flash itself only ever rendered the quadratic `edges` (SWF is quadratic-only),
+    so rendering cubics would both double-draw and diverge from Flash.
+  - Resolution: stop extracting `cubics` (`tools/xfl_metadata.py` drops the
+    attribute and filters the resulting style-less empty edges; bounds now come
+    from `edges` only), drop `EdgeDef.cubics` from the schema/generator, and
+    remove the dead cubics-draw code from `VectorShapeRenderer` (the old "draw
+    cubics directly inside the fill" path was unreachable since cubics edges have
+    no style). Regenerated `AssetCatalog.hx` shrank ~12.8MB->10.0MB (~70k lines).
+  - The `/` (lineTo) and `]` (quadTo) commands were already handled identically
+    to `|`/`[` -- geometrically correct, they only differ by a cubic-segment hint
+    bit. `/` appears 138x in styled edges; `]` never appears. Verified by
+    rendering cubics-heavy symbols (e.g. `Parts/Heads/Blobfish/blobbyTop`, 63
+    cubics edges) fully from their styled edges, plus the mute_button baseline.
+    Runtime tests still pass (345 assertions).
 - [ ] Automate the renderer-vs-PNG diff.
   - Use `tools/compare_screenshots.py` to score `SymbolPreview` captures against
     the Adobe `@4x` rasters; align scale/offset via the symbol drawing bounds so

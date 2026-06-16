@@ -280,12 +280,16 @@ def parse_shape_styles(element, wrapper_name, style_name):
 
 
 def parse_edge(element):
+    # The XFL `cubics` attribute is a redundant cubic-Bezier copy of geometry the
+    # styled `edges` quadratics already fully describe. Cubics edges carry no
+    # fill/stroke style, and Flash itself renders only the quadratic `edges` (SWF
+    # is quadratic-only), so we drop `cubics` here. A style-less cubics-only Edge
+    # then compacts to an empty record, which parse_shape_edges filters out.
     record = {
         "fillStyle0": maybe_int(element.attrib.get("fillStyle0")),
         "fillStyle1": maybe_int(element.attrib.get("fillStyle1")),
         "strokeStyle": maybe_int(element.attrib.get("strokeStyle")),
         "edges": element.attrib.get("edges"),
-        "cubics": element.attrib.get("cubics"),
     }
     return compact_record(record)
 
@@ -294,15 +298,11 @@ def parse_shape_edges(element):
     wrapper = first_direct_child(element, "edges")
     if wrapper is None:
         return []
-    return [parse_edge(edge) for edge in direct_children(wrapper, "Edge")]
+    return [edge for edge in (parse_edge(edge) for edge in direct_children(wrapper, "Edge")) if edge]
 
 
 def edge_numbers(edge_record):
-    text = " ".join(
-        value
-        for value in (edge_record.get("edges"), edge_record.get("cubics"))
-        if value
-    )
+    text = edge_record.get("edges") or ""
     return [maybe_float(match.group(0)) for match in EDGE_NUMBER_RE.finditer(text)]
 
 

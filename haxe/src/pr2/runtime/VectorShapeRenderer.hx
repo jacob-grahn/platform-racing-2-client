@@ -49,21 +49,13 @@ class VectorShapeRenderer {
 				}
 				var contours = collectFillContours(element.edges, fill.index);
 				var rings = stitch(contours);
-				if (rings.length == 0 && !hasCubicFill(element.edges, fill.index)) {
+				if (rings.length == 0) {
 					continue;
 				}
 
 				beginStyleFill(shape.graphics, fill.value);
 				for (ring in rings) {
 					emitContour(shape.graphics, ring);
-				}
-				// Edges expressed only as cubics aren't stitched yet; draw them
-				// directly inside the fill so they are not dropped entirely.
-				for (edge in element.edges) {
-					if (edge.edges == null && edge.cubics != null
-						&& (edge.fillStyle0 == fill.index || edge.fillStyle1 == fill.index)) {
-						new EdgePathParser(edge.cubics, shape.graphics).draw();
-					}
 				}
 				shape.graphics.endFill();
 				drew = true;
@@ -174,16 +166,6 @@ class VectorShapeRenderer {
 			}
 		}
 		return contours;
-	}
-
-	private static function hasCubicFill(edges:Array<EdgeDef>, index:Int):Bool {
-		for (edge in edges) {
-			if (edge.edges == null && edge.cubics != null
-				&& (edge.fillStyle0 == index || edge.fillStyle1 == index)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	// Connect contour pieces end-to-start into closed rings. Pieces that are
@@ -301,11 +283,10 @@ class VectorShapeRenderer {
 			if (edge.strokeStyle != index) {
 				continue;
 			}
-			var path = edge.edges != null ? edge.edges : edge.cubics;
-			if (path == null || path == "") {
+			if (edge.edges == null || edge.edges == "") {
 				continue;
 			}
-			new EdgePathParser(path, graphics).draw();
+			new EdgePathParser(edge.edges, graphics).draw();
 			drew = true;
 		}
 		return drew;
@@ -440,11 +421,16 @@ private class EdgeContourParser {
 	private function new() {}
 }
 
+// Draws an XFL styled `edges` string straight to a Graphics, used for strokes
+// (fills go through the stitching path instead). Styled edges only ever use the
+// quadratic commands `! | / [ ] S`; the `/` and `]` forms are the same geometry
+// as `|`/`[` (they only differ by a "cubic segment" hint bit), so they are drawn
+// identically. The redundant cubic-Bézier `cubics` representation is dropped at
+// extraction (it carries no style and Flash renders only these quadratics), so
+// this parser never needs the cubic tokens.
 private class EdgePathParser {
 	private var reader:EdgeReader;
 	private var graphics:Graphics;
-	private var currentX:Float = 0;
-	private var currentY:Float = 0;
 
 	public function new(text:String, graphics:Graphics) {
 		this.reader = new EdgeReader(text);
@@ -459,72 +445,25 @@ private class EdgePathParser {
 					var point = reader.readPoint();
 					if (point != null) {
 						graphics.moveTo(point.x, point.y);
-						currentX = point.x;
-						currentY = point.y;
 					}
 				case "|", "/":
 					var point = reader.readPoint();
 					if (point != null) {
 						graphics.lineTo(point.x, point.y);
-						currentX = point.x;
-						currentY = point.y;
 					}
 				case "[", "]":
 					var control = reader.readPoint();
 					var anchor = reader.readPoint();
 					if (control != null && anchor != null) {
 						graphics.curveTo(control.x, control.y, anchor.x, anchor.y);
-						currentX = anchor.x;
-						currentY = anchor.y;
 					}
-				case "Q":
-					var control = reader.readPoint();
-					reader.skipSeparators();
-					if (reader.peek() == "q") {
-						reader.next();
-					}
-					var anchor = reader.readPoint();
-					if (control != null && anchor != null) {
-						graphics.curveTo(control.x, control.y, anchor.x, anchor.y);
-						currentX = anchor.x;
-						currentY = anchor.y;
-					}
-				case "q":
-					drawLinePoints();
 				case "S":
+					// Style-selector hint carrying a single number and no
+					// geometry; consume the number and continue.
 					reader.readNumber();
 				default:
 			}
 		}
-	}
-
-	private function drawLinePoints():Void {
-		var points:Array<Pt> = [];
-		while (true) {
-			var checkpoint = reader.pos;
-			var point = reader.readPoint();
-			if (point == null) {
-				reader.pos = checkpoint;
-				break;
-			}
-			points.push(point);
-			reader.skipSeparators();
-			if (reader.eof() || reader.isCommand(reader.peek())) {
-				break;
-			}
-		}
-
-		var startIndex = points.length > 1 && samePoint(points[0], currentX, currentY) ? 1 : 0;
-		for (i in startIndex...points.length) {
-			var point = points[i];
-			graphics.lineTo(point.x, point.y);
-			currentX = point.x;
-			currentY = point.y;
-		}
-	}
-
-	private function samePoint(point:Pt, x:Float, y:Float):Bool {
-		return Math.abs(point.x - x) < 0.0001 && Math.abs(point.y - y) < 0.0001;
 	}
 }
 
@@ -541,10 +480,6 @@ private class EdgeReader {
 
 	public inline function eof():Bool {
 		return pos >= text.length;
-	}
-
-	public inline function peek():String {
-		return pos < text.length ? text.charAt(pos) : "";
 	}
 
 	public inline function next():String {
@@ -634,15 +569,11 @@ private class EdgeReader {
 	public function skipSeparators():Void {
 		while (pos < text.length) {
 			var char = text.charAt(pos);
-			if (char == " " || char == "\n" || char == "\r" || char == "\t" || char == "," || char == ";" || char == "(" || char == ")") {
+			if (char == " " || char == "\n" || char == "\r" || char == "\t") {
 				pos++;
 			} else {
 				break;
 			}
 		}
-	}
-
-	public function isCommand(char:String):Bool {
-		return char == "!" || char == "|" || char == "/" || char == "[" || char == "]" || char == "S" || char == "Q" || char == "q";
 	}
 }
