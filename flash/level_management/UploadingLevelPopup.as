@@ -1,4 +1,3 @@
-﻿
 package level_management
 {
     import com.hurlant.crypto.hash.MD5;

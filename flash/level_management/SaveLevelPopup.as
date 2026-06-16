@@ -1,4 +1,3 @@
-﻿
 package level_management
 {
     import flash.events.Event;
