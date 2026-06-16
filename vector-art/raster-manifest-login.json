@@ -35,8 +35,8 @@
         "x": -8.0,
         "y": -3.0
       },
-      "png": "vector-art/png/login/bg_front@4x.png",
-      "scale": 4,
+      "png": "vector-art/png/login/bg_front@2x.png",
+      "scale": 2,
       "slug": "bg_front",
       "source": "vector-art/svg/login/bg_front.svg",
       "stage": {
@@ -45,10 +45,10 @@
       },
       "trim": {
         "empty": false,
-        "height": 796,
-        "width": 10158,
-        "x": -21,
-        "y": 2
+        "height": 398,
+        "width": 5078,
+        "x": -10,
+        "y": 1
       }
     },
     {

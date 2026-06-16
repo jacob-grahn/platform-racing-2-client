@@ -512,7 +512,12 @@ private class LoginBackground extends Sprite {
 			new LoginBackgroundLayer("assets/login/bg_sky@4x.png", -245, -162, 4, 0, 0, 1.0, 1.00010681152344, 1, 0, 0),
 			new LoginBackgroundLayer("assets/login/bg_far@4x.png", 46, 0, 4, -15.65, 240.25, 1.0, 1.0, 1508, 1276.0, -1276.0),
 			new LoginBackgroundLayer("assets/login/bg_mid@4x.png", 119, -615, 4, -36.75, 263.4, 1.00004577636719, 1.0006103515625, 383, 1237.0, -1235.7),
-			new LoginBackgroundLayer("assets/login/bg_front@4x.png", -21, 2, 4, -7.2, 279.9, 1.0, 1.0, 134, -0.65, -1250.25),
+			// bg_front is rasterized at 2x (5078px wide) rather than 4x (10158px).
+			// At 4x it exceeds the WebGL MAX_TEXTURE_SIZE (8192 on many GPUs), so the
+			// texture upload fails and the layer paints as an opaque black quad over
+			// the sky. As a fast-scrolling foreground silhouette it does not need 4x
+			// detail. See vector-art/raster-manifest-login.json for the trim values.
+			new LoginBackgroundLayer("assets/login/bg_front@2x.png", -10, 1, 2, -7.2, 279.9, 1.0, 1.0, 134, -0.65, -1250.25),
 		];
 
 		for (layer in layers) {
