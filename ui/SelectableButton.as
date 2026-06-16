@@ -1,6 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-
-//ui.SelectableButton
+﻿//ui.SelectableButton
 
 package ui
 {

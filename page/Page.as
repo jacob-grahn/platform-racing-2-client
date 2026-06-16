@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// Page = class_5
+﻿// Page = class_5
 
 package page
 {

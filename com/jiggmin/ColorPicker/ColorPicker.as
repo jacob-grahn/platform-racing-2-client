@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// com.jiggmin.ColorPicker.ColorPicker = package_16.class_182
+﻿// com.jiggmin.ColorPicker.ColorPicker = package_16.class_182
 
 package com.jiggmin.ColorPicker
 {

@@ -1,6 +1,3 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
 // package_17.PartInfoListing = package_17.class_257
 
 package player_profile.PartInfo

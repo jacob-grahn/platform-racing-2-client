@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.AdminMenu = dialogs.class_194
+﻿// dialogs.AdminMenu = dialogs.class_194
 
 package dialogs
 {

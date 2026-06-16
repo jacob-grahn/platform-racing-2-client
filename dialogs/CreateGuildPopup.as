@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.CreateGuildPopup = dialogs.class_255
+﻿// dialogs.CreateGuildPopup = dialogs.class_255
 
 package dialogs
 {

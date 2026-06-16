@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.Hat = effects.class_143
+﻿// effects.Hat = effects.class_143
 
 package effects
 {

@@ -1,6 +1,3 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
 // com.jiggmin.ColorPicker.CursorEyedropper = package_16.class_279
 
 package com.jiggmin.ColorPicker

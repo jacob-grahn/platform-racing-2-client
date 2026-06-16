@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// character.Character = character.class_76
+﻿// character.Character = character.class_76
 
 package character
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.MineExplode = class_108
+﻿// effects.MineExplode = class_108
 
 package effects
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//levelEditor.BlockObject = levelEditor.class_132
+﻿//levelEditor.BlockObject = levelEditor.class_132
 
 package levelEditor
 {

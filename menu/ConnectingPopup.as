@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// menu.ConnectingPopup = menu.class_119
+﻿// menu.ConnectingPopup = menu.class_119
 
 package menu
 {

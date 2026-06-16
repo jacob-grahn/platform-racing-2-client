@@ -1,6 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-
-//background.LevelBackground
+﻿//background.LevelBackground
 // actual level background image
 
 package background

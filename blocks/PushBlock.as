@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//blocks.PushBlock = blocks.class_50
+﻿//blocks.PushBlock = blocks.class_50
 
 package blocks
 {

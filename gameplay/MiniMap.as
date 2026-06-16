@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// gameplay.MiniMap = gameplay.class_84
+﻿// gameplay.MiniMap = gameplay.class_84
 
 package gameplay
 {

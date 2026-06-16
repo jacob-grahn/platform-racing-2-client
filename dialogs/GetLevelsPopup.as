@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.GetLevelsPopup = dialogs.class_173
+﻿// dialogs.GetLevelsPopup = dialogs.class_173
 
 package dialogs
 {

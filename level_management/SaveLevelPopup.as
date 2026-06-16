@@ -1,8 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-
-package level_management
+﻿package level_management
 {
     import flash.events.Event;
     import flash.events.MouseEvent;

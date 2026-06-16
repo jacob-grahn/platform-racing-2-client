@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// ui.MuteButton = ui.class_13
+﻿// ui.MuteButton = ui.class_13
 
 package ui
 {

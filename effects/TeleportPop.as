@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.TeleportPop = effects.class_177
+﻿// effects.TeleportPop = effects.class_177
 
 package effects
 {

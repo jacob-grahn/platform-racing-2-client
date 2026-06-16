@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//PR2_Graphics_1_Apr_2014_fla.bubblxbox_play_latest_text_252
+﻿//PR2_Graphics_1_Apr_2014_fla.bubblxbox_play_latest_text_252
 
 package PR2_Graphics_1_Apr_2014_fla
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// ui.LoginPageMenuButton = ui.class_70
+﻿// ui.LoginPageMenuButton = ui.class_70
 
 package ui
 {

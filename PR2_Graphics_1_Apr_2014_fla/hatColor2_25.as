@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//PR2_Graphics_1_Apr_2014_fla.hatColor2_25
+﻿//PR2_Graphics_1_Apr_2014_fla.hatColor2_25
 
 package PR2_Graphics_1_Apr_2014_fla
 {

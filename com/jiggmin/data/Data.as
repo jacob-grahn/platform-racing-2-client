@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// com.jiggmin.data.Data = data.class_28
+﻿// com.jiggmin.data.Data = data.class_28
 
 package com.jiggmin.data
 {

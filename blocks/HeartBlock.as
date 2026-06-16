@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//blocks.HeartBlock = blocks.class_57
+﻿//blocks.HeartBlock = blocks.class_57
 
 package blocks
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// menu.IntroPage = menu.class_6
+﻿// menu.IntroPage = menu.class_6
 
 package menu
 {

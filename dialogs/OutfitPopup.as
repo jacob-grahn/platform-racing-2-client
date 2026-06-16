@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.Popup = lobby.class_205
+﻿// dialogs.Popup = lobby.class_205
 
 package dialogs
 {

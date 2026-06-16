@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.BanMenu = dialogs.class_191
+﻿// dialogs.BanMenu = dialogs.class_191
 
 package dialogs
 {

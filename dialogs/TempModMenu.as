@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.TempModMenu = dialogs.class_195
+﻿// dialogs.TempModMenu = dialogs.class_195
 
 package dialogs
 {
