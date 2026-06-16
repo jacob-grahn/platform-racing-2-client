@@ -1,0 +1,43 @@
+{
+  "id": "flat-level",
+  "name": "Flat Fixture",
+  "widthTiles": 18,
+  "heightTiles": 12,
+  "tileSize": 30,
+  "gravity": 27,
+  "stats": {
+    "speed": 55,
+    "acceleration": 1.2,
+    "jump": 12
+  },
+  "playerStart": {
+    "x": 2,
+    "y": 8
+  },
+  "finish": {
+    "x": 16,
+    "y": 8
+  },
+  "blocks": [
+    { "x": 2, "y": 9, "type": "start" },
+    { "x": 16, "y": 9, "type": "finish" },
+    { "x": 0, "y": 10, "type": "basic" },
+    { "x": 1, "y": 10, "type": "basic" },
+    { "x": 2, "y": 10, "type": "basic" },
+    { "x": 3, "y": 10, "type": "basic" },
+    { "x": 4, "y": 10, "type": "basic" },
+    { "x": 5, "y": 10, "type": "basic" },
+    { "x": 6, "y": 10, "type": "basic" },
+    { "x": 7, "y": 10, "type": "basic" },
+    { "x": 8, "y": 10, "type": "basic" },
+    { "x": 9, "y": 10, "type": "basic" },
+    { "x": 10, "y": 10, "type": "basic" },
+    { "x": 11, "y": 10, "type": "basic" },
+    { "x": 12, "y": 10, "type": "basic" },
+    { "x": 13, "y": 10, "type": "basic" },
+    { "x": 14, "y": 10, "type": "basic" },
+    { "x": 15, "y": 10, "type": "basic" },
+    { "x": 16, "y": 10, "type": "basic" },
+    { "x": 17, "y": 10, "type": "basic" }
+  ]
+}

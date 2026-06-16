@@ -1,0 +1,32 @@
+{
+  "query": "screen=harness",
+  "steps": [
+    {
+      "time": 2.0,
+      "action": "keyDown",
+      "key": "down"
+    },
+    {
+      "time": 2.3,
+      "action": "debug-state",
+      "expect": {
+        "fixture": "flat-level",
+        "x": "75",
+        "y": "270",
+        "grounded": "true",
+        "crouching": "true",
+        "animation": "crouch"
+      }
+    },
+    {
+      "time": 2.4,
+      "action": "shot",
+      "out": "test/output/openfl-crouch.png"
+    },
+    {
+      "time": 2.5,
+      "action": "keyUp",
+      "key": "down"
+    }
+  ]
+}

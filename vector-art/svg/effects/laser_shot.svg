@@ -1,0 +1,36 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<radialGradient id="Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="107.80000000000001" fx="0" fy="0" gradientTransform="matrix( 0.9999999999999999, 0, 0, 0.9999999999999999, 0,0) " spreadMethod="pad">
+<stop  offset="0%" stop-color="#FFFFFF"/>
+
+<stop  offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+</radialGradient>
+
+<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="-108" y1="0" x2="108" y2="0" spreadMethod="pad">
+<stop  offset="0%" stop-color="#FFFFFF" stop-opacity="0"/>
+
+<stop  offset="100%" stop-color="#FFFFFF"/>
+</linearGradient>
+
+<g id="MovieClips_Symbol_869_0_Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 75.65 -75.65
+Q 44.3 -107 0 -107 -44.3 -107 -75.65 -75.65 -107 -44.3 -107 0 -107 44.3 -75.65 75.65 -44.3 107 0 107 44.3 107 75.65 75.65 107 44.3 107 0 107 -44.3 75.65 -75.65 Z"/>
+</g>
+
+<path id="MovieClips_Symbol_869_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+M 75.65 -75.65
+Q 107 -44.3 107 0 107 44.3 75.65 75.65 44.3 107 0 107 -44.3 107 -75.65 75.65 -107 44.3 -107 0 -107 -44.3 -75.65 -75.65 -44.3 -107 0 -107 44.3 -107 75.65 -75.65 Z"/>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 0.1824951171875, 0, 0, 0.2941741943359375, -43.25,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_869_0_Layer0_0_FILL"/>
+
+<use xlink:href="#MovieClips_Symbol_869_0_Layer0_0_1_STROKES"/>
+</g>
+</g>
+</g>
+</svg>

@@ -1,0 +1,33 @@
+{
+  "atlasGroup": "character/body/primary",
+  "category": "character",
+  "channel": "primary",
+  "frames": {
+    "001_classic": {
+      "frame": {
+        "height": 567,
+        "width": 244,
+        "x": 2,
+        "y": 2
+      },
+      "id": 1,
+      "png": "vector-art/png/character/body/001_classic/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 567,
+        "width": 244,
+        "x": -112,
+        "y": -280
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/body/primary/atlas@4x.png",
+  "kind": "body",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 571,
+    "width": 248
+  }
+}

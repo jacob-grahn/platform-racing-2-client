@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<meta title="Platform Racing 2" package="com.jiggmin.pr2" version="0.0.1" company="Jiggmin" />
+
+	<app main="Main" path="export" file="PlatformRacing2" />
+
+	<source path="haxe/src" />
+	<assets path="assets" rename="assets" if="html5" />
+	<assets path="assets" rename="assets" unless="html5" />
+	<assets path="vector-art/png/blocks" rename="assets/blocks" />
+	<assets path="vector-art/atlases/character" rename="assets/character/atlases" />
+	<assets path="vector-art/atlases/intro" rename="assets/intro/atlases" />
+	<assets path="vector-art/png/login" rename="assets/login" />
+
+	<haxelib name="openfl" />
+
+	<window width="550" height="400" fps="27" background="#242A3A" resizable="false" />
+</project>

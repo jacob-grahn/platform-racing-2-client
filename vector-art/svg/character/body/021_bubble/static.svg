@@ -1,0 +1,32 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="MovieClips_Symbol_256_0_Layer0_0_FILL">
+<path fill="#FFFFFF" stroke="none" d="
+M -21.65 -32.3
+Q -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 -20.45 -31.1 -21.65 -32.3 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, -33.5,-72.6) ">
+<g transform="matrix( 0.83343505859375, -0.09869384765625, 0.09869384765625, 0.83343505859375, 39.25,75.45) ">
+<g id="bubble2" transform="matrix( 0.6719970703125, 0, 0, 0.6719970703125, 0.15,-53.35) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_256_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g id="bubble3" transform="matrix( 0.6719970703125, 0, 0, 0.6719970703125, 47.2,26.8) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_256_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g id="bubble1" transform="matrix( 0.6719970703125, 0, 0, 0.6719970703125, -47.3,27.05) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_256_0_Layer0_0_FILL"/>
+</g>
+</g>
+</g>
+</g>
+</svg>

@@ -1,0 +1,10 @@
+.DS_Store
+*.php
+.vscode/*
+*.code-workspace
+asconfig.json
+*.swf
+*.swc
+platform-racing-2.app
+platform-racing-2-xfl/
+RECOVER_platform-racing-2.fla

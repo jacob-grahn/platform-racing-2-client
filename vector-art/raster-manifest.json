@@ -1,0 +1,34 @@
+{
+  "atlases": [],
+  "pngs": [
+    {
+      "atlas_group": "character/body/composite",
+      "category": "character",
+      "channel": "composite",
+      "drawingBounds": {
+        "height": 145.25,
+        "width": 67.0,
+        "x": -33.5,
+        "y": -72.6
+      },
+      "id": 1,
+      "kind": "body",
+      "part": "001_classic",
+      "png": "vector-art/png/character/body/001_classic/composite@4x.png",
+      "scale": 4,
+      "source": "vector-art/svg/character/body/001_classic/composite.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 581,
+        "width": 268,
+        "x": -134,
+        "y": -291
+      }
+    }
+  ],
+  "schema": "pr2-rasterized-vector-art-v1"
+}

@@ -1,0 +1,30 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs/>
+
+<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
+<g id="hat1" transform="matrix( 0.983917236328125, -0.17529296875, 0.17529296875, 0.983917236328125, 45.2,78.25) ">
+<g id="colorMC" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+
+<g id="hat2" transform="matrix( 0.9733734130859375, -0.2247314453125, 0.2247314453125, 0.9733734130859375, 38,60.6) ">
+<g id="colorMC_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+
+<g id="hat3" transform="matrix( 0.96026611328125, -0.2753753662109375, 0.2753753662109375, 0.96026611328125, 26,48.4) ">
+<g id="colorMC_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+
+<g id="hat4" transform="matrix( 0.944580078125, -0.3252410888671875, 0.3252410888671875, 0.944580078125, 18.85,34.5) ">
+<g id="colorMC_FL_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2_FL_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+</g>
+</svg>

@@ -1,0 +1,102 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<radialGradient id="Gradient_1" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="51.275000000000006" fx="0" fy="0" gradientTransform="matrix( 1, 0, 0, 1, 50,50) " spreadMethod="pad">
+<stop  offset="44.705882352941174%" stop-color="#FFFF00" stop-opacity="0.050980392156862744"/>
+
+<stop  offset="65.09803921568627%" stop-color="#FFFF00" stop-opacity="0.0784313725490196"/>
+
+<stop  offset="91.37254901960785%" stop-color="#FFFF00" stop-opacity="0.3333333333333333"/>
+
+<stop  offset="100%" stop-color="#FFFF00"/>
+</radialGradient>
+
+<radialGradient id="Gradient_2" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="58.150000000000006" fx="0" fy="0" gradientTransform="matrix( 0.9999999999999999, 0, 0, 1.20743766122098, 0.45,21.75) " spreadMethod="pad">
+<stop  offset="67.84313725490196%" stop-color="#FFFFFF" stop-opacity="0"/>
+
+<stop  offset="91.37254901960785%" stop-color="#FFFFFF" stop-opacity="0.25098039215686274"/>
+
+<stop  offset="100%" stop-color="#FFFFFF"/>
+</radialGradient>
+
+<filter id="Filter_1" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+<feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" result="result1"/>
+</filter>
+
+<g id="MovieClips_Symbol_218_0_Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 85.35 85.35
+Q 100 70.7 100 50 100 29.3 85.35 14.6 70.7 0 50 0 29.3 0 14.6 14.6 0 29.3 0 50 0 70.7 14.6 85.35 29.3 100 50 100 70.7 100 85.35 85.35 Z"/>
+</g>
+
+<g id="Graphics_Symbol_219_0_Layer1_0_FILL">
+<path fill="url(#Gradient_2)" stroke="none" d="
+M 29.75 -38.4
+Q 17.6 -47.7 0.35 -47.7 -16.85 -47.7 -29 -38.4 -41.15 -29.05 -41.15 -15.9 -41.15 -2.65 -29 6.65 -16.85 15.95 0.35 15.95 17.6 15.95 29.75 6.65 41.9 -2.65 41.9 -15.9 41.9 -29.05 29.75 -38.4 Z"/>
+</g>
+
+<g id="Graphics_Symbol_219_0_Layer0_0_FILL">
+<path fill="#FFFFFF" stroke="none" d="
+M -21.65 -32.3
+Q -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 -20.45 -31.1 -21.65 -32.3 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, -32.9,-71.25) ">
+<g transform="matrix( 0.83343505859375, -0.09869384765625, 0.09869384765625, 0.83343505859375, 39.25,75.45) ">
+<g id="bubble2" transform="matrix( 0.6719970703125, 0, 0, 0.6719970703125, 0.15,-53.35) ">
+<g transform="matrix( 1, 0, 0, 1, -50,-50) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use filter="url(#Filter_1)" xlink:href="#MovieClips_Symbol_218_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_219_0_Layer1_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_219_0_Layer0_0_FILL"/>
+</g>
+</g>
+</g>
+
+<g id="bubble3" transform="matrix( 0.6719970703125, 0, 0, 0.6719970703125, 47.2,26.8) ">
+<g transform="matrix( 1, 0, 0, 1, -50,-50) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use filter="url(#Filter_1)" xlink:href="#MovieClips_Symbol_218_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_219_0_Layer1_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_219_0_Layer0_0_FILL"/>
+</g>
+</g>
+</g>
+
+<g id="bubble1" transform="matrix( 0.6719970703125, 0, 0, 0.6719970703125, -47.3,27.05) ">
+<g transform="matrix( 1, 0, 0, 1, -50,-50) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use filter="url(#Filter_1)" xlink:href="#MovieClips_Symbol_218_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_219_0_Layer1_0_FILL"/>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_219_0_Layer0_0_FILL"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</svg>

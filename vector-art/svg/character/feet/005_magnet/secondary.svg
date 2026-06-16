@@ -1,0 +1,28 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="MovieClips_Symbol_264_4_Layer1_0_FILL">
+<path fill="#009966" stroke="none" d="
+M 15.5 35.75
+L 19.25 36.1
+Q 21.3 36.15 21.75 34.35 22.2 32.7 22.5 29.65
+L 22.75 25.9
+Q 22.75 24.3 22.1 23.1
+L -17.5 27 -17.75 31.5 -17.35 36.75 -17.25 37.1 15.5 35.75
+M 20.1 -3.6
+L 6.65 -3.95 -3.75 -3.15 -4.15 -3.15 -4.25 -3.45 -21.35 -1
+Q -20 1.7 -19.2 6.25
+L -17.85 13.55 -11.85 13.75
+Q -4.65 12.2 4.95 12.1
+L 21.6 12.05 21.75 10.15
+Q 21.75 8.05 21.05 3.45
+L 21.05 3.4 19.05 3.25 19.05 2.7 20.95 2.75 20.1 -3.6 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, -28.4,-10.7) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_264_4_Layer1_0_FILL"/>
+</g>
+</g>
+</svg>

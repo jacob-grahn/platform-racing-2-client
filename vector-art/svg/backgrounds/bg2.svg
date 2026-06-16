@@ -1,0 +1,74 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<linearGradient id="Gradient_1" gradientUnits="userSpaceOnUse" x1="270.65" y1="177.84999999999997" x2="270.65" y2="425.95" spreadMethod="pad">
+<stop  offset="0%" stop-color="#FDF7BD"/>
+
+<stop  offset="100%" stop-color="#6F8B41"/>
+</linearGradient>
+
+<radialGradient id="Gradient_2" gradientUnits="userSpaceOnUse" cx="0" cy="0" r="395.85" fx="0" fy="0" gradientTransform="matrix( -0.9999999999999999, 0, 0, 0.9999999999999999, 416,27) " spreadMethod="pad">
+<stop  offset="0%" stop-color="#FDEAC9"/>
+
+<stop  offset="100%" stop-color="#9D7E8E"/>
+</radialGradient>
+
+<linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="279.05" y1="23.64999999999999" x2="279.05" y2="242.35000000000002" spreadMethod="pad">
+<stop  offset="0%" stop-color="#0E0403"/>
+
+<stop  offset="100%" stop-color="#AAA48A"/>
+</linearGradient>
+
+<g id="UI_Pages_Levels_Backgrounds_bg2_0_Layer0_0_FILL">
+<path fill="url(#Gradient_1)" stroke="none" d="
+M 0 234.95
+Q 1.05 232.85 0 233.1
+L 0 234.95
+M 442.75 180.75
+L 454.7 193.75 455.5 199.25 326.9 203.75 338.65 212
+Q 279.85 223.25 219 216.3 192.35 213.35 165.85 216.95 81.5 228.8 0 242.8
+L 0 400 550 400 550 180.9
+Q 500 186.25 442.75 180.75 Z"/>
+
+<path fill="url(#Gradient_2)" stroke="none" d="
+M 550 140.6
+L 550 0 0 0
+Q 63.65 45.25 138.05 40.65 161.75 39.4 181.05 26.2
+L 354.45 109.7
+Q 366 98.6 381.05 93.3 394.05 88.65 407.55 91.75
+L 408 92
+Q 436.9 105.95 470.2 111.65 512.85 118.65 550 140.6
+M 549.95 149.85
+L 550 149.85 550 145.9
+Q 549.4 147.4 549.95 149.85 Z"/>
+
+<path fill="url(#Gradient_3)" stroke="none" d="
+M 550 145.9
+L 550 140.6
+Q 512.85 118.65 470.2 111.65 436.9 105.95 408 92
+L 407.55 91.75
+Q 394.05 88.65 381.05 93.3 366 98.6 354.45 109.7
+L 181.05 26.2
+Q 161.75 39.4 138.05 40.65 63.65 45.25 0 0
+L 0 233.1
+Q 1.05 232.85 0 234.95
+L 0 237
+Q 2.15 235.65 0 237.25
+L 0 242.8
+Q 81.5 228.8 165.85 216.95 192.35 213.35 219 216.3 279.85 223.25 338.65 212
+L 326.9 203.75 455.5 199.25 454.7 193.75 442.75 180.75
+Q 500 186.25 550 180.9
+L 550 149.85 549.95 149.85
+Q 549.4 147.4 550 145.9
+M 333.8 211.3
+L 333.2 211.35
+Q 333.05 209.95 333.8 211.3 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#UI_Pages_Levels_Backgrounds_bg2_0_Layer0_0_FILL"/>
+</g>
+</g>
+</svg>

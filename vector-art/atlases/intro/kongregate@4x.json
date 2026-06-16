@@ -1,0 +1,268 @@
+{
+  "atlasGroup": "intro/kongregate",
+  "category": "intro",
+  "frames": {
+    "graphic_28": {
+      "frame": {
+        "height": 578,
+        "width": 629,
+        "x": 1618,
+        "y": 1595
+      },
+      "png": "vector-art/png/intro/kongregate/graphic_28@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 578,
+        "width": 629,
+        "x": -338,
+        "y": -361
+      }
+    },
+    "graphic_42": {
+      "frame": {
+        "height": 1591,
+        "width": 2200,
+        "x": 2,
+        "y": 2
+      },
+      "png": "vector-art/png/intro/kongregate/graphic_42@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 1591,
+        "width": 2200,
+        "x": -1105,
+        "y": -798
+      }
+    },
+    "graphic_43": {
+      "frame": {
+        "height": 62,
+        "width": 630,
+        "x": 1053,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/graphic_43@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 62,
+        "width": 630,
+        "x": -315,
+        "y": -31
+      }
+    },
+    "symbol_27": {
+      "frame": {
+        "height": 934,
+        "width": 964,
+        "x": 2,
+        "y": 1595
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_27@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 934,
+        "width": 964,
+        "x": -482,
+        "y": -467
+      }
+    },
+    "symbol_30": {
+      "frame": {
+        "height": 345,
+        "width": 356,
+        "x": 3555,
+        "y": 1595
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_30@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 345,
+        "width": 356,
+        "x": -178,
+        "y": -173
+      }
+    },
+    "symbol_32": {
+      "frame": {
+        "height": 356,
+        "width": 1304,
+        "x": 2249,
+        "y": 1595
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_32@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 356,
+        "width": 1304,
+        "x": -652,
+        "y": -178
+      }
+    },
+    "symbol_34": {
+      "frame": {
+        "height": 226,
+        "width": 248,
+        "x": 419,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_34@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 226,
+        "width": 248,
+        "x": -124,
+        "y": -113
+      }
+    },
+    "symbol_36": {
+      "frame": {
+        "height": 158,
+        "width": 81,
+        "x": 793,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_36@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 158,
+        "width": 81,
+        "x": -41,
+        "y": -79
+      }
+    },
+    "symbol_38": {
+      "frame": {
+        "height": 161,
+        "width": 122,
+        "x": 669,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_38@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 161,
+        "width": 122,
+        "x": -61,
+        "y": -81
+      }
+    },
+    "symbol_40": {
+      "frame": {
+        "height": 88,
+        "width": 175,
+        "x": 876,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_40@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 88,
+        "width": 175,
+        "x": -88,
+        "y": -44
+      }
+    },
+    "symbol_41": {
+      "frame": {
+        "height": 286,
+        "width": 415,
+        "x": 2,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_41@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 286,
+        "width": 415,
+        "x": -202,
+        "y": -137
+      }
+    },
+    "symbol_44": {
+      "frame": {
+        "height": 62,
+        "width": 630,
+        "x": 1685,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_44@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 62,
+        "width": 630,
+        "x": -315,
+        "y": -31
+      }
+    },
+    "symbol_47": {
+      "frame": {
+        "height": 1560,
+        "width": 1612,
+        "x": 2204,
+        "y": 2
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_47@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 1560,
+        "width": 1612,
+        "x": -888,
+        "y": -940
+      }
+    },
+    "symbol_49": {
+      "frame": {
+        "height": 706,
+        "width": 648,
+        "x": 968,
+        "y": 1595
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_49@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 706,
+        "width": 648,
+        "x": -324,
+        "y": -353
+      }
+    },
+    "symbol_52": {
+      "frame": {
+        "height": 46,
+        "width": 516,
+        "x": 2317,
+        "y": 2531
+      },
+      "png": "vector-art/png/intro/kongregate/symbol_52@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 46,
+        "width": 516,
+        "x": -261,
+        "y": -15
+      }
+    }
+  },
+  "image": "vector-art/atlases/intro/kongregate@4x.png",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 2819,
+    "width": 3913
+  }
+}

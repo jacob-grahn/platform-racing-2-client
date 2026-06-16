@@ -1,0 +1,23 @@
+{
+  "query": "hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite&screen=harness",
+  "steps": [
+    {
+      "time": 2.0,
+      "action": "debug-state",
+      "expect": {
+        "hat": "16",
+        "head": "37",
+        "body": "29",
+        "feet": "40",
+        "primary": "aa00ff",
+        "secondary": "00cc11",
+        "characterRender": "composite"
+      }
+    },
+    {
+      "time": 2.1,
+      "action": "shot",
+      "out": "test/output/openfl-character-customization.png"
+    }
+  ]
+}

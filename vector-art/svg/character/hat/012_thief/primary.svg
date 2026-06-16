@@ -1,0 +1,27 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="none" x="0px" y="0px" width="550px" height="400px" viewBox="0 0 550 400">
+<defs>
+<g id="MovieClips_PR2_Graphics_1_Apr_2014_fla_Symbol_667_11_Layer0_0_FILL">
+<path fill="#584D1F" stroke="none" d="
+M 74.55 -23.4
+Q 75.7 -26.95 77.9 -30.3
+L 74.9 -30.55 74.1 -31.75 69.9 -32.65 43.25 -44.2
+Q 32.6 -48.7 22.45 -50.55 13.1 -52.25 -1.15 -52.4
+L -35 -52.2
+Q -35.4 -45.3 -35.7 -43.05 -37.2 -33.55 -41.8 -17.65
+L -41.9 -17.25 -41.9 -16.75
+Q -51.95 -13.7 -59.6 -11.85
+L -47.35 15.4 -20.6 6.9
+Q -15.25 5.7 -4.15 2.5
+L 64.15 -14
+Q 68.85 -14.7 70.85 -15.85 72.5 -16.8 73.2 -18.8
+L 74.55 -23.4 Z"/>
+</g>
+</defs>
+
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_PR2_Graphics_1_Apr_2014_fla_Symbol_667_11_Layer0_0_FILL"/>
+</g>
+</g>
+</svg>

@@ -1,8 +1,5 @@
+export/
+.haxelib/
+__pycache__/
+test/output/
 .DS_Store
-*.php
-.vscode/*
-*.code-workspace
-asconfig.json
-*.swf
-*.swc
-platform-racing-2.app
