@@ -215,11 +215,51 @@ Next steps:
     solid shape instead of showing only its outline. Runtime tests still pass
     (`PR2MovieClipRuntimeTest`, 339 assertions). The panel background and the
     flat speaker color remain pending the gradient-fill step below.
-- [ ] Implement gradient fills with `beginGradientFill`.
-  - `colorForStyle` flattens a gradient to its first stop, so gradient fills
-    render as a flat (often invisible) color. Map XFL `LinearGradient`/
-    `RadialGradient` entries (color, alpha, ratio) plus the gradient matrix to
-    `beginGradientFill`. Re-run the mute_button comparison.
+- [x] Implement gradient fills with `beginGradientFill`.
+  - `VectorShapeRenderer.beginStyleFill` now emits real `beginGradientFill`
+    calls for `LinearGradient`/`RadialGradient` styles (mapping entry
+    color/alpha/ratio, with ratios scaled to 0-255) and falls back to solid
+    `beginFill` otherwise. `gradientMatrix` converts the XFL gradient matrix to
+    OpenFL's: XFL gradients live in a +/-16384 twip box while OpenFL's box is
+    +/-819.2 px, so `a/b/c/d` are scaled by 20 and `tx/ty` (already px) are kept.
+    All catalog gradients use default pad spread / RGB interp / no focal point.
+  - Verified via the mute_button comparison: the speaker body now shows its
+    linear highlight gradient matching the Adobe `@4x.png`. Radial confirmed on
+    `Graphics/Symbol 28` (flat single color before, interpolated after). Runtime
+    tests still pass (339 assertions).
+  - Note: the mute_button panel background is still missing, but that is a
+    separate gap — it is a `DOMRectangleObject` primitive the XFL extractor does
+    not emit edges/fills for, not a gradient issue.
+- [ ] Render `DOMRectangleObject` (and `DOMOvalObject`) primitives.
+  - These are Animate primitive drawing objects, not `DOMShape`, so they carry
+    no `edges`. `tools/xfl_metadata.py` drops them today: `parse_display_element`
+    only handles `DOMSymbolInstance`/`DOMBitmapInstance`/`DOMShape`/`DOMGroup`,
+    and `parse_display_elements` filters the same set, so the element is counted
+    in `elementCount`/`elementTypes` but never emitted into `elements`. This is
+    why the mute_button panel background (and other rounded-rect popup BGs) draw
+    nothing while the rest of the symbol renders.
+  - Source shape, from `LIBRARY/UI/Popups (outside levels)/BG.xml`: a
+    `<DOMRectangleObject>` with `x`/`y`/`objectWidth`/`objectHeight` (px), four
+    corner radii (`topLeftRadius`/`topRightRadius`/`bottomLeftRadius`/
+    `bottomRightRadius`), a `<matrix>`, a `<fill>` (solid or
+    Linear/RadialGradient, same structure as `DOMShape` fills), and a `<stroke>`
+    (`SolidStroke` with `weight` + nested `<fill>`). `DOMOvalObject` is the
+    analogous ellipse primitive.
+  - Extractor work: add `DOMRectangleObject`/`DOMOvalObject` to both functions in
+    `xfl_metadata.py`; emit geometry (x, y, objectWidth, objectHeight, corner
+    radii / oval flags), reuse `parse_matrix` + `parse_indexed_style`-style
+    fill/stroke parsing (the `<fill>`/`<stroke>` here are direct children, not
+    `fills`/`strokes` wrappers). Add matching optional fields to the generated
+    `DisplayElementDef` in `AssetTypes.hx` (and the generator that writes it).
+  - Renderer work: in `VectorShapeRenderer`, draw the primitive directly
+    (`graphics.drawRoundRect`/`drawRoundRectComplex`/`drawEllipse`, or a manual
+    `curveTo` path for per-corner radii), applying the element matrix, and reuse
+    `beginStyleFill` (already gradient-aware) for the fill plus the existing
+    stroke path. Note the BG fill+stroke are themselves linear gradients, so the
+    new gradient support already covers them once the geometry is emitted.
+  - Verify by re-running the mute_button comparison
+    (`?screen=symbol&symbol=UI/Global/MuteButton&scale=4`): the rounded panel
+    background + hairline border should appear behind the speaker.
 - [ ] Handle the `cubics` edge format and the `/`/`]` commands.
   - `EdgeDef.cubics` is used by ~23k records as an alternative to `edges` (cubic
     Bezier form with `(`, `)`, `;`, `q`, `Q` tokens, same twip scale). The

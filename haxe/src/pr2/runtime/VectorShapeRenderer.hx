@@ -1,7 +1,11 @@
 package pr2.runtime;
 
 import openfl.display.Graphics;
+import openfl.display.GradientType;
+import openfl.display.InterpolationMethod;
 import openfl.display.Shape;
+import openfl.display.SpreadMethod;
+import openfl.geom.Matrix;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
 import pr2.generated.assets.AssetTypes.EdgeDef;
 import pr2.generated.assets.AssetTypes.StyleValueDef;
@@ -45,8 +49,7 @@ class VectorShapeRenderer {
 					continue;
 				}
 
-				var fillColor = colorForStyle(fill.value);
-				shape.graphics.beginFill(fillColor.color, fillColor.alpha);
+				beginStyleFill(shape.graphics, fill.value);
 				for (ring in rings) {
 					emitContour(shape.graphics, ring);
 				}
@@ -235,6 +238,51 @@ class VectorShapeRenderer {
 			drew = true;
 		}
 		return drew;
+	}
+
+	// Begin a fill for an XFL fill style: a real gradient fill for
+	// Linear/RadialGradient styles, otherwise a flat solid fill.
+	private static function beginStyleFill(graphics:Graphics, style:StyleValueDef):Void {
+		if (style != null && (style.type == "LinearGradient" || style.type == "RadialGradient")
+			&& style.entries != null && style.entries.length > 0) {
+			var colors:Array<Int> = [];
+			var alphas:Array<Float> = [];
+			var ratios:Array<Int> = [];
+			for (entry in (style.entries : Array<Dynamic>)) {
+				colors.push(entry.color == null ? 0 : parseColor(entry.color));
+				alphas.push(entry.alpha == null ? 1.0 : entry.alpha);
+				var ratio = entry.ratio == null ? 0.0 : (entry.ratio : Float);
+				var scaled = Math.round(ratio * 255);
+				ratios.push(scaled < 0 ? 0 : (scaled > 255 ? 255 : scaled));
+			}
+			var type = style.type == "RadialGradient" ? GradientType.RADIAL : GradientType.LINEAR;
+			var focal = style.focalPointRatio == null ? 0.0 : (style.focalPointRatio : Float);
+			graphics.beginGradientFill(type, colors, alphas, ratios, gradientMatrix(style.matrix),
+				SpreadMethod.PAD, InterpolationMethod.RGB, focal);
+			return;
+		}
+
+		var solid = colorForStyle(style);
+		graphics.beginFill(solid.color, solid.alpha);
+	}
+
+	// Convert an XFL gradient matrix to the OpenFL gradient matrix. XFL gradients
+	// are defined over a local box of +/-16384 twips while OpenFL's gradient box
+	// is +/-819.2 px (a 20x = twips-per-pixel ratio). The XFL matrix maps the
+	// twip-local box to pixels with tx/ty already in pixels, so scaling a/b/c/d
+	// by 20 (and keeping tx/ty) maps OpenFL's px-local box to the same pixels.
+	private static function gradientMatrix(m:Dynamic):Matrix {
+		if (m == null) {
+			return new Matrix();
+		}
+		var a:Float = m.a == null ? 1.0 : m.a;
+		var b:Float = m.b == null ? 0.0 : m.b;
+		var c:Float = m.c == null ? 0.0 : m.c;
+		var d:Float = m.d == null ? 1.0 : m.d;
+		var tx:Float = m.tx == null ? 0.0 : m.tx;
+		var ty:Float = m.ty == null ? 0.0 : m.ty;
+		var s = 20.0;
+		return new Matrix(a * s, b * s, c * s, d * s, tx, ty);
 	}
 
 	private static function colorForStyle(style:StyleValueDef):{color:Int, alpha:Float} {
