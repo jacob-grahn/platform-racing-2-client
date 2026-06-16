@@ -397,9 +397,22 @@ class LoginPage extends Page {
 				case LoginId(loginId):
 					setStatus('Received login id $loginId from ${server.label()}.');
 					openLoggingInPopup(loginId, userName, userPass, remember, server);
+				case LoginSuccessful(socketUserName):
+					// The server confirms the session over the socket after
+					// login.php succeeds; hand off to the lobby once it arrives.
+					enterLobby(socketUserName == "" ? userName : socketUserName, server);
 			}
 		});
 		socketProbe.connect();
+	}
+
+	private function enterLobby(userName:String, server:ServerInfo):Void {
+		closeSocketProbe();
+		closePopup();
+		setStatus('Logged in as $userName.');
+		if (pageHolder != null) {
+			pageHolder.changePage(new LobbyStubPage(userName, server));
+		}
 	}
 
 	private function closeSocketProbe():Void {
@@ -753,6 +766,7 @@ private class LoginFlashPopup extends Sprite {
 private enum LoginProbeStatus {
 	Message(message:String);
 	LoginId(loginId:String);
+	LoginSuccessful(userName:String);
 }
 
 private class LoginSocketProbe {
@@ -845,6 +859,10 @@ private class LoginSocketProbe {
 		var command = parts[2];
 		if (command == "setLoginID" && parts.length >= 4) {
 			onStatus(LoginId(parts[3]));
+		} else if (command == "loginSuccessful") {
+			// Frame layout matches the e2e read in LiveLoginE2ETest: the args are
+			// parts.slice(3), so parts[4] is the canonical user name.
+			onStatus(LoginSuccessful(parts.length >= 5 ? parts[4] : ""));
 		} else if (command == "loginFailure") {
 			onStatus(Message('Server rejected login: ${parts.slice(3).join(" ")}'));
 		} else {
