@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.Egg = effects.class_82
+﻿// effects.Egg = effects.class_82
 
 package effects
 {

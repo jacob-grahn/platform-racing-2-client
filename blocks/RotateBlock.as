@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// blocks.RotateBlock = blocks.class_45
+﻿// blocks.RotateBlock = blocks.class_45
 
 package blocks
 {

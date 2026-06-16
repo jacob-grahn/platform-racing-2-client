@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// PlayersTabListGraphic = class_309
+﻿// PlayersTabListGraphic = class_309
 
 package 
 {

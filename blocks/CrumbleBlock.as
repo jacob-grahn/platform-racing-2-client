@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// blocks.CrumbleBlock = blocks.class_63
+﻿// blocks.CrumbleBlock = blocks.class_63
 
 package blocks
 {

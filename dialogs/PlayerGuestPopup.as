@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.PlayerGuestPopup = dialogs.class_188
+﻿// dialogs.PlayerGuestPopup = dialogs.class_188
 
 package dialogs
 {

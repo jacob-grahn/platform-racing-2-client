@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// gameplay.TestCourse = gameplay.class_171
+﻿// gameplay.TestCourse = gameplay.class_171
 
 package gameplay
 {

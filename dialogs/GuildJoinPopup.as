@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.GuildJoinPopup = dialogs.class_187
+﻿// dialogs.GuildJoinPopup = dialogs.class_187
 
 package dialogs
 {

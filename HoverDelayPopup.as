@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//HoverDelayPopup = class_213
+﻿//HoverDelayPopup = class_213
 
 package 
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// ui.ProgressBar = ui.class_163
+﻿// ui.ProgressBar = ui.class_163
 
 package ui
 {

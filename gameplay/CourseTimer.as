@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// gameplay.CourseTimer = gameplay.class_83
+﻿// gameplay.CourseTimer = gameplay.class_83
 
 package gameplay
 {

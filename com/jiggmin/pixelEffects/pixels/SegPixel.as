@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// package_7.class_66 = com.jiggmin.pixelEffects.pixels.SegPixel
+﻿// package_7.class_66 = com.jiggmin.pixelEffects.pixels.SegPixel
 
 package com.jiggmin.pixelEffects.pixels
 {

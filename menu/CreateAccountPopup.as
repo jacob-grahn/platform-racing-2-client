@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// menu.CreateAccountPopup = menu.class_67
+﻿// menu.CreateAccountPopup = menu.class_67
 
 package menu
 {

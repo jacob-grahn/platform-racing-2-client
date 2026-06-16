@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//data.CommandHandler = data.class_12
+﻿//data.CommandHandler = data.class_12
 
 package com.jiggmin.data
 {

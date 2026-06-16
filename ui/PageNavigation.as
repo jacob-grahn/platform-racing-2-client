@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//ui.PageNavigation = ui.class_283
+﻿//ui.PageNavigation = ui.class_283
 
 package ui
 {

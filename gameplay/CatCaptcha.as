@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//gameplay.CatCaptcha = gameplay.class_34
+﻿//gameplay.CatCaptcha = gameplay.class_34
 
 package gameplay
 {

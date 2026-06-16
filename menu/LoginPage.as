@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// LoginPage = class_22
+﻿// LoginPage = class_22
 
 package menu
 {

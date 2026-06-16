@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// data.EpicFlash = data.class_153
+﻿// data.EpicFlash = data.class_153
 
 package com.jiggmin.data
 {

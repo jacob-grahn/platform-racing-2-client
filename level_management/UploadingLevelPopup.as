@@ -1,8 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-
-package level_management
+﻿package level_management
 {
     import com.hurlant.crypto.hash.MD5;
     import com.hurlant.util.Hex;

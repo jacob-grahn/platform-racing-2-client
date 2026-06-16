@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// background.ObjectBackground = background.class_77
+﻿// background.ObjectBackground = background.class_77
 
 package background
 {

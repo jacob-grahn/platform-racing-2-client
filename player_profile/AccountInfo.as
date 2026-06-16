@@ -1,6 +1,3 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
 // player_profile.AccountInfo = player_profile.class_260
 
 package player_profile

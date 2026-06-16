@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-
-
-package social
+﻿package social
 {
     import page.Page;
     import ui.TabsHolder;
