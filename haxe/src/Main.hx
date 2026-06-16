@@ -17,6 +17,7 @@ import pr2.page.CampaignTestScreen;
 import pr2.page.IntroPage;
 import pr2.page.LoginPage;
 import pr2.page.PageHolder;
+import pr2.page.SymbolPreview;
 
 /**
 	Application entry point. Boots into a screen selected by the `?screen=`
@@ -75,6 +76,27 @@ class Main extends Sprite {
 			case Campaign: new CampaignTestScreen(QueryParams.get(query, "page"));
 			case Login: new PageHolder(new LoginPage());
 			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")));
+			case Symbol: new SymbolPreview(
+				QueryParams.get(query, "symbol"),
+				parseScale(QueryParams.get(query, "scale")),
+				parseColor(QueryParams.get(query, "bg"))
+			);
 		};
+	}
+
+	private function parseScale(value:Null<String>):Float {
+		if (value == null) {
+			return 4;
+		}
+		var parsed = Std.parseFloat(value);
+		return Math.isNaN(parsed) || parsed <= 0 ? 4 : parsed;
+	}
+
+	private function parseColor(value:Null<String>):Int {
+		if (value == null) {
+			return 0xFFFFFF;
+		}
+		var parsed = Std.parseInt("0x" + StringTools.replace(value, "#", ""));
+		return parsed == null ? 0xFFFFFF : parsed;
 	}
 }

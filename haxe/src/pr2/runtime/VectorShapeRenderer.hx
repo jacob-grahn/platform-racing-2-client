@@ -6,7 +6,20 @@ import pr2.generated.assets.AssetTypes.DisplayElementDef;
 import pr2.generated.assets.AssetTypes.EdgeDef;
 import pr2.generated.assets.AssetTypes.StyleValueDef;
 
+private typedef Pt = {x:Float, y:Float};
+
+private enum Seg {
+	Line(p:Pt);
+	Quad(c:Pt, p:Pt);
+}
+
+private typedef Contour = {start:Pt, segs:Array<Seg>};
+
 class VectorShapeRenderer {
+	// Points within this many pixels are treated as the same vertex when
+	// deciding whether a moveTo continues a contour or starts a new one.
+	public static inline var EPS:Float = 1e-4;
+
 	public static function render(element:DisplayElementDef):Null<Shape> {
 		if (element.edges == null || element.edges.length == 0) {
 			return null;
@@ -15,19 +28,38 @@ class VectorShapeRenderer {
 		var shape = new Shape();
 		var drew = false;
 
+		// Fills: the XFL edge format does not store closed rings. Each edge
+		// records the fill on its left (fillStyle0) and right (fillStyle1)
+		// sides. To fill correctly we gather every edge touching a fill style,
+		// reverse the ones where the fill is on side 1 so all edges wind the
+		// same way, then stitch them head-to-tail into closed contours before
+		// handing them to beginFill. (This is the SWF "shape -> contours" step.)
 		if (element.fills != null) {
 			for (fill in element.fills) {
 				if (fill.index == null || fill.value == null) {
 					continue;
 				}
+				var contours = collectFillContours(element.edges, fill.index);
+				var rings = stitch(contours);
+				if (rings.length == 0 && !hasCubicFill(element.edges, fill.index)) {
+					continue;
+				}
+
 				var fillColor = colorForStyle(fill.value);
 				shape.graphics.beginFill(fillColor.color, fillColor.alpha);
-				if (drawEdges(shape.graphics, element.edges, function(edge) {
-					return edge.fillStyle0 == fill.index || edge.fillStyle1 == fill.index;
-				})) {
-					drew = true;
+				for (ring in rings) {
+					emitContour(shape.graphics, ring);
+				}
+				// Edges expressed only as cubics aren't stitched yet; draw them
+				// directly inside the fill so they are not dropped entirely.
+				for (edge in element.edges) {
+					if (edge.edges == null && edge.cubics != null
+						&& (edge.fillStyle0 == fill.index || edge.fillStyle1 == fill.index)) {
+						new EdgePathParser(edge.cubics, shape.graphics).draw();
+					}
 				}
 				shape.graphics.endFill();
+				drew = true;
 			}
 		}
 
@@ -39,9 +71,7 @@ class VectorShapeRenderer {
 				var strokeFill = stroke.value.fill != null ? stroke.value.fill : stroke.value;
 				var strokeColor = colorForStyle(strokeFill);
 				shape.graphics.lineStyle(stroke.value.weight == null ? 1 : stroke.value.weight, strokeColor.color, strokeColor.alpha);
-				if (drawEdges(shape.graphics, element.edges, function(edge) {
-					return edge.strokeStyle == stroke.index;
-				})) {
+				if (drawStrokes(shape.graphics, element.edges, stroke.index)) {
 					drew = true;
 				}
 			}
@@ -50,18 +80,157 @@ class VectorShapeRenderer {
 		return drew ? shape : null;
 	}
 
-	private static function drawEdges(graphics:Graphics, edges:Array<EdgeDef>, predicate:EdgeDef->Bool):Bool {
-		var drew = false;
+	// Gather all contour pieces touching the given fill style, reversing those
+	// where the fill sits on side 1 so every piece winds consistently.
+	private static function collectFillContours(edges:Array<EdgeDef>, index:Int):Array<Contour> {
+		var contours:Array<Contour> = [];
 		for (edge in edges) {
-			if (!predicate(edge)) {
+			if (edge.edges == null || edge.edges == "") {
 				continue;
 			}
+			if (edge.fillStyle0 == index) {
+				for (c in EdgeContourParser.parse(edge.edges)) {
+					contours.push(c);
+				}
+			}
+			if (edge.fillStyle1 == index) {
+				for (c in EdgeContourParser.parse(edge.edges)) {
+					contours.push(reverse(c));
+				}
+			}
+		}
+		return contours;
+	}
 
+	private static function hasCubicFill(edges:Array<EdgeDef>, index:Int):Bool {
+		for (edge in edges) {
+			if (edge.edges == null && edge.cubics != null
+				&& (edge.fillStyle0 == index || edge.fillStyle1 == index)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// Connect contour pieces end-to-start into closed rings. Pieces that are
+	// already closed (or that cannot be extended) are emitted as-is; beginFill
+	// auto-closes any remaining gap.
+	private static function stitch(contours:Array<Contour>):Array<Contour> {
+		var rings:Array<Contour> = [];
+		if (contours.length == 0) {
+			return rings;
+		}
+
+		var byStart = new Map<String, Array<Int>>();
+		var used = [for (_ in contours) false];
+		for (i in 0...contours.length) {
+			var key = pointKey(contours[i].start);
+			if (!byStart.exists(key)) {
+				byStart.set(key, []);
+			}
+			byStart.get(key).push(i);
+		}
+
+		for (i in 0...contours.length) {
+			if (used[i]) {
+				continue;
+			}
+			used[i] = true;
+			var ring:Contour = {start: contours[i].start, segs: contours[i].segs.copy()};
+			var startKey = pointKey(ring.start);
+			var endKey = pointKey(endPoint(ring));
+
+			while (endKey != startKey) {
+				var next = takeUnused(byStart, endKey, used);
+				if (next == -1) {
+					break;
+				}
+				used[next] = true;
+				for (s in contours[next].segs) {
+					ring.segs.push(s);
+				}
+				endKey = pointKey(endPoint(contours[next]));
+			}
+
+			rings.push(ring);
+		}
+
+		return rings;
+	}
+
+	private static function takeUnused(byStart:Map<String, Array<Int>>, key:String, used:Array<Bool>):Int {
+		var bucket = byStart.get(key);
+		if (bucket == null) {
+			return -1;
+		}
+		for (idx in bucket) {
+			if (!used[idx]) {
+				return idx;
+			}
+		}
+		return -1;
+	}
+
+	private static function endPoint(c:Contour):Pt {
+		if (c.segs.length == 0) {
+			return c.start;
+		}
+		return switch (c.segs[c.segs.length - 1]) {
+			case Line(p): p;
+			case Quad(_, p): p;
+		};
+	}
+
+	// Reverse a contour piece: walk its vertices backwards. Line segments keep
+	// their type, quad segments keep their control point but flip endpoints.
+	private static function reverse(c:Contour):Contour {
+		var pts = [c.start];
+		for (s in c.segs) {
+			pts.push(switch (s) {
+				case Line(p): p;
+				case Quad(_, p): p;
+			});
+		}
+		var n = c.segs.length;
+		var rev:Contour = {start: pts[n], segs: []};
+		var i = n - 1;
+		while (i >= 0) {
+			var to = pts[i];
+			rev.segs.push(switch (c.segs[i]) {
+				case Line(_): Line(to);
+				case Quad(ctrl, _): Quad(ctrl, to);
+			});
+			i--;
+		}
+		return rev;
+	}
+
+	private static function emitContour(graphics:Graphics, c:Contour):Void {
+		graphics.moveTo(c.start.x, c.start.y);
+		for (s in c.segs) {
+			switch (s) {
+				case Line(p): graphics.lineTo(p.x, p.y);
+				case Quad(ctrl, p): graphics.curveTo(ctrl.x, ctrl.y, p.x, p.y);
+			}
+		}
+	}
+
+	private static function pointKey(p:Pt):String {
+		// Round to whole twips (the source unit) so endpoints that should join
+		// match despite float rounding from the pixel conversion.
+		return Math.round(p.x * 20) + ":" + Math.round(p.y * 20);
+	}
+
+	private static function drawStrokes(graphics:Graphics, edges:Array<EdgeDef>, index:Int):Bool {
+		var drew = false;
+		for (edge in edges) {
+			if (edge.strokeStyle != index) {
+				continue;
+			}
 			var path = edge.edges != null ? edge.edges : edge.cubics;
 			if (path == null || path == "") {
 				continue;
 			}
-
 			new EdgePathParser(path, graphics).draw();
 			drew = true;
 		}
@@ -93,53 +262,109 @@ class VectorShapeRenderer {
 	private function new() {}
 }
 
-private class EdgePathParser {
-	private static inline var TWIPS_PER_PIXEL:Float = 20;
+// Parses the XFL `edges` string into closed-ish contour pieces. A new piece is
+// started whenever a moveTo (`!`) jumps to a point other than the current
+// position; consecutive segments that chain through shared endpoints stay in
+// one piece.
+private class EdgeContourParser {
+	public static function parse(text:String):Array<Contour> {
+		var r = new EdgeReader(text);
+		var contours:Array<Contour> = [];
+		var cur:Contour = null;
+		var x = 0.0;
+		var y = 0.0;
 
-	private var text:String;
+		while (!r.eof()) {
+			var command = r.next();
+			switch (command) {
+				case "!":
+					var p = r.readPoint();
+					if (p == null) {
+						continue;
+					}
+					if (cur == null || Math.abs(p.x - x) > VectorShapeRenderer.EPS || Math.abs(p.y - y) > VectorShapeRenderer.EPS) {
+						if (cur != null && cur.segs.length > 0) {
+							contours.push(cur);
+						}
+						cur = {start: p, segs: []};
+					}
+					x = p.x;
+					y = p.y;
+				case "|", "/":
+					var p = r.readPoint();
+					if (p == null || cur == null) {
+						continue;
+					}
+					cur.segs.push(Line(p));
+					x = p.x;
+					y = p.y;
+				case "[", "]":
+					var control = r.readPoint();
+					var anchor = r.readPoint();
+					if (control == null || anchor == null || cur == null) {
+						continue;
+					}
+					cur.segs.push(Quad(control, anchor));
+					x = anchor.x;
+					y = anchor.y;
+				default:
+					// Cubic tokens are handled by EdgePathParser, not here.
+			}
+		}
+
+		if (cur != null && cur.segs.length > 0) {
+			contours.push(cur);
+		}
+		return contours;
+	}
+
+	private function new() {}
+}
+
+private class EdgePathParser {
+	private var reader:EdgeReader;
 	private var graphics:Graphics;
-	private var pos:Int = 0;
 	private var currentX:Float = 0;
 	private var currentY:Float = 0;
 
 	public function new(text:String, graphics:Graphics) {
-		this.text = text;
+		this.reader = new EdgeReader(text);
 		this.graphics = graphics;
 	}
 
 	public function draw():Void {
-		while (pos < text.length) {
-			var command = text.charAt(pos++);
+		while (!reader.eof()) {
+			var command = reader.next();
 			switch (command) {
 				case "!":
-					var point = readPoint();
+					var point = reader.readPoint();
 					if (point != null) {
 						graphics.moveTo(point.x, point.y);
 						currentX = point.x;
 						currentY = point.y;
 					}
-				case "|":
-					var point = readPoint();
+				case "|", "/":
+					var point = reader.readPoint();
 					if (point != null) {
 						graphics.lineTo(point.x, point.y);
 						currentX = point.x;
 						currentY = point.y;
 					}
-				case "[":
-					var control = readPoint();
-					var anchor = readPoint();
+				case "[", "]":
+					var control = reader.readPoint();
+					var anchor = reader.readPoint();
 					if (control != null && anchor != null) {
 						graphics.curveTo(control.x, control.y, anchor.x, anchor.y);
 						currentX = anchor.x;
 						currentY = anchor.y;
 					}
 				case "Q":
-					var control = readPoint();
-					skipSeparators();
-					if (pos < text.length && text.charAt(pos) == "q") {
-						pos++;
+					var control = reader.readPoint();
+					reader.skipSeparators();
+					if (reader.peek() == "q") {
+						reader.next();
 					}
-					var anchor = readPoint();
+					var anchor = reader.readPoint();
 					if (control != null && anchor != null) {
 						graphics.curveTo(control.x, control.y, anchor.x, anchor.y);
 						currentX = anchor.x;
@@ -148,24 +373,24 @@ private class EdgePathParser {
 				case "q":
 					drawLinePoints();
 				case "S":
-					readNumber();
+					reader.readNumber();
 				default:
 			}
 		}
 	}
 
 	private function drawLinePoints():Void {
-		var points:Array<{x:Float, y:Float}> = [];
+		var points:Array<Pt> = [];
 		while (true) {
-			var checkpoint = pos;
-			var point = readPoint();
+			var checkpoint = reader.pos;
+			var point = reader.readPoint();
 			if (point == null) {
-				pos = checkpoint;
+				reader.pos = checkpoint;
 				break;
 			}
 			points.push(point);
-			skipSeparators();
-			if (pos >= text.length || isCommand(text.charAt(pos))) {
+			reader.skipSeparators();
+			if (reader.eof() || reader.isCommand(reader.peek())) {
 				break;
 			}
 		}
@@ -179,7 +404,35 @@ private class EdgePathParser {
 		}
 	}
 
-	private function readPoint():Null<{x:Float, y:Float}> {
+	private function samePoint(point:Pt, x:Float, y:Float):Bool {
+		return Math.abs(point.x - x) < 0.0001 && Math.abs(point.y - y) < 0.0001;
+	}
+}
+
+// Shared low-level reader for the XFL edge string number/point formats.
+private class EdgeReader {
+	private static inline var TWIPS_PER_PIXEL:Float = 20;
+
+	public var text:String;
+	public var pos:Int = 0;
+
+	public function new(text:String) {
+		this.text = text;
+	}
+
+	public inline function eof():Bool {
+		return pos >= text.length;
+	}
+
+	public inline function peek():String {
+		return pos < text.length ? text.charAt(pos) : "";
+	}
+
+	public inline function next():String {
+		return text.charAt(pos++);
+	}
+
+	public function readPoint():Null<Pt> {
 		var x = readNumber();
 		var y = readNumber();
 		if (x == null || y == null) {
@@ -188,8 +441,11 @@ private class EdgePathParser {
 		return {x: x / TWIPS_PER_PIXEL, y: y / TWIPS_PER_PIXEL};
 	}
 
-	private function readNumber():Null<Float> {
+	public function readNumber():Null<Float> {
 		skipSeparators();
+		if (pos < text.length && text.charAt(pos) == "#") {
+			return readHexNumber();
+		}
 		var start = pos;
 		if (pos < text.length && (text.charAt(pos) == "-" || text.charAt(pos) == "+")) {
 			pos++;
@@ -208,7 +464,55 @@ private class EdgePathParser {
 		return Std.parseFloat(text.substr(start, pos - start));
 	}
 
-	private function skipSeparators():Void {
+	// XFL edge strings encode high-precision coordinates as signed hex
+	// fixed-point in twips, e.g. "#13.FB": the part before the dot is the
+	// integer twips in hex and each hex digit after the dot is a sixteenth.
+	// The plain decimal coordinates and these hex coordinates share the same
+	// twip unit, so readPoint() divides both by TWIPS_PER_PIXEL.
+	private function readHexNumber():Null<Float> {
+		pos++; // consume '#'
+		var sign = 1.0;
+		if (pos < text.length && (text.charAt(pos) == "-" || text.charAt(pos) == "+")) {
+			if (text.charAt(pos) == "-") {
+				sign = -1.0;
+			}
+			pos++;
+		}
+
+		var intStart = pos;
+		while (pos < text.length && isHexDigit(text.charAt(pos))) {
+			pos++;
+		}
+		if (pos == intStart) {
+			return null;
+		}
+		var value:Float = parseHex(text.substr(intStart, pos - intStart));
+
+		if (pos < text.length && text.charAt(pos) == ".") {
+			pos++;
+			var fracStart = pos;
+			while (pos < text.length && isHexDigit(text.charAt(pos))) {
+				pos++;
+			}
+			var fracLen = pos - fracStart;
+			if (fracLen > 0) {
+				value += parseHex(text.substr(fracStart, fracLen)) / Math.pow(16, fracLen);
+			}
+		}
+
+		return sign * value;
+	}
+
+	private function isHexDigit(char:String):Bool {
+		return (char >= "0" && char <= "9") || (char >= "a" && char <= "f") || (char >= "A" && char <= "F");
+	}
+
+	private function parseHex(hex:String):Int {
+		var result = Std.parseInt("0x" + hex);
+		return result == null ? 0 : result;
+	}
+
+	public function skipSeparators():Void {
 		while (pos < text.length) {
 			var char = text.charAt(pos);
 			if (char == " " || char == "\n" || char == "\r" || char == "\t" || char == "," || char == ";" || char == "(" || char == ")") {
@@ -219,11 +523,7 @@ private class EdgePathParser {
 		}
 	}
 
-	private function isCommand(char:String):Bool {
-		return char == "!" || char == "|" || char == "[" || char == "S" || char == "Q" || char == "q";
-	}
-
-	private function samePoint(point:{x:Float, y:Float}, x:Float, y:Float):Bool {
-		return Math.abs(point.x - x) < 0.0001 && Math.abs(point.y - y) < 0.0001;
+	public function isCommand(char:String):Bool {
+		return char == "!" || char == "|" || char == "/" || char == "[" || char == "]" || char == "S" || char == "Q" || char == "q";
 	}
 }

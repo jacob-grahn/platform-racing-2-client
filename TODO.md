@@ -40,7 +40,8 @@ details belong in `docs/vector-art-export-plan.md`.
 - [x] Basic XFL vector rendering exists.
   - Solid fill/stroke path rendering works for many leaf symbols.
   - Gradient/bitmap style parity is still incomplete, which is why the raster
-    asset path remains important.
+    asset path remains important. See the "Vector Renderer" section for the
+    active improvement track.
 - [x] Character SVG exports and raster assets exist.
   - Character SVGs are under `vector-art/svg/character/`.
   - Character PNGs are under `vector-art/png/character/`.
@@ -160,6 +161,80 @@ Acceptance for this section:
 - Common outfits look close enough to Flash for gameplay work.
 - Character animation state switching remains compatible with the MovieClip
   runtime.
+
+## Vector Renderer
+
+The renderer (`pr2.runtime.VectorShapeRenderer`) translates Animate XFL
+`DOMShape` edge/style data into OpenFL `Graphics` calls. OpenFL supplies the
+rasterizer (`beginFill`/`lineStyle`/`curveTo`/`beginGradientFill`), so we are
+not writing our own; the work is correctly translating the XFL edge format.
+Ruffle and `xfl2svg` are algorithm references for the edge format, not code to
+port. Goal: render simple shapes and gradients well enough for UI/leaf symbols,
+reducing dependence on the raster fallback path.
+
+Reference facts (see also `docs/vector-art-export-plan.md`):
+
+- Edge coordinates are raw XFL twips; divide by 20 to get pixels. This is fixed
+  and DPI-independent (XFL/SWF defines its unit as 1/20 logical px; the
+  "15 twips/px" figure is the typographic twip at 96 DPI and does not apply).
+  `tools/xfl_metadata.py` copies `edges` verbatim, so the renderer is the only
+  place this conversion happens.
+- Edge commands: `!` moveTo, `|`/`/` lineTo, `[`/`]` quadTo. Coordinates are
+  either decimal twips or hex fixed-point twips like `#13.FB` (integer part hex,
+  fractional digits are hex sixteenths).
+
+Comparison harness:
+
+- [x] Single-symbol debug route renders any library symbol through the vector
+  path: `?screen=symbol&symbol=<name>&scale=4&bg=FFFFFF`
+  (`pr2.page.SymbolPreview`, wired in `Main`/`Screen`). Capture with
+  `python3 tools/openfl_driver.py --delay 2.5 --query "..." shot out.png` and
+  compare to the Adobe `@4x.png` under `vector-art/png/`.
+- Working test symbol: `UI/Global/MuteButton` (`login/mute_button@4x.png`) —
+  exercises lines, hex-encoded curves, and two linear gradients.
+
+Progress:
+
+- [x] Parse hex fixed-point edge coordinates (`#13.FB`).
+  - `readNumber`/`readHexNumber` in `VectorShapeRenderer`. Previously all `#`
+    control points (~1028 in the catalog) returned null and every curve using
+    them was silently dropped. Curves now render (verified: the mute button's
+    sound-wave arcs appear). Existing runtime tests still pass.
+
+Next steps:
+
+- [x] Stitch fill edges into closed contours; reverse `fillStyle1` edges.
+  - `VectorShapeRenderer` now parses each `edges` string into contour pieces
+    (`EdgeContourParser`), gathers every piece touching a fill style — forward
+    for `fillStyle0`, reversed for `fillStyle1` so all pieces wind the same way
+    — then stitches them head-to-tail into rings (`stitch`, keyed on rounded
+    twip endpoints) before emitting to `beginFill`. This is the SWF
+    "shape -> contours" step. Cubic-only fill edges are still drawn directly
+    inside the fill (the `cubics` format remains the next step).
+  - Verified via the mute_button comparison: the speaker body now fills as a
+    solid shape instead of showing only its outline. Runtime tests still pass
+    (`PR2MovieClipRuntimeTest`, 339 assertions). The panel background and the
+    flat speaker color remain pending the gradient-fill step below.
+- [ ] Implement gradient fills with `beginGradientFill`.
+  - `colorForStyle` flattens a gradient to its first stop, so gradient fills
+    render as a flat (often invisible) color. Map XFL `LinearGradient`/
+    `RadialGradient` entries (color, alpha, ratio) plus the gradient matrix to
+    `beginGradientFill`. Re-run the mute_button comparison.
+- [ ] Handle the `cubics` edge format and the `/`/`]` commands.
+  - `EdgeDef.cubics` is used by ~23k records as an alternative to `edges` (cubic
+    Bezier form with `(`, `)`, `;`, `q`, `Q` tokens, same twip scale). The
+    parser currently only fully handles the `edges` form.
+- [ ] Automate the renderer-vs-PNG diff.
+  - Use `tools/compare_screenshots.py` to score `SymbolPreview` captures against
+    the Adobe `@4x` rasters; align scale/offset via the symbol drawing bounds so
+    the comparison is deterministic. Add a small set of representative symbols.
+
+Acceptance for this section:
+
+- Simple line+fill leaf symbols render close enough to their Adobe PNGs to use
+  in UI/screens without the raster fallback.
+- Linear and radial gradient fills render recognizably.
+- The single-symbol comparison harness can score a symbol against its PNG.
 
 ## Remaining Asset Migration
 

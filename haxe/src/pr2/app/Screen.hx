@@ -12,6 +12,7 @@ enum abstract Screen(String) from String to String {
 	var Login = "login";
 	var Harness = "harness";
 	var Campaign = "campaign";
+	var Symbol = "symbol";
 
 	public static function fromQuery(query:Null<String>):Screen {
 		var value = QueryParams.get(query, "screen");
@@ -20,6 +21,7 @@ enum abstract Screen(String) from String to String {
 			case "harness": Harness;
 			case "campaign": Campaign;
 			case "login": Login;
+			case "symbol": Symbol;
 			default: Intro;
 		}
 	}
