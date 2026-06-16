@@ -13,6 +13,7 @@ import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
+import openfl.filters.GlowFilter;
 import openfl.geom.ColorTransform;
 import openfl.media.SoundMixer;
 import openfl.media.SoundTransform;
@@ -23,6 +24,7 @@ import openfl.text.TextFormatAlign;
 import openfl.text.TextFieldType;
 import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
 import pr2.net.LoginAuthClient;
 import pr2.net.ServerInfo;
@@ -40,7 +42,10 @@ class LoginPage extends Page {
 	private static inline var LOGIN_PAGE_ASSET = "assets/login/login_page@4x.png";
 	private static inline var LOGIN_PAGE_SCALE = 4;
 	private static inline var LOGIN_PAGE_TRIM_X = 21;
-	private static inline var LOGIN_PAGE_TRIM_Y = 370;
+	// Trim Y dropped from 370 once the Gwibble title (Layer 7) was removed from the
+	// page art; the topmost remaining content is now the menu panel. See raster
+	// manifest entry for login_page (vector-art/raster-manifest-other.json).
+	private static inline var LOGIN_PAGE_TRIM_Y = 848;
 
 	private static inline var MENU_X:Float = 275;
 	private static inline var MENU_Y:Float = 228;
@@ -48,6 +53,7 @@ class LoginPage extends Page {
 
 	private var background:Null<LoginBackground>;
 	private var pageArt:Null<Bitmap>;
+	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
 	private var muteButton:Null<LoginMuteButton>;
 	private var kongHitArea:Null<Sprite>;
@@ -69,6 +75,9 @@ class LoginPage extends Page {
 
 		pageArt = createBitmap(LOGIN_PAGE_ASSET, LOGIN_PAGE_TRIM_X, LOGIN_PAGE_TRIM_Y, LOGIN_PAGE_SCALE);
 		addChild(pageArt);
+
+		titleText = createTitle();
+		addChild(titleText);
 
 		addMenuButton("Log In", openLoginDialog);
 		addMenuButton("Play as Guest", openGuestDialog);
@@ -119,6 +128,11 @@ class LoginPage extends Page {
 			statusText.parent.removeChild(statusText);
 		}
 		statusText = null;
+
+		if (titleText != null && titleText.parent != null) {
+			titleText.parent.removeChild(titleText);
+		}
+		titleText = null;
 
 		if (pageArt != null && pageArt.parent != null) {
 			pageArt.parent.removeChild(pageArt);
@@ -437,6 +451,30 @@ class LoginPage extends Page {
 		return bitmap;
 	}
 
+	// The "Platform Racing 2" logo. In the original Flash menu this is live
+	// Gwibble text with a white glow (XFL LoginPage symbol, Layer 7); the baked
+	// page art no longer includes it. Geometry mirrors the DOMStaticText:
+	// tx/ty 81.4/92.4, box 386.8 wide, size 43, centered, lineSpacing -3.
+	private static function createTitle():TextField {
+		var text = new TextField();
+		var format = new TextFormat(FontResolver.resolve("Gwibble"), 43, 0x000000, false, false, false, null, null, TextFormatAlign.CENTER, 0, 0, 0, -3);
+		text.defaultTextFormat = format;
+		text.embedFonts = true;
+		text.x = 81.4;
+		text.y = 92.4;
+		text.width = 386.8;
+		text.height = 120;
+		text.autoSize = TextFieldAutoSize.NONE;
+		text.selectable = false;
+		text.mouseEnabled = false;
+		text.multiline = true;
+		text.wordWrap = false;
+		text.text = "Platform Racing\n-- 2 --";
+		text.setTextFormat(format);
+		text.filters = [new GlowFilter(0xFFFFFF, 1, 4, 4, 2, 3)];
+		return text;
+	}
+
 	private static function createHitArea(x:Float, y:Float, width:Float, height:Float, clickHandler:Void->Void):Sprite {
 		var hitArea = new Sprite();
 		hitArea.x = x;
@@ -454,7 +492,7 @@ class LoginPage extends Page {
 
 	private static function makeText(x:Float, y:Float, width:Float, height:Float, size:Int, color:Int, align:TextFormatAlign):TextField {
 		var text = new TextField();
-		text.defaultTextFormat = new TextFormat("_sans", size, color, false, false, false, null, null, align);
+		text.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, size, color, false, false, false, null, null, align);
 		text.x = x;
 		text.y = y;
 		text.width = width;
@@ -606,7 +644,7 @@ private class LoginPageMenuButton extends Sprite {
 
 	private function buildTextField(color:Int):TextField {
 		var text = new TextField();
-		text.defaultTextFormat = new TextFormat("_sans", 12, color, false, false, false, null, null, CENTER);
+		text.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 12, color, false, false, false, null, null, CENTER);
 		text.selectable = false;
 		text.mouseEnabled = false;
 		text.autoSize = TextFieldAutoSize.NONE;
@@ -658,7 +696,7 @@ private class LoginFlashPopup extends Sprite {
 		addChild(art);
 
 		messageText = new TextField();
-		messageText.defaultTextFormat = new TextFormat("_sans", 11, 0x7B2D26, false, false, false, null, null, TextFormatAlign.CENTER);
+		messageText.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 11, 0x7B2D26, false, false, false, null, null, TextFormatAlign.CENTER);
 		messageText.x = 118;
 		messageText.y = 346;
 		messageText.width = 314;

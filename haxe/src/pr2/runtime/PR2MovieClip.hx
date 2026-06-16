@@ -365,11 +365,13 @@ class PR2MovieClip extends Sprite {
 	private function createStaticText(element:DisplayElementDef):DisplayObject {
 		var attrs:Dynamic = element.textAttrs;
 		var field = new TextField();
-		var face = dynamicString(attrs, "face", "_sans");
-		var bold = face.indexOf("Bold") >= 0;
+		// Map the original (often proprietary) face name onto an embedded font.
+		// The resolved family already encodes weight/style, so bold/italic flags
+		// stay off to avoid browser faux-synthesis over the real outlines.
+		var face = FontResolver.resolve(dynamicString(attrs, "face", "_sans"));
 		var size = Std.int(dynamicFloat(attrs, "size", dynamicFloat(attrs, "lineHeight", 12)));
 		var align = textAlign(dynamicString(attrs, "alignment", "left"));
-		var format = new TextFormat(face, size, 0x000000, bold, false, false, null, null, align);
+		var format = new TextFormat(face, size, 0x000000, false, false, false, null, null, align);
 		field.defaultTextFormat = format;
 		field.setTextFormat(format);
 		field.text = element.text == null ? "" : element.text;

@@ -10,6 +10,7 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.Constants;
+import pr2.runtime.FontResolver;
 import pr2.net.ServerInfo;
 
 /**
@@ -73,7 +74,7 @@ class LobbyStubPage extends Page {
 
 	private function addText(x:Float, y:Float, width:Float, height:Float, value:String, size:Int, color:Int):Void {
 		var text = new TextField();
-		text.defaultTextFormat = new TextFormat("_sans", size, color, true, false, false, null, null, TextFormatAlign.CENTER);
+		text.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, size, color, true, false, false, null, null, TextFormatAlign.CENTER);
 		text.x = x;
 		text.y = y;
 		text.width = width;
@@ -110,7 +111,7 @@ private class LobbyButton extends Sprite {
 		graphics.endFill();
 
 		var text = new TextField();
-		text.defaultTextFormat = new TextFormat("_sans", 13, 0xFFFFFF, true, false, false, null, null, TextFormatAlign.CENTER);
+		text.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 13, 0xFFFFFF, true, false, false, null, null, TextFormatAlign.CENTER);
 		text.x = -WIDTH / 2;
 		text.y = 5;
 		text.width = WIDTH;

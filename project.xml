@@ -5,8 +5,14 @@
 	<app main="Main" path="export" file="PlatformRacing2" />
 
 	<source path="haxe/src" />
-	<assets path="assets" rename="assets" if="html5" />
-	<assets path="assets" rename="assets" unless="html5" />
+	<assets path="assets" rename="assets" exclude="fonts/*" if="html5" />
+	<assets path="assets" rename="assets" exclude="fonts/*" unless="html5" />
+
+	<!-- Embedded fonts. Mapped to the original PR2 face names by pr2.runtime.FontResolver.
+	     DejaVu Sans (Verdana stand-in, metric-compatible) is split into distinct family
+	     names per weight so OpenFL's __fontByName variant lookup resolves bold/italic to the
+	     real outlines instead of browser faux-synthesis. -->
+	<assets path="assets/fonts" rename="assets/fonts" include="*.ttf" embed="true" />
 	<assets path="vector-art/png/blocks" rename="assets/blocks" />
 	<assets path="vector-art/atlases/character" rename="assets/character/atlases" />
 	<assets path="vector-art/atlases/intro" rename="assets/intro/atlases" />

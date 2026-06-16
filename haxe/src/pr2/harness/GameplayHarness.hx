@@ -12,6 +12,7 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 import openfl.utils.Assets;
+import pr2.runtime.FontResolver;
 import pr2.Constants;
 import pr2.character.CharacterDisplay;
 import pr2.character.CharacterRenderMode;
@@ -85,7 +86,7 @@ class GameplayHarness extends Sprite {
 
 	private function createHud():Void {
 		statusText = new TextField();
-		statusText.defaultTextFormat = new TextFormat("_sans", 12, 0xFFFFFF);
+		statusText.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 12, 0xFFFFFF);
 		statusText.selectable = false;
 		statusText.mouseEnabled = false;
 		statusText.multiline = true;

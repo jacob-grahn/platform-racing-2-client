@@ -6954,15 +6954,8 @@ L 1627 0 1815 0 1815 725 Z"/>
 </g>
 </g>
 
-<g filter="url(#Filter_3)" transform="matrix( 1, 0, 0, 1, 0,0) ">
-<g transform="matrix( 1, 0, 0, 1, 81.4,92.4) ">
-<clipPath id="Mask_Mask_1">
-<rect x="-2" y="-2" width="390.8" height="92.3" fill="#FFFFFF" stroke="none"/>
-</clipPath>
-
-<text clip-path="url(#Mask_Mask_1)" writing-mode="lr"><tspan x="0.1" y="37.05" baseline-shift="0%" kerning="auto" font-family="Gwibble_Regular" font-size="43" fill="#000000" xml:space="preserve">Platform Racing</tspan><tspan x="136.25" y="79.7" baseline-shift="0%" kerning="auto" font-family="Gwibble_Regular" font-size="43" fill="#000000" xml:space="preserve">-- 2 --</tspan></text>
-</g>
-</g>
+<!-- Title (Layer 7, "Platform Racing -- 2 --") removed: rendered live in Gwibble
+     by pr2.page.LoginPage.createTitle() instead of baked into the page art. -->
 
 <g transform="matrix( 1.160003662109375, 0, 0, 1.239990234375, 217.5,212) ">
 <g transform="matrix( 0, -0.9876556396484375, 0.9876556396484375, 0, 0.45,99.55) ">

@@ -106,7 +106,7 @@
       "category": "login",
       "drawingBounds": {
         "height": 395.299,
-        "width": 421.71,
+        "width": 333.542,
         "x": 0.0,
         "y": 0.0
       },
@@ -120,10 +120,10 @@
       },
       "trim": {
         "empty": false,
-        "height": 1211,
-        "width": 1666,
+        "height": 734,
+        "width": 1314,
         "x": 21,
-        "y": 370
+        "y": 848
       }
     },
     {
