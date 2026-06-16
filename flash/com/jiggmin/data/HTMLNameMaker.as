@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// data.HTMLNameMaker = data.class_145
+﻿// data.HTMLNameMaker = data.class_145
 
 package com.jiggmin.data
 {

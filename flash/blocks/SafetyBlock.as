@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//blocks.SafetyBlock = blocks.class_60
+﻿//blocks.SafetyBlock = blocks.class_60
 
 package blocks
 {

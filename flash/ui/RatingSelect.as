@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// ui.RatingSelect = ui.class_150
+﻿// ui.RatingSelect = ui.class_150
 
 package ui
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// levelEditor.GetLevelsPopupItem = levelEditor.class_232
+﻿// levelEditor.GetLevelsPopupItem = levelEditor.class_232
 
 package levelEditor
 {

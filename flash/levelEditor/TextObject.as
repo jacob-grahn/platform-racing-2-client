@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// levelEditor.TextObject = levelEditor.class_131
+﻿// levelEditor.TextObject = levelEditor.class_131
 
 package levelEditor
 {

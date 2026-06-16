@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// blocks.Block = blocks.class_36
+﻿// blocks.Block = blocks.class_36
 
 package blocks
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// character.RemoteCharacter = character.class_91
+﻿// character.RemoteCharacter = character.class_91
 
 package character
 {

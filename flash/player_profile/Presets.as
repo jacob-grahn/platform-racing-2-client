@@ -1,6 +1,3 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
 // player_profile.class_211 = player_profile.Presets
 
 package player_profile

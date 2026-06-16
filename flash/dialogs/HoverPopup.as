@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//dialogs.HoverPopup = dialogs.class_204
+﻿//dialogs.HoverPopup = dialogs.class_204
 
 package dialogs
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// Keys = class_2
+﻿// Keys = class_2
 
 package 
 {

@@ -1,6 +1,3 @@
-// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
 // Package_18.class_262 = player_profile.PlayerDisplay
 
 package player_profile

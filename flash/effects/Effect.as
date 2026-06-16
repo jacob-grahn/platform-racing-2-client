@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.Effect = effects.class_80
+﻿// effects.Effect = effects.class_80
 
 package effects
 {

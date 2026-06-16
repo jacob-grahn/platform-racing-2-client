@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// menu.CheckServers = menu.class_14
+﻿// menu.CheckServers = menu.class_14
 
 package menu
 {

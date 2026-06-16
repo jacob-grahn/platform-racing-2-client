@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// blocks.ArrowBlock = blocks.class_37
+﻿// blocks.ArrowBlock = blocks.class_37
 
 package blocks
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// data.Encryptor = data.class_64
+﻿// data.Encryptor = data.class_64
 
 package com.jiggmin.data
 {

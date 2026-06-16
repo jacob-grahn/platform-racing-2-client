@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// gameplay.PrizePopup = gameplay.class_97
+﻿// gameplay.PrizePopup = gameplay.class_97
 
 package gameplay
 {

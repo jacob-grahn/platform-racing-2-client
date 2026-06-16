@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.class_106 = effects.BlockPiece
+﻿// effects.class_106 = effects.BlockPiece
 
 package effects
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// sounds.NoodleTown = package_2.class_11
+﻿// sounds.NoodleTown = package_2.class_11
 
 package sounds
 {

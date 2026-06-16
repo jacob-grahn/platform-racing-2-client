@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-
-
-package editor_sidebar
+﻿package editor_sidebar
 {
     import levelEditor.LevelEditor;
     import editor_tools.MusicMenuButton;

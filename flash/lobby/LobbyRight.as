@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// lobby.LobbyRight = lobby.class_197
+﻿// lobby.LobbyRight = lobby.class_197
 
 package lobby
 {

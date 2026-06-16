@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-//gameplay.Course = gameplay.class_30
+﻿//gameplay.Course = gameplay.class_30
 
 package gameplay
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// sounds.SoundEffects = package_2.class_88
+﻿// sounds.SoundEffects = package_2.class_88
 
 package sounds
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// dialogs.Popup = dialogs.class_25
+﻿// dialogs.Popup = dialogs.class_25
 
 package dialogs
 {

@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// menu.LoggingInPopup = menu.class_165
+﻿// menu.LoggingInPopup = menu.class_165
 
 package menu
 {

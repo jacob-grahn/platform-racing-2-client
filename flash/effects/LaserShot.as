@@ -1,7 +1,4 @@
-﻿// Decompiled by AS3 Sorcerer 5.98
-// www.as3sorcerer.com
-
-// effects.LaserShot = effects.class_136
+﻿// effects.LaserShot = effects.class_136
 
 package effects
 {
