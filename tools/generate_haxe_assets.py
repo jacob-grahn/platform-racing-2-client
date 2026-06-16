@@ -196,6 +196,20 @@ typedef DisplayElementDef = {
 \t@:optional var bounds:BoundsDef;
 \t@:optional var filters:Array<FilterDef>;
 \t@:optional var children:Array<DisplayElementDef>;
+\t@:optional var x:Float;
+\t@:optional var y:Float;
+\t@:optional var objectWidth:Float;
+\t@:optional var objectHeight:Float;
+\t@:optional var topLeftRadius:Float;
+\t@:optional var topRightRadius:Float;
+\t@:optional var bottomLeftRadius:Float;
+\t@:optional var bottomRightRadius:Float;
+\t@:optional var startAngle:Float;
+\t@:optional var endAngle:Float;
+\t@:optional var innerRadius:Float;
+\t@:optional var closePath:Bool;
+\t@:optional var fill:StyleValueDef;
+\t@:optional var stroke:StyleValueDef;
 }
 
 typedef FrameDef = {

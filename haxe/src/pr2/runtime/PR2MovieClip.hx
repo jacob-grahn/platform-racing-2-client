@@ -329,7 +329,7 @@ class PR2MovieClip extends Sprite {
 			}
 		}
 
-		if (element.type == "DOMShape") {
+		if (element.type == "DOMShape" || element.type == "DOMRectangleObject" || element.type == "DOMOvalObject") {
 			var vectorShape = VectorShapeRenderer.render(element);
 			if (vectorShape != null) {
 				return vectorShape;

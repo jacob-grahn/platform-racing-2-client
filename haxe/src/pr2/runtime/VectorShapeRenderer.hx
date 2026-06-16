@@ -25,6 +25,10 @@ class VectorShapeRenderer {
 	public static inline var EPS:Float = 1e-4;
 
 	public static function render(element:DisplayElementDef):Null<Shape> {
+		if (element.type == "DOMRectangleObject" || element.type == "DOMOvalObject") {
+			return renderPrimitive(element);
+		}
+
 		if (element.edges == null || element.edges.length == 0) {
 			return null;
 		}
@@ -81,6 +85,73 @@ class VectorShapeRenderer {
 		}
 
 		return drew ? shape : null;
+	}
+
+	// Render an Animate primitive drawing object (DOMRectangleObject /
+	// DOMOvalObject). These carry their geometry as attributes rather than as
+	// `edges`, plus a single direct `fill`/`stroke` style. The element matrix is
+	// applied by the caller (PR2MovieClip.applyElementProperties), so the
+	// geometry is drawn here in the element's local coordinate space, exactly as
+	// DOMShape edges are.
+	private static function renderPrimitive(element:DisplayElementDef):Null<Shape> {
+		var shape = new Shape();
+		var graphics = shape.graphics;
+		var drew = false;
+
+		if (element.stroke != null) {
+			applyStrokeStyle(graphics, element.stroke);
+			drew = true;
+		}
+
+		var hasFill = element.fill != null;
+		if (hasFill) {
+			beginStyleFill(graphics, element.fill);
+			drew = true;
+		}
+
+		drawPrimitiveGeometry(graphics, element);
+
+		if (hasFill) {
+			graphics.endFill();
+		}
+
+		return drew ? shape : null;
+	}
+
+	private static function drawPrimitiveGeometry(graphics:Graphics, element:DisplayElementDef):Void {
+		var x = element.x == null ? 0.0 : element.x;
+		var y = element.y == null ? 0.0 : element.y;
+		var w = element.objectWidth == null ? 0.0 : element.objectWidth;
+		var h = element.objectHeight == null ? 0.0 : element.objectHeight;
+
+		if (element.type == "DOMOvalObject") {
+			graphics.drawEllipse(x, y, w, h);
+			return;
+		}
+
+		var tl = element.topLeftRadius == null ? 0.0 : element.topLeftRadius;
+		var tr = element.topRightRadius == null ? 0.0 : element.topRightRadius;
+		var bl = element.bottomLeftRadius == null ? 0.0 : element.bottomLeftRadius;
+		var br = element.bottomRightRadius == null ? 0.0 : element.bottomRightRadius;
+
+		if (tl == 0 && tr == 0 && bl == 0 && br == 0) {
+			graphics.drawRect(x, y, w, h);
+		} else if (tl == tr && tl == bl && tl == br) {
+			// drawRoundRect takes ellipse width/height (diameter), i.e. 2x radius.
+			graphics.drawRoundRect(x, y, w, h, tl * 2, tl * 2);
+		} else {
+			graphics.drawRoundRectComplex(x, y, w, h, tl, tr, bl, br);
+		}
+	}
+
+	// Apply a primitive's stroke. The XFL stroke is a SolidStroke whose paint is
+	// itself a nested fill (solid or gradient); mirror the DOMShape stroke path
+	// and resolve it to a single line color/alpha.
+	private static function applyStrokeStyle(graphics:Graphics, stroke:StyleValueDef):Void {
+		var strokeFill = stroke.fill != null ? stroke.fill : stroke;
+		var color = colorForStyle(strokeFill);
+		var weight:Float = stroke.weight == null ? 1.0 : stroke.weight;
+		graphics.lineStyle(weight, color.color, color.alpha);
 	}
 
 	// Gather all contour pieces touching the given fill style, reversing those

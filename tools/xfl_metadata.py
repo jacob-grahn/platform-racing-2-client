@@ -394,6 +394,53 @@ def parse_shape_summary(element):
     return compact_record(record)
 
 
+# Animate primitive drawing objects (DOMRectangleObject / DOMOvalObject) carry
+# their geometry as attributes instead of `edges`, plus direct `<fill>`/`<stroke>`
+# children (not the `fills`/`strokes` wrappers used by DOMShape).
+PRIMITIVE_GEOMETRY_ATTRS = (
+    "x",
+    "y",
+    "objectWidth",
+    "objectHeight",
+    "topLeftRadius",
+    "topRightRadius",
+    "bottomLeftRadius",
+    "bottomRightRadius",
+    "startAngle",
+    "endAngle",
+    "innerRadius",
+)
+
+
+def parse_direct_style(element, wrapper_name):
+    wrapper = first_direct_child(element, wrapper_name)
+    if wrapper is None:
+        return None
+    value = first_style_value(wrapper)
+    if value is None:
+        return None
+    return parse_style_value(value)
+
+
+def parse_primitive_object(element):
+    record = parse_common_display_attrs(element)
+    record.update(parse_float_attrs(element, PRIMITIVE_GEOMETRY_ATTRS))
+
+    close_path = parse_bool(element.attrib.get("closePath"))
+    if close_path is not None:
+        record["closePath"] = close_path
+
+    fill = parse_direct_style(element, "fill")
+    if fill is not None:
+        record["fill"] = fill
+
+    stroke = parse_direct_style(element, "stroke")
+    if stroke is not None:
+        record["stroke"] = stroke
+
+    return compact_record(record)
+
+
 def parse_display_element(element):
     name = local_name(element.tag)
     if name in ("DOMSymbolInstance", "DOMBitmapInstance"):
@@ -401,6 +448,9 @@ def parse_display_element(element):
 
     if name == "DOMShape":
         return parse_shape_summary(element)
+
+    if name in ("DOMRectangleObject", "DOMOvalObject"):
+        return parse_primitive_object(element)
 
     if name == "DOMGroup":
         record = parse_common_display_attrs(element)
@@ -418,7 +468,14 @@ def parse_display_elements(parent):
     elements = []
     for element in list(parent):
         name = local_name(element.tag)
-        if name in ("DOMSymbolInstance", "DOMBitmapInstance", "DOMShape", "DOMGroup"):
+        if name in (
+            "DOMSymbolInstance",
+            "DOMBitmapInstance",
+            "DOMShape",
+            "DOMGroup",
+            "DOMRectangleObject",
+            "DOMOvalObject",
+        ):
             elements.append(parse_display_element(element))
     return elements
 

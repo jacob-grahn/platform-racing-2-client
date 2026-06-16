@@ -17,6 +17,7 @@ class PR2MovieClipRuntimeTest {
 		testSourceLayerOrderRendersTopLayersAboveBottomLayers();
 		testColorTransforms();
 		testLeafVectorShapes();
+		testPrimitiveDrawingObjects();
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
 		testGeneratedCharacterPartIdSelection();
@@ -595,6 +596,88 @@ class PR2MovieClipRuntimeTest {
 					type: "DOMShape",
 					name: childName,
 					bounds: {left: 0, top: 0, right: 10, bottom: 10}
+				}]
+			}]
+		};
+	}
+
+	private static function testPrimitiveDrawingObjects():Void {
+		var clip = new PR2MovieClip(makePrimitiveSymbol());
+
+		// DOMRectangleObject geometry is drawn from its objectWidth/objectHeight,
+		// not from `edges`, so the placeholder crosshair (~8px) should not appear.
+		// (the stroke weight widens the measured bounds by half a pixel per side).
+		var rect = requireChild(clip, "rect");
+		assertAtLeast(120, rect.width, "DOMRectangleObject renders its objectWidth");
+		assertAtLeast(80, rect.height, "DOMRectangleObject renders its objectHeight");
+
+		// DOMOvalObject renders as an unstroked ellipse of objectWidth x objectHeight.
+		var oval = requireChild(clip, "oval");
+		assertClose(60, oval.width, "DOMOvalObject renders its objectWidth");
+		assertClose(40, oval.height, "DOMOvalObject renders its objectHeight");
+	}
+
+	private static function makePrimitiveSymbol():SymbolAssetDef {
+		return {
+			href: "PrimitiveSymbol.xml",
+			type: "movie clip",
+			name: "PrimitiveSymbol",
+			linkageClassName: "PrimitiveSymbol",
+			linkageIdentifier: "PrimitiveSymbol",
+			timelines: [{
+				name: "PrimitiveSymbol",
+				layerCount: 1,
+				frameCount: 1,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 1,
+					frames: [{
+						index: 0,
+						duration: 1,
+						elementCount: 2,
+						elementTypes: ["DOMRectangleObject", "DOMOvalObject"],
+						elements: [
+							{
+								type: "DOMRectangleObject",
+								name: "rect",
+								x: 0,
+								y: 0,
+								objectWidth: 120,
+								objectHeight: 80,
+								topLeftRadius: 10,
+								topRightRadius: 10,
+								bottomLeftRadius: 10,
+								bottomRightRadius: 10,
+								fill: {
+									type: "LinearGradient",
+									matrix: {a: 0.06, d: 0.06, tx: 60, ty: 40},
+									entries: [
+										{ratio: 0, color: "#9D9D9D", alpha: 0.4},
+										{ratio: 1, color: "#FFFFFF", alpha: 0.65}
+									]
+								},
+								stroke: {
+									type: "SolidStroke",
+									weight: 1,
+									fill: {type: "SolidColor", color: "#333333"}
+								}
+							},
+							{
+								type: "DOMOvalObject",
+								name: "oval",
+								x: 0,
+								y: 0,
+								objectWidth: 60,
+								objectHeight: 40,
+								fill: {type: "SolidColor", color: "#00FF00"}
+							}
+						]
+					}]
 				}]
 			}]
 		};

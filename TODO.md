@@ -227,39 +227,37 @@ Next steps:
     linear highlight gradient matching the Adobe `@4x.png`. Radial confirmed on
     `Graphics/Symbol 28` (flat single color before, interpolated after). Runtime
     tests still pass (339 assertions).
-  - Note: the mute_button panel background is still missing, but that is a
-    separate gap — it is a `DOMRectangleObject` primitive the XFL extractor does
-    not emit edges/fills for, not a gradient issue.
-- [ ] Render `DOMRectangleObject` (and `DOMOvalObject`) primitives.
+  - Note: the mute_button panel background was a separate gap — a
+    `DOMRectangleObject` primitive the XFL extractor did not emit, not a gradient
+    issue. That is now resolved (see the `DOMRectangleObject` item below).
+- [x] Render `DOMRectangleObject` (and `DOMOvalObject`) primitives.
   - These are Animate primitive drawing objects, not `DOMShape`, so they carry
-    no `edges`. `tools/xfl_metadata.py` drops them today: `parse_display_element`
-    only handles `DOMSymbolInstance`/`DOMBitmapInstance`/`DOMShape`/`DOMGroup`,
-    and `parse_display_elements` filters the same set, so the element is counted
-    in `elementCount`/`elementTypes` but never emitted into `elements`. This is
-    why the mute_button panel background (and other rounded-rect popup BGs) draw
-    nothing while the rest of the symbol renders.
-  - Source shape, from `LIBRARY/UI/Popups (outside levels)/BG.xml`: a
-    `<DOMRectangleObject>` with `x`/`y`/`objectWidth`/`objectHeight` (px), four
-    corner radii (`topLeftRadius`/`topRightRadius`/`bottomLeftRadius`/
-    `bottomRightRadius`), a `<matrix>`, a `<fill>` (solid or
-    Linear/RadialGradient, same structure as `DOMShape` fills), and a `<stroke>`
-    (`SolidStroke` with `weight` + nested `<fill>`). `DOMOvalObject` is the
-    analogous ellipse primitive.
-  - Extractor work: add `DOMRectangleObject`/`DOMOvalObject` to both functions in
-    `xfl_metadata.py`; emit geometry (x, y, objectWidth, objectHeight, corner
-    radii / oval flags), reuse `parse_matrix` + `parse_indexed_style`-style
-    fill/stroke parsing (the `<fill>`/`<stroke>` here are direct children, not
-    `fills`/`strokes` wrappers). Add matching optional fields to the generated
-    `DisplayElementDef` in `AssetTypes.hx` (and the generator that writes it).
-  - Renderer work: in `VectorShapeRenderer`, draw the primitive directly
-    (`graphics.drawRoundRect`/`drawRoundRectComplex`/`drawEllipse`, or a manual
-    `curveTo` path for per-corner radii), applying the element matrix, and reuse
-    `beginStyleFill` (already gradient-aware) for the fill plus the existing
-    stroke path. Note the BG fill+stroke are themselves linear gradients, so the
-    new gradient support already covers them once the geometry is emitted.
-  - Verify by re-running the mute_button comparison
+    no `edges`. `tools/xfl_metadata.py` dropped them previously, so the element
+    was counted in `elementCount`/`elementTypes` but never emitted into
+    `elements`, which is why the mute_button panel background (and other
+    rounded-rect popup BGs) drew nothing while the rest of the symbol rendered.
+  - Extractor: `parse_primitive_object` in `xfl_metadata.py` now handles
+    `DOMRectangleObject`/`DOMOvalObject` in both `parse_display_element` and
+    `parse_display_elements`. It emits geometry (`x`, `y`, `objectWidth`,
+    `objectHeight`, the four corner radii, plus oval `startAngle`/`endAngle`/
+    `innerRadius`/`closePath`), reuses `parse_matrix` via
+    `parse_common_display_attrs`, and parses the direct-child `<fill>`/`<stroke>`
+    (not the `fills`/`strokes` wrappers) through `parse_direct_style` +
+    `parse_style_value`, so the nested gradient/solid paint is captured the same
+    way as `DOMShape` styles. New optional `DisplayElementDef` fields were added
+    to `AssetTypes.hx` and the generator, and the catalog was regenerated.
+  - Renderer: `VectorShapeRenderer.renderPrimitive` draws the geometry directly
+    (`drawRect`/`drawRoundRect`/`drawRoundRectComplex` for rectangles,
+    `drawEllipse` for ovals) in the element's local space — the element matrix is
+    applied by `PR2MovieClip.applyElementProperties`, exactly as for `DOMShape`
+    edges — and reuses the gradient-aware `beginStyleFill` for the fill plus a
+    `colorForStyle`-based stroke that mirrors the existing `DOMShape` stroke path.
+  - Verified by re-running the mute_button comparison
     (`?screen=symbol&symbol=UI/Global/MuteButton&scale=4`): the rounded panel
-    background + hairline border should appear behind the speaker.
+    background + hairline border now render behind the speaker, matching the
+    structure of the Adobe `@4x.png`. Runtime tests cover a stroked rounded
+    rectangle and a solid-filled oval (`PR2MovieClipRuntimeTest`, now 345
+    assertions); other suites still pass.
 - [ ] Handle the `cubics` edge format and the `/`/`]` commands.
   - `EdgeDef.cubics` is used by ~23k records as an alternative to `edges` (cubic
     Bezier form with `(`, `)`, `;`, `q`, `Q` tokens, same twip scale). The
