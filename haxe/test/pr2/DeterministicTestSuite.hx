@@ -15,6 +15,7 @@ import pr2.net.CampaignListClientTest;
 import pr2.net.LevelDataClientTest;
 import pr2.net.LoginAuthClientTest;
 import pr2.net.LoginSocketProtocolTest;
+import pr2.net.ServerConfigTest;
 import pr2.net.ServerStatusClientTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 
@@ -31,6 +32,7 @@ class DeterministicTestSuite {
 		FixtureLevelRendererTest.main();
 		GameplayHarnessOptionsTest.main();
 		LocalPlayerControllerTest.main();
+		ServerConfigTest.main();
 		ServerStatusClientTest.main();
 		LoginSocketProtocolTest.main();
 		CampaignListClientTest.main();

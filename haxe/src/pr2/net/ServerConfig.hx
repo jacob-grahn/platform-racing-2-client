@@ -38,8 +38,16 @@ final class ServerConfig {
 		}
 	}
 
+	public static function resetHost():Void {
+		host = DEFAULT_HOST;
+	}
+
 	public static function getHost():String {
 		return host;
+	}
+
+	public static function hasProxyHost():Bool {
+		return host != DEFAULT_HOST;
 	}
 
 	/**

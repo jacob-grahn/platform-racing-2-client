@@ -21,6 +21,7 @@ import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
+import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevelDecoder;
@@ -72,6 +73,15 @@ class CampaignTestScreen extends Sprite {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		#if html5
+		if (!ServerConfig.hasProxyHost()) {
+			setStatus(
+				"phase=proxyRequired",
+				'Campaign fetch requires a same-origin API proxy on HTML5.\nUse ?apiHost=/api with tools/dev_proxy.py or configure an equivalent deploy proxy.'
+			);
+			return;
+		}
+		#end
 		CampaignListClient.fetch(page, onList, onError);
 	}
 

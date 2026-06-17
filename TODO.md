@@ -281,8 +281,10 @@ Server pipeline (confirmed from Flash source; salts/URLs the open bits need):
   - Spawn `CharacterDisplay` at the start block (code 111), using the same
     feet-anchored display/container wiring as the local harness; decoded server
     blocks feed `LocalPlayerController` collision.
-- [ ] Production CORS: a real deploy needs a server-side proxy or CORS on the
-  level host (not needed for the local harness).
+- [x] Production CORS: the campaign harness now requires an explicit same-origin
+  API proxy on HTML5 (`?apiHost=/api` for `tools/dev_proxy.py`, or an
+  equivalent deploy proxy) instead of attempting direct browser requests to
+  pr2hub.com.
 
 ## Gameplay Expansion
 
