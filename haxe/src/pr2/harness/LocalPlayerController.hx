@@ -14,6 +14,7 @@ class LocalPlayerController {
 	private static inline var HALF_WIDTH:Float = STANDING_WIDTH / 2;
 	private static inline var MAX_SPEED:Float = 28;
 	private static inline var DEFAULT_GRAVITY:Float = 0.7;
+	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -38,6 +39,8 @@ class LocalPlayerController {
 	private var jumpVelBoost:Float = 0;
 	private var crouchCharge:Float = 0;
 	private var waterTicks:Float = 0;
+	private final crumbleLife:Map<String, Int> = new Map();
+	private final removedBlocks:Map<String, Bool> = new Map();
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -284,22 +287,25 @@ class LocalPlayerController {
 
 	private function onStand(block:LevelBlock):Void {
 		touch(block);
+		var standForce = Math.round(vy * 2);
 		y = block.y * level.tileSize;
 		vy = 0;
 		grounded = true;
-		applyStandEffect(block);
+		applyStandEffect(block, standForce);
 	}
 
 	private function onBump(block:LevelBlock, input:LocalPlayerInput):Void {
 		touch(block);
+		var bumpForce = Math.round(-vy);
 		y = (block.y + 1) * level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
 		vy *= -0.25;
 		jumpVelBoost = 0;
-		applyBumpEffect(block, input);
+		applyBumpEffect(block, input, bumpForce);
 	}
 
 	private function onLeftHit(block:LevelBlock):Void {
 		touch(block);
+		var sideForce = Math.round(Math.abs(vx) * 1.75);
 		x = block.x * level.tileSize - HALF_WIDTH;
 		if (vx > 0) {
 			vx *= -0.05;
@@ -307,11 +313,12 @@ class LocalPlayerController {
 		if (targetVelX > 0) {
 			targetVelX = 0;
 		}
-		applySideHitEffect(block);
+		applySideHitEffect(block, sideForce);
 	}
 
 	private function onRightHit(block:LevelBlock):Void {
 		touch(block);
+		var sideForce = Math.round(Math.abs(vx) * 1.75);
 		x = (block.x + 1) * level.tileSize + HALF_WIDTH;
 		if (vx < 0) {
 			vx *= -0.05;
@@ -319,11 +326,13 @@ class LocalPlayerController {
 		if (targetVelX < 0) {
 			targetVelX = 0;
 		}
-		applySideHitEffect(block);
+		applySideHitEffect(block, sideForce);
 	}
 
-	private function applyStandEffect(block:LevelBlock):Void {
+	private function applyStandEffect(block:LevelBlock, force:Int):Void {
 		switch (block.type) {
+			case BlockType.Crumble:
+				applyCrumbleForce(block, force);
 			case BlockType.Ice:
 				accelFactor = 0.05;
 			case BlockType.ArrowUp:
@@ -338,8 +347,10 @@ class LocalPlayerController {
 		}
 	}
 
-	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput):Void {
+	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int):Void {
 		switch (block.type) {
+			case BlockType.Crumble:
+				applyCrumbleForce(block, force);
 			case BlockType.ArrowUp:
 				vy = !input.down && !crouching ? -14 : 0;
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
@@ -348,8 +359,10 @@ class LocalPlayerController {
 		}
 	}
 
-	private function applySideHitEffect(block:LevelBlock):Void {
+	private function applySideHitEffect(block:LevelBlock, force:Int):Void {
 		switch (block.type) {
+			case BlockType.Crumble:
+				applyCrumbleForce(block, force);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
 			default:
@@ -377,6 +390,21 @@ class LocalPlayerController {
 			return null;
 		}
 		return getBlockAtTile(block.x, block.y + 1) == null ? block : null;
+	}
+
+	private function applyCrumbleForce(block:LevelBlock, force:Int):Void {
+		var damage = Std.int(Math.floor(force / 4));
+		if (damage <= 0) {
+			return;
+		}
+
+		var key = blockKey(block.x, block.y);
+		var life = crumbleLife.exists(key) ? crumbleLife.get(key) : CRUMBLE_INITIAL_LIFE;
+		life -= damage;
+		crumbleLife.set(key, life);
+		if (life <= 0) {
+			removedBlocks.set(key, true);
+		}
 	}
 
 	private function touch(block:Null<LevelBlock>):Void {
@@ -407,10 +435,14 @@ class LocalPlayerController {
 
 	private function getBlockAtTile(tileX:Int, tileY:Int):Null<LevelBlock> {
 		var block = level.blockAt(tileX, tileY);
-		if (block == null || !block.type.isSolid()) {
+		if (block == null || removedBlocks.exists(blockKey(tileX, tileY)) || !block.type.isSolid()) {
 			return null;
 		}
 		return block;
+	}
+
+	private function blockKey(tileX:Int, tileY:Int):String {
+		return tileX + "," + tileY;
 	}
 
 	private function tileIndex(value:Float):Int {

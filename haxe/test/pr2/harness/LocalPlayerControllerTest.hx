@@ -21,6 +21,7 @@ class LocalPlayerControllerTest {
 		testFallingIntoWaterEntersSwimMode();
 		testWaterDampsSinkingAndPaddlesUp();
 		testLeavingWaterReturnsToLand();
+		testHighImpactFallBreaksCrumbleBlock();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -165,6 +166,31 @@ class LocalPlayerControllerTest {
 		assertEquals(true, returnedToLand, "swimming up out of water returns to land mode");
 	}
 
+	private static function testHighImpactFallBreaksCrumbleBlock():Void {
+		var player = new LocalPlayerController(crumbleDropLevel());
+		var touchedCrumble = false;
+		var framesAfterCrumble = 0;
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput());
+			var state = player.debugState();
+			if (state.touchedBlockType == "crumble") {
+				touchedCrumble = true;
+			}
+			if (touchedCrumble) {
+				framesAfterCrumble++;
+				if (framesAfterCrumble >= 6) {
+					break;
+				}
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals(true, touchedCrumble, "falling player touches crumble platform");
+		assertBelow(240, state.y, "broken crumble block is removed from collision");
+		assertEquals(false, state.grounded, "player is no longer supported by broken crumble");
+	}
+
 	private static function newPlayer():LocalPlayerController {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
@@ -205,6 +231,24 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, type),
 				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function crumbleDropLevel():FixtureLevel {
+		return new FixtureLevel(
+			"crumble-drop",
+			"Crumble Drop",
+			5,
+			13,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 0),
+			new TilePosition(4, 8),
+			[
+				new LevelBlock(2, 8, BlockType.Crumble),
+				new LevelBlock(2, 9, BlockType.Solid)
 			]
 		);
 	}

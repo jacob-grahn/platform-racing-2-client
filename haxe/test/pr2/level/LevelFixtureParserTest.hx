@@ -34,6 +34,7 @@ class LevelFixtureParserTest {
 		assertBlock(fixture.blockAt(16, 9), Finish, "finish block");
 		assertBlock(fixture.blockAt(0, 10), Basic, "ground block");
 		assertEquals(null, fixture.blockAt(0, 0), "empty tile lookup");
+		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"crumble"')).blockAt(1, 2), Crumble, "crumble block");
 	}
 
 	private static function testValidationRejectsBadBlockTypes():Void {

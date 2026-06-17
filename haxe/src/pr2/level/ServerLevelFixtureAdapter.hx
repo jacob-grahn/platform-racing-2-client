@@ -62,6 +62,8 @@ class ServerLevelFixtureAdapter {
 				BlockType.ArrowLeft;
 			case ObjectCodes.BLOCK_ARROW_RIGHT:
 				BlockType.ArrowRight;
+			case ObjectCodes.BLOCK_CRUMBLE:
+				BlockType.Crumble;
 			case ObjectCodes.BLOCK_WATER:
 				BlockType.Water;
 			case ObjectCodes.BLOCK_SAFETY:
