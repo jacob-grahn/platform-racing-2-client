@@ -22,6 +22,10 @@ class LocalPlayerController {
 	public var grounded(default, null):Bool = false;
 	public var crouching(default, null):Bool = false;
 	public var touchedBlock(default, null):Null<LevelBlock> = null;
+	public var mode(default, null):String = MODE_LAND;
+
+	public static inline var MODE_LAND:String = "land";
+	public static inline var MODE_WATER:String = "water";
 
 	private final level:FixtureLevel;
 	private final accel:Float;
@@ -33,6 +37,7 @@ class LocalPlayerController {
 	private var jumpHeld:Bool = false;
 	private var jumpVelBoost:Float = 0;
 	private var crouchCharge:Float = 0;
+	private var waterTicks:Float = 0;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -47,7 +52,14 @@ class LocalPlayerController {
 
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
+		if (mode == MODE_WATER) {
+			waterStep(input);
+		} else {
+			landStep(input);
+		}
+	}
 
+	private function landStep(input:LocalPlayerInput):Void {
 		if (input.right) {
 			targetVelX += accel;
 		}
@@ -97,8 +109,49 @@ class LocalPlayerController {
 		processBlocks(input);
 	}
 
+	// Ports LocalCharacter.waterGo: directional paddling, heavy damping, a brief
+	// linger (waterTicks) after leaving the water, and an upward boost on exit.
+	private function waterStep(input:LocalPlayerInput):Void {
+		if (input.right) {
+			vx += accel * 0.5;
+		}
+		if (input.left) {
+			vx -= accel * 0.5;
+		}
+		if (input.down) {
+			vy += accel * 0.65;
+		}
+		if (input.jump) {
+			vy -= accel * 0.65;
+		}
+		vy += DEFAULT_GRAVITY * 0.25;
+		vx *= 0.92;
+		vy *= 0.92;
+		vx = clamp(vx, -MAX_SPEED, MAX_SPEED);
+		vy = clamp(vy, -MAX_SPEED, MAX_SPEED);
+		x += vx;
+		y += vy;
+		processBlocks(input);
+		waterTicks--;
+		if (waterTicks <= 0) {
+			if (input.jump) {
+				vy -= jumpVelocity * 0.5;
+				jumpVelBoost = -jumpVelocity * 0.5;
+				jumpHeld = true;
+			}
+			setMode(MODE_LAND);
+		}
+	}
+
+	private function setMode(newMode:String):Void {
+		if (mode != newMode) {
+			mode = newMode;
+			targetVelX = 0;
+		}
+	}
+
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type, mode);
 	}
 
 	private function position():Void {
@@ -137,8 +190,8 @@ class LocalPlayerController {
 			if (grounded) {
 				crouching = true;
 			}
-			var bumpBlock = blockWithOpenSpaceBelow(refs.ceiling);
-			if (bumpBlock == null) {
+			var bumpBlock = mode == MODE_WATER ? null : blockWithOpenSpaceBelow(refs.ceiling);
+			if (bumpBlock == null && mode != MODE_WATER) {
 				bumpBlock = blockWithOpenSpaceBelow(refs.headBlock);
 			}
 			if (bumpBlock == null) {
@@ -175,9 +228,30 @@ class LocalPlayerController {
 			crouching = true;
 		}
 
-		touch(getBlockAtPixel(x, y - 15));
+		touchAt(x, y - 15);
 		if (!crouching) {
-			touch(getBlockAtPixel(x, y - 45));
+			touchAt(x, y - 45);
+		}
+	}
+
+	// Mirrors Block.onTouch dispatch: unlike the solid-collision lookups, this
+	// sees non-solid blocks (water/safety) so their touch effects can fire.
+	private function touchAt(pixelX:Float, pixelY:Float):Void {
+		var block = level.blockAt(tileIndex(pixelX), tileIndex(pixelY));
+		if (block == null) {
+			return;
+		}
+		touch(block);
+		switch (block.type) {
+			case BlockType.Water:
+				if (!grounded) {
+					setMode(MODE_WATER);
+					waterTicks = 2;
+				} else {
+					targetVelX *= 0.9;
+					accelFactor = 0.1;
+				}
+			default:
 		}
 	}
 
@@ -312,6 +386,9 @@ class LocalPlayerController {
 	}
 
 	private function animationName():String {
+		if (mode == MODE_WATER) {
+			return "swim";
+		}
 		if (crouchCharge > 25) {
 			return "superJump";
 		}

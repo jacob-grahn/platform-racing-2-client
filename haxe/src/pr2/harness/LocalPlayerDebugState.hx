@@ -9,6 +9,7 @@ class LocalPlayerDebugState {
 	public final crouching:Bool;
 	public final animation:String;
 	public final touchedBlockType:Null<String>;
+	public final mode:String;
 
 	public function new(
 		x:Float,
@@ -18,7 +19,8 @@ class LocalPlayerDebugState {
 		grounded:Bool,
 		crouching:Bool,
 		animation:String,
-		touchedBlockType:Null<String>
+		touchedBlockType:Null<String>,
+		mode:String = "land"
 	) {
 		this.x = x;
 		this.y = y;
@@ -28,11 +30,12 @@ class LocalPlayerDebugState {
 		this.crouching = crouching;
 		this.animation = animation;
 		this.touchedBlockType = touchedBlockType;
+		this.mode = mode;
 	}
 
 	public function serialize():String {
 		var touched = touchedBlockType == null ? "none" : touchedBlockType;
-		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched';
+		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode';
 	}
 
 	private static function round3(value:Float):Float {

@@ -279,12 +279,16 @@ Server pipeline (confirmed from Flash source; salts/URLs the open bits need):
 Add mechanics in small, testable batches after the flat fixture is playable.
 Each should match original PR2 behavior, verified via debug state / comparison.
 
-- [ ] Special block interactions: ice, water, crumble, vanish, mine, teleport,
-  item blocks, move/rotate blocks, custom stats.
+- [ ] Special block interactions: ice and water done (water enters/exits the
+  `LocalCharacter.waterGo` swim mode with the AS3 paddle/damping/exit-boost
+  constants); remaining: crumble, vanish, mine, teleport, item blocks,
+  move/rotate blocks, custom stats.
 - [ ] Items: sword, laser gun, mine, jet pack, super jump, speed burst, ice
   wave, teleport, lightning.
-- [ ] Movement edge cases: swimming, bumping/recovery, frozen state,
-  moving/rotating block collisions, corner cases.
+- [ ] Movement edge cases: swimming done (water `mode` switch in
+  `LocalPlayerController`, swim animation + `mode` in debug state, deterministic
+  tests); remaining: bumping/recovery, frozen state, moving/rotating block
+  collisions, corner cases.
 
 Acceptance: each mechanic has a fixture level; debug state exposes enough to
 compare behavior; common movement feels like Flash.

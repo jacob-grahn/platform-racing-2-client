@@ -18,6 +18,9 @@ class LocalPlayerControllerTest {
 		testCrouchOnlyWhileGrounded();
 		testIceBlockReducesNextFrameAcceleration();
 		testArrowStandEffectsMatchAs3Deltas();
+		testFallingIntoWaterEntersSwimMode();
+		testWaterDampsSinkingAndPaddlesUp();
+		testLeavingWaterReturnsToLand();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -101,8 +104,91 @@ class LocalPlayerControllerTest {
 		assertClose(3, new LocalPlayerController(singleBlockLevel(BlockType.ArrowRight)).debugState().vx, "right arrow stand pushes right");
 	}
 
+	private static function testFallingIntoWaterEntersSwimMode():Void {
+		var player = new LocalPlayerController(waterPoolLevel());
+		var enteredWater = false;
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput());
+			if (player.debugState().mode == "water") {
+				enteredWater = true;
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals(true, enteredWater, "falling into water enters swim mode");
+		assertEquals("water", state.mode, "debug state reports water mode");
+		assertEquals("swim", state.animation, "swim animation while in water");
+		assertEquals(false, state.grounded, "submerged player is not grounded");
+	}
+
+	private static function testWaterDampsSinkingAndPaddlesUp():Void {
+		var sinking = new LocalPlayerController(waterPoolLevel());
+		for (_ in 0...40) {
+			sinking.step(new LocalPlayerInput());
+		}
+		var sinkState = sinking.debugState();
+		assertEquals("water", sinkState.mode, "idle player stays submerged");
+		assertBelow(sinkState.vy, 5, "water damps sinking speed far below free-fall");
+		assertBelow(0, sinkState.vy, "idle player still drifts downward");
+
+		var paddling = new LocalPlayerController(waterPoolLevel());
+		var minVy = 1e9;
+		for (_ in 0...40) {
+			paddling.step(new LocalPlayerInput(false, false, true));
+			var vy = paddling.debugState().vy;
+			if (vy < minVy) {
+				minVy = vy;
+			}
+		}
+		assertBelow(minVy, 0, "holding jump paddles the swimmer upward");
+	}
+
+	private static function testLeavingWaterReturnsToLand():Void {
+		var player = new LocalPlayerController(waterPoolLevel());
+		var enteredWater = false;
+		var returnedToLand = false;
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput(false, false, true));
+			var mode = player.debugState().mode;
+			if (mode == "water") {
+				enteredWater = true;
+			} else if (enteredWater && mode == "land") {
+				returnedToLand = true;
+				break;
+			}
+		}
+
+		assertEquals(true, enteredWater, "player enters water before exiting");
+		assertEquals(true, returnedToLand, "swimming up out of water returns to land mode");
+	}
+
 	private static function newPlayer():LocalPlayerController {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
+	}
+
+	// Start tile is in open air above a deep water column on a solid floor, so a
+	// dropped player falls in, swims, and can paddle back out the top.
+	private static function waterPoolLevel():FixtureLevel {
+		var blocks:Array<LevelBlock> = [];
+		for (tileY in 2...10) {
+			blocks.push(new LevelBlock(2, tileY, BlockType.Water));
+		}
+		blocks.push(new LevelBlock(2, 10, BlockType.Solid));
+		return new FixtureLevel(
+			"water-pool",
+			"Water Pool",
+			6,
+			13,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 0),
+			new TilePosition(5, 11),
+			blocks
+		);
 	}
 
 	private static function singleBlockLevel(type:BlockType):FixtureLevel {
