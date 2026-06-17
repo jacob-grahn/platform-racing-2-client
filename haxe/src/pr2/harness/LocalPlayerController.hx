@@ -18,6 +18,8 @@ class LocalPlayerController {
 	private static inline var VANISH_FADE_FRAMES:Int = 10;
 	private static inline var VANISH_REAPPEAR_FRAMES:Int = 54;
 	private static inline var MINE_HIT_SPEED:Float = 50;
+	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
+	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -46,6 +48,7 @@ class LocalPlayerController {
 	private final removedBlocks:Map<String, Bool> = new Map();
 	private final vanishFadeFrames:Map<String, Int> = new Map();
 	private final vanishReappearFrames:Map<String, Int> = new Map();
+	private final disabledTeleportFrames:Map<String, Int> = new Map();
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -65,7 +68,7 @@ class LocalPlayerController {
 		} else {
 			landStep(input);
 		}
-		updateVanishBlocks();
+		updateTimedBlocks();
 	}
 
 	private function landStep(input:LocalPlayerInput):Void {
@@ -225,7 +228,9 @@ class LocalPlayerController {
 				if (input.jump) {
 					var yPriorToBump = y;
 					onBump(topBlock, input);
-					y = yPriorToBump;
+					if (topBlock.type != BlockType.Teleport) {
+						y = yPriorToBump;
+					}
 					vy = 0;
 				}
 				if (vy < 0) {
@@ -345,6 +350,8 @@ class LocalPlayerController {
 				activateVanish(block);
 			case BlockType.Mine:
 				hitMine(block);
+			case BlockType.Teleport:
+				maybeTeleport(block);
 			case BlockType.Ice:
 				accelFactor = 0.05;
 			case BlockType.ArrowUp:
@@ -367,6 +374,8 @@ class LocalPlayerController {
 				activateVanish(block);
 			case BlockType.Mine:
 				hitMine(block);
+			case BlockType.Teleport:
+				maybeTeleport(block);
 			case BlockType.ArrowUp:
 				vy = !input.down && !crouching ? -14 : 0;
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
@@ -383,6 +392,8 @@ class LocalPlayerController {
 				activateVanish(block);
 			case BlockType.Mine:
 				hitMine(block);
+			case BlockType.Teleport:
+				maybeTeleport(block);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
 			default:
@@ -419,6 +430,37 @@ class LocalPlayerController {
 		removedBlocks.set(blockKey(block.x, block.y), true);
 	}
 
+	private function maybeTeleport(block:LevelBlock):Void {
+		var color = teleportColor(block);
+		if (disabledTeleportFrames.exists(color)) {
+			return;
+		}
+
+		var blocks = teleportBlocksOfColor(color);
+		if (blocks.length == 0) {
+			return;
+		}
+
+		disabledTeleportFrames.set(color, TELEPORT_RESET_FRAMES);
+		var index = blocks.indexOf(block);
+		if (index < 0) {
+			index = 0;
+		}
+		var dest = blocks[(index + 1) % blocks.length];
+		x += (dest.x - block.x) * level.tileSize;
+		y += (dest.y - block.y) * level.tileSize;
+	}
+
+	private function teleportBlocksOfColor(color:String):Array<LevelBlock> {
+		return level.blocks.filter(function(candidate) {
+			return candidate.type == BlockType.Teleport && teleportColor(candidate) == color;
+		});
+	}
+
+	private function teleportColor(block:LevelBlock):String {
+		return block.options == "" ? TELEPORT_DEFAULT_COLOR : block.options;
+	}
+
 	private function blockWithOpenSpaceBelow(block:Null<LevelBlock>):Null<LevelBlock> {
 		if (block == null) {
 			return null;
@@ -448,6 +490,11 @@ class LocalPlayerController {
 		}
 	}
 
+	private function updateTimedBlocks():Void {
+		updateVanishBlocks();
+		updateTeleportBlocks();
+	}
+
 	private function updateVanishBlocks():Void {
 		var fading:Array<String> = [for (key in vanishFadeFrames.keys()) key];
 		for (key in fading) {
@@ -471,6 +518,18 @@ class LocalPlayerController {
 				removedBlocks.remove(key);
 			} else {
 				vanishReappearFrames.set(key, VANISH_REAPPEAR_FRAMES);
+			}
+		}
+	}
+
+	private function updateTeleportBlocks():Void {
+		var colors:Array<String> = [for (color in disabledTeleportFrames.keys()) color];
+		for (color in colors) {
+			var frames = disabledTeleportFrames.get(color) - 1;
+			if (frames <= 0) {
+				disabledTeleportFrames.remove(color);
+			} else {
+				disabledTeleportFrames.set(color, frames);
 			}
 		}
 	}

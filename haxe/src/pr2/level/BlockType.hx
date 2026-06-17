@@ -15,6 +15,7 @@ enum abstract BlockType(String) from String to String {
 	var Vanish = "vanish";
 	var Water = "water";
 	var Safety = "safety";
+	var Teleport = "teleport";
 
 	public static function parse(value:String):BlockType {
 		return switch (value) {
@@ -32,13 +33,14 @@ enum abstract BlockType(String) from String to String {
 			case Vanish: Vanish;
 			case Water: Water;
 			case Safety: Safety;
+			case Teleport: Teleport;
 			default: throw 'unknown block type "$value"';
 		}
 	}
 
 	public inline function isSolid():Bool {
 		return switch (this) {
-			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Crumble | Vanish: true;
+			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Crumble | Vanish | Teleport: true;
 			case Water | Safety: false;
 			default: false;
 		}

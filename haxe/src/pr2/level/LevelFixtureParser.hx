@@ -43,7 +43,8 @@ class LevelFixtureParser {
 			blocks.push(new LevelBlock(
 				requiredInt(block, "x", 'blocks[$index]'),
 				requiredInt(block, "y", 'blocks[$index]'),
-				BlockType.parse(requiredString(block, "type", 'blocks[$index]'))
+				BlockType.parse(requiredString(block, "type", 'blocks[$index]')),
+				optionalString(block, "options", 'blocks[$index]')
 			));
 		}
 		return blocks;
@@ -103,6 +104,17 @@ class LevelFixtureParser {
 
 	private static function requiredString(data:Dynamic, name:String, ?path:String):String {
 		var value:Dynamic = readField(data, name, path);
+		if (Std.isOfType(value, String) == false) {
+			throw missingMessage(name, path) + " must be a string";
+		}
+		return cast value;
+	}
+
+	private static function optionalString(data:Dynamic, name:String, ?path:String):String {
+		if (data == null || Reflect.hasField(data, name) == false) {
+			return "";
+		}
+		var value:Dynamic = Reflect.field(data, name);
 		if (Std.isOfType(value, String) == false) {
 			throw missingMessage(name, path) + " must be a string";
 		}

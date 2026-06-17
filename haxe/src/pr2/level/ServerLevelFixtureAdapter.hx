@@ -24,7 +24,8 @@ class ServerLevelFixtureAdapter {
 			blocks.push(new LevelBlock(
 				tileFloor(block.x) - minTileX,
 				tileFloor(block.y) - minTileY,
-				blockType(block.code)
+				blockType(block.code),
+				block.opts
 			));
 		}
 
@@ -72,6 +73,8 @@ class ServerLevelFixtureAdapter {
 				BlockType.Water;
 			case ObjectCodes.BLOCK_SAFETY:
 				BlockType.Safety;
+			case ObjectCodes.BLOCK_TELEPORT:
+				BlockType.Teleport;
 			case ObjectCodes.BLOCK_BASIC1 | ObjectCodes.BLOCK_BASIC2 | ObjectCodes.BLOCK_BASIC3 | ObjectCodes.BLOCK_BASIC4:
 				BlockType.Basic;
 			default:

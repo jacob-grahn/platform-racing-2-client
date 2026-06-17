@@ -50,11 +50,13 @@ class LevelBlock {
 	public final x:Int;
 	public final y:Int;
 	public final type:BlockType;
+	public final options:String;
 
-	public function new(x:Int, y:Int, type:BlockType) {
+	public function new(x:Int, y:Int, type:BlockType, options:String = "") {
 		this.x = x;
 		this.y = y;
 		this.type = type;
+		this.options = options;
 	}
 }
 

@@ -25,6 +25,8 @@ class LocalPlayerControllerTest {
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
+		testTeleportBlockMovesPlayerToNextSameColorBlock();
+		testTeleportCooldownPreventsImmediateReturn();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -251,6 +253,29 @@ class LocalPlayerControllerTest {
 		assertBelow(90, state.y, "player falls through removed mine block");
 	}
 
+	private static function testTeleportBlockMovesPlayerToNextSameColorBlock():Void {
+		var player = new LocalPlayerController(teleportPairLevel());
+		var state = player.debugState();
+
+		assertEquals("teleport", state.touchedBlockType, "standing on teleport reports touched block");
+		assertClose(135, state.x, "teleport moves player by matching block delta");
+		assertClose(90, state.y, "teleport preserves feet offset relative to block");
+		assertEquals(true, state.grounded, "player remains grounded after teleport");
+	}
+
+	private static function testTeleportCooldownPreventsImmediateReturn():Void {
+		var player = new LocalPlayerController(teleportPairLevel());
+
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+		var state = player.debugState();
+
+		assertClose(135, state.x, "teleport color cooldown prevents immediate return teleport");
+		assertClose(90, state.y, "cooldown leaves player standing on destination block");
+		assertEquals(true, state.grounded, "destination teleport supports player during cooldown");
+	}
+
 	private static function newPlayer():LocalPlayerController {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
@@ -309,6 +334,25 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, BlockType.Mine),
 				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function teleportPairLevel():FixtureLevel {
+		return new FixtureLevel(
+			"teleport-pair",
+			"Teleport Pair",
+			7,
+			5,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 2),
+			[
+				new LevelBlock(2, 3, BlockType.Teleport, "255"),
+				new LevelBlock(4, 3, BlockType.Teleport, "255"),
+				new LevelBlock(6, 3, BlockType.Finish)
 			]
 		);
 	}

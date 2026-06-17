@@ -280,12 +280,13 @@ Server pipeline (confirmed from Flash source; salts/URLs the open bits need):
 Add mechanics in small, testable batches after the flat fixture is playable.
 Each should match original PR2 behavior, verified via debug state / comparison.
 
-- [ ] Special block interactions: ice, water, crumble, vanish, and mine done (water enters/exits the
+- [ ] Special block interactions: ice, water, crumble, vanish, mine, and teleport done (water enters/exits the
   `LocalCharacter.waterGo` swim mode with the AS3 paddle/damping/exit-boost
   constants; crumble uses AS3-style force/life removal in the local harness;
   vanish fades out after contact, becomes inactive, and reappears after its
   Flash delay once unoccupied; mine applies AS3 radial knockback and removes
-  itself on contact); remaining: teleport, item blocks,
+  itself on contact; teleport groups blocks by color, moves to the next same-color
+  block, and applies the Flash 3000 ms color cooldown); remaining: item blocks,
   move/rotate blocks, custom stats.
 - [ ] Items: sword, laser gun, mine, jet pack, super jump, speed burst, ice
   wave, teleport, lightning.

@@ -7,6 +7,7 @@ class ServerLevelFixtureAdapterTest {
 
 	public static function main():Void {
 		testConvertsServerCoordinatesToFixtureTiles();
+		testPreservesBlockOptions();
 		testBlockTypesMatchInitialCollisionBehavior();
 		trace('ServerLevelFixtureAdapterTest passed $assertions assertions');
 	}
@@ -35,6 +36,18 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(10050.0, playerFeetWorldY, "start feet world y round trip");
 	}
 
+	private static function testPreservesBlockOptions():Void {
+		var level = new ServerLevel(0xFFFFFF, [
+			new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_TELEPORT, 10050, 10050, "255")
+		]);
+		var fixture = ServerLevelFixtureAdapter.convert(level, 1).fixture;
+		var teleport = fixture.blockAt(5, 4);
+
+		assertEquals(BlockType.Teleport, teleport.type, "teleport type preserved");
+		assertEquals("255", teleport.options, "teleport options preserved");
+	}
+
 	private static function testBlockTypesMatchInitialCollisionBehavior():Void {
 		assertEquals(BlockType.Start, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_START4), "start code");
 		assertEquals(BlockType.Finish, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_FINISH), "finish code");
@@ -51,7 +64,7 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_WATER).isSolid(), "water inactive collision");
 		assertEquals(BlockType.Safety, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY), "safety code");
 		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY).isSolid(), "safety inactive collision");
-		assertEquals(BlockType.Solid, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_TELEPORT), "other blocks remain solid");
+		assertEquals(BlockType.Teleport, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_TELEPORT), "teleport code");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
