@@ -15,6 +15,8 @@ class LocalPlayerController {
 	private static inline var MAX_SPEED:Float = 28;
 	private static inline var DEFAULT_GRAVITY:Float = 0.7;
 	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
+	private static inline var VANISH_FADE_FRAMES:Int = 10;
+	private static inline var VANISH_REAPPEAR_FRAMES:Int = 54;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -41,6 +43,8 @@ class LocalPlayerController {
 	private var waterTicks:Float = 0;
 	private final crumbleLife:Map<String, Int> = new Map();
 	private final removedBlocks:Map<String, Bool> = new Map();
+	private final vanishFadeFrames:Map<String, Int> = new Map();
+	private final vanishReappearFrames:Map<String, Int> = new Map();
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -60,6 +64,7 @@ class LocalPlayerController {
 		} else {
 			landStep(input);
 		}
+		updateVanishBlocks();
 	}
 
 	private function landStep(input:LocalPlayerInput):Void {
@@ -333,6 +338,8 @@ class LocalPlayerController {
 		switch (block.type) {
 			case BlockType.Crumble:
 				applyCrumbleForce(block, force);
+			case BlockType.Vanish:
+				activateVanish(block);
 			case BlockType.Ice:
 				accelFactor = 0.05;
 			case BlockType.ArrowUp:
@@ -351,6 +358,8 @@ class LocalPlayerController {
 		switch (block.type) {
 			case BlockType.Crumble:
 				applyCrumbleForce(block, force);
+			case BlockType.Vanish:
+				activateVanish(block);
 			case BlockType.ArrowUp:
 				vy = !input.down && !crouching ? -14 : 0;
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
@@ -363,6 +372,8 @@ class LocalPlayerController {
 		switch (block.type) {
 			case BlockType.Crumble:
 				applyCrumbleForce(block, force);
+			case BlockType.Vanish:
+				activateVanish(block);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
 			default:
@@ -405,6 +416,55 @@ class LocalPlayerController {
 		if (life <= 0) {
 			removedBlocks.set(key, true);
 		}
+	}
+
+	private function activateVanish(block:LevelBlock):Void {
+		var key = blockKey(block.x, block.y);
+		if (!vanishReappearFrames.exists(key) && !vanishFadeFrames.exists(key)) {
+			vanishFadeFrames.set(key, VANISH_FADE_FRAMES);
+		}
+	}
+
+	private function updateVanishBlocks():Void {
+		var fading:Array<String> = [for (key in vanishFadeFrames.keys()) key];
+		for (key in fading) {
+			var frames = vanishFadeFrames.get(key) - 1;
+			if (frames <= 0) {
+				vanishFadeFrames.remove(key);
+				removedBlocks.set(key, true);
+				vanishReappearFrames.set(key, VANISH_REAPPEAR_FRAMES);
+			} else {
+				vanishFadeFrames.set(key, frames);
+			}
+		}
+
+		var reappearing:Array<String> = [for (key in vanishReappearFrames.keys()) key];
+		for (key in reappearing) {
+			var frames = vanishReappearFrames.get(key) - 1;
+			if (frames > 0) {
+				vanishReappearFrames.set(key, frames);
+			} else if (!playerOccupiesBlock(key)) {
+				vanishReappearFrames.remove(key);
+				removedBlocks.remove(key);
+			} else {
+				vanishReappearFrames.set(key, VANISH_REAPPEAR_FRAMES);
+			}
+		}
+	}
+
+	private function playerOccupiesBlock(key:String):Bool {
+		var left = tileIndex(x - HALF_WIDTH);
+		var right = tileIndex(x + HALF_WIDTH);
+		var top = tileIndex(y - (crouching ? CROUCHING_HEIGHT : STANDING_HEIGHT));
+		var bottom = tileIndex(y);
+		for (tileX in left...right + 1) {
+			for (tileY in top...bottom + 1) {
+				if (blockKey(tileX, tileY) == key) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private function touch(block:Null<LevelBlock>):Void {

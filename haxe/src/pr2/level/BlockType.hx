@@ -11,6 +11,7 @@ enum abstract BlockType(String) from String to String {
 	var ArrowLeft = "arrow_left";
 	var ArrowRight = "arrow_right";
 	var Crumble = "crumble";
+	var Vanish = "vanish";
 	var Water = "water";
 	var Safety = "safety";
 
@@ -26,6 +27,7 @@ enum abstract BlockType(String) from String to String {
 			case ArrowLeft: ArrowLeft;
 			case ArrowRight: ArrowRight;
 			case Crumble: Crumble;
+			case Vanish: Vanish;
 			case Water: Water;
 			case Safety: Safety;
 			default: throw 'unknown block type "$value"';
@@ -34,7 +36,7 @@ enum abstract BlockType(String) from String to String {
 
 	public inline function isSolid():Bool {
 		return switch (this) {
-			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Crumble: true;
+			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Crumble | Vanish: true;
 			case Water | Safety: false;
 			default: false;
 		}

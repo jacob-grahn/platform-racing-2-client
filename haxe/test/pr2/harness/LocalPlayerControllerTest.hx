@@ -22,6 +22,8 @@ class LocalPlayerControllerTest {
 		testWaterDampsSinkingAndPaddlesUp();
 		testLeavingWaterReturnsToLand();
 		testHighImpactFallBreaksCrumbleBlock();
+		testStandingOnVanishBlockFallsThroughAfterFadeOut();
+		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -191,6 +193,47 @@ class LocalPlayerControllerTest {
 		assertEquals(false, state.grounded, "player is no longer supported by broken crumble");
 	}
 
+	private static function testStandingOnVanishBlockFallsThroughAfterFadeOut():Void {
+		var player = new LocalPlayerController(singleBlockLevel(BlockType.Vanish));
+
+		for (_ in 0...10) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(true, player.debugState().grounded, "vanish block remains solid while fading");
+
+		player.step(new LocalPlayerInput());
+		var state = player.debugState();
+		assertEquals(false, state.grounded, "vanish block becomes inactive after fade-out");
+		assertBelow(90, state.y, "player starts falling through inactive vanish block");
+	}
+
+	private static function testVanishBlockReappearsAfterDelayWhenUnoccupied():Void {
+		var player = new LocalPlayerController(vanishReappearLevel());
+
+		for (_ in 0...11) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(false, player.debugState().grounded, "vanish block is inactive after fade-out");
+
+		for (_ in 0...80) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(true, player.debugState().grounded, "player lands below the inactive vanish block");
+
+		for (_ in 0...54) {
+			player.step(new LocalPlayerInput());
+		}
+		var bumpedVanish = false;
+		for (_ in 0...25) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().touchedBlockType == "vanish") {
+				bumpedVanish = true;
+				break;
+			}
+		}
+		assertEquals(true, bumpedVanish, "reappeared vanish block collides again");
+	}
+
 	private static function newPlayer():LocalPlayerController {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
@@ -249,6 +292,24 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 8, BlockType.Crumble),
 				new LevelBlock(2, 9, BlockType.Solid)
+			]
+		);
+	}
+
+	private static function vanishReappearLevel():FixtureLevel {
+		return new FixtureLevel(
+			"vanish-reappear",
+			"Vanish Reappear",
+			5,
+			8,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(4, 6),
+			[
+				new LevelBlock(2, 3, BlockType.Vanish),
+				new LevelBlock(2, 6, BlockType.Solid)
 			]
 		);
 	}

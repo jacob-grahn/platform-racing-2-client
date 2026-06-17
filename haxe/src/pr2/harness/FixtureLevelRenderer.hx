@@ -69,6 +69,7 @@ class FixtureLevelRenderer extends Sprite {
 			case Basic: "assets/blocks/basic1.png";
 			case Start: "assets/blocks/start.png";
 			case Finish: "assets/blocks/finish.png";
+			case Vanish: "assets/blocks/vanish.png";
 			default: "";
 		}
 	}
@@ -78,6 +79,7 @@ class FixtureLevelRenderer extends Sprite {
 			case Basic: 0x63718C;
 			case Start: 0x3A8E52;
 			case Finish: 0xB64B4B;
+			case Vanish: 0x56707A;
 			default: 0x888888;
 		}
 	}
@@ -87,6 +89,7 @@ class FixtureLevelRenderer extends Sprite {
 			case Basic: 0xAAB4C8;
 			case Start: 0xB6F0C3;
 			case Finish: 0xFFD2D2;
+			case Vanish: 0xBDEAF5;
 			default: 0xCCCCCC;
 		}
 	}
