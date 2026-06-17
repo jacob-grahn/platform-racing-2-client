@@ -30,6 +30,8 @@ class LocalPlayerControllerTest {
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
+		testStandingOnPushBlockMovesItDown();
+		testBumpingRotateBlockFreezesPlayer();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -331,6 +333,34 @@ class LocalPlayerControllerTest {
 		assertEquals(true, state.grounded, "destination teleport supports player during cooldown");
 	}
 
+	private static function testStandingOnPushBlockMovesItDown():Void {
+		var level = pushBlockLevel();
+		var player = new LocalPlayerController(level);
+		var state = player.debugState();
+
+		assertEquals("push", state.touchedBlockType, "standing on push block reports touched block");
+		assertEquals(null, level.blockAt(2, 3), "push block leaves original tile");
+		assertEquals(BlockType.Push, level.blockAt(2, 4).type, "push block moves one tile down");
+	}
+
+	private static function testBumpingRotateBlockFreezesPlayer():Void {
+		var player = new LocalPlayerController(rotateBlockLevel(BlockType.RotateRight));
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().mode == "freeze") {
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals("rotate_right", state.touchedBlockType, "debug state reports rotate block touch");
+		assertEquals("freeze", state.mode, "rotate block bump enters freeze mode");
+		assertEquals("freeze", state.animation, "freeze mode exposes freeze animation state");
+		assertClose(0, state.vx, "rotate block clears horizontal velocity");
+		assertClose(0, state.vy, "rotate block clears vertical velocity");
+	}
+
 	private static function newPlayer():LocalPlayerController {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
@@ -465,6 +495,43 @@ class LocalPlayerControllerTest {
 				new LevelBlock(2, 3, BlockType.Teleport, "255"),
 				new LevelBlock(4, 3, BlockType.Teleport, "255"),
 				new LevelBlock(6, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function pushBlockLevel():FixtureLevel {
+		return new FixtureLevel(
+			"push-block",
+			"Push Block",
+			5,
+			6,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 3, BlockType.Push),
+				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function rotateBlockLevel(type:BlockType):FixtureLevel {
+		return new FixtureLevel(
+			"rotate-block",
+			"Rotate Block",
+			5,
+			6,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 1, type),
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(4, 4, BlockType.Finish)
 			]
 		);
 	}

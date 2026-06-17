@@ -62,8 +62,12 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(BlockType.InfiniteItem, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ITEM_INF), "infinite item code");
 		assertEquals(BlockType.Crumble, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_CRUMBLE), "crumble code");
 		assertEquals(BlockType.Vanish, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_VANISH), "vanish code");
+		assertEquals(BlockType.Move, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_MOVE), "move code");
 		assertEquals(BlockType.Water, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_WATER), "water code");
 		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_WATER).isSolid(), "water inactive collision");
+		assertEquals(BlockType.RotateRight, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ROTATE_RIGHT), "rotate right code");
+		assertEquals(BlockType.RotateLeft, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ROTATE_LEFT), "rotate left code");
+		assertEquals(BlockType.Push, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_PUSH), "push code");
 		assertEquals(BlockType.Safety, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY), "safety code");
 		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY).isSolid(), "safety inactive collision");
 		assertEquals(BlockType.Teleport, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_TELEPORT), "teleport code");

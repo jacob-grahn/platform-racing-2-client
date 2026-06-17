@@ -47,8 +47,8 @@ class FixtureLevel {
 }
 
 class LevelBlock {
-	public final x:Int;
-	public final y:Int;
+	public var x:Int;
+	public var y:Int;
 	public final type:BlockType;
 	public final options:String;
 

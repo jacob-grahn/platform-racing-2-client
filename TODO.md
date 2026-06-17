@@ -292,7 +292,9 @@ Each should match original PR2 behavior, verified via debug state / comparison.
   Flash `SupplyBlock` bump hook, support single-use/infinite supply types, and
   expose the granted item id in debug state; custom stats blocks use the Flash
   `SupplyBlock` bump hook, apply configured speed/accel/jump stats, and support
-  `reset` to starting stats); remaining: move/rotate blocks.
+  `reset` to starting stats; push blocks move one tile on stand/bump/side-hit
+  when the destination is open; rotate blocks enter freeze mode on bump);
+  remaining: timed move blocks and full course rotation.
 - [ ] Items: sword, laser gun, mine, jet pack, super jump, speed burst, ice
   wave, teleport, lightning.
 - [ ] Movement edge cases: swimming done (water `mode` switch in

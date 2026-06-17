@@ -15,7 +15,11 @@ enum abstract BlockType(String) from String to String {
 	var InfiniteItem = "infinite_item";
 	var Crumble = "crumble";
 	var Vanish = "vanish";
+	var Move = "move";
 	var Water = "water";
+	var RotateRight = "rotate_right";
+	var RotateLeft = "rotate_left";
+	var Push = "push";
 	var Safety = "safety";
 	var Teleport = "teleport";
 	var CustomStats = "custom_stats";
@@ -36,7 +40,11 @@ enum abstract BlockType(String) from String to String {
 			case InfiniteItem: InfiniteItem;
 			case Crumble: Crumble;
 			case Vanish: Vanish;
+			case Move: Move;
 			case Water: Water;
+			case RotateRight: RotateRight;
+			case RotateLeft: RotateLeft;
+			case Push: Push;
 			case Safety: Safety;
 			case Teleport: Teleport;
 			case CustomStats: CustomStats;
@@ -46,7 +54,7 @@ enum abstract BlockType(String) from String to String {
 
 	public inline function isSolid():Bool {
 		return switch (this) {
-			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Teleport | CustomStats: true;
+			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats: true;
 			case Water | Safety: false;
 			default: false;
 		}

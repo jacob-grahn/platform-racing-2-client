@@ -33,6 +33,7 @@ class LocalPlayerController {
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
+	public static inline var MODE_FREEZE:String = "freeze";
 
 	private final level:FixtureLevel;
 	private var accel:Float;
@@ -72,7 +73,9 @@ class LocalPlayerController {
 
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
-		if (mode == MODE_WATER) {
+		if (mode == MODE_FREEZE) {
+			// Freeze mode parks the local character while course rotation runs.
+		} else if (mode == MODE_WATER) {
 			waterStep(input);
 		} else {
 			landStep(input);
@@ -361,6 +364,8 @@ class LocalPlayerController {
 				hitMine(block);
 			case BlockType.Teleport:
 				maybeTeleport(block);
+			case BlockType.Push:
+				pushBlock(block, 0, 1);
 			case BlockType.Ice:
 				accelFactor = 0.05;
 			case BlockType.ArrowUp:
@@ -389,6 +394,10 @@ class LocalPlayerController {
 				useCustomStatsBlock(block);
 			case BlockType.Teleport:
 				maybeTeleport(block);
+			case BlockType.Push:
+				pushBlock(block, 0, -1);
+			case BlockType.RotateRight | BlockType.RotateLeft:
+				startRotate(block);
 			case BlockType.ArrowUp:
 				vy = !input.down && !crouching ? -14 : 0;
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
@@ -407,6 +416,8 @@ class LocalPlayerController {
 				hitMine(block);
 			case BlockType.Teleport:
 				maybeTeleport(block);
+			case BlockType.Push:
+				pushBlock(block, vx >= 0 ? 1 : -1, 0);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
 			default:
@@ -427,6 +438,38 @@ class LocalPlayerController {
 				vx += 3;
 			default:
 		}
+	}
+
+	private function startRotate(block:LevelBlock):Void {
+		setMode(MODE_FREEZE);
+		vx = 0;
+		vy = 0;
+		targetVelX = 0;
+	}
+
+	private function pushBlock(block:LevelBlock, dx:Int, dy:Int):Void {
+		if (dx == 0 && dy == 0) {
+			return;
+		}
+
+		var destX = block.x + dx;
+		var destY = block.y + dy;
+		if (!canMoveBlockTo(destX, destY)) {
+			return;
+		}
+
+		block.x = destX;
+		block.y = destY;
+	}
+
+	private function canMoveBlockTo(tileX:Int, tileY:Int):Bool {
+		if (tileX < 0 || tileY < 0 || tileX >= level.widthTiles || tileY >= level.heightTiles) {
+			return false;
+		}
+		if (level.blockAt(tileX, tileY) != null) {
+			return false;
+		}
+		return !playerOccupiesTile(tileX, tileY);
 	}
 
 	private function hitMine(block:LevelBlock):Void {
@@ -622,13 +665,23 @@ class LocalPlayerController {
 	}
 
 	private function playerOccupiesBlock(key:String):Bool {
+		var parts = key.split(",");
+		if (parts.length != 2) {
+			return false;
+		}
+		var tileX = Std.parseInt(parts[0]);
+		var tileY = Std.parseInt(parts[1]);
+		return tileX != null && tileY != null && playerOccupiesTile(tileX, tileY);
+	}
+
+	private function playerOccupiesTile(targetTileX:Int, targetTileY:Int):Bool {
 		var left = tileIndex(x - HALF_WIDTH);
 		var right = tileIndex(x + HALF_WIDTH);
 		var top = tileIndex(y - (crouching ? CROUCHING_HEIGHT : STANDING_HEIGHT));
 		var bottom = tileIndex(y);
 		for (tileX in left...right + 1) {
 			for (tileY in top...bottom + 1) {
-				if (blockKey(tileX, tileY) == key) {
+				if (tileX == targetTileX && tileY == targetTileY) {
 					return true;
 				}
 			}
@@ -643,6 +696,9 @@ class LocalPlayerController {
 	}
 
 	private function animationName():String {
+		if (mode == MODE_FREEZE) {
+			return "freeze";
+		}
 		if (mode == MODE_WATER) {
 			return "swim";
 		}
