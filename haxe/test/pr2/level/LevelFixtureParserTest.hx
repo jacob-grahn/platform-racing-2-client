@@ -35,6 +35,8 @@ class LevelFixtureParserTest {
 		assertBlock(fixture.blockAt(0, 10), Basic, "ground block");
 		assertEquals(null, fixture.blockAt(0, 0), "empty tile lookup");
 		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"crumble"')).blockAt(1, 2), Crumble, "crumble block");
+		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"item","options":"4"')).blockAt(1, 2), Item, "item block");
+		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"infinite_item","options":"4"')).blockAt(1, 2), InfiniteItem, "infinite item block");
 		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"vanish"')).blockAt(1, 2), Vanish, "vanish block");
 		var teleport = LevelFixtureParser.parse(minimalFixture('"type":"teleport","options":"255"')).blockAt(1, 2);
 		assertBlock(teleport, Teleport, "teleport block");

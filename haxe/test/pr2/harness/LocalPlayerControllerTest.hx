@@ -25,6 +25,7 @@ class LocalPlayerControllerTest {
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
+		testBumpingItemBlockGrantsConfiguredItem();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
@@ -253,6 +254,24 @@ class LocalPlayerControllerTest {
 		assertBelow(90, state.y, "player falls through removed mine block");
 	}
 
+	private static function testBumpingItemBlockGrantsConfiguredItem():Void {
+		var player = new LocalPlayerController(itemBlockLevel(BlockType.Item));
+		var grantedItem = false;
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().itemId == 4) {
+				grantedItem = true;
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals(true, grantedItem, "jumping player bumps item block");
+		assertEquals(4, state.itemId, "configured item id is granted");
+		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
+	}
+
 	private static function testTeleportBlockMovesPlayerToNextSameColorBlock():Void {
 		var player = new LocalPlayerController(teleportPairLevel());
 		var state = player.debugState();
@@ -334,6 +353,25 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, BlockType.Mine),
 				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function itemBlockLevel(type:BlockType):FixtureLevel {
+		return new FixtureLevel(
+			"item-block",
+			"Item Block",
+			5,
+			6,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 1, type, "4"),
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(4, 4, BlockType.Finish)
 			]
 		);
 	}

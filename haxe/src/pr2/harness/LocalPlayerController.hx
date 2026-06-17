@@ -29,6 +29,7 @@ class LocalPlayerController {
 	public var crouching(default, null):Bool = false;
 	public var touchedBlock(default, null):Null<LevelBlock> = null;
 	public var mode(default, null):String = MODE_LAND;
+	public var itemId(default, null):Null<Int> = null;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -49,6 +50,7 @@ class LocalPlayerController {
 	private final vanishFadeFrames:Map<String, Int> = new Map();
 	private final vanishReappearFrames:Map<String, Int> = new Map();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
+	private final depletedItemBlocks:Map<String, Bool> = new Map();
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -163,7 +165,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type, mode);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type, mode, itemId);
 	}
 
 	private function position():Void {
@@ -374,6 +376,8 @@ class LocalPlayerController {
 				activateVanish(block);
 			case BlockType.Mine:
 				hitMine(block);
+			case BlockType.Item | BlockType.InfiniteItem:
+				useItemBlock(block);
 			case BlockType.Teleport:
 				maybeTeleport(block);
 			case BlockType.ArrowUp:
@@ -428,6 +432,35 @@ class LocalPlayerController {
 		vx += Math.cos(angle) * MINE_HIT_SPEED;
 		vy += Math.sin(angle) * MINE_HIT_SPEED;
 		removedBlocks.set(blockKey(block.x, block.y), true);
+	}
+
+	private function useItemBlock(block:LevelBlock):Void {
+		if (block.type == BlockType.Item) {
+			var key = blockKey(block.x, block.y);
+			if (depletedItemBlocks.exists(key)) {
+				return;
+			}
+			depletedItemBlocks.set(key, true);
+		}
+
+		var nextItem = itemFromBlockOptions(block.options);
+		if (nextItem != null) {
+			itemId = nextItem;
+		}
+	}
+
+	private function itemFromBlockOptions(options:String):Null<Int> {
+		if (options == "" || options == "none") {
+			return null;
+		}
+		var ids = options.split("-");
+		for (id in ids) {
+			var parsed = Std.parseInt(id);
+			if (parsed != null && parsed > 0) {
+				return parsed;
+			}
+		}
+		return null;
 	}
 
 	private function maybeTeleport(block:LevelBlock):Void {

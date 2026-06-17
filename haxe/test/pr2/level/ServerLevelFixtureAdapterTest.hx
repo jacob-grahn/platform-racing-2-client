@@ -58,6 +58,8 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(BlockType.ArrowLeft, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ARROW_LEFT), "arrow left code");
 		assertEquals(BlockType.ArrowRight, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ARROW_RIGHT), "arrow right code");
 		assertEquals(BlockType.Mine, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_MINE), "mine code");
+		assertEquals(BlockType.Item, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ITEM), "item code");
+		assertEquals(BlockType.InfiniteItem, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ITEM_INF), "infinite item code");
 		assertEquals(BlockType.Crumble, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_CRUMBLE), "crumble code");
 		assertEquals(BlockType.Vanish, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_VANISH), "vanish code");
 		assertEquals(BlockType.Water, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_WATER), "water code");

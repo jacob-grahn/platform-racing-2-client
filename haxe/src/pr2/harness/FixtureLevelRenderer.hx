@@ -69,6 +69,8 @@ class FixtureLevelRenderer extends Sprite {
 			case Basic: "assets/blocks/basic1.png";
 			case Start: "assets/blocks/start.png";
 			case Finish: "assets/blocks/finish.png";
+			case Item: "assets/blocks/item.png";
+			case InfiniteItem: "assets/blocks/infinite_item.png";
 			case Vanish: "assets/blocks/vanish.png";
 			case Teleport: "assets/blocks/teleport_block.png";
 			default: "";
@@ -80,6 +82,8 @@ class FixtureLevelRenderer extends Sprite {
 			case Basic: 0x63718C;
 			case Start: 0x3A8E52;
 			case Finish: 0xB64B4B;
+			case Item: 0xD3A33B;
+			case InfiniteItem: 0xC28C23;
 			case Vanish: 0x56707A;
 			case Teleport: 0xFF7F50;
 			default: 0x888888;
@@ -91,6 +95,8 @@ class FixtureLevelRenderer extends Sprite {
 			case Basic: 0xAAB4C8;
 			case Start: 0xB6F0C3;
 			case Finish: 0xFFD2D2;
+			case Item: 0xFFE2A0;
+			case InfiniteItem: 0xFFF2B8;
 			case Vanish: 0xBDEAF5;
 			case Teleport: 0xFFD0C0;
 			default: 0xCCCCCC;

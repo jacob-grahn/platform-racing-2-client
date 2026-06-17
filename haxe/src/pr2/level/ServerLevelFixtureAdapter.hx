@@ -65,6 +65,10 @@ class ServerLevelFixtureAdapter {
 				BlockType.ArrowRight;
 			case ObjectCodes.BLOCK_MINE:
 				BlockType.Mine;
+			case ObjectCodes.BLOCK_ITEM:
+				BlockType.Item;
+			case ObjectCodes.BLOCK_ITEM_INF:
+				BlockType.InfiniteItem;
 			case ObjectCodes.BLOCK_CRUMBLE:
 				BlockType.Crumble;
 			case ObjectCodes.BLOCK_VANISH:
