@@ -31,6 +31,8 @@ class LocalPlayerControllerTest {
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		testStandingOnPushBlockMovesItDown();
+		testTimedMoveBlockShiftsAfterPreview();
+		testTimedMoveBlockWaitsWhenDestinationBlocked();
 		testBumpingRotateBlockFreezesPlayer();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
@@ -343,6 +345,32 @@ class LocalPlayerControllerTest {
 		assertEquals(BlockType.Push, level.blockAt(2, 4).type, "push block moves one tile down");
 	}
 
+	private static function testTimedMoveBlockShiftsAfterPreview():Void {
+		var level = timedMoveBlockLevel("right", false);
+		var player = new LocalPlayerController(level);
+
+		for (_ in 0...26) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(BlockType.Move, level.blockAt(2, 3).type, "move block waits through arrow preview");
+
+		player.step(new LocalPlayerInput());
+		assertEquals(null, level.blockAt(2, 3), "move block leaves original tile after one second");
+		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block shifts one tile in chosen direction");
+	}
+
+	private static function testTimedMoveBlockWaitsWhenDestinationBlocked():Void {
+		var level = timedMoveBlockLevel("right", true);
+		var player = new LocalPlayerController(level);
+
+		for (_ in 0...27) {
+			player.step(new LocalPlayerInput());
+		}
+
+		assertEquals(BlockType.Move, level.blockAt(2, 3).type, "blocked move block stays in place");
+		assertEquals(BlockType.Solid, level.blockAt(3, 3).type, "blocking tile remains occupied");
+	}
+
 	private static function testBumpingRotateBlockFreezesPlayer():Void {
 		var player = new LocalPlayerController(rotateBlockLevel(BlockType.RotateRight));
 
@@ -514,6 +542,28 @@ class LocalPlayerControllerTest {
 				new LevelBlock(2, 3, BlockType.Push),
 				new LevelBlock(4, 4, BlockType.Finish)
 			]
+		);
+	}
+
+	private static function timedMoveBlockLevel(direction:String, blocked:Bool):FixtureLevel {
+		var blocks:Array<LevelBlock> = [
+			new LevelBlock(2, 3, BlockType.Move, direction),
+			new LevelBlock(4, 4, BlockType.Finish)
+		];
+		if (blocked) {
+			blocks.push(new LevelBlock(3, 3, BlockType.Solid));
+		}
+		return new FixtureLevel(
+			"timed-move-block",
+			"Timed Move Block",
+			6,
+			6,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(4, 4),
+			blocks
 		);
 	}
 

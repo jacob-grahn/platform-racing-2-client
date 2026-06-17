@@ -20,6 +20,8 @@ class LocalPlayerController {
 	private static inline var MINE_HIT_SPEED:Float = 50;
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
 	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
+	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
+	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -58,6 +60,10 @@ class LocalPlayerController {
 	private final vanishReappearFrames:Map<String, Int> = new Map();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final depletedItemBlocks:Map<String, Bool> = new Map();
+	private final moveBlockDirections:Map<String, Int> = new Map();
+	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
+	private var moveBlockPhase:String = "shift";
+	private var moveRandomSeed:Int = 1;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -68,6 +74,7 @@ class LocalPlayerController {
 		gravity = DEFAULT_GRAVITY * (level.gravity / 27);
 		x = level.playerStart.x * level.tileSize + level.tileSize / 2;
 		y = (level.playerStart.y + 1) * level.tileSize;
+		determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
 	}
 
@@ -623,6 +630,73 @@ class LocalPlayerController {
 	private function updateTimedBlocks():Void {
 		updateVanishBlocks();
 		updateTeleportBlocks();
+		updateMoveBlocks();
+	}
+
+	private function updateMoveBlocks():Void {
+		if (moveBlockDirections.keys().hasNext() == false) {
+			return;
+		}
+
+		moveBlockTimer--;
+		if (moveBlockTimer > 0) {
+			return;
+		}
+
+		if (moveBlockPhase == "shift") {
+			shiftMoveBlocks();
+			moveBlockPhase = "reselect";
+			moveBlockTimer = MOVE_RESELECT_FRAMES;
+		} else {
+			determineMoveBlockDirections();
+			moveBlockPhase = "shift";
+			moveBlockTimer = MOVE_PREVIEW_FRAMES;
+		}
+	}
+
+	private function determineMoveBlockDirections():Void {
+		moveBlockDirections.clear();
+		for (block in level.blocks) {
+			if (block.type == BlockType.Move) {
+				moveBlockDirections.set(blockKey(block.x, block.y), moveBlockDirection(block));
+			}
+		}
+	}
+
+	private function shiftMoveBlocks():Void {
+		var moveBlocks = level.blocks.filter(function(block) return block.type == BlockType.Move);
+		for (block in moveBlocks) {
+			var direction = moveBlockDirections.get(blockKey(block.x, block.y));
+			if (direction == null) {
+				continue;
+			}
+			switch (direction) {
+				case 0:
+					pushBlock(block, 0, 1);
+				case 1:
+					pushBlock(block, 0, -1);
+				case 2:
+					pushBlock(block, 1, 0);
+				case 3:
+					pushBlock(block, -1, 0);
+				default:
+			}
+		}
+	}
+
+	private function moveBlockDirection(block:LevelBlock):Int {
+		return switch (block.options) {
+			case "down": 0;
+			case "up": 1;
+			case "right": 2;
+			case "left": 3;
+			default: nextMoveRandom(4);
+		}
+	}
+
+	private function nextMoveRandom(maxValue:Int):Int {
+		moveRandomSeed = (moveRandomSeed * 1103515245 + 12345) & 0x7fffffff;
+		return moveRandomSeed % maxValue;
 	}
 
 	private function updateVanishBlocks():Void {
