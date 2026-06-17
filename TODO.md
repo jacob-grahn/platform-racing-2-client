@@ -272,9 +272,10 @@ Server pipeline (confirmed from Flash source; salts/URLs the open bits need):
   - `ServerLevelRenderer` preserves pixel coords + background color, maps block
     codes to block art, and focuses the camera around the first start block at
     the original 30 px block scale.
-- [ ] Bit 5 — Place the character in the loaded level.
-  - Spawn `CharacterDisplay` at the start block (code 111); reuse harness
-    wiring; collide against decoded blocks if practical.
+- [x] Bit 5 — Place the character in the loaded level.
+  - Spawn `CharacterDisplay` at the start block (code 111), using the same
+    feet-anchored display/container wiring as the local harness; decoded server
+    blocks feed `LocalPlayerController` collision.
 - [ ] Production CORS: a real deploy needs a server-side proxy or CORS on the
   level host (not needed for the local harness).
 

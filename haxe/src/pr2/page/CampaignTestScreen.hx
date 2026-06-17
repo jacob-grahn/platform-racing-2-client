@@ -45,6 +45,7 @@ class CampaignTestScreen extends Sprite {
 	private var levelRenderer:ServerLevelRenderer;
 	private var serverFixture:ServerFixtureLevel;
 	private var player:LocalPlayerController;
+	private var playerDisplay:Sprite;
 	private var characterDisplay:CharacterDisplay;
 	private var lastStatusText:String = "";
 
@@ -147,12 +148,18 @@ class CampaignTestScreen extends Sprite {
 
 		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(data.levelId), data.title);
 		player = new LocalPlayerController(serverFixture.fixture);
+		playerDisplay = new Sprite();
 		characterDisplay = new CharacterDisplay(
 			{hat: 1, head: 1, body: 1, feet: 1},
 			{primary: 0x005CB8, secondary: 0xFFF200},
 			CharacterRenderMode.Layered
 		);
-		levelRenderer.addChild(characterDisplay);
+		characterDisplay.x = LocalPlayerController.STANDING_WIDTH / 2;
+		characterDisplay.y = LocalPlayerController.STANDING_HEIGHT;
+		characterDisplay.scaleX = 0.9;
+		characterDisplay.scaleY = 0.9;
+		playerDisplay.addChild(characterDisplay);
+		levelRenderer.addChild(playerDisplay);
 		updatePlayerDisplay();
 	}
 
@@ -198,19 +205,18 @@ class CampaignTestScreen extends Sprite {
 	}
 
 	private function updatePlayerDisplay():Void {
-		if (player == null || levelRenderer == null || serverFixture == null || characterDisplay == null) {
+		if (player == null || levelRenderer == null || serverFixture == null || playerDisplay == null || characterDisplay == null) {
 			return;
 		}
 
 		var state = player.debugState();
+		var height = player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT;
 		var worldX = serverFixture.fixturePixelToWorldX(player.x);
 		var worldY = serverFixture.fixturePixelToWorldY(player.y);
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
-		characterDisplay.x = screen.x;
-		characterDisplay.y = screen.y;
-		characterDisplay.scaleX = 0.9;
-		characterDisplay.scaleY = (player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT)
-			/ LocalPlayerController.STANDING_HEIGHT * 0.9;
+		playerDisplay.x = screen.x - LocalPlayerController.STANDING_WIDTH / 2;
+		playerDisplay.y = screen.y - height;
+		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
 		characterDisplay.setState(characterStateName(state.animation));
 		characterDisplay.advanceOneFrame();
 	}

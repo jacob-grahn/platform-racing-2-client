@@ -1,5 +1,6 @@
 package pr2.level;
 
+import pr2.harness.LocalPlayerController;
 import pr2.level.ServerLevel.DecodedBlock;
 
 class ServerLevelFixtureAdapterTest {
@@ -34,6 +35,10 @@ class ServerLevelFixtureAdapterTest {
 		var playerFeetWorldY = converted.fixturePixelToWorldY((fixture.playerStart.y + 1) * fixture.tileSize);
 		assertEquals(10020.0, playerStartWorldX, "start world x round trip");
 		assertEquals(10050.0, playerFeetWorldY, "start feet world y round trip");
+
+		var player = new LocalPlayerController(fixture);
+		assertEquals(10035.0, converted.fixturePixelToWorldX(player.x), "player spawns centered on start block");
+		assertEquals(10050.0, converted.fixturePixelToWorldY(player.y), "player feet spawn on top of start block");
 	}
 
 	private static function testPreservesBlockOptions():Void {
