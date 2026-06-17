@@ -22,6 +22,7 @@ class PR2MovieClipRuntimeTest {
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
+		testGeneratedIntroTimelines();
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
 		testGeneratedCharacterPartIdSelection();
@@ -220,6 +221,13 @@ class PR2MovieClipRuntimeTest {
 		assertEquals(true, passBox.displayAsPassword, "password TextInput preserves displayAsPassword");
 	}
 
+	private static function testGeneratedIntroTimelines():Void {
+		assertIntroTimeline("JiggminIntroGraphic", 249);
+		assertIntroTimeline("KongregateIntroGraphic", 153);
+		assertIntroTimeline("ArmorIntroGraphic", 218);
+		assertIntroTimeline("BubbleBoxIntroGraphic", 117);
+	}
+
 	private static function testTimelineCompositionPreservesPartSelection():Void {
 		var runAnim = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.jumpAnim_61", {maxNestedDepth: 2});
 		var head = requireClipChild(runAnim, "head");
@@ -335,6 +343,16 @@ class PR2MovieClipRuntimeTest {
 		clip.gotoAndStop(labelName);
 		assertEquals(labelFrame, clip.currentFrame, '$linkage gotoAndStop resolves $labelName');
 		return clip;
+	}
+
+	private static function assertIntroTimeline(linkage:String, totalFrames:Int):Void {
+		var intro = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 4});
+		assertEquals(totalFrames, intro.totalFrames, '$linkage totalFrames');
+		assertAtLeast(1, intro.numChildren, '$linkage renders first frame children');
+		assertAtLeast(1, intro.width, '$linkage renders non-empty first frame width');
+		assertAtLeast(1, intro.height, '$linkage renders non-empty first frame height');
+		intro.gotoAndStop(totalFrames);
+		assertEquals(totalFrames, intro.currentFrame, '$linkage can seek to final frame');
 	}
 
 	private static function assertHasLabel(clip:PR2MovieClip, labelName:String, labelFrame:Int):Void {

@@ -96,7 +96,9 @@ Asset migration:
   runtime. Flash page system ported under `pr2.page` (`Page`, `PageHolder`,
   `IntroPage`, stub `LoginPage`); `IntroPage` reproduces the original site-mode
   intro queue, final-frame `COMPLETE` script, click-to-skip, and login
-  transition. `JiggminIntroGraphic` renders (Kongregate/Armor/BubbleBox remain).
+  transition. `JiggminIntroGraphic` renders; Kongregate's nested art is covered
+  by a baked intro atlas; Jiggmin/Kongregate/Armor/BubbleBox generated intro
+  timelines are covered by `pr2.runtime.PR2MovieClipRuntimeTest`.
 
 Server level harness:
 - `LevelDataClient` fetches + verifies a level
@@ -199,8 +201,8 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
   `LevelEditorMenuGraphic`, `DrawingPopupGraphic`, `HatPickerGraphic`,
   `LobbyGraphic`, `LobbyBottomButtonsGraphic`, `PlayersTabListGraphic`,
   `GetLevelsPopupGraphic`, `StorePopupGraphic`.
-- [ ] Finish the intro animations: render the Kongregate intro art (its logo is
-  `bitmap379.jpg` plus nested vector pieces), and verify Armor/BubbleBox intros.
+- [ ] Finish the intro animations: visually verify the baked Kongregate intro
+  art (`bitmap379.jpg` plus nested vector pieces) against Flash.
   `com.jiggmin.pixelEffects.PixelEffect1` (the Jiggmin pixel dissolve) is ported,
   wired into `IntroPage`, and covered by `pr2.effects.PixelEffect1Test`.
 - [ ] Resolve the five unexported bitmap media entries.
