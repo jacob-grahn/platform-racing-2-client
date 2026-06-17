@@ -42,6 +42,15 @@ final class ServerConfig {
 		host = DEFAULT_HOST;
 	}
 
+	public static function applyLocalOverrides(?apiHost:Null<String>):Void {
+		if (apiHost == null) {
+			#if sys
+			apiHost = Sys.getEnv("PR2_API_HOST");
+			#end
+		}
+		setHost(apiHost);
+	}
+
 	public static function getHost():String {
 		return host;
 	}

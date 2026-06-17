@@ -6,6 +6,7 @@ class ServerConfigTest {
 	public static function main():Void {
 		testDefaultsToProductionHost();
 		testProxyHostBuildsSameOriginUrls();
+		testLocalOverrideUsesExplicitEnvValue();
 		testBlankHostDoesNotReplaceCurrentHost();
 		trace('ServerConfigTest passed $assertions assertions');
 	}
@@ -25,6 +26,13 @@ class ServerConfigTest {
 		assertEquals(true, ServerConfig.hasProxyHost(), "proxy detected");
 		assertEquals("/api/files/lists/campaign/2", ServerConfig.listUrl("campaign", 2), "proxy campaign list url");
 		assertEquals("/api/levels/50815.txt?version=7", ServerConfig.levelDataUrl(50815, 7), "proxy level data url");
+	}
+
+	private static function testLocalOverrideUsesExplicitEnvValue():Void {
+		ServerConfig.resetHost();
+		ServerConfig.applyLocalOverrides(" http://localhost:8080/api ");
+		assertEquals("http://localhost:8080/api", ServerConfig.getHost(), "local env host");
+		assertEquals("http://localhost:8080/api/login.php", ServerConfig.loginUrl(), "local env login url");
 	}
 
 	private static function testBlankHostDoesNotReplaceCurrentHost():Void {

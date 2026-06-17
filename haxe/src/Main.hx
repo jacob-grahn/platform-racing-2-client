@@ -45,7 +45,9 @@ class Main extends Sprite {
 		try {
 			var query = currentQuery();
 			// pr2hub.com sends no CORS headers; `?apiHost=/api` points level
-			// fetches at a same-origin dev proxy (tools/dev_proxy.py).
+			// fetches at a same-origin dev proxy (tools/dev_proxy.py). On
+			// sys targets, PR2_API_HOST can provide the same local override.
+			ServerConfig.applyLocalOverrides();
 			ServerConfig.setHost(QueryParams.get(query, "apiHost"));
 			addChild(buildScreen(Screen.fromQuery(query), query));
 		} catch (error:Dynamic) {

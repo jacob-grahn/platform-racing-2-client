@@ -322,8 +322,10 @@ depends on the real gameserver flow. (Server-side WebSocket support is done.)
 
 - [x] Minimal OpenFL networking spike: connect to a configured WebSocket URL,
   send `request_login_id` with the `chr(0x04)` delimiter, parse `setLoginID`.
-- [ ] Safe local config: no committed credentials; ignored local config / env
-  vars if needed.
+- [x] Safe local config: no committed credentials; ignored local config / env
+  vars if needed. `.env*`/`*.local` files are ignored, and sys-target API
+  calls can use `PR2_API_HOST` for local/proxy endpoints without committing
+  secrets.
 - [ ] Port the real flow after the local harness is useful: login, server
   selection, lobby, level browser, load one real level.
 

@@ -39,6 +39,13 @@ haxe test/deterministic.hxml
 haxe test/real-server.hxml
 ```
 
+Local server/API overrides can live in ignored shell env files. On sys targets,
+set `PR2_API_HOST` to point API calls at a proxy or local endpoint:
+
+```sh
+PR2_API_HOST=/api haxe test/real-server.hxml
+```
+
 ## Project Layout
 
 - `project.xml`: OpenFL project file.
