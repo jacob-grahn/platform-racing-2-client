@@ -123,6 +123,10 @@ Server level harness:
 Networking + tooling:
 - Server repo accepts WebSocket connections alongside raw TCP into the same PR2
   command buffer (production stays `wss://`).
+- Minimal OpenFL networking spike: `LoginSocketProbe` opens the selected server
+  WebSocket, sends `request_login_id` with the Flash `chr(0x04)` delimiter, and
+  parses `setLoginID`; the frame format/parser is covered by deterministic
+  tests.
 - `tools/openfl_driver.py` drives the browser build (keyDown/keyUp/tap/hold/
   debug-state/shot, normalized to 550x400); `tools/compare_screenshots.py`
   scores PNG/JPEG diffs; debug-state `--expect` checks. Passing suites:
@@ -314,7 +318,7 @@ compare behavior; common movement feels like Flash.
 Don't block local gameplay on this, but keep it moving — browser deployment
 depends on the real gameserver flow. (Server-side WebSocket support is done.)
 
-- [ ] Minimal OpenFL networking spike: connect to a configured WebSocket URL,
+- [x] Minimal OpenFL networking spike: connect to a configured WebSocket URL,
   send `request_login_id` with the `chr(0x04)` delimiter, parse `setLoginID`.
 - [ ] Safe local config: no committed credentials; ignored local config / env
   vars if needed.

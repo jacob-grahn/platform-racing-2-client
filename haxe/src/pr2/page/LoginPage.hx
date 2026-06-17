@@ -3,7 +3,6 @@ package pr2.page;
 #if js
 import js.Browser;
 #end
-import haxe.crypto.Md5;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
@@ -27,6 +26,8 @@ import pr2.Constants;
 import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
 import pr2.net.LoginAuthClient;
+import pr2.net.LoginSocketProtocol;
+import pr2.net.LoginSocketProtocol.LoginSocketMessage;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.PR2MovieClip;
@@ -829,14 +830,9 @@ private enum LoginProbeStatus {
 }
 
 private class LoginSocketProbe {
-	private static inline var END_CHAR:String = "\x04";
-	private static inline var COMM_PASS:String = "QHE0NSNwKWZZQVEhU19xMA==";
-	private static inline var COMM_PASS_SERVER_10:String = "ayo3JnBGQCZVRiEhVjFAQA==";
-
 	private var server:ServerInfo;
 	private var onStatus:LoginProbeStatus->Void;
-	private var sendNum:Int = 0;
-	private var buffer:String = "";
+	private var protocol:LoginSocketProtocol;
 	#if js
 	private var socket:Null<js.html.WebSocket>;
 	#end
@@ -844,6 +840,7 @@ private class LoginSocketProbe {
 	public function new(server:ServerInfo, onStatus:LoginProbeStatus->Void) {
 		this.server = server;
 		this.onStatus = onStatus;
+		this.protocol = new LoginSocketProtocol(server.serverId);
 	}
 
 	public function connect():Void {
@@ -857,16 +854,15 @@ private class LoginSocketProbe {
 				write("request_login_id`");
 			};
 			socket.onmessage = function(event):Void {
-				buffer += Std.string(event.data);
-				readBufferedMessages();
+				for (message in protocol.append(Std.string(event.data))) {
+					handleMessage(message);
+				}
 			};
 			socket.onerror = function(_):Void {
 				onStatus(Message('Could not connect to ${server.label()} over WebSocket.'));
 			};
 			socket.onclose = function(_):Void {
-				if (buffer == "") {
-					onStatus(Message('Connection to ${server.label()} closed.'));
-				}
+				onStatus(Message('Connection to ${server.label()} closed.'));
 			};
 		} catch (error:Dynamic) {
 			onStatus(Message('Could not open WebSocket: ${Std.string(error)}'));
@@ -890,47 +886,21 @@ private class LoginSocketProbe {
 		if (socket == null || socket.readyState != js.html.WebSocket.OPEN) {
 			return;
 		}
-		sendNum++;
-		if (sendNum == 12) {
-			sendNum++;
-		}
-		var payload = sendNum + "`" + command;
-		var hash = Md5.encode(socketToken() + payload).substr(0, 3);
-		socket.send(hash + "`" + payload + END_CHAR);
+		socket.send(protocol.commandFrame(command));
 		#end
 	}
 
-	private function readBufferedMessages():Void {
-		var endIndex = buffer.indexOf(END_CHAR);
-		while (endIndex >= 0) {
-			var message = buffer.substr(0, endIndex);
-			buffer = buffer.substr(endIndex + 1);
-			handleMessage(message);
-			endIndex = buffer.indexOf(END_CHAR);
+	private function handleMessage(message:LoginSocketMessage):Void {
+		switch (message) {
+			case LoginId(loginId):
+				onStatus(LoginId(loginId));
+			case LoginSuccessful(userName):
+				onStatus(LoginSuccessful(userName));
+			case LoginFailure(message):
+				onStatus(Message('Server rejected login: $message'));
+			case Other(command):
+				onStatus(Message('Received $command from ${server.label()}.'));
 		}
-	}
-
-	private function handleMessage(message:String):Void {
-		var parts = message.split("`");
-		if (parts.length < 3) {
-			return;
-		}
-		var command = parts[2];
-		if (command == "setLoginID" && parts.length >= 4) {
-			onStatus(LoginId(parts[3]));
-		} else if (command == "loginSuccessful") {
-			// Frame layout matches the e2e read in LiveLoginE2ETest: the args are
-			// parts.slice(3), so parts[4] is the canonical user name.
-			onStatus(LoginSuccessful(parts.length >= 5 ? parts[4] : ""));
-		} else if (command == "loginFailure") {
-			onStatus(Message('Server rejected login: ${parts.slice(3).join(" ")}'));
-		} else {
-			onStatus(Message('Received $command from ${server.label()}.'));
-		}
-	}
-
-	private function socketToken():String {
-		return server.serverId == 10 ? COMM_PASS_SERVER_10 : COMM_PASS;
 	}
 }
 
