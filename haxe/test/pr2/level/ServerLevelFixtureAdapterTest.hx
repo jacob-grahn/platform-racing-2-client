@@ -67,6 +67,7 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(BlockType.Safety, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY), "safety code");
 		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY).isSolid(), "safety inactive collision");
 		assertEquals(BlockType.Teleport, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_TELEPORT), "teleport code");
+		assertEquals(BlockType.CustomStats, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_CUSTOM_STATS), "custom stats code");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

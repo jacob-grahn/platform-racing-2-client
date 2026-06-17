@@ -288,8 +288,9 @@ Each should match original PR2 behavior, verified via debug state / comparison.
   itself on contact; teleport groups blocks by color, moves to the next same-color
   block, and applies the Flash 3000 ms color cooldown; item blocks use the
   Flash `SupplyBlock` bump hook, support single-use/infinite supply types, and
-  expose the granted item id in debug state); remaining: move/rotate blocks,
-  custom stats.
+  expose the granted item id in debug state; custom stats blocks use the Flash
+  `SupplyBlock` bump hook, apply configured speed/accel/jump stats, and support
+  `reset` to starting stats); remaining: move/rotate blocks.
 - [ ] Items: sword, laser gun, mine, jet pack, super jump, speed burst, ice
   wave, teleport, lightning.
 - [ ] Movement edge cases: swimming done (water `mode` switch in

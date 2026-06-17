@@ -35,10 +35,16 @@ class LocalPlayerController {
 	public static inline var MODE_WATER:String = "water";
 
 	private final level:FixtureLevel;
-	private final accel:Float;
-	private final maxVelX:Float;
-	private final jumpVelocity:Float;
+	private var accel:Float;
+	private var maxVelX:Float;
+	private var jumpVelocity:Float;
 	private final gravity:Float;
+	private final startingSpeedStat:Float;
+	private final startingAccelerationStat:Float;
+	private final startingJumpStat:Float;
+	private var speedStat:Float;
+	private var accelerationStat:Float;
+	private var jumpStat:Float;
 	private var targetVelX:Float = 0;
 	private var accelFactor:Float = BASE_ACCEL_FACTOR;
 	private var jumpHeld:Bool = false;
@@ -54,9 +60,10 @@ class LocalPlayerController {
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
-		accel = level.stats.acceleration;
-		maxVelX = 2 + level.stats.speed / 10;
-		jumpVelocity = level.stats.jump;
+		startingSpeedStat = clamp(level.stats.speed, 0, 100);
+		startingAccelerationStat = clamp((level.stats.acceleration - 0.2) * 60, 0, 100);
+		startingJumpStat = clamp((level.stats.jump - 2) * 40, 0, 100);
+		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
 		gravity = DEFAULT_GRAVITY * (level.gravity / 27);
 		x = level.playerStart.x * level.tileSize + level.tileSize / 2;
 		y = (level.playerStart.y + 1) * level.tileSize;
@@ -165,7 +172,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type, mode, itemId);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, speedStat, accelerationStat, jumpStat);
 	}
 
 	private function position():Void {
@@ -378,6 +385,8 @@ class LocalPlayerController {
 				hitMine(block);
 			case BlockType.Item | BlockType.InfiniteItem:
 				useItemBlock(block);
+			case BlockType.CustomStats:
+				useCustomStatsBlock(block);
 			case BlockType.Teleport:
 				maybeTeleport(block);
 			case BlockType.ArrowUp:
@@ -461,6 +470,51 @@ class LocalPlayerController {
 			}
 		}
 		return null;
+	}
+
+	private function useCustomStatsBlock(block:LevelBlock):Void {
+		var key = blockKey(block.x, block.y);
+		if (depletedItemBlocks.exists(key)) {
+			return;
+		}
+		depletedItemBlocks.set(key, true);
+
+		if (block.options == "reset") {
+			applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+			return;
+		}
+
+		var stats = parseCustomStats(block.options);
+		applyStats(stats.speed, stats.acceleration, stats.jump);
+	}
+
+	private function parseCustomStats(options:String):PlayerStats {
+		if (options == "") {
+			return new PlayerStats(50, 50, 50);
+		}
+		var values = options.split("-");
+		return new PlayerStats(
+			customStatAt(values, 0, 50),
+			customStatAt(values, 1, 50),
+			customStatAt(values, 2, 50)
+		);
+	}
+
+	private function customStatAt(values:Array<String>, index:Int, fallback:Float):Float {
+		if (index >= values.length) {
+			return fallback;
+		}
+		var parsed = Std.parseInt(values[index]);
+		return parsed == null ? fallback : clamp(parsed, 0, 100);
+	}
+
+	private function applyStats(speed:Float, acceleration:Float, jump:Float):Void {
+		speedStat = clamp(speed, 0, 100);
+		accelerationStat = clamp(acceleration, 0, 100);
+		jumpStat = clamp(jump, 0, 100);
+		maxVelX = 2 + speedStat / 10;
+		accel = 0.2 + accelerationStat / 60;
+		jumpVelocity = 2 + jumpStat / 40;
 	}
 
 	private function maybeTeleport(block:LevelBlock):Void {
@@ -645,4 +699,16 @@ private typedef BlockRefs = {
 	final ceilRight:Null<LevelBlock>;
 	final headBlock:Null<LevelBlock>;
 	final topBlock:Null<LevelBlock>;
+}
+
+private class PlayerStats {
+	public final speed:Float;
+	public final acceleration:Float;
+	public final jump:Float;
+
+	public function new(speed:Float, acceleration:Float, jump:Float) {
+		this.speed = speed;
+		this.acceleration = acceleration;
+		this.jump = jump;
+	}
 }

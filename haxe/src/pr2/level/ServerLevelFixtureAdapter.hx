@@ -79,6 +79,8 @@ class ServerLevelFixtureAdapter {
 				BlockType.Safety;
 			case ObjectCodes.BLOCK_TELEPORT:
 				BlockType.Teleport;
+			case ObjectCodes.BLOCK_CUSTOM_STATS:
+				BlockType.CustomStats;
 			case ObjectCodes.BLOCK_BASIC1 | ObjectCodes.BLOCK_BASIC2 | ObjectCodes.BLOCK_BASIC3 | ObjectCodes.BLOCK_BASIC4:
 				BlockType.Basic;
 			default:

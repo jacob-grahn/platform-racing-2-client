@@ -26,6 +26,8 @@ class LocalPlayerControllerTest {
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testBumpingItemBlockGrantsConfiguredItem();
+		testBumpingCustomStatsBlockAppliesConfiguredStats();
+		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
@@ -272,6 +274,40 @@ class LocalPlayerControllerTest {
 		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
 	}
 
+	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
+		var player = new LocalPlayerController(customStatsBlockLevel("100-0-80"));
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().touchedBlockType == "custom_stats") {
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals("custom_stats", state.touchedBlockType, "debug state reports custom stats block touch");
+		assertClose(100, state.speedStat, "custom stats block applies speed stat");
+		assertClose(0, state.accelerationStat, "custom stats block applies acceleration stat");
+		assertClose(80, state.jumpStat, "custom stats block applies jump stat");
+	}
+
+	private static function testBumpingResetCustomStatsBlockRestoresStartingStats():Void {
+		var player = new LocalPlayerController(customStatsResetLevel());
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().touchedBlockType == "custom_stats") {
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals("custom_stats", state.touchedBlockType, "debug state reports reset custom stats block touch");
+		assertClose(70, state.speedStat, "reset custom stats block restores starting speed stat");
+		assertClose(40, state.accelerationStat, "reset custom stats block restores starting acceleration stat");
+		assertClose(20, state.jumpStat, "reset custom stats block restores starting jump stat");
+	}
+
 	private static function testTeleportBlockMovesPlayerToNextSameColorBlock():Void {
 		var player = new LocalPlayerController(teleportPairLevel());
 		var state = player.debugState();
@@ -370,6 +406,44 @@ class LocalPlayerControllerTest {
 			new TilePosition(4, 4),
 			[
 				new LevelBlock(2, 1, type, "4"),
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function customStatsBlockLevel(options:String):FixtureLevel {
+		return new FixtureLevel(
+			"custom-stats-block",
+			"Custom Stats Block",
+			5,
+			6,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 1, BlockType.CustomStats, options),
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function customStatsResetLevel():FixtureLevel {
+		return new FixtureLevel(
+			"custom-stats-reset",
+			"Custom Stats Reset",
+			5,
+			6,
+			30,
+			27,
+			new StatDefaults(70, 0.2 + 40 / 60, 2 + 20 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 1, BlockType.CustomStats, "reset"),
 				new LevelBlock(2, 4, BlockType.Solid),
 				new LevelBlock(4, 4, BlockType.Finish)
 			]
