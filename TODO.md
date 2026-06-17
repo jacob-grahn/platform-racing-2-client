@@ -156,14 +156,28 @@ renders one symbol through the vector path (`pr2.page.SymbolPreview`); capture
 with `tools/openfl_driver.py` and compare to the Adobe `@4x.png` under
 `vector-art/png/`. Good test symbol: `UI/Global/MuteButton`.
 
-- [ ] Automate the renderer-vs-PNG diff.
-  - Use `tools/compare_screenshots.py` to score `SymbolPreview` captures against
-    the Adobe `@4x` rasters; align scale/offset via symbol drawing bounds for a
-    deterministic comparison. Add a small set of representative symbols.
+- [x] Automate the renderer-vs-PNG diff.
+  - `tools/compare_symbol_render.py` renders each case symbol through the
+    `?screen=symbol` vector path (real-time DevTools capture — the symbol screen
+    loads its catalog asynchronously, so the virtual-time `shot` path only ever
+    grabs the preloader), trims it to its content box, resizes to the reference
+    raster, and scores `rmsDelta` / `differingPercent`. Render scale auto-fits
+    the stage from the reference `@4x` size so large symbols are not clipped, so
+    the score is scale-independent and deterministic. Cases + per-case thresholds
+    live in `tools/symbol_render_cases.json` (MuteButton, tree1, rock1).
+  - `rmsDelta` is the gate; `differingPercent` is report-only (gradient/anti-alias
+    diffs keep it near 100% even for faithful renders). MuteButton's gradient
+    panel matches well (rms ~13); the stamps still expose real fill/contour gaps
+    (rock1 misses a highlight, tree1's right silhouette differs) with looser
+    baseline thresholds to tighten as the renderer improves.
 
-Acceptance: simple line+fill leaf symbols render close enough to their Adobe
-PNGs to use without the raster fallback; linear/radial gradients render
-recognizably; the harness can score a symbol against its PNG.
+Remaining gap: close the stamp fill/contour differences so their thresholds can
+tighten toward the leaf-symbol level.
+
+Acceptance (met for scoring; renderer fidelity still improving): simple line+fill
+leaf symbols render close enough to their Adobe PNGs to use without the raster
+fallback; linear/radial gradients render recognizably; the harness can score a
+symbol against its PNG.
 
 ## Asset Migration — Remaining
 

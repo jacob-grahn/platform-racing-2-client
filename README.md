@@ -256,6 +256,17 @@ Compare two stage screenshots and write diff artifacts:
 python3 tools/compare_screenshots.py expected.png actual.png --diff test/output/diff.png --metrics test/output/metrics.json --threshold-percent 1 --threshold-rms 8
 ```
 
+Score the vector renderer against the Adobe `@4x` rasters. Each case renders one
+library symbol through the `?screen=symbol` vector path, trims it to its content
+box, resizes to the reference raster, and reports `rmsDelta` / `differingPercent`
+(`rmsDelta` is the gate; see `tools/symbol_render_cases.json` for the cases and
+per-case thresholds):
+
+```sh
+python3 tools/compare_symbol_render.py --diff-dir test/output/symbol-diffs --metrics test/output/symbol-metrics.json
+python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton --reference vector-art/png/login/mute_button@4x.png
+```
+
 Check approximate OpenFL frame rate:
 
 ```sh
