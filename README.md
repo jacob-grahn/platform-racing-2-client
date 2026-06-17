@@ -35,8 +35,8 @@ haxelib run openfl build html5
 Run the lightweight runtime tests:
 
 ```sh
-haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.runtime.PR2MovieClipRuntimeTest --interp
-haxe --library lime --library openfl -cp haxe/src -cp haxe/test --main pr2.harness.LocalPlayerControllerTest --interp
+haxe test/deterministic.hxml
+haxe test/real-server.hxml
 ```
 
 ## Project Layout

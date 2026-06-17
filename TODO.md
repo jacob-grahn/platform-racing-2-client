@@ -326,8 +326,11 @@ least one real response is parsed; login feasibility is known before full UI.
 - [ ] Generalize `tools/pr2driver.py` into a common sequence format for Flash
   and OpenFL (launch/click/tap/hold/wait/screenshot). OpenFL sequence support
   and 550x400 normalization already exist.
-- [ ] Keep deterministic fixture tests (parity) separate from real-server tests
+- [x] Keep deterministic fixture tests (parity) separate from real-server tests
   (connectivity / broad behavior only).
+  - `test/deterministic.hxml` runs the local no-network parity/unit suite;
+    `test/real-server.hxml` is the isolated entry point for live connectivity
+    checks as they are added.
 - [ ] Remaining suites: `intro-flow` (Jiggmin renders; verify
   `data-pr2-intro-state` + click-to-skip; Kongregate pending art),
   `level-load-flat`, `finish-race`, `real-server-connect`.
