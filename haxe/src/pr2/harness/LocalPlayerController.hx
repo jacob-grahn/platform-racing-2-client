@@ -1,5 +1,6 @@
 package pr2.harness;
 
+import pr2.character.CharacterState;
 import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.BlockType;
@@ -182,7 +183,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationName(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, speedStat, accelerationStat, jumpStat);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, speedStat, accelerationStat, jumpStat);
 	}
 
 	private function position():Void {
@@ -769,23 +770,8 @@ class LocalPlayerController {
 		}
 	}
 
-	private function animationName():String {
-		if (mode == MODE_FREEZE) {
-			return "freeze";
-		}
-		if (mode == MODE_WATER) {
-			return "swim";
-		}
-		if (crouchCharge > 25) {
-			return "superJump";
-		}
-		if (crouching) {
-			return Math.abs(vx) > 0.05 ? "crouchWalk" : "crouch";
-		}
-		if (!grounded) {
-			return vy < 0 ? "jump" : "fall";
-		}
-		return Math.abs(vx) > 0.05 ? "run" : "stand";
+	private function characterState():CharacterState {
+		return CharacterState.fromMotion(mode, grounded, crouching, crouchCharge, vx, vy);
 	}
 
 	private function getBlockAtPixel(pixelX:Float, pixelY:Float):Null<LevelBlock> {

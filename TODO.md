@@ -228,7 +228,7 @@ faithful to the original AS3.
 
 - [ ] Minimal compatibility shims: timing, keyboard/mouse input, event-dispatch
   differences, asset lookup.
-- [ ] Gameplay-facing data classes: constants/stat defaults, level fixture
+- [x] Gameplay-facing data classes: constants/stat defaults, level fixture
   models, block-type definitions, character state model.
 - [ ] Display wrappers as the harness needs them: character, block, minimal
   game page/container.

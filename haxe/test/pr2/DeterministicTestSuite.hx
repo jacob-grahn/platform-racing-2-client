@@ -1,6 +1,7 @@
 package pr2;
 
 import pr2.character.CharacterAtlasTest;
+import pr2.character.CharacterStateTest;
 import pr2.crypto.PR2EncryptorTest;
 import pr2.effects.PixelEffect1Test;
 import pr2.harness.FixtureLevelRendererTest;
@@ -24,6 +25,7 @@ class DeterministicTestSuite {
 		PR2MovieClipRuntimeTest.main();
 		PixelEffect1Test.main();
 		CharacterAtlasTest.main();
+		CharacterStateTest.main();
 		PR2EncryptorTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();

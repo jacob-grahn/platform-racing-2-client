@@ -1,5 +1,7 @@
 package pr2.harness;
 
+import pr2.character.CharacterState;
+
 class LocalPlayerDebugState {
 	public final x:Float;
 	public final y:Float;
@@ -7,6 +9,7 @@ class LocalPlayerDebugState {
 	public final vy:Float;
 	public final grounded:Bool;
 	public final crouching:Bool;
+	public final characterState:CharacterState;
 	public final animation:String;
 	public final touchedBlockType:Null<String>;
 	public final mode:String;
@@ -22,7 +25,7 @@ class LocalPlayerDebugState {
 		vy:Float,
 		grounded:Bool,
 		crouching:Bool,
-		animation:String,
+		characterState:CharacterState,
 		touchedBlockType:Null<String>,
 		mode:String = "land",
 		?itemId:Null<Int>,
@@ -36,7 +39,8 @@ class LocalPlayerDebugState {
 		this.vy = vy;
 		this.grounded = grounded;
 		this.crouching = crouching;
-		this.animation = animation;
+		this.characterState = characterState;
+		this.animation = characterState.toString();
 		this.touchedBlockType = touchedBlockType;
 		this.mode = mode;
 		this.itemId = itemId;

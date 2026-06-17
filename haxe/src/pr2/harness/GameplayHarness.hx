@@ -132,20 +132,8 @@ class GameplayHarness extends Sprite {
 		playerDisplay.x = player.x - LocalPlayerController.STANDING_WIDTH / 2;
 		playerDisplay.y = player.y - height;
 		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
-		characterDisplay.setState(characterStateName(player.debugState().animation));
+		characterDisplay.setState(player.debugState().characterState.toClipName());
 		characterDisplay.advanceOneFrame();
-	}
-
-	private function characterStateName(animationName:String):String {
-		return switch (animationName) {
-			case "run": "runAnim";
-			case "stand": "standAnim";
-			case "jump" | "fall": "jumpAnim";
-			case "superJump": "superJumpAnim";
-			case "crouch": "crouchAnim";
-			case "crouchWalk": "crouchWalkAnim";
-			default: "standAnim";
-		}
 	}
 
 	private function onAddedToStage(event:Event):Void {
