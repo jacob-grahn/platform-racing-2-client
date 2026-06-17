@@ -23,9 +23,8 @@ while true; do
   run_count=$((run_count + 1))
   echo "Starting Codex TODO run $run_count..."
 
-  codex exec \
+  codex -a never exec \
     --sandbox workspace-write \
-    --ask-for-approval never \
     --ephemeral \
     "$prompt" \
     -o "$last_output"
