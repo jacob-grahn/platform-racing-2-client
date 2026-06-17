@@ -236,8 +236,9 @@ keep Flash/OpenFL differences isolated.
 
 ## Level Loading And Rendering
 
-- [ ] Inventory the real PR2 level payload format: course fields, block grid,
-  background/stamp/draw/text objects, settings and game modes.
+- [x] Inventory the real PR2 level payload format: course fields, block grid,
+  background/stamp/draw/text objects, settings and game modes. See
+  `docs/real-level-payload-format.md`.
 - [ ] Build the local fixture loader first (flat, blocks-only showcase, special
   blocks once interactions exist).
 - [ ] Add the real level parser after the fixture renderer works: parse
