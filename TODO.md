@@ -264,7 +264,7 @@ Server pipeline (confirmed from Flash source; salts/URLs the open bits need):
   backtick-delimited: `data[0]` read mode `m1`-`m4`, `data[1]` block string
   (relative coords, segSize 30; codes 100-132 from `Objects.as`).
 
-- [ ] Bit 1 — Networking + campaign list fetch.
+- [x] Bit 1 — Networking + campaign list fetch.
   - Async text loader over `openfl.net.URLLoader` (XHR on html5); server config
     (URLs + salts); `CampaignListClient` fetch/validate/parse into
     `CampaignLevelInfo`; `?screen=campaign` shows first level title/id/version.

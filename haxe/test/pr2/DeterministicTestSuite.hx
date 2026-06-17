@@ -11,6 +11,7 @@ import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
 import pr2.net.AccountCreationClientTest;
+import pr2.net.CampaignListClientTest;
 import pr2.net.LevelDataClientTest;
 import pr2.net.LoginAuthClientTest;
 import pr2.net.ServerStatusClientTest;
@@ -30,6 +31,7 @@ class DeterministicTestSuite {
 		GameplayHarnessOptionsTest.main();
 		LocalPlayerControllerTest.main();
 		ServerStatusClientTest.main();
+		CampaignListClientTest.main();
 		AccountCreationClientTest.main();
 		LoginAuthClientTest.main();
 		LevelDataClientTest.main();
