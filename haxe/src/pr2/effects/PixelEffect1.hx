@@ -22,10 +22,12 @@ import openfl.utils.Timer;
 	Defaults match the original `new PixelEffect1(logo)` call:
 	bgColor 0, spread 500, pull 0.19, pixels 15, scaleRange 15, interval 55ms.
 **/
+@:allow(pr2.effects.PixelEffect1Test)
 class PixelEffect1 extends Sprite {
 	private var src:BitmapData;
 	private var product:BitmapData;
 	private var productBitmap:Bitmap;
+	private var bgColor:Int;
 	private var spread:Float;
 	private var pull:Float;
 	private var pixels:Int;
@@ -38,6 +40,7 @@ class PixelEffect1 extends Sprite {
 		super();
 
 		this.src = src;
+		this.bgColor = bgColor;
 		this.spread = spread;
 		this.pull = pull;
 		this.pixels = pixels;
@@ -89,7 +92,7 @@ class PixelEffect1 extends Sprite {
 				segArray.splice(col, 1);
 			}
 
-			var chunk:BitmapData = new BitmapData(pixels, pixels, false, 0);
+			var chunk:BitmapData = new BitmapData(pixels, pixels, false, bgColor);
 			var rect:Rectangle = new Rectangle(px, py, pixels, pixels);
 			chunk.copyPixels(src, rect, new Point(0, 0));
 

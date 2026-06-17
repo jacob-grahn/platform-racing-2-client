@@ -199,9 +199,10 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
   `LevelEditorMenuGraphic`, `DrawingPopupGraphic`, `HatPickerGraphic`,
   `LobbyGraphic`, `LobbyBottomButtonsGraphic`, `PlayersTabListGraphic`,
   `GetLevelsPopupGraphic`, `StorePopupGraphic`.
-- [ ] Finish the intro animations: port `com.jiggmin.pixelEffects.PixelEffect1`
-  (the Jiggmin pixel dissolve), render the Kongregate intro art (its logo is
+- [ ] Finish the intro animations: render the Kongregate intro art (its logo is
   `bitmap379.jpg` plus nested vector pieces), and verify Armor/BubbleBox intros.
+  `com.jiggmin.pixelEffects.PixelEffect1` (the Jiggmin pixel dissolve) is ported,
+  wired into `IntroPage`, and covered by `pr2.effects.PixelEffect1Test`.
 - [ ] Resolve the five unexported bitmap media entries.
   - `Images/bitmap379.jpg` is a normal XFL image (likely the Kongregate logo).
   - `bitmap1249.png`, `bitmap371.png`, `bitmap386.png`, `bitmap97.jpg` are
