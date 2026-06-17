@@ -268,9 +268,10 @@ Server pipeline (confirmed from Flash source; salts/URLs the open bits need):
   - Async text loader over `openfl.net.URLLoader` (XHR on html5); server config
     (URLs + salts); `CampaignListClient` fetch/validate/parse into
     `CampaignLevelInfo`; `?screen=campaign` shows first level title/id/version.
-- [ ] Bit 4 — Render the decoded server level.
-  - Pixel coords + background color; map block codes to block art; camera/scale
-    so the level fits or scrolls.
+- [x] Bit 4 — Render the decoded server level.
+  - `ServerLevelRenderer` preserves pixel coords + background color, maps block
+    codes to block art, and focuses the camera around the first start block at
+    the original 30 px block scale.
 - [ ] Bit 5 — Place the character in the loaded level.
   - Spawn `CharacterDisplay` at the start block (code 111); reuse harness
     wiring; collide against decoded blocks if practical.
