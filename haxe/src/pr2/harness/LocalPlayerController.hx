@@ -17,6 +17,7 @@ class LocalPlayerController {
 	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
 	private static inline var VANISH_FADE_FRAMES:Int = 10;
 	private static inline var VANISH_REAPPEAR_FRAMES:Int = 54;
+	private static inline var MINE_HIT_SPEED:Float = 50;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -246,11 +247,13 @@ class LocalPlayerController {
 	// sees non-solid blocks (water/safety) so their touch effects can fire.
 	private function touchAt(pixelX:Float, pixelY:Float):Void {
 		var block = level.blockAt(tileIndex(pixelX), tileIndex(pixelY));
-		if (block == null) {
+		if (block == null || isBlockRemoved(block)) {
 			return;
 		}
 		touch(block);
 		switch (block.type) {
+			case BlockType.Mine:
+				hitMine(block);
 			case BlockType.Water:
 				if (!grounded) {
 					setMode(MODE_WATER);
@@ -340,6 +343,8 @@ class LocalPlayerController {
 				applyCrumbleForce(block, force);
 			case BlockType.Vanish:
 				activateVanish(block);
+			case BlockType.Mine:
+				hitMine(block);
 			case BlockType.Ice:
 				accelFactor = 0.05;
 			case BlockType.ArrowUp:
@@ -360,6 +365,8 @@ class LocalPlayerController {
 				applyCrumbleForce(block, force);
 			case BlockType.Vanish:
 				activateVanish(block);
+			case BlockType.Mine:
+				hitMine(block);
 			case BlockType.ArrowUp:
 				vy = !input.down && !crouching ? -14 : 0;
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
@@ -374,6 +381,8 @@ class LocalPlayerController {
 				applyCrumbleForce(block, force);
 			case BlockType.Vanish:
 				activateVanish(block);
+			case BlockType.Mine:
+				hitMine(block);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
 			default:
@@ -394,6 +403,20 @@ class LocalPlayerController {
 				vx += 3;
 			default:
 		}
+	}
+
+	private function hitMine(block:LevelBlock):Void {
+		if (isBlockRemoved(block)) {
+			return;
+		}
+
+		var mineCenterX = block.x * level.tileSize + level.tileSize / 2;
+		var mineCenterY = block.y * level.tileSize + level.tileSize / 2;
+		var charHeight = crouching ? CROUCHING_HEIGHT : STANDING_HEIGHT;
+		var angle = Math.atan2((y - charHeight / 2) - mineCenterY, x - mineCenterX);
+		vx += Math.cos(angle) * MINE_HIT_SPEED;
+		vy += Math.sin(angle) * MINE_HIT_SPEED;
+		removedBlocks.set(blockKey(block.x, block.y), true);
 	}
 
 	private function blockWithOpenSpaceBelow(block:Null<LevelBlock>):Null<LevelBlock> {
@@ -495,10 +518,14 @@ class LocalPlayerController {
 
 	private function getBlockAtTile(tileX:Int, tileY:Int):Null<LevelBlock> {
 		var block = level.blockAt(tileX, tileY);
-		if (block == null || removedBlocks.exists(blockKey(tileX, tileY)) || !block.type.isSolid()) {
+		if (block == null || isBlockRemoved(block) || !block.type.isSolid()) {
 			return null;
 		}
 		return block;
+	}
+
+	private function isBlockRemoved(block:LevelBlock):Bool {
+		return removedBlocks.exists(blockKey(block.x, block.y));
 	}
 
 	private function blockKey(tileX:Int, tileY:Int):String {

@@ -24,6 +24,7 @@ class LocalPlayerControllerTest {
 		testHighImpactFallBreaksCrumbleBlock();
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
+		testMineBlockLaunchesPlayerAndRemovesItself();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -234,6 +235,22 @@ class LocalPlayerControllerTest {
 		assertEquals(true, bumpedVanish, "reappeared vanish block collides again");
 	}
 
+	private static function testMineBlockLaunchesPlayerAndRemovesItself():Void {
+		var player = new LocalPlayerController(mineBlockLevel());
+		var initialState = player.debugState();
+
+		assertEquals("mine", initialState.touchedBlockType, "standing on mine reports touched block");
+		assertClose(0, initialState.vx, "centered mine hit has no horizontal launch");
+		assertClose(-50, initialState.vy, "mine hit launches away from block center with AS3 speed");
+
+		for (_ in 0...220) {
+			player.step(new LocalPlayerInput());
+		}
+		var state = player.debugState();
+		assertEquals(false, state.grounded, "removed mine no longer supports player");
+		assertBelow(90, state.y, "player falls through removed mine block");
+	}
+
 	private static function newPlayer():LocalPlayerController {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
@@ -273,6 +290,24 @@ class LocalPlayerControllerTest {
 			new TilePosition(3, 2),
 			[
 				new LevelBlock(2, 3, type),
+				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function mineBlockLevel():FixtureLevel {
+		return new FixtureLevel(
+			"mine-block",
+			"Mine Block",
+			5,
+			5,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(3, 2),
+			[
+				new LevelBlock(2, 3, BlockType.Mine),
 				new LevelBlock(3, 3, BlockType.Finish)
 			]
 		);
