@@ -21,6 +21,7 @@ class LocalPlayerControllerTest {
 		testFallingIntoWaterEntersSwimMode();
 		testWaterDampsSinkingAndPaddlesUp();
 		testLeavingWaterReturnsToLand();
+		testSafetyBlockReturnsPlayerToLastSafeSpot();
 		testHighImpactFallBreaksCrumbleBlock();
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
@@ -176,6 +177,27 @@ class LocalPlayerControllerTest {
 
 		assertEquals(true, enteredWater, "player enters water before exiting");
 		assertEquals(true, returnedToLand, "swimming up out of water returns to land mode");
+	}
+
+	private static function testSafetyBlockReturnsPlayerToLastSafeSpot():Void {
+		var player = new LocalPlayerController(safetyDropLevel());
+		var touchedSafety = false;
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.debugState().touchedBlockType == "safety") {
+				touchedSafety = true;
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals(true, touchedSafety, "falling player touches safety block");
+		assertClose(75, state.x, "safety block restores last safe x");
+		assertClose(90, state.y, "safety block restores last safe y");
+		assertClose(0, state.vx, "safety block clears horizontal velocity");
+		assertClose(0, state.vy, "safety block clears vertical velocity");
+		assertEquals(true, state.grounded, "safety return leaves player grounded");
 	}
 
 	private static function testHighImpactFallBreaksCrumbleBlock():Void {
@@ -447,6 +469,28 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, BlockType.Mine),
 				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function safetyDropLevel():FixtureLevel {
+		return new FixtureLevel(
+			"safety-drop",
+			"Safety Drop",
+			10,
+			13,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(4, 10),
+			[
+				new LevelBlock(2, 3, BlockType.Solid),
+				new LevelBlock(5, 7, BlockType.Safety),
+				new LevelBlock(6, 7, BlockType.Safety),
+				new LevelBlock(7, 7, BlockType.Safety),
+				new LevelBlock(8, 7, BlockType.Safety),
+				new LevelBlock(4, 10, BlockType.Finish)
 			]
 		);
 	}

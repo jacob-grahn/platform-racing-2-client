@@ -33,7 +33,8 @@ The local playable harness is done. The faithful-port path from here:
 2. Continue real server-level support — render coverage now includes the decoded
    block layer with the character placed at the first start block, and decoded
    blocks now feed local movement/collision with first-pass ice/arrow behavior;
-   next is remaining special block behavior and dynamic level choice.
+   safety-net returns are covered; next is remaining special block behavior and
+   dynamic level choice.
 3. Automate the renderer-vs-PNG diff to lock in vector fidelity (Vector
    Renderer section).
 
@@ -117,6 +118,8 @@ Server level harness:
 - `LocalPlayerController` now preserves server block identities for ice and
   directional arrows and applies their AS3 stand/bump/side-hit movement effects
   in deterministic tests.
+- Safety blocks now mirror the AS3 last-safe-position return behavior in local
+  movement tests.
 - Dev CORS proxy `tools/dev_proxy.py` serves the build and proxies
   `/api/* -> pr2hub.com` same-origin (`?apiHost=/api`).
 

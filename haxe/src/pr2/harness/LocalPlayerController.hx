@@ -65,6 +65,10 @@ class LocalPlayerController {
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
 	private var moveRandomSeed:Int = 1;
+	private var lastSafeX:Float;
+	private var lastSafeY:Float;
+	private var standingTileX:Int;
+	private var standingTileY:Int;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -75,6 +79,10 @@ class LocalPlayerController {
 		gravity = DEFAULT_GRAVITY * (level.gravity / 27);
 		x = level.playerStart.x * level.tileSize + level.tileSize / 2;
 		y = (level.playerStart.y + 1) * level.tileSize;
+		lastSafeX = x;
+		lastSafeY = y;
+		standingTileX = level.playerStart.x;
+		standingTileY = level.playerStart.y + 1;
 		determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
 	}
@@ -287,6 +295,11 @@ class LocalPlayerController {
 					targetVelX *= 0.9;
 					accelFactor = 0.1;
 				}
+				updateSafeSpot(block, true);
+			case BlockType.Safety:
+				if (standingTileX != block.x || standingTileY < block.y || standingTileY > block.y + 2) {
+					returnToLastSafeSpot();
+				}
 			default:
 		}
 	}
@@ -324,6 +337,9 @@ class LocalPlayerController {
 		y = block.y * level.tileSize;
 		vy = 0;
 		grounded = true;
+		if (isSafeStandBlock(block)) {
+			updateSafeSpot(block, false);
+		}
 		applyStandEffect(block, standForce);
 	}
 
@@ -446,6 +462,32 @@ class LocalPlayerController {
 				vx += 3;
 			default:
 		}
+	}
+
+	private function isSafeStandBlock(block:LevelBlock):Bool {
+		return switch (block.type) {
+			case BlockType.Crumble | BlockType.Vanish | BlockType.Mine | BlockType.Move | BlockType.Teleport | BlockType.Push | BlockType.Water | BlockType.Safety: false;
+			default: true;
+		}
+	}
+
+	private function updateSafeSpot(block:LevelBlock, centerY:Bool):Void {
+		lastSafeX = block.x * level.tileSize + level.tileSize / 2;
+		lastSafeY = (block.y + (centerY ? 0.5 : 0)) * level.tileSize;
+		standingTileX = block.x;
+		standingTileY = block.y;
+	}
+
+	private function returnToLastSafeSpot():Void {
+		x = lastSafeX;
+		y = lastSafeY;
+		vx = 0;
+		vy = 0;
+		targetVelX = 0;
+		jumpVelBoost = 0;
+		jumpHeld = false;
+		setMode(MODE_LAND);
+		grounded = true;
 	}
 
 	private function startRotate(block:LevelBlock):Void {
