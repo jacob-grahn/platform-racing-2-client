@@ -22,6 +22,11 @@ the boot screen so development and automated tests can jump straight to one:
 - `?screen=login`: the (stub) login page.
 - `?screen=harness`: the local gameplay harness; accepts the character query
   options (`hat`, `head`, `body`, `feet`, `primary`, `secondary`, `render`).
+- `?screen=campaign`: loads a real campaign level through the configured API
+  host/proxy, renders the decoded block layer, and places the character at the
+  first start block.
+- `?screen=symbol&symbol=<name>&scale=4&bg=FFFFFF`: renders one generated
+  library symbol through the vector renderer for visual comparison work.
 
 `IntroPage` publishes its progress to the `data-pr2-intro-state` body attribute
 (`intro-jiggmin`, `intro-kongregate`, `login`) for harness observation.
@@ -59,6 +64,63 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `vector-art/atlases/`: generated sprite sheets and frame JSON.
 - `docs/`: migration notes and inventories.
 - `TODO.md`: current porting plan and next steps.
+
+## Porting Status
+
+The port targets a faithful Haxe/OpenFL browser build of the original Flash
+client: 550x400 stage, 27 FPS timing, Flash-compatible gameplay behavior, and
+visual parity measured by deterministic state and screenshot comparisons. Normal
+development and CI should use committed Haxe/OpenFL source and generated assets;
+Adobe Animate is only a migration tool for regenerating source assets.
+
+Current foundation:
+
+- Generated asset metadata is available under `pr2.generated.assets` from the
+  extracted XFL source.
+- `AssetLibrary` and `PR2MovieClip` run generated timelines with nested clips,
+  labels, frame scripts, transforms, visibility, and named children.
+- The local harness can run fixture levels without login/lobby/server flow and
+  exposes deterministic debug state for movement checks.
+- `LocalCharacter` has Flash-derived land movement/collision, with additional
+  tested behavior for water, crumble, vanish, mine, teleport, item/stat supply,
+  push, timed move, ice, arrow, and safety blocks.
+- `CharacterDisplay` uses the generated `CharacterGraphic` timeline skeleton and
+  atlas-backed hat/head/body/feet parts, including primary/secondary layer
+  rendering and a composite debug/fallback mode.
+- Intro pages run through the MovieClip timeline runtime, with Jiggmin and
+  Kongregate intro coverage and a stub login page.
+
+Server level support:
+
+- `CampaignListClient` fetches and validates campaign lists; `LevelDataClient`
+  fetches and validates level data.
+- `ServerLevelDecoder` decodes block strings in modes `m1`-`m4` into original
+  pixel coordinates, and `ServerLevelRenderer` renders the decoded block layer at
+  the original 30 px block scale.
+- `ServerLevelFixtureAdapter` converts decoded server geometry into fixture
+  collision data so local movement can run in real level layouts.
+- Browser builds need a same-origin API proxy for pr2hub.com requests. The dev
+  proxy is `tools/dev_proxy.py`; use `?apiHost=/api` with that proxy.
+
+Campaign payload reference:
+
+- Campaign lists are fetched from `pr2hub.com/files/lists/campaign/{page}` and
+  validated with `MD5(ret.substr(10, len - 53) + "984cn98c54$")`.
+- Level data is fetched from `pr2hub.com/levels/{id}.txt?version={v}` and
+  validated with `MD5(version + id + levelData + "0kg4%dsw")`.
+- The decoded `levelData` is `&`-joined URL-encoded vars passed through
+  `validateSaveString`; `data` is backtick-delimited with read mode in
+  `data[0]` and the relative-coordinate block string in `data[1]`.
+
+Networking status:
+
+- Browser OpenFL cannot open the original raw TCP gameserver socket directly, so
+  browser deployment must use the gameserver WebSocket path.
+- The minimal networking spike opens the selected server WebSocket, sends
+  `request_login_id` with the Flash `chr(0x04)` delimiter, and parses
+  `setLoginID`.
+- Local config and credentials should stay in ignored env/local files. Sys-target
+  API calls can use `PR2_API_HOST` for a proxy or local endpoint.
 
 ## Haxe/OpenFL Commands
 
