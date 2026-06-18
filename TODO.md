@@ -265,8 +265,9 @@ least one real response is parsed; login feasibility is known before full UI.
 - [x] Add `intro-flow` OpenFL sequence for Jiggmin render state,
   `data-pr2-intro-state`, and click-to-skip coverage.
 - [x] Add `level-load-flat` OpenFL sequence for fixture load/debug coverage.
-- [ ] Remaining suites: `finish-race`, `real-server-connect`; Kongregate intro
-  art remains pending.
+- [x] Add `finish-race` OpenFL sequence for reaching the fixture finish block.
+- [ ] Remaining suites: `real-server-connect`; Kongregate intro art remains
+  pending.
 
 Acceptance: one command runs a useful scripted OpenFL sequence; failures produce
 screenshots + debug output that are easy to inspect.

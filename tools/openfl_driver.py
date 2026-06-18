@@ -522,12 +522,65 @@ def dispatch_key(devtools, event_type, key_name):
     if definition is None:
         raise SystemExit(f"Unknown key '{key_name}'. Valid: {', '.join(sorted(KEY_DEFINITIONS))}")
     params = dict(definition)
-    params["type"] = event_type
+    cdp_event_type = "rawKeyDown" if event_type == "keyDown" and "text" not in params else event_type
+    params["type"] = cdp_event_type
     params["nativeVirtualKeyCode"] = params["windowsVirtualKeyCode"]
     if event_type == "keyUp":
         params.pop("text", None)
     devtools.request("Input.dispatchKeyEvent", params)
+    if not dispatch_harness_key(devtools, event_type, definition):
+        dispatch_dom_key(devtools, event_type, definition)
     print(f"{event_type}: {key_name}")
+
+
+def dispatch_harness_key(devtools, event_type, definition):
+    pressed = event_type == "keyDown"
+    expression = """
+(() => {
+  if (typeof window.__pr2HarnessSetKeyCode !== "function") {
+    return false;
+  }
+  window.__pr2HarnessSetKeyCode(%d, %s);
+  return true;
+})()
+""" % (
+        definition["windowsVirtualKeyCode"],
+        json.dumps(pressed),
+    )
+    return devtools.evaluate(expression) is True
+
+
+def dispatch_dom_key(devtools, event_type, definition):
+    dom_event_type = "keydown" if event_type == "keyDown" else "keyup"
+    key_code = definition["windowsVirtualKeyCode"]
+    expression = """
+(() => {
+  const event = new KeyboardEvent(%s, {
+    key: %s,
+    code: %s,
+    bubbles: true,
+    cancelable: true
+  });
+  Object.defineProperty(event, "keyCode", {get: () => %d});
+  Object.defineProperty(event, "which", {get: () => %d});
+  const targets = [window, document, document.body, document.activeElement];
+  for (const canvas of document.querySelectorAll("canvas")) {
+    targets.push(canvas);
+  }
+  for (const target of targets) {
+    if (target) {
+      target.dispatchEvent(event);
+    }
+  }
+})()
+""" % (
+        json.dumps(dom_event_type),
+        json.dumps(definition["key"]),
+        json.dumps(definition["code"]),
+        key_code,
+        key_code,
+    )
+    devtools.evaluate(expression)
 
 
 def dispatch_click(devtools, x, y):

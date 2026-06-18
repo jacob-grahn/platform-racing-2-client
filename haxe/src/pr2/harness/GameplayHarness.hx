@@ -139,6 +139,11 @@ class GameplayHarness extends Sprite {
 	private function onAddedToStage(event:Event):Void {
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		#if js
+		Reflect.setField(Browser.window, "__pr2HarnessSetKeyCode", function(keyCode:Int, pressed:Bool):Void {
+			setKey(cast keyCode, pressed);
+		});
+		#end
 	}
 
 	private function onKeyDown(event:KeyboardEvent):Void {
