@@ -212,12 +212,12 @@ class PR2MovieClipRuntimeTest {
 		assertNotNull(popup.getChildByTimelineName("login_bt"), "LoginPopupGraphic renders named Button component");
 		assertNotNull(popup.getChildByTimelineName("rememberMe_chk"), "LoginPopupGraphic renders named CheckBox component");
 
-		var nameBox = Std.downcast(popup.getChildByTimelineName("nameBox"), TextField);
-		assertNotNull(nameBox, "LoginPopupGraphic renders named TextInput component as TextField");
-		assertEquals(TextFieldType.INPUT, nameBox.type, "TextInput component is editable");
+		var nameBox = Std.downcast(popup.getChildByTimelineName("nameBox"), FlTextInput);
+		assertNotNull(nameBox, "LoginPopupGraphic renders named TextInput component as FlTextInput");
+		assertEquals(true, nameBox.editable, "TextInput component is editable");
 
-		var passBox = Std.downcast(popup.getChildByTimelineName("passBox"), TextField);
-		assertNotNull(passBox, "LoginPopupGraphic renders password TextInput component as TextField");
+		var passBox = Std.downcast(popup.getChildByTimelineName("passBox"), FlTextInput);
+		assertNotNull(passBox, "LoginPopupGraphic renders password TextInput component as FlTextInput");
 		assertEquals(true, passBox.displayAsPassword, "password TextInput preserves displayAsPassword");
 	}
 

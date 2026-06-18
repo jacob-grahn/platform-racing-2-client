@@ -388,36 +388,51 @@ class PR2MovieClip extends Sprite {
 	private function createComponent(element:DisplayElementDef):DisplayObject {
 		return switch (element.libraryItemName) {
 			case "Components/TextInput":
-				createTextInput(element);
+				createTextInputComponent(element);
+			case "Components/TextArea":
+				createTextAreaComponent(element);
 			case "Components/Button":
 				createButtonComponent(element);
 			case "Components/ComboBox":
-				createComboBoxComponent(componentString(element, "prompt", ""));
+				createComboBoxComponent(element);
 			case "Components/CheckBox":
-				createCheckBoxComponent(
-					componentString(element, "label", ""),
-					componentBool(element, "selected", false)
-				);
+				createCheckBoxComponent(element);
+			case "Components/Slider":
+				createSliderComponent(element);
+			case "Components/List":
+				createListComponent(element);
+			case "Components/UIScrollBar":
+				createScrollBarComponent(element);
 			default:
 				createGenericComponent(element);
 		}
 	}
 
-	private function createTextInput(element:DisplayElementDef):DisplayObject {
-		var field = new TextField();
-		field.type = componentBool(element, "editable", true) ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
-		field.defaultTextFormat = new TextFormat("_sans", 12, 0x111111, false, false, false, null, null, TextFormatAlign.LEFT);
-		field.text = componentString(element, "text", "");
-		field.displayAsPassword = componentBool(element, "displayAsPassword", false);
-		field.selectable = true;
-		field.mouseEnabled = true;
-		field.border = true;
-		field.borderColor = 0x7C8EA0;
-		field.background = true;
-		field.backgroundColor = 0xFFFFFF;
-		field.width = 100;
-		field.height = 22;
-		return field;
+	private function createTextInputComponent(element:DisplayElementDef):DisplayObject {
+		var input = new FlTextInput(componentString(element, "text", ""));
+		input.displayAsPassword = componentBool(element, "displayAsPassword", false);
+		input.editable = componentBool(element, "editable", true);
+		var restrict = componentString(element, "restrict", "");
+		if (restrict != "") {
+			input.restrict = restrict;
+		}
+		var maxChars = Std.parseInt(componentString(element, "maxChars", "0"));
+		if (maxChars != null && maxChars > 0) {
+			input.maxChars = maxChars;
+		}
+		var size = componentSize(element, 100, 22);
+		input.setSize(size.width, size.height);
+		input.enabled = componentBool(element, "enabled", true);
+		return input;
+	}
+
+	private function createTextAreaComponent(element:DisplayElementDef):DisplayObject {
+		var size = componentSize(element, 160, 100);
+		var area = new FlTextArea(size.width, size.height);
+		area.editable = componentBool(element, "editable", true);
+		area.text = componentString(element, "text", "");
+		area.enabled = componentBool(element, "enabled", true);
+		return area;
 	}
 
 	private function createButtonComponent(element:DisplayElementDef):DisplayObject {
@@ -430,49 +445,56 @@ class PR2MovieClip extends Sprite {
 		return button;
 	}
 
-	private function createComboBoxComponent(prompt:String):DisplayObject {
-		var combo = new Sprite();
-		drawComponentBox(combo, 100, 22, 0xFFFFFF, 0x777777);
-		var text = componentText(prompt == "" ? "Loading..." : prompt, 78, 20, 0x222222, false, TextFormatAlign.LEFT);
-		text.x = 4;
-		text.y = 3;
-		combo.addChild(text);
-
-		var arrow = new Shape();
-		arrow.graphics.beginFill(0x333333);
-		arrow.graphics.moveTo(85, 8);
-		arrow.graphics.lineTo(95, 8);
-		arrow.graphics.lineTo(90, 14);
-		arrow.graphics.lineTo(85, 8);
-		arrow.graphics.endFill();
-		combo.addChild(arrow);
+	private function createComboBoxComponent(element:DisplayElementDef):DisplayObject {
+		var combo = new FlComboBox(componentString(element, "prompt", ""));
+		var size = componentSize(element, 100, 22);
+		combo.setSize(size.width, size.height);
+		combo.enabled = componentBool(element, "enabled", true);
 		return combo;
 	}
 
-	private function createCheckBoxComponent(label:String, selected:Bool):DisplayObject {
-		var holder = new Sprite();
-		holder.buttonMode = true;
-		holder.useHandCursor = true;
-		holder.mouseChildren = false;
+	private function createCheckBoxComponent(element:DisplayElementDef):DisplayObject {
+		var checkBox = new FlCheckBox(
+			componentString(element, "label", ""),
+			componentBool(element, "selected", false)
+		);
+		checkBox.enabled = componentBool(element, "enabled", true);
+		return checkBox;
+	}
 
-		var box = new Shape();
-		box.graphics.beginFill(0xFFFFFF);
-		box.graphics.lineStyle(1, 0x666666);
-		box.graphics.drawRect(0, 3, 13, 13);
-		box.graphics.endFill();
-		if (selected) {
-			box.graphics.lineStyle(2, 0x222222);
-			box.graphics.moveTo(3, 9);
-			box.graphics.lineTo(6, 13);
-			box.graphics.lineTo(12, 5);
+	private function createSliderComponent(element:DisplayElementDef):DisplayObject {
+		var size = componentSize(element, 100, 16);
+		var slider = new FlSlider(size.width);
+		var min = Std.parseFloat(componentString(element, "minimum", "0"));
+		var max = Std.parseFloat(componentString(element, "maximum", "100"));
+		slider.minimum = Math.isNaN(min) ? 0 : min;
+		slider.maximum = Math.isNaN(max) ? 100 : max;
+		var value = Std.parseFloat(componentString(element, "value", "0"));
+		slider.value = Math.isNaN(value) ? 0 : value;
+		slider.enabled = componentBool(element, "enabled", true);
+		return slider;
+	}
+
+	private function createListComponent(element:DisplayElementDef):DisplayObject {
+		var size = componentSize(element, 150, 100);
+		return new FlList(size.width, size.height);
+	}
+
+	private function createScrollBarComponent(element:DisplayElementDef):DisplayObject {
+		var size = componentSize(element, FlUIScrollBar.WIDTH, 100);
+		return new FlUIScrollBar(size.height);
+	}
+
+	/** Authored on-stage size from the instance bounds, with component defaults. */
+	private function componentSize(element:DisplayElementDef, defaultWidth:Float, defaultHeight:Float):{width:Float, height:Float} {
+		if (element.bounds != null) {
+			var width = element.bounds.right - element.bounds.left;
+			var height = element.bounds.bottom - element.bounds.top;
+			if (width > 0 && height > 0) {
+				return {width: width, height: height};
+			}
 		}
-		holder.addChild(box);
-
-		var text = componentText(label, 110, 20, 0x222222, false, TextFormatAlign.LEFT);
-		text.x = 18;
-		text.y = 2;
-		holder.addChild(text);
-		return holder;
+		return {width: defaultWidth, height: defaultHeight};
 	}
 
 	private function createGenericComponent(element:DisplayElementDef):DisplayObject {

@@ -7,6 +7,44 @@ and visuals — not a loose remake. Keep this file focused on what moves the por
 forward; command references belong in `README.md`, and asset-pipeline details in
 `docs/vector-art-export-plan.md`.
 
+## fl UI Components
+
+Port of the Adobe `fl.controls.*` components placed in the original assets. These
+render through `PR2MovieClip.createComponent`; until ported, instances fall back
+to inert placeholders (a grey box or a non-interactive drawing). Follow the
+`FlButton` pattern: real skin symbols, 9-slice to size, swap per state, plus the
+properties/events the source actually drives.
+
+- [x] **Button** (`fl.controls.Button`, 129 instances) — `pr2.runtime.FlButton`,
+      covered by `FlButtonTest`.
+- [x] **CheckBox** (`fl.controls.CheckBox`, 58 instances) — `pr2.runtime.FlCheckBox`:
+      real `CheckBox_*Icon` skins swapped per state, `selected`/`label`/`enabled`
+      get/set, click toggle, silent programmatic set, `CHANGE` on user click.
+- [x] **ComboBox** (`fl.controls.ComboBox`, 17 instances) — `pr2.runtime.FlComboBox`:
+      `ComboBox_*Skin` background, `FlDataProvider` (`addItem`/`removeAll`/`length`),
+      `prompt`, `selectedIndex`/`selectedItem`, open/close list, `CHANGE` on pick.
+- [x] **TextInput** (`fl.controls.TextInput`, 34 instances) — `pr2.runtime.FlTextInput`:
+      inner editable `TextField` over the nine-sliced `TextInput_*Skin`, with
+      `text`/`editable`/`displayAsPassword`/`restrict`/`maxChars` and re-broadcast `CHANGE`.
+- [x] **TextArea** (`fl.controls.TextArea`, 8 instances) — `pr2.runtime.FlTextArea`:
+      multiline `TextField` over `TextArea_upSkin` plus an attached `FlUIScrollBar`;
+      `text`/`htmlText`/`append`/`editable`.
+- [x] **Slider** (`fl.controls.Slider`, 6 instances) — `pr2.runtime.FlSlider`:
+      `SliderTrack`/`SliderThumb` skins, drag + track-click, `value`/`minimum`/
+      `maximum`/`snapInterval`, `FlSliderEvent` (CHANGE == `Event.CHANGE`, THUMB_*).
+- [x] **List** (`fl.controls.List`, 1 instance) — `pr2.runtime.FlList`: `List_skin`
+      border, `FlDataProvider` rows with selection highlight + overflow scrollbar,
+      `selectedIndex`/`selectedItem`, `CHANGE`. (Lobby listing stays custom-ported.)
+- [x] **UIScrollBar** (`fl.controls.UIScrollBar`, 1 instance) — `pr2.runtime.FlUIScrollBar`:
+      `ScrollTrack`/`ScrollThumb`/`ScrollArrow*` skins, draggable thumb + arrow steps,
+      `scrollTarget`/`setScrollProperties`/`scrollPosition`, `SCROLL`. Drives FlTextArea.
+
+All seven render through `PR2MovieClip.createComponent`, share the `FlSkin`
+nine-slice helper, and are covered by `FlComponentsTest`.
+
+(ColorPicker / CellRenderer / ScrollBar appear only as skins internal to the
+above — no standalone instances to migrate.)
+
 ## Direction
 
 - End goal: a faithful port of the original Flash game. Same physics/timing,
