@@ -136,6 +136,16 @@ final class ServerConfig {
 		return host + "/messages_delete_all.php";
 	}
 
+	/** Player profile lookup, matching `dialogs.PlayerPopup.playerInfoFromHTTP`. */
+	public static function getPlayerInfoUrl():String {
+		return host + "/get_player_info.php";
+	}
+
+	/** Friend/following/ignored list add/remove POST, matching `PlayerPopup.handleUserListURL`. */
+	public static function userListModifyUrl():String {
+		return host + "/user_list_modify.php";
+	}
+
 	/** Favorites add/remove POST, matching `LevelItem.handleFavorite`. */
 	public static function favoriteModifyUrl():String {
 		return host + "/favorite_levels_modify.php";

@@ -3,6 +3,8 @@ package pr2.lobby;
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.players.PlayerListSort;
+import pr2.lobby.players.SocialAction;
+import pr2.lobby.players.SocialAction.SocialActionPlan;
 import pr2.lobby.players.PlayerListSort.SortableRow;
 import pr2.lobby.search.SearchQuery;
 import pr2.lobby.search.SearchQuery.SearchDecision;
@@ -49,6 +51,7 @@ class LobbyServicesTest {
 		testCommandDispatch();
 		testMemoryAndSecureData();
 		testMessagesPaging();
+		testSocialActionPlan();
 		trace('LobbyServicesTest passed $assertions assertions');
 	}
 
@@ -74,6 +77,39 @@ class LobbyServicesTest {
 		UnreadNotif.notifyUser(150);
 		assertEquals(0, UnreadNotif.numUnread(), "message older than new last-read ignored");
 		UnreadNotif.reset();
+	}
+
+	private static function testSocialActionPlan():Void {
+		// Each player-popup action maps to a user_list_modify list/mode and a socket verb.
+		var follow = SocialActionPlan.plan(SocialAction.Follow);
+		assertEquals("following", follow.list, "follow list");
+		assertEquals("add", follow.mode, "follow mode");
+		assertEquals("follow_user", follow.socketVerb, "follow verb");
+
+		var unfollow = SocialActionPlan.plan(SocialAction.Unfollow);
+		assertEquals("following", unfollow.list, "unfollow list");
+		assertEquals("remove", unfollow.mode, "unfollow mode");
+		assertEquals("unfollow_user", unfollow.socketVerb, "unfollow verb");
+
+		var addFriend = SocialActionPlan.plan(SocialAction.AddFriend);
+		assertEquals("friends", addFriend.list, "add-friend list");
+		assertEquals("add", addFriend.mode, "add-friend mode");
+		assertEquals("add_friend", addFriend.socketVerb, "add-friend verb");
+
+		var removeFriend = SocialActionPlan.plan(SocialAction.RemoveFriend);
+		assertEquals("friends", removeFriend.list, "remove-friend list");
+		assertEquals("remove", removeFriend.mode, "remove-friend mode");
+		assertEquals("remove_friend", removeFriend.socketVerb, "remove-friend verb");
+
+		var ignore = SocialActionPlan.plan(SocialAction.Ignore);
+		assertEquals("ignored", ignore.list, "ignore list");
+		assertEquals("add", ignore.mode, "ignore mode");
+		assertEquals("ignore_user", ignore.socketVerb, "ignore verb");
+
+		var unignore = SocialActionPlan.plan(SocialAction.Unignore);
+		assertEquals("ignored", unignore.list, "unignore list");
+		assertEquals("remove", unignore.mode, "unignore mode");
+		assertEquals("unignore_user", unignore.socketVerb, "unignore verb");
 	}
 
 	private static function testTabLayoutNoCompression():Void {
