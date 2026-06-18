@@ -137,8 +137,8 @@ final class ServerConfig {
 	}
 
 	/** Player profile lookup, matching `dialogs.PlayerPopup.playerInfoFromHTTP`. */
-	public static function getPlayerInfoUrl():String {
-		return host + "/get_player_info.php";
+	public static function getPlayerInfoUrl(name:String):String {
+		return host + "/get_player_info.php?name=" + StringTools.urlEncode(name);
 	}
 
 	/** Friend/following/ignored list add/remove POST, matching `PlayerPopup.handleUserListURL`. */
