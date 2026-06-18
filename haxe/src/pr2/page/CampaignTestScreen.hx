@@ -35,12 +35,14 @@ import pr2.level.ServerLevelRenderer;
 	proves end-to-end connectivity and list parsing before later bits load,
 	render, and play the first level.
 
-	Reachable via `?screen=campaign` (optional `&page=N`, default 1).
+	Reachable via `?screen=campaign` (optional `&page=N`, default 1, and
+	`&levelId=N` or `&level=N` to load a specific level from that page).
 **/
 class CampaignTestScreen extends Sprite {
 	private static inline var DEFAULT_PAGE:Int = 1;
 
 	private final page:Int;
+	private final requestedLevelId:Null<Int>;
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 	private var statusText:TextField;
 	private var levelRenderer:ServerLevelRenderer;
@@ -50,23 +52,51 @@ class CampaignTestScreen extends Sprite {
 	private var characterDisplay:CharacterDisplay;
 	private var lastStatusText:String = "";
 
-	public function new(?page:String) {
+	public function new(?page:String, ?levelId:String) {
 		super();
 		this.page = parsePage(page);
+		this.requestedLevelId = parseRequestedLevelId(levelId);
 
 		drawBackground();
 		createStatusText();
-		setStatus("phase=fetching", 'Fetching campaign list page ${this.page}...');
+		setStatus(
+			"phase=fetching",
+			requestedLevelId == null
+				? 'Fetching campaign list page ${this.page}...'
+				: 'Fetching campaign list page ${this.page} for level ${requestedLevelId}...'
+		);
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 
-	private static function parsePage(page:Null<String>):Int {
+	public static function parsePage(page:Null<String>):Int {
 		if (page == null) {
 			return DEFAULT_PAGE;
 		}
 		var parsed = Std.parseInt(StringTools.trim(page));
 		return (parsed == null || parsed < 1) ? DEFAULT_PAGE : parsed;
+	}
+
+	public static function parseRequestedLevelId(levelId:Null<String>):Null<Int> {
+		if (levelId == null) {
+			return null;
+		}
+		var parsed = Std.parseInt(StringTools.trim(levelId));
+		return (parsed == null || parsed < 1) ? null : parsed;
+	}
+
+	public static function selectLevel(levels:Array<CampaignLevelInfo>, requestedLevelId:Null<Int>):Null<CampaignLevelInfo> {
+		if (levels.length == 0) {
+			return null;
+		}
+		if (requestedLevelId != null) {
+			for (level in levels) {
+				if (level.levelId == requestedLevelId) {
+					return level;
+				}
+			}
+		}
+		return levels[0];
 	}
 
 	private function onAddedToStage(event:Event):Void {
@@ -91,23 +121,27 @@ class CampaignTestScreen extends Sprite {
 			return;
 		}
 
-		var first = result.levels[0];
-		setStatus('phase=listLoaded;levels=${result.levels.length};firstId=${first.levelId}', [
+		var selected = selectLevel(result.levels, requestedLevelId);
+		var requestedStatus = requestedLevelId == null
+			? "default first level"
+			: (selected.levelId == requestedLevelId ? 'matched requested level ${requestedLevelId}' : 'requested level ${requestedLevelId} not found; using first level');
+		setStatus('phase=listLoaded;levels=${result.levels.length};selectedId=${selected.levelId}', [
 			'Campaign list page $page',
 			'levels=${result.levels.length} listHashValid=${result.hashValid}',
-			'first level: ${first.describe()}',
+			requestedStatus,
+			'selected level: ${selected.describe()}',
 			"",
-			'Loading level data for ${first.levelId} v${first.version}...'
+			'Loading level data for ${selected.levelId} v${selected.version}...'
 		].join("\n"));
 
-		LevelDataClient.fetch(first.levelId, first.version, function(data:ServerLevelData):Void {
-			onLevelData(first, data);
+		LevelDataClient.fetch(selected.levelId, selected.version, function(data:ServerLevelData):Void {
+			onLevelData(selected, data);
 		}, onLevelError);
 	}
 
 	private function onLevelData(info:CampaignLevelInfo, data:ServerLevelData):Void {
 		var lines = [
-			'Campaign page $page -> first level loaded',
+			'Campaign page $page -> selected level loaded',
 			'id=${info.levelId} v${info.version} levelHashValid=${data.hashValid}',
 			'title: ${data.title}',
 			'gravity=${data.gravity} maxTime=${data.maxTime} mode=${data.gameMode}',

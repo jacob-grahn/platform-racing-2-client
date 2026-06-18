@@ -75,7 +75,10 @@ class Main extends Sprite {
 	private function buildScreen(screen:Screen, query:Null<String>):DisplayObject {
 		return switch (screen) {
 			case Harness: new GameplayHarness();
-			case Campaign: new CampaignTestScreen(QueryParams.get(query, "page"));
+			case Campaign: new CampaignTestScreen(
+				QueryParams.get(query, "page"),
+				campaignLevelQuery(query)
+			);
 			case Login: new PageHolder(new LoginPage());
 			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")));
 			case Symbol: new SymbolPreview(
@@ -100,5 +103,10 @@ class Main extends Sprite {
 		}
 		var parsed = Std.parseInt("0x" + StringTools.replace(value, "#", ""));
 		return parsed == null ? 0xFFFFFF : parsed;
+	}
+
+	private function campaignLevelQuery(query:Null<String>):Null<String> {
+		var levelId = QueryParams.get(query, "levelId");
+		return levelId != null ? levelId : QueryParams.get(query, "level");
 	}
 }

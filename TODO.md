@@ -227,7 +227,7 @@ usable by the local movement harness.
 Fetch a real campaign level from pr2hub.com, render it, and drop the character
 in. Reachable via `?screen=campaign`.
 
-- [ ] Add user/developer selection for campaign page and level id.
+- [x] Add user/developer selection for campaign page and level id.
 - [ ] Render non-block level content: backgrounds, stamps/draw objects, text
   objects, and minimap if needed.
 

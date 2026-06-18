@@ -18,6 +18,7 @@ import pr2.net.LoginAuthClientTest;
 import pr2.net.LoginSocketProtocolTest;
 import pr2.net.ServerConfigTest;
 import pr2.net.ServerStatusClientTest;
+import pr2.page.CampaignTestScreenTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 
 class DeterministicTestSuite {
@@ -41,6 +42,7 @@ class DeterministicTestSuite {
 		AccountCreationClientTest.main();
 		LoginAuthClientTest.main();
 		LevelDataClientTest.main();
+		CampaignTestScreenTest.main();
 		trace("DeterministicTestSuite passed");
 	}
 }
