@@ -283,6 +283,8 @@ class CampaignTestScreen extends Sprite {
 				input.jump = pressed;
 			case Keyboard.DOWN | Keyboard.S:
 				input.down = pressed;
+			case Keyboard.CONTROL | Keyboard.X:
+				input.item = pressed;
 			default:
 		}
 	}

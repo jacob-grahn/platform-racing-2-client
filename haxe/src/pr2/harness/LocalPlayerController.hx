@@ -24,6 +24,7 @@ class LocalPlayerController {
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
 	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
 	private static inline var ROTATE_FRAMES:Int = 30;
+	private static inline var ITEM_SUPER_JUMP:Int = 5;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -93,6 +94,7 @@ class LocalPlayerController {
 
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
+		useHeldItem(input);
 		if (mode == MODE_FREEZE) {
 			updateRotation();
 		} else if (mode == MODE_WATER) {
@@ -606,6 +608,26 @@ class LocalPlayerController {
 			}
 		}
 		return null;
+	}
+
+	private function useHeldItem(input:LocalPlayerInput):Void {
+		if (!input.item || itemId == null) {
+			return;
+		}
+
+		switch (itemId) {
+			case ITEM_SUPER_JUMP:
+				useSuperJump();
+			default:
+		}
+	}
+
+	private function useSuperJump():Void {
+		if (crouching) {
+			return;
+		}
+		vy -= 25;
+		itemId = null;
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {

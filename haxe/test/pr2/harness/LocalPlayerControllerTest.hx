@@ -27,6 +27,7 @@ class LocalPlayerControllerTest {
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testBumpingItemBlockGrantsConfiguredItem();
+		testSuperJumpItemLaunchesPlayerAndConsumesItem();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
@@ -302,6 +303,35 @@ class LocalPlayerControllerTest {
 		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
 	}
 
+	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {
+		var player = new LocalPlayerController(superJumpItemLevel());
+		var grantedItem = false;
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().itemId == 5) {
+				grantedItem = true;
+				break;
+			}
+		}
+
+		assertEquals(true, grantedItem, "jumping player bumps super jump item block");
+		for (_ in 0...70) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.debugState().x > 105) {
+				break;
+			}
+		}
+		var beforeUse = player.debugState();
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var afterUse = player.debugState();
+
+		assertEquals(null, afterUse.itemId, "super jump consumes the held item");
+		assertBelow(afterUse.vy, beforeUse.vy - 20, "super jump applies the Flash upward impulse");
+		assertBelow(afterUse.y, beforeUse.y, "super jump moves the player upward on use");
+	}
+
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
 		var player = new LocalPlayerController(customStatsBlockLevel("100-0-80"));
 
@@ -555,6 +585,26 @@ class LocalPlayerControllerTest {
 				new LevelBlock(2, 1, type, "4"),
 				new LevelBlock(2, 4, BlockType.Solid),
 				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function superJumpItemLevel():FixtureLevel {
+		return new FixtureLevel(
+			"super-jump-item",
+			"Super Jump Item",
+			5,
+			8,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(4, 6),
+			[
+				new LevelBlock(2, 3, BlockType.Item, "5"),
+				new LevelBlock(2, 6, BlockType.Solid),
+				new LevelBlock(3, 6, BlockType.Solid),
+				new LevelBlock(4, 6, BlockType.Finish)
 			]
 		);
 	}

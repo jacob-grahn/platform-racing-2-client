@@ -237,8 +237,9 @@ Add mechanics in small, testable batches after the flat fixture is playable.
 Each should match original PR2 behavior, verified via debug state / comparison.
 
 - [x] Full course rotation behavior.
-- [ ] Items: sword, laser gun, mine, jet pack, super jump, speed burst, ice
-  wave, teleport, lightning.
+- [x] Item: super jump.
+- [ ] Items: sword, laser gun, mine, jet pack, speed burst, ice wave,
+  teleport, lightning.
 - [ ] Movement edge cases: bumping/recovery, frozen state, moving/rotating block
   collisions, corner cases.
 
