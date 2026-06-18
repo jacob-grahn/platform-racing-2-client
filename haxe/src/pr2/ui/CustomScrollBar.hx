@@ -52,6 +52,13 @@ class CustomScrollBar extends Sprite {
 		if (downArrow != null) {
 			downArrow.addEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown);
 		}
+		// Pages are added to the display list after `initialize()`, so `stage` is
+		// null when `init()` runs; capture it once the scrollbar is on stage.
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+	}
+
+	private function onAddedToStage(_:Event):Void {
+		stageRef = stage;
 	}
 
 	/**
@@ -77,7 +84,9 @@ class CustomScrollBar extends Sprite {
 	}
 
 	public function init(target:DisplayObject, trackHeight:Float, viewHeight:Float):Void {
-		this.stageRef = stage;
+		if (stageRef == null) {
+			stageRef = stage;
+		}
 		if (track != null) {
 			track.height = trackHeight - 15;
 		}
@@ -161,6 +170,7 @@ class CustomScrollBar extends Sprite {
 	}
 
 	public function remove():Void {
+		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		if (thumb != null) {
 			thumb.removeEventListener(MouseEvent.MOUSE_DOWN, onThumbDown);
 		}

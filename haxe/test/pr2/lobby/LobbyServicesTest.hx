@@ -2,6 +2,8 @@ package pr2.lobby;
 
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
+import pr2.lobby.players.PlayerListSort;
+import pr2.lobby.players.PlayerListSort.SortableRow;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.ui.CustomScrollBar;
@@ -25,6 +27,8 @@ class LobbyServicesTest {
 		testTabMemory();
 		testScrollBarMapping();
 		testPageNavigationPositions();
+		testPlayerSortStateMachine();
+		testPlayerSortOrdering();
 		testPaneTabLabels();
 		testSessionGuestMember();
 		testSocketRecording();
@@ -90,6 +94,46 @@ class LobbyServicesTest {
 		var spread = PageNavigation.buttonPositions([20, 20], 100);
 		assertEquals(0.0, spread[0], "spread first x");
 		assertEquals(80.0, spread[1], "spread second x");
+	}
+
+	private static function testPlayerSortStateMachine():Void {
+		// A numeric header sorts descending first; re-clicking it toggles to asc.
+		var state = PlayerListSort.nextSort({mode: "rank", order: "desc"}, "rank", "userName");
+		assertEquals("rank", state.mode, "re-click keeps mode");
+		assertEquals("asc", state.order, "re-click toggles order");
+		// Switching to another numeric header resets to descending.
+		state = PlayerListSort.nextSort(state, "hats", "userName");
+		assertEquals("hats", state.mode, "switch column");
+		assertEquals("desc", state.order, "new numeric column is desc");
+		// The name header sorts ascending.
+		state = PlayerListSort.nextSort(state, "userName", "userName");
+		assertEquals("userName", state.mode, "name column");
+		assertEquals("asc", state.order, "name column is asc");
+		// Re-clicking the name header toggles to descending.
+		state = PlayerListSort.nextSort(state, "userName", "userName");
+		assertEquals("desc", state.order, "name re-click toggles");
+		// Tiebreak columns pair up as in the originals.
+		assertEquals("hats", PlayerListSort.tiebreak("rank"), "rank tiebreak");
+		assertEquals("activeMembers", PlayerListSort.tiebreak("gpToday"), "gp tiebreak");
+	}
+
+	private static function testPlayerSortOrdering():Void {
+		// Descending rank, with hats as the tiebreak and name as the final tiebreak.
+		var rows:Array<SortableRow> = [
+			new TestRow("alice", 5, 2),
+			new TestRow("bob", 9, 1),
+			new TestRow("carol", 5, 7),
+			new TestRow("dave", 5, 2)
+		];
+		PlayerListSort.apply(rows, {mode: "rank", order: "desc"}, "userName");
+		assertEquals("bob", rows[0].sortName(), "highest rank first");
+		assertEquals("carol", rows[1].sortName(), "rank tie broken by hats");
+		assertEquals("alice", rows[2].sortName(), "remaining tie broken by name");
+		assertEquals("dave", rows[3].sortName(), "name order after alice");
+		// Ascending name sort.
+		PlayerListSort.apply(rows, {mode: "userName", order: "asc"}, "userName");
+		assertEquals("alice", rows[0].sortName(), "name asc first");
+		assertEquals("dave", rows[3].sortName(), "name asc last");
 	}
 
 	private static function testPaneTabLabels():Void {
@@ -168,5 +212,26 @@ class LobbyServicesTest {
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+}
+
+/** Minimal `SortableRow` for exercising the players/guilds sort comparator. */
+private class TestRow implements SortableRow {
+	private var name:String;
+	private var rank:Int;
+	private var hats:Int;
+
+	public function new(name:String, rank:Int, hats:Int) {
+		this.name = name;
+		this.rank = rank;
+		this.hats = hats;
+	}
+
+	public function numericField(key:String):Float {
+		return key == "rank" ? rank : (key == "hats" ? hats : 0);
+	}
+
+	public function sortName():String {
+		return name;
 	}
 }

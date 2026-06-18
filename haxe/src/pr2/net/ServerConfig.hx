@@ -95,4 +95,19 @@ final class ServerConfig {
 	public static function loginUrl():String {
 		return host + "/login.php";
 	}
+
+	/**
+		Friends/Following/Ignored player list endpoint, matching
+		`social.PlayersTabUserListDataLoader`: `{host}/user_list_get.php?mode={mode}`.
+	**/
+	public static function userListUrl(mode:String):String {
+		return host + "/user_list_get.php?mode=" + StringTools.urlEncode(mode);
+	}
+
+	/**
+		Top guilds endpoint, matching `social.Guilds`: `{host}/guilds_top.php`.
+	**/
+	public static function guildsTopUrl():String {
+		return host + "/guilds_top.php";
+	}
 }

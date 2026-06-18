@@ -41,6 +41,38 @@ class LobbyArt {
 	}
 
 	/**
+		Collect every `TextField` under `container`, left-to-right by x. Used to
+		recover the name/rank/hats fields of art whose dynamic-text instances were
+		exported without instance names (e.g. `PlayersTabListItemGraphic`).
+	**/
+	public static function textFields(container:Null<DisplayObjectContainer>):Array<TextField> {
+		var fields:Array<TextField> = [];
+		collectTextFields(container, fields);
+		fields.sort(function(a, b) {
+			return a.x < b.x ? -1 : (a.x > b.x ? 1 : 0);
+		});
+		return fields;
+	}
+
+	private static function collectTextFields(container:Null<DisplayObjectContainer>, into:Array<TextField>):Void {
+		if (container == null) {
+			return;
+		}
+		for (i in 0...container.numChildren) {
+			var child = container.getChildAt(i);
+			var field = Std.downcast(child, TextField);
+			if (field != null) {
+				into.push(field);
+				continue;
+			}
+			var childContainer = Std.downcast(child, DisplayObjectContainer);
+			if (childContainer != null) {
+				collectTextFields(childContainer, into);
+			}
+		}
+	}
+
+	/**
 		Make `target` behave like a button and call `handler` on click. Returns a
 		binding token to pass to `unbind`.
 	**/
