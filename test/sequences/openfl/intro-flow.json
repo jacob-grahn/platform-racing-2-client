@@ -1,0 +1,28 @@
+{
+  "query": "screen=intro&intro=jiggmin",
+  "steps": [
+    {
+      "time": 0.8,
+      "action": "body-attribute",
+      "name": "data-pr2-intro-state",
+      "value": "intro-jiggmin"
+    },
+    {
+      "time": 0.9,
+      "action": "shot",
+      "out": "test/output/openfl-intro-jiggmin.png"
+    },
+    {
+      "time": 1.0,
+      "action": "click",
+      "x": 275,
+      "y": 200
+    },
+    {
+      "time": 1.2,
+      "action": "body-attribute",
+      "name": "data-pr2-intro-state",
+      "value": "login"
+    }
+  ]
+}

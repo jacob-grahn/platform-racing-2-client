@@ -30,7 +30,7 @@ Sequence script format:
   }
 
   A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
-  tap, hold, shot, debug-state.
+  tap, hold, click, shot, debug-state, body-attribute.
 """
 
 import argparse
@@ -554,10 +554,14 @@ def run_sequence_step(devtools, step):
         key = require_key(step)
         dispatch_key(devtools, "keyDown", key)
         dispatch_key(devtools, "keyUp", key)
+    elif action == "click":
+        dispatch_click(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
     elif action == "shot":
         capture_devtools_shot(devtools, require_field(step, "out"))
     elif action == "debug-state":
         validate_sequence_debug_state(devtools, step.get("expect", {}))
+    elif action == "body-attribute":
+        validate_sequence_body_attribute(devtools, require_field(step, "name"), require_field(step, "value"))
     else:
         raise SystemExit(f"Unsupported OpenFL sequence action: {action}")
 
@@ -573,6 +577,19 @@ def dispatch_key(devtools, event_type, key_name):
         params.pop("text", None)
     devtools.request("Input.dispatchKeyEvent", params)
     print(f"{event_type}: {key_name}")
+
+
+def dispatch_click(devtools, x, y):
+    base_params = {
+        "x": x,
+        "y": y,
+        "button": "left",
+        "clickCount": 1,
+    }
+    devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mouseMoved", button="none", buttons=0))
+    devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mousePressed", buttons=1))
+    devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mouseReleased", buttons=0))
+    print(f"click: {x},{y}")
 
 
 def capture_devtools_shot(devtools, out_path):
@@ -618,6 +635,14 @@ def validate_sequence_debug_state(devtools, expected):
         print(f"Debug-state validation passed ({len(expected)} expectations).")
 
 
+def validate_sequence_body_attribute(devtools, name, expected_value):
+    actual_value = wait_for_body_attribute(devtools, name, expected_value)
+    print(f"Body attribute {name}: {actual_value}")
+    if actual_value != expected_value:
+        raise SystemExit(f"Expected body attribute {name}={expected_value}, got {actual_value}")
+    print(f"Body attribute validation passed ({name}).")
+
+
 def wait_for_sequence_debug_state(devtools):
     deadline = time.monotonic() + 5.0
     while time.monotonic() < deadline:
@@ -628,8 +653,28 @@ def wait_for_sequence_debug_state(devtools):
     return ""
 
 
+def wait_for_body_attribute(devtools, name, expected_value):
+    deadline = time.monotonic() + 5.0
+    expression = f'document.body.getAttribute({json.dumps(name)}) || ""'
+    last_value = ""
+    while time.monotonic() < deadline:
+        last_value = devtools.evaluate(expression)
+        if last_value == expected_value:
+            return last_value
+        time.sleep(0.1)
+    return last_value
+
+
 def require_key(step):
     return require_field(step, "key")
+
+
+def require_coordinate(step, field):
+    value = require_field(step, field)
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        raise SystemExit(f"Sequence {step.get('action')} step requires numeric {field}: {step}")
 
 
 def require_field(step, field):
