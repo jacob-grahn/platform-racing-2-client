@@ -53,6 +53,9 @@ import time
 import urllib.request
 import zlib
 
+from pr2_sequence import load_sequence as load_pr2_sequence
+from pr2_sequence import require_field
+
 DEFAULT_ROOT = os.path.join("export", "html5", "bin")
 DEFAULT_BROWSER_PATHS = [
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
@@ -475,64 +478,12 @@ class WebSocket:
 
 def run_sequence(script_path, root, browser_path):
     browser = resolve_browser(browser_path)
-    query, steps = load_sequence(script_path)
+    query, steps = load_pr2_sequence(script_path, normalize_hold=True)
 
     with serve(root) as url:
         url = append_query(url, query)
         with browser_devtools_session(browser, url) as devtools:
             run_sequence_steps(devtools, steps)
-
-
-def load_sequence(script_path):
-    with open(script_path) as file:
-        data = json.load(file)
-
-    if isinstance(data, list):
-        query = common_step_query(data)
-        raw_steps = data
-    elif isinstance(data, dict):
-        query = data.get("query", "")
-        raw_steps = data.get("steps")
-        if raw_steps is None:
-            raise SystemExit(f"Sequence object must include steps: {script_path}")
-        step_query = common_step_query(raw_steps)
-        if query and step_query and query != step_query:
-            raise SystemExit("Sequence query must be top-level when steps need different query strings.")
-        query = query or step_query
-    else:
-        raise SystemExit(f"Sequence must be a JSON object or list: {script_path}")
-
-    return query, normalize_sequence_steps(raw_steps)
-
-
-def common_step_query(steps):
-    queries = {step.get("query", "") for step in steps if step.get("query", "")}
-    if len(queries) > 1:
-        raise SystemExit("OpenFL sequence can only use one query string per browser session.")
-    return next(iter(queries), "")
-
-
-def normalize_sequence_steps(raw_steps):
-    normalized = []
-    order = 0
-    for step in raw_steps:
-        if "time" not in step or "action" not in step:
-            raise SystemExit(f"Sequence step requires time and action: {step}")
-        step_time = parse_non_negative_float(step["time"], "time")
-        action = step["action"]
-        if action == "hold":
-            seconds = parse_non_negative_float(step.get("seconds"), "seconds")
-            key = require_key(step)
-            normalized.append({"time": step_time, "action": "keyDown", "key": key, "_order": order})
-            order += 1
-            normalized.append({"time": step_time + seconds, "action": "keyUp", "key": key, "_order": order})
-        else:
-            item = dict(step)
-            item["time"] = step_time
-            item["_order"] = order
-            normalized.append(item)
-        order += 1
-    return sorted(normalized, key=lambda step: (step["time"], step["_order"]))
 
 
 def run_sequence_steps(devtools, steps):
@@ -675,23 +626,6 @@ def require_coordinate(step, field):
         return float(value)
     except (TypeError, ValueError):
         raise SystemExit(f"Sequence {step.get('action')} step requires numeric {field}: {step}")
-
-
-def require_field(step, field):
-    value = step.get(field)
-    if value is None or value == "":
-        raise SystemExit(f"Sequence {step.get('action')} step requires {field}: {step}")
-    return value
-
-
-def parse_non_negative_float(value, label):
-    try:
-        parsed = float(value)
-    except (TypeError, ValueError):
-        raise SystemExit(f"Invalid sequence {label}: {value}")
-    if parsed < 0:
-        raise SystemExit(f"Sequence {label} must be non-negative: {value}")
-    return parsed
 
 
 def append_query(url, query):

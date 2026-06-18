@@ -258,7 +258,7 @@ least one real response is parsed; login feasibility is known before full UI.
 
 ## Testing
 
-- [ ] Generalize `tools/pr2driver.py` into a common sequence format shared by
+- [x] Generalize `tools/pr2driver.py` into a common sequence format shared by
   Flash and OpenFL.
 - [ ] Add lobby-focused OpenFL/Flash comparison suites after the first lobby
   shell lands.

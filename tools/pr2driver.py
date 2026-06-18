@@ -12,17 +12,22 @@ Commands:
   sequence <script.json>        replay a JSON input timeline (see format below)
 
 Sequence script format:
-  [
-    {"time": 0.0, "action": "click", "x": 275, "y": 200},
-    {"time": 0.4, "action": "hold",  "key": "right", "seconds": 1.0},
-    {"time": 2.0, "action": "shot",  "out": "run.jpg"}
-  ]
-  Actions fire at their time in seconds, relative to sequence start.
+  {
+    "steps": [
+      {"time": 0.0, "action": "click", "x": 275, "y": 200},
+      {"time": 0.4, "action": "hold",  "key": "right", "seconds": 1.0},
+      {"time": 2.0, "action": "shot",  "out": "run.jpg"}
+    ]
+  }
+  A bare list of steps is also accepted. Actions fire at their time in seconds,
+  relative to sequence start.
 
 Key names: left right up down space
 """
 
-import subprocess, sys, os, json, time, tempfile, shutil, textwrap
+import subprocess, sys, os, time, tempfile, shutil, textwrap
+
+from pr2_sequence import load_sequence as load_pr2_sequence
 
 APP_NAME   = "Platform Racing 2"
 APP_PATH   = None        # overridden by --app flag
@@ -178,28 +183,32 @@ def _ensure_flash_focus():
         _run_swift(_SWIFT_FOCUS)
 
 def cmd_tap(key):
-    kc = _resolve_key(key)
-    _ensure_flash_focus()
-    _run_swift(_SWIFT_KEYDOWN, kc)
+    cmd_key_down(key)
     time.sleep(0.04)
-    _run_swift(_SWIFT_KEYUP, kc)
+    cmd_key_up(key)
     print(f"Tapped {key}")
 
 def cmd_hold(key, seconds):
-    kc = _resolve_key(key)
     if seconds < 0:
         print("Hold duration must be non-negative.", file=sys.stderr)
         sys.exit(1)
-    _ensure_flash_focus()
-    _run_swift(_SWIFT_KEYDOWN, kc)
+    cmd_key_down(key)
     time.sleep(seconds)
-    _run_swift(_SWIFT_KEYUP, kc)
+    cmd_key_up(key)
     print(f"Held {key} for {seconds:.3f}s")
 
+def cmd_key_down(key):
+    kc = _resolve_key(key)
+    _ensure_flash_focus()
+    _run_swift(_SWIFT_KEYDOWN, kc)
+
+def cmd_key_up(key):
+    kc = _resolve_key(key)
+    _ensure_flash_focus()
+    _run_swift(_SWIFT_KEYUP, kc)
+
 def cmd_sequence(script_path):
-    with open(script_path) as f:
-        steps = json.load(f)
-    steps = sorted(steps, key=lambda s: s["time"])
+    _, steps = load_pr2_sequence(script_path, allow_query=False)
     t0 = None  # set on first non-launch action
     for step in steps:
         action = step["action"]
@@ -215,6 +224,10 @@ def cmd_sequence(script_path):
             time.sleep(wait)
         if action == "click":
             cmd_click(step["x"], step["y"])
+        elif action == "keyDown":
+            cmd_key_down(step["key"])
+        elif action == "keyUp":
+            cmd_key_up(step["key"])
         elif action == "tap":
             cmd_tap(step["key"])
         elif action == "hold":
