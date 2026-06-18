@@ -1,0 +1,23 @@
+{
+  "query": "screen=harness",
+  "steps": [
+    {
+      "time": 2.0,
+      "action": "debug-state",
+      "expect": {
+        "fixture": "flat-level",
+        "x": "75",
+        "y": "270",
+        "grounded": "true",
+        "touched": "start",
+        "finish": "16,8",
+        "blocks": "20"
+      }
+    },
+    {
+      "time": 2.1,
+      "action": "shot",
+      "out": "test/output/openfl-level-load-flat.png"
+    }
+  ]
+}
