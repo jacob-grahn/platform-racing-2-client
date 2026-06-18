@@ -28,6 +28,22 @@ class LevelListClient {
 	}
 
 	/**
+		POST a search to `search_levels.php` and parse the same level-list payload,
+		mirroring `level_browser.Search.requestCourses` + the shared `loadHandler`.
+	**/
+	public static function search(params:Map<String, String>, onResult:LevelListResult->Void, ?onError:String->Void):Void {
+		FormPostClient.post(ServerConfig.searchLevelsUrl(), params, function(body:String):Void {
+			try {
+				onResult(parse(body));
+			} catch (error:Dynamic) {
+				if (onError != null) {
+					onError('failed to parse search results: ${Std.string(error)}');
+				}
+			}
+		}, onError);
+	}
+
+	/**
 		Flash campaign page formula `((server_id + day) % 6) + 1`, where `day` is the
 		weekday (0-6) of the last auth time. Campaign lists have six pages.
 	**/
