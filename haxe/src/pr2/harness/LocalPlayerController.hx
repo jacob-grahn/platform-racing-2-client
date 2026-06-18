@@ -24,10 +24,15 @@ class LocalPlayerController {
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
 	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
 	private static inline var ROTATE_FRAMES:Int = 30;
+	private static inline var ITEM_LASER_GUN:Int = 1;
+	private static inline var ITEM_MINE:Int = 2;
+	private static inline var ITEM_LIGHTNING:Int = 3;
 	private static inline var ITEM_TELEPORT:Int = 4;
 	private static inline var ITEM_SUPER_JUMP:Int = 5;
+	private static inline var ITEM_JET_PACK:Int = 6;
 	private static inline var ITEM_SPEED_BURST:Int = 7;
-	private static inline var ITEM_JET_PACK:Int = 8;
+	private static inline var ITEM_SWORD:Int = 8;
+	private static inline var ITEM_ICE_WAVE:Int = 9;
 	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
 	private static inline var SPEED_BURST_FRAMES:Int = 135;
 	private static inline var JET_PACK_FRAMES:Int = 135;
@@ -42,6 +47,8 @@ class LocalPlayerController {
 	public var touchedBlock(default, null):Null<LevelBlock> = null;
 	public var mode(default, null):String = MODE_LAND;
 	public var itemId(default, null):Null<Int> = null;
+	public var itemUses(default, null):Null<Int> = null;
+	public var lastItemEffect(default, null):Null<String> = null;
 	public var courseRotation(default, null):Int = 0;
 
 	public static inline var MODE_LAND:String = "land";
@@ -104,6 +111,7 @@ class LocalPlayerController {
 
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
+		lastItemEffect = null;
 		useHeldItem(input);
 		if (mode == MODE_FREEZE) {
 			updateRotation();
@@ -210,7 +218,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, speedStat, accelerationStat, jumpStat, courseRotation);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation);
 	}
 
 	private function position():Void {
@@ -606,6 +614,7 @@ class LocalPlayerController {
 		var nextItem = itemFromBlockOptions(block.options);
 		if (nextItem != null) {
 			itemId = nextItem;
+			itemUses = initialItemUses(nextItem);
 		}
 	}
 
@@ -629,16 +638,48 @@ class LocalPlayerController {
 		}
 
 		switch (itemId) {
+			case ITEM_LASER_GUN:
+				useLaserGun();
+			case ITEM_MINE:
+				useMineItem();
+			case ITEM_LIGHTNING:
+				useLightning();
 			case ITEM_TELEPORT:
 				useTeleportItem();
 			case ITEM_SUPER_JUMP:
 				useSuperJump();
-			case ITEM_SPEED_BURST:
-				useSpeedBurst();
 			case ITEM_JET_PACK:
 				useJetPack();
+			case ITEM_SPEED_BURST:
+				useSpeedBurst();
+			case ITEM_SWORD:
+				useSword();
+			case ITEM_ICE_WAVE:
+				useIceWave();
 			default:
 		}
+	}
+
+	private function useLaserGun():Void {
+		var direction = facingDirection < 0 ? "left" : "right";
+		vx += facingDirection < 0 ? 15 : -15;
+		lastItemEffect = "laser:" + direction;
+		consumeHeldItemUse();
+	}
+
+	private function useMineItem():Void {
+		var tile = rotatedTileAtPixel(x + facingDirection * level.tileSize, y - 15);
+		if (level.blockAt(tile.x, tile.y) != null) {
+			return;
+		}
+		level.blocks.push(new LevelBlock(tile.x, tile.y, BlockType.Mine));
+		lastItemEffect = "mine";
+		consumeHeldItemUse();
+	}
+
+	private function useLightning():Void {
+		lastItemEffect = "zap";
+		consumeHeldItemUse();
 	}
 
 	private function useTeleportItem():Void {
@@ -647,7 +688,7 @@ class LocalPlayerController {
 			return;
 		}
 		x = destX;
-		itemId = null;
+		consumeHeldItemUse();
 	}
 
 	private function useSuperJump():Void {
@@ -655,7 +696,7 @@ class LocalPlayerController {
 			return;
 		}
 		vy -= 25;
-		itemId = null;
+		consumeHeldItemUse();
 	}
 
 	private function useSpeedBurst():Void {
@@ -672,6 +713,35 @@ class LocalPlayerController {
 			return;
 		}
 		jetPackFramesRemaining = JET_PACK_FRAMES;
+	}
+
+	private function useSword():Void {
+		var direction = facingDirection < 0 ? "left" : "right";
+		vx += facingDirection < 0 ? -8 : 8;
+		lastItemEffect = "slash:" + direction;
+		consumeHeldItemUse();
+	}
+
+	private function useIceWave():Void {
+		var direction = facingDirection < 0 ? "left" : "right";
+		lastItemEffect = "ice_wave:" + direction;
+		consumeHeldItemUse();
+	}
+
+	private function consumeHeldItemUse():Void {
+		if (itemUses == null || itemUses <= 1) {
+			itemId = null;
+			itemUses = null;
+			return;
+		}
+		itemUses--;
+	}
+
+	private function initialItemUses(id:Int):Int {
+		return switch (id) {
+			case ITEM_LASER_GUN | ITEM_SWORD | ITEM_ICE_WAVE: 3;
+			default: 1;
+		}
 	}
 
 	private function applyJetPackThrust(input:LocalPlayerInput):Void {
@@ -810,6 +880,7 @@ class LocalPlayerController {
 		speedBurstFramesRemaining--;
 		if (speedBurstFramesRemaining <= 0) {
 			itemId = null;
+			itemUses = null;
 			applyMovementStats();
 		}
 	}
@@ -821,6 +892,7 @@ class LocalPlayerController {
 		jetPackFramesRemaining--;
 		if (jetPackFramesRemaining <= 0) {
 			itemId = null;
+			itemUses = null;
 		}
 	}
 

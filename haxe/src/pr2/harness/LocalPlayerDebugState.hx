@@ -14,6 +14,8 @@ class LocalPlayerDebugState {
 	public final touchedBlockType:Null<String>;
 	public final mode:String;
 	public final itemId:Null<Int>;
+	public final itemUses:Null<Int>;
+	public final lastItemEffect:Null<String>;
 	public final speedStat:Float;
 	public final accelerationStat:Float;
 	public final jumpStat:Float;
@@ -30,6 +32,8 @@ class LocalPlayerDebugState {
 		touchedBlockType:Null<String>,
 		mode:String = "land",
 		?itemId:Null<Int>,
+		?itemUses:Null<Int>,
+		?lastItemEffect:Null<String>,
 		speedStat:Float = 50,
 		accelerationStat:Float = 50,
 		jumpStat:Float = 50,
@@ -46,6 +50,8 @@ class LocalPlayerDebugState {
 		this.touchedBlockType = touchedBlockType;
 		this.mode = mode;
 		this.itemId = itemId;
+		this.itemUses = itemUses;
+		this.lastItemEffect = lastItemEffect;
 		this.speedStat = speedStat;
 		this.accelerationStat = accelerationStat;
 		this.jumpStat = jumpStat;
@@ -55,7 +61,9 @@ class LocalPlayerDebugState {
 	public function serialize():String {
 		var touched = touchedBlockType == null ? "none" : touchedBlockType;
 		var item = itemId == null ? "none" : Std.string(itemId);
-		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation';
+		var uses = itemUses == null ? "none" : Std.string(itemUses);
+		var effect = lastItemEffect == null ? "none" : lastItemEffect;
+		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation';
 	}
 
 	private static function round3(value:Float):Float {

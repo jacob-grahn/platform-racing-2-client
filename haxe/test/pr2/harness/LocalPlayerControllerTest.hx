@@ -32,6 +32,11 @@ class LocalPlayerControllerTest {
 		testTeleportItemBlockedBySolidDestination();
 		testSpeedBurstBoostsMovementThenExpires();
 		testJetPackLiftsPlayerThenExpires();
+		testLaserGunRecoilsAndConsumesThreeShots();
+		testMineItemPlacesMineAndConsumesItem();
+		testLightningEmitsZapAndConsumesItem();
+		testSwordLungesAndConsumesThreeSwings();
+		testIceWaveEmitsThreeWaves();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
@@ -411,7 +416,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testJetPackLiftsPlayerThenExpires():Void {
-		var boosted = collectItem(jetPackItemLevel(), 8);
+		var boosted = collectItem(jetPackItemLevel(), 6);
 		var normal = new LocalPlayerController(jetPackComparisonLevel());
 
 		for (_ in 0...70) {
@@ -423,7 +428,7 @@ class LocalPlayerControllerTest {
 		}
 
 		boosted.step(new LocalPlayerInput(false, false, false, false, true));
-		assertEquals(8, boosted.debugState().itemId, "jet pack stays held while active");
+		assertEquals(6, boosted.debugState().itemId, "jet pack stays held while active");
 
 		for (_ in 0...24) {
 			boosted.step(new LocalPlayerInput(false, false, false, false, true));
@@ -438,6 +443,74 @@ class LocalPlayerControllerTest {
 		}
 
 		assertEquals(null, boosted.debugState().itemId, "jet pack expires after five seconds");
+	}
+
+	private static function testLaserGunRecoilsAndConsumesThreeShots():Void {
+		var player = collectItem(heldItemLevel(1), 1);
+		var beforeUse = player.debugState();
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var firstShot = player.debugState();
+		assertEquals(1, firstShot.itemId, "laser remains held after first shot");
+		assertEquals(2, firstShot.itemUses, "laser consumes one of three shots");
+		assertEquals("laser:right", firstShot.lastItemEffect, "laser emits a right-facing shot");
+		assertBelow(firstShot.vx, beforeUse.vx, "laser applies backwards recoil");
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(null, player.debugState().itemId, "laser is consumed after three shots");
+	}
+
+	private static function testMineItemPlacesMineAndConsumesItem():Void {
+		var level = heldItemLevel(2);
+		var player = collectItem(level, 2);
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var state = player.debugState();
+
+		assertEquals(null, state.itemId, "mine item consumes after placing mine");
+		assertEquals("mine", state.lastItemEffect, "mine item emits mine effect");
+		assertEquals(true, Lambda.exists(level.blocks, function(block) return block.type == BlockType.Mine), "mine item places a mine block");
+	}
+
+	private static function testLightningEmitsZapAndConsumesItem():Void {
+		var player = collectItem(heldItemLevel(3), 3);
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var state = player.debugState();
+
+		assertEquals(null, state.itemId, "lightning consumes on use");
+		assertEquals("zap", state.lastItemEffect, "lightning emits zap effect");
+	}
+
+	private static function testSwordLungesAndConsumesThreeSwings():Void {
+		var player = collectItem(heldItemLevel(8), 8);
+		var beforeUse = player.debugState();
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var firstSwing = player.debugState();
+		assertEquals(8, firstSwing.itemId, "sword remains held after first swing");
+		assertEquals(2, firstSwing.itemUses, "sword consumes one of three swings");
+		assertEquals("slash:right", firstSwing.lastItemEffect, "sword emits a right-facing slash");
+		assertBelow(beforeUse.vx, firstSwing.vx, "sword lunges in the facing direction");
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(null, player.debugState().itemId, "sword is consumed after three swings");
+	}
+
+	private static function testIceWaveEmitsThreeWaves():Void {
+		var player = collectItem(heldItemLevel(9), 9);
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var firstWave = player.debugState();
+		assertEquals(9, firstWave.itemId, "ice wave remains held after first wave");
+		assertEquals(2, firstWave.itemUses, "ice wave consumes one of three waves");
+		assertEquals("ice_wave:right", firstWave.lastItemEffect, "ice wave emits a right-facing wave");
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(null, player.debugState().itemId, "ice wave is consumed after three waves");
 	}
 
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
@@ -818,10 +891,33 @@ class LocalPlayerControllerTest {
 			new TilePosition(2, 8),
 			new TilePosition(5, 10),
 			[
-				new LevelBlock(2, 6, BlockType.Item, "8"),
+				new LevelBlock(2, 6, BlockType.Item, "6"),
 				new LevelBlock(2, 9, BlockType.Solid),
 				new LevelBlock(3, 9, BlockType.Solid),
 				new LevelBlock(5, 10, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function heldItemLevel(itemId:Int):FixtureLevel {
+		return new FixtureLevel(
+			'held-item-$itemId',
+			'Held Item $itemId',
+			8,
+			8,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(7, 6),
+			[
+				new LevelBlock(2, 3, BlockType.Item, Std.string(itemId)),
+				new LevelBlock(2, 6, BlockType.Solid),
+				new LevelBlock(3, 6, BlockType.Solid),
+				new LevelBlock(4, 6, BlockType.Solid),
+				new LevelBlock(5, 6, BlockType.Solid),
+				new LevelBlock(6, 6, BlockType.Solid),
+				new LevelBlock(7, 6, BlockType.Finish)
 			]
 		);
 	}
