@@ -6,6 +6,10 @@ import pr2.lobby.players.PlayerListSort;
 import pr2.lobby.players.PlayerListSort.SortableRow;
 import pr2.lobby.search.SearchQuery;
 import pr2.lobby.search.SearchQuery.SearchDecision;
+import pr2.lobby.level.LevelAccess;
+import pr2.lobby.level.LevelAccess.LevelAccessState;
+import pr2.lobby.level.LevelGridLayout;
+import pr2.net.CampaignLevelInfo;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.ui.CustomScrollBar;
@@ -34,6 +38,9 @@ class LobbyServicesTest {
 		testPaneTabLabels();
 		testLevelListParsing();
 		testSearchQuery();
+		testLevelAccess();
+		testLevelGridLayout();
+		testLevelInfoParsing();
 		testSessionGuestMember();
 		testSocketRecording();
 		testCommandDispatch();
@@ -187,6 +194,73 @@ class LobbyServicesTest {
 		assertEquals("rating", vars.get("order"), "post order");
 		assertEquals("desc", vars.get("dir"), "post dir");
 		assertEquals("2", vars.get("page"), "post page");
+	}
+
+	private static function testLevelAccess():Void {
+		var noHats:Array<Int> = [];
+		// Open level, sufficient rank: playable.
+		assertEquals("Open", accessName(LevelAccess.evaluate(false, false, 1, false, 5, 3, -1, noHats)), "open level");
+		// Password level not yet entered: pass cover (members below mod).
+		assertEquals("PassNeeded", accessName(LevelAccess.evaluate(true, false, 1, false, 9, 0, -1, noHats)), "pass needed");
+		// Owner bypasses the password.
+		assertEquals("Open", accessName(LevelAccess.evaluate(true, false, 1, true, 9, 0, -1, noHats)), "owner bypasses pass");
+		// Moderators (group>=2) bypass the password.
+		assertEquals("Open", accessName(LevelAccess.evaluate(true, false, 2, false, 9, 0, -1, noHats)), "mod bypasses pass");
+		// Rank too low: rank cover with the min rank.
+		assertEquals("RankNeeded", accessName(LevelAccess.evaluate(false, false, 1, false, 2, 10, -1, noHats)), "rank gate");
+		assertEquals("Rank 10 Needed", LevelAccess.coverText(LevelAccess.evaluate(false, false, 1, false, 2, 10, -1, noHats)), "rank cover text");
+		// Disallowed hat applies even to the owner.
+		assertEquals("HatNotAllowed", accessName(LevelAccess.evaluate(false, false, 1, true, 5, 0, 7, [7, 9])), "hat gate");
+		assertEquals("HatNotAllowed", accessName(LevelAccess.evaluate(false, false, 2, false, 5, 0, 7, [7])), "mod still hat-gated");
+	}
+
+	private static function accessName(state:LevelAccessState):String {
+		return switch (state) {
+			case Open: "Open";
+			case PassNeeded: "PassNeeded";
+			case RankNeeded(_): "RankNeeded";
+			case HatNotAllowed: "HatNotAllowed";
+		}
+	}
+
+	private static function testLevelGridLayout():Void {
+		// Seven levels from y=0 fill three columns then start a second/third row.
+		var positions = LevelGridLayout.positions(7, 0);
+		assertEquals(7, positions.length, "all seven placed at y=0 start");
+		assertEquals(2.0, positions[0].x, "col0 x");
+		assertEquals(111.0, positions[1].x, "col1 x");
+		assertEquals(220.0, positions[2].x, "col2 x");
+		assertEquals(0.0, positions[2].y, "row0 y");
+		assertEquals(112.0, positions[3].y, "row1 y");
+		assertEquals(224.0, positions[6].y, "row2 y at the limit");
+		// A non-zero start height pushes rows past 224 and the phantom row is cut.
+		var shifted = LevelGridLayout.positions(9, 20);
+		assertEquals(6, shifted.length, "rows past 224 are dropped");
+	}
+
+	private static function testLevelInfoParsing():Void {
+		var data = {
+			level_id: "42",
+			version: "3",
+			title: "Castle",
+			user_name: "Jo",
+			user_group: "1,1",
+			min_level: "5",
+			rating: "4.5",
+			play_count: "1200",
+			note: "fun",
+			pass: "1",
+			type: "d",
+			bad_hats: "0,1,7,9",
+			time: "1600000000"
+		};
+		var info = CampaignLevelInfo.fromDynamic(data);
+		assertEquals(42, info.levelId, "level id");
+		assertEquals(true, info.pass, "pass flag");
+		assertEquals("d", info.type, "type code");
+		assertEquals(2, info.badHats.length, "bad hats keep ids > 1");
+		assertEquals(7, info.badHats[0], "first bad hat");
+		assertEquals(9, info.badHats[1], "second bad hat");
 	}
 
 	private static function testSessionGuestMember():Void {

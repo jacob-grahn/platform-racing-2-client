@@ -110,4 +110,19 @@ final class ServerConfig {
 	public static function guildsTopUrl():String {
 		return host + "/guilds_top.php";
 	}
+
+	/** Favorites add/remove POST, matching `LevelItem.handleFavorite`. */
+	public static function favoriteModifyUrl():String {
+		return host + "/favorite_levels_modify.php";
+	}
+
+	/** Level password check POST, matching `LevelItem.clickPassEnter`. */
+	public static function levelPassCheckUrl():String {
+		return host + "/level_pass_check.php";
+	}
+
+	/** Search POST endpoint, matching `level_browser.Search.requestCourses`. */
+	public static function searchLevelsUrl():String {
+		return host + "/search_levels.php";
+	}
 }

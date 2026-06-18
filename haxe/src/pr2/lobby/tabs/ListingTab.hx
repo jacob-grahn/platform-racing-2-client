@@ -1,70 +1,179 @@
 package pr2.lobby.tabs;
 
+import openfl.display.Sprite;
 import pr2.lobby.LobbySession;
 import pr2.lobby.Memory;
+import pr2.lobby.level.LevelGridLayout;
+import pr2.lobby.level.LevelItem;
+import pr2.lobby.level.LevelListingState;
+import pr2.net.CampaignLevelInfo;
+import pr2.net.CommandHandler;
 import pr2.net.LevelListClient;
+import pr2.net.LevelListClient.LevelListResult;
 import pr2.net.LobbySocket;
+import pr2.page.Page;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.PageNavigation;
+import pr2.ui.PageNavigation.Paginated;
 
 /**
-	Port-in-progress of the Flash `level_browser` listing pages (`Best`,
-	`BestWeek`, `Newest`, `Favorites`, `Campaign`).
+	Port of Flash `level_browser.LevelListing` (and the `Campaign`/`Best`/
+	`BestWeek`/`Newest`/`Favorites` subclasses that differ only by `mode`).
 
-	Each shares the same shell — a `LoadingGraphic`, a vertical `PageNavigation`,
-	and a three-column grid of `LevelItem`s loaded from the list endpoint — and
-	differs only by `mode`. This tab now performs the real list fetch (correct
-	page, hash validation, and per-mode `set_right_room` on success) and reports
-	the loaded level count; the interactive `LevelItem` grid and page-navigation
-	art are still being ported.
+	Loads the course list for the current page, validates the list hash, and lays
+	the levels out in a three-column `LevelItem` grid alongside a vertical
+	`PageNavigation`. Page numbers are remembered per mode; the campaign tab seeds
+	its page from the Flash formula `((server_id + day) % 6) + 1`. `set_right_room`
+	is written once the page renders, and the server-driven `addPageHighlight` /
+	`removePageHighlight` / `testLevelAccess` commands are honored.
 **/
-class ListingTab extends ScaffoldTab {
+class ListingTab extends Page implements Paginated {
 	/** Flash campaign page formula: `((server_id + day) % 6) + 1`. */
 	public static function campaignPage(serverId:Int, weekday:Int):Int {
 		return LevelListClient.campaignPage(serverId, weekday);
 	}
 
 	private var mode:String;
-	private var page:Int = 1;
+	private var pageNum:Int = 1;
+	private var holder:Sprite;
+	private var loading:Null<PR2MovieClip>;
+	private var pageNavigation:PageNavigation;
+	private var levelItems:Array<LevelItem> = [];
 
 	public function new(mode:String) {
+		super();
 		this.mode = mode;
-		// LevelListing/PaginatedPage write `set_right_room`none` on entry; the
-		// per-mode room is set only once courses have loaded.
-		super("LoadingGraphic", "set_right_room`none", null,
-			'Levels ($mode) — level grid and page navigation are being ported.');
+		this.pageNum = resolveInitialPage();
 	}
 
-	override private function onArtReady(art:PR2MovieClip):Void {
-		// Center the loading spinner the way LevelListing positioned it.
-		art.x = 164;
-		art.y = 150;
-		page = resolvePage();
-		LevelListClient.fetch(mode, page, onLoaded, onError);
+	override public function initialize():Void {
+		holder = new Sprite();
+		addChild(holder);
+
+		loading = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4});
+		loading.x = 164;
+		loading.y = 150;
+		addChild(loading);
+
+		pageNavigation = new PageNavigation(this, "vertical", pageNum, 9, 283);
+		pageNavigation.x = 328;
+		pageNavigation.y = 26;
+		addChild(pageNavigation);
+
+		LobbySocket.write("set_right_room`none");
+
+		var cm = CommandHandler.commandHandler;
+		cm.defineCommand("addPageHighlight", onAddPageHighlight);
+		cm.defineCommand("removePageHighlight", onRemovePageHighlight);
+		cm.defineCommand("testLevelAccess", onTestLevelAccess);
+
+		requestCourses();
 	}
 
-	private function resolvePage():Int {
+	private function resolveInitialPage():Int {
 		if (mode == "campaign") {
 			var serverId = LobbySession.server != null ? LobbySession.server.serverId : 0;
-			return LevelListClient.campaignPage(serverId, currentWeekday());
+			return campaignPage(serverId, currentWeekday());
 		}
-		// LevelListing restores the remembered page per mode (`coursePageNum<mode>`).
 		var remembered = Memory.getInt("coursePageNum" + mode, 0);
 		return remembered != 0 ? remembered : 1;
 	}
 
-	private function onLoaded(result:pr2.net.LevelListResult):Void {
-		Memory.set("coursePageNum" + mode, page);
-		// LevelListing.showCourses writes `set_right_room`search` for favorites.
-		LobbySocket.write("set_right_room`" + (mode == "favorites" ? "search" : mode));
-		var validity = result.hashValid ? "verified" : "unverified hash";
-		setNote('Levels ($mode), page $page: ${result.levels.length} loaded ($validity). Grid rendering is being ported.');
+	private function requestCourses():Void {
+		LevelListingState.currentPageNum = pageNum;
+		if (loading != null) {
+			loading.visible = true;
+		}
+		LevelListClient.fetch(mode, pageNum, onLoaded, onError);
 	}
 
-	private function onError(message:String):Void {
-		setNote('Levels ($mode): could not load list ($message).');
+	private function onLoaded(result:LevelListResult):Void {
+		if (loading != null) {
+			loading.visible = false;
+		}
+		// Flash only renders a list whose hash matches; a mismatch shows nothing.
+		if (result.hashValid) {
+			showCourses(result.levels);
+		}
+	}
+
+	private function onError(_:String):Void {
+		if (loading != null) {
+			loading.visible = false;
+		}
+	}
+
+	private function showCourses(levels:Array<CampaignLevelInfo>):Void {
+		var spriteHeight = holder.height;
+		if (spriteHeight != 0) {
+			spriteHeight += 20;
+		}
+		var positions = LevelGridLayout.positions(levels.length, spriteHeight);
+		for (pos in positions) {
+			var item = new LevelItem(levels[pos.index]);
+			item.x = pos.x;
+			item.y = pos.y;
+			levelItems.push(item);
+			holder.addChild(item);
+		}
+		LobbySocket.write("set_right_room`" + (mode == "favorites" ? "search" : mode));
+	}
+
+	private function removeLevels():Void {
+		for (item in levelItems) {
+			item.remove();
+		}
+		levelItems = [];
+	}
+
+	// Paginated
+	public function setPageNum(n:Int):Void {
+		pageNum = n;
+		Memory.set("coursePageNum" + mode, n);
+		LevelListingState.currentPageNum = n;
+		removeLevels();
+		requestCourses();
+	}
+
+	private function onAddPageHighlight(args:Array<String>):Void {
+		if (mode == "search" || mode == "favorites") {
+			return;
+		}
+		var i = Std.parseInt(args[0]);
+		if (i != null) {
+			pageNavigation.addPageHighlight(i);
+		}
+	}
+
+	private function onRemovePageHighlight(args:Array<String>):Void {
+		if (mode == "search" || mode == "favorites") {
+			return;
+		}
+		var i = Std.parseInt(args[0]);
+		if (i != null) {
+			pageNavigation.removePageHighlight(i);
+		}
+	}
+
+	private function onTestLevelAccess(_:Array<String>):Void {
+		for (item in levelItems) {
+			item.testAccess();
+		}
 	}
 
 	private static function currentWeekday():Int {
 		return Std.int(Date.now().getDay());
+	}
+
+	override public function remove():Void {
+		var cm = CommandHandler.commandHandler;
+		cm.defineCommand("addPageHighlight", null);
+		cm.defineCommand("removePageHighlight", null);
+		cm.defineCommand("testLevelAccess", null);
+		if (pageNavigation != null) {
+			pageNavigation.remove();
+		}
+		removeLevels();
+		super.remove();
 	}
 }

@@ -54,6 +54,28 @@ class LobbyArt {
 		return fields;
 	}
 
+	/**
+		Immediate `TextField` children of `container`, top-to-bottom by y. Used to
+		recover stacked text fields (e.g. `LevelItemGraphic`'s title above author)
+		whose instances were exported without names, without pulling in text from
+		nested sub-clips the way `textFields` would.
+	**/
+	public static function directTextFields(container:Null<DisplayObjectContainer>):Array<TextField> {
+		var fields:Array<TextField> = [];
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				var field = Std.downcast(container.getChildAt(i), TextField);
+				if (field != null) {
+					fields.push(field);
+				}
+			}
+		}
+		fields.sort(function(a, b) {
+			return a.y < b.y ? -1 : (a.y > b.y ? 1 : 0);
+		});
+		return fields;
+	}
+
 	private static function collectTextFields(container:Null<DisplayObjectContainer>, into:Array<TextField>):Void {
 		if (container == null) {
 			return;
