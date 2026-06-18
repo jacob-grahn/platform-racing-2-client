@@ -54,7 +54,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     the vector export plan.
   - Verify `LobbyGraphic` and `LobbyBottomButtonsGraphic` visually against Flash
     before building UI on approximate shapes.
-- [ ] Replace `LobbyStubPage` with the real lobby shell.
+- [x] Replace `LobbyStubPage` with the real lobby shell.
   - Port `Lobby`, `LobbyLeft`, `LobbyRight`, and `LobbySide` layout: background,
     left pane at `(3, 3)` sized `194 x 394`, right pane at `(200, 3)` sized
     `347 x 356`, bottom button strip, and stage/music/quality side effects that
@@ -64,14 +64,14 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
   - Implement bottom actions to parity: logout, level editor entry placeholder
     or real handoff, Kongregate/more-games link behavior, options, vault/store,
     credits, and hover popup behavior.
-- [ ] Port `LobbyTab` and `TabsHolder`.
+- [x] Port `LobbyTab` and `TabsHolder`.
   - Match Flash tab sizing from text width, `up`/`over`/`selected` states,
     hover-to-front behavior, compressed tab positioning when width exceeds the
     pane, and selected tab memory by holder id (`lobbyLeft`, `lobbyRight`,
     `playerLists`).
   - Add deterministic tests for initial selected tabs, click/hover ordering,
     remembered tab restoration, and guest/member tab differences.
-- [ ] Complete left pane tab: Chat.
+- [x] Complete left pane tab: Chat.
   - Port room selection, send/join buttons, enter-key handling, lock-to-bottom
     scrolling, info hover popup, `set_chat_room` socket commands, link handling,
     and pause/update toggle behavior.
@@ -196,21 +196,6 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
 Acceptance: needed assets ship from committed files; the browser build loads
 them without Animate; regeneration is documented and reproducible.
 
-## AS3 -> Haxe Porting Track
-
-Port only what milestones need; avoid mechanical ports that don't compile into a
-useful screen. Keep Flash/OpenFL differences behind wrappers so behavior stays
-faithful to the original AS3.
-
-- [ ] Minimal compatibility shims needed by upcoming screens: timing,
-  keyboard/mouse input, event-dispatch differences, asset lookup.
-- [ ] Display wrappers as upcoming lobby/editor screens need them: character,
-  block, tabbed panes, page navigation, scrollbars, buttons, popups.
-- [ ] Defer editor and non-lobby UI shell work until the lobby workflows are
-  usable.
-
-Acceptance: ported classes compile, are exercised by harness/tests/pipeline, and
-keep Flash/OpenFL differences isolated.
 
 ## Level Loading And Rendering
 

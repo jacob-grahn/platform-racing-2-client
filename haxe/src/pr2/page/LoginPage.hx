@@ -425,8 +425,13 @@ class LoginPage extends Page {
 		closeSocketProbe();
 		closePopup();
 		setStatus('Logged in as $userName.');
+		// Guests connect with no account group; real members would carry their
+		// group/id from the login response. Until that is parsed, treat named
+		// logins as members so the member lobby (PMs/Account/Favorites) is shown.
+		var group = userName == "Guest" ? 0 : 1;
+		pr2.lobby.LobbySession.begin(userName, group, server);
 		if (pageHolder != null) {
-			pageHolder.changePage(new LobbyStubPage(userName, server));
+			pageHolder.changePage(new LobbyPage(userName, server));
 		}
 	}
 

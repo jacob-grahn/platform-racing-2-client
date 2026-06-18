@@ -80,6 +80,7 @@ class Main extends Sprite {
 				campaignLevelQuery(query)
 			);
 			case Login: new PageHolder(new LoginPage());
+			case Lobby: buildLobby(query);
 			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")));
 			case Symbol: new SymbolPreview(
 				QueryParams.get(query, "symbol"),
@@ -87,6 +88,19 @@ class Main extends Sprite {
 				parseColor(QueryParams.get(query, "bg"))
 			);
 		};
+	}
+
+	// Boots straight into the lobby for development/automated coverage. `?guest=1`
+	// shows the guest lobby; otherwise a member session is seeded so the
+	// member-only tabs (PMs/Account/Favorites) appear. `?user=` sets the name.
+	private function buildLobby(query:Null<String>):DisplayObject {
+		var guest = QueryParams.get(query, "guest") == "1";
+		var userName = QueryParams.get(query, "user");
+		if (userName == null) {
+			userName = guest ? "Guest" : "Tester";
+		}
+		pr2.lobby.LobbySession.begin(userName, guest ? 0 : 1);
+		return new PageHolder(new pr2.page.LobbyPage(userName));
 	}
 
 	private function parseScale(value:Null<String>):Float {

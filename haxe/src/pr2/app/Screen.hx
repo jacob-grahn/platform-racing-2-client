@@ -10,6 +10,7 @@ import StringTools;
 enum abstract Screen(String) from String to String {
 	var Intro = "intro";
 	var Login = "login";
+	var Lobby = "lobby";
 	var Harness = "harness";
 	var Campaign = "campaign";
 	var Symbol = "symbol";
@@ -21,6 +22,7 @@ enum abstract Screen(String) from String to String {
 			case "harness": Harness;
 			case "campaign": Campaign;
 			case "login": Login;
+			case "lobby": Lobby;
 			case "symbol": Symbol;
 			default: Intro;
 		}
