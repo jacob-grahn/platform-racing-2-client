@@ -8,6 +8,7 @@ import pr2.lobby.dialogs.MessagesItem;
 import pr2.lobby.dialogs.SendMessagePopup;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.messages.MessagesPaging;
+import pr2.lobby.messages.UnreadNotif;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.page.Page;
@@ -69,6 +70,7 @@ class MessagesTab extends Page implements Paginated {
 		loading.y = 150;
 
 		getMessages();
+		UnreadNotif.updateLastRead();
 	}
 
 	private function clickSend():Void {

@@ -10,6 +10,7 @@ import pr2.lobby.level.LevelAccess;
 import pr2.lobby.level.LevelAccess.LevelAccessState;
 import pr2.lobby.level.LevelGridLayout;
 import pr2.lobby.messages.MessagesPaging;
+import pr2.lobby.messages.UnreadNotif;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
@@ -60,6 +61,19 @@ class LobbyServicesTest {
 		assertEquals(20, MessagesPaging.startIndex(3, 10), "explicit items-per-page");
 		ServerConfig.resetHost();
 		assertEquals("https://pr2hub.com/messages_get.php?start=10&count=10", ServerConfig.messagesGetUrl(10, 10), "messages_get url");
+
+		// Unread PM badge: only timestamps newer than last-read count; opening clears.
+		UnreadNotif.reset();
+		UnreadNotif.setLastRead(100);
+		UnreadNotif.notifyUser(50);
+		assertEquals(0, UnreadNotif.numUnread(), "older-than-last-read does not count");
+		UnreadNotif.notifyUser(200);
+		assertEquals(1, UnreadNotif.numUnread(), "newer message counts as unread");
+		UnreadNotif.updateLastRead();
+		assertEquals(0, UnreadNotif.numUnread(), "opening PMs clears unread");
+		UnreadNotif.notifyUser(150);
+		assertEquals(0, UnreadNotif.numUnread(), "message older than new last-read ignored");
+		UnreadNotif.reset();
 	}
 
 	private static function testTabLayoutNoCompression():Void {

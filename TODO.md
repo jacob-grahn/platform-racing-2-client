@@ -77,7 +77,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     and pause/update toggle behavior.
   - Render incoming chat records through the original HTML/name formatting and
     preserve scroll behavior while new messages arrive.
-- [ ] Complete left pane tab: PMs.
+- [x] Complete left pane tab: PMs.
   - Port message list loading (`messages_get.php`), paging, scrollbar,
     send-message popup, delete/report/delete-all flows, unread notification
     badge behavior, and error/loading states.

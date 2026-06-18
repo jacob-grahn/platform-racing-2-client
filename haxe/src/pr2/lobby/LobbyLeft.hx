@@ -1,9 +1,11 @@
 package pr2.lobby;
 
+import pr2.lobby.messages.UnreadNotif;
 import pr2.lobby.tabs.AccountTab;
 import pr2.lobby.tabs.ChatTab;
 import pr2.lobby.tabs.MessagesTab;
 import pr2.lobby.tabs.PlayersTab;
+import pr2.net.CommandHandler;
 import pr2.ui.LobbyTab;
 
 /**
@@ -32,6 +34,8 @@ class LobbyLeft extends LobbySide {
 		if (LobbySession.isMember()) {
 			tabArray = [chatTab, pmsTab, playersTab, accountTab];
 			lastArrKey = 3;
+			UnreadNotif.addNotifContainer(pmsTab);
+			CommandHandler.commandHandler.defineCommand("pmNotify", onPmNotify);
 		} else {
 			tabArray = [chatTab, playersTab, accountTab];
 			lastArrKey = 2;
@@ -39,6 +43,13 @@ class LobbyLeft extends LobbySide {
 		x = 3;
 		y = 3;
 		configure(tabArray, "lobbyLeft", lastArrKey, 194, 394);
+	}
+
+	private function onPmNotify(args:Array<String>):Void {
+		var time = Std.parseFloat(args[0]);
+		if (!Math.isNaN(time)) {
+			UnreadNotif.notifyUser(time);
+		}
 	}
 
 	private function changeTabChat():Void {
