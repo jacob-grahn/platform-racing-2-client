@@ -26,7 +26,9 @@ class LocalPlayerController {
 	private static inline var ROTATE_FRAMES:Int = 30;
 	private static inline var ITEM_TELEPORT:Int = 4;
 	private static inline var ITEM_SUPER_JUMP:Int = 5;
+	private static inline var ITEM_SPEED_BURST:Int = 7;
 	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
+	private static inline var SPEED_BURST_FRAMES:Int = 135;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -77,6 +79,7 @@ class LocalPlayerController {
 	private var rotateFramesRemaining:Int = 0;
 	private var rotateDirection:Int = 0;
 	private var facingDirection:Int = 1;
+	private var speedBurstFramesRemaining:Int = 0;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -625,6 +628,8 @@ class LocalPlayerController {
 				useTeleportItem();
 			case ITEM_SUPER_JUMP:
 				useSuperJump();
+			case ITEM_SPEED_BURST:
+				useSpeedBurst();
 			default:
 		}
 	}
@@ -644,6 +649,15 @@ class LocalPlayerController {
 		}
 		vy -= 25;
 		itemId = null;
+	}
+
+	private function useSpeedBurst():Void {
+		if (speedBurstFramesRemaining > 0) {
+			return;
+		}
+		accel *= 2;
+		maxVelX *= 2;
+		speedBurstFramesRemaining = SPEED_BURST_FRAMES;
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
@@ -686,6 +700,14 @@ class LocalPlayerController {
 		speedStat = clamp(speed, 0, 100);
 		accelerationStat = clamp(acceleration, 0, 100);
 		jumpStat = clamp(jump, 0, 100);
+		if (speedBurstFramesRemaining > 0) {
+			jumpVelocity = 2 + jumpStat / 40;
+			return;
+		}
+		applyMovementStats();
+	}
+
+	private function applyMovementStats():Void {
 		maxVelX = 2 + speedStat / 10;
 		accel = 0.2 + accelerationStat / 60;
 		jumpVelocity = 2 + jumpStat / 40;
@@ -752,9 +774,21 @@ class LocalPlayerController {
 	}
 
 	private function updateTimedBlocks():Void {
+		updateSpeedBurst();
 		updateVanishBlocks();
 		updateTeleportBlocks();
 		updateMoveBlocks();
+	}
+
+	private function updateSpeedBurst():Void {
+		if (speedBurstFramesRemaining <= 0) {
+			return;
+		}
+		speedBurstFramesRemaining--;
+		if (speedBurstFramesRemaining <= 0) {
+			itemId = null;
+			applyMovementStats();
+		}
 	}
 
 	private function updateMoveBlocks():Void {

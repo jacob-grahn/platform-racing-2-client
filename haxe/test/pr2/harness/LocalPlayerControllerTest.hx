@@ -30,6 +30,7 @@ class LocalPlayerControllerTest {
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
 		testTeleportItemMovesPlayerForwardAndConsumesItem();
 		testTeleportItemBlockedBySolidDestination();
+		testSpeedBurstBoostsMovementThenExpires();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
@@ -386,6 +387,28 @@ class LocalPlayerControllerTest {
 		assertClose(0, afterUse.x - beforeUse.x - afterUse.vx, "blocked teleport does not apply item movement");
 	}
 
+	private static function testSpeedBurstBoostsMovementThenExpires():Void {
+		var boosted = collectItem(speedBurstItemLevel(), 7);
+		var normal = new LocalPlayerController(speedBurstComparisonLevel());
+
+		boosted.step(new LocalPlayerInput(false, false, false, false, true));
+		var active = boosted.debugState();
+		assertEquals(7, active.itemId, "speed burst stays held while active");
+
+		for (_ in 0...24) {
+			boosted.step(new LocalPlayerInput(false, true));
+			normal.step(new LocalPlayerInput(false, true));
+		}
+
+		assertBelow(normal.debugState().vx * 1.4, boosted.debugState().vx, "speed burst doubles movement acceleration");
+
+		for (_ in 0...110) {
+			boosted.step(new LocalPlayerInput(false, true));
+		}
+
+		assertEquals(null, boosted.debugState().itemId, "speed burst expires after five seconds");
+	}
+
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
 		var player = new LocalPlayerController(customStatsBlockLevel("100-0-80"));
 
@@ -544,6 +567,17 @@ class LocalPlayerControllerTest {
 		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
 
+	private static function collectItem(level:FixtureLevel, itemId:Int):LocalPlayerController {
+		var player = new LocalPlayerController(level);
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().itemId == itemId) {
+				return player;
+			}
+		}
+		throw 'item $itemId was not collected';
+	}
+
 	// Start tile is in open air above a deep water column on a solid floor, so a
 	// dropped player falls in, swims, and can paddle back out the top.
 	private static function waterPoolLevel():FixtureLevel {
@@ -687,6 +721,57 @@ class LocalPlayerControllerTest {
 			new TilePosition(2, 5),
 			new TilePosition(8, 6),
 			blocks
+		);
+	}
+
+	private static function speedBurstItemLevel():FixtureLevel {
+		return new FixtureLevel(
+			"speed-burst-item",
+			"Speed Burst Item",
+			12,
+			8,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(10, 6),
+			[
+				new LevelBlock(2, 3, BlockType.Item, "7"),
+				new LevelBlock(2, 6, BlockType.Solid),
+				new LevelBlock(3, 6, BlockType.Solid),
+				new LevelBlock(4, 6, BlockType.Solid),
+				new LevelBlock(5, 6, BlockType.Solid),
+				new LevelBlock(6, 6, BlockType.Solid),
+				new LevelBlock(7, 6, BlockType.Solid),
+				new LevelBlock(8, 6, BlockType.Solid),
+				new LevelBlock(9, 6, BlockType.Solid),
+				new LevelBlock(10, 6, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function speedBurstComparisonLevel():FixtureLevel {
+		return new FixtureLevel(
+			"speed-burst-comparison",
+			"Speed Burst Comparison",
+			12,
+			8,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(10, 6),
+			[
+				new LevelBlock(2, 6, BlockType.Solid),
+				new LevelBlock(3, 6, BlockType.Solid),
+				new LevelBlock(4, 6, BlockType.Solid),
+				new LevelBlock(5, 6, BlockType.Solid),
+				new LevelBlock(6, 6, BlockType.Solid),
+				new LevelBlock(7, 6, BlockType.Solid),
+				new LevelBlock(8, 6, BlockType.Solid),
+				new LevelBlock(9, 6, BlockType.Solid),
+				new LevelBlock(10, 6, BlockType.Finish)
+			]
 		);
 	}
 
