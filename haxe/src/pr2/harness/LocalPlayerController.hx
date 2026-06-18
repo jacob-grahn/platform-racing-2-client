@@ -24,7 +24,9 @@ class LocalPlayerController {
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
 	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
 	private static inline var ROTATE_FRAMES:Int = 30;
+	private static inline var ITEM_TELEPORT:Int = 4;
 	private static inline var ITEM_SUPER_JUMP:Int = 5;
+	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -74,6 +76,7 @@ class LocalPlayerController {
 	private var standingTileY:Int;
 	private var rotateFramesRemaining:Int = 0;
 	private var rotateDirection:Int = 0;
+	private var facingDirection:Int = 1;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -107,9 +110,11 @@ class LocalPlayerController {
 
 	private function landStep(input:LocalPlayerInput):Void {
 		if (input.right) {
+			facingDirection = 1;
 			targetVelX += accel;
 		}
 		if (input.left) {
+			facingDirection = -1;
 			targetVelX -= accel;
 		}
 		if (!input.right && !input.left) {
@@ -616,10 +621,21 @@ class LocalPlayerController {
 		}
 
 		switch (itemId) {
+			case ITEM_TELEPORT:
+				useTeleportItem();
 			case ITEM_SUPER_JUMP:
 				useSuperJump();
 			default:
 		}
+	}
+
+	private function useTeleportItem():Void {
+		var destX = x + TELEPORT_ITEM_DISTANCE * facingDirection;
+		if (getBlockAtPixel(destX, y - 5) != null) {
+			return;
+		}
+		x = destX;
+		itemId = null;
 	}
 
 	private function useSuperJump():Void {

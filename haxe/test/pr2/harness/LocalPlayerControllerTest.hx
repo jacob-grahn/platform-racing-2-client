@@ -28,6 +28,8 @@ class LocalPlayerControllerTest {
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testBumpingItemBlockGrantsConfiguredItem();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
+		testTeleportItemMovesPlayerForwardAndConsumesItem();
+		testTeleportItemBlockedBySolidDestination();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
@@ -332,6 +334,58 @@ class LocalPlayerControllerTest {
 		assertBelow(afterUse.y, beforeUse.y, "super jump moves the player upward on use");
 	}
 
+	private static function testTeleportItemMovesPlayerForwardAndConsumesItem():Void {
+		var player = new LocalPlayerController(teleportItemLevel(false));
+		var grantedItem = false;
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().itemId == 4) {
+				grantedItem = true;
+				break;
+			}
+		}
+
+		assertEquals(true, grantedItem, "jumping player bumps teleport item block");
+		for (_ in 0...70) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.debugState().x > 105) {
+				break;
+			}
+		}
+		var beforeUse = player.debugState();
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var afterUse = player.debugState();
+
+		assertEquals(null, afterUse.itemId, "teleport item consumes after a clear teleport");
+		assertClose(120, afterUse.x - beforeUse.x - afterUse.vx, "teleport item moves 120 px in facing direction");
+	}
+
+	private static function testTeleportItemBlockedBySolidDestination():Void {
+		var player = new LocalPlayerController(teleportItemLevel(true));
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().itemId == 4) {
+				break;
+			}
+		}
+		for (_ in 0...70) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.debugState().x > 105) {
+				break;
+			}
+		}
+		var beforeUse = player.debugState();
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var afterUse = player.debugState();
+
+		assertEquals(4, afterUse.itemId, "blocked teleport keeps held item");
+		assertClose(0, afterUse.x - beforeUse.x - afterUse.vx, "blocked teleport does not apply item movement");
+	}
+
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
 		var player = new LocalPlayerController(customStatsBlockLevel("100-0-80"));
 
@@ -606,6 +660,33 @@ class LocalPlayerControllerTest {
 				new LevelBlock(3, 6, BlockType.Solid),
 				new LevelBlock(4, 6, BlockType.Finish)
 			]
+		);
+	}
+
+	private static function teleportItemLevel(blocked:Bool):FixtureLevel {
+		var blocks:Array<LevelBlock> = [
+			new LevelBlock(2, 3, BlockType.Item, "4"),
+			new LevelBlock(2, 6, BlockType.Solid),
+			new LevelBlock(3, 6, BlockType.Solid),
+			new LevelBlock(4, 6, BlockType.Solid),
+			new LevelBlock(5, 6, BlockType.Solid),
+			new LevelBlock(6, 6, BlockType.Solid),
+			new LevelBlock(8, 6, BlockType.Finish)
+		];
+		if (blocked) {
+			blocks.push(new LevelBlock(7, 5, BlockType.Solid));
+		}
+		return new FixtureLevel(
+			"teleport-item",
+			"Teleport Item",
+			10,
+			8,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 5),
+			new TilePosition(8, 6),
+			blocks
 		);
 	}
 
