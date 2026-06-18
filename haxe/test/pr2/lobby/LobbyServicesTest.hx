@@ -4,6 +4,8 @@ import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.players.PlayerListSort;
 import pr2.lobby.players.PlayerListSort.SortableRow;
+import pr2.lobby.search.SearchQuery;
+import pr2.lobby.search.SearchQuery.SearchDecision;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.ui.CustomScrollBar;
@@ -31,6 +33,7 @@ class LobbyServicesTest {
 		testPlayerSortOrdering();
 		testPaneTabLabels();
 		testLevelListParsing();
+		testSearchQuery();
 		testSessionGuestMember();
 		testSocketRecording();
 		testCommandDispatch();
@@ -166,6 +169,24 @@ class LobbyServicesTest {
 		assertEquals(7, result.levels[0].levelId, "first level id");
 		assertEquals("Beta", result.levels[1].title, "second level title");
 		assertEquals(false, result.hashValid, "arbitrary hash is invalid");
+	}
+
+	private static function testSearchQuery():Void {
+		// Blank query sends nothing.
+		assertEquals(Std.string(SearchDecision.Skip), Std.string(SearchQuery.decide("   ", "user", 1, true)), "blank query skipped");
+		// A normal query on any page sends.
+		assertEquals(Std.string(SearchDecision.Send), Std.string(SearchQuery.decide("mario", "user", 3, false)), "user query sends");
+		// Id search past page 1 snaps to page 1 on first run, then is ignored.
+		assertEquals(Std.string(SearchDecision.ResetToFirstPage), Std.string(SearchQuery.decide("1234", "id", 4, true)), "id page>1 first run resets");
+		assertEquals(Std.string(SearchDecision.Skip), Std.string(SearchQuery.decide("1234", "id", 4, false)), "id page>1 later skipped");
+		assertEquals(Std.string(SearchDecision.Send), Std.string(SearchQuery.decide("1234", "id", 1, false)), "id page 1 sends");
+		// POST params carry the inputs.
+		var vars = SearchQuery.buildPost("mario", "user", "rating", "desc", 2);
+		assertEquals("mario", vars.get("search_str"), "post search_str");
+		assertEquals("user", vars.get("mode"), "post mode");
+		assertEquals("rating", vars.get("order"), "post order");
+		assertEquals("desc", vars.get("dir"), "post dir");
+		assertEquals("2", vars.get("page"), "post page");
 	}
 
 	private static function testSessionGuestMember():Void {
