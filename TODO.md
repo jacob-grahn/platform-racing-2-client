@@ -240,7 +240,8 @@ Each should match original PR2 behavior, verified via debug state / comparison.
 - [x] Item: super jump.
 - [x] Item: teleport.
 - [x] Item: speed burst.
-- [ ] Items: sword, laser gun, mine, jet pack, ice wave, lightning.
+- [x] Item: jet pack.
+- [ ] Items: sword, laser gun, mine, ice wave, lightning.
 - [ ] Movement edge cases: bumping/recovery, frozen state, moving/rotating block
   collisions, corner cases.
 

@@ -31,6 +31,7 @@ class LocalPlayerControllerTest {
 		testTeleportItemMovesPlayerForwardAndConsumesItem();
 		testTeleportItemBlockedBySolidDestination();
 		testSpeedBurstBoostsMovementThenExpires();
+		testJetPackLiftsPlayerThenExpires();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
@@ -409,6 +410,36 @@ class LocalPlayerControllerTest {
 		assertEquals(null, boosted.debugState().itemId, "speed burst expires after five seconds");
 	}
 
+	private static function testJetPackLiftsPlayerThenExpires():Void {
+		var boosted = collectItem(jetPackItemLevel(), 8);
+		var normal = new LocalPlayerController(jetPackComparisonLevel());
+
+		for (_ in 0...70) {
+			boosted.step(new LocalPlayerInput(false, true));
+			normal.step(new LocalPlayerInput(false, true));
+			if (boosted.debugState().x > 105) {
+				break;
+			}
+		}
+
+		boosted.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(8, boosted.debugState().itemId, "jet pack stays held while active");
+
+		for (_ in 0...24) {
+			boosted.step(new LocalPlayerInput(false, false, false, false, true));
+			normal.step(new LocalPlayerInput());
+		}
+
+		assertBelow(boosted.debugState().y, normal.debugState().y - 20, "jet pack thrust lifts the player");
+		assertBelow(boosted.debugState().vy, normal.debugState().vy, "jet pack counters gravity while active");
+
+		for (_ in 0...110) {
+			boosted.step(new LocalPlayerInput(false, false, false, false, true));
+		}
+
+		assertEquals(null, boosted.debugState().itemId, "jet pack expires after five seconds");
+	}
+
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
 		var player = new LocalPlayerController(customStatsBlockLevel("100-0-80"));
 
@@ -771,6 +802,45 @@ class LocalPlayerControllerTest {
 				new LevelBlock(8, 6, BlockType.Solid),
 				new LevelBlock(9, 6, BlockType.Solid),
 				new LevelBlock(10, 6, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function jetPackItemLevel():FixtureLevel {
+		return new FixtureLevel(
+			"jet-pack-item",
+			"Jet Pack Item",
+			6,
+			12,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 8),
+			new TilePosition(5, 10),
+			[
+				new LevelBlock(2, 6, BlockType.Item, "8"),
+				new LevelBlock(2, 9, BlockType.Solid),
+				new LevelBlock(3, 9, BlockType.Solid),
+				new LevelBlock(5, 10, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function jetPackComparisonLevel():FixtureLevel {
+		return new FixtureLevel(
+			"jet-pack-comparison",
+			"Jet Pack Comparison",
+			6,
+			12,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 8),
+			new TilePosition(5, 10),
+			[
+				new LevelBlock(2, 9, BlockType.Solid),
+				new LevelBlock(3, 9, BlockType.Solid),
+				new LevelBlock(5, 10, BlockType.Finish)
 			]
 		);
 	}

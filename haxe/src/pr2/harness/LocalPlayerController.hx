@@ -27,8 +27,11 @@ class LocalPlayerController {
 	private static inline var ITEM_TELEPORT:Int = 4;
 	private static inline var ITEM_SUPER_JUMP:Int = 5;
 	private static inline var ITEM_SPEED_BURST:Int = 7;
+	private static inline var ITEM_JET_PACK:Int = 8;
 	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
 	private static inline var SPEED_BURST_FRAMES:Int = 135;
+	private static inline var JET_PACK_FRAMES:Int = 135;
+	private static inline var JET_PACK_THRUST:Float = 1.5;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -80,6 +83,7 @@ class LocalPlayerController {
 	private var rotateDirection:Int = 0;
 	private var facingDirection:Int = 1;
 	private var speedBurstFramesRemaining:Int = 0;
+	private var jetPackFramesRemaining:Int = 0;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -159,6 +163,7 @@ class LocalPlayerController {
 			crouchCharge = 0;
 		}
 
+		applyJetPackThrust(input);
 		position();
 		processBlocks(input);
 	}
@@ -630,6 +635,8 @@ class LocalPlayerController {
 				useSuperJump();
 			case ITEM_SPEED_BURST:
 				useSpeedBurst();
+			case ITEM_JET_PACK:
+				useJetPack();
 			default:
 		}
 	}
@@ -658,6 +665,21 @@ class LocalPlayerController {
 		accel *= 2;
 		maxVelX *= 2;
 		speedBurstFramesRemaining = SPEED_BURST_FRAMES;
+	}
+
+	private function useJetPack():Void {
+		if (jetPackFramesRemaining > 0) {
+			return;
+		}
+		jetPackFramesRemaining = JET_PACK_FRAMES;
+	}
+
+	private function applyJetPackThrust(input:LocalPlayerInput):Void {
+		if (jetPackFramesRemaining <= 0 || !input.item || itemId != ITEM_JET_PACK || crouching) {
+			return;
+		}
+		vy -= JET_PACK_THRUST;
+		jumpHeld = false;
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
@@ -775,6 +797,7 @@ class LocalPlayerController {
 
 	private function updateTimedBlocks():Void {
 		updateSpeedBurst();
+		updateJetPack();
 		updateVanishBlocks();
 		updateTeleportBlocks();
 		updateMoveBlocks();
@@ -788,6 +811,16 @@ class LocalPlayerController {
 		if (speedBurstFramesRemaining <= 0) {
 			itemId = null;
 			applyMovementStats();
+		}
+	}
+
+	private function updateJetPack():Void {
+		if (jetPackFramesRemaining <= 0) {
+			return;
+		}
+		jetPackFramesRemaining--;
+		if (jetPackFramesRemaining <= 0) {
+			itemId = null;
 		}
 	}
 
