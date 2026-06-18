@@ -42,6 +42,7 @@ class LobbyPopups {
 
 	public static function sendMessage(toUser:String):Void {
 		lastRequest = 'sendMessage:$toUser';
+		new pr2.lobby.dialogs.SendMessagePopup(toUser);
 	}
 
 	public static function openUrl(url:String):Void {

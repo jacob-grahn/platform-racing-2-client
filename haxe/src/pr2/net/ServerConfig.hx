@@ -111,6 +111,31 @@ final class ServerConfig {
 		return host + "/guilds_top.php";
 	}
 
+	/** Private-message list GET, matching `chat.Messages.getMessages`. */
+	public static function messagesGetUrl(start:Int, count:Int):String {
+		return host + "/messages_get.php?start=" + start + "&count=" + count;
+	}
+
+	public static function messageSendUrl():String {
+		return host + "/message_send.php";
+	}
+
+	public static function guildMessageUrl():String {
+		return host + "/guild_message.php";
+	}
+
+	public static function messageReportUrl():String {
+		return host + "/message_report.php";
+	}
+
+	public static function messageDeleteUrl():String {
+		return host + "/message_delete.php";
+	}
+
+	public static function messagesDeleteAllUrl():String {
+		return host + "/messages_delete_all.php";
+	}
+
 	/** Favorites add/remove POST, matching `LevelItem.handleFavorite`. */
 	public static function favoriteModifyUrl():String {
 		return host + "/favorite_levels_modify.php";

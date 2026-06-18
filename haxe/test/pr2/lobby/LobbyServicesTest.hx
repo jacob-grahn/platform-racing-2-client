@@ -9,7 +9,9 @@ import pr2.lobby.search.SearchQuery.SearchDecision;
 import pr2.lobby.level.LevelAccess;
 import pr2.lobby.level.LevelAccess.LevelAccessState;
 import pr2.lobby.level.LevelGridLayout;
+import pr2.lobby.messages.MessagesPaging;
 import pr2.net.CampaignLevelInfo;
+import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.ui.CustomScrollBar;
@@ -45,7 +47,19 @@ class LobbyServicesTest {
 		testSocketRecording();
 		testCommandDispatch();
 		testMemoryAndSecureData();
+		testMessagesPaging();
 		trace('LobbyServicesTest passed $assertions assertions');
+	}
+
+	private static function testMessagesPaging():Void {
+		// Flash chat.Messages: start = (currentPage - 1) * itemsPerPage, count = itemsPerPage.
+		assertEquals(0, MessagesPaging.startIndex(1), "page 1 starts at 0");
+		assertEquals(10, MessagesPaging.startIndex(2), "page 2 starts at 10");
+		assertEquals(40, MessagesPaging.startIndex(5), "page 5 starts at 40");
+		assertEquals(0, MessagesPaging.startIndex(0), "page 0 clamps to first page");
+		assertEquals(20, MessagesPaging.startIndex(3, 10), "explicit items-per-page");
+		ServerConfig.resetHost();
+		assertEquals("https://pr2hub.com/messages_get.php?start=10&count=10", ServerConfig.messagesGetUrl(10, 10), "messages_get url");
 	}
 
 	private static function testTabLayoutNoCompression():Void {
