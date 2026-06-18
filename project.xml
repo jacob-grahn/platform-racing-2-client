@@ -17,6 +17,8 @@
 	<assets path="vector-art/atlases/character" rename="assets/character/atlases" />
 	<assets path="vector-art/atlases/intro" rename="assets/intro/atlases" />
 	<assets path="vector-art/png/login" rename="assets/login" />
+	<assets path="vector-art/png/backgrounds" rename="assets/backgrounds" />
+	<assets path="vector-art/png/stamps" rename="assets/stamps" />
 
 	<haxelib name="openfl" />
 

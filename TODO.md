@@ -228,7 +228,7 @@ Fetch a real campaign level from pr2hub.com, render it, and drop the character
 in. Reachable via `?screen=campaign`.
 
 - [x] Add user/developer selection for campaign page and level id.
-- [ ] Render non-block level content: backgrounds, stamps/draw objects, text
+- [x] Render non-block level content: backgrounds, stamps/draw objects, text
   objects, and minimap if needed.
 
 ## Gameplay Expansion

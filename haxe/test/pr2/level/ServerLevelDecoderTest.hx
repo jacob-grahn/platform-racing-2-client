@@ -7,6 +7,7 @@ class ServerLevelDecoderTest {
 
 	public static function main():Void {
 		testM3RelativeWalk();
+		testM3ArtBackgroundAndLayers();
 		testM2SegMultOne();
 		testM4Options();
 		testM1HexAbsolute();
@@ -25,6 +26,54 @@ class ServerLevelDecoderTest {
 		// code omitted -> keeps previous (0 -> basic1) after stepping y.
 		assertBlock(level.blocks[2], ObjectCodes.BLOCK_BASIC1, 10050, 10080, "m3 new code 0");
 		assertBlock(level.blocks[3], ObjectCodes.BLOCK_BASIC1, 10080, 10080, "m3 carried code");
+	}
+
+	private static function testM3ArtBackgroundAndLayers():Void {
+		var level = ServerLevelDecoder.decode([
+			"m3",
+			"ffffff",
+			"0;0;11",
+			"10;20;1;150;50,5;5;t;hello|world;16711680;200;100",
+			"",
+			"",
+			"c123456,t4,d1;2;3;4",
+			"",
+			"",
+			"207",
+			"2;3;5",
+			"",
+			"",
+			"mwrong,d9;9;1;1"
+		].join("`"));
+
+		assertEquals(207, level.artBackgroundCode, "art background code");
+		assertEquals(5, level.artLayers.length, "art layer count");
+		assertEquals(1, level.artLayers[0].objects.length, "layer 1 object count");
+		assertEquals(1, level.artLayers[0].texts.length, "layer 1 text count");
+		assertEquals(3, level.artLayers[0].drawActions.length, "layer 1 draw actions");
+		assertEquals(2, level.artLayers[4].drawActions.length, "erase draw action is preserved for renderer decision");
+
+		var object = level.artLayers[0].objects[0];
+		assertEquals(1, object.code, "art object code");
+		assertEquals(10.0, object.x, "art object x");
+		assertEquals(20.0, object.y, "art object y");
+		assertEquals(1.5, object.scaleX, "art object scale x");
+		assertEquals(0.5, object.scaleY, "art object scale y");
+
+		var text = level.artLayers[0].texts[0];
+		assertEquals("hello|world", text.text, "text content");
+		assertEquals(15.0, text.x, "text x carries relative cursor");
+		assertEquals(25.0, text.y, "text y carries relative cursor");
+		assertEquals(0xFF0000, text.color, "text color");
+		assertEquals(2.0, text.scaleX, "text scale x");
+		assertEquals(1.0, text.scaleY, "text scale y");
+
+		var color = level.artLayers[0].drawActions[0];
+		assertEquals("c", color.kind, "draw color kind");
+		assertEquals(0x123456, Std.int(color.values[0]), "draw color");
+		var stroke = level.artLayers[0].drawActions[2];
+		assertEquals("d", stroke.kind, "stroke kind");
+		assertEquals(4, stroke.values.length, "stroke values");
 	}
 
 	private static function testM2SegMultOne():Void {
