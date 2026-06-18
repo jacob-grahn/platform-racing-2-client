@@ -285,8 +285,15 @@ class LocalPlayerControllerTest {
 		assertEquals("mine", initialState.touchedBlockType, "standing on mine reports touched block");
 		assertClose(0, initialState.vx, "centered mine hit has no horizontal launch");
 		assertClose(-50, initialState.vy, "mine hit launches away from block center with AS3 speed");
+		assertEquals("hurt", initialState.mode, "mine hit enters hurt recovery mode");
+		assertEquals("bumped", initialState.animation, "mine hit exposes bumped animation");
 
-		for (_ in 0...220) {
+		for (_ in 0...60) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals("land", player.debugState().mode, "hurt recovery returns to land mode");
+
+		for (_ in 0...160) {
 			player.step(new LocalPlayerInput());
 		}
 		var state = player.debugState();

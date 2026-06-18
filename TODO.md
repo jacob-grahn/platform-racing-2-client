@@ -242,8 +242,9 @@ Each should match original PR2 behavior, verified via debug state / comparison.
 - [x] Item: speed burst.
 - [x] Item: jet pack.
 - [x] Items: sword, laser gun, mine, ice wave, lightning.
-- [ ] Movement edge cases: bumping/recovery, frozen state, moving/rotating block
-  collisions, corner cases.
+- [ ] Movement edge cases: frozen state, moving/rotating block collisions,
+  corner cases.
+  - [x] Mine-hit hurt recovery with bumped animation state.
 
 Acceptance: each mechanic has a fixture level; debug state exposes enough to
 compare behavior; common movement feels like Flash.

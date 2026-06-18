@@ -11,6 +11,7 @@ class CharacterStateTest {
 
 	private static function testFromMotionPriorities():Void {
 		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("freeze", true, false, 0, 0, 0), "freeze mode owns state");
+		assertEquals(CharacterState.Bumped, CharacterState.fromMotion("hurt", true, false, 0, 0, 0), "hurt mode owns state");
 		assertEquals(CharacterState.Swim, CharacterState.fromMotion("water", true, false, 0, 0, 0), "water mode owns state");
 		assertEquals(CharacterState.SuperJump, CharacterState.fromMotion("land", true, false, 26, 0, 0), "charged crouch uses super jump");
 		assertEquals(CharacterState.CrouchWalk, CharacterState.fromMotion("land", true, true, 0, 0.1, 0), "moving crouch uses crouch walk");
@@ -31,6 +32,7 @@ class CharacterStateTest {
 		assertEquals("crouchWalkAnim", CharacterState.CrouchWalk.toClipName(), "crouch walk clip");
 		assertEquals("swimAnim", CharacterState.Swim.toClipName(), "swim clip");
 		assertEquals("frozenSolidAnim", CharacterState.Freeze.toClipName(), "freeze clip");
+		assertEquals("bumpedAnim", CharacterState.Bumped.toClipName(), "bumped clip");
 	}
 
 	private static function assertEquals<T>(expected:T, actual:T, message:String):Void {

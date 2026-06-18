@@ -10,10 +10,14 @@ enum abstract CharacterState(String) from String to String {
 	public var CrouchWalk = "crouchWalk";
 	public var Swim = "swim";
 	public var Freeze = "freeze";
+	public var Bumped = "bumped";
 
 	public static function fromMotion(mode:String, grounded:Bool, crouching:Bool, crouchCharge:Float, vx:Float, vy:Float):CharacterState {
 		if (mode == "freeze") {
 			return Freeze;
+		}
+		if (mode == "hurt") {
+			return Bumped;
 		}
 		if (mode == "water") {
 			return Swim;
@@ -40,6 +44,7 @@ enum abstract CharacterState(String) from String to String {
 			case "crouchWalk": "crouchWalkAnim";
 			case "swim": "swimAnim";
 			case "freeze": "frozenSolidAnim";
+			case "bumped": "bumpedAnim";
 			default: "standAnim";
 		}
 	}

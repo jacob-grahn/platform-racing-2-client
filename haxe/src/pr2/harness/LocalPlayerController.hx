@@ -24,6 +24,7 @@ class LocalPlayerController {
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
 	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
 	private static inline var ROTATE_FRAMES:Int = 30;
+	private static inline var HURT_FRAMES:Int = 60;
 	private static inline var ITEM_LASER_GUN:Int = 1;
 	private static inline var ITEM_MINE:Int = 2;
 	private static inline var ITEM_LIGHTNING:Int = 3;
@@ -54,6 +55,7 @@ class LocalPlayerController {
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
 	public static inline var MODE_FREEZE:String = "freeze";
+	public static inline var MODE_HURT:String = "hurt";
 
 	private final level:FixtureLevel;
 	private var accel:Float;
@@ -88,6 +90,7 @@ class LocalPlayerController {
 	private var standingTileY:Int;
 	private var rotateFramesRemaining:Int = 0;
 	private var rotateDirection:Int = 0;
+	private var hurtFramesRemaining:Int = 0;
 	private var facingDirection:Int = 1;
 	private var speedBurstFramesRemaining:Int = 0;
 	private var jetPackFramesRemaining:Int = 0;
@@ -115,12 +118,24 @@ class LocalPlayerController {
 		useHeldItem(input);
 		if (mode == MODE_FREEZE) {
 			updateRotation();
+		} else if (mode == MODE_HURT) {
+			hurtStep(input);
 		} else if (mode == MODE_WATER) {
 			waterStep(input);
 		} else {
 			landStep(input);
 		}
 		updateTimedBlocks();
+	}
+
+	private function hurtStep(input:LocalPlayerInput):Void {
+		targetVelX = 0;
+		position();
+		processBlocks(input);
+		hurtFramesRemaining--;
+		if (hurtFramesRemaining <= 0) {
+			setMode(MODE_LAND);
+		}
 	}
 
 	private function landStep(input:LocalPlayerInput):Void {
@@ -600,6 +615,12 @@ class LocalPlayerController {
 		vx += Math.cos(angle) * MINE_HIT_SPEED;
 		vy += Math.sin(angle) * MINE_HIT_SPEED;
 		removedBlocks.set(blockKey(block.x, block.y), true);
+		if (mode != MODE_FREEZE) {
+			setMode(MODE_HURT);
+			if (hurtFramesRemaining <= 0) {
+				hurtFramesRemaining = HURT_FRAMES;
+			}
+		}
 	}
 
 	private function useItemBlock(block:LevelBlock):Void {
