@@ -102,7 +102,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     level access checks, and right-room socket commands.
   - Selecting a level should open the original-style level info/course menu and
     start/load the selected level path that exists today.
-- [ ] Complete right pane tabs: All Time Best, Week's Best, Newest, Favorites.
+- [x] Complete right pane tabs: All Time Best, Week's Best, Newest, Favorites.
   - Port `LevelListing` page navigation, list hash validation, loading/error
     states, three-column level item layout, page highlight commands, memory of
     page numbers, favorite-only availability, and `set_right_room` behavior.
