@@ -30,6 +30,7 @@ class LobbyServicesTest {
 		testPlayerSortStateMachine();
 		testPlayerSortOrdering();
 		testPaneTabLabels();
+		testLevelListParsing();
 		testSessionGuestMember();
 		testSocketRecording();
 		testCommandDispatch();
@@ -151,6 +152,20 @@ class LobbyServicesTest {
 		var rightGuest = LobbyRight.tabLabels(0);
 		assertEquals(5, rightGuest.length, "guest right tab count");
 		assertEquals("Campaign", rightGuest[0], "right defaults to campaign");
+	}
+
+	private static function testLevelListParsing():Void {
+		// Campaign page formula `((server_id + day) % 6) + 1`, 1..6.
+		assertEquals(1, pr2.net.LevelListClient.campaignPage(0, 0), "campaign page base");
+		assertEquals(3, pr2.net.LevelListClient.campaignPage(5, 3), "campaign page wraps within 6");
+		assertEquals(6, pr2.net.LevelListClient.campaignPage(2, 3), "campaign page upper");
+		// Parsing pulls the levels array; an arbitrary body has an invalid hash.
+		var body = '{"hash":"zzz","levels":[{"level_id":"7","title":"Alpha","user_name":"Jo"},{"level_id":"8","title":"Beta","user_name":"Al"}]}';
+		var result = pr2.net.LevelListClient.parse(body);
+		assertEquals(2, result.levels.length, "parsed level count");
+		assertEquals(7, result.levels[0].levelId, "first level id");
+		assertEquals("Beta", result.levels[1].title, "second level title");
+		assertEquals(false, result.hashValid, "arbitrary hash is invalid");
 	}
 
 	private static function testSessionGuestMember():Void {

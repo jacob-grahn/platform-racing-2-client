@@ -50,6 +50,13 @@ class ScaffoldTab extends Page {
 	/** Hook for subclasses to wire controls once the art exists. */
 	private function onArtReady(art:PR2MovieClip):Void {}
 
+	/** Update the pending-data note (e.g. once an async list load resolves). */
+	private function setNote(text:String):Void {
+		if (noteField != null) {
+			noteField.text = text;
+		}
+	}
+
 	override public function remove():Void {
 		if (leaveCommand != null) {
 			LobbySocket.write(leaveCommand);
