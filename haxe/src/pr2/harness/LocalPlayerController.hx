@@ -23,6 +23,7 @@ class LocalPlayerController {
 	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
 	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
+	private static inline var ROTATE_FRAMES:Int = 30;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -33,6 +34,7 @@ class LocalPlayerController {
 	public var touchedBlock(default, null):Null<LevelBlock> = null;
 	public var mode(default, null):String = MODE_LAND;
 	public var itemId(default, null):Null<Int> = null;
+	public var courseRotation(default, null):Int = 0;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -69,6 +71,8 @@ class LocalPlayerController {
 	private var lastSafeY:Float;
 	private var standingTileX:Int;
 	private var standingTileY:Int;
+	private var rotateFramesRemaining:Int = 0;
+	private var rotateDirection:Int = 0;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -90,7 +94,7 @@ class LocalPlayerController {
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
 		if (mode == MODE_FREEZE) {
-			// Freeze mode parks the local character while course rotation runs.
+			updateRotation();
 		} else if (mode == MODE_WATER) {
 			waterStep(input);
 		} else {
@@ -191,7 +195,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, speedStat, accelerationStat, jumpStat);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, speedStat, accelerationStat, jumpStat, courseRotation);
 	}
 
 	private function position():Void {
@@ -279,7 +283,8 @@ class LocalPlayerController {
 	// Mirrors Block.onTouch dispatch: unlike the solid-collision lookups, this
 	// sees non-solid blocks (water/safety) so their touch effects can fire.
 	private function touchAt(pixelX:Float, pixelY:Float):Void {
-		var block = level.blockAt(tileIndex(pixelX), tileIndex(pixelY));
+		var tile = rotatedTileAtPixel(pixelX, pixelY);
+		var block = level.blockAt(tile.x, tile.y);
 		if (block == null || isBlockRemoved(block)) {
 			return;
 		}
@@ -334,7 +339,7 @@ class LocalPlayerController {
 	private function onStand(block:LevelBlock):Void {
 		touch(block);
 		var standForce = Math.round(vy * 2);
-		y = block.y * level.tileSize;
+		y = rotatedBlockPos(block).y;
 		vy = 0;
 		grounded = true;
 		if (isSafeStandBlock(block)) {
@@ -491,10 +496,48 @@ class LocalPlayerController {
 	}
 
 	private function startRotate(block:LevelBlock):Void {
+		if (rotateFramesRemaining > 0) {
+			return;
+		}
 		setMode(MODE_FREEZE);
 		vx = 0;
 		vy = 0;
 		targetVelX = 0;
+		grounded = false;
+		rotateDirection = block.type == BlockType.RotateRight ? 1 : -1;
+		rotateFramesRemaining = ROTATE_FRAMES;
+	}
+
+	private function updateRotation():Void {
+		if (rotateFramesRemaining <= 0) {
+			return;
+		}
+		rotateFramesRemaining--;
+		if (rotateFramesRemaining == 0) {
+			finishRotation();
+		}
+	}
+
+	private function finishRotation():Void {
+		if (rotateDirection > 0) {
+			var nextX = -y;
+			y = x;
+			x = nextX;
+			var safeX = -lastSafeY;
+			lastSafeY = lastSafeX;
+			lastSafeX = safeX;
+			courseRotation = normalizeRotation(courseRotation + 90);
+		} else {
+			var nextX = y;
+			y = -x;
+			x = nextX;
+			var safeX = lastSafeY;
+			lastSafeY = -lastSafeX;
+			lastSafeX = safeX;
+			courseRotation = normalizeRotation(courseRotation - 90);
+		}
+		rotateDirection = 0;
+		setMode(MODE_LAND);
 	}
 
 	private function pushBlock(block:LevelBlock, dx:Int, dy:Int):Void {
@@ -817,7 +860,8 @@ class LocalPlayerController {
 	}
 
 	private function getBlockAtPixel(pixelX:Float, pixelY:Float):Null<LevelBlock> {
-		return getBlockAtTile(tileIndex(pixelX), tileIndex(pixelY));
+		var tile = rotatedTileAtPixel(pixelX, pixelY);
+		return getBlockAtTile(tile.x, tile.y);
 	}
 
 	private function getBlockAtTile(tileX:Int, tileY:Int):Null<LevelBlock> {
@@ -840,8 +884,66 @@ class LocalPlayerController {
 		return Std.int(Math.floor(value / level.tileSize));
 	}
 
+	private function rotatedTileAtPixel(pixelX:Float, pixelY:Float):TilePoint {
+		var point = rotatePoint(pixelX, pixelY, courseRotation);
+		return new TilePoint(tileIndex(point.x), tileIndex(point.y));
+	}
+
+	private function rotatedBlockPos(block:LevelBlock):PixelPoint {
+		var offsetX:Float = 0;
+		var offsetY:Float = 0;
+		if (courseRotation == 90) {
+			offsetY = level.tileSize;
+		} else if (Math.abs(courseRotation) == 180) {
+			offsetX = level.tileSize;
+			offsetY = level.tileSize;
+		} else if (courseRotation == -90) {
+			offsetX = level.tileSize;
+		}
+		return rotatePoint(block.x * level.tileSize + offsetX, block.y * level.tileSize + offsetY, -courseRotation);
+	}
+
+	private static function rotatePoint(x:Float, y:Float, rotation:Int):PixelPoint {
+		return switch (normalizeRotation(rotation)) {
+			case 90: new PixelPoint(y, -x);
+			case -90: new PixelPoint(-y, x);
+			case 180 | -180: new PixelPoint(-x, -y);
+			default: new PixelPoint(x, y);
+		}
+	}
+
+	private static function normalizeRotation(rotation:Int):Int {
+		var normalized = rotation % 360;
+		if (normalized > 180) {
+			normalized -= 360;
+		} else if (normalized < -180) {
+			normalized += 360;
+		}
+		return normalized;
+	}
+
 	private static function clamp(value:Float, min:Float, max:Float):Float {
 		return Math.max(min, Math.min(max, value));
+	}
+}
+
+private class PixelPoint {
+	public final x:Float;
+	public final y:Float;
+
+	public function new(x:Float, y:Float) {
+		this.x = x;
+		this.y = y;
+	}
+}
+
+private class TilePoint {
+	public final x:Int;
+	public final y:Int;
+
+	public function new(x:Int, y:Int) {
+		this.x = x;
+		this.y = y;
 	}
 }
 

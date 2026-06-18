@@ -35,6 +35,8 @@ class LocalPlayerControllerTest {
 		testTimedMoveBlockShiftsAfterPreview();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
 		testBumpingRotateBlockFreezesPlayer();
+		testRotateRightCompletesCourseRotation();
+		testRotateLeftCompletesCourseRotation();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -409,6 +411,49 @@ class LocalPlayerControllerTest {
 		assertEquals("freeze", state.animation, "freeze mode exposes freeze animation state");
 		assertClose(0, state.vx, "rotate block clears horizontal velocity");
 		assertClose(0, state.vy, "rotate block clears vertical velocity");
+	}
+
+	private static function testRotateRightCompletesCourseRotation():Void {
+		var player = bumpRotateBlock(BlockType.RotateRight);
+		var frozen = player.debugState();
+
+		for (_ in 0...29) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals("freeze", player.debugState().mode, "right rotation keeps player frozen before final frame");
+
+		player.step(new LocalPlayerInput());
+		var state = player.debugState();
+		assertEquals("land", state.mode, "right rotation returns player to land mode");
+		assertEquals(90, state.courseRotation, "right rotation advances course rotation");
+		assertClose(-frozen.y, state.x, "right rotation maps x from frozen y");
+		assertClose(frozen.x, state.y, "right rotation maps y from frozen x");
+	}
+
+	private static function testRotateLeftCompletesCourseRotation():Void {
+		var player = bumpRotateBlock(BlockType.RotateLeft);
+		var frozen = player.debugState();
+
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput());
+		}
+
+		var state = player.debugState();
+		assertEquals("land", state.mode, "left rotation returns player to land mode");
+		assertEquals(-90, state.courseRotation, "left rotation decreases course rotation");
+		assertClose(frozen.y, state.x, "left rotation maps x from frozen y");
+		assertClose(-frozen.x, state.y, "left rotation maps y from frozen x");
+	}
+
+	private static function bumpRotateBlock(type:BlockType):LocalPlayerController {
+		var player = new LocalPlayerController(rotateBlockLevel(type));
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().mode == "freeze") {
+				return player;
+			}
+		}
+		throw "rotate block was not bumped";
 	}
 
 	private static function newPlayer():LocalPlayerController {
