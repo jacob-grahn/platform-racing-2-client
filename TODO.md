@@ -269,7 +269,7 @@ least one real response is parsed; login feasibility is known before full UI.
 - [x] Add `finish-race` OpenFL sequence for reaching the fixture finish block.
 - [x] Add `real-server-connect` smoke coverage for server-list parsing,
   WebSocket URL selection, and login-id socket framing.
-- [ ] Kongregate intro art remains pending.
+- [x] Kongregate intro art remains pending.
 
 Acceptance: one command runs a useful scripted OpenFL sequence; failures produce
 screenshots + debug output that are easy to inspect.
