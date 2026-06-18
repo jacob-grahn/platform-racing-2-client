@@ -4,6 +4,8 @@ import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
+import pr2.ui.CustomScrollBar;
+import pr2.ui.PageNavigation;
 import pr2.ui.TabLayout;
 import pr2.ui.TabsHolder;
 
@@ -21,6 +23,8 @@ class LobbyServicesTest {
 		testTabLayoutCompression();
 		testTabLayoutSingleTab();
 		testTabMemory();
+		testScrollBarMapping();
+		testPageNavigationPositions();
 		testPaneTabLabels();
 		testSessionGuestMember();
 		testSocketRecording();
@@ -62,6 +66,30 @@ class LobbyServicesTest {
 		// Remembered index out of range for a smaller tab set falls back.
 		assertEquals(0, TabsHolder.resolveSelected("lobbyLeft", 0, 1), "stale memory ignored");
 		TabsHolder.clearMemory();
+	}
+
+	private static function testScrollBarMapping():Void {
+		// Thumb spans [20, 120]; target overflow = 400 - 300 = 100 px.
+		// At the top the target sits at its initial y; at the bottom it scrolls up
+		// by the full overflow.
+		assertEquals(0.0, CustomScrollBar.thumbToTargetY(20, 20, 120, 0, 400, 300), "thumb top -> initial");
+		assertEquals(-100.0, CustomScrollBar.thumbToTargetY(120, 20, 120, 0, 400, 300), "thumb bottom -> full scroll");
+		assertEquals(-50.0, CustomScrollBar.thumbToTargetY(70, 20, 120, 0, 400, 300), "thumb middle -> half scroll");
+		// Out-of-range thumb is clamped; target never scrolls below initial.
+		assertEquals(0.0, CustomScrollBar.thumbToTargetY(-50, 20, 120, 0, 400, 300), "above top clamps to initial");
+		assertEquals(-100.0, CustomScrollBar.thumbToTargetY(999, 20, 120, 0, 400, 300), "below bottom clamps to full");
+	}
+
+	private static function testPageNavigationPositions():Void {
+		// Three 40px buttons across a 90px strip overlap exactly like the tab strip.
+		var xs = PageNavigation.buttonPositions([40, 40, 40], 90);
+		assertEquals(0.0, xs[0], "page button first x");
+		assertEquals(25.0, xs[1], "page button second x");
+		assertEquals(50.0, xs[2], "page button third x");
+		// Fewer/narrower buttons than the strip spread apart (negative startingPos).
+		var spread = PageNavigation.buttonPositions([20, 20], 100);
+		assertEquals(0.0, spread[0], "spread first x");
+		assertEquals(80.0, spread[1], "spread second x");
 	}
 
 	private static function testPaneTabLabels():Void {
