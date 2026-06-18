@@ -390,7 +390,7 @@ class PR2MovieClip extends Sprite {
 			case "Components/TextInput":
 				createTextInput(element);
 			case "Components/Button":
-				createButtonComponent(componentString(element, "label", "Button"));
+				createButtonComponent(element);
 			case "Components/ComboBox":
 				createComboBoxComponent(componentString(element, "prompt", ""));
 			case "Components/CheckBox":
@@ -420,16 +420,13 @@ class PR2MovieClip extends Sprite {
 		return field;
 	}
 
-	private function createButtonComponent(label:String):DisplayObject {
-		var button = new Sprite();
-		button.buttonMode = true;
-		button.useHandCursor = true;
-		button.mouseChildren = false;
-		drawComponentBox(button, 100, 22, 0xECECEC, 0x777777);
-
-		var text = componentText(label, 100, 20, 0x222222, true, TextFormatAlign.CENTER);
-		text.y = 3;
-		button.addChild(text);
+	private function createButtonComponent(element:DisplayElementDef):DisplayObject {
+		var button = new FlButton(componentString(element, "label", "Button"));
+		button.toggle = componentBool(element, "toggle", false);
+		button.selected = componentBool(element, "selected", false);
+		// `enabled` last: a disabled button must end up greyed and inert even if
+		// it was authored selected.
+		button.enabled = componentBool(element, "enabled", true);
 		return button;
 	}
 

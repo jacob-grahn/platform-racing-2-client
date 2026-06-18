@@ -20,11 +20,13 @@ import pr2.net.LoginSocketProtocolTest;
 import pr2.net.ServerConfigTest;
 import pr2.net.ServerStatusClientTest;
 import pr2.page.CampaignTestScreenTest;
+import pr2.runtime.FlButtonTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 
 class DeterministicTestSuite {
 	public static function main():Void {
 		PR2MovieClipRuntimeTest.main();
+		FlButtonTest.main();
 		PixelEffect1Test.main();
 		CharacterAtlasTest.main();
 		CharacterStateTest.main();
