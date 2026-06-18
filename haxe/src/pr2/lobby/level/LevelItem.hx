@@ -11,7 +11,9 @@ import pr2.lobby.LobbyPopups;
 import pr2.lobby.LobbySession;
 import pr2.lobby.SecureData;
 import pr2.lobby.account.AccountState;
+import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
+import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.level.LevelAccess.LevelAccessState;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.FormPostClient;
@@ -55,6 +57,7 @@ class LevelItem extends Sprite {
 	private var infoBinding:Null<LobbyArt.Binding>;
 	private var favBinding:Null<LobbyArt.Binding>;
 	private var passBinding:Null<LobbyArt.Binding>;
+	private var infoPopup:Null<HoverPopup>;
 
 	public function new(info:CampaignLevelInfo) {
 		super();
@@ -82,6 +85,10 @@ class LevelItem extends Sprite {
 
 		infoButton = LobbyArt.findByName(art, "infoButton");
 		infoBinding = LobbyArt.bind(infoButton, clickInfo);
+		if (infoButton != null) {
+			infoButton.addEventListener(MouseEvent.MOUSE_OVER, overInfo);
+			infoButton.addEventListener(MouseEvent.MOUSE_OUT, outInfo);
+		}
 
 		plusButton = LobbyArt.findByName(art, "plusButton");
 		minusButton = LobbyArt.findByName(art, "minusButton");
@@ -341,6 +348,30 @@ class LevelItem extends Sprite {
 		LobbyPopups.showLevel(Std.string(courseID));
 	}
 
+	private function overInfo(_:MouseEvent):Void {
+		if (infoButton == null) {
+			return;
+		}
+		var popupTitle = "-- " + ChatText.escapeString(info.title) + " --";
+		var body = "By: " + ChatText.escapeString(info.userName) + "<br/>"
+			+ "Version: " + info.version + "<br/>"
+			+ "Min Rank: " + info.minLevel + "<br/>"
+			+ "Plays: " + pr2.lobby.NumberFormat.withCommas(info.playCount) + "<br/>"
+			+ "Rating: " + info.rating;
+		if (ChatText.escapeString(info.note) != "") {
+			body += "<br/>-----<br/><i>" + ChatText.escapeString(info.note, true) + "</i>";
+		}
+		body += "<br/>-----<br/>(click the \"?\" for more info)";
+		infoPopup = new HoverPopup(popupTitle, body, infoButton);
+	}
+
+	private function outInfo(_:MouseEvent):Void {
+		if (infoPopup != null) {
+			infoPopup.remove();
+			infoPopup = null;
+		}
+	}
+
 	// ---- helpers ---------------------------------------------------------
 
 	private inline function removeArtChild(child:Null<DisplayObject>):Void {
@@ -354,6 +385,14 @@ class LevelItem extends Sprite {
 	}
 
 	public function remove():Void {
+		if (infoButton != null) {
+			infoButton.removeEventListener(MouseEvent.MOUSE_OVER, overInfo);
+			infoButton.removeEventListener(MouseEvent.MOUSE_OUT, outInfo);
+		}
+		if (infoPopup != null) {
+			infoPopup.remove();
+			infoPopup = null;
+		}
 		LobbyArt.unbind(infoBinding);
 		LobbyArt.unbind(favBinding);
 		LobbyArt.unbind(passBinding);

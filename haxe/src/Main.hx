@@ -41,6 +41,7 @@ class Main extends Sprite {
 		stage.frameRate = Constants.FRAME_RATE;
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
+		pr2.app.AppStage.stage = stage;
 
 		try {
 			var query = currentQuery();
