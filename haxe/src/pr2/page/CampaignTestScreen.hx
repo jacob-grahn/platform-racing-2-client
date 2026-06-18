@@ -32,8 +32,8 @@ import pr2.level.ServerLevelRenderer;
 /**
 	Bit 1 of the server campaign level test harness (see TODO.md). Fetches a real
 	campaign course list from the live PR2 server and reports what came back. This
-	proves end-to-end connectivity and list parsing before later bits load,
-	render, and play the first level.
+	proves end-to-end connectivity and list parsing before loading, rendering,
+	and playing either the first listed level or a requested level on that page.
 
 	Reachable via `?screen=campaign` (optional `&page=N`, default 1, and
 	`&levelId=N` or `&level=N` to load a specific level from that page).
