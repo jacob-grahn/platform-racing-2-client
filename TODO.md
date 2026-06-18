@@ -216,7 +216,7 @@ keep Flash/OpenFL differences isolated.
 
 - [x] Add dynamic campaign level choice instead of always loading the first
   configured level.
-- [ ] Expand rendering coverage: backgrounds, stamps/draw objects, text objects,
+- [x] Expand rendering coverage: backgrounds, stamps/draw objects, text objects,
   minimap if needed.
 
 Acceptance: selected real levels render all required visual layers and remain
