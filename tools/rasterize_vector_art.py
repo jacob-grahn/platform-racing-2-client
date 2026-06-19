@@ -11,6 +11,7 @@ import argparse
 import json
 import math
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -31,7 +32,7 @@ CHANNELS = ("static", "primary", "secondary", "composite")
 # Categories that produce individual PNGs with no atlas. Large timeline-driven
 # effect symbols can exceed the default atlas page and are animated by metadata
 # rather than by atlas frame sequencing.
-NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "effects", "login"})
+NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "blocks", "effects", "login"})
 
 
 def parse_svg_path(svg_root, path):
@@ -71,6 +72,17 @@ def parse_svg_path(svg_root, path):
             "rel": rel,
             "slug": path.stem,
             "atlas_group": None,  # no atlas for backgrounds
+        }
+
+    if category == "blocks":
+        # blocks/<slug>.svg overlays the separately exported block bitmap tile.
+        if len(parts) != 2:
+            return None
+        return {
+            "category": "blocks",
+            "rel": rel,
+            "slug": path.stem,
+            "atlas_group": None,
         }
 
     if category == "stamps":
@@ -225,12 +237,85 @@ def trim_image(source_path, out_path, bounds, scale):
     return trim
 
 
+def rasterize_with_batik(svg_path, out_path, temp_path, stage_width, stage_height, scale, centered):
+    """Fallback for systems where the configured Inkscape cannot run."""
+    lime_path = subprocess.run(
+        ["haxelib", "libpath", "lime"],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    ).stdout.strip()
+    rasterizer = Path(lime_path) / "templates/bin/batik/batik-rasterizer.jar"
+    if not rasterizer.exists():
+        raise FileNotFoundError(f"Batik SVG rasterizer not found: {rasterizer}")
+
+    x = -stage_width / 2 if centered else 0
+    y = -stage_height / 2 if centered else 0
+    source = svg_path.read_text(encoding="utf-8")
+    source = re.sub(r'width="[^"]+"', f'width="{stage_width}px"', source, count=1)
+    source = re.sub(r'height="[^"]+"', f'height="{stage_height}px"', source, count=1)
+    source = re.sub(
+        r'viewBox="[^"]+"',
+        f'viewBox="{x:g} {y:g} {stage_width} {stage_height}"',
+        source,
+        count=1,
+    )
+    fallback_svg = temp_path.with_suffix(".svg")
+    fallback_svg.write_text(source, encoding="utf-8")
+    subprocess.run(
+        [
+            "java",
+            "-Djava.security.manager=allow",
+            "-Djava.awt.headless=true",
+            "-jar",
+            str(rasterizer),
+            "-d",
+            str(temp_path),
+            "-w",
+            str(stage_width * scale),
+            "-h",
+            str(stage_height * scale),
+            str(fallback_svg),
+        ],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    image = Image.open(temp_path).convert("RGBA")
+    bbox = image.getchannel("A").getbbox()
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if bbox is None:
+        Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(out_path)
+        return None, {"x": 0, "y": 0, "width": 0, "height": 0, "empty": True}
+
+    image.crop(bbox).save(out_path)
+    bounds = {
+        "x": x + bbox[0] / scale,
+        "y": y + bbox[1] / scale,
+        "width": (bbox[2] - bbox[0]) / scale,
+        "height": (bbox[3] - bbox[1]) / scale,
+    }
+    trim = {
+        "x": math.floor(x * scale) + bbox[0],
+        "y": math.floor(y * scale) + bbox[1],
+        "width": bbox[2] - bbox[0],
+        "height": bbox[3] - bbox[1],
+        "empty": False,
+    }
+    return bounds, trim
+
+
 def png_path_for(png_root, job, scale):
     cat = job["category"]
     if cat == "character":
         return png_root / "character" / job["kind"] / job["part"] / f"{job['channel']}@{scale}x.png"
     if cat == "backgrounds":
         return png_root / "backgrounds" / f"{job['slug']}@{scale}x.png"
+    if cat == "blocks":
+        return png_root / "blocks" / f"{job['slug']}@{scale}x.png"
     if cat == "stamps":
         return png_root / "stamps" / f"{job['slug']}@{scale}x.png"
     if cat == "effects":
@@ -254,8 +339,24 @@ def rasterize_jobs(jobs, args):
             out_path = png_path_for(args.png_root, job, args.scale)
             raw_path = temp_path / f"{index}.png"
             print(f"[{index}/{len(jobs)}] {job['svg']} -> {out_path}", file=sys.stderr)
-            bounds = query_drawing_bounds(args.inkscape, job["svg"])
-            if bounds is None or bounds["width"] <= 0 or bounds["height"] <= 0:
+            try:
+                bounds = query_drawing_bounds(args.inkscape, job["svg"])
+            except (FileNotFoundError, subprocess.CalledProcessError):
+                bounds, trim = rasterize_with_batik(
+                    job["svg"],
+                    out_path,
+                    raw_path,
+                    args.stage_width,
+                    args.stage_height,
+                    args.scale,
+                    job["category"] not in ("backgrounds", "login"),
+                )
+                used_fallback = True
+            else:
+                used_fallback = False
+            if used_fallback:
+                pass
+            elif bounds is None or bounds["width"] <= 0 or bounds["height"] <= 0:
                 out_path.parent.mkdir(parents=True, exist_ok=True)
                 Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(out_path)
                 trim = {"x": 0, "y": 0, "width": 0, "height": 0, "empty": True}
@@ -280,7 +381,7 @@ def rasterize_jobs(jobs, args):
                 record["part"] = job["part"]
                 record["id"] = job["id"]
                 record["channel"] = job["channel"]
-            elif cat in ("backgrounds", "stamps"):
+            elif cat in ("backgrounds", "blocks", "stamps"):
                 record["slug"] = job["slug"]
             elif cat == "effects":
                 record["slug"] = job["slug"]
@@ -359,7 +460,7 @@ def entry_name(record):
     cat = record.get("category")
     if cat == "character":
         return record["part"]
-    if cat in ("backgrounds", "stamps"):
+    if cat in ("backgrounds", "blocks", "stamps"):
         return record["slug"]
     if cat == "effects":
         return record.get("frame") or record["slug"]
@@ -494,7 +595,7 @@ def parse_args(argv):
     parser.add_argument(
         "--category",
         action="append",
-		choices=("character", "backgrounds", "stamps", "effects", "items", "intro", "login"),
+		choices=("character", "backgrounds", "blocks", "stamps", "effects", "items", "intro", "login"),
         help="repeatable category filter; default: all categories",
     )
     parser.add_argument("--limit", type=int)

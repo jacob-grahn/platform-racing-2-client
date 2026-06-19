@@ -64,6 +64,54 @@ var JOBS = [
     "symbolName": "UI/Pages/Levels/Backgrounds/bg7"
   },
   {
+    "category": "blocks",
+    "exportPath": "blocks/arrow_overlay.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/blocks/arrow_overlay.svg",
+    "slug": "arrow_overlay",
+    "symbolName": "MovieClips/Symbol 451"
+  },
+  {
+    "category": "blocks",
+    "exportPath": "blocks/egg_overlay.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/blocks/egg_overlay.svg",
+    "slug": "egg_overlay",
+    "symbolName": "MovieClips/Symbol 317"
+  },
+  {
+    "category": "blocks",
+    "exportPath": "blocks/arrow2_overlay.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/blocks/arrow2_overlay.svg",
+    "slug": "arrow2_overlay",
+    "symbolName": "MovieClips/Symbol 455"
+  },
+  {
+    "category": "blocks",
+    "exportPath": "blocks/brick_piece.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/blocks/brick_piece.svg",
+    "slug": "brick_piece",
+    "symbolName": "MovieClips/Symbol 466"
+  },
+  {
+    "category": "blocks",
+    "exportPath": "blocks/crumble_piece.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/blocks/crumble_piece.svg",
+    "slug": "crumble_piece",
+    "symbolName": "MovieClips/Symbol 479"
+  },
+  {
+    "category": "blocks",
+    "exportPath": "blocks/start_block_text.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/blocks/start_block_text.svg",
+    "slug": "start_block_text",
+    "symbolName": "UI/Pages/Levels/Editor/StartBlockText"
+  },
+  {
     "category": "stamps",
     "exportPath": "stamps/petrified_tree.svg",
     "frame": 0,

@@ -4,6 +4,7 @@ Generate a JSFL batch script to export non-character PR2 vector assets as SVGs.
 
 Categories exported:
   backgrounds  - bg1-bg7 (single frame each)
+  blocks       - block overlays and break-off pieces
   stamps       - decorative level objects (single frame each)
   effects      - in-game visual effect symbols (one SVG per reusable symbol)
   items        - ItemDisplay icon frames (one per label)
@@ -41,6 +42,18 @@ BACKGROUNDS = [
     {"slug": "bg5", "symbol": "UI/Pages/Levels/Backgrounds/bg5"},
     {"slug": "bg6", "symbol": "UI/Pages/Levels/Backgrounds/bg6"},
     {"slug": "bg7", "symbol": "UI/Pages/Levels/Backgrounds/bg7"},
+]
+
+BLOCK_OVERLAYS = [
+    {"slug": "arrow_overlay",   "symbol": "MovieClips/Symbol 451"},
+    {"slug": "egg_overlay",     "symbol": "MovieClips/Symbol 317"},
+    {"slug": "arrow2_overlay",  "symbol": "MovieClips/Symbol 455"},
+    {"slug": "brick_piece",     "symbol": "MovieClips/Symbol 466"},
+    {"slug": "crumble_piece",  "symbol": "MovieClips/Symbol 479"},
+    {
+        "slug": "start_block_text",
+        "symbol": "UI/Pages/Levels/Editor/StartBlockText",
+    },
 ]
 
 STAMPS = [
@@ -159,6 +172,17 @@ def build_jobs(svg_dir):
         export_path = f"backgrounds/{entry['slug']}.svg"
         jobs.append({
             "category":   "backgrounds",
+            "slug":       entry["slug"],
+            "symbolName": entry["symbol"],
+            "frame":      0,
+            "exportPath": export_path,
+            "outputUri":  (root / export_path).as_uri(),
+        })
+
+    for entry in BLOCK_OVERLAYS:
+        export_path = f"blocks/{entry['slug']}.svg"
+        jobs.append({
+            "category":   "blocks",
             "slug":       entry["slug"],
             "symbolName": entry["symbol"],
             "frame":      0,

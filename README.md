@@ -239,12 +239,12 @@ Rasterize only character art:
 python3 tools/rasterize_vector_art.py --sheets --category character --manifest vector-art/raster-manifest.json
 ```
 
-Rasterize the exported non-character SVGs. Backgrounds, effect symbols, and
-login page components remain standalone PNGs; stamps and item icons are packed
-into separate atlases:
+Rasterize the exported non-character SVGs. Backgrounds, block overlays, effect
+symbols, and login page components remain standalone PNGs; stamps and item icons
+are packed into separate atlases:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category stamps --category effects --category items --category login --manifest vector-art/raster-manifest-other.json
+python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category blocks --category stamps --category effects --category items --category login --manifest vector-art/raster-manifest-other.json
 ```
 
 Rasterize the baked intro symbols. The Kongregate intro keeps its original
@@ -255,7 +255,8 @@ loaded from this atlas:
 python3 tools/rasterize_vector_art.py --sheets --category intro --manifest vector-art/raster-manifest-intro.json
 ```
 
-The rasterizer uses Inkscape. The default path is:
+The rasterizer uses Inkscape when available and falls back to Lime's bundled
+Batik renderer. The default Inkscape path is:
 
 ```text
 /Applications/Inkscape.app/Contents/MacOS/inkscape

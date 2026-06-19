@@ -208,7 +208,7 @@ reduce reliance on raster fallbacks.
 These widen visual coverage toward parity; most can follow the playable harness.
 Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
 
-- [ ] Export block overlays / block-piece graphics not covered by tile bitmaps:
+- [x] Export block overlays / block-piece graphics not covered by tile bitmaps:
   `ArrowBlockGraphic`, `EggBlockGraphic`, `Arrow2Graphic`, `BrickPieceGraphic`,
   `CrumblePieceGraphic`, `StartBlockText`.
 - [ ] Export remaining gameplay/item effect symbols as timeline-driven assets

@@ -1,0 +1,156 @@
+{
+  "atlases": [],
+  "pngs": [
+    {
+      "atlas_group": null,
+      "category": "blocks",
+      "drawingBounds": {
+        "height": 65.5,
+        "width": 44.5,
+        "x": -22.25,
+        "y": -32.75
+      },
+      "png": "vector-art/png/blocks/arrow2_overlay@4x.png",
+      "scale": 4,
+      "slug": "arrow2_overlay",
+      "source": "vector-art/svg/blocks/arrow2_overlay.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 262,
+        "width": 178,
+        "x": -89,
+        "y": -131
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "blocks",
+      "drawingBounds": {
+        "height": 23.5,
+        "width": 16.25,
+        "x": -8.25,
+        "y": -11.75
+      },
+      "png": "vector-art/png/blocks/arrow_overlay@4x.png",
+      "scale": 4,
+      "slug": "arrow_overlay",
+      "source": "vector-art/svg/blocks/arrow_overlay.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 94,
+        "width": 65,
+        "x": -33,
+        "y": -47
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "blocks",
+      "drawingBounds": {
+        "height": 12.75,
+        "width": 8.25,
+        "x": -3.75,
+        "y": -6.0
+      },
+      "png": "vector-art/png/blocks/brick_piece@4x.png",
+      "scale": 4,
+      "slug": "brick_piece",
+      "source": "vector-art/svg/blocks/brick_piece.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 51,
+        "width": 33,
+        "x": -15,
+        "y": -24
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "blocks",
+      "drawingBounds": {
+        "height": 10.5,
+        "width": 10.5,
+        "x": -5.25,
+        "y": -4.75
+      },
+      "png": "vector-art/png/blocks/crumble_piece@4x.png",
+      "scale": 4,
+      "slug": "crumble_piece",
+      "source": "vector-art/svg/blocks/crumble_piece.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 42,
+        "width": 42,
+        "x": -21,
+        "y": -19
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "blocks",
+      "drawingBounds": {
+        "height": 30.25,
+        "width": 25.0,
+        "x": 2.0,
+        "y": 0.0
+      },
+      "png": "vector-art/png/blocks/egg_overlay@4x.png",
+      "scale": 4,
+      "slug": "egg_overlay",
+      "source": "vector-art/svg/blocks/egg_overlay.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 121,
+        "width": 100,
+        "x": 8,
+        "y": 0
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "blocks",
+      "drawingBounds": {
+        "height": 9.0,
+        "width": 6.75,
+        "x": 13.0,
+        "y": 11.75
+      },
+      "png": "vector-art/png/blocks/start_block_text@4x.png",
+      "scale": 4,
+      "slug": "start_block_text",
+      "source": "vector-art/svg/blocks/start_block_text.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 36,
+        "width": 27,
+        "x": 52,
+        "y": 47
+      }
+    }
+  ],
+  "schema": "pr2-rasterized-vector-art-v1"
+}

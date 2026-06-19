@@ -81,6 +81,7 @@ asset families:
 
 - `tools/generate_other_assets_jsfl.py`
   - backgrounds: 7 SVGs
+  - block overlays and pieces: 6 SVGs
   - stamps: 8 SVGs
   - effect symbols: 10 SVGs, one reusable symbol image each
   - item display icons: 10 SVGs
@@ -179,6 +180,6 @@ This grouping is intentional for the character renderer: `static`, `primary`,
 and `secondary` can be drawn or tinted independently, while `composite` is useful
 for previews, debugging, and non-tinted fallbacks. Non-character exports use
 separate asset groups by gameplay area or screen. The current raster pass leaves
-backgrounds and effect symbols standalone, and packs stamps plus item display
-icons into their own atlases. Static block bitmaps are exported directly to
-`vector-art/png/blocks/`.
+backgrounds, block overlays, and effect symbols standalone, and packs stamps
+plus item display icons into their own atlases. Static block bitmaps are exported
+directly to `vector-art/png/blocks/`.
