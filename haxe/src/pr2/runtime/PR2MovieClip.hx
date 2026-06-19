@@ -6,21 +6,13 @@ import openfl.display.FrameLabel;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.filters.BitmapFilter;
-import openfl.filters.BlurFilter;
-import openfl.filters.DropShadowFilter;
-import openfl.filters.GlowFilter;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
-import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
-import pr2.generated.assets.AssetTypes.FilterDef;
-import pr2.generated.assets.AssetTypes.FrameDef;
-import pr2.generated.assets.AssetTypes.LabelDef;
 import pr2.generated.assets.AssetTypes.LayerDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.generated.assets.AssetTypes.TimelineDef;
@@ -317,7 +309,7 @@ class PR2MovieClip extends Sprite {
 		}
 
 		if (element.type == "DOMComponentInstance") {
-			return createComponent(element);
+			return FlComponentFactory.create(element);
 		}
 
 		if (element.libraryItemName != null) {
@@ -383,189 +375,6 @@ class PR2MovieClip extends Sprite {
 		field.selectable = false;
 		field.mouseEnabled = false;
 		return field;
-	}
-
-	private function createComponent(element:DisplayElementDef):DisplayObject {
-		return switch (element.libraryItemName) {
-			case "Components/TextInput":
-				createTextInputComponent(element);
-			case "Components/TextArea":
-				createTextAreaComponent(element);
-			case "Components/Button":
-				createButtonComponent(element);
-			case "Components/ComboBox":
-				createComboBoxComponent(element);
-			case "Components/CheckBox":
-				createCheckBoxComponent(element);
-			case "Components/Slider":
-				createSliderComponent(element);
-			case "Components/List":
-				createListComponent(element);
-			case "Components/UIScrollBar":
-				createScrollBarComponent(element);
-			default:
-				createGenericComponent(element);
-		}
-	}
-
-	private function createTextInputComponent(element:DisplayElementDef):DisplayObject {
-		var input = new FlTextInput(componentString(element, "text", ""));
-		input.displayAsPassword = componentBool(element, "displayAsPassword", false);
-		input.editable = componentBool(element, "editable", true);
-		var restrict = componentString(element, "restrict", "");
-		if (restrict != "") {
-			input.restrict = restrict;
-		}
-		var maxChars = Std.parseInt(componentString(element, "maxChars", "0"));
-		if (maxChars != null && maxChars > 0) {
-			input.maxChars = maxChars;
-		}
-		var size = componentSize(element, 100, 22);
-		input.setSize(size.width, size.height);
-		input.enabled = componentBool(element, "enabled", true);
-		return input;
-	}
-
-	private function createTextAreaComponent(element:DisplayElementDef):DisplayObject {
-		var size = componentSize(element, 160, 100);
-		var area = new FlTextArea(size.width, size.height);
-		area.editable = componentBool(element, "editable", true);
-		area.text = componentString(element, "text", "");
-		area.enabled = componentBool(element, "enabled", true);
-		return area;
-	}
-
-	private function createButtonComponent(element:DisplayElementDef):DisplayObject {
-		var button = new FlButton(componentString(element, "label", "Button"));
-		button.toggle = componentBool(element, "toggle", false);
-		button.selected = componentBool(element, "selected", false);
-		// `enabled` last: a disabled button must end up greyed and inert even if
-		// it was authored selected.
-		button.enabled = componentBool(element, "enabled", true);
-		return button;
-	}
-
-	private function createComboBoxComponent(element:DisplayElementDef):DisplayObject {
-		var combo = new FlComboBox(componentString(element, "prompt", ""));
-		var size = componentSize(element, 100, 22);
-		combo.setSize(size.width, size.height);
-		var rowCount = Std.parseInt(componentString(element, "rowCount", "5"));
-		if (rowCount != null && rowCount > 0) {
-			combo.rowCount = rowCount;
-		}
-		// Authored dropdown items come through as the Flash collection serialization.
-		var items = FlDataProvider.fromCollectionString(componentString(element, "dataProvider", "")).toArray();
-		for (item in items) {
-			combo.addItem(item);
-		}
-		// A prompt-less ComboBox with data selects its first row, like fl.controls.
-		if (combo.length > 0 && combo.prompt == "" && combo.selectedIndex < 0) {
-			combo.selectedIndex = 0;
-		}
-		combo.enabled = componentBool(element, "enabled", true);
-		return combo;
-	}
-
-	private function createCheckBoxComponent(element:DisplayElementDef):DisplayObject {
-		var checkBox = new FlCheckBox(
-			componentString(element, "label", ""),
-			componentBool(element, "selected", false)
-		);
-		checkBox.enabled = componentBool(element, "enabled", true);
-		return checkBox;
-	}
-
-	private function createSliderComponent(element:DisplayElementDef):DisplayObject {
-		var size = componentSize(element, 100, 16);
-		var slider = new FlSlider(size.width);
-		var min = Std.parseFloat(componentString(element, "minimum", "0"));
-		var max = Std.parseFloat(componentString(element, "maximum", "100"));
-		slider.minimum = Math.isNaN(min) ? 0 : min;
-		slider.maximum = Math.isNaN(max) ? 100 : max;
-		var value = Std.parseFloat(componentString(element, "value", "0"));
-		slider.value = Math.isNaN(value) ? 0 : value;
-		slider.enabled = componentBool(element, "enabled", true);
-		return slider;
-	}
-
-	private function createListComponent(element:DisplayElementDef):DisplayObject {
-		var size = componentSize(element, 150, 100);
-		return new FlList(size.width, size.height);
-	}
-
-	private function createScrollBarComponent(element:DisplayElementDef):DisplayObject {
-		var size = componentSize(element, FlUIScrollBar.WIDTH, 100);
-		return new FlUIScrollBar(size.height);
-	}
-
-	/** Authored on-stage size from the instance bounds, with component defaults. */
-	private function componentSize(element:DisplayElementDef, defaultWidth:Float, defaultHeight:Float):{width:Float, height:Float} {
-		if (element.bounds != null) {
-			var width = element.bounds.right - element.bounds.left;
-			var height = element.bounds.bottom - element.bounds.top;
-			if (width > 0 && height > 0) {
-				return {width: width, height: height};
-			}
-		}
-		return {width: defaultWidth, height: defaultHeight};
-	}
-
-	private function createGenericComponent(element:DisplayElementDef):DisplayObject {
-		var label = element.name == null ? "component" : element.name;
-		var holder = new Sprite();
-		drawComponentBox(holder, 100, 22, 0xF2F2F2, 0x999999);
-		var text = componentText(label, 100, 20, 0x555555, false, TextFormatAlign.CENTER);
-		text.y = 3;
-		holder.addChild(text);
-		return holder;
-	}
-
-	private function drawComponentBox(target:Sprite, width:Float, height:Float, fill:Int, stroke:Int):Void {
-		target.graphics.beginFill(fill);
-		target.graphics.lineStyle(1, stroke);
-		target.graphics.drawRect(0, 0, width, height);
-		target.graphics.endFill();
-	}
-
-	private function componentText(label:String, width:Float, height:Float, color:Int, bold:Bool, align:TextFormatAlign):TextField {
-		var text = new TextField();
-		text.defaultTextFormat = new TextFormat("_sans", 11, color, bold, false, false, null, null, align);
-		text.width = width;
-		text.height = height;
-		text.text = label;
-		text.selectable = false;
-		text.mouseEnabled = false;
-		return text;
-	}
-
-	private function componentString(element:DisplayElementDef, name:String, fallback:String):String {
-		var params:Dynamic = element.componentParams;
-		if (params == null) {
-			return fallback;
-		}
-		var param:Dynamic = Reflect.field(params, name);
-		if (param == null || !Reflect.hasField(param, "value")) {
-			return fallback;
-		}
-		var value:Dynamic = Reflect.field(param, "value");
-		return value == null ? fallback : Std.string(value);
-	}
-
-	private function componentBool(element:DisplayElementDef, name:String, fallback:Bool):Bool {
-		var params:Dynamic = element.componentParams;
-		if (params == null) {
-			return fallback;
-		}
-		var param:Dynamic = Reflect.field(params, name);
-		if (param == null || !Reflect.hasField(param, "value")) {
-			return fallback;
-		}
-		var value:Dynamic = Reflect.field(param, "value");
-		if (Std.isOfType(value, Bool)) {
-			return value;
-		}
-		var text = Std.string(value).toLowerCase();
-		return text == "true" || text == "1" || text == "yes";
 	}
 
 	private function dynamicString(data:Dynamic, name:String, fallback:String):String {
@@ -651,60 +460,6 @@ class PR2MovieClip extends Sprite {
 		// Reassign filters every frame so a reused clip drops any filter left
 		// over from a previous keyframe; OpenFL only re-renders the filter pass
 		// when the array reference is set.
-		child.filters = element.filters == null ? null : buildFilters(element.filters);
-	}
-
-	private function buildFilters(defs:Array<FilterDef>):Array<BitmapFilter> {
-		var result:Array<BitmapFilter> = [];
-		for (def in defs) {
-			var filter = buildFilter(def);
-			if (filter != null) {
-				result.push(filter);
-			}
-		}
-		return result;
-	}
-
-	/**
-		Maps an XFL filter def to its OpenFL equivalent. Missing attributes fall
-		back to the OpenFL constructor defaults, which match the Flash authoring
-		defaults the XFL omits, so the rendered result matches the original.
-	**/
-	private function buildFilter(def:FilterDef):Null<BitmapFilter> {
-		return switch (def.type) {
-			case "BlurFilter":
-				new BlurFilter(
-					def.blurX == null ? 4 : def.blurX,
-					def.blurY == null ? 4 : def.blurY,
-					def.quality == null ? 1 : def.quality
-				);
-			case "GlowFilter":
-				new GlowFilter(
-					def.color == null ? 0xFF0000 : def.color,
-					def.alpha == null ? 1 : def.alpha,
-					def.blurX == null ? 6 : def.blurX,
-					def.blurY == null ? 6 : def.blurY,
-					def.strength == null ? 2 : def.strength,
-					def.quality == null ? 1 : def.quality,
-					def.inner == null ? false : def.inner,
-					def.knockout == null ? false : def.knockout
-				);
-			case "DropShadowFilter":
-				new DropShadowFilter(
-					def.distance == null ? 4 : def.distance,
-					def.angle == null ? 45 : def.angle,
-					def.color == null ? 0 : def.color,
-					def.alpha == null ? 1 : def.alpha,
-					def.blurX == null ? 4 : def.blurX,
-					def.blurY == null ? 4 : def.blurY,
-					def.strength == null ? 1 : def.strength,
-					def.quality == null ? 1 : def.quality,
-					def.inner == null ? false : def.inner,
-					def.knockout == null ? false : def.knockout,
-					def.hideObject == null ? false : def.hideObject
-				);
-			default:
-				null;
-		}
+		child.filters = element.filters == null ? null : FilterBuilder.build(element.filters);
 	}
 }
