@@ -177,6 +177,110 @@ var JOBS = [
   },
   {
     "category": "effects",
+    "exportPath": "effects/countdown.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/countdown.svg",
+    "slug": "countdown",
+    "symbolName": "MovieClips/Symbol 430"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/egg.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/egg.svg",
+    "slug": "egg",
+    "symbolName": "MovieClips/Symbol 901"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/heart.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/heart.svg",
+    "slug": "heart",
+    "symbolName": "MovieClips/Symbol 918"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/ice_wave.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/ice_wave.svg",
+    "slug": "ice_wave",
+    "symbolName": "MovieClips/Symbol 1023"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/djinn_ice.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/djinn_ice.svg",
+    "slug": "djinn_ice",
+    "symbolName": "MovieClips/Symbol 1200"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/gun_fire_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/gun_fire_anim.svg",
+    "slug": "gun_fire_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 858"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/jet_pack_states.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/jet_pack_states.svg",
+    "slug": "jet_pack_states",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 873"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/sword_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/sword_anim.svg",
+    "slug": "sword_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 878"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/ice_wave_fire_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/ice_wave_fire_anim.svg",
+    "slug": "ice_wave_fire_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 881"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/bumped_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/bumped_anim.svg",
+    "slug": "bumped_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 886"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/super_jump_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/super_jump_anim.svg",
+    "slug": "super_jump_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 887"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/jump_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/jump_anim.svg",
+    "slug": "jump_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 888"
+  },
+  {
+    "category": "effects",
+    "exportPath": "effects/frozen_solid_anim.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/frozen_solid_anim.svg",
+    "slug": "frozen_solid_anim",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 896"
+  },
+  {
+    "category": "effects",
     "exportPath": "effects/laser_shot.svg",
     "frame": 0,
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/effects/laser_shot.svg",

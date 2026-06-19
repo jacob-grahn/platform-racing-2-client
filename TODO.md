@@ -213,7 +213,7 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
 - [x] Export block overlays / block-piece graphics not covered by tile bitmaps:
   `ArrowBlockGraphic`, `EggBlockGraphic`, `Arrow2Graphic`, `BrickPieceGraphic`,
   `CrumblePieceGraphic`, `StartBlockText`.
-- [ ] Export remaining gameplay/item effect symbols as timeline-driven assets
+- [x] Export remaining gameplay/item effect symbols as timeline-driven assets
   (not per-frame SVG): `CountdownGraphic`, `EggGraphic`, `HeartGraphic`,
   `IceWaveGraphic`, `DjinnIceGraphic`, and the `PR2_Graphics_..._fla`
   jetpack/sword/gunfire/iceWave/superJump/jump/bumped/frozenSolid anims.

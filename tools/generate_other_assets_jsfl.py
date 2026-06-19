@@ -73,6 +73,58 @@ STAMPS = [
 # composition; these SVGs are fallback/static leaf assets for the runtime.
 EFFECTS = [
     {
+        "slug":   "countdown",
+        "symbol": "MovieClips/Symbol 430",
+    },
+    {
+        "slug":   "egg",
+        "symbol": "MovieClips/Symbol 901",
+    },
+    {
+        "slug":   "heart",
+        "symbol": "MovieClips/Symbol 918",
+    },
+    {
+        "slug":   "ice_wave",
+        "symbol": "MovieClips/Symbol 1023",
+    },
+    {
+        "slug":   "djinn_ice",
+        "symbol": "MovieClips/Symbol 1200",
+    },
+    {
+        "slug":   "gun_fire_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 858",
+    },
+    {
+        "slug":   "jet_pack_states",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 873",
+    },
+    {
+        "slug":   "sword_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 878",
+    },
+    {
+        "slug":   "ice_wave_fire_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 881",
+    },
+    {
+        "slug":   "bumped_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 886",
+    },
+    {
+        "slug":   "super_jump_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 887",
+    },
+    {
+        "slug":   "jump_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 888",
+    },
+    {
+        "slug":   "frozen_solid_anim",
+        "symbol": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 896",
+    },
+    {
         "slug":   "laser_shot",
         "symbol": "UI/Pages/Levels/In-Game/Effects/LaserShot",
     },

@@ -245,6 +245,8 @@ Animated effects are intentionally not exported as per-frame SVG sequences.
 The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested
 symbols, transforms, visibility, and customization. The exported effect SVGs
 are reusable symbol images for runtime composition and fallback rendering.
+This includes the countdown, egg, heart, ice-wave, Djinn-ice, and character
+item/state animation symbols; their generated XFL metadata drives playback.
 
 ## SVG To PNG Rasterization
 

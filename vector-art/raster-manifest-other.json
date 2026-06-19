@@ -199,6 +199,281 @@
       "atlas_group": null,
       "category": "effects",
       "drawingBounds": {
+        "height": 397.805,
+        "width": 125.98,
+        "x": -66.763,
+        "y": -391.709
+      },
+      "png": "vector-art/png/effects/bumped_anim@4x.png",
+      "scale": 4,
+      "slug": "bumped_anim",
+      "source": "vector-art/svg/effects/bumped_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1591,
+        "width": 504,
+        "x": -268,
+        "y": -1567
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 194.051,
+        "width": 122.736,
+        "x": -50.5507,
+        "y": -90.8667
+      },
+      "png": "vector-art/png/effects/countdown@4x.png",
+      "scale": 4,
+      "slug": "countdown",
+      "source": "vector-art/svg/effects/countdown.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 10.0006,
+        "width": 10.0006,
+        "x": -5.00031,
+        "y": -5.00031
+      },
+      "png": "vector-art/png/effects/djinn_ice@4x.png",
+      "scale": 4,
+      "slug": "djinn_ice",
+      "source": "vector-art/svg/effects/djinn_ice.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 41,
+        "width": 41,
+        "x": -21,
+        "y": -21
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 264.35,
+        "width": 199.691,
+        "x": -76.001,
+        "y": -260.25
+      },
+      "png": "vector-art/png/effects/egg@4x.png",
+      "scale": 4,
+      "slug": "egg",
+      "source": "vector-art/svg/effects/egg.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1058,
+        "width": 799,
+        "x": -305,
+        "y": -1041
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 400.494,
+        "width": 308.8,
+        "x": -156.2,
+        "y": -394.397
+      },
+      "png": "vector-art/png/effects/frozen_solid_anim@4x.png",
+      "scale": 4,
+      "slug": "frozen_solid_anim",
+      "source": "vector-art/svg/effects/frozen_solid_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1603,
+        "width": 1236,
+        "x": -625,
+        "y": -1578
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 78.0,
+        "width": 122.7,
+        "x": -61.35,
+        "y": -38.9
+      },
+      "png": "vector-art/png/effects/gun_fire_anim@4x.png",
+      "scale": 4,
+      "slug": "gun_fire_anim",
+      "source": "vector-art/svg/effects/gun_fire_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 312,
+        "width": 491,
+        "x": -246,
+        "y": -156
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 77.0,
+        "width": 101.0,
+        "x": -0.5,
+        "y": -0.5
+      },
+      "png": "vector-art/png/effects/heart@4x.png",
+      "scale": 4,
+      "slug": "heart",
+      "source": "vector-art/svg/effects/heart.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 308,
+        "width": 404,
+        "x": -2,
+        "y": -2
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 71.6,
+        "width": 79.0,
+        "x": -51.0,
+        "y": -35.8
+      },
+      "png": "vector-art/png/effects/ice_wave@4x.png",
+      "scale": 4,
+      "slug": "ice_wave",
+      "source": "vector-art/svg/effects/ice_wave.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 286,
+        "width": 316,
+        "x": -204,
+        "y": -144
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 149.367,
+        "width": 141.468,
+        "x": -60.3176,
+        "y": -77.7175
+      },
+      "png": "vector-art/png/effects/ice_wave_fire_anim@4x.png",
+      "scale": 4,
+      "slug": "ice_wave_fire_anim",
+      "source": "vector-art/svg/effects/ice_wave_fire_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 598,
+        "width": 566,
+        "x": -242,
+        "y": -311
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 103.806,
+        "width": 84.9532,
+        "x": -42.4754,
+        "y": -51.8951
+      },
+      "png": "vector-art/png/effects/jet_pack_states@4x.png",
+      "scale": 4,
+      "slug": "jet_pack_states",
+      "source": "vector-art/svg/effects/jet_pack_states.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 415,
+        "width": 340,
+        "x": -170,
+        "y": -208
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 413.991,
+        "width": 183.645,
+        "x": -107.1,
+        "y": -410.35
+      },
+      "png": "vector-art/png/effects/jump_anim@4x.png",
+      "scale": 4,
+      "slug": "jump_anim",
+      "source": "vector-art/svg/effects/jump_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1657,
+        "width": 735,
+        "x": -429,
+        "y": -1642
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
         "height": 63.5416,
         "width": 39.4189,
         "x": -62.9595,
@@ -418,6 +693,56 @@
         "width": 640,
         "x": -320,
         "y": -220
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 401.987,
+        "width": 118.376,
+        "x": -53.2494,
+        "y": -395.89
+      },
+      "png": "vector-art/png/effects/super_jump_anim@4x.png",
+      "scale": 4,
+      "slug": "super_jump_anim",
+      "source": "vector-art/svg/effects/super_jump_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1610,
+        "width": 474,
+        "x": -213,
+        "y": -1584
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "effects",
+      "drawingBounds": {
+        "height": 165.2,
+        "width": 63.9181,
+        "x": -29.6,
+        "y": -18.55
+      },
+      "png": "vector-art/png/effects/sword_anim@4x.png",
+      "scale": 4,
+      "slug": "sword_anim",
+      "source": "vector-art/svg/effects/sword_anim.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 662,
+        "width": 256,
+        "x": -119,
+        "y": -75
       }
     },
     {

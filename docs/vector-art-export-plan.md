@@ -83,7 +83,7 @@ asset families:
   - backgrounds: 7 SVGs
   - block overlays and pieces: 6 SVGs
   - stamps: 8 SVGs
-  - effect symbols: 10 SVGs, one reusable symbol image each
+  - effect symbols: 23 SVGs, one reusable symbol image each
   - item display icons: 10 SVGs
   - editor/menu graphics: 3 SVGs
 - `tools/generate_block_bitmap_jsfl.py`
