@@ -16,6 +16,7 @@ import pr2.level.ServerLevelRendererTest;
 import pr2.net.AccountCreationClientTest;
 import pr2.net.CampaignListClientTest;
 import pr2.net.LevelDataClientTest;
+import pr2.net.JsonClientTest;
 import pr2.net.LoginAuthClientTest;
 import pr2.net.LoginSocketProtocolTest;
 import pr2.net.ServerConfigTest;
@@ -48,6 +49,7 @@ class DeterministicTestSuite {
 		AccountCreationClientTest.main();
 		LoginAuthClientTest.main();
 		LevelDataClientTest.main();
+		JsonClientTest.main();
 		CampaignTestScreenTest.main();
 		LobbyServicesTest.main();
 		AccountTabTest.main();

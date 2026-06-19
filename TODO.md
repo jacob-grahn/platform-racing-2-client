@@ -149,7 +149,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     blank/id/page guards, POST request to `search_levels.php`, persisted search
     state, and `LobbyRight.lookupUser` / `lookupLevel` hooks from player/level
     popups.
-- [ ] Port shared lobby UI/services needed by the tabs.
+- [x] Port shared lobby UI/services needed by the tabs.
   - Add Haxe wrappers for `Main.group`, logged-in user/server metadata,
     `Memory`, `SecureData`, `CommandHandler`, socket command dispatch, URLLoader
     POST/GET JSON helpers, `PageNavigation`, `CustomScrollBar`, loading
