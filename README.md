@@ -45,6 +45,13 @@ haxe test/deterministic.hxml
 haxe test/real-server.hxml
 ```
 
+Capture the representative character parity cases (default, recolored, mixed
+parts, and cheese-hat/Fred-body placement) after an HTML5 build:
+
+```sh
+for case in default colors mixed-parts tricky-parts; do python3 tools/openfl_driver.py sequence test/sequences/openfl/character-$case.json; done
+```
+
 Local server/API overrides can live in ignored shell env files. On sys targets,
 set `PR2_API_HOST` to point API calls at a proxy or local endpoint:
 

@@ -177,7 +177,7 @@ appearance, not an open-ended art project.
   - Separate static/primary/secondary layers; independent primary/secondary
     tinting; composite layer kept for preview/debug/fallback.
   - Verify against Flash for representative outfits.
-- [ ] Compare representative character screenshots against Flash.
+- [x] Compare representative character screenshots against Flash.
   - Default outfit; primary + secondary color change; hat/head/body/feet mix;
     known tricky parts (cheese hat, Fred/body-specific placement).
 
