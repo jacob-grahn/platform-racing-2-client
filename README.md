@@ -174,6 +174,13 @@ Regenerate the vector-art inventory:
 python3 tools/vector_art_inventory.py
 ```
 
+Recover bitmap files retained only as XFL `bin/*.dat` payloads:
+
+```sh
+python3 tools/extract_xfl_bitmaps.py
+python3 tools/extract_xfl_bitmaps.py --check
+```
+
 The default inventory output is `docs/vector-art-inventory.json`.
 
 ## Adobe Animate SVG Export

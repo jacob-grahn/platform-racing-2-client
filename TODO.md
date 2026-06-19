@@ -223,10 +223,9 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
   `LevelEditorMenuGraphic`, `DrawingPopupGraphic`, `HatPickerGraphic`.
 - [ ] Finish the intro animations: visually verify the baked Kongregate intro
   art (`bitmap379.jpg` plus nested vector pieces) against Flash.
-- [ ] Resolve the five unexported bitmap media entries.
-  - `Images/bitmap379.jpg` is a normal XFL image (likely the Kongregate logo).
-  - `bitmap1249.png`, `bitmap371.png`, `bitmap386.png`, `bitmap97.jpg` are
-    referenced as embedded payloads but absent under `LIBRARY/Images/`.
+- [x] Resolve the five unexported bitmap media entries.
+  - Recover direct JPEG and chunked 32-bit bitmap `bin/*.dat` payloads with
+    `tools/extract_xfl_bitmaps.py`; all five recover under `LIBRARY/Images/`.
 - [ ] Leave broad Flash component skins / low-priority UI linkage symbols (258
   audited: 3 backgrounds, 8 blocks, 41 components, 10 items_effects, 144 ui, 52
   uncategorized) until a ported screen needs them.
