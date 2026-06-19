@@ -32,7 +32,7 @@ CHANNELS = ("static", "primary", "secondary", "composite")
 # Categories that produce individual PNGs with no atlas. Large timeline-driven
 # effect symbols can exceed the default atlas page and are animated by metadata
 # rather than by atlas frame sequencing.
-NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "blocks", "effects", "login"})
+NO_ATLAS_CATEGORIES = frozenset({"backgrounds", "blocks", "effects", "login", "menus"})
 
 
 def parse_svg_path(svg_root, path):
@@ -152,6 +152,17 @@ def parse_svg_path(svg_root, path):
             return None
         return {
             "category": "login",
+            "rel": rel,
+            "slug": path.stem,
+            "atlas_group": None,
+        }
+
+    if category == "menus":
+        # menus/<slug>.svg
+        if len(parts) != 2:
+            return None
+        return {
+            "category": "menus",
             "rel": rel,
             "slug": path.stem,
             "atlas_group": None,
@@ -328,6 +339,8 @@ def png_path_for(png_root, job, scale):
         return png_root / "intro" / job["group"] / f"{job['slug']}@{scale}x.png"
     if cat == "login":
         return png_root / "login" / f"{job['slug']}@{scale}x.png"
+    if cat == "menus":
+        return png_root / "menus" / f"{job['slug']}@{scale}x.png"
     raise ValueError(f"Unknown category: {cat}")
 
 
@@ -595,7 +608,7 @@ def parse_args(argv):
     parser.add_argument(
         "--category",
         action="append",
-		choices=("character", "backgrounds", "blocks", "stamps", "effects", "items", "intro", "login"),
+        choices=("character", "backgrounds", "blocks", "stamps", "effects", "items", "intro", "login", "menus"),
         help="repeatable category filter; default: all categories",
     )
     parser.add_argument("--limit", type=int)

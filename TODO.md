@@ -221,7 +221,7 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
   `FinishedPageGraphic`, `ExpGainGraphic`, `DrawingInfoGraphic`,
   `StatsDisplayGraphic`, `RaceChatGraphic`, `MiniMapGraphic`, `MiniMapDot`,
   `PrizePopupGraphic`, `QuitButtonGraphic`, `MusicSelectionGraphic`.
-- [ ] Export editor/menu graphics per screen after the lobby asset pass:
+- [x] Export editor/menu graphics per screen after the lobby asset pass:
   `LevelEditorMenuGraphic`, `DrawingPopupGraphic`, `HatPickerGraphic`.
 - [ ] Finish the intro animations: visually verify the baked Kongregate intro
   art (`bitmap379.jpg` plus nested vector pieces) against Flash.

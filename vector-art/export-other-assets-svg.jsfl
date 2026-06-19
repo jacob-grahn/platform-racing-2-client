@@ -517,6 +517,30 @@ var JOBS = [
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/login/bg_front.svg",
     "slug": "bg_front",
     "symbolName": "MovieClips/Symbol 374"
+  },
+  {
+    "category": "menus",
+    "exportPath": "menus/level_editor_menu.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/menus/level_editor_menu.svg",
+    "slug": "level_editor_menu",
+    "symbolName": "UI/Pages/Levels/Editor/LevelEditorMenu"
+  },
+  {
+    "category": "menus",
+    "exportPath": "menus/drawing_popup.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/menus/drawing_popup.svg",
+    "slug": "drawing_popup",
+    "symbolName": "MovieClips/Symbol 1092"
+  },
+  {
+    "category": "menus",
+    "exportPath": "menus/hat_picker.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/menus/hat_picker.svg",
+    "slug": "hat_picker",
+    "symbolName": "MovieClips/Symbol 1185"
   }
 ];
 

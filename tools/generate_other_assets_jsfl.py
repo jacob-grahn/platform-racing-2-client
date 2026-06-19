@@ -10,6 +10,7 @@ Categories exported:
   items        - ItemDisplay icon frames (one per label)
   intro        - baked leaf/composite art used by intro timelines
   login        - login screen baked page/control artwork
+  menus        - editor and drawing menu artwork
 
 The generated JSFL should be run inside Adobe Animate the same way as the
 character export JSFL. Outputs land directly in vector-art/svg/<category>/.
@@ -155,6 +156,15 @@ LOGIN_SYMBOLS = [
     {"slug": "bg_front", "symbol": "MovieClips/Symbol 374"},
 ]
 
+MENU_SYMBOLS = [
+    {
+        "slug": "level_editor_menu",
+        "symbol": "UI/Pages/Levels/Editor/LevelEditorMenu",
+    },
+    {"slug": "drawing_popup", "symbol": "MovieClips/Symbol 1092"},
+    {"slug": "hat_picker", "symbol": "MovieClips/Symbol 1185"},
+]
+
 
 def file_uri(path):
     return Path(path).resolve().as_uri()
@@ -242,6 +252,17 @@ def build_jobs(svg_dir):
             "slug":       entry["slug"],
             "symbolName": entry["symbol"],
             "frame":      entry.get("frame", 0),
+            "exportPath": export_path,
+            "outputUri":  (root / export_path).as_uri(),
+        })
+
+    for entry in MENU_SYMBOLS:
+        export_path = f"menus/{entry['slug']}.svg"
+        jobs.append({
+            "category":   "menus",
+            "slug":       entry["slug"],
+            "symbolName": entry["symbol"],
+            "frame":      0,
             "exportPath": export_path,
             "outputUri":  (root / export_path).as_uri(),
         })

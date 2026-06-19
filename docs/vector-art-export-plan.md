@@ -85,6 +85,7 @@ asset families:
   - stamps: 8 SVGs
   - effect symbols: 10 SVGs, one reusable symbol image each
   - item display icons: 10 SVGs
+  - editor/menu graphics: 3 SVGs
 - `tools/generate_block_bitmap_jsfl.py`
   - block bitmap tiles: 26 PNGs
 
@@ -92,6 +93,8 @@ Animated effects are intentionally not exported as per-frame SVG sequences.
 The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested
 symbols, transforms, visibility, and customization. The exported effect SVGs
 are reusable symbol images for runtime composition and fallback rendering.
+Editor/menu exports are written to `vector-art/svg/menus/` and rasterized as
+standalone PNGs.
 
 ## Animate Automation Contract
 
