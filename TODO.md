@@ -223,8 +223,10 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
   `PrizePopupGraphic`, `QuitButtonGraphic`, `MusicSelectionGraphic`.
 - [x] Export editor/menu graphics per screen after the lobby asset pass:
   `LevelEditorMenuGraphic`, `DrawingPopupGraphic`, `HatPickerGraphic`.
-- [ ] Finish the intro animations: visually verify the baked Kongregate intro
-  art (`bitmap379.jpg` plus nested vector pieces) against Flash.
+- [x] Finish the intro animations: verify all 15 Adobe-exported Kongregate
+  symbols are present and pixel-identical in the committed runtime atlas, and
+  validate the recovered `bitmap379.jpg`; covered by
+  `tools/verify_kongregate_intro.py` and the `intro-kongregate` OpenFL sequence.
 - [x] Resolve the five unexported bitmap media entries.
   - Recover direct JPEG and chunked 32-bit bitmap `bin/*.dat` payloads with
     `tools/extract_xfl_bitmaps.py`; all five recover under `LIBRARY/Images/`.
@@ -299,7 +301,8 @@ least one real response is parsed; login feasibility is known before full UI.
 - [x] Add `finish-race` OpenFL sequence for reaching the fixture finish block.
 - [x] Add `real-server-connect` smoke coverage for server-list parsing,
   WebSocket URL selection, and login-id socket framing.
-- [x] Kongregate intro art remains pending.
+- [x] Kongregate intro art is verified by the committed-asset integrity check
+  and the `intro-kongregate` OpenFL sequence.
 
 Acceptance: one command runs a useful scripted OpenFL sequence; failures produce
 screenshots + debug output that are easy to inspect.

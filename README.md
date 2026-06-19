@@ -188,6 +188,12 @@ python3 tools/extract_xfl_bitmaps.py
 python3 tools/extract_xfl_bitmaps.py --check
 ```
 
+Verify the Adobe-exported Kongregate intro art and its committed runtime atlas:
+
+```sh
+python3 tools/verify_kongregate_intro.py
+```
+
 The default inventory output is `docs/vector-art-inventory.json`.
 
 ## Adobe Animate SVG Export
