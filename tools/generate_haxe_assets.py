@@ -70,10 +70,13 @@ def haxe_number(value):
     return str(value)
 
 
-def haxe_literal(value, indent=0):
-    pad = "\t" * indent
-    child_pad = "\t" * (indent + 1)
+# Maximum width (excluding indentation) for which a value is rendered on a
+# single line. Above this the value is expanded one entry per line. A long
+# scalar (e.g. a vector edge string) always stays on its own single line.
+MAX_INLINE_WIDTH = 200
 
+
+def haxe_scalar(value):
     if value is None:
         return "null"
     if isinstance(value, bool):
@@ -82,19 +85,45 @@ def haxe_literal(value, indent=0):
         return haxe_number(value)
     if isinstance(value, str):
         return haxe_string(value)
+    return None
+
+
+def haxe_inline(value):
+    scalar = haxe_scalar(value)
+    if scalar is not None:
+        return scalar
     if isinstance(value, list):
         if not value:
             return "[]"
-        items = [child_pad + haxe_literal(item, indent + 1) for item in value]
-        return "[\n" + ",\n".join(items) + "\n" + pad + "]"
+        return "[" + ", ".join(haxe_inline(item) for item in value) + "]"
     if isinstance(value, dict):
         if not value:
             return "{}"
+        items = [key + ": " + haxe_inline(value[key]) for key in sorted(value.keys())]
+        return "{" + ", ".join(items) + "}"
+    raise TypeError(f"Unsupported value for Haxe literal: {value!r}")
+
+
+def haxe_literal(value, indent=0):
+    inline = haxe_inline(value)
+    if len(inline) <= MAX_INLINE_WIDTH:
+        return inline
+
+    pad = "\t" * indent
+    child_pad = "\t" * (indent + 1)
+
+    if isinstance(value, list):
+        items = [child_pad + haxe_literal(item, indent + 1) for item in value]
+        return "[\n" + ",\n".join(items) + "\n" + pad + "]"
+    if isinstance(value, dict):
         items = []
         for key in sorted(value.keys()):
             items.append(child_pad + key + ": " + haxe_literal(value[key], indent + 1))
         return "{\n" + ",\n".join(items) + "\n" + pad + "}"
-    raise TypeError(f"Unsupported value for Haxe literal: {value!r}")
+
+    # A scalar wider than MAX_INLINE_WIDTH (e.g. a long edge string) cannot be
+    # split further, so it stays on its own line.
+    return inline
 
 
 def write_file(path, content):
@@ -306,11 +335,62 @@ final class AssetConstants {{
 """
 
 
-def catalog_source(metadata):
+def symbol_category(symbol):
+    href = symbol.get("href") or ""
+    slash = href.find("/")
+    if slash < 0:
+        return "Misc"
+    segment = href[:slash]
+    cleaned = "".join(ch for ch in segment if ch.isalnum())
+    if not cleaned or not cleaned[0].isalpha():
+        return "Misc"
+    return cleaned[0].upper() + cleaned[1:]
+
+
+def symbol_category_class(category):
+    return "AssetCatalogSymbols" + category
+
+
+def category_source(category, symbols):
+    class_name = symbol_category_class(category)
+    return GENERATED_NOTICE + """package pr2.generated.assets;
+
+import pr2.generated.assets.AssetTypes.SymbolAssetDef;
+
+final class """ + class_name + """ {
+\tpublic static function symbols():Array<SymbolAssetDef> {
+\t\treturn """ + haxe_literal(symbols, 2) + """;
+\t}
+
+\tprivate function new() {}
+}
+"""
+
+
+def catalog_sources(metadata):
     media = metadata["media"]
     symbols = [prune_symbol(symbol) for symbol in metadata["symbols"]]
     linkage_classes = metadata["linkageClasses"]
-    return GENERATED_NOTICE + """package pr2.generated.assets;
+
+    by_category = {}
+    for symbol in symbols:
+        by_category.setdefault(symbol_category(symbol), []).append(symbol)
+    categories = sorted(by_category.keys())
+
+    sources = {}
+    for category in categories:
+        sources[symbol_category_class(category) + ".hx"] = category_source(
+            category, by_category[category]
+        )
+
+    concat = "\n\t\t\t.concat(".join(
+        symbol_category_class(category) + ".symbols()" for category in categories
+    )
+    # First term has no leading ".concat(", the rest are wrapped; close one
+    # paren per concatenated category.
+    symbols_body = concat + ")" * (len(categories) - 1)
+
+    sources["AssetCatalog.hx"] = GENERATED_NOTICE + """package pr2.generated.assets;
 
 import pr2.generated.assets.AssetTypes.MediaAssetDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
@@ -321,7 +401,7 @@ final class AssetCatalog {
 \t}
 
 \tpublic static function symbols():Array<SymbolAssetDef> {
-\t\treturn """ + haxe_literal(symbols, 2) + """;
+\t\treturn """ + symbols_body + """;
 \t}
 
 \tpublic static function linkageClasses():Array<String> {
@@ -331,6 +411,7 @@ final class AssetCatalog {
 \tprivate function new() {}
 }
 """
+    return sources
 
 
 def parse_args(argv):
@@ -351,7 +432,8 @@ def main(argv=None):
 
     write_file(os.path.join(args.out_dir, "AssetTypes.hx"), schema_source())
     write_file(os.path.join(args.out_dir, "AssetConstants.hx"), constants_source(metadata))
-    write_file(os.path.join(args.out_dir, "AssetCatalog.hx"), catalog_source(metadata))
+    for filename, content in catalog_sources(metadata).items():
+        write_file(os.path.join(args.out_dir, filename), content)
 
     counts = metadata["counts"]
     print(

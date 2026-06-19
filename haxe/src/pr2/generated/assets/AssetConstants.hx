@@ -9,8 +9,8 @@ final class AssetConstants {
 	public static inline var SYMBOL_COUNT:Int = 988;
 	public static inline var MEDIA_COUNT:Int = 67;
 	public static inline var LINKAGE_CLASS_COUNT:Int = 339;
-	public static inline var TIMELINE_LAYER_COUNT:Int = 2587;
-	public static inline var TIMELINE_FRAME_COUNT:Int = 11511;
+	public static inline var TIMELINE_LAYER_COUNT:Int = 2586;
+	public static inline var TIMELINE_FRAME_COUNT:Int = 11510;
 	public static inline var TIMELINE_LABEL_COUNT:Int = 116;
 	public static inline var MAX_TIMELINE_FRAMES:Int = 1508;
 
