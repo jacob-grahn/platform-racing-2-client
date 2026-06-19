@@ -179,6 +179,7 @@ Regenerate the vector-art inventory:
 
 ```sh
 python3 tools/vector_art_inventory.py
+python3 tools/verify_deferred_linkages.py
 ```
 
 Recover bitmap files retained only as XFL `bin/*.dat` payloads:

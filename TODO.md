@@ -230,9 +230,11 @@ Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
 - [x] Resolve the five unexported bitmap media entries.
   - Recover direct JPEG and chunked 32-bit bitmap `bin/*.dat` payloads with
     `tools/extract_xfl_bitmaps.py`; all five recover under `LIBRARY/Images/`.
-- [ ] Leave broad Flash component skins / low-priority UI linkage symbols (258
-  audited: 3 backgrounds, 8 blocks, 41 components, 10 items_effects, 144 ui, 52
-  uncategorized) until a ported screen needs them.
+- [x] Leave broad Flash component skins / low-priority UI linkage symbols (247
+  currently deferred: 3 backgrounds, 5 blocks, 41 components, 10 items_effects,
+  140 ui, 48 uncategorized) until a ported screen needs them. The audited set is
+  enforced by `tools/verify_deferred_linkages.py` and excludes symbols already
+  selected by the non-character export manifest.
 
 Acceptance: needed assets ship from committed files; the browser build loads
 them without Animate; regeneration is documented and reproducible.
