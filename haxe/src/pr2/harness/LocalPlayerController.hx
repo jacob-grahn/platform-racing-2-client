@@ -25,6 +25,7 @@ class LocalPlayerController {
 	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
 	private static inline var ROTATE_FRAMES:Int = 30;
 	private static inline var HURT_FRAMES:Int = 60;
+	private static inline var FROZEN_SOLID_FRAMES:Int = 54;
 	private static inline var ITEM_LASER_GUN:Int = 1;
 	private static inline var ITEM_MINE:Int = 2;
 	private static inline var ITEM_LIGHTNING:Int = 3;
@@ -55,6 +56,7 @@ class LocalPlayerController {
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
 	public static inline var MODE_FREEZE:String = "freeze";
+	public static inline var MODE_FROZEN_SOLID:String = "frozenSolid";
 	public static inline var MODE_HURT:String = "hurt";
 
 	private final level:FixtureLevel;
@@ -91,6 +93,7 @@ class LocalPlayerController {
 	private var rotateFramesRemaining:Int = 0;
 	private var rotateDirection:Int = 0;
 	private var hurtFramesRemaining:Int = 0;
+	private var frozenSolidFramesRemaining:Int = 0;
 	private var facingDirection:Int = 1;
 	private var speedBurstFramesRemaining:Int = 0;
 	private var jetPackFramesRemaining:Int = 0;
@@ -118,6 +121,8 @@ class LocalPlayerController {
 		useHeldItem(input);
 		if (mode == MODE_FREEZE) {
 			updateRotation();
+		} else if (mode == MODE_FROZEN_SOLID) {
+			frozenSolidStep(input);
 		} else if (mode == MODE_HURT) {
 			hurtStep(input);
 		} else if (mode == MODE_WATER) {
@@ -126,6 +131,31 @@ class LocalPlayerController {
 			landStep(input);
 		}
 		updateTimedBlocks();
+	}
+
+	public function freeze():Void {
+		if (mode == MODE_FROZEN_SOLID || frozenSolidFramesRemaining > 0) {
+			return;
+		}
+		frozenSolidFramesRemaining = FROZEN_SOLID_FRAMES;
+		setMode(MODE_FROZEN_SOLID);
+	}
+
+	public function isFrozen():Bool {
+		return frozenSolidFramesRemaining > 0;
+	}
+
+	private function frozenSolidStep(input:LocalPlayerInput):Void {
+		targetVelX = 0;
+		position();
+		processBlocks(input);
+		if (input.jump && grounded && !crouching) {
+			vy -= jumpVelocity;
+		}
+		frozenSolidFramesRemaining--;
+		if (frozenSolidFramesRemaining <= 0) {
+			setMode(MODE_LAND);
+		}
 	}
 
 	private function hurtStep(input:LocalPlayerInput):Void {

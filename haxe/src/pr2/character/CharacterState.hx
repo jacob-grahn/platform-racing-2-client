@@ -13,7 +13,7 @@ enum abstract CharacterState(String) from String to String {
 	public var Bumped = "bumped";
 
 	public static function fromMotion(mode:String, grounded:Bool, crouching:Bool, crouchCharge:Float, vx:Float, vy:Float):CharacterState {
-		if (mode == "freeze") {
+		if (mode == "freeze" || mode == "frozenSolid") {
 			return Freeze;
 		}
 		if (mode == "hurt") {

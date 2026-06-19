@@ -37,6 +37,7 @@ class LocalPlayerControllerTest {
 		testLightningEmitsZapAndConsumesItem();
 		testSwordLungesAndConsumesThreeSwings();
 		testIceWaveEmitsThreeWaves();
+		testFrozenSolidDisablesMovementAndThaws();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
@@ -518,6 +519,26 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(null, player.debugState().itemId, "ice wave is consumed after three waves");
+	}
+
+	private static function testFrozenSolidDisablesMovementAndThaws():Void {
+		var player = newPlayer();
+		var startX = player.debugState().x;
+		player.freeze();
+
+		assertEquals(true, player.isFrozen(), "freeze marks player frozen");
+		assertEquals("frozenSolid", player.debugState().mode, "freeze enters frozen-solid mode");
+		assertEquals("freeze", player.debugState().animation, "frozen-solid mode uses frozen animation");
+
+		for (_ in 0...53) {
+			player.step(new LocalPlayerInput(false, true));
+		}
+		assertEquals(true, player.isFrozen(), "player remains frozen before two seconds elapse");
+		assertClose(startX, player.debugState().x, "frozen player ignores horizontal input");
+
+		player.step(new LocalPlayerInput(false, true));
+		assertEquals(false, player.isFrozen(), "player thaws after two seconds");
+		assertEquals("land", player.debugState().mode, "thaw returns player to land mode");
 	}
 
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {

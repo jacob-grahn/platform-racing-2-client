@@ -11,6 +11,7 @@ class CharacterStateTest {
 
 	private static function testFromMotionPriorities():Void {
 		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("freeze", true, false, 0, 0, 0), "freeze mode owns state");
+		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("frozenSolid", true, false, 0, 0, 0), "frozen-solid mode owns state");
 		assertEquals(CharacterState.Bumped, CharacterState.fromMotion("hurt", true, false, 0, 0, 0), "hurt mode owns state");
 		assertEquals(CharacterState.Swim, CharacterState.fromMotion("water", true, false, 0, 0, 0), "water mode owns state");
 		assertEquals(CharacterState.SuperJump, CharacterState.fromMotion("land", true, false, 26, 0, 0), "charged crouch uses super jump");

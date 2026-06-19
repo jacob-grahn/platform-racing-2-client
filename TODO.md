@@ -267,6 +267,7 @@ Each should match original PR2 behavior, verified via debug state / comparison.
 - [x] Items: sword, laser gun, mine, ice wave, lightning.
 - [ ] Movement edge cases: frozen state, moving/rotating block collisions,
   corner cases.
+  - [x] Frozen-solid state: immobilization, animation, and timed thaw.
   - [x] Mine-hit hurt recovery with bumped animation state.
 
 Acceptance: each mechanic has a fixture level; debug state exposes enough to
