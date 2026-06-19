@@ -18,6 +18,7 @@ import pr2.page.IntroPage;
 import pr2.page.LoginPage;
 import pr2.page.PageHolder;
 import pr2.page.SymbolPreview;
+import pr2.ui.MuteButton;
 
 /**
 	Application entry point. Boots into a screen selected by the `?screen=`
@@ -50,9 +51,27 @@ class Main extends Sprite {
 			// sys targets, PR2_API_HOST can provide the same local override.
 			ServerConfig.applyLocalOverrides();
 			ServerConfig.setHost(QueryParams.get(query, "apiHost"));
-			addChild(buildScreen(Screen.fromQuery(query), query));
+			var screen = Screen.fromQuery(query);
+			addChild(buildScreen(screen, query));
+			addGlobalChrome(screen);
 		} catch (error:Dynamic) {
 			reportFatalError(error);
+		}
+	}
+
+	// The mute toggle lives at the document root in the Flash original
+	// (`Main.muteButton`), so it stays on screen across every page. It is added
+	// on top of the active screen at the Flash coordinates (x=504, y=380). The
+	// pure dev tooling screens (symbol preview / gameplay harness) are not part
+	// of the real game chrome and would corrupt visual diffs, so they skip it.
+	private function addGlobalChrome(screen:Screen):Void {
+		switch (screen) {
+			case Login | Lobby | Intro | Campaign:
+				var muteButton = new MuteButton();
+				muteButton.x = 504;
+				muteButton.y = 380;
+				addChild(muteButton);
+			default:
 		}
 	}
 

@@ -45,7 +45,6 @@ class LoginPage extends Page {
 	private var pageArt:Null<Bitmap>;
 	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
-	private var muteButton:Null<LoginMuteButton>;
 	private var kongHitArea:Null<Sprite>;
 	private var statusText:Null<TextField>;
 	private var activePopup:Null<LoginFlashPopup>;
@@ -78,11 +77,6 @@ class LoginPage extends Page {
 		kongHitArea = createHitArea(5, 364, 183, 31, openKongDialog);
 		addChild(kongHitArea);
 
-		muteButton = new LoginMuteButton();
-		muteButton.x = 491;
-		muteButton.y = 363;
-		addChild(muteButton);
-
 		statusText = makeText(10, 8, 530, 20, 11, 0x20354A, TextFormatAlign.CENTER);
 		statusText.text = "Loading servers...";
 		addChild(statusText);
@@ -100,14 +94,6 @@ class LoginPage extends Page {
 			}
 		}
 		buttons = [];
-
-		if (muteButton != null) {
-			muteButton.remove();
-			if (muteButton.parent != null) {
-				muteButton.parent.removeChild(muteButton);
-			}
-			muteButton = null;
-		}
 
 		if (kongHitArea != null && kongHitArea.parent != null) {
 			kongHitArea.parent.removeChild(kongHitArea);

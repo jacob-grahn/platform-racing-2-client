@@ -1,4 +1,4 @@
-package pr2.page;
+package pr2.ui;
 
 import openfl.display.Bitmap;
 import openfl.display.PixelSnapping;
@@ -9,7 +9,16 @@ import openfl.media.SoundMixer;
 import openfl.media.SoundTransform;
 import openfl.utils.Assets;
 
-class LoginMuteButton extends Sprite {
+/**
+	Global mute toggle ported from the Flash `ui.MuteButton`. In the original
+	game this lives at the document root (`Main`) and stays on screen across
+	every page, so it is owned by `Main` here rather than any single page.
+
+	The artwork is the `UI/Global/MuteButton` symbol baked through the vector
+	pipeline; the sprite's local origin matches the symbol registration point,
+	so positioning the sprite at the Flash coordinates places it identically.
+**/
+class MuteButton extends Sprite {
 	private static inline var MUTE_BUTTON_ASSET = "assets/login/mute_button@4x.png";
 	private static inline var MUTE_BUTTON_SCALE = 4;
 	private static inline var MUTE_BUTTON_TRIM_X = -57;
