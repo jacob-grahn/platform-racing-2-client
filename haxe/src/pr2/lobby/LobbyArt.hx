@@ -6,6 +6,7 @@ import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import pr2.runtime.FlComponents;
 
 /**
 	Helpers shared by the lobby tab pages for poking at instance-named children of
@@ -37,7 +38,7 @@ class LobbyArt {
 	}
 
 	public static function text(container:Null<DisplayObjectContainer>, name:String):Null<TextField> {
-		return Std.downcast(findByName(container, name), TextField);
+		return FlComponents.asTextField(findByName(container, name));
 	}
 
 	/**

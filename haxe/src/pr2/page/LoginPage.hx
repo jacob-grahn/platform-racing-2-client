@@ -23,6 +23,7 @@ import openfl.text.TextFormatAlign;
 import openfl.text.TextFieldType;
 import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.runtime.FlComponents;
 import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
 import pr2.net.LoginAuthClient;
@@ -740,7 +741,9 @@ private class LoginFlashPopup extends Sprite {
 	}
 
 	public function input(name:String):TextField {
-		var field = Std.downcast(child(name), TextField);
+		// nameBox/passBox/etc. are authored as fl.controls.TextInput components, so
+		// unwrap the FlTextInput/FlTextArea sprite to its inner editable field.
+		var field = FlComponents.asTextField(child(name));
 		if (field == null) {
 			throw 'Popup ${art.symbol.linkageClassName} missing TextInput $name';
 		}

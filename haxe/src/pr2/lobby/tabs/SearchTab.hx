@@ -185,10 +185,8 @@ class SearchTab extends LevelListingPage {
 		}
 	}
 
-	/** First text field under the SearchGraphic's TextInput clip. */
+	/** Editable field of the SearchGraphic's `searchBox` TextInput component. */
 	private static function firstInputField(container:DisplayObjectContainer):Null<TextField> {
-		var box = Std.downcast(LobbyArt.findByName(container, "searchBox"), DisplayObjectContainer);
-		var fields = LobbyArt.textFields(box != null ? box : container);
-		return fields.length > 0 ? fields[0] : null;
+		return LobbyArt.text(container, "searchBox");
 	}
 }
