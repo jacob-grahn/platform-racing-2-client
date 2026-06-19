@@ -45,9 +45,11 @@ class LocalPlayerControllerTest {
 		testStandingOnPushBlockMovesItDown();
 		testTimedMoveBlockShiftsAfterPreview();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
+		testTimedMoveBlockWaitsWhenDestinationOccupied();
 		testBumpingRotateBlockFreezesPlayer();
 		testRotateRightCompletesCourseRotation();
 		testRotateLeftCompletesCourseRotation();
+		testCollisionSnapsAgainstRotatedCeiling();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -634,6 +636,18 @@ class LocalPlayerControllerTest {
 		assertEquals(BlockType.Solid, level.blockAt(3, 3).type, "blocking tile remains occupied");
 	}
 
+	private static function testTimedMoveBlockWaitsWhenDestinationOccupied():Void {
+		var level = timedMoveBlockLevel("up", false);
+		var player = new LocalPlayerController(level);
+
+		for (_ in 0...27) {
+			player.step(new LocalPlayerInput());
+		}
+
+		assertEquals(BlockType.Move, level.blockAt(2, 3).type, "move block does not shift into the player");
+		assertEquals(null, level.blockAt(2, 2), "occupied destination stays free of moving blocks");
+	}
+
 	private static function testBumpingRotateBlockFreezesPlayer():Void {
 		var player = new LocalPlayerController(rotateBlockLevel(BlockType.RotateRight));
 
@@ -682,6 +696,38 @@ class LocalPlayerControllerTest {
 		assertEquals(-90, state.courseRotation, "left rotation decreases course rotation");
 		assertClose(frozen.y, state.x, "left rotation maps x from frozen y");
 		assertClose(-frozen.x, state.y, "left rotation maps y from frozen x");
+	}
+
+	private static function testCollisionSnapsAgainstRotatedCeiling():Void {
+		var level = rotateBlockLevel(BlockType.RotateRight);
+		level.blocks.push(new LevelBlock(4, 3, BlockType.Solid));
+		level.blocks.push(new LevelBlock(1, 3, BlockType.Solid));
+		var player = new LocalPlayerController(level);
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().mode == "freeze") {
+				break;
+			}
+		}
+		for (_ in 0...60) {
+			player.step(new LocalPlayerInput());
+			if (player.debugState().grounded) {
+				break;
+			}
+		}
+
+		var bumped = false;
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput(false, false, true));
+			var state = player.debugState();
+			if (state.touchedBlockType == "solid" && state.y > 100) {
+				bumped = true;
+				assertClose(115, state.y, "rotated ceiling bump snaps below its displayed edge");
+				break;
+			}
+		}
+		assertEquals(true, bumped, "player bumps the ceiling after course rotation");
 	}
 
 	private static function bumpRotateBlock(type:BlockType):LocalPlayerController {

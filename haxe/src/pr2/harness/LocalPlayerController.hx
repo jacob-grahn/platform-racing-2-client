@@ -419,7 +419,7 @@ class LocalPlayerController {
 	private function onBump(block:LevelBlock, input:LocalPlayerInput):Void {
 		touch(block);
 		var bumpForce = Math.round(-vy);
-		y = (block.y + 1) * level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
+		y = rotatedBlockPos(block).y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
 		vy *= -0.25;
 		jumpVelBoost = 0;
 		applyBumpEffect(block, input, bumpForce);
@@ -428,7 +428,7 @@ class LocalPlayerController {
 	private function onLeftHit(block:LevelBlock):Void {
 		touch(block);
 		var sideForce = Math.round(Math.abs(vx) * 1.75);
-		x = block.x * level.tileSize - HALF_WIDTH;
+		x = rotatedBlockPos(block).x - HALF_WIDTH;
 		if (vx > 0) {
 			vx *= -0.05;
 		}
@@ -441,7 +441,7 @@ class LocalPlayerController {
 	private function onRightHit(block:LevelBlock):Void {
 		touch(block);
 		var sideForce = Math.round(Math.abs(vx) * 1.75);
-		x = (block.x + 1) * level.tileSize + HALF_WIDTH;
+		x = rotatedBlockPos(block).x + level.tileSize + HALF_WIDTH;
 		if (vx < 0) {
 			vx *= -0.05;
 		}
