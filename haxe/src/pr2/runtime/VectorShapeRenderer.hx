@@ -1,6 +1,8 @@
 package pr2.runtime;
 
 import openfl.display.Graphics;
+import openfl.display.GraphicsPath;
+import openfl.display.GraphicsPathWinding;
 import openfl.display.GradientType;
 import openfl.display.InterpolationMethod;
 import openfl.display.Shape;
@@ -54,9 +56,7 @@ class VectorShapeRenderer {
 				}
 
 				beginStyleFill(shape.graphics, fill.value);
-				for (ring in rings) {
-					emitContour(shape.graphics, ring);
-				}
+				emitFillContours(shape.graphics, rings);
 				shape.graphics.endFill();
 				drew = true;
 			}
@@ -261,12 +261,25 @@ class VectorShapeRenderer {
 		return rev;
 	}
 
-	private static function emitContour(graphics:Graphics, c:Contour):Void {
-		graphics.moveTo(c.start.x, c.start.y);
+	// XFL/SWF fills use non-zero winding. OpenFL's incremental Graphics path
+	// defaults to even-odd winding, which incorrectly punches holes where stamp
+	// contours overlap. Submit the complete fill as one explicit non-zero path;
+	// collectFillContours has already oriented outer and inner boundaries by the
+	// side of the edge carrying this fill.
+	private static function emitFillContours(graphics:Graphics, contours:Array<Contour>):Void {
+		var path = new GraphicsPath();
+		for (contour in contours) {
+			emitContour(path, contour);
+		}
+		graphics.drawPath(path.commands, path.data, GraphicsPathWinding.NON_ZERO);
+	}
+
+	private static function emitContour(path:GraphicsPath, c:Contour):Void {
+		path.moveTo(c.start.x, c.start.y);
 		for (s in c.segs) {
 			switch (s) {
-				case Line(p): graphics.lineTo(p.x, p.y);
-				case Quad(ctrl, p): graphics.curveTo(ctrl.x, ctrl.y, p.x, p.y);
+				case Line(p): path.lineTo(p.x, p.y);
+				case Quad(ctrl, p): path.curveTo(ctrl.x, ctrl.y, p.x, p.y);
 			}
 		}
 	}

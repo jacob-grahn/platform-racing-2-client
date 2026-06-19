@@ -197,8 +197,10 @@ Comparison harness: `tools/compare_symbol_render.py` renders each case symbol
 through the `?screen=symbol` vector path and scores it against the Adobe `@4x`
 PNG. Cases and thresholds live in `tools/symbol_render_cases.json`.
 
-- [ ] Close stamp fill/contour differences so `tree1` and `rock1` thresholds can
-  tighten toward the leaf-symbol level.
+- [x] Close stamp fill/contour differences so `tree1` and `rock1` thresholds can
+  tighten toward the leaf-symbol level. Filled contours now render as one
+  non-zero-winding path, matching XFL/SWF semantics instead of punching out
+  overlapping contours with OpenFL's even-odd default; both RMS gates are 24.
 
 Acceptance: stamp cases score close enough to tighten their thresholds and
 reduce reliance on raster fallbacks.

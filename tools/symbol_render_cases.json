@@ -1,5 +1,5 @@
 {
-  "_comment": "Representative symbols scored by tools/compare_symbol_render.py: each renders through the OpenFL vector path and is compared to its Adobe @4x raster under vector-art/png/. Per-case scale/bg/thresholdPercent/thresholdRms override the manifest defaults. thresholdRms is the meaningful gate; thresholdPercent is report-only (gradient/anti-alias diffs keep it near 100%). thresholdRms values lock in current fidelity as a regression baseline; tighten them as the renderer improves. The stamp thresholds are loose because the renderer still has known fill/contour gaps (run with --diff-dir to inspect).",
+  "_comment": "Representative symbols scored by tools/compare_symbol_render.py: each renders through the OpenFL vector path and is compared to its Adobe @4x raster under vector-art/png/. Per-case scale/bg/thresholdPercent/thresholdRms override the manifest defaults. thresholdRms is the meaningful gate; thresholdPercent is report-only (gradient/anti-alias diffs keep it near 100%). thresholdRms values lock in current fidelity as a regression baseline.",
   "scale": 4,
   "bg": "FFFFFF",
   "cases": [
@@ -13,13 +13,13 @@
       "name": "stamp-tree1",
       "symbol": "UI/Pages/Levels/Stamps/tree1",
       "reference": "vector-art/png/stamps/tree1@4x.png",
-      "thresholdRms": 45
+      "thresholdRms": 24
     },
     {
       "name": "stamp-rock1",
       "symbol": "UI/Pages/Levels/Stamps/rock1",
       "reference": "vector-art/png/stamps/rock1@4x.png",
-      "thresholdRms": 52
+      "thresholdRms": 24
     }
   ]
 }
