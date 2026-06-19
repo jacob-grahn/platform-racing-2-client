@@ -1,5 +1,8 @@
 package pr2.lobby;
 
+#if js
+import js.Browser;
+#end
 import pr2.lobby.messages.UnreadNotif;
 import pr2.lobby.tabs.AccountTab;
 import pr2.lobby.tabs.ChatTab;
@@ -53,18 +56,28 @@ class LobbyLeft extends LobbySide {
 	}
 
 	private function changeTabChat():Void {
+		reportSelected("chat");
 		changePage(new ChatTab());
 	}
 
 	private function changeTabPMs():Void {
+		reportSelected("pms");
 		changePage(new MessagesTab());
 	}
 
 	private function changeTabPlayers():Void {
+		reportSelected("players");
 		changePage(new PlayersTab());
 	}
 
 	private function changeTabAccount():Void {
+		reportSelected("account");
 		changePage(new AccountTab());
+	}
+
+	private function reportSelected(tab:String):Void {
+		#if js
+		Browser.document.body.setAttribute("data-pr2-lobby-left", tab);
+		#end
 	}
 }

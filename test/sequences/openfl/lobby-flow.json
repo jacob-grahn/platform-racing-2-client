@@ -1,0 +1,63 @@
+{
+  "query": "screen=lobby&user=Tester",
+  "steps": [
+    {
+      "time": 2.0,
+      "action": "body-attribute",
+      "name": "data-pr2-page",
+      "value": "lobby:Tester"
+    },
+    {
+      "time": 2.1,
+      "action": "body-attribute",
+      "name": "data-pr2-lobby-left",
+      "value": "account"
+    },
+    {
+      "time": 2.2,
+      "action": "body-attribute",
+      "name": "data-pr2-lobby-right",
+      "value": "campaign"
+    },
+    {
+      "time": 2.3,
+      "action": "shot",
+      "out": "test/output/openfl-lobby-shell.png"
+    },
+    {
+      "time": 2.4,
+      "action": "click",
+      "x": 20,
+      "y": 10
+    },
+    {
+      "time": 2.6,
+      "action": "body-attribute",
+      "name": "data-pr2-lobby-left",
+      "value": "chat"
+    },
+    {
+      "time": 2.7,
+      "action": "click",
+      "x": 440,
+      "y": 10
+    },
+    {
+      "time": 2.9,
+      "action": "body-attribute",
+      "name": "data-pr2-lobby-right",
+      "value": "search"
+    },
+    {
+      "time": 3.0,
+      "action": "mouseMove",
+      "x": 248,
+      "y": 10
+    },
+    {
+      "time": 3.1,
+      "action": "shot",
+      "out": "test/output/openfl-lobby-tabs.png"
+    }
+  ]
+}

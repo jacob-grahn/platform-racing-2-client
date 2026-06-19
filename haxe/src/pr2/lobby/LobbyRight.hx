@@ -1,5 +1,8 @@
 package pr2.lobby;
 
+#if js
+import js.Browser;
+#end
 import pr2.lobby.tabs.ListingTab;
 import pr2.lobby.tabs.SearchTab;
 import pr2.ui.LobbyTab;
@@ -46,26 +49,32 @@ class LobbyRight extends LobbySide {
 	}
 
 	private function clickCampaign():Void {
+		reportSelected("campaign");
 		changePage(new ListingTab("campaign"));
 	}
 
 	private function clickBest():Void {
+		reportSelected("best");
 		changePage(new ListingTab("best"));
 	}
 
 	private function clickBestWeek():Void {
+		reportSelected("best_week");
 		changePage(new ListingTab("best_week"));
 	}
 
 	private function clickNew():Void {
+		reportSelected("newest");
 		changePage(new ListingTab("newest"));
 	}
 
 	private function clickSearch():Void {
+		reportSelected("search");
 		changePage(new SearchTab());
 	}
 
 	private function clickFavs():Void {
+		reportSelected("favorites");
 		changePage(new ListingTab("favorites"));
 	}
 
@@ -82,5 +91,11 @@ class LobbyRight extends LobbySide {
 	override public function remove():Void {
 		instance = null;
 		super.remove();
+	}
+
+	private function reportSelected(tab:String):Void {
+		#if js
+		Browser.document.body.setAttribute("data-pr2-lobby-right", tab);
+		#end
 	}
 }

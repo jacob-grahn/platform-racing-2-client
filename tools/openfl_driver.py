@@ -30,7 +30,7 @@ Sequence script format:
   }
 
   A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
-  tap, hold, click, shot, debug-state, body-attribute.
+  tap, hold, mouseMove, click, shot, debug-state, body-attribute.
 """
 
 import argparse
@@ -507,6 +507,8 @@ def run_sequence_step(devtools, step):
         dispatch_key(devtools, "keyUp", key)
     elif action == "click":
         dispatch_click(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
+    elif action == "mouseMove":
+        dispatch_mouse_move(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
     elif action == "shot":
         capture_devtools_shot(devtools, require_field(step, "out"))
     elif action == "debug-state":
@@ -594,6 +596,17 @@ def dispatch_click(devtools, x, y):
     devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mousePressed", buttons=1))
     devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mouseReleased", buttons=0))
     print(f"click: {x},{y}")
+
+
+def dispatch_mouse_move(devtools, x, y):
+    devtools.request("Input.dispatchMouseEvent", {
+        "type": "mouseMoved",
+        "x": x,
+        "y": y,
+        "button": "none",
+        "buttons": 0,
+    })
+    print(f"mouseMove: {x},{y}")
 
 
 def capture_devtools_shot(devtools, out_path):

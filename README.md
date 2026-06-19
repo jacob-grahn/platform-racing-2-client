@@ -348,10 +348,12 @@ Run a scripted OpenFL harness sequence:
 ```sh
 python3 tools/openfl_driver.py sequence test/sequences/openfl/harness-boot.json
 python3 tools/openfl_driver.py sequence test/sequences/openfl/run-right.json
+python3 tools/openfl_driver.py sequence test/sequences/openfl/lobby-flow.json
+python3 tools/compare_screenshots.py test/baselines/flash/04_lobby_unobstructed.jpg test/output/openfl-lobby-shell.png --diff test/output/openfl-vs-flash-lobby-diff.png --metrics test/output/openfl-vs-flash-lobby-metrics.json --threshold-percent 100 --threshold-rms 255
 ```
 
 Sequence files keep one browser session open and can combine `keyDown`,
-`keyUp`, `tap`, `hold`, `debug-state`, and `shot` actions. Screenshots and
+`keyUp`, `tap`, `hold`, `mouseMove`, `debug-state`, and `shot` actions. Screenshots and
 diff output should go under ignored `test/output/`.
 
 ## Useful References
