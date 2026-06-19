@@ -11,6 +11,8 @@ import pr2.lobby.search.SearchQuery.SearchDecision;
 import pr2.lobby.level.LevelAccess;
 import pr2.lobby.level.LevelAccess.LevelAccessState;
 import pr2.lobby.level.LevelGridLayout;
+import pr2.lobby.level.CourseMenu;
+import pr2.lobby.level.LevelLaunch;
 import pr2.lobby.messages.MessagesPaging;
 import pr2.lobby.messages.UnreadNotif;
 import pr2.net.CampaignLevelInfo;
@@ -52,6 +54,8 @@ class LobbyServicesTest {
 		testMemoryAndSecureData();
 		testMessagesPaging();
 		testSocialActionPlan();
+		testCourseMenuTiming();
+		testLevelLaunch();
 		trace('LobbyServicesTest passed $assertions assertions');
 	}
 
@@ -110,6 +114,27 @@ class LobbyServicesTest {
 		assertEquals("ignored", unignore.list, "unignore list");
 		assertEquals("remove", unignore.mode, "unignore mode");
 		assertEquals("unignore_user", unignore.socketVerb, "unignore verb");
+	}
+
+	private static function testCourseMenuTiming():Void {
+		// Flash CourseMenu.forceTime seeds (15 - timeRemaining) + 1, then ticks once;
+		// the first value the player sees is therefore 15 - timeRemaining.
+		assertEquals(16, CourseMenu.initialTimer(0), "full wait seeds 16");
+		assertEquals(1, CourseMenu.initialTimer(15), "one second left seeds 1");
+		assertEquals(6, CourseMenu.initialTimer(10), "ten seconds left seeds 6");
+	}
+
+	private static function testLevelLaunch():Void {
+		// Pressing Play hands the chosen course to the existing level loader. The
+		// override intercepts the launch (the default would navigate the page).
+		var captured:Null<String> = null;
+		LevelLaunch.handler = function(levelId:Int, version:Int):Void {
+			captured = levelId + ":" + version;
+		};
+		LevelLaunch.launch(4271, 9);
+		assertEquals("4271:9", captured, "launch invokes the handler with id/version");
+		assertEquals("4271`9", LevelLaunch.lastLaunch, "launch records the request");
+		LevelLaunch.handler = null;
 	}
 
 	private static function testTabLayoutNoCompression():Void {

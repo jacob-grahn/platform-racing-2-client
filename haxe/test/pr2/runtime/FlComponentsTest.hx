@@ -19,6 +19,7 @@ class FlComponentsTest {
 		testCheckBox();
 		testComboBoxModel();
 		testComboBoxUserSelectionDispatchesChange();
+		testComboBoxCollectionString();
 		testTextInput();
 		testTextArea();
 		testSlider();
@@ -100,6 +101,29 @@ class FlComponentsTest {
 		assertEquals(1, combo.selectedIndex, "picking a row selects it");
 		assertEquals(1, changes, "user selection dispatches CHANGE");
 		assertNotNull(findLabelField(combo, "Two"), "caption follows the picked row");
+	}
+
+	private static function testComboBoxCollectionString():Void {
+		// The Flash IDE serializes a ComboBox dataProvider as a flat token list:
+		// header, field descriptors (4 tokens each), item count, then values.
+		var mode = FlDataProvider.fromCollectionString(
+			"fl.data.DataProvider, fl.data.SimpleCollectionItem, item, 2, label, 5, , , data, 5, , , 3, User Name, user, Level Title, title, Level ID, id");
+		assertEquals(3, mode.length, "search mode provider parses three rows");
+		assertEquals("User Name", mode.getItemAt(0).label, "first label");
+		assertEquals("user", mode.getItemAt(0).data, "first data");
+		assertEquals("id", mode.getItemAt(2).data, "last data");
+
+		// Empty data values (a blank `data` field) survive as empty strings.
+		var dir = FlDataProvider.fromCollectionString(
+			"fl.data.DataProvider, fl.data.SimpleCollectionItem, item, 2, label, 5, , , data, 5, , , 3, Choose..., , One Hour, 3600, One Day, 86400");
+		assertEquals(3, dir.length, "provider with a blank value parses all rows");
+		assertEquals("", dir.getItemAt(0).data, "blank data preserved");
+		assertEquals("3600", dir.getItemAt(1).data, "value after a blank parses");
+
+		// An empty collection yields no rows.
+		assertEquals(0, FlDataProvider.fromCollectionString("fl.data.DataProvider, fl.data.SimpleCollectionItem, item, 0, 0").length,
+			"empty collection has no rows");
+		assertEquals(0, FlDataProvider.fromCollectionString("").length, "blank string yields no rows");
 	}
 
 	// --- TextInput ----------------------------------------------------------

@@ -10,6 +10,7 @@ import pr2.lobby.level.LevelListingPage;
 import pr2.lobby.search.SearchQuery;
 import pr2.net.LevelListClient;
 import pr2.net.LevelListClient.LevelListResult;
+import pr2.runtime.FlComboBox;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -18,13 +19,13 @@ import pr2.runtime.PR2MovieClip;
 	Renders the real `SearchGraphic` (search box, button, and the mode/order/
 	direction dropdowns) and runs searches through `LevelListingPage`: the request
 	guards and POST parameters come from the pure `SearchQuery`, results POST to
-	`search_levels.php` and render in the shared three-column grid, and the query
-	is persisted to `Memory`. Seeded lookups (`LobbyRight.lookupUser` /
-	`lookupLevel`) run immediately.
-
-	The mode/order/direction combo boxes are shown but not yet interactive — the
-	fl `ComboBox` component port is pending — so selection falls back to the seeded
-	or remembered mode with default order/direction.
+	`search_levels.php` and render in the shared three-column grid. The mode/order/
+	direction `FlComboBox` dropdowns supply `selectedItem.data`, and the search box
+	text plus the three combo `selectedIndex` values are persisted to `Memory`
+	(`searchStr` / `searchModeIndex` / `searchOrderIndex` / `searchDirIndex`) and
+	restored on re-entry, mirroring the original. Seeded lookups
+	(`LobbyRight.lookupUser` / `lookupLevel`) preselect the matching mode and run
+	immediately.
 **/
 class SearchTab extends LevelListingPage {
 	private var art:PR2MovieClip;
@@ -32,18 +33,18 @@ class SearchTab extends LevelListingPage {
 	private var searchButton:Null<openfl.display.DisplayObject>;
 	private var searchBinding:Null<LobbyArt.Binding>;
 
+	private var modeCb:Null<FlComboBox>;
+	private var orderCb:Null<FlComboBox>;
+	private var dirCb:Null<FlComboBox>;
+
 	private var seededQuery:String;
-	private var searchMode:String;
-	private var order:String;
-	private var dir:String;
+	private var seededMode:String;
 	private var firstRun:Bool = true;
 
 	public function new(?query:String, ?searchMode:String) {
 		super("search", 1);
 		this.seededQuery = query != null ? query : "";
-		this.searchMode = searchMode != null ? searchMode : modeFromMemory();
-		this.order = "";
-		this.dir = "";
+		this.seededMode = searchMode != null ? searchMode : "user";
 	}
 
 	override private function onInitialized():Void {
@@ -57,14 +58,48 @@ class SearchTab extends LevelListingPage {
 		searchBinding = LobbyArt.bind(searchButton, doSearch);
 		if (searchBox != null) {
 			searchBox.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			var remembered = Memory.getString("searchStr", "");
-			searchBox.text = seededQuery != "" ? seededQuery : remembered;
 		}
+
+		modeCb = Std.downcast(LobbyArt.findByName(art, "mode_cb"), FlComboBox);
+		orderCb = Std.downcast(LobbyArt.findByName(art, "order_cb"), FlComboBox);
+		dirCb = Std.downcast(LobbyArt.findByName(art, "dir_cb"), FlComboBox);
+
+		// Restore the remembered query + dropdown selections; the base then calls
+		// requestCourses(), which sends only when the box is non-blank.
+		var rememberedStr = Memory.has("searchStr") ? Memory.getString("searchStr", "") : null;
+		if (rememberedStr != null && searchBox != null) {
+			searchBox.text = rememberedStr;
+			selectIndex(modeCb, Memory.getInt("searchModeIndex", 0));
+			selectIndex(orderCb, Memory.getInt("searchOrderIndex", 0));
+			selectIndex(dirCb, Memory.getInt("searchDirIndex", 0));
+		}
+
+		// A seeded lookup (player/level popup) overrides the remembered state.
+		if (seededQuery != "" && searchBox != null) {
+			searchBox.text = seededQuery;
+			setSearchMode(seededMode);
+		}
+	}
+
+	/** Select the mode item whose `data` matches `s` (Flash `setSearchMode`). */
+	private function setSearchMode(s:String):Void {
+		if (modeCb == null) {
+			return;
+		}
+		var option = 0;
+		for (i in 0...modeCb.length) {
+			if (comboItemData(modeCb.dataProvider.getItemAt(i)) == s) {
+				option = i;
+				break;
+			}
+		}
+		modeCb.selectedIndex = option;
 	}
 
 	override private function requestCourses():Void {
 		var query = searchBox != null ? searchBox.text : seededQuery;
-		var decision = SearchQuery.decide(query, searchMode, getPageNum(), firstRun);
+		var mode = comboData(modeCb, "user");
+		var decision = SearchQuery.decide(query, mode, getPageNum(), firstRun);
 		switch (decision) {
 			case Skip:
 				hideLoading();
@@ -77,7 +112,9 @@ class SearchTab extends LevelListingPage {
 		}
 		firstRun = false;
 		showLoading();
-		var params = SearchQuery.buildPost(query, searchMode, order, dir, getPageNum());
+		var order = comboData(orderCb, "");
+		var dir = comboData(dirCb, "");
+		var params = SearchQuery.buildPost(query, mode, order, dir, getPageNum());
 		LevelListClient.search(params, onLoaded, onError);
 	}
 
@@ -104,9 +141,27 @@ class SearchTab extends LevelListingPage {
 		}
 	}
 
-	private function modeFromMemory():String {
-		var remembered = Memory.getString("searchMode", "");
-		return remembered != "" ? remembered : "user";
+	/** `selectedItem.data` for a combo, or the fallback when nothing is selected. */
+	private static function comboData(combo:Null<FlComboBox>, fallback:String):String {
+		if (combo == null) {
+			return fallback;
+		}
+		var data = comboItemData(combo.selectedItem);
+		return data == null ? fallback : data;
+	}
+
+	private static function comboItemData(item:Dynamic):Null<String> {
+		if (item == null || !Reflect.hasField(item, "data")) {
+			return null;
+		}
+		var value = Reflect.field(item, "data");
+		return value == null ? "" : Std.string(value);
+	}
+
+	private static function selectIndex(combo:Null<FlComboBox>, index:Int):Void {
+		if (combo != null && index >= 0 && index < combo.length) {
+			combo.selectedIndex = index;
+		}
 	}
 
 	override private function onTeardown():Void {
@@ -114,7 +169,15 @@ class SearchTab extends LevelListingPage {
 			Memory.set("searchStr", searchBox.text);
 			searchBox.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
-		Memory.set("searchMode", searchMode);
+		if (modeCb != null) {
+			Memory.set("searchModeIndex", modeCb.selectedIndex);
+		}
+		if (orderCb != null) {
+			Memory.set("searchOrderIndex", orderCb.selectedIndex);
+		}
+		if (dirCb != null) {
+			Memory.set("searchDirIndex", dirCb.selectedIndex);
+		}
 		LobbyArt.unbind(searchBinding);
 		if (art != null) {
 			art.dispose();

@@ -12,6 +12,12 @@ typedef CharacterColors = {
 	@:optional var secondary:Int;
 }
 
+/** Per-part tint; `secondary < 0` means the part has no epic (second) color. */
+typedef PartColor = {
+	var primary:Int;
+	var secondary:Int;
+}
+
 class CharacterDisplay extends Sprite {
 	public static final STATE_NAMES = [
 		"runAnim",
@@ -34,6 +40,8 @@ class CharacterDisplay extends Sprite {
 	private var partIds:CharacterPartIds;
 	private var primaryColor:Int;
 	private var secondaryColor:Int;
+	// Optional per-part overrides (hat/head/body/feet). Empty => global colors.
+	private final partColors:Map<String, PartColor> = new Map();
 	private var activeStateName:String = "standAnim";
 	private var activeStateClip:Null<PR2MovieClip>;
 
@@ -66,6 +74,23 @@ class CharacterDisplay extends Sprite {
 		if (activeStateClip != null) {
 			renderAtlasParts(activeStateClip);
 		}
+	}
+
+	/**
+		Tint a single part kind (`hat`/`head`/`body`/`feet`) independently of the
+		others. `secondary < 0` removes that part's epic colour. Used by the Account
+		customize preview, where each part carries its own colour.
+	**/
+	public function setPartColor(kind:String, primary:Int, secondary:Int):Void {
+		partColors.set(kind, {primary: primary, secondary: secondary});
+		if (activeStateClip != null) {
+			renderAtlasParts(activeStateClip);
+		}
+	}
+
+	private function colorFor(kind:String):PartColor {
+		var override = partColors.get(kind);
+		return override != null ? override : {primary: primaryColor, secondary: secondaryColor};
 	}
 
 	public function setRenderMode(renderMode:CharacterRenderMode):Void {
@@ -157,13 +182,17 @@ class CharacterDisplay extends Sprite {
 			return;
 		}
 
-		renderLayeredPartSlot(partClip, kind, layeredFrameName, yOffset);
+		renderLayeredPartSlot(partClip, kind, layeredFrameName, yOffset, colorFor(kind));
 	}
 
-	private function renderLayeredPartSlot(partClip:PR2MovieClip, kind:String, frameName:String, yOffset:Float):Void {
+	private function renderLayeredPartSlot(partClip:PR2MovieClip, kind:String, frameName:String, yOffset:Float, color:PartColor):Void {
 		ensureAtlasLayer(partClip, kind, "static", frameName, null, yOffset);
-		ensureChannelAtlasLayer(partClip, kind, "colorMC", "primary", frameName, primaryColor, yOffset);
-		ensureChannelAtlasLayer(partClip, kind, "colorMC2", "secondary", frameName, secondaryColor, yOffset);
+		ensureChannelAtlasLayer(partClip, kind, "colorMC", "primary", frameName, color.primary, yOffset);
+		if (color.secondary >= 0) {
+			ensureChannelAtlasLayer(partClip, kind, "colorMC2", "secondary", frameName, color.secondary, yOffset);
+		} else {
+			hideChannelAtlasLayer(partClip, kind, "colorMC2", "secondary");
+		}
 		removeAtlasLayer(partClip, kind, "composite");
 		removeUnusedAtlasLayers(partClip, kind, ["static", "primary", "secondary"]);
 	}

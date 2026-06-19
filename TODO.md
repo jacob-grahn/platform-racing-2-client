@@ -121,7 +121,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     badge behavior, and error/loading states.
   - Preserve guest/member availability: PMs tab only appears for logged-in
     accounts (`Main.group > 0`).
-- [ ] Complete left pane tab: Players.
+- [x] Complete left pane tab: Players.
   - Port nested `PlayersTab` tabs: Online, Friends, Following, Ignored, and the
     guest Guilds view.
   - Implement list loading, item rendering, player/guild popup hooks, online
@@ -133,7 +133,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     loadouts popup entry, outfit hotkeys, and `set_customize_info` writes.
   - Keep account changes synchronized with level access checks and lobby/player
     display refreshes.
-- [ ] Complete right pane tab: Campaign.
+- [x] Complete right pane tab: Campaign.
   - Integrate the existing campaign list and level-data clients into the lobby
     listing UI, including the Flash campaign page formula
     `((server_id + day) % 6) + 1`, six-page vertical navigation, list caching,
@@ -144,7 +144,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
   - Port `LevelListing` page navigation, list hash validation, loading/error
     states, three-column level item layout, page highlight commands, memory of
     page numbers, favorite-only availability, and `set_right_room` behavior.
-- [ ] Complete right pane tab: Search.
+- [x] Complete right pane tab: Search.
   - Port search controls, mode/order/direction dropdowns, enter-key search,
     blank/id/page guards, POST request to `search_levels.php`, persisted search
     state, and `LobbyRight.lookupUser` / `lookupLevel` hooks from player/level

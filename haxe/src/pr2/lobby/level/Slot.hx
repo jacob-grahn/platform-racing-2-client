@@ -11,10 +11,9 @@ import pr2.runtime.PR2MovieClip;
 	`LevelItem`. Clicking an empty slot sends `fill_slot` to the gameserver; the
 	server then drives `fillSlot`/`confirmSlot`/`clearSlot` through the level item.
 	The slot background steps through `<status>Up` / `<status>Over` / `pending`
-	frames exactly as in Flash.
-
-	`CourseMenu` (shown when the local player fills a slot) is not yet ported; the
-	socket `fill_slot`/`confirm_slot`/`clear_slot` round-trip is faithful.
+	frames exactly as in Flash. When the local player fills a slot (`me == "me"`),
+	a `CourseMenu` opens beside it; `sendConfirmSlot`/`sendClearSlot` route back
+	through the owning `LevelItem` to the gameserver.
 **/
 class Slot extends Sprite {
 	private var num:Int;
@@ -24,6 +23,7 @@ class Slot extends Sprite {
 	private var rankBox:Null<TextField>;
 	private var nameBox:Null<TextField>;
 	private var status:String = "empty";
+	private var courseMenu:Null<CourseMenu>;
 
 	public function new(num:Int, owner:LevelItem) {
 		super();
@@ -48,7 +48,25 @@ class Slot extends Sprite {
 			nameBox.text = name;
 		}
 		changeStatus("filled");
-		// Flash opens a CourseMenu here when me == "me"; menu port is pending.
+		if (me == "me") {
+			courseMenu = new CourseMenu(this);
+		}
+	}
+
+	/** Confirm/clear route through the owning level item to the gameserver,
+		mirroring Flash `Slot.sendConfirmSlot`/`sendClearSlot`. */
+	public function sendConfirmSlot():Void {
+		owner.sendConfirmSlot();
+	}
+
+	public function sendClearSlot():Void {
+		owner.sendClearSlot();
+		courseMenu = null;
+	}
+
+	/** Hand the owning level off to the playable level path that exists today. */
+	public function launchOwnerLevel():Void {
+		owner.launchLevel();
 	}
 
 	public function confirmSlot():Void {
@@ -90,6 +108,10 @@ class Slot extends Sprite {
 	}
 
 	public function remove():Void {
+		if (courseMenu != null) {
+			courseMenu.remove();
+			courseMenu = null;
+		}
 		removeEventListener(MouseEvent.MOUSE_OVER, onOver);
 		removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 		removeEventListener(MouseEvent.CLICK, onClick);

@@ -30,9 +30,8 @@ import pr2.runtime.PR2MovieClip;
 	behind the access cover (password / rank / hat) using the pure `LevelAccess`
 	logic. Clicking the info button opens the level popup.
 
-	Still pending from the original: the `HoverPopup` tooltips, the `CourseMenu`
-	shown when the local player fills a slot, and the `Encryptor`-based decrypt of
-	the password-check payload (the POST round-trip and success gating are wired).
+	Still pending from the original: the `Encryptor`-based decrypt of the
+	password-check payload (the POST round-trip and success gating are wired).
 **/
 class LevelItem extends Sprite {
 	public final courseID:Int;
@@ -315,6 +314,11 @@ class LevelItem extends Sprite {
 
 	public function sendConfirmSlot():Void {
 		LobbySocket.write("confirm_slot`");
+	}
+
+	/** Launch this course through the existing level loader (see `LevelLaunch`). */
+	public function launchLevel():Void {
+		LevelLaunch.launch(courseID, version);
 	}
 
 	private function onFillSlot(args:Array<String>):Void {

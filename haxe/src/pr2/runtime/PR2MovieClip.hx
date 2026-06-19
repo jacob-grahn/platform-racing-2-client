@@ -449,6 +449,19 @@ class PR2MovieClip extends Sprite {
 		var combo = new FlComboBox(componentString(element, "prompt", ""));
 		var size = componentSize(element, 100, 22);
 		combo.setSize(size.width, size.height);
+		var rowCount = Std.parseInt(componentString(element, "rowCount", "5"));
+		if (rowCount != null && rowCount > 0) {
+			combo.rowCount = rowCount;
+		}
+		// Authored dropdown items come through as the Flash collection serialization.
+		var items = FlDataProvider.fromCollectionString(componentString(element, "dataProvider", "")).toArray();
+		for (item in items) {
+			combo.addItem(item);
+		}
+		// A prompt-less ComboBox with data selects its first row, like fl.controls.
+		if (combo.length > 0 && combo.prompt == "" && combo.selectedIndex < 0) {
+			combo.selectedIndex = 0;
+		}
 		combo.enabled = componentBool(element, "enabled", true);
 		return combo;
 	}
