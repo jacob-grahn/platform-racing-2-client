@@ -173,7 +173,7 @@ automated sequences cover the main lobby workflows.
 Keep character rendering in service of the playable harness and faithful
 appearance, not an open-ended art project.
 
-- [ ] Finish one full customizable character.
+- [x] Finish one full customizable character.
   - Separate static/primary/secondary layers; independent primary/secondary
     tinting; composite layer kept for preview/debug/fallback.
   - Verify against Flash for representative outfits.

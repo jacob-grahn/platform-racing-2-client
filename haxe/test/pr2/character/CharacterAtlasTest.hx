@@ -7,6 +7,7 @@ class CharacterAtlasTest {
 
 	public static function main():Void {
 		testParsesHatPrimaryAtlas();
+		testLayeredChannelsCoverEveryExportedPart();
 		testParsesRenderMode();
 		trace('CharacterAtlasTest passed $assertions assertions');
 	}
@@ -41,6 +42,40 @@ class CharacterAtlasTest {
 		assertEquals(CharacterRenderMode.Composite, CharacterRenderMode.parse(" composite "), "composite render mode");
 		assertEquals(CharacterRenderMode.Composite, CharacterRenderMode.parse("debug"), "debug render mode alias");
 		assertEquals("composite", CharacterRenderMode.Composite.toLabel(), "render mode label");
+	}
+
+	private static function testLayeredChannelsCoverEveryExportedPart():Void {
+		for (kind in ["hat", "head", "body", "feet"]) {
+			var staticAtlases = loadAtlases(kind, "static");
+			var primaryAtlases = loadAtlases(kind, "primary");
+			var secondaryAtlases = loadAtlases(kind, "secondary");
+			for (id in 1...51) {
+				var exported = hasFrame(staticAtlases, id);
+				assertEquals(exported, hasFrame(primaryAtlases, id), '$kind $id primary coverage');
+				assertEquals(exported, hasFrame(secondaryAtlases, id), '$kind $id secondary coverage');
+			}
+		}
+	}
+
+	private static function loadAtlases(kind:String, channel:String):Array<CharacterAtlas> {
+		var base = 'vector-art/atlases/character/$kind/$channel@4x';
+		var paths = [base + "-p01.json", base + "-p02.json", base + ".json"];
+		var atlases:Array<CharacterAtlas> = [];
+		for (path in paths) {
+			if (sys.FileSystem.exists(path)) {
+				atlases.push(CharacterAtlas.parse(File.getContent(path), path));
+			}
+		}
+		return atlases;
+	}
+
+	private static function hasFrame(atlases:Array<CharacterAtlas>, id:Int):Bool {
+		for (atlas in atlases) {
+			if (atlas.getFrameNameById(id) != null) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static function assertNotNull(value:Dynamic, message:String):Void {
