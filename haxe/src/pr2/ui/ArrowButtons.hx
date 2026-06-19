@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -18,8 +19,8 @@ class ArrowButtons extends Sprite {
 	private var art:PR2MovieClip;
 	private var leftButton:Null<DisplayObject>;
 	private var rightButton:Null<DisplayObject>;
-	private var leftBinding:Null<LobbyArt.Binding>;
-	private var rightBinding:Null<LobbyArt.Binding>;
+	private var leftBinding:Null<Binding>;
+	private var rightBinding:Null<Binding>;
 	private var array:Array<Int>;
 	private var index:Int = 0;
 

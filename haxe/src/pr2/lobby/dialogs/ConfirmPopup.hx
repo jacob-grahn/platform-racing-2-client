@@ -1,6 +1,7 @@
 package pr2.lobby.dialogs;
 
 import pr2.lobby.LobbyArt;
+import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -10,8 +11,8 @@ import pr2.runtime.PR2MovieClip;
 class ConfirmPopup extends Popup {
 	private var art:PR2MovieClip;
 	private var confirmFunction:Void->Void;
-	private var okBinding:Null<LobbyArt.Binding>;
-	private var cancelBinding:Null<LobbyArt.Binding>;
+	private var okBinding:Null<Binding>;
+	private var cancelBinding:Null<Binding>;
 
 	public function new(confirmFunction:Void->Void, message:String = "Are you sure?") {
 		super();

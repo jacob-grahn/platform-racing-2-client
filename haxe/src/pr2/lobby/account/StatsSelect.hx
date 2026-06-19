@@ -69,6 +69,10 @@ class StatsSelect extends Sprite {
 		return speedSlider.value + "`" + accelSlider.value + "`" + jumpnSlider.value;
 	}
 
+	public function getStats():{speed:Int, acceleration:Int, jumping:Int} {
+		return {speed: speedSlider.value, acceleration: accelSlider.value, jumping: jumpnSlider.value};
+	}
+
 	public function remove():Void {
 		speedSlider.remove();
 		accelSlider.remove();

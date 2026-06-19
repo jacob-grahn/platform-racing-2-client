@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.FlSlider;
 import pr2.runtime.PR2MovieClip;
 
@@ -25,8 +26,8 @@ class StatSlider extends Sprite {
 	private var textBox:Null<TextField>;
 	private var decButton:Null<DisplayObject>;
 	private var incButton:Null<DisplayObject>;
-	private var decBinding:Null<LobbyArt.Binding>;
-	private var incBinding:Null<LobbyArt.Binding>;
+	private var decBinding:Null<Binding>;
+	private var incBinding:Null<Binding>;
 
 	public function new(statName:String, ss:StatsSelect) {
 		super();

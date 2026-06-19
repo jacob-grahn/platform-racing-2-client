@@ -89,8 +89,8 @@ class CharacterDisplay extends Sprite {
 	}
 
 	private function colorFor(kind:String):PartColor {
-		var override = partColors.get(kind);
-		return override != null ? override : {primary: primaryColor, secondary: secondaryColor};
+		var partOverride = partColors.get(kind);
+		return partOverride != null ? partOverride : {primary: primaryColor, secondary: secondaryColor};
 	}
 
 	public function setRenderMode(renderMode:CharacterRenderMode):Void {

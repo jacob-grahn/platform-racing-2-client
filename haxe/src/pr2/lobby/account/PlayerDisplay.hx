@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.net.CommandHandler;
 import pr2.runtime.PR2MovieClip;
@@ -27,7 +28,7 @@ class PlayerDisplay extends Sprite {
 
 	private var charPreview:AccountCharacter;
 	private var randomButton:Null<PR2MovieClip>;
-	private var randomBinding:Null<LobbyArt.Binding>;
+	private var randomBinding:Null<Binding>;
 	private var hover:Null<HoverPopup>;
 	private final yStart:Float = 24;
 	private var hasHatRow:Bool;

@@ -127,7 +127,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
   - Implement list loading, item rendering, player/guild popup hooks, online
     status/rank/hat counts, following/friend/ignore actions, and nested tab
     memory under `playerLists`.
-- [ ] Complete left pane tab: Account.
+- [x] Complete left pane tab: Account.
   - Port customize-info socket flow, character preview using `CharacterDisplay`,
     part/color selectors, stats selector, rank token up/down, guild display,
     loadouts popup entry, outfit hotkeys, and `set_customize_info` writes.

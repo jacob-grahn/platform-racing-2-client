@@ -9,6 +9,7 @@ import pr2.harness.GameplayHarnessOptionsTest;
 import pr2.harness.LocalPlayerControllerTest;
 import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
+import pr2.lobby.AccountTabTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
@@ -49,6 +50,7 @@ class DeterministicTestSuite {
 		LevelDataClientTest.main();
 		CampaignTestScreenTest.main();
 		LobbyServicesTest.main();
+		AccountTabTest.main();
 		trace("DeterministicTestSuite passed");
 	}
 }
