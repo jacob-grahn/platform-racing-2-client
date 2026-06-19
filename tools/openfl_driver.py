@@ -13,6 +13,7 @@ Shot options:
   --delay <seconds>             wait before capture, default 1.5
   --query <query>               query string to append to index.html
   --browser <path>              Chrome/Chromium binary path
+  --base-url <url>              use an existing server (for example dev_proxy.py)
   --fps-duration <seconds>      FPS validation duration, default 30.0
   --fps-target <fps>            FPS validation target, default 27
   --fps-tolerance <fps>         FPS validation tolerance, default 5
@@ -30,7 +31,8 @@ Sequence script format:
   }
 
   A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
-  tap, hold, mouseMove, click, shot, debug-state, body-attribute.
+  tap, hold, mouseMove, click, typeText, rebuild-lobby, shot, debug-state,
+  body-attribute.
 """
 
 import argparse
@@ -476,11 +478,12 @@ class WebSocket:
             self.socket.close()
 
 
-def run_sequence(script_path, root, browser_path):
+def run_sequence(script_path, root, browser_path, base_url=None):
     browser = resolve_browser(browser_path)
     query, steps = load_pr2_sequence(script_path, normalize_hold=True)
 
-    with serve(root) as url:
+    server = contextlib.nullcontext(base_url) if base_url else serve(root)
+    with server as url:
         url = append_query(url, query)
         with browser_devtools_session(browser, url) as devtools:
             run_sequence_steps(devtools, steps)
@@ -509,6 +512,20 @@ def run_sequence_step(devtools, step):
         dispatch_click(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
     elif action == "mouseMove":
         dispatch_mouse_move(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
+    elif action == "typeText":
+        value = require_field(step, "text")
+        if not isinstance(value, str):
+            raise SystemExit("Sequence typeText step requires a string text field.")
+        devtools.request("Input.insertText", {"text": value})
+        print(f"typeText: {value}")
+    elif action == "rebuild-lobby":
+        rebuilt = devtools.evaluate(
+            'typeof window.__pr2RebuildLobby === "function" && '
+            '(window.__pr2RebuildLobby(), true)'
+        )
+        if rebuilt is not True:
+            raise SystemExit("Lobby rebuild hook is unavailable.")
+        print("rebuild-lobby")
     elif action == "shot":
         capture_devtools_shot(devtools, require_field(step, "out"))
     elif action == "debug-state":
@@ -792,6 +809,7 @@ def main():
     parser.add_argument("--delay", type=float, default=1.5)
     parser.add_argument("--query", default="")
     parser.add_argument("--browser")
+    parser.add_argument("--base-url", help="existing static/proxy server URL")
     parser.add_argument("--fps-duration", type=float, default=30.0)
     parser.add_argument("--fps-target", type=int, default=27)
     parser.add_argument("--fps-tolerance", type=int, default=5)
@@ -811,7 +829,7 @@ def main():
     if args.command == "shot":
         capture_shot(args.out, args.root, args.delay, args.browser, args.query)
     elif args.command == "sequence":
-        run_sequence(args.script, args.root, args.browser)
+        run_sequence(args.script, args.root, args.browser, args.base_url)
     elif args.command == "fps":
         check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser, args.query)
     elif args.command == "debug-state":

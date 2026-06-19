@@ -371,7 +371,15 @@ Run a scripted OpenFL harness sequence:
 python3 tools/openfl_driver.py sequence test/sequences/openfl/harness-boot.json
 python3 tools/openfl_driver.py sequence test/sequences/openfl/run-right.json
 python3 tools/openfl_driver.py sequence test/sequences/openfl/lobby-flow.json
+python3 tools/openfl_driver.py sequence test/sequences/openfl/lobby-parity.json
 python3 tools/compare_screenshots.py test/baselines/flash/04_lobby_unobstructed.jpg test/output/openfl-lobby-shell.png --diff test/output/openfl-vs-flash-lobby-diff.png --metrics test/output/openfl-vs-flash-lobby-metrics.json --threshold-percent 100 --threshold-rms 255
+```
+
+To exercise campaign and search responses through the real same-origin proxy,
+start `tools/dev_proxy.py` and run the parity sequence against it:
+
+```sh
+python3 tools/openfl_driver.py --base-url http://127.0.0.1:8000 sequence test/sequences/openfl/lobby-parity.json
 ```
 
 Sequence files keep one browser session open and can combine `keyDown`,

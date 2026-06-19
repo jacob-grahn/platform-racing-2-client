@@ -101,7 +101,15 @@ class Main extends Sprite {
 			userName = guest ? "Guest" : "Tester";
 		}
 		pr2.lobby.LobbySession.begin(userName, guest ? 0 : 1);
-		return new PageHolder(new pr2.page.LobbyPage(userName));
+		var holder = new PageHolder(new pr2.page.LobbyPage(userName));
+		#if js
+		// Runtime parity sequences rebuild the lobby in-place to verify that the
+		// static TabsHolder selection memory survives a real page teardown.
+		untyped Browser.window.__pr2RebuildLobby = function():Void {
+			holder.changePage(new pr2.page.LobbyPage(userName));
+		};
+		#end
+		return holder;
 	}
 
 	private function parseScale(value:Null<String>):Float {

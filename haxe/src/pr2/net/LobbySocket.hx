@@ -1,6 +1,7 @@
 package pr2.net;
 
 #if js
+import js.Browser;
 import js.html.WebSocket;
 #end
 
@@ -44,6 +45,7 @@ class LobbySocket {
 	public static function write(command:String):Void {
 		sentCommands.push(command);
 		#if js
+		Browser.document.body.setAttribute("data-pr2-last-command", command);
 		if (socket != null && socket.readyState == WebSocket.OPEN && protocol != null) {
 			socket.send(protocol.commandFrame(command));
 		}

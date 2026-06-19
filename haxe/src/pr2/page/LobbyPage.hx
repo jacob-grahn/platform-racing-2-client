@@ -104,7 +104,7 @@ class LobbyPage extends Page {
 	private function clickLevelEditor():Void {
 		// The Flash client logged out and opened the level editor here. The editor
 		// is not ported yet, so this is wired as a placeholder entry point.
-		reportState("lobby:levelEditor");
+		reportAction("levelEditor");
 	}
 
 	private function clickKong():Void {
@@ -115,14 +115,23 @@ class LobbyPage extends Page {
 
 	private function clickOptions():Void {
 		LobbyPopups.lastRequest = "options";
+		reportAction("options");
 	}
 
 	private function clickStore():Void {
 		LobbyPopups.lastRequest = "store";
+		reportAction("store");
 	}
 
 	private function clickCredits():Void {
 		LobbyPopups.lastRequest = "credits";
+		reportAction("credits");
+	}
+
+	private function reportAction(action:String):Void {
+		#if js
+		Browser.document.body.setAttribute("data-pr2-lobby-action", action);
+		#end
 	}
 
 	private function reportState(state:String):Void {

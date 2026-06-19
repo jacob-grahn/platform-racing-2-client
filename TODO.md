@@ -155,7 +155,7 @@ Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
     POST/GET JSON helpers, `PageNavigation`, `CustomScrollBar`, loading
     graphics, hover/message/confirm/uploading popups, and HTML text/link
     handling.
-- [ ] Test lobby parity.
+- [x] Test lobby parity.
   - Add OpenFL sequences for post-login lobby boot, left/right tab switching,
     tab memory after leaving/returning, campaign/search list load via dev proxy,
     chat room command emission, PM/account loading states, and bottom buttons.
