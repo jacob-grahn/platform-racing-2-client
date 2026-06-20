@@ -67,17 +67,16 @@ sequence and screenshots cover level entry, countdown, racing, and finish.
 
 ## Gameplay Fidelity
 
-- [ ] Correct character-part vertical registration. Against
+- [x] Correct character-part vertical registration. Against
   `test/baselines/flash/08_standing.jpg`, normalized to the feet line, feet match
   but body is about 7 px and head about 11 px too high. Sizes already match, so
   fix registration/spacing without rescaling the parts. Recheck default,
   recolored, mixed, and tricky outfits in standing, running, crouching, jumping,
   swimming, frozen, and bumped states.
-- [ ] Audit the harness physics against `character/LocalCharacter.as` frame by
-  frame rather than treating existing mechanic fixtures as final parity.
+- [ ] Audit the harness physics against `character/LocalCharacter.as` rather than treating existing mechanic fixtures as final parity.
   Compare acceleration, deceleration, stat formulas, jump/crouch, water, ice,
   rotation, collision ordering, corner resolution, moving blocks, item timing,
-  hurt/freeze recovery, and finish detection at 27 FPS.
+  hurt/freeze recovery, and finish detection.
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
