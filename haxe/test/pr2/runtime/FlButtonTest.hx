@@ -17,7 +17,9 @@ class FlButtonTest {
 	public static function main():Void {
 		testDefaultsAndLabel();
 		testEnabledTogglesInteractivity();
+		testDisabledAndEmphasizedAppearance();
 		testSkinSwapsWithMouseState();
+		testAuthoredButtonSymbolMouseStates();
 		testToggleFlipsSelectedOnClick();
 		testClickReachesExternalListeners();
 		testGeneratedPlayerInfoButtons();
@@ -51,6 +53,19 @@ class FlButtonTest {
 		assertEquals(true, button.mouseEnabled, "re-enabling restores mouse handling");
 	}
 
+	private static function testDisabledAndEmphasizedAppearance():Void {
+		var button = new FlButton("Continue");
+		var up = firstSkin(button);
+		button.emphasized = true;
+		assertEquals(true, button.emphasized, "emphasized property is exposed");
+		assertNotSame(up, firstSkin(button), "emphasized button uses its authored skin");
+
+		button.enabled = false;
+		var label = findLabelField(button, "Continue");
+		assertNotNull(label, "disabled button retains its label");
+		assertEquals(0x999999, label.getTextFormat().color, "disabled label uses the Flash component color");
+	}
+
 	private static function testSkinSwapsWithMouseState():Void {
 		var button = new FlButton("Follow");
 		var up = firstSkin(button);
@@ -68,6 +83,22 @@ class FlButtonTest {
 		button.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT));
 		var back = firstSkin(button);
 		assertSame(up, back, "rolling out returns to the cached up skin");
+	}
+
+	private static function testAuthoredButtonSymbolMouseStates():Void {
+		var button = PR2MovieClip.fromSymbolName("Buttons/CancelTextButton");
+		assertEquals(1, button.currentFrame, "authored button starts on its up frame");
+		assertEquals(true, button.buttonMode, "authored button exposes button cursor behavior");
+
+		button.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OVER));
+		assertEquals(2, button.currentFrame, "rollover shows the authored over frame");
+		button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals(3, button.currentFrame, "press shows the authored down frame");
+		button.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
+		assertEquals(2, button.currentFrame, "release inside returns to the over frame");
+		button.dispatchEvent(new MouseEvent(MouseEvent.ROLL_OUT));
+		assertEquals(1, button.currentFrame, "rollout restores the up frame");
+		button.dispose();
 	}
 
 	private static function testToggleFlipsSelectedOnClick():Void {

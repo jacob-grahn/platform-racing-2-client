@@ -68,6 +68,7 @@ class FlComponentFactory {
 		var button = new FlButton(componentString(element, "label", "Button"));
 		button.toggle = componentBool(element, "toggle", false);
 		button.selected = componentBool(element, "selected", false);
+		button.emphasized = componentBool(element, "emphasized", false);
 		// `enabled` last: a disabled button must end up greyed and inert even if
 		// it was authored selected.
 		button.enabled = componentBool(element, "enabled", true);

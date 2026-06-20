@@ -6,6 +6,7 @@ import openfl.display.FrameLabel;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
 import openfl.text.TextField;
@@ -42,6 +43,7 @@ class PR2MovieClip extends Sprite {
 	private var nestedDepth:Int;
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
 	private var runningFrameScripts:Bool = false;
+	private var isButtonSymbol:Bool = false;
 
 	// Mask metadata keyed by source layer `index`. `maskLayers` holds layers
 	// flagged `layerType: "mask"`; `maskedLayerParents` maps a masked layer to
@@ -76,9 +78,11 @@ class PR2MovieClip extends Sprite {
 
 		gotoAndStop(1);
 		// Button symbols use their extra frames as up/over/down/hit states, not
-		// as an animation, so they must rest on frame 1 instead of free-running
-		// (otherwise they flicker through their hover/press art every tick).
-		if (totalFrames > 1 && symbol.symbolType != "button") {
+		// as an animation. Drive those states from the mouse like Flash does.
+		isButtonSymbol = symbol.symbolType == "button";
+		if (isButtonSymbol) {
+			configureButtonSymbol();
+		} else if (totalFrames > 1) {
 			play();
 		}
 	}
@@ -111,7 +115,46 @@ class PR2MovieClip extends Sprite {
 
 	public function dispose():Void {
 		stop();
+		if (isButtonSymbol) {
+			removeEventListener(MouseEvent.ROLL_OVER, onButtonRollOver);
+			removeEventListener(MouseEvent.ROLL_OUT, onButtonRollOut);
+			removeEventListener(MouseEvent.MOUSE_DOWN, onButtonMouseDown);
+			removeEventListener(MouseEvent.MOUSE_UP, onButtonMouseUp);
+		}
 		disposeChildren();
+	}
+
+	private function configureButtonSymbol():Void {
+		buttonMode = true;
+		useHandCursor = true;
+		mouseChildren = false;
+		addEventListener(MouseEvent.ROLL_OVER, onButtonRollOver);
+		addEventListener(MouseEvent.ROLL_OUT, onButtonRollOut);
+		addEventListener(MouseEvent.MOUSE_DOWN, onButtonMouseDown);
+		addEventListener(MouseEvent.MOUSE_UP, onButtonMouseUp);
+	}
+
+	private function onButtonRollOver(_:MouseEvent):Void {
+		showButtonFrame(2);
+	}
+
+	private function onButtonRollOut(_:MouseEvent):Void {
+		showButtonFrame(1);
+	}
+
+	private function onButtonMouseDown(_:MouseEvent):Void {
+		showButtonFrame(3);
+	}
+
+	private function onButtonMouseUp(_:MouseEvent):Void {
+		showButtonFrame(2);
+	}
+
+	private function showButtonFrame(frame:Int):Void {
+		// Flash buttons conventionally have up/over/down/hit frames. A few PR2
+		// symbols omit duplicate state frames, so clamp to the final visible frame.
+		var visibleFrames = totalFrames >= 4 ? totalFrames - 1 : totalFrames;
+		gotoAndStop(Std.int(Math.min(frame, Math.max(1, visibleFrames))));
 	}
 
 	public function gotoAndPlay(frame:Dynamic):Void {

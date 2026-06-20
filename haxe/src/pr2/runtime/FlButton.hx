@@ -51,6 +51,7 @@ class FlButton extends Sprite {
 	private var _label:String;
 	private var _enabled:Bool = true;
 	private var _selected:Bool = false;
+	private var _emphasized:Bool = false;
 
 	/** When true the button keeps its pressed (`selected`) state after a click. */
 	public var toggle:Bool = false;
@@ -58,6 +59,7 @@ class FlButton extends Sprite {
 	public var label(get, set):String;
 	public var enabled(get, set):Bool;
 	public var selected(get, set):Bool;
+	public var emphasized(get, set):Bool;
 
 	public function new(label:String = "Button") {
 		super();
@@ -132,7 +134,21 @@ class FlButton extends Sprite {
 			mouseDown = false;
 		}
 		redraw();
+		layoutLabel();
 		return _enabled;
+	}
+
+	private function get_emphasized():Bool {
+		return _emphasized;
+	}
+
+	private function set_emphasized(value:Bool):Bool {
+		if (_emphasized == value) {
+			return _emphasized;
+		}
+		_emphasized = value;
+		redraw();
+		return _emphasized;
 	}
 
 	private function get_selected():Bool {
@@ -184,6 +200,9 @@ class FlButton extends Sprite {
 		if (_selected) {
 			return "selected" + phase.charAt(0).toUpperCase() + phase.substr(1) + "Skin";
 		}
+		if (_emphasized && phase == "up") {
+			return "emphasizedSkin";
+		}
 		return phase + "Skin";
 	}
 
@@ -228,9 +247,15 @@ class FlButton extends Sprite {
 	}
 
 	private function layoutLabel():Void {
-		textField.width = buttonWidth;
+		var format = new TextFormat(
+			FontResolver.resolve("Arial"), 11, _enabled ? 0x000000 : 0x999999, false, false, false, null, null, TextFormatAlign.CENTER
+		);
+		textField.defaultTextFormat = format;
+		textField.setTextFormat(format);
+		// fl.controls.Button reserves five pixels on each side for its label.
+		textField.width = Math.max(0, buttonWidth - 10);
 		textField.height = textField.textHeight + 4;
-		textField.x = 0;
+		textField.x = 5;
 		textField.y = (buttonHeight - textField.height) / 2;
 	}
 }

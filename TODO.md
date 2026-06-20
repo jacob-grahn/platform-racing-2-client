@@ -45,6 +45,56 @@ nine-slice helper, and are covered by `FlComponentsTest`.
 (ColorPicker / CellRenderer / ScrollBar appear only as skins internal to the
 above — no standalone instances to migrate.)
 
+## Core UI Visual Parity — Remaining
+
+The core controls are functional, but their OpenFL rendering still differs
+noticeably from the Flash client. Treat the exported Flash artwork and
+Flash/OpenFL comparison screenshots as the source of truth; avoid replacing
+these controls with generic approximations.
+
+- [x] Bring buttons to visual parity with Flash.
+  - Match the original up/over/down/disabled skins, nine-slice behavior, label
+    font/size/color, text centering, padding, and enabled/disabled treatment.
+  - Check both `FlButton` instances and custom menu/lobby buttons at their
+    actual authored sizes, including hover and pressed screenshots.
+  - `FlButton` uses all authored component skins (including emphasized and
+    disabled), Flash's five-pixel label inset, and disabled label color.
+    Timeline-authored `symbolType="button"` assets now remain on up and switch
+    to their authored over/down frames from mouse events instead of being frozen
+    on frame 1; deterministic tests cover both button paths.
+- [ ] Bring popups to visual parity with Flash.
+  - Match the original popup panels, borders/shadows, title and body typography,
+    spacing, close/confirm controls, modal positioning, and dimming or overlap
+    behavior where present.
+  - Cover `Popup`, `InfoPopup`/`HoverPopup`, message/confirm/send-message,
+    uploading, course-menu, and loadouts variants with representative
+    Flash/OpenFL screenshot comparisons.
+- [ ] Bring text inputs to visual parity with Flash.
+  - Match `TextInput_*Skin` scaling, inset editable bounds, font metrics,
+    baseline, padding, selection/caret rendering, password display, and
+    editable/disabled/focused states.
+  - Verify short, long, empty, and focused values at the authored login and
+    lobby control sizes.
+- [ ] Fix ComboBox interaction to behave like a real dropdown.
+  - Clicking the closed control must open a visible option list without changing
+    selection; clicking a row selects that row, dispatches one `CHANGE`, and
+    closes the list. Clicking outside or pressing Escape closes without a
+    selection change.
+  - Remove the current behavior where clicking the closed control immediately
+    advances to the next item.
+  - Add deterministic tests for open, choose, outside-close, Escape-close,
+    repeated clicks, disabled state, and list placement near stage edges.
+- [ ] Bring ComboBox dropdown visuals to parity with Flash.
+  - Match closed-control skins and typography plus the open list's border,
+    row height, padding, selected/hover states, scrollbar, width, stacking,
+    and above/below placement.
+  - Capture parity screenshots for the Search tab's mode, order, and direction
+    dropdowns in closed, open, hovered, and selected states.
+
+Acceptance: buttons, popups, text inputs, and dropdowns match representative
+Flash baselines at authored sizes and interaction states; opening a ComboBox
+never changes its value until the user explicitly chooses an option.
+
 ## Direction
 
 - End goal: a faithful port of the original Flash game. Same physics/timing,
