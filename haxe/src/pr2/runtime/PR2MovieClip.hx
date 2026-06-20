@@ -536,7 +536,29 @@ class PR2MovieClip extends Sprite {
 		var face = FontResolver.resolve(dynamicString(attrs, "face", "_sans"));
 		var size = Std.int(dynamicFloat(attrs, "size", dynamicFloat(attrs, "lineHeight", 12)));
 		var align = textAlign(dynamicString(attrs, "alignment", "left"));
-		var format = new TextFormat(face, size, 0x000000, false, false, false, null, null, align);
+		// Authored fill color (e.g. the credits' "#254489"); default to black to
+		// match Animate's behavior when no fillColor attribute is present.
+		var color = parseTextColor(dynamicString(attrs, "fillColor", null), 0x000000);
+		var format = new TextFormat(face, size, color, false, false, false, null, null, align);
+		// XFL carries the inter-character spacing and inter-line leading as
+		// authored; both are dropped if left unset, so apply them here. `rotation`
+		// in textAttrs is anti-aliasing metadata, not a transform, so it is ignored.
+		var letterSpacing = dynamicFloatOrNull(attrs, "letterSpacing");
+		if (letterSpacing != null) {
+			format.letterSpacing = letterSpacing;
+		}
+		var lineSpacing = dynamicFloatOrNull(attrs, "lineSpacing");
+		if (lineSpacing != null) {
+			format.leading = Math.round(lineSpacing);
+		}
+		var leftMargin = dynamicFloatOrNull(attrs, "leftMargin");
+		if (leftMargin != null) {
+			format.leftMargin = Math.round(leftMargin);
+		}
+		var rightMargin = dynamicFloatOrNull(attrs, "rightMargin");
+		if (rightMargin != null) {
+			format.rightMargin = Math.round(rightMargin);
+		}
 		field.defaultTextFormat = format;
 		field.setTextFormat(format);
 		field.text = element.text == null ? "" : element.text;
@@ -568,6 +590,26 @@ class PR2MovieClip extends Sprite {
 		}
 		var parsed = Std.parseFloat(Std.string(value));
 		return Math.isNaN(parsed) ? fallback : parsed;
+	}
+
+	private function dynamicFloatOrNull(data:Dynamic, name:String):Null<Float> {
+		if (data == null) {
+			return null;
+		}
+		var value:Dynamic = Reflect.field(data, name);
+		if (value == null) {
+			return null;
+		}
+		var parsed = Std.parseFloat(Std.string(value));
+		return Math.isNaN(parsed) ? null : parsed;
+	}
+
+	private function parseTextColor(value:String, fallback:Int):Int {
+		if (value == null) {
+			return fallback;
+		}
+		var parsed = Std.parseInt(StringTools.replace(value, "#", "0x"));
+		return parsed == null ? fallback : parsed;
 	}
 
 	private function textAlign(value:String):TextFormatAlign {

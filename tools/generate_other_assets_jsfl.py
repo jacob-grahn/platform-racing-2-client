@@ -215,6 +215,9 @@ MENU_SYMBOLS = [
     },
     {"slug": "drawing_popup", "symbol": "MovieClips/Symbol 1092"},
     {"slug": "hat_picker", "symbol": "MovieClips/Symbol 1185"},
+    # Pure static-text credits page (#254489 Verdana columns); the reference
+    # raster for the createStaticText fillColor/letterSpacing parity case.
+    {"slug": "credits_art_pg1", "symbol": "UI/Popups (outside levels)/Credits/artPg1"},
 ]
 
 

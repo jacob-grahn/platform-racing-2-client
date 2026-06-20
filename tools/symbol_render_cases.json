@@ -20,6 +20,13 @@
       "symbol": "UI/Pages/Levels/Stamps/rock1",
       "reference": "vector-art/png/stamps/rock1@4x.png",
       "thresholdRms": 24
+    },
+    {
+      "_comment": "Pure static-text symbol: validates that createStaticText applies the authored #254489 fillColor (vs. black for the 'by' column). rmsDelta runs high because the Verdana->DejaVu advance-width drift collides the hand-positioned label/by/value columns (a separate open TODO); the threshold locks in current fidelity until that metric fix lands.",
+      "name": "credits-art-pg1",
+      "symbol": "UI/Popups (outside levels)/Credits/artPg1",
+      "reference": "vector-art/png/menus/credits_art_pg1@4x.png",
+      "thresholdRms": 78
     }
   ]
 }

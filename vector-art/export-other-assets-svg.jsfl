@@ -645,6 +645,14 @@ var JOBS = [
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/menus/hat_picker.svg",
     "slug": "hat_picker",
     "symbolName": "MovieClips/Symbol 1185"
+  },
+  {
+    "category": "menus",
+    "exportPath": "menus/credits_art_pg1.svg",
+    "frame": 0,
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/menus/credits_art_pg1.svg",
+    "slug": "credits_art_pg1",
+    "symbolName": "UI/Popups (outside levels)/Credits/artPg1"
   }
 ];
 

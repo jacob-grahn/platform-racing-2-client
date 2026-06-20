@@ -7,6 +7,7 @@ import openfl.events.Event;
 import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
+import openfl.text.TextFormatAlign;
 import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 
@@ -24,6 +25,7 @@ class PR2MovieClipRuntimeTest {
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
+		testStaticTextHonorsAuthoredAttributes();
 		testGeneratedIntroTimelines();
 		testGeneratedCharacterNamedChildren();
 		testTimelineCompositionPreservesPartSelection();
@@ -312,6 +314,85 @@ class PR2MovieClipRuntimeTest {
 		var passBox = Std.downcast(popup.getChildByTimelineName("passBox"), FlTextInput);
 		assertNotNull(passBox, "LoginPopupGraphic renders password TextInput component as FlTextInput");
 		assertEquals(true, passBox.displayAsPassword, "password TextInput preserves displayAsPassword");
+	}
+
+	private static function testStaticTextHonorsAuthoredAttributes():Void {
+		var clip = new PR2MovieClip(makeStaticTextSymbol());
+
+		// Authored attribute element: fillColor #254489 (the credits' blue),
+		// negative letterSpacing, and non-zero line leading all carried in textAttrs.
+		var styled = Std.downcast(clip.getChildByTimelineName("styled"), TextField);
+		assertNotNull(styled, "DOMStaticText renders as a TextField");
+		assertEquals("Credits", styled.text, "DOMStaticText keeps its authored text");
+		var format = styled.defaultTextFormat;
+		assertEquals(0x254489, format.color, "fillColor hex is honored instead of hardcoded black");
+		assertClose(-0.05, format.letterSpacing, "authored letterSpacing is applied");
+		assertClose(2.0, format.leading, "authored lineSpacing maps to TextFormat leading");
+		assertEquals(TextFormatAlign.RIGHT, format.align, "authored alignment is applied");
+
+		// Element with no fillColor/letterSpacing must keep Animate's defaults:
+		// black text and unset (null) letterSpacing rather than a parsed value.
+		var plain = Std.downcast(clip.getChildByTimelineName("plain"), TextField);
+		assertNotNull(plain, "second DOMStaticText renders as a TextField");
+		assertEquals(0x000000, plain.defaultTextFormat.color, "missing fillColor defaults to black");
+		assertClose(0, plain.defaultTextFormat.letterSpacing, "missing letterSpacing keeps the default 0 spacing");
+	}
+
+	private static function makeStaticTextSymbol():SymbolAssetDef {
+		return {
+			href: "StaticTextSymbol.xml",
+			type: "movie clip",
+			name: "StaticTextSymbol",
+			linkageClassName: "StaticTextSymbol",
+			linkageIdentifier: "StaticTextSymbol",
+			timelines: [{
+				name: "StaticTextSymbol",
+				layerCount: 1,
+				frameCount: 1,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 1,
+					frames: [{
+						index: 0,
+						duration: 1,
+						elementCount: 2,
+						elementTypes: ["DOMStaticText", "DOMStaticText"],
+						elements: [
+							{
+								type: "DOMStaticText",
+								name: "styled",
+								text: "Credits",
+								left: 0,
+								width: 80,
+								height: 16,
+								textAttrs: {
+									face: "Verdana",
+									size: 9.0,
+									alignment: "right",
+									fillColor: "#254489",
+									letterSpacing: -0.05,
+									lineSpacing: 2.0
+								}
+							},
+							{
+								type: "DOMStaticText",
+								name: "plain",
+								text: "by",
+								left: 0,
+								width: 40,
+								height: 16,
+								textAttrs: {face: "Verdana", size: 9.0}
+							}
+						]
+					}]
+				}]
+			}]
+		};
 	}
 
 	private static function testGeneratedIntroTimelines():Void {

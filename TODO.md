@@ -156,6 +156,33 @@ same serialized meaning and visible result as Flash.
   color transforms, nested frame scripts, sound frames, dynamic text/font
   embedding, buttons, nine-slice scaling, and unload/disposal behavior. Add a
   reduced fixture for every runtime fix.
+- [x] Static-text attribute fidelity in `PR2MovieClip.createStaticText`.
+  `createStaticText` now parses `textAttrs.fillColor` (e.g. the credits'
+  `#254489`) into the format color instead of hardcoding `0x000000`, applies
+  `letterSpacing`, maps `lineSpacing` to `TextFormat.leading`, and honors
+  `leftMargin`/`rightMargin`; `alignment`, `size`, and `lineHeight` were already
+  handled. Covered by a deterministic reduced fixture in
+  `PR2MovieClipRuntimeTest.testStaticTextHonorsAuthoredAttributes` (styled vs.
+  plain static text) and a `compare_symbol_render` case `credits-art-pg1`
+  (symbol `UI/Popups (outside levels)/Credits/artPg1`, reference
+  `vector-art/png/menus/credits_art_pg1@4x.png`, exported via the committed
+  `generate_other_assets_jsfl.py` pipeline). The render confirms blue
+  `#254489` labels and black `by`. Its `rmsDelta` runs high because the
+  Verdana->DejaVu advance-width drift collides the hand-positioned
+  label/by/value columns (the separate open item below); the threshold locks in
+  current fidelity until that metric fix lands.
+- [ ] Verdana metric drift causes text overlap. `FontResolver` maps Verdana ->
+  DejaVu Sans, a visual look-alike whose advance widths are wider than Verdana
+  (unlike Arial/Times -> Liberation, which are metric clones), so hand-positioned
+  multi-field layouts collide (e.g. the credits popup `label by value` columns).
+  Resolve while keeping the offline/embedded path: each authored element carries
+  its Verdana `width`, so in `createStaticText` measure the rendered advance and
+  apply a compensating horizontal `scaleX` (or `letterSpacing`) to match the
+  authored box. Alternatives to weigh: a generated metric-clone of Verdana
+  (fonttools rescale to Verdana's width table), or a device-font stack
+  (`Verdana, DejaVu Sans, ...`) that uses locally installed real fonts where
+  present. Verify with text-heavy baselines (credits, login) via
+  `compare_symbol_render.py`.
 - [ ] Remove authored-symbol fallbacks from reachable screens. Expand the asset
   manifest only as screens are ported, commit generated output, and keep normal
   builds independent of Adobe Animate.
