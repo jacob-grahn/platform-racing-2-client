@@ -180,6 +180,22 @@ appearance, not an open-ended art project.
 - [x] Compare representative character screenshots against Flash.
   - Default outfit; primary + secondary color change; hat/head/body/feet mix;
     known tricky parts (cheese hat, Fred/body-specific placement).
+- [x] Fix part fill/outline z-order. The static line-art was inserted at the
+      back of each part clip, so the `colorMC`/`colorMC2` fills drew on top of it
+      and hid the internal outline detail (eyes/mouth/chin); because the fill
+      silhouette is shorter than the outline, the bottom outline poked out and the
+      fill looked shifted up ~10px. `renderLayeredPartSlot` now brings the static
+      layer to the front after placing fills (`bringAtlasLayerToFront`), matching
+      the original Flash order (line-art on top, fills behind). Verified against
+      the `composite` reference (fill bbox aligns exactly, delta 0,0).
+- [ ] Parts sit too high vs the shipped game (head ~11px, body ~7px; feet match).
+      Measured against `08_standing.jpg`, normalized to the feet line:
+      feet -11..0 (orig -12..0, ✓), body -42..-23 (orig -36..-16), head -64..-50
+      (orig -53..-39). Part *sizes* match (widths/heights identical) — only
+      vertical *position* is off, and the error grows with height above the feet
+      (~27% vertical spacing expansion). Tools used: `tools/crop_zoom.py`
+      (added), band/width measurement scripts, and the per-channel atlas JSON
+      under `vector-art/atlases/character/`.
 
 Acceptance: customization works in the harness; common outfits match Flash
 closely; animation-state switching stays compatible with the MovieClip runtime.

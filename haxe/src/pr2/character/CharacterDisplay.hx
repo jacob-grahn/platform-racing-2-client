@@ -195,6 +195,18 @@ class CharacterDisplay extends Sprite {
 		}
 		removeAtlasLayer(partClip, kind, "composite");
 		removeUnusedAtlasLayers(partClip, kind, ["static", "primary", "secondary"]);
+
+		// The static line art must sit in front of the colorMC/colorMC2 fill
+		// containers (which are pre-existing timeline children), matching the
+		// original Flash z-order where the black outline draws over the fills.
+		bringAtlasLayerToFront(partClip, kind, "static");
+	}
+
+	private function bringAtlasLayerToFront(parent:PR2MovieClip, kind:String, channel:String):Void {
+		var layer = findAtlasLayer(parent, kind, channel);
+		if (layer != null && layer.parent == parent) {
+			parent.setChildIndex(layer, parent.numChildren - 1);
+		}
 	}
 
 	private function renderCompositePartSlot(partClip:PR2MovieClip, kind:String, frameName:Null<String>, yOffset:Float):Void {
