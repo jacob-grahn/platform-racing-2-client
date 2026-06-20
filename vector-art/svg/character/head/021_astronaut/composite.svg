@@ -9,6 +9,15 @@
 <stop  offset="100%" stop-color="#FFFFFF" stop-opacity="0.7529411764705882"/>
 </linearGradient>
 
+<g id="Parts_Heads_headColorMC_20_Layer1_0_FILL">
+<path fill="#FFFFFF" stroke="none" d="
+M 110.95 69.75
+L 115.4 68.55
+Q 99.95 44.7 60.25 54.55 29 69.4 22.65 84.15 15.2 123.35 34.6 130.7 53.9 138 84.95 144.25 116.05 150.45 121.45 107.15
+L 122.25 91.2 118.35 97.7
+Q 112.55 112.5 102.95 126.15 81.7 128.95 63.5 128.7 52.55 120.3 53.15 102.7 74.3 74.95 110.95 69.75 Z"/>
+</g>
+
 <g id="Graphics_Symbol_788_0_Layer0_0_FILL">
 <path fill="url(#Gradient_1)" stroke="none" d="
 M 118.6 87.5
@@ -178,16 +187,21 @@ Q 31.5 94.85 31.3 93.6 31.15 92.3 30.5 91.7 29.4 90.7 26.6 90.45
 L 26.9 88.95 26.9 87.3
 Q 26.6 84.7 25.2 82.35 23.6 79.5 22.55 83.7 22.05 85.7 22.4 88.5 18.45 89.65 17.3 90.8 16.65 91.65 16.85 93.3 Z"/>
 </g>
-
-<g id="Parts_Heads_headColorMC_20_Layer1_0_FILL">
-<path fill="#FFFFFF" stroke="none" d="
-M 110.95 69.75
-L 115.4 68.55
-Q 99.95 44.7 60.25 54.55 29 69.4 22.65 84.15 15.2 123.35 34.6 130.7 53.9 138 84.95 144.25 116.05 150.45 121.45 107.15
-L 122.25 91.2 118.35 97.7
-Q 112.55 112.5 102.95 126.15 81.7 128.95 63.5 128.7 52.55 120.3 53.15 102.7 74.3 74.95 110.95 69.75 Z"/>
-</g>
 </defs>
+
+<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Parts_Heads_headColorMC_20_Layer1_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Graphics_Symbol_788_0_Layer0_0_FILL"/>
+</g>
+</g>
+</g>
 
 <g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
@@ -236,20 +250,6 @@ Q 112.55 112.5 102.95 126.15 81.7 128.95 63.5 128.7 52.55 120.3 53.15 102.7 74.3
 <g id="colorMC_FL_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
 
 <g id="colorMC2_FL_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
-</g>
-</g>
-
-<g transform="matrix( 1, 0, 0, 1, -75.4,-101.9) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Parts_Heads_headColorMC_20_Layer1_0_FILL"/>
-</g>
-</g>
-
-<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Graphics_Symbol_788_0_Layer0_0_FILL"/>
-</g>
 </g>
 </g>
 </svg>

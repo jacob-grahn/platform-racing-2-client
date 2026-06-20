@@ -187,9 +187,10 @@ appearance, not an open-ended art project.
       fill looked shifted up ~10px. `renderLayeredPartSlot` now brings the static
       layer to the front after placing fills (`bringAtlasLayerToFront`), matching
       the original Flash order (line-art on top, fills behind). Character channel
-      exports now use the part container's registration matrix, and composites
-      export the original source hierarchy instead of detached overlays, so the
-      head fills align with their static art and retain the source layer order.
+      exports now use the part container's registration matrix. Composites stage
+      the requested fill frames at that same registration point before placing
+      the static art above them, so fills align and line art retains its source
+      ordering without relying on nested movie-clip playback during SVG export.
 - [ ] Parts sit too high vs the shipped game (head ~11px, body ~7px; feet match).
       Measured against `08_standing.jpg`, normalized to the feet line:
       feet -11..0 (orig -12..0, ✓), body -42..-23 (orig -36..-16), head -64..-50

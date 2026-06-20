@@ -1,0 +1,915 @@
+{
+  "atlasGroup": "character/head/composite",
+  "category": "character",
+  "channel": "composite",
+  "frames": {
+    "001_classic": {
+      "frame": {
+        "height": 613,
+        "width": 508,
+        "x": 2436,
+        "y": 826
+      },
+      "id": 1,
+      "png": "vector-art/png/character/head/001_classic/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 613,
+        "width": 508,
+        "x": -254,
+        "y": -305
+      }
+    },
+    "002_tired": {
+      "frame": {
+        "height": 465,
+        "width": 475,
+        "x": 2333,
+        "y": 2118
+      },
+      "id": 2,
+      "png": "vector-art/png/character/head/002_tired/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 465,
+        "width": 475,
+        "x": -291,
+        "y": -167
+      }
+    },
+    "003_smiler": {
+      "frame": {
+        "height": 397,
+        "width": 504,
+        "x": 2,
+        "y": 3506
+      },
+      "id": 3,
+      "png": "vector-art/png/character/head/003_smiler/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 397,
+        "width": 504,
+        "x": -277,
+        "y": -114
+      }
+    },
+    "004_flower": {
+      "frame": {
+        "height": 529,
+        "width": 523,
+        "x": 1811,
+        "y": 1520
+      },
+      "id": 4,
+      "png": "vector-art/png/character/head/004_flower/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 529,
+        "width": 523,
+        "x": -269,
+        "y": -208
+      }
+    },
+    "005_classic_girl": {
+      "frame": {
+        "height": 413,
+        "width": 518,
+        "x": 2987,
+        "y": 3075
+      },
+      "id": 5,
+      "png": "vector-art/png/character/head/005_classic_girl/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 413,
+        "width": 518,
+        "x": -264,
+        "y": -105
+      }
+    },
+    "006_goof": {
+      "frame": {
+        "height": 470,
+        "width": 393,
+        "x": 1445,
+        "y": 2118
+      },
+      "id": 6,
+      "png": "vector-art/png/character/head/006_goof/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 470,
+        "width": 393,
+        "x": -218,
+        "y": -193
+      }
+    },
+    "007_downer": {
+      "frame": {
+        "height": 485,
+        "width": 409,
+        "x": 1034,
+        "y": 2118
+      },
+      "id": 7,
+      "png": "vector-art/png/character/head/007_downer/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 485,
+        "width": 409,
+        "x": -168,
+        "y": -172
+      }
+    },
+    "008_balloon": {
+      "frame": {
+        "height": 697,
+        "width": 516,
+        "x": 3189,
+        "y": 2
+      },
+      "id": 8,
+      "png": "vector-art/png/character/head/008_balloon/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 697,
+        "width": 516,
+        "x": -267,
+        "y": -419
+      }
+    },
+    "009_worm": {
+      "frame": {
+        "height": 463,
+        "width": 427,
+        "x": 2810,
+        "y": 2118
+      },
+      "id": 9,
+      "png": "vector-art/png/character/head/009_worm/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 463,
+        "width": 427,
+        "x": -214,
+        "y": -167
+      }
+    },
+    "010_unicorn": {
+      "frame": {
+        "height": 822,
+        "width": 560,
+        "x": 2,
+        "y": 2
+      },
+      "id": 10,
+      "png": "vector-art/png/character/head/010_unicorn/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 822,
+        "width": 560,
+        "x": -119,
+        "y": -521
+      }
+    },
+    "011_bird": {
+      "frame": {
+        "height": 374,
+        "width": 547,
+        "x": 1502,
+        "y": 3506
+      },
+      "id": 11,
+      "png": "vector-art/png/character/head/011_bird/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 374,
+        "width": 547,
+        "x": -182,
+        "y": -114
+      }
+    },
+    "012_sun": {
+      "frame": {
+        "height": 768,
+        "width": 785,
+        "x": 564,
+        "y": 2
+      },
+      "id": 12,
+      "png": "vector-art/png/character/head/012_sun/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 768,
+        "width": 785,
+        "x": -323,
+        "y": -284
+      }
+    },
+    "013_candy": {
+      "frame": {
+        "height": 665,
+        "width": 562,
+        "x": 1256,
+        "y": 826
+      },
+      "id": 13,
+      "png": "vector-art/png/character/head/013_candy/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 665,
+        "width": 562,
+        "x": -336,
+        "y": -377
+      }
+    },
+    "014_invisible": {
+      "frame": {
+        "height": 613,
+        "width": 508,
+        "x": 2946,
+        "y": 826
+      },
+      "id": 14,
+      "png": "vector-art/png/character/head/014_invisible/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 613,
+        "width": 508,
+        "x": -254,
+        "y": -305
+      }
+    },
+    "015_football_helmet": {
+      "frame": {
+        "height": 421,
+        "width": 529,
+        "x": 1011,
+        "y": 3075
+      },
+      "id": 15,
+      "png": "vector-art/png/character/head/015_football_helmet/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 421,
+        "width": 529,
+        "x": -191,
+        "y": -116
+      }
+    },
+    "016_basketball": {
+      "frame": {
+        "height": 432,
+        "width": 433,
+        "x": 3097,
+        "y": 2617
+      },
+      "id": 16,
+      "png": "vector-art/png/character/head/016_basketball/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 432,
+        "width": 433,
+        "x": -188,
+        "y": -109
+      }
+    },
+    "017_stick": {
+      "frame": {
+        "height": 448,
+        "width": 425,
+        "x": 1093,
+        "y": 2617
+      },
+      "id": 17,
+      "png": "vector-art/png/character/head/017_stick/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 448,
+        "width": 425,
+        "x": -169,
+        "y": -120
+      }
+    },
+    "018_cat": {
+      "frame": {
+        "height": 596,
+        "width": 722,
+        "x": 2,
+        "y": 1520
+      },
+      "id": 18,
+      "png": "vector-art/png/character/head/018_cat/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 596,
+        "width": 722,
+        "x": -288,
+        "y": -201
+      }
+    },
+    "019_elephant": {
+      "frame": {
+        "height": 725,
+        "width": 1076,
+        "x": 2111,
+        "y": 2
+      },
+      "id": 19,
+      "png": "vector-art/png/character/head/019_elephant/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 725,
+        "width": 1076,
+        "x": -446,
+        "y": -207
+      }
+    },
+    "020_ant": {
+      "frame": {
+        "height": 347,
+        "width": 607,
+        "x": 2051,
+        "y": 3506
+      },
+      "id": 20,
+      "png": "vector-art/png/character/head/020_ant/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 347,
+        "width": 607,
+        "x": -180,
+        "y": -84
+      }
+    },
+    "021_astronaut": {
+      "frame": {
+        "height": 390,
+        "width": 446,
+        "x": 508,
+        "y": 3506
+      },
+      "id": 21,
+      "png": "vector-art/png/character/head/021_astronaut/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 390,
+        "width": 446,
+        "x": -184,
+        "y": -111
+      }
+    },
+    "022_alien": {
+      "frame": {
+        "height": 424,
+        "width": 531,
+        "x": 478,
+        "y": 3075
+      },
+      "id": 22,
+      "png": "vector-art/png/character/head/022_alien/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 424,
+        "width": 531,
+        "x": -248,
+        "y": -187
+      }
+    },
+    "023_dino": {
+      "frame": {
+        "height": 304,
+        "width": 447,
+        "x": 3008,
+        "y": 3506
+      },
+      "id": 23,
+      "png": "vector-art/png/character/head/023_dino/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 304,
+        "width": 447,
+        "x": -93,
+        "y": -97
+      }
+    },
+    "024_armor": {
+      "frame": {
+        "height": 429,
+        "width": 395,
+        "x": 3532,
+        "y": 2617
+      },
+      "id": 24,
+      "png": "vector-art/png/character/head/024_armor/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 429,
+        "width": 395,
+        "x": -159,
+        "y": -161
+      }
+    },
+    "025_fairy": {
+      "frame": {
+        "height": 347,
+        "width": 346,
+        "x": 2660,
+        "y": 3506
+      },
+      "id": 25,
+      "png": "vector-art/png/character/head/025_fairy/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 347,
+        "width": 346,
+        "x": -151,
+        "y": -68
+      }
+    },
+    "026_gingerbread": {
+      "frame": {
+        "height": 457,
+        "width": 459,
+        "x": 3239,
+        "y": 2118
+      },
+      "id": 26,
+      "png": "vector-art/png/character/head/026_gingerbread/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 457,
+        "width": 459,
+        "x": -213,
+        "y": -160
+      }
+    },
+    "027_bubble": {
+      "frame": {
+        "height": 401,
+        "width": 401,
+        "x": 3507,
+        "y": 3075
+      },
+      "id": 27,
+      "png": "vector-art/png/character/head/027_bubble/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 401,
+        "width": 401,
+        "x": -195,
+        "y": -106
+      }
+    },
+    "028_king": {
+      "frame": {
+        "height": 442,
+        "width": 480,
+        "x": 2072,
+        "y": 2617
+      },
+      "id": 28,
+      "png": "vector-art/png/character/head/028_king/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 442,
+        "width": 480,
+        "x": -184,
+        "y": -123
+      }
+    },
+    "029_queen": {
+      "frame": {
+        "height": 504,
+        "width": 472,
+        "x": 3359,
+        "y": 1520
+      },
+      "id": 29,
+      "png": "vector-art/png/character/head/029_queen/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 504,
+        "width": 472,
+        "x": -187,
+        "y": -133
+      }
+    },
+    "030_sir": {
+      "frame": {
+        "height": 421,
+        "width": 400,
+        "x": 1542,
+        "y": 3075
+      },
+      "id": 30,
+      "png": "vector-art/png/character/head/030_sir/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 421,
+        "width": 400,
+        "x": -164,
+        "y": -153
+      }
+    },
+    "031_very_invisible": {
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 3457,
+        "y": 3506
+      },
+      "id": 31,
+      "png": "vector-art/png/character/head/031_very_invisible/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "032_taco": {
+      "frame": {
+        "height": 729,
+        "width": 758,
+        "x": 1351,
+        "y": 2
+      },
+      "id": 32,
+      "png": "vector-art/png/character/head/032_taco/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 729,
+        "width": 758,
+        "x": -453,
+        "y": -437
+      }
+    },
+    "033_slender": {
+      "frame": {
+        "height": 420,
+        "width": 362,
+        "x": 1944,
+        "y": 3075
+      },
+      "id": 33,
+      "png": "vector-art/png/character/head/033_slender/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 420,
+        "width": 362,
+        "x": -176,
+        "y": -111
+      }
+    },
+    "034_santa": {
+      "frame": {
+        "height": 655,
+        "width": 614,
+        "x": 1820,
+        "y": 826
+      },
+      "id": 34,
+      "png": "vector-art/png/character/head/034_santa/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 655,
+        "width": 614,
+        "x": -198,
+        "y": -132
+      }
+    },
+    "035_frost_djinn": {
+      "frame": {
+        "height": 505,
+        "width": 615,
+        "x": 2742,
+        "y": 1520
+      },
+      "id": 35,
+      "png": "vector-art/png/character/head/035_frost_djinn/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 505,
+        "width": 615,
+        "x": -305,
+        "y": -169
+      }
+    },
+    "036_reindeer": {
+      "frame": {
+        "height": 692,
+        "width": 709,
+        "x": 2,
+        "y": 826
+      },
+      "id": 36,
+      "png": "vector-art/png/character/head/036_reindeer/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 692,
+        "width": 709,
+        "x": -353,
+        "y": -391
+      }
+    },
+    "037_crocodile": {
+      "frame": {
+        "height": 415,
+        "width": 677,
+        "x": 2308,
+        "y": 3075
+      },
+      "id": 37,
+      "png": "vector-art/png/character/head/037_crocodile/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 415,
+        "width": 677,
+        "x": -192,
+        "y": -153
+      }
+    },
+    "038_valentine": {
+      "frame": {
+        "height": 497,
+        "width": 547,
+        "x": 2,
+        "y": 2118
+      },
+      "id": 38,
+      "png": "vector-art/png/character/head/038_valentine/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 497,
+        "width": 547,
+        "x": -224,
+        "y": -178
+      }
+    },
+    "039_bunny": {
+      "frame": {
+        "height": 467,
+        "width": 491,
+        "x": 1840,
+        "y": 2118
+      },
+      "id": 39,
+      "png": "vector-art/png/character/head/039_bunny/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 467,
+        "width": 491,
+        "x": -221,
+        "y": -166
+      }
+    },
+    "040_gecko": {
+      "frame": {
+        "height": 387,
+        "width": 544,
+        "x": 956,
+        "y": 3506
+      },
+      "id": 40,
+      "png": "vector-art/png/character/head/040_gecko/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 387,
+        "width": 544,
+        "x": -286,
+        "y": -111
+      }
+    },
+    "041_bat": {
+      "frame": {
+        "height": 546,
+        "width": 495,
+        "x": 1314,
+        "y": 1520
+      },
+      "id": 41,
+      "png": "vector-art/png/character/head/041_bat/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 546,
+        "width": 495,
+        "x": -237,
+        "y": -242
+      }
+    },
+    "042_sea": {
+      "frame": {
+        "height": 684,
+        "width": 541,
+        "x": 713,
+        "y": 826
+      },
+      "id": 42,
+      "png": "vector-art/png/character/head/042_sea/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 684,
+        "width": 541,
+        "x": -231,
+        "y": -147
+      }
+    },
+    "043_brew": {
+      "frame": {
+        "height": 456,
+        "width": 600,
+        "x": 2,
+        "y": 2617
+      },
+      "id": 43,
+      "png": "vector-art/png/character/head/043_brew/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 456,
+        "width": 600,
+        "x": -277,
+        "y": -173
+      }
+    },
+    "044_jackolantern": {
+      "frame": {
+        "height": 449,
+        "width": 487,
+        "x": 604,
+        "y": 2617
+      },
+      "id": 44,
+      "png": "vector-art/png/character/head/044_jackolantern/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 449,
+        "width": 487,
+        "x": -217,
+        "y": -165
+      }
+    },
+    "045_xmas": {
+      "frame": {
+        "height": 497,
+        "width": 481,
+        "x": 551,
+        "y": 2118
+      },
+      "id": 45,
+      "png": "vector-art/png/character/head/045_xmas/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 497,
+        "width": 481,
+        "x": -230,
+        "y": -148
+      }
+    },
+    "046_snowman": {
+      "frame": {
+        "height": 441,
+        "width": 541,
+        "x": 2554,
+        "y": 2617
+      },
+      "id": 46,
+      "png": "vector-art/png/character/head/046_snowman/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 441,
+        "width": 541,
+        "x": -209,
+        "y": -147
+      }
+    },
+    "047_blobfish": {
+      "frame": {
+        "height": 571,
+        "width": 586,
+        "x": 726,
+        "y": 1520
+      },
+      "id": 47,
+      "png": "vector-art/png/character/head/047_blobfish/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 571,
+        "width": 586,
+        "x": -240,
+        "y": -151
+      }
+    },
+    "048_turkey": {
+      "frame": {
+        "height": 429,
+        "width": 474,
+        "x": 2,
+        "y": 3075
+      },
+      "id": 48,
+      "png": "vector-art/png/character/head/048_turkey/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 429,
+        "width": 474,
+        "x": -189,
+        "y": -125
+      }
+    },
+    "049_dog": {
+      "frame": {
+        "height": 446,
+        "width": 550,
+        "x": 1520,
+        "y": 2617
+      },
+      "id": 49,
+      "png": "vector-art/png/character/head/049_dog/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 446,
+        "width": 550,
+        "x": -234,
+        "y": -156
+      }
+    },
+    "050_gladiator": {
+      "frame": {
+        "height": 510,
+        "width": 404,
+        "x": 2336,
+        "y": 1520
+      },
+      "id": 50,
+      "png": "vector-art/png/character/head/050_gladiator/composite@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 510,
+        "width": 404,
+        "x": -158,
+        "y": -200
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/head/composite@4x.png",
+  "kind": "head",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 3905,
+    "width": 3929
+  }
+}

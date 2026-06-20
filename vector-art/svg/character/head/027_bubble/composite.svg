@@ -23,12 +23,6 @@
 <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0" result="result1"/>
 </filter>
 
-<g id="MovieClips_Symbol_256_0_Layer0_0_FILL">
-<path fill="#FFFFFF" stroke="none" d="
-M -21.65 -32.3
-Q -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 -20.45 -31.1 -21.65 -32.3 Z"/>
-</g>
-
 <g id="MovieClips_Symbol_218_0_Layer0_0_FILL">
 <path fill="url(#Gradient_1)" stroke="none" d="
 M 85.35 85.35
@@ -71,41 +65,15 @@ Q 10.9 22.7 16.5 22.7 19 22.7 19 20.2
 L 16.35 17.95 11.75 14.45 16.8 10.3
 Q 19 8.25 19 6.9 Z"/>
 </g>
+
+<g id="MovieClips_Symbol_256_0_Layer0_0_FILL">
+<path fill="#FFFFFF" stroke="none" d="
+M -21.65 -32.3
+Q -22.85 -33.45 -25.45 -32.5 -28.05 -31.6 -30.55 -29.1 -33.05 -26.55 -34.05 -23.9 -34.95 -21.35 -33.75 -20.15 -32.6 -18.95 -30 -19.9 -27.35 -20.85 -24.85 -23.35 -22.35 -25.85 -21.45 -28.45 -20.45 -31.1 -21.65 -32.3 Z"/>
+</g>
 </defs>
 
 <g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
-<g transform="matrix( 1, 0, 0, 1, 64.05,100.5) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#MovieClips_Symbol_256_0_Layer0_0_FILL"/>
-</g>
-</g>
-
-<g id="hat1" transform="matrix( 0.983917236328125, -0.17529296875, 0.17529296875, 0.983917236328125, 45.2,78.25) ">
-<g id="colorMC" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
-
-<g id="colorMC2" transform="matrix( 1, 0, 0, 1, 0,0) "/>
-</g>
-
-<g id="hat2" transform="matrix( 0.9733734130859375, -0.2247314453125, 0.2247314453125, 0.9733734130859375, 38,60.6) ">
-<g id="colorMC_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
-
-<g id="colorMC2_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
-</g>
-
-<g id="hat3" transform="matrix( 0.96026611328125, -0.2753753662109375, 0.2753753662109375, 0.96026611328125, 26,48.4) ">
-<g id="colorMC_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
-
-<g id="colorMC2_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
-</g>
-
-<g id="hat4" transform="matrix( 0.944580078125, -0.3252410888671875, 0.3252410888671875, 0.944580078125, 18.85,34.5) ">
-<g id="colorMC_FL_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
-
-<g id="colorMC2_FL_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
-</g>
-</g>
-
-<g transform="matrix( 1, 0, 0, 1, -75.4,-101.9) ">
 <g transform="matrix( 1, 0, 0, 1, 64.05,100.5) ">
 <g transform="matrix( 1, 0, 0, 1, -50,-50) ">
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
@@ -146,6 +114,38 @@ Q 19 8.25 19 6.9 Z"/>
 <g transform="matrix( 1, 0, 0, 1, 0,0) ">
 <use xlink:href="#MovieClips_Symbol_256_0_Layer0_0_FILL"/>
 </g>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
+<g transform="matrix( 1, 0, 0, 1, 64.05,100.5) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#MovieClips_Symbol_256_0_Layer0_0_FILL"/>
+</g>
+</g>
+
+<g id="hat1" transform="matrix( 0.983917236328125, -0.17529296875, 0.17529296875, 0.983917236328125, 45.2,78.25) ">
+<g id="colorMC" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+
+<g id="hat2" transform="matrix( 0.9733734130859375, -0.2247314453125, 0.2247314453125, 0.9733734130859375, 38,60.6) ">
+<g id="colorMC_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+
+<g id="hat3" transform="matrix( 0.96026611328125, -0.2753753662109375, 0.2753753662109375, 0.96026611328125, 26,48.4) ">
+<g id="colorMC_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
+</g>
+
+<g id="hat4" transform="matrix( 0.944580078125, -0.3252410888671875, 0.3252410888671875, 0.944580078125, 18.85,34.5) ">
+<g id="colorMC_FL_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
+
+<g id="colorMC2_FL_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
 </g>
 </g>
 </svg>

@@ -38,6 +38,18 @@ Q 66.85 52.95 91.45 57.55 Z"/>
 </defs>
 
 <g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Parts_Heads_headColorMC_16_Layer1_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
+<g transform="matrix( 1, 0, 0, 1, 0,0) ">
+<use xlink:href="#Parts_Heads_headColorMC2_16_Layer3_0_FILL"/>
+</g>
+</g>
+
+<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
 <g id="hat1" transform="matrix( 0.983917236328125, -0.17529296875, 0.17529296875, 0.983917236328125, 45.2,78.25) ">
 <g id="colorMC" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
 
@@ -60,18 +72,6 @@ Q 66.85 52.95 91.45 57.55 Z"/>
 <g id="colorMC_FL_FL_FL" transform="matrix( 0.9999847412109375, 0, 0, 0.9999847412109375, 0,0) "/>
 
 <g id="colorMC2_FL_FL_FL" transform="matrix( 1, 0, 0, 1, 0,0) "/>
-</g>
-</g>
-
-<g transform="matrix( 1, 0, 0, 1, -75.4,-101.9) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Parts_Heads_headColorMC_16_Layer1_0_FILL"/>
-</g>
-</g>
-
-<g transform="matrix( 1, 0, 0, 1, -62.75,-76.85) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#Parts_Heads_headColorMC2_16_Layer3_0_FILL"/>
 </g>
 </g>
 </svg>

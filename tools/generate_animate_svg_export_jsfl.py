@@ -39,6 +39,12 @@ def load_jobs(manifest_path, channels, kinds, limit):
     with open(manifest_path, encoding="utf-8") as handle:
         manifest = json.load(handle)
 
+    channel_sources = {}
+    for entry in manifest["characterExports"]:
+        source_symbol = entry["source"].get("symbolName")
+        if source_symbol:
+            channel_sources[(entry["kind"], entry["id"], entry["channel"])] = source_symbol
+
     jobs = []
     for entry in manifest["characterExports"]:
         if channels and entry["channel"] not in channels:
@@ -47,6 +53,12 @@ def load_jobs(manifest_path, channels, kinds, limit):
             continue
         source = entry["source"]
         source_symbol = source.get("symbolName")
+        overlays = []
+        if entry["channel"] == "composite":
+            for overlay_channel in ("primary", "secondary"):
+                overlay_symbol = channel_sources.get((entry["kind"], entry["id"], overlay_channel))
+                if overlay_symbol:
+                    overlays.append({"channel": overlay_channel, "symbolName": overlay_symbol})
         jobs.append(
             {
                 "id": entry["id"],
@@ -57,8 +69,9 @@ def load_jobs(manifest_path, channels, kinds, limit):
                 "exportPath": entry["exportPath"],
                 "symbolName": source_symbol if entry["channel"] in ("primary", "secondary") and source_symbol else source["containerSymbol"],
                 "containerSymbol": source["containerSymbol"],
-                "hiddenInstances": ["colorMC", "colorMC2"] if entry["channel"] == "static" else [],
-                "hiddenLayers": ["colorMC", "colorMC2"] if entry["channel"] == "static" else [],
+                "hiddenInstances": ["colorMC", "colorMC2"] if entry["channel"] in ("static", "composite") else [],
+                "hiddenLayers": ["colorMC", "colorMC2"] if entry["channel"] in ("static", "composite") else [],
+                "overlays": overlays,
             }
         )
 
@@ -120,17 +133,6 @@ function selectFrame(timeline, frameIndex) {{
 \t}}
 }}
 
-function activeFrame(layer, frameIndex) {{
-\tfor (var i = 0; i < layer.frames.length; i++) {{
-\t\tvar frame = layer.frames[i];
-\t\tvar duration = frame.duration ? frame.duration : 1;
-\t\tif (frame.index <= frameIndex && frameIndex < frame.index + duration) {{
-\t\t\treturn frame;
-\t\t}}
-\t}}
-\treturn null;
-}}
-
 function contains(values, value) {{
 \tfor (var i = 0; i < values.length; i++) {{
 \t\tif (values[i] == value) {{
@@ -164,39 +166,6 @@ function setLibraryVisibility(timeline, job, visible) {{
 \t}}
 }}
 
-function configureColorInstance(element, layerIndex, elementIndex, frameIndex, states) {{
-\tstates.push({{
-\t\tkind: "element",
-\t\tlayerIndex: layerIndex,
-\t\telementIndex: elementIndex,
-\t\tsymbolType: element.symbolType,
-\t\tfirstFrame: element.firstFrame,
-\t\tloop: element.loop
-\t}});
-\telement.symbolType = "graphic";
-\telement.firstFrame = frameIndex;
-\telement.loop = "single frame";
-}}
-
-function configureLibraryItem(timeline, job, states) {{
-\tif (job.channel != "composite") {{
-\t\treturn;
-\t}}
-\tfor (var i = 0; i < timeline.layers.length; i++) {{
-\t\tvar layer = timeline.layers[i];
-\t\tvar frame = activeFrame(layer, job.frame);
-\t\tif (!frame || !frame.elements) {{
-\t\t\tcontinue;
-\t\t}}
-\t\tfor (var e = 0; e < frame.elements.length; e++) {{
-\t\t\tvar element = frame.elements[e];
-\t\t\tif (element.name == "colorMC" || element.name == "colorMC2") {{
-\t\t\t\tconfigureColorInstance(element, i, e, job.frame, states);
-\t\t\t}}
-\t\t}}
-\t}}
-}}
-
 function prepareLibraryItem(doc, job) {{
 \tif (!doc.library.editItem(job.symbolName)) {{
 \t\tthrow new Error("Could not edit library item: " + job.symbolName);
@@ -204,34 +173,23 @@ function prepareLibraryItem(doc, job) {{
 \tvar editDoc = fl.getDocumentDOM();
 \tvar timeline = editDoc.getTimeline();
 \tselectFrame(timeline, job.frame);
-\tif (job.channel == "static") {{
+\tif (job.channel == "static" || job.channel == "composite") {{
 \t\tsetLibraryVisibility(timeline, job, false);
 \t\teditDoc.exitEditMode();
-\t\treturn [];
+\t\treturn;
 \t}}
-\tvar states = [];
-\tconfigureLibraryItem(timeline, job, states);
 \teditDoc.exitEditMode();
-\treturn states;
 }}
 
-function restoreLibraryItem(doc, job, states) {{
+function restoreLibraryItem(doc, job) {{
 \tif (!doc.library.editItem(job.symbolName)) {{
 \t\tthrow new Error("Could not re-edit library item for restore: " + job.symbolName);
 \t}}
 \tvar timeline = fl.getDocumentDOM().getTimeline();
-\tif (job.channel == "static") {{
+\tif (job.channel == "static" || job.channel == "composite") {{
 \t\tsetLibraryVisibility(timeline, job, true);
 \t\tfl.getDocumentDOM().exitEditMode();
 \t\treturn;
-\t}}
-\tfor (var i = states.length - 1; i >= 0; i--) {{
-\t\tvar state = states[i];
-\t\tvar frame = activeFrame(timeline.layers[state.layerIndex], job.frame);
-\t\tvar element = frame.elements[state.elementIndex];
-\t\telement.symbolType = state.symbolType;
-\t\telement.firstFrame = state.firstFrame;
-\t\telement.loop = state.loop;
 \t}}
 \tfl.getDocumentDOM().exitEditMode();
 }}
@@ -243,26 +201,27 @@ function exportCurrentView(outputUri) {{
 \tfl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", outputUri, true, "", false, false, 0, 0);
 }}
 
-function stageSymbol(doc, job) {{
-\tvar registrationMatrix = null;
-\tif (job.channel == "primary" || job.channel == "secondary") {{
-\t\tdoc.library.addItemToDocument({{ x: 0, y: 0 }}, job.containerSymbol);
-\t\tvar reference = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
-\t\tif (!reference) {{
-\t\t\tthrow new Error("Could not stage registration reference: " + job.containerSymbol);
-\t\t}}
-\t\tregistrationMatrix = reference.matrix;
-\t\tdoc.deleteSelection();
+function registrationMatrix(doc, containerSymbol) {{
+\tdoc.library.addItemToDocument({{ x: 0, y: 0 }}, containerSymbol);
+\tvar reference = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
+\tif (!reference) {{
+\t\tthrow new Error("Could not stage registration reference: " + containerSymbol);
 \t}}
-\tdoc.library.addItemToDocument({{ x: 0, y: 0 }}, job.symbolName);
+\tvar matrix = reference.matrix;
+\tdoc.deleteSelection();
+\treturn matrix;
+}}
+
+function stageSymbol(doc, symbolName, frame, matrixOverride) {{
+\tdoc.library.addItemToDocument({{ x: 0, y: 0 }}, symbolName);
 \tvar instance = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
 \tif (!instance) {{
-\t\tthrow new Error("Could not stage library item: " + job.symbolName);
+\t\tthrow new Error("Could not stage library item: " + symbolName);
 \t}}
-\tif (registrationMatrix != null) {{
+\tif (matrixOverride != null) {{
 \t\tvar matrix = instance.matrix;
-\t\tmatrix.tx = registrationMatrix.tx;
-\t\tmatrix.ty = registrationMatrix.ty;
+\t\tmatrix.tx = matrixOverride.tx;
+\t\tmatrix.ty = matrixOverride.ty;
 \t\tinstance.matrix = matrix;
 \t}}
 \ttry {{
@@ -270,7 +229,7 @@ function stageSymbol(doc, job) {{
 \t}} catch (e) {{
 \t}}
 \ttry {{
-\t\tinstance.firstFrame = job.frame;
+\t\tinstance.firstFrame = frame;
 \t}} catch (e) {{
 \t}}
 \ttry {{
@@ -281,21 +240,28 @@ function stageSymbol(doc, job) {{
 
 function exportJob(doc, job) {{
 \tlog("exporting " + job.exportPath + " from " + job.symbolName + " frame " + job.frame);
-\tvar states = prepareLibraryItem(doc, job);
+\tprepareLibraryItem(doc, job);
 \tdoc = fl.getDocumentDOM();
 \ttry {{
 \t\tdoc.selectAll();
 \t\tdoc.deleteSelection();
 \t}} catch (e) {{
 \t}}
-\tstageSymbol(doc, job);
+\tvar matrix = null;
+\tif (job.channel == "primary" || job.channel == "secondary" || job.channel == "composite") {{
+\t\tmatrix = registrationMatrix(doc, job.containerSymbol);
+\t}}
+\tfor (var i = 0; i < job.overlays.length; i++) {{
+\t\tstageSymbol(doc, job.overlays[i].symbolName, job.frame, matrix);
+\t}}
+\tstageSymbol(doc, job.symbolName, job.frame, matrix);
 \texportCurrentView(job.outputUri);
 \ttry {{
 \t\tdoc.selectAll();
 \t\tdoc.deleteSelection();
 \t}} catch (e) {{
 \t}}
-\trestoreLibraryItem(doc, job, states);
+\trestoreLibraryItem(doc, job);
 }}
 
 function run() {{

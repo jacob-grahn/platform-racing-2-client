@@ -23,6 +23,7 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/static.svg",
+    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -36,6 +37,7 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/primary.svg",
+    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -49,6 +51,7 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/secondary.svg",
+    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
   },
   {
@@ -56,12 +59,28 @@ var JOBS = [
     "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/001_none/composite.svg",
     "frame": 0,
-    "hiddenInstances": [],
-    "hiddenLayers": [],
+    "hiddenInstances": [
+      "colorMC",
+      "colorMC2"
+    ],
+    "hiddenLayers": [
+      "colorMC",
+      "colorMC2"
+    ],
     "id": 1,
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/composite.svg",
+    "overlays": [
+      {
+        "channel": "primary",
+        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
+      },
+      {
+        "channel": "secondary",
+        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
+      }
+    ],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -81,6 +100,7 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/static.svg",
+    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -94,6 +114,7 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/primary.svg",
+    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -107,6 +128,7 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/secondary.svg",
+    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
   },
   {
@@ -114,12 +136,28 @@ var JOBS = [
     "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/002_exp/composite.svg",
     "frame": 1,
-    "hiddenInstances": [],
-    "hiddenLayers": [],
+    "hiddenInstances": [
+      "colorMC",
+      "colorMC2"
+    ],
+    "hiddenLayers": [
+      "colorMC",
+      "colorMC2"
+    ],
     "id": 2,
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/composite.svg",
+    "overlays": [
+      {
+        "channel": "primary",
+        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
+      },
+      {
+        "channel": "secondary",
+        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
+      }
+    ],
     "symbolName": "Parts/Hats/hatsMC"
   }
 ];
@@ -157,17 +195,6 @@ function selectFrame(timeline, frameIndex) {
 	}
 }
 
-function activeFrame(layer, frameIndex) {
-	for (var i = 0; i < layer.frames.length; i++) {
-		var frame = layer.frames[i];
-		var duration = frame.duration ? frame.duration : 1;
-		if (frame.index <= frameIndex && frameIndex < frame.index + duration) {
-			return frame;
-		}
-	}
-	return null;
-}
-
 function contains(values, value) {
 	for (var i = 0; i < values.length; i++) {
 		if (values[i] == value) {
@@ -201,39 +228,6 @@ function setLibraryVisibility(timeline, job, visible) {
 	}
 }
 
-function configureColorInstance(element, layerIndex, elementIndex, frameIndex, states) {
-	states.push({
-		kind: "element",
-		layerIndex: layerIndex,
-		elementIndex: elementIndex,
-		symbolType: element.symbolType,
-		firstFrame: element.firstFrame,
-		loop: element.loop
-	});
-	element.symbolType = "graphic";
-	element.firstFrame = frameIndex;
-	element.loop = "single frame";
-}
-
-function configureLibraryItem(timeline, job, states) {
-	if (job.channel != "composite") {
-		return;
-	}
-	for (var i = 0; i < timeline.layers.length; i++) {
-		var layer = timeline.layers[i];
-		var frame = activeFrame(layer, job.frame);
-		if (!frame || !frame.elements) {
-			continue;
-		}
-		for (var e = 0; e < frame.elements.length; e++) {
-			var element = frame.elements[e];
-			if (element.name == "colorMC" || element.name == "colorMC2") {
-				configureColorInstance(element, i, e, job.frame, states);
-			}
-		}
-	}
-}
-
 function prepareLibraryItem(doc, job) {
 	if (!doc.library.editItem(job.symbolName)) {
 		throw new Error("Could not edit library item: " + job.symbolName);
@@ -241,34 +235,23 @@ function prepareLibraryItem(doc, job) {
 	var editDoc = fl.getDocumentDOM();
 	var timeline = editDoc.getTimeline();
 	selectFrame(timeline, job.frame);
-	if (job.channel == "static") {
+	if (job.channel == "static" || job.channel == "composite") {
 		setLibraryVisibility(timeline, job, false);
 		editDoc.exitEditMode();
-		return [];
+		return;
 	}
-	var states = [];
-	configureLibraryItem(timeline, job, states);
 	editDoc.exitEditMode();
-	return states;
 }
 
-function restoreLibraryItem(doc, job, states) {
+function restoreLibraryItem(doc, job) {
 	if (!doc.library.editItem(job.symbolName)) {
 		throw new Error("Could not re-edit library item for restore: " + job.symbolName);
 	}
 	var timeline = fl.getDocumentDOM().getTimeline();
-	if (job.channel == "static") {
+	if (job.channel == "static" || job.channel == "composite") {
 		setLibraryVisibility(timeline, job, true);
 		fl.getDocumentDOM().exitEditMode();
 		return;
-	}
-	for (var i = states.length - 1; i >= 0; i--) {
-		var state = states[i];
-		var frame = activeFrame(timeline.layers[state.layerIndex], job.frame);
-		var element = frame.elements[state.elementIndex];
-		element.symbolType = state.symbolType;
-		element.firstFrame = state.firstFrame;
-		element.loop = state.loop;
 	}
 	fl.getDocumentDOM().exitEditMode();
 }
@@ -280,26 +263,27 @@ function exportCurrentView(outputUri) {
 	fl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", outputUri, true, "", false, false, 0, 0);
 }
 
-function stageSymbol(doc, job) {
-	var registrationMatrix = null;
-	if (job.channel == "primary" || job.channel == "secondary") {
-		doc.library.addItemToDocument({ x: 0, y: 0 }, job.containerSymbol);
-		var reference = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
-		if (!reference) {
-			throw new Error("Could not stage registration reference: " + job.containerSymbol);
-		}
-		registrationMatrix = reference.matrix;
-		doc.deleteSelection();
+function registrationMatrix(doc, containerSymbol) {
+	doc.library.addItemToDocument({ x: 0, y: 0 }, containerSymbol);
+	var reference = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
+	if (!reference) {
+		throw new Error("Could not stage registration reference: " + containerSymbol);
 	}
-	doc.library.addItemToDocument({ x: 0, y: 0 }, job.symbolName);
+	var matrix = reference.matrix;
+	doc.deleteSelection();
+	return matrix;
+}
+
+function stageSymbol(doc, symbolName, frame, matrixOverride) {
+	doc.library.addItemToDocument({ x: 0, y: 0 }, symbolName);
 	var instance = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
 	if (!instance) {
-		throw new Error("Could not stage library item: " + job.symbolName);
+		throw new Error("Could not stage library item: " + symbolName);
 	}
-	if (registrationMatrix != null) {
+	if (matrixOverride != null) {
 		var matrix = instance.matrix;
-		matrix.tx = registrationMatrix.tx;
-		matrix.ty = registrationMatrix.ty;
+		matrix.tx = matrixOverride.tx;
+		matrix.ty = matrixOverride.ty;
 		instance.matrix = matrix;
 	}
 	try {
@@ -307,7 +291,7 @@ function stageSymbol(doc, job) {
 	} catch (e) {
 	}
 	try {
-		instance.firstFrame = job.frame;
+		instance.firstFrame = frame;
 	} catch (e) {
 	}
 	try {
@@ -318,21 +302,28 @@ function stageSymbol(doc, job) {
 
 function exportJob(doc, job) {
 	log("exporting " + job.exportPath + " from " + job.symbolName + " frame " + job.frame);
-	var states = prepareLibraryItem(doc, job);
+	prepareLibraryItem(doc, job);
 	doc = fl.getDocumentDOM();
 	try {
 		doc.selectAll();
 		doc.deleteSelection();
 	} catch (e) {
 	}
-	stageSymbol(doc, job);
+	var matrix = null;
+	if (job.channel == "primary" || job.channel == "secondary" || job.channel == "composite") {
+		matrix = registrationMatrix(doc, job.containerSymbol);
+	}
+	for (var i = 0; i < job.overlays.length; i++) {
+		stageSymbol(doc, job.overlays[i].symbolName, job.frame, matrix);
+	}
+	stageSymbol(doc, job.symbolName, job.frame, matrix);
 	exportCurrentView(job.outputUri);
 	try {
 		doc.selectAll();
 		doc.deleteSelection();
 	} catch (e) {
 	}
-	restoreLibraryItem(doc, job, states);
+	restoreLibraryItem(doc, job);
 }
 
 function run() {

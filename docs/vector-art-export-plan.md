@@ -129,9 +129,11 @@ At a high level:
 5. For `secondary`, export `colorMC2` after `colorMC2.gotoAndStop(partId)`,
    staged with the same container registration matrix.
 6. For `static`, hide `colorMC` and `colorMC2`, then export the remaining part.
-7. For `composite`, export the original part container with `colorMC` and
-   `colorMC2` advanced to the requested frame. This preserves their source
-   transforms and layer order.
+7. For `composite`, stage the requested primary and secondary frames at the
+   part container's registration point, then place the container above them
+   with `colorMC` and `colorMC2` hidden. This preserves the source line-art
+   ordering without relying on Animate to advance nested movie clips during
+   SVG export.
 8. Convert SVG outputs to `@4x.png` sprite sheets as a separate deterministic build step.
 
 To run a generated JSFL file through Animate on macOS:
