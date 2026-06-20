@@ -4,6 +4,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import pr2.lobby.account.LoadoutsPopup;
 import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.CreditsPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.PMRFCodesPopup;
 import pr2.lobby.dialogs.SendMessagePopup;
@@ -27,6 +28,7 @@ class PopupPreview extends Sprite {
 			case "confirm": new ConfirmPopup(function() {}, "Are you sure you want to continue?");
 			case "send-message": new SendMessagePopup("Jiggmin", "Hello from Platform Racing 2!");
 			case "codes": new PMRFCodesPopup();
+			case "credits": new CreditsPopup();
 			case "loadouts": new LoadoutsPopup(null, null, null);
 			default: new MessagePopup("This is a representative popup message.");
 		}

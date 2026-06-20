@@ -125,6 +125,7 @@ class LobbyPage extends Page {
 
 	private function clickCredits():Void {
 		LobbyPopups.lastRequest = "credits";
+		new pr2.lobby.dialogs.CreditsPopup();
 		reportAction("credits");
 	}
 

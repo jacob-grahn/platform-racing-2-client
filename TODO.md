@@ -100,6 +100,15 @@ do not infer completion from the presence of a tab or exported symbol.
 - [ ] Implement the bottom-strip destinations: options (quality, controls,
   songs), store/vault and quantity/purchase flows, credits, and level editor.
   Preserve guest/member visibility and logout side effects.
+  - Credits: `pr2.lobby.dialogs.CreditsPopup` now opens from the bottom strip and
+    renders the authored `CreditsPopupGraphic` with a working close button
+    (`?screen=popup&popup=credits`). Remaining parity gaps vs `menu/CreditsPopup.as`:
+    the committed XFL symbol no longer exports `versionBox`/`buildBox` or the
+    `art_nav_bts`/`music_nav_bt` page-navigation links, and `PR2MovieClip` skips
+    `visible:false` layers, so only the authored-visible credit pages (`artPg3`,
+    `musicPg2`) instantiate — the earlier art/music pages and the version/build
+    display are unreachable without a re-exported symbol (or runtime support for
+    instantiating hidden layers) plus the older nav instances.
 - [ ] Verify every Chat, PMs, Players, Account, Campaign, listing, Favorites, and
   Search operation against real HTTP/socket responses. Cover paging, stale and
   out-of-order responses, loading/error/empty states, permissions, unread
