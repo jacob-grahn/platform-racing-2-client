@@ -20,6 +20,7 @@ import pr2.net.AccountCreationClient;
 import pr2.net.LoginAuthClient;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
+import pr2.runtime.FlComboBox;
 
 /**
 	Login menu ported from the Flash `menu.LoginPage`.
@@ -144,14 +145,9 @@ class LoginPage extends Page {
 		var remember = false;
 		var nameInput = popup.input("nameBox");
 		var passInput = popup.input("passBox");
-		var updateServer = function():Void {
-			var server = selectedServer();
-			popup.setComponentLabel("dropdown", server == null ? "No servers" : server.label());
-		};
-		updateServer();
-		popup.bindButton("dropdown", function():Void {
-			shiftServer(1);
-			updateServer();
+		populateServerCombo(popup.comboBox("dropdown"));
+		popup.bindComboBox("dropdown", function(combo:FlComboBox):Void {
+			selectServerFromCombo(combo);
 		});
 		popup.bindButton("reload_bt", function():Void {
 			loadServers();
@@ -229,11 +225,7 @@ class LoginPage extends Page {
 
 	private function openServerSelectPopup(guestLogin:Bool, createdAccount:Bool):Void {
 		var popup = openPopup("ServerSelectPopupGraphic");
-		var updateServer = function():Void {
-			var server = selectedServer();
-			popup.setComponentLabel("serverSelect", server == null ? "No servers" : server.label());
-		};
-		updateServer();
+		populateServerCombo(popup.comboBox("serverSelect"));
 		popup.setComponentLabel("userSelect", guestLogin ? "Guest" : (createdAccount ? pendingCreatedUserName : "Use Other Account..."));
 		var userDelete = popup.child("user_del_bt");
 		if (userDelete != null) {
@@ -243,9 +235,8 @@ class LoginPage extends Page {
 				userDeleteInteractive.mouseEnabled = !(guestLogin || createdAccount);
 			}
 		}
-		popup.bindButton("serverSelect", function():Void {
-			shiftServer(1);
-			updateServer();
+		popup.bindComboBox("serverSelect", function(combo:FlComboBox):Void {
+			selectServerFromCombo(combo);
 		});
 		popup.bindButton("reload_bt", function():Void {
 			loadServers();
@@ -327,17 +318,21 @@ class LoginPage extends Page {
 	}
 
 	private function loadServers():Void {
+		var previousServer = selectedServer();
+		setActiveServerCombosLoading();
 		ServerStatusClient.fetch(function(result):Void {
 			servers = result.servers.filter(function(server):Bool {
 				return server.address != "" && server.port > 0;
 			});
-			selectedServerIndex = 0;
-			setStatus(servers.length == 0 ? "No usable servers found." : 'Loaded ${servers.length} servers. Selected ${servers[0].label()}.');
-			updateActiveServerLabels();
+			selectedServerIndex = findServerIndex(previousServer);
+			var selected = selectedServer();
+			setStatus(selected == null ? "No usable servers found." : 'Loaded ${servers.length} servers. Selected ${selected.label()}.');
+			updateActiveServerCombos();
 		}, function(message:String):Void {
 			servers = [];
+			selectedServerIndex = 0;
 			setStatus(message);
-			updateActiveServerLabels();
+			updateActiveServerCombos();
 		});
 	}
 
@@ -351,24 +346,64 @@ class LoginPage extends Page {
 		return servers[selectedServerIndex];
 	}
 
-	private function shiftServer(delta:Int):Void {
-		if (servers.length == 0) {
-			return;
+	private function findServerIndex(previous:Null<ServerInfo>):Int {
+		if (previous != null) {
+			for (i in 0...servers.length) {
+				if (servers[i].serverId == previous.serverId) {
+					return i;
+				}
+			}
 		}
-		selectedServerIndex = (selectedServerIndex + delta + servers.length) % servers.length;
-		var server = servers[selectedServerIndex];
-		setStatus('Selected ${server.label()}.');
-		updateActiveServerLabels();
+		return 0;
 	}
 
-	private function updateActiveServerLabels():Void {
+	private function selectServerFromCombo(combo:FlComboBox):Void {
+		if (combo.selectedIndex < 0 || combo.selectedIndex >= servers.length) {
+			return;
+		}
+		selectedServerIndex = combo.selectedIndex;
+		setStatus('Selected ${servers[selectedServerIndex].label()}.');
+		updateActiveServerCombos();
+	}
+
+	private function populateServerCombo(combo:Null<FlComboBox>):Void {
+		if (combo == null) {
+			return;
+		}
+		combo.removeAll();
+		if (servers.length == 0) {
+			combo.prompt = "No servers found. :(";
+			combo.enabled = false;
+			return;
+		}
+		combo.prompt = "";
+		for (server in servers) {
+			combo.addItem({label: server.label(), server: server});
+		}
+		combo.selectedIndex = selectedServerIndex;
+		combo.enabled = true;
+	}
+
+	private function setActiveServerCombosLoading():Void {
 		if (activePopup == null) {
 			return;
 		}
-		var server = selectedServer();
-		var label = server == null ? "No servers" : server.label();
-		activePopup.setComponentLabel("serverSelect", label);
-		activePopup.setComponentLabel("dropdown", label);
+		for (name in ["serverSelect", "dropdown"]) {
+			var combo = activePopup.comboBox(name);
+			if (combo != null) {
+				combo.removeAll();
+				combo.prompt = "Loading...";
+				combo.enabled = false;
+			}
+		}
+	}
+
+	private function updateActiveServerCombos():Void {
+		if (activePopup == null) {
+			return;
+		}
+		populateServerCombo(activePopup.comboBox("serverSelect"));
+		populateServerCombo(activePopup.comboBox("dropdown"));
 	}
 
 	private function attemptConnection(userName:String, userPass:String, remember:Bool, popup:LoginFlashPopup):Void {

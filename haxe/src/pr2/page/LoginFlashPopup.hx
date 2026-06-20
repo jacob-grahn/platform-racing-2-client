@@ -4,12 +4,14 @@ import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.Constants;
 import pr2.runtime.FlComponents;
+import pr2.runtime.FlComboBox;
 import pr2.runtime.FontResolver;
 import pr2.runtime.PR2MovieClip;
 
@@ -17,6 +19,7 @@ class LoginFlashPopup extends Sprite {
 	private var art:PR2MovieClip;
 	private var messageText:TextField;
 	private var buttonHandlers:Array<{target:DisplayObject, handler:MouseEvent->Void}> = [];
+	private var comboHandlers:Array<{target:FlComboBox, handler:Event->Void}> = [];
 
 	public function new(linkage:String) {
 		super();
@@ -54,6 +57,22 @@ class LoginFlashPopup extends Sprite {
 			throw 'Popup ${art.symbol.linkageClassName} missing TextInput $name';
 		}
 		return field;
+	}
+
+	public function comboBox(name:String):Null<FlComboBox> {
+		return Std.downcast(child(name), FlComboBox);
+	}
+
+	public function bindComboBox(name:String, changeHandler:FlComboBox->Void):Void {
+		var target = comboBox(name);
+		if (target == null) {
+			return;
+		}
+		var handler = function(_:Event):Void {
+			changeHandler(target);
+		};
+		target.addEventListener(Event.CHANGE, handler);
+		comboHandlers.push({target: target, handler: handler});
 	}
 
 	public function bindButton(name:String, clickHandler:Void->Void):Void {
@@ -98,6 +117,10 @@ class LoginFlashPopup extends Sprite {
 			entry.target.removeEventListener(MouseEvent.CLICK, entry.handler);
 		}
 		buttonHandlers = [];
+		for (entry in comboHandlers) {
+			entry.target.removeEventListener(Event.CHANGE, entry.handler);
+		}
+		comboHandlers = [];
 		art.dispose();
 	}
 
