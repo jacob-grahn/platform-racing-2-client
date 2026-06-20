@@ -1,5 +1,7 @@
 package pr2.lobby;
 
+import pr2.lobby.account.AccountCharacter;
+
 import pr2.lobby.account.AccountCustomizeData;
 import pr2.lobby.tabs.AccountTab;
 
@@ -7,9 +9,20 @@ class AccountTabTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		testCharacterGraphicScale();
 		testCustomizePayload();
 		testHotkeys();
 		trace('AccountTabTest passed $assertions assertions');
+	}
+
+	private static function testCharacterGraphicScale():Void {
+		var character = new AccountCharacter();
+		assertEquals(1, character.scaleX, "Flash Character wrapper remains at scale 1");
+		assertEquals(1, character.display.scaleX, "CharacterGraphic container remains at scale 1");
+		var stand = character.display.getStateClip("standAnim");
+		assertEquals(0.149993896484375, stand.scaleX, "standAnim preserves its authored internal scaleX");
+		assertEquals(0.149993896484375, stand.scaleY, "standAnim preserves its authored internal scaleY");
+		character.remove();
 	}
 
 	private static function testCustomizePayload():Void {

@@ -62,19 +62,31 @@ these controls with generic approximations.
     Timeline-authored `symbolType="button"` assets now remain on up and switch
     to their authored over/down frames from mouse events instead of being frozen
     on frame 1; deterministic tests cover both button paths.
-- [ ] Bring popups to visual parity with Flash.
+- [x] Bring popups to visual parity with Flash.
   - Match the original popup panels, borders/shadows, title and body typography,
     spacing, close/confirm controls, modal positioning, and dimming or overlap
     behavior where present.
   - Cover `Popup`, `InfoPopup`/`HoverPopup`, message/confirm/send-message,
     uploading, course-menu, and loadouts variants with representative
     Flash/OpenFL screenshot comparisons.
-- [ ] Bring text inputs to visual parity with Flash.
+  - Modal and info variants use the authored popup symbols and Flash placement,
+    fade, overlay, typography, and controls. Uploading restores the authored
+    easing progress bar; send-message restores focus and rich-format help; and
+    loadouts now uses `GetLevelsPopupGraphic`/`PresetListingGraphic` instead of
+    a generic drawn panel. `popup-parity.json` captures the reachable variants.
+- [x] Bring text inputs to visual parity with Flash.
   - Match `TextInput_*Skin` scaling, inset editable bounds, font metrics,
     baseline, padding, selection/caret rendering, password display, and
     editable/disabled/focused states.
   - Verify short, long, empty, and focused values at the authored login and
     lobby control sizes.
+  - `FlTextInput` now uses the authored one-pixel skin scaling and focus rect,
+    Flash's five-pixel horizontal/one-pixel vertical text inset, Arial 11 font
+    metrics and state colors, native selection/caret/password rendering, and
+    preserves `editable` across disabled/enabled transitions. Deterministic
+    coverage locks down geometry, focus, and state behavior;
+    `text-input-parity.json` captures empty, short, password, and long/focused
+    login values, while `lobby-parity.json` covers the authored search size.
 - [ ] Fix ComboBox interaction to behave like a real dropdown.
   - Clicking the closed control must open a visible option list without changing
     selection; clicking a row selects that row, dispatches one `CHANGE`, and

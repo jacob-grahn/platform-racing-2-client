@@ -15,6 +15,7 @@ enum abstract Screen(String) from String to String {
 	var Campaign = "campaign";
 	var Symbol = "symbol";
 	var CustomizeCharacter = "customize_character";
+	var PopupPreview = "popup";
 
 	public static function fromQuery(query:Null<String>):Screen {
 		var value = QueryParams.get(query, "screen");
@@ -26,6 +27,7 @@ enum abstract Screen(String) from String to String {
 			case "lobby": Lobby;
 			case "symbol": Symbol;
 			case "customize_character": CustomizeCharacter;
+			case "popup": PopupPreview;
 			default: Intro;
 		}
 	}

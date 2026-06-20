@@ -15,8 +15,8 @@ import pr2.runtime.PR2MovieClip;
 	`REMOVED` events fire at the end of each fade so callers can chain behavior.
 **/
 class Popup extends Sprite {
-	public static inline var LOADED:String = "popupLoaded";
-	public static inline var REMOVED:String = "popupRemoved";
+	public static inline var LOADED:String = "loaded";
+	public static inline var REMOVED:String = "removed";
 
 	private static var openPopups:Array<Popup> = [];
 

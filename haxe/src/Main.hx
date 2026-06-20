@@ -19,6 +19,7 @@ import pr2.page.IntroPage;
 import pr2.page.LoginPage;
 import pr2.page.PageHolder;
 import pr2.page.SymbolPreview;
+import pr2.page.PopupPreview;
 import pr2.ui.MuteButton;
 
 /**
@@ -109,6 +110,7 @@ class Main extends Sprite {
 				parseColor(QueryParams.get(query, "bg"))
 			);
 			case CustomizeCharacter: new CustomizeCharacterScreen();
+			case PopupPreview: new PopupPreview(QueryParams.get(query, "popup"));
 		};
 	}
 

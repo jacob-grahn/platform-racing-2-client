@@ -11,9 +11,8 @@ import pr2.runtime.PR2MovieClip;
 	progress message with a close button, and dispatches `DONE` (with `parsedData`)
 	or `ERROR` when the request settles, then fades out.
 
-	The Flash `ProgressBar` art is not yet exported, so the determinate progress
-	bar is omitted; the POST round-trip, parsed result, events, and optional
-	callbacks are faithful.
+	The authored progress bar starts empty and eases to completion when the POST
+	settles, matching the Flash control's layout and interpolation.
 **/
 class UploadingPopup extends Popup {
 	public static inline var DONE:String = "uploadDone";
@@ -22,6 +21,7 @@ class UploadingPopup extends Popup {
 	public var parsedData:Dynamic = null;
 
 	private var art:PR2MovieClip;
+	private var progressBar:ProgressBar;
 	private var closeBinding:Null<LobbyArt.Binding>;
 
 	public function new(url:String, fields:Map<String, String>, dispText:String = "Uploading...", ?onResult:Dynamic->Void, ?onError:String->Void) {
@@ -32,9 +32,14 @@ class UploadingPopup extends Popup {
 			textBox.text = dispText;
 		}
 		addChild(art);
+		progressBar = new ProgressBar();
+		progressBar.x = -100;
+		progressBar.y = -5;
+		addChild(progressBar);
 		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), function():Void startFadeOut());
 
 		FormPostClient.post(url, fields, function(body:String):Void {
+			progressBar.setProgress(1);
 			try {
 				parsedData = Json.parse(body);
 			} catch (_:Dynamic) {
@@ -46,6 +51,7 @@ class UploadingPopup extends Popup {
 			dispatchEvent(new Event(DONE));
 			startFadeOut();
 		}, function(message:String):Void {
+			progressBar.setProgress(1);
 			if (onError != null) {
 				onError(message);
 			}
@@ -56,6 +62,10 @@ class UploadingPopup extends Popup {
 
 	override public function remove():Void {
 		LobbyArt.unbind(closeBinding);
+		if (progressBar != null) {
+			progressBar.remove();
+			progressBar = null;
+		}
 		if (art != null) {
 			art.dispose();
 			art = null;

@@ -1,8 +1,10 @@
 package pr2.runtime;
 
 import openfl.display.DisplayObject;
+import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.FocusEvent;
 import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -25,9 +27,16 @@ class FlTextInput extends Sprite {
 	private static inline final SKIN_PREFIX:String = "Components/Component Assets/TextInputSkins/TextInput_";
 	private static inline final SKIN_NOMINAL_WIDTH:Float = 152;
 	private static inline final SKIN_NOMINAL_HEIGHT:Float = 22;
-	private static final SKIN_GRID = new Rectangle(2.25, 1.45, 147.8, 18.6);
+	// The TextInput skins are one-pixel bevels. Only their white centre should
+	// stretch; scaling the bevel itself makes narrow authored controls blurry.
+	private static final SKIN_GRID = new Rectangle(1, 1, 150, 20);
+	private static inline final FOCUS_SKIN:String = "Components/Component Assets/Shared/focusRectSkin";
+	private static inline final FOCUS_NATIVE_WIDTH:Float = 82;
+	private static inline final FOCUS_NATIVE_HEIGHT:Float = 22;
+	private static final FOCUS_GRID = new Rectangle(4, 2, 74, 18);
 
 	private var skinHolder:Sprite;
+	private var focusSkin:Null<DisplayObject>;
 	private var skinCache:Map<String, DisplayObject> = new Map();
 	private var currentSkin:Null<DisplayObject>;
 	private var field:TextField;
@@ -38,6 +47,8 @@ class FlTextInput extends Sprite {
 	private var nativeHeight:Float = SKIN_NOMINAL_HEIGHT;
 
 	private var _enabled:Bool = true;
+	private var _editable:Bool = true;
+	private var _focused:Bool = false;
 
 	public var text(get, set):String;
 	public var displayAsPassword(get, set):Bool;
@@ -51,7 +62,19 @@ class FlTextInput extends Sprite {
 		super();
 
 		skinHolder = new Sprite();
+		skinHolder.mouseEnabled = false;
+		skinHolder.mouseChildren = false;
 		addChild(skinHolder);
+
+		focusSkin = FlSkin.create(FOCUS_SKIN);
+		if (focusSkin != null) {
+			focusSkin.visible = false;
+			var interactiveFocusSkin = Std.downcast(focusSkin, InteractiveObject);
+			if (interactiveFocusSkin != null) {
+				interactiveFocusSkin.mouseEnabled = false;
+			}
+			addChild(focusSkin);
+		}
 
 		field = new TextField();
 		field.type = TextFieldType.INPUT;
@@ -60,13 +83,13 @@ class FlTextInput extends Sprite {
 		field.selectable = true;
 		field.mouseEnabled = true;
 		field.autoSize = TextFieldAutoSize.NONE;
-		field.defaultTextFormat = new TextFormat(
-			FontResolver.resolve("Arial"), 11, 0x111111, false, false, false, null, null, TextFormatAlign.LEFT
-		);
+		field.defaultTextFormat = textFormatForState();
 		field.text = text;
 		// Re-broadcast the inner field's CHANGE so external listeners can bind to
 		// the component itself, like fl does.
 		field.addEventListener(Event.CHANGE, function(_) dispatchEvent(new Event(Event.CHANGE)));
+		field.addEventListener(FocusEvent.FOCUS_IN, onFocusIn);
+		field.addEventListener(FocusEvent.FOCUS_OUT, onFocusOut);
 		addChild(field);
 
 		redraw();
@@ -79,6 +102,7 @@ class FlTextInput extends Sprite {
 		for (skin in skinCache) {
 			FlSkin.nineSlice(skin, SKIN_GRID, nativeWidth, nativeHeight, boxWidth, boxHeight);
 		}
+		layoutFocusSkin();
 		layout();
 	}
 
@@ -101,12 +125,13 @@ class FlTextInput extends Sprite {
 	}
 
 	private function get_editable():Bool {
-		return field.type == TextFieldType.INPUT;
+		return _editable;
 	}
 
 	private function set_editable(value:Bool):Bool {
-		field.type = value ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
-		return value;
+		_editable = value;
+		updateFieldInteraction();
+		return _editable;
 	}
 
 	private function get_restrict():String {
@@ -136,10 +161,13 @@ class FlTextInput extends Sprite {
 			return _enabled;
 		}
 		_enabled = value;
-		field.mouseEnabled = value;
-		field.selectable = value;
-		field.type = value && get_editable() ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+		if (!value) {
+			_focused = false;
+		}
+		updateFieldInteraction();
+		applyTextFormat();
 		redraw();
+		updateFocusSkin();
 		return _enabled;
 	}
 
@@ -178,10 +206,54 @@ class FlTextInput extends Sprite {
 		return skin;
 	}
 
+	private function textFormatForState():TextFormat {
+		return new TextFormat(
+			FontResolver.resolve("Arial"), 11, _enabled ? 0x000000 : 0x999999,
+			false, false, false, null, null, TextFormatAlign.LEFT
+		);
+	}
+
+	private function applyTextFormat():Void {
+		var format = textFormatForState();
+		field.defaultTextFormat = format;
+		field.setTextFormat(format);
+	}
+
+	private function updateFieldInteraction():Void {
+		field.mouseEnabled = _enabled;
+		field.selectable = _enabled;
+		field.type = _enabled && _editable ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+	}
+
+	private function onFocusIn(_):Void {
+		_focused = _enabled;
+		updateFocusSkin();
+	}
+
+	private function onFocusOut(_):Void {
+		_focused = false;
+		updateFocusSkin();
+	}
+
+	private function updateFocusSkin():Void {
+		if (focusSkin != null) {
+			focusSkin.visible = _focused && _enabled;
+		}
+	}
+
+	private function layoutFocusSkin():Void {
+		if (focusSkin != null) {
+			FlSkin.nineSlice(focusSkin, FOCUS_GRID, FOCUS_NATIVE_WIDTH, FOCUS_NATIVE_HEIGHT, boxWidth, boxHeight);
+		}
+	}
+
 	private function layout():Void {
-		field.x = 4;
-		field.width = Math.max(1, boxWidth - 8);
-		field.height = boxHeight - 4;
-		field.y = (boxHeight - field.height) / 2;
+		// fl.controls.TextInput uses UIComponent.TEXT_FIELD_PADDING (5px)
+		// horizontally and leaves one pixel for the top/bottom skin bevel. This
+		// also gives OpenFL's native selection and caret the same clipping bounds.
+		field.x = 5;
+		field.y = 1;
+		field.width = Math.max(1, boxWidth - 10);
+		field.height = Math.max(1, boxHeight - 2);
 	}
 }

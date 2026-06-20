@@ -15,6 +15,9 @@ import pr2.character.CharacterRenderMode;
 	preview then hides that part's secondary tint.
 **/
 class AccountCharacter extends Sprite {
+	/** Authored transform retained by CharacterGraphic's state children. */
+	public static inline final INTERNAL_GRAPHIC_SCALE:Float = 0.15;
+
 	public var hat1:Int;
 	public var head:Int;
 	public var body:Int;
@@ -39,6 +42,9 @@ class AccountCharacter extends Sprite {
 		this.body = bodyId;
 		this.feet = feetId;
 		display = new CharacterDisplay({hat: hatId, head: headId, body: bodyId, feet: feetId}, null, CharacterRenderMode.Layered);
+		// CharacterDisplay instantiates the exported CharacterGraphic. Its state
+		// children already retain their authored ~0.15 matrices, so the wrapper
+		// itself remains at scale 1 exactly like Flash's Character instance.
 		addChild(display);
 		applyAppearance();
 	}

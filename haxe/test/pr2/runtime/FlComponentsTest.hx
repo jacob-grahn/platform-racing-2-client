@@ -5,7 +5,9 @@ import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
+import openfl.events.FocusEvent;
 import openfl.text.TextField;
+import openfl.text.TextFieldType;
 
 /**
 	Behavioural coverage for the `fl.controls.*` component ports beyond FlButton:
@@ -137,6 +139,28 @@ class FlComponentsTest {
 		assertEquals(true, input.editable, "text input defaults to editable");
 		input.editable = false;
 		assertEquals(false, input.editable, "editable toggles the field type");
+		assertEquals(TextFieldType.DYNAMIC, input.textField.type, "non-editable input uses a dynamic field");
+		input.editable = true;
+
+		input.enabled = false;
+		assertEquals(false, input.textField.selectable, "disabled input cannot select text");
+		assertEquals(0x999999, input.textField.defaultTextFormat.color, "disabled input uses the Flash disabled text color");
+		input.enabled = true;
+		assertEquals(true, input.editable, "disabling and re-enabling preserves editable state");
+		assertEquals(TextFieldType.INPUT, input.textField.type, "re-enabled editable input accepts text");
+		assertEquals(0x000000, input.textField.defaultTextFormat.color, "enabled input restores black text");
+
+		input.setSize(152, 22);
+		assertEquals(5.0, input.textField.x, "text uses the Flash five-pixel left inset");
+		assertEquals(142.0, input.textField.width, "text reserves five pixels on both sides");
+		assertEquals(1.0, input.textField.y, "text baseline box starts below the top bevel");
+		assertEquals(20.0, input.textField.height, "text box leaves both skin bevels visible");
+
+		// The authored focusRectSkin sits between the background and editable field.
+		input.textField.dispatchEvent(new FocusEvent(FocusEvent.FOCUS_IN));
+		assertEquals(true, input.getChildAt(1).visible, "focus in shows the authored focus skin");
+		input.textField.dispatchEvent(new FocusEvent(FocusEvent.FOCUS_OUT));
+		assertEquals(false, input.getChildAt(1).visible, "focus out hides the authored focus skin");
 
 		// The component re-broadcasts the inner field's CHANGE.
 		var changes = 0;

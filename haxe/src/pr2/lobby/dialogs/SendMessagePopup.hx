@@ -26,8 +26,9 @@ class SendMessagePopup extends Popup {
 
 	private var sendBinding:Null<LobbyArt.Binding>;
 	private var cancelBinding:Null<LobbyArt.Binding>;
+	private var codesBinding:Null<LobbyArt.Binding>;
 
-	public function new(name:String = "", message:String = "", guild:Bool = false) {
+	public function new(name:String = "", message:String = "", guild:Bool = false, focusName:Bool = false) {
 		super();
 		this.isGuildMessage = guild;
 		art = PR2MovieClip.fromLinkage("SendMessagePopupGraphic", {maxNestedDepth: 6});
@@ -53,10 +54,22 @@ class SendMessagePopup extends Popup {
 
 		sendBinding = LobbyArt.bind(LobbyArt.findByName(art, "send_bt"), clickSend);
 		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		codesBinding = LobbyArt.bind(codesButton, function():Void new PMRFCodesPopup());
 		if (codesButton != null) {
 			codesButton.addEventListener(MouseEvent.MOUSE_OVER, hoverOverCodes);
 			codesButton.addEventListener(MouseEvent.MOUSE_OUT, hoverOutCodes);
 		}
+		addEventListener(Popup.LOADED, focusName ? focusNameBox : focusTextBox);
+	}
+
+	private function focusNameBox(_:Event):Void {
+		removeEventListener(Popup.LOADED, focusNameBox);
+		if (stage != null && nameBox != null) stage.focus = nameBox;
+	}
+
+	private function focusTextBox(_:Event):Void {
+		removeEventListener(Popup.LOADED, focusTextBox);
+		if (stage != null && textBox != null) stage.focus = textBox;
 	}
 
 	private function countChars(?_:Event):Void {
@@ -105,6 +118,7 @@ class SendMessagePopup extends Popup {
 		}
 		LobbyArt.unbind(sendBinding);
 		LobbyArt.unbind(cancelBinding);
+		LobbyArt.unbind(codesBinding);
 		if (art != null) {
 			art.dispose();
 			art = null;

@@ -1,0 +1,6 @@
+{
+  "query": "screen=popup&popup=loadouts",
+  "steps": [
+    {"time": 8.0, "action": "shot", "out": "test/output/openfl-popup-loadouts.png"}
+  ]
+}

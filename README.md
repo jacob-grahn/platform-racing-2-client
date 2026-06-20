@@ -327,6 +327,15 @@ Capture an OpenFL screenshot after launching the app:
 python3 tools/openfl_driver.py --delay 2.0 shot test/baselines/openfl/run_harness.png
 ```
 
+Capture popup parity fixtures without requiring a live lobby session:
+
+```sh
+python3 tools/openfl_driver.py --delay 8 --query 'screen=popup&popup=loadouts' shot test/output/openfl-popup-loadouts.png
+```
+
+Supported popup fixtures are `message`, `confirm`, `send-message`, `codes`, and
+`loadouts`.
+
 Capture a representative character outfit for comparison work:
 
 ```sh
