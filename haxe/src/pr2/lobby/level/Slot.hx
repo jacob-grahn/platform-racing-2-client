@@ -32,6 +32,10 @@ class Slot extends Sprite {
 		art = PR2MovieClip.fromLinkage("SlotGraphic", {maxNestedDepth: 4});
 		addChild(art);
 		bg = Std.downcast(LobbyArt.findByName(art, "bg"), PR2MovieClip);
+		// The bg is a multi-frame state machine (emptyUp/emptyOver/pending/...),
+		// not an animation. Rest it on the initial status frame so it doesn't
+		// free-run through every state until the first server-driven change.
+		changeStatus(status);
 		rankBox = LobbyArt.text(art, "rankBox");
 		nameBox = LobbyArt.text(art, "nameBox");
 		addEventListener(MouseEvent.MOUSE_OVER, onOver);
