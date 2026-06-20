@@ -46,6 +46,10 @@ class AccountCharacter extends Sprite {
 		// children already retain their authored ~0.15 matrices, so the wrapper
 		// itself remains at scale 1 exactly like Flash's Character instance.
 		addChild(display);
+		// Flash's customize/account preview is a live Character MovieClip, so the
+		// standing idle plays continuously. Drive it from the stage clock; the
+		// listener is released automatically when the preview is detached.
+		display.enableIdleAnimation();
 		applyAppearance();
 	}
 

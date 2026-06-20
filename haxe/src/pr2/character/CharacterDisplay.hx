@@ -1,6 +1,7 @@
 package pr2.character;
 
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import pr2.character.CharacterAppearance.CharacterPartIds;
 import pr2.character.CharacterRenderMode;
@@ -44,6 +45,12 @@ class CharacterDisplay extends Sprite {
 	private final partColors:Map<String, PartColor> = new Map();
 	private var activeStateName:String = "standAnim";
 	private var activeStateClip:Null<PR2MovieClip>;
+	// When enabled, the active state's authored animation (e.g. the standing
+	// idle) plays one timeline frame per stage frame, the way a Flash
+	// `Character` MovieClip auto-plays. Off by default so gameplay/campaign can
+	// keep driving frames manually in lock-step with the physics tick.
+	private var idleAnimationEnabled:Bool = false;
+	private var idleTicking:Bool = false;
 
 	public function new(?partIds:CharacterPartIds, ?colors:CharacterColors, ?initialRenderMode:CharacterRenderMode) {
 		super();
@@ -138,6 +145,54 @@ class CharacterDisplay extends Sprite {
 
 	public function getStateClip(stateName:String):Null<PR2MovieClip> {
 		return getClipChild(clip, stateName);
+	}
+
+	/**
+		Play the active state's authored idle animation continuously, advancing
+		one timeline frame per stage frame like a Flash `Character` MovieClip.
+		Ticks are bound to the stage lifecycle so the listener never leaks when
+		the display is detached (customize preview, account tab, loadout/preset
+		previews). Gameplay and campaign do not call this; they advance frames
+		manually in step with the physics tick.
+	**/
+	public function enableIdleAnimation():Void {
+		if (idleAnimationEnabled) {
+			return;
+		}
+		idleAnimationEnabled = true;
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		if (stage != null) {
+			startIdleTicks();
+		}
+	}
+
+	private function onAddedToStage(_:Event):Void {
+		startIdleTicks();
+	}
+
+	private function onRemovedFromStage(_:Event):Void {
+		stopIdleTicks();
+	}
+
+	private function startIdleTicks():Void {
+		if (idleTicking) {
+			return;
+		}
+		idleTicking = true;
+		addEventListener(Event.ENTER_FRAME, onIdleTick);
+	}
+
+	private function stopIdleTicks():Void {
+		if (!idleTicking) {
+			return;
+		}
+		idleTicking = false;
+		removeEventListener(Event.ENTER_FRAME, onIdleTick);
+	}
+
+	private function onIdleTick(_:Event):Void {
+		advanceOneFrame();
 	}
 
 	private function renderAtlasPartsForAllStates():Void {

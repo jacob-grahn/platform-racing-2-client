@@ -29,6 +29,16 @@ DEFAULT_STAGE_WIDTH = 550
 DEFAULT_STAGE_HEIGHT = 400
 DEFAULT_MAX_ATLAS_SIZE = 4096
 CHANNELS = ("static", "primary", "secondary", "composite")
+# Empirical vertical-registration correction for character parts, in unscaled
+# stage units (the same units as the runtime slot-local coordinate space, since
+# parts are exported at scale 1). Against test/baselines/flash/08_standing.jpg,
+# normalized to the feet line, the head and body atlas frames render ~7px too
+# high while the feet line up. The root cause (some registration-point vs slot
+# mismatch in the Animate export staging) is not yet understood, so this nudges
+# sourceTrim.y downward to match Flash. Calibrated by sweeping the runtime
+# slot-local Y offset (tools/calibrate_sweep.py) until head/body matched the
+# baseline, then carried here (sourceTrim.y += nudge * scale). Feet/hat = 0.
+CHARACTER_Y_NUDGE = {"head": 55, "body": 55}
 # Categories that produce individual PNGs with no atlas. Large timeline-driven
 # effect symbols can exceed the default atlas page and are animated by metadata
 # rather than by atlas frame sequencing.
@@ -377,6 +387,10 @@ def rasterize_jobs(jobs, args):
                 width = max(1, math.ceil(bounds["width"] * args.scale))
                 run_inkscape(args.inkscape, job["svg"], raw_path, width)
                 trim = trim_image(raw_path, out_path, bounds, args.scale)
+            if job["category"] == "character" and not trim.get("empty"):
+                nudge = CHARACTER_Y_NUDGE.get(job["kind"])
+                if nudge:
+                    trim["y"] += int(round(nudge * args.scale))
             record = {
                 "source": str(job["svg"]),
                 "png": str(out_path),
