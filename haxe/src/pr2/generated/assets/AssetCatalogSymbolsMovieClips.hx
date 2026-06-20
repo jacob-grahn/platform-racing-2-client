@@ -758,6 +758,7 @@ final class AssetCatalogSymbolsMovieClips {
 				href: "MovieClips/clockMC.xml",
 				itemID: "5e7193f1-000006de",
 				name: "MovieClips/clockMC",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,

@@ -5500,6 +5500,7 @@ final class AssetCatalogSymbolsComponents {
 				href: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_icon.xml",
 				itemID: "456df1e4-00000190",
 				name: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_icon",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5973,6 +5974,7 @@ final class AssetCatalogSymbolsComponents {
 				href: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_icon.xml",
 				itemID: "456df209-00000192",
 				name: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_icon",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6659,6 +6661,7 @@ final class AssetCatalogSymbolsComponents {
 				href: "Components/Component Assets/Shared/arrowIcon.xml",
 				itemID: "456df449-0000019f",
 				name: "Components/Component Assets/Shared/arrowIcon",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,

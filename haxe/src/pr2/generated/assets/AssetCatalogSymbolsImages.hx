@@ -10,6 +10,7 @@ final class AssetCatalogSymbolsImages {
 				href: "Images/clock_icon.svg.xml",
 				itemID: "5e7191c6-000006bf",
 				name: "Images/clock_icon.svg",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -192,6 +193,7 @@ final class AssetCatalogSymbolsImages {
 				href: "Images/everyone_icon.svg.xml",
 				itemID: "5d0870de-00001dc4",
 				name: "Images/everyone_icon.svg",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -250,6 +252,7 @@ final class AssetCatalogSymbolsImages {
 				href: "Images/swap_icon.svg.xml",
 				itemID: "5e6ed9a2-0000058b",
 				name: "Images/swap_icon.svg",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,

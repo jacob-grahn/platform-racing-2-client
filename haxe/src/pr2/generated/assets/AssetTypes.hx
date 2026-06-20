@@ -172,5 +172,6 @@ typedef SymbolAssetDef = {
 	@:optional var itemID:String;
 	@:optional var linkageClassName:String;
 	@:optional var linkageIdentifier:String;
+	@:optional var symbolType:String;
 	var timelines:Array<TimelineDef>;
 }

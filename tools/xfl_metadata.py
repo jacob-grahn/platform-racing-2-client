@@ -824,6 +824,7 @@ def parse_symbol_linkages(xfl_dir, symbol_includes):
             "itemID": attrs.get("itemID"),
             "linkageClassName": attrs.get("linkageClassName"),
             "linkageIdentifier": attrs.get("linkageIdentifier"),
+            "symbolType": attrs.get("symbolType"),
             "timelines": parse_timelines(root),
         }
         records.append(compact_record(record))

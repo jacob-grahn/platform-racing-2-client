@@ -10,6 +10,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/ArrowButton.xml",
 				itemID: "6033518b-00000bfb",
 				name: "Buttons/ArrowButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -39,6 +40,7 @@ final class AssetCatalogSymbolsButtons {
 				itemID: "605a9c6d-00000509",
 				linkageClassName: "BlockOptionsButton",
 				name: "Buttons/BlockOptionsButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -155,6 +157,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/BlockOptionsButtonBackup.xml",
 				itemID: "605a9c63-00000500",
 				name: "Buttons/BlockOptionsButtonBackup",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -272,6 +275,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/CancelTextButton.xml",
 				itemID: "652361ce-00000816",
 				name: "Buttons/CancelTextButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -329,6 +333,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/gButton.xml",
 				itemID: "5e719793-0000073a",
 				name: "Buttons/gButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -418,6 +423,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/MinusButton.xml",
 				itemID: "5ed8d2cc-0000293e",
 				name: "Buttons/MinusButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -475,6 +481,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/PlusButton.xml",
 				itemID: "5ed8d262-00002925",
 				name: "Buttons/PlusButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -532,6 +539,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/reloadButton.xml",
 				itemID: "5db350fc-000005f6",
 				name: "Buttons/reloadButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -636,6 +644,7 @@ final class AssetCatalogSymbolsButtons {
 				itemID: "5d2ed2cb-0000057d",
 				linkageClassName: "SwapButton",
 				name: "Buttons/SwapButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -728,6 +737,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 66.xml",
 				itemID: "5bfa7c8d-00000252",
 				name: "Buttons/Symbol 66",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -756,6 +766,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 382.xml",
 				itemID: "5bfa7c8d-00000324",
 				name: "Buttons/Symbol 382",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -802,6 +813,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 543.xml",
 				itemID: "5bfa7c8d-00000372",
 				name: "Buttons/Symbol 543",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -892,6 +904,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "BlueSquareButton",
 				linkageIdentifier: "BlueSquareButton",
 				name: "Buttons/Symbol 970",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -983,6 +996,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "DeleteButton",
 				linkageIdentifier: "DeleteButton",
 				name: "Buttons/Symbol 992",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1029,6 +1043,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "ResizeButton",
 				linkageIdentifier: "ResizeButton",
 				name: "Buttons/Symbol 995",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1068,6 +1083,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "EditTextButton",
 				linkageIdentifier: "EditTextButton",
 				name: "Buttons/Symbol 998",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1105,6 +1121,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1026.xml",
 				itemID: "5bfa7c8d-0000046e",
 				name: "Buttons/Symbol 1026",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1193,6 +1210,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1045.xml",
 				itemID: "5bfa7c8d-00000472",
 				name: "Buttons/Symbol 1045",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1281,6 +1299,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1048.xml",
 				itemID: "5bfa7c8d-00000473",
 				name: "Buttons/Symbol 1048",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1369,6 +1388,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1121.xml",
 				itemID: "5bfa7c8d-0000049b",
 				name: "Buttons/Symbol 1121",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1415,6 +1435,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1122.xml",
 				itemID: "5bfa7c8d-0000049c",
 				name: "Buttons/Symbol 1122",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1461,6 +1482,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1123.xml",
 				itemID: "5bfa7c8d-0000049d",
 				name: "Buttons/Symbol 1123",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1523,6 +1545,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1152.xml",
 				itemID: "5bfa7c8d-000004a6",
 				name: "Buttons/Symbol 1152",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1611,6 +1634,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1155.xml",
 				itemID: "5bfa7c8d-000004a7",
 				name: "Buttons/Symbol 1155",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1699,6 +1723,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1158.xml",
 				itemID: "5bfa7c8d-000004a8",
 				name: "Buttons/Symbol 1158",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1787,6 +1812,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1161.xml",
 				itemID: "5bfa7c8d-000004a9",
 				name: "Buttons/Symbol 1161",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1875,6 +1901,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1164.xml",
 				itemID: "5bfa7c8d-000004aa",
 				name: "Buttons/Symbol 1164",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -1964,6 +1991,7 @@ final class AssetCatalogSymbolsButtons {
 				itemID: "5bfa7c8d-000004cf",
 				linkageClassName: "InfoButton",
 				name: "Buttons/Symbol 1213",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2057,6 +2085,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1244.xml",
 				itemID: "5bfa7c8d-000004d7",
 				name: "Buttons/Symbol 1244",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2145,6 +2174,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1245.xml",
 				itemID: "5c0b7b81-00000582",
 				name: "Buttons/Symbol 1245",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2204,6 +2234,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1246.xml",
 				itemID: "5c0b7be7-0000059c",
 				name: "Buttons/Symbol 1246",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2261,6 +2292,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1268.xml",
 				itemID: "5bfa7c8d-000004e1",
 				name: "Buttons/Symbol 1268",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2339,6 +2371,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "DeleteMessageButtonGraphic",
 				linkageIdentifier: "DeleteMessageButtonGraphic",
 				name: "Buttons/Symbol 1320",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2390,6 +2423,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1330.xml",
 				itemID: "5bfa7c8d-00000501",
 				name: "Buttons/Symbol 1330",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2478,6 +2512,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1333.xml",
 				itemID: "5bfa7c8d-00000502",
 				name: "Buttons/Symbol 1333",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2566,6 +2601,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1336.xml",
 				itemID: "5bfa7c8d-00000503",
 				name: "Buttons/Symbol 1336",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2658,6 +2694,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1339.xml",
 				itemID: "5bfa7c8d-00000504",
 				name: "Buttons/Symbol 1339",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2750,6 +2787,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/Symbol 1342.xml",
 				itemID: "5bfa7c8d-00000505",
 				name: "Buttons/Symbol 1342",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2844,6 +2882,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "ReportMessageButtonGraphic",
 				linkageIdentifier: "ReportMessageButtonGraphic",
 				name: "Buttons/Symbol 1357",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2909,6 +2948,7 @@ final class AssetCatalogSymbolsButtons {
 				linkageClassName: "ReplyMessageButtonGraphic",
 				linkageIdentifier: "ReplyMessageButtonGraphic",
 				name: "Buttons/Symbol 1360",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -2960,6 +3000,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/TransferGuildBtn.xml",
 				itemID: "5e75c173-0000105e",
 				name: "Buttons/TransferGuildBtn",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -3017,6 +3058,7 @@ final class AssetCatalogSymbolsButtons {
 				href: "Buttons/viewPriors.xml",
 				itemID: "5c731691-00000577",
 				name: "Buttons/viewPriors",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,

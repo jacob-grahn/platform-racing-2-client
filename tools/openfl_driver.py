@@ -10,7 +10,7 @@ Commands:
 
 Shot options:
   --root <dir>                  HTML root, default export/html5/bin
-  --delay <seconds>             wait before capture, default 1.5
+  --delay <seconds>             wait before capture, default 5.0
   --query <query>               query string to append to index.html
   --browser <path>              Chrome/Chromium binary path
   --base-url <url>              use an existing server (for example dev_proxy.py)
@@ -806,7 +806,7 @@ def paeth(left, up, up_left):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--root", default=DEFAULT_ROOT)
-    parser.add_argument("--delay", type=float, default=1.5)
+    parser.add_argument("--delay", type=float, default=5.0)
     parser.add_argument("--query", default="")
     parser.add_argument("--browser")
     parser.add_argument("--base-url", help="existing static/proxy server URL")

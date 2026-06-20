@@ -3043,6 +3043,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Hats/Cheese/cheeseHat.xml",
 				itemID: "5ecf4754-00000690",
 				name: "Parts/Hats/Cheese/cheeseHat",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3104,6 +3105,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Hats/Cheese/cheeseHatColor.xml",
 				itemID: "5ecf4837-0000069c",
 				name: "Parts/Hats/Cheese/cheeseHatColor",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3150,6 +3152,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Hats/Cheese/cheeseHatEpic.xml",
 				itemID: "5ecf4812-00000698",
 				name: "Parts/Hats/Cheese/cheeseHatEpic",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3196,6 +3199,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Hats/Cheese/cheeseHatStatic.xml",
 				itemID: "5ecf47d2-00000694",
 				name: "Parts/Hats/Cheese/cheeseHatStatic",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -10164,6 +10168,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Heads/Jack-O-Lantern/jackoShading.xml",
 				itemID: "5dbb6e64-00000fe4",
 				name: "Parts/Heads/Jack-O-Lantern/jackoShading",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -12879,6 +12884,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Bat/batBody.xml",
 				itemID: "5c4a845e-000005a4",
 				name: "Parts/Sets/Bat/batBody",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13109,6 +13115,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Bat/batFoot.xml",
 				itemID: "5c4a8d10-000005bb",
 				name: "Parts/Sets/Bat/batFoot",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13209,6 +13216,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Brew/brewBody.xml",
 				itemID: "5d0afad0-00000664",
 				name: "Parts/Sets/Brew/brewBody",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13355,6 +13363,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Brew/brewFoot.xml",
 				itemID: "5d0afb26-0000066b",
 				name: "Parts/Sets/Brew/brewFoot",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13451,6 +13460,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Brew/brewHead.xml",
 				itemID: "5d0afacd-00000663",
 				name: "Parts/Sets/Brew/brewHead",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13607,6 +13617,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Dog/dogBody.xml",
 				itemID: "609f4f9f-0000099b",
 				name: "Parts/Sets/Dog/dogBody",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13732,6 +13743,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Dog/dogFeet.xml",
 				itemID: "60a1ca3f-0000053a",
 				name: "Parts/Sets/Dog/dogFeet",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -13838,6 +13850,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Dog/dogHead.xml",
 				itemID: "609f4f55-00000990",
 				name: "Parts/Sets/Dog/dogHead",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14427,6 +14440,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gecko/geckoBodyOutline.xml",
 				itemID: "5d1af25b-000016ee",
 				name: "Parts/Sets/Gecko/geckoBodyOutline",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14574,6 +14588,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gecko/geckoBodyStatic.xml",
 				itemID: "5d1af5a1-000016fd",
 				name: "Parts/Sets/Gecko/geckoBodyStatic",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14620,6 +14635,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gecko/geckoFootOutline.xml",
 				itemID: "5d1af874-00001848",
 				name: "Parts/Sets/Gecko/geckoFootOutline",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14706,6 +14722,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gecko/geckoFootStatic.xml",
 				itemID: "5d1af8b3-00001853",
 				name: "Parts/Sets/Gecko/geckoFootStatic",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14752,6 +14769,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gecko/geckoHeadOutline.xml",
 				itemID: "5d1aeea2-000016de",
 				name: "Parts/Sets/Gecko/geckoHeadOutline",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14902,6 +14920,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gecko/geckoHeadStatic.xml",
 				itemID: "5d1af7a6-000017a7",
 				name: "Parts/Sets/Gecko/geckoHeadStatic",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -14948,6 +14967,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gladiator/gladiatorBody.xml",
 				itemID: "6169e6bf-000005f6",
 				name: "Parts/Sets/Gladiator/gladiatorBody",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16142,6 +16162,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gladiator/gladiatorFeet.xml",
 				itemID: "616b74a5-0000091e",
 				name: "Parts/Sets/Gladiator/gladiatorFeet",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17157,6 +17178,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Gladiator/gladiatorHead.xml",
 				itemID: "6169e67e-000005c0",
 				name: "Parts/Sets/Gladiator/gladiatorHead",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21921,6 +21943,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Turkey/turkeyBody.xml",
 				itemID: "5fbe0e2b-000012ae",
 				name: "Parts/Sets/Turkey/turkeyBody",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22238,6 +22261,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Turkey/turkeyFeet.xml",
 				itemID: "5fbe0e38-000012b1",
 				name: "Parts/Sets/Turkey/turkeyFeet",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22358,6 +22382,7 @@ final class AssetCatalogSymbolsParts {
 				href: "Parts/Sets/Turkey/turkeyHead.xml",
 				itemID: "5fbe0e56-000012b7",
 				name: "Parts/Sets/Turkey/turkeyHead",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,

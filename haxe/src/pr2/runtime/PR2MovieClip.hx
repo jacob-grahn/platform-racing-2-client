@@ -61,7 +61,10 @@ class PR2MovieClip extends Sprite {
 		}
 
 		gotoAndStop(1);
-		if (totalFrames > 1) {
+		// Button symbols use their extra frames as up/over/down/hit states, not
+		// as an animation, so they must rest on frame 1 instead of free-running
+		// (otherwise they flicker through their hover/press art every tick).
+		if (totalFrames > 1 && symbol.symbolType != "button") {
 			play();
 		}
 	}

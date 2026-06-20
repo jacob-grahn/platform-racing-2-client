@@ -6,19 +6,31 @@ import js.html.WebSocket;
 #end
 
 /**
-	Wrapper for the Flash `Main.socket` used by lobby pages to talk to the
-	gameserver. Pages call `LobbySocket.write("set_chat_room`main")` and register
-	incoming-command handlers through `CommandHandler`.
+	The single persistent game socket, mirroring Flash `Main.socket`: it is opened
+	once when the player connects to a server and then reused for the whole
+	session — the login handshake and every lobby/gameplay command share it. There
+	is no per-page socket and no handing a connection from one owner to another.
 
-	On the html5 target this drives a real WebSocket (frames are END_CHAR
-	terminated). With no transport attached — headless tests and the OpenFL
-	harness — writes are simply recorded into `sentCommands`, which lets parity
-	tests assert exactly which commands a tab would have emitted without needing a
-	live server.
+	Incoming frames (END_CHAR terminated) are routed to `CommandHandler` by
+	default. The login phase sets `onFrame` to intercept frames while it runs the
+	`request_login_id` / `loginSuccessful` handshake, then clears it so the lobby
+	resumes the normal `CommandHandler` routing on the very same connection.
+
+	With no transport attached — headless tests and the OpenFL harness — writes are
+	simply recorded into `sentCommands`, which lets parity tests assert exactly
+	which commands a tab would have emitted without needing a live server.
 **/
 class LobbySocket {
 	/** Commands written since the last `resetSent()` — inspected by tests. */
 	public static var sentCommands:Array<String> = [];
+
+	/** Login-phase frame interceptor; when null, frames go to `CommandHandler`. */
+	public static var onFrame:Null<String->Void>;
+
+	/** Connection lifecycle hooks for the login UI; the lobby ignores these. */
+	public static var onOpen:Null<Void->Void>;
+	public static var onConnectionError:Null<Void->Void>;
+	public static var onConnectionClose:Null<Void->Void>;
 
 	private static var protocol:Null<LoginSocketProtocol>;
 	#if js
@@ -28,15 +40,36 @@ class LobbySocket {
 
 	private function new() {}
 
-	/** Attach a live WebSocket session for a connected server. */
-	public static function attach(server:ServerInfo, secure:Bool = false):Void {
+	/** Open the one game socket for `server`, replacing any previous connection. */
+	public static function connect(server:ServerInfo, secure:Bool = false):Void {
 		#if js
+		close();
 		protocol = new LoginSocketProtocol(server.serverId);
 		buffer = "";
 		socket = new WebSocket(server.websocketUrl(secure));
+		socket.onopen = function(_):Void {
+			if (onOpen != null) {
+				onOpen();
+			}
+		};
 		socket.onmessage = function(event):Void {
 			for (frame in splitFrames(Std.string(event.data))) {
-				CommandHandler.commandHandler.handleServerFrame(frame);
+				var handler = onFrame;
+				if (handler != null) {
+					handler(frame);
+				} else {
+					CommandHandler.commandHandler.handleServerFrame(frame);
+				}
+			}
+		};
+		socket.onerror = function(_):Void {
+			if (onConnectionError != null) {
+				onConnectionError();
+			}
+		};
+		socket.onclose = function(_):Void {
+			if (onConnectionClose != null) {
+				onConnectionClose();
 			}
 		};
 		#end
@@ -55,9 +88,14 @@ class LobbySocket {
 	public static function close():Void {
 		#if js
 		if (socket != null) {
+			socket.onopen = null;
+			socket.onmessage = null;
+			socket.onerror = null;
+			socket.onclose = null;
 			socket.close();
 			socket = null;
 		}
+		buffer = "";
 		#end
 		protocol = null;
 	}

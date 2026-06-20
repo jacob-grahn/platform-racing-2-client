@@ -10,6 +10,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/batHead.xml",
 				itemID: "5c4a7392-00000594",
 				name: "Graphics/batHead",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -240,6 +241,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Minus.xml",
 				itemID: "5ed8d2ee-00002944",
 				name: "Graphics/Minus",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -282,6 +284,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Plus.xml",
 				itemID: "5ed8d2f1-00002945",
 				name: "Graphics/Plus",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -324,6 +327,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 26.xml",
 				itemID: "5bfa7c8d-00000239",
 				name: "Graphics/Symbol 26",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -366,6 +370,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 28.xml",
 				itemID: "5bfa7c8d-0000023b",
 				name: "Graphics/Symbol 28",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -408,6 +413,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 42.xml",
 				itemID: "5bfa7c8d-00000243",
 				name: "Graphics/Symbol 42",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -455,6 +461,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 43.xml",
 				itemID: "5bfa7c8d-00000244",
 				name: "Graphics/Symbol 43",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -502,6 +509,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 54.xml",
 				itemID: "5bfa7c8d-0000024b",
 				name: "Graphics/Symbol 54",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -560,6 +568,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 55.xml",
 				itemID: "5bfa7c8d-0000024c",
 				name: "Graphics/Symbol 55",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -714,6 +723,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 56.xml",
 				itemID: "5bfa7c8d-0000024d",
 				name: "Graphics/Symbol 56",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -872,6 +882,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 59.xml",
 				itemID: "5bfa7c8d-0000024e",
 				name: "Graphics/Symbol 59",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -924,6 +935,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 60.xml",
 				itemID: "5bfa7c8d-0000024f",
 				name: "Graphics/Symbol 60",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1056,6 +1068,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 65.xml",
 				itemID: "5bfa7c8d-00000251",
 				name: "Graphics/Symbol 65",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1103,6 +1116,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 82.xml",
 				itemID: "5bfa7c8d-0000025c",
 				name: "Graphics/Symbol 82",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1181,6 +1195,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 83.xml",
 				itemID: "5bfa7c8d-0000025d",
 				name: "Graphics/Symbol 83",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1223,6 +1238,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 84.xml",
 				itemID: "5bfa7c8d-0000025e",
 				name: "Graphics/Symbol 84",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1270,6 +1286,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 86.xml",
 				itemID: "5bfa7c8d-0000025f",
 				name: "Graphics/Symbol 86",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1312,6 +1329,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 88.xml",
 				itemID: "5bfa7c8d-00000260",
 				name: "Graphics/Symbol 88",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1359,6 +1377,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 89.xml",
 				itemID: "5bfa7c8d-00000261",
 				name: "Graphics/Symbol 89",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1406,6 +1425,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 91.xml",
 				itemID: "5bfa7c8d-00000262",
 				name: "Graphics/Symbol 91",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -1453,6 +1473,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 98.xml",
 				itemID: "5bfa7c8d-00000265",
 				name: "Graphics/Symbol 98",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2027,6 +2048,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 99.xml",
 				itemID: "5bfa7c8d-00000266",
 				name: "Graphics/Symbol 99",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2198,6 +2220,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 107.xml",
 				itemID: "5bfa7c8d-0000026b",
 				name: "Graphics/Symbol 107",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2305,6 +2328,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 152.xml",
 				itemID: "5bfa7c8d-00000294",
 				name: "Graphics/Symbol 152",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2352,6 +2376,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 185.xml",
 				itemID: "5bfa7c8d-000002b2",
 				name: "Graphics/Symbol 185",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2570,6 +2595,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 187.xml",
 				itemID: "5bfa7c8d-000002b4",
 				name: "Graphics/Symbol 187",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2720,6 +2746,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 189.xml",
 				itemID: "5bfa7c8d-000002b6",
 				name: "Graphics/Symbol 189",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -2941,6 +2968,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 219.xml",
 				itemID: "5bfa7c8d-000002b9",
 				name: "Graphics/Symbol 219",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3028,6 +3056,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 229.xml",
 				itemID: "5bfa7c8d-000002bc",
 				name: "Graphics/Symbol 229",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3075,6 +3104,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 231.xml",
 				itemID: "5bfa7c8d-000002bd",
 				name: "Graphics/Symbol 231",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3126,6 +3156,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 232.xml",
 				itemID: "5bfa7c8d-000002be",
 				name: "Graphics/Symbol 232",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3173,6 +3204,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 241.xml",
 				itemID: "5bfa7c8d-000002bf",
 				name: "Graphics/Symbol 241",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3220,6 +3252,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 244.xml",
 				itemID: "5bfa7c8d-000002c0",
 				name: "Graphics/Symbol 244",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3267,6 +3300,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 245.xml",
 				itemID: "5bfa7c8d-000002c1",
 				name: "Graphics/Symbol 245",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3324,6 +3358,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 246.xml",
 				itemID: "5bfa7c8d-000002c2",
 				name: "Graphics/Symbol 246",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3371,6 +3406,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 248.xml",
 				itemID: "5bfa7c8d-000002c3",
 				name: "Graphics/Symbol 248",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3418,6 +3454,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 251.xml",
 				itemID: "5bfa7c8d-000002c4",
 				name: "Graphics/Symbol 251",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3469,6 +3506,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 252.xml",
 				itemID: "5bfa7c8d-000002c5",
 				name: "Graphics/Symbol 252",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3516,6 +3554,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 254.xml",
 				itemID: "5bfa7c8d-000002c6",
 				name: "Graphics/Symbol 254",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3563,6 +3602,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 257.xml",
 				itemID: "5bfa7c8d-000002c8",
 				name: "Graphics/Symbol 257",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3610,6 +3650,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 259.xml",
 				itemID: "5bfa7c8d-000002c9",
 				name: "Graphics/Symbol 259",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3657,6 +3698,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 260.xml",
 				itemID: "5bfa7c8d-000002ca",
 				name: "Graphics/Symbol 260",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3704,6 +3746,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 263.xml",
 				itemID: "5bfa7c8d-000002cb",
 				name: "Graphics/Symbol 263",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3751,6 +3794,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 265.xml",
 				itemID: "5bfa7c8d-000002cd",
 				name: "Graphics/Symbol 265",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3855,6 +3899,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 266.xml",
 				itemID: "5bfa7c8d-000002ce",
 				name: "Graphics/Symbol 266",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -3991,6 +4036,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 267.xml",
 				itemID: "5bfa7c8d-000002cf",
 				name: "Graphics/Symbol 267",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4096,6 +4142,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 268.xml",
 				itemID: "5bfa7c8d-000002d0",
 				name: "Graphics/Symbol 268",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4220,6 +4267,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 269.xml",
 				itemID: "5bfa7c8d-000002d1",
 				name: "Graphics/Symbol 269",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4364,6 +4412,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 271.xml",
 				itemID: "5bfa7c8d-000002d2",
 				name: "Graphics/Symbol 271",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4473,6 +4522,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 272.xml",
 				itemID: "5bfa7c8d-000002d3",
 				name: "Graphics/Symbol 272",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4617,6 +4667,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 274.xml",
 				itemID: "5bfa7c8d-000002d4",
 				name: "Graphics/Symbol 274",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4759,6 +4810,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 276.xml",
 				itemID: "5bfa7c8d-000002d5",
 				name: "Graphics/Symbol 276",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4899,6 +4951,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 277.xml",
 				itemID: "5bfa7c8d-000002d6",
 				name: "Graphics/Symbol 277",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -4983,6 +5036,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 278.xml",
 				itemID: "5bfa7c8d-000002d7",
 				name: "Graphics/Symbol 278",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5120,6 +5174,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 279.xml",
 				itemID: "5bfa7c8d-000002d8",
 				name: "Graphics/Symbol 279",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5233,6 +5288,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 280.xml",
 				itemID: "5bfa7c8d-000002d9",
 				name: "Graphics/Symbol 280",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5367,6 +5423,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 283.xml",
 				itemID: "5bfa7c8d-000002db",
 				name: "Graphics/Symbol 283",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5445,6 +5502,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 284.xml",
 				itemID: "5bfa7c8d-000002dc",
 				name: "Graphics/Symbol 284",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5544,6 +5602,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 285.xml",
 				itemID: "5bfa7c8d-000002dd",
 				name: "Graphics/Symbol 285",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5840,6 +5899,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 286.xml",
 				itemID: "5bfa7c8d-000002de",
 				name: "Graphics/Symbol 286",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -5975,6 +6035,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 287.xml",
 				itemID: "5bfa7c8d-000002df",
 				name: "Graphics/Symbol 287",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6065,6 +6126,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 288.xml",
 				itemID: "5bfa7c8d-000002e0",
 				name: "Graphics/Symbol 288",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6192,6 +6254,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 289.xml",
 				itemID: "5bfa7c8d-000002e1",
 				name: "Graphics/Symbol 289",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6271,6 +6334,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 290.xml",
 				itemID: "5bfa7c8d-000002e2",
 				name: "Graphics/Symbol 290",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6380,6 +6444,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 292.xml",
 				itemID: "5bfa7c8d-000002e3",
 				name: "Graphics/Symbol 292",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6458,6 +6523,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 293.xml",
 				itemID: "5bfa7c8d-000002e4",
 				name: "Graphics/Symbol 293",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6602,6 +6668,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 295.xml",
 				itemID: "5bfa7c8d-000002e5",
 				name: "Graphics/Symbol 295",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6684,6 +6751,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 299.xml",
 				itemID: "5bfa7c8d-000002e6",
 				name: "Graphics/Symbol 299",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6766,6 +6834,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 300.xml",
 				itemID: "5bfa7c8d-000002e7",
 				name: "Graphics/Symbol 300",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6844,6 +6913,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 301.xml",
 				itemID: "5bfa7c8d-000002e8",
 				name: "Graphics/Symbol 301",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -6948,6 +7018,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 302.xml",
 				itemID: "5bfa7c8d-000002e9",
 				name: "Graphics/Symbol 302",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7093,6 +7164,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 303.xml",
 				itemID: "5bfa7c8d-000002ea",
 				name: "Graphics/Symbol 303",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7171,6 +7243,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 305.xml",
 				itemID: "5bfa7c8d-000002eb",
 				name: "Graphics/Symbol 305",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7249,6 +7322,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 307.xml",
 				itemID: "5bfa7c8d-000002ec",
 				name: "Graphics/Symbol 307",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7366,6 +7440,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 308.xml",
 				itemID: "5bfa7c8d-000002ed",
 				name: "Graphics/Symbol 308",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7444,6 +7519,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 315.xml",
 				itemID: "5bfa7c8d-000002f1",
 				name: "Graphics/Symbol 315",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7522,6 +7598,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 318.xml",
 				itemID: "5bfa7c8d-000002f4",
 				name: "Graphics/Symbol 318",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7683,6 +7760,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 322.xml",
 				itemID: "5bfa7c8d-000002f6",
 				name: "Graphics/Symbol 322",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7808,6 +7886,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 325.xml",
 				itemID: "5bfa7c8d-000002f9",
 				name: "Graphics/Symbol 325",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -7950,6 +8029,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 327.xml",
 				itemID: "5bfa7c8d-000002fb",
 				name: "Graphics/Symbol 327",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -8038,6 +8118,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 329.xml",
 				itemID: "5bfa7c8d-000002fd",
 				name: "Graphics/Symbol 329",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -8149,6 +8230,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 333.xml",
 				itemID: "5bfa7c8d-00000300",
 				name: "Graphics/Symbol 333",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -8363,6 +8445,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 335.xml",
 				itemID: "5bfa7c8d-00000302",
 				name: "Graphics/Symbol 335",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -8513,6 +8596,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 337.xml",
 				itemID: "5bfa7c8d-00000304",
 				name: "Graphics/Symbol 337",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -9079,6 +9163,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 339.xml",
 				itemID: "5bfa7c8d-00000306",
 				name: "Graphics/Symbol 339",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -9313,6 +9398,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 341.xml",
 				itemID: "5bfa7c8d-00000308",
 				name: "Graphics/Symbol 341",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -9463,6 +9549,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 347.xml",
 				itemID: "5bfa7c8d-0000030c",
 				name: "Graphics/Symbol 347",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -9701,6 +9788,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 350.xml",
 				itemID: "5bfa7c8d-0000030f",
 				name: "Graphics/Symbol 350",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -9825,6 +9913,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 354.xml",
 				itemID: "5bfa7c8d-00000312",
 				name: "Graphics/Symbol 354",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -9954,6 +10043,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 356.xml",
 				itemID: "5bfa7c8d-00000314",
 				name: "Graphics/Symbol 356",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -10001,6 +10091,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 365.xml",
 				itemID: "5bfa7c8d-0000031a",
 				name: "Graphics/Symbol 365",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -10284,6 +10375,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 368.xml",
 				itemID: "5bfa7c8d-0000031d",
 				name: "Graphics/Symbol 368",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -10397,6 +10489,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 383.xml",
 				itemID: "5bfa7c8d-00000325",
 				name: "Graphics/Symbol 383",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -10834,6 +10927,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 385.xml",
 				itemID: "5bfa7c8d-00000327",
 				name: "Graphics/Symbol 385",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -15681,6 +15775,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 414.xml",
 				itemID: "5bfa7c8d-0000033f",
 				name: "Graphics/Symbol 414",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -15723,6 +15818,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 433.xml",
 				itemID: "5bfa7c8d-0000034c",
 				name: "Graphics/Symbol 433",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -15837,6 +15933,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 467.xml",
 				itemID: "5bfa7c8d-0000035c",
 				name: "Graphics/Symbol 467",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -15911,6 +16008,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 468.xml",
 				itemID: "5bfa7c8d-0000035d",
 				name: "Graphics/Symbol 468",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16014,6 +16112,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 469.xml",
 				itemID: "5bfa7c8d-0000035e",
 				name: "Graphics/Symbol 469",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16087,6 +16186,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 553.xml",
 				itemID: "5bfa7c8d-00000376",
 				name: "Graphics/Symbol 553",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16134,6 +16234,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 560.xml",
 				itemID: "5bfa7c8d-00000377",
 				name: "Graphics/Symbol 560",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16186,6 +16287,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 588.xml",
 				itemID: "5bfa7c8d-0000037b",
 				name: "Graphics/Symbol 588",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16233,6 +16335,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 592.xml",
 				itemID: "5bfa7c8d-0000037d",
 				name: "Graphics/Symbol 592",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16280,6 +16383,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 593.xml",
 				itemID: "5bfa7c8d-0000037e",
 				name: "Graphics/Symbol 593",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16327,6 +16431,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 594.xml",
 				itemID: "5bfa7c8d-0000037f",
 				name: "Graphics/Symbol 594",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16374,6 +16479,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 596.xml",
 				itemID: "5bfa7c8d-00000380",
 				name: "Graphics/Symbol 596",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16421,6 +16527,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 597.xml",
 				itemID: "5bfa7c8d-00000381",
 				name: "Graphics/Symbol 597",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16468,6 +16575,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 599.xml",
 				itemID: "5bfa7c8d-00000382",
 				name: "Graphics/Symbol 599",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16519,6 +16627,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 602.xml",
 				itemID: "5bfa7c8d-00000383",
 				name: "Graphics/Symbol 602",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16566,6 +16675,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 603.xml",
 				itemID: "5bfa7c8d-00000384",
 				name: "Graphics/Symbol 603",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16625,6 +16735,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 604.xml",
 				itemID: "5bfa7c8d-00000385",
 				name: "Graphics/Symbol 604",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16672,6 +16783,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 607.xml",
 				itemID: "5bfa7c8d-00000387",
 				name: "Graphics/Symbol 607",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16723,6 +16835,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 608.xml",
 				itemID: "5bfa7c8d-00000388",
 				name: "Graphics/Symbol 608",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16770,6 +16883,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 609.xml",
 				itemID: "5bfa7c8d-00000389",
 				name: "Graphics/Symbol 609",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16934,6 +17048,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 610.xml",
 				itemID: "5bfa7c8d-0000038a",
 				name: "Graphics/Symbol 610",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -16985,6 +17100,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 611.xml",
 				itemID: "5bfa7c8d-0000038b",
 				name: "Graphics/Symbol 611",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17037,6 +17153,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 612.xml",
 				itemID: "5bfa7c8d-0000038c",
 				name: "Graphics/Symbol 612",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17092,6 +17209,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 613.xml",
 				itemID: "5bfa7c8d-0000038d",
 				name: "Graphics/Symbol 613",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17140,6 +17258,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 614.xml",
 				itemID: "5bfa7c8d-0000038e",
 				name: "Graphics/Symbol 614",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17187,6 +17306,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 616.xml",
 				itemID: "5bfa7c8d-0000038f",
 				name: "Graphics/Symbol 616",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17234,6 +17354,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 617.xml",
 				itemID: "5bfa7c8d-00000390",
 				name: "Graphics/Symbol 617",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17281,6 +17402,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 619.xml",
 				itemID: "5bfa7c8d-00000391",
 				name: "Graphics/Symbol 619",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17332,6 +17454,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 620.xml",
 				itemID: "5bfa7c8d-00000392",
 				name: "Graphics/Symbol 620",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17387,6 +17510,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 626.xml",
 				itemID: "5bfa7c8d-00000396",
 				name: "Graphics/Symbol 626",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17500,6 +17624,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 627.xml",
 				itemID: "5bfa7c8d-00000397",
 				name: "Graphics/Symbol 627",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17613,6 +17738,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 628.xml",
 				itemID: "5bfa7c8d-00000398",
 				name: "Graphics/Symbol 628",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17726,6 +17852,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 632.xml",
 				itemID: "5bfa7c8d-00000399",
 				name: "Graphics/Symbol 632",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17835,6 +17962,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 633.xml",
 				itemID: "5bfa7c8d-0000039a",
 				name: "Graphics/Symbol 633",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -17954,6 +18082,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 634.xml",
 				itemID: "5bfa7c8d-0000039b",
 				name: "Graphics/Symbol 634",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18068,6 +18197,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 635.xml",
 				itemID: "5bfa7c8d-0000039c",
 				name: "Graphics/Symbol 635",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18182,6 +18312,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 638.xml",
 				itemID: "5bfa7c8d-0000039e",
 				name: "Graphics/Symbol 638",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18336,6 +18467,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 639.xml",
 				itemID: "5bfa7c8d-0000039f",
 				name: "Graphics/Symbol 639",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18414,6 +18546,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 640.xml",
 				itemID: "5bfa7c8d-000003a0",
 				name: "Graphics/Symbol 640",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18540,6 +18673,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 641.xml",
 				itemID: "5bfa7c8d-000003a1",
 				name: "Graphics/Symbol 641",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18832,6 +18966,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 642.xml",
 				itemID: "5bfa7c8d-000003a2",
 				name: "Graphics/Symbol 642",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -18953,6 +19088,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 644.xml",
 				itemID: "5bfa7c8d-000003a3",
 				name: "Graphics/Symbol 644",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -19075,6 +19211,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 645.xml",
 				itemID: "5bfa7c8d-000003a4",
 				name: "Graphics/Symbol 645",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -19267,6 +19404,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 646.xml",
 				itemID: "5bfa7c8d-000003a5",
 				name: "Graphics/Symbol 646",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -19398,6 +19536,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 648.xml",
 				itemID: "5bfa7c8d-000003a6",
 				name: "Graphics/Symbol 648",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -19672,6 +19811,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 650.xml",
 				itemID: "5bfa7c8d-000003a7",
 				name: "Graphics/Symbol 650",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -19781,6 +19921,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 651.xml",
 				itemID: "5bfa7c8d-000003a8",
 				name: "Graphics/Symbol 651",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -19973,6 +20114,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 652.xml",
 				itemID: "5bfa7c8d-000003a9",
 				name: "Graphics/Symbol 652",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20260,6 +20402,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 654.xml",
 				itemID: "5bfa7c8d-000003aa",
 				name: "Graphics/Symbol 654",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20436,6 +20579,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 680.xml",
 				itemID: "5bfa7c8d-000003ae",
 				name: "Graphics/Symbol 680",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20558,6 +20702,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 685.xml",
 				itemID: "5bfa7c8d-000003b1",
 				name: "Graphics/Symbol 685",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20663,6 +20808,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 686.xml",
 				itemID: "5bfa7c8d-000003b2",
 				name: "Graphics/Symbol 686",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20784,6 +20930,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 687.xml",
 				itemID: "5bfa7c8d-000003b3",
 				name: "Graphics/Symbol 687",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20888,6 +21035,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 688.xml",
 				itemID: "5bfa7c8d-000003b4",
 				name: "Graphics/Symbol 688",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -20961,6 +21109,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 689.xml",
 				itemID: "5bfa7c8d-000003b5",
 				name: "Graphics/Symbol 689",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21039,6 +21188,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 690.xml",
 				itemID: "5bfa7c8d-000003b6",
 				name: "Graphics/Symbol 690",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21112,6 +21262,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 691.xml",
 				itemID: "5bfa7c8d-000003b7",
 				name: "Graphics/Symbol 691",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21190,6 +21341,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 693.xml",
 				itemID: "5bfa7c8d-000003b9",
 				name: "Graphics/Symbol 693",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21268,6 +21420,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 695.xml",
 				itemID: "5bfa7c8d-000003ba",
 				name: "Graphics/Symbol 695",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21372,6 +21525,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 698.xml",
 				itemID: "5bfa7c8d-000003bb",
 				name: "Graphics/Symbol 698",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21459,6 +21613,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 699.xml",
 				itemID: "5bfa7c8d-000003bc",
 				name: "Graphics/Symbol 699",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21568,6 +21723,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 701.xml",
 				itemID: "5bfa7c8d-000003bd",
 				name: "Graphics/Symbol 701",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21646,6 +21802,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 702.xml",
 				itemID: "5bfa7c8d-000003be",
 				name: "Graphics/Symbol 702",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21754,6 +21911,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 703.xml",
 				itemID: "5bfa7c8d-000003bf",
 				name: "Graphics/Symbol 703",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -21943,6 +22101,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 704.xml",
 				itemID: "5bfa7c8d-000003c0",
 				name: "Graphics/Symbol 704",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22021,6 +22180,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 706.xml",
 				itemID: "5bfa7c8d-000003c1",
 				name: "Graphics/Symbol 706",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22226,6 +22386,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 707.xml",
 				itemID: "5bfa7c8d-000003c2",
 				name: "Graphics/Symbol 707",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22339,6 +22500,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 708.xml",
 				itemID: "5bfa7c8d-000003c3",
 				name: "Graphics/Symbol 708",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22460,6 +22622,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 713.xml",
 				itemID: "5bfa7c8d-000003c6",
 				name: "Graphics/Symbol 713",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -22911,6 +23074,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 715.xml",
 				itemID: "5bfa7c8d-000003c8",
 				name: "Graphics/Symbol 715",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23080,6 +23244,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 719.xml",
 				itemID: "5bfa7c8d-000003c9",
 				name: "Graphics/Symbol 719",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23235,6 +23400,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 720.xml",
 				itemID: "5bfa7c8d-000003ca",
 				name: "Graphics/Symbol 720",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23337,6 +23503,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 722.xml",
 				itemID: "5bfa7c8d-000003cb",
 				name: "Graphics/Symbol 722",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23576,6 +23743,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 723.xml",
 				itemID: "5bfa7c8d-000003cc",
 				name: "Graphics/Symbol 723",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23684,6 +23852,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 724.xml",
 				itemID: "5bfa7c8d-000003cd",
 				name: "Graphics/Symbol 724",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23807,6 +23976,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 766.xml",
 				itemID: "5bfa7c8d-000003d3",
 				name: "Graphics/Symbol 766",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23854,6 +24024,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 773.xml",
 				itemID: "5bfa7c8d-000003d5",
 				name: "Graphics/Symbol 773",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23905,6 +24076,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 779.xml",
 				itemID: "5bfa7c8d-000003d6",
 				name: "Graphics/Symbol 779",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -23953,6 +24125,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 782.xml",
 				itemID: "5bfa7c8d-000003d7",
 				name: "Graphics/Symbol 782",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24000,6 +24173,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 783.xml",
 				itemID: "5bfa7c8d-000003d8",
 				name: "Graphics/Symbol 783",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24051,6 +24225,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 785.xml",
 				itemID: "5bfa7c8d-000003d9",
 				name: "Graphics/Symbol 785",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24098,6 +24273,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 786.xml",
 				itemID: "5bfa7c8d-000003da",
 				name: "Graphics/Symbol 786",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24145,6 +24321,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 787.xml",
 				itemID: "5bfa7c8d-000003db",
 				name: "Graphics/Symbol 787",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24192,6 +24369,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 788.xml",
 				itemID: "5bfa7c8d-000003dc",
 				name: "Graphics/Symbol 788",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24248,6 +24426,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 789.xml",
 				itemID: "5bfa7c8d-000003dd",
 				name: "Graphics/Symbol 789",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24295,6 +24474,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 790.xml",
 				itemID: "5bfa7c8d-000003de",
 				name: "Graphics/Symbol 790",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24342,6 +24522,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 791.xml",
 				itemID: "5bfa7c8d-000003df",
 				name: "Graphics/Symbol 791",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24389,6 +24570,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 793.xml",
 				itemID: "5bfa7c8d-000003e0",
 				name: "Graphics/Symbol 793",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24444,6 +24626,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 794.xml",
 				itemID: "5bfa7c8d-000003e1",
 				name: "Graphics/Symbol 794",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24495,6 +24678,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 795.xml",
 				itemID: "5bfa7c8d-000003e2",
 				name: "Graphics/Symbol 795",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24543,6 +24727,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 796.xml",
 				itemID: "5bfa7c8d-000003e3",
 				name: "Graphics/Symbol 796",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24590,6 +24775,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 798.xml",
 				itemID: "5bfa7c8d-000003e4",
 				name: "Graphics/Symbol 798",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24637,6 +24823,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 801.xml",
 				itemID: "5bfa7c8d-000003e5",
 				name: "Graphics/Symbol 801",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24688,6 +24875,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 802.xml",
 				itemID: "5bfa7c8d-000003e6",
 				name: "Graphics/Symbol 802",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24735,6 +24923,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 803.xml",
 				itemID: "5bfa7c8d-000003e7",
 				name: "Graphics/Symbol 803",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24782,6 +24971,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 804.xml",
 				itemID: "5bfa7c8d-000003e8",
 				name: "Graphics/Symbol 804",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24829,6 +25019,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 806.xml",
 				itemID: "5bfa7c8d-000003ea",
 				name: "Graphics/Symbol 806",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -24911,6 +25102,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 808.xml",
 				itemID: "5bfa7c8d-000003eb",
 				name: "Graphics/Symbol 808",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25020,6 +25212,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 810.xml",
 				itemID: "5bfa7c8d-000003ec",
 				name: "Graphics/Symbol 810",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25153,6 +25346,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 812.xml",
 				itemID: "5bfa7c8d-000003ed",
 				name: "Graphics/Symbol 812",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25275,6 +25469,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 814.xml",
 				itemID: "5bfa7c8d-000003ee",
 				name: "Graphics/Symbol 814",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25357,6 +25552,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 815.xml",
 				itemID: "5bfa7c8d-000003ef",
 				name: "Graphics/Symbol 815",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25479,6 +25675,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 817.xml",
 				itemID: "5bfa7c8d-000003f0",
 				name: "Graphics/Symbol 817",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25588,6 +25785,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 818.xml",
 				itemID: "5bfa7c8d-000003f1",
 				name: "Graphics/Symbol 818",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25781,6 +25979,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 819.xml",
 				itemID: "5bfa7c8d-000003f2",
 				name: "Graphics/Symbol 819",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -25890,6 +26089,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 821.xml",
 				itemID: "5bfa7c8d-000003f3",
 				name: "Graphics/Symbol 821",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26096,6 +26296,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 823.xml",
 				itemID: "5bfa7c8d-000003f4",
 				name: "Graphics/Symbol 823",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26206,6 +26407,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 826.xml",
 				itemID: "5bfa7c8d-000003f5",
 				name: "Graphics/Symbol 826",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26317,6 +26519,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 828.xml",
 				itemID: "5bfa7c8d-000003f6",
 				name: "Graphics/Symbol 828",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26399,6 +26602,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 829.xml",
 				itemID: "5bfa7c8d-000003f7",
 				name: "Graphics/Symbol 829",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26517,6 +26721,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 830.xml",
 				itemID: "5bfa7c8d-000003f8",
 				name: "Graphics/Symbol 830",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26635,6 +26840,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 831.xml",
 				itemID: "5bfa7c8d-000003f9",
 				name: "Graphics/Symbol 831",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26774,6 +26980,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 832.xml",
 				itemID: "5bfa7c8d-000003fa",
 				name: "Graphics/Symbol 832",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -26905,6 +27112,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 833.xml",
 				itemID: "5bfa7c8d-000003fb",
 				name: "Graphics/Symbol 833",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27022,6 +27230,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 834.xml",
 				itemID: "5bfa7c8d-000003fc",
 				name: "Graphics/Symbol 834",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27198,6 +27407,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 835.xml",
 				itemID: "5bfa7c8d-000003fd",
 				name: "Graphics/Symbol 835",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27319,6 +27529,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 836.xml",
 				itemID: "5bfa7c8d-000003fe",
 				name: "Graphics/Symbol 836",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27478,6 +27689,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 837.xml",
 				itemID: "5bfa7c8d-000003ff",
 				name: "Graphics/Symbol 837",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27618,6 +27830,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 839.xml",
 				itemID: "5bfa7c8d-00000400",
 				name: "Graphics/Symbol 839",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27744,6 +27957,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 841.xml",
 				itemID: "5bfa7c8d-00000401",
 				name: "Graphics/Symbol 841",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -27822,6 +28036,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 842.xml",
 				itemID: "5bfa7c8d-00000402",
 				name: "Graphics/Symbol 842",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28028,6 +28243,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 843.xml",
 				itemID: "5bfa7c8d-00000403",
 				name: "Graphics/Symbol 843",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28230,6 +28446,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 844.xml",
 				itemID: "5bfa7c8d-00000404",
 				name: "Graphics/Symbol 844",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28419,6 +28636,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 846.xml",
 				itemID: "5bfa7c8d-00000405",
 				name: "Graphics/Symbol 846",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28497,6 +28715,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 849.xml",
 				itemID: "5bfa7c8d-00000406",
 				name: "Graphics/Symbol 849",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28682,6 +28901,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 850.xml",
 				itemID: "5bfa7c8d-00000407",
 				name: "Graphics/Symbol 850",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28791,6 +29011,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 851.xml",
 				itemID: "5bfa7c8d-00000408",
 				name: "Graphics/Symbol 851",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -28932,6 +29153,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 852.xml",
 				itemID: "5bfa7c8d-00000409",
 				name: "Graphics/Symbol 852",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29124,6 +29346,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 853.xml",
 				itemID: "5bfa7c8d-0000040a",
 				name: "Graphics/Symbol 853",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29206,6 +29429,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 854.xml",
 				itemID: "5bfa7c8d-0000040b",
 				name: "Graphics/Symbol 854",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29286,6 +29510,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 856.xml",
 				itemID: "5bfa7c8d-0000040d",
 				name: "Graphics/Symbol 856",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29416,6 +29641,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 860.xml",
 				itemID: "5bfa7c8d-00000411",
 				name: "Graphics/Symbol 860",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29492,6 +29718,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 862.xml",
 				itemID: "5bfa7c8d-00000413",
 				name: "Graphics/Symbol 862",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29583,6 +29810,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 866.xml",
 				itemID: "5bfa7c8d-00000416",
 				name: "Graphics/Symbol 866",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29710,6 +29938,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 876.xml",
 				itemID: "5bfa7c8d-0000041d",
 				name: "Graphics/Symbol 876",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -29813,6 +30042,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 879.xml",
 				itemID: "5bfa7c8d-00000420",
 				name: "Graphics/Symbol 879",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30108,6 +30338,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 917.xml",
 				itemID: "5bfa7c8d-00000439",
 				name: "Graphics/Symbol 917",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30243,6 +30474,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 985.xml",
 				itemID: "5bfa7c8d-00000452",
 				name: "Graphics/Symbol 985",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30339,6 +30571,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 988.xml",
 				itemID: "5bfa7c8d-00000455",
 				name: "Graphics/Symbol 988",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30414,6 +30647,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 989.xml",
 				itemID: "5bfa7c8d-00000456",
 				name: "Graphics/Symbol 989",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30463,6 +30697,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 990.xml",
 				itemID: "5bfa7c8d-00000457",
 				name: "Graphics/Symbol 990",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30505,6 +30740,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 991.xml",
 				itemID: "5bfa7c8d-00000458",
 				name: "Graphics/Symbol 991",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30547,6 +30783,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 993.xml",
 				itemID: "5bfa7c8d-0000045a",
 				name: "Graphics/Symbol 993",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30622,6 +30859,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 994.xml",
 				itemID: "5bfa7c8d-0000045b",
 				name: "Graphics/Symbol 994",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30697,6 +30935,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 996.xml",
 				itemID: "5bfa7c8d-0000045d",
 				name: "Graphics/Symbol 996",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30772,6 +31011,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 997.xml",
 				itemID: "5bfa7c8d-0000045e",
 				name: "Graphics/Symbol 997",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30847,6 +31087,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1006.xml",
 				itemID: "5bfa7c8d-00000463",
 				name: "Graphics/Symbol 1006",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30925,6 +31166,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1015.xml",
 				itemID: "5bfa7c8d-00000468",
 				name: "Graphics/Symbol 1015",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -30967,6 +31209,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1022.xml",
 				itemID: "5bfa7c8d-0000046c",
 				name: "Graphics/Symbol 1022",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31080,6 +31323,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1032.xml",
 				itemID: "5bfa7c8d-00000470",
 				name: "Graphics/Symbol 1032",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31122,6 +31366,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1078.xml",
 				itemID: "5bfa7c8d-00000482",
 				name: "Graphics/Symbol 1078",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31190,6 +31435,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1103.xml",
 				itemID: "5bfa7c8d-0000048f",
 				name: "Graphics/Symbol 1103",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31265,6 +31511,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1105.xml",
 				itemID: "5bfa7c8d-00000491",
 				name: "Graphics/Symbol 1105",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31339,6 +31586,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1174.xml",
 				itemID: "5bfa7c8d-000004b0",
 				name: "Graphics/Symbol 1174",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31438,6 +31686,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1179.xml",
 				itemID: "5bfa7c8d-000004b3",
 				name: "Graphics/Symbol 1179",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31481,6 +31730,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1180.xml",
 				itemID: "5bfa7c8d-000004b4",
 				name: "Graphics/Symbol 1180",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31524,6 +31774,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1181.xml",
 				itemID: "5bfa7c8d-000004b5",
 				name: "Graphics/Symbol 1181",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31567,6 +31818,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1182.xml",
 				itemID: "5bfa7c8d-000004b6",
 				name: "Graphics/Symbol 1182",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31609,6 +31861,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1186.xml",
 				itemID: "5bfa7c8d-000004ba",
 				name: "Graphics/Symbol 1186",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31686,6 +31939,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1188.xml",
 				itemID: "5bfa7c8d-000004bc",
 				name: "Graphics/Symbol 1188",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31760,6 +32014,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1190.xml",
 				itemID: "5bfa7c8d-000004be",
 				name: "Graphics/Symbol 1190",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31833,6 +32088,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1192.xml",
 				itemID: "5bfa7c8d-000004c0",
 				name: "Graphics/Symbol 1192",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31875,6 +32131,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1195.xml",
 				itemID: "5bfa7c8d-000004c1",
 				name: "Graphics/Symbol 1195",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31917,6 +32174,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1202.xml",
 				itemID: "5bfca65a-00000984",
 				name: "Graphics/Symbol 1202",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -31995,6 +32253,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1207.xml",
 				itemID: "5bfa7c8d-000004cb",
 				name: "Graphics/Symbol 1207",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32037,6 +32296,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1208.xml",
 				itemID: "5bfa7c8d-000004cc",
 				name: "Graphics/Symbol 1208",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32097,6 +32357,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1210.xml",
 				itemID: "5bfa7c8d-000004cd",
 				name: "Graphics/Symbol 1210",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32157,6 +32418,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1212.xml",
 				itemID: "5bfa7c8d-000004ce",
 				name: "Graphics/Symbol 1212",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32199,6 +32461,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1223.xml",
 				itemID: "5bfa7c8d-000004d2",
 				name: "Graphics/Symbol 1223",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32311,6 +32574,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1259.xml",
 				itemID: "5bfa7c8d-000004dd",
 				name: "Graphics/Symbol 1259",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32386,6 +32650,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1261.xml",
 				itemID: "5bfa7c8d-000004de",
 				name: "Graphics/Symbol 1261",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32454,6 +32719,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1302.xml",
 				itemID: "5bfa7c8d-000004f3",
 				name: "Graphics/Symbol 1302",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32533,6 +32799,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1313.xml",
 				itemID: "5bfa7c8d-000004f9",
 				name: "Graphics/Symbol 1313",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32629,6 +32896,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1318.xml",
 				itemID: "5bfa7c8d-000004fc",
 				name: "Graphics/Symbol 1318",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32671,6 +32939,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1319.xml",
 				itemID: "5bfa7c8d-000004fd",
 				name: "Graphics/Symbol 1319",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32713,6 +32982,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1358.xml",
 				itemID: "5bfa7c8d-0000050b",
 				name: "Graphics/Symbol 1358",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,
@@ -32755,6 +33025,7 @@ final class AssetCatalogSymbolsGraphics {
 				href: "Graphics/Symbol 1359.xml",
 				itemID: "5bfa7c8d-0000050c",
 				name: "Graphics/Symbol 1359",
+				symbolType: "graphic",
 				timelines: [
 					{
 						frameCount: 1,

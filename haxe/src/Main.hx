@@ -14,6 +14,7 @@ import pr2.app.Screen;
 import pr2.net.ServerConfig;
 import pr2.harness.GameplayHarness;
 import pr2.page.CampaignTestScreen;
+import pr2.page.CustomizeCharacterScreen;
 import pr2.page.IntroPage;
 import pr2.page.LoginPage;
 import pr2.page.PageHolder;
@@ -107,6 +108,7 @@ class Main extends Sprite {
 				parseScale(QueryParams.get(query, "scale")),
 				parseColor(QueryParams.get(query, "bg"))
 			);
+			case CustomizeCharacter: new CustomizeCharacterScreen();
 		};
 	}
 

@@ -20973,6 +20973,7 @@ final class AssetCatalogSymbolsUI {
 				itemID: "6176e712-00000668",
 				linkageClassName: "RandomizeStyleButtonGraphic",
 				name: "UI/Pages/Lobby/Left/randomizeStyle",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -25734,6 +25735,7 @@ final class AssetCatalogSymbolsUI {
 				href: "UI/Popups (outside levels)/LevelInfo/Buttons/cowboy.xml",
 				itemID: "5fb92c7d-000009cb",
 				name: "UI/Popups (outside levels)/LevelInfo/Buttons/cowboy",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -25812,6 +25814,7 @@ final class AssetCatalogSymbolsUI {
 				href: "UI/Popups (outside levels)/LevelInfo/Buttons/hatsAllowed.xml",
 				itemID: "5fb92c8c-000009d0",
 				name: "UI/Popups (outside levels)/LevelInfo/Buttons/hatsAllowed",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -25878,6 +25881,7 @@ final class AssetCatalogSymbolsUI {
 				href: "UI/Popups (outside levels)/LevelInfo/Buttons/items.xml",
 				itemID: "5fb92c81-000009cc",
 				name: "UI/Popups (outside levels)/LevelInfo/Buttons/items",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -26038,6 +26042,7 @@ final class AssetCatalogSymbolsUI {
 				href: "UI/Popups (outside levels)/LevelInfo/Buttons/musicNote.xml",
 				itemID: "5fb92c84-000009cd",
 				name: "UI/Popups (outside levels)/LevelInfo/Buttons/musicNote",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,
@@ -26781,6 +26786,7 @@ final class AssetCatalogSymbolsUI {
 				href: "UI/Popups (outside levels)/Options/musicButton.xml",
 				itemID: "5e6f12b0-0000068f",
 				name: "UI/Popups (outside levels)/Options/musicButton",
+				symbolType: "button",
 				timelines: [
 					{
 						frameCount: 4,

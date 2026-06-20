@@ -306,6 +306,7 @@ typedef SymbolAssetDef = {
 \t@:optional var itemID:String;
 \t@:optional var linkageClassName:String;
 \t@:optional var linkageIdentifier:String;
+\t@:optional var symbolType:String;
 \tvar timelines:Array<TimelineDef>;
 }
 """

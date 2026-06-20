@@ -397,7 +397,13 @@ class LoginPage extends Page {
 	}
 
 	private function enterLobby(userName:String, server:ServerInfo):Void {
-		closeSocketProbe();
+		// Hand the live connection to the lobby: detach the login-phase hooks but
+		// keep the socket open (the Flash original reuses the single Main.socket),
+		// so the lobby's get_customize_info etc. run on the same session.
+		if (socketProbe != null) {
+			socketProbe.release();
+			socketProbe = null;
+		}
 		closePopup();
 		setStatus('Logged in as $userName.');
 		// Guests connect with no account group; real members would carry their
