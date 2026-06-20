@@ -49,7 +49,7 @@ class FlComponentFactory {
 		if (maxChars != null && maxChars > 0) {
 			input.maxChars = maxChars;
 		}
-		var size = componentSize(element, 100, 22);
+		var size = scaledComponentSize(element, 100, 22);
 		input.setSize(size.width, size.height);
 		input.enabled = componentBool(element, "enabled", true);
 		return input;
@@ -66,6 +66,11 @@ class FlComponentFactory {
 
 	private static function createButtonComponent(element:DisplayElementDef):DisplayObject {
 		var button = new FlButton(componentString(element, "label", "Button"));
+		// Flash components interpret an instance scale as component dimensions;
+		// their labels remain unscaled. Bake that authored scale into the ported
+		// button's layout before PR2MovieClip normalizes its display transform.
+		var scale = componentScale(element);
+		button.setSize(100 * scale.x, 22 * scale.y);
 		button.toggle = componentBool(element, "toggle", false);
 		button.selected = componentBool(element, "selected", false);
 		button.emphasized = componentBool(element, "emphasized", false);
@@ -75,9 +80,24 @@ class FlComponentFactory {
 		return button;
 	}
 
+	private static function componentScale(element:DisplayElementDef):{x:Float, y:Float} {
+		if (element.matrix == null) {
+			return {x: 1, y: 1};
+		}
+		var matrix = element.matrix;
+		var a = matrix.a == null ? 1 : matrix.a;
+		var b = matrix.b == null ? 0 : matrix.b;
+		var c = matrix.c == null ? 0 : matrix.c;
+		var d = matrix.d == null ? 1 : matrix.d;
+		return {
+			x: Math.max(0.0001, Math.sqrt(a * a + b * b)),
+			y: Math.max(0.0001, Math.sqrt(c * c + d * d))
+		};
+	}
+
 	private static function createComboBoxComponent(element:DisplayElementDef):DisplayObject {
 		var combo = new FlComboBox(componentString(element, "prompt", ""));
-		var size = componentSize(element, 100, 22);
+		var size = scaledComponentSize(element, 100, 22);
 		combo.setSize(size.width, size.height);
 		var rowCount = Std.parseInt(componentString(element, "rowCount", "5"));
 		if (rowCount != null && rowCount > 0) {
@@ -138,6 +158,12 @@ class FlComponentFactory {
 			}
 		}
 		return {width: defaultWidth, height: defaultHeight};
+	}
+
+	private static function scaledComponentSize(element:DisplayElementDef, defaultWidth:Float, defaultHeight:Float):{width:Float, height:Float} {
+		var size = componentSize(element, defaultWidth, defaultHeight);
+		var scale = componentScale(element);
+		return {width: size.width * scale.x, height: size.height * scale.y};
 	}
 
 	private static function createGenericComponent(element:DisplayElementDef):DisplayObject {

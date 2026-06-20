@@ -534,7 +534,12 @@ class PR2MovieClip extends Sprite {
 		// The resolved family already encodes weight/style, so bold/italic flags
 		// stay off to avoid browser faux-synthesis over the real outlines.
 		var face = FontResolver.resolve(dynamicString(attrs, "face", "_sans"));
-		var size = Std.int(dynamicFloat(attrs, "size", dynamicFloat(attrs, "lineHeight", 12)));
+		// Animate sometimes omits `size`, but `bitmapSize` still carries the font
+		// size in twentieths of a pixel (240 = 12px). `lineHeight` is larger than
+		// the font and must not be used directly or text is oversized and clipped.
+		var bitmapSize = dynamicFloatOrNull(attrs, "bitmapSize");
+		var inferredSize = bitmapSize == null ? dynamicFloat(attrs, "lineHeight", 14.4) / 1.2 : bitmapSize / 20;
+		var size = Std.int(dynamicFloat(attrs, "size", inferredSize));
 		var align = textAlign(dynamicString(attrs, "alignment", "left"));
 		// Authored fill color (e.g. the credits' "#254489"); default to black to
 		// match Animate's behavior when no fillColor attribute is present.
@@ -653,12 +658,25 @@ class PR2MovieClip extends Sprite {
 			var matrix = element.matrix;
 			var a = matrix.a == null ? 1 : matrix.a;
 			var b = matrix.b == null ? 0 : matrix.b;
+			var c = matrix.c == null ? 0 : matrix.c;
+			var d = matrix.d == null ? 1 : matrix.d;
+			// fl.controls.Button consumes instance scaling as its width/height. The
+			// factory has already baked those dimensions into the control, so retain
+			// only rotation/skew here instead of also distorting the label glyphs.
+			if (Std.isOfType(child, FlButton) || Std.isOfType(child, FlTextInput) || Std.isOfType(child, FlComboBox)) {
+				var scaleX = Math.max(0.0001, Math.sqrt(a * a + b * b));
+				var scaleY = Math.max(0.0001, Math.sqrt(c * c + d * d));
+				a /= scaleX;
+				b /= scaleX;
+				c /= scaleY;
+				d /= scaleY;
+			}
 			var localTextLeft = element.type == "DOMStaticText" && element.left != null ? element.left : 0;
 			child.transform.matrix = new Matrix(
 				a,
 				b,
-				matrix.c == null ? 0 : matrix.c,
-				matrix.d == null ? 1 : matrix.d,
+				c,
+				d,
 				(matrix.tx == null ? 0 : matrix.tx) + a * localTextLeft,
 				(matrix.ty == null ? 0 : matrix.ty) + b * localTextLeft
 			);

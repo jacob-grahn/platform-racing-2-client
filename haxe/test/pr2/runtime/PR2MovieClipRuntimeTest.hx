@@ -304,12 +304,19 @@ class PR2MovieClipRuntimeTest {
 
 		assertNotNull(findTextDescendant(popup, "-- Login --"), "LoginPopupGraphic renders DOMStaticText title");
 		assertNotNull(findTextDescendant(popup, "name:"), "LoginPopupGraphic renders DOMStaticText field labels");
-		assertNotNull(popup.getChildByTimelineName("login_bt"), "LoginPopupGraphic renders named Button component");
+		var loginButton = popup.getChildByTimelineName("login_bt");
+		assertNotNull(loginButton, "LoginPopupGraphic renders named Button component");
+		assertClose(1, loginButton.transform.matrix.a, "Button instance width does not horizontally scale its label");
 		assertNotNull(popup.getChildByTimelineName("rememberMe_chk"), "LoginPopupGraphic renders named CheckBox component");
 
 		var nameBox = Std.downcast(popup.getChildByTimelineName("nameBox"), FlTextInput);
 		assertNotNull(nameBox, "LoginPopupGraphic renders named TextInput component as FlTextInput");
 		assertEquals(true, nameBox.editable, "TextInput component is editable");
+		assertClose(1, nameBox.transform.matrix.a, "TextInput width does not horizontally scale its text");
+
+		var serverDropdown = Std.downcast(popup.getChildByTimelineName("dropdown"), FlComboBox);
+		assertNotNull(serverDropdown, "LoginPopupGraphic renders server dropdown as FlComboBox");
+		assertClose(1, serverDropdown.transform.matrix.a, "ComboBox width does not horizontally scale its caption");
 
 		var passBox = Std.downcast(popup.getChildByTimelineName("passBox"), FlTextInput);
 		assertNotNull(passBox, "LoginPopupGraphic renders password TextInput component as FlTextInput");
@@ -400,6 +407,12 @@ class PR2MovieClipRuntimeTest {
 	}
 
 	private static function testGeneratedIntroTimelines():Void {
+		var page = PR2MovieClip.fromLinkage("IntroPageGraphic");
+		var skipPrompt = findTextDescendant(page, "Click anywhere to skip");
+		assertNotNull(skipPrompt, "IntroPageGraphic renders its skip prompt");
+		assertClose(12, skipPrompt.defaultTextFormat.size, "skip prompt infers its 12px font from bitmapSize");
+		assertEquals(true, skipPrompt.textWidth <= skipPrompt.width, "skip prompt fits its authored text field");
+
 		assertIntroTimeline("JiggminIntroGraphic", 249);
 		assertIntroTimeline("KongregateIntroGraphic", 153);
 		assertIntroTimeline("ArmorIntroGraphic", 218);

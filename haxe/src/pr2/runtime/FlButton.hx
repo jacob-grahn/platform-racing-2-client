@@ -230,20 +230,13 @@ class FlButton extends Sprite {
 			return null;
 		}
 		var skin:DisplayObject = new PR2MovieClip(symbol);
-		try {
-			skin.scale9Grid = SKIN_GRID;
-		} catch (_:Dynamic) {
-			// Some targets reject scale9Grid on vector sprites; fall back to a
-			// plain scale, which still fills the button (corners stretch a touch).
-		}
 		layoutSkin(skin);
 		skinCache.set(state, skin);
 		return skin;
 	}
 
 	private function layoutSkin(skin:DisplayObject):Void {
-		skin.scaleX = buttonWidth / SKIN_NATIVE_WIDTH;
-		skin.scaleY = buttonHeight / SKIN_NATIVE_HEIGHT;
+		FlSkin.nineSlice(skin, SKIN_GRID, SKIN_NATIVE_WIDTH, SKIN_NATIVE_HEIGHT, buttonWidth, buttonHeight);
 	}
 
 	private function layoutLabel():Void {

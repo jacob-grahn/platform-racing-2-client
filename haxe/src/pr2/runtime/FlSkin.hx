@@ -42,8 +42,14 @@ class FlSkin {
 		are the authored skin dimensions used to derive the fill scale.
 	**/
 	public static function nineSlice(skin:DisplayObject, grid:Rectangle, nativeW:Float, nativeH:Float, width:Float, height:Float):Void {
+		// OpenFL's HTML5 renderer clips the right/bottom slices when a vector
+		// Sprite with scale9Grid is scaled again by an authored component-instance
+		// transform. TextInput, ComboBox, and Button all hit that path in the login
+		// popups, leaving roughly the right 15% of the control undrawn. These skins
+		// use one-pixel bevels and only resize modestly, so ordinary scaling is the
+		// reliable cross-target behavior.
 		try {
-			skin.scale9Grid = grid;
+			skin.scale9Grid = null;
 		} catch (_:Dynamic) {
 			// Some targets reject scale9Grid on vector sprites; a plain scale still
 			// fills the control (corners stretch a touch), matching FlButton.
