@@ -167,22 +167,20 @@ same serialized meaning and visible result as Flash.
   (symbol `UI/Popups (outside levels)/Credits/artPg1`, reference
   `vector-art/png/menus/credits_art_pg1@4x.png`, exported via the committed
   `generate_other_assets_jsfl.py` pipeline). The render confirms blue
-  `#254489` labels and black `by`. Its `rmsDelta` runs high because the
-  Verdana->DejaVu advance-width drift collides the hand-positioned
-  label/by/value columns (the separate open item below); the threshold locks in
-  current fidelity until that metric fix lands.
-- [ ] Verdana metric drift causes text overlap. `FontResolver` maps Verdana ->
-  DejaVu Sans, a visual look-alike whose advance widths are wider than Verdana
-  (unlike Arial/Times -> Liberation, which are metric clones), so hand-positioned
-  multi-field layouts collide (e.g. the credits popup `label by value` columns).
-  Resolve while keeping the offline/embedded path: each authored element carries
-  its Verdana `width`, so in `createStaticText` measure the rendered advance and
-  apply a compensating horizontal `scaleX` (or `letterSpacing`) to match the
-  authored box. Alternatives to weigh: a generated metric-clone of Verdana
-  (fonttools rescale to Verdana's width table), or a device-font stack
-  (`Verdana, DejaVu Sans, ...`) that uses locally installed real fonts where
-  present. Verify with text-heavy baselines (credits, login) via
-  `compare_symbol_render.py`.
+  `#254489` labels and black `by`. Its `rmsDelta` remains comparatively high
+  because OpenFL's DejaVu substitution and browser text rasterization differ
+  from Animate's Verdana export; the threshold locks in the current appearance.
+- [x] Preserve static-text `left` offsets when applying authored transforms.
+  XFL stores a text field's local layout offset separately from its element
+  matrix. `createStaticText` previously assigned that offset to `TextField.x`,
+  after which `applyElementProperties` replaced the complete transform matrix
+  and discarded it. In the credits popup this moved every `by` field about 65
+  pixels left into the preceding label; it was not Verdana/DejaVu metric drift.
+  Static text now composes the local offset as `matrix * translate(left, 0)`,
+  including scaled or rotated matrices, with a reduced regression fixture in
+  `PR2MovieClipRuntimeTest.testStaticTextHonorsAuthoredAttributes`. Font metrics
+  and kerning may still produce small visual differences and should only be
+  adjusted when a focused comparison demonstrates a remaining discrepancy.
 - [ ] Remove authored-symbol fallbacks from reachable screens. Expand the asset
   manifest only as screens are ported, commit generated output, and keep normal
   builds independent of Adobe Animate.

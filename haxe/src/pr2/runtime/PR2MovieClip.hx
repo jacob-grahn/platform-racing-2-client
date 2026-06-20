@@ -562,7 +562,10 @@ class PR2MovieClip extends Sprite {
 		field.defaultTextFormat = format;
 		field.setTextFormat(format);
 		field.text = element.text == null ? "" : element.text;
-		field.x = element.left == null ? 0 : element.left;
+		// `left` is local text-layout geometry, not a parent-space position. It is
+		// composed with the authored element matrix in applyElementProperties so
+		// assigning that matrix cannot discard the offset.
+		field.x = 0;
 		field.y = 0;
 		field.width = element.width == null ? Math.max(1, field.textWidth + 4) : element.width + 4;
 		field.height = element.height == null ? Math.max(1, field.textHeight + 4) : element.height + 4;
@@ -648,14 +651,19 @@ class PR2MovieClip extends Sprite {
 
 		if (element.matrix != null) {
 			var matrix = element.matrix;
+			var a = matrix.a == null ? 1 : matrix.a;
+			var b = matrix.b == null ? 0 : matrix.b;
+			var localTextLeft = element.type == "DOMStaticText" && element.left != null ? element.left : 0;
 			child.transform.matrix = new Matrix(
-				matrix.a == null ? 1 : matrix.a,
-				matrix.b == null ? 0 : matrix.b,
+				a,
+				b,
 				matrix.c == null ? 0 : matrix.c,
 				matrix.d == null ? 1 : matrix.d,
-				matrix.tx == null ? 0 : matrix.tx,
-				matrix.ty == null ? 0 : matrix.ty
+				(matrix.tx == null ? 0 : matrix.tx) + a * localTextLeft,
+				(matrix.ty == null ? 0 : matrix.ty) + b * localTextLeft
 			);
+		} else if (element.type == "DOMStaticText" && element.left != null) {
+			child.x = element.left;
 		}
 
 		if (element.color != null) {

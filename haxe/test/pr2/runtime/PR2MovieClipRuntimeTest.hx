@@ -329,6 +329,9 @@ class PR2MovieClipRuntimeTest {
 		assertClose(-0.05, format.letterSpacing, "authored letterSpacing is applied");
 		assertClose(2.0, format.leading, "authored lineSpacing maps to TextFormat leading");
 		assertEquals(TextFormatAlign.RIGHT, format.align, "authored alignment is applied");
+		var styledMatrix = styled.transform.matrix;
+		assertClose(22, styledMatrix.tx, "static-text left is composed with matrix scale into tx");
+		assertClose(23, styledMatrix.ty, "static-text left is composed with matrix skew into ty");
 
 		// Element with no fillColor/letterSpacing must keep Animate's defaults:
 		// black text and unset (null) letterSpacing rather than a parsed value.
@@ -367,9 +370,10 @@ class PR2MovieClipRuntimeTest {
 								type: "DOMStaticText",
 								name: "styled",
 								text: "Credits",
-								left: 0,
+								left: 6,
 								width: 80,
 								height: 16,
+								matrix: {a: 2, b: 0.5, tx: 10, ty: 20},
 								textAttrs: {
 									face: "Verdana",
 									size: 9.0,

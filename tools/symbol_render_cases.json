@@ -22,7 +22,7 @@
       "thresholdRms": 24
     },
     {
-      "_comment": "Pure static-text symbol: validates that createStaticText applies the authored #254489 fillColor (vs. black for the 'by' column). rmsDelta runs high because the Verdana->DejaVu advance-width drift collides the hand-positioned label/by/value columns (a separate open TODO); the threshold locks in current fidelity until that metric fix lands.",
+      "_comment": "Pure static-text symbol: validates authored #254489 labels, black 'by' text, and separate XFL static-text left offsets composed with element matrices.",
       "name": "credits-art-pg1",
       "symbol": "UI/Popups (outside levels)/Credits/artPg1",
       "reference": "vector-art/png/menus/credits_art_pg1@4x.png",
