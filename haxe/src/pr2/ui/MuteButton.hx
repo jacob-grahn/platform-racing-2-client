@@ -2,6 +2,7 @@ package pr2.ui;
 
 import openfl.display.Bitmap;
 import openfl.display.PixelSnapping;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
@@ -26,6 +27,7 @@ class MuteButton extends Sprite {
 	private static var muted:Bool = false;
 
 	private var bitmap:Bitmap;
+	private var waves:Shape;
 
 	public function new() {
 		super();
@@ -35,6 +37,9 @@ class MuteButton extends Sprite {
 		bitmap.scaleX = 1 / MUTE_BUTTON_SCALE;
 		bitmap.scaleY = 1 / MUTE_BUTTON_SCALE;
 		addChild(bitmap);
+
+		waves = createWaves();
+		addChild(waves);
 
 		buttonMode = true;
 		useHandCursor = true;
@@ -66,7 +71,35 @@ class MuteButton extends Sprite {
 	}
 
 	private function applyMutedState():Void {
-		alpha = muted ? 0.7 : 1;
+		waves.visible = !muted;
 		SoundMixer.soundTransform = new SoundTransform(muted ? 0 : 1);
+	}
+
+	private function createWaves():Shape {
+		var shape = new Shape();
+		var graphics = shape.graphics;
+
+		graphics.lineStyle(1, 0x333333, 1);
+		graphics.moveTo(15.1, -6.15);
+		graphics.curveTo(17.6, -3.6, 17.8, -0.6);
+		graphics.lineTo(17.8, -0.05);
+		graphics.curveTo(17.8, 3.4, 15.15, 6.25);
+
+		graphics.lineStyle(1, 0x333333, 0.66);
+		graphics.moveTo(21.15, -8.05);
+		graphics.curveTo(22.3, -6.9, 23.05, -5.55);
+		graphics.lineTo(23.6, -4.55);
+		graphics.curveTo(24.6, -2.45, 24.6, -0.05);
+		graphics.curveTo(24.6, 1.9, 24, 3.65);
+		graphics.curveTo(23.1, 6, 21.15, 8.15);
+
+		graphics.lineStyle(1, 0x333333, 0.33);
+		graphics.moveTo(27.1, -9.95);
+		graphics.lineTo(28.7, -8.15);
+		graphics.curveTo(31.5, -4.4, 31.5, -0.1);
+		graphics.curveTo(31.5, 3.85, 29.35, 7.3);
+		graphics.lineTo(27.1, 10.05);
+
+		return shape;
 	}
 }

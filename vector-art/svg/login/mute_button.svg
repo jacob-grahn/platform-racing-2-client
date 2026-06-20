@@ -125,15 +125,6 @@ L 12 20"/>
 </g>
 </g>
 
-<g id="waves" transform="matrix( 1, 0, 0, 1, 16.6,-10) ">
-<g transform="matrix( 1, 0, 0, 1, 0,0) ">
-<use xlink:href="#MovieClips_Symbol_109_0_Layer0_0_1_STROKES"/>
-
-<use xlink:href="#MovieClips_Symbol_109_0_Layer0_0_2_STROKES"/>
-
-<use xlink:href="#MovieClips_Symbol_109_0_Layer0_0_3_STROKES"/>
-</g>
-</g>
 </g>
 </g>
 </svg>
