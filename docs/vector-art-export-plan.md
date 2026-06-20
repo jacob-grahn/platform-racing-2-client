@@ -124,10 +124,14 @@ At a high level:
 1. Open the FLA/XFL in Animate.
 2. Locate the part container symbol.
 3. `gotoAndStop(partId)` on the part container.
-4. For `primary`, export `colorMC` after `colorMC.gotoAndStop(partId)`.
-5. For `secondary`, export `colorMC2` after `colorMC2.gotoAndStop(partId)`.
+4. For `primary`, export `colorMC` after `colorMC.gotoAndStop(partId)`,
+   staged with the part container's registration matrix.
+5. For `secondary`, export `colorMC2` after `colorMC2.gotoAndStop(partId)`,
+   staged with the same container registration matrix.
 6. For `static`, hide `colorMC` and `colorMC2`, then export the remaining part.
-7. For `composite`, export static art with `colorMC` and `colorMC2` hidden, then overlay the primary and secondary channel symbols before exporting.
+7. For `composite`, export the original part container with `colorMC` and
+   `colorMC2` advanced to the requested frame. This preserves their source
+   transforms and layer order.
 8. Convert SVG outputs to `@4x.png` sprite sheets as a separate deterministic build step.
 
 To run a generated JSFL file through Animate on macOS:

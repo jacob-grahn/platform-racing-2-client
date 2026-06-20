@@ -8,6 +8,7 @@ var ADOBE_SVG_EXPORTER_URI = "file:///Applications/Adobe%20Animate%202024/Adobe%
 var JOBS = [
   {
     "channel": "static",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/001_none/static.svg",
     "frame": 0,
     "hiddenInstances": [
@@ -22,11 +23,11 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "primary",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/001_none/primary.svg",
     "frame": 0,
     "hiddenInstances": [],
@@ -35,11 +36,11 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
     "channel": "secondary",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/001_none/secondary.svg",
     "frame": 0,
     "hiddenInstances": [],
@@ -48,41 +49,24 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
   },
   {
     "channel": "composite",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/001_none/composite.svg",
     "frame": 0,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
+    "hiddenInstances": [],
+    "hiddenLayers": [],
     "id": 1,
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "frame": 0,
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "frame": 0,
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/002_exp/static.svg",
     "frame": 1,
     "hiddenInstances": [
@@ -97,11 +81,11 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "primary",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/002_exp/primary.svg",
     "frame": 1,
     "hiddenInstances": [],
@@ -110,11 +94,11 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
     "channel": "secondary",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/002_exp/secondary.svg",
     "frame": 1,
     "hiddenInstances": [],
@@ -123,37 +107,19 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
   },
   {
     "channel": "composite",
+    "containerSymbol": "Parts/Hats/hatsMC",
     "exportPath": "character/hat/002_exp/composite.svg",
     "frame": 1,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
+    "hiddenInstances": [],
+    "hiddenLayers": [],
     "id": 2,
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "frame": 1,
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "frame": 1,
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
     "symbolName": "Parts/Hats/hatsMC"
   }
 ];
@@ -191,6 +157,17 @@ function selectFrame(timeline, frameIndex) {
 	}
 }
 
+function activeFrame(layer, frameIndex) {
+	for (var i = 0; i < layer.frames.length; i++) {
+		var frame = layer.frames[i];
+		var duration = frame.duration ? frame.duration : 1;
+		if (frame.index <= frameIndex && frameIndex < frame.index + duration) {
+			return frame;
+		}
+	}
+	return null;
+}
+
 function contains(values, value) {
 	for (var i = 0; i < values.length; i++) {
 		if (values[i] == value) {
@@ -198,19 +175,6 @@ function contains(values, value) {
 		}
 	}
 	return false;
-}
-
-function setElementVisibility(elements, hiddenNames, hiddenStates) {
-	if (!elements) {
-		return;
-	}
-	for (var i = 0; i < elements.length; i++) {
-		var element = elements[i];
-		if (element.name && contains(hiddenNames, element.name)) {
-			hiddenStates.push({ target: element, visible: element.visible });
-			element.visible = false;
-		}
-	}
 }
 
 function setElementNamesVisible(elements, names, visible) {
@@ -237,6 +201,39 @@ function setLibraryVisibility(timeline, job, visible) {
 	}
 }
 
+function configureColorInstance(element, layerIndex, elementIndex, frameIndex, states) {
+	states.push({
+		kind: "element",
+		layerIndex: layerIndex,
+		elementIndex: elementIndex,
+		symbolType: element.symbolType,
+		firstFrame: element.firstFrame,
+		loop: element.loop
+	});
+	element.symbolType = "graphic";
+	element.firstFrame = frameIndex;
+	element.loop = "single frame";
+}
+
+function configureLibraryItem(timeline, job, states) {
+	if (job.channel != "composite") {
+		return;
+	}
+	for (var i = 0; i < timeline.layers.length; i++) {
+		var layer = timeline.layers[i];
+		var frame = activeFrame(layer, job.frame);
+		if (!frame || !frame.elements) {
+			continue;
+		}
+		for (var e = 0; e < frame.elements.length; e++) {
+			var element = frame.elements[e];
+			if (element.name == "colorMC" || element.name == "colorMC2") {
+				configureColorInstance(element, i, e, job.frame, states);
+			}
+		}
+	}
+}
+
 function prepareLibraryItem(doc, job) {
 	if (!doc.library.editItem(job.symbolName)) {
 		throw new Error("Could not edit library item: " + job.symbolName);
@@ -244,21 +241,36 @@ function prepareLibraryItem(doc, job) {
 	var editDoc = fl.getDocumentDOM();
 	var timeline = editDoc.getTimeline();
 	selectFrame(timeline, job.frame);
-	setLibraryVisibility(timeline, job, false);
+	if (job.channel == "static") {
+		setLibraryVisibility(timeline, job, false);
+		editDoc.exitEditMode();
+		return [];
+	}
+	var states = [];
+	configureLibraryItem(timeline, job, states);
 	editDoc.exitEditMode();
+	return states;
 }
 
-function restoreLibraryItem(doc, job) {
-	if (job.hiddenLayers.length == 0 && job.hiddenInstances.length == 0) {
-		return;
-	}
+function restoreLibraryItem(doc, job, states) {
 	if (!doc.library.editItem(job.symbolName)) {
 		throw new Error("Could not re-edit library item for restore: " + job.symbolName);
 	}
-	var editDoc = fl.getDocumentDOM();
-	var timeline = editDoc.getTimeline();
-	setLibraryVisibility(timeline, job, true);
-	editDoc.exitEditMode();
+	var timeline = fl.getDocumentDOM().getTimeline();
+	if (job.channel == "static") {
+		setLibraryVisibility(timeline, job, true);
+		fl.getDocumentDOM().exitEditMode();
+		return;
+	}
+	for (var i = states.length - 1; i >= 0; i--) {
+		var state = states[i];
+		var frame = activeFrame(timeline.layers[state.layerIndex], job.frame);
+		var element = frame.elements[state.elementIndex];
+		element.symbolType = state.symbolType;
+		element.firstFrame = state.firstFrame;
+		element.loop = state.loop;
+	}
+	fl.getDocumentDOM().exitEditMode();
 }
 
 function exportCurrentView(outputUri) {
@@ -268,18 +280,34 @@ function exportCurrentView(outputUri) {
 	fl.runScript(ADOBE_SVG_EXPORTER_URI, "exportSVG", "", outputUri, true, "", false, false, 0, 0);
 }
 
-function stageSymbol(doc, symbolName, frame) {
-	doc.library.addItemToDocument({ x: 0, y: 0 }, symbolName);
+function stageSymbol(doc, job) {
+	var registrationMatrix = null;
+	if (job.channel == "primary" || job.channel == "secondary") {
+		doc.library.addItemToDocument({ x: 0, y: 0 }, job.containerSymbol);
+		var reference = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
+		if (!reference) {
+			throw new Error("Could not stage registration reference: " + job.containerSymbol);
+		}
+		registrationMatrix = reference.matrix;
+		doc.deleteSelection();
+	}
+	doc.library.addItemToDocument({ x: 0, y: 0 }, job.symbolName);
 	var instance = doc.selection && doc.selection.length > 0 ? doc.selection[0] : null;
 	if (!instance) {
-		throw new Error("Could not stage library item: " + symbolName);
+		throw new Error("Could not stage library item: " + job.symbolName);
+	}
+	if (registrationMatrix != null) {
+		var matrix = instance.matrix;
+		matrix.tx = registrationMatrix.tx;
+		matrix.ty = registrationMatrix.ty;
+		instance.matrix = matrix;
 	}
 	try {
 		instance.symbolType = "graphic";
 	} catch (e) {
 	}
 	try {
-		instance.firstFrame = frame;
+		instance.firstFrame = job.frame;
 	} catch (e) {
 	}
 	try {
@@ -290,24 +318,21 @@ function stageSymbol(doc, symbolName, frame) {
 
 function exportJob(doc, job) {
 	log("exporting " + job.exportPath + " from " + job.symbolName + " frame " + job.frame);
-	prepareLibraryItem(doc, job);
+	var states = prepareLibraryItem(doc, job);
 	doc = fl.getDocumentDOM();
 	try {
 		doc.selectAll();
 		doc.deleteSelection();
 	} catch (e) {
 	}
-	stageSymbol(doc, job.symbolName, job.frame);
-	for (var i = 0; i < job.overlays.length; i++) {
-		stageSymbol(doc, job.overlays[i].symbolName, job.overlays[i].frame);
-	}
+	stageSymbol(doc, job);
 	exportCurrentView(job.outputUri);
 	try {
 		doc.selectAll();
 		doc.deleteSelection();
 	} catch (e) {
 	}
-	restoreLibraryItem(doc, job);
+	restoreLibraryItem(doc, job, states);
 }
 
 function run() {
@@ -322,4 +347,14 @@ function run() {
 	log("complete: " + JOBS.length + " SVG exports");
 }
 
-run();
+try {
+	run();
+} catch (error) {
+	var message = error && error.message ? error.message : String(error);
+	fl.trace("[PR2 SVG Export] ERROR: " + message);
+	try {
+		FLfile.write("file:///tmp/pr2-svg-export-error.log", message);
+	} catch (writeError) {
+	}
+	throw error;
+}

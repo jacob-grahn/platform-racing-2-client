@@ -1,4 +1,6 @@
 {
+  "atlasGroup": "character/head/secondary",
+  "category": "character",
   "channel": "secondary",
   "frames": {
     "001_classic": {
