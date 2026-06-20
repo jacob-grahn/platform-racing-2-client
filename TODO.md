@@ -1,408 +1,195 @@
 # Platform Racing 2 Haxe/OpenFL Port TODO
 
-Working roadmap for porting the original Flash Platform Racing 2 client to a
-Haxe/OpenFL browser build. The end goal is a faithful reproduction of the
-original game — matching gameplay/physics timing, level and character behavior,
-and visuals — not a loose remake. Keep this file focused on what moves the port
-forward; command references belong in `README.md`, and asset-pipeline details in
-`docs/vector-art-export-plan.md`.
+This file tracks only unfinished work. The target is a 1:1 port of the original
+Flash client, not a compatible remake: behavior, 27 FPS timing, protocol,
+screen flow, layout, animation, sound, and failure states should match the AS3
+and XFL sources. Completed work belongs in git history and `README.md`.
 
-## fl UI Components
+## Parity Rules
 
-Port of the Adobe `fl.controls.*` components placed in the original assets. These
-render through `PR2MovieClip.createComponent`; until ported, instances fall back
-to inert placeholders (a grey box or a non-interactive drawing). Follow the
-`FlButton` pattern: real skin symbols, 9-slice to size, swap per state, plus the
-properties/events the source actually drives.
+- Treat `flash/**/*.as` and `flash/platform-racing-2-xfl/` as the behavioral and
+  visual specification. Do not silently simplify a workflow because the happy
+  path works.
+- Keep browser transport adaptations behind narrow wrappers. WebSocket and
+  same-origin HTTP proxy requirements may differ from Flash; commands,
+  responses, state transitions, and visible behavior should not.
+- Every ported feature needs deterministic state/protocol coverage and, when it
+  is visible, a representative Flash/OpenFL screenshot comparison.
+- Temporary drawings, record-only actions, harness redirects, hard-coded data,
+  and unsupported buttons are parity gaps and must remain listed here.
+- A task is complete only when the real user flow works. Rendering the art or
+  recording the requested action is not completion.
 
-- [x] **Button** (`fl.controls.Button`, 129 instances) — `pr2.runtime.FlButton`,
-      covered by `FlButtonTest`.
-- [x] **CheckBox** (`fl.controls.CheckBox`, 58 instances) — `pr2.runtime.FlCheckBox`:
-      real `CheckBox_*Icon` skins swapped per state, `selected`/`label`/`enabled`
-      get/set, click toggle, silent programmatic set, `CHANGE` on user click.
-- [x] **ComboBox** (`fl.controls.ComboBox`, 17 instances) — `pr2.runtime.FlComboBox`:
-      `ComboBox_*Skin` background, `FlDataProvider` (`addItem`/`removeAll`/`length`),
-      `prompt`, `selectedIndex`/`selectedItem`, open/close list, `CHANGE` on pick.
-- [x] **TextInput** (`fl.controls.TextInput`, 34 instances) — `pr2.runtime.FlTextInput`:
-      inner editable `TextField` over the nine-sliced `TextInput_*Skin`, with
-      `text`/`editable`/`displayAsPassword`/`restrict`/`maxChars` and re-broadcast `CHANGE`.
-- [x] **TextArea** (`fl.controls.TextArea`, 8 instances) — `pr2.runtime.FlTextArea`:
-      multiline `TextField` over `TextArea_upSkin` plus an attached `FlUIScrollBar`;
-      `text`/`htmlText`/`append`/`editable`.
-- [x] **Slider** (`fl.controls.Slider`, 6 instances) — `pr2.runtime.FlSlider`:
-      `SliderTrack`/`SliderThumb` skins, drag + track-click, `value`/`minimum`/
-      `maximum`/`snapInterval`, `FlSliderEvent` (CHANGE == `Event.CHANGE`, THUMB_*).
-- [x] **List** (`fl.controls.List`, 1 instance) — `pr2.runtime.FlList`: `List_skin`
-      border, `FlDataProvider` rows with selection highlight + overflow scrollbar,
-      `selectedIndex`/`selectedItem`, `CHANGE`. (Lobby listing stays custom-ported.)
-- [x] **UIScrollBar** (`fl.controls.UIScrollBar`, 1 instance) — `pr2.runtime.FlUIScrollBar`:
-      `ScrollTrack`/`ScrollThumb`/`ScrollArrow*` skins, draggable thumb + arrow steps,
-      `scrollTarget`/`setScrollProperties`/`scrollPosition`, `SCROLL`. Drives FlTextArea.
+## Current Priority: Real Login-to-Race Flow
 
-All seven render through `PR2MovieClip.createComponent`, share the `FlSkin`
-nine-slice helper, and are covered by `FlComponentsTest`.
+The next milestone is one uninterrupted real-server session: login, lobby,
+select/join a level, race with remote players, finish, and return to the lobby.
+The persistent `LobbySocket` must survive every page transition as Flash's
+`Main.socket` did.
 
-(ColorPicker / CellRenderer / ScrollBar appear only as skins internal to the
-above — no standalone instances to migrate.)
+- [ ] Finish login and session establishment.
+  - Handle `loginSuccessful` and all login failure/socket-close commands, apply
+    returned account/server state, transfer the live socket to normal command
+    routing, and enter `LobbyPage` for both account and guest login.
+  - Port remembered-account selection/deletion, secure credential persistence,
+    forgot-password, account-creation follow-up, server refresh/selection, and
+    exact cancel/retry/error behavior from `flash/menu`.
+  - Replace status text and click-to-cycle stand-ins with the authored popup and
+    component behavior; cover guest, member, bad credentials, full/down server,
+    disconnect, reconnect, and canceled login.
+- [ ] Replace the campaign-harness redirect with the real level-entry protocol.
+  - Port slot selection, `CourseMenu`, access checks, password/private flows,
+    spectating, room commands, loading/cancel/error states, and game-page
+    transition from `flash/level_browser`, `flash/page/GamePage.as`, and
+    `flash/gameplay/Game.as`.
+  - Load the level selected by the server without reloading the browser or
+    opening `?screen=campaign`; preserve the live socket and lobby state.
+- [ ] Port multiplayer race synchronization.
+  - Implement local update emission, remote character creation/interpolation,
+    player join/leave, positions, rotations, stats, hats, items/effects, block
+    changes, countdown/start, timer, finish order, spectating, and disconnect.
+  - Verify command names, field order, delimiters, update cadence, and rounding
+    against the AS3 client and captured server traffic.
+- [ ] Port the complete in-game shell and race lifecycle.
+  - Implement `Course`, `GamePage`, countdown, race chat, minimap, stats, item
+    display, hearts, drawing info, music selection, quit flow, finish page,
+    experience gain, prizes, artifact/special-event behavior, and return to
+    lobby.
+  - Export or wire the authored `FinishedPageGraphic`, `ExpGainGraphic`,
+    `DrawingInfoGraphic`, `StatsDisplayGraphic`, `RaceChatGraphic`,
+    `MiniMapGraphic`, `MiniMapDot`, `PrizePopupGraphic`, `QuitButtonGraphic`, and
+    `MusicSelectionGraphic`; no generic HUD substitutes in parity captures.
 
-## Core UI Visual Parity — Remaining
+Acceptance: an account and a guest can each enter a real race over WebSocket,
+see synchronized remote players, finish or quit, and return to the lobby without
+a page reload. A deterministic transcript test verifies the full command/state
+sequence and screenshots cover level entry, countdown, racing, and finish.
 
-The core controls are functional, but their OpenFL rendering still differs
-noticeably from the Flash client. Treat the exported Flash artwork and
-Flash/OpenFL comparison screenshots as the source of truth; avoid replacing
-these controls with generic approximations.
+## Gameplay Fidelity
 
-- [x] Bring buttons to visual parity with Flash.
-  - Match the original up/over/down/disabled skins, nine-slice behavior, label
-    font/size/color, text centering, padding, and enabled/disabled treatment.
-  - Check both `FlButton` instances and custom menu/lobby buttons at their
-    actual authored sizes, including hover and pressed screenshots.
-  - `FlButton` uses all authored component skins (including emphasized and
-    disabled), Flash's five-pixel label inset, and disabled label color.
-    Timeline-authored `symbolType="button"` assets now remain on up and switch
-    to their authored over/down frames from mouse events instead of being frozen
-    on frame 1; deterministic tests cover both button paths.
-- [x] Bring popups to visual parity with Flash.
-  - Match the original popup panels, borders/shadows, title and body typography,
-    spacing, close/confirm controls, modal positioning, and dimming or overlap
-    behavior where present.
-  - Cover `Popup`, `InfoPopup`/`HoverPopup`, message/confirm/send-message,
-    uploading, course-menu, and loadouts variants with representative
-    Flash/OpenFL screenshot comparisons.
-  - Modal and info variants use the authored popup symbols and Flash placement,
-    fade, overlay, typography, and controls. Uploading restores the authored
-    easing progress bar; send-message restores focus and rich-format help; and
-    loadouts now uses `GetLevelsPopupGraphic`/`PresetListingGraphic` instead of
-    a generic drawn panel. `popup-parity.json` captures the reachable variants.
-- [x] Bring text inputs to visual parity with Flash.
-  - Match `TextInput_*Skin` scaling, inset editable bounds, font metrics,
-    baseline, padding, selection/caret rendering, password display, and
-    editable/disabled/focused states.
-  - Verify short, long, empty, and focused values at the authored login and
-    lobby control sizes.
-  - `FlTextInput` now uses the authored one-pixel skin scaling and focus rect,
-    Flash's five-pixel horizontal/one-pixel vertical text inset, Arial 11 font
-    metrics and state colors, native selection/caret/password rendering, and
-    preserves `editable` across disabled/enabled transitions. Deterministic
-    coverage locks down geometry, focus, and state behavior;
-    `text-input-parity.json` captures empty, short, password, and long/focused
-    login values, while `lobby-parity.json` covers the authored search size.
-- [x] Fix ComboBox interaction to behave like a real dropdown.
-  - Clicking the closed control must open a visible option list without changing
-    selection; clicking a row selects that row, dispatches one `CHANGE`, and
-    closes the list. Clicking outside or pressing Escape closes without a
-    selection change.
-  - Remove the current behavior where clicking the closed control immediately
-    advances to the next item.
-  - Add deterministic tests for open, choose, outside-close, Escape-close,
-    repeated clicks, disabled state, and list placement near stage edges.
-- [x] Bring ComboBox dropdown visuals to parity with Flash.
-  - Match closed-control skins and typography plus the open list's border,
-    row height, padding, selected/hover states, scrollbar, width, stacking,
-    and above/below placement.
-  - Capture parity screenshots for the Search tab's mode, order, and direction
-    dropdowns in closed, open, hovered, and selected states.
-  - Authored `List_skin`, `CellRenderer_*` states, and scrollbar artwork now
-    render with Flash row metrics, padding, row-count clipping, selected-row
-    scrolling, stage-top stacking, and edge-aware placement;
-    `combo-box-parity.json` captures the Search-tab states.
+- [ ] Correct character-part vertical registration. Against
+  `test/baselines/flash/08_standing.jpg`, normalized to the feet line, feet match
+  but body is about 7 px and head about 11 px too high. Sizes already match, so
+  fix registration/spacing without rescaling the parts. Recheck default,
+  recolored, mixed, and tricky outfits in standing, running, crouching, jumping,
+  swimming, frozen, and bumped states.
+- [ ] Audit the harness physics against `character/LocalCharacter.as` frame by
+  frame rather than treating existing mechanic fixtures as final parity.
+  Compare acceleration, deceleration, stat formulas, jump/crouch, water, ice,
+  rotation, collision ordering, corner resolution, moving blocks, item timing,
+  hurt/freeze recovery, and finish detection at 27 FPS.
+- [ ] Port gameplay behavior not represented by the local harness: hats and hat
+  powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
+  rank progression, race modes, captcha, and server-authoritative interactions.
+- [ ] Validate real level decoding/rendering across read modes and representative
+  legacy levels, including malformed or old payloads, all background effects,
+  drawing/text ordering, stamps, block options, rotations, and object limits.
 
-Acceptance: buttons, popups, text inputs, and dropdowns match representative
-Flash baselines at authored sizes and interaction states; opening a ComboBox
-never changes its value until the user explicitly chooses an option.
+Acceptance: scripted input and server transcripts produce matching Flash debug
+state at agreed checkpoints, and representative race screenshots stay within
+documented image-diff thresholds.
 
-## Direction
+## Lobby and Account Completion
 
-- End goal: a faithful port of the original Flash game. Same physics/timing,
-  same level and character behavior, visuals that match the original. Pixel-level
-  parity is pursued through the Flash-vs-OpenFL comparison harnesses (screenshots
-  + debug state), not judged by eye.
-- Primary target: browser/HTML5 with Haxe + OpenFL. Secondary: Android and iOS
-  after browser parity.
-- Strategy: build the smallest playable, deterministic harness first, then grow
-  fidelity outward (more blocks, items, real levels, real server). Approximate
-  visuals are acceptable as intermediate milestones, but every approximation is
-  a tracked gap to close, not the destination.
-- Normal development and CI must not require Adobe Animate; it is only a
-  migration tool for regenerating source assets.
-- Testing order: deterministic fixture runs, then Flash/OpenFL screenshot and
-  debug-state comparisons, then real-server checks.
+The lobby shell and tabs exist, but a number of interactions are currently
+record-only or fixture-driven. Audit every reachable control against the AS3;
+do not infer completion from the presence of a tab or exported symbol.
 
-## Current Focus
+- [ ] Replace `LobbyPopups.lastRequest` stand-ins with functional player,
+  guest-player, guild, level-info/report, external-link, admin/moderation, and
+  social-action popups, including their network requests and refresh behavior.
+- [ ] Implement the bottom-strip destinations: options (quality, controls,
+  songs), store/vault and quantity/purchase flows, credits, and level editor.
+  Preserve guest/member visibility and logout side effects.
+- [ ] Verify every Chat, PMs, Players, Account, Campaign, listing, Favorites, and
+  Search operation against real HTTP/socket responses. Cover paging, stale and
+  out-of-order responses, loading/error/empty states, permissions, unread
+  updates, room changes, link handling, and state restoration after a race.
+- [ ] Complete account/profile workflows: password/email changes, outfit and
+  loadout persistence, part information, guild actions, friend/follow/ignore,
+  moderation controls, rank tokens, hotkeys, and server-driven refreshes.
+- [ ] Replace any remaining synthetic lobby visuals/data with authored symbols
+  and exact Flash typography, masks, scroll behavior, hover/focus states, and
+  stacking. Add focused baselines for every popup and non-empty/error state,
+  not only the current shell/tab fixtures.
 
-The next push is the full lobby port. End state: a functional post-login lobby
-that looks and feels like the Flash client, uses the original lobby artwork, and
-has complete left/right tab behavior.
+Acceptance: every lobby control performs its original operation against the
+real services, all role/guest variants are covered, and no reachable action is
+implemented only as a test marker.
 
-1. Export and wire the lobby background/bottom/tab/page assets.
-2. Replace `LobbyStubPage` with a real two-pane `LobbyPage`.
-3. Port tab selection/memory/overlap logic, then complete every lobby tab.
-4. Keep server/API/WebSocket differences behind small wrappers so lobby pages
-   can preserve the original AS3 behavior.
+## Level Editor and Level Management
 
-## Lobby Port — Current Push
+- [ ] Port `LevelEditor`, `LevelEditorMenu`, sidebars, tools, drawing/text/stamp
+  placement, block options, selection/deletion, undo-equivalent behavior,
+  camera/zoom, settings, hats/items/music menus, and test-course transition.
+- [ ] Port load/save/upload/delete/report-management flows and their validation,
+  access rules, popups, server formats, loading/errors, and return navigation.
+- [ ] Round-trip representative original level payloads without semantic drift;
+  compare editor and test-course screenshots with Flash at the same camera and
+  selected-tool state.
 
-Reference source: `flash/lobby/Lobby.as`, `LobbyLeft.as`, `LobbyRight.as`,
-`LobbySide.as`, `flash/ui/LobbyTab.as`, `TabsHolder.as`, `flash/chat`,
-`flash/social`, `flash/level_browser`, and `flash/player_profile/AccountInfo.as`.
+Acceptance: a user can load, edit, test, save, and reopen a real level with the
+same serialized meaning and visible result as Flash.
 
-- [ ] Export and rasterize lobby artwork.
-  - Include `LobbyGraphic`, `LobbyBottomButtonsGraphic`, `LobbyTabGraphic`,
-    `ChatGraphic`, `MessagesGraphic`, `MessagesItemGraphic`,
-    `PlayersTabListGraphic`, `PlayersTabListItemGraphic`, `AccountInfoGraphic`,
-    `SearchGraphic`, level listing/item graphics, `PageNavigation` pieces, and
-    popups needed by the lobby (`StorePopupGraphic`, options/credits/message
-    popups as they become reachable).
-  - Add a dedicated lobby/menu export category to the JSFL/raster manifest, keep
-    generated PNG/atlas files committed, and document regeneration in README or
-    the vector export plan.
-  - Verify `LobbyGraphic` and `LobbyBottomButtonsGraphic` visually against Flash
-    before building UI on approximate shapes.
-- [x] Replace `LobbyStubPage` with the real lobby shell.
-  - Port `Lobby`, `LobbyLeft`, `LobbyRight`, and `LobbySide` layout: background,
-    left pane at `(3, 3)` sized `194 x 394`, right pane at `(200, 3)` sized
-    `347 x 356`, bottom button strip, and stage/music/quality side effects that
-    matter in OpenFL.
-  - Wire post-login handoff to the real lobby while preserving logout back to
-    `LoginPage`.
-  - Implement bottom actions to parity: logout, level editor entry placeholder
-    or real handoff, Kongregate/more-games link behavior, options, vault/store,
-    credits, and hover popup behavior.
-- [x] Port `LobbyTab` and `TabsHolder`.
-  - Match Flash tab sizing from text width, `up`/`over`/`selected` states,
-    hover-to-front behavior, compressed tab positioning when width exceeds the
-    pane, and selected tab memory by holder id (`lobbyLeft`, `lobbyRight`,
-    `playerLists`).
-  - Add deterministic tests for initial selected tabs, click/hover ordering,
-    remembered tab restoration, and guest/member tab differences.
-- [x] Complete left pane tab: Chat.
-  - Port room selection, send/join buttons, enter-key handling, lock-to-bottom
-    scrolling, info hover popup, `set_chat_room` socket commands, link handling,
-    and pause/update toggle behavior.
-  - Render incoming chat records through the original HTML/name formatting and
-    preserve scroll behavior while new messages arrive.
-- [x] Complete left pane tab: PMs.
-  - Port message list loading (`messages_get.php`), paging, scrollbar,
-    send-message popup, delete/report/delete-all flows, unread notification
-    badge behavior, and error/loading states.
-  - Preserve guest/member availability: PMs tab only appears for logged-in
-    accounts (`Main.group > 0`).
-- [x] Complete left pane tab: Players.
-  - Port nested `PlayersTab` tabs: Online, Friends, Following, Ignored, and the
-    guest Guilds view.
-  - Implement list loading, item rendering, player/guild popup hooks, online
-    status/rank/hat counts, following/friend/ignore actions, and nested tab
-    memory under `playerLists`.
-- [x] Complete left pane tab: Account.
-  - Port customize-info socket flow, character preview using `CharacterDisplay`,
-    part/color selectors, stats selector, rank token up/down, guild display,
-    loadouts popup entry, outfit hotkeys, and `set_customize_info` writes.
-  - Keep account changes synchronized with level access checks and lobby/player
-    display refreshes.
-- [x] Complete right pane tab: Campaign.
-  - Integrate the existing campaign list and level-data clients into the lobby
-    listing UI, including the Flash campaign page formula
-    `((server_id + day) % 6) + 1`, six-page vertical navigation, list caching,
-    level access checks, and right-room socket commands.
-  - Selecting a level should open the original-style level info/course menu and
-    start/load the selected level path that exists today.
-- [x] Complete right pane tabs: All Time Best, Week's Best, Newest, Favorites.
-  - Port `LevelListing` page navigation, list hash validation, loading/error
-    states, three-column level item layout, page highlight commands, memory of
-    page numbers, favorite-only availability, and `set_right_room` behavior.
-- [x] Complete right pane tab: Search.
-  - Port search controls, mode/order/direction dropdowns, enter-key search,
-    blank/id/page guards, POST request to `search_levels.php`, persisted search
-    state, and `LobbyRight.lookupUser` / `lookupLevel` hooks from player/level
-    popups.
-- [x] Port shared lobby UI/services needed by the tabs.
-  - Add Haxe wrappers for `Main.group`, logged-in user/server metadata,
-    `Memory`, `SecureData`, `CommandHandler`, socket command dispatch, URLLoader
-    POST/GET JSON helpers, `PageNavigation`, `CustomScrollBar`, loading
-    graphics, hover/message/confirm/uploading popups, and HTML text/link
-    handling.
-- [x] Test lobby parity.
-  - Add OpenFL sequences for post-login lobby boot, left/right tab switching,
-    tab memory after leaving/returning, campaign/search list load via dev proxy,
-    chat room command emission, PM/account loading states, and bottom buttons.
-  - Add screenshot comparisons for the empty lobby shell, tab selected/hover
-    states, campaign listing, search controls, PM list, players list, and account
-    customization view against Flash baselines.
+## Audio
 
-Acceptance: after login, the user lands in a lobby that visually matches the
-original, every visible tab can be selected and performs its Flash-equivalent
-workflow, network-backed tabs use the appropriate real/proxy endpoints, and
-automated sequences cover the main lobby workflows.
+- [ ] Inventory and extract every music and sound asset referenced by
+  `flash/sounds`, `flash/ui/GameSound.as`, gameplay, menus, and timelines while
+  preserving loop points, volume, and linkage identity.
+- [ ] Port `SoundEffects`, music selection, mute/options persistence, overlapping
+  effect rules, page/race transitions, and stop/fade behavior.
+- [ ] Add the smallest browser-unlock layer needed for autoplay policy while
+  preserving Flash behavior after the first user gesture; verify timing in
+  intro, lobby, gameplay, items, and finish flow.
 
-## Character Rendering — Remaining
+## Runtime and Visual Coverage
 
-Keep character rendering in service of the playable harness and faithful
-appearance, not an open-ended art project.
+- [ ] Audit generated timelines against Flash for masks, filters, blend modes,
+  color transforms, nested frame scripts, sound frames, dynamic text/font
+  embedding, buttons, nine-slice scaling, and unload/disposal behavior. Add a
+  reduced fixture for every runtime fix.
+- [ ] Remove authored-symbol fallbacks from reachable screens. Expand the asset
+  manifest only as screens are ported, commit generated output, and keep normal
+  builds independent of Adobe Animate.
+- [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
+  stage size for default, hover, pressed, focused, disabled, loading, populated,
+  empty, and error states. Keep visual metrics alongside baselines so “looks
+  close” is not the acceptance criterion.
+- [ ] Audit cleanup across repeated login/lobby/race/editor transitions: event
+  listeners, timers, sockets, bitmap data, audio, and display-list references
+  must not leak or duplicate behavior.
 
-- [x] Finish one full customizable character.
-  - Separate static/primary/secondary layers; independent primary/secondary
-    tinting; composite layer kept for preview/debug/fallback.
-  - Verify against Flash for representative outfits.
-- [x] Compare representative character screenshots against Flash.
-  - Default outfit; primary + secondary color change; hat/head/body/feet mix;
-    known tricky parts (cheese hat, Fred/body-specific placement).
-- [x] Fix part fill/outline z-order. The static line-art was inserted at the
-      back of each part clip, so the `colorMC`/`colorMC2` fills drew on top of it
-      and hid the internal outline detail (eyes/mouth/chin); because the fill
-      silhouette is shorter than the outline, the bottom outline poked out and the
-      fill looked shifted up ~10px. `renderLayeredPartSlot` now brings the static
-      layer to the front after placing fills (`bringAtlasLayerToFront`), matching
-      the original Flash order (line-art on top, fills behind). Character channel
-      exports now use the part container's registration matrix. Composites stage
-      the requested fill frames at that same registration point before placing
-      the static art above them, so fills align and line art retains its source
-      ordering without relying on nested movie-clip playback during SVG export.
-- [ ] Parts sit too high vs the shipped game (head ~11px, body ~7px; feet match).
-      Measured against `08_standing.jpg`, normalized to the feet line:
-      feet -11..0 (orig -12..0, ✓), body -42..-23 (orig -36..-16), head -64..-50
-      (orig -53..-39). Part *sizes* match (widths/heights identical) — only
-      vertical *position* is off, and the error grows with height above the feet
-      (~27% vertical spacing expansion). Tools used: `tools/crop_zoom.py`
-      (added), band/width measurement scripts, and the per-channel atlas JSON
-      under `vector-art/atlases/character/`.
+## Test and Release Matrix
 
-Acceptance: customization works in the harness; common outfits match Flash
-closely; animation-state switching stays compatible with the MovieClip runtime.
+- [ ] Add one command that runs deterministic unit tests, protocol transcript
+  tests, an HTML5 build, and the required OpenFL parity sequences, with useful
+  artifacts on failure.
+- [ ] Add recorded/offline fixtures for all HTTP and socket workflows so CI does
+  not depend on production PR2 services; keep separate opt-in real-server smoke
+  tests that cannot mutate accounts or levels unexpectedly.
+- [ ] Verify Chrome, Firefox, and Safari keyboard/focus, rendering, WebSocket,
+  audio, storage, and lifecycle behavior. Profile long sessions only after
+  behavior is correct, then optimize without changing parity.
+- [ ] Prepare the browser release path: production proxy/WebSocket configuration,
+  HTTPS, cache/version strategy, preload/error handling, diagnostics, and a
+  public test build.
+- [ ] After browser parity, port touch controls and package Android/iOS. Mobile
+  layout adaptations must not alter the canonical 550x400 game coordinates or
+  browser behavior.
 
-## Vector Renderer — Remaining
+## Final 1:1 Audit
 
-`pr2.runtime.VectorShapeRenderer` translates XFL `DOMShape` edges/styles into
-OpenFL `Graphics` calls (OpenFL rasterizes). Reference: edge coords are raw XFL
-twips / 20 = px (DPI-independent); commands `!` moveTo, `|`/`/` lineTo, `[`/`]`
-quadTo, coords decimal or hex fixed-point (`#13.FB`). Ruffle/`xfl2svg` are
-algorithm references only. The raster asset path remains the fallback for any
-symbol the renderer cannot yet reproduce faithfully.
+- [ ] Build a source-class coverage inventory mapping every first-party AS3
+  class and linkage to its Haxe implementation, deliberate platform adapter, or
+  verified unreachable/dead status. An exported asset alone does not count as a
+  class port.
+- [ ] Walk every original user flow and role: guest, member, moderator/admin
+  where testable, login failures, lobby/social/account/store, level browsing,
+  racing/spectating, editor/management, disconnect/reconnect, and logout.
+- [ ] Document only unavoidable browser differences, with evidence that each is
+  platform-required rather than an implementation shortcut.
 
-Comparison harness: `tools/compare_symbol_render.py` renders each case symbol
-through the `?screen=symbol` vector path and scores it against the Adobe `@4x`
-PNG. Cases and thresholds live in `tools/symbol_render_cases.json`.
-
-- [x] Close stamp fill/contour differences so `tree1` and `rock1` thresholds can
-  tighten toward the leaf-symbol level. Filled contours now render as one
-  non-zero-winding path, matching XFL/SWF semantics instead of punching out
-  overlapping contours with OpenFL's even-odd default; both RMS gates are 24.
-
-Acceptance: stamp cases score close enough to tighten their thresholds and
-reduce reliance on raster fallbacks.
-
-## Asset Migration — Remaining
-
-These widen visual coverage toward parity; most can follow the playable harness.
-Regeneration commands live in `README.md` / `docs/vector-art-export-plan.md`.
-
-- [x] Export block overlays / block-piece graphics not covered by tile bitmaps:
-  `ArrowBlockGraphic`, `EggBlockGraphic`, `Arrow2Graphic`, `BrickPieceGraphic`,
-  `CrumblePieceGraphic`, `StartBlockText`.
-- [x] Export remaining gameplay/item effect symbols as timeline-driven assets
-  (not per-frame SVG): `CountdownGraphic`, `EggGraphic`, `HeartGraphic`,
-  `IceWaveGraphic`, `DjinnIceGraphic`, and the `PR2_Graphics_..._fla`
-  jetpack/sword/gunfire/iceWave/superJump/jump/bumped/frozenSolid anims.
-- [ ] Export in-game HUD/page graphics when the harness needs them:
-  `FinishedPageGraphic`, `ExpGainGraphic`, `DrawingInfoGraphic`,
-  `StatsDisplayGraphic`, `RaceChatGraphic`, `MiniMapGraphic`, `MiniMapDot`,
-  `PrizePopupGraphic`, `QuitButtonGraphic`, `MusicSelectionGraphic`.
-- [x] Export editor/menu graphics per screen after the lobby asset pass:
-  `LevelEditorMenuGraphic`, `DrawingPopupGraphic`, `HatPickerGraphic`.
-- [x] Finish the intro animations: verify all 15 Adobe-exported Kongregate
-  symbols are present and pixel-identical in the committed runtime atlas, and
-  validate the recovered `bitmap379.jpg`; covered by
-  `tools/verify_kongregate_intro.py` and the `intro-kongregate` OpenFL sequence.
-- [x] Resolve the five unexported bitmap media entries.
-  - Recover direct JPEG and chunked 32-bit bitmap `bin/*.dat` payloads with
-    `tools/extract_xfl_bitmaps.py`; all five recover under `LIBRARY/Images/`.
-- [x] Leave broad Flash component skins / low-priority UI linkage symbols (247
-  currently deferred: 3 backgrounds, 5 blocks, 41 components, 10 items_effects,
-  140 ui, 48 uncategorized) until a ported screen needs them. The audited set is
-  enforced by `tools/verify_deferred_linkages.py` and excludes symbols already
-  selected by the non-character export manifest.
-
-Acceptance: needed assets ship from committed files; the browser build loads
-them without Animate; regeneration is documented and reproducible.
-
-
-## Level Loading And Rendering
-
-- [x] Add dynamic campaign level choice instead of always loading the first
-  configured level.
-- [x] Expand rendering coverage: backgrounds, stamps/draw objects, text objects,
-  minimap if needed.
-
-Acceptance: selected real levels render all required visual layers and remain
-usable by the local movement harness.
-
-### Server Campaign Level Test Harness
-
-Fetch a real campaign level from pr2hub.com, render it, and drop the character
-in. Reachable via `?screen=campaign`.
-
-- [x] Add user/developer selection for campaign page and level id.
-- [x] Render non-block level content: backgrounds, stamps/draw objects, text
-  objects, and minimap if needed.
-
-## Gameplay Expansion
-
-Add mechanics in small, testable batches after the flat fixture is playable.
-Each should match original PR2 behavior, verified via debug state / comparison.
-
-- [x] Full course rotation behavior.
-- [x] Item: super jump.
-- [x] Item: teleport.
-- [x] Item: speed burst.
-- [x] Item: jet pack.
-- [x] Items: sword, laser gun, mine, ice wave, lightning.
-- [x] Movement edge cases: frozen state, moving/rotating block collisions,
-  corner cases.
-  - [x] Frozen-solid state: immobilization, animation, and timed thaw.
-  - [x] Mine-hit hurt recovery with bumped animation state.
-  - [x] Timed move blocks respect solid/player occupancy; collision snapping
-        uses displayed block edges after course rotation.
-
-Acceptance: each mechanic has a fixture level; debug state exposes enough to
-compare behavior; common movement feels like Flash.
-
-## Networking And Real Server Flow
-
-Don't block local gameplay on this, but keep it moving: browser deployment
-depends on the real gameserver flow.
-
-- [ ] Finish the real post-login flow through lobby, level browser, level
-  selection, and loading one real level.
-
-Acceptance: the browser build reaches a real server path over WebSocket; at
-least one real response is parsed; login feasibility is known before full UI.
-
-## Testing
-
-- [x] Generalize `tools/pr2driver.py` into a common sequence format shared by
-  Flash and OpenFL.
-- [x] Add lobby-focused OpenFL/Flash comparison suites after the first lobby
-  shell lands.
-- [x] Add `intro-flow` OpenFL sequence for Jiggmin render state,
-  `data-pr2-intro-state`, and click-to-skip coverage.
-- [x] Add `level-load-flat` OpenFL sequence for fixture load/debug coverage.
-- [x] Add `finish-race` OpenFL sequence for reaching the fixture finish block.
-- [x] Add `real-server-connect` smoke coverage for server-list parsing,
-  WebSocket URL selection, and login-id socket framing.
-- [x] Kongregate intro art is verified by the committed-asset integrity check
-  and the `intro-kongregate` OpenFL sequence.
-
-Acceptance: one command runs a useful scripted OpenFL sequence; failures produce
-screenshots + debug output that are easy to inspect.
-
-## Later Work
-
-- [ ] Sound and music: extract/import assets, port `SoundEffects`, handle
-  browser autoplay restrictions.
-- [ ] Full UI polish: login shell, lobby, level browser, customization UI,
-  editor shell if needed.
-- [ ] Performance/compatibility: profile browser rendering, optimize after
-  behavior is right, test Chrome/Firefox/Safari/mobile, watch memory across
-  level loads.
-- [ ] Mobile targets: responsive wrapper, touch controls, Android, iOS.
-- [ ] Release readiness: production build, asset cache/versioning, loading/error
-  screens, gameserver WebSocket deploy docs, public test build.
+The port is complete when no reachable behavior is a placeholder or harness
+redirect, the coverage inventory has no unexplained gaps, and deterministic,
+protocol, audio, and visual comparisons demonstrate parity with the Flash
+client.
