@@ -87,7 +87,7 @@ these controls with generic approximations.
     coverage locks down geometry, focus, and state behavior;
     `text-input-parity.json` captures empty, short, password, and long/focused
     login values, while `lobby-parity.json` covers the authored search size.
-- [ ] Fix ComboBox interaction to behave like a real dropdown.
+- [x] Fix ComboBox interaction to behave like a real dropdown.
   - Clicking the closed control must open a visible option list without changing
     selection; clicking a row selects that row, dispatches one `CHANGE`, and
     closes the list. Clicking outside or pressing Escape closes without a

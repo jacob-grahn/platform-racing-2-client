@@ -6,8 +6,10 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.events.FocusEvent;
+import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
+import openfl.ui.Keyboard;
 
 /**
 	Behavioural coverage for the `fl.controls.*` component ports beyond FlButton:
@@ -20,7 +22,7 @@ class FlComponentsTest {
 	public static function main():Void {
 		testCheckBox();
 		testComboBoxModel();
-		testComboBoxUserSelectionDispatchesChange();
+		testComboBoxInteraction();
 		testComboBoxCollectionString();
 		testTextInput();
 		testTextArea();
@@ -83,7 +85,7 @@ class FlComponentsTest {
 		assertNotNull(findLabelField(combo, "Loading..."), "prompt returns after removeAll");
 	}
 
-	private static function testComboBoxUserSelectionDispatchesChange():Void {
+	private static function testComboBoxInteraction():Void {
 		var combo = new FlComboBox("");
 		combo.addItem("One");
 		combo.addItem("Two");
@@ -91,10 +93,18 @@ class FlComponentsTest {
 		var changes = 0;
 		combo.addEventListener(Event.CHANGE, function(_) changes++);
 
-		// Open the list, then click the second row like a user would.
+		// Opening and closing the collapsed control never changes its value.
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		var dropdown = findOpenDropdown(combo);
 		assertNotNull(dropdown, "clicking the combo opens its list");
+		assertEquals(-1, combo.selectedIndex, "opening leaves selection unchanged");
+		assertEquals(0, changes, "opening does not dispatch CHANGE");
+		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(null, findOpenDropdown(combo), "a repeated control click closes the list");
+		assertEquals(-1, combo.selectedIndex, "closing by control click leaves selection unchanged");
+
+		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		dropdown = findOpenDropdown(combo);
 		// Row sprites follow the background shape (child 0); pick the second row.
 		var row = Std.downcast(dropdown.getChildAt(2), Sprite);
 		assertNotNull(row, "the open list renders a row per item");
@@ -103,6 +113,36 @@ class FlComponentsTest {
 		assertEquals(1, combo.selectedIndex, "picking a row selects it");
 		assertEquals(1, changes, "user selection dispatches CHANGE");
 		assertNotNull(findLabelField(combo, "Two"), "caption follows the picked row");
+		assertEquals(null, findOpenDropdown(combo), "picking a row closes the list");
+
+		// Picking the already-selected row is silent but still closes the list.
+		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		dropdown = findOpenDropdown(combo);
+		row = Std.downcast(dropdown.getChildAt(2), Sprite);
+		row.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(1, changes, "picking the selected row does not dispatch CHANGE again");
+		assertEquals(null, findOpenDropdown(combo), "picking the selected row closes the list");
+
+		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		combo.onStageMouseDown(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals(null, findOpenDropdown(combo), "an outside press closes the list");
+		assertEquals(1, combo.selectedIndex, "outside-close leaves selection unchanged");
+
+		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		combo.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, Keyboard.ESCAPE));
+		assertEquals(null, findOpenDropdown(combo), "Escape closes the list");
+		assertEquals(1, combo.selectedIndex, "Escape-close leaves selection unchanged");
+
+		combo.enabled = false;
+		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(null, findOpenDropdown(combo), "a disabled combo does not open");
+		assertEquals(1, changes, "disabled clicks do not dispatch CHANGE");
+
+		assertEquals(true, FlComboBox.chooseDropdownBelow(200, 40, -26, 60), "list opens below when it fits");
+		assertEquals(false, FlComboBox.chooseDropdownBelow(100, 80, 20, 60), "list opens above near the bottom edge");
+		assertEquals(true, FlComboBox.chooseDropdownBelow(50, 20, -40, 60), "list stays below near the top edge");
+		assertEquals(0.0, FlComboBox.clampDropdownX(-10, 80, 200), "list stays inside the left stage edge");
+		assertEquals(120.0, FlComboBox.clampDropdownX(150, 80, 200), "list stays inside the right stage edge");
 	}
 
 	private static function testComboBoxCollectionString():Void {
@@ -249,13 +289,7 @@ class FlComponentsTest {
 	// --- helpers ------------------------------------------------------------
 
 	private static function findOpenDropdown(combo:FlComboBox):Null<Sprite> {
-		for (i in 0...combo.numChildren) {
-			var child = Std.downcast(combo.getChildAt(i), Sprite);
-			if (child != null && child.visible && child.numChildren > 1) {
-				return child;
-			}
-		}
-		return null;
+		return combo.dropdown.visible ? combo.dropdown : null;
 	}
 
 	private static function thumbOf(slider:FlSlider):Sprite {

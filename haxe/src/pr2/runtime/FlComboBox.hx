@@ -4,8 +4,12 @@ import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.Matrix;
+import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.ui.Keyboard;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
@@ -28,6 +32,7 @@ import openfl.text.TextFormatAlign;
 	the dropdown arrow), nine-sliced to size like `FlButton`. The open list is a
 	scrollless column of rows drawn over everything else.
 **/
+@:allow(pr2.runtime.FlComponentsTest)
 class FlComboBox extends Sprite {
 	private static inline final SKIN_PREFIX:String = "Components/Component Assets/ComboBoxSkins/ComboBox_";
 	private static inline final SKIN_NOMINAL_WIDTH:Float = 130;
@@ -93,6 +98,8 @@ class FlComboBox extends Sprite {
 		addEventListener(MouseEvent.ROLL_OVER, onRollOver);
 		addEventListener(MouseEvent.ROLL_OUT, onRollOut);
 		addEventListener(MouseEvent.CLICK, onClick);
+		addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 
 		redraw();
 		layoutLabel();
@@ -203,7 +210,7 @@ class FlComboBox extends Sprite {
 	private function onClick(event:MouseEvent):Void {
 		// Clicks inside the open list are handled by the row listeners; only the
 		// collapsed box toggles the dropdown.
-		if (!_enabled || dropdown.visible && event.target != this && isDropdownChild(event.target)) {
+		if (!_enabled || event.target != this && isDropdownChild(event.target)) {
 			return;
 		}
 		if (open) {
@@ -225,18 +232,88 @@ class FlComboBox extends Sprite {
 	}
 
 	private function openDropdown():Void {
-		if (dataProvider.length == 0) {
+		if (!_enabled || open || dataProvider.length == 0) {
 			return;
 		}
 		open = true;
 		buildDropdown();
 		dropdown.visible = true;
-		setChildIndex(dropdown, numChildren - 1);
+		if (stage != null) {
+			var listHeight = boxHeight * dataProvider.length;
+			var below = localToGlobal(new Point(0, boxHeight));
+			var above = localToGlobal(new Point(0, -listHeight));
+			var bottom = localToGlobal(new Point(0, boxHeight + listHeight));
+			var localY = chooseDropdownBelow(stage.stageHeight, below.y, above.y, Math.abs(bottom.y - below.y)) ? boxHeight : -listHeight;
+			var origin = localToGlobal(new Point(0, localY));
+			var right = localToGlobal(new Point(boxWidth, localY));
+			var matrix = transform.concatenatedMatrix.clone();
+			matrix.tx = clampDropdownX(origin.x, Math.abs(right.x - origin.x), stage.stageWidth);
+			matrix.ty = origin.y;
+			stage.addChild(dropdown);
+			dropdown.transform.matrix = matrix;
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		} else {
+			dropdown.y = boxHeight;
+			setChildIndex(dropdown, numChildren - 1);
+		}
+		redraw();
 	}
 
 	private function closeDropdown():Void {
+		if (!open) {
+			return;
+		}
 		open = false;
 		dropdown.visible = false;
+		var ownerStage = dropdown.stage;
+		if (ownerStage != null) {
+			ownerStage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			ownerStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		if (dropdown.parent != this) {
+			if (dropdown.parent != null) {
+				dropdown.parent.removeChild(dropdown);
+			}
+			addChild(dropdown);
+			dropdown.transform.matrix = new Matrix();
+		}
+		redraw();
+	}
+
+	private function onStageMouseDown(event:MouseEvent):Void {
+		if (!isControlChild(event.target) && !isDropdownChild(event.target)) {
+			closeDropdown();
+		}
+	}
+
+	private function onKeyDown(event:KeyboardEvent):Void {
+		if (open && event.keyCode == Keyboard.ESCAPE) {
+			closeDropdown();
+		}
+	}
+
+	private function onRemovedFromStage(_):Void {
+		closeDropdown();
+	}
+
+	private function isControlChild(target:Dynamic):Bool {
+		var obj = Std.downcast(target, DisplayObject);
+		while (obj != null) {
+			if (obj == this) {
+				return true;
+			}
+			obj = obj.parent;
+		}
+		return false;
+	}
+
+	private static function chooseDropdownBelow(stageHeight:Float, belowY:Float, aboveY:Float, listHeight:Float):Bool {
+		return belowY + listHeight <= stageHeight || aboveY < 0;
+	}
+
+	private static function clampDropdownX(x:Float, listWidth:Float, stageWidth:Float):Float {
+		return Math.max(0, Math.min(x, stageWidth - listWidth));
 	}
 
 	private function buildDropdown():Void {
@@ -256,7 +333,6 @@ class FlComboBox extends Sprite {
 			row.y = i * rowHeight;
 			dropdown.addChild(row);
 		}
-		dropdown.y = boxHeight;
 	}
 
 	private function makeRow(index:Int, rowHeight:Float):Sprite {
