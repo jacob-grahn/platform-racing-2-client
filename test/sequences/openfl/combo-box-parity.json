@@ -1,0 +1,30 @@
+{
+  "query": "screen=lobby&user=Tester&apiHost=/api",
+  "steps": [
+    {"time": 2.0, "action": "body-attribute", "name": "data-pr2-page", "value": "lobby:Tester"},
+    {"time": 2.1, "action": "click", "x": 440, "y": 10},
+    {"time": 2.3, "action": "body-attribute", "name": "data-pr2-lobby-right", "value": "search"},
+    {"time": 2.5, "action": "shot", "out": "test/output/openfl-combo-search-closed.png"},
+
+    {"time": 2.7, "action": "click", "x": 440, "y": 52},
+    {"time": 2.9, "action": "shot", "out": "test/output/openfl-combo-mode-open.png"},
+    {"time": 3.1, "action": "mouseMove", "x": 440, "y": 108},
+    {"time": 3.3, "action": "shot", "out": "test/output/openfl-combo-mode-hovered.png"},
+    {"time": 3.5, "action": "click", "x": 440, "y": 108},
+    {"time": 3.7, "action": "shot", "out": "test/output/openfl-combo-mode-selected.png"},
+
+    {"time": 3.9, "action": "click", "x": 335, "y": 72},
+    {"time": 4.1, "action": "shot", "out": "test/output/openfl-combo-order-open.png"},
+    {"time": 4.3, "action": "mouseMove", "x": 335, "y": 138},
+    {"time": 4.5, "action": "shot", "out": "test/output/openfl-combo-order-hovered.png"},
+    {"time": 4.7, "action": "click", "x": 335, "y": 138},
+    {"time": 4.9, "action": "shot", "out": "test/output/openfl-combo-order-selected.png"},
+
+    {"time": 5.1, "action": "click", "x": 440, "y": 72},
+    {"time": 5.3, "action": "shot", "out": "test/output/openfl-combo-direction-open.png"},
+    {"time": 5.5, "action": "mouseMove", "x": 440, "y": 116},
+    {"time": 5.7, "action": "shot", "out": "test/output/openfl-combo-direction-hovered.png"},
+    {"time": 5.9, "action": "click", "x": 440, "y": 116},
+    {"time": 6.1, "action": "shot", "out": "test/output/openfl-combo-direction-selected.png"}
+  ]
+}

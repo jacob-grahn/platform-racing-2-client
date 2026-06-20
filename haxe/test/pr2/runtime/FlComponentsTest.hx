@@ -105,9 +105,11 @@ class FlComponentsTest {
 
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		dropdown = findOpenDropdown(combo);
-		// Row sprites follow the background shape (child 0); pick the second row.
-		var row = Std.downcast(dropdown.getChildAt(2), Sprite);
+		var row = combo.rowsHolder == null ? null : Std.downcast(combo.rowsHolder.getChildAt(1), Sprite);
 		assertNotNull(row, "the open list renders a row per item");
+		assertEquals(22.0, combo.rowsHolder.getChildAt(1).y - combo.rowsHolder.getChildAt(0).y,
+			"dropdown rows retain the authored CellRenderer spacing");
+		assertEquals(48.0, combo.dropdownHeight(), "two rows plus the List skin inset determine dropdown height");
 		row.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 
 		assertEquals(1, combo.selectedIndex, "picking a row selects it");
@@ -118,7 +120,7 @@ class FlComponentsTest {
 		// Picking the already-selected row is silent but still closes the list.
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		dropdown = findOpenDropdown(combo);
-		row = Std.downcast(dropdown.getChildAt(2), Sprite);
+		row = Std.downcast(combo.rowsHolder.getChildAt(1), Sprite);
 		row.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, changes, "picking the selected row does not dispatch CHANGE again");
 		assertEquals(null, findOpenDropdown(combo), "picking the selected row closes the list");
@@ -143,6 +145,16 @@ class FlComponentsTest {
 		assertEquals(true, FlComboBox.chooseDropdownBelow(50, 20, -40, 60), "list stays below near the top edge");
 		assertEquals(0.0, FlComboBox.clampDropdownX(-10, 80, 200), "list stays inside the left stage edge");
 		assertEquals(120.0, FlComboBox.clampDropdownX(150, 80, 200), "list stays inside the right stage edge");
+
+		var scrolling = new FlComboBox("");
+		scrolling.rowCount = 2;
+		for (label in ["One", "Two", "Three", "Four"]) scrolling.addItem(label);
+		scrolling.selectedIndex = 3;
+		scrolling.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(2, scrolling.scrollOffset, "opening scrolls the selected row into view");
+		assertEquals(true, scrolling.scrollBar.parent == scrolling.dropdown, "rowCount overflow shows the authored scrollbar");
+		assertEquals(48.0, scrolling.dropdownHeight(), "rowCount caps dropdown height");
+		scrolling.closeDropdown();
 	}
 
 	private static function testComboBoxCollectionString():Void {

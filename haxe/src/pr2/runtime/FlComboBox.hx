@@ -29,8 +29,8 @@ import openfl.text.TextFormatAlign;
 	  - `Event.CHANGE` — dispatched when the selection changes.
 
 	The collapsed box uses the real `ComboBox_*Skin` background (which includes
-	the dropdown arrow), nine-sliced to size like `FlButton`. The open list is a
-	scrollless column of rows drawn over everything else.
+	the dropdown arrow), nine-sliced to size like `FlButton`. The open list uses
+	the authored List, CellRenderer, and scrollbar skins above the stage content.
 **/
 @:allow(pr2.runtime.FlComponentsTest)
 class FlComboBox extends Sprite {
@@ -38,10 +38,21 @@ class FlComboBox extends Sprite {
 	private static inline final SKIN_NOMINAL_WIDTH:Float = 130;
 	private static inline final SKIN_NOMINAL_HEIGHT:Float = 22;
 	private static final SKIN_GRID = new Rectangle(4, 13.45, 120.75, 4.6);
+	private static inline final LIST_SKIN:String = "Components/Component Assets/ListSkins/List_skin";
+	private static inline final CELL_SKIN_PREFIX:String = "Components/Component Assets/CellRendererSkins/CellRenderer_";
+	private static inline final CELL_NOMINAL_WIDTH:Float = 152;
+	private static inline final CELL_NOMINAL_HEIGHT:Float = 22;
+	private static inline final LIST_INSET:Float = 2;
+	private static final LIST_GRID = new Rectangle(2, 2, 146, 18);
+	private static final CELL_GRID = new Rectangle(1, 1, 150, 20);
 
 	private var skinHolder:Sprite;
 	private var captionField:TextField;
 	private var dropdown:Sprite;
+	private var rowsHolder:Sprite;
+	private var rowsClip:Sprite;
+	private var rowsMask:Shape;
+	private var scrollBar:FlUIScrollBar;
 	private var skinCache:Map<String, DisplayObject> = new Map();
 	private var currentSkin:Null<DisplayObject>;
 
@@ -52,6 +63,8 @@ class FlComboBox extends Sprite {
 
 	private var mouseOver:Bool = false;
 	private var open:Bool = false;
+	private var scrollOffset:Int = 0;
+	private var hoveredIndex:Int = -1;
 
 	private var _enabled:Bool = true;
 	private var _prompt:Null<String> = null;
@@ -89,6 +102,14 @@ class FlComboBox extends Sprite {
 
 		dropdown = new Sprite();
 		dropdown.visible = false;
+		rowsClip = new Sprite();
+		rowsHolder = new Sprite();
+		rowsClip.addChild(rowsHolder);
+		rowsMask = new Shape();
+		rowsClip.mask = rowsMask;
+		scrollBar = new FlUIScrollBar(100);
+		scrollBar.addEventListener(Event.SCROLL, onDropdownScroll);
+		dropdown.addEventListener(MouseEvent.MOUSE_WHEEL, onDropdownWheel);
 		addChild(dropdown);
 
 		mouseChildren = true;
@@ -192,6 +213,7 @@ class FlComboBox extends Sprite {
 			closeDropdown();
 		}
 		redraw();
+		updateCaptionFormat();
 		return _enabled;
 	}
 
@@ -236,16 +258,17 @@ class FlComboBox extends Sprite {
 			return;
 		}
 		open = true;
+		scrollOffset = initialScrollOffset();
 		buildDropdown();
 		dropdown.visible = true;
 		if (stage != null) {
-			var listHeight = boxHeight * dataProvider.length;
+			var listHeight = dropdownHeight();
 			var below = localToGlobal(new Point(0, boxHeight));
 			var above = localToGlobal(new Point(0, -listHeight));
 			var bottom = localToGlobal(new Point(0, boxHeight + listHeight));
 			var localY = chooseDropdownBelow(stage.stageHeight, below.y, above.y, Math.abs(bottom.y - below.y)) ? boxHeight : -listHeight;
 			var origin = localToGlobal(new Point(0, localY));
-			var right = localToGlobal(new Point(boxWidth, localY));
+			var right = localToGlobal(new Point(dropdownWidth(), localY));
 			var matrix = transform.concatenatedMatrix.clone();
 			matrix.tx = clampDropdownX(origin.x, Math.abs(right.x - origin.x), stage.stageWidth);
 			matrix.ty = origin.y;
@@ -320,50 +343,147 @@ class FlComboBox extends Sprite {
 		while (dropdown.numChildren > 0) {
 			dropdown.removeChildAt(0);
 		}
-		var rowHeight = boxHeight;
-		var bg = new Shape();
-		bg.graphics.beginFill(0xFFFFFF);
-		bg.graphics.lineStyle(1, 0x7C8EA0);
-		bg.graphics.drawRect(0, 0, boxWidth, rowHeight * dataProvider.length);
-		bg.graphics.endFill();
-		dropdown.addChild(bg);
+		var height = dropdownHeight();
+		var listSkin = FlSkin.create(LIST_SKIN);
+		if (listSkin != null) {
+			var bounds = FlSkin.nativeBounds(listSkin, 150, 100);
+			FlSkin.nineSlice(listSkin, LIST_GRID, bounds.width, bounds.height, dropdownWidth(), height);
+			dropdown.addChild(listSkin);
+		} else {
+			var bg = new Shape();
+			bg.graphics.beginFill(0xFFFFFF);
+			bg.graphics.lineStyle(1, 0x7C8EA0);
+			bg.graphics.drawRect(0, 0, dropdownWidth(), height);
+			bg.graphics.endFill();
+			dropdown.addChild(bg);
+		}
+
+		rowsClip = new Sprite();
+		rowsHolder = new Sprite();
+		rowsClip.addChild(rowsHolder);
+		rowsClip.x = LIST_INSET;
+		rowsClip.y = LIST_INSET;
+		dropdown.addChild(rowsClip);
+
+		rowsMask = new Shape();
+		rowsMask.graphics.beginFill(0xFFFFFF);
+		rowsMask.graphics.drawRect(LIST_INSET, LIST_INSET, contentWidth(), visibleRowCount() * CELL_NOMINAL_HEIGHT);
+		rowsMask.graphics.endFill();
+		dropdown.addChild(rowsMask);
+		rowsClip.mask = rowsMask;
 
 		for (i in 0...dataProvider.length) {
-			var row = makeRow(i, rowHeight);
-			row.y = i * rowHeight;
-			dropdown.addChild(row);
+			rowsHolder.addChild(makeRow(i));
+		}
+		layoutRows();
+
+		if (needsScrollBar()) {
+			scrollBar = new FlUIScrollBar(height - LIST_INSET * 2);
+			scrollBar.x = dropdownWidth() - FlUIScrollBar.WIDTH - 1;
+			scrollBar.y = LIST_INSET;
+			scrollBar.setScrollProperties(visibleRowCount(), 1, maxScrollOffset() + 1);
+			scrollBar.scrollPosition = scrollOffset + 1;
+			scrollBar.addEventListener(Event.SCROLL, onDropdownScroll);
+			dropdown.addChild(scrollBar);
 		}
 	}
 
-	private function makeRow(index:Int, rowHeight:Float):Sprite {
+	private function makeRow(index:Int):Sprite {
 		var row = new Sprite();
 		row.buttonMode = true;
 		row.useHandCursor = true;
 		row.mouseChildren = false;
 
-		var bg = new Shape();
-		var selectedRow = index == _selectedIndex;
-		bg.graphics.beginFill(selectedRow ? 0x2A5A8C : 0xFFFFFF, selectedRow ? 1 : 0.01);
-		bg.graphics.drawRect(0, 0, boxWidth, rowHeight);
-		bg.graphics.endFill();
-		row.addChild(bg);
+		drawRow(row, index, false);
+		row.addEventListener(MouseEvent.ROLL_OVER, function(_) {
+			hoveredIndex = index;
+			drawRow(row, index, true);
+		});
+		row.addEventListener(MouseEvent.ROLL_OUT, function(_) {
+			if (hoveredIndex == index) hoveredIndex = -1;
+			drawRow(row, index, false);
+		});
+		row.addEventListener(MouseEvent.CLICK, function(_) selectFromList(index));
+		return row;
+	}
 
+	private function drawRow(row:Sprite, index:Int, hovered:Bool):Void {
+		while (row.numChildren > 0) row.removeChildAt(0);
+		var selectedRow = index == _selectedIndex;
+		var state = selectedRow ? (hovered ? "selectedOverSkin" : "selectedUpSkin") : (hovered ? "overSkin" : "upSkin");
+		var skin = FlSkin.create(CELL_SKIN_PREFIX + state);
+		if (skin != null) {
+			var bounds = FlSkin.nativeBounds(skin, CELL_NOMINAL_WIDTH, CELL_NOMINAL_HEIGHT);
+			FlSkin.nineSlice(skin, CELL_GRID, bounds.width, bounds.height, contentWidth(), CELL_NOMINAL_HEIGHT);
+			row.addChild(skin);
+		} else {
+			var bg = new Shape();
+			bg.graphics.beginFill(hovered ? 0xDAF1FF : selectedRow ? 0x9AD8FF : 0xFFFFFF);
+			bg.graphics.drawRect(0, 0, contentWidth(), CELL_NOMINAL_HEIGHT);
+			bg.graphics.endFill();
+			row.addChild(bg);
+		}
 		var text = new TextField();
 		text.selectable = false;
 		text.mouseEnabled = false;
 		text.autoSize = TextFieldAutoSize.NONE;
-		text.width = boxWidth - 8;
-		text.height = rowHeight;
-		text.defaultTextFormat = new TextFormat(
-			FontResolver.resolve("Arial"), 11, selectedRow ? 0xFFFFFF : 0x000000, false, false, false, null, null, TextFormatAlign.LEFT
-		);
+		text.width = Math.max(1, contentWidth() - 10);
+		text.height = CELL_NOMINAL_HEIGHT;
+		text.defaultTextFormat = new TextFormat(FontResolver.resolve("Arial"), 11, 0x000000, false, false, false, null, null, TextFormatAlign.LEFT);
 		text.text = itemToLabel(dataProvider.getItemAt(index));
-		text.x = 4;
-		text.y = (rowHeight - text.textHeight) / 2 - 2;
+		text.x = 5;
+		text.y = (CELL_NOMINAL_HEIGHT - text.textHeight) / 2 - 2;
 		row.addChild(text);
+	}
 
-		row.addEventListener(MouseEvent.CLICK, function(_) selectFromList(index));
-		return row;
+	private function visibleRowCount():Int {
+		return Std.int(Math.max(1, Math.min(rowCount, dataProvider.length)));
+	}
+
+	private function needsScrollBar():Bool {
+		return dataProvider.length > visibleRowCount();
+	}
+
+	private function contentWidth():Float {
+		return Math.max(1, dropdownWidth() - LIST_INSET * 2 - (needsScrollBar() ? FlUIScrollBar.WIDTH : 0));
+	}
+
+	private function dropdownWidth():Float {
+		// Some authored instances shrink below the ComboBox skin's scale-grid
+		// minimum. Flash lets the skin retain that minimum visual width, and its
+		// List follows the rendered control rather than the nominal component box.
+		return Math.max(boxWidth, skinHolder == null ? 0 : skinHolder.width);
+	}
+
+	private function dropdownHeight():Float {
+		return visibleRowCount() * CELL_NOMINAL_HEIGHT + LIST_INSET * 2;
+	}
+
+	private function maxScrollOffset():Int {
+		return Std.int(Math.max(0, dataProvider.length - visibleRowCount()));
+	}
+
+	private function initialScrollOffset():Int {
+		if (_selectedIndex < 0) return 0;
+		return Std.int(Math.min(maxScrollOffset(), Math.max(0, _selectedIndex - visibleRowCount() + 1)));
+	}
+
+	private function layoutRows():Void {
+		for (i in 0...rowsHolder.numChildren) {
+			rowsHolder.getChildAt(i).y = (i - scrollOffset) * CELL_NOMINAL_HEIGHT;
+		}
+	}
+
+	private function onDropdownScroll(_):Void {
+		scrollOffset = Std.int(Math.max(0, Math.min(maxScrollOffset(), scrollBar.scrollPosition - 1)));
+		layoutRows();
+	}
+
+	private function onDropdownWheel(event:MouseEvent):Void {
+		if (!needsScrollBar()) return;
+		scrollOffset = Std.int(Math.max(0, Math.min(maxScrollOffset(), scrollOffset + (event.delta < 0 ? 1 : -1))));
+		scrollBar.scrollPosition = scrollOffset + 1;
+		layoutRows();
 	}
 
 	private function selectFromList(index:Int):Void {
@@ -423,6 +543,7 @@ class FlComboBox extends Sprite {
 		captionField.text = _selectedIndex < 0
 			? (_prompt == null ? "" : _prompt)
 			: itemToLabel(dataProvider.getItemAt(_selectedIndex));
+		layoutLabel();
 	}
 
 	private function itemToLabel(item:Dynamic):String {
@@ -444,5 +565,12 @@ class FlComboBox extends Sprite {
 		captionField.width = Math.max(1, boxWidth - 24); // leave room for the arrow
 		captionField.height = boxHeight;
 		captionField.y = (boxHeight - (captionField.textHeight + 4)) / 2;
+	}
+
+	private function updateCaptionFormat():Void {
+		captionField.defaultTextFormat = new TextFormat(
+			FontResolver.resolve("Arial"), 11, _enabled ? 0x000000 : 0x999999, false, false, false, null, null, TextFormatAlign.LEFT
+		);
+		captionField.setTextFormat(captionField.defaultTextFormat);
 	}
 }

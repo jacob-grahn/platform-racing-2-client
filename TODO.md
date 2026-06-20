@@ -96,12 +96,16 @@ these controls with generic approximations.
     advances to the next item.
   - Add deterministic tests for open, choose, outside-close, Escape-close,
     repeated clicks, disabled state, and list placement near stage edges.
-- [ ] Bring ComboBox dropdown visuals to parity with Flash.
+- [x] Bring ComboBox dropdown visuals to parity with Flash.
   - Match closed-control skins and typography plus the open list's border,
     row height, padding, selected/hover states, scrollbar, width, stacking,
     and above/below placement.
   - Capture parity screenshots for the Search tab's mode, order, and direction
     dropdowns in closed, open, hovered, and selected states.
+  - Authored `List_skin`, `CellRenderer_*` states, and scrollbar artwork now
+    render with Flash row metrics, padding, row-count clipping, selected-row
+    scrolling, stage-top stacking, and edge-aware placement;
+    `combo-box-parity.json` captures the Search-tab states.
 
 Acceptance: buttons, popups, text inputs, and dropdowns match representative
 Flash baselines at authored sizes and interaction states; opening a ComboBox
