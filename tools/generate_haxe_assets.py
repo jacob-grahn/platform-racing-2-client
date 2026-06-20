@@ -265,6 +265,7 @@ typedef LayerDef = {
 \t@:optional var visible:Bool;
 \t@:optional var locked:Bool;
 \t@:optional var layerType:String;
+\t@:optional var parentLayerIndex:Int;
 \tvar frameCount:Int;
 \tvar frames:Array<FrameDef>;
 }

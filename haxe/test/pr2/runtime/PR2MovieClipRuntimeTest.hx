@@ -18,6 +18,8 @@ class PR2MovieClipRuntimeTest {
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();
 		testSourceLayerOrderRendersTopLayersAboveBottomLayers();
+		testMaskLayersClipMaskedLayers();
+		testGeneratedRatingStarsMask();
 		testColorTransforms();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
@@ -111,6 +113,97 @@ class PR2MovieClipRuntimeTest {
 		assertEquals("top", clip.getChildAt(2).name, "first source layer renders at the top");
 	}
 
+
+	private static function testMaskLayersClipMaskedLayers():Void {
+		var clip = new PR2MovieClip(makeMaskedSymbol());
+
+		// background + bar share a masked content holder; the star mask sits in a
+		// second holder; the overlay layer (no parent) stays a direct child.
+		assertEquals(3, clip.numChildren, "masked symbol groups masked layers into holders");
+
+		var content = Std.downcast(clip.getChildAt(0), Sprite);
+		assertNotNull(content, "masked layers are wrapped in a content holder sprite");
+		assertNotNull(content.mask, "masked content holder has a mask assigned");
+		assertEquals(2, content.numChildren, "both masked layers share one content holder");
+
+		var maskHolder = Std.downcast(clip.getChildAt(1), Sprite);
+		assertNotNull(maskHolder, "the mask layer is wrapped in its own holder sprite");
+		assertEquals(maskHolder, content.mask, "content holder is clipped by the mask holder");
+		assertEquals(1, maskHolder.numChildren, "mask holder contains the mask layer's shapes");
+
+		// Masked children remain addressable through the synthetic holders.
+		var bar = clip.getChildByTimelineName("bar");
+		assertNotNull(bar, "masked child stays addressable by timeline name");
+		assertEquals(content, bar.parent, "masked child lives inside the content holder");
+
+		var background = clip.getChildByTimelineName("background");
+		assertNotNull(background, "second masked child stays addressable");
+		assertEquals(content, background.parent, "second masked child lives inside the content holder");
+
+		var overlay = clip.getChildByTimelineName("overlay");
+		assertNotNull(overlay, "unmasked top layer stays a direct child");
+		assertEquals(clip, overlay.parent, "unmasked layer is not wrapped in a holder");
+
+		var starMask = clip.getChildByTimelineName("starMask");
+		assertNotNull(starMask, "mask shape stays addressable by timeline name");
+		assertEquals(maskHolder, starMask.parent, "mask shape lives inside the mask holder");
+	}
+
+	private static function testGeneratedRatingStarsMask():Void {
+		// The real catalog symbol the in-game vote widget uses: a green bar plus a
+		// gradient background, both clipped to five star shapes (parentLayerIndex).
+		var stars = PR2MovieClip.fromLinkage("RatingSelectGraphic", {maxNestedDepth: 4});
+
+		var maskedContent:Sprite = null;
+		for (i in 0...stars.numChildren) {
+			var sprite = Std.downcast(stars.getChildAt(i), Sprite);
+			if (sprite != null && sprite.mask != null) {
+				maskedContent = sprite;
+				break;
+			}
+		}
+		assertNotNull(maskedContent, "RatingStars masks its bar/background to the star shapes");
+
+		var bar = stars.getChildByTimelineName("bar");
+		assertNotNull(bar, "RatingStars exposes the masked bar by name");
+		assertEquals(maskedContent, bar.parent, "the bar is clipped by the star mask");
+	}
+
+	private static function makeMaskedSymbol():SymbolAssetDef {
+		return {
+			href: "MaskedSymbol.xml",
+			type: "movie clip",
+			name: "MaskedSymbol",
+			linkageClassName: "MaskedSymbol",
+			linkageIdentifier: "MaskedSymbol",
+			timelines: [{
+				name: "MaskedSymbol",
+				layerCount: 4,
+				frameCount: 1,
+				labels: [],
+				// Mirrors UI/Global/RatingStars: a top overlay, a mask layer, then
+				// two layers (bar over background) clipped by that mask.
+				layers: [
+					makeSingleShapeLayer(0, "Overlay", "overlay"),
+					makeMaskShapeLayer(1, "Mask", "starMask"),
+					makeMaskedShapeLayer(2, 1, "Bar", "bar"),
+					makeMaskedShapeLayer(3, 1, "Background", "background")
+				]
+			}]
+		};
+	}
+
+	private static function makeMaskShapeLayer(index:Int, layerName:String, childName:String):Dynamic {
+		var layer = makeSingleShapeLayer(index, layerName, childName);
+		layer.layerType = "mask";
+		return layer;
+	}
+
+	private static function makeMaskedShapeLayer(index:Int, parentLayerIndex:Int, layerName:String, childName:String):Dynamic {
+		var layer = makeSingleShapeLayer(index, layerName, childName);
+		layer.parentLayerIndex = parentLayerIndex;
+		return layer;
+	}
 
 	private static function testColorTransforms():Void {
 		var clip = new PR2MovieClip(makeColorSymbol());

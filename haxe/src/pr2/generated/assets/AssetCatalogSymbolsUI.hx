@@ -227,7 +227,8 @@ final class AssetCatalogSymbolsUI {
 								],
 								index: 2,
 								locked: true,
-								name: "Layer 3"
+								name: "Layer 3",
+								parentLayerIndex: 1
 							},
 							{
 								color: "#9217FD",
@@ -258,7 +259,8 @@ final class AssetCatalogSymbolsUI {
 								],
 								index: 3,
 								locked: true,
-								name: "Layer 4"
+								name: "Layer 4",
+								parentLayerIndex: 1
 							}
 						],
 						name: "RatingStars"
@@ -21161,7 +21163,8 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 5,
-								name: "Layer 6"
+								name: "Layer 6",
+								parentLayerIndex: 4
 							},
 							{
 								color: "#BEBCC3",
@@ -21307,7 +21310,8 @@ final class AssetCatalogSymbolsUI {
 								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 72", name: "var_295", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								locked: true,
-								name: "Layer 4"
+								name: "Layer 4",
+								parentLayerIndex: 2
 							},
 							{
 								color: "#F7D4F9",
@@ -26877,7 +26881,7 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 1"
 							},
 							{color: "#FF0000", frameCount: 0, frames: [], index: 1, layerType: "folder", locked: true, name: "artControls"},
-							{color: "#669900", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, locked: true, name: "offText"},
+							{color: "#669900", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, locked: true, name: "offText", parentLayerIndex: 1},
 							{
 								color: "#4CFCF0",
 								frameCount: 1,
@@ -26933,7 +26937,8 @@ final class AssetCatalogSymbolsUI {
 								],
 								index: 3,
 								locked: true,
-								name: "Layer 2"
+								name: "Layer 2",
+								parentLayerIndex: 1
 							},
 							{
 								color: "#AFFBD7",
@@ -27163,10 +27168,11 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 12,
-								name: "title"
+								name: "title",
+								parentLayerIndex: 11
 							},
-							{color: "#FF4FFF", frameCount: 0, frames: [], index: 13, layerType: "folder", name: "items"},
-							{color: "#9844E8", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 14, name: "Layer 10"},
+							{color: "#FF4FFF", frameCount: 0, frames: [], index: 13, layerType: "folder", name: "items", parentLayerIndex: 11},
+							{color: "#9844E8", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 14, name: "Layer 10", parentLayerIndex: 13},
 							{
 								color: "#E8B1D6",
 								frameCount: 1,
@@ -27180,10 +27186,11 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 15,
-								name: "Layer 11"
+								name: "Layer 11",
+								parentLayerIndex: 13
 							},
-							{color: "#FF800A", frameCount: 0, frames: [], index: 16, layerType: "folder", name: "left"},
-							{color: "#DE663D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 17, name: "Layer 12"},
+							{color: "#FF800A", frameCount: 0, frames: [], index: 16, layerType: "folder", name: "left", parentLayerIndex: 11},
+							{color: "#DE663D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 17, name: "Layer 12", parentLayerIndex: 16},
 							{
 								color: "#E607D4",
 								frameCount: 1,
@@ -27207,10 +27214,11 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 18,
-								name: "Layer 19"
+								name: "Layer 19",
+								parentLayerIndex: 16
 							},
-							{color: "#9933CC", frameCount: 0, frames: [], index: 19, layerType: "folder", name: "right"},
-							{color: "#F989B7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 20, name: "Layer 14"},
+							{color: "#9933CC", frameCount: 0, frames: [], index: 19, layerType: "folder", name: "right", parentLayerIndex: 11},
+							{color: "#F989B7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 20, name: "Layer 14", parentLayerIndex: 19},
 							{
 								color: "#5279FD",
 								frameCount: 1,
@@ -27234,10 +27242,11 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 21,
-								name: "Layer 17"
+								name: "Layer 17",
+								parentLayerIndex: 19
 							},
-							{color: "#FF4F4F", frameCount: 0, frames: [], index: 22, layerType: "folder", name: "down"},
-							{color: "#AF53DF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 23, name: "Layer 13"},
+							{color: "#FF4F4F", frameCount: 0, frames: [], index: 22, layerType: "folder", name: "down", parentLayerIndex: 11},
+							{color: "#AF53DF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 23, name: "Layer 13", parentLayerIndex: 22},
 							{
 								color: "#A1AAF4",
 								frameCount: 1,
@@ -27261,10 +27270,11 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 24,
-								name: "Layer 16"
+								name: "Layer 16",
+								parentLayerIndex: 22
 							},
-							{color: "#669900", frameCount: 0, frames: [], index: 25, layerType: "folder", name: "up"},
-							{color: "#C94F6D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 26, name: "Layer 15"},
+							{color: "#669900", frameCount: 0, frames: [], index: 25, layerType: "folder", name: "up", parentLayerIndex: 11},
+							{color: "#C94F6D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 26, name: "Layer 15", parentLayerIndex: 25},
 							{
 								color: "#7163FE",
 								frameCount: 1,
@@ -27288,7 +27298,8 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 27,
-								name: "Layer 18"
+								name: "Layer 18",
+								parentLayerIndex: 25
 							},
 							{
 								color: "#FF0000",
@@ -29598,7 +29609,8 @@ final class AssetCatalogSymbolsUI {
 									}
 								],
 								index: 1,
-								name: "Layer 2"
+								name: "Layer 2",
+								parentLayerIndex: 0
 							},
 							{color: "#3DF2E3", frameCount: 1, frames: [{elementCount: 2, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
 							{

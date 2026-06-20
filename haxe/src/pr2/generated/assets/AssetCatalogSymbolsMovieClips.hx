@@ -83318,7 +83318,8 @@ final class AssetCatalogSymbolsMovieClips {
 									}
 								],
 								index: 9,
-								name: "Layer 8"
+								name: "Layer 8",
+								parentLayerIndex: 8
 							},
 							{
 								color: "#F9E151",
@@ -84773,7 +84774,8 @@ final class AssetCatalogSymbolsMovieClips {
 									}
 								],
 								index: 6,
-								name: "Layer 7"
+								name: "Layer 7",
+								parentLayerIndex: 5
 							},
 							{
 								color: "#F198A5",

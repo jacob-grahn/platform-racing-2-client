@@ -19,6 +19,9 @@ import pr2.generated.assets.AssetTypes.TimelineDef;
 
 typedef RuntimeFrame = {
 	var elements:Array<DisplayElementDef>;
+	// Parallel to `elements`: the source timeline layer index each element came
+	// from. Used to reconstruct Animate mask/masked layer relationships.
+	var elementLayers:Array<Int>;
 }
 
 typedef PR2MovieClipOptions = {
@@ -39,6 +42,17 @@ class PR2MovieClip extends Sprite {
 	private var nestedDepth:Int;
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
 	private var runningFrameScripts:Bool = false;
+
+	// Mask metadata keyed by source layer `index`. `maskLayers` holds layers
+	// flagged `layerType: "mask"`; `maskedLayerParents` maps a masked layer to
+	// the index of the mask layer that clips it (`parentLayerIndex`). Empty when
+	// the timeline uses no masks, in which case rendering takes the flat path.
+	private var maskLayers:Map<Int, Bool> = new Map();
+	private var maskedLayerParents:Map<Int, Int> = new Map();
+	private var hasMaskLayers:Bool = false;
+
+	private static inline var MASK_HOLDER_NAME = "__pr2_mask";
+	private static inline var MASKED_HOLDER_NAME = "__pr2_masked";
 
 	public static function fromSymbolName(name:String, ?options:PR2MovieClipOptions):PR2MovieClip {
 		return new PR2MovieClip(AssetLibrary.requireSymbol(name), options);
@@ -97,13 +111,7 @@ class PR2MovieClip extends Sprite {
 
 	public function dispose():Void {
 		stop();
-		while (numChildren > 0) {
-			var child = removeChildAt(numChildren - 1);
-			var childClip = Std.downcast(child, PR2MovieClip);
-			if (childClip != null) {
-				childClip.dispose();
-			}
-		}
+		disposeChildren();
 	}
 
 	public function gotoAndPlay(frame:Dynamic):Void {
@@ -130,6 +138,16 @@ class PR2MovieClip extends Sprite {
 			if (child.name == name) {
 				return child;
 			}
+			// Mask/content holders are synthetic wrappers, not part of the
+			// authored timeline, so look through them for the named instance.
+			if (child.name == MASK_HOLDER_NAME || child.name == MASKED_HOLDER_NAME) {
+				var holder:Sprite = cast child;
+				for (j in 0...holder.numChildren) {
+					if (holder.getChildAt(j).name == name) {
+						return holder.getChildAt(j);
+					}
+				}
+			}
 		}
 		return null;
 	}
@@ -150,13 +168,25 @@ class PR2MovieClip extends Sprite {
 	private function buildTimeline(source:TimelineDef):Void {
 		totalFrames = source.frameCount < 1 ? 1 : source.frameCount;
 		for (i in 0...totalFrames) {
-			frames.push({elements: []});
+			frames.push({elements: [], elementLayers: []});
 		}
 
 		for (label in source.labels) {
 			var frameNumber = label.frame + 1;
 			labelsByName.set(label.name, frameNumber);
 			currentLabels.push(new FrameLabel(label.name, frameNumber));
+		}
+
+		// Record Animate mask relationships before flattening: a "mask" layer
+		// clips every layer whose `parentLayerIndex` points back at it.
+		for (layer in source.layers) {
+			if (layer.layerType == "mask") {
+				maskLayers.set(layer.index, true);
+				hasMaskLayers = true;
+			}
+			if (layer.parentLayerIndex != null) {
+				maskedLayerParents.set(layer.index, layer.parentLayerIndex);
+			}
 		}
 
 		// Animate/XFL serializes layers from top to bottom. OpenFL display
@@ -182,6 +212,7 @@ class PR2MovieClip extends Sprite {
 			for (frameIndex in start...end) {
 				for (element in elements) {
 					frames[frameIndex].elements.push(element);
+					frames[frameIndex].elementLayers.push(layer.index);
 				}
 			}
 		}
@@ -214,6 +245,11 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function renderFrame(frame:RuntimeFrame):Void {
+		if (hasMaskLayers) {
+			renderFrameWithMasks(frame);
+			return;
+		}
+
 		var reusableClips:Map<String, Array<PR2MovieClip>> = collectReusableClips();
 		var desiredChildren:Array<DisplayObject> = [];
 		var desiredChildSet:ObjectMap<DisplayObject, Bool> = new ObjectMap();
@@ -243,6 +279,97 @@ class PR2MovieClip extends Sprite {
 			}
 		}
 		disposeUnusedReusableClips(reusableClips);
+	}
+
+	// Rebuilds the frame honoring Animate mask layers. Masked layers are grouped
+	// into a holder Sprite that is clipped by a sibling holder containing the
+	// mask layer's shapes (`content.mask = maskHolder`). Mask symbols in the
+	// catalog are static single-frame graphics, so this rebuilds from scratch
+	// rather than reusing the pooled-clip fast path used by `renderFrame`.
+	private function renderFrameWithMasks(frame:RuntimeFrame):Void {
+		disposeChildren();
+
+		// One content holder + one mask holder per mask layer index, created
+		// lazily the first time an element belonging to that group is seen. The
+		// flat element list is already in bottom-to-top paint order, so adding
+		// holders to `this` on first use yields the correct stacking.
+		var maskHolders:Map<Int, Sprite> = new Map();
+		var contentHolders:Map<Int, Sprite> = new Map();
+
+		for (i in 0...frame.elements.length) {
+			var element = frame.elements[i];
+			var layerIndex = frame.elementLayers[i];
+			var child = createDisplayObject(element, null);
+			applyElementProperties(child, element);
+
+			if (maskLayers.exists(layerIndex)) {
+				var holder = maskHolders.get(layerIndex);
+				if (holder == null) {
+					holder = createHolder(MASK_HOLDER_NAME);
+					maskHolders.set(layerIndex, holder);
+					addChild(holder);
+				}
+				holder.addChild(child);
+				continue;
+			}
+
+			var parent = maskedLayerParents.get(layerIndex);
+			if (parent != null && maskLayers.exists(parent)) {
+				var content = contentHolders.get(parent);
+				if (content == null) {
+					content = createHolder(MASKED_HOLDER_NAME);
+					contentHolders.set(parent, content);
+					addChild(content);
+				}
+				content.addChild(child);
+				continue;
+			}
+
+			addChild(child);
+		}
+
+		// Wire each content holder to its mask. A mask must be on the display
+		// list to clip; it then renders only as the clip region, not as art.
+		for (maskIndex in contentHolders.keys()) {
+			var holder = maskHolders.get(maskIndex);
+			if (holder != null) {
+				contentHolders.get(maskIndex).mask = holder;
+			}
+		}
+	}
+
+	private function createHolder(name:String):Sprite {
+		var holder = new Sprite();
+		holder.name = name;
+		holder.mouseEnabled = false;
+		return holder;
+	}
+
+	private function disposeChildren():Void {
+		while (numChildren > 0) {
+			var child = removeChildAt(numChildren - 1);
+			var clip = Std.downcast(child, PR2MovieClip);
+			if (clip != null) {
+				clip.dispose();
+				continue;
+			}
+			// Mask/content holders are plain Sprites; dispose any clips nested
+			// inside them so animated children stop their ENTER_FRAME ticks.
+			var holder = Std.downcast(child, Sprite);
+			if (holder != null) {
+				disposeHolder(holder);
+			}
+		}
+	}
+
+	private function disposeHolder(holder:Sprite):Void {
+		holder.mask = null;
+		while (holder.numChildren > 0) {
+			var nested = Std.downcast(holder.removeChildAt(holder.numChildren - 1), PR2MovieClip);
+			if (nested != null) {
+				nested.dispose();
+			}
+		}
 	}
 
 	private function runFrameScripts(frameNumber:Int):Void {

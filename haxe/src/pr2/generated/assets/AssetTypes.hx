@@ -131,6 +131,7 @@ typedef LayerDef = {
 	@:optional var visible:Bool;
 	@:optional var locked:Bool;
 	@:optional var layerType:String;
+	@:optional var parentLayerIndex:Int;
 	var frameCount:Int;
 	var frames:Array<FrameDef>;
 }

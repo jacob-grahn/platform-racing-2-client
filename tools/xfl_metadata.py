@@ -618,6 +618,7 @@ def parse_layer(layer, layer_index):
             "visible": parse_bool(attrs.get("visible")),
             "locked": parse_bool(attrs.get("locked")),
             "layerType": attrs.get("layerType"),
+            "parentLayerIndex": maybe_int(attrs.get("parentLayerIndex")),
             "frameCount": len(frames),
             "frames": frames,
         }
