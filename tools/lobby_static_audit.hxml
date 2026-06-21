@@ -2,6 +2,5 @@
 --library openfl
 -cp haxe/src
 -cp haxe/test
--D pr2_flatten_cache
---main pr2.DeterministicTestSuite
+--main pr2.tools.LobbyStaticAudit
 --interp

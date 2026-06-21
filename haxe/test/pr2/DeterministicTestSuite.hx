@@ -25,10 +25,14 @@ import pr2.page.CampaignTestScreenTest;
 import pr2.runtime.FlButtonTest;
 import pr2.runtime.FlComponentsTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
+import pr2.runtime.StaticSubtreeAnalyzerTest;
+import pr2.runtime.FlattenSafetyGateTest;
 
 class DeterministicTestSuite {
 	public static function main():Void {
 		PR2MovieClipRuntimeTest.main();
+		StaticSubtreeAnalyzerTest.main();
+		FlattenSafetyGateTest.main();
 		FlButtonTest.main();
 		FlComponentsTest.main();
 		PixelEffect1Test.main();

@@ -31,6 +31,13 @@ class BakedSymbolAtlas {
 
 	private static var kongregateAtlas:Null<GenericAtlas>;
 
+	// True when `create` would replace this symbol with a baked Bitmap. Lets the
+	// static-subtree analysis treat a baked symbol as a single static quad without
+	// loading the atlas image or allocating a display object.
+	public static function isBaked(symbolName:String):Bool {
+		return KONGREGATE_SYMBOLS.exists(symbolName);
+	}
+
 	public static function create(symbolName:String):Null<Sprite> {
 		var frameName = KONGREGATE_SYMBOLS.get(symbolName);
 		if (frameName == null || !Assets.exists(KONGREGATE_ATLAS)) {

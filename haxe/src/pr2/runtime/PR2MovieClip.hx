@@ -63,6 +63,15 @@ class PR2MovieClip extends Sprite {
 	// child leaves this container so the map cannot outlive its children.
 	private var appliedFilterDefs:ObjectMap<DisplayObject, Array<FilterDef>> = new ObjectMap();
 
+	// Caches the display object built for a static element (shape/text), keyed by
+	// the element def reference. Animate emits a fresh element object whenever
+	// geometry or transform changes, so a cache hit guarantees identical output:
+	// the cached object is reused across frames instead of re-rasterizing the
+	// vector shape and re-uploading its GPU texture. Persists for the clip's
+	// lifetime (bounded by the clip's distinct static elements) so it also covers
+	// looping timelines, not just held keyframes; cleared on teardown.
+	private var shapeByElement:ObjectMap<DisplayElementDef, DisplayObject> = new ObjectMap();
+
 	private static inline var MASK_HOLDER_NAME = "__pr2_mask";
 	private static inline var MASKED_HOLDER_NAME = "__pr2_masked";
 
@@ -92,9 +101,30 @@ class PR2MovieClip extends Sprite {
 		isButtonSymbol = symbol.symbolType == "button";
 		if (isButtonSymbol) {
 			configureButtonSymbol();
+		} else if (maybeFlattenSubtree()) {
+			// Collapsed into a single cached bitmap; stays stopped, no per-frame work.
 		} else if (totalFrames > 1) {
 			play();
 		}
+	}
+
+	// Spike (opt-in via `-D pr2_flatten_cache`): when a top-level clip's whole
+	// subtree is provably static AND render-safe to flatten, freeze it and let the
+	// GPU composite it as one quad instead of N. This is the cacheAsBitmap lever for
+	// the lobby's ~198 static objects; gated on `FlattenPolicy` so it never touches
+	// a subtree that could change, and on `nestedDepth == 0` so each flattened region
+	// is cached once at its root rather than redundantly at every nesting level.
+	// `stopAll` freezes any held-keyframe descendants whose per-frame re-render would
+	// otherwise keep invalidating the cache.
+	private function maybeFlattenSubtree():Bool {
+		#if pr2_flatten_cache
+		if (nestedDepth == 0 && FlattenPolicy.isFlattenable(symbol)) {
+			stopAll();
+			cacheAsBitmap = true;
+			return true;
+		}
+		#end
+		return false;
 	}
 
 	public function play():Void {
@@ -308,8 +338,24 @@ class PR2MovieClip extends Sprite {
 		var desiredChildSet:ObjectMap<DisplayObject, Bool> = new ObjectMap();
 
 		for (element in frame.elements) {
-			var child = createDisplayObject(element, takeReusableClip(reusableClips, element));
-			applyElementProperties(child, element);
+			// Static visuals (shapes/text) are pure functions of their element def:
+			// Animate emits a new element object whenever geometry or transform
+			// changes, so the same element reference always renders identically.
+			// Reuse the previously built object instead of re-rasterizing it and
+			// re-uploading its GPU texture every frame. The cached object already
+			// carries the element's transform/visibility/filters, so its properties
+			// do not need re-applying.
+			var child:DisplayObject = null;
+			var cached = shapeByElement.get(element);
+			if (cached != null && !desiredChildSet.exists(cached)) {
+				child = cached;
+			} else {
+				child = createDisplayObject(element, takeReusableClip(reusableClips, element));
+				applyElementProperties(child, element);
+				if (isCacheableElement(element)) {
+					shapeByElement.set(element, child);
+				}
+			}
 			desiredChildren.push(child);
 			desiredChildSet.set(child, true);
 		}
@@ -333,6 +379,18 @@ class PR2MovieClip extends Sprite {
 			}
 		}
 		disposeUnusedReusableClips(reusableClips);
+	}
+
+	// Static, non-interactive, non-animated visuals whose rendered output depends
+	// only on the element def, so they are safe to cache and reuse across frames.
+	// Symbol instances (nested clips) keep their playback state and are handled by
+	// the name-based clip pool; interactive components hold their own state. Neither
+	// is cached here.
+	private function isCacheableElement(element:DisplayElementDef):Bool {
+		return switch (element.type) {
+			case "DOMShape" | "DOMRectangleObject" | "DOMOvalObject" | "DOMStaticText": true;
+			default: false;
+		}
 	}
 
 	// Rebuilds the frame honoring Animate mask layers. Masked layers are grouped
@@ -415,6 +473,9 @@ class PR2MovieClip extends Sprite {
 				disposeHolder(holder);
 			}
 		}
+		// Drop cached static children that were detached (kept for reuse across
+		// frames) so they cannot outlive the cleared display list.
+		shapeByElement = new ObjectMap();
 	}
 
 	private function disposeHolder(holder:Sprite):Void {

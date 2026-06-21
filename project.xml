@@ -22,5 +22,13 @@
 
 	<haxelib name="openfl" />
 
+	<!-- Flatten static, render-safe display subtrees into one cached GPU quad
+	     (pr2.runtime.FlattenPolicy gate + PR2MovieClip.maybeFlattenSubtree).
+	     On by default: measured the lobby 18.7fps -> 60fps (vsync cap) with a
+	     sub-perceptual (<=2/255) anti-alias delta. Both gates still run at
+	     runtime, so only static+safe subtrees are ever cached. Remove this
+	     define to A/B against the un-flattened render. -->
+	<haxedef name="pr2_flatten_cache" />
+
 	<window width="550" height="400" fps="27" background="#242A3A" resizable="false" />
 </project>
