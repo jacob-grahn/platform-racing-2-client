@@ -14,6 +14,7 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
+import pr2.generated.assets.AssetTypes.FilterDef;
 import pr2.generated.assets.AssetTypes.LayerDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.generated.assets.AssetTypes.TimelineDef;
@@ -52,6 +53,15 @@ class PR2MovieClip extends Sprite {
 	private var maskLayers:Map<Int, Bool> = new Map();
 	private var maskedLayerParents:Map<Int, Int> = new Map();
 	private var hasMaskLayers:Bool = false;
+
+	// Per-child record of the filter def array last assigned to each child,
+	// compared by reference. Frame defs are static catalog data, so an unchanged
+	// keyframe yields the same array instance every frame; skipping the
+	// reassignment lets OpenFL keep its cached filter raster instead of
+	// re-rasterizing the blur and re-uploading the GPU texture every frame (the
+	// dominant cost behind the lobby's 1fps render). Entries are removed when a
+	// child leaves this container so the map cannot outlive its children.
+	private var appliedFilterDefs:ObjectMap<DisplayObject, Array<FilterDef>> = new ObjectMap();
 
 	private static inline var MASK_HOLDER_NAME = "__pr2_mask";
 	private static inline var MASKED_HOLDER_NAME = "__pr2_masked";
@@ -308,6 +318,7 @@ class PR2MovieClip extends Sprite {
 		while (index >= 0) {
 			var child = getChildAt(index);
 			if (!desiredChildSet.exists(child)) {
+				appliedFilterDefs.remove(child);
 				removeChildAt(index);
 			}
 			index--;
@@ -391,6 +402,7 @@ class PR2MovieClip extends Sprite {
 	private function disposeChildren():Void {
 		while (numChildren > 0) {
 			var child = removeChildAt(numChildren - 1);
+			appliedFilterDefs.remove(child);
 			var clip = Std.downcast(child, PR2MovieClip);
 			if (clip != null) {
 				clip.dispose();
@@ -408,7 +420,9 @@ class PR2MovieClip extends Sprite {
 	private function disposeHolder(holder:Sprite):Void {
 		holder.mask = null;
 		while (holder.numChildren > 0) {
-			var nested = Std.downcast(holder.removeChildAt(holder.numChildren - 1), PR2MovieClip);
+			var nestedChild = holder.removeChildAt(holder.numChildren - 1);
+			appliedFilterDefs.remove(nestedChild);
+			var nested = Std.downcast(nestedChild, PR2MovieClip);
 			if (nested != null) {
 				nested.dispose();
 			}
@@ -685,22 +699,63 @@ class PR2MovieClip extends Sprite {
 		}
 
 		if (element.color != null) {
-			var color = element.color;
-			child.transform.colorTransform = new ColorTransform(
-				color.redMultiplier == null ? 1 : color.redMultiplier,
-				color.greenMultiplier == null ? 1 : color.greenMultiplier,
-				color.blueMultiplier == null ? 1 : color.blueMultiplier,
-				color.alphaMultiplier == null ? 1 : color.alphaMultiplier,
-				color.redOffset == null ? 0 : color.redOffset,
-				color.greenOffset == null ? 0 : color.greenOffset,
-				color.blueOffset == null ? 0 : color.blueOffset,
-				color.alphaOffset == null ? 0 : color.alphaOffset
-			);
+			applyColorTransform(child, element.color);
 		}
 
-		// Reassign filters every frame so a reused clip drops any filter left
-		// over from a previous keyframe; OpenFL only re-renders the filter pass
-		// when the array reference is set.
-		child.filters = element.filters == null ? null : FilterBuilder.build(element.filters);
+		applyFilters(child, element.filters);
+	}
+
+	// Only assigns a new ColorTransform when a channel actually differs from the
+	// child's current transform. Reassigning an equal transform every frame would
+	// re-trigger OpenFL's per-pixel color pass needlessly.
+	private function applyColorTransform(child:DisplayObject, color:Dynamic):Void {
+		var redMultiplier = color.redMultiplier == null ? 1 : color.redMultiplier;
+		var greenMultiplier = color.greenMultiplier == null ? 1 : color.greenMultiplier;
+		var blueMultiplier = color.blueMultiplier == null ? 1 : color.blueMultiplier;
+		var alphaMultiplier = color.alphaMultiplier == null ? 1 : color.alphaMultiplier;
+		var redOffset = color.redOffset == null ? 0 : color.redOffset;
+		var greenOffset = color.greenOffset == null ? 0 : color.greenOffset;
+		var blueOffset = color.blueOffset == null ? 0 : color.blueOffset;
+		var alphaOffset = color.alphaOffset == null ? 0 : color.alphaOffset;
+
+		var current = child.transform.colorTransform;
+		if (current != null
+			&& current.redMultiplier == redMultiplier
+			&& current.greenMultiplier == greenMultiplier
+			&& current.blueMultiplier == blueMultiplier
+			&& current.alphaMultiplier == alphaMultiplier
+			&& current.redOffset == redOffset
+			&& current.greenOffset == greenOffset
+			&& current.blueOffset == blueOffset
+			&& current.alphaOffset == alphaOffset) {
+			return;
+		}
+
+		child.transform.colorTransform = new ColorTransform(
+			redMultiplier, greenMultiplier, blueMultiplier, alphaMultiplier,
+			redOffset, greenOffset, blueOffset, alphaOffset
+		);
+	}
+
+	// Assigns filters only when the def array differs from the one last applied to
+	// this child. Setting `filters` invalidates OpenFL's cached filter raster, so a
+	// reused clip whose keyframe is unchanged keeps its existing filter pass rather
+	// than rebuilding the blur and re-uploading its texture every frame.
+	private function applyFilters(child:DisplayObject, defs:Array<FilterDef>):Void {
+		if (defs == null) {
+			// Drop any filter left over from a previous keyframe, once.
+			if (appliedFilterDefs.exists(child)) {
+				child.filters = null;
+				appliedFilterDefs.remove(child);
+			}
+			return;
+		}
+
+		if (appliedFilterDefs.get(child) == defs) {
+			return;
+		}
+
+		child.filters = FilterBuilder.build(defs);
+		appliedFilterDefs.set(child, defs);
 	}
 }

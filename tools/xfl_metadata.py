@@ -180,15 +180,36 @@ def parse_filter(element):
     return record
 
 
+def filter_is_noop(record):
+    """A filter that produces no visible output, so it can be dropped instead of
+    paying for a per-frame raster + GPU texture upload.
+
+    - Glow/DropShadow with strength 0 draw nothing.
+    - Glow/Blur with no blur radius spread nothing (a drop shadow can still show
+      an offset hard edge, so it is not covered here).
+    """
+    filter_type = record.get("type")
+    if filter_type in ("GlowFilter", "DropShadowFilter") and record.get("strength") == 0:
+        return True
+    if filter_type in ("GlowFilter", "BlurFilter"):
+        if record.get("blurX") == 0 and record.get("blurY") == 0:
+            return True
+    return False
+
+
 def parse_filters(element):
     wrapper = first_direct_child(element, "filters")
     if wrapper is None:
         return []
-    return [
-        parse_filter(child)
-        for child in list(wrapper)
-        if local_name(child.tag) in SUPPORTED_FILTERS
-    ]
+    filters = []
+    for child in list(wrapper):
+        if local_name(child.tag) not in SUPPORTED_FILTERS:
+            continue
+        record = parse_filter(child)
+        if filter_is_noop(record):
+            continue
+        filters.append(record)
+    return filters
 
 
 def parse_color_transform(element):
