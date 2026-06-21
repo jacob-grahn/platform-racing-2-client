@@ -774,10 +774,10 @@
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/ice_wave@4x.png",
@@ -790,20 +790,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/jet_pack@4x.png",
@@ -816,20 +816,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/laser@4x.png",
@@ -842,20 +842,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/lightning@4x.png",
@@ -868,20 +868,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/mine@4x.png",
@@ -894,20 +894,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/none@4x.png",
@@ -920,20 +920,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/speed_burst@4x.png",
@@ -946,20 +946,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/super_jump@4x.png",
@@ -972,20 +972,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/sword@4x.png",
@@ -998,20 +998,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {
       "atlas_group": "items/display",
       "category": "items",
       "drawingBounds": {
-        "height": 68.2345,
-        "width": 75.0222,
-        "x": -0.0104154,
-        "y": -0.00284346
+        "height": 69.2006,
+        "width": 77.9841,
+        "x": -1.49136,
+        "y": -0.980726
       },
       "group": "display",
       "png": "vector-art/png/items/display/teleport@4x.png",
@@ -1024,10 +1024,10 @@
       },
       "trim": {
         "empty": false,
-        "height": 274,
-        "width": 301,
-        "x": -1,
-        "y": -1
+        "height": 275,
+        "width": 304,
+        "x": -2,
+        "y": -2
       }
     },
     {

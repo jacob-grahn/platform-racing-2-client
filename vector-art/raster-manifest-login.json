@@ -106,7 +106,7 @@
       "category": "login",
       "drawingBounds": {
         "height": 395.299,
-        "width": 333.542,
+        "width": 335.833,
         "x": 0.0,
         "y": 0.0
       },
@@ -120,20 +120,20 @@
       },
       "trim": {
         "empty": false,
-        "height": 734,
-        "width": 1314,
+        "height": 736,
+        "width": 1316,
         "x": 21,
-        "y": 848
+        "y": 846
       }
     },
     {
       "atlas_group": null,
       "category": "login",
       "drawingBounds": {
-        "height": 35.0216,
-        "width": 57.0109,
-        "x": -14.0079,
-        "y": -18.002
+        "height": 36.3974,
+        "width": 59.2617,
+        "x": -15.1333,
+        "y": -18.6866
       },
       "png": "vector-art/png/login/mute_button@4x.png",
       "scale": 4,
@@ -145,10 +145,10 @@
       },
       "trim": {
         "empty": false,
-        "height": 141,
-        "width": 229,
-        "x": -57,
-        "y": -73
+        "height": 146,
+        "width": 234,
+        "x": -59,
+        "y": -75
       }
     }
   ],

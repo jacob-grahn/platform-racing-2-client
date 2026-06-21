@@ -35,8 +35,8 @@ class LoginPage extends Page {
 	private static inline var LOGIN_PAGE_TRIM_X = 21;
 	// Trim Y dropped from 370 once the Gwibble title (Layer 7) was removed from the
 	// page art; the topmost remaining content is now the menu panel. See raster
-	// manifest entry for login_page (vector-art/raster-manifest-other.json).
-	private static inline var LOGIN_PAGE_TRIM_Y = 848;
+	// manifest entry for login_page (vector-art/raster-manifest-login.json).
+	private static inline var LOGIN_PAGE_TRIM_Y = 846;
 
 	private static inline var MENU_X:Float = 275;
 	private static inline var MENU_Y:Float = 228;

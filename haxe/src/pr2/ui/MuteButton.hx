@@ -22,8 +22,8 @@ import openfl.utils.Assets;
 class MuteButton extends Sprite {
 	private static inline var MUTE_BUTTON_ASSET = "assets/login/mute_button@4x.png";
 	private static inline var MUTE_BUTTON_SCALE = 4;
-	private static inline var MUTE_BUTTON_TRIM_X = -57;
-	private static inline var MUTE_BUTTON_TRIM_Y = -73;
+	private static inline var MUTE_BUTTON_TRIM_X = -59;
+	private static inline var MUTE_BUTTON_TRIM_Y = -75;
 	private static var muted:Bool = false;
 
 	private var bitmap:Bitmap;
