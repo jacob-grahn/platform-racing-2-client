@@ -7,10 +7,10 @@
 <stop  offset="100%" stop-color="#FFFFFF" stop-opacity="0.6470588235294118"/>
 </linearGradient>
 
-<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="-0.4750000000000014" y1="50.15" x2="100.775" y2="50.15" spreadMethod="pad">
-<stop  offset="0%" stop-color="#333333"/>
+<linearGradient id="Gradient_2" gradientUnits="userSpaceOnUse" x1="50.15" y1="-0.4750000000000014" x2="50.15" y2="100.775" spreadMethod="pad">
+<stop  offset="0%" stop-color="#999999"/>
 
-<stop  offset="100%" stop-color="#999999"/>
+<stop  offset="100%" stop-color="#333333"/>
 </linearGradient>
 
 <linearGradient id="Gradient_3" gradientUnits="userSpaceOnUse" x1="3.3" y1="-3.0500000000000003" x2="3.3" y2="3.0500000000000003" spreadMethod="pad">
@@ -65,7 +65,7 @@ Q 2 0.05 5.5 -0.45
 L 5.7 -0.5 5.75 -0.75 5.7 -0.9 1 -1.15 Z"/>
 </g>
 
-<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
+<path id="UI_Popups__outside_levels__BG_0_Layer0_0_1_STROKES" stroke="url(#Gradient_2)" stroke-opacity="0.5" stroke-width="0.05" stroke-linejoin="round" stroke-linecap="round" fill="none" d="
 M 0.005554962158203114 95.05616683959961
 L 0.005554962158203114 4.93258972167969
 Q 0.005554962158203114 -0.005688476562497158 4.9438331604003904 -0.005688476562497158
