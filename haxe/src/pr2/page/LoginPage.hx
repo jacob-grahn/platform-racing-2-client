@@ -47,7 +47,6 @@ class LoginPage extends Page {
 	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
 	private var kongHitArea:Null<Sprite>;
-	private var statusText:Null<TextField>;
 	private var activePopup:Null<LoginFlashPopup>;
 	private var servers:Array<ServerInfo> = [];
 	private var selectedServerIndex:Int = 0;
@@ -78,9 +77,6 @@ class LoginPage extends Page {
 		kongHitArea = createHitArea(5, 364, 183, 31, openKongDialog);
 		addChild(kongHitArea);
 
-		statusText = makeText(10, 8, 530, 20, 11, 0x20354A, TextFormatAlign.CENTER);
-		statusText.text = "Loading servers...";
-		addChild(statusText);
 		loadServers();
 	}
 
@@ -100,11 +96,6 @@ class LoginPage extends Page {
 			kongHitArea.parent.removeChild(kongHitArea);
 		}
 		kongHitArea = null;
-
-		if (statusText != null && statusText.parent != null) {
-			statusText.parent.removeChild(statusText);
-		}
-		statusText = null;
 
 		if (titleText != null && titleText.parent != null) {
 			titleText.parent.removeChild(titleText);
@@ -287,15 +278,12 @@ class LoginPage extends Page {
 					? "Guest auth accepted. Lobby handoff is not ported yet."
 					: "Account auth accepted. Waiting for socket loginSuccessful/lobby handoff.";
 				popup.setMessage(message);
-				setStatus(message);
 			} else {
 				var message = result.message == "" ? "Login failed." : result.message;
 				popup.setMessage(message);
-				setStatus(message);
 			}
 		}, function(message:String):Void {
 			popup.setMessage(message);
-			setStatus(message);
 		});
 	}
 
@@ -325,13 +313,10 @@ class LoginPage extends Page {
 				return server.address != "" && server.port > 0;
 			});
 			selectedServerIndex = findServerIndex(previousServer);
-			var selected = selectedServer();
-			setStatus(selected == null ? "No usable servers found." : 'Loaded ${servers.length} servers. Selected ${selected.label()}.');
 			updateActiveServerCombos();
 		}, function(message:String):Void {
 			servers = [];
 			selectedServerIndex = 0;
-			setStatus(message);
 			updateActiveServerCombos();
 		});
 	}
@@ -362,7 +347,6 @@ class LoginPage extends Page {
 			return;
 		}
 		selectedServerIndex = combo.selectedIndex;
-		setStatus('Selected ${servers[selectedServerIndex].label()}.');
 		updateActiveServerCombos();
 	}
 
@@ -418,9 +402,7 @@ class LoginPage extends Page {
 			switch (status) {
 				case Message(message):
 					popup.setMessage(message);
-					setStatus(message);
 				case LoginId(loginId):
-					setStatus('Received login id $loginId from ${server.label()}.');
 					openLoggingInPopup(loginId, userName, userPass, remember, server);
 				case LoginSuccessful(socketUserName):
 					// The server confirms the session over the socket after
@@ -440,7 +422,6 @@ class LoginPage extends Page {
 			socketProbe = null;
 		}
 		closePopup();
-		setStatus('Logged in as $userName.');
 		// Guests connect with no account group; real members would carry their
 		// group/id from the login response. Until that is parsed, treat named
 		// logins as members so the member lobby (PMs/Account/Favorites) is shown.
@@ -455,12 +436,6 @@ class LoginPage extends Page {
 		if (socketProbe != null) {
 			socketProbe.close();
 			socketProbe = null;
-		}
-	}
-
-	private function setStatus(message:String):Void {
-		if (statusText != null) {
-			statusText.text = message;
 		}
 	}
 
@@ -493,7 +468,7 @@ class LoginPage extends Page {
 		text.wordWrap = false;
 		text.text = "Platform Racing\n-- 2 --";
 		text.setTextFormat(format);
-		text.filters = [new GlowFilter(0xFFFFFF, 1, 4, 4, 2, 3)];
+		text.filters = [new GlowFilter(0xFFFFFF, 1, 6, 6, 2, 3)];
 		return text;
 	}
 
@@ -512,15 +487,4 @@ class LoginPage extends Page {
 		return hitArea;
 	}
 
-	private static function makeText(x:Float, y:Float, width:Float, height:Float, size:Int, color:Int, align:TextFormatAlign):TextField {
-		var text = new TextField();
-		text.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, size, color, false, false, false, null, null, align);
-		text.x = x;
-		text.y = y;
-		text.width = width;
-		text.height = height;
-		text.selectable = false;
-		text.mouseEnabled = false;
-		return text;
-	}
 }

@@ -11,6 +11,9 @@ import pr2.runtime.FontResolver;
 class LoginPageMenuButton extends Sprite {
 	private static inline var HIT_WIDTH:Float = 116;
 	private static inline var HIT_HEIGHT:Float = 20;
+	// The XFL fields start at y=-7; OpenFL's Verdana metrics render their glyphs
+	// two pixels lower than Flash, so compensate to match the source baseline.
+	private static inline var TEXT_Y:Float = -7;
 
 	private var label:String;
 	private var clickHandler:Void->Void;
@@ -29,12 +32,13 @@ class LoginPageMenuButton extends Sprite {
 		drawHitArea();
 
 		shadowText = buildTextField(0xFFFFFF);
-		shadowText.x = -HIT_WIDTH / 2 + 1;
-		shadowText.y = 1;
+		shadowText.x = -HIT_WIDTH / 2;
+		shadowText.y = TEXT_Y;
 		addChild(shadowText);
 
 		frontText = buildTextField(0x333333);
-		frontText.x = -HIT_WIDTH / 2;
+		frontText.x = -HIT_WIDTH / 2 + 1;
+		frontText.y = TEXT_Y + 1;
 		addChild(frontText);
 		setLabel(label);
 
@@ -67,7 +71,7 @@ class LoginPageMenuButton extends Sprite {
 
 	private function drawHitArea():Void {
 		graphics.beginFill(0xFFFFFF, 0);
-		graphics.drawRect(-HIT_WIDTH / 2, 0, HIT_WIDTH, HIT_HEIGHT);
+		graphics.drawRect(-HIT_WIDTH / 2, TEXT_Y, HIT_WIDTH, HIT_HEIGHT);
 		graphics.endFill();
 	}
 
