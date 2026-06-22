@@ -58,5 +58,26 @@ class FlSkin {
 		skin.scaleY = nativeH <= 0 ? 1 : height / nativeH;
 	}
 
+	/**
+		Nine-slice that keeps `scale9Grid` active, so the skin's bevels/borders hold
+		their native thickness instead of stretching. Use this for skins that resize
+		a lot in one axis (e.g. the multiline TextArea background, which scales ~14x
+		vertically — plain scaling there turns the 1px top/bottom edges into thick
+		grey bands across the text). Safe only when the skin carries no residual
+		outer transform; controls that keep an authored instance scale must use
+		`nineSlice` instead to dodge the HTML5 right/bottom-slice clipping bug.
+	**/
+	public static function nineSliceBordered(skin:DisplayObject, grid:Rectangle, nativeW:Float, nativeH:Float, width:Float, height:Float):Void {
+		try {
+			skin.scale9Grid = grid;
+		} catch (_:Dynamic) {
+			// Target rejected scale9Grid on a vector sprite; fall back to plain scale.
+			nineSlice(skin, grid, nativeW, nativeH, width, height);
+			return;
+		}
+		skin.scaleX = nativeW <= 0 ? 1 : width / nativeW;
+		skin.scaleY = nativeH <= 0 ? 1 : height / nativeH;
+	}
+
 	private function new() {}
 }

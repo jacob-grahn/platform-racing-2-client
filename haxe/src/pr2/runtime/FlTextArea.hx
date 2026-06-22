@@ -1,9 +1,8 @@
 package pr2.runtime;
 
-import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
@@ -22,21 +21,21 @@ import openfl.text.TextFormatAlign;
 	placeholder.
 **/
 class FlTextArea extends Sprite {
-	private static inline final SKIN_PREFIX:String = "Components/Component Assets/TextAreaSkins/TextArea_";
-	private static inline final SKIN_NOMINAL_WIDTH:Float = 152;
-	private static inline final SKIN_NOMINAL_HEIGHT:Float = 22;
-	private static final SKIN_GRID = new Rectangle(1.55, 1.55, 148.5, 18.4);
+	// TextArea_upSkin is a white box with a 1px inset border. The skin art is only
+	// 22px tall, so scaling it to a multiline box (~14x) smears that 1px border
+	// into thick grey bands; we draw the border ourselves at the exact size
+	// instead. Colours lifted straight from the skin's fills.
+	private static inline final BORDER_OUTER:Int = 0xC9CBCC;
+	private static inline final BORDER_SHADOW:Int = 0x6D6F70;
+	private static inline final FILL_ENABLED:Int = 0xFFFFFF;
+	private static inline final FILL_DISABLED:Int = 0xEEEEEE;
 
-	private var skinHolder:Sprite;
-	private var skinCache:Map<String, DisplayObject> = new Map();
-	private var currentSkin:Null<DisplayObject>;
+	private var background:Shape;
 	private var field:TextField;
 	private var scrollBar:FlUIScrollBar;
 
 	private var boxWidth:Float = 160;
 	private var boxHeight:Float = 100;
-	private var nativeWidth:Float = SKIN_NOMINAL_WIDTH;
-	private var nativeHeight:Float = SKIN_NOMINAL_HEIGHT;
 
 	private var _enabled:Bool = true;
 
@@ -52,8 +51,8 @@ class FlTextArea extends Sprite {
 		boxWidth = width;
 		boxHeight = height;
 
-		skinHolder = new Sprite();
-		addChild(skinHolder);
+		background = new Shape();
+		addChild(background);
 
 		field = new TextField();
 		field.type = TextFieldType.DYNAMIC;
@@ -80,9 +79,7 @@ class FlTextArea extends Sprite {
 	public function setSize(width:Float, height:Float):Void {
 		boxWidth = width;
 		boxHeight = height;
-		for (skin in skinCache) {
-			FlSkin.nineSlice(skin, SKIN_GRID, nativeWidth, nativeHeight, boxWidth, boxHeight);
-		}
+		redraw();
 		layout();
 	}
 
@@ -152,35 +149,21 @@ class FlTextArea extends Sprite {
 		return scrollBar;
 	}
 
+	/** Draw the white field box with its 1px inset border at the exact size. */
 	private function redraw():Void {
-		var skin = skinForState(_enabled ? "upSkin" : "disabledSkin");
-		if (skin == currentSkin) {
-			return;
-		}
-		if (currentSkin != null && currentSkin.parent == skinHolder) {
-			skinHolder.removeChild(currentSkin);
-		}
-		currentSkin = skin;
-		if (skin != null) {
-			skinHolder.addChildAt(skin, 0);
-		}
-	}
-
-	private function skinForState(state:String):Null<DisplayObject> {
-		var cached = skinCache.get(state);
-		if (cached != null) {
-			return cached;
-		}
-		var skin = FlSkin.create(SKIN_PREFIX + state);
-		if (skin == null) {
-			return null;
-		}
-		var bounds = FlSkin.nativeBounds(skin, SKIN_NOMINAL_WIDTH, SKIN_NOMINAL_HEIGHT);
-		nativeWidth = bounds.width;
-		nativeHeight = bounds.height;
-		FlSkin.nineSlice(skin, SKIN_GRID, nativeWidth, nativeHeight, boxWidth, boxHeight);
-		skinCache.set(state, skin);
-		return skin;
+		var g = background.graphics;
+		g.clear();
+		// Outer 1px frame.
+		g.beginFill(BORDER_OUTER);
+		g.drawRect(0, 0, boxWidth, boxHeight);
+		g.endFill();
+		// Inner fill, inset by the 1px border, with a faint top/left shadow line.
+		g.beginFill(BORDER_SHADOW);
+		g.drawRect(1, 1, boxWidth - 2, boxHeight - 2);
+		g.endFill();
+		g.beginFill(_enabled ? FILL_ENABLED : FILL_DISABLED);
+		g.drawRect(1, 2, boxWidth - 2, boxHeight - 3);
+		g.endFill();
 	}
 
 	private function layout():Void {
