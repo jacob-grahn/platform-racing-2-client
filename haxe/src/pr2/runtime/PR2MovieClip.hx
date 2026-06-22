@@ -754,10 +754,10 @@ class PR2MovieClip extends Sprite {
 			var b = matrix.b == null ? 0 : matrix.b;
 			var c = matrix.c == null ? 0 : matrix.c;
 			var d = matrix.d == null ? 1 : matrix.d;
-			// fl.controls.Button consumes instance scaling as its width/height. The
+			// fl.controls consume instance scaling as their width/height. The
 			// factory has already baked those dimensions into the control, so retain
-			// only rotation/skew here instead of also distorting the label glyphs.
-			if (Std.isOfType(child, FlButton) || Std.isOfType(child, FlTextInput) || Std.isOfType(child, FlComboBox)) {
+			// only rotation/skew here instead of also distorting the text/glyphs.
+			if (Std.isOfType(child, FlButton) || Std.isOfType(child, FlTextInput) || Std.isOfType(child, FlComboBox) || Std.isOfType(child, FlTextArea)) {
 				var scaleX = Math.max(0.0001, Math.sqrt(a * a + b * b));
 				var scaleY = Math.max(0.0001, Math.sqrt(c * c + d * d));
 				a /= scaleX;

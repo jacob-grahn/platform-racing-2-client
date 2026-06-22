@@ -56,7 +56,11 @@ class FlComponentFactory {
 	}
 
 	private static function createTextAreaComponent(element:DisplayElementDef):DisplayObject {
-		var size = componentSize(element, 160, 100);
+		// Like the other fl.controls, an authored instance scale is the component's
+		// box size, not a glyph transform. Bake scale * the fl TextArea default
+		// (100x100) into the control here; applyElementProperties strips the scale
+		// from the matrix so the text renders at its native size.
+		var size = scaledComponentSize(element, 100, 100);
 		var area = new FlTextArea(size.width, size.height);
 		area.editable = componentBool(element, "editable", true);
 		area.text = componentString(element, "text", "");
