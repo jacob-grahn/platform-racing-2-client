@@ -1,5 +1,6 @@
 package pr2;
 
+import pr2.audio.AudioUnlockGateTest;
 import pr2.character.CharacterAtlasTest;
 import pr2.character.CharacterStateTest;
 import pr2.crypto.PR2EncryptorTest;
@@ -30,6 +31,7 @@ import pr2.runtime.FlattenSafetyGateTest;
 
 class DeterministicTestSuite {
 	public static function main():Void {
+		AudioUnlockGateTest.main();
 		PR2MovieClipRuntimeTest.main();
 		StaticSubtreeAnalyzerTest.main();
 		FlattenSafetyGateTest.main();

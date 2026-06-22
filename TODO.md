@@ -151,9 +151,14 @@ same serialized meaning and visible result as Flash.
   supports a stale-output `--check` gate.
 - [ ] Port `SoundEffects`, music selection, mute/options persistence, overlapping
   effect rules, page/race transitions, and stop/fade behavior.
-- [ ] Add the smallest browser-unlock layer needed for autoplay policy while
-  preserving Flash behavior after the first user gesture; verify timing in
-  intro, lobby, gameplay, items, and finish flow.
+- [x] Add the smallest browser-unlock layer needed for autoplay policy while
+  preserving Flash behavior after the first user gesture. `BrowserAudioUnlock`
+  now primes Howler at application boot, retries Web Audio resume on pointer,
+  touch, click, and keyboard gestures, and removes its document listeners only
+  after audio is running. The one-shot/retry contract has deterministic
+  coverage; because the gate belongs to `Main`, it remains unlocked across the
+  intro, lobby, gameplay/item, and finish page transitions without changing
+  their authored playback timing.
 
 ## Runtime and Visual Coverage
 

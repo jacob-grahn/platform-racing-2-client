@@ -11,6 +11,7 @@ import openfl.events.Event;
 import pr2.Constants;
 import pr2.app.QueryParams;
 import pr2.app.Screen;
+import pr2.audio.BrowserAudioUnlock;
 import pr2.net.ServerConfig;
 import pr2.harness.GameplayHarness;
 import pr2.page.CampaignTestScreen;
@@ -45,6 +46,7 @@ class Main extends Sprite {
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		pr2.app.AppStage.stage = stage;
+		BrowserAudioUnlock.install();
 
 		try {
 			var query = currentQuery();
