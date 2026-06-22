@@ -71,8 +71,6 @@ The physics port must map 1:1 to the original engine, preserving its quirks and
 bugs. Do not "fix" or idealize behavior — replicate the AS3 exactly, including
 rounding, ordering, and edge cases.
 
-- [ ] Audit and port rotation logic 1:1 (block/character rotation, angle math,
-  update order, and any rounding/overflow quirks).
 - [ ] Audit and port character physics 1:1 (movement, jumping, friction,
   collision response, state transitions, and their quirks).
 - [ ] Audit and port item physics/interaction 1:1 (item effects on the

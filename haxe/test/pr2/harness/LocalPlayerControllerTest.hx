@@ -54,6 +54,8 @@ class LocalPlayerControllerTest {
 		testBumpingRotateBlockFreezesPlayer();
 		testRotateRightCompletesCourseRotation();
 		testRotateLeftCompletesCourseRotation();
+		testRotationTweenMatchesCourseFrames();
+		testRotationMapsSafePosition();
 		testCollisionSnapsAgainstRotatedCeiling();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
@@ -807,6 +809,34 @@ class LocalPlayerControllerTest {
 		assertEquals(-90, state.courseRotation, "left rotation decreases course rotation");
 		assertClose(frozen.y, state.x, "left rotation maps x from frozen y");
 		assertClose(-frozen.x, state.y, "left rotation maps y from frozen x");
+	}
+
+	private static function testRotationTweenMatchesCourseFrames():Void {
+		var player = bumpRotateBlock(BlockType.RotateRight);
+		player.step(new LocalPlayerInput());
+		assertEquals(3, player.courseTweenRotation, "course tween advances three degrees per frame");
+		assertEquals(-3, player.characterRotation, "character counters the course tween");
+
+		for (_ in 0...28) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(87, player.courseTweenRotation, "course reaches 87 degrees before the final frame");
+		assertEquals(-87, player.characterRotation, "character counter-rotation reaches -87 degrees");
+
+		player.step(new LocalPlayerInput());
+		assertEquals(0, player.courseTweenRotation, "completed tween resets the course container");
+		assertEquals(0, player.characterRotation, "completed tween resets character rotMod");
+	}
+
+	private static function testRotationMapsSafePosition():Void {
+		var player = bumpRotateBlock(BlockType.RotateRight);
+		var initialSafeX = player.lastSafeX;
+		var initialSafeY = player.lastSafeY;
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput());
+		}
+		assertClose(-initialSafeY, player.lastSafeX, "right rotation maps the last-safe x coordinate");
+		assertClose(initialSafeX, player.lastSafeY, "right rotation maps the last-safe y coordinate");
 	}
 
 	private static function testCollisionSnapsAgainstRotatedCeiling():Void {

@@ -128,6 +128,9 @@ Completed subsystems (parity-relevant facts worth keeping):
   multiplier changes.
   Start blocks mark spawn positions but are excluded from character collision, as
   in `background/Map.as`.
+  Rotate blocks use Flash's 30-frame, 3-degree course tween, counter-rotate the
+  local character each frame, rotate character and safe coordinates on completion,
+  and preserve `Data.rotatePoint` integer coercion and single-wrap quirks.
   Character animation state follows the Flash input-driven conditions: grounded
   run/crouch-walk require a held direction, coasting stands, and all airborne
   land movement uses the jump state.

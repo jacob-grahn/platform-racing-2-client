@@ -4,6 +4,7 @@ import pr2.character.CharacterState;
 import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.BlockType;
+import pr2.gameplay.RotationMath;
 
 class LocalPlayerController {
 	public static inline var STANDING_WIDTH:Float = 20;
@@ -52,6 +53,8 @@ class LocalPlayerController {
 	public var itemUses(default, null):Null<Int> = null;
 	public var lastItemEffect(default, null):Null<String> = null;
 	public var courseRotation(default, null):Int = 0;
+	public var courseTweenRotation(default, null):Int = 0;
+	public var characterRotation(default, null):Int = 0;
 	public var finished(default, null):Bool = false;
 	public var finishBlockId(default, null):Null<Int> = null;
 	public var finishX(default, null):Null<Int> = null;
@@ -90,8 +93,8 @@ class LocalPlayerController {
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
 	private var moveRandomSeed:Int = 1;
-	private var lastSafeX:Float;
-	private var lastSafeY:Float;
+	public var lastSafeX(default, null):Float;
+	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
 	private var standingTileY:Int;
 	private var rotateFramesRemaining:Int = 0;
@@ -620,12 +623,16 @@ class LocalPlayerController {
 		grounded = false;
 		rotateDirection = block.type == BlockType.RotateRight ? 1 : -1;
 		rotateFramesRemaining = ROTATE_FRAMES;
+		courseTweenRotation = 0;
+		characterRotation = 0;
 	}
 
 	private function updateRotation():Void {
 		if (rotateFramesRemaining <= 0) {
 			return;
 		}
+		courseTweenRotation += rotateDirection * 3;
+		characterRotation = -courseTweenRotation;
 		rotateFramesRemaining--;
 		if (rotateFramesRemaining == 0) {
 			finishRotation();
@@ -640,7 +647,7 @@ class LocalPlayerController {
 			var safeX = -lastSafeY;
 			lastSafeY = lastSafeX;
 			lastSafeX = safeX;
-			courseRotation = normalizeRotation(courseRotation + 90);
+			courseRotation = RotationMath.normalizeDisplayRotation(courseRotation + 90);
 		} else {
 			var nextX = y;
 			y = -x;
@@ -648,9 +655,11 @@ class LocalPlayerController {
 			var safeX = lastSafeY;
 			lastSafeY = -lastSafeX;
 			lastSafeX = safeX;
-			courseRotation = normalizeRotation(courseRotation - 90);
+			courseRotation = RotationMath.normalizeDisplayRotation(courseRotation - 90);
 		}
 		rotateDirection = 0;
+		courseTweenRotation = 0;
+		characterRotation = 0;
 		setMode(MODE_LAND);
 	}
 
@@ -1178,22 +1187,8 @@ class LocalPlayerController {
 	}
 
 	private static function rotatePoint(x:Float, y:Float, rotation:Int):PixelPoint {
-		return switch (normalizeRotation(rotation)) {
-			case 90: new PixelPoint(y, -x);
-			case -90: new PixelPoint(-y, x);
-			case 180 | -180: new PixelPoint(-x, -y);
-			default: new PixelPoint(x, y);
-		}
-	}
-
-	private static function normalizeRotation(rotation:Int):Int {
-		var normalized = rotation % 360;
-		if (normalized > 180) {
-			normalized -= 360;
-		} else if (normalized < -180) {
-			normalized += 360;
-		}
-		return normalized;
+		var point = RotationMath.rotatePoint(x, y, rotation);
+		return new PixelPoint(point.x, point.y);
 	}
 
 	private static function clamp(value:Float, min:Float, max:Float):Float {

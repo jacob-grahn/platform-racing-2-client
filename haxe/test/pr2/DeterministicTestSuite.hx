@@ -9,6 +9,7 @@ import pr2.effects.PixelEffect1Test;
 import pr2.harness.FixtureLevelRendererTest;
 import pr2.harness.GameplayHarnessOptionsTest;
 import pr2.harness.LocalPlayerControllerTest;
+import pr2.gameplay.RotationMathTest;
 import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
@@ -60,6 +61,7 @@ class DeterministicTestSuite {
 		FixtureLevelRendererTest.main();
 		GameplayHarnessOptionsTest.main();
 		LocalPlayerControllerTest.main();
+		RotationMathTest.main();
 		ServerConfigTest.main();
 		ServerStatusClientTest.main();
 		LoginSocketProtocolTest.main();
