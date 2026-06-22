@@ -97,6 +97,13 @@ final class ServerConfig {
 	}
 
 	/**
+		Password recovery endpoint, matching `menu.ForgotPassPopup`.
+	**/
+	public static function forgotPasswordUrl():String {
+		return host + "/forgot_password.php";
+	}
+
+	/**
 		Friends/Following/Ignored player list endpoint, matching
 		`social.PlayersTabUserListDataLoader`: `{host}/user_list_get.php?mode={mode}`.
 	**/

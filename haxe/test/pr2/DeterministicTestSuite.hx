@@ -16,6 +16,7 @@ import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
 import pr2.net.AccountCreationClientTest;
+import pr2.net.ForgotPasswordClientTest;
 import pr2.net.CampaignListClientTest;
 import pr2.net.LevelDataClientTest;
 import pr2.net.JsonClientTest;
@@ -54,6 +55,7 @@ class DeterministicTestSuite {
 		LoginSocketProtocolTest.main();
 		CampaignListClientTest.main();
 		AccountCreationClientTest.main();
+		ForgotPasswordClientTest.main();
 		LoginAuthClientTest.main();
 		LevelDataClientTest.main();
 		JsonClientTest.main();

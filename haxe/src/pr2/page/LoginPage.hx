@@ -17,6 +17,7 @@ import openfl.utils.Assets;
 import pr2.page.LoginSocketProbe.LoginProbeStatus;
 import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
+import pr2.net.ForgotPasswordClient;
 import pr2.net.LoginAuthClient;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
@@ -149,7 +150,7 @@ class LoginPage extends Page {
 			popup.setComponentLabel("rememberMe_chk", remember ? "Remember Me: Yes" : "Remember Me");
 		});
 		popup.bindButton("forgotPass", function():Void {
-			popup.setMessage("Password reset is not ported yet.");
+			openForgotPasswordDialog(nameInput.text);
 		});
 		popup.bindButton("cancel_bt", closePopup);
 		popup.bindButton("login_bt", function():Void {
@@ -166,6 +167,45 @@ class LoginPage extends Page {
 			closePopup();
 			openConnectingPopup(userName, userPass, remember);
 		});
+	}
+
+	private function openForgotPasswordDialog(prefilledName:String):Void {
+		var popup = openPopup("ForgotPassPopupGraphic");
+		var nameInput = popup.input("nameBox");
+		var emailInput = popup.input("emailBox");
+		nameInput.text = prefilledName;
+
+		var submit = function():Void {
+			var name = nameInput.text;
+			var email = emailInput.text;
+			var progress = openPopup("UploadingPopupGraphic");
+			var canceled = false;
+			progress.setText("textBox", "Checking your information...");
+			progress.bindButton("close_bt", function():Void {
+				canceled = true;
+				closePopup();
+			});
+			ForgotPasswordClient.send(name, email, function(result):Void {
+				if (!canceled) {
+					openLoginMessage(result.message == "" ? "Your request was processed." : result.message);
+				}
+			}, function(message:String):Void {
+				if (!canceled) {
+					openLoginMessage("Error: " + message);
+				}
+			});
+		};
+
+		popup.bindButton("ok_bt", submit);
+		popup.bindButton("cancel_bt", closePopup);
+		popup.bindEnter("nameBox", submit);
+		popup.bindEnter("emailBox", submit);
+	}
+
+	private function openLoginMessage(message:String):Void {
+		var popup = openPopup("MessagePopupGraphic");
+		popup.setText("textBox", message);
+		popup.bindButton("ok_bt", closePopup);
 	}
 
 	private function openGuestDialog():Void {

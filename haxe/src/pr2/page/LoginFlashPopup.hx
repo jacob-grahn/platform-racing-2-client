@@ -5,6 +5,7 @@ import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -20,6 +21,7 @@ class LoginFlashPopup extends Sprite {
 	private var messageText:TextField;
 	private var buttonHandlers:Array<{target:DisplayObject, handler:MouseEvent->Void}> = [];
 	private var comboHandlers:Array<{target:FlComboBox, handler:Event->Void}> = [];
+	private var keyHandlers:Array<{target:TextField, handler:KeyboardEvent->Void}> = [];
 
 	public function new(linkage:String) {
 		super();
@@ -97,12 +99,30 @@ class LoginFlashPopup extends Sprite {
 		buttonHandlers.push({target: target, handler: handler});
 	}
 
+	public function bindEnter(name:String, enterHandler:Void->Void):Void {
+		var target = input(name);
+		var handler = function(event:KeyboardEvent):Void {
+			if (event.keyCode == 13) {
+				enterHandler();
+			}
+		};
+		target.addEventListener(KeyboardEvent.KEY_DOWN, handler);
+		keyHandlers.push({target: target, handler: handler});
+	}
+
 	public function setComponentLabel(name:String, value:String):Void {
 		var target = Std.downcast(child(name), DisplayObjectContainer);
 		if (target == null) {
 			return;
 		}
 		var text = firstTextField(target);
+		if (text != null) {
+			text.text = value;
+		}
+	}
+
+	public function setText(name:String, value:String):Void {
+		var text = FlComponents.asTextField(child(name));
 		if (text != null) {
 			text.text = value;
 		}
@@ -121,6 +141,10 @@ class LoginFlashPopup extends Sprite {
 			entry.target.removeEventListener(Event.CHANGE, entry.handler);
 		}
 		comboHandlers = [];
+		for (entry in keyHandlers) {
+			entry.target.removeEventListener(KeyboardEvent.KEY_DOWN, entry.handler);
+		}
+		keyHandlers = [];
 		art.dispose();
 	}
 

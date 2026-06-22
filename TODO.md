@@ -37,6 +37,11 @@ The persistent `LobbySocket` must survive every page transition as Flash's
   - Replace status text and click-to-cycle stand-ins with the authored popup and
     component behavior; cover guest, member, bad credentials, full/down server,
     disconnect, reconnect, and canceled login.
+  - Forgot-password recovery now uses the authored popup, prefills the login
+    name, submits the original `name`/`email` form to `forgot_password.php`,
+    supports Enter and cancel, and displays the server response through the
+    authored progress/message popups. Deterministic coverage locks the endpoint,
+    fields, and Flash-compatible JSON success/error handling.
 - [ ] Replace the campaign-harness redirect with the real level-entry protocol.
   - Port slot selection, `CourseMenu`, access checks, password/private flows,
     spectating, room commands, loading/cancel/error states, and game-page

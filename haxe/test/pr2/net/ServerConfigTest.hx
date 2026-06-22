@@ -33,6 +33,7 @@ class ServerConfigTest {
 		ServerConfig.applyLocalOverrides(" http://localhost:8080/api ");
 		assertEquals("http://localhost:8080/api", ServerConfig.getHost(), "local env host");
 		assertEquals("http://localhost:8080/api/login.php", ServerConfig.loginUrl(), "local env login url");
+		assertEquals("http://localhost:8080/api/forgot_password.php", ServerConfig.forgotPasswordUrl(), "local env forgot-password url");
 	}
 
 	private static function testBlankHostDoesNotReplaceCurrentHost():Void {
