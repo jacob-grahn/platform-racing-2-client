@@ -45,6 +45,12 @@ class FlUIScrollBar extends Sprite {
 
 	private var _scrollTarget:Null<TextField>;
 
+	// Last metrics read off the bound field, so the per-frame poll only re-lays
+	// out (which rebuilds skins) when the content actually scrolled or changed.
+	private var lastMaxScrollV:Int = -1;
+	private var lastScrollV:Int = -1;
+	private var lastBottomScrollV:Int = -1;
+
 	public var scrollPosition(get, set):Float;
 	public var scrollTarget(get, set):Null<TextField>;
 
@@ -64,7 +70,33 @@ class FlUIScrollBar extends Sprite {
 		thumb = makeThumb();
 		addChild(thumb);
 
+		// Keep the bar in lock-step with its field no matter how the text is
+		// mutated. Consumers like ChatTab write the underlying TextField directly
+		// (htmlText/scrollV) rather than going through FlTextArea's setters, so an
+		// on-stage poll is the only way the bar reliably learns it changed.
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+
 		layout();
+	}
+
+	private function onAddedToStage(_):Void {
+		addEventListener(Event.ENTER_FRAME, onEnterFrame);
+	}
+
+	private function onRemovedFromStage(_):Void {
+		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+	}
+
+	private function onEnterFrame(_):Void {
+		if (dragging || _scrollTarget == null) {
+			return;
+		}
+		if (_scrollTarget.maxScrollV != lastMaxScrollV
+			|| _scrollTarget.scrollV != lastScrollV
+			|| _scrollTarget.bottomScrollV != lastBottomScrollV) {
+			syncFromTarget();
+		}
 	}
 
 	public function setSize(height:Float):Void {
@@ -112,9 +144,11 @@ class FlUIScrollBar extends Sprite {
 		if (_scrollTarget == null) {
 			return;
 		}
-		var maxScroll = _scrollTarget.maxScrollV;
-		setScrollProperties(_scrollTarget.bottomScrollV - _scrollTarget.scrollV + 1, 1, maxScroll);
-		position = clampPosition(_scrollTarget.scrollV);
+		lastMaxScrollV = _scrollTarget.maxScrollV;
+		lastScrollV = _scrollTarget.scrollV;
+		lastBottomScrollV = _scrollTarget.bottomScrollV;
+		setScrollProperties(lastBottomScrollV - lastScrollV + 1, 1, lastMaxScrollV);
+		position = clampPosition(lastScrollV);
 		layout();
 	}
 
@@ -144,6 +178,7 @@ class FlUIScrollBar extends Sprite {
 	private function applyToTarget():Void {
 		if (_scrollTarget != null) {
 			_scrollTarget.scrollV = Std.int(position);
+			lastScrollV = _scrollTarget.scrollV;
 		}
 	}
 

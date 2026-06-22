@@ -57,10 +57,13 @@ class FlComponentFactory {
 
 	private static function createTextAreaComponent(element:DisplayElementDef):DisplayObject {
 		// Like the other fl.controls, an authored instance scale is the component's
-		// box size, not a glyph transform. Bake scale * the fl TextArea default
-		// (100x100) into the control here; applyElementProperties strips the scale
-		// from the matrix so the text renders at its native size.
-		var size = scaledComponentSize(element, 100, 100);
+		// box size, not a glyph transform. The fl TextArea's intrinsic footprint is
+		// its Component_avatar (100x44), so the authored scale resolves against that,
+		// not the 100x100 stage square — getting this wrong made the chat box ~688px
+		// tall, overflowing off-screen with no room left to scroll. Bake scale *
+		// 100x44 into the control here; applyElementProperties strips the scale from
+		// the matrix so the text renders at its native size.
+		var size = scaledComponentSize(element, 100, 44);
 		var area = new FlTextArea(size.width, size.height);
 		area.editable = componentBool(element, "editable", true);
 		area.text = componentString(element, "text", "");
