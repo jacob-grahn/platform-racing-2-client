@@ -58,8 +58,9 @@ sequence and screenshots cover level entry, countdown, racing, and finish.
 
 ## Gameplay Fidelity
 
-Character-part registration, the `LocalCharacter` physics audit, and real level
-decoding/rendering are complete (see README).
+Character-part registration, the `LocalCharacter` character-physics audit, and
+real level decoding/rendering are complete (see README). Remaining physics work
+is scoped to item and block behavior below.
 
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
@@ -71,8 +72,6 @@ The physics port must map 1:1 to the original engine, preserving its quirks and
 bugs. Do not "fix" or idealize behavior — replicate the AS3 exactly, including
 rounding, ordering, and edge cases.
 
-- [ ] Audit and port character physics 1:1 (movement, jumping, friction,
-  collision response, state transitions, and their quirks).
 - [ ] Audit and port item physics/interaction 1:1 (item effects on the
   character and world, timing, and edge cases).
 - [ ] Audit and port block physics 1:1 (collision, special block types, block
