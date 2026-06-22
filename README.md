@@ -108,6 +108,49 @@ Current foundation:
 - Intro pages run through the MovieClip timeline runtime, with Jiggmin and
   Kongregate intro coverage and a stub login page.
 
+Completed subsystems (parity-relevant facts worth keeping):
+
+- Login and accounts: full login/session establishment handles `loginSuccessful`
+  and the login failure/socket-close commands, hands the live socket off to normal
+  command routing, and enters `LobbyPage` for both account and guest login.
+  Remembered accounts persist only server-issued tokens in SharedObject storage
+  with Flash's recency and case-insensitive replacement, confirmed deletion/logout,
+  and invalidated-token removal. Account creation, server refresh/selection
+  (`CheckServers` ordering/labels, public/private/guild order, preferred open
+  server, beta filtering, 60s refresh, 10s manual reload cooldown), the authored
+  login combo boxes/popups, and forgot-password recovery (`forgot_password.php`,
+  `name`/`email` form, JSON success/error) are all functional.
+- Gameplay fidelity: character-part vertical registration is corrected against the
+  feet line. `LocalCharacter` physics is audited against `character/LocalCharacter.as`
+  (accel/decel and stat formulas, jump/crouch, water/ice, collision probe ordering
+  and rotated resolution, moving-block timing, item durations, hurt/freeze recovery).
+  Note: `FinishBlock` is a one-use `SupplyBlock`, so only a bump from below latches
+  completion and reports its one-based id and pixel center; side/stand/touch
+  collisions do not finish the race. Server level decoding is validated across
+  m1-m4 formats, legacy/malformed payloads, art backgrounds, drawings, text, stamps,
+  and m4 block options.
+- Lobby popups: the external-link warning popup (explicit confirm before opening a
+  tab), the Options popup (`OptionsPopupGraphic` — music/sound sliders, filter/art
+  toggles, alternate controls saved as Flash key codes, persisted quality/song
+  blacklist), and the Credits popup (`CreditsPopupGraphic`, three art pages and two
+  music pages per `menu/CreditsPopup.as`) are functional.
+- Audio: the runtime reproduces Flash's 700 px game-sound attenuation/panning,
+  independent effect channels, clamped music/sound persistence, the full track
+  catalog (editor random selection and the artifact track), looping race music, the
+  two-layer Noodle Town menu crossfade across login/lobby transitions, and global
+  mute via `SoundMixer`. `BrowserAudioUnlock` primes Howler at boot and resumes Web
+  Audio on the first pointer/touch/click/keyboard gesture, then removes its
+  listeners. Assets come from `tools/extract_xfl_audio.py` (35 embedded sounds plus
+  20 streamed tracks in `docs/audio-inventory.json`).
+- Runtime/visual: `PR2MovieClip.createStaticText` honors authored `fillColor`,
+  `letterSpacing`, `lineSpacing` (mapped to leading), and left/right margins, and
+  composes the XFL local `left` offset into the element matrix (`matrix * translate(
+  left, 0)`) so transforms do not discard it. Authored-symbol fallbacks are removed:
+  `PR2MovieClip` fails explicitly on an unresolved or over-nested symbol instead of
+  drawing a placeholder. `FlattenPolicy` flattens proven-static top-level subtrees
+  with `cacheAsBitmap` (enabled by default; lobby GPU frame rate improved from
+  ~18.7fps to the 60fps vsync cap).
+
 Server level support:
 
 - `CampaignListClient` fetches and validates campaign lists; `LevelDataClient`
