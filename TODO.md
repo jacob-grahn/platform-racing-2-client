@@ -137,6 +137,10 @@ do not infer completion from the presence of a tab or exported symbol.
 - [ ] Replace `LobbyPopups.lastRequest` stand-ins with functional player,
   guest-player, guild, level-info/report, external-link, admin/moderation, and
   social-action popups, including their network requests and refresh behavior.
+  - [x] External links now open the authored warning popup, display the target,
+    require explicit confirmation before opening a new tab, support cancel, and
+    replace an already-open external-link popup as in Flash. Deterministic
+    coverage locks confirmation, cancellation, and URL preservation.
 - [ ] Implement the bottom-strip destinations: options (quality, controls,
   songs), store/vault and quantity/purchase flows, credits, and level editor.
   Preserve guest/member visibility and logout side effects.

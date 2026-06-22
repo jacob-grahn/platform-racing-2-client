@@ -1,8 +1,6 @@
 package pr2.lobby;
 
-#if js
-import js.Browser;
-#end
+import pr2.lobby.dialogs.ExternalLinkPopup;
 
 /**
 	Thin wrapper standing in for the Flash `dialogs.*` popup classes that lobby
@@ -10,9 +8,9 @@ import js.Browser;
 	`SendMessagePopup`, `ExternalLinkPopup`, ...).
 
 	Those popups are large UI subsystems of their own. Until each is ported, this
-	hub records the most recent request (so link-handling can be tested) and, for
-	external URLs, performs the real navigation. A renderer hook can later replace
-	the record-only behavior with the actual popups without touching callers.
+	hub records the most recent request (so link-handling can be tested). A
+	renderer hook can later replace the remaining record-only behavior without
+	touching callers.
 **/
 class LobbyPopups {
 	/** Last popup requested, e.g. "player:Jiggmin" — inspected by tests. */
@@ -47,8 +45,6 @@ class LobbyPopups {
 
 	public static function openUrl(url:String):Void {
 		lastRequest = 'url:$url';
-		#if js
-		Browser.window.open(url, "_blank");
-		#end
+		new ExternalLinkPopup(url);
 	}
 }
