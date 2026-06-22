@@ -33,19 +33,23 @@ class LobbyLeft extends LobbySide {
 		var accountTab = new LobbyTab(changeTabAccount, "Account");
 
 		var tabArray:Array<LobbyTab>;
+		var tabKeys:Array<String>;
 		var lastArrKey:Int;
 		if (LobbySession.isMember()) {
 			tabArray = [chatTab, pmsTab, playersTab, accountTab];
+			tabKeys = ["chat", "pms", "players", "account"];
 			lastArrKey = 3;
 			UnreadNotif.addNotifContainer(pmsTab);
 			CommandHandler.commandHandler.defineCommand("pmNotify", onPmNotify);
 		} else {
 			tabArray = [chatTab, playersTab, accountTab];
+			tabKeys = ["chat", "players", "account"];
 			lastArrKey = 2;
 		}
 		x = 3;
 		y = 3;
-		configure(tabArray, "lobbyLeft", lastArrKey, 194, 394);
+		var initial = initialTabIndex("lobbyLeftTab", tabKeys, lastArrKey);
+		configure(tabArray, "lobbyLeft", initial, 194, 394);
 	}
 
 	private function onPmNotify(args:Array<String>):Void {

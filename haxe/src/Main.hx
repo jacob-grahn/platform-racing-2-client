@@ -61,6 +61,9 @@ class Main extends Sprite {
 			addChild(buildScreen(screen, query));
 			addGlobalChrome(screen);
 			signalAppReady();
+			#if pr2_leak_probe
+			installLeakProbe();
+			#end
 		} catch (error:Dynamic) {
 			reportFatalError(error);
 		}
@@ -77,6 +80,19 @@ class Main extends Sprite {
 		Browser.document.body.setAttribute("data-pr2-app-ready", "1");
 		#end
 	}
+
+	// Leak/perf probe (only compiled in with `-Dpr2_leak_probe`): exposes a global
+	// to inject server frames (e.g. chat) from the CDP profiler in tools/, so a
+	// long idle chat session can be driven without a live server.
+	#if pr2_leak_probe
+	private function installLeakProbe():Void {
+		#if js
+		untyped Browser.window.__pr2InjectFrame = function(frame:String):Void {
+			pr2.net.CommandHandler.commandHandler.handleServerFrame(frame);
+		};
+		#end
+	}
+	#end
 
 	// The mute toggle lives at the document root in the Flash original
 	// (`Main.muteButton`), so it stays on screen across every page. It is added

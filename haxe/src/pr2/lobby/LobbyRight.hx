@@ -40,12 +40,15 @@ class LobbyRight extends LobbySide {
 		var favsTab = new LobbyTab(clickFavs, "♥");
 
 		var tabsArray = [campaignTab, atbTab, wbTab, newTab, searchTab];
+		var tabKeys = ["campaign", "best", "best_week", "newest", "search"];
 		if (LobbySession.group >= 1) {
 			tabsArray.push(favsTab);
+			tabKeys.push("favorites");
 		}
 		x = 200;
 		y = 3;
-		configure(tabsArray, "lobbyRight", 0, 347, 356);
+		var initial = initialTabIndex("lobbyRightTab", tabKeys, 0);
+		configure(tabsArray, "lobbyRight", initial, 347, 356);
 	}
 
 	private function clickCampaign():Void {

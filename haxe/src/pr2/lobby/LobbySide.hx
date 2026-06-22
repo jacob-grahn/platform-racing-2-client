@@ -1,5 +1,9 @@
 package pr2.lobby;
 
+#if js
+import js.Browser;
+#end
+import pr2.app.QueryParams;
 import pr2.page.Page;
 import pr2.page.PageHolder;
 import pr2.runtime.PR2MovieClip;
@@ -32,6 +36,25 @@ class LobbySide extends PageHolder {
 		tabsHolder = new TabsHolder(tabs, hId, tabSel, maxW);
 		addChild(tabsHolder);
 		setSize(maxW, h);
+	}
+
+	/**
+		Resolve the initial selected tab from a `?<queryKey>=<name>` URL flag,
+		mirroring how `?screen=` jumps straight to a screen. `tabKeys` are the
+		pane's short tab names (the same keys reported via `data-pr2-lobby-*`), in
+		display order. Returns `fallback` when the flag is absent or unrecognised.
+	**/
+	private function initialTabIndex(queryKey:String, tabKeys:Array<String>, fallback:Int):Int {
+		#if js
+		var requested = QueryParams.get(Browser.location.search, queryKey);
+		if (requested != null) {
+			var index = tabKeys.indexOf(requested.toLowerCase());
+			if (index >= 0) {
+				return index;
+			}
+		}
+		#end
+		return fallback;
 	}
 
 	public function setSize(w:Float, h:Float):Void {

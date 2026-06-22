@@ -362,11 +362,33 @@ class PR2MovieClip extends Sprite {
 				applyElementProperties(child, element);
 				if (isCacheableElement(element)) {
 					shapeByElement.set(element, child);
+				} else if (isCacheableSymbolInstance(element)) {
+					// A nested instance whose whole subtree is provably static renders
+					// identically every frame, so build it once and reuse it like a
+					// shape instead of rebuilding the clip (and re-rasterizing its
+					// shapes) each frame. Freeze any residual ENTER_FRAME ticks first
+					// (e.g. a single-frame child set to "loop" in place): the output is
+					// constant, so stopping is visually a no-op, it drops the per-frame
+					// re-render/allocation, and — having no listeners — the clip is then
+					// safe to leave intact on removal for reuse, exactly like a shape.
+					var staticClip = Std.downcast(child, PR2MovieClip);
+					if (staticClip != null) {
+						staticClip.stopAll();
+					}
+					shapeByElement.set(element, child);
 				}
 			}
 			child.visible = child.visible && frame.elementLayerVisible[i];
 			desiredChildren.push(child);
 			desiredChildSet.set(child, true);
+		}
+
+		// Children kept in `shapeByElement` (static shapes/text and provably-static
+		// symbol instances) are reused across frames, so they must survive removal
+		// rather than be disposed. Snapshot the current cache values once.
+		var cachedObjects:ObjectMap<DisplayObject, Bool> = new ObjectMap();
+		for (cachedChild in shapeByElement) {
+			cachedObjects.set(cachedChild, true);
 		}
 
 		var index = numChildren - 1;
@@ -375,6 +397,17 @@ class PR2MovieClip extends Sprite {
 			if (!desiredChildSet.exists(child)) {
 				appliedFilterDefs.remove(child);
 				removeChildAt(index);
+				// A detached nested clip that is not reused this frame must be
+				// disposed, not just removed: an auto-playing clip keeps its
+				// ENTER_FRAME listener, which OpenFL holds in a static
+				// `__broadcastEvents` array, so it stays referenced (and keeps
+				// ticking, spawning more orphans) forever otherwise. Cached children
+				// (plain shapes/text, and the static instances frozen above) have no
+				// listeners, so they are left intact for reuse via `shapeByElement`.
+				var clip = Std.downcast(child, PR2MovieClip);
+				if (clip != null && !cachedObjects.exists(clip)) {
+					clip.dispose();
+				}
 			}
 			index--;
 		}
@@ -388,18 +421,63 @@ class PR2MovieClip extends Sprite {
 			}
 		}
 		disposeUnusedReusableClips(reusableClips);
+		// A frame-by-frame animation removes children every frame. OpenFL queues
+		// each removed child in `__removedChildren` and only flushes it while the
+		// container is rendered (CanvasDisplayObjectContainer.renderDrawable). A
+		// clip that keeps advancing via ENTER_FRAME while OFF the rendered path
+		// (an inactive lobby tab, alpha 0, or any non-renderable ancestor) is never
+		// drawn, so that vector — and the matrices/transforms its orphans retain —
+		// grows without bound. ENTER_FRAME broadcasts fire regardless of
+		// visibility, so the idle lobby leaked here. Flush eagerly each frame.
+		__cleanupRemovedChildren();
 	}
 
-	// Static, non-interactive, non-animated visuals whose rendered output depends
-	// only on the element def, so they are safe to cache and reuse across frames.
-	// Symbol instances (nested clips) keep their playback state and are handled by
-	// the name-based clip pool; interactive components hold their own state. Neither
-	// is cached here.
+	// Elements whose built object can be reused across frames keyed by element def
+	// reference: Animate emits a new element object whenever geometry/transform/
+	// params change, so a stable reference means identical output.
+	//   - Static visuals (shapes/text) are pure functions of their def.
+	//   - `DOMComponentInstance` (fl.controls Button/TextInput/…) MUST be reused, not
+	//     rebuilt every frame: a held button on an animated clip's static layer keeps
+	//     the same element ref each frame, so without caching `createDisplayObject`
+	//     mints a fresh `FlButton` (and its `PR2MovieClip` skins) every frame and the
+	//     discarded one is never disposed — a per-frame leak. Reusing the instance
+	//     also preserves its interactive state (hover/toggle/focus).
+	// Animated symbol instances keep playback state and are handled by the
+	// name-based clip pool, so they are not cached here — but a *provably static*
+	// instance is (see `isCacheableSymbolInstance`).
 	private function isCacheableElement(element:DisplayElementDef):Bool {
 		return switch (element.type) {
-			case "DOMShape" | "DOMRectangleObject" | "DOMOvalObject" | "DOMStaticText": true;
+			case "DOMShape" | "DOMRectangleObject" | "DOMOvalObject" | "DOMStaticText"
+				| "DOMComponentInstance": true;
 			default: false;
 		}
+	}
+
+	// Memoized analysis of whether a symbol's whole subtree is temporally static.
+	static var staticAnalyzer:StaticSubtreeAnalyzer;
+
+	// True for a nested symbol instance whose rendered output never changes over
+	// time (the entire descendant tree included). Graphic symbols carry no authored
+	// instance name, so the name-based clip pool can never reuse them; without this
+	// every held graphic instance (e.g. the lobby's single-frame `Graphics/Symbol *`
+	// art, which dominated the idle render churn) is rebuilt — clip + nested shapes
+	// re-rasterized — on every frame. A static instance is a pure function of its
+	// element def, exactly like a shape, so it is safe to build once and reuse via
+	// `shapeByElement`. (Temporal staticness only; this clip still renders normally
+	// each frame, so masks/filters/blends are unaffected — no flatten-safety gate
+	// is needed.)
+	private function isCacheableSymbolInstance(element:DisplayElementDef):Bool {
+		if (element.type != "DOMSymbolInstance" || element.libraryItemName == null) {
+			return false;
+		}
+		var childSymbol = AssetLibrary.getSymbol(element.libraryItemName);
+		if (childSymbol == null) {
+			return false;
+		}
+		if (staticAnalyzer == null) {
+			staticAnalyzer = new StaticSubtreeAnalyzer();
+		}
+		return staticAnalyzer.isStaticSymbol(childSymbol);
 	}
 
 	// Rebuilds the frame honoring Animate mask layers. Masked layers are grouped
@@ -483,6 +561,10 @@ class PR2MovieClip extends Sprite {
 				disposeHolder(holder);
 			}
 		}
+		// Flush OpenFL's pending-removed-children queue (see renderFrame): the
+		// masked render path tears down and rebuilds every child each frame, so
+		// without this the orphans pile up when the clip is off the rendered path.
+		__cleanupRemovedChildren();
 		// Drop cached static children that were detached (kept for reuse across
 		// frames) so they cannot outlive the cleared display list.
 		shapeByElement = new ObjectMap();
