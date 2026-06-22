@@ -4,7 +4,7 @@ import haxe.crypto.Md5;
 
 enum LoginSocketMessage {
 	LoginId(loginId:String);
-	LoginSuccessful(userName:String);
+	LoginSuccessful(group:Int, userName:String);
 	LoginFailure(message:String);
 	Other(command:String);
 }
@@ -63,9 +63,8 @@ class LoginSocketProtocol {
 			case "setLoginID" if (parts.length >= 4):
 				LoginId(parts[3]);
 			case "loginSuccessful":
-				// Frame layout matches the e2e read in LiveLoginE2ETest: the args
-				// are parts.slice(3), so parts[4] is the canonical user name.
-				LoginSuccessful(parts.length >= 5 ? parts[4] : "");
+				var group = parts.length >= 4 ? Std.parseInt(parts[3]) : null;
+				LoginSuccessful(group == null ? 0 : group, parts.length >= 5 ? parts[4] : "");
 			case "loginFailure":
 				LoginFailure(parts.slice(3).join(" "));
 			case _:

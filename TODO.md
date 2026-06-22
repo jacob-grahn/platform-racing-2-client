@@ -28,7 +28,7 @@ The persistent `LobbySocket` must survive every page transition as Flash's
 `Main.socket` did.
 
 - [ ] Finish login and session establishment.
-  - Handle `loginSuccessful` and all login failure/socket-close commands, apply
+  - [x] Handle `loginSuccessful` and all login failure/socket-close commands, apply
     returned account/server state, transfer the live socket to normal command
     routing, and enter `LobbyPage` for both account and guest login.
   - Port remembered-account selection/deletion, secure credential persistence,

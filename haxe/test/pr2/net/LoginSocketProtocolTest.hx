@@ -43,7 +43,7 @@ class LoginSocketProtocolTest {
 	}
 
 	private static function testParsesLoginResponses():Void {
-		assertLoginSuccessful("Player", LoginSocketProtocol.parseFrame("abc`1`loginSuccessful`7`Player"), "login success user name");
+		assertLoginSuccessful(7, "Player", LoginSocketProtocol.parseFrame("abc`1`loginSuccessful`7`Player"), "login success state");
 		assertLoginFailure("bad login", LoginSocketProtocol.parseFrame("abc`1`loginFailure`bad`login"), "login failure message");
 		assertEquals(null, LoginSocketProtocol.parseFrame("too-short"), "short frame ignored");
 	}
@@ -57,12 +57,12 @@ class LoginSocketProtocolTest {
 		}
 	}
 
-	private static function assertLoginSuccessful(expected:String, actual:Null<LoginSocketMessage>, message:String):Void {
+	private static function assertLoginSuccessful(expectedGroup:Int, expectedName:String, actual:Null<LoginSocketMessage>, message:String):Void {
 		assertions++;
 		switch (actual) {
-			case LoginSuccessful(userName) if (userName == expected):
+			case LoginSuccessful(group, userName) if (group == expectedGroup && userName == expectedName):
 			case _:
-				throw '$message: expected LoginSuccessful($expected), got $actual';
+				throw '$message: expected LoginSuccessful($expectedGroup, $expectedName), got $actual';
 		}
 	}
 

@@ -8,7 +8,9 @@ import pr2.net.ServerInfo;
 enum LoginProbeStatus {
 	Message(message:String);
 	LoginId(loginId:String);
-	LoginSuccessful(userName:String);
+	LoginSuccessful(group:Int, userName:String);
+	LoginFailed(message:String);
+	ConnectionClosed(message:String);
 }
 
 /**
@@ -40,10 +42,10 @@ class LoginSocketProbe {
 			}
 		};
 		LobbySocket.onConnectionError = function():Void {
-			onStatus(Message('Could not connect to ${server.label()} over WebSocket.'));
+			onStatus(LoginFailed('Could not connect to ${server.label()} over WebSocket.'));
 		};
 		LobbySocket.onConnectionClose = function():Void {
-			onStatus(Message('Connection to ${server.label()} closed.'));
+			onStatus(ConnectionClosed('Connection to ${server.label()} closed.'));
 		};
 		var secure = js.Browser.location.protocol == "https:";
 		LobbySocket.connect(server, secure);
@@ -71,10 +73,10 @@ class LoginSocketProbe {
 		switch (message) {
 			case LoginId(loginId):
 				onStatus(LoginId(loginId));
-			case LoginSuccessful(userName):
-				onStatus(LoginSuccessful(userName));
+			case LoginSuccessful(group, userName):
+				onStatus(LoginSuccessful(group, userName));
 			case LoginFailure(message):
-				onStatus(Message('Server rejected login: $message'));
+				onStatus(LoginFailed(message == "" ? "Login failed." : message));
 			case Other(command):
 				onStatus(Message('Received $command from ${server.label()}.'));
 		}

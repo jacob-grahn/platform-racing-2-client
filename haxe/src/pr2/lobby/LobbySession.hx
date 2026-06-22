@@ -21,6 +21,8 @@ class LobbySession {
 
 	/** Numeric account id, 0 for guests (Flash `Main.userId`). */
 	public static var userId:Int = 0;
+	public static var hasEmail:Bool = false;
+	public static var token:String = "";
 
 	/** Server the session is connected to (Flash `Main.server`). */
 	public static var server:Null<ServerInfo> = null;
@@ -28,6 +30,8 @@ class LobbySession {
 	/** Guild id / name the player belongs to (0 / "" when guildless). */
 	public static var guildId:Int = 0;
 	public static var guildName:String = "";
+	public static var guildOwner:Bool = false;
+	public static var emblem:String = "";
 
 	/** Whether the session was started with "Remember Me" (Flash `Main.remember`). */
 	public static var remember:Bool = false;
@@ -69,9 +73,13 @@ class LobbySession {
 		userName = "Guest";
 		group = 0;
 		userId = 0;
+		hasEmail = false;
+		token = "";
 		server = null;
 		guildId = 0;
 		guildName = "";
+		guildOwner = false;
+		emblem = "";
 		remember = false;
 		isTempMod = false;
 		isTrialMod = false;

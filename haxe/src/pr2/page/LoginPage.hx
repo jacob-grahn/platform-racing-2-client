@@ -19,6 +19,8 @@ import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
 import pr2.net.ForgotPasswordClient;
 import pr2.net.LoginAuthClient;
+import pr2.net.LoginSessionGate;
+import pr2.net.LoginSessionGate.LoginSessionResult;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
@@ -55,6 +57,9 @@ class LoginPage extends Page {
 	private var socketProbe:Null<LoginSocketProbe>;
 	private var pendingCreatedUserName:String = "";
 	private var pendingCreatedUserPass:String = "";
+	private var loginGate:Null<LoginSessionGate>;
+	private var loginServer:Null<ServerInfo>;
+	private var loginRemember:Bool = false;
 
 	public function new() {
 		super();
@@ -314,18 +319,21 @@ class LoginPage extends Page {
 			return;
 		}
 		popup.setMessage("Sending encrypted login...");
+		loginServer = server;
+		loginRemember = remember;
+		var gate = new LoginSessionGate(enterLobby);
+		loginGate = gate;
 		LoginAuthClient.login(userName, userPass, server, remember, parsedLoginId, function(result):Void {
+			if (loginGate != gate) return;
 			if (result.success) {
-				var message = userName == "Guest"
-					? "Guest auth accepted. Lobby handoff is not ported yet."
-					: "Account auth accepted. Waiting for socket loginSuccessful/lobby handoff.";
-				popup.setMessage(message);
+				popup.setMessage("Account accepted. Waiting for server confirmation...");
+				gate.acceptHttp(result);
 			} else {
-				var message = result.message == "" ? "Login failed." : result.message;
-				popup.setMessage(message);
+				failLogin(result.message == "" ? "Login failed." : result.message);
 			}
 		}, function(message:String):Void {
-			popup.setMessage(message);
+			if (loginGate != gate) return;
+			failLogin(message);
 		});
 	}
 
@@ -446,16 +454,16 @@ class LoginPage extends Page {
 					popup.setMessage(message);
 				case LoginId(loginId):
 					openLoggingInPopup(loginId, userName, userPass, remember, server);
-				case LoginSuccessful(socketUserName):
-					// The server confirms the session over the socket after
-					// login.php succeeds; hand off to the lobby once it arrives.
-					enterLobby(socketUserName == "" ? userName : socketUserName, server);
+				case LoginSuccessful(group, socketUserName):
+					if (loginGate != null) loginGate.acceptSocket(group, socketUserName == "" ? userName : socketUserName);
+				case LoginFailed(message), ConnectionClosed(message):
+					failLogin(message);
 			}
 		});
 		socketProbe.connect();
 	}
 
-	private function enterLobby(userName:String, server:ServerInfo):Void {
+	private function enterLobby(session:LoginSessionResult):Void {
 		// Hand the live connection to the lobby: detach the login-phase hooks but
 		// keep the socket open (the Flash original reuses the single Main.socket),
 		// so the lobby's get_customize_info etc. run on the same session.
@@ -464,14 +472,25 @@ class LoginPage extends Page {
 			socketProbe = null;
 		}
 		closePopup();
-		// Guests connect with no account group; real members would carry their
-		// group/id from the login response. Until that is parsed, treat named
-		// logins as members so the member lobby (PMs/Account/Favorites) is shown.
-		var group = userName == "Guest" ? 0 : 1;
-		pr2.lobby.LobbySession.begin(userName, group, server);
+		var server = loginServer;
+		pr2.lobby.LobbySession.begin(session.userName, session.group, server, session.userId, loginRemember);
+		pr2.lobby.LobbySession.hasEmail = session.hasEmail;
+		pr2.lobby.LobbySession.token = session.token;
+		pr2.lobby.LobbySession.guildId = session.guildId;
+		pr2.lobby.LobbySession.guildOwner = session.guildOwner;
+		pr2.lobby.LobbySession.guildName = session.guildName;
+		pr2.lobby.LobbySession.emblem = session.emblem;
+		pr2.lobby.LobbySession.favoriteLevels = session.favoriteLevels;
 		if (pageHolder != null) {
-			pageHolder.changePage(new LobbyPage(userName, server));
+			pageHolder.changePage(new LobbyPage(session.userName, server));
 		}
+	}
+
+	private function failLogin(message:String):Void {
+		loginGate = null;
+		loginServer = null;
+		closeSocketProbe();
+		openLoginMessage(message == "" ? "Login failed." : message);
 	}
 
 	private function closeSocketProbe():Void {
@@ -479,6 +498,7 @@ class LoginPage extends Page {
 			socketProbe.close();
 			socketProbe = null;
 		}
+		loginGate = null;
 	}
 
 	private static function createBitmap(assetPath:String, trimX:Int, trimY:Int, scale:Int):Bitmap {
