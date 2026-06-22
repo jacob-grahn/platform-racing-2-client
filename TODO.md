@@ -191,72 +191,14 @@ same serialized meaning and visible result as Flash.
 - [ ] Audit cleanup across repeated login/lobby/race/editor transitions: event
   listeners, timers, sockets, bitmap data, audio, and display-list references
   must not leak or duplicate behavior.
-- [ ] Flatten static `PR2MovieClip` subtrees with `cacheAsBitmap` to cut the
-  lobby's per-frame GPU compositing cost. This is the remaining lever after the
-  shape-element cache; it is structurally invasive, so treat it as its own
-  project, not a quick follow-up.
-
-  **Background / why this exists.** The lobby rendered at ~1fps in real
-  (GPU-accelerated) Chrome. Investigation (2026-06-21, tooling in
-  `tools/openfl_profile.py`, `--no-headless` for the real GPU path) found the
-  cause is *not* filters (the lobby instantiates only 2 filtered objects out of
-  ~198) and *not* the CPU. The JS thread sits ~78% idle, blocked on the GPU:
-  OpenFL's HTML5 `Context3D` path re-composites every display object on the stage
-  every frame, and 16 multi-frame `MovieClip`s auto-play perpetually on the idle
-  lobby (every symbol with `totalFrames>1` auto-plays; only 1 of the 16 is fully
-  static). Two fixes already landed and helped but did not solve it:
-    1. `PR2MovieClip` caches the last-applied filter def array and diffs
-       `colorTransform`, and `xfl_metadata.parse_filters` drops no-op filters at
-       build time (catalog 306→165). Marginal for the lobby (2 filters).
-    2. **Shape-element cache** (`PR2MovieClip.shapeByElement`): static elements
-       (`DOMShape`/`DOMRectangleObject`/`DOMOvalObject`/`DOMStaticText`) are
-       cached by their `DisplayElementDef` reference for the clip's lifetime and
-       reused across frames instead of rebuilding the vector `Shape` and
-       re-uploading its GPU texture. Animate emits a fresh element object on any
-       geometry/transform change, so a cache hit is provably identical output;
-       reused objects also skip `applyElementProperties`. This took GPU Chrome
-       from ~11fps to ~17fps and dropped `texImage2D` self-time to ~0.3%.
-
-  **Why `cacheAsBitmap` is the next lever.** With rasterization and texture
-  uploads now cheap, the dominant remaining cost is the GPU compositing ~198
-  *separate* textured quads per frame. The shape cache cannot reduce object
-  *count*. `cacheAsBitmap` on a static container subtree flattens its descendants
-  into a single texture, so the GPU draws 1 quad instead of N — the standard fix
-  for "too many static display objects" in the Flash/OpenFL model. The lobby is a
-  good candidate because most of it (background, chrome, decorative clips) is
-  visually static even though the timelines technically advance frames.
-
-  **Why it is hard (design surface to get right).**
-    - *Invalidation.* `cacheAsBitmap` must be dropped/refreshed when the subtree
-      actually changes (a tab switch, a value update, a genuinely animating
-      child, hover/focus state). Caching a subtree that still changes produces
-      stale visuals; the hard part is deciding *which* subtrees are static enough
-      and detecting when that assumption breaks. Note that the 15 non-static
-      auto-playing clips advance frames — caching their container freezes them, so
-      either exclude them or confirm their motion is imperceptible/unwanted.
-    - *Granularity.* Too coarse (whole stage) re-rasterizes a large bitmap on any
-      change and can be slower; too fine gives little compositing win. Needs a
-      policy for where to set the flag (per page region? per top-level lobby
-      clip? a curated allowlist of symbols?).
-    - *Interactivity & layering.* Cached subtrees must still receive mouse/focus
-      events correctly, and `cacheAsBitmap` interacts with masks, filters, blend
-      modes, and `scrollRect` (the lobby uses masks/scroll in tabs). Verify
-      OpenFL's HTML5 implementation honors these inside a cached subtree.
-    - *Memory & resolution.* Each cached subtree allocates a bitmap sized to its
-      bounds; at the 550x400 stage and 27fps this is modest, but a careless
-      allowlist could blow up VRAM. Watch DPR/scale so cached bitmaps are not
-      blurry or oversized.
-    - *Parity risk.* This is a rendering optimization, not a behavior change, so
-      it must be invisible in screenshot comparisons. Any pixel drift means the
-      cache is capturing the wrong subtree or at the wrong resolution.
-
-  **Acceptance.** Lobby holds a materially higher steady-state FPS in real GPU
-  Chrome (measure with `tools/openfl_profile.py --no-headless`) with no visual
-  regression in the per-screen 550x400 screenshot comparisons and no broken
-  interactivity (clicks, hover, focus, tab switches, scroll). Animated content
-  that is supposed to move still moves. The full deterministic suite still
-  passes. Document the chosen caching granularity/policy and its invalidation
-  triggers. See memory `lobby-perf-filters.md` for the measured profiles.
+- [x] Flatten static `PR2MovieClip` subtrees with `cacheAsBitmap` to cut the
+  lobby's per-frame GPU compositing cost. `FlattenPolicy` caches only top-level
+  subtrees proven temporally static and free of mask/filter/blend risks, so
+  animated or stateful content requires no invalidation and remains uncached.
+  The policy is enabled by default and improved measured GPU Chrome performance
+  from 18.7fps to the 60fps vsync cap. Deterministic analyzer/safety tests and
+  the full verification gate cover lobby interaction and the locked 550x400
+  post-flatten screenshot (maximum observed delta 2/255).
 
 ## Test and Release Matrix
 
