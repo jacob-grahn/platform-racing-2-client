@@ -64,8 +64,6 @@ decoding/rendering are complete (see README).
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
-- [ ] Camera follow: track the local player during a race exactly as the source
-  does (scroll/anchor logic, bounds, smoothing — copy the AS3, do not approximate).
 - [ ] Port character animation state from the source 1:1. Animations must be
   driven by the same conditions as the AS3, not by what seems right — e.g. the
   run animation should play only while a left or right key is down, not whenever

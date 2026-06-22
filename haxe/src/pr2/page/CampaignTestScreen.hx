@@ -18,6 +18,7 @@ import pr2.character.CharacterDisplay;
 import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
+import pr2.gameplay.CameraFollow;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
 import pr2.net.CampaignLevelInfo;
@@ -54,6 +55,7 @@ class CampaignTestScreen extends Sprite {
 	private var player:LocalPlayerController;
 	private var playerDisplay:Sprite;
 	private var characterDisplay:CharacterDisplay;
+	private var camera:CameraFollow;
 	private var lastStatusText:String = "";
 
 	public function new(?page:String, ?levelId:String, ?version:Int) {
@@ -232,6 +234,8 @@ class CampaignTestScreen extends Sprite {
 		characterDisplay.scaleY = 0.9;
 		playerDisplay.addChild(characterDisplay);
 		levelRenderer.addChild(playerDisplay);
+		camera = new CameraFollow(renderer.worldToScreen(0, 0).x - Constants.STAGE_WIDTH / 2,
+			renderer.worldToScreen(0, 0).y - Constants.STAGE_HEIGHT / 2);
 		updatePlayerDisplay();
 	}
 
@@ -285,6 +289,8 @@ class CampaignTestScreen extends Sprite {
 		var height = player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT;
 		var worldX = serverFixture.fixturePixelToWorldX(player.x);
 		var worldY = serverFixture.fixturePixelToWorldY(player.y);
+		camera.follow(worldX, worldY);
+		levelRenderer.setCameraOffset(Constants.STAGE_WIDTH / 2 + camera.posX, Constants.STAGE_HEIGHT / 2 + camera.posY);
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
 		playerDisplay.x = screen.x - LocalPlayerController.STANDING_WIDTH / 2;
 		playerDisplay.y = screen.y - height;

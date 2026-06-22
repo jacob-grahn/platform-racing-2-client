@@ -28,8 +28,10 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 
 	private final level:ServerLevel;
-	private final offsetX:Float;
-	private final offsetY:Float;
+	private var offsetX:Float;
+	private var offsetY:Float;
+	private final blockLayer:Sprite = new Sprite();
+	private final artLayerContainers:Array<Sprite> = [];
 
 	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y) {
 		super();
@@ -59,6 +61,23 @@ class ServerLevelRenderer extends Sprite {
 
 	public function worldToScreen(x:Float, y:Float):Point {
 		return new Point(x + offsetX, y + offsetY);
+	}
+
+	/** Applies Course.setPos camera translation to world and parallax layers. */
+	public function setCameraOffset(x:Float, y:Float):Void {
+		offsetX = Math.round(x);
+		offsetY = Math.round(y);
+		blockLayer.x = offsetX;
+		blockLayer.y = offsetY;
+		for (i in 0...artLayerContainers.length) {
+			var layer = level.artLayers[i];
+			artLayerContainers[i].x = parallaxOffset(x, Constants.STAGE_WIDTH / 2, layer.scale);
+			artLayerContainers[i].y = parallaxOffset(y, Constants.STAGE_HEIGHT / 2, layer.scale);
+		}
+	}
+
+	private static inline function parallaxOffset(screenOffset:Float, stageCenter:Float, scale:Float):Float {
+		return stageCenter + Math.round((screenOffset - stageCenter) * scale);
 	}
 
 	public static function blockAssetPath(code:Int):String {
@@ -130,8 +149,11 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function drawBlocks():Void {
+		blockLayer.x = offsetX;
+		blockLayer.y = offsetY;
+		addChild(blockLayer);
 		for (block in level.blocks) {
-			addChild(createBlockDisplay(block));
+			blockLayer.addChild(createBlockDisplay(block));
 		}
 	}
 
@@ -159,8 +181,9 @@ class ServerLevelRenderer extends Sprite {
 		// Background.setPos rounds camera movement after applying the plane's
 		// parallax scale. DrawableBackground applies that scale to placed objects
 		// and text individually rather than scaling its stroke canvas.
-		container.x = Math.round(offsetX * layer.scale);
-		container.y = Math.round(offsetY * layer.scale);
+		container.x = parallaxOffset(offsetX, Constants.STAGE_WIDTH / 2, layer.scale);
+		container.y = parallaxOffset(offsetY, Constants.STAGE_HEIGHT / 2, layer.scale);
+		artLayerContainers[index] = container;
 		drawLayerStrokes(container, layer.drawActions);
 		drawLayerObjects(container, layer.objects, layer.scale);
 		drawLayerTexts(container, layer.texts, layer.scale);
@@ -245,9 +268,8 @@ class ServerLevelRenderer extends Sprite {
 
 	private function createBlockDisplay(block:DecodedBlock):Sprite {
 		var container = new Sprite();
-		var pos = worldToScreen(block.x, block.y);
-		container.x = pos.x;
-		container.y = pos.y;
+		container.x = block.x;
+		container.y = block.y;
 
 		var assetPath = blockAssetPath(block.code);
 		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {

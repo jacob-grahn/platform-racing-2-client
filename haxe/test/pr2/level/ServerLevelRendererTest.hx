@@ -44,6 +44,11 @@ class ServerLevelRendererTest {
 		var neighbor = renderer.worldToScreen(10050, 10050);
 		assertEquals(210.0, neighbor.x, "neighbor x keeps 30px block scale");
 		assertEquals(280.0, neighbor.y, "neighbor y");
+
+		renderer.setCameraOffset(100.4, 200.6);
+		var moved = renderer.worldToScreen(25, 35);
+		assertEquals(125.0, moved.x, "camera rounds map x like Background.setPos");
+		assertEquals(236.0, moved.y, "camera rounds map y like Background.setPos");
 	}
 
 	private static function testArtLayerDepthAndParallax():Void {
@@ -65,8 +70,8 @@ class ServerLevelRendererTest {
 		assertEquals("artLayer5", renderer.getChildAt(6).name, "nearest foreground layer renders last");
 
 		var rear = Std.downcast(renderer.getChildAt(1), Sprite);
-		assertEquals(Math.round((180.0 - 10020) * 0.25), rear.x, "rear layer x applies authored parallax");
-		assertEquals(Math.round((280.0 - 10050) * 0.25), rear.y, "rear layer y applies authored parallax");
+		assertEquals(275 + Math.round((180.0 - 275 - 10020) * 0.25), rear.x, "rear layer x applies authored parallax around stage center");
+		assertEquals(200 + Math.round((280.0 - 200 - 10050) * 0.25), rear.y, "rear layer y applies authored parallax around stage center");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

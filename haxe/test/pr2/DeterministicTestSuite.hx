@@ -19,6 +19,7 @@ import pr2.lobby.PlayerPopupTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
+import pr2.gameplay.CameraFollowTest;
 import pr2.net.AccountCreationClientTest;
 import pr2.net.ForgotPasswordClientTest;
 import pr2.net.CampaignListClientTest;
@@ -54,6 +55,7 @@ class DeterministicTestSuite {
 		ServerLevelDecoderTest.main();
 		ServerLevelFixtureAdapterTest.main();
 		ServerLevelRendererTest.main();
+		CameraFollowTest.main();
 		FixtureLevelRendererTest.main();
 		GameplayHarnessOptionsTest.main();
 		LocalPlayerControllerTest.main();
