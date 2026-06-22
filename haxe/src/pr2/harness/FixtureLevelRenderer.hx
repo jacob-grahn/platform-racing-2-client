@@ -67,6 +67,7 @@ class FixtureLevelRenderer extends Sprite {
 	private static function blockAssetPath(type:BlockType):String {
 		return switch (type) {
 			case Basic: "assets/blocks/basic1.png";
+			case Brick: "assets/blocks/brick.png";
 			case Start: "assets/blocks/start.png";
 			case Finish: "assets/blocks/finish.png";
 			case Item: "assets/blocks/item.png";
@@ -80,12 +81,17 @@ class FixtureLevelRenderer extends Sprite {
 	private static function blockFill(type:BlockType):Int {
 		return switch (type) {
 			case Basic: 0x63718C;
+			case Brick: 0x9B543A;
 			case Start: 0x3A8E52;
 			case Finish: 0xB64B4B;
 			case Item: 0xD3A33B;
 			case InfiniteItem: 0xC28C23;
 			case Vanish: 0x56707A;
 			case Teleport: 0xFF7F50;
+			case Happy: 0xE8D54B;
+			case Sad: 0x6389C6;
+			case Heart: 0xD94B65;
+			case Time: 0x8D6AC2;
 			default: 0x888888;
 		}
 	}
@@ -93,6 +99,7 @@ class FixtureLevelRenderer extends Sprite {
 	private static function blockStroke(type:BlockType):Int {
 		return switch (type) {
 			case Basic: 0xAAB4C8;
+			case Brick: 0xE5A080;
 			case Start: 0xB6F0C3;
 			case Finish: 0xFFD2D2;
 			case Item: 0xFFE2A0;

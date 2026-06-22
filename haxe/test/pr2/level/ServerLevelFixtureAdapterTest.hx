@@ -78,6 +78,11 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAFETY).isSolid(), "safety inactive collision");
 		assertEquals(BlockType.Teleport, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_TELEPORT), "teleport code");
 		assertEquals(BlockType.CustomStats, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_CUSTOM_STATS), "custom stats code");
+		assertEquals(BlockType.Brick, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_BRICK), "brick code");
+		assertEquals(BlockType.Happy, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_HAPPY), "happy code");
+		assertEquals(BlockType.Sad, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_SAD), "sad code");
+		assertEquals(BlockType.Heart, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_HEART), "heart code");
+		assertEquals(BlockType.Time, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_TIME), "time code");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

@@ -58,9 +58,9 @@ sequence and screenshots cover level entry, countdown, racing, and finish.
 
 ## Gameplay Fidelity
 
-Character-part registration, the `LocalCharacter` character-physics audit, and
+Character-part registration, the `LocalCharacter` and block-physics audits, and
 real level decoding/rendering are complete (see README). Remaining physics work
-is scoped to item and block behavior below.
+is scoped to item behavior below.
 
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
@@ -74,9 +74,6 @@ rounding, ordering, and edge cases.
 
 - [ ] Audit and port item physics/interaction 1:1 (item effects on the
   character and world, timing, and edge cases).
-- [ ] Audit and port block physics 1:1 (collision, special block types, block
-  changes, and their interaction quirks).
-
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.

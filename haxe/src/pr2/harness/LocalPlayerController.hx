@@ -59,6 +59,8 @@ class LocalPlayerController {
 	public var finishBlockId(default, null):Null<Int> = null;
 	public var finishX(default, null):Null<Int> = null;
 	public var finishY(default, null):Null<Int> = null;
+	public var lives(default, null):Int = 3;
+	public var courseTime(default, null):Int = 120;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -89,6 +91,7 @@ class LocalPlayerController {
 	private final vanishReappearFrames:Map<String, Int> = new Map();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final depletedItemBlocks:Map<String, Bool> = new Map();
+	private final depletedSupplyBlocks:Map<String, Bool> = new Map();
 	private final moveBlockDirections:Map<String, Int> = new Map();
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
@@ -289,7 +292,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime);
 	}
 
 	private function position():Void {
@@ -505,8 +508,18 @@ class LocalPlayerController {
 
 	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int):Void {
 		switch (block.type) {
+			case BlockType.Brick:
+				removedBlocks.set(blockKey(block.x, block.y), true);
 			case BlockType.Finish:
 				finish(block);
+			case BlockType.Happy:
+				useStatSupply(block, false);
+			case BlockType.Sad:
+				useStatSupply(block, true);
+			case BlockType.Heart:
+				if (useSupply(block)) lives = Std.int(Math.min(15, lives + 1));
+			case BlockType.Time:
+				if (useSupply(block)) courseTime += 10;
 			case BlockType.Crumble:
 				applyCrumbleForce(block, force);
 			case BlockType.Vanish:
@@ -588,7 +601,7 @@ class LocalPlayerController {
 
 	private function isSafeStandBlock(block:LevelBlock):Bool {
 		return switch (block.type) {
-			case BlockType.Crumble | BlockType.Vanish | BlockType.Mine | BlockType.Move | BlockType.Teleport | BlockType.Push | BlockType.Water | BlockType.Safety: false;
+			case BlockType.Brick | BlockType.Crumble | BlockType.Vanish | BlockType.Mine | BlockType.Move | BlockType.Teleport | BlockType.Push | BlockType.Water | BlockType.Safety: false;
 			default: true;
 		}
 	}
@@ -872,6 +885,25 @@ class LocalPlayerController {
 
 		var stats = parseCustomStats(block.options);
 		applyStats(stats.speed, stats.acceleration, stats.jump);
+	}
+
+	private function useStatSupply(block:LevelBlock, negative:Bool):Void {
+		if (!useSupply(block)) {
+			return;
+		}
+		var parsed = Std.parseInt(block.options);
+		var amount = parsed == null ? (negative ? -5 : 5) : parsed;
+		amount = Std.int(clamp(amount, negative ? -100 : 5, negative ? -5 : 100));
+		applyStats(speedStat + amount, accelerationStat + amount, jumpStat + amount);
+	}
+
+	private function useSupply(block:LevelBlock):Bool {
+		var key = blockKey(block.x, block.y);
+		if (depletedSupplyBlocks.exists(key)) {
+			return false;
+		}
+		depletedSupplyBlocks.set(key, true);
+		return true;
 	}
 
 	private function parseCustomStats(options:String):PlayerStats {

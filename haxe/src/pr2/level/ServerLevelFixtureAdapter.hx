@@ -89,6 +89,16 @@ class ServerLevelFixtureAdapter {
 				BlockType.Teleport;
 			case ObjectCodes.BLOCK_CUSTOM_STATS:
 				BlockType.CustomStats;
+			case ObjectCodes.BLOCK_BRICK:
+				BlockType.Brick;
+			case ObjectCodes.BLOCK_HAPPY:
+				BlockType.Happy;
+			case ObjectCodes.BLOCK_SAD:
+				BlockType.Sad;
+			case ObjectCodes.BLOCK_HEART:
+				BlockType.Heart;
+			case ObjectCodes.BLOCK_TIME:
+				BlockType.Time;
 			case ObjectCodes.BLOCK_BASIC1 | ObjectCodes.BLOCK_BASIC2 | ObjectCodes.BLOCK_BASIC3 | ObjectCodes.BLOCK_BASIC4:
 				BlockType.Basic;
 			default:

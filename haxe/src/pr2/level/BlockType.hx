@@ -2,6 +2,7 @@ package pr2.level;
 
 enum abstract BlockType(String) from String to String {
 	var Basic = "basic";
+	var Brick = "brick";
 	var Start = "start";
 	var Finish = "finish";
 	var Solid = "solid";
@@ -23,10 +24,15 @@ enum abstract BlockType(String) from String to String {
 	var Safety = "safety";
 	var Teleport = "teleport";
 	var CustomStats = "custom_stats";
+	var Happy = "happy";
+	var Sad = "sad";
+	var Heart = "heart";
+	var Time = "time";
 
 	public static function parse(value:String):BlockType {
 		return switch (value) {
 			case Basic: Basic;
+			case Brick: Brick;
 			case Start: Start;
 			case Finish: Finish;
 			case Solid: Solid;
@@ -48,13 +54,17 @@ enum abstract BlockType(String) from String to String {
 			case Safety: Safety;
 			case Teleport: Teleport;
 			case CustomStats: CustomStats;
+			case Happy: Happy;
+			case Sad: Sad;
+			case Heart: Heart;
+			case Time: Time;
 			default: throw 'unknown block type "$value"';
 		}
 	}
 
 	public inline function isSolid():Bool {
 		return switch (this) {
-			case Basic | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats: true;
+			case Basic | Brick | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats | Happy | Sad | Heart | Time: true;
 			case Start | Water | Safety: false;
 			default: false;
 		}

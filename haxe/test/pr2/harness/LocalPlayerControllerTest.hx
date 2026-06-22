@@ -45,6 +45,11 @@ class LocalPlayerControllerTest {
 		testFrozenSolidDisablesMovementAndThaws();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
+		testBumpingBrickBlockBreaksIt();
+		testBumpingHappyBlockRaisesStats();
+		testBumpingSadBlockLowersStats();
+		testBumpingHeartBlockAddsCappedLife();
+		testBumpingTimeBlockAddsTenSeconds();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		testStandingOnPushBlockMovesItDown();
@@ -690,6 +695,47 @@ class LocalPlayerControllerTest {
 		assertClose(20, state.jumpStat, "reset custom stats block restores starting jump stat");
 	}
 
+	private static function testBumpingBrickBlockBreaksIt():Void {
+		var level = supplyBlockLevel(BlockType.Brick);
+		var player = bumpSupply(level, BlockType.Brick);
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(false, player.debugState().touchedBlockType == "brick", "broken brick no longer collides");
+	}
+
+	private static function testBumpingHappyBlockRaisesStats():Void {
+		var state = bumpSupply(supplyBlockLevel(BlockType.Happy, "20"), BlockType.Happy).debugState();
+		assertClose(70, state.speedStat, "happy block raises speed by configured amount");
+		assertClose(70, state.accelerationStat, "happy block raises acceleration");
+		assertClose(70, state.jumpStat, "happy block raises jumping");
+	}
+
+	private static function testBumpingSadBlockLowersStats():Void {
+		var state = bumpSupply(supplyBlockLevel(BlockType.Sad, "-20"), BlockType.Sad).debugState();
+		assertClose(30, state.speedStat, "sad block lowers speed by configured amount");
+		assertClose(30, state.accelerationStat, "sad block lowers acceleration");
+		assertClose(30, state.jumpStat, "sad block lowers jumping");
+	}
+
+	private static function testBumpingHeartBlockAddsCappedLife():Void {
+		var player = bumpSupply(supplyBlockLevel(BlockType.Heart), BlockType.Heart);
+		assertEquals(4, player.debugState().lives, "heart block adds one life");
+	}
+
+	private static function testBumpingTimeBlockAddsTenSeconds():Void {
+		var player = bumpSupply(supplyBlockLevel(BlockType.Time), BlockType.Time);
+		assertEquals(130, player.debugState().courseTime, "time block adds ten seconds");
+	}
+
+	private static function bumpSupply(level:FixtureLevel, type:BlockType):LocalPlayerController {
+		var player = new LocalPlayerController(level);
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().touchedBlockType == type) break;
+		}
+		assertEquals(type, player.debugState().touchedBlockType, '$type block is bumped');
+		return player;
+	}
+
 	private static function testTeleportBlockMovesPlayerToNextSameColorBlock():Void {
 		var player = new LocalPlayerController(teleportPairLevel());
 		var state = player.debugState();
@@ -1184,6 +1230,25 @@ class LocalPlayerControllerTest {
 			new TilePosition(4, 4),
 			[
 				new LevelBlock(2, 1, BlockType.CustomStats, options),
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function supplyBlockLevel(type:BlockType, options:String = ""):FixtureLevel {
+		return new FixtureLevel(
+			"supply-block",
+			"Supply Block",
+			5,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 1, type, options),
 				new LevelBlock(2, 4, BlockType.Solid),
 				new LevelBlock(4, 4, BlockType.Finish)
 			]

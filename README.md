@@ -128,6 +128,9 @@ Completed subsystems (parity-relevant facts worth keeping):
   and rotated resolution, moving-block timing, item durations, hurt/freeze recovery).
   Gravity uses Flash's exact `0.7 * level multiplier` update and supports runtime
   multiplier changes.
+  Block collision behavior covers every authored block code, including one-hit
+  brick destruction and the one-use happy, sad, heart, and time supply blocks
+  with their original option clamps and stat/life/timer limits.
   Start blocks mark spawn positions but are excluded from character collision, as
   in `background/Map.as`.
   Rotate blocks use Flash's 30-frame, 3-degree course tween, counter-rotate the
