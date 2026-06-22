@@ -31,8 +31,13 @@ The persistent `LobbySocket` must survive every page transition as Flash's
   - [x] Handle `loginSuccessful` and all login failure/socket-close commands, apply
     returned account/server state, transfer the live socket to normal command
     routing, and enter `LobbyPage` for both account and guest login.
-  - Port remembered-account selection/deletion, secure credential persistence,
-    forgot-password, account-creation follow-up, server refresh/selection, and
+  - [x] Port remembered-account selection/deletion and secure token persistence.
+    Saved accounts now retain only server-issued tokens in SharedObject storage,
+    preserve Flash's recency and case-insensitive replacement behavior, populate
+    the authored account selector, support confirmed deletion/logout, and remove
+    invalidated tokens. Deterministic coverage locks storage semantics and the
+    separate authenticated login form field.
+  - Port forgot-password, account-creation follow-up, server refresh/selection, and
     exact cancel/retry/error behavior from `flash/menu`.
   - Replace status text and click-to-cycle stand-ins with the authored popup and
     component behavior; cover guest, member, bad credentials, full/down server,

@@ -103,6 +103,10 @@ final class ServerConfig {
 		return host + "/forgot_password.php";
 	}
 
+	public static function logoutUrl():String {
+		return host + "/logout.php";
+	}
+
 	/**
 		Friends/Following/Ignored player list endpoint, matching
 		`social.PlayersTabUserListDataLoader`: `{host}/user_list_get.php?mode={mode}`.

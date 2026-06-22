@@ -21,6 +21,8 @@ import pr2.net.ForgotPasswordClient;
 import pr2.net.LoginAuthClient;
 import pr2.net.LoginSessionGate;
 import pr2.net.LoginSessionGate.LoginSessionResult;
+import pr2.net.FormPostClient;
+import pr2.net.SavedAccounts;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
@@ -60,6 +62,7 @@ class LoginPage extends Page {
 	private var loginGate:Null<LoginSessionGate>;
 	private var loginServer:Null<ServerInfo>;
 	private var loginRemember:Bool = false;
+	private var loginToken:String = "";
 
 	public function new() {
 		super();
@@ -140,6 +143,15 @@ class LoginPage extends Page {
 	}
 
 	private function openLoginDialog():Void {
+		if (SavedAccounts.getAll().length > 0) {
+			openServerSelectPopup(false, false);
+			return;
+		}
+		openCredentialDialog();
+	}
+
+	private function openCredentialDialog(?returnToAccounts:Bool = false):Void {
+		loginToken = "";
 		var popup = openPopup("LoginPopupGraphic");
 		var remember = false;
 		var nameInput = popup.input("nameBox");
@@ -159,7 +171,7 @@ class LoginPage extends Page {
 		popup.bindButton("forgotPass", function():Void {
 			openForgotPasswordDialog(nameInput.text);
 		});
-		popup.bindButton("cancel_bt", closePopup);
+		popup.bindButton("cancel_bt", returnToAccounts ? function():Void openServerSelectPopup(false, false) : closePopup);
 		popup.bindButton("login_bt", function():Void {
 			if (StringTools.trim(nameInput.text) == "" || passInput.text == "") {
 				popup.setMessage("Enter a username and password.");
@@ -216,10 +228,12 @@ class LoginPage extends Page {
 	}
 
 	private function openGuestDialog():Void {
+		loginToken = "";
 		openServerSelectPopup(true, false);
 	}
 
 	private function openCreateAccountDialog():Void {
+		loginToken = "";
 		var popup = openPopup("CreateAccountPopupGraphic");
 		var nameInput = popup.input("nameBox");
 		var passInput = popup.input("passBox1");
@@ -264,7 +278,26 @@ class LoginPage extends Page {
 	private function openServerSelectPopup(guestLogin:Bool, createdAccount:Bool):Void {
 		var popup = openPopup("ServerSelectPopupGraphic");
 		populateServerCombo(popup.comboBox("serverSelect"));
-		popup.setComponentLabel("userSelect", guestLogin ? "Guest" : (createdAccount ? pendingCreatedUserName : "Use Other Account..."));
+		var accountCombo = popup.comboBox("userSelect");
+		var selectedToken = "";
+		var selectedName = "";
+		if (guestLogin || createdAccount) {
+			popup.setComponentLabel("userSelect", guestLogin ? "Guest" : pendingCreatedUserName);
+			if (accountCombo != null) accountCombo.enabled = false;
+		} else if (accountCombo != null) {
+			accountCombo.removeAll();
+			for (account in SavedAccounts.getAll()) accountCombo.addItem({label: account.name, token: account.token});
+			accountCombo.addItem({label: "Use Other Account...", token: ""});
+			accountCombo.selectedIndex = 0;
+			accountCombo.enabled = true;
+			selectedName = Reflect.field(accountCombo.selectedItem, "label");
+			selectedToken = Reflect.field(accountCombo.selectedItem, "token");
+			popup.bindComboBox("userSelect", function(combo:FlComboBox):Void {
+				selectedName = Reflect.field(combo.selectedItem, "label");
+				selectedToken = Reflect.field(combo.selectedItem, "token");
+				if (selectedToken == "") openCredentialDialog(true);
+			});
+		}
 		var userDelete = popup.child("user_del_bt");
 		if (userDelete != null) {
 			userDelete.alpha = guestLogin || createdAccount ? 0.1 : 1;
@@ -281,6 +314,19 @@ class LoginPage extends Page {
 			popup.setMessage("Reloading servers...");
 		});
 		popup.bindButton("cancel_bt", closePopup);
+		if (!guestLogin && !createdAccount) popup.bindButton("user_del_bt", function():Void {
+			if (selectedToken == "") return;
+			var name = selectedName;
+			var token = selectedToken;
+			var confirm = openPopup("ConfirmPopupGraphic");
+			confirm.setText("textBox", 'Are you sure you want to delete "$name" from your saved accounts?');
+			confirm.bindButton("cancel_bt", function():Void openServerSelectPopup(false, false));
+			confirm.bindButton("ok_bt", function():Void {
+				FormPostClient.post(pr2.net.ServerConfig.logoutUrl(), ["token" => token], function(_):Void {}, function(_):Void {});
+				SavedAccounts.deleteAccount(name);
+				if (SavedAccounts.getAll().length == 0) openCredentialDialog(); else openServerSelectPopup(false, false);
+			});
+		});
 		popup.bindButton("login_bt", function():Void {
 			if (selectedServer() == null) {
 				popup.setMessage("No server is available yet.");
@@ -292,7 +338,8 @@ class LoginPage extends Page {
 			} else if (createdAccount) {
 				openConnectingPopup(pendingCreatedUserName, pendingCreatedUserPass, false);
 			} else {
-				openLoginDialog();
+				loginToken = selectedToken;
+				openConnectingPopup(selectedName, "", true);
 			}
 		});
 	}
@@ -329,12 +376,13 @@ class LoginPage extends Page {
 				popup.setMessage("Account accepted. Waiting for server confirmation...");
 				gate.acceptHttp(result);
 			} else {
+				if (Reflect.field(result.data, "resetToken") == true && loginToken != "") SavedAccounts.deleteAccount(loginToken, true);
 				failLogin(result.message == "" ? "Login failed." : result.message);
 			}
 		}, function(message:String):Void {
 			if (loginGate != gate) return;
 			failLogin(message);
-		});
+		}, loginToken);
 	}
 
 	private function openPopup(linkage:String):LoginFlashPopup {
@@ -481,6 +529,8 @@ class LoginPage extends Page {
 		pr2.lobby.LobbySession.guildName = session.guildName;
 		pr2.lobby.LobbySession.emblem = session.emblem;
 		pr2.lobby.LobbySession.favoriteLevels = session.favoriteLevels;
+		if (loginRemember) SavedAccounts.add(session.userName, session.token);
+		loginToken = "";
 		if (pageHolder != null) {
 			pageHolder.changePage(new LobbyPage(session.userName, server));
 		}

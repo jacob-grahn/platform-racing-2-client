@@ -24,6 +24,7 @@ import pr2.net.JsonClientTest;
 import pr2.net.LoginAuthClientTest;
 import pr2.net.LoginSocketProtocolTest;
 import pr2.net.LoginSessionGateTest;
+import pr2.net.SavedAccountsTest;
 import pr2.net.ServerConfigTest;
 import pr2.net.ServerStatusClientTest;
 import pr2.page.CampaignTestScreenTest;
@@ -57,6 +58,7 @@ class DeterministicTestSuite {
 		ServerStatusClientTest.main();
 		LoginSocketProtocolTest.main();
 		LoginSessionGateTest.main();
+		SavedAccountsTest.main();
 		CampaignListClientTest.main();
 		AccountCreationClientTest.main();
 		ForgotPasswordClientTest.main();

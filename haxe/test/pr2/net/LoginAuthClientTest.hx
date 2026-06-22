@@ -6,8 +6,15 @@ class LoginAuthClientTest {
 	public static function main():Void {
 		testPayloadContainsFlashFields();
 		testEncryptedFields();
+		testRememberedTokenField();
 		testParsesError();
 		trace('LoginAuthClientTest passed $assertions assertions');
+	}
+
+	private static function testRememberedTokenField():Void {
+		var fields = LoginAuthClient.fields("Alice", "", server(), true, 1234, "saved-token");
+		assertEquals("saved-token", fields.get("token"), "saved token form field");
+		assertEquals(false, LoginAuthClient.fields("Alice", "", server(), true, 1234).exists("token"), "token omitted for password login");
 	}
 
 	private static function testPayloadContainsFlashFields():Void {

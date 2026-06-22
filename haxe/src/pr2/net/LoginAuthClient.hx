@@ -14,9 +14,10 @@ class LoginAuthClient {
 		remember:Bool,
 		loginId:Int,
 		onResult:LoginAuthResult->Void,
-		?onError:String->Void
+		?onError:String->Void,
+		?token:String
 	):Void {
-		FormPostClient.post(ServerConfig.loginUrl(), fields(userName, userPass, server, remember, loginId), function(body:String):Void {
+		FormPostClient.post(ServerConfig.loginUrl(), fields(userName, userPass, server, remember, loginId, token), function(body:String):Void {
 			try {
 				onResult(parse(body));
 			} catch (error:Dynamic) {
@@ -27,11 +28,13 @@ class LoginAuthClient {
 		}, onError);
 	}
 
-	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int):Map<String, String> {
-		return [
+	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?token:String):Map<String, String> {
+		var result = [
 			"i" => encryptPayload(payloadJson(userName, userPass, server, remember, loginId)),
 			"build" => ServerConfig.BUILD,
 		];
+		if (token != null && token != "") result.set("token", token);
+		return result;
 	}
 
 	public static function payloadJson(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int):String {
