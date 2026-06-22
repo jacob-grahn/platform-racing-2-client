@@ -412,7 +412,7 @@ def parse_text_attrs(text_run):
     return compact_record(record)
 
 
-def parse_static_text(element):
+def parse_text(element):
     record = parse_common_display_attrs(element)
     text_runs = first_direct_child(element, "textRuns")
     if text_runs is None:
@@ -554,8 +554,8 @@ def parse_display_element(element):
     if name in ("DOMSymbolInstance", "DOMBitmapInstance"):
         return parse_common_display_attrs(element)
 
-    if name == "DOMStaticText":
-        return parse_static_text(element)
+    if name in ("DOMStaticText", "DOMDynamicText"):
+        return parse_text(element)
 
     if name == "DOMComponentInstance":
         return parse_component_instance(element)
@@ -587,6 +587,7 @@ def parse_display_elements(parent):
             "DOMBitmapInstance",
             "DOMComponentInstance",
             "DOMStaticText",
+            "DOMDynamicText",
             "DOMShape",
             "DOMGroup",
             "DOMRectangleObject",

@@ -1152,8 +1152,59 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 0,
 								name: "Labels Layer"
 							},
-							{color: "#F524B3", frameCount: 1, frames: [{duration: 16, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#CE389A", frameCount: 1, frames: [{duration: 16, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#F524B3",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 16,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												left: -4.45,
+												matrix: {a: 0.999191284179688, tx: 171.0, ty: 2.5},
+												name: "timeBox",
+												text: "14/Jun/2020",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 78.05
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#CE389A",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 16,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 2.0, ty: 2.5},
+												name: "titleBox",
+												text: "Title goes here",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 158.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#6452ED",
 								frameCount: 3,
@@ -13478,7 +13529,31 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#BCC3AC", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"}
+							{
+								color: "#BCC3AC",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -145.5, ty: -8.0},
+												name: "textBox",
+												text: "Logged in as Someone",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#C0F1CA", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 230.2
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							}
 						],
 						name: "Symbol 413"
 					}
@@ -30303,6 +30378,15 @@ final class AssetCatalogSymbolsMovieClips {
 												name: "supplBg",
 												transformationPoint: {y: 0.55},
 												type: "DOMSymbolInstance"
+											},
+											{
+												height: 14.55,
+												left: -61.1,
+												matrix: {tx: -49.85, ty: 267.15},
+												name: "supplText",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 223.5
 											}
 										],
 										index: 0,
@@ -30327,13 +30411,183 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 4,
 								name: "pmButton"
 							},
-							{color: "#81F8C1", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 4"},
-							{color: "#DCD336", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 5"},
-							{color: "#4299AF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 7, name: "Layer 6"},
-							{color: "#D2A424", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 8, name: "Layer 7"},
-							{color: "#BDC8EA", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 9, name: "Layer 8"},
-							{color: "#3F89FE", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 10, name: "Layer 9"},
-							{color: "#A197C1", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 11, name: "Layer 10"},
+							{
+								color: "#81F8C1",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.95,
+												left: -11.95,
+												matrix: {tx: 23.95, ty: 130.0},
+												name: "activeBox",
+												text: "17/Mar/2013",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 91.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 4"
+							},
+							{
+								color: "#DCD336",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -38.0, ty: 66.0},
+												name: "guildBox",
+												text: "none",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 141.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 5"
+							},
+							{
+								color: "#4299AF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.85,
+												left: -6.4,
+												matrix: {tx: 18.4, ty: 98.0},
+												name: "registerBox",
+												text: "17/Sep/2013",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 91.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 7,
+								name: "Layer 6"
+							},
+							{
+								color: "#D2A424",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: -106.75, ty: 1.0},
+												name: "statusBox",
+												text: "offline",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 213.5
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 8,
+								name: "Layer 7"
+							},
+							{
+								color: "#BDC8EA",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -38.0, ty: 98.0},
+												name: "rankBox",
+												text: "24",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 36.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 9,
+								name: "Layer 8"
+							},
+							{
+								color: "#3F89FE",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -38.0, ty: 130.0},
+												name: "hatBox",
+												text: "2",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 36.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 10,
+								name: "Layer 9"
+							},
+							{
+								color: "#A197C1",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -38.0, ty: 34.0},
+												name: "groupBox",
+												text: "Temporary Moderator",
+												textAttrs: {aliasText: false, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 141.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 11,
+								name: "Layer 10"
+							},
 							{
 								color: "#76DF5D",
 								frameCount: 1,
@@ -31764,7 +32018,31 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 1,
 								name: "Layer 2"
 							},
-							{color: "#B845DC", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#B845DC",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {ty: 21.95},
+												name: "textBox",
+												text: "Rank 99 needed.",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 99.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#247DE5",
 								frameCount: 1,
@@ -31787,7 +32065,32 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#4BD472", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#4BD472",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 116.0,
+												matrix: {d: 0.999664306640625, tx: 2.0, ty: 2.0},
+												name: "textBox2",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 141.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "RaceChatBoxBG"
 					}
 				],
@@ -31802,7 +32105,32 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#B4ED7C", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#B4ED7C",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 116.05,
+												matrix: {d: 0.999664306640625, tx: 2.0, ty: 2.0},
+												name: "textBox1",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 141.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "RaceChatBoxTop"
 					}
 				],
@@ -36100,7 +36428,31 @@ final class AssetCatalogSymbolsMovieClips {
 						labels: [],
 						layerCount: 2,
 						layers: [
-							{color: "#F7EA31", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{
+								color: "#F7EA31",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 17.05,
+												matrix: {tx: 5.0, ty: 9.0},
+												name: "textBox",
+												text: "+10 GP",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", fillColor: "#333333", lineHeight: 17.05, rotation: true, size: 14.0},
+												type: "DOMDynamicText",
+												width: 70.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
 							{
 								color: "#F206DC",
 								frameCount: 1,
@@ -79367,8 +79719,55 @@ final class AssetCatalogSymbolsMovieClips {
 						labels: [],
 						layerCount: 2,
 						layers: [
-							{color: "#2AF2BB", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1", visible: false},
-							{color: "#CDCFF8", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"}
+							{
+								color: "#2AF2BB",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -49.0, ty: 2.0},
+												name: "nameBox",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 100.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1",
+								visible: false
+							},
+							{
+								color: "#CDCFF8",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -50.0, ty: 3.0},
+												name: "nameBox2",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 100.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							}
 						],
 						name: "Symbol 893"
 					}
@@ -81437,7 +81836,33 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#77F1C2", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#77F1C2",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 15.0,
+												matrix: {tx: -38.95, ty: 2.0},
+												name: "timeBox",
+												text: "60:00",
+												textAttrs: {aliasText: false, alignment: "center", face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 52.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "Symbol 903"
 					}
 				],
@@ -81525,7 +81950,33 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#5DF372", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#5DF372",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: 2.0, ty: 2.0},
+												name: "textBox",
+												text: "None",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 100.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "Symbol 920"
 					}
 				],
@@ -81699,17 +82150,281 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 3,
 								name: "Layer 4"
 							},
-							{color: "#A7987D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 4, name: "Layer 5"},
-							{color: "#75B5E5", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#CF902B", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
-							{color: "#FB5549", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
-							{color: "#F4699E", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
-							{color: "#8271DF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 9, name: "Layer 10"},
-							{color: "#80B7E5", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 10, name: "Layer 11"},
-							{color: "#6EA6C1", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 11, name: "Layer 12"},
-							{color: "#4ED097", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 12, name: "Layer 13"},
-							{color: "#0A9DF5", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 13, name: "Layer 14"},
-							{color: "#9A29C7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 14, name: "Layer 15"},
+							{
+								color: "#A7987D",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: -127.95, ty: -12.5},
+												name: "bonus5",
+												text: "--",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 4,
+								name: "Layer 5"
+							},
+							{
+								color: "#75B5E5",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: -127.95, ty: -34.5},
+												name: "bonus4",
+												text: "--",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 6"
+							},
+							{
+								color: "#CF902B",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: -127.95, ty: -56.5},
+												name: "bonus3",
+												text: "--",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 7"
+							},
+							{
+								color: "#FB5549",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: -127.95, ty: -78.5},
+												name: "bonus2",
+												text: "--",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 7,
+								name: "Layer 8"
+							},
+							{
+								color: "#F4699E",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 50.25, ty: 19.5},
+												name: "expTotal",
+												text: "--",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 8,
+								name: "Layer 9"
+							},
+							{
+								color: "#8271DF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 50.25, ty: -12.5},
+												name: "exp5",
+												text: "--",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 9,
+								name: "Layer 10"
+							},
+							{
+								color: "#80B7E5",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 50.25, ty: -56.5},
+												name: "exp3",
+												text: "--",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 10,
+								name: "Layer 11"
+							},
+							{
+								color: "#6EA6C1",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 50.25, ty: -78.5},
+												name: "exp2",
+												text: "--",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 11,
+								name: "Layer 12"
+							},
+							{
+								color: "#4ED097",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 50.25, ty: -100.5},
+												name: "exp1",
+												text: "--",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 12,
+								name: "Layer 13"
+							},
+							{
+								color: "#0A9DF5",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 50.25, ty: -34.5},
+												name: "exp4",
+												text: "--",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 13,
+								name: "Layer 14"
+							},
+							{
+								color: "#9A29C7",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: -127.95, ty: -100.5},
+												name: "bonus1",
+												text: "--",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 14,
+								name: "Layer 15"
+							},
 							{
 								color: "#CCAFA7",
 								frameCount: 1,
@@ -81789,7 +82504,34 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#F32C80", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#F32C80",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 68.75,
+												left: 3.05,
+												matrix: {tx: -1.05, ty: 11.95},
+												name: "textBox",
+												text: "You already have this prize, so here are 5 experience points instead!",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.1, lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 125.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "Symbol 948"
 					}
 				],
@@ -81957,14 +82699,198 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 3,
 								name: "Layer 4"
 							},
-							{color: "#43C1F4", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 4, name: "Layer 5"},
-							{color: "#B9B881", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#A0D7C2", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
-							{color: "#852AEC", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
-							{color: "#C174C7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
-							{color: "#68DFEF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 9, name: "Layer 10"},
-							{color: "#B2747E", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 10, name: "Layer 11"},
-							{color: "#D5E961", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 11, name: "Layer 12"}
+							{
+								color: "#43C1F4",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 68.0},
+												name: "timeBox3",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 128.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 4,
+								name: "Layer 5"
+							},
+							{
+								color: "#B9B881",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 46.0},
+												name: "timeBox2",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 128.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 6"
+							},
+							{
+								color: "#A0D7C2",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 24.0},
+												name: "timeBox1",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 128.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 7"
+							},
+							{
+								color: "#852AEC",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 2.0},
+												name: "timeBox0",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 128.9
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 7,
+								name: "Layer 8"
+							},
+							{
+								color: "#C174C7",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 15.0,
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 68.0},
+												name: "nameBox3",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 83.45
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 8,
+								name: "Layer 9"
+							},
+							{
+								color: "#68DFEF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 46.0},
+												name: "nameBox2",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 83.45
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 9,
+								name: "Layer 10"
+							},
+							{
+								color: "#B2747E",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 24.0},
+												name: "nameBox1",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 83.45
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 10,
+								name: "Layer 11"
+							},
+							{
+								color: "#D5E961",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 2.0},
+												name: "nameBox0",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 83.45
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 11,
+								name: "Layer 12"
+							}
 						],
 						name: "Symbol 966"
 					}
@@ -82889,7 +83815,27 @@ final class AssetCatalogSymbolsMovieClips {
 							{
 								color: "#A3E949",
 								frameCount: 2,
-								frames: [{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 11, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 5, keyMode: 9728}],
+								frames: [
+									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{
+										duration: 11,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												left: -16.05,
+												matrix: {tx: -131.9, ty: -140.0},
+												name: "titleBox",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 296.95
+											}
+										],
+										index: 5,
+										keyMode: 9728
+									}
+								],
 								index: 2,
 								name: "Title"
 							},
@@ -82925,21 +83871,51 @@ final class AssetCatalogSymbolsMovieClips {
 							{
 								color: "#7DEA93",
 								frameCount: 2,
-								frames: [{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 11, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 5, keyMode: 9728}],
+								frames: [
+									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{
+										duration: 11,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -91.0}, name: "gpTotalBox", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
+										index: 5,
+										keyMode: 9728
+									}
+								],
 								index: 4,
 								name: "GPTotal"
 							},
 							{
 								color: "#9E2EFF",
 								frameCount: 2,
-								frames: [{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 11, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 5, keyMode: 9728}],
+								frames: [
+									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{
+										duration: 11,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -110.0}, name: "gpTodayBox", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
+										index: 5,
+										keyMode: 9728
+									}
+								],
 								index: 5,
 								name: "GPToday"
 							},
 							{
 								color: "#5EA588",
 								frameCount: 2,
-								frames: [{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 11, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 5, keyMode: 9728}],
+								frames: [
+									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{
+										duration: 11,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -72.0}, name: "membersCount", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
+										index: 5,
+										keyMode: 9728
+									}
+								],
 								index: 6,
 								name: "MemberCt"
 							},
@@ -83041,7 +84017,26 @@ final class AssetCatalogSymbolsMovieClips {
 							{
 								color: "#6631F9",
 								frameCount: 2,
-								frames: [{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 11, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 5, keyMode: 9728}],
+								frames: [
+									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{
+										duration: 11,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 40.45,
+												matrix: {tx: -138.0, ty: 77.0},
+												name: "guildProse",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, size: 10.0},
+												type: "DOMDynamicText",
+												width: 273.95
+											}
+										],
+										index: 5,
+										keyMode: 9728
+									}
+								],
 								index: 11,
 								name: "Prose"
 							},
@@ -83876,7 +84871,31 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#D9E524", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"}
+							{
+								color: "#D9E524",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {tx: -92.75, ty: 13.95},
+												name: "textBox",
+												text: "/",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 185.45
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							}
 						],
 						name: "Symbol 1075"
 					}
@@ -84403,7 +85422,31 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 2,
 								name: "Layer 3"
 							},
-							{color: "#CA318E", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
+							{
+								color: "#CA318E",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 17.05,
+												matrix: {tx: -84.15, ty: -117.0},
+												name: "titleBox",
+												text: "-- Load --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, rotation: true, size: 14.0},
+												type: "DOMDynamicText",
+												width: 162.85
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 3,
+								name: "Layer 4"
+							},
 							{
 								color: "#24DB87",
 								frameCount: 1,
@@ -84804,9 +85847,81 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#62FF2E", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#8D8EED", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
-							{color: "#97A8AE", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"}
+							{
+								color: "#62FF2E",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 193.0, ty: 2.0},
+												name: "gpTotalBox",
+												text: "1,659",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 66.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#8D8EED",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 122.0, ty: 2.0},
+												name: "gpTodayBox",
+												text: "15",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 64.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
+							{
+								color: "#97A8AE",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 2.0, ty: 2.0},
+												name: "nameBox",
+												text: "User Name",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 111.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 3,
+								name: "Layer 4"
+							}
 						],
 						name: "Symbol 1128"
 					}
@@ -84824,7 +85939,33 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#E9FEAD", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#E9FEAD",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {d: 1.00286865234375, tx: 2.0, ty: 2.0},
+												name: "nameBox",
+												text: "Guild Name",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 106.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "Symbol 1137"
 					}
 				],
@@ -85197,8 +86338,58 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 0,
 								name: "Labels Layer"
 							},
-							{color: "#F524B3", frameCount: 1, frames: [{duration: 16, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#CE389A", frameCount: 1, frames: [{duration: 16, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#F524B3",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 16,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {a: 0.999191284179688, tx: 171.0, ty: 2.0},
+												name: "statusBox",
+												text: "Unpublished",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 72.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#CE389A",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 16,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: 2.0, ty: 2.0},
+												name: "titleBox",
+												text: "Title goes here",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 158.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#6452ED",
 								frameCount: 3,
@@ -86421,7 +87612,19 @@ final class AssetCatalogSymbolsMovieClips {
 									{
 										elementCount: 2,
 										elementTypes: ["DOMDynamicText", "DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1026", matrix: {tx: 60.0, ty: -7.85}, name: "deleteEmblem_bt", symbolType: "button", type: "DOMSymbolInstance"}],
+										elements: [
+											{
+												height: 17.05,
+												left: -37.5,
+												matrix: {tx: -60.5, ty: -95.5},
+												name: "titleBox",
+												text: "-- Create Guild --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, rotation: true, size: 14.0},
+												type: "DOMDynamicText",
+												width: 196.0
+											},
+											{libraryItemName: "Buttons/Symbol 1026", matrix: {tx: 60.0, ty: -7.85}, name: "deleteEmblem_bt", symbolType: "button", type: "DOMSymbolInstance"}
+										],
 										index: 0,
 										keyMode: 9728
 									}
@@ -86842,7 +88045,31 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 1,
 								name: "Layer 2"
 							},
-							{color: "#C989E8", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#C989E8",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 16.0, ty: 2.0},
+												name: "textBox",
+												text: "(1)",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#737373", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 23.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#93FF9D",
 								frameCount: 1,
@@ -86913,10 +88140,106 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 2,
 								name: "Layer 3"
 							},
-							{color: "#CD3BE7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
-							{color: "#C5A26F", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 4, name: "Layer 5"},
-							{color: "#DC6CC8", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#65BFB9", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"}
+							{
+								color: "#CD3BE7",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 0.999725341796875, tx: 2.0, ty: 56.0},
+												name: "guildBox",
+												text: "Guild:PR2 Staff",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 176.05
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 3,
+								name: "Layer 4"
+							},
+							{
+								color: "#C5A26F",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 0.999725341796875, tx: 2.0, ty: 38.0},
+												name: "hatBox",
+												text: "Hats:13",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 176.05
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 4,
+								name: "Layer 5"
+							},
+							{
+								color: "#DC6CC8",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 0.999725341796875, tx: 2.0, ty: 20.0},
+												name: "rankBox",
+												text: "Rank:45",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 176.05
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 6"
+							},
+							{
+								color: "#65BFB9",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 0.999618530273438, tx: 2.0, ty: 2.0},
+												name: "nameBox",
+												text: "Welcome,Jiggmin",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 156.05
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 7"
+							}
 						],
 						name: "Symbol 1269"
 					}
@@ -87116,7 +88439,32 @@ final class AssetCatalogSymbolsMovieClips {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#0AD3BA", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#0AD3BA",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {d: 1.00286865234375, tx: 2.0, ty: 2.0},
+												name: "textBox",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 6.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "Symbol 1307"
 					}
 				],
@@ -87193,8 +88541,56 @@ final class AssetCatalogSymbolsMovieClips {
 						labels: [],
 						layerCount: 9,
 						layers: [
-							{color: "#C79CAF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#CF7580", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{
+								color: "#C79CAF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 2.0, ty: 1.0},
+												name: "titleBox",
+												text: "Title",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#325638", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 97.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
+							{
+								color: "#CF7580",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.05,
+												matrix: {tx: 2.0, ty: 15.0},
+												name: "authorBox",
+												text: "by: Jiggmin",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#698D70", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 97.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
 							{
 								color: "#A8A797",
 								frameCount: 1,
@@ -87641,10 +89037,110 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 0,
 								name: "Labels Layer"
 							},
-							{color: "#ADE6A3", frameCount: 1, frames: [{duration: 18, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#C7D843", frameCount: 1, frames: [{duration: 18, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
-							{color: "#FD7A37", frameCount: 1, frames: [{duration: 18, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
-							{color: "#FAB94D", frameCount: 1, frames: [{duration: 18, elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 4, name: "Layer 5"},
+							{
+								color: "#ADE6A3",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 18,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 19.45,
+												matrix: {tx: 10.0, ty: 25.0},
+												name: "loadoutNum",
+												text: "10",
+												textAttrs: {aliasText: false, bitmapSize: 320.0, face: "Verdana", lineHeight: 19.45, rotation: true, size: 16.0},
+												type: "DOMDynamicText",
+												width: 23.5
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#C7D843",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 18,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 92.0, ty: 47.0},
+												name: "loadoutJump",
+												text: "jumping: 50",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 116.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
+							{
+								color: "#FD7A37",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 18,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 92.0, ty: 27.0},
+												name: "loadoutAccel",
+												text: "acceleration: 50",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 116.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 3,
+								name: "Layer 4"
+							},
+							{
+								color: "#FAB94D",
+								frameCount: 1,
+								frames: [
+									{
+										duration: 18,
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 92.0, ty: 7.0},
+												name: "loadoutSpeed",
+												text: "speed: 50",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 116.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 4,
+								name: "Layer 5"
+							},
 							{
 								color: "#93C1C2",
 								frameCount: 3,
@@ -87761,7 +89257,31 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 1,
 								name: "Layer 2"
 							},
-							{color: "#38EBE2", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#38EBE2",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {tx: 33.6, ty: 39.05},
+												name: "textBox",
+												text: "--",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 69.35
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#ECB50D",
 								frameCount: 1,

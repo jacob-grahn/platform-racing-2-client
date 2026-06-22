@@ -11,6 +11,7 @@ import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
@@ -24,10 +25,13 @@ typedef RuntimeFrame = {
 	// Parallel to `elements`: the source timeline layer index each element came
 	// from. Used to reconstruct Animate mask/masked layer relationships.
 	var elementLayers:Array<Int>;
+	// Parallel to `elements`: false for elements authored on a hidden layer.
+	var elementLayerVisible:Array<Bool>;
 }
 
 typedef PR2MovieClipOptions = {
 	@:optional var maxNestedDepth:Int;
+	@:optional var includeHiddenLayers:Bool;
 }
 
 class PR2MovieClip extends Sprite {
@@ -42,6 +46,7 @@ class PR2MovieClip extends Sprite {
 	private var playing:Bool = false;
 	private var maxNestedDepth:Int;
 	private var nestedDepth:Int;
+	private var includeHiddenLayers:Bool;
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
 	private var runningFrameScripts:Bool = false;
 	private var isButtonSymbol:Bool = false;
@@ -87,6 +92,7 @@ class PR2MovieClip extends Sprite {
 		super();
 		this.symbol = symbol;
 		this.maxNestedDepth = options != null && options.maxNestedDepth != null ? options.maxNestedDepth : 32;
+		this.includeHiddenLayers = options != null && options.includeHiddenLayers == true;
 		this.nestedDepth = nestedDepth;
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];
@@ -251,7 +257,7 @@ class PR2MovieClip extends Sprite {
 	private function buildTimeline(source:TimelineDef):Void {
 		totalFrames = source.frameCount < 1 ? 1 : source.frameCount;
 		for (i in 0...totalFrames) {
-			frames.push({elements: [], elementLayers: []});
+			frames.push({elements: [], elementLayers: [], elementLayerVisible: []});
 		}
 
 		for (label in source.labels) {
@@ -282,7 +288,7 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function applyLayer(layer:LayerDef):Void {
-		if (layer.visible == false) {
+		if (layer.visible == false && !includeHiddenLayers) {
 			return;
 		}
 
@@ -296,6 +302,7 @@ class PR2MovieClip extends Sprite {
 				for (element in elements) {
 					frames[frameIndex].elements.push(element);
 					frames[frameIndex].elementLayers.push(layer.index);
+					frames[frameIndex].elementLayerVisible.push(layer.visible != false);
 				}
 			}
 		}
@@ -337,7 +344,8 @@ class PR2MovieClip extends Sprite {
 		var desiredChildren:Array<DisplayObject> = [];
 		var desiredChildSet:ObjectMap<DisplayObject, Bool> = new ObjectMap();
 
-		for (element in frame.elements) {
+		for (i in 0...frame.elements.length) {
+			var element = frame.elements[i];
 			// Static visuals (shapes/text) are pure functions of their element def:
 			// Animate emits a new element object whenever geometry or transform
 			// changes, so the same element reference always renders identically.
@@ -356,6 +364,7 @@ class PR2MovieClip extends Sprite {
 					shapeByElement.set(element, child);
 				}
 			}
+			child.visible = child.visible && frame.elementLayerVisible[i];
 			desiredChildren.push(child);
 			desiredChildSet.set(child, true);
 		}
@@ -413,6 +422,7 @@ class PR2MovieClip extends Sprite {
 			var layerIndex = frame.elementLayers[i];
 			var child = createDisplayObject(element, null);
 			applyElementProperties(child, element);
+			child.visible = child.visible && frame.elementLayerVisible[i];
 
 			if (maskLayers.exists(layerIndex)) {
 				var holder = maskHolders.get(layerIndex);
@@ -552,7 +562,7 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function createDisplayObject(element:DisplayElementDef, reusableClip:Null<PR2MovieClip>):DisplayObject {
-		if (element.type == "DOMStaticText") {
+		if (element.type == "DOMStaticText" || element.type == "DOMDynamicText") {
 			return createStaticText(element);
 		}
 
@@ -572,7 +582,10 @@ class PR2MovieClip extends Sprite {
 					return createPlaceholder(element);
 				}
 
-				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {maxNestedDepth: maxNestedDepth}, nestedDepth + 1);
+				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {
+					maxNestedDepth: maxNestedDepth,
+					includeHiddenLayers: includeHiddenLayers
+				}, nestedDepth + 1);
 				if (element.loop == "single frame") {
 					clip.gotoAndStop((element.firstFrame == null ? 0 : element.firstFrame) + 1);
 				} else if (reusableClip == null && (element.loop == "play once" || element.loop == "loop")) {
@@ -651,7 +664,8 @@ class PR2MovieClip extends Sprite {
 		field.height = element.height == null ? Math.max(1, field.textHeight + 4) : element.height + 4;
 		field.autoSize = TextFieldAutoSize.NONE;
 		field.selectable = false;
-		field.mouseEnabled = false;
+		field.type = TextFieldType.DYNAMIC;
+		field.mouseEnabled = element.type == "DOMDynamicText";
 		return field;
 	}
 
@@ -746,7 +760,7 @@ class PR2MovieClip extends Sprite {
 				c /= scaleY;
 				d /= scaleY;
 			}
-			var localTextLeft = element.type == "DOMStaticText" && element.left != null ? element.left : 0;
+			var localTextLeft = (element.type == "DOMStaticText" || element.type == "DOMDynamicText") && element.left != null ? element.left : 0;
 			child.transform.matrix = new Matrix(
 				a,
 				b,

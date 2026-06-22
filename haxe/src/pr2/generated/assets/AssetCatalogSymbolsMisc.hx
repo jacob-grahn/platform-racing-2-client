@@ -62,7 +62,34 @@ final class AssetCatalogSymbolsMisc {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#00FFFF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer_1"}],
+						layers: [
+							{
+								color: "#00FFFF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												left: 10.55,
+												matrix: {tx: -8.55, ty: 2.0},
+												name: "box",
+												text: "Fred the G. Cactus",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana*", fillColor: "#666666", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 113.8
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer_1"
+							}
+						],
 						name: "SpectateNameBoxText"
 					}
 				],
@@ -77,7 +104,33 @@ final class AssetCatalogSymbolsMisc {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#00FFFF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer_1"}],
+						layers: [
+							{
+								color: "#00FFFF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 2.0, ty: 2.0},
+												name: "box",
+												text: "-- Spectating --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana*", fillColor: "#666666", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 100.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer_1"
+							}
+						],
 						name: "SpectateTextBoxMC"
 					}
 				],

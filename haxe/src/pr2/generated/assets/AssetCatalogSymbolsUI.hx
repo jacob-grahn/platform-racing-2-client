@@ -280,7 +280,31 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 2,
 						layers: [
-							{color: "#42CABA", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{
+								color: "#42CABA",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {a: 1.00167846679688, tx: 130.05, ty: 2.0},
+												name: "textBox",
+												text: "100",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 37.85
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
 							{
 								color: "#E16EA2",
 								frameCount: 1,
@@ -342,7 +366,31 @@ final class AssetCatalogSymbolsUI {
 								name: "arrows"
 							},
 							{color: "#D45EA6", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 1"},
-							{color: "#AEDECF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 2"},
+							{
+								color: "#AEDECF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 1.85, ty: 2.0},
+												name: "nameBox",
+												text: "Speed",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 81.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 2"
+							},
 							{
 								color: "#17B8B5",
 								frameCount: 1,
@@ -9410,6 +9458,15 @@ final class AssetCatalogSymbolsUI {
 										elementTypes: ["DOMComponentInstance", "DOMDynamicText"],
 										elements: [
 											{
+												height: 31.1,
+												matrix: {tx: -103.0, ty: -23.0},
+												name: "descBox",
+												text: "All the stats of players that bump this block will be increased by:",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 206.0
+											},
+											{
 												componentParams: {
 													direction: {type: "List", value: "horizontal"},
 													enabled: {type: "Boolean", value: true},
@@ -9426,6 +9483,15 @@ final class AssetCatalogSymbolsUI {
 												name: "slider",
 												transformationPoint: {x: 40.95, y: 1.1},
 												type: "DOMComponentInstance"
+											},
+											{
+												height: 14.55,
+												matrix: {tx: -12.95, ty: 46.5},
+												name: "statBox",
+												text: "5",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 23.5
 											}
 										],
 										index: 0,
@@ -9439,7 +9505,31 @@ final class AssetCatalogSymbolsUI {
 							{color: "#8C99D6", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
 							{color: "#F12B73", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
 							{color: "#EC9521", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
-							{color: "#EDB002", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 9, name: "Layer 10"},
+							{
+								color: "#EDB002",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.00047302246094, tx: -56.0, ty: -49.0},
+												name: "titleBox",
+												text: "-- Happy Block --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
+												type: "DOMDynamicText",
+												width: 115.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 9,
+								name: "Layer 10"
+							},
 							{
 								color: "#EEC6B8",
 								frameCount: 1,
@@ -9897,7 +9987,17 @@ final class AssetCatalogSymbolsUI {
 												transformationPoint: {x: 50.0, y: 11.0},
 												type: "DOMComponentInstance"
 											},
-											{libraryItemName: "Buttons/CancelTextButton", matrix: {tx: 58.5, ty: -16.5}, name: "other_cancel_bt", symbolType: "button", type: "DOMSymbolInstance"}
+											{libraryItemName: "Buttons/CancelTextButton", matrix: {tx: 58.5, ty: -16.5}, name: "other_cancel_bt", symbolType: "button", type: "DOMSymbolInstance"},
+											{
+												height: 12.15,
+												left: 10.05,
+												matrix: {tx: -153.05, ty: -88.0},
+												name: "titleBox",
+												text: "Newbieland 2 by Jiggmin",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 286.0
+											}
 										],
 										index: 0,
 										keyMode: 9728
@@ -11728,6 +11828,15 @@ final class AssetCatalogSymbolsUI {
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
 												width: 108.9
+											},
+											{
+												height: 31.1,
+												matrix: {tx: -103.5, ty: -23.0},
+												name: "var_283",
+												text: "Each game mode has a different goal and method of winning.",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 206.0
 											}
 										],
 										index: 0,
@@ -11810,7 +11919,18 @@ final class AssetCatalogSymbolsUI {
 									{
 										elementCount: 2,
 										elementTypes: ["DOMDynamicText", "DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 21.95, centerPoint3DY: 41.75, libraryItemName: "UI/ShadowBG", matrix: {a: 0.882400512695312, d: 0.785186767578125, tx: -120.0, ty: -50.0}, type: "DOMSymbolInstance"}],
+										elements: [
+											{centerPoint3DX: 21.95, centerPoint3DY: 41.75, libraryItemName: "UI/ShadowBG", matrix: {a: 0.882400512695312, d: 0.785186767578125, tx: -120.0, ty: -50.0}, type: "DOMSymbolInstance"},
+											{
+												height: 64.2,
+												left: -8.95,
+												matrix: {tx: -100.55, ty: 19.0},
+												text: "This song will play by default for players playing your course. Choose none for no song and random for a random one from the list.",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 219.9
+											}
+										],
 										index: 0,
 										keyMode: 9728
 									}
@@ -12039,6 +12159,16 @@ final class AssetCatalogSymbolsUI {
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
 												width: 128.0
+											},
+											{
+												height: 60.75,
+												left: -9.9,
+												matrix: {tx: 21.9, ty: 52.25},
+												name: "linksBox",
+												text: "https://pr2hub.com\rPR2 Hub Website\rJiggmin\rNewbieland 2\rPR2 Staff",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 128.0
 											}
 										],
 										index: 0,
@@ -12090,8 +12220,56 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 2,
 						layers: [
-							{color: "#DC8C87", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#D086FA", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"}
+							{
+								color: "#DC8C87",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {d: 1.00177001953125, tx: 0.75, ty: 4.0},
+												name: "titleBox",
+												text: "title",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 27.55
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
+							{
+								color: "#D086FA",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {d: 1.00177001953125, tx: 0.75, ty: 13.75},
+												name: "valueBox",
+												text: "val",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#024775", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 27.55
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							}
 						],
 						name: "SettingsButton"
 					}
@@ -12110,7 +12288,31 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 4,
 						layers: [
-							{color: "#56CFC2", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{
+								color: "#56CFC2",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {a: 1.00047302246094, tx: -113.45, ty: -61.0},
+												name: "titleBox",
+												text: "-- Time Limit --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 226.85
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
 							{
 								color: "#F6A802",
 								frameCount: 1,
@@ -12144,7 +12346,31 @@ final class AssetCatalogSymbolsUI {
 								index: 1,
 								name: "Layer 2"
 							},
-							{color: "#04B5E7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#04B5E7",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 31.1,
+												matrix: {tx: -102.5, ty: -35.05},
+												name: "descBox",
+												text: "The amount of seconds racers will have to complete this course.",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 206.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#DFC5FD",
 								frameCount: 1,
@@ -12186,7 +12412,33 @@ final class AssetCatalogSymbolsUI {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#6DF2C4", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#6DF2C4",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 16.3,
+												matrix: {tx: 7.25, ty: 8.55},
+												name: "textBox",
+												text: "1",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", fillColor: "#FFFFFF", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 17.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "StartBlockText"
 					}
 				],
@@ -12302,7 +12554,32 @@ final class AssetCatalogSymbolsUI {
 						frameCount: 1,
 						labels: [],
 						layerCount: 1,
-						layers: [{color: "#A7FE30", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}],
+						layers: [
+							{
+								color: "#A7FE30",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 29.2,
+												matrix: {d: 1.00286865234375, tx: 2.0, ty: 2.0},
+												name: "textBox",
+												textAttrs: {aliasText: false, bitmapSize: 360.0, face: "Verdana", lineHeight: 21.9, rotation: true, size: 18.0},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							}
+						],
 						name: "Symbol 353"
 					}
 				],
@@ -12320,8 +12597,54 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 2,
 						layers: [
-							{color: "#BCC486", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#B632FA", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"}
+							{
+								color: "#BCC486",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -32.0, ty: -6.0},
+												name: "textBox2",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 66.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
+							{
+								color: "#B632FA",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -33.0, ty: -7.0},
+												name: "textBox1",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#FFFFFF", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 66.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							}
 						],
 						name: "Symbol 547"
 					}
@@ -19606,7 +19929,31 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#CF80E1", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{
+								color: "#CF80E1",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 100.0, ty: 7.95},
+												name: "textBox",
+												text: "+1 Lux",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
 							{
 								color: "#E06FAA",
 								frameCount: 1,
@@ -20315,8 +20662,56 @@ final class AssetCatalogSymbolsUI {
 								index: 4,
 								name: "heads"
 							},
-							{color: "#D7AFF3", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#66ECCF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
+							{
+								color: "#D7AFF3",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 38.05,
+												matrix: {tx: 101.0, ty: -129.05},
+												name: "textBox",
+												text: "The winner of this race\rwill earn an:",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 161.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 6"
+							},
+							{
+								color: "#66ECCF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 101.0, ty: -87.0},
+												name: "titleBox",
+												text: "--- EXP Hat! ---",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 162.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 7"
+							},
 							{
 								color: "#8175BB",
 								frameCount: 1,
@@ -20365,7 +20760,31 @@ final class AssetCatalogSymbolsUI {
 								index: 8,
 								name: "Layer 9"
 							},
-							{color: "#9E78E2", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 9, name: "Layer 10"},
+							{
+								color: "#9E78E2",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 51.95,
+												matrix: {tx: 103.95, ty: 60.0},
+												name: "flavor",
+												text: "If you finish a race with this hat, it will increase your exp gain by 100%!",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 152.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 9,
+								name: "Layer 10"
+							},
 							{
 								color: "#FB65F5",
 								frameCount: 1,
@@ -20747,7 +21166,53 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "dividers"
 							},
-							{color: "#FF800A", frameCount: 1, frames: [{elementCount: 3, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, locked: true, name: "stats"},
+							{
+								color: "#FF800A",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 3,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 9.75,
+												left: -0.9,
+												matrix: {tx: 2.4, ty: 3.75},
+												name: "speedBox",
+												text: "100",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", lineHeight: 9.75, rotation: true, size: 8.0},
+												type: "DOMDynamicText",
+												width: 15.5
+											},
+											{
+												height: 9.75,
+												left: 0.8,
+												matrix: {tx: 20.25, ty: 3.75},
+												name: "accelBox",
+												text: "100",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", lineHeight: 9.75, rotation: true, size: 8.0},
+												type: "DOMDynamicText",
+												width: 15.7
+											},
+											{
+												height: 9.75,
+												left: 1.35,
+												matrix: {tx: 38.35, ty: 3.75},
+												name: "jumpBox",
+												text: "100",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", lineHeight: 9.75, rotation: true, size: 8.0},
+												type: "DOMDynamicText",
+												width: 15.3
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								locked: true,
+								name: "stats"
+							},
 							{
 								color: "#F74AF7",
 								frameCount: 1,
@@ -21200,9 +21665,81 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 3,
 						layers: [
-							{color: "#9C19FC", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#B7709B", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#CEFF80", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"}
+							{
+								color: "#9C19FC",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {tx: 146.0, ty: 2.0},
+												name: "hatBox",
+												text: "5",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 24.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
+							{
+								color: "#B7709B",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {tx: 106.0, ty: 2.0},
+												name: "rankBox",
+												text: "12",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 30.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#CEFF80",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.05,
+												matrix: {tx: 2.0, ty: 2.0},
+												name: "nameBox",
+												text: "ok some name",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 95.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							}
 						],
 						name: "TabPlayersListItem"
 					}
@@ -21346,9 +21883,80 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 5,
 						layers: [
-							{color: "#25FE9A", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#8552BD", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#C3F0A5", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#25FE9A",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {tx: 52.0, ty: 88.75},
+												name: "timeBox",
+												text: "5/4/2007",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 115.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
+							{
+								color: "#8552BD",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 291.7,
+												matrix: {tx: 5.0, ty: 29.95},
+												name: "textBox",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#010101", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 159.5
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#C3F0A5",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 2.0, ty: 6.95},
+												name: "nameBox",
+												text: "name yeagh",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 156.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#009999",
 								frameCount: 1,
@@ -22320,8 +22928,54 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 3,
 						layers: [
-							{color: "#F8A5C0", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#A7EECB", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{
+								color: "#F8A5C0",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {d: 1.00311279296875, tx: 21.0, ty: 2.0},
+												name: "nameBox",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 76.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
+							{
+								color: "#A7EECB",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {d: 1.00311279296875, tx: 3.0, ty: 2.0},
+												name: "rankBox",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 14.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
 							{
 								color: "#9E95FD",
 								frameCount: 1,
@@ -22355,7 +23009,31 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 2,
 						layers: [
-							{color: "#E975C1", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{
+								color: "#E975C1",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 5.0, ty: 2.0},
+												name: "textBox",
+												text: "text",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 41.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
 							{
 								color: "#EAB191",
 								frameCount: 1,
@@ -24717,6 +25395,15 @@ final class AssetCatalogSymbolsUI {
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
 												width: 12.2
+											},
+											{
+												height: 10.95,
+												matrix: {tx: -150.25, ty: 89.15},
+												name: "music_nav_bt",
+												text: "(more ->)",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 180.0, face: "Verdana-Italic", fillColor: "#234287", lineHeight: 10.95, rotation: true, size: 9.0, target: "_blank"},
+												type: "DOMDynamicText",
+												width: 56.0
 											}
 										],
 										index: 0,
@@ -24794,6 +25481,26 @@ final class AssetCatalogSymbolsUI {
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 180.0, face: "Verdana-Italic", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
 												width: 152.5
+											},
+											{
+												height: 9.75,
+												left: -67.1,
+												matrix: {tx: 127.65, ty: 145.0},
+												name: "versionBox",
+												text: "PR2 v156.0",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 120.0, face: "Verdana", fillColor: "#666666", lineHeight: 7.3, rotation: true, size: 6.0},
+												type: "DOMDynamicText",
+												width: 179.25
+											},
+											{
+												height: 9.75,
+												left: -79.15,
+												matrix: {tx: 139.7, ty: 153.25},
+												name: "buildBox",
+												text: "Build: 22-apr-2019-v155",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 120.0, face: "Verdana", fillColor: "#666666", lineHeight: 7.3, rotation: true, size: 6.0},
+												type: "DOMDynamicText",
+												width: 179.15
 											}
 										],
 										index: 0,
@@ -24894,6 +25601,16 @@ final class AssetCatalogSymbolsUI {
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
 												width: 12.2
+											},
+											{
+												height: 10.95,
+												left: -60.55,
+												matrix: {tx: 138.55, ty: 2.0},
+												name: "art_nav_bts",
+												text: "(<- back) (next ->)",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 180.0, face: "Verdana-Italic", fillColor: "#234287", lineHeight: 10.95, rotation: true, size: 9.0, target: "_blank"},
+												type: "DOMDynamicText",
+												width: 116.0
 											}
 										],
 										index: 0,
@@ -26222,6 +26939,26 @@ final class AssetCatalogSymbolsUI {
 										elementTypes: ["DOMDynamicText", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
+												height: 14.5,
+												left: -77.4,
+												matrix: {tx: -79.65, ty: -100.25},
+												name: "author",
+												text: "by: Author",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 318.95
+											},
+											{
+												height: 14.55,
+												left: -110.95,
+												matrix: {tx: -41.1, ty: -118.8},
+												name: "title",
+												text: "Level Name",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 307.95
+											},
+											{
 												height: 13.35,
 												left: -21.45,
 												matrix: {tx: -141.1, ty: -39.8},
@@ -26241,6 +26978,26 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 13.35,
+												left: 136.85,
+												matrix: {tx: -200.95, ty: -39.8},
+												name: "updated",
+												text: "17/Mar/2020",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 76.0
+											},
+											{
+												height: 13.35,
+												left: 136.85,
+												matrix: {tx: -200.95, ty: -59.8},
+												name: "version",
+												text: "21",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 31.0
+											},
+											{
+												height: 13.35,
 												left: 8.25,
 												matrix: {tx: -170.8, ty: -19.8},
 												text: "Min. Rank:",
@@ -26250,12 +27007,42 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 13.35,
+												left: 136.85,
+												matrix: {tx: -200.95, ty: -19.8},
+												name: "minRank",
+												text: "99",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 31.0
+											},
+											{
+												height: 13.35,
 												left: 2.55,
 												matrix: {tx: -165.1, ty: 0.2},
 												text: "Play Count:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 220.0, face: "Verdana-Bold", lineHeight: 13.35, size: 11.0},
 												type: "DOMStaticText",
 												width: 91.0
+											},
+											{
+												height: 13.35,
+												left: 136.85,
+												matrix: {tx: -200.95, ty: 0.2},
+												name: "plays",
+												text: "999,999,999",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 76.0
+											},
+											{
+												height: 120.65,
+												left: -68.9,
+												matrix: {tx: 91.45, ty: -0.95},
+												name: "note",
+												text: "my description\r\rbla\r\rweeeeeeeeeee",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana-Italic", fillColor: "#666666", lineHeight: 9.75, size: 8.0},
+												type: "DOMDynamicText",
+												width: 140.0
 											},
 											{
 												height: 13.35,
@@ -26730,7 +27517,31 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "buttons"
 							},
-							{color: "#FF800A", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "desc"},
+							{
+								color: "#FF800A",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 80.75,
+												left: -8.95,
+												matrix: {tx: -96.05, ty: 32.5},
+												text: "This setting maximizes art quality but may increase drawing time. That may annoy your friends. Art in the Level Editor will always be drawn at lossless quality.",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 212.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "desc"
+							},
 							{
 								color: "#EDB002",
 								frameCount: 1,
@@ -26881,7 +27692,33 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 1"
 							},
 							{color: "#FF0000", frameCount: 0, frames: [], index: 1, layerType: "folder", locked: true, name: "artControls"},
-							{color: "#669900", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, locked: true, name: "offText", parentLayerIndex: 1},
+							{
+								color: "#669900",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -106.1, ty: -104.5},
+												name: "artOffText",
+												text: "art",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 26.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								locked: true,
+								name: "offText",
+								parentLayerIndex: 1
+							},
 							{
 								color: "#4CFCF0",
 								frameCount: 1,
@@ -27048,6 +27885,26 @@ final class AssetCatalogSymbolsUI {
 												text: "sounds",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
+												width: 42.5
+											},
+											{
+												height: 14.55,
+												left: 54.05,
+												matrix: {tx: -33.55, ty: -92.2},
+												name: "musicPercentBox",
+												text: "100%",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 36.0
+											},
+											{
+												height: 14.55,
+												left: 54.05,
+												matrix: {tx: 17.2, ty: -92.2},
+												name: "soundPercentBox",
+												text: "100%",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
 												width: 42.5
 											},
 											{
@@ -28167,7 +29024,70 @@ final class AssetCatalogSymbolsUI {
 								index: 3,
 								name: "head"
 							},
-							{color: "#669900", frameCount: 1, frames: [{elementCount: 5, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 4, name: "text"},
+							{
+								color: "#669900",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 5,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.5,
+												left: -77.4,
+												matrix: {tx: -103.55, ty: -66.45},
+												name: "descBox",
+												text: "Ahh! Girls have cooties!! And it's Valentine's Day!!!",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 364.95
+											},
+											{
+												height: 14.55,
+												left: -110.95,
+												matrix: {tx: -65.0, ty: -85.0},
+												name: "titleBox",
+												text: "-- Valentine Feet --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 354.95
+											},
+											{
+												height: 14.55,
+												matrix: {tx: -46.3, ty: -43.75},
+												name: "ownedBox",
+												text: "You don't own this part.",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 144.95
+											},
+											{
+												height: 13.35,
+												matrix: {tx: -46.3, ty: -25.2},
+												name: "epicBox",
+												text: "Epic Upgrade included with EE purchase!",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 230.3
+											},
+											{
+												height: 47.65,
+												left: -7.0,
+												matrix: {tx: -39.3, ty: -7.85},
+												name: "obtainBox",
+												text: "How to Obtain: Log in on Valentine's Day!",
+												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
+												type: "DOMDynamicText",
+												width: 221.3
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 4,
+								name: "text"
+							},
 							{
 								color: "#C022E1",
 								frameCount: 1,
@@ -28269,10 +29189,107 @@ final class AssetCatalogSymbolsUI {
 							},
 							{color: "#89CDD9", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
 							{color: "#1BABFB", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
-							{color: "#FEC142", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
-							{color: "#6793B2", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 4, name: "Layer 5"},
-							{color: "#8277D3", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#EBAA8D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
+							{
+								color: "#FEC142",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												left: -3.0,
+												matrix: {tx: 65.05, ty: 77.35},
+												name: "epicBox",
+												text: "Purchased!",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#006600", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 55.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 3,
+								name: "Layer 4"
+							},
+							{
+								color: "#6793B2",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {tx: 10.0, ty: 25.55},
+												name: "ownedBox",
+												text: "Owned!",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#006600", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 42.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 4,
+								name: "Layer 5"
+							},
+							{
+								color: "#8277D3",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 65.65,
+												matrix: {tx: 10.0, ty: 96.0},
+												name: "descBox",
+												text: "Rock it old school.",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 108.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 6"
+							},
+							{
+								color: "#EBAA8D",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 10.05, ty: 5.0},
+												name: "titleBox",
+												text: "Classic",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 109.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 7"
+							},
 							{
 								color: "#009999",
 								frameCount: 1,
@@ -28497,7 +29514,31 @@ final class AssetCatalogSymbolsUI {
 								index: 1,
 								name: "Layer 2"
 							},
-							{color: "#50F1F1", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#50F1F1",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 17.05,
+												matrix: {tx: -94.0, ty: -52.5},
+												name: "nameBox",
+												text: "-- Character Name --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, rotation: true, size: 14.0},
+												type: "DOMDynamicText",
+												width: 188.1
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#D79CA5",
 								frameCount: 1,
@@ -28531,7 +29572,31 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 5,
 						layers: [
-							{color: "#47E660", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{
+								color: "#47E660",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 17.05,
+												matrix: {tx: -92.5, ty: -133.2},
+												name: "nameBox",
+												text: "-- Character Name --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, rotation: true, size: 14.0},
+												type: "DOMDynamicText",
+												width: 188.1
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
 							{
 								color: "#B2A568",
 								frameCount: 1,
@@ -28637,7 +29702,42 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 12,
 						layers: [
-							{color: "#FF4FFF", frameCount: 1, frames: [{elementCount: 2, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer_12"},
+							{
+								color: "#FF4FFF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 2,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.75,
+												left: 36.25,
+												matrix: {tx: -170.25, ty: -29.0},
+												name: "noteCharsRemaining",
+												text: "255 / 255",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", fillColor: "#AAAAAA", lineHeight: 9.75, size: 8.0},
+												type: "DOMDynamicText",
+												width: 52.0
+											},
+											{
+												height: 12.75,
+												left: 36.25,
+												matrix: {tx: -170.25, ty: -68.0},
+												name: "titleCharsRemaining",
+												text: "50 / 50",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", fillColor: "#AAAAAA", lineHeight: 9.75, size: 8.0},
+												type: "DOMDynamicText",
+												width: 52.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer_12"
+							},
 							{
 								color: "#56A5B2",
 								frameCount: 1,
@@ -29100,6 +30200,16 @@ final class AssetCatalogSymbolsUI {
 												width: 197.2
 											},
 											{
+												height: 12.75,
+												left: 30.05,
+												matrix: {tx: 55.5, ty: 39.5},
+												name: "messageCharsRemaining",
+												text: "1000 / 1000",
+												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 160.0, face: "Verdana", fillColor: "#AAAAAA", lineHeight: 9.75, size: 8.0},
+												type: "DOMDynamicText",
+												width: 65.5
+											},
+											{
 												height: 14.55,
 												matrix: {tx: -72.0, ty: -97.25},
 												text: "To:",
@@ -29485,6 +30595,16 @@ final class AssetCatalogSymbolsUI {
 												width: 216.95
 											},
 											{
+												height: 14.55,
+												left: -145.9,
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: 25.7, ty: 23.45},
+												name: "costBox",
+												text: "Cost: 999,999 Coins",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
+												type: "DOMDynamicText",
+												width: 240.6
+											},
+											{
 												centerPoint3DX: -24.5,
 												centerPoint3DY: 210.9,
 												componentParams: {
@@ -29547,12 +30667,32 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
+												left: -42.45,
+												matrix: {tx: -78.0, ty: 4.9},
+												name: "numSelectedBox",
+												text: "Selected: 9,999",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
+												type: "DOMDynamicText",
+												width: 241.0
+											},
+											{
+												height: 14.55,
 												left: 68.15,
 												matrix: {tx: -173.6, ty: -18.65},
 												text: "1",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
 												width: 7.7
+											},
+											{
+												height: 14.55,
+												left: 71.0,
+												matrix: {tx: 26.05, ty: -19.15},
+												name: "maxBox",
+												text: "99",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
+												type: "DOMDynamicText",
+												width: 18.5
 											}
 										],
 										index: 0,
@@ -29612,7 +30752,41 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 2",
 								parentLayerIndex: 0
 							},
-							{color: "#3DF2E3", frameCount: 1, frames: [{elementCount: 2, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#3DF2E3",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 2,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -211.75, ty: -162.05},
+												name: "titleBox",
+												text: "-- Vault of Magics --",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 423.75
+											},
+											{
+												height: 14.55,
+												left: -142.8,
+												matrix: {tx: -79.95, ty: 133.5},
+												name: "coinsLeftBox",
+												text: "You have 999,999 Jigg Coins remaining. Need more?",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana Bold*", fillColor: "#BB0000", lineHeight: 14.55},
+												type: "DOMDynamicText",
+												width: 445.75
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#5A6BDA",
 								frameCount: 1,
@@ -29716,8 +30890,56 @@ final class AssetCatalogSymbolsUI {
 								locked: true,
 								name: "Layer 1"
 							},
-							{color: "#89CDD9", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#1BABFB", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{
+								color: "#89CDD9",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.05,
+												matrix: {tx: 52.0, ty: 72.0},
+												name: "saleBox",
+												text: "25% off",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#339900", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 55.75
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
+							{
+								color: "#1BABFB",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												matrix: {tx: 13.0, ty: 72.0},
+												name: "priceBox",
+												text: "1",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 6.55
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 2,
+								name: "Layer 3"
+							},
 							{
 								color: "#FEC142",
 								frameCount: 1,
@@ -29748,8 +30970,56 @@ final class AssetCatalogSymbolsUI {
 								index: 4,
 								name: "Layer 5"
 							},
-							{color: "#8277D3", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#EBAA8D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
+							{
+								color: "#8277D3",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 57.95,
+												matrix: {tx: 10.0, ty: 96.0},
+												name: "descBox",
+												text: "You and everyone in your guild gains an artifact hat for one hour.",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
+												type: "DOMDynamicText",
+												width: 107.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 5,
+								name: "Layer 6"
+							},
+							{
+								color: "#EBAA8D",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: 10.05, ty: 7.0},
+												name: "titleBox",
+												text: "Guild de Artifact",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 109.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 6,
+								name: "Layer 7"
+							},
 							{
 								color: "#B66287",
 								frameCount: 1,
@@ -29838,7 +31108,52 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#0BD2A6", frameCount: 1, frames: [{elementCount: 3, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{
+								color: "#0BD2A6",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 3,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 12.15,
+												left: 108.2,
+												matrix: {tx: 17.15, ty: 54.35},
+												name: "speedBox",
+												text: "Speed:",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, size: 10.0},
+												type: "DOMDynamicText",
+												width: 91.0
+											},
+											{
+												height: 12.15,
+												left: 78.5,
+												matrix: {tx: 46.85, ty: 70.5},
+												name: "accelBox",
+												text: "Acceleration:",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, size: 10.0},
+												type: "DOMDynamicText",
+												width: 91.0
+											},
+											{
+												height: 12.15,
+												left: 97.4,
+												matrix: {tx: 27.95, ty: 86.65},
+												name: "jumpnBox",
+												text: "Jumping:",
+												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, size: 10.0},
+												type: "DOMDynamicText",
+												width: 91.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 2"
+							},
 							{
 								color: "#C022E1",
 								frameCount: 1,
@@ -30435,7 +31750,31 @@ final class AssetCatalogSymbolsUI {
 						labels: [],
 						layerCount: 3,
 						layers: [
-							{color: "#E7D593", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMDynamicText"], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{
+								color: "#E7D593",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMDynamicText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -98.0, ty: -38.15},
+												name: "textBox",
+												text: "Uploading...",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMDynamicText",
+												width: 196.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 0,
+								name: "Layer 1"
+							},
 							{
 								color: "#8853BA",
 								frameCount: 1,
