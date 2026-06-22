@@ -53,15 +53,15 @@ class ServerLevelDecoder {
 
 	public static function decodeArtLayers(mode:String, sections:Array<String>):Array<DecodedArtLayer> {
 		return [
-			decodeArtLayer(mode, section(sections, 3), section(sections, 6)),
-			decodeArtLayer(mode, section(sections, 4), section(sections, 7)),
-			decodeArtLayer(mode, section(sections, 5), section(sections, 8)),
-			decodeArtLayer(mode, section(sections, 10), section(sections, 12)),
-			decodeArtLayer(mode, section(sections, 11), section(sections, 13))
+			decodeArtLayer(mode, section(sections, 3), section(sections, 6), 1),
+			decodeArtLayer(mode, section(sections, 4), section(sections, 7), 0.5),
+			decodeArtLayer(mode, section(sections, 5), section(sections, 8), 0.25),
+			decodeArtLayer(mode, section(sections, 10), section(sections, 12), 1),
+			decodeArtLayer(mode, section(sections, 11), section(sections, 13), 2)
 		];
 	}
 
-	private static function decodeArtLayer(mode:String, objectString:String, drawString:String):DecodedArtLayer {
+	private static function decodeArtLayer(mode:String, objectString:String, drawString:String, scale:Float):DecodedArtLayer {
 		var objects:Array<DecodedArtObject> = [];
 		var texts:Array<DecodedTextObject> = [];
 		for (entry in decodeArtObjects(mode, objectString)) {
@@ -75,7 +75,7 @@ class ServerLevelDecoder {
 				}
 			}
 		}
-		return new DecodedArtLayer(decodeDrawActions(drawString), objects, texts);
+		return new DecodedArtLayer(decodeDrawActions(drawString), objects, texts, scale);
 	}
 
 	public static function decodeDrawActions(drawString:String):Array<DecodedDrawAction> {

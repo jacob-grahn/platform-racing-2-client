@@ -46,8 +46,15 @@ class ServerLevelRenderer extends Sprite {
 
 		drawBackground();
 		drawArtBackground();
-		drawArtLayers();
+		// Course.attachBackgrounds places bg3/bg2/bg1 behind the map and bg4/bg5
+		// in front. Preserve that authored depth order instead of flattening all
+		// five drawing planes behind the blocks.
+		drawArtLayer(2);
+		drawArtLayer(1);
+		drawArtLayer(0);
 		drawBlocks();
+		drawArtLayer(3);
+		drawArtLayer(4);
 	}
 
 	public function worldToScreen(x:Float, y:Float):Point {
@@ -144,16 +151,20 @@ class ServerLevelRenderer extends Sprite {
 		addChild(bitmap);
 	}
 
-	private function drawArtLayers():Void {
-		for (layer in level.artLayers) {
-			var container = new Sprite();
-			container.x = offsetX;
-			container.y = offsetY;
-			drawLayerStrokes(container, layer.drawActions);
-			drawLayerObjects(container, layer.objects);
-			drawLayerTexts(container, layer.texts);
-			addChild(container);
-		}
+	private function drawArtLayer(index:Int):Void {
+		if (index >= level.artLayers.length) return;
+		var layer = level.artLayers[index];
+		var container = new Sprite();
+		container.name = 'artLayer${index + 1}';
+		// Background.setPos rounds camera movement after applying the plane's
+		// parallax scale. DrawableBackground applies that scale to placed objects
+		// and text individually rather than scaling its stroke canvas.
+		container.x = Math.round(offsetX * layer.scale);
+		container.y = Math.round(offsetY * layer.scale);
+		drawLayerStrokes(container, layer.drawActions);
+		drawLayerObjects(container, layer.objects, layer.scale);
+		drawLayerTexts(container, layer.texts, layer.scale);
+		addChild(container);
 	}
 
 	private function drawLayerStrokes(container:Sprite, actions:Array<DecodedDrawAction>):Void {
@@ -198,7 +209,7 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	private function drawLayerObjects(container:Sprite, objects:Array<DecodedArtObject>):Void {
+	private function drawLayerObjects(container:Sprite, objects:Array<DecodedArtObject>, layerScale:Float):Void {
 		for (object in objects) {
 			var assetPath = stampAssetPath(object.code);
 			if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
@@ -206,15 +217,15 @@ class ServerLevelRenderer extends Sprite {
 			}
 			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
 			bitmap.smoothing = true;
-			bitmap.scaleX = object.scaleX / 4;
-			bitmap.scaleY = object.scaleY / 4;
-			bitmap.x = object.x;
-			bitmap.y = object.y;
+			bitmap.scaleX = object.scaleX * layerScale / 4;
+			bitmap.scaleY = object.scaleY * layerScale / 4;
+			bitmap.x = object.x * layerScale;
+			bitmap.y = object.y * layerScale;
 			container.addChild(bitmap);
 		}
 	}
 
-	private function drawLayerTexts(container:Sprite, texts:Array<DecodedTextObject>):Void {
+	private function drawLayerTexts(container:Sprite, texts:Array<DecodedTextObject>, layerScale:Float):Void {
 		for (text in texts) {
 			var field = new TextField();
 			field.selectable = false;
@@ -223,11 +234,11 @@ class ServerLevelRenderer extends Sprite {
 			field.autoSize = TextFieldAutoSize.LEFT;
 			field.textColor = text.color;
 			field.text = parseTextObjectText(text.text);
-			field.scaleX = text.scaleX;
-			field.scaleY = text.scaleY;
+			field.scaleX = text.scaleX * layerScale;
+			field.scaleY = text.scaleY * layerScale;
 			field.height = 24;
-			field.x = text.x;
-			field.y = text.y;
+			field.x = text.x * layerScale;
+			field.y = text.y * layerScale;
 			container.addChild(field);
 		}
 	}

@@ -12,7 +12,7 @@ class ServerLevelRendererTest {
 		testBlockAssetMapping();
 		testArtAssetMappings();
 		testWorldToScreenFocus();
-		testArtLayersUseWorldOffset();
+		testArtLayerDepthAndParallax();
 		trace('ServerLevelRendererTest passed $assertions assertions');
 	}
 
@@ -46,14 +46,27 @@ class ServerLevelRendererTest {
 		assertEquals(280.0, neighbor.y, "neighbor y");
 	}
 
-	private static function testArtLayersUseWorldOffset():Void {
+	private static function testArtLayerDepthAndParallax():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
-		var level = new ServerLevel(0xFFFFFF, [focus], [new DecodedArtLayer([new DecodedDrawAction("d", [0, 0, 1, 1])])]);
+		var layers = [
+			new DecodedArtLayer([], [], [], 1),
+			new DecodedArtLayer([], [], [], 0.5),
+			new DecodedArtLayer([new DecodedDrawAction("d", [0, 0, 1, 1])], [], [], 0.25),
+			new DecodedArtLayer([], [], [], 1),
+			new DecodedArtLayer([], [], [], 2)
+		];
+		var level = new ServerLevel(0xFFFFFF, [focus], layers);
 		var renderer = new ServerLevelRenderer(level, focus, 180, 280);
-		var artLayer = Std.downcast(renderer.getChildAt(1), Sprite);
 
-		assertEquals(180.0 - 10020, artLayer.x, "art layer x follows world offset");
-		assertEquals(280.0 - 10050, artLayer.y, "art layer y follows world offset");
+		assertEquals("artLayer3", renderer.getChildAt(1).name, "furthest rear layer renders first");
+		assertEquals("artLayer2", renderer.getChildAt(2).name, "middle rear layer renders second");
+		assertEquals("artLayer1", renderer.getChildAt(3).name, "nearest rear layer renders before blocks");
+		assertEquals("artLayer4", renderer.getChildAt(5).name, "first foreground layer renders after blocks");
+		assertEquals("artLayer5", renderer.getChildAt(6).name, "nearest foreground layer renders last");
+
+		var rear = Std.downcast(renderer.getChildAt(1), Sprite);
+		assertEquals(Math.round((180.0 - 10020) * 0.25), rear.x, "rear layer x applies authored parallax");
+		assertEquals(Math.round((280.0 - 10050) * 0.25), rear.y, "rear layer y applies authored parallax");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

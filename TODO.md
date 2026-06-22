@@ -113,9 +113,16 @@ sequence and screenshots cover level entry, countdown, racing, and finish.
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
-- [ ] Validate real level decoding/rendering across read modes and representative
+- [x] Validate real level decoding/rendering across read modes and representative
   legacy levels, including malformed or old payloads, all background effects,
   drawing/text ordering, stamps, block options, rotations, and object limits.
+  The server-level decoder now covers m1-m4 coordinate formats, legacy missing
+  sections, invalid numeric fields, art backgrounds, drawing actions, text,
+  stamps, and m4 block options. Rendering preserves Course's authored bg3/bg2/
+  bg1/map/bg4/bg5 depth order and 0.25/0.5/1/1/2 parallax scales; deterministic
+  tests lock decoding, layer composition, world offsets, assets, and collision
+  fixture conversion. Runtime gameplay tests cover rotated collision and the
+  local fixture adapter bounds the decoded map to its represented block grid.
 
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within

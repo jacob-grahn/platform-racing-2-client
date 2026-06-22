@@ -59,11 +59,13 @@ class DecodedArtLayer {
 	public final drawActions:Array<DecodedDrawAction>;
 	public final objects:Array<DecodedArtObject>;
 	public final texts:Array<DecodedTextObject>;
+	public final scale:Float;
 
-	public function new(?drawActions:Array<DecodedDrawAction>, ?objects:Array<DecodedArtObject>, ?texts:Array<DecodedTextObject>) {
+	public function new(?drawActions:Array<DecodedDrawAction>, ?objects:Array<DecodedArtObject>, ?texts:Array<DecodedTextObject>, scale:Float = 1) {
 		this.drawActions = drawActions == null ? [] : drawActions;
 		this.objects = objects == null ? [] : objects;
 		this.texts = texts == null ? [] : texts;
+		this.scale = scale;
 	}
 }
 

@@ -48,6 +48,11 @@ class ServerLevelDecoderTest {
 
 		assertEquals(207, level.artBackgroundCode, "art background code");
 		assertEquals(5, level.artLayers.length, "art layer count");
+		assertEquals(1.0, level.artLayers[0].scale, "bg1 scale");
+		assertEquals(0.5, level.artLayers[1].scale, "bg2 scale");
+		assertEquals(0.25, level.artLayers[2].scale, "bg3 scale");
+		assertEquals(1.0, level.artLayers[3].scale, "bg4 scale");
+		assertEquals(2.0, level.artLayers[4].scale, "bg5 scale");
 		assertEquals(1, level.artLayers[0].objects.length, "layer 1 object count");
 		assertEquals(1, level.artLayers[0].texts.length, "layer 1 text count");
 		assertEquals(3, level.artLayers[0].drawActions.length, "layer 1 draw actions");
