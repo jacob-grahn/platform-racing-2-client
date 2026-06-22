@@ -16,6 +16,7 @@ import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.OptionsPopupTest;
 import pr2.lobby.PlayerPopupTest;
+import pr2.lobby.StorePopupTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
@@ -77,6 +78,7 @@ class DeterministicTestSuite {
 		ExternalLinkPopupTest.main();
 		OptionsPopupTest.main();
 		PlayerPopupTest.main();
+		StorePopupTest.main();
 		trace("DeterministicTestSuite passed");
 	}
 }

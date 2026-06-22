@@ -141,6 +141,8 @@ Completed subsystems (parity-relevant facts worth keeping):
   toggles, alternate controls saved as Flash key codes, persisted quality/song
   blacklist), and the Credits popup (`CreditsPopupGraphic`, three art pages and two
   music pages per `menu/CreditsPopup.as`) are functional.
+  The Vault of Magics also loads the authenticated live catalog, renders authored
+  listings and quantity selection, and supports FAQ, sale, coin, and purchase flows.
 - Audio: the runtime reproduces Flash's 700 px game-sound attenuation/panning,
   independent effect channels, clamped music/sound persistence, the full track
   catalog (editor random selection and the artifact track), looping race music, the

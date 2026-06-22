@@ -17,6 +17,8 @@ class ServerConfigTest {
 		assertEquals(false, ServerConfig.hasProxyHost(), "default is not proxy");
 		assertEquals("https://pr2hub.com/files/lists/campaign/1", ServerConfig.listUrl("campaign", 1), "default campaign list url");
 		assertEquals("https://pr2hub.com/levels/50815.txt?version=7", ServerConfig.levelDataUrl(50815, 7), "default level data url");
+		assertEquals("https://pr2hub.com/vault/vault.php", ServerConfig.vaultUrl(), "default vault url");
+		assertEquals("https://pr2hub.com/vault/purchase_item.php", ServerConfig.vaultPurchaseUrl(), "default vault purchase url");
 	}
 
 	private static function testProxyHostBuildsSameOriginUrls():Void {
@@ -26,6 +28,8 @@ class ServerConfigTest {
 		assertEquals(true, ServerConfig.hasProxyHost(), "proxy detected");
 		assertEquals("/api/files/lists/campaign/2", ServerConfig.listUrl("campaign", 2), "proxy campaign list url");
 		assertEquals("/api/levels/50815.txt?version=7", ServerConfig.levelDataUrl(50815, 7), "proxy level data url");
+		assertEquals("/api/vault/use_super_booster.php", ServerConfig.vaultSuperBoosterUrl(), "proxy booster url");
+		assertEquals("/api/vault/buy_coins.php", ServerConfig.vaultBuyCoinsUrl(), "proxy coin url");
 	}
 
 	private static function testLocalOverrideUsesExplicitEnvValue():Void {

@@ -1,0 +1,137 @@
+package pr2.lobby.store;
+
+import haxe.Json;
+import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.events.TextEvent;
+import pr2.crypto.PR2Encryptor;
+import pr2.lobby.LobbyArt;
+import pr2.lobby.LobbySession;
+import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.Popup;
+import pr2.lobby.dialogs.UploadingPopup;
+import pr2.net.ServerConfig;
+import pr2.net.TextLoader;
+import pr2.runtime.PR2MovieClip;
+
+/** Flash-compatible Vault of Magics catalog and purchase flow. */
+class StorePopup extends Popup {
+	public static var userCoins(default, null):Int = 0;
+	private static inline var URL_KEY = "OTkhX24+S0VVaHlAIXhqbA==";
+	private static inline var URL_IV = "J1N0QSJzSWV6ZT4mIz5vKA==";
+	private var art:PR2MovieClip;
+	private var holder:Null<DisplayObjectContainer>;
+	private var listings:Array<StoreListing> = [];
+	private var bindings:Array<LobbyArt.Binding> = [];
+	private var loading:Null<PR2MovieClip>;
+	private var scrollY:Float = 0;
+
+	/** `fixture` is used by deterministic tests; production always loads the API. */
+	public function new(?fixture:Dynamic) {
+		super();
+		art = PR2MovieClip.fromLinkage("StorePopupGraphic", {maxNestedDepth: 7}); addChild(art);
+		holder = Std.downcast(LobbyArt.findByName(art, "itemsHolder"), DisplayObjectContainer);
+		var coins = LobbyArt.text(art, "coinsLeftBox");
+		if (coins != null) { coins.visible = false; coins.addEventListener(TextEvent.LINK, needMore); }
+		var close = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut); if (close != null) bindings.push(close);
+		art.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
+		if (fixture != null) populate(fixture); else load();
+	}
+
+	private function load():Void {
+		loading = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4}); addChild(loading);
+		var join = ServerConfig.vaultUrl().indexOf("?") < 0 ? "?" : "&";
+		var url = ServerConfig.vaultUrl() + join + "rand=" + Std.random(10000000) + "&token=" + StringTools.urlEncode(LobbySession.token);
+		TextLoader.load(url, function(body:String):Void {
+			try {
+				var data:Dynamic = Json.parse(body);
+				var error = Reflect.field(data, "error");
+				if (error != null || Reflect.field(data, "success") == false) throw error == null ? "An unknown error occurred." : Std.string(error);
+				populate(data);
+			} catch (error:Dynamic) fail(Std.string(error));
+		}, fail);
+	}
+
+	private function fail(message:String):Void { new MessagePopup("Error: " + message); startFadeOut(); }
+
+	private function populate(data:Dynamic):Void {
+		if (loading != null) { loading.dispose(); if (loading.parent != null) loading.parent.removeChild(loading); loading = null; }
+		var info = Reflect.field(data, "info");
+		var user = info == null ? null : Reflect.field(info, "user");
+		userCoins = intField(user, "coins");
+		var coins = LobbyArt.text(art, "coinsLeftBox");
+		if (coins != null) {
+			coins.htmlText = '<b><font color="#' + (userCoins == 0 ? "BB0000" : "006600") + '">You have $userCoins Coins remaining.</font> <u><font color="#4E4EFE"><a href="event:clickNeedMore">Need more?</a></font></u></b>';
+			coins.visible = true;
+		}
+		var title = info == null ? null : Reflect.field(info, "title");
+		if (title != null) { var box = LobbyArt.text(art, "titleBox"); if (box != null) box.text = "-- " + stringField(title, "title") + " --"; }
+		var values:Array<Dynamic> = cast Reflect.field(data, "listings");
+		if (values == null) return;
+		for (value in values) addListing(new StoreListingData(value));
+	}
+
+	private function addListing(data:StoreListingData):Void {
+		var listing = new StoreListing(data);
+		listing.x = (listings.length % 3) * 137;
+		listing.y = Math.floor(listings.length / 3) * 160;
+		listing.addEventListener(StoreListing.PURCHASE, purchase);
+		listing.addEventListener(StoreListing.INFO, info);
+		if (holder != null) holder.addChild(listing);
+		listings.push(listing);
+	}
+
+	private function purchase(event:Event):Void {
+		var item = Std.downcast(event.currentTarget, StoreListing); if (item == null) return;
+		if (!LobbySession.isMember()) { new MessagePopup("Error: You must be logged in to use the Vault of Magics."); startFadeOut(); return; }
+		if (item.listing.slug == "stats_boost") { postPurchase(ServerConfig.vaultSuperBoosterUrl(), ["server_id" => LobbySession.server == null ? "0" : Std.string(LobbySession.server.serverId)], "Powering up..."); startFadeOut(); return; }
+		if (userCoins < item.listing.currentPrice()) { new MessagePopup("Error: You don't have enough coins to purchase this item."); return; }
+		if (item.listing.maxQuantity > 1) {
+			new QuantityPopup(item.listing, function(quantity:Int):Void confirmPurchase(item.listing, quantity));
+		} else confirmPurchase(item.listing, 1);
+	}
+
+	private function confirmPurchase(item:StoreListingData, quantity:Int):Void {
+		var cost = item.quantityCost(quantity);
+		new ConfirmPopup(function():Void postPurchase(ServerConfig.vaultPurchaseUrl(), ["slug" => item.slug, "quantity" => Std.string(quantity)], "Purchasing item..."),
+			'Are you sure you\'d like to purchase ' + (quantity > 1 ? '<b>$quantity</b> of ' : "") + 'this lovely <b>${item.title}</b>? Your account will be debited <b>$cost coins</b>.');
+	}
+
+	private function postPurchase(url:String, fields:Map<String, String>, label:String):Void {
+		fields.set("token", LobbySession.token); fields.set("rand", Std.string(Std.random(10000000)));
+		new UploadingPopup(url, fields, label, function(result:Dynamic):Void {
+			if (result != null && Reflect.field(result, "success") == true) startFadeOut();
+			else if (result != null && Reflect.field(result, "error") != null) new MessagePopup("Error: " + Std.string(Reflect.field(result, "error")));
+		});
+	}
+
+	private function info(event:Event):Void { var item = Std.downcast(event.currentTarget, StoreListing); if (item != null) new MessagePopup('<b>--- ${item.listing.title} FAQ ---</b> \n\n${item.listing.faq}'); }
+	private function needMore(_:TextEvent):Void new ConfirmPopup(openBuyCoins, "You will be routed to pr2hub.com in order to complete this transaction.");
+	private function openBuyCoins():Void {
+		#if js
+		var payload = Json.stringify({token: LobbySession.token, time: Std.int(Date.now().getTime() / 1000), rand: Std.random(10000000)});
+		var encrypted = PR2Encryptor.encryptBase64(payload, URL_KEY, URL_IV);
+		var document = js.Browser.document;
+		var form = document.createFormElement(); form.method = "POST"; form.action = ServerConfig.vaultBuyCoinsUrl(); form.target = "_blank";
+		var input = document.createInputElement(); input.name = "data"; input.value = encrypted; form.appendChild(input); document.body.appendChild(form); form.submit(); document.body.removeChild(form);
+		#end
+		startFadeOut();
+	}
+	private function wheel(event:MouseEvent):Void {
+		if (holder == null) return;
+		var rows = Math.ceil(listings.length / 3); var min = Math.min(0, 225 - rows * 160);
+		scrollY = Math.max(min, Math.min(0, scrollY + event.delta * 20)); holder.y = scrollY;
+	}
+	private static function intField(o:Dynamic, name:String):Int { var n = o == null ? null : Std.parseInt(Std.string(Reflect.field(o, name))); return n == null ? 0 : n; }
+	private static function stringField(o:Dynamic, name:String):String { var v = o == null ? null : Reflect.field(o, name); return v == null ? "" : Std.string(v); }
+
+	override public function remove():Void {
+		userCoins = 0; art.removeEventListener(MouseEvent.MOUSE_WHEEL, wheel);
+		var coins = LobbyArt.text(art, "coinsLeftBox"); if (coins != null) coins.removeEventListener(TextEvent.LINK, needMore);
+		for (binding in bindings) LobbyArt.unbind(binding); bindings = [];
+		for (listing in listings) listing.remove(); listings = [];
+		if (loading != null) loading.dispose(); art.dispose(); super.remove();
+	}
+}

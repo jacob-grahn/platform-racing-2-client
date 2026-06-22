@@ -64,7 +64,6 @@ decoding/rendering are complete (see README).
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
-- [ ] Implement the Vault of Magics popup.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

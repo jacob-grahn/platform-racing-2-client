@@ -124,6 +124,7 @@ class LobbyPage extends Page {
 
 	private function clickStore():Void {
 		LobbyPopups.lastRequest = "store";
+		new pr2.lobby.store.StorePopup();
 		reportAction("store");
 	}
 

@@ -107,6 +107,11 @@ final class ServerConfig {
 		return host + "/logout.php";
 	}
 
+	public static function vaultUrl():String return host + "/vault/vault.php";
+	public static function vaultPurchaseUrl():String return host + "/vault/purchase_item.php";
+	public static function vaultSuperBoosterUrl():String return host + "/vault/use_super_booster.php";
+	public static function vaultBuyCoinsUrl():String return host + "/vault/buy_coins.php";
+
 	/**
 		Friends/Following/Ignored player list endpoint, matching
 		`social.PlayersTabUserListDataLoader`: `{host}/user_list_get.php?mode={mode}`.
