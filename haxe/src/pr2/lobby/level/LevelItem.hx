@@ -51,7 +51,8 @@ class LevelItem extends Sprite {
 	private var accessCover:Null<PR2MovieClip>;
 	private var coverText:Null<TextField>;
 	private var passButton:Null<DisplayObject>;
-	private var passBox:Null<TextField>;
+	private var passBox:Null<DisplayObject>;
+	private var passField:Null<TextField>;
 
 	private var infoBinding:Null<LobbyArt.Binding>;
 	private var favBinding:Null<LobbyArt.Binding>;
@@ -97,7 +98,11 @@ class LevelItem extends Sprite {
 		if (accessCover != null) {
 			coverText = LobbyArt.text(accessCover, "textBox");
 			passButton = LobbyArt.findByName(accessCover, "passButton");
-			passBox = LobbyArt.text(accessCover, "passBox");
+			// `passBox` is an fl.controls.TextInput component: keep the display object
+			// itself for attach/detach (its inner field's parent is the wrapper, not
+			// the cover) and the inner TextField for reading/writing the entered text.
+			passBox = LobbyArt.findByName(accessCover, "passBox");
+			passField = pr2.runtime.FlComponents.asTextField(passBox);
 			// Start with the cover detached; testAccess re-attaches it if gated.
 			detachCover();
 		}
@@ -216,12 +221,12 @@ class LevelItem extends Sprite {
 	}
 
 	private function clickPassEnter():Void {
-		if (passPending || passBox == null) {
+		if (passPending || passField == null) {
 			return;
 		}
 		passPending = true;
-		var entered = passBox.text;
-		passBox.text = "checking...";
+		var entered = passField.text;
+		passField.text = "checking...";
 		var hash = haxe.crypto.Md5.encode(entered + ServerConfig.LEVEL_LIST_SALT);
 		var fields = ["course_id" => Std.string(courseID), "hash" => hash];
 		FormPostClient.post(ServerConfig.levelPassCheckUrl(), fields, onPassResponse, onPassError);
@@ -241,15 +246,15 @@ class LevelItem extends Sprite {
 		if (success) {
 			passOK = true;
 			testAccess();
-		} else if (passBox != null) {
-			passBox.text = "nope!";
+		} else if (passField != null) {
+			passField.text = "nope!";
 		}
 	}
 
 	private function onPassError(_:String):Void {
 		passPending = false;
-		if (passBox != null) {
-			passBox.text = "";
+		if (passField != null) {
+			passField.text = "";
 		}
 	}
 
