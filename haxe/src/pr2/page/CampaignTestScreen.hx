@@ -289,6 +289,7 @@ class CampaignTestScreen extends Sprite {
 		playerDisplay.x = screen.x - LocalPlayerController.STANDING_WIDTH / 2;
 		playerDisplay.y = screen.y - height;
 		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
+		characterDisplay.scaleX = 0.9 * player.facingScaleX;
 		characterDisplay.setState(state.characterState.toClipName());
 		characterDisplay.advanceOneFrame();
 	}

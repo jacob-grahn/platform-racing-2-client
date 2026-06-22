@@ -133,6 +133,7 @@ class GameplayHarness extends Sprite {
 		playerDisplay.x = player.x - LocalPlayerController.STANDING_WIDTH / 2;
 		playerDisplay.y = player.y - height;
 		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
+		characterDisplay.scaleX = 0.9 * player.facingScaleX;
 		characterDisplay.setState(player.debugState().characterState.toClipName());
 		characterDisplay.advanceOneFrame();
 	}

@@ -71,8 +71,6 @@ decoding/rendering are complete (see README).
   driven by the same conditions as the AS3, not by what seems right — e.g. the
   run animation should play only while a left or right key is down, not whenever
   the character is moving.
-- [ ] Flip character `scaleX` when moving left, using the same trigger the source
-  uses (copy the AS3, not an inferred rule).
 - [ ] Implement the Vault of Magics popup.
 
 ### Physics 1:1 (preserve original quirks/bugs)

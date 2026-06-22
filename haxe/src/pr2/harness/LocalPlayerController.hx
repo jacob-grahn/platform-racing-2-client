@@ -99,6 +99,7 @@ class LocalPlayerController {
 	private var hurtFramesRemaining:Int = 0;
 	private var frozenSolidFramesRemaining:Int = 0;
 	private var facingDirection:Int = 1;
+	public var facingScaleX(get, never):Int;
 	private var speedBurstFramesRemaining:Int = 0;
 	private var jetPackFramesRemaining:Int = 0;
 
@@ -122,6 +123,14 @@ class LocalPlayerController {
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
 		lastItemEffect = null;
+		// LocalCharacter.updateKeys applies RIGHT first and LEFT second, so LEFT
+		// determines the facing direction when both keys are held.
+		if (input.right) {
+			facingDirection = 1;
+		}
+		if (input.left) {
+			facingDirection = -1;
+		}
 		useHeldItem(input);
 		if (mode == MODE_FREEZE) {
 			updateRotation();
@@ -135,6 +144,10 @@ class LocalPlayerController {
 			landStep(input);
 		}
 		updateTimedBlocks();
+	}
+
+	private function get_facingScaleX():Int {
+		return facingDirection;
 	}
 
 	public function freeze():Void {
@@ -174,11 +187,9 @@ class LocalPlayerController {
 
 	private function landStep(input:LocalPlayerInput):Void {
 		if (input.right) {
-			facingDirection = 1;
 			targetVelX += accel;
 		}
 		if (input.left) {
-			facingDirection = -1;
 			targetVelX -= accel;
 		}
 		if (!input.right && !input.left) {

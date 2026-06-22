@@ -16,6 +16,7 @@ class LocalPlayerControllerTest {
 		testSideCollisionDoesNotFinishRace();
 		testBumpingFinishBlockFinishesRaceOnce();
 		testJumpAndLandOnFlatFixture();
+		testFacingFollowsPressedDirection();
 		testCrouchOnlyWhileGrounded();
 		testIceBlockReducesNextFrameAcceleration();
 		testArrowStandEffectsMatchAs3Deltas();
@@ -52,6 +53,23 @@ class LocalPlayerControllerTest {
 		testRotateLeftCompletesCourseRotation();
 		testCollisionSnapsAgainstRotatedCeiling();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
+	}
+
+	private static function testFacingFollowsPressedDirection():Void {
+		var player = newPlayer();
+		assertEquals(1, player.facingScaleX, "character initially faces right");
+
+		player.step(new LocalPlayerInput(true, false));
+		assertEquals(-1, player.facingScaleX, "left input flips the character");
+
+		player.step(new LocalPlayerInput());
+		assertEquals(-1, player.facingScaleX, "released input preserves facing");
+
+		player.step(new LocalPlayerInput(false, true));
+		assertEquals(1, player.facingScaleX, "right input faces the character right");
+
+		player.step(new LocalPlayerInput(true, true));
+		assertEquals(-1, player.facingScaleX, "left wins when both directions are held like AS3 updateKeys");
 	}
 
 	private static function testStartBlockHasNoCollision():Void {
