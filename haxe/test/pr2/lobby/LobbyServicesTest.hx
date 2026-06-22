@@ -125,15 +125,24 @@ class LobbyServicesTest {
 	}
 
 	private static function testLevelLaunch():Void {
-		// Pressing Play hands the chosen course to the existing level loader. The
-		// override intercepts the launch (the default would navigate the page).
+		// The selected slot is only entered after the matching server startGame.
 		var captured:Null<String> = null;
 		LevelLaunch.handler = function(levelId:Int, version:Int):Void {
 			captured = levelId + ":" + version;
 		};
-		LevelLaunch.launch(4271, 9);
-		assertEquals("4271:9", captured, "launch invokes the handler with id/version");
-		assertEquals("4271`9", LevelLaunch.lastLaunch, "launch records the request");
+		LevelLaunch.select(4271, 9);
+		LevelLaunch.startGame(["9999"]);
+		assertEquals(null, captured, "unrelated startGame is ignored");
+		LevelLaunch.startGame(["4271"]);
+		assertEquals("4271:9", captured, "matching startGame enters selected level");
+		assertEquals("4271`9", LevelLaunch.lastLaunch, "accepted launch is recorded");
+		LevelLaunch.startGame(["4271"]);
+		assertEquals("4271:9", captured, "selection is consumed once");
+		LevelLaunch.select(4271, 9);
+		LevelLaunch.clear(4271, 9);
+		captured = null;
+		LevelLaunch.startGame(["4271"]);
+		assertEquals(null, captured, "cleared slot cannot enter a game");
 		LevelLaunch.handler = null;
 	}
 

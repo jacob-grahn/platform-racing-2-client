@@ -36,13 +36,16 @@ import pr2.level.ServerLevelRenderer;
 	and playing either the first listed level or a requested level on that page.
 
 	Reachable via `?screen=campaign` (optional `&page=N`, default 1, and
-	`&levelId=N` or `&level=N` to load a specific level from that page).
+	`&levelId=N` or `&level=N` to load a specific level from that page). GamePage
+	also supplies a version to bypass the list and load a server-selected level
+	directly without navigating away from the live session.
 **/
 class CampaignTestScreen extends Sprite {
 	private static inline var DEFAULT_PAGE:Int = 1;
 
 	private final page:Int;
 	private final requestedLevelId:Null<Int>;
+	private final directVersion:Null<Int>;
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 	private var statusText:TextField;
 	private var levelRenderer:ServerLevelRenderer;
@@ -52,16 +55,19 @@ class CampaignTestScreen extends Sprite {
 	private var characterDisplay:CharacterDisplay;
 	private var lastStatusText:String = "";
 
-	public function new(?page:String, ?levelId:String) {
+	public function new(?page:String, ?levelId:String, ?version:Int) {
 		super();
 		this.page = parsePage(page);
 		this.requestedLevelId = parseRequestedLevelId(levelId);
+		this.directVersion = version;
 
 		drawBackground();
 		createStatusText();
 		setStatus(
 			"phase=fetching",
-			requestedLevelId == null
+			directVersion != null
+				? 'Loading level ${requestedLevelId} v${directVersion}...'
+				: requestedLevelId == null
 				? 'Fetching campaign list page ${this.page}...'
 				: 'Fetching campaign list page ${this.page} for level ${requestedLevelId}...'
 		);
@@ -112,7 +118,28 @@ class CampaignTestScreen extends Sprite {
 			return;
 		}
 		#end
-		CampaignListClient.fetch(page, onList, onError);
+		if (directVersion != null && requestedLevelId != null) {
+			LevelDataClient.fetch(requestedLevelId, directVersion, function(data:ServerLevelData):Void {
+				onDirectLevelData(requestedLevelId, directVersion, data);
+			}, onLevelError);
+		} else {
+			CampaignListClient.fetch(page, onList, onError);
+		}
+	}
+
+	private function onDirectLevelData(levelId:Int, version:Int, data:ServerLevelData):Void {
+		var info = new CampaignLevelInfo(levelId, version, data.title, "", 0, 0, 0);
+		onLevelData(info, data);
+	}
+
+	public function remove():Void {
+		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+		if (stage != null) {
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+			stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		}
+		if (parent != null) parent.removeChild(this);
 	}
 
 	private function onList(result:CampaignListResult):Void {

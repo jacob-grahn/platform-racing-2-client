@@ -316,9 +316,12 @@ class LevelItem extends Sprite {
 		LobbySocket.write("confirm_slot`");
 	}
 
-	/** Launch this course through the existing level loader (see `LevelLaunch`). */
-	public function launchLevel():Void {
-		LevelLaunch.launch(courseID, version);
+	public function selectLevel():Void {
+		LevelLaunch.select(courseID, version);
+	}
+
+	public function clearSelectedLevel():Void {
+		LevelLaunch.clear(courseID, version);
 	}
 
 	private function onFillSlot(args:Array<String>):Void {

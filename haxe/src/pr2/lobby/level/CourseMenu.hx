@@ -15,8 +15,8 @@ import pr2.runtime.PR2MovieClip;
 	Shown beside a join `Slot` when the local player fills it: renders
 	`CourseMenuGraphic` with its Play / Cancel buttons and a countdown text box,
 	and registers the gameserver `forceTime` / `closeCourseMenu` commands. Play
-	confirms the slot (and hands off to the existing level loader via
-	`Slot.launchOwnerLevel`); Cancel clears it. The server drives `forceTime` to
+	confirms the slot; only the server's later `startGame` command enters the
+	level. Cancel clears it. The server drives `forceTime` to
 	run a 15-second countdown that issues `force_start` at zero, or `-1` to show a
 	`--` wait with a 30-second fallback dismiss. Clicking outside the popup, like
 	the original auto-dismiss, removes it.
@@ -119,8 +119,6 @@ class CourseMenu extends InfoPopup {
 		stopWait();
 		if (slot != null) {
 			slot.sendConfirmSlot();
-			// Hand off to the playable level path that exists today.
-			slot.launchOwnerLevel();
 		}
 	}
 

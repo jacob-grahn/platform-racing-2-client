@@ -12,6 +12,7 @@ class PageHolder extends Sprite {
 
 	public function new(?page:Page) {
 		super();
+		pr2.lobby.level.LevelLaunch.install(this);
 		if (page != null) {
 			changePage(page);
 		}

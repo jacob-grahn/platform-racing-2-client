@@ -65,8 +65,14 @@ The persistent `LobbySocket` must survive every page transition as Flash's
     spectating, room commands, loading/cancel/error states, and game-page
     transition from `flash/level_browser`, `flash/page/GamePage.as`, and
     `flash/gameplay/Game.as`.
-  - Load the level selected by the server without reloading the browser or
-    opening `?screen=campaign`; preserve the live socket and lobby state.
+  - [x] Load the level selected by the server without reloading the browser or
+    opening `?screen=campaign`; preserve the live socket and lobby state. Local
+    slot selection now records the level/version, Play only sends
+    `confirm_slot`, and the matching server `startGame` command performs an
+    in-place `GamePage` transition. The page fetches the selected version
+    directly and reuses the decoded level/runtime path while the persistent
+    `LobbySocket` remains connected. Deterministic coverage locks matching,
+    unrelated-command rejection, cancellation, and one-shot consumption.
 - [ ] Port multiplayer race synchronization.
   - Implement local update emission, remote character creation/interpolation,
     player join/leave, positions, rotations, stats, hats, items/effects, block

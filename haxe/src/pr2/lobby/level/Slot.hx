@@ -53,6 +53,7 @@ class Slot extends Sprite {
 		}
 		changeStatus("filled");
 		if (me == "me") {
+			owner.selectLevel();
 			courseMenu = new CourseMenu(this);
 		}
 	}
@@ -65,12 +66,8 @@ class Slot extends Sprite {
 
 	public function sendClearSlot():Void {
 		owner.sendClearSlot();
+		owner.clearSelectedLevel();
 		courseMenu = null;
-	}
-
-	/** Hand the owning level off to the playable level path that exists today. */
-	public function launchOwnerLevel():Void {
-		owner.launchLevel();
 	}
 
 	public function confirmSlot():Void {
