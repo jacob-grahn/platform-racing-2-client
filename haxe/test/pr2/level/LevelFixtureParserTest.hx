@@ -30,7 +30,7 @@ class LevelFixtureParserTest {
 		assertEquals(8, fixture.finish.y, "fixture finish y");
 		assertEquals(20, fixture.blocks.length, "fixture block count");
 
-		assertBlock(fixture.blockAt(2, 9), Start, "start block");
+		assertBlock(fixture.blockAt(2, 9), Start, "start block", false);
 		assertBlock(fixture.blockAt(16, 9), Finish, "finish block");
 		assertBlock(fixture.blockAt(0, 10), Basic, "ground block");
 		assertEquals(null, fixture.blockAt(0, 0), "empty tile lookup");
@@ -74,10 +74,10 @@ class LevelFixtureParserTest {
 			+ '}';
 	}
 
-	private static function assertBlock(block:Null<LevelBlock>, expected:BlockType, message:String):Void {
+	private static function assertBlock(block:Null<LevelBlock>, expected:BlockType, message:String, solid:Bool = true):Void {
 		assertNotNull(block, message);
 		assertEquals(expected, block.type, message + " type");
-		assertEquals(true, block.type.isSolid(), message + " solid");
+		assertEquals(solid, block.type.isSolid(), message + " solid");
 	}
 
 	private static function assertNotNull(value:Dynamic, message:String):Void {

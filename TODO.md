@@ -66,8 +66,6 @@ decoding/rendering are complete (see README).
   rank progression, race modes, captcha, and server-authoritative interactions.
 - [ ] Camera follow: track the local player during a race exactly as the source
   does (scroll/anchor logic, bounds, smoothing — copy the AS3, do not approximate).
-- [ ] Start blocks must not have a physics interaction with characters; match the
-  source's collision exclusion rather than treating them as solid blocks.
 - [ ] Tune gravity to match the source game's value/behavior exactly.
 - [ ] Port character animation state from the source 1:1. Animations must be
   driven by the same conditions as the AS3, not by what seems right — e.g. the

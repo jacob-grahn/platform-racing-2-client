@@ -55,6 +55,7 @@ class ServerLevelFixtureAdapterTest {
 
 	private static function testBlockTypesMatchInitialCollisionBehavior():Void {
 		assertEquals(BlockType.Start, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_START4), "start code");
+		assertEquals(false, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_START4).isSolid(), "start excluded from collision");
 		assertEquals(BlockType.Finish, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_FINISH), "finish code");
 		assertEquals(BlockType.Basic, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_BASIC3), "basic code");
 		assertEquals(BlockType.Ice, ServerLevelFixtureAdapter.blockType(ObjectCodes.BLOCK_ICE), "ice code");

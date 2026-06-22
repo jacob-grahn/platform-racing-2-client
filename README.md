@@ -124,6 +124,8 @@ Completed subsystems (parity-relevant facts worth keeping):
   feet line. `LocalCharacter` physics is audited against `character/LocalCharacter.as`
   (accel/decel and stat formulas, jump/crouch, water/ice, collision probe ordering
   and rotated resolution, moving-block timing, item durations, hurt/freeze recovery).
+  Start blocks mark spawn positions but are excluded from character collision, as
+  in `background/Map.as`.
   Note: `FinishBlock` is a one-use `SupplyBlock`, so only a bump from below latches
   completion and reports its one-based id and pixel center; side/stand/touch
   collisions do not finish the race. Server level decoding is validated across

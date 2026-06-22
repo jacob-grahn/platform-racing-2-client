@@ -12,7 +12,7 @@ class LocalPlayerControllerTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
-		testInitialStateIsGroundedOnStartBlock();
+		testStartBlockHasNoCollision();
 		testSideCollisionDoesNotFinishRace();
 		testBumpingFinishBlockFinishesRaceOnce();
 		testJumpAndLandOnFlatFixture();
@@ -54,14 +54,20 @@ class LocalPlayerControllerTest {
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
-	private static function testInitialStateIsGroundedOnStartBlock():Void {
+	private static function testStartBlockHasNoCollision():Void {
 		var player = newPlayer();
 		var state = player.debugState();
 
 		assertClose(75, state.x, "initial x centers player in start tile");
-		assertClose(270, state.y, "initial y stands on start block");
-		assertEquals(true, state.grounded, "initial grounded");
-		assertEquals("stand", state.animation, "initial animation");
+		assertClose(270, state.y, "initial feet align with start block top");
+		assertEquals(false, state.grounded, "start block does not ground player");
+
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+		state = player.debugState();
+		assertClose(300, state.y, "player falls through start block to solid floor");
+		assertEquals(true, state.grounded, "solid floor grounds player");
 	}
 
 	private static function testSideCollisionDoesNotFinishRace():Void {
@@ -110,12 +116,15 @@ class LocalPlayerControllerTest {
 
 	private static function testJumpAndLandOnFlatFixture():Void {
 		var player = newPlayer();
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
 
 		player.step(new LocalPlayerInput(false, false, true));
 		var jumpState = player.debugState();
 		assertEquals(false, jumpState.grounded, "jump leaves ground");
 		assertEquals("jump", jumpState.animation, "jump animation");
-		assertBelow(jumpState.y, 270, "jump moves player up");
+		assertBelow(jumpState.y, 300, "jump moves player up");
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput());
@@ -123,18 +132,21 @@ class LocalPlayerControllerTest {
 
 		var landedState = player.debugState();
 		assertEquals(true, landedState.grounded, "scripted jump lands");
-		assertClose(270, landedState.y, "jump lands back on start block");
+		assertClose(300, landedState.y, "jump lands back on solid floor");
 		assertEquals("stand", landedState.animation, "landed animation");
 	}
 
 	private static function testCrouchOnlyWhileGrounded():Void {
 		var player = newPlayer();
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
 
 		player.step(new LocalPlayerInput(false, false, false, true));
 		var crouchState = player.debugState();
 		assertEquals(true, crouchState.crouching, "down crouches while grounded");
 		assertEquals("crouch", crouchState.animation, "crouch animation");
-		assertClose(270, crouchState.y, "crouch preserves feet position");
+		assertClose(300, crouchState.y, "crouch preserves feet position");
 
 		player.step(new LocalPlayerInput(false, false, true, true));
 		assertEquals(true, player.debugState().crouching, "crouching blocks jump");

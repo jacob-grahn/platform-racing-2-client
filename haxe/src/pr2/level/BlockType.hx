@@ -54,8 +54,8 @@ enum abstract BlockType(String) from String to String {
 
 	public inline function isSolid():Bool {
 		return switch (this) {
-			case Basic | Start | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats: true;
-			case Water | Safety: false;
+			case Basic | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats: true;
+			case Start | Water | Safety: false;
 			default: false;
 		}
 	}
