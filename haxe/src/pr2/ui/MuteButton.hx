@@ -24,7 +24,7 @@ class MuteButton extends Sprite {
 	private static inline var MUTE_BUTTON_SCALE = 4;
 	private static inline var MUTE_BUTTON_TRIM_X = -59;
 	private static inline var MUTE_BUTTON_TRIM_Y = -75;
-	private static var muted:Bool = false;
+	public static var muted(default, null):Bool = false;
 
 	private var bitmap:Bitmap;
 	private var waves:Shape;
@@ -58,8 +58,7 @@ class MuteButton extends Sprite {
 	}
 
 	private function onClick(_:MouseEvent):Void {
-		muted = !muted;
-		applyMutedState();
+		doToggle(!muted);
 	}
 
 	private function onOver(_:MouseEvent):Void {
@@ -73,6 +72,13 @@ class MuteButton extends Sprite {
 	private function applyMutedState():Void {
 		waves.visible = !muted;
 		SoundMixer.soundTransform = new SoundTransform(muted ? 0 : 1);
+	}
+
+	public function toggle():Void doToggle(!muted);
+
+	public function doToggle(value:Bool):Void {
+		muted = value;
+		applyMutedState();
 	}
 
 	private function createWaves():Shape {

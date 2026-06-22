@@ -9,9 +9,16 @@ package pr2.lobby.account;
 **/
 class Settings {
 	public static inline var PRESETS:String = "presets";
+	public static inline var DISABLED_SONGS:String = "disabledSongs";
+	public static inline var MUSIC_VOLUME:String = "musicLevel";
+	public static inline var SOUND_VOLUME:String = "soundLevel";
+
+	public static var musicLevel(default, null):Int = 100;
+	public static var soundLevel(default, null):Int = 100;
 
 	private static final values:Map<String, Dynamic> = new Map();
 	private static var loaded:Bool = false;
+	private static var persistenceEnabled:Bool = true;
 
 	private function new() {}
 
@@ -22,14 +29,28 @@ class Settings {
 
 	public static function setValue(key:String, value:Dynamic):Void {
 		ensureLoaded();
+		value = normalizeValue(key, value);
 		values.set(key, value);
+		applyTypedValue(key, value);
 		persist();
+	}
+
+	public static function disabledSongs():Array<String> {
+		var value:Dynamic = getValue(DISABLED_SONGS, []);
+		return value == null ? [] : cast value;
 	}
 
 	/** Test hook: drop the in-memory cache so a fresh load can be exercised. */
 	public static function reset():Void {
 		values.clear();
 		loaded = false;
+	}
+
+	/** Prevent interpreter tests from creating a local SharedObject on disk. */
+	public static function disablePersistenceForTests():Void {
+		persistenceEnabled = false;
+		values.clear();
+		loaded = true;
 	}
 
 	private static function ensureLoaded():Void {
@@ -43,7 +64,9 @@ class Settings {
 			if (data != null && Reflect.field(data, "json") != null) {
 				var parsed:Dynamic = haxe.Json.parse(Reflect.field(data, "json"));
 				for (field in Reflect.fields(parsed)) {
-					values.set(field, Reflect.field(parsed, field));
+					var value = normalizeValue(field, Reflect.field(parsed, field));
+					values.set(field, value);
+					applyTypedValue(field, value);
 				}
 			}
 		} catch (_:Dynamic) {
@@ -51,7 +74,21 @@ class Settings {
 		}
 	}
 
+	private static function normalizeValue(key:String, value:Dynamic):Dynamic {
+		if (key == MUSIC_VOLUME || key == SOUND_VOLUME) {
+			var number = Std.parseInt(Std.string(value));
+			return number == null ? 100 : Std.int(Math.max(0, Math.min(100, number)));
+		}
+		return value;
+	}
+
+	private static function applyTypedValue(key:String, value:Dynamic):Void {
+		if (key == MUSIC_VOLUME) musicLevel = cast value;
+		if (key == SOUND_VOLUME) soundLevel = cast value;
+	}
+
 	private static function persist():Void {
+		if (!persistenceEnabled) return;
 		try {
 			var obj:Dynamic = {};
 			for (key in values.keys()) {

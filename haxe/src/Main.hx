@@ -12,6 +12,7 @@ import pr2.Constants;
 import pr2.app.QueryParams;
 import pr2.app.Screen;
 import pr2.audio.BrowserAudioUnlock;
+import pr2.audio.AudioManager;
 import pr2.net.ServerConfig;
 import pr2.harness.GameplayHarness;
 import pr2.page.CampaignTestScreen;
@@ -47,6 +48,7 @@ class Main extends Sprite {
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		pr2.app.AppStage.stage = stage;
 		BrowserAudioUnlock.install();
+		AudioManager.install(this);
 
 		try {
 			var query = currentQuery();

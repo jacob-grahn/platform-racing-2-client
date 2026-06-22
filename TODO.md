@@ -155,8 +155,18 @@ same serialized meaning and visible result as Flash.
   call-site playback arguments, timeline frame/in-point/out-point metadata, and
   all 20 remotely streamed music tracks in `docs/audio-inventory.json`, and
   supports a stale-output `--check` gate.
-- [ ] Port `SoundEffects`, music selection, mute/options persistence, overlapping
-  effect rules, page/race transitions, and stop/fade behavior.
+- [x] Port `SoundEffects`, music selection, mute/options persistence, overlapping
+  effect rules, page/race transitions, and stop/fade behavior. The audio runtime
+  now reproduces Flash's 700 px game-sound attenuation/panning and independent
+  effect channels, persists clamped music/sound levels and disabled songs,
+  exposes the complete track catalog (including editor random selection and the
+  artifact track), and owns looping race music with mute/volume polling and
+  deterministic teardown. The two-layer Noodle Town menu track crossfades and
+  frame-fades at the authored rates across login/lobby transitions, while the
+  global mute button continues to use `SoundMixer` so already-playing and
+  overlapping channels change together. Deterministic coverage locks spatial
+  mixing, volume persistence, filtering, fallback selection, and artifact/editor
+  variants; the HTML5 build verifies the real OpenFL audio path and assets.
 - [x] Add the smallest browser-unlock layer needed for autoplay policy while
   preserving Flash behavior after the first user gesture. `BrowserAudioUnlock`
   now primes Howler at application boot, retries Web Audio resume on pointer,

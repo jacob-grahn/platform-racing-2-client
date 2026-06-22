@@ -22,6 +22,7 @@ import pr2.net.LoginAuthClient;
 import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
+import pr2.audio.AudioManager;
 
 /**
 	Login menu ported from the Flash `menu.LoginPage`.
@@ -60,6 +61,7 @@ class LoginPage extends Page {
 	}
 
 	override public function initialize():Void {
+		AudioManager.enterLogin();
 		background = new LoginBackground();
 		addChild(background);
 

@@ -11,6 +11,7 @@ import pr2.lobby.LobbySession;
 import pr2.net.LobbySocket;
 import pr2.net.ServerInfo;
 import pr2.runtime.PR2MovieClip;
+import pr2.audio.AudioManager;
 
 /**
 	Port of Flash `lobby.Lobby`: the post-login lobby shell.
@@ -40,6 +41,7 @@ class LobbyPage extends Page {
 	}
 
 	override public function initialize():Void {
+		AudioManager.enterLobby();
 		background = PR2MovieClip.fromLinkage("LobbyGraphic", {maxNestedDepth: 8});
 		addChild(background);
 
@@ -63,6 +65,7 @@ class LobbyPage extends Page {
 	}
 
 	override public function remove():Void {
+		AudioManager.leaveMenu();
 		for (binding in bindings) {
 			LobbyArt.unbind(binding);
 		}
