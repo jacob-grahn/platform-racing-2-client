@@ -199,6 +199,14 @@ python3 tools/extract_xfl_bitmaps.py
 python3 tools/extract_xfl_bitmaps.py --check
 ```
 
+Extract embedded sound effects and regenerate the audio inventory (including
+streamed music metadata and authored playback parameters):
+
+```sh
+python3 tools/extract_xfl_audio.py
+python3 tools/extract_xfl_audio.py --check
+```
+
 Verify the Adobe-exported Kongregate intro art and its committed runtime atlas:
 
 ```sh

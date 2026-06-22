@@ -141,9 +141,14 @@ same serialized meaning and visible result as Flash.
 
 ## Audio
 
-- [ ] Inventory and extract every music and sound asset referenced by
+- [x] Inventory and extract every music and sound asset referenced by
   `flash/sounds`, `flash/ui/GameSound.as`, gameplay, menus, and timelines while
-  preserving loop points, volume, and linkage identity.
+  preserving loop points, volume, and linkage identity. The deterministic
+  `tools/extract_xfl_audio.py` pipeline recovers all 35 embedded XFL sounds from
+  their native MP3 or PCM payloads into `assets/audio/sfx`, records linkage,
+  call-site playback arguments, timeline frame/in-point/out-point metadata, and
+  all 20 remotely streamed music tracks in `docs/audio-inventory.json`, and
+  supports a stale-output `--check` gate.
 - [ ] Port `SoundEffects`, music selection, mute/options persistence, overlapping
   effect rules, page/race transitions, and stop/fade behavior.
 - [ ] Add the smallest browser-unlock layer needed for autoplay policy while

@@ -1,0 +1,981 @@
+{
+  "source": "flash/platform-racing-2-xfl/DOMDocument.xml",
+  "soundEffects": [
+    {
+      "libraryName": "Sounds/sound1002.mp3",
+      "output": "assets/audio/sfx/sound1002.mp3",
+      "sha256": "0857413197248e421a335fc21b61afea6087dd59fe5855d495810b9bae465cc9",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 8064,
+      "durationSeconds": 0.365714,
+      "linkageClass": "SwishSound",
+      "linkageIdentifier": "SwishSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/Slash.as",
+          "line": 37,
+          "expression": "SoundEffects.playGameSound(new SwishSound(), startX, startY);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound1003.mp3",
+      "output": "assets/audio/sfx/sound1003.mp3",
+      "sha256": "2872d49a1919d8ec2ea92adb8d183179aae587f57bbaf86d36b662df4b227a89",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 20736,
+      "durationSeconds": 0.940408,
+      "linkageClass": "LaserHitSound",
+      "linkageIdentifier": "LaserHitSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/LaserShot.as",
+          "line": 30,
+          "expression": "SoundEffects.playGameSound(new LaserHitSound(), x, y, 1.5);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound1014.mp3",
+      "output": "assets/audio/sfx/sound1014.mp3",
+      "sha256": "47175d36169c6b2a07df11e51dd499113870ae94f53cd11dd281c3e0fb9286d1",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 19584,
+      "durationSeconds": 0.888163,
+      "linkageClass": "LaserSound",
+      "linkageIdentifier": "LaserSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/LaserShot.as",
+          "line": 22,
+          "expression": "SoundEffects.playGameSound(new LaserSound(), _arg_1, _arg_2, 1.5);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound1019.mp3",
+      "output": "assets/audio/sfx/sound1019.mp3",
+      "sha256": "c46c1337e0d149da6ec2ea5e86e6bac428a945c37c70f4a8602bcb77b4ca5cd7",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 17856,
+      "durationSeconds": 0.809796,
+      "linkageClass": "ZapSound",
+      "linkageIdentifier": "ZapSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/Zap.as",
+          "line": 29,
+          "expression": "SoundEffects.playSound(new ZapSound(), 1 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound1021.mp3",
+      "output": "assets/audio/sfx/sound1021.mp3",
+      "sha256": "a995a7191c83ebb0c5ac48c98261b1c141ea0670d67c929560dd45f08b16f4be",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 42048,
+      "durationSeconds": 1.906939,
+      "linkageClass": "MineAppearSound",
+      "linkageIdentifier": "MineAppearSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/MineAppear.as",
+          "line": 23,
+          "expression": "SoundEffects.playGameSound(new MineAppearSound(), point.x, point.y);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound103.mp3",
+      "output": "assets/audio/sfx/sound103.wav",
+      "sha256": "3689da39d47d96e37d6cfab4718ff9091edc8c13d36480c54e209107086b63d2",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 546216,
+      "durationSeconds": 24.771701,
+      "linkageClass": "NoodleTown3",
+      "linkageIdentifier": null,
+      "sourceUsages": [
+        {
+          "source": "flash/sounds/NoodleTown.as",
+          "line": 16,
+          "expression": "private var song2:Sound = new NoodleTown3();"
+        }
+      ],
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 22050,
+        "bitsPerSample": 16,
+        "channels": 2
+      }
+    },
+    {
+      "libraryName": "Sounds/sound104.mp3",
+      "output": "assets/audio/sfx/sound104.wav",
+      "sha256": "1fa9c1b42e7a648631f733a28fed1c746d298cc1cfb52151ff476bc97f313b79",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 546216,
+      "durationSeconds": 24.771701,
+      "linkageClass": "NoodleTown2",
+      "linkageIdentifier": null,
+      "sourceUsages": [
+        {
+          "source": "flash/sounds/NoodleTown.as",
+          "line": 15,
+          "expression": "private var song1:Sound = new NoodleTown2();"
+        }
+      ],
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 22050,
+        "bitsPerSample": 16,
+        "channels": 2
+      }
+    },
+    {
+      "libraryName": "Sounds/sound1110.mp3",
+      "output": "assets/audio/sfx/sound1110.mp3",
+      "sha256": "00e21d726ca4103ea085fbd6d432d8115b6da9cf8d86a1c654dc31dcb4e79934",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 25920,
+      "durationSeconds": 1.17551,
+      "linkageClass": "TeleportSound",
+      "linkageIdentifier": "TeleportSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/TeleportPop.as",
+          "line": 17,
+          "expression": "SoundEffects.playGameSound(new TeleportSound(), x, y, 0.66);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound431.mp3",
+      "output": "assets/audio/sfx/sound431.mp3",
+      "sha256": "f4f2998bfe59aea216ed9460474b63cf86bdffa25e287fec3cec2b2b8e45a858",
+      "format": "11kHz 16bit Stereo",
+      "sampleCount": 21888,
+      "durationSeconds": 1.985306,
+      "linkageClass": "GoSound",
+      "linkageIdentifier": "GoSound",
+      "sourceUsages": [
+        {
+          "source": "flash/gameplay/Course.as",
+          "line": 280,
+          "expression": "SoundEffects.playSound(new GoSound(), 0.5 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound432.mp3",
+      "output": "assets/audio/sfx/sound432.mp3",
+      "sha256": "8dd3ede3c367da5f1a20694620fa778f722f07cc0013f3d3e4e699d6fe04f402",
+      "format": "11kHz 16bit Stereo",
+      "sampleCount": 21888,
+      "durationSeconds": 1.985306,
+      "linkageClass": "ReadySound",
+      "linkageIdentifier": "ReadySound",
+      "sourceUsages": [
+        {
+          "source": "flash/gameplay/Course.as",
+          "line": 275,
+          "expression": "SoundEffects.playSound(new ReadySound(), 0.4 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound442.mp3",
+      "output": "assets/audio/sfx/sound442.mp3",
+      "sha256": "ff34604bddd0f1356d2e7d196896871824d857078326a688a5ad9f32388bfcf2",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 35712,
+      "durationSeconds": 1.619592,
+      "linkageClass": "VictorySound",
+      "linkageIdentifier": "VictorySound",
+      "sourceUsages": [
+        {
+          "source": "flash/gameplay/Game.as",
+          "line": 425,
+          "expression": "SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));"
+        },
+        {
+          "source": "flash/gameplay/TestCourse.as",
+          "line": 105,
+          "expression": "SoundEffects.playSound(new VictorySound(), 1 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound448.mp3",
+      "output": "assets/audio/sfx/sound448.mp3",
+      "sha256": "8eb6a09be370b8daee4558285fdffb79c5a03a3fc2d62149222c064b01ffce43",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 40896,
+      "durationSeconds": 1.854694,
+      "linkageClass": "ThumpSound",
+      "linkageIdentifier": "ThumpSound",
+      "sourceUsages": [
+        {
+          "source": "flash/blocks/Block.as",
+          "line": 297,
+          "expression": "SoundEffects.playGameSound(new ThumpSound(), point.x, point.y, _local_3);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound452.mp3",
+      "output": "assets/audio/sfx/sound452.mp3",
+      "sha256": "8f655560e607ddad0c41c73207a2929112a0ee5c94267494a9efbc011f0ef934",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 33408,
+      "durationSeconds": 1.515102,
+      "linkageClass": "StarSound",
+      "linkageIdentifier": "StarSound",
+      "sourceUsages": [
+        {
+          "source": "flash/blocks/CustomStatsBlock.as",
+          "line": 53,
+          "expression": "SoundEffects.playSound(new StarSound(), 0.6 * (Settings.soundLevel / 100));"
+        },
+        {
+          "source": "flash/blocks/ItemBlock.as",
+          "line": 65,
+          "expression": "SoundEffects.playSound(new StarSound(), 0.6 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound453.mp3",
+      "output": "assets/audio/sfx/sound453.mp3",
+      "sha256": "7f4109fd53f755f6c272db277896c054df8591c96fbfe7b35daa8875c64a38b2",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 42048,
+      "durationSeconds": 1.906939,
+      "linkageClass": "TickTockSound",
+      "linkageIdentifier": "TickTockSound",
+      "sourceUsages": [
+        {
+          "source": "flash/blocks/TimeBlock.as",
+          "line": 22,
+          "expression": "SoundEffects.playSound(new TickTockSound(), 1 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound460.mp3",
+      "output": "assets/audio/sfx/sound460.mp3",
+      "sha256": "7f9452965174d5ba2af02cddeb21311aa4a176b6616bf089e3a6063dde807537",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 21312,
+      "durationSeconds": 0.966531,
+      "linkageClass": "BumpSadSound",
+      "linkageIdentifier": "BumpSadSound",
+      "sourceUsages": [
+        {
+          "source": "flash/blocks/SadBlock.as",
+          "line": 42,
+          "expression": "SoundEffects.playSound(new BumpSadSound(), 0.75 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound473.mp3",
+      "output": "assets/audio/sfx/sound473.mp3",
+      "sha256": "5269a962b8342141a4d9362e87b2ed0d2277b7b1a059e271dc67659f5d39695f",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 27648,
+      "durationSeconds": 1.253878,
+      "linkageClass": "BumpHappySound",
+      "linkageIdentifier": "BumpHappySound",
+      "sourceUsages": [
+        {
+          "source": "flash/blocks/HappyBlock.as",
+          "line": 43,
+          "expression": "SoundEffects.playSound(new BumpHappySound(), 0.75 * (Settings.soundLevel / 100));"
+        },
+        {
+          "source": "flash/character/Character.as",
+          "line": 451,
+          "expression": "SoundEffects.playGameSound(new BumpHappySound(), x, y, 0.75);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound549.mp3",
+      "output": "assets/audio/sfx/sound549.wav",
+      "sha256": "1440b8b2acc26fff2253e7670913f77572e391d455b113741765eadf4a5d382f",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 46634,
+      "durationSeconds": 2.114921,
+      "linkageClass": "EngineSound",
+      "linkageIdentifier": null,
+      "sourceUsages": [
+        {
+          "source": "flash/character/Character.as",
+          "line": 501,
+          "expression": "this.jetSoundChannel = SoundEffects.playGameSound(new EngineSound(), x, y, 0.6, 0, 999);"
+        }
+      ],
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 22050,
+        "bitsPerSample": 16,
+        "channels": 2
+      }
+    },
+    {
+      "libraryName": "Sounds/sound550.mp3",
+      "output": "assets/audio/sfx/sound550.mp3",
+      "sha256": "c6661c9ed672132f4496a56c4570dfc1665d9c571ff516b71d9d03b9ac425851",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 44352,
+      "durationSeconds": 2.011429,
+      "linkageClass": "SpeedUpSound",
+      "linkageIdentifier": "SpeedUpSound",
+      "sourceUsages": [
+        {
+          "source": "flash/character/Character.as",
+          "line": 463,
+          "expression": "SoundEffects.playGameSound(new SpeedUpSound(), x, y);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound551.mp3",
+      "output": "assets/audio/sfx/sound551.mp3",
+      "sha256": "a436222226febe8f721766cad6ce8030c49c5dcb7c0d7f9542a4f9389988d789",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 50112,
+      "durationSeconds": 2.272653,
+      "linkageClass": "SlowDownSound",
+      "linkageIdentifier": "SlowDownSound",
+      "sourceUsages": [
+        {
+          "source": "flash/character/Character.as",
+          "line": 470,
+          "expression": "SoundEffects.playGameSound(new SlowDownSound(), x, y);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound552.mp3",
+      "output": "assets/audio/sfx/sound552.mp3",
+      "sha256": "a369a2f7f0108a231a17cd98934c835c5af1f22d564f9707fd058ccf636eca74",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 6912,
+      "durationSeconds": 0.313469,
+      "linkageClass": "JumpSound",
+      "linkageIdentifier": "JumpSound",
+      "sourceUsages": [
+        {
+          "source": "flash/character/Character.as",
+          "line": 423,
+          "expression": "SoundEffects.playGameSound(new JumpSound(), x, y, 0.75);"
+        },
+        {
+          "source": "flash/dialogs/OptionsPopup.as",
+          "line": 112,
+          "expression": "SoundEffects.playSound(new JumpSound(), 0.75 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound57.mp3",
+      "output": "assets/audio/sfx/sound57.mp3",
+      "sha256": "e255832e16d126c59ae995c02c87a3d9371a03daf7dd18d7fcdc1ef27a00321f",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 12672,
+      "durationSeconds": 0.574694,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "218",
+            "index": "1",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "143",
+            "inPoint44": "4500",
+            "index": "76",
+            "keyMode": "9728",
+            "outPoint44": "13000",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "218",
+            "index": "1",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "143",
+            "inPoint44": "4500",
+            "index": "76",
+            "keyMode": "9728",
+            "outPoint44": "13000",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound58.mp3",
+      "output": "assets/audio/sfx/sound58.mp3",
+      "sha256": "587c793619a0fd5037d1d131ac05ab13443a39c7beb2e261fa7918aadbd04f0e",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 100800,
+      "durationSeconds": 4.571429,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "218",
+            "index": "1",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "218",
+            "index": "1",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound62.mp3",
+      "output": "assets/audio/sfx/sound62.mp3",
+      "sha256": "2ebc2cc4975f0d8707914af80d39155087e2eeb5827bebc22440364fa8a3b725",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 23616,
+      "durationSeconds": 1.07102,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "212",
+            "index": "7",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "212",
+            "index": "7",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound63.mp3",
+      "output": "assets/audio/sfx/sound63.mp3",
+      "sha256": "75d24ae8c57d30d5dfa31cf4bccb7f5b8c8e82fed4499955ff18ca511c41c5df",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 37440,
+      "durationSeconds": 1.697959,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "188",
+            "index": "31",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "188",
+            "index": "31",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound64.mp3",
+      "output": "assets/audio/sfx/sound64.mp3",
+      "sha256": "a4349bfcf3dc39ad8cc0d66f475dc8beac70f40755cd6bdb378867ab99749157",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 16128,
+      "durationSeconds": 0.731429,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "183",
+            "index": "36",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "183",
+            "index": "36",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound67.mp3",
+      "output": "assets/audio/sfx/sound67.mp3",
+      "sha256": "85ca6a7ec45f30d75555fe6cc39aaa61529fb14e5ffd80436d5be6cf9b88a246",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 8640,
+      "durationSeconds": 0.391837,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "135",
+            "index": "84",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "135",
+            "index": "84",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound68.mp3",
+      "output": "assets/audio/sfx/sound68.mp3",
+      "sha256": "7e28de949e76d3e26bcc388d407cecb848a5581e141ab82202bce7b7b59fe629",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 9216,
+      "durationSeconds": 0.417959,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml",
+          "frame": {
+            "duration": "135",
+            "index": "84",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 69.xml",
+          "frame": {
+            "duration": "135",
+            "index": "84",
+            "keyMode": "9728",
+            "soundEffect": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound81.mp3",
+      "output": "assets/audio/sfx/sound81.mp3",
+      "sha256": "cb00e0e1a83fbe8232e1be385dd69a843d630be0c799b231591551e8a2353d00",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 204480,
+      "durationSeconds": 9.273469,
+      "linkageClass": null,
+      "linkageIdentifier": null,
+      "sourceUsages": [],
+      "timelineUsages": [
+        {
+          "source": "LIBRARY/MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 80.xml",
+          "frame": {
+            "duration": "232",
+            "index": "0",
+            "keyMode": "9728"
+          }
+        },
+        {
+          "source": "LIBRARY/MovieClips/Symbol 80.xml",
+          "frame": {
+            "duration": "232",
+            "index": "0",
+            "keyMode": "9728"
+          }
+        }
+      ]
+    },
+    {
+      "libraryName": "Sounds/sound898.mp3",
+      "output": "assets/audio/sfx/sound898.mp3",
+      "sha256": "c33faff3998f6ee7edb812e7101efb3905a8f762d03404983031a2b436765a85",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 12672,
+      "durationSeconds": 0.574694,
+      "linkageClass": "CollectEggSound",
+      "linkageIdentifier": "CollectEggSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/Egg.as",
+          "line": 198,
+          "expression": "SoundEffects.playGameSound(new CollectEggSound(), x, y, 1.5);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound912.mp3",
+      "output": "assets/audio/sfx/sound912.mp3",
+      "sha256": "684e134fd8695782e29d5d53b03fe9dfba810d67862ac45ba27b67eff6736940",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 16704,
+      "durationSeconds": 0.757551,
+      "linkageClass": "SquashSound",
+      "linkageIdentifier": "SquashSound",
+      "sourceUsages": [
+        {
+          "source": "flash/character/LocalCharacter.as",
+          "line": 229,
+          "expression": "SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);"
+        },
+        {
+          "source": "flash/character/LocalCharacter.as",
+          "line": 344,
+          "expression": "SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound913.mp3",
+      "output": "assets/audio/sfx/sound913.mp3",
+      "sha256": "2f1747453a45111218d10487af4735c9fb02e14da39f4c76b3ff06e93bec23f4",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 14400,
+      "durationSeconds": 0.653061,
+      "linkageClass": "SuperJumpSound",
+      "linkageIdentifier": "SuperJumpSound",
+      "sourceUsages": [
+        {
+          "source": "flash/character/LocalCharacter.as",
+          "line": 493,
+          "expression": "SoundEffects.playSound(new SuperJumpSound(), 1 * (Settings.soundLevel / 100));"
+        },
+        {
+          "source": "flash/items/SuperJump.as",
+          "line": 20,
+          "expression": "SoundEffects.playSound(new SuperJumpSound(), Settings.soundLevel / 100);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound914.mp3",
+      "output": "assets/audio/sfx/sound914.mp3",
+      "sha256": "e8bb8f46b1b64625c07d2c5d579e68ab4b51698e2551cbf7da05c2c4f9059fea",
+      "format": "22kHz 16bit Stereo",
+      "sampleCount": 39744,
+      "durationSeconds": 1.802449,
+      "linkageClass": "IceWaveSound",
+      "linkageIdentifier": "IceWaveSound",
+      "sourceUsages": [
+        {
+          "source": "flash/background/EffectBackground.as",
+          "line": 69,
+          "expression": "SoundEffects.playGameSound(new IceWaveSound(), originX, originY, 1.5);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/sound971.mp3",
+      "output": "assets/audio/sfx/sound971.mp3",
+      "sha256": "3a86ea1b80ee7bea2f843f74b354c6d49c2381d1b633c31344e0156ba004835f",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 47232,
+      "durationSeconds": 2.142041,
+      "linkageClass": "ExplosionSound",
+      "linkageIdentifier": "ExplosionSound",
+      "sourceUsages": [
+        {
+          "source": "flash/effects/MineExplode.as",
+          "line": 18,
+          "expression": "SoundEffects.playGameSound(new ExplosionSound(), _arg_1, _arg_2);"
+        }
+      ],
+      "timelineUsages": []
+    },
+    {
+      "libraryName": "Sounds/stingSound",
+      "output": "assets/audio/sfx/stingSound.wav",
+      "sha256": "2ccd22c7e9ed18c9b3992bd3b11253d7aeec2fee4f0c16625805a748ca22e2f4",
+      "format": "22kHz 16bit Mono",
+      "sampleCount": 37158,
+      "durationSeconds": 1.68517,
+      "linkageClass": "StingSound",
+      "linkageIdentifier": null,
+      "sourceUsages": [
+        {
+          "source": "flash/effects/Sting.as",
+          "line": 25,
+          "expression": "SoundEffects.playGameSound(new StingSound(), x, y, 0.66);"
+        }
+      ],
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 22050,
+        "bitsPerSample": 16,
+        "channels": 1
+      }
+    },
+    {
+      "libraryName": "Sounds/yeah.wav",
+      "output": "assets/audio/sfx/yeah.wav",
+      "sha256": "d6f0740298144db9a74b628844be47af547beca4a77008dfa539106e8dd69262",
+      "format": "44kHz 16bit Stereo",
+      "sampleCount": 64562,
+      "durationSeconds": 1.463991,
+      "linkageClass": "YeahSound",
+      "linkageIdentifier": null,
+      "sourceUsages": [
+        {
+          "source": "flash/character/LocalCharacter.as",
+          "line": 1010,
+          "expression": "SoundEffects.playSound(new YeahSound(), 1 * (Settings.soundLevel / 100));"
+        }
+      ],
+      "timelineUsages": [],
+      "decodedPcm": {
+        "sampleRate": 44100,
+        "bitsPerSample": 16,
+        "channels": 2
+      }
+    }
+  ],
+  "streamedMusic": [
+    {
+      "id": "1",
+      "label": "Orbital Trance - Space Planet",
+      "file": "01_orbital-trance.mp3",
+      "url": "/music/new/01_orbital-trance.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "2",
+      "label": "Code - Stefano Maccarelli",
+      "file": "02_code.mp3",
+      "url": "/music/new/02_code.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "3",
+      "label": "Paradise on E - API",
+      "file": "03_paradise-on-e_ng32772.mp3",
+      "url": "/music/new/03_paradise-on-e_ng32772.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "4",
+      "label": "Crying Soul (FL Mix) - Pyroific",
+      "file": "04_crying-soul_ng102483.mp3",
+      "url": "/music/new/04_crying-soul_ng102483.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "5",
+      "label": "My Vision - David Orr",
+      "file": "05_my-vision_ng44613.mp3",
+      "url": "/music/new/05_my-vision_ng44613.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "6",
+      "label": "Switchblade - Detective Jabsco",
+      "file": "06_switchblade_ng59342.mp3",
+      "url": "/music/new/06_switchblade_ng59342.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "7",
+      "label": "The Wires - Cheez-R-Us",
+      "file": "07_the-wires_ng74690.mp3",
+      "url": "/music/new/07_the-wires_ng74690.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "8",
+      "label": "Before Mydnite - F-777",
+      "file": "08_before-mydnite_ng108133.mp3",
+      "url": "/music/new/08_before-mydnite_ng108133.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "10",
+      "label": "Broked It - SWiTCH",
+      "file": "10_broked-it_ng51265.mp3",
+      "url": "/music/new/10_broked-it_ng51265.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "11",
+      "label": "Hello? - TMM43",
+      "file": "11_hello_ng83720.mp3",
+      "url": "/music/new/11_hello_ng83720.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "12",
+      "label": "Pyrokinesis - Sean Tucker",
+      "file": "12_pyrokinesis_ng98624.mp3",
+      "url": "/music/new/12_pyrokinesis_ng98624.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "13",
+      "label": "Flowerz 'n' Herbz - Brunzolaitis",
+      "file": "13_flowerz-n-herbs_ng109884.mp3",
+      "url": "/music/new/13_flowerz-n-herbs_ng109884.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "14",
+      "label": "Instrumental #4 - Reasoner",
+      "file": "14_instrumental-4_ng128701.mp3",
+      "url": "/music/new/14_instrumental-4_ng128701.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "15",
+      "label": "Prismatic - Lunanova",
+      "file": "15_prismatic.mp3",
+      "url": "/music/new/15_prismatic.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "17",
+      "label": "Toodaloo - mustangman",
+      "file": "17_toodaloo.mp3",
+      "url": "/music/new/17_toodaloo.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "18",
+      "label": "Night Shade - Goliathe",
+      "file": "18_night-shade.mp3",
+      "url": "/music/new/18_night-shade.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "19",
+      "label": "Blizzard! - Majicke",
+      "file": "19_blizzard.mp3",
+      "url": "/music/new/19_blizzard.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "20",
+      "label": "Pasture (Instrumental) - Dangevin",
+      "file": "20_pasture.mp3",
+      "url": "/music/new/20_pasture.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "21",
+      "label": "Sunset Raiders - AVL",
+      "file": "21_sunset-raiders.mp3",
+      "url": "/music/new/21_sunset-raiders.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    },
+    {
+      "id": "16",
+      "label": "We Are Loud - Dynamedion",
+      "file": "16_we-are-loud.mp3",
+      "url": "/music/new/16_we-are-loud.mp3",
+      "volume": "Settings.musicLevel / 100",
+      "playLoops": 9999
+    }
+  ],
+  "behavior": {
+    "musicBasePath": "/music/new",
+    "musicLooping": "GameSound restarts on SOUND_COMPLETE; play() also requests 9999 loops",
+    "spatialSound": "SoundEffects.playGameSound attenuates over 700 pixels and pans by horizontal offset"
+  }
+}
