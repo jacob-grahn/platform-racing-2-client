@@ -164,9 +164,9 @@ class LoginPage extends Page {
 	private function openCredentialDialog(?returnToAccounts:Bool = false):Void {
 		loginToken = "";
 		var popup = openPopup("LoginPopupGraphic");
-		var remember = false;
 		var nameInput = popup.input("nameBox");
 		var passInput = popup.input("passBox");
+		var rememberCheck = popup.checkBox("rememberMe_chk");
 		populateServerCombo(popup.comboBox("dropdown"));
 		popup.bindComboBox("dropdown", function(combo:FlComboBox):Void {
 			selectServerFromCombo(combo);
@@ -174,28 +174,22 @@ class LoginPage extends Page {
 		popup.bindButton("reload_bt", function():Void {
 			startServerReload(popup);
 		});
-		popup.bindButton("rememberMe_chk", function():Void {
-			remember = !remember;
-			popup.setComponentLabel("rememberMe_chk", remember ? "Remember Me: Yes" : "Remember Me");
-		});
 		popup.bindButton("forgotPass", function():Void {
 			openForgotPasswordDialog(nameInput.text);
 		});
 		popup.bindButton("cancel_bt", returnToAccounts ? function():Void openServerSelectPopup(false, false) : closePopup);
-		popup.bindButton("login_bt", function():Void {
-			if (StringTools.trim(nameInput.text) == "" || passInput.text == "") {
-				popup.setMessage("Enter a username and password.");
-				return;
-			}
+		var submit = function():Void {
 			if (selectedServer() == null) {
-				popup.setMessage("No server is available yet.");
 				return;
 			}
 			var userName = StringTools.trim(nameInput.text);
 			var userPass = passInput.text;
 			closePopup();
-			openConnectingPopup(userName, userPass, remember);
-		});
+			openConnectingPopup(userName, userPass, rememberCheck != null && rememberCheck.selected);
+		};
+		popup.bindButton("login_bt", submit);
+		popup.bindEnter("nameBox", submit);
+		popup.bindEnter("passBox", submit);
 	}
 
 	private function openForgotPasswordDialog(prefilledName:String):Void {
@@ -462,7 +456,6 @@ class LoginPage extends Page {
 	private function startServerReload(popup:LoginFlashPopup):Void {
 		if (reloadCooldownTimer != null) return;
 		popup.setButtonEnabled("reload_bt", false, 0.1);
-		popup.setMessage("Reloading servers...");
 		loadServers();
 		reloadCooldownTimer = new Timer(10000, 1);
 		reloadCooldownTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onReloadCooldownComplete);

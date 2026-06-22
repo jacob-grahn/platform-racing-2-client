@@ -8,17 +8,14 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
-import openfl.text.TextFormat;
-import openfl.text.TextFormatAlign;
 import pr2.Constants;
+import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.FlComboBox;
-import pr2.runtime.FontResolver;
 import pr2.runtime.PR2MovieClip;
 
 class LoginFlashPopup extends Sprite {
 	private var art:PR2MovieClip;
-	private var messageText:TextField;
 	private var buttonHandlers:Array<{target:DisplayObject, handler:MouseEvent->Void}> = [];
 	private var comboHandlers:Array<{target:FlComboBox, handler:Event->Void}> = [];
 	private var keyHandlers:Array<{target:TextField, handler:KeyboardEvent->Void}> = [];
@@ -33,18 +30,6 @@ class LoginFlashPopup extends Sprite {
 		art.x = Constants.STAGE_WIDTH / 2;
 		art.y = Constants.STAGE_HEIGHT / 2;
 		addChild(art);
-
-		messageText = new TextField();
-		messageText.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 11, 0x7B2D26, false, false, false, null, null, TextFormatAlign.CENTER);
-		messageText.x = 118;
-		messageText.y = 346;
-		messageText.width = 314;
-		messageText.height = 42;
-		messageText.wordWrap = true;
-		messageText.multiline = true;
-		messageText.selectable = false;
-		messageText.mouseEnabled = false;
-		addChild(messageText);
 	}
 
 	public function child(name:String):Null<DisplayObject> {
@@ -63,6 +48,10 @@ class LoginFlashPopup extends Sprite {
 
 	public function comboBox(name:String):Null<FlComboBox> {
 		return Std.downcast(child(name), FlComboBox);
+	}
+
+	public function checkBox(name:String):Null<FlCheckBox> {
+		return Std.downcast(child(name), FlCheckBox);
 	}
 
 	public function bindComboBox(name:String, changeHandler:FlComboBox->Void):Void {
@@ -137,7 +126,10 @@ class LoginFlashPopup extends Sprite {
 	}
 
 	public function setMessage(message:String):Void {
-		messageText.text = message;
+		// Some authored popups expose a textBox. Popups without one (notably the
+		// animated connecting/login graphics) communicate through their timeline;
+		// do not add synthetic status text over the authored art.
+		setText("textBox", message);
 	}
 
 	public function remove():Void {

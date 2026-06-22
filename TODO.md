@@ -27,7 +27,7 @@ select/join a level, race with remote players, finish, and return to the lobby.
 The persistent `LobbySocket` must survive every page transition as Flash's
 `Main.socket` did.
 
-- [ ] Finish login and session establishment.
+- [x] Finish login and session establishment.
   - [x] Handle `loginSuccessful` and all login failure/socket-close commands, apply
     returned account/server state, transfer the live socket to normal command
     routing, and enter `LobbyPage` for both account and guest login.
@@ -49,9 +49,12 @@ The persistent `LobbySocket` must survive every page transition as Flash's
     reload cooldown. Refreshes preserve the selected server by id, ignore stale
     responses, and expose Flash's loading/empty states; deterministic coverage
     locks ordering, labels, filtering, and preferred-server behavior.
-  - Replace status text and click-to-cycle stand-ins with the authored popup and
-    component behavior; cover guest, member, bad credentials, full/down server,
-    disconnect, reconnect, and canceled login.
+  - [x] Replace status text and click-to-cycle stand-ins with the authored popup
+    and component behavior; cover guest, member, bad credentials, full/down
+    server, disconnect, reconnect, and canceled login. Login now uses the
+    authored combo boxes and checkbox state, supports Enter from both credential
+    fields, leaves connecting progress to the authored animated timelines, and
+    routes failures through `MessagePopupGraphic` without a synthetic overlay.
   - Forgot-password recovery now uses the authored popup, prefills the login
     name, submits the original `name`/`email` form to `forgot_password.php`,
     supports Enter and cancel, and displays the server response through the

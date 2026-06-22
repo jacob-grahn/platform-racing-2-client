@@ -10,6 +10,7 @@ import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
 import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
+import pr2.page.LoginFlashPopup;
 
 class PR2MovieClipRuntimeTest {
 	private static var assertions:Int = 0;
@@ -26,6 +27,7 @@ class PR2MovieClipRuntimeTest {
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
+		testLoginPopupUsesAuthoredComponentsOnly();
 		testStaticTextHonorsAuthoredAttributes();
 		testGeneratedIntroTimelines();
 		testGeneratedCharacterNamedChildren();
@@ -333,6 +335,15 @@ class PR2MovieClipRuntimeTest {
 		var passBox = Std.downcast(popup.getChildByTimelineName("passBox"), FlTextInput);
 		assertNotNull(passBox, "LoginPopupGraphic renders password TextInput component as FlTextInput");
 		assertEquals(true, passBox.displayAsPassword, "password TextInput preserves displayAsPassword");
+	}
+
+	private static function testLoginPopupUsesAuthoredComponentsOnly():Void {
+		var popup = new LoginFlashPopup("LoginPopupGraphic");
+		assertEquals(1, popup.numChildren, "login popup contains only its authored graphic");
+		assertNotNull(popup.checkBox("rememberMe_chk"), "login popup exposes the authored checkbox state");
+		popup.setMessage("synthetic status must not be added");
+		assertEquals(1, popup.numChildren, "status updates do not add a synthetic text overlay");
+		popup.remove();
 	}
 
 	private static function testStaticTextHonorsAuthoredAttributes():Void {
