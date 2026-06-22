@@ -102,6 +102,8 @@ class LocalPlayerController {
 	public var facingScaleX(get, never):Int;
 	private var speedBurstFramesRemaining:Int = 0;
 	private var jetPackFramesRemaining:Int = 0;
+	private var animationLeft:Bool = false;
+	private var animationRight:Bool = false;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -123,6 +125,8 @@ class LocalPlayerController {
 	public function step(input:LocalPlayerInput):Void {
 		touchedBlock = null;
 		lastItemEffect = null;
+		animationLeft = input.left;
+		animationRight = input.right;
 		// LocalCharacter.updateKeys applies RIGHT first and LEFT second, so LEFT
 		// determines the facing direction when both keys are held.
 		if (input.right) {
@@ -1126,7 +1130,7 @@ class LocalPlayerController {
 	}
 
 	private function characterState():CharacterState {
-		return CharacterState.fromMotion(mode, grounded, crouching, crouchCharge, vx, vy);
+		return CharacterState.fromMotion(mode, grounded, crouching, crouchCharge, animationLeft, animationRight);
 	}
 
 	private function getBlockAtPixel(pixelX:Float, pixelY:Float):Null<LevelBlock> {

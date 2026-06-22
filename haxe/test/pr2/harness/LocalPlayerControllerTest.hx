@@ -18,6 +18,7 @@ class LocalPlayerControllerTest {
 		testJumpAndLandOnFlatFixture();
 		testGravityUsesFlashMultiplierAndSupportsRuntimeChanges();
 		testFacingFollowsPressedDirection();
+		testAnimationFollowsDirectionalInput();
 		testCrouchOnlyWhileGrounded();
 		testIceBlockReducesNextFrameAcceleration();
 		testArrowStandEffectsMatchAs3Deltas();
@@ -71,6 +72,26 @@ class LocalPlayerControllerTest {
 
 		player.step(new LocalPlayerInput(true, true));
 		assertEquals(-1, player.facingScaleX, "left wins when both directions are held like AS3 updateKeys");
+	}
+
+	private static function testAnimationFollowsDirectionalInput():Void {
+		var player = newPlayer();
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		player.step(new LocalPlayerInput(false, true));
+		assertEquals("run", player.debugState().animation, "held direction runs like LocalCharacter");
+
+		player.step(new LocalPlayerInput());
+		assertEquals("stand", player.debugState().animation, "coasting without input stands like LocalCharacter");
+
+		player.step(new LocalPlayerInput(false, false, false, true));
+		player.step(new LocalPlayerInput(false, true, false, true));
+		assertEquals("crouchWalk", player.debugState().animation, "held direction selects crouch walk");
+
+		player.step(new LocalPlayerInput(false, false, false, true));
+		assertEquals("crouch", player.debugState().animation, "released direction selects crouch");
 	}
 
 	private static function testStartBlockHasNoCollision():Void {

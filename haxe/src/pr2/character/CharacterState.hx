@@ -12,7 +12,7 @@ enum abstract CharacterState(String) from String to String {
 	public var Freeze = "freeze";
 	public var Bumped = "bumped";
 
-	public static function fromMotion(mode:String, grounded:Bool, crouching:Bool, crouchCharge:Float, vx:Float, vy:Float):CharacterState {
+	public static function fromMotion(mode:String, grounded:Bool, crouching:Bool, crouchCharge:Float, left:Bool, right:Bool):CharacterState {
 		if (mode == "freeze" || mode == "frozenSolid") {
 			return Freeze;
 		}
@@ -26,12 +26,12 @@ enum abstract CharacterState(String) from String to String {
 			return SuperJump;
 		}
 		if (crouching) {
-			return Math.abs(vx) > 0.05 ? CrouchWalk : Crouch;
+			return left || right ? CrouchWalk : Crouch;
 		}
 		if (!grounded) {
-			return vy < 0 ? Jump : Fall;
+			return Jump;
 		}
-		return Math.abs(vx) > 0.05 ? Run : Stand;
+		return left || right ? Run : Stand;
 	}
 
 	public function toClipName():String {

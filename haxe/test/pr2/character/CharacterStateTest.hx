@@ -10,17 +10,16 @@ class CharacterStateTest {
 	}
 
 	private static function testFromMotionPriorities():Void {
-		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("freeze", true, false, 0, 0, 0), "freeze mode owns state");
-		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("frozenSolid", true, false, 0, 0, 0), "frozen-solid mode owns state");
-		assertEquals(CharacterState.Bumped, CharacterState.fromMotion("hurt", true, false, 0, 0, 0), "hurt mode owns state");
-		assertEquals(CharacterState.Swim, CharacterState.fromMotion("water", true, false, 0, 0, 0), "water mode owns state");
-		assertEquals(CharacterState.SuperJump, CharacterState.fromMotion("land", true, false, 26, 0, 0), "charged crouch uses super jump");
-		assertEquals(CharacterState.CrouchWalk, CharacterState.fromMotion("land", true, true, 0, 0.1, 0), "moving crouch uses crouch walk");
-		assertEquals(CharacterState.Crouch, CharacterState.fromMotion("land", true, true, 0, 0, 0), "still crouch uses crouch");
-		assertEquals(CharacterState.Jump, CharacterState.fromMotion("land", false, false, 0, 0, -1), "negative vy uses jump");
-		assertEquals(CharacterState.Fall, CharacterState.fromMotion("land", false, false, 0, 0, 1), "positive vy uses fall");
-		assertEquals(CharacterState.Run, CharacterState.fromMotion("land", true, false, 0, 0.1, 0), "ground movement uses run");
-		assertEquals(CharacterState.Stand, CharacterState.fromMotion("land", true, false, 0, 0, 0), "still grounded uses stand");
+		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("freeze", true, false, 0, false, false), "freeze mode owns state");
+		assertEquals(CharacterState.Freeze, CharacterState.fromMotion("frozenSolid", true, false, 0, false, false), "frozen-solid mode owns state");
+		assertEquals(CharacterState.Bumped, CharacterState.fromMotion("hurt", true, false, 0, false, false), "hurt mode owns state");
+		assertEquals(CharacterState.Swim, CharacterState.fromMotion("water", true, false, 0, false, false), "water mode owns state");
+		assertEquals(CharacterState.SuperJump, CharacterState.fromMotion("land", true, false, 26, false, false), "charged crouch uses super jump");
+		assertEquals(CharacterState.CrouchWalk, CharacterState.fromMotion("land", true, true, 0, true, false), "held direction uses crouch walk");
+		assertEquals(CharacterState.Crouch, CharacterState.fromMotion("land", true, true, 0, false, false), "released direction uses crouch");
+		assertEquals(CharacterState.Jump, CharacterState.fromMotion("land", false, false, 0, false, false), "all airborne motion uses jump");
+		assertEquals(CharacterState.Run, CharacterState.fromMotion("land", true, false, 0, false, true), "held direction uses run");
+		assertEquals(CharacterState.Stand, CharacterState.fromMotion("land", true, false, 0, false, false), "released direction uses stand");
 	}
 
 	private static function testClipNames():Void {

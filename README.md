@@ -128,6 +128,9 @@ Completed subsystems (parity-relevant facts worth keeping):
   multiplier changes.
   Start blocks mark spawn positions but are excluded from character collision, as
   in `background/Map.as`.
+  Character animation state follows the Flash input-driven conditions: grounded
+  run/crouch-walk require a held direction, coasting stands, and all airborne
+  land movement uses the jump state.
   Note: `FinishBlock` is a one-use `SupplyBlock`, so only a bump from below latches
   completion and reports its one-based id and pixel center; side/stand/touch
   collisions do not finish the race. Server level decoding is validated across
