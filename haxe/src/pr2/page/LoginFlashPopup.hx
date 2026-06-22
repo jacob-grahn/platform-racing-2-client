@@ -99,6 +99,14 @@ class LoginFlashPopup extends Sprite {
 		buttonHandlers.push({target: target, handler: handler});
 	}
 
+	public function setButtonEnabled(name:String, enabled:Bool, alpha:Float):Void {
+		var target = child(name);
+		if (target == null) return;
+		target.alpha = alpha;
+		var interactive = Std.downcast(target, InteractiveObject);
+		if (interactive != null) interactive.mouseEnabled = enabled;
+	}
+
 	public function bindEnter(name:String, enterHandler:Void->Void):Void {
 		var target = input(name);
 		var handler = function(event:KeyboardEvent):Void {

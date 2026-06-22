@@ -35,4 +35,36 @@ class ServerStatusClient {
 		}
 		return new ServerStatusResult(servers);
 	}
+
+	/** Applies the filtering and ordering used by Flash's `CheckServers`. */
+	public static function selectList(source:Array<ServerInfo>, guildId:Int = 0, beta:Bool = false):Array<ServerInfo> {
+		var servers = source.filter(function(server):Bool {
+			return server.address != "" && server.port > 0 && (!beta || server.guildId == 205);
+		});
+		servers.sort(function(a:ServerInfo, b:ServerInfo):Int {
+			var aOwn = guildId != 0 && a.guildId == guildId && a.status != "down";
+			var bOwn = guildId != 0 && b.guildId == guildId && b.status != "down";
+			if (aOwn != bOwn) return aOwn ? -1 : 1;
+			if ((a.guildId == 0) != (b.guildId == 0)) return a.guildId == 0 ? -1 : 1;
+			if (a.guildId == 0 && a.port != b.port) return a.port < b.port ? -1 : 1;
+			if (a.guildId != 0 && a.population != b.population) return a.population > b.population ? -1 : 1;
+			return a.serverId - b.serverId;
+		});
+		return servers;
+	}
+
+	/** Chooses the user's open guild server, then a non-full open public server. */
+	public static function preferredIndex(servers:Array<ServerInfo>, guildId:Int = 0):Int {
+		if (guildId != 0) {
+			for (i in 0...servers.length) {
+				var server = servers[i];
+				if (server.guildId == guildId && server.status == "open") return i;
+			}
+		}
+		for (i in 0...servers.length) {
+			var server = servers[i];
+			if (server.guildId == 0 && server.status == "open" && server.population < 180) return i;
+		}
+		return servers.length == 0 ? -1 : 0;
+	}
 }

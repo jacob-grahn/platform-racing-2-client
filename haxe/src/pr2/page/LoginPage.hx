@@ -8,12 +8,14 @@ import openfl.display.InteractiveObject;
 import openfl.display.PixelSnapping;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
+import openfl.events.TimerEvent;
 import openfl.filters.GlowFilter;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import openfl.utils.Assets;
+import openfl.utils.Timer;
 import pr2.page.LoginSocketProbe.LoginProbeStatus;
 import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
@@ -63,6 +65,9 @@ class LoginPage extends Page {
 	private var loginServer:Null<ServerInfo>;
 	private var loginRemember:Bool = false;
 	private var loginToken:String = "";
+	private var serverRefreshTimer:Null<Timer>;
+	private var reloadCooldownTimer:Null<Timer>;
+	private var serverRequestGeneration:Int = 0;
 
 	public function new() {
 		super();
@@ -89,11 +94,15 @@ class LoginPage extends Page {
 		addChild(kongHitArea);
 
 		loadServers();
+		serverRefreshTimer = new Timer(60000);
+		serverRefreshTimer.addEventListener(TimerEvent.TIMER, onServerRefreshTimer);
+		serverRefreshTimer.start();
 	}
 
 	override public function remove():Void {
 		closePopup();
 		closeSocketProbe();
+		stopServerTimers();
 
 		for (button in buttons) {
 			button.remove();
@@ -161,8 +170,7 @@ class LoginPage extends Page {
 			selectServerFromCombo(combo);
 		});
 		popup.bindButton("reload_bt", function():Void {
-			loadServers();
-			popup.setMessage("Reloading servers...");
+			startServerReload(popup);
 		});
 		popup.bindButton("rememberMe_chk", function():Void {
 			remember = !remember;
@@ -310,8 +318,7 @@ class LoginPage extends Page {
 			selectServerFromCombo(combo);
 		});
 		popup.bindButton("reload_bt", function():Void {
-			loadServers();
-			popup.setMessage("Reloading servers...");
+			startServerReload(popup);
 		});
 		popup.bindButton("cancel_bt", closePopup);
 		if (!guestLogin && !createdAccount) popup.bindButton("user_del_bt", function():Void {
@@ -405,18 +412,57 @@ class LoginPage extends Page {
 
 	private function loadServers():Void {
 		var previousServer = selectedServer();
+		var generation = ++serverRequestGeneration;
 		setActiveServerCombosLoading();
 		ServerStatusClient.fetch(function(result):Void {
-			servers = result.servers.filter(function(server):Bool {
-				return server.address != "" && server.port > 0;
-			});
-			selectedServerIndex = findServerIndex(previousServer);
+			if (generation != serverRequestGeneration) return;
+			servers = ServerStatusClient.selectList(result.servers);
+			selectedServerIndex = previousServer == null
+				? ServerStatusClient.preferredIndex(servers)
+				: findServerIndex(previousServer);
 			updateActiveServerCombos();
 		}, function(message:String):Void {
+			if (generation != serverRequestGeneration) return;
 			servers = [];
-			selectedServerIndex = 0;
+			selectedServerIndex = -1;
 			updateActiveServerCombos();
 		});
+	}
+
+	private function startServerReload(popup:LoginFlashPopup):Void {
+		if (reloadCooldownTimer != null) return;
+		popup.setButtonEnabled("reload_bt", false, 0.1);
+		popup.setMessage("Reloading servers...");
+		loadServers();
+		reloadCooldownTimer = new Timer(10000, 1);
+		reloadCooldownTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onReloadCooldownComplete);
+		reloadCooldownTimer.start();
+	}
+
+	private function onReloadCooldownComplete(_:TimerEvent):Void {
+		if (reloadCooldownTimer != null) {
+			reloadCooldownTimer.stop();
+			reloadCooldownTimer = null;
+		}
+		if (activePopup != null) activePopup.setButtonEnabled("reload_bt", true, 1);
+	}
+
+	private function onServerRefreshTimer(_:TimerEvent):Void {
+		loadServers();
+	}
+
+	private function stopServerTimers():Void {
+		if (serverRefreshTimer != null) {
+			serverRefreshTimer.stop();
+			serverRefreshTimer.removeEventListener(TimerEvent.TIMER, onServerRefreshTimer);
+			serverRefreshTimer = null;
+		}
+		if (reloadCooldownTimer != null) {
+			reloadCooldownTimer.stop();
+			reloadCooldownTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onReloadCooldownComplete);
+			reloadCooldownTimer = null;
+		}
+		serverRequestGeneration++;
 	}
 
 	private function selectedServer():Null<ServerInfo> {
@@ -437,7 +483,7 @@ class LoginPage extends Page {
 				}
 			}
 		}
-		return 0;
+		return ServerStatusClient.preferredIndex(servers);
 	}
 
 	private function selectServerFromCombo(combo:FlComboBox):Void {

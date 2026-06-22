@@ -44,8 +44,9 @@ class ServerInfo {
 	}
 
 	public function label():String {
-		var suffix = population > 0 ? ' ($population online)' : "";
-		return name + suffix;
+		var displayStatus = status == "open" ? '$population online' : status;
+		var prefix = (guildId != 0 ? "* " : "") + (happyHour ? "!! " : "");
+		return '$prefix$name ($displayStatus)';
 	}
 
 	public function websocketUrl(?secure:Bool):String {

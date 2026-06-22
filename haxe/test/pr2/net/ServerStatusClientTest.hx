@@ -5,6 +5,9 @@ class ServerStatusClientTest {
 
 	public static function main():Void {
 		testParsesServerList();
+		testFlashLabels();
+		testOrdersAndSelectsServers();
+		testBetaAndInvalidFiltering();
 		trace('ServerStatusClientTest passed $assertions assertions');
 	}
 
@@ -18,7 +21,39 @@ class ServerStatusClientTest {
 		assertEquals("online", result.servers[0].status, "status");
 		assertEquals(12, result.servers[0].population, "population");
 		assertEquals(true, result.servers[0].happyHour, "happy hour");
-		assertEquals("Derron (12 online)", result.servers[0].label(), "label");
+		assertEquals("!! Derron (online)", result.servers[0].label(), "label");
+	}
+
+	private static function testFlashLabels():Void {
+		assertEquals("!! Derron (12 online)", server(2, 9160, 0, 12, "open", true).label(), "happy-hour open label");
+		assertEquals("* Guild (down)", server(8, 9000, 42, 0, "down", false, "Guild").label(), "private down label");
+	}
+
+	private static function testOrdersAndSelectsServers():Void {
+		var ordered = ServerStatusClient.selectList([
+			server(9, 9009, 20, 5),
+			server(4, 9004, 0, 190),
+			server(7, 9007, 20, 30),
+			server(2, 9002, 0, 20),
+			server(6, 9006, 42, 10)
+		], 42);
+		assertEquals("6,2,4,7,9", [for (entry in ordered) entry.serverId].join(","), "guild/public/private ordering");
+		assertEquals(0, ServerStatusClient.preferredIndex(ordered, 42), "own guild server preferred");
+		assertEquals(1, ServerStatusClient.preferredIndex(ordered), "non-full public server preferred");
+	}
+
+	private static function testBetaAndInvalidFiltering():Void {
+		var selected = ServerStatusClient.selectList([
+			server(1, 9001, 0, 1),
+			server(2, 9002, 205, 1),
+			new ServerInfo("", 0, 3, "Invalid", "open", 1, 205, false)
+		], 0, true);
+		assertEquals(1, selected.length, "beta and invalid filtering count");
+		assertEquals(2, selected[0].serverId, "beta keeps guild 205 server");
+	}
+
+	private static function server(id:Int, port:Int, guild:Int, population:Int, status:String = "open", happy:Bool = false, name:String = "Derron"):ServerInfo {
+		return new ServerInfo("example.com", port, id, name, status, population, guild, happy);
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
