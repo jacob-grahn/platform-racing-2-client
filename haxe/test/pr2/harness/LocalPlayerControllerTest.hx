@@ -13,7 +13,8 @@ class LocalPlayerControllerTest {
 
 	public static function main():Void {
 		testInitialStateIsGroundedOnStartBlock();
-		testRunRightTouchesFinishBlock();
+		testSideCollisionDoesNotFinishRace();
+		testBumpingFinishBlockFinishesRaceOnce();
 		testJumpAndLandOnFlatFixture();
 		testCrouchOnlyWhileGrounded();
 		testIceBlockReducesNextFrameAcceleration();
@@ -63,7 +64,7 @@ class LocalPlayerControllerTest {
 		assertEquals("stand", state.animation, "initial animation");
 	}
 
-	private static function testRunRightTouchesFinishBlock():Void {
+	private static function testSideCollisionDoesNotFinishRace():Void {
 		var player = newPlayer();
 		var input = new LocalPlayerInput(false, true);
 		var touchedFinish = false;
@@ -82,6 +83,29 @@ class LocalPlayerControllerTest {
 		assertClose(470, state.x, "finish collision stops at block edge");
 		assertEquals(true, state.grounded, "player is grounded after run");
 		assertEquals("finish", state.touchedBlockType, "debug state reports touched finish block");
+		assertEquals(false, state.finished, "side collision does not activate finish supply");
+	}
+
+	private static function testBumpingFinishBlockFinishesRaceOnce():Void {
+		var player = new LocalPlayerController(finishBumpLevel());
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().finished) {
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals(true, state.finished, "bumping finish block completes race");
+		assertEquals(1, state.finishBlockId, "finish reports Flash-style one-based block id");
+		assertEquals(105, state.finishX, "finish reports block center x");
+		assertEquals(45, state.finishY, "finish reports block center y");
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+		}
+		assertEquals(1, player.debugState().finishBlockId, "finish supply remains latched after first use");
 	}
 
 	private static function testJumpAndLandOnFlatFixture():Void {
@@ -1030,6 +1054,24 @@ class LocalPlayerControllerTest {
 				new LevelBlock(2, 1, BlockType.CustomStats, options),
 				new LevelBlock(2, 4, BlockType.Solid),
 				new LevelBlock(4, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function finishBumpLevel():FixtureLevel {
+		return new FixtureLevel(
+			"finish-bump",
+			"Finish Bump",
+			6,
+			6,
+			30,
+			27,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(3, 3),
+			new TilePosition(3, 1),
+			[
+				new LevelBlock(3, 1, BlockType.Finish),
+				new LevelBlock(3, 4, BlockType.Solid)
 			]
 		);
 	}

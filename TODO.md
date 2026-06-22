@@ -73,10 +73,14 @@ sequence and screenshots cover level entry, countdown, racing, and finish.
   fix registration/spacing without rescaling the parts. Recheck default,
   recolored, mixed, and tricky outfits in standing, running, crouching, jumping,
   swimming, frozen, and bumped states.
-- [ ] Audit the harness physics against `character/LocalCharacter.as` rather than treating existing mechanic fixtures as final parity.
-  Compare acceleration, deceleration, stat formulas, jump/crouch, water, ice,
-  rotation, collision ordering, corner resolution, moving blocks, item timing,
-  hurt/freeze recovery, and finish detection.
+- [x] Audit the harness physics against `character/LocalCharacter.as` rather than treating existing mechanic fixtures as final parity.
+  The controller now follows the AS3 acceleration/deceleration and stat
+  formulas, jump/crouch and water/ice movement, collision probe ordering and
+  rotated resolution, moving-block timing, item durations, and hurt/freeze
+  recovery under deterministic fixtures. The final audit corrected finish
+  detection: `FinishBlock` is a one-use `SupplyBlock`, so only a bump from
+  below latches completion and reports its one-based id and pixel center; side,
+  stand, and touch collisions do not finish the race.
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.

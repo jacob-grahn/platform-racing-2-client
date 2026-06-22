@@ -20,6 +20,10 @@ class LocalPlayerDebugState {
 	public final accelerationStat:Float;
 	public final jumpStat:Float;
 	public final courseRotation:Int;
+	public final finished:Bool;
+	public final finishBlockId:Null<Int>;
+	public final finishX:Null<Int>;
+	public final finishY:Null<Int>;
 
 	public function new(
 		x:Float,
@@ -37,7 +41,11 @@ class LocalPlayerDebugState {
 		speedStat:Float = 50,
 		accelerationStat:Float = 50,
 		jumpStat:Float = 50,
-		courseRotation:Int = 0
+		courseRotation:Int = 0,
+		finished:Bool = false,
+		?finishBlockId:Null<Int>,
+		?finishX:Null<Int>,
+		?finishY:Null<Int>
 	) {
 		this.x = x;
 		this.y = y;
@@ -56,6 +64,10 @@ class LocalPlayerDebugState {
 		this.accelerationStat = accelerationStat;
 		this.jumpStat = jumpStat;
 		this.courseRotation = courseRotation;
+		this.finished = finished;
+		this.finishBlockId = finishBlockId;
+		this.finishX = finishX;
+		this.finishY = finishY;
 	}
 
 	public function serialize():String {
@@ -63,7 +75,8 @@ class LocalPlayerDebugState {
 		var item = itemId == null ? "none" : Std.string(itemId);
 		var uses = itemUses == null ? "none" : Std.string(itemUses);
 		var effect = lastItemEffect == null ? "none" : lastItemEffect;
-		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation';
+		var finish = finishBlockId == null ? "none" : '$finishBlockId,$finishX,$finishY';
+		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation;finished=$finished;finish=$finish';
 	}
 
 	private static function round3(value:Float):Float {

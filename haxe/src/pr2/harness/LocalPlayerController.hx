@@ -52,6 +52,10 @@ class LocalPlayerController {
 	public var itemUses(default, null):Null<Int> = null;
 	public var lastItemEffect(default, null):Null<String> = null;
 	public var courseRotation(default, null):Int = 0;
+	public var finished(default, null):Bool = false;
+	public var finishBlockId(default, null):Null<Int> = null;
+	public var finishX(default, null):Null<Int> = null;
+	public var finishY(default, null):Null<Int> = null;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -263,7 +267,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY);
 	}
 
 	private function position():Void {
@@ -479,6 +483,8 @@ class LocalPlayerController {
 
 	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int):Void {
 		switch (block.type) {
+			case BlockType.Finish:
+				finish(block);
 			case BlockType.Crumble:
 				applyCrumbleForce(block, force);
 			case BlockType.Vanish:
@@ -501,6 +507,27 @@ class LocalPlayerController {
 				pushArrow(block.type);
 			default:
 		}
+	}
+
+	// FinishBlock extends SupplyBlock in Flash: it fires once, and only through
+	// onBump. Side, stand, and touch collisions must not complete the race.
+	private function finish(block:LevelBlock):Void {
+		if (finished) {
+			return;
+		}
+		finished = true;
+		var id = 0;
+		for (candidate in level.blocks) {
+			if (candidate.type == BlockType.Finish) {
+				id++;
+				if (candidate == block) {
+					break;
+				}
+			}
+		}
+		finishBlockId = id;
+		finishX = block.x * level.tileSize + Std.int(level.tileSize / 2);
+		finishY = block.y * level.tileSize + Std.int(level.tileSize / 2);
 	}
 
 	private function applySideHitEffect(block:LevelBlock, force:Int):Void {
