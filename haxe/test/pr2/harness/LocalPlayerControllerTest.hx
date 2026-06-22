@@ -17,6 +17,7 @@ class LocalPlayerControllerTest {
 		testBumpingFinishBlockFinishesRaceOnce();
 		testJumpAndLandOnFlatFixture();
 		testGravityUsesFlashMultiplierAndSupportsRuntimeChanges();
+		testVelocityIntegrationOrderAndTerminalClamp();
 		testFacingFollowsPressedDirection();
 		testAnimationFollowsDirectionalInput();
 		testCrouchOnlyWhileGrounded();
@@ -184,6 +185,30 @@ class LocalPlayerControllerTest {
 		player.setGravity(0.5);
 		player.step(new LocalPlayerInput());
 		assertClose(2.1, player.debugState().vy, "runtime gravity changes replace the active multiplier");
+	}
+
+	private static function testVelocityIntegrationOrderAndTerminalClamp():Void {
+		var player = new LocalPlayerController(emptyLevel(1));
+		player.step(new LocalPlayerInput(false, true));
+		var state = player.debugState();
+		var acceleration = 0.2 + 50 / 60;
+		var expectedVx = acceleration * 0.985 * 0.35;
+		assertClose(expectedVx, state.vx, "horizontal integration applies input, friction, then acceleration factor");
+		assertClose(75 + expectedVx, state.x, "horizontal position uses the integrated velocity");
+		assertClose(0.7, state.vy, "vertical integration applies gravity before movement");
+		assertClose(90.7, state.y, "vertical position uses velocity after gravity");
+
+		player = new LocalPlayerController(emptyLevel(100));
+		player.step(new LocalPlayerInput());
+		state = player.debugState();
+		assertClose(28, state.vy, "positive velocity is clamped to Flash's terminal speed");
+		assertClose(118, state.y, "terminal velocity is clamped before position integration");
+
+		player.setGravity(-100);
+		player.step(new LocalPlayerInput());
+		state = player.debugState();
+		assertClose(-28, state.vy, "negative velocity is clamped to Flash's terminal speed");
+		assertClose(90, state.y, "negative terminal velocity is clamped before position integration");
 	}
 
 	private static function testCrouchOnlyWhileGrounded():Void {
