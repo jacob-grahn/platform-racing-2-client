@@ -67,7 +67,7 @@ class LocalPlayerController {
 	private var accel:Float;
 	private var maxVelX:Float;
 	private var jumpVelocity:Float;
-	private final gravity:Float;
+	private var gravity:Float;
 	private final startingSpeedStat:Float;
 	private final startingAccelerationStat:Float;
 	private final startingJumpStat:Float;
@@ -109,7 +109,7 @@ class LocalPlayerController {
 		startingAccelerationStat = clamp((level.stats.acceleration - 0.2) * 60, 0, 100);
 		startingJumpStat = clamp((level.stats.jump - 2) * 40, 0, 100);
 		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
-		gravity = DEFAULT_GRAVITY * (level.gravity / 27);
+		setGravity(level.gravity);
 		x = level.playerStart.x * level.tileSize + level.tileSize / 2;
 		y = (level.playerStart.y + 1) * level.tileSize;
 		lastSafeX = x;
@@ -144,6 +144,10 @@ class LocalPlayerController {
 			landStep(input);
 		}
 		updateTimedBlocks();
+	}
+
+	public function setGravity(multiplier:Float):Void {
+		gravity = DEFAULT_GRAVITY * multiplier;
 	}
 
 	private function get_facingScaleX():Int {

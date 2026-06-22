@@ -4,7 +4,7 @@
   "widthTiles": 18,
   "heightTiles": 12,
   "tileSize": 30,
-  "gravity": 27,
+  "gravity": 1,
   "stats": {
     "speed": 55,
     "acceleration": 1.2,

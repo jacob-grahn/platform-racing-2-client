@@ -20,7 +20,7 @@ class LevelFixtureParserTest {
 		assertEquals(18, fixture.widthTiles, "fixture width");
 		assertEquals(12, fixture.heightTiles, "fixture height");
 		assertEquals(30, fixture.tileSize, "fixture PR2 tile size");
-		assertEquals(27, fixture.gravity, "fixture gravity default");
+		assertEquals(1, fixture.gravity, "fixture gravity multiplier");
 		assertEquals(55, fixture.stats.speed, "fixture speed default");
 		assertEquals(1.2, fixture.stats.acceleration, "fixture acceleration default");
 		assertEquals(12, fixture.stats.jump, "fixture jump default");
@@ -66,7 +66,7 @@ class LevelFixtureParserTest {
 			+ '"widthTiles":4,'
 			+ '"heightTiles":4,'
 			+ '"tileSize":30,'
-			+ '"gravity":27,'
+			+ '"gravity":1,'
 			+ '"stats":{"speed":55,"acceleration":1.2,"jump":12},'
 			+ start
 			+ '"finish":{"x":2,"y":1},'

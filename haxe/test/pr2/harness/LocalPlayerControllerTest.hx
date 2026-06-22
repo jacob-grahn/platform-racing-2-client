@@ -16,6 +16,7 @@ class LocalPlayerControllerTest {
 		testSideCollisionDoesNotFinishRace();
 		testBumpingFinishBlockFinishesRaceOnce();
 		testJumpAndLandOnFlatFixture();
+		testGravityUsesFlashMultiplierAndSupportsRuntimeChanges();
 		testFacingFollowsPressedDirection();
 		testCrouchOnlyWhileGrounded();
 		testIceBlockReducesNextFrameAcceleration();
@@ -152,6 +153,16 @@ class LocalPlayerControllerTest {
 		assertEquals(true, landedState.grounded, "scripted jump lands");
 		assertClose(300, landedState.y, "jump lands back on solid floor");
 		assertEquals("stand", landedState.animation, "landed animation");
+	}
+
+	private static function testGravityUsesFlashMultiplierAndSupportsRuntimeChanges():Void {
+		var player = new LocalPlayerController(emptyLevel(2.5));
+		player.step(new LocalPlayerInput());
+		assertClose(1.75, player.debugState().vy, "gravity is Flash's 0.7 times the level multiplier");
+
+		player.setGravity(0.5);
+		player.step(new LocalPlayerInput());
+		assertClose(2.1, player.debugState().vy, "runtime gravity changes replace the active multiplier");
 	}
 
 	private static function testCrouchOnlyWhileGrounded():Void {
@@ -824,11 +835,26 @@ class LocalPlayerControllerTest {
 			6,
 			13,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 0),
 			new TilePosition(5, 11),
 			blocks
+		);
+	}
+
+	private static function emptyLevel(gravity:Float):FixtureLevel {
+		return new FixtureLevel(
+			"empty",
+			"Empty",
+			10,
+			10,
+			30,
+			gravity,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(8, 8),
+			[]
 		);
 	}
 
@@ -857,7 +883,7 @@ class LocalPlayerControllerTest {
 			5,
 			5,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(3, 2),
@@ -875,7 +901,7 @@ class LocalPlayerControllerTest {
 			10,
 			13,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(4, 10),
@@ -897,7 +923,7 @@ class LocalPlayerControllerTest {
 			5,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 3),
 			new TilePosition(4, 4),
@@ -916,7 +942,7 @@ class LocalPlayerControllerTest {
 			5,
 			8,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 5),
 			new TilePosition(4, 6),
@@ -948,7 +974,7 @@ class LocalPlayerControllerTest {
 			10,
 			8,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 5),
 			new TilePosition(8, 6),
@@ -963,7 +989,7 @@ class LocalPlayerControllerTest {
 			12,
 			8,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 5),
 			new TilePosition(10, 6),
@@ -989,7 +1015,7 @@ class LocalPlayerControllerTest {
 			12,
 			8,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 5),
 			new TilePosition(10, 6),
@@ -1014,7 +1040,7 @@ class LocalPlayerControllerTest {
 			6,
 			12,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 8),
 			new TilePosition(5, 10),
@@ -1034,7 +1060,7 @@ class LocalPlayerControllerTest {
 			8,
 			8,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 5),
 			new TilePosition(7, 6),
@@ -1057,7 +1083,7 @@ class LocalPlayerControllerTest {
 			6,
 			12,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 8),
 			new TilePosition(5, 10),
@@ -1076,7 +1102,7 @@ class LocalPlayerControllerTest {
 			5,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 3),
 			new TilePosition(4, 4),
@@ -1095,7 +1121,7 @@ class LocalPlayerControllerTest {
 			6,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(3, 3),
 			new TilePosition(3, 1),
@@ -1113,7 +1139,7 @@ class LocalPlayerControllerTest {
 			5,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(70, 0.2 + 40 / 60, 2 + 20 / 40),
 			new TilePosition(2, 3),
 			new TilePosition(4, 4),
@@ -1132,7 +1158,7 @@ class LocalPlayerControllerTest {
 			7,
 			5,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(6, 2),
@@ -1151,7 +1177,7 @@ class LocalPlayerControllerTest {
 			5,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(4, 4),
@@ -1176,7 +1202,7 @@ class LocalPlayerControllerTest {
 			6,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(4, 4),
@@ -1191,7 +1217,7 @@ class LocalPlayerControllerTest {
 			5,
 			6,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 3),
 			new TilePosition(4, 4),
@@ -1210,7 +1236,7 @@ class LocalPlayerControllerTest {
 			5,
 			13,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 0),
 			new TilePosition(4, 8),
@@ -1228,7 +1254,7 @@ class LocalPlayerControllerTest {
 			5,
 			8,
 			30,
-			27,
+			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(4, 6),
