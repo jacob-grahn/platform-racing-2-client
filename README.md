@@ -81,6 +81,8 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `vector-art/png/`: generated 4x PNGs from SVG vector art.
 - `vector-art/atlases/`: generated sprite sheets and frame JSON.
 - `docs/`: migration notes and inventories.
+- `docs/browser-platform-differences.md`: audited, platform-required HTML5
+  differences and their parity boundaries.
 - `TODO.md`: current porting plan and next steps.
 
 ## Porting Status

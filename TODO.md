@@ -162,7 +162,7 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
 - [ ] Walk every original user flow and role: guest, member, moderator/admin
   where testable, login failures, lobby/social/account/store, level browsing,
   racing/spectating, editor/management, disconnect/reconnect, and logout.
-- [ ] Document only unavoidable browser differences, with evidence that each is
+- [x] Document only unavoidable browser differences, with evidence that each is
   platform-required rather than an implementation shortcut.
 
 The port is complete when no reachable behavior is a placeholder or harness
