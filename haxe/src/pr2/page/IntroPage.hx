@@ -5,7 +5,7 @@ import js.Browser;
 #end
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
-import openfl.display.Shape;
+import openfl.display.Sprite;
 import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -46,7 +46,7 @@ class IntroPage extends Page {
 	static inline var JIGGMIN_LOGO_ASSET = "assets/blocks/jiggmin_logo.png";
 
 	private var toPlay:Array<Int> = [];
-	private var background:Null<Shape>;
+	private var background:Null<Sprite>;
 	private var introPageGraphic:Null<PR2MovieClip>;
 	private var introHolder:Null<DisplayObjectContainer>;
 	private var currentIntro:Null<PR2MovieClip>;
@@ -64,7 +64,10 @@ class IntroPage extends Page {
 		// The original Jiggmin intro played over a full-screen black backdrop
 		// (Symbol 26). Reproduce it here so the window background never shows
 		// through behind the intro graphics or the assembling logo blocks.
-		background = new Shape();
+		// A Sprite (not a Shape) so blank-space clicks hit-test onto the backdrop
+		// and bubble up to the stage skip handler; a Shape is not interactive and
+		// would let clicks on empty areas fall through without skipping the intro.
+		background = new Sprite();
 		addChild(background);
 
 		introPageGraphic = PR2MovieClip.fromLinkage("IntroPageGraphic");
