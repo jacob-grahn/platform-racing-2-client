@@ -579,7 +579,7 @@ class PR2MovieClip extends Sprite {
 			var childSymbol = AssetLibrary.getSymbol(element.libraryItemName);
 			if (childSymbol != null) {
 				if (nestedDepth >= maxNestedDepth) {
-					return createPlaceholder(element);
+					throw 'PR2 symbol nesting limit ($maxNestedDepth) exceeded while rendering ${element.libraryItemName} in ${symbol.name}';
 				}
 
 				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {
@@ -592,6 +592,10 @@ class PR2MovieClip extends Sprite {
 					clip.gotoAndPlay((element.firstFrame == null ? 0 : element.firstFrame) + 1);
 				}
 				return clip;
+			}
+
+			if (element.type != "DOMBitmapInstance") {
+				throw 'Unknown nested PR2 symbol ${element.libraryItemName} in ${symbol.name}';
 			}
 		}
 

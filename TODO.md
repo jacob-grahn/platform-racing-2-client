@@ -207,9 +207,12 @@ same serialized meaning and visible result as Flash.
   `PR2MovieClipRuntimeTest.testStaticTextHonorsAuthoredAttributes`. Font metrics
   and kerning may still produce small visual differences and should only be
   adjusted when a focused comparison demonstrates a remaining discrepancy.
-- [ ] Remove authored-symbol fallbacks from reachable screens. Expand the asset
-  manifest only as screens are ported, commit generated output, and keep normal
-  builds independent of Adobe Animate.
+- [x] Remove authored-symbol fallbacks from reachable screens. The generated
+  catalog contains the complete XFL symbol graph, and `PR2MovieClip` now fails
+  explicitly when an authored nested symbol is unresolved or exceeds the
+  configured nesting limit instead of silently drawing a placeholder. Reduced
+  runtime fixtures lock both failure paths; normal builds continue to consume
+  only committed generated Haxe and assets without requiring Adobe Animate.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

@@ -124,7 +124,7 @@ class FlButtonTest {
 	}
 
 	private static function testGeneratedPlayerInfoButtons():Void {
-		var playerInfo = PR2MovieClip.fromSymbolName(PLAYER_INFO_SYMBOL, {maxNestedDepth: 2});
+		var playerInfo = PR2MovieClip.fromSymbolName(PLAYER_INFO_SYMBOL, {maxNestedDepth: 12});
 
 		// follow/friend/ignore/levels are fl Components/Button; messageButton is a
 		// separate button symbol (Buttons/Symbol 1360), so it is excluded here.

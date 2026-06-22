@@ -16,6 +16,7 @@ class PR2MovieClipRuntimeTest {
 
 	public static function main():Void {
 		testTimelineControls();
+		testAuthoredSymbolFailuresAreExplicit();
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();
 		testSourceLayerOrderRendersTopLayersAboveBottomLayers();
@@ -32,6 +33,17 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedCharacterPartIdSelection();
 		testGeneratedRunAnimationPartPlacement();
 		trace('PR2MovieClipRuntimeTest passed $assertions assertions');
+	}
+
+	private static function testAuthoredSymbolFailuresAreExplicit():Void {
+		assertThrows(
+			function() new PR2MovieClip(makeUnresolvedChildSymbol()),
+			"unresolved authored symbols are rejected instead of drawn as placeholders"
+		);
+		assertThrows(
+			function() PR2MovieClip.fromLinkage("LobbyGraphic", {maxNestedDepth: 0}),
+			"authored symbols beyond the configured nesting limit are rejected instead of drawn as placeholders"
+		);
 	}
 
 	private static function testTimelineControls():Void {
@@ -237,7 +249,7 @@ class PR2MovieClipRuntimeTest {
 	}
 
 	private static function testGeneratedCharacterNamedChildren():Void {
-		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 2});
+		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
 
 		for (childName in ["runAnim", "standAnim", "jumpAnim", "superJumpAnim", "bumpedAnim", "crouchAnim", "crouchWalkAnim", "swimAnim"]) {
 			var child = Std.downcast(character.getChildByTimelineName(childName), PR2MovieClip);
@@ -258,25 +270,25 @@ class PR2MovieClipRuntimeTest {
 			"PR2_Graphics_1_Apr_2014_fla.superJumpAnim_60",
 			"PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59"
 		]) {
-			var animation = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 1});
+			var animation = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 12});
 			assertNamedChildren(animation, ["weapon", "head", "body", "foot1", "foot2"], '$linkage exposes character part children');
 		}
 
-		var headSelector = PR2MovieClip.fromSymbolName("Parts/Heads/headsMC", {maxNestedDepth: 2});
+		var headSelector = PR2MovieClip.fromSymbolName("Parts/Heads/headsMC", {maxNestedDepth: 12});
 		headSelector.gotoAndStop("gladiator");
 		assertNestedNamedChildren(headSelector, ["colorMC", "colorMC2"], "headsMC gladiator frame exposes color layers");
 
-		var bodySelector = PR2MovieClip.fromSymbolName("Parts/Bodies/bodyMC", {maxNestedDepth: 2});
+		var bodySelector = PR2MovieClip.fromSymbolName("Parts/Bodies/bodyMC", {maxNestedDepth: 12});
 		assertEquals(69, bodySelector.totalFrames, "bodyMC exposes all generated body frames");
 		bodySelector.gotoAndStop("gladiator");
 		assertNestedNamedChildren(bodySelector, ["colorMC", "colorMC2"], "bodyMC gladiator frame exposes color layers");
 
-		var footSelector = PR2MovieClip.fromSymbolName("Parts/Feet/footMC", {maxNestedDepth: 2});
+		var footSelector = PR2MovieClip.fromSymbolName("Parts/Feet/footMC", {maxNestedDepth: 12});
 		assertEquals(101, footSelector.totalFrames, "footMC exposes all generated foot frames");
 		footSelector.gotoAndStop("gladiator");
 		assertNestedNamedChildren(footSelector, ["colorMC"], "footMC gladiator frame exposes color layer");
 
-		var hatSelector = PR2MovieClip.fromLinkage("HatGraphic", {maxNestedDepth: 2});
+		var hatSelector = PR2MovieClip.fromLinkage("HatGraphic", {maxNestedDepth: 12});
 		assertEquals(62, hatSelector.totalFrames, "hatsMC exposes all generated hat frames");
 		hatSelector.gotoAndStop(24);
 		assertNestedNamedChildren(hatSelector, ["colorMC"], "hatsMC colorable frame exposes color layer");
@@ -300,7 +312,7 @@ class PR2MovieClipRuntimeTest {
 	}
 
 	private static function testGeneratedStaticTextAndComponents():Void {
-		var popup = PR2MovieClip.fromLinkage("LoginPopupGraphic", {maxNestedDepth: 2});
+		var popup = PR2MovieClip.fromLinkage("LoginPopupGraphic", {maxNestedDepth: 12});
 
 		assertNotNull(findTextDescendant(popup, "-- Login --"), "LoginPopupGraphic renders DOMStaticText title");
 		assertNotNull(findTextDescendant(popup, "name:"), "LoginPopupGraphic renders DOMStaticText field labels");
@@ -420,7 +432,7 @@ class PR2MovieClipRuntimeTest {
 	}
 
 	private static function testTimelineCompositionPreservesPartSelection():Void {
-		var runAnim = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.jumpAnim_61", {maxNestedDepth: 2});
+		var runAnim = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.jumpAnim_61", {maxNestedDepth: 12});
 		var head = requireClipChild(runAnim, "head");
 		var body = requireClipChild(runAnim, "body");
 
@@ -528,7 +540,7 @@ class PR2MovieClipRuntimeTest {
 	}
 
 	private static function assertLinkedClip(linkage:String, totalFrames:Int, labelName:String, labelFrame:Int):PR2MovieClip {
-		var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 1});
+		var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 12});
 		assertEquals(totalFrames, clip.totalFrames, '$linkage totalFrames');
 		assertHasLabel(clip, labelName, labelFrame);
 		clip.gotoAndStop(labelName);
@@ -565,7 +577,7 @@ class PR2MovieClipRuntimeTest {
 						if (element.name == childName) {
 							assertEquals(false, layer.visible, '$message layer visibility');
 							assertEquals(libraryItemName, element.libraryItemName, '$message library item');
-							assertNotNull(PR2MovieClip.fromSymbolName(libraryItemName, {maxNestedDepth: 1}), '$message symbol can instantiate directly');
+							assertNotNull(PR2MovieClip.fromSymbolName(libraryItemName, {maxNestedDepth: 12}), '$message symbol can instantiate directly');
 							return;
 						}
 					}
@@ -1026,6 +1038,38 @@ class PR2MovieClipRuntimeTest {
 							}]
 						}
 					]
+				}]
+			}]
+		};
+	}
+
+	private static function makeUnresolvedChildSymbol():SymbolAssetDef {
+		return {
+			href: "UnresolvedChild.xml",
+			type: "movie clip",
+			name: "UnresolvedChild",
+			timelines: [{
+				name: "UnresolvedChild",
+				layerCount: 1,
+				frameCount: 1,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 1,
+					frames: [{
+						index: 0,
+						duration: 1,
+						elementCount: 1,
+						elementTypes: ["DOMSymbolInstance"],
+						elements: [{
+							type: "DOMSymbolInstance",
+							libraryItemName: "Missing/AuthoredSymbol"
+						}]
+					}]
 				}]
 			}]
 		};

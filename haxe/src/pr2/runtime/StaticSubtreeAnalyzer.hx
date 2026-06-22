@@ -129,7 +129,10 @@ class StaticSubtreeAnalyzer {
 
 		var child = resolveSymbol(element.libraryItemName);
 		if (child == null) {
-			return true; // unresolved → static fallback path in PR2MovieClip
+			// Bitmap media is currently rendered by the explicit bitmap fallback;
+			// an unresolved symbol is rejected by PR2MovieClip and must never make a
+			// subtree eligible for flattening.
+			return element.type == "DOMBitmapInstance";
 		}
 
 		// A "single frame" instance is pinned with gotoAndStop and never advances,
