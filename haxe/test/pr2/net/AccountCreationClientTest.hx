@@ -7,6 +7,8 @@ class AccountCreationClientTest {
 		testBuildsFlashCompatibleFields();
 		testParsesSuccess();
 		testParsesErrorMessage();
+		testParsesFlashBooleanValues();
+		testRejectsMalformedResponses();
 		trace('AccountCreationClientTest passed $assertions assertions');
 	}
 
@@ -29,10 +31,30 @@ class AccountCreationClientTest {
 		assertEquals("Name already exists.", result.message, "error message");
 	}
 
+	private static function testParsesFlashBooleanValues():Void {
+		assertEquals(true, AccountCreationClient.parse('{"success":"1"}').success, "numeric string success");
+		assertEquals(false, AccountCreationClient.parse('{"success":"false"}').success, "false string success");
+	}
+
+	private static function testRejectsMalformedResponses():Void {
+		assertThrows(function():Void AccountCreationClient.parse(""), "empty response");
+		assertThrows(function():Void AccountCreationClient.parse("not json"), "invalid JSON");
+	}
+
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertThrows(callback:Void->Void, message:String):Void {
+		assertions++;
+		try {
+			callback();
+		} catch (_:Dynamic) {
+			return;
+		}
+		throw '$message: expected exception';
 	}
 }

@@ -37,8 +37,12 @@ The persistent `LobbySocket` must survive every page transition as Flash's
     the authored account selector, support confirmed deletion/logout, and remove
     invalidated tokens. Deterministic coverage locks storage semantics and the
     separate authenticated login form field.
-  - Port account-creation follow-up and exact cancel/retry/error behavior from
-    `flash/menu`.
+  - [x] Port account-creation follow-up and exact cancel/retry/error behavior from
+    `flash/menu`. Registration now uses the authored progress and message
+    popups, preserves entered values across validation/server errors and retries,
+    cancels stale HTTP callbacks, and enters server selection with the newly
+    created credentials. Deterministic coverage locks the request and response
+    contract.
   - [x] Port server refresh/selection. Login server selectors now reproduce
     `CheckServers` labels, public/private/guild ordering, preferred open-server
     choice, beta filtering, 60-second refresh, and the authored 10-second manual

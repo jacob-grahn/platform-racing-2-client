@@ -61,6 +61,7 @@ class LoginPage extends Page {
 	private var socketProbe:Null<LoginSocketProbe>;
 	private var pendingCreatedUserName:String = "";
 	private var pendingCreatedUserPass:String = "";
+	private var accountRequestGeneration:Int = 0;
 	private var loginGate:Null<LoginSessionGate>;
 	private var loginServer:Null<ServerInfo>;
 	private var loginRemember:Bool = false;
@@ -86,7 +87,7 @@ class LoginPage extends Page {
 
 		addMenuButton("Log In", openLoginDialog);
 		addMenuButton("Play as Guest", openGuestDialog);
-		addMenuButton("Create Account", openCreateAccountDialog);
+		addMenuButton("Create Account", function():Void openCreateAccountDialog());
 		addMenuButton("Instructions", openInstructions);
 		addMenuButton("Credits", openCreditsDialog);
 
@@ -100,6 +101,7 @@ class LoginPage extends Page {
 	}
 
 	override public function remove():Void {
+		accountRequestGeneration++;
 		closePopup();
 		closeSocketProbe();
 		stopServerTimers();
@@ -229,10 +231,10 @@ class LoginPage extends Page {
 		popup.bindEnter("emailBox", submit);
 	}
 
-	private function openLoginMessage(message:String):Void {
+	private function openLoginMessage(message:String, ?afterClose:Void->Void):Void {
 		var popup = openPopup("MessagePopupGraphic");
 		popup.setText("textBox", message);
-		popup.bindButton("ok_bt", closePopup);
+		popup.bindButton("ok_bt", afterClose == null ? closePopup : afterClose);
 	}
 
 	private function openGuestDialog():Void {
@@ -240,35 +242,63 @@ class LoginPage extends Page {
 		openServerSelectPopup(true, false);
 	}
 
-	private function openCreateAccountDialog():Void {
+	private function openCreateAccountDialog(
+		?initialName:String = "",
+		?initialPassword:String = "",
+		?initialConfirmation:String = "",
+		?initialEmail:String = ""
+	):Void {
 		loginToken = "";
 		var popup = openPopup("CreateAccountPopupGraphic");
 		var nameInput = popup.input("nameBox");
 		var passInput = popup.input("passBox1");
 		var confirmInput = popup.input("passBox2");
 		var emailInput = popup.input("emailBox");
-		popup.bindButton("cancel_bt", closePopup);
+		nameInput.text = initialName;
+		passInput.text = initialPassword;
+		confirmInput.text = initialConfirmation;
+		emailInput.text = initialEmail;
+		popup.bindButton("cancel_bt", function():Void {
+			accountRequestGeneration++;
+			closePopup();
+		});
 		popup.bindButton("createAccount_bt", function():Void {
-			var userName = StringTools.trim(nameInput.text);
+			var userName = nameInput.text;
 			var userPass = passInput.text;
-			if (userName == "" || userPass == "") {
-				popup.setMessage("Fill in username and password.");
-			} else if (userPass != confirmInput.text) {
-				popup.setMessage("The passwords don't match. Please enter your password again.");
-			} else {
-				popup.setMessage("Creating account...");
-				AccountCreationClient.create(userName, userPass, StringTools.trim(emailInput.text), function(result):Void {
-					if (result.success) {
-						pendingCreatedUserName = userName;
-						pendingCreatedUserPass = userPass;
-						openServerSelectPopup(false, true);
-					} else {
-						popup.setMessage(result.message == "" ? "Account creation failed." : result.message);
-					}
-				}, function(message:String):Void {
-					popup.setMessage(message);
-				});
+			var confirmation = confirmInput.text;
+			var email = emailInput.text;
+			var retry = function():Void openCreateAccountDialog(userName, userPass, confirmation, email);
+			if (userPass != confirmation) {
+				openLoginMessage("The passwords don't match. Please enter your password again.", retry);
+				return;
 			}
+
+			var generation = ++accountRequestGeneration;
+			var progress = openPopup("UploadingPopupGraphic");
+			progress.setText("textBox", "Creating account...");
+			progress.bindButton("close_bt", function():Void {
+				if (generation != accountRequestGeneration) return;
+				accountRequestGeneration++;
+				retry();
+			});
+			AccountCreationClient.create(userName, userPass, email, function(result):Void {
+				if (generation != accountRequestGeneration) return;
+				accountRequestGeneration++;
+				if (result.success) {
+					pendingCreatedUserName = userName;
+					pendingCreatedUserPass = userPass;
+					openServerSelectPopup(false, true);
+				} else {
+					var message = result.message == ""
+						? "Error: An unknown error occurred. I suspect evil aliens."
+						: "Error: " + result.message;
+					openLoginMessage(message, retry);
+				}
+			}, function(message:String):Void {
+				if (generation != accountRequestGeneration) return;
+				accountRequestGeneration++;
+				openLoginMessage("Error: " + message, retry);
+			});
 		});
 	}
 
