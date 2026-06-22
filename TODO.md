@@ -64,6 +64,35 @@ decoding/rendering are complete (see README).
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
+- [ ] Camera follow: track the local player during a race exactly as the source
+  does (scroll/anchor logic, bounds, smoothing — copy the AS3, do not approximate).
+- [ ] Start blocks must not have a physics interaction with characters; match the
+  source's collision exclusion rather than treating them as solid blocks.
+- [ ] Tune gravity to match the source game's value/behavior exactly.
+- [ ] Port character animation state from the source 1:1. Animations must be
+  driven by the same conditions as the AS3, not by what seems right — e.g. the
+  run animation should play only while a left or right key is down, not whenever
+  the character is moving.
+- [ ] Flip character `scaleX` when moving left, using the same trigger the source
+  uses (copy the AS3, not an inferred rule).
+- [ ] Implement the Vault of Magics popup.
+
+### Physics 1:1 (preserve original quirks/bugs)
+
+The physics port must map 1:1 to the original engine, preserving its quirks and
+bugs. Do not "fix" or idealize behavior — replicate the AS3 exactly, including
+rounding, ordering, and edge cases.
+
+- [ ] Audit and port rotation logic 1:1 (block/character rotation, angle math,
+  update order, and any rounding/overflow quirks).
+- [ ] Audit and port gravity/velocity integration 1:1 (acceleration, terminal
+  behavior, per-frame order).
+- [ ] Audit and port character physics 1:1 (movement, jumping, friction,
+  collision response, state transitions, and their quirks).
+- [ ] Audit and port item physics/interaction 1:1 (item effects on the
+  character and world, timing, and edge cases).
+- [ ] Audit and port block physics 1:1 (collision, special block types, block
+  changes, and their interaction quirks).
 
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
