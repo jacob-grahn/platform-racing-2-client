@@ -157,6 +157,16 @@ final class ServerConfig {
 		return host + "/user_list_modify.php";
 	}
 
+	/** Guild invite POST, matching `PlayerPopup.clickInvite`. */
+	public static function guildInviteUrl():String {
+		return host + "/guild_invite.php";
+	}
+
+	/** Guild kick POST, matching `PlayerPopup.clickKick`. */
+	public static function guildKickUrl():String {
+		return host + "/guild_kick.php";
+	}
+
 	/** Favorites add/remove POST, matching `LevelItem.handleFavorite`. */
 	public static function favoriteModifyUrl():String {
 		return host + "/favorite_levels_modify.php";

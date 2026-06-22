@@ -20,10 +20,12 @@ class LobbyPopups {
 
 	public static function showPlayer(userName:String):Void {
 		lastRequest = 'player:$userName';
+		new pr2.lobby.dialogs.PlayerPopup(userName);
 	}
 
 	public static function showGuestPlayer(userName:String):Void {
 		lastRequest = 'guestPlayer:$userName';
+		new pr2.lobby.dialogs.PlayerGuestPopup(userName);
 	}
 
 	public static function showGuild(guildId:Int):Void {
