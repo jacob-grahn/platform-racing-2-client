@@ -10,6 +10,7 @@ import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.utils.Assets;
+import pr2.Constants;
 import pr2.effects.PixelEffect1;
 import pr2.runtime.PR2MovieClip;
 import StringTools;
@@ -64,9 +65,9 @@ class IntroPage extends Page {
 		// The original Jiggmin intro played over a full-screen black backdrop
 		// (Symbol 26). Reproduce it here so the window background never shows
 		// through behind the intro graphics or the assembling logo blocks.
-		// A Sprite (not a Shape) so blank-space clicks hit-test onto the backdrop
-		// and bubble up to the stage skip handler; a Shape is not interactive and
-		// would let clicks on empty areas fall through without skipping the intro.
+		// A Sprite (not a Shape) so clicks on the empty backdrop hit-test and
+		// bubble up to the stage skip handler, letting a click anywhere skip
+		// the intro.
 		background = new Sprite();
 		addChild(background);
 
@@ -104,9 +105,14 @@ class IntroPage extends Page {
 		if (background == null || stage == null) {
 			return;
 		}
+		// Size from the fixed Flash stage (550x400), matching every other
+		// full-stage backdrop in the client, rather than `stage.stageWidth`/
+		// `stageHeight`. This guarantees the backdrop covers the whole stage, so
+		// it both hides the window background and gives empty-area clicks a
+		// surface to land on so they reach the skip handler.
 		background.graphics.clear();
 		background.graphics.beginFill(0x000000);
-		background.graphics.drawRect(0, 0, stage.stageWidth, stage.stageHeight);
+		background.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		background.graphics.endFill();
 	}
 

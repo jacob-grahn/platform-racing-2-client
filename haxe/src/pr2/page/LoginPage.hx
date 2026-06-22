@@ -401,7 +401,14 @@ class LoginPage extends Page {
 		loginRemember = remember;
 		var gate = new LoginSessionGate(enterLobby);
 		loginGate = gate;
-		LoginAuthClient.login(userName, userPass, server, remember, parsedLoginId, function(result):Void {
+		// Token logins authenticate purely from the saved `token` field. Flash's
+		// remembered-account path never sets `Main.userName`, so it posts an empty
+		// user_name; the server rejects a name supplied without a password ("You
+		// must enter a name and password.") before it consults the token, so we
+		// must send an empty name here too. `userName` is still used elsewhere
+		// (connecting message, socket-username fallback).
+		var payloadUserName = loginToken != "" ? "" : userName;
+		LoginAuthClient.login(payloadUserName, userPass, server, remember, parsedLoginId, function(result):Void {
 			if (loginGate != gate) return;
 			if (result.success) {
 				popup.setMessage("Account accepted. Waiting for server confirmation...");
