@@ -133,6 +133,12 @@ do not infer completion from the presence of a tab or exported symbol.
 - [ ] Implement the bottom-strip destinations: options (quality, controls,
   songs), store/vault and quantity/purchase flows, credits, and level editor.
   Preserve guest/member visibility and logout side effects.
+  - [x] Options: the bottom strip now opens the authored `OptionsPopupGraphic`.
+    Music and sound sliders update persistent volume state, filter/art toggles
+    preserve the authored highlights, alternate controls save Flash key codes
+    with the original defaults, and the authored quality/song menus persist
+    lossless rendering and the song blacklist. Deterministic coverage locks the
+    complete settings lifecycle and popup teardown.
   - Credits: `pr2.lobby.dialogs.CreditsPopup` now opens from the bottom strip and
     renders the authored `CreditsPopupGraphic` with working close, art-page, and
     music-page controls (`?screen=popup&popup=credits`). It fills the authored

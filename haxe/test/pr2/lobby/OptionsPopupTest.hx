@@ -1,0 +1,89 @@
+package pr2.lobby;
+
+import openfl.events.Event;
+import openfl.events.MouseEvent;
+import openfl.text.TextField;
+import pr2.lobby.account.Settings;
+import pr2.lobby.account.AlternateControls;
+import pr2.lobby.dialogs.OptionsPopup;
+import pr2.runtime.FlCheckBox;
+import pr2.runtime.FlSlider;
+
+class OptionsPopupTest {
+	private static var assertions:Int = 0;
+
+	public static function main():Void {
+		Settings.disablePersistenceForTests();
+		Settings.setValue(Settings.MUSIC_VOLUME, 35);
+		Settings.setValue(Settings.SOUND_VOLUME, 45);
+		Settings.setValue(Settings.DISABLED_SONGS, ["2", "17"]);
+		var popup = new OptionsPopup();
+
+		var music = slider(popup, "musicSlider");
+		var sound = slider(popup, "soundSlider");
+		assertEquals(35.0, music.value, "music slider loads persisted value");
+		assertEquals("35%", LobbyArt.text(popup, "musicPercentBox").text, "music label loads persisted value");
+		music.value = 62;
+		music.dispatchEvent(new Event(Event.CHANGE));
+		sound.value = 18;
+		sound.dispatchEvent(new Event(Event.CHANGE));
+		assertEquals(62, Settings.musicLevel, "music changes persist immediately");
+		assertEquals(18, Settings.soundLevel, "sound changes persist immediately");
+
+		click(popup, "filterOff_bt");
+		click(popup, "artOff_bt");
+		assertEquals(-43.5, LobbyArt.findByName(popup, "filterHighlight").y, "filter off moves authored highlight");
+		assertEquals(false, LobbyArt.findByName(popup, "art_bt").visible, "art quality is unavailable when art is off");
+
+		click(popup, "artOn_bt");
+		click(popup, "art_bt");
+		var lossless = checkbox(popup, "lossless_chk");
+		lossless.selected = true;
+		click(popup, "music_bt");
+		assertEquals(false, checkbox(popup, "song2").selected, "disabled song is unchecked");
+		assertEquals(true, checkbox(popup, "song3").selected, "enabled song is checked");
+		checkbox(popup, "song3").selected = false;
+
+		var up = LobbyArt.text(popup, "wasdUp");
+		up.text = "";
+		LobbyArt.text(popup, "wasdItem").text = "X";
+		popup.remove();
+		var controls:Dynamic = Settings.getValue(Settings.ALTERNATE_CONTROLS, null);
+		assertEquals(87, Reflect.field(controls, "up"), "empty control restores Flash default");
+		assertEquals(88, Reflect.field(controls, "item"), "custom control persists as key code");
+		assertEquals(true, AlternateControls.matches("item", 88), "saved alternate key drives gameplay input");
+		assertEquals(false, AlternateControls.matches("item", 73), "replaced alternate key is inactive");
+		assertEquals(false, Settings.getValue(Settings.FILTER_SWEARS, true), "filter choice persists on close");
+		assertEquals(true, Settings.getValue(Settings.DRAW_ART, false), "art choice persists on close");
+		assertEquals(true, Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false), "quality choice persists on close");
+		var disabled = Settings.disabledSongs();
+		assertEquals(true, disabled.indexOf("2") >= 0 && disabled.indexOf("3") >= 0, "song choices persist on close");
+
+		Settings.setValue(Settings.MUSIC_VOLUME, 100);
+		Settings.setValue(Settings.SOUND_VOLUME, 100);
+		trace('OptionsPopupTest passed $assertions assertions');
+	}
+
+	private static function click(popup:OptionsPopup, name:String):Void {
+		var target = LobbyArt.findByName(popup, name);
+		if (target == null) throw name + " missing";
+		target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function slider(popup:OptionsPopup, name:String):FlSlider {
+		var value = Std.downcast(LobbyArt.findByName(popup, name), FlSlider);
+		if (value == null) throw name + " missing";
+		return value;
+	}
+
+	private static function checkbox(popup:OptionsPopup, name:String):FlCheckBox {
+		var value = Std.downcast(LobbyArt.findByName(popup, name), FlCheckBox);
+		if (value == null) throw name + " missing";
+		return value;
+	}
+
+	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
+		assertions++;
+		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+}

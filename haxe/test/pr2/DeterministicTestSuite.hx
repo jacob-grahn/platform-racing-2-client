@@ -13,6 +13,7 @@ import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
 import pr2.lobby.CreditsPopupTest;
+import pr2.lobby.OptionsPopupTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
@@ -69,6 +70,7 @@ class DeterministicTestSuite {
 		LobbyServicesTest.main();
 		AccountTabTest.main();
 		CreditsPopupTest.main();
+		OptionsPopupTest.main();
 		trace("DeterministicTestSuite passed");
 	}
 }

@@ -12,6 +12,11 @@ class Settings {
 	public static inline var DISABLED_SONGS:String = "disabledSongs";
 	public static inline var MUSIC_VOLUME:String = "musicLevel";
 	public static inline var SOUND_VOLUME:String = "soundLevel";
+	public static inline var DRAW_ART:String = "drawArt";
+	public static inline var ART_LOSSLESS_QUALITY:String = "losslessQuality";
+	public static inline var FILTER_SWEARS:String = "filterSwears";
+	public static inline var ALTERNATE_CONTROLS:String = "altCtrl";
+	public static final DEFAULT_ALT_CONTROLS:Dynamic = {up: 87, right: 68, down: 83, left: 65, item: 73};
 
 	public static var musicLevel(default, null):Int = 100;
 	public static var soundLevel(default, null):Int = 100;

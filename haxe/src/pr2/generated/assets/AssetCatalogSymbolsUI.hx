@@ -365,7 +365,31 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "arrows"
 							},
-							{color: "#D45EA6", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 1, name: "Layer 1"},
+							{
+								color: "#D45EA6",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.5,
+												matrix: {a: 1.00131225585938, tx: 93.0, ty: 2.0},
+												name: "textBox",
+												text: "100",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 33.95
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 1,
+								name: "Layer 1"
+							},
 							{
 								color: "#AEDECF",
 								frameCount: 1,
@@ -20972,7 +20996,30 @@ final class AssetCatalogSymbolsUI {
 								index: 2,
 								name: "Layer 3"
 							},
-							{color: "#F93C9E", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
+							{
+								color: "#F93C9E",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {d: 0.999664306640625, tx: 45.0, ty: 129.7},
+												name: "chatInput",
+												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 100.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 3,
+								name: "Layer 4"
+							},
 							{
 								color: "#B4CBA4",
 								frameCount: 1,
@@ -28029,7 +28076,32 @@ final class AssetCatalogSymbolsUI {
 								parentLayerIndex: 11
 							},
 							{color: "#FF4FFF", frameCount: 0, frames: [], index: 13, layerType: "folder", name: "items", parentLayerIndex: 11},
-							{color: "#9844E8", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 14, name: "Layer 10", parentLayerIndex: 13},
+							{
+								color: "#9844E8",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -56.0, ty: 70.5},
+												name: "wasdItem",
+												text: "I",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 16.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 14,
+								name: "Layer 10",
+								parentLayerIndex: 13
+							},
 							{
 								color: "#E8B1D6",
 								frameCount: 1,
@@ -28047,7 +28119,32 @@ final class AssetCatalogSymbolsUI {
 								parentLayerIndex: 13
 							},
 							{color: "#FF800A", frameCount: 0, frames: [], index: 16, layerType: "folder", name: "left", parentLayerIndex: 11},
-							{color: "#DE663D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 17, name: "Layer 12", parentLayerIndex: 16},
+							{
+								color: "#DE663D",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -91.25, ty: 35.45},
+												name: "wasdLeft",
+												text: "A",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 16.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 17,
+								name: "Layer 12",
+								parentLayerIndex: 16
+							},
 							{
 								color: "#E607D4",
 								frameCount: 1,
@@ -28075,7 +28172,32 @@ final class AssetCatalogSymbolsUI {
 								parentLayerIndex: 16
 							},
 							{color: "#9933CC", frameCount: 0, frames: [], index: 19, layerType: "folder", name: "right", parentLayerIndex: 11},
-							{color: "#F989B7", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 20, name: "Layer 14", parentLayerIndex: 19},
+							{
+								color: "#F989B7",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -46.35, ty: 35.5},
+												name: "wasdRight",
+												text: "D",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 16.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 20,
+								name: "Layer 14",
+								parentLayerIndex: 19
+							},
 							{
 								color: "#5279FD",
 								frameCount: 1,
@@ -28103,7 +28225,32 @@ final class AssetCatalogSymbolsUI {
 								parentLayerIndex: 19
 							},
 							{color: "#FF4F4F", frameCount: 0, frames: [], index: 22, layerType: "folder", name: "down", parentLayerIndex: 11},
-							{color: "#AF53DF", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 23, name: "Layer 13", parentLayerIndex: 22},
+							{
+								color: "#AF53DF",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -68.8, ty: 35.5},
+												name: "wasdDown",
+												text: "S",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 16.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 23,
+								name: "Layer 13",
+								parentLayerIndex: 22
+							},
 							{
 								color: "#A1AAF4",
 								frameCount: 1,
@@ -28131,7 +28278,32 @@ final class AssetCatalogSymbolsUI {
 								parentLayerIndex: 22
 							},
 							{color: "#669900", frameCount: 0, frames: [], index: 25, layerType: "folder", name: "up", parentLayerIndex: 11},
-							{color: "#C94F6D", frameCount: 1, frames: [{elementCount: 1, elementTypes: ["DOMInputText"], index: 0, keyMode: 9728}], index: 26, name: "Layer 15", parentLayerIndex: 25},
+							{
+								color: "#C94F6D",
+								frameCount: 1,
+								frames: [
+									{
+										elementCount: 1,
+										elementTypes: ["DOMInputText"],
+										elements: [
+											{
+												height: 14.55,
+												matrix: {tx: -68.75, ty: 14.5},
+												name: "wasdUp",
+												text: "W",
+												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
+												type: "DOMInputText",
+												width: 16.0
+											}
+										],
+										index: 0,
+										keyMode: 9728
+									}
+								],
+								index: 26,
+								name: "Layer 15",
+								parentLayerIndex: 25
+							},
 							{
 								color: "#7163FE",
 								frameCount: 1,

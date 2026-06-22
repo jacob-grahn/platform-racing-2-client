@@ -118,6 +118,7 @@ class LobbyPage extends Page {
 
 	private function clickOptions():Void {
 		LobbyPopups.lastRequest = "options";
+		new pr2.lobby.dialogs.OptionsPopup();
 		reportAction("options");
 	}
 

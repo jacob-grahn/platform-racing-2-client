@@ -554,7 +554,7 @@ def parse_display_element(element):
     if name in ("DOMSymbolInstance", "DOMBitmapInstance"):
         return parse_common_display_attrs(element)
 
-    if name in ("DOMStaticText", "DOMDynamicText"):
+    if name in ("DOMStaticText", "DOMDynamicText", "DOMInputText"):
         return parse_text(element)
 
     if name == "DOMComponentInstance":
@@ -588,6 +588,7 @@ def parse_display_elements(parent):
             "DOMComponentInstance",
             "DOMStaticText",
             "DOMDynamicText",
+            "DOMInputText",
             "DOMShape",
             "DOMGroup",
             "DOMRectangleObject",

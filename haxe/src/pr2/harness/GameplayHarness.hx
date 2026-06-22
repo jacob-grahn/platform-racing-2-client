@@ -11,6 +11,7 @@ import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
+import pr2.lobby.account.AlternateControls;
 import openfl.utils.Assets;
 import pr2.runtime.FontResolver;
 import pr2.Constants;
@@ -155,23 +156,12 @@ class GameplayHarness extends Sprite {
 	}
 
 	private function setKey(keyCode:UInt, pressed:Bool):Void {
-		switch (keyCode) {
-			case Keyboard.LEFT | Keyboard.A:
-				input.left = pressed;
-			case Keyboard.RIGHT | Keyboard.D:
-				input.right = pressed;
-			case Keyboard.UP | Keyboard.W | Keyboard.SPACE:
-				input.jump = pressed;
-			case Keyboard.DOWN | Keyboard.S:
-				input.down = pressed;
-			case Keyboard.CONTROL | Keyboard.X:
-				input.item = pressed;
-			case Keyboard.C:
-				if (pressed) {
-					toggleCharacterRenderMode();
-				}
-			default:
-		}
+		if (keyCode == Keyboard.LEFT || AlternateControls.matches("left", keyCode)) input.left = pressed;
+		if (keyCode == Keyboard.RIGHT || AlternateControls.matches("right", keyCode)) input.right = pressed;
+		if (keyCode == Keyboard.UP || AlternateControls.matches("up", keyCode)) input.jump = pressed;
+		if (keyCode == Keyboard.DOWN || AlternateControls.matches("down", keyCode)) input.down = pressed;
+		if (keyCode == Keyboard.SPACE || AlternateControls.matches("item", keyCode)) input.item = pressed;
+		if (keyCode == Keyboard.C && pressed) toggleCharacterRenderMode();
 	}
 
 	private function toggleCharacterRenderMode():Void {

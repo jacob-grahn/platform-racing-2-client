@@ -562,7 +562,7 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function createDisplayObject(element:DisplayElementDef, reusableClip:Null<PR2MovieClip>):DisplayObject {
-		if (element.type == "DOMStaticText" || element.type == "DOMDynamicText") {
+		if (element.type == "DOMStaticText" || element.type == "DOMDynamicText" || element.type == "DOMInputText") {
 			return createStaticText(element);
 		}
 
@@ -667,9 +667,10 @@ class PR2MovieClip extends Sprite {
 		field.width = element.width == null ? Math.max(1, field.textWidth + 4) : element.width + 4;
 		field.height = element.height == null ? Math.max(1, field.textHeight + 4) : element.height + 4;
 		field.autoSize = TextFieldAutoSize.NONE;
-		field.selectable = false;
-		field.type = TextFieldType.DYNAMIC;
-		field.mouseEnabled = element.type == "DOMDynamicText";
+		var input = element.type == "DOMInputText";
+		field.selectable = input;
+		field.type = input ? TextFieldType.INPUT : TextFieldType.DYNAMIC;
+		field.mouseEnabled = element.type != "DOMStaticText";
 		return field;
 	}
 
@@ -764,7 +765,7 @@ class PR2MovieClip extends Sprite {
 				c /= scaleY;
 				d /= scaleY;
 			}
-			var localTextLeft = (element.type == "DOMStaticText" || element.type == "DOMDynamicText") && element.left != null ? element.left : 0;
+			var localTextLeft = (element.type == "DOMStaticText" || element.type == "DOMDynamicText" || element.type == "DOMInputText") && element.left != null ? element.left : 0;
 			child.transform.matrix = new Matrix(
 				a,
 				b,
@@ -773,7 +774,7 @@ class PR2MovieClip extends Sprite {
 				(matrix.tx == null ? 0 : matrix.tx) + a * localTextLeft,
 				(matrix.ty == null ? 0 : matrix.ty) + b * localTextLeft
 			);
-		} else if (element.type == "DOMStaticText" && element.left != null) {
+		} else if ((element.type == "DOMStaticText" || element.type == "DOMDynamicText" || element.type == "DOMInputText") && element.left != null) {
 			child.x = element.left;
 		}
 
