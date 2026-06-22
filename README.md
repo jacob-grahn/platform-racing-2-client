@@ -45,6 +45,16 @@ haxe test/deterministic.hxml
 haxe test/real-server.hxml
 ```
 
+Run the complete local verification gate (deterministic and protocol tests,
+HTML5 build, and required character parity sequences):
+
+```sh
+tools/test_all.sh
+```
+
+Per-stage logs are written to `test/output/test-all/`; parity screenshots are
+written to `test/output/`.
+
 Capture the representative character parity cases (default, recolored, mixed
 parts, and cheese-hat/Fred-body placement) after an HTML5 build:
 

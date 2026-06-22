@@ -1,0 +1,6 @@
+--library lime
+--library openfl
+-cp haxe/src
+-cp haxe/test
+--main pr2.net.LoginSocketProtocolTest
+--interp

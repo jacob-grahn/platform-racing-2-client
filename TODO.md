@@ -260,9 +260,6 @@ same serialized meaning and visible result as Flash.
 
 ## Test and Release Matrix
 
-- [ ] Add one command that runs deterministic unit tests, protocol transcript
-  tests, an HTML5 build, and the required OpenFL parity sequences, with useful
-  artifacts on failure.
 - [ ] Add recorded/offline fixtures for all HTTP and socket workflows so CI does
   not depend on production PR2 services; keep separate opt-in real-server smoke
   tests that cannot mutate accounts or levels unexpectedly.
