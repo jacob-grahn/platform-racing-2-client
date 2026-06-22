@@ -60,9 +60,22 @@ class Main extends Sprite {
 			var screen = Screen.fromQuery(query);
 			addChild(buildScreen(screen, query));
 			addGlobalChrome(screen);
+			signalAppReady();
 		} catch (error:Dynamic) {
 			reportFatalError(error);
 		}
+	}
+
+	// Screen-independent boot signal for the OpenFL driver/harness. Once `Main`
+	// is running past the OpenFL preloader and the initial screen is on the
+	// display list, automated sequences can safely dispatch input; clicks/keys
+	// sent earlier hit the preloader, not the game, and are silently dropped.
+	// Sequences gate their first step on this attribute instead of guessing a
+	// fixed preload time (see tools/openfl_driver.py).
+	private function signalAppReady():Void {
+		#if js
+		Browser.document.body.setAttribute("data-pr2-app-ready", "1");
+		#end
 	}
 
 	// The mute toggle lives at the document root in the Flash original

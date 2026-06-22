@@ -33,6 +33,13 @@ Sequence script format:
   A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
   tap, hold, mouseMove, click, typeText, rebuild-lobby, shot, debug-state,
   body-attribute.
+
+  Sequences wait for the app to boot past the OpenFL preloader before the
+  clock starts: step `time` offsets are measured from the moment `Main` sets
+  the `data-pr2-app-ready` body attribute, not from browser launch. This means
+  input is never dispatched into the preloader (where it would be silently
+  dropped), so `time` values only need to account for in-app settling, not a
+  guessed preload duration.
 """
 
 import argparse
@@ -489,7 +496,31 @@ def run_sequence(script_path, root, browser_path, base_url=None):
             run_sequence_steps(devtools, steps)
 
 
+# The OpenFL preloader runs for a variable amount of time before `Main` boots.
+# Input dispatched during preload hits the preloader, not the game, and is
+# silently dropped, which makes sequences flaky. Gate the sequence clock on the
+# screen-independent ready signal `Main` sets once it is running (see Main.hx),
+# so step `time` offsets are relative to app boot rather than browser launch.
+APP_READY_TIMEOUT = 60.0
+
+
+def wait_for_app_ready(devtools, timeout=APP_READY_TIMEOUT):
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if devtools.evaluate('document.body.getAttribute("data-pr2-app-ready") || ""'):
+            return
+        error = devtools.evaluate('document.body.getAttribute("data-pr2-error") || ""')
+        if error:
+            raise SystemExit(f"App failed to boot before sequence: {error}")
+        time.sleep(0.1)
+    raise SystemExit(
+        f"Timed out after {timeout:.0f}s waiting for data-pr2-app-ready; "
+        "the OpenFL build may have failed to boot past the preloader."
+    )
+
+
 def run_sequence_steps(devtools, steps):
+    wait_for_app_ready(devtools)
     start = time.monotonic()
     for step in steps:
         wait = start + step["time"] - time.monotonic()

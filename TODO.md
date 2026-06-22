@@ -131,14 +131,6 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
 
 ## Test and Release Matrix
 
-- [ ] Make the OpenFL driver/harness (`tools/openfl_driver.py`) wait for the
-  preloader to finish before running sequence steps, instead of guessing with
-  fixed `time` offsets. Clicks/keys dispatched during preload are silently
-  dropped (they hit the OpenFL preloader, not the game), which produces flaky
-  false negatives. Gate the first step on a ready signal (e.g. poll for a body
-  attribute the app sets once `Main` is running, or for the first
-  `data-pr2-*-state`) and make `time` relative to that, so sequences no longer
-  hard-code waits like 10s.
 - [ ] Verify Chrome, Firefox, and Safari keyboard/focus, rendering, WebSocket,
   audio, storage, and lifecycle behavior. Profile long sessions only after
   behavior is correct, then optimize without changing parity.

@@ -458,6 +458,13 @@ Sequence files keep one browser session open and can combine `keyDown`,
 `keyUp`, `tap`, `hold`, `mouseMove`, `debug-state`, and `shot` actions. Screenshots and
 diff output should go under ignored `test/output/`.
 
+Sequences wait for the app to boot past the OpenFL preloader before the clock
+starts: step `time` offsets are measured from when `Main` sets the
+`data-pr2-app-ready` body attribute, not from browser launch. This keeps input
+from being dispatched into the preloader (where it is silently dropped), so
+`time` values only need to cover in-app settling, not a guessed preload
+duration.
+
 ## Useful References
 
 - `TODO.md`: active migration plan and resume notes.
