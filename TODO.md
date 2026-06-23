@@ -90,6 +90,10 @@ is scoped to item behavior below.
 - [ ] Port in-game item display
 - [ ] Port in-game menu buttons
 - [ ] Port finish popup, level rating, experience gain
+- [ ] Mine, brick, and crumble blocks should disapear (visually) when removed and show their effects when hit
+- [ ] Vanish block should, well, vanish. It works on the physics level, but visually the block stays there
+- [ ] Arrow blocks are missing their arrows
+- [ ] Implement background art layers with parallax scrolling
 
 ### Physics 1:1 (preserve original quirks/bugs)
 
