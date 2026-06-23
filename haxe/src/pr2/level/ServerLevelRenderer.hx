@@ -107,9 +107,30 @@ class ServerLevelRenderer extends Sprite {
 			case ObjectCodes.BLOCK_TIME: "assets/blocks/time.png";
 			case ObjectCodes.BLOCK_CUSTOM_STATS: "assets/blocks/custom_stats.png";
 			case ObjectCodes.BLOCK_TELEPORT: "assets/blocks/teleport_block.png";
+			// ArrowBlock uses a basic2 tile as its base (Blocks.getBlock) and adds
+			// the rotated arrow overlay on top; see arrowOverlayAssetPath.
 			case ObjectCodes.BLOCK_ARROW_DOWN | ObjectCodes.BLOCK_ARROW_UP | ObjectCodes.BLOCK_ARROW_LEFT | ObjectCodes.BLOCK_ARROW_RIGHT:
-				"";
+				"assets/blocks/basic2.png";
 			default: "";
+		}
+	}
+
+	/** The shared arrow overlay art (ArrowBlockGraphic) drawn over the base tile. */
+	public static inline function arrowOverlayAssetPath():String {
+		return "assets/blocks/arrow_overlay@4x.png";
+	}
+
+	/**
+		Arrow overlay rotation in degrees, matching ArrowUp/Down/Left/RightBlock's
+		`rot` argument to ArrowBlock. Null for non-arrow blocks.
+	**/
+	public static function arrowOverlayRotation(code:Int):Null<Float> {
+		return switch (code) {
+			case ObjectCodes.BLOCK_ARROW_UP: 0;
+			case ObjectCodes.BLOCK_ARROW_DOWN: 180;
+			case ObjectCodes.BLOCK_ARROW_LEFT: -90;
+			case ObjectCodes.BLOCK_ARROW_RIGHT: 90;
+			default: null;
 		}
 	}
 
@@ -282,7 +303,36 @@ class ServerLevelRenderer extends Sprite {
 			drawFallbackBlock(container, block.code);
 		}
 
+		var arrowRotation = arrowOverlayRotation(block.code);
+		if (arrowRotation != null) {
+			addArrowOverlay(container, arrowRotation);
+		}
+
 		return container;
+	}
+
+	/**
+		Adds the rotated arrow graphic over an arrow block, matching ArrowBlock,
+		which places the ArrowBlockGraphic at the tile centre (15,15) and rotates
+		it about that point.
+	**/
+	private static function addArrowOverlay(container:Sprite, rotation:Float):Void {
+		var overlayPath = arrowOverlayAssetPath();
+		if (!Assets.exists(overlayPath, AssetType.IMAGE)) {
+			return;
+		}
+		var pivot = new Sprite();
+		var bitmap = new Bitmap(Assets.getBitmapData(overlayPath));
+		bitmap.smoothing = true;
+		// Overlay art is authored at 4x; render it at the 30px block scale.
+		bitmap.scaleX = bitmap.scaleY = 0.25;
+		bitmap.x = -bitmap.width / 2;
+		bitmap.y = -bitmap.height / 2;
+		pivot.addChild(bitmap);
+		pivot.x = TILE_SIZE / 2;
+		pivot.y = TILE_SIZE / 2;
+		pivot.rotation = rotation;
+		container.addChild(pivot);
 	}
 
 	private static function drawFallbackBlock(container:Sprite, code:Int):Void {

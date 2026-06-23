@@ -92,7 +92,13 @@ is scoped to item behavior below.
 - [ ] Port finish popup, level rating, experience gain
 - [ ] Mine, brick, and crumble blocks should disapear (visually) when removed and show their effects when hit
 - [ ] Vanish block should, well, vanish. It works on the physics level, but visually the block stays there
-- [ ] Arrow blocks are missing their arrows
+- [x] Arrow blocks render their arrows. `ServerLevelRenderer` now draws arrow
+  blocks as a `basic2` base tile plus the shared `arrow_overlay@4x` graphic,
+  centered on the tile (15,15) and rotated per direction (up 0, down 180, left
+  -90, right 90) exactly as `ArrowBlock`/`ArrowUp/Down/Left/RightBlock` and
+  `Blocks.getBlock` do in AS3. Guarded by `ServerLevelRendererTest`
+  (`testArrowOverlay`). The "press" brighten animation (`ArrowBlock.animateArrow`
+  color frames) is deferred until live block-activation hooks land.
 - [ ] Implement background art layers with parallax scrolling
 
 ### Physics 1:1 (preserve original quirks/bugs)
