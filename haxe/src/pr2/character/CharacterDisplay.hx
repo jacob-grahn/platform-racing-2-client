@@ -127,6 +127,10 @@ class CharacterDisplay extends Sprite {
 			stateClip.visible = name == stateName;
 			stateClip.stopAll();
 			if (name == stateName) {
+				// Rewind the entered state so non-looping animations (jump,
+				// super-jump charge) replay from the start instead of resuming on
+				// the last frame they were left frozen on.
+				stateClip.gotoAndStop(1);
 				activeStateClip = stateClip;
 			}
 		}
@@ -136,11 +140,31 @@ class CharacterDisplay extends Sprite {
 		}
 	}
 
+	// States whose animation plays once and holds on its final frame instead of
+	// looping. The jump pose and the super-jump charge both freeze at the end in
+	// the original Flash; every other state loops.
+	private static final NON_LOOPING_STATES = ["jumpAnim", "superJumpAnim"];
+
 	public function advanceOneFrame():Void {
-		if (activeStateClip != null) {
-			activeStateClip.advanceOneFrame();
-			renderAtlasParts(activeStateClip);
+		if (activeStateClip == null) {
+			return;
 		}
+
+		if (NON_LOOPING_STATES.indexOf(activeStateName) != -1) {
+			if (activeStateClip.currentFrame < activeStateClip.totalFrames) {
+				activeStateClip.advanceOneFrame();
+				if (activeStateClip.currentFrame >= activeStateClip.totalFrames) {
+					// At the final pose, freeze the whole subtree. Nested multi-frame
+					// clips (e.g. the super-jump charge aura) auto-play on their own
+					// ENTER_FRAME tick, so stopping the top-level timeline alone is not
+					// enough to hold the animation — they would keep looping.
+					activeStateClip.stopAll();
+				}
+			}
+		} else {
+			activeStateClip.advanceOneFrame();
+		}
+		renderAtlasParts(activeStateClip);
 	}
 
 	public function getStateClip(stateName:String):Null<PR2MovieClip> {

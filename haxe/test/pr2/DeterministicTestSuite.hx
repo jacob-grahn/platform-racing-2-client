@@ -82,5 +82,9 @@ class DeterministicTestSuite {
 		PlayerPopupTest.main();
 		StorePopupTest.main();
 		trace("DeterministicTestSuite passed");
+		// All assertions are synchronous, but pulling in openfl/lime leaves the
+		// eval event loop alive, so the `--interp` process would otherwise hang
+		// after main() returns instead of exiting. Terminate explicitly.
+		Sys.exit(0);
 	}
 }
