@@ -19,12 +19,15 @@ import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
 import pr2.gameplay.CameraFollow;
+import pr2.gameplay.MiniMap;
+import pr2.gameplay.MiniMapDot;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
+import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevelDecoder;
 import pr2.level.ServerLevelFixtureAdapter;
@@ -56,6 +59,8 @@ class CampaignTestScreen extends Sprite {
 	private var playerDisplay:Sprite;
 	private var characterDisplay:CharacterDisplay;
 	private var camera:CameraFollow;
+	private var miniMap:MiniMap;
+	private var playerDot:MiniMapDot;
 	private var lastStatusText:String = "";
 
 	public function new(?page:String, ?levelId:String, ?version:Int) {
@@ -141,6 +146,11 @@ class CampaignTestScreen extends Sprite {
 		if (stage != null) {
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		}
+		if (miniMap != null) {
+			miniMap.remove();
+			miniMap = null;
+			playerDot = null;
 		}
 		if (parent != null) parent.removeChild(this);
 	}
@@ -240,7 +250,40 @@ class CampaignTestScreen extends Sprite {
 		// CameraFollow.snapTo).
 		camera = new CameraFollow(0, 0);
 		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
+		buildMiniMap(level);
 		updatePlayerDisplay();
+	}
+
+	/**
+		Builds the minimap from the decoded level, mirroring Map.attachObject:
+		start blocks and minion eggs are excluded from the silhouette, finish
+		blocks add a finish box, everything else is filled in. The local player
+		gets a yellow dot. Positioned at stage (80, 2) to match Course's minimap
+		holder offset (-195, -198) against the centred game holder.
+	**/
+	private function buildMiniMap(level:ServerLevel):Void {
+		if (miniMap != null) {
+			miniMap.remove();
+			miniMap = null;
+			playerDot = null;
+		}
+
+		miniMap = new MiniMap();
+		for (block in level.blocks) {
+			if (block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4) {
+				continue;
+			}
+			if (block.code == ObjectCodes.BLOCK_MINION_EGG) {
+				continue;
+			}
+			miniMap.addBlock(block.code, block.x, block.y);
+		}
+		miniMap.rasterize();
+		playerDot = miniMap.getDot();
+		playerDot.setTempID(0, true);
+		miniMap.x = 80;
+		miniMap.y = 2;
+		addChild(miniMap);
 	}
 
 	private function createStatusText():Void {
@@ -295,6 +338,10 @@ class CampaignTestScreen extends Sprite {
 		var worldY = serverFixture.fixturePixelToWorldY(player.y);
 		camera.follow(worldX, worldY);
 		levelRenderer.setCameraOffset(Constants.STAGE_WIDTH / 2 + camera.posX, Constants.STAGE_HEIGHT / 2 + camera.posY);
+		if (playerDot != null) {
+			playerDot.x = worldX;
+			playerDot.y = worldY;
+		}
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
 		playerDisplay.x = screen.x - LocalPlayerController.STANDING_WIDTH / 2;
 		playerDisplay.y = screen.y - height;

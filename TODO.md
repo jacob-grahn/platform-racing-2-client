@@ -86,7 +86,17 @@ is scoped to item behavior below.
      frames. Flash hides that ease-in behind the 3-2-1 countdown
      (`Course.beginRace`/`toggleKeyScroll`); this screen has no countdown, so it
      now snaps to the settled spawn target via `CameraFollow.snapTo`.
-- [ ] Port in-game minimap
+- [x] Port in-game minimap. `gameplay/MiniMap` and `gameplay/MiniMapDot` port
+  `MiniMap.as`/`MiniMapDot.as`: the block silhouette is rasterized to a bitmap
+  fitted to the authored 400x44 strip (`rasterizeScale`/`fitScale`/`numLimit`),
+  finish boxes (`MiniMapFinishGraphic`) and constant-4px player dots layer over
+  it, and the dot drives the authored five colour frames via `setTempID`.
+  `CampaignTestScreen` builds it from the decoded level (excluding start blocks
+  and minion eggs as `Map.attachObject` does), places the local yellow dot at
+  stage (80,2) per Course's holder offset, and tracks the player each frame.
+  Guarded by `MiniMapTest`. The `MiniMapDot` hover popup (player name) and
+  remote-player dots are deferred until the full `Game`/`Course` shell and
+  multiplayer sync land.
 - [ ] Port in-game item display
 - [ ] Port in-game menu buttons
 - [ ] Port finish popup, level rating, experience gain

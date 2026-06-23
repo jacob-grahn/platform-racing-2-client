@@ -10,6 +10,7 @@ import pr2.harness.FixtureLevelRendererTest;
 import pr2.harness.GameplayHarnessOptionsTest;
 import pr2.harness.LocalPlayerControllerTest;
 import pr2.gameplay.RotationMathTest;
+import pr2.gameplay.MiniMapTest;
 import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
@@ -62,6 +63,7 @@ class DeterministicTestSuite {
 		GameplayHarnessOptionsTest.main();
 		LocalPlayerControllerTest.main();
 		RotationMathTest.main();
+		MiniMapTest.main();
 		ServerConfigTest.main();
 		ServerStatusClientTest.main();
 		LoginSocketProtocolTest.main();
