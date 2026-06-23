@@ -186,4 +186,9 @@ final class ServerConfig {
 	public static function searchLevelsUrl():String {
 		return host + "/search_levels.php";
 	}
+
+	/** Level rating POST endpoint, matching `ui.RatingSelect.rateLevel`. */
+	public static function submitRatingUrl():String {
+		return host + "/submit_rating.php";
+	}
 }

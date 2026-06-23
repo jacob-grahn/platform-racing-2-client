@@ -99,7 +99,20 @@ is scoped to item behavior below.
   multiplayer sync land.
 - [ ] Port in-game item display
 - [ ] Port in-game menu buttons
-- [ ] Port finish popup, level rating, experience gain
+- [x] Port finish popup, level rating, experience gain. `gameplay/FinishedPage`,
+  `gameplay/ExpGain`, and `ui/RatingSelect` port `FinishedPage.as`/`ExpGain.as`/
+  `RatingSelect.as` over the authored `FinishedPageGraphic`, `ExpGainGraphic`,
+  `HighlightStar`, and `RatingSelectGraphic` symbols: award/exp lines (capped at
+  five), the `+ delta` total, the 45-frame exp-bar ease with the AS3 end-clamping
+  (`m.bar.bar.width`/`textBox`), and the 1-5 star control that confirms via
+  `ConfirmPopup` and POSTs to `submit_rating.php` through `UploadingPopup`
+  (`ServerConfig.submitRatingUrl`). Guarded by `FinishedPageTest`. Since the real
+  in-game `Game`/`Course` shell and multiplayer finish protocol are not ported
+  yet, `FinishedPage` takes the level id directly and exposes the same
+  `award`/`setExpGain` entry points `Game` called, with an injected `onReturn` for
+  the "Return to Lobby" button (Flash's `set_game_room`none` + page change). Wiring
+  it to the live race-finish/award/exp commands is deferred to the multiplayer
+  race-sync and in-game-shell tasks above.
 - [ ] Mine, brick, and crumble blocks should disapear (visually) when removed and show their effects when hit
 - [ ] Vanish block should, well, vanish. It works on the physics level, but visually the block stays there
 - [x] Arrow blocks render their arrows. `ServerLevelRenderer` now draws arrow
