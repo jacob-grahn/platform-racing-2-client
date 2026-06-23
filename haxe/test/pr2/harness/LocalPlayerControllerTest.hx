@@ -20,7 +20,8 @@ class LocalPlayerControllerTest {
 		testVelocityIntegrationOrderAndTerminalClamp();
 		testFacingFollowsPressedDirection();
 		testAnimationFollowsDirectionalInput();
-		testCrouchOnlyWhileGrounded();
+		testLowCeilingForcesCrouchAndBlocksJump();
+		testHoldingDownChargesAndLaunchesSuperJump();
 		testIceBlockReducesNextFrameAcceleration();
 		testArrowStandEffectsMatchAs3Deltas();
 		testFallingIntoWaterEntersSwimMode();
@@ -96,10 +97,10 @@ class LocalPlayerControllerTest {
 
 		player.step(new LocalPlayerInput(false, false, false, true));
 		player.step(new LocalPlayerInput(false, true, false, true));
-		assertEquals("crouchWalk", player.debugState().animation, "held direction selects crouch walk");
+		assertEquals("run", player.debugState().animation, "down on flat ground charges, not crouches: held direction still runs");
 
 		player.step(new LocalPlayerInput(false, false, false, true));
-		assertEquals("crouch", player.debugState().animation, "released direction selects crouch");
+		assertEquals("stand", player.debugState().animation, "down on flat ground does not crouch: released direction stands while charging");
 	}
 
 	private static function testStartBlockHasNoCollision():Void {
@@ -218,20 +219,49 @@ class LocalPlayerControllerTest {
 		assertClose(90, state.y, "negative terminal velocity is clamped before position integration");
 	}
 
-	private static function testCrouchOnlyWhileGrounded():Void {
+	// LocalCharacter.processBlocks forces crouch only when a solid block sits above
+	// the head while the body tile is clear; down never crouches on open ground.
+	private static function testLowCeilingForcesCrouchAndBlocksJump():Void {
+		var player = new LocalPlayerController(lowCeilingLevel());
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		var crouchState = player.debugState();
+		assertEquals(true, crouchState.crouching, "a low ceiling forces the character to crouch");
+		assertEquals("crouch", crouchState.animation, "forced crouch shows the crouch animation");
+		assertClose(300, crouchState.y, "crouch preserves feet position on the floor");
+
+		player.step(new LocalPlayerInput(false, false, true, false));
+		var jumpState = player.debugState();
+		assertEquals(true, jumpState.crouching, "the low ceiling keeps the character crouched");
+		assertEquals(true, jumpState.grounded, "crouching under a ceiling blocks the jump");
+	}
+
+	// LocalCharacter.landGo charges crouchCharge while down is held on the ground and
+	// launches a super jump of -crouchCharge*0.24 when it releases above the 25 floor.
+	private static function testHoldingDownChargesAndLaunchesSuperJump():Void {
 		var player = newPlayer();
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
 
-		player.step(new LocalPlayerInput(false, false, false, true));
-		var crouchState = player.debugState();
-		assertEquals(true, crouchState.crouching, "down crouches while grounded");
-		assertEquals("crouch", crouchState.animation, "crouch animation");
-		assertClose(300, crouchState.y, "crouch preserves feet position");
+		// crouchCharge grows by 2 each frame; it must pass 25 to arm a super jump.
+		for (_ in 0...15) {
+			player.step(new LocalPlayerInput(false, false, false, true));
+		}
+		var charged = player.debugState();
+		assertEquals(false, charged.crouching, "holding down on open ground never crouches");
+		assertEquals(true, charged.grounded, "charging a super jump stays grounded");
+		assertEquals("superJump", charged.animation, "a charged crouch shows the super jump pose");
 
-		player.step(new LocalPlayerInput(false, false, true, true));
-		assertEquals(true, player.debugState().crouching, "crouching blocks jump");
+		// Releasing down fires the charge as an upward launch.
+		var beforeY = charged.y;
+		player.step(new LocalPlayerInput());
+		var launched = player.debugState();
+		assertEquals(false, launched.grounded, "releasing a charged super jump leaves the ground");
+		assertBelow(launched.vy, -5, "super jump launches with the Flash -crouchCharge*0.24 impulse");
+		assertBelow(launched.y, beforeY, "super jump moves the player upward");
 	}
 
 	private static function testIceBlockReducesNextFrameAcceleration():Void {
@@ -994,6 +1024,30 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, type),
 				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function lowCeilingLevel():FixtureLevel {
+		return new FixtureLevel(
+			"low-ceiling",
+			"Low Ceiling",
+			6,
+			13,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 9),
+			new TilePosition(4, 9),
+			[
+				new LevelBlock(2, 8, BlockType.Basic),
+				new LevelBlock(0, 10, BlockType.Basic),
+				new LevelBlock(1, 10, BlockType.Basic),
+				new LevelBlock(2, 10, BlockType.Basic),
+				new LevelBlock(3, 10, BlockType.Basic),
+				new LevelBlock(4, 10, BlockType.Basic),
+				new LevelBlock(5, 10, BlockType.Basic),
+				new LevelBlock(4, 9, BlockType.Finish)
 			]
 		);
 	}

@@ -138,7 +138,11 @@ Completed subsystems (parity-relevant facts worth keeping):
   and preserve `Data.rotatePoint` integer coercion and single-wrap quirks.
   Character animation state follows the Flash input-driven conditions: grounded
   run/crouch-walk require a held direction, coasting stands, and all airborne
-  land movement uses the jump state.
+  land movement uses the jump state. Crouch is forced only by a low ceiling (a
+  solid block above the head with the body tile clear), never by the down key;
+  holding down on open ground charges a super jump (`crouchCharge` grows by 2 per
+  frame, clamped at 100) that launches at `-crouchCharge * 0.24` on release once
+  it passes 25, matching `LocalCharacter.landGo`/`processBlocks`.
   Note: `FinishBlock` is a one-use `SupplyBlock`, so only a bump from below latches
   completion and reports its one-based id and pixel center; side/stand/touch
   collisions do not finish the race. Server level decoding is validated across

@@ -367,9 +367,6 @@ class LocalPlayerController {
 				}
 			}
 		}
-		if (input.down && grounded) {
-			crouching = true;
-		}
 
 		touchAt(x, y - 15);
 		if (!crouching) {

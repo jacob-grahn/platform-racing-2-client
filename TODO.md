@@ -65,7 +65,11 @@ is scoped to item behavior below.
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
-- [ ] Port character "hold down to charge super jump" behavior
+- [x] Port character "hold down to charge super jump" behavior. Crouch is now
+  forced only by a low ceiling (block above the head, body tile clear) as in
+  `LocalCharacter.processBlocks`; holding down on open ground charges
+  `crouchCharge` and releases a `-crouchCharge*0.24` super jump per
+  `LocalCharacter.landGo`, instead of incorrectly crouching.
 - [ ] Camera should be centered on the player, currently it is too high on the y axis and too far right on the x axis
 - [ ] Port in-game minimap
 - [ ] Port in-game item display
