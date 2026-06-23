@@ -134,9 +134,9 @@ class Main extends Sprite {
 				QueryParams.get(query, "page"),
 				campaignLevelQuery(query)
 			);
-			case Login: new PageHolder(new LoginPage());
+			case Login: new PageHolder(new LoginPage(), true);
 			case Lobby: buildLobby(query);
-			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")));
+			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")), true);
 			case Symbol: new SymbolPreview(
 				QueryParams.get(query, "symbol"),
 				parseScale(QueryParams.get(query, "scale")),
@@ -157,7 +157,7 @@ class Main extends Sprite {
 			userName = guest ? "Guest" : "Tester";
 		}
 		pr2.lobby.LobbySession.begin(userName, guest ? 0 : 1);
-		var holder = new PageHolder(new pr2.page.LobbyPage(userName));
+		var holder = new PageHolder(new pr2.page.LobbyPage(userName), true);
 		#if js
 		// Runtime parity sequences rebuild the lobby in-place to verify that the
 		// static TabsHolder selection memory survives a real page teardown.

@@ -23,6 +23,15 @@ class LevelLaunch {
 		CommandHandler.commandHandler.defineCommand("startGame", startGame);
 	}
 
+	/**
+		The holder a launched game will mount into (Flash's `Main.pageHolder`).
+		Exposed for tests: nested lobby holders must not become the launch target,
+		or the game loads inside an offset lobby panel instead of the stage.
+	**/
+	public static function launchHolder():Null<PageHolder> {
+		return pageHolder;
+	}
+
 	public static function select(levelId:Int, version:Int):Void {
 		selectedLevelId = levelId;
 		selectedVersion = version;

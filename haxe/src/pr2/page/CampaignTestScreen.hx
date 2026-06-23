@@ -234,8 +234,12 @@ class CampaignTestScreen extends Sprite {
 		characterDisplay.scaleY = 0.9;
 		playerDisplay.addChild(characterDisplay);
 		levelRenderer.addChild(playerDisplay);
-		camera = new CameraFollow(renderer.worldToScreen(0, 0).x - Constants.STAGE_WIDTH / 2,
-			renderer.worldToScreen(0, 0).y - Constants.STAGE_HEIGHT / 2);
+		// Center the camera on the player from the first frame. Easing in from an
+		// off-center start would briefly leave the player low and to the side
+		// because this screen has no countdown to hide the drift (see
+		// CameraFollow.snapTo).
+		camera = new CameraFollow(0, 0);
+		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
 		updatePlayerDisplay();
 	}
 

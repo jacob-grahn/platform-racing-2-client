@@ -70,7 +70,22 @@ is scoped to item behavior below.
   `LocalCharacter.processBlocks`; holding down on open ground charges
   `crouchCharge` and releases a `-crouchCharge*0.24` super jump per
   `LocalCharacter.landGo`, instead of incorrectly crouching.
-- [ ] Camera should be centered on the player, currently it is too high on the y axis and too far right on the x axis
+- [x] Camera centers on the player on entry. Two bugs stacked here:
+  1. Root cause: in the real login->lobby->race flow the game mounted inside a
+     nested lobby panel, not the stage. Every `PageHolder` claimed the `startGame`
+     launch in its constructor (`LevelLaunch.install`), so the lobby's nested
+     holders (`PlayersTab` inner list holder, `LobbySide`) became the launch
+     target. The `GamePage` then loaded into an offset lobby panel, leaving the
+     lobby chrome (Vault/Editor/Logout/Options) on screen and shifting the game
+     right/down. Flash uses a single root `Main.pageHolder`; now only the
+     stage-root holder installs (`PageHolder(..., root = true)` from `Main`).
+     Guarded by `LobbyServicesTest.testLevelLaunchTargetsRootHolder`.
+  2. The follow easing matched Flash (`Course.cameraFollowPlayer` target `-c.x`,
+     `-c.y + 45`), but `CampaignTestScreen` (wrapped by `GamePage`) seeded
+     `CameraFollow` from the renderer's off-center focus and eased in over ~10
+     frames. Flash hides that ease-in behind the 3-2-1 countdown
+     (`Course.beginRace`/`toggleKeyScroll`); this screen has no countdown, so it
+     now snaps to the settled spawn target via `CameraFollow.snapTo`.
 - [ ] Port in-game minimap
 - [ ] Port in-game item display
 - [ ] Port in-game menu buttons

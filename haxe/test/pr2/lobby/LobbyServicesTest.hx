@@ -56,6 +56,7 @@ class LobbyServicesTest {
 		testSocialActionPlan();
 		testCourseMenuTiming();
 		testLevelLaunch();
+		testLevelLaunchTargetsRootHolder();
 		trace('LobbyServicesTest passed $assertions assertions');
 	}
 
@@ -144,6 +145,19 @@ class LobbyServicesTest {
 		LevelLaunch.startGame(["4271"]);
 		assertEquals(null, captured, "cleared slot cannot enter a game");
 		LevelLaunch.handler = null;
+	}
+
+	private static function testLevelLaunchTargetsRootHolder():Void {
+		// Regression: every PageHolder used to claim the startGame launch in its
+		// constructor, so the lobby's nested holders (PlayersTab's inner list
+		// holder, LobbySide) stole the target and the game mounted inside an
+		// offset lobby panel. Only the stage-root holder may host the game.
+		var root = new pr2.page.PageHolder(null, true);
+		assertEquals(true, LevelLaunch.launchHolder() == root, "root holder claims the launch target");
+		var nestedA = new pr2.page.PageHolder();
+		var nestedB = new pr2.page.PageHolder();
+		assertEquals(true, nestedA != null && nestedB != null, "nested holders construct");
+		assertEquals(true, LevelLaunch.launchHolder() == root, "nested holders do not steal the launch target");
 	}
 
 	private static function testTabLayoutNoCompression():Void {
