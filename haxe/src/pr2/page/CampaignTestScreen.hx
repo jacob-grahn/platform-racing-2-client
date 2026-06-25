@@ -19,6 +19,7 @@ import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
 import pr2.gameplay.CameraFollow;
+import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
 import pr2.gameplay.MiniMapDot;
 import pr2.net.CampaignListClient;
@@ -61,6 +62,9 @@ class CampaignTestScreen extends Sprite {
 	private var camera:CameraFollow;
 	private var miniMap:MiniMap;
 	private var playerDot:MiniMapDot;
+	private var itemDisplay:ItemDisplay;
+	private var displayedItemId:Null<Int>;
+	private var displayedItemUses:Null<Int>;
 	private var lastStatusText:String = "";
 
 	public function new(?page:String, ?levelId:String, ?version:Int) {
@@ -151,6 +155,10 @@ class CampaignTestScreen extends Sprite {
 			miniMap.remove();
 			miniMap = null;
 			playerDot = null;
+		}
+		if (itemDisplay != null) {
+			itemDisplay.remove();
+			itemDisplay = null;
 		}
 		if (parent != null) parent.removeChild(this);
 	}
@@ -251,6 +259,7 @@ class CampaignTestScreen extends Sprite {
 		camera = new CameraFollow(0, 0);
 		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
 		buildMiniMap(level);
+		buildItemDisplay();
 		updatePlayerDisplay();
 	}
 
@@ -284,6 +293,20 @@ class CampaignTestScreen extends Sprite {
 		miniMap.x = 80;
 		miniMap.y = 2;
 		addChild(miniMap);
+	}
+
+	/** Positions the authored item display at Course's stage-space (2, 2). */
+	private function buildItemDisplay():Void {
+		if (itemDisplay != null) {
+			itemDisplay.remove();
+		}
+		itemDisplay = new ItemDisplay();
+		itemDisplay.x = 2;
+		itemDisplay.y = 2;
+		addChild(itemDisplay);
+		displayedItemId = null;
+		displayedItemUses = null;
+		syncItemDisplay();
 	}
 
 	private function createStatusText():Void {
@@ -322,10 +345,30 @@ class CampaignTestScreen extends Sprite {
 		syncBlockVisuals();
 		updatePlayerDisplay();
 		var state = player.debugState();
+		syncItemDisplay(state.itemId, state.itemUses);
 		statusText.text = lastStatusText + '\nplayer ${state.serialize()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=playable;${state.serialize()}');
 		#end
+	}
+
+	private function syncItemDisplay(?itemId:Null<Int>, ?itemUses:Null<Int>):Void {
+		if (itemDisplay == null) {
+			return;
+		}
+		if (itemId == null && player != null) {
+			var state = player.debugState();
+			itemId = state.itemId;
+			itemUses = state.itemUses;
+		}
+		if (itemId != displayedItemId) {
+			itemDisplay.setItemCode(itemId == null ? 0 : itemId);
+			displayedItemId = itemId;
+		}
+		if (itemUses != displayedItemUses) {
+			itemDisplay.setAmmo(itemUses == null ? 0 : itemUses);
+			displayedItemUses = itemUses;
+		}
 	}
 
 	private function syncBlockVisuals():Void {

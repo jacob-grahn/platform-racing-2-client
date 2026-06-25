@@ -11,6 +11,7 @@ import pr2.harness.GameplayHarnessOptionsTest;
 import pr2.harness.LocalPlayerControllerTest;
 import pr2.gameplay.RotationMathTest;
 import pr2.gameplay.MiniMapTest;
+import pr2.gameplay.ItemDisplayTest;
 import pr2.gameplay.FinishedPageTest;
 import pr2.gameplay.QuitButtonTest;
 import pr2.level.LevelFixtureParserTest;
@@ -66,6 +67,7 @@ class DeterministicTestSuite {
 		LocalPlayerControllerTest.main();
 		RotationMathTest.main();
 		MiniMapTest.main();
+		ItemDisplayTest.main();
 		FinishedPageTest.main();
 		QuitButtonTest.main();
 		ServerConfigTest.main();
