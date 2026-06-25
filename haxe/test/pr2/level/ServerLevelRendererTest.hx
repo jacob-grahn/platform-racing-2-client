@@ -12,8 +12,18 @@ class ServerLevelRendererTest {
 		testBlockAssetMapping();
 		testArtAssetMappings();
 		testWorldToScreenFocus();
+		testBlockAlphaUpdate();
 		testArtLayerDepthAndParallax();
 		trace('ServerLevelRendererTest passed $assertions assertions');
+	}
+
+	private static function testBlockAlphaUpdate():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		renderer.setBlockAlpha(block.x, block.y, 0.4);
+
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		assertEquals(0.4, blockLayer.getChildAt(0).alpha, "server renderer updates block alpha");
 	}
 
 	private static function testBlockAssetMapping():Void {

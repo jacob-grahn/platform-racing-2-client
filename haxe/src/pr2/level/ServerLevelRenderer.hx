@@ -32,6 +32,7 @@ class ServerLevelRenderer extends Sprite {
 	private var offsetY:Float;
 	private final blockLayer:Sprite = new Sprite();
 	private final artLayerContainers:Array<Sprite> = [];
+	private final blockDisplays:Map<String, Sprite> = new Map();
 
 	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y) {
 		super();
@@ -73,6 +74,13 @@ class ServerLevelRenderer extends Sprite {
 			var layer = level.artLayers[i];
 			artLayerContainers[i].x = parallaxOffset(x, Constants.STAGE_WIDTH / 2, layer.scale);
 			artLayerContainers[i].y = parallaxOffset(y, Constants.STAGE_HEIGHT / 2, layer.scale);
+		}
+	}
+
+	public function setBlockAlpha(worldX:Int, worldY:Int, alpha:Float):Void {
+		var display = blockDisplays.get(blockKey(worldX, worldY));
+		if (display != null) {
+			display.alpha = alpha;
 		}
 	}
 
@@ -174,8 +182,14 @@ class ServerLevelRenderer extends Sprite {
 		blockLayer.y = offsetY;
 		addChild(blockLayer);
 		for (block in level.blocks) {
-			blockLayer.addChild(createBlockDisplay(block));
+			var display = createBlockDisplay(block);
+			blockDisplays.set(blockKey(block.x, block.y), display);
+			blockLayer.addChild(display);
 		}
+	}
+
+	private static inline function blockKey(x:Int, y:Int):String {
+		return x + "," + y;
 	}
 
 	private function drawArtBackground():Void {

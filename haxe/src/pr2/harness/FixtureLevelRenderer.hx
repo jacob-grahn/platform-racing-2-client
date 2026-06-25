@@ -12,14 +12,28 @@ import pr2.level.FixtureLevel.LevelBlock;
 class FixtureLevelRenderer extends Sprite {
 	private static inline var GRID_COLOR:Int = 0x3E465D;
 	private final useBitmapAssets:Bool;
+	private final blockDisplays:Map<String, Sprite> = new Map();
 
 	public function new(level:FixtureLevel, useBitmapAssets:Bool = true) {
 		super();
 		this.useBitmapAssets = useBitmapAssets;
 		drawGrid(level);
 		for (block in level.blocks) {
-			addChild(createBlockDisplay(block, level.tileSize));
+			var display = createBlockDisplay(block, level.tileSize);
+			blockDisplays.set(blockKey(block.x, block.y), display);
+			addChild(display);
 		}
+	}
+
+	public function syncBlockVisuals(player:LocalPlayerController):Void {
+		for (key => display in blockDisplays) {
+			var position = key.split(",");
+			display.alpha = player.blockAlphaAt(Std.parseInt(position[0]), Std.parseInt(position[1]));
+		}
+	}
+
+	private static inline function blockKey(x:Int, y:Int):String {
+		return x + "," + y;
 	}
 
 	private function drawGrid(level:FixtureLevel):Void {

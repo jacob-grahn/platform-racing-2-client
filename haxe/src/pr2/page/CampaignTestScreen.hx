@@ -319,12 +319,24 @@ class CampaignTestScreen extends Sprite {
 		}
 
 		player.step(input.copy());
+		syncBlockVisuals();
 		updatePlayerDisplay();
 		var state = player.debugState();
 		statusText.text = lastStatusText + '\nplayer ${state.serialize()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=playable;${state.serialize()}');
 		#end
+	}
+
+	private function syncBlockVisuals():Void {
+		for (block in serverFixture.fixture.blocks) {
+			if (block.type != pr2.level.BlockType.Vanish) {
+				continue;
+			}
+			var worldX = (block.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var worldY = (block.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+			levelRenderer.setBlockAlpha(worldX, worldY, player.blockAlphaAt(block.x, block.y));
+		}
 	}
 
 	private function updatePlayerDisplay():Void {

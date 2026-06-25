@@ -89,6 +89,7 @@ class LocalPlayerController {
 	private final removedBlocks:Map<String, Bool> = new Map();
 	private final vanishFadeFrames:Map<String, Int> = new Map();
 	private final vanishReappearFrames:Map<String, Int> = new Map();
+	private final vanishFadeInFrames:Map<String, Int> = new Map();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final depletedItemBlocks:Map<String, Bool> = new Map();
 	private final depletedSupplyBlocks:Map<String, Bool> = new Map();
@@ -293,6 +294,17 @@ class LocalPlayerController {
 
 	public function debugState():LocalPlayerDebugState {
 		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime);
+	}
+
+	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
+		var key = blockKey(tileX, tileY);
+		if (vanishFadeFrames.exists(key)) {
+			return vanishFadeFrames.get(key) / VANISH_FADE_FRAMES;
+		}
+		if (vanishFadeInFrames.exists(key)) {
+			return 1 - vanishFadeInFrames.get(key) / VANISH_FADE_FRAMES;
+		}
+		return removedBlocks.exists(key) ? 0 : 1;
 	}
 
 	private function position():Void {
@@ -995,7 +1007,7 @@ class LocalPlayerController {
 
 	private function activateVanish(block:LevelBlock):Void {
 		var key = blockKey(block.x, block.y);
-		if (!vanishReappearFrames.exists(key) && !vanishFadeFrames.exists(key)) {
+		if (!vanishReappearFrames.exists(key) && !vanishFadeFrames.exists(key) && !vanishFadeInFrames.exists(key)) {
 			vanishFadeFrames.set(key, VANISH_FADE_FRAMES);
 		}
 	}
@@ -1110,6 +1122,16 @@ class LocalPlayerController {
 			}
 		}
 
+		var fadingIn:Array<String> = [for (key in vanishFadeInFrames.keys()) key];
+		for (key in fadingIn) {
+			var frames = vanishFadeInFrames.get(key) - 1;
+			if (frames <= 0) {
+				vanishFadeInFrames.remove(key);
+			} else {
+				vanishFadeInFrames.set(key, frames);
+			}
+		}
+
 		var reappearing:Array<String> = [for (key in vanishReappearFrames.keys()) key];
 		for (key in reappearing) {
 			var frames = vanishReappearFrames.get(key) - 1;
@@ -1118,6 +1140,7 @@ class LocalPlayerController {
 			} else if (!playerOccupiesBlock(key)) {
 				vanishReappearFrames.remove(key);
 				removedBlocks.remove(key);
+				vanishFadeInFrames.set(key, VANISH_FADE_FRAMES - 2);
 			} else {
 				vanishReappearFrames.set(key, VANISH_REAPPEAR_FRAMES);
 			}

@@ -1,5 +1,10 @@
 package pr2.harness;
 
+import pr2.level.BlockType;
+import pr2.level.FixtureLevel;
+import pr2.level.FixtureLevel.LevelBlock;
+import pr2.level.FixtureLevel.StatDefaults;
+import pr2.level.FixtureLevel.TilePosition;
 import pr2.level.LevelFixtureParser;
 import sys.io.File;
 
@@ -8,7 +13,19 @@ class FixtureLevelRendererTest {
 
 	public static function main():Void {
 		testFlatFixtureRendererCreatesGridAndBlocks();
+		testSyncsVanishBlockAlpha();
 		trace('FixtureLevelRendererTest passed $assertions assertions');
+	}
+
+	private static function testSyncsVanishBlockAlpha():Void {
+		var level = new FixtureLevel("vanish", "Vanish", 5, 5, 30, 1, new StatDefaults(50, 1, 3), new TilePosition(2, 2),
+			new TilePosition(0, 0), [new LevelBlock(2, 3, BlockType.Vanish)]);
+		var player = new LocalPlayerController(level);
+		var renderer = new FixtureLevelRenderer(level, false);
+
+		player.step(new LocalPlayerInput());
+		renderer.syncBlockVisuals(player);
+		assertEquals(0.9, renderer.getChildAt(1).alpha, "renderer applies vanish fade alpha");
 	}
 
 	private static function testFlatFixtureRendererCreatesGridAndBlocks():Void {

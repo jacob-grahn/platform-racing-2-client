@@ -391,10 +391,15 @@ class LocalPlayerControllerTest {
 	private static function testStandingOnVanishBlockFallsThroughAfterFadeOut():Void {
 		var player = new LocalPlayerController(singleBlockLevel(BlockType.Vanish));
 
-		for (_ in 0...10) {
+		assertClose(1, player.blockAlphaAt(2, 3), "vanish block starts opaque");
+		player.step(new LocalPlayerInput());
+		assertClose(0.9, player.blockAlphaAt(2, 3), "vanish block fades by one tenth per frame");
+
+		for (_ in 0...9) {
 			player.step(new LocalPlayerInput());
 		}
 		assertEquals(true, player.debugState().grounded, "vanish block remains solid while fading");
+		assertClose(0, player.blockAlphaAt(2, 3), "vanish block is invisible at fade-out");
 
 		player.step(new LocalPlayerInput());
 		var state = player.debugState();
@@ -410,7 +415,20 @@ class LocalPlayerControllerTest {
 		}
 		assertEquals(false, player.debugState().grounded, "vanish block is inactive after fade-out");
 
+		var reappeared = false;
 		for (_ in 0...80) {
+			player.step(new LocalPlayerInput());
+			if (player.blockAlphaAt(2, 3) > 0) {
+				reappeared = true;
+				break;
+			}
+		}
+		assertEquals(true, reappeared, "vanish block reappears after its delay");
+		assertClose(0.2, player.blockAlphaAt(2, 3), "vanish block reappears at one fifth alpha");
+		player.step(new LocalPlayerInput());
+		assertClose(0.3, player.blockAlphaAt(2, 3), "vanish block fades back in by one tenth per frame");
+
+		for (_ in 0...30) {
 			player.step(new LocalPlayerInput());
 		}
 		assertEquals(true, player.debugState().grounded, "player lands below the inactive vanish block");

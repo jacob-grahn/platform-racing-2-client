@@ -31,6 +31,7 @@ class GameplayHarness extends Sprite {
 	private var statusText:TextField;
 	private var playerDisplay:Sprite;
 	private var characterDisplay:CharacterDisplay;
+	private var levelRenderer:FixtureLevelRenderer;
 
 	public function new(?level:FixtureLevel, ?options:GameplayHarnessOptions) {
 		super();
@@ -39,7 +40,8 @@ class GameplayHarness extends Sprite {
 		player = new LocalPlayerController(this.level);
 
 		drawStageBackground();
-		addChild(new FixtureLevelRenderer(this.level));
+		levelRenderer = new FixtureLevelRenderer(this.level);
+		addChild(levelRenderer);
 		createPlayerDisplay();
 		createHud();
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -104,6 +106,7 @@ class GameplayHarness extends Sprite {
 	private function onEnterFrame(event:Event):Void {
 		frameCounter++;
 		player.step(input.copy());
+		levelRenderer.syncBlockVisuals(player);
 		updatePlayerDisplay();
 		updateStatusText();
 		exportDebugState();

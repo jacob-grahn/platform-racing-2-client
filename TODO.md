@@ -114,7 +114,13 @@ is scoped to item behavior below.
   it to the live race-finish/award/exp commands is deferred to the multiplayer
   race-sync and in-game-shell tasks above.
 - [ ] Mine, brick, and crumble blocks should disapear (visually) when removed and show their effects when hit
-- [ ] Vanish block should, well, vanish. It works on the physics level, but visually the block stays there
+- [x] Vanish blocks now reproduce `VanishBlock.as` visually as well as
+  physically: contact fades the block by 0.1 per frame, the inactive block is
+  hidden during its 2-second delay, and an unoccupied block reappears at 0.2
+  alpha before fading back in. The shared `LocalPlayerController` state drives
+  both fixture and server-level renderers. Guarded by
+  `LocalPlayerControllerTest`, `FixtureLevelRendererTest`, and
+  `ServerLevelRendererTest`.
 - [x] Arrow blocks render their arrows. `ServerLevelRenderer` now draws arrow
   blocks as a `basic2` base tile plus the shared `arrow_overlay@4x` graphic,
   centered on the tile (15,15) and rotated per direction (up 0, down 180, left
