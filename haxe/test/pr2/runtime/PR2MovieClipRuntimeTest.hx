@@ -14,6 +14,7 @@ import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
 import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetCatalog;
+import pr2.generated.assets.AssetTypes.FrameDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.page.LoginFlashPopup;
 
@@ -33,6 +34,7 @@ class PR2MovieClipRuntimeTest {
 		testFilters();
 		testScale9Grids();
 		testGeneratedSoundFrameMetadata();
+		testTimelineEventSounds();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
@@ -339,6 +341,29 @@ class PR2MovieClipRuntimeTest {
 		assertEquals(14900, envelope[1].mark44, "sound envelope retains its sample marker");
 		assertEquals(32768, envelope[1].level0, "sound envelope retains its left level");
 		assertEquals(32768, envelope[1].level1, "sound envelope retains its right level");
+	}
+
+	private static function testTimelineEventSounds():Void {
+		var played:Array<String> = [];
+		var clip = new PR2MovieClip(makeSoundSymbol(), {
+			soundFrameHandler: function(frame:FrameDef) played.push(frame.soundName)
+		});
+
+		assertEquals("Sounds/first.mp3", played.join(","), "frame-one sound plays when the clip is created");
+		clip.advanceOneFrame();
+		assertEquals("Sounds/first.mp3", played.join(","), "held sound keyframe does not retrigger");
+		clip.advanceOneFrame();
+		assertEquals(
+			"Sounds/first.mp3,Sounds/second.mp3",
+			played.join(","),
+			"sound plays once when its later keyframe is entered"
+		);
+		clip.gotoAndStop(3);
+		assertEquals(
+			"Sounds/first.mp3,Sounds/second.mp3,Sounds/second.mp3",
+			played.join(","),
+			"explicitly re-entering a sound keyframe retriggers its event sound"
+		);
 	}
 
 	private static function testLeafVectorShapes():Void {
@@ -834,6 +859,46 @@ class PR2MovieClipRuntimeTest {
 								name: "middleMarker",
 								bounds: {left: 0, top: 0, right: 20, bottom: 20}
 							}]
+						}
+					]
+				}]
+			}]
+		};
+	}
+
+	private static function makeSoundSymbol():SymbolAssetDef {
+		return {
+			href: "SoundSymbol.xml",
+			type: "movie clip",
+			name: "SoundSymbol",
+			linkageClassName: "SoundSymbol",
+			linkageIdentifier: "SoundSymbol",
+			timelines: [{
+				name: "SoundSymbol",
+				layerCount: 1,
+				frameCount: 3,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Sound",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 2,
+					frames: [
+						{
+							index: 0,
+							duration: 2,
+							soundName: "Sounds/first.mp3",
+							elementCount: 0,
+							elementTypes: []
+						},
+						{
+							index: 2,
+							duration: 1,
+							soundName: "Sounds/second.mp3",
+							elementCount: 0,
+							elementTypes: []
 						}
 					]
 				}]

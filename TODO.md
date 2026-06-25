@@ -246,6 +246,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
     catalog, including sound names/effects, in/out points, and envelope points.
   - [ ] Play authored timeline sound frames with Flash-compatible sync,
     envelope, seeking, looping, and stop/disposal behavior.
+    - [x] Play default/event sounds once when the playhead enters their exact
+      keyframe, without retriggering across the keyframe's held duration.
+    - [ ] Apply authored in/out-point seeking and volume envelopes.
+    - [ ] Implement non-event sync modes, looping, and stop/disposal behavior.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

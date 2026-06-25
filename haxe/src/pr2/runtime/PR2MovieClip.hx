@@ -16,8 +16,10 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
+import pr2.audio.TimelineSound;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
 import pr2.generated.assets.AssetTypes.FilterDef;
+import pr2.generated.assets.AssetTypes.FrameDef;
 import pr2.generated.assets.AssetTypes.LayerDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.generated.assets.AssetTypes.TimelineDef;
@@ -29,11 +31,16 @@ typedef RuntimeFrame = {
 	var elementLayers:Array<Int>;
 	// Parallel to `elements`: false for elements authored on a hidden layer.
 	var elementLayerVisible:Array<Bool>;
+	// Sound keyframes that begin on this exact frame. Unlike display elements,
+	// sound frames are not expanded across their authored duration: Flash event
+	// sounds fire once when the playhead enters the keyframe.
+	var soundFrames:Array<FrameDef>;
 }
 
 typedef PR2MovieClipOptions = {
 	@:optional var maxNestedDepth:Int;
 	@:optional var includeHiddenLayers:Bool;
+	@:optional var soundFrameHandler:FrameDef->Void;
 }
 
 class PR2MovieClip extends Sprite {
@@ -49,6 +56,7 @@ class PR2MovieClip extends Sprite {
 	private var maxNestedDepth:Int;
 	private var nestedDepth:Int;
 	private var includeHiddenLayers:Bool;
+	private var soundFrameHandler:FrameDef->Void;
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
 	private var runningFrameScripts:Bool = false;
 	private var isButtonSymbol:Bool = false;
@@ -95,6 +103,9 @@ class PR2MovieClip extends Sprite {
 		this.symbol = symbol;
 		this.maxNestedDepth = options != null && options.maxNestedDepth != null ? options.maxNestedDepth : 32;
 		this.includeHiddenLayers = options != null && options.includeHiddenLayers == true;
+		this.soundFrameHandler = options != null && options.soundFrameHandler != null
+			? options.soundFrameHandler
+			: TimelineSound.playEventFrame;
 		this.nestedDepth = nestedDepth;
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];
@@ -276,7 +287,7 @@ class PR2MovieClip extends Sprite {
 	private function buildTimeline(source:TimelineDef):Void {
 		totalFrames = source.frameCount < 1 ? 1 : source.frameCount;
 		for (i in 0...totalFrames) {
-			frames.push({elements: [], elementLayers: [], elementLayerVisible: []});
+			frames.push({elements: [], elementLayers: [], elementLayerVisible: [], soundFrames: []});
 		}
 
 		for (label in source.labels) {
@@ -317,6 +328,10 @@ class PR2MovieClip extends Sprite {
 			var elements = frame.elements == null ? [] : frame.elements;
 			var end = Std.int(Math.min(totalFrames, start + duration));
 
+			if (frame.soundName != null && start >= 0 && start < totalFrames) {
+				frames[start].soundFrames.push(frame);
+			}
+
 			for (frameIndex in start...end) {
 				for (element in elements) {
 					frames[frameIndex].elements.push(element);
@@ -338,8 +353,16 @@ class PR2MovieClip extends Sprite {
 		}
 
 		currentFrame = frameNumber;
-		renderFrame(frames[frameNumber - 1]);
+		var runtimeFrame = frames[frameNumber - 1];
+		renderFrame(runtimeFrame);
+		playFrameSounds(runtimeFrame);
 		runFrameScripts(frameNumber);
+	}
+
+	private function playFrameSounds(frame:RuntimeFrame):Void {
+		for (soundFrame in frame.soundFrames) {
+			soundFrameHandler(soundFrame);
+		}
 	}
 
 	private function resolveFrame(frame:Dynamic):Int {
@@ -685,7 +708,8 @@ class PR2MovieClip extends Sprite {
 
 				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {
 					maxNestedDepth: maxNestedDepth,
-					includeHiddenLayers: includeHiddenLayers
+					includeHiddenLayers: includeHiddenLayers,
+					soundFrameHandler: soundFrameHandler
 				}, nestedDepth + 1);
 				if (element.loop == "single frame") {
 					clip.gotoAndStop((element.firstFrame == null ? 0 : element.firstFrame) + 1);
