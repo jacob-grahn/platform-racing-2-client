@@ -232,6 +232,9 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Apply authored element blend modes in `PR2MovieClip`, including
     Animate's `layer` mode, with a reduced runtime fixture covering multiply,
     screen, layer, and the normal default.
+  - [x] Apply authored Blur, Glow, and DropShadow filters in source order, with
+    Flash-compatible omitted-attribute defaults and keyframe removal. A reduced
+    runtime fixture covers every generated-catalog filter type and parameter.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

@@ -5,6 +5,9 @@ import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.filters.BlurFilter;
+import openfl.filters.DropShadowFilter;
+import openfl.filters.GlowFilter;
 import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
@@ -26,6 +29,7 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedRatingStarsMask();
 		testColorTransforms();
 		testBlendModes();
+		testFilters();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
@@ -246,6 +250,55 @@ class PR2MovieClipRuntimeTest {
 		assertEquals(BlendMode.SCREEN, requireChild(clip, "screen").blendMode, "screen blend mode is applied");
 		assertEquals(BlendMode.LAYER, requireChild(clip, "layer").blendMode, "layer blend mode is applied");
 		assertEquals(BlendMode.NORMAL, requireChild(clip, "normal").blendMode, "missing blend mode defaults to normal");
+	}
+
+	private static function testFilters():Void {
+		var clip = new PR2MovieClip(makeFilterSymbol());
+		var filtered = requireChild(clip, "filtered");
+
+		assertEquals(3, filtered.filters.length, "authored filters retain their source order");
+
+		var blur = Std.downcast(filtered.filters[0], BlurFilter);
+		assertNotNull(blur, "BlurFilter is created");
+		assertClose(7, blur.blurX, "BlurFilter blurX");
+		assertClose(9, blur.blurY, "BlurFilter blurY");
+		assertEquals(2, blur.quality, "BlurFilter quality");
+
+		var glow = Std.downcast(filtered.filters[1], GlowFilter);
+		assertNotNull(glow, "GlowFilter is created");
+		assertEquals(0x123456, glow.color, "GlowFilter color");
+		assertClose(0.4, glow.alpha, "GlowFilter alpha");
+		assertClose(8, glow.blurX, "GlowFilter blurX");
+		assertClose(10, glow.blurY, "GlowFilter blurY");
+		assertClose(3, glow.strength, "GlowFilter strength");
+		assertEquals(2, glow.quality, "GlowFilter quality");
+		assertEquals(true, glow.inner, "GlowFilter inner");
+		assertEquals(true, glow.knockout, "GlowFilter knockout");
+
+		var shadow = Std.downcast(filtered.filters[2], DropShadowFilter);
+		assertNotNull(shadow, "DropShadowFilter is created");
+		assertClose(6, shadow.distance, "DropShadowFilter distance");
+		assertClose(30, shadow.angle, "DropShadowFilter angle");
+		assertEquals(0x654321, shadow.color, "DropShadowFilter color");
+		assertClose(0.6, shadow.alpha, "DropShadowFilter alpha");
+		assertClose(11, shadow.blurX, "DropShadowFilter blurX");
+		assertClose(13, shadow.blurY, "DropShadowFilter blurY");
+		assertClose(1.5, shadow.strength, "DropShadowFilter strength");
+		assertEquals(3, shadow.quality, "DropShadowFilter quality");
+		assertEquals(true, shadow.inner, "DropShadowFilter inner");
+		assertEquals(true, shadow.knockout, "DropShadowFilter knockout");
+		assertEquals(true, shadow.hideObject, "DropShadowFilter hideObject");
+
+		var defaults = requireChild(clip, "defaults");
+		var defaultBlur = Std.downcast(defaults.filters[0], BlurFilter);
+		var defaultGlow = Std.downcast(defaults.filters[1], GlowFilter);
+		var defaultShadow = Std.downcast(defaults.filters[2], DropShadowFilter);
+		assertClose(4, defaultBlur.blurX, "BlurFilter uses Flash default blurX");
+		assertClose(6, defaultGlow.blurX, "GlowFilter uses Flash default blurX");
+		assertClose(4, defaultShadow.distance, "DropShadowFilter uses Flash default distance");
+
+		clip.gotoAndStop(2);
+		assertEquals(0, requireChild(clip, "filtered").filters.length, "filters are removed on an unfiltered keyframe");
 	}
 
 	private static function testLeafVectorShapes():Void {
@@ -1016,6 +1069,94 @@ class PR2MovieClipRuntimeTest {
 							}
 						]
 					}]
+				}]
+			}]
+		};
+	}
+
+	private static function makeFilterSymbol():SymbolAssetDef {
+		return {
+			href: "FilterSymbol.xml",
+			type: "movie clip",
+			name: "FilterSymbol",
+			linkageClassName: "FilterSymbol",
+			linkageIdentifier: "FilterSymbol",
+			timelines: [{
+				name: "FilterSymbol",
+				layerCount: 1,
+				frameCount: 2,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 2,
+					frames: [
+						{
+							index: 0,
+							duration: 1,
+							elementCount: 2,
+							elementTypes: ["DOMShape", "DOMShape"],
+							elements: [
+								{
+									type: "DOMShape",
+									name: "filtered",
+									bounds: {left: 0, top: 0, right: 10, bottom: 10},
+									filters: [
+										{type: "BlurFilter", blurX: 7, blurY: 9, quality: 2},
+										{
+											type: "GlowFilter",
+											color: 0x123456,
+											alpha: 0.4,
+											blurX: 8,
+											blurY: 10,
+											strength: 3,
+											quality: 2,
+											inner: true,
+											knockout: true
+										},
+										{
+											type: "DropShadowFilter",
+											distance: 6,
+											angle: 30,
+											color: 0x654321,
+											alpha: 0.6,
+											blurX: 11,
+											blurY: 13,
+											strength: 1.5,
+											quality: 3,
+											inner: true,
+											knockout: true,
+											hideObject: true
+										}
+									]
+								},
+								{
+									type: "DOMShape",
+									name: "defaults",
+									bounds: {left: 0, top: 0, right: 10, bottom: 10},
+									filters: [
+										{type: "BlurFilter"},
+										{type: "GlowFilter"},
+										{type: "DropShadowFilter"}
+									]
+								}
+							]
+						},
+						{
+							index: 1,
+							duration: 1,
+							elementCount: 1,
+							elementTypes: ["DOMShape"],
+							elements: [{
+								type: "DOMShape",
+								name: "filtered",
+								bounds: {left: 0, top: 0, right: 10, bottom: 10}
+							}]
+						}
+					]
 				}]
 			}]
 		};
