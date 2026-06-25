@@ -257,8 +257,12 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
       `soundSync`, and entering a `stop` keyframe terminates every active
       instance of that named library sound without affecting other sounds.
       Guarded by `AudioRuntimeTest`.
-    - [ ] Implement start/stream sync modes, looping, and timeline-owned
-      disposal behavior.
+    - [x] Implement start-sync frames. Entering a `start` keyframe plays like an
+      event sound only when that named library sound has no active instance;
+      existing playback continues without restarting. Guarded by
+      `AudioRuntimeTest`.
+    - [ ] Implement stream sync mode, looping, and timeline-owned disposal
+      behavior.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

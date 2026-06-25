@@ -52,6 +52,20 @@ class AudioRuntimeTest {
 		TimelineSound.stopLibrarySound("Sounds/b.mp3");
 		assert(stoppedB == 1, "other registered timeline sounds remain independently stoppable"); assertions++;
 
+		var startSoundStops = 0;
+		TimelineSound.registerActive("Sounds/start.mp3", function():Void startSoundStops++);
+		assert(TimelineSound.isLibrarySoundActive("Sounds/start.mp3"), "registered timeline sound is active"); assertions++;
+		TimelineSound.processFrame({
+			soundName: "Sounds/start.mp3",
+			soundSync: "start",
+			elementCount: 0,
+			elementTypes: []
+		});
+		assert(startSoundStops == 0, "start-sync does not interrupt an active instance"); assertions++;
+		TimelineSound.stopLibrarySound("Sounds/start.mp3");
+		assert(startSoundStops == 1, "start-sync suppression keeps the original instance registered"); assertions++;
+		assert(!TimelineSound.isLibrarySoundActive("Sounds/start.mp3"), "stopped timeline sound is no longer active"); assertions++;
+
 		var songs = MusicCatalog.enabled(["2", "19"]);
 		assert(songs.length == 18, "disabled songs are omitted outside the editor"); assertions++;
 		assert(MusicCatalog.select(songs, "3", 0) == 2, "known song ids select exactly"); assertions++;

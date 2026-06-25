@@ -15,8 +15,9 @@ import pr2.lobby.account.Settings;
 	Event/default-sync sounds start once when their keyframe is entered and then
 	run independently of the timeline. Authored in/out points and volume
 	envelopes use Animate's 44.1 kHz sample units. Stop-sync frames terminate all
-	active instances of their named library sound. Start/stream sync, looping,
-	and timeline-owned disposal are handled by later runtime parity work.
+	active instances of their named library sound. Start-sync frames behave like
+	event sounds unless that library sound is already active. Stream sync,
+	looping, and timeline-owned disposal are handled by later runtime parity work.
 **/
 class TimelineSound {
 	private static inline var SAMPLES_PER_MILLISECOND:Float = 44.1;
@@ -29,6 +30,9 @@ class TimelineSound {
 		}
 		if (frame.soundSync == "stop") {
 			stopLibrarySound(frame.soundName);
+			return;
+		}
+		if (frame.soundSync == "start" && isLibrarySoundActive(frame.soundName)) {
 			return;
 		}
 		playEventFrame(frame);
@@ -65,6 +69,11 @@ class TimelineSound {
 		for (instance in active) {
 			instance.stop();
 		}
+	}
+
+	public static function isLibrarySoundActive(libraryName:String):Bool {
+		var active = activeByPath.get(assetPath(libraryName));
+		return active != null && active.length > 0;
 	}
 
 	/**
