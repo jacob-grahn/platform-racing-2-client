@@ -168,6 +168,11 @@ rounding, ordering, and edge cases.
 
 - [ ] Audit and port item physics/interaction 1:1 (item effects on the
   character and world, timing, and edge cases).
+  - [x] Enforce the authored multi-use item reload timing: Laser Gun and Sword
+    wait 800ms (22 frames at 27 FPS), Ice Wave waits 1000ms (27 frames), and a
+    held item key fires again only when the reload completes.
+  - [ ] Complete the remaining item effect, world interaction, and edge-case
+    audit against the AS3 item/effect classes and server protocol.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.

@@ -38,11 +38,11 @@ class LocalPlayerControllerTest {
 		testTeleportItemBlockedBySolidDestination();
 		testSpeedBurstBoostsMovementThenExpires();
 		testJetPackLiftsPlayerThenExpires();
-		testLaserGunRecoilsAndConsumesThreeShots();
+		testLaserGunReloadTiming();
 		testMineItemPlacesMineAndConsumesItem();
 		testLightningEmitsZapAndConsumesItem();
-		testSwordLungesAndConsumesThreeSwings();
-		testIceWaveEmitsThreeWaves();
+		testSwordReloadTiming();
+		testIceWaveReloadTiming();
 		testFrozenSolidDisablesMovementAndThaws();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
@@ -627,7 +627,7 @@ class LocalPlayerControllerTest {
 		assertEquals(null, boosted.debugState().itemId, "jet pack expires after five seconds");
 	}
 
-	private static function testLaserGunRecoilsAndConsumesThreeShots():Void {
+	private static function testLaserGunReloadTiming():Void {
 		var player = collectItem(heldItemLevel(1), 1);
 		var beforeUse = player.debugState();
 
@@ -638,8 +638,15 @@ class LocalPlayerControllerTest {
 		assertEquals("laser:right", firstShot.lastItemEffect, "laser emits a right-facing shot");
 		assertBelow(firstShot.vx, beforeUse.vx, "laser applies backwards recoil");
 
+		for (_ in 0...21) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+			assertEquals(2, player.debugState().itemUses, "laser cannot fire during its 800ms reload");
+		}
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(1, player.debugState().itemUses, "held laser fires again after 22 frames");
+		for (_ in 0...22) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+		}
 		assertEquals(null, player.debugState().itemId, "laser is consumed after three shots");
 	}
 
@@ -665,7 +672,7 @@ class LocalPlayerControllerTest {
 		assertEquals("zap", state.lastItemEffect, "lightning emits zap effect");
 	}
 
-	private static function testSwordLungesAndConsumesThreeSwings():Void {
+	private static function testSwordReloadTiming():Void {
 		var player = collectItem(heldItemLevel(8), 8);
 		var beforeUse = player.debugState();
 
@@ -676,12 +683,19 @@ class LocalPlayerControllerTest {
 		assertEquals("slash:right", firstSwing.lastItemEffect, "sword emits a right-facing slash");
 		assertBelow(beforeUse.vx, firstSwing.vx, "sword lunges in the facing direction");
 
+		for (_ in 0...21) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+			assertEquals(2, player.debugState().itemUses, "sword cannot swing during its 800ms reload");
+		}
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(1, player.debugState().itemUses, "held sword swings again after 22 frames");
+		for (_ in 0...22) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+		}
 		assertEquals(null, player.debugState().itemId, "sword is consumed after three swings");
 	}
 
-	private static function testIceWaveEmitsThreeWaves():Void {
+	private static function testIceWaveReloadTiming():Void {
 		var player = collectItem(heldItemLevel(9), 9);
 
 		player.step(new LocalPlayerInput(false, false, false, false, true));
@@ -690,8 +704,15 @@ class LocalPlayerControllerTest {
 		assertEquals(2, firstWave.itemUses, "ice wave consumes one of three waves");
 		assertEquals("ice_wave:right", firstWave.lastItemEffect, "ice wave emits a right-facing wave");
 
+		for (_ in 0...26) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+			assertEquals(2, player.debugState().itemUses, "ice wave cannot fire during its 1000ms reload");
+		}
 		player.step(new LocalPlayerInput(false, false, false, false, true));
-		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(1, player.debugState().itemUses, "held ice wave fires again after 27 frames");
+		for (_ in 0...27) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+		}
 		assertEquals(null, player.debugState().itemId, "ice wave is consumed after three waves");
 	}
 

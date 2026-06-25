@@ -41,6 +41,8 @@ class LocalPlayerController {
 	private static inline var SPEED_BURST_FRAMES:Int = 135;
 	private static inline var JET_PACK_FRAMES:Int = 135;
 	private static inline var JET_PACK_THRUST:Float = 1.5;
+	private static inline var FAST_ITEM_RELOAD_FRAMES:Int = 22;
+	private static inline var ICE_WAVE_RELOAD_FRAMES:Int = 27;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -111,6 +113,7 @@ class LocalPlayerController {
 	public var facingScaleX(get, never):Int;
 	private var speedBurstFramesRemaining:Int = 0;
 	private var jetPackFramesRemaining:Int = 0;
+	private var itemReloadFramesRemaining:Int = 0;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
 
@@ -136,6 +139,7 @@ class LocalPlayerController {
 		lastItemEffect = null;
 		animationLeft = input.left;
 		animationRight = input.right;
+		updateItemReload();
 		// LocalCharacter.updateKeys applies RIGHT first and LEFT second, so LEFT
 		// determines the facing direction when both keys are held.
 		if (input.right) {
@@ -772,7 +776,7 @@ class LocalPlayerController {
 	}
 
 	private function useHeldItem(input:LocalPlayerInput):Void {
-		if (!input.item || itemId == null) {
+		if (!input.item || itemId == null || itemReloadFramesRemaining > 0) {
 			return;
 		}
 
@@ -871,9 +875,15 @@ class LocalPlayerController {
 		if (itemUses == null || itemUses <= 1) {
 			itemId = null;
 			itemUses = null;
+			itemReloadFramesRemaining = 0;
 			return;
 		}
 		itemUses--;
+		itemReloadFramesRemaining = switch (itemId) {
+			case ITEM_LASER_GUN | ITEM_SWORD: FAST_ITEM_RELOAD_FRAMES;
+			case ITEM_ICE_WAVE: ICE_WAVE_RELOAD_FRAMES;
+			default: 0;
+		}
 	}
 
 	private function initialItemUses(id:Int):Int {
@@ -1031,6 +1041,12 @@ class LocalPlayerController {
 		updateVanishBlocks();
 		updateTeleportBlocks();
 		updateMoveBlocks();
+	}
+
+	private function updateItemReload():Void {
+		if (itemReloadFramesRemaining > 0) {
+			itemReloadFramesRemaining--;
+		}
 	}
 
 	private function updateSpeedBurst():Void {
