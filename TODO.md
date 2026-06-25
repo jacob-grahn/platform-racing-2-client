@@ -261,8 +261,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
       event sound only when that named library sound has no active instance;
       existing playback continues without restarting. Guarded by
       `AudioRuntimeTest`.
-    - [ ] Implement stream sync mode, looping, and timeline-owned disposal
-      behavior.
+    - [x] Stop timeline-owned sounds when their `PR2MovieClip` is disposed,
+      without interrupting another timeline's instance of the same library
+      sound. Guarded by `AudioRuntimeTest`.
+    - [ ] Implement stream sync mode and looping.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

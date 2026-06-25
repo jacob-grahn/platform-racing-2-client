@@ -106,7 +106,7 @@ class PR2MovieClip extends Sprite {
 		this.includeHiddenLayers = options != null && options.includeHiddenLayers == true;
 		this.soundFrameHandler = options != null && options.soundFrameHandler != null
 			? options.soundFrameHandler
-			: TimelineSound.processFrame;
+			: function(frame:FrameDef):Void TimelineSound.processFrame(frame, this);
 		this.nestedDepth = nestedDepth;
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];
@@ -192,6 +192,7 @@ class PR2MovieClip extends Sprite {
 
 	public function dispose():Void {
 		stop();
+		TimelineSound.stopOwner(this);
 		if (isButtonSymbol) {
 			removeEventListener(MouseEvent.ROLL_OVER, onButtonRollOver);
 			removeEventListener(MouseEvent.ROLL_OUT, onButtonRollOut);

@@ -66,6 +66,22 @@ class AudioRuntimeTest {
 		assert(startSoundStops == 1, "start-sync suppression keeps the original instance registered"); assertions++;
 		assert(!TimelineSound.isLibrarySoundActive("Sounds/start.mp3"), "stopped timeline sound is no longer active"); assertions++;
 
+		var ownerA = {};
+		var ownerB = {};
+		var ownerAStops = 0;
+		var ownerBStops = 0;
+		TimelineSound.registerActive("Sounds/owned.mp3", function():Void ownerAStops++, ownerA);
+		TimelineSound.registerActive("Sounds/owned.mp3", function():Void ownerBStops++, ownerB);
+		TimelineSound.stopOwner(ownerA);
+		assert(ownerAStops == 1, "disposing a timeline stops its owned sound"); assertions++;
+		assert(ownerBStops == 0, "disposing a timeline leaves another timeline's sound active"); assertions++;
+		assert(TimelineSound.isLibrarySoundActive("Sounds/owned.mp3"), "other owners remain registered after timeline disposal"); assertions++;
+		TimelineSound.stopOwner(ownerA);
+		assert(ownerAStops == 1, "disposed timeline sounds are removed from the owner registry"); assertions++;
+		TimelineSound.stopOwner(ownerB);
+		assert(ownerBStops == 1, "the remaining timeline owner can dispose its sound"); assertions++;
+		assert(!TimelineSound.isLibrarySoundActive("Sounds/owned.mp3"), "owner disposal removes the final library registration"); assertions++;
+
 		var songs = MusicCatalog.enabled(["2", "19"]);
 		assert(songs.length == 18, "disabled songs are omitted outside the editor"); assertions++;
 		assert(MusicCatalog.select(songs, "3", 0) == 2, "known song ids select exactly"); assertions++;

@@ -1,6 +1,7 @@
 package pr2.audio;
 
 import haxe.Timer;
+import haxe.ds.ObjectMap;
 import openfl.events.Event;
 import openfl.media.SoundChannel;
 import openfl.media.SoundTransform;
@@ -17,14 +18,16 @@ import pr2.lobby.account.Settings;
 	envelopes use Animate's 44.1 kHz sample units. Stop-sync frames terminate all
 	active instances of their named library sound. Start-sync frames behave like
 	event sounds unless that library sound is already active. Stream sync,
-	looping, and timeline-owned disposal are handled by later runtime parity work.
+	looping are handled by later runtime parity work. Playback started by a
+	PR2MovieClip is owned by that timeline and stopped when the clip is disposed.
 **/
 class TimelineSound {
 	private static inline var SAMPLES_PER_MILLISECOND:Float = 44.1;
 	private static inline var MAX_ENVELOPE_LEVEL:Float = 32768;
 	private static var activeByPath:Map<String, Array<ActiveTimelineSound>> = new Map();
+	private static var activeByOwner:ObjectMap<Dynamic, Array<ActiveTimelineSound>> = new ObjectMap();
 
-	public static function processFrame(frame:FrameDef):Void {
+	public static function processFrame(frame:FrameDef, ?owner:Dynamic):Void {
 		if (frame.soundName == null) {
 			return;
 		}
@@ -35,10 +38,10 @@ class TimelineSound {
 		if (frame.soundSync == "start" && isLibrarySoundActive(frame.soundName)) {
 			return;
 		}
-		playEventFrame(frame);
+		playEventFrame(frame, owner);
 	}
 
-	public static function playEventFrame(frame:FrameDef):Void {
+	public static function playEventFrame(frame:FrameDef, ?owner:Dynamic):Void {
 		if (frame.soundName == null || Settings.soundLevel <= 0) {
 			return;
 		}
@@ -50,10 +53,10 @@ class TimelineSound {
 			var initialMix = envelopeMixAt(frame.soundEnvelope, 0);
 			var channel = sound.play(startTime, 0, soundTransform(initialMix.left, initialMix.right));
 			if (channel != null) {
-				var active = registerActive(path, channel.stop);
-				channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(path, active));
+				var active = registerActive(path, channel.stop, owner);
+				channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(active));
 				if (frame.outPoint44 != null || hasChangingEnvelope(frame.soundEnvelope)) {
-					monitor(channel, frame, startTime, function():Void unregisterActive(path, active));
+					monitor(channel, frame, startTime, function():Void unregisterActive(active));
 				}
 			}
 		}
@@ -65,8 +68,22 @@ class TimelineSound {
 		if (active == null) {
 			return;
 		}
-		activeByPath.remove(path);
-		for (instance in active) {
+		for (instance in active.copy()) {
+			unregisterActive(instance);
+			instance.stop();
+		}
+	}
+
+	public static function stopOwner(owner:Dynamic):Void {
+		if (owner == null) {
+			return;
+		}
+		var active = activeByOwner.get(owner);
+		if (active == null) {
+			return;
+		}
+		for (instance in active.copy()) {
+			unregisterActive(instance);
 			instance.stop();
 		}
 	}
@@ -80,17 +97,25 @@ class TimelineSound {
 		Register timeline-owned playback. Public so deterministic tests and future
 		sync-mode backends can use the same stop registry without loading audio.
 	**/
-	public static function registerActive(libraryNameOrPath:String, stop:Void->Void):ActiveTimelineSound {
+	public static function registerActive(libraryNameOrPath:String, stop:Void->Void, ?owner:Dynamic):ActiveTimelineSound {
 		var path = StringTools.startsWith(libraryNameOrPath, "assets/")
 			? libraryNameOrPath
 			: assetPath(libraryNameOrPath);
-		var active = {stop: stop};
+		var active = {path: path, stop: stop, owner: owner};
 		var instances = activeByPath.get(path);
 		if (instances == null) {
 			instances = [];
 			activeByPath.set(path, instances);
 		}
 		instances.push(active);
+		if (owner != null) {
+			var owned = activeByOwner.get(owner);
+			if (owned == null) {
+				owned = [];
+				activeByOwner.set(owner, owned);
+			}
+			owned.push(active);
+		}
 		return active;
 	}
 
@@ -156,14 +181,23 @@ class TimelineSound {
 		};
 	}
 
-	private static function unregisterActive(path:String, active:ActiveTimelineSound):Void {
-		var instances = activeByPath.get(path);
+	private static function unregisterActive(active:ActiveTimelineSound):Void {
+		var instances = activeByPath.get(active.path);
 		if (instances == null) {
 			return;
 		}
 		instances.remove(active);
 		if (instances.length == 0) {
-			activeByPath.remove(path);
+			activeByPath.remove(active.path);
+		}
+		if (active.owner != null) {
+			var owned = activeByOwner.get(active.owner);
+			if (owned != null) {
+				owned.remove(active);
+				if (owned.length == 0) {
+					activeByOwner.remove(active.owner);
+				}
+			}
 		}
 	}
 
@@ -198,5 +232,7 @@ class TimelineSound {
 }
 
 typedef ActiveTimelineSound = {
+	var path:String;
 	var stop:Void->Void;
+	var owner:Dynamic;
 }
