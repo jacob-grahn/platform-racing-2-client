@@ -78,7 +78,7 @@ class FixtureLevelRenderer extends Sprite {
 		return container;
 	}
 
-	private static function blockAssetPath(type:BlockType):String {
+	public static function blockAssetPath(type:BlockType):String {
 		return switch (type) {
 			case Basic: "assets/blocks/basic1.png";
 			case Brick: "assets/blocks/brick.png";
@@ -86,6 +86,8 @@ class FixtureLevelRenderer extends Sprite {
 			case Finish: "assets/blocks/finish.png";
 			case Item: "assets/blocks/item.png";
 			case InfiniteItem: "assets/blocks/infinite_item.png";
+			case Mine: "assets/blocks/mine_block.png";
+			case Crumble: "assets/blocks/crumble.png";
 			case Vanish: "assets/blocks/vanish.png";
 			case Teleport: "assets/blocks/teleport_block.png";
 			default: "";

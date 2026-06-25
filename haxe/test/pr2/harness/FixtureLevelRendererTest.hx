@@ -14,7 +14,14 @@ class FixtureLevelRendererTest {
 	public static function main():Void {
 		testFlatFixtureRendererCreatesGridAndBlocks();
 		testSyncsVanishBlockAlpha();
+		testRemovedBlockAssets();
 		trace('FixtureLevelRendererTest passed $assertions assertions');
+	}
+
+	private static function testRemovedBlockAssets():Void {
+		assertEquals("assets/blocks/brick.png", FixtureLevelRenderer.blockAssetPath(BlockType.Brick), "brick asset path");
+		assertEquals("assets/blocks/mine_block.png", FixtureLevelRenderer.blockAssetPath(BlockType.Mine), "mine asset path");
+		assertEquals("assets/blocks/crumble.png", FixtureLevelRenderer.blockAssetPath(BlockType.Crumble), "crumble asset path");
 	}
 
 	private static function testSyncsVanishBlockAlpha():Void {
@@ -43,4 +50,5 @@ class FixtureLevelRendererTest {
 			throw '$message: expected $expected, got $actual';
 		}
 	}
+
 }

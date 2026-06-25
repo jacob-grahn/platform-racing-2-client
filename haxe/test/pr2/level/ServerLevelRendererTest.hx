@@ -18,12 +18,22 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testBlockAlphaUpdate():Void {
-		var block = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 10020, 10050);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
-		renderer.setBlockAlpha(block.x, block.y, 0.4);
+		var blocks = [
+			new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10020, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_MINE, 10050, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_CRUMBLE, 10080, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_VANISH, 10110, 10050)
+		];
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, blocks), blocks[0]);
+		for (block in blocks) {
+			renderer.setBlockAlpha(block.x, block.y, 0);
+		}
 
 		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
-		assertEquals(0.4, blockLayer.getChildAt(0).alpha, "server renderer updates block alpha");
+		assertEquals(0.0, blockLayer.getChildAt(0).alpha, "server renderer hides removed brick");
+		assertEquals(0.0, blockLayer.getChildAt(1).alpha, "server renderer hides removed mine");
+		assertEquals(0.0, blockLayer.getChildAt(2).alpha, "server renderer hides removed crumble");
+		assertEquals(0.0, blockLayer.getChildAt(3).alpha, "server renderer hides vanished block");
 	}
 
 	private static function testBlockAssetMapping():Void {

@@ -330,9 +330,6 @@ class CampaignTestScreen extends Sprite {
 
 	private function syncBlockVisuals():Void {
 		for (block in serverFixture.fixture.blocks) {
-			if (block.type != pr2.level.BlockType.Vanish) {
-				continue;
-			}
 			var worldX = (block.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
 			var worldY = (block.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 			levelRenderer.setBlockAlpha(worldX, worldY, player.blockAlphaAt(block.x, block.y));
