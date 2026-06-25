@@ -98,7 +98,11 @@ is scoped to item behavior below.
   remote-player dots are deferred until the full `Game`/`Course` shell and
   multiplayer sync land.
 - [ ] Port in-game item display
-- [ ] Port in-game menu buttons
+- [ ] Port in-game menu buttons.
+  - [x] Port the authored quit button, including immediate mouse quit, the
+    focused Space-key confirmation while racing, glow controls, `quit_race`,
+    the finish popup, and `set_game_room`none` return-to-lobby flow.
+  - [ ] Port the authored music-selection dropdown and runtime song switching.
 - [x] Port finish popup, level rating, experience gain. `gameplay/FinishedPage`,
   `gameplay/ExpGain`, and `ui/RatingSelect` port `FinishedPage.as`/`ExpGain.as`/
   `RatingSelect.as` over the authored `FinishedPageGraphic`, `ExpGainGraphic`,
