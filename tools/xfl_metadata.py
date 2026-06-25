@@ -603,11 +603,25 @@ def parse_frame(frame):
     label = attrs.get("name")
     element_types = []
     display_elements = []
+    sound_envelope = []
 
     elements = first_direct_child(frame, "elements")
     if elements is not None:
         element_types = sorted({local_name(element.tag) for element in list(elements)})
         display_elements = parse_display_elements(elements)
+
+    envelope = first_direct_child(frame, "SoundEnvelope")
+    if envelope is not None:
+        for point in direct_children(envelope, "SoundEnvelopePoint"):
+            sound_envelope.append(
+                compact_record(
+                    {
+                        "mark44": maybe_int(point.attrib.get("mark44")),
+                        "level0": maybe_int(point.attrib.get("level0")),
+                        "level1": maybe_int(point.attrib.get("level1")),
+                    }
+                )
+            )
 
     record = compact_record(
         {
@@ -617,12 +631,18 @@ def parse_frame(frame):
             "labelType": attrs.get("labelType"),
             "keyMode": maybe_int(attrs.get("keyMode")),
             "motionTweenScale": parse_bool(attrs.get("motionTweenScale")),
+            "soundName": attrs.get("soundName"),
+            "soundEffect": attrs.get("soundEffect"),
+            "inPoint44": maybe_int(attrs.get("inPoint44")),
+            "outPoint44": maybe_int(attrs.get("outPoint44")),
             "elementCount": len(list(elements)) if elements is not None else 0,
             "elementTypes": element_types,
         }
     )
     if display_elements:
         record["elements"] = display_elements
+    if sound_envelope:
+        record["soundEnvelope"] = sound_envelope
     return record
 
 

@@ -253,9 +253,20 @@ typedef FrameDef = {
 \t@:optional var labelType:String;
 \t@:optional var keyMode:Int;
 \t@:optional var motionTweenScale:Bool;
+\t@:optional var soundName:String;
+\t@:optional var soundEffect:String;
+\t@:optional var inPoint44:Int;
+\t@:optional var outPoint44:Int;
+\t@:optional var soundEnvelope:Array<SoundEnvelopePointDef>;
 \tvar elementCount:Int;
 \tvar elementTypes:Array<String>;
 \t@:optional var elements:Array<DisplayElementDef>;
+}
+
+typedef SoundEnvelopePointDef = {
+\t@:optional var mark44:Int;
+\t@:optional var level0:Int;
+\t@:optional var level1:Int;
 }
 
 typedef LayerDef = {

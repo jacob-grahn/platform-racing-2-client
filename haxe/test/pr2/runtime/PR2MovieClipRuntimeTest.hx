@@ -13,6 +13,7 @@ import openfl.text.TextField;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
 import pr2.character.CharacterAppearance;
+import pr2.generated.assets.AssetCatalog;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.page.LoginFlashPopup;
 
@@ -31,6 +32,7 @@ class PR2MovieClipRuntimeTest {
 		testBlendModes();
 		testFilters();
 		testScale9Grids();
+		testGeneratedSoundFrameMetadata();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
@@ -314,6 +316,29 @@ class PR2MovieClipRuntimeTest {
 		assertNotNull(generated.scale9Grid, "generated XFL scale grid reaches the runtime");
 		assertClose(5.05, generated.scale9Grid.x, "generated scale9Grid x");
 		assertClose(90, generated.scale9Grid.width, "generated scale9Grid width");
+	}
+
+	private static function testGeneratedSoundFrameMetadata():Void {
+		var symbol = null;
+		for (candidate in AssetCatalog.symbols()) {
+			if (candidate.href == "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 69.xml") {
+				symbol = candidate;
+				break;
+			}
+		}
+		assertNotNull(symbol, "generated catalog retains the authored sound-frame symbol");
+
+		var seekFrame = symbol.timelines[0].layers[14].frames[1];
+		assertEquals("Sounds/sound57.mp3", seekFrame.soundName, "sound frame retains its library name");
+		assertEquals("custom", seekFrame.soundEffect, "sound frame retains its authored effect");
+		assertEquals(4500, seekFrame.inPoint44, "sound frame retains its 44 kHz in point");
+		assertEquals(13000, seekFrame.outPoint44, "sound frame retains its 44 kHz out point");
+
+		var envelope = symbol.timelines[0].layers[10].frames[1].soundEnvelope;
+		assertEquals(2, envelope.length, "sound frame retains every envelope point");
+		assertEquals(14900, envelope[1].mark44, "sound envelope retains its sample marker");
+		assertEquals(32768, envelope[1].level0, "sound envelope retains its left level");
+		assertEquals(32768, envelope[1].level1, "sound envelope retains its right level");
 	}
 
 	private static function testLeafVectorShapes():Void {

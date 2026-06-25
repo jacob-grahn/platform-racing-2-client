@@ -8064,56 +8064,77 @@ final class AssetCatalogSymbolsMovieClips {
 							{
 								color: "#97D768",
 								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 218, elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}],
+								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 218, elementCount: 0, elementTypes: [], index: 1, keyMode: 9728, soundEffect: "custom", soundName: "Sounds/sound57.mp3"}],
 								index: 9,
 								name: "Sound Layer 0"
 							},
 							{
 								color: "#4D73C0",
 								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 218, elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}],
+								frames: [
+									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 218, elementCount: 0, elementTypes: [], index: 1, keyMode: 9728, soundEffect: "custom", soundEnvelope: [{}, {level0: 32768, level1: 32768, mark44: 14900}], soundName: "Sounds/sound58.mp3"}
+								],
 								index: 10,
 								name: "Sound Layer 1"
 							},
 							{
 								color: "#DEAF9A",
 								frameCount: 2,
-								frames: [{duration: 7, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 212, elementCount: 0, elementTypes: [], index: 7, keyMode: 9728}],
+								frames: [
+									{duration: 7, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 212, elementCount: 0, elementTypes: [], index: 7, keyMode: 9728, soundEffect: "custom", soundName: "Sounds/sound62.mp3"}
+								],
 								index: 11,
 								name: "Sound Layer 2"
 							},
 							{
 								color: "#B7F3A0",
 								frameCount: 2,
-								frames: [{duration: 31, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 188, elementCount: 0, elementTypes: [], index: 31, keyMode: 9728}],
+								frames: [
+									{duration: 31, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 188, elementCount: 0, elementTypes: [], index: 31, keyMode: 9728, soundEffect: "custom", soundName: "Sounds/sound63.mp3"}
+								],
 								index: 12,
 								name: "Sound Layer 3"
 							},
 							{
 								color: "#21EFFB",
 								frameCount: 2,
-								frames: [{duration: 36, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 183, elementCount: 0, elementTypes: [], index: 36, keyMode: 9728}],
+								frames: [
+									{duration: 36, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 183, elementCount: 0, elementTypes: [], index: 36, keyMode: 9728, soundEffect: "custom", soundName: "Sounds/sound64.mp3"}
+								],
 								index: 13,
 								name: "Sound Layer 4"
 							},
 							{
 								color: "#617CC4",
 								frameCount: 2,
-								frames: [{duration: 76, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 143, elementCount: 0, elementTypes: [], index: 76, keyMode: 9728}],
+								frames: [
+									{duration: 76, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 143, elementCount: 0, elementTypes: [], inPoint44: 4500, index: 76, keyMode: 9728, outPoint44: 13000, soundEffect: "custom", soundName: "Sounds/sound57.mp3"}
+								],
 								index: 14,
 								name: "Sound Layer 5"
 							},
 							{
 								color: "#74F82D",
 								frameCount: 2,
-								frames: [{duration: 84, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 135, elementCount: 0, elementTypes: [], index: 84, keyMode: 9728}],
+								frames: [
+									{duration: 84, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 135, elementCount: 0, elementTypes: [], index: 84, keyMode: 9728, soundEffect: "custom", soundName: "Sounds/sound67.mp3"}
+								],
 								index: 15,
 								name: "Sound Layer 6"
 							},
 							{
 								color: "#5BFAC0",
 								frameCount: 2,
-								frames: [{duration: 84, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {duration: 135, elementCount: 0, elementTypes: [], index: 84, keyMode: 9728}],
+								frames: [
+									{duration: 84, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 135, elementCount: 0, elementTypes: [], index: 84, keyMode: 9728, soundEffect: "custom", soundEnvelope: [{level0: 16236, level1: 16236}], soundName: "Sounds/sound68.mp3"}
+								],
 								index: 16,
 								name: "Sound Layer 7"
 							}
@@ -13356,7 +13377,13 @@ final class AssetCatalogSymbolsMovieClips {
 								index: 2,
 								name: "Layer 3"
 							},
-							{color: "#FF4FFF", frameCount: 1, frames: [{duration: 232, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 3, name: "Sound Layer"}
+							{
+								color: "#FF4FFF",
+								frameCount: 1,
+								frames: [{duration: 232, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728, soundEnvelope: [{level0: 32768, level1: 32768}], soundName: "Sounds/sound81.mp3"}],
+								index: 3,
+								name: "Sound Layer"
+							}
 						],
 						name: "Symbol 80"
 					}
