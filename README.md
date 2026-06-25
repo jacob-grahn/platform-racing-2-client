@@ -147,7 +147,8 @@ Completed subsystems (parity-relevant facts worth keeping):
   completion and reports its one-based id and pixel center; side/stand/touch
   collisions do not finish the race. Server level decoding is validated across
   m1-m4 formats, legacy/malformed payloads, art backgrounds, drawings, text, stamps,
-  and m4 block options.
+  and m4 block options. The five authored art planes render around the block
+  layer with Flash's rounded 0.25x/0.5x/1x/1x/2x parallax movement.
 - Lobby popups: the external-link warning popup (explicit confirm before opening a
   tab), the Options popup (`OptionsPopupGraphic` — music/sound sliders, filter/art
   toggles, alternate controls saved as Flash key codes, persisted quality/song

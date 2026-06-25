@@ -147,7 +147,12 @@ is scoped to item behavior below.
   `Blocks.getBlock` do in AS3. Guarded by `ServerLevelRendererTest`
   (`testArrowOverlay`). The "press" brighten animation (`ArrowBlock.animateArrow`
   color frames) is deferred until live block-activation hooks land.
-- [ ] Implement background art layers with parallax scrolling
+- [x] Implement background art layers with parallax scrolling.
+  `ServerLevelDecoder` decodes all five drawing/object/text planes and their
+  authored scales; `ServerLevelRenderer` places bg3/bg2/bg1 behind blocks and
+  bg4/bg5 in front, renders the selected level background, and applies Flash's
+  rounded 0.25x/0.5x/1x/1x/2x camera movement. Guarded by
+  `ServerLevelDecoderTest` and `ServerLevelRendererTest`.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 
