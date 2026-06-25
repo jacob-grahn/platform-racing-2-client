@@ -174,5 +174,9 @@ typedef SymbolAssetDef = {
 	@:optional var linkageClassName:String;
 	@:optional var linkageIdentifier:String;
 	@:optional var symbolType:String;
+	@:optional var scaleGridLeft:Float;
+	@:optional var scaleGridRight:Float;
+	@:optional var scaleGridTop:Float;
+	@:optional var scaleGridBottom:Float;
 	var timelines:Array<TimelineDef>;
 }

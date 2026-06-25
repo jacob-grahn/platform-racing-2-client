@@ -238,6 +238,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Apply authored Blur, Glow, and DropShadow filters in source order, with
     Flash-compatible omitted-attribute defaults and keyframe removal. A reduced
     runtime fixture covers every generated-catalog filter type and parameter.
+  - [x] Apply authored symbol nine-slice scaling grids. XFL `scaleGridLeft`,
+    `scaleGridRight`, `scaleGridTop`, and `scaleGridBottom` now generate into
+    `SymbolAssetDef` and initialize OpenFL `scale9Grid`; reduced and generated
+    `SquareBG` fixtures cover coordinate and size conversion.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

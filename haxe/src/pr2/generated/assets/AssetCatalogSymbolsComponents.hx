@@ -737,6 +737,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_disabledSkin",
 				linkageIdentifier: "Button_disabledSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_disabledSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 6.0,
+				scaleGridRight: 74.0,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -878,6 +882,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_downSkin",
 				linkageIdentifier: "Button_downSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_downSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 4.0,
+				scaleGridRight: 76.0,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1028,6 +1036,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_emphasizedSkin",
 				linkageIdentifier: "Button_emphasizedSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_emphasizedSkin",
+				scaleGridBottom: 17.05,
+				scaleGridLeft: 4.9,
+				scaleGridRight: 76.9,
+				scaleGridTop: 4.9,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1113,6 +1125,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_overSkin",
 				linkageIdentifier: "Button_overSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_overSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 5.0,
+				scaleGridRight: 76.0,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1259,6 +1275,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_selectedDisabledSkin",
 				linkageIdentifier: "Button_selectedDisabledSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_selectedDisabledSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 7.0,
+				scaleGridRight: 57.75,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1373,6 +1393,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_selectedDownSkin",
 				linkageIdentifier: "Button_selectedDownSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_selectedDownSkin",
+				scaleGridBottom: 17.0,
+				scaleGridLeft: 5.0,
+				scaleGridRight: 58.85,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1479,6 +1503,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_selectedOverSkin",
 				linkageIdentifier: "Button_selectedOverSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_selectedOverSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 5.0,
+				scaleGridRight: 58.55,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1585,6 +1613,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_selectedUpSkin",
 				linkageIdentifier: "Button_selectedUpSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_selectedUpSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 6.0,
+				scaleGridRight: 59.2,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -1691,6 +1723,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "Button_upSkin",
 				linkageIdentifier: "Button_upSkin",
 				name: "Components/Component Assets/ButtonSkins/Button_upSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 7.0,
+				scaleGridRight: 75.0,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2045,6 +2081,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004dd",
 				linkageClassName: "CellRenderer_disabledSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_disabledSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 150.95,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2121,6 +2161,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004e0",
 				linkageClassName: "CellRenderer_downSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_downSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 150.95,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2197,6 +2241,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004e3",
 				linkageClassName: "CellRenderer_overSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_overSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 151.0,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2274,6 +2322,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004e6",
 				linkageClassName: "CellRenderer_selectedDisabledSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_selectedDisabledSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.15,
+				scaleGridRight: 151.0,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2372,6 +2424,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004e9",
 				linkageClassName: "CellRenderer_selectedDownSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_selectedDownSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 151.0,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2453,6 +2509,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004ec",
 				linkageClassName: "CellRenderer_selectedOverSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_selectedOverSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 151.0,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2576,6 +2636,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004ef",
 				linkageClassName: "CellRenderer_selectedUpSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_selectedUpSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 151.0,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -2662,6 +2726,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "453f806e-000004da",
 				linkageClassName: "CellRenderer_upSkin",
 				name: "Components/Component Assets/CellRendererSkins/CellRenderer_upSkin",
+				scaleGridBottom: 21.0,
+				scaleGridLeft: 1.0,
+				scaleGridRight: 151.0,
+				scaleGridTop: 1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -3821,6 +3889,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44f5ad5f-0000014e",
 				linkageClassName: "ColorPicker_backgroundSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_backgroundSkin",
+				scaleGridBottom: 186.6,
+				scaleGridLeft: 4.0,
+				scaleGridRight: 267.95,
+				scaleGridTop: 10.25,
 				timelines: [
 					{
 						frameCount: 1,
@@ -3904,6 +3976,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "ColorPicker_disabledSkin",
 				linkageIdentifier: "ColorPicker_disabledSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_disabledSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 3.0,
+				scaleGridRight: 14.0,
+				scaleGridTop: 3.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -3969,6 +4045,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "ColorPicker_downSkin",
 				linkageIdentifier: "ColorPicker_downSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_downSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 3.0,
+				scaleGridRight: 14.0,
+				scaleGridTop: 3.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4036,6 +4116,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "ColorPicker_overSkin",
 				linkageIdentifier: "ColorPicker_overSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_overSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 3.0,
+				scaleGridRight: 14.0,
+				scaleGridTop: 3.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4100,6 +4184,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44f4b9ad-00000014",
 				linkageClassName: "ColorPicker_swatchSelectedSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_swatchSelectedSkin",
+				scaleGridBottom: 9.1,
+				scaleGridLeft: 2.85,
+				scaleGridRight: 9.05,
+				scaleGridTop: 2.9,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4184,6 +4272,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "451857c7-000001dc",
 				linkageClassName: "ColorPicker_textFieldSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_textFieldSkin",
+				scaleGridBottom: 26.8,
+				scaleGridLeft: 7.2,
+				scaleGridRight: 66.15,
+				scaleGridTop: 5.7,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4292,6 +4384,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "ColorPicker_upSkin",
 				linkageIdentifier: "ColorPicker_upSkin",
 				name: "Components/Component Assets/ColorPickerSkins/ColorPicker_upSkin",
+				scaleGridBottom: 16.0,
+				scaleGridLeft: 3.0,
+				scaleGridRight: 14.0,
+				scaleGridTop: 3.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4399,6 +4495,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44f747a4-00000196",
 				linkageClassName: "ComboBox_disabledSkin",
 				name: "Components/Component Assets/ComboBoxSkins/ComboBox_disabledSkin",
+				scaleGridBottom: 18.05,
+				scaleGridLeft: 4.0,
+				scaleGridRight: 125.0,
+				scaleGridTop: 13.7,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4577,6 +4677,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44f74767-00000192",
 				linkageClassName: "ComboBox_downSkin",
 				name: "Components/Component Assets/ComboBoxSkins/ComboBox_downSkin",
+				scaleGridBottom: 18.25,
+				scaleGridLeft: 5.0,
+				scaleGridRight: 125.0,
+				scaleGridTop: 13.45,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4756,6 +4860,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44f7476d-00000193",
 				linkageClassName: "ComboBox_overSkin",
 				name: "Components/Component Assets/ComboBoxSkins/ComboBox_overSkin",
+				scaleGridBottom: 17.6,
+				scaleGridLeft: 5.0,
+				scaleGridRight: 125.0,
+				scaleGridTop: 13.25,
 				timelines: [
 					{
 						frameCount: 1,
@@ -4925,6 +5033,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44f7477c-00000194",
 				linkageClassName: "ComboBox_upSkin",
 				name: "Components/Component Assets/ComboBoxSkins/ComboBox_upSkin",
+				scaleGridBottom: 18.05,
+				scaleGridLeft: 4.0,
+				scaleGridRight: 124.75,
+				scaleGridTop: 13.45,
 				timelines: [
 					{
 						frameCount: 1,
@@ -5084,6 +5196,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44d01cb5-00000051",
 				linkageClassName: "List_skin",
 				name: "Components/Component Assets/ListSkins/List_skin",
+				scaleGridBottom: 186.45,
+				scaleGridLeft: 5.9,
+				scaleGridRight: 266.3,
+				scaleGridTop: 5.7,
 				timelines: [
 					{
 						frameCount: 1,
@@ -6304,6 +6420,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "4399c5a6-000092e7",
 				linkageClassName: "ScrollThumb_downSkin",
 				name: "Components/Component Assets/ScrollBarSkins/ScrollThumb_downSkin",
+				scaleGridBottom: 48.0,
+				scaleGridLeft: -1.0,
+				scaleGridRight: 8.05,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -6398,6 +6518,10 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "ScrollThumb_overSkin",
 				linkageIdentifier: "ScrollThumb_overSkin",
 				name: "Components/Component Assets/ScrollBarSkins/ScrollThumb_overSkin",
+				scaleGridBottom: 48.0,
+				scaleGridLeft: -1.05,
+				scaleGridRight: 8.0,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -6492,6 +6616,9 @@ final class AssetCatalogSymbolsComponents {
 				linkageClassName: "ScrollThumb_upSkin",
 				linkageIdentifier: "ScrollThumb_upSkin",
 				name: "Components/Component Assets/ScrollBarSkins/ScrollThumb_upSkin",
+				scaleGridBottom: 48.0,
+				scaleGridRight: 8.0,
+				scaleGridTop: 5.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -6709,6 +6836,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44d8b6f8-00000055",
 				linkageClassName: "focusRectSkin",
 				name: "Components/Component Assets/Shared/focusRectSkin",
+				scaleGridBottom: 16.95,
+				scaleGridLeft: 4.9,
+				scaleGridRight: 76.95,
+				scaleGridTop: 4.95,
 				timelines: [
 					{
 						frameCount: 1,
@@ -7111,6 +7242,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44bafbb2-00000054",
 				linkageClassName: "SliderTrack_disabledSkin",
 				name: "Components/Component Assets/SliderSkins/SliderTrack_disabledSkin",
+				scaleGridBottom: 4.05,
+				scaleGridLeft: 2.0,
+				scaleGridRight: 78.0,
+				scaleGridTop: -1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -7173,6 +7308,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44fdb8c9-000002a6",
 				linkageClassName: "SliderTrack_skin",
 				name: "Components/Component Assets/SliderSkins/SliderTrack_skin",
+				scaleGridBottom: 3.95,
+				scaleGridLeft: 2.25,
+				scaleGridRight: 78.0,
+				scaleGridTop: -1.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -7232,6 +7371,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44d8caf3-000000d9",
 				linkageClassName: "TextArea_disabledSkin",
 				name: "Components/Component Assets/TextAreaSkins/TextArea_disabledSkin",
+				scaleGridBottom: 16.5,
+				scaleGridLeft: 38.0,
+				scaleGridRight: 114.0,
+				scaleGridTop: 5.5,
 				timelines: [
 					{
 						frameCount: 1,
@@ -7292,6 +7435,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44d8cafd-000000da",
 				linkageClassName: "TextArea_upSkin",
 				name: "Components/Component Assets/TextAreaSkins/TextArea_upSkin",
+				scaleGridBottom: 19.95,
+				scaleGridLeft: 1.55,
+				scaleGridRight: 150.05,
+				scaleGridTop: 1.55,
 				timelines: [
 					{
 						frameCount: 1,
@@ -7352,6 +7499,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44b148ab-000000ee",
 				linkageClassName: "TextInput_disabledSkin",
 				name: "Components/Component Assets/TextInputSkins/TextInput_disabledSkin",
+				scaleGridBottom: 19.95,
+				scaleGridLeft: 2.0,
+				scaleGridRight: 150.0,
+				scaleGridTop: 2.0,
 				timelines: [
 					{
 						frameCount: 1,
@@ -7411,6 +7562,10 @@ final class AssetCatalogSymbolsComponents {
 				itemID: "44b148bb-000000ef",
 				linkageClassName: "TextInput_upSkin",
 				name: "Components/Component Assets/TextInputSkins/TextInput_upSkin",
+				scaleGridBottom: 20.05,
+				scaleGridLeft: 2.25,
+				scaleGridRight: 150.05,
+				scaleGridTop: 1.45,
 				timelines: [
 					{
 						frameCount: 1,

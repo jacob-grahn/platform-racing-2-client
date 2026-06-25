@@ -849,6 +849,10 @@ def parse_symbol_linkages(xfl_dir, symbol_includes):
             "linkageClassName": attrs.get("linkageClassName"),
             "linkageIdentifier": attrs.get("linkageIdentifier"),
             "symbolType": attrs.get("symbolType"),
+            "scaleGridLeft": maybe_float(attrs.get("scaleGridLeft")),
+            "scaleGridRight": maybe_float(attrs.get("scaleGridRight")),
+            "scaleGridTop": maybe_float(attrs.get("scaleGridTop")),
+            "scaleGridBottom": maybe_float(attrs.get("scaleGridBottom")),
             "timelines": parse_timelines(root),
         }
         records.append(compact_record(record))

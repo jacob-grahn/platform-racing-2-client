@@ -11,6 +11,10 @@ final class AssetCatalogSymbolsMovieClips {
 				itemID: "62d1c3b1-000009b5",
 				linkageClassName: "ArrowButtonsGraphic",
 				name: "MovieClips/ArrowButtons",
+				scaleGridBottom: 35.55,
+				scaleGridLeft: 11.55,
+				scaleGridRight: 97.55,
+				scaleGridTop: 21.55,
 				timelines: [
 					{
 						frameCount: 1,
@@ -86174,6 +86178,10 @@ final class AssetCatalogSymbolsMovieClips {
 				itemID: "5bfa7c8d-000004a5",
 				linkageClassName: "HalfSquareBG",
 				name: "MovieClips/Symbol 1143",
+				scaleGridBottom: 95.3,
+				scaleGridLeft: 4.55,
+				scaleGridRight: 95.4,
+				scaleGridTop: 3.9,
 				timelines: [
 					{
 						frameCount: 1,

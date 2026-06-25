@@ -308,6 +308,10 @@ typedef SymbolAssetDef = {
 \t@:optional var linkageClassName:String;
 \t@:optional var linkageIdentifier:String;
 \t@:optional var symbolType:String;
+\t@:optional var scaleGridLeft:Float;
+\t@:optional var scaleGridRight:Float;
+\t@:optional var scaleGridTop:Float;
+\t@:optional var scaleGridBottom:Float;
 \tvar timelines:Array<TimelineDef>;
 }
 """

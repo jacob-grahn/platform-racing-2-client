@@ -10,6 +10,7 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
+import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
@@ -103,6 +104,7 @@ class PR2MovieClip extends Sprite {
 		}
 
 		gotoAndStop(1);
+		applyScale9Grid();
 		// Button symbols use their extra frames as up/over/down/hit states, not
 		// as an animation. Drive those states from the mouse like Flash does.
 		isButtonSymbol = symbol.symbolType == "button";
@@ -113,6 +115,22 @@ class PR2MovieClip extends Sprite {
 		} else if (totalFrames > 1) {
 			play();
 		}
+	}
+
+	private function applyScale9Grid():Void {
+		if (symbol.scaleGridLeft == null
+			|| symbol.scaleGridRight == null
+			|| symbol.scaleGridTop == null
+			|| symbol.scaleGridBottom == null) {
+			return;
+		}
+
+		scale9Grid = new Rectangle(
+			symbol.scaleGridLeft,
+			symbol.scaleGridTop,
+			symbol.scaleGridRight - symbol.scaleGridLeft,
+			symbol.scaleGridBottom - symbol.scaleGridTop
+		);
 	}
 
 	// Spike (opt-in via `-D pr2_flatten_cache`): when a top-level clip's whole

@@ -24301,6 +24301,10 @@ final class AssetCatalogSymbolsUI {
 				itemID: "5fb75ce3-00001109",
 				linkageClassName: "SquareBG",
 				name: "UI/Popups (outside levels)/BG",
+				scaleGridBottom: 95.15,
+				scaleGridLeft: 5.05,
+				scaleGridRight: 95.05,
+				scaleGridTop: 5.05,
 				timelines: [
 					{
 						frameCount: 1,
@@ -32006,6 +32010,10 @@ final class AssetCatalogSymbolsUI {
 				itemID: "608b2761-0000050a",
 				linkageClassName: "ShadowBG",
 				name: "UI/ShadowBG",
+				scaleGridBottom: 186.7,
+				scaleGridLeft: 4.65,
+				scaleGridRight: 267.6,
+				scaleGridTop: 6.65,
 				timelines: [
 					{
 						frameCount: 1,

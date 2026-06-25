@@ -30,6 +30,7 @@ class PR2MovieClipRuntimeTest {
 		testColorTransforms();
 		testBlendModes();
 		testFilters();
+		testScale9Grids();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
@@ -299,6 +300,20 @@ class PR2MovieClipRuntimeTest {
 
 		clip.gotoAndStop(2);
 		assertEquals(0, requireChild(clip, "filtered").filters.length, "filters are removed on an unfiltered keyframe");
+	}
+
+	private static function testScale9Grids():Void {
+		var clip = new PR2MovieClip(makeScale9GridSymbol());
+		assertNotNull(clip.scale9Grid, "authored scale grid creates an OpenFL scale9Grid");
+		assertClose(4.5, clip.scale9Grid.x, "scale9Grid x");
+		assertClose(6.5, clip.scale9Grid.y, "scale9Grid y");
+		assertClose(91, clip.scale9Grid.width, "scale9Grid width uses right minus left");
+		assertClose(88.5, clip.scale9Grid.height, "scale9Grid height uses bottom minus top");
+
+		var generated = PR2MovieClip.fromLinkage("SquareBG");
+		assertNotNull(generated.scale9Grid, "generated XFL scale grid reaches the runtime");
+		assertClose(5.05, generated.scale9Grid.x, "generated scale9Grid x");
+		assertClose(90, generated.scale9Grid.width, "generated scale9Grid width");
 	}
 
 	private static function testLeafVectorShapes():Void {
@@ -1070,6 +1085,27 @@ class PR2MovieClipRuntimeTest {
 						]
 					}]
 				}]
+			}]
+		};
+	}
+
+	private static function makeScale9GridSymbol():SymbolAssetDef {
+		return {
+			href: "Scale9GridSymbol.xml",
+			type: "movie clip",
+			name: "Scale9GridSymbol",
+			linkageClassName: "Scale9GridSymbol",
+			linkageIdentifier: "Scale9GridSymbol",
+			scaleGridLeft: 4.5,
+			scaleGridRight: 95.5,
+			scaleGridTop: 6.5,
+			scaleGridBottom: 95,
+			timelines: [{
+				name: "Scale9GridSymbol",
+				layerCount: 0,
+				frameCount: 1,
+				labels: [],
+				layers: []
 			}]
 		};
 	}
