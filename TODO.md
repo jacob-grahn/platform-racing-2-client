@@ -101,7 +101,7 @@ is scoped to item behavior below.
   `ItemDisplayGraphic` item frames, dual item-name fields, and three ammo dots
   from `LocalPlayerController` state in `CampaignTestScreen`, at Flash's stage
   position (2,2). Guarded by `ItemDisplayTest`.
-- [ ] Port in-game menu buttons.
+- [x] Port in-game menu buttons.
   - [x] Port the authored quit button, including immediate mouse quit, the
     focused Space-key confirmation while racing, glow controls, `quit_race`,
     the finish popup, and `set_game_room`none` return-to-lobby flow.
