@@ -1,6 +1,7 @@
 package pr2.level;
 
 import openfl.display.Sprite;
+import openfl.events.Event;
 import pr2.level.ServerLevel.DecodedArtLayer;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel.DecodedDrawAction;
@@ -13,6 +14,7 @@ class ServerLevelRendererTest {
 		testArtAssetMappings();
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
+		testArrowAnimation();
 		testMineExplosion();
 		testBlockPieces();
 		testArtLayerDepthAndParallax();
@@ -85,6 +87,25 @@ class ServerLevelRendererTest {
 		assertEquals(-90.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_LEFT), "left arrow rotates -90");
 		assertEquals(90.0, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_ARROW_RIGHT), "right arrow rotates 90");
 		assertEquals(null, ServerLevelRenderer.arrowOverlayRotation(ObjectCodes.BLOCK_BASIC2), "non-arrow blocks have no overlay rotation");
+	}
+
+	private static function testArrowAnimation():Void {
+		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
+		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow timeline starts stopped on frame 1");
+
+		renderer.animateArrow(arrow.x, arrow.y);
+		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow activation starts one frame brighter");
+
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
+		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
+		var timeline = pivot.getChildAt(0);
+		for (_ in 0...7) {
+			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow animation returns to its stopped first frame");
+		assertEquals(null, renderer.arrowFrameAt(0, 0), "non-arrow coordinate has no animation frame");
 	}
 
 	private static function testArtAssetMappings():Void {

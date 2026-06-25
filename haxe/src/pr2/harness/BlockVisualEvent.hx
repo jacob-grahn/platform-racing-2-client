@@ -1,6 +1,7 @@
 package pr2.harness;
 
 enum BlockVisualEventKind {
+	ArrowAnimate;
 	MineExplode;
 	BrickPieces;
 	CrumblePieces;

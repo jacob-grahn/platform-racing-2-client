@@ -521,8 +521,10 @@ class LocalPlayerController {
 				} else {
 					pushArrow(block.type);
 				}
+				animateArrow(block);
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
+				animateArrow(block);
 			default:
 		}
 	}
@@ -560,8 +562,10 @@ class LocalPlayerController {
 				startRotate(block);
 			case BlockType.ArrowUp:
 				vy = !input.down && !crouching ? -14 : 0;
+				animateArrow(block);
 			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
+				animateArrow(block);
 			default:
 		}
 	}
@@ -601,8 +605,13 @@ class LocalPlayerController {
 				pushBlock(block, vx >= 0 ? 1 : -1, 0);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(block.type);
+				animateArrow(block);
 			default:
 		}
+	}
+
+	private function animateArrow(block:LevelBlock):Void {
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.ArrowAnimate, block.x, block.y));
 	}
 
 	private function pushArrow(type:BlockType):Void {

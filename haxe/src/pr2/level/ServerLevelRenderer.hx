@@ -16,6 +16,7 @@ import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedTextObject;
 import pr2.effects.BlockPiece;
 import pr2.effects.MineExplosion;
+import pr2.runtime.PR2MovieClip;
 
 /**
 	Renders the decoded server block layer in original PR2 pixel units.
@@ -35,6 +36,7 @@ class ServerLevelRenderer extends Sprite {
 	private final blockLayer:Sprite = new Sprite();
 	private final artLayerContainers:Array<Sprite> = [];
 	private final blockDisplays:Map<String, Sprite> = new Map();
+	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
 
 	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y) {
 		super();
@@ -84,6 +86,23 @@ class ServerLevelRenderer extends Sprite {
 		if (display != null) {
 			display.alpha = alpha;
 		}
+	}
+
+	public function animateArrow(worldX:Int, worldY:Int):Void {
+		var arrow = arrowDisplays.get(blockKey(worldX, worldY));
+		if (arrow == null) {
+			return;
+		}
+		if (arrow.currentFrame < 5) {
+			arrow.gotoAndPlay(arrow.currentFrame + 1);
+		} else if (arrow.currentFrame > 5) {
+			arrow.gotoAndPlay(arrow.currentFrame - 1);
+		}
+	}
+
+	public function arrowFrameAt(worldX:Int, worldY:Int):Null<Int> {
+		var arrow = arrowDisplays.get(blockKey(worldX, worldY));
+		return arrow == null ? null : arrow.currentFrame;
 	}
 
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
@@ -144,7 +163,7 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	/** The shared arrow overlay art (ArrowBlockGraphic) drawn over the base tile. */
+	/** The committed raster export retained for asset-inventory compatibility. */
 	public static inline function arrowOverlayAssetPath():String {
 		return "assets/blocks/arrow_overlay@4x.png";
 	}
@@ -340,7 +359,10 @@ class ServerLevelRenderer extends Sprite {
 
 		var arrowRotation = arrowOverlayRotation(block.code);
 		if (arrowRotation != null) {
-			addArrowOverlay(container, arrowRotation);
+			var arrow = addArrowOverlay(container, arrowRotation);
+			if (arrow != null) {
+				arrowDisplays.set(blockKey(block.x, block.y), arrow);
+			}
 		}
 
 		return container;
@@ -351,23 +373,21 @@ class ServerLevelRenderer extends Sprite {
 		which places the ArrowBlockGraphic at the tile centre (15,15) and rotates
 		it about that point.
 	**/
-	private static function addArrowOverlay(container:Sprite, rotation:Float):Void {
-		var overlayPath = arrowOverlayAssetPath();
-		if (!Assets.exists(overlayPath, AssetType.IMAGE)) {
-			return;
-		}
+	private static function addArrowOverlay(container:Sprite, rotation:Float):Null<PR2MovieClip> {
 		var pivot = new Sprite();
-		var bitmap = new Bitmap(Assets.getBitmapData(overlayPath));
-		bitmap.smoothing = true;
-		// Overlay art is authored at 4x; render it at the 30px block scale.
-		bitmap.scaleX = bitmap.scaleY = 0.25;
-		bitmap.x = -bitmap.width / 2;
-		bitmap.y = -bitmap.height / 2;
-		pivot.addChild(bitmap);
+		var arrow = PR2MovieClip.fromLinkage("ArrowBlockGraphic", {maxNestedDepth: 2});
+		// ArrowBlockGraphic's generated AS3 class stops on frame 1. Reinstall that
+		// class script here so gotoAndPlay runs the authored brighten/fade cycle
+		// once and stops after wrapping back to the first frame.
+		arrow.stop();
+		arrow.setFrameScript(0, arrow.stop);
+		arrow.gotoAndStop(1);
+		pivot.addChild(arrow);
 		pivot.x = TILE_SIZE / 2;
 		pivot.y = TILE_SIZE / 2;
 		pivot.rotation = rotation;
 		container.addChild(pivot);
+		return arrow;
 	}
 
 	private static function drawFallbackBlock(container:Sprite, code:Int):Void {

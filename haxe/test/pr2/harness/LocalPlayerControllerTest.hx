@@ -275,7 +275,11 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testArrowStandEffectsMatchAs3Deltas():Void {
-		assertClose(-10, new LocalPlayerController(singleBlockLevel(BlockType.ArrowUp)).debugState().vy, "up arrow stand launches upward");
+		var up = new LocalPlayerController(singleBlockLevel(BlockType.ArrowUp));
+		assertClose(-10, up.debugState().vy, "up arrow stand launches upward");
+		var events = up.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "arrow stand emits one visual activation");
+		assertEquals("ArrowAnimate", Type.enumConstructor(events[0].kind), "arrow stand emits authored animation event");
 		assertClose(5, new LocalPlayerController(singleBlockLevel(BlockType.ArrowDown)).debugState().vy, "down arrow stand pushes down");
 		assertClose(-3, new LocalPlayerController(singleBlockLevel(BlockType.ArrowLeft)).debugState().vx, "left arrow stand pushes left");
 		assertClose(3, new LocalPlayerController(singleBlockLevel(BlockType.ArrowRight)).debugState().vx, "right arrow stand pushes right");

@@ -147,12 +147,15 @@ is scoped to item behavior below.
   `LocalPlayerControllerTest`, `FixtureLevelRendererTest`, and
   `ServerLevelRendererTest`.
 - [x] Arrow blocks render their arrows. `ServerLevelRenderer` now draws arrow
-  blocks as a `basic2` base tile plus the shared `arrow_overlay@4x` graphic,
+  blocks as a `basic2` base tile plus the generated `ArrowBlockGraphic`,
   centered on the tile (15,15) and rotated per direction (up 0, down 180, left
   -90, right 90) exactly as `ArrowBlock`/`ArrowUp/Down/Left/RightBlock` and
-  `Blocks.getBlock` do in AS3. Guarded by `ServerLevelRendererTest`
-  (`testArrowOverlay`). The "press" brighten animation (`ArrowBlock.animateArrow`
-  color frames) is deferred until live block-activation hooks land.
+  `Blocks.getBlock` do in AS3. Guarded by `ServerLevelRendererTest`.
+  - [x] Port the "press" brighten animation. Local arrow collisions now emit a
+    visual activation that drives the authored eight-frame `ArrowBlockGraphic`
+    timeline, including its frame-1 stop script and `ArrowBlock.animateArrow`
+    retrigger rules. Guarded by `LocalPlayerControllerTest` and
+    `ServerLevelRendererTest`.
 - [x] Implement background art layers with parallax scrolling.
   `ServerLevelDecoder` decodes all five drawing/object/text planes and their
   authored scales; `ServerLevelRenderer` places bg3/bg2/bg1 behind blocks and

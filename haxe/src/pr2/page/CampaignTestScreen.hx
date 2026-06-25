@@ -398,6 +398,10 @@ class CampaignTestScreen extends Sprite {
 		}
 		for (event in player.consumeBlockVisualEvents()) {
 			switch (event.kind) {
+				case ArrowAnimate:
+					var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+					var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+					levelRenderer.animateArrow(worldX, worldY);
 				case MineExplode:
 					var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
 					var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;

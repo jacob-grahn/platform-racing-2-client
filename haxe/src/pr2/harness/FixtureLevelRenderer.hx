@@ -34,6 +34,7 @@ class FixtureLevelRenderer extends Sprite {
 		}
 		for (event in player.consumeBlockVisualEvents()) {
 			switch (event.kind) {
+				case ArrowAnimate:
 				case MineExplode:
 					addChild(new MineExplosion(event.tileX * 30, event.tileY * 30));
 				case BrickPieces:
