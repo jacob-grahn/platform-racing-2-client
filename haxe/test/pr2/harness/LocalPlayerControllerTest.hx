@@ -457,8 +457,10 @@ class LocalPlayerControllerTest {
 		assertEquals("hurt", initialState.mode, "mine hit enters hurt recovery mode");
 		assertEquals("bumped", initialState.animation, "mine hit exposes bumped animation");
 		var visualEvents = player.consumeBlockVisualEvents();
-		assertEquals(1, visualEvents.length, "mine hit emits one visual event");
-		assertEquals("MineExplode", Std.string(visualEvents[0].kind), "mine hit emits explosion event");
+		assertEquals(2, visualEvents.length, "mine hit emits piece and explosion events");
+		assertEquals("MinePieces", Std.string(visualEvents[0].kind), "mine hit emits authored pieces");
+		assertEquals(10, visualEvents[0].count, "mine hit emits ten pieces");
+		assertEquals("MineExplode", Std.string(visualEvents[1].kind), "mine hit emits explosion event");
 		assertEquals(0, player.consumeBlockVisualEvents().length, "visual events are consumed once");
 
 		for (_ in 0...60) {
@@ -750,6 +752,10 @@ class LocalPlayerControllerTest {
 	private static function testBumpingBrickBlockBreaksIt():Void {
 		var level = supplyBlockLevel(BlockType.Brick);
 		var player = bumpSupply(level, BlockType.Brick);
+		var visualEvents = player.consumeBlockVisualEvents();
+		assertEquals(1, visualEvents.length, "broken brick emits one piece event");
+		assertEquals("BrickPieces", Std.string(visualEvents[0].kind), "broken brick uses brick pieces");
+		assertEquals(6, visualEvents[0].count, "broken brick emits six pieces");
 		player.step(new LocalPlayerInput(false, false, true));
 		assertEquals(false, player.debugState().touchedBlockType == "brick", "broken brick no longer collides");
 	}

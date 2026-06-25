@@ -14,6 +14,7 @@ import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.effects.BlockPiece;
 import pr2.effects.MineExplosion;
 
 /**
@@ -89,6 +90,19 @@ class ServerLevelRenderer extends Sprite {
 		var effect = new MineExplosion(worldX, worldY, offsetX, offsetY, playSound);
 		blockLayer.addChild(effect);
 		return effect;
+	}
+
+	public function showBlockPieces(linkage:String, worldX:Float, worldY:Float, count:Int, spreadX:Float, spreadY:Float,
+			spreadRot:Float, ?random:Void->Float):Array<BlockPiece> {
+		var nextRandom = random == null ? Math.random : random;
+		var pieces:Array<BlockPiece> = [];
+		for (_ in 0...count) {
+			var piece = new BlockPiece(linkage, worldX + nextRandom() * TILE_SIZE, worldY + nextRandom() * TILE_SIZE, spreadX, spreadY, spreadRot,
+				BlockPiece.GRAVITY, BlockPiece.FRICTION, BlockPiece.FADE_RATE, nextRandom);
+			blockLayer.addChild(piece);
+			pieces.push(piece);
+		}
+		return pieces;
 	}
 
 	private static inline function parallaxOffset(screenOffset:Float, stageCenter:Float, scale:Float):Float {

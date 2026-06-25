@@ -14,6 +14,7 @@ class ServerLevelRendererTest {
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
 		testMineExplosion();
+		testBlockPieces();
 		testArtLayerDepthAndParallax();
 		trace('ServerLevelRendererTest passed $assertions assertions');
 	}
@@ -30,6 +31,24 @@ class ServerLevelRendererTest {
 			effect.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
 		}
 		assertEquals(1, blockLayer.numChildren, "mine explosion removes itself after 14 frames");
+	}
+
+	private static function testBlockPieces():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var pieces = renderer.showBlockPieces("BrickPieceGraphic", block.x, block.y, 1, 10, 10, 25, function() return 0.5);
+		var piece = pieces[0];
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		assertEquals(block.x + 15, piece.x, "piece starts at randomized position inside block");
+		assertEquals(block.y + 15, piece.y, "piece starts at randomized position inside block");
+		assertEquals(180.0, piece.rotation, "piece starts with randomized rotation");
+		piece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		assertEquals(block.y + 15.75, piece.y, "piece applies friction then gravity");
+		assertClose(0.95, piece.alpha, "piece fades by Flash rate");
+		for (_ in 0...19) {
+			piece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		}
+		assertEquals(1, blockLayer.numChildren, "piece removes itself after 20 frames");
 	}
 
 	private static function testBlockAlphaUpdate():Void {
@@ -129,6 +148,13 @@ class ServerLevelRendererTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) {
+			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertClose(expected:Float, actual:Float, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > 0.0001) {
 			throw '$message: expected $expected, got $actual';
 		}
 	}

@@ -131,11 +131,14 @@ is scoped to item behavior below.
   campaign block display rather than only vanish blocks, and the fixture
   renderer uses the authored mine and crumble bitmap assets. Guarded by
   `FixtureLevelRendererTest` and `ServerLevelRendererTest`.
-- [ ] Show the authored mine explosion and mine/brick/crumble piece effects
+- [x] Show the authored mine explosion and mine/brick/crumble piece effects
   when those blocks are hit or removed.
   - [x] Show the authored 14-frame mine explosion and spatial explosion sound
     when a mine is triggered.
-  - [ ] Show the authored mine, brick, and crumble piece physics.
+  - [x] Show the authored mine, brick, and crumble piece physics. Authored
+    `BrickPieceGraphic`, `CrumblePieceGraphic`, and `MinePieceGraphic` fragments
+    now use Flash's exact counts, randomized spawn/velocity/rotation spreads,
+    gravity, friction, fade rate, and 20-frame removal lifecycle.
 - [x] Vanish blocks now reproduce `VanishBlock.as` visually as well as
   physically: contact fades the block by 0.1 per frame, the inactive block is
   hidden during its 2-second delay, and an unoccupied block reappears at 0.2

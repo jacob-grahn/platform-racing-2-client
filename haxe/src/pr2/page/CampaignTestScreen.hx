@@ -18,6 +18,7 @@ import pr2.character.CharacterDisplay;
 import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
+import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.CameraFollow;
 import pr2.gameplay.ItemDisplay;
@@ -401,8 +402,20 @@ class CampaignTestScreen extends Sprite {
 					var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
 					var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 					levelRenderer.showMineExplosion(worldX, worldY);
+				case BrickPieces:
+					showBlockPieces(event, "BrickPieceGraphic", 10, 10, 25);
+				case CrumblePieces:
+					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
+				case MinePieces:
+					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
 			}
 		}
+	}
+
+	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
+		var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+		var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+		levelRenderer.showBlockPieces(linkage, worldX, worldY, event.count, spreadX, spreadY, spreadRot);
 	}
 
 	private function updatePlayerDisplay():Void {

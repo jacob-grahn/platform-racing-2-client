@@ -527,6 +527,7 @@ class LocalPlayerController {
 		switch (block.type) {
 			case BlockType.Brick:
 				removedBlocks.set(blockKey(block.x, block.y), true);
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
 			case BlockType.Finish:
 				finish(block);
 			case BlockType.Happy:
@@ -730,6 +731,7 @@ class LocalPlayerController {
 		vx += Math.cos(angle) * MINE_HIT_SPEED;
 		vy += Math.sin(angle) * MINE_HIT_SPEED;
 		removedBlocks.set(blockKey(block.x, block.y), true);
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
 		if (mode != MODE_FREEZE) {
 			setMode(MODE_HURT);
@@ -1009,7 +1011,9 @@ class LocalPlayerController {
 		var life = crumbleLife.exists(key) ? crumbleLife.get(key) : CRUMBLE_INITIAL_LIFE;
 		life -= damage;
 		crumbleLife.set(key, life);
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, Std.int(Math.min(damage * 2, 20))));
 		if (life <= 0) {
+			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, 10));
 			removedBlocks.set(key, true);
 		}
 	}

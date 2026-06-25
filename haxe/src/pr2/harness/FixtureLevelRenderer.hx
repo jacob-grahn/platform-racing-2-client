@@ -8,6 +8,7 @@ import openfl.utils.Assets;
 import pr2.level.BlockType;
 import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
+import pr2.effects.BlockPiece;
 import pr2.effects.MineExplosion;
 
 class FixtureLevelRenderer extends Sprite {
@@ -35,7 +36,19 @@ class FixtureLevelRenderer extends Sprite {
 			switch (event.kind) {
 				case MineExplode:
 					addChild(new MineExplosion(event.tileX * 30, event.tileY * 30));
+				case BrickPieces:
+					showBlockPieces("BrickPieceGraphic", event.tileX * 30, event.tileY * 30, event.count, 10, 10, 25);
+				case CrumblePieces:
+					showBlockPieces("CrumblePieceGraphic", event.tileX * 30, event.tileY * 30, event.count, 5, 5, 15);
+				case MinePieces:
+					showBlockPieces("MinePieceGraphic", event.tileX * 30, event.tileY * 30, event.count, 30, 30, 50);
 			}
+		}
+	}
+
+	private function showBlockPieces(linkage:String, worldX:Float, worldY:Float, count:Int, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
+		for (_ in 0...count) {
+			addChild(new BlockPiece(linkage, worldX + Math.random() * 30, worldY + Math.random() * 30, spreadX, spreadY, spreadRot));
 		}
 	}
 
