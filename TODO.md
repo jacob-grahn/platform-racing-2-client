@@ -229,6 +229,9 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   color transforms, nested frame scripts, sound frames, dynamic text/font
   embedding, buttons, nine-slice scaling, and unload/disposal behavior. Add a
   reduced fixture for every runtime fix.
+  - [x] Apply authored element blend modes in `PR2MovieClip`, including
+    Animate's `layer` mode, with a reduced runtime fixture covering multiply,
+    screen, layer, and the normal default.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

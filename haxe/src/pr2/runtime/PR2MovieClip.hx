@@ -1,6 +1,7 @@
 package pr2.runtime;
 
 import haxe.ds.ObjectMap;
+import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.display.FrameLabel;
 import openfl.display.Shape;
@@ -864,6 +865,7 @@ class PR2MovieClip extends Sprite {
 			applyColorTransform(child, element.color);
 		}
 
+		child.blendMode = element.blendMode == null ? BlendMode.NORMAL : element.blendMode;
 		applyFilters(child, element.filters);
 	}
 

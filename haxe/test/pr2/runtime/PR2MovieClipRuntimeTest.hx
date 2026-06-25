@@ -1,5 +1,6 @@
 package pr2.runtime;
 
+import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
@@ -24,6 +25,7 @@ class PR2MovieClipRuntimeTest {
 		testMaskLayersClipMaskedLayers();
 		testGeneratedRatingStarsMask();
 		testColorTransforms();
+		testBlendModes();
 		testLeafVectorShapes();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
@@ -235,6 +237,15 @@ class PR2MovieClipRuntimeTest {
 		clip.gotoAndStop(2);
 		assertEquals(null, clip.getChildByTimelineName("primaryColor"), "color children are replaced on frame changes");
 		assertColorTransform(requireChild(clip, "identityColor"), 1, 1, 1, 1, 0, 0, 0, 0, "missing color transform defaults to identity");
+	}
+
+	private static function testBlendModes():Void {
+		var clip = new PR2MovieClip(makeBlendModeSymbol());
+
+		assertEquals(BlendMode.MULTIPLY, requireChild(clip, "multiply").blendMode, "multiply blend mode is applied");
+		assertEquals(BlendMode.SCREEN, requireChild(clip, "screen").blendMode, "screen blend mode is applied");
+		assertEquals(BlendMode.LAYER, requireChild(clip, "layer").blendMode, "layer blend mode is applied");
+		assertEquals(BlendMode.NORMAL, requireChild(clip, "normal").blendMode, "missing blend mode defaults to normal");
 	}
 
 	private static function testLeafVectorShapes():Void {
@@ -947,6 +958,61 @@ class PR2MovieClipRuntimeTest {
 								objectWidth: 60,
 								objectHeight: 40,
 								fill: {type: "SolidColor", color: "#00FF00"}
+							}
+						]
+					}]
+				}]
+			}]
+		};
+	}
+
+	private static function makeBlendModeSymbol():SymbolAssetDef {
+		return {
+			href: "BlendModeSymbol.xml",
+			type: "movie clip",
+			name: "BlendModeSymbol",
+			linkageClassName: "BlendModeSymbol",
+			linkageIdentifier: "BlendModeSymbol",
+			timelines: [{
+				name: "BlendModeSymbol",
+				layerCount: 1,
+				frameCount: 1,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 1,
+					frames: [{
+						index: 0,
+						duration: 1,
+						elementCount: 4,
+						elementTypes: ["DOMShape", "DOMShape", "DOMShape", "DOMShape"],
+						elements: [
+							{
+								type: "DOMShape",
+								name: "multiply",
+								blendMode: "multiply",
+								bounds: {left: 0, top: 0, right: 10, bottom: 10}
+							},
+							{
+								type: "DOMShape",
+								name: "screen",
+								blendMode: "screen",
+								bounds: {left: 0, top: 0, right: 10, bottom: 10}
+							},
+							{
+								type: "DOMShape",
+								name: "layer",
+								blendMode: "layer",
+								bounds: {left: 0, top: 0, right: 10, bottom: 10}
+							},
+							{
+								type: "DOMShape",
+								name: "normal",
+								bounds: {left: 0, top: 0, right: 10, bottom: 10}
 							}
 						]
 					}]
