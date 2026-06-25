@@ -8,6 +8,7 @@ import openfl.media.SoundTransform;
 import openfl.net.URLRequest;
 import pr2.lobby.account.Settings;
 import pr2.ui.MuteButton;
+import pr2.audio.MusicCatalog.MusicTrack;
 
 /** Runtime counterpart of GameSound; selection is separate from UI so the
 	level editor and authored race dropdown can share identical playback rules. */

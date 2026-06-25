@@ -105,7 +105,13 @@ is scoped to item behavior below.
   - [x] Port the authored quit button, including immediate mouse quit, the
     focused Space-key confirmation while racing, glow controls, `quit_race`,
     the finish popup, and `set_game_room`none` return-to-lobby flow.
-  - [ ] Port the authored music-selection dropdown and runtime song switching.
+  - [x] Port the authored music-selection dropdown and runtime song switching.
+    `gameplay/MusicSelection` renders `MusicSelectionGraphic` around the shared
+    authored `FlComboBox`, filters the catalog through the saved song blacklist,
+    selects the level's requested/random fallback track, switches looping
+    `GameMusic` playback on user changes, and supports the artifact song.
+    `CampaignTestScreen` positions it at Course's stage-space coordinates and
+    tears it down with the level. Guarded by `MusicSelectionTest`.
 - [x] Port finish popup, level rating, experience gain. `gameplay/FinishedPage`,
   `gameplay/ExpGain`, and `ui/RatingSelect` port `FinishedPage.as`/`ExpGain.as`/
   `RatingSelect.as` over the authored `FinishedPageGraphic`, `ExpGainGraphic`,

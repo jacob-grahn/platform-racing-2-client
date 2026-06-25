@@ -22,6 +22,7 @@ import pr2.gameplay.CameraFollow;
 import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
 import pr2.gameplay.MiniMapDot;
+import pr2.gameplay.MusicSelection;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
 import pr2.net.CampaignLevelInfo;
@@ -63,6 +64,7 @@ class CampaignTestScreen extends Sprite {
 	private var miniMap:MiniMap;
 	private var playerDot:MiniMapDot;
 	private var itemDisplay:ItemDisplay;
+	private var musicSelection:MusicSelection;
 	private var displayedItemId:Null<Int>;
 	private var displayedItemUses:Null<Int>;
 	private var lastStatusText:String = "";
@@ -159,6 +161,10 @@ class CampaignTestScreen extends Sprite {
 		if (itemDisplay != null) {
 			itemDisplay.remove();
 			itemDisplay = null;
+		}
+		if (musicSelection != null) {
+			musicSelection.remove();
+			musicSelection = null;
 		}
 		if (parent != null) parent.removeChild(this);
 	}
@@ -260,6 +266,7 @@ class CampaignTestScreen extends Sprite {
 		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
 		buildMiniMap(level);
 		buildItemDisplay();
+		buildMusicSelection(data.song);
 		updatePlayerDisplay();
 	}
 
@@ -307,6 +314,16 @@ class CampaignTestScreen extends Sprite {
 		displayedItemId = null;
 		displayedItemUses = null;
 		syncItemDisplay();
+	}
+
+	/** Positions the authored race music selector at Course's stage-space (204, 362). */
+	private function buildMusicSelection(songId:String):Void {
+		if (musicSelection != null) musicSelection.remove();
+		musicSelection = new MusicSelection();
+		musicSelection.x = 204;
+		musicSelection.y = 362;
+		addChild(musicSelection);
+		musicSelection.setSong(songId);
 	}
 
 	private function createStatusText():Void {
