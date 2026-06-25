@@ -3,6 +3,7 @@ package pr2.runtime;
 import haxe.ds.ObjectMap;
 import openfl.display.BlendMode;
 import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.FrameLabel;
 import openfl.display.Shape;
 import openfl.display.Sprite;
@@ -596,11 +597,12 @@ class PR2MovieClip extends Sprite {
 				clip.dispose();
 				continue;
 			}
-			// Mask/content holders are plain Sprites; dispose any clips nested
-			// inside them so animated children stop their ENTER_FRAME ticks.
-			var holder = Std.downcast(child, Sprite);
-			if (holder != null) {
-				disposeHolder(holder);
+			// Groups, component skins, and mask holders can contain animated clips
+			// at any depth. Walk the full subtree so none of their ENTER_FRAME
+			// listeners survive after the owning timeline is disposed.
+			var container = Std.downcast(child, DisplayObjectContainer);
+			if (container != null) {
+				disposeContainer(container);
 			}
 		}
 		// Flush OpenFL's pending-removed-children queue (see renderFrame): the
@@ -612,14 +614,19 @@ class PR2MovieClip extends Sprite {
 		shapeByElement = new ObjectMap();
 	}
 
-	private function disposeHolder(holder:Sprite):Void {
-		holder.mask = null;
-		while (holder.numChildren > 0) {
-			var nestedChild = holder.removeChildAt(holder.numChildren - 1);
+	private function disposeContainer(container:DisplayObjectContainer):Void {
+		container.mask = null;
+		while (container.numChildren > 0) {
+			var nestedChild = container.removeChildAt(container.numChildren - 1);
 			appliedFilterDefs.remove(nestedChild);
 			var nested = Std.downcast(nestedChild, PR2MovieClip);
 			if (nested != null) {
 				nested.dispose();
+				continue;
+			}
+			var nestedContainer = Std.downcast(nestedChild, DisplayObjectContainer);
+			if (nestedContainer != null) {
+				disposeContainer(nestedContainer);
 			}
 		}
 	}

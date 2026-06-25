@@ -261,6 +261,9 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
 - [ ] Audit cleanup across repeated login/lobby/race/editor transitions: event
   listeners, timers, sockets, bitmap data, audio, and display-list references
   must not leak or duplicate behavior.
+  - [x] Recursively dispose animated `PR2MovieClip` descendants inside
+    `DOMGroup`, component, and mask-holder containers so nested `ENTER_FRAME`
+    listeners cannot survive their owning timeline.
 
 ## Test and Release Matrix
 

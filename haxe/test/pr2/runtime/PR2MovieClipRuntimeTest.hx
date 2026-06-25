@@ -36,6 +36,7 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
 		testLeafVectorShapes();
+		testDisposeStopsClipsNestedInGroups();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
 		testLoginPopupUsesAuthoredComponentsOnly();
@@ -377,6 +378,23 @@ class PR2MovieClipRuntimeTest {
 		assertNotNull(group, "DOMGroup renders as a sprite");
 		assertEquals(1, group.numChildren, "DOMGroup renders member shapes");
 		assertAtLeast(9, group.getChildAt(0).width, "DOMGroup member shape renders vector width");
+	}
+
+	private static function testDisposeStopsClipsNestedInGroups():Void {
+		var clip = new PR2MovieClip(makeNestedAnimatedGroupSymbol());
+		var group = Std.downcast(clip.getChildByTimelineName("group"), Sprite);
+		assertNotNull(group, "nested animated group renders");
+		var nested = Std.downcast(group.getChildAt(0), PR2MovieClip);
+		assertNotNull(nested, "group contains the animated child clip");
+
+		var startingFrame = nested.currentFrame;
+		nested.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(startingFrame + 1, nested.currentFrame, "nested child plays before disposal");
+
+		clip.dispose();
+		var disposedFrame = nested.currentFrame;
+		nested.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(disposedFrame, nested.currentFrame, "disposing the owner stops clips nested inside groups");
 	}
 
 	private static function testGeneratedCharacterNamedChildren():Void {
@@ -1329,6 +1347,44 @@ class PR2MovieClipRuntimeTest {
 								}]
 							}
 						]
+					}]
+				}]
+			}]
+		};
+	}
+
+	private static function makeNestedAnimatedGroupSymbol():SymbolAssetDef {
+		return {
+			href: "NestedAnimatedGroupSymbol.xml",
+			type: "movie clip",
+			name: "NestedAnimatedGroupSymbol",
+			linkageClassName: "NestedAnimatedGroupSymbol",
+			linkageIdentifier: "NestedAnimatedGroupSymbol",
+			timelines: [{
+				name: "NestedAnimatedGroupSymbol",
+				layerCount: 1,
+				frameCount: 1,
+				labels: [],
+				layers: [{
+					index: 0,
+					name: "Layer 1",
+					visible: true,
+					locked: false,
+					layerType: "normal",
+					frameCount: 1,
+					frames: [{
+						index: 0,
+						duration: 1,
+						elementCount: 1,
+						elementTypes: ["DOMGroup"],
+						elements: [{
+							type: "DOMGroup",
+							name: "group",
+							children: [{
+								type: "DOMSymbolInstance",
+								libraryItemName: "Parts/Heads/headsMC"
+							}]
+						}]
 					}]
 				}]
 			}]
