@@ -4,7 +4,7 @@ set -euo pipefail
 max_runs="${MAX_RUNS:-0}"
 last_output="${LAST_OUTPUT:-/tmp/codex-todo-loop-last.txt}"
 
-prompt='Read README.md and TODO.md. Pick exactly one incomplete TODO item. Implement it fully. Run the relevant tests. Update TODO.md. Stop after one item. If there are no actionable TODO items left, reply exactly DONE and make no changes. If you made a change, reply with only a short git commit message, 72 characters or fewer, with no bullet, code fence, or explanation.'
+prompt='Read README.md and TODO.md. Pick exactly one incomplete TODO item. Either implement it fully, or break the TODO item into subtasks and implement one subtask fully. Run the relevant tests. Update TODO.md. Stop after one item. If there are no actionable TODO items left, reply exactly DONE and make no changes. If you made a change, reply with only a short git commit message, 72 characters or fewer, with no bullet, code fence, or explanation.'
 
 run_count=0
 
