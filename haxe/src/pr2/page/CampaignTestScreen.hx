@@ -18,6 +18,7 @@ import pr2.character.CharacterDisplay;
 import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
+import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.CameraFollow;
 import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
@@ -393,6 +394,14 @@ class CampaignTestScreen extends Sprite {
 			var worldX = (block.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
 			var worldY = (block.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 			levelRenderer.setBlockAlpha(worldX, worldY, player.blockAlphaAt(block.x, block.y));
+		}
+		for (event in player.consumeBlockVisualEvents()) {
+			switch (event.kind) {
+				case MineExplode:
+					var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+					var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+					levelRenderer.showMineExplosion(worldX, worldY);
+			}
 		}
 	}
 

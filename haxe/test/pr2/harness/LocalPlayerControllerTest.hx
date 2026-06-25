@@ -456,6 +456,10 @@ class LocalPlayerControllerTest {
 		assertClose(-50, initialState.vy, "mine hit launches away from block center with AS3 speed");
 		assertEquals("hurt", initialState.mode, "mine hit enters hurt recovery mode");
 		assertEquals("bumped", initialState.animation, "mine hit exposes bumped animation");
+		var visualEvents = player.consumeBlockVisualEvents();
+		assertEquals(1, visualEvents.length, "mine hit emits one visual event");
+		assertEquals("MineExplode", Std.string(visualEvents[0].kind), "mine hit emits explosion event");
+		assertEquals(0, player.consumeBlockVisualEvents().length, "visual events are consumed once");
 
 		for (_ in 0...60) {
 			player.step(new LocalPlayerInput());

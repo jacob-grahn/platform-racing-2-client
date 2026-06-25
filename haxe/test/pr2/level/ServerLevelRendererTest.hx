@@ -13,8 +13,23 @@ class ServerLevelRendererTest {
 		testArtAssetMappings();
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
+		testMineExplosion();
 		testArtLayerDepthAndParallax();
 		trace('ServerLevelRendererTest passed $assertions assertions');
+	}
+
+	private static function testMineExplosion():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_MINE, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var effect = renderer.showMineExplosion(block.x, block.y, false);
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		assertEquals(block.x, effect.x, "mine explosion uses block world x");
+		assertEquals(block.y, effect.y, "mine explosion uses block world y");
+		assertEquals(effect, blockLayer.getChildAt(1), "mine explosion renders over the block layer");
+		for (_ in 0...14) {
+			effect.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		}
+		assertEquals(1, blockLayer.numChildren, "mine explosion removes itself after 14 frames");
 	}
 
 	private static function testBlockAlphaUpdate():Void {

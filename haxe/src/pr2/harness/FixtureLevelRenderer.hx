@@ -8,6 +8,7 @@ import openfl.utils.Assets;
 import pr2.level.BlockType;
 import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
+import pr2.effects.MineExplosion;
 
 class FixtureLevelRenderer extends Sprite {
 	private static inline var GRID_COLOR:Int = 0x3E465D;
@@ -29,6 +30,12 @@ class FixtureLevelRenderer extends Sprite {
 		for (key => display in blockDisplays) {
 			var position = key.split(",");
 			display.alpha = player.blockAlphaAt(Std.parseInt(position[0]), Std.parseInt(position[1]));
+		}
+		for (event in player.consumeBlockVisualEvents()) {
+			switch (event.kind) {
+				case MineExplode:
+					addChild(new MineExplosion(event.tileX * 30, event.tileY * 30));
+			}
 		}
 	}
 

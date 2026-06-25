@@ -14,6 +14,7 @@ import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.effects.MineExplosion;
 
 /**
 	Renders the decoded server block layer in original PR2 pixel units.
@@ -82,6 +83,12 @@ class ServerLevelRenderer extends Sprite {
 		if (display != null) {
 			display.alpha = alpha;
 		}
+	}
+
+	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
+		var effect = new MineExplosion(worldX, worldY, offsetX, offsetY, playSound);
+		blockLayer.addChild(effect);
+		return effect;
 	}
 
 	private static inline function parallaxOffset(screenOffset:Float, stageCenter:Float, scale:Float):Float {

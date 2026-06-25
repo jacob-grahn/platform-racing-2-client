@@ -5,6 +5,7 @@ import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.BlockType;
 import pr2.gameplay.RotationMath;
+import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 
 class LocalPlayerController {
 	public static inline var STANDING_WIDTH:Float = 20;
@@ -87,6 +88,7 @@ class LocalPlayerController {
 	private var waterTicks:Float = 0;
 	private final crumbleLife:Map<String, Int> = new Map();
 	private final removedBlocks:Map<String, Bool> = new Map();
+	private final blockVisualEvents:Array<BlockVisualEvent> = [];
 	private final vanishFadeFrames:Map<String, Int> = new Map();
 	private final vanishReappearFrames:Map<String, Int> = new Map();
 	private final vanishFadeInFrames:Map<String, Int> = new Map();
@@ -305,6 +307,12 @@ class LocalPlayerController {
 			return 1 - vanishFadeInFrames.get(key) / VANISH_FADE_FRAMES;
 		}
 		return removedBlocks.exists(key) ? 0 : 1;
+	}
+
+	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
+		var events = blockVisualEvents.copy();
+		blockVisualEvents.resize(0);
+		return events;
 	}
 
 	private function position():Void {
@@ -722,6 +730,7 @@ class LocalPlayerController {
 		vx += Math.cos(angle) * MINE_HIT_SPEED;
 		vy += Math.sin(angle) * MINE_HIT_SPEED;
 		removedBlocks.set(blockKey(block.x, block.y), true);
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
 		if (mode != MODE_FREEZE) {
 			setMode(MODE_HURT);
 			if (hurtFramesRemaining <= 0) {
