@@ -267,7 +267,11 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
     - [x] Preserve authored `soundLoopMode`/`soundLoop` metadata and play event/
       start sounds with Flash repeat-count and continuous-loop semantics.
       Guarded by `AudioRuntimeTest`.
-    - [ ] Implement stream sync mode.
+    - [x] Implement stream sync mode. Stream frames now remain active across
+      their authored keyframe duration, seek from the playhead's 27 FPS frame
+      offset and authored in-point, continue without restarting across
+      sequential frames, and stop on timeline stop or disposal. Guarded by
+      `AudioRuntimeTest`.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

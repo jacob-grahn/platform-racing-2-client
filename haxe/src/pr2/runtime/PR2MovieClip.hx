@@ -57,7 +57,8 @@ class PR2MovieClip extends Sprite {
 	private var maxNestedDepth:Int;
 	private var nestedDepth:Int;
 	private var includeHiddenLayers:Bool;
-	private var soundFrameHandler:FrameDef->Void;
+	private var soundFrameHandler:Null<FrameDef->Void>;
+	private var hasEnteredFrame:Bool = false;
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
 	private var runningFrameScripts:Bool = false;
 	private var isButtonSymbol:Bool = false;
@@ -104,9 +105,7 @@ class PR2MovieClip extends Sprite {
 		this.symbol = symbol;
 		this.maxNestedDepth = options != null && options.maxNestedDepth != null ? options.maxNestedDepth : 32;
 		this.includeHiddenLayers = options != null && options.includeHiddenLayers == true;
-		this.soundFrameHandler = options != null && options.soundFrameHandler != null
-			? options.soundFrameHandler
-			: function(frame:FrameDef):Void TimelineSound.processFrame(frame, this);
+		this.soundFrameHandler = options != null ? options.soundFrameHandler : null;
 		this.nestedDepth = nestedDepth;
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];
@@ -115,7 +114,7 @@ class PR2MovieClip extends Sprite {
 			buildTimeline(timeline);
 		}
 
-		gotoAndStop(1);
+		gotoFrame(1, false);
 		applyScale9Grid();
 		// Button symbols use their extra frames as up/over/down/hit states, not
 		// as an animation. Drive those states from the mouse like Flash does.
@@ -173,6 +172,7 @@ class PR2MovieClip extends Sprite {
 	}
 
 	public function stop():Void {
+		TimelineSound.stopStream(this);
 		if (!playing) {
 			return;
 		}
@@ -236,12 +236,12 @@ class PR2MovieClip extends Sprite {
 	}
 
 	public function gotoAndPlay(frame:Dynamic):Void {
-		gotoFrame(frame);
+		gotoFrame(frame, true);
 		play();
 	}
 
 	public function gotoAndStop(frame:Dynamic):Void {
-		gotoFrame(frame);
+		gotoFrame(frame, false);
 		stop();
 	}
 
@@ -250,7 +250,7 @@ class PR2MovieClip extends Sprite {
 		if (next > totalFrames) {
 			next = 1;
 		}
-		gotoFrame(next);
+		gotoFrame(next, true);
 	}
 
 	public function getChildByTimelineName(name:String):Null<DisplayObject> {
@@ -331,7 +331,13 @@ class PR2MovieClip extends Sprite {
 			var end = Std.int(Math.min(totalFrames, start + duration));
 
 			if (frame.soundName != null && start >= 0 && start < totalFrames) {
-				frames[start].soundFrames.push(frame);
+				if (frame.soundSync == "stream") {
+					for (frameIndex in start...end) {
+						frames[frameIndex].soundFrames.push(frame);
+					}
+				} else {
+					frames[start].soundFrames.push(frame);
+				}
 			}
 
 			for (frameIndex in start...end) {
@@ -348,22 +354,40 @@ class PR2MovieClip extends Sprite {
 		advanceOneFrame();
 	}
 
-	private function gotoFrame(frame:Dynamic):Void {
+	private function gotoFrame(frame:Dynamic, streamEnabled:Bool):Void {
 		var frameNumber = resolveFrame(frame);
 		if (frameNumber < 1 || frameNumber > totalFrames) {
 			throw 'Frame out of range for ${symbol.name}: $frameNumber';
 		}
 
+		var sequential = hasEnteredFrame && frameNumber == currentFrame + 1;
 		currentFrame = frameNumber;
+		hasEnteredFrame = true;
 		var runtimeFrame = frames[frameNumber - 1];
 		renderFrame(runtimeFrame);
-		playFrameSounds(runtimeFrame);
+		playFrameSounds(runtimeFrame, frameNumber, sequential, streamEnabled);
 		runFrameScripts(frameNumber);
 	}
 
-	private function playFrameSounds(frame:RuntimeFrame):Void {
+	private function playFrameSounds(frame:RuntimeFrame, frameNumber:Int, sequential:Bool, streamEnabled:Bool):Void {
+		if (soundFrameHandler == null) {
+			var hasStream = false;
+			for (soundFrame in frame.soundFrames) {
+				if (soundFrame.soundSync == "stream") {
+					hasStream = true;
+					break;
+				}
+			}
+			if (!hasStream) {
+				TimelineSound.stopStream(this);
+			}
+		}
 		for (soundFrame in frame.soundFrames) {
-			soundFrameHandler(soundFrame);
+			if (soundFrameHandler != null) {
+				soundFrameHandler(soundFrame);
+			} else {
+				TimelineSound.processFrame(soundFrame, this, frameNumber, sequential, streamEnabled);
+			}
 		}
 	}
 

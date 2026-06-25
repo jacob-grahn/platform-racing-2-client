@@ -50,6 +50,19 @@ class AudioRuntimeTest {
 			elementCount: 0,
 			elementTypes: []
 		}) == 0, "timeline sounds play once by default"); assertions++;
+		var streamFrame = {
+			index: 4,
+			soundName: "Sounds/stream.mp3",
+			inPoint44: 22050,
+			elementCount: 0,
+			elementTypes: []
+		};
+		assert(TimelineSound.streamSampleAt(streamFrame, 5) == 22050,
+			"stream playback starts at the authored in point on its keyframe"); assertions++;
+		assert(TimelineSound.streamSampleAt(streamFrame, 32) == 66150,
+			"stream playback seeks by elapsed 27 FPS timeline frames"); assertions++;
+		assert(TimelineSound.streamSampleAt(streamFrame, 1) == 22050,
+			"stream playback never seeks before its authored in point"); assertions++;
 
 		var stoppedA = 0;
 		var stoppedB = 0;

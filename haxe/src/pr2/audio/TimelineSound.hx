@@ -19,18 +19,34 @@ import pr2.lobby.account.Settings;
 	active instances of their named library sound. Start-sync frames behave like
 	event sounds unless that library sound is already active. Authored repeat
 	counts and continuous-loop mode map to OpenFL's additional-loop count. Stream
-	sync is handled by later runtime parity work. Playback started by a PR2MovieClip
-	is owned by that timeline and stopped when the clip is disposed.
+	sounds seek from their timeline-frame offset, continue across sequential
+	frames, and stop when their owning timeline stops or is disposed.
 **/
 class TimelineSound {
 	private static inline var SAMPLES_PER_MILLISECOND:Float = 44.1;
+	private static inline var TIMELINE_FRAME_RATE:Float = 27;
 	private static inline var MAX_ENVELOPE_LEVEL:Float = 32768;
 	private static inline var CONTINUOUS_LOOPS:Int = 9999;
 	private static var activeByPath:Map<String, Array<ActiveTimelineSound>> = new Map();
 	private static var activeByOwner:ObjectMap<Dynamic, Array<ActiveTimelineSound>> = new ObjectMap();
+	private static var streamByOwner:ObjectMap<Dynamic, ActiveTimelineSound> = new ObjectMap();
 
-	public static function processFrame(frame:FrameDef, ?owner:Dynamic):Void {
+	public static function processFrame(
+		frame:FrameDef,
+		?owner:Dynamic,
+		?timelineFrame:Int,
+		sequential:Bool = false,
+		streamEnabled:Bool = true
+	):Void {
 		if (frame.soundName == null) {
+			return;
+		}
+		if (frame.soundSync == "stream") {
+			if (streamEnabled) {
+				playStreamFrame(frame, owner, timelineFrame == null ? 1 : timelineFrame, sequential);
+			} else {
+				stopStream(owner);
+			}
 			return;
 		}
 		if (frame.soundSync == "stop") {
@@ -41,6 +57,63 @@ class TimelineSound {
 			return;
 		}
 		playEventFrame(frame, owner);
+	}
+
+	public static function playStreamFrame(frame:FrameDef, owner:Dynamic, timelineFrame:Int, sequential:Bool):Void {
+		if (owner == null || frame.soundName == null) {
+			return;
+		}
+
+		var path = assetPath(frame.soundName);
+		var current = streamByOwner.get(owner);
+		if (sequential && current != null && current.path == path && current.streamFrame == frame.index) {
+			return;
+		}
+		stopStream(owner);
+		if (Settings.soundLevel <= 0) {
+			return;
+		}
+
+		var sound = Assets.getSound(path);
+		if (sound == null) {
+			return;
+		}
+		var startSample44 = streamSampleAt(frame, timelineFrame);
+		if (frame.outPoint44 != null && startSample44 >= frame.outPoint44) {
+			return;
+		}
+		var startTime = sample44ToMilliseconds(startSample44);
+		var elapsedSample44 = startSample44 - valueOrZero(frame.inPoint44);
+		var initialMix = envelopeMixAt(frame.soundEnvelope, elapsedSample44);
+		var channel = sound.play(startTime, 0, soundTransform(initialMix.left, initialMix.right));
+		if (channel == null) {
+			return;
+		}
+
+		var stopMonitoring:Null<Void->Void> = null;
+		var active = registerActive(path, channel.stop, owner, function():Void {
+			if (stopMonitoring != null) {
+				stopMonitoring();
+			}
+		});
+		active.streamFrame = frame.index;
+		streamByOwner.set(owner, active);
+		channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(active));
+		if (frame.outPoint44 != null || hasChangingEnvelope(frame.soundEnvelope)) {
+			stopMonitoring = monitor(channel, frame, startTime, elapsedSample44, function():Void unregisterActive(active));
+		}
+	}
+
+	public static function stopStream(owner:Dynamic):Void {
+		if (owner == null) {
+			return;
+		}
+		var active = streamByOwner.get(owner);
+		if (active == null) {
+			return;
+		}
+		unregisterActive(active);
+		active.stop();
 	}
 
 	public static function playEventFrame(frame:FrameDef, ?owner:Dynamic):Void {
@@ -63,7 +136,7 @@ class TimelineSound {
 				});
 				channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(active));
 				if (frame.outPoint44 != null || hasChangingEnvelope(frame.soundEnvelope)) {
-					stopMonitoring = monitor(channel, frame, startTime, function():Void unregisterActive(active));
+					stopMonitoring = monitor(channel, frame, startTime, 0, function():Void unregisterActive(active));
 				}
 			}
 		}
@@ -144,6 +217,13 @@ class TimelineSound {
 		return sample44 / SAMPLES_PER_MILLISECOND;
 	}
 
+	public static function streamSampleAt(frame:FrameDef, timelineFrame:Int):Int {
+		var keyframe = frame.index == null ? 0 : frame.index;
+		var elapsedFrames = Math.max(0, timelineFrame - 1 - keyframe);
+		return valueOrZero(frame.inPoint44)
+			+ Std.int(Math.round(elapsedFrames * SAMPLES_PER_MILLISECOND * 1000 / TIMELINE_FRAME_RATE));
+	}
+
 	public static function playbackLoops(frame:FrameDef):Int {
 		if (frame.soundLoopMode == "loop") {
 			return CONTINUOUS_LOOPS;
@@ -190,7 +270,13 @@ class TimelineSound {
 		return "assets/audio/sfx/" + fileName;
 	}
 
-	private static function monitor(channel:SoundChannel, frame:FrameDef, startTime:Float, onStop:Void->Void):Void->Void {
+	private static function monitor(
+		channel:SoundChannel,
+		frame:FrameDef,
+		startTime:Float,
+		initialElapsedSample44:Int = 0,
+		onStop:Void->Void
+	):Void->Void {
 		var timer = new Timer(15);
 		var stopMonitoring = function():Void timer.stop();
 		channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void stopMonitoring());
@@ -203,7 +289,7 @@ class TimelineSound {
 			}
 
 			var elapsedMilliseconds = Math.max(0, channel.position - startTime);
-			var mark44 = Std.int(Math.round(elapsedMilliseconds * SAMPLES_PER_MILLISECOND));
+			var mark44 = initialElapsedSample44 + Std.int(Math.round(elapsedMilliseconds * SAMPLES_PER_MILLISECOND));
 			var mix = envelopeMixAt(frame.soundEnvelope, mark44);
 			channel.soundTransform = soundTransform(mix.left, mix.right);
 		};
@@ -220,6 +306,9 @@ class TimelineSound {
 			activeByPath.remove(active.path);
 		}
 		if (active.owner != null) {
+			if (streamByOwner.get(active.owner) == active) {
+				streamByOwner.remove(active.owner);
+			}
 			var owned = activeByOwner.get(active.owner);
 			if (owned != null) {
 				owned.remove(active);
@@ -264,4 +353,5 @@ typedef ActiveTimelineSound = {
 	var path:String;
 	var stop:Void->Void;
 	var owner:Dynamic;
+	@:optional var streamFrame:Int;
 }
