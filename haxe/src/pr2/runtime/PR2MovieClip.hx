@@ -33,8 +33,8 @@ typedef RuntimeFrame = {
 	// Parallel to `elements`: false for elements authored on a hidden layer.
 	var elementLayerVisible:Array<Bool>;
 	// Sound keyframes that begin on this exact frame. Unlike display elements,
-	// sound frames are not expanded across their authored duration: Flash event
-	// sounds fire once when the playhead enters the keyframe.
+	// sound frames are not expanded across their authored duration: Flash sound
+	// commands run once when the playhead enters the keyframe.
 	var soundFrames:Array<FrameDef>;
 }
 
@@ -106,7 +106,7 @@ class PR2MovieClip extends Sprite {
 		this.includeHiddenLayers = options != null && options.includeHiddenLayers == true;
 		this.soundFrameHandler = options != null && options.soundFrameHandler != null
 			? options.soundFrameHandler
-			: TimelineSound.playEventFrame;
+			: TimelineSound.processFrame;
 		this.nestedDepth = nestedDepth;
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];

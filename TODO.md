@@ -253,7 +253,12 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
       milliseconds, start at `inPoint44`, stop at `outPoint44`, and linearly
       interpolate authored left/right envelope levels while playing. Guarded by
       `AudioRuntimeTest`.
-    - [ ] Implement non-event sync modes, looping, and stop/disposal behavior.
+    - [x] Implement stop-sync frames. Generated frame metadata now retains
+      `soundSync`, and entering a `stop` keyframe terminates every active
+      instance of that named library sound without affecting other sounds.
+      Guarded by `AudioRuntimeTest`.
+    - [ ] Implement start/stream sync modes, looping, and timeline-owned
+      disposal behavior.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
   empty, and error states. Keep visual metrics alongside baselines so “looks

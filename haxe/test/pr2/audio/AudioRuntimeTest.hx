@@ -34,6 +34,24 @@ class AudioRuntimeTest {
 		assertNear(1, defaultMix.left, "timeline sounds without envelopes use full left volume"); assertions++;
 		assertNear(1, defaultMix.right, "timeline sounds without envelopes use full right volume"); assertions++;
 
+		var stoppedA = 0;
+		var stoppedB = 0;
+		TimelineSound.registerActive("Sounds/a.mp3", function():Void stoppedA++);
+		TimelineSound.registerActive("Sounds/a.mp3", function():Void stoppedA++);
+		TimelineSound.registerActive("Sounds/b.mp3", function():Void stoppedB++);
+		TimelineSound.processFrame({
+			soundName: "Sounds/a.mp3",
+			soundSync: "stop",
+			elementCount: 0,
+			elementTypes: []
+		});
+		assert(stoppedA == 2, "stop-sync terminates every active instance of the named sound"); assertions++;
+		assert(stoppedB == 0, "stop-sync leaves other library sounds playing"); assertions++;
+		TimelineSound.stopLibrarySound("Sounds/a.mp3");
+		assert(stoppedA == 2, "stopped timeline sounds are removed from the active registry"); assertions++;
+		TimelineSound.stopLibrarySound("Sounds/b.mp3");
+		assert(stoppedB == 1, "other registered timeline sounds remain independently stoppable"); assertions++;
+
 		var songs = MusicCatalog.enabled(["2", "19"]);
 		assert(songs.length == 18, "disabled songs are omitted outside the editor"); assertions++;
 		assert(MusicCatalog.select(songs, "3", 0) == 2, "known song ids select exactly"); assertions++;

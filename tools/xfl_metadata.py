@@ -633,6 +633,7 @@ def parse_frame(frame):
             "motionTweenScale": parse_bool(attrs.get("motionTweenScale")),
             "soundName": attrs.get("soundName"),
             "soundEffect": attrs.get("soundEffect"),
+            "soundSync": attrs.get("soundSync"),
             "inPoint44": maybe_int(attrs.get("inPoint44")),
             "outPoint44": maybe_int(attrs.get("outPoint44")),
             "elementCount": len(list(elements)) if elements is not None else 0,

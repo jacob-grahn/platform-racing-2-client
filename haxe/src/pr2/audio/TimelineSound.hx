@@ -14,12 +14,25 @@ import pr2.lobby.account.Settings;
 
 	Event/default-sync sounds start once when their keyframe is entered and then
 	run independently of the timeline. Authored in/out points and volume
-	envelopes use Animate's 44.1 kHz sample units. Non-event sync modes, looping,
+	envelopes use Animate's 44.1 kHz sample units. Stop-sync frames terminate all
+	active instances of their named library sound. Start/stream sync, looping,
 	and timeline-owned disposal are handled by later runtime parity work.
 **/
 class TimelineSound {
 	private static inline var SAMPLES_PER_MILLISECOND:Float = 44.1;
 	private static inline var MAX_ENVELOPE_LEVEL:Float = 32768;
+	private static var activeByPath:Map<String, Array<ActiveTimelineSound>> = new Map();
+
+	public static function processFrame(frame:FrameDef):Void {
+		if (frame.soundName == null) {
+			return;
+		}
+		if (frame.soundSync == "stop") {
+			stopLibrarySound(frame.soundName);
+			return;
+		}
+		playEventFrame(frame);
+	}
 
 	public static function playEventFrame(frame:FrameDef):Void {
 		if (frame.soundName == null || Settings.soundLevel <= 0) {
@@ -32,10 +45,44 @@ class TimelineSound {
 			var startTime = sample44ToMilliseconds(valueOrZero(frame.inPoint44));
 			var initialMix = envelopeMixAt(frame.soundEnvelope, 0);
 			var channel = sound.play(startTime, 0, soundTransform(initialMix.left, initialMix.right));
-			if (channel != null && (frame.outPoint44 != null || hasChangingEnvelope(frame.soundEnvelope))) {
-				monitor(channel, frame, startTime);
+			if (channel != null) {
+				var active = registerActive(path, channel.stop);
+				channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(path, active));
+				if (frame.outPoint44 != null || hasChangingEnvelope(frame.soundEnvelope)) {
+					monitor(channel, frame, startTime, function():Void unregisterActive(path, active));
+				}
 			}
 		}
+	}
+
+	public static function stopLibrarySound(libraryName:String):Void {
+		var path = assetPath(libraryName);
+		var active = activeByPath.get(path);
+		if (active == null) {
+			return;
+		}
+		activeByPath.remove(path);
+		for (instance in active) {
+			instance.stop();
+		}
+	}
+
+	/**
+		Register timeline-owned playback. Public so deterministic tests and future
+		sync-mode backends can use the same stop registry without loading audio.
+	**/
+	public static function registerActive(libraryNameOrPath:String, stop:Void->Void):ActiveTimelineSound {
+		var path = StringTools.startsWith(libraryNameOrPath, "assets/")
+			? libraryNameOrPath
+			: assetPath(libraryNameOrPath);
+		var active = {stop: stop};
+		var instances = activeByPath.get(path);
+		if (instances == null) {
+			instances = [];
+			activeByPath.set(path, instances);
+		}
+		instances.push(active);
+		return active;
 	}
 
 	public static inline function sample44ToMilliseconds(sample44:Int):Float {
@@ -81,13 +128,14 @@ class TimelineSound {
 		return "assets/audio/sfx/" + fileName;
 	}
 
-	private static function monitor(channel:SoundChannel, frame:FrameDef, startTime:Float):Void {
+	private static function monitor(channel:SoundChannel, frame:FrameDef, startTime:Float, onStop:Void->Void):Void {
 		var timer = new Timer(15);
 		var stopMonitoring = function():Void timer.stop();
 		channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void stopMonitoring());
 		timer.run = function():Void {
 			if (frame.outPoint44 != null && channel.position >= sample44ToMilliseconds(frame.outPoint44)) {
 				channel.stop();
+				onStop();
 				stopMonitoring();
 				return;
 			}
@@ -97,6 +145,17 @@ class TimelineSound {
 			var mix = envelopeMixAt(frame.soundEnvelope, mark44);
 			channel.soundTransform = soundTransform(mix.left, mix.right);
 		};
+	}
+
+	private static function unregisterActive(path:String, active:ActiveTimelineSound):Void {
+		var instances = activeByPath.get(path);
+		if (instances == null) {
+			return;
+		}
+		instances.remove(active);
+		if (instances.length == 0) {
+			activeByPath.remove(path);
+		}
 	}
 
 	private static function soundTransform(left:Float, right:Float):SoundTransform {
@@ -127,4 +186,8 @@ class TimelineSound {
 	}
 
 	private function new() {}
+}
+
+typedef ActiveTimelineSound = {
+	var stop:Void->Void;
 }

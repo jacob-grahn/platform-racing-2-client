@@ -255,6 +255,7 @@ typedef FrameDef = {
 \t@:optional var motionTweenScale:Bool;
 \t@:optional var soundName:String;
 \t@:optional var soundEffect:String;
+\t@:optional var soundSync:String;
 \t@:optional var inPoint44:Int;
 \t@:optional var outPoint44:Int;
 \t@:optional var soundEnvelope:Array<SoundEnvelopePointDef>;
