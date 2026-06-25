@@ -634,6 +634,8 @@ def parse_frame(frame):
             "soundName": attrs.get("soundName"),
             "soundEffect": attrs.get("soundEffect"),
             "soundSync": attrs.get("soundSync"),
+            "soundLoopMode": attrs.get("soundLoopMode"),
+            "soundLoop": maybe_int(attrs.get("soundLoop")),
             "inPoint44": maybe_int(attrs.get("inPoint44")),
             "outPoint44": maybe_int(attrs.get("outPoint44")),
             "elementCount": len(list(elements)) if elements is not None else 0,

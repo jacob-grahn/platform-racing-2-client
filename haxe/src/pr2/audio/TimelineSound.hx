@@ -17,13 +17,15 @@ import pr2.lobby.account.Settings;
 	run independently of the timeline. Authored in/out points and volume
 	envelopes use Animate's 44.1 kHz sample units. Stop-sync frames terminate all
 	active instances of their named library sound. Start-sync frames behave like
-	event sounds unless that library sound is already active. Stream sync,
-	looping are handled by later runtime parity work. Playback started by a
-	PR2MovieClip is owned by that timeline and stopped when the clip is disposed.
+	event sounds unless that library sound is already active. Authored repeat
+	counts and continuous-loop mode map to OpenFL's additional-loop count. Stream
+	sync is handled by later runtime parity work. Playback started by a PR2MovieClip
+	is owned by that timeline and stopped when the clip is disposed.
 **/
 class TimelineSound {
 	private static inline var SAMPLES_PER_MILLISECOND:Float = 44.1;
 	private static inline var MAX_ENVELOPE_LEVEL:Float = 32768;
+	private static inline var CONTINUOUS_LOOPS:Int = 9999;
 	private static var activeByPath:Map<String, Array<ActiveTimelineSound>> = new Map();
 	private static var activeByOwner:ObjectMap<Dynamic, Array<ActiveTimelineSound>> = new ObjectMap();
 
@@ -51,7 +53,7 @@ class TimelineSound {
 		if (sound != null) {
 			var startTime = sample44ToMilliseconds(valueOrZero(frame.inPoint44));
 			var initialMix = envelopeMixAt(frame.soundEnvelope, 0);
-			var channel = sound.play(startTime, 0, soundTransform(initialMix.left, initialMix.right));
+			var channel = sound.play(startTime, playbackLoops(frame), soundTransform(initialMix.left, initialMix.right));
 			if (channel != null) {
 				var active = registerActive(path, channel.stop, owner);
 				channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(active));
@@ -121,6 +123,13 @@ class TimelineSound {
 
 	public static inline function sample44ToMilliseconds(sample44:Int):Float {
 		return sample44 / SAMPLES_PER_MILLISECOND;
+	}
+
+	public static function playbackLoops(frame:FrameDef):Int {
+		if (frame.soundLoopMode == "loop") {
+			return CONTINUOUS_LOOPS;
+		}
+		return frame.soundLoop == null ? 0 : Std.int(Math.max(0, frame.soundLoop - 1));
 	}
 
 	public static function envelopeMixAt(envelope:Array<SoundEnvelopePointDef>, mark44:Int):{left:Float, right:Float} {

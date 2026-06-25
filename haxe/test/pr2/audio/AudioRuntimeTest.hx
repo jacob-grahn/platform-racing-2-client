@@ -33,6 +33,23 @@ class AudioRuntimeTest {
 		var defaultMix = TimelineSound.envelopeMixAt(null, 0);
 		assertNear(1, defaultMix.left, "timeline sounds without envelopes use full left volume"); assertions++;
 		assertNear(1, defaultMix.right, "timeline sounds without envelopes use full right volume"); assertions++;
+		assert(TimelineSound.playbackLoops({
+			soundName: "Sounds/repeat.mp3",
+			soundLoop: 3,
+			elementCount: 0,
+			elementTypes: []
+		}) == 2, "authored repeat counts map total plays to OpenFL's additional loops"); assertions++;
+		assert(TimelineSound.playbackLoops({
+			soundName: "Sounds/loop.mp3",
+			soundLoopMode: "loop",
+			elementCount: 0,
+			elementTypes: []
+		}) == 9999, "continuous timeline sounds use the runtime's established loop sentinel"); assertions++;
+		assert(TimelineSound.playbackLoops({
+			soundName: "Sounds/once.mp3",
+			elementCount: 0,
+			elementTypes: []
+		}) == 0, "timeline sounds play once by default"); assertions++;
 
 		var stoppedA = 0;
 		var stoppedB = 0;

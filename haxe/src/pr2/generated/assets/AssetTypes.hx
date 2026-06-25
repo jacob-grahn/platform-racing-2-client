@@ -122,6 +122,8 @@ typedef FrameDef = {
 	@:optional var soundName:String;
 	@:optional var soundEffect:String;
 	@:optional var soundSync:String;
+	@:optional var soundLoopMode:String;
+	@:optional var soundLoop:Int;
 	@:optional var inPoint44:Int;
 	@:optional var outPoint44:Int;
 	@:optional var soundEnvelope:Array<SoundEnvelopePointDef>;
