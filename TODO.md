@@ -248,7 +248,11 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
     envelope, seeking, looping, and stop/disposal behavior.
     - [x] Play default/event sounds once when the playhead enters their exact
       keyframe, without retriggering across the keyframe's held duration.
-    - [ ] Apply authored in/out-point seeking and volume envelopes.
+    - [x] Apply authored in/out-point seeking and volume envelopes. Timeline
+      event sounds now convert Animate's 44.1 kHz sample markers to playback
+      milliseconds, start at `inPoint44`, stop at `outPoint44`, and linearly
+      interpolate authored left/right envelope levels while playing. Guarded by
+      `AudioRuntimeTest`.
     - [ ] Implement non-event sync modes, looping, and stop/disposal behavior.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,

@@ -16,6 +16,24 @@ class AudioRuntimeTest {
 		assertNear(0, outside.volume, "effects past 700 pixels are silent"); assertions++;
 		assertNear(1, outside.pan, "pan is clamped to the SoundTransform range"); assertions++;
 
+		assertNear(1000, TimelineSound.sample44ToMilliseconds(44100), "timeline sound sample points convert to milliseconds"); assertions++;
+		var fade = [
+			{mark44: 0, level0: 0, level1: 32768},
+			{mark44: 44100, level0: 32768, level1: 0}
+		];
+		var fadeStart = TimelineSound.envelopeMixAt(fade, 0);
+		assertNear(0, fadeStart.left, "timeline envelope starts at its authored left level"); assertions++;
+		assertNear(1, fadeStart.right, "timeline envelope starts at its authored right level"); assertions++;
+		var fadeMiddle = TimelineSound.envelopeMixAt(fade, 22050);
+		assertNear(0.5, fadeMiddle.left, "timeline envelope interpolates the left level"); assertions++;
+		assertNear(0.5, fadeMiddle.right, "timeline envelope interpolates the right level"); assertions++;
+		var fadeEnd = TimelineSound.envelopeMixAt(fade, 50000);
+		assertNear(1, fadeEnd.left, "timeline envelope holds its final left level"); assertions++;
+		assertNear(0, fadeEnd.right, "timeline envelope holds its final right level"); assertions++;
+		var defaultMix = TimelineSound.envelopeMixAt(null, 0);
+		assertNear(1, defaultMix.left, "timeline sounds without envelopes use full left volume"); assertions++;
+		assertNear(1, defaultMix.right, "timeline sounds without envelopes use full right volume"); assertions++;
+
 		var songs = MusicCatalog.enabled(["2", "19"]);
 		assert(songs.length == 18, "disabled songs are omitted outside the editor"); assertions++;
 		assert(MusicCatalog.select(songs, "3", 0) == 2, "known song ids select exactly"); assertions++;
