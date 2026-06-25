@@ -11,7 +11,6 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
-import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
@@ -115,7 +114,6 @@ class PR2MovieClip extends Sprite {
 		}
 
 		gotoFrame(1, false);
-		applyScale9Grid();
 		// Button symbols use their extra frames as up/over/down/hit states, not
 		// as an animation. Drive those states from the mouse like Flash does.
 		isButtonSymbol = symbol.symbolType == "button";
@@ -126,22 +124,6 @@ class PR2MovieClip extends Sprite {
 		} else if (totalFrames > 1) {
 			play();
 		}
-	}
-
-	private function applyScale9Grid():Void {
-		if (symbol.scaleGridLeft == null
-			|| symbol.scaleGridRight == null
-			|| symbol.scaleGridTop == null
-			|| symbol.scaleGridBottom == null) {
-			return;
-		}
-
-		scale9Grid = new Rectangle(
-			symbol.scaleGridLeft,
-			symbol.scaleGridTop,
-			symbol.scaleGridRight - symbol.scaleGridLeft,
-			symbol.scaleGridBottom - symbol.scaleGridTop
-		);
 	}
 
 	// Spike (opt-in via `-D pr2_flatten_cache`): when a top-level clip's whole
@@ -738,6 +720,21 @@ class PR2MovieClip extends Sprite {
 					throw 'PR2 symbol nesting limit ($maxNestedDepth) exceeded while rendering ${element.libraryItemName} in ${symbol.name}';
 				}
 
+				// Symbols with an authored scale-grid render through nine-slice
+				// tiling (corners fixed, edges/center stretched) rather than a
+				// uniform scale; `applyElementProperties` consumes the instance scale
+				// as the target size. Falls through to a normal clip when the grid is
+				// degenerate.
+				if (NineSliceSymbol.hasGrid(childSymbol)) {
+					var sliced = NineSliceSymbol.tryCreate(childSymbol, {
+						maxNestedDepth: maxNestedDepth,
+						includeHiddenLayers: includeHiddenLayers
+					}, nestedDepth + 1);
+					if (sliced != null) {
+						return sliced;
+					}
+				}
+
 				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {
 					maxNestedDepth: maxNestedDepth,
 					includeHiddenLayers: includeHiddenLayers,
@@ -911,16 +908,22 @@ class PR2MovieClip extends Sprite {
 			var b = matrix.b == null ? 0 : matrix.b;
 			var c = matrix.c == null ? 0 : matrix.c;
 			var d = matrix.d == null ? 1 : matrix.d;
-			// fl.controls consume instance scaling as their width/height. The
-			// factory has already baked those dimensions into the control, so retain
-			// only rotation/skew here instead of also distorting the text/glyphs.
-			if (Std.isOfType(child, FlButton) || Std.isOfType(child, FlTextInput) || Std.isOfType(child, FlComboBox) || Std.isOfType(child, FlTextArea)) {
+			// fl.controls and nine-slice symbols consume instance scaling as their
+			// width/height rather than as a uniform transform: the control factory has
+			// baked the dimensions in, and a nine-slice re-tiles to the target size.
+			// Retain only rotation/skew in the matrix so the content is not also
+			// distorted, and hand the scale to the nine-slice so it can lay out.
+			var sliced = Std.downcast(child, NineSliceSymbol);
+			if (sliced != null || Std.isOfType(child, FlButton) || Std.isOfType(child, FlTextInput) || Std.isOfType(child, FlComboBox) || Std.isOfType(child, FlTextArea)) {
 				var scaleX = Math.max(0.0001, Math.sqrt(a * a + b * b));
 				var scaleY = Math.max(0.0001, Math.sqrt(c * c + d * d));
 				a /= scaleX;
 				b /= scaleX;
 				c /= scaleY;
 				d /= scaleY;
+				if (sliced != null) {
+					sliced.applyPlacementScale(scaleX, scaleY);
+				}
 			}
 			var localTextLeft = (element.type == "DOMStaticText" || element.type == "DOMDynamicText" || element.type == "DOMInputText") && element.left != null ? element.left : 0;
 			child.transform.matrix = new Matrix(

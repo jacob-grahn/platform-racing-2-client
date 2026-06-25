@@ -308,17 +308,37 @@ class PR2MovieClipRuntimeTest {
 	}
 
 	private static function testScale9Grids():Void {
-		var clip = new PR2MovieClip(makeScale9GridSymbol());
-		assertNotNull(clip.scale9Grid, "authored scale grid creates an OpenFL scale9Grid");
-		assertClose(4.5, clip.scale9Grid.x, "scale9Grid x");
-		assertClose(6.5, clip.scale9Grid.y, "scale9Grid y");
-		assertClose(91, clip.scale9Grid.width, "scale9Grid width uses right minus left");
-		assertClose(88.5, clip.scale9Grid.height, "scale9Grid height uses bottom minus top");
+		assertEquals(true, NineSliceSymbol.hasGrid(makeScale9GridSymbol()), "authored scale grid is recognized");
+		assertEquals(false, NineSliceSymbol.hasGrid(makeVectorSymbol()), "a symbol without a scale grid is not nine-sliced");
 
-		var generated = PR2MovieClip.fromLinkage("SquareBG");
-		assertNotNull(generated.scale9Grid, "generated XFL scale grid reaches the runtime");
-		assertClose(5.05, generated.scale9Grid.x, "generated scale9Grid x");
-		assertClose(90, generated.scale9Grid.width, "generated scale9Grid width");
+		// 100x100 content (origin at 0,0) with 10px margins on every side, scaled to
+		// 3x wide and 2x tall: corners stay 10px, edges/center absorb the rest.
+		var cells = NineSliceSymbol.computeCells(0, 0, 100, 100, 10, 10, 10, 10, 3, 2);
+		var tl = cells[0];
+		var center = cells[4];
+		var br = cells[8];
+
+		assertClose(10, tl.width, "top-left corner keeps its natural width");
+		assertClose(10, tl.height, "top-left corner keeps its natural height");
+		assertClose(0, tl.x, "top-left corner sits at the box origin");
+
+		assertClose(280, center.width, "center stretches to fill the horizontal slack (300 - 2x10)");
+		assertClose(180, center.height, "center stretches to fill the vertical slack (200 - 2x10)");
+		assertClose(10, center.x, "center starts after the left corner");
+
+		assertClose(290, br.x, "bottom-right corner is flush to the scaled right edge (300 - 10)");
+		assertClose(190, br.y, "bottom-right corner is flush to the scaled bottom edge (200 - 10)");
+
+		// The full box matches what a uniform scale would have covered, so the
+		// panel is not "too small": right edge at boundsWidth*scaleX.
+		assertClose(300, br.x + br.width, "sliced box spans the full scaled width");
+		assertClose(200, br.y + br.height, "sliced box spans the full scaled height");
+
+		// A panel squashed below its fixed margins clamps the corners proportionally
+		// rather than overflowing (center collapses to zero).
+		var squashed = NineSliceSymbol.computeCells(0, 0, 100, 100, 10, 10, 10, 10, 0.1, 0.1);
+		assertClose(0, squashed[4].width, "over-squashed center collapses to zero width");
+		assertClose(10, squashed[8].x + squashed[8].width, "squashed slices still fit the 10px box");
 	}
 
 	private static function testGeneratedSoundFrameMetadata():Void {

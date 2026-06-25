@@ -156,12 +156,18 @@ is scoped to item behavior below.
     timeline, including its frame-1 stop script and `ArrowBlock.animateArrow`
     retrigger rules. Guarded by `LocalPlayerControllerTest` and
     `ServerLevelRendererTest`.
-- [x] Implement background art layers with parallax scrolling.
-  `ServerLevelDecoder` decodes all five drawing/object/text planes and their
-  authored scales; `ServerLevelRenderer` places bg3/bg2/bg1 behind blocks and
-  bg4/bg5 in front, renders the selected level background, and applies Flash's
-  rounded 0.25x/0.5x/1x/1x/2x camera movement. Guarded by
-  `ServerLevelDecoderTest` and `ServerLevelRendererTest`.
+- [ ] Fix click-to-skip in the intro. Currently clicks only register if they hit something like the mute button or the middle logo
+- [ ] Fix the position of the in-game quit button, match it to the source game
+- [ ] Port in-game chat
+- [ ] Play in-game music, streaming from a server endpoint. Dropdown can select different songs
+- [ ] Character shrinks too short when crouching under a block
+- [ ] Pressing up while under a block should bump it
+- [ ] Bumping an item block should give your character an item
+- [ ] Bumping a regular item block should grey it out, bumping it again does not give an item
+- [ ] Port the scale-shake effect when charging a super jump
+- [ ] Background art layers are not showing
+- [ ] Port the live level drawing from the source game, x blocks and x lines are drawn every frame until everything is ready and the game begins
+- [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
 
 ### Physics 1:1 (preserve original quirks/bugs)
 
