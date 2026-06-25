@@ -99,6 +99,21 @@ class AudioRuntimeTest {
 		assert(ownerBStops == 1, "the remaining timeline owner can dispose its sound"); assertions++;
 		assert(!TimelineSound.isLibrarySoundActive("Sounds/owned.mp3"), "owner disposal removes the final library registration"); assertions++;
 
+		var monitoredOwner = {};
+		var monitoredStops = 0;
+		var monitorCleanups = 0;
+		TimelineSound.registerActive(
+			"Sounds/monitored.mp3",
+			function():Void monitoredStops++,
+			monitoredOwner,
+			function():Void monitorCleanups++
+		);
+		TimelineSound.stopOwner(monitoredOwner);
+		assert(monitoredStops == 1, "disposing a timeline stops monitored playback"); assertions++;
+		assert(monitorCleanups == 1, "disposing a timeline stops its sound monitor timer"); assertions++;
+		TimelineSound.stopOwner(monitoredOwner);
+		assert(monitorCleanups == 1, "disposed sound monitor cleanup is not repeated"); assertions++;
+
 		var songs = MusicCatalog.enabled(["2", "19"]);
 		assert(songs.length == 18, "disabled songs are omitted outside the editor"); assertions++;
 		assert(MusicCatalog.select(songs, "3", 0) == 2, "known song ids select exactly"); assertions++;

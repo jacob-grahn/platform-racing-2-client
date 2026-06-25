@@ -278,6 +278,9 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Recursively dispose animated `PR2MovieClip` descendants inside
     `DOMGroup`, component, and mask-holder containers so nested `ENTER_FRAME`
     listeners cannot survive their owning timeline.
+  - [x] Stop timeline-sound envelope/out-point monitor timers when playback is
+    explicitly stopped by a sync frame or owning `PR2MovieClip` disposal.
+    Guarded by `AudioRuntimeTest`.
 
 ## Test and Release Matrix
 

@@ -55,10 +55,15 @@ class TimelineSound {
 			var initialMix = envelopeMixAt(frame.soundEnvelope, 0);
 			var channel = sound.play(startTime, playbackLoops(frame), soundTransform(initialMix.left, initialMix.right));
 			if (channel != null) {
-				var active = registerActive(path, channel.stop, owner);
+				var stopMonitoring:Null<Void->Void> = null;
+				var active = registerActive(path, channel.stop, owner, function():Void {
+					if (stopMonitoring != null) {
+						stopMonitoring();
+					}
+				});
 				channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void unregisterActive(active));
 				if (frame.outPoint44 != null || hasChangingEnvelope(frame.soundEnvelope)) {
-					monitor(channel, frame, startTime, function():Void unregisterActive(active));
+					stopMonitoring = monitor(channel, frame, startTime, function():Void unregisterActive(active));
 				}
 			}
 		}
@@ -99,11 +104,25 @@ class TimelineSound {
 		Register timeline-owned playback. Public so deterministic tests and future
 		sync-mode backends can use the same stop registry without loading audio.
 	**/
-	public static function registerActive(libraryNameOrPath:String, stop:Void->Void, ?owner:Dynamic):ActiveTimelineSound {
+	public static function registerActive(
+		libraryNameOrPath:String,
+		stop:Void->Void,
+		?owner:Dynamic,
+		?cleanup:Void->Void
+	):ActiveTimelineSound {
 		var path = StringTools.startsWith(libraryNameOrPath, "assets/")
 			? libraryNameOrPath
 			: assetPath(libraryNameOrPath);
-		var active = {path: path, stop: stop, owner: owner};
+		var active = {
+			path: path,
+			stop: function():Void {
+				stop();
+				if (cleanup != null) {
+					cleanup();
+				}
+			},
+			owner: owner
+		};
 		var instances = activeByPath.get(path);
 		if (instances == null) {
 			instances = [];
@@ -171,7 +190,7 @@ class TimelineSound {
 		return "assets/audio/sfx/" + fileName;
 	}
 
-	private static function monitor(channel:SoundChannel, frame:FrameDef, startTime:Float, onStop:Void->Void):Void {
+	private static function monitor(channel:SoundChannel, frame:FrameDef, startTime:Float, onStop:Void->Void):Void->Void {
 		var timer = new Timer(15);
 		var stopMonitoring = function():Void timer.stop();
 		channel.addEventListener(Event.SOUND_COMPLETE, function(_):Void stopMonitoring());
@@ -188,6 +207,7 @@ class TimelineSound {
 			var mix = envelopeMixAt(frame.soundEnvelope, mark44);
 			channel.soundTransform = soundTransform(mix.left, mix.right);
 		};
+		return stopMonitoring;
 	}
 
 	private static function unregisterActive(active:ActiveTimelineSound):Void {
