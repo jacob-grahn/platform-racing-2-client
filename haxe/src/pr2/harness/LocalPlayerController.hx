@@ -39,8 +39,7 @@ class LocalPlayerController {
 	private static inline var ITEM_ICE_WAVE:Int = 9;
 	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
 	private static inline var SPEED_BURST_FRAMES:Int = 135;
-	private static inline var JET_PACK_FRAMES:Int = 135;
-	private static inline var JET_PACK_THRUST:Float = 1.5;
+	private static inline var JET_PACK_TOTAL_FUEL:Int = 200;
 	private static inline var FAST_ITEM_RELOAD_FRAMES:Int = 22;
 	private static inline var ICE_WAVE_RELOAD_FRAMES:Int = 27;
 
@@ -112,7 +111,7 @@ class LocalPlayerController {
 	private var facingDirection:Int = 1;
 	public var facingScaleX(get, never):Int;
 	private var speedBurstFramesRemaining:Int = 0;
-	private var jetPackFramesRemaining:Int = 0;
+	private var jetPackFuelRemaining:Null<Int> = null;
 	private var itemReloadFramesRemaining:Int = 0;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
@@ -773,6 +772,7 @@ class LocalPlayerController {
 		if (nextItem != null) {
 			itemId = nextItem;
 			itemUses = initialItemUses(nextItem);
+			jetPackFuelRemaining = nextItem == ITEM_JET_PACK ? JET_PACK_TOTAL_FUEL : null;
 		}
 	}
 
@@ -867,10 +867,15 @@ class LocalPlayerController {
 	}
 
 	private function useJetPack():Void {
-		if (jetPackFramesRemaining > 0) {
+		if (jetPackFuelRemaining == null || jetPackFuelRemaining <= 0 || crouching) {
 			return;
 		}
-		jetPackFramesRemaining = JET_PACK_FRAMES;
+		vy -= vy > -5 ? 1.25 : 0.5;
+		jetPackFuelRemaining--;
+		itemUses = Std.int(Math.ceil((jetPackFuelRemaining / JET_PACK_TOTAL_FUEL) * 3));
+		if (jetPackFuelRemaining <= 0) {
+			consumeHeldItemCompletely();
+		}
 	}
 
 	private function useSword():Void {
@@ -888,9 +893,7 @@ class LocalPlayerController {
 
 	private function consumeHeldItemUse():Void {
 		if (itemUses == null || itemUses <= 1) {
-			itemId = null;
-			itemUses = null;
-			itemReloadFramesRemaining = 0;
+			consumeHeldItemCompletely();
 			return;
 		}
 		itemUses--;
@@ -904,16 +907,20 @@ class LocalPlayerController {
 	private function initialItemUses(id:Int):Int {
 		return switch (id) {
 			case ITEM_LASER_GUN | ITEM_SWORD | ITEM_ICE_WAVE: 3;
+			case ITEM_JET_PACK: 3;
 			default: 1;
 		}
 	}
 
 	private function applyJetPackThrust(input:LocalPlayerInput):Void {
-		if (jetPackFramesRemaining <= 0 || !input.item || itemId != ITEM_JET_PACK || crouching) {
-			return;
-		}
-		vy -= JET_PACK_THRUST;
-		jumpHeld = false;
+		if (input.item && itemId == ITEM_JET_PACK && !crouching) jumpHeld = false;
+	}
+
+	private function consumeHeldItemCompletely():Void {
+		itemId = null;
+		itemUses = null;
+		itemReloadFramesRemaining = 0;
+		jetPackFuelRemaining = null;
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
@@ -1052,7 +1059,6 @@ class LocalPlayerController {
 
 	private function updateTimedBlocks():Void {
 		updateSpeedBurst();
-		updateJetPack();
 		updateVanishBlocks();
 		updateTeleportBlocks();
 		updateMoveBlocks();
@@ -1073,17 +1079,6 @@ class LocalPlayerController {
 			itemId = null;
 			itemUses = null;
 			applyMovementStats();
-		}
-	}
-
-	private function updateJetPack():Void {
-		if (jetPackFramesRemaining <= 0) {
-			return;
-		}
-		jetPackFramesRemaining--;
-		if (jetPackFramesRemaining <= 0) {
-			itemId = null;
-			itemUses = null;
 		}
 	}
 

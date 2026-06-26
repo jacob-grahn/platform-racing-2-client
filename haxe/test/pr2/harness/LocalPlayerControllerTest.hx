@@ -658,6 +658,7 @@ class LocalPlayerControllerTest {
 
 		boosted.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(6, boosted.debugState().itemId, "jet pack stays held while active");
+		assertEquals(3, boosted.debugState().itemUses, "jet pack starts with three fuel pips");
 
 		for (_ in 0...24) {
 			boosted.step(new LocalPlayerInput(false, false, false, false, true));
@@ -667,11 +668,16 @@ class LocalPlayerControllerTest {
 		assertBelow(boosted.debugState().y, normal.debugState().y - 20, "jet pack thrust lifts the player");
 		assertBelow(boosted.debugState().vy, normal.debugState().vy, "jet pack counters gravity while active");
 
-		for (_ in 0...110) {
+		for (_ in 0...42) {
+			boosted.step(new LocalPlayerInput(false, false, false, false, true));
+		}
+		assertEquals(2, boosted.debugState().itemUses, "jet pack ammo drops after one third of the fuel is spent");
+
+		for (_ in 0...133) {
 			boosted.step(new LocalPlayerInput(false, false, false, false, true));
 		}
 
-		assertEquals(null, boosted.debugState().itemId, "jet pack expires after five seconds");
+		assertEquals(null, boosted.debugState().itemId, "jet pack expires after 200 fuel frames");
 	}
 
 	private static function testLaserGunReloadTiming():Void {

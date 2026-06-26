@@ -255,6 +255,11 @@ rounding, ordering, and edge cases.
   - [x] Enforce the authored multi-use item reload timing: Laser Gun and Sword
     wait 800ms (22 frames at 27 FPS), Ice Wave waits 1000ms (27 frames), and a
     held item key fires again only when the reload completes.
+  - [x] Port Jet Pack fuel depletion and thrust timing. The local harness now
+    mirrors `items.JetPack`: 200 fuel ticks, three ammo pips derived from
+    remaining fuel, per-frame thrust of `-1.25` above `-5` vertical speed and
+    `-0.5` afterward, no fuel use while crouching, and item removal only when
+    fuel reaches zero. Guarded by `LocalPlayerControllerTest`.
   - [ ] Complete the remaining item effect, world interaction, and edge-case
     audit against the AS3 item/effect classes and server protocol.
 Acceptance: scripted input and server transcripts produce matching Flash debug
