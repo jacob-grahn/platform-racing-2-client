@@ -15,6 +15,7 @@ class ServerLevelRendererTest {
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
+		testIncrementalBlockDrawing();
 		testArrowAnimation();
 		testMineExplosion();
 		testBlockPieces();
@@ -83,6 +84,34 @@ class ServerLevelRendererTest {
 		assertEquals(0.5, transform.redMultiplier, "server renderer applies depleted item red multiplier");
 		assertEquals(0.5, transform.greenMultiplier, "server renderer applies depleted item green multiplier");
 		assertEquals(0.5, transform.blueMultiplier, "server renderer applies depleted item blue multiplier");
+	}
+
+	private static function testIncrementalBlockDrawing():Void {
+		var blocks = [
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC2, 10050, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC3, 10080, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC4, 10110, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10140, 10050)
+		];
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, blocks), blocks[0], 180, 280, true, 2);
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		assertEquals(0, renderer.drawnBlockCount(), "incremental renderer starts before drawing blocks");
+		assertEquals(0, blockLayer.numChildren, "incremental block layer starts empty");
+		assertEquals(false, renderer.isBlockDrawingComplete(), "incremental renderer is initially incomplete");
+
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(2, renderer.drawnBlockCount(), "incremental renderer draws first frame batch");
+		assertEquals(2, blockLayer.numChildren, "first frame adds one batch of blocks");
+
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(4, renderer.drawnBlockCount(), "incremental renderer draws second frame batch");
+		assertEquals(false, renderer.isBlockDrawingComplete(), "incremental renderer waits for final partial batch");
+
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(5, renderer.drawnBlockCount(), "incremental renderer draws final partial batch");
+		assertEquals(5, blockLayer.numChildren, "incremental renderer eventually attaches every block");
+		assertEquals(true, renderer.isBlockDrawingComplete(), "incremental renderer reports completion");
 	}
 
 	private static function testBlockAssetMapping():Void {

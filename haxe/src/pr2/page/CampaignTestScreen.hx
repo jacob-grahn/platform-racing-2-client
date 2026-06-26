@@ -176,6 +176,10 @@ class CampaignTestScreen extends Sprite {
 			raceChat.remove();
 			raceChat = null;
 		}
+		if (levelRenderer != null) {
+			levelRenderer.remove();
+			levelRenderer = null;
+		}
 		if (parent != null) parent.removeChild(this);
 	}
 
@@ -244,13 +248,13 @@ class CampaignTestScreen extends Sprite {
 	}
 
 	private function renderDecodedLevel(level:ServerLevel, data:ServerLevelData):Void {
-		if (levelRenderer != null && levelRenderer.parent != null) {
-			removeChild(levelRenderer);
+		if (levelRenderer != null) {
+			levelRenderer.remove();
 		}
 
 		var startBlocks = level.startBlocks();
 		var focus = startBlocks.length == 0 ? null : startBlocks[0];
-		var renderer = new ServerLevelRenderer(level, focus);
+		var renderer = new ServerLevelRenderer(level, focus, ServerLevelRenderer.DEFAULT_FOCUS_X, ServerLevelRenderer.DEFAULT_FOCUS_Y, true);
 		levelRenderer = renderer;
 		addChildAt(levelRenderer, 1);
 
@@ -394,6 +398,12 @@ class CampaignTestScreen extends Sprite {
 
 	private function onEnterFrame(event:Event):Void {
 		if (player == null) {
+			return;
+		}
+		if (levelRenderer != null && !levelRenderer.isBlockDrawingComplete()) {
+			#if js
+			Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=drawing;blocks=${levelRenderer.drawnBlockCount()}');
+			#end
 			return;
 		}
 

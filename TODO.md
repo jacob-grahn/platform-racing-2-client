@@ -210,7 +210,14 @@ is scoped to item behavior below.
   `Math.round(cameraOffset * layerScale)`, matching `Background.setPos`, while
   retaining the authored bg3/bg2/bg1/map/bg4/bg5 depth order and child-level
   scale for stamps/text. Guarded by `ServerLevelRendererTest`.
-- [ ] Port the live level drawing from the source game, x blocks and x lines are drawn every frame until everything is ready and the game begins
+- [ ] Port the live level drawing from the source game, x blocks and x lines are
+  drawn every frame until everything is ready and the game begins.
+  - [x] Draw server-level blocks incrementally before gameplay starts. The
+    campaign/game renderer now attaches blocks in frame batches and holds player
+    stepping in a `phase=drawing` state until every block is present, instead of
+    synchronously drawing the full map. Guarded by `ServerLevelRendererTest`.
+  - [ ] Port incremental drawing for authored art lines/objects/text and wire the
+    real `finish_drawing` readiness flow around all background layers.
 - [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
   - [x] Hide the campaign/game debug overlay by default while preserving the
     `data-pr2-debug-state` automation hook.

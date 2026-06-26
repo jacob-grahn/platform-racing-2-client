@@ -3,6 +3,7 @@ package pr2.level;
 import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import openfl.geom.Point;
 import openfl.text.TextField;
@@ -30,6 +31,7 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var TILE_SIZE:Int = 30;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
+	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
 
 	private final level:ServerLevel;
 	private var offsetX:Float;
@@ -38,10 +40,16 @@ class ServerLevelRenderer extends Sprite {
 	private final artLayerContainers:Array<Sprite> = [];
 	private final blockDisplays:Map<String, Sprite> = new Map();
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
+	private var nextBlockToDraw:Int = 0;
+	private var incrementalBlocks:Bool = false;
+	private var blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME;
 
-	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y) {
+	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y,
+			incrementalBlocks:Bool = false, blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME) {
 		super();
 		this.level = level;
+		this.incrementalBlocks = incrementalBlocks;
+		this.blocksPerFrame = blocksPerFrame <= 0 ? DEFAULT_BLOCKS_PER_FRAME : blocksPerFrame;
 
 		var focus = focusBlock == null ? firstRenderableBlock(level) : focusBlock;
 		if (focus == null) {
@@ -63,6 +71,14 @@ class ServerLevelRenderer extends Sprite {
 		drawBlocks();
 		drawArtLayer(3);
 		drawArtLayer(4);
+	}
+
+	public function isBlockDrawingComplete():Bool {
+		return nextBlockToDraw >= level.blocks.length;
+	}
+
+	public function drawnBlockCount():Int {
+		return nextBlockToDraw;
 	}
 
 	public function worldToScreen(x:Float, y:Float):Point {
@@ -229,10 +245,38 @@ class ServerLevelRenderer extends Sprite {
 		blockLayer.x = offsetX;
 		blockLayer.y = offsetY;
 		addChild(blockLayer);
-		for (block in level.blocks) {
-			var display = createBlockDisplay(block);
-			blockDisplays.set(blockKey(block.x, block.y), display);
-			blockLayer.addChild(display);
+		if (incrementalBlocks) {
+			addEventListener(Event.ENTER_FRAME, drawBlockBatch);
+			return;
+		}
+		drawNextBlocks(level.blocks.length);
+	}
+
+	private function drawBlockBatch(event:Event):Void {
+		drawNextBlocks(blocksPerFrame);
+		if (isBlockDrawingComplete()) {
+			removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
+		}
+	}
+
+	private function drawNextBlocks(limit:Int):Void {
+		var end = Std.int(Math.min(level.blocks.length, nextBlockToDraw + limit));
+		while (nextBlockToDraw < end) {
+			var block = level.blocks[nextBlockToDraw++];
+			addBlockDisplay(block);
+		}
+	}
+
+	private function addBlockDisplay(block:DecodedBlock):Void {
+		var display = createBlockDisplay(block);
+		blockDisplays.set(blockKey(block.x, block.y), display);
+		blockLayer.addChild(display);
+	}
+
+	public function remove():Void {
+		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
+		if (parent != null) {
+			parent.removeChild(this);
 		}
 	}
 
