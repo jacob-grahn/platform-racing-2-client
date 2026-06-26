@@ -6,31 +6,14 @@ import js.Browser;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
-import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
-import openfl.ui.Keyboard;
-import pr2.lobby.account.AlternateControls;
 import pr2.Constants;
 import pr2.runtime.FontResolver;
-import pr2.character.CharacterDisplay;
-import pr2.character.CharacterRenderMode;
-import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerDebugState;
-import pr2.harness.LocalPlayerInput;
-import pr2.harness.PlayerDisplayPlacement;
-import pr2.harness.BlockVisualEvent;
-import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
-import pr2.gameplay.CameraFollow;
-import pr2.gameplay.DrawingInfo;
-import pr2.gameplay.Hearts;
-import pr2.gameplay.ItemDisplay;
-import pr2.gameplay.MiniMap;
-import pr2.gameplay.MiniMapDot;
-import pr2.gameplay.MusicSelection;
-import pr2.gameplay.RaceChat;
-import pr2.gameplay.StatsDisplay;
+import pr2.gameplay.Course;
+import pr2.gameplay.LevelConfig;
 import pr2.lobby.chat.ChatText;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
@@ -38,23 +21,19 @@ import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
-import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevelDecoder;
-import pr2.level.ServerLevelFixtureAdapter;
-import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
-import pr2.level.ServerLevelRenderer;
 
 /**
-	Bit 1 of the server campaign level test harness (see TODO.md). Fetches a real
-	campaign course list from the live PR2 server and reports what came back. This
-	proves end-to-end connectivity and list parsing before loading, rendering,
-	and playing either the first listed level or a requested level on that page.
+	Debug harness for exercising real server campaign levels (see TODO.md).
+	Fetches a course list (or a server-selected level directly), decodes it, and
+	mounts the production `pr2.gameplay.Course` shell, wrapping it with a status
+	overlay toggled by the `/debug` chat command.
 
-	Reachable via `?screen=campaign` (optional `&page=N`, default 1, and
-	`&levelId=N` or `&level=N` to load a specific level from that page). GamePage
-	also supplies a version to bypass the list and load a server-selected level
-	directly without navigating away from the live session.
+	The gameplay shell itself now lives in `Course` so the real `GamePage` mounts
+	the same code without this harness chrome. Reachable via `?screen=campaign`
+	(optional `&page=N`, `&levelId=N`/`&level=N`); `GamePage` supplies a version to
+	load a server-selected level directly.
 **/
 class CampaignTestScreen extends Sprite {
 	private static inline var DEFAULT_PAGE:Int = 1;
@@ -62,27 +41,8 @@ class CampaignTestScreen extends Sprite {
 	private final page:Int;
 	private final requestedLevelId:Null<Int>;
 	private final directVersion:Null<Int>;
-	private final input:LocalPlayerInput = new LocalPlayerInput();
 	private var statusText:TextField;
-	private var levelRenderer:ServerLevelRenderer;
-	private var serverFixture:ServerFixtureLevel;
-	private var player:LocalPlayerController;
-	private var playerDisplay:Sprite;
-	private var characterDisplay:CharacterDisplay;
-	private var camera:CameraFollow;
-	private var miniMap:MiniMap;
-	private var playerDot:MiniMapDot;
-	private var itemDisplay:ItemDisplay;
-	private var musicSelection:MusicSelection;
-	private var raceChat:RaceChat;
-	private var drawingInfo:DrawingInfo;
-	private var statsDisplay:StatsDisplay;
-	private var hearts:Hearts;
-	private var drawingInfoFinished:Bool = false;
-	private var displayedItemId:Null<Int>;
-	private var displayedItemUses:Null<Int>;
-	private var displayedStats:Null<String>;
-	private var displayedLives:Null<Int>;
+	private var course:Course;
 	private var lastStatusText:String = "";
 
 	public function new(?page:String, ?levelId:String, ?version:Int) {
@@ -102,7 +62,7 @@ class CampaignTestScreen extends Sprite {
 				: 'Fetching campaign list page ${this.page} for level ${requestedLevelId}...'
 		);
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		addEventListener(Event.ENTER_FRAME, onHarnessFrame);
 	}
 
 	public static function parsePage(page:Null<String>):Int {
@@ -137,8 +97,6 @@ class CampaignTestScreen extends Sprite {
 
 	private function onAddedToStage(event:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		#if html5
 		if (!ServerConfig.hasProxyHost()) {
 			setStatus(
@@ -164,43 +122,10 @@ class CampaignTestScreen extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-		if (stage != null) {
-			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
-		}
-		if (miniMap != null) {
-			miniMap.remove();
-			miniMap = null;
-			playerDot = null;
-		}
-		if (itemDisplay != null) {
-			itemDisplay.remove();
-			itemDisplay = null;
-		}
-		if (statsDisplay != null) {
-			statsDisplay.remove();
-			statsDisplay = null;
-		}
-		if (hearts != null) {
-			hearts.remove();
-			hearts = null;
-		}
-		if (musicSelection != null) {
-			musicSelection.remove();
-			musicSelection = null;
-		}
-		if (raceChat != null) {
-			raceChat.remove();
-			raceChat = null;
-		}
-		if (drawingInfo != null) {
-			drawingInfo.remove();
-			drawingInfo = null;
-		}
-		if (levelRenderer != null) {
-			levelRenderer.remove();
-			levelRenderer = null;
+		removeEventListener(Event.ENTER_FRAME, onHarnessFrame);
+		if (course != null) {
+			course.remove();
+			course = null;
 		}
 		if (parent != null) parent.removeChild(this);
 	}
@@ -241,7 +166,7 @@ class CampaignTestScreen extends Sprite {
 		var debug = 'phase=levelLoaded;id=${info.levelId};hashValid=${data.hashValid};readMode=${data.readMode()}';
 		try {
 			var level = ServerLevelDecoder.decode(data.data);
-			renderDecodedLevel(level, data);
+			mountCourse(level, data);
 			lines.push('decoded: blocks=${level.blocks.length} bg=0x${StringTools.hex(level.bgColor, 6)}');
 			lines.push('starts=${level.startBlocks().length} finishes=${level.finishBlocks().length} bounds=${level.maxX - level.minX}x${level.maxY - level.minY}px');
 			debug += ';blocks=${level.blocks.length};starts=${level.startBlocks().length}';
@@ -251,6 +176,16 @@ class CampaignTestScreen extends Sprite {
 		}
 
 		setStatus(debug, lines.join("\n"));
+	}
+
+	private function mountCourse(level:ServerLevel, data:ServerLevelData):Void {
+		if (course != null) {
+			course.remove();
+		}
+		var config = LevelConfig.fromServerData(data);
+		course = new Course(level, data, config, handleRaceChatLine, onCourseFrame);
+		// Keep the course above the background but below the status overlay.
+		addChildAt(course, 1);
 	}
 
 	private function onError(message:String):Void {
@@ -267,151 +202,6 @@ class CampaignTestScreen extends Sprite {
 		background.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
 		background.graphics.endFill();
 		addChild(background);
-	}
-
-	private function renderDecodedLevel(level:ServerLevel, data:ServerLevelData):Void {
-		if (levelRenderer != null) {
-			levelRenderer.remove();
-		}
-
-		var startBlocks = level.startBlocks();
-		var focus = startBlocks.length == 0 ? null : startBlocks[0];
-		var renderer = new ServerLevelRenderer(level, focus, ServerLevelRenderer.DEFAULT_FOCUS_X, ServerLevelRenderer.DEFAULT_FOCUS_Y, true);
-		levelRenderer = renderer;
-		addChildAt(levelRenderer, 1);
-
-		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(data.levelId), data.title);
-		player = new LocalPlayerController(serverFixture.fixture);
-		playerDisplay = new Sprite();
-		characterDisplay = new CharacterDisplay(
-			{hat: 1, head: 1, body: 1, feet: 1},
-			{primary: 0x005CB8, secondary: 0xFFF200},
-			CharacterRenderMode.Layered
-		);
-		characterDisplay.x = LocalPlayerController.STANDING_WIDTH / 2;
-		characterDisplay.y = LocalPlayerController.STANDING_HEIGHT;
-		characterDisplay.scaleX = 0.9;
-		characterDisplay.scaleY = 0.9;
-		playerDisplay.addChild(characterDisplay);
-		levelRenderer.addChild(playerDisplay);
-		// Center the camera on the player from the first frame. Easing in from an
-		// off-center start would briefly leave the player low and to the side
-		// because this screen has no countdown to hide the drift (see
-		// CameraFollow.snapTo).
-		camera = new CameraFollow(0, 0);
-		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
-		buildMiniMap(level);
-		buildItemDisplay();
-		buildStatsDisplay();
-		buildHearts();
-		buildMusicSelection(data.song);
-		buildRaceChat();
-		buildDrawingInfo();
-		updatePlayerDisplay();
-	}
-
-	/**
-		Builds the minimap from the decoded level, mirroring Map.attachObject:
-		start blocks and minion eggs are excluded from the silhouette, finish
-		blocks add a finish box, everything else is filled in. The local player
-		gets a yellow dot. Positioned at stage (80, 2) to match Course's minimap
-		holder offset (-195, -198) against the centred game holder.
-	**/
-	private function buildMiniMap(level:ServerLevel):Void {
-		if (miniMap != null) {
-			miniMap.remove();
-			miniMap = null;
-			playerDot = null;
-		}
-
-		miniMap = new MiniMap();
-		for (block in level.blocks) {
-			if (block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4) {
-				continue;
-			}
-			if (block.code == ObjectCodes.BLOCK_MINION_EGG) {
-				continue;
-			}
-			miniMap.addBlock(block.code, block.x, block.y);
-		}
-		miniMap.rasterize();
-		playerDot = miniMap.getDot();
-		playerDot.setTempID(0, true);
-		miniMap.x = 80;
-		miniMap.y = 2;
-		addChild(miniMap);
-	}
-
-	/** Positions the authored item display at Course's stage-space (2, 2). */
-	private function buildItemDisplay():Void {
-		if (itemDisplay != null) {
-			itemDisplay.remove();
-		}
-		itemDisplay = new ItemDisplay();
-		itemDisplay.x = 2;
-		itemDisplay.y = 2;
-		addChild(itemDisplay);
-		displayedItemId = null;
-		displayedItemUses = null;
-		syncItemDisplay();
-	}
-
-	/** Positions the authored stats display at Course's stage-space (490, 34). */
-	private function buildStatsDisplay():Void {
-		if (statsDisplay != null) {
-			statsDisplay.remove();
-		}
-		statsDisplay = new StatsDisplay();
-		statsDisplay.x = 490;
-		statsDisplay.y = 34;
-		addChild(statsDisplay);
-		displayedStats = null;
-		syncStatsDisplay();
-	}
-
-	/** Positions the authored deathmatch hearts at Course's stage-space (515, 59).
-		Hidden until a deathmatch level reports lives, matching Course.setLife. */
-	private function buildHearts():Void {
-		if (hearts != null) {
-			hearts.remove();
-		}
-		hearts = new Hearts();
-		hearts.x = 515;
-		hearts.y = 59;
-		hearts.visible = false;
-		addChild(hearts);
-		displayedLives = null;
-		syncHearts();
-	}
-
-	/** Positions the authored race music selector at Course's stage-space (204, 362). */
-	private function buildMusicSelection(songId:String):Void {
-		if (musicSelection != null) musicSelection.remove();
-		musicSelection = new MusicSelection();
-		musicSelection.x = 204;
-		musicSelection.y = 362;
-		addChild(musicSelection);
-		musicSelection.setSong(songId);
-	}
-
-	/** Positions the authored race chat at Course's stage-space (4, 249). */
-	private function buildRaceChat():Void {
-		if (raceChat != null) raceChat.remove();
-		raceChat = new RaceChat(handleRaceChatLine);
-		raceChat.x = 4;
-		raceChat.y = 249;
-		addChild(raceChat);
-	}
-
-	/** Positions the authored drawing status at Course's stage-space (2, 96). */
-	private function buildDrawingInfo():Void {
-		if (drawingInfo != null) drawingInfo.remove();
-		drawingInfo = new DrawingInfo();
-		drawingInfo.x = 2;
-		drawingInfo.y = 96;
-		drawingInfo.addPlayer("You", 0);
-		drawingInfoFinished = false;
-		addChild(drawingInfo);
 	}
 
 	private function createStatusText():Void {
@@ -460,168 +250,24 @@ class CampaignTestScreen extends Sprite {
 		#end
 	}
 
-	private function onEnterFrame(event:Event):Void {
-		if (player == null) {
+	/** Slim per-frame loop: only reports the harness debug phase; the Course owns
+		the actual gameplay/render/HUD update. */
+	private function onHarnessFrame(event:Event):Void {
+		if (course == null || course.levelRenderer == null) {
 			return;
 		}
-		if (levelRenderer != null && !levelRenderer.isBlockDrawingComplete()) {
+		if (!course.levelRenderer.isBlockDrawingComplete()) {
 			#if js
-			Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=drawing;blocks=${levelRenderer.drawnBlockCount()}');
+			Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=drawing;blocks=${course.levelRenderer.drawnBlockCount()}');
 			#end
-			return;
 		}
-		if (!drawingInfoFinished) {
-			if (drawingInfo != null) {
-				drawingInfo.finishDrawing(0);
-			}
-			drawingInfoFinished = true;
-		}
+	}
 
-		player.step(input.copy());
-		syncBlockVisuals();
-		updatePlayerDisplay();
-		var state = player.debugState();
-		syncItemDisplay(state.itemId, state.itemUses);
-		syncStatsDisplay(state);
-		syncHearts(state);
+	/** Invoked by the Course each playable frame with the local player's state. */
+	private function onCourseFrame(state:LocalPlayerDebugState):Void {
 		statusText.text = lastStatusText + '\nplayer ${state.serialize()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=playable;${state.serialize()}');
 		#end
-	}
-
-	private function syncItemDisplay(?itemId:Null<Int>, ?itemUses:Null<Int>):Void {
-		if (itemDisplay == null) {
-			return;
-		}
-		if (itemId == null && player != null) {
-			var state = player.debugState();
-			itemId = state.itemId;
-			itemUses = state.itemUses;
-		}
-		if (itemId != displayedItemId) {
-			itemDisplay.setItemCode(itemId == null ? 0 : itemId);
-			displayedItemId = itemId;
-		}
-		if (itemUses != displayedItemUses) {
-			itemDisplay.setAmmo(itemUses == null ? 0 : itemUses);
-			displayedItemUses = itemUses;
-		}
-	}
-
-	/** Mirrors LocalCharacter.setStats pushing the character's stats into the
-		course StatsDisplay each time they change. */
-	private function syncStatsDisplay(?state:LocalPlayerDebugState):Void {
-		if (statsDisplay == null) {
-			return;
-		}
-		if (state == null && player != null) {
-			state = player.debugState();
-		}
-		if (state == null) {
-			return;
-		}
-		var speed = Math.round(state.speedStat);
-		var accel = Math.round(state.accelerationStat);
-		var jump = Math.round(state.jumpStat);
-		var key = '$speed,$accel,$jump';
-		if (key != displayedStats) {
-			statsDisplay.setStats(speed, accel, jump);
-			displayedStats = key;
-		}
-	}
-
-	/** Mirrors Course.setLife: the hearts only appear in deathmatch mode and
-		track the player's remaining lives. */
-	private function syncHearts(?state:LocalPlayerDebugState):Void {
-		if (hearts == null) {
-			return;
-		}
-		if (state == null && player != null) {
-			state = player.debugState();
-		}
-		if (state == null) {
-			return;
-		}
-		if (state.mode != "deathmatch") {
-			return;
-		}
-		if (state.lives != displayedLives) {
-			hearts.visible = true;
-			hearts.setHearts(state.lives);
-			displayedLives = state.lives;
-		}
-	}
-
-	private function syncBlockVisuals():Void {
-		for (block in serverFixture.fixture.blocks) {
-			var worldX = (block.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-			var worldY = (block.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
-			levelRenderer.setBlockAlpha(worldX, worldY, player.blockAlphaAt(block.x, block.y));
-			levelRenderer.setBlockColorMultiplier(worldX, worldY, player.blockColorMultiplierAt(block.x, block.y));
-		}
-		for (event in player.consumeBlockVisualEvents()) {
-			switch (event.kind) {
-				case ArrowAnimate:
-					var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-					var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
-					levelRenderer.animateArrow(worldX, worldY);
-				case MineExplode:
-					var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-					var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
-					levelRenderer.showMineExplosion(worldX, worldY);
-				case BrickPieces:
-					showBlockPieces(event, "BrickPieceGraphic", 10, 10, 25);
-				case CrumblePieces:
-					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
-				case MinePieces:
-					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
-			}
-		}
-	}
-
-	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
-		var worldX = (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-		var worldY = (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
-		levelRenderer.showBlockPieces(linkage, worldX, worldY, event.count, spreadX, spreadY, spreadRot);
-	}
-
-	private function updatePlayerDisplay():Void {
-		if (player == null || levelRenderer == null || serverFixture == null || playerDisplay == null || characterDisplay == null) {
-			return;
-		}
-
-		var state = player.debugState();
-		var worldX = serverFixture.fixturePixelToWorldX(player.x);
-		var worldY = serverFixture.fixturePixelToWorldY(player.y);
-		camera.follow(worldX, worldY);
-		levelRenderer.setCameraOffset(Constants.STAGE_WIDTH / 2 + camera.posX, Constants.STAGE_HEIGHT / 2 + camera.posY);
-		if (playerDot != null) {
-			playerDot.x = worldX;
-			playerDot.y = worldY;
-		}
-		var screen = levelRenderer.worldToScreen(worldX, worldY);
-		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, screen.x, screen.y, player.crouching, player.facingScaleX);
-		characterDisplay.setState(state.characterState.toClipName());
-		characterDisplay.advanceOneFrame();
-	}
-
-	private function onKeyDown(event:KeyboardEvent):Void {
-		setKey(event.keyCode, true);
-	}
-
-	private function onKeyUp(event:KeyboardEvent):Void {
-		setKey(event.keyCode, false);
-	}
-
-	private function setKey(keyCode:UInt, pressed:Bool):Void {
-		if (raceChat != null && raceChat.inputHasFocus()) {
-			return;
-		}
-		if (keyCode == Keyboard.LEFT || AlternateControls.matches("left", keyCode)) input.left = pressed;
-		if (keyCode == Keyboard.RIGHT || AlternateControls.matches("right", keyCode)) input.right = pressed;
-		if (keyCode == Keyboard.UP || AlternateControls.matches("up", keyCode)) input.jump = pressed;
-		if (keyCode == Keyboard.DOWN || AlternateControls.matches("down", keyCode)) input.down = pressed;
-		if (keyCode == Keyboard.SPACE || AlternateControls.matches("item", keyCode)) input.item = pressed;
 	}
 }

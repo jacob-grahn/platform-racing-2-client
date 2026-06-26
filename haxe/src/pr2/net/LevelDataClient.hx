@@ -49,7 +49,7 @@ class LevelDataClient {
 	}
 
 	/** `MD5(version + courseID + levelData + LEVEL_SALT_2)`, per `Game.loadHandler`. **/
-	private static function computeHash(version:Int, levelId:Int, levelData:String):String {
+	public static function computeHash(version:Int, levelId:Int, levelData:String):String {
 		return Md5.encode(Std.string(version) + Std.string(levelId) + levelData + ServerConfig.LEVEL_SALT_2);
 	}
 

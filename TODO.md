@@ -25,8 +25,9 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 The next milestone is one uninterrupted real-server session: login, lobby,
 select/join a level, race with remote players, finish, and return to the lobby.
 The persistent `LobbySocket` must survive every page transition as Flash's
-`Main.socket` did. Login and session establishment are complete (see README);
-level entry, race sync, and the in-game shell remain.
+`Main.socket` did. Login and session establishment are complete (see README),
+and the level-entry decomposition (A1–A5 below) is now done; multiplayer race
+sync (Section B) and the live in-game shell / cutover (Section C) remain.
 
 - [ ] Replace the campaign-harness redirect with the real level-entry protocol.
   - Port slot selection, `CourseMenu`, access checks, password/private flows,
@@ -35,42 +36,33 @@ level entry, race sync, and the in-game shell remain.
     `flash/gameplay/Game.as`. In-place level loading via `confirm_slot`/
     `startGame` already works (see README); the remaining work is the full
     `CourseMenu`/access/spectate protocol around it.
-  - Decomposed into sequenced sub-tasks (knock out one at a time; each ships a
-    named `*Test.hx` registered in `DeterministicTestSuite`):
-  - [ ] **A1 — Port `GamePage` level-data ingest.** Add `setVariables`,
-    `validateSaveString`, and `decodeLevelData` (read modes `m1`–`m4` via
-    `decodeObjectString`/`decodeObjectString2`/`decodeBlockString`) plus the field
-    setters (items, badHats, gravity, maxTime, song, gameMode, cowboyChance,
-    credits, title, note, levelID, updatedTime) to `pr2/page/GamePage.hx`, from
-    `flash/page/GamePage.as`. Reuse the existing server-level decoders where they
-    already cover a mode; only fill gaps. Test: `GamePageDecodeTest` over captured
-    m2/m3/m4 fixture strings asserting the expected `o<code>;x;y[;w;h]` join.
-  - [ ] **A2 — Port `Game.getLevelData` fetch + validation.** Fetch
-    `levelsURL + "/" + id + ".txt?version=" + v`, MD5-validate, and hand the
-    decoded save string to `GamePage.setVariables` (from `flash/gameplay/Game.as`).
-    Reuse `LevelDataClient`/`PR2Encryptor` for MD5. Test: `LevelDataFetchTest`
-    (deterministic fixture; assert the MD5-mismatch path rejects).
-  - [ ] **A3 — Build the `Game`/`Course` shell to replace the harness.** New
-    `pr2/gameplay/Game.hx` (or promote the existing course screen) mounts the
-    decoded level, the already-ported in-game shell components (Countdown,
-    RaceChat, MiniMap, StatsDisplay, ItemDisplay, Hearts, DrawingInfo,
-    MusicSelection, QuitButton, FinishedPage, PrizePopup), and hosts the character
-    layer. Point `pr2/page/GamePage.hx` at this shell instead of
-    `CampaignTestScreen`; keep `CampaignTestScreen` as a dev harness behind a flag.
-    Test: `GameShellMountTest` (components present at verified holder→stage
-    offsets).
-  - [ ] **A4 — Port the entry/access state machine.** Loading state,
-    access/password prompt, private-room and spectate gating, room join, and error
-    states, driven from the `CourseMenu`/`Slot`/`LevelLaunch` handoff. Reuse
-    existing `LevelLaunch.startGame` (page change only on server `startGame` for
-    the selected level). Test: `LevelEntryStateTest` (transcript: server frames →
-    expected state transitions and prompts).
-  - [ ] **A5 — Port `Game` command-shell registration.** Register the server
-    commands `Game.as` defines (`createLocalCharacter`, `createRemoteCharacter`,
-    award/exp/lux/prize/cancel/win, cowboyMode, happyHour, eggSeed/addEggs,
-    superBooster, maybeReturnHatToStart, startHatCountdown, forceQuit) via
-    `CommandHandler.defineCommand`. Test: `GameCommandShellTest` (each frame routes
-    to the right handler / mutates the expected state).
+  - Decomposed A1–A5 (each ships a named `*Test.hx` in `DeterministicTestSuite`).
+    **All five done and verified** — condensed below; see git history for detail.
+    `GamePage` now mounts the real `Course` shell, resolves the load through the
+    two-error `LevelEntry` machine, and registers the full `Game` command table
+    via `GameCommandShell`. Remaining for this box (deferred to B/C, why it stays
+    `[ ]`): the `SpectatePicker` UI (only `spectatePossible` is modeled) and the
+    live race — character creation, `beginRace`/countdown/finish hooks, and the
+    popup side-effects behind `GameCommandDelegate` (LuxPopup/CowboyMode/HappyHour/
+    Egg/Hat unported). Flips to `[x]` when the real login→race→lobby flow runs.
+  - [x] A1 — Faithful config-setter semantics → `pr2.gameplay.LevelConfig` (+
+    `pr2.gameplay.Items`); decode/fetch were already in `ServerLevelDecoder`/
+    `LevelDataClient`. Test: `LevelConfigTest`.
+  - [x] A2 — Fetch + `MD5(version+id+levelData+LEVEL_SALT_2)` validation already in
+    `LevelDataClient`; parsed→config handoff is `LevelConfig.fromServerData`. Test:
+    `LevelDataClientTest`.
+  - [x] A3 — Extracted the in-game `Course` shell (level render, camera, character
+    layer, HUD at verified offsets) from `CampaignTestScreen`; `GamePage` mounts it
+    instead of the harness. Test: `GameShellMountTest`.
+  - [x] A4 — In-game load lifecycle as the pure `pr2.gameplay.LevelEntry`
+    (`Idle→Selected→Loading→Ready|Failed`, matching-`startGame` gate, the two
+    distinct `loadHandler` error strings, spectate-on-`Ready`); access cover
+    (`LevelAccess`/`LevelItem`) and launch handoff (`LevelLaunch`) were already
+    ported. Test: `LevelEntryStateTest`.
+  - [x] A5 — `pr2.gameplay.GameCommandShell`: 1:1 parse/register of the
+    `Game.initialize`/`remove` command table behind a typed `GameCommandDelegate`;
+    character commands parse into reusable `LocalCharacterInit`/`RemoteCharacterInit`
+    (consumed by B). Test: `GameCommandShellTest`.
 - [ ] Port multiplayer race synchronization.
   - Implement local update emission, remote character creation/interpolation,
     player join/leave, positions, rotations, stats, hats, items/effects, block
@@ -185,151 +177,6 @@ is scoped to item behavior below.
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
-- [x] Port character "hold down to charge super jump" behavior. Crouch is now
-  forced only by a low ceiling (block above the head, body tile clear) as in
-  `LocalCharacter.processBlocks`; holding down on open ground charges
-  `crouchCharge` and releases a `-crouchCharge*0.24` super jump per
-  `LocalCharacter.landGo`, instead of incorrectly crouching.
-- [x] Camera centers on the player on entry. Two bugs stacked here:
-  1. Root cause: in the real login->lobby->race flow the game mounted inside a
-     nested lobby panel, not the stage. Every `PageHolder` claimed the `startGame`
-     launch in its constructor (`LevelLaunch.install`), so the lobby's nested
-     holders (`PlayersTab` inner list holder, `LobbySide`) became the launch
-     target. The `GamePage` then loaded into an offset lobby panel, leaving the
-     lobby chrome (Vault/Editor/Logout/Options) on screen and shifting the game
-     right/down. Flash uses a single root `Main.pageHolder`; now only the
-     stage-root holder installs (`PageHolder(..., root = true)` from `Main`).
-     Guarded by `LobbyServicesTest.testLevelLaunchTargetsRootHolder`.
-  2. The follow easing matched Flash (`Course.cameraFollowPlayer` target `-c.x`,
-     `-c.y + 45`), but `CampaignTestScreen` (wrapped by `GamePage`) seeded
-     `CameraFollow` from the renderer's off-center focus and eased in over ~10
-     frames. Flash hides that ease-in behind the 3-2-1 countdown
-     (`Course.beginRace`/`toggleKeyScroll`); this screen has no countdown, so it
-     now snaps to the settled spawn target via `CameraFollow.snapTo`.
-- [x] Port in-game minimap. `gameplay/MiniMap` and `gameplay/MiniMapDot` port
-  `MiniMap.as`/`MiniMapDot.as`: the block silhouette is rasterized to a bitmap
-  fitted to the authored 400x44 strip (`rasterizeScale`/`fitScale`/`numLimit`),
-  finish boxes (`MiniMapFinishGraphic`) and constant-4px player dots layer over
-  it, and the dot drives the authored five colour frames via `setTempID`.
-  `CampaignTestScreen` builds it from the decoded level (excluding start blocks
-  and minion eggs as `Map.attachObject` does), places the local yellow dot at
-  stage (80,2) per Course's holder offset, and tracks the player each frame.
-  Guarded by `MiniMapTest`. The `MiniMapDot` hover popup (player name) and
-  remote-player dots are deferred until the full `Game`/`Course` shell and
-  multiplayer sync land.
-- [x] Port in-game item display. `gameplay/ItemDisplay` drives the authored
-  `ItemDisplayGraphic` item frames, dual item-name fields, and three ammo dots
-  from `LocalPlayerController` state in `CampaignTestScreen`, at Flash's stage
-  position (2,2). Guarded by `ItemDisplayTest`.
-- [x] Port in-game menu buttons.
-  - [x] Port the authored quit button, including immediate mouse quit, the
-    focused Space-key confirmation while racing, glow controls, `quit_race`,
-    the finish popup, and `set_game_room`none` return-to-lobby flow.
-  - [x] Port the authored music-selection dropdown and runtime song switching.
-    `gameplay/MusicSelection` renders `MusicSelectionGraphic` around the shared
-    authored `FlComboBox`, filters the catalog through the saved song blacklist,
-    selects the level's requested/random fallback track, switches looping
-    `GameMusic` playback on user changes, and supports the artifact song.
-    `CampaignTestScreen` positions it at Course's stage-space coordinates and
-    tears it down with the level. Guarded by `MusicSelectionTest`.
-- [x] Port finish popup, level rating, experience gain. `gameplay/FinishedPage`,
-  `gameplay/ExpGain`, and `ui/RatingSelect` port `FinishedPage.as`/`ExpGain.as`/
-  `RatingSelect.as` over the authored `FinishedPageGraphic`, `ExpGainGraphic`,
-  `HighlightStar`, and `RatingSelectGraphic` symbols: award/exp lines (capped at
-  five), the `+ delta` total, the 45-frame exp-bar ease with the AS3 end-clamping
-  (`m.bar.bar.width`/`textBox`), and the 1-5 star control that confirms via
-  `ConfirmPopup` and POSTs to `submit_rating.php` through `UploadingPopup`
-  (`ServerConfig.submitRatingUrl`). Guarded by `FinishedPageTest`. Since the real
-  in-game `Game`/`Course` shell and multiplayer finish protocol are not ported
-  yet, `FinishedPage` takes the level id directly and exposes the same
-  `award`/`setExpGain` entry points `Game` called, with an injected `onReturn` for
-  the "Return to Lobby" button (Flash's `set_game_room`none` + page change). Wiring
-  it to the live race-finish/award/exp commands is deferred to the multiplayer
-  race-sync and in-game-shell tasks above.
-- [x] Mine, brick, and crumble blocks disappear visually when removed. The
-  shared `LocalPlayerController.blockAlphaAt` removal state now drives every
-  campaign block display rather than only vanish blocks, and the fixture
-  renderer uses the authored mine and crumble bitmap assets. Guarded by
-  `FixtureLevelRendererTest` and `ServerLevelRendererTest`.
-- [x] Show the authored mine explosion and mine/brick/crumble piece effects
-  when those blocks are hit or removed.
-  - [x] Show the authored 14-frame mine explosion and spatial explosion sound
-    when a mine is triggered.
-  - [x] Show the authored mine, brick, and crumble piece physics. Authored
-    `BrickPieceGraphic`, `CrumblePieceGraphic`, and `MinePieceGraphic` fragments
-    now use Flash's exact counts, randomized spawn/velocity/rotation spreads,
-    gravity, friction, fade rate, and 20-frame removal lifecycle.
-- [x] Vanish blocks now reproduce `VanishBlock.as` visually as well as
-  physically: contact fades the block by 0.1 per frame, the inactive block is
-  hidden during its 2-second delay, and an unoccupied block reappears at 0.2
-  alpha before fading back in. The shared `LocalPlayerController` state drives
-  both fixture and server-level renderers. Guarded by
-  `LocalPlayerControllerTest`, `FixtureLevelRendererTest`, and
-  `ServerLevelRendererTest`.
-- [x] Arrow blocks render their arrows. `ServerLevelRenderer` now draws arrow
-  blocks as a `basic2` base tile plus the generated `ArrowBlockGraphic`,
-  centered on the tile (15,15) and rotated per direction (up 0, down 180, left
-  -90, right 90) exactly as `ArrowBlock`/`ArrowUp/Down/Left/RightBlock` and
-  `Blocks.getBlock` do in AS3. Guarded by `ServerLevelRendererTest`.
-  - [x] Port the "press" brighten animation. Local arrow collisions now emit a
-    visual activation that drives the authored eight-frame `ArrowBlockGraphic`
-    timeline, including its frame-1 stop script and `ArrowBlock.animateArrow`
-    retrigger rules. Guarded by `LocalPlayerControllerTest` and
-    `ServerLevelRendererTest`.
-- [x] Fix click-to-skip in the intro. Flash's `menu.IntroPage` listened for
-  `MouseEvent.CLICK` on the stage so a click anywhere skipped to login, but
-  OpenFL's HTML5 backend does not dispatch a stage-level CLICK for clicks on
-  plain (non-button) art or the empty backdrop, so only interactive symbols
-  (the global mute button, the center logo) skipped. `IntroPage` now keeps the
-  stage listener (so those symbols still skip) and adds a transparent,
-  full-stage skip hit area on top of the intro art with its own CLICK listener,
-  matching `LoginPage.createHitArea`. An `ended` guard makes the now-doubled
-  skip path idempotent so a click never stacks two `LoginPage` transitions.
-  Verified end-to-end with `tools/openfl_driver.py sequence`: a plain-area
-  click advances `data-pr2-intro-state` from `intro-jiggmin` to `login`.
-- [x] Fix the position of the in-game quit button. `GamePage` now mounts
-  `QuitButton` at the Flash course origin (stage 275,200), so the authored
-  `quit_bt` lands at stage (428,369) as in `gameplay.Game`/`Course`.
-  Guarded by `QuitButtonTest`.
-- [x] Port in-game chat.
-  - [x] Port incoming race-chat message rendering. `gameplay/RaceChat` now
-    formats `chat` command payloads like Flash `page.Chat.handleMessageFromArray`:
-    linked/colored user names through `HtmlNameMaker`, escaped or swear-filtered
-    message text, Fred/artifact italics with authored HTML preserved, link
-    listeners on the visible chat text, and the seven-line race message window.
-    Guarded by `RaceChatTest`.
-- [x] Play in-game music, streaming from a server endpoint. Dropdown can select different songs.
-  `GameMusic` streams the selected authored track from `/music/new/<file>` and
-  `MusicSelection` switches playback from the authored dropdown. Guarded by
-  `MusicSelectionTest`.
-- [x] Character no longer shrinks too short when crouching under a block. The
-  gameplay harness and campaign/race screen now keep the authored character
-  display scale fixed at 0.9 while only moving the display container to the
-  shorter crouch collision height, matching Flash's `LocalCharacter.landGo`
-  visual behavior. Guarded by `PlayerDisplayPlacementTest`.
-- [x] Pressing up while under a block bumps it. The existing grounded
-  low-ceiling branch now has deterministic coverage: pressing up under a
-  one-tile gap routes through `onBump` without launching the player, so a
-  ceiling item block grants its configured item while the character remains
-  crouched and grounded. Guarded by `LocalPlayerControllerTest`.
-- [x] Bumping an item block gives your character the configured item. Guarded by
-  `LocalPlayerControllerTest`.
-- [x] Bumping a regular item block should grey it out, bumping it again does not give an item.
-  Regular `Item` blocks now mirror Flash `SupplyBlock.depleteVisuals` with a
-  0.5 RGB color transform after first use, while `InfiniteItem` blocks stay
-  bright and reusable. The depleted block no longer grants another item on a
-  later bump. Guarded by `LocalPlayerControllerTest`,
-  `FixtureLevelRendererTest`, and `ServerLevelRendererTest`.
-- [x] Port the scale-shake effect when charging a super jump. Entering the
-  authored `superJumpAnim` now starts Flash's per-frame vertical scale wobble
-  from `Character.superJumpWobbleTick`, using the active animation frame to
-  widen the random shake range; leaving the state removes the listener and
-  resets `scaleY` to 1. Guarded by `CharacterDisplayTest`.
-- [x] Background art layers are showing with Flash's plane-offset math.
-  `ServerLevelRenderer` now positions each decoded art plane with
-  `Math.round(cameraOffset * layerScale)`, matching `Background.setPos`, while
-  retaining the authored bg3/bg2/bg1/map/bg4/bg5 depth order and child-level
-  scale for stamps/text. Guarded by `ServerLevelRendererTest`.
 - [ ] Port the live level drawing from the source game, x blocks and x lines are
   drawn every frame until everything is ready and the game begins.
   - [x] Draw server-level blocks incrementally before gameplay starts. The
@@ -338,25 +185,6 @@ is scoped to item behavior below.
     synchronously drawing the full map. Guarded by `ServerLevelRendererTest`.
   - [ ] Port incremental drawing for authored art lines/objects/text and wire the
     real `finish_drawing` readiness flow around all background layers.
-- [x] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
-  - [x] Hide the campaign/game debug overlay by default while preserving the
-    `data-pr2-debug-state` automation hook.
-  - [x] Add the race-chat command route that recognizes `/debug` (case-
-    insensitive, ignoring edge whitespace) and toggles the campaign/game debug
-    overlay without swallowing normal chat lines. Guarded by
-    `CampaignTestScreenTest`.
-  - [x] Connect the command route to the authored `RaceChatGraphic` input.
-    `gameplay/RaceChat` now renders the generated chat art, exposes the authored
-    input as Flash's focus target, sends Enter-submitted lines through the
-    campaign/game command route, strips the socket delimiter, and falls through
-    normal chat lines to the game socket route. `CampaignTestScreen` mounts it
-    at Course's stage-space position and ignores movement keys while chat input
-    has focus. Guarded by `RaceChatTest` and `CampaignTestScreenTest`.
-  - [x] Send normal outgoing race-chat lines over the game socket. After local
-    command handlers (currently `/debug`) decline a non-empty line,
-    `gameplay/RaceChat` emits Flash's `chat` command on the persistent
-    `LobbySocket`, while still stripping the forbidden socket delimiter and
-    clearing the authored input. Guarded by `RaceChatTest`.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 
@@ -535,12 +363,8 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
 - [ ] Walk every original user flow and role: guest, member, moderator/admin
   where testable, login failures, lobby/social/account/store, level browsing,
   racing/spectating, editor/management, disconnect/reconnect, and logout.
-- [x] Document only unavoidable browser differences, with evidence that each is
-  platform-required rather than an implementation shortcut.
 
 The port is complete when no reachable behavior is a placeholder or harness
 redirect, the coverage inventory has no unexplained gaps, and deterministic,
 protocol, audio, and visual comparisons demonstrate parity with the Flash
 client.
-</content>
-</invoke>
