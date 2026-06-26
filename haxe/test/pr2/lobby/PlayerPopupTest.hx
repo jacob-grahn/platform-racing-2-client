@@ -69,16 +69,19 @@ class PlayerPopupTest {
 	private static function testChatLinkEntryPoints():Void {
 		LobbySession.group = 1;
 		closeAll();
+		LobbyPopups.lastRequest = "sentinel";
 		LobbyPopups.showGuestPlayer("Anon");
 		var open = Popup.getOpen();
 		var guest = Std.downcast(open[open.length - 1], PlayerGuestPopup);
 		assertNotNull(guest, "showGuestPlayer opens a PlayerGuestPopup");
 		assertEquals("-- Anon --", LobbyArt.text(guest, "nameBox").text, "guest popup shows the name");
+		assertEquals("sentinel", LobbyPopups.lastRequest, "guest popup route is no longer record-only");
 
 		// A member chat link opens the full popup (which then loads asynchronously).
 		LobbyPopups.showPlayer("Member");
 		open = Popup.getOpen();
 		assertNotNull(Std.downcast(open[open.length - 1], PlayerPopup), "showPlayer opens a PlayerPopup");
+		assertEquals("sentinel", LobbyPopups.lastRequest, "player popup route is no longer record-only");
 		closeAll();
 	}
 

@@ -276,6 +276,11 @@ external-link, Options, and Credits popups are already functional (see README).
 - [ ] Replace `LobbyPopups.lastRequest` stand-ins with functional player,
   guest-player, guild, level-info/report, admin/moderation, and social-action
   popups, including their network requests and refresh behavior.
+  - [x] Remove `lastRequest` marker behavior from the ported player,
+    guest-player, and guild routes. `LobbyPopups.showPlayer`,
+    `showGuestPlayer`, `showGuild`, and `showGuildByName` now only open their
+    authored popup classes, leaving `lastRequest` reserved for still-unported
+    routes. Guarded by `PlayerPopupTest` and `GuildPopupTest`.
   - [x] Replace guild link stand-ins with the authored `GuildPopupGraphic`
     flow. `LobbyPopups.showGuild`/`showGuildByName` now open `GuildPopup`,
     load `guild_info.php` with member rows, fill GP/member/prose fields, expose

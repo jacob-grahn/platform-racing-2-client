@@ -51,9 +51,11 @@ class GuildPopupTest {
 		LobbySession.guildId = 9;
 		LobbySession.isTrialMod = false;
 		closeAll();
+		LobbyPopups.lastRequest = "sentinel";
 		LobbyPopups.showGuild(9);
 		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GuildPopup);
 		assertNotNull(popup, "showGuild opens a GuildPopup");
+		assertEquals("sentinel", LobbyPopups.lastRequest, "guild popup route is no longer record-only");
 		popup.applyReturnData(sampleData());
 		assertEquals(true, LobbyArt.findByName(popup, "messageButton") != null, "members get PM Everyone");
 		assertEquals(true, LobbyArt.findByName(popup, "delete_bt").visible, "admins see delete");
