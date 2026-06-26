@@ -19,6 +19,9 @@ import pr2.net.CampaignLevelInfo;
 import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
+import pr2.page.LobbyPage;
+import pr2.page.Page;
+import pr2.page.PageHolder;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.TabLayout;
@@ -52,6 +55,7 @@ class LobbyServicesTest {
 		testSocketRecording();
 		testCommandDispatch();
 		testMemoryAndSecureData();
+		testLevelEditorRoute();
 		testMessagesPaging();
 		testSocialActionPlan();
 		testCourseMenuTiming();
@@ -115,6 +119,37 @@ class LobbyServicesTest {
 		assertEquals("ignored", unignore.list, "unignore list");
 		assertEquals("remove", unignore.mode, "unignore mode");
 		assertEquals("unignore_user", unignore.socketVerb, "unignore verb");
+	}
+
+	private static function testLevelEditorRoute():Void {
+		var previousFactory = LobbyPage.createLevelEditorPage;
+		var launchedAsMod:Null<Bool> = null;
+		LobbyPage.createLevelEditorPage = function(isMod:Bool):Page {
+			launchedAsMod = isMod;
+			return new TestPage("level-editor");
+		};
+
+		LobbySession.clear();
+		LobbySession.group = 3;
+		LobbySession.isTempMod = false;
+		LobbySession.isTrialMod = false;
+		var holder = new PageHolder();
+		var page = new LobbyPage();
+		page.pageHolder = holder;
+		Reflect.callMethod(page, Reflect.field(page, "clickLevelEditor"), []);
+		assertEquals(true, launchedAsMod, "permanent moderators enter editor with mod privileges");
+		assertEquals(true, Std.isOfType(holder.getCurrentPage(), TestPage), "level editor route changes page");
+
+		launchedAsMod = null;
+		LobbySession.group = 3;
+		LobbySession.isTempMod = true;
+		page = new LobbyPage();
+		page.pageHolder = holder;
+		Reflect.callMethod(page, Reflect.field(page, "clickLevelEditor"), []);
+		assertEquals(false, launchedAsMod, "temporary moderators enter editor without mod privileges");
+
+		LobbyPage.createLevelEditorPage = previousFactory;
+		LobbySession.clear();
 	}
 
 	private static function testCourseMenuTiming():Void {
@@ -455,5 +490,14 @@ private class TestRow implements SortableRow {
 
 	public function sortName():String {
 		return name;
+	}
+}
+
+private class TestPage extends Page {
+	public var id(default, null):String;
+
+	public function new(id:String) {
+		super();
+		this.id = id;
 	}
 }

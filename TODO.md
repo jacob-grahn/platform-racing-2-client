@@ -293,6 +293,11 @@ external-link, Options, and Credits popups are already functional (see README).
     directly, with deterministic coverage that the route no longer mutates the
     placeholder request marker. The catalog, quantity, purchase, FAQ, sale, coin,
     and booster flows are covered by the existing StorePopup implementation.
+  - [x] Replace the record-only level-editor click marker with the Flash-shaped
+    editor handoff. The lobby computes the permanent-moderator flag before
+    leaving, changes pages through the level-editor factory, and closes the
+    persistent lobby socket; the full editor implementation remains in the
+    level-editor section below. Guarded by `LobbyServicesTest`.
 - [ ] Verify every Chat, PMs, Players, Account, Campaign, listing, Favorites, and
   Search operation against real HTTP/socket responses. Cover paging, stale and
   out-of-order responses, loading/error/empty states, permissions, unread

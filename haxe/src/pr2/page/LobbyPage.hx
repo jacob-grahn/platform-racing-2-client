@@ -27,6 +27,9 @@ class LobbyPage extends Page {
 	public static var createStorePopup:Void->Void = function():Void {
 		new StorePopup();
 	};
+	public static var createLevelEditorPage:Bool->Page = function(isMod:Bool):Page {
+		return new Page();
+	};
 
 	private var background:Null<PR2MovieClip>;
 	private var left:Null<LobbyLeft>;
@@ -110,9 +113,11 @@ class LobbyPage extends Page {
 	}
 
 	private function clickLevelEditor():Void {
-		// The Flash client logged out and opened the level editor here. The editor
-		// is not ported yet, so this is wired as a placeholder entry point.
-		reportAction("levelEditor");
+		var isMod = !LobbySession.isTempMod && !LobbySession.isTrialMod && LobbySession.group >= 2;
+		if (pageHolder != null) {
+			pageHolder.changePage(createLevelEditorPage(isMod));
+		}
+		LobbySocket.close();
 	}
 
 	private function clickKong():Void {
