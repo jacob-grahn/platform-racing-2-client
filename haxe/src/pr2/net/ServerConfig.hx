@@ -127,6 +127,11 @@ final class ServerConfig {
 		return host + "/guilds_top.php";
 	}
 
+	/** Guild profile lookup, matching `dialogs.GuildPopup`. */
+	public static function guildInfoUrl(id:Int = 0, name:String = ""):String {
+		return host + "/guild_info.php?id=" + id + "&name=" + StringTools.urlEncode(name) + "&getMembers=yes";
+	}
+
 	/** Private-message list GET, matching `chat.Messages.getMessages`. */
 	public static function messagesGetUrl(start:Int, count:Int):String {
 		return host + "/messages_get.php?start=" + start + "&count=" + count;

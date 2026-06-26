@@ -265,6 +265,11 @@ external-link, Options, and Credits popups are already functional (see README).
 - [ ] Replace `LobbyPopups.lastRequest` stand-ins with functional player,
   guest-player, guild, level-info/report, admin/moderation, and social-action
   popups, including their network requests and refresh behavior.
+  - [x] Replace guild link stand-ins with the authored `GuildPopupGraphic`
+    flow. `LobbyPopups.showGuild`/`showGuildByName` now open `GuildPopup`,
+    load `guild_info.php` with member rows, fill GP/member/prose fields, expose
+    PM Everyone for current guild members, and preserve the Shift guild-id
+    title toggle. Guarded by `GuildPopupTest`.
 - [ ] Implement the remaining bottom-strip destinations: store/vault and
   quantity/purchase flows, and the level editor. Preserve guest/member
   visibility and logout side effects.

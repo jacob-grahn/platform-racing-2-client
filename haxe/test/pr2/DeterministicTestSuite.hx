@@ -23,6 +23,7 @@ import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
 import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
+import pr2.lobby.GuildPopupTest;
 import pr2.lobby.OptionsPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.StorePopupTest;
@@ -94,6 +95,7 @@ class DeterministicTestSuite {
 		AccountTabTest.main();
 		CreditsPopupTest.main();
 		ExternalLinkPopupTest.main();
+		GuildPopupTest.main();
 		OptionsPopupTest.main();
 		PlayerPopupTest.main();
 		StorePopupTest.main();

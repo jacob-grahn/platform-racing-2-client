@@ -30,10 +30,12 @@ class LobbyPopups {
 
 	public static function showGuild(guildId:Int):Void {
 		lastRequest = 'guild:$guildId';
+		new pr2.lobby.dialogs.GuildPopup(guildId);
 	}
 
 	public static function showGuildByName(name:String):Void {
 		lastRequest = 'guildName:$name';
+		new pr2.lobby.dialogs.GuildPopup(0, name);
 	}
 
 	public static function showLevel(levelId:String):Void {
