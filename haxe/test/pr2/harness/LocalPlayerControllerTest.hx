@@ -21,6 +21,7 @@ class LocalPlayerControllerTest {
 		testFacingFollowsPressedDirection();
 		testAnimationFollowsDirectionalInput();
 		testLowCeilingForcesCrouchAndBlocksJump();
+		testPressingUpUnderBlockBumpsIt();
 		testHoldingDownChargesAndLaunchesSuperJump();
 		testIceBlockReducesNextFrameAcceleration();
 		testArrowStandEffectsMatchAs3Deltas();
@@ -236,6 +237,24 @@ class LocalPlayerControllerTest {
 		var jumpState = player.debugState();
 		assertEquals(true, jumpState.crouching, "the low ceiling keeps the character crouched");
 		assertEquals(true, jumpState.grounded, "crouching under a ceiling blocks the jump");
+	}
+
+	private static function testPressingUpUnderBlockBumpsIt():Void {
+		var player = new LocalPlayerController(lowItemCeilingLevel());
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		var crouchState = player.debugState();
+		assertEquals(true, crouchState.crouching, "the low item block forces crouch before input");
+		assertEquals(null, crouchState.itemId, "standing under the item block does not collect it");
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var bumpState = player.debugState();
+		assertEquals(true, bumpState.grounded, "pressing up under a block stays grounded");
+		assertEquals(true, bumpState.crouching, "the block still forces crouch after the bump");
+		assertEquals(4, bumpState.itemId, "pressing up under the block routes through onBump");
+		assertEquals("item", bumpState.touchedBlockType, "debug state reports the bumped ceiling block");
 	}
 
 	// LocalCharacter.landGo charges crouchCharge while down is held on the ground and
@@ -1094,6 +1113,30 @@ class LocalPlayerControllerTest {
 			new TilePosition(4, 9),
 			[
 				new LevelBlock(2, 8, BlockType.Basic),
+				new LevelBlock(0, 10, BlockType.Basic),
+				new LevelBlock(1, 10, BlockType.Basic),
+				new LevelBlock(2, 10, BlockType.Basic),
+				new LevelBlock(3, 10, BlockType.Basic),
+				new LevelBlock(4, 10, BlockType.Basic),
+				new LevelBlock(5, 10, BlockType.Basic),
+				new LevelBlock(4, 9, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function lowItemCeilingLevel():FixtureLevel {
+		return new FixtureLevel(
+			"low-item-ceiling",
+			"Low Item Ceiling",
+			6,
+			13,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 9),
+			new TilePosition(4, 9),
+			[
+				new LevelBlock(2, 8, BlockType.Item, "4"),
 				new LevelBlock(0, 10, BlockType.Basic),
 				new LevelBlock(1, 10, BlockType.Basic),
 				new LevelBlock(2, 10, BlockType.Basic),

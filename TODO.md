@@ -181,7 +181,11 @@ is scoped to item behavior below.
   display scale fixed at 0.9 while only moving the display container to the
   shorter crouch collision height, matching Flash's `LocalCharacter.landGo`
   visual behavior. Guarded by `PlayerDisplayPlacementTest`.
-- [ ] Pressing up while under a block should bump it
+- [x] Pressing up while under a block bumps it. The existing grounded
+  low-ceiling branch now has deterministic coverage: pressing up under a
+  one-tile gap routes through `onBump` without launching the player, so a
+  ceiling item block grants its configured item while the character remains
+  crouched and grounded. Guarded by `LocalPlayerControllerTest`.
 - [ ] Bumping an item block should give your character an item
 - [ ] Bumping a regular item block should grey it out, bumping it again does not give an item
 - [x] Port the scale-shake effect when charging a super jump. Entering the
