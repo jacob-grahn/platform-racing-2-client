@@ -51,6 +51,7 @@ class CharacterDisplay extends Sprite {
 	// keep driving frames manually in lock-step with the physics tick.
 	private var idleAnimationEnabled:Bool = false;
 	private var idleTicking:Bool = false;
+	private var superJumpWobbleRandom:Void->Float = Math.random;
 
 	public function new(?partIds:CharacterPartIds, ?colors:CharacterColors, ?initialRenderMode:CharacterRenderMode) {
 		super();
@@ -116,6 +117,9 @@ class CharacterDisplay extends Sprite {
 			return;
 		}
 
+		if (activeStateName == "superJumpAnim") {
+			endSuperJumpWobble();
+		}
 		activeStateName = stateName;
 		activeStateClip = null;
 
@@ -137,6 +141,9 @@ class CharacterDisplay extends Sprite {
 
 		if (activeStateClip != null) {
 			renderAtlasParts(activeStateClip);
+		}
+		if (activeStateName == "superJumpAnim") {
+			startSuperJumpWobble();
 		}
 	}
 
@@ -217,6 +224,28 @@ class CharacterDisplay extends Sprite {
 
 	private function onIdleTick(_:Event):Void {
 		advanceOneFrame();
+	}
+
+	@:allow(pr2.character.CharacterDisplayTest)
+	private function setSuperJumpWobbleRandomForTest(random:Void->Float):Void {
+		superJumpWobbleRandom = random == null ? Math.random : random;
+	}
+
+	private function startSuperJumpWobble():Void {
+		addEventListener(Event.ENTER_FRAME, superJumpWobbleTick);
+	}
+
+	private function endSuperJumpWobble():Void {
+		removeEventListener(Event.ENTER_FRAME, superJumpWobbleTick);
+		scaleY = 1;
+	}
+
+	private function superJumpWobbleTick(_:Event):Void {
+		if (activeStateClip == null) {
+			return;
+		}
+		var amount = activeStateClip.currentFrame / 2;
+		scaleY = (superJumpWobbleRandom() * amount + (100 - amount / 2)) / 100;
 	}
 
 	private function renderAtlasPartsForAllStates():Void {

@@ -3,6 +3,7 @@ package pr2;
 import pr2.audio.AudioUnlockGateTest;
 import pr2.audio.AudioRuntimeTest;
 import pr2.character.CharacterAtlasTest;
+import pr2.character.CharacterDisplayTest;
 import pr2.character.CharacterStateTest;
 import pr2.crypto.PR2EncryptorTest;
 import pr2.effects.PixelEffect1Test;
@@ -56,6 +57,7 @@ class DeterministicTestSuite {
 		FlComponentsTest.main();
 		PixelEffect1Test.main();
 		CharacterAtlasTest.main();
+		CharacterDisplayTest.main();
 		CharacterStateTest.main();
 		PR2EncryptorTest.main();
 		LevelFixtureParserTest.main();

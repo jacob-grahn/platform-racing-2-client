@@ -177,7 +177,11 @@ is scoped to item behavior below.
 - [ ] Pressing up while under a block should bump it
 - [ ] Bumping an item block should give your character an item
 - [ ] Bumping a regular item block should grey it out, bumping it again does not give an item
-- [ ] Port the scale-shake effect when charging a super jump
+- [x] Port the scale-shake effect when charging a super jump. Entering the
+  authored `superJumpAnim` now starts Flash's per-frame vertical scale wobble
+  from `Character.superJumpWobbleTick`, using the active animation frame to
+  widen the random shake range; leaving the state removes the listener and
+  resets `scaleY` to 1. Guarded by `CharacterDisplayTest`.
 - [ ] Background art layers are not showing
 - [ ] Port the live level drawing from the source game, x blocks and x lines are drawn every frame until everything is ready and the game begins
 - [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
