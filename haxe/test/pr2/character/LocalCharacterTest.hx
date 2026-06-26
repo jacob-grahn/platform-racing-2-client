@@ -1,0 +1,96 @@
+package pr2.character;
+
+import pr2.harness.LocalPlayerController;
+import pr2.harness.LocalPlayerInput;
+import pr2.level.BlockType;
+import pr2.level.FixtureLevel;
+import pr2.level.FixtureLevel.LevelBlock;
+import pr2.level.FixtureLevel.StatDefaults;
+import pr2.level.FixtureLevel.TilePosition;
+
+class LocalCharacterTest {
+	private static var assertions:Int = 0;
+
+	public static function main():Void {
+		testDelegatesPhysicsAndMirrorsCharacterState();
+		trace('LocalCharacterTest passed $assertions assertions');
+	}
+
+	private static function testDelegatesPhysicsAndMirrorsCharacterState():Void {
+		var level = flatLevel();
+		var controller = new LocalPlayerController(level);
+		var character = new LocalCharacter(level);
+		assertSameState(controller, character, "initial sync");
+		assertEquals("local", character.type, "local character type");
+
+		var inputs = [
+			new LocalPlayerInput(),
+			new LocalPlayerInput(false, true),
+			new LocalPlayerInput(false, true),
+			new LocalPlayerInput(false, false, true),
+			new LocalPlayerInput(false, false, true),
+			new LocalPlayerInput(),
+			new LocalPlayerInput(true, false),
+			new LocalPlayerInput()
+		];
+
+		for (i in 0...inputs.length) {
+			controller.step(inputs[i]);
+			character.step(inputs[i].copy());
+			assertSameState(controller, character, 'frame $i');
+		}
+
+		character.setGravity(2.5);
+		controller.setGravity(2.5);
+		controller.step(new LocalPlayerInput());
+		character.step(new LocalPlayerInput());
+		assertSameState(controller, character, "runtime gravity sync");
+	}
+
+	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
+		var expected = controller.debugState();
+		var actual = character.debugState();
+		assertEquals(expected.serialize(), actual.serialize(), '$label debug state');
+		assertClose(expected.x, character.x, '$label x');
+		assertClose(expected.y, character.y, '$label y');
+		assertClose(expected.vx, character.velX, '$label velX');
+		assertClose(expected.vy, character.velY, '$label velY');
+		assertEquals(expected.grounded, character.grounded, '$label grounded');
+		assertEquals(expected.crouching, character.crouching, '$label crouching');
+		assertEquals(expected.animation, character.state, '$label animation state');
+		assertClose(0.9 * controller.facingScaleX, character.display.scaleX, '$label facing scale');
+	}
+
+	private static function flatLevel():FixtureLevel {
+		return new FixtureLevel(
+			"local-character-flat",
+			"Local Character Flat",
+			8,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 6),
+			[
+				new LevelBlock(2, 4, BlockType.Basic),
+				new LevelBlock(3, 4, BlockType.Basic),
+				new LevelBlock(4, 4, BlockType.Basic)
+			]
+		);
+	}
+
+	private static function assertEquals<T>(expected:T, actual:T, label:String):Void {
+		assertions++;
+		if (expected != actual) {
+			throw '$label expected $expected but was $actual';
+		}
+	}
+
+	private static function assertClose(expected:Float, actual:Float, label:String, epsilon:Float = 0.001):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > epsilon) {
+			throw '$label expected $expected but was $actual';
+		}
+	}
+}

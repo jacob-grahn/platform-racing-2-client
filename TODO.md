@@ -92,6 +92,13 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     `LocalPlayerController` physics into `pr2/character/LocalCharacter.hx extends
     Character` (or delegate to the existing controller) so behavior is preserved.
     Test: reuse/retarget `LocalPlayerControllerTest` against `LocalCharacter`.
+    - [x] Add the `LocalCharacter` controller-delegation bridge. The new
+      `pr2.character.LocalCharacter` extends `Character`, owns the audited
+      `LocalPlayerController`, mirrors position/velocity/item/animation/facing
+      state after each step, exposes the existing debug/block helpers, and is
+      guarded by `LocalCharacterTest`.
+    - [ ] Retarget the full `LocalPlayerControllerTest` matrix through
+      `LocalCharacter` and cut over `Course`/live gameplay construction.
   - [ ] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
     `exact_pos\`x\`y`, and `set_var\`<field>\`<value>` for each tracked field
     (scaleX, state, parent, item, rotMod, rot, sparkle, jet, beginRemove), gated by
