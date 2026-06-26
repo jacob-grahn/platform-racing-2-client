@@ -9,6 +9,7 @@ import openfl.text.TextField;
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.ChatText;
+import pr2.lobby.chat.HtmlNameMaker;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -25,6 +26,7 @@ class RaceChat extends Sprite {
 	private var bgText:Null<TextField>;
 	private var existingMessages:String = "";
 	private var messages:Int = 0;
+	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var sendHandler:Null<String->Bool>;
 	private var stageListenersActive:Bool = false;
 	private var ownerStage:Null<Stage>;
@@ -45,6 +47,7 @@ class RaceChat extends Sprite {
 		}
 		if (topText != null) topText.mouseWheelEnabled = false;
 		if (bgText != null) bgText.mouseWheelEnabled = false;
+		if (topText != null) htmlNameMaker.listenForLink(topText);
 		if (art != null) art.addEventListener(MouseEvent.MOUSE_WHEEL, ensureBottom);
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
@@ -63,6 +66,15 @@ class RaceChat extends Sprite {
 
 	public function receiveSystemMessage(message:String):Void {
 		displayMessage("<i><font color='#3E8697'>" + ChatText.escapeString(message) + "</font></i><br/>");
+	}
+
+	public function receiveChatMessage(userName:String, group:String, messageText:String, fred:Bool = false, filterSwears:Bool = true):Void {
+		if (!fred) {
+			messageText = filterSwears ? ChatText.escapeAndFilterString(messageText) : ChatText.escapeString(messageText);
+		}
+		var chatMessageName = htmlNameMaker.makeName(userName, group);
+		var fullMessage = chatMessageName + "<font color='#666666'>: " + messageText + "</font><br/>";
+		displayMessage(fred ? '<i>' + fullMessage + '</i>' : fullMessage);
 	}
 
 	public function displayMessage(message:String):Void {
@@ -96,6 +108,7 @@ class RaceChat extends Sprite {
 			art.dispose();
 			art = null;
 		}
+		htmlNameMaker.remove();
 		if (textBox == chatInput) {
 			textBox = null;
 		}

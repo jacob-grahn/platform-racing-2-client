@@ -172,6 +172,12 @@ is scoped to item behavior below.
   `quit_bt` lands at stage (428,369) as in `gameplay.Game`/`Course`.
   Guarded by `QuitButtonTest`.
 - [ ] Port in-game chat
+  - [x] Port incoming race-chat message rendering. `gameplay/RaceChat` now
+    formats `chat` command payloads like Flash `page.Chat.handleMessageFromArray`:
+    linked/colored user names through `HtmlNameMaker`, escaped or swear-filtered
+    message text, Fred/artifact italics with authored HTML preserved, link
+    listeners on the visible chat text, and the seven-line race message window.
+    Guarded by `RaceChatTest`.
 - [x] Play in-game music, streaming from a server endpoint. Dropdown can select different songs.
   `GameMusic` streams the selected authored track from `/music/new/<file>` and
   `MusicSelection` switches playback from the authored dropdown. Guarded by
