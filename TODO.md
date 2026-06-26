@@ -286,9 +286,13 @@ external-link, Options, and Credits popups are already functional (see README).
     load `guild_info.php` with member rows, fill GP/member/prose fields, expose
     PM Everyone for current guild members, and preserve the Shift guild-id
     title toggle. Guarded by `GuildPopupTest`.
-- [ ] Implement the remaining bottom-strip destinations: store/vault and
-  quantity/purchase flows, and the level editor. Preserve guest/member
-  visibility and logout side effects.
+- [ ] Implement the remaining bottom-strip destinations: level editor. Preserve
+  guest/member visibility and logout side effects.
+  - [x] Remove the record-only `lastRequest` marker from the bottom-strip
+    store/vault route. The button now opens the authored Vault of Magics popup
+    directly, with deterministic coverage that the route no longer mutates the
+    placeholder request marker. The catalog, quantity, purchase, FAQ, sale, coin,
+    and booster flows are covered by the existing StorePopup implementation.
 - [ ] Verify every Chat, PMs, Players, Account, Campaign, listing, Favorites, and
   Search operation against real HTTP/socket responses. Cover paging, stale and
   out-of-order responses, loading/error/empty states, permissions, unread

@@ -12,6 +12,7 @@ import pr2.net.LobbySocket;
 import pr2.net.ServerInfo;
 import pr2.runtime.PR2MovieClip;
 import pr2.audio.AudioManager;
+import pr2.lobby.store.StorePopup;
 
 /**
 	Port of Flash `lobby.Lobby`: the post-login lobby shell.
@@ -23,6 +24,10 @@ import pr2.audio.AudioManager;
 	options, vault/store, and credits to their Flash-equivalent actions.
 **/
 class LobbyPage extends Page {
+	public static var createStorePopup:Void->Void = function():Void {
+		new StorePopup();
+	};
+
 	private var background:Null<PR2MovieClip>;
 	private var left:Null<LobbyLeft>;
 	private var right:Null<LobbyRight>;
@@ -123,8 +128,7 @@ class LobbyPage extends Page {
 	}
 
 	private function clickStore():Void {
-		LobbyPopups.lastRequest = "store";
-		new pr2.lobby.store.StorePopup();
+		createStorePopup();
 		reportAction("store");
 	}
 

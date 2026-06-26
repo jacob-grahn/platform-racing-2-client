@@ -2,7 +2,9 @@ package pr2.lobby;
 
 import pr2.lobby.store.StoreListingData;
 import pr2.lobby.store.StorePopup;
+import pr2.page.LobbyPage;
 
+@:access(pr2.page.LobbyPage)
 class StorePopupTest {
 	private static var assertions = 0;
 
@@ -27,6 +29,19 @@ class StorePopupTest {
 		assertEquals(true, LobbyArt.text(popup, "coinsLeftBox").visible, "coin balance becomes visible");
 		popup.remove();
 		assertEquals(0, StorePopup.userCoins, "cleanup clears coin balance");
+
+		var opened = 0;
+		var previousFactory = LobbyPage.createStorePopup;
+		LobbyPage.createStorePopup = function():Void {
+			opened++;
+		};
+		LobbyPopups.lastRequest = "sentinel";
+		var page = new LobbyPage();
+		Reflect.callMethod(page, Reflect.field(page, "clickStore"), []);
+		assertEquals(1, opened, "lobby vault route opens the authored store popup");
+		assertEquals("sentinel", LobbyPopups.lastRequest, "lobby vault route is no longer record-only");
+		LobbyPage.createStorePopup = previousFactory;
+
 		trace('StorePopupTest passed $assertions assertions');
 	}
 
