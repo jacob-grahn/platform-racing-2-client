@@ -75,11 +75,19 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     AS3-spec deterministic transcript tests (emitted/consumed frame strings match
     byte-for-byte; interpolation tests step `go()` deterministically, no live
     server). Sequenced sub-tasks:
-  - [ ] **B1 — Port `Character` base.** New `pr2/character/Character.hx` from
-    `flash/character/Character.as`: parts/hats assembly (reuse existing
-    `pr2/character` atlas/display code), state machine, block-touch dispatch, item
-    hold/use, hat stack. No networking yet. Test: `CharacterBaseTest` (state
-    transitions, hat stack, block-touch classification).
+  - [x] **B1 — Port `Character` base.** `pr2/character/Character.hx` ports
+    `flash/character/Character.as`: the appearance model (head/body/feet ids +
+    per-part primary/epic colours and the four-slot hat stack with special-hat
+    flags — `resetHats`/`setHats`/`getHighestHat`, `SecureStore` replaced by a flag
+    map), driving the existing `CharacterDisplay` for parts/colours/state; the
+    `changeState` state machine (clip = `state + "Anim"`, jump-sound via injectable
+    hook); `getPos`/`setPos`/`rotate`/`updateSegs` (via `RotationMath`); the pure
+    `blockTouchProbes` classifier B4 consumes; and the recovery-flash + fade-out
+    removal lifecycle. No networking. Deferred behind hooks (need unported
+    subsystems): particle emitters, jet-pack flame, `DjinnEffects`, held-weapon
+    display frame, sound playback. Test: `CharacterBaseTest` (state transitions +
+    jump-sound hook, hat stack/`getHighestHat`/flags, block-touch probes, recovery/
+    removal).
   - [ ] **B2 — Port `LocalCharacter` physics integration.** Migrate the audited
     `LocalPlayerController` physics into `pr2/character/LocalCharacter.hx extends
     Character` (or delegate to the existing controller) so behavior is preserved.
