@@ -76,8 +76,8 @@ class ServerLevelRenderer extends Sprite {
 		blockLayer.y = offsetY;
 		for (i in 0...artLayerContainers.length) {
 			var layer = level.artLayers[i];
-			artLayerContainers[i].x = parallaxOffset(x, Constants.STAGE_WIDTH / 2, layer.scale);
-			artLayerContainers[i].y = parallaxOffset(y, Constants.STAGE_HEIGHT / 2, layer.scale);
+			artLayerContainers[i].x = parallaxOffset(x, layer.scale);
+			artLayerContainers[i].y = parallaxOffset(y, layer.scale);
 		}
 	}
 
@@ -124,8 +124,8 @@ class ServerLevelRenderer extends Sprite {
 		return pieces;
 	}
 
-	private static inline function parallaxOffset(screenOffset:Float, stageCenter:Float, scale:Float):Float {
-		return stageCenter + Math.round((screenOffset - stageCenter) * scale);
+	private static inline function parallaxOffset(screenOffset:Float, scale:Float):Float {
+		return Math.round(screenOffset * scale);
 	}
 
 	public static function blockAssetPath(code:Int):String {
@@ -256,8 +256,8 @@ class ServerLevelRenderer extends Sprite {
 		// Background.setPos rounds camera movement after applying the plane's
 		// parallax scale. DrawableBackground applies that scale to placed objects
 		// and text individually rather than scaling its stroke canvas.
-		container.x = parallaxOffset(offsetX, Constants.STAGE_WIDTH / 2, layer.scale);
-		container.y = parallaxOffset(offsetY, Constants.STAGE_HEIGHT / 2, layer.scale);
+		container.x = parallaxOffset(offsetX, layer.scale);
+		container.y = parallaxOffset(offsetY, layer.scale);
 		artLayerContainers[index] = container;
 		drawLayerStrokes(container, layer.drawActions);
 		drawLayerObjects(container, layer.objects, layer.scale);

@@ -155,15 +155,15 @@ class ServerLevelRendererTest {
 		assertEquals("artLayer5", renderer.getChildAt(6).name, "nearest foreground layer renders last");
 
 		var rear = Std.downcast(renderer.getChildAt(1), Sprite);
-		assertEquals(275 + Math.round((180.0 - 275 - 10020) * 0.25), rear.x, "rear layer x applies authored parallax around stage center");
-		assertEquals(200 + Math.round((280.0 - 200 - 10050) * 0.25), rear.y, "rear layer y applies authored parallax around stage center");
+		assertEquals(Math.round((180.0 - 10020) * 0.25), rear.x, "rear layer x applies authored parallax scale");
+		assertEquals(Math.round((280.0 - 10050) * 0.25), rear.y, "rear layer y applies authored parallax scale");
 
 		renderer.setCameraOffset(315.4, 172.6);
-		assertEquals(275 + Math.round((315.4 - 275) * 0.25), rear.x, "rear layer x follows camera at quarter speed");
-		assertEquals(200 + Math.round((172.6 - 200) * 0.25), rear.y, "rear layer y follows camera at quarter speed");
+		assertEquals(Math.round(315.4 * 0.25), rear.x, "rear layer x follows camera at quarter speed");
+		assertEquals(Math.round(172.6 * 0.25), rear.y, "rear layer y follows camera at quarter speed");
 		var foreground = Std.downcast(renderer.getChildAt(6), Sprite);
-		assertEquals(275 + Math.round((315.4 - 275) * 2), foreground.x, "foreground layer x follows camera at double speed");
-		assertEquals(200 + Math.round((172.6 - 200) * 2), foreground.y, "foreground layer y follows camera at double speed");
+		assertEquals(Math.round(315.4 * 2), foreground.x, "foreground layer x follows camera at double speed");
+		assertEquals(Math.round(172.6 * 2), foreground.y, "foreground layer y follows camera at double speed");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

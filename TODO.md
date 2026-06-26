@@ -182,7 +182,11 @@ is scoped to item behavior below.
   from `Character.superJumpWobbleTick`, using the active animation frame to
   widen the random shake range; leaving the state removes the listener and
   resets `scaleY` to 1. Guarded by `CharacterDisplayTest`.
-- [ ] Background art layers are not showing
+- [x] Background art layers are showing with Flash's plane-offset math.
+  `ServerLevelRenderer` now positions each decoded art plane with
+  `Math.round(cameraOffset * layerScale)`, matching `Background.setPos`, while
+  retaining the authored bg3/bg2/bg1/map/bg4/bg5 depth order and child-level
+  scale for stamps/text. Guarded by `ServerLevelRendererTest`.
 - [ ] Port the live level drawing from the source game, x blocks and x lines are drawn every frame until everything is ready and the game begins
 - [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
   - [x] Hide the campaign/game debug overlay by default while preserving the
