@@ -34,6 +34,7 @@ class LocalPlayerControllerTest {
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testBumpingItemBlockGrantsConfiguredItem();
+		testRegularItemBlockDepletesAfterFirstUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
 		testTeleportItemMovesPlayerForwardAndConsumesItem();
 		testTeleportItemBlockedBySolidDestination();
@@ -515,6 +516,29 @@ class LocalPlayerControllerTest {
 		assertEquals(true, grantedItem, "jumping player bumps item block");
 		assertEquals(4, state.itemId, "configured item id is granted");
 		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
+	}
+
+	private static function testRegularItemBlockDepletesAfterFirstUse():Void {
+		var player = new LocalPlayerController(lowItemCeilingLevel(BlockType.Item, "3"));
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(3, player.debugState().itemId, "first regular item bump grants the configured item");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 8), "depleted item block uses SupplyBlock grey transform");
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(null, player.debugState().itemId, "lightning item consumes before the second bump");
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(null, player.debugState().itemId, "depleted regular item block does not grant again");
+
+		var infinite = new LocalPlayerController(lowItemCeilingLevel(BlockType.InfiniteItem, "3"));
+		for (_ in 0...20) {
+			infinite.step(new LocalPlayerInput());
+		}
+		infinite.step(new LocalPlayerInput(false, false, true));
+		assertClose(1, infinite.blockColorMultiplierAt(2, 8), "infinite item block does not deplete visually");
 	}
 
 	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {
@@ -1124,7 +1148,7 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function lowItemCeilingLevel():FixtureLevel {
+	private static function lowItemCeilingLevel(type:BlockType = BlockType.Item, options:String = "4"):FixtureLevel {
 		return new FixtureLevel(
 			"low-item-ceiling",
 			"Low Item Ceiling",
@@ -1136,7 +1160,7 @@ class LocalPlayerControllerTest {
 			new TilePosition(2, 9),
 			new TilePosition(4, 9),
 			[
-				new LevelBlock(2, 8, BlockType.Item, "4"),
+				new LevelBlock(2, 8, type, options),
 				new LevelBlock(0, 10, BlockType.Basic),
 				new LevelBlock(1, 10, BlockType.Basic),
 				new LevelBlock(2, 10, BlockType.Basic),

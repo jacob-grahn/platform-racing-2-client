@@ -3,6 +3,7 @@ package pr2.harness;
 import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.geom.ColorTransform;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.BlockType;
@@ -30,7 +31,11 @@ class FixtureLevelRenderer extends Sprite {
 	public function syncBlockVisuals(player:LocalPlayerController):Void {
 		for (key => display in blockDisplays) {
 			var position = key.split(",");
-			display.alpha = player.blockAlphaAt(Std.parseInt(position[0]), Std.parseInt(position[1]));
+			var tileX = Std.parseInt(position[0]);
+			var tileY = Std.parseInt(position[1]);
+			display.alpha = player.blockAlphaAt(tileX, tileY);
+			var multiplier = player.blockColorMultiplierAt(tileX, tileY);
+			display.transform.colorTransform = new ColorTransform(multiplier, multiplier, multiplier);
 		}
 		for (event in player.consumeBlockVisualEvents()) {
 			switch (event.kind) {

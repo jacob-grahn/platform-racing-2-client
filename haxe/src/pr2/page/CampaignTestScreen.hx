@@ -401,6 +401,7 @@ class CampaignTestScreen extends Sprite {
 			var worldX = (block.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
 			var worldY = (block.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 			levelRenderer.setBlockAlpha(worldX, worldY, player.blockAlphaAt(block.x, block.y));
+			levelRenderer.setBlockColorMultiplier(worldX, worldY, player.blockColorMultiplierAt(block.x, block.y));
 		}
 		for (event in player.consumeBlockVisualEvents()) {
 			switch (event.kind) {

@@ -3,6 +3,7 @@ package pr2.level;
 import openfl.display.Bitmap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.geom.ColorTransform;
 import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -85,6 +86,13 @@ class ServerLevelRenderer extends Sprite {
 		var display = blockDisplays.get(blockKey(worldX, worldY));
 		if (display != null) {
 			display.alpha = alpha;
+		}
+	}
+
+	public function setBlockColorMultiplier(worldX:Int, worldY:Int, multiplier:Float):Void {
+		var display = blockDisplays.get(blockKey(worldX, worldY));
+		if (display != null) {
+			display.transform.colorTransform = new ColorTransform(multiplier, multiplier, multiplier);
 		}
 	}
 

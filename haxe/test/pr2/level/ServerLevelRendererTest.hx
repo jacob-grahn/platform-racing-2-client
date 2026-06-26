@@ -14,6 +14,7 @@ class ServerLevelRendererTest {
 		testArtAssetMappings();
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
+		testBlockColorMultiplierUpdate();
 		testArrowAnimation();
 		testMineExplosion();
 		testBlockPieces();
@@ -70,6 +71,18 @@ class ServerLevelRendererTest {
 		assertEquals(0.0, blockLayer.getChildAt(1).alpha, "server renderer hides removed mine");
 		assertEquals(0.0, blockLayer.getChildAt(2).alpha, "server renderer hides removed crumble");
 		assertEquals(0.0, blockLayer.getChildAt(3).alpha, "server renderer hides vanished block");
+	}
+
+	private static function testBlockColorMultiplierUpdate():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_ITEM, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		renderer.setBlockColorMultiplier(block.x, block.y, 0.5);
+
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var transform = blockLayer.getChildAt(0).transform.colorTransform;
+		assertEquals(0.5, transform.redMultiplier, "server renderer applies depleted item red multiplier");
+		assertEquals(0.5, transform.greenMultiplier, "server renderer applies depleted item green multiplier");
+		assertEquals(0.5, transform.blueMultiplier, "server renderer applies depleted item blue multiplier");
 	}
 
 	private static function testBlockAssetMapping():Void {

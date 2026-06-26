@@ -187,7 +187,12 @@ is scoped to item behavior below.
   ceiling item block grants its configured item while the character remains
   crouched and grounded. Guarded by `LocalPlayerControllerTest`.
 - [ ] Bumping an item block should give your character an item
-- [ ] Bumping a regular item block should grey it out, bumping it again does not give an item
+- [x] Bumping a regular item block should grey it out, bumping it again does not give an item.
+  Regular `Item` blocks now mirror Flash `SupplyBlock.depleteVisuals` with a
+  0.5 RGB color transform after first use, while `InfiniteItem` blocks stay
+  bright and reusable. The depleted block no longer grants another item on a
+  later bump. Guarded by `LocalPlayerControllerTest`,
+  `FixtureLevelRendererTest`, and `ServerLevelRendererTest`.
 - [x] Port the scale-shake effect when charging a super jump. Entering the
   authored `superJumpAnim` now starts Flash's per-frame vertical scale wobble
   from `Character.superJumpWobbleTick`, using the active animation frame to

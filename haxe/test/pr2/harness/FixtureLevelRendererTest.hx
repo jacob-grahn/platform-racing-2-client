@@ -14,8 +14,26 @@ class FixtureLevelRendererTest {
 	public static function main():Void {
 		testFlatFixtureRendererCreatesGridAndBlocks();
 		testSyncsVanishBlockAlpha();
+		testSyncsDepletedItemBlockColor();
 		testRemovedBlockAssets();
 		trace('FixtureLevelRendererTest passed $assertions assertions');
+	}
+
+	private static function testSyncsDepletedItemBlockColor():Void {
+		var level = new FixtureLevel("item", "Item", 5, 5, 30, 1, new StatDefaults(50, 1, 3), new TilePosition(2, 3),
+			new TilePosition(0, 0), [new LevelBlock(2, 1, BlockType.Item, "3"), new LevelBlock(2, 4, BlockType.Solid)]);
+		var player = new LocalPlayerController(level);
+		var renderer = new FixtureLevelRenderer(level, false);
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().itemId == 3) break;
+		}
+
+		renderer.syncBlockVisuals(player);
+		var transform = renderer.getChildAt(1).transform.colorTransform;
+		assertEquals(0.5, transform.redMultiplier, "renderer applies depleted item red multiplier");
+		assertEquals(0.5, transform.greenMultiplier, "renderer applies depleted item green multiplier");
+		assertEquals(0.5, transform.blueMultiplier, "renderer applies depleted item blue multiplier");
 	}
 
 	private static function testRemovedBlockAssets():Void {

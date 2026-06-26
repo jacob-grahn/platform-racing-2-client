@@ -313,6 +313,12 @@ class LocalPlayerController {
 		return removedBlocks.exists(key) ? 0 : 1;
 	}
 
+	public function blockColorMultiplierAt(tileX:Int, tileY:Int):Float {
+		var key = blockKey(tileX, tileY);
+		var block = level.blockAt(tileX, tileY);
+		return block != null && block.type == BlockType.Item && depletedItemBlocks.exists(key) ? 0.5 : 1;
+	}
+
 	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
 		var events = blockVisualEvents.copy();
 		blockVisualEvents.resize(0);
