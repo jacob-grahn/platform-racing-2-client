@@ -171,7 +171,7 @@ is scoped to item behavior below.
   `QuitButton` at the Flash course origin (stage 275,200), so the authored
   `quit_bt` lands at stage (428,369) as in `gameplay.Game`/`Course`.
   Guarded by `QuitButtonTest`.
-- [ ] Port in-game chat
+- [x] Port in-game chat.
   - [x] Port incoming race-chat message rendering. `gameplay/RaceChat` now
     formats `chat` command payloads like Flash `page.Chat.handleMessageFromArray`:
     linked/colored user names through `HtmlNameMaker`, escaped or swear-filtered
