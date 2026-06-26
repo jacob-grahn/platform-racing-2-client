@@ -360,6 +360,11 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Stop timeline-sound envelope/out-point monitor timers when playback is
     explicitly stopped by a sync frame or owning `PR2MovieClip` disposal.
     Guarded by `AudioRuntimeTest`.
+  - [x] Dispose active server-level renderer animations on teardown. Removing
+    `ServerLevelRenderer` now clears the incremental block-draw listener and
+    recursively disposes arrow timelines plus active mine explosion/block-piece
+    effects, so race-screen teardown cannot leave their frame listeners alive.
+    Guarded by `ServerLevelRendererTest`.
 
 ## Test and Release Matrix
 

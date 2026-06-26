@@ -275,8 +275,37 @@ class ServerLevelRenderer extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
+		disposeAnimatedChildren(this);
 		if (parent != null) {
 			parent.removeChild(this);
+		}
+	}
+
+	private function disposeAnimatedChildren(container:Sprite):Void {
+		var i = container.numChildren - 1;
+		while (i >= 0) {
+			var child = container.getChildAt(i);
+			var mineExplosion = Std.downcast(child, MineExplosion);
+			if (mineExplosion != null) {
+				mineExplosion.remove();
+				i--;
+				continue;
+			}
+			var blockPiece = Std.downcast(child, BlockPiece);
+			if (blockPiece != null) {
+				blockPiece.remove();
+				i--;
+				continue;
+			}
+			var clip = Std.downcast(child, PR2MovieClip);
+			if (clip != null) {
+				clip.dispose();
+			}
+			var childContainer = Std.downcast(child, Sprite);
+			if (childContainer != null) {
+				disposeAnimatedChildren(childContainer);
+			}
+			i--;
 		}
 	}
 

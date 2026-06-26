@@ -20,6 +20,7 @@ class ServerLevelRendererTest {
 		testMineExplosion();
 		testBlockPieces();
 		testArtLayerDepthAndParallax();
+		testRemoveDisposesAnimatedChildren();
 		trace('ServerLevelRendererTest passed $assertions assertions');
 	}
 
@@ -206,6 +207,31 @@ class ServerLevelRendererTest {
 		var foreground = Std.downcast(renderer.getChildAt(6), Sprite);
 		assertEquals(Math.round(315.4 * 2), foreground.x, "foreground layer x follows camera at double speed");
 		assertEquals(Math.round(172.6 * 2), foreground.y, "foreground layer y follows camera at double speed");
+	}
+
+	private static function testRemoveDisposesAnimatedChildren():Void {
+		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
+		renderer.animateArrow(arrow.x, arrow.y);
+		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
+		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
+		var arrowTimeline = pivot.getChildAt(0);
+		var explosion = renderer.showMineExplosion(arrow.x, arrow.y, false);
+		var pieces = renderer.showBlockPieces("BrickPieceGraphic", arrow.x, arrow.y, 1, 10, 10, 25, function() return 0.5);
+		var piece = pieces[0];
+
+		assertEquals(true, arrowTimeline.hasEventListener(Event.ENTER_FRAME), "active arrow has frame listener before renderer removal");
+		assertEquals(true, explosion.hasEventListener(Event.ENTER_FRAME), "active mine explosion has frame listener before renderer removal");
+		assertEquals(true, piece.hasEventListener(Event.ENTER_FRAME), "active block piece has frame listener before renderer removal");
+
+		renderer.remove();
+
+		assertEquals(false, arrowTimeline.hasEventListener(Event.ENTER_FRAME), "renderer removal disposes active arrow timeline");
+		assertEquals(false, explosion.hasEventListener(Event.ENTER_FRAME), "renderer removal disposes active mine explosion");
+		assertEquals(false, piece.hasEventListener(Event.ENTER_FRAME), "renderer removal disposes active block piece");
+		assertEquals(null, explosion.parent, "renderer removal detaches active mine explosion");
+		assertEquals(null, piece.parent, "renderer removal detaches active block piece");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
