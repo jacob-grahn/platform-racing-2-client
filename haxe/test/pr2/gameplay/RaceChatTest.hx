@@ -1,5 +1,6 @@
 package pr2.gameplay;
 
+import pr2.net.LobbySocket;
 import pr2.page.CampaignTestScreen;
 
 class RaceChatTest {
@@ -13,6 +14,7 @@ class RaceChatTest {
 	}
 
 	private static function testAuthoredInputAndSubmitCallback():Void {
+		LobbySocket.resetSent();
 		var sent:Array<String> = [];
 		var chat = new RaceChat(function(message:String):Bool {
 			sent.push(message);
@@ -24,10 +26,12 @@ class RaceChatTest {
 		assertEquals(" /debug ", sent[0], "submit strips the Flash socket delimiter");
 		assertEquals("", chat.inputText(), "submit clears the authored input");
 
-		assertEquals(false, chat.submitText("hello"), "normal chat remains available for the game socket route");
+		assertEquals(true, chat.submitText("hello"), "normal chat submits through the game socket route");
 		assertEquals("hello", sent[1], "normal chat is forwarded");
+		assertEquals("chat`hello", LobbySocket.lastSent(), "normal race chat emits Flash chat command");
 		chat.remove();
 		assertEquals(null, RaceChat.textBox, "remove clears static input target");
+		LobbySocket.resetSent();
 	}
 
 	private static function testIncomingChatFormatting():Void {

@@ -221,11 +221,15 @@ is scoped to item behavior below.
   - [x] Connect the command route to the authored `RaceChatGraphic` input.
     `gameplay/RaceChat` now renders the generated chat art, exposes the authored
     input as Flash's focus target, sends Enter-submitted lines through the
-    campaign/game command route, strips the socket delimiter, and preserves
-    normal chat lines for the later game socket route. `CampaignTestScreen`
-    mounts it at Course's stage-space position and ignores movement keys while
-    chat input has focus. Guarded by `RaceChatTest` and
-    `CampaignTestScreenTest`.
+    campaign/game command route, strips the socket delimiter, and falls through
+    normal chat lines to the game socket route. `CampaignTestScreen` mounts it
+    at Course's stage-space position and ignores movement keys while chat input
+    has focus. Guarded by `RaceChatTest` and `CampaignTestScreenTest`.
+  - [x] Send normal outgoing race-chat lines over the game socket. After local
+    command handlers (currently `/debug`) decline a non-empty line,
+    `gameplay/RaceChat` emits Flash's `chat` command on the persistent
+    `LobbySocket`, while still stripping the forbidden socket delimiter and
+    clearing the authored input. Guarded by `RaceChatTest`.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

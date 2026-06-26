@@ -10,6 +10,7 @@ import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
+import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -61,7 +62,11 @@ class RaceChat extends Sprite {
 		if (ChatText.trimWhitespace(cleaned) == "") {
 			return true;
 		}
-		return sendHandler == null ? false : sendHandler(cleaned);
+		if (sendHandler != null && sendHandler(cleaned)) {
+			return true;
+		}
+		LobbySocket.write("chat`" + cleaned);
+		return true;
 	}
 
 	public function receiveSystemMessage(message:String):Void {
