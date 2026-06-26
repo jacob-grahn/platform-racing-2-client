@@ -343,7 +343,12 @@ class CampaignTestScreen extends Sprite {
 		statusText.background = true;
 		statusText.backgroundColor = 0x000000;
 		statusText.alpha = 0.82;
+		statusText.visible = false;
 		addChild(statusText);
+	}
+
+	public function isDebugTextVisible():Bool {
+		return statusText != null && statusText.visible;
 	}
 
 	private function setStatus(debugState:String, text:String):Void {

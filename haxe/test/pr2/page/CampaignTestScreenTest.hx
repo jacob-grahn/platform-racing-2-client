@@ -8,6 +8,7 @@ class CampaignTestScreenTest {
 	public static function main():Void {
 		testParsesCampaignQueryValues();
 		testSelectsRequestedLevelFromCampaignPage();
+		testDebugTextHiddenByDefault();
 		trace('CampaignTestScreenTest passed $assertions assertions');
 	}
 
@@ -35,6 +36,12 @@ class CampaignTestScreenTest {
 
 	private static function level(levelId:Int, version:Int, title:String):CampaignLevelInfo {
 		return new CampaignLevelInfo(levelId, version, title, "Tester", 0, 0, 0);
+	}
+
+	private static function testDebugTextHiddenByDefault():Void {
+		var screen = new CampaignTestScreen();
+		assertEquals(false, screen.isDebugTextVisible(), "campaign debug text starts hidden");
+		screen.remove();
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

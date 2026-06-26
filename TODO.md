@@ -178,6 +178,9 @@ is scoped to item behavior below.
 - [ ] Background art layers are not showing
 - [ ] Port the live level drawing from the source game, x blocks and x lines are drawn every frame until everything is ready and the game begins
 - [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
+  - [x] Hide the campaign/game debug overlay by default while preserving the
+    `data-pr2-debug-state` automation hook.
+  - [ ] Wire `/debug` through the in-game chat once race chat exists.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 
