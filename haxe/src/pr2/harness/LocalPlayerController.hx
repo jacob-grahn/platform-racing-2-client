@@ -841,11 +841,14 @@ class LocalPlayerController {
 	}
 
 	private function useTeleportItem():Void {
+		var startX = x;
+		var startY = y - 25;
 		var destX = x + TELEPORT_ITEM_DISTANCE * facingDirection;
 		if (getBlockAtPixel(destX, y - 5) != null) {
 			return;
 		}
 		x = destX;
+		lastItemEffect = "teleport:" + Std.int(startX) + "," + Std.int(startY) + ":" + Std.int(x) + "," + Std.int(y - 25);
 		consumeHeldItemUse();
 	}
 

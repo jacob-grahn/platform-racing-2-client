@@ -596,6 +596,11 @@ class LocalPlayerControllerTest {
 
 		assertEquals(null, afterUse.itemId, "teleport item consumes after a clear teleport");
 		assertClose(120, afterUse.x - beforeUse.x - afterUse.vx, "teleport item moves 120 px in facing direction");
+		assertEquals(
+			"teleport:" + Std.int(beforeUse.x) + "," + Std.int(beforeUse.y - 25) + ":" + Std.int(afterUse.x - afterUse.vx) + "," + Std.int(beforeUse.y - 25),
+			afterUse.lastItemEffect,
+			"teleport item emits Flash start and end pop effect positions"
+		);
 	}
 
 	private static function testTeleportItemBlockedBySolidDestination():Void {
@@ -620,6 +625,7 @@ class LocalPlayerControllerTest {
 
 		assertEquals(4, afterUse.itemId, "blocked teleport keeps held item");
 		assertClose(0, afterUse.x - beforeUse.x - afterUse.vx, "blocked teleport does not apply item movement");
+		assertEquals(null, afterUse.lastItemEffect, "blocked teleport does not emit pop effects");
 	}
 
 	private static function testSpeedBurstBoostsMovementThenExpires():Void {

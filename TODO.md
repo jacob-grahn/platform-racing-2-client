@@ -262,6 +262,10 @@ rounding, ordering, and edge cases.
     fuel reaches zero. Guarded by `LocalPlayerControllerTest`.
   - [ ] Complete the remaining item effect, world interaction, and edge-case
     audit against the AS3 item/effect classes and server protocol.
+    - [x] Emit teleport-item start/end pop effect coordinates from the local
+      controller, matching `items.Teleport` (`x`, `y - 25` before and after the
+      120 px move) and suppressing effects when the destination is blocked.
+      Guarded by `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.
