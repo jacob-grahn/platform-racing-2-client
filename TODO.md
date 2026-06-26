@@ -224,7 +224,7 @@ is scoped to item behavior below.
     synchronously drawing the full map. Guarded by `ServerLevelRendererTest`.
   - [ ] Port incremental drawing for authored art lines/objects/text and wire the
     real `finish_drawing` readiness flow around all background layers.
-- [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
+- [x] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
   - [x] Hide the campaign/game debug overlay by default while preserving the
     `data-pr2-debug-state` automation hook.
   - [x] Add the race-chat command route that recognizes `/debug` (case-
