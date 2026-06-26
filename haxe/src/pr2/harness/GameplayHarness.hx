@@ -132,11 +132,7 @@ class GameplayHarness extends Sprite {
 	}
 
 	private function updatePlayerDisplay():Void {
-		var height = player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT;
-		playerDisplay.x = player.x - LocalPlayerController.STANDING_WIDTH / 2;
-		playerDisplay.y = player.y - height;
-		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
-		characterDisplay.scaleX = 0.9 * player.facingScaleX;
+		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, player.x, player.y, player.crouching, player.facingScaleX);
 		characterDisplay.setState(player.debugState().characterState.toClipName());
 		characterDisplay.advanceOneFrame();
 	}

@@ -18,6 +18,7 @@ import pr2.character.CharacterDisplay;
 import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
+import pr2.harness.PlayerDisplayPlacement;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.CameraFollow;
@@ -433,7 +434,6 @@ class CampaignTestScreen extends Sprite {
 		}
 
 		var state = player.debugState();
-		var height = player.crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT;
 		var worldX = serverFixture.fixturePixelToWorldX(player.x);
 		var worldY = serverFixture.fixturePixelToWorldY(player.y);
 		camera.follow(worldX, worldY);
@@ -443,10 +443,7 @@ class CampaignTestScreen extends Sprite {
 			playerDot.y = worldY;
 		}
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
-		playerDisplay.x = screen.x - LocalPlayerController.STANDING_WIDTH / 2;
-		playerDisplay.y = screen.y - height;
-		playerDisplay.scaleY = height / LocalPlayerController.STANDING_HEIGHT;
-		characterDisplay.scaleX = 0.9 * player.facingScaleX;
+		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, screen.x, screen.y, player.crouching, player.facingScaleX);
 		characterDisplay.setState(state.characterState.toClipName());
 		characterDisplay.advanceOneFrame();
 	}

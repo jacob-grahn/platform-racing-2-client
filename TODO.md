@@ -176,7 +176,11 @@ is scoped to item behavior below.
   `GameMusic` streams the selected authored track from `/music/new/<file>` and
   `MusicSelection` switches playback from the authored dropdown. Guarded by
   `MusicSelectionTest`.
-- [ ] Character shrinks too short when crouching under a block
+- [x] Character no longer shrinks too short when crouching under a block. The
+  gameplay harness and campaign/race screen now keep the authored character
+  display scale fixed at 0.9 while only moving the display container to the
+  shorter crouch collision height, matching Flash's `LocalCharacter.landGo`
+  visual behavior. Guarded by `PlayerDisplayPlacementTest`.
 - [ ] Pressing up while under a block should bump it
 - [ ] Bumping an item block should give your character an item
 - [ ] Bumping a regular item block should grey it out, bumping it again does not give an item
