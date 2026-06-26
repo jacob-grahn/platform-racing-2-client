@@ -33,6 +33,8 @@ class GameShellMountTest {
 
 		assertEquals(true, course.levelRenderer != null, "level renderer mounted");
 		assertEquals(true, course.characterLayer != null, "character layer present");
+		assertEquals(true, course.localCharacter != null, "local character bridge mounted");
+		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
 
 		// With no chat interceptor supplied, the shell does not swallow chat.
 		assertEquals(false, course.handleRaceChatLine("/debug"), "no interceptor leaves chat unhandled");
@@ -46,6 +48,7 @@ class GameShellMountTest {
 		assertEquals(true, course.raceChat == null, "race chat torn down");
 		assertEquals(true, course.drawingInfo == null, "drawing info torn down");
 		assertEquals(true, course.levelRenderer == null, "level renderer torn down");
+		assertEquals(true, course.localCharacter == null, "local character torn down");
 
 		trace('GameShellMountTest passed $assertions assertions');
 	}

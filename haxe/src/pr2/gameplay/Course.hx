@@ -9,11 +9,9 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 import pr2.Constants;
-import pr2.character.CharacterDisplay;
-import pr2.character.CharacterRenderMode;
+import pr2.character.LocalCharacter;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
-import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.PlayerDisplayPlacement;
@@ -28,16 +26,16 @@ import pr2.net.ServerLevelData;
 /**
 	The in-game race shell: a decoded `ServerLevel` rendered with the authored HUD
 	mounted at Course's holder->stage offsets, a local player driven by
-	`LocalPlayerController`, a follow camera, and incremental block drawing.
+	`LocalCharacter`, a follow camera, and incremental block drawing.
 
 	Extracted from `CampaignTestScreen` so the real `GamePage` can mount the shell
 	directly (without the campaign-list fetch / debug-overlay chrome the harness
 	wraps around it). The harness now builds a `Course` too, supplying `onChatLine`
 	to intercept `/debug` and `onFrame` to drive its status overlay.
 
-	The character layer is currently a single `LocalPlayerController`; the
-	multiplayer `Character`/`RemoteCharacter` hierarchy (Section B) will populate
-	`characterLayer` alongside the local player.
+	The character layer is currently a single `LocalCharacter`; the multiplayer
+	`RemoteCharacter` hierarchy (Section B) will populate `characterLayer`
+	alongside the local player.
 **/
 class Course extends Sprite {
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
@@ -66,10 +64,9 @@ class Course extends Sprite {
 
 	public var levelRenderer(default, null):ServerLevelRenderer;
 	public var characterLayer(default, null):Sprite;
+	public var localCharacter(default, null):LocalCharacter;
 	private var serverFixture:ServerFixtureLevel;
-	private var player:LocalPlayerController;
-	private var playerDisplay:Sprite;
-	private var characterDisplay:CharacterDisplay;
+	private var player:LocalCharacter;
 	private var camera:CameraFollow;
 
 	public var miniMap(default, null):MiniMap;
@@ -107,21 +104,13 @@ class Course extends Sprite {
 		addChild(levelRenderer);
 
 		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
-		player = new LocalPlayerController(serverFixture.fixture);
+		player = new LocalCharacter(serverFixture.fixture);
+		player.display.x = player.halfWidth;
+		player.display.y = player.charHeight;
+		localCharacter = player;
 
 		characterLayer = new Sprite();
-		playerDisplay = new Sprite();
-		characterDisplay = new CharacterDisplay(
-			{hat: 1, head: 1, body: 1, feet: 1},
-			{primary: 0x005CB8, secondary: 0xFFF200},
-			CharacterRenderMode.Layered
-		);
-		characterDisplay.x = LocalPlayerController.STANDING_WIDTH / 2;
-		characterDisplay.y = LocalPlayerController.STANDING_HEIGHT;
-		characterDisplay.scaleX = 0.9;
-		characterDisplay.scaleY = 0.9;
-		playerDisplay.addChild(characterDisplay);
-		characterLayer.addChild(playerDisplay);
+		characterLayer.addChild(player);
 		levelRenderer.addChild(characterLayer);
 
 		camera = new CameraFollow(0, 0);
@@ -347,7 +336,7 @@ class Course extends Sprite {
 	}
 
 	private function updatePlayerDisplay():Void {
-		if (player == null || levelRenderer == null || serverFixture == null || playerDisplay == null || characterDisplay == null) {
+		if (player == null || levelRenderer == null || serverFixture == null) {
 			return;
 		}
 
@@ -361,9 +350,9 @@ class Course extends Sprite {
 			playerDot.y = worldY;
 		}
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
-		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, screen.x, screen.y, player.crouching, player.facingScaleX);
-		characterDisplay.setState(state.characterState.toClipName());
-		characterDisplay.advanceOneFrame();
+		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.crouching, player.facingScaleX);
+		player.display.setState(state.characterState.toClipName());
+		player.display.advanceOneFrame();
 	}
 
 	private function onKeyDown(event:KeyboardEvent):Void {
@@ -426,6 +415,9 @@ class Course extends Sprite {
 			levelRenderer.remove();
 			levelRenderer = null;
 		}
+		localCharacter = null;
+		player = null;
+		characterLayer = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}

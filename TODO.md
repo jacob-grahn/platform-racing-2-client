@@ -88,7 +88,7 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     display frame, sound playback. Test: `CharacterBaseTest` (state transitions +
     jump-sound hook, hat stack/`getHighestHat`/flags, block-touch probes, recovery/
     removal).
-  - [ ] **B2 — Port `LocalCharacter` physics integration.** Migrate the audited
+  - [x] **B2 — Port `LocalCharacter` physics integration.** Migrate the audited
     `LocalPlayerController` physics into `pr2/character/LocalCharacter.hx extends
     Character` (or delegate to the existing controller) so behavior is preserved.
     Test: reuse/retarget `LocalPlayerControllerTest` against `LocalCharacter`.
@@ -101,7 +101,10 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       `LocalCharacter`. The controller parity matrix now instantiates
       `LocalCharacter` for the audited physics/block/item/rotation coverage,
       with controller-only debug hooks forwarded through the bridge.
-    - [ ] Cut over `Course`/live gameplay construction to `LocalCharacter`.
+    - [x] Cut over `Course`/live gameplay construction to `LocalCharacter`.
+      `Course` now mounts the `LocalCharacter` bridge directly in the character
+      layer and keeps the existing debug-state/HUD sync surface. Guarded by
+      `GameShellMountTest`.
   - [ ] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
     `exact_pos\`x\`y`, and `set_var\`<field>\`<value>` for each tracked field
     (scaleX, state, parent, item, rotMod, rot, sparkle, jet, beginRemove), gated by
