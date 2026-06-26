@@ -212,8 +212,14 @@ is scoped to item behavior below.
     insensitive, ignoring edge whitespace) and toggles the campaign/game debug
     overlay without swallowing normal chat lines. Guarded by
     `CampaignTestScreenTest`.
-  - [ ] Connect the command route to the authored `RaceChatGraphic` input once
-    the full in-game race chat UI is ported.
+  - [x] Connect the command route to the authored `RaceChatGraphic` input.
+    `gameplay/RaceChat` now renders the generated chat art, exposes the authored
+    input as Flash's focus target, sends Enter-submitted lines through the
+    campaign/game command route, strips the socket delimiter, and preserves
+    normal chat lines for the later game socket route. `CampaignTestScreen`
+    mounts it at Course's stage-space position and ignores movement keys while
+    chat input has focus. Guarded by `RaceChatTest` and
+    `CampaignTestScreenTest`.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

@@ -26,6 +26,7 @@ import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
 import pr2.gameplay.MiniMapDot;
 import pr2.gameplay.MusicSelection;
+import pr2.gameplay.RaceChat;
 import pr2.lobby.chat.ChatText;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
@@ -69,6 +70,7 @@ class CampaignTestScreen extends Sprite {
 	private var playerDot:MiniMapDot;
 	private var itemDisplay:ItemDisplay;
 	private var musicSelection:MusicSelection;
+	private var raceChat:RaceChat;
 	private var displayedItemId:Null<Int>;
 	private var displayedItemUses:Null<Int>;
 	private var lastStatusText:String = "";
@@ -169,6 +171,10 @@ class CampaignTestScreen extends Sprite {
 		if (musicSelection != null) {
 			musicSelection.remove();
 			musicSelection = null;
+		}
+		if (raceChat != null) {
+			raceChat.remove();
+			raceChat = null;
 		}
 		if (parent != null) parent.removeChild(this);
 	}
@@ -271,6 +277,7 @@ class CampaignTestScreen extends Sprite {
 		buildMiniMap(level);
 		buildItemDisplay();
 		buildMusicSelection(data.song);
+		buildRaceChat();
 		updatePlayerDisplay();
 	}
 
@@ -328,6 +335,15 @@ class CampaignTestScreen extends Sprite {
 		musicSelection.y = 362;
 		addChild(musicSelection);
 		musicSelection.setSong(songId);
+	}
+
+	/** Positions the authored race chat at Course's stage-space (4, 249). */
+	private function buildRaceChat():Void {
+		if (raceChat != null) raceChat.remove();
+		raceChat = new RaceChat(handleRaceChatLine);
+		raceChat.x = 4;
+		raceChat.y = 249;
+		addChild(raceChat);
 	}
 
 	private function createStatusText():Void {
@@ -473,6 +489,9 @@ class CampaignTestScreen extends Sprite {
 	}
 
 	private function setKey(keyCode:UInt, pressed:Bool):Void {
+		if (raceChat != null && raceChat.inputHasFocus()) {
+			return;
+		}
 		if (keyCode == Keyboard.LEFT || AlternateControls.matches("left", keyCode)) input.left = pressed;
 		if (keyCode == Keyboard.RIGHT || AlternateControls.matches("right", keyCode)) input.right = pressed;
 		if (keyCode == Keyboard.UP || AlternateControls.matches("up", keyCode)) input.jump = pressed;

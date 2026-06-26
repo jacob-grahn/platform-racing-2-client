@@ -15,6 +15,7 @@ import pr2.gameplay.RotationMathTest;
 import pr2.gameplay.MiniMapTest;
 import pr2.gameplay.ItemDisplayTest;
 import pr2.gameplay.MusicSelectionTest;
+import pr2.gameplay.RaceChatTest;
 import pr2.gameplay.FinishedPageTest;
 import pr2.gameplay.QuitButtonTest;
 import pr2.level.LevelFixtureParserTest;
@@ -74,6 +75,7 @@ class DeterministicTestSuite {
 		MiniMapTest.main();
 		ItemDisplayTest.main();
 		MusicSelectionTest.main();
+		RaceChatTest.main();
 		FinishedPageTest.main();
 		QuitButtonTest.main();
 		ServerConfigTest.main();
