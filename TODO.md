@@ -50,6 +50,12 @@ level entry, race sync, and the in-game shell remain.
     `DrawingInfoGraphic`, `StatsDisplayGraphic`, `RaceChatGraphic`,
     `MiniMapGraphic`, `MiniMapDot`, `PrizePopupGraphic`, `QuitButtonGraphic`, and
     `MusicSelectionGraphic`; no generic HUD substitutes in parity captures.
+  - [x] Port the authored drawing-readiness display. `gameplay/DrawingInfo`
+    wraps `DrawingInfoGraphic`, mirrors Flash's four player rows, starts each
+    player's `drawing...` animation from `addPlayer`, handles the `finishDrawing`
+    command by hiding the matching spinner, unregisters on remove, and is mounted
+    in the current campaign/game path at Course's stage-space position while
+    incremental block drawing runs. Guarded by `DrawingInfoTest`.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without

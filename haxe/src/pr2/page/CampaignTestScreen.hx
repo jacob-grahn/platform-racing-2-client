@@ -22,6 +22,7 @@ import pr2.harness.PlayerDisplayPlacement;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.CameraFollow;
+import pr2.gameplay.DrawingInfo;
 import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
 import pr2.gameplay.MiniMapDot;
@@ -71,6 +72,8 @@ class CampaignTestScreen extends Sprite {
 	private var itemDisplay:ItemDisplay;
 	private var musicSelection:MusicSelection;
 	private var raceChat:RaceChat;
+	private var drawingInfo:DrawingInfo;
+	private var drawingInfoFinished:Bool = false;
 	private var displayedItemId:Null<Int>;
 	private var displayedItemUses:Null<Int>;
 	private var lastStatusText:String = "";
@@ -175,6 +178,10 @@ class CampaignTestScreen extends Sprite {
 		if (raceChat != null) {
 			raceChat.remove();
 			raceChat = null;
+		}
+		if (drawingInfo != null) {
+			drawingInfo.remove();
+			drawingInfo = null;
 		}
 		if (levelRenderer != null) {
 			levelRenderer.remove();
@@ -282,6 +289,7 @@ class CampaignTestScreen extends Sprite {
 		buildItemDisplay();
 		buildMusicSelection(data.song);
 		buildRaceChat();
+		buildDrawingInfo();
 		updatePlayerDisplay();
 	}
 
@@ -350,6 +358,17 @@ class CampaignTestScreen extends Sprite {
 		addChild(raceChat);
 	}
 
+	/** Positions the authored drawing status at Course's stage-space (2, 96). */
+	private function buildDrawingInfo():Void {
+		if (drawingInfo != null) drawingInfo.remove();
+		drawingInfo = new DrawingInfo();
+		drawingInfo.x = 2;
+		drawingInfo.y = 96;
+		drawingInfo.addPlayer("You", 0);
+		drawingInfoFinished = false;
+		addChild(drawingInfo);
+	}
+
 	private function createStatusText():Void {
 		statusText = new TextField();
 		statusText.defaultTextFormat = new TextFormat(FontResolver.DEFAULT, 12, 0xFFFFFF);
@@ -405,6 +424,12 @@ class CampaignTestScreen extends Sprite {
 			Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=drawing;blocks=${levelRenderer.drawnBlockCount()}');
 			#end
 			return;
+		}
+		if (!drawingInfoFinished) {
+			if (drawingInfo != null) {
+				drawingInfo.finishDrawing(0);
+			}
+			drawingInfoFinished = true;
 		}
 
 		player.step(input.copy());
