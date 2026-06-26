@@ -17,17 +17,20 @@ import pr2.runtime.FontResolver;
 import pr2.character.CharacterDisplay;
 import pr2.character.CharacterRenderMode;
 import pr2.harness.LocalPlayerController;
+import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.PlayerDisplayPlacement;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.gameplay.CameraFollow;
 import pr2.gameplay.DrawingInfo;
+import pr2.gameplay.Hearts;
 import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
 import pr2.gameplay.MiniMapDot;
 import pr2.gameplay.MusicSelection;
 import pr2.gameplay.RaceChat;
+import pr2.gameplay.StatsDisplay;
 import pr2.lobby.chat.ChatText;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
@@ -73,9 +76,13 @@ class CampaignTestScreen extends Sprite {
 	private var musicSelection:MusicSelection;
 	private var raceChat:RaceChat;
 	private var drawingInfo:DrawingInfo;
+	private var statsDisplay:StatsDisplay;
+	private var hearts:Hearts;
 	private var drawingInfoFinished:Bool = false;
 	private var displayedItemId:Null<Int>;
 	private var displayedItemUses:Null<Int>;
+	private var displayedStats:Null<String>;
+	private var displayedLives:Null<Int>;
 	private var lastStatusText:String = "";
 
 	public function new(?page:String, ?levelId:String, ?version:Int) {
@@ -170,6 +177,14 @@ class CampaignTestScreen extends Sprite {
 		if (itemDisplay != null) {
 			itemDisplay.remove();
 			itemDisplay = null;
+		}
+		if (statsDisplay != null) {
+			statsDisplay.remove();
+			statsDisplay = null;
+		}
+		if (hearts != null) {
+			hearts.remove();
+			hearts = null;
 		}
 		if (musicSelection != null) {
 			musicSelection.remove();
@@ -287,6 +302,8 @@ class CampaignTestScreen extends Sprite {
 		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
 		buildMiniMap(level);
 		buildItemDisplay();
+		buildStatsDisplay();
+		buildHearts();
 		buildMusicSelection(data.song);
 		buildRaceChat();
 		buildDrawingInfo();
@@ -337,6 +354,34 @@ class CampaignTestScreen extends Sprite {
 		displayedItemId = null;
 		displayedItemUses = null;
 		syncItemDisplay();
+	}
+
+	/** Positions the authored stats display at Course's stage-space (490, 34). */
+	private function buildStatsDisplay():Void {
+		if (statsDisplay != null) {
+			statsDisplay.remove();
+		}
+		statsDisplay = new StatsDisplay();
+		statsDisplay.x = 490;
+		statsDisplay.y = 34;
+		addChild(statsDisplay);
+		displayedStats = null;
+		syncStatsDisplay();
+	}
+
+	/** Positions the authored deathmatch hearts at Course's stage-space (515, 59).
+		Hidden until a deathmatch level reports lives, matching Course.setLife. */
+	private function buildHearts():Void {
+		if (hearts != null) {
+			hearts.remove();
+		}
+		hearts = new Hearts();
+		hearts.x = 515;
+		hearts.y = 59;
+		hearts.visible = false;
+		addChild(hearts);
+		displayedLives = null;
+		syncHearts();
 	}
 
 	/** Positions the authored race music selector at Course's stage-space (204, 362). */
@@ -437,6 +482,8 @@ class CampaignTestScreen extends Sprite {
 		updatePlayerDisplay();
 		var state = player.debugState();
 		syncItemDisplay(state.itemId, state.itemUses);
+		syncStatsDisplay(state);
+		syncHearts(state);
 		statusText.text = lastStatusText + '\nplayer ${state.serialize()}';
 		#if js
 		Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=playable;${state.serialize()}');
@@ -459,6 +506,50 @@ class CampaignTestScreen extends Sprite {
 		if (itemUses != displayedItemUses) {
 			itemDisplay.setAmmo(itemUses == null ? 0 : itemUses);
 			displayedItemUses = itemUses;
+		}
+	}
+
+	/** Mirrors LocalCharacter.setStats pushing the character's stats into the
+		course StatsDisplay each time they change. */
+	private function syncStatsDisplay(?state:LocalPlayerDebugState):Void {
+		if (statsDisplay == null) {
+			return;
+		}
+		if (state == null && player != null) {
+			state = player.debugState();
+		}
+		if (state == null) {
+			return;
+		}
+		var speed = Math.round(state.speedStat);
+		var accel = Math.round(state.accelerationStat);
+		var jump = Math.round(state.jumpStat);
+		var key = '$speed,$accel,$jump';
+		if (key != displayedStats) {
+			statsDisplay.setStats(speed, accel, jump);
+			displayedStats = key;
+		}
+	}
+
+	/** Mirrors Course.setLife: the hearts only appear in deathmatch mode and
+		track the player's remaining lives. */
+	private function syncHearts(?state:LocalPlayerDebugState):Void {
+		if (hearts == null) {
+			return;
+		}
+		if (state == null && player != null) {
+			state = player.debugState();
+		}
+		if (state == null) {
+			return;
+		}
+		if (state.mode != "deathmatch") {
+			return;
+		}
+		if (state.lives != displayedLives) {
+			hearts.visible = true;
+			hearts.setHearts(state.lives);
+			displayedLives = state.lives;
 		}
 	}
 

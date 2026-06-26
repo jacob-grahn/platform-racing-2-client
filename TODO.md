@@ -35,12 +35,85 @@ level entry, race sync, and the in-game shell remain.
     `flash/gameplay/Game.as`. In-place level loading via `confirm_slot`/
     `startGame` already works (see README); the remaining work is the full
     `CourseMenu`/access/spectate protocol around it.
+  - Decomposed into sequenced sub-tasks (knock out one at a time; each ships a
+    named `*Test.hx` registered in `DeterministicTestSuite`):
+  - [ ] **A1 — Port `GamePage` level-data ingest.** Add `setVariables`,
+    `validateSaveString`, and `decodeLevelData` (read modes `m1`–`m4` via
+    `decodeObjectString`/`decodeObjectString2`/`decodeBlockString`) plus the field
+    setters (items, badHats, gravity, maxTime, song, gameMode, cowboyChance,
+    credits, title, note, levelID, updatedTime) to `pr2/page/GamePage.hx`, from
+    `flash/page/GamePage.as`. Reuse the existing server-level decoders where they
+    already cover a mode; only fill gaps. Test: `GamePageDecodeTest` over captured
+    m2/m3/m4 fixture strings asserting the expected `o<code>;x;y[;w;h]` join.
+  - [ ] **A2 — Port `Game.getLevelData` fetch + validation.** Fetch
+    `levelsURL + "/" + id + ".txt?version=" + v`, MD5-validate, and hand the
+    decoded save string to `GamePage.setVariables` (from `flash/gameplay/Game.as`).
+    Reuse `LevelDataClient`/`PR2Encryptor` for MD5. Test: `LevelDataFetchTest`
+    (deterministic fixture; assert the MD5-mismatch path rejects).
+  - [ ] **A3 — Build the `Game`/`Course` shell to replace the harness.** New
+    `pr2/gameplay/Game.hx` (or promote the existing course screen) mounts the
+    decoded level, the already-ported in-game shell components (Countdown,
+    RaceChat, MiniMap, StatsDisplay, ItemDisplay, Hearts, DrawingInfo,
+    MusicSelection, QuitButton, FinishedPage, PrizePopup), and hosts the character
+    layer. Point `pr2/page/GamePage.hx` at this shell instead of
+    `CampaignTestScreen`; keep `CampaignTestScreen` as a dev harness behind a flag.
+    Test: `GameShellMountTest` (components present at verified holder→stage
+    offsets).
+  - [ ] **A4 — Port the entry/access state machine.** Loading state,
+    access/password prompt, private-room and spectate gating, room join, and error
+    states, driven from the `CourseMenu`/`Slot`/`LevelLaunch` handoff. Reuse
+    existing `LevelLaunch.startGame` (page change only on server `startGame` for
+    the selected level). Test: `LevelEntryStateTest` (transcript: server frames →
+    expected state transitions and prompts).
+  - [ ] **A5 — Port `Game` command-shell registration.** Register the server
+    commands `Game.as` defines (`createLocalCharacter`, `createRemoteCharacter`,
+    award/exp/lux/prize/cancel/win, cowboyMode, happyHour, eggSeed/addEggs,
+    superBooster, maybeReturnHatToStart, startHatCountdown, forceQuit) via
+    `CommandHandler.defineCommand`. Test: `GameCommandShellTest` (each frame routes
+    to the right handler / mutates the expected state).
 - [ ] Port multiplayer race synchronization.
   - Implement local update emission, remote character creation/interpolation,
     player join/leave, positions, rotations, stats, hats, items/effects, block
     changes, countdown/start, timer, finish order, spectating, and disconnect.
   - Verify command names, field order, delimiters, update cadence, and rounding
     against the AS3 client and captured server traffic.
+  - Architecture decision: port the full Flash `Character`/`LocalCharacter`/
+    `RemoteCharacter` hierarchy (truer 1:1), integrating with / replacing the
+    `LocalPlayerController` harness rather than bolting sync onto it. Verification:
+    AS3-spec deterministic transcript tests (emitted/consumed frame strings match
+    byte-for-byte; interpolation tests step `go()` deterministically, no live
+    server). Sequenced sub-tasks:
+  - [ ] **B1 — Port `Character` base.** New `pr2/character/Character.hx` from
+    `flash/character/Character.as`: parts/hats assembly (reuse existing
+    `pr2/character` atlas/display code), state machine, block-touch dispatch, item
+    hold/use, hat stack. No networking yet. Test: `CharacterBaseTest` (state
+    transitions, hat stack, block-touch classification).
+  - [ ] **B2 — Port `LocalCharacter` physics integration.** Migrate the audited
+    `LocalPlayerController` physics into `pr2/character/LocalCharacter.hx extends
+    Character` (or delegate to the existing controller) so behavior is preserved.
+    Test: reuse/retarget `LocalPlayerControllerTest` against `LocalCharacter`.
+  - [ ] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
+    `exact_pos\`x\`y`, and `set_var\`<field>\`<value>` for each tracked field
+    (scaleX, state, parent, item, rotMod, rot, sparkle, jet, beginRemove), gated by
+    `updateInterval`/`framesSinceUpdate` (fallback 16). Emit event messages
+    (`squash`, `sting`, `heart`, `loose_hat`, `hat_to_start`, `grab_egg`,
+    `objective_reached`, `finish_race`, `quit_race`, `finish_drawing`,
+    `check_hat_countdown`) via `LobbySocket.write`. Test: `LocalCharacterEmitTest`
+    — drive scripted frames, assert exact emitted frame strings and cadence.
+  - [ ] **B4 — Port `RemoteCharacter` consume + interpolation.** New
+    `pr2/character/RemoteCharacter.hx` from `flash/character/RemoteCharacter.as`:
+    register per-tempID commands (`p<id>`, `var<id>`, `exactPos<id>`,
+    `setHats<id>`, `heart<id>`, `sting<id>`), `updateQueue` push, ENTER_FRAME
+    `go()` with the `catchupRate` model (init `updateInterval+1`, −0.01 per
+    consumed update, +0.08 when empty, clamp 10), `setVar`/`setExactPos`/`pos`
+    queue ops, `processBlockTouches` remote activation, and command teardown on
+    remove. Test: `RemoteCharacterConsumeTest` — feed recorded command frames, step
+    `go()` deterministically, assert interpolated convergence and teardown.
+  - [ ] **B5 — Wire create/destroy into the Game shell.**
+    `createLocalCharacter`/`createRemoteCharacter` instantiate into the character
+    layer from A3/A5; `beginRemove`/`quit_race`/`forceQuit` tear down. Test:
+    `CharacterLifecycleTest` (create N remotes + 1 local, route a quit, assert
+    display-list + command-table cleanup).
 - [ ] Port the complete in-game shell and race lifecycle.
   - Implement `Course`, `GamePage`, countdown, race chat, minimap, stats, item
     display, hearts, drawing info, music selection, quit flow, finish page,
@@ -56,6 +129,47 @@ level entry, race sync, and the in-game shell remain.
     command by hiding the matching spinner, unregisters on remove, and is mounted
     in the current campaign/game path at Course's stage-space position while
     incremental block drawing runs. Guarded by `DrawingInfoTest`.
+  - [x] Port the authored stats display. `gameplay/StatsDisplay` wraps
+    `StatsDisplayGraphic`, shows the character's speed/acceleration/jump from
+    `LocalCharacter.setStats`, and opens the `Current Stats` `HoverPopup` after a
+    250ms hover (torn down on mouse-out/remove). Mounted at Course's stage-space
+    (490, 34) and fed from the controller's stats each frame. Guarded by
+    `StatsDisplayTest`.
+  - [x] Port the authored deathmatch hearts. `gameplay/Hearts` stacks
+    `HeartGraphic` icons (0.2 scale, 20px step) and grows/shrinks toward the
+    requested count clamped to 0..15 like `Data.numLimit`. Mounted at Course's
+    stage-space (515, 59), hidden until a deathmatch level reports lives per
+    `Course.setLife`. Guarded by `HeartsTest`.
+  - [x] Port the 3-2-1 race countdown. `gameplay/Countdown` drives the authored
+    `CountdownGraphic` timeline, attaching its frame scripts (count at 9/24/39,
+    finish at 54, self-remove at 62), playing `ReadySound`/`GoSound` scaled by
+    the saved sound level, and invoking an injected `onFinish` for the
+    gameplay-start hook `Course.beginRace`/`onCountdownFinish` ran. Wiring it to
+    the live `beginRace` command is deferred to the multiplayer race-sync task.
+    Guarded by `CountdownTest`.
+  - [x] Port the prize announcement. `gameplay/PrizePopup` (with the
+    `com.jiggmin.data.EpicFlash` port) renders `PrizePopupGraphic`: target clip
+    selection by type (`hat`/`head`/`body`/`feet`/`exp`/`cancel`), the
+    "You won" / "Anyone who finishes" / "The winner" body lines with `a`/`an`/`a
+    pair of`, the title decoration, flavor description, exp/cancel detail lines,
+    and the epic-upgrade shimmer. Wiring it to the live prize/special-event
+    commands is deferred to the multiplayer race-sync task. Guarded by
+    `PrizePopupTest`.
+  - The remaining list items are confirmed already ported (and recorded below or
+    in the README): race chat (`RaceChat`), minimap (`MiniMap`), item display
+    (`ItemDisplay`), drawing info (`DrawingInfo`), music selection
+    (`MusicSelection`), quit flow (`QuitButton`), finish page (`FinishedPage`),
+    experience gain (`ExpGain`), and return-to-lobby (`GamePage`). The `Course`
+    and `GamePage` full shells and artifact/special-event behavior remain blocked
+    on the level-entry and multiplayer race-sync tasks above.
+  - Cutover sub-tasks (do after Sections A and B land):
+  - [ ] **C1 — Flip `GamePage` default to the real shell.** Gate
+    `CampaignTestScreen` behind a debug flag and update these notes to record that
+    the full `Course`/`GamePage` shells are unblocked.
+  - [ ] **C2 — Port artifact / special-event behavior** onto the real shell from
+    `flash/.../PlaceArtifact.as` and `SpecialEvent.as`, wiring the deferred
+    `Countdown.beginRace` and `PrizePopup` live-command hooks. Tests:
+    `SpecialEventTest` / `PlaceArtifactTest`.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without
