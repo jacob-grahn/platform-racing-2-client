@@ -1,5 +1,6 @@
 package pr2.harness;
 
+import pr2.character.LocalCharacter;
 import pr2.level.LevelFixtureParser;
 import pr2.level.BlockType;
 import pr2.level.FixtureLevel;
@@ -144,7 +145,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testBumpingFinishBlockFinishesRaceOnce():Void {
-		var player = new LocalPlayerController(finishBumpLevel());
+		var player = new LocalCharacter(finishBumpLevel());
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -188,7 +189,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testGravityUsesFlashMultiplierAndSupportsRuntimeChanges():Void {
-		var player = new LocalPlayerController(emptyLevel(2.5));
+		var player = new LocalCharacter(emptyLevel(2.5));
 		player.step(new LocalPlayerInput());
 		assertClose(1.75, player.debugState().vy, "gravity is Flash's 0.7 times the level multiplier");
 
@@ -198,7 +199,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testVelocityIntegrationOrderAndTerminalClamp():Void {
-		var player = new LocalPlayerController(emptyLevel(1));
+		var player = new LocalCharacter(emptyLevel(1));
 		player.step(new LocalPlayerInput(false, true));
 		var state = player.debugState();
 		var acceleration = 0.2 + 50 / 60;
@@ -208,7 +209,7 @@ class LocalPlayerControllerTest {
 		assertClose(0.7, state.vy, "vertical integration applies gravity before movement");
 		assertClose(90.7, state.y, "vertical position uses velocity after gravity");
 
-		player = new LocalPlayerController(emptyLevel(100));
+		player = new LocalCharacter(emptyLevel(100));
 		player.step(new LocalPlayerInput());
 		state = player.debugState();
 		assertClose(28, state.vy, "positive velocity is clamped to Flash's terminal speed");
@@ -224,7 +225,7 @@ class LocalPlayerControllerTest {
 	// LocalCharacter.processBlocks forces crouch only when a solid block sits above
 	// the head while the body tile is clear; down never crouches on open ground.
 	private static function testLowCeilingForcesCrouchAndBlocksJump():Void {
-		var player = new LocalPlayerController(lowCeilingLevel());
+		var player = new LocalCharacter(lowCeilingLevel());
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
@@ -241,7 +242,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testPressingUpUnderBlockBumpsIt():Void {
-		var player = new LocalPlayerController(lowItemCeilingLevel());
+		var player = new LocalCharacter(lowItemCeilingLevel());
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
@@ -285,8 +286,8 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testIceBlockReducesNextFrameAcceleration():Void {
-		var normal = new LocalPlayerController(singleBlockLevel(BlockType.Basic));
-		var icy = new LocalPlayerController(singleBlockLevel(BlockType.Ice));
+		var normal = new LocalCharacter(singleBlockLevel(BlockType.Basic));
+		var icy = new LocalCharacter(singleBlockLevel(BlockType.Ice));
 
 		normal.step(new LocalPlayerInput(false, true));
 		icy.step(new LocalPlayerInput(false, true));
@@ -295,18 +296,18 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testArrowStandEffectsMatchAs3Deltas():Void {
-		var up = new LocalPlayerController(singleBlockLevel(BlockType.ArrowUp));
+		var up = new LocalCharacter(singleBlockLevel(BlockType.ArrowUp));
 		assertClose(-10, up.debugState().vy, "up arrow stand launches upward");
 		var events = up.consumeBlockVisualEvents();
 		assertEquals(1, events.length, "arrow stand emits one visual activation");
 		assertEquals("ArrowAnimate", Type.enumConstructor(events[0].kind), "arrow stand emits authored animation event");
-		assertClose(5, new LocalPlayerController(singleBlockLevel(BlockType.ArrowDown)).debugState().vy, "down arrow stand pushes down");
-		assertClose(-3, new LocalPlayerController(singleBlockLevel(BlockType.ArrowLeft)).debugState().vx, "left arrow stand pushes left");
-		assertClose(3, new LocalPlayerController(singleBlockLevel(BlockType.ArrowRight)).debugState().vx, "right arrow stand pushes right");
+		assertClose(5, new LocalCharacter(singleBlockLevel(BlockType.ArrowDown)).debugState().vy, "down arrow stand pushes down");
+		assertClose(-3, new LocalCharacter(singleBlockLevel(BlockType.ArrowLeft)).debugState().vx, "left arrow stand pushes left");
+		assertClose(3, new LocalCharacter(singleBlockLevel(BlockType.ArrowRight)).debugState().vx, "right arrow stand pushes right");
 	}
 
 	private static function testFallingIntoWaterEntersSwimMode():Void {
-		var player = new LocalPlayerController(waterPoolLevel());
+		var player = new LocalCharacter(waterPoolLevel());
 		var enteredWater = false;
 
 		for (_ in 0...40) {
@@ -325,7 +326,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testWaterDampsSinkingAndPaddlesUp():Void {
-		var sinking = new LocalPlayerController(waterPoolLevel());
+		var sinking = new LocalCharacter(waterPoolLevel());
 		for (_ in 0...40) {
 			sinking.step(new LocalPlayerInput());
 		}
@@ -334,7 +335,7 @@ class LocalPlayerControllerTest {
 		assertBelow(sinkState.vy, 5, "water damps sinking speed far below free-fall");
 		assertBelow(0, sinkState.vy, "idle player still drifts downward");
 
-		var paddling = new LocalPlayerController(waterPoolLevel());
+		var paddling = new LocalCharacter(waterPoolLevel());
 		var minVy = 1e9;
 		for (_ in 0...40) {
 			paddling.step(new LocalPlayerInput(false, false, true));
@@ -347,7 +348,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testLeavingWaterReturnsToLand():Void {
-		var player = new LocalPlayerController(waterPoolLevel());
+		var player = new LocalCharacter(waterPoolLevel());
 		var enteredWater = false;
 		var returnedToLand = false;
 
@@ -367,7 +368,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testSafetyBlockReturnsPlayerToLastSafeSpot():Void {
-		var player = new LocalPlayerController(safetyDropLevel());
+		var player = new LocalCharacter(safetyDropLevel());
 		var touchedSafety = false;
 
 		for (_ in 0...120) {
@@ -388,7 +389,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testHighImpactFallBreaksCrumbleBlock():Void {
-		var player = new LocalPlayerController(crumbleDropLevel());
+		var player = new LocalCharacter(crumbleDropLevel());
 		var touchedCrumble = false;
 		var framesAfterCrumble = 0;
 
@@ -413,7 +414,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testStandingOnVanishBlockFallsThroughAfterFadeOut():Void {
-		var player = new LocalPlayerController(singleBlockLevel(BlockType.Vanish));
+		var player = new LocalCharacter(singleBlockLevel(BlockType.Vanish));
 
 		assertClose(1, player.blockAlphaAt(2, 3), "vanish block starts opaque");
 		player.step(new LocalPlayerInput());
@@ -432,7 +433,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testVanishBlockReappearsAfterDelayWhenUnoccupied():Void {
-		var player = new LocalPlayerController(vanishReappearLevel());
+		var player = new LocalCharacter(vanishReappearLevel());
 
 		for (_ in 0...11) {
 			player.step(new LocalPlayerInput());
@@ -472,7 +473,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testMineBlockLaunchesPlayerAndRemovesItself():Void {
-		var player = new LocalPlayerController(mineBlockLevel());
+		var player = new LocalCharacter(mineBlockLevel());
 		var initialState = player.debugState();
 
 		assertEquals("mine", initialState.touchedBlockType, "standing on mine reports touched block");
@@ -501,7 +502,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testBumpingItemBlockGrantsConfiguredItem():Void {
-		var player = new LocalPlayerController(itemBlockLevel(BlockType.Item));
+		var player = new LocalCharacter(itemBlockLevel(BlockType.Item));
 		var grantedItem = false;
 
 		for (_ in 0...40) {
@@ -519,7 +520,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testRegularItemBlockDepletesAfterFirstUse():Void {
-		var player = new LocalPlayerController(lowItemCeilingLevel(BlockType.Item, "3"));
+		var player = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, "3"));
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
 		}
@@ -533,7 +534,7 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput(false, false, true));
 		assertEquals(null, player.debugState().itemId, "depleted regular item block does not grant again");
 
-		var infinite = new LocalPlayerController(lowItemCeilingLevel(BlockType.InfiniteItem, "3"));
+		var infinite = new LocalCharacter(lowItemCeilingLevel(BlockType.InfiniteItem, "3"));
 		for (_ in 0...20) {
 			infinite.step(new LocalPlayerInput());
 		}
@@ -542,7 +543,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {
-		var player = new LocalPlayerController(superJumpItemLevel());
+		var player = new LocalCharacter(superJumpItemLevel());
 		var grantedItem = false;
 
 		for (_ in 0...40) {
@@ -571,7 +572,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testTeleportItemMovesPlayerForwardAndConsumesItem():Void {
-		var player = new LocalPlayerController(teleportItemLevel(false));
+		var player = new LocalCharacter(teleportItemLevel(false));
 		var grantedItem = false;
 
 		for (_ in 0...40) {
@@ -604,7 +605,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testTeleportItemBlockedBySolidDestination():Void {
-		var player = new LocalPlayerController(teleportItemLevel(true));
+		var player = new LocalCharacter(teleportItemLevel(true));
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -630,7 +631,7 @@ class LocalPlayerControllerTest {
 
 	private static function testSpeedBurstBoostsMovementThenExpires():Void {
 		var boosted = collectItem(speedBurstItemLevel(), 7);
-		var normal = new LocalPlayerController(speedBurstComparisonLevel());
+		var normal = new LocalCharacter(speedBurstComparisonLevel());
 
 		boosted.step(new LocalPlayerInput(false, false, false, false, true));
 		var active = boosted.debugState();
@@ -652,7 +653,7 @@ class LocalPlayerControllerTest {
 
 	private static function testJetPackLiftsPlayerThenExpires():Void {
 		var boosted = collectItem(jetPackItemLevel(), 6);
-		var normal = new LocalPlayerController(jetPackComparisonLevel());
+		var normal = new LocalCharacter(jetPackComparisonLevel());
 
 		for (_ in 0...70) {
 			boosted.step(new LocalPlayerInput(false, true));
@@ -796,7 +797,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testBumpingCustomStatsBlockAppliesConfiguredStats():Void {
-		var player = new LocalPlayerController(customStatsBlockLevel("100-0-80"));
+		var player = new LocalCharacter(customStatsBlockLevel("100-0-80"));
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -813,7 +814,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testBumpingResetCustomStatsBlockRestoresStartingStats():Void {
-		var player = new LocalPlayerController(customStatsResetLevel());
+		var player = new LocalCharacter(customStatsResetLevel());
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -864,8 +865,8 @@ class LocalPlayerControllerTest {
 		assertEquals(130, player.debugState().courseTime, "time block adds ten seconds");
 	}
 
-	private static function bumpSupply(level:FixtureLevel, type:BlockType):LocalPlayerController {
-		var player = new LocalPlayerController(level);
+	private static function bumpSupply(level:FixtureLevel, type:BlockType):LocalCharacter {
+		var player = new LocalCharacter(level);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
 			if (player.debugState().touchedBlockType == type) break;
@@ -875,7 +876,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testTeleportBlockMovesPlayerToNextSameColorBlock():Void {
-		var player = new LocalPlayerController(teleportPairLevel());
+		var player = new LocalCharacter(teleportPairLevel());
 		var state = player.debugState();
 
 		assertEquals("teleport", state.touchedBlockType, "standing on teleport reports touched block");
@@ -885,7 +886,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testTeleportCooldownPreventsImmediateReturn():Void {
-		var player = new LocalPlayerController(teleportPairLevel());
+		var player = new LocalCharacter(teleportPairLevel());
 
 		for (_ in 0...20) {
 			player.step(new LocalPlayerInput());
@@ -899,7 +900,7 @@ class LocalPlayerControllerTest {
 
 	private static function testStandingOnPushBlockMovesItDown():Void {
 		var level = pushBlockLevel();
-		var player = new LocalPlayerController(level);
+		var player = new LocalCharacter(level);
 		var state = player.debugState();
 
 		assertEquals("push", state.touchedBlockType, "standing on push block reports touched block");
@@ -909,7 +910,7 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockShiftsAfterPreview():Void {
 		var level = timedMoveBlockLevel("right", false);
-		var player = new LocalPlayerController(level);
+		var player = new LocalCharacter(level);
 
 		for (_ in 0...26) {
 			player.step(new LocalPlayerInput());
@@ -923,7 +924,7 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockWaitsWhenDestinationBlocked():Void {
 		var level = timedMoveBlockLevel("right", true);
-		var player = new LocalPlayerController(level);
+		var player = new LocalCharacter(level);
 
 		for (_ in 0...27) {
 			player.step(new LocalPlayerInput());
@@ -935,7 +936,7 @@ class LocalPlayerControllerTest {
 
 	private static function testTimedMoveBlockWaitsWhenDestinationOccupied():Void {
 		var level = timedMoveBlockLevel("up", false);
-		var player = new LocalPlayerController(level);
+		var player = new LocalCharacter(level);
 
 		for (_ in 0...27) {
 			player.step(new LocalPlayerInput());
@@ -946,7 +947,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testBumpingRotateBlockFreezesPlayer():Void {
-		var player = new LocalPlayerController(rotateBlockLevel(BlockType.RotateRight));
+		var player = new LocalCharacter(rotateBlockLevel(BlockType.RotateRight));
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -1027,7 +1028,7 @@ class LocalPlayerControllerTest {
 		var level = rotateBlockLevel(BlockType.RotateRight);
 		level.blocks.push(new LevelBlock(4, 3, BlockType.Solid));
 		level.blocks.push(new LevelBlock(1, 3, BlockType.Solid));
-		var player = new LocalPlayerController(level);
+		var player = new LocalCharacter(level);
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -1055,8 +1056,8 @@ class LocalPlayerControllerTest {
 		assertEquals(true, bumped, "player bumps the ceiling after course rotation");
 	}
 
-	private static function bumpRotateBlock(type:BlockType):LocalPlayerController {
-		var player = new LocalPlayerController(rotateBlockLevel(type));
+	private static function bumpRotateBlock(type:BlockType):LocalCharacter {
+		var player = new LocalCharacter(rotateBlockLevel(type));
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
 			if (player.debugState().mode == "freeze") {
@@ -1066,12 +1067,12 @@ class LocalPlayerControllerTest {
 		throw "rotate block was not bumped";
 	}
 
-	private static function newPlayer():LocalPlayerController {
-		return new LocalPlayerController(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
+	private static function newPlayer():LocalCharacter {
+		return new LocalCharacter(LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json")));
 	}
 
-	private static function collectItem(level:FixtureLevel, itemId:Int):LocalPlayerController {
-		var player = new LocalPlayerController(level);
+	private static function collectItem(level:FixtureLevel, itemId:Int):LocalCharacter {
+		var player = new LocalCharacter(level);
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
 			if (player.debugState().itemId == itemId) {

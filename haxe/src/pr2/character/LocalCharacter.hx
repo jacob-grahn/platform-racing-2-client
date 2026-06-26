@@ -18,6 +18,10 @@ class LocalCharacter extends Character {
 	public var grounded(get, never):Bool;
 	public var crouching(get, never):Bool;
 	public var facingScaleX(get, never):Int;
+	public var courseTweenRotation(get, never):Int;
+	public var characterRotation(get, never):Int;
+	public var lastSafeX(get, never):Float;
+	public var lastSafeY(get, never):Float;
 
 	public function new(level:FixtureLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super(hatId, headId, bodyId, feetId);
@@ -47,6 +51,19 @@ class LocalCharacter extends Character {
 		return controller.blockColorMultiplierAt(tileX, tileY);
 	}
 
+	public function consumeBlockVisualEvents():Array<pr2.harness.BlockVisualEvent> {
+		return controller.consumeBlockVisualEvents();
+	}
+
+	public function freeze():Void {
+		controller.freeze();
+		syncFromController();
+	}
+
+	public function isFrozen():Bool {
+		return controller.isFrozen();
+	}
+
 	private function syncFromController():Void {
 		var state = controller.debugState();
 		x = state.x;
@@ -69,5 +86,21 @@ class LocalCharacter extends Character {
 
 	private function get_facingScaleX():Int {
 		return controller.facingScaleX;
+	}
+
+	private function get_courseTweenRotation():Int {
+		return controller.courseTweenRotation;
+	}
+
+	private function get_characterRotation():Int {
+		return controller.characterRotation;
+	}
+
+	private function get_lastSafeX():Float {
+		return controller.lastSafeX;
+	}
+
+	private function get_lastSafeY():Float {
+		return controller.lastSafeY;
 	}
 }

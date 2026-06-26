@@ -97,8 +97,11 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       `LocalPlayerController`, mirrors position/velocity/item/animation/facing
       state after each step, exposes the existing debug/block helpers, and is
       guarded by `LocalCharacterTest`.
-    - [ ] Retarget the full `LocalPlayerControllerTest` matrix through
-      `LocalCharacter` and cut over `Course`/live gameplay construction.
+    - [x] Retarget the full `LocalPlayerControllerTest` matrix through
+      `LocalCharacter`. The controller parity matrix now instantiates
+      `LocalCharacter` for the audited physics/block/item/rotation coverage,
+      with controller-only debug hooks forwarded through the bridge.
+    - [ ] Cut over `Course`/live gameplay construction to `LocalCharacter`.
   - [ ] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
     `exact_pos\`x\`y`, and `set_var\`<field>\`<value>` for each tracked field
     (scaleX, state, parent, item, rotMod, rot, sparkle, jet, beginRemove), gated by
