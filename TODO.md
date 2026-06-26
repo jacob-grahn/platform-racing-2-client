@@ -186,7 +186,8 @@ is scoped to item behavior below.
   one-tile gap routes through `onBump` without launching the player, so a
   ceiling item block grants its configured item while the character remains
   crouched and grounded. Guarded by `LocalPlayerControllerTest`.
-- [ ] Bumping an item block should give your character an item
+- [x] Bumping an item block gives your character the configured item. Guarded by
+  `LocalPlayerControllerTest`.
 - [x] Bumping a regular item block should grey it out, bumping it again does not give an item.
   Regular `Item` blocks now mirror Flash `SupplyBlock.depleteVisuals` with a
   0.5 RGB color transform after first use, while `InfiniteItem` blocks stay
