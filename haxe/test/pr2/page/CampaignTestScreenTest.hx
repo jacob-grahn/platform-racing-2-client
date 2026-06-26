@@ -9,6 +9,7 @@ class CampaignTestScreenTest {
 		testParsesCampaignQueryValues();
 		testSelectsRequestedLevelFromCampaignPage();
 		testDebugTextHiddenByDefault();
+		testDebugChatCommandTogglesOverlay();
 		trace('CampaignTestScreenTest passed $assertions assertions');
 	}
 
@@ -41,6 +42,22 @@ class CampaignTestScreenTest {
 	private static function testDebugTextHiddenByDefault():Void {
 		var screen = new CampaignTestScreen();
 		assertEquals(false, screen.isDebugTextVisible(), "campaign debug text starts hidden");
+		screen.remove();
+	}
+
+	private static function testDebugChatCommandTogglesOverlay():Void {
+		assertEquals(true, CampaignTestScreen.isDebugChatCommand("/debug"), "debug command recognized");
+		assertEquals(true, CampaignTestScreen.isDebugChatCommand("  /DeBuG  "), "debug command ignores case and edge whitespace");
+		assertEquals(false, CampaignTestScreen.isDebugChatCommand("/debug now"), "debug command rejects extra text");
+		assertEquals(false, CampaignTestScreen.isDebugChatCommand("hello"), "normal chat is not a debug command");
+
+		var screen = new CampaignTestScreen();
+		assertEquals(false, screen.handleRaceChatLine("hello"), "normal chat is not handled by debug route");
+		assertEquals(false, screen.isDebugTextVisible(), "normal chat leaves debug text hidden");
+		assertEquals(true, screen.handleRaceChatLine("/debug"), "debug chat route handles command");
+		assertEquals(true, screen.isDebugTextVisible(), "debug command shows debug text");
+		assertEquals(true, screen.handleRaceChatLine(" /debug "), "debug chat route handles trimmed command");
+		assertEquals(false, screen.isDebugTextVisible(), "second debug command hides debug text");
 		screen.remove();
 	}
 

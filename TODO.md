@@ -208,7 +208,12 @@ is scoped to item behavior below.
 - [ ] Hide the in-game debug text by default. Type /debug into the chat to show/hide it
   - [x] Hide the campaign/game debug overlay by default while preserving the
     `data-pr2-debug-state` automation hook.
-  - [ ] Wire `/debug` through the in-game chat once race chat exists.
+  - [x] Add the race-chat command route that recognizes `/debug` (case-
+    insensitive, ignoring edge whitespace) and toggles the campaign/game debug
+    overlay without swallowing normal chat lines. Guarded by
+    `CampaignTestScreenTest`.
+  - [ ] Connect the command route to the authored `RaceChatGraphic` input once
+    the full in-game race chat UI is ported.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

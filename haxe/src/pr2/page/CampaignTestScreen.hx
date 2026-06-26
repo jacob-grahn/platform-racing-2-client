@@ -26,6 +26,7 @@ import pr2.gameplay.ItemDisplay;
 import pr2.gameplay.MiniMap;
 import pr2.gameplay.MiniMapDot;
 import pr2.gameplay.MusicSelection;
+import pr2.lobby.chat.ChatText;
 import pr2.net.CampaignListClient;
 import pr2.net.CampaignListClient.CampaignListResult;
 import pr2.net.CampaignLevelInfo;
@@ -350,6 +351,20 @@ class CampaignTestScreen extends Sprite {
 
 	public function isDebugTextVisible():Bool {
 		return statusText != null && statusText.visible;
+	}
+
+	public static function isDebugChatCommand(message:String):Bool {
+		return ChatText.trimWhitespace(message == null ? "" : message).toLowerCase() == "/debug";
+	}
+
+	public function handleRaceChatLine(message:String):Bool {
+		if (!isDebugChatCommand(message)) {
+			return false;
+		}
+		if (statusText != null) {
+			statusText.visible = !statusText.visible;
+		}
+		return true;
 	}
 
 	private function setStatus(debugState:String, text:String):Void {
