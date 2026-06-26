@@ -156,7 +156,17 @@ is scoped to item behavior below.
     timeline, including its frame-1 stop script and `ArrowBlock.animateArrow`
     retrigger rules. Guarded by `LocalPlayerControllerTest` and
     `ServerLevelRendererTest`.
-- [ ] Fix click-to-skip in the intro. Currently clicks only register if they hit something like the mute button or the middle logo
+- [x] Fix click-to-skip in the intro. Flash's `menu.IntroPage` listened for
+  `MouseEvent.CLICK` on the stage so a click anywhere skipped to login, but
+  OpenFL's HTML5 backend does not dispatch a stage-level CLICK for clicks on
+  plain (non-button) art or the empty backdrop, so only interactive symbols
+  (the global mute button, the center logo) skipped. `IntroPage` now keeps the
+  stage listener (so those symbols still skip) and adds a transparent,
+  full-stage skip hit area on top of the intro art with its own CLICK listener,
+  matching `LoginPage.createHitArea`. An `ended` guard makes the now-doubled
+  skip path idempotent so a click never stacks two `LoginPage` transitions.
+  Verified end-to-end with `tools/openfl_driver.py sequence`: a plain-area
+  click advances `data-pr2-intro-state` from `intro-jiggmin` to `login`.
 - [ ] Fix the position of the in-game quit button, match it to the source game
 - [ ] Port in-game chat
 - [ ] Play in-game music, streaming from a server endpoint. Dropdown can select different songs

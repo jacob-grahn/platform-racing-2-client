@@ -51,7 +51,9 @@ class IntroPage extends Page {
 	private var introPageGraphic:Null<PR2MovieClip>;
 	private var introHolder:Null<DisplayObjectContainer>;
 	private var currentIntro:Null<PR2MovieClip>;
+	private var skipHitArea:Null<Sprite>;
 	private var listeningStage:Null<Stage>;
+	private var ended:Bool = false;
 
 	/**
 		@param siteMode which host the client thinks it is, picking the intro
@@ -65,15 +67,34 @@ class IntroPage extends Page {
 		// The original Jiggmin intro played over a full-screen black backdrop
 		// (Symbol 26). Reproduce it here so the window background never shows
 		// through behind the intro graphics or the assembling logo blocks.
-		// A Sprite (not a Shape) so clicks on the empty backdrop hit-test and
-		// bubble up to the stage skip handler, letting a click anywhere skip
-		// the intro.
 		background = new Sprite();
 		addChild(background);
 
 		introPageGraphic = PR2MovieClip.fromLinkage("IntroPageGraphic");
 		addChild(introPageGraphic);
 		introHolder = Std.downcast(introPageGraphic.getChildByTimelineName("introHolder"), DisplayObjectContainer);
+
+		// Flash's `menu.IntroPage` listened for `MouseEvent.CLICK` on
+		// `Main.stage`, so a click *anywhere* skipped straight to the login page.
+		// OpenFL's HTML5 backend does not reliably dispatch a stage-level CLICK
+		// for clicks that land on plain (non-button) art or empty backdrop, so a
+		// stage listener alone only fired for the few interactive symbols (the
+		// global mute button, the logo) — which is exactly the "clicks only
+		// register on the mute button or middle logo" bug. We keep the stage
+		// listener (so those interactive symbols still skip, as in Flash) and add
+		// the fix for plain-area clicks using the same approach the rest of the
+		// client uses for full-region clicks (`LoginPage.createHitArea`): a
+		// transparent, full-stage Sprite kept on top of the intro art with its
+		// own CLICK listener. Added after `introPageGraphic` so it stays topmost;
+		// intros mount inside `introHolder`, which never reorders this page's
+		// direct children. (`Main.muteButton` is layered above this page by
+		// `Main.addGlobalChrome`, so its click still reaches the stage handler.)
+		skipHitArea = new Sprite();
+		skipHitArea.graphics.beginFill(0xFFFFFF, 0);
+		skipHitArea.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		skipHitArea.graphics.endFill();
+		skipHitArea.addEventListener(MouseEvent.CLICK, onClick);
+		addChild(skipHitArea);
 
 		var single = only == null ? null : introTypeFromName(only);
 		if (single != null) {
@@ -89,15 +110,15 @@ class IntroPage extends Page {
 		}
 
 		// Intros advance via ENTER_FRAME, so they can only start once we are on
-		// the stage. The stage click-to-skip listener also needs the stage.
+		// the stage.
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 	}
 
 	private function onAddedToStage(event:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		listeningStage = stage;
-		drawBackground();
 		stage.addEventListener(MouseEvent.CLICK, onClick);
+		drawBackground();
 		playNextIntro();
 	}
 
@@ -226,6 +247,12 @@ class IntroPage extends Page {
 	}
 
 	private function endIntro():Void {
+		// A click can race the queue draining (or fire more than once); only the
+		// first request advances so we never stack two LoginPage transitions.
+		if (ended) {
+			return;
+		}
+		ended = true;
 		clearCurrentIntro();
 		reportState("login");
 		if (pageHolder != null) {
@@ -265,6 +292,10 @@ class IntroPage extends Page {
 	}
 
 	override public function remove():Void {
+		if (skipHitArea != null) {
+			skipHitArea.removeEventListener(MouseEvent.CLICK, onClick);
+			skipHitArea = null;
+		}
 		if (listeningStage != null) {
 			listeningStage.removeEventListener(MouseEvent.CLICK, onClick);
 			listeningStage = null;
