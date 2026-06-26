@@ -3,6 +3,7 @@ package pr2.gameplay;
 import openfl.display.InteractiveObject;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.ConfirmPopup;
@@ -74,6 +75,9 @@ class QuitButtonTest {
 		var holder = new PageHolder();
 		var game = new GamePage(12345, 7);
 		holder.changePage(game);
+		var buttonPosition = button(game).localToGlobal(new Point());
+		assertEquals(428, buttonPosition.x, "quit button x matches Flash stage position");
+		assertEquals(369, buttonPosition.y, "quit button y matches Flash stage position");
 
 		button(game).dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP));
 		assertEquals("quit_race`", LobbySocket.lastSent(), "game page emits the Flash quit command");

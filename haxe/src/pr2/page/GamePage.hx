@@ -1,6 +1,7 @@
 package pr2.page;
 
 import pr2.audio.AudioManager;
+import pr2.Constants;
 import pr2.gameplay.FinishedPage;
 import pr2.gameplay.QuitButton;
 import pr2.lobby.LobbySession;
@@ -26,6 +27,8 @@ class GamePage extends Page {
 		level = new CampaignTestScreen(null, Std.string(levelId), version);
 		addChild(level);
 		quitButton = new QuitButton(quitGame, function():Bool return playerDone);
+		quitButton.x = Constants.STAGE_WIDTH / 2;
+		quitButton.y = Constants.STAGE_HEIGHT / 2;
 		addChild(quitButton);
 	}
 

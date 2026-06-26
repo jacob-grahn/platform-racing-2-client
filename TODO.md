@@ -167,7 +167,10 @@ is scoped to item behavior below.
   skip path idempotent so a click never stacks two `LoginPage` transitions.
   Verified end-to-end with `tools/openfl_driver.py sequence`: a plain-area
   click advances `data-pr2-intro-state` from `intro-jiggmin` to `login`.
-- [ ] Fix the position of the in-game quit button, match it to the source game
+- [x] Fix the position of the in-game quit button. `GamePage` now mounts
+  `QuitButton` at the Flash course origin (stage 275,200), so the authored
+  `quit_bt` lands at stage (428,369) as in `gameplay.Game`/`Course`.
+  Guarded by `QuitButtonTest`.
 - [ ] Port in-game chat
 - [ ] Play in-game music, streaming from a server endpoint. Dropdown can select different songs
 - [ ] Character shrinks too short when crouching under a block
