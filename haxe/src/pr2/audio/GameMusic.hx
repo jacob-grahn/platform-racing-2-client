@@ -29,6 +29,10 @@ class GameMusic {
 		restart();
 	}
 
+	public static function streamUrl(song:MusicTrack):String {
+		return BASE_PATH + "/" + song.file;
+	}
+
 	public function refresh():Void {
 		if (channel == null && canPlay()) restart();
 		else if (channel != null) channel.soundTransform = new SoundTransform(Settings.musicLevel / 100);
@@ -50,7 +54,7 @@ class GameMusic {
 	private function restart():Void {
 		stop();
 		if (!canPlay()) return;
-		var sound = new Sound(new URLRequest(BASE_PATH + "/" + selected.file));
+		var sound = new Sound(new URLRequest(streamUrl(selected)));
 		channel = sound.play(0, 9999, new SoundTransform(Settings.musicLevel / 100));
 		if (channel != null) channel.addEventListener(Event.SOUND_COMPLETE, onComplete);
 	}

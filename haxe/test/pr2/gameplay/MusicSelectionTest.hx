@@ -12,6 +12,7 @@ class MusicSelectionTest {
 		Settings.disablePersistenceForTests();
 		testLevelSongSelection();
 		testUserSongSwitching();
+		testStreamingEndpoint();
 		testArtifactSong();
 		trace('MusicSelectionTest passed $assertions assertions');
 	}
@@ -35,6 +36,12 @@ class MusicSelectionTest {
 		selection.dropdown.dispatchEvent(new Event(Event.CHANGE));
 		assertEquals("2", music.lastSongId, "dropdown changes switch the runtime song");
 		selection.remove();
+	}
+
+	private static function testStreamingEndpoint():Void {
+		assertEquals("/music/new/03_paradise-on-e_ng32772.mp3",
+			GameMusic.streamUrl({id: "3", label: "Paradise on E - API", file: "03_paradise-on-e_ng32772.mp3"}),
+			"race music streams from the original server music endpoint");
 	}
 
 	private static function testArtifactSong():Void {

@@ -172,7 +172,10 @@ is scoped to item behavior below.
   `quit_bt` lands at stage (428,369) as in `gameplay.Game`/`Course`.
   Guarded by `QuitButtonTest`.
 - [ ] Port in-game chat
-- [ ] Play in-game music, streaming from a server endpoint. Dropdown can select different songs
+- [x] Play in-game music, streaming from a server endpoint. Dropdown can select different songs.
+  `GameMusic` streams the selected authored track from `/music/new/<file>` and
+  `MusicSelection` switches playback from the authored dropdown. Guarded by
+  `MusicSelectionTest`.
 - [ ] Character shrinks too short when crouching under a block
 - [ ] Pressing up while under a block should bump it
 - [ ] Bumping an item block should give your character an item
