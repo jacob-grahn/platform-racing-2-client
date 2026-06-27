@@ -246,8 +246,11 @@ is scoped to item behavior below.
     server-level renderer now batches decoded stroke actions, stamp objects, and
     text objects alongside incremental blocks, and `Course` waits for complete
     map/art drawing before stepping gameplay. Guarded by `ServerLevelRendererTest`.
-  - [ ] Wire the real `finish_drawing` readiness flow around all background
-    layers.
+  - [x] Wire the real `finish_drawing` readiness flow around all background
+    layers. `Course` now waits for incremental blocks and all decoded art layers
+    to finish, emits Flash's `finish_drawing` payload with the gameplay level
+    hash, mode, finish positions/count, cowboy chance, and bad hats, and hides
+    the local drawing spinner exactly once. Guarded by `GameShellMountTest`.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

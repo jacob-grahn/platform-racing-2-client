@@ -1,7 +1,11 @@
 package pr2.gameplay;
 
+import haxe.crypto.Md5;
+import openfl.events.Event;
 import pr2.level.ServerLevelDecoder;
+import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
+import pr2.net.ServerConfig;
 
 /**
 	A3 coverage: the production `Course` shell mounts a decoded level plus the
@@ -50,6 +54,8 @@ class GameShellMountTest {
 		assertEquals(true, course.levelRenderer == null, "level renderer torn down");
 		assertEquals(true, course.localCharacter == null, "local character torn down");
 
+		testFinishDrawingReadinessEmission();
+
 		trace('GameShellMountTest passed $assertions assertions');
 	}
 
@@ -70,6 +76,43 @@ class GameShellMountTest {
 		var data = new ServerLevelData(vars, true);
 		var config = LevelConfig.fromServerData(data);
 		return new Course(level, data, config);
+	}
+
+	private static function testFinishDrawingReadinessEmission():Void {
+		var dataString = "m3`e0c8b8`0;0;11,1;0;16";
+		var level = ServerLevelDecoder.decode(dataString);
+		var saveString = "level_id=42&version=7&title=Draw Ready&song=song1&gravity=1&max_time=120&gameMode=race&cowboyChance=25&badHats=4,6&data="
+			+ dataString;
+
+		var vars:Map<String, String> = new Map();
+		vars.set("level_id", "42");
+		vars.set("version", "7");
+		vars.set("title", "Draw Ready");
+		vars.set("song", "song1");
+		vars.set("gravity", "1");
+		vars.set("max_time", "120");
+		vars.set("gameMode", "race");
+		vars.set("cowboyChance", "25");
+		vars.set("badHats", "4,6");
+		vars.set("data", dataString);
+
+		var data = new ServerLevelData(vars, true, saveString);
+		var course = new Course(level, data, LevelConfig.fromServerData(data));
+		LobbySocket.resetSent();
+		while (!course.levelRenderer.isDrawingComplete()) {
+			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		course.dispatchEvent(new Event(Event.ENTER_FRAME));
+
+		var hash = Md5.encode(saveString + "42" + "7" + ServerConfig.LEVEL_HASH_SALT);
+		assertEquals(
+			'finish_drawing`$hash`race`[{"id":1,"x":45,"y":15}]`1`25`4,6',
+			LobbySocket.sentCommands.join("|"),
+			"finish_drawing emitted after all drawing completes"
+		);
+		assertEquals(false, course.drawingInfo.isDrawing(0), "local drawing spinner hidden after readiness emission");
+		course.remove();
 	}
 
 	private static function assertClose(expected:Float, actual:Float, message:String):Void {

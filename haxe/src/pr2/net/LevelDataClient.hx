@@ -45,7 +45,7 @@ class LevelDataClient {
 		var hashValid = computeHash(version, levelId, levelData) == levelHash;
 
 		var validated = validateSaveString(levelData);
-		return new ServerLevelData(parseVars(validated), hashValid);
+		return new ServerLevelData(parseVars(validated), hashValid, validated);
 	}
 
 	/** `MD5(version + courseID + levelData + LEVEL_SALT_2)`, per `Game.loadHandler`. **/

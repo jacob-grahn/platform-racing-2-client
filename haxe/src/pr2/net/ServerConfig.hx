@@ -19,6 +19,9 @@ final class ServerConfig {
 	/** Hash salt applied to a downloaded level txt file (`Env.LEVEL_SALT_2`). **/
 	public static inline var LEVEL_SALT_2:String = "0kg4%dsw";
 
+	/** Hash salt used in the in-race `finish_drawing` readiness payload. **/
+	public static inline var LEVEL_HASH_SALT:String = "N^&drwseawf";
+
 	/** Pixels per block segment; the Flash block strings are in these units. **/
 	public static inline var SEG_SIZE:Int = 30;
 

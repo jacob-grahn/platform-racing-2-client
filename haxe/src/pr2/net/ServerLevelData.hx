@@ -24,9 +24,13 @@ class ServerLevelData {
 	/** Raw level/block string; `data[0]` is the read mode. Decoded in Bit 3. **/
 	public final data:String;
 
-	public function new(vars:Map<String, String>, hashValid:Bool) {
+	/** Validated `&`-joined level vars, before URLVariables decoding. **/
+	public final saveString:String;
+
+	public function new(vars:Map<String, String>, hashValid:Bool, ?saveString:String) {
 		this.vars = vars;
 		this.hashValid = hashValid;
+		this.saveString = saveString == null ? "" : saveString;
 		levelId = intVar("level_id", 0);
 		version = intVar("version", 0);
 		title = strVar("title", "(untitled)");

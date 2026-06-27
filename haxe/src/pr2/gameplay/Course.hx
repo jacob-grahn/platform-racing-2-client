@@ -3,6 +3,7 @@ package pr2.gameplay;
 #if js
 import js.Browser;
 #end
+import haxe.crypto.Md5;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -94,6 +95,7 @@ class Course extends Sprite {
 	private var displayedItemUses:Null<Int>;
 	private var displayedStats:Null<String>;
 	private var displayedLives:Null<Int>;
+	private var finishDrawingEmitted:Bool = false;
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -337,6 +339,7 @@ class Course extends Sprite {
 			return;
 		}
 		if (!drawingInfoFinished) {
+			emitFinishDrawingReady();
 			if (drawingInfo != null) {
 				drawingInfo.finishDrawing(0);
 			}
@@ -435,6 +438,35 @@ class Course extends Sprite {
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
 			}
 		}
+	}
+
+	private function emitFinishDrawingReady():Void {
+		if (finishDrawingEmitted || localCharacter == null) {
+			return;
+		}
+		finishDrawingEmitted = true;
+		var cowboyChance = Std.parseInt(config.cowboyChance);
+		localCharacter.emitFinishDrawing(
+			Md5.encode(data.saveString + Std.int(config.levelId) + data.version + pr2.net.ServerConfig.LEVEL_HASH_SALT),
+			config.gameMode,
+			finishBlockPositions(),
+			level.finishBlocks().length,
+			cowboyChance == null ? 5 : cowboyChance,
+			config.badHats
+		);
+	}
+
+	private function finishBlockPositions():String {
+		var finishes = level.finishBlocks();
+		if (finishes.length > 5) {
+			return "all";
+		}
+		var parts:Array<String> = [];
+		for (i in 0...finishes.length) {
+			var block = finishes[i];
+			parts.push('{"id":${i + 1},"x":${block.x + 15},"y":${block.y + 15}}');
+		}
+		return "[" + parts.join(",") + "]";
 	}
 
 	private inline function worldXOf(event:BlockVisualEvent):Int {
