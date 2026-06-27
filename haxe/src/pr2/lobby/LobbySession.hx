@@ -39,6 +39,8 @@ class LobbySession {
 	/** Temporary/trial moderator flags affecting logout confirmation. */
 	public static var isTempMod:Bool = false;
 	public static var isTrialMod:Bool = false;
+	public static var isSpecialUser:Bool = false;
+	public static var isPrizer:Bool = false;
 
 	/** Favorited level ids (Flash `Main.favoriteLevels`), used by listings. */
 	public static var favoriteLevels:Array<Int> = [];
@@ -83,6 +85,8 @@ class LobbySession {
 		remember = false;
 		isTempMod = false;
 		isTrialMod = false;
+		isSpecialUser = false;
+		isPrizer = false;
 		favoriteLevels = [];
 		accountChangeListeners = [];
 	}

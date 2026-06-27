@@ -205,6 +205,13 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       `Game.setPrize`/`cancelPrize`/`winPrize`, stores the current prize, opens
       the authored `PrizePopup`, and fades the active prize popup on page
       teardown. Guarded by `QuitButtonTest`.
+    - [x] Port the `SpecialEvent` click-hotkey dispatch. Privileged sessions now
+      track the Flash G+C artifact-placement and C+X prize-cancel click paths;
+      G+C opens the authored `PlaceArtifactGraphic` shell with the clicked course
+      coordinates, while C+X emits `cancel_prize` only when a prize is active.
+      Guarded by `SpecialEventTest`.
+    - [ ] Complete `PlaceArtifact` date selection, confirmation, scheduled
+      override, and `place_artifact.php` upload response flow.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without

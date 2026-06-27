@@ -1,5 +1,8 @@
 package pr2.page;
 
+import openfl.events.Event;
+import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
@@ -15,6 +18,7 @@ import pr2.gameplay.LevelConfig;
 import pr2.gameplay.LevelEntry;
 import pr2.gameplay.PrizePopup;
 import pr2.gameplay.QuitButton;
+import pr2.gameplay.SpecialEvent;
 import pr2.lobby.LobbySession;
 import pr2.net.LobbySocket;
 import pr2.net.LevelDataClient;
@@ -44,6 +48,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingLocalInit:Null<LocalCharacterInit>;
 	private var pendingRemoteInits:Array<RemoteCharacterInit> = [];
 	private var pendingBeginRace:Bool = false;
+	private var specialEvent:Null<SpecialEvent>;
 	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
@@ -69,6 +74,12 @@ class GamePage extends Page implements GameCommandDelegate {
 
 		commandShell = new GameCommandShell(this);
 		commandShell.install();
+		specialEvent = new SpecialEvent();
+		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		if (stage != null) {
+			attachSpecialEventListeners();
+		}
 
 		#if html5
 		if (!ServerConfig.hasProxyHost()) {
@@ -122,6 +133,10 @@ class GamePage extends Page implements GameCommandDelegate {
 			commandShell.remove();
 			commandShell = null;
 		}
+		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
+		detachSpecialEventListeners();
+		specialEvent = null;
 		if (finishedPage != null) {
 			finishedPage.remove();
 			finishedPage = null;
@@ -140,6 +155,50 @@ class GamePage extends Page implements GameCommandDelegate {
 		}
 		clearLoadingText();
 		super.remove();
+	}
+
+	private function onAddedToStage(_:Event):Void {
+		attachSpecialEventListeners();
+	}
+
+	private function onRemovedFromStage(_:Event):Void {
+		detachSpecialEventListeners();
+	}
+
+	private function attachSpecialEventListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onSpecialEventKeyDown);
+		stage.addEventListener(KeyboardEvent.KEY_UP, onSpecialEventKeyUp);
+		stage.addEventListener(MouseEvent.CLICK, onSpecialEventClick);
+	}
+
+	private function detachSpecialEventListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(KeyboardEvent.KEY_DOWN, onSpecialEventKeyDown);
+		stage.removeEventListener(KeyboardEvent.KEY_UP, onSpecialEventKeyUp);
+		stage.removeEventListener(MouseEvent.CLICK, onSpecialEventClick);
+	}
+
+	private function onSpecialEventKeyDown(event:KeyboardEvent):Void {
+		if (specialEvent != null) {
+			specialEvent.keyDown(event.keyCode);
+		}
+	}
+
+	private function onSpecialEventKeyUp(event:KeyboardEvent):Void {
+		if (specialEvent != null) {
+			specialEvent.keyUp(event.keyCode);
+		}
+	}
+
+	private function onSpecialEventClick(event:MouseEvent):Void {
+		if (specialEvent != null) {
+			specialEvent.click(event.stageX, event.stageY, course, prize);
+		}
 	}
 
 	public function createRemoteCharacter(init:RemoteCharacterInit):Void {

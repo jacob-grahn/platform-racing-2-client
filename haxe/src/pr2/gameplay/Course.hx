@@ -13,6 +13,7 @@ import pr2.character.LocalCharacter;
 import pr2.character.RemoteCharacter;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
+import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.harness.LocalPlayerDebugState;
@@ -297,6 +298,16 @@ class Course extends Sprite {
 			var startPos = localCharacter.getPos();
 			LobbySocket.write('exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}');
 		}
+	}
+
+	public function artifactPlacementAt(stageX:Float, stageY:Float):PlaceArtifactRequest {
+		var point = levelRenderer.screenToWorld(stageX - x, stageY - y);
+		return {
+			levelId: Std.int(config.levelId),
+			x: Math.round(point.x),
+			y: Math.round(point.y),
+			rot: Math.round(levelRenderer.rotation)
+		};
 	}
 
 	private function onCountdownFinish():Void {

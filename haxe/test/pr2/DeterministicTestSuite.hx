@@ -27,6 +27,7 @@ import pr2.gameplay.HeartsTest;
 import pr2.gameplay.StatsDisplayTest;
 import pr2.gameplay.CountdownTest;
 import pr2.gameplay.PrizePopupTest;
+import pr2.gameplay.SpecialEventTest;
 import pr2.gameplay.LevelConfigTest;
 import pr2.gameplay.GameShellMountTest;
 import pr2.gameplay.CharacterLifecycleTest;
@@ -103,6 +104,7 @@ class DeterministicTestSuite {
 		StatsDisplayTest.main();
 		CountdownTest.main();
 		PrizePopupTest.main();
+		SpecialEventTest.main();
 		LevelConfigTest.main();
 		GameShellMountTest.main();
 		CharacterLifecycleTest.main();
