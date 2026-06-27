@@ -249,6 +249,8 @@ rounding, ordering, and edge cases.
     - [x] Emit mine-item effect coordinates from the centered placed mine tile,
       rotated with `Data.rotatePoint`, matching `items.Mine`'s `add_effect`
       payload shape. Guarded by `LocalPlayerControllerTest`.
+    - [x] Lock left-facing Laser Gun, Sword, and Ice Wave item direction/recoil
+      parity against the AS3 item classes. Guarded by `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.

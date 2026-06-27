@@ -698,6 +698,14 @@ class LocalPlayerControllerTest {
 		assertEquals("laser:right", firstShot.lastItemEffect, "laser emits a right-facing shot");
 		assertBelow(firstShot.vx, beforeUse.vx, "laser applies backwards recoil");
 
+		var leftFacing = collectItem(heldItemLevel(1), 1);
+		leftFacing.step(new LocalPlayerInput(true));
+		var beforeLeftUse = leftFacing.debugState();
+		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
+		var leftShot = leftFacing.debugState();
+		assertEquals("laser:left", leftShot.lastItemEffect, "laser emits a left-facing shot");
+		assertBelow(beforeLeftUse.vx, leftShot.vx, "left-facing laser recoils right like Flash");
+
 		for (_ in 0...21) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 			assertEquals(2, player.debugState().itemUses, "laser cannot fire during its 800ms reload");
@@ -744,6 +752,14 @@ class LocalPlayerControllerTest {
 		assertEquals("slash:right", firstSwing.lastItemEffect, "sword emits a right-facing slash");
 		assertBelow(beforeUse.vx, firstSwing.vx, "sword lunges in the facing direction");
 
+		var leftFacing = collectItem(heldItemLevel(8), 8);
+		leftFacing.step(new LocalPlayerInput(true));
+		var beforeLeftUse = leftFacing.debugState();
+		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
+		var leftSwing = leftFacing.debugState();
+		assertEquals("slash:left", leftSwing.lastItemEffect, "sword emits a left-facing slash");
+		assertBelow(leftSwing.vx, beforeLeftUse.vx, "left-facing sword lunges left like Flash");
+
 		for (_ in 0...21) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 			assertEquals(2, player.debugState().itemUses, "sword cannot swing during its 800ms reload");
@@ -764,6 +780,12 @@ class LocalPlayerControllerTest {
 		assertEquals(9, firstWave.itemId, "ice wave remains held after first wave");
 		assertEquals(2, firstWave.itemUses, "ice wave consumes one of three waves");
 		assertEquals("ice_wave:right", firstWave.lastItemEffect, "ice wave emits a right-facing wave");
+
+		var leftFacing = collectItem(heldItemLevel(9), 9);
+		leftFacing.step(new LocalPlayerInput(true));
+		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
+		var leftWave = leftFacing.debugState();
+		assertEquals("ice_wave:left", leftWave.lastItemEffect, "ice wave emits a left-facing wave");
 
 		for (_ in 0...26) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
