@@ -272,6 +272,9 @@ rounding, ordering, and edge cases.
       payload shape. Guarded by `LocalPlayerControllerTest`.
     - [x] Lock left-facing Laser Gun, Sword, and Ice Wave item direction/recoil
       parity against the AS3 item classes. Guarded by `LocalPlayerControllerTest`.
+    - [x] Lock Super Jump item crouch parity against `items.SuperJump`: using it
+      while `LocalCharacter.crouching` is true does not consume the item, alter
+      velocity, or emit an effect. Guarded by `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.

@@ -37,6 +37,7 @@ class LocalPlayerControllerTest {
 		testBumpingItemBlockGrantsConfiguredItem();
 		testRegularItemBlockDepletesAfterFirstUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
+		testSuperJumpItemDoesNothingWhileCrouching();
 		testTeleportItemMovesPlayerForwardAndConsumesItem();
 		testTeleportItemBlockedBySolidDestination();
 		testSpeedBurstBoostsMovementThenExpires();
@@ -569,6 +570,25 @@ class LocalPlayerControllerTest {
 		assertEquals(null, afterUse.itemId, "super jump consumes the held item");
 		assertBelow(afterUse.vy, beforeUse.vy - 20, "super jump applies the Flash upward impulse");
 		assertBelow(afterUse.y, beforeUse.y, "super jump moves the player upward on use");
+	}
+
+	private static function testSuperJumpItemDoesNothingWhileCrouching():Void {
+		var player = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, "5"));
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var beforeUse = player.debugState();
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var afterUse = player.debugState();
+
+		assertEquals(true, beforeUse.crouching, "low ceiling forces crouch before super jump item use");
+		assertEquals(5, beforeUse.itemId, "bumping low item block grants the super jump item");
+		assertEquals(5, afterUse.itemId, "crouched super jump item use keeps the held item");
+		assertClose(beforeUse.vy, afterUse.vy, "crouched super jump item use does not apply impulse");
+		assertEquals(null, afterUse.lastItemEffect, "crouched super jump item use emits no effect");
 	}
 
 	private static function testTeleportItemMovesPlayerForwardAndConsumesItem():Void {
