@@ -22,10 +22,10 @@ the boot screen so development and automated tests can jump straight to one:
 - `?screen=login`: the (stub) login page.
 - `?screen=harness`: the local gameplay harness; accepts the character query
   options (`hat`, `head`, `body`, `feet`, `primary`, `secondary`, `render`).
-- `?screen=campaign`: loads a real campaign level through the configured API
-  host/proxy, renders the decoded block layer, and places the character at the
-  first start block. Accepts `page` and `levelId` (or `level`) to choose a
-  listed campaign level.
+- `?screen=campaign&debug=campaign`: debug-only campaign harness. Loads a real
+  campaign level through the configured API host/proxy, renders the decoded block
+  layer, and places the character at the first start block. Accepts `page` and
+  `levelId` (or `level`) to choose a listed campaign level.
 - `?screen=symbol&symbol=<name>&scale=4&bg=FFFFFF`: renders one generated
   library symbol through the vector renderer for visual comparison work.
 

@@ -193,9 +193,10 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     and `GamePage` full shells and artifact/special-event behavior remain blocked
     on the level-entry and multiplayer race-sync tasks above.
   - Cutover sub-tasks (do after Sections A and B land):
-  - [ ] **C1 — Flip `GamePage` default to the real shell.** Gate
-    `CampaignTestScreen` behind a debug flag and update these notes to record that
-    the full `Course`/`GamePage` shells are unblocked.
+  - [x] **C1 — Flip `GamePage` default to the real shell.** `GamePage` already
+    mounts the real `Course` shell, and the old `CampaignTestScreen` route is now
+    debug-only (`?screen=campaign&debug=campaign` / `debug=1`) with screen-routing
+    coverage in `ScreenTest`.
   - [ ] **C2 — Port artifact / special-event behavior** onto the real shell from
     `flash/.../PlaceArtifact.as` and `SpecialEvent.as`, wiring the deferred
     `Countdown.beginRace` and `PrizePopup` live-command hooks. Tests:
