@@ -199,8 +199,12 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     coverage in `ScreenTest`.
   - [ ] **C2 — Port artifact / special-event behavior** onto the real shell from
     `flash/.../PlaceArtifact.as` and `SpecialEvent.as`, wiring the deferred
-    `Countdown.beginRace` and `PrizePopup` live-command hooks. Tests:
-    `SpecialEventTest` / `PlaceArtifactTest`.
+    `Countdown.beginRace` live-command hook. Tests: `SpecialEventTest` /
+    `PlaceArtifactTest`.
+    - [x] Wire the live prize command hooks. `GamePage` now mirrors Flash
+      `Game.setPrize`/`cancelPrize`/`winPrize`, stores the current prize, opens
+      the authored `PrizePopup`, and fades the active prize popup on page
+      teardown. Guarded by `QuitButtonTest`.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without

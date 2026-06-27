@@ -13,6 +13,7 @@ import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.LevelEntry;
+import pr2.gameplay.PrizePopup;
 import pr2.gameplay.QuitButton;
 import pr2.lobby.LobbySession;
 import pr2.net.LobbySocket;
@@ -43,6 +44,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingLocalInit:Null<LocalCharacterInit>;
 	private var pendingRemoteInits:Array<RemoteCharacterInit> = [];
 	private var pendingBeginRace:Bool = false;
+	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
 		super();
@@ -124,6 +126,10 @@ class GamePage extends Page implements GameCommandDelegate {
 			finishedPage.remove();
 			finishedPage = null;
 		}
+		prize = null;
+		if (PrizePopup.instance != null) {
+			PrizePopup.instance.startFadeOut();
+		}
 		if (quitButton != null) {
 			quitButton.remove();
 			quitButton = null;
@@ -163,9 +169,21 @@ class GamePage extends Page implements GameCommandDelegate {
 	public function award(args:Array<String>):Void {}
 	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {}
 	public function setLuxGain(amount:Int):Void {}
-	public function setPrize(prize:Dynamic):Void {}
-	public function cancelPrize(message:String):Void {}
-	public function winPrize(prize:Dynamic):Void {}
+	public function setPrize(prize:Dynamic):Void {
+		this.prize = prize;
+		showPrizePopup(prize, false);
+	}
+
+	public function cancelPrize(message:String):Void {
+		prize = null;
+		new PrizePopup("cancel", 0, "Prize Cancelled", message);
+	}
+
+	public function winPrize(prize:Dynamic):Void {
+		this.prize = prize;
+		showPrizePopup(prize, true);
+	}
+
 	public function cowboyMode():Void {}
 	public function happyHour():Void {}
 	public function setEggSeed(seed:Int):Void {}
@@ -175,6 +193,43 @@ class GamePage extends Page implements GameCommandDelegate {
 	public function startHatCountdown():Void {}
 	public function forceQuit():Void {
 		quitGame();
+	}
+
+	private function showPrizePopup(prize:Dynamic, finished:Bool):Void {
+		if (prize == null) {
+			return;
+		}
+		new PrizePopup(
+			stringField(prize, "type"),
+			intField(prize, "id"),
+			stringField(prize, "name"),
+			stringField(prize, "desc"),
+			boolField(prize, "universal"),
+			finished
+		);
+	}
+
+	private static function stringField(value:Dynamic, field:String):String {
+		var raw = Reflect.field(value, field);
+		return raw == null ? "" : Std.string(raw);
+	}
+
+	private static function intField(value:Dynamic, field:String):Int {
+		var raw = Reflect.field(value, field);
+		if (raw == null) {
+			return 0;
+		}
+		var parsed = Std.parseInt(Std.string(raw));
+		return parsed == null ? 0 : parsed;
+	}
+
+	private static function boolField(value:Dynamic, field:String):Bool {
+		var raw = Reflect.field(value, field);
+		if (raw == true) {
+			return true;
+		}
+		var text = raw == null ? "" : Std.string(raw).toLowerCase();
+		return text == "1" || text == "true";
 	}
 
 	private function quitGame():Void {

@@ -22,6 +22,7 @@ class QuitButtonTest {
 		testSpaceQuitsWhenDone();
 		testGlowControls();
 		testGamePageQuitFlow();
+		testGamePagePrizeCommands();
 		closeAll();
 		trace('QuitButtonTest passed $assertions assertions');
 	}
@@ -90,6 +91,42 @@ class QuitButtonTest {
 		assertEquals(true, Std.isOfType(holder.getCurrentPage(), LobbyPage), "return restores the lobby page");
 
 		holder.getCurrentPage().remove();
+		closeAll();
+	}
+
+	private static function testGamePagePrizeCommands():Void {
+		var game = new GamePage(12345, 7);
+
+		game.setPrize({
+			type: "hat",
+			id: 5,
+			name: "Propeller Hat",
+			desc: "Spins when you jump",
+			universal: true
+		});
+		var announced = PrizePopup.instance;
+		assertEquals("hat", announced.targetName, "setPrize opens a hat prize popup");
+		assertEquals("Anyone who finishes this race wins a:", announced.bodyText, "setPrize uses unfinished universal wording");
+		assertEquals("Propeller Hat", game.prize.name, "setPrize stores current prize");
+
+		game.winPrize({
+			type: "feet",
+			id: 2,
+			name: "Boots",
+			desc: "",
+			universal: false
+		});
+		assertEquals(false, Popup.getOpen().indexOf(announced) >= 0, "winPrize replaces the previous prize popup");
+		assertEquals("foot", PrizePopup.instance.targetName, "winPrize opens the won prize popup");
+		assertEquals("You won a pair of:", PrizePopup.instance.bodyText, "winPrize uses finished wording");
+
+		game.cancelPrize("Bob");
+		assertEquals(null, game.prize, "cancelPrize clears current prize");
+		assertEquals("exp", PrizePopup.instance.targetName, "cancelPrize opens the cancel popup");
+		assertEquals("Bob cancelled the prize for finishing this race.", PrizePopup.instance.detailText, "cancelPrize forwards the cancelling user");
+
+		game.remove();
+		assertEquals(true, PrizePopup.instance.fadeOutStarted, "GamePage removal fades out the active prize popup");
 		closeAll();
 	}
 
