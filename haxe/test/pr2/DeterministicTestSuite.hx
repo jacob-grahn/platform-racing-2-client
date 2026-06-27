@@ -6,6 +6,7 @@ import pr2.character.CharacterAtlasTest;
 import pr2.character.CharacterBaseTest;
 import pr2.character.CharacterDisplayTest;
 import pr2.character.CharacterStateTest;
+import pr2.character.LocalCharacterEmitTest;
 import pr2.character.LocalCharacterTest;
 import pr2.crypto.PR2EncryptorTest;
 import pr2.effects.PixelEffect1Test;
@@ -75,6 +76,7 @@ class DeterministicTestSuite {
 		CharacterDisplayTest.main();
 		CharacterStateTest.main();
 		LocalCharacterTest.main();
+		LocalCharacterEmitTest.main();
 		PR2EncryptorTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();

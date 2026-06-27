@@ -4,6 +4,7 @@ import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.level.FixtureLevel;
+import pr2.net.LobbySocket;
 
 /**
 	`LocalCharacter` physics bridge for B2.
@@ -22,6 +23,15 @@ class LocalCharacter extends Character {
 	public var characterRotation(get, never):Int;
 	public var lastSafeX(get, never):Float;
 	public var lastSafeY(get, never):Float;
+	public var networkPlayerCount:Int = 1;
+
+	private var lastNetScaleX:Null<Float>;
+	private var exactX:Int = 0;
+	private var exactY:Int = 0;
+	private var lastNetState:Null<String>;
+	private var lastNetParent:Null<String>;
+	private var lastNetItem:Int = 0;
+	private var exactPosNextUpdate:Bool = false;
 
 	public function new(level:FixtureLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super(hatId, headId, bodyId, feetId);
@@ -33,6 +43,124 @@ class LocalCharacter extends Character {
 	public function step(input:LocalPlayerInput):Void {
 		controller.step(input);
 		syncFromController();
+	}
+
+	public function initNetworkEmission():Void {
+		framesSinceUpdate = 0;
+		exactX = 0;
+		exactY = 0;
+		exactPosNextUpdate = true;
+		LobbySocket.write("p`0`0");
+	}
+
+	public function emitNetworkUpdate(?parentLayer:Null<String>):Void {
+		x = Math.round(x);
+		y = Math.round(y);
+		updateSegs(characterRotation);
+		framesSinceUpdate++;
+		if (framesSinceUpdate >= updateInterval) {
+			if (playersInPosUpdateRange() || framesSinceUpdate >= 16) {
+				framesSinceUpdate = 0;
+				var curX = Math.round(x);
+				var curY = Math.round(y);
+				var deltaX = curX - exactX;
+				var deltaY = curY - exactY;
+				exactX = curX;
+				exactY = curY;
+				if (deltaX != 0 || deltaY != 0) {
+					LobbySocket.write('p`$deltaX`$deltaY');
+				}
+				if (exactPosNextUpdate) {
+					exactPosNextUpdate = false;
+					LobbySocket.write('exact_pos`$curX`$curY');
+				}
+			}
+			emitChangedVars(parentLayer);
+		}
+	}
+
+	public function forceExactPositionOnNextUpdate():Void {
+		exactPosNextUpdate = true;
+	}
+
+	public function setNetworkRotation(rotation:Int):Void {
+		this.rotation = Math.round(rotation);
+		LobbySocket.write("set_var`rotMod`" + this.rotation);
+	}
+
+	override public function rotate(direction:String):Void {
+		super.rotate(direction);
+		// Safe-coordinate rotation is owned by the delegated controller during
+		// live physics; keep the network side-effect here for the multiplayer port.
+		LobbySocket.write("set_var`rot`" + -controller.courseRotation);
+		exactPosNextUpdate = true;
+	}
+
+	public function emitSquash(remoteTempId:Int):Void {
+		LobbySocket.write('squash`$remoteTempId`' + Math.round(x) + "`" + Math.round(y));
+	}
+
+	public function emitSting(remoteTempId:Int):Void {
+		LobbySocket.write('sting`$remoteTempId`' + Math.round(x) + "`" + Math.round(y));
+	}
+
+	public function emitHeart(remoteTempId:Int):Void {
+		LobbySocket.write('heart`$remoteTempId`' + Math.round(x) + "`" + Math.round(y));
+	}
+
+	public function emitLooseHat(hatId:Int, hatColor:Int = 0, hatColor2:Int = -1):Void {
+		LobbySocket.write('loose_hat`$hatId`$hatColor`$hatColor2`' + Math.round(x) + "`" + Math.round(y));
+	}
+
+	public function emitHatToStart(hatId:Int):Void {
+		LobbySocket.write('hat_to_start`$hatId');
+	}
+
+	public function emitGrabEgg(eggId:Int):Void {
+		LobbySocket.write('grab_egg`$eggId');
+	}
+
+	public function emitObjectiveReached(finishId:Int, finishX:Int, finishY:Int):Void {
+		LobbySocket.write('objective_reached`$finishId`$finishX`$finishY');
+	}
+
+	public function emitFinishRace(finishId:Int, finishX:Int, finishY:Int):Void {
+		LobbySocket.write('finish_race`$finishId`$finishX`$finishY');
+	}
+
+	public function emitQuitRace():Void {
+		LobbySocket.write("quit_race`");
+	}
+
+	public function emitFinishDrawing(levelHash:String, gameMode:String, finishBlockPositions:String, finishBlockCount:Int, cowboyChance:Int,
+			badHats:Array<Int>):Void {
+		LobbySocket.write('finish_drawing`$levelHash`$gameMode`$finishBlockPositions`$finishBlockCount`$cowboyChance`' + badHats.join(","));
+	}
+
+	public function emitCheckHatCountdown():Void {
+		LobbySocket.write("check_hat_countdown`");
+	}
+
+	public function beginSparklesNetwork():Void {
+		LobbySocket.write("set_var`sparkle`1");
+	}
+
+	public function endSparklesNetwork():Void {
+		LobbySocket.write("set_var`sparkle`0");
+	}
+
+	public function beginJetNetwork():Void {
+		LobbySocket.write("set_var`jet`1");
+	}
+
+	public function endJetNetwork():Void {
+		LobbySocket.write("set_var`jet`0");
+	}
+
+	override public function beginRemove():Void {
+		changeState("freeze");
+		LobbySocket.write("set_var`beginRemove`1");
+		super.beginRemove();
 	}
 
 	public function setGravity(multiplier:Float):Void {
@@ -74,6 +202,29 @@ class LocalCharacter extends Character {
 		changeState(state.animation);
 		display.scaleX = 0.9 * controller.facingScaleX;
 		display.scaleY = 0.9;
+	}
+
+	private function emitChangedVars(?parentLayer:Null<String>):Void {
+		if (lastNetScaleX == null || lastNetScaleX != display.scaleX) {
+			lastNetScaleX = display.scaleX;
+			LobbySocket.write("set_var`scaleX`" + display.scaleX);
+		}
+		if (lastNetState != state) {
+			lastNetState = state;
+			LobbySocket.write("set_var`state`" + state);
+		}
+		if (parentLayer != null && lastNetParent != parentLayer) {
+			lastNetParent = parentLayer;
+			LobbySocket.write("set_var`parent`" + parentLayer);
+		}
+		if (lastNetItem != item) {
+			lastNetItem = item;
+			LobbySocket.write("set_var`item`" + item);
+		}
+	}
+
+	private function playersInPosUpdateRange():Bool {
+		return networkPlayerCount > 1;
 	}
 
 	private function get_grounded():Bool {

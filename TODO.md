@@ -105,7 +105,7 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       `Course` now mounts the `LocalCharacter` bridge directly in the character
       layer and keeps the existing debug-state/HUD sync surface. Guarded by
       `GameShellMountTest`.
-  - [ ] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
+  - [x] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
     `exact_pos\`x\`y`, and `set_var\`<field>\`<value>` for each tracked field
     (scaleX, state, parent, item, rotMod, rot, sparkle, jet, beginRemove), gated by
     `updateInterval`/`framesSinceUpdate` (fallback 16). Emit event messages
