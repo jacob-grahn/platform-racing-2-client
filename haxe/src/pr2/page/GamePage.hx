@@ -35,6 +35,7 @@ import pr2.level.ServerLevelDecoder;
 	The fuller loading/access/error state machine lands with the level-entry task
 	(A4); this is the baseline load + mount + quit/finish lifecycle.
 **/
+@:allow(pr2.gameplay.QuitButtonTest)
 class GamePage extends Page implements GameCommandDelegate {
 	public final levelId:Int;
 	public final version:Int;
@@ -49,6 +50,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingRemoteInits:Array<RemoteCharacterInit> = [];
 	private var pendingBeginRace:Bool = false;
 	private var specialEvent:Null<SpecialEvent>;
+	private var hatCountdownTimer:Null<haxe.Timer>;
 	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
@@ -137,6 +139,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		detachSpecialEventListeners();
 		specialEvent = null;
+		stopHatCountdown();
 		if (finishedPage != null) {
 			finishedPage.remove();
 			finishedPage = null;
@@ -249,9 +252,29 @@ class GamePage extends Page implements GameCommandDelegate {
 	public function addEggs(count:Int):Void {}
 	public function superBooster(tempId:Int):Void {}
 	public function maybeReturnHatToStart(hatId:Int):Void {}
-	public function startHatCountdown():Void {}
+	public function startHatCountdown():Void {
+		stopHatCountdown();
+		hatCountdownTimer = new haxe.Timer(1000);
+		hatCountdownTimer.run = onHatCountdownTick;
+	}
+
+	public function cancelHatCountdown():Void {
+		stopHatCountdown();
+	}
+
 	public function forceQuit():Void {
 		quitGame();
+	}
+
+	private function onHatCountdownTick():Void {
+		LobbySocket.write("check_hat_countdown`");
+	}
+
+	private function stopHatCountdown():Void {
+		if (hatCountdownTimer != null) {
+			hatCountdownTimer.stop();
+			hatCountdownTimer = null;
+		}
 	}
 
 	private function showPrizePopup(prize:Dynamic, finished:Bool):Void {

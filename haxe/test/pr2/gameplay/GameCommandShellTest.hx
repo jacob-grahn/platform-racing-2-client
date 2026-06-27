@@ -94,6 +94,7 @@ class GameCommandShellTest {
 		send(cm, "cancelHatCountdown`");
 		assertEquals(false, shell.hatCountdownActive, "countdown cleared by cancel");
 		assertEquals(false, cm.hasCommand("cancelHatCountdown"), "cancel command self-clears");
+		assertEquals(1, rec.hatCountdownCancels, "cancelHatCountdown routed");
 
 		send(cm, "forceQuit`");
 		assertEquals(1, rec.forceQuitCount, "forceQuit routed");
@@ -147,6 +148,7 @@ private class RecordingDelegate implements GameCommandDelegate {
 	public var boostedTempId:Int;
 	public var returnHatId:Int;
 	public var hatCountdownStarts:Int = 0;
+	public var hatCountdownCancels:Int = 0;
 	public var forceQuitCount:Int = 0;
 
 	public function new() {}
@@ -217,6 +219,10 @@ private class RecordingDelegate implements GameCommandDelegate {
 
 	public function startHatCountdown():Void {
 		hatCountdownStarts++;
+	}
+
+	public function cancelHatCountdown():Void {
+		hatCountdownCancels++;
 	}
 
 	public function forceQuit():Void {

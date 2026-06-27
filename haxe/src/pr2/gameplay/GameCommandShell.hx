@@ -48,6 +48,7 @@ interface GameCommandDelegate {
 	function superBooster(tempId:Int):Void;
 	function maybeReturnHatToStart(hatId:Int):Void;
 	function startHatCountdown():Void;
+	function cancelHatCountdown():Void;
 	function forceQuit():Void;
 }
 
@@ -202,6 +203,7 @@ class GameCommandShell {
 
 	private function onCancelHatCountdown(_:Array<String>):Void {
 		cancelHatCountdown();
+		delegate.cancelHatCountdown();
 	}
 
 	private function cancelHatCountdown():Void {

@@ -132,5 +132,6 @@ private class CourseDelegate implements GameCommandDelegate {
 	public function superBooster(tempId:Int):Void {}
 	public function maybeReturnHatToStart(hatId:Int):Void {}
 	public function startHatCountdown():Void {}
+	public function cancelHatCountdown():Void {}
 	public function forceQuit():Void {}
 }

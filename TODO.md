@@ -216,6 +216,11 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       scheduled set time. Guarded by `PlaceArtifactTest`.
     - [x] Complete `PlaceArtifact` confirmation, scheduled override, and
       `place_artifact.php` upload response flow.
+    - [x] Wire the live artifact-hat countdown command. `startHatCountdown`
+      now starts Flash's one-second `check_hat_countdown` emission,
+      `cancelHatCountdown` stops it through the game command shell, and game-page
+      teardown clears the timer. Guarded by `GameCommandShellTest` and
+      `QuitButtonTest`.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without

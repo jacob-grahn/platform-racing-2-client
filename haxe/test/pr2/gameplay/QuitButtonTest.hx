@@ -23,6 +23,7 @@ class QuitButtonTest {
 		testGlowControls();
 		testGamePageQuitFlow();
 		testGamePagePrizeCommands();
+		testGamePageHatCountdown();
 		closeAll();
 		trace('QuitButtonTest passed $assertions assertions');
 	}
@@ -127,6 +128,29 @@ class QuitButtonTest {
 
 		game.remove();
 		assertEquals(true, PrizePopup.instance.fadeOutStarted, "GamePage removal fades out the active prize popup");
+		closeAll();
+	}
+
+	private static function testGamePageHatCountdown():Void {
+		LobbySocket.resetSent();
+		var game = new GamePage(12345, 7);
+		game.startHatCountdown();
+		assertEquals(true, game.hatCountdownTimer != null, "startHatCountdown arms the timer");
+
+		game.onHatCountdownTick();
+		assertEquals("check_hat_countdown`", LobbySocket.lastSent(), "hat countdown emits the Flash command");
+
+		var firstTimer = game.hatCountdownTimer;
+		game.startHatCountdown();
+		assertEquals(true, game.hatCountdownTimer != null, "restart keeps a timer armed");
+		assertEquals(true, game.hatCountdownTimer != firstTimer, "restart replaces the old timer");
+
+		game.cancelHatCountdown();
+		assertEquals(null, game.hatCountdownTimer, "cancelHatCountdown clears the timer");
+
+		game.startHatCountdown();
+		game.remove();
+		assertEquals(null, game.hatCountdownTimer, "page removal clears the timer");
 		closeAll();
 	}
 
