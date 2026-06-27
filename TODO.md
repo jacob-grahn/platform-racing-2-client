@@ -122,6 +122,15 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     queue ops, `processBlockTouches` remote activation, and command teardown on
     remove. Test: `RemoteCharacterConsumeTest` — feed recorded command frames, step
     `go()` deterministically, assert interpolated convergence and teardown.
+    - [x] Port the command consume/interpolation core. `RemoteCharacter` now
+      registers tempID-scoped position/var/exact-position/hat/heart/sting
+      commands, applies Flash's queued catch-up stepping and exact-position latch,
+      updates its minimap dot, exposes remote block-touch probes through a shell
+      hook, and unregisters commands plus removes the dot on teardown. Guarded by
+      `RemoteCharacterConsumeTest`.
+    - [ ] Wire remote block-touch probes to the real map block activation classes
+      (`ArrowBlock`, `VanishBlock`, `WaterBlock`) once remotes are mounted in the
+      live `Course`.
   - [ ] **B5 — Wire create/destroy into the Game shell.**
     `createLocalCharacter`/`createRemoteCharacter` instantiate into the character
     layer from A3/A5; `beginRemove`/`quit_race`/`forceQuit` tear down. Test:
