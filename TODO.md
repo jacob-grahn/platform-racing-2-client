@@ -113,7 +113,7 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     `objective_reached`, `finish_race`, `quit_race`, `finish_drawing`,
     `check_hat_countdown`) via `LobbySocket.write`. Test: `LocalCharacterEmitTest`
     — drive scripted frames, assert exact emitted frame strings and cadence.
-  - [ ] **B4 — Port `RemoteCharacter` consume + interpolation.** New
+  - [x] **B4 — Port `RemoteCharacter` consume + interpolation.** New
     `pr2/character/RemoteCharacter.hx` from `flash/character/RemoteCharacter.as`:
     register per-tempID commands (`p<id>`, `var<id>`, `exactPos<id>`,
     `setHats<id>`, `heart<id>`, `sting<id>`), `updateQueue` push, ENTER_FRAME
