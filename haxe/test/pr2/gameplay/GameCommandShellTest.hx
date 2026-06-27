@@ -40,6 +40,9 @@ class GameCommandShellTest {
 		assertClose(14, rec.remoteInit.feetColor2, "remote feetColor2 parsed");
 		assertEquals("mod", rec.remoteInit.group, "remote group parsed");
 
+		send(cm, "beginRace`");
+		assertEquals(1, rec.beginRaceCount, "beginRace routed");
+
 		send(cm, "award`coin`50");
 		assertEquals("coin", rec.awardArgs[0], "award arg0 routed verbatim");
 		assertEquals("50", rec.awardArgs[1], "award arg1 routed verbatim");
@@ -98,6 +101,7 @@ class GameCommandShellTest {
 		// Teardown drops every command (a later frame must not route).
 		shell.remove();
 		assertEquals(false, cm.hasCommand("createLocalCharacter"), "createLocalCharacter cleared on remove");
+		assertEquals(false, cm.hasCommand("beginRace"), "beginRace cleared on remove");
 		assertEquals(false, cm.hasCommand("forceQuit"), "forceQuit cleared on remove");
 		assertEquals(false, send(cm, "award`coin`50"), "no command routes after remove");
 
@@ -127,6 +131,7 @@ class GameCommandShellTest {
 private class RecordingDelegate implements GameCommandDelegate {
 	public var localInit:LocalCharacterInit;
 	public var remoteInit:RemoteCharacterInit;
+	public var beginRaceCount:Int = 0;
 	public var awardArgs:Array<String> = [];
 	public var expOld:Int;
 	public var expNew:Int;
@@ -152,6 +157,10 @@ private class RecordingDelegate implements GameCommandDelegate {
 
 	public function createLocalCharacter(init:LocalCharacterInit):Void {
 		localInit = init;
+	}
+
+	public function beginRace():Void {
+		beginRaceCount++;
 	}
 
 	public function award(args:Array<String>):Void {

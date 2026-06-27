@@ -171,10 +171,12 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
   - [x] Port the 3-2-1 race countdown. `gameplay/Countdown` drives the authored
     `CountdownGraphic` timeline, attaching its frame scripts (count at 9/24/39,
     finish at 54, self-remove at 62), playing `ReadySound`/`GoSound` scaled by
-    the saved sound level, and invoking an injected `onFinish` for the
-    gameplay-start hook `Course.beginRace`/`onCountdownFinish` ran. Wiring it to
-    the live `beginRace` command is deferred to the multiplayer race-sync task.
-    Guarded by `CountdownTest`.
+    the saved sound level, and invoking the gameplay-start hook from the live
+    `beginRace` command: `GameCommandShell` routes `beginRace`, `GamePage`
+    forwards or defers it until the `Course` exists, and `Course.beginRace`
+    mounts the countdown, emits the starting `exact_pos`, and initializes local
+    network emission when the countdown finishes. Guarded by `CountdownTest`,
+    `GameCommandShellTest`, and `CharacterLifecycleTest`.
   - [x] Port the prize announcement. `gameplay/PrizePopup` (with the
     `com.jiggmin.data.EpicFlash` port) renders `PrizePopupGraphic`: target clip
     selection by type (`hat`/`head`/`body`/`feet`/`exp`/`cancel`), the

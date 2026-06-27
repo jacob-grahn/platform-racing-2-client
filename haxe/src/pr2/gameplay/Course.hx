@@ -25,6 +25,7 @@ import pr2.level.ServerLevelFixtureAdapter;
 import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
 import pr2.level.ServerLevelRenderer;
 import pr2.net.CommandHandler;
+import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 
 /**
@@ -83,6 +84,8 @@ class Course extends Sprite {
 	public var musicSelection(default, null):MusicSelection;
 	public var raceChat(default, null):RaceChat;
 	public var drawingInfo(default, null):DrawingInfo;
+	public var countdown(default, null):Countdown;
+	public var raceStarted(default, null):Bool = false;
 
 	private var playerDot:MiniMapDot;
 	private var drawingInfoFinished:Bool = false;
@@ -280,6 +283,26 @@ class Course extends Sprite {
 		var ids = [for (id in remoteCharacters.keys()) id];
 		for (id in ids) {
 			removeRemoteCharacter(id);
+		}
+	}
+
+	public function beginRace():Void {
+		if (countdown != null) {
+			countdown.remove();
+		}
+		raceStarted = false;
+		countdown = new Countdown(onCountdownFinish);
+		addChild(countdown);
+		if (localCharacter != null) {
+			var startPos = localCharacter.getPos();
+			LobbySocket.write('exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}');
+		}
+	}
+
+	private function onCountdownFinish():Void {
+		raceStarted = true;
+		if (localCharacter != null) {
+			localCharacter.initNetworkEmission();
 		}
 	}
 
@@ -490,6 +513,10 @@ class Course extends Sprite {
 		if (drawingInfo != null) {
 			drawingInfo.remove();
 			drawingInfo = null;
+		}
+		if (countdown != null) {
+			countdown.remove();
+			countdown = null;
 		}
 		removeAllRemoteCharacters();
 		if (levelRenderer != null) {

@@ -34,6 +34,7 @@ typedef LocalCharacterInit = {
 interface GameCommandDelegate {
 	function createRemoteCharacter(init:RemoteCharacterInit):Void;
 	function createLocalCharacter(init:LocalCharacterInit):Void;
+	function beginRace():Void;
 	function award(args:Array<String>):Void;
 	function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void;
 	function setLuxGain(amount:Int):Void;
@@ -75,6 +76,7 @@ class GameCommandShell {
 	public function install():Void {
 		cm.defineCommand("createRemoteCharacter", onCreateRemoteCharacter);
 		cm.defineCommand("createLocalCharacter", onCreateLocalCharacter);
+		cm.defineCommand("beginRace", onBeginRace);
 		cm.defineCommand("award", onAward);
 		cm.defineCommand("setExpGain", onSetExpGain);
 		cm.defineCommand("setLuxGain", onSetLuxGain);
@@ -95,6 +97,7 @@ class GameCommandShell {
 	public function remove():Void {
 		cm.defineCommand("createRemoteCharacter", null);
 		cm.defineCommand("createLocalCharacter", null);
+		cm.defineCommand("beginRace", null);
 		cm.defineCommand("award", null);
 		cm.defineCommand("setExpGain", null);
 		cm.defineCommand("setLuxGain", null);
@@ -134,6 +137,10 @@ class GameCommandShell {
 			hatColor2: toFloat(a[12]), headColor2: toFloat(a[13]), bodyColor2: toFloat(a[14]), feetColor2: toFloat(a[15]),
 			group: arg(a, 16)
 		});
+	}
+
+	private function onBeginRace(_:Array<String>):Void {
+		delegate.beginRace();
 	}
 
 	private function onAward(a:Array<String>):Void {

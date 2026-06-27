@@ -7,6 +7,7 @@ import pr2.gameplay.GameCommandShell.GameCommandDelegate;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.net.CommandHandler;
+import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 
 class CharacterLifecycleTest {
@@ -33,6 +34,17 @@ class CharacterLifecycleTest {
 		assertEquals(80.0, course.localCharacter.debugState().speedStat, "local speed stat applied");
 		assertEquals(70.0, course.localCharacter.debugState().accelerationStat, "local accel stat applied");
 		assertEquals(60.0, course.localCharacter.debugState().jumpStat, "local jump stat applied");
+
+		LobbySocket.resetSent();
+		handler.dispatch("beginRace", []);
+		assertTrue(course.countdown != null, "beginRace mounts countdown");
+		assertEquals(false, course.raceStarted, "race waits for countdown finish");
+		assertEquals("exact_pos`135`120", LobbySocket.sentCommands[0], "beginRace emits starting exact position");
+		while (course.countdown != null && course.countdown.parent != null) {
+			course.countdown.advance();
+		}
+		assertEquals(true, course.raceStarted, "countdown finish starts race");
+		assertEquals("p`0`0", LobbySocket.lastSent(), "countdown finish initializes local network emission");
 
 		handler.dispatch("createRemoteCharacter", ["9", "Rival", "111", "112", "113", "114", "6", "7", "8", "9", "211", "212", "213", "214", "mod"]);
 		var remote = course.getRemoteCharacter(9);
@@ -106,6 +118,7 @@ private class CourseDelegate implements GameCommandDelegate {
 
 	public function createRemoteCharacter(init:RemoteCharacterInit):Void course.createRemoteCharacter(init);
 	public function createLocalCharacter(init:LocalCharacterInit):Void course.createLocalCharacter(init);
+	public function beginRace():Void course.beginRace();
 	public function award(args:Array<String>):Void {}
 	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {}
 	public function setLuxGain(amount:Int):Void {}

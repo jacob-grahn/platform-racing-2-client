@@ -42,6 +42,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var playerDone:Bool = false;
 	private var pendingLocalInit:Null<LocalCharacterInit>;
 	private var pendingRemoteInits:Array<RemoteCharacterInit> = [];
+	private var pendingBeginRace:Bool = false;
 
 	public function new(levelId:Int, version:Int) {
 		super();
@@ -98,6 +99,10 @@ class GamePage extends Page implements GameCommandDelegate {
 				course.createRemoteCharacter(init);
 			}
 			pendingRemoteInits.resize(0);
+			if (pendingBeginRace) {
+				pendingBeginRace = false;
+				course.beginRace();
+			}
 			// Below the quit button / finish overlay, above nothing else yet.
 			addChildAt(course, 0);
 			clearLoadingText();
@@ -145,6 +150,14 @@ class GamePage extends Page implements GameCommandDelegate {
 			return;
 		}
 		course.createLocalCharacter(init);
+	}
+
+	public function beginRace():Void {
+		if (course == null) {
+			pendingBeginRace = true;
+			return;
+		}
+		course.beginRace();
 	}
 
 	public function award(args:Array<String>):Void {}
