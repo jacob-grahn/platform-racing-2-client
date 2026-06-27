@@ -2,9 +2,12 @@ package pr2.level;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.text.TextField;
 import pr2.level.ServerLevel.DecodedArtLayer;
+import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel.DecodedDrawAction;
+import pr2.level.ServerLevel.DecodedTextObject;
 
 class ServerLevelRendererTest {
 	private static var assertions:Int = 0;
@@ -16,6 +19,7 @@ class ServerLevelRendererTest {
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
 		testIncrementalBlockDrawing();
+		testIncrementalArtDrawing();
 		testArrowAnimation();
 		testRemoteVisibleBlockActivation();
 		testMineExplosion();
@@ -114,6 +118,32 @@ class ServerLevelRendererTest {
 		assertEquals(5, renderer.drawnBlockCount(), "incremental renderer draws final partial batch");
 		assertEquals(5, blockLayer.numChildren, "incremental renderer eventually attaches every block");
 		assertEquals(true, renderer.isBlockDrawingComplete(), "incremental renderer reports completion");
+	}
+
+	private static function testIncrementalArtDrawing():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
+		var art = new DecodedArtLayer([
+			new DecodedDrawAction("c", [0xFF0000]),
+			new DecodedDrawAction("t", [3]),
+			new DecodedDrawAction("d", [0, 0, 10, 10])
+		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello|world", 15, 25, 0x00FF00)], 1);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 4);
+		var artLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		assertEquals(0, renderer.drawnArtItemCount(), "incremental art starts before drawing art");
+		assertEquals(0, artLayer.numChildren, "incremental art layer starts empty");
+		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for incremental art");
+
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(4, renderer.drawnArtItemCount(), "first art batch counts strokes and skipped stamps");
+		assertEquals(0, artLayer.numChildren, "first art batch has not reached text object");
+		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for remaining art item");
+
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(5, renderer.drawnArtItemCount(), "second art batch draws final text item");
+		assertEquals(1, artLayer.numChildren, "second art batch attaches text object");
+		assertEquals(true, renderer.isDrawingComplete(), "renderer completes after blocks and art");
+		var field = Std.downcast(artLayer.getChildAt(0), TextField);
+		assertEquals("hello,world", field.text, "incremental text uses server text parsing");
 	}
 
 	private static function testBlockAssetMapping():Void {

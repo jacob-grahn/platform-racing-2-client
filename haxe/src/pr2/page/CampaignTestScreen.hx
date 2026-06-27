@@ -256,9 +256,10 @@ class CampaignTestScreen extends Sprite {
 		if (course == null || course.levelRenderer == null) {
 			return;
 		}
-		if (!course.levelRenderer.isBlockDrawingComplete()) {
+		if (!course.levelRenderer.isDrawingComplete()) {
 			#if js
-			Browser.document.body.setAttribute("data-pr2-debug-state", 'phase=drawing;blocks=${course.levelRenderer.drawnBlockCount()}');
+			Browser.document.body.setAttribute("data-pr2-debug-state",
+				'phase=drawing;blocks=${course.levelRenderer.drawnBlockCount()};art=${course.levelRenderer.drawnArtItemCount()}');
 			#end
 		}
 	}

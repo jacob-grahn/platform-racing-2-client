@@ -242,8 +242,12 @@ is scoped to item behavior below.
     campaign/game renderer now attaches blocks in frame batches and holds player
     stepping in a `phase=drawing` state until every block is present, instead of
     synchronously drawing the full map. Guarded by `ServerLevelRendererTest`.
-  - [ ] Port incremental drawing for authored art lines/objects/text and wire the
-    real `finish_drawing` readiness flow around all background layers.
+  - [x] Port incremental drawing for authored art lines/objects/text. The
+    server-level renderer now batches decoded stroke actions, stamp objects, and
+    text objects alongside incremental blocks, and `Course` waits for complete
+    map/art drawing before stepping gameplay. Guarded by `ServerLevelRendererTest`.
+  - [ ] Wire the real `finish_drawing` readiness flow around all background
+    layers.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

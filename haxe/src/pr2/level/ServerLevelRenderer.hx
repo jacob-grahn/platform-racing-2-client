@@ -41,7 +41,11 @@ class ServerLevelRenderer extends Sprite {
 	private final blockDisplays:Map<String, Sprite> = new Map();
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
+	private final artDrawCursors:Array<ArtDrawCursor> = [];
 	private var nextBlockToDraw:Int = 0;
+	private var nextArtLayerToDraw:Int = 0;
+	private var drawnArtItems:Int = 0;
+	private var totalArtItems:Int = 0;
 	private var incrementalBlocks:Bool = false;
 	private var blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME;
 
@@ -72,14 +76,25 @@ class ServerLevelRenderer extends Sprite {
 		drawBlocks();
 		drawArtLayer(3);
 		drawArtLayer(4);
+		if (incrementalBlocks && totalArtItems > 0) {
+			addEventListener(Event.ENTER_FRAME, drawArtBatch);
+		}
 	}
 
 	public function isBlockDrawingComplete():Bool {
 		return nextBlockToDraw >= level.blocks.length;
 	}
 
+	public function isDrawingComplete():Bool {
+		return isBlockDrawingComplete() && drawnArtItems >= totalArtItems;
+	}
+
 	public function drawnBlockCount():Int {
 		return nextBlockToDraw;
+	}
+
+	public function drawnArtItemCount():Int {
+		return drawnArtItems;
 	}
 
 	public function worldToScreen(x:Float, y:Float):Point {
@@ -290,6 +305,13 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
+	private function drawArtBatch(event:Event):Void {
+		drawNextArtItems(blocksPerFrame);
+		if (drawnArtItems >= totalArtItems) {
+			removeEventListener(Event.ENTER_FRAME, drawArtBatch);
+		}
+	}
+
 	private function onWaterRippleFrame(event:Event):Void {
 		for (key in [for (k in waterRippleFrames.keys()) k]) {
 			var display = blockDisplays.get(key);
@@ -324,6 +346,7 @@ class ServerLevelRenderer extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
+		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
 		removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
 		waterRippleFrames.clear();
 		disposeAnimatedChildren(this);
@@ -391,10 +414,35 @@ class ServerLevelRenderer extends Sprite {
 		container.x = parallaxOffset(offsetX, layer.scale);
 		container.y = parallaxOffset(offsetY, layer.scale);
 		artLayerContainers[index] = container;
-		drawLayerStrokes(container, layer.drawActions);
-		drawLayerObjects(container, layer.objects, layer.scale);
-		drawLayerTexts(container, layer.texts, layer.scale);
+		if (incrementalBlocks) {
+			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
+			artDrawCursors[index] = new ArtDrawCursor(container, layer);
+		} else {
+			drawLayerStrokes(container, layer.drawActions);
+			drawLayerObjects(container, layer.objects, layer.scale);
+			drawLayerTexts(container, layer.texts, layer.scale);
+		}
 		addChild(container);
+	}
+
+	private function drawNextArtItems(limit:Int):Void {
+		var remaining = limit;
+		while (remaining > 0 && drawnArtItems < totalArtItems) {
+			while (nextArtLayerToDraw < artDrawCursors.length && artDrawCursors[nextArtLayerToDraw] == null) {
+				nextArtLayerToDraw++;
+			}
+			if (nextArtLayerToDraw >= artDrawCursors.length) {
+				return;
+			}
+			var cursor = artDrawCursors[nextArtLayerToDraw];
+			if (cursor.drawNext()) {
+				drawnArtItems++;
+				remaining--;
+			}
+			if (cursor.isComplete()) {
+				nextArtLayerToDraw++;
+			}
+		}
 	}
 
 	private function drawLayerStrokes(container:Sprite, actions:Array<DecodedDrawAction>):Void {
@@ -405,19 +453,31 @@ class ServerLevelRenderer extends Sprite {
 		container.graphics.lineStyle(size, color);
 
 		for (action in actions) {
-			switch (action.kind) {
-				case "c":
-					color = Std.int(action.values[0]);
-					container.graphics.lineStyle(size, color);
-				case "t":
-					size = action.values[0];
-					container.graphics.lineStyle(size, color);
-				case "m":
-					mode = action.text;
-				case "d":
-					if (mode == "erase" || action.values.length < 2) {
-						continue;
-					}
+			var state = drawStrokeAction(container, color, size, mode, action);
+			color = state.color;
+			size = state.size;
+			mode = state.mode;
+			if (action.kind == "d" && mode != "erase" && action.values.length >= 2) {
+				drawing = true;
+			}
+		}
+		if (!drawing) {
+			container.graphics.clear();
+		}
+	}
+
+	public static function drawStrokeAction(container:Sprite, color:Int, size:Float, mode:String, action:DecodedDrawAction):ArtStrokeState {
+		switch (action.kind) {
+			case "c":
+				color = Std.int(action.values[0]);
+				container.graphics.lineStyle(size, color);
+			case "t":
+				size = action.values[0];
+				container.graphics.lineStyle(size, color);
+			case "m":
+				mode = action.text;
+			case "d":
+				if (mode != "erase" && action.values.length >= 2) {
 					var x = action.values[0];
 					var y = action.values[1];
 					container.graphics.moveTo(x, y);
@@ -430,47 +490,52 @@ class ServerLevelRenderer extends Sprite {
 						container.graphics.lineTo(x, y);
 						i += 2;
 					}
-					drawing = true;
-				default:
-			}
+				}
+			default:
 		}
-		if (!drawing) {
-			container.graphics.clear();
-		}
+		return {color: color, size: size, mode: mode};
 	}
 
 	private function drawLayerObjects(container:Sprite, objects:Array<DecodedArtObject>, layerScale:Float):Void {
 		for (object in objects) {
-			var assetPath = stampAssetPath(object.code);
-			if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
-				continue;
-			}
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
-			bitmap.smoothing = true;
-			bitmap.scaleX = object.scaleX * layerScale / 4;
-			bitmap.scaleY = object.scaleY * layerScale / 4;
-			bitmap.x = object.x * layerScale;
-			bitmap.y = object.y * layerScale;
-			container.addChild(bitmap);
+			addLayerObject(container, object, layerScale);
 		}
 	}
 
 	private function drawLayerTexts(container:Sprite, texts:Array<DecodedTextObject>, layerScale:Float):Void {
 		for (text in texts) {
-			var field = new TextField();
-			field.selectable = false;
-			field.wordWrap = false;
-			field.multiline = true;
-			field.autoSize = TextFieldAutoSize.LEFT;
-			field.textColor = text.color;
-			field.text = parseTextObjectText(text.text);
-			field.scaleX = text.scaleX * layerScale;
-			field.scaleY = text.scaleY * layerScale;
-			field.height = 24;
-			field.x = text.x * layerScale;
-			field.y = text.y * layerScale;
-			container.addChild(field);
+			addLayerText(container, text, layerScale);
 		}
+	}
+
+	public static function addLayerObject(container:Sprite, object:DecodedArtObject, layerScale:Float):Void {
+		var assetPath = stampAssetPath(object.code);
+		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
+			return;
+		}
+		var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+		bitmap.smoothing = true;
+		bitmap.scaleX = object.scaleX * layerScale / 4;
+		bitmap.scaleY = object.scaleY * layerScale / 4;
+		bitmap.x = object.x * layerScale;
+		bitmap.y = object.y * layerScale;
+		container.addChild(bitmap);
+	}
+
+	public static function addLayerText(container:Sprite, text:DecodedTextObject, layerScale:Float):Void {
+		var field = new TextField();
+		field.selectable = false;
+		field.wordWrap = false;
+		field.multiline = true;
+		field.autoSize = TextFieldAutoSize.LEFT;
+		field.textColor = text.color;
+		field.text = parseTextObjectText(text.text);
+		field.scaleX = text.scaleX * layerScale;
+		field.scaleY = text.scaleY * layerScale;
+		field.height = 24;
+		field.x = text.x * layerScale;
+		field.y = text.y * layerScale;
+		container.addChild(field);
 	}
 
 	private function createBlockDisplay(block:DecodedBlock):Sprite {
@@ -545,5 +610,51 @@ class ServerLevelRenderer extends Sprite {
 
 	private static function parseTextObjectText(value:String):String {
 		return StringTools.replace(StringTools.replace(value, "|", ","), "<br>", "\n");
+	}
+}
+
+typedef ArtStrokeState = {
+	var color:Int;
+	var size:Float;
+	var mode:String;
+}
+
+private class ArtDrawCursor {
+	public final container:Sprite;
+	public final layer:DecodedArtLayer;
+	public var color:Int = 0x000000;
+	public var size:Float = 10.0;
+	public var mode:String = "draw";
+	private var actionIndex:Int = 0;
+	private var objectIndex:Int = 0;
+	private var textIndex:Int = 0;
+
+	public function new(container:Sprite, layer:DecodedArtLayer) {
+		this.container = container;
+		this.layer = layer;
+		container.graphics.lineStyle(size, color);
+	}
+
+	public function drawNext():Bool {
+		if (actionIndex < layer.drawActions.length) {
+			var state = ServerLevelRenderer.drawStrokeAction(container, color, size, mode, layer.drawActions[actionIndex++]);
+			color = state.color;
+			size = state.size;
+			mode = state.mode;
+			return true;
+		}
+		if (objectIndex < layer.objects.length) {
+			ServerLevelRenderer.addLayerObject(container, layer.objects[objectIndex++], layer.scale);
+			return true;
+		}
+		if (textIndex < layer.texts.length) {
+			ServerLevelRenderer.addLayerText(container, layer.texts[textIndex++], layer.scale);
+			return true;
+		}
+		return false;
+	}
+
+	public function isComplete():Bool {
+		return actionIndex >= layer.drawActions.length && objectIndex >= layer.objects.length && textIndex >= layer.texts.length;
 	}
 }

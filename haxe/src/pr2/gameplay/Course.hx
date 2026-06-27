@@ -333,7 +333,7 @@ class Course extends Sprite {
 		if (player == null) {
 			return;
 		}
-		if (levelRenderer != null && !levelRenderer.isBlockDrawingComplete()) {
+		if (levelRenderer != null && !levelRenderer.isDrawingComplete()) {
 			return;
 		}
 		if (!drawingInfoFinished) {
