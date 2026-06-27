@@ -214,7 +214,7 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       Flash month/day/year, time, AM/PM, and "Place Now" controls; validates
       hour/minute text; handles leap years/month lengths; and computes the
       scheduled set time. Guarded by `PlaceArtifactTest`.
-    - [ ] Complete `PlaceArtifact` confirmation, scheduled override, and
+    - [x] Complete `PlaceArtifact` confirmation, scheduled override, and
       `place_artifact.php` upload response flow.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,

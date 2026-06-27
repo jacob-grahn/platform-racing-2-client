@@ -2,25 +2,28 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import openfl.events.FocusEvent;
+import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.net.ServerConfig;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
 
+private typedef UploadFactory = String->Map<String, String>->String->(Dynamic->Void)->UploadingPopup;
+
 /**
 	Authored artifact-placement prompt shell opened by `SpecialEvent`.
-
-	The submit upload flow remains part of the larger PlaceArtifact task; this
-	class preserves the singleton popup behavior, placement payload, and Flash's
-	date/time selection controls.
 **/
 @:allow(pr2.gameplay.PlaceArtifactTest)
 class PlaceArtifact extends Popup {
 	public static var instance:Null<PlaceArtifact>;
+	private static var uploadFactory:UploadFactory = defaultUpload;
+	private static var nowSeconds:Void->Int = function():Int return Std.int(Date.now().getTime() / 1000);
 
 	public final request:PlaceArtifactRequest;
 	private var art:Null<PR2MovieClip>;
@@ -33,6 +36,9 @@ class PlaceArtifact extends Popup {
 	private var nowCheck:Null<FlCheckBox>;
 	private var placeBinding:Null<Binding>;
 	private var cancelBinding:Null<Binding>;
+	private var setTime:Int = 0;
+	private var overrideSched:Bool = false;
+	private var uploading:Null<UploadingPopup>;
 
 	public function new(request:PlaceArtifactRequest) {
 		super();
@@ -170,9 +176,33 @@ class PlaceArtifact extends Popup {
 	}
 
 	private function clickPlace():Void {
-		// Confirmation and upload are intentionally left for the remaining
-		// PlaceArtifact subtask; date selection is now ready for that handoff.
-		selectedSetTime(Std.int(Date.now().getTime() / 1000));
+		setTime = selectedSetTime(nowSeconds());
+		var timeStr = setTime > 0 ? "on " + dateTimeStr(setTime) : "now";
+		new ConfirmPopup(placeArtifact, "Are you sure you want to place the artifact " + timeStr + "?");
+	}
+
+	private function placeArtifact():Void {
+		var effectiveSetTime = setTime < nowSeconds() ? 0 : setTime;
+		var fields:Map<String, String> = [
+			"level_id" => Std.string(request.levelId),
+			"x" => Std.string(request.x),
+			"y" => Std.string(request.y),
+			"rot" => Std.string(request.rot),
+			"set_time" => Std.string(effectiveSetTime),
+			"override_sched" => overrideSched ? "1" : "0"
+		];
+		uploading = uploadFactory(ServerConfig.placeArtifactUrl(), fields, "Placing artifact...", handleResponse);
+	}
+
+	private function handleResponse(ret:Dynamic):Void {
+		if (ret != null && Reflect.field(ret, "success") != true && Reflect.field(ret, "status") == "scheduled") {
+			new ConfirmPopup(function():Void {
+				overrideSched = true;
+				placeArtifact();
+			}, "There is already a scheduled artifact placement. Is it OK to replace it with this one?");
+			return;
+		}
+		startFadeOut();
 	}
 
 	private function clickCancel():Void {
@@ -190,6 +220,10 @@ class PlaceArtifact extends Popup {
 		if (nowCheck != null) nowCheck.removeEventListener(Event.CHANGE, checkNowBox);
 		LobbyArt.unbind(placeBinding);
 		LobbyArt.unbind(cancelBinding);
+		if (uploading != null) {
+			uploading.remove();
+			uploading = null;
+		}
 		if (art != null) {
 			art.dispose();
 			art = null;
@@ -221,5 +255,40 @@ class PlaceArtifact extends Popup {
 
 	private static function isLeapYear(year:Int):Bool {
 		return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+	}
+
+	private static function defaultUpload(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void):UploadingPopup {
+		return new UploadingPopup(url, fields, label, onResult);
+	}
+
+	private static function dateTimeStr(seconds:Int):String {
+		var d = Date.fromTime(seconds * 1000.0);
+		var hour = d.getHours();
+		var merid = hour >= 12 ? "PM" : "AM";
+		var hour12 = hour % 12;
+		if (hour12 == 0) {
+			hour12 = 12;
+		}
+		return longMonth(d.getMonth()) + " " + d.getDate() + ", " + d.getFullYear() + " " + hour12 + ":"
+			+ StringTools.lpad(Std.string(d.getMinutes()), "0", 2) + ":"
+			+ StringTools.lpad(Std.string(d.getSeconds()), "0", 2) + " " + merid;
+	}
+
+	private static function longMonth(month:Int):String {
+		return switch (month) {
+			case 0: "January";
+			case 1: "February";
+			case 2: "March";
+			case 3: "April";
+			case 4: "May";
+			case 5: "June";
+			case 6: "July";
+			case 7: "August";
+			case 8: "September";
+			case 9: "October";
+			case 10: "November";
+			case 11: "December";
+			default: "";
+		}
 	}
 }

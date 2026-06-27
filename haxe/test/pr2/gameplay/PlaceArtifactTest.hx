@@ -1,7 +1,12 @@
 package pr2.gameplay;
 
+import openfl.display.InteractiveObject;
 import openfl.events.Event;
+import openfl.events.MouseEvent;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
+import pr2.lobby.LobbyArt;
+import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.Popup;
 
 class PlaceArtifactTest {
 	private static var assertions:Int = 0;
@@ -11,6 +16,9 @@ class PlaceArtifactTest {
 		testVariableMonthLengths();
 		testTextValidationAndSetTime();
 		testPlaceNowDisablesDateControls();
+		testPlaceConfirmationUploadsFields();
+		testScheduledResponsePromptsOverrideUpload();
+		closeAll();
 		trace('PlaceArtifactTest passed $assertions assertions');
 	}
 
@@ -80,6 +88,49 @@ class PlaceArtifactTest {
 		popup.remove();
 	}
 
+	private static function testPlaceConfirmationUploadsFields():Void {
+		closeAll();
+		var uploads:Array<UploadCall> = [];
+		PlaceArtifact.uploadFactory = fakeUpload(uploads, [{success: true}]);
+		PlaceArtifact.nowSeconds = function():Int return Std.int(new Date(2026, 5, 7, 12, 0, 0).getTime() / 1000);
+		var popup = popupAt(new Date(2026, 5, 7, 13, 5, 0));
+		popup.clickPlace();
+		var confirm = lastConfirm();
+		assertContains(confirmText(confirm), "Are you sure you want to place the artifact on ", "scheduled placement asks for confirmation");
+		clickOk(confirm);
+
+		assertEquals(1, uploads.length, "confirmation starts one upload");
+		assertEquals("https://pr2hub.com/place_artifact.php", uploads[0].url, "artifact endpoint matches Flash");
+		assertEquals("42", uploads[0].fields.get("level_id"), "level id posts");
+		assertEquals("10", uploads[0].fields.get("x"), "x coordinate posts");
+		assertEquals("20", uploads[0].fields.get("y"), "y coordinate posts");
+		assertEquals("0", uploads[0].fields.get("rot"), "rotation posts");
+		assertEquals(Std.string(Std.int(new Date(2026, 5, 7, 13, 5, 0).getTime() / 1000)), uploads[0].fields.get("set_time"), "future set time posts");
+		assertEquals("0", uploads[0].fields.get("override_sched"), "first upload does not override scheduled placements");
+		assertEquals(true, popup.fadeOutStarted, "successful upload closes artifact popup");
+		restoreHooks();
+		closeAll();
+	}
+
+	private static function testScheduledResponsePromptsOverrideUpload():Void {
+		closeAll();
+		var uploads:Array<UploadCall> = [];
+		PlaceArtifact.uploadFactory = fakeUpload(uploads, [{success: false, status: "scheduled"}, {success: true}]);
+		PlaceArtifact.nowSeconds = function():Int return Std.int(new Date(2026, 5, 7, 12, 0, 0).getTime() / 1000);
+		var popup = popupAt(new Date(2026, 5, 7, 13, 5, 0));
+		popup.clickPlace();
+		clickOk(lastConfirm());
+		assertEquals(1, uploads.length, "scheduled conflict posts once before override prompt");
+		var overrideConfirm = lastConfirm();
+		assertContains(confirmText(overrideConfirm), "There is already a scheduled artifact placement.", "scheduled response opens override confirmation");
+		clickOk(overrideConfirm);
+		assertEquals(2, uploads.length, "override confirmation reposts");
+		assertEquals("1", uploads[1].fields.get("override_sched"), "override repost sets override flag");
+		assertEquals(true, popup.fadeOutStarted, "successful override closes artifact popup");
+		restoreHooks();
+		closeAll();
+	}
+
 	private static function popupAt(date:Date):PlaceArtifact {
 		if (PlaceArtifact.instance != null) {
 			PlaceArtifact.instance.remove();
@@ -99,4 +150,62 @@ class PlaceArtifactTest {
 			throw '$message: expected $expected, got $actual';
 		}
 	}
+
+	private static function assertContains(haystack:String, needle:String, message:String):Void {
+		assertions++;
+		if (haystack.indexOf(needle) < 0) {
+			throw '$message: expected "$haystack" to contain "$needle"';
+		}
+	}
+
+	private static function lastConfirm():ConfirmPopup {
+		for (i in 0...Popup.getOpen().length) {
+			var popup = Popup.getOpen()[Popup.getOpen().length - 1 - i];
+			var confirm = Std.downcast(popup, ConfirmPopup);
+			if (confirm != null) {
+				return confirm;
+			}
+		}
+		throw "expected open confirmation";
+	}
+
+	private static function confirmText(confirm:ConfirmPopup):String {
+		var text = LobbyArt.text(confirm, "textBox");
+		return text == null ? "" : text.htmlText;
+	}
+
+	private static function clickOk(confirm:ConfirmPopup):Void {
+		var ok = Std.downcast(LobbyArt.findByName(confirm, "ok_bt"), InteractiveObject);
+		ok.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function fakeUpload(uploads:Array<UploadCall>, results:Array<Dynamic>):Dynamic {
+		return function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult(results.length > 0 ? results.shift() : {success: true});
+			return null;
+		}
+	}
+
+	private static function restoreHooks():Void {
+		PlaceArtifact.uploadFactory = PlaceArtifact.defaultUpload;
+		PlaceArtifact.nowSeconds = function():Int return Std.int(Date.now().getTime() / 1000);
+	}
+
+	private static function closeAll():Void {
+		for (popup in Popup.getOpen().copy()) {
+			popup.remove();
+		}
+		restoreHooks();
+	}
+}
+
+private typedef UploadCall = {
+	var url:String;
+	var fields:Map<String, String>;
+	var label:String;
 }

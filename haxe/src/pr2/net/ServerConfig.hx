@@ -196,4 +196,9 @@ final class ServerConfig {
 	public static function submitRatingUrl():String {
 		return host + "/submit_rating.php";
 	}
+
+	/** Artifact placement POST endpoint, matching `gameplay.PlaceArtifact`. */
+	public static function placeArtifactUrl():String {
+		return host + "/place_artifact.php";
+	}
 }
