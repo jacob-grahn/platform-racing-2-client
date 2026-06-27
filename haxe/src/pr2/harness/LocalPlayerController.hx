@@ -166,6 +166,10 @@ class LocalPlayerController {
 		gravity = DEFAULT_GRAVITY * multiplier;
 	}
 
+	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
+		applyStats(speed, acceleration, jump);
+	}
+
 	private function get_facingScaleX():Int {
 		return facingDirection;
 	}

@@ -167,6 +167,11 @@ class LocalCharacter extends Character {
 		controller.setGravity(multiplier);
 	}
 
+	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
+		controller.setStats(speed, acceleration, jump);
+		syncFromController();
+	}
+
 	public function debugState():LocalPlayerDebugState {
 		return controller.debugState();
 	}

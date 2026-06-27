@@ -28,6 +28,7 @@ import pr2.gameplay.CountdownTest;
 import pr2.gameplay.PrizePopupTest;
 import pr2.gameplay.LevelConfigTest;
 import pr2.gameplay.GameShellMountTest;
+import pr2.gameplay.CharacterLifecycleTest;
 import pr2.gameplay.LevelEntryStateTest;
 import pr2.gameplay.GameCommandShellTest;
 import pr2.gameplay.QuitButtonTest;
@@ -102,6 +103,7 @@ class DeterministicTestSuite {
 		PrizePopupTest.main();
 		LevelConfigTest.main();
 		GameShellMountTest.main();
+		CharacterLifecycleTest.main();
 		LevelEntryStateTest.main();
 		GameCommandShellTest.main();
 		QuitButtonTest.main();

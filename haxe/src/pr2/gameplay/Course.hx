@@ -10,6 +10,9 @@ import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 import pr2.Constants;
 import pr2.character.LocalCharacter;
+import pr2.character.RemoteCharacter;
+import pr2.gameplay.GameCommandShell.LocalCharacterInit;
+import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.harness.LocalPlayerDebugState;
@@ -21,6 +24,7 @@ import pr2.level.ServerLevel;
 import pr2.level.ServerLevelFixtureAdapter;
 import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
 import pr2.level.ServerLevelRenderer;
+import pr2.net.CommandHandler;
 import pr2.net.ServerLevelData;
 
 /**
@@ -59,15 +63,18 @@ class Course extends Sprite {
 	private final config:LevelConfig;
 	private final onChatLine:Null<String->Bool>;
 	private final onFrame:Null<LocalPlayerDebugState->Void>;
+	private final commandHandler:Null<CommandHandler>;
 
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 
 	public var levelRenderer(default, null):ServerLevelRenderer;
 	public var characterLayer(default, null):Sprite;
 	public var localCharacter(default, null):LocalCharacter;
+	public var remoteCharacters(default, null):Map<Int, RemoteCharacter> = new Map();
 	private var serverFixture:ServerFixtureLevel;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
+	private var remoteBlockActivation:RemoteBlockActivation;
 
 	public var miniMap(default, null):MiniMap;
 	public var itemDisplay(default, null):ItemDisplay;
@@ -84,13 +91,15 @@ class Course extends Sprite {
 	private var displayedStats:Null<String>;
 	private var displayedLives:Null<Int>;
 
-	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void) {
+	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
+			?commandHandler:CommandHandler) {
 		super();
 		this.level = level;
 		this.data = data;
 		this.config = config;
 		this.onChatLine = onChatLine;
 		this.onFrame = onFrame;
+		this.commandHandler = commandHandler;
 		build();
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
@@ -108,6 +117,7 @@ class Course extends Sprite {
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
 		localCharacter = player;
+		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
 
 		characterLayer = new Sprite();
 		characterLayer.addChild(player);
@@ -201,6 +211,76 @@ class Course extends Sprite {
 	/** Lets a wrapper (the debug harness) intercept chat lines before display. **/
 	public function handleRaceChatLine(message:String):Bool {
 		return onChatLine != null && onChatLine(message);
+	}
+
+	public function createLocalCharacter(init:LocalCharacterInit):LocalCharacter {
+		if (localCharacter == null) {
+			return null;
+		}
+		localCharacter.tempID = init.tempId;
+		localCharacter.groupStr = init.group;
+		localCharacter.setHatId(Std.int(init.hatId));
+		localCharacter.setHeadId(Std.int(init.headId));
+		localCharacter.setBodyId(Std.int(init.bodyId));
+		localCharacter.setFeetId(Std.int(init.feetId));
+		localCharacter.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
+			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
+		localCharacter.setStats(init.speed, init.accel, init.jump);
+		return localCharacter;
+	}
+
+	public function createRemoteCharacter(init:RemoteCharacterInit):RemoteCharacter {
+		removeRemoteCharacter(init.tempId);
+		var dot = miniMap == null ? null : miniMap.getDot();
+		var remote = new RemoteCharacter(init.tempId, dot, init.userName, Std.int(init.hatId), Std.int(init.headId), Std.int(init.bodyId),
+			Std.int(init.feetId), init.group, commandHandler);
+		remote.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
+			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
+		if (remoteBlockActivation != null) {
+			remote.onBlockTouch = remoteBlockActivation.touch;
+		}
+		remoteCharacters.set(init.tempId, remote);
+		if (characterLayer != null) {
+			characterLayer.addChild(remote);
+		}
+		return remote;
+	}
+
+	public function getRemoteCharacter(tempId:Int):Null<RemoteCharacter> {
+		return remoteCharacters == null ? null : remoteCharacters.get(tempId);
+	}
+
+	public function remoteCharacterCount():Int {
+		if (remoteCharacters == null) {
+			return 0;
+		}
+		var count = 0;
+		for (_ in remoteCharacters.keys()) {
+			count++;
+		}
+		return count;
+	}
+
+	public function removeRemoteCharacter(tempId:Int):Void {
+		if (remoteCharacters == null) {
+			return;
+		}
+		var remote = remoteCharacters.get(tempId);
+		if (remote == null) {
+			return;
+		}
+		remote.remove();
+		remoteCharacters.remove(tempId);
+	}
+
+	public function removeAllRemoteCharacters():Void {
+		if (remoteCharacters == null) {
+			return;
+		}
+		var ids = [for (id in remoteCharacters.keys()) id];
+		for (id in ids) {
+			removeRemoteCharacter(id);
+		}
 	}
 
 	private function onAddedToStage(event:Event):Void {
@@ -411,6 +491,7 @@ class Course extends Sprite {
 			drawingInfo.remove();
 			drawingInfo = null;
 		}
+		removeAllRemoteCharacters();
 		if (levelRenderer != null) {
 			levelRenderer.remove();
 			levelRenderer = null;
@@ -418,6 +499,8 @@ class Course extends Sprite {
 		localCharacter = null;
 		player = null;
 		characterLayer = null;
+		remoteBlockActivation = null;
+		remoteCharacters = null;
 		if (parent != null) {
 			parent.removeChild(this);
 		}

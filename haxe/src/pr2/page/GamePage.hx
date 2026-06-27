@@ -7,6 +7,10 @@ import pr2.audio.AudioManager;
 import pr2.Constants;
 import pr2.gameplay.Course;
 import pr2.gameplay.FinishedPage;
+import pr2.gameplay.GameCommandShell;
+import pr2.gameplay.GameCommandShell.GameCommandDelegate;
+import pr2.gameplay.GameCommandShell.LocalCharacterInit;
+import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.LevelEntry;
 import pr2.gameplay.QuitButton;
@@ -26,15 +30,18 @@ import pr2.level.ServerLevelDecoder;
 	The fuller loading/access/error state machine lands with the level-entry task
 	(A4); this is the baseline load + mount + quit/finish lifecycle.
 **/
-class GamePage extends Page {
+class GamePage extends Page implements GameCommandDelegate {
 	public final levelId:Int;
 	public final version:Int;
 	private var entry:LevelEntry;
 	private var course:Null<Course>;
+	private var commandShell:Null<GameCommandShell>;
 	private var loadingText:Null<TextField>;
 	private var quitButton:Null<QuitButton>;
 	private var finishedPage:Null<FinishedPage>;
 	private var playerDone:Bool = false;
+	private var pendingLocalInit:Null<LocalCharacterInit>;
+	private var pendingRemoteInits:Array<RemoteCharacterInit> = [];
 
 	public function new(levelId:Int, version:Int) {
 		super();
@@ -56,6 +63,9 @@ class GamePage extends Page {
 		quitButton.x = Constants.STAGE_WIDTH / 2;
 		quitButton.y = Constants.STAGE_HEIGHT / 2;
 		addChild(quitButton);
+
+		commandShell = new GameCommandShell(this);
+		commandShell.install();
 
 		#if html5
 		if (!ServerConfig.hasProxyHost()) {
@@ -80,6 +90,14 @@ class GamePage extends Page {
 			var level = ServerLevelDecoder.decode(data.data);
 			var config = LevelConfig.fromServerData(data);
 			course = new Course(level, data, config);
+			if (pendingLocalInit != null) {
+				course.createLocalCharacter(pendingLocalInit);
+				pendingLocalInit = null;
+			}
+			for (init in pendingRemoteInits) {
+				course.createRemoteCharacter(init);
+			}
+			pendingRemoteInits.resize(0);
 			// Below the quit button / finish overlay, above nothing else yet.
 			addChildAt(course, 0);
 			clearLoadingText();
@@ -93,6 +111,10 @@ class GamePage extends Page {
 	}
 
 	override public function remove():Void {
+		if (commandShell != null) {
+			commandShell.remove();
+			commandShell = null;
+		}
 		if (finishedPage != null) {
 			finishedPage.remove();
 			finishedPage = null;
@@ -107,6 +129,39 @@ class GamePage extends Page {
 		}
 		clearLoadingText();
 		super.remove();
+	}
+
+	public function createRemoteCharacter(init:RemoteCharacterInit):Void {
+		if (course == null) {
+			pendingRemoteInits.push(init);
+			return;
+		}
+		course.createRemoteCharacter(init);
+	}
+
+	public function createLocalCharacter(init:LocalCharacterInit):Void {
+		if (course == null) {
+			pendingLocalInit = init;
+			return;
+		}
+		course.createLocalCharacter(init);
+	}
+
+	public function award(args:Array<String>):Void {}
+	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {}
+	public function setLuxGain(amount:Int):Void {}
+	public function setPrize(prize:Dynamic):Void {}
+	public function cancelPrize(message:String):Void {}
+	public function winPrize(prize:Dynamic):Void {}
+	public function cowboyMode():Void {}
+	public function happyHour():Void {}
+	public function setEggSeed(seed:Int):Void {}
+	public function addEggs(count:Int):Void {}
+	public function superBooster(tempId:Int):Void {}
+	public function maybeReturnHatToStart(hatId:Int):Void {}
+	public function startHatCountdown():Void {}
+	public function forceQuit():Void {
+		quitGame();
 	}
 
 	private function quitGame():Void {

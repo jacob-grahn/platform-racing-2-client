@@ -133,13 +133,15 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       `ArrowBlock` animation, `VanishBlock` activation, and `WaterBlock` ripple
       effects through `ServerLevelRenderer`. Guarded by
       `RemoteCharacterConsumeTest` and `ServerLevelRendererTest`.
-    - [ ] Attach the remote block activation adapter when B5 mounts remotes in the
+    - [x] Attach the remote block activation adapter when B5 mounts remotes in the
       live `Course`.
-  - [ ] **B5 — Wire create/destroy into the Game shell.**
-    `createLocalCharacter`/`createRemoteCharacter` instantiate into the character
-    layer from A3/A5; `beginRemove`/`quit_race`/`forceQuit` tear down. Test:
-    `CharacterLifecycleTest` (create N remotes + 1 local, route a quit, assert
-    display-list + command-table cleanup).
+  - [x] **B5 — Wire create/destroy into the Game shell.**
+    `createLocalCharacter`/`createRemoteCharacter` now route from
+    `GameCommandShell` into the live `Course`, apply local stats/appearance,
+    instantiate remotes into the character layer with minimap dots and real-map
+    remote block activation, replace duplicate temp IDs, and tear remotes plus
+    temp command handlers down on explicit/course removal. `forceQuit` routes
+    through the game page quit flow. Guarded by `CharacterLifecycleTest`.
 - [ ] Port the complete in-game shell and race lifecycle.
   - Implement `Course`, `GamePage`, countdown, race chat, minimap, stats, item
     display, hearts, drawing info, music selection, quit flow, finish page,
