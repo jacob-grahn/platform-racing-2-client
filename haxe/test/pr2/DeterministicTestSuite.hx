@@ -28,6 +28,7 @@ import pr2.gameplay.StatsDisplayTest;
 import pr2.gameplay.CountdownTest;
 import pr2.gameplay.PrizePopupTest;
 import pr2.gameplay.SpecialEventTest;
+import pr2.gameplay.PlaceArtifactTest;
 import pr2.gameplay.LevelConfigTest;
 import pr2.gameplay.GameShellMountTest;
 import pr2.gameplay.CharacterLifecycleTest;
@@ -105,6 +106,7 @@ class DeterministicTestSuite {
 		CountdownTest.main();
 		PrizePopupTest.main();
 		SpecialEventTest.main();
+		PlaceArtifactTest.main();
 		LevelConfigTest.main();
 		GameShellMountTest.main();
 		CharacterLifecycleTest.main();
