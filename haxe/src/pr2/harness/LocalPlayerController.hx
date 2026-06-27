@@ -835,7 +835,8 @@ class LocalPlayerController {
 			return;
 		}
 		level.blocks.push(new LevelBlock(tile.x, tile.y, BlockType.Mine));
-		lastItemEffect = "mine";
+		var effectPos = rotatePoint(tile.x * level.tileSize + 15, tile.y * level.tileSize + 15, courseRotation);
+		lastItemEffect = "mine:" + effectPos.x + "," + effectPos.y + ":" + courseRotation;
 		consumeHeldItemUse();
 	}
 

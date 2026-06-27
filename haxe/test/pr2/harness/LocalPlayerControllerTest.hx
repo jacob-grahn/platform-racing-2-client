@@ -718,8 +718,9 @@ class LocalPlayerControllerTest {
 		var state = player.debugState();
 
 		assertEquals(null, state.itemId, "mine item consumes after placing mine");
-		assertEquals("mine", state.lastItemEffect, "mine item emits mine effect");
-		assertEquals(true, Lambda.exists(level.blocks, function(block) return block.type == BlockType.Mine), "mine item places a mine block");
+		var mine = Lambda.find(level.blocks, function(block) return block.type == BlockType.Mine);
+		assertEquals(true, mine != null, "mine item places a mine block");
+		assertEquals('mine:${mine.x * 30 + 15},${mine.y * 30 + 15}:0', state.lastItemEffect, "mine item emits centered mine effect");
 	}
 
 	private static function testLightningEmitsZapAndConsumesItem():Void {

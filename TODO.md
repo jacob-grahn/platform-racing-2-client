@@ -244,6 +244,9 @@ rounding, ordering, and edge cases.
       controller, matching `items.Teleport` (`x`, `y - 25` before and after the
       120 px move) and suppressing effects when the destination is blocked.
       Guarded by `LocalPlayerControllerTest`.
+    - [x] Emit mine-item effect coordinates from the centered placed mine tile,
+      rotated with `Data.rotatePoint`, matching `items.Mine`'s `add_effect`
+      payload shape. Guarded by `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.
