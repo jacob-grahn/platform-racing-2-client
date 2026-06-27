@@ -1,6 +1,12 @@
 package pr2.character;
 
 import pr2.gameplay.MiniMapDot;
+import pr2.gameplay.RemoteBlockActivation;
+import pr2.level.ObjectCodes;
+import pr2.level.ServerLevel;
+import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.ServerLevelFixtureAdapter;
+import pr2.level.ServerLevelRenderer;
 import pr2.net.CommandHandler;
 
 class RemoteCharacterConsumeTest {
@@ -10,6 +16,7 @@ class RemoteCharacterConsumeTest {
 		testRegistersAndTearsDownTempCommands();
 		testConsumesPositionVarsAndExactPosition();
 		testCatchupClampAndBlockTouches();
+		testRemoteBlockTouchesActivateRealMapEffects();
 		testHeartStingAndHatCommands();
 		trace('RemoteCharacterConsumeTest passed $assertions assertions');
 	}
@@ -107,6 +114,31 @@ class RemoteCharacterConsumeTest {
 		assertEquals("1,70,90", stingArgs, "sting command reaches hook args");
 		assertEquals(6, remote.hat1, "setHats command applies hat stack");
 		assertTrue(remote.hasHatFlag(Character.CROWN), "setHats command raises special hat flags");
+	}
+
+	private static function testRemoteBlockTouchesActivateRealMapEffects():Void {
+		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 0, 0);
+		var vanish = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 30, 0);
+		var water = new DecodedBlock(ObjectCodes.BLOCK_WATER, 60, 0);
+		var level = new ServerLevel(0xFFFFFF, [arrow, vanish, water]);
+		var fixture = ServerLevelFixtureAdapter.convert(level, 0.7);
+		var renderer = new ServerLevelRenderer(level, arrow);
+		var activation = new RemoteBlockActivation(fixture, renderer);
+
+		var remote = new RemoteCharacter(4, null, "Remote", 1, 1, 1, 1, "0", new CommandHandler());
+		remote.onBlockTouch = activation.touch;
+
+		remote.setPos((fixture.originTileX * -1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
+		remote.stepFrame();
+		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "remote touch animates arrow block");
+
+		remote.setPos((fixture.originTileX * -1 + 1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
+		remote.stepFrame();
+		assertEquals(0.0, renderer.blockAlphaAt(vanish.x, vanish.y), "remote touch activates vanish block");
+
+		remote.setPos((fixture.originTileX * -1 + 2) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
+		remote.stepFrame();
+		assertClose(0.9, renderer.blockAlphaAt(water.x, water.y), "remote touch triggers water ripple");
 	}
 
 	private static function assertEquals<T>(expected:T, actual:T, message:String):Void {

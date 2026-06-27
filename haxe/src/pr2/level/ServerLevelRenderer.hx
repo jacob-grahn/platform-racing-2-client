@@ -40,6 +40,7 @@ class ServerLevelRenderer extends Sprite {
 	private final artLayerContainers:Array<Sprite> = [];
 	private final blockDisplays:Map<String, Sprite> = new Map();
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
+	private final waterRippleFrames:Map<String, Int> = new Map();
 	private var nextBlockToDraw:Int = 0;
 	private var incrementalBlocks:Bool = false;
 	private var blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME;
@@ -127,6 +128,32 @@ class ServerLevelRenderer extends Sprite {
 	public function arrowFrameAt(worldX:Int, worldY:Int):Null<Int> {
 		var arrow = arrowDisplays.get(blockKey(worldX, worldY));
 		return arrow == null ? null : arrow.currentFrame;
+	}
+
+	public function activateVanish(worldX:Int, worldY:Int):Void {
+		var display = blockDisplays.get(blockKey(worldX, worldY));
+		if (display != null) {
+			display.alpha = 0;
+		}
+	}
+
+	public function triggerWaterRipple(worldX:Int, worldY:Int):Void {
+		var key = blockKey(worldX, worldY);
+		var display = blockDisplays.get(key);
+		if (display == null) {
+			return;
+		}
+		display.alpha -= 0.1;
+		if (display.alpha < 0.5) {
+			display.alpha = 0.5;
+		}
+		waterRippleFrames.set(key, 1);
+		addEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
+	}
+
+	public function blockAlphaAt(worldX:Int, worldY:Int):Null<Float> {
+		var display = blockDisplays.get(blockKey(worldX, worldY));
+		return display == null ? null : display.alpha;
 	}
 
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
@@ -259,6 +286,24 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
+	private function onWaterRippleFrame(event:Event):Void {
+		for (key in [for (k in waterRippleFrames.keys()) k]) {
+			var display = blockDisplays.get(key);
+			if (display == null) {
+				waterRippleFrames.remove(key);
+				continue;
+			}
+			display.alpha += 0.03;
+			if (display.alpha >= 1) {
+				display.alpha = 1;
+				waterRippleFrames.remove(key);
+			}
+		}
+		if (!waterRippleFrames.keys().hasNext()) {
+			removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
+		}
+	}
+
 	private function drawNextBlocks(limit:Int):Void {
 		var end = Std.int(Math.min(level.blocks.length, nextBlockToDraw + limit));
 		while (nextBlockToDraw < end) {
@@ -275,6 +320,8 @@ class ServerLevelRenderer extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
+		removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
+		waterRippleFrames.clear();
 		disposeAnimatedChildren(this);
 		if (parent != null) {
 			parent.removeChild(this);

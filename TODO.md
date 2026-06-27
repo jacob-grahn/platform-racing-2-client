@@ -128,8 +128,12 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       updates its minimap dot, exposes remote block-touch probes through a shell
       hook, and unregisters commands plus removes the dot on teardown. Guarded by
       `RemoteCharacterConsumeTest`.
-    - [ ] Wire remote block-touch probes to the real map block activation classes
-      (`ArrowBlock`, `VanishBlock`, `WaterBlock`) once remotes are mounted in the
+    - [x] Add the real-map remote block activation adapter. `RemoteBlockActivation`
+      resolves touched fixture blocks and dispatches Flash's remote-visible
+      `ArrowBlock` animation, `VanishBlock` activation, and `WaterBlock` ripple
+      effects through `ServerLevelRenderer`. Guarded by
+      `RemoteCharacterConsumeTest` and `ServerLevelRendererTest`.
+    - [ ] Attach the remote block activation adapter when B5 mounts remotes in the
       live `Course`.
   - [ ] **B5 — Wire create/destroy into the Game shell.**
     `createLocalCharacter`/`createRemoteCharacter` instantiate into the character

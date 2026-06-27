@@ -17,6 +17,7 @@ class ServerLevelRendererTest {
 		testBlockColorMultiplierUpdate();
 		testIncrementalBlockDrawing();
 		testArrowAnimation();
+		testRemoteVisibleBlockActivation();
 		testMineExplosion();
 		testBlockPieces();
 		testArtLayerDepthAndParallax();
@@ -149,6 +150,28 @@ class ServerLevelRendererTest {
 		}
 		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow animation returns to its stopped first frame");
 		assertEquals(null, renderer.arrowFrameAt(0, 0), "non-arrow coordinate has no animation frame");
+	}
+
+	private static function testRemoteVisibleBlockActivation():Void {
+		var vanish = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 10020, 10050);
+		var water = new DecodedBlock(ObjectCodes.BLOCK_WATER, 10050, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [vanish, water]), vanish);
+
+		renderer.activateVanish(vanish.x, vanish.y);
+		assertEquals(0.0, renderer.blockAlphaAt(vanish.x, vanish.y), "remote vanish activation hides block");
+
+		renderer.triggerWaterRipple(water.x, water.y);
+		assertClose(0.9, renderer.blockAlphaAt(water.x, water.y), "remote water ripple dims block");
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertClose(0.93, renderer.blockAlphaAt(water.x, water.y), "remote water ripple recovers each frame");
+		for (_ in 0...3) {
+			renderer.triggerWaterRipple(water.x, water.y);
+		}
+		assertClose(0.63, renderer.blockAlphaAt(water.x, water.y), "remote water ripple stacks alpha reduction");
+		for (_ in 0...20) {
+			renderer.triggerWaterRipple(water.x, water.y);
+		}
+		assertEquals(0.5, renderer.blockAlphaAt(water.x, water.y), "remote water ripple clamps minimum alpha");
 	}
 
 	private static function testArtAssetMappings():Void {
