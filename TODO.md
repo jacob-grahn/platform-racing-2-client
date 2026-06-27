@@ -197,7 +197,7 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     mounts the real `Course` shell, and the old `CampaignTestScreen` route is now
     debug-only (`?screen=campaign&debug=campaign` / `debug=1`) with screen-routing
     coverage in `ScreenTest`.
-  - [ ] **C2 — Port artifact / special-event behavior** onto the real shell from
+  - [x] **C2 — Port artifact / special-event behavior** onto the real shell from
     `flash/.../PlaceArtifact.as` and `SpecialEvent.as`, wiring the deferred
     `Countdown.beginRace` live-command hook. Tests: `SpecialEventTest` /
     `PlaceArtifactTest`.
