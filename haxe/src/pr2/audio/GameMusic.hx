@@ -7,6 +7,7 @@ import openfl.media.SoundChannel;
 import openfl.media.SoundTransform;
 import openfl.net.URLRequest;
 import pr2.lobby.account.Settings;
+import pr2.net.ServerConfig;
 import pr2.ui.MuteButton;
 import pr2.audio.MusicCatalog.MusicTrack;
 
@@ -14,6 +15,11 @@ import pr2.audio.MusicCatalog.MusicTrack;
 	level editor and authored race dropdown can share identical playback rules. */
 class GameMusic {
 	public static inline var BASE_PATH:String = "/music/new";
+
+	/** Music streams from the same host as the level/API endpoints (Flash used
+		`Main.baseURL + "/music/new"`). Routing through `ServerConfig.getHost()`
+		means an `?apiHost=/api` dev proxy forwards the request to pr2hub.com,
+		instead of the bare path 404ing against the local static server. */
 	public var selected(default, null):MusicTrack;
 	private var channel:Null<SoundChannel>;
 	private var settingsTimer:Timer;
@@ -30,7 +36,7 @@ class GameMusic {
 	}
 
 	public static function streamUrl(song:MusicTrack):String {
-		return BASE_PATH + "/" + song.file;
+		return ServerConfig.getHost() + BASE_PATH + "/" + song.file;
 	}
 
 	public function refresh():Void {

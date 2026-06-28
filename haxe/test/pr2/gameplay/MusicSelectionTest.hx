@@ -4,6 +4,7 @@ import openfl.events.Event;
 import pr2.audio.GameMusic;
 import pr2.audio.MusicCatalog.MusicTrack;
 import pr2.lobby.account.Settings;
+import pr2.net.ServerConfig;
 
 class MusicSelectionTest {
 	private static var assertions:Int = 0;
@@ -39,9 +40,17 @@ class MusicSelectionTest {
 	}
 
 	private static function testStreamingEndpoint():Void {
-		assertEquals("/music/new/03_paradise-on-e_ng32772.mp3",
-			GameMusic.streamUrl({id: "3", label: "Paradise on E - API", file: "03_paradise-on-e_ng32772.mp3"}),
-			"race music streams from the original server music endpoint");
+		var track:MusicTrack = {id: "3", label: "Paradise on E - API", file: "03_paradise-on-e_ng32772.mp3"};
+		ServerConfig.resetHost();
+		assertEquals("https://pr2hub.com/music/new/03_paradise-on-e_ng32772.mp3",
+			GameMusic.streamUrl(track),
+			"race music streams from the same host as the level/API endpoints");
+
+		ServerConfig.setHost("/api");
+		assertEquals("/api/music/new/03_paradise-on-e_ng32772.mp3",
+			GameMusic.streamUrl(track),
+			"music routes through the configured dev proxy host");
+		ServerConfig.resetHost();
 	}
 
 	private static function testArtifactSong():Void {
