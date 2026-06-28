@@ -130,19 +130,20 @@ class ServerLevelRendererTest {
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 4);
 		var artLayer = Std.downcast(renderer.getChildAt(1), Sprite);
 		assertEquals(0, renderer.drawnArtItemCount(), "incremental art starts before drawing art");
-		assertEquals(0, artLayer.numChildren, "incremental art layer starts empty");
+		// Child 0 is the (empty) stroke raster canvas that placed art sits on top of.
+		assertEquals(1, artLayer.numChildren, "incremental art layer starts with only the stroke canvas");
 		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for incremental art");
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(4, renderer.drawnArtItemCount(), "first art batch counts strokes and skipped stamps");
-		assertEquals(0, artLayer.numChildren, "first art batch has not reached text object");
+		assertEquals(1, artLayer.numChildren, "first art batch has not reached text object");
 		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for remaining art item");
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(5, renderer.drawnArtItemCount(), "second art batch draws final text item");
-		assertEquals(1, artLayer.numChildren, "second art batch attaches text object");
+		assertEquals(2, artLayer.numChildren, "second art batch attaches text object above the stroke canvas");
 		assertEquals(true, renderer.isDrawingComplete(), "renderer completes after blocks and art");
-		var field = Std.downcast(artLayer.getChildAt(0), TextField);
+		var field = Std.downcast(artLayer.getChildAt(1), TextField);
 		assertEquals("hello,world", field.text, "incremental text uses server text parsing");
 	}
 

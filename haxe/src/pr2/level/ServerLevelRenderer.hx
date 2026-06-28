@@ -1,10 +1,12 @@
 package pr2.level;
 
 import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
+import openfl.geom.Matrix;
 import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
@@ -29,6 +31,11 @@ import pr2.runtime.PR2MovieClip;
 **/
 class ServerLevelRenderer extends Sprite {
 	public static inline var TILE_SIZE:Int = 30;
+	// Edge length of the transparent square that stroke art is rasterized onto,
+	// mirroring DrawableBackground.rasterTileSize. Kept well under the WebGL
+	// MAX_TEXTURE_SIZE (8192 on many GPUs, 4096 on some) so a single tile never
+	// fails to upload. See rasterizeBrushInto.
+	public static inline var ART_RASTER_TILE_SIZE:Int = 1024;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
@@ -414,11 +421,20 @@ class ServerLevelRenderer extends Sprite {
 		container.x = parallaxOffset(offsetX, layer.scale);
 		container.y = parallaxOffset(offsetY, layer.scale);
 		artLayerContainers[index] = container;
+		// Brush strokes are rasterized onto this canvas, which sits beneath the
+		// placed objects and text — the rasterCanvas/objCanvas split from
+		// DrawableBackground. Drawing the strokes straight into the container's
+		// vector graphics instead would make OpenFL's HTML5 backend rasterize the
+		// whole (potentially level-spanning) layer into one offscreen texture.
+		var rasterCanvas = new Sprite();
+		container.addChild(rasterCanvas);
 		if (incrementalBlocks) {
 			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
-			artDrawCursors[index] = new ArtDrawCursor(container, layer);
+			artDrawCursors[index] = new ArtDrawCursor(container, rasterCanvas, layer);
 		} else {
-			drawLayerStrokes(container, layer.drawActions);
+			var brushCanvas = new Sprite();
+			drawLayerStrokes(brushCanvas, layer.drawActions);
+			rasterizeBrushInto(rasterCanvas, brushCanvas);
 			drawLayerObjects(container, layer.objects, layer.scale);
 			drawLayerTexts(container, layer.texts, layer.scale);
 		}
@@ -445,15 +461,15 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	private function drawLayerStrokes(container:Sprite, actions:Array<DecodedDrawAction>):Void {
+	private function drawLayerStrokes(brushCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
 		var color = 0x000000;
 		var size = 10.0;
 		var mode = "draw";
 		var drawing = false;
-		container.graphics.lineStyle(size, color);
+		brushCanvas.graphics.lineStyle(size, color);
 
 		for (action in actions) {
-			var state = drawStrokeAction(container, color, size, mode, action);
+			var state = drawStrokeAction(brushCanvas, color, size, mode, action);
 			color = state.color;
 			size = state.size;
 			mode = state.mode;
@@ -462,7 +478,54 @@ class ServerLevelRenderer extends Sprite {
 			}
 		}
 		if (!drawing) {
-			container.graphics.clear();
+			brushCanvas.graphics.clear();
+		}
+	}
+
+	/**
+		Rasterizes the accumulated brush strokes onto transparent square tiles and
+		attaches them to `rasterCanvas`, mirroring DrawableBackground.rasterizeTile
+		(`new BitmapData(rasterTileSize + 1, rasterTileSize + 1, true, 0)`).
+
+		The original tiles the brush canvas so no single bitmap is huge. The port
+		needs the same split for a different but related reason: OpenFL's HTML5
+		renderer rasterizes each display object's vector graphics into one offscreen
+		texture sized to its bounds. Server art can span the whole level (>8192 px),
+		exceeding the GPU's MAX_TEXTURE_SIZE; the upload then fails and the layer
+		paints as an opaque black quad (the same failure documented for the login
+		background's bg_front). Tiling keeps every texture under the limit, and the
+		transparent fill (`true, 0`) lets the level show through between strokes.
+	**/
+	public static function rasterizeBrushInto(rasterCanvas:Sprite, brushCanvas:Sprite):Void {
+		var bounds = brushCanvas.getBounds(brushCanvas);
+		if (bounds.width <= 0 || bounds.height <= 0) {
+			return;
+		}
+		var tile = ART_RASTER_TILE_SIZE;
+		var tileY = Math.floor(bounds.y / tile) * tile;
+		var endX = bounds.x + bounds.width;
+		var endY = bounds.y + bounds.height;
+		while (tileY < endY) {
+			var tileX = Math.floor(bounds.x / tile) * tile;
+			while (tileX < endX) {
+				// +1 overlap between neighbouring tiles hides the seam, as in the original.
+				var data = new BitmapData(tile + 1, tile + 1, true, 0);
+				var matrix = new Matrix();
+				matrix.translate(-tileX, -tileY);
+				data.draw(brushCanvas, matrix, null, null, null, true);
+				if (data.getColorBoundsRect(0xFF000000, 0x00000000, false).width == 0) {
+					// No strokes landed on this tile; keep memory proportional to drawn art.
+					data.dispose();
+				} else {
+					var bitmap = new Bitmap(data);
+					bitmap.smoothing = true;
+					bitmap.x = tileX;
+					bitmap.y = tileY;
+					rasterCanvas.addChild(bitmap);
+				}
+				tileX += tile;
+			}
+			tileY += tile;
 		}
 	}
 
@@ -621,6 +684,8 @@ typedef ArtStrokeState = {
 
 private class ArtDrawCursor {
 	public final container:Sprite;
+	public final rasterCanvas:Sprite;
+	public final brushCanvas:Sprite;
 	public final layer:DecodedArtLayer;
 	public var color:Int = 0x000000;
 	public var size:Float = 10.0;
@@ -628,20 +693,29 @@ private class ArtDrawCursor {
 	private var actionIndex:Int = 0;
 	private var objectIndex:Int = 0;
 	private var textIndex:Int = 0;
+	private var rasterized:Bool = false;
 
-	public function new(container:Sprite, layer:DecodedArtLayer) {
+	public function new(container:Sprite, rasterCanvas:Sprite, layer:DecodedArtLayer) {
 		this.container = container;
+		this.rasterCanvas = rasterCanvas;
+		this.brushCanvas = new Sprite();
 		this.layer = layer;
-		container.graphics.lineStyle(size, color);
+		brushCanvas.graphics.lineStyle(size, color);
 	}
 
 	public function drawNext():Bool {
 		if (actionIndex < layer.drawActions.length) {
-			var state = ServerLevelRenderer.drawStrokeAction(container, color, size, mode, layer.drawActions[actionIndex++]);
+			var state = ServerLevelRenderer.drawStrokeAction(brushCanvas, color, size, mode, layer.drawActions[actionIndex++]);
 			color = state.color;
 			size = state.size;
 			mode = state.mode;
 			return true;
+		}
+		if (!rasterized) {
+			// All strokes are in; bake them onto transparent tiles once the layer's
+			// brush canvas is complete, before the objects/text layer on top of it.
+			ServerLevelRenderer.rasterizeBrushInto(rasterCanvas, brushCanvas);
+			rasterized = true;
 		}
 		if (objectIndex < layer.objects.length) {
 			ServerLevelRenderer.addLayerObject(container, layer.objects[objectIndex++], layer.scale);
