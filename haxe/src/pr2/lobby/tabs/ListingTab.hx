@@ -36,7 +36,13 @@ class ListingTab extends LevelListingPage {
 
 	override private function requestCourses():Void {
 		showLoading();
-		LevelListClient.fetch(mode, getPageNum(), onLoaded, onError);
+		// Favorites use a dedicated POST endpoint (user_id + page), not the generic
+		// /files/lists/{mode}/{page} GET; mirrors Flash `Favorites.requestCourses`.
+		if (mode == "favorites") {
+			LevelListClient.fetchFavorites(LobbySession.userId, getPageNum(), LobbySession.token, onLoaded, onError);
+		} else {
+			LevelListClient.fetch(mode, getPageNum(), onLoaded, onError);
+		}
 	}
 
 	private function onLoaded(result:LevelListResult):Void {

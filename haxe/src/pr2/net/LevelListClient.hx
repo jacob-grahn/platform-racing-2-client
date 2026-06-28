@@ -28,6 +28,31 @@ class LevelListClient {
 	}
 
 	/**
+		POST to `favorite_levels_get.php` (with `user_id` + `page`) and parse the
+		same level-list payload, mirroring `level_browser.Favorites.requestCourses`.
+		Favorites use this dedicated endpoint rather than the generic `listUrl` path.
+	**/
+	public static function fetchFavorites(userId:Int, page:Int, token:String, onResult:LevelListResult->Void, ?onError:String->Void):Void {
+		// favorite_levels_get.php is authenticated: Flash's SuperLoader appends a
+		// `token` (Main.token) and a `rand` to every request, so mirror that here.
+		var params = [
+			"user_id" => Std.string(userId),
+			"page" => Std.string(page),
+			"token" => token,
+			"rand" => Std.string(Std.random(10000000)),
+		];
+		FormPostClient.post(ServerConfig.favoriteLevelsGetUrl(), params, function(body:String):Void {
+			try {
+				onResult(parse(body));
+			} catch (error:Dynamic) {
+				if (onError != null) {
+					onError('failed to parse favorites list: ${Std.string(error)}');
+				}
+			}
+		}, onError);
+	}
+
+	/**
 		POST a search to `search_levels.php` and parse the same level-list payload,
 		mirroring `level_browser.Search.requestCourses` + the shared `loadHandler`.
 	**/

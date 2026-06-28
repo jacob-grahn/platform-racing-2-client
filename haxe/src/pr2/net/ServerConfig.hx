@@ -185,6 +185,15 @@ final class ServerConfig {
 		return host + "/favorite_levels_modify.php";
 	}
 
+	/**
+		Favorites list POST endpoint, matching `level_browser.Favorites.requestCourses`.
+		Unlike the other listing modes, favorites use a dedicated endpoint (POST
+		`user_id` + `page`) rather than the generic `{host}/files/lists/...` path.
+	**/
+	public static function favoriteLevelsGetUrl():String {
+		return host + "/favorite_levels_get.php";
+	}
+
 	/** Level password check POST, matching `LevelItem.clickPassEnter`. */
 	public static function levelPassCheckUrl():String {
 		return host + "/level_pass_check.php";
