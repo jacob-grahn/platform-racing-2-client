@@ -295,6 +295,10 @@ class Course extends Sprite {
 		}
 		raceStarted = false;
 		countdown = new Countdown(onCountdownFinish);
+		// CountdownGraphic's art is registered on its own origin, so anchor it at
+		// the screen center (Course HUD coords are top-left based).
+		countdown.x = Constants.STAGE_WIDTH / 2;
+		countdown.y = Constants.STAGE_HEIGHT / 2;
 		addChild(countdown);
 		if (localCharacter != null) {
 			var startPos = localCharacter.getPos();
