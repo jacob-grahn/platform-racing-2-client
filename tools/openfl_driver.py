@@ -416,12 +416,21 @@ class DevToolsSession:
 
 
 class WebSocket:
+    # Connect/handshake should be quick, but individual CDP responses can take a
+    # while: Page.captureScreenshot waits for a frame commit, and during the
+    # racing phase the page renders at low FPS, so a screenshot can take many
+    # seconds to come back. create_connection's timeout stays on the socket for
+    # all later recv() calls, so a short value would make read_exact time out
+    # mid-gameplay. Connect briefly, then widen the timeout for operations.
+    CONNECT_TIMEOUT = 5
+    OPERATION_TIMEOUT = 120
+
     def __init__(self, url):
         match = re.match(r"ws://([^/:]+):(\d+)(/.*)", url)
         if not match:
             raise SystemExit(f"Unsupported WebSocket URL: {url}")
         host, port, path = match.group(1), int(match.group(2)), match.group(3)
-        self.socket = socket.create_connection((host, port), timeout=5)
+        self.socket = socket.create_connection((host, port), timeout=self.CONNECT_TIMEOUT)
         key = base64.b64encode(os.urandom(16)).decode("ascii")
         request = (
             f"GET {path} HTTP/1.1\r\n"
@@ -435,6 +444,9 @@ class WebSocket:
         response = self.socket.recv(4096)
         if b" 101 " not in response.split(b"\r\n", 1)[0]:
             raise SystemExit(f"WebSocket handshake failed: {response.decode('utf-8', 'replace')}")
+        # Handshake done; allow long-running CDP calls (e.g. a mid-gameplay
+        # Page.captureScreenshot) to complete without tripping the recv timeout.
+        self.socket.settimeout(self.OPERATION_TIMEOUT)
 
     def request(self, payload):
         self.send_text(json.dumps(payload))
