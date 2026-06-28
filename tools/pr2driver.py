@@ -8,7 +8,9 @@ Commands:
   shot <out.jpg>                window-only screenshot (auto-crops to game rect)
   click <x> <y>                 click at stage coords (focus-click + action-click)
   tap <key>                     single keypress (key name: left right up down space)
+  type <text>                   type a unicode string into the focused field
   hold <key> <seconds>          key held for N seconds
+  quit                          kill the Flash projector
   sequence <script.json>        replay a JSON input timeline (see format below)
 
 Sequence script format:
@@ -81,6 +83,25 @@ _SWIFT_CLICK = textwrap.dedent("""\
     CGEvent(mouseEventSource: src, mouseType: .leftMouseUp, mouseCursorPosition: p, mouseButton: .left)?.post(tap: .cghidEventTap)
 """)
 
+_SWIFT_TYPE = textwrap.dedent("""\
+    import CoreGraphics
+    import Foundation
+    let text = CommandLine.arguments[1]
+    let src = CGEventSource(stateID: .hidSystemState)
+    for scalar in text.unicodeScalars {
+        var unit = UniChar(scalar.value & 0xFFFF)
+        if let down = CGEvent(keyboardEventSource: src, virtualKey: 0, keyDown: true) {
+            down.keyboardSetUnicodeString(stringLength: 1, unicodeString: &unit)
+            down.post(tap: .cghidEventTap)
+        }
+        if let up = CGEvent(keyboardEventSource: src, virtualKey: 0, keyDown: false) {
+            up.keyboardSetUnicodeString(stringLength: 1, unicodeString: &unit)
+            up.post(tap: .cghidEventTap)
+        }
+        usleep(25_000)
+    }
+""")
+
 _SWIFT_KEYDOWN = textwrap.dedent("""\
     import CoreGraphics
     import Foundation
@@ -147,11 +168,19 @@ def cmd_launch():
     print("\nTimeout waiting for Flash Player window.")
     sys.exit(1)
 
+def cmd_quit():
+    subprocess.run(["killall", PROC_NAME], capture_output=True)
+    print("Quit Flash Player.")
+
 def cmd_shot(out_path):
+    out_path = out_path.replace("{target}", "flash")
+    out_dir = os.path.dirname(os.path.abspath(out_path))
+    os.makedirs(out_dir, exist_ok=True)
     wx, wy, ww, wh = _win_rect()
     # Crop to the SWF stage only (exclude title bar)
     sx, sy = wx, wy + TITLE_H
     sw, sh = ww, wh - TITLE_H
+    fmt = "png" if out_path.lower().endswith(".png") else "jpeg"
     raw = out_path + ".raw.png"
     subprocess.run(
         ["screencapture", "-x", "-R", f"{sx},{sy},{sw},{sh}", raw],
@@ -159,7 +188,7 @@ def cmd_shot(out_path):
     )
     # Downscale to logical resolution (screencapture is 2x on Retina)
     subprocess.run(
-        ["sips", "-Z", str(sw), "-s", "format", "jpeg", raw, "--out", out_path],
+        ["sips", "-Z", str(sw), "-s", "format", fmt, raw, "--out", out_path],
         check=True, capture_output=True
     )
     os.unlink(raw)
@@ -181,6 +210,11 @@ def cmd_click(sx, sy):
 def _ensure_flash_focus():
     if not _flash_is_frontmost():
         _run_swift(_SWIFT_FOCUS)
+
+def cmd_type(text):
+    _ensure_flash_focus()
+    _run_swift(_SWIFT_TYPE, text)
+    print(f"Typed {text!r}")
 
 def cmd_tap(key):
     cmd_key_down(key)
@@ -230,10 +264,14 @@ def cmd_sequence(script_path):
             cmd_key_up(step["key"])
         elif action == "tap":
             cmd_tap(step["key"])
+        elif action == "typeText":
+            cmd_type(step["text"])
         elif action == "hold":
             cmd_hold(step["key"], step["seconds"])
         elif action == "shot":
             cmd_shot(step["out"])
+        elif action == "quit":
+            cmd_quit()
         else:
             print(f"Unknown action: {action}", file=sys.stderr)
 
@@ -284,8 +322,12 @@ def main():
         cmd_click(int(args[1]), int(args[2]))
     elif cmd == "tap" and len(args) == 2:
         cmd_tap(args[1])
+    elif cmd == "type" and len(args) == 2:
+        cmd_type(args[1])
     elif cmd == "hold" and len(args) == 3:
         cmd_hold(args[1], _parse_seconds(args[2]))
+    elif cmd == "quit" and len(args) == 1:
+        cmd_quit()
     elif cmd == "sequence" and len(args) == 2:
         cmd_sequence(args[1])
     else:

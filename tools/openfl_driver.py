@@ -89,6 +89,14 @@ KEY_DEFINITIONS = {
 }
 
 
+def gpu_flags(use_gpu):
+    # Default: software compositing (SwiftShader) for reproducible, machine-independent
+    # rendering, which the committed screenshot baselines depend on. --gpu opts into the
+    # real GPU path, useful for the e2e physics run where a higher/steadier framerate
+    # matters more than pixel-identical output.
+    return [] if use_gpu else ["--disable-gpu"]
+
+
 class QuietHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
@@ -139,7 +147,7 @@ def shutil_which(command):
     return None
 
 
-def capture_shot(out_path, root, delay, browser_path, query=""):
+def capture_shot(out_path, root, delay, browser_path, query="", use_gpu=False):
     browser = resolve_browser(browser_path)
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     virtual_time_ms = max(0, int(delay * 1000))
@@ -149,7 +157,7 @@ def capture_shot(out_path, root, delay, browser_path, query=""):
         command = [
             browser,
             "--headless=new",
-            "--disable-gpu",
+            *gpu_flags(use_gpu),
             "--hide-scrollbars",
             "--window-size=550,400",
             f"--virtual-time-budget={virtual_time_ms}",
@@ -175,12 +183,12 @@ def capture_shot(out_path, root, delay, browser_path, query=""):
     )
 
 
-def check_fps(root, duration, target, tolerance, browser_path, query=""):
+def check_fps(root, duration, target, tolerance, browser_path, query="", use_gpu=False):
     browser = resolve_browser(browser_path)
 
     with serve(root) as url:
         url = append_query(url, query)
-        samples = run_browser_and_read_fps(browser, url, duration)
+        samples = run_browser_and_read_fps(browser, url, duration, use_gpu)
 
     expected_sample_count = int(duration)
     checked_samples = samples[-expected_sample_count:]
@@ -199,12 +207,12 @@ def check_fps(root, duration, target, tolerance, browser_path, query=""):
     print("FPS validation passed.")
 
 
-def check_debug_state(root, delay, browser_path, query, expected):
+def check_debug_state(root, delay, browser_path, query, expected, use_gpu=False):
     browser = resolve_browser(browser_path)
 
     with serve(root) as url:
         url = append_query(url, query)
-        state_text = run_browser_and_read_debug_state(browser, url, delay)
+        state_text = run_browser_and_read_debug_state(browser, url, delay, use_gpu)
 
     state = parse_debug_state(state_text)
     print("Debug state:", state_text)
@@ -225,13 +233,13 @@ def check_debug_state(root, delay, browser_path, query, expected):
         print(f"Debug-state validation passed ({len(expected)} expectations).")
 
 
-def run_browser_and_read_debug_state(browser, url, delay):
+def run_browser_and_read_debug_state(browser, url, delay, use_gpu=False):
     debug_port = reserve_port()
     user_data_dir = tempfile.mkdtemp(prefix="pr2-openfl-chrome-")
     command = [
         browser,
         "--headless=new",
-        "--disable-gpu",
+        *gpu_flags(use_gpu),
         "--hide-scrollbars",
         "--window-size=550,400",
         f"--remote-debugging-port={debug_port}",
@@ -257,13 +265,13 @@ def run_browser_and_read_debug_state(browser, url, delay):
 
 
 @contextlib.contextmanager
-def browser_devtools_session(browser, url):
+def browser_devtools_session(browser, url, use_gpu=False):
     debug_port = reserve_port()
     user_data_dir = tempfile.mkdtemp(prefix="pr2-openfl-chrome-")
     command = [
         browser,
         "--headless=new",
-        "--disable-gpu",
+        *gpu_flags(use_gpu),
         "--hide-scrollbars",
         "--window-size=550,400",
         f"--remote-debugging-port={debug_port}",
@@ -314,13 +322,13 @@ def parse_expectation(expectation):
     return key, value
 
 
-def run_browser_and_read_fps(browser, url, duration):
+def run_browser_and_read_fps(browser, url, duration, use_gpu=False):
     debug_port = reserve_port()
     user_data_dir = tempfile.mkdtemp(prefix="pr2-openfl-chrome-")
     command = [
         browser,
         "--headless=new",
-        "--disable-gpu",
+        *gpu_flags(use_gpu),
         "--hide-scrollbars",
         "--window-size=550,400",
         f"--remote-debugging-port={debug_port}",
@@ -485,14 +493,14 @@ class WebSocket:
             self.socket.close()
 
 
-def run_sequence(script_path, root, browser_path, base_url=None):
+def run_sequence(script_path, root, browser_path, base_url=None, use_gpu=False):
     browser = resolve_browser(browser_path)
     query, steps = load_pr2_sequence(script_path, normalize_hold=True)
 
     server = contextlib.nullcontext(base_url) if base_url else serve(root)
     with server as url:
         url = append_query(url, query)
-        with browser_devtools_session(browser, url) as devtools:
+        with browser_devtools_session(browser, url, use_gpu) as devtools:
             run_sequence_steps(devtools, steps)
 
 
@@ -557,6 +565,10 @@ def run_sequence_step(devtools, step):
         if rebuilt is not True:
             raise SystemExit("Lobby rebuild hook is unavailable.")
         print("rebuild-lobby")
+    elif action in ("launch", "quit"):
+        # Lifecycle steps for the Flash projector; the browser session manages
+        # its own launch/teardown, so these are no-ops for parity sequences.
+        print(action)
     elif action == "shot":
         capture_devtools_shot(devtools, require_field(step, "out"))
     elif action == "debug-state":
@@ -658,6 +670,7 @@ def dispatch_mouse_move(devtools, x, y):
 
 
 def capture_devtools_shot(devtools, out_path):
+    out_path = out_path.replace("{target}", "openfl")
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     response = devtools.request("Page.captureScreenshot", {
         "format": "png",
@@ -845,6 +858,13 @@ def main():
     parser.add_argument("--fps-target", type=int, default=27)
     parser.add_argument("--fps-tolerance", type=int, default=5)
     parser.add_argument("--expect", action="append", default=[])
+    parser.add_argument(
+        "--gpu",
+        action="store_true",
+        help="use the real GPU instead of software rendering (drops --disable-gpu); "
+             "higher/steadier framerate but machine-dependent rendering, so avoid for "
+             "screenshot-baseline comparisons",
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     shot = subparsers.add_parser("shot")
@@ -858,13 +878,13 @@ def main():
 
     args = parser.parse_args()
     if args.command == "shot":
-        capture_shot(args.out, args.root, args.delay, args.browser, args.query)
+        capture_shot(args.out, args.root, args.delay, args.browser, args.query, args.gpu)
     elif args.command == "sequence":
-        run_sequence(args.script, args.root, args.browser, args.base_url)
+        run_sequence(args.script, args.root, args.browser, args.base_url, args.gpu)
     elif args.command == "fps":
-        check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser, args.query)
+        check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser, args.query, args.gpu)
     elif args.command == "debug-state":
-        check_debug_state(args.root, args.delay, args.browser, args.query, args.expect)
+        check_debug_state(args.root, args.delay, args.browser, args.query, args.expect, args.gpu)
 
 
 if __name__ == "__main__":

@@ -40,6 +40,20 @@ Grid overlays are included for the key navigation screens:
 - `04_lobby_unobstructed-grid.jpg`
 - `07_gameplay_start-grid.jpg`
 
+## End-to-end physics-parity test
+
+- `race-complete-title.png` - static "-- Race Complete! --" title crop (stage box `160,78,392,102`), the assertion target for the "Don't Move JV" full-flow test.
+
+Run it with `tools/test_dont_move_jv.sh`. It drives the original projector through
+the whole flow (preloader -> intro skip -> login -> favorites/heart tab ->
+`Don't Move JV` -> Play), idles ~75s while the level's blocks push the character
+through the course on their own, then asserts the Race Complete! popup opened via
+`tools/check_race_complete.py`. Sequence: `test/sequences/flash/dont-move-jv.json`.
+
+Prereq: the `testjun6` / `Derron` session must be remembered by the projector so the
+login dialog resumes it with a single click (no password field is shown). This is the
+reference run the new port's physics will later be measured against.
+
 ## Notes
 
 The item captures show the held-item HUD state after rolling an infinite item block. They do not capture each item's active-use effect.
