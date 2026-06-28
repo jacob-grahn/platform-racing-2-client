@@ -17,10 +17,10 @@ class PlayerDisplayPlacementTest {
 		characterDisplay.scaleY = PlayerDisplayPlacement.CHARACTER_SCALE;
 		playerDisplay.addChild(characterDisplay);
 
-		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, 75, 300, true, -1);
+		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, 75, 300, -1);
 
 		assertClose(65, playerDisplay.x, "container x stays aligned to the standing hitbox width");
-		assertClose(270, playerDisplay.y, "crouch placement uses the shorter collision height");
+		assertClose(245, playerDisplay.y, "placement always anchors the feet-aligned display origin at the standing height");
 		assertClose(1, playerDisplay.scaleY, "crouch does not visually squash the character container");
 		assertClose(-0.9, characterDisplay.scaleX, "facing still flips the authored character scale");
 		assertClose(0.9, characterDisplay.scaleY, "crouch keeps the authored character scale");

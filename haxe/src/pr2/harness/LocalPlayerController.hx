@@ -115,6 +115,10 @@ class LocalPlayerController {
 	private var itemReloadFramesRemaining:Int = 0;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
+	// The level's allowed-item pool (GamePage.setItems), used when an item block
+	// carries empty options. Defaults to every code so a standalone controller
+	// still hands out items before Course wires the level config.
+	private var allowedItems:Array<Int> = pr2.gameplay.Items.getAllCodes();
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -168,6 +172,12 @@ class LocalPlayerController {
 
 	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
 		applyStats(speed, acceleration, jump);
+	}
+
+	// The pool an empty-options item block draws from (Course passes the decoded
+	// LevelConfig.allowedItems). Empty means the level grants no items.
+	public function setAllowedItems(items:Array<Int>):Void {
+		allowedItems = items != null ? items : [];
 	}
 
 	private function get_facingScaleX():Int {
@@ -780,18 +790,30 @@ class LocalPlayerController {
 		}
 	}
 
+	// Mirrors ItemBlock.useSupply: an empty options string means "any of the
+	// level's allowed items", "none" yields nothing, and otherwise the dash list
+	// is the candidate pool. Flash then picks one candidate at random; the
+	// deterministic LCG keeps the test suite reproducible (single-item blocks,
+	// the only ones the suite exercises, resolve to the same id regardless).
 	private function itemFromBlockOptions(options:String):Null<Int> {
-		if (options == "" || options == "none") {
-			return null;
-		}
-		var ids = options.split("-");
-		for (id in ids) {
-			var parsed = Std.parseInt(id);
-			if (parsed != null && parsed > 0) {
-				return parsed;
+		var candidates:Array<Int>;
+		if (options == "") {
+			candidates = allowedItems;
+		} else if (options == "none") {
+			candidates = [];
+		} else {
+			candidates = [];
+			for (id in options.split("-")) {
+				var parsed = Std.parseInt(id);
+				if (parsed != null && parsed > 0) {
+					candidates.push(parsed);
+				}
 			}
 		}
-		return null;
+		if (candidates.length == 0) {
+			return null;
+		}
+		return candidates[nextMoveRandom(candidates.length)];
 	}
 
 	private function useHeldItem(input:LocalPlayerInput):Void {

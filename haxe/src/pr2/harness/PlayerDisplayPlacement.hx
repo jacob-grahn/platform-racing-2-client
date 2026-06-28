@@ -10,12 +10,17 @@ class PlayerDisplayPlacement {
 		characterDisplay:DisplayObject,
 		feetX:Float,
 		feetY:Float,
-		crouching:Bool,
 		facingScaleX:Int
 	):Void {
-		var height = crouching ? LocalPlayerController.CROUCHING_HEIGHT : LocalPlayerController.STANDING_HEIGHT;
+		// The character art is feet-anchored: the inner display is offset down by
+		// the standing charHeight so its origin lands exactly on the feet. The
+		// container must therefore always subtract STANDING_HEIGHT, regardless of
+		// crouch state. Crouching is conveyed purely by the crouch animation frame
+		// (Flash keeps scaleY = 1 and the feet pinned); using the shorter crouch
+		// height here drops the display origin below the feet and sinks the
+		// character into the floor.
 		playerDisplay.x = feetX - LocalPlayerController.STANDING_WIDTH / 2;
-		playerDisplay.y = feetY - height;
+		playerDisplay.y = feetY - LocalPlayerController.STANDING_HEIGHT;
 		playerDisplay.scaleY = 1;
 		characterDisplay.scaleX = CHARACTER_SCALE * facingScaleX;
 		characterDisplay.scaleY = CHARACTER_SCALE;

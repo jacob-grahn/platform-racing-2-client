@@ -106,6 +106,7 @@ class GamePage extends Page implements GameCommandDelegate {
 			var level = ServerLevelDecoder.decode(data.data);
 			var config = LevelConfig.fromServerData(data);
 			course = new Course(level, data, config);
+			course.onFinish = onLocalFinish;
 			if (pendingLocalInit != null) {
 				course.createLocalCharacter(pendingLocalInit);
 				pendingLocalInit = null;
@@ -323,6 +324,23 @@ class GamePage extends Page implements GameCommandDelegate {
 			if (quitButton != null) {
 				quitButton.stopGlow();
 			}
+			finishedPage = new FinishedPage(levelId, returnToLobby);
+		}
+	}
+
+	// Course invokes this once the local player bumps a finish block (race-style
+	// modes). It emits finish_race itself; here we mark the player done, glow the
+	// quit button, and show the finished page (Flash Game.finish + the server's
+	// maybeShowFinishedPage, which the award/exp command stubs don't yet drive).
+	private function onLocalFinish(_:pr2.harness.LocalPlayerDebugState):Void {
+		if (playerDone) {
+			return;
+		}
+		playerDone = true;
+		if (quitButton != null) {
+			quitButton.startGlow();
+		}
+		if (finishedPage == null) {
 			finishedPage = new FinishedPage(levelId, returnToLobby);
 		}
 	}

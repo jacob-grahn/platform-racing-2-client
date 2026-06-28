@@ -132,7 +132,7 @@ class GameplayHarness extends Sprite {
 	}
 
 	private function updatePlayerDisplay():Void {
-		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, player.x, player.y, player.crouching, player.facingScaleX);
+		PlayerDisplayPlacement.place(playerDisplay, characterDisplay, player.x, player.y, player.facingScaleX);
 		characterDisplay.setState(player.debugState().characterState.toClipName());
 		characterDisplay.advanceOneFrame();
 	}

@@ -167,6 +167,10 @@ class LocalCharacter extends Character {
 		controller.setGravity(multiplier);
 	}
 
+	public function setAllowedItems(items:Array<Int>):Void {
+		controller.setAllowedItems(items);
+	}
+
 	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
 		controller.setStats(speed, acceleration, jump);
 		syncFromController();

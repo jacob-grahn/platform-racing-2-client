@@ -89,6 +89,12 @@ class Course extends Sprite {
 	public var countdown(default, null):Countdown;
 	public var raceStarted(default, null):Bool = false;
 
+	// Invoked once when the local player reaches a finish block. The host page
+	// (GamePage) uses it to mark the player done and show the finished page; the
+	// network notification itself is emitted here, mirroring Flash Game.finish.
+	public var onFinish:Null<LocalPlayerDebugState->Void> = null;
+	private var localFinishHandled:Bool = false;
+
 	private var playerDot:MiniMapDot;
 	private var drawingInfoFinished:Bool = false;
 	private var displayedItemId:Null<Int>;
@@ -120,6 +126,7 @@ class Course extends Sprite {
 
 		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
 		player = new LocalCharacter(serverFixture.fixture);
+		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
 		localCharacter = player;
@@ -354,11 +361,43 @@ class Course extends Sprite {
 		syncBlockVisuals();
 		updatePlayerDisplay();
 		var state = player.debugState();
+		maybeHandleLocalFinish(state);
 		syncItemDisplay(state.itemId, state.itemUses);
 		syncStatsDisplay(state);
 		syncHearts(state);
 		if (onFrame != null) {
 			onFrame(state);
+		}
+	}
+
+	// Port of the local side of Game.finish: when the player bumps a finish block
+	// the controller latches `finished`; objective mode reports each objective and
+	// removes its minimap marker, while every other mode emits finish_race once and
+	// lets the host page surface the finished page.
+	private function maybeHandleLocalFinish(state:LocalPlayerDebugState):Void {
+		if (localFinishHandled || !state.finished || state.finishBlockId == null) {
+			return;
+		}
+		localFinishHandled = true;
+		var finishId = state.finishBlockId;
+		var finishX = state.finishX == null ? 0 : state.finishX;
+		var finishY = state.finishY == null ? 0 : state.finishY;
+		if (config.gameMode == "objective") {
+			// Objective mode reports the objective and keeps racing; it must not
+			// surface the finished page, so onFinish stays unfired here.
+			if (miniMap != null) {
+				miniMap.removeFinish(finishX, finishY);
+			}
+			if (localCharacter != null) {
+				localCharacter.emitObjectiveReached(finishId, finishX, finishY);
+			}
+			return;
+		}
+		if (localCharacter != null) {
+			localCharacter.emitFinishRace(finishId, finishX, finishY);
+		}
+		if (onFinish != null) {
+			onFinish(state);
 		}
 	}
 
@@ -500,7 +539,7 @@ class Course extends Sprite {
 			playerDot.y = worldY;
 		}
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
-		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.crouching, player.facingScaleX);
+		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX);
 		player.display.setState(state.characterState.toClipName());
 		player.display.advanceOneFrame();
 	}

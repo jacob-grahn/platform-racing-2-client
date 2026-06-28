@@ -35,6 +35,7 @@ class LocalPlayerControllerTest {
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testBumpingItemBlockGrantsConfiguredItem();
+		testEmptyOptionsItemBlockGrantsAllowedItem();
 		testRegularItemBlockDepletesAfterFirstUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
 		testSuperJumpItemDoesNothingWhileCrouching();
@@ -518,6 +519,29 @@ class LocalPlayerControllerTest {
 		assertEquals(true, grantedItem, "jumping player bumps item block");
 		assertEquals(4, state.itemId, "configured item id is granted");
 		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
+	}
+
+	// An item block with empty options means "any of the level's allowed items"
+	// (ItemBlock.useSupply). Regression: the port previously treated empty options
+	// as "no item", so the common item block handed out nothing.
+	private static function testEmptyOptionsItemBlockGrantsAllowedItem():Void {
+		var player = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, ""));
+		player.setAllowedItems([7]);
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		assertEquals(null, player.debugState().itemId, "empty-options block grants nothing before the bump");
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(7, player.debugState().itemId, "empty options draws from the level's allowed item pool");
+
+		var noneAllowed = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, ""));
+		noneAllowed.setAllowedItems([]);
+		for (_ in 0...20) {
+			noneAllowed.step(new LocalPlayerInput());
+		}
+		noneAllowed.step(new LocalPlayerInput(false, false, true));
+		assertEquals(null, noneAllowed.debugState().itemId, "a level with no allowed items grants nothing");
 	}
 
 	private static function testRegularItemBlockDepletesAfterFirstUse():Void {

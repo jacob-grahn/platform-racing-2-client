@@ -690,6 +690,15 @@ class PR2MovieClip extends Sprite {
 	private function disposeUnusedReusableClips(reusableClips:Map<String, Array<PR2MovieClip>>):Void {
 		for (clips in reusableClips) {
 			for (clip in clips) {
+				// A clip still parented to `this` was reused this frame via the
+				// `shapeByElement` static-instance cache (it never went through
+				// `takeReusableClip`, so it stayed in the pool). The remove loop above
+				// has already detached every genuinely unused child, so a surviving
+				// parent means the clip is in use — disposing it would empty a visible
+				// instance (e.g. a held graphic re-rendered by gotoAndStop).
+				if (clip.parent == this) {
+					continue;
+				}
 				clip.dispose();
 			}
 		}
