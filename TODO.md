@@ -305,6 +305,9 @@ rounding, ordering, and edge cases.
     - [x] Lock Lightning item command parity against `items.Lightning`: use emits
       the exact `zap\`` payload and consumes the item. Guarded by
       `LocalPlayerControllerTest`.
+    - [x] Lock Mine item blocked-placement parity against `items.Mine`: using it
+      when the target tile is occupied keeps the item, adds no mine, and emits no
+      effect. Guarded by `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.

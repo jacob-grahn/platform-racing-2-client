@@ -46,6 +46,7 @@ class LocalPlayerControllerTest {
 		testJetPackLiftsPlayerThenExpires();
 		testLaserGunReloadTiming();
 		testMineItemPlacesMineAndConsumesItem();
+		testMineItemBlockedByOccupiedTile();
 		testLightningEmitsZapAndConsumesItem();
 		testSwordReloadTiming();
 		testIceWaveReloadTiming();
@@ -807,6 +808,20 @@ class LocalPlayerControllerTest {
 		assertEquals('mine:${mine.x * 30 + 15},${mine.y * 30 + 15}:0', state.lastItemEffect, "mine item emits centered mine effect");
 	}
 
+	private static function testMineItemBlockedByOccupiedTile():Void {
+		var level = blockedMineItemLevel();
+		var player = collectItem(level, 2);
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var state = player.debugState();
+
+		assertEquals(2, state.itemId, "blocked mine placement keeps held item");
+		assertEquals(null, state.lastItemEffect, "blocked mine placement emits no effect");
+		var mineCount = Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine);
+		assertEquals(0, mineCount, "blocked mine placement does not add a mine block");
+	}
+
 	private static function testLightningEmitsZapAndConsumesItem():Void {
 		var player = collectItem(heldItemLevel(3), 3);
 
@@ -1493,6 +1508,13 @@ class LocalPlayerControllerTest {
 				new LevelBlock(7, 6, BlockType.Finish)
 			]
 		);
+	}
+
+	private static function blockedMineItemLevel():FixtureLevel {
+		var level = heldItemLevel(2);
+		level.blocks.push(new LevelBlock(3, 4, BlockType.Solid));
+		level.blocks.push(new LevelBlock(3, 5, BlockType.Solid));
+		return level;
 	}
 
 	private static function jetPackComparisonLevel():FixtureLevel {
