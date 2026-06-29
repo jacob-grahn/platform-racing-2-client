@@ -52,7 +52,7 @@ still-unported popup/visual side effects.
     - [x] Port the Flash `PhysicsEffect` egg movement step: gravity, active-block
       landing, grounded wall reversal, egg-mode wrapping, facing, fade-in, and
       local-player touch collection.
-    - [ ] Port the animated egg attack side effects.
+    - [x] Port the animated egg attack side effects.
       - [x] Port the Flash egg attack probe, add_effect payloads, and 120-frame
         cooldown.
       - [x] Mount and animate the local Slash/Laser/IceWave effect visuals from
