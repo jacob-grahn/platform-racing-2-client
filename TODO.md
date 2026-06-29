@@ -22,215 +22,29 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Current Priority: Real Login-to-Race Flow
 
-The next milestone is one uninterrupted real-server session: login, lobby,
-select/join a level, race with remote players, finish, and return to the lobby.
-The persistent `LobbySocket` must survive every page transition as Flash's
-`Main.socket` did. Login and session establishment are complete (see README),
-and the level-entry decomposition (A1–A5 below) is now done; multiplayer race
-sync (Section B) and the live in-game shell / cutover (Section C) remain.
+The level-entry decomposition, the multiplayer `Character`/`LocalCharacter`/
+`RemoteCharacter` system and its emission/interpolation/lifecycle, the in-game
+`Course`/`GamePage` shell, the HUD widgets, the 3-2-1 countdown, prize and
+special-event behavior, and incremental level drawing are all ported and
+unit-covered (see README). What remains is the end-to-end acceptance and the
+still-unported popup/visual side effects.
 
-- [ ] Replace the campaign-harness redirect with the real level-entry protocol.
-  - Port slot selection, `CourseMenu`, access checks, password/private flows,
-    spectating, room commands, loading/cancel/error states, and game-page
-    transition from `flash/level_browser`, `flash/page/GamePage.as`, and
-    `flash/gameplay/Game.as`. In-place level loading via `confirm_slot`/
-    `startGame` already works (see README); the remaining work is the full
-    `CourseMenu`/access/spectate protocol around it.
-  - Decomposed A1–A5 (each ships a named `*Test.hx` in `DeterministicTestSuite`).
-    **All five done and verified** — condensed below; see git history for detail.
-    `GamePage` now mounts the real `Course` shell, resolves the load through the
-    two-error `LevelEntry` machine, and registers the full `Game` command table
-    via `GameCommandShell`. Remaining for this box (deferred to B/C, why it stays
-    `[ ]`): the live race — character creation, `beginRace`/countdown/finish hooks, and the
-    popup side-effects behind `GameCommandDelegate` (LuxPopup/Egg/Hat
-    unported). Flips to `[x]` when the real login→race→lobby flow runs.
-  - [x] Port the authored `SpectatePicker` UI boundary. `Course` now mounts
-    `SpectatePickerGraphic`, exposes Flash's temp-id `playerArray`, gates picker
-    visibility through `toggleSpectatePossible`, cycles remote players with the
-    arrow buttons, calls `changeSpectate`, and tears bindings/art down on course
-    removal. Guarded by `SpectatePickerTest`.
-  - [x] A1 — Faithful config-setter semantics → `pr2.gameplay.LevelConfig` (+
-    `pr2.gameplay.Items`); decode/fetch were already in `ServerLevelDecoder`/
-    `LevelDataClient`. Test: `LevelConfigTest`.
-  - [x] A2 — Fetch + `MD5(version+id+levelData+LEVEL_SALT_2)` validation already in
-    `LevelDataClient`; parsed→config handoff is `LevelConfig.fromServerData`. Test:
-    `LevelDataClientTest`.
-  - [x] A3 — Extracted the in-game `Course` shell (level render, camera, character
-    layer, HUD at verified offsets) from `CampaignTestScreen`; `GamePage` mounts it
-    instead of the harness. Test: `GameShellMountTest`.
-  - [x] A4 — In-game load lifecycle as the pure `pr2.gameplay.LevelEntry`
-    (`Idle→Selected→Loading→Ready|Failed`, matching-`startGame` gate, the two
-    distinct `loadHandler` error strings, spectate-on-`Ready`); access cover
-    (`LevelAccess`/`LevelItem`) and launch handoff (`LevelLaunch`) were already
-    ported. Test: `LevelEntryStateTest`.
-  - [x] A5 — `pr2.gameplay.GameCommandShell`: 1:1 parse/register of the
-    `Game.initialize`/`remove` command table behind a typed `GameCommandDelegate`;
-    character commands parse into reusable `LocalCharacterInit`/`RemoteCharacterInit`
-    (consumed by B). Test: `GameCommandShellTest`.
-- [ ] Port multiplayer race synchronization.
-  - Implement local update emission, remote character creation/interpolation,
-    player join/leave, positions, rotations, stats, hats, items/effects, block
-    changes, countdown/start, timer, finish order, spectating, and disconnect.
-  - Verify command names, field order, delimiters, update cadence, and rounding
-    against the AS3 client and captured server traffic.
-  - Architecture decision: port the full Flash `Character`/`LocalCharacter`/
-    `RemoteCharacter` hierarchy (truer 1:1), integrating with / replacing the
-    `LocalPlayerController` harness rather than bolting sync onto it. Verification:
-    AS3-spec deterministic transcript tests (emitted/consumed frame strings match
-    byte-for-byte; interpolation tests step `go()` deterministically, no live
-    server). Sequenced sub-tasks:
-  - [x] **B1 — Port `Character` base.** `pr2/character/Character.hx` ports
-    `flash/character/Character.as`: the appearance model (head/body/feet ids +
-    per-part primary/epic colours and the four-slot hat stack with special-hat
-    flags — `resetHats`/`setHats`/`getHighestHat`, `SecureStore` replaced by a flag
-    map), driving the existing `CharacterDisplay` for parts/colours/state; the
-    `changeState` state machine (clip = `state + "Anim"`, jump-sound via injectable
-    hook); `getPos`/`setPos`/`rotate`/`updateSegs` (via `RotationMath`); the pure
-    `blockTouchProbes` classifier B4 consumes; and the recovery-flash + fade-out
-    removal lifecycle. No networking. Deferred behind hooks (need unported
-    subsystems): particle emitters, jet-pack flame, `DjinnEffects`, held-weapon
-    display frame, sound playback. Test: `CharacterBaseTest` (state transitions +
-    jump-sound hook, hat stack/`getHighestHat`/flags, block-touch probes, recovery/
-    removal).
-  - [x] **B2 — Port `LocalCharacter` physics integration.** Migrate the audited
-    `LocalPlayerController` physics into `pr2/character/LocalCharacter.hx extends
-    Character` (or delegate to the existing controller) so behavior is preserved.
-    Test: reuse/retarget `LocalPlayerControllerTest` against `LocalCharacter`.
-    - [x] Add the `LocalCharacter` controller-delegation bridge. The new
-      `pr2.character.LocalCharacter` extends `Character`, owns the audited
-      `LocalPlayerController`, mirrors position/velocity/item/animation/facing
-      state after each step, exposes the existing debug/block helpers, and is
-      guarded by `LocalCharacterTest`.
-    - [x] Retarget the full `LocalPlayerControllerTest` matrix through
-      `LocalCharacter`. The controller parity matrix now instantiates
-      `LocalCharacter` for the audited physics/block/item/rotation coverage,
-      with controller-only debug hooks forwarded through the bridge.
-    - [x] Cut over `Course`/live gameplay construction to `LocalCharacter`.
-      `Course` now mounts the `LocalCharacter` bridge directly in the character
-      layer and keeps the existing debug-state/HUD sync surface. Guarded by
-      `GameShellMountTest`.
-  - [x] **B3 — Port `LocalCharacter` emission.** Emit `p\`dX\`dY`,
-    `exact_pos\`x\`y`, and `set_var\`<field>\`<value>` for each tracked field
-    (scaleX, state, parent, item, rotMod, rot, sparkle, jet, beginRemove), gated by
-    `updateInterval`/`framesSinceUpdate` (fallback 16). Emit event messages
-    (`squash`, `sting`, `heart`, `loose_hat`, `hat_to_start`, `grab_egg`,
-    `objective_reached`, `finish_race`, `quit_race`, `finish_drawing`,
-    `check_hat_countdown`) via `LobbySocket.write`. Test: `LocalCharacterEmitTest`
-    — drive scripted frames, assert exact emitted frame strings and cadence.
-  - [x] **B4 — Port `RemoteCharacter` consume + interpolation.** New
-    `pr2/character/RemoteCharacter.hx` from `flash/character/RemoteCharacter.as`:
-    register per-tempID commands (`p<id>`, `var<id>`, `exactPos<id>`,
-    `setHats<id>`, `heart<id>`, `sting<id>`), `updateQueue` push, ENTER_FRAME
-    `go()` with the `catchupRate` model (init `updateInterval+1`, −0.01 per
-    consumed update, +0.08 when empty, clamp 10), `setVar`/`setExactPos`/`pos`
-    queue ops, `processBlockTouches` remote activation, and command teardown on
-    remove. Test: `RemoteCharacterConsumeTest` — feed recorded command frames, step
-    `go()` deterministically, assert interpolated convergence and teardown.
-    - [x] Port the command consume/interpolation core. `RemoteCharacter` now
-      registers tempID-scoped position/var/exact-position/hat/heart/sting
-      commands, applies Flash's queued catch-up stepping and exact-position latch,
-      updates its minimap dot, exposes remote block-touch probes through a shell
-      hook, and unregisters commands plus removes the dot on teardown. Guarded by
-      `RemoteCharacterConsumeTest`.
-    - [x] Add the real-map remote block activation adapter. `RemoteBlockActivation`
-      resolves touched fixture blocks and dispatches Flash's remote-visible
-      `ArrowBlock` animation, `VanishBlock` activation, and `WaterBlock` ripple
-      effects through `ServerLevelRenderer`. Guarded by
-      `RemoteCharacterConsumeTest` and `ServerLevelRendererTest`.
-    - [x] Attach the remote block activation adapter when B5 mounts remotes in the
-      live `Course`.
-  - [x] **B5 — Wire create/destroy into the Game shell.**
-    `createLocalCharacter`/`createRemoteCharacter` now route from
-    `GameCommandShell` into the live `Course`, apply local stats/appearance,
-    instantiate remotes into the character layer with minimap dots and real-map
-    remote block activation, replace duplicate temp IDs, and tear remotes plus
-    temp command handlers down on explicit/course removal. `forceQuit` routes
-    through the game page quit flow. Guarded by `CharacterLifecycleTest`.
-- [ ] Port the complete in-game shell and race lifecycle.
-  - Implement `Course`, `GamePage`, countdown, race chat, minimap, stats, item
-    display, hearts, drawing info, music selection, quit flow, finish page,
-    experience gain, prizes, artifact/special-event behavior, and return to
-    lobby.
-  - Export or wire the authored `FinishedPageGraphic`, `ExpGainGraphic`,
-    `DrawingInfoGraphic`, `StatsDisplayGraphic`, `RaceChatGraphic`,
-    `MiniMapGraphic`, `MiniMapDot`, `PrizePopupGraphic`, `QuitButtonGraphic`, and
-    `MusicSelectionGraphic`; no generic HUD substitutes in parity captures.
-  - [x] Port the authored drawing-readiness display. `gameplay/DrawingInfo`
-    wraps `DrawingInfoGraphic`, mirrors Flash's four player rows, starts each
-    player's `drawing...` animation from `addPlayer`, handles the `finishDrawing`
-    command by hiding the matching spinner, unregisters on remove, and is mounted
-    in the current campaign/game path at Course's stage-space position while
-    incremental block drawing runs. Guarded by `DrawingInfoTest`.
-  - [x] Port the authored stats display. `gameplay/StatsDisplay` wraps
-    `StatsDisplayGraphic`, shows the character's speed/acceleration/jump from
-    `LocalCharacter.setStats`, and opens the `Current Stats` `HoverPopup` after a
-    250ms hover (torn down on mouse-out/remove). Mounted at Course's stage-space
-    (490, 34) and fed from the controller's stats each frame. Guarded by
-    `StatsDisplayTest`.
-  - [x] Port the authored deathmatch hearts. `gameplay/Hearts` stacks
-    `HeartGraphic` icons (0.2 scale, 20px step) and grows/shrinks toward the
-    requested count clamped to 0..15 like `Data.numLimit`. Mounted at Course's
-    stage-space (515, 59), hidden until a deathmatch level reports lives per
-    `Course.setLife`. Guarded by `HeartsTest`.
-  - [x] Port the 3-2-1 race countdown. `gameplay/Countdown` drives the authored
-    `CountdownGraphic` timeline, attaching its frame scripts (count at 9/24/39,
-    finish at 54, self-remove at 62), playing `ReadySound`/`GoSound` scaled by
-    the saved sound level, and invoking the gameplay-start hook from the live
-    `beginRace` command: `GameCommandShell` routes `beginRace`, `GamePage`
-    forwards or defers it until the `Course` exists, and `Course.beginRace`
-    mounts the countdown, emits the starting `exact_pos`, and initializes local
-    network emission when the countdown finishes. Guarded by `CountdownTest`,
-    `GameCommandShellTest`, and `CharacterLifecycleTest`.
-  - [x] Port the prize announcement. `gameplay/PrizePopup` (with the
-    `com.jiggmin.data.EpicFlash` port) renders `PrizePopupGraphic`: target clip
-    selection by type (`hat`/`head`/`body`/`feet`/`exp`/`cancel`), the
-    "You won" / "Anyone who finishes" / "The winner" body lines with `a`/`an`/`a
-    pair of`, the title decoration, flavor description, exp/cancel detail lines,
-    and the epic-upgrade shimmer. Wiring it to the live prize/special-event
-    commands is deferred to the multiplayer race-sync task. Guarded by
-    `PrizePopupTest`.
-  - The remaining list items are confirmed already ported (and recorded below or
-    in the README): race chat (`RaceChat`), minimap (`MiniMap`), item display
-    (`ItemDisplay`), drawing info (`DrawingInfo`), music selection
-    (`MusicSelection`), quit flow (`QuitButton`), finish page (`FinishedPage`),
-    experience gain (`ExpGain`), and return-to-lobby (`GamePage`). The `Course`
-    and `GamePage` full shells and artifact/special-event behavior remain blocked
-    on the level-entry and multiplayer race-sync tasks above.
-  - Cutover sub-tasks (do after Sections A and B land):
-  - [x] **C1 — Flip `GamePage` default to the real shell.** `GamePage` already
-    mounts the real `Course` shell, and the old `CampaignTestScreen` route is now
-    debug-only (`?screen=campaign&debug=campaign` / `debug=1`) with screen-routing
-    coverage in `ScreenTest`.
-  - [x] **C2 — Port artifact / special-event behavior** onto the real shell from
-    `flash/.../PlaceArtifact.as` and `SpecialEvent.as`, wiring the deferred
-    `Countdown.beginRace` live-command hook. Tests: `SpecialEventTest` /
-    `PlaceArtifactTest`.
-    - [x] Wire the live prize command hooks. `GamePage` now mirrors Flash
-      `Game.setPrize`/`cancelPrize`/`winPrize`, stores the current prize, opens
-      the authored `PrizePopup`, and fades the active prize popup on page
-      teardown. Guarded by `QuitButtonTest`.
-    - [x] Port the `SpecialEvent` click-hotkey dispatch. Privileged sessions now
-      track the Flash G+C artifact-placement and C+X prize-cancel click paths;
-      G+C opens the authored `PlaceArtifactGraphic` shell with the clicked course
-      coordinates, while C+X emits `cancel_prize` only when a prize is active.
-      Guarded by `SpecialEventTest`.
-    - [x] Port `PlaceArtifact` date selection. The authored popup now wires the
-      Flash month/day/year, time, AM/PM, and "Place Now" controls; validates
-      hour/minute text; handles leap years/month lengths; and computes the
-      scheduled set time. Guarded by `PlaceArtifactTest`.
-    - [x] Complete `PlaceArtifact` confirmation, scheduled override, and
-      `place_artifact.php` upload response flow.
-    - [x] Wire the live artifact-hat countdown command. `startHatCountdown`
-      now starts Flash's one-second `check_hat_countdown` emission,
-      `cancelHatCountdown` stops it through the game command shell, and game-page
-      teardown clears the timer. Guarded by `GameCommandShellTest` and
-      `QuitButtonTest`.
-    - [x] Wire the live cowboy-mode command. `GamePage.cowboyMode` now mounts the
-      authored `CowboyMode` animation, preserves its frame-82 stop script, and
-      disposes active animations on page teardown. Guarded by `QuitButtonTest`.
-    - [x] Wire the live happy-hour command. `GamePage.happyHour` now mounts the
-      authored `HappyHour` animation, preserves its frame-100 self-removal script,
-      and disposes active animations on page teardown. Guarded by `QuitButtonTest`.
+- [ ] Run one uninterrupted real-server session: an account and a guest each log
+  in, select/join a level, race with synchronized remote players, finish or
+  quit, and return to the lobby without a page reload. Add a deterministic
+  transcript test covering the full command/state sequence and screenshots for
+  level entry, countdown, racing, and finish. This is the acceptance that flips
+  the level-entry and race-sync milestones to done.
+- [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
+  `LuxPopup`, `Egg`, and `Hat` popups are unported.
+- [ ] Port the remaining character visual-effect hooks that are currently
+  stubbed behind injectable hooks: particle emitters, jet-pack flame,
+  `DjinnEffects`, the held-weapon display frame, and per-state sound playback.
+- [ ] Port the full `CourseMenu` access/spectate UI around in-place level
+  loading (slot selection, password/private flows, loading/cancel/error states)
+  from `flash/level_browser`, `flash/page/GamePage.as`, and
+  `flash/gameplay/Game.as`. In-place load via `confirm_slot`/`startGame`, the
+  `SpectatePicker` boundary, and the `LevelEntry` machine already work.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without
@@ -240,33 +54,21 @@ sequence and screenshots cover level entry, countdown, racing, and finish.
 ## Gameplay Fidelity
 
 Character-part registration, the `LocalCharacter` and block-physics audits, and
-real level decoding/rendering are complete (see README). Remaining physics work
-is scoped to item behavior below.
+real level decoding/rendering are complete (see README). Remaining work is the
+item-physics audit below plus unported gameplay subsystems.
 
-- [ ] Port gameplay behavior not represented by the local harness: hats and hat
-  powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
-  rank progression, race modes, captcha, and server-authoritative interactions.
-  - [x] Wire the live egg round command boundary. `Course` now handles
-    `setEggSeed`/`addEggs` in egg mode, preserves Flash's seeded egg ids/mode
-    bookkeeping, registers per-egg `removeEgg{id}` commands, emits `grab_egg`
-    when the local egg is collected, and tears egg commands down with the course.
-    Full `effects.Egg` PhysicsEffect movement/attack/squash visuals remain in
-    this parent item. Guarded by `CharacterLifecycleTest`.
-- [ ] Port the live level drawing from the source game, x blocks and x lines are
-  drawn every frame until everything is ready and the game begins.
-  - [x] Draw server-level blocks incrementally before gameplay starts. The
-    campaign/game renderer now attaches blocks in frame batches and holds player
-    stepping in a `phase=drawing` state until every block is present, instead of
-    synchronously drawing the full map. Guarded by `ServerLevelRendererTest`.
-  - [x] Port incremental drawing for authored art lines/objects/text. The
-    server-level renderer now batches decoded stroke actions, stamp objects, and
-    text objects alongside incremental blocks, and `Course` waits for complete
-    map/art drawing before stepping gameplay. Guarded by `ServerLevelRendererTest`.
-  - [x] Wire the real `finish_drawing` readiness flow around all background
-    layers. `Course` now waits for incremental blocks and all decoded art layers
-    to finish, emits Flash's `finish_drawing` payload with the gameplay level
-    hash, mode, finish positions/count, cowboy chance, and bad hats, and hides
-    the local drawing spinner exactly once. Guarded by `GameShellMountTest`.
+Port gameplay behavior not represented by the local harness, one subsystem at a
+time:
+
+- [ ] Port hats and hat powers.
+- [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
+  The egg round command boundary is already wired.
+- [ ] Port the deathmatch hearts gameplay behavior (the `Hearts` HUD widget is
+  already ported).
+- [ ] Port captcha.
+- [ ] Port rank progression.
+- [ ] Port race modes.
+- [ ] Port the remaining server-authoritative interactions.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 
@@ -274,101 +76,56 @@ The physics port must map 1:1 to the original engine, preserving its quirks and
 bugs. Do not "fix" or idealize behavior — replicate the AS3 exactly, including
 rounding, ordering, and edge cases.
 
-- [ ] Audit and port item physics/interaction 1:1 (item effects on the
-  character and world, timing, and edge cases).
-  - [x] Enforce the authored multi-use item reload timing: Laser Gun and Sword
-    wait 800ms (22 frames at 27 FPS), Ice Wave waits 1000ms (27 frames), and a
-    held item key fires again only when the reload completes.
-  - [x] Port Jet Pack fuel depletion and thrust timing. The local harness now
-    mirrors `items.JetPack`: 200 fuel ticks, three ammo pips derived from
-    remaining fuel, per-frame thrust of `-1.25` above `-5` vertical speed and
-    `-0.5` afterward, no fuel use while crouching, and item removal only when
-    fuel reaches zero. Guarded by `LocalPlayerControllerTest`.
-  - [ ] Complete the remaining item effect, world interaction, and edge-case
-    audit against the AS3 item/effect classes and server protocol.
-    - [x] Emit teleport-item start/end pop effect coordinates from the local
-      controller, matching `items.Teleport` (`x`, `y - 25` before and after the
-      120 px move) and suppressing effects when the destination is blocked.
-      Guarded by `LocalPlayerControllerTest`.
-    - [x] Emit mine-item effect coordinates from the centered placed mine tile,
-      rotated with `Data.rotatePoint`, matching `items.Mine`'s `add_effect`
-      payload shape. Guarded by `LocalPlayerControllerTest`.
-    - [x] Lock left-facing Laser Gun, Sword, and Ice Wave item direction/recoil
-      parity against the AS3 item classes. Guarded by `LocalPlayerControllerTest`.
-    - [x] Lock Super Jump item crouch parity against `items.SuperJump`: using it
-      while `LocalCharacter.crouching` is true does not consume the item, alter
-      velocity, or emit an effect. Guarded by `LocalPlayerControllerTest`.
-    - [x] Lock Speed Burst expiry parity against `items.SpeedBurst.remove()`:
-      after the five-second boost, the held item clears and movement stats reset
-      to the character's underlying stats. Guarded by `LocalPlayerControllerTest`.
-    - [x] Lock the base `items.Item` availability gate: a newly collected item
-      cannot fire until the item key has been released once, while held multi-use
-      items still refire after their reload completes. Guarded by
-      `LocalPlayerControllerTest`.
-    - [x] Lock Lightning item command parity against `items.Lightning`: use emits
-      the exact `zap\`` payload and consumes the item. Guarded by
-      `LocalPlayerControllerTest`.
-    - [x] Lock Mine item blocked-placement parity against `items.Mine`: using it
-      when the target tile is occupied keeps the item, adds no mine, and emits no
-      effect. Guarded by `LocalPlayerControllerTest`.
-    - [x] Lock the base `items.Item` release gate for reloadable weapons: Laser
-      Gun cannot fire until the item key has been released after collection, then
-      a held key refires exactly when the reload timer completes. Guarded by
-      `LocalPlayerControllerTest`.
+- [ ] Complete the remaining item effect, world-interaction, and edge-case audit
+  against the AS3 item/effect classes and server protocol. Jet pack fuel/thrust,
+  multi-use reload timing (Laser Gun/Sword/Ice Wave), teleport/mine effect
+  emission, super-jump crouch, speed-burst expiry, lightning, mine
+  blocked-placement, and the base item availability/release gates are done (see
+  README).
+
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.
 
 ## Lobby and Account Completion
 
-The lobby shell and tabs exist, but a number of interactions are currently
-record-only or fixture-driven. Audit every reachable control against the AS3;
-do not infer completion from the presence of a tab or exported symbol. The
-external-link, Options, and Credits popups are already functional (see README).
+The lobby shell and tabs exist, but a number of interactions are still
+record-only or fixture-driven. Audit every reachable control against the AS3; do
+not infer completion from the presence of a tab or exported symbol. The
+player, guest-player, guild, send-message, external-link, level-info shell,
+Options, Credits, store/Vault, and level-editor-handoff routes are functional
+(see README).
 
-- [ ] Replace `LobbyPopups.lastRequest` stand-ins with functional player,
-  guest-player, guild, level-info/report, admin/moderation, and social-action
-  popups, including their network requests and refresh behavior.
-  - [x] Remove `lastRequest` marker behavior from the ported player,
-    guest-player, and guild routes. `LobbyPopups.showPlayer`,
-    `showGuestPlayer`, `showGuild`, and `showGuildByName` now only open their
-    authored popup classes, leaving `lastRequest` reserved for still-unported
-    routes. Guarded by `PlayerPopupTest` and `GuildPopupTest`.
-  - [x] Replace guild link stand-ins with the authored `GuildPopupGraphic`
-    flow. `LobbyPopups.showGuild`/`showGuildByName` now open `GuildPopup`,
-    load `guild_info.php` with member rows, fill GP/member/prose fields, expose
-    PM Everyone for current guild members, and preserve the Shift guild-id
-    title toggle. Guarded by `GuildPopupTest`.
-  - [x] Remove the `lastRequest` marker from the send-message social-action
-    route. `LobbyPopups.sendMessage` now only opens `SendMessagePopup` with the
-    recipient filled in, leaving the shared upload flow to the authored popup.
-    Guarded by `SendMessagePopupTest`.
-  - [x] Remove the `lastRequest` marker from the level-link route. `showLevel`
-    now opens the authored `LevelInfoPopupGraphic` shell with Flash's singleton
-    modal lifecycle and loading-state boundary; data population/report/rating/
-    moderation actions remain in this TODO item. Guarded by `LevelInfoPopupTest`.
-  - [x] Remove the `lastRequest` marker from the external URL route. `openUrl`
-    now only opens the authored external-link warning popup and preserves the
-    explicit confirm-before-navigation flow. Guarded by `ExternalLinkPopupTest`.
-- [ ] Implement the remaining bottom-strip destinations: level editor. Preserve
-  guest/member visibility and logout side effects.
-  - [x] Remove the record-only `lastRequest` marker from the bottom-strip
-    store/vault route. The button now opens the authored Vault of Magics popup
-    directly, with deterministic coverage that the route no longer mutates the
-    placeholder request marker. The catalog, quantity, purchase, FAQ, sale, coin,
-    and booster flows are covered by the existing StorePopup implementation.
-  - [x] Replace the record-only level-editor click marker with the Flash-shaped
-    editor handoff. The lobby computes the permanent-moderator flag before
-    leaving, changes pages through the level-editor factory, and closes the
-    persistent lobby socket; the full editor implementation remains in the
-    level-editor section below. Guarded by `LobbyServicesTest`.
-- [ ] Verify every Chat, PMs, Players, Account, Campaign, listing, Favorites, and
-  Search operation against real HTTP/socket responses. Cover paging, stale and
-  out-of-order responses, loading/error/empty states, permissions, unread
-  updates, room changes, link handling, and state restoration after a race.
-- [ ] Complete account/profile workflows: password/email changes, outfit and
-  loadout persistence, part information, guild actions, friend/follow/ignore,
-  moderation controls, rank tokens, hotkeys, and server-driven refreshes.
+Finish the still-unported lobby popup routes, one at a time:
+
+- [ ] Port the level-info popup data population.
+- [ ] Port the level-info report/rating/moderation actions.
+- [ ] Port the admin/moderation popups.
+
+Verify each lobby data surface against real HTTP/socket responses, one at a
+time. Each must cover paging, stale and out-of-order responses,
+loading/error/empty states, permissions, unread updates, room changes, link
+handling, and state restoration after a race:
+
+- [ ] Verify Chat.
+- [ ] Verify PMs.
+- [ ] Verify Players.
+- [ ] Verify Account.
+- [ ] Verify Campaign.
+- [ ] Verify the level listing.
+- [ ] Verify Favorites.
+- [ ] Verify Search.
+Complete account/profile workflows, one at a time:
+
+- [ ] Port password and email changes.
+- [ ] Port outfit and loadout persistence.
+- [ ] Port part information.
+- [ ] Port guild actions.
+- [ ] Port friend/follow/ignore.
+- [ ] Port moderation controls.
+- [ ] Port rank tokens.
+- [ ] Port hotkeys.
+- [ ] Port server-driven profile refreshes.
 - [ ] Replace any remaining synthetic lobby visuals/data with authored symbols
   and exact Flash typography, masks, scroll behavior, hover/focus states, and
   stacking. Add focused baselines for every popup and non-empty/error state,
@@ -380,11 +137,31 @@ implemented only as a test marker.
 
 ## Level Editor and Level Management
 
-- [ ] Port `LevelEditor`, `LevelEditorMenu`, sidebars, tools, drawing/text/stamp
-  placement, block options, selection/deletion, undo-equivalent behavior,
-  camera/zoom, settings, hats/items/music menus, and test-course transition.
-- [ ] Port load/save/upload/delete/report-management flows and their validation,
-  access rules, popups, server formats, loading/errors, and return navigation.
+The lobby-to-editor handoff (permanent-moderator flag, page change, lobby socket
+close) is wired; the editor itself is unported.
+
+Port the editor itself, one piece at a time:
+
+- [ ] Port the `LevelEditor`/`LevelEditorMenu` shell and layout.
+- [ ] Port the editor sidebars.
+- [ ] Port the editor tools.
+- [ ] Port drawing/text/stamp placement.
+- [ ] Port block options.
+- [ ] Port selection/deletion.
+- [ ] Port undo-equivalent behavior.
+- [ ] Port camera/zoom.
+- [ ] Port editor settings.
+- [ ] Port the hats/items/music menus.
+- [ ] Port the test-course transition.
+
+Then the level-management flows, one at a time:
+
+- [ ] Port the load flow with its validation, access rules, popups, server
+  format, loading/errors, and return navigation.
+- [ ] Port the save flow with the same coverage.
+- [ ] Port the upload flow with the same coverage.
+- [ ] Port the delete flow with the same coverage.
+- [ ] Port the report-management flow with the same coverage.
 - [ ] Round-trip representative original level payloads without semantic drift;
   compare editor and test-course screenshots with Flash at the same camera and
   selected-tool state.
@@ -394,129 +171,77 @@ same serialized meaning and visible result as Flash.
 
 ## Runtime and Visual Coverage
 
-Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
-`cacheAsBitmap` optimization are complete (see README).
+Static-text fidelity, authored-symbol fallback removal, the `FlattenPolicy`
+`cacheAsBitmap` optimization, blend modes, Blur/Glow/DropShadow filters,
+nine-slice scaling, and the full timeline sound-frame runtime are complete (see
+README).
 
-- [ ] Audit generated timelines against Flash for masks, filters, blend modes,
-  color transforms, nested frame scripts, sound frames, dynamic text/font
-  embedding, buttons, nine-slice scaling, and unload/disposal behavior. Add a
-  reduced fixture for every runtime fix.
-  - [x] Apply authored element blend modes in `PR2MovieClip`, including
-    Animate's `layer` mode, with a reduced runtime fixture covering multiply,
-    screen, layer, and the normal default.
-  - [x] Apply authored Blur, Glow, and DropShadow filters in source order, with
-    Flash-compatible omitted-attribute defaults and keyframe removal. A reduced
-    runtime fixture covers every generated-catalog filter type and parameter.
-  - [x] Apply authored symbol nine-slice scaling grids. XFL `scaleGridLeft`,
-    `scaleGridRight`, `scaleGridTop`, and `scaleGridBottom` now generate into
-    `SymbolAssetDef` and initialize OpenFL `scale9Grid`; reduced and generated
-    `SquareBG` fixtures cover coordinate and size conversion.
-  - [x] Preserve authored timeline sound-frame metadata in the generated asset
-    catalog, including sound names/effects, in/out points, and envelope points.
-  - [x] Play authored timeline sound frames with Flash-compatible sync,
-    envelope, seeking, looping, and stop/disposal behavior.
-    - [x] Play default/event sounds once when the playhead enters their exact
-      keyframe, without retriggering across the keyframe's held duration.
-    - [x] Apply authored in/out-point seeking and volume envelopes. Timeline
-      event sounds now convert Animate's 44.1 kHz sample markers to playback
-      milliseconds, start at `inPoint44`, stop at `outPoint44`, and linearly
-      interpolate authored left/right envelope levels while playing. Guarded by
-      `AudioRuntimeTest`.
-    - [x] Implement stop-sync frames. Generated frame metadata now retains
-      `soundSync`, and entering a `stop` keyframe terminates every active
-      instance of that named library sound without affecting other sounds.
-      Guarded by `AudioRuntimeTest`.
-    - [x] Implement start-sync frames. Entering a `start` keyframe plays like an
-      event sound only when that named library sound has no active instance;
-      existing playback continues without restarting. Guarded by
-      `AudioRuntimeTest`.
-    - [x] Stop timeline-owned sounds when their `PR2MovieClip` is disposed,
-      without interrupting another timeline's instance of the same library
-      sound. Guarded by `AudioRuntimeTest`.
-    - [x] Preserve authored `soundLoopMode`/`soundLoop` metadata and play event/
-      start sounds with Flash repeat-count and continuous-loop semantics.
-      Guarded by `AudioRuntimeTest`.
-    - [x] Implement stream sync mode. Stream frames now remain active across
-      their authored keyframe duration, seek from the playhead's 27 FPS frame
-      offset and authored in-point, continue without restarting across
-      sequential frames, and stop on timeline stop or disposal. Guarded by
-      `AudioRuntimeTest`.
+Audit remaining generated-timeline behavior against Flash, one aspect at a time.
+Add a reduced fixture for every runtime fix.
+
+- [ ] Audit masks.
+- [ ] Audit color transforms.
+- [ ] Audit nested frame scripts.
+- [ ] Audit dynamic text/font embedding.
+- [ ] Audit buttons.
+- [ ] Audit unload/disposal.
 - [ ] Establish per-screen screenshot thresholds and compare at exact 550x400
   stage size for default, hover, pressed, focused, disabled, loading, populated,
-  empty, and error states. Keep visual metrics alongside baselines so “looks
-  close” is not the acceptance criterion.
+  empty, and error states. Keep visual metrics alongside baselines so "looks
+  close" is not the acceptance criterion.
 - [ ] Audit cleanup across repeated login/lobby/race/editor transitions: event
   listeners, timers, sockets, bitmap data, audio, and display-list references
-  must not leak or duplicate behavior.
-  - [x] Recursively dispose animated `PR2MovieClip` descendants inside
-    `DOMGroup`, component, and mask-holder containers so nested `ENTER_FRAME`
-    listeners cannot survive their owning timeline.
-  - [x] Stop timeline-sound envelope/out-point monitor timers when playback is
-    explicitly stopped by a sync frame or owning `PR2MovieClip` disposal.
-    Guarded by `AudioRuntimeTest`.
-  - [x] Dispose active server-level renderer animations on teardown. Removing
-    `ServerLevelRenderer` now clears the incremental block-draw listener and
-    recursively disposes arrow timelines plus active mine explosion/block-piece
-    effects, so race-screen teardown cannot leave their frame listeners alive.
-    Guarded by `ServerLevelRendererTest`.
+  must not leak or duplicate behavior. Nested-clip, audio-monitor-timer, and
+  server-level-renderer animation disposal are done (see README).
 
 ## Test and Release Matrix
 
-- [ ] Verify Chrome, Firefox, and Safari keyboard/focus, rendering, WebSocket,
-  audio, storage, and lifecycle behavior. Profile long sessions only after
-  behavior is correct, then optimize without changing parity.
-- [ ] Prepare the browser release path: production proxy/WebSocket configuration,
-  HTTPS, cache/version strategy, preload/error handling, diagnostics, and a
-  public test build.
-- [ ] After browser parity, port touch controls and package Android/iOS. Mobile
-  layout adaptations must not alter the canonical 550x400 game coordinates or
-  browser behavior.
+Verify keyboard/focus, rendering, WebSocket, audio, storage, and lifecycle
+behavior per browser. Profile long sessions only after behavior is correct, then
+optimize without changing parity:
+
+- [ ] Verify Chrome.
+- [ ] Verify Firefox.
+- [ ] Verify Safari.
+
+Prepare the browser release path, one piece at a time:
+
+- [ ] Port the production proxy/WebSocket configuration.
+- [ ] Set up HTTPS.
+- [ ] Define the cache/version strategy.
+- [ ] Port preload/error handling.
+- [ ] Add diagnostics.
+- [ ] Ship a public test build.
+
+Then mobile, after browser parity:
+
+- [ ] Port touch controls.
+- [ ] Package Android/iOS. Mobile layout adaptations must not alter the canonical
+  550x400 game coordinates or browser behavior.
 
 ## Final 1:1 Audit
 
 - [ ] Build a source-class coverage inventory mapping every first-party AS3
   class and linkage to its Haxe implementation, deliberate platform adapter, or
   verified unreachable/dead status. An exported asset alone does not count as a
-  class port.
-  - [x] Inventory `flash/background/*.as` in
-    `docs/source-class-coverage.md`, mapping each background/map class to the
-    Haxe renderer, fixture, course, effect, or editor-gap boundary that carries
-    its behavior. Guarded by `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/items/*.as` in `docs/source-class-coverage.md`, mapping
-    each item class to its Haxe controller/catalog target and current coverage
-    boundary. Guarded by `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/blocks/*.as` and `flash/blocks/options/*.as` in
-    `docs/source-class-coverage.md`, mapping each block/option class to the Haxe
-    block type, fixture/controller, renderer, or config boundary that carries its
-    behavior. Guarded by `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/character/*.as` in
-    `docs/source-class-coverage.md`, mapping the ported character base/local/
-    remote classes and explicit visual-effect hook boundaries. Guarded by
-    `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/chat/*.as` in `docs/source-class-coverage.md`,
-    mapping the lobby chat tab, PM list/actions, and explicit chat room info /
-    message-format parity gaps. Guarded by `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/social/*.as` in `docs/source-class-coverage.md`,
-    mapping the Players tab, online/friends/following/ignored/guild list
-    loaders, sortable rows, and explicit live refresh/error-state gaps. Guarded
-    by `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/effects/*.as` in `docs/source-class-coverage.md`,
-    mapping concrete effects to Haxe renderers, item/character hook boundaries,
-    and explicit remaining visual/physics gaps. Guarded by
-    `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/gameplay/*.as` in `docs/source-class-coverage.md`,
-    mapping the race shell, HUD widgets, command/page boundaries, and explicit
-    gameplay gaps. Guarded by `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/level_browser/*.as` in
-    `docs/source-class-coverage.md`, mapping listing pages, entries, slots,
-    course-menu launch behavior, and explicit live-response gaps. Guarded by
-    `SourceClassCoverageInventoryTest`.
-  - [x] Inventory `flash/sounds/*.as` in `docs/source-class-coverage.md`,
-    mapping Noodle Town menu music and shared sound-effect playback to the Haxe
-    audio runtime. Guarded by `SourceClassCoverageInventoryTest`.
-- [ ] Walk every original user flow and role: guest, member, moderator/admin
-  where testable, login failures, lobby/social/account/store, level browsing,
-  racing/spectating, editor/management, disconnect/reconnect, and logout.
+  class port. The `background`, `items`, `blocks` (+`blocks/options`),
+  `character`, `chat`, `social`, `effects`, `gameplay`, `level_browser`, and
+  `sounds` packages are inventoried in `docs/source-class-coverage.md` (guarded
+  by `SourceClassCoverageInventoryTest`). Remaining: inventory the rest of the
+  first-party AS3 packages (e.g. `page`, `menu`, `level_editor`, `com.*`) and
+  reconcile every class.
+Walk every original user flow and role, one at a time:
+
+- [ ] Walk the guest role end to end.
+- [ ] Walk the member role end to end.
+- [ ] Walk the moderator/admin role end to end where testable.
+- [ ] Walk the login-failure paths.
+- [ ] Walk lobby/social/account/store.
+- [ ] Walk level browsing.
+- [ ] Walk racing/spectating.
+- [ ] Walk editor/management.
+- [ ] Walk disconnect/reconnect.
+- [ ] Walk logout.
 
 The port is complete when no reachable behavior is a placeholder or harness
 redirect, the coverage inventory has no unexplained gaps, and deterministic,

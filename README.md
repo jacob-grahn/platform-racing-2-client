@@ -83,6 +83,7 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `docs/`: migration notes and inventories.
 - `docs/browser-platform-differences.md`: audited, platform-required HTML5
   differences and their parity boundaries.
+- `docs/source-class-coverage.md`: AS3 source-class → Haxe coverage inventory.
 - `TODO.md`: current porting plan and next steps.
 
 ## Porting Status
@@ -171,7 +172,39 @@ Completed subsystems (parity-relevant facts worth keeping):
   `PR2MovieClip` fails explicitly on an unresolved or over-nested symbol instead of
   drawing a placeholder. `FlattenPolicy` flattens proven-static top-level subtrees
   with `cacheAsBitmap` (enabled by default; lobby GPU frame rate improved from
-  ~18.7fps to the 60fps vsync cap).
+  ~18.7fps to the 60fps vsync cap). `PR2MovieClip` also applies authored element
+  blend modes (including Animate's `layer` mode), Blur/Glow/DropShadow filters in
+  source order with Flash-compatible omitted-attribute defaults, and symbol
+  nine-slice `scale9Grid` from XFL `scaleGrid*`. The timeline audio runtime plays
+  authored sound frames with Flash-compatible event/start/stop/stream sync,
+  in/out-point seeking (44.1 kHz markers → ms), linear left/right volume
+  envelopes, repeat-count/continuous loop semantics, and stop/disposal cleanup.
+- In-game race shell and multiplayer: `GamePage` mounts the real `Course` shell
+  (the old `CampaignTestScreen` route is debug-only), resolving level loads
+  through the pure `LevelEntry` state machine and registering the full `Game`
+  command table via `GameCommandShell` behind a typed `GameCommandDelegate`. The
+  Flash `Character`/`LocalCharacter`/`RemoteCharacter` hierarchy is ported:
+  appearance/hat-stack model and `changeState` machine, `LocalCharacter`'s
+  position/var/exact-pos emission gated by `updateInterval`, and `RemoteCharacter`
+  consume with the `catchupRate` interpolation model and remote block activation
+  (`ArrowBlock`/`VanishBlock`/`WaterBlock`). `createLocalCharacter`/
+  `createRemoteCharacter`, duplicate-temp-id replacement, and teardown are wired
+  through `Course`. The HUD widgets render from authored symbols — `SpectatePicker`,
+  `Countdown` (3-2-1 with `Ready`/`Go` sounds), `DrawingInfo`, `StatsDisplay`,
+  `Hearts`, `MiniMap`, `RaceChat`, `ItemDisplay`, `MusicSelection`, `QuitButton`,
+  `FinishedPage`, and `ExpGain` — and `PrizePopup` (with the `EpicFlash` port)
+  renders the prize/epic-upgrade announcement. `SpecialEvent` dispatches the G+C
+  artifact-placement and C+X prize-cancel hotkeys; `PlaceArtifact` handles the
+  full date/time scheduling and `place_artifact.php` upload; cowboy-mode,
+  happy-hour, hat-countdown, and the egg-round command boundary are wired live.
+  Server levels draw incrementally (blocks and authored art lines/objects/text in
+  per-frame batches) and gameplay holds in a drawing phase until every layer is
+  present, emitting Flash's `finish_drawing` payload exactly once.
+- Item physics: the local controller mirrors `items.JetPack` fuel/thrust timing,
+  the authored multi-use reload windows (Laser Gun/Sword 800ms, Ice Wave 1000ms),
+  teleport and mine effect-coordinate emission, super-jump crouch suppression,
+  speed-burst expiry stat reset, lightning's `zap` payload, mine blocked-placement,
+  and the base `items.Item` availability/release gates.
 
 Server level support:
 
