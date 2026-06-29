@@ -94,6 +94,43 @@ class SourceClassCoverageInventoryTest {
 		"ReportMessageButton"
 	];
 
+	private static final DIALOG_CLASSES:Array<String> = [
+		"AdminMenu",
+		"AutoDismissPopup",
+		"BanMenu",
+		"ChangePasswordPopup",
+		"ChooseLevelModModePopup",
+		"ConfirmPopup",
+		"CreateGuildPopup",
+		"DiscordVerificationPopup",
+		"ExternalLinkPopup",
+		"GetLevelsPopup",
+		"GuildJoinPopup",
+		"GuildMemberName",
+		"GuildPopup",
+		"HatsMenu",
+		"HoverPopup",
+		"InfoPopup",
+		"ItemMenu",
+		"LevelInfoPopup",
+		"LevelReportPopup",
+		"LogoutPassPopup",
+		"MessagePopup",
+		"OptionsArtQualityMenu",
+		"OptionsPopup",
+		"OptionsSongsMenu",
+		"OutfitPopup",
+		"PMRFCodesPopup",
+		"PlayerGuestPopup",
+		"PlayerPopup",
+		"Popup",
+		"SendMessagePopup",
+		"SetEmailPopup",
+		"TempModMenu",
+		"TransferGuildPopup",
+		"UploadingPopup"
+	];
+
 	private static final SOCIAL_CLASSES:Array<String> = [
 		"Following",
 		"Friends",
@@ -217,6 +254,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in CHAT_CLASSES) {
 			assertContains(inventory, '`flash/chat/$name.as`', 'inventory lists flash/chat/$name.as');
 		}
+		for (name in DIALOG_CLASSES) {
+			assertContains(inventory, '`flash/dialogs/$name.as`', 'inventory lists flash/dialogs/$name.as');
+		}
 		for (name in SOCIAL_CLASSES) {
 			assertContains(inventory, '`flash/social/$name.as`', 'inventory lists flash/social/$name.as');
 		}
@@ -247,6 +287,10 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.character.RemoteCharacter", "inventory maps remote character behavior");
 		assertContains(inventory, "pr2.lobby.tabs.ChatTab", "inventory maps lobby chat tab behavior");
 		assertContains(inventory, "pr2.lobby.tabs.MessagesTab", "inventory maps private message tab behavior");
+		assertContains(inventory, "pr2.lobby.dialogs.Popup", "inventory maps shared dialog popup behavior");
+		assertContains(inventory, "pr2.lobby.dialogs.PlayerPopup", "inventory maps member profile popup behavior");
+		assertContains(inventory, "pr2.lobby.dialogs.OptionsPopup", "inventory maps options popup behavior");
+		assertContains(inventory, "pr2.lobby.dialogs.UploadingPopup", "inventory maps shared upload popup behavior");
 		assertContains(inventory, "pr2.lobby.tabs.PlayersTab", "inventory maps social players tab behavior");
 		assertContains(inventory, "pr2.lobby.players.PlayersUserListLoader", "inventory maps social user-list loading");
 		assertContains(inventory, "pr2.effects.BlockPiece", "inventory maps block-piece effects");

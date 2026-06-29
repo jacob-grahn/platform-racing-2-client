@@ -100,6 +100,45 @@ alone is not a class port.
 | `flash/chat/ReplyMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored reply button graphic is mounted by `MessagesItem`, and its click opens `SendMessagePopup` with the Flash-shaped quoted body. |
 | `flash/chat/ReportMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored report button graphic is mounted by `MessagesItem`, and its click opens the moderation report confirmation before routing to `MessagesTab.doReport`. |
 
+## Dialogs Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/dialogs/AdminMenu.as` | admin/moderation popup gap | gap | The authored admin side menu and its role-gated server actions remain under the admin/moderation popup TODO. |
+| `flash/dialogs/AutoDismissPopup.as` | `pr2.lobby.dialogs.InfoPopup` subclasses | partial | The current hover/info popup base supports explicit popup removal and authored layout, but Flash's generic timed auto-dismiss base is not represented as a standalone reusable class. |
+| `flash/dialogs/BanMenu.as` | admin/moderation popup gap | gap | The authored ban menu, duration/reason controls, and moderation requests are not yet ported. |
+| `flash/dialogs/ChangePasswordPopup.as` | account password-change gap | gap | The password-change form and request flow remain under the account workflow TODO. |
+| `flash/dialogs/ChooseLevelModModePopup.as` | level-info moderation gap | gap | Level moderation mode selection is still part of the level-info report/rating/moderation action TODO. |
+| `flash/dialogs/ConfirmPopup.as` | `pr2.lobby.dialogs.ConfirmPopup` | ported | Authored confirmation layout, OK/cancel callbacks, singleton replacement, and gameplay/lobby callers are covered by popup and quit/artifact/rating tests. |
+| `flash/dialogs/CreateGuildPopup.as` | guild action gap | gap | Guild creation and its upload flow remain under the account/profile guild-action TODO. |
+| `flash/dialogs/DiscordVerificationPopup.as` | account verification gap | gap | Discord verification upload/response handling is not represented in the Haxe lobby yet. |
+| `flash/dialogs/ExternalLinkPopup.as` | `pr2.lobby.dialogs.ExternalLinkPopup`, `pr2.lobby.LobbyPopups` | ported | External links open only after explicit confirmation, replace earlier warnings, and are covered by `ExternalLinkPopupTest`. |
+| `flash/dialogs/GetLevelsPopup.as` | level-info list popup gap | gap | The user-level listing popup remains unported; level-listing tabs cover the main list surfaces separately. |
+| `flash/dialogs/GuildJoinPopup.as` | guild action gap | gap | Guild join/request upload behavior remains with the unported guild action workflows. |
+| `flash/dialogs/GuildMemberName.as` | `pr2.lobby.dialogs.GuildMemberName`, `pr2.lobby.dialogs.GuildPopup` | ported | Guild member rows render the authored symbol and linked names inside `GuildPopup`, covered by `GuildPopupTest`. |
+| `flash/dialogs/GuildPopup.as` | `pr2.lobby.dialogs.GuildPopup` | partial | The authored guild profile popup, member rows, link route, and profile request are represented; full guild actions and live error/loading parity remain workflow gaps. |
+| `flash/dialogs/HatsMenu.as` | level-editor/account menu gap | gap | The authored hats picker menu is not yet ported as a dialogs class; hats/loadout persistence and editor hats menu remain separate TODOs. |
+| `flash/dialogs/HoverPopup.as` | `pr2.lobby.dialogs.HoverPopup` | partial | Authored hover-popup framing and text display exist; specialized hover content such as chat room info and exact delay variants remain listed under their feature gaps. |
+| `flash/dialogs/InfoPopup.as` | `pr2.lobby.dialogs.InfoPopup`, `pr2.lobby.level.CourseMenu` | partial | Shared info-popup framing supports current hover/info popups and course-menu placement; generic Flash base behavior is not fully audited. |
+| `flash/dialogs/ItemMenu.as` | level-editor/account menu gap | gap | The authored item picker menu remains unported outside the generated symbol assets. |
+| `flash/dialogs/LevelInfoPopup.as` | `pr2.lobby.dialogs.LevelInfoPopup`, `pr2.lobby.LobbyPopups` | partial | Level links open the authored singleton popup, covered by `LevelInfoPopupTest`; data population, report, rating, and moderation actions remain TODOs. |
+| `flash/dialogs/LevelReportPopup.as` | level-info report gap | gap | Level report form fields and submission remain under the level-info actions TODO. |
+| `flash/dialogs/LogoutPassPopup.as` | account logout/password confirmation gap | gap | The authored logout password prompt is not yet represented in the account workflows. |
+| `flash/dialogs/MessagePopup.as` | `pr2.lobby.dialogs.MessagePopup` | ported | The shared authored message popup is used by login/lobby/store/gameplay flows for informational and error text. |
+| `flash/dialogs/OptionsArtQualityMenu.as` | `pr2.lobby.dialogs.OptionsPopup` | ported | Art-quality and filter toggles are folded into the authored options popup and persisted through `Settings`, covered by `OptionsPopupTest`. |
+| `flash/dialogs/OptionsPopup.as` | `pr2.lobby.dialogs.OptionsPopup`, `pr2.lobby.account.Settings` | ported | Music/sound sliders, art/filter toggles, alternate controls, quality, song blacklist, and persistence are covered by `OptionsPopupTest`. |
+| `flash/dialogs/OptionsSongsMenu.as` | `pr2.lobby.dialogs.OptionsPopup` | ported | Song blacklist selection is implemented inside the authored options popup and persisted with the rest of options state. |
+| `flash/dialogs/OutfitPopup.as` | `pr2.lobby.account.LoadoutsPopup`, account outfit persistence gap | partial | Loadout preview/listing has an authored Haxe popup, but full Flash outfit persistence and all account variants remain TODOs. |
+| `flash/dialogs/PMRFCodesPopup.as` | `pr2.lobby.dialogs.PMRFCodesPopup`, `pr2.lobby.dialogs.SendMessagePopup` | ported | The PM rich-formatting codes reference opens from the send-message popup as an authored info popup. |
+| `flash/dialogs/PlayerGuestPopup.as` | `pr2.lobby.dialogs.PlayerGuestPopup`, `pr2.lobby.LobbyPopups` | ported | Guest profile links open the authored stripped-down popup, covered by `PlayerPopupTest`. |
+| `flash/dialogs/PlayerPopup.as` | `pr2.lobby.dialogs.PlayerPopup`, `pr2.lobby.players.SocialActions` | partial | Member profile data, social labels/actions, message/guild routes, and guest handoff are represented; admin/temp-mod/ban side menus and complete live refresh parity remain TODOs. |
+| `flash/dialogs/Popup.as` | `pr2.lobby.dialogs.Popup` | partial | The Haxe popup base owns singleton open tracking, parent attachment, close controls, and fade-out/removal; exact Flash modal stacking and every subclass lifecycle remain audited per popup. |
+| `flash/dialogs/SendMessagePopup.as` | `pr2.lobby.dialogs.SendMessagePopup`, `pr2.lobby.tabs.MessagesTab` | partial | Compose, validation, quote prefill, character count, PMRF help, and upload routing are represented; swear/link/date parity and live error states remain PM workflow gaps. |
+| `flash/dialogs/SetEmailPopup.as` | account email-change gap | gap | The email-change form and request flow remain under the account workflow TODO. |
+| `flash/dialogs/TempModMenu.as` | admin/moderation popup gap | gap | Temporary-moderator controls are not yet ported. |
+| `flash/dialogs/TransferGuildPopup.as` | guild action gap | gap | Guild transfer flow and confirmation/upload handling remain unported. |
+| `flash/dialogs/UploadingPopup.as` | `pr2.lobby.dialogs.UploadingPopup`, `pr2.net.FormPostClient` | partial | Shared POST popup and JSON response callback handling are used by messages, store, ratings, and artifact placement; exact progress/error presentation is still verified per workflow. |
+
 ## Social Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
