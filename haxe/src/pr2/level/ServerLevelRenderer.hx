@@ -130,6 +130,10 @@ class ServerLevelRenderer extends Sprite {
 		return new Point(x - offsetX, y - offsetY);
 	}
 
+	public function cameraOffset():Point {
+		return new Point(offsetX, offsetY);
+	}
+
 	/** Applies Course.setPos camera translation to world and parallax layers. */
 	public function setCameraOffset(x:Float, y:Float):Void {
 		offsetX = Math.round(x);

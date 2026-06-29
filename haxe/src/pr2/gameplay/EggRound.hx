@@ -1,6 +1,9 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import openfl.geom.Point;
+import openfl.utils.Assets;
+import pr2.audio.SoundEffects;
 import pr2.level.ServerLevel;
 import pr2.net.CommandHandler;
 import pr2.runtime.PR2MovieClip;
@@ -20,18 +23,25 @@ typedef EggState = {
 	removal commands. The animated/attacking PhysicsEffect body remains separate.
 **/
 class EggRound {
+	public static inline var COLLECT_SOUND_PATH:String = "assets/audio/sfx/sound898.mp3";
+
 	private var rand:FlashRandom = new FlashRandom(1);
 	private var nextId:Int = 1;
 	private var mode:Int = 3;
 	private final commandHandler:CommandHandler;
 	private final onCollect:Int->Void;
 	private final displayLayer:Null<Sprite>;
+	private final cameraOffset:Void->Point;
+	private final playCollectSound:Int->Int->Void;
 	private var eggs:Map<Int, EggState> = new Map();
 
-	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite) {
+	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
+			?playCollectSound:Int->Int->Void) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
 		this.displayLayer = displayLayer;
+		this.cameraOffset = cameraOffset != null ? cameraOffset : function():Point return new Point();
+		this.playCollectSound = playCollectSound != null ? playCollectSound : playDefaultCollectSound;
 	}
 
 	public function initRound(seed:Int):Void {
@@ -53,9 +63,11 @@ class EggRound {
 	}
 
 	public function collectEgg(id:Int):Bool {
-		if (!eggs.exists(id)) {
+		var egg = eggs.get(id);
+		if (egg == null) {
 			return false;
 		}
+		playCollectSound(egg.x, egg.y);
 		removeEgg(id);
 		onCollect(id);
 		return true;
@@ -129,6 +141,14 @@ class EggRound {
 		commandHandler.defineCommand('removeEgg$id', function(_:Array<String>):Void {
 			removeEgg(id);
 		});
+	}
+
+	private function playDefaultCollectSound(x:Int, y:Int):Void {
+		if (!Assets.exists(COLLECT_SOUND_PATH)) {
+			return;
+		}
+		var offset = cameraOffset();
+		SoundEffects.playGameSound(Assets.getSound(COLLECT_SOUND_PATH), x, y, offset.x, offset.y, 1.5);
 	}
 }
 

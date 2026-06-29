@@ -124,6 +124,17 @@ class CharacterLifecycleTest {
 		raceCourse.addEggs(3);
 		assertEquals(0, raceCourse.eggRound.count(), "non-egg game mode ignores addEggs");
 		raceCourse.remove();
+
+		var soundPositions:Array<String> = [];
+		var soundRound = new EggRound(new CommandHandler(), function(_):Void {}, null, null, function(x:Int, y:Int):Void {
+			soundPositions.push('$x,$y');
+		});
+		soundRound.initRound(777);
+		soundRound.addEggs(1, ServerLevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0"));
+		var soundEgg = soundRound.egg(1);
+		assertTrue(soundEgg != null, "sound test egg spawned");
+		assertEquals(true, soundRound.collectEgg(1), "sound test egg collects");
+		assertEquals('${soundEgg.x},${soundEgg.y}', soundPositions[0], "collecting an egg plays its collection sound at the egg position");
 	}
 
 	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {
