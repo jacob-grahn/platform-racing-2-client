@@ -243,6 +243,12 @@ is scoped to item behavior below.
 - [ ] Port gameplay behavior not represented by the local harness: hats and hat
   powers, eggs/hearts, cowboy mode, artifact/special events, prizes, experience,
   rank progression, race modes, captcha, and server-authoritative interactions.
+  - [x] Wire the live egg round command boundary. `Course` now handles
+    `setEggSeed`/`addEggs` in egg mode, preserves Flash's seeded egg ids/mode
+    bookkeeping, registers per-egg `removeEgg{id}` commands, emits `grab_egg`
+    when the local egg is collected, and tears egg commands down with the course.
+    Full `effects.Egg` PhysicsEffect movement/attack/squash visuals remain in
+    this parent item. Guarded by `CharacterLifecycleTest`.
 - [ ] Port the live level drawing from the source game, x blocks and x lines are
   drawn every frame until everything is ready and the game begins.
   - [x] Draw server-level blocks incrementally before gameplay starts. The

@@ -50,6 +50,8 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingLocalInit:Null<LocalCharacterInit>;
 	private var pendingRemoteInits:Array<RemoteCharacterInit> = [];
 	private var pendingBeginRace:Bool = false;
+	private var pendingEggSeed:Null<Int>;
+	private var pendingEggAdds:Array<Int> = [];
 	private var specialEvent:Null<SpecialEvent>;
 	private var hatCountdownTimer:Null<haxe.Timer>;
 	private var cowboyModes:Array<CowboyMode> = [];
@@ -121,6 +123,14 @@ class GamePage extends Page implements GameCommandDelegate {
 				pendingBeginRace = false;
 				course.beginRace();
 			}
+			if (pendingEggSeed != null) {
+				course.setEggSeed(pendingEggSeed);
+				pendingEggSeed = null;
+			}
+			for (count in pendingEggAdds) {
+				course.addEggs(count);
+			}
+			pendingEggAdds.resize(0);
 			// Below the quit button / finish overlay, above nothing else yet.
 			addChildAt(course, 0);
 			clearLoadingText();
@@ -259,8 +269,20 @@ class GamePage extends Page implements GameCommandDelegate {
 		addChild(mode);
 	}
 	public function happyHour():Void {}
-	public function setEggSeed(seed:Int):Void {}
-	public function addEggs(count:Int):Void {}
+	public function setEggSeed(seed:Int):Void {
+		if (course == null) {
+			pendingEggSeed = seed;
+			return;
+		}
+		course.setEggSeed(seed);
+	}
+	public function addEggs(count:Int):Void {
+		if (course == null) {
+			pendingEggAdds.push(count);
+			return;
+		}
+		course.addEggs(count);
+	}
 	public function superBooster(tempId:Int):Void {}
 	public function maybeReturnHatToStart(hatId:Int):Void {}
 	public function startHatCountdown():Void {

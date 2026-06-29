@@ -94,6 +94,7 @@ class Course extends Sprite {
 	public var raceChat(default, null):RaceChat;
 	public var drawingInfo(default, null):DrawingInfo;
 	public var countdown(default, null):Countdown;
+	public var eggRound(default, null):EggRound;
 	public var raceStarted(default, null):Bool = false;
 
 	// Invoked once when the local player reaches a finish block. The host page
@@ -158,6 +159,7 @@ class Course extends Sprite {
 		buildMusicSelection();
 		buildRaceChat();
 		buildDrawingInfo();
+		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg);
 		updatePlayerDisplay();
 	}
 
@@ -342,6 +344,25 @@ class Course extends Sprite {
 		if (localCharacter != null) {
 			var startPos = localCharacter.getPos();
 			LobbySocket.write('exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}');
+		}
+	}
+
+	public function setEggSeed(seed:Int):Void {
+		if (eggRound != null) {
+			eggRound.initRound(seed);
+		}
+	}
+
+	public function addEggs(count:Int):Void {
+		if (config.gameMode != "egg" || eggRound == null) {
+			return;
+		}
+		eggRound.addEggs(count, level);
+	}
+
+	public function collectEgg(id:Int):Void {
+		if (localCharacter != null) {
+			localCharacter.emitGrabEgg(id);
 		}
 	}
 
@@ -683,6 +704,10 @@ class Course extends Sprite {
 		if (countdown != null) {
 			countdown.remove();
 			countdown = null;
+		}
+		if (eggRound != null) {
+			eggRound.clear();
+			eggRound = null;
 		}
 		removeAllRemoteCharacters();
 		if (levelRenderer != null) {

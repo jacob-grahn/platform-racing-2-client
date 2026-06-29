@@ -15,6 +15,7 @@ class CharacterLifecycleTest {
 
 	public static function main():Void {
 		testLocalAndRemoteLifecycle();
+		testEggRoundCommandLifecycle();
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
 
@@ -76,7 +77,46 @@ class CharacterLifecycleTest {
 		assertEquals(null, course.localCharacter, "course teardown clears local character");
 	}
 
-	private static function buildCourse(handler:CommandHandler):Course {
+	private static function testEggRoundCommandLifecycle():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "egg");
+		var shell = new GameCommandShell(new CourseDelegate(course), handler);
+		shell.install();
+
+		LobbySocket.resetSent();
+		handler.dispatch("setEggSeed", ["777"]);
+		handler.dispatch("addEggs", ["2"]);
+		assertEquals(2, course.eggRound.count(), "egg mode spawns requested eggs");
+		assertEquals(1, course.eggRound.ids()[0], "egg ids start at one");
+		assertEquals(2, course.eggRound.ids()[1], "egg ids increment");
+		assertTrue(handler.hasCommand("removeEgg1"), "first egg remote remove command registered");
+		assertTrue(handler.hasCommand("removeEgg2"), "second egg remote remove command registered");
+		assertEquals(3, course.eggRound.currentMode(), "seeded mode clamps Flash random value");
+		var first = course.eggRound.egg(1);
+		assertTrue(first != null, "first egg state stored");
+
+		assertEquals(true, course.eggRound.collectEgg(1), "collecting active egg succeeds");
+		assertEquals("grab_egg`1", LobbySocket.lastSent(), "collecting egg emits grab_egg");
+		assertEquals(1, course.eggRound.count(), "collected egg removed locally");
+		assertTrue(!handler.hasCommand("removeEgg1"), "collected egg unregisters remote remove");
+
+		assertEquals(true, handler.dispatch("removeEgg2", []), "remote remove command dispatches");
+		assertEquals(0, course.eggRound.count(), "remote remove clears egg");
+		assertTrue(!handler.hasCommand("removeEgg2"), "remote remove unregisters itself");
+
+		handler.dispatch("addEggs", ["1"]);
+		assertEquals(1, course.eggRound.count(), "egg mode can spawn after remote remove");
+		course.remove();
+		assertTrue(!handler.hasCommand("removeEgg3"), "course teardown unregisters remaining egg");
+		shell.remove();
+
+		var raceCourse = buildCourse(new CommandHandler(), "race");
+		raceCourse.addEggs(3);
+		assertEquals(0, raceCourse.eggRound.count(), "non-egg game mode ignores addEggs");
+		raceCourse.remove();
+	}
+
+	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {
 		var dataString = "m3`ffffff`0;0;11,1;0;8,0;1;0";
 		var level = ServerLevelDecoder.decode(dataString);
 
@@ -86,7 +126,7 @@ class CharacterLifecycleTest {
 		vars.set("song", "song1");
 		vars.set("gravity", "1");
 		vars.set("max_time", "120");
-		vars.set("gameMode", "race");
+		vars.set("gameMode", gameMode);
 		vars.set("items", "all");
 		vars.set("data", dataString);
 
@@ -127,8 +167,8 @@ private class CourseDelegate implements GameCommandDelegate {
 	public function winPrize(prize:Dynamic):Void {}
 	public function cowboyMode():Void {}
 	public function happyHour():Void {}
-	public function setEggSeed(seed:Int):Void {}
-	public function addEggs(count:Int):Void {}
+	public function setEggSeed(seed:Int):Void course.setEggSeed(seed);
+	public function addEggs(count:Int):Void course.addEggs(count);
 	public function superBooster(tempId:Int):Void {}
 	public function maybeReturnHatToStart(hatId:Int):Void {}
 	public function startHatCountdown():Void {}
