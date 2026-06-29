@@ -206,6 +206,13 @@ class SourceClassCoverageInventoryTest {
 		"Slot"
 	];
 
+	private static final LOBBY_CLASSES:Array<String> = [
+		"Lobby",
+		"LobbyLeft",
+		"LobbyRight",
+		"LobbySide"
+	];
+
 	private static final PAGE_CLASSES:Array<String> = [
 		"ArtifactHint",
 		"Chat",
@@ -308,6 +315,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in LEVEL_BROWSER_CLASSES) {
 			assertContains(inventory, '`flash/level_browser/$name.as`', 'inventory lists flash/level_browser/$name.as');
 		}
+		for (name in LOBBY_CLASSES) {
+			assertContains(inventory, '`flash/lobby/$name.as`', 'inventory lists flash/lobby/$name.as');
+		}
 		for (name in PAGE_CLASSES) {
 			assertContains(inventory, '`flash/page/$name.as`', 'inventory lists flash/page/$name.as');
 		}
@@ -343,6 +353,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.lobby.level.LevelListingPage", "inventory maps level browser listing pages");
 		assertContains(inventory, "pr2.lobby.level.LevelItem", "inventory maps level browser items");
 		assertContains(inventory, "pr2.lobby.level.CourseMenu", "inventory maps level browser course menu");
+		assertContains(inventory, "pr2.page.LobbyPage", "inventory maps lobby shell lifecycle");
+		assertContains(inventory, "pr2.lobby.LobbySide", "inventory maps lobby pane shell behavior");
 		assertContains(inventory, "pr2.page.PageHolder", "inventory maps page holder lifecycle");
 		assertContains(inventory, "pr2.gameplay.LevelConfig", "inventory maps page game metadata parsing");
 		assertContains(inventory, "pr2.lobby.tabs.AccountTab", "inventory maps account profile customization");

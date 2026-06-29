@@ -246,6 +246,15 @@ alone is not a class port.
 | `flash/level_browser/Search.as` | `pr2.lobby.search.SearchQuery`, `pr2.lobby.level.LevelListingPage` | partial | Search query normalization/decision logic and the shared listing shell are covered by `LobbyServicesTest`; populated/error response rendering remains with lobby verification. |
 | `flash/level_browser/Slot.as` | `pr2.lobby.level.Slot`, `pr2.lobby.level.LevelItem`, `pr2.lobby.level.CourseMenu` | ported | Slot state frames, fill/confirm/clear command routing, pending click, local course-menu creation, and teardown are represented by the Haxe slot/item/menu path and covered through `LobbyServicesTest`. |
 
+## Lobby Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/lobby/Lobby.as` | `pr2.page.LobbyPage`, `pr2.lobby.LobbyLeft`, `pr2.lobby.LobbyRight`, `pr2.lobby.LobbyPopups` | partial | The post-login shell mounts the authored lobby background, both panes, bottom button strip, menu music entry/exit, logout, level-editor handoff boundary, Kong link, Options, Vault, and Credits routes. Temporary-moderator confirmation copy and exact Kong-hat hover popup behavior remain lobby workflow/visual gaps. |
+| `flash/lobby/LobbyLeft.as` | `pr2.lobby.LobbyLeft`, `pr2.lobby.tabs.ChatTab`, `pr2.lobby.tabs.MessagesTab`, `pr2.lobby.tabs.PlayersTab`, `pr2.lobby.tabs.AccountTab` | ported | Member/guest tab membership, default Account selection, holder id, pane coordinates, unread PM notification container, and PM notify command routing are represented by the Haxe pane and covered by lobby tests. |
+| `flash/lobby/LobbyRight.as` | `pr2.lobby.LobbyRight`, `pr2.lobby.tabs.ListingTab`, `pr2.lobby.tabs.SearchTab` | partial | Campaign, All Time Best, Week's Best, Newest, Search, member-only Favorites, lookup-user, and lookup-level tab routing are represented. Each listing tab's live loading/error/populated parity remains tracked under the lobby data-surface verification TODO. |
+| `flash/lobby/LobbySide.as` | `pr2.lobby.LobbySide`, `pr2.page.PageHolder`, `pr2.ui.TabsHolder` | ported | The shared half-square background, tab holder, dimensions, selected tab memory, page offset `(4, 20)`, resize behavior, and teardown are represented by the Haxe pane base. |
+
 ## Page Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
