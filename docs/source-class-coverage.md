@@ -256,6 +256,22 @@ alone is not a class port.
 | `flash/page/Page.as` | `pr2.page.Page` | ported | Page initialization/removal lifecycle and parent removal are represented by the Haxe base page. |
 | `flash/page/PageHolder.as` | `pr2.page.PageHolder`, `pr2.lobby.level.LevelLaunch` | ported | Page replacement removes the old page before initializing/adding the new one, and root-only `startGame` launch ownership is covered by lobby and race transcript tests. |
 
+## Player Profile Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/player_profile/AccountInfo.as` | `pr2.lobby.tabs.AccountTab`, `pr2.lobby.account.AccountCustomizeData`, `pr2.lobby.account.AccountCharacter` | partial | The authored account tab requests/parses `setCustomizeInfo`, previews the character, edits stats/parts, emits `set_customize_info`, handles rank-token commands, and opens loadouts. Guild-name popup behavior, outfit confirmation parity, and full account workflow coverage remain open account/lobby tasks. |
+| `flash/player_profile/LoadoutsPopup.as` | `pr2.lobby.account.LoadoutsPopup`, `pr2.lobby.account.Presets` | partial | The ten-slot loadout popup applies and saves presets against the live account character, stats, and selectors. Exact Flash inheritance from `GetLevelsPopup` and complete persistence/user-state variants remain covered by the loadout/account workflow TODO. |
+| `flash/player_profile/PartInfo/PartInfoListing.as` | part-information popup gap | gap | The owned-part listing row, epic decoration, Djinn obtain text, and click-through part popup are not ported; account part info currently opens only a lightweight hover boundary. |
+| `flash/player_profile/PartInfo/PartInfoPopup.as` | part-information popup gap | gap | The full scrollable part catalog, per-part entries, close behavior, and external obtain links remain under the part-information TODO. |
+| `flash/player_profile/PartInfo/PartPopup.as` | part-information popup gap | gap | The detailed part popup, equip dispatch, obtain text, epic flash decoration, and linked player names are not yet represented in Haxe. |
+| `flash/player_profile/PartSelector.as` | `pr2.lobby.account.PartSelector`, `pr2.ui.ArrowButtons`, `pr2.lobby.account.ColorPicker` | partial | Part stepping, primary/epic color pickers, randomization, epic-color visibility, and change dispatch are represented. The exact Flash color-picker art and triangle/diagonal mask visuals remain visual fidelity work. |
+| `flash/player_profile/PlayerDisplay.as` | `pr2.lobby.account.PlayerDisplay`, `pr2.lobby.account.AccountCharacter` | partial | The hat/head/body/feet selectors, randomize button, preview update, current-hat tracking, and level-access retest dispatch are ported. The full part-info popup route is still a gap. |
+| `flash/player_profile/Preset.as` | `pr2.lobby.account.Preset` | ported | Preset slot number, stats, part ids, primary/epic colors, stored-data shape, and outfit-format projection are represented by the Haxe preset model. |
+| `flash/player_profile/PresetListing.as` | `pr2.lobby.account.LoadoutsPopup` internal listing | partial | Haxe renders selectable loadout rows inside `LoadoutsPopup`; the standalone `SelectableButton` subclass and exact row art/hover states are still part of account visual fidelity. |
+| `flash/player_profile/Presets.as` | `pr2.lobby.account.Presets`, `pr2.lobby.account.Settings` | ported | Ten saved presets load from settings, apply to character/stats/selectors, and save current style back to persistent settings. |
+| `flash/player_profile/RandomizeStyleButton.as` | `pr2.lobby.account.PlayerDisplay` randomize button | partial | The random-style action is wired through `PlayerDisplay` using the authored button symbol; the standalone hover-delay popup wrapper text is not represented. |
+
 ## UI Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |

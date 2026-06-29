@@ -214,6 +214,20 @@ class SourceClassCoverageInventoryTest {
 		"PageHolder"
 	];
 
+	private static final PLAYER_PROFILE_CLASSES:Array<String> = [
+		"AccountInfo",
+		"LoadoutsPopup",
+		"PartInfo/PartInfoListing",
+		"PartInfo/PartInfoPopup",
+		"PartInfo/PartPopup",
+		"PartSelector",
+		"PlayerDisplay",
+		"Preset",
+		"PresetListing",
+		"Presets",
+		"RandomizeStyleButton"
+	];
+
 	private static final SOUND_CLASSES:Array<String> = [
 		"NoodleTown",
 		"SoundEffects"
@@ -297,6 +311,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in PAGE_CLASSES) {
 			assertContains(inventory, '`flash/page/$name.as`', 'inventory lists flash/page/$name.as');
 		}
+		for (name in PLAYER_PROFILE_CLASSES) {
+			assertContains(inventory, '`flash/player_profile/$name.as`', 'inventory lists flash/player_profile/$name.as');
+		}
 		for (name in UI_CLASSES) {
 			assertContains(inventory, '`flash/ui/$name.as`', 'inventory lists flash/ui/$name.as');
 		}
@@ -328,6 +345,9 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.lobby.level.CourseMenu", "inventory maps level browser course menu");
 		assertContains(inventory, "pr2.page.PageHolder", "inventory maps page holder lifecycle");
 		assertContains(inventory, "pr2.gameplay.LevelConfig", "inventory maps page game metadata parsing");
+		assertContains(inventory, "pr2.lobby.tabs.AccountTab", "inventory maps account profile customization");
+		assertContains(inventory, "pr2.lobby.account.PartSelector", "inventory maps player-profile part selection");
+		assertContains(inventory, "pr2.lobby.account.Presets", "inventory maps loadout presets");
 		assertContains(inventory, "pr2.ui.TabsHolder", "inventory maps shared UI tab behavior");
 		assertContains(inventory, "pr2.ui.PageNavigation", "inventory maps shared page navigation");
 		assertContains(inventory, "pr2.lobby.account.StatsSelect", "inventory maps account stat controls");

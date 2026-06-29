@@ -238,7 +238,8 @@ Then mobile, after browser parity:
   `docs/source-class-coverage.md` (guarded by
   `SourceClassCoverageInventoryTest`). Remaining: inventory the rest of the
   first-party AS3 packages (e.g. `level_editor`, `lobby`, `com.*`) and
-  reconcile every class. The `menu` and `ui` packages are now inventoried.
+  reconcile every class. The `menu`, `player_profile`, and `ui` packages are now
+  inventoried.
 Walk every original user flow and role, one at a time:
 
 - [ ] Walk the guest role end to end.
