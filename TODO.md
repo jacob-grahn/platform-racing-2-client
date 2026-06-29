@@ -347,6 +347,9 @@ external-link, Options, and Credits popups are already functional (see README).
     now opens the authored `LevelInfoPopupGraphic` shell with Flash's singleton
     modal lifecycle and loading-state boundary; data population/report/rating/
     moderation actions remain in this TODO item. Guarded by `LevelInfoPopupTest`.
+  - [x] Remove the `lastRequest` marker from the external URL route. `openUrl`
+    now only opens the authored external-link warning popup and preserves the
+    explicit confirm-before-navigation flow. Guarded by `ExternalLinkPopupTest`.
 - [ ] Implement the remaining bottom-strip destinations: level editor. Preserve
   guest/member visibility and logout side effects.
   - [x] Remove the record-only `lastRequest` marker from the bottom-strip

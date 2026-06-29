@@ -10,12 +10,14 @@ class ExternalLinkPopupTest {
 	public static function main():Void {
 		var navigated:Array<String> = [];
 		ExternalLinkPopup.navigate = function(url:String):Void navigated.push(url);
+		LobbyPopups.lastRequest = "sentinel";
 
 		LobbyPopups.openUrl("https://pr2hub.com/path?q=one%20two");
 		var open = Popup.getOpen();
 		var popup = Std.downcast(open[open.length - 1], ExternalLinkPopup);
 		assertNotNull(popup, "external URL opens the authored warning popup");
 		assertEquals("https://pr2hub.com/path?q=one%20two", LobbyArt.text(popup, "linkBox").text, "link is shown verbatim");
+		assertEquals("sentinel", LobbyPopups.lastRequest, "external URL route is no longer record-only");
 		assertEquals(0, navigated.length, "opening the popup does not navigate");
 
 		click(popup, "proceed_bt");

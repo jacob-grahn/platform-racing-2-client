@@ -43,7 +43,6 @@ class LobbyPopups {
 	}
 
 	public static function openUrl(url:String):Void {
-		lastRequest = 'url:$url';
 		new ExternalLinkPopup(url);
 	}
 }
