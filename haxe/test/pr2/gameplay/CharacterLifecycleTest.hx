@@ -210,6 +210,24 @@ class CharacterLifecycleTest {
 			touchRound.step(physicsLevel);
 		}
 		assertEquals(0, touchRound.count(), "touch-collected egg is removed after squash timeout");
+
+		var attackRound = new EggRound(new CommandHandler(), function(_):Void {}, null, null, function(_, _):Void {});
+		attackRound.initRound(18);
+		assertEquals(0, attackRound.currentMode(), "attack test seed selects ice mode");
+		attackRound.addEggs(1, new ServerLevel(0xffffff, []));
+		var attackEgg = attackRound.egg(1);
+		assertTrue(attackEgg != null, "attack test egg spawned");
+		attackEgg.posX = 100;
+		attackEgg.posY = 100;
+		attackEgg.velX = 0;
+		attackEgg.velY = 0;
+		LobbySocket.resetSent();
+		attackRound.step(new ServerLevel(0xffffff, []), 0, 150, 120, false, false);
+		assertEquals("add_effect`IceWave`100`90`180`0`-1", LobbySocket.lastSent(), "egg attack emits Flash add_effect payload");
+		assertEquals(120, attackEgg.attackCooldown, "egg attack starts Flash cooldown");
+		attackRound.step(new ServerLevel(0xffffff, []), 0, 150, 120, false, false);
+		assertEquals(1, LobbySocket.sentCommands.length, "egg attack cooldown suppresses repeat emission");
+		assertEquals(119, attackEgg.attackCooldown, "egg attack cooldown ticks down each frame");
 	}
 
 	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {

@@ -8,6 +8,7 @@ import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.net.CommandHandler;
+import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
 import pr2.gameplay.RotationMath.RotatedPoint;
 
@@ -22,6 +23,7 @@ typedef EggState = {
 	var velY:Float;
 	var grounded:Bool;
 	var wallCooldown:Int;
+	var attackCooldown:Int;
 	var removing:Bool;
 	var removeFrames:Int;
 	final display:PR2MovieClip;
@@ -30,12 +32,16 @@ typedef EggState = {
 /**
 	Ports the round state from `effects.Egg`: seeded id/position generation,
 	PhysicsEffect movement, egg-mode gating in Course, collect emission, squash
-	removal, and per-egg remote removal commands. The attacking effect body
-	remains separate.
+	removal, per-egg remote removal commands, and the egg attack protocol/cooldown.
 **/
 class EggRound {
 	public static inline var COLLECT_SOUND_PATH:String = "assets/audio/sfx/sound898.mp3";
 	private static inline var SQUASH_REMOVE_FRAMES:Int = 27;
+	private static inline var ATTACK_COOLDOWN_FRAMES:Int = 120;
+	private static inline var MODE_ICE:Int = 0;
+	private static inline var MODE_SLASH:Int = 1;
+	private static inline var MODE_LASER:Int = 2;
+	private static inline var MODE_RANDOM:Int = 3;
 
 	private var rand:FlashRandom = new FlashRandom(1);
 	private var nextId:Int = 1;
@@ -85,7 +91,7 @@ class EggRound {
 				stepRemovingEgg(id, egg);
 				continue;
 			}
-			stepEgg(egg, level, courseRotation);
+			stepEgg(egg, level, courseRotation, playerX, playerY, playerCrouching, playerRemoved);
 			if (playerX != null && playerY != null && isNearLocalPlayer(egg.x, egg.y, playerX, playerY, playerCrouching, playerRemoved)) {
 				collectEgg(id);
 			}
@@ -186,6 +192,7 @@ class EggRound {
 			velY: 0,
 			grounded: false,
 			wallCooldown: 0,
+			attackCooldown: 0,
 			removing: false,
 			removeFrames: 0,
 			display: display
@@ -208,7 +215,8 @@ class EggRound {
 		}
 	}
 
-	private function stepEgg(egg:EggState, level:ServerLevel, courseRotation:Int):Void {
+	private function stepEgg(egg:EggState, level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
+			playerRemoved:Bool = false):Void {
 		egg.velY += 0.2;
 		if (egg.velY > 8) {
 			egg.velY = 8;
@@ -265,6 +273,49 @@ class EggRound {
 		if (egg.display.alpha < 1) {
 			egg.display.alpha += 0.02;
 		}
+		stepAttack(egg, displayRotation, playerX, playerY, playerCrouching, playerRemoved);
+	}
+
+	private function stepAttack(egg:EggState, displayRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
+			playerRemoved:Bool = false):Void {
+		var probeX = egg.posX + (egg.velX * (Math.random() * 100)) + 50;
+		var probe = RotationMath.rotatePoint(probeX, egg.posY, -displayRotation);
+		var nearLocalPlayer = playerX != null && playerY != null
+			&& isNearLocalPlayer(probe.x, probe.y, playerX, playerY, playerCrouching, playerRemoved);
+		if (egg.attackCooldown <= 0 && nearLocalPlayer) {
+			egg.attackCooldown = ATTACK_COOLDOWN_FRAMES;
+			var angle = 0;
+			var dir = "right";
+			if (egg.display.scaleX < 0) {
+				angle = 180;
+				dir = "left";
+			}
+			var attackX = Std.int(egg.posX);
+			var attackY = Std.int(egg.posY - 10);
+			var payload = attackPayload(attackX, attackY, angle, dir, egg.rot);
+			if (payload != "") {
+				LobbySocket.write('add_effect`$payload');
+			}
+		} else {
+			egg.attackCooldown--;
+		}
+	}
+
+	private function attackPayload(x:Int, y:Int, angle:Int, dir:String, rot:Int):String {
+		var randomMode = -1.0;
+		if (mode == MODE_RANDOM) {
+			randomMode = Math.random();
+		}
+		if (mode == MODE_ICE || randomMode > 0.66) {
+			return 'IceWave`$x`$y`$angle`$rot`-1';
+		}
+		if (mode == MODE_SLASH || randomMode > 0.33) {
+			return 'Slash`$x`$y`$dir`-1';
+		}
+		if (mode == MODE_LASER || randomMode > 0) {
+			return 'Laser`$x`$y`$dir`$rot`-1';
+		}
+		return "";
 	}
 
 	private static function wrapPosition(egg:EggState, level:ServerLevel):Void {

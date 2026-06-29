@@ -53,6 +53,10 @@ still-unported popup/visual side effects.
       landing, grounded wall reversal, egg-mode wrapping, facing, fade-in, and
       local-player touch collection.
     - [ ] Port the animated egg attack side effects.
+      - [x] Port the Flash egg attack probe, add_effect payloads, and 120-frame
+        cooldown.
+      - [ ] Mount and animate the local Slash/Laser/IceWave effect visuals from
+        egg attacks.
     - [x] Port the animated egg squash/remove side effect.
   - [ ] `Hat` popup.
 - [ ] Port the remaining character visual-effect hooks that are currently
