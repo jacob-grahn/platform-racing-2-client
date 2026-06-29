@@ -258,6 +258,12 @@ class SourceClassCoverageInventoryTest {
 		"RandomizeStyleButton"
 	];
 
+	private static final SHOP_CLASSES:Array<String> = [
+		"QuantityPopup",
+		"StoreListing",
+		"StorePopup"
+	];
+
 	private static final SOUND_CLASSES:Array<String> = [
 		"NoodleTown",
 		"SoundEffects"
@@ -402,6 +408,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in PLAYER_PROFILE_CLASSES) {
 			assertContains(inventory, '`flash/player_profile/$name.as`', 'inventory lists flash/player_profile/$name.as');
 		}
+		for (name in SHOP_CLASSES) {
+			assertContains(inventory, '`flash/shop/$name.as`', 'inventory lists flash/shop/$name.as');
+		}
 		for (name in UI_CLASSES) {
 			assertContains(inventory, '`flash/ui/$name.as`', 'inventory lists flash/ui/$name.as');
 		}
@@ -443,6 +452,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.lobby.tabs.AccountTab", "inventory maps account profile customization");
 		assertContains(inventory, "pr2.lobby.account.PartSelector", "inventory maps player-profile part selection");
 		assertContains(inventory, "pr2.lobby.account.Presets", "inventory maps loadout presets");
+		assertContains(inventory, "pr2.lobby.store.StorePopup", "inventory maps shop vault popup");
+		assertContains(inventory, "pr2.lobby.store.StoreListingData", "inventory maps shop listing pricing");
 		assertContains(inventory, "pr2.ui.TabsHolder", "inventory maps shared UI tab behavior");
 		assertContains(inventory, "pr2.ui.PageNavigation", "inventory maps shared page navigation");
 		assertContains(inventory, "pr2.lobby.account.StatsSelect", "inventory maps account stat controls");

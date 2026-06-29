@@ -308,6 +308,14 @@ alone is not a class port.
 | `flash/player_profile/Presets.as` | `pr2.lobby.account.Presets`, `pr2.lobby.account.Settings` | ported | Ten saved presets load from settings, apply to character/stats/selectors, and save current style back to persistent settings. |
 | `flash/player_profile/RandomizeStyleButton.as` | `pr2.lobby.account.PlayerDisplay` randomize button | partial | The random-style action is wired through `PlayerDisplay` using the authored button symbol; the standalone hover-delay popup wrapper text is not represented. |
 
+## Shop Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/shop/QuantityPopup.as` | `pr2.lobby.store.QuantityPopup`, `pr2.lobby.store.StoreListingData` | ported | The authored quantity popup, singleton replacement, slider max, selected/count cost text, rank-rental quantity limit, sale-adjusted cost, affordability color, buy enablement, cancel, and listener cleanup are represented by the Haxe popup and covered by `StorePopupTest`. |
+| `flash/shop/StoreListing.as` | `pr2.lobby.store.StoreListing`, `pr2.lobby.store.StoreListingData` | partial | Authored listing art, title/price/sale/description links, availability alpha, hover background, purchase/info dispatch, image loading, sale math, and current-price helpers are ported. The random `epic_everything` character previews and exact coin/price background resizing remain visual fidelity gaps. |
+| `flash/shop/StorePopup.as` | `pr2.lobby.store.StorePopup`, `pr2.lobby.store.StoreListing`, `pr2.lobby.store.StoreListingData`, `pr2.lobby.dialogs.UploadingPopup`, `pr2.crypto.PR2Encryptor` | partial | The Vault popup loads `/vault/vault.php`, renders authored listings, tracks user coins/title, handles FAQ, quantity selection, member/coin validation, super-booster use, purchase upload, encrypted buy-coins POST, wheel scrolling, and cleanup. Flash `CustomScrollBar` parity, sale title flashing, purchase terms copy, and full live error/empty visual coverage remain lobby/store verification gaps. |
+
 ## UI Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
