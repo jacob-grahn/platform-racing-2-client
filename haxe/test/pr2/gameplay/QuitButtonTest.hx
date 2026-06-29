@@ -23,6 +23,7 @@ class QuitButtonTest {
 		testGlowControls();
 		testGamePageQuitFlow();
 		testGamePagePrizeCommands();
+		testGamePageCowboyMode();
 		testGamePageHatCountdown();
 		closeAll();
 		trace('QuitButtonTest passed $assertions assertions');
@@ -151,6 +152,24 @@ class QuitButtonTest {
 		game.startHatCountdown();
 		game.remove();
 		assertEquals(null, game.hatCountdownTimer, "page removal clears the timer");
+		closeAll();
+	}
+
+	private static function testGamePageCowboyMode():Void {
+		var game = new GamePage(12345, 7);
+		game.cowboyMode();
+		assertEquals(1, game.cowboyModes.length, "cowboyMode adds the authored animation");
+		var mode = game.cowboyModes[0];
+		assertEquals(true, mode.parent == game, "cowboyMode attaches to the game page");
+
+		for (_ in 0...120) {
+			mode.advance();
+		}
+		assertEquals(82, mode.currentFrame, "cowboyMode stops on Flash frame 82");
+
+		game.remove();
+		assertEquals(0, game.cowboyModes.length, "game removal clears cowboy animations");
+		assertEquals(true, mode.parent == null, "game removal detaches cowboy animation");
 		closeAll();
 	}
 

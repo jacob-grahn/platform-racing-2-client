@@ -9,6 +9,7 @@ import openfl.text.TextFormat;
 import pr2.audio.AudioManager;
 import pr2.Constants;
 import pr2.gameplay.Course;
+import pr2.gameplay.CowboyMode;
 import pr2.gameplay.FinishedPage;
 import pr2.gameplay.GameCommandShell;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
@@ -51,6 +52,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingBeginRace:Bool = false;
 	private var specialEvent:Null<SpecialEvent>;
 	private var hatCountdownTimer:Null<haxe.Timer>;
+	private var cowboyModes:Array<CowboyMode> = [];
 	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
@@ -141,6 +143,10 @@ class GamePage extends Page implements GameCommandDelegate {
 		detachSpecialEventListeners();
 		specialEvent = null;
 		stopHatCountdown();
+		for (mode in cowboyModes.copy()) {
+			mode.remove();
+		}
+		cowboyModes.resize(0);
 		if (finishedPage != null) {
 			finishedPage.remove();
 			finishedPage = null;
@@ -247,7 +253,11 @@ class GamePage extends Page implements GameCommandDelegate {
 		showPrizePopup(prize, true);
 	}
 
-	public function cowboyMode():Void {}
+	public function cowboyMode():Void {
+		var mode = new CowboyMode();
+		cowboyModes.push(mode);
+		addChild(mode);
+	}
 	public function happyHour():Void {}
 	public function setEggSeed(seed:Int):Void {}
 	public function addEggs(count:Int):Void {}

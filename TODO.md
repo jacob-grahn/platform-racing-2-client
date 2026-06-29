@@ -221,6 +221,9 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
       `cancelHatCountdown` stops it through the game command shell, and game-page
       teardown clears the timer. Guarded by `GameCommandShellTest` and
       `QuitButtonTest`.
+    - [x] Wire the live cowboy-mode command. `GamePage.cowboyMode` now mounts the
+      authored `CowboyMode` animation, preserves its frame-82 stop script, and
+      disposes active animations on page teardown. Guarded by `QuitButtonTest`.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without
