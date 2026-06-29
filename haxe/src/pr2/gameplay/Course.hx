@@ -10,6 +10,7 @@ import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 import pr2.Constants;
+import pr2.character.Character;
 import pr2.character.LocalCharacter;
 import pr2.character.RemoteCharacter;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
@@ -50,6 +51,8 @@ class Course extends Sprite {
 	public static inline var ITEM_Y:Float = 2;
 	public static inline var MINIMAP_X:Float = 80;
 	public static inline var MINIMAP_Y:Float = 2;
+	public static inline var SPECTATE_X:Float = 10;
+	public static inline var SPECTATE_Y:Float = 230;
 	public static inline var DRAWING_X:Float = 2;
 	public static inline var DRAWING_Y:Float = 96;
 	public static inline var CHAT_X:Float = 4;
@@ -74,12 +77,16 @@ class Course extends Sprite {
 	public var characterLayer(default, null):Sprite;
 	public var localCharacter(default, null):LocalCharacter;
 	public var remoteCharacters(default, null):Map<Int, RemoteCharacter> = new Map();
+	public var playerArray(default, null):Array<Character> = [];
+	public var playerSpectating(default, null):Null<Character>;
+	public var canSpectate(default, null):Bool = false;
 	private var serverFixture:ServerFixtureLevel;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
 	private var remoteBlockActivation:RemoteBlockActivation;
 
 	public var miniMap(default, null):MiniMap;
+	public var spectatePicker(default, null):SpectatePicker;
 	public var itemDisplay(default, null):ItemDisplay;
 	public var statsDisplay(default, null):StatsDisplay;
 	public var hearts(default, null):Hearts;
@@ -133,6 +140,7 @@ class Course extends Sprite {
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
 		localCharacter = player;
+		playerArray[player.tempID] = player;
 		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
 
 		characterLayer = new Sprite();
@@ -143,6 +151,7 @@ class Course extends Sprite {
 		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
 
 		buildMiniMap();
+		buildSpectatePicker();
 		buildItemDisplay();
 		buildStatsDisplay();
 		buildHearts();
@@ -224,6 +233,14 @@ class Course extends Sprite {
 		addChild(drawingInfo);
 	}
 
+	private function buildSpectatePicker():Void {
+		spectatePicker = new SpectatePicker(this);
+		spectatePicker.x = SPECTATE_X;
+		spectatePicker.y = SPECTATE_Y;
+		addChild(spectatePicker);
+		toggleSpectatePossible(false);
+	}
+
 	/** Lets a wrapper (the debug harness) intercept chat lines before display. **/
 	public function handleRaceChatLine(message:String):Bool {
 		return onChatLine != null && onChatLine(message);
@@ -242,6 +259,7 @@ class Course extends Sprite {
 		localCharacter.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
 		localCharacter.setStats(init.speed, init.accel, init.jump);
+		playerArray[init.tempId] = localCharacter;
 		return localCharacter;
 	}
 
@@ -256,6 +274,7 @@ class Course extends Sprite {
 			remote.onBlockTouch = remoteBlockActivation.touch;
 		}
 		remoteCharacters.set(init.tempId, remote);
+		playerArray[init.tempId] = remote;
 		if (characterLayer != null) {
 			characterLayer.addChild(remote);
 		}
@@ -287,6 +306,15 @@ class Course extends Sprite {
 		}
 		remote.remove();
 		remoteCharacters.remove(tempId);
+		if (playerArray != null && tempId >= 0 && tempId < playerArray.length) {
+			playerArray[tempId] = null;
+		}
+		if (playerSpectating == remote) {
+			changeSpectate(-1);
+			if (spectatePicker != null) {
+				spectatePicker.stopSpectating();
+			}
+		}
 	}
 
 	public function removeAllRemoteCharacters():Void {
@@ -303,6 +331,7 @@ class Course extends Sprite {
 		if (countdown != null) {
 			countdown.remove();
 		}
+		toggleSpectatePossible(false);
 		raceStarted = false;
 		countdown = new Countdown(onCountdownFinish);
 		// CountdownGraphic's art is registered on its own origin, so anchor it at
@@ -314,6 +343,24 @@ class Course extends Sprite {
 			var startPos = localCharacter.getPos();
 			LobbySocket.write('exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}');
 		}
+	}
+
+	public function toggleSpectatePossible(value:Bool):Void {
+		if (spectatePicker != null) {
+			spectatePicker.toggleVisibility(value);
+		}
+		if (canSpectate == value) {
+			return;
+		}
+		canSpectate = value;
+		playerSpectating = null;
+	}
+
+	public function changeSpectate(tempId:Int):Void {
+		if (playerSpectating != null && tempId == playerSpectating.tempID) {
+			return;
+		}
+		playerSpectating = tempId >= 0 && playerArray != null && tempId < playerArray.length ? playerArray[tempId] : null;
 	}
 
 	public function artifactPlacementAt(stageX:Float, stageY:Float):PlaceArtifactRequest {
@@ -605,6 +652,10 @@ class Course extends Sprite {
 			miniMap = null;
 			playerDot = null;
 		}
+		if (spectatePicker != null) {
+			spectatePicker.remove();
+			spectatePicker = null;
+		}
 		if (itemDisplay != null) {
 			itemDisplay.remove();
 			itemDisplay = null;
@@ -640,6 +691,9 @@ class Course extends Sprite {
 		}
 		localCharacter = null;
 		player = null;
+		playerSpectating = null;
+		playerArray = null;
+		canSpectate = false;
 		characterLayer = null;
 		remoteBlockActivation = null;
 		remoteCharacters = null;

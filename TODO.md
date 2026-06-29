@@ -41,10 +41,14 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     `GamePage` now mounts the real `Course` shell, resolves the load through the
     two-error `LevelEntry` machine, and registers the full `Game` command table
     via `GameCommandShell`. Remaining for this box (deferred to B/C, why it stays
-    `[ ]`): the `SpectatePicker` UI (only `spectatePossible` is modeled) and the
-    live race — character creation, `beginRace`/countdown/finish hooks, and the
+    `[ ]`): the live race — character creation, `beginRace`/countdown/finish hooks, and the
     popup side-effects behind `GameCommandDelegate` (LuxPopup/CowboyMode/HappyHour/
     Egg/Hat unported). Flips to `[x]` when the real login→race→lobby flow runs.
+  - [x] Port the authored `SpectatePicker` UI boundary. `Course` now mounts
+    `SpectatePickerGraphic`, exposes Flash's temp-id `playerArray`, gates picker
+    visibility through `toggleSpectatePossible`, cycles remote players with the
+    arrow buttons, calls `changeSpectate`, and tears bindings/art down on course
+    removal. Guarded by `SpectatePickerTest`.
   - [x] A1 — Faithful config-setter semantics → `pr2.gameplay.LevelConfig` (+
     `pr2.gameplay.Items`); decode/fetch were already in `ServerLevelDecoder`/
     `LevelDataClient`. Test: `LevelConfigTest`.
