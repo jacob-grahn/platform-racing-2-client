@@ -579,7 +579,7 @@ class LocalPlayerControllerTest {
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(null, player.debugState().itemId, "item fires after the key has been released");
-		assertEquals("zap", player.debugState().lastItemEffect, "released lightning emits its effect");
+		assertEquals("zap`", player.debugState().lastItemEffect, "released lightning emits the Flash payload");
 	}
 
 	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {
@@ -815,7 +815,7 @@ class LocalPlayerControllerTest {
 		var state = player.debugState();
 
 		assertEquals(null, state.itemId, "lightning consumes on use");
-		assertEquals("zap", state.lastItemEffect, "lightning emits zap effect");
+		assertEquals("zap`", state.lastItemEffect, "lightning emits Flash's zap command payload");
 	}
 
 	private static function testSwordReloadTiming():Void {

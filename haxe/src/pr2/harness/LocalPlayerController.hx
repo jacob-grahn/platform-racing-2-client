@@ -890,7 +890,7 @@ class LocalPlayerController {
 	}
 
 	private function useLightning():Void {
-		lastItemEffect = "zap";
+		lastItemEffect = "zap`";
 		consumeHeldItemUse();
 	}
 

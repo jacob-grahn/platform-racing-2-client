@@ -302,6 +302,9 @@ rounding, ordering, and edge cases.
       cannot fire until the item key has been released once, while held multi-use
       items still refire after their reload completes. Guarded by
       `LocalPlayerControllerTest`.
+    - [x] Lock Lightning item command parity against `items.Lightning`: use emits
+      the exact `zap\`` payload and consumes the item. Guarded by
+      `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.
