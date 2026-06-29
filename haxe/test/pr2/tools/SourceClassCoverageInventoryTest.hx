@@ -84,6 +84,16 @@ class SourceClassCoverageInventoryTest {
 		"RemoteCharacter"
 	];
 
+	private static final CHAT_CLASSES:Array<String> = [
+		"ChatInstance",
+		"ChatRoomInfoPopup",
+		"DeleteMessageButton",
+		"Messages",
+		"MessagesItem",
+		"ReplyMessageButton",
+		"ReportMessageButton"
+	];
+
 	private static final EFFECT_CLASSES:Array<String> = [
 		"ArrowEffect",
 		"BlockPiece",
@@ -166,6 +176,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in CHARACTER_CLASSES) {
 			assertContains(inventory, '`flash/character/$name.as`', 'inventory lists flash/character/$name.as');
 		}
+		for (name in CHAT_CLASSES) {
+			assertContains(inventory, '`flash/chat/$name.as`', 'inventory lists flash/chat/$name.as');
+		}
 		for (name in EFFECT_CLASSES) {
 			assertContains(inventory, '`flash/effects/$name.as`', 'inventory lists flash/effects/$name.as');
 		}
@@ -185,6 +198,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.level.ServerLevelRenderer", "inventory maps visual block behavior to the renderer");
 		assertContains(inventory, "pr2.character.Character", "inventory maps character base behavior");
 		assertContains(inventory, "pr2.character.RemoteCharacter", "inventory maps remote character behavior");
+		assertContains(inventory, "pr2.lobby.tabs.ChatTab", "inventory maps lobby chat tab behavior");
+		assertContains(inventory, "pr2.lobby.tabs.MessagesTab", "inventory maps private message tab behavior");
 		assertContains(inventory, "pr2.effects.BlockPiece", "inventory maps block-piece effects");
 		assertContains(inventory, "pr2.effects.MineExplosion", "inventory maps mine explosion effects");
 		assertContains(inventory, "pr2.audio.SoundEffects", "inventory maps spatial sound playback");

@@ -487,6 +487,9 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
     `docs/source-class-coverage.md`, mapping the ported character base/local/
     remote classes and explicit visual-effect hook boundaries. Guarded by
     `SourceClassCoverageInventoryTest`.
+  - [x] Inventory `flash/chat/*.as` in `docs/source-class-coverage.md`,
+    mapping the lobby chat tab, PM list/actions, and explicit chat room info /
+    message-format parity gaps. Guarded by `SourceClassCoverageInventoryTest`.
   - [x] Inventory `flash/effects/*.as` in `docs/source-class-coverage.md`,
     mapping concrete effects to Haxe renderers, item/character hook boundaries,
     and explicit remaining visual/physics gaps. Guarded by

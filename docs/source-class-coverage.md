@@ -88,6 +88,18 @@ alone is not a class port.
 | `flash/character/RainbowStarEmitter.as` | `pr2.character.Character` hook boundary | gap | Rainbow sparkle particles are not yet rendered; sparkle start/end is currently exposed through local/remote network hooks. |
 | `flash/character/RemoteCharacter.as` | `pr2.character.RemoteCharacter`, `pr2.gameplay.RemoteBlockActivation` | ported | Temp-id command registration, queued position/var/exact-position consumption, Flash catch-up interpolation, minimap-dot updates, remote block-touch probes, and command teardown are covered by `RemoteCharacterConsumeTest`. Sparkle, jet, heart, and sting visuals remain hook boundaries. |
 
+## Chat Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/chat/ChatInstance.as` | `pr2.lobby.tabs.ChatTab`, `pr2.lobby.chat.ChatLog`, `pr2.lobby.chat.HtmlNameMaker` | partial | The authored chat tab, room persistence, `set_chat_room`, send routing, transcript rendering, lock-to-bottom behavior, and Ctrl update toggle are represented in `ChatTab`/`ChatLog`; the hover room-info popup is still a gap. |
+| `flash/chat/ChatRoomInfoPopup.as` | chat room info popup gap | gap | The `get_chat_rooms` request, `setChatRoomList` command registration, and authored hover popup list are not yet ported even though the command parser itself is covered by `LobbyServicesTest`. |
+| `flash/chat/DeleteMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored delete button graphic is mounted by `MessagesItem`, and its click opens the delete confirmation before routing to `MessagesTab.doDelete`. |
+| `flash/chat/Messages.as` | `pr2.lobby.tabs.MessagesTab`, `pr2.lobby.messages.MessagesPaging`, `pr2.lobby.messages.UnreadNotif` | partial | The PMs tab loads `messages_get.php`, paginates ten messages, lays out `MessagesItem` rows, opens compose/delete-all flows, and POSTs report/delete through `UploadingPopup`; exact unread badge behavior, swear filtering parity, and error/empty visual states remain lobby workflow gaps. |
+| `flash/chat/MessagesItem.as` | `pr2.lobby.dialogs.MessagesItem`, `pr2.lobby.chat.ChatText`, `pr2.lobby.chat.HtmlNameMaker` | partial | Sender names, guild marker, escaped body text, sent-time hover, reply quote truncation, and report/delete confirmations are ported; Flash `Data.parseLinks` URL detection and full date-format parity remain explicit gaps. |
+| `flash/chat/ReplyMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored reply button graphic is mounted by `MessagesItem`, and its click opens `SendMessagePopup` with the Flash-shaped quoted body. |
+| `flash/chat/ReportMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored report button graphic is mounted by `MessagesItem`, and its click opens the moderation report confirmation before routing to `MessagesTab.doReport`. |
+
 ## Effect Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
