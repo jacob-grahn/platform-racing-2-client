@@ -693,6 +693,9 @@ class LocalPlayerControllerTest {
 		}
 
 		assertEquals(null, boosted.debugState().itemId, "speed burst expires after five seconds");
+		assertClose(50, boosted.debugState().speedStat, "speed burst expiry restores speed stat");
+		assertClose(50, boosted.debugState().accelerationStat, "speed burst expiry restores acceleration stat");
+		assertClose(50, boosted.debugState().jumpStat, "speed burst expiry preserves jump stat");
 	}
 
 	private static function testJetPackLiftsPlayerThenExpires():Void {

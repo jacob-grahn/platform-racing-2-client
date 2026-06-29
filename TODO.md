@@ -285,6 +285,9 @@ rounding, ordering, and edge cases.
     - [x] Lock Super Jump item crouch parity against `items.SuperJump`: using it
       while `LocalCharacter.crouching` is true does not consume the item, alter
       velocity, or emit an effect. Guarded by `LocalPlayerControllerTest`.
+    - [x] Lock Speed Burst expiry parity against `items.SpeedBurst.remove()`:
+      after the five-second boost, the held item clears and movement stats reset
+      to the character's underlying stats. Guarded by `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.
