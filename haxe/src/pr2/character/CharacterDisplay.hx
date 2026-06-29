@@ -45,6 +45,7 @@ class CharacterDisplay extends Sprite {
 	private final partColors:Map<String, PartColor> = new Map();
 	private var activeStateName:String = "standAnim";
 	private var activeStateClip:Null<PR2MovieClip>;
+	private var itemFrameName:String = "None";
 	// When enabled, the active state's authored animation (e.g. the standing
 	// idle) plays one timeline frame per stage frame, the way a Flash
 	// `Character` MovieClip auto-plays. Off by default so gameplay/campaign can
@@ -142,9 +143,15 @@ class CharacterDisplay extends Sprite {
 		if (activeStateClip != null) {
 			renderAtlasParts(activeStateClip);
 		}
+		applyItemFrame();
 		if (activeStateName == "superJumpAnim") {
 			startSuperJumpWobble();
 		}
+	}
+
+	public function setItemFrameName(frameName:String):Void {
+		itemFrameName = frameName == null || frameName == "" ? "None" : frameName;
+		applyItemFrame();
 	}
 
 	// States whose animation plays once and holds on its final frame instead of
@@ -172,6 +179,7 @@ class CharacterDisplay extends Sprite {
 			activeStateClip.advanceOneFrame();
 		}
 		renderAtlasParts(activeStateClip);
+		applyItemFrame();
 	}
 
 	public function getStateClip(stateName:String):Null<PR2MovieClip> {
@@ -253,6 +261,19 @@ class CharacterDisplay extends Sprite {
 			var stateClip = getClipChild(clip, name);
 			if (stateClip != null) {
 				renderAtlasParts(stateClip);
+			}
+		}
+	}
+
+	private function applyItemFrame():Void {
+		for (name in STATE_NAMES) {
+			var stateClip = getClipChild(clip, name);
+			if (stateClip == null) {
+				continue;
+			}
+			var weapon = getClipChild(stateClip, "weapon");
+			if (weapon != null) {
+				weapon.gotoAndStop(itemFrameName);
 			}
 		}
 	}

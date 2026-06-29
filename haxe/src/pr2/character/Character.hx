@@ -33,9 +33,9 @@ typedef BlockTouchProbe = {
 
 	Deferred (need still-unported subsystems, documented at the call sites): the
 	particle emitters (sparkles / arrow-sparkle / rainbow-star), the jet-pack flame
-	loop, `DjinnEffects`, the held-weapon (`item`) display frame, and the actual
-	sound playback — all wired through injectable hooks so the live Game shell (B5)
-	can supply them without changing this base.
+	loop, `DjinnEffects`, and the actual sound playback — all wired through
+	injectable hooks so the live Game shell (B5) can supply them without changing
+	this base.
 **/
 class Character extends Sprite {
 	// Special-hat flag keys (Character.as static consts). The original stores
@@ -329,16 +329,16 @@ class Character extends Sprite {
 	}
 
 	/**
-		Hold/use the current item. The held-weapon clip frame (`Items.getNameFromCode`)
-		is not yet wired into `CharacterDisplay`; kept as a hook so the value stays
-		faithful and the display port can attach later. Resolving the name here keeps
-		the item/name mapping exercised.
+		Hold/use the current item. Flash applies `Items.getNameFromCode` to every
+		character-state `weapon` clip so the authored held-item frames stay in sync
+		across animation changes.
 	**/
 	private function applyItem():Void {
 		itemFrameName = Items.getNameFromCode(item);
+		display.setItemFrameName(itemFrameName);
 	}
 
-	/** Last resolved held-item frame name (e.g. "Laser", "None"); display-deferred. */
+	/** Last resolved held-item frame name (e.g. "Laser", "None"). */
 	public var itemFrameName(default, null):String = "None";
 
 	private inline function currentPartIds():CharacterPartIds {

@@ -1,6 +1,7 @@
 package pr2.character;
 
 import openfl.events.Event;
+import pr2.runtime.PR2MovieClip;
 
 /**
 	B1 coverage for the ported `Character` base: animation state transitions (incl.
@@ -15,6 +16,7 @@ class CharacterBaseTest {
 		testJumpSoundHook();
 		testHatStack();
 		testGetHighestHat();
+		testHeldWeaponDisplay();
 		testBlockTouchProbes();
 		testRecoveryAndRemoval();
 		trace('CharacterBaseTest passed $assertions assertions');
@@ -90,6 +92,25 @@ class CharacterBaseTest {
 		var none = c.getHighestHat();
 		assertEquals(0, none.hatNum, "popping with no hats returns the empty result");
 		assertEquals(0, none.hatColor, "empty pop carries no colour");
+	}
+
+	private static function testHeldWeaponDisplay():Void {
+		var c = new Character();
+		c.setItem(4);
+
+		assertEquals("Teleport", c.itemFrameName, "setItem resolves the held-item frame name");
+		assertEquals(21, weaponClip(c, "standAnim").currentFrame, "setItem applies the authored weapon frame");
+
+		c.changeState("jump");
+		assertEquals(21, weaponClip(c, "jumpAnim").currentFrame, "held weapon survives animation changes");
+	}
+
+	private static function weaponClip(c:Character, stateName:String):PR2MovieClip {
+		var state = c.display.getStateClip(stateName);
+		assertTrue(state != null, '$stateName exists');
+		var weapon = Std.downcast(state.getChildByTimelineName("weapon"), PR2MovieClip);
+		assertTrue(weapon != null, '$stateName exposes weapon clip');
+		return weapon;
 	}
 
 	private static function testBlockTouchProbes():Void {

@@ -47,7 +47,8 @@ still-unported popup/visual side effects.
   `LuxPopup`, `Egg`, and `Hat` popups are unported.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,
-  `DjinnEffects`, the held-weapon display frame, and per-state sound playback.
+  `DjinnEffects`, and per-state sound playback. The held-weapon display frame is
+  now wired to the authored `weapon` clip across character animation states.
 - [ ] Port the full `CourseMenu` access/spectate UI around in-place level
   loading (slot selection, password/private flows, loading/cancel/error states)
   from `flash/level_browser`, `flash/page/GamePage.as`, and
