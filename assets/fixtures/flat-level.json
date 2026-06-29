@@ -21,10 +21,6 @@
   "blocks": [
     { "x": 2, "y": 9, "type": "start" },
     { "x": 16, "y": 9, "type": "finish" },
-    { "x": 5, "y": 9, "type": "mine" },
-    { "x": 7, "y": 9, "type": "vanish" },
-    { "x": 9, "y": 9, "type": "push" },
-    { "x": 11, "y": 9, "type": "arrow_right" },
     { "x": 0, "y": 10, "type": "basic" },
     { "x": 1, "y": 10, "type": "basic" },
     { "x": 2, "y": 10, "type": "basic" },
