@@ -61,6 +61,18 @@ class SourceClassCoverageInventoryTest {
 		"TeleportBlockOptions"
 	];
 
+	private static final CHARACTER_CLASSES:Array<String> = [
+		"ArrowSparkleEmitter",
+		"Character",
+		"DjinnEffects",
+		"LocalCharacter",
+		"ParticleEmitter",
+		"PhysicsParticle",
+		"PositionedParticleEmitter",
+		"RainbowStarEmitter",
+		"RemoteCharacter"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in ITEM_CLASSES) {
@@ -72,10 +84,15 @@ class SourceClassCoverageInventoryTest {
 		for (name in BLOCK_OPTION_CLASSES) {
 			assertContains(inventory, '`flash/blocks/options/$name.as`', 'inventory lists flash/blocks/options/$name.as');
 		}
+		for (name in CHARACTER_CLASSES) {
+			assertContains(inventory, '`flash/character/$name.as`', 'inventory lists flash/character/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
 		assertContains(inventory, "pr2.level.BlockType", "inventory maps block classes to block types");
 		assertContains(inventory, "pr2.level.ServerLevelRenderer", "inventory maps visual block behavior to the renderer");
+		assertContains(inventory, "pr2.character.Character", "inventory maps character base behavior");
+		assertContains(inventory, "pr2.character.RemoteCharacter", "inventory maps remote character behavior");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}

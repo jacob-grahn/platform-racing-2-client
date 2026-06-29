@@ -60,3 +60,17 @@ alone is not a class port.
 | `flash/blocks/options/ItemBlockOptions.as` | `pr2.gameplay.Items`, `pr2.harness.LocalPlayerController` | ported | Item option parsing and empty-options allowed-pool selection are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/options/StatBlockOptions.as` | `pr2.harness.LocalPlayerController` | ported | Happy/sad stat option clamps are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/options/TeleportBlockOptions.as` | `pr2.harness.LocalPlayerController` | ported | Teleport color matching and default color behavior are covered by `LocalPlayerControllerTest`. |
+
+## Character Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/character/ArrowSparkleEmitter.as` | `pr2.character.Character` hook boundary | gap | The base character exposes sparkle network hooks, but the random colored arrow particle emitter and its authored `ArrowEffect` visual are still deferred with the character/effects visual work. |
+| `flash/character/Character.as` | `pr2.character.Character`, `pr2.character.CharacterDisplay` | ported | Appearance ids/colors, four-slot hat stack and special-hat flags, animation state changes, geometry helpers, block-touch probes, recovery flash, and fade-out removal are covered by `CharacterBaseTest`. Particle, jet, Djinn, weapon-display, and sound side effects are explicit hook boundaries. |
+| `flash/character/DjinnEffects.as` | `pr2.character.Character` hook boundary | gap | Djinn body/feet particle emission remains deferred; the character core records it as an unported visual side effect rather than silently substituting a generic effect. |
+| `flash/character/LocalCharacter.as` | `pr2.character.LocalCharacter`, `pr2.harness.LocalPlayerController` | ported | Local multiplayer character construction, controller-backed physics, stats/gravity/item state mirroring, network position/var emission, and race event payloads are covered by `LocalCharacterTest`, `LocalPlayerControllerTest`, and `LocalCharacterEmitTest`. Remaining hat/effect visuals stay under the gameplay behavior TODO. |
+| `flash/character/ParticleEmitter.as` | character visual-effect hook boundary | gap | Timed particle spawning for sparkles/Djinn visuals is not yet ported; current character tests intentionally verify no hidden substitute behavior. |
+| `flash/character/PhysicsParticle.as` | character visual-effect hook boundary | gap | The parameterized Djinn particle physics and lifetime fade are not yet represented in Haxe; this is part of the deferred character visual-effects audit. |
+| `flash/character/PositionedParticleEmitter.as` | character visual-effect hook boundary | gap | Parent-space positioned particle spawning for moving character parts remains deferred with `DjinnEffects`. |
+| `flash/character/RainbowStarEmitter.as` | `pr2.character.Character` hook boundary | gap | Rainbow sparkle particles are not yet rendered; sparkle start/end is currently exposed through local/remote network hooks. |
+| `flash/character/RemoteCharacter.as` | `pr2.character.RemoteCharacter`, `pr2.gameplay.RemoteBlockActivation` | ported | Temp-id command registration, queued position/var/exact-position consumption, Flash catch-up interpolation, minimap-dot updates, remote block-touch probes, and command teardown are covered by `RemoteCharacterConsumeTest`. Sparkle, jet, heart, and sting visuals remain hook boundaries. |
