@@ -260,6 +260,19 @@ alone is not a class port.
 | `flash/levelEditor/LevelEditorMenu.as` | level-editor implementation gap | gap | The top-level editor menu, mode buttons, confirmation popups, and navigation are unported beyond the lobby-to-editor handoff boundary. |
 | `flash/levelEditor/TextObject.as` | level-editor implementation gap | gap | Editor text-object creation, editing, placement, and serialization remain unported; decoded server text rendering is covered separately by the level renderer. |
 
+## Level Management Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/level_management/ChooseLevelsModePopup.as` | level-management implementation gap | gap | The editor load/report mode chooser, reports/my-levels routing, cancel behavior, and authored popup lifecycle remain unported with the level-management flows. |
+| `flash/level_management/DeletingLevelPopup.as` | level-management implementation gap | gap | The `delete_level.php` upload popup, completion handling, and return to the editable level list remain part of the unported delete flow. |
+| `flash/level_management/GetLevelReports.as` | level-management implementation gap | gap | Reported-level listing retrieval from `levels_get_reported.php`, row creation, load-as-report routing, and handle action remain with report-management work. |
+| `flash/level_management/GetLevels.as` | level-management implementation gap | gap | The user's level-list request, selectable rows, load routing, delete confirmation, and loader cleanup are unported beyond the generated popup symbols. |
+| `flash/level_management/HandleLevelReportPopup.as` | level-management implementation gap | gap | The report-detail popup, info hover, archive request, social-ban request, validation, confirmation, and reported-list refresh are unported moderation flows. |
+| `flash/level_management/LoadingLevelPopup.as` | level-management implementation gap | gap | Editor level download, hash validation, URL-variable parse, editor state hydration, report-mode handoff, and error popups remain unported. Runtime level loading is covered separately by `GamePage`/`LevelEntry`. |
+| `flash/level_management/SaveLevelPopup.as` | level-management implementation gap | gap | The editor save dialog, title/note char counts, publishing/password controls, validation copy, and upload launch are part of the unported save flow. |
+| `flash/level_management/UploadingLevelPopup.as` | level-management implementation gap | gap | Save-string generation, MD5 upload hash, `upload_level.php` request, retry wait, override-ban confirmation, overwrite confirmation, and error handling remain unported. |
+
 ## Lobby Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
