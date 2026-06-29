@@ -246,6 +246,20 @@ alone is not a class port.
 | `flash/level_browser/Search.as` | `pr2.lobby.search.SearchQuery`, `pr2.lobby.level.LevelListingPage` | partial | Search query normalization/decision logic and the shared listing shell are covered by `LobbyServicesTest`; populated/error response rendering remains with lobby verification. |
 | `flash/level_browser/Slot.as` | `pr2.lobby.level.Slot`, `pr2.lobby.level.LevelItem`, `pr2.lobby.level.CourseMenu` | ported | Slot state frames, fill/confirm/clear command routing, pending click, local course-menu creation, and teardown are represented by the Haxe slot/item/menu path and covered through `LobbyServicesTest`. |
 
+## Level Editor Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/levelEditor/BlockObject.as` | level-editor implementation gap | gap | Editor block-object selection, option mutation, serialization, and placement remain unported with the level-editor tools/sidebar work. Runtime decoded block fixtures and rendering are covered separately by the level/server renderer paths. |
+| `flash/levelEditor/DrawObject.as` | level-editor implementation gap | gap | Editor drawing-object ownership, transform editing, and save-string projection remain unported; server-authored drawings render only after decoded level load. |
+| `flash/levelEditor/DrawingPopup.as` | level-editor implementation gap | gap | The drawing popup, draw settings, and editor-specific drawing controls are not yet represented in Haxe. |
+| `flash/levelEditor/GetLevelsPopupItem.as` | level-management implementation gap | gap | The load-level popup row, validation, click behavior, and server response variants remain with the level-management load flow. |
+| `flash/levelEditor/GetReportedLevelsPopupItem.as` | report-management implementation gap | gap | Reported-level rows and report-management actions remain unported with the editor report-management flow. |
+| `flash/levelEditor/HatPicker.as` | level-editor test-course gap | gap | The editor/test-course hat picker is not ported; race character hats and account preview hats are covered by other subsystems. |
+| `flash/levelEditor/LevelEditor.as` | level-editor implementation gap | gap | The main editor stage, camera, tool dispatch, save/load/upload/delete flows, object mutation, and test-course transition are not yet ported. |
+| `flash/levelEditor/LevelEditorMenu.as` | level-editor implementation gap | gap | The top-level editor menu, mode buttons, confirmation popups, and navigation are unported beyond the lobby-to-editor handoff boundary. |
+| `flash/levelEditor/TextObject.as` | level-editor implementation gap | gap | Editor text-object creation, editing, placement, and serialization remain unported; decoded server text rendering is covered separately by the level renderer. |
+
 ## Lobby Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |

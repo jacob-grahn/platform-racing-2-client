@@ -206,6 +206,18 @@ class SourceClassCoverageInventoryTest {
 		"Slot"
 	];
 
+	private static final LEVEL_EDITOR_CLASSES:Array<String> = [
+		"BlockObject",
+		"DrawObject",
+		"DrawingPopup",
+		"GetLevelsPopupItem",
+		"GetReportedLevelsPopupItem",
+		"HatPicker",
+		"LevelEditor",
+		"LevelEditorMenu",
+		"TextObject"
+	];
+
 	private static final LOBBY_CLASSES:Array<String> = [
 		"Lobby",
 		"LobbyLeft",
@@ -364,6 +376,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in LEVEL_BROWSER_CLASSES) {
 			assertContains(inventory, '`flash/level_browser/$name.as`', 'inventory lists flash/level_browser/$name.as');
 		}
+		for (name in LEVEL_EDITOR_CLASSES) {
+			assertContains(inventory, '`flash/levelEditor/$name.as`', 'inventory lists flash/levelEditor/$name.as');
+		}
 		for (name in LOBBY_CLASSES) {
 			assertContains(inventory, '`flash/lobby/$name.as`', 'inventory lists flash/lobby/$name.as');
 		}
@@ -405,6 +420,7 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.lobby.level.LevelListingPage", "inventory maps level browser listing pages");
 		assertContains(inventory, "pr2.lobby.level.LevelItem", "inventory maps level browser items");
 		assertContains(inventory, "pr2.lobby.level.CourseMenu", "inventory maps level browser course menu");
+		assertContains(inventory, "level-editor implementation gap", "inventory records level editor implementation gaps");
 		assertContains(inventory, "pr2.page.LobbyPage", "inventory maps lobby shell lifecycle");
 		assertContains(inventory, "pr2.lobby.LobbySide", "inventory maps lobby pane shell behavior");
 		assertContains(inventory, "pr2.page.PageHolder", "inventory maps page holder lifecycle");
