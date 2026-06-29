@@ -128,6 +128,22 @@ class SourceClassCoverageInventoryTest {
 		"TestCourse"
 	];
 
+	private static final LEVEL_BROWSER_CLASSES:Array<String> = [
+		"Best",
+		"BestWeek",
+		"Campaign",
+		"CourseMenu",
+		"Favorites",
+		"LevelItem",
+		"LevelListing",
+		"ListingEntry",
+		"ListingPage",
+		"Newest",
+		"PaginatedPage",
+		"Search",
+		"Slot"
+	];
+
 	private static final SOUND_CLASSES:Array<String> = [
 		"NoodleTown",
 		"SoundEffects"
@@ -159,6 +175,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in GAMEPLAY_CLASSES) {
 			assertContains(inventory, '`flash/gameplay/$name.as`', 'inventory lists flash/gameplay/$name.as');
 		}
+		for (name in LEVEL_BROWSER_CLASSES) {
+			assertContains(inventory, '`flash/level_browser/$name.as`', 'inventory lists flash/level_browser/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
 		assertContains(inventory, "pr2.level.ServerLevelDecoder", "inventory maps background data decoding");
@@ -172,6 +191,9 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.audio.MenuMusic", "inventory maps Noodle Town menu music");
 		assertContains(inventory, "pr2.gameplay.GameCommandShell", "inventory maps live game command routing");
 		assertContains(inventory, "pr2.page.GamePage", "inventory maps game page lifecycle");
+		assertContains(inventory, "pr2.lobby.level.LevelListingPage", "inventory maps level browser listing pages");
+		assertContains(inventory, "pr2.lobby.level.LevelItem", "inventory maps level browser items");
+		assertContains(inventory, "pr2.lobby.level.CourseMenu", "inventory maps level browser course menu");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}

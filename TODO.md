@@ -494,6 +494,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Inventory `flash/gameplay/*.as` in `docs/source-class-coverage.md`,
     mapping the race shell, HUD widgets, command/page boundaries, and explicit
     gameplay gaps. Guarded by `SourceClassCoverageInventoryTest`.
+  - [x] Inventory `flash/level_browser/*.as` in
+    `docs/source-class-coverage.md`, mapping listing pages, entries, slots,
+    course-menu launch behavior, and explicit live-response gaps. Guarded by
+    `SourceClassCoverageInventoryTest`.
   - [x] Inventory `flash/sounds/*.as` in `docs/source-class-coverage.md`,
     mapping Noodle Town menu music and shared sound-effect playback to the Haxe
     audio runtime. Guarded by `SourceClassCoverageInventoryTest`.
