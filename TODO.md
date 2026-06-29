@@ -471,6 +471,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Inventory `flash/items/*.as` in `docs/source-class-coverage.md`, mapping
     each item class to its Haxe controller/catalog target and current coverage
     boundary. Guarded by `SourceClassCoverageInventoryTest`.
+  - [x] Inventory `flash/blocks/*.as` and `flash/blocks/options/*.as` in
+    `docs/source-class-coverage.md`, mapping each block/option class to the Haxe
+    block type, fixture/controller, renderer, or config boundary that carries its
+    behavior. Guarded by `SourceClassCoverageInventoryTest`.
 - [ ] Walk every original user flow and role: guest, member, moderator/admin
   where testable, login failures, lobby/social/account/store, level browsing,
   racing/spectating, editor/management, disconnect/reconnect, and logout.

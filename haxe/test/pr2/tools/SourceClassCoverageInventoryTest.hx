@@ -19,13 +19,63 @@ class SourceClassCoverageInventoryTest {
 		"Teleport"
 	];
 
+	private static final BLOCK_CLASSES:Array<String> = [
+		"ArrowBlock",
+		"ArrowDownBlock",
+		"ArrowLeftBlock",
+		"ArrowRightBlock",
+		"ArrowUpBlock",
+		"BasicBlock",
+		"Block",
+		"Blocks",
+		"BrickBlock",
+		"CrumbleBlock",
+		"CustomStatsBlock",
+		"FinishBlock",
+		"HappyBlock",
+		"HeartBlock",
+		"IceBlock",
+		"InfItemBlock",
+		"ItemBlock",
+		"MineBlock",
+		"MoveBlock",
+		"PushBlock",
+		"RotateBlock",
+		"RotateLeftBlock",
+		"RotateRightBlock",
+		"SadBlock",
+		"SafetyBlock",
+		"StartBlock",
+		"SupplyBlock",
+		"TeleportBlock",
+		"TimeBlock",
+		"VanishBlock",
+		"WaterBlock"
+	];
+
+	private static final BLOCK_OPTION_CLASSES:Array<String> = [
+		"BlockOptions",
+		"CustomStatsBlockOptions",
+		"ItemBlockOptions",
+		"StatBlockOptions",
+		"TeleportBlockOptions"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in ITEM_CLASSES) {
 			assertContains(inventory, '`flash/items/$name.as`', 'inventory lists flash/items/$name.as');
 		}
+		for (name in BLOCK_CLASSES) {
+			assertContains(inventory, '`flash/blocks/$name.as`', 'inventory lists flash/blocks/$name.as');
+		}
+		for (name in BLOCK_OPTION_CLASSES) {
+			assertContains(inventory, '`flash/blocks/options/$name.as`', 'inventory lists flash/blocks/options/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
+		assertContains(inventory, "pr2.level.BlockType", "inventory maps block classes to block types");
+		assertContains(inventory, "pr2.level.ServerLevelRenderer", "inventory maps visual block behavior to the renderer");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}
