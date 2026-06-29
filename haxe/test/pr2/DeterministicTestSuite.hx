@@ -68,6 +68,7 @@ import pr2.runtime.FlComponentsTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
+import pr2.tools.SourceClassCoverageInventoryTest;
 
 class DeterministicTestSuite {
 	public static function main():Void {
@@ -77,6 +78,7 @@ class DeterministicTestSuite {
 		PR2MovieClipRuntimeTest.main();
 		StaticSubtreeAnalyzerTest.main();
 		FlattenSafetyGateTest.main();
+		SourceClassCoverageInventoryTest.main();
 		FlButtonTest.main();
 		FlComponentsTest.main();
 		PixelEffect1Test.main();

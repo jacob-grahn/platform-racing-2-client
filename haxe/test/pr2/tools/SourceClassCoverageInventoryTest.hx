@@ -1,0 +1,39 @@
+package pr2.tools;
+
+import sys.io.File;
+
+class SourceClassCoverageInventoryTest {
+	private static var assertions:Int = 0;
+
+	private static final ITEM_CLASSES:Array<String> = [
+		"IceWave",
+		"Item",
+		"Items",
+		"JetPack",
+		"LaserGun",
+		"Lightning",
+		"Mine",
+		"SpeedBurst",
+		"SuperJump",
+		"Sword",
+		"Teleport"
+	];
+
+	public static function main():Void {
+		var inventory = File.getContent("docs/source-class-coverage.md");
+		for (name in ITEM_CLASSES) {
+			assertContains(inventory, '`flash/items/$name.as`', 'inventory lists flash/items/$name.as');
+		}
+		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
+		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
+		assertContains(inventory, "ported", "inventory records status");
+		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
+	}
+
+	private static function assertContains(haystack:String, needle:String, message:String):Void {
+		assertions++;
+		if (haystack.indexOf(needle) == -1) {
+			throw message + ' (missing "$needle")';
+		}
+	}
+}
