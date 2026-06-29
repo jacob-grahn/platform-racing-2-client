@@ -39,6 +39,15 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
+	// View-window culling (mirrors Flash background.Background.updateViewWindow):
+	// only blocks within VIEW_MARGIN_SEGMENTS of the visible stage are attached to
+	// blockLayer. Without this the whole level (18k+ blocks on big maps) stays on
+	// the display list, giving one WebGL draw call per block and ~3fps; Flash keeps
+	// just the on-screen window attached and recycles blocks as the camera scrolls.
+	public static inline var VIEW_MARGIN_SEGMENTS:Int = 2;
+	// Only rebuild the window once the camera has scrolled this many segments, so a
+	// slow pan does not churn addChild/removeChild every frame (Flash uses 5).
+	public static inline var VIEW_REBUILD_THRESHOLD:Int = 3;
 
 	private final level:ServerLevel;
 	private var offsetX:Float;
@@ -46,6 +55,15 @@ class ServerLevelRenderer extends Sprite {
 	private final blockLayer:Sprite = new Sprite();
 	private final artLayerContainers:Array<Sprite> = [];
 	private final blockDisplays:Map<String, Sprite> = new Map();
+	// Block sprites keyed by segment (column -> row -> sprite), mirroring Flash's
+	// blockArray[segX][segY]. Used to attach/detach only the on-screen window
+	// without scanning every block. Every block lives here whether attached or not.
+	private final blockGrid:Map<Int, Map<Int, Sprite>> = new Map();
+	private var viewColMin:Int = 0;
+	private var viewColMax:Int = 0;
+	private var viewRowMin:Int = 0;
+	private var viewRowMax:Int = 0;
+	private var viewInitialized:Bool = false;
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
 	private final artDrawCursors:Array<ArtDrawCursor> = [];
@@ -123,6 +141,7 @@ class ServerLevelRenderer extends Sprite {
 			artLayerContainers[i].x = parallaxOffset(x, layer.scale);
 			artLayerContainers[i].y = parallaxOffset(y, layer.scale);
 		}
+		updateViewWindow(false);
 	}
 
 	public function setBlockAlpha(worldX:Int, worldY:Int, alpha:Float):Void {
@@ -298,6 +317,10 @@ class ServerLevelRenderer extends Sprite {
 		blockLayer.x = offsetX;
 		blockLayer.y = offsetY;
 		addChild(blockLayer);
+		// Establish the initial window from the start-focus offset so blocks that
+		// fall on screen are attached as they are created, and the rest stay off
+		// the display list until the camera scrolls to them.
+		updateViewWindow(true);
 		if (incrementalBlocks) {
 			addEventListener(Event.ENTER_FRAME, drawBlockBatch);
 			return;
@@ -348,7 +371,92 @@ class ServerLevelRenderer extends Sprite {
 	private function addBlockDisplay(block:DecodedBlock):Void {
 		var display = createBlockDisplay(block);
 		blockDisplays.set(blockKey(block.x, block.y), display);
-		blockLayer.addChild(display);
+		var segX = segmentOf(block.x);
+		var segY = segmentOf(block.y);
+		var col = blockGrid.get(segX);
+		if (col == null) {
+			col = new Map();
+			blockGrid.set(segX, col);
+		}
+		col.set(segY, display);
+		// Attach only if the block currently falls inside the view window; otherwise
+		// it stays in the grid and is attached later when the camera scrolls to it.
+		if (isInView(segX, segY)) {
+			blockLayer.addChild(display);
+		}
+	}
+
+	private static inline function segmentOf(coord:Int):Int {
+		return Math.round(coord / TILE_SIZE);
+	}
+
+	private inline function isInView(segX:Int, segY:Int):Bool {
+		return viewInitialized && segX >= viewColMin && segX <= viewColMax && segY >= viewRowMin && segY <= viewRowMax;
+	}
+
+	private function setBlockAttached(segX:Int, segY:Int, attach:Bool):Void {
+		var col = blockGrid.get(segX);
+		if (col == null) {
+			return;
+		}
+		var display = col.get(segY);
+		if (display == null) {
+			return;
+		}
+		if (attach) {
+			if (display.parent != blockLayer) {
+				blockLayer.addChild(display);
+			}
+		} else if (display.parent == blockLayer) {
+			blockLayer.removeChild(display);
+		}
+	}
+
+	/**
+		Attaches the on-screen block window and detaches what scrolled out, mirroring
+		Flash `background.Background.updateViewWindow`. Only the window perimeter is
+		walked (a few hundred segment cells), never the full block list.
+	**/
+	private function updateViewWindow(force:Bool):Void {
+		var colMin = Math.floor((-offsetX) / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
+		var colMax = Math.ceil((Constants.STAGE_WIDTH - offsetX) / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
+		var rowMin = Math.floor((-offsetY) / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
+		var rowMax = Math.ceil((Constants.STAGE_HEIGHT - offsetY) / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
+		if (!force
+			&& viewInitialized
+			&& intAbs(colMin - viewColMin) <= VIEW_REBUILD_THRESHOLD
+			&& intAbs(colMax - viewColMax) <= VIEW_REBUILD_THRESHOLD
+			&& intAbs(rowMin - viewRowMin) <= VIEW_REBUILD_THRESHOLD
+			&& intAbs(rowMax - viewRowMax) <= VIEW_REBUILD_THRESHOLD) {
+			return;
+		}
+		// Detach cells leaving the window.
+		if (viewInitialized) {
+			for (segX in viewColMin...viewColMax + 1) {
+				for (segY in viewRowMin...viewRowMax + 1) {
+					if (segX < colMin || segX > colMax || segY < rowMin || segY > rowMax) {
+						setBlockAttached(segX, segY, false);
+					}
+				}
+			}
+		}
+		// Attach cells entering the window (skip those already inside the old one).
+		for (segX in colMin...colMax + 1) {
+			for (segY in rowMin...rowMax + 1) {
+				if (!viewInitialized || segX < viewColMin || segX > viewColMax || segY < viewRowMin || segY > viewRowMax) {
+					setBlockAttached(segX, segY, true);
+				}
+			}
+		}
+		viewColMin = colMin;
+		viewColMax = colMax;
+		viewRowMin = rowMin;
+		viewRowMax = rowMax;
+		viewInitialized = true;
+	}
+
+	private static inline function intAbs(value:Int):Int {
+		return value < 0 ? -value : value;
 	}
 
 	public function remove():Void {
@@ -356,6 +464,12 @@ class ServerLevelRenderer extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
 		removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
 		waterRippleFrames.clear();
+		// Dispose every arrow movie clip, including off-screen ones that culling left
+		// detached from blockLayer so the tree walk below would not reach them.
+		for (arrow in arrowDisplays) {
+			arrow.dispose();
+		}
+		arrowDisplays.clear();
 		disposeAnimatedChildren(this);
 		if (parent != null) {
 			parent.removeChild(this);

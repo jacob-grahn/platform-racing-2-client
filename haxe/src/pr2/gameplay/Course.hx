@@ -102,6 +102,9 @@ class Course extends Sprite {
 	private var displayedStats:Null<String>;
 	private var displayedLives:Null<Int>;
 	private var finishDrawingEmitted:Bool = false;
+	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
+	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
+	private var activeVisualBlocks:Map<String, Bool> = new Map();
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -461,12 +464,23 @@ class Course extends Sprite {
 	}
 
 	private function syncBlockVisuals():Void {
-		for (block in serverFixture.fixture.blocks) {
-			var worldX = (block.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-			var worldY = (block.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
-			levelRenderer.setBlockAlpha(worldX, worldY, player.blockAlphaAt(block.x, block.y));
-			levelRenderer.setBlockColorMultiplier(worldX, worldY, player.blockColorMultiplierAt(block.x, block.y));
+		// Only blocks with non-default alpha/tint (fading/removed/depleted) need
+		// restyling; iterating all blocks here was O(blocks) per frame and dropped
+		// large levels to a few fps. Update just the active set, and reset any block
+		// that returned to default since last frame.
+		var current:Map<String, Bool> = new Map();
+		for (key in player.activeVisualBlockKeys()) {
+			current.set(key, true);
+			var tileX = tileKeyX(key);
+			var tileY = tileKeyY(key);
+			applyBlockVisual(tileX, tileY, player.blockAlphaAt(tileX, tileY), player.blockColorMultiplierAt(tileX, tileY));
 		}
+		for (key in activeVisualBlocks.keys()) {
+			if (!current.exists(key)) {
+				applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1);
+			}
+		}
+		activeVisualBlocks = current;
 		for (event in player.consumeBlockVisualEvents()) {
 			switch (event.kind) {
 				case ArrowAnimate:
@@ -481,6 +495,21 @@ class Course extends Sprite {
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
 			}
 		}
+	}
+
+	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float):Void {
+		var worldX = (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+		var worldY = (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+		levelRenderer.setBlockAlpha(worldX, worldY, alpha);
+		levelRenderer.setBlockColorMultiplier(worldX, worldY, multiplier);
+	}
+
+	private static inline function tileKeyX(key:String):Int {
+		return Std.parseInt(key.substring(0, key.indexOf(",")));
+	}
+
+	private static inline function tileKeyY(key:String):Int {
+		return Std.parseInt(key.substring(key.indexOf(",") + 1));
 	}
 
 	private function emitFinishDrawingReady():Void {

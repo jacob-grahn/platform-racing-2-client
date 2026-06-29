@@ -338,6 +338,20 @@ class LocalPlayerController {
 		return events;
 	}
 
+	/**
+		Tile keys ("x,y") of blocks whose alpha/tint currently differs from the
+		default: fading/removed vanish blocks and depleted item blocks. Lets the
+		renderer restyle only these instead of every block in the level each frame.
+	**/
+	public function activeVisualBlockKeys():Array<String> {
+		var seen:Map<String, Bool> = new Map();
+		for (key in vanishFadeFrames.keys()) seen.set(key, true);
+		for (key in vanishFadeInFrames.keys()) seen.set(key, true);
+		for (key in removedBlocks.keys()) seen.set(key, true);
+		for (key in depletedItemBlocks.keys()) seen.set(key, true);
+		return [for (key in seen.keys()) key];
+	}
+
 	private function position():Void {
 		vy += gravity;
 		targetVelX *= FRICTION;

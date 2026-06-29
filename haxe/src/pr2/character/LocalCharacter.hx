@@ -192,6 +192,10 @@ class LocalCharacter extends Character {
 		return controller.consumeBlockVisualEvents();
 	}
 
+	public function activeVisualBlockKeys():Array<String> {
+		return controller.activeVisualBlockKeys();
+	}
+
 	public function freeze():Void {
 		controller.freeze();
 		syncFromController();
