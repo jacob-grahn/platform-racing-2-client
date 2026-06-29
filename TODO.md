@@ -493,6 +493,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Inventory `flash/chat/*.as` in `docs/source-class-coverage.md`,
     mapping the lobby chat tab, PM list/actions, and explicit chat room info /
     message-format parity gaps. Guarded by `SourceClassCoverageInventoryTest`.
+  - [x] Inventory `flash/social/*.as` in `docs/source-class-coverage.md`,
+    mapping the Players tab, online/friends/following/ignored/guild list
+    loaders, sortable rows, and explicit live refresh/error-state gaps. Guarded
+    by `SourceClassCoverageInventoryTest`.
   - [x] Inventory `flash/effects/*.as` in `docs/source-class-coverage.md`,
     mapping concrete effects to Haxe renderers, item/character hook boundaries,
     and explicit remaining visual/physics gaps. Guarded by

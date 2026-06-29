@@ -100,6 +100,23 @@ alone is not a class port.
 | `flash/chat/ReplyMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored reply button graphic is mounted by `MessagesItem`, and its click opens `SendMessagePopup` with the Flash-shaped quoted body. |
 | `flash/chat/ReportMessageButton.as` | `pr2.lobby.dialogs.MessagesItem` | ported | The authored report button graphic is mounted by `MessagesItem`, and its click opens the moderation report confirmation before routing to `MessagesTab.doReport`. |
 
+## Social Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/social/Following.as` | `pr2.lobby.players.Following`, `pr2.lobby.players.PlayersUserListLoader` | ported | The following sub-tab uses the shared user-list loader with the `following` mode. Live response and stale/error-state parity remain under the broader lobby verification TODO. |
+| `flash/social/Friends.as` | `pr2.lobby.players.Friends`, `pr2.lobby.players.PlayersUserListLoader` | ported | The friends sub-tab uses the shared user-list loader with the `friends` mode. Friend add/remove actions are mapped by `SocialActionPlan` and popup refresh behavior remains a lobby workflow gap. |
+| `flash/social/Guilds.as` | `pr2.lobby.players.Guilds`, `pr2.lobby.players.GuildEntry` | partial | Guest guild listings load `guilds_top.php`, render linked rows, and sort by guild/name/active/GP columns; exact loading/error visuals and live refresh coverage remain with lobby verification. |
+| `flash/social/Ignored.as` | `pr2.lobby.players.Ignored`, `pr2.lobby.players.PlayersUserListLoader` | ported | The ignored sub-tab uses the shared user-list loader with the `ignored` mode. Ignore/unignore actions are mapped by `SocialActionPlan`; server refresh parity remains broader lobby work. |
+| `flash/social/Online.as` | `pr2.lobby.players.Online`, `pr2.net.CommandHandler`, `pr2.net.LobbySocket` | ported | Online registers `addUser`, emits `get_online_list\``, rejects duplicate names through the shared list, and tears the command down on removal. Room-change refresh coverage remains in lobby verification. |
+| `flash/social/PlayersTab.as` | `pr2.lobby.tabs.PlayersTab`, `pr2.ui.TabsHolder` | ported | The nested Players tab strip preserves the Flash member/guest tab split and remembered `playerLists` selection. |
+| `flash/social/PlayersTabGuildListItem.as` | `pr2.lobby.players.GuildEntry`, `pr2.lobby.chat.HtmlNameMaker` | ported | Guild rows render linked guild names plus GP-today and active-member columns, with comma formatting for GP. |
+| `flash/social/PlayersTabList.as` | `pr2.lobby.players.PlayersTabList`, `pr2.lobby.players.PlayerListSort` | ported | The authored list frame, Name/Rank/Hats headers, duplicate suppression, and default descending-rank sort are represented by `PlayersTabList` and pure sort coverage. |
+| `flash/social/PlayersTabListHolder.as` | `pr2.lobby.players.PlayersListHolder`, `pr2.ui.CustomScrollBar` | ported | The holder owns row stacking, loading spinner visibility, scrollbar setup, clearing, and relayout after sort. |
+| `flash/social/PlayersTabListItem.as` | `pr2.lobby.players.PlayerListItem` | ported | The row base wraps `PlayersTabListItemGraphic`, recovers the three text fields positionally, and centralizes linked-name listener cleanup. |
+| `flash/social/PlayersTabListItemInfo.as` | `pr2.lobby.players.PlayerEntry`, `pr2.lobby.chat.HtmlNameMaker` | ported | Player rows render linked name/group, rank, hats, and optional server-name display labels. |
+| `flash/social/PlayersTabUserListDataLoader.as` | `pr2.lobby.players.PlayersUserListLoader`, `pr2.net.TextLoader` | partial | The shared friends/following/ignored loader requests `user_list_get.php?mode=...`, parses JSON rows, and leaves malformed/error responses empty; exact Flash error-state visuals remain under lobby verification. |
+
 ## Effect Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
