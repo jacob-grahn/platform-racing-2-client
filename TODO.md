@@ -233,10 +233,11 @@ Then mobile, after browser parity:
   class and linkage to its Haxe implementation, deliberate platform adapter, or
   verified unreachable/dead status. An exported asset alone does not count as a
   class port. The `background`, `items`, `blocks` (+`blocks/options`),
-  `character`, `chat`, `social`, `effects`, `gameplay`, `level_browser`, and
-  `sounds` packages are inventoried in `docs/source-class-coverage.md` (guarded
-  by `SourceClassCoverageInventoryTest`). Remaining: inventory the rest of the
-  first-party AS3 packages (e.g. `page`, `menu`, `level_editor`, `com.*`) and
+  `character`, `chat`, `social`, `effects`, `gameplay`, `level_browser`,
+  `page`, and `sounds` packages are inventoried in
+  `docs/source-class-coverage.md` (guarded by
+  `SourceClassCoverageInventoryTest`). Remaining: inventory the rest of the
+  first-party AS3 packages (e.g. `menu`, `level_editor`, `com.*`) and
   reconcile every class.
 Walk every original user flow and role, one at a time:
 

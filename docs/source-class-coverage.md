@@ -189,3 +189,13 @@ alone is not a class port.
 | `flash/level_browser/PaginatedPage.as` | `pr2.ui.PageNavigation`, `pr2.lobby.level.LevelListingPage` | ported | Page number positioning and current-page handoff are covered by `LobbyServicesTest`; visual baselines remain part of the broader screenshot-threshold TODO. |
 | `flash/level_browser/Search.as` | `pr2.lobby.search.SearchQuery`, `pr2.lobby.level.LevelListingPage` | partial | Search query normalization/decision logic and the shared listing shell are covered by `LobbyServicesTest`; populated/error response rendering remains with lobby verification. |
 | `flash/level_browser/Slot.as` | `pr2.lobby.level.Slot`, `pr2.lobby.level.LevelItem`, `pr2.lobby.level.CourseMenu` | ported | Slot state frames, fill/confirm/clear command routing, pending click, local course-menu creation, and teardown are represented by the Haxe slot/item/menu path and covered through `LobbyServicesTest`. |
+
+## Page Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/page/ArtifactHint.as` | chat artifact-hint gap | gap | The `/files/level_of_the_week.json` fetch and Fred system-chat injection for `/hint`/`/lotw`/`/arti` are not yet ported; RaceChat and lobby chat commands do not synthesize this hint. |
+| `flash/page/Chat.as` | `pr2.lobby.tabs.ChatTab`, `pr2.gameplay.RaceChat`, `pr2.lobby.chat.HtmlNameMaker` | partial | Lobby chat and race chat cover command registration, display, send routing, and linked-name rendering in their respective contexts. Shared Flash slash-command routes, artifact hints, and exact swear-filter/link parsing remain with chat/lobby verification gaps. |
+| `flash/page/GamePage.as` | `pr2.page.GamePage`, `pr2.gameplay.LevelEntry`, `pr2.gameplay.LevelConfig`, `pr2.level.ServerLevelDecoder`, `pr2.level.ServerLevelRenderer`, `pr2.gameplay.Course` | partial | In-session game entry, level fetch failure wording, metadata parsing, m1-m4 decode, incremental drawing readiness, course mounting, command buffering, finish/quit return, and special-event hooks are covered by level/gameplay tests. Free-scroll/zoom editor-style camera behavior and remaining race side effects stay under gameplay/editor TODOs. |
+| `flash/page/Page.as` | `pr2.page.Page` | ported | Page initialization/removal lifecycle and parent removal are represented by the Haxe base page. |
+| `flash/page/PageHolder.as` | `pr2.page.PageHolder`, `pr2.lobby.level.LevelLaunch` | ported | Page replacement removes the old page before initializing/adding the new one, and root-only `startGame` launch ownership is covered by lobby and race transcript tests. |

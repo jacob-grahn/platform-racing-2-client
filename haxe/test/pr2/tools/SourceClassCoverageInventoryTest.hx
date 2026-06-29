@@ -169,6 +169,14 @@ class SourceClassCoverageInventoryTest {
 		"Slot"
 	];
 
+	private static final PAGE_CLASSES:Array<String> = [
+		"ArtifactHint",
+		"Chat",
+		"GamePage",
+		"Page",
+		"PageHolder"
+	];
+
 	private static final SOUND_CLASSES:Array<String> = [
 		"NoodleTown",
 		"SoundEffects"
@@ -209,6 +217,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in LEVEL_BROWSER_CLASSES) {
 			assertContains(inventory, '`flash/level_browser/$name.as`', 'inventory lists flash/level_browser/$name.as');
 		}
+		for (name in PAGE_CLASSES) {
+			assertContains(inventory, '`flash/page/$name.as`', 'inventory lists flash/page/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
 		assertContains(inventory, "pr2.level.ServerLevelDecoder", "inventory maps background data decoding");
@@ -229,6 +240,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.lobby.level.LevelListingPage", "inventory maps level browser listing pages");
 		assertContains(inventory, "pr2.lobby.level.LevelItem", "inventory maps level browser items");
 		assertContains(inventory, "pr2.lobby.level.CourseMenu", "inventory maps level browser course menu");
+		assertContains(inventory, "pr2.page.PageHolder", "inventory maps page holder lifecycle");
+		assertContains(inventory, "pr2.gameplay.LevelConfig", "inventory maps page game metadata parsing");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}
