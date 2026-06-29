@@ -255,3 +255,24 @@ alone is not a class port.
 | `flash/page/GamePage.as` | `pr2.page.GamePage`, `pr2.gameplay.LevelEntry`, `pr2.gameplay.LevelConfig`, `pr2.level.ServerLevelDecoder`, `pr2.level.ServerLevelRenderer`, `pr2.gameplay.Course` | partial | In-session game entry, level fetch failure wording, metadata parsing, m1-m4 decode, incremental drawing readiness, course mounting, command buffering, finish/quit return, and special-event hooks are covered by level/gameplay tests. Free-scroll/zoom editor-style camera behavior and remaining race side effects stay under gameplay/editor TODOs. |
 | `flash/page/Page.as` | `pr2.page.Page` | ported | Page initialization/removal lifecycle and parent removal are represented by the Haxe base page. |
 | `flash/page/PageHolder.as` | `pr2.page.PageHolder`, `pr2.lobby.level.LevelLaunch` | ported | Page replacement removes the old page before initializing/adding the new one, and root-only `startGame` launch ownership is covered by lobby and race transcript tests. |
+
+## UI Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/ui/ArrowButtons.as` | `pr2.ui.ArrowButtons` | ported | Left/right value stepping, wraparound, `Event.CHANGE`, and authored button binding are represented by the shared UI control. |
+| `flash/ui/CustomCursor.as` | level-editor cursor gap | gap | The editor cursor singleton, hidden-mouse lifecycle, touch forwarding, and temporary delete-tool shortcut are unported with the level-editor tool/camera work. |
+| `flash/ui/CustomScrollBar.as` | `pr2.ui.CustomScrollBar` | ported | Thumb-to-target mapping, arrow continuous scroll, stage drag listeners, and teardown are represented by the shared scrollbar and covered by lobby UI tests. |
+| `flash/ui/EmblemLoader.as` | guild-emblem upload gap | gap | The local image browse/scale/JPEG upload flow is not ported; guild emblem management remains under guild/account workflow completion. |
+| `flash/ui/GameSound.as` | `pr2.gameplay.MusicSelection`, `pr2.audio.GameMusic`, `pr2.audio.MusicCatalog` | ported | Song catalog, blacklist filtering, random/editor choices, artifact track handling, looping playback, and music handoff are represented by gameplay music selection and audio tests. |
+| `flash/ui/GuildName.as` | `pr2.lobby.dialogs.PlayerPopup` boundary, guild popup gap | partial | Player popups reserve the guild-name/emblem boundary, but the clickable `GuildNameGraphic` wrapper and guild popup launch remain part of guild workflow completion. |
+| `flash/ui/LobbyTab.as` | `pr2.ui.LobbyTab` | ported | Authored tab art, text sizing, hover/selected frames, click activation, and cleanup are represented with `TabsHolder` and covered by lobby tests. |
+| `flash/ui/LoginPageMenuButton.as` | `pr2.page.LoginPageMenuButton` | ported | Login menu button labels, hover text decoration, alpha changes, hit area, click dispatch, and cleanup are represented by the login page button. |
+| `flash/ui/MuteButton.as` | `pr2.ui.MuteButton`, `pr2.audio.AudioManager` | ported | Global mute toggles `SoundMixer`, shows/hides wave art, applies hover color, and is owned at the app root as in Flash. |
+| `flash/ui/PageNavigation.as` | `pr2.ui.PageNavigation` | ported | Full/vertical/arrow-only layouts, link dispatch, page highlighting, and Flash's compression math are represented and covered by `LobbyServicesTest`. |
+| `flash/ui/ProgressBar.as` | `pr2.lobby.dialogs.ProgressBar` | ported | Authored progress bar art, drop shadow, clamped target progress, per-frame interpolation, and disposal are represented by dialog upload flows. |
+| `flash/ui/RatingSelect.as` | `pr2.ui.RatingSelect` | ported | Finished-race star hover math, confirm popup, and `submit_rating.php` upload route are represented by the authored rating control. |
+| `flash/ui/SelectableButton.as` | selectable-button gap | gap | The generic up/over/selected wrapper is not yet a standalone Haxe control; current screens use direct authored button bindings where needed. |
+| `flash/ui/StatSlider.as` | `pr2.lobby.account.StatSlider` | partial | Numeric entry, slider sync, button stepping, point-budget clamp, and display updates are ported; Flash's press-and-hold acceleration and level-editor save hook are intentionally still gaps. |
+| `flash/ui/StatsSelect.as` | `pr2.lobby.account.StatsSelect` | partial | Account stat allocation, remaining-points display, info string, and stat extraction are ported; the level-editor live-character/stat persistence hook remains with editor test-course work. |
+| `flash/ui/TabsHolder.as` | `pr2.ui.TabsHolder`, `pr2.ui.TabLayout` | ported | Tab ownership, remembered selected tab, overlap layout, selected-front ordering, and removal persistence are represented by the shared tab holder. |

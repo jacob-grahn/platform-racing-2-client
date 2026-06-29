@@ -234,6 +234,25 @@ class SourceClassCoverageInventoryTest {
 		"ServerSelectPopup"
 	];
 
+	private static final UI_CLASSES:Array<String> = [
+		"ArrowButtons",
+		"CustomCursor",
+		"CustomScrollBar",
+		"EmblemLoader",
+		"GameSound",
+		"GuildName",
+		"LobbyTab",
+		"LoginPageMenuButton",
+		"MuteButton",
+		"PageNavigation",
+		"ProgressBar",
+		"RatingSelect",
+		"SelectableButton",
+		"StatSlider",
+		"StatsSelect",
+		"TabsHolder"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in BACKGROUND_CLASSES) {
@@ -278,6 +297,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in PAGE_CLASSES) {
 			assertContains(inventory, '`flash/page/$name.as`', 'inventory lists flash/page/$name.as');
 		}
+		for (name in UI_CLASSES) {
+			assertContains(inventory, '`flash/ui/$name.as`', 'inventory lists flash/ui/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
 		assertContains(inventory, "pr2.level.ServerLevelDecoder", "inventory maps background data decoding");
@@ -306,6 +328,9 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.lobby.level.CourseMenu", "inventory maps level browser course menu");
 		assertContains(inventory, "pr2.page.PageHolder", "inventory maps page holder lifecycle");
 		assertContains(inventory, "pr2.gameplay.LevelConfig", "inventory maps page game metadata parsing");
+		assertContains(inventory, "pr2.ui.TabsHolder", "inventory maps shared UI tab behavior");
+		assertContains(inventory, "pr2.ui.PageNavigation", "inventory maps shared page navigation");
+		assertContains(inventory, "pr2.lobby.account.StatsSelect", "inventory maps account stat controls");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}
