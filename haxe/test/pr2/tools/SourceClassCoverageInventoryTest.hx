@@ -5,6 +5,17 @@ import sys.io.File;
 class SourceClassCoverageInventoryTest {
 	private static var assertions:Int = 0;
 
+	private static final BACKGROUND_CLASSES:Array<String> = [
+		"Background",
+		"BlockBackground",
+		"BlockGridLines",
+		"DrawableBackground",
+		"EffectBackground",
+		"LevelBackground",
+		"Map",
+		"ObjectBackground"
+	];
+
 	private static final ITEM_CLASSES:Array<String> = [
 		"IceWave",
 		"Item",
@@ -119,6 +130,9 @@ class SourceClassCoverageInventoryTest {
 
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
+		for (name in BACKGROUND_CLASSES) {
+			assertContains(inventory, '`flash/background/$name.as`', 'inventory lists flash/background/$name.as');
+		}
 		for (name in ITEM_CLASSES) {
 			assertContains(inventory, '`flash/items/$name.as`', 'inventory lists flash/items/$name.as');
 		}
@@ -139,6 +153,7 @@ class SourceClassCoverageInventoryTest {
 		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
+		assertContains(inventory, "pr2.level.ServerLevelDecoder", "inventory maps background data decoding");
 		assertContains(inventory, "pr2.level.BlockType", "inventory maps block classes to block types");
 		assertContains(inventory, "pr2.level.ServerLevelRenderer", "inventory maps visual block behavior to the renderer");
 		assertContains(inventory, "pr2.character.Character", "inventory maps character base behavior");

@@ -4,6 +4,19 @@ This inventory tracks first-party AS3 classes against their Haxe/OpenFL port,
 platform adapter, or remaining gap. Keep entries narrow: an exported symbol
 alone is not a class port.
 
+## Background Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/background/Background.as` | `pr2.level.ServerLevelRenderer`, `pr2.gameplay.Course` | partial | The active view-window culling, camera offset, and holder layering are represented by `ServerLevelRenderer` and `Course`; the exact shared Flash base class is not a standalone Haxe type. |
+| `flash/background/BlockBackground.as` | `pr2.level.ServerLevelRenderer`, `pr2.level.ServerLevelFixtureAdapter` | partial | Block display creation, segment-grid attachment, and fixture conversion are covered by renderer/fixture tests; editor-specific mutation paths remain with the level-editor TODO. |
+| `flash/background/BlockGridLines.as` | level-editor grid gap | gap | The editor's authored block-grid overlay is not ported yet and remains part of the level-editor sidebar/camera/tooling work. |
+| `flash/background/DrawableBackground.as` | `pr2.level.ServerLevelRenderer`, `pr2.level.ServerLevelDecoder` | ported | Decoded draw strokes, text, and stamp objects render incrementally across the five art planes, with raster-tile sizing and drawing-readiness coverage in `ServerLevelRendererTest` and `GameShellMountTest`. |
+| `flash/background/EffectBackground.as` | `pr2.level.ServerLevelRenderer`, `pr2.effects.*`, `pr2.gameplay.Course` | partial | Mine explosions, block pieces, arrow animations, vanish activation, and water ripples use renderer/effect ownership; loose hats, egg physics, shots, and shared effect-background behavior remain explicit effect gaps. |
+| `flash/background/LevelBackground.as` | `pr2.level.ServerLevelRenderer` | ported | The five authored art planes are mounted around the block layer with Flash's rounded parallax scales, covered by `ServerLevelRendererTest`. |
+| `flash/background/Map.as` | `pr2.level.ServerLevelFixtureAdapter`, `pr2.level.ServerLevelRenderer`, `pr2.gameplay.Course` | partial | Server maps decode into fixture/render layers, preserve start-block spawn/non-collision behavior, and drive the live course shell. Editor map editing and live block mutation completeness remain with editor/gameplay gaps. |
+| `flash/background/ObjectBackground.as` | `pr2.level.ServerLevelDecoder`, `pr2.level.ServerLevelRenderer` | partial | Server stamp/object decoding and display are represented in the renderer; editor placement, selection, and deletion remain with the level-editor TODO. |
+
 ## Item Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |

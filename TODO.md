@@ -472,6 +472,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   class and linkage to its Haxe implementation, deliberate platform adapter, or
   verified unreachable/dead status. An exported asset alone does not count as a
   class port.
+  - [x] Inventory `flash/background/*.as` in
+    `docs/source-class-coverage.md`, mapping each background/map class to the
+    Haxe renderer, fixture, course, effect, or editor-gap boundary that carries
+    its behavior. Guarded by `SourceClassCoverageInventoryTest`.
   - [x] Inventory `flash/items/*.as` in `docs/source-class-coverage.md`, mapping
     each item class to its Haxe controller/catalog target and current coverage
     boundary. Guarded by `SourceClassCoverageInventoryTest`.
