@@ -479,6 +479,10 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
     `docs/source-class-coverage.md`, mapping the ported character base/local/
     remote classes and explicit visual-effect hook boundaries. Guarded by
     `SourceClassCoverageInventoryTest`.
+  - [x] Inventory `flash/effects/*.as` in `docs/source-class-coverage.md`,
+    mapping concrete effects to Haxe renderers, item/character hook boundaries,
+    and explicit remaining visual/physics gaps. Guarded by
+    `SourceClassCoverageInventoryTest`.
 - [ ] Walk every original user flow and role: guest, member, moderator/admin
   where testable, login failures, lobby/social/account/store, level browsing,
   racing/spectating, editor/management, disconnect/reconnect, and logout.
