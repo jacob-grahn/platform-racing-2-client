@@ -48,6 +48,7 @@ class LocalPlayerControllerTest {
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
 		testLightningEmitsZapAndConsumesItem();
+		testReloadableItemReleaseGateThenHeldRefire();
 		testSwordReloadTiming();
 		testIceWaveReloadTiming();
 		testFrozenSolidDisablesMovementAndThaws();
@@ -831,6 +832,26 @@ class LocalPlayerControllerTest {
 
 		assertEquals(null, state.itemId, "lightning consumes on use");
 		assertEquals("zap`", state.lastItemEffect, "lightning emits Flash's zap command payload");
+	}
+
+	private static function testReloadableItemReleaseGateThenHeldRefire():Void {
+		var player = collectItem(heldItemLevel(1), 1);
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(3, player.debugState().itemUses, "fresh reloadable item ignores held item key before first release");
+		assertEquals(null, player.debugState().lastItemEffect, "fresh reloadable item emits no effect before first release");
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(2, player.debugState().itemUses, "released reloadable item fires on the next item press");
+
+		for (_ in 0...21) {
+			player.step(new LocalPlayerInput(false, false, false, false, true));
+		}
+		assertEquals(2, player.debugState().itemUses, "held reloadable item waits through its reload timer");
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(1, player.debugState().itemUses, "held reloadable item refires when reload completes without another release");
 	}
 
 	private static function testSwordReloadTiming():Void {

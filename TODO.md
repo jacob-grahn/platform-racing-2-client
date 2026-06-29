@@ -308,6 +308,10 @@ rounding, ordering, and edge cases.
     - [x] Lock Mine item blocked-placement parity against `items.Mine`: using it
       when the target tile is occupied keeps the item, adds no mine, and emits no
       effect. Guarded by `LocalPlayerControllerTest`.
+    - [x] Lock the base `items.Item` release gate for reloadable weapons: Laser
+      Gun cannot fire until the item key has been released after collection, then
+      a held key refires exactly when the reload timer completes. Guarded by
+      `LocalPlayerControllerTest`.
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
 documented image-diff thresholds.
