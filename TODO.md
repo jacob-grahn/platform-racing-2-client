@@ -46,6 +46,10 @@ still-unported popup/visual side effects.
 - [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
   - [x] `LuxPopup`.
   - [ ] `Egg` popup.
+    - [x] Mount authored `EggGraphic` instances for `addEggs` and remove them
+      on collect, remote removal, reseed, and course teardown.
+    - [ ] Port the animated egg movement/attack/squash side effects and
+      collection sound.
   - [ ] `Hat` popup.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,

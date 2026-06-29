@@ -164,7 +164,7 @@ class Course extends Sprite {
 		buildMusicSelection();
 		buildRaceChat();
 		buildDrawingInfo();
-		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg);
+		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, characterLayer);
 		updatePlayerDisplay();
 	}
 

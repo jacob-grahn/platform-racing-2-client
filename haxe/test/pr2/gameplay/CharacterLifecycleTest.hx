@@ -94,19 +94,29 @@ class CharacterLifecycleTest {
 		assertEquals(3, course.eggRound.currentMode(), "seeded mode clamps Flash random value");
 		var first = course.eggRound.egg(1);
 		assertTrue(first != null, "first egg state stored");
+		assertEquals(3, course.characterLayer.numChildren, "egg graphics mount beside characters");
+		assertTrue(first.display.parent == course.characterLayer, "egg graphic is added to course layer");
+		assertEquals(first.x, Std.int(first.display.x), "egg graphic uses seeded x");
+		assertEquals(first.y, Std.int(first.display.y), "egg graphic uses seeded y");
+		assertEquals(first.rot, Std.int(first.display.rotation), "egg graphic uses seeded rotation");
 
 		assertEquals(true, course.eggRound.collectEgg(1), "collecting active egg succeeds");
 		assertEquals("grab_egg`1", LobbySocket.lastSent(), "collecting egg emits grab_egg");
 		assertEquals(1, course.eggRound.count(), "collected egg removed locally");
+		assertTrue(first.display.parent == null, "collected egg graphic removed");
 		assertTrue(!handler.hasCommand("removeEgg1"), "collected egg unregisters remote remove");
 
+		var second = course.eggRound.egg(2);
 		assertEquals(true, handler.dispatch("removeEgg2", []), "remote remove command dispatches");
 		assertEquals(0, course.eggRound.count(), "remote remove clears egg");
+		assertTrue(second.display.parent == null, "remote remove clears egg graphic");
 		assertTrue(!handler.hasCommand("removeEgg2"), "remote remove unregisters itself");
 
 		handler.dispatch("addEggs", ["1"]);
 		assertEquals(1, course.eggRound.count(), "egg mode can spawn after remote remove");
+		var third = course.eggRound.egg(3);
 		course.remove();
+		assertTrue(third.display.parent == null, "course teardown removes egg graphic");
 		assertTrue(!handler.hasCommand("removeEgg3"), "course teardown unregisters remaining egg");
 		shell.remove();
 

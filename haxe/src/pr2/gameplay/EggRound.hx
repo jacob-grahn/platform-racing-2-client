@@ -1,7 +1,9 @@
 package pr2.gameplay;
 
+import openfl.display.Sprite;
 import pr2.level.ServerLevel;
 import pr2.net.CommandHandler;
+import pr2.runtime.PR2MovieClip;
 
 typedef EggState = {
 	final id:Int;
@@ -9,6 +11,7 @@ typedef EggState = {
 	final y:Int;
 	final rot:Int;
 	final velX:Int;
+	final display:PR2MovieClip;
 }
 
 /**
@@ -22,11 +25,13 @@ class EggRound {
 	private var mode:Int = 3;
 	private final commandHandler:CommandHandler;
 	private final onCollect:Int->Void;
+	private final displayLayer:Null<Sprite>;
 	private var eggs:Map<Int, EggState> = new Map();
 
-	public function new(commandHandler:CommandHandler, onCollect:Int->Void) {
+	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
+		this.displayLayer = displayLayer;
 	}
 
 	public function initRound(seed:Int):Void {
@@ -59,6 +64,10 @@ class EggRound {
 	public function removeEgg(id:Int):Bool {
 		if (!eggs.exists(id)) {
 			return false;
+		}
+		var egg = eggs.get(id);
+		if (egg.display.parent != null) {
+			egg.display.parent.removeChild(egg.display);
 		}
 		eggs.remove(id);
 		commandHandler.defineCommand('removeEgg$id', null);
@@ -107,7 +116,16 @@ class EggRound {
 		var rot = rand.nextMinMax(-1, 3) * 90;
 		var rotated = RotationMath.rotatePoint(rawX, rawY, -rot);
 		var velX = rand.nextMinMax(0, 2) == 1 ? 1 : -1;
-		eggs.set(id, {id: id, x: rotated.x, y: rotated.y, rot: rot, velX: velX});
+		var display = PR2MovieClip.fromLinkage("EggGraphic", {maxNestedDepth: 8});
+		display.x = rotated.x;
+		display.y = rotated.y;
+		display.rotation = rot;
+		display.scaleX = velX > 0 ? 0.12 : -0.12;
+		display.scaleY = 0.12;
+		if (displayLayer != null) {
+			displayLayer.addChild(display);
+		}
+		eggs.set(id, {id: id, x: rotated.x, y: rotated.y, rot: rot, velX: velX, display: display});
 		commandHandler.defineCommand('removeEgg$id', function(_:Array<String>):Void {
 			removeEgg(id);
 		});
