@@ -92,6 +92,31 @@ class SourceClassCoverageInventoryTest {
 		"Zap"
 	];
 
+	private static final GAMEPLAY_CLASSES:Array<String> = [
+		"CatCaptcha",
+		"CatImage",
+		"Course",
+		"CourseTimer",
+		"DrawingInfo",
+		"ExpGain",
+		"FinishedPage",
+		"Game",
+		"Hearts",
+		"ItemDisplay",
+		"LuxPopup",
+		"MiniMap",
+		"Modes",
+		"MusicSelection",
+		"PlaceArtifact",
+		"PrizePopup",
+		"QuitButton",
+		"RaceChat",
+		"SpecialEvent",
+		"SpectatePicker",
+		"StatsDisplay",
+		"TestCourse"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in ITEM_CLASSES) {
@@ -109,6 +134,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in EFFECT_CLASSES) {
 			assertContains(inventory, '`flash/effects/$name.as`', 'inventory lists flash/effects/$name.as');
 		}
+		for (name in GAMEPLAY_CLASSES) {
+			assertContains(inventory, '`flash/gameplay/$name.as`', 'inventory lists flash/gameplay/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
 		assertContains(inventory, "pr2.level.BlockType", "inventory maps block classes to block types");
@@ -117,6 +145,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.character.RemoteCharacter", "inventory maps remote character behavior");
 		assertContains(inventory, "pr2.effects.BlockPiece", "inventory maps block-piece effects");
 		assertContains(inventory, "pr2.effects.MineExplosion", "inventory maps mine explosion effects");
+		assertContains(inventory, "pr2.gameplay.GameCommandShell", "inventory maps live game command routing");
+		assertContains(inventory, "pr2.page.GamePage", "inventory maps game page lifecycle");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}
