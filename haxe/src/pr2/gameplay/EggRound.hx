@@ -22,16 +22,20 @@ typedef EggState = {
 	var velY:Float;
 	var grounded:Bool;
 	var wallCooldown:Int;
+	var removing:Bool;
+	var removeFrames:Int;
 	final display:PR2MovieClip;
 }
 
 /**
 	Ports the round state from `effects.Egg`: seeded id/position generation,
-	PhysicsEffect movement, egg-mode gating in Course, collect emission, and
-	per-egg remote removal commands. The attacking effect body remains separate.
+	PhysicsEffect movement, egg-mode gating in Course, collect emission, squash
+	removal, and per-egg remote removal commands. The attacking effect body
+	remains separate.
 **/
 class EggRound {
 	public static inline var COLLECT_SOUND_PATH:String = "assets/audio/sfx/sound898.mp3";
+	private static inline var SQUASH_REMOVE_FRAMES:Int = 27;
 
 	private var rand:FlashRandom = new FlashRandom(1);
 	private var nextId:Int = 1;
@@ -77,6 +81,10 @@ class EggRound {
 			if (egg == null) {
 				continue;
 			}
+			if (egg.removing) {
+				stepRemovingEgg(id, egg);
+				continue;
+			}
 			stepEgg(egg, level, courseRotation);
 			if (playerX != null && playerY != null && isNearLocalPlayer(egg.x, egg.y, playerX, playerY, playerCrouching, playerRemoved)) {
 				collectEgg(id);
@@ -89,13 +97,20 @@ class EggRound {
 		if (egg == null) {
 			return false;
 		}
+		if (egg.removing) {
+			return false;
+		}
 		playCollectSound(egg.x, egg.y);
-		removeEgg(id);
+		beginSquash(egg);
 		onCollect(id);
 		return true;
 	}
 
 	public function removeEgg(id:Int):Bool {
+		return removeEggNow(id);
+	}
+
+	private function removeEggNow(id:Int):Bool {
 		if (!eggs.exists(id)) {
 			return false;
 		}
@@ -171,11 +186,26 @@ class EggRound {
 			velY: 0,
 			grounded: false,
 			wallCooldown: 0,
+			removing: false,
+			removeFrames: 0,
 			display: display
 		});
 		commandHandler.defineCommand('removeEgg$id', function(_:Array<String>):Void {
-			removeEgg(id);
+			removeEggNow(id);
 		});
+	}
+
+	private function beginSquash(egg:EggState):Void {
+		egg.removing = true;
+		egg.removeFrames = SQUASH_REMOVE_FRAMES;
+		egg.display.gotoAndPlay("squash");
+	}
+
+	private function stepRemovingEgg(id:Int, egg:EggState):Void {
+		egg.removeFrames--;
+		if (egg.removeFrames <= 0) {
+			removeEggNow(id);
+		}
 	}
 
 	private function stepEgg(egg:EggState, level:ServerLevel, courseRotation:Int):Void {

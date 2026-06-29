@@ -104,9 +104,21 @@ class CharacterLifecycleTest {
 
 		assertEquals(true, course.eggRound.collectEgg(1), "collecting active egg succeeds");
 		assertEquals("grab_egg`1", LobbySocket.lastSent(), "collecting egg emits grab_egg");
-		assertEquals(1, course.eggRound.count(), "collected egg removed locally");
-		assertTrue(first.display.parent == null, "collected egg graphic removed");
-		assertTrue(!handler.hasCommand("removeEgg1"), "collected egg unregisters remote remove");
+		assertEquals(2, course.eggRound.count(), "collected egg remains during squash animation");
+		assertTrue(first.removing, "collected egg enters squash removal state");
+		assertEquals(30, first.display.currentFrame, "collected egg starts authored squash animation");
+		assertTrue(first.display.parent == course.characterLayer, "collected egg graphic remains during squash animation");
+		assertTrue(handler.hasCommand("removeEgg1"), "collected egg keeps remote remove command during squash animation");
+		assertEquals(false, course.eggRound.collectEgg(1), "squashing egg cannot be collected twice");
+		var lifecycleLevel = ServerLevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0");
+		for (_ in 0...26) {
+			course.eggRound.step(lifecycleLevel);
+		}
+		assertTrue(first.display.parent == course.characterLayer, "squash animation persists before Flash timeout");
+		course.eggRound.step(lifecycleLevel);
+		assertEquals(1, course.eggRound.count(), "collected egg removed after squash timeout");
+		assertTrue(first.display.parent == null, "squashed egg graphic removed");
+		assertTrue(!handler.hasCommand("removeEgg1"), "squashed egg unregisters remote remove");
 
 		var second = course.eggRound.egg(2);
 		assertEquals(true, handler.dispatch("removeEgg2", []), "remote remove command dispatches");
@@ -191,8 +203,13 @@ class CharacterLifecycleTest {
 		touchEgg.velX = 0;
 		touchEgg.velY = 0;
 		touchRound.step(physicsLevel, 0, 10, 20, false, false);
-		assertEquals(0, touchRound.count(), "egg movement step collects near local player");
+		assertEquals(1, touchRound.count(), "egg movement step starts squash removal near local player");
+		assertTrue(touchEgg.removing, "touch-collected egg enters squash removal state");
 		assertEquals(1, collectedIds[0], "egg movement step emits collected egg id");
+		for (_ in 0...27) {
+			touchRound.step(physicsLevel);
+		}
+		assertEquals(0, touchRound.count(), "touch-collected egg is removed after squash timeout");
 	}
 
 	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {

@@ -53,7 +53,7 @@ still-unported popup/visual side effects.
       landing, grounded wall reversal, egg-mode wrapping, facing, fade-in, and
       local-player touch collection.
     - [ ] Port the animated egg attack side effects.
-    - [ ] Port the animated egg squash/remove side effect.
+    - [x] Port the animated egg squash/remove side effect.
   - [ ] `Hat` popup.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,
