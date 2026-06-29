@@ -34,7 +34,8 @@ class LobbyPopups {
 	}
 
 	public static function showLevel(levelId:String):Void {
-		lastRequest = 'level:$levelId';
+		var parsed = Std.parseInt(levelId);
+		new pr2.lobby.dialogs.LevelInfoPopup(parsed == null ? 0 : parsed);
 	}
 
 	public static function sendMessage(toUser:String):Void {

@@ -42,6 +42,7 @@ import pr2.lobby.AccountTabTest;
 import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
+import pr2.lobby.LevelInfoPopupTest;
 import pr2.lobby.OptionsPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.SendMessagePopupTest;
@@ -133,6 +134,7 @@ class DeterministicTestSuite {
 		CreditsPopupTest.main();
 		ExternalLinkPopupTest.main();
 		GuildPopupTest.main();
+		LevelInfoPopupTest.main();
 		OptionsPopupTest.main();
 		PlayerPopupTest.main();
 		SendMessagePopupTest.main();
