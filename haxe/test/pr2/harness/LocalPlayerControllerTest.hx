@@ -37,6 +37,7 @@ class LocalPlayerControllerTest {
 		testBumpingItemBlockGrantsConfiguredItem();
 		testEmptyOptionsItemBlockGrantsAllowedItem();
 		testRegularItemBlockDepletesAfterFirstUse();
+		testNewlyCollectedItemRequiresReleaseBeforeUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
 		testSuperJumpItemDoesNothingWhileCrouching();
 		testTeleportItemMovesPlayerForwardAndConsumesItem();
@@ -554,6 +555,7 @@ class LocalPlayerControllerTest {
 		assertEquals(3, player.debugState().itemId, "first regular item bump grants the configured item");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 8), "depleted item block uses SupplyBlock grey transform");
 
+		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(null, player.debugState().itemId, "lightning item consumes before the second bump");
 		player.step(new LocalPlayerInput(false, false, true));
@@ -565,6 +567,19 @@ class LocalPlayerControllerTest {
 		}
 		infinite.step(new LocalPlayerInput(false, false, true));
 		assertClose(1, infinite.blockColorMultiplierAt(2, 8), "infinite item block does not deplete visually");
+	}
+
+	private static function testNewlyCollectedItemRequiresReleaseBeforeUse():Void {
+		var player = collectItem(heldItemLevel(3), 3);
+
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(3, player.debugState().itemId, "newly collected item does not fire before a key-up frame");
+		assertEquals(null, player.debugState().lastItemEffect, "blocked first press emits no item effect");
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		assertEquals(null, player.debugState().itemId, "item fires after the key has been released");
+		assertEquals("zap", player.debugState().lastItemEffect, "released lightning emits its effect");
 	}
 
 	private static function testSuperJumpItemLaunchesPlayerAndConsumesItem():Void {
@@ -588,6 +603,8 @@ class LocalPlayerControllerTest {
 		}
 		var beforeUse = player.debugState();
 
+		makeItemAvailable(player);
+		beforeUse = player.debugState();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var afterUse = player.debugState();
 
@@ -605,6 +622,8 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput(false, false, true));
 		var beforeUse = player.debugState();
 
+		makeItemAvailable(player);
+		beforeUse = player.debugState();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var afterUse = player.debugState();
 
@@ -636,6 +655,8 @@ class LocalPlayerControllerTest {
 		}
 		var beforeUse = player.debugState();
 
+		makeItemAvailable(player);
+		beforeUse = player.debugState();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var afterUse = player.debugState();
 
@@ -665,6 +686,8 @@ class LocalPlayerControllerTest {
 		}
 		var beforeUse = player.debugState();
 
+		makeItemAvailable(player);
+		beforeUse = player.debugState();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var afterUse = player.debugState();
 
@@ -677,6 +700,7 @@ class LocalPlayerControllerTest {
 		var boosted = collectItem(speedBurstItemLevel(), 7);
 		var normal = new LocalCharacter(speedBurstComparisonLevel());
 
+		makeItemAvailable(boosted);
 		boosted.step(new LocalPlayerInput(false, false, false, false, true));
 		var active = boosted.debugState();
 		assertEquals(7, active.itemId, "speed burst stays held while active");
@@ -738,6 +762,8 @@ class LocalPlayerControllerTest {
 		var player = collectItem(heldItemLevel(1), 1);
 		var beforeUse = player.debugState();
 
+		makeItemAvailable(player);
+		beforeUse = player.debugState();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var firstShot = player.debugState();
 		assertEquals(1, firstShot.itemId, "laser remains held after first shot");
@@ -748,6 +774,8 @@ class LocalPlayerControllerTest {
 		var leftFacing = collectItem(heldItemLevel(1), 1);
 		leftFacing.step(new LocalPlayerInput(true));
 		var beforeLeftUse = leftFacing.debugState();
+		makeItemAvailable(leftFacing);
+		beforeLeftUse = leftFacing.debugState();
 		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
 		var leftShot = leftFacing.debugState();
 		assertEquals("laser:left", leftShot.lastItemEffect, "laser emits a left-facing shot");
@@ -769,6 +797,7 @@ class LocalPlayerControllerTest {
 		var level = heldItemLevel(2);
 		var player = collectItem(level, 2);
 
+		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var state = player.debugState();
 
@@ -781,6 +810,7 @@ class LocalPlayerControllerTest {
 	private static function testLightningEmitsZapAndConsumesItem():Void {
 		var player = collectItem(heldItemLevel(3), 3);
 
+		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var state = player.debugState();
 
@@ -792,6 +822,8 @@ class LocalPlayerControllerTest {
 		var player = collectItem(heldItemLevel(8), 8);
 		var beforeUse = player.debugState();
 
+		makeItemAvailable(player);
+		beforeUse = player.debugState();
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var firstSwing = player.debugState();
 		assertEquals(8, firstSwing.itemId, "sword remains held after first swing");
@@ -802,6 +834,8 @@ class LocalPlayerControllerTest {
 		var leftFacing = collectItem(heldItemLevel(8), 8);
 		leftFacing.step(new LocalPlayerInput(true));
 		var beforeLeftUse = leftFacing.debugState();
+		makeItemAvailable(leftFacing);
+		beforeLeftUse = leftFacing.debugState();
 		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
 		var leftSwing = leftFacing.debugState();
 		assertEquals("slash:left", leftSwing.lastItemEffect, "sword emits a left-facing slash");
@@ -822,6 +856,7 @@ class LocalPlayerControllerTest {
 	private static function testIceWaveReloadTiming():Void {
 		var player = collectItem(heldItemLevel(9), 9);
 
+		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var firstWave = player.debugState();
 		assertEquals(9, firstWave.itemId, "ice wave remains held after first wave");
@@ -830,6 +865,7 @@ class LocalPlayerControllerTest {
 
 		var leftFacing = collectItem(heldItemLevel(9), 9);
 		leftFacing.step(new LocalPlayerInput(true));
+		makeItemAvailable(leftFacing);
 		leftFacing.step(new LocalPlayerInput(false, false, false, false, true));
 		var leftWave = leftFacing.debugState();
 		assertEquals("ice_wave:left", leftWave.lastItemEffect, "ice wave emits a left-facing wave");
@@ -1150,6 +1186,10 @@ class LocalPlayerControllerTest {
 			}
 		}
 		throw 'item $itemId was not collected';
+	}
+
+	private static function makeItemAvailable(player:LocalCharacter):Void {
+		player.step(new LocalPlayerInput());
 	}
 
 	// Start tile is in open air above a deep water column on a solid floor, so a

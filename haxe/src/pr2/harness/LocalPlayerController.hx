@@ -113,6 +113,7 @@ class LocalPlayerController {
 	private var speedBurstFramesRemaining:Int = 0;
 	private var jetPackFuelRemaining:Null<Int> = null;
 	private var itemReloadFramesRemaining:Int = 0;
+	private var itemAvailable:Bool = false;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
 	// The level's allowed-item pool (GamePage.setItems), used when an item block
@@ -801,6 +802,7 @@ class LocalPlayerController {
 			itemId = nextItem;
 			itemUses = initialItemUses(nextItem);
 			jetPackFuelRemaining = nextItem == ITEM_JET_PACK ? JET_PACK_TOTAL_FUEL : null;
+			itemAvailable = false;
 		}
 	}
 
@@ -831,7 +833,18 @@ class LocalPlayerController {
 	}
 
 	private function useHeldItem(input:LocalPlayerInput):Void {
-		if (!input.item || itemId == null || itemReloadFramesRemaining > 0) {
+		if (!input.item) {
+			itemAvailable = true;
+			return;
+		}
+		if (itemId == null || itemReloadFramesRemaining > 0) {
+			return;
+		}
+		if (itemId == ITEM_JET_PACK) {
+			useJetPack();
+			return;
+		}
+		if (!itemAvailable) {
 			return;
 		}
 
@@ -965,6 +978,7 @@ class LocalPlayerController {
 		itemUses = null;
 		itemReloadFramesRemaining = 0;
 		jetPackFuelRemaining = null;
+		itemAvailable = false;
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
@@ -1122,6 +1136,7 @@ class LocalPlayerController {
 		if (speedBurstFramesRemaining <= 0) {
 			itemId = null;
 			itemUses = null;
+			itemAvailable = false;
 			applyMovementStats();
 		}
 	}
