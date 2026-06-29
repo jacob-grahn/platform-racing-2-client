@@ -1,6 +1,7 @@
 package pr2.gameplay;
 
 import openfl.events.Event;
+import openfl.display.Sprite;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -228,6 +229,35 @@ class CharacterLifecycleTest {
 		attackRound.step(new ServerLevel(0xffffff, []), 0, 150, 120, false, false);
 		assertEquals(1, LobbySocket.sentCommands.length, "egg attack cooldown suppresses repeat emission");
 		assertEquals(119, attackEgg.attackCooldown, "egg attack cooldown ticks down each frame");
+
+		assertEggAttackVisual(14, "IceWave", 3, "ice wave attacks mount three authored shot graphics");
+		assertEggAttackVisual(1, "Slash", 1, "slash attacks mount the authored slash animation");
+		assertEggAttackVisual(9, "Laser", 1, "laser attacks mount the authored laser shot graphic");
+	}
+
+	private static function assertEggAttackVisual(seed:Int, expectedType:String, expectedCount:Int, message:String):Void {
+		var layer = new Sprite();
+		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {});
+		round.initRound(seed);
+		round.addEggs(1, new ServerLevel(0xffffff, []));
+		var egg = round.egg(1);
+		assertTrue(egg != null, '$message: egg spawned');
+		egg.posX = 100;
+		egg.posY = 100;
+		egg.velX = 0;
+		egg.velY = 0;
+		var probe = RotationMath.rotatePoint(150, 100, -RotationMath.normalizeDisplayRotation(-egg.rot));
+		LobbySocket.resetSent();
+		round.step(new ServerLevel(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
+		assertTrue(LobbySocket.lastSent().indexOf('add_effect`$expectedType`') == 0, '$message: expected payload type');
+		assertEquals(expectedCount, round.activeAttackVisualCount(), message);
+		assertEquals(expectedCount + 1, layer.numChildren, '$message: visuals share the egg display layer');
+		var visual = layer.getChildAt(1);
+		var initialX = visual.x;
+		round.step(new ServerLevel(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
+		assertTrue(visual.x != initialX || expectedType == "Slash", '$message: projectile visuals advance after mounting');
+		round.clear();
+		assertEquals(0, layer.numChildren, '$message: clear removes mounted visuals');
 	}
 
 	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {

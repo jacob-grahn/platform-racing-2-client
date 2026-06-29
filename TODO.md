@@ -55,7 +55,7 @@ still-unported popup/visual side effects.
     - [ ] Port the animated egg attack side effects.
       - [x] Port the Flash egg attack probe, add_effect payloads, and 120-frame
         cooldown.
-      - [ ] Mount and animate the local Slash/Laser/IceWave effect visuals from
+      - [x] Mount and animate the local Slash/Laser/IceWave effect visuals from
         egg attacks.
     - [x] Port the animated egg squash/remove side effect.
   - [ ] `Hat` popup.

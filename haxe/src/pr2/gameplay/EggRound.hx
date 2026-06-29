@@ -29,6 +29,16 @@ typedef EggState = {
 	final display:PR2MovieClip;
 }
 
+typedef EggAttackVisual = {
+	var posX:Float;
+	var posY:Float;
+	var velX:Float;
+	var velY:Float;
+	var life:Int;
+	var alphaJitter:Bool;
+	var display:PR2MovieClip;
+}
+
 /**
 	Ports the round state from `effects.Egg`: seeded id/position generation,
 	PhysicsEffect movement, egg-mode gating in Course, collect emission, squash
@@ -52,6 +62,7 @@ class EggRound {
 	private final cameraOffset:Void->Point;
 	private final playCollectSound:Int->Int->Void;
 	private var eggs:Map<Int, EggState> = new Map();
+	private var attackVisuals:Array<EggAttackVisual> = [];
 
 	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
 			?playCollectSound:Int->Int->Void) {
@@ -82,6 +93,7 @@ class EggRound {
 
 	public function step(level:ServerLevel, courseRotation:Int = 0, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false):Void {
+		stepAttackVisuals();
 		for (id in ids()) {
 			var egg = eggs.get(id);
 			if (egg == null) {
@@ -133,6 +145,7 @@ class EggRound {
 		for (id in ids()) {
 			removeEgg(id);
 		}
+		clearAttackVisuals();
 	}
 
 	public function count():Int {
@@ -158,6 +171,10 @@ class EggRound {
 
 	public function currentMode():Int {
 		return mode;
+	}
+
+	public function activeAttackVisualCount():Int {
+		return attackVisuals.length;
 	}
 
 	private function spawn(level:ServerLevel):Void {
@@ -294,6 +311,7 @@ class EggRound {
 			var attackY = Std.int(egg.posY - 10);
 			var payload = attackPayload(attackX, attackY, angle, dir, egg.rot);
 			if (payload != "") {
+				mountAttackVisual(payload);
 				LobbySocket.write('add_effect`$payload');
 			}
 		} else {
@@ -316,6 +334,100 @@ class EggRound {
 			return 'Laser`$x`$y`$dir`$rot`-1';
 		}
 		return "";
+	}
+
+	private function mountAttackVisual(payload:String):Void {
+		if (displayLayer == null) {
+			return;
+		}
+		var parts = payload.split("`");
+		var type = parts[0];
+		var x = parsePartInt(parts, 1);
+		var y = parsePartInt(parts, 2);
+		switch (type) {
+			case "Slash":
+				var dir = parts.length > 3 ? parts[3] : "right";
+				addAttackVisual("SlashAnimation", x, y, dir == "left" ? -1 : 1, 1, 0, 0, 6, false);
+			case "Laser":
+				var dir = parts.length > 3 ? parts[3] : "right";
+				var angle = dir == "left" ? 180 : 0;
+				var rot = parsePartInt(parts, 4);
+				var laser = addAttackVisual("LaserShotGraphic", x, y, 1, 1, Math.cos(angle * Math.PI / 180) * 29,
+					Math.sin(angle * Math.PI / 180) * 29, 100, false);
+				laser.display.rotation = angle - rot;
+			case "IceWave":
+				var base = parsePartInt(parts, 3);
+				var rot = parsePartInt(parts, 4);
+				for (angle in [base, base + 30, base - 30]) {
+					var shot = addAttackVisual("IceWaveGraphic", x, y, 1, 1, Math.cos(angle * Math.PI / 180) * 5,
+						Math.sin(angle * Math.PI / 180) * 5, 75, true);
+					shot.display.rotation = angle - rot;
+				}
+			default:
+		}
+	}
+
+	private function addAttackVisual(linkage:String, x:Int, y:Int, scaleX:Float, scaleY:Float, velX:Float, velY:Float, life:Int,
+			alphaJitter:Bool):EggAttackVisual {
+		var display = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 8});
+		display.x = x;
+		display.y = y;
+		display.scaleX = scaleX;
+		display.scaleY = scaleY;
+		displayLayer.addChild(display);
+		var visual:EggAttackVisual = {
+			posX: x + 0.0,
+			posY: y + 0.0,
+			velX: velX,
+			velY: velY,
+			life: life,
+			alphaJitter: alphaJitter,
+			display: display
+		};
+		attackVisuals.push(visual);
+		return visual;
+	}
+
+	private function stepAttackVisuals():Void {
+		var remaining:Array<EggAttackVisual> = [];
+		for (visual in attackVisuals) {
+			visual.posX += visual.velX;
+			visual.posY += visual.velY;
+			visual.display.x = visual.posX;
+			visual.display.y = visual.posY;
+			if (visual.alphaJitter) {
+				visual.display.alpha = (Math.random() * visual.life / 100) + 0.25;
+			}
+			visual.life--;
+			if (visual.life <= 0) {
+				removeAttackVisual(visual);
+			} else {
+				remaining.push(visual);
+			}
+		}
+		attackVisuals = remaining;
+	}
+
+	private function clearAttackVisuals():Void {
+		for (visual in attackVisuals) {
+			removeAttackVisual(visual);
+		}
+		attackVisuals.resize(0);
+	}
+
+	private static function removeAttackVisual(visual:EggAttackVisual):Void {
+		visual.display.dispose();
+		if (visual.display.parent != null) {
+			visual.display.parent.removeChild(visual.display);
+		}
+	}
+
+	private static function parsePartInt(parts:Array<String>, index:Int):Int {
+		if (index >= parts.length) {
+			return 0;
+		}
+		var value = Std.parseInt(parts[index]);
+		return value == null ? 0 : value;
 	}
 
 	private static function wrapPosition(egg:EggState, level:ServerLevel):Void {
