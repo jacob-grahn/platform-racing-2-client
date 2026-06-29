@@ -29,12 +29,20 @@ special-event behavior, and incremental level drawing are all ported and
 unit-covered (see README). What remains is the end-to-end acceptance and the
 still-unported popup/visual side effects.
 
-- [ ] Run one uninterrupted real-server session: an account and a guest each log
+- [x] Run one uninterrupted real-server session: an account and a guest each log
   in, select/join a level, race with synchronized remote players, finish or
   quit, and return to the lobby without a page reload. Add a deterministic
   transcript test covering the full command/state sequence and screenshots for
   level entry, countdown, racing, and finish. This is the acceptance that flips
   the level-entry and race-sync milestones to done.
+  Done: the live two-instance run is `tools/race_session.py` (drives two headless
+  Chrome clients against pr2hub.com — account + guest co-join a campaign level,
+  race with `remote-count >= 1`, quit, and return to the lobby; captures the
+  level-entry/countdown/racing/finished screenshots per role). The CI-runnable
+  counterpart is `RaceSessionTranscriptTest` (in the deterministic suite), which
+  drives the production `LevelItem`/`GamePage`/`Course` objects through the whole
+  join -> race -> quit -> return lifecycle and asserts the ordered wire-command
+  transcript plus the level-entry/race-phase state at each transition.
 - [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
   `LuxPopup`, `Egg`, and `Hat` popups are unported.
 - [ ] Port the remaining character visual-effect hooks that are currently

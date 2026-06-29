@@ -103,6 +103,11 @@ class Course extends Sprite {
 	public var onFinish:Null<LocalPlayerDebugState->Void> = null;
 	private var localFinishHandled:Bool = false;
 
+	// Set by GamePage when the player quits (or otherwise leaves the race) so the
+	// per-frame race-phase report keeps saying "finished" instead of clobbering
+	// the GamePage-set value back to "racing" while the course keeps ticking.
+	public var raceEnded:Bool = false;
+
 	private var playerDot:MiniMapDot;
 	private var drawingInfoFinished:Bool = false;
 	private var displayedItemId:Null<Int>;
@@ -418,8 +423,10 @@ class Course extends Sprite {
 			return;
 		}
 		if (levelRenderer != null && !levelRenderer.isDrawingComplete()) {
+			pr2.app.DebugSignal.set("race-phase", "loading");
 			return;
 		}
+		reportRacePhase();
 		if (!drawingInfoFinished) {
 			emitFinishDrawingReady();
 			if (drawingInfo != null) {
@@ -439,6 +446,25 @@ class Course extends Sprite {
 		if (onFrame != null) {
 			onFrame(state);
 		}
+	}
+
+	// Publishes the race lifecycle phase and the live remote-player count to the
+	// document body so the OpenFL driver can detect level entry, the countdown,
+	// racing, and finish, and assert that two co-joined clients actually see each
+	// other (remote-count >= 1). The finished phase is also set by GamePage's quit
+	// path, which Course does not observe.
+	private function reportRacePhase():Void {
+		var phase = if (localFinishHandled || raceEnded) {
+			"finished";
+		} else if (raceStarted) {
+			"racing";
+		} else if (countdown != null && countdown.parent != null) {
+			"countdown";
+		} else {
+			"ready";
+		}
+		pr2.app.DebugSignal.set("race-phase", phase);
+		pr2.app.DebugSignal.set("remote-count", Std.string(remoteCharacterCount()));
 	}
 
 	// Port of the local side of Game.finish: when the player bumps a finish block

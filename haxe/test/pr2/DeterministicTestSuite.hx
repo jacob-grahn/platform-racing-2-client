@@ -36,6 +36,7 @@ import pr2.gameplay.CharacterLifecycleTest;
 import pr2.gameplay.LevelEntryStateTest;
 import pr2.gameplay.GameCommandShellTest;
 import pr2.gameplay.QuitButtonTest;
+import pr2.gameplay.RaceSessionTranscriptTest;
 import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
@@ -119,6 +120,7 @@ class DeterministicTestSuite {
 		LevelEntryStateTest.main();
 		GameCommandShellTest.main();
 		QuitButtonTest.main();
+		RaceSessionTranscriptTest.main();
 		ServerConfigTest.main();
 		ServerStatusClientTest.main();
 		LoginSocketProtocolTest.main();

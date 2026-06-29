@@ -146,6 +146,8 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	override public function remove():Void {
+		pr2.app.DebugSignal.clear("race-phase");
+		pr2.app.DebugSignal.clear("remote-count");
 		if (commandShell != null) {
 			commandShell.remove();
 			commandShell = null;
@@ -373,6 +375,12 @@ class GamePage extends Page implements GameCommandDelegate {
 			}
 			finishedPage = new FinishedPage(levelId, returnToLobby);
 		}
+		// The course keeps ticking under the finished overlay; tell it the race is
+		// over so its per-frame phase report does not clobber "finished".
+		if (course != null) {
+			course.raceEnded = true;
+		}
+		pr2.app.DebugSignal.set("race-phase", "finished");
 	}
 
 	// Course invokes this once the local player bumps a finish block (race-style
@@ -390,6 +398,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		if (finishedPage == null) {
 			finishedPage = new FinishedPage(levelId, returnToLobby);
 		}
+		pr2.app.DebugSignal.set("race-phase", "finished");
 	}
 
 	private function returnToLobby():Void {

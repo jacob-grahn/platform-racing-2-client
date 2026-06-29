@@ -200,6 +200,16 @@ Completed subsystems (parity-relevant facts worth keeping):
   Server levels draw incrementally (blocks and authored art lines/objects/text in
   per-frame batches) and gameplay holds in a drawing phase until every layer is
   present, emitting Flash's `finish_drawing` payload exactly once.
+  The full login-to-race flow is accepted end to end: `tools/race_session.py`
+  runs two headless-Chrome clients against the live server (an account and a guest
+  co-join a campaign level, race with at least one synchronized remote player,
+  quit, and return to the lobby without a page reload, capturing level-entry,
+  countdown, racing, and finished screenshots per role). Its CI-runnable
+  counterpart, `RaceSessionTranscriptTest` in the deterministic suite, drives the
+  production `LevelItem`/`GamePage`/`Course` objects through the same join → race
+  → quit → return lifecycle (including the `pendingLocalInit`/`pendingBeginRace`
+  frame buffering before the level payload arrives) and asserts the ordered
+  wire-command transcript plus the level-entry/race-phase state at each transition.
 - Item physics: the local controller mirrors `items.JetPack` fuel/thrust timing,
   the authored multi-use reload windows (Laser Gun/Sword 800ms, Ice Wave 1000ms),
   teleport and mine effect-coordinate emission, super-jump crouch suppression,

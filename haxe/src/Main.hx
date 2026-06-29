@@ -78,6 +78,10 @@ class Main extends Sprite {
 	private function signalAppReady():Void {
 		#if js
 		Browser.document.body.setAttribute("data-pr2-app-ready", "1");
+		// Expose the live stage so automated harnesses can hit-test the display
+		// list for authored buttons whose on-stage position is hard to predict
+		// from the symbol registration point (e.g. the in-race Quit button).
+		untyped Browser.window.__pr2Stage = stage;
 		#end
 	}
 
