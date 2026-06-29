@@ -237,8 +237,8 @@ Then mobile, after browser parity:
   `page`, and `sounds` packages are inventoried in
   `docs/source-class-coverage.md` (guarded by
   `SourceClassCoverageInventoryTest`). Remaining: inventory the rest of the
-  first-party AS3 packages (e.g. `menu`, `level_editor`, `com.*`) and
-  reconcile every class.
+  first-party AS3 packages (e.g. `level_editor`, `dialogs`, `lobby`, `com.*`)
+  and reconcile every class. The `menu` package is now inventoried.
 Walk every original user flow and role, one at a time:
 
 - [ ] Walk the guest role end to end.

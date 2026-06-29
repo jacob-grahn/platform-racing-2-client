@@ -182,6 +182,21 @@ class SourceClassCoverageInventoryTest {
 		"SoundEffects"
 	];
 
+	private static final MENU_CLASSES:Array<String> = [
+		"CheckServers",
+		"CommAuth",
+		"ConnectingPopup",
+		"CreateAccountPopup",
+		"CreditsPopup",
+		"ForgotPassPopup",
+		"IntroPage",
+		"KongOutfitPopup",
+		"LoggingInPopup",
+		"LoginPage",
+		"LoginPopup",
+		"ServerSelectPopup"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in BACKGROUND_CLASSES) {
@@ -211,6 +226,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in SOUND_CLASSES) {
 			assertContains(inventory, '`flash/sounds/$name.as`', 'inventory lists flash/sounds/$name.as');
 		}
+		for (name in MENU_CLASSES) {
+			assertContains(inventory, '`flash/menu/$name.as`', 'inventory lists flash/menu/$name.as');
+		}
 		for (name in GAMEPLAY_CLASSES) {
 			assertContains(inventory, '`flash/gameplay/$name.as`', 'inventory lists flash/gameplay/$name.as');
 		}
@@ -235,6 +253,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.effects.MineExplosion", "inventory maps mine explosion effects");
 		assertContains(inventory, "pr2.audio.SoundEffects", "inventory maps spatial sound playback");
 		assertContains(inventory, "pr2.audio.MenuMusic", "inventory maps Noodle Town menu music");
+		assertContains(inventory, "pr2.net.LoginSessionGate", "inventory maps menu login handshake");
+		assertContains(inventory, "pr2.net.ServerStatusClient", "inventory maps menu server selection");
 		assertContains(inventory, "pr2.gameplay.GameCommandShell", "inventory maps live game command routing");
 		assertContains(inventory, "pr2.page.GamePage", "inventory maps game page lifecycle");
 		assertContains(inventory, "pr2.lobby.level.LevelListingPage", "inventory maps level browser listing pages");

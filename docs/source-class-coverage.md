@@ -145,6 +145,23 @@ alone is not a class port.
 | `flash/sounds/NoodleTown.as` | `pr2.audio.MenuMusic`, `pr2.audio.AudioManager` | ported | The two-layer Noodle Town menu loop, randomized crossfade, frame-rate volume fade, and login/lobby handoff are represented by `MenuMusic`/`AudioManager`; teardown stops channels and timers. |
 | `flash/sounds/SoundEffects.as` | `pr2.audio.SoundEffects`, `pr2.audio.TimelineSound` | ported | Overlapping one-shot playback, 700 px game-sound attenuation/panning, sound-level scaling, loop forwarding, and timeline-owned sound disposal are covered by `AudioRuntimeTest`. |
 
+## Menu Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/menu/CheckServers.as` | `pr2.net.ServerStatusClient`, `pr2.page.LoginPage` | ported | Server-status loading, filtering, Flash ordering, preferred open server choice, refresh interval, and manual reload cooldown are represented by the login page and covered by `LobbyServicesTest`. |
+| `flash/menu/CommAuth.as` | platform crypto boundary | gap | Flash's communication-token `SecureStore` helper is not represented as a standalone Haxe class; the currently ported login/API flows do not consume this token path. |
+| `flash/menu/ConnectingPopup.as` | `pr2.page.LoginPage`, `pr2.page.LoginSocketProbe`, `pr2.net.LoginSessionGate` | ported | Socket replacement, `setLoginID` handoff, cancel/error teardown, and transition into the login handshake are represented by the login-page popup flow and covered by login/session tests. |
+| `flash/menu/CreateAccountPopup.as` | `pr2.page.LoginPage`, `pr2.net.AccountCreationClient` | ported | Password confirmation, `register_user.php` POST, success handoff to server selection, and uploading/message popup behavior are represented in the authored login popup flow. |
+| `flash/menu/CreditsPopup.as` | `pr2.lobby.dialogs.CreditsPopup`, `pr2.page.LoginPage` | ported | The authored credits popup, version/build text, three art pages, two music pages, nav links, and close behavior are covered by popup tests. |
+| `flash/menu/ForgotPassPopup.as` | `pr2.page.LoginPage`, `pr2.net.ForgotPasswordClient` | ported | Name prefill, Enter submission, `forgot_password.php` form fields, uploading state, and success/error message handling are represented by the login-page popup flow. |
+| `flash/menu/IntroPage.as` | `pr2.page.IntroPage` | ported | Site-mode intro sequencing, click-to-skip, generated timeline playback, final-frame completion, and login transition are covered by intro harness state and deterministic tests. |
+| `flash/menu/KongOutfitPopup.as` | login Kong reward gap | gap | The Kong sponsor outfit acceptance flow and next-login award flag are not yet ported; the login page only exposes the Kong hit region boundary. |
+| `flash/menu/LoggingInPopup.as` | `pr2.page.LoginPage`, `pr2.net.LoginAuthClient`, `pr2.net.LoginSessionGate`, `pr2.net.SavedAccounts` | ported | The HTTP/socket two-phase login handshake, `loginSuccessful`/failure handling, session fields, remembered token persistence, invalid token deletion, and lobby transition are covered by login and race-session tests. |
+| `flash/menu/LoginPage.as` | `pr2.page.LoginPage`, `pr2.audio.AudioManager` | ported | Authored login menu art, button routes, server refresh lifecycle, instructions link, Noodle Town entry, and cleanup are represented by `LoginPage`; site-logo variants other than Kong remain visual-only gaps. |
+| `flash/menu/LoginPopup.as` | `pr2.page.LoginPage`, `pr2.net.ServerStatusClient` | ported | Credential fields, remember checkbox, server dropdown, Enter-to-submit, forgot-password route, reload cooldown, and cancel behavior are represented in the login-page popup flow. |
+| `flash/menu/ServerSelectPopup.as` | `pr2.page.LoginPage`, `pr2.net.SavedAccounts`, `pr2.net.ServerStatusClient` | ported | Guest/account server selection, saved-account dropdown, delete confirmation/logout request, reload cooldown, cancel state reset, and connection start are represented by the login-page popup flow. |
+
 ## Gameplay Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
