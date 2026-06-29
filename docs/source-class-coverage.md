@@ -301,3 +301,54 @@ alone is not a class port.
 | `flash/ui/StatSlider.as` | `pr2.lobby.account.StatSlider` | partial | Numeric entry, slider sync, button stepping, point-budget clamp, and display updates are ported; Flash's press-and-hold acceleration and level-editor save hook are intentionally still gaps. |
 | `flash/ui/StatsSelect.as` | `pr2.lobby.account.StatsSelect` | partial | Account stat allocation, remaining-points display, info string, and stat extraction are ported; the level-editor live-character/stat persistence hook remains with editor test-course work. |
 | `flash/ui/TabsHolder.as` | `pr2.ui.TabsHolder`, `pr2.ui.TabLayout` | ported | Tab ownership, remembered selected tab, overlap layout, selected-front ordering, and removal persistence are represented by the shared tab holder. |
+
+## Com Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/com/adobe/crypto/MD5.as` | Haxe `haxe.crypto.Md5` call sites | ported | Campaign-list and level-data hash validation use the standard Haxe MD5 implementation at the same protocol boundaries instead of carrying the Adobe helper class. |
+| `flash/com/adobe/utils/IntUtil.as` | crypto adapter boundary | gap | The AS3 bit-rotation helpers are only used by the vendored Adobe MD5 implementation; no standalone Haxe adapter is needed while MD5 is supplied by the standard library. |
+| `flash/com/hurlant/crypto/hash/IHash.as` | crypto adapter boundary | gap | The Hurlant hash interface is not ported as an interface; current covered flows use direct MD5/AES adapters. |
+| `flash/com/hurlant/crypto/hash/MD5.as` | Haxe `haxe.crypto.Md5` call sites | ported | The Hurlant MD5 implementation is replaced by the standard Haxe MD5 at login, level-list, and level-data validation boundaries. |
+| `flash/com/hurlant/crypto/prng/ARC4.as` | crypto adapter boundary | gap | ARC4 is part of the vendored Hurlant crypto bundle and is not represented by a Haxe runtime class. |
+| `flash/com/hurlant/crypto/prng/IPRNG.as` | crypto adapter boundary | gap | The Hurlant PRNG interface has no standalone Haxe equivalent; covered PR2 flows do not consume this interface directly. |
+| `flash/com/hurlant/crypto/prng/Random.as` | `pr2.lobby.Memory`, `pr2.lobby.SecureData` | partial | SecureData-style byte storage is represented for current lobby/account uses, but Hurlant's entropy pool and PRNG API are not ported. |
+| `flash/com/hurlant/crypto/symmetric/AESKey.as` | `pr2.crypto.PR2Encryptor` | ported | AES-CBC login/store encryption is implemented through `PR2Encryptor` and covered by `PR2EncryptorTest`. |
+| `flash/com/hurlant/crypto/symmetric/CBCMode.as` | `pr2.crypto.PR2Encryptor` | ported | CBC-mode block processing is supplied by the Haxe crypto adapter inside `PR2Encryptor`. |
+| `flash/com/hurlant/crypto/symmetric/ICipher.as` | crypto adapter boundary | gap | The Hurlant cipher interface is not exposed as a Haxe type; encryption is kept behind PR2-specific helpers. |
+| `flash/com/hurlant/crypto/symmetric/IMode.as` | crypto adapter boundary | gap | The Hurlant mode interface is not exposed as a Haxe type; current parity coverage is at the encrypted payload boundary. |
+| `flash/com/hurlant/crypto/symmetric/IPad.as` | crypto adapter boundary | gap | Generic pad strategy injection is not ported; the PR2 pad behavior is folded into `PR2Encryptor`. |
+| `flash/com/hurlant/crypto/symmetric/IStreamCipher.as` | crypto adapter boundary | gap | Stream-cipher support is unused by the ported PR2 flows and remains unimplemented. |
+| `flash/com/hurlant/crypto/symmetric/ISymmetricKey.as` | crypto adapter boundary | gap | The Hurlant symmetric-key interface is not exposed as a Haxe type; AES use is constrained to `PR2Encryptor`. |
+| `flash/com/hurlant/crypto/symmetric/IVMode.as` | `pr2.crypto.PR2Encryptor` | ported | IV handling for PR2 AES-CBC payloads is represented inside `PR2Encryptor`. |
+| `flash/com/hurlant/crypto/symmetric/PKCS5.as` | `pr2.crypto.PR2Encryptor` | ported | The login/store encryption pad behavior is represented in `PR2Encryptor` and covered by deterministic encryption vectors. |
+| `flash/com/hurlant/util/Base64.as` | `pr2.crypto.PR2Encryptor` | ported | Base64 encoding for encrypted PR2 payloads is handled inside the encryption adapter. |
+| `flash/com/hurlant/util/Hex.as` | crypto adapter boundary | gap | The general Hex helper is not ported; current protocol code does not expose Hurlant hex APIs. |
+| `flash/com/hurlant/util/Memory.as` | `pr2.lobby.Memory`, `pr2.lobby.SecureData` | partial | Byte storage is represented for SecureData-compatible values; Hurlant's full fast-memory adapter is not ported. |
+| `flash/com/jcward/workers/BitString.as` | guild-emblem upload gap | gap | The JPEG bit writer is only needed by the unported local image/JPEG upload path. |
+| `flash/com/jcward/workers/JPEGEncoder.as` | guild-emblem upload gap | gap | JPEG encoding remains with the guild-emblem upload TODO; no Haxe encoder is currently wired. |
+| `flash/com/jiggmin/ColorPicker/ColorChoices.as` | `pr2.lobby.account.ColorChoices` | ported | The authored color palette is represented by the account color picker data. |
+| `flash/com/jiggmin/ColorPicker/ColorPicker.as` | `pr2.lobby.account.ColorPicker` | partial | Account part color selection is functional; exact Flash picker triangle/diagonal mask visuals remain visual fidelity work. |
+| `flash/com/jiggmin/ColorPicker/ColorPickerPopup.as` | `pr2.lobby.account.ColorPicker` | partial | Popup-style color editing is represented inside the account picker control; exact popup artwork and focus behavior remain visual gaps. |
+| `flash/com/jiggmin/ColorPicker/CursorEyedropper.as` | level-editor color-tool gap | gap | Eyedropper cursor behavior is not ported and remains with level-editor tooling. |
+| `flash/com/jiggmin/data/AESPad.as` | `pr2.crypto.PR2Encryptor` | ported | PR2's AES padding quirk is represented in the encrypted login/store payload adapter. |
+| `flash/com/jiggmin/data/ColorUtil.as` | `pr2.lobby.account.ColorPicker`, character color parsing | partial | Account customization parses and applies PR2 color values; a standalone color utility API is not ported. |
+| `flash/com/jiggmin/data/CommandHandler.as` | `pr2.net.CommandHandler` | ported | Backtick-delimited command registration, dispatch, shared instance routing, and teardown are covered by gameplay/lobby tests. |
+| `flash/com/jiggmin/data/Data.as` | targeted protocol/model helpers | partial | Level hashes, save-string parsing, item/block constants, rotate math, links, and account values are split across focused Haxe modules; broad static utility parity is not complete. |
+| `flash/com/jiggmin/data/Encryptor.as` | `pr2.crypto.PR2Encryptor` | partial | Login and store encryption are ported; encrypted level-password payload parity is still called out at `LevelItem`. |
+| `flash/com/jiggmin/data/EpicFlash.as` | `pr2.runtime.EpicFlash` | ported | Prize and part epic decoration use the ported runtime effect, covered through gameplay/account popup tests. |
+| `flash/com/jiggmin/data/GpNotification.as` | GP notification gap | gap | The authored GP notification popup/effect is not ported as a standalone runtime path. |
+| `flash/com/jiggmin/data/HTMLNameMaker.as` | `pr2.lobby.chat.HtmlNameMaker` | partial | Linked player/guild-name rendering is represented for chat and popups; full Flash HTML/link parsing parity remains under chat/lobby verification. |
+| `flash/com/jiggmin/data/Memory.as` | `pr2.lobby.Memory` | partial | Byte array storage needed by SecureData-style values is represented; the full AS3 memory helper API is not. |
+| `flash/com/jiggmin/data/Objects.as` | `pr2.level.ObjectCodes`, generated asset metadata | partial | Block/object code lookup is represented for decoded levels and fixtures; editor object catalogs remain part of the level-editor TODO. |
+| `flash/com/jiggmin/data/PR2Socket.as` | `pr2.net.LobbySocket`, `pr2.net.LoginSocketProtocol` | ported | Socket framing, login handoff, command routing, send recording, and close/error boundaries are covered by socket and race-session tests. |
+| `flash/com/jiggmin/data/Random.as` | targeted deterministic random use | partial | Item selection and visual random effects use local deterministic/random helpers where ported; the shared Flash random wrapper is not standalone. |
+| `flash/com/jiggmin/data/SWFStats.as` | external analytics boundary | gap | Kong/SWF stats submission is intentionally not implemented in the browser port. |
+| `flash/com/jiggmin/data/SavedAccounts.as` | `pr2.net.SavedAccounts` | ported | Remembered token storage, recency, case-insensitive replacement, deletion, and invalid-token removal are covered by login tests. |
+| `flash/com/jiggmin/data/SecureData.as` | `pr2.lobby.SecureData` | partial | Mutable numeric/string storage and current lobby/account uses are represented; anti-tamper semantics are not reproduced outside required behavior. |
+| `flash/com/jiggmin/data/SecureStore.as` | `pr2.lobby.account.Settings`, `pr2.net.SavedAccounts` | partial | Persistent settings and login tokens use browser storage wrappers; Flash secure-store internals are not preserved. |
+| `flash/com/jiggmin/data/Settings.as` | `pr2.lobby.account.Settings` | ported | Music/sound volumes, filter/art toggles, alternate controls, disabled songs, and loadout preset storage are covered by options/audio/account tests. |
+| `flash/com/jiggmin/data/Time.as` | targeted date/time helpers | partial | Artifact placement and race/session flows parse/format the date fields they use; the broad static Time helper is not ported. |
+| `flash/com/jiggmin/data/UnreadNotif.as` | `pr2.lobby.messages.UnreadNotif` | ported | PM unread count, last-read updates, notification container wiring, and reset behavior are covered by lobby tests. |
+| `flash/com/jiggmin/pixelEffects/PixelEffect1.as` | `pr2.effects.PixelEffect1` | ported | Pixel burst lifecycle and teardown are represented by the Haxe effect and covered by `PixelEffect1Test`. |
+| `flash/com/jiggmin/pixelEffects/pixels/SegPixel.as` | `pr2.effects.SegPixel` | ported | Segment pixel movement/lifetime support is represented by the Haxe pixel effect implementation. |

@@ -237,8 +237,8 @@ Then mobile, after browser parity:
   `level_browser`, `page`, and `sounds` packages are inventoried in
   `docs/source-class-coverage.md` (guarded by
   `SourceClassCoverageInventoryTest`). Remaining: inventory the rest of the
-  first-party AS3 packages (e.g. `level_editor`, `com.*`) and reconcile every
-  class. The `lobby`, `menu`, `player_profile`, and `ui` packages are now
+  first-party AS3 packages (e.g. `level_editor`) and reconcile every class. The
+  `com.*`, `lobby`, `menu`, `player_profile`, and `ui` packages are now
   inventoried.
 Walk every original user flow and role, one at a time:
 

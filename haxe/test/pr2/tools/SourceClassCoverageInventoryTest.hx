@@ -274,6 +274,55 @@ class SourceClassCoverageInventoryTest {
 		"TabsHolder"
 	];
 
+	private static final COM_CLASSES:Array<String> = [
+		"adobe/crypto/MD5",
+		"adobe/utils/IntUtil",
+		"hurlant/crypto/hash/IHash",
+		"hurlant/crypto/hash/MD5",
+		"hurlant/crypto/prng/ARC4",
+		"hurlant/crypto/prng/IPRNG",
+		"hurlant/crypto/prng/Random",
+		"hurlant/crypto/symmetric/AESKey",
+		"hurlant/crypto/symmetric/CBCMode",
+		"hurlant/crypto/symmetric/ICipher",
+		"hurlant/crypto/symmetric/IMode",
+		"hurlant/crypto/symmetric/IPad",
+		"hurlant/crypto/symmetric/IStreamCipher",
+		"hurlant/crypto/symmetric/ISymmetricKey",
+		"hurlant/crypto/symmetric/IVMode",
+		"hurlant/crypto/symmetric/PKCS5",
+		"hurlant/util/Base64",
+		"hurlant/util/Hex",
+		"hurlant/util/Memory",
+		"jcward/workers/BitString",
+		"jcward/workers/JPEGEncoder",
+		"jiggmin/ColorPicker/ColorChoices",
+		"jiggmin/ColorPicker/ColorPicker",
+		"jiggmin/ColorPicker/ColorPickerPopup",
+		"jiggmin/ColorPicker/CursorEyedropper",
+		"jiggmin/data/AESPad",
+		"jiggmin/data/ColorUtil",
+		"jiggmin/data/CommandHandler",
+		"jiggmin/data/Data",
+		"jiggmin/data/Encryptor",
+		"jiggmin/data/EpicFlash",
+		"jiggmin/data/GpNotification",
+		"jiggmin/data/HTMLNameMaker",
+		"jiggmin/data/Memory",
+		"jiggmin/data/Objects",
+		"jiggmin/data/PR2Socket",
+		"jiggmin/data/Random",
+		"jiggmin/data/SWFStats",
+		"jiggmin/data/SavedAccounts",
+		"jiggmin/data/SecureData",
+		"jiggmin/data/SecureStore",
+		"jiggmin/data/Settings",
+		"jiggmin/data/Time",
+		"jiggmin/data/UnreadNotif",
+		"jiggmin/pixelEffects/PixelEffect1",
+		"jiggmin/pixelEffects/pixels/SegPixel"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in BACKGROUND_CLASSES) {
@@ -327,6 +376,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in UI_CLASSES) {
 			assertContains(inventory, '`flash/ui/$name.as`', 'inventory lists flash/ui/$name.as');
 		}
+		for (name in COM_CLASSES) {
+			assertContains(inventory, '`flash/com/$name.as`', 'inventory lists flash/com/$name.as');
+		}
 		assertContains(inventory, "pr2.harness.LocalPlayerController", "inventory maps item behavior to the controller");
 		assertContains(inventory, "pr2.gameplay.Items", "inventory maps Items.as to the item catalog");
 		assertContains(inventory, "pr2.level.ServerLevelDecoder", "inventory maps background data decoding");
@@ -363,6 +415,11 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.ui.TabsHolder", "inventory maps shared UI tab behavior");
 		assertContains(inventory, "pr2.ui.PageNavigation", "inventory maps shared page navigation");
 		assertContains(inventory, "pr2.lobby.account.StatsSelect", "inventory maps account stat controls");
+		assertContains(inventory, "pr2.crypto.PR2Encryptor", "inventory maps PR2 encryption helpers");
+		assertContains(inventory, "pr2.net.CommandHandler", "inventory maps socket command dispatch");
+		assertContains(inventory, "pr2.net.LobbySocket", "inventory maps PR2 socket behavior");
+		assertContains(inventory, "pr2.lobby.account.ColorPicker", "inventory maps color-picker controls");
+		assertContains(inventory, "pr2.effects.PixelEffect1", "inventory maps pixel effects");
 		assertContains(inventory, "ported", "inventory records status");
 		trace('SourceClassCoverageInventoryTest passed $assertions assertions');
 	}
