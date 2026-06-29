@@ -23,6 +23,7 @@ class QuitButtonTest {
 		testGlowControls();
 		testGamePageQuitFlow();
 		testGamePagePrizeCommands();
+		testGamePageLuxCommand();
 		testGamePageCowboyMode();
 		testGamePageHappyHour();
 		testGamePageHatCountdown();
@@ -130,6 +131,25 @@ class QuitButtonTest {
 
 		game.remove();
 		assertEquals(true, PrizePopup.instance.fadeOutStarted, "GamePage removal fades out the active prize popup");
+		closeAll();
+	}
+
+	private static function testGamePageLuxCommand():Void {
+		var popup = new LuxPopup(37, false);
+		assertEquals("+37 Lux", popup.text, "LuxPopup writes the Flash gain label");
+		assertEquals(pr2.net.ServerConfig.getHost() + "/img/luna.jpg", popup.imageUrl, "LuxPopup uses the Flash luna portrait URL");
+		var close = Std.downcast(LobbyArt.findByName(popup, "close_bt"), InteractiveObject);
+		close.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(true, popup.fadeOutStarted, "LuxPopup close button fades it out");
+		popup.remove();
+
+		var game = new GamePage(12345, 7);
+		game.setLuxGain(25);
+		var opened = Popup.getOpen()[Popup.getOpen().length - 1];
+		var lux = Std.downcast(opened, LuxPopup);
+		assertEquals("+25 Lux", lux.text, "setLuxGain opens a LuxPopup");
+		game.remove();
+		assertEquals(false, Popup.getOpen().indexOf(lux) >= 0, "GamePage removal clears LuxPopup");
 		closeAll();
 	}
 

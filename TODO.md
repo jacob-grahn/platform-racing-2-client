@@ -44,7 +44,9 @@ still-unported popup/visual side effects.
   join -> race -> quit -> return lifecycle and asserts the ordered wire-command
   transcript plus the level-entry/race-phase state at each transition.
 - [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
-  `LuxPopup`, `Egg`, and `Hat` popups are unported.
+  - [x] `LuxPopup`.
+  - [ ] `Egg` popup.
+  - [ ] `Hat` popup.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,
   `DjinnEffects`, and per-state sound playback. The held-weapon display frame is

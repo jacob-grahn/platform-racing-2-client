@@ -78,6 +78,11 @@ final class ServerConfig {
 		return host + "/levels/" + levelId + ".txt?version=" + version;
 	}
 
+	/** Luna portrait loaded by Flash `gameplay.LuxPopup`. */
+	public static function lunaImageUrl():String {
+		return host + "/img/luna.jpg";
+	}
+
 	/**
 		Live multiplayer server status endpoint, matching `CheckServers`.
 	**/

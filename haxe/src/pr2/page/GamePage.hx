@@ -18,6 +18,7 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.HappyHour;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.LevelEntry;
+import pr2.gameplay.LuxPopup;
 import pr2.gameplay.PrizePopup;
 import pr2.gameplay.QuitButton;
 import pr2.gameplay.SpecialEvent;
@@ -57,6 +58,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var hatCountdownTimer:Null<haxe.Timer>;
 	private var cowboyModes:Array<CowboyMode> = [];
 	private var happyHours:Array<HappyHour> = [];
+	private var luxPop:Null<LuxPopup>;
 	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
@@ -173,6 +175,10 @@ class GamePage extends Page implements GameCommandDelegate {
 		if (PrizePopup.instance != null) {
 			PrizePopup.instance.startFadeOut();
 		}
+		if (luxPop != null) {
+			luxPop.remove();
+			luxPop = null;
+		}
 		if (quitButton != null) {
 			quitButton.remove();
 			quitButton = null;
@@ -255,7 +261,9 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	public function award(args:Array<String>):Void {}
 	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {}
-	public function setLuxGain(amount:Int):Void {}
+	public function setLuxGain(amount:Int):Void {
+		luxPop = new LuxPopup(amount);
+	}
 	public function setPrize(prize:Dynamic):Void {
 		this.prize = prize;
 		showPrizePopup(prize, false);
