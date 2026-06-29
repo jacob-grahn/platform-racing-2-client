@@ -49,7 +49,11 @@ still-unported popup/visual side effects.
     - [x] Mount authored `EggGraphic` instances for `addEggs` and remove them
       on collect, remote removal, reseed, and course teardown.
     - [x] Port the egg collection sound with Flash game-sound attenuation.
-    - [ ] Port the animated egg movement/attack/squash side effects.
+    - [x] Port the Flash `PhysicsEffect` egg movement step: gravity, active-block
+      landing, grounded wall reversal, egg-mode wrapping, facing, fade-in, and
+      local-player touch collection.
+    - [ ] Port the animated egg attack side effects.
+    - [ ] Port the animated egg squash/remove side effect.
   - [ ] `Hat` popup.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,

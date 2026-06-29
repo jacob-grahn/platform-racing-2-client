@@ -436,6 +436,9 @@ class Course extends Sprite {
 		}
 
 		player.step(input.copy());
+		if (eggRound != null && config.gameMode == "egg") {
+			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);
+		}
 		syncBlockVisuals();
 		updatePlayerDisplay();
 		var state = player.debugState();

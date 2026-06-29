@@ -2,6 +2,8 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import pr2.level.ObjectCodes;
+import pr2.level.ServerLevel;
+import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelDecoder;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
@@ -135,6 +137,62 @@ class CharacterLifecycleTest {
 		assertTrue(soundEgg != null, "sound test egg spawned");
 		assertEquals(true, soundRound.collectEgg(1), "sound test egg collects");
 		assertEquals('${soundEgg.x},${soundEgg.y}', soundPositions[0], "collecting an egg plays its collection sound at the egg position");
+
+		var physicsRound = new EggRound(new CommandHandler(), function(_):Void {}, null, null, function(_, _):Void {});
+		var physicsLevel = new ServerLevel(0xffffff, [
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 0),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, -30)
+		]);
+		physicsRound.initRound(777);
+		physicsRound.addEggs(1, physicsLevel);
+		var physicsEgg = physicsRound.egg(1);
+		assertTrue(physicsEgg != null, "physics test egg spawned");
+		physicsEgg.posX = 15;
+		physicsEgg.posY = -20;
+		physicsEgg.velX = 0;
+		physicsEgg.velY = 0;
+		physicsRound.step(physicsLevel);
+		assertEquals(-19, Std.int(physicsEgg.posY), "egg gravity advances vertical position before landing");
+		assertTrue(physicsEgg.display.alpha > 0, "egg fades in during movement step");
+
+		physicsEgg.posX = 15;
+		physicsEgg.posY = -1;
+		physicsEgg.velY = 1;
+		physicsRound.step(physicsLevel);
+		assertEquals(0, Std.int(physicsEgg.posY), "egg lands on active block top");
+		assertEquals(0, Std.int(physicsEgg.velY), "egg landing clears falling velocity");
+		assertTrue(physicsEgg.grounded, "egg landing sets grounded state");
+
+		physicsEgg.posX = 29;
+		physicsEgg.posY = 0;
+		physicsEgg.velX = 1;
+		physicsEgg.velY = 0;
+		physicsEgg.grounded = true;
+		physicsRound.step(physicsLevel);
+		assertEquals(-1, Std.int(physicsEgg.velX), "grounded egg reverses on wall touch");
+		assertEquals(29, Std.int(physicsEgg.posX), "wall touch snaps egg beside block");
+
+		physicsEgg.posX = 331;
+		physicsEgg.posY = 0;
+		physicsEgg.velX = 0;
+		physicsEgg.velY = 0;
+		physicsRound.step(physicsLevel);
+		assertEquals(-300, Std.int(physicsEgg.posX), "egg wraps past level movement max x");
+
+		var collectedIds:Array<Int> = [];
+		var touchRound = new EggRound(new CommandHandler(), function(id):Void {
+			collectedIds.push(id);
+		}, null, null, function(_, _):Void {});
+		touchRound.initRound(777);
+		touchRound.addEggs(1, physicsLevel);
+		var touchEgg = touchRound.egg(1);
+		touchEgg.posX = 10;
+		touchEgg.posY = 10;
+		touchEgg.velX = 0;
+		touchEgg.velY = 0;
+		touchRound.step(physicsLevel, 0, 10, 20, false, false);
+		assertEquals(0, touchRound.count(), "egg movement step collects near local player");
+		assertEquals(1, collectedIds[0], "egg movement step emits collected egg id");
 	}
 
 	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {
