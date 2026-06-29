@@ -24,6 +24,7 @@ class QuitButtonTest {
 		testGamePageQuitFlow();
 		testGamePagePrizeCommands();
 		testGamePageCowboyMode();
+		testGamePageHappyHour();
 		testGamePageHatCountdown();
 		closeAll();
 		trace('QuitButtonTest passed $assertions assertions');
@@ -170,6 +171,27 @@ class QuitButtonTest {
 		game.remove();
 		assertEquals(0, game.cowboyModes.length, "game removal clears cowboy animations");
 		assertEquals(true, mode.parent == null, "game removal detaches cowboy animation");
+		closeAll();
+	}
+
+	private static function testGamePageHappyHour():Void {
+		var game = new GamePage(12345, 7);
+		game.happyHour();
+		assertEquals(1, game.happyHours.length, "happyHour adds the authored animation");
+		var happy = game.happyHours[0];
+		assertEquals(true, happy.parent == game, "happyHour attaches to the game page");
+
+		for (_ in 0...120) {
+			happy.advance();
+		}
+		assertEquals(0, game.happyHours.length, "happyHour removes itself on Flash frame 100");
+		assertEquals(true, happy.parent == null, "happyHour detaches after finishing");
+
+		game.happyHour();
+		happy = game.happyHours[0];
+		game.remove();
+		assertEquals(0, game.happyHours.length, "game removal clears happyHour animations");
+		assertEquals(true, happy.parent == null, "game removal detaches happyHour animation");
 		closeAll();
 	}
 

@@ -42,8 +42,8 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     two-error `LevelEntry` machine, and registers the full `Game` command table
     via `GameCommandShell`. Remaining for this box (deferred to B/C, why it stays
     `[ ]`): the live race — character creation, `beginRace`/countdown/finish hooks, and the
-    popup side-effects behind `GameCommandDelegate` (LuxPopup/CowboyMode/HappyHour/
-    Egg/Hat unported). Flips to `[x]` when the real login→race→lobby flow runs.
+    popup side-effects behind `GameCommandDelegate` (LuxPopup/Egg/Hat
+    unported). Flips to `[x]` when the real login→race→lobby flow runs.
   - [x] Port the authored `SpectatePicker` UI boundary. `Course` now mounts
     `SpectatePickerGraphic`, exposes Flash's temp-id `playerArray`, gates picker
     visibility through `toggleSpectatePossible`, cycles remote players with the
@@ -228,6 +228,9 @@ sync (Section B) and the live in-game shell / cutover (Section C) remain.
     - [x] Wire the live cowboy-mode command. `GamePage.cowboyMode` now mounts the
       authored `CowboyMode` animation, preserves its frame-82 stop script, and
       disposes active animations on page teardown. Guarded by `QuitButtonTest`.
+    - [x] Wire the live happy-hour command. `GamePage.happyHour` now mounts the
+      authored `HappyHour` animation, preserves its frame-100 self-removal script,
+      and disposes active animations on page teardown. Guarded by `QuitButtonTest`.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without

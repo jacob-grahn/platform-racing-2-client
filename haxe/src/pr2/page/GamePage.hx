@@ -15,6 +15,7 @@ import pr2.gameplay.GameCommandShell;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
+import pr2.gameplay.HappyHour;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.LevelEntry;
 import pr2.gameplay.PrizePopup;
@@ -55,6 +56,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var specialEvent:Null<SpecialEvent>;
 	private var hatCountdownTimer:Null<haxe.Timer>;
 	private var cowboyModes:Array<CowboyMode> = [];
+	private var happyHours:Array<HappyHour> = [];
 	public var prize(default, null):Dynamic;
 
 	public function new(levelId:Int, version:Int) {
@@ -157,6 +159,10 @@ class GamePage extends Page implements GameCommandDelegate {
 			mode.remove();
 		}
 		cowboyModes.resize(0);
+		for (happy in happyHours.copy()) {
+			happy.remove();
+		}
+		happyHours.resize(0);
 		if (finishedPage != null) {
 			finishedPage.remove();
 			finishedPage = null;
@@ -268,7 +274,16 @@ class GamePage extends Page implements GameCommandDelegate {
 		cowboyModes.push(mode);
 		addChild(mode);
 	}
-	public function happyHour():Void {}
+	public function happyHour():Void {
+		var happy = new HappyHour(onHappyHourRemoved);
+		happyHours.push(happy);
+		addChild(happy);
+	}
+
+	private function onHappyHourRemoved(happy:HappyHour):Void {
+		happyHours.remove(happy);
+	}
+
 	public function setEggSeed(seed:Int):Void {
 		if (course == null) {
 			pendingEggSeed = seed;
