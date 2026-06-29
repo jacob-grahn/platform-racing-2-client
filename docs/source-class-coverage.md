@@ -109,6 +109,13 @@ alone is not a class port.
 | `flash/effects/TeleportPop.as` | `pr2.harness.LocalPlayerController`, `pr2.character.LocalCharacter` item payload boundary | partial | Teleport start/end effect coordinates and blocked-destination suppression are covered by `LocalPlayerControllerTest`; authored pop animation and sound are not yet rendered. |
 | `flash/effects/Zap.as` | `pr2.harness.LocalPlayerController`, `pr2.character.LocalCharacter` item payload boundary | partial | Lightning `zap\`` command emission and item consumption are covered by `LocalPlayerControllerTest`; the owner-following bolt/flash display and sound remain unported live effects. |
 
+## Sound Classes
+
+| AS3 source | Haxe/OpenFL target | Status | Notes |
+| --- | --- | --- | --- |
+| `flash/sounds/NoodleTown.as` | `pr2.audio.MenuMusic`, `pr2.audio.AudioManager` | ported | The two-layer Noodle Town menu loop, randomized crossfade, frame-rate volume fade, and login/lobby handoff are represented by `MenuMusic`/`AudioManager`; teardown stops channels and timers. |
+| `flash/sounds/SoundEffects.as` | `pr2.audio.SoundEffects`, `pr2.audio.TimelineSound` | ported | Overlapping one-shot playback, 700 px game-sound attenuation/panning, sound-level scaling, loop forwarding, and timeline-owned sound disposal are covered by `AudioRuntimeTest`. |
+
 ## Gameplay Classes
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |

@@ -494,6 +494,9 @@ Static-text fidelity, authored-symbol fallback removal, and the `FlattenPolicy`
   - [x] Inventory `flash/gameplay/*.as` in `docs/source-class-coverage.md`,
     mapping the race shell, HUD widgets, command/page boundaries, and explicit
     gameplay gaps. Guarded by `SourceClassCoverageInventoryTest`.
+  - [x] Inventory `flash/sounds/*.as` in `docs/source-class-coverage.md`,
+    mapping Noodle Town menu music and shared sound-effect playback to the Haxe
+    audio runtime. Guarded by `SourceClassCoverageInventoryTest`.
 - [ ] Walk every original user flow and role: guest, member, moderator/admin
   where testable, login failures, lobby/social/account/store, level browsing,
   racing/spectating, editor/management, disconnect/reconnect, and logout.

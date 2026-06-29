@@ -128,6 +128,11 @@ class SourceClassCoverageInventoryTest {
 		"TestCourse"
 	];
 
+	private static final SOUND_CLASSES:Array<String> = [
+		"NoodleTown",
+		"SoundEffects"
+	];
+
 	public static function main():Void {
 		var inventory = File.getContent("docs/source-class-coverage.md");
 		for (name in BACKGROUND_CLASSES) {
@@ -148,6 +153,9 @@ class SourceClassCoverageInventoryTest {
 		for (name in EFFECT_CLASSES) {
 			assertContains(inventory, '`flash/effects/$name.as`', 'inventory lists flash/effects/$name.as');
 		}
+		for (name in SOUND_CLASSES) {
+			assertContains(inventory, '`flash/sounds/$name.as`', 'inventory lists flash/sounds/$name.as');
+		}
 		for (name in GAMEPLAY_CLASSES) {
 			assertContains(inventory, '`flash/gameplay/$name.as`', 'inventory lists flash/gameplay/$name.as');
 		}
@@ -160,6 +168,8 @@ class SourceClassCoverageInventoryTest {
 		assertContains(inventory, "pr2.character.RemoteCharacter", "inventory maps remote character behavior");
 		assertContains(inventory, "pr2.effects.BlockPiece", "inventory maps block-piece effects");
 		assertContains(inventory, "pr2.effects.MineExplosion", "inventory maps mine explosion effects");
+		assertContains(inventory, "pr2.audio.SoundEffects", "inventory maps spatial sound playback");
+		assertContains(inventory, "pr2.audio.MenuMusic", "inventory maps Noodle Town menu music");
 		assertContains(inventory, "pr2.gameplay.GameCommandShell", "inventory maps live game command routing");
 		assertContains(inventory, "pr2.page.GamePage", "inventory maps game page lifecycle");
 		assertContains(inventory, "ported", "inventory records status");
