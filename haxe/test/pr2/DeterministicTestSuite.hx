@@ -43,6 +43,7 @@ import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
 import pr2.lobby.OptionsPopupTest;
 import pr2.lobby.PlayerPopupTest;
+import pr2.lobby.SendMessagePopupTest;
 import pr2.lobby.StorePopupTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
@@ -132,6 +133,7 @@ class DeterministicTestSuite {
 		GuildPopupTest.main();
 		OptionsPopupTest.main();
 		PlayerPopupTest.main();
+		SendMessagePopupTest.main();
 		StorePopupTest.main();
 		trace("DeterministicTestSuite passed");
 		// All assertions are synchronous, but pulling in openfl/lime leaves the

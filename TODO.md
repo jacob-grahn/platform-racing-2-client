@@ -306,6 +306,10 @@ external-link, Options, and Credits popups are already functional (see README).
     load `guild_info.php` with member rows, fill GP/member/prose fields, expose
     PM Everyone for current guild members, and preserve the Shift guild-id
     title toggle. Guarded by `GuildPopupTest`.
+  - [x] Remove the `lastRequest` marker from the send-message social-action
+    route. `LobbyPopups.sendMessage` now only opens `SendMessagePopup` with the
+    recipient filled in, leaving the shared upload flow to the authored popup.
+    Guarded by `SendMessagePopupTest`.
 - [ ] Implement the remaining bottom-strip destinations: level editor. Preserve
   guest/member visibility and logout side effects.
   - [x] Remove the record-only `lastRequest` marker from the bottom-strip
