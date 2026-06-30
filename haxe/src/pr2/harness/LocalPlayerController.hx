@@ -262,6 +262,7 @@ class LocalPlayerController {
 			if (crouchCharge > 25) {
 				vy = -crouchCharge * 0.24;
 				jumpHeld = false;
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.SuperJumpSound, 0, 0));
 			}
 			crouchCharge = 0;
 		}
@@ -910,6 +911,7 @@ class LocalPlayerController {
 		if (crouching) {
 			return;
 		}
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.SuperJumpSound, 0, 0));
 		vy -= 25;
 		consumeHeldItemUse();
 	}

@@ -288,6 +288,9 @@ class LocalPlayerControllerTest {
 		assertEquals(false, launched.grounded, "releasing a charged super jump leaves the ground");
 		assertBelow(launched.vy, -5, "super jump launches with the Flash -crouchCharge*0.24 impulse");
 		assertBelow(launched.y, beforeY, "super jump moves the player upward");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "charged super jump emits one side-effect event");
+		assertEquals("SuperJumpSound", Type.enumConstructor(events[0].kind), "charged super jump emits the Flash sound event");
 	}
 
 	private static function testIceBlockReducesNextFrameAcceleration():Void {
@@ -613,6 +616,9 @@ class LocalPlayerControllerTest {
 		assertEquals(null, afterUse.itemId, "super jump consumes the held item");
 		assertBelow(afterUse.vy, beforeUse.vy - 20, "super jump applies the Flash upward impulse");
 		assertBelow(afterUse.y, beforeUse.y, "super jump moves the player upward on use");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "super jump item emits one side-effect event");
+		assertEquals("SuperJumpSound", Type.enumConstructor(events[0].kind), "super jump item emits the Flash sound event");
 	}
 
 	private static function testSuperJumpItemDoesNothingWhileCrouching():Void {

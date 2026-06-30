@@ -24,6 +24,7 @@ import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.PlayerDisplayPlacement;
 import pr2.lobby.account.AlternateControls;
+import pr2.lobby.account.Settings;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevelFixtureAdapter;
@@ -50,6 +51,8 @@ import pr2.net.ServerLevelData;
 class Course extends Sprite {
 	// JumpSound -> sound552 (AssetCatalog DOMSoundItem).
 	static inline var JUMP_SOUND:String = "assets/audio/sfx/sound552.mp3";
+	// SuperJumpSound -> sound913 (AssetCatalog DOMSoundItem).
+	static inline var SUPER_JUMP_SOUND:String = "assets/audio/sfx/sound913.mp3";
 
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
 	public static inline var ITEM_X:Float = 2;
@@ -394,6 +397,12 @@ class Course extends Sprite {
 		}
 	}
 
+	private function playSuperJumpSound():Void {
+		if (Assets.exists(SUPER_JUMP_SOUND)) {
+			SoundEffects.playSound(Assets.getSound(SUPER_JUMP_SOUND), Settings.soundLevel / 100);
+		}
+	}
+
 	public function toggleSpectatePossible(value:Bool):Void {
 		if (spectatePicker != null) {
 			spectatePicker.toggleVisibility(value);
@@ -615,6 +624,8 @@ class Course extends Sprite {
 					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
 				case MinePieces:
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
+				case SuperJumpSound:
+					playSuperJumpSound();
 			}
 		}
 	}

@@ -26,7 +26,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [ ] character should appear below water blocks, they should fade out some when near
 - [ ] arrow blocks loose their arrow after they have been touched. The push animation plays, then the arrow is gone
 - [ ] sword doesn't work
-- [ ] super jump sound doesn't play
+- [x] super jump sound doesn't play
 - [x] jump sound doesn't play
 - [ ] block bump sound doesn't play
 - [ ] item block sound doesn't play
