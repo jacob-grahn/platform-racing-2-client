@@ -18,6 +18,7 @@ class CharacterBaseTest {
 		testGetHighestHat();
 		testHeldWeaponDisplay();
 		testBlockTouchProbes();
+		testParticleEmitterLifecycle();
 		testRecoveryAndRemoval();
 		trace('CharacterBaseTest passed $assertions assertions');
 	}
@@ -134,6 +135,35 @@ class CharacterBaseTest {
 		assertEquals(2, downLeft.length, "moving down-left probes only down and left");
 		assertEquals(201.0, downLeft[0].y, "down probe is y + 1");
 		assertEquals(89.0, downLeft[1].x, "left probe is x - halfWidth - 1");
+	}
+
+	private static function testParticleEmitterLifecycle():Void {
+		var c = new Character();
+		var started:Array<String> = [];
+		var clears = 0;
+		c.onStartParticleEmitter = function(request) {
+			assertEquals(c, request.target, "particle emitter targets the character");
+			started.push(request.kind + ":" + request.intervalMs + ":" + request.durationMs);
+		};
+		c.onClearParticleEmitter = function() clears++;
+
+		c.beginSparkles(1234);
+		assertEquals("sparkle:33:1234", started.join("|"), "beginSparkles starts Flash's sparkle emitter");
+		assertEquals(0, clears, "first emitter does not clear anything");
+
+		c.beginArrowSparkles();
+		assertEquals("sparkle:33:1234|arrowSparkle:33:5000", started.join("|"), "arrow sparkles replace the old emitter");
+		assertEquals(1, clears, "setting a new emitter clears the previous one");
+
+		c.becomeInvincible(8);
+		assertEquals("sparkle:33:1234|arrowSparkle:33:5000|rainbowStar:33:5000", started.join("|"),
+			"becomeInvincible starts Flash's rainbow-star emitter");
+		assertEquals(2, clears, "rainbow-star emitter replaces arrow sparkles");
+
+		c.endSparkles();
+		assertEquals(3, clears, "endSparkles clears the active emitter");
+		c.remove();
+		assertEquals(3, clears, "remove does not clear a missing emitter twice");
 	}
 
 	private static function testRecoveryAndRemoval():Void {

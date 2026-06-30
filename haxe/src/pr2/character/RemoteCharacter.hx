@@ -16,8 +16,8 @@ typedef RemoteCharacterPoint = {
 	This covers the B4 consume/interpolation core: tempID-scoped command
 	registration, queued `p` / `var` / `exactPos` updates, Flash's catch-up model,
 	minimap-dot position updates, remote block-touch probes, and command teardown.
-	The visual side-effects for sparkles/jet/sting/heart are still delegated through
-	hooks until the live race shell owns those systems.
+	The visual side-effects for jet/sting/heart are still delegated through hooks
+	until the live race shell owns those systems.
 **/
 class RemoteCharacter extends Character {
 	public var mapDot(default, null):Null<MiniMapDot>;
@@ -204,8 +204,16 @@ class RemoteCharacter extends Character {
 		if (Reflect.field(update, "item") != null) {
 			setItem(parseIntValue(Reflect.field(update, "item")));
 		}
-		if (Reflect.field(update, "sparkle") != null && onSparklesChange != null) {
-			onSparklesChange(Std.string(Reflect.field(update, "sparkle")) == "1");
+		if (Reflect.field(update, "sparkle") != null) {
+			var enabled = Std.string(Reflect.field(update, "sparkle")) == "1";
+			if (enabled) {
+				beginSparkles();
+			} else {
+				endSparkles();
+			}
+			if (onSparklesChange != null) {
+				onSparklesChange(enabled);
+			}
 		}
 		if (Reflect.field(update, "jet") != null && onJetChange != null) {
 			onJetChange(Std.string(Reflect.field(update, "jet")) == "1");

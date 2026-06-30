@@ -143,10 +143,12 @@ class LocalCharacter extends Character {
 
 	public function beginSparklesNetwork():Void {
 		LobbySocket.write("set_var`sparkle`1");
+		beginSparkles();
 	}
 
 	public function endSparklesNetwork():Void {
 		LobbySocket.write("set_var`sparkle`0");
+		endSparkles();
 	}
 
 	public function beginJetNetwork():Void {

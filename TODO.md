@@ -69,7 +69,7 @@ still-unported popup/visual side effects.
       emission, and done-playing suppression are deterministic.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks:
-  [ ] particle emitters
+  [x] particle emitters
   [ ] jet-pack flame,
   [ ] `DjinnEffects`
   [ ] per-state sound playback.

@@ -13,6 +13,13 @@ typedef BlockTouchProbe = {
 	final y:Float;
 }
 
+typedef ParticleEmitterRequest = {
+	final kind:String;
+	final intervalMs:Int;
+	final durationMs:Int;
+	final target:Character;
+}
+
 /**
 	Faithful port of the `character.Character` base class (`flash/character/Character.as`)
 	— the shared state for both the player-controlled `LocalCharacter` (B2/B3) and
@@ -32,10 +39,9 @@ typedef BlockTouchProbe = {
 	- The recovery/invincibility flash and the fade-out removal lifecycle.
 
 	Deferred (need still-unported subsystems, documented at the call sites): the
-	particle emitters (sparkles / arrow-sparkle / rainbow-star), the jet-pack flame
-	loop, `DjinnEffects`, and the actual sound playback — all wired through
-	injectable hooks so the live Game shell (B5) can supply them without changing
-	this base.
+	jet-pack flame loop, `DjinnEffects`, and the actual sound playback — all wired
+	through injectable hooks so the live Game shell (B5) can supply them without
+	changing this base.
 **/
 class Character extends Sprite {
 	// Special-hat flag keys (Character.as static consts). The original stores
@@ -113,8 +119,11 @@ class Character extends Sprite {
 	// Injectable side-effects deferred from B1 (see class doc). Defaulted to
 	// no-ops so the deterministic base needs no audio/particle subsystem.
 	public var onPlayJumpSound:Null<Float->Float->Void> = null;
+	public var onStartParticleEmitter:Null<ParticleEmitterRequest->Void> = null;
+	public var onClearParticleEmitter:Null<Void->Void> = null;
 
 	private var recoveryRandom:Void->Float = Math.random;
+	private var activeParticleEmitter:Null<ParticleEmitterRequest> = null;
 
 	public function new(hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super();
@@ -467,13 +476,22 @@ class Character extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, recoveryTick);
 	}
 
-	/**
-		Become invincible for `frames` frames (the recovery flash). The original also
-		spawns a `RainbowStarEmitter`; the particle emitters are deferred (B-later),
-		so only the flash is applied here.
-	**/
+	/** Become invincible for `frames` frames and start Flash's rainbow-star emitter. */
 	public function becomeInvincible(frames:Int):Void {
 		beginRecovery(frames);
+		setParticleEmitter("rainbowStar", 33, 5000);
+	}
+
+	public function beginSparkles(durationMs:Int = 5000):Void {
+		setParticleEmitter("sparkle", 33, durationMs);
+	}
+
+	public function endSparkles(used:Bool = false):Void {
+		clearParticleEmitter();
+	}
+
+	public function beginArrowSparkles():Void {
+		setParticleEmitter("arrowSparkle", 33, 5000);
 	}
 
 	// ---- removal lifecycle -----------------------------------------------
@@ -500,6 +518,7 @@ class Character extends Sprite {
 
 	public function remove():Void {
 		removeListeners();
+		clearParticleEmitter();
 		if (!removed) {
 			removed = fadeOutStarted = true;
 			removeEventListener(Event.ENTER_FRAME, fadeOut);
@@ -509,6 +528,24 @@ class Character extends Sprite {
 			if (parent != null) {
 				parent.removeChild(this);
 			}
+		}
+	}
+
+	private function setParticleEmitter(kind:String, intervalMs:Int, durationMs:Int):Void {
+		clearParticleEmitter();
+		activeParticleEmitter = {kind: kind, intervalMs: intervalMs, durationMs: durationMs, target: this};
+		if (onStartParticleEmitter != null) {
+			onStartParticleEmitter(activeParticleEmitter);
+		}
+	}
+
+	private function clearParticleEmitter():Void {
+		if (activeParticleEmitter == null) {
+			return;
+		}
+		activeParticleEmitter = null;
+		if (onClearParticleEmitter != null) {
+			onClearParticleEmitter();
 		}
 	}
 
