@@ -127,16 +127,18 @@ class ServerLevelRendererTest {
 			new DecodedDrawAction("t", [3]),
 			new DecodedDrawAction("d", [0, 0, 10, 10])
 		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello|world", 15, 25, 0x00FF00)], 1);
-		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 4);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 3);
 		var artLayer = worldLayer(renderer, 1);
 		assertEquals(0, renderer.drawnArtItemCount(), "incremental art starts before drawing art");
 		// Child 0 is the (empty) stroke raster canvas that placed art sits on top of.
 		assertEquals(1, artLayer.numChildren, "incremental art layer starts with only the stroke canvas");
+		assertEquals(0, strokeRaster(artLayer).numChildren, "incremental art starts with no rasterized stroke tiles");
 		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for incremental art");
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
-		assertEquals(4, renderer.drawnArtItemCount(), "first art batch counts strokes and skipped stamps");
+		assertEquals(3, renderer.drawnArtItemCount(), "first art batch counts the initial stroke commands");
 		assertEquals(1, artLayer.numChildren, "first art batch has not reached text object");
+		assertEquals(1, strokeRaster(artLayer).numChildren, "first art batch shows in-progress stroke tiles");
 		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for remaining art item");
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
@@ -297,6 +299,10 @@ class ServerLevelRendererTest {
 	private static function worldLayer(renderer:ServerLevelRenderer, index:Int):Sprite {
 		var world = Std.downcast(renderer.getChildAt(1), Sprite);
 		return Std.downcast(world.getChildAt(index - 1), Sprite);
+	}
+
+	private static function strokeRaster(artLayer:Sprite):Sprite {
+		return Std.downcast(artLayer.getChildAt(0), Sprite);
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

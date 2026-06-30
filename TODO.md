@@ -21,11 +21,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   recording the requested action is not completion.
 - Run only the related test cases for your change, the full suite is a bit slow
 
-
-## bugs (see how it works in the source flash game before implementing fixes)
-- [ ] art layers don't show up until they are done drawing. They should show art in progress as the level renders
-
-
 ## Current Priority: Real Login-to-Race Flow
 
 The level-entry decomposition, the multiplayer `Character`/`LocalCharacter`/

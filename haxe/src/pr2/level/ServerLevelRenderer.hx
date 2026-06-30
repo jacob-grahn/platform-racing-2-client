@@ -1002,15 +1002,23 @@ private class ArtDrawCursor {
 
 	public function drawNext():Bool {
 		if (actionIndex < layer.drawActions.length) {
-			var state = ServerLevelRenderer.drawStrokeAction(brushCanvas, color, size, mode, layer.drawActions[actionIndex++]);
+			var action = layer.drawActions[actionIndex++];
+			var shouldRefreshRaster = action.kind == "d" && mode != "erase" && action.values.length >= 2;
+			var state = ServerLevelRenderer.drawStrokeAction(brushCanvas, color, size, mode, action);
 			color = state.color;
 			size = state.size;
 			mode = state.mode;
+			if (shouldRefreshRaster && brushCanvas.parent == null) {
+				rasterCanvas.addChild(brushCanvas);
+			}
 			return true;
 		}
 		if (!rasterized) {
 			// All strokes are in; bake them onto transparent tiles once the layer's
 			// brush canvas is complete, before the objects/text layer on top of it.
+			if (brushCanvas.parent == rasterCanvas) {
+				rasterCanvas.removeChild(brushCanvas);
+			}
 			ServerLevelRenderer.rasterizeBrushInto(rasterCanvas, brushCanvas);
 			rasterized = true;
 		}
