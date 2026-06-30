@@ -1,5 +1,6 @@
 package pr2.character;
 
+import openfl.display.Sprite;
 import openfl.events.Event;
 import pr2.runtime.PR2MovieClip;
 
@@ -20,6 +21,7 @@ class CharacterBaseTest {
 		testJetPackFlameLifecycle();
 		testBlockTouchProbes();
 		testParticleEmitterLifecycle();
+		testDjinnEffectsLifecycle();
 		testCharacterSoundRequests();
 		testRecoveryAndRemoval();
 		trace('CharacterBaseTest passed $assertions assertions');
@@ -220,6 +222,43 @@ class CharacterBaseTest {
 		assertEquals(3, clears, "endSparkles clears the active emitter");
 		c.remove();
 		assertEquals(3, clears, "remove does not clear a missing emitter twice");
+	}
+
+	private static function testDjinnEffectsLifecycle():Void {
+		var parent = new Sprite();
+		var c = new Character();
+		var started:Array<String> = [];
+		var clears = 0;
+		c.onStartDjinnEmitter = function(request) {
+			assertEquals(c, request.target, "Djinn emitter targets the character");
+			started.push(request.slot + ":" + request.graphic + ":" + request.colors.join(",") + ":" + request.life + ":" + request.startAlpha + ":"
+				+ request.maxVelAlpha + ":" + request.minScale + ":" + request.maxScale + ":" + request.offsetX + ":" + request.offsetY);
+		};
+		c.onClearDjinnEmitters = function() clears++;
+
+		c.setBodyId(35);
+		assertEquals("", started.join("|"), "unmounted Djinn body does not start emitters");
+		parent.addChild(c);
+		assertEquals("body:DjinnIceGraphic:0,-1:16:0.1:0.5:-1:-0.75:-15:-10", started.join("|"),
+			"mounted Frost Djinn body starts Flash body ice emitter");
+
+		c.setFeetColors(0x112233, 0x445566);
+		c.setFeetId(35);
+		assertEquals(2, clears, "appearance changes clear existing Djinn emitters before replacing them");
+		assertEquals(
+			"body:DjinnIceGraphic:0,-1:16:0.1:0.5:-1:-0.75:-15:-10|body:DjinnIceGraphic:0,-1:16:0.1:0.5:-1:-0.75:-15:-10|body:DjinnIceGraphic:0,-1:16:0.1:0.5:-1:-0.75:-15:-10|foot1:DjinnIceGraphic:1122867,4478310:8:0.1:0.5:0.075:0.1:0:0|foot2:DjinnIceGraphic:1122867,4478310:8:0.1:0.5:0.075:0.1:0:0",
+			started.join("|"),
+			"Frost Djinn feet start separate foot emitters with feet colors");
+
+		c.djinnUpdateAlpha(0.25);
+		assertEquals(3, clears, "djinnUpdateAlpha refreshes active emitters");
+		assertEquals("body:DjinnIceGraphic:0,-1:16:0.05:0.25:-1:-0.75:-15:-10|foot1:DjinnIceGraphic:1122867,4478310:8:0.05:0.25:0.075:0.1:0:0|foot2:DjinnIceGraphic:1122867,4478310:8:0.05:0.25:0.075:0.1:0:0",
+			started.slice(started.length - 3).join("|"), "djinnUpdateAlpha applies Flash alpha scaling");
+
+		parent.removeChild(c);
+		assertEquals(4, clears, "removing a mounted character clears Djinn emitters");
+		c.remove();
+		assertEquals(4, clears, "remove does not clear already-cleared Djinn emitters twice");
 	}
 
 	private static function testCharacterSoundRequests():Void {

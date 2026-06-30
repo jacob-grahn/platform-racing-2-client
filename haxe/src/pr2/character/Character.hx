@@ -21,6 +21,33 @@ typedef ParticleEmitterRequest = {
 	final target:Character;
 }
 
+typedef DjinnEmitterRequest = {
+	final slot:String;
+	final graphic:String;
+	final colors:Array<Int>;
+	final life:Int;
+	final startAlpha:Float;
+	final minVelAlpha:Float;
+	final maxVelAlpha:Float;
+	final minVelX:Null<Float>;
+	final maxVelX:Null<Float>;
+	final minVelY:Null<Float>;
+	final maxVelY:Null<Float>;
+	final velScaleX:Float;
+	final velScaleY:Float;
+	final fricX:Null<Float>;
+	final fricY:Null<Float>;
+	final minOffsetX:Float;
+	final maxOffsetX:Float;
+	final minOffsetY:Float;
+	final maxOffsetY:Float;
+	final minScale:Float;
+	final maxScale:Float;
+	final offsetX:Float;
+	final offsetY:Float;
+	final target:Character;
+}
+
 typedef CharacterSoundRequest = {
 	final kind:String;
 	final x:Float;
@@ -48,9 +75,8 @@ typedef CharacterSoundRequest = {
 	- The recovery/invincibility flash and the fade-out removal lifecycle.
 
 	Deferred (need still-unported subsystems, documented at the call sites): the
-	jet-pack flame loop, `DjinnEffects`, and the actual sound playback — all wired
-	through injectable hooks so the live Game shell (B5) can supply them without
-	changing this base.
+	actual particle/audio rendering — wired through injectable hooks so the live Game
+	shell can supply them without changing this base.
 **/
 class Character extends Sprite {
 	// Special-hat flag keys (Character.as static consts). The original stores
@@ -133,10 +159,14 @@ class Character extends Sprite {
 	public var onStopJetSound:Null<Character->Void> = null;
 	public var onStartParticleEmitter:Null<ParticleEmitterRequest->Void> = null;
 	public var onClearParticleEmitter:Null<Void->Void> = null;
+	public var onStartDjinnEmitter:Null<DjinnEmitterRequest->Void> = null;
+	public var onClearDjinnEmitters:Null<Void->Void> = null;
 
 	private var recoveryRandom:Void->Float = Math.random;
 	private var jetFlameRandom:Void->Float = Math.random;
 	private var activeParticleEmitter:Null<ParticleEmitterRequest> = null;
+	private var djinnEmittersActive:Bool = false;
+	private var djinnAlpha:Float = 0.5;
 	private var jetSoundActive:Bool = false;
 
 	public function new(hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
@@ -148,6 +178,8 @@ class Character extends Sprite {
 
 		display = new CharacterDisplay(currentPartIds());
 		addChild(display);
+		addEventListener(Event.ADDED, onAdded);
+		addEventListener(Event.REMOVED, onRemoved);
 
 		resetHats();
 		changeState("stand");
@@ -349,6 +381,7 @@ class Character extends Sprite {
 		display.setPartColor("body", bodyColor, bodyColor2);
 		display.setPartColor("feet", feetColor, feetColor2);
 		applyItem();
+		updateDjinnEffects();
 	}
 
 	/**
@@ -463,6 +496,7 @@ class Character extends Sprite {
 		}
 		state = s;
 		display.setState(s + "Anim");
+		updateDjinnEffects();
 	}
 
 	// ---- recovery / invincibility ----------------------------------------
@@ -515,6 +549,11 @@ class Character extends Sprite {
 
 	public function beginArrowSparkles():Void {
 		setParticleEmitter("arrowSparkle", 33, 5000);
+	}
+
+	public function djinnUpdateAlpha(newAlpha:Float):Void {
+		djinnAlpha = newAlpha;
+		updateDjinnEffects();
 	}
 
 	public function beginJet():Void {
@@ -582,6 +621,7 @@ class Character extends Sprite {
 	public function remove():Void {
 		removeListeners();
 		clearParticleEmitter();
+		clearDjinnEmitters();
 		if (!removed) {
 			removed = fadeOutStarted = true;
 			removeEventListener(Event.ENTER_FRAME, fadeOut);
@@ -625,6 +665,107 @@ class Character extends Sprite {
 		activeParticleEmitter = null;
 		if (onClearParticleEmitter != null) {
 			onClearParticleEmitter();
+		}
+	}
+
+	private function updateDjinnEffects():Void {
+		clearDjinnEmitters();
+		if (parent == null) {
+			return;
+		}
+		if (body == 35) {
+			startDjinnEmitter(djinnBodyRequest());
+		}
+		if (feet == 35) {
+			startDjinnEmitter(djinnFeetRequest("foot1"));
+			startDjinnEmitter(djinnFeetRequest("foot2"));
+		}
+	}
+
+	private function startDjinnEmitter(request:DjinnEmitterRequest):Void {
+		djinnEmittersActive = true;
+		if (onStartDjinnEmitter != null) {
+			onStartDjinnEmitter(request);
+		}
+	}
+
+	private function djinnBodyRequest():DjinnEmitterRequest {
+		return {
+			slot: "body",
+			graphic: "DjinnIceGraphic",
+			colors: [bodyColor, bodyColor2],
+			life: 16,
+			startAlpha: djinnAlpha / 5,
+			minVelAlpha: 0,
+			maxVelAlpha: djinnAlpha,
+			minVelX: null,
+			maxVelX: null,
+			minVelY: 2,
+			maxVelY: 3,
+			velScaleX: 0.1,
+			velScaleY: 0.1,
+			fricX: 1.05,
+			fricY: 0.9,
+			minOffsetX: -5,
+			maxOffsetX: 5,
+			minOffsetY: -10,
+			maxOffsetY: 10,
+			minScale: -1,
+			maxScale: -0.75,
+			offsetX: -15,
+			offsetY: -10,
+			target: this
+		};
+	}
+
+	private function djinnFeetRequest(slot:String):DjinnEmitterRequest {
+		return {
+			slot: slot,
+			graphic: "DjinnIceGraphic",
+			colors: [feetColor, feetColor2],
+			life: 8,
+			startAlpha: djinnAlpha / 5,
+			minVelAlpha: 0,
+			maxVelAlpha: djinnAlpha,
+			minVelX: -2,
+			maxVelX: 2,
+			minVelY: null,
+			maxVelY: null,
+			velScaleX: 0.1,
+			velScaleY: 0.1,
+			fricX: null,
+			fricY: null,
+			minOffsetX: -5,
+			maxOffsetX: 5,
+			minOffsetY: -5,
+			maxOffsetY: 5,
+			minScale: 0.075,
+			maxScale: 0.1,
+			offsetX: 0,
+			offsetY: 0,
+			target: this
+		};
+	}
+
+	private function clearDjinnEmitters():Void {
+		if (!djinnEmittersActive) {
+			return;
+		}
+		djinnEmittersActive = false;
+		if (onClearDjinnEmitters != null) {
+			onClearDjinnEmitters();
+		}
+	}
+
+	private function onAdded(event:Event):Void {
+		if (event.target == this) {
+			updateDjinnEffects();
+		}
+	}
+
+	private function onRemoved(event:Event):Void {
+		if (event.target == this) {
+			clearDjinnEmitters();
 		}
 	}
 

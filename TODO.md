@@ -71,7 +71,7 @@ still-unported popup/visual side effects.
   stubbed behind injectable hooks:
   [x] particle emitters
   [x] jet-pack flame,
-  [ ] `DjinnEffects`
+  [x] `DjinnEffects`
   [ ] per-state sound playback.
     - [x] Port `Character.gainHeart`, `beginSparkles`, and `endSparkles`
       playback (`BumpHappySound`, `SpeedUpSound`, `SlowDownSound`) through the
