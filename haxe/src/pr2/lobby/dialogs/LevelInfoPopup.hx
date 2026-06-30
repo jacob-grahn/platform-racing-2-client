@@ -2,18 +2,20 @@ package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.InteractiveObject;
 import openfl.text.TextField;
 import pr2.lobby.NumberFormat;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.lobby.LobbySession;
 import pr2.runtime.PR2MovieClip;
 
 /**
 	Authored shell for Flash `dialogs.LevelInfoPopup`.
 
-	The HTTP load/report/rating/moderation flow is still porting work; this class
-	owns the modal lifecycle and Flash data application used by level links.
+	The HTTP load/rating/moderation flow is still porting work; this class owns
+	the modal lifecycle, Flash data application, and report action used by level links.
 **/
 class LevelInfoPopup extends Popup {
 	public static var instance:Null<LevelInfoPopup>;
@@ -35,6 +37,7 @@ class LevelInfoPopup extends Popup {
 	private var levelInfo:Null<DisplayObjectContainer>;
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var closeBinding:Null<Binding>;
+	private var reportBinding:Null<Binding>;
 
 	public function new(id:Int) {
 		if (LevelInfoPopup.instance != null) {
@@ -50,6 +53,8 @@ class LevelInfoPopup extends Popup {
 			levelInfo.visible = false;
 			setCoverVisible("rating", false);
 			setCoverVisible("gameMode", false);
+			setActionButtonVisible("report_bt", false);
+			setActionButtonVisible("unpublish_bt", false);
 		}
 		addChild(art);
 		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut);
@@ -84,6 +89,7 @@ class LevelInfoPopup extends Popup {
 			htmlNameMaker.listenForLink(author);
 		}
 		setRatingScale(rating);
+		configureActionButtons();
 		var loading:Null<DisplayObject> = LobbyArt.findByName(art, "loading");
 		if (loading != null) {
 			loading.visible = false;
@@ -97,7 +103,9 @@ class LevelInfoPopup extends Popup {
 		}
 		htmlNameMaker.remove();
 		LobbyArt.unbind(closeBinding);
+		LobbyArt.unbind(reportBinding);
 		closeBinding = null;
+		reportBinding = null;
 		if (art != null) {
 			art.dispose();
 			art = null;
@@ -117,6 +125,32 @@ class LevelInfoPopup extends Popup {
 		if (bar != null) {
 			bar.scaleX = value / 5;
 		}
+	}
+
+	private function configureActionButtons():Void {
+		LobbyArt.unbind(reportBinding);
+		reportBinding = null;
+		setActionButtonVisible("report_bt", false);
+		setActionButtonVisible("unpublish_bt", false);
+		if (LobbySession.group == 1) {
+			setActionButtonVisible("report_bt", true);
+			reportBinding = LobbyArt.bind(LobbyArt.findByName(levelInfo, "report_bt"), openReportPopup);
+		}
+	}
+
+	private function setActionButtonVisible(name:String, visible:Bool):Void {
+		var button = LobbyArt.findByName(levelInfo, name);
+		if (button != null) {
+			button.visible = visible;
+			var interactive = Std.downcast(button, InteractiveObject);
+			if (interactive != null) {
+				interactive.mouseEnabled = visible;
+			}
+		}
+	}
+
+	private function openReportPopup():Void {
+		new LevelReportPopup(levelId, version);
 	}
 
 	private function setCoverVisible(name:String, visible:Bool):Void {

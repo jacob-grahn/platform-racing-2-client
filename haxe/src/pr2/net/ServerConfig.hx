@@ -214,6 +214,11 @@ final class ServerConfig {
 		return host + "/submit_rating.php";
 	}
 
+	/** Level report POST endpoint, matching `dialogs.LevelReportPopup`. */
+	public static function levelReportUrl():String {
+		return host + "/level_report.php";
+	}
+
 	/** Artifact placement POST endpoint, matching `gameplay.PlaceArtifact`. */
 	public static function placeArtifactUrl():String {
 		return host + "/place_artifact.php";
