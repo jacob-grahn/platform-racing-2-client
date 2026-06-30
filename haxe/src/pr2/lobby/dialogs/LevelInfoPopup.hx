@@ -39,6 +39,7 @@ class LevelInfoPopup extends Popup {
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var closeBinding:Null<Binding>;
 	private var reportBinding:Null<Binding>;
+	private var unpublishBinding:Null<Binding>;
 	private var hoverRating:Null<HoverPopup>;
 
 	public function new(id:Int) {
@@ -109,8 +110,10 @@ class LevelInfoPopup extends Popup {
 		closeRatingHover();
 		LobbyArt.unbind(closeBinding);
 		LobbyArt.unbind(reportBinding);
+		LobbyArt.unbind(unpublishBinding);
 		closeBinding = null;
 		reportBinding = null;
+		unpublishBinding = null;
 		if (art != null) {
 			art.dispose();
 			art = null;
@@ -175,10 +178,15 @@ class LevelInfoPopup extends Popup {
 
 	private function configureActionButtons():Void {
 		LobbyArt.unbind(reportBinding);
+		LobbyArt.unbind(unpublishBinding);
 		reportBinding = null;
+		unpublishBinding = null;
 		setActionButtonVisible("report_bt", false);
 		setActionButtonVisible("unpublish_bt", false);
-		if (LobbySession.group == 1) {
+		if (LobbySession.group >= 2) {
+			setActionButtonVisible("unpublish_bt", true);
+			unpublishBinding = LobbyArt.bind(LobbyArt.findByName(levelInfo, "unpublish_bt"), openModerationPopup);
+		} else if (LobbySession.group == 1) {
 			setActionButtonVisible("report_bt", true);
 			reportBinding = LobbyArt.bind(LobbyArt.findByName(levelInfo, "report_bt"), openReportPopup);
 		}
@@ -197,6 +205,10 @@ class LevelInfoPopup extends Popup {
 
 	private function openReportPopup():Void {
 		new LevelReportPopup(levelId, version);
+	}
+
+	private function openModerationPopup():Void {
+		new ChooseLevelModModePopup(levelId);
 	}
 
 	private function setCoverVisible(name:String, visible:Bool):Void {

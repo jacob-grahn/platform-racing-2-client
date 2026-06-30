@@ -141,7 +141,11 @@ Finish the still-unported lobby popup routes, one at a time:
     error, confirmation, and `level_report.php` upload fields.
   - [x] Port level-info rating action.
     - [x] Port the Flash rating hover cover and numeric `HoverPopup`.
-  - [ ] Port level-info moderation/unpublish actions.
+  - [x] Port level-info moderation/unpublish actions.
+    Done: moderators see the authored `unpublish_bt`, open
+    `ChooseLevelModModePopup`, confirm Unpublish/Restrict, POST
+    `level_moderate.php` with `level_id`/`action`, and successful responses fade
+    the level-info and moderation popups.
 - [ ] Port the admin/moderation popups.
 
 

@@ -219,6 +219,11 @@ final class ServerConfig {
 		return host + "/level_report.php";
 	}
 
+	/** Level moderation POST endpoint, matching `dialogs.ChooseLevelModModePopup`. */
+	public static function levelModerateUrl():String {
+		return host + "/level_moderate.php";
+	}
+
 	/** Artifact placement POST endpoint, matching `gameplay.PlaceArtifact`. */
 	public static function placeArtifactUrl():String {
 		return host + "/place_artifact.php";
