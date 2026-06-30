@@ -53,6 +53,8 @@ class Course extends Sprite {
 	static inline var JUMP_SOUND:String = "assets/audio/sfx/sound552.mp3";
 	// SuperJumpSound -> sound913 (AssetCatalog DOMSoundItem).
 	static inline var SUPER_JUMP_SOUND:String = "assets/audio/sfx/sound913.mp3";
+	// StarSound -> sound452 (AssetCatalog DOMSoundItem), used by ItemBlock.useSupply.
+	static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
 
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
 	public static inline var ITEM_X:Float = 2;
@@ -624,9 +626,17 @@ class Course extends Sprite {
 					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
 				case MinePieces:
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
+				case ItemBlockSound:
+					playItemBlockSound();
 				case SuperJumpSound:
 					playSuperJumpSound();
 			}
+		}
+	}
+
+	private function playItemBlockSound():Void {
+		if (Assets.exists(ITEM_BLOCK_SOUND)) {
+			SoundEffects.playSound(Assets.getSound(ITEM_BLOCK_SOUND), 0.6 * (Settings.soundLevel / 100));
 		}
 	}
 

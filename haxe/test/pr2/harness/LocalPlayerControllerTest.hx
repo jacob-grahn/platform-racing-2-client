@@ -35,6 +35,7 @@ class LocalPlayerControllerTest {
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
 		testBumpingItemBlockGrantsConfiguredItem();
+		testBumpingItemBlockEmitsStarSound();
 		testEmptyOptionsItemBlockGrantsAllowedItem();
 		testRegularItemBlockDepletesAfterFirstUse();
 		testNewlyCollectedItemRequiresReleaseBeforeUse();
@@ -527,6 +528,21 @@ class LocalPlayerControllerTest {
 		assertEquals("item", state.touchedBlockType, "debug state reports item block touch");
 	}
 
+	private static function testBumpingItemBlockEmitsStarSound():Void {
+		var player = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, "none"));
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "used item block emits one sound event");
+		assertEquals("ItemBlockSound", Std.string(events[0].kind), "item block uses StarSound event");
+
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(0, player.consumeBlockVisualEvents().length, "depleted item block does not replay sound");
+	}
+
 	// An item block with empty options means "any of the level's allowed items"
 	// (ItemBlock.useSupply). Regression: the port previously treated empty options
 	// as "no item", so the common item block handed out nothing.
@@ -600,6 +616,7 @@ class LocalPlayerControllerTest {
 		}
 
 		assertEquals(true, grantedItem, "jumping player bumps super jump item block");
+		player.consumeBlockVisualEvents();
 		for (_ in 0...70) {
 			player.step(new LocalPlayerInput(false, true));
 			if (player.debugState().x > 105) {

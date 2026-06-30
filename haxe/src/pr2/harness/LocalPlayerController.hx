@@ -797,6 +797,7 @@ class LocalPlayerController {
 			}
 			depletedItemBlocks.set(key, true);
 		}
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.ItemBlockSound, block.x, block.y));
 
 		var nextItem = itemFromBlockOptions(block.options);
 		if (nextItem != null) {
