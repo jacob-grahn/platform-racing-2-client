@@ -72,13 +72,15 @@ still-unported popup/visual side effects.
   [x] particle emitters
   [x] jet-pack flame,
   [x] `DjinnEffects`
-  [ ] per-state sound playback.
+  [x] per-state sound playback.
     - [x] Port `Character.gainHeart`, `beginSparkles`, and `endSparkles`
       playback (`BumpHappySound`, `SpeedUpSound`, `SlowDownSound`) through the
       live `Course` spatial sound path for local and remote characters.
     - [x] Port the Jet Pack `EngineSound` loop: `beginJet` restarts the spatial
       loop, `endJet` stops it, and course teardown clears active local/remote
       channels.
+    - [x] Port remote-character `JumpSound` playback for `jump` state entry
+      through the live `Course` spatial sound path.
 - [ ] Port the full `CourseMenu` access/spectate UI around in-place level
   loading (slot selection, password/private flows, loading/cancel/error states)
   from `flash/level_browser`, `flash/page/GamePage.as`, and

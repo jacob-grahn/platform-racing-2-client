@@ -22,6 +22,7 @@ class CharacterLifecycleTest {
 		testLocalAndRemoteLifecycle();
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();
+		testRemoteJumpPlaysSound();
 		testCharacterEffectSounds();
 		testJetEngineSoundLifecycle();
 		testLocalSwordEmitsSlashEffect();
@@ -138,6 +139,31 @@ class CharacterLifecycleTest {
 		);
 		course.localCharacter.changeState("jump");
 		assertEquals(1, sounds.length, "holding jump does not retrigger the sound every frame");
+		course.remove();
+	}
+
+	private static function testRemoteJumpPlaysSound():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler);
+		var shell = new GameCommandShell(new CourseDelegate(course), handler);
+		shell.install();
+		var sounds:Array<String> = [];
+		course.onPlayJumpSound = function(x:Float, y:Float):Void {
+			sounds.push('${Math.round(x)},${Math.round(y)}');
+		};
+
+		handler.dispatch("createRemoteCharacter", ["9", "Rival", "1", "1", "1", "1", "1", "1", "1", "1", "-1", "-1", "-1", "-1", "0"]);
+		var remote = course.getRemoteCharacter(9);
+		remote.velY = 0;
+		remote.setPos(44, 55);
+		remote.changeState("jump");
+		remote.changeState("jump");
+		remote.changeState("stand");
+		remote.velY = 12;
+		remote.changeState("jump");
+
+		assertEquals("44,55", sounds.join("|"), "remote jump state plays Flash JumpSound once at the remote world position");
+		shell.remove();
 		course.remove();
 	}
 

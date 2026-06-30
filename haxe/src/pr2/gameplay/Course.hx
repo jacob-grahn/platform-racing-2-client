@@ -360,6 +360,7 @@ class Course extends Sprite {
 		if (remoteBlockActivation != null) {
 			remote.onBlockTouch = remoteBlockActivation.touch;
 		}
+		remote.onPlayJumpSound = playRemoteJumpSound;
 		remote.onPlayCharacterSound = playCharacterSound;
 		remote.onStartJetSound = startJetSound;
 		remote.onStopJetSound = stopJetSound;
@@ -494,6 +495,14 @@ class Course extends Sprite {
 	private function playJumpSound(fixtureX:Float, fixtureY:Float):Void {
 		var worldX = serverFixture.fixturePixelToWorldX(fixtureX);
 		var worldY = serverFixture.fixturePixelToWorldY(fixtureY);
+		playWorldJumpSound(worldX, worldY);
+	}
+
+	private function playRemoteJumpSound(worldX:Float, worldY:Float):Void {
+		playWorldJumpSound(worldX, worldY);
+	}
+
+	private function playWorldJumpSound(worldX:Float, worldY:Float):Void {
 		if (onPlayJumpSound != null) {
 			onPlayJumpSound(worldX, worldY);
 			return;
