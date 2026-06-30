@@ -25,6 +25,7 @@ class CharacterLifecycleTest {
 		testLocalSwordEmitsSlashEffect();
 		testEggRoundCommandLifecycle();
 		testHatReturnToStartLifecycle();
+		testLooseHatPhysicsAndPickup();
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
 
@@ -378,6 +379,35 @@ class CharacterLifecycleTest {
 		assertEquals(0, countLooseHats(course), "hat without matching start is removed instead of respawned");
 
 		shell.remove();
+		course.remove();
+	}
+
+	private static function testLooseHatPhysicsAndPickup():Void {
+		var course = buildCourse(new CommandHandler(), "hat", "m3`ffffff`0;0;11,0;1;0");
+		finishDrawing(course);
+
+		var falling = course.addLooseHat(15, -45, 0, 5, 0xFFFFFF, -1, 1);
+		for (_ in 0...90) {
+			falling.step(course.level, 0);
+		}
+		assertEquals(true, falling.grounded, "loose hat lands on active blocks");
+		assertEquals(30, Std.int(falling.posY), "loose hat snaps to the block top");
+		assertEquals(30, Std.int(falling.display.y), "loose hat display follows physics position");
+		falling.remove();
+
+		var pickup = course.addLooseHat(15, 0, 0, 6, 0x123456, -1, 2);
+		LobbySocket.resetSent();
+		pickup.step(course.level, 0, 15, 20, false, false, false);
+		assertEquals(0, countLooseHats(course), "touching local player removes loose hat");
+		assertEquals("get_hat`2", LobbySocket.lastSent(), "touching local player emits get_hat");
+		assertTrue(pickup.display.parent == null, "pickup detaches loose hat display");
+
+		var finishedPickup = course.addLooseHat(15, 0, 0, 6, 0x123456, -1, 3);
+		LobbySocket.resetSent();
+		finishedPickup.step(course.level, 0, 15, 20, false, false, true);
+		assertEquals(1, countLooseHats(course), "done-playing local player does not collect loose hat");
+		assertEquals("", LobbySocket.lastSent(), "done-playing pickup suppression emits no get_hat");
+
 		course.remove();
 	}
 

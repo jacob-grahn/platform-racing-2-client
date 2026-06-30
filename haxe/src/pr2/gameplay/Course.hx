@@ -290,6 +290,23 @@ class Course extends Sprite {
 		}
 	}
 
+	private function stepLooseHats():Void {
+		if (looseHats == null || localCharacter == null || levelRenderer == null) {
+			return;
+		}
+		for (id in [for (id in looseHats.keys()) id]) {
+			var hat = looseHats.get(id);
+			if (hat != null) {
+				hat.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
+					localCharacter.removed, isDonePlaying());
+			}
+		}
+	}
+
+	public function isDonePlaying():Bool {
+		return localFinishHandled || raceEnded;
+	}
+
 	private static function isStartBlock(block:DecodedBlock):Bool {
 		return block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4;
 	}
@@ -542,6 +559,9 @@ class Course extends Sprite {
 		}
 		if (raceStarted && eggRound != null && config.gameMode == "egg") {
 			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);
+		}
+		if (raceStarted && config.gameMode == "hat") {
+			stepLooseHats();
 		}
 		syncBlockVisuals();
 		updatePlayerDisplay();

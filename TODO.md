@@ -78,6 +78,9 @@ still-unported popup/visual side effects.
     - [x] Port `maybeReturnHatToStart`: out-of-bounds loose hats are removed,
       respawned at the matching start block when one exists, and their remote
       remove command/display lifecycle is deterministic.
+    - [x] Port loose-hat `PhysicsEffect` stepping and local-player pickup:
+      gravity, active-block landing/wall clamp, display rotation, `get_hat`
+      emission, and done-playing suppression are deterministic.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,
   `DjinnEffects`, and per-state sound playback. The held-weapon display frame is
