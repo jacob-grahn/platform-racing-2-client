@@ -3,6 +3,7 @@ package pr2.lobby.dialogs;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
+import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.lobby.NumberFormat;
 import pr2.lobby.chat.HtmlNameMaker;
@@ -38,6 +39,7 @@ class LevelInfoPopup extends Popup {
 	private var htmlNameMaker:HtmlNameMaker = new HtmlNameMaker();
 	private var closeBinding:Null<Binding>;
 	private var reportBinding:Null<Binding>;
+	private var hoverRating:Null<HoverPopup>;
 
 	public function new(id:Int) {
 		if (LevelInfoPopup.instance != null) {
@@ -89,6 +91,7 @@ class LevelInfoPopup extends Popup {
 			htmlNameMaker.listenForLink(author);
 		}
 		setRatingScale(rating);
+		bindRatingHover();
 		configureActionButtons();
 		var loading:Null<DisplayObject> = LobbyArt.findByName(art, "loading");
 		if (loading != null) {
@@ -102,6 +105,8 @@ class LevelInfoPopup extends Popup {
 			LevelInfoPopup.instance = null;
 		}
 		htmlNameMaker.remove();
+		unbindRatingHover();
+		closeRatingHover();
 		LobbyArt.unbind(closeBinding);
 		LobbyArt.unbind(reportBinding);
 		closeBinding = null;
@@ -124,6 +129,47 @@ class LevelInfoPopup extends Popup {
 		var bar = LobbyArt.findByName(Std.downcast(LobbyArt.findByName(levelInfo, "rating"), DisplayObjectContainer), "bar");
 		if (bar != null) {
 			bar.scaleX = value / 5;
+		}
+	}
+
+	private function bindRatingHover():Void {
+		unbindRatingHover();
+		var target = LobbyArt.findByName(levelInfo, "rating");
+		if (target != null) {
+			target.addEventListener(MouseEvent.MOUSE_OVER, overRating);
+			target.addEventListener(MouseEvent.MOUSE_OUT, outRating);
+		}
+	}
+
+	private function unbindRatingHover():Void {
+		var target = LobbyArt.findByName(levelInfo, "rating");
+		if (target != null) {
+			target.removeEventListener(MouseEvent.MOUSE_OVER, overRating);
+			target.removeEventListener(MouseEvent.MOUSE_OUT, outRating);
+		}
+	}
+
+	private function overRating(_:MouseEvent):Void {
+		setCoverVisible("rating", true);
+		closeRatingHover();
+		var target = LobbyArt.findByName(levelInfo, "rating");
+		if (target != null) {
+			hoverRating = new HoverPopup("", Std.string(rating), target);
+			hoverRating.x += 238;
+			hoverRating.y -= 15;
+			hoverRating.width /= 2;
+		}
+	}
+
+	private function outRating(_:MouseEvent):Void {
+		setCoverVisible("rating", false);
+		closeRatingHover();
+	}
+
+	private function closeRatingHover():Void {
+		if (hoverRating != null) {
+			hoverRating.remove();
+			hoverRating = null;
 		}
 	}
 

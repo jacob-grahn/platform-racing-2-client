@@ -136,7 +136,8 @@ Finish the still-unported lobby popup routes, one at a time:
 - [ ] Port the level-info report/rating/moderation actions.
   - [x] Port member level-report popup flow: authored report dialog, blank-reason
     error, confirmation, and `level_report.php` upload fields.
-  - [ ] Port level-info rating action.
+  - [x] Port level-info rating action.
+    - [x] Port the Flash rating hover cover and numeric `HoverPopup`.
   - [ ] Port level-info moderation/unpublish actions.
 - [ ] Port the admin/moderation popups.
 

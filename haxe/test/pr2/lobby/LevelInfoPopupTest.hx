@@ -19,6 +19,7 @@ class LevelInfoPopupTest {
 	public static function main():Void {
 		testLinkRouteOpensAuthoredShell();
 		testApplyReturnDataPopulatesAuthoredFields();
+		testRatingHoverShowsFlashCover();
 		testMemberReportFlow();
 		testSingletonFadeOut();
 		closeAll();
@@ -67,6 +68,31 @@ class LevelInfoPopupTest {
 		assertEquals("Hat Attack", popup.gameMode, "game mode is normalized");
 		assertEquals("Code - Stefano Maccarelli", popup.song, "song id is named");
 		assertEquals(0.75, LobbyArt.findByName(popup, "bar").scaleX, "rating star bar scales");
+		popup.remove();
+	}
+
+	private static function testRatingHoverShowsFlashCover():Void {
+		closeAll();
+		var popup = new LevelInfoPopup(79);
+		popup.applyReturnData({
+			title: "Star Hover",
+			version: 1,
+			play_count: 0,
+			min_rank: 0,
+			user_name: "Player",
+			user_group: "0",
+			rating: 4.25,
+			time: 1605484800,
+			song: "0",
+			gameMode: "race"
+		});
+		var rating = LobbyArt.findByName(popup, "rating");
+		var cover = LobbyArt.findByName(Std.downcast(rating, openfl.display.DisplayObjectContainer), "cover");
+		assertEquals(false, cover.visible, "rating cover starts hidden");
+		rating.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(true, cover.visible, "rating hover shows Flash cover");
+		rating.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(false, cover.visible, "rating mouseout hides Flash cover");
 		popup.remove();
 	}
 
