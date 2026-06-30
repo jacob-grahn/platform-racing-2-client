@@ -655,6 +655,8 @@ class Course extends Sprite {
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
 				case WaterRipple:
 					levelRenderer.triggerWaterRipple(worldXOf(event), worldYOf(event));
+				case SafetyPoof:
+					levelRenderer.showTeleportPop(worldXOf(event), worldYOf(event));
 				case BlockBumpSound:
 					playBlockBumpSound(event);
 				case ItemBlockSound:

@@ -31,6 +31,7 @@ class LocalPlayerControllerTest {
 		testWaterDampsSinkingAndPaddlesUp();
 		testLeavingWaterReturnsToLand();
 		testSafetyBlockReturnsPlayerToLastSafeSpot();
+		testSafetyBlockEmitsPoofVisual();
 		testHighImpactFallBreaksCrumbleBlock();
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
@@ -418,6 +419,27 @@ class LocalPlayerControllerTest {
 		assertClose(0, state.vx, "safety block clears horizontal velocity");
 		assertClose(0, state.vy, "safety block clears vertical velocity");
 		assertEquals(true, state.grounded, "safety return leaves player grounded");
+	}
+
+	private static function testSafetyBlockEmitsPoofVisual():Void {
+		var player = new LocalCharacter(safetyDropLevel());
+		var poofEvents = 0;
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput(false, true));
+			for (event in player.consumeBlockVisualEvents()) {
+				if (event.kind == SafetyPoof) {
+					poofEvents++;
+					assertEquals(2, event.tileX, "safety poof appears at last safe tile x");
+					assertEquals(3, event.tileY, "safety poof appears at last safe tile y");
+				}
+			}
+			if (player.debugState().touchedBlockType == "safety") {
+				break;
+			}
+		}
+
+		assertEquals(1, poofEvents, "safety return emits one teleport poof visual event");
 	}
 
 	private static function testHighImpactFallBreaksCrumbleBlock():Void {

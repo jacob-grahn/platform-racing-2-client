@@ -20,6 +20,7 @@ import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedTextObject;
 import pr2.effects.BlockPiece;
 import pr2.effects.MineExplosion;
+import pr2.effects.TeleportPop;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -352,6 +353,12 @@ class ServerLevelRenderer extends Sprite {
 
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
 		var effect = new MineExplosion(worldX, worldY, offsetX, offsetY, playSound);
+		blockLayer.addChild(effect);
+		return effect;
+	}
+
+	public function showTeleportPop(worldX:Float, worldY:Float, playSound:Bool = true):TeleportPop {
+		var effect = new TeleportPop(worldX, worldY, offsetX, offsetY, playSound);
 		blockLayer.addChild(effect);
 		return effect;
 	}

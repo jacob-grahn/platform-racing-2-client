@@ -31,7 +31,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [x] block bump sound doesn't play
 - [x] item block sound doesn't play
 - [ ] probably some other sound effects don't play, they seem to have been missed so far
-- [ ] poof visual effect and sound effect missing when touching a safety net
+- [x] poof visual effect and sound effect missing when touching a safety net
 - [ ] art layers don't show up until they are done drawing
 
 

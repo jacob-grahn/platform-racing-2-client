@@ -693,6 +693,7 @@ class LocalPlayerController {
 	}
 
 	private function returnToLastSafeSpot():Void {
+		var poofTile = rotatedTileAtPixel(lastSafeX, lastSafeY);
 		x = lastSafeX;
 		y = lastSafeY;
 		vx = 0;
@@ -702,6 +703,7 @@ class LocalPlayerController {
 		jumpHeld = false;
 		setMode(MODE_LAND);
 		grounded = true;
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.SafetyPoof, poofTile.x, poofTile.y));
 	}
 
 	private function startRotate(block:LevelBlock):Void {
