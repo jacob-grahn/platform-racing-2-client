@@ -29,6 +29,18 @@ special-event behavior, and incremental level drawing are all ported and
 unit-covered (see README). What remains is the end-to-end acceptance and the
 still-unported popup/visual side effects.
 
+bugs (see how it works in the source flash game before implementing fixes): 
+- [ ] character can move before the 321 countdown is done
+- [ ] character should appear below water blocks, they should fade out some when near
+- [ ] arrow blocks loose their arrow after they have been touched. The push animation plays, then the arrow is gone
+- [ ] sword doesn't work
+- [ ] super jump sound doesn't play
+- [ ] jump sound doesn't play
+- [ ] block bump sound doesn't play
+- [ ] item block sound doesn't play
+- [ ] probably some other sound effects don't play, they seem to have been missed so far
+- [ ] poof visual effect and sound effect missing when touching a safety net
+
 - [x] Run one uninterrupted real-server session: an account and a guest each log
   in, select/join a level, race with synchronized remote players, finish or
   quit, and return to the lobby without a page reload. Add a deterministic

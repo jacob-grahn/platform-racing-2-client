@@ -33,7 +33,7 @@ class ServerLevelRendererTest {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_MINE, 10020, 10050);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
 		var effect = renderer.showMineExplosion(block.x, block.y, false);
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(block.x, effect.x, "mine explosion uses block world x");
 		assertEquals(block.y, effect.y, "mine explosion uses block world y");
 		assertEquals(effect, blockLayer.getChildAt(1), "mine explosion renders over the block layer");
@@ -48,7 +48,7 @@ class ServerLevelRendererTest {
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
 		var pieces = renderer.showBlockPieces("BrickPieceGraphic", block.x, block.y, 1, 10, 10, 25, function() return 0.5);
 		var piece = pieces[0];
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(block.x + 15, piece.x, "piece starts at randomized position inside block");
 		assertEquals(block.y + 15, piece.y, "piece starts at randomized position inside block");
 		assertEquals(180.0, piece.rotation, "piece starts with randomized rotation");
@@ -73,7 +73,7 @@ class ServerLevelRendererTest {
 			renderer.setBlockAlpha(block.x, block.y, 0);
 		}
 
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(0.0, blockLayer.getChildAt(0).alpha, "server renderer hides removed brick");
 		assertEquals(0.0, blockLayer.getChildAt(1).alpha, "server renderer hides removed mine");
 		assertEquals(0.0, blockLayer.getChildAt(2).alpha, "server renderer hides removed crumble");
@@ -85,7 +85,7 @@ class ServerLevelRendererTest {
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
 		renderer.setBlockColorMultiplier(block.x, block.y, 0.5);
 
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		var transform = blockLayer.getChildAt(0).transform.colorTransform;
 		assertEquals(0.5, transform.redMultiplier, "server renderer applies depleted item red multiplier");
 		assertEquals(0.5, transform.greenMultiplier, "server renderer applies depleted item green multiplier");
@@ -101,7 +101,7 @@ class ServerLevelRendererTest {
 			new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10140, 10050)
 		];
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, blocks), blocks[0], 180, 280, true, 2);
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(0, renderer.drawnBlockCount(), "incremental renderer starts before drawing blocks");
 		assertEquals(0, blockLayer.numChildren, "incremental block layer starts empty");
 		assertEquals(false, renderer.isBlockDrawingComplete(), "incremental renderer is initially incomplete");
@@ -128,7 +128,7 @@ class ServerLevelRendererTest {
 			new DecodedDrawAction("d", [0, 0, 10, 10])
 		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello|world", 15, 25, 0x00FF00)], 1);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 4);
-		var artLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var artLayer = worldLayer(renderer, 1);
 		assertEquals(0, renderer.drawnArtItemCount(), "incremental art starts before drawing art");
 		// Child 0 is the (empty) stroke raster canvas that placed art sits on top of.
 		assertEquals(1, artLayer.numChildren, "incremental art layer starts with only the stroke canvas");
@@ -172,7 +172,7 @@ class ServerLevelRendererTest {
 		renderer.animateArrow(arrow.x, arrow.y);
 		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow activation starts one frame brighter");
 
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
 		var timeline = pivot.getChildAt(0);
@@ -245,20 +245,20 @@ class ServerLevelRendererTest {
 		var level = new ServerLevel(0xFFFFFF, [focus], layers);
 		var renderer = new ServerLevelRenderer(level, focus, 180, 280);
 
-		assertEquals("artLayer3", renderer.getChildAt(1).name, "furthest rear layer renders first");
-		assertEquals("artLayer2", renderer.getChildAt(2).name, "middle rear layer renders second");
-		assertEquals("artLayer1", renderer.getChildAt(3).name, "nearest rear layer renders before blocks");
-		assertEquals("artLayer4", renderer.getChildAt(5).name, "first foreground layer renders after blocks");
-		assertEquals("artLayer5", renderer.getChildAt(6).name, "nearest foreground layer renders last");
+		assertEquals("artLayer3", worldLayer(renderer, 1).name, "furthest rear layer renders first");
+		assertEquals("artLayer2", worldLayer(renderer, 2).name, "middle rear layer renders second");
+		assertEquals("artLayer1", worldLayer(renderer, 3).name, "nearest rear layer renders before blocks");
+		assertEquals("artLayer4", worldLayer(renderer, 5).name, "first foreground layer renders after blocks");
+		assertEquals("artLayer5", worldLayer(renderer, 6).name, "nearest foreground layer renders last");
 
-		var rear = Std.downcast(renderer.getChildAt(1), Sprite);
+		var rear = worldLayer(renderer, 1);
 		assertEquals(Math.round((180.0 - 10020) * 0.25), rear.x, "rear layer x applies authored parallax scale");
 		assertEquals(Math.round((280.0 - 10050) * 0.25), rear.y, "rear layer y applies authored parallax scale");
 
 		renderer.setCameraOffset(315.4, 172.6);
 		assertEquals(Math.round(315.4 * 0.25), rear.x, "rear layer x follows camera at quarter speed");
 		assertEquals(Math.round(172.6 * 0.25), rear.y, "rear layer y follows camera at quarter speed");
-		var foreground = Std.downcast(renderer.getChildAt(6), Sprite);
+		var foreground = worldLayer(renderer, 6);
 		assertEquals(Math.round(315.4 * 2), foreground.x, "foreground layer x follows camera at double speed");
 		assertEquals(Math.round(172.6 * 2), foreground.y, "foreground layer y follows camera at double speed");
 	}
@@ -267,7 +267,7 @@ class ServerLevelRendererTest {
 		var arrow = new DecodedBlock(ObjectCodes.BLOCK_ARROW_RIGHT, 10020, 10050);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
 		renderer.animateArrow(arrow.x, arrow.y);
-		var blockLayer = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
 		var arrowTimeline = pivot.getChildAt(0);
@@ -286,6 +286,16 @@ class ServerLevelRendererTest {
 		assertEquals(false, piece.hasEventListener(Event.ENTER_FRAME), "renderer removal disposes active block piece");
 		assertEquals(null, explosion.parent, "renderer removal detaches active mine explosion");
 		assertEquals(null, piece.parent, "renderer removal detaches active block piece");
+	}
+
+	// The block and parallax art layers now live inside the renderer's rotating
+	// world container (renderer child index 1), so a layer that used to sit at
+	// renderer child `index` is now at world-container child `index - 1`. See
+	// ServerLevelRenderer.worldContainer, which lets a rotate block spin the
+	// whole world about the screen centre without moving the upright backgrounds.
+	private static function worldLayer(renderer:ServerLevelRenderer, index:Int):Sprite {
+		var world = Std.downcast(renderer.getChildAt(1), Sprite);
+		return Std.downcast(world.getChildAt(index - 1), Sprite);
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

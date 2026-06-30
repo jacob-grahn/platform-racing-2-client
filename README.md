@@ -20,12 +20,14 @@ the boot screen so development and automated tests can jump straight to one:
 - `?screen=intro` (default): Jiggmin and Kongregate intro flow, then login.
   - `?intro=jiggmin` or `?intro=kongregate` plays just that one intro (testing).
 - `?screen=login`: the (stub) login page.
-- `?screen=harness`: the local gameplay harness; accepts the character query
-  options (`hat`, `head`, `body`, `feet`, `primary`, `secondary`, `render`).
 - `?screen=campaign&debug=campaign`: debug-only campaign harness. Loads a real
   campaign level through the configured API host/proxy, renders the decoded block
   layer, and places the character at the first start block. Accepts `page` and
   `levelId` (or `level`) to choose a listed campaign level.
+  - `&localLevel=<name>` instead builds a synthetic level entirely client-side
+    (no server fetch) and mounts it in the same `Course`/`ServerLevelRenderer`
+    path — the offline gameplay sandbox. Layouts: `rotate` (a boxed-in room with
+    a rotate block over the spawn) and `flat` (a wide open floor).
 - `?screen=symbol&symbol=<name>&scale=4&bg=FFFFFF`: renders one generated
   library symbol through the vector renderer for visual comparison work.
 
@@ -100,8 +102,9 @@ Current foundation:
   extracted XFL source.
 - `AssetLibrary` and `PR2MovieClip` run generated timelines with nested clips,
   labels, frame scripts, transforms, visibility, and named children.
-- The local harness can run fixture levels without login/lobby/server flow and
-  exposes deterministic debug state for movement checks.
+- The `?screen=campaign&localLevel=<name>` sandbox can run synthetic levels
+  without login/lobby/server flow and exposes deterministic debug state for
+  movement checks.
 - `LocalCharacter` has Flash-derived land movement/collision, with additional
   tested behavior for water, crumble, vanish, mine, teleport, item/stat supply,
   push, timed move, ice, arrow, and safety blocks.
@@ -462,20 +465,13 @@ python3 tools/openfl_driver.py --delay 8 --query 'screen=popup&popup=loadouts' s
 Supported popup fixtures are `message`, `confirm`, `send-message`, `codes`,
 `loadouts`, and `credits`.
 
-Capture a representative character outfit for comparison work:
+Read and validate the OpenFL debug state. The offline gameplay sandbox
+(`?screen=campaign&debug=1&localLevel=<name>`) publishes the local player's
+state to `data-pr2-debug-state`:
 
 ```sh
-python3 tools/openfl_driver.py --delay 2.0 --query 'hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite' shot test/output/openfl-character-outfit.png
-```
-
-Read and validate the OpenFL harness debug state:
-
-```sh
-python3 tools/openfl_driver.py --delay 1.0 \
-  --expect fixture=flat-level \
-  --expect x=75 \
-  --expect y=270 \
-  --expect grounded=true \
+python3 tools/openfl_driver.py --delay 2.0 --query 'screen=campaign&debug=1&localLevel=flat' \
+  --expect phase=playable \
   debug-state
 ```
 
@@ -502,11 +498,9 @@ Check approximate OpenFL frame rate:
 python3 tools/openfl_driver.py --fps-duration 30 --fps-target 27 --fps-tolerance 5 fps
 ```
 
-Run a scripted OpenFL harness sequence:
+Run a scripted OpenFL driver sequence:
 
 ```sh
-python3 tools/openfl_driver.py sequence test/sequences/openfl/harness-boot.json
-python3 tools/openfl_driver.py sequence test/sequences/openfl/run-right.json
 python3 tools/openfl_driver.py sequence test/sequences/openfl/lobby-flow.json
 python3 tools/openfl_driver.py sequence test/sequences/openfl/lobby-parity.json
 python3 tools/compare_screenshots.py test/baselines/flash/04_lobby_unobstructed.jpg test/output/openfl-lobby-shell.png --diff test/output/openfl-vs-flash-lobby-diff.png --metrics test/output/openfl-vs-flash-lobby-metrics.json --threshold-percent 100 --threshold-rms 255

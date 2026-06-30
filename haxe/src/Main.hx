@@ -14,7 +14,6 @@ import pr2.app.Screen;
 import pr2.audio.BrowserAudioUnlock;
 import pr2.audio.AudioManager;
 import pr2.net.ServerConfig;
-import pr2.harness.GameplayHarness;
 import pr2.page.CampaignTestScreen;
 import pr2.page.CustomizeCharacterScreen;
 import pr2.page.IntroPage;
@@ -101,8 +100,9 @@ class Main extends Sprite {
 	// The mute toggle lives at the document root in the Flash original
 	// (`Main.muteButton`), so it stays on screen across every page. It is added
 	// on top of the active screen at the Flash coordinates (x=504, y=380). The
-	// pure dev tooling screens (symbol preview / gameplay harness) are not part
-	// of the real game chrome and would corrupt visual diffs, so they skip it.
+	// pure dev tooling screens (symbol preview / customize / popup preview) are
+	// not part of the real game chrome and would corrupt visual diffs, so they
+	// skip it.
 	private function addGlobalChrome(screen:Screen):Void {
 		switch (screen) {
 			case Login | Lobby | Intro | Campaign:
@@ -133,10 +133,11 @@ class Main extends Sprite {
 
 	private function buildScreen(screen:Screen, query:Null<String>):DisplayObject {
 		return switch (screen) {
-			case Harness: new GameplayHarness();
 			case Campaign: new CampaignTestScreen(
 				QueryParams.get(query, "page"),
-				campaignLevelQuery(query)
+				campaignLevelQuery(query),
+				null,
+				QueryParams.get(query, "localLevel")
 			);
 			case Login: new PageHolder(new LoginPage(), true);
 			case Lobby: buildLobby(query);

@@ -52,6 +52,28 @@ class ServerLevelRenderer extends Sprite {
 	private final level:ServerLevel;
 	private var offsetX:Float;
 	private var offsetY:Float;
+	// Unrounded camera offset, kept so the parallax layers can re-derive their
+	// rounded per-plane offset whenever the committed rotation changes.
+	private var rawOffsetX:Float;
+	private var rawOffsetY:Float;
+	// Pivot (in block-layer local/level-pixel coords) that the committed rotation
+	// turns about. The controller swaps the player's coordinates about the fixture
+	// origin (originTile*TILE_SIZE), so the blocks must turn about that same point
+	// or they land hundreds of pixels off-screen and culling drops them all.
+	private var rotationPivotX:Float = 0;
+	private var rotationPivotY:Float = 0;
+	// Holds the parallax art layers and the block layer — everything that spins
+	// when a rotate block fires. Mirrors Flash, which rotates the whole Course
+	// during the tween (worldContainer here) and bakes the committed 90-degree
+	// step into blockBackground/bg* (blockLayer + art layer rotation here). The
+	// solid background and themed art-background bitmap stay direct children of
+	// `this` so they remain upright, like Flash's counter-rotated `bg`.
+	private final worldContainer:Sprite = new Sprite();
+	// Committed course rotation (a multiple of 90), baked about the block layer's
+	// own origin. `tweenRotation` is the in-progress smooth spin applied to the
+	// whole world about the screen centre while a rotate block animates.
+	private var courseRotation:Int = 0;
+	private var tweenRotation:Float = 0;
 	private final blockLayer:Sprite = new Sprite();
 	private final artLayerContainers:Array<Sprite> = [];
 	private final blockDisplays:Map<String, Sprite> = new Map();
@@ -89,9 +111,15 @@ class ServerLevelRenderer extends Sprite {
 			offsetX = focusScreenX - focus.x;
 			offsetY = focusScreenY - focus.y;
 		}
+		rawOffsetX = offsetX;
+		rawOffsetY = offsetY;
 
 		drawBackground();
 		drawArtBackground();
+		// The block and parallax art layers live inside the rotating world
+		// container; the solid background and art-background bitmap above stay on
+		// `this` so they remain upright when the course spins.
+		addChild(worldContainer);
 		// Course.attachBackgrounds places bg3/bg2/bg1 behind the map and bg4/bg5
 		// in front. Preserve that authored depth order instead of flattening all
 		// five drawing planes behind the blocks.
@@ -122,29 +150,112 @@ class ServerLevelRenderer extends Sprite {
 		return drawnArtItems;
 	}
 
+	// World points handed in here (player, eggs, mines) are already expressed in
+	// the current rotated frame, so they only need the camera translation plus
+	// the in-progress tween spin about the screen centre. The committed course
+	// rotation is baked into the block layer, which stores its blocks in the
+	// original frame, so it must not be applied again here.
 	public function worldToScreen(x:Float, y:Float):Point {
-		return new Point(x + offsetX, y + offsetY);
+		var point = new Point(x + offsetX, y + offsetY);
+		return tweenRotation == 0 ? point : worldContainer.transform.matrix.transformPoint(point);
 	}
 
 	public function screenToWorld(x:Float, y:Float):Point {
-		return new Point(x - offsetX, y - offsetY);
+		var point = new Point(x, y);
+		if (tweenRotation != 0) {
+			var inverse = worldContainer.transform.matrix.clone();
+			inverse.invert();
+			point = inverse.transformPoint(point);
+		}
+		return new Point(point.x - offsetX, point.y - offsetY);
 	}
 
 	public function cameraOffset():Point {
 		return new Point(offsetX, offsetY);
 	}
 
+	/**
+		Applies the rotate-block course rotation. `courseRotation` is the committed
+		multiple of 90 degrees, baked into the block and parallax layers about their
+		own origin (Flash `blockBackground.rotation`/`bg*.rotation`). `tweenRotation`
+		is the in-progress smooth spin applied to the whole world about the screen
+		centre while the block animates (Flash rotating the Course during the tween).
+	**/
+	public function setCourseRotation(courseRotation:Int, tweenRotation:Float):Void {
+		if (this.courseRotation != courseRotation) {
+			this.courseRotation = courseRotation;
+			applyLayerTransforms();
+			updateViewWindow(true);
+		}
+		if (this.tweenRotation != tweenRotation) {
+			this.tweenRotation = tweenRotation;
+			applyTweenRotation();
+		}
+	}
+
+	/**
+		Sets the point the committed course rotation turns about, in block-layer
+		local (level-pixel) coordinates. Course passes the fixture origin so the
+		blocks turn about the same pivot the controller uses when it swaps the
+		player's coordinates on each rotate step.
+	**/
+	public function setRotationPivot(x:Float, y:Float):Void {
+		if (rotationPivotX == x && rotationPivotY == y) {
+			return;
+		}
+		rotationPivotX = x;
+		rotationPivotY = y;
+		if (courseRotation != 0) {
+			applyLayerTransforms();
+			updateViewWindow(true);
+		}
+	}
+
+	// Builds the block/art layer matrix: turn the original-frame content about the
+	// committed rotation pivot, then apply the (per-plane) camera translation.
+	private function layerMatrix(translateX:Float, translateY:Float):Matrix {
+		var matrix = new Matrix();
+		if (courseRotation != 0) {
+			matrix.translate(-rotationPivotX, -rotationPivotY);
+			matrix.rotate(courseRotation * Math.PI / 180);
+			matrix.translate(rotationPivotX, rotationPivotY);
+		}
+		matrix.translate(translateX, translateY);
+		return matrix;
+	}
+
+	private function applyLayerTransforms():Void {
+		blockLayer.transform.matrix = layerMatrix(offsetX, offsetY);
+		for (i in 0...artLayerContainers.length) {
+			if (artLayerContainers[i] == null) {
+				continue;
+			}
+			var layer = level.artLayers[i];
+			artLayerContainers[i].transform.matrix = layerMatrix(parallaxOffset(rawOffsetX, layer.scale), parallaxOffset(rawOffsetY, layer.scale));
+		}
+	}
+
+	private function applyTweenRotation():Void {
+		if (tweenRotation == 0) {
+			worldContainer.transform.matrix = new Matrix();
+			return;
+		}
+		var pivotX = Constants.STAGE_WIDTH / 2;
+		var pivotY = Constants.STAGE_HEIGHT / 2;
+		var matrix = new Matrix();
+		matrix.translate(-pivotX, -pivotY);
+		matrix.rotate(tweenRotation * Math.PI / 180);
+		matrix.translate(pivotX, pivotY);
+		worldContainer.transform.matrix = matrix;
+	}
+
 	/** Applies Course.setPos camera translation to world and parallax layers. */
 	public function setCameraOffset(x:Float, y:Float):Void {
+		rawOffsetX = x;
+		rawOffsetY = y;
 		offsetX = Math.round(x);
 		offsetY = Math.round(y);
-		blockLayer.x = offsetX;
-		blockLayer.y = offsetY;
-		for (i in 0...artLayerContainers.length) {
-			var layer = level.artLayers[i];
-			artLayerContainers[i].x = parallaxOffset(x, layer.scale);
-			artLayerContainers[i].y = parallaxOffset(y, layer.scale);
-		}
+		applyLayerTransforms();
 		updateViewWindow(false);
 	}
 
@@ -320,7 +431,7 @@ class ServerLevelRenderer extends Sprite {
 	private function drawBlocks():Void {
 		blockLayer.x = offsetX;
 		blockLayer.y = offsetY;
-		addChild(blockLayer);
+		worldContainer.addChild(blockLayer);
 		// Establish the initial window from the start-focus offset so blocks that
 		// fall on screen are attached as they are created, and the rest stay off
 		// the display list until the camera scrolls to them.
@@ -422,10 +533,31 @@ class ServerLevelRenderer extends Sprite {
 		walked (a few hundred segment cells), never the full block list.
 	**/
 	private function updateViewWindow(force:Bool):Void {
-		var colMin = Math.floor((-offsetX) / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
-		var colMax = Math.ceil((Constants.STAGE_WIDTH - offsetX) / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
-		var rowMin = Math.floor((-offsetY) / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
-		var rowMax = Math.ceil((Constants.STAGE_HEIGHT - offsetY) / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
+		// Map the visible stage rectangle into the block layer's local (original,
+		// pre-rotation) frame so culling stays correct when a rotate block spins the
+		// course. Mirrors Flash background.Background.updateViewWindow, which rotates
+		// the camera window into the block layer's frame before picking the column/
+		// row range. The combined matrix folds in both the committed block rotation
+		// and the in-progress tween, so the bounding box covers the rotated window.
+		var toLocal = blockLayer.transform.matrix.clone();
+		toLocal.concat(worldContainer.transform.matrix);
+		toLocal.invert();
+		var minX = Math.POSITIVE_INFINITY;
+		var minY = Math.POSITIVE_INFINITY;
+		var maxX = Math.NEGATIVE_INFINITY;
+		var maxY = Math.NEGATIVE_INFINITY;
+		for (corner in [new Point(0, 0), new Point(Constants.STAGE_WIDTH, 0), new Point(0, Constants.STAGE_HEIGHT),
+			new Point(Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT)]) {
+			var local = toLocal.transformPoint(corner);
+			if (local.x < minX) minX = local.x;
+			if (local.x > maxX) maxX = local.x;
+			if (local.y < minY) minY = local.y;
+			if (local.y > maxY) maxY = local.y;
+		}
+		var colMin = Math.floor(minX / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
+		var colMax = Math.ceil(maxX / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
+		var rowMin = Math.floor(minY / TILE_SIZE) - VIEW_MARGIN_SEGMENTS;
+		var rowMax = Math.ceil(maxY / TILE_SIZE) + VIEW_MARGIN_SEGMENTS;
 		if (!force
 			&& viewInitialized
 			&& intAbs(colMin - viewColMin) <= VIEW_REBUILD_THRESHOLD
@@ -556,7 +688,7 @@ class ServerLevelRenderer extends Sprite {
 			drawLayerObjects(container, layer.objects, layer.scale);
 			drawLayerTexts(container, layer.texts, layer.scale);
 		}
-		addChild(container);
+		worldContainer.addChild(container);
 	}
 
 	private function drawNextArtItems(limit:Int):Void {

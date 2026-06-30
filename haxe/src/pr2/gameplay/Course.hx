@@ -141,6 +141,9 @@ class Course extends Sprite {
 		addChild(levelRenderer);
 
 		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
+		// The controller swaps the player's coordinates about the fixture origin on
+		// each rotate step, so the block layer must turn about that same point.
+		levelRenderer.setRotationPivot(serverFixture.originTileX * ServerLevelRenderer.TILE_SIZE, serverFixture.originTileY * ServerLevelRenderer.TILE_SIZE);
 		player = new LocalCharacter(serverFixture.fixture);
 		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
@@ -656,6 +659,15 @@ class Course extends Sprite {
 		}
 
 		var state = player.debugState();
+		// Spin the world to match the controller's rotate-block state: the committed
+		// 90-degree step is baked into the block layer while the in-progress tween
+		// animates the whole course. The minimap snaps to the committed rotation,
+		// mirroring Flash Course.rotate. Applied before the camera offset so culling
+		// rebuilds against the new rotation in the same frame.
+		levelRenderer.setCourseRotation(state.courseRotation, localCharacter.courseTweenRotation);
+		if (miniMap != null) {
+			miniMap.rotate(state.courseRotation);
+		}
 		var worldX = serverFixture.fixturePixelToWorldX(player.x);
 		var worldY = serverFixture.fixturePixelToWorldY(player.y);
 		camera.follow(worldX, worldY);

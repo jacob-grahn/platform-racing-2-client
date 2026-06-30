@@ -5,14 +5,13 @@ import StringTools;
 /**
 	Which screen the client boots into. The Flash client always started at the
 	intro; here a `?screen=` flag can jump straight to supported screens to make
-	development and automated harness testing easier. The old campaign harness is
+	development and automated harness testing easier. The `campaign` screen is
 	debug-only now that the real `GamePage` owns level entry.
 **/
 enum abstract Screen(String) from String to String {
 	var Intro = "intro";
 	var Login = "login";
 	var Lobby = "lobby";
-	var Harness = "harness";
 	var Campaign = "campaign";
 	var Symbol = "symbol";
 	var CustomizeCharacter = "customize_character";
@@ -22,7 +21,6 @@ enum abstract Screen(String) from String to String {
 		var value = QueryParams.get(query, "screen");
 		var normalized = value == null ? "" : StringTools.trim(value).toLowerCase();
 		return switch (normalized) {
-			case "harness": Harness;
 			case "campaign" if (allowsCampaignHarness(query)): Campaign;
 			case "login": Login;
 			case "lobby": Lobby;

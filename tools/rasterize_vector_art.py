@@ -41,8 +41,8 @@ FLASH_HAIRLINE_RE = re.compile(r'stroke-width="0\.05"')
 # high while the feet line up. The root cause (some registration-point vs slot
 # mismatch in the Animate export staging) is not yet understood, so this nudges
 # sourceTrim.y downward to match Flash. Calibrated by sweeping the runtime
-# slot-local Y offset (tools/calibrate_sweep.py) until head/body matched the
-# baseline, then carried here (sourceTrim.y += nudge * scale). Feet/hat = 0.
+# slot-local Y offset until head/body matched the baseline, then carried here
+# (sourceTrim.y += nudge * scale). Feet/hat = 0.
 CHARACTER_Y_NUDGE = {"head": 55, "body": 55}
 # Categories that produce individual PNGs with no atlas. Large timeline-driven
 # effect symbols can exceed the default atlas page and are animated by metadata

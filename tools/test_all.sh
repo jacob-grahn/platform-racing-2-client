@@ -36,9 +36,4 @@ run_step lobby-flatten-parity \
     --metrics test/output/lobby-metrics.json \
     --threshold-percent 2 --threshold-rms 1.0
 
-for case in default colors mixed-parts tricky-parts; do
-  run_step "character-$case" \
-    python3 tools/openfl_driver.py sequence "test/sequences/openfl/character-$case.json"
-done
-
 echo "All tests passed. Logs: ${ARTIFACT_DIR#$ROOT/}"

@@ -3,9 +3,8 @@ package pr2.app;
 import StringTools;
 
 /**
-	Small helper for reading the browser query string. Mirrors the parsing in
-	`GameplayHarnessOptions` so screen routing and harness options agree on
-	how `?key=value&...` is decoded.
+	Small helper for reading the browser query string used by screen routing to
+	decode `?key=value&...` flags.
 **/
 class QueryParams {
 	public static function parse(query:Null<String>):Map<String, String> {

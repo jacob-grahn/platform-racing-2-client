@@ -22,7 +22,9 @@ import pr2.net.LevelDataClient;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
 import pr2.level.ServerLevel;
+import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelDecoder;
+import pr2.level.ObjectCodes;
 
 /**
 	Debug harness for exercising real server campaign levels (see TODO.md).
@@ -34,6 +36,11 @@ import pr2.level.ServerLevelDecoder;
 	the same code without this harness chrome. Reachable via `?screen=campaign`
 	(optional `&page=N`, `&levelId=N`/`&level=N`); `GamePage` supplies a version to
 	load a server-selected level directly.
+
+	`&localLevel=<name>` builds a synthetic level entirely client-side (no server
+	fetch) and mounts it in the same `Course` path. This replaces the old
+	standalone gameplay harness as the way to exercise gameplay offline; see
+	`buildLocalLevel` for the supported layouts.
 **/
 class CampaignTestScreen extends Sprite {
 	private static inline var DEFAULT_PAGE:Int = 1;
@@ -41,15 +48,17 @@ class CampaignTestScreen extends Sprite {
 	private final page:Int;
 	private final requestedLevelId:Null<Int>;
 	private final directVersion:Null<Int>;
+	private final localLevel:Null<String>;
 	private var statusText:TextField;
 	private var course:Course;
 	private var lastStatusText:String = "";
 
-	public function new(?page:String, ?levelId:String, ?version:Int) {
+	public function new(?page:String, ?levelId:String, ?version:Int, ?localLevel:String) {
 		super();
 		this.page = parsePage(page);
 		this.requestedLevelId = parseRequestedLevelId(levelId);
 		this.directVersion = version;
+		this.localLevel = localLevel;
 
 		drawBackground();
 		createStatusText();
@@ -97,6 +106,10 @@ class CampaignTestScreen extends Sprite {
 
 	private function onAddedToStage(event:Event):Void {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		if (localLevel != null) {
+			buildLocalLevel();
+			return;
+		}
 		#if html5
 		if (!ServerConfig.hasProxyHost()) {
 			setStatus(
@@ -113,6 +126,59 @@ class CampaignTestScreen extends Sprite {
 		} else {
 			CampaignListClient.fetch(page, onList, onError);
 		}
+	}
+
+	// Builds a synthetic level entirely client-side (no server fetch) so gameplay
+	// can be exercised and screenshotted in the real `Course`/`ServerLevelRenderer`
+	// path without a server. This is the replacement for the old standalone
+	// gameplay harness: pick a layout with `?screen=campaign&debug=1&localLevel=<name>`.
+	// Supported names: `rotate` (default) and `flat`.
+	private function buildLocalLevel():Void {
+		var name = localLevel == null ? "rotate" : localLevel.toLowerCase();
+		var blocks:Array<DecodedBlock> = [];
+		function add(code:Int, col:Int, row:Int):Void {
+			blocks.push(new DecodedBlock(code, col * 30, row * 30));
+		}
+
+		var title;
+		switch (name) {
+			case "flat":
+				// A wide open floor with a start block: a minimal physics sandbox,
+				// matching what the old harness's flat-level fixture provided.
+				title = "Local Flat Test";
+				for (col in 6...34) {
+					add(ObjectCodes.BLOCK_BRICK, col, 20);
+				}
+				add(ObjectCodes.BLOCK_START1, 20, 19);
+
+			default:
+				// Rotate layout: a floor + walls + ceiling box (so missing blocks are
+				// obvious), a start block to spawn on, and a rotate block directly
+				// above the head to bump when the player jumps.
+				title = "Local Rotate Test";
+				for (col in 14...27) {
+					add(ObjectCodes.BLOCK_BRICK, col, 20);
+				}
+				for (col in 14...27) {
+					add(ObjectCodes.BLOCK_BASIC2, col, 11);
+				}
+				for (row in 12...20) {
+					add(ObjectCodes.BLOCK_BASIC1, 14, row);
+					add(ObjectCodes.BLOCK_BASIC1, 26, row);
+				}
+				add(ObjectCodes.BLOCK_START1, 20, 19);
+				add(ObjectCodes.BLOCK_ROTATE_RIGHT, 20, 16);
+		}
+
+		var level = new ServerLevel(0x6688AA, blocks);
+		var vars = new Map<String, String>();
+		vars.set("title", title);
+		vars.set("gravity", "1");
+		vars.set("max_time", "120");
+		vars.set("gameMode", "race");
+		var data = new ServerLevelData(vars, true);
+		mountCourse(level, data);
+		setStatus("phase=localLevel", 'Local test level "$name" mounted (blocks=${blocks.length}).');
 	}
 
 	private function onDirectLevelData(levelId:Int, version:Int, data:ServerLevelData):Void {
