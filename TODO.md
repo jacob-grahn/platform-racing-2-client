@@ -60,7 +60,7 @@ still-unported popup/visual side effects.
       - [x] Mount and animate the local Slash/Laser/IceWave effect visuals from
         egg attacks.
     - [x] Port the animated egg squash/remove side effect.
-  - [ ] `Hat` popup.
+  - [x] `Hat` popup.
     - [x] Port `maybeReturnHatToStart`: out-of-bounds loose hats are removed,
       respawned at the matching start block when one exists, and their remote
       remove command/display lifecycle is deterministic.
