@@ -55,9 +55,9 @@ class RemoteCharacterConsumeTest {
 		handler.dispatch("var1", ["state", "run"]);
 		handler.dispatch("var1", ["scaleX", "-1"]);
 		handler.dispatch("var1", ["parent", "frontBackground"]);
-		handler.dispatch("var1", ["item", "4"]);
+		handler.dispatch("var1", ["item", "6"]);
 		handler.dispatch("var1", ["sparkle", "1"]);
-		handler.dispatch("var1", ["jet", "0"]);
+		handler.dispatch("var1", ["jet", "1"]);
 		handler.dispatch("exactPos1", ["100", "200"]);
 
 		for (_ in 0...5) {
@@ -70,12 +70,20 @@ class RemoteCharacterConsumeTest {
 		assertClose(25, dot.y, "minimap dot follows unrotated y");
 		assertEquals("run", remote.state, "queued state var applies");
 		assertClose(-1, remote.scaleX, "queued scaleX var applies");
-		assertEquals("Teleport", remote.itemFrameName, "queued item var applies");
+		assertEquals("Jet Pack", remote.itemFrameName, "queued item var applies");
 		assertEquals(100.0, remote.posX, "exactPos x is latched after interpolation update");
 		assertEquals(200.0, remote.posY, "exactPos y is latched after interpolation update");
 		assertEquals("frontBackground", parents.join(","), "parent hook receives queued parent");
 		assertEquals("true", [for (v in sparkles) Std.string(v)].join(","), "sparkle hook receives true");
-		assertEquals("false", [for (v in jets) Std.string(v)].join(","), "jet hook receives false");
+		assertEquals("true", [for (v in jets) Std.string(v)].join(","), "jet hook receives true");
+		assertEquals(6, remote.jetPackForState("runAnim").currentFrame, "remote jet var switches active Jet Pack flame on");
+
+		handler.dispatch("p1", ["0", "0"]);
+		handler.dispatch("var1", ["jet", "0"]);
+		for (_ in 0...5) {
+			remote.stepFrame();
+		}
+		assertEquals(1, remote.jetPackForState("runAnim").currentFrame, "remote jet var switches Jet Pack flame off");
 	}
 
 	private static function testCatchupClampAndBlockTouches():Void {

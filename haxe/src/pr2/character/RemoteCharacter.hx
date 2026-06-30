@@ -216,8 +216,16 @@ class RemoteCharacter extends Character {
 				onSparklesChange(enabled);
 			}
 		}
-		if (Reflect.field(update, "jet") != null && onJetChange != null) {
-			onJetChange(Std.string(Reflect.field(update, "jet")) == "1");
+		if (Reflect.field(update, "jet") != null) {
+			var enabled = Std.string(Reflect.field(update, "jet")) == "1";
+			if (enabled) {
+				beginJet();
+			} else {
+				endJet();
+			}
+			if (onJetChange != null) {
+				onJetChange(enabled);
+			}
 		}
 		if (Reflect.field(update, "beginRemove") != null) {
 			beginRemove();

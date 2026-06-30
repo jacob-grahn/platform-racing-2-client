@@ -153,10 +153,12 @@ class LocalCharacter extends Character {
 
 	public function beginJetNetwork():Void {
 		LobbySocket.write("set_var`jet`1");
+		beginJet();
 	}
 
 	public function endJetNetwork():Void {
 		LobbySocket.write("set_var`jet`0");
+		endJet();
 	}
 
 	override public function beginRemove():Void {

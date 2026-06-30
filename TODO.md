@@ -70,7 +70,7 @@ still-unported popup/visual side effects.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks:
   [x] particle emitters
-  [ ] jet-pack flame,
+  [x] jet-pack flame,
   [ ] `DjinnEffects`
   [ ] per-state sound playback.
     - [x] Port `Character.gainHeart`, `beginSparkles`, and `endSparkles`

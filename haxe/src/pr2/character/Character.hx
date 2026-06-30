@@ -6,6 +6,7 @@ import pr2.character.CharacterAppearance.CharacterPartIds;
 import pr2.gameplay.Items;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.RotationMath.RotatedPoint;
+import pr2.runtime.PR2MovieClip;
 
 /** A `(x, y)` block-touch probe point in stage space (see `blockTouchProbes`). */
 typedef BlockTouchProbe = {
@@ -131,6 +132,7 @@ class Character extends Sprite {
 	public var onClearParticleEmitter:Null<Void->Void> = null;
 
 	private var recoveryRandom:Void->Float = Math.random;
+	private var jetFlameRandom:Void->Float = Math.random;
 	private var activeParticleEmitter:Null<ParticleEmitterRequest> = null;
 
 	public function new(hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
@@ -511,6 +513,38 @@ class Character extends Sprite {
 		setParticleEmitter("arrowSparkle", 33, 5000);
 	}
 
+	public function beginJet():Void {
+		removeEventListener(Event.ENTER_FRAME, jetPackTick);
+		addEventListener(Event.ENTER_FRAME, jetPackTick);
+		setCurrentJetPackFrame("on");
+	}
+
+	public function endJet():Void {
+		removeEventListener(Event.ENTER_FRAME, jetPackTick);
+		for (stateName in CharacterDisplay.STATE_NAMES) {
+			var jetPack = jetPackForState(stateName);
+			if (jetPack != null) {
+				jetPack.gotoAndStop("off");
+			}
+		}
+	}
+
+	@:allow(pr2.character.CharacterBaseTest)
+	private function setJetFlameRandomForTest(random:Void->Float):Void {
+		jetFlameRandom = random == null ? Math.random : random;
+	}
+
+	@:allow(pr2.character.CharacterBaseTest)
+	@:allow(pr2.character.RemoteCharacterConsumeTest)
+	private function jetPackForState(stateName:String):Null<PR2MovieClip> {
+		var stateClip = display.getStateClip(stateName);
+		if (stateClip == null) {
+			return null;
+		}
+		var weapon = Std.downcast(stateClip.getChildByTimelineName("weapon"), PR2MovieClip);
+		return weapon == null ? null : Std.downcast(weapon.getChildByTimelineName("jetPack"), PR2MovieClip);
+	}
+
 	// ---- removal lifecycle -----------------------------------------------
 
 	public function beginRemove():Void {
@@ -531,6 +565,7 @@ class Character extends Sprite {
 
 	private function removeListeners():Void {
 		removeEventListener(Event.ENTER_FRAME, recoveryTick);
+		removeEventListener(Event.ENTER_FRAME, jetPackTick);
 	}
 
 	public function remove():Void {
@@ -570,6 +605,33 @@ class Character extends Sprite {
 		if (onClearParticleEmitter != null) {
 			onClearParticleEmitter();
 		}
+	}
+
+	private function jetPackTick(_:Event):Void {
+		var jetPack = setCurrentJetPackFrame("on");
+		if (jetPack == null) {
+			return;
+		}
+		var anim = Std.downcast(jetPack.getChildByTimelineName("anim"), PR2MovieClip);
+		if (anim == null) {
+			return;
+		}
+		var fire1 = anim.getChildByTimelineName("fire1");
+		var fire2 = anim.getChildByTimelineName("fire2");
+		if (fire1 != null) {
+			fire1.scaleY = jetFlameRandom() * 0.5 + 0.5;
+		}
+		if (fire2 != null) {
+			fire2.alpha = jetFlameRandom() * 0.5 + 0.5;
+		}
+	}
+
+	private function setCurrentJetPackFrame(frame:String):Null<PR2MovieClip> {
+		var jetPack = state == null ? null : jetPackForState(state + "Anim");
+		if (jetPack != null) {
+			jetPack.gotoAndStop(frame);
+		}
+		return jetPack;
 	}
 
 	// ---- helpers ---------------------------------------------------------

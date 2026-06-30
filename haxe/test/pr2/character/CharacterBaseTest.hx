@@ -17,6 +17,7 @@ class CharacterBaseTest {
 		testHatStack();
 		testGetHighestHat();
 		testHeldWeaponDisplay();
+		testJetPackFlameLifecycle();
 		testBlockTouchProbes();
 		testParticleEmitterLifecycle();
 		testCharacterSoundRequests();
@@ -113,6 +114,47 @@ class CharacterBaseTest {
 		var weapon = Std.downcast(state.getChildByTimelineName("weapon"), PR2MovieClip);
 		assertTrue(weapon != null, '$stateName exposes weapon clip');
 		return weapon;
+	}
+
+	private static function testJetPackFlameLifecycle():Void {
+		var c = new Character();
+		c.setItem(6);
+		var values = [0.1, 0.9, 0.2, 0.8];
+		var index = 0;
+		c.setJetFlameRandomForTest(function() return values[index++]);
+
+		var jetPack = c.jetPackForState("standAnim");
+		assertTrue(jetPack != null, "Jet Pack weapon exposes the jetPack state clip");
+		assertEquals(1, jetPack.currentFrame, "Jet Pack starts on the off frame");
+
+		c.beginJet();
+		assertEquals(6, jetPack.currentFrame, "beginJet switches the current Jet Pack to the on frame");
+		c.dispatchEvent(new Event(Event.ENTER_FRAME));
+
+		var anim = Std.downcast(jetPack.getChildByTimelineName("anim"), PR2MovieClip);
+		assertTrue(anim != null, "Jet Pack on frame exposes the flame anim");
+		var fire1 = anim.getChildByTimelineName("fire1");
+		var fire2 = anim.getChildByTimelineName("fire2");
+		assertTrue(fire1 != null, "Jet Pack flame exposes fire1");
+		assertTrue(fire2 != null, "Jet Pack flame exposes fire2");
+		assertClose(0.55, fire1.scaleY, "jetPackTick jitters fire1 scaleY with Flash's 0.5-1.0 range");
+		assertClose(0.95, fire2.alpha, "jetPackTick jitters fire2 alpha with Flash's 0.5-1.0 range");
+
+		c.changeState("run");
+		var runJetPack = c.jetPackForState("runAnim");
+		c.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(6, runJetPack.currentFrame, "jetPackTick keeps the active state's Jet Pack on after state changes");
+
+		c.endJet();
+		var resetClips = 0;
+		for (stateName in CharacterDisplay.STATE_NAMES) {
+			var stateJetPack = c.jetPackForState(stateName);
+			if (stateJetPack != null) {
+				resetClips++;
+				assertEquals(1, stateJetPack.currentFrame, '$stateName Jet Pack returns to the off frame');
+			}
+		}
+		assertTrue(resetClips > 1, "endJet resets every authored Jet Pack state clip that exists");
 	}
 
 	private static function testBlockTouchProbes():Void {
