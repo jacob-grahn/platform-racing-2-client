@@ -12,6 +12,7 @@ class LevelInfoPopupTest {
 
 	public static function main():Void {
 		testLinkRouteOpensAuthoredShell();
+		testApplyReturnDataPopulatesAuthoredFields();
 		testSingletonFadeOut();
 		closeAll();
 		trace('LevelInfoPopupTest passed $assertions assertions');
@@ -27,6 +28,36 @@ class LevelInfoPopupTest {
 		assertEquals("sentinel", LobbyPopups.lastRequest, "level route is no longer record-only");
 		assertEquals(true, LobbyArt.findByName(popup, "loading").visible, "loading graphic remains visible");
 		assertEquals(false, LobbyArt.findByName(popup, "levelInfo").visible, "data panel stays hidden until data port lands");
+		popup.remove();
+	}
+
+	private static function testApplyReturnDataPopulatesAuthoredFields():Void {
+		closeAll();
+		var popup = new LevelInfoPopup(77);
+		popup.applyReturnData({
+			title: "Hat Factory",
+			note: "Find the hidden hat.",
+			version: 12345,
+			play_count: 987654,
+			min_rank: 15,
+			user_name: "Jiggmin",
+			user_group: "2,1",
+			rating: 3.75,
+			time: 1605484800,
+			song: "2",
+			gameMode: "hat"
+		});
+		assertEquals(false, LobbyArt.findByName(popup, "loading").visible, "loading graphic hides after data");
+		assertEquals(true, LobbyArt.findByName(popup, "levelInfo").visible, "data panel shows after data");
+		assertEquals("Hat Factory", LobbyArt.text(popup, "title").text, "title populates");
+		assertEquals("Find the hidden hat.", LobbyArt.text(popup, "note").text, "note populates");
+		assertEquals("12,345", LobbyArt.text(popup, "version").text, "version is comma-formatted");
+		assertEquals("987,654", LobbyArt.text(popup, "plays").text, "plays is comma-formatted");
+		assertEquals("15", LobbyArt.text(popup, "minRank").text, "min rank populates");
+		assertEquals("15/Nov/2020", LobbyArt.text(popup, "updated").text, "updated uses Flash short date");
+		assertEquals("Hat Attack", popup.gameMode, "game mode is normalized");
+		assertEquals("Code - Stefano Maccarelli", popup.song, "song id is named");
+		assertEquals(0.75, LobbyArt.findByName(popup, "bar").scaleX, "rating star bar scales");
 		popup.remove();
 	}
 
