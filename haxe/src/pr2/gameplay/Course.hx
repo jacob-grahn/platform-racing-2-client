@@ -180,6 +180,7 @@ class Course extends Sprite {
 		player.onPlayCharacterSound = playCharacterSound;
 		player.onStartJetSound = startJetSound;
 		player.onStopJetSound = stopJetSound;
+		player.setGameMode(config.gameMode);
 		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
@@ -683,11 +684,14 @@ class Course extends Sprite {
 	// removes its minimap marker, while every other mode emits finish_race once and
 	// lets the host page surface the finished page.
 	private function maybeHandleLocalFinish(state:LocalPlayerDebugState):Void {
-		if (localFinishHandled || !state.finished || state.finishBlockId == null) {
+		if (localFinishHandled || !state.finished) {
+			return;
+		}
+		if (config.gameMode == "objective" && state.finishBlockId == null) {
 			return;
 		}
 		localFinishHandled = true;
-		var finishId = state.finishBlockId;
+		var finishId = state.finishBlockId == null ? -1 : state.finishBlockId;
 		var finishX = state.finishX == null ? 0 : state.finishX;
 		var finishY = state.finishY == null ? 0 : state.finishY;
 		if (config.gameMode == "objective") {
@@ -776,7 +780,7 @@ class Course extends Sprite {
 		if (state == null) {
 			return;
 		}
-		if (state.mode != "deathmatch") {
+		if (config.gameMode != "deathmatch") {
 			return;
 		}
 		if (state.lives != displayedLives) {

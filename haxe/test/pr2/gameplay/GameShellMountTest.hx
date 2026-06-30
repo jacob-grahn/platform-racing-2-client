@@ -2,7 +2,9 @@ package pr2.gameplay;
 
 import haxe.crypto.Md5;
 import openfl.events.Event;
+import pr2.character.CharacterState;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
+import pr2.harness.LocalPlayerDebugState;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -61,9 +63,22 @@ class GameShellMountTest {
 		assertEquals(true, course.levelRenderer == null, "level renderer torn down");
 		assertEquals(true, course.localCharacter == null, "local character torn down");
 
+		testDeathmatchHeartsShowInitialLives();
 		testFinishDrawingReadinessEmission();
 
 		trace('GameShellMountTest passed $assertions assertions');
+	}
+
+	private static function testDeathmatchHeartsShowInitialLives():Void {
+		var course = buildCourse("deathmatch");
+		assertEquals(true, course.hearts.visible, "deathmatch course shows hearts immediately");
+		assertEquals(3, course.hearts.getHeartCount(), "deathmatch course starts with three lives");
+		LobbySocket.resetSent();
+		var zeroLives = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Bumped, null, "hurt", null, null, null, 50, 50,
+			50, 0, true, null, null, null, 0);
+		@:privateAccess course.maybeHandleLocalFinish(zeroLives);
+		assertEquals("finish_race`-1`0`0", LobbySocket.lastSent(), "deathmatch zero lives emits default finish payload");
+		course.remove();
 	}
 
 	private static function testRemoteParentLayerSwitch(course:Course):Void {
@@ -96,7 +111,7 @@ class GameShellMountTest {
 		};
 	}
 
-	private static function buildCourse():Course {
+	private static function buildCourse(gameMode:String = "race"):Course {
 		var dataString = "m3`e0c8b8`334;335;11,1;0;12,0;1;0,1;0";
 		var level = ServerLevelDecoder.decode(dataString);
 
@@ -106,7 +121,7 @@ class GameShellMountTest {
 		vars.set("song", "song1");
 		vars.set("gravity", "2.5");
 		vars.set("max_time", "120");
-		vars.set("gameMode", "race");
+		vars.set("gameMode", gameMode);
 		vars.set("items", "all");
 		vars.set("data", dataString);
 

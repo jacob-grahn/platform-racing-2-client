@@ -104,8 +104,12 @@ time:
 - [ ] Port hats and hat powers.
 - [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
-- [ ] Port the deathmatch hearts gameplay behavior (the `Hearts` HUD widget is
+- [x] Port the deathmatch hearts gameplay behavior (the `Hearts` HUD widget is
   already ported).
+  Done: `LocalPlayerController` now tracks deathmatch mode, clamps lives through
+  the Flash `setLife` path, removes one life on hurt recovery, finishes the local
+  player at zero lives, and `Course` shows/syncs the authored hearts stack from
+  the level game mode. Covered by deterministic controller and Course HUD tests.
 - [ ] Port captcha.
 - [ ] Port rank progression.
 - [ ] Port race modes.

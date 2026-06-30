@@ -36,6 +36,7 @@ class LocalPlayerControllerTest {
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
+		testDeathmatchMineHitRemovesLifeAndFinishesAtZero();
 		testBumpingItemBlockGrantsConfiguredItem();
 		testBumpingItemBlockEmitsStarSound();
 		testEmptyOptionsItemBlockGrantsAllowedItem();
@@ -553,6 +554,26 @@ class LocalPlayerControllerTest {
 		var state = player.debugState();
 		assertEquals(false, state.grounded, "removed mine no longer supports player");
 		assertBelow(90, state.y, "player falls through removed mine block");
+	}
+
+	private static function testDeathmatchMineHitRemovesLifeAndFinishesAtZero():Void {
+		var player = new LocalPlayerController(delayedMineBlockLevel());
+		player.setGameMode("deathmatch");
+		player.setLife(1);
+
+		var hitMine = false;
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput());
+			if (player.debugState().touchedBlockType == "mine") {
+				hitMine = true;
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals(true, hitMine, "deathmatch player reaches mine");
+		assertEquals(0, state.lives, "deathmatch hurt removes one life");
+		assertEquals(true, state.finished, "deathmatch zero lives finishes the player");
 	}
 
 	private static function testBumpingItemBlockGrantsConfiguredItem():Void {
@@ -1417,6 +1438,24 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, BlockType.Mine),
 				new LevelBlock(3, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function delayedMineBlockLevel():FixtureLevel {
+		return new FixtureLevel(
+			"delayed-mine-block",
+			"Delayed Mine Block",
+			5,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 1),
+			new TilePosition(3, 4),
+			[
+				new LevelBlock(2, 3, BlockType.Mine),
+				new LevelBlock(3, 4, BlockType.Finish)
 			]
 		);
 	}

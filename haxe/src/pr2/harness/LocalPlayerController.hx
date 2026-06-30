@@ -63,6 +63,7 @@ class LocalPlayerController {
 	public var finishY(default, null):Null<Int> = null;
 	public var lives(default, null):Int = 3;
 	public var courseTime(default, null):Int = 120;
+	public var gameMode(default, null):String = "race";
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -179,6 +180,17 @@ class LocalPlayerController {
 	// LevelConfig.allowedItems). Empty means the level grants no items.
 	public function setAllowedItems(items:Array<Int>):Void {
 		allowedItems = items != null ? items : [];
+	}
+
+	public function setGameMode(mode:String):Void {
+		gameMode = mode == "eggs" ? "egg" : (mode == null || mode == "" ? "race" : mode);
+		if (gameMode == "deathmatch") {
+			setLife(3);
+		}
+	}
+
+	public function setLife(value:Int):Void {
+		lives = Std.int(clamp(value, 0, 15));
 	}
 
 	private function get_facingScaleX():Int {
@@ -589,7 +601,7 @@ class LocalPlayerController {
 			case BlockType.Sad:
 				useStatSupply(block, true);
 			case BlockType.Heart:
-				if (useSupply(block)) lives = Std.int(Math.min(15, lives + 1));
+				if (useSupply(block)) setLife(lives + 1);
 			case BlockType.Time:
 				if (useSupply(block)) courseTime += 10;
 			case BlockType.Crumble:
@@ -798,8 +810,19 @@ class LocalPlayerController {
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
 		if (mode != MODE_FREEZE) {
 			setMode(MODE_HURT);
-			if (hurtFramesRemaining <= 0) {
-				hurtFramesRemaining = HURT_FRAMES;
+			beginHurtRecovery();
+		}
+	}
+
+	private function beginHurtRecovery():Void {
+		if (hurtFramesRemaining > 0) {
+			return;
+		}
+		hurtFramesRemaining = HURT_FRAMES;
+		if (gameMode == "deathmatch") {
+			setLife(lives - 1);
+			if (lives <= 0) {
+				finished = true;
 			}
 		}
 	}

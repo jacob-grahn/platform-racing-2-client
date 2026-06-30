@@ -175,6 +175,11 @@ class LocalCharacter extends Character {
 		controller.setAllowedItems(items);
 	}
 
+	public function setGameMode(mode:String):Void {
+		controller.setGameMode(mode);
+		syncFromController();
+	}
+
 	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
 		controller.setStats(speed, acceleration, jump);
 		syncFromController();
