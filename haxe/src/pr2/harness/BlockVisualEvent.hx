@@ -6,6 +6,7 @@ enum BlockVisualEventKind {
 	BrickPieces;
 	CrumblePieces;
 	MinePieces;
+	WaterRipple;
 	BlockBumpSound;
 	ItemBlockSound;
 	SuperJumpSound;

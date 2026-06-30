@@ -2,6 +2,7 @@ package pr2.gameplay;
 
 import haxe.crypto.Md5;
 import openfl.events.Event;
+import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -37,8 +38,14 @@ class GameShellMountTest {
 
 		assertEquals(true, course.levelRenderer != null, "level renderer mounted");
 		assertEquals(true, course.characterLayer != null, "character layer present");
+		assertEquals(true, course.backCharacterLayer != null, "back character layer present");
 		assertEquals(true, course.localCharacter != null, "local character bridge mounted");
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
+		assertBelow(course.levelRenderer.getChildIndex(course.backCharacterLayer), course.levelRenderer.getChildIndex(course.characterLayer),
+			"back character layer renders below front character layer");
+		assertBelow(course.levelRenderer.getChildIndex(course.backCharacterLayer), course.levelRenderer.numChildren - 1,
+			"back character layer is below the level foreground");
+		testRemoteParentLayerSwitch(course);
 
 		// With no chat interceptor supplied, the shell does not swallow chat.
 		assertEquals(false, course.handleRaceChatLine("/debug"), "no interceptor leaves chat unhandled");
@@ -57,6 +64,36 @@ class GameShellMountTest {
 		testFinishDrawingReadinessEmission();
 
 		trace('GameShellMountTest passed $assertions assertions');
+	}
+
+	private static function testRemoteParentLayerSwitch(course:Course):Void {
+		var remote = course.createRemoteCharacter(remoteInit(9));
+		assertEquals(course.characterLayer, remote.parent, "remote character starts in front character layer");
+		remote.onParentChange("backBackground");
+		assertEquals(course.backCharacterLayer, remote.parent, "remote water parent moves behind blocks");
+		remote.onParentChange("frontBackground");
+		assertEquals(course.characterLayer, remote.parent, "remote front parent returns above blocks");
+		course.removeRemoteCharacter(9);
+	}
+
+	private static function remoteInit(tempId:Int):RemoteCharacterInit {
+		return {
+			tempId: tempId,
+			userName: "Remote",
+			hatId: 1,
+			headId: 1,
+			bodyId: 1,
+			feetId: 1,
+			group: "g",
+			hatColor: 1,
+			hatColor2: 2,
+			headColor: 3,
+			headColor2: 4,
+			bodyColor: 5,
+			bodyColor2: 6,
+			feetColor: 7,
+			feetColor2: 8
+		};
 	}
 
 	private static function buildCourse():Course {
@@ -126,6 +163,13 @@ class GameShellMountTest {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertBelow(actual:Float, expectedUpperBound:Float, message:String):Void {
+		assertions++;
+		if (!(actual < expectedUpperBound)) {
+			throw '$message: expected $actual to be below $expectedUpperBound';
 		}
 	}
 }

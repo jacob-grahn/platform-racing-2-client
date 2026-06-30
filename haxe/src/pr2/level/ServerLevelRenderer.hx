@@ -274,6 +274,20 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
+	public function attachBackCharacterLayer(layer:Sprite):Void {
+		if (layer.parent == this) {
+			return;
+		}
+		addChildAt(layer, getChildIndex(worldContainer));
+	}
+
+	public function attachFrontCharacterLayer(layer:Sprite):Void {
+		if (layer.parent == this) {
+			return;
+		}
+		addChild(layer);
+	}
+
 	public function animateArrow(worldX:Int, worldY:Int):Void {
 		var key = blockKey(worldX, worldY);
 		var arrow = arrowDisplays.get(key);

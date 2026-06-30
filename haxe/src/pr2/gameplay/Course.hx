@@ -86,6 +86,7 @@ class Course extends Sprite {
 	private final input:LocalPlayerInput = new LocalPlayerInput();
 
 	public var levelRenderer(default, null):ServerLevelRenderer;
+	public var backCharacterLayer(default, null):Sprite;
 	public var characterLayer(default, null):Sprite;
 	public var localCharacter(default, null):LocalCharacter;
 	public var remoteCharacters(default, null):Map<Int, RemoteCharacter> = new Map();
@@ -168,7 +169,9 @@ class Course extends Sprite {
 
 		characterLayer = new Sprite();
 		characterLayer.addChild(player);
-		levelRenderer.addChild(characterLayer);
+		backCharacterLayer = new Sprite();
+		levelRenderer.attachBackCharacterLayer(backCharacterLayer);
+		levelRenderer.attachFrontCharacterLayer(characterLayer);
 
 		camera = new CameraFollow(0, 0);
 		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
@@ -297,6 +300,9 @@ class Course extends Sprite {
 		if (remoteBlockActivation != null) {
 			remote.onBlockTouch = remoteBlockActivation.touch;
 		}
+		remote.onParentChange = function(parentLayer:String):Void {
+			moveCharacterToLayer(remote, parentLayer);
+		};
 		remoteCharacters.set(init.tempId, remote);
 		playerArray[init.tempId] = remote;
 		if (characterLayer != null) {
@@ -628,6 +634,8 @@ class Course extends Sprite {
 					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
 				case MinePieces:
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
+				case WaterRipple:
+					levelRenderer.triggerWaterRipple(worldXOf(event), worldYOf(event));
 				case BlockBumpSound:
 					playBlockBumpSound(event);
 				case ItemBlockSound:
@@ -731,9 +739,17 @@ class Course extends Sprite {
 			playerDot.y = worldY;
 		}
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
+		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
 		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX);
 		player.display.setState(state.characterState.toClipName());
 		player.display.advanceOneFrame();
+	}
+
+	private function moveCharacterToLayer(character:Character, parentLayer:String):Void {
+		var target = parentLayer == "backBackground" ? backCharacterLayer : characterLayer;
+		if (target != null && character.parent != target) {
+			target.addChild(character);
+		}
 	}
 
 	private function onKeyDown(event:KeyboardEvent):Void {
@@ -815,6 +831,7 @@ class Course extends Sprite {
 		playerArray = null;
 		canSpectate = false;
 		characterLayer = null;
+		backCharacterLayer = null;
 		remoteBlockActivation = null;
 		remoteCharacters = null;
 		if (parent != null) {

@@ -27,6 +27,7 @@ class LocalPlayerControllerTest {
 		testIceBlockReducesNextFrameAcceleration();
 		testArrowStandEffectsMatchAs3Deltas();
 		testFallingIntoWaterEntersSwimMode();
+		testWaterTouchEmitsRippleVisual();
 		testWaterDampsSinkingAndPaddlesUp();
 		testLeavingWaterReturnsToLand();
 		testSafetyBlockReturnsPlayerToLastSafeSpot();
@@ -332,6 +333,28 @@ class LocalPlayerControllerTest {
 		assertEquals("water", state.mode, "debug state reports water mode");
 		assertEquals("swim", state.animation, "swim animation while in water");
 		assertEquals(false, state.grounded, "submerged player is not grounded");
+	}
+
+	private static function testWaterTouchEmitsRippleVisual():Void {
+		var player = new LocalCharacter(waterPoolLevel());
+		var emittedRipple = false;
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput());
+			for (event in player.consumeBlockVisualEvents()) {
+				if (Type.enumConstructor(event.kind) == "WaterRipple") {
+					emittedRipple = true;
+					assertEquals(2, event.tileX, "water ripple event uses touched tile x");
+					assertEquals(true, event.tileY >= 2 && event.tileY < 10, "water ripple event uses a water tile y");
+					break;
+				}
+			}
+			if (emittedRipple) {
+				break;
+			}
+		}
+
+		assertEquals(true, emittedRipple, "touching water emits the block fade/ripple event");
 	}
 
 	private static function testWaterDampsSinkingAndPaddlesUp():Void {

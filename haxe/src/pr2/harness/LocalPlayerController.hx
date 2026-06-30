@@ -454,6 +454,7 @@ class LocalPlayerController {
 					accelFactor = 0.1;
 				}
 				updateSafeSpot(block, true);
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.WaterRipple, block.x, block.y));
 			case BlockType.Safety:
 				if (standingTileX != block.x || standingTileY < block.y || standingTileY > block.y + 2) {
 					returnToLastSafeSpot();
