@@ -179,7 +179,8 @@ class ServerLevelRendererTest {
 		for (_ in 0...7) {
 			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow animation returns to its stopped first frame");
+		assertEquals(null, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow overlay is removed after the activation animation");
+		assertEquals(1, blockDisplay.numChildren, "arrow block keeps only its basic tile after activation");
 		assertEquals(null, renderer.arrowFrameAt(0, 0), "non-arrow coordinate has no animation frame");
 	}
 

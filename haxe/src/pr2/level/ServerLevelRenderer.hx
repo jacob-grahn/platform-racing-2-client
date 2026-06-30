@@ -87,6 +87,7 @@ class ServerLevelRenderer extends Sprite {
 	private var viewRowMax:Int = 0;
 	private var viewInitialized:Bool = false;
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
+	private final arrowCompletionHandlers:Map<String, Event->Void> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
 	private final artDrawCursors:Array<ArtDrawCursor> = [];
 	private var nextBlockToDraw:Int = 0;
@@ -274,7 +275,8 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function animateArrow(worldX:Int, worldY:Int):Void {
-		var arrow = arrowDisplays.get(blockKey(worldX, worldY));
+		var key = blockKey(worldX, worldY);
+		var arrow = arrowDisplays.get(key);
 		if (arrow == null) {
 			return;
 		}
@@ -282,6 +284,24 @@ class ServerLevelRenderer extends Sprite {
 			arrow.gotoAndPlay(arrow.currentFrame + 1);
 		} else if (arrow.currentFrame > 5) {
 			arrow.gotoAndPlay(arrow.currentFrame - 1);
+		}
+		if (!arrowCompletionHandlers.exists(key)) {
+			var onFrame:Event->Void = null;
+			onFrame = function(_:Event):Void {
+				if (arrow.currentFrame != 1) {
+					return;
+				}
+				arrow.removeEventListener(Event.ENTER_FRAME, onFrame);
+				arrowCompletionHandlers.remove(key);
+				arrowDisplays.remove(key);
+				var pivot = arrow.parent;
+				if (pivot != null && pivot.parent != null) {
+					pivot.parent.removeChild(pivot);
+				}
+				arrow.dispose();
+			};
+			arrowCompletionHandlers.set(key, onFrame);
+			arrow.addEventListener(Event.ENTER_FRAME, onFrame);
 		}
 	}
 
@@ -602,10 +622,16 @@ class ServerLevelRenderer extends Sprite {
 		waterRippleFrames.clear();
 		// Dispose every arrow movie clip, including off-screen ones that culling left
 		// detached from blockLayer so the tree walk below would not reach them.
-		for (arrow in arrowDisplays) {
+		for (key in arrowDisplays.keys()) {
+			var arrow = arrowDisplays.get(key);
+			var handler = arrowCompletionHandlers.get(key);
+			if (handler != null) {
+				arrow.removeEventListener(Event.ENTER_FRAME, handler);
+			}
 			arrow.dispose();
 		}
 		arrowDisplays.clear();
+		arrowCompletionHandlers.clear();
 		disposeAnimatedChildren(this);
 		if (parent != null) {
 			parent.removeChild(this);

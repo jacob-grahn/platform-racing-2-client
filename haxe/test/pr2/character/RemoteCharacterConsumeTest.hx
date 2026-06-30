@@ -1,5 +1,7 @@
 package pr2.character;
 
+import openfl.display.Sprite;
+import openfl.events.Event;
 import pr2.gameplay.MiniMapDot;
 import pr2.gameplay.RemoteBlockActivation;
 import pr2.level.ObjectCodes;
@@ -131,6 +133,15 @@ class RemoteCharacterConsumeTest {
 		remote.setPos((fixture.originTileX * -1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
 		remote.stepFrame();
 		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "remote touch animates arrow block");
+		var world = Std.downcast(renderer.getChildAt(1), Sprite);
+		var blockLayer = Std.downcast(world.getChildAt(0), Sprite);
+		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
+		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
+		var arrowTimeline = pivot.getChildAt(0);
+		for (_ in 0...7) {
+			arrowTimeline.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(null, renderer.arrowFrameAt(arrow.x, arrow.y), "remote arrow activation removes the arrow overlay");
 
 		remote.setPos((fixture.originTileX * -1 + 1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
 		remote.stepFrame();
