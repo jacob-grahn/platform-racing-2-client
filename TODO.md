@@ -28,7 +28,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [ ] sword doesn't work
 - [x] super jump sound doesn't play
 - [x] jump sound doesn't play
-- [ ] block bump sound doesn't play
+- [x] block bump sound doesn't play
 - [x] item block sound doesn't play
 - [ ] probably some other sound effects don't play, they seem to have been missed so far
 - [ ] poof visual effect and sound effect missing when touching a safety net

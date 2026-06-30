@@ -53,6 +53,8 @@ class Course extends Sprite {
 	static inline var JUMP_SOUND:String = "assets/audio/sfx/sound552.mp3";
 	// SuperJumpSound -> sound913 (AssetCatalog DOMSoundItem).
 	static inline var SUPER_JUMP_SOUND:String = "assets/audio/sfx/sound913.mp3";
+	// ThumpSound -> sound448 (AssetCatalog DOMSoundItem), used by Block.hit.
+	static inline var BLOCK_BUMP_SOUND:String = "assets/audio/sfx/sound448.mp3";
 	// StarSound -> sound452 (AssetCatalog DOMSoundItem), used by ItemBlock.useSupply.
 	static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
 
@@ -626,11 +628,20 @@ class Course extends Sprite {
 					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
 				case MinePieces:
 					showBlockPieces(event, "MinePieceGraphic", 30, 30, 50);
+				case BlockBumpSound:
+					playBlockBumpSound(event);
 				case ItemBlockSound:
 					playItemBlockSound();
 				case SuperJumpSound:
 					playSuperJumpSound();
 			}
+		}
+	}
+
+	private function playBlockBumpSound(event:BlockVisualEvent):Void {
+		if (Assets.exists(BLOCK_BUMP_SOUND)) {
+			var offset = levelRenderer.cameraOffset();
+			SoundEffects.playGameSound(Assets.getSound(BLOCK_BUMP_SOUND), worldXOf(event), worldYOf(event), offset.x, offset.y, 0.9);
 		}
 	}
 

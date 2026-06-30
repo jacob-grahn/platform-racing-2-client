@@ -536,11 +536,14 @@ class LocalPlayerControllerTest {
 
 		player.step(new LocalPlayerInput(false, false, true));
 		var events = player.consumeBlockVisualEvents();
-		assertEquals(1, events.length, "used item block emits one sound event");
-		assertEquals("ItemBlockSound", Std.string(events[0].kind), "item block uses StarSound event");
+		assertEquals(2, events.length, "used item block emits thump then item sound events");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "item block first uses base ThumpSound event");
+		assertEquals("ItemBlockSound", Std.string(events[1].kind), "item block then uses StarSound event");
 
 		player.step(new LocalPlayerInput(false, false, true));
-		assertEquals(0, player.consumeBlockVisualEvents().length, "depleted item block does not replay sound");
+		var depletedEvents = player.consumeBlockVisualEvents();
+		assertEquals(1, depletedEvents.length, "depleted item block still emits base thump");
+		assertEquals("BlockBumpSound", Std.string(depletedEvents[0].kind), "depleted item block does not replay StarSound");
 	}
 
 	// An item block with empty options means "any of the level's allowed items"
@@ -999,9 +1002,10 @@ class LocalPlayerControllerTest {
 		var level = supplyBlockLevel(BlockType.Brick);
 		var player = bumpSupply(level, BlockType.Brick);
 		var visualEvents = player.consumeBlockVisualEvents();
-		assertEquals(1, visualEvents.length, "broken brick emits one piece event");
-		assertEquals("BrickPieces", Std.string(visualEvents[0].kind), "broken brick uses brick pieces");
-		assertEquals(6, visualEvents[0].count, "broken brick emits six pieces");
+		assertEquals(2, visualEvents.length, "broken brick emits thump and piece events");
+		assertEquals("BlockBumpSound", Std.string(visualEvents[0].kind), "broken brick uses base ThumpSound event");
+		assertEquals("BrickPieces", Std.string(visualEvents[1].kind), "broken brick uses brick pieces");
+		assertEquals(6, visualEvents[1].count, "broken brick emits six pieces");
 		player.step(new LocalPlayerInput(false, false, true));
 		assertEquals(false, player.debugState().touchedBlockType == "brick", "broken brick no longer collides");
 	}

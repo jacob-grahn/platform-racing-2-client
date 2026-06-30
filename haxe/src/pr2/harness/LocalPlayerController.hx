@@ -507,7 +507,19 @@ class LocalPlayerController {
 		y = rotatedBlockPos(block).y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
 		vy *= -0.25;
 		jumpVelBoost = 0;
+		if (bumpPlaysThump(block)) {
+			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y));
+		}
 		applyBumpEffect(block, input, bumpForce);
+	}
+
+	private function bumpPlaysThump(block:LevelBlock):Bool {
+		return switch (block.type) {
+			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
+				false;
+			default:
+				true;
+		}
 	}
 
 	private function onLeftHit(block:LevelBlock):Void {
