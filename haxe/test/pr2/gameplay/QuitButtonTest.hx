@@ -22,6 +22,7 @@ class QuitButtonTest {
 		testSpaceQuitsWhenDone();
 		testGlowControls();
 		testGamePageQuitFlow();
+		testGamePageAwardAndExpCommands();
 		testGamePagePrizeCommands();
 		testGamePageLuxCommand();
 		testGamePageCowboyMode();
@@ -131,6 +132,29 @@ class QuitButtonTest {
 
 		game.remove();
 		assertEquals(true, PrizePopup.instance.fadeOutStarted, "GamePage removal fades out the active prize popup");
+		closeAll();
+	}
+
+	private static function testGamePageAwardAndExpCommands():Void {
+		LobbySocket.resetSent();
+		var game = new GamePage(12345, 7);
+
+		game.award(["First Place", "+50"]);
+		assertEquals(0, Popup.getOpen().length, "award before finish is queued");
+		game.setExpGain(10, 60, 100);
+
+		assertEquals("", LobbySocket.lastSent(), "setExpGain does not emit a quit command");
+		assertEquals(true, game.playerDone, "setExpGain marks the player done");
+		assertEquals(1, Popup.getOpen().length, "setExpGain opens the finish popup");
+		var finish = Std.downcast(Popup.getOpen()[0], FinishedPage);
+		assertEquals("First Place", LobbyArt.text(finish, "bonus1").text, "queued award fills the finish popup");
+		assertEquals("+50", LobbyArt.text(finish, "exp1").text, "queued award exp fills the finish popup");
+		assertEquals("+ 50", LobbyArt.text(finish, "expTotal").text, "setExpGain fills the exp total");
+
+		game.award(["Speed Bonus", "+20"]);
+		assertEquals("Speed Bonus", LobbyArt.text(finish, "bonus2").text, "award after finish updates the open popup");
+
+		game.remove();
 		closeAll();
 	}
 

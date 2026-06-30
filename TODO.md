@@ -112,6 +112,9 @@ time:
   the level game mode. Covered by deterministic controller and Course HUD tests.
 - [ ] Port captcha.
 - [ ] Port rank progression.
+  - [x] Wire in-race `award` and `setExpGain` commands into the authored
+    `FinishedPage` overlay: awards queue before the popup exists, later awards
+    update it live, and exp gain marks the player done without emitting a quit.
 - [ ] Port race modes.
 
 ### Physics 1:1 (preserve original quirks/bugs)

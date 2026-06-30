@@ -54,6 +54,10 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingBeginRace:Bool = false;
 	private var pendingEggSeed:Null<Int>;
 	private var pendingEggAdds:Array<Int> = [];
+	private var pendingAwards:Array<Array<String>> = [];
+	private var expOld:Int = 0;
+	private var expNew:Int = 0;
+	private var expToRank:Int = 0;
 	private var specialEvent:Null<SpecialEvent>;
 	private var hatCountdownTimer:Null<haxe.Timer>;
 	private var cowboyModes:Array<CowboyMode> = [];
@@ -259,8 +263,24 @@ class GamePage extends Page implements GameCommandDelegate {
 		course.beginRace();
 	}
 
-	public function award(args:Array<String>):Void {}
-	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {}
+	public function award(args:Array<String>):Void {
+		pendingAwards.push(args);
+		if (finishedPage != null) {
+			applyAwardToFinishedPage(args);
+		}
+	}
+
+	public function setExpGain(expOld:Int, expNew:Int, expToRank:Int):Void {
+		this.expOld = expOld;
+		this.expNew = expNew;
+		this.expToRank = expToRank;
+		var finishedPageAlreadyOpen = finishedPage != null;
+		markPlayerDone();
+		maybeShowFinishedPage();
+		if (finishedPageAlreadyOpen && finishedPage != null) {
+			finishedPage.setExpGain(this.expOld, this.expNew, this.expToRank);
+		}
+	}
 	public function setLuxGain(amount:Int):Void {
 		luxPop = new LuxPopup(amount);
 	}
@@ -379,14 +399,9 @@ class GamePage extends Page implements GameCommandDelegate {
 	private function quitGame():Void {
 		if (!playerDone) {
 			LobbySocket.write("quit_race`");
-			playerDone = true;
 		}
-		if (finishedPage == null) {
-			if (quitButton != null) {
-				quitButton.stopGlow();
-			}
-			finishedPage = new FinishedPage(levelId, returnToLobby);
-		}
+		markPlayerDone();
+		maybeShowFinishedPage();
 		// The course keeps ticking under the finished overlay; tell it the race is
 		// over so its per-frame phase report does not clobber "finished".
 		if (course != null) {
@@ -397,20 +412,50 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	// Course invokes this once the local player bumps a finish block (race-style
 	// modes). It emits finish_race itself; here we mark the player done, glow the
-	// quit button, and show the finished page (Flash Game.finish + the server's
-	// maybeShowFinishedPage, which the award/exp command stubs don't yet drive).
+	// quit button, and show the finished page (Flash Game.finish +
+	// maybeShowFinishedPage).
 	private function onLocalFinish(_:pr2.harness.LocalPlayerDebugState):Void {
 		if (playerDone) {
 			return;
 		}
-		playerDone = true;
+		markPlayerDone();
 		if (quitButton != null) {
 			quitButton.startGlow();
 		}
-		if (finishedPage == null) {
-			finishedPage = new FinishedPage(levelId, returnToLobby);
-		}
+		maybeShowFinishedPage();
 		pr2.app.DebugSignal.set("race-phase", "finished");
+	}
+
+	private function markPlayerDone():Void {
+		playerDone = true;
+	}
+
+	private function maybeShowFinishedPage():Void {
+		if (finishedPage != null) {
+			return;
+		}
+		markPlayerDone();
+		if (quitButton != null) {
+			quitButton.stopGlow();
+		}
+		finishedPage = new FinishedPage(levelId, returnToLobby);
+		for (awardArgs in pendingAwards) {
+			applyAwardToFinishedPage(awardArgs);
+		}
+		if (expToRank != 0) {
+			finishedPage.setExpGain(expOld, expNew, expToRank);
+		}
+	}
+
+	private function applyAwardToFinishedPage(args:Array<String>):Void {
+		if (finishedPage == null || args == null) {
+			return;
+		}
+		finishedPage.award(arg(args, 0), arg(args, 1));
+	}
+
+	private static function arg(args:Array<String>, index:Int):String {
+		return index >= 0 && index < args.length && args[index] != null ? args[index] : "";
 	}
 
 	private function returnToLobby():Void {
