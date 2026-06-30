@@ -20,6 +20,13 @@ typedef ParticleEmitterRequest = {
 	final target:Character;
 }
 
+typedef CharacterSoundRequest = {
+	final kind:String;
+	final x:Float;
+	final y:Float;
+	final volume:Float;
+}
+
 /**
 	Faithful port of the `character.Character` base class (`flash/character/Character.as`)
 	— the shared state for both the player-controlled `LocalCharacter` (B2/B3) and
@@ -119,6 +126,7 @@ class Character extends Sprite {
 	// Injectable side-effects deferred from B1 (see class doc). Defaulted to
 	// no-ops so the deterministic base needs no audio/particle subsystem.
 	public var onPlayJumpSound:Null<Float->Float->Void> = null;
+	public var onPlayCharacterSound:Null<CharacterSoundRequest->Void> = null;
 	public var onStartParticleEmitter:Null<ParticleEmitterRequest->Void> = null;
 	public var onClearParticleEmitter:Null<Void->Void> = null;
 
@@ -477,16 +485,25 @@ class Character extends Sprite {
 	}
 
 	/** Become invincible for `frames` frames and start Flash's rainbow-star emitter. */
+	public function gainHeart():Void {
+		playCharacterSound("bumpHappy", 0.75);
+		becomeInvincible(135);
+	}
+
 	public function becomeInvincible(frames:Int):Void {
 		beginRecovery(frames);
 		setParticleEmitter("rainbowStar", 33, 5000);
 	}
 
 	public function beginSparkles(durationMs:Int = 5000):Void {
+		playCharacterSound("speedUp", 1);
 		setParticleEmitter("sparkle", 33, durationMs);
 	}
 
 	public function endSparkles(used:Bool = false):Void {
+		if (used) {
+			playCharacterSound("slowDown", 1);
+		}
 		clearParticleEmitter();
 	}
 
@@ -536,6 +553,12 @@ class Character extends Sprite {
 		activeParticleEmitter = {kind: kind, intervalMs: intervalMs, durationMs: durationMs, target: this};
 		if (onStartParticleEmitter != null) {
 			onStartParticleEmitter(activeParticleEmitter);
+		}
+	}
+
+	private function playCharacterSound(kind:String, volume:Float):Void {
+		if (onPlayCharacterSound != null) {
+			onPlayCharacterSound({kind: kind, x: x, y: y, volume: volume});
 		}
 	}
 

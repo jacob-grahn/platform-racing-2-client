@@ -104,8 +104,10 @@ class RemoteCharacterConsumeTest {
 		var handler = new CommandHandler();
 		var remote = new RemoteCharacter(3, null, "Remote", 1, 1, 1, 1, "0", handler);
 		var hearts = 0;
+		var sounds:Array<String> = [];
 		var stingArgs = "";
 		remote.onHeartGain = function() hearts++;
+		remote.onPlayCharacterSound = function(request) sounds.push(request.kind + ":" + request.volume);
 		remote.onSting = function(args) stingArgs = args.join(",");
 
 		handler.dispatch("heart3", []);
@@ -113,6 +115,7 @@ class RemoteCharacterConsumeTest {
 		handler.dispatch("setHats3", ["6", "16711680", "-1"]);
 
 		assertEquals(1, hearts, "heart command reaches hook");
+		assertEquals("bumpHappy:0.75", sounds.join(","), "heart command plays Flash heart sound");
 		assertEquals("1,70,90", stingArgs, "sting command reaches hook args");
 		assertEquals(6, remote.hat1, "setHats command applies hat stack");
 		assertTrue(remote.hasHatFlag(Character.CROWN), "setHats command raises special hat flags");

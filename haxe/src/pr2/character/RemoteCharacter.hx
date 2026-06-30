@@ -114,6 +114,7 @@ class RemoteCharacter extends Character {
 	public function setScaleY(_:Float):Void {}
 
 	public function heart(_:Array<String>):Void {
+		gainHeart();
 		if (onHeartGain != null) {
 			onHeartGain();
 		}

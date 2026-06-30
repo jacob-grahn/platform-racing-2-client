@@ -22,6 +22,7 @@ class CharacterLifecycleTest {
 		testLocalAndRemoteLifecycle();
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();
+		testCharacterEffectSounds();
 		testLocalSwordEmitsSlashEffect();
 		testEggRoundCommandLifecycle();
 		testHatReturnToStartLifecycle();
@@ -136,6 +137,27 @@ class CharacterLifecycleTest {
 		);
 		course.localCharacter.changeState("jump");
 		assertEquals(1, sounds.length, "holding jump does not retrigger the sound every frame");
+		course.remove();
+	}
+
+	private static function testCharacterEffectSounds():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler);
+		var shell = new GameCommandShell(new CourseDelegate(course), handler);
+		shell.install();
+		var sounds:Array<String> = [];
+		course.onPlayCharacterSound = function(request):Void {
+			sounds.push(request.kind + ":" + request.volume + ":" + Math.round(request.x) + ":" + Math.round(request.y));
+		};
+
+		course.localCharacter.beginSparklesNetwork();
+		course.localCharacter.endSparkles(true);
+		handler.dispatch("createRemoteCharacter", ["9", "Rival", "1", "1", "1", "1", "1", "1", "1", "1", "-1", "-1", "-1", "-1", "0"]);
+		handler.dispatch("heart9", []);
+
+		assertEquals("speedUp:1:265:190|slowDown:1:265:190|bumpHappy:0.75:0:0", sounds.join("|"),
+			"Course routes local and remote character effect sounds through spatial playback");
+		shell.remove();
 		course.remove();
 	}
 

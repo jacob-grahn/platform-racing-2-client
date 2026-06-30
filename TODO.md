@@ -73,6 +73,9 @@ still-unported popup/visual side effects.
   [ ] jet-pack flame,
   [ ] `DjinnEffects`
   [ ] per-state sound playback.
+    - [x] Port `Character.gainHeart`, `beginSparkles`, and `endSparkles`
+      playback (`BumpHappySound`, `SpeedUpSound`, `SlowDownSound`) through the
+      live `Course` spatial sound path for local and remote characters.
 - [ ] Port the full `CourseMenu` access/spectate UI around in-place level
   loading (slot selection, password/private flows, loading/cancel/error states)
   from `flash/level_browser`, `flash/page/GamePage.as`, and

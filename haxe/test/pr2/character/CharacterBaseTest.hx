@@ -19,6 +19,7 @@ class CharacterBaseTest {
 		testHeldWeaponDisplay();
 		testBlockTouchProbes();
 		testParticleEmitterLifecycle();
+		testCharacterSoundRequests();
 		testRecoveryAndRemoval();
 		trace('CharacterBaseTest passed $assertions assertions');
 	}
@@ -164,6 +165,25 @@ class CharacterBaseTest {
 		assertEquals(3, clears, "endSparkles clears the active emitter");
 		c.remove();
 		assertEquals(3, clears, "remove does not clear a missing emitter twice");
+	}
+
+	private static function testCharacterSoundRequests():Void {
+		var c = new Character();
+		var sounds:Array<String> = [];
+		c.x = 120;
+		c.y = 240;
+		c.onPlayCharacterSound = function(request) {
+			sounds.push(request.kind + ":" + request.volume + ":" + Math.round(request.x) + ":" + Math.round(request.y));
+		};
+
+		c.beginSparkles();
+		c.endSparkles(false);
+		c.beginSparkles(100);
+		c.endSparkles(true);
+		c.gainHeart();
+
+		assertEquals("speedUp:1:120:240|speedUp:1:120:240|slowDown:1:120:240|bumpHappy:0.75:120:240", sounds.join("|"),
+			"sparkles and heart emit Flash character sound requests");
 	}
 
 	private static function testRecoveryAndRemoval():Void {

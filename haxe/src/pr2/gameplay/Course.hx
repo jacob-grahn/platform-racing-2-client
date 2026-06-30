@@ -58,6 +58,11 @@ class Course extends Sprite {
 	static inline var BLOCK_BUMP_SOUND:String = "assets/audio/sfx/sound448.mp3";
 	// StarSound -> sound452 (AssetCatalog DOMSoundItem), used by ItemBlock.useSupply.
 	static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
+	// BumpHappySound -> sound473 (AssetCatalog DOMSoundItem), used by Character.gainHeart.
+	static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/sound473.mp3";
+	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
+	static inline var SPEED_UP_SOUND:String = "assets/audio/sfx/sound550.mp3";
+	static inline var SLOW_DOWN_SOUND:String = "assets/audio/sfx/sound551.mp3";
 
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
 	public static inline var ITEM_X:Float = 2;
@@ -117,6 +122,7 @@ class Course extends Sprite {
 	// network notification itself is emitted here, mirroring Flash Game.finish.
 	public var onFinish:Null<LocalPlayerDebugState->Void> = null;
 	public var onPlayJumpSound:Null<Float->Float->Void> = null;
+	public var onPlayCharacterSound:Null<pr2.character.Character.CharacterSoundRequest->Void> = null;
 	private var localFinishHandled:Bool = false;
 
 	// Set by GamePage when the player quits (or otherwise leaves the race) so the
@@ -163,6 +169,7 @@ class Course extends Sprite {
 		levelRenderer.setRotationPivot(serverFixture.originTileX * ServerLevelRenderer.TILE_SIZE, serverFixture.originTileY * ServerLevelRenderer.TILE_SIZE);
 		player = new LocalCharacter(serverFixture.fixture);
 		player.onPlayJumpSound = playJumpSound;
+		player.onPlayCharacterSound = playCharacterSound;
 		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
@@ -343,6 +350,7 @@ class Course extends Sprite {
 		if (remoteBlockActivation != null) {
 			remote.onBlockTouch = remoteBlockActivation.touch;
 		}
+		remote.onPlayCharacterSound = playCharacterSound;
 		remote.onParentChange = function(parentLayer:String):Void {
 			moveCharacterToLayer(remote, parentLayer);
 		};
@@ -481,6 +489,23 @@ class Course extends Sprite {
 		if (Assets.exists(JUMP_SOUND)) {
 			var offset = levelRenderer.cameraOffset();
 			SoundEffects.playGameSound(Assets.getSound(JUMP_SOUND), worldX, worldY, offset.x, offset.y, 0.75);
+		}
+	}
+
+	private function playCharacterSound(request:pr2.character.Character.CharacterSoundRequest):Void {
+		if (onPlayCharacterSound != null) {
+			onPlayCharacterSound(request);
+			return;
+		}
+		var path = switch (request.kind) {
+			case "bumpHappy": BUMP_HAPPY_SOUND;
+			case "speedUp": SPEED_UP_SOUND;
+			case "slowDown": SLOW_DOWN_SOUND;
+			default: null;
+		}
+		if (path != null && Assets.exists(path)) {
+			var offset = levelRenderer.cameraOffset();
+			SoundEffects.playGameSound(Assets.getSound(path), request.x, request.y, offset.x, offset.y, request.volume);
 		}
 	}
 
