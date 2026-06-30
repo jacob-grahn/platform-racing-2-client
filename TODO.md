@@ -25,7 +25,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [x] character can move before the 321 countdown is done
 - [x] character should appear below water blocks, they should fade out some when near
 - [x] arrow blocks loose their arrow after they have been touched. The push animation plays, then the arrow is gone
-- [ ] sword doesn't work
+- [x] sword doesn't work
 - [x] super jump sound doesn't play
 - [x] jump sound doesn't play
 - [x] block bump sound doesn't play

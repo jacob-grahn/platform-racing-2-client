@@ -486,6 +486,7 @@ class Course extends Sprite {
 		syncBlockVisuals();
 		updatePlayerDisplay();
 		var state = player.debugState();
+		emitLocalItemEffect(state);
 		maybeHandleLocalFinish(state);
 		syncItemDisplay(state.itemId, state.itemUses);
 		syncStatsDisplay(state);
@@ -543,6 +544,24 @@ class Course extends Sprite {
 		if (onFinish != null) {
 			onFinish(state);
 		}
+	}
+
+	private function emitLocalItemEffect(state:LocalPlayerDebugState):Void {
+		if (state.lastItemEffect == null || localCharacter == null) {
+			return;
+		}
+		var parts = state.lastItemEffect.split(":");
+		if (parts[0] != "slash") {
+			return;
+		}
+		var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x));
+		var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+		var direction = parts.length > 1 ? parts[1] : "right";
+		var payload = 'Slash`$worldX`$worldY`$direction`' + localCharacter.tempID;
+		if (eggRound != null) {
+			eggRound.mountAttackVisual(payload);
+		}
+		LobbySocket.write('add_effect`$payload');
 	}
 
 	private function syncItemDisplay(?itemId:Null<Int>, ?itemUses:Null<Int>):Void {

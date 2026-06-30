@@ -22,6 +22,7 @@ class CharacterLifecycleTest {
 		testLocalAndRemoteLifecycle();
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();
+		testLocalSwordEmitsSlashEffect();
 		testEggRoundCommandLifecycle();
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
@@ -133,6 +134,31 @@ class CharacterLifecycleTest {
 		);
 		course.localCharacter.changeState("jump");
 		assertEquals(1, sounds.length, "holding jump does not retrigger the sound every frame");
+		course.remove();
+	}
+
+	private static function testLocalSwordEmitsSlashEffect():Void {
+		var course = buildCourse(new CommandHandler(), "race", "m4`ffffff`2;5;11,0;-2;10;8,0;3;0,1;0;0,1;0;0,1;0;0");
+		finishDrawing(course);
+		course.beginRace();
+		finishCountdown(course);
+		course.setKey(Keyboard.UP, true);
+		for (_ in 0...40) {
+			course.onEnterFrame(new Event(Event.ENTER_FRAME));
+			if (course.localCharacter.debugState().itemId == 8) break;
+		}
+		course.setKey(Keyboard.UP, false);
+		assertEquals(8, course.localCharacter.debugState().itemId, "local player collects sword");
+
+		LobbySocket.resetSent();
+		course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		course.setKey(Keyboard.SPACE, true);
+		course.onEnterFrame(new Event(Event.ENTER_FRAME));
+
+		assertTrue(LobbySocket.lastSent().indexOf("add_effect`Slash`") == 0, "sword emits Slash effect command");
+		assertTrue(LobbySocket.lastSent().indexOf("`right`0") > 0, "sword Slash payload includes direction and temp id");
+		assertEquals(1, course.eggRound.activeAttackVisualCount(), "sword mounts the authored slash visual");
+		course.setKey(Keyboard.SPACE, false);
 		course.remove();
 	}
 
@@ -316,8 +342,22 @@ class CharacterLifecycleTest {
 		assertEquals(0, layer.numChildren, '$message: clear removes mounted visuals');
 	}
 
-	private static function buildCourse(handler:CommandHandler, gameMode:String = "race"):Course {
-		var dataString = "m3`ffffff`0;0;11,1;0;8,0;1;0";
+	private static function finishDrawing(course:Course):Void {
+		while (!course.levelRenderer.isDrawingComplete()) {
+			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+	}
+
+	private static function finishCountdown(course:Course):Void {
+		while (course.countdown != null && course.countdown.parent != null) {
+			course.countdown.advance();
+		}
+	}
+
+	private static function buildCourse(handler:CommandHandler, gameMode:String = "race", ?dataString:String):Course {
+		if (dataString == null) {
+			dataString = "m3`ffffff`0;0;11,1;0;8,0;1;0";
+		}
 		var level = ServerLevelDecoder.decode(dataString);
 
 		var vars:Map<String, String> = new Map();

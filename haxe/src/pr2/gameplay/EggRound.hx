@@ -336,7 +336,7 @@ class EggRound {
 		return "";
 	}
 
-	private function mountAttackVisual(payload:String):Void {
+	public function mountAttackVisual(payload:String):Void {
 		if (displayLayer == null) {
 			return;
 		}
