@@ -9,7 +9,9 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
+import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.audio.SoundEffects;
 import pr2.character.Character;
 import pr2.character.LocalCharacter;
 import pr2.character.RemoteCharacter;
@@ -46,6 +48,9 @@ import pr2.net.ServerLevelData;
 	alongside the local player.
 **/
 class Course extends Sprite {
+	// JumpSound -> sound552 (AssetCatalog DOMSoundItem).
+	static inline var JUMP_SOUND:String = "assets/audio/sfx/sound552.mp3";
+
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
 	public static inline var ITEM_X:Float = 2;
 	public static inline var ITEM_Y:Float = 2;
@@ -101,6 +106,7 @@ class Course extends Sprite {
 	// (GamePage) uses it to mark the player done and show the finished page; the
 	// network notification itself is emitted here, mirroring Flash Game.finish.
 	public var onFinish:Null<LocalPlayerDebugState->Void> = null;
+	public var onPlayJumpSound:Null<Float->Float->Void> = null;
 	private var localFinishHandled:Bool = false;
 
 	// Set by GamePage when the player quits (or otherwise leaves the race) so the
@@ -145,6 +151,7 @@ class Course extends Sprite {
 		// each rotate step, so the block layer must turn about that same point.
 		levelRenderer.setRotationPivot(serverFixture.originTileX * ServerLevelRenderer.TILE_SIZE, serverFixture.originTileY * ServerLevelRenderer.TILE_SIZE);
 		player = new LocalCharacter(serverFixture.fixture);
+		player.onPlayJumpSound = playJumpSound;
 		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
@@ -371,6 +378,19 @@ class Course extends Sprite {
 	public function collectEgg(id:Int):Void {
 		if (localCharacter != null) {
 			localCharacter.emitGrabEgg(id);
+		}
+	}
+
+	private function playJumpSound(fixtureX:Float, fixtureY:Float):Void {
+		var worldX = serverFixture.fixturePixelToWorldX(fixtureX);
+		var worldY = serverFixture.fixturePixelToWorldY(fixtureY);
+		if (onPlayJumpSound != null) {
+			onPlayJumpSound(worldX, worldY);
+			return;
+		}
+		if (Assets.exists(JUMP_SOUND)) {
+			var offset = levelRenderer.cameraOffset();
+			SoundEffects.playGameSound(Assets.getSound(JUMP_SOUND), worldX, worldY, offset.x, offset.y, 0.75);
 		}
 	}
 

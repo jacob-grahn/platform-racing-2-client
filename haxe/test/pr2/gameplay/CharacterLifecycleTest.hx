@@ -21,6 +21,7 @@ class CharacterLifecycleTest {
 	public static function main():Void {
 		testLocalAndRemoteLifecycle();
 		testCountdownLocksLocalMovement();
+		testLocalJumpPlaysSound();
 		testEggRoundCommandLifecycle();
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
@@ -108,6 +109,30 @@ class CharacterLifecycleTest {
 			course.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
 		assertTrue(course.localCharacter.debugState().x > startX, "local movement resumes after countdown");
+		course.remove();
+	}
+
+	private static function testLocalJumpPlaysSound():Void {
+		var course = buildCourse(new CommandHandler());
+		while (!course.levelRenderer.isDrawingComplete()) {
+			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		var sounds:Array<String> = [];
+		course.onPlayJumpSound = function(x:Float, y:Float):Void {
+			sounds.push('${Math.round(x)},${Math.round(y)}');
+		}
+		var start = course.localCharacter.getPos();
+		course.localCharacter.velY = 0;
+		course.localCharacter.changeState("stand");
+		course.localCharacter.changeState("jump");
+		assertEquals(1, sounds.length, "entering local jump state plays the local jump sound");
+		assertEquals(
+			'${Math.round(course.serverFixture.fixturePixelToWorldX(start.x))},${Math.round(course.serverFixture.fixturePixelToWorldY(start.y))}',
+			sounds[0],
+			"jump sound uses the local character world position"
+		);
+		course.localCharacter.changeState("jump");
+		assertEquals(1, sounds.length, "holding jump does not retrigger the sound every frame");
 		course.remove();
 	}
 

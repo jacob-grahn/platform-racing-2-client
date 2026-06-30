@@ -27,7 +27,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [ ] arrow blocks loose their arrow after they have been touched. The push animation plays, then the arrow is gone
 - [ ] sword doesn't work
 - [ ] super jump sound doesn't play
-- [ ] jump sound doesn't play
+- [x] jump sound doesn't play
 - [ ] block bump sound doesn't play
 - [ ] item block sound doesn't play
 - [ ] probably some other sound effects don't play, they seem to have been missed so far
