@@ -26,6 +26,7 @@ typedef CharacterSoundRequest = {
 	final x:Float;
 	final y:Float;
 	final volume:Float;
+	final target:Character;
 }
 
 /**
@@ -128,12 +129,15 @@ class Character extends Sprite {
 	// no-ops so the deterministic base needs no audio/particle subsystem.
 	public var onPlayJumpSound:Null<Float->Float->Void> = null;
 	public var onPlayCharacterSound:Null<CharacterSoundRequest->Void> = null;
+	public var onStartJetSound:Null<CharacterSoundRequest->Void> = null;
+	public var onStopJetSound:Null<Character->Void> = null;
 	public var onStartParticleEmitter:Null<ParticleEmitterRequest->Void> = null;
 	public var onClearParticleEmitter:Null<Void->Void> = null;
 
 	private var recoveryRandom:Void->Float = Math.random;
 	private var jetFlameRandom:Void->Float = Math.random;
 	private var activeParticleEmitter:Null<ParticleEmitterRequest> = null;
+	private var jetSoundActive:Bool = false;
 
 	public function new(hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super();
@@ -517,10 +521,16 @@ class Character extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, jetPackTick);
 		addEventListener(Event.ENTER_FRAME, jetPackTick);
 		setCurrentJetPackFrame("on");
+		stopJetSound();
+		if (onStartJetSound != null) {
+			onStartJetSound({kind: "engine", x: x, y: y, volume: 0.6, target: this});
+			jetSoundActive = true;
+		}
 	}
 
 	public function endJet():Void {
 		removeEventListener(Event.ENTER_FRAME, jetPackTick);
+		stopJetSound();
 		for (stateName in CharacterDisplay.STATE_NAMES) {
 			var jetPack = jetPackForState(stateName);
 			if (jetPack != null) {
@@ -566,6 +576,7 @@ class Character extends Sprite {
 	private function removeListeners():Void {
 		removeEventListener(Event.ENTER_FRAME, recoveryTick);
 		removeEventListener(Event.ENTER_FRAME, jetPackTick);
+		stopJetSound();
 	}
 
 	public function remove():Void {
@@ -593,7 +604,17 @@ class Character extends Sprite {
 
 	private function playCharacterSound(kind:String, volume:Float):Void {
 		if (onPlayCharacterSound != null) {
-			onPlayCharacterSound({kind: kind, x: x, y: y, volume: volume});
+			onPlayCharacterSound({kind: kind, x: x, y: y, volume: volume, target: this});
+		}
+	}
+
+	private function stopJetSound():Void {
+		if (!jetSoundActive) {
+			return;
+		}
+		jetSoundActive = false;
+		if (onStopJetSound != null) {
+			onStopJetSound(this);
 		}
 	}
 

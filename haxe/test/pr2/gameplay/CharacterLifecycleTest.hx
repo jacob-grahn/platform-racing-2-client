@@ -23,6 +23,7 @@ class CharacterLifecycleTest {
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();
 		testCharacterEffectSounds();
+		testJetEngineSoundLifecycle();
 		testLocalSwordEmitsSlashEffect();
 		testEggRoundCommandLifecycle();
 		testHatReturnToStartLifecycle();
@@ -159,6 +160,36 @@ class CharacterLifecycleTest {
 			"Course routes local and remote character effect sounds through spatial playback");
 		shell.remove();
 		course.remove();
+	}
+
+	private static function testJetEngineSoundLifecycle():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler);
+		var shell = new GameCommandShell(new CourseDelegate(course), handler);
+		shell.install();
+		var starts:Array<String> = [];
+		var stops:Array<Int> = [];
+		course.onStartJetSound = function(request):Void {
+			starts.push(request.kind + ":" + request.volume + ":" + request.target.tempID + ":" + Math.round(request.x) + ":" + Math.round(request.y));
+		};
+		course.onStopJetSound = function(character):Void {
+			stops.push(character.tempID);
+		};
+
+		course.localCharacter.tempID = 7;
+		course.localCharacter.beginJetNetwork();
+		course.localCharacter.endJetNetwork();
+		handler.dispatch("createRemoteCharacter", ["9", "Rival", "1", "1", "1", "1", "1", "1", "1", "1", "-1", "-1", "-1", "-1", "0"]);
+		var remote = course.getRemoteCharacter(9);
+		remote.x = 44;
+		remote.y = 55;
+		remote.beginJet();
+		course.remove();
+
+		assertEquals("engine:0.6:7:265:190|engine:0.6:9:44:55", starts.join("|"),
+			"Course routes local and remote Jet Pack EngineSound start requests");
+		assertEquals("7,9", [for (id in stops) Std.string(id)].join(","), "endJet and Course teardown stop active EngineSound loops");
+		shell.remove();
 	}
 
 	private static function testLocalSwordEmitsSlashEffect():Void {

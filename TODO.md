@@ -76,6 +76,9 @@ still-unported popup/visual side effects.
     - [x] Port `Character.gainHeart`, `beginSparkles`, and `endSparkles`
       playback (`BumpHappySound`, `SpeedUpSound`, `SlowDownSound`) through the
       live `Course` spatial sound path for local and remote characters.
+    - [x] Port the Jet Pack `EngineSound` loop: `beginJet` restarts the spatial
+      loop, `endJet` stops it, and course teardown clears active local/remote
+      channels.
 - [ ] Port the full `CourseMenu` access/spectate UI around in-place level
   loading (slot selection, password/private flows, loading/cancel/error states)
   from `flash/level_browser`, `flash/page/GamePage.as`, and

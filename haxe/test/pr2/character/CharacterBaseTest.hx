@@ -119,6 +119,13 @@ class CharacterBaseTest {
 	private static function testJetPackFlameLifecycle():Void {
 		var c = new Character();
 		c.setItem(6);
+		var starts:Array<String> = [];
+		var stops = 0;
+		c.onStartJetSound = function(request) starts.push(request.kind + ":" + request.volume + ":" + (request.target == c));
+		c.onStopJetSound = function(character) {
+			assertEquals(c, character, "Jet Pack sound stop targets the character");
+			stops++;
+		};
 		var values = [0.1, 0.9, 0.2, 0.8];
 		var index = 0;
 		c.setJetFlameRandomForTest(function() return values[index++]);
@@ -128,6 +135,8 @@ class CharacterBaseTest {
 		assertEquals(1, jetPack.currentFrame, "Jet Pack starts on the off frame");
 
 		c.beginJet();
+		assertEquals("engine:0.6:true", starts.join("|"), "beginJet starts Flash's looping EngineSound");
+		assertEquals(0, stops, "first beginJet has no existing EngineSound to stop");
 		assertEquals(6, jetPack.currentFrame, "beginJet switches the current Jet Pack to the on frame");
 		c.dispatchEvent(new Event(Event.ENTER_FRAME));
 
@@ -142,10 +151,14 @@ class CharacterBaseTest {
 
 		c.changeState("run");
 		var runJetPack = c.jetPackForState("runAnim");
+		c.beginJet();
+		assertEquals("engine:0.6:true|engine:0.6:true", starts.join("|"), "beginJet restarts an existing EngineSound loop");
+		assertEquals(1, stops, "restarting Jet Pack stops the previous EngineSound loop");
 		c.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(6, runJetPack.currentFrame, "jetPackTick keeps the active state's Jet Pack on after state changes");
 
 		c.endJet();
+		assertEquals(2, stops, "endJet stops the active EngineSound loop");
 		var resetClips = 0;
 		for (stateName in CharacterDisplay.STATE_NAMES) {
 			var stateJetPack = c.jetPackForState(stateName);
