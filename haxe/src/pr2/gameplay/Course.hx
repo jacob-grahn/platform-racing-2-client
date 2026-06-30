@@ -27,6 +27,7 @@ import pr2.lobby.account.AlternateControls;
 import pr2.lobby.account.Settings;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
+import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelFixtureAdapter;
 import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
 import pr2.level.ServerLevelRenderer;
@@ -108,6 +109,7 @@ class Course extends Sprite {
 	public var drawingInfo(default, null):DrawingInfo;
 	public var countdown(default, null):Countdown;
 	public var eggRound(default, null):EggRound;
+	public var looseHats(default, null):Map<Int, HatEffect> = new Map();
 	public var raceStarted(default, null):Bool = false;
 
 	// Invoked once when the local player reaches a finish block. The host page
@@ -132,6 +134,7 @@ class Course extends Sprite {
 	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
 	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
 	private var activeVisualBlocks:Map<String, Bool> = new Map();
+	private var startPositions:Array<{x:Int, y:Int}> = [];
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -166,6 +169,7 @@ class Course extends Sprite {
 		localCharacter = player;
 		playerArray[player.tempID] = player;
 		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
+		buildStartPositions();
 
 		characterLayer = new Sprite();
 		characterLayer.addChild(player);
@@ -266,6 +270,28 @@ class Course extends Sprite {
 		spectatePicker.y = SPECTATE_Y;
 		addChild(spectatePicker);
 		toggleSpectatePossible(false);
+	}
+
+	private function buildStartPositions():Void {
+		startPositions = [];
+		for (block in level.blocks) {
+			if (isStartBlock(block)) {
+				startPositions.push({x: block.x + 15, y: block.y + 15});
+			}
+		}
+	}
+
+	private function returnHatToStart(hat:HatEffect):Void {
+		var info = hat.info();
+		hat.remove();
+		if (info.id < startPositions.length) {
+			var start = startPositions[info.id];
+			addLooseHat(start.x, start.y, 0, info.num, info.color, info.color2, info.id);
+		}
+	}
+
+	private static function isStartBlock(block:DecodedBlock):Bool {
+		return block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4;
 	}
 
 	/** Lets a wrapper (the debug harness) intercept chat lines before display. **/
@@ -386,6 +412,40 @@ class Course extends Sprite {
 			return;
 		}
 		eggRound.addEggs(count, level);
+	}
+
+	public function addLooseHat(x:Int, y:Int, rot:Int, num:Int, color:Int, color2:Int, id:Int):HatEffect {
+		removeLooseHat(id);
+		return new HatEffect(this, x, y, rot, num, color, color2, id, characterLayer, commandHandler);
+	}
+
+	public function removeLooseHat(id:Int):Bool {
+		if (looseHats == null) {
+			return false;
+		}
+		var hat = looseHats.get(id);
+		if (hat == null) {
+			return false;
+		}
+		hat.remove();
+		return true;
+	}
+
+	public function maybeReturnHatToStart(hatId:Int):Void {
+		if (looseHats == null) {
+			return;
+		}
+		var hat = looseHats.get(hatId);
+		if (hat == null) {
+			return;
+		}
+		var hatPos = RotationMath.rotatePoint(hat.posX, hat.posY, hat.rot);
+		if ((hatPos.y > level.maxY + 500 && hat.rot == 0)
+			|| (hatPos.y < level.minY - 500 && Math.abs(hat.rot) == 180)
+			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
+			|| (hatPos.x < level.minX - 500 && hat.rot == -90)) {
+			returnHatToStart(hat);
+		}
 	}
 
 	public function collectEgg(id:Int):Void {
@@ -840,6 +900,12 @@ class Course extends Sprite {
 		if (eggRound != null) {
 			eggRound.clear();
 			eggRound = null;
+		}
+		if (looseHats != null) {
+			for (id in [for (id in looseHats.keys()) id]) {
+				removeLooseHat(id);
+			}
+			looseHats = null;
 		}
 		removeAllRemoteCharacters();
 		if (levelRenderer != null) {

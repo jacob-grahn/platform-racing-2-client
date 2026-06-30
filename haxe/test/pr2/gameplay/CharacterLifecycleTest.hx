@@ -24,6 +24,7 @@ class CharacterLifecycleTest {
 		testLocalJumpPlaysSound();
 		testLocalSwordEmitsSlashEffect();
 		testEggRoundCommandLifecycle();
+		testHatReturnToStartLifecycle();
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
 
@@ -342,6 +343,52 @@ class CharacterLifecycleTest {
 		assertEquals(0, layer.numChildren, '$message: clear removes mounted visuals');
 	}
 
+	private static function testHatReturnToStartLifecycle():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "hat", "m3`ffffff`0;0;11,1;0;8,0;1;11,0;2;0,11,0;4;0");
+		var shell = new GameCommandShell(new CourseDelegate(course), handler);
+		shell.install();
+
+		var hat = course.addLooseHat(15, course.level.maxY + 501, 0, 5, 0x123456, -1, 1);
+		assertEquals(1, countLooseHats(course), "loose hat is registered");
+		assertTrue(handler.hasCommand("removeHat1"), "loose hat registers remote remove command");
+		assertTrue(hat.display.parent == course.characterLayer, "loose hat display mounts to character layer");
+
+		handler.dispatch("maybeReturnHatToStart", ["1"]);
+		var returned = course.looseHats.get(1);
+		assertTrue(returned != null, "out-of-bounds loose hat respawns at matching start");
+		assertTrue(returned != hat, "return to start replaces the old hat instance");
+		assertEquals(45, Std.int(returned.posX), "returned hat uses start block center x");
+		assertEquals(45, Std.int(returned.posY), "returned hat uses start block center y");
+		assertEquals(0, returned.rot, "returned hat resets rotation");
+		assertEquals(5, returned.num, "returned hat preserves hat id");
+		assertEquals(0x123456, returned.color, "returned hat preserves primary color");
+		assertEquals(-1, returned.color2, "returned hat preserves secondary color sentinel");
+		assertTrue(hat.display.parent == null, "old loose hat display is removed");
+		assertTrue(returned.display.parent == course.characterLayer, "returned loose hat display mounts");
+		assertTrue(handler.hasCommand("removeHat1"), "returned hat keeps remote remove command registered");
+
+		handler.dispatch("removeHat1", []);
+		assertEquals(0, countLooseHats(course), "remote remove clears returned loose hat");
+		assertTrue(returned.display.parent == null, "remote remove detaches returned display");
+		assertTrue(!handler.hasCommand("removeHat1"), "remote remove unregisters command");
+
+		course.addLooseHat(20, course.level.maxY + 501, 0, 6, 0xFFFFFF, 0, 4);
+		handler.dispatch("maybeReturnHatToStart", ["4"]);
+		assertEquals(0, countLooseHats(course), "hat without matching start is removed instead of respawned");
+
+		shell.remove();
+		course.remove();
+	}
+
+	private static function countLooseHats(course:Course):Int {
+		var count = 0;
+		for (_ in course.looseHats.keys()) {
+			count++;
+		}
+		return count;
+	}
+
 	private static function finishDrawing(course:Course):Void {
 		while (!course.levelRenderer.isDrawingComplete()) {
 			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
@@ -410,7 +457,7 @@ private class CourseDelegate implements GameCommandDelegate {
 	public function setEggSeed(seed:Int):Void course.setEggSeed(seed);
 	public function addEggs(count:Int):Void course.addEggs(count);
 	public function superBooster(tempId:Int):Void {}
-	public function maybeReturnHatToStart(hatId:Int):Void {}
+	public function maybeReturnHatToStart(hatId:Int):Void course.maybeReturnHatToStart(hatId);
 	public function startHatCountdown():Void {}
 	public function cancelHatCountdown():Void {}
 	public function forceQuit():Void {}

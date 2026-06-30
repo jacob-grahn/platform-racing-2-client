@@ -75,6 +75,9 @@ still-unported popup/visual side effects.
         egg attacks.
     - [x] Port the animated egg squash/remove side effect.
   - [ ] `Hat` popup.
+    - [x] Port `maybeReturnHatToStart`: out-of-bounds loose hats are removed,
+      respawned at the matching start block when one exists, and their remote
+      remove command/display lifecycle is deterministic.
 - [ ] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks: particle emitters, jet-pack flame,
   `DjinnEffects`, and per-state sound playback. The held-weapon display frame is

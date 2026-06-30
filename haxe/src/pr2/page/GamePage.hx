@@ -309,7 +309,11 @@ class GamePage extends Page implements GameCommandDelegate {
 		course.addEggs(count);
 	}
 	public function superBooster(tempId:Int):Void {}
-	public function maybeReturnHatToStart(hatId:Int):Void {}
+	public function maybeReturnHatToStart(hatId:Int):Void {
+		if (course != null) {
+			course.maybeReturnHatToStart(hatId);
+		}
+	}
 	public function startHatCountdown():Void {
 		stopHatCountdown();
 		hatCountdownTimer = new haxe.Timer(1000);
