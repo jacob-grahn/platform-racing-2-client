@@ -20,16 +20,8 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - A task is complete only when the real user flow works. Rendering the art or
   recording the requested action is not completion.
 
-## Current Priority: Real Login-to-Race Flow
 
-The level-entry decomposition, the multiplayer `Character`/`LocalCharacter`/
-`RemoteCharacter` system and its emission/interpolation/lifecycle, the in-game
-`Course`/`GamePage` shell, the HUD widgets, the 3-2-1 countdown, prize and
-special-event behavior, and incremental level drawing are all ported and
-unit-covered (see README). What remains is the end-to-end acceptance and the
-still-unported popup/visual side effects.
-
-bugs (see how it works in the source flash game before implementing fixes): 
+## bugs (see how it works in the source flash game before implementing fixes)
 - [ ] character can move before the 321 countdown is done
 - [ ] character should appear below water blocks, they should fade out some when near
 - [ ] arrow blocks loose their arrow after they have been touched. The push animation plays, then the arrow is gone
@@ -40,7 +32,19 @@ bugs (see how it works in the source flash game before implementing fixes):
 - [ ] item block sound doesn't play
 - [ ] probably some other sound effects don't play, they seem to have been missed so far
 - [ ] poof visual effect and sound effect missing when touching a safety net
+- [ ] art layers don't show up until they are done drawing
 
+
+## Current Priority: Real Login-to-Race Flow
+
+The level-entry decomposition, the multiplayer `Character`/`LocalCharacter`/
+`RemoteCharacter` system and its emission/interpolation/lifecycle, the in-game
+`Course`/`GamePage` shell, the HUD widgets, the 3-2-1 countdown, prize and
+special-event behavior, and incremental level drawing are all ported and
+unit-covered (see README). What remains is the end-to-end acceptance and the
+still-unported popup/visual side effects.
+
+--------
 - [x] Run one uninterrupted real-server session: an account and a guest each log
   in, select/join a level, race with synchronized remote players, finish or
   quit, and return to the lobby without a page reload. Add a deterministic
