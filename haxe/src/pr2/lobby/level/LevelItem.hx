@@ -6,6 +6,7 @@ import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import pr2.crypto.PR2Encryptor;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyPopups;
 import pr2.lobby.LobbySession;
@@ -30,8 +31,7 @@ import pr2.runtime.PR2MovieClip;
 	behind the access cover (password / rank / hat) using the pure `LevelAccess`
 	logic. Clicking the info button opens the level popup.
 
-	Still pending from the original: the `Encryptor`-based decrypt of the
-	password-check payload (the POST round-trip and success gating are wired).
+	The password-check response follows Flash's encrypted `result` payload.
 **/
 class LevelItem extends Sprite {
 	public final courseID:Int;
@@ -227,7 +227,7 @@ class LevelItem extends Sprite {
 		passPending = true;
 		var entered = passField.text;
 		passField.text = "checking...";
-		var hash = haxe.crypto.Md5.encode(entered + ServerConfig.LEVEL_LIST_SALT);
+		var hash = haxe.crypto.Md5.encode(entered + ServerConfig.LEVEL_PASS_SALT);
 		var fields = ["course_id" => Std.string(courseID), "hash" => hash];
 		FormPostClient.post(ServerConfig.levelPassCheckUrl(), fields, onPassResponse, onPassError);
 	}
@@ -236,10 +236,7 @@ class LevelItem extends Sprite {
 		passPending = false;
 		var success = false;
 		try {
-			var obj:Dynamic = Json.parse(body);
-			// Flash decrypts `result` and checks `access == 1`; without the ported
-			// Encryptor we accept the server's success flag for the round-trip.
-			success = Reflect.field(obj, "success") == true || Std.string(Reflect.field(obj, "access")) == "1";
+			success = parsePasswordResponse(body, courseID);
 		} catch (_:Dynamic) {
 			success = false;
 		}
@@ -249,6 +246,29 @@ class LevelItem extends Sprite {
 		} else if (passField != null) {
 			passField.text = "nope!";
 		}
+	}
+
+	public static function parsePasswordResponse(body:String, courseID:Int):Bool {
+		var ret:Dynamic = Json.parse(body);
+		if (Reflect.field(ret, "success") != true) {
+			return false;
+		}
+		var encrypted = Std.string(Reflect.field(ret, "result"));
+		var decrypted = PR2Encryptor.decryptBase64(encrypted, ServerConfig.LEVEL_PASS_KEY, ServerConfig.LEVEL_PASS_IV);
+		decrypted = normalizePasswordJson(decrypted);
+		var obj:Dynamic = Json.parse(decrypted);
+		return Std.parseInt(Std.string(Reflect.field(obj, "level_id"))) == courseID
+			&& Std.parseInt(Std.string(Reflect.field(obj, "access"))) == 1;
+	}
+
+	private static function normalizePasswordJson(value:String):String {
+		var cleaned = StringTools.trim(value);
+		var start = cleaned.indexOf("{");
+		var end = cleaned.indexOf("}", start);
+		if (start >= 0 && end >= start) {
+			cleaned = cleaned.substring(start, end + 1);
+		}
+		return StringTools.trim(cleaned);
 	}
 
 	private function onPassError(_:String):Void {

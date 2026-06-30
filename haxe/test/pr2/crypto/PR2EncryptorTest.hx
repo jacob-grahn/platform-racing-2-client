@@ -7,6 +7,7 @@ class PR2EncryptorTest {
 
 	public static function main():Void {
 		testOpenSslFixture();
+		testDecryptRoundTrip();
 		trace('PR2EncryptorTest passed $assertions assertions');
 	}
 
@@ -18,6 +19,12 @@ class PR2EncryptorTest {
 			encrypted,
 			"AES-128-CBC zero-padded fixture"
 		);
+	}
+
+	private static function testDecryptRoundTrip():Void {
+		var plain = "{\"level_id\":77,\"access\":1}";
+		var encrypted = PR2Encryptor.encryptBase64(plain, LOGIN_KEY, LOGIN_IV);
+		assertEquals(plain, PR2Encryptor.decryptBase64(encrypted, LOGIN_KEY, LOGIN_IV), "AES decrypt round trip");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

@@ -49,6 +49,7 @@ class LobbyServicesTest {
 		testLevelListParsing();
 		testSearchQuery();
 		testLevelAccess();
+		testLevelPassResponse();
 		testLevelGridLayout();
 		testLevelInfoParsing();
 		testSessionGuestMember();
@@ -359,6 +360,25 @@ class LobbyServicesTest {
 		// Disallowed hat applies even to the owner.
 		assertEquals("HatNotAllowed", accessName(LevelAccess.evaluate(false, false, 1, true, 5, 0, 7, [7, 9])), "hat gate");
 		assertEquals("HatNotAllowed", accessName(LevelAccess.evaluate(false, false, 2, false, 5, 0, 7, [7])), "mod still hat-gated");
+	}
+
+	private static function testLevelPassResponse():Void {
+		var encrypted = pr2.crypto.PR2Encryptor.encryptBase64(
+			"\u0000{\"level_id\":42,\"access\":1}\u0000",
+			ServerConfig.LEVEL_PASS_KEY,
+			ServerConfig.LEVEL_PASS_IV
+		);
+		var body = haxe.Json.stringify({success: true, result: encrypted});
+		assertEquals(true, pr2.lobby.level.LevelItem.parsePasswordResponse(body, 42), "encrypted pass response grants matching level");
+		assertEquals(false, pr2.lobby.level.LevelItem.parsePasswordResponse(body, 43), "encrypted pass response rejects other level");
+
+		var denied = pr2.crypto.PR2Encryptor.encryptBase64(
+			"{\"level_id\":42,\"access\":0}",
+			ServerConfig.LEVEL_PASS_KEY,
+			ServerConfig.LEVEL_PASS_IV
+		);
+		assertEquals(false, pr2.lobby.level.LevelItem.parsePasswordResponse(haxe.Json.stringify({success: true, result: denied}), 42), "encrypted pass response rejects access 0");
+		assertEquals(false, pr2.lobby.level.LevelItem.parsePasswordResponse(haxe.Json.stringify({success: false, result: encrypted}), 42), "failed pass response rejects");
 	}
 
 	private static function accessName(state:LevelAccessState):String {

@@ -86,6 +86,13 @@ still-unported popup/visual side effects.
   from `flash/level_browser`, `flash/page/GamePage.as`, and
   `flash/gameplay/Game.as`. In-place load via `confirm_slot`/`startGame`, the
   `SpectatePicker` boundary, and the `LevelEntry` machine already work.
+  - [x] Port encrypted level-password verification: hash with
+    `LEVEL_PASS_SALT`, decrypt the Flash `result` payload with
+    `LEVEL_PASS_KEY`/`LEVEL_PASS_IV`, and gate access on matching
+    `level_id`/`access == 1`.
+  - [ ] Port private/full slot selection behavior.
+  - [ ] Port CourseMenu loading/cancel/error state visuals.
+  - [ ] Port remaining spectate UI wiring around in-place loading.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without

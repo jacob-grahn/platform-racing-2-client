@@ -16,12 +16,7 @@ class PR2Encryptor {
 	public static function encryptBase64(plainText:String, base64Key:String, base64Iv:String):String {
 		var key = Base64.decode(base64Key);
 		var iv = Base64.decode(base64Iv);
-		if (key.length != 16) {
-			throw 'AES-128 key must be 16 bytes, got ${key.length}';
-		}
-		if (iv.length != 16) {
-			throw 'AES-CBC IV must be 16 bytes, got ${iv.length}';
-		}
+		validateKeyIv(key, iv);
 
 		var input = zeroPad(Bytes.ofString(plainText));
 		var aes = new Aes128(key);
@@ -43,6 +38,41 @@ class PR2Encryptor {
 		return Base64.encode(out);
 	}
 
+	public static function decryptBase64(cipherText:String, base64Key:String, base64Iv:String):String {
+		var key = Base64.decode(base64Key);
+		var iv = Base64.decode(base64Iv);
+		validateKeyIv(key, iv);
+
+		var input = Base64.decode(cipherText);
+		if (input.length == 0 || input.length % 16 != 0) {
+			throw 'AES-CBC ciphertext length must be a non-zero multiple of 16 bytes, got ${input.length}';
+		}
+		var aes = new Aes128(key);
+		var out = Bytes.alloc(input.length);
+		var previous = iv;
+		var offset = 0;
+		while (offset < input.length) {
+			var cipherBlock = Bytes.alloc(16);
+			cipherBlock.blit(0, input, offset, 16);
+			var decrypted = aes.decryptBlock(cipherBlock);
+			for (i in 0...16) {
+				out.set(offset + i, decrypted.get(i) ^ previous.get(i));
+			}
+			previous = cipherBlock;
+			offset += 16;
+		}
+		return stripTrailingNulls(out).toString();
+	}
+
+	private static function validateKeyIv(key:Bytes, iv:Bytes):Void {
+		if (key.length != 16) {
+			throw 'AES-128 key must be 16 bytes, got ${key.length}';
+		}
+		if (iv.length != 16) {
+			throw 'AES-CBC IV must be 16 bytes, got ${iv.length}';
+		}
+	}
+
 	private static function zeroPad(input:Bytes):Bytes {
 		var remainder = input.length % 16;
 		if (remainder == 0) {
@@ -51,6 +81,19 @@ class PR2Encryptor {
 		var padded = Bytes.alloc(input.length + 16 - remainder);
 		padded.blit(0, input, 0, input.length);
 		return padded;
+	}
+
+	private static function stripTrailingNulls(input:Bytes):Bytes {
+		var len = input.length;
+		while (len > 0 && input.get(len - 1) == 0) {
+			len--;
+		}
+		if (len == input.length) {
+			return input;
+		}
+		var stripped = Bytes.alloc(len);
+		stripped.blit(0, input, 0, len);
+		return stripped;
 	}
 }
 
@@ -74,6 +117,7 @@ private class Aes128 {
 		0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16,
 	];
 	private static final RCON:Array<Int> = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36];
+	private static final INV_SBOX:Array<Int> = buildInvSbox();
 
 	private final roundKeys:Array<Int>;
 
@@ -93,6 +137,26 @@ private class Aes128 {
 		subBytes(state);
 		shiftRows(state);
 		addRoundKey(state, 10);
+
+		var out = Bytes.alloc(16);
+		for (i in 0...16) {
+			out.set(i, state[i]);
+		}
+		return out;
+	}
+
+	public function decryptBlock(input:Bytes):Bytes {
+		var state = [for (i in 0...16) input.get(i)];
+		addRoundKey(state, 10);
+		for (round in 0...9) {
+			invShiftRows(state);
+			invSubBytes(state);
+			addRoundKey(state, 9 - round);
+			invMixColumns(state);
+		}
+		invShiftRows(state);
+		invSubBytes(state);
+		addRoundKey(state, 0);
 
 		var out = Bytes.alloc(16);
 		for (i in 0...16) {
@@ -130,6 +194,28 @@ private class Aes128 {
 		state[15] = copy[11];
 	}
 
+	private static function invSubBytes(state:Array<Int>):Void {
+		for (i in 0...16) {
+			state[i] = INV_SBOX[state[i]];
+		}
+	}
+
+	private static function invShiftRows(state:Array<Int>):Void {
+		var copy = state.copy();
+		state[1] = copy[13];
+		state[5] = copy[1];
+		state[9] = copy[5];
+		state[13] = copy[9];
+		state[2] = copy[10];
+		state[6] = copy[14];
+		state[10] = copy[2];
+		state[14] = copy[6];
+		state[3] = copy[7];
+		state[7] = copy[11];
+		state[11] = copy[15];
+		state[15] = copy[3];
+	}
+
 	private static function mixColumns(state:Array<Int>):Void {
 		for (c in 0...4) {
 			var i = c * 4;
@@ -141,6 +227,20 @@ private class Aes128 {
 			state[i + 1] = a0 ^ mul2(a1) ^ mul3(a2) ^ a3;
 			state[i + 2] = a0 ^ a1 ^ mul2(a2) ^ mul3(a3);
 			state[i + 3] = mul3(a0) ^ a1 ^ a2 ^ mul2(a3);
+		}
+	}
+
+	private static function invMixColumns(state:Array<Int>):Void {
+		for (c in 0...4) {
+			var i = c * 4;
+			var a0 = state[i];
+			var a1 = state[i + 1];
+			var a2 = state[i + 2];
+			var a3 = state[i + 3];
+			state[i] = mul(0x0e, a0) ^ mul(0x0b, a1) ^ mul(0x0d, a2) ^ mul(0x09, a3);
+			state[i + 1] = mul(0x09, a0) ^ mul(0x0e, a1) ^ mul(0x0b, a2) ^ mul(0x0d, a3);
+			state[i + 2] = mul(0x0d, a0) ^ mul(0x09, a1) ^ mul(0x0e, a2) ^ mul(0x0b, a3);
+			state[i + 3] = mul(0x0b, a0) ^ mul(0x0d, a1) ^ mul(0x09, a2) ^ mul(0x0e, a3);
 		}
 	}
 
@@ -179,5 +279,31 @@ private class Aes128 {
 
 	private static inline function mul3(value:Int):Int {
 		return mul2(value) ^ value;
+	}
+
+	private static function mul(a:Int, b:Int):Int {
+		var result = 0;
+		var aa = a;
+		var bb = b;
+		for (_ in 0...8) {
+			if ((bb & 1) != 0) {
+				result ^= aa;
+			}
+			var high = aa & 0x80;
+			aa = (aa << 1) & 0xff;
+			if (high != 0) {
+				aa ^= 0x1b;
+			}
+			bb >>= 1;
+		}
+		return result & 0xff;
+	}
+
+	private static function buildInvSbox():Array<Int> {
+		var inv = [for (i in 0...256) 0];
+		for (i in 0...SBOX.length) {
+			inv[SBOX[i]] = i;
+		}
+		return inv;
 	}
 }

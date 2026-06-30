@@ -15,6 +15,12 @@ final class ServerConfig {
 
 	/** Hash salt used when listing levels (`Env.LEVEL_LIST_SALT`). **/
 	public static inline var LEVEL_LIST_SALT:String = "984cn98c54$";
+	/** Hash salt used when checking level passwords (`Env.LEVEL_PASS_SALT`). **/
+	public static inline var LEVEL_PASS_SALT:String = "WGZSL3JWcUE9L3Q4YipZIQ==";
+	/** AES key used for encrypted level-password responses (`Env.LEVEL_PASS_KEY`). **/
+	public static inline var LEVEL_PASS_KEY:String = "OWdCREBKUkI9JjEpQCNuYg==";
+	/** AES IV used for encrypted level-password responses (`Env.LEVEL_PASS_IV`). **/
+	public static inline var LEVEL_PASS_IV:String = "ZiUybmpjc04mNEAkNythbg==";
 
 	/** Hash salt applied to a downloaded level txt file (`Env.LEVEL_SALT_2`). **/
 	public static inline var LEVEL_SALT_2:String = "0kg4%dsw";
