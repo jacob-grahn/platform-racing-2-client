@@ -67,7 +67,7 @@ still-unported popup/visual side effects.
     - [x] Port loose-hat `PhysicsEffect` stepping and local-player pickup:
       gravity, active-block landing/wall clamp, display rotation, `get_hat`
       emission, and done-playing suppression are deterministic.
-- [ ] Port the remaining character visual-effect hooks that are currently
+- [x] Port the remaining character visual-effect hooks that are currently
   stubbed behind injectable hooks:
   [x] particle emitters
   [x] jet-pack flame,
