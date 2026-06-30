@@ -2,6 +2,7 @@ package pr2.gameplay;
 
 import openfl.events.Event;
 import openfl.display.Sprite;
+import openfl.ui.Keyboard;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -13,11 +14,13 @@ import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 
+@:access(pr2.gameplay.Course)
 class CharacterLifecycleTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
 		testLocalAndRemoteLifecycle();
+		testCountdownLocksLocalMovement();
 		testEggRoundCommandLifecycle();
 		trace('CharacterLifecycleTest passed $assertions assertions');
 	}
@@ -78,6 +81,34 @@ class CharacterLifecycleTest {
 		course.remove();
 		assertEquals(0, course.remoteCharacterCount(), "course teardown clears remotes");
 		assertEquals(null, course.localCharacter, "course teardown clears local character");
+	}
+
+	private static function testCountdownLocksLocalMovement():Void {
+		var course = buildCourse(new CommandHandler());
+		while (!course.levelRenderer.isDrawingComplete()) {
+			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		LobbySocket.resetSent();
+		course.beginRace();
+		var startX = course.localCharacter.debugState().x;
+		var startY = course.localCharacter.debugState().y;
+
+		course.setKey(Keyboard.RIGHT, true);
+		for (_ in 0...5) {
+			course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(startX, course.localCharacter.debugState().x, "countdown blocks local horizontal movement");
+		assertEquals(startY, course.localCharacter.debugState().y, "countdown blocks local vertical movement");
+
+		while (course.countdown != null && course.countdown.parent != null) {
+			course.countdown.advance();
+		}
+		assertEquals(true, course.raceStarted, "countdown finish starts race before movement resumes");
+		for (_ in 0...10) {
+			course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertTrue(course.localCharacter.debugState().x > startX, "local movement resumes after countdown");
+		course.remove();
 	}
 
 	private static function testEggRoundCommandLifecycle():Void {

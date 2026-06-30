@@ -438,8 +438,10 @@ class Course extends Sprite {
 			drawingInfoFinished = true;
 		}
 
-		player.step(input.copy());
-		if (eggRound != null && config.gameMode == "egg") {
+		if (raceStarted) {
+			player.step(input.copy());
+		}
+		if (raceStarted && eggRound != null && config.gameMode == "egg") {
 			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);
 		}
 		syncBlockVisuals();

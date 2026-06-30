@@ -22,7 +22,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 
 ## bugs (see how it works in the source flash game before implementing fixes)
-- [ ] character can move before the 321 countdown is done
+- [x] character can move before the 321 countdown is done
 - [ ] character should appear below water blocks, they should fade out some when near
 - [ ] arrow blocks loose their arrow after they have been touched. The push animation plays, then the arrow is gone
 - [ ] sword doesn't work
