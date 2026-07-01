@@ -66,7 +66,7 @@ time:
     `SuperJump = 4.5`) via `ensureCowboyStats`, and `resetStats` when removed.
   - [ ] Crown (id 6, `CROWN`): invincibility — immune to death except in `dm`
     and `hat` game modes.
-  - [ ] Santa hat (id 7, `SANTA`): stand on water/safety blocks (`onStand` while
+  - [x] Santa hat (id 7, `SANTA`): stand on water/safety blocks (`onStand` while
     over a `WaterBlock`/`SafetyBlock`); +1 `maxVelX` via `ensureSantaStats`, and
     `resetStats` when removed.
   - [ ] Party hat (id 8, `PARTY`): immune to the `hurt` mode reaction from

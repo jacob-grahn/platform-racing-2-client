@@ -66,6 +66,7 @@ class LocalPlayerController {
 	public var gameMode(default, null):String = "race";
 	public var propellerHatActive:Bool = false;
 	public var cowboyHatActive:Bool = false;
+	public var santaHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -184,6 +185,12 @@ class LocalPlayerController {
 
 	public function ensureCowboyStats():Void {
 		applyStats(Math.max(speedStat, 100), Math.max(accelerationStat, 99.6), Math.max(jumpStat, 100));
+	}
+
+	public function ensureSantaStats():Void {
+		if (santaHatActive) {
+			maxVelX += 1;
+		}
 	}
 
 	public function resetStats():Void {
@@ -405,6 +412,15 @@ class LocalPlayerController {
 	private function processBlocks(input:LocalPlayerInput):Void {
 		var refs = refreshBlockRefs();
 		updateGrounded(refs);
+		if (santaHatActive) {
+			var floorTile = rotatedTileAtPixel(x, y);
+			var floorBlock = level.blockAt(floorTile.x, floorTile.y);
+			if (floorBlock != null && !isBlockRemoved(floorBlock)
+					&& ((floorBlock.type == BlockType.Water && mode != MODE_WATER) || floorBlock.type == BlockType.Safety)) {
+				onStand(floorBlock);
+				refs = refreshBlockRefs();
+			}
+		}
 
 		if (vx >= -1 && refs.wallRight != null && getBlockAtTile(refs.wallRight.x - 1, refs.wallRight.y) == null) {
 			onLeftHit(refs.wallRight);
@@ -1109,6 +1125,7 @@ class LocalPlayerController {
 		maxVelX = 2 + speedStat / 10;
 		accel = 0.2 + accelerationStat / 60;
 		jumpVelocity = 2 + jumpStat / 40;
+		ensureSantaStats();
 	}
 
 	private function maybeTeleport(block:LevelBlock):Void {

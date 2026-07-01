@@ -16,6 +16,7 @@ class LocalCharacterTest {
 		testPropellerHatSlowsFallWhenHoldingJump();
 		testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved();
 		testMoonHatReducesGravityUntilRemoved();
+		testSantaHatStandsOnWaterAndSafetyAndRaisesSpeedCapUntilRemoved();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -102,6 +103,41 @@ class LocalCharacterTest {
 		assertClose(normal.debugState().vy, removed.debugState().vy, "moon hat removal restores level gravity");
 	}
 
+	private static function testSantaHatStandsOnWaterAndSafetyAndRaisesSpeedCapUntilRemoved():Void {
+		var normalWater = new LocalCharacter(nonSolidFloorLevel(BlockType.Water));
+		var santaWater = new LocalCharacter(nonSolidFloorLevel(BlockType.Water));
+		santaWater.setHats([7, 0xFFFFFF, -1]);
+
+		normalWater.step(new LocalPlayerInput());
+		santaWater.step(new LocalPlayerInput());
+		assertEquals(false, normalWater.debugState().grounded, "water remains non-solid without santa hat");
+		assertEquals(true, santaWater.debugState().grounded, "santa hat stands on water");
+		assertClose(90, santaWater.debugState().y, "santa water stand snaps to block top");
+
+		var santaSafety = new LocalCharacter(nonSolidFloorLevel(BlockType.Safety));
+		santaSafety.setHats([7, 0xFFFFFF, -1]);
+		santaSafety.step(new LocalPlayerInput());
+		assertEquals(true, santaSafety.debugState().grounded, "santa hat stands on safety blocks");
+		assertClose(90, santaSafety.debugState().y, "santa safety stand snaps to block top");
+
+		var normal = new LocalCharacter(longFlatLevel());
+		var santa = new LocalCharacter(longFlatLevel());
+		santa.setHats([7, 0xFFFFFF, -1]);
+		for (_ in 0...90) {
+			normal.step(new LocalPlayerInput(false, true));
+			santa.step(new LocalPlayerInput(false, true));
+		}
+		assertAbove(santa.debugState().vx, normal.debugState().vx + 0.5, "santa hat raises max horizontal velocity");
+
+		var removed = new LocalCharacter(longFlatLevel());
+		removed.setHats([7, 0xFFFFFF, -1]);
+		removed.setHats([]);
+		for (_ in 0...90) {
+			removed.step(new LocalPlayerInput(false, true));
+		}
+		assertClose(normal.debugState().vx, removed.debugState().vx, "santa hat removal restores max horizontal velocity");
+	}
+
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
 		var expected = controller.debugState();
 		var actual = character.debugState();
@@ -165,6 +201,40 @@ class LocalCharacterTest {
 		);
 	}
 
+	private static function nonSolidFloorLevel(type:BlockType):FixtureLevel {
+		return new FixtureLevel(
+			"local-character-non-solid-floor",
+			"Local Character Non-solid Floor",
+			8,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 6),
+			[new LevelBlock(2, 3, type)]
+		);
+	}
+
+	private static function longFlatLevel():FixtureLevel {
+		var blocks:Array<LevelBlock> = [];
+		for (tileX in 0...38) {
+			blocks.push(new LevelBlock(tileX, 4, BlockType.Basic));
+		}
+		return new FixtureLevel(
+			"local-character-long-flat",
+			"Local Character Long Flat",
+			40,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(38, 6),
+			blocks
+		);
+	}
+
 	private static function assertEquals<T>(expected:T, actual:T, label:String):Void {
 		assertions++;
 		if (expected != actual) {
@@ -176,6 +246,13 @@ class LocalCharacterTest {
 		assertions++;
 		if (Math.abs(expected - actual) > epsilon) {
 			throw '$label expected $expected but was $actual';
+		}
+	}
+
+	private static function assertAbove(actual:Float, minimum:Float, label:String):Void {
+		assertions++;
+		if (actual <= minimum) {
+			throw '$label expected above $minimum but was $actual';
 		}
 	}
 }
