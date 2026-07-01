@@ -126,7 +126,7 @@ Options, Credits, store/Vault, and level-editor-handoff routes are functional
 
 Finish the still-unported lobby popup routes, one at a time:
 
-- [ ] Port the level-info popup data population.
+- [x] Port the level-info popup data population.
   - [x] Apply returned `level_data.php` fields to the authored popup display.
 - [ ] Port the level-info report/rating/moderation actions.
   - [x] Port member level-report popup flow: authored report dialog, blank-reason
