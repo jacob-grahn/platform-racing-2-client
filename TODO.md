@@ -69,7 +69,7 @@ time:
   - [x] Santa hat (id 7, `SANTA`): stand on water/safety blocks (`onStand` while
     over a `WaterBlock`/`SafetyBlock`); +1 `maxVelX` via `ensureSantaStats`, and
     `resetStats` when removed.
-  - [ ] Party hat (id 8, `PARTY`): immune to the `hurt` mode reaction from
+  - [x] Party hat (id 8, `PARTY`): immune to the `hurt` mode reaction from
     sting and zap.
   - [ ] Top hat (id 9, `TOP`): pass through `VanishBlock`s.
   - [ ] Jump-start hat (id 10, `JUMP_START`): on equip, grant a 2000 ms

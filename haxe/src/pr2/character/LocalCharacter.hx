@@ -49,6 +49,7 @@ class LocalCharacter extends Character {
 		super.setHats(hatArray);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
+		controller.partyHatActive = hasHatFlag(Character.PARTY);
 		if (hadMoon && !hasHatFlag(Character.MOON)) {
 			controller.setGravity(baseGravityMultiplier);
 		}
@@ -75,6 +76,7 @@ class LocalCharacter extends Character {
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
+		controller.partyHatActive = hasHatFlag(Character.PARTY);
 		controller.step(input);
 		syncFromController();
 	}
@@ -246,6 +248,16 @@ class LocalCharacter extends Character {
 
 	public function isFrozen():Bool {
 		return controller.isFrozen();
+	}
+
+	public function receiveSting():Void {
+		controller.receiveSting();
+		syncFromController();
+	}
+
+	public function receiveZap():Void {
+		controller.receiveZap();
+		syncFromController();
 	}
 
 	private function syncFromController():Void {

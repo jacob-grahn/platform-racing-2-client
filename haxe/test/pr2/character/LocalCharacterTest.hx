@@ -17,6 +17,7 @@ class LocalCharacterTest {
 		testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved();
 		testMoonHatReducesGravityUntilRemoved();
 		testSantaHatStandsOnWaterAndSafetyAndRaisesSpeedCapUntilRemoved();
+		testPartyHatIgnoresStingAndZapHurtReactions();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -136,6 +137,26 @@ class LocalCharacterTest {
 			removed.step(new LocalPlayerInput(false, true));
 		}
 		assertClose(normal.debugState().vx, removed.debugState().vx, "santa hat removal restores max horizontal velocity");
+	}
+
+	private static function testPartyHatIgnoresStingAndZapHurtReactions():Void {
+		var stung = new LocalCharacter(flatLevel());
+		stung.receiveSting();
+		assertEquals("hurt", stung.debugState().mode, "sting puts an unprotected local character in hurt mode");
+
+		var partyStung = new LocalCharacter(flatLevel());
+		partyStung.setHats([8, 0xFFFFFF, -1]);
+		partyStung.receiveSting();
+		assertEquals("land", partyStung.debugState().mode, "party hat ignores sting hurt reaction");
+
+		var zapped = new LocalCharacter(flatLevel());
+		zapped.receiveZap();
+		assertEquals("hurt", zapped.debugState().mode, "zap puts an unprotected local character in hurt mode");
+
+		var partyZapped = new LocalCharacter(flatLevel());
+		partyZapped.setHats([8, 0xFFFFFF, -1]);
+		partyZapped.receiveZap();
+		assertEquals("land", partyZapped.debugState().mode, "party hat ignores zap hurt reaction");
 	}
 
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {

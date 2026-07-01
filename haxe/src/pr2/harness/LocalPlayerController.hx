@@ -67,6 +67,7 @@ class LocalPlayerController {
 	public var propellerHatActive:Bool = false;
 	public var cowboyHatActive:Bool = false;
 	public var santaHatActive:Bool = false;
+	public var partyHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -228,6 +229,23 @@ class LocalPlayerController {
 
 	public function isFrozen():Bool {
 		return frozenSolidFramesRemaining > 0;
+	}
+
+	public function receiveSting():Void {
+		if (!partyHatActive) {
+			receiveHurtEffect();
+		}
+	}
+
+	public function receiveZap():Void {
+		if (!partyHatActive) {
+			receiveHurtEffect();
+		}
+	}
+
+	private function receiveHurtEffect():Void {
+		setMode(MODE_HURT);
+		beginHurtRecovery();
 	}
 
 	private function frozenSolidStep(input:LocalPlayerInput):Void {
