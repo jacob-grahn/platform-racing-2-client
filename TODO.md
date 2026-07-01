@@ -1,7 +1,7 @@
 # Platform Racing 2 Haxe/OpenFL Port TODO
 
 This file tracks only unfinished work. The target is a 1:1 port of the original
-Flash client, not a compatible remake: behavior, 27 FPS timing, protocol,
+Flash client, not a compatible remake: behavior, protocol,
 screen flow, layout, animation, sound, and failure states should match the AS3
 and XFL sources. Completed work belongs in git history and `README.md`.
 
@@ -10,11 +10,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Treat `flash/**/*.as` and `flash/platform-racing-2-xfl/` as the behavioral and
   visual specification. Do not silently simplify a workflow because the happy
   path works.
-- Keep browser transport adaptations behind narrow wrappers. WebSocket and
-  same-origin HTTP proxy requirements may differ from Flash; commands,
-  responses, state transitions, and visible behavior should not.
-- Every ported feature needs deterministic state/protocol coverage and, when it
-  is visible, a representative Flash/OpenFL screenshot comparison.
 - Temporary drawings, record-only actions, harness redirects, hard-coded data,
   and unsupported buttons are parity gaps and must remain listed here.
 - A task is complete only when the real user flow works. Rendering the art or
@@ -33,17 +28,16 @@ still-unported popup/visual side effects.
 --------
 - [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
 - [ ] Port the full `CourseMenu` access/spectate UI around in-place level
-  loading (slot selection, password/private flows, loading/cancel/error states)
-  from `flash/level_browser`, `flash/page/GamePage.as`, and
-  `flash/gameplay/Game.as`. In-place load via `confirm_slot`/`startGame`, the
-  `SpectatePicker` boundary, and the `LevelEntry` machine already work.
+  loading
+  - [ ] slot selection
+  - [ ] password/private flows
   - [x] Port encrypted level-password verification: hash with
     `LEVEL_PASS_SALT`, decrypt the Flash `result` payload with
     `LEVEL_PASS_KEY`/`LEVEL_PASS_IV`, and gate access on matching
     `level_id`/`access == 1`.
   - [ ] Port private/full slot selection behavior.
   - [ ] Port CourseMenu loading/cancel/error state visuals.
-  - [ ] Port remaining spectate UI wiring around in-place loading.
+  - [ ] Port spectate UI wiring around in-place loading.
 
 Acceptance: an account and a guest can each enter a real race over WebSocket,
 see synchronized remote players, finish or quit, and return to the lobby without
@@ -59,7 +53,43 @@ item-physics audit below plus unported gameplay subsystems.
 Port gameplay behavior not represented by the local harness, one subsystem at a
 time:
 
-- [ ] Port hats and hat powers.
+- [ ] Port hats and hat powers. The appearance/hat-stack model
+  (`resetHats`/`setHats`/`getHighestHat` and the hat-id → power-flag map) is
+  already ported in `Character`; remaining work is the per-power gameplay
+  behavior in `LocalCharacter` plus the hat-attack loose-hat lifecycle. Port one
+  power at a time (AS3 refs are `character/Character.as` and
+  `character/LocalCharacter.as`):
+  - [ ] Propeller hat (id 4, `PROP`): holding Up while falling (`velY > 0`)
+    multiplies `velY` by 0.85 to slow the descent.
+  - [ ] Cowboy hat (id 5, `COWBOY`): while airborne, force swim/`water` mode
+    (`waterTicks`); apply stat boost (`maxVelX >= 12`, `accel >= 1.86`,
+    `SuperJump = 4.5`) via `ensureCowboyStats`, and `resetStats` when removed.
+  - [ ] Crown (id 6, `CROWN`): invincibility — immune to death except in `dm`
+    and `hat` game modes.
+  - [ ] Santa hat (id 7, `SANTA`): stand on water/safety blocks (`onStand` while
+    over a `WaterBlock`/`SafetyBlock`); +1 `maxVelX` via `ensureSantaStats`, and
+    `resetStats` when removed.
+  - [ ] Party hat (id 8, `PARTY`): immune to the `hurt` mode reaction from
+    sting and zap.
+  - [ ] Top hat (id 9, `TOP`): pass through `VanishBlock`s.
+  - [ ] Jump-start hat (id 10, `JUMP_START`): on equip, grant a 2000 ms
+    `speedBurst` item.
+  - [ ] Moon hat (id 11, `MOON`): low gravity (course gravity × 0.85);
+    `resetGravity` when removed.
+  - [ ] Jiggmin hat (id 13, `JIGG`): while falling (`velY > 0`), squash remote
+    players below you (bounce + `squash` command via `maybeSquash`).
+  - [ ] Artifact hat (id 14, `ARTIFACT`): 30 s `speedBurst`, clamp the course
+    timer to 30 s, reversed controls, plus `Zap`/`YeahSound`/music feedback;
+    clean up (clear speed burst, restore controls) when removed.
+  - [ ] Jellyfish hat (id 15, `JELLYFISH`): periodically sting nearby players
+    (`stingCooldown` + `maybeSting`) and be immune to the sting `hurt` reaction.
+  - [ ] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color
+    transparency workaround) — no gameplay power.
+  - [ ] Port the hat-attack game-mode loose-hat lifecycle: drop your highest hat
+    on bump (`getHighestHat` → `loose_hat`), `get_hat` pickup, and
+    `returnHatToStart`/`hat_to_start` when a hat leaves the map bounds.
+    `effects.Hat` display/pickup is partially ported in
+    `gameplay/HatEffect.hx`.
 - [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
 - [ ] Port captcha.
