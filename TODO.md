@@ -95,7 +95,7 @@ rounding, ordering, and edge cases.
   [x] Port multi-use reload timing (Laser Gun/Sword/Ice Wave)
   [ ] Port teleport/mine effect
   [x] Port speed-burst expiry
-  [ ] Port lightning
+  [x] Port lightning
   [x] Port mine item
   [x] Port block item
 
