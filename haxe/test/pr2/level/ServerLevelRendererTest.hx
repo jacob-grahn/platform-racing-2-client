@@ -112,6 +112,17 @@ class ServerLevelRendererTest {
 		}
 		assertClose(block.x, display.x, "block bump returns to original x");
 		assertClose(block.y, display.y, "block bump returns to original y");
+
+		renderer.animateBlockBump(block.x, block.y, 5, 0);
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+
+		assertClose(block.x + 1.625, display.x, "block side bump uses horizontal Flash bounce decay on first frame");
+		assertClose(block.y, display.y, "block side bump keeps y aligned");
+		for (_ in 0...20) {
+			renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertClose(block.x, display.x, "block side bump returns to original x");
+		assertClose(block.y, display.y, "block side bump returns to original y");
 	}
 
 	private static function testMoveBlockDisplay():Void {

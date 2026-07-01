@@ -49,12 +49,14 @@ class LocalPlayerControllerTest {
 		testSpeedBurstBoostsMovementThenExpires();
 		testJetPackLiftsPlayerThenExpires();
 		testLaserGunReloadTiming();
+		testLaserGunShotAnimatesBlockFromSide();
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
 		testLightningEmitsZapAndConsumesItem();
 		testReloadableItemReleaseGateThenHeldRefire();
 		testSwordReloadTiming();
 		testIceWaveReloadTiming();
+		testIceWaveShotAnimatesBlockFromSide();
 		testFrozenSolidDisablesMovementAndThaws();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
@@ -890,6 +892,22 @@ class LocalPlayerControllerTest {
 		assertEquals(null, player.debugState().itemId, "laser is consumed after three shots");
 	}
 
+	private static function testLaserGunShotAnimatesBlockFromSide():Void {
+		var player = collectItem(heldItemWithTargetBlockLevel(1), 1);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var events = player.consumeBlockVisualEvents();
+
+		assertEquals(1, events.length, "laser shot side-hit emits one block visual event");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "laser side-hit uses block bump animation event");
+		assertEquals(4, events[0].tileX, "laser side-hit targets the first solid block in the shot path");
+		assertEquals(5, events[0].tileY, "laser side-hit targets the shot-height block row");
+		assertEquals(5, events[0].hitX, "right-facing laser bumps the block sideways");
+		assertEquals(0, events[0].hitY, "side shot does not use the upward bump impulse");
+	}
+
 	private static function testMineItemPlacesMineAndConsumesItem():Void {
 		var level = heldItemLevel(2);
 		var player = collectItem(level, 2);
@@ -1011,6 +1029,22 @@ class LocalPlayerControllerTest {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
 		assertEquals(null, player.debugState().itemId, "ice wave is consumed after three waves");
+	}
+
+	private static function testIceWaveShotAnimatesBlockFromSide():Void {
+		var player = collectItem(heldItemWithTargetBlockLevel(9), 9);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var events = player.consumeBlockVisualEvents();
+
+		assertEquals(1, events.length, "ice wave side-hit emits one block visual event");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "ice wave side-hit uses block bump animation event");
+		assertEquals(4, events[0].tileX, "ice wave side-hit targets the first solid block in the shot path");
+		assertEquals(5, events[0].tileY, "ice wave side-hit targets the shot-height block row");
+		assertEquals(5, events[0].hitX, "right-facing ice wave bumps the block sideways");
+		assertEquals(0, events[0].hitY, "ice wave side-hit does not use the upward bump impulse");
 	}
 
 	private static function testFrozenSolidDisablesMovementAndThaws():Void {
@@ -1718,6 +1752,12 @@ class LocalPlayerControllerTest {
 				new LevelBlock(7, 6, BlockType.Finish)
 			]
 		);
+	}
+
+	private static function heldItemWithTargetBlockLevel(itemId:Int):FixtureLevel {
+		var level = heldItemLevel(itemId);
+		level.blocks.push(new LevelBlock(4, 5, BlockType.Solid));
+		return level;
 	}
 
 	private static function blockedMineItemLevel():FixtureLevel {

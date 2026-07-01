@@ -23,13 +23,17 @@ class BlockVisualEvent {
 	public final toTileX:Null<Int>;
 	public final toTileY:Null<Int>;
 	public final count:Int;
+	public final hitX:Float;
+	public final hitY:Float;
 
-	public function new(kind:BlockVisualEventKind, tileX:Int, tileY:Int, count:Int = 1, ?toTileX:Int, ?toTileY:Int) {
+	public function new(kind:BlockVisualEventKind, tileX:Int, tileY:Int, count:Int = 1, ?toTileX:Int, ?toTileY:Int, hitX:Float = 0, hitY:Float = -15) {
 		this.kind = kind;
 		this.tileX = tileX;
 		this.tileY = tileY;
 		this.count = count;
 		this.toTileX = toTileX;
 		this.toTileY = toTileY;
+		this.hitX = hitX;
+		this.hitY = hitY;
 	}
 }

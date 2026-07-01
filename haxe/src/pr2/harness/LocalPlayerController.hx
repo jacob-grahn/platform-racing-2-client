@@ -1032,6 +1032,7 @@ class LocalPlayerController {
 		var direction = facingDirection < 0 ? "left" : "right";
 		vx += facingDirection < 0 ? 15 : -15;
 		lastItemEffect = "laser:" + direction;
+		animateFirstShotBlockHit(facingDirection < 0 ? 180 : 0);
 		consumeHeldItemUse();
 	}
 
@@ -1114,7 +1115,25 @@ class LocalPlayerController {
 	private function useIceWave():Void {
 		var direction = facingDirection < 0 ? "left" : "right";
 		lastItemEffect = "ice_wave:" + direction;
+		animateFirstShotBlockHit(facingDirection < 0 ? 180 : 0);
 		consumeHeldItemUse();
+	}
+
+	private function animateFirstShotBlockHit(angleDegrees:Float):Void {
+		var shotX = x + (angleDegrees == 180 ? -20 : 20);
+		var shotY = y - 25;
+		var radians = angleDegrees * Math.PI / 180;
+		var velX = Math.cos(radians) * 5;
+		var velY = Math.sin(radians) * 5;
+		for (_ in 0...100) {
+			var block = getBlockAtPixel(shotX, shotY);
+			if (block != null) {
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, velX, 0));
+				return;
+			}
+			shotX += velX;
+			shotY += velY;
+		}
 	}
 
 	private function consumeHeldItemUse():Void {

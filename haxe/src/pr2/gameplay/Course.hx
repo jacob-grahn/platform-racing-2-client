@@ -853,7 +853,7 @@ class Course extends Sprite {
 				case SafetyPoof:
 					levelRenderer.showTeleportPop(worldXOf(event), worldYOf(event));
 				case BlockBumpSound:
-					levelRenderer.animateBlockBump(worldXOf(event), worldYOf(event));
+					levelRenderer.animateBlockBump(worldXOf(event), worldYOf(event), event.hitX, event.hitY);
 					playBlockBumpSound(event);
 				case ItemBlockSound:
 					playItemBlockSound();
