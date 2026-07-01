@@ -19,7 +19,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 ## Bugs
 - [x] after rotating once with a rotate block, player can walk to the left and go through walls
 - [x] art backgrounds line art is drawn too thick
-- [ ] move blocks don't move
+- [x] move blocks don't move
 - [ ] move blocks don't display their direction arrow before moving
 
 ## Current Priority: Real Login-to-Race Flow

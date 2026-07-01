@@ -334,6 +334,33 @@ class ServerLevelRenderer extends Sprite {
 		return display == null ? null : display.alpha;
 	}
 
+	public function moveBlockDisplay(fromWorldX:Int, fromWorldY:Int, toWorldX:Int, toWorldY:Int):Void {
+		if (fromWorldX == toWorldX && fromWorldY == toWorldY) {
+			return;
+		}
+		var fromKey = blockKey(fromWorldX, fromWorldY);
+		var display = blockDisplays.get(fromKey);
+		if (display == null) {
+			return;
+		}
+
+		blockDisplays.remove(fromKey);
+		removeFromBlockGrid(fromWorldX, fromWorldY);
+
+		display.x = toWorldX;
+		display.y = toWorldY;
+		blockDisplays.set(blockKey(toWorldX, toWorldY), display);
+		addToBlockGrid(toWorldX, toWorldY, display);
+
+		if (isInView(segmentOf(toWorldX), segmentOf(toWorldY))) {
+			if (display.parent != blockLayer) {
+				blockLayer.addChild(display);
+			}
+		} else if (display.parent == blockLayer) {
+			blockLayer.removeChild(display);
+		}
+	}
+
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
 		var effect = new MineExplosion(worldX, worldY, offsetX, offsetY, playSound);
 		blockLayer.addChild(effect);
@@ -510,19 +537,35 @@ class ServerLevelRenderer extends Sprite {
 	private function addBlockDisplay(block:DecodedBlock):Void {
 		var display = createBlockDisplay(block);
 		blockDisplays.set(blockKey(block.x, block.y), display);
+		addToBlockGrid(block.x, block.y, display);
 		var segX = segmentOf(block.x);
 		var segY = segmentOf(block.y);
+		// Attach only if the block currently falls inside the view window; otherwise
+		// it stays in the grid and is attached later when the camera scrolls to it.
+		if (isInView(segX, segY)) {
+			blockLayer.addChild(display);
+		}
+	}
+
+	private function addToBlockGrid(worldX:Int, worldY:Int, display:Sprite):Void {
+		var segX = segmentOf(worldX);
+		var segY = segmentOf(worldY);
 		var col = blockGrid.get(segX);
 		if (col == null) {
 			col = new Map();
 			blockGrid.set(segX, col);
 		}
 		col.set(segY, display);
-		// Attach only if the block currently falls inside the view window; otherwise
-		// it stays in the grid and is attached later when the camera scrolls to it.
-		if (isInView(segX, segY)) {
-			blockLayer.addChild(display);
+	}
+
+	private function removeFromBlockGrid(worldX:Int, worldY:Int):Void {
+		var segX = segmentOf(worldX);
+		var segY = segmentOf(worldY);
+		var col = blockGrid.get(segX);
+		if (col == null) {
+			return;
 		}
+		col.remove(segY);
 	}
 
 	private static inline function segmentOf(coord:Int):Int {

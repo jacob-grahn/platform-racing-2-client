@@ -19,6 +19,7 @@ class ServerLevelRendererTest {
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
+		testMoveBlockDisplay();
 		testIncrementalBlockDrawing();
 		testIncrementalArtDrawing();
 		testArrowAnimation();
@@ -91,6 +92,20 @@ class ServerLevelRendererTest {
 		assertEquals(0.5, transform.redMultiplier, "server renderer applies depleted item red multiplier");
 		assertEquals(0.5, transform.greenMultiplier, "server renderer applies depleted item green multiplier");
 		assertEquals(0.5, transform.blueMultiplier, "server renderer applies depleted item blue multiplier");
+	}
+
+	private static function testMoveBlockDisplay():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_MOVE, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+
+		renderer.moveBlockDisplay(10020, 10050, 10050, 10050);
+
+		var blockLayer = worldLayer(renderer, 1);
+		var display = blockLayer.getChildAt(0);
+		assertEquals(10050.0, display.x, "move block display shifts to new world x");
+		assertEquals(10050.0, display.y, "move block display keeps new world y");
+		assertEquals(null, renderer.blockAlphaAt(10020, 10050), "old move block coordinate is no longer keyed");
+		assertEquals(1.0, renderer.blockAlphaAt(10050, 10050), "new move block coordinate is keyed");
 	}
 
 	private static function testIncrementalBlockDrawing():Void {

@@ -145,6 +145,7 @@ class Course extends Sprite {
 	private var displayedStats:Null<String>;
 	private var displayedLives:Null<Int>;
 	private var finishDrawingEmitted:Bool = false;
+	private final displayedMoveBlockPositions:Map<Int, {worldX:Int, worldY:Int}> = new Map();
 	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
 	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
 	private var activeVisualBlocks:Map<String, Bool> = new Map();
@@ -796,6 +797,7 @@ class Course extends Sprite {
 	}
 
 	private function syncBlockVisuals():Void {
+		syncMoveBlockDisplays();
 		// Only blocks with non-default alpha/tint (fading/removed/depleted) need
 		// restyling; iterating all blocks here was O(blocks) per frame and dropped
 		// large levels to a few fps. Update just the active set, and reset any block
@@ -835,6 +837,31 @@ class Course extends Sprite {
 					playItemBlockSound();
 				case SuperJumpSound:
 					playSuperJumpSound();
+			}
+		}
+	}
+
+	private function syncMoveBlockDisplays():Void {
+		if (levelRenderer == null || serverFixture == null || serverFixture.fixture == null) {
+			return;
+		}
+		var fixtureBlocks = serverFixture.fixture.blocks;
+		for (i in 0...fixtureBlocks.length) {
+			var fixtureBlock = fixtureBlocks[i];
+			if (fixtureBlock.type != pr2.level.BlockType.Move || i >= level.blocks.length) {
+				continue;
+			}
+			var currentWorldX = (fixtureBlock.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var currentWorldY = (fixtureBlock.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var displayed = displayedMoveBlockPositions.get(i);
+			if (displayed == null) {
+				var original = level.blocks[i];
+				displayedMoveBlockPositions.set(i, {worldX: original.x, worldY: original.y});
+				displayed = displayedMoveBlockPositions.get(i);
+			}
+			if (displayed.worldX != currentWorldX || displayed.worldY != currentWorldY) {
+				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
+				displayedMoveBlockPositions.set(i, {worldX: currentWorldX, worldY: currentWorldY});
 			}
 		}
 	}
