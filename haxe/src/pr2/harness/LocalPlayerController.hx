@@ -105,6 +105,7 @@ class LocalPlayerController {
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final depletedItemBlocks:Map<String, Bool> = new Map();
 	private final depletedSupplyBlocks:Map<String, Bool> = new Map();
+	private final depletedVisualSupplyBlocks:Map<String, Bool> = new Map();
 	private final moveBlockDirections:Map<String, Int> = new Map();
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
@@ -402,7 +403,7 @@ class LocalPlayerController {
 	public function blockColorMultiplierAt(tileX:Int, tileY:Int):Float {
 		var key = blockKey(tileX, tileY);
 		var block = level.blockAt(tileX, tileY);
-		return block != null && block.type == BlockType.Item && depletedItemBlocks.exists(key) ? 0.5 : 1;
+		return block != null && ((block.type == BlockType.Item && depletedItemBlocks.exists(key)) || depletedVisualSupplyBlocks.exists(key)) ? 0.5 : 1;
 	}
 
 	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
@@ -422,7 +423,17 @@ class LocalPlayerController {
 		for (key in vanishFadeInFrames.keys()) seen.set(key, true);
 		for (key in removedBlocks.keys()) seen.set(key, true);
 		for (key in depletedItemBlocks.keys()) seen.set(key, true);
+		for (key in depletedVisualSupplyBlocks.keys()) seen.set(key, true);
 		return [for (key in seen.keys()) key];
+	}
+
+	private static function depletesAsSupplyVisual(type:BlockType):Bool {
+		return switch (type) {
+			case BlockType.Happy | BlockType.Sad:
+				true;
+			default:
+				false;
+		}
 	}
 
 	public function activeMoveBlockDirections():Map<String, Int> {
@@ -1153,6 +1164,9 @@ class LocalPlayerController {
 			return false;
 		}
 		depletedSupplyBlocks.set(key, true);
+		if (depletesAsSupplyVisual(block.type)) {
+			depletedVisualSupplyBlocks.set(key, true);
+		}
 		return true;
 	}
 

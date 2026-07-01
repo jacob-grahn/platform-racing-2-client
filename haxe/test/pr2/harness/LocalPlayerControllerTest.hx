@@ -1080,17 +1080,21 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function testBumpingHappyBlockRaisesStats():Void {
-		var state = bumpSupply(supplyBlockLevel(BlockType.Happy, "20"), BlockType.Happy).debugState();
+		var player = bumpSupply(supplyBlockLevel(BlockType.Happy, "20"), BlockType.Happy);
+		var state = player.debugState();
 		assertClose(70, state.speedStat, "happy block raises speed by configured amount");
 		assertClose(70, state.accelerationStat, "happy block raises acceleration");
 		assertClose(70, state.jumpStat, "happy block raises jumping");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted happy block uses SupplyBlock grey transform");
 	}
 
 	private static function testBumpingSadBlockLowersStats():Void {
-		var state = bumpSupply(supplyBlockLevel(BlockType.Sad, "-20"), BlockType.Sad).debugState();
+		var player = bumpSupply(supplyBlockLevel(BlockType.Sad, "-20"), BlockType.Sad);
+		var state = player.debugState();
 		assertClose(30, state.speedStat, "sad block lowers speed by configured amount");
 		assertClose(30, state.accelerationStat, "sad block lowers acceleration");
 		assertClose(30, state.jumpStat, "sad block lowers jumping");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted sad block uses SupplyBlock grey transform");
 	}
 
 	private static function testBumpingHeartBlockAddsCappedLife():Void {
