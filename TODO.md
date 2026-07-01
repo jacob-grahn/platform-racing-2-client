@@ -92,7 +92,7 @@ bugs. Do not "fix" or idealize behavior — replicate the AS3 exactly, including
 rounding, ordering, and edge cases.
 
 - [x] Port Jet pack fuel/thrust,
-  [ ] Port multi-use reload timing (Laser Gun/Sword/Ice Wave)
+  [x] Port multi-use reload timing (Laser Gun/Sword/Ice Wave)
   [ ] Port teleport/mine effect
   [x] Port speed-burst expiry
   [ ] Port lightning
