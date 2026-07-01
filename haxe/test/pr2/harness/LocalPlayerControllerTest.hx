@@ -1144,6 +1144,13 @@ class LocalPlayerControllerTest {
 		assertEquals("push", state.touchedBlockType, "standing on push block reports touched block");
 		assertEquals(null, level.blockAt(2, 3), "push block leaves original tile");
 		assertEquals(BlockType.Push, level.blockAt(2, 4).type, "push block moves one tile down");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "push block emits one display movement event");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[0].kind), "push block emits display movement event");
+		assertEquals(2, events[0].tileX, "push block display event records source x");
+		assertEquals(3, events[0].tileY, "push block display event records source y");
+		assertEquals(2, events[0].toTileX, "push block display event records destination x");
+		assertEquals(4, events[0].toTileY, "push block display event records destination y");
 	}
 
 	private static function testTimedMoveBlockShiftsAfterPreview():Void {

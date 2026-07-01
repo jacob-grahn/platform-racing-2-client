@@ -842,6 +842,15 @@ class Course extends Sprite {
 					playItemBlockSound();
 				case SuperJumpSound:
 					playSuperJumpSound();
+				case PushBlockMove:
+					if (event.toTileX != null && event.toTileY != null) {
+						levelRenderer.moveBlockDisplay(
+							worldXOf(event),
+							worldYOf(event),
+							worldTileX(event.toTileX),
+							worldTileY(event.toTileY)
+						);
+					}
 			}
 		}
 	}
@@ -957,6 +966,14 @@ class Course extends Sprite {
 
 	private inline function worldYOf(event:BlockVisualEvent):Int {
 		return (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+	}
+
+	private inline function worldTileX(tileX:Int):Int {
+		return (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+	}
+
+	private inline function worldTileY(tileY:Int):Int {
+		return (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 	}
 
 	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {

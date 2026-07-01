@@ -862,8 +862,11 @@ class LocalPlayerController {
 			return;
 		}
 
+		var fromX = block.x;
+		var fromY = block.y;
 		block.x = destX;
 		block.y = destY;
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.PushBlockMove, fromX, fromY, 1, destX, destY));
 	}
 
 	private function canMoveBlockTo(tileX:Int, tileY:Int):Bool {

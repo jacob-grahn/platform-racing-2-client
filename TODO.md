@@ -23,7 +23,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [ ] character dissapears when in water (perhaps the character is rendering behind the background?)
 - [ ] happy and sad blocks should deactivate/grey out after one use
 - [ ] happy and sad blocks should play sound effects when bumped
-- [ ] push block works on the physics level, but does not update its display position when moving
  
 
 ## Gameplay Fidelity
