@@ -202,6 +202,16 @@ class Character extends Sprite {
 		}
 	}
 
+	private function refreshHatFlags():Void {
+		resetHats();
+		for (hatId in [hat1, hat2, hat3, hat4]) {
+			var flag = hatFlagForId(hatId);
+			if (flag != null) {
+				hatFlags.set(flag, true);
+			}
+		}
+	}
+
 	/** True when the character is currently wearing the given special hat. */
 	public function hasHatFlag(flag:String):Bool {
 		return hatFlags.exists(flag) && hatFlags.get(flag);
@@ -244,13 +254,10 @@ class Character extends Sprite {
 					hat4Color2 = hatColor2;
 			}
 
-			var flag = hatFlagForId(hatId);
-			if (flag != null) {
-				hatFlags.set(flag, true);
-			}
 			hatSlot++;
 			i += 3;
 		}
+		refreshHatFlags();
 		applyAppearance();
 	}
 
@@ -274,6 +281,7 @@ class Character extends Sprite {
 
 	public function setHatId(id:Int):Void {
 		hat1 = id;
+		refreshHatFlags();
 		applyAppearance();
 	}
 
@@ -365,6 +373,7 @@ class Character extends Sprite {
 			}
 			hatSlot--;
 		}
+		refreshHatFlags();
 		applyAppearance();
 		return {hatNum: hatNum, hatColor: hatColor};
 	}

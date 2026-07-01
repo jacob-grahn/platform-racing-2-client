@@ -257,6 +257,11 @@ class LocalPlayerController {
 		}
 	}
 
+	public function squashBounce():Void {
+		vy = -3;
+		grounded = true;
+	}
+
 	private function receiveHurtEffect():Void {
 		setMode(MODE_HURT);
 		beginHurtRecovery();

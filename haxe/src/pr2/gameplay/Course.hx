@@ -62,6 +62,8 @@ class Course extends Sprite {
 	static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
 	// BumpHappySound -> sound473 (AssetCatalog DOMSoundItem), used by Character.gainHeart.
 	static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/sound473.mp3";
+	// SquashSound -> sound915, used by the Jiggmin hat stomp.
+	static inline var SQUASH_SOUND:String = "assets/audio/sfx/sound915.mp3";
 	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
 	static inline var SPEED_UP_SOUND:String = "assets/audio/sfx/sound550.mp3";
 	static inline var SLOW_DOWN_SOUND:String = "assets/audio/sfx/sound551.mp3";
@@ -521,6 +523,7 @@ class Course extends Sprite {
 		}
 		var path = switch (request.kind) {
 			case "bumpHappy": BUMP_HAPPY_SOUND;
+			case "squash": SQUASH_SOUND;
 			case "speedUp": SPEED_UP_SOUND;
 			case "slowDown": SLOW_DOWN_SOUND;
 			default: null;
@@ -640,6 +643,7 @@ class Course extends Sprite {
 
 		if (raceStarted) {
 			player.step(input.copy());
+			player.maybeSquash(playerArray);
 		}
 		if (raceStarted && eggRound != null && config.gameMode == "egg") {
 			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);

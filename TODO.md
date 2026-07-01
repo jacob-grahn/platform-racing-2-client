@@ -82,7 +82,7 @@ time:
     `speedBurst` item.
   - [x] Moon hat (id 11, `MOON`): low gravity (course gravity × 0.85);
     `resetGravity` when removed.
-  - [ ] Jiggmin hat (id 13, `JIGG`): while falling (`velY > 0`), squash remote
+  - [x] Jiggmin hat (id 13, `JIGG`): while falling (`velY > 0`), squash remote
     players below you (bounce + `squash` command via `maybeSquash`).
   - [ ] Artifact hat (id 14, `ARTIFACT`): 30 s `speedBurst`, clamp the course
     timer to 30 s, reversed controls, plus `Zap`/`YeahSound`/music feedback;

@@ -79,6 +79,10 @@ class CharacterBaseTest {
 		c.setHats([5, 0, -1]);
 		assertTrue(c.hasHatFlag(Character.COWBOY), "cowboy id raises the cowboy flag");
 		assertTrue(!c.hasHatFlag(Character.CROWN), "setHats clears flags from the old stack");
+
+		c.setHatId(13);
+		assertTrue(c.hasHatFlag(Character.JIGG), "direct hat id updates special flags");
+		assertTrue(!c.hasHatFlag(Character.COWBOY), "direct hat id clears stale special flags");
 	}
 
 	private static function testGetHighestHat():Void {

@@ -7,6 +7,8 @@ import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.FixtureLevel.StatDefaults;
 import pr2.level.FixtureLevel.TilePosition;
+import pr2.net.CommandHandler;
+import pr2.net.LobbySocket;
 
 class LocalCharacterTest {
 	private static var assertions:Int = 0;
@@ -21,6 +23,7 @@ class LocalCharacterTest {
 		testTopHatPassesThroughVanishBlocks();
 		testCrownHatIgnoresMineHitsExceptDeathmatch();
 		testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip();
+		testJiggminHatSquashesRemotePlayersWhileFalling();
 		testCheeseHatIsCosmeticOnly();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
@@ -226,6 +229,40 @@ class LocalCharacterTest {
 		assertEquals(null, jumpStart.debugState().itemId, "jump-start speed burst expires after two seconds");
 		assertClose(50, jumpStart.debugState().speedStat, "jump-start expiry restores speed stat");
 		assertClose(50, jumpStart.debugState().accelerationStat, "jump-start expiry restores acceleration stat");
+	}
+
+	private static function testJiggminHatSquashesRemotePlayersWhileFalling():Void {
+		var local = new LocalCharacter(airborneLevel());
+		local.setHats([13, 0xFFFFFF, -1]);
+		local.step(new LocalPlayerInput());
+		var remote = new RemoteCharacter(7, null, "Rival", 1, 1, 1, 1, "0", new CommandHandler());
+		remote.setPos(local.x + 5, local.y + 50);
+		remote.changeState("stand");
+		var sounds:Array<String> = [];
+		local.onPlayCharacterSound = function(request):Void {
+			sounds.push(request.kind + ":" + request.volume + ":" + Math.round(request.x) + ":" + Math.round(request.y));
+		};
+		LobbySocket.resetSent();
+
+		assertEquals(true, local.maybeSquash([local, remote]), "jiggmin hat squashes a remote below while falling");
+		assertEquals("crouch", remote.state, "squashed remote predicts crouch state");
+		assertClose(-3, local.debugState().vy, "squash bounce sets upward velocity");
+		assertEquals(true, local.debugState().grounded, "squash bounce marks the local character grounded");
+		assertEquals("squash:0.66:" + Math.round(local.x) + ":" + Math.round(local.y), sounds.join("|"), "squash sound hook fires at local position");
+		assertEquals("squash`7`" + Math.round(local.x) + "`" + Math.round(local.y), LobbySocket.lastSent(), "squash emits remote id and local coordinates");
+
+		var noHat = new LocalCharacter(airborneLevel());
+		noHat.step(new LocalPlayerInput());
+		var untouched = new RemoteCharacter(8, null, "Other", 1, 1, 1, 1, "0", new CommandHandler());
+		untouched.setPos(noHat.x + 5, noHat.y + 50);
+		untouched.changeState("stand");
+		LobbySocket.resetSent();
+		assertEquals(false, noHat.maybeSquash([untouched]), "missing jiggmin hat does not squash");
+		assertEquals("stand", untouched.state, "remote stays standing without jiggmin hat");
+		assertEquals(0, LobbySocket.sentCommands.length, "no squash command without jiggmin hat");
+
+		remote.remove();
+		untouched.remove();
 	}
 
 	private static function testCheeseHatIsCosmeticOnly():Void {

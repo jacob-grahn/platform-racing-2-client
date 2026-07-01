@@ -89,6 +89,32 @@ class LocalCharacter extends Character {
 		syncFromController();
 	}
 
+	public function maybeSquash(players:Array<Character>):Bool {
+		if (!hasHatFlag(Character.JIGG) || controller.vy <= 0 || players == null) {
+			return false;
+		}
+		var squashed = false;
+		for (player in players) {
+			if (!(Std.isOfType(player, RemoteCharacter))) {
+				continue;
+			}
+			if (player.state == "crouch" || player.state == "crouchWalk") {
+				continue;
+			}
+			if (player.x > x - 20 && player.x < x + 20 && player.y > y + 35 && player.y < y + 65 && player.rotation == rotation) {
+				player.changeState("crouch");
+				if (onPlayCharacterSound != null) {
+					onPlayCharacterSound({kind: "squash", x: x, y: y, volume: 0.66, target: this});
+				}
+				emitSquash(player.tempID);
+				controller.squashBounce();
+				syncFromController();
+				squashed = true;
+			}
+		}
+		return squashed;
+	}
+
 	public function initNetworkEmission():Void {
 		framesSinceUpdate = 0;
 		exactX = 0;
