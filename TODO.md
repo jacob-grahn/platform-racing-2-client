@@ -82,7 +82,7 @@ time:
   - [x] Port the in-race `areYouHuman` command boundary and cat captcha popup:
     load `/cat/cat-captcha.php`, render two authored cat-image choices, POST the
     clicked `answer` to `/cat/captcha-submit.php`, and fade on submit/error.
-- [ ] Port rank progression.
+- [x] Port rank progression.
   - [x] Wire in-race `award` and `setExpGain` commands into the authored
     `FinishedPage` overlay: awards queue before the popup exists, later awards
     update it live, and exp gain marks the player done without emitting a quit.
