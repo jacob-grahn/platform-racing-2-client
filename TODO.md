@@ -97,7 +97,7 @@ rounding, ordering, and edge cases.
   [x] Port speed-burst expiry
   [ ] Port lightning
   [x] Port mine item
-  [ ] Port block item
+  [x] Port block item
 
 Acceptance: scripted input and server transcripts produce matching Flash debug
 state at agreed checkpoints, and representative race screenshots stay within
