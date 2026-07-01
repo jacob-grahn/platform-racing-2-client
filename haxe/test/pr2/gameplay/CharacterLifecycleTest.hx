@@ -3,6 +3,7 @@ package pr2.gameplay;
 import openfl.events.Event;
 import openfl.display.Sprite;
 import openfl.ui.Keyboard;
+import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -13,17 +14,20 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
+import pr2.lobby.account.Settings;
 
 @:access(pr2.gameplay.Course)
 class CharacterLifecycleTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		Settings.disablePersistenceForTests();
 		testLocalAndRemoteLifecycle();
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();
 		testRemoteJumpPlaysSound();
 		testCharacterEffectSounds();
+		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
 		testLocalSwordEmitsSlashEffect();
 		testEggRoundCommandLifecycle();
@@ -164,6 +168,34 @@ class CharacterLifecycleTest {
 
 		assertEquals("44,55", sounds.join("|"), "remote jump state plays Flash JumpSound once at the remote world position");
 		shell.remove();
+		course.remove();
+	}
+
+	private static function testArtifactHatMountsSilentFlashOnlyZapEffect():Void {
+		var course = buildCourse(new CommandHandler());
+		var initialChildren = course.characterLayer.numChildren;
+		var oldMusicLevel = Settings.musicLevel;
+		Settings.setValue(Settings.MUSIC_VOLUME, 0);
+
+		course.localCharacter.setHats([14, 0xFFFFFF, -1]);
+
+		assertEquals(initialChildren + 1, course.characterLayer.numChildren, "artifact activation mounts one zap effect");
+		var zap = Std.downcast(course.characterLayer.getChildAt(course.characterLayer.numChildren - 1), ZapEffect);
+		assertTrue(zap != null, "artifact activation mounts a zap effect");
+		assertEquals(false, zap.hasTimelineChild("lightning"), "artifact zap hides the bolt");
+		assertEquals(true, zap.hasTimelineChild("bg"), "artifact zap keeps the blue flash");
+
+		course.localCharacter.x += 12;
+		course.localCharacter.y += 7;
+		zap.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(course.localCharacter.x, zap.x, "artifact zap follows the local character x");
+		assertEquals(course.localCharacter.y, zap.y, "artifact zap follows the local character y");
+		for (_ in 0...10) {
+			zap.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertTrue(zap.parent == null, "artifact zap removes itself after fading out");
+
+		Settings.setValue(Settings.MUSIC_VOLUME, oldMusicLevel);
 		course.remove();
 	}
 

@@ -17,6 +17,7 @@ import pr2.audio.SoundEffects;
 import pr2.character.Character;
 import pr2.character.LocalCharacter;
 import pr2.character.RemoteCharacter;
+import pr2.effects.ZapEffect;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
@@ -545,6 +546,9 @@ class Course extends Sprite {
 	private function onArtifactHatActivated():Void {
 		if (musicSelection != null) {
 			musicSelection.gotArtifact();
+		}
+		if (localCharacter != null && characterLayer != null) {
+			characterLayer.addChild(new ZapEffect(localCharacter, false, false, true));
 		}
 	}
 

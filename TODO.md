@@ -63,7 +63,7 @@ time:
     - [x] Gameplay power: 30 s `speedBurst`, clamp the course timer to 30 s,
       reversed controls, `YeahSound`/music feedback, and removal cleanup
       (clear speed burst, restore controls).
-    - [ ] Render the silent blue `Zap` flash visual on activation.
+    - [x] Render the silent blue `Zap` flash visual on activation.
   - [x] Jellyfish hat (id 15, `JELLYFISH`): periodically sting nearby players
     (`stingCooldown` + `maybeSting`) and be immune to the sting `hurt` reaction.
   - [x] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color
