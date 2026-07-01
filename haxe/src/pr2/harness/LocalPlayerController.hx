@@ -65,6 +65,7 @@ class LocalPlayerController {
 	public var courseTime(default, null):Int = 120;
 	public var gameMode(default, null):String = "race";
 	public var propellerHatActive:Bool = false;
+	public var cowboyHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -155,6 +156,10 @@ class LocalPlayerController {
 			facingDirection = -1;
 		}
 		useHeldItem(input);
+		if (cowboyHatActive && !grounded && mode == MODE_LAND) {
+			setMode(MODE_WATER);
+			waterTicks = 2;
+		}
 		if (mode == MODE_FREEZE) {
 			updateRotation();
 		} else if (mode == MODE_FROZEN_SOLID) {
@@ -175,6 +180,14 @@ class LocalPlayerController {
 
 	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
 		applyStats(speed, acceleration, jump);
+	}
+
+	public function ensureCowboyStats():Void {
+		applyStats(Math.max(speedStat, 100), Math.max(accelerationStat, 99.6), Math.max(jumpStat, 100));
+	}
+
+	public function resetStats():Void {
+		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
 	}
 
 	// The pool an empty-options item block draws from (Course passes the decoded

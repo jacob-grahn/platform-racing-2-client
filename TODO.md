@@ -61,7 +61,7 @@ time:
   `character/LocalCharacter.as`):
   - [x] Propeller hat (id 4, `PROP`): holding Up while falling (`velY > 0`)
     multiplies `velY` by 0.85 to slow the descent.
-  - [ ] Cowboy hat (id 5, `COWBOY`): while airborne, force swim/`water` mode
+  - [x] Cowboy hat (id 5, `COWBOY`): while airborne, force swim/`water` mode
     (`waterTicks`); apply stat boost (`maxVelX >= 12`, `accel >= 1.86`,
     `SuperJump = 4.5`) via `ensureCowboyStats`, and `resetStats` when removed.
   - [ ] Crown (id 6, `CROWN`): invincibility — immune to death except in `dm`

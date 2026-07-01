@@ -44,6 +44,7 @@ class LocalCharacter extends Character {
 
 	override public function setHats(hatArray:Array<Int>):Void {
 		var hadMoon = hasHatFlag(Character.MOON);
+		var hadCowboy = hasHatFlag(Character.COWBOY);
 		super.setHats(hatArray);
 		if (hadMoon && !hasHatFlag(Character.MOON)) {
 			controller.setGravity(baseGravityMultiplier);
@@ -51,11 +52,20 @@ class LocalCharacter extends Character {
 		if (hasHatFlag(Character.MOON) && !hadMoon) {
 			controller.setGravity(baseGravityMultiplier * 0.85);
 		}
+		if (hadCowboy && !hasHatFlag(Character.COWBOY)) {
+			controller.cowboyHatActive = false;
+			controller.resetStats();
+		}
+		if (hasHatFlag(Character.COWBOY) && !hadCowboy) {
+			controller.cowboyHatActive = true;
+			controller.ensureCowboyStats();
+		}
 		syncFromController();
 	}
 
 	public function step(input:LocalPlayerInput):Void {
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
+		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.step(input);
 		syncFromController();
 	}

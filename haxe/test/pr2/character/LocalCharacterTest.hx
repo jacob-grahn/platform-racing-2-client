@@ -14,6 +14,7 @@ class LocalCharacterTest {
 	public static function main():Void {
 		testDelegatesPhysicsAndMirrorsCharacterState();
 		testPropellerHatSlowsFallWhenHoldingJump();
+		testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved();
 		testMoonHatReducesGravityUntilRemoved();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
@@ -62,6 +63,27 @@ class LocalCharacterTest {
 		notHeld.setHats([4, 0xFFFFFF, -1]);
 		notHeld.step(new LocalPlayerInput());
 		assertClose(normal.debugState().vy, notHeld.debugState().vy, "propeller does not slow falling without jump held");
+	}
+
+	private static function testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved():Void {
+		var cowboy = new LocalCharacter(airborneLevel());
+		cowboy.setHats([5, 0xFFFFFF, -1]);
+
+		var equipped = cowboy.debugState();
+		assertClose(100, equipped.speedStat, "cowboy hat raises speed to Flash minimum");
+		assertClose(99.6, equipped.accelerationStat, "cowboy hat raises acceleration to Flash minimum");
+		assertClose(100, equipped.jumpStat, "cowboy hat raises jump to Flash minimum");
+
+		cowboy.step(new LocalPlayerInput());
+		var swimming = cowboy.debugState();
+		assertEquals("water", swimming.mode, "cowboy hat forces airborne water mode");
+		assertEquals("swim", swimming.animation, "cowboy airborne mode uses swim animation");
+
+		cowboy.setHats([]);
+		var removed = cowboy.debugState();
+		assertClose(50, removed.speedStat, "cowboy hat removal restores starting speed");
+		assertClose(50, removed.accelerationStat, "cowboy hat removal restores starting acceleration");
+		assertClose(50, removed.jumpStat, "cowboy hat removal restores starting jump");
 	}
 
 	private static function testMoonHatReducesGravityUntilRemoved():Void {
