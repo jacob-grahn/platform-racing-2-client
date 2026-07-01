@@ -7,6 +7,8 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.LocalPlayerDebugState;
+import pr2.level.BlockType;
+import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -54,6 +56,7 @@ class GameShellMountTest {
 		assertBelow(course.levelRenderer.getChildIndex(course.backCharacterLayer), course.levelRenderer.numChildren - 1,
 			"back character layer is below the level foreground");
 		testRemoteParentLayerSwitch(course);
+		testLocalWaterParentLayerSwitch(course);
 
 		// With no chat interceptor supplied, the shell does not swallow chat.
 		assertEquals(false, course.handleRaceChatLine("/debug"), "no interceptor leaves chat unhandled");
@@ -98,6 +101,16 @@ class GameShellMountTest {
 		remote.onParentChange("frontBackground");
 		assertEquals(course.characterLayer, remote.parent, "remote front parent returns above blocks");
 		course.removeRemoteCharacter(9);
+	}
+
+	private static function testLocalWaterParentLayerSwitch(course:Course):Void {
+		@:privateAccess course.localCharacter.controller.touchedBlock = new LevelBlock(0, 0, BlockType.Water);
+		course.updatePlayerDisplay();
+		assertEquals(course.backCharacterLayer, course.localCharacter.parent, "local water touch moves behind blocks");
+
+		@:privateAccess course.localCharacter.controller.touchedBlock = null;
+		course.updatePlayerDisplay();
+		assertEquals(course.characterLayer, course.localCharacter.parent, "local non-water touch returns above blocks");
 	}
 
 	private static function remoteInit(tempId:Int):RemoteCharacterInit {

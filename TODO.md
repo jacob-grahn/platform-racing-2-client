@@ -22,7 +22,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   - [x] animate the block when bumped from below
   - [x] animate the block when shot from the side
 - [ ] arrow blocks don't work right afer rotating a level with a rotate block
-- [ ] character dissapears when in water (perhaps the character is rendering behind the background?)
+- [x] character dissapears when in water (perhaps the character is rendering behind the background?)
 - [x] happy and sad blocks should deactivate/grey out after one use
 - [x] happy and sad blocks should play sound effects when bumped
  
