@@ -15,6 +15,7 @@ class ServerLevelRendererTest {
 	public static function main():Void {
 		testBlockAssetMapping();
 		testArtAssetMappings();
+		testDefaultArtStrokeThickness();
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
@@ -215,6 +216,14 @@ class ServerLevelRendererTest {
 		assertEquals("assets/stamps/tree1@4x.png", ServerLevelRenderer.stampAssetPath(0), "tree stamp asset");
 		assertEquals("assets/stamps/spire2@4x.png", ServerLevelRenderer.stampAssetPath(8), "spire stamp asset");
 		assertEquals("", ServerLevelRenderer.stampAssetPath(4), "unexported cactus stamp skipped");
+	}
+
+	private static function testDefaultArtStrokeThickness():Void {
+		var brush = new Sprite();
+		ServerLevelRenderer.drawLayerStrokes(brush, [new DecodedDrawAction("d", [20, 20, 20, 0])]);
+		var bounds = brush.getBounds(brush);
+		assertEquals(4.0, ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE, "server art uses Flash's default brush size");
+		assertClose(4.0, bounds.height, "server art default stroke bounds match Flash brush thickness");
 	}
 
 	private static function testWorldToScreenFocus():Void {

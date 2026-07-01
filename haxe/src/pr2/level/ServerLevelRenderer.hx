@@ -37,6 +37,7 @@ class ServerLevelRenderer extends Sprite {
 	// MAX_TEXTURE_SIZE (8192 on many GPUs, 4096 on some) so a single tile never
 	// fails to upload. See rasterizeBrushInto.
 	public static inline var ART_RASTER_TILE_SIZE:Int = 1024;
+	public static inline var DEFAULT_ART_BRUSH_SIZE:Float = 4.0;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
@@ -740,9 +741,9 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	private function drawLayerStrokes(brushCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
+	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
 		var color = 0x000000;
-		var size = 10.0;
+		var size = DEFAULT_ART_BRUSH_SIZE;
 		var mode = "draw";
 		var drawing = false;
 		brushCanvas.graphics.lineStyle(size, color);
@@ -967,7 +968,7 @@ private class ArtDrawCursor {
 	public final brushCanvas:Sprite;
 	public final layer:DecodedArtLayer;
 	public var color:Int = 0x000000;
-	public var size:Float = 10.0;
+	public var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 	public var mode:String = "draw";
 	private var actionIndex:Int = 0;
 	private var objectIndex:Int = 0;
