@@ -59,7 +59,7 @@ time:
   behavior in `LocalCharacter` plus the hat-attack loose-hat lifecycle. Port one
   power at a time (AS3 refs are `character/Character.as` and
   `character/LocalCharacter.as`):
-  - [ ] Propeller hat (id 4, `PROP`): holding Up while falling (`velY > 0`)
+  - [x] Propeller hat (id 4, `PROP`): holding Up while falling (`velY > 0`)
     multiplies `velY` by 0.85 to slow the descent.
   - [ ] Cowboy hat (id 5, `COWBOY`): while airborne, force swim/`water` mode
     (`waterTicks`); apply stat boost (`maxVelX >= 12`, `accel >= 1.86`,

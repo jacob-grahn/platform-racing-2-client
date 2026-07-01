@@ -13,6 +13,7 @@ class LocalCharacterTest {
 
 	public static function main():Void {
 		testDelegatesPhysicsAndMirrorsCharacterState();
+		testPropellerHatSlowsFallWhenHoldingJump();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -47,6 +48,21 @@ class LocalCharacterTest {
 		assertSameState(controller, character, "runtime gravity sync");
 	}
 
+	private static function testPropellerHatSlowsFallWhenHoldingJump():Void {
+		var normal = new LocalCharacter(airborneLevel());
+		var propeller = new LocalCharacter(airborneLevel());
+		propeller.setHats([4, 0xFFFFFF, -1]);
+
+		normal.step(new LocalPlayerInput(false, false, true));
+		propeller.step(new LocalPlayerInput(false, false, true));
+		assertClose(normal.debugState().vy * 0.85, propeller.debugState().vy, "propeller slows falling while jump is held");
+
+		var notHeld = new LocalCharacter(airborneLevel());
+		notHeld.setHats([4, 0xFFFFFF, -1]);
+		notHeld.step(new LocalPlayerInput());
+		assertClose(normal.debugState().vy, notHeld.debugState().vy, "propeller does not slow falling without jump held");
+	}
+
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
 		var expected = controller.debugState();
 		var actual = character.debugState();
@@ -77,6 +93,21 @@ class LocalCharacterTest {
 				new LevelBlock(3, 4, BlockType.Basic),
 				new LevelBlock(4, 4, BlockType.Basic)
 			]
+		);
+	}
+
+	private static function airborneLevel():FixtureLevel {
+		return new FixtureLevel(
+			"local-character-airborne",
+			"Local Character Airborne",
+			8,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 6),
+			[]
 		);
 	}
 

@@ -41,6 +41,7 @@ class LocalCharacter extends Character {
 	}
 
 	public function step(input:LocalPlayerInput):Void {
+		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.step(input);
 		syncFromController();
 	}

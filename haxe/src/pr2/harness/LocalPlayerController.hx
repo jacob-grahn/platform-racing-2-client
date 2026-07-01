@@ -64,6 +64,7 @@ class LocalPlayerController {
 	public var lives(default, null):Int = 3;
 	public var courseTime(default, null):Int = 120;
 	public var gameMode(default, null):String = "race";
+	public var propellerHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -211,7 +212,7 @@ class LocalPlayerController {
 
 	private function frozenSolidStep(input:LocalPlayerInput):Void {
 		targetVelX = 0;
-		position();
+		position(input);
 		processBlocks(input);
 		if (input.jump && grounded && !crouching) {
 			vy -= jumpVelocity;
@@ -224,7 +225,7 @@ class LocalPlayerController {
 
 	private function hurtStep(input:LocalPlayerInput):Void {
 		targetVelX = 0;
-		position();
+		position(input);
 		processBlocks(input);
 		hurtFramesRemaining--;
 		if (hurtFramesRemaining <= 0) {
@@ -280,7 +281,7 @@ class LocalPlayerController {
 		}
 
 		applyJetPackThrust(input);
-		position();
+		position(input);
 		processBlocks(input);
 	}
 
@@ -366,8 +367,11 @@ class LocalPlayerController {
 		return [for (key in seen.keys()) key];
 	}
 
-	private function position():Void {
+	private function position(input:LocalPlayerInput):Void {
 		vy += gravity;
+		if (input.jump && propellerHatActive && vy > 0) {
+			vy *= 0.85;
+		}
 		targetVelX *= FRICTION;
 		if (crouching) {
 			targetVelX *= 0.7;
