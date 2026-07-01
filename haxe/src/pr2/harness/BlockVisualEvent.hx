@@ -10,6 +10,8 @@ enum BlockVisualEventKind {
 	SafetyPoof;
 	BlockBumpSound;
 	ItemBlockSound;
+	HappyBlockSound;
+	SadBlockSound;
 	SuperJumpSound;
 	PushBlockMove;
 }

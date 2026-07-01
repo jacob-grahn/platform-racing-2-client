@@ -1174,6 +1174,7 @@ class LocalPlayerController {
 		var amount = parsed == null ? (negative ? -5 : 5) : parsed;
 		amount = Std.int(clamp(amount, negative ? -100 : 5, negative ? -5 : 100));
 		applyStats(speedStat + amount, accelerationStat + amount, jumpStat + amount);
+		blockVisualEvents.push(new BlockVisualEvent(negative ? BlockVisualEventKind.SadBlockSound : BlockVisualEventKind.HappyBlockSound, block.x, block.y));
 	}
 
 	private function useSupply(block:LevelBlock):Bool {

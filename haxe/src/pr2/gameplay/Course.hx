@@ -62,6 +62,8 @@ class Course extends Sprite {
 	static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
 	// BumpHappySound -> sound473 (AssetCatalog DOMSoundItem), used by Character.gainHeart.
 	static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/sound473.mp3";
+	// BumpSadSound -> sound460 (AssetCatalog DOMSoundItem), used by SadBlock.useSupply.
+	static inline var BUMP_SAD_SOUND:String = "assets/audio/sfx/sound460.mp3";
 	// SquashSound -> sound915, used by the Jiggmin hat stomp.
 	static inline var SQUASH_SOUND:String = "assets/audio/sfx/sound915.mp3";
 	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
@@ -850,6 +852,10 @@ class Course extends Sprite {
 					playBlockBumpSound(event);
 				case ItemBlockSound:
 					playItemBlockSound();
+				case HappyBlockSound:
+					playStatBlockSound(event, BUMP_HAPPY_SOUND);
+				case SadBlockSound:
+					playStatBlockSound(event, BUMP_SAD_SOUND);
 				case SuperJumpSound:
 					playSuperJumpSound();
 				case PushBlockMove:
@@ -923,6 +929,12 @@ class Course extends Sprite {
 	private function playItemBlockSound():Void {
 		if (Assets.exists(ITEM_BLOCK_SOUND)) {
 			SoundEffects.playSound(Assets.getSound(ITEM_BLOCK_SOUND), 0.6 * (Settings.soundLevel / 100));
+		}
+	}
+
+	private function playStatBlockSound(event:BlockVisualEvent, path:String):Void {
+		if (Assets.exists(path)) {
+			SoundEffects.playSound(Assets.getSound(path), 0.75 * (Settings.soundLevel / 100));
 		}
 	}
 

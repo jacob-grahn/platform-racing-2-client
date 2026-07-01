@@ -1086,6 +1086,12 @@ class LocalPlayerControllerTest {
 		assertClose(70, state.accelerationStat, "happy block raises acceleration");
 		assertClose(70, state.jumpStat, "happy block raises jumping");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted happy block uses SupplyBlock grey transform");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(2, events.length, "happy block emits thump and stat sound events");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "happy block keeps base ThumpSound event");
+		assertEquals("HappyBlockSound", Std.string(events[1].kind), "happy block emits BumpHappySound event");
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(0, player.consumeBlockVisualEvents().length, "depleted happy block does not replay sound");
 	}
 
 	private static function testBumpingSadBlockLowersStats():Void {
@@ -1095,6 +1101,12 @@ class LocalPlayerControllerTest {
 		assertClose(30, state.accelerationStat, "sad block lowers acceleration");
 		assertClose(30, state.jumpStat, "sad block lowers jumping");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted sad block uses SupplyBlock grey transform");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(2, events.length, "sad block emits thump and stat sound events");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "sad block keeps base ThumpSound event");
+		assertEquals("SadBlockSound", Std.string(events[1].kind), "sad block emits BumpSadSound event");
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(0, player.consumeBlockVisualEvents().length, "depleted sad block does not replay sound");
 	}
 
 	private static function testBumpingHeartBlockAddsCappedLife():Void {
