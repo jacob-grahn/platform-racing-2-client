@@ -300,24 +300,6 @@ class ServerLevelRenderer extends Sprite {
 		} else if (arrow.currentFrame > 5) {
 			arrow.gotoAndPlay(arrow.currentFrame - 1);
 		}
-		if (!arrowCompletionHandlers.exists(key)) {
-			var onFrame:Event->Void = null;
-			onFrame = function(_:Event):Void {
-				if (arrow.currentFrame != 1) {
-					return;
-				}
-				arrow.removeEventListener(Event.ENTER_FRAME, onFrame);
-				arrowCompletionHandlers.remove(key);
-				arrowDisplays.remove(key);
-				var pivot = arrow.parent;
-				if (pivot != null && pivot.parent != null) {
-					pivot.parent.removeChild(pivot);
-				}
-				arrow.dispose();
-			};
-			arrowCompletionHandlers.set(key, onFrame);
-			arrow.addEventListener(Event.ENTER_FRAME, onFrame);
-		}
 	}
 
 	public function arrowFrameAt(worldX:Int, worldY:Int):Null<Int> {

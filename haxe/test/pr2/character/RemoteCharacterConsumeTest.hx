@@ -152,7 +152,7 @@ class RemoteCharacterConsumeTest {
 		for (_ in 0...7) {
 			arrowTimeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals(null, renderer.arrowFrameAt(arrow.x, arrow.y), "remote arrow activation removes the arrow overlay");
+		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "remote arrow activation leaves the overlay stopped");
 
 		remote.setPos((fixture.originTileX * -1 + 1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
 		remote.stepFrame();
