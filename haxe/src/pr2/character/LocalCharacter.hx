@@ -24,6 +24,7 @@ class LocalCharacter extends Character {
 	public var lastSafeX(get, never):Float;
 	public var lastSafeY(get, never):Float;
 	public var networkPlayerCount:Int = 1;
+	public var stingCooldown(default, null):Int = 0;
 
 	private var lastNetScaleX:Null<Float>;
 	private var exactX:Int = 0;
@@ -52,6 +53,7 @@ class LocalCharacter extends Character {
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.crownHatActive = hasHatFlag(Character.CROWN);
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
+		controller.jellyfishHatActive = hasHatFlag(Character.JELLYFISH);
 		controller.topHatActive = hasHatFlag(Character.TOP);
 		if (hadMoon && !hasHatFlag(Character.MOON)) {
 			controller.setGravity(baseGravityMultiplier);
@@ -84,6 +86,7 @@ class LocalCharacter extends Character {
 		controller.crownHatActive = hasHatFlag(Character.CROWN);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
+		controller.jellyfishHatActive = hasHatFlag(Character.JELLYFISH);
 		controller.topHatActive = hasHatFlag(Character.TOP);
 		controller.step(input);
 		syncFromController();
@@ -113,6 +116,37 @@ class LocalCharacter extends Character {
 			}
 		}
 		return squashed;
+	}
+
+	public function tickJellyfishSting(players:Array<Character>, randomRoll:Int):Bool {
+		if (stingCooldown > 0) {
+			stingCooldown--;
+			return false;
+		}
+		if (!hasHatFlag(Character.JELLYFISH) || randomRoll != 1) {
+			return false;
+		}
+		return maybeSting(players);
+	}
+
+	public function maybeSting(players:Array<Character>):Bool {
+		if (!hasHatFlag(Character.JELLYFISH) || stingCooldown > 0 || players == null) {
+			return false;
+		}
+		for (player in players) {
+			if (!(Std.isOfType(player, RemoteCharacter))) {
+				continue;
+			}
+			if (player.state == "bumped") {
+				continue;
+			}
+			if (player.x > x - 75 && player.x < x + 75 && player.y > y - 100 && player.y < y + 100) {
+				emitSting(player.tempID);
+				stingCooldown = 135;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public function initNetworkEmission():Void {

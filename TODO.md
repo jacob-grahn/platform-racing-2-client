@@ -87,7 +87,7 @@ time:
   - [ ] Artifact hat (id 14, `ARTIFACT`): 30 s `speedBurst`, clamp the course
     timer to 30 s, reversed controls, plus `Zap`/`YeahSound`/music feedback;
     clean up (clear speed burst, restore controls) when removed.
-  - [ ] Jellyfish hat (id 15, `JELLYFISH`): periodically sting nearby players
+  - [x] Jellyfish hat (id 15, `JELLYFISH`): periodically sting nearby players
     (`stingCooldown` + `maybeSting`) and be immune to the sting `hurt` reaction.
   - [x] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color
     transparency workaround) — no gameplay power.

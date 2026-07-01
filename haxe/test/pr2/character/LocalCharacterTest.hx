@@ -24,6 +24,7 @@ class LocalCharacterTest {
 		testCrownHatIgnoresMineHitsExceptDeathmatch();
 		testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip();
 		testJiggminHatSquashesRemotePlayersWhileFalling();
+		testJellyfishHatStingsNearbyRemotePlayersAndIgnoresStingHurt();
 		testCheeseHatIsCosmeticOnly();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
@@ -263,6 +264,44 @@ class LocalCharacterTest {
 
 		remote.remove();
 		untouched.remove();
+	}
+
+	private static function testJellyfishHatStingsNearbyRemotePlayersAndIgnoresStingHurt():Void {
+		var jellyfish = new LocalCharacter(flatLevel());
+		jellyfish.setHats([15, 0xFFFFFF, -1]);
+		jellyfish.receiveSting();
+		assertEquals("land", jellyfish.debugState().mode, "jellyfish hat ignores sting hurt reaction");
+
+		var remote = new RemoteCharacter(9, null, "Rival", 1, 1, 1, 1, "0", new CommandHandler());
+		remote.setPos(jellyfish.x + 30, jellyfish.y + 20);
+		remote.changeState("stand");
+		LobbySocket.resetSent();
+
+		assertEquals(true, jellyfish.tickJellyfishSting([jellyfish, remote], 1), "jellyfish roll stings a nearby remote");
+		assertEquals("sting`9`" + Math.round(jellyfish.x) + "`" + Math.round(jellyfish.y), LobbySocket.lastSent(), "jellyfish sting emits remote id and local coordinates");
+		assertEquals(135, jellyfish.stingCooldown, "jellyfish sting starts five-second cooldown");
+
+		LobbySocket.resetSent();
+		assertEquals(false, jellyfish.tickJellyfishSting([remote], 1), "jellyfish cooldown blocks immediate repeat sting");
+		assertEquals(134, jellyfish.stingCooldown, "jellyfish cooldown decrements each tick");
+		assertEquals(0, LobbySocket.sentCommands.length, "cooldown suppresses sting command");
+
+		var noHat = new LocalCharacter(flatLevel());
+		LobbySocket.resetSent();
+		assertEquals(false, noHat.tickJellyfishSting([remote], 1), "missing jellyfish hat does not sting");
+		assertEquals(0, LobbySocket.sentCommands.length, "no sting command without jellyfish hat");
+
+		var far = new RemoteCharacter(10, null, "Far", 1, 1, 1, 1, "0", new CommandHandler());
+		far.setPos(jellyfish.x + 90, jellyfish.y);
+		for (_ in 0...134) {
+			jellyfish.tickJellyfishSting([remote], 2);
+		}
+		LobbySocket.resetSent();
+		assertEquals(false, jellyfish.tickJellyfishSting([far], 1), "jellyfish hat only stings nearby remotes");
+		assertEquals(0, LobbySocket.sentCommands.length, "out-of-range remote is not stung");
+
+		remote.remove();
+		far.remove();
 	}
 
 	private static function testCheeseHatIsCosmeticOnly():Void {

@@ -644,6 +644,7 @@ class Course extends Sprite {
 		if (raceStarted) {
 			player.step(input.copy());
 			player.maybeSquash(playerArray);
+			player.tickJellyfishSting(playerArray, Std.random(35) + 1);
 		}
 		if (raceStarted && eggRound != null && config.gameMode == "egg") {
 			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);

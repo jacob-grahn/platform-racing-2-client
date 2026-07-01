@@ -69,6 +69,7 @@ class LocalPlayerController {
 	public var cowboyHatActive:Bool = false;
 	public var santaHatActive:Bool = false;
 	public var partyHatActive:Bool = false;
+	public var jellyfishHatActive:Bool = false;
 	public var topHatActive:Bool = false;
 	public var crownHatActive:Bool = false;
 
@@ -246,7 +247,7 @@ class LocalPlayerController {
 	}
 
 	public function receiveSting():Void {
-		if (!partyHatActive) {
+		if (!partyHatActive && !jellyfishHatActive) {
 			receiveHurtEffect();
 		}
 	}
