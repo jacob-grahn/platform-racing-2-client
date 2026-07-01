@@ -339,34 +339,39 @@ class Character extends Sprite {
 
 	/**
 		Pop the highest-numbered occupied hat slot back to empty and return its
-		`{hatNum, hatColor}`, mirroring `Character.getHighestHat` — the hat-stack
+		`{hatNum, hatColor, hatColor2}`, mirroring `Character.getHighestHat` — the hat-stack
 		shed used by the hat-loss / hat-to-start race events. Returns `{0, 0}` when
 		the character has no hats on.
 	**/
-	public function getHighestHat():{hatNum:Int, hatColor:Int} {
+	public function getHighestHat():{hatNum:Int, hatColor:Int, hatColor2:Int} {
 		var hatNum = 0;
 		var hatColor = 0;
+		var hatColor2 = -1;
 		var hatSlot = 4;
 		while (hatSlot >= 1) {
 			switch (hatSlot) {
 				case 4 if (hat4 != 1):
 					hatNum = hat4;
 					hatColor = hat4Color;
+					hatColor2 = hat4Color2;
 					hat4 = 1;
 					break;
 				case 3 if (hat3 != 1):
 					hatNum = hat3;
 					hatColor = hat3Color;
+					hatColor2 = hat3Color2;
 					hat3 = 1;
 					break;
 				case 2 if (hat2 != 1):
 					hatNum = hat2;
 					hatColor = hat2Color;
+					hatColor2 = hat2Color2;
 					hat2 = 1;
 					break;
 				case 1 if (hat1 != 1):
 					hatNum = hat1;
 					hatColor = hat1Color;
+					hatColor2 = hat1Color2;
 					hat1 = 1;
 					break;
 				default:
@@ -375,7 +380,7 @@ class Character extends Sprite {
 		}
 		refreshHatFlags();
 		applyAppearance();
-		return {hatNum: hatNum, hatColor: hatColor};
+		return {hatNum: hatNum, hatColor: hatColor, hatColor2: hatColor2};
 	}
 
 	public function setItem(itemCode:Int):Void {

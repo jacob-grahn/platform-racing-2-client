@@ -70,11 +70,12 @@ time:
     (`stingCooldown` + `maybeSting`) and be immune to the sting `hurt` reaction.
   - [x] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color
     transparency workaround) — no gameplay power.
-  - [ ] Port the hat-attack game-mode loose-hat lifecycle: drop your highest hat
-    on bump (`getHighestHat` → `loose_hat`), `get_hat` pickup, and
-    `returnHatToStart`/`hat_to_start` when a hat leaves the map bounds.
-    `effects.Hat` display/pickup is partially ported in
-    `gameplay/HatEffect.hx`.
+  - [ ] Port the hat-attack game-mode loose-hat lifecycle. `effects.Hat`
+    display/pickup is partially ported in `gameplay/HatEffect.hx`.
+    - [x] Drop the highest equipped hat on a hat-mode hit and emit Flash's
+      `loose_hat` drop command.
+    - [ ] Complete `get_hat` pickup parity.
+    - [ ] Complete `returnHatToStart`/`hat_to_start` bounds parity.
 - [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
 - [ ] Port captcha.

@@ -92,6 +92,7 @@ class CharacterBaseTest {
 		var top = c.getHighestHat();
 		assertEquals(9, top.hatNum, "highest hat pops the top occupied slot first");
 		assertEquals(0x00FF00, top.hatColor, "highest hat returns that slot's colour");
+		assertEquals(0, top.hatColor2, "highest hat returns that slot's epic colour");
 		assertEquals(1, c.hat2, "popped slot is reset to empty");
 
 		var next = c.getHighestHat();
@@ -101,6 +102,7 @@ class CharacterBaseTest {
 		var none = c.getHighestHat();
 		assertEquals(0, none.hatNum, "popping with no hats returns the empty result");
 		assertEquals(0, none.hatColor, "empty pop carries no colour");
+		assertEquals(-1, none.hatColor2, "empty pop carries no epic colour");
 	}
 
 	private static function testHeldWeaponDisplay():Void {

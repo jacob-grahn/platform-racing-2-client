@@ -27,6 +27,7 @@ class LocalCharacterTest {
 		testJiggminHatSquashesRemotePlayersWhileFalling();
 		testJellyfishHatStingsNearbyRemotePlayersAndIgnoresStingHurt();
 		testCheeseHatIsCosmeticOnly();
+		testHatAttackHitDropsHighestHat();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -368,6 +369,31 @@ class LocalCharacterTest {
 		stung.receiveSting();
 		cheeseStung.receiveSting();
 		assertEquals(stung.debugState().serialize(), cheeseStung.debugState().serialize(), "cheese hat does not block sting hurt");
+	}
+
+	private static function testHatAttackHitDropsHighestHat():Void {
+		var local = new LocalCharacter(delayedMineBlockLevel());
+		local.setGameMode("hat");
+		local.setHats([6, 0xFF0000, -1, 9, 0x00FF00, 0]);
+		LobbySocket.resetSent();
+
+		for (_ in 0...40) {
+			local.step(new LocalPlayerInput());
+			if (local.debugState().touchedBlockType == "mine") {
+				break;
+			}
+		}
+
+		assertEquals("hurt", local.debugState().mode, "hat attack mine hit hurts the local character");
+		assertEquals("loose_hat`75`40`0", LobbySocket.lastSent(), "hat attack hit emits Flash loose-hat drop");
+		assertEquals(6, local.hat1, "lower hat remains equipped after top hat drops");
+		assertEquals(1, local.hat2, "highest occupied slot is cleared after drop");
+
+		LobbySocket.resetSent();
+		for (_ in 0...5) {
+			local.step(new LocalPlayerInput());
+		}
+		assertEquals("", LobbySocket.lastSent(), "hurt recovery frames do not drop more hats");
 	}
 
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {

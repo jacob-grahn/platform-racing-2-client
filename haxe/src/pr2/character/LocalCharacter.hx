@@ -36,6 +36,7 @@ class LocalCharacter extends Character {
 	private var lastNetItem:Int = 0;
 	private var exactPosNextUpdate:Bool = false;
 	private final baseGravityMultiplier:Float;
+	private var lastControllerMode:Null<String> = null;
 
 	public function new(level:FixtureLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super(hatId, headId, bodyId, feetId);
@@ -105,6 +106,7 @@ class LocalCharacter extends Character {
 			reversed.right = input.left;
 			input = reversed;
 		}
+		var previousMode = controller.debugState().mode;
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.crownHatActive = hasHatFlag(Character.CROWN);
@@ -113,7 +115,7 @@ class LocalCharacter extends Character {
 		controller.jellyfishHatActive = hasHatFlag(Character.JELLYFISH);
 		controller.topHatActive = hasHatFlag(Character.TOP);
 		controller.step(input);
-		syncFromController();
+		syncFromController(previousMode);
 	}
 
 	public function maybeSquash(players:Array<Character>):Bool {
@@ -347,16 +349,18 @@ class LocalCharacter extends Character {
 	}
 
 	public function receiveSting():Void {
+		var previousMode = controller.debugState().mode;
 		controller.receiveSting();
-		syncFromController();
+		syncFromController(previousMode);
 	}
 
 	public function receiveZap():Void {
+		var previousMode = controller.debugState().mode;
 		controller.receiveZap();
-		syncFromController();
+		syncFromController(previousMode);
 	}
 
-	private function syncFromController():Void {
+	private function syncFromController(?previousMode:Null<String>):Void {
 		var state = controller.debugState();
 		x = state.x;
 		y = state.y;
@@ -366,6 +370,20 @@ class LocalCharacter extends Character {
 		changeState(state.animation);
 		display.scaleX = 0.9 * controller.facingScaleX;
 		display.scaleY = 0.9;
+		if (previousMode == null) {
+			previousMode = lastControllerMode;
+		}
+		if (controller.gameMode == "hat" && previousMode != "hurt" && state.mode == "hurt") {
+			dropHighestHatFromHit();
+		}
+		lastControllerMode = state.mode;
+	}
+
+	private function dropHighestHatFromHit():Void {
+		var hat = getHighestHat();
+		if (hat.hatNum != 1 && hat.hatNum != 0) {
+			LobbySocket.write("loose_hat`" + Math.round(x) + "`" + Math.round(y - 50) + "`" + Math.round(rotation));
+		}
 	}
 
 	private function emitChangedVars(?parentLayer:Null<String>):Void {
