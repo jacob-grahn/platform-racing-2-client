@@ -75,7 +75,7 @@ time:
     - [x] Drop the highest equipped hat on a hat-mode hit and emit Flash's
       `loose_hat` drop command.
     - [x] Complete `get_hat` pickup parity.
-    - [ ] Complete `returnHatToStart`/`hat_to_start` bounds parity.
+    - [x] Complete `returnHatToStart`/`hat_to_start` bounds parity.
 - [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
 - [ ] Port captcha.

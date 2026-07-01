@@ -486,9 +486,27 @@ class CharacterLifecycleTest {
 		assertTrue(returned.display.parent == null, "remote remove detaches returned display");
 		assertTrue(!handler.hasCommand("removeHat1"), "remote remove unregisters command");
 
+		var localObserved = course.addLooseHat(15, course.level.maxY + 510, 0, 5, 0xABCDEF, -1, 1);
+		LobbySocket.resetSent();
+		course.stepLooseHats();
+		assertEquals("hat_to_start`1", LobbySocket.lastSent(), "local bounds check emits hat_to_start");
+		assertEquals(1, countLooseHats(course), "local emit leaves loose hat until server echo");
+		assertTrue(localObserved.sentReturnToStart, "local bounds check marks return request sent");
+		LobbySocket.resetSent();
+		localObserved.posY = course.level.maxY + 510;
+		localObserved.velY = 0;
+		course.stepLooseHats();
+		assertEquals("", LobbySocket.lastSent(), "local bounds check emits hat_to_start only once");
+		handler.dispatch("maybeReturnHatToStart", ["1"]);
+		var locallyReturned = course.looseHats.get(1);
+		assertTrue(locallyReturned != null, "server echo respawns locally returned hat");
+		assertTrue(locallyReturned != localObserved, "server echo replaces locally returned hat instance");
+		assertEquals(45, Std.int(locallyReturned.posX), "server echo uses matching start block center x");
+		assertEquals(45, Std.int(locallyReturned.posY), "server echo uses matching start block center y");
+
 		course.addLooseHat(20, course.level.maxY + 501, 0, 6, 0xFFFFFF, 0, 4);
 		handler.dispatch("maybeReturnHatToStart", ["4"]);
-		assertEquals(0, countLooseHats(course), "hat without matching start is removed instead of respawned");
+		assertEquals(1, countLooseHats(course), "hat without matching start is removed instead of respawned");
 
 		shell.remove();
 		course.remove();

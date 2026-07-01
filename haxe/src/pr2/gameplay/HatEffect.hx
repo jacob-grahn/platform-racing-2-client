@@ -38,6 +38,7 @@ class HatEffect {
 	public var color(default, null):Int;
 	public var color2(default, null):Int;
 	public var grounded(default, null):Bool = false;
+	public var sentReturnToStart(default, null):Bool = false;
 	private final owner:Course;
 	private final commandHandler:CommandHandler;
 
@@ -124,6 +125,10 @@ class HatEffect {
 			color2: color2,
 			id: id
 		};
+	}
+
+	public function returningToStart():Void {
+		sentReturnToStart = true;
 	}
 
 	public function remove():Void {

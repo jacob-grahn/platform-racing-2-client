@@ -329,6 +329,7 @@ class Course extends Sprite {
 			if (hat != null) {
 				hat.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching,
 					localCharacter.removed, isDonePlaying());
+				maybeEmitHatToStart(hat);
 			}
 		}
 	}
@@ -519,6 +520,20 @@ class Course extends Sprite {
 			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
 			|| (hatPos.x < level.minX - 500 && hat.rot == -90)) {
 			returnHatToStart(hat);
+		}
+	}
+
+	private function maybeEmitHatToStart(hat:HatEffect):Void {
+		if (hat.sentReturnToStart) {
+			return;
+		}
+		var hatPos = RotationMath.rotatePoint(hat.posX, hat.posY, hat.rot);
+		if ((hatPos.y > level.maxY + 500 && hat.rot == 0)
+			|| (hatPos.y < level.minY - 500 && Math.abs(hat.rot) == 180)
+			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
+			|| (hatPos.x < level.minX - 500 && hat.rot == -90)) {
+			hat.returningToStart();
+			localCharacter.emitHatToStart(hat.id);
 		}
 	}
 
