@@ -91,7 +91,7 @@ The physics port must map 1:1 to the original engine, preserving its quirks and
 bugs. Do not "fix" or idealize behavior — replicate the AS3 exactly, including
 rounding, ordering, and edge cases.
 
-- [ ] Port Jet pack fuel/thrust,
+- [x] Port Jet pack fuel/thrust,
   [ ] Port multi-use reload timing (Laser Gun/Sword/Ice Wave)
   [ ] Port teleport/mine effect
   [x] Port speed-burst expiry
