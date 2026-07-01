@@ -20,7 +20,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [ ] character dissapears during rotation animation after hitting a rotate block. After the rotation the character reappears, but the camera is far away and takes a few frames to snap back to the character
 - [ ] blocks should play a bump animation when bumped from below or shot from the side
 - [ ] arrow blocks don't work right afer rotating a level with a rotate block
-- [ ] arrow blocks stop displaying their stationary arrow after playing their active animation
 - [ ] character dissapears when in water (perhaps the character is rendering behind the background?)
 - [ ] happy and sad blocks should deactivate/grey out after one use
 - [ ] happy and sad blocks should play sound effects when bumped
