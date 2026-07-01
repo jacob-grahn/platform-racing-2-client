@@ -31,56 +31,7 @@ unit-covered (see README). What remains is the end-to-end acceptance and the
 still-unported popup/visual side effects.
 
 --------
-- [x] Run one uninterrupted real-server session: an account and a guest each log
-  in, select/join a level, race with synchronized remote players, finish or
-  quit, and return to the lobby without a page reload. Add a deterministic
-  transcript test covering the full command/state sequence and screenshots for
-  level entry, countdown, racing, and finish. This is the acceptance that flips
-  the level-entry and race-sync milestones to done.
-  Done: the live two-instance run is `tools/race_session.py` (drives two headless
-  Chrome clients against pr2hub.com — account + guest co-join a campaign level,
-  race with `remote-count >= 1`, quit, and return to the lobby; captures the
-  level-entry/countdown/racing/finished screenshots per role). The CI-runnable
-  counterpart is `RaceSessionTranscriptTest` (in the deterministic suite), which
-  drives the production `LevelItem`/`GamePage`/`Course` objects through the whole
-  join -> race -> quit -> return lifecycle and asserts the ordered wire-command
-  transcript plus the level-entry/race-phase state at each transition.
 - [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
-  - [x] `LuxPopup`.
-  - [ ] `Egg` popup.
-    - [x] Mount authored `EggGraphic` instances for `addEggs` and remove them
-      on collect, remote removal, reseed, and course teardown.
-    - [x] Port the egg collection sound with Flash game-sound attenuation.
-    - [x] Port the Flash `PhysicsEffect` egg movement step: gravity, active-block
-      landing, grounded wall reversal, egg-mode wrapping, facing, fade-in, and
-      local-player touch collection.
-    - [x] Port the animated egg attack side effects.
-      - [x] Port the Flash egg attack probe, add_effect payloads, and 120-frame
-        cooldown.
-      - [x] Mount and animate the local Slash/Laser/IceWave effect visuals from
-        egg attacks.
-    - [x] Port the animated egg squash/remove side effect.
-  - [x] `Hat` popup.
-    - [x] Port `maybeReturnHatToStart`: out-of-bounds loose hats are removed,
-      respawned at the matching start block when one exists, and their remote
-      remove command/display lifecycle is deterministic.
-    - [x] Port loose-hat `PhysicsEffect` stepping and local-player pickup:
-      gravity, active-block landing/wall clamp, display rotation, `get_hat`
-      emission, and done-playing suppression are deterministic.
-- [x] Port the remaining character visual-effect hooks that are currently
-  stubbed behind injectable hooks:
-  [x] particle emitters
-  [x] jet-pack flame,
-  [x] `DjinnEffects`
-  [x] per-state sound playback.
-    - [x] Port `Character.gainHeart`, `beginSparkles`, and `endSparkles`
-      playback (`BumpHappySound`, `SpeedUpSound`, `SlowDownSound`) through the
-      live `Course` spatial sound path for local and remote characters.
-    - [x] Port the Jet Pack `EngineSound` loop: `beginJet` restarts the spatial
-      loop, `endJet` stops it, and course teardown clears active local/remote
-      channels.
-    - [x] Port remote-character `JumpSound` playback for `jump` state entry
-      through the live `Course` spatial sound path.
 - [ ] Port the full `CourseMenu` access/spectate UI around in-place level
   loading (slot selection, password/private flows, loading/cancel/error states)
   from `flash/level_browser`, `flash/page/GamePage.as`, and
@@ -111,12 +62,6 @@ time:
 - [ ] Port hats and hat powers.
 - [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
-- [x] Port the deathmatch hearts gameplay behavior (the `Hearts` HUD widget is
-  already ported).
-  Done: `LocalPlayerController` now tracks deathmatch mode, clamps lives through
-  the Flash `setLife` path, removes one life on hurt recovery, finishes the local
-  player at zero lives, and `Course` shows/syncs the authored hearts stack from
-  the level game mode. Covered by deterministic controller and Course HUD tests.
 - [ ] Port captcha.
 - [ ] Port rank progression.
   - [x] Wire in-race `award` and `setExpGain` commands into the authored
