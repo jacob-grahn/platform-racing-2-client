@@ -94,7 +94,7 @@ rounding, ordering, and edge cases.
 - [ ] Port Jet pack fuel/thrust,
   [ ] Port multi-use reload timing (Laser Gun/Sword/Ice Wave)
   [ ] Port teleport/mine effect
-  [ ] Port speed-burst expiry
+  [x] Port speed-burst expiry
   [ ] Port lightning
   [x] Port mine item
   [ ] Port block item
