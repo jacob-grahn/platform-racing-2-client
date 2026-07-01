@@ -130,6 +130,17 @@ class QuitButtonTest {
 		assertEquals("exp", PrizePopup.instance.targetName, "cancelPrize opens the cancel popup");
 		assertEquals("Bob cancelled the prize for finishing this race.", PrizePopup.instance.detailText, "cancelPrize forwards the cancelling user");
 
+		game.setPrize({
+			type: "hat",
+			id: 4,
+			name: "Propeller Hat",
+			desc: "",
+			universal: false
+		});
+		var preRace = PrizePopup.instance;
+		game.beginRace();
+		assertEquals(true, preRace.fadeOutStarted, "beginRace fades out the active prize popup");
+
 		game.remove();
 		assertEquals(true, PrizePopup.instance.fadeOutStarted, "GamePage removal fades out the active prize popup");
 		closeAll();

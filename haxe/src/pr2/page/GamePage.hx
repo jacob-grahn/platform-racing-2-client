@@ -256,6 +256,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	public function beginRace():Void {
+		closePrizePopup();
 		if (course == null) {
 			pendingBeginRace = true;
 			return;
@@ -371,6 +372,12 @@ class GamePage extends Page implements GameCommandDelegate {
 			boolField(prize, "universal"),
 			finished
 		);
+	}
+
+	private function closePrizePopup():Void {
+		if (PrizePopup.instance != null) {
+			PrizePopup.instance.startFadeOut();
+		}
 	}
 
 	private static function stringField(value:Dynamic, field:String):String {

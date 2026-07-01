@@ -18,7 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Bugs
 - [ ] after rotating once with a rotate block, player can walk to the left and go through walls
-- [ ] prize popup should auto close when the race starts
 - [ ] art backgrounds line art is drawn too thick
 - [ ] the arrows on arrow blocks dissapaer a few seconds after touching them
 - [ ] move blocks don't move
