@@ -90,6 +90,9 @@ time:
     `SecureData.userRank` for lobby access checks.
 - [ ] Port race modes.
   - [x] Port Flash `gameplay.Modes` constants and full-name normalization.
+  - [x] Port objective-mode finish reporting: each reached finish block emits
+    `objective_reached` once, removes its minimap marker, and keeps the local
+    race active instead of opening the finished flow.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

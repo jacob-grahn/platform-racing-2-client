@@ -160,6 +160,7 @@ class Course extends Sprite {
 	private var activeJetSounds:ObjectMap<Character, Bool> = new ObjectMap();
 	private var jetSoundChannels:ObjectMap<Character, SoundChannel> = new ObjectMap();
 	private var localSetHatsCommandName:Null<String>;
+	private var reachedObjectives:Map<Int, Bool> = new Map();
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -747,17 +748,17 @@ class Course extends Sprite {
 	// removes its minimap marker, while every other mode emits finish_race once and
 	// lets the host page surface the finished page.
 	private function maybeHandleLocalFinish(state:LocalPlayerDebugState):Void {
-		if (localFinishHandled || !state.finished) {
+		if (!state.finished) {
 			return;
 		}
-		if (config.gameMode == "objective" && state.finishBlockId == null) {
-			return;
-		}
-		localFinishHandled = true;
 		var finishId = state.finishBlockId == null ? -1 : state.finishBlockId;
 		var finishX = state.finishX == null ? 0 : state.finishX;
 		var finishY = state.finishY == null ? 0 : state.finishY;
 		if (config.gameMode == "objective") {
+			if (state.finishBlockId == null || reachedObjectives.exists(finishId)) {
+				return;
+			}
+			reachedObjectives.set(finishId, true);
 			// Objective mode reports the objective and keeps racing; it must not
 			// surface the finished page, so onFinish stays unfired here.
 			if (miniMap != null) {
@@ -768,6 +769,10 @@ class Course extends Sprite {
 			}
 			return;
 		}
+		if (localFinishHandled) {
+			return;
+		}
+		localFinishHandled = true;
 		if (localCharacter != null) {
 			localCharacter.emitFinishRace(finishId, finishX, finishY);
 			if (config.gameMode != "hat") {

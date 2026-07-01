@@ -75,6 +75,7 @@ class GameShellMountTest {
 		testDeathmatchHeartsShowInitialLives();
 		testFinishDrawingReadinessEmission();
 		testLocalFinishBeginsCharacterRemoval();
+		testObjectiveModeReportsEachFinishOnce();
 		testRotateBlockDisplayKeepsLocalCharacterCentered();
 
 		trace('GameShellMountTest passed $assertions assertions');
@@ -198,6 +199,22 @@ class GameShellMountTest {
 		assertEquals("finish_race`1`45`15|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
 			"race finish emits finish and starts local removal");
 		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
+		course.remove();
+	}
+
+	private static function testObjectiveModeReportsEachFinishOnce():Void {
+		var course = buildCourse("objective");
+		LobbySocket.resetSent();
+		var first = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+			50, 0, true, 1, 45, 15);
+		var second = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+			50, 0, true, 2, 75, 15);
+		@:privateAccess course.maybeHandleLocalFinish(first);
+		@:privateAccess course.maybeHandleLocalFinish(first);
+		@:privateAccess course.maybeHandleLocalFinish(second);
+		assertEquals("objective_reached`1`45`15|objective_reached`2`75`15", LobbySocket.sentCommands.join("|"),
+			"objective mode reports each objective once without ending race");
+		assertEquals(false, course.localFinishHandled, "objective mode does not latch the race finished");
 		course.remove();
 	}
 
