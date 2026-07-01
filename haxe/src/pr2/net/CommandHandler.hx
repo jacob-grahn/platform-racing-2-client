@@ -1,5 +1,7 @@
 package pr2.net;
 
+import pr2.lobby.SecureData;
+
 /**
 	Port of the Flash `com.jiggmin.data.CommandHandler` socket-command dispatcher.
 
@@ -20,8 +22,11 @@ class CommandHandler {
 	}
 
 	private var commands:Map<String, Array<String>->Void> = new Map();
+	private var defaultCommands:Map<String, Array<String>->Void> = new Map();
 
-	public function new() {}
+	public function new() {
+		defaultCommands.set("setRank", setRank);
+	}
 
 	/** Register (or, with `handler == null`, clear) the handler for a command. */
 	public function defineCommand(name:String, handler:Null<Array<String>->Void>):Void {
@@ -33,12 +38,15 @@ class CommandHandler {
 	}
 
 	public function hasCommand(name:String):Bool {
-		return commands.exists(name);
+		return commands.exists(name) || defaultCommands.exists(name);
 	}
 
 	/** Invoke the handler for `name` with `args`. Returns true if one was registered. */
 	public function dispatch(name:String, args:Array<String>):Bool {
 		var handler = commands.get(name);
+		if (handler == null) {
+			handler = defaultCommands.get(name);
+		}
 		if (handler == null) {
 			return false;
 		}
@@ -65,5 +73,10 @@ class CommandHandler {
 	/** Test/teardown helper: drop all registered handlers. */
 	public function clearAll():Void {
 		commands = new Map();
+	}
+
+	private function setRank(args:Array<String>):Void {
+		var rank = args.length > 0 ? Std.parseInt(args[0]) : null;
+		SecureData.setNumber("userRank", rank == null ? 0 : rank);
 	}
 }

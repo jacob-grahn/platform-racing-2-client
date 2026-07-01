@@ -86,6 +86,8 @@ time:
   - [x] Wire in-race `award` and `setExpGain` commands into the authored
     `FinishedPage` overlay: awards queue before the popup exists, later awards
     update it live, and exp gain marks the player done without emitting a quit.
+  - [x] Port the global `setRank` socket command so rank progression updates
+    `SecureData.userRank` for lobby access checks.
 - [ ] Port race modes.
 
 ### Physics 1:1 (preserve original quirks/bugs)

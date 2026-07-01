@@ -471,6 +471,13 @@ class LobbyServicesTest {
 		assertEquals("speed", captured[1], "second arg parsed");
 		handler.defineCommand("setChatRoomList", null);
 		assertEquals(false, handler.handleServerFrame("abc`6`setChatRoomList`x`"), "cleared command ignored");
+
+		SecureData.clear();
+		assertEquals(true, handler.handleServerFrame("abc`7`setRank`37`"), "default setRank handled");
+		assertEquals(37.0, SecureData.getNumber("userRank"), "setRank updates secure rank");
+		handler.clearAll();
+		assertEquals(true, handler.handleServerFrame("abc`8`setRank`38`"), "default setRank survives clearAll");
+		assertEquals(38.0, SecureData.getNumber("userRank"), "setRank remains global");
 	}
 
 	private static function testMemoryAndSecureData():Void {
