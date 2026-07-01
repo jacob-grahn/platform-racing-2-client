@@ -460,11 +460,11 @@ class LocalPlayerController {
 			}
 		}
 
-		if (vx >= -1 && refs.wallRight != null && getBlockAtTile(refs.wallRight.x - 1, refs.wallRight.y) == null) {
+		if (vx >= -1 && refs.wallRight != null && getBlockLeftOf(refs.wallRight) == null) {
 			onLeftHit(refs.wallRight);
 			refs = refreshBlockRefs();
 		}
-		if (vx <= 1 && refs.wallLeft != null && getBlockAtTile(refs.wallLeft.x + 1, refs.wallLeft.y) == null) {
+		if (vx <= 1 && refs.wallLeft != null && getBlockRightOf(refs.wallLeft) == null) {
 			onRightHit(refs.wallLeft);
 			refs = refreshBlockRefs();
 		}
@@ -1215,7 +1215,19 @@ class LocalPlayerController {
 		if (block == null) {
 			return null;
 		}
-		return getBlockAtTile(block.x, block.y + 1) == null ? block : null;
+		return getBlockBelow(block) == null ? block : null;
+	}
+
+	private function getBlockLeftOf(block:LevelBlock):Null<LevelBlock> {
+		return getBlockAtPixel(block.x * level.tileSize - level.tileSize, block.y * level.tileSize);
+	}
+
+	private function getBlockRightOf(block:LevelBlock):Null<LevelBlock> {
+		return getBlockAtPixel(block.x * level.tileSize + level.tileSize, block.y * level.tileSize);
+	}
+
+	private function getBlockBelow(block:LevelBlock):Null<LevelBlock> {
+		return getBlockAtPixel(block.x * level.tileSize, block.y * level.tileSize + level.tileSize);
 	}
 
 	private function applyCrumbleForce(block:LevelBlock, force:Int):Void {

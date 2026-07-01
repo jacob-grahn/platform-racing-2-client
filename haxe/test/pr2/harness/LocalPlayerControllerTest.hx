@@ -75,6 +75,7 @@ class LocalPlayerControllerTest {
 		testRotationTweenMatchesCourseFrames();
 		testRotationMapsSafePosition();
 		testCollisionSnapsAgainstRotatedCeiling();
+		testCollisionStopsLeftMovementAfterRotation();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -1289,6 +1290,31 @@ class LocalPlayerControllerTest {
 			}
 		}
 		assertEquals(true, bumped, "player bumps the ceiling after course rotation");
+	}
+
+	private static function testCollisionStopsLeftMovementAfterRotation():Void {
+		var level = rotateBlockLevel(BlockType.RotateRight);
+		for (tileX in 3...12) {
+			level.blocks.push(new LevelBlock(tileX, 4, BlockType.Solid));
+		}
+		var player = new LocalCharacter(level);
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().mode == "freeze") {
+				break;
+			}
+		}
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput());
+		}
+
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput(true));
+		}
+
+		var state = player.debugState();
+		assertBelow(-111, state.x, "rotated wall stops left movement at its displayed edge");
 	}
 
 	private static function bumpRotateBlock(type:BlockType):LocalCharacter {

@@ -17,7 +17,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Run only the related test cases for your change, the full suite is a bit slow
 
 ## Bugs
-- [ ] after rotating once with a rotate block, player can walk to the left and go through walls
+- [x] after rotating once with a rotate block, player can walk to the left and go through walls
 - [ ] art backgrounds line art is drawn too thick
 - [ ] move blocks don't move
 - [ ] move blocks don't display their direction arrow before moving
