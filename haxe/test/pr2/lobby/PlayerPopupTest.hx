@@ -2,12 +2,16 @@ package pr2.lobby;
 
 import openfl.display.DisplayObjectContainer;
 import openfl.events.MouseEvent;
+import pr2.lobby.dialogs.BanMenu;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.PlayerGuestPopup;
 import pr2.lobby.dialogs.PlayerPopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.LobbySocket;
+import pr2.net.ServerConfig;
 import pr2.runtime.FlButton;
+import pr2.runtime.FlComboBox;
+import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -22,15 +26,20 @@ class PlayerPopupTest {
 	public static function main():Void {
 		var savedGroup = LobbySession.group;
 		var savedTempMod = LobbySession.isTempMod;
+		var savedTrialMod = LobbySession.isTrialMod;
+		var savedUploadFactory = BanMenu.uploadFactory;
 
 		testMemberRender();
 		testGuestHandoff();
 		testChatLinkEntryPoints();
 		testGuestButtonsDisabled();
 		testTempModMenu();
+		testBanMenu();
 
 		LobbySession.group = savedGroup;
 		LobbySession.isTempMod = savedTempMod;
+		LobbySession.isTrialMod = savedTrialMod;
+		BanMenu.uploadFactory = savedUploadFactory;
 		closeAll();
 		trace('PlayerPopupTest passed $assertions assertions');
 	}
@@ -95,6 +104,65 @@ class PlayerPopupTest {
 		assertEquals(true, popup.fadeOutStarted, "confirmed kick starts closing the player popup");
 
 		LobbySession.isTempMod = false;
+		closeAll();
+	}
+
+	private static function testBanMenu():Void {
+		LobbySession.group = 2;
+		LobbySession.isTempMod = false;
+		LobbySession.isTrialMod = false;
+		LobbySocket.resetSent();
+		closeAll();
+
+		var uploads:Array<{url:String, fields:Map<String, String>, label:String}> = [];
+		BanMenu.uploadFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
+			uploads.push({url: url, fields: fields, label: label});
+			onResult({ban_id: 123});
+			return null;
+		};
+
+		var popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 1, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1
+		});
+
+		var menu = banMenu(popup);
+		assertNotNull(menu, "moderators see the full ban menu");
+		click(menu, "warning3Button");
+		assertEquals("warn`Target`3", LobbySocket.lastSent(), "ban menu warning emits warn command");
+		popup.remove();
+
+		popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 1, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1
+		});
+		menu = banMenu(popup);
+		FlComponents.asTextField(LobbyArt.findByName(menu, "reason")).text = "spam";
+		var duration = combo(menu, "duration");
+		duration.selectedIndex = 2;
+		click(menu, "banButton");
+		var confirm = lastPopup(ConfirmPopup);
+		assertNotNull(confirm, "ban opens a confirmation popup");
+		click(confirm, "ok_bt");
+
+		assertEquals(1, uploads.length, "ban uploads once after confirmation");
+		assertEquals(ServerConfig.banUserUrl(), uploads[0].url, "ban endpoint");
+		assertEquals("Target", uploads[0].fields.get("banned_name"), "ban target field");
+		assertEquals("86400", uploads[0].fields.get("duration"), "selected ban duration");
+		assertEquals("spam", uploads[0].fields.get("reason"), "ban reason field");
+		assertEquals("both", uploads[0].fields.get("type"), "ban type field");
+		assertEquals("social", uploads[0].fields.get("scope"), "ban scope field");
+		assertEquals("Banning...", uploads[0].label, "ban upload label");
+		assertEquals("ban`Target`86400`social`123`spam", LobbySocket.lastSent(), "ban success emits socket command");
+		assertEquals(true, popup.fadeOutStarted, "ban success closes the player popup");
+
+		popup.remove();
+		BanMenu.uploadFactory = BanMenu.defaultUpload;
 		closeAll();
 	}
 
@@ -163,6 +231,16 @@ class PlayerPopupTest {
 
 	private static function tempModMenu(popup:PlayerPopup):PR2MovieClip {
 		return findSymbol(popup, "TempModMenuGraphic");
+	}
+
+	private static function banMenu(container:DisplayObjectContainer):PR2MovieClip {
+		return findSymbol(container, "BanMenuGraphic");
+	}
+
+	private static function combo(container:DisplayObjectContainer, name:String):FlComboBox {
+		var combo = Std.downcast(LobbyArt.findByName(container, name), FlComboBox);
+		if (combo == null) throw name + " is not an FlComboBox";
+		return combo;
 	}
 
 	private static function findSymbol(container:Dynamic, symbolName:String):PR2MovieClip {

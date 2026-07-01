@@ -35,8 +35,8 @@ import pr2.runtime.PR2MovieClip;
 	ignore / message / view-levels buttons exactly as the original did.
 
 	A profile that comes back as a guest (group <= 0) hands off to
-	`PlayerGuestPopup`, matching Flash. The privileged side menus are ported one at
-	a time; temporary moderators get the Flash warning/kick menu.
+	`PlayerGuestPopup`, matching Flash. The privileged side menus mirror Flash's
+	moderator ban menu and temporary moderator warning/kick menu.
 **/
 class PlayerPopup extends Popup {
 	public static var instance:Null<PlayerPopup>;
@@ -61,6 +61,7 @@ class PlayerPopup extends Popup {
 	private var expPoints:Int = 0;
 	private var expToRank:Int = 0;
 	private var rankValue:Int = 0;
+	private var banMenu:Null<BanMenu>;
 	private var tempModMenu:Null<TempModMenu>;
 
 	private var cm:CommandHandler = CommandHandler.commandHandler;
@@ -202,10 +203,20 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setupModMenus(targetGroup:Int):Void {
-		if (LobbySession.group == 1 && LobbySession.isTempMod && targetGroup == 1) {
+		if (LobbySession.group >= 2) {
+			banMenu = new BanMenu(userName, this);
+			addChild(banMenu);
+			banMenu.x = banMenu.width / 2 + 40;
+			if (art != null) {
+				art.x -= 96;
+			}
+		} else if (LobbySession.group == 1 && LobbySession.isTempMod && targetGroup == 1) {
 			tempModMenu = new TempModMenu(userName, this);
 			addChild(tempModMenu);
 			tempModMenu.x = tempModMenu.width / 2 + 47;
+			if (art != null) {
+				art.x -= 96;
+			}
 		}
 	}
 
@@ -538,6 +549,10 @@ class PlayerPopup extends Popup {
 			PlayerPopup.instance = null;
 		}
 		clearHover();
+		if (banMenu != null) {
+			banMenu.remove();
+			banMenu = null;
+		}
 		if (tempModMenu != null) {
 			tempModMenu.remove();
 			tempModMenu = null;

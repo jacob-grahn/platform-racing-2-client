@@ -141,6 +141,9 @@ Finish the still-unported lobby popup routes, one at a time:
 - [ ] Port the admin/moderation popups.
   - [x] Port the temporary-moderator player popup side menu: authored warning
     and 30-minute kick controls emit the Flash socket commands.
+  - [x] Port the full moderator BanMenu popup route: authored warning/kick/view
+    priors controls, duration/type/scope selection, `ban_user.php` upload, and
+    follow-up `ban` socket command.
 
 
 ## Level Editor and Level Management

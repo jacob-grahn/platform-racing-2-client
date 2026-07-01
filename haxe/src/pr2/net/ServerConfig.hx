@@ -191,6 +191,11 @@ final class ServerConfig {
 		return host + "/guild_kick.php";
 	}
 
+	/** Moderator ban POST endpoint, matching `dialogs.BanMenu`. */
+	public static function banUserUrl():String {
+		return host + "/ban_user.php";
+	}
+
 	/** Favorites add/remove POST, matching `LevelItem.handleFavorite`. */
 	public static function favoriteModifyUrl():String {
 		return host + "/favorite_levels_modify.php";
