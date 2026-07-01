@@ -93,6 +93,9 @@ time:
   - [x] Port objective-mode finish reporting: each reached finish block emits
     `objective_reached` once, removes its minimap marker, and keeps the local
     race active instead of opening the finished flow.
+  - [x] Port deathmatch life updates: the `setLife` server command is routed to
+    `Course.setLife`, updates the local controller life count, and keeps the
+    authored hearts HUD visible/synced.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

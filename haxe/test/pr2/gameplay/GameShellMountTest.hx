@@ -85,6 +85,11 @@ class GameShellMountTest {
 		var course = buildCourse("deathmatch");
 		assertEquals(true, course.hearts.visible, "deathmatch course shows hearts immediately");
 		assertEquals(3, course.hearts.getHeartCount(), "deathmatch course starts with three lives");
+		course.setLife(2);
+		assertEquals(2, course.hearts.getHeartCount(), "setLife updates deathmatch hearts");
+		assertEquals(2, course.localCharacter.debugState().lives, "setLife updates local controller lives");
+		course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(2, course.hearts.getHeartCount(), "setLife value survives the next frame sync");
 		LobbySocket.resetSent();
 		var zeroLives = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Bumped, null, "hurt", null, null, null, 50, 50,
 			50, 0, true, null, null, null, 0);

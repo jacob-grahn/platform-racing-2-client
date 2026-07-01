@@ -490,6 +490,20 @@ class Course extends Sprite {
 		eggRound.addEggs(count, level);
 	}
 
+	public function setLife(lives:Int):Void {
+		if (config.gameMode != "deathmatch") {
+			return;
+		}
+		if (localCharacter != null) {
+			localCharacter.setLife(lives);
+		}
+		if (hearts != null) {
+			hearts.visible = true;
+			hearts.setHearts(lives);
+			displayedLives = hearts.getHeartCount();
+		}
+	}
+
 	public function addLooseHat(x:Int, y:Int, rot:Int, num:Int, color:Int, color2:Int, id:Int):HatEffect {
 		removeLooseHat(id);
 		return new HatEffect(this, x, y, rot, num, color, color2, id, characterLayer, commandHandler);

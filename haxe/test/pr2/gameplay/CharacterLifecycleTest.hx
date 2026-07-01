@@ -641,6 +641,7 @@ private class CourseDelegate implements GameCommandDelegate {
 	public function happyHour():Void {}
 	public function setEggSeed(seed:Int):Void course.setEggSeed(seed);
 	public function addEggs(count:Int):Void course.addEggs(count);
+	public function setLife(lives:Int):Void course.setLife(lives);
 	public function superBooster(tempId:Int):Void {}
 	public function maybeReturnHatToStart(hatId:Int):Void course.maybeReturnHatToStart(hatId);
 	public function startHatCountdown():Void {}

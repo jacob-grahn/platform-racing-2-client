@@ -45,6 +45,7 @@ interface GameCommandDelegate {
 	function happyHour():Void;
 	function setEggSeed(seed:Int):Void;
 	function addEggs(count:Int):Void;
+	function setLife(lives:Int):Void;
 	function superBooster(tempId:Int):Void;
 	function maybeReturnHatToStart(hatId:Int):Void;
 	function startHatCountdown():Void;
@@ -89,6 +90,7 @@ class GameCommandShell {
 		cm.defineCommand("happyHour", onHappyHour);
 		cm.defineCommand("setEggSeed", onSetEggSeed);
 		cm.defineCommand("addEggs", onAddEggs);
+		cm.defineCommand("setLife", onSetLife);
 		cm.defineCommand("superBooster", onSuperBooster);
 		cm.defineCommand("maybeReturnHatToStart", onMaybeReturnHatToStart);
 		cm.defineCommand("startHatCountdown", onStartHatCountdown);
@@ -111,6 +113,7 @@ class GameCommandShell {
 		cm.defineCommand("happyHour", null);
 		cm.defineCommand("setEggSeed", null);
 		cm.defineCommand("addEggs", null);
+		cm.defineCommand("setLife", null);
 		cm.defineCommand("superBooster", null);
 		cm.defineCommand("maybeReturnHatToStart", null);
 		cm.defineCommand("startHatCountdown", null);
@@ -185,6 +188,10 @@ class GameCommandShell {
 
 	private function onAddEggs(a:Array<String>):Void {
 		delegate.addEggs(toInt(a[0]));
+	}
+
+	private function onSetLife(a:Array<String>):Void {
+		delegate.setLife(toInt(a[0]));
 	}
 
 	private function onSuperBooster(a:Array<String>):Void {

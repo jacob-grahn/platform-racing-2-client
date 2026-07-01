@@ -55,6 +55,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	private var pendingBeginRace:Bool = false;
 	private var pendingEggSeed:Null<Int>;
 	private var pendingEggAdds:Array<Int> = [];
+	private var pendingLife:Null<Int>;
 	private var pendingAwards:Array<Array<String>> = [];
 	private var expOld:Int = 0;
 	private var expNew:Int = 0;
@@ -140,6 +141,10 @@ class GamePage extends Page implements GameCommandDelegate {
 				course.addEggs(count);
 			}
 			pendingEggAdds.resize(0);
+			if (pendingLife != null) {
+				course.setLife(pendingLife);
+				pendingLife = null;
+			}
 			// Below the quit button / finish overlay, above nothing else yet.
 			addChildAt(course, 0);
 			clearLoadingText();
@@ -329,6 +334,13 @@ class GamePage extends Page implements GameCommandDelegate {
 			return;
 		}
 		course.addEggs(count);
+	}
+	public function setLife(lives:Int):Void {
+		if (course == null) {
+			pendingLife = lives;
+			return;
+		}
+		course.setLife(lives);
 	}
 	public function superBooster(tempId:Int):Void {}
 	public function maybeReturnHatToStart(hatId:Int):Void {

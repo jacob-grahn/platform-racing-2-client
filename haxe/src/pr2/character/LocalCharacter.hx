@@ -315,6 +315,10 @@ class LocalCharacter extends Character {
 		syncFromController();
 	}
 
+	public function setLife(lives:Int):Void {
+		controller.setLife(lives);
+	}
+
 	public function debugState():LocalPlayerDebugState {
 		return controller.debugState();
 	}

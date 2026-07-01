@@ -79,6 +79,9 @@ class GameCommandShellTest {
 		send(cm, "addEggs`4");
 		assertEquals(4, rec.eggsAdded, "egg count parsed");
 
+		send(cm, "setLife`2");
+		assertEquals(2, rec.lives, "setLife count parsed");
+
 		send(cm, "superBooster`9");
 		assertEquals(9, rec.boostedTempId, "superBooster tempId parsed");
 
@@ -106,6 +109,7 @@ class GameCommandShellTest {
 		shell.remove();
 		assertEquals(false, cm.hasCommand("createLocalCharacter"), "createLocalCharacter cleared on remove");
 		assertEquals(false, cm.hasCommand("beginRace"), "beginRace cleared on remove");
+		assertEquals(false, cm.hasCommand("setLife"), "setLife cleared on remove");
 		assertEquals(false, cm.hasCommand("areYouHuman"), "areYouHuman cleared on remove");
 		assertEquals(false, cm.hasCommand("forceQuit"), "forceQuit cleared on remove");
 		assertEquals(false, send(cm, "award`coin`50"), "no command routes after remove");
@@ -149,6 +153,7 @@ private class RecordingDelegate implements GameCommandDelegate {
 	public var happyHourCount:Int = 0;
 	public var eggSeed:Int;
 	public var eggsAdded:Int;
+	public var lives:Int;
 	public var boostedTempId:Int;
 	public var returnHatId:Int;
 	public var hatCountdownStarts:Int = 0;
@@ -212,6 +217,10 @@ private class RecordingDelegate implements GameCommandDelegate {
 
 	public function addEggs(count:Int):Void {
 		eggsAdded = count;
+	}
+
+	public function setLife(lives:Int):Void {
+		this.lives = lives;
 	}
 
 	public function superBooster(tempId:Int):Void {
