@@ -35,8 +35,8 @@ import pr2.runtime.PR2MovieClip;
 	ignore / message / view-levels buttons exactly as the original did.
 
 	A profile that comes back as a guest (group <= 0) hands off to
-	`PlayerGuestPopup`, matching Flash. The privileged ban/admin/temp-mod side menus
-	(group >= 2 only) are upstream symbols that are not ported yet and are omitted.
+	`PlayerGuestPopup`, matching Flash. The privileged side menus are ported one at
+	a time; temporary moderators get the Flash warning/kick menu.
 **/
 class PlayerPopup extends Popup {
 	public static var instance:Null<PlayerPopup>;
@@ -61,6 +61,7 @@ class PlayerPopup extends Popup {
 	private var expPoints:Int = 0;
 	private var expToRank:Int = 0;
 	private var rankValue:Int = 0;
+	private var tempModMenu:Null<TempModMenu>;
 
 	private var cm:CommandHandler = CommandHandler.commandHandler;
 	private var cleanups:Array<Void->Void> = [];
@@ -181,6 +182,7 @@ class PlayerPopup extends Popup {
 		hideSupplement();
 
 		setupSocialButtons(ret, group);
+		setupModMenus(group);
 
 		playerInfo.visible = true;
 		var loading = LobbyArt.findByName(art, "loadingGraphic");
@@ -196,6 +198,14 @@ class PlayerPopup extends Popup {
 					AppStage.stage.removeEventListener(KeyboardEvent.KEY_DOWN, toggleUserIdShown);
 				}
 			});
+		}
+	}
+
+	private function setupModMenus(targetGroup:Int):Void {
+		if (LobbySession.group == 1 && LobbySession.isTempMod && targetGroup == 1) {
+			tempModMenu = new TempModMenu(userName, this);
+			addChild(tempModMenu);
+			tempModMenu.x = tempModMenu.width / 2 + 47;
 		}
 	}
 
@@ -528,6 +538,10 @@ class PlayerPopup extends Popup {
 			PlayerPopup.instance = null;
 		}
 		clearHover();
+		if (tempModMenu != null) {
+			tempModMenu.remove();
+			tempModMenu = null;
+		}
 		for (cleanup in cleanups) {
 			cleanup();
 		}

@@ -1,10 +1,14 @@
 package pr2.lobby;
 
+import openfl.display.DisplayObjectContainer;
 import openfl.events.MouseEvent;
+import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.PlayerGuestPopup;
 import pr2.lobby.dialogs.PlayerPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.net.LobbySocket;
 import pr2.runtime.FlButton;
+import pr2.runtime.PR2MovieClip;
 
 /**
 	Verifies that clicking a chat name brings up the player info popup the way the
@@ -17,13 +21,16 @@ class PlayerPopupTest {
 
 	public static function main():Void {
 		var savedGroup = LobbySession.group;
+		var savedTempMod = LobbySession.isTempMod;
 
 		testMemberRender();
 		testGuestHandoff();
 		testChatLinkEntryPoints();
 		testGuestButtonsDisabled();
+		testTempModMenu();
 
 		LobbySession.group = savedGroup;
+		LobbySession.isTempMod = savedTempMod;
 		closeAll();
 		trace('PlayerPopupTest passed $assertions assertions');
 	}
@@ -53,6 +60,42 @@ class PlayerPopupTest {
 		assertEquals(true, LobbyArt.findByName(popup, "playerInfo").visible, "info panel becomes visible");
 
 		popup.remove();
+	}
+
+	private static function testTempModMenu():Void {
+		LobbySession.group = 1;
+		LobbySession.isTempMod = true;
+		LobbySocket.resetSent();
+		closeAll();
+
+		var popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 1, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1
+		});
+
+		assertNotNull(LobbyArt.findByName(popup, "warning1Button"), "temporary moderators see the warning menu");
+		click(popup, "warning2Button");
+		assertEquals("warn`Target`2", LobbySocket.lastSent(), "warning buttons emit warn command");
+		assertEquals(true, popup.fadeOutStarted, "warning starts closing the player popup");
+		popup.remove();
+
+		popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 1, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1
+		});
+		click(tempModMenu(popup), "kickButton");
+		var confirm = lastPopup(ConfirmPopup);
+		assertNotNull(confirm, "kick opens a confirmation popup");
+		click(confirm, "ok_bt");
+		assertEquals("kick`Target", LobbySocket.lastSent(), "confirmed kick emits kick command");
+		assertEquals(true, popup.fadeOutStarted, "confirmed kick starts closing the player popup");
+
+		LobbySession.isTempMod = false;
+		closeAll();
 	}
 
 	private static function testGuestHandoff():Void {
@@ -110,6 +153,46 @@ class PlayerPopupTest {
 
 	private static function flLabel(popup:PlayerPopup, name:String):String {
 		return flButton(popup, name).label;
+	}
+
+	private static function click(container:DisplayObjectContainer, name:String):Void {
+		var target = LobbyArt.findByName(container, name);
+		if (target == null) throw 'missing click target $name';
+		target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function tempModMenu(popup:PlayerPopup):PR2MovieClip {
+		return findSymbol(popup, "TempModMenuGraphic");
+	}
+
+	private static function findSymbol(container:Dynamic, symbolName:String):PR2MovieClip {
+		var display = Std.downcast(container, DisplayObjectContainer);
+		if (display == null) throw 'missing $symbolName';
+		for (i in 0...display.numChildren) {
+			var child = display.getChildAt(i);
+			var clip = Std.downcast(child, PR2MovieClip);
+			if (clip != null && clip.symbol.linkageClassName == symbolName) {
+				return clip;
+			}
+			var childContainer = Std.downcast(child, DisplayObjectContainer);
+			if (childContainer != null) {
+				try {
+					return findSymbol(childContainer, symbolName);
+				} catch (_:Dynamic) {}
+			}
+		}
+		throw 'missing $symbolName';
+	}
+
+	private static function lastPopup<T:Popup>(cls:Class<T>):Null<T> {
+		var open = Popup.getOpen();
+		var i = open.length - 1;
+		while (i >= 0) {
+			var popup = Std.downcast(open[i], cls);
+			if (popup != null) return popup;
+			i--;
+		}
+		return null;
 	}
 
 	private static function closeAll():Void {

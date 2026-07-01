@@ -132,6 +132,8 @@ Finish the still-unported lobby popup routes, one at a time:
     `level_moderate.php` with `level_id`/`action`, and successful responses fade
     the level-info and moderation popups.
 - [ ] Port the admin/moderation popups.
+  - [x] Port the temporary-moderator player popup side menu: authored warning
+    and 30-minute kick controls emit the Flash socket commands.
 
 
 ## Level Editor and Level Management
