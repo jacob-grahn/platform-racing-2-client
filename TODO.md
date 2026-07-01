@@ -17,38 +17,17 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Run only the related test cases for your change, the full suite is a bit slow
 
 ## Bugs
-- [x] after rotating once with a rotate block, player can walk to the left and go through walls
-- [x] art backgrounds line art is drawn too thick
-- [x] move blocks don't move
-- [x] move blocks don't display their direction arrow before moving
-
-## Current Priority: Real Login-to-Race Flow
-
-The level-entry decomposition, the multiplayer `Character`/`LocalCharacter`/
-`RemoteCharacter` system and its emission/interpolation/lifecycle, the in-game
-`Course`/`GamePage` shell, the HUD widgets, the 3-2-1 countdown, prize and
-special-event behavior, and incremental level drawing are all ported and
-unit-covered (see README). What remains is the end-to-end acceptance and the
-still-unported popup/visual side effects.
-
---------
-- [ ] Port the deferred in-race popup side effects behind `GameCommandDelegate`:
-- [ ] Port the full `CourseMenu` access/spectate UI around in-place level
-  loading
-  - [ ] slot selection
-  - [ ] password/private flows
-  - [x] Port encrypted level-password verification: hash with
-    `LEVEL_PASS_SALT`, decrypt the Flash `result` payload with
-    `LEVEL_PASS_KEY`/`LEVEL_PASS_IV`, and gate access on matching
-    `level_id`/`access == 1`.
-  - [ ] Port private/full slot selection behavior.
-  - [ ] Port CourseMenu loading/cancel/error state visuals.
-  - [ ] Port spectate UI wiring around in-place loading.
-
-Acceptance: an account and a guest can each enter a real race over WebSocket,
-see synchronized remote players, finish or quit, and return to the lobby without
-a page reload. A deterministic transcript test verifies the full command/state
-sequence and screenshots cover level entry, countdown, racing, and finish.
+- [ ] move blocks go down every time (direction should be random)
+- [ ] character dissapears during rotation animation after hitting a rotate block. After the rotation the character reappears, but the camera is far away and takes a few frames to snap back to the character
+- [ ] blocks should play a bump animation when bumped from below or shot from the side
+- [ ] arrow blocks don't work right afer rotating a level with a rotate block
+- [ ] arrow blocks stop displaying their stationary arrow after playing their active animation
+- [ ] character dissapears when in water (perhaps the character is rendering behind the background?)
+- [ ] happy and sad blocks should deactivate/grey out after one use
+- [ ] happy and sad blocks should play sound effects when bumped
+- [ ] push block works on the physics level, but does not update its display position when moving
+- [ ] character should deactivate after hitting a finish block
+ 
 
 ## Gameplay Fidelity
 
