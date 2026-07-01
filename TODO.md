@@ -96,7 +96,7 @@ rounding, ordering, and edge cases.
   [ ] Port teleport/mine effect
   [ ] Port speed-burst expiry
   [ ] Port lightning
-  [ ] Port mine item
+  [x] Port mine item
   [ ] Port block item
 
 Acceptance: scripted input and server transcripts produce matching Flash debug
