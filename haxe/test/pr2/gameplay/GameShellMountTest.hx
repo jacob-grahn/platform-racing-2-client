@@ -65,6 +65,7 @@ class GameShellMountTest {
 
 		testDeathmatchHeartsShowInitialLives();
 		testFinishDrawingReadinessEmission();
+		testLocalFinishBeginsCharacterRemoval();
 
 		trace('GameShellMountTest passed $assertions assertions');
 	}
@@ -77,7 +78,8 @@ class GameShellMountTest {
 		var zeroLives = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Bumped, null, "hurt", null, null, null, 50, 50,
 			50, 0, true, null, null, null, 0);
 		@:privateAccess course.maybeHandleLocalFinish(zeroLives);
-		assertEquals("finish_race`-1`0`0", LobbySocket.lastSent(), "deathmatch zero lives emits default finish payload");
+		assertEquals("finish_race`-1`0`0|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
+			"deathmatch zero lives emits finish and starts local removal");
 		course.remove();
 	}
 
@@ -164,6 +166,18 @@ class GameShellMountTest {
 			"finish_drawing emitted after all drawing completes"
 		);
 		assertEquals(false, course.drawingInfo.isDrawing(0), "local drawing spinner hidden after readiness emission");
+		course.remove();
+	}
+
+	private static function testLocalFinishBeginsCharacterRemoval():Void {
+		var course = buildCourse("race");
+		LobbySocket.resetSent();
+		var finish = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+			50, 0, true, 1, 45, 15);
+		@:privateAccess course.maybeHandleLocalFinish(finish);
+		assertEquals("finish_race`1`45`15|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
+			"race finish emits finish and starts local removal");
+		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
 		course.remove();
 	}
 

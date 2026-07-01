@@ -714,6 +714,9 @@ class Course extends Sprite {
 		}
 		if (localCharacter != null) {
 			localCharacter.emitFinishRace(finishId, finishX, finishY);
+			if (config.gameMode != "hat") {
+				localCharacter.beginRemove();
+			}
 		}
 		if (onFinish != null) {
 			onFinish(state);

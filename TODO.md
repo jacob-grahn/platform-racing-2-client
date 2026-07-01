@@ -25,7 +25,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [ ] happy and sad blocks should deactivate/grey out after one use
 - [ ] happy and sad blocks should play sound effects when bumped
 - [ ] push block works on the physics level, but does not update its display position when moving
-- [ ] character should deactivate after hitting a finish block
  
 
 ## Gameplay Fidelity
