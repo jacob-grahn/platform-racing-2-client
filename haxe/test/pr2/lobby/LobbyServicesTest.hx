@@ -1,5 +1,6 @@
 package pr2.lobby;
 
+import openfl.events.MouseEvent;
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.players.PlayerListSort;
@@ -170,6 +171,17 @@ class LobbyServicesTest {
 		assertEquals(3, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "zoomSelect"), "selectedIndex"), "editor zoom defaults to 100%");
 		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "guests cannot save");
 		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
+		assertEquals("blocks", editor.menu.sideBar.id, "editor menu starts on blocks sidebar");
+		assertEquals(editor.menu, editor.menu.sideBar.parent, "active sidebar is mounted above menu art");
+		clickEditorMenu(editor, "settingsButton");
+		assertEquals("settings", editor.menu.sideBar.id, "settings button switches sidebar");
+		assertEquals(null, editor.menu.blocks.parent, "old sidebar is removed when switching");
+		clickEditorMenu(editor, "bgButton");
+		assertEquals("backgrounds", editor.menu.sideBar.id, "background button switches sidebar");
+		clickEditorMenu(editor, "layer1Button");
+		assertEquals("stamps", editor.menu.sideBar.id, "layer buttons switch to stamps sidebar");
+		clickEditorMenu(editor, "blocksButton");
+		assertEquals("blocks", editor.menu.sideBar.id, "blocks button restores blocks sidebar");
 		editor.remove();
 		assertEquals(null, LevelEditor.editor, "editor shell clears singleton");
 
@@ -185,6 +197,10 @@ class LobbyServicesTest {
 		assertEquals(true, editor.reportsMode, "menu reports mode updates editor");
 		editor.remove();
 		LobbySession.clear();
+	}
+
+	private static function clickEditorMenu(editor:LevelEditor, name:String):Void {
+		LobbyArt.findByName(editor.menu.art, name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 
 	private static function testCourseMenuTiming():Void {

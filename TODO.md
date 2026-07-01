@@ -155,6 +155,8 @@ Port the editor itself, one piece at a time:
     authored `LevelEditorMenuGraphic`, preserve mod/reports mode, guest save/load
     disabling, overlay ordering, and editor singleton cleanup.
 - [ ] Port the editor sidebars.
+  - [x] Mount the five editor sidebars and wire menu/layer buttons to switch the
+    active sidebar.
 - [ ] Port the editor tools.
 - [ ] Port drawing/text/stamp placement.
 - [ ] Port block options.
