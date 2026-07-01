@@ -49,6 +49,7 @@ class LocalCharacter extends Character {
 		super.setHats(hatArray);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
+		controller.crownHatActive = hasHatFlag(Character.CROWN);
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
 		controller.topHatActive = hasHatFlag(Character.TOP);
 		if (hadMoon && !hasHatFlag(Character.MOON)) {
@@ -76,6 +77,7 @@ class LocalCharacter extends Character {
 	public function step(input:LocalPlayerInput):Void {
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
+		controller.crownHatActive = hasHatFlag(Character.CROWN);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
 		controller.topHatActive = hasHatFlag(Character.TOP);

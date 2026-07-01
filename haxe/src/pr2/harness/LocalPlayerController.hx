@@ -69,6 +69,7 @@ class LocalPlayerController {
 	public var santaHatActive:Bool = false;
 	public var partyHatActive:Bool = false;
 	public var topHatActive:Bool = false;
+	public var crownHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -855,12 +856,15 @@ class LocalPlayerController {
 		var mineCenterY = block.y * level.tileSize + level.tileSize / 2;
 		var charHeight = crouching ? CROUCHING_HEIGHT : STANDING_HEIGHT;
 		var angle = Math.atan2((y - charHeight / 2) - mineCenterY, x - mineCenterX);
-		vx += Math.cos(angle) * MINE_HIT_SPEED;
-		vy += Math.sin(angle) * MINE_HIT_SPEED;
+		var crownProtected = crownHatActive && gameMode != "deathmatch" && gameMode != "dm" && gameMode != "hat";
+		if (!crownProtected) {
+			vx += Math.cos(angle) * MINE_HIT_SPEED;
+			vy += Math.sin(angle) * MINE_HIT_SPEED;
+		}
 		removedBlocks.set(blockKey(block.x, block.y), true);
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
-		if (mode != MODE_FREEZE) {
+		if (!crownProtected && mode != MODE_FREEZE) {
 			setMode(MODE_HURT);
 			beginHurtRecovery();
 		}

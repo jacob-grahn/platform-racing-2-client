@@ -64,7 +64,7 @@ time:
   - [x] Cowboy hat (id 5, `COWBOY`): while airborne, force swim/`water` mode
     (`waterTicks`); apply stat boost (`maxVelX >= 12`, `accel >= 1.86`,
     `SuperJump = 4.5`) via `ensureCowboyStats`, and `resetStats` when removed.
-  - [ ] Crown (id 6, `CROWN`): invincibility — immune to death except in `dm`
+  - [x] Crown (id 6, `CROWN`): invincibility — immune to death except in `dm`
     and `hat` game modes.
   - [x] Santa hat (id 7, `SANTA`): stand on water/safety blocks (`onStand` while
     over a `WaterBlock`/`SafetyBlock`); +1 `maxVelX` via `ensureSantaStats`, and

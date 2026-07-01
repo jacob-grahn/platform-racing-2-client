@@ -19,6 +19,7 @@ class LocalCharacterTest {
 		testSantaHatStandsOnWaterAndSafetyAndRaisesSpeedCapUntilRemoved();
 		testPartyHatIgnoresStingAndZapHurtReactions();
 		testTopHatPassesThroughVanishBlocks();
+		testCrownHatIgnoresMineHitsExceptDeathmatch();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -174,6 +175,37 @@ class LocalCharacterTest {
 		assertAbove(top.debugState().x, 86, "top hat passes through vanish wall");
 	}
 
+	private static function testCrownHatIgnoresMineHitsExceptDeathmatch():Void {
+		var normal = new LocalCharacter(delayedMineBlockLevel());
+		var crown = new LocalCharacter(delayedMineBlockLevel());
+		crown.setHats([6, 0xFFFFFF, -1]);
+
+		for (_ in 0...40) {
+			normal.step(new LocalPlayerInput());
+			crown.step(new LocalPlayerInput());
+			if (normal.debugState().touchedBlockType == "mine") {
+				break;
+			}
+		}
+
+		assertEquals("hurt", normal.debugState().mode, "mine hit hurts an unprotected character");
+		assertEquals("land", crown.debugState().mode, "crown hat ignores mine hurt in race mode");
+		assertClose(0, crown.debugState().vy, "crown hat ignores mine knockback in race mode");
+
+		var deathmatchCrown = new LocalCharacter(delayedMineBlockLevel());
+		deathmatchCrown.setGameMode("deathmatch");
+		deathmatchCrown.setHats([6, 0xFFFFFF, -1]);
+		for (_ in 0...40) {
+			deathmatchCrown.step(new LocalPlayerInput());
+			if (deathmatchCrown.debugState().touchedBlockType == "mine") {
+				break;
+			}
+		}
+
+		assertEquals("hurt", deathmatchCrown.debugState().mode, "crown hat does not block mine hurt in deathmatch");
+		assertClose(-50, deathmatchCrown.debugState().vy, "deathmatch crown mine hit still applies knockback");
+	}
+
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
 		var expected = controller.debugState();
 		var actual = character.debugState();
@@ -288,6 +320,24 @@ class LocalCharacterTest {
 				new LevelBlock(3, 3, BlockType.Basic),
 				new LevelBlock(4, 3, BlockType.Basic),
 				new LevelBlock(3, 2, BlockType.Vanish)
+			]
+		);
+	}
+
+	private static function delayedMineBlockLevel():FixtureLevel {
+		return new FixtureLevel(
+			"local-character-delayed-mine-block",
+			"Local Character Delayed Mine Block",
+			5,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 1),
+			new TilePosition(3, 4),
+			[
+				new LevelBlock(2, 3, BlockType.Mine),
+				new LevelBlock(3, 4, BlockType.Finish)
 			]
 		);
 	}
