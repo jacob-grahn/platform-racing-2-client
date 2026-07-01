@@ -32,11 +32,25 @@ class LocalCharacter extends Character {
 	private var lastNetParent:Null<String>;
 	private var lastNetItem:Int = 0;
 	private var exactPosNextUpdate:Bool = false;
+	private final baseGravityMultiplier:Float;
 
 	public function new(level:FixtureLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super(hatId, headId, bodyId, feetId);
 		type = "local";
+		baseGravityMultiplier = level.gravity;
 		controller = new LocalPlayerController(level);
+		syncFromController();
+	}
+
+	override public function setHats(hatArray:Array<Int>):Void {
+		var hadMoon = hasHatFlag(Character.MOON);
+		super.setHats(hatArray);
+		if (hadMoon && !hasHatFlag(Character.MOON)) {
+			controller.setGravity(baseGravityMultiplier);
+		}
+		if (hasHatFlag(Character.MOON) && !hadMoon) {
+			controller.setGravity(baseGravityMultiplier * 0.85);
+		}
 		syncFromController();
 	}
 

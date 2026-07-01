@@ -74,7 +74,7 @@ time:
   - [ ] Top hat (id 9, `TOP`): pass through `VanishBlock`s.
   - [ ] Jump-start hat (id 10, `JUMP_START`): on equip, grant a 2000 ms
     `speedBurst` item.
-  - [ ] Moon hat (id 11, `MOON`): low gravity (course gravity × 0.85);
+  - [x] Moon hat (id 11, `MOON`): low gravity (course gravity × 0.85);
     `resetGravity` when removed.
   - [ ] Jiggmin hat (id 13, `JIGG`): while falling (`velY > 0`), squash remote
     players below you (bounce + `squash` command via `maybeSquash`).

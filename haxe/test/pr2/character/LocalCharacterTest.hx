@@ -14,6 +14,7 @@ class LocalCharacterTest {
 	public static function main():Void {
 		testDelegatesPhysicsAndMirrorsCharacterState();
 		testPropellerHatSlowsFallWhenHoldingJump();
+		testMoonHatReducesGravityUntilRemoved();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -63,6 +64,22 @@ class LocalCharacterTest {
 		assertClose(normal.debugState().vy, notHeld.debugState().vy, "propeller does not slow falling without jump held");
 	}
 
+	private static function testMoonHatReducesGravityUntilRemoved():Void {
+		var normal = new LocalCharacter(heavyGravityAirborneLevel());
+		var moon = new LocalCharacter(heavyGravityAirborneLevel());
+		moon.setHats([11, 0xFFFFFF, -1]);
+
+		normal.step(new LocalPlayerInput());
+		moon.step(new LocalPlayerInput());
+		assertClose(normal.debugState().vy * 0.85, moon.debugState().vy, "moon hat applies low gravity");
+
+		var removed = new LocalCharacter(heavyGravityAirborneLevel());
+		removed.setHats([11, 0xFFFFFF, -1]);
+		removed.setHats([]);
+		removed.step(new LocalPlayerInput());
+		assertClose(normal.debugState().vy, removed.debugState().vy, "moon hat removal restores level gravity");
+	}
+
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
 		var expected = controller.debugState();
 		var actual = character.debugState();
@@ -104,6 +121,21 @@ class LocalCharacterTest {
 			8,
 			30,
 			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 6),
+			[]
+		);
+	}
+
+	private static function heavyGravityAirborneLevel():FixtureLevel {
+		return new FixtureLevel(
+			"local-character-heavy-airborne",
+			"Local Character Heavy Airborne",
+			8,
+			8,
+			30,
+			2,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 2),
 			new TilePosition(6, 6),
