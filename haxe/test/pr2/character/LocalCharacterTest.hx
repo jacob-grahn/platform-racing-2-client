@@ -20,6 +20,7 @@ class LocalCharacterTest {
 		testPartyHatIgnoresStingAndZapHurtReactions();
 		testTopHatPassesThroughVanishBlocks();
 		testCrownHatIgnoresMineHitsExceptDeathmatch();
+		testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -206,6 +207,26 @@ class LocalCharacterTest {
 		assertClose(-50, deathmatchCrown.debugState().vy, "deathmatch crown mine hit still applies knockback");
 	}
 
+	private static function testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip():Void {
+		var normal = new LocalCharacter(longFlatLevel());
+		var jumpStart = new LocalCharacter(longFlatLevel());
+		jumpStart.setHats([10, 0xFFFFFF, -1]);
+
+		assertEquals(7, jumpStart.debugState().itemId, "jump-start hat immediately uses a speed burst");
+		for (_ in 0...24) {
+			normal.step(new LocalPlayerInput(false, true));
+			jumpStart.step(new LocalPlayerInput(false, true));
+		}
+		assertBelow(normal.debugState().vx * 1.4, jumpStart.debugState().vx, "jump-start speed burst boosts movement");
+
+		for (_ in 0...30) {
+			jumpStart.step(new LocalPlayerInput(false, true));
+		}
+		assertEquals(null, jumpStart.debugState().itemId, "jump-start speed burst expires after two seconds");
+		assertClose(50, jumpStart.debugState().speedStat, "jump-start expiry restores speed stat");
+		assertClose(50, jumpStart.debugState().accelerationStat, "jump-start expiry restores acceleration stat");
+	}
+
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
 		var expected = controller.debugState();
 		var actual = character.debugState();
@@ -360,6 +381,13 @@ class LocalCharacterTest {
 		assertions++;
 		if (actual <= minimum) {
 			throw '$label expected above $minimum but was $actual';
+		}
+	}
+
+	private static function assertBelow(actual:Float, maximum:Float, label:String):Void {
+		assertions++;
+		if (actual >= maximum) {
+			throw '$label expected below $maximum but was $actual';
 		}
 	}
 }

@@ -46,6 +46,7 @@ class LocalCharacter extends Character {
 		var hadMoon = hasHatFlag(Character.MOON);
 		var hadCowboy = hasHatFlag(Character.COWBOY);
 		var hadSanta = hasHatFlag(Character.SANTA);
+		var hadJumpStart = hasHatFlag(Character.JUMP_START);
 		super.setHats(hatArray);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
@@ -70,6 +71,9 @@ class LocalCharacter extends Character {
 		}
 		if (hasHatFlag(Character.SANTA) && !hadSanta && !(hasHatFlag(Character.COWBOY) && !hadCowboy)) {
 			controller.ensureSantaStats();
+		}
+		if (hasHatFlag(Character.JUMP_START) && !hadJumpStart) {
+			controller.grantSpeedBurst(2000);
 		}
 		syncFromController();
 	}

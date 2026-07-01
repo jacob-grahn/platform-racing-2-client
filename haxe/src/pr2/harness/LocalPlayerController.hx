@@ -39,6 +39,7 @@ class LocalPlayerController {
 	private static inline var ITEM_ICE_WAVE:Int = 9;
 	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
 	private static inline var SPEED_BURST_FRAMES:Int = 135;
+	private static inline var FRAME_RATE:Int = 27;
 	private static inline var JET_PACK_TOTAL_FUEL:Int = 200;
 	private static inline var FAST_ITEM_RELOAD_FRAMES:Int = 22;
 	private static inline var ICE_WAVE_RELOAD_FRAMES:Int = 27;
@@ -198,6 +199,17 @@ class LocalPlayerController {
 
 	public function resetStats():Void {
 		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+	}
+
+	public function grantSpeedBurst(durationMs:Int):Void {
+		if (speedBurstFramesRemaining > 0) {
+			speedBurstFramesRemaining = 0;
+			applyMovementStats();
+		}
+		itemId = ITEM_SPEED_BURST;
+		itemUses = null;
+		itemAvailable = false;
+		activateSpeedBurst(msToFrames(durationMs));
 	}
 
 	// The pool an empty-options item block draws from (Course passes the decoded
@@ -1015,9 +1027,20 @@ class LocalPlayerController {
 		if (speedBurstFramesRemaining > 0) {
 			return;
 		}
+		activateSpeedBurst(SPEED_BURST_FRAMES);
+	}
+
+	private function activateSpeedBurst(frames:Int):Void {
+		if (frames <= 0) {
+			return;
+		}
 		accel *= 2;
 		maxVelX *= 2;
-		speedBurstFramesRemaining = SPEED_BURST_FRAMES;
+		speedBurstFramesRemaining = frames;
+	}
+
+	private static function msToFrames(ms:Int):Int {
+		return Std.int(Math.round(ms * FRAME_RATE / 1000));
 	}
 
 	private function useJetPack():Void {
