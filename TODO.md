@@ -76,7 +76,7 @@ time:
       `loose_hat` drop command.
     - [x] Complete `get_hat` pickup parity.
     - [x] Complete `returnHatToStart`/`hat_to_start` bounds parity.
-- [ ] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
+- [x] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
 - [ ] Port captcha.
 - [ ] Port rank progression.
