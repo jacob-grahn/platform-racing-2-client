@@ -80,7 +80,7 @@ time:
   - [x] Party hat (id 8, `PARTY`): immune to the `hurt` mode reaction from
     sting and zap.
   - [x] Top hat (id 9, `TOP`): pass through `VanishBlock`s.
-  - [ ] Jump-start hat (id 10, `JUMP_START`): on equip, grant a 2000 ms
+  - [x] Jump-start hat (id 10, `JUMP_START`): on equip, grant a 2000 ms
     `speedBurst` item.
   - [x] Moon hat (id 11, `MOON`): low gravity (course gravity × 0.85);
     `resetGravity` when removed.
