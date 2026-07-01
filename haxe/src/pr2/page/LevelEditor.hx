@@ -2,6 +2,7 @@ package pr2.page;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
@@ -23,6 +24,8 @@ class LevelEditor extends Page {
 	public var reportsMode(default, null):Bool;
 	public var overlayLayer(default, null):Null<Sprite>;
 	public var menu(default, null):Null<LevelEditorMenu>;
+	public var selectedToolSidebar(default, null):String = "";
+	public var selectedToolId(default, null):String = "";
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
 		super();
@@ -50,6 +53,11 @@ class LevelEditor extends Page {
 
 	public function setReportsMode(on:Bool = false):Void {
 		reportsMode = on;
+	}
+
+	public function selectEditorTool(sidebar:String, toolId:String):Void {
+		selectedToolSidebar = sidebar;
+		selectedToolId = toolId;
 	}
 
 	override public function remove():Void {
@@ -118,6 +126,7 @@ class LevelEditorMenu extends Sprite {
 			sideBar.exit();
 		}
 		sideBar = next;
+		editor.selectEditorTool("", "");
 		sideBar.init();
 		addChild(sideBar);
 	}
@@ -189,6 +198,7 @@ class LevelEditorMenu extends Sprite {
 
 class EditorSideBar extends Sprite {
 	public final id:String;
+	public var selectedEntry(default, null):Null<EditorSideBarEntry>;
 
 	public function new(id:String, itemIds:Array<String>) {
 		super();
@@ -199,6 +209,7 @@ class EditorSideBar extends Sprite {
 		var itemY:Float = 4;
 		for (itemId in itemIds) {
 			var entry = new EditorSideBarEntry(itemId);
+			entry.addEventListener(MouseEvent.CLICK, selectEntry);
 			entry.y = itemY;
 			addChild(entry);
 			itemY += entry.height + 10;
@@ -206,6 +217,22 @@ class EditorSideBar extends Sprite {
 	}
 
 	public function init():Void {}
+
+	private function selectEntry(e:MouseEvent):Void {
+		var entry = Std.downcast(e.currentTarget, EditorSideBarEntry);
+		if (entry == null) {
+			return;
+		}
+		if (selectedEntry != null) {
+			selectedEntry.setSelected(false);
+		}
+		selectedEntry = entry;
+		selectedEntry.setSelected(true);
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			editor.selectEditorTool(id, entry.id);
+		}
+	}
 
 	public function exit():Void {
 		if (parent != null) {
@@ -216,19 +243,23 @@ class EditorSideBar extends Sprite {
 	public function remove():Void {
 		exit();
 		while (numChildren > 0) {
-			removeChildAt(0);
+			var child = removeChildAt(0);
+			child.removeEventListener(MouseEvent.CLICK, selectEntry);
 		}
+		selectedEntry = null;
 	}
 }
 
 class EditorSideBarEntry extends Sprite {
+	public final id:String;
+
 	public function new(id:String) {
 		super();
+		this.id = id;
 		name = id + "Entry";
-		graphics.beginFill(0xF4F4F4);
-		graphics.lineStyle(1, 0x666666);
-		graphics.drawRect(0, 0, 30, 30);
-		graphics.endFill();
+		buttonMode = true;
+		useHandCursor = true;
+		draw(false);
 		var label = new TextField();
 		label.defaultTextFormat = new TextFormat("_sans", 6, 0x111111);
 		label.width = 30;
@@ -237,5 +268,17 @@ class EditorSideBarEntry extends Sprite {
 		label.mouseEnabled = false;
 		label.text = id;
 		addChild(label);
+	}
+
+	public function setSelected(selected:Bool):Void {
+		draw(selected);
+	}
+
+	private function draw(selected:Bool):Void {
+		graphics.clear();
+		graphics.beginFill(0xF4F4F4);
+		graphics.lineStyle(selected ? 2 : 1, selected ? 0x1F66CC : 0x666666);
+		graphics.drawRect(0, 0, 30, 30);
+		graphics.endFill();
 	}
 }

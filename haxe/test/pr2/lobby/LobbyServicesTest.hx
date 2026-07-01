@@ -173,13 +173,20 @@ class LobbyServicesTest {
 		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
 		assertEquals("blocks", editor.menu.sideBar.id, "editor menu starts on blocks sidebar");
 		assertEquals(editor.menu, editor.menu.sideBar.parent, "active sidebar is mounted above menu art");
+		clickEditorSidebar(editor, "brickEntry");
+		assertEquals("blocks", editor.selectedToolSidebar, "sidebar click records selected tool sidebar");
+		assertEquals("brick", editor.selectedToolId, "sidebar click records selected tool id");
 		clickEditorMenu(editor, "settingsButton");
 		assertEquals("settings", editor.menu.sideBar.id, "settings button switches sidebar");
 		assertEquals(null, editor.menu.blocks.parent, "old sidebar is removed when switching");
+		assertEquals("", editor.selectedToolId, "switching sidebars clears stale selected tool");
 		clickEditorMenu(editor, "bgButton");
 		assertEquals("backgrounds", editor.menu.sideBar.id, "background button switches sidebar");
 		clickEditorMenu(editor, "layer1Button");
 		assertEquals("stamps", editor.menu.sideBar.id, "layer buttons switch to stamps sidebar");
+		clickEditorSidebar(editor, "textEntry");
+		assertEquals("stamps", editor.selectedToolSidebar, "stamp sidebar entry records selected tool sidebar");
+		assertEquals("text", editor.selectedToolId, "stamp sidebar entry records selected tool id");
 		clickEditorMenu(editor, "blocksButton");
 		assertEquals("blocks", editor.menu.sideBar.id, "blocks button restores blocks sidebar");
 		editor.remove();
@@ -201,6 +208,10 @@ class LobbyServicesTest {
 
 	private static function clickEditorMenu(editor:LevelEditor, name:String):Void {
 		LobbyArt.findByName(editor.menu.art, name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function clickEditorSidebar(editor:LevelEditor, name:String):Void {
+		editor.menu.sideBar.getChildByName(name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 
 	private static function testCourseMenuTiming():Void {
