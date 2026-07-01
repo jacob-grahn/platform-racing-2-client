@@ -89,6 +89,7 @@ time:
   - [x] Port the global `setRank` socket command so rank progression updates
     `SecureData.userRank` for lobby access checks.
 - [ ] Port race modes.
+  - [x] Port Flash `gameplay.Modes` constants and full-name normalization.
 
 ### Physics 1:1 (preserve original quirks/bugs)
 

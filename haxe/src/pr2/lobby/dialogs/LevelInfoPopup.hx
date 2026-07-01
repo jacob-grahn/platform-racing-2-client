@@ -10,6 +10,7 @@ import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
+import pr2.gameplay.Modes;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -220,25 +221,20 @@ class LevelInfoPopup extends Popup {
 
 	private function determineMode(mode:String):String {
 		var frame = 1;
-		var label = "Race";
 		if (mode == "deathmatch" || mode == "dm" || mode == "d") {
-			label = "Deathmatch";
 			frame = 2;
 		} else if (mode == "egg" || mode == "eggs" || mode == "e") {
-			label = "Alien Eggs";
 			frame = 3;
 		} else if (mode == "objective" || mode == "obj" || mode == "o") {
-			label = "Objective";
 			frame = 4;
 		} else if (mode == "hat" || mode == "h") {
-			label = "Hat Attack";
 			frame = 5;
 		}
 		var modeSym = Std.downcast(LobbyArt.findByName(Std.downcast(LobbyArt.findByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"), PR2MovieClip);
 		if (modeSym != null) {
 			modeSym.gotoAndStop(frame);
 		}
-		return label;
+		return Modes.getFullName(mode);
 	}
 
 	private static function determineSong(song:String):String {

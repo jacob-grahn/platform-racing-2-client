@@ -30,6 +30,7 @@ import pr2.gameplay.SpectatePickerTest;
 import pr2.gameplay.SpecialEventTest;
 import pr2.gameplay.PlaceArtifactTest;
 import pr2.gameplay.LevelConfigTest;
+import pr2.gameplay.ModesTest;
 import pr2.gameplay.GameShellMountTest;
 import pr2.gameplay.CharacterLifecycleTest;
 import pr2.gameplay.LevelEntryStateTest;
@@ -112,6 +113,7 @@ class DeterministicTestSuite {
 		SpectatePickerTest.main();
 		SpecialEventTest.main();
 		PlaceArtifactTest.main();
+		ModesTest.main();
 		LevelConfigTest.main();
 		GameShellMountTest.main();
 		CharacterLifecycleTest.main();
