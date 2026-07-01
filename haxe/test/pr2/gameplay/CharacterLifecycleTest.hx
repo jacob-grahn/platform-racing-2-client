@@ -3,6 +3,7 @@ package pr2.gameplay;
 import openfl.events.Event;
 import openfl.display.Sprite;
 import openfl.ui.Keyboard;
+import pr2.character.Character;
 import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
@@ -494,7 +495,28 @@ class CharacterLifecycleTest {
 	}
 
 	private static function testLooseHatPhysicsAndPickup():Void {
-		var course = buildCourse(new CommandHandler(), "hat", "m3`ffffff`0;0;11,0;1;0");
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "hat", "m3`ffffff`0;0;11,0;1;0");
+		course.createLocalCharacter({
+			tempId: 4,
+			speed: 80,
+			accel: 70,
+			jump: 60,
+			hatColor: 0xFFFFFF,
+			headColor: 0xFFFFFF,
+			bodyColor: 0xFFFFFF,
+			feetColor: 0xFFFFFF,
+			hatId: 1,
+			headId: 1,
+			bodyId: 1,
+			feetId: 1,
+			hatColor2: -1,
+			headColor2: -1,
+			bodyColor2: -1,
+			feetColor2: -1,
+			group: "0"
+		});
+		assertTrue(handler.hasCommand("setHats4"), "local character registers setHats command for pickup replies");
 		finishDrawing(course);
 
 		var falling = course.addLooseHat(15, -45, 0, 5, 0xFFFFFF, -1, 1);
@@ -512,6 +534,9 @@ class CharacterLifecycleTest {
 		assertEquals(0, countLooseHats(course), "touching local player removes loose hat");
 		assertEquals("get_hat`2", LobbySocket.lastSent(), "touching local player emits get_hat");
 		assertTrue(pickup.display.parent == null, "pickup detaches loose hat display");
+		handler.dispatch("setHats4", ["6", "1193046", "-1"]);
+		assertEquals(6, course.localCharacter.hat1, "server pickup reply equips the collected hat locally");
+		assertTrue(course.localCharacter.hasHatFlag(Character.CROWN), "server pickup reply refreshes local hat powers");
 
 		var finishedPickup = course.addLooseHat(15, 0, 0, 6, 0x123456, -1, 3);
 		LobbySocket.resetSent();
@@ -520,6 +545,7 @@ class CharacterLifecycleTest {
 		assertEquals("", LobbySocket.lastSent(), "done-playing pickup suppression emits no get_hat");
 
 		course.remove();
+		assertTrue(!handler.hasCommand("setHats4"), "course teardown unregisters local setHats command");
 	}
 
 	private static function countLooseHats(course:Course):Int {

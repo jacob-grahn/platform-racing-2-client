@@ -159,6 +159,7 @@ class Course extends Sprite {
 	private var startPositions:Array<{x:Int, y:Int}> = [];
 	private var activeJetSounds:ObjectMap<Character, Bool> = new ObjectMap();
 	private var jetSoundChannels:ObjectMap<Character, SoundChannel> = new ObjectMap();
+	private var localSetHatsCommandName:Null<String>;
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -349,6 +350,7 @@ class Course extends Sprite {
 		if (localCharacter == null) {
 			return null;
 		}
+		unregisterLocalSetHatsCommand();
 		localCharacter.tempID = init.tempId;
 		localCharacter.groupStr = init.group;
 		localCharacter.setHatId(Std.int(init.hatId));
@@ -359,7 +361,29 @@ class Course extends Sprite {
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
 		localCharacter.setStats(init.speed, init.accel, init.jump);
 		playerArray[init.tempId] = localCharacter;
+		registerLocalSetHatsCommand(init.tempId);
 		return localCharacter;
+	}
+
+	private function registerLocalSetHatsCommand(tempId:Int):Void {
+		if (commandHandler == null) {
+			return;
+		}
+		localSetHatsCommandName = "setHats" + tempId;
+		commandHandler.defineCommand(localSetHatsCommandName, setLocalHatsCommand);
+	}
+
+	private function unregisterLocalSetHatsCommand():Void {
+		if (commandHandler != null && localSetHatsCommandName != null) {
+			commandHandler.defineCommand(localSetHatsCommandName, null);
+		}
+		localSetHatsCommandName = null;
+	}
+
+	private function setLocalHatsCommand(args:Array<String>):Void {
+		if (localCharacter != null) {
+			localCharacter.setHats([for (arg in args) parseIntArg(arg)]);
+		}
 	}
 
 	public function createRemoteCharacter(init:RemoteCharacterInit):RemoteCharacter {
@@ -1127,6 +1151,7 @@ class Course extends Sprite {
 		}
 		stopAllJetSounds();
 		removeAllRemoteCharacters();
+		unregisterLocalSetHatsCommand();
 		if (levelRenderer != null) {
 			levelRenderer.remove();
 			levelRenderer = null;
@@ -1143,5 +1168,10 @@ class Course extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	private static function parseIntArg(value:String):Int {
+		var parsed = Std.parseInt(value);
+		return parsed == null ? 0 : parsed;
 	}
 }
