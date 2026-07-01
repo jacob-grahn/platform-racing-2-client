@@ -108,7 +108,7 @@ class LocalPlayerController {
 	private final moveBlockDirections:Map<String, Int> = new Map();
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
-	private var moveRandomSeed:Int = 1;
+	private final moveRandom:ControllerFlashRandom = new ControllerFlashRandom(1);
 	public var lastSafeX(default, null):Float;
 	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
@@ -1353,8 +1353,7 @@ class LocalPlayerController {
 	}
 
 	private function nextMoveRandom(maxValue:Int):Int {
-		moveRandomSeed = (moveRandomSeed * 1103515245 + 12345) & 0x7fffffff;
-		return moveRandomSeed % maxValue;
+		return moveRandom.nextMinMax(0, maxValue);
 	}
 
 	private function updateVanishBlocks():Void {
@@ -1516,6 +1515,66 @@ private class TilePoint {
 	public function new(x:Int, y:Int) {
 		this.x = x;
 		this.y = y;
+	}
+}
+
+private class ControllerFlashRandom {
+	private static inline var MBIG:Int = 0x7fffffff;
+	private static inline var MSEED:Int = 0x9a4ec86;
+	private var inext:Int = 0;
+	private var inextp:Int = 0x15;
+	private var seedArray:Array<Int> = [];
+
+	public function new(seed:Int) {
+		for (_ in 0...0x38) {
+			seedArray.push(0);
+		}
+		var num2 = MSEED - Std.int(Math.abs(seed));
+		seedArray[0x37] = num2;
+		var num3 = 1;
+		for (i in 1...0x37) {
+			var index = (0x15 * i) % 0x37;
+			seedArray[index] = num3;
+			num3 = num2 - num3;
+			if (num3 < 0) {
+				num3 += MBIG;
+			}
+			num2 = seedArray[index];
+		}
+		for (_ in 1...5) {
+			for (k in 1...0x38) {
+				seedArray[k] -= seedArray[1 + ((k + 30) % 0x37)];
+				if (seedArray[k] < 0) {
+					seedArray[k] += MBIG;
+				}
+			}
+		}
+	}
+
+	public function nextMinMax(minValue:Int, maxValue:Int):Int {
+		if (minValue > maxValue) {
+			throw 'Argument "minValue" must be less than or equal to "maxValue".';
+		}
+		return Std.int(sample() * (maxValue - minValue)) + minValue;
+	}
+
+	private function sample():Float {
+		return internalSample() * 4.6566128752457969E-10;
+	}
+
+	private function internalSample():Int {
+		if (++inext >= 0x38) {
+			inext = 1;
+		}
+		if (++inextp >= 0x38) {
+			inextp = 1;
+		}
+		var num = seedArray[inext] - seedArray[inextp];
+		if (num < 0) {
+			num += MBIG;
+		}
+		seedArray[inext] = num;
+		return num;
 	}
 }
 

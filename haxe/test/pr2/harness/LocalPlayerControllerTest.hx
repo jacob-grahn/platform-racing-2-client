@@ -66,6 +66,7 @@ class LocalPlayerControllerTest {
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		testStandingOnPushBlockMovesItDown();
+		testUnconfiguredMoveBlocksUseFlashRandomDirections();
 		testTimedMoveBlockPreviewDirections();
 		testTimedMoveBlockShiftsAfterPreview();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
@@ -1175,6 +1176,17 @@ class LocalPlayerControllerTest {
 		assertEquals(2, player.activeMoveBlockDirections().get("3,3"), "move block exposes arrow again after reselect");
 	}
 
+	private static function testUnconfiguredMoveBlocksUseFlashRandomDirections():Void {
+		var player = new LocalCharacter(randomMoveBlockLevel());
+		var directions = player.activeMoveBlockDirections();
+
+		assertEquals(0, directions.get("1,1"), "first random move block uses Flash seed");
+		assertEquals(0, directions.get("2,1"), "second random move block uses Flash seed");
+		assertEquals(1, directions.get("3,1"), "third random move block uses Flash seed");
+		assertEquals(3, directions.get("4,1"), "fourth random move block uses Flash seed");
+		assertEquals(2, directions.get("5,1"), "fifth random move block uses Flash seed");
+	}
+
 	private static function testTimedMoveBlockWaitsWhenDestinationBlocked():Void {
 		var level = timedMoveBlockLevel("right", true);
 		var player = new LocalCharacter(level);
@@ -1842,6 +1854,28 @@ class LocalPlayerControllerTest {
 			new TilePosition(2, 2),
 			new TilePosition(4, 4),
 			blocks
+		);
+	}
+
+	private static function randomMoveBlockLevel():FixtureLevel {
+		return new FixtureLevel(
+			"random-move-blocks",
+			"Random Move Blocks",
+			8,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 4),
+			[
+				new LevelBlock(1, 1, BlockType.Move),
+				new LevelBlock(2, 1, BlockType.Move),
+				new LevelBlock(3, 1, BlockType.Move),
+				new LevelBlock(4, 1, BlockType.Move),
+				new LevelBlock(5, 1, BlockType.Move),
+				new LevelBlock(6, 4, BlockType.Finish)
+			]
 		);
 	}
 
