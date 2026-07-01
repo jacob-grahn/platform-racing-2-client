@@ -68,6 +68,7 @@ class LocalPlayerController {
 	public var cowboyHatActive:Bool = false;
 	public var santaHatActive:Bool = false;
 	public var partyHatActive:Bool = false;
+	public var topHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -531,9 +532,9 @@ class LocalPlayerController {
 			y += 0.001;
 		}
 		return {
-			floorLeft: getBlockAtPixel(x - HALF_WIDTH, y),
-			floorCenter: getBlockAtPixel(x, y),
-			floorRight: getBlockAtPixel(x + HALF_WIDTH, y),
+			floorLeft: getBlockAtPixel(x - HALF_WIDTH, y, true),
+			floorCenter: getBlockAtPixel(x, y, true),
+			floorRight: getBlockAtPixel(x + HALF_WIDTH, y, true),
 			wallLeft: getBlockAtPixel(x - HALF_WIDTH, y - 10),
 			midBlock: getBlockAtPixel(x, y - 10),
 			wallRight: getBlockAtPixel(x + HALF_WIDTH, y - 10),
@@ -1385,14 +1386,17 @@ class LocalPlayerController {
 		return CharacterState.fromMotion(mode, grounded, crouching, crouchCharge, animationLeft, animationRight);
 	}
 
-	private function getBlockAtPixel(pixelX:Float, pixelY:Float):Null<LevelBlock> {
+	private function getBlockAtPixel(pixelX:Float, pixelY:Float, allowTopHatVanishCollision:Bool = false):Null<LevelBlock> {
 		var tile = rotatedTileAtPixel(pixelX, pixelY);
-		return getBlockAtTile(tile.x, tile.y);
+		return getBlockAtTile(tile.x, tile.y, allowTopHatVanishCollision);
 	}
 
-	private function getBlockAtTile(tileX:Int, tileY:Int):Null<LevelBlock> {
+	private function getBlockAtTile(tileX:Int, tileY:Int, allowTopHatVanishCollision:Bool = false):Null<LevelBlock> {
 		var block = level.blockAt(tileX, tileY);
 		if (block == null || isBlockRemoved(block) || !block.type.isSolid()) {
+			return null;
+		}
+		if (topHatActive && block.type == BlockType.Vanish && !allowTopHatVanishCollision) {
 			return null;
 		}
 		return block;

@@ -18,6 +18,7 @@ class LocalCharacterTest {
 		testMoonHatReducesGravityUntilRemoved();
 		testSantaHatStandsOnWaterAndSafetyAndRaisesSpeedCapUntilRemoved();
 		testPartyHatIgnoresStingAndZapHurtReactions();
+		testTopHatPassesThroughVanishBlocks();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -159,6 +160,20 @@ class LocalCharacterTest {
 		assertEquals("land", partyZapped.debugState().mode, "party hat ignores zap hurt reaction");
 	}
 
+	private static function testTopHatPassesThroughVanishBlocks():Void {
+		var normal = new LocalCharacter(vanishWallLevel());
+		var top = new LocalCharacter(vanishWallLevel());
+		top.setHats([9, 0xFFFFFF, -1]);
+
+		for (_ in 0...8) {
+			normal.step(new LocalPlayerInput(false, true));
+			top.step(new LocalPlayerInput(false, true));
+		}
+
+		assertClose(80, normal.debugState().x, "vanish wall stops a character without top hat");
+		assertAbove(top.debugState().x, 86, "top hat passes through vanish wall");
+	}
+
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
 		var expected = controller.debugState();
 		var actual = character.debugState();
@@ -253,6 +268,27 @@ class LocalCharacterTest {
 			new TilePosition(2, 2),
 			new TilePosition(38, 6),
 			blocks
+		);
+	}
+
+	private static function vanishWallLevel():FixtureLevel {
+		return new FixtureLevel(
+			"local-character-vanish-wall",
+			"Local Character Vanish Wall",
+			8,
+			8,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 6),
+			[
+				new LevelBlock(1, 3, BlockType.Basic),
+				new LevelBlock(2, 3, BlockType.Basic),
+				new LevelBlock(3, 3, BlockType.Basic),
+				new LevelBlock(4, 3, BlockType.Basic),
+				new LevelBlock(3, 2, BlockType.Vanish)
+			]
 		);
 	}
 

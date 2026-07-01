@@ -50,6 +50,7 @@ class LocalCharacter extends Character {
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
+		controller.topHatActive = hasHatFlag(Character.TOP);
 		if (hadMoon && !hasHatFlag(Character.MOON)) {
 			controller.setGravity(baseGravityMultiplier);
 		}
@@ -77,6 +78,7 @@ class LocalCharacter extends Character {
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
+		controller.topHatActive = hasHatFlag(Character.TOP);
 		controller.step(input);
 		syncFromController();
 	}
