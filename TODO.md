@@ -79,6 +79,9 @@ time:
 - [x] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
 - [ ] Port captcha.
+  - [x] Port the in-race `areYouHuman` command boundary and cat captcha popup:
+    load `/cat/cat-captcha.php`, render two authored cat-image choices, POST the
+    clicked `answer` to `/cat/captcha-submit.php`, and fade on submit/error.
 - [ ] Port rank progression.
   - [x] Wire in-race `award` and `setExpGain` commands into the authored
     `FinishedPage` overlay: awards queue before the popup exists, later awards

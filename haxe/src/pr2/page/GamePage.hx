@@ -8,6 +8,7 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import pr2.audio.AudioManager;
 import pr2.Constants;
+import pr2.gameplay.CatCaptcha;
 import pr2.gameplay.Course;
 import pr2.gameplay.CowboyMode;
 import pr2.gameplay.FinishedPage;
@@ -347,6 +348,10 @@ class GamePage extends Page implements GameCommandDelegate {
 
 	public function forceQuit():Void {
 		quitGame();
+	}
+
+	public function areYouHuman():Void {
+		new CatCaptcha();
 	}
 
 	private function onHatCountdownTick():Void {

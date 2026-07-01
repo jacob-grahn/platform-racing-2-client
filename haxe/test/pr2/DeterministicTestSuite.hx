@@ -24,6 +24,7 @@ import pr2.gameplay.FinishedPageTest;
 import pr2.gameplay.HeartsTest;
 import pr2.gameplay.StatsDisplayTest;
 import pr2.gameplay.CountdownTest;
+import pr2.gameplay.CatCaptchaTest;
 import pr2.gameplay.PrizePopupTest;
 import pr2.gameplay.SpectatePickerTest;
 import pr2.gameplay.SpecialEventTest;
@@ -106,6 +107,7 @@ class DeterministicTestSuite {
 		HeartsTest.main();
 		StatsDisplayTest.main();
 		CountdownTest.main();
+		CatCaptchaTest.main();
 		PrizePopupTest.main();
 		SpectatePickerTest.main();
 		SpecialEventTest.main();

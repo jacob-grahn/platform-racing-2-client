@@ -645,5 +645,6 @@ private class CourseDelegate implements GameCommandDelegate {
 	public function maybeReturnHatToStart(hatId:Int):Void course.maybeReturnHatToStart(hatId);
 	public function startHatCountdown():Void {}
 	public function cancelHatCountdown():Void {}
+	public function areYouHuman():Void {}
 	public function forceQuit():Void {}
 }

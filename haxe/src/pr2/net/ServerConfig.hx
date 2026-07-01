@@ -234,4 +234,19 @@ final class ServerConfig {
 	public static function placeArtifactUrl():String {
 		return host + "/place_artifact.php";
 	}
+
+	/** Cat captcha challenge endpoint, matching `gameplay.CatCaptcha`. */
+	public static function catCaptchaUrl():String {
+		return host + "/cat/cat-captcha.php";
+	}
+
+	/** Cat captcha image endpoint, matching `gameplay.CatImage`. */
+	public static function catImageUrl():String {
+		return host + "/cat/cat-img.php";
+	}
+
+	/** Cat captcha answer POST endpoint, matching `gameplay.CatCaptcha`. */
+	public static function catCaptchaSubmitUrl():String {
+		return host + "/cat/captcha-submit.php";
+	}
 }

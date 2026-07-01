@@ -96,6 +96,9 @@ class GameCommandShellTest {
 		assertEquals(false, cm.hasCommand("cancelHatCountdown"), "cancel command self-clears");
 		assertEquals(1, rec.hatCountdownCancels, "cancelHatCountdown routed");
 
+		send(cm, "areYouHuman`");
+		assertEquals(1, rec.areYouHumanCount, "areYouHuman routed");
+
 		send(cm, "forceQuit`");
 		assertEquals(1, rec.forceQuitCount, "forceQuit routed");
 
@@ -103,6 +106,7 @@ class GameCommandShellTest {
 		shell.remove();
 		assertEquals(false, cm.hasCommand("createLocalCharacter"), "createLocalCharacter cleared on remove");
 		assertEquals(false, cm.hasCommand("beginRace"), "beginRace cleared on remove");
+		assertEquals(false, cm.hasCommand("areYouHuman"), "areYouHuman cleared on remove");
 		assertEquals(false, cm.hasCommand("forceQuit"), "forceQuit cleared on remove");
 		assertEquals(false, send(cm, "award`coin`50"), "no command routes after remove");
 
@@ -149,6 +153,7 @@ private class RecordingDelegate implements GameCommandDelegate {
 	public var returnHatId:Int;
 	public var hatCountdownStarts:Int = 0;
 	public var hatCountdownCancels:Int = 0;
+	public var areYouHumanCount:Int = 0;
 	public var forceQuitCount:Int = 0;
 
 	public function new() {}
@@ -223,6 +228,10 @@ private class RecordingDelegate implements GameCommandDelegate {
 
 	public function cancelHatCountdown():Void {
 		hatCountdownCancels++;
+	}
+
+	public function areYouHuman():Void {
+		areYouHumanCount++;
 	}
 
 	public function forceQuit():Void {

@@ -49,6 +49,7 @@ interface GameCommandDelegate {
 	function maybeReturnHatToStart(hatId:Int):Void;
 	function startHatCountdown():Void;
 	function cancelHatCountdown():Void;
+	function areYouHuman():Void;
 	function forceQuit():Void;
 }
 
@@ -91,6 +92,7 @@ class GameCommandShell {
 		cm.defineCommand("superBooster", onSuperBooster);
 		cm.defineCommand("maybeReturnHatToStart", onMaybeReturnHatToStart);
 		cm.defineCommand("startHatCountdown", onStartHatCountdown);
+		cm.defineCommand("areYouHuman", onAreYouHuman);
 		cm.defineCommand("forceQuit", onForceQuit);
 	}
 
@@ -112,6 +114,7 @@ class GameCommandShell {
 		cm.defineCommand("superBooster", null);
 		cm.defineCommand("maybeReturnHatToStart", null);
 		cm.defineCommand("startHatCountdown", null);
+		cm.defineCommand("areYouHuman", null);
 		cm.defineCommand("forceQuit", null);
 		cancelHatCountdown();
 	}
@@ -213,6 +216,10 @@ class GameCommandShell {
 
 	private function onForceQuit(_:Array<String>):Void {
 		delegate.forceQuit();
+	}
+
+	private function onAreYouHuman(_:Array<String>):Void {
+		delegate.areYouHuman();
 	}
 
 	// ---- arg helpers -----------------------------------------------------
