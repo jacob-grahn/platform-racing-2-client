@@ -19,6 +19,7 @@ class ServerLevelRendererTest {
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
+		testBlockBumpAnimation();
 		testMoveBlockDisplay();
 		testMoveBlockArrowDisplay();
 		testIncrementalBlockDrawing();
@@ -93,6 +94,24 @@ class ServerLevelRendererTest {
 		assertEquals(0.5, transform.redMultiplier, "server renderer applies depleted item red multiplier");
 		assertEquals(0.5, transform.greenMultiplier, "server renderer applies depleted item green multiplier");
 		assertEquals(0.5, transform.blueMultiplier, "server renderer applies depleted item blue multiplier");
+	}
+
+	private static function testBlockBumpAnimation():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var blockLayer = worldLayer(renderer, 1);
+		var display = blockLayer.getChildAt(0);
+
+		renderer.animateBlockBump(block.x, block.y);
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+
+		assertEquals(block.x, display.x, "block bump from below keeps x aligned");
+		assertClose(block.y - 4.875, display.y, "block bump uses Flash bounce decay on first frame");
+		for (_ in 0...20) {
+			renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertClose(block.x, display.x, "block bump returns to original x");
+		assertClose(block.y, display.y, "block bump returns to original y");
 	}
 
 	private static function testMoveBlockDisplay():Void {

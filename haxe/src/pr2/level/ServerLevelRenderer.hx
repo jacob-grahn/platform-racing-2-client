@@ -92,6 +92,7 @@ class ServerLevelRenderer extends Sprite {
 	private final arrowCompletionHandlers:Map<String, Event->Void> = new Map();
 	private final moveArrowDisplays:Map<String, PR2MovieClip> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
+	private final blockBounceVelocities:Map<String, Point> = new Map();
 	private final artDrawCursors:Array<ArtDrawCursor> = [];
 	private var nextBlockToDraw:Int = 0;
 	private var nextArtLayerToDraw:Int = 0;
@@ -316,6 +317,15 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
+	public function animateBlockBump(worldX:Int, worldY:Int, hitX:Float = 0, hitY:Float = -15):Void {
+		var key = blockKey(worldX, worldY);
+		if (!blockDisplays.exists(key)) {
+			return;
+		}
+		blockBounceVelocities.set(key, new Point(hitX, hitY));
+		addEventListener(Event.ENTER_FRAME, onBlockBounceFrame);
+	}
+
 	public function triggerWaterRipple(worldX:Int, worldY:Int):Void {
 		var key = blockKey(worldX, worldY);
 		var display = blockDisplays.get(key);
@@ -352,6 +362,11 @@ class ServerLevelRenderer extends Sprite {
 		display.y = toWorldY;
 		var toKey = blockKey(toWorldX, toWorldY);
 		blockDisplays.set(toKey, display);
+		var bounceVelocity = blockBounceVelocities.get(fromKey);
+		if (bounceVelocity != null) {
+			blockBounceVelocities.remove(fromKey);
+			blockBounceVelocities.set(toKey, bounceVelocity);
+		}
 		var moveArrow = moveArrowDisplays.get(fromKey);
 		if (moveArrow != null) {
 			moveArrowDisplays.remove(fromKey);
@@ -567,6 +582,32 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
+	private function onBlockBounceFrame(event:Event):Void {
+		for (key in [for (k in blockBounceVelocities.keys()) k]) {
+			var display = blockDisplays.get(key);
+			if (display == null) {
+				blockBounceVelocities.remove(key);
+				continue;
+			}
+			var velocity = blockBounceVelocities.get(key);
+			velocity.x *= 0.5;
+			velocity.y *= 0.5;
+			var origin = blockOrigin(key);
+			display.x += velocity.x;
+			display.x += (origin.x - display.x) * 0.35;
+			display.y += velocity.y;
+			display.y += (origin.y - display.y) * 0.35;
+			if (Math.abs(origin.x - display.x) < 0.25 && Math.abs(origin.y - display.y) < 0.25) {
+				display.x = origin.x;
+				display.y = origin.y;
+				blockBounceVelocities.remove(key);
+			}
+		}
+		if (!blockBounceVelocities.keys().hasNext()) {
+			removeEventListener(Event.ENTER_FRAME, onBlockBounceFrame);
+		}
+	}
+
 	private function drawNextBlocks(limit:Int):Void {
 		var end = Std.int(Math.min(level.blocks.length, nextBlockToDraw + limit));
 		while (nextBlockToDraw < end) {
@@ -707,7 +748,9 @@ class ServerLevelRenderer extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
 		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
 		removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
+		removeEventListener(Event.ENTER_FRAME, onBlockBounceFrame);
 		waterRippleFrames.clear();
+		blockBounceVelocities.clear();
 		// Dispose every arrow movie clip, including off-screen ones that culling left
 		// detached from blockLayer so the tree walk below would not reach them.
 		for (key in arrowDisplays.keys()) {
@@ -756,6 +799,11 @@ class ServerLevelRenderer extends Sprite {
 
 	private static inline function blockKey(x:Int, y:Int):String {
 		return x + "," + y;
+	}
+
+	private static function blockOrigin(key:String):Point {
+		var comma = key.indexOf(",");
+		return new Point(Std.parseInt(key.substring(0, comma)), Std.parseInt(key.substring(comma + 1)));
 	}
 
 	private function drawArtBackground():Void {
