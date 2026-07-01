@@ -78,7 +78,7 @@ time:
     - [x] Complete `returnHatToStart`/`hat_to_start` bounds parity.
 - [x] Port the full `effects.Egg` PhysicsEffect movement/attack/squash visuals.
   The egg round command boundary is already wired.
-- [ ] Port captcha.
+- [x] Port captcha.
   - [x] Port the in-race `areYouHuman` command boundary and cat captcha popup:
     load `/cat/cat-captcha.php`, render two authored cat-image choices, POST the
     clicked `answer` to `/cat/captcha-submit.php`, and fade on submit/error.
