@@ -61,7 +61,7 @@ time:
     `resetGravity` when removed.
   - [x] Jiggmin hat (id 13, `JIGG`): while falling (`velY > 0`), squash remote
     players below you (bounce + `squash` command via `maybeSquash`).
-  - [ ] Artifact hat (id 14, `ARTIFACT`):
+  - [x] Artifact hat (id 14, `ARTIFACT`):
     - [x] Gameplay power: 30 s `speedBurst`, clamp the course timer to 30 s,
       reversed controls, `YeahSound`/music feedback, and removal cleanup
       (clear speed burst, restore controls).
