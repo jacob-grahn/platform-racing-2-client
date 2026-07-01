@@ -4,7 +4,12 @@ import haxe.crypto.Md5;
 import openfl.events.Event;
 import pr2.character.CharacterState;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
+import pr2.harness.LocalPlayerController;
+import pr2.harness.LocalPlayerInput;
 import pr2.harness.LocalPlayerDebugState;
+import pr2.level.ObjectCodes;
+import pr2.level.ServerLevel;
+import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -16,6 +21,7 @@ import pr2.net.ServerConfig;
 	layer, and tears everything down on `remove`. Built from a small in-memory m3
 	fixture so no network fetch is needed.
 **/
+@:access(pr2.gameplay.Course)
 class GameShellMountTest {
 	private static var assertions:Int = 0;
 
@@ -66,6 +72,7 @@ class GameShellMountTest {
 		testDeathmatchHeartsShowInitialLives();
 		testFinishDrawingReadinessEmission();
 		testLocalFinishBeginsCharacterRemoval();
+		testRotateBlockDisplayKeepsLocalCharacterCentered();
 
 		trace('GameShellMountTest passed $assertions assertions');
 	}
@@ -179,6 +186,55 @@ class GameShellMountTest {
 			"race finish emits finish and starts local removal");
 		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
 		course.remove();
+	}
+
+	private static function testRotateBlockDisplayKeepsLocalCharacterCentered():Void {
+		var course = buildRotateCourse();
+		for (_ in 0...40) {
+			course.localCharacter.step(new LocalPlayerInput(false, false, true));
+			if (course.localCharacter.debugState().mode == "freeze") {
+				break;
+			}
+		}
+		assertEquals("freeze", course.localCharacter.debugState().mode, "local character reaches rotate freeze");
+
+		course.localCharacter.step(new LocalPlayerInput());
+		course.updatePlayerDisplay();
+		assertEquals(-3, course.localCharacter.rotation, "local character counter-rotates during course tween");
+
+		for (_ in 0...29) {
+			course.localCharacter.step(new LocalPlayerInput());
+			course.updatePlayerDisplay();
+		}
+
+		var state = course.localCharacter.debugState();
+		assertEquals(90, state.courseRotation, "rotate block commits course rotation");
+		assertEquals(0, course.localCharacter.rotation, "local character rotation resets after tween");
+		assertClose(275, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2, "camera snaps local x after rotation");
+		assertClose(245, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT, "camera snaps local y after rotation");
+		course.remove();
+	}
+
+	private static function buildRotateCourse():Course {
+		var level = new ServerLevel(0xFFFFFF, [
+			new DecodedBlock(ObjectCodes.BLOCK_START1, 60, 90),
+			new DecodedBlock(ObjectCodes.BLOCK_ROTATE_RIGHT, 60, 30),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 60, 120),
+			new DecodedBlock(ObjectCodes.BLOCK_FINISH, 120, 120)
+		]);
+
+		var vars:Map<String, String> = new Map();
+		vars.set("level_id", "43");
+		vars.set("title", "Rotate Display Test");
+		vars.set("song", "song1");
+		vars.set("gravity", "1");
+		vars.set("max_time", "120");
+		vars.set("gameMode", "race");
+		vars.set("items", "all");
+		vars.set("data", "rotate-display-test");
+
+		var data = new ServerLevelData(vars, true);
+		return new Course(level, data, LevelConfig.fromServerData(data));
 	}
 
 	private static function assertClose(expected:Float, actual:Float, message:String):Void {

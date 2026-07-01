@@ -17,7 +17,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Run only the related test cases for your change, the full suite is a bit slow
 
 ## Bugs
-- [ ] character dissapears during rotation animation after hitting a rotate block. After the rotation the character reappears, but the camera is far away and takes a few frames to snap back to the character
+- [x] character dissapears during rotation animation after hitting a rotate block. After the rotation the character reappears, but the camera is far away and takes a few frames to snap back to the character
 - [x] blocks should play a bump animation when bumped from below or shot from the side
   - [x] animate the block when bumped from below
   - [x] animate the block when shot from the side

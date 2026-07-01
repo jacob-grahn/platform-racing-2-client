@@ -150,6 +150,7 @@ class Course extends Sprite {
 	private var displayedStats:Null<String>;
 	private var displayedLives:Null<Int>;
 	private var finishDrawingEmitted:Bool = false;
+	private var displayedCourseRotation:Int = 0;
 	private final displayedMoveBlockPositions:Map<Int, {worldX:Int, worldY:Int}> = new Map();
 	private var displayedMoveBlockArrows:Map<String, Bool> = new Map();
 	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
@@ -1024,7 +1025,12 @@ class Course extends Sprite {
 		}
 		var worldX = serverFixture.fixturePixelToWorldX(player.x);
 		var worldY = serverFixture.fixturePixelToWorldY(player.y);
-		camera.follow(worldX, worldY);
+		if (state.courseRotation != displayedCourseRotation) {
+			camera.snapTo(worldX, worldY);
+			displayedCourseRotation = state.courseRotation;
+		} else {
+			camera.follow(worldX, worldY);
+		}
 		levelRenderer.setCameraOffset(Constants.STAGE_WIDTH / 2 + camera.posX, Constants.STAGE_HEIGHT / 2 + camera.posY);
 		if (playerDot != null) {
 			playerDot.x = worldX;
@@ -1033,6 +1039,7 @@ class Course extends Sprite {
 		var screen = levelRenderer.worldToScreen(worldX, worldY);
 		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
 		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX);
+		player.rotation = localCharacter.characterRotation;
 		player.display.setState(state.characterState.toClipName());
 		player.display.advanceOneFrame();
 	}
