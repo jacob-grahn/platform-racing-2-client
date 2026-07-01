@@ -309,6 +309,10 @@ class LocalCharacter extends Character {
 		return controller.activeVisualBlockKeys();
 	}
 
+	public function activeMoveBlockDirections():Map<String, Int> {
+		return controller.activeMoveBlockDirections();
+	}
+
 	public function freeze():Void {
 		controller.freeze();
 		syncFromController();

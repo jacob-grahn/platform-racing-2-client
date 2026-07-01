@@ -146,6 +146,7 @@ class Course extends Sprite {
 	private var displayedLives:Null<Int>;
 	private var finishDrawingEmitted:Bool = false;
 	private final displayedMoveBlockPositions:Map<Int, {worldX:Int, worldY:Int}> = new Map();
+	private var displayedMoveBlockArrows:Map<String, Bool> = new Map();
 	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
 	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
 	private var activeVisualBlocks:Map<String, Bool> = new Map();
@@ -797,6 +798,7 @@ class Course extends Sprite {
 	}
 
 	private function syncBlockVisuals():Void {
+		syncMoveBlockArrows();
 		syncMoveBlockDisplays();
 		// Only blocks with non-default alpha/tint (fading/removed/depleted) need
 		// restyling; iterating all blocks here was O(blocks) per frame and dropped
@@ -864,6 +866,29 @@ class Course extends Sprite {
 				displayedMoveBlockPositions.set(i, {worldX: currentWorldX, worldY: currentWorldY});
 			}
 		}
+	}
+
+	private function syncMoveBlockArrows():Void {
+		if (levelRenderer == null || serverFixture == null || player == null) {
+			return;
+		}
+		var current:Map<String, Bool> = new Map();
+		var directions = player.activeMoveBlockDirections();
+		for (tileKey in directions.keys()) {
+			var tileX = tileKeyX(tileKey);
+			var tileY = tileKeyY(tileKey);
+			var worldX = (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var worldY = (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var worldKey = '$worldX,$worldY';
+			current.set(worldKey, true);
+			levelRenderer.showMoveBlockArrow(worldX, worldY, directions.get(tileKey));
+		}
+		for (worldKey in displayedMoveBlockArrows.keys()) {
+			if (!current.exists(worldKey)) {
+				levelRenderer.hideMoveBlockArrow(tileKeyX(worldKey), tileKeyY(worldKey));
+			}
+		}
+		displayedMoveBlockArrows = current;
 	}
 
 	private function playBlockBumpSound(event:BlockVisualEvent):Void {

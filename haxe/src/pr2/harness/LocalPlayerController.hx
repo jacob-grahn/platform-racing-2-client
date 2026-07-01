@@ -425,6 +425,17 @@ class LocalPlayerController {
 		return [for (key in seen.keys()) key];
 	}
 
+	public function activeMoveBlockDirections():Map<String, Int> {
+		var directions:Map<String, Int> = new Map();
+		if (moveBlockPhase != "shift") {
+			return directions;
+		}
+		for (key in moveBlockDirections.keys()) {
+			directions.set(key, moveBlockDirections.get(key));
+		}
+		return directions;
+	}
+
 	private function position(input:LocalPlayerInput):Void {
 		vy += gravity;
 		if (input.jump && propellerHatActive && vy > 0) {

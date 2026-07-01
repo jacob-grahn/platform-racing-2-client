@@ -66,6 +66,7 @@ class LocalPlayerControllerTest {
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		testStandingOnPushBlockMovesItDown();
+		testTimedMoveBlockPreviewDirections();
 		testTimedMoveBlockShiftsAfterPreview();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
 		testTimedMoveBlockWaitsWhenDestinationOccupied();
@@ -1156,6 +1157,22 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput());
 		assertEquals(null, level.blockAt(2, 3), "move block leaves original tile after one second");
 		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block shifts one tile in chosen direction");
+	}
+
+	private static function testTimedMoveBlockPreviewDirections():Void {
+		var level = timedMoveBlockLevel("right", false);
+		var player = new LocalCharacter(level);
+
+		assertEquals(2, player.activeMoveBlockDirections().get("2,3"), "move block exposes right arrow during preview");
+		for (_ in 0...27) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(false, player.activeMoveBlockDirections().exists("2,3"), "move block arrow clears after shifting");
+
+		for (_ in 0...135) {
+			player.step(new LocalPlayerInput());
+		}
+		assertEquals(2, player.activeMoveBlockDirections().get("3,3"), "move block exposes arrow again after reselect");
 	}
 
 	private static function testTimedMoveBlockWaitsWhenDestinationBlocked():Void {

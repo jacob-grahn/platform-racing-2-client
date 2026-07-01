@@ -90,6 +90,7 @@ class ServerLevelRenderer extends Sprite {
 	private var viewInitialized:Bool = false;
 	private final arrowDisplays:Map<String, PR2MovieClip> = new Map();
 	private final arrowCompletionHandlers:Map<String, Event->Void> = new Map();
+	private final moveArrowDisplays:Map<String, PR2MovieClip> = new Map();
 	private final waterRippleFrames:Map<String, Int> = new Map();
 	private final artDrawCursors:Array<ArtDrawCursor> = [];
 	private var nextBlockToDraw:Int = 0;
@@ -349,7 +350,13 @@ class ServerLevelRenderer extends Sprite {
 
 		display.x = toWorldX;
 		display.y = toWorldY;
-		blockDisplays.set(blockKey(toWorldX, toWorldY), display);
+		var toKey = blockKey(toWorldX, toWorldY);
+		blockDisplays.set(toKey, display);
+		var moveArrow = moveArrowDisplays.get(fromKey);
+		if (moveArrow != null) {
+			moveArrowDisplays.remove(fromKey);
+			moveArrowDisplays.set(toKey, moveArrow);
+		}
 		addToBlockGrid(toWorldX, toWorldY, display);
 
 		if (isInView(segmentOf(toWorldX), segmentOf(toWorldY))) {
@@ -359,6 +366,40 @@ class ServerLevelRenderer extends Sprite {
 		} else if (display.parent == blockLayer) {
 			blockLayer.removeChild(display);
 		}
+	}
+
+	public function showMoveBlockArrow(worldX:Int, worldY:Int, direction:Int):Void {
+		var key = blockKey(worldX, worldY);
+		var display = blockDisplays.get(key);
+		if (display == null) {
+			return;
+		}
+		var arrow = moveArrowDisplays.get(key);
+		if (arrow == null) {
+			arrow = PR2MovieClip.fromLinkage("MoveArrow", {maxNestedDepth: 2});
+			arrow.x = TILE_SIZE / 2;
+			arrow.y = TILE_SIZE / 2;
+			display.addChild(arrow);
+			moveArrowDisplays.set(key, arrow);
+		}
+		arrow.rotation = moveBlockArrowRotation(direction);
+	}
+
+	public function hideMoveBlockArrow(worldX:Int, worldY:Int):Void {
+		var key = blockKey(worldX, worldY);
+		var arrow = moveArrowDisplays.get(key);
+		if (arrow == null) {
+			return;
+		}
+		if (arrow.parent != null) {
+			arrow.parent.removeChild(arrow);
+		}
+		moveArrowDisplays.remove(key);
+	}
+
+	public function moveBlockArrowRotationAt(worldX:Int, worldY:Int):Null<Float> {
+		var arrow = moveArrowDisplays.get(blockKey(worldX, worldY));
+		return arrow == null ? null : arrow.rotation;
 	}
 
 	public function showMineExplosion(worldX:Float, worldY:Float, playSound:Bool = true):MineExplosion {
@@ -971,6 +1012,16 @@ class ServerLevelRenderer extends Sprite {
 		pivot.rotation = rotation;
 		container.addChild(pivot);
 		return arrow;
+	}
+
+	private static function moveBlockArrowRotation(direction:Int):Float {
+		return switch (direction) {
+			case 3: 270;
+			case 2: 90;
+			case 1: 0;
+			case 0: 180;
+			default: 0;
+		}
 	}
 
 	private static function drawFallbackBlock(container:Sprite, code:Int):Void {

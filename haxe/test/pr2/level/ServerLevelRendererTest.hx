@@ -20,6 +20,7 @@ class ServerLevelRendererTest {
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
 		testMoveBlockDisplay();
+		testMoveBlockArrowDisplay();
 		testIncrementalBlockDrawing();
 		testIncrementalArtDrawing();
 		testArrowAnimation();
@@ -106,6 +107,25 @@ class ServerLevelRendererTest {
 		assertEquals(10050.0, display.y, "move block display keeps new world y");
 		assertEquals(null, renderer.blockAlphaAt(10020, 10050), "old move block coordinate is no longer keyed");
 		assertEquals(1.0, renderer.blockAlphaAt(10050, 10050), "new move block coordinate is keyed");
+	}
+
+	private static function testMoveBlockArrowDisplay():Void {
+		var block = new DecodedBlock(ObjectCodes.BLOCK_MOVE, 10020, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var blockLayer = worldLayer(renderer, 1);
+		var display = cast(blockLayer.getChildAt(0), Sprite);
+
+		renderer.showMoveBlockArrow(10020, 10050, 2);
+		assertEquals(2, display.numChildren, "move block arrow is added over the tile");
+		assertEquals(90.0, renderer.moveBlockArrowRotationAt(10020, 10050), "right move arrow matches Flash rotation");
+
+		renderer.moveBlockDisplay(10020, 10050, 10050, 10050);
+		assertEquals(null, renderer.moveBlockArrowRotationAt(10020, 10050), "move arrow leaves old coordinate");
+		assertEquals(90.0, renderer.moveBlockArrowRotationAt(10050, 10050), "move arrow follows shifted block display");
+
+		renderer.hideMoveBlockArrow(10050, 10050);
+		assertEquals(1, display.numChildren, "move block arrow is removed from the tile");
+		assertEquals(null, renderer.moveBlockArrowRotationAt(10050, 10050), "move arrow key is cleared");
 	}
 
 	private static function testIncrementalBlockDrawing():Void {
