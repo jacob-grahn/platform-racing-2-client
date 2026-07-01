@@ -673,6 +673,16 @@ class LocalPlayerController {
 	}
 
 	private function applyStandEffect(block:LevelBlock, force:Int):Void {
+		if (isArrowBlock(block)) {
+			var rotation = arrowEffectiveRotation(block);
+			if (rotation == 0 && !crouching) {
+				vy -= 10;
+			} else {
+				pushArrow(rotation);
+			}
+			animateArrow(block);
+			return;
+		}
 		switch (block.type) {
 			case BlockType.Crumble:
 				applyCrumbleForce(block, force);
@@ -686,16 +696,6 @@ class LocalPlayerController {
 				pushBlock(block, 0, 1);
 			case BlockType.Ice:
 				accelFactor = 0.05;
-			case BlockType.ArrowUp:
-				if (!crouching) {
-					vy -= 10;
-				} else {
-					pushArrow(block.type);
-				}
-				animateArrow(block);
-			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
-				pushArrow(block.type);
-				animateArrow(block);
 			default:
 		}
 	}
@@ -719,6 +719,14 @@ class LocalPlayerController {
 				applyCrumbleForce(block, force);
 			case BlockType.Vanish:
 				activateVanish(block);
+			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
+				var rotation = arrowEffectiveRotation(block);
+				if (rotation == 0) {
+					vy = !input.down && !crouching ? -14 : 0;
+				} else {
+					pushArrow(rotation);
+				}
+				animateArrow(block);
 			case BlockType.Mine:
 				hitMine(block);
 			case BlockType.Item | BlockType.InfiniteItem:
@@ -731,12 +739,6 @@ class LocalPlayerController {
 				pushBlock(block, 0, -1);
 			case BlockType.RotateRight | BlockType.RotateLeft:
 				startRotate(block);
-			case BlockType.ArrowUp:
-				vy = !input.down && !crouching ? -14 : 0;
-				animateArrow(block);
-			case BlockType.ArrowDown | BlockType.ArrowLeft | BlockType.ArrowRight:
-				pushArrow(block.type);
-				animateArrow(block);
 			default:
 		}
 	}
@@ -775,7 +777,7 @@ class LocalPlayerController {
 			case BlockType.Push:
 				pushBlock(block, vx >= 0 ? 1 : -1, 0);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
-				pushArrow(block.type);
+				pushArrow(arrowEffectiveRotation(block));
 				animateArrow(block);
 			default:
 		}
@@ -785,19 +787,41 @@ class LocalPlayerController {
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.ArrowAnimate, block.x, block.y));
 	}
 
-	private function pushArrow(type:BlockType):Void {
-		switch (type) {
-			case BlockType.ArrowUp:
-				if (!crouching) {
-					vy -= 1.2;
-				}
-			case BlockType.ArrowDown:
-				vy += 5;
-			case BlockType.ArrowLeft:
-				vx -= 3;
-			case BlockType.ArrowRight:
-				vx += 3;
+	private function pushArrow(rotation:Int):Void {
+		if (rotation == 0 && !crouching) {
+			vy -= 1.2;
+		}
+		if (Math.abs(rotation) == 180) {
+			vy += 5;
+		}
+		if (rotation == -90) {
+			vx -= 3;
+		}
+		if (rotation == 90) {
+			vx += 3;
+		}
+	}
+
+	private function isArrowBlock(block:LevelBlock):Bool {
+		return switch (block.type) {
+			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
+				true;
 			default:
+				false;
+		}
+	}
+
+	private function arrowEffectiveRotation(block:LevelBlock):Int {
+		return RotationMath.normalizeDisplayRotation(courseRotation + arrowBaseRotation(block.type));
+	}
+
+	private static function arrowBaseRotation(type:BlockType):Int {
+		return switch (type) {
+			case BlockType.ArrowUp: 0;
+			case BlockType.ArrowDown: 180;
+			case BlockType.ArrowLeft: -90;
+			case BlockType.ArrowRight: 90;
+			default: 0;
 		}
 	}
 

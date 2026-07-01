@@ -80,6 +80,7 @@ class LocalPlayerControllerTest {
 		testRotationMapsSafePosition();
 		testCollisionSnapsAgainstRotatedCeiling();
 		testCollisionStopsLeftMovementAfterRotation();
+		testArrowPushUsesRotatedCourseDirection();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -1401,6 +1402,34 @@ class LocalPlayerControllerTest {
 
 		var state = player.debugState();
 		assertBelow(-111, state.x, "rotated wall stops left movement at its displayed edge");
+	}
+
+	private static function testArrowPushUsesRotatedCourseDirection():Void {
+		var level = rotateBlockLevel(BlockType.RotateRight);
+		level.blocks.push(new LevelBlock(3, 4, BlockType.ArrowRight));
+		var player = new LocalCharacter(level);
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().mode == "freeze") {
+				break;
+			}
+		}
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput());
+		}
+
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput(true));
+			if (player.debugState().touchedBlockType == "arrow_right") {
+				break;
+			}
+		}
+
+		var state = player.debugState();
+		assertEquals("arrow_right", state.touchedBlockType, "scripted run reaches rotated arrow block");
+		assertBelow(-state.vy, -5, "right arrow rotated 90 degrees pushes down like Flash");
+		assertBelow(state.vx, 1, "rotated right arrow no longer pushes along unrotated right");
 	}
 
 	private static function bumpRotateBlock(type:BlockType):LocalCharacter {
