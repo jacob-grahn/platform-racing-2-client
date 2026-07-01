@@ -91,7 +91,7 @@ time:
     clean up (clear speed burst, restore controls) when removed.
   - [ ] Jellyfish hat (id 15, `JELLYFISH`): periodically sting nearby players
     (`stingCooldown` + `maybeSting`) and be immune to the sting `hurt` reaction.
-  - [ ] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color
+  - [x] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color
     transparency workaround) — no gameplay power.
   - [ ] Port the hat-attack game-mode loose-hat lifecycle: drop your highest hat
     on bump (`getHighestHat` → `loose_hat`), `get_hat` pickup, and

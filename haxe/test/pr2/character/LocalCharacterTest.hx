@@ -21,6 +21,7 @@ class LocalCharacterTest {
 		testTopHatPassesThroughVanishBlocks();
 		testCrownHatIgnoresMineHitsExceptDeathmatch();
 		testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip();
+		testCheeseHatIsCosmeticOnly();
 		trace('LocalCharacterTest passed $assertions assertions');
 	}
 
@@ -225,6 +226,33 @@ class LocalCharacterTest {
 		assertEquals(null, jumpStart.debugState().itemId, "jump-start speed burst expires after two seconds");
 		assertClose(50, jumpStart.debugState().speedStat, "jump-start expiry restores speed stat");
 		assertClose(50, jumpStart.debugState().accelerationStat, "jump-start expiry restores acceleration stat");
+	}
+
+	private static function testCheeseHatIsCosmeticOnly():Void {
+		var normal = new LocalCharacter(longFlatLevel());
+		var cheese = new LocalCharacter(longFlatLevel());
+		cheese.setHats([16, 0xC8B040, -1]);
+		assertEquals(true, cheese.hasHatFlag(Character.CHEESE), "cheese hat flag is set for cosmetic rendering");
+
+		for (_ in 0...30) {
+			normal.step(new LocalPlayerInput(false, true));
+			cheese.step(new LocalPlayerInput(false, true));
+		}
+		assertEquals(normal.debugState().serialize(), cheese.debugState().serialize(), "cheese hat does not change land movement");
+
+		var normalFall = new LocalCharacter(airborneLevel());
+		var cheeseFall = new LocalCharacter(airborneLevel());
+		cheeseFall.setHats([16, 0xC8B040, -1]);
+		normalFall.step(new LocalPlayerInput(false, false, true));
+		cheeseFall.step(new LocalPlayerInput(false, false, true));
+		assertEquals(normalFall.debugState().serialize(), cheeseFall.debugState().serialize(), "cheese hat does not change falling movement");
+
+		var stung = new LocalCharacter(flatLevel());
+		var cheeseStung = new LocalCharacter(flatLevel());
+		cheeseStung.setHats([16, 0xC8B040, -1]);
+		stung.receiveSting();
+		cheeseStung.receiveSting();
+		assertEquals(stung.debugState().serialize(), cheeseStung.debugState().serialize(), "cheese hat does not block sting hurt");
 	}
 
 	private static function assertSameState(controller:LocalPlayerController, character:LocalCharacter, label:String):Void {
