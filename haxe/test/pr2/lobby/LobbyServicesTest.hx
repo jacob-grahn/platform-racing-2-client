@@ -20,6 +20,7 @@ import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.LobbyPage;
+import pr2.page.LevelEditor;
 import pr2.page.Page;
 import pr2.page.PageHolder;
 import pr2.ui.CustomScrollBar;
@@ -57,6 +58,7 @@ class LobbyServicesTest {
 		testCommandDispatch();
 		testMemoryAndSecureData();
 		testLevelEditorRoute();
+		testLevelEditorShell();
 		testMessagesPaging();
 		testSocialActionPlan();
 		testCourseMenuTiming();
@@ -150,6 +152,38 @@ class LobbyServicesTest {
 		assertEquals(false, launchedAsMod, "temporary moderators enter editor without mod privileges");
 
 		LobbyPage.createLevelEditorPage = previousFactory;
+		LobbySession.clear();
+	}
+
+	private static function testLevelEditorShell():Void {
+		LobbySession.clear();
+		LobbySession.group = 0;
+		var editor = new LevelEditor(null, false, true);
+		editor.initialize();
+		assertEquals(editor, LevelEditor.editor, "editor shell sets singleton");
+		assertEquals(false, editor.isMod, "editor shell stores mod flag");
+		assertEquals(true, editor.reportsMode, "editor shell applies reports mode");
+		assertEquals(false, editor.overlayLayer.mouseEnabled, "overlay ignores mouse");
+		assertEquals(false, editor.overlayLayer.mouseChildren, "overlay children ignore mouse");
+		assertEquals(true, editor.getChildIndex(editor.overlayLayer) > editor.getChildIndex(editor.menu), "overlay is above menu");
+		assertNotNull(LobbyArt.findByName(editor.menu.art, "blocksButton"), "authored editor menu is mounted");
+		assertEquals(3, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "zoomSelect"), "selectedIndex"), "editor zoom defaults to 100%");
+		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "guests cannot save");
+		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
+		editor.remove();
+		assertEquals(null, LevelEditor.editor, "editor shell clears singleton");
+
+		LobbySession.group = 1;
+		editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		assertEquals(true, editor.isMod, "editor shell stores permanent mod flag");
+		assertEquals(false, editor.reportsMode, "editor shell starts outside reports mode");
+		assertEquals(true, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "members can save");
+		assertEquals(true, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "loadButton"), "enabled"), "members can load");
+		editor.menu.setReportsMode(true);
+		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "reports mode disables save");
+		assertEquals(true, editor.reportsMode, "menu reports mode updates editor");
+		editor.remove();
 		LobbySession.clear();
 	}
 
@@ -495,6 +529,13 @@ class LobbyServicesTest {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertNotNull(value:Dynamic, message:String):Void {
+		assertions++;
+		if (value == null) {
+			throw message;
 		}
 	}
 }

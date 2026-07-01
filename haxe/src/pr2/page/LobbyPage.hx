@@ -28,7 +28,7 @@ class LobbyPage extends Page {
 		new StorePopup();
 	};
 	public static var createLevelEditorPage:Bool->Page = function(isMod:Bool):Page {
-		return new Page();
+		return new LevelEditor(null, isMod);
 	};
 
 	private var background:Null<PR2MovieClip>;

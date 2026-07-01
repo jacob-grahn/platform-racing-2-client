@@ -142,6 +142,9 @@ close) is wired; the editor itself is unported.
 Port the editor itself, one piece at a time:
 
 - [ ] Port the `LevelEditor`/`LevelEditorMenu` shell and layout.
+  - [x] Mount a real `LevelEditor` page from the lobby editor button, create the
+    authored `LevelEditorMenuGraphic`, preserve mod/reports mode, guest save/load
+    disabling, overlay ordering, and editor singleton cleanup.
 - [ ] Port the editor sidebars.
 - [ ] Port the editor tools.
 - [ ] Port drawing/text/stamp placement.
