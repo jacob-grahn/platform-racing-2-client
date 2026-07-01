@@ -59,9 +59,11 @@ time:
     `resetGravity` when removed.
   - [x] Jiggmin hat (id 13, `JIGG`): while falling (`velY > 0`), squash remote
     players below you (bounce + `squash` command via `maybeSquash`).
-  - [ ] Artifact hat (id 14, `ARTIFACT`): 30 s `speedBurst`, clamp the course
-    timer to 30 s, reversed controls, plus `Zap`/`YeahSound`/music feedback;
-    clean up (clear speed burst, restore controls) when removed.
+  - [ ] Artifact hat (id 14, `ARTIFACT`):
+    - [x] Gameplay power: 30 s `speedBurst`, clamp the course timer to 30 s,
+      reversed controls, `YeahSound`/music feedback, and removal cleanup
+      (clear speed burst, restore controls).
+    - [ ] Render the silent blue `Zap` flash visual on activation.
   - [x] Jellyfish hat (id 15, `JELLYFISH`): periodically sting nearby players
     (`stingCooldown` + `maybeSting`) and be immune to the sting `hurt` reaction.
   - [x] Cheese hat (id 16, `CHEESE`): cosmetic only (secondary-color

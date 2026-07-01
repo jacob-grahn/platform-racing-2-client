@@ -23,6 +23,7 @@ class LocalCharacterTest {
 		testTopHatPassesThroughVanishBlocks();
 		testCrownHatIgnoresMineHitsExceptDeathmatch();
 		testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip();
+		testArtifactHatGrantsThirtySecondBurstAndReversesControlsUntilRemoved();
 		testJiggminHatSquashesRemotePlayersWhileFalling();
 		testJellyfishHatStingsNearbyRemotePlayersAndIgnoresStingHurt();
 		testCheeseHatIsCosmeticOnly();
@@ -230,6 +231,44 @@ class LocalCharacterTest {
 		assertEquals(null, jumpStart.debugState().itemId, "jump-start speed burst expires after two seconds");
 		assertClose(50, jumpStart.debugState().speedStat, "jump-start expiry restores speed stat");
 		assertClose(50, jumpStart.debugState().accelerationStat, "jump-start expiry restores acceleration stat");
+	}
+
+	private static function testArtifactHatGrantsThirtySecondBurstAndReversesControlsUntilRemoved():Void {
+		var artifact = new LocalCharacter(longFlatLevel());
+		var sounds:Array<String> = [];
+		var musicActivations = 0;
+		artifact.onPlayCharacterSound = function(request):Void {
+			sounds.push(request.kind + ":" + request.volume);
+		};
+		artifact.onArtifactHatActivated = function():Void {
+			musicActivations++;
+		};
+		artifact.setHats([14, 0xFFFFFF, -1]);
+
+		assertEquals(7, artifact.debugState().itemId, "artifact hat immediately uses a speed burst");
+		assertEquals(30, artifact.debugState().courseTime, "artifact hat clamps race timer to thirty seconds");
+		assertEquals(true, artifact.artifactControlsReversed, "artifact hat reverses controls on equip");
+		assertEquals("artifactYeah:1", sounds.join("|"), "artifact hat emits yeah feedback");
+		assertEquals(1, musicActivations, "artifact hat switches to artifact music once");
+
+		for (_ in 0...24) {
+			artifact.step(new LocalPlayerInput(false, true));
+		}
+		assertBelow(artifact.debugState().vx, -0.1, "artifact reversed controls turn right input into left movement");
+
+		artifact.setHats([]);
+		assertEquals(null, artifact.debugState().itemId, "artifact hat removal clears active speed burst");
+		assertEquals(false, artifact.artifactControlsReversed, "artifact hat removal restores controls");
+
+		var restored = new LocalCharacter(longFlatLevel());
+		var removedFresh = new LocalCharacter(longFlatLevel());
+		removedFresh.setHats([14, 0xFFFFFF, -1]);
+		removedFresh.setHats([]);
+		removedFresh.step(new LocalPlayerInput(false, true));
+		restored.step(new LocalPlayerInput(false, true));
+		assertAbove(removedFresh.debugState().vx, 0, "right input moves right after artifact removal");
+		assertClose(restored.debugState().speedStat, artifact.debugState().speedStat, "artifact removal restores speed stat");
+		assertClose(restored.debugState().accelerationStat, artifact.debugState().accelerationStat, "artifact removal restores acceleration stat");
 	}
 
 	private static function testJiggminHatSquashesRemotePlayersWhileFalling():Void {

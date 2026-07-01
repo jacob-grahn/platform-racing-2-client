@@ -214,6 +214,24 @@ class LocalPlayerController {
 		activateSpeedBurst(msToFrames(durationMs));
 	}
 
+	public function clearSpeedBurst():Void {
+		if (itemId == ITEM_SPEED_BURST) {
+			itemId = null;
+			itemUses = null;
+			itemAvailable = false;
+		}
+		if (speedBurstFramesRemaining > 0) {
+			speedBurstFramesRemaining = 0;
+			applyMovementStats();
+		}
+	}
+
+	public function clampCourseTime(maxSeconds:Int):Void {
+		if (courseTime > maxSeconds) {
+			courseTime = maxSeconds;
+		}
+	}
+
 	// The pool an empty-options item block draws from (Course passes the decoded
 	// LevelConfig.allowedItems). Empty means the level grants no items.
 	public function setAllowedItems(items:Array<Int>):Void {

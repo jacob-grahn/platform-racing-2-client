@@ -25,6 +25,8 @@ class LocalCharacter extends Character {
 	public var lastSafeY(get, never):Float;
 	public var networkPlayerCount:Int = 1;
 	public var stingCooldown(default, null):Int = 0;
+	public var artifactControlsReversed(default, null):Bool = false;
+	public var onArtifactHatActivated:Null<Void->Void> = null;
 
 	private var lastNetScaleX:Null<Float>;
 	private var exactX:Int = 0;
@@ -48,6 +50,7 @@ class LocalCharacter extends Character {
 		var hadCowboy = hasHatFlag(Character.COWBOY);
 		var hadSanta = hasHatFlag(Character.SANTA);
 		var hadJumpStart = hasHatFlag(Character.JUMP_START);
+		var hadArtifact = hasHatFlag(Character.ARTIFACT);
 		super.setHats(hatArray);
 		controller.santaHatActive = hasHatFlag(Character.SANTA);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
@@ -77,10 +80,31 @@ class LocalCharacter extends Character {
 		if (hasHatFlag(Character.JUMP_START) && !hadJumpStart) {
 			controller.grantSpeedBurst(2000);
 		}
+		if (hadArtifact && !hasHatFlag(Character.ARTIFACT)) {
+			controller.clearSpeedBurst();
+			artifactControlsReversed = false;
+		}
+		if (hasHatFlag(Character.ARTIFACT) && !hadArtifact) {
+			controller.grantSpeedBurst(30000);
+			controller.clampCourseTime(30);
+			artifactControlsReversed = true;
+			if (onPlayCharacterSound != null) {
+				onPlayCharacterSound({kind: "artifactYeah", x: x, y: y, volume: 1, target: this});
+			}
+			if (onArtifactHatActivated != null) {
+				onArtifactHatActivated();
+			}
+		}
 		syncFromController();
 	}
 
 	public function step(input:LocalPlayerInput):Void {
+		if (artifactControlsReversed) {
+			var reversed = input.copy();
+			reversed.left = input.right;
+			reversed.right = input.left;
+			input = reversed;
+		}
 		controller.propellerHatActive = hasHatFlag(Character.PROP);
 		controller.cowboyHatActive = hasHatFlag(Character.COWBOY);
 		controller.crownHatActive = hasHatFlag(Character.CROWN);

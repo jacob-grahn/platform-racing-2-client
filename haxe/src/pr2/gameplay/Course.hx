@@ -67,6 +67,8 @@ class Course extends Sprite {
 	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
 	static inline var SPEED_UP_SOUND:String = "assets/audio/sfx/sound550.mp3";
 	static inline var SLOW_DOWN_SOUND:String = "assets/audio/sfx/sound551.mp3";
+	// YeahSound -> yeah, used by Artifact hat activation.
+	static inline var YEAH_SOUND:String = "assets/audio/sfx/yeah.wav";
 	// EngineSound -> sound549, looped while Character.beginJet is active.
 	static inline var ENGINE_SOUND:String = "assets/audio/sfx/sound549.wav";
 
@@ -182,6 +184,7 @@ class Course extends Sprite {
 		player = new LocalCharacter(serverFixture.fixture);
 		player.onPlayJumpSound = playJumpSound;
 		player.onPlayCharacterSound = playCharacterSound;
+		player.onArtifactHatActivated = onArtifactHatActivated;
 		player.onStartJetSound = startJetSound;
 		player.onStopJetSound = stopJetSound;
 		player.setGameMode(config.gameMode);
@@ -528,11 +531,18 @@ class Course extends Sprite {
 			case "squash": SQUASH_SOUND;
 			case "speedUp": SPEED_UP_SOUND;
 			case "slowDown": SLOW_DOWN_SOUND;
+			case "artifactYeah": YEAH_SOUND;
 			default: null;
 		}
 		if (path != null && Assets.exists(path)) {
 			var offset = levelRenderer.cameraOffset();
 			SoundEffects.playGameSound(Assets.getSound(path), request.x, request.y, offset.x, offset.y, request.volume);
+		}
+	}
+
+	private function onArtifactHatActivated():Void {
+		if (musicSelection != null) {
+			musicSelection.gotArtifact();
 		}
 	}
 
