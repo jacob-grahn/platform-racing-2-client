@@ -8,6 +8,7 @@ import pr2.lobby.players.PlayerListSort.SortState;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `social.Guilds`: the top-guilds list shown to guests. Uses the
@@ -27,13 +28,13 @@ class Guilds extends PlayersListHolder {
 		graphic = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
 		graphic.gotoAndStop("guilds");
 		addChild(graphic);
-		var listHolder = Std.downcast(LobbyArt.findByName(graphic, "listHolder"), DisplayObjectContainer);
+		var listHolder = Std.downcast(DisplayUtil.findByName(graphic, "listHolder"), DisplayObjectContainer);
 		if (listHolder != null) {
 			attachHolder(listHolder);
 		}
-		nameButton = Std.downcast(LobbyArt.findByName(graphic, "name_bt"), DisplayObjectContainer);
-		activeButton = Std.downcast(LobbyArt.findByName(graphic, "active_bt"), DisplayObjectContainer);
-		gpButton = Std.downcast(LobbyArt.findByName(graphic, "gp_bt"), DisplayObjectContainer);
+		nameButton = Std.downcast(DisplayUtil.findByName(graphic, "name_bt"), DisplayObjectContainer);
+		activeButton = Std.downcast(DisplayUtil.findByName(graphic, "active_bt"), DisplayObjectContainer);
+		gpButton = Std.downcast(DisplayUtil.findByName(graphic, "gp_bt"), DisplayObjectContainer);
 		if (nameButton != null) {
 			nameButton.addEventListener(MouseEvent.CLICK, clickName);
 		}

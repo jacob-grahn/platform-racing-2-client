@@ -6,6 +6,7 @@ import js.Browser;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Port of Flash `dialogs.ExternalLinkPopup`. */
 class ExternalLinkPopup extends Popup {
@@ -29,8 +30,8 @@ class ExternalLinkPopup extends Popup {
 		var linkBox = LobbyArt.text(art, "linkBox");
 		if (linkBox != null) linkBox.text = url;
 		addChild(art);
-		proceedBinding = LobbyArt.bind(LobbyArt.findByName(art, "proceed_bt"), proceed);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut);
+		proceedBinding = LobbyArt.bind(DisplayUtil.findByName(art, "proceed_bt"), proceed);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
 	}
 
 	private function proceed():Void {

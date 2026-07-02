@@ -13,6 +13,7 @@ import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 class LoginFlashPopup extends Sprite {
 	private var art:PR2MovieClip;
@@ -33,7 +34,7 @@ class LoginFlashPopup extends Sprite {
 	}
 
 	public function child(name:String):Null<DisplayObject> {
-		return findByName(art, name);
+		return DisplayUtil.findByName(art, name);
 	}
 
 	public function input(name:String):TextField {
@@ -146,23 +147,6 @@ class LoginFlashPopup extends Sprite {
 		}
 		keyHandlers = [];
 		art.dispose();
-	}
-
-	private function findByName(container:DisplayObjectContainer, name:String):Null<DisplayObject> {
-		for (i in 0...container.numChildren) {
-			var display = container.getChildAt(i);
-			if (display.name == name) {
-				return display;
-			}
-			var childContainer = Std.downcast(display, DisplayObjectContainer);
-			if (childContainer != null) {
-				var found = findByName(childContainer, name);
-				if (found != null) {
-					return found;
-				}
-			}
-		}
-		return null;
 	}
 
 	private function firstTextField(container:DisplayObjectContainer):Null<TextField> {

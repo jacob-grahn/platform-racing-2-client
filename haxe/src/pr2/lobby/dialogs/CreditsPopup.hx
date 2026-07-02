@@ -6,6 +6,7 @@ import pr2.runtime.PR2MovieClip;
 import pr2.Constants;
 import openfl.events.TextEvent;
 import openfl.text.TextField;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `menu.CreditsPopup`: the credits modal reached from the lobby
@@ -43,7 +44,7 @@ class CreditsPopup extends Popup {
 		updateMusicNav();
 		if (artNav != null) artNav.addEventListener(TextEvent.LINK, clickArtNav);
 		if (musicNav != null) musicNav.addEventListener(TextEvent.LINK, clickMusicNav);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 	}
 
 	private function clickArtNav(event:TextEvent):Void {
@@ -77,7 +78,7 @@ class CreditsPopup extends Popup {
 	}
 
 	private function findText(name:String):Null<TextField> {
-		return Std.downcast(LobbyArt.findByName(art, name), TextField);
+		return Std.downcast(DisplayUtil.findByName(art, name), TextField);
 	}
 
 	private function setText(name:String, value:String):Void {
@@ -86,7 +87,7 @@ class CreditsPopup extends Popup {
 	}
 
 	private function setPageVisible(name:String, visible:Bool):Void {
-		var page = LobbyArt.findByName(art, name);
+		var page = DisplayUtil.findByName(art, name);
 		if (page != null) page.visible = visible;
 	}
 

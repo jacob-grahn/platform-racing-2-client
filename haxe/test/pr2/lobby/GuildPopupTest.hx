@@ -4,6 +4,7 @@ import openfl.events.KeyboardEvent;
 import pr2.app.AppStage;
 import pr2.lobby.dialogs.GuildPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.util.DisplayUtil;
 
 /**
 	Verifies the authored guild popup path used by chat/profile guild links:
@@ -40,7 +41,7 @@ class GuildPopupTest {
 		assertEquals(true, hasText(popup, "GP Total: 98,765"), "GP total is formatted");
 		assertEquals("Members: 2 (1 active)", LobbyArt.text(popup, "membersCount").text, "member count fills");
 		assertEquals("Fast only", LobbyArt.text(popup, "guildProse").text, "guild note fills");
-		assertEquals(false, LobbyArt.findByName(popup, "messageButton") != null, "non-members do not get PM Everyone");
+		assertEquals(false, DisplayUtil.findByName(popup, "messageButton") != null, "non-members do not get PM Everyone");
 		assertEquals(true, LobbyArt.text(popup, "nameBox").htmlText.indexOf("Jiggmin") >= 0, "member row uses linked name");
 
 		popup.remove();
@@ -57,8 +58,8 @@ class GuildPopupTest {
 		assertNotNull(popup, "showGuild opens a GuildPopup");
 		assertEquals("sentinel", LobbyPopups.lastRequest, "guild popup route is no longer record-only");
 		popup.applyReturnData(sampleData());
-		assertEquals(true, LobbyArt.findByName(popup, "messageButton") != null, "members get PM Everyone");
-		assertEquals(true, LobbyArt.findByName(popup, "delete_bt").visible, "admins see delete");
+		assertEquals(true, DisplayUtil.findByName(popup, "messageButton") != null, "members get PM Everyone");
+		assertEquals(true, DisplayUtil.findByName(popup, "delete_bt").visible, "admins see delete");
 
 		if (AppStage.stage != null) {
 			AppStage.stage.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, 16));

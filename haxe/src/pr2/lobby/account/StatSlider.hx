@@ -8,6 +8,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.FlSlider;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `ui.StatSlider`: one labelled 0–100 stat row with a slider, a
@@ -45,14 +46,14 @@ class StatSlider extends Sprite {
 			textBox.type = openfl.text.TextFieldType.INPUT;
 			textBox.addEventListener(Event.CHANGE, onTextChange);
 		}
-		slider = Std.downcast(LobbyArt.findByName(m, "slider"), FlSlider);
+		slider = Std.downcast(DisplayUtil.findByName(m, "slider"), FlSlider);
 		if (slider != null) {
 			slider.minimum = 0;
 			slider.maximum = 100;
 			slider.addEventListener(Event.CHANGE, onSliderChange);
 		}
-		decButton = LobbyArt.findByName(m, "decBtn");
-		incButton = LobbyArt.findByName(m, "incBtn");
+		decButton = DisplayUtil.findByName(m, "decBtn");
+		incButton = DisplayUtil.findByName(m, "incBtn");
 		decBinding = LobbyArt.bind(decButton, function():Void step(-1));
 		incBinding = LobbyArt.bind(incButton, function():Void step(1));
 	}

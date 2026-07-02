@@ -7,6 +7,7 @@ import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.net.CommandHandler;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.DrawingInfo`'s drawing-readiness rows.
@@ -28,8 +29,8 @@ class DrawingInfo extends Sprite {
 		this.commandHandler = commandHandler == null ? CommandHandler.commandHandler : commandHandler;
 		art = PR2MovieClip.fromLinkage("DrawingInfoGraphic", {maxNestedDepth: 5});
 		addChild(art);
-		info1 = Std.downcast(LobbyArt.findByName(art, "info1"), DisplayObjectContainer);
-		info2 = Std.downcast(LobbyArt.findByName(art, "info2"), DisplayObjectContainer);
+		info1 = Std.downcast(DisplayUtil.findByName(art, "info1"), DisplayObjectContainer);
+		info2 = Std.downcast(DisplayUtil.findByName(art, "info2"), DisplayObjectContainer);
 		for (i in 0...MAX_PLAYERS) {
 			names[i] = null;
 			setDrawingVisible(i, false);
@@ -120,8 +121,8 @@ class DrawingInfo extends Sprite {
 
 	private function findInBoth(name:String):{first:Null<DisplayObject>, second:Null<DisplayObject>} {
 		return {
-			first: LobbyArt.findByName(info1, name),
-			second: LobbyArt.findByName(info2, name)
+			first: DisplayUtil.findByName(info1, name),
+			second: DisplayUtil.findByName(info2, name)
 		};
 	}
 

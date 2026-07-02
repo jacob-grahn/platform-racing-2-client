@@ -8,6 +8,7 @@ import pr2.lobby.account.AlternateControls;
 import pr2.lobby.dialogs.OptionsPopup;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlSlider;
+import pr2.util.DisplayUtil;
 
 class OptionsPopupTest {
 	private static var assertions:Int = 0;
@@ -32,8 +33,8 @@ class OptionsPopupTest {
 
 		click(popup, "filterOff_bt");
 		click(popup, "artOff_bt");
-		assertEquals(-43.5, LobbyArt.findByName(popup, "filterHighlight").y, "filter off moves authored highlight");
-		assertEquals(false, LobbyArt.findByName(popup, "art_bt").visible, "art quality is unavailable when art is off");
+		assertEquals(-43.5, DisplayUtil.findByName(popup, "filterHighlight").y, "filter off moves authored highlight");
+		assertEquals(false, DisplayUtil.findByName(popup, "art_bt").visible, "art quality is unavailable when art is off");
 
 		click(popup, "artOn_bt");
 		click(popup, "art_bt");
@@ -65,19 +66,19 @@ class OptionsPopupTest {
 	}
 
 	private static function click(popup:OptionsPopup, name:String):Void {
-		var target = LobbyArt.findByName(popup, name);
+		var target = DisplayUtil.findByName(popup, name);
 		if (target == null) throw name + " missing";
 		target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 
 	private static function slider(popup:OptionsPopup, name:String):FlSlider {
-		var value = Std.downcast(LobbyArt.findByName(popup, name), FlSlider);
+		var value = Std.downcast(DisplayUtil.findByName(popup, name), FlSlider);
 		if (value == null) throw name + " missing";
 		return value;
 	}
 
 	private static function checkbox(popup:OptionsPopup, name:String):FlCheckBox {
-		var value = Std.downcast(LobbyArt.findByName(popup, name), FlCheckBox);
+		var value = Std.downcast(DisplayUtil.findByName(popup, name), FlCheckBox);
 		if (value == null) throw name + " missing";
 		return value;
 	}

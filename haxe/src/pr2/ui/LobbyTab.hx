@@ -7,6 +7,7 @@ import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `ui.LobbyTab`.
@@ -28,12 +29,12 @@ class LobbyTab extends Sprite {
 		this.tabFunction = tabFn;
 
 		art = PR2MovieClip.fromLinkage("LobbyTabGraphic", {maxNestedDepth: 6});
-		var textBox = Std.downcast(findByName(art, "textBox"), TextField);
+		var textBox = Std.downcast(DisplayUtil.findByName(art, "textBox"), TextField);
 		if (textBox != null) {
 			textBox.autoSize = TextFieldAutoSize.LEFT;
 			textBox.text = tabText;
 		}
-		bg = Std.downcast(findByName(art, "bg"), PR2MovieClip);
+		bg = Std.downcast(DisplayUtil.findByName(art, "bg"), PR2MovieClip);
 		if (bg != null && textBox != null) {
 			bg.width = textBox.width + 10;
 		}
@@ -108,23 +109,4 @@ class LobbyTab extends Sprite {
 		}
 	}
 
-	private static function findByName(container:Null<DisplayObjectContainer>, name:String):Null<DisplayObject> {
-		if (container == null) {
-			return null;
-		}
-		for (i in 0...container.numChildren) {
-			var child = container.getChildAt(i);
-			if (child.name == name) {
-				return child;
-			}
-			var childContainer = Std.downcast(child, DisplayObjectContainer);
-			if (childContainer != null) {
-				var found = findByName(childContainer, name);
-				if (found != null) {
-					return found;
-				}
-			}
-		}
-		return null;
-	}
 }

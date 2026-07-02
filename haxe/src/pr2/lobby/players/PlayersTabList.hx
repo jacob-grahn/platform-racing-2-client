@@ -5,6 +5,7 @@ import openfl.events.MouseEvent;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.players.PlayerListSort.SortState;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `social.PlayersTabList`: the Online/Friends/Following/Ignored
@@ -25,13 +26,13 @@ class PlayersTabList extends PlayersListHolder {
 	override public function initialize():Void {
 		graphic = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
 		addChild(graphic);
-		var listHolder = Std.downcast(LobbyArt.findByName(graphic, "listHolder"), DisplayObjectContainer);
+		var listHolder = Std.downcast(DisplayUtil.findByName(graphic, "listHolder"), DisplayObjectContainer);
 		if (listHolder != null) {
 			attachHolder(listHolder);
 		}
-		nameButton = Std.downcast(LobbyArt.findByName(graphic, "name_bt"), DisplayObjectContainer);
-		rankButton = Std.downcast(LobbyArt.findByName(graphic, "rank_bt"), DisplayObjectContainer);
-		hatsButton = Std.downcast(LobbyArt.findByName(graphic, "hats_bt"), DisplayObjectContainer);
+		nameButton = Std.downcast(DisplayUtil.findByName(graphic, "name_bt"), DisplayObjectContainer);
+		rankButton = Std.downcast(DisplayUtil.findByName(graphic, "rank_bt"), DisplayObjectContainer);
+		hatsButton = Std.downcast(DisplayUtil.findByName(graphic, "hats_bt"), DisplayObjectContainer);
 		if (nameButton != null) {
 			nameButton.addEventListener(MouseEvent.CLICK, clickName);
 		}

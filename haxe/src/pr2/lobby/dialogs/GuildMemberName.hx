@@ -6,6 +6,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.NumberFormat;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.GuildMemberName`: one linked member row in
@@ -34,11 +35,11 @@ class GuildMemberName extends Sprite {
 		setText("gpTotalBox", NumberFormat.withCommas(intField(member, "gp_total")));
 
 		if (owner) {
-			var hat = Std.downcast(LobbyArt.findByName(art, "hat"), PR2MovieClip);
+			var hat = Std.downcast(DisplayUtil.findByName(art, "hat"), PR2MovieClip);
 			if (hat != null) {
 				hat.gotoAndStop(6);
-				var colorMC = Std.downcast(LobbyArt.findByName(hat, "colorMC"), PR2MovieClip);
-				var colorMC2 = Std.downcast(LobbyArt.findByName(hat, "colorMC2"), PR2MovieClip);
+				var colorMC = Std.downcast(DisplayUtil.findByName(hat, "colorMC"), PR2MovieClip);
+				var colorMC2 = Std.downcast(DisplayUtil.findByName(hat, "colorMC2"), PR2MovieClip);
 				if (colorMC != null) colorMC.gotoAndStop(6);
 				if (colorMC2 != null) colorMC2.gotoAndStop(6);
 			}

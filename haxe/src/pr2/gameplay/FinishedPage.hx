@@ -5,6 +5,7 @@ import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.Popup;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.RatingSelect;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.FinishedPage`: the end-of-race popup with the level
@@ -33,8 +34,8 @@ class FinishedPage extends Popup {
 		this.onReturn = onReturn;
 
 		art = PR2MovieClip.fromLinkage("FinishedPageGraphic", {maxNestedDepth: 6});
-		returnBinding = LobbyArt.bind(LobbyArt.findByName(art, "return_bt"), clickReturn);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), function():Void startFadeOut());
+		returnBinding = LobbyArt.bind(DisplayUtil.findByName(art, "return_bt"), clickReturn);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);
 
 		stars = new RatingSelect(courseID);

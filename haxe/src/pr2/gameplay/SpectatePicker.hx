@@ -8,6 +8,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.SpectatePicker`.
@@ -30,8 +31,8 @@ class SpectatePicker extends Sprite {
 		this.course = course;
 		art = PR2MovieClip.fromLinkage("SpectatePickerGraphic", {maxNestedDepth: 6});
 		addChild(art);
-		leftBinding = LobbyArt.bind(LobbyArt.findByName(art, "arrowLeft"), clickLeft);
-		rightBinding = LobbyArt.bind(LobbyArt.findByName(art, "arrowRight"), clickRight);
+		leftBinding = LobbyArt.bind(DisplayUtil.findByName(art, "arrowLeft"), clickLeft);
+		rightBinding = LobbyArt.bind(DisplayUtil.findByName(art, "arrowRight"), clickRight);
 		var top = playerNameTop();
 		if (top != null) {
 			htmlNameMaker.listenForLink(top);
@@ -124,21 +125,21 @@ class SpectatePicker extends Sprite {
 	}
 
 	private function setSpectatingVisible(value:Bool):Void {
-		var spectating = LobbyArt.findByName(art, "spectatingText");
+		var spectating = DisplayUtil.findByName(art, "spectatingText");
 		if (spectating != null) {
 			spectating.visible = value;
 		}
 	}
 
 	private function playerNameTop():Null<TextField> {
-		var playerName = Std.downcast(LobbyArt.findByName(art, "playerName"), DisplayObjectContainer);
-		var top = Std.downcast(LobbyArt.findByName(playerName, "top"), DisplayObjectContainer);
+		var playerName = Std.downcast(DisplayUtil.findByName(art, "playerName"), DisplayObjectContainer);
+		var top = Std.downcast(DisplayUtil.findByName(playerName, "top"), DisplayObjectContainer);
 		return LobbyArt.text(top, "box");
 	}
 
 	private function playerNameBg():Null<TextField> {
-		var playerName = Std.downcast(LobbyArt.findByName(art, "playerName"), DisplayObjectContainer);
-		var bg = Std.downcast(LobbyArt.findByName(playerName, "bg"), DisplayObjectContainer);
+		var playerName = Std.downcast(DisplayUtil.findByName(art, "playerName"), DisplayObjectContainer);
+		var bg = Std.downcast(DisplayUtil.findByName(playerName, "bg"), DisplayObjectContainer);
 		return LobbyArt.text(bg, "box");
 	}
 

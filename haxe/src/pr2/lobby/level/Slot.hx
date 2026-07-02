@@ -5,6 +5,7 @@ import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `level_browser.Slot` — one of the four join slots on a
@@ -31,7 +32,7 @@ class Slot extends Sprite {
 		this.owner = owner;
 		art = PR2MovieClip.fromLinkage("SlotGraphic", {maxNestedDepth: 4});
 		addChild(art);
-		bg = Std.downcast(LobbyArt.findByName(art, "bg"), PR2MovieClip);
+		bg = Std.downcast(DisplayUtil.findByName(art, "bg"), PR2MovieClip);
 		// The bg is a multi-frame state machine (emptyUp/emptyOver/pending/...),
 		// not an animation. Rest it on the initial status frame so it doesn't
 		// free-run through every state until the first server-driven change.

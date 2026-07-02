@@ -13,6 +13,7 @@ import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.GuildPopup`: loads `guild_info.php`, renders the
@@ -43,7 +44,7 @@ class GuildPopup extends Popup {
 
 		art = PR2MovieClip.fromLinkage("GuildPopupGraphic", {maxNestedDepth: 8});
 		art.gotoAndStop("loading");
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), clickClose);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), clickClose);
 		addChild(art);
 
 		if (autoLoad) {
@@ -77,12 +78,12 @@ class GuildPopup extends Popup {
 		setText("membersCount", "Members: " + intAny(ret, ["member_count", "memberCount"]) + " (" + intAny(ret, ["active_count", "activeCount"]) + " active)");
 		setText("guildProse", strField(ret, "note"));
 
-		var loading = LobbyArt.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.findByName(art, "loadingGraphic");
 		if (loading != null) loading.visible = false;
 		setVisible("edit_bt", LobbySession.group >= 2 && !LobbySession.isTrialMod);
 		setVisible("delete_bt", LobbySession.group == 3);
 
-		var holder = Std.downcast(LobbyArt.findByName(art, "membersHolder"), DisplayObjectContainer);
+		var holder = Std.downcast(DisplayUtil.findByName(art, "membersHolder"), DisplayObjectContainer);
 		if (holder != null) {
 			for (member in members) {
 				var row = new GuildMemberName(member, ownerId != 0 && ownerId == intAny(member, ["user_id", "userId"]));
@@ -97,9 +98,9 @@ class GuildPopup extends Popup {
 			scroll.init(holder, 100, 100);
 		}
 
-		closeBinding = replaceBinding(closeBinding, LobbyArt.findByName(art, "close_bt"), clickClose);
+		closeBinding = replaceBinding(closeBinding, DisplayUtil.findByName(art, "close_bt"), clickClose);
 		if (LobbySession.guildId != 0 && LobbySession.guildId == guildId) {
-			messageBinding = LobbyArt.bind(LobbyArt.findByName(art, "messageButton"), clickMessage);
+			messageBinding = LobbyArt.bind(DisplayUtil.findByName(art, "messageButton"), clickMessage);
 		}
 		if (AppStage.stage != null) {
 			AppStage.stage.addEventListener(KeyboardEvent.KEY_DOWN, toggleGuildIdShown);
@@ -132,7 +133,7 @@ class GuildPopup extends Popup {
 	}
 
 	private function setVisible(name:String, value:Bool):Void {
-		var target = LobbyArt.findByName(art, name);
+		var target = DisplayUtil.findByName(art, name);
 		if (target != null) target.visible = value;
 	}
 

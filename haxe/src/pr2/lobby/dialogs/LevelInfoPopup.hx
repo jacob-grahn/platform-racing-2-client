@@ -12,6 +12,7 @@ import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
 import pr2.gameplay.Modes;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Authored shell for Flash `dialogs.LevelInfoPopup`.
@@ -52,7 +53,7 @@ class LevelInfoPopup extends Popup {
 		levelId = id;
 
 		art = PR2MovieClip.fromLinkage("LevelInfoPopupGraphic", {maxNestedDepth: 8});
-		levelInfo = Std.downcast(LobbyArt.findByName(art, "levelInfo"), DisplayObjectContainer);
+		levelInfo = Std.downcast(DisplayUtil.findByName(art, "levelInfo"), DisplayObjectContainer);
 		if (levelInfo != null) {
 			levelInfo.visible = false;
 			setCoverVisible("rating", false);
@@ -61,7 +62,7 @@ class LevelInfoPopup extends Popup {
 			setActionButtonVisible("unpublish_bt", false);
 		}
 		addChild(art);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
 	}
 
 	public function applyReturnData(ret:Dynamic):Void {
@@ -95,7 +96,7 @@ class LevelInfoPopup extends Popup {
 		setRatingScale(rating);
 		bindRatingHover();
 		configureActionButtons();
-		var loading:Null<DisplayObject> = LobbyArt.findByName(art, "loading");
+		var loading:Null<DisplayObject> = DisplayUtil.findByName(art, "loading");
 		if (loading != null) {
 			loading.visible = false;
 		}
@@ -130,7 +131,7 @@ class LevelInfoPopup extends Popup {
 	}
 
 	private function setRatingScale(value:Float):Void {
-		var bar = LobbyArt.findByName(Std.downcast(LobbyArt.findByName(levelInfo, "rating"), DisplayObjectContainer), "bar");
+		var bar = DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(levelInfo, "rating"), DisplayObjectContainer), "bar");
 		if (bar != null) {
 			bar.scaleX = value / 5;
 		}
@@ -138,7 +139,7 @@ class LevelInfoPopup extends Popup {
 
 	private function bindRatingHover():Void {
 		unbindRatingHover();
-		var target = LobbyArt.findByName(levelInfo, "rating");
+		var target = DisplayUtil.findByName(levelInfo, "rating");
 		if (target != null) {
 			target.addEventListener(MouseEvent.MOUSE_OVER, overRating);
 			target.addEventListener(MouseEvent.MOUSE_OUT, outRating);
@@ -146,7 +147,7 @@ class LevelInfoPopup extends Popup {
 	}
 
 	private function unbindRatingHover():Void {
-		var target = LobbyArt.findByName(levelInfo, "rating");
+		var target = DisplayUtil.findByName(levelInfo, "rating");
 		if (target != null) {
 			target.removeEventListener(MouseEvent.MOUSE_OVER, overRating);
 			target.removeEventListener(MouseEvent.MOUSE_OUT, outRating);
@@ -156,7 +157,7 @@ class LevelInfoPopup extends Popup {
 	private function overRating(_:MouseEvent):Void {
 		setCoverVisible("rating", true);
 		closeRatingHover();
-		var target = LobbyArt.findByName(levelInfo, "rating");
+		var target = DisplayUtil.findByName(levelInfo, "rating");
 		if (target != null) {
 			hoverRating = new HoverPopup("", Std.string(rating), target);
 			hoverRating.x += 238;
@@ -186,15 +187,15 @@ class LevelInfoPopup extends Popup {
 		setActionButtonVisible("unpublish_bt", false);
 		if (LobbySession.group >= 2) {
 			setActionButtonVisible("unpublish_bt", true);
-			unpublishBinding = LobbyArt.bind(LobbyArt.findByName(levelInfo, "unpublish_bt"), openModerationPopup);
+			unpublishBinding = LobbyArt.bind(DisplayUtil.findByName(levelInfo, "unpublish_bt"), openModerationPopup);
 		} else if (LobbySession.group == 1) {
 			setActionButtonVisible("report_bt", true);
-			reportBinding = LobbyArt.bind(LobbyArt.findByName(levelInfo, "report_bt"), openReportPopup);
+			reportBinding = LobbyArt.bind(DisplayUtil.findByName(levelInfo, "report_bt"), openReportPopup);
 		}
 	}
 
 	private function setActionButtonVisible(name:String, visible:Bool):Void {
-		var button = LobbyArt.findByName(levelInfo, name);
+		var button = DisplayUtil.findByName(levelInfo, name);
 		if (button != null) {
 			button.visible = visible;
 			var interactive = Std.downcast(button, InteractiveObject);
@@ -213,7 +214,7 @@ class LevelInfoPopup extends Popup {
 	}
 
 	private function setCoverVisible(name:String, visible:Bool):Void {
-		var cover = LobbyArt.findByName(Std.downcast(LobbyArt.findByName(levelInfo, name), DisplayObjectContainer), "cover");
+		var cover = DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(levelInfo, name), DisplayObjectContainer), "cover");
 		if (cover != null) {
 			cover.visible = visible;
 		}
@@ -230,7 +231,7 @@ class LevelInfoPopup extends Popup {
 		} else if (mode == "hat" || mode == "h") {
 			frame = 5;
 		}
-		var modeSym = Std.downcast(LobbyArt.findByName(Std.downcast(LobbyArt.findByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"), PR2MovieClip);
+		var modeSym = Std.downcast(DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"), PR2MovieClip);
 		if (modeSym != null) {
 			modeSym.gotoAndStop(frame);
 		}

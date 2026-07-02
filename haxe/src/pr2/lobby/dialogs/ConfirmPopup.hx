@@ -3,6 +3,7 @@ package pr2.lobby.dialogs;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.ConfirmPopup`: an OK/Cancel modal. OK runs the supplied
@@ -23,8 +24,8 @@ class ConfirmPopup extends Popup {
 			textBox.htmlText = message;
 		}
 		addChild(art);
-		okBinding = LobbyArt.bind(LobbyArt.findByName(art, "ok_bt"), clickOk);
-		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		okBinding = LobbyArt.bind(DisplayUtil.findByName(art, "ok_bt"), clickOk);
+		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
 	}
 
 	private function clickOk():Void {

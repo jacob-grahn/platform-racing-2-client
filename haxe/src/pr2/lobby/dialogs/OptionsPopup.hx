@@ -11,6 +11,7 @@ import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Authored lobby options popup: volume, chat/art toggles, controls and songs. */
 class OptionsPopup extends Popup {
@@ -56,16 +57,16 @@ class OptionsPopup extends Popup {
 		bind("music_bt", toggleSongsMenu);
 		bind("close_bt", startFadeOut);
 		for (name in ["changePass_bt", "changeEmail_bt", "guildLeave_bt", "guildCreate_bt", "guildEdit_bt", "guildTransfer_bt"]) {
-			var button = LobbyArt.findByName(art, name);
+			var button = DisplayUtil.findByName(art, name);
 			if (button != null) button.visible = false;
 		}
 	}
 
-	private function slider(name:String):Null<FlSlider> return Std.downcast(LobbyArt.findByName(art, name), FlSlider);
+	private function slider(name:String):Null<FlSlider> return Std.downcast(DisplayUtil.findByName(art, name), FlSlider);
 	private function text(name:String):Null<TextField> return LobbyArt.text(art, name);
 	private function setText(name:String, value:String):Void { var field = text(name); if (field != null) field.text = value; }
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(LobbyArt.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
 		if (binding != null) bindings.push(binding);
 	}
 
@@ -88,13 +89,13 @@ class OptionsPopup extends Popup {
 	private function setDrawArt(value:Bool):Void {
 		drawArt = value;
 		setHighlight("artHighlight", value);
-		var button = LobbyArt.findByName(art, "art_bt");
-		var offText = LobbyArt.findByName(art, "artOffText");
+		var button = DisplayUtil.findByName(art, "art_bt");
+		var offText = DisplayUtil.findByName(art, "artOffText");
 		if (button != null) button.visible = value;
 		if (offText != null) offText.visible = !value;
 		if (!value) closeArtMenu();
 	}
-	private function setHighlight(name:String, value:Bool):Void { var target = LobbyArt.findByName(art, name); if (target != null) target.y = value ? TRUE_Y : FALSE_Y; }
+	private function setHighlight(name:String, value:Bool):Void { var target = DisplayUtil.findByName(art, name); if (target != null) target.y = value ? TRUE_Y : FALSE_Y; }
 
 	private function loadControls():Void {
 		var controls:Dynamic = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
@@ -127,14 +128,14 @@ class OptionsPopup extends Popup {
 		artMenu = PR2MovieClip.fromLinkage("OptionsArtQualityMenuGraphic", {maxNestedDepth: 4});
 		artMenu.x = -105;
 		artMenu.y = -105;
-		var check = Std.downcast(LobbyArt.findByName(artMenu, "lossless_chk"), FlCheckBox);
+		var check = Std.downcast(DisplayUtil.findByName(artMenu, "lossless_chk"), FlCheckBox);
 		if (check != null) check.selected = Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false);
 		addChild(artMenu);
 	}
 
 	private function closeArtMenu():Void {
 		if (artMenu == null) return;
-		var check = Std.downcast(LobbyArt.findByName(artMenu, "lossless_chk"), FlCheckBox);
+		var check = Std.downcast(DisplayUtil.findByName(artMenu, "lossless_chk"), FlCheckBox);
 		if (check != null) Settings.setValue(Settings.ART_LOSSLESS_QUALITY, check.selected);
 		artMenu.dispose();
 		if (artMenu.parent != null) artMenu.parent.removeChild(artMenu);
@@ -148,7 +149,7 @@ class OptionsPopup extends Popup {
 		songsMenu.y = -155;
 		var disabled = Settings.disabledSongs();
 		for (i in 1...22) if (i != 9 && i != 16) {
-			var check = Std.downcast(LobbyArt.findByName(songsMenu, "song" + i), FlCheckBox);
+			var check = Std.downcast(DisplayUtil.findByName(songsMenu, "song" + i), FlCheckBox);
 			if (check != null) check.selected = disabled.indexOf(Std.string(i)) < 0;
 		}
 		addChild(songsMenu);
@@ -158,7 +159,7 @@ class OptionsPopup extends Popup {
 		if (songsMenu == null) return;
 		var disabled:Array<String> = [];
 		for (i in 1...22) if (i != 9 && i != 16) {
-			var check = Std.downcast(LobbyArt.findByName(songsMenu, "song" + i), FlCheckBox);
+			var check = Std.downcast(DisplayUtil.findByName(songsMenu, "song" + i), FlCheckBox);
 			if (check != null && !check.selected) disabled.push(Std.string(i));
 		}
 		Settings.setValue(Settings.DISABLED_SONGS, disabled);

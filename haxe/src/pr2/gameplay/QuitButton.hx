@@ -7,6 +7,7 @@ import openfl.ui.Keyboard;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.QuitButton`.
@@ -29,7 +30,7 @@ class QuitButton extends openfl.display.Sprite {
 
 		art = PR2MovieClip.fromLinkage("QuitButtonGraphic", {maxNestedDepth: 5});
 		addChild(art);
-		button = Std.downcast(LobbyArt.findByName(art, "quit_bt"), InteractiveObject);
+		button = Std.downcast(DisplayUtil.findByName(art, "quit_bt"), InteractiveObject);
 		if (button != null) {
 			button.addEventListener(MouseEvent.MOUSE_UP, invokeMouseQuit);
 			button.addEventListener(KeyboardEvent.KEY_UP, invokeKeyboardQuit);
@@ -73,7 +74,7 @@ class QuitButton extends openfl.display.Sprite {
 	}
 
 	private function glowClip():Null<PR2MovieClip> {
-		return art == null ? null : Std.downcast(LobbyArt.findByName(art, "glow"), PR2MovieClip);
+		return art == null ? null : Std.downcast(DisplayUtil.findByName(art, "glow"), PR2MovieClip);
 	}
 
 	public function remove():Void {

@@ -166,7 +166,7 @@ class CustomScrollBar extends Sprite {
 	}
 
 	private function findChild(name:String):Null<DisplayObject> {
-		return pr2.lobby.LobbyArt.findByName(art, name);
+		return pr2.util.DisplayUtil.findByName(art, name);
 	}
 
 	public function remove():Void {

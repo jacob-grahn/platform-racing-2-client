@@ -15,6 +15,7 @@ import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Flash-compatible Vault of Magics catalog and purchase flow. */
 class StorePopup extends Popup {
@@ -32,10 +33,10 @@ class StorePopup extends Popup {
 	public function new(?fixture:Dynamic) {
 		super();
 		art = PR2MovieClip.fromLinkage("StorePopupGraphic", {maxNestedDepth: 7}); addChild(art);
-		holder = Std.downcast(LobbyArt.findByName(art, "itemsHolder"), DisplayObjectContainer);
+		holder = Std.downcast(DisplayUtil.findByName(art, "itemsHolder"), DisplayObjectContainer);
 		var coins = LobbyArt.text(art, "coinsLeftBox");
 		if (coins != null) { coins.visible = false; coins.addEventListener(TextEvent.LINK, needMore); }
-		var close = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut); if (close != null) bindings.push(close);
+		var close = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut); if (close != null) bindings.push(close);
 		art.addEventListener(MouseEvent.MOUSE_WHEEL, wheel);
 		if (fixture != null) populate(fixture); else load();
 	}

@@ -8,6 +8,7 @@ import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Port of Flash `gameplay.LuxPopup`, shown by the in-race `setLuxGain` command. */
 class LuxPopup extends Popup {
@@ -34,11 +35,11 @@ class LuxPopup extends Popup {
 		}
 
 		text = "+" + numLux + " Lux";
-		var field = Std.downcast(LobbyArt.findByName(art, "textBox"), TextField);
+		var field = Std.downcast(DisplayUtil.findByName(art, "textBox"), TextField);
 		if (field != null) {
 			field.text = text;
 		}
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);
 	}
 

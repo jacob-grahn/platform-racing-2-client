@@ -21,6 +21,7 @@ import pr2.net.FormPostClient;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `level_browser.LevelItem` — one course tile in a listing grid.
@@ -83,25 +84,25 @@ class LevelItem extends Sprite {
 		setRatingBar(info.rating);
 		setBackgroundFrame(info.type);
 
-		infoButton = LobbyArt.findByName(art, "infoButton");
+		infoButton = DisplayUtil.findByName(art, "infoButton");
 		infoBinding = LobbyArt.bind(infoButton, clickInfo);
 		if (infoButton != null) {
 			infoButton.addEventListener(MouseEvent.MOUSE_OVER, overInfo);
 			infoButton.addEventListener(MouseEvent.MOUSE_OUT, outInfo);
 		}
 
-		plusButton = LobbyArt.findByName(art, "plusButton");
-		minusButton = LobbyArt.findByName(art, "minusButton");
+		plusButton = DisplayUtil.findByName(art, "plusButton");
+		minusButton = DisplayUtil.findByName(art, "minusButton");
 		setupFavoriteButtons();
 
-		accessCover = Std.downcast(LobbyArt.findByName(art, "accessCover"), PR2MovieClip);
+		accessCover = Std.downcast(DisplayUtil.findByName(art, "accessCover"), PR2MovieClip);
 		if (accessCover != null) {
 			coverText = LobbyArt.text(accessCover, "textBox");
-			passButton = LobbyArt.findByName(accessCover, "passButton");
+			passButton = DisplayUtil.findByName(accessCover, "passButton");
 			// `passBox` is an fl.controls.TextInput component: keep the display object
 			// itself for attach/detach (its inner field's parent is the wrapper, not
 			// the cover) and the inner TextField for reading/writing the entered text.
-			passBox = LobbyArt.findByName(accessCover, "passBox");
+			passBox = DisplayUtil.findByName(accessCover, "passBox");
 			passField = pr2.runtime.FlComponents.asTextField(passBox);
 			// Start with the cover detached; testAccess re-attaches it if gated.
 			detachCover();
@@ -117,9 +118,9 @@ class LevelItem extends Sprite {
 	}
 
 	private function setRatingBar(rating:Float):Void {
-		var stars = Std.downcast(LobbyArt.findByName(art, "ratingStars"), DisplayObjectContainer);
+		var stars = Std.downcast(DisplayUtil.findByName(art, "ratingStars"), DisplayObjectContainer);
 		if (stars != null) {
-			var bar = LobbyArt.findByName(stars, "bar");
+			var bar = DisplayUtil.findByName(stars, "bar");
 			if (bar != null) {
 				bar.scaleX = rating / 5;
 			}
@@ -135,7 +136,7 @@ class LevelItem extends Sprite {
 			case "h": 5;
 			default: 1;
 		};
-		var bg = Std.downcast(LobbyArt.findByName(art, "bg"), PR2MovieClip);
+		var bg = Std.downcast(DisplayUtil.findByName(art, "bg"), PR2MovieClip);
 		if (bg != null) {
 			bg.gotoAndStop(frame);
 		}
@@ -314,7 +315,7 @@ class LevelItem extends Sprite {
 	// ---- slots -----------------------------------------------------------
 
 	private function addSlots():Void {
-		var holder = Std.downcast(LobbyArt.findByName(art, "slotsHolder"), DisplayObjectContainer);
+		var holder = Std.downcast(DisplayUtil.findByName(art, "slotsHolder"), DisplayObjectContainer);
 		if (holder == null) {
 			return;
 		}

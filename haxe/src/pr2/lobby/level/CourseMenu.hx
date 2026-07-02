@@ -8,6 +8,7 @@ import pr2.lobby.dialogs.InfoPopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `level_browser.CourseMenu` (an `AutoDismissPopup`).
@@ -57,8 +58,8 @@ class CourseMenu extends InfoPopup {
 		var fields = LobbyArt.directTextFields(art);
 		textBox = fields.length > 0 ? fields[0] : null;
 
-		playButton = LobbyArt.findByName(art, "play_bt");
-		cancelButton = LobbyArt.findByName(art, "cancel_bt");
+		playButton = DisplayUtil.findByName(art, "play_bt");
+		cancelButton = DisplayUtil.findByName(art, "cancel_bt");
 		playBinding = LobbyArt.bind(playButton, clickPlay);
 		cancelBinding = LobbyArt.bind(cancelButton, closeMenu);
 

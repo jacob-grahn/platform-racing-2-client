@@ -12,6 +12,7 @@ import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `chat.ChatInstance` (+ its `page.Chat` base).
@@ -59,9 +60,9 @@ class ChatTab extends Page {
 			textBox.addEventListener(FocusEvent.FOCUS_OUT, lockToBottom);
 			nameMaker.listenForLink(textBox);
 		}
-		sendBinding = LobbyArt.bind(LobbyArt.findByName(art, "send_bt"), clickSend);
-		joinBinding = LobbyArt.bind(LobbyArt.findByName(art, "joinRoom_bt"), changeRoom);
-		var infoButton = LobbyArt.findByName(art, "infoButton");
+		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "send_bt"), clickSend);
+		joinBinding = LobbyArt.bind(DisplayUtil.findByName(art, "joinRoom_bt"), changeRoom);
+		var infoButton = DisplayUtil.findByName(art, "infoButton");
 		if (infoButton != null) {
 			infoButton.addEventListener(KeyboardEvent.KEY_DOWN, function(_) {});
 		}

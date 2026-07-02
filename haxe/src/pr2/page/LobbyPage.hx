@@ -13,6 +13,7 @@ import pr2.net.ServerInfo;
 import pr2.runtime.PR2MovieClip;
 import pr2.audio.AudioManager;
 import pr2.lobby.store.StorePopup;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `lobby.Lobby`: the post-login lobby shell.
@@ -98,7 +99,7 @@ class LobbyPage extends Page {
 	}
 
 	private function bind(art:PR2MovieClip, name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(LobbyArt.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}

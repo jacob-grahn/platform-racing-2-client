@@ -7,6 +7,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.Popup;
 import pr2.runtime.FlButton;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Flash-faithful loadout chooser built from `GetLevelsPopupGraphic`. */
 class LoadoutsPopup extends Popup {
@@ -33,15 +34,15 @@ class LoadoutsPopup extends Popup {
 
 		var title = LobbyArt.text(art, "titleBox");
 		if (title != null) title.text = "-- Loadouts --";
-		var loading = LobbyArt.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.findByName(art, "loadingGraphic");
 		if (loading != null && loading.parent != null) loading.parent.removeChild(loading);
-		holder = Std.downcast(LobbyArt.findByName(art, "levelsHolder"), DisplayObjectContainer);
-		loadButton = Std.downcast(LobbyArt.findByName(art, "load_bt"), FlButton);
-		saveButton = Std.downcast(LobbyArt.findByName(art, "delete_bt"), FlButton);
+		holder = Std.downcast(DisplayUtil.findByName(art, "levelsHolder"), DisplayObjectContainer);
+		loadButton = Std.downcast(DisplayUtil.findByName(art, "load_bt"), FlButton);
+		saveButton = Std.downcast(DisplayUtil.findByName(art, "delete_bt"), FlButton);
 		if (saveButton != null) saveButton.label = "Save";
 
 		for (preset in Presets.getPresets()) addListing(preset);
-		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), startFadeOut);
+		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), startFadeOut);
 		loadBinding = LobbyArt.bind(loadButton, applySelected);
 		saveBinding = LobbyArt.bind(saveButton, saveSelected);
 		if (holder != null) holder.addEventListener(MouseEvent.MOUSE_WHEEL, onWheel);

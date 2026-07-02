@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Rich-formatting reference popup used by `SendMessagePopup`. */
 class PMRFCodesPopup extends Popup {
@@ -18,7 +19,7 @@ class PMRFCodesPopup extends Popup {
 				+ '<b>Jiggmin</b><br/>Newbieland 2<br/>PR2 Staff';
 		}
 		addChild(art);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
 	}
 
 	override public function remove():Void {

@@ -7,6 +7,7 @@ import openfl.display.Sprite;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.ChatText;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Something `PageNavigation` can drive: page selection callbacks. */
 interface Paginated {
@@ -100,7 +101,7 @@ class PageNavigation extends Sprite {
 
 	private function makeNavButton(title:String, num:Int, clickable:Bool):Void {
 		var button = PR2MovieClip.fromLinkage("PageNumberGraphic", {maxNestedDepth: 3});
-		var textBox = Std.downcast(LobbyArt.findByName(button, "textBox"), TextField);
+		var textBox = Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
 		if (textBox != null) {
 			textBox.autoSize = TextFieldAutoSize.LEFT;
 			if (clickable) {
@@ -130,7 +131,7 @@ class PageNavigation extends Sprite {
 			var button = navButtons[i];
 			var listener = linkListeners[i];
 			if (listener != null) {
-				var textBox = Std.downcast(LobbyArt.findByName(button, "textBox"), TextField);
+				var textBox = Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
 				if (textBox != null) {
 					textBox.removeEventListener(TextEvent.LINK, listener);
 				}
@@ -155,7 +156,7 @@ class PageNavigation extends Sprite {
 			return;
 		}
 		var button = navButtons[buttonIndex(i)];
-		var textBox = button == null ? null : Std.downcast(LobbyArt.findByName(button, "textBox"), TextField);
+		var textBox = button == null ? null : Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
 		if (textBox != null) {
 			textBox.htmlText = "<a href='event:" + i + "'><font color='#FFFFFF'><u>" + i + "</u></font></a>";
 		}
@@ -166,7 +167,7 @@ class PageNavigation extends Sprite {
 			return;
 		}
 		var button = navButtons[buttonIndex(i)];
-		var textBox = button == null ? null : Std.downcast(LobbyArt.findByName(button, "textBox"), TextField);
+		var textBox = button == null ? null : Std.downcast(DisplayUtil.findByName(button, "textBox"), TextField);
 		if (textBox != null) {
 			textBox.htmlText = "<a href='event:" + i + "'><font color='#325638'><u>" + i + "</u></font></a>";
 		}

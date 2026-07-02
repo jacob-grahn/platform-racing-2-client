@@ -12,6 +12,7 @@ import pr2.net.LevelListClient;
 import pr2.net.LevelListClient.LevelListResult;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `level_browser.Search`.
@@ -54,15 +55,15 @@ class SearchTab extends LevelListingPage {
 		addChild(art);
 
 		searchBox = firstInputField(art);
-		searchButton = LobbyArt.findByName(art, "search_bt");
+		searchButton = DisplayUtil.findByName(art, "search_bt");
 		searchBinding = LobbyArt.bind(searchButton, doSearch);
 		if (searchBox != null) {
 			searchBox.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		}
 
-		modeCb = Std.downcast(LobbyArt.findByName(art, "mode_cb"), FlComboBox);
-		orderCb = Std.downcast(LobbyArt.findByName(art, "order_cb"), FlComboBox);
-		dirCb = Std.downcast(LobbyArt.findByName(art, "dir_cb"), FlComboBox);
+		modeCb = Std.downcast(DisplayUtil.findByName(art, "mode_cb"), FlComboBox);
+		orderCb = Std.downcast(DisplayUtil.findByName(art, "order_cb"), FlComboBox);
+		dirCb = Std.downcast(DisplayUtil.findByName(art, "dir_cb"), FlComboBox);
 
 		// Restore the remembered query + dropdown selections; the base then calls
 		// requestCourses(), which sends only when the box is non-blank.

@@ -5,6 +5,7 @@ import openfl.events.Event;
 import pr2.lobby.LobbyArt;
 import pr2.net.FormPostClient;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.UploadingPopup`: a modal that POSTs a request, shows a
@@ -36,7 +37,7 @@ class UploadingPopup extends Popup {
 		progressBar.x = -100;
 		progressBar.y = -5;
 		addChild(progressBar);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 
 		FormPostClient.post(url, fields, function(body:String):Void {
 			progressBar.setProgress(1);

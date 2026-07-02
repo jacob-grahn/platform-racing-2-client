@@ -12,6 +12,7 @@ import pr2.net.LobbySocket;
 import pr2.page.GamePage;
 import pr2.page.LobbyPage;
 import pr2.page.PageHolder;
+import pr2.util.DisplayUtil;
 
 class QuitButtonTest {
 	private static var assertions:Int = 0;
@@ -49,7 +50,7 @@ class QuitButtonTest {
 		assertEquals(1, Popup.getOpen().length, "space opens a confirmation while racing");
 
 		var popup = Std.downcast(Popup.getOpen()[0], ConfirmPopup);
-		var ok = Std.downcast(LobbyArt.findByName(popup, "ok_bt"), InteractiveObject);
+		var ok = Std.downcast(DisplayUtil.findByName(popup, "ok_bt"), InteractiveObject);
 		ok.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, calls, "confirmation invokes quit");
 		popup.remove();
@@ -67,7 +68,7 @@ class QuitButtonTest {
 
 	private static function testGlowControls():Void {
 		var quit = new QuitButton(function():Void {}, function():Bool return false);
-		var glow = Std.downcast(LobbyArt.findByName(quit, "glow"), pr2.runtime.PR2MovieClip);
+		var glow = Std.downcast(DisplayUtil.findByName(quit, "glow"), pr2.runtime.PR2MovieClip);
 		var offFrame = glow.currentFrame;
 		quit.startGlow();
 		assertEquals(true, glow.currentFrame > offFrame, "startGlow enters the on animation");
@@ -90,7 +91,7 @@ class QuitButtonTest {
 		assertEquals(1, Popup.getOpen().length, "quitting opens the finish popup");
 
 		var finish = Std.downcast(Popup.getOpen()[0], FinishedPage);
-		var returnButton = Std.downcast(LobbyArt.findByName(finish, "return_bt"), InteractiveObject);
+		var returnButton = Std.downcast(DisplayUtil.findByName(finish, "return_bt"), InteractiveObject);
 		returnButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(true, LobbySocket.sentCommands.indexOf("set_game_room`none") >= 0, "return clears the game room");
 		assertEquals(true, Std.isOfType(holder.getCurrentPage(), LobbyPage), "return restores the lobby page");
@@ -173,7 +174,7 @@ class QuitButtonTest {
 		var popup = new LuxPopup(37, false);
 		assertEquals("+37 Lux", popup.text, "LuxPopup writes the Flash gain label");
 		assertEquals(pr2.net.ServerConfig.getHost() + "/img/luna.jpg", popup.imageUrl, "LuxPopup uses the Flash luna portrait URL");
-		var close = Std.downcast(LobbyArt.findByName(popup, "close_bt"), InteractiveObject);
+		var close = Std.downcast(DisplayUtil.findByName(popup, "close_bt"), InteractiveObject);
 		close.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(true, popup.fadeOutStarted, "LuxPopup close button fades it out");
 		popup.remove();
@@ -251,7 +252,7 @@ class QuitButtonTest {
 	}
 
 	private static function button(owner:openfl.display.DisplayObjectContainer):InteractiveObject {
-		return Std.downcast(LobbyArt.findByName(owner, "quit_bt"), InteractiveObject);
+		return Std.downcast(DisplayUtil.findByName(owner, "quit_bt"), InteractiveObject);
 	}
 
 	private static function closeAll():Void {

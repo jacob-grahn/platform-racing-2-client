@@ -4,6 +4,7 @@ import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 typedef LevelReportUploadFactory = String->Map<String, String>->String->Null<UploadingPopup>;
 
@@ -28,8 +29,8 @@ class LevelReportPopup extends Popup {
 
 		art = PR2MovieClip.fromLinkage("LevelReportPopupGraphic", {maxNestedDepth: 5});
 		addChild(art);
-		reportBinding = LobbyArt.bind(LobbyArt.findByName(art, "report_bt"), clickReport);
-		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		reportBinding = LobbyArt.bind(DisplayUtil.findByName(art, "report_bt"), clickReport);
+		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
 	}
 
 	private function clickReport():Void {

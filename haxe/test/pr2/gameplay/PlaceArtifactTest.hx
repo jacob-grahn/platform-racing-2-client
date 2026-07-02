@@ -7,6 +7,7 @@ import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.util.DisplayUtil;
 
 class PlaceArtifactTest {
 	private static var assertions:Int = 0;
@@ -175,7 +176,7 @@ class PlaceArtifactTest {
 	}
 
 	private static function clickOk(confirm:ConfirmPopup):Void {
-		var ok = Std.downcast(LobbyArt.findByName(confirm, "ok_bt"), InteractiveObject);
+		var ok = Std.downcast(DisplayUtil.findByName(confirm, "ok_bt"), InteractiveObject);
 		ok.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 

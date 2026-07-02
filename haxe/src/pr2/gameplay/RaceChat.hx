@@ -12,6 +12,7 @@ import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.RaceChat` around the authored `RaceChatGraphic`.
@@ -39,8 +40,8 @@ class RaceChat extends Sprite {
 		addChild(art);
 
 		chatInput = LobbyArt.text(art, "chatInput");
-		topText = LobbyArt.text(cast LobbyArt.findByName(art, "top"), "textBox1");
-		bgText = LobbyArt.text(cast LobbyArt.findByName(art, "bg"), "textBox2");
+		topText = LobbyArt.text(cast DisplayUtil.findByName(art, "top"), "textBox1");
+		bgText = LobbyArt.text(cast DisplayUtil.findByName(art, "bg"), "textBox2");
 
 		if (chatInput != null) {
 			chatInput.restrict = "^`";

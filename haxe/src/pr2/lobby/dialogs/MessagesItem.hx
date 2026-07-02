@@ -8,6 +8,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `chat.MessagesItem`: one private message with the sender name,
@@ -64,7 +65,7 @@ class MessagesItem extends Sprite {
 		if (textBox != null) {
 			textBox.htmlText = html;
 			htmlNameMaker.listenForLink(textBox);
-			var bg = Std.downcast(LobbyArt.findByName(art, "bg"), DisplayObject);
+			var bg = Std.downcast(DisplayUtil.findByName(art, "bg"), DisplayObject);
 			if (bg != null) {
 				bg.height = textBox.height + 6;
 			}
@@ -73,7 +74,7 @@ class MessagesItem extends Sprite {
 				timeBox.y = textBox.height + 32;
 			}
 		}
-		var guildIcon = LobbyArt.findByName(art, "guildMsgIcon");
+		var guildIcon = DisplayUtil.findByName(art, "guildMsgIcon");
 		if (guildIcon != null) {
 			guildIcon.visible = guildMessage;
 		}

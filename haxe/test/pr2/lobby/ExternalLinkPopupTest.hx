@@ -3,6 +3,7 @@ package pr2.lobby;
 import openfl.events.MouseEvent;
 import pr2.lobby.dialogs.ExternalLinkPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.util.DisplayUtil;
 
 class ExternalLinkPopupTest {
 	private static var assertions:Int = 0;
@@ -38,7 +39,7 @@ class ExternalLinkPopupTest {
 	}
 
 	private static function click(popup:ExternalLinkPopup, name:String):Void {
-		var target = LobbyArt.findByName(popup, name);
+		var target = DisplayUtil.findByName(popup, name);
 		if (target == null) throw name + " missing";
 		target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}

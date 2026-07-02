@@ -9,6 +9,7 @@ import pr2.net.ServerConfig;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 typedef BanUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
@@ -63,7 +64,7 @@ class BanMenu extends Sprite {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		bindings.push(LobbyArt.bind(LobbyArt.findByName(art, name), handler));
+		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, name), handler));
 	}
 
 	private function viewPriors():Void {
@@ -136,11 +137,11 @@ class BanMenu extends Sprite {
 	}
 
 	private function combo(name:String):Null<FlComboBox> {
-		return Std.downcast(LobbyArt.findByName(art, name), FlComboBox);
+		return Std.downcast(DisplayUtil.findByName(art, name), FlComboBox);
 	}
 
 	private function reasonText():String {
-		var field = FlComponents.asTextField(LobbyArt.findByName(art, "reason"));
+		var field = FlComponents.asTextField(DisplayUtil.findByName(art, "reason"));
 		return field == null ? "" : field.text;
 	}
 

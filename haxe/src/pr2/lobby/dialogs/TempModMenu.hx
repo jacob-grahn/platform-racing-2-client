@@ -5,6 +5,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.TempModMenu`: temporary moderators can issue warning
@@ -30,7 +31,7 @@ class TempModMenu extends Sprite {
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		bindings.push(LobbyArt.bind(LobbyArt.findByName(art, name), handler));
+		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, name), handler));
 	}
 
 	private function warnUser(warnLevel:Int):Void {

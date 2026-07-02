@@ -22,6 +22,7 @@ import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Flash-compatible Account customization tab. */
 class AccountTab extends Page {
@@ -48,9 +49,9 @@ class AccountTab extends Page {
 	override public function initialize():Void {
 		art = PR2MovieClip.fromLinkage("AccountInfoGraphic", {maxNestedDepth: 8});
 		addChild(art);
-		rankUp = LobbyArt.findByName(art, "rankTokenUp_bt");
-		rankDown = LobbyArt.findByName(art, "rankTokenDown_bt");
-		loadouts = LobbyArt.findByName(art, "loadouts_bt");
+		rankUp = DisplayUtil.findByName(art, "rankTokenUp_bt");
+		rankDown = DisplayUtil.findByName(art, "rankTokenDown_bt");
+		loadouts = DisplayUtil.findByName(art, "loadouts_bt");
 		upBinding = LobbyArt.bind(rankUp, useRankToken);
 		downBinding = LobbyArt.bind(rankDown, unuseRankToken);
 		loadoutsBinding = LobbyArt.bind(loadouts, openLoadouts);

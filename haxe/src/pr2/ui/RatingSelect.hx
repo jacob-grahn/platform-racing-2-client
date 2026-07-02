@@ -10,6 +10,7 @@ import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `ui.RatingSelect`: the 1-5 star level-rating control on the
@@ -36,7 +37,7 @@ class RatingSelect extends Sprite {
 		star.gotoAndStop("off");
 		star.mouseChildren = false;
 		star.mouseEnabled = false;
-		bar = LobbyArt.findByName(art, "bar");
+		bar = DisplayUtil.findByName(art, "bar");
 		addChild(art);
 		addChild(star);
 		addEventListener(MouseEvent.MOUSE_MOVE, moveHandler);

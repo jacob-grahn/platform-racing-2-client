@@ -6,6 +6,7 @@ import openfl.events.Event;
 import openfl.filters.DropShadowFilter;
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /** Flash `ui.ProgressBar`, backed by the authored `ProgressBarGraphic`. */
 class ProgressBar extends Sprite {
@@ -23,7 +24,7 @@ class ProgressBar extends Sprite {
 		art.filters = [new DropShadowFilter(2, 45, 0, 1, 2, 2)];
 		addChild(art);
 		art.width = px;
-		fill = LobbyArt.findByName(art, "bar");
+		fill = DisplayUtil.findByName(art, "bar");
 		totalPx = px - 4;
 		if (fill != null) fill.width = 0;
 		addEventListener(Event.ENTER_FRAME, update);

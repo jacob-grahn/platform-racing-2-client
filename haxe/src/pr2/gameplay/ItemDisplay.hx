@@ -7,6 +7,7 @@ import openfl.text.TextFormat;
 import pr2.runtime.FontResolver;
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.ItemDisplay`.
@@ -58,7 +59,7 @@ class ItemDisplay extends Sprite {
 	public function setAmmo(value:Int):Void {
 		ammo = clampAmmo(value);
 		for (index in 1...4) {
-			var dot = LobbyArt.findByName(art, "a" + index);
+			var dot = DisplayUtil.findByName(art, "a" + index);
 			if (dot != null) {
 				dot.visible = index <= ammo;
 			}
@@ -66,7 +67,7 @@ class ItemDisplay extends Sprite {
 	}
 
 	private function hideAuthoredTextHolder(holderName:String):Void {
-		var holder = LobbyArt.findByName(art, holderName);
+		var holder = DisplayUtil.findByName(art, holderName);
 		if (holder != null) {
 			holder.visible = false;
 		}
@@ -86,7 +87,7 @@ class ItemDisplay extends Sprite {
 	}
 
 	public function ammoVisible(index:Int):Bool {
-		var dot:Null<DisplayObject> = LobbyArt.findByName(art, "a" + index);
+		var dot:Null<DisplayObject> = DisplayUtil.findByName(art, "a" + index);
 		return dot != null && dot.visible;
 	}
 

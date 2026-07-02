@@ -9,6 +9,7 @@ import pr2.lobby.NumberFormat;
 import pr2.lobby.dialogs.Popup;
 import pr2.runtime.EpicFlash;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.PrizePopup`.
@@ -136,7 +137,7 @@ class PrizePopup extends Popup {
 		titleText = type == "cancel" ? "-- " + prizeName + " --" : "--- " + prizeName + "! ---";
 		setText(textField(art, "titleBox"), titleText);
 
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), function():Void startFadeOut());
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 		addChild(art);
 		PrizePopup.instance = this;
 	}
@@ -163,7 +164,7 @@ class PrizePopup extends Popup {
 			}
 			field.autoSize = openfl.text.TextFieldAutoSize.LEFT;
 			flavorText = field.text;
-			var bg = LobbyArt.findByName(art, "flavorBg");
+			var bg = DisplayUtil.findByName(art, "flavorBg");
 			if (bg != null) {
 				bg.height = field.height + 15;
 			}
@@ -182,11 +183,11 @@ class PrizePopup extends Popup {
 	// --- authored-art helpers -------------------------------------------------
 
 	private function container(name:String):Null<DisplayObjectContainer> {
-		return Std.downcast(LobbyArt.findByName(art, name), DisplayObjectContainer);
+		return Std.downcast(DisplayUtil.findByName(art, name), DisplayObjectContainer);
 	}
 
 	private function child(parent:Null<DisplayObjectContainer>, name:String):Null<DisplayObject> {
-		return parent == null ? null : LobbyArt.findByName(parent, name);
+		return parent == null ? null : DisplayUtil.findByName(parent, name);
 	}
 
 	private function textField(parent:Null<DisplayObjectContainer>, name:String):Null<TextField> {
@@ -200,7 +201,7 @@ class PrizePopup extends Popup {
 	}
 
 	private function setVisible(name:String, visible:Bool):Void {
-		var d = LobbyArt.findByName(art, name);
+		var d = DisplayUtil.findByName(art, name);
 		if (d != null) {
 			d.visible = visible;
 		}
@@ -214,14 +215,14 @@ class PrizePopup extends Popup {
 	}
 
 	private function moveY(name:String, y:Float):Void {
-		var d = LobbyArt.findByName(art, name);
+		var d = DisplayUtil.findByName(art, name);
 		if (d != null) {
 			d.y = y;
 		}
 	}
 
 	private function setHeight(name:String, height:Float):Void {
-		var d = LobbyArt.findByName(art, name);
+		var d = DisplayUtil.findByName(art, name);
 		if (d != null) {
 			d.height = height;
 		}

@@ -5,6 +5,7 @@ import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.PlayerGuestPopup`: the stripped-down profile popup shown
@@ -25,7 +26,7 @@ class PlayerGuestPopup extends Popup {
 			nameBox.text = "-- " + name + " --";
 		}
 		addChild(art);
-		closeBinding = LobbyArt.bind(LobbyArt.findByName(art, "close_bt"), startFadeOut);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), startFadeOut);
 		if (LobbySession.group >= 2) {
 			banMenu = new BanMenu(name, this);
 			banMenu.x = banMenu.width / 2 + 3;

@@ -13,6 +13,7 @@ import pr2.runtime.FlComboBox;
 import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
+import pr2.util.DisplayUtil;
 
 private typedef UploadFactory = String->Map<String, String>->String->(Dynamic->Void)->UploadingPopup;
 
@@ -55,21 +56,21 @@ class PlaceArtifact extends Popup {
 	}
 
 	private function wireControls():Void {
-		monthSel = Std.downcast(LobbyArt.findByName(art, "monthSel"), FlComboBox);
-		daySel = Std.downcast(LobbyArt.findByName(art, "daySel"), FlComboBox);
-		yearSel = Std.downcast(LobbyArt.findByName(art, "yearSel"), FlComboBox);
-		hourBox = Std.downcast(LobbyArt.findByName(art, "hourBox"), FlTextInput);
-		minBox = Std.downcast(LobbyArt.findByName(art, "minBox"), FlTextInput);
-		meridSel = Std.downcast(LobbyArt.findByName(art, "meridSel"), FlComboBox);
-		nowCheck = Std.downcast(LobbyArt.findByName(art, "now_chk"), FlCheckBox);
+		monthSel = Std.downcast(DisplayUtil.findByName(art, "monthSel"), FlComboBox);
+		daySel = Std.downcast(DisplayUtil.findByName(art, "daySel"), FlComboBox);
+		yearSel = Std.downcast(DisplayUtil.findByName(art, "yearSel"), FlComboBox);
+		hourBox = Std.downcast(DisplayUtil.findByName(art, "hourBox"), FlTextInput);
+		minBox = Std.downcast(DisplayUtil.findByName(art, "minBox"), FlTextInput);
+		meridSel = Std.downcast(DisplayUtil.findByName(art, "meridSel"), FlComboBox);
+		nowCheck = Std.downcast(DisplayUtil.findByName(art, "now_chk"), FlCheckBox);
 
 		if (monthSel != null) monthSel.addEventListener(Event.CHANGE, selChange);
 		if (yearSel != null) yearSel.addEventListener(Event.CHANGE, selChange);
 		if (hourBox != null) hourBox.addEventListener(FocusEvent.FOCUS_OUT, validateText);
 		if (minBox != null) minBox.addEventListener(FocusEvent.FOCUS_OUT, validateText);
 		if (nowCheck != null) nowCheck.addEventListener(Event.CHANGE, checkNowBox);
-		placeBinding = LobbyArt.bind(LobbyArt.findByName(art, "place_bt"), clickPlace);
-		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), clickCancel);
+		placeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "place_bt"), clickPlace);
+		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), clickCancel);
 	}
 
 	private function populateOptions(first:Bool = false, ?date:Date):Void {

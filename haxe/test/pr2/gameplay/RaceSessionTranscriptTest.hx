@@ -17,6 +17,7 @@ import pr2.net.ServerLevelData;
 import pr2.page.GamePage;
 import pr2.page.LobbyPage;
 import pr2.page.PageHolder;
+import pr2.util.DisplayUtil;
 
 /**
 	Deterministic transcript of one full real-server race session, from the
@@ -154,11 +155,11 @@ class RaceSessionTranscriptTest {
 	}
 
 	private static function quitButton(game:GamePage):InteractiveObject {
-		return Std.downcast(LobbyArt.findByName(game, "quit_bt"), InteractiveObject);
+		return Std.downcast(DisplayUtil.findByName(game, "quit_bt"), InteractiveObject);
 	}
 
 	private static function returnButton(finish:FinishedPage):InteractiveObject {
-		return Std.downcast(LobbyArt.findByName(finish, "return_bt"), InteractiveObject);
+		return Std.downcast(DisplayUtil.findByName(finish, "return_bt"), InteractiveObject);
 	}
 
 	private static function isLoading(state:LevelEntryState):Bool {

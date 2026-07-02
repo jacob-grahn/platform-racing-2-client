@@ -16,6 +16,7 @@ import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.PageNavigation.Paginated;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `chat.Messages` (the PMs tab). Loads the caller's private
@@ -49,7 +50,7 @@ class MessagesTab extends Page implements Paginated {
 
 	override public function initialize():Void {
 		art = PR2MovieClip.fromLinkage("MessagesGraphic", {maxNestedDepth: 8});
-		holder = Std.downcast(LobbyArt.findByName(art, "var_295"), DisplayObjectContainer);
+		holder = Std.downcast(DisplayUtil.findByName(art, "var_295"), DisplayObjectContainer);
 
 		scrollBar = new CustomScrollBar();
 		scrollBar.x = 176;
@@ -61,8 +62,8 @@ class MessagesTab extends Page implements Paginated {
 		pageNavigation = new PageNavigation(this, "minimal", 1, 99, 110);
 		pageNavigation.x = 33;
 
-		sendBinding = LobbyArt.bind(LobbyArt.findByName(art, "sendMessage_bt"), clickSend);
-		deleteAllBinding = LobbyArt.bind(LobbyArt.findByName(art, "deleteAll_bt"), clickDeleteAll);
+		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "sendMessage_bt"), clickSend);
+		deleteAllBinding = LobbyArt.bind(DisplayUtil.findByName(art, "deleteAll_bt"), clickDeleteAll);
 		addChild(art);
 
 		loading = PR2MovieClip.fromLinkage("LoadingGraphic", {maxNestedDepth: 4});

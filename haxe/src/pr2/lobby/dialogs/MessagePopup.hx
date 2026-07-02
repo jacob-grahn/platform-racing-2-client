@@ -2,6 +2,7 @@ package pr2.lobby.dialogs;
 
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.MessagePopup`: a modal showing an HTML message and an OK
@@ -19,7 +20,7 @@ class MessagePopup extends Popup {
 			textBox.htmlText = message;
 		}
 		addChild(art);
-		okBinding = LobbyArt.bind(LobbyArt.findByName(art, "ok_bt"), function():Void startFadeOut());
+		okBinding = LobbyArt.bind(DisplayUtil.findByName(art, "ok_bt"), function():Void startFadeOut());
 	}
 
 	override public function remove():Void {

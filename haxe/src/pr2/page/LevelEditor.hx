@@ -9,6 +9,7 @@ import openfl.text.TextFormat;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Initial shell for Flash `levelEditor.LevelEditor`.
@@ -147,11 +148,11 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	private function find(name:String):Dynamic {
-		return pr2.lobby.LobbyArt.findByName(art, name);
+		return pr2.util.DisplayUtil.findByName(art, name);
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
-		var binding = LobbyArt.bind(LobbyArt.findByName(art, name), handler);
+		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
 		if (binding != null) {
 			bindings.push(binding);
 		}

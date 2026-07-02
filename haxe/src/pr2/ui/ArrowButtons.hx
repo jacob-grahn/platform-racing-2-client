@@ -7,6 +7,7 @@ import openfl.events.MouseEvent;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `ui.ArrowButtons`: a left/right stepper over a fixed array of
@@ -29,8 +30,8 @@ class ArrowButtons extends Sprite {
 		this.array = values;
 		art = PR2MovieClip.fromLinkage("ArrowButtonsGraphic", {maxNestedDepth: 4});
 		addChild(art);
-		leftButton = LobbyArt.findByName(art, "left");
-		rightButton = LobbyArt.findByName(art, "right");
+		leftButton = DisplayUtil.findByName(art, "left");
+		rightButton = DisplayUtil.findByName(art, "right");
 		leftBinding = LobbyArt.bind(leftButton, clickLeft);
 		rightBinding = LobbyArt.bind(rightButton, clickRight);
 		setValue(val);

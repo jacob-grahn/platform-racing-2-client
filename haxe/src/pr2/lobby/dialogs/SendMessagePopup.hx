@@ -7,6 +7,7 @@ import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.SendMessagePopup`: compose and send a private (or guild)
@@ -35,7 +36,7 @@ class SendMessagePopup extends Popup {
 		nameBox = LobbyArt.text(art, "nameBox");
 		textBox = LobbyArt.text(art, "textBox");
 		charsRemaining = LobbyArt.text(art, "messageCharsRemaining");
-		codesButton = LobbyArt.findByName(art, "codes_bt");
+		codesButton = DisplayUtil.findByName(art, "codes_bt");
 
 		if (nameBox != null) {
 			nameBox.text = name;
@@ -52,8 +53,8 @@ class SendMessagePopup extends Popup {
 			nameBox.alpha = 0.5;
 		}
 
-		sendBinding = LobbyArt.bind(LobbyArt.findByName(art, "send_bt"), clickSend);
-		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "send_bt"), clickSend);
+		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
 		codesBinding = LobbyArt.bind(codesButton, function():Void new PMRFCodesPopup());
 		if (codesButton != null) {
 			codesButton.addEventListener(MouseEvent.MOUSE_OVER, hoverOverCodes);

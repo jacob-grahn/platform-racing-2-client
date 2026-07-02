@@ -7,6 +7,7 @@ import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.runtime.FlComponents;
+import pr2.util.DisplayUtil;
 
 /**
 	Helpers shared by the lobby tab pages for poking at instance-named children of
@@ -25,30 +26,8 @@ class LobbyArt {
 		or part symbol can carry its own empty `nameBox`, and a depth-first walk would
 		return that stray field instead of the one the caller means.
 	**/
-	public static function findByName(container:Null<DisplayObjectContainer>, name:String):Null<DisplayObject> {
-		if (container == null) {
-			return null;
-		}
-		var queue:Array<DisplayObjectContainer> = [container];
-		var head = 0;
-		while (head < queue.length) {
-			var current = queue[head++];
-			for (i in 0...current.numChildren) {
-				var child = current.getChildAt(i);
-				if (child.name == name) {
-					return child;
-				}
-				var childContainer = Std.downcast(child, DisplayObjectContainer);
-				if (childContainer != null) {
-					queue.push(childContainer);
-				}
-			}
-		}
-		return null;
-	}
-
 	public static function text(container:Null<DisplayObjectContainer>, name:String):Null<TextField> {
-		return FlComponents.asTextField(findByName(container, name));
+		return FlComponents.asTextField(DisplayUtil.findByName(container, name));
 	}
 
 	/**

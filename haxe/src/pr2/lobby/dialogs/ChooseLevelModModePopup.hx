@@ -3,6 +3,7 @@ package pr2.lobby.dialogs;
 import pr2.lobby.LobbyArt;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 typedef LevelModerateUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->Null<UploadingPopup>;
 
@@ -26,9 +27,9 @@ class ChooseLevelModModePopup extends Popup {
 		this.levelId = levelId;
 		art = PR2MovieClip.fromLinkage("ChooseLevelModModePopupGraphic", {maxNestedDepth: 4});
 		addChild(art);
-		unpublishBinding = LobbyArt.bind(LobbyArt.findByName(art, "unpublish_bt"), clickUnpublish);
-		restrictBinding = LobbyArt.bind(LobbyArt.findByName(art, "restrict_bt"), clickRestrict);
-		cancelBinding = LobbyArt.bind(LobbyArt.findByName(art, "cancel_bt"), function():Void startFadeOut());
+		unpublishBinding = LobbyArt.bind(DisplayUtil.findByName(art, "unpublish_bt"), clickUnpublish);
+		restrictBinding = LobbyArt.bind(DisplayUtil.findByName(art, "restrict_bt"), clickRestrict);
+		cancelBinding = LobbyArt.bind(DisplayUtil.findByName(art, "cancel_bt"), function():Void startFadeOut());
 	}
 
 	private function clickUnpublish():Void {

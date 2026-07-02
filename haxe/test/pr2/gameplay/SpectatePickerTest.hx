@@ -5,6 +5,7 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.lobby.LobbyArt;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerLevelData;
+import pr2.util.DisplayUtil;
 
 class SpectatePickerTest {
 	private static var assertions:Int = 0;
@@ -26,20 +27,20 @@ class SpectatePickerTest {
 		assertEquals(true, course.spectatePicker.isArtVisible(), "picker visible when spectating is possible");
 		assertEquals(null, course.playerSpectating, "visibility reset leaves free scroll");
 
-		LobbyArt.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		DisplayUtil.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(0, course.spectatePicker.pickedID, "right arrow starts at local temp id");
 		assertEquals(course.localCharacter, course.playerSpectating, "right arrow selects local character first");
 
-		LobbyArt.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		DisplayUtil.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, course.spectatePicker.pickedID, "right arrow advances to first remote");
 		assertEquals(course.getRemoteCharacter(1), course.playerSpectating, "right arrow selects remote");
 		assertContains(course.spectatePicker.playerNameHtml(), "Rival", "selected name rendered");
 
-		LobbyArt.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		DisplayUtil.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(2, course.spectatePicker.pickedID, "right arrow advances to next remote");
 		assertEquals(course.getRemoteCharacter(2), course.playerSpectating, "next remote selected");
 
-		LobbyArt.findByName(course.spectatePicker, "arrowLeft").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		DisplayUtil.findByName(course.spectatePicker, "arrowLeft").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, course.spectatePicker.pickedID, "left arrow returns to previous remote");
 
 		course.toggleSpectatePossible(false);

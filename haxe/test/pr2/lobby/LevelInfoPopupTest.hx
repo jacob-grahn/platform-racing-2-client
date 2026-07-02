@@ -9,6 +9,7 @@ import pr2.lobby.dialogs.LevelReportPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerConfig;
+import pr2.util.DisplayUtil;
 
 /**
 	Locks the first ported LevelInfoPopup boundary: level links open the authored
@@ -37,8 +38,8 @@ class LevelInfoPopupTest {
 		assertNotNull(popup, "showLevel opens LevelInfoPopup");
 		assertEquals(12345, popup.levelId, "level id parsed");
 		assertEquals("sentinel", LobbyPopups.lastRequest, "level route is no longer record-only");
-		assertEquals(true, LobbyArt.findByName(popup, "loading").visible, "loading graphic remains visible");
-		assertEquals(false, LobbyArt.findByName(popup, "levelInfo").visible, "data panel stays hidden until data port lands");
+		assertEquals(true, DisplayUtil.findByName(popup, "loading").visible, "loading graphic remains visible");
+		assertEquals(false, DisplayUtil.findByName(popup, "levelInfo").visible, "data panel stays hidden until data port lands");
 		popup.remove();
 	}
 
@@ -59,8 +60,8 @@ class LevelInfoPopupTest {
 			song: "2",
 			gameMode: "hat"
 		});
-		assertEquals(false, LobbyArt.findByName(popup, "loading").visible, "loading graphic hides after data");
-		assertEquals(true, LobbyArt.findByName(popup, "levelInfo").visible, "data panel shows after data");
+		assertEquals(false, DisplayUtil.findByName(popup, "loading").visible, "loading graphic hides after data");
+		assertEquals(true, DisplayUtil.findByName(popup, "levelInfo").visible, "data panel shows after data");
 		assertEquals("Hat Factory", LobbyArt.text(popup, "title").text, "title populates");
 		assertEquals("Find the hidden hat.", LobbyArt.text(popup, "note").text, "note populates");
 		assertEquals("12,345", LobbyArt.text(popup, "version").text, "version is comma-formatted");
@@ -69,7 +70,7 @@ class LevelInfoPopupTest {
 		assertEquals("15/Nov/2020", LobbyArt.text(popup, "updated").text, "updated uses Flash short date");
 		assertEquals("Hat Attack", popup.gameMode, "game mode is normalized");
 		assertEquals("Code - Stefano Maccarelli", popup.song, "song id is named");
-		assertEquals(0.75, LobbyArt.findByName(popup, "bar").scaleX, "rating star bar scales");
+		assertEquals(0.75, DisplayUtil.findByName(popup, "bar").scaleX, "rating star bar scales");
 		popup.remove();
 	}
 
@@ -88,8 +89,8 @@ class LevelInfoPopupTest {
 			song: "0",
 			gameMode: "race"
 		});
-		var rating = LobbyArt.findByName(popup, "rating");
-		var cover = LobbyArt.findByName(Std.downcast(rating, openfl.display.DisplayObjectContainer), "cover");
+		var rating = DisplayUtil.findByName(popup, "rating");
+		var cover = DisplayUtil.findByName(Std.downcast(rating, openfl.display.DisplayObjectContainer), "cover");
 		assertEquals(false, cover.visible, "rating cover starts hidden");
 		rating.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
 		assertEquals(true, cover.visible, "rating hover shows Flash cover");
@@ -125,8 +126,8 @@ class LevelInfoPopupTest {
 			song: "0",
 			gameMode: "race"
 		});
-		assertEquals(true, LobbyArt.findByName(popup, "report_bt").visible, "members see report button");
-		assertEquals(false, LobbyArt.findByName(popup, "unpublish_bt").visible, "members do not see moderation button");
+		assertEquals(true, DisplayUtil.findByName(popup, "report_bt").visible, "members see report button");
+		assertEquals(false, DisplayUtil.findByName(popup, "unpublish_bt").visible, "members do not see moderation button");
 		click(popup, "report_bt");
 
 		var report = lastPopup(LevelReportPopup);
@@ -181,8 +182,8 @@ class LevelInfoPopupTest {
 			song: "0",
 			gameMode: "race"
 		});
-		assertEquals(false, LobbyArt.findByName(popup, "report_bt").visible, "moderators do not see report button");
-		assertEquals(true, LobbyArt.findByName(popup, "unpublish_bt").visible, "moderators see moderation button");
+		assertEquals(false, DisplayUtil.findByName(popup, "report_bt").visible, "moderators do not see report button");
+		assertEquals(true, DisplayUtil.findByName(popup, "unpublish_bt").visible, "moderators see moderation button");
 		click(popup, "unpublish_bt");
 
 		var modPopup = lastPopup(ChooseLevelModModePopup);
@@ -249,7 +250,7 @@ class LevelInfoPopupTest {
 	}
 
 	private static function click(container:openfl.display.DisplayObjectContainer, name:String):Void {
-		var button = Std.downcast(LobbyArt.findByName(container, name), InteractiveObject);
+		var button = Std.downcast(DisplayUtil.findByName(container, name), InteractiveObject);
 		if (button == null) {
 			throw 'missing button $name';
 		}

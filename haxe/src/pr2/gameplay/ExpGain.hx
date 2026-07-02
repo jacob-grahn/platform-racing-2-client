@@ -6,6 +6,7 @@ import openfl.events.Event;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.NumberFormat;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `gameplay.ExpGain`: the experience-gain bar shown on the
@@ -35,8 +36,8 @@ class ExpGain extends Sprite {
 		art = PR2MovieClip.fromLinkage("ExpGainGraphic", {maxNestedDepth: 4});
 		addChild(art);
 		// `m.bar` is the ProgressBar instance; its inner fill is also named `bar`.
-		var bar = Std.downcast(LobbyArt.findByName(art, "bar"), openfl.display.DisplayObjectContainer);
-		fill = LobbyArt.findByName(bar, "bar");
+		var bar = Std.downcast(DisplayUtil.findByName(art, "bar"), openfl.display.DisplayObjectContainer);
+		fill = DisplayUtil.findByName(bar, "bar");
 		textBox = LobbyArt.text(art, "textBox");
 		if (fill != null) {
 			fill.width = 1;

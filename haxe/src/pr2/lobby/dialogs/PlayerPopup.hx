@@ -24,6 +24,7 @@ import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.FlButton;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `dialogs.PlayerPopup`: the player profile popup raised by clicking
@@ -80,11 +81,11 @@ class PlayerPopup extends Popup {
 		if (nameBox != null) {
 			nameBox.text = "-- " + name + " --";
 		}
-		playerInfo = Std.downcast(LobbyArt.findByName(art, "playerInfo"), DisplayObjectContainer);
+		playerInfo = Std.downcast(DisplayUtil.findByName(art, "playerInfo"), DisplayObjectContainer);
 		if (playerInfo != null) {
 			playerInfo.visible = false;
 		}
-		bindClick(LobbyArt.findByName(art, "close_bt"), clickClose);
+		bindClick(DisplayUtil.findByName(art, "close_bt"), clickClose);
 		addChild(art);
 
 		// `autoLoad` is only disabled by tests, which feed `applyReturnData` directly.
@@ -186,7 +187,7 @@ class PlayerPopup extends Popup {
 		setupModMenus(group);
 
 		playerInfo.visible = true;
-		var loading = LobbyArt.findByName(art, "loadingGraphic");
+		var loading = DisplayUtil.findByName(art, "loadingGraphic");
 		if (loading != null) {
 			loading.visible = false;
 		}
@@ -221,8 +222,8 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setupIcons(ret:Dynamic):Void {
-		var verified = LobbyArt.findByName(playerInfo, "verifiedIcon");
-		var hof = LobbyArt.findByName(playerInfo, "hofIcon");
+		var verified = DisplayUtil.findByName(playerInfo, "verifiedIcon");
+		var hof = DisplayUtil.findByName(playerInfo, "hofIcon");
 		var showVerified = boolField(ret, "verified");
 		var showHof = boolField(ret, "hof");
 		if (verified != null) {
@@ -281,12 +282,12 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setupSocialButtons(ret:Dynamic, group:Int):Void {
-		var message = LobbyArt.findByName(playerInfo, "messageButton");
+		var message = DisplayUtil.findByName(playerInfo, "messageButton");
 		bindClick(message, function():Void {
 			startFadeOut();
 			new SendMessagePopup(userName);
 		});
-		bindClick(LobbyArt.findByName(playerInfo, "levelsButton"), clickViewLevels);
+		bindClick(DisplayUtil.findByName(playerInfo, "levelsButton"), clickViewLevels);
 
 		// Guild owners can invite guildless players or kick their own members.
 		var guildId = intField(ret, "guildId");
@@ -296,12 +297,12 @@ class PlayerPopup extends Popup {
 		if (LobbySession.guildOwner) {
 			if (guildId == 0) {
 				setVisible("inviteButton", true);
-				bindClick(LobbyArt.findByName(playerInfo, "inviteButton"), function():Void handleGuildUrl(ServerConfig.guildInviteUrl()));
+				bindClick(DisplayUtil.findByName(playerInfo, "inviteButton"), function():Void handleGuildUrl(ServerConfig.guildInviteUrl()));
 			}
 			if (guildId != 0 && guildId == LobbySession.guildId) {
 				setVisible("kickButton", true);
 				setVisible("kickBg", true);
-				bindClick(LobbyArt.findByName(playerInfo, "kickButton"), function():Void handleGuildUrl(ServerConfig.guildKickUrl()));
+				bindClick(DisplayUtil.findByName(playerInfo, "kickButton"), function():Void handleGuildUrl(ServerConfig.guildKickUrl()));
 			}
 		}
 
@@ -367,19 +368,19 @@ class PlayerPopup extends Popup {
 	private function showRankSupplement():Void {
 		// The original draws a live EXP progress bar here; that ExpGain symbol is
 		// not ported yet, so we surface the same numbers as text in the meantime.
-		var supplBg = LobbyArt.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = true;
 		setText("supplText", "Rank " + rankValue + " — " + expPoints + " / " + expToRank + " EXP");
 	}
 
 	private function showDateSupplement(time:Float):Void {
-		var supplBg = LobbyArt.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = true;
 		setText("supplText", getDateTimeStr(time));
 	}
 
 	private function hideSupplement():Void {
-		var supplBg = LobbyArt.findByName(playerInfo, "supplBg");
+		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = false;
 		setText("supplText", "");
 	}
@@ -445,14 +446,14 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setVisible(name:String, value:Bool):Void {
-		var target = LobbyArt.findByName(playerInfo, name);
+		var target = DisplayUtil.findByName(playerInfo, name);
 		if (target != null) {
 			target.visible = value;
 		}
 	}
 
 	private function flButton(name:String):Null<FlButton> {
-		return Std.downcast(LobbyArt.findByName(playerInfo, name), FlButton);
+		return Std.downcast(DisplayUtil.findByName(playerInfo, name), FlButton);
 	}
 
 	private function bindClick(target:Null<DisplayObject>, handler:Void->Void):Void {

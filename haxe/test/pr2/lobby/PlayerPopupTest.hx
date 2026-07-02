@@ -13,6 +13,7 @@ import pr2.runtime.FlButton;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Verifies that clicking a chat name brings up the player info popup the way the
@@ -66,7 +67,7 @@ class PlayerPopupTest {
 		assertEquals("Remove Friend", flLabel(popup, "friendButton"), "already a friend => Remove Friend");
 		assertEquals("Ignore", flLabel(popup, "ignoreButton"), "not ignored => Ignore");
 		assertEquals(true, flButton(popup, "followButton").enabled, "members can follow");
-		assertEquals(true, LobbyArt.findByName(popup, "playerInfo").visible, "info panel becomes visible");
+		assertEquals(true, DisplayUtil.findByName(popup, "playerInfo").visible, "info panel becomes visible");
 
 		popup.remove();
 	}
@@ -84,7 +85,7 @@ class PlayerPopupTest {
 			hat: 1, head: 1, body: 1, feet: 1
 		});
 
-		assertNotNull(LobbyArt.findByName(popup, "warning1Button"), "temporary moderators see the warning menu");
+		assertNotNull(DisplayUtil.findByName(popup, "warning1Button"), "temporary moderators see the warning menu");
 		click(popup, "warning2Button");
 		assertEquals("warn`Target`2", LobbySocket.lastSent(), "warning buttons emit warn command");
 		assertEquals(true, popup.fadeOutStarted, "warning starts closing the player popup");
@@ -142,7 +143,7 @@ class PlayerPopupTest {
 			hat: 1, head: 1, body: 1, feet: 1
 		});
 		menu = banMenu(popup);
-		FlComponents.asTextField(LobbyArt.findByName(menu, "reason")).text = "spam";
+		FlComponents.asTextField(DisplayUtil.findByName(menu, "reason")).text = "spam";
 		var duration = combo(menu, "duration");
 		duration.selectedIndex = 2;
 		click(menu, "banButton");
@@ -214,7 +215,7 @@ class PlayerPopupTest {
 	}
 
 	private static function flButton(popup:PlayerPopup, name:String):FlButton {
-		var button = Std.downcast(LobbyArt.findByName(popup, name), FlButton);
+		var button = Std.downcast(DisplayUtil.findByName(popup, name), FlButton);
 		if (button == null) throw name + " is not an FlButton";
 		return button;
 	}
@@ -224,7 +225,7 @@ class PlayerPopupTest {
 	}
 
 	private static function click(container:DisplayObjectContainer, name:String):Void {
-		var target = LobbyArt.findByName(container, name);
+		var target = DisplayUtil.findByName(container, name);
 		if (target == null) throw 'missing click target $name';
 		target.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
@@ -238,7 +239,7 @@ class PlayerPopupTest {
 	}
 
 	private static function combo(container:DisplayObjectContainer, name:String):FlComboBox {
-		var combo = Std.downcast(LobbyArt.findByName(container, name), FlComboBox);
+		var combo = Std.downcast(DisplayUtil.findByName(container, name), FlComboBox);
 		if (combo == null) throw name + " is not an FlComboBox";
 		return combo;
 	}

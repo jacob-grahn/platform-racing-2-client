@@ -28,6 +28,7 @@ import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.TabLayout;
 import pr2.ui.TabsHolder;
+import pr2.util.DisplayUtil;
 
 /**
 	Deterministic coverage for the shared lobby services and tab logic that don't
@@ -167,10 +168,10 @@ class LobbyServicesTest {
 		assertEquals(false, editor.overlayLayer.mouseEnabled, "overlay ignores mouse");
 		assertEquals(false, editor.overlayLayer.mouseChildren, "overlay children ignore mouse");
 		assertEquals(true, editor.getChildIndex(editor.overlayLayer) > editor.getChildIndex(editor.menu), "overlay is above menu");
-		assertNotNull(LobbyArt.findByName(editor.menu.art, "blocksButton"), "authored editor menu is mounted");
-		assertEquals(3, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "zoomSelect"), "selectedIndex"), "editor zoom defaults to 100%");
-		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "guests cannot save");
-		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
+		assertNotNull(DisplayUtil.findByName(editor.menu.art, "blocksButton"), "authored editor menu is mounted");
+		assertEquals(3, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "zoomSelect"), "selectedIndex"), "editor zoom defaults to 100%");
+		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "saveButton"), "enabled"), "guests cannot save");
+		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
 		assertEquals("blocks", editor.menu.sideBar.id, "editor menu starts on blocks sidebar");
 		assertEquals(editor.menu, editor.menu.sideBar.parent, "active sidebar is mounted above menu art");
 		clickEditorSidebar(editor, "brickEntry");
@@ -197,17 +198,17 @@ class LobbyServicesTest {
 		editor.initialize();
 		assertEquals(true, editor.isMod, "editor shell stores permanent mod flag");
 		assertEquals(false, editor.reportsMode, "editor shell starts outside reports mode");
-		assertEquals(true, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "members can save");
-		assertEquals(true, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "loadButton"), "enabled"), "members can load");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "saveButton"), "enabled"), "members can save");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "loadButton"), "enabled"), "members can load");
 		editor.menu.setReportsMode(true);
-		assertEquals(false, Reflect.getProperty(LobbyArt.findByName(editor.menu.art, "saveButton"), "enabled"), "reports mode disables save");
+		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "saveButton"), "enabled"), "reports mode disables save");
 		assertEquals(true, editor.reportsMode, "menu reports mode updates editor");
 		editor.remove();
 		LobbySession.clear();
 	}
 
 	private static function clickEditorMenu(editor:LevelEditor, name:String):Void {
-		LobbyArt.findByName(editor.menu.art, name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		DisplayUtil.findByName(editor.menu.art, name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 
 	private static function clickEditorSidebar(editor:LevelEditor, name:String):Void {

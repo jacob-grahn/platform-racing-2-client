@@ -4,17 +4,18 @@ import openfl.events.TextEvent;
 import openfl.text.TextField;
 import pr2.Constants;
 import pr2.lobby.dialogs.CreditsPopup;
+import pr2.util.DisplayUtil;
 
 class CreditsPopupTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
 		var popup = new CreditsPopup();
-		var art1 = LobbyArt.findByName(popup, "artPg1");
-		var art2 = LobbyArt.findByName(popup, "artPg2");
-		var art3 = LobbyArt.findByName(popup, "artPg3");
-		var music1 = LobbyArt.findByName(popup, "musicPg1");
-		var music2 = LobbyArt.findByName(popup, "musicPg2");
+		var art1 = DisplayUtil.findByName(popup, "artPg1");
+		var art2 = DisplayUtil.findByName(popup, "artPg2");
+		var art3 = DisplayUtil.findByName(popup, "artPg3");
+		var music1 = DisplayUtil.findByName(popup, "musicPg1");
+		var music2 = DisplayUtil.findByName(popup, "musicPg2");
 
 		assertNotNull(art1, "hidden art page 1 is instantiated");
 		assertNotNull(art2, "hidden art page 2 is instantiated");
@@ -49,7 +50,7 @@ class CreditsPopupTest {
 	}
 
 	private static function text(popup:CreditsPopup, name:String):TextField {
-		var field = Std.downcast(LobbyArt.findByName(popup, name), TextField);
+		var field = Std.downcast(DisplayUtil.findByName(popup, name), TextField);
 		assertNotNull(field, name + " is a dynamic text field");
 		return field;
 	}
