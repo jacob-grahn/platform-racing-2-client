@@ -81,6 +81,7 @@ class LocalPlayerControllerTest {
 		testCollisionSnapsAgainstRotatedCeiling();
 		testCollisionStopsLeftMovementAfterRotation();
 		testArrowPushUsesRotatedCourseDirection();
+		testPushBlockUsesRotatedCourseDirection();
 		trace('LocalPlayerControllerTest passed $assertions assertions');
 	}
 
@@ -1430,6 +1431,42 @@ class LocalPlayerControllerTest {
 		assertEquals("arrow_right", state.touchedBlockType, "scripted run reaches rotated arrow block");
 		assertBelow(-state.vy, -5, "right arrow rotated 90 degrees pushes down like Flash");
 		assertBelow(state.vx, 1, "rotated right arrow no longer pushes along unrotated right");
+	}
+
+	private static function testPushBlockUsesRotatedCourseDirection():Void {
+		var level = rotateBlockLevel(BlockType.RotateRight);
+		level.blocks.push(new LevelBlock(3, 4, BlockType.Push));
+		var player = new LocalCharacter(level);
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().mode == "freeze") {
+				break;
+			}
+		}
+		var pushEvent:Null<BlockVisualEvent> = null;
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput());
+		}
+		for (_ in 0...30) {
+			player.step(new LocalPlayerInput(true));
+			for (event in player.consumeBlockVisualEvents()) {
+				if (Type.enumConstructor(event.kind) == "PushBlockMove") {
+					pushEvent = event;
+					break;
+				}
+			}
+			if (pushEvent != null) {
+				break;
+			}
+		}
+
+		assertEquals(90, player.debugState().courseRotation, "test course is rotated right");
+		assertEquals("PushBlockMove", Type.enumConstructor(pushEvent.kind), "rotated push block emits movement");
+		assertEquals(3, pushEvent.tileX, "rotated push block source x");
+		assertEquals(4, pushEvent.tileY, "rotated push block source y");
+		assertEquals(3, pushEvent.toTileX, "right-rotated right push keeps x");
+		assertEquals(3, pushEvent.toTileY, "right-rotated right push maps to -y");
 	}
 
 	private static function bumpRotateBlock(type:BlockType):LocalCharacter {

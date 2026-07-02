@@ -927,6 +927,9 @@ class LocalPlayerController {
 		if (dx == 0 && dy == 0) {
 			return;
 		}
+		var rotatedDelta = RotationMath.rotatePoint(dx, dy, courseRotation);
+		dx = rotatedDelta.x;
+		dy = rotatedDelta.y;
 
 		var destX = block.x + dx;
 		var destY = block.y + dy;
