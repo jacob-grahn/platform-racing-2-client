@@ -1,5 +1,7 @@
 package pr2.character;
 
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.events.Event;
 import pr2.runtime.PR2MovieClip;
 
@@ -33,6 +35,8 @@ class CharacterDisplayTest {
 		for (stateName in ["standAnim", "runAnim", "jumpAnim", "swimAnim"]) {
 			var weapon = weaponClip(display, stateName);
 			assertEquals(6, weapon.currentFrame, '$stateName weapon moves to Laser frame');
+			assertTrue(weapon.visible, '$stateName weapon clip stays visible');
+			assertTrue(visibleDescendantCount(weapon) > 0, '$stateName Laser frame has visible held-item art');
 		}
 
 		display.setState("runAnim");
@@ -43,6 +47,7 @@ class CharacterDisplayTest {
 		display.setItemFrameName("None");
 		assertEquals(1, weaponClip(display, "runAnim").currentFrame, "None resets the active weapon clip");
 		assertEquals(1, weaponClip(display, "standAnim").currentFrame, "None resets inactive weapon clips too");
+		assertEquals(0, visibleDescendantCount(weaponClip(display, "runAnim")), "None frame hides held-item art");
 	}
 
 	private static function weaponClip(display:CharacterDisplay, stateName:String):PR2MovieClip {
@@ -51,6 +56,21 @@ class CharacterDisplayTest {
 		var weapon = Std.downcast(state.getChildByTimelineName("weapon"), PR2MovieClip);
 		assertTrue(weapon != null, '$stateName exposes weapon clip');
 		return weapon;
+	}
+
+	private static function visibleDescendantCount(root:DisplayObject):Int {
+		if (!root.visible) {
+			return 0;
+		}
+		var container = Std.downcast(root, DisplayObjectContainer);
+		if (container == null) {
+			return 1;
+		}
+		var count = 0;
+		for (i in 0...container.numChildren) {
+			count += visibleDescendantCount(container.getChildAt(i));
+		}
+		return count;
 	}
 
 	private static function assertEquals<T>(expected:T, actual:T, message:String):Void {
