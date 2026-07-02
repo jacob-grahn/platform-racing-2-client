@@ -1,11 +1,16 @@
 package pr2.page;
 
+import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
+import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
+import openfl.utils.AssetType;
+import openfl.utils.Assets;
+import pr2.level.ServerLevelRenderer;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
@@ -27,6 +32,9 @@ class LevelEditor extends Page {
 	public var menu(default, null):Null<LevelEditorMenu>;
 	public var selectedToolSidebar(default, null):String = "";
 	public var selectedToolId(default, null):String = "";
+	public var objectLayers(default, null):Array<EditorObjectLayer> = [];
+	public var activeObjectLayer(default, null):Null<EditorObjectLayer>;
+	private var layerContainer:Null<Sprite>;
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
 		super();
@@ -40,6 +48,11 @@ class LevelEditor extends Page {
 		if (stage != null) {
 			stage.quality = StageQuality.HIGH;
 		}
+
+		layerContainer = new Sprite();
+		addChild(layerContainer);
+		attachObjectLayers();
+		addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 
 		overlayLayer = new Sprite();
 		overlayLayer.mouseEnabled = false;
@@ -61,16 +74,64 @@ class LevelEditor extends Page {
 		selectedToolId = toolId;
 	}
 
+	public function setActiveObjectLayer(layerNum:Int):Void {
+		if (layerNum < 1 || layerNum > objectLayers.length) {
+			return;
+		}
+		activeObjectLayer = objectLayers[layerNum - 1];
+	}
+
+	public function placeSelectedToolAt(stageX:Float, stageY:Float):Null<EditorPlacedObject> {
+		if (activeObjectLayer == null || selectedToolSidebar != "stamps" || !StringTools.startsWith(selectedToolId, "stamp")) {
+			return null;
+		}
+		var code = Std.parseInt(selectedToolId.substr("stamp".length));
+		if (code == null) {
+			return null;
+		}
+		return activeObjectLayer.addStamp(code, stageX, stageY);
+	}
+
 	override public function remove():Void {
 		if (LevelEditor.editor == this) {
 			LevelEditor.editor = null;
 		}
+		removeEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 		if (menu != null) {
 			menu.remove();
 			menu = null;
 		}
+		if (layerContainer != null) {
+			for (layer in objectLayers) {
+				layer.remove();
+			}
+			objectLayers = [];
+			activeObjectLayer = null;
+			layerContainer = null;
+		}
 		overlayLayer = null;
 		super.remove();
+	}
+
+	private function attachObjectLayers():Void {
+		if (layerContainer == null) {
+			return;
+		}
+		for (scale in [1.0, 0.5, 0.25, 1.0, 2.0]) {
+			var layer = new EditorObjectLayer(objectLayers.length + 1, scale);
+			objectLayers.push(layer);
+			layerContainer.addChild(layer);
+		}
+		activeObjectLayer = objectLayers[0];
+	}
+
+	private function placeSelectedToolFromMouse(event:MouseEvent):Void {
+		if (menu != null && menu.hitTestPoint(event.stageX, event.stageY, true)) {
+			return;
+		}
+		if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
+			event.stopImmediatePropagation();
+		}
 	}
 }
 
@@ -177,6 +238,7 @@ class LevelEditorMenu extends Sprite {
 		if (sideBar != stamps && sideBar != tools) {
 			changeSideBar(stamps);
 		}
+		editor.setActiveObjectLayer(layerNum);
 		moveGlow(find(switch (layerNum) {
 			case 5: "layer00Button";
 			case 4: "layer0Button";
@@ -194,6 +256,94 @@ class LevelEditorMenu extends Sprite {
 		}
 		glow.x = target.x + target.width / 2;
 		glow.width = target.width + 6;
+	}
+}
+
+class EditorObjectLayer extends Sprite {
+	public final layerNum:Int;
+	public final placedObjects:Array<EditorPlacedObject> = [];
+
+	public function new(layerNum:Int, layerScale:Float) {
+		super();
+		this.layerNum = layerNum;
+		name = 'editorObjectLayer$layerNum';
+		scaleX = layerScale;
+		scaleY = layerScale;
+	}
+
+	public function addStamp(code:Int, stageX:Float, stageY:Float):EditorPlacedObject {
+		var size = stampDisplaySize(code);
+		var point = globalToLocal(new Point(stageX, stageY));
+		var placed = new EditorPlacedObject(code, Math.round(point.x - size.width / 2), Math.round(point.y - size.height / 2));
+		placedObjects.push(placed);
+		addChild(createStampDisplay(placed, size));
+		return placed;
+	}
+
+	public function remove():Void {
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		while (numChildren > 0) {
+			removeChildAt(0);
+		}
+		placedObjects.resize(0);
+	}
+
+	private static function createStampDisplay(placed:EditorPlacedObject, size:StampSize):Sprite {
+		var holder = new Sprite();
+		holder.x = placed.x;
+		holder.y = placed.y;
+		var assetPath = ServerLevelRenderer.stampAssetPath(placed.code);
+		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
+			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+			bitmap.smoothing = true;
+			bitmap.scaleX = 0.25;
+			bitmap.scaleY = 0.25;
+			holder.addChild(bitmap);
+		} else {
+			holder.graphics.lineStyle(1, 0x666666);
+			holder.graphics.beginFill(0xEEEEEE, 0.5);
+			holder.graphics.drawRect(0, 0, size.width, size.height);
+			holder.graphics.endFill();
+		}
+		return holder;
+	}
+
+	private static function stampDisplaySize(code:Int):StampSize {
+		return switch (code) {
+			case 0: new StampSize(228, 172.75);
+			case 1: new StampSize(188, 249.25);
+			case 2: new StampSize(194, 236.5);
+			case 3: new StampSize(77.25, 101.75);
+			case 5: new StampSize(87.25, 91);
+			case 6: new StampSize(125.75, 118.5);
+			case 7: new StampSize(114, 319.75);
+			case 8: new StampSize(294.25, 268.5);
+			default: new StampSize(30, 30);
+		}
+	}
+}
+
+class EditorPlacedObject {
+	public final code:Int;
+	public final x:Int;
+	public final y:Int;
+
+	public function new(code:Int, x:Int, y:Int) {
+		this.code = code;
+		this.x = x;
+		this.y = y;
+	}
+}
+
+private class StampSize {
+	public final width:Float;
+	public final height:Float;
+
+	public function new(width:Float, height:Float) {
+		this.width = width;
+		this.height = height;
 	}
 }
 
