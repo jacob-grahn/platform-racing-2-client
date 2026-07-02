@@ -56,7 +56,7 @@ Port the editor itself, one piece at a time:
       integration.
       - [x] Port empty-text deletion after editing.
       - [x] Port text color changes.
-      - [ ] Port resize/move integration.
+      - [x] Port resize/move integration.
         - [x] Record text object move/resize mutations with Flash `m`/`r`
           action encoding and rounding.
         - [x] Wire text object drag and resize handle interactions.
