@@ -48,8 +48,10 @@ class ServerLevelRenderer extends Sprite {
 	// just the on-screen window attached and recycles blocks as the camera scrolls.
 	public static inline var VIEW_MARGIN_SEGMENTS:Int = 2;
 	// Only rebuild the window once the camera has scrolled this many segments, so a
-	// slow pan does not churn addChild/removeChild every frame (Flash uses 5).
-	public static inline var VIEW_REBUILD_THRESHOLD:Int = 3;
+	// slow pan does not churn addChild/removeChild every frame. Keep this no larger
+	// than the margin, otherwise blocks can enter the visible stage before the
+	// window refreshes and visibly pop in at the edge.
+	public static inline var VIEW_REBUILD_THRESHOLD:Int = VIEW_MARGIN_SEGMENTS;
 
 	private final level:ServerLevel;
 	private var offsetX:Float;

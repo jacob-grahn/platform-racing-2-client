@@ -27,6 +27,7 @@ class ServerLevelRendererTest {
 		testMoveBlockDisplay();
 		testMoveBlockArrowDisplay();
 		testIncrementalBlockDrawing();
+		testViewWindowRefreshesBeforeLeftEdgeExposure();
 		testIncrementalArtDrawing();
 		testArrowAnimation();
 		testStartBlockNotRendered();
@@ -189,6 +190,19 @@ class ServerLevelRendererTest {
 		assertEquals(5, renderer.drawnBlockCount(), "incremental renderer draws final partial batch");
 		assertEquals(5, blockLayer.numChildren, "incremental renderer eventually attaches every block");
 		assertEquals(true, renderer.isBlockDrawingComplete(), "incremental renderer reports completion");
+	}
+
+	private static function testViewWindowRefreshesBeforeLeftEdgeExposure():Void {
+		var focus = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
+		var leftEdge = new DecodedBlock(ObjectCodes.BLOCK_BASIC2, 9750, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [focus, leftEdge]), focus, 180, 280);
+		var blockLayer = worldLayer(renderer, 1);
+		assertEquals(1, blockLayer.numChildren, "block just beyond the left view margin starts detached");
+
+		renderer.setCameraOffset(-9750, 280 - 10050);
+
+		assertEquals(2, blockLayer.numChildren, "leftward scroll attaches blocks before they reach the stage edge");
+		assertEquals(0.0, renderer.worldToScreen(leftEdge.x, leftEdge.y).x, "regression block is exactly on the left edge");
 	}
 
 	private static function testIncrementalArtDrawing():Void {
