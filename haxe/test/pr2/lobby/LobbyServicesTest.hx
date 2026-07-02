@@ -220,12 +220,20 @@ class LobbyServicesTest {
 		assertEquals(0x336699, label.color, "text color edit commits the selected color");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601", editor.activeObjectLayer.getSaveString(),
 			"text re-edit records a Flash change action with color");
+		label.moveToLocal(112.4, 130.6);
+		label.resizeTo(1.236, 0.754);
+		assertEquals(112, Std.int(label.x), "text move rounds x like Flash drag release");
+		assertEquals(131, Std.int(label.y), "text move rounds y like Flash drag release");
+		assertEquals(1.24, label.scaleX, "text resize rounds scale x to hundredths");
+		assertEquals(0.75, label.scaleY, "text resize rounds scale y to hundredths");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75",
+			editor.activeObjectLayer.getSaveString(), "text move and resize record Flash object actions");
 		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		label.setEditingText("   ");
 		label.finishEditing();
 		assertEquals(0, editor.activeObjectLayer.textObjects.length, "empty text edit removes the text object");
 		assertEquals(null, label.parent, "empty text edit unmounts the display object");
-		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,d0", editor.activeObjectLayer.getSaveString(),
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0", editor.activeObjectLayer.getSaveString(),
 			"empty text edit records a Flash delete action");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);

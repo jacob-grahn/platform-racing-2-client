@@ -377,6 +377,20 @@ class EditorObjectLayer extends Sprite {
 		}
 	}
 
+	public function recordMoveText(textObject:EditorTextObject):Void {
+		var textId = textObjects.indexOf(textObject);
+		if (textId >= 0) {
+			saveArray.push("m" + textId + ";" + textObject.x + ";" + textObject.y);
+		}
+	}
+
+	public function recordResizeText(textObject:EditorTextObject):Void {
+		var textId = textObjects.indexOf(textObject);
+		if (textId >= 0) {
+			saveArray.push("r" + textId + ";" + textObject.scaleX + ";" + textObject.scaleY);
+		}
+	}
+
 	public function removeTextObject(textObject:EditorTextObject, record:Bool = true):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId < 0) {
@@ -702,6 +716,32 @@ class EditorTextObject extends Sprite {
 			editField.textColor = color;
 		}
 		lastColor = color;
+	}
+
+	public function moveToLocal(nextX:Float, nextY:Float, record:Bool = true):Void {
+		var roundedX = Math.round(nextX);
+		var roundedY = Math.round(nextY);
+		if (x == roundedX && y == roundedY) {
+			return;
+		}
+		x = roundedX;
+		y = roundedY;
+		if (record) {
+			owner.recordMoveText(this);
+		}
+	}
+
+	public function resizeTo(nextScaleX:Float, nextScaleY:Float, record:Bool = true):Void {
+		var roundedScaleX = Math.round(nextScaleX * 100) / 100;
+		var roundedScaleY = Math.round(nextScaleY * 100) / 100;
+		if (scaleX == roundedScaleX && scaleY == roundedScaleY) {
+			return;
+		}
+		scaleX = roundedScaleX;
+		scaleY = roundedScaleY;
+		if (record) {
+			owner.recordResizeText(this);
+		}
 	}
 
 	public function getEscapedText():String {
