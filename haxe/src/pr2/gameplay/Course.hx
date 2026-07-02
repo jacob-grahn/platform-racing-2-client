@@ -15,6 +15,7 @@ import openfl.utils.Assets;
 import pr2.Constants;
 import pr2.audio.SoundEffects;
 import pr2.character.Character;
+import pr2.character.CharacterState;
 import pr2.character.LocalCharacter;
 import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
@@ -1084,8 +1085,16 @@ class Course extends Sprite {
 		if (miniMap != null) {
 			miniMap.rotate(state.courseRotation);
 		}
-		var worldX = serverFixture.fixturePixelToWorldX(player.x);
-		var worldY = serverFixture.fixturePixelToWorldY(player.y);
+		// Use the controller's authoritative position, not player.x/player.y: the
+		// PlayerDisplayPlacement.place() call below overwrites player.x/player.y
+		// with the on-screen (feet) coordinate every frame. During the race that
+		// is harmless because step()->syncFromController rewrites player.x/y back
+		// to the controller position before the next updatePlayerDisplay. During
+		// the 3-2-1 countdown, though, step() never runs, so reading player.x/y
+		// here would feed the previous frame's screen coordinate back into the
+		// camera target and make it scroll away, snapping back only at "Go".
+		var worldX = serverFixture.fixturePixelToWorldX(state.x);
+		var worldY = serverFixture.fixturePixelToWorldY(state.y);
 		if (state.courseRotation != displayedCourseRotation) {
 			camera.snapTo(worldX, worldY);
 			displayedCourseRotation = state.courseRotation;
@@ -1101,7 +1110,14 @@ class Course extends Sprite {
 		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
 		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX);
 		player.rotation = localCharacter.characterRotation;
-		player.display.setState(state.characterState.toClipName());
+		// Until the countdown finishes the race has not started and the local
+		// player is never stepped (Flash keeps it in mode="wait"/state="stand"
+		// with its physics ENTER_FRAME not yet attached). Show the idle stand pose
+		// instead of the airborne "jump" the motion state derives from the not-yet
+		// grounded spawn, so the character sits still on its start block through
+		// the 3-2-1 rather than floating mid-jump.
+		var clipState = raceStarted ? state.characterState : CharacterState.Stand;
+		player.display.setState(clipState.toClipName());
 		player.display.advanceOneFrame();
 	}
 

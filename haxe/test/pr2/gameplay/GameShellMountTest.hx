@@ -79,6 +79,7 @@ class GameShellMountTest {
 		testLocalFinishBeginsCharacterRemoval();
 		testObjectiveModeReportsEachFinishOnce();
 		testRotateBlockDisplayKeepsLocalCharacterCentered();
+		testCountdownKeepsCameraStill();
 
 		trace('GameShellMountTest passed $assertions assertions');
 	}
@@ -249,6 +250,38 @@ class GameShellMountTest {
 		assertEquals(0, course.localCharacter.rotation, "local character rotation resets after tween");
 		assertClose(275, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2, "camera snaps local x after rotation");
 		assertClose(245, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT, "camera snaps local y after rotation");
+		course.remove();
+	}
+
+	// Regression: during the 3-2-1 countdown the race has not started, so the
+	// local player is never stepped or synced from its controller. Each
+	// updatePlayerDisplay still runs and PlayerDisplayPlacement.place() overwrites
+	// localCharacter.x/y with the on-screen (feet) coordinate. The camera must
+	// therefore follow the controller's authoritative position, not the mutated
+	// localCharacter.x/y — otherwise it feeds the previous frame's screen coord
+	// back into its target and scrolls away from the player every frame, snapping
+	// back only at "Go" (the "player teleports far away during the countdown" bug).
+	private static function testCountdownKeepsCameraStill():Void {
+		var course = buildCourse("race");
+		while (!course.levelRenderer.isDrawingComplete()) {
+			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		// One display frame settles the camera on the player; capture it, then run
+		// more countdown frames (no step/sync) and assert the camera does not move.
+		course.updatePlayerDisplay();
+		// The non-solid start block leaves the player airborne at spawn, so without
+		// the wait-state handling the motion state would derive a "jumpAnim"; the
+		// countdown must show the idle stand pose instead (Flash mode="wait").
+		assertEquals(false, course.localCharacter.grounded, "start block leaves the player airborne at spawn");
+		assertEquals("standAnim", @:privateAccess course.localCharacter.display.activeStateName,
+			"local player shows the idle stand pose during the countdown, not a jump");
+		var camX = @:privateAccess course.camera.posX;
+		var camY = @:privateAccess course.camera.posY;
+		for (_ in 0...10) {
+			course.updatePlayerDisplay();
+		}
+		assertClose(camX, @:privateAccess course.camera.posX, "camera x holds steady through the countdown");
+		assertClose(camY, @:privateAccess course.camera.posY, "camera y holds steady through the countdown");
 		course.remove();
 	}
 
