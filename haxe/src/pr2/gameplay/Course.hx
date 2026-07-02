@@ -521,6 +521,17 @@ class Course extends Sprite {
 		return true;
 	}
 
+	// True once a loose hat has drifted 500px past the level edge it fell out of
+	// (the edge depends on the level's rotation). Both the local return and the
+	// remote emit paths trip on the same boundary.
+	private function hatPastReturnBoundary(hat:HatEffect):Bool {
+		var hatPos = RotationMath.rotatePoint(hat.posX, hat.posY, hat.rot);
+		return (hatPos.y > level.maxY + 500 && hat.rot == 0)
+			|| (hatPos.y < level.minY - 500 && Math.abs(hat.rot) == 180)
+			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
+			|| (hatPos.x < level.minX - 500 && hat.rot == -90);
+	}
+
 	public function maybeReturnHatToStart(hatId:Int):Void {
 		if (looseHats == null) {
 			return;
@@ -529,11 +540,7 @@ class Course extends Sprite {
 		if (hat == null) {
 			return;
 		}
-		var hatPos = RotationMath.rotatePoint(hat.posX, hat.posY, hat.rot);
-		if ((hatPos.y > level.maxY + 500 && hat.rot == 0)
-			|| (hatPos.y < level.minY - 500 && Math.abs(hat.rot) == 180)
-			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
-			|| (hatPos.x < level.minX - 500 && hat.rot == -90)) {
+		if (hatPastReturnBoundary(hat)) {
 			returnHatToStart(hat);
 		}
 	}
@@ -542,11 +549,7 @@ class Course extends Sprite {
 		if (hat.sentReturnToStart) {
 			return;
 		}
-		var hatPos = RotationMath.rotatePoint(hat.posX, hat.posY, hat.rot);
-		if ((hatPos.y > level.maxY + 500 && hat.rot == 0)
-			|| (hatPos.y < level.minY - 500 && Math.abs(hat.rot) == 180)
-			|| (hatPos.x > level.maxX + 500 && hat.rot == 90)
-			|| (hatPos.x < level.minX - 500 && hat.rot == -90)) {
+		if (hatPastReturnBoundary(hat)) {
 			hat.returningToStart();
 			localCharacter.emitHatToStart(hat.id);
 		}

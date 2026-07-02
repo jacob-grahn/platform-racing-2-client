@@ -25,6 +25,7 @@ import pr2.net.TextLoader;
 import pr2.runtime.FlButton;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
+import pr2.util.Dyn;
 
 /**
 	Port of Flash `dialogs.PlayerPopup`: the player profile popup raised by clicking
@@ -135,16 +136,16 @@ class PlayerPopup extends Popup {
 		if (art == null || playerInfo == null) {
 			return;
 		}
-		userId = intField(ret, "userId");
-		var group = intField(ret, "group");
+		userId = Dyn.int(ret, "userId");
+		var group = Dyn.int(ret, "group");
 
 		var groupText:String;
 		if (group == 1) {
-			groupText = boolField(ret, "ca") ? "Community Ambassador" : "Member";
+			groupText = Dyn.bool(ret, "ca") ? "Community Ambassador" : "Member";
 		} else if (group == 2) {
-			if (boolField(ret, "temp_mod")) {
+			if (Dyn.bool(ret, "temp_mod")) {
 				groupText = "Temporary Moderator";
-			} else if (boolField(ret, "trial_mod")) {
+			} else if (Dyn.bool(ret, "trial_mod")) {
 				groupText = "Trial Moderator";
 			} else {
 				groupText = "Moderator";
@@ -158,20 +159,20 @@ class PlayerPopup extends Popup {
 			return;
 		}
 
-		setText("statusBox", strField(ret, "status"));
+		setText("statusBox", Dyn.string(ret, "status", ""));
 		setText("groupBox", groupText);
 
 		setupIcons(ret);
 
-		rankValue = intField(ret, "rank");
-		expPoints = intField(ret, "exp_points");
-		expToRank = intField(ret, "exp_to_rank");
+		rankValue = Dyn.int(ret, "rank");
+		expPoints = Dyn.int(ret, "exp_points");
+		expToRank = Dyn.int(ret, "exp_to_rank");
 		setText("rankBox", Std.string(rankValue));
 		bindHover("rankBox", showRankSupplement, hideSupplement);
-		setText("hatBox", strField(ret, "hats"));
+		setText("hatBox", Dyn.string(ret, "hats", ""));
 
-		registerTime = floatField(ret, "registerDate");
-		activeTime = floatField(ret, "loginDate");
+		registerTime = Dyn.float(ret, "registerDate");
+		activeTime = Dyn.float(ret, "loginDate");
 		setText("registerBox", registerTime == 0 ? "Age of Heroes" : getShortDateStr(registerTime));
 		if (registerTime != 0) {
 			bindHover("registerBox", function():Void showDateSupplement(registerTime), hideSupplement);
@@ -224,8 +225,8 @@ class PlayerPopup extends Popup {
 	private function setupIcons(ret:Dynamic):Void {
 		var verified = DisplayUtil.findByName(playerInfo, "verifiedIcon");
 		var hof = DisplayUtil.findByName(playerInfo, "hofIcon");
-		var showVerified = boolField(ret, "verified");
-		var showHof = boolField(ret, "hof");
+		var showVerified = Dyn.bool(ret, "verified");
+		var showHof = Dyn.bool(ret, "hof");
 		if (verified != null) {
 			verified.visible = showVerified;
 			if (showVerified) {
@@ -248,7 +249,7 @@ class PlayerPopup extends Popup {
 	}
 
 	private function setupGuild(ret:Dynamic):Void {
-		var guildId = intField(ret, "guildId");
+		var guildId = Dyn.int(ret, "guildId");
 		var guildBox = LobbyArt.text(playerInfo, "guildBox");
 		if (guildBox == null) {
 			return;
@@ -259,17 +260,17 @@ class PlayerPopup extends Popup {
 		}
 		// The original swaps in a GuildName clip (emblem + linked name); that symbol
 		// is not ported yet, so we keep the authored guildBox as a clickable name.
-		guildBox.text = strField(ret, "guildName");
+		guildBox.text = Dyn.string(ret, "guildName", "");
 		bindClick(guildBox, function():Void LobbyPopups.showGuild(guildId));
 	}
 
 	private function setupCharacter(ret:Dynamic):Void {
-		var body = intField(ret, "body");
-		character = new AccountCharacter(intField(ret, "hat"), intField(ret, "head"), body, intField(ret, "feet"));
-		character.setHatColors(intField(ret, "hatColor"), intField(ret, "hatColor2"));
-		character.setHeadColors(intField(ret, "headColor"), intField(ret, "headColor2"));
-		character.setBodyColors(intField(ret, "bodyColor"), intField(ret, "bodyColor2"));
-		character.setFeetColors(intField(ret, "feetColor"), intField(ret, "feetColor2"));
+		var body = Dyn.int(ret, "body");
+		character = new AccountCharacter(Dyn.int(ret, "hat"), Dyn.int(ret, "head"), body, Dyn.int(ret, "feet"));
+		character.setHatColors(Dyn.int(ret, "hatColor"), Dyn.int(ret, "hatColor2"));
+		character.setHeadColors(Dyn.int(ret, "headColor"), Dyn.int(ret, "headColor2"));
+		character.setBodyColors(Dyn.int(ret, "bodyColor"), Dyn.int(ret, "bodyColor2"));
+		character.setFeetColors(Dyn.int(ret, "feetColor"), Dyn.int(ret, "feetColor2"));
 		character.scaleX = character.scaleY = 2;
 		character.x = -75;
 		character.y = 135;
@@ -290,7 +291,7 @@ class PlayerPopup extends Popup {
 		bindClick(DisplayUtil.findByName(playerInfo, "levelsButton"), clickViewLevels);
 
 		// Guild owners can invite guildless players or kick their own members.
-		var guildId = intField(ret, "guildId");
+		var guildId = Dyn.int(ret, "guildId");
 		setVisible("inviteButton", false);
 		setVisible("kickButton", false);
 		setVisible("kickBg", false);
@@ -308,7 +309,7 @@ class PlayerPopup extends Popup {
 
 		var followBtn = flButton("followButton");
 		if (followBtn != null) {
-			if (intField(ret, "following") == 1) {
+			if (Dyn.int(ret, "following") == 1) {
 				followBtn.label = "Unfollow";
 				bindClick(followBtn, function():Void doSocial(Unfollow));
 			} else {
@@ -318,7 +319,7 @@ class PlayerPopup extends Popup {
 		}
 		var friendBtn = flButton("friendButton");
 		if (friendBtn != null) {
-			if (intField(ret, "friend") == 1) {
+			if (Dyn.int(ret, "friend") == 1) {
 				friendBtn.label = "Remove Friend";
 				bindClick(friendBtn, function():Void doSocial(RemoveFriend));
 			} else {
@@ -328,7 +329,7 @@ class PlayerPopup extends Popup {
 		}
 		var ignoreBtn = flButton("ignoreButton");
 		if (ignoreBtn != null) {
-			if (intField(ret, "ignored") == 1) {
+			if (Dyn.int(ret, "ignored") == 1) {
 				ignoreBtn.label = "Unignore";
 				bindClick(ignoreBtn, function():Void doSocial(Unignore));
 			} else {
@@ -502,47 +503,6 @@ class PlayerPopup extends Popup {
 		var mins = StringTools.lpad(Std.string(d.getMinutes()), "0", 2);
 		var secs = StringTools.lpad(Std.string(d.getSeconds()), "0", 2);
 		return MONTHS_LONG[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear() + " " + hour12 + ":" + mins + ":" + secs + " " + ampm;
-	}
-
-	private static function intField(ret:Dynamic, name:String):Int {
-		var value:Dynamic = Reflect.field(ret, name);
-		if (value == null) {
-			return 0;
-		}
-		if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) {
-			return Std.int(value);
-		}
-		var parsed = Std.parseInt(Std.string(value));
-		return parsed == null ? 0 : parsed;
-	}
-
-	private static function floatField(ret:Dynamic, name:String):Float {
-		var value:Dynamic = Reflect.field(ret, name);
-		if (value == null) {
-			return 0;
-		}
-		if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) {
-			return value;
-		}
-		var parsed = Std.parseFloat(Std.string(value));
-		return Math.isNaN(parsed) ? 0 : parsed;
-	}
-
-	private static function strField(ret:Dynamic, name:String):String {
-		var value:Dynamic = Reflect.field(ret, name);
-		return value == null ? "" : Std.string(value);
-	}
-
-	private static function boolField(ret:Dynamic, name:String):Bool {
-		var value:Dynamic = Reflect.field(ret, name);
-		if (value == null) {
-			return false;
-		}
-		if (Std.isOfType(value, Bool)) {
-			return value;
-		}
-		var text = Std.string(value).toLowerCase();
-		return text == "true" || text == "1";
 	}
 
 	override public function remove():Void {

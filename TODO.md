@@ -64,3 +64,34 @@ Then the level-management flows, one at a time:
 
 Acceptance: a user can load, edit, test, save, and reopen a real level with the
 same serialized meaning and visible result as Flash.
+
+## Refactoring / Tech Debt
+
+- [ ] (Low priority / maybe won't-do) Reconsider whether `ServerLevelRenderer`'s
+  asset-path lookups (`blockAssetPath`/`artBackgroundAssetPath`/`stampAssetPath`/
+  `fallbackFill`) should become `static final Map` tables. Assessed and deferred:
+  the conversion is lateral — the switches are already table-shaped and readable,
+  `blockAssetPath` uses OR-patterns + symbolic `ObjectCodes` constants + comments
+  that a flat Map would lose, and `fallbackFill` is a 2-branch default. No
+  correctness/perf/clarity win, and retyping ~40 entries carries typo risk that
+  the tests don't fully cover. Only worth doing if these tables ever need to be
+  generated or shared with another consumer.
+- [ ] Extract race sound handling out of `Course` into a `RaceSounds` helper (the
+  ~13 `*_SOUND` path constants plus `playWorldJumpSound`/`playCharacterSound`/
+  block-bump/item/stat-block cues). Deferred: these cues read `Course` state
+  directly (`levelRenderer.cameraOffset()`, the `onPlayJumpSound`/
+  `onPlayCharacterSound` test-injection callbacks, `worldXOf`/`worldYOf(event)`,
+  `Settings.soundLevel`), so a clean extraction needs a deliberate seam for the
+  camera offset + callbacks rather than a mechanical move.
+- [ ] Collapse `Character`'s four-slot hat handling (`hat1`..`hat4` /
+  `hat1Color`..`hat4Color` / `hat1Color2`..`hat4Color2`) into an array so the
+  repeated switch-on-slot logic in `setHats`/`getHighestHat`/`setHatColors`
+  disappears. Deferred: these are `public var` fields that mirror the Flash
+  `Character` shape and are asserted directly by `CharacterBaseTest`,
+  `LocalCharacterTest`, `RemoteCharacterConsumeTest`, and
+  `CharacterLifecycleTest`. A clean conversion has to change the public API and
+  rewrite those assertions at the same time, so it needs deliberate design (e.g.
+  array-backed `hatN` property accessors to keep the public surface, or a
+  coordinated update of the tests) rather than a mechanical edit. The same
+  discrete-slot pattern also drives `CharacterDisplay.renderAtlasParts`; solve
+  both together.

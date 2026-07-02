@@ -439,37 +439,31 @@ class CharacterDisplay extends Sprite {
 		return collection;
 	}
 
-	private function removeAtlasLayers(parent:PR2MovieClip):Void {
+	// Walk children back-to-front removing every atlas layer for which `keep`
+	// returns false. Non-atlas children are never touched. All the atlas-layer
+	// removers below are thin predicates over this one traversal.
+	private function removeAtlasLayersWhere(parent:PR2MovieClip, keep:Null<String>->Bool):Void {
 		var index = parent.numChildren - 1;
 		while (index >= 0) {
 			var child = parent.getChildAt(index);
-			if (isAtlasLayer(child.name)) {
+			if (isAtlasLayer(child.name) && !keep(child.name)) {
 				parent.removeChildAt(index);
 			}
 			index--;
 		}
+	}
+
+	private function removeAtlasLayers(parent:PR2MovieClip):Void {
+		removeAtlasLayersWhere(parent, _ -> false);
 	}
 
 	private function removeAtlasLayer(parent:PR2MovieClip, kind:String, channel:String):Void {
 		var layerName = atlasLayerName(kind, channel);
-		var index = parent.numChildren - 1;
-		while (index >= 0) {
-			if (parent.getChildAt(index).name == layerName) {
-				parent.removeChildAt(index);
-			}
-			index--;
-		}
+		removeAtlasLayersWhere(parent, name -> name != layerName);
 	}
 
 	private function removeUnusedAtlasLayers(parent:PR2MovieClip, kind:String, allowedChannels:Array<String>):Void {
-		var index = parent.numChildren - 1;
-		while (index >= 0) {
-			var child = parent.getChildAt(index);
-			if (isAtlasLayer(child.name) && !isAllowedAtlasLayer(child.name, kind, allowedChannels)) {
-				parent.removeChildAt(index);
-			}
-			index--;
-		}
+		removeAtlasLayersWhere(parent, name -> isAllowedAtlasLayer(name, kind, allowedChannels));
 	}
 
 	private function isAllowedAtlasLayer(name:Null<String>, kind:String, allowedChannels:Array<String>):Bool {

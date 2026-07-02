@@ -29,6 +29,7 @@ import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
 import pr2.audio.AudioManager;
+import pr2.util.RequestGeneration;
 
 /**
 	Login menu ported from the Flash `menu.LoginPage`.
@@ -61,14 +62,14 @@ class LoginPage extends Page {
 	private var socketProbe:Null<LoginSocketProbe>;
 	private var pendingCreatedUserName:String = "";
 	private var pendingCreatedUserPass:String = "";
-	private var accountRequestGeneration:Int = 0;
+	private var accountGeneration:RequestGeneration = new RequestGeneration();
 	private var loginGate:Null<LoginSessionGate>;
 	private var loginServer:Null<ServerInfo>;
 	private var loginRemember:Bool = false;
 	private var loginToken:String = "";
 	private var serverRefreshTimer:Null<Timer>;
 	private var reloadCooldownTimer:Null<Timer>;
-	private var serverRequestGeneration:Int = 0;
+	private var serverGeneration:RequestGeneration = new RequestGeneration();
 
 	public function new() {
 		super();
@@ -101,7 +102,7 @@ class LoginPage extends Page {
 	}
 
 	override public function remove():Void {
-		accountRequestGeneration++;
+		accountGeneration.cancel();
 		closePopup();
 		closeSocketProbe();
 		stopServerTimers();
@@ -253,7 +254,7 @@ class LoginPage extends Page {
 		confirmInput.text = initialConfirmation;
 		emailInput.text = initialEmail;
 		popup.bindButton("cancel_bt", function():Void {
-			accountRequestGeneration++;
+			accountGeneration.cancel();
 			closePopup();
 		});
 		popup.bindButton("createAccount_bt", function():Void {
@@ -267,17 +268,15 @@ class LoginPage extends Page {
 				return;
 			}
 
-			var generation = ++accountRequestGeneration;
+			var generation = accountGeneration.begin();
 			var progress = openPopup("UploadingPopupGraphic");
 			progress.setText("textBox", "Creating account...");
 			progress.bindButton("close_bt", function():Void {
-				if (generation != accountRequestGeneration) return;
-				accountRequestGeneration++;
+				if (!accountGeneration.claim(generation)) return;
 				retry();
 			});
 			AccountCreationClient.create(userName, userPass, email, function(result):Void {
-				if (generation != accountRequestGeneration) return;
-				accountRequestGeneration++;
+				if (!accountGeneration.claim(generation)) return;
 				if (result.success) {
 					pendingCreatedUserName = userName;
 					pendingCreatedUserPass = userPass;
@@ -289,8 +288,7 @@ class LoginPage extends Page {
 					openLoginMessage(message, retry);
 				}
 			}, function(message:String):Void {
-				if (generation != accountRequestGeneration) return;
-				accountRequestGeneration++;
+				if (!accountGeneration.claim(generation)) return;
 				openLoginMessage("Error: " + message, retry);
 			});
 		});
@@ -443,17 +441,17 @@ class LoginPage extends Page {
 
 	private function loadServers():Void {
 		var previousServer = selectedServer();
-		var generation = ++serverRequestGeneration;
+		var generation = serverGeneration.begin();
 		setActiveServerCombosLoading();
 		ServerStatusClient.fetch(function(result):Void {
-			if (generation != serverRequestGeneration) return;
+			if (serverGeneration.isStale(generation)) return;
 			servers = ServerStatusClient.selectList(result.servers);
 			selectedServerIndex = previousServer == null
 				? ServerStatusClient.preferredIndex(servers)
 				: findServerIndex(previousServer);
 			updateActiveServerCombos();
 		}, function(message:String):Void {
-			if (generation != serverRequestGeneration) return;
+			if (serverGeneration.isStale(generation)) return;
 			servers = [];
 			selectedServerIndex = -1;
 			updateActiveServerCombos();
@@ -492,7 +490,7 @@ class LoginPage extends Page {
 			reloadCooldownTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onReloadCooldownComplete);
 			reloadCooldownTimer = null;
 		}
-		serverRequestGeneration++;
+		serverGeneration.cancel();
 	}
 
 	private function selectedServer():Null<ServerInfo> {

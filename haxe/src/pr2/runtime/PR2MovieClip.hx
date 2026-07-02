@@ -23,6 +23,7 @@ import pr2.generated.assets.AssetTypes.FrameDef;
 import pr2.generated.assets.AssetTypes.LayerDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 import pr2.generated.assets.AssetTypes.TimelineDef;
+import pr2.util.Dyn;
 
 typedef RuntimeFrame = {
 	var elements:Array<DisplayElementDef>;
@@ -794,34 +795,34 @@ class PR2MovieClip extends Sprite {
 		// Map the original (often proprietary) face name onto an embedded font.
 		// The resolved family already encodes weight/style, so bold/italic flags
 		// stay off to avoid browser faux-synthesis over the real outlines.
-		var face = FontResolver.resolve(dynamicString(attrs, "face", "_sans"));
+		var face = FontResolver.resolve(Dyn.string(attrs, "face", "_sans"));
 		// Animate sometimes omits `size`, but `bitmapSize` still carries the font
 		// size in twentieths of a pixel (240 = 12px). `lineHeight` is larger than
 		// the font and must not be used directly or text is oversized and clipped.
-		var bitmapSize = dynamicFloatOrNull(attrs, "bitmapSize");
-		var inferredSize = bitmapSize == null ? dynamicFloat(attrs, "lineHeight", 14.4) / 1.2 : bitmapSize / 20;
-		var size = Std.int(dynamicFloat(attrs, "size", inferredSize));
-		var align = textAlign(dynamicString(attrs, "alignment", "left"));
+		var bitmapSize = Dyn.floatOrNull(attrs, "bitmapSize");
+		var inferredSize = bitmapSize == null ? Dyn.float(attrs, "lineHeight", 14.4) / 1.2 : bitmapSize / 20;
+		var size = Std.int(Dyn.float(attrs, "size", inferredSize));
+		var align = textAlign(Dyn.string(attrs, "alignment", "left"));
 		// Authored fill color (e.g. the credits' "#254489"); default to black to
 		// match Animate's behavior when no fillColor attribute is present.
-		var color = parseTextColor(dynamicString(attrs, "fillColor", null), 0x000000);
+		var color = parseTextColor(Dyn.string(attrs, "fillColor", null), 0x000000);
 		var format = new TextFormat(face, size, color, false, false, false, null, null, align);
 		// XFL carries the inter-character spacing and inter-line leading as
 		// authored; both are dropped if left unset, so apply them here. `rotation`
 		// in textAttrs is anti-aliasing metadata, not a transform, so it is ignored.
-		var letterSpacing = dynamicFloatOrNull(attrs, "letterSpacing");
+		var letterSpacing = Dyn.floatOrNull(attrs, "letterSpacing");
 		if (letterSpacing != null) {
 			format.letterSpacing = letterSpacing;
 		}
-		var lineSpacing = dynamicFloatOrNull(attrs, "lineSpacing");
+		var lineSpacing = Dyn.floatOrNull(attrs, "lineSpacing");
 		if (lineSpacing != null) {
 			format.leading = Math.round(lineSpacing);
 		}
-		var leftMargin = dynamicFloatOrNull(attrs, "leftMargin");
+		var leftMargin = Dyn.floatOrNull(attrs, "leftMargin");
 		if (leftMargin != null) {
 			format.leftMargin = Math.round(leftMargin);
 		}
-		var rightMargin = dynamicFloatOrNull(attrs, "rightMargin");
+		var rightMargin = Dyn.floatOrNull(attrs, "rightMargin");
 		if (rightMargin != null) {
 			format.rightMargin = Math.round(rightMargin);
 		}
@@ -843,37 +844,6 @@ class PR2MovieClip extends Sprite {
 		return field;
 	}
 
-	private function dynamicString(data:Dynamic, name:String, fallback:String):String {
-		if (data == null) {
-			return fallback;
-		}
-		var value:Dynamic = Reflect.field(data, name);
-		return value == null ? fallback : Std.string(value);
-	}
-
-	private function dynamicFloat(data:Dynamic, name:String, fallback:Float):Float {
-		if (data == null) {
-			return fallback;
-		}
-		var value:Dynamic = Reflect.field(data, name);
-		if (value == null) {
-			return fallback;
-		}
-		var parsed = Std.parseFloat(Std.string(value));
-		return Math.isNaN(parsed) ? fallback : parsed;
-	}
-
-	private function dynamicFloatOrNull(data:Dynamic, name:String):Null<Float> {
-		if (data == null) {
-			return null;
-		}
-		var value:Dynamic = Reflect.field(data, name);
-		if (value == null) {
-			return null;
-		}
-		var parsed = Std.parseFloat(Std.string(value));
-		return Math.isNaN(parsed) ? null : parsed;
-	}
 
 	private function parseTextColor(value:String, fallback:Int):Int {
 		if (value == null) {

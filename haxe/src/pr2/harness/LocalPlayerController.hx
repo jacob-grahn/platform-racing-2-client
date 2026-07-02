@@ -6,6 +6,7 @@ import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.BlockType;
 import pr2.gameplay.RotationMath;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
+import pr2.util.FlashRandom;
 
 class LocalPlayerController {
 	public static inline var STANDING_WIDTH:Float = 20;
@@ -96,20 +97,20 @@ class LocalPlayerController {
 	private var jumpVelBoost:Float = 0;
 	private var crouchCharge:Float = 0;
 	private var waterTicks:Float = 0;
-	private final crumbleLife:Map<String, Int> = new Map();
-	private final removedBlocks:Map<String, Bool> = new Map();
+	// Per-tile runtime block state (keyed by "x,y"), consolidating what used to be
+	// eight parallel maps: crumble life, the removed flag, the three vanish phases
+	// (fade-out / reappear-wait / fade-in), and the item/supply/visual-supply
+	// depletion flags. Entries are created lazily on first write; a tile with an
+	// absent entry reads identically to one whose fields are all at their defaults.
+	// Teleport cooldowns are keyed by color (not tile) and move-block directions
+	// are rebuilt wholesale each cycle, so those two stay as their own maps.
+	private final blockStates:Map<String, BlockState> = new Map();
 	private final blockVisualEvents:Array<BlockVisualEvent> = [];
-	private final vanishFadeFrames:Map<String, Int> = new Map();
-	private final vanishReappearFrames:Map<String, Int> = new Map();
-	private final vanishFadeInFrames:Map<String, Int> = new Map();
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
-	private final depletedItemBlocks:Map<String, Bool> = new Map();
-	private final depletedSupplyBlocks:Map<String, Bool> = new Map();
-	private final depletedVisualSupplyBlocks:Map<String, Bool> = new Map();
 	private final moveBlockDirections:Map<String, Int> = new Map();
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
-	private final moveRandom:ControllerFlashRandom = new ControllerFlashRandom(1);
+	private final moveRandom:FlashRandom = new FlashRandom(1);
 	public var lastSafeX(default, null):Float;
 	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
@@ -408,20 +409,24 @@ class LocalPlayerController {
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
-		var key = blockKey(tileX, tileY);
-		if (vanishFadeFrames.exists(key)) {
-			return vanishFadeFrames.get(key) / VANISH_FADE_FRAMES;
+		var state = blockStates.get(blockKey(tileX, tileY));
+		if (state == null) {
+			return 1;
 		}
-		if (vanishFadeInFrames.exists(key)) {
-			return 1 - vanishFadeInFrames.get(key) / VANISH_FADE_FRAMES;
+		if (state.vanishFadeFrames != null) {
+			return state.vanishFadeFrames / VANISH_FADE_FRAMES;
 		}
-		return removedBlocks.exists(key) ? 0 : 1;
+		if (state.vanishFadeInFrames != null) {
+			return 1 - state.vanishFadeInFrames / VANISH_FADE_FRAMES;
+		}
+		return state.removed ? 0 : 1;
 	}
 
 	public function blockColorMultiplierAt(tileX:Int, tileY:Int):Float {
-		var key = blockKey(tileX, tileY);
+		var state = blockStates.get(blockKey(tileX, tileY));
 		var block = level.blockAt(tileX, tileY);
-		return block != null && ((block.type == BlockType.Item && depletedItemBlocks.exists(key)) || depletedVisualSupplyBlocks.exists(key)) ? 0.5 : 1;
+		return block != null && state != null
+			&& ((block.type == BlockType.Item && state.depletedItem) || state.depletedVisualSupply) ? 0.5 : 1;
 	}
 
 	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
@@ -436,13 +441,17 @@ class LocalPlayerController {
 		renderer restyle only these instead of every block in the level each frame.
 	**/
 	public function activeVisualBlockKeys():Array<String> {
-		var seen:Map<String, Bool> = new Map();
-		for (key in vanishFadeFrames.keys()) seen.set(key, true);
-		for (key in vanishFadeInFrames.keys()) seen.set(key, true);
-		for (key in removedBlocks.keys()) seen.set(key, true);
-		for (key in depletedItemBlocks.keys()) seen.set(key, true);
-		for (key in depletedVisualSupplyBlocks.keys()) seen.set(key, true);
-		return [for (key in seen.keys()) key];
+		var keys:Array<String> = [];
+		for (key => state in blockStates) {
+			if (state.vanishFadeFrames != null
+				|| state.vanishFadeInFrames != null
+				|| state.removed
+				|| state.depletedItem
+				|| state.depletedVisualSupply) {
+				keys.push(key);
+			}
+		}
+		return keys;
 	}
 
 	private static function depletesAsSupplyVisual(type:BlockType):Bool {
@@ -463,6 +472,16 @@ class LocalPlayerController {
 			directions.set(key, moveBlockDirections.get(key));
 		}
 		return directions;
+	}
+
+	/** The runtime state for a tile, creating (and storing) a fresh one on first write. */
+	private function blockState(key:String):BlockState {
+		var state = blockStates.get(key);
+		if (state == null) {
+			state = new BlockState();
+			blockStates.set(key, state);
+		}
+		return state;
 	}
 
 	private function position(input:LocalPlayerInput):Void {
@@ -703,7 +722,7 @@ class LocalPlayerController {
 	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int):Void {
 		switch (block.type) {
 			case BlockType.Brick:
-				removedBlocks.set(blockKey(block.x, block.y), true);
+				blockState(blockKey(block.x, block.y)).removed = true;
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
 			case BlockType.Finish:
 				finish(block);
@@ -946,7 +965,7 @@ class LocalPlayerController {
 			vx += Math.cos(angle) * MINE_HIT_SPEED;
 			vy += Math.sin(angle) * MINE_HIT_SPEED;
 		}
-		removedBlocks.set(blockKey(block.x, block.y), true);
+		blockState(blockKey(block.x, block.y)).removed = true;
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
 		if (!crownProtected && mode != MODE_FREEZE) {
@@ -970,11 +989,11 @@ class LocalPlayerController {
 
 	private function useItemBlock(block:LevelBlock):Void {
 		if (block.type == BlockType.Item) {
-			var key = blockKey(block.x, block.y);
-			if (depletedItemBlocks.exists(key)) {
+			var state = blockState(blockKey(block.x, block.y));
+			if (state.depletedItem) {
 				return;
 			}
-			depletedItemBlocks.set(key, true);
+			state.depletedItem = true;
 		}
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.ItemBlockSound, block.x, block.y));
 
@@ -1194,11 +1213,11 @@ class LocalPlayerController {
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
-		var key = blockKey(block.x, block.y);
-		if (depletedItemBlocks.exists(key)) {
+		var state = blockState(blockKey(block.x, block.y));
+		if (state.depletedItem) {
 			return;
 		}
-		depletedItemBlocks.set(key, true);
+		state.depletedItem = true;
 
 		if (block.options == "reset") {
 			applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
@@ -1221,13 +1240,13 @@ class LocalPlayerController {
 	}
 
 	private function useSupply(block:LevelBlock):Bool {
-		var key = blockKey(block.x, block.y);
-		if (depletedSupplyBlocks.exists(key)) {
+		var state = blockState(blockKey(block.x, block.y));
+		if (state.depletedSupply) {
 			return false;
 		}
-		depletedSupplyBlocks.set(key, true);
+		state.depletedSupply = true;
 		if (depletesAsSupplyVisual(block.type)) {
-			depletedVisualSupplyBlocks.set(key, true);
+			state.depletedVisualSupply = true;
 		}
 		return true;
 	}
@@ -1326,21 +1345,21 @@ class LocalPlayerController {
 			return;
 		}
 
-		var key = blockKey(block.x, block.y);
-		var life = crumbleLife.exists(key) ? crumbleLife.get(key) : CRUMBLE_INITIAL_LIFE;
+		var state = blockState(blockKey(block.x, block.y));
+		var life = state.crumbleLife != null ? state.crumbleLife : CRUMBLE_INITIAL_LIFE;
 		life -= damage;
-		crumbleLife.set(key, life);
+		state.crumbleLife = life;
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, Std.int(Math.min(damage * 2, 20))));
 		if (life <= 0) {
 			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, 10));
-			removedBlocks.set(key, true);
+			state.removed = true;
 		}
 	}
 
 	private function activateVanish(block:LevelBlock):Void {
-		var key = blockKey(block.x, block.y);
-		if (!vanishReappearFrames.exists(key) && !vanishFadeFrames.exists(key) && !vanishFadeInFrames.exists(key)) {
-			vanishFadeFrames.set(key, VANISH_FADE_FRAMES);
+		var state = blockState(blockKey(block.x, block.y));
+		if (state.vanishReappearFrames == null && state.vanishFadeFrames == null && state.vanishFadeInFrames == null) {
+			state.vanishFadeFrames = VANISH_FADE_FRAMES;
 		}
 	}
 
@@ -1436,39 +1455,47 @@ class LocalPlayerController {
 	}
 
 	private function updateVanishBlocks():Void {
-		var fading:Array<String> = [for (key in vanishFadeFrames.keys()) key];
-		for (key in fading) {
-			var frames = vanishFadeFrames.get(key) - 1;
-			if (frames <= 0) {
-				vanishFadeFrames.remove(key);
-				removedBlocks.set(key, true);
-				vanishReappearFrames.set(key, VANISH_REAPPEAR_FRAMES);
-			} else {
-				vanishFadeFrames.set(key, frames);
+		// Three separate passes over every tracked tile, matching the original's
+		// three map snapshots. The order matters: a fade that completes in the
+		// first pass starts its reappear timer, which the third pass then ticks
+		// down within the same frame; the fade-in the third pass starts is only
+		// ticked on the following frame (the fade-in pass has already run).
+		for (state in blockStates) {
+			if (state.vanishFadeFrames != null) {
+				var frames = state.vanishFadeFrames - 1;
+				if (frames <= 0) {
+					state.vanishFadeFrames = null;
+					state.removed = true;
+					state.vanishReappearFrames = VANISH_REAPPEAR_FRAMES;
+				} else {
+					state.vanishFadeFrames = frames;
+				}
 			}
 		}
 
-		var fadingIn:Array<String> = [for (key in vanishFadeInFrames.keys()) key];
-		for (key in fadingIn) {
-			var frames = vanishFadeInFrames.get(key) - 1;
-			if (frames <= 0) {
-				vanishFadeInFrames.remove(key);
-			} else {
-				vanishFadeInFrames.set(key, frames);
+		for (state in blockStates) {
+			if (state.vanishFadeInFrames != null) {
+				var frames = state.vanishFadeInFrames - 1;
+				if (frames <= 0) {
+					state.vanishFadeInFrames = null;
+				} else {
+					state.vanishFadeInFrames = frames;
+				}
 			}
 		}
 
-		var reappearing:Array<String> = [for (key in vanishReappearFrames.keys()) key];
-		for (key in reappearing) {
-			var frames = vanishReappearFrames.get(key) - 1;
-			if (frames > 0) {
-				vanishReappearFrames.set(key, frames);
-			} else if (!playerOccupiesBlock(key)) {
-				vanishReappearFrames.remove(key);
-				removedBlocks.remove(key);
-				vanishFadeInFrames.set(key, VANISH_FADE_FRAMES - 2);
-			} else {
-				vanishReappearFrames.set(key, VANISH_REAPPEAR_FRAMES);
+		for (key => state in blockStates) {
+			if (state.vanishReappearFrames != null) {
+				var frames = state.vanishReappearFrames - 1;
+				if (frames > 0) {
+					state.vanishReappearFrames = frames;
+				} else if (!playerOccupiesBlock(key)) {
+					state.vanishReappearFrames = null;
+					state.removed = false;
+					state.vanishFadeInFrames = VANISH_FADE_FRAMES - 2;
+				} else {
+					state.vanishReappearFrames = VANISH_REAPPEAR_FRAMES;
+				}
 			}
 		}
 	}
@@ -1537,7 +1564,8 @@ class LocalPlayerController {
 	}
 
 	private function isBlockRemoved(block:LevelBlock):Bool {
-		return removedBlocks.exists(blockKey(block.x, block.y));
+		var state = blockStates.get(blockKey(block.x, block.y));
+		return state != null && state.removed;
 	}
 
 	private function blockKey(tileX:Int, tileY:Int):String {
@@ -1597,66 +1625,6 @@ private class TilePoint {
 	}
 }
 
-private class ControllerFlashRandom {
-	private static inline var MBIG:Int = 0x7fffffff;
-	private static inline var MSEED:Int = 0x9a4ec86;
-	private var inext:Int = 0;
-	private var inextp:Int = 0x15;
-	private var seedArray:Array<Int> = [];
-
-	public function new(seed:Int) {
-		for (_ in 0...0x38) {
-			seedArray.push(0);
-		}
-		var num2 = MSEED - Std.int(Math.abs(seed));
-		seedArray[0x37] = num2;
-		var num3 = 1;
-		for (i in 1...0x37) {
-			var index = (0x15 * i) % 0x37;
-			seedArray[index] = num3;
-			num3 = num2 - num3;
-			if (num3 < 0) {
-				num3 += MBIG;
-			}
-			num2 = seedArray[index];
-		}
-		for (_ in 1...5) {
-			for (k in 1...0x38) {
-				seedArray[k] -= seedArray[1 + ((k + 30) % 0x37)];
-				if (seedArray[k] < 0) {
-					seedArray[k] += MBIG;
-				}
-			}
-		}
-	}
-
-	public function nextMinMax(minValue:Int, maxValue:Int):Int {
-		if (minValue > maxValue) {
-			throw 'Argument "minValue" must be less than or equal to "maxValue".';
-		}
-		return Std.int(sample() * (maxValue - minValue)) + minValue;
-	}
-
-	private function sample():Float {
-		return internalSample() * 4.6566128752457969E-10;
-	}
-
-	private function internalSample():Int {
-		if (++inext >= 0x38) {
-			inext = 1;
-		}
-		if (++inextp >= 0x38) {
-			inextp = 1;
-		}
-		var num = seedArray[inext] - seedArray[inextp];
-		if (num < 0) {
-			num += MBIG;
-		}
-		seedArray[inext] = num;
-		return num;
-	}
-}
-
 private typedef BlockRefs = {
 	final floorLeft:Null<LevelBlock>;
 	final floorCenter:Null<LevelBlock>;
@@ -1681,4 +1649,22 @@ private class PlayerStats {
 		this.acceleration = acceleration;
 		this.jump = jump;
 	}
+}
+
+/**
+	Mutable runtime state for a single tile, keyed by "x,y" in `blockStates`. A
+	null Int / false Bool means "no such state", so a tile with a fresh (all
+	default) instance behaves identically to one with no entry at all.
+**/
+private class BlockState {
+	public var crumbleLife:Null<Int> = null;
+	public var removed:Bool = false;
+	public var vanishFadeFrames:Null<Int> = null;
+	public var vanishReappearFrames:Null<Int> = null;
+	public var vanishFadeInFrames:Null<Int> = null;
+	public var depletedItem:Bool = false;
+	public var depletedSupply:Bool = false;
+	public var depletedVisualSupply:Bool = false;
+
+	public function new() {}
 }
