@@ -165,6 +165,10 @@ class ServerLevelRenderer extends Sprite {
 		return tweenRotation == 0 ? point : worldContainer.transform.matrix.transformPoint(point);
 	}
 
+	public function worldToCharacterLayer(x:Float, y:Float):Point {
+		return new Point(x + offsetX, y + offsetY);
+	}
+
 	public function screenToWorld(x:Float, y:Float):Point {
 		var point = new Point(x, y);
 		if (tweenRotation != 0) {
@@ -306,10 +310,10 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function attachFrontCharacterLayer(layer:Sprite):Void {
-		if (layer.parent == this) {
+		if (layer.parent == worldContainer) {
 			return;
 		}
-		addChild(layer);
+		worldContainer.addChild(layer);
 	}
 
 	public function animateArrow(worldX:Int, worldY:Int):Void {

@@ -23,7 +23,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - [x] held items are not visible on the player
 - [x] erase lines seem to not work in the level art layers
 - [ ] push blocks don't work right when the map is rotated
-- [ ] character dissapears during the rotation animation after hitting a rotate block, and re appears when the rotation animation is done
+- [x] character dissapears during the rotation animation after hitting a rotate block, and re appears when the rotation animation is done
 - [ ] blocks can be seen spawning in on the left edge of the screen when running to the left
 
 ## Level Editor and Level Management

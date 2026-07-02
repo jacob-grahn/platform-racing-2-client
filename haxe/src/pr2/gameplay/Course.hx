@@ -1106,7 +1106,7 @@ class Course extends Sprite {
 			playerDot.x = worldX;
 			playerDot.y = worldY;
 		}
-		var screen = levelRenderer.worldToScreen(worldX, worldY);
+		var screen = levelRenderer.worldToCharacterLayer(worldX, worldY);
 		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
 		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX);
 		player.rotation = localCharacter.characterRotation;

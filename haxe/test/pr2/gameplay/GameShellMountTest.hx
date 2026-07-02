@@ -55,8 +55,8 @@ class GameShellMountTest {
 			"back character layer sits inside the rotating world (above the background art)");
 		assertBelow(course.levelRenderer.worldChildDepth(course.backCharacterLayer), course.levelRenderer.blockLayerDepth(),
 			"back character layer renders below the blocks");
-		assertEquals(course.levelRenderer.numChildren - 1, course.levelRenderer.getChildIndex(course.characterLayer),
-			"front character layer renders above the world (and the back layer)");
+		assertEquals(true, course.levelRenderer.worldChildDepth(course.characterLayer) > course.levelRenderer.blockLayerDepth(),
+			"front character layer sits inside the rotating world above the blocks");
 		testRemoteParentLayerSwitch(course);
 		testLocalWaterParentLayerSwitch(course);
 
@@ -239,6 +239,11 @@ class GameShellMountTest {
 		course.localCharacter.step(new LocalPlayerInput());
 		course.updatePlayerDisplay();
 		assertEquals(-3, course.localCharacter.rotation, "local character counter-rotates during course tween");
+		assertEquals(course.characterLayer, course.localCharacter.parent, "local character stays in the rotating front layer during tween");
+		assertBetween(0, 550, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2,
+			"local character x stays on-stage while the world tween is active");
+		assertBetween(0, 400, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT,
+			"local character y stays on-stage while the world tween is active");
 
 		for (_ in 0...29) {
 			course.localCharacter.step(new LocalPlayerInput());
@@ -325,6 +330,13 @@ class GameShellMountTest {
 		assertions++;
 		if (!(actual < expectedUpperBound)) {
 			throw '$message: expected $actual to be below $expectedUpperBound';
+		}
+	}
+
+	private static function assertBetween(min:Float, max:Float, actual:Float, message:String):Void {
+		assertions++;
+		if (actual < min || actual > max) {
+			throw '$message: expected $actual to be between $min and $max';
 		}
 	}
 }
