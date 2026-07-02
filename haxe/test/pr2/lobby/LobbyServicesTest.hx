@@ -211,6 +211,13 @@ class LobbyServicesTest {
 		assertEquals(104, Std.int(label.y), "text placement applies Flash cursor y offset");
 		assertEquals("hello, world; #1", label.text, "text editing commits the typed content");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0", editor.activeObjectLayer.getSaveString(), "text placement records Flash add/change actions");
+		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals(true, label.isEditing(), "clicking existing text reopens editing");
+		label.setEditingText("edited text");
+		label.finishEditing();
+		assertEquals("edited text", label.text, "re-editing commits the updated text");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;0", editor.activeObjectLayer.getSaveString(),
+			"text re-edit records a Flash change action");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);
 		assertEquals(0, tree.code, "stamp placement stores the selected stamp code");

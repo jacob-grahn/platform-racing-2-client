@@ -613,6 +613,7 @@ class EditorTextObject extends Sprite {
 		displayField.selectable = false;
 		addChild(displayField);
 		setText(parseText(text));
+		addEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
 	}
 
 	public function startEditing():Void {
@@ -655,6 +656,10 @@ class EditorTextObject extends Sprite {
 		}
 	}
 
+	public function isEditing():Bool {
+		return editField != null;
+	}
+
 	public function setEditingText(nextText:String):Void {
 		if (editField == null) {
 			setText(nextText);
@@ -684,6 +689,7 @@ class EditorTextObject extends Sprite {
 	}
 
 	public function remove():Void {
+		removeEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
 		if (editField != null) {
 			editField.removeEventListener(Event.CHANGE, editTextChanged);
 			removeChild(editField);
@@ -692,6 +698,11 @@ class EditorTextObject extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	private function selectForEditing(event:MouseEvent):Void {
+		startEditing();
+		event.stopImmediatePropagation();
 	}
 
 	private function editTextChanged(_:Event):Void {
