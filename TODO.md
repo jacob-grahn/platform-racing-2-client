@@ -55,7 +55,7 @@ Port the editor itself, one piece at a time:
     - [ ] Port text color changes, empty-text deletion, and resize/move
       integration.
       - [x] Port empty-text deletion after editing.
-      - [ ] Port text color changes.
+      - [x] Port text color changes.
       - [ ] Port resize/move integration.
 - [ ] Port block options.
 - [ ] Port selection/deletion.

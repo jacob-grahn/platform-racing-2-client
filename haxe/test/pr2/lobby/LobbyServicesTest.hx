@@ -214,16 +214,18 @@ class LobbyServicesTest {
 		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		assertEquals(true, label.isEditing(), "clicking existing text reopens editing");
 		label.setEditingText("edited text");
+		label.setColor(0x336699);
 		label.finishEditing();
 		assertEquals("edited text", label.text, "re-editing commits the updated text");
-		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;0", editor.activeObjectLayer.getSaveString(),
-			"text re-edit records a Flash change action");
+		assertEquals(0x336699, label.color, "text color edit commits the selected color");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601", editor.activeObjectLayer.getSaveString(),
+			"text re-edit records a Flash change action with color");
 		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		label.setEditingText("   ");
 		label.finishEditing();
 		assertEquals(0, editor.activeObjectLayer.textObjects.length, "empty text edit removes the text object");
 		assertEquals(null, label.parent, "empty text edit unmounts the display object");
-		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;0,d0", editor.activeObjectLayer.getSaveString(),
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,d0", editor.activeObjectLayer.getSaveString(),
 			"empty text edit records a Flash delete action");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);

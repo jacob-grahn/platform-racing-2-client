@@ -15,6 +15,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevelRenderer;
+import pr2.lobby.account.ColorPicker;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.PR2MovieClip;
@@ -608,6 +609,7 @@ class EditorTextObject extends Sprite {
 	private final owner:EditorObjectLayer;
 	private final displayField:TextField;
 	private var editField:Null<TextField>;
+	private var colorPicker:Null<ColorPicker>;
 	private var originalText:String;
 	private var originalColor:Int;
 
@@ -646,6 +648,7 @@ class EditorTextObject extends Sprite {
 		editField.text = text;
 		editField.addEventListener(Event.CHANGE, editTextChanged);
 		addChild(editField);
+		addColorPicker();
 		if (stage != null) {
 			stage.focus = editField;
 		}
@@ -659,6 +662,7 @@ class EditorTextObject extends Sprite {
 		editField.removeEventListener(Event.CHANGE, editTextChanged);
 		removeChild(editField);
 		editField = null;
+		removeColorPicker();
 		displayField.visible = true;
 		if (stage != null) {
 			stage.focus = stage;
@@ -711,6 +715,7 @@ class EditorTextObject extends Sprite {
 			removeChild(editField);
 			editField = null;
 		}
+		removeColorPicker();
 		if (parent != null) {
 			parent.removeChild(this);
 		}
@@ -727,7 +732,46 @@ class EditorTextObject extends Sprite {
 			displayField.height = Math.max(displayField.textHeight + 5, 20);
 			editField.height = Math.max(editField.textHeight + 5, 20);
 			editField.width = Math.max(editField.textWidth + 8, 100);
+			positionColorPicker();
 		}
+	}
+
+	private function addColorPicker():Void {
+		removeColorPicker();
+		colorPicker = new ColorPicker();
+		colorPicker.setColor(color);
+		colorPicker.width = 14;
+		colorPicker.height = 14;
+		colorPicker.addEventListener(Event.CHANGE, colorPickerChanged);
+		addChild(colorPicker);
+		positionColorPicker();
+	}
+
+	private function removeColorPicker():Void {
+		if (colorPicker == null) {
+			return;
+		}
+		colorPicker.removeEventListener(Event.CHANGE, colorPickerChanged);
+		colorPicker.remove();
+		colorPicker = null;
+	}
+
+	private function colorPickerChanged(_:Event):Void {
+		if (colorPicker != null) {
+			setColor(colorPicker.getColor());
+			if (stage != null) {
+				stage.focus = stage;
+			}
+		}
+	}
+
+	private function positionColorPicker():Void {
+		if (colorPicker == null) {
+			return;
+		}
+		var target = editField != null ? editField : displayField;
+		colorPicker.x = Math.max(target.width, 100) - colorPicker.width / 2;
+		colorPicker.y = -colorPicker.height / 2;
 	}
 
 	private function createTextField():TextField {
