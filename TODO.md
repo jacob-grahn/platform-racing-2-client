@@ -66,7 +66,7 @@ Port the editor itself, one piece at a time:
 - [ ] Port block options.
   - [x] Port Flash-compatible block option string normalization for item,
     teleport, happy/sad stat, and custom-stat blocks.
-  - [ ] Port block placement/selection enough to attach option buttons to
+  - [x] Port block placement/selection enough to attach option buttons to
     placed option-capable blocks.
   - [ ] Port the authored item, teleport, stat, and custom-stat option popups
     and commit their values through the normalized editor option strings.

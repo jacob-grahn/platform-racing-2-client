@@ -14,6 +14,8 @@ import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.level.ServerLevel.DecodedDrawAction;
+import pr2.level.BlockType;
+import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelRenderer;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.LobbyArt;
@@ -41,6 +43,9 @@ class LevelEditor extends Page {
 	public var objectLayers(default, null):Array<EditorObjectLayer> = [];
 	public var activeDrawLayer(default, null):Null<EditorDrawableLayer>;
 	public var activeObjectLayer(default, null):Null<EditorObjectLayer>;
+	public var blockLayer(default, null):Null<EditorBlockLayer>;
+	public var selectedBlock(default, null):Null<EditorBlockObject>;
+	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 
@@ -59,6 +64,8 @@ class LevelEditor extends Page {
 
 		layerContainer = new Sprite();
 		addChild(layerContainer);
+		blockLayer = new EditorBlockLayer(this);
+		layerContainer.addChild(blockLayer);
 		attachArtLayers();
 		addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 		addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
@@ -110,6 +117,34 @@ class LevelEditor extends Page {
 		return activeObjectLayer.addText("", stageX, stageY, EditorTextObject.lastColor, true);
 	}
 
+	public function placeSelectedBlockAt(stageX:Float, stageY:Float):Null<EditorBlockObject> {
+		if (blockLayer == null || selectedToolSidebar != "blocks" || selectedToolId == "delete") {
+			return null;
+		}
+		var spec = EditorBlockLayer.specForTool(selectedToolId);
+		if (spec == null) {
+			return null;
+		}
+		return blockLayer.addBlockAtStage(spec.code, spec.type, stageX, stageY);
+	}
+
+	public function selectBlock(block:Null<EditorBlockObject>):Void {
+		if (selectedBlock == block) {
+			return;
+		}
+		if (selectedBlock != null) {
+			selectedBlock.setSelected(false);
+		}
+		selectedBlock = block;
+		if (selectedBlock != null) {
+			selectedBlock.setSelected(true);
+		}
+	}
+
+	public function openBlockOptions(block:EditorBlockObject):Void {
+		lastBlockOptionsRequest = block;
+	}
+
 	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
 		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
 			return false;
@@ -158,6 +193,12 @@ class LevelEditor extends Page {
 			objectLayers = [];
 			activeDrawLayer = null;
 			activeObjectLayer = null;
+			if (blockLayer != null) {
+				blockLayer.remove();
+			}
+			blockLayer = null;
+			selectedBlock = null;
+			lastBlockOptionsRequest = null;
 			layerContainer = null;
 		}
 		drawingLayer = null;
@@ -189,6 +230,10 @@ class LevelEditor extends Page {
 			event.stopImmediatePropagation();
 			return;
 		}
+		if (placeSelectedBlockAt(event.stageX, event.stageY) != null) {
+			event.stopImmediatePropagation();
+			return;
+		}
 		if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
 			event.stopImmediatePropagation();
 			return;
@@ -210,6 +255,11 @@ class LevelEditor extends Page {
 		}
 	}
 }
+
+typedef EditorBlockSpec = {
+	final code:Int;
+	final type:Null<BlockType>;
+};
 
 class LevelEditorMenu extends Sprite {
 	public final editor:LevelEditor;
@@ -332,6 +382,289 @@ class LevelEditorMenu extends Sprite {
 		}
 		glow.x = target.x + target.width / 2;
 		glow.width = target.width + 6;
+	}
+}
+
+class EditorBlockLayer extends Sprite {
+	public final editor:LevelEditor;
+	public final blocks:Array<EditorBlockObject> = [];
+	private final blocksBySeg:Map<String, EditorBlockObject> = new Map();
+
+	public function new(editor:LevelEditor) {
+		super();
+		this.editor = editor;
+		name = "editorBlockLayer";
+		for (code in ObjectCodes.BLOCK_START1...ObjectCodes.BLOCK_START4 + 1) {
+			var start = addBlockAtLocal(code, BlockType.Start, code * LevelEditor.segSize + 10000, LevelEditor.segSize * 2 + 10000, false);
+			start.deleteable = false;
+		}
+	}
+
+	public function addBlockAtStage(code:Int, type:Null<BlockType>, stageX:Float, stageY:Float):Null<EditorBlockObject> {
+		var point = globalToLocal(new Point(stageX - 15, stageY - 15));
+		var segX = Math.round(point.x / LevelEditor.segSize);
+		var segY = Math.round(point.y / LevelEditor.segSize);
+		var existing = getBlockAtSeg(segX, segY);
+		if (existing != null && !existing.deleteable) {
+			return null;
+		}
+		if (existing != null) {
+			removeBlock(existing, false);
+		}
+		return addBlockAtLocal(code, type, point.x, point.y, true);
+	}
+
+	public function getBlockAtSeg(segX:Int, segY:Int):Null<EditorBlockObject> {
+		return blocksBySeg.get(segKey(segX, segY));
+	}
+
+	public function removeBlock(block:EditorBlockObject, record:Bool = true):Void {
+		var index = blocks.indexOf(block);
+		if (index < 0) {
+			return;
+		}
+		if (editor.selectedBlock == block) {
+			editor.selectBlock(null);
+		}
+		blocks.splice(index, 1);
+		blocksBySeg.remove(segKey(block.segX, block.segY));
+		block.remove();
+	}
+
+	public function getSaveString():String {
+		var out:Array<String> = [];
+		var lastX = 0;
+		var lastY = 0;
+		var lastCode = 0;
+		for (block in blocks) {
+			var code = block.code - 100;
+			var relX = block.segX - lastX;
+			var relY = block.segY - lastY;
+			lastX = block.segX;
+			lastY = block.segY;
+			var row = relX + ";" + relY;
+			if (code != lastCode || block.options != "") {
+				lastCode = code;
+				row += ";" + code;
+				if (block.options != "") {
+					row += ";" + block.options;
+				}
+			}
+			out.push(row);
+		}
+		return out.join(",");
+	}
+
+	public function remove():Void {
+		while (blocks.length > 0) {
+			removeBlock(blocks[blocks.length - 1], false);
+		}
+		blocksBySeg.clear();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	private function addBlockAtLocal(code:Int, type:Null<BlockType>, localX:Float, localY:Float, select:Bool):EditorBlockObject {
+		var block = new EditorBlockObject(editor, code, type, snap(localX), snap(localY));
+		blocks.push(block);
+		blocksBySeg.set(segKey(block.segX, block.segY), block);
+		addChild(block);
+		if (select) {
+			editor.selectBlock(block);
+		}
+		return block;
+	}
+
+	private static inline function snap(value:Float):Int {
+		return Std.int(Math.round(value / LevelEditor.segSize) * LevelEditor.segSize);
+	}
+
+	private static inline function segKey(segX:Int, segY:Int):String {
+		return segX + ":" + segY;
+	}
+
+	public static function specForTool(toolId:String):Null<EditorBlockSpec> {
+		return switch (toolId) {
+			case "basic1": {code: ObjectCodes.BLOCK_BASIC1, type: BlockType.Basic};
+			case "basic2": {code: ObjectCodes.BLOCK_BASIC2, type: BlockType.Basic};
+			case "basic3": {code: ObjectCodes.BLOCK_BASIC3, type: BlockType.Basic};
+			case "basic4": {code: ObjectCodes.BLOCK_BASIC4, type: BlockType.Basic};
+			case "brick": {code: ObjectCodes.BLOCK_BRICK, type: BlockType.Brick};
+			case "finish": {code: ObjectCodes.BLOCK_FINISH, type: BlockType.Finish};
+			case "ice": {code: ObjectCodes.BLOCK_ICE, type: BlockType.Ice};
+			case "item": {code: ObjectCodes.BLOCK_ITEM, type: BlockType.Item};
+			case "infItem": {code: ObjectCodes.BLOCK_ITEM_INF, type: BlockType.InfiniteItem};
+			case "left": {code: ObjectCodes.BLOCK_ARROW_LEFT, type: BlockType.ArrowLeft};
+			case "right": {code: ObjectCodes.BLOCK_ARROW_RIGHT, type: BlockType.ArrowRight};
+			case "up": {code: ObjectCodes.BLOCK_ARROW_UP, type: BlockType.ArrowUp};
+			case "down": {code: ObjectCodes.BLOCK_ARROW_DOWN, type: BlockType.ArrowDown};
+			case "teleport": {code: ObjectCodes.BLOCK_TELEPORT, type: BlockType.Teleport};
+			case "mine": {code: ObjectCodes.BLOCK_MINE, type: BlockType.Mine};
+			case "crumble": {code: ObjectCodes.BLOCK_CRUMBLE, type: BlockType.Crumble};
+			case "vanish": {code: ObjectCodes.BLOCK_VANISH, type: BlockType.Vanish};
+			case "move": {code: ObjectCodes.BLOCK_MOVE, type: BlockType.Move};
+			case "water": {code: ObjectCodes.BLOCK_WATER, type: BlockType.Water};
+			case "rotateR": {code: ObjectCodes.BLOCK_ROTATE_RIGHT, type: BlockType.RotateRight};
+			case "rotateL": {code: ObjectCodes.BLOCK_ROTATE_LEFT, type: BlockType.RotateLeft};
+			case "push": {code: ObjectCodes.BLOCK_PUSH, type: BlockType.Push};
+			case "happy": {code: ObjectCodes.BLOCK_HAPPY, type: BlockType.Happy};
+			case "sad": {code: ObjectCodes.BLOCK_SAD, type: BlockType.Sad};
+			case "custom": {code: ObjectCodes.BLOCK_CUSTOM_STATS, type: BlockType.CustomStats};
+			case "safety": {code: ObjectCodes.BLOCK_SAFETY, type: BlockType.Safety};
+			case "heart": {code: ObjectCodes.BLOCK_HEART, type: BlockType.Heart};
+			case "time": {code: ObjectCodes.BLOCK_TIME, type: BlockType.Time};
+			case "egg": {code: ObjectCodes.BLOCK_MINION_EGG, type: null};
+			default: null;
+		}
+	}
+}
+
+class EditorBlockObject extends Sprite {
+	public final editor:LevelEditor;
+	public final code:Int;
+	public final type:Null<BlockType>;
+	public final segX:Int;
+	public final segY:Int;
+	public var options(default, null):String;
+	public var deleteable:Bool = true;
+	private final display:Sprite;
+	private var highlight:Null<Sprite>;
+	private var optionsButton:Null<Sprite>;
+
+	public function new(editor:LevelEditor, code:Int, type:Null<BlockType>, x:Int, y:Int, options:String = "") {
+		super();
+		this.editor = editor;
+		this.code = code;
+		this.type = type;
+		this.options = options;
+		this.x = x;
+		this.y = y;
+		segX = Std.int(x / LevelEditor.segSize);
+		segY = Std.int(y / LevelEditor.segSize);
+		name = "editorBlock_" + segX + "_" + segY;
+		buttonMode = true;
+		useHandCursor = true;
+		display = createDisplay(code);
+		addChild(display);
+		addEventListener(MouseEvent.MOUSE_DOWN, blockPressed);
+	}
+
+	public function hasOptions():Bool {
+		return type != null && EditorBlockOptions.hasOptions(type);
+	}
+
+	public function setOptions(nextOptions:String):Void {
+		options = nextOptions == null ? "" : nextOptions;
+	}
+
+	public function setSelected(selected:Bool):Void {
+		if (selected) {
+			showHighlight();
+			if (deleteable && hasOptions()) {
+				showOptionsButton();
+			}
+		} else {
+			hideHighlight();
+			hideOptionsButton();
+		}
+	}
+
+	public function remove():Void {
+		removeEventListener(MouseEvent.MOUSE_DOWN, blockPressed);
+		hideOptionsButton();
+		hideHighlight();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	private function blockPressed(event:MouseEvent):Void {
+		editor.selectBlock(this);
+		event.stopImmediatePropagation();
+	}
+
+	private function showHighlight():Void {
+		if (highlight != null) {
+			return;
+		}
+		highlight = new Sprite();
+		highlight.name = "selectionOutline";
+		highlight.graphics.lineStyle(3, 0xFFFFFF);
+		highlight.graphics.drawRect(0, 0, LevelEditor.segSize, LevelEditor.segSize);
+		addChild(highlight);
+	}
+
+	private function hideHighlight():Void {
+		if (highlight == null) {
+			return;
+		}
+		if (highlight.parent != null) {
+			highlight.parent.removeChild(highlight);
+		}
+		highlight = null;
+	}
+
+	private function showOptionsButton():Void {
+		if (optionsButton != null) {
+			return;
+		}
+		optionsButton = new Sprite();
+		optionsButton.name = "optionsButton";
+		optionsButton.buttonMode = true;
+		optionsButton.graphics.lineStyle(1, 0x222222);
+		optionsButton.graphics.beginFill(0xFFFFFF);
+		optionsButton.graphics.drawCircle(0, 0, 5);
+		optionsButton.graphics.endFill();
+		optionsButton.x = LevelEditor.segSize;
+		optionsButton.y = LevelEditor.segSize;
+		optionsButton.addEventListener(MouseEvent.MOUSE_DOWN, optionsPressed);
+		addChild(optionsButton);
+	}
+
+	private function hideOptionsButton():Void {
+		if (optionsButton == null) {
+			return;
+		}
+		optionsButton.removeEventListener(MouseEvent.MOUSE_DOWN, optionsPressed);
+		if (optionsButton.parent != null) {
+			optionsButton.parent.removeChild(optionsButton);
+		}
+		optionsButton = null;
+	}
+
+	private function optionsPressed(event:MouseEvent):Void {
+		editor.openBlockOptions(this);
+		event.stopImmediatePropagation();
+	}
+
+	private static function createDisplay(code:Int):Sprite {
+		var holder = new Sprite();
+		var assetPath = ServerLevelRenderer.blockAssetPath(code);
+		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
+			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+			bitmap.width = LevelEditor.segSize;
+			bitmap.height = LevelEditor.segSize;
+			bitmap.smoothing = false;
+			holder.addChild(bitmap);
+		} else {
+			holder.graphics.lineStyle(1, 0x444444);
+			holder.graphics.beginFill(0xCCCCCC);
+			holder.graphics.drawRect(0, 0, LevelEditor.segSize, LevelEditor.segSize);
+			holder.graphics.endFill();
+		}
+		var rotation = ServerLevelRenderer.arrowOverlayRotation(code);
+		if (rotation != null && Assets.exists(ServerLevelRenderer.arrowOverlayAssetPath(), AssetType.IMAGE)) {
+			var arrow = new Bitmap(Assets.getBitmapData(ServerLevelRenderer.arrowOverlayAssetPath()));
+			arrow.width = LevelEditor.segSize;
+			arrow.height = LevelEditor.segSize;
+			arrow.x = LevelEditor.segSize / 2;
+			arrow.y = LevelEditor.segSize / 2;
+			arrow.rotation = rotation;
+			arrow.smoothing = false;
+			holder.addChild(arrow);
+		}
+		return holder;
 	}
 }
 

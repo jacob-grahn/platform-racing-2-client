@@ -268,6 +268,25 @@ class LobbyServicesTest {
 		assertEquals(1, editor.objectLayers[1].placedObjects.length, "layer 2 receives its own placed stamp");
 		clickEditorMenu(editor, "blocksButton");
 		assertEquals("blocks", editor.menu.sideBar.id, "blocks button restores blocks sidebar");
+		clickEditorSidebar(editor, "itemEntry");
+		var itemBlock = editor.placeSelectedBlockAt(100, 120);
+		assertNotNull(itemBlock, "block sidebar places a block object");
+		assertEquals(110, itemBlock.code, "item block placement stores the Flash block code");
+		assertEquals(3, itemBlock.segX, "block placement snaps x to Flash grid");
+		assertEquals(4, itemBlock.segY, "block placement snaps y to Flash grid");
+		assertEquals(itemBlock, editor.selectedBlock, "newly placed block is selected");
+		assertNotNull(itemBlock.getChildByName("optionsButton"), "option-capable selected blocks show the options button");
+		itemBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals(itemBlock, editor.lastBlockOptionsRequest, "options button records the selected block for popup wiring");
+		clickEditorSidebar(editor, "brickEntry");
+		var brickBlock = editor.placeSelectedBlockAt(100, 120);
+		assertEquals(104, brickBlock.code, "placing over an editable block replaces it");
+		assertEquals(5, editor.blockLayer.blocks.length, "replacement keeps the four start blocks plus new block");
+		assertEquals(null, itemBlock.parent, "replaced block is unmounted");
+		assertEquals(null, brickBlock.getChildByName("optionsButton"), "plain selected blocks do not show options");
+		brickBlock.setOptions("legacy");
+		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;4;legacy", editor.blockLayer.getSaveString(),
+			"block save string uses Flash relative grid coordinates and option suffixes");
 		editor.remove();
 		assertEquals(null, LevelEditor.editor, "editor shell clears singleton");
 
