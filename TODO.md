@@ -20,7 +20,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 ## Bugs
 
 - [ ] Player is moving far away during the 321 countdown, then moves back when it is done
-- [ ] Player disappears when in water
 - [ ] Touching a safety net freezes the game, even clicking ui elements no longer works after
 - [ ] held items are not visible on the player
 - [ ] erase lines seem to not work in the level art layers

@@ -51,10 +51,12 @@ class GameShellMountTest {
 		assertEquals(true, course.backCharacterLayer != null, "back character layer present");
 		assertEquals(true, course.localCharacter != null, "local character bridge mounted");
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
-		assertBelow(course.levelRenderer.getChildIndex(course.backCharacterLayer), course.levelRenderer.getChildIndex(course.characterLayer),
-			"back character layer renders below front character layer");
-		assertBelow(course.levelRenderer.getChildIndex(course.backCharacterLayer), course.levelRenderer.numChildren - 1,
-			"back character layer is below the level foreground");
+		assertEquals(true, course.levelRenderer.worldChildDepth(course.backCharacterLayer) >= 0,
+			"back character layer sits inside the rotating world (above the background art)");
+		assertBelow(course.levelRenderer.worldChildDepth(course.backCharacterLayer), course.levelRenderer.blockLayerDepth(),
+			"back character layer renders below the blocks");
+		assertEquals(course.levelRenderer.numChildren - 1, course.levelRenderer.getChildIndex(course.characterLayer),
+			"front character layer renders above the world (and the back layer)");
 		testRemoteParentLayerSwitch(course);
 		testLocalWaterParentLayerSwitch(course);
 

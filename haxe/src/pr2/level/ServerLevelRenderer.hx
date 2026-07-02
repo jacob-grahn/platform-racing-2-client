@@ -279,10 +279,30 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function attachBackCharacterLayer(layer:Sprite):Void {
-		if (layer.parent == this) {
+		if (layer.parent == worldContainer) {
 			return;
 		}
-		addChildAt(layer, getChildIndex(worldContainer));
+		// Flash keeps a swimming character in `backBackground`, the plane sitting
+		// between the rear parallax art (bg1/bg2/bg3) and the block map. Insert the
+		// back character layer just below the block layer inside the rotating world
+		// so a character in water renders behind the blocks but still in front of
+		// the background art. Placing it below `worldContainer` (as before) buried
+		// it behind every background art layer, so it vanished in water on any
+		// level with a drawn background (e.g. Underwater World).
+		worldContainer.addChildAt(layer, worldContainer.getChildIndex(blockLayer));
+	}
+
+	// Test seam: depth of `child` within the rotating world container, or -1 when
+	// it is not a direct child of it. Lets the shell test assert the back
+	// character layer sits below the blocks (and thus above the background art).
+	@:allow(pr2.gameplay.GameShellMountTest)
+	private function worldChildDepth(child:openfl.display.DisplayObject):Int {
+		return child.parent == worldContainer ? worldContainer.getChildIndex(child) : -1;
+	}
+
+	@:allow(pr2.gameplay.GameShellMountTest)
+	private function blockLayerDepth():Int {
+		return worldContainer.getChildIndex(blockLayer);
 	}
 
 	public function attachFrontCharacterLayer(layer:Sprite):Void {
