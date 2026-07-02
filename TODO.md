@@ -46,7 +46,7 @@ Port the editor itself, one piece at a time:
 - [ ] Port drawing/text/stamp placement.
   - [x] Port stamp object placement onto the active art layer, including
     Flash-style centered coordinate rounding and layer-scale conversion.
-  - [ ] Port brush drawing/erasing.
+  - [x] Port brush drawing/erasing.
   - [ ] Port text placement/editing.
 - [ ] Port block options.
 - [ ] Port selection/deletion.

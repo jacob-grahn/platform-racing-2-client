@@ -10,6 +10,7 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
+import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevelRenderer;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
@@ -32,9 +33,12 @@ class LevelEditor extends Page {
 	public var menu(default, null):Null<LevelEditorMenu>;
 	public var selectedToolSidebar(default, null):String = "";
 	public var selectedToolId(default, null):String = "";
+	public var drawLayers(default, null):Array<EditorDrawableLayer> = [];
 	public var objectLayers(default, null):Array<EditorObjectLayer> = [];
+	public var activeDrawLayer(default, null):Null<EditorDrawableLayer>;
 	public var activeObjectLayer(default, null):Null<EditorObjectLayer>;
 	private var layerContainer:Null<Sprite>;
+	private var drawingLayer:Null<EditorDrawableLayer>;
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
 		super();
@@ -51,8 +55,10 @@ class LevelEditor extends Page {
 
 		layerContainer = new Sprite();
 		addChild(layerContainer);
-		attachObjectLayers();
+		attachArtLayers();
 		addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
+		addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
+		addEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
 
 		overlayLayer = new Sprite();
 		overlayLayer.mouseEnabled = false;
@@ -78,6 +84,7 @@ class LevelEditor extends Page {
 		if (layerNum < 1 || layerNum > objectLayers.length) {
 			return;
 		}
+		activeDrawLayer = drawLayers[layerNum - 1];
 		activeObjectLayer = objectLayers[layerNum - 1];
 	}
 
@@ -92,36 +99,74 @@ class LevelEditor extends Page {
 		return activeObjectLayer.addStamp(code, stageX, stageY);
 	}
 
+	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
+		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
+			return false;
+		}
+		drawingLayer = activeDrawLayer;
+		drawingLayer.beginStroke(stageX, stageY, selectedToolId == "eraser" ? "erase" : "draw");
+		return true;
+	}
+
+	public function continueSelectedBrushAt(stageX:Float, stageY:Float):Bool {
+		if (drawingLayer == null) {
+			return false;
+		}
+		drawingLayer.extendStroke(stageX, stageY);
+		return true;
+	}
+
+	public function endSelectedBrush():Bool {
+		if (drawingLayer == null) {
+			return false;
+		}
+		drawingLayer.finishStroke();
+		drawingLayer = null;
+		return true;
+	}
+
 	override public function remove():Void {
 		if (LevelEditor.editor == this) {
 			LevelEditor.editor = null;
 		}
 		removeEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
+		removeEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
+		removeEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
 		if (menu != null) {
 			menu.remove();
 			menu = null;
 		}
 		if (layerContainer != null) {
+			for (layer in drawLayers) {
+				layer.remove();
+			}
 			for (layer in objectLayers) {
 				layer.remove();
 			}
+			drawLayers = [];
 			objectLayers = [];
+			activeDrawLayer = null;
 			activeObjectLayer = null;
 			layerContainer = null;
 		}
+		drawingLayer = null;
 		overlayLayer = null;
 		super.remove();
 	}
 
-	private function attachObjectLayers():Void {
+	private function attachArtLayers():Void {
 		if (layerContainer == null) {
 			return;
 		}
 		for (scale in [1.0, 0.5, 0.25, 1.0, 2.0]) {
+			var drawLayer = new EditorDrawableLayer(drawLayers.length + 1, scale);
+			drawLayers.push(drawLayer);
+			layerContainer.addChild(drawLayer);
 			var layer = new EditorObjectLayer(objectLayers.length + 1, scale);
 			objectLayers.push(layer);
 			layerContainer.addChild(layer);
 		}
+		activeDrawLayer = drawLayers[0];
 		activeObjectLayer = objectLayers[0];
 	}
 
@@ -129,7 +174,23 @@ class LevelEditor extends Page {
 		if (menu != null && menu.hitTestPoint(event.stageX, event.stageY, true)) {
 			return;
 		}
+		if (beginSelectedBrushAt(event.stageX, event.stageY)) {
+			event.stopImmediatePropagation();
+			return;
+		}
 		if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
+			event.stopImmediatePropagation();
+		}
+	}
+
+	private function continueSelectedToolFromMouse(event:MouseEvent):Void {
+		if (continueSelectedBrushAt(event.stageX, event.stageY)) {
+			event.stopImmediatePropagation();
+		}
+	}
+
+	private function stopSelectedToolFromMouse(event:MouseEvent):Void {
+		if (endSelectedBrush()) {
 			event.stopImmediatePropagation();
 		}
 	}
@@ -325,6 +386,152 @@ class EditorObjectLayer extends Sprite {
 	}
 }
 
+class EditorDrawableLayer extends Sprite {
+	public static inline var DEFAULT_BRUSH_SIZE:Float = 4;
+
+	public final layerNum:Int;
+	public final saveArray:Array<String> = [];
+	public final drawActions:Array<DecodedDrawAction> = [];
+	public final rasterCanvas:Sprite;
+	public final brushCanvas:Sprite;
+	private var color:Int = 0;
+	private var brushSize:Float = DEFAULT_BRUSH_SIZE;
+	private var mode:String = "draw";
+	private var brushX:Float = 0;
+	private var brushY:Float = 0;
+	private var drawing:Bool = false;
+
+	public function new(layerNum:Int, layerScale:Float) {
+		super();
+		this.layerNum = layerNum;
+		name = 'editorDrawableLayer$layerNum';
+		scaleX = layerScale;
+		scaleY = layerScale;
+		rasterCanvas = new Sprite();
+		brushCanvas = new Sprite();
+		addChild(rasterCanvas);
+		addChild(brushCanvas);
+		brushCanvas.graphics.lineStyle(brushSize, color);
+	}
+
+	public function beginStroke(stageX:Float, stageY:Float, nextMode:String):Void {
+		recordColor(color);
+		setBrushSize(brushSize);
+		setMode(nextMode);
+		var start = roundedLocalPoint(stageX, stageY);
+		moveTo(start.x, start.y);
+		drawing = true;
+	}
+
+	public function extendStroke(stageX:Float, stageY:Float):Void {
+		if (!drawing) {
+			return;
+		}
+		var point = roundedLocalPoint(stageX, stageY);
+		if (point.x == brushX && point.y == brushY) {
+			return;
+		}
+		lineTo(point.x, point.y);
+	}
+
+	public function finishStroke():Void {
+		if (!drawing) {
+			return;
+		}
+		drawing = false;
+		rasterize();
+	}
+
+	public function getSaveString():String {
+		return saveArray.join(",");
+	}
+
+	public function remove():Void {
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		clearChildren(rasterCanvas);
+		clearChildren(brushCanvas);
+		saveArray.resize(0);
+		drawActions.resize(0);
+	}
+
+	private function recordColor(nextColor:Int):Void {
+		if (color != nextColor) {
+			color = nextColor;
+			brushCanvas.graphics.lineStyle(brushSize, color);
+			recordAction(new DecodedDrawAction("c", [color]), "c" + StringTools.hex(color, 6).toLowerCase());
+		}
+	}
+
+	private function setBrushSize(nextSize:Float):Void {
+		if (brushSize != nextSize) {
+			brushSize = nextSize;
+			brushCanvas.graphics.lineStyle(brushSize, color);
+			recordAction(new DecodedDrawAction("t", [brushSize]), "t" + brushSize);
+		}
+	}
+
+	private function setMode(nextMode:String):Void {
+		if (mode != nextMode) {
+			mode = nextMode;
+			recordAction(new DecodedDrawAction("m", [], mode), "m" + mode);
+		}
+	}
+
+	private function moveTo(x:Float, y:Float):Void {
+		brushX = x;
+		brushY = y;
+		var action = new DecodedDrawAction("d", [x, y]);
+		recordAction(action, "d" + x + ";" + y);
+		if (mode != "erase") {
+			brushCanvas.graphics.moveTo(x, y);
+			brushCanvas.graphics.lineTo(x - 0.15, y);
+			brushCanvas.graphics.moveTo(x, y);
+		}
+	}
+
+	private function lineTo(x:Float, y:Float):Void {
+		var dx = x - brushX;
+		var dy = y - brushY;
+		brushX = x;
+		brushY = y;
+		var action = drawActions[drawActions.length - 1];
+		action.values.push(dx);
+		action.values.push(dy);
+		saveArray[saveArray.length - 1] += ";" + dx + ";" + dy;
+		if (mode != "erase") {
+			brushCanvas.graphics.lineTo(x, y);
+		}
+	}
+
+	private function rasterize():Void {
+		clearChildren(rasterCanvas);
+		ServerLevelRenderer.renderLayerStrokes(rasterCanvas, drawActions);
+		brushCanvas.graphics.clear();
+		brushCanvas.graphics.lineStyle(brushSize, color);
+	}
+
+	private function roundedLocalPoint(stageX:Float, stageY:Float):Point {
+		var point = globalToLocal(new Point(stageX, stageY));
+		point.x = Math.round(point.x);
+		point.y = Math.round(point.y);
+		return point;
+	}
+
+	private function recordAction(action:DecodedDrawAction, encoded:String):Void {
+		drawActions.push(action);
+		saveArray.push(encoded);
+	}
+
+	private static function clearChildren(sprite:Sprite):Void {
+		sprite.graphics.clear();
+		while (sprite.numChildren > 0) {
+			sprite.removeChildAt(0);
+		}
+	}
+}
+
 class EditorPlacedObject {
 	public final code:Int;
 	public final x:Int;
@@ -380,6 +587,10 @@ class EditorSideBar extends Sprite {
 		selectedEntry = entry;
 		selectedEntry.setSelected(true);
 		var editor = LevelEditor.editor;
+		if (editor != null && id == "stamps" && entry.id == "brush" && editor.menu != null) {
+			editor.menu.changeSideBar(editor.menu.tools);
+			return;
+		}
 		if (editor != null) {
 			editor.selectEditorTool(id, entry.id);
 		}
