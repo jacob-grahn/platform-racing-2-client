@@ -1,5 +1,6 @@
 package pr2.level;
 
+import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
@@ -18,6 +19,7 @@ class ServerLevelRendererTest {
 		testBlockAssetMapping();
 		testArtAssetMappings();
 		testDefaultArtStrokeThickness();
+		testArtEraseStrokeClearsRasterTiles();
 		testWorldToScreenFocus();
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
@@ -207,7 +209,7 @@ class ServerLevelRendererTest {
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(3, renderer.drawnArtItemCount(), "first art batch counts the initial stroke commands");
 		assertEquals(1, artLayer.numChildren, "first art batch has not reached text object");
-		assertEquals(1, strokeRaster(artLayer).numChildren, "first art batch shows in-progress stroke tiles");
+		assertTrue(strokeRaster(artLayer).numChildren > 0, "first art batch shows in-progress stroke tiles");
 		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for remaining art item");
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
@@ -313,6 +315,26 @@ class ServerLevelRendererTest {
 		var bounds = brush.getBounds(brush);
 		assertEquals(4.0, ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE, "server art uses Flash's default brush size");
 		assertClose(4.0, bounds.height, "server art default stroke bounds match Flash brush thickness");
+	}
+
+	private static function testArtEraseStrokeClearsRasterTiles():Void {
+		var raster = new Sprite();
+		ServerLevelRenderer.renderLayerStrokes(raster, [
+			new DecodedDrawAction("c", [0xFF0000]),
+			new DecodedDrawAction("t", [10]),
+			new DecodedDrawAction("d", [10, 10, 80, 0]),
+			new DecodedDrawAction("m", [], "erase"),
+			new DecodedDrawAction("t", [12]),
+			new DecodedDrawAction("d", [50, 10, 20, 0]),
+			new DecodedDrawAction("m", [], "draw"),
+			new DecodedDrawAction("c", [0x0000FF]),
+			new DecodedDrawAction("d", [75, 10, 10, 0])
+		]);
+
+		var tile = Std.downcast(raster.getChildAt(0), Bitmap).bitmapData;
+		assertEquals(0xFF0000, tile.getPixel(20, 10), "drawn stroke remains before erase");
+		assertEquals(0, tile.getPixel32(60, 10), "erase stroke clears existing art pixels");
+		assertEquals(0x0000FF, tile.getPixel(80, 10), "later draw strokes render after erase mode ends");
 	}
 
 	private static function testWorldToScreenFocus():Void {

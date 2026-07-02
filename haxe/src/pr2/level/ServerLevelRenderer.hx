@@ -876,9 +876,7 @@ class ServerLevelRenderer extends Sprite {
 			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
 			artDrawCursors[index] = new ArtDrawCursor(container, rasterCanvas, layer);
 		} else {
-			var brushCanvas = new Sprite();
-			drawLayerStrokes(brushCanvas, layer.drawActions);
-			rasterizeBrushInto(rasterCanvas, brushCanvas);
+			renderLayerStrokes(rasterCanvas, layer.drawActions);
 			drawLayerObjects(container, layer.objects, layer.scale);
 			drawLayerTexts(container, layer.texts, layer.scale);
 		}
@@ -923,6 +921,13 @@ class ServerLevelRenderer extends Sprite {
 		}
 		if (!drawing) {
 			brushCanvas.graphics.clear();
+		}
+	}
+
+	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
+		var tiles = new ArtRasterTiles(rasterCanvas);
+		for (action in actions) {
+			tiles.apply(action);
 		}
 	}
 
@@ -1139,45 +1144,24 @@ typedef ArtStrokeState = {
 private class ArtDrawCursor {
 	public final container:Sprite;
 	public final rasterCanvas:Sprite;
-	public final brushCanvas:Sprite;
 	public final layer:DecodedArtLayer;
-	public var color:Int = 0x000000;
-	public var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
-	public var mode:String = "draw";
+	private final strokeTiles:ArtRasterTiles;
 	private var actionIndex:Int = 0;
 	private var objectIndex:Int = 0;
 	private var textIndex:Int = 0;
-	private var rasterized:Bool = false;
 
 	public function new(container:Sprite, rasterCanvas:Sprite, layer:DecodedArtLayer) {
 		this.container = container;
 		this.rasterCanvas = rasterCanvas;
-		this.brushCanvas = new Sprite();
 		this.layer = layer;
-		brushCanvas.graphics.lineStyle(size, color);
+		this.strokeTiles = new ArtRasterTiles(rasterCanvas);
 	}
 
 	public function drawNext():Bool {
 		if (actionIndex < layer.drawActions.length) {
 			var action = layer.drawActions[actionIndex++];
-			var shouldRefreshRaster = action.kind == "d" && mode != "erase" && action.values.length >= 2;
-			var state = ServerLevelRenderer.drawStrokeAction(brushCanvas, color, size, mode, action);
-			color = state.color;
-			size = state.size;
-			mode = state.mode;
-			if (shouldRefreshRaster && brushCanvas.parent == null) {
-				rasterCanvas.addChild(brushCanvas);
-			}
+			strokeTiles.apply(action);
 			return true;
-		}
-		if (!rasterized) {
-			// All strokes are in; bake them onto transparent tiles once the layer's
-			// brush canvas is complete, before the objects/text layer on top of it.
-			if (brushCanvas.parent == rasterCanvas) {
-				rasterCanvas.removeChild(brushCanvas);
-			}
-			ServerLevelRenderer.rasterizeBrushInto(rasterCanvas, brushCanvas);
-			rasterized = true;
 		}
 		if (objectIndex < layer.objects.length) {
 			ServerLevelRenderer.addLayerObject(container, layer.objects[objectIndex++], layer.scale);
@@ -1192,5 +1176,111 @@ private class ArtDrawCursor {
 
 	public function isComplete():Bool {
 		return actionIndex >= layer.drawActions.length && objectIndex >= layer.objects.length && textIndex >= layer.texts.length;
+	}
+}
+
+private class ArtRasterTiles {
+	private final rasterCanvas:Sprite;
+	private final tiles:Map<String, Bitmap> = new Map();
+	private var color:Int = 0x000000;
+	private var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
+	private var mode:String = "draw";
+
+	public function new(rasterCanvas:Sprite) {
+		this.rasterCanvas = rasterCanvas;
+	}
+
+	public function apply(action:DecodedDrawAction):Void {
+		switch (action.kind) {
+			case "c":
+				color = Std.int(action.values[0]);
+			case "t":
+				size = action.values[0];
+			case "m":
+				mode = action.text;
+			case "d":
+				if (action.values.length >= 2) {
+					rasterStroke(action, mode == "erase");
+				}
+			default:
+		}
+	}
+
+	private function getOrCreateTile(tileX:Int, tileY:Int):Bitmap {
+		var key = tileKey(tileX, tileY);
+		var bitmap = tiles.get(key);
+		if (bitmap != null) {
+			return bitmap;
+		}
+		bitmap = new Bitmap(new BitmapData(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, true, 0));
+		bitmap.smoothing = true;
+		bitmap.x = tileX;
+		bitmap.y = tileY;
+		tiles.set(key, bitmap);
+		rasterCanvas.addChild(bitmap);
+		return bitmap;
+	}
+
+	private function rasterStroke(action:DecodedDrawAction, erase:Bool):Void {
+		var x = action.values[0];
+		var y = action.values[1];
+		stampBrush(x, y, erase);
+		var i = 2;
+		while (i + 1 < action.values.length) {
+			var nextX = x + action.values[i];
+			var nextY = y + action.values[i + 1];
+			rasterLine(x, y, nextX, nextY, erase);
+			x = nextX;
+			y = nextY;
+			i += 2;
+		}
+	}
+
+	private function rasterLine(x1:Float, y1:Float, x2:Float, y2:Float, erase:Bool):Void {
+		var dx = x2 - x1;
+		var dy = y2 - y1;
+		var steps = Std.int(Math.ceil(Math.max(Math.abs(dx), Math.abs(dy))));
+		if (steps <= 0) {
+			stampBrush(x1, y1, erase);
+			return;
+		}
+		for (i in 1...steps + 1) {
+			var t = i / steps;
+			stampBrush(x1 + dx * t, y1 + dy * t, erase);
+		}
+	}
+
+	private function stampBrush(centerX:Float, centerY:Float, erase:Bool):Void {
+		var radius = Math.max(0.5, size / 2);
+		var minX = Math.floor(centerX - radius);
+		var minY = Math.floor(centerY - radius);
+		var maxX = Math.ceil(centerX + radius);
+		var maxY = Math.ceil(centerY + radius);
+		var radiusSq = radius * radius;
+		for (py in Std.int(minY)...Std.int(maxY) + 1) {
+			for (px in Std.int(minX)...Std.int(maxX) + 1) {
+				var sampleX = px + 0.5 - centerX;
+				var sampleY = py + 0.5 - centerY;
+				if (sampleX * sampleX + sampleY * sampleY > radiusSq) {
+					continue;
+				}
+				var tileX = tileOrigin(px);
+				var tileY = tileOrigin(py);
+				var bitmap = erase ? tiles.get(tileKey(tileX, tileY)) : getOrCreateTile(tileX, tileY);
+				if (bitmap == null) {
+					continue;
+				}
+				bitmap.bitmapData.setPixel32(px - tileX, py - tileY, erase ? 0 : (0xFF000000 | color));
+			}
+		}
+	}
+
+	private static inline function tileOrigin(pixel:Int):Int {
+		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		return Std.int(Math.floor(pixel / tile)) * tile;
+	}
+
+	private static inline function tileKey(tileX:Int, tileY:Int):String {
+		return tileX + "," + tileY;
 	}
 }
