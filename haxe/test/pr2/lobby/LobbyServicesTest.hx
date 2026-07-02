@@ -218,13 +218,20 @@ class LobbyServicesTest {
 		assertEquals("edited text", label.text, "re-editing commits the updated text");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;0", editor.activeObjectLayer.getSaveString(),
 			"text re-edit records a Flash change action");
+		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		label.setEditingText("   ");
+		label.finishEditing();
+		assertEquals(0, editor.activeObjectLayer.textObjects.length, "empty text edit removes the text object");
+		assertEquals(null, label.parent, "empty text edit unmounts the display object");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;0,d0", editor.activeObjectLayer.getSaveString(),
+			"empty text edit records a Flash delete action");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);
 		assertEquals(0, tree.code, "stamp placement stores the selected stamp code");
 		assertEquals(-14, tree.x, "stamp placement centers by authored display width");
 		assertEquals(34, tree.y, "stamp placement centers by authored display height");
 		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "stamp placement records object on active layer");
-		assertEquals(2, editor.activeObjectLayer.numChildren, "stamp placement mounts a display object alongside text");
+		assertEquals(1, editor.activeObjectLayer.numChildren, "stamp placement mounts a display object after deleted text");
 		clickEditorMenu(editor, "layer2Button");
 		clickEditorSidebar(editor, "stamp5Entry");
 		var rock = editor.placeSelectedToolAt(100, 120);

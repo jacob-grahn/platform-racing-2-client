@@ -376,6 +376,18 @@ class EditorObjectLayer extends Sprite {
 		}
 	}
 
+	public function removeTextObject(textObject:EditorTextObject, record:Bool = true):Void {
+		var textId = textObjects.indexOf(textObject);
+		if (textId < 0) {
+			return;
+		}
+		if (record) {
+			saveArray.push("d" + textId);
+		}
+		textObjects.splice(textId, 1);
+		textObject.remove();
+	}
+
 	public function getSaveString():String {
 		return saveArray.join(",");
 	}
@@ -650,6 +662,10 @@ class EditorTextObject extends Sprite {
 		displayField.visible = true;
 		if (stage != null) {
 			stage.focus = stage;
+		}
+		if (StringTools.trim(text) == "") {
+			owner.removeTextObject(this);
+			return;
 		}
 		if (text != originalText || color != originalColor) {
 			owner.recordChangeText(this);
