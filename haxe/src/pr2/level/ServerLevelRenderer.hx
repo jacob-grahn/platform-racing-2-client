@@ -446,6 +446,10 @@ class ServerLevelRenderer extends Sprite {
 		return Math.round(screenOffset * scale);
 	}
 
+	public static inline function isStartBlockCode(code:Int):Bool {
+		return code >= ObjectCodes.BLOCK_START1 && code <= ObjectCodes.BLOCK_START4;
+	}
+
 	public static function blockAssetPath(code:Int):String {
 		return switch (code) {
 			case ObjectCodes.BLOCK_BASIC1: "assets/blocks/basic1.png";
@@ -617,6 +621,14 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function addBlockDisplay(block:DecodedBlock):Void {
+		// Start blocks are spawn markers, not scenery. Flash's gameplay Map only
+		// records their position (setStartPos) and never adds them to the display,
+		// so they must stay invisible during a race — Course.buildStartPositions
+		// reads the spawn points independently. Drawing start.png here surfaced a
+		// stray dot the moment the player left the tile that had been covering it.
+		if (isStartBlockCode(block.code)) {
+			return;
+		}
 		var display = createBlockDisplay(block);
 		blockDisplays.set(blockKey(block.x, block.y), display);
 		addToBlockGrid(block.x, block.y, display);

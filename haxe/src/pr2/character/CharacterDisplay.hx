@@ -61,6 +61,12 @@ class CharacterDisplay extends Sprite {
 		secondaryColor = colors != null && colors.secondary != null ? colors.secondary : 0xFFD24A;
 		renderMode = initialRenderMode == null ? CharacterRenderMode.Layered : initialRenderMode;
 
+		// The authored CharacterGraphic keeps the frozenSolidAnim state on an
+		// eye-hidden layer. PR2MovieClip renders every layer regardless of its
+		// authoring visibility (matching Flash's published SWF), so the state clip
+		// is instantiated like the others and setState below selects the active one
+		// — previously the frozen state was missing and the character vanished while
+		// frozen (e.g. during the rotate-block spin).
 		clip = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
 		addChild(clip);
 		clip.stopAll();

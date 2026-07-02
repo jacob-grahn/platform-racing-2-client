@@ -420,17 +420,20 @@ class PR2MovieClipRuntimeTest {
 	private static function testGeneratedCharacterNamedChildren():Void {
 		var character = PR2MovieClip.fromLinkage("CharacterGraphic", {maxNestedDepth: 12});
 
-		for (childName in ["runAnim", "standAnim", "jumpAnim", "superJumpAnim", "bumpedAnim", "crouchAnim", "crouchWalkAnim", "swimAnim"]) {
+		// frozenSolidAnim sits on an eye-hidden source layer, but Flash's published
+		// SWF renders every layer regardless of its authoring visibility, so it is
+		// exposed as a movie clip alongside the other states (setState toggles which
+		// one is visible). Without it the character vanishes while frozen.
+		for (childName in ["runAnim", "standAnim", "jumpAnim", "superJumpAnim", "bumpedAnim", "crouchAnim", "crouchWalkAnim", "swimAnim", "frozenSolidAnim"]) {
 			var child = Std.downcast(character.getChildByTimelineName(childName), PR2MovieClip);
 			assertNotNull(child, 'CharacterGraphic exposes $childName as a movie clip');
 			assertAtLeast(1, child.totalFrames, '$childName has timeline frames');
 		}
-		assertEquals(null, character.getChildByTimelineName("frozenSolidAnim"), "invisible CharacterGraphic layers are not rendered");
 		assertHiddenTimelineChild(
 			AssetLibrary.requireSymbolByLinkage("CharacterGraphic"),
 			"frozenSolidAnim",
 			"MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 896",
-			"CharacterGraphic keeps frozenSolidAnim on an invisible source layer"
+			"CharacterGraphic keeps frozenSolidAnim on an eye-hidden source layer yet still renders it"
 		);
 
 		for (linkage in [

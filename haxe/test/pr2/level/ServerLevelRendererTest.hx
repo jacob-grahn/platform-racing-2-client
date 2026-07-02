@@ -27,6 +27,7 @@ class ServerLevelRendererTest {
 		testIncrementalBlockDrawing();
 		testIncrementalArtDrawing();
 		testArrowAnimation();
+		testStartBlockNotRendered();
 		testRemoteVisibleBlockActivation();
 		testMineExplosion();
 		testBlockPieces();
@@ -259,6 +260,20 @@ class ServerLevelRendererTest {
 		assertEquals(2, blockDisplay.numChildren, "arrow block keeps its overlay after activation");
 		assertEquals(restDepth, deepChildCount(timeline), "arrow chevron keeps its inner content after animating and settling");
 		assertEquals(null, renderer.arrowFrameAt(0, 0), "non-arrow coordinate has no animation frame");
+	}
+
+	private static function testStartBlockNotRendered():Void {
+		// Flash's gameplay Map records start-block positions but never displays
+		// them; only the brick should reach the block layer. Rendering the start
+		// tile left a stray dot once the player jumped off its spawn cell.
+		var start = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
+		var brick = new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10050, 10050);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [start, brick]), start);
+		var blockLayer = worldLayer(renderer, 1);
+		assertEquals(1, blockLayer.numChildren, "start blocks are spawn markers and must not render during a race");
+		assertEquals(brick.x, Std.downcast(blockLayer.getChildAt(0), Sprite).x, "the only rendered block is the brick, not the start marker");
+		assertTrue(ServerLevelRenderer.isStartBlockCode(ObjectCodes.BLOCK_START4), "start variants are start-block codes");
+		assertTrue(!ServerLevelRenderer.isStartBlockCode(ObjectCodes.BLOCK_BRICK), "non-start codes are not start blocks");
 	}
 
 	private static function testRemoteVisibleBlockActivation():Void {

@@ -29,8 +29,6 @@ typedef RuntimeFrame = {
 	// Parallel to `elements`: the source timeline layer index each element came
 	// from. Used to reconstruct Animate mask/masked layer relationships.
 	var elementLayers:Array<Int>;
-	// Parallel to `elements`: false for elements authored on a hidden layer.
-	var elementLayerVisible:Array<Bool>;
 	// Sound keyframes that begin on this exact frame. Unlike display elements,
 	// sound frames are not expanded across their authored duration: Flash sound
 	// commands run once when the playhead enters the keyframe.
@@ -39,7 +37,6 @@ typedef RuntimeFrame = {
 
 typedef PR2MovieClipOptions = {
 	@:optional var maxNestedDepth:Int;
-	@:optional var includeHiddenLayers:Bool;
 	@:optional var soundFrameHandler:FrameDef->Void;
 }
 
@@ -55,7 +52,6 @@ class PR2MovieClip extends Sprite {
 	private var playing:Bool = false;
 	private var maxNestedDepth:Int;
 	private var nestedDepth:Int;
-	private var includeHiddenLayers:Bool;
 	private var soundFrameHandler:Null<FrameDef->Void>;
 	private var hasEnteredFrame:Bool = false;
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
@@ -103,7 +99,6 @@ class PR2MovieClip extends Sprite {
 		super();
 		this.symbol = symbol;
 		this.maxNestedDepth = options != null && options.maxNestedDepth != null ? options.maxNestedDepth : 32;
-		this.includeHiddenLayers = options != null && options.includeHiddenLayers == true;
 		this.soundFrameHandler = options != null ? options.soundFrameHandler : null;
 		this.nestedDepth = nestedDepth;
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
@@ -271,7 +266,7 @@ class PR2MovieClip extends Sprite {
 	private function buildTimeline(source:TimelineDef):Void {
 		totalFrames = source.frameCount < 1 ? 1 : source.frameCount;
 		for (i in 0...totalFrames) {
-			frames.push({elements: [], elementLayers: [], elementLayerVisible: [], soundFrames: []});
+			frames.push({elements: [], elementLayers: [], soundFrames: []});
 		}
 
 		for (label in source.labels) {
@@ -302,7 +297,11 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function applyLayer(layer:LayerDef):Void {
-		if (layer.visible == false && !includeHiddenLayers) {
+		// A layer's eye-icon (`visible`) is an authoring-only toggle; Flash's
+		// published SWF renders every layer regardless, so we ignore it here.
+		// Guide layers are the exception — Flash never exports them (they hold
+		// motion paths and authoring notes), so their content must be skipped.
+		if (layer.layerType == "guide" || layer.layerType == "folder") {
 			return;
 		}
 
@@ -326,7 +325,6 @@ class PR2MovieClip extends Sprite {
 				for (element in elements) {
 					frames[frameIndex].elements.push(element);
 					frames[frameIndex].elementLayers.push(layer.index);
-					frames[frameIndex].elementLayerVisible.push(layer.visible != false);
 				}
 			}
 		}
@@ -428,7 +426,6 @@ class PR2MovieClip extends Sprite {
 					shapeByElement.set(element, child);
 				}
 			}
-			child.visible = child.visible && frame.elementLayerVisible[i];
 			desiredChildren.push(child);
 			desiredChildSet.set(child, true);
 		}
@@ -550,7 +547,6 @@ class PR2MovieClip extends Sprite {
 			var layerIndex = frame.elementLayers[i];
 			var child = createDisplayObject(element, null);
 			applyElementProperties(child, element);
-			child.visible = child.visible && frame.elementLayerVisible[i];
 
 			if (maskLayers.exists(layerIndex)) {
 				var holder = maskHolders.get(layerIndex);
@@ -748,8 +744,7 @@ class PR2MovieClip extends Sprite {
 				// degenerate.
 				if (NineSliceSymbol.hasGrid(childSymbol)) {
 					var sliced = NineSliceSymbol.tryCreate(childSymbol, {
-						maxNestedDepth: maxNestedDepth,
-						includeHiddenLayers: includeHiddenLayers
+						maxNestedDepth: maxNestedDepth
 					}, nestedDepth + 1);
 					if (sliced != null) {
 						return sliced;
@@ -758,7 +753,6 @@ class PR2MovieClip extends Sprite {
 
 				var clip = reusableClip != null ? reusableClip : new PR2MovieClip(childSymbol, {
 					maxNestedDepth: maxNestedDepth,
-					includeHiddenLayers: includeHiddenLayers,
 					soundFrameHandler: soundFrameHandler
 				}, nestedDepth + 1);
 				if (element.loop == "single frame") {

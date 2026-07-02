@@ -17,20 +17,30 @@ import pr2.runtime.FlComponents;
 class LobbyArt {
 	private function new() {}
 
+	/**
+		Find the named child nearest the container. The search is breadth-first so a
+		field authored directly on the art (e.g. a popup's own `nameBox`) always wins
+		over a same-named instance buried deeper in a nested symbol. That matters now
+		that `PR2MovieClip` renders eye-hidden layers like Flash does: an avatar card
+		or part symbol can carry its own empty `nameBox`, and a depth-first walk would
+		return that stray field instead of the one the caller means.
+	**/
 	public static function findByName(container:Null<DisplayObjectContainer>, name:String):Null<DisplayObject> {
 		if (container == null) {
 			return null;
 		}
-		for (i in 0...container.numChildren) {
-			var child = container.getChildAt(i);
-			if (child.name == name) {
-				return child;
-			}
-			var childContainer = Std.downcast(child, DisplayObjectContainer);
-			if (childContainer != null) {
-				var found = findByName(childContainer, name);
-				if (found != null) {
-					return found;
+		var queue:Array<DisplayObjectContainer> = [container];
+		var head = 0;
+		while (head < queue.length) {
+			var current = queue[head++];
+			for (i in 0...current.numChildren) {
+				var child = current.getChildAt(i);
+				if (child.name == name) {
+					return child;
+				}
+				var childContainer = Std.downcast(child, DisplayObjectContainer);
+				if (childContainer != null) {
+					queue.push(childContainer);
 				}
 			}
 		}

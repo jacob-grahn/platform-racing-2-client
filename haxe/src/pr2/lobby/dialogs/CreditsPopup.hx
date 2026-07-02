@@ -27,7 +27,7 @@ class CreditsPopup extends Popup {
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("CreditsPopupGraphic", {maxNestedDepth: 4, includeHiddenLayers: true});
+		art = PR2MovieClip.fromLinkage("CreditsPopupGraphic", {maxNestedDepth: 4});
 		addChild(art);
 		setText("versionBox", "PR2 v" + Constants.VERSION + (Constants.BETA ? " Beta" : ""));
 		setText("buildBox", "Build: " + Constants.BUILD);
