@@ -48,6 +48,11 @@ Port the editor itself, one piece at a time:
     Flash-style centered coordinate rounding and layer-scale conversion.
   - [x] Port brush drawing/erasing.
   - [ ] Port text placement/editing.
+    - [x] Port initial text placement on the active art layer, including Flash
+      cursor offsets, layer-scale conversion, editable input, and `u`/`y`
+      action recording.
+    - [ ] Port selecting existing text objects for re-editing, color changes,
+      empty-text deletion, and resize/move integration.
 - [ ] Port block options.
 - [ ] Port selection/deletion.
 - [ ] Port undo-equivalent behavior.

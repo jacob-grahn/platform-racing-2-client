@@ -3,10 +3,13 @@ package pr2.page;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
 import openfl.geom.Point;
 import openfl.text.TextField;
+import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
@@ -99,6 +102,13 @@ class LevelEditor extends Page {
 		return activeObjectLayer.addStamp(code, stageX, stageY);
 	}
 
+	public function placeSelectedTextAt(stageX:Float, stageY:Float):Null<EditorTextObject> {
+		if (activeObjectLayer == null || selectedToolSidebar != "stamps" || selectedToolId != "text") {
+			return null;
+		}
+		return activeObjectLayer.addText("", stageX, stageY, EditorTextObject.lastColor, true);
+	}
+
 	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
 		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
 			return false;
@@ -179,6 +189,10 @@ class LevelEditor extends Page {
 			return;
 		}
 		if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
+			event.stopImmediatePropagation();
+			return;
+		}
+		if (placeSelectedTextAt(event.stageX, event.stageY) != null) {
 			event.stopImmediatePropagation();
 		}
 	}
@@ -323,6 +337,8 @@ class LevelEditorMenu extends Sprite {
 class EditorObjectLayer extends Sprite {
 	public final layerNum:Int;
 	public final placedObjects:Array<EditorPlacedObject> = [];
+	public final textObjects:Array<EditorTextObject> = [];
+	public final saveArray:Array<String> = [];
 
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
@@ -341,6 +357,29 @@ class EditorObjectLayer extends Sprite {
 		return placed;
 	}
 
+	public function addText(text:String, stageX:Float, stageY:Float, color:Int, startEditing:Bool = false):EditorTextObject {
+		var point = globalToLocal(new Point(stageX - 5, stageY - 16));
+		var placed = new EditorTextObject(text, Std.int(point.x), Std.int(point.y), color, this);
+		textObjects.push(placed);
+		saveArray.push("u" + placed.getEscapedText() + ";" + placed.x + ";" + placed.y + ";" + color + ";100;100");
+		addChild(placed);
+		if (startEditing) {
+			placed.startEditing();
+		}
+		return placed;
+	}
+
+	public function recordChangeText(textObject:EditorTextObject):Void {
+		var textId = textObjects.indexOf(textObject);
+		if (textId >= 0) {
+			saveArray.push("y" + textId + ";" + textObject.getEscapedText() + ";" + textObject.color);
+		}
+	}
+
+	public function getSaveString():String {
+		return saveArray.join(",");
+	}
+
 	public function remove():Void {
 		if (parent != null) {
 			parent.removeChild(this);
@@ -349,6 +388,11 @@ class EditorObjectLayer extends Sprite {
 			removeChildAt(0);
 		}
 		placedObjects.resize(0);
+		for (textObject in textObjects) {
+			textObject.remove();
+		}
+		textObjects.resize(0);
+		saveArray.resize(0);
 	}
 
 	private static function createStampDisplay(placed:EditorPlacedObject, size:StampSize):Sprite {
@@ -541,6 +585,154 @@ class EditorPlacedObject {
 		this.code = code;
 		this.x = x;
 		this.y = y;
+	}
+}
+
+class EditorTextObject extends Sprite {
+	public static var lastColor:Int = 0;
+
+	public var color(default, null):Int;
+	public var text(default, null):String;
+	private final owner:EditorObjectLayer;
+	private final displayField:TextField;
+	private var editField:Null<TextField>;
+	private var originalText:String;
+	private var originalColor:Int;
+
+	public function new(text:String, x:Int, y:Int, color:Int, owner:EditorObjectLayer) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.color = color;
+		this.owner = owner;
+		this.text = "";
+		originalText = "";
+		originalColor = color;
+
+		displayField = createTextField();
+		displayField.selectable = false;
+		addChild(displayField);
+		setText(parseText(text));
+	}
+
+	public function startEditing():Void {
+		if (editField != null) {
+			return;
+		}
+		originalText = text;
+		originalColor = color;
+		displayField.visible = false;
+		editField = createTextField();
+		editField.type = TextFieldType.INPUT;
+		editField.selectable = true;
+		editField.background = true;
+		editField.border = true;
+		editField.maxChars = 500;
+		editField.width = Math.max(displayField.width, 100);
+		editField.height = Math.max(displayField.height, 20);
+		editField.text = text;
+		editField.addEventListener(Event.CHANGE, editTextChanged);
+		addChild(editField);
+		if (stage != null) {
+			stage.focus = editField;
+		}
+	}
+
+	public function finishEditing():Void {
+		if (editField == null) {
+			return;
+		}
+		setText(editField.text);
+		editField.removeEventListener(Event.CHANGE, editTextChanged);
+		removeChild(editField);
+		editField = null;
+		displayField.visible = true;
+		if (stage != null) {
+			stage.focus = stage;
+		}
+		if (text != originalText || color != originalColor) {
+			owner.recordChangeText(this);
+		}
+	}
+
+	public function setEditingText(nextText:String):Void {
+		if (editField == null) {
+			setText(nextText);
+			return;
+		}
+		editField.text = nextText == null ? "" : nextText;
+		editTextChanged(null);
+	}
+
+	public function setText(nextText:String):Void {
+		text = nextText == null ? "" : nextText;
+		displayField.text = text;
+		displayField.height = Math.max(displayField.textHeight + 5, 20);
+	}
+
+	public function setColor(nextColor:Int):Void {
+		color = nextColor;
+		displayField.textColor = color;
+		if (editField != null) {
+			editField.textColor = color;
+		}
+		lastColor = color;
+	}
+
+	public function getEscapedText():String {
+		return escapeText(text);
+	}
+
+	public function remove():Void {
+		if (editField != null) {
+			editField.removeEventListener(Event.CHANGE, editTextChanged);
+			removeChild(editField);
+			editField = null;
+		}
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	private function editTextChanged(_:Event):Void {
+		if (editField != null) {
+			displayField.text = editField.text;
+			displayField.height = Math.max(displayField.textHeight + 5, 20);
+			editField.height = Math.max(editField.textHeight + 5, 20);
+			editField.width = Math.max(editField.textWidth + 8, 100);
+		}
+	}
+
+	private function createTextField():TextField {
+		var field = new TextField();
+		field.defaultTextFormat = new TextFormat("_sans", 12, color);
+		field.wordWrap = false;
+		field.multiline = true;
+		field.autoSize = TextFieldAutoSize.LEFT;
+		field.textColor = color;
+		return field;
+	}
+
+	public static function escapeText(value:String):String {
+		var escaped = value == null ? "" : value;
+		escaped = StringTools.replace(escaped, "#", "#35");
+		escaped = StringTools.replace(escaped, "`", "#96");
+		escaped = StringTools.replace(escaped, "&", "#38");
+		escaped = StringTools.replace(escaped, ",", "#44");
+		escaped = StringTools.replace(escaped, "+", "#43");
+		escaped = StringTools.replace(escaped, "-", "#45");
+		return StringTools.replace(escaped, ";", "#59");
+	}
+
+	public static function parseText(value:String):String {
+		var parsed = value == null ? "" : value;
+		parsed = StringTools.replace(parsed, "#96", "`");
+		parsed = StringTools.replace(parsed, "#38", "&");
+		parsed = StringTools.replace(parsed, "#44", ",");
+		parsed = StringTools.replace(parsed, "#59", ";");
+		parsed = StringTools.replace(parsed, "#43", "+");
+		parsed = StringTools.replace(parsed, "#45", "-");
+		return StringTools.replace(parsed, "#35", "#");
 	}
 }
 
