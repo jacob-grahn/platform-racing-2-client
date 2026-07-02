@@ -20,7 +20,7 @@ class TeleportPop extends Sprite {
 		super();
 		x = worldX;
 		y = worldY;
-		animation = PR2MovieClip.fromLinkage("TeleportEffectGraphic", {maxNestedDepth: 3});
+		animation = PR2MovieClip.fromLinkage("TeleportAnimation", {maxNestedDepth: 3});
 		addChild(animation);
 		addEventListener(Event.ENTER_FRAME, tick);
 

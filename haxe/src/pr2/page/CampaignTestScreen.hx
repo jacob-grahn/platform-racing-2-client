@@ -132,7 +132,7 @@ class CampaignTestScreen extends Sprite {
 	// can be exercised and screenshotted in the real `Course`/`ServerLevelRenderer`
 	// path without a server. This is the replacement for the old standalone
 	// gameplay harness: pick a layout with `?screen=campaign&debug=1&localLevel=<name>`.
-	// Supported names: `rotate` (default) and `flat`.
+	// Supported names: `rotate` (default), `flat`, `arrow`, and `safety`.
 	private function buildLocalLevel():Void {
 		var name = localLevel == null ? "rotate" : localLevel.toLowerCase();
 		var blocks:Array<DecodedBlock> = [];
@@ -150,6 +150,19 @@ class CampaignTestScreen extends Sprite {
 					add(ObjectCodes.BLOCK_BRICK, col, 20);
 				}
 				add(ObjectCodes.BLOCK_START1, 20, 19);
+
+			case "safety":
+				// Safety-net sandbox: a brick floor with a safety net standing on it a
+				// few tiles to the right of the spawn. Walk right into the net to touch
+				// it from the side, the condition that fires `returnToLastSafeSpot`
+				// (TODO bug: touching a safety net freezes the game).
+				title = "Local Safety Test";
+				for (col in 6...34) {
+					add(ObjectCodes.BLOCK_BRICK, col, 20);
+				}
+				add(ObjectCodes.BLOCK_SAFETY, 24, 19);
+				add(ObjectCodes.BLOCK_SAFETY, 24, 18);
+				add(ObjectCodes.BLOCK_START1, 16, 19);
 
 			case "arrow":
 				// Arrow-block sandbox: a brick floor with an up arrow embedded in it and

@@ -12,6 +12,7 @@ import pr2.character.LocalCharacterTest;
 import pr2.character.RemoteCharacterConsumeTest;
 import pr2.crypto.PR2EncryptorTest;
 import pr2.effects.PixelEffect1Test;
+import pr2.effects.TeleportPopTest;
 import pr2.harness.LocalPlayerControllerTest;
 import pr2.harness.PlayerDisplayPlacementTest;
 import pr2.gameplay.RotationMathTest;
@@ -83,6 +84,7 @@ class DeterministicTestSuite {
 		FlButtonTest.main();
 		FlComponentsTest.main();
 		PixelEffect1Test.main();
+		TeleportPopTest.main();
 		CharacterAtlasTest.main();
 		CharacterBaseTest.main();
 		CharacterDisplayTest.main();
