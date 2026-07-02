@@ -688,6 +688,18 @@ class PR2MovieClip extends Sprite {
 	}
 
 	private function disposeUnusedReusableClips(reusableClips:Map<String, Array<PR2MovieClip>>):Void {
+		// Provably-static symbol instances are kept in `shapeByElement` and reused
+		// across frames (one cached clip per frame element). They also land in the
+		// reusable pool because OpenFL auto-names every clip, but `takeReusableClip`
+		// never draws them (their element has no authored name), so they linger here.
+		// Such a clip is only *detached* while another frame is showing — it is still
+		// live and will be re-added when its frame comes back — so disposing it would
+		// empty a cached instance and blank it out on return (arrow blocks lost their
+		// chevron after animating). Skip anything still referenced by the cache.
+		var cached:ObjectMap<DisplayObject, Bool> = new ObjectMap();
+		for (cachedChild in shapeByElement) {
+			cached.set(cachedChild, true);
+		}
 		for (clips in reusableClips) {
 			for (clip in clips) {
 				// A clip still parented to `this` was reused this frame via the
@@ -696,7 +708,7 @@ class PR2MovieClip extends Sprite {
 				// has already detached every genuinely unused child, so a surviving
 				// parent means the clip is in use — disposing it would empty a visible
 				// instance (e.g. a held graphic re-rendered by gotoAndStop).
-				if (clip.parent == this) {
+				if (clip.parent == this || cached.exists(clip)) {
 					continue;
 				}
 				clip.dispose();

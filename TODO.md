@@ -17,6 +17,17 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 - Run only the related test cases for your change, the full suite is a bit slow
 
 
+## Bugs
+
+- [ ] Player is moving far away during the 321 countdown, then moves back when it is done
+- [ ] Player disappears when in water
+- [ ] Touching a safety net freezes the game, even clicking ui elements no longer works after
+- [ ] held items are not visible on the player
+- [ ] erase lines seem to not work in the level art layers
+- [ ] push blocks don't work right when the map is rotated
+- [ ] character dissapears during the rotation animation after hitting a rotate block, and re appears when the rotation animation is done
+- [ ] a stray black dot/circle appears near the far-left of the floor the moment the player bounces off an arrow block (seen in the local `?screen=campaign&debug=1&localLevel=arrow` harness). It is anchored to a world position (~col 8), not the player, and persists after the bounce. Pre-existing (present before the arrow-chevron fix), so it's a separate rendering artifact — likely a mis-parented/mis-positioned display object triggered during the arrow interaction or the launch physics. Repro screenshots: test/output/bugs/arrow-repro-02..06.png
+
 ## Level Editor and Level Management
 
 The lobby-to-editor handoff (permanent-moderator flag, page change, lobby socket

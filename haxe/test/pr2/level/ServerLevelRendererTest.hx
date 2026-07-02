@@ -1,5 +1,7 @@
 package pr2.level;
 
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
@@ -237,18 +239,25 @@ class ServerLevelRendererTest {
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [arrow]), arrow);
 		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow timeline starts stopped on frame 1");
 
-		renderer.animateArrow(arrow.x, arrow.y);
-		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow activation starts one frame brighter");
-
 		var blockLayer = worldLayer(renderer, 1);
 		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
 		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
 		var timeline = pivot.getChildAt(0);
+		// Capture the chevron's full sub-tree at rest so we can prove the animation
+		// does not empty it. Counting direct children alone missed the regression
+		// where the frame-1 clip stayed attached but its inner chevron was disposed.
+		var restDepth = deepChildCount(timeline);
+		assertTrue(restDepth > 1, "arrow chevron has inner content at rest");
+
+		renderer.animateArrow(arrow.x, arrow.y);
+		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow activation starts one frame brighter");
+
 		for (_ in 0...7) {
 			timeline.dispatchEvent(new Event(Event.ENTER_FRAME));
 		}
 		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "arrow overlay returns to its stopped first frame");
 		assertEquals(2, blockDisplay.numChildren, "arrow block keeps its overlay after activation");
+		assertEquals(restDepth, deepChildCount(timeline), "arrow chevron keeps its inner content after animating and settling");
 		assertEquals(null, renderer.arrowFrameAt(0, 0), "non-arrow coordinate has no animation frame");
 	}
 
@@ -391,5 +400,24 @@ class ServerLevelRendererTest {
 		if (Math.abs(expected - actual) > 0.0001) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertTrue(value:Bool, message:String):Void {
+		assertions++;
+		if (!value) {
+			throw '$message: expected true';
+		}
+	}
+
+	private static function deepChildCount(o:DisplayObject):Int {
+		var container = Std.downcast(o, DisplayObjectContainer);
+		if (container == null) {
+			return 0;
+		}
+		var n = container.numChildren;
+		for (i in 0...container.numChildren) {
+			n += deepChildCount(container.getChildAt(i));
+		}
+		return n;
 	}
 }

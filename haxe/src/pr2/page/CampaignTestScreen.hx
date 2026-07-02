@@ -151,6 +151,18 @@ class CampaignTestScreen extends Sprite {
 				}
 				add(ObjectCodes.BLOCK_START1, 20, 19);
 
+			case "arrow":
+				// Arrow-block sandbox: a brick floor with an up arrow embedded in it and
+				// the player spawning on the floor a few tiles to the left. Walk right
+				// onto the up arrow to bounce off it (each bounce is a single touch
+				// followed by ~1s airborne), which is the condition that exposes arrow
+				// blocks losing their overlay after being touched (TODO bug).
+				title = "Local Arrow Test";
+				for (col in 6...34) {
+					add(col == 20 ? ObjectCodes.BLOCK_ARROW_UP : ObjectCodes.BLOCK_BRICK, col, 20);
+				}
+				add(ObjectCodes.BLOCK_START1, 16, 19);
+
 			default:
 				// Rotate layout: a floor + walls + ceiling box (so missing blocks are
 				// obvious), a start block to spawn on, and a rotate block directly
@@ -178,6 +190,10 @@ class CampaignTestScreen extends Sprite {
 		vars.set("gameMode", "race");
 		var data = new ServerLevelData(vars, true);
 		mountCourse(level, data);
+		// The real flow calls beginRace from GamePage once the character exists; the
+		// local harness has no GamePage, so start the countdown/race here so physics
+		// actually runs offline.
+		course.beginRace();
 		setStatus("phase=localLevel", 'Local test level "$name" mounted (blocks=${blocks.length}).');
 	}
 
