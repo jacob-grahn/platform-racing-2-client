@@ -226,7 +226,11 @@ class LobbyServicesTest {
 		label.dragTo(117.4, 146.6);
 		label.endDragAt(117.4, 146.6);
 		assertEquals(1, label.alpha, "text drag restores alpha on release");
-		label.resizeTo(1.236, 0.754);
+		var resizeHandle = label.getChildByName("resizeHandle");
+		assertNotNull(resizeHandle, "text object exposes a resize handle");
+		label.beginResizeAt(label.x + resizeHandle.x, label.y + resizeHandle.y);
+		label.resizeDragTo(label.x + resizeHandle.x * 1.236, label.y + resizeHandle.y * 0.754);
+		label.endResizeAt(label.x + resizeHandle.x * 1.236, label.y + resizeHandle.y * 0.754);
 		assertEquals(112, Std.int(label.x), "text move rounds x like Flash drag release");
 		assertEquals(131, Std.int(label.y), "text move rounds y like Flash drag release");
 		assertEquals(1.24, label.scaleX, "text resize rounds scale x to hundredths");

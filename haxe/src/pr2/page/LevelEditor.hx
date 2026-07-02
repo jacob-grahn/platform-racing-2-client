@@ -622,6 +622,7 @@ class EditorTextObject extends Sprite {
 	public var text(default, null):String;
 	private final owner:EditorObjectLayer;
 	private final displayField:TextField;
+	private final resizeHandle:Sprite;
 	private var editField:Null<TextField>;
 	private var colorPicker:Null<ColorPicker>;
 	private var originalText:String;
@@ -632,6 +633,11 @@ class EditorTextObject extends Sprite {
 	private var dragOffsetY:Float = 0;
 	private var dragStartX:Float = 0;
 	private var dragStartY:Float = 0;
+	private var resizing:Bool = false;
+	private var resizeStartScaleX:Float = 1;
+	private var resizeStartScaleY:Float = 1;
+	private var resizeBaseWidth:Float = 100;
+	private var resizeBaseHeight:Float = 20;
 
 	public function new(text:String, x:Int, y:Int, color:Int, owner:EditorObjectLayer) {
 		super();
@@ -646,6 +652,8 @@ class EditorTextObject extends Sprite {
 		displayField = createTextField();
 		displayField.selectable = false;
 		addChild(displayField);
+		resizeHandle = createResizeHandle();
+		addChild(resizeHandle);
 		setText(parseText(text));
 		addEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
 	}
@@ -657,6 +665,7 @@ class EditorTextObject extends Sprite {
 		originalText = text;
 		originalColor = color;
 		displayField.visible = false;
+		resizeHandle.visible = false;
 		editField = createTextField();
 		editField.type = TextFieldType.INPUT;
 		editField.selectable = true;
@@ -684,6 +693,8 @@ class EditorTextObject extends Sprite {
 		editField = null;
 		removeColorPicker();
 		displayField.visible = true;
+		resizeHandle.visible = true;
+		positionResizeHandle();
 		if (stage != null) {
 			stage.focus = stage;
 		}
@@ -713,6 +724,7 @@ class EditorTextObject extends Sprite {
 		text = nextText == null ? "" : nextText;
 		displayField.text = text;
 		displayField.height = Math.max(displayField.textHeight + 5, 20);
+		positionResizeHandle();
 	}
 
 	public function setColor(nextColor:Int):Void {
@@ -746,6 +758,44 @@ class EditorTextObject extends Sprite {
 		scaleX = roundedScaleX;
 		scaleY = roundedScaleY;
 		if (record) {
+			owner.recordResizeText(this);
+		}
+	}
+
+	public function beginResizeAt(stageX:Float, stageY:Float):Void {
+		if (isEditing() || resizing) {
+			return;
+		}
+		resizing = true;
+		resizeStartScaleX = scaleX;
+		resizeStartScaleY = scaleY;
+		resizeBaseWidth = Math.max(displayField.width, 1);
+		resizeBaseHeight = Math.max(displayField.height, 1);
+		if (parent != null && parent.numChildren > 1) {
+			parent.setChildIndex(this, parent.numChildren - 1);
+		}
+	}
+
+	public function resizeDragTo(stageX:Float, stageY:Float):Void {
+		if (!resizing) {
+			return;
+		}
+		var point = owner.globalToLocal(new Point(stageX, stageY));
+		scaleX = (point.x - x) / resizeBaseWidth;
+		scaleY = (point.y - y) / resizeBaseHeight;
+		positionResizeHandle();
+	}
+
+	public function endResizeAt(stageX:Float, stageY:Float):Void {
+		if (!resizing) {
+			return;
+		}
+		resizeDragTo(stageX, stageY);
+		resizing = false;
+		var changed = scaleX != resizeStartScaleX || scaleY != resizeStartScaleY;
+		resizeTo(scaleX, scaleY, false);
+		positionResizeHandle();
+		if (changed) {
 			owner.recordResizeText(this);
 		}
 	}
@@ -802,6 +852,8 @@ class EditorTextObject extends Sprite {
 	public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
 		removeStageDragListeners();
+		removeStageResizeListeners();
+		resizeHandle.removeEventListener(MouseEvent.MOUSE_DOWN, resizeHandlePressed);
 		if (editField != null) {
 			editField.removeEventListener(Event.CHANGE, editTextChanged);
 			removeChild(editField);
@@ -838,12 +890,41 @@ class EditorTextObject extends Sprite {
 		event.stopImmediatePropagation();
 	}
 
+	private function resizeHandlePressed(event:MouseEvent):Void {
+		beginResizeAt(event.stageX, event.stageY);
+		if (stage != null) {
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, resizeMouseMoved);
+			stage.addEventListener(MouseEvent.MOUSE_UP, resizeMouseReleased);
+			stage.focus = stage;
+		}
+		event.stopImmediatePropagation();
+	}
+
+	private function resizeMouseMoved(event:MouseEvent):Void {
+		resizeDragTo(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function resizeMouseReleased(event:MouseEvent):Void {
+		removeStageResizeListeners();
+		endResizeAt(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
 	private function removeStageDragListeners():Void {
 		if (stage == null) {
 			return;
 		}
 		stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
 		stage.removeEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
+	}
+
+	private function removeStageResizeListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, resizeMouseMoved);
+		stage.removeEventListener(MouseEvent.MOUSE_UP, resizeMouseReleased);
 	}
 
 	private function editTextChanged(_:Event):Void {
@@ -853,6 +934,7 @@ class EditorTextObject extends Sprite {
 			editField.height = Math.max(editField.textHeight + 5, 20);
 			editField.width = Math.max(editField.textWidth + 8, 100);
 			positionColorPicker();
+			positionResizeHandle();
 		}
 	}
 
@@ -892,6 +974,25 @@ class EditorTextObject extends Sprite {
 		var target = editField != null ? editField : displayField;
 		colorPicker.x = Math.max(target.width, 100) - colorPicker.width / 2;
 		colorPicker.y = -colorPicker.height / 2;
+	}
+
+	private function positionResizeHandle():Void {
+		var target = editField != null ? editField : displayField;
+		resizeHandle.x = target.width;
+		resizeHandle.y = target.height;
+	}
+
+	private function createResizeHandle():Sprite {
+		var handle = new Sprite();
+		handle.name = "resizeHandle";
+		handle.buttonMode = true;
+		handle.mouseChildren = false;
+		handle.graphics.lineStyle(1, 0x333333);
+		handle.graphics.beginFill(0xFFFFFF);
+		handle.graphics.drawRect(-4, -4, 8, 8);
+		handle.graphics.endFill();
+		handle.addEventListener(MouseEvent.MOUSE_DOWN, resizeHandlePressed);
+		return handle;
 	}
 
 	private function createTextField():TextField {
