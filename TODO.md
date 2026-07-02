@@ -60,6 +60,9 @@ Port the editor itself, one piece at a time:
         - [x] Record text object move/resize mutations with Flash `m`/`r`
           action encoding and rounding.
         - [ ] Wire text object drag and resize handle interactions.
+          - [x] Wire text object drag interactions with Flash rounding and `m`
+            action recording.
+          - [ ] Wire text object resize handle interactions.
 - [ ] Port block options.
 - [ ] Port selection/deletion.
 - [ ] Port undo-equivalent behavior.

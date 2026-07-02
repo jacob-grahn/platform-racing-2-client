@@ -626,6 +626,12 @@ class EditorTextObject extends Sprite {
 	private var colorPicker:Null<ColorPicker>;
 	private var originalText:String;
 	private var originalColor:Int;
+	private var dragging:Bool = false;
+	private var dragMoved:Bool = false;
+	private var dragOffsetX:Float = 0;
+	private var dragOffsetY:Float = 0;
+	private var dragStartX:Float = 0;
+	private var dragStartY:Float = 0;
 
 	public function new(text:String, x:Int, y:Int, color:Int, owner:EditorObjectLayer) {
 		super();
@@ -744,12 +750,58 @@ class EditorTextObject extends Sprite {
 		}
 	}
 
+	public function beginDragAt(stageX:Float, stageY:Float):Void {
+		if (isEditing() || dragging) {
+			return;
+		}
+		var point = owner.globalToLocal(new Point(stageX, stageY));
+		dragging = true;
+		dragMoved = false;
+		dragOffsetX = x - point.x;
+		dragOffsetY = y - point.y;
+		dragStartX = x;
+		dragStartY = y;
+		alpha = 0.75;
+		if (parent != null && parent.numChildren > 1) {
+			parent.setChildIndex(this, parent.numChildren - 1);
+		}
+	}
+
+	public function dragTo(stageX:Float, stageY:Float):Void {
+		if (!dragging) {
+			return;
+		}
+		var point = owner.globalToLocal(new Point(stageX, stageY));
+		var nextX = point.x + dragOffsetX;
+		var nextY = point.y + dragOffsetY;
+		if (x != nextX || y != nextY) {
+			dragMoved = true;
+		}
+		x = nextX;
+		y = nextY;
+	}
+
+	public function endDragAt(stageX:Float, stageY:Float):Void {
+		if (!dragging) {
+			return;
+		}
+		dragTo(stageX, stageY);
+		dragging = false;
+		alpha = 1;
+		var changed = dragMoved || x != dragStartX || y != dragStartY;
+		moveToLocal(x, y, changed);
+		if (!changed) {
+			startEditing();
+		}
+	}
+
 	public function getEscapedText():String {
 		return escapeText(text);
 	}
 
 	public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
+		removeStageDragListeners();
 		if (editField != null) {
 			editField.removeEventListener(Event.CHANGE, editTextChanged);
 			removeChild(editField);
@@ -762,8 +814,36 @@ class EditorTextObject extends Sprite {
 	}
 
 	private function selectForEditing(event:MouseEvent):Void {
-		startEditing();
+		if (isEditing()) {
+			event.stopImmediatePropagation();
+			return;
+		}
+		beginDragAt(event.stageX, event.stageY);
+		if (stage != null) {
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
+			stage.addEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
+			stage.focus = stage;
+		}
 		event.stopImmediatePropagation();
+	}
+
+	private function dragMouseMoved(event:MouseEvent):Void {
+		dragTo(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function dragMouseReleased(event:MouseEvent):Void {
+		removeStageDragListeners();
+		endDragAt(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function removeStageDragListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
+		stage.removeEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
 	}
 
 	private function editTextChanged(_:Event):Void {

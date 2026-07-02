@@ -211,7 +211,8 @@ class LobbyServicesTest {
 		assertEquals(104, Std.int(label.y), "text placement applies Flash cursor y offset");
 		assertEquals("hello, world; #1", label.text, "text editing commits the typed content");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0", editor.activeObjectLayer.getSaveString(), "text placement records Flash add/change actions");
-		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		label.beginDragAt(100, 120);
+		label.endDragAt(100, 120);
 		assertEquals(true, label.isEditing(), "clicking existing text reopens editing");
 		label.setEditingText("edited text");
 		label.setColor(0x336699);
@@ -220,7 +221,11 @@ class LobbyServicesTest {
 		assertEquals(0x336699, label.color, "text color edit commits the selected color");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601", editor.activeObjectLayer.getSaveString(),
 			"text re-edit records a Flash change action with color");
-		label.moveToLocal(112.4, 130.6);
+		label.beginDragAt(100, 120);
+		assertEquals(0.75, label.alpha, "text drag fades the moved object like Flash");
+		label.dragTo(117.4, 146.6);
+		label.endDragAt(117.4, 146.6);
+		assertEquals(1, label.alpha, "text drag restores alpha on release");
 		label.resizeTo(1.236, 0.754);
 		assertEquals(112, Std.int(label.x), "text move rounds x like Flash drag release");
 		assertEquals(131, Std.int(label.y), "text move rounds y like Flash drag release");
@@ -228,7 +233,8 @@ class LobbyServicesTest {
 		assertEquals(0.75, label.scaleY, "text resize rounds scale y to hundredths");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75",
 			editor.activeObjectLayer.getSaveString(), "text move and resize record Flash object actions");
-		label.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		label.beginDragAt(112, 131);
+		label.endDragAt(112, 131);
 		label.setEditingText("   ");
 		label.finishEditing();
 		assertEquals(0, editor.activeObjectLayer.textObjects.length, "empty text edit removes the text object");
