@@ -129,13 +129,9 @@ same serialized meaning and visible result as Flash.
   correctness/perf/clarity win, and retyping ~40 entries carries typo risk that
   the tests don't fully cover. Only worth doing if these tables ever need to be
   generated or shared with another consumer.
-- [ ] Extract race sound handling out of `Course` into a `RaceSounds` helper (the
-  ~13 `*_SOUND` path constants plus `playWorldJumpSound`/`playCharacterSound`/
-  block-bump/item/stat-block cues). Deferred: these cues read `Course` state
-  directly (`levelRenderer.cameraOffset()`, the `onPlayJumpSound`/
-  `onPlayCharacterSound` test-injection callbacks, `worldXOf`/`worldYOf(event)`,
-  `Settings.soundLevel`), so a clean extraction needs a deliberate seam for the
-  camera offset + callbacks rather than a mechanical move.
+- [x] Extract race sound handling out of `Course` into a `RaceSounds` helper (the
+  `*_SOUND` path constants plus `playWorldJumpSound`/`playCharacterSound`/
+  block-bump/item/stat-block cues).
 - [ ] Collapse `Character`'s four-slot hat handling (`hat1`..`hat4` /
   `hat1Color`..`hat4Color` / `hat1Color2`..`hat4Color2`) into an array so the
   repeated switch-on-slot logic in `setHats`/`getHighestHat`/`setHatColors`

@@ -4,16 +4,12 @@ package pr2.gameplay;
 import js.Browser;
 #end
 import haxe.crypto.Md5;
-import haxe.ds.ObjectMap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
-import openfl.media.SoundChannel;
 import openfl.ui.Keyboard;
-import openfl.utils.Assets;
 import pr2.Constants;
-import pr2.audio.SoundEffects;
 import pr2.character.Character;
 import pr2.character.CharacterState;
 import pr2.character.LocalCharacter;
@@ -28,7 +24,6 @@ import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.PlayerDisplayPlacement;
 import pr2.lobby.account.AlternateControls;
-import pr2.lobby.account.Settings;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -54,28 +49,6 @@ import pr2.net.ServerLevelData;
 	alongside the local player.
 **/
 class Course extends Sprite {
-	// JumpSound -> sound552 (AssetCatalog DOMSoundItem).
-	static inline var JUMP_SOUND:String = "assets/audio/sfx/sound552.mp3";
-	// SuperJumpSound -> sound913 (AssetCatalog DOMSoundItem).
-	static inline var SUPER_JUMP_SOUND:String = "assets/audio/sfx/sound913.mp3";
-	// ThumpSound -> sound448 (AssetCatalog DOMSoundItem), used by Block.hit.
-	static inline var BLOCK_BUMP_SOUND:String = "assets/audio/sfx/sound448.mp3";
-	// StarSound -> sound452 (AssetCatalog DOMSoundItem), used by ItemBlock.useSupply.
-	static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
-	// BumpHappySound -> sound473 (AssetCatalog DOMSoundItem), used by Character.gainHeart.
-	static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/sound473.mp3";
-	// BumpSadSound -> sound460 (AssetCatalog DOMSoundItem), used by SadBlock.useSupply.
-	static inline var BUMP_SAD_SOUND:String = "assets/audio/sfx/sound460.mp3";
-	// SquashSound -> sound915, used by the Jiggmin hat stomp.
-	static inline var SQUASH_SOUND:String = "assets/audio/sfx/sound915.mp3";
-	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
-	static inline var SPEED_UP_SOUND:String = "assets/audio/sfx/sound550.mp3";
-	static inline var SLOW_DOWN_SOUND:String = "assets/audio/sfx/sound551.mp3";
-	// YeahSound -> yeah, used by Artifact hat activation.
-	static inline var YEAH_SOUND:String = "assets/audio/sfx/yeah.wav";
-	// EngineSound -> sound549, looped while Character.beginJet is active.
-	static inline var ENGINE_SOUND:String = "assets/audio/sfx/sound549.wav";
-
 	// Verified Course holder->stage offsets (holder is centred at +275,+200).
 	public static inline var ITEM_X:Float = 2;
 	public static inline var ITEM_Y:Float = 2;
@@ -158,8 +131,7 @@ class Course extends Sprite {
 	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
 	private var activeVisualBlocks:Map<String, Bool> = new Map();
 	private var startPositions:Array<{x:Int, y:Int}> = [];
-	private var activeJetSounds:ObjectMap<Character, Bool> = new ObjectMap();
-	private var jetSoundChannels:ObjectMap<Character, SoundChannel> = new ObjectMap();
+	private var raceSounds:RaceSounds;
 	private var localSetHatsCommandName:Null<String>;
 	private var reachedObjectives:Map<Int, Bool> = new Map();
 
@@ -183,6 +155,7 @@ class Course extends Sprite {
 		var focus = startBlocks.length == 0 ? null : startBlocks[0];
 		levelRenderer = new ServerLevelRenderer(level, focus, ServerLevelRenderer.DEFAULT_FOCUS_X, ServerLevelRenderer.DEFAULT_FOCUS_Y, true);
 		addChild(levelRenderer);
+		raceSounds = new RaceSounds(levelRenderer.cameraOffset);
 
 		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
 		// The controller swaps the player's coordinates about the fixture origin on
@@ -577,10 +550,7 @@ class Course extends Sprite {
 			onPlayJumpSound(worldX, worldY);
 			return;
 		}
-		if (Assets.exists(JUMP_SOUND)) {
-			var offset = levelRenderer.cameraOffset();
-			SoundEffects.playGameSound(Assets.getSound(JUMP_SOUND), worldX, worldY, offset.x, offset.y, 0.75);
-		}
+		raceSounds.playWorldJumpSound(worldX, worldY);
 	}
 
 	private function playCharacterSound(request:pr2.character.Character.CharacterSoundRequest):Void {
@@ -588,18 +558,7 @@ class Course extends Sprite {
 			onPlayCharacterSound(request);
 			return;
 		}
-		var path = switch (request.kind) {
-			case "bumpHappy": BUMP_HAPPY_SOUND;
-			case "squash": SQUASH_SOUND;
-			case "speedUp": SPEED_UP_SOUND;
-			case "slowDown": SLOW_DOWN_SOUND;
-			case "artifactYeah": YEAH_SOUND;
-			default: null;
-		}
-		if (path != null && Assets.exists(path)) {
-			var offset = levelRenderer.cameraOffset();
-			SoundEffects.playGameSound(Assets.getSound(path), request.x, request.y, offset.x, offset.y, request.volume);
-		}
+		raceSounds.playCharacterSound(request);
 	}
 
 	private function onArtifactHatActivated():Void {
@@ -613,45 +572,32 @@ class Course extends Sprite {
 
 	private function startJetSound(request:pr2.character.Character.CharacterSoundRequest):Void {
 		stopJetSound(request.target);
-		activeJetSounds.set(request.target, true);
 		if (onStartJetSound != null) {
+			raceSounds.markJetSoundActive(request.target);
 			onStartJetSound(request);
 			return;
 		}
-		if (Assets.exists(ENGINE_SOUND)) {
-			var offset = levelRenderer.cameraOffset();
-			var channel = SoundEffects.playGameSound(Assets.getSound(ENGINE_SOUND), request.x, request.y, offset.x, offset.y, request.volume, 0, 999);
-			if (channel != null) {
-				jetSoundChannels.set(request.target, channel);
-			}
-		}
+		raceSounds.startJetSound(request);
 	}
 
 	private function stopJetSound(character:Character):Void {
-		if (!activeJetSounds.exists(character) && !jetSoundChannels.exists(character)) {
+		if (!raceSounds.hasJetSound(character)) {
 			return;
 		}
 		if (onStopJetSound != null) {
 			onStopJetSound(character);
 		}
-		activeJetSounds.remove(character);
-		var channel = jetSoundChannels.get(character);
-		if (channel != null) {
-			channel.stop();
-			jetSoundChannels.remove(character);
-		}
+		raceSounds.stopJetSound(character);
 	}
 
 	private function stopAllJetSounds():Void {
-		for (character in [for (character in activeJetSounds.keys()) character]) {
+		for (character in raceSounds.activeJetCharacters()) {
 			stopJetSound(character);
 		}
 	}
 
 	private function playSuperJumpSound():Void {
-		if (Assets.exists(SUPER_JUMP_SOUND)) {
-			SoundEffects.playSound(Assets.getSound(SUPER_JUMP_SOUND), Settings.soundLevel / 100);
-		}
+		raceSounds.playSuperJumpSound();
 	}
 
 	public function toggleSpectatePossible(value:Bool):Void {
@@ -921,9 +867,9 @@ class Course extends Sprite {
 				case ItemBlockSound:
 					playItemBlockSound();
 				case HappyBlockSound:
-					playStatBlockSound(event, BUMP_HAPPY_SOUND);
+					playStatBlockSound(event, RaceSounds.BUMP_HAPPY_SOUND);
 				case SadBlockSound:
-					playStatBlockSound(event, BUMP_SAD_SOUND);
+					playStatBlockSound(event, RaceSounds.BUMP_SAD_SOUND);
 				case SuperJumpSound:
 					playSuperJumpSound();
 				case PushBlockMove:
@@ -988,22 +934,15 @@ class Course extends Sprite {
 	}
 
 	private function playBlockBumpSound(event:BlockVisualEvent):Void {
-		if (Assets.exists(BLOCK_BUMP_SOUND)) {
-			var offset = levelRenderer.cameraOffset();
-			SoundEffects.playGameSound(Assets.getSound(BLOCK_BUMP_SOUND), worldXOf(event), worldYOf(event), offset.x, offset.y, 0.9);
-		}
+		raceSounds.playBlockBumpSound(worldXOf(event), worldYOf(event));
 	}
 
 	private function playItemBlockSound():Void {
-		if (Assets.exists(ITEM_BLOCK_SOUND)) {
-			SoundEffects.playSound(Assets.getSound(ITEM_BLOCK_SOUND), 0.6 * (Settings.soundLevel / 100));
-		}
+		raceSounds.playItemBlockSound();
 	}
 
 	private function playStatBlockSound(event:BlockVisualEvent, path:String):Void {
-		if (Assets.exists(path)) {
-			SoundEffects.playSound(Assets.getSound(path), 0.75 * (Settings.soundLevel / 100));
-		}
+		raceSounds.playStatBlockSound(path);
 	}
 
 	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float):Void {
