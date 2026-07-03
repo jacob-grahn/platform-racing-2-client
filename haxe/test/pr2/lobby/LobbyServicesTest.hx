@@ -248,6 +248,19 @@ class LobbyServicesTest {
 		assertEquals(null, label.parent, "empty text edit unmounts the display object");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0", editor.activeObjectLayer.getSaveString(),
 			"empty text edit records a Flash delete action");
+		clickEditorMenu(editor, "undoButton");
+		assertEquals(1, editor.activeObjectLayer.textObjects.length, "undo restores the deleted text object");
+		label = editor.activeObjectLayer.textObjects[0];
+		assertEquals("edited text", label.text, "undo rebuilds the previous text content");
+		assertEquals(112, Std.int(label.x), "undo rebuilds the previous text x");
+		assertEquals(131, Std.int(label.y), "undo rebuilds the previous text y");
+		assertEquals(1.24, label.scaleX, "undo rebuilds the previous text scale x");
+		assertEquals(0.75, label.scaleY, "undo rebuilds the previous text scale y");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75",
+			editor.activeObjectLayer.getSaveString(), "undo removes the last Flash text action");
+		editor.activeObjectLayer.removeTextObject(label);
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
+			editor.activeObjectLayer.getSaveString(), "re-deleting restored text records a fresh delete action");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);
 		assertEquals(0, tree.code, "stamp placement stores the selected stamp code");

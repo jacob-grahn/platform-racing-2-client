@@ -229,6 +229,13 @@ class LevelEditor extends Page {
 		return true;
 	}
 
+	public function undoActiveObjectLayer():Bool {
+		if (activeObjectLayer == null) {
+			return false;
+		}
+		return activeObjectLayer.undo();
+	}
+
 	override public function remove():Void {
 		if (LevelEditor.editor == this) {
 			LevelEditor.editor = null;
@@ -359,7 +366,9 @@ class LevelEditorMenu extends Sprite {
 		bind("layer1Button", function() setLayer(1));
 		bind("layer2Button", function() setLayer(2));
 		bind("layer3Button", function() setLayer(3));
+		bind("undoButton", clickUndo);
 		Reflect.setProperty(find("zoomSelect"), "selectedIndex", 3);
+		Reflect.setProperty(find("redoButton"), "enabled", false);
 		if (pr2.lobby.LobbySession.group <= 0) {
 			Reflect.setProperty(find("saveButton"), "enabled", false);
 			Reflect.setProperty(find("loadButton"), "enabled", false);
@@ -421,6 +430,10 @@ class LevelEditorMenu extends Sprite {
 	private function clickBackgrounds():Void {
 		changeSideBar(bg);
 		moveGlow(find("bgButton"));
+	}
+
+	private function clickUndo():Void {
+		editor.undoActiveObjectLayer();
 	}
 
 	private function setLayer(layerNum:Int):Void {
@@ -1090,6 +1103,15 @@ class EditorObjectLayer extends Sprite {
 		textObject.remove();
 	}
 
+	public function undo():Bool {
+		if (saveArray.length == 0) {
+			return false;
+		}
+		saveArray.pop();
+		rebuildTextObjects();
+		return true;
+	}
+
 	public function getSaveString():String {
 		return saveArray.join(",");
 	}
@@ -1102,11 +1124,84 @@ class EditorObjectLayer extends Sprite {
 			removeChildAt(0);
 		}
 		placedObjects.resize(0);
-		for (textObject in textObjects) {
+		for (textObject in textObjects.copy()) {
 			textObject.remove();
 		}
 		textObjects.resize(0);
 		saveArray.resize(0);
+	}
+
+	private function rebuildTextObjects():Void {
+		for (textObject in textObjects.copy()) {
+			textObject.remove();
+		}
+		textObjects.resize(0);
+		for (action in saveArray) {
+			replayTextAction(action);
+		}
+	}
+
+	private function replayTextAction(action:String):Void {
+		if (action == null || action.length == 0) {
+			return;
+		}
+		var parts = action.split(";");
+		switch (action.charAt(0)) {
+			case "u":
+				if (parts.length < 4) {
+					return;
+				}
+				var text = parts[0].substr(1);
+				var placed = new EditorTextObject(text, parseIntPart(parts, 1), parseIntPart(parts, 2), parseIntPart(parts, 3), this);
+				if (parts.length >= 6) {
+					placed.resizeTo(parseFloatPart(parts, 4) / 100, parseFloatPart(parts, 5) / 100, false);
+				}
+				textObjects.push(placed);
+				addChild(placed);
+			case "y":
+				var textObject = textObjectForAction(parts);
+				if (textObject != null && parts.length >= 3) {
+					textObject.setText(EditorTextObject.parseText(parts[1]));
+					textObject.setColor(parseIntPart(parts, 2));
+				}
+			case "m":
+				var textObject = textObjectForAction(parts);
+				if (textObject != null && parts.length >= 3) {
+					textObject.moveToLocal(parseFloatPart(parts, 1), parseFloatPart(parts, 2), false);
+				}
+			case "r":
+				var textObject = textObjectForAction(parts);
+				if (textObject != null && parts.length >= 3) {
+					textObject.resizeTo(parseFloatPart(parts, 1), parseFloatPart(parts, 2), false);
+				}
+			case "d":
+				var index = parseActionIndex(parts[0]);
+				if (index >= 0 && index < textObjects.length) {
+					var removed = textObjects.splice(index, 1)[0];
+					removed.remove();
+				}
+			default:
+		}
+	}
+
+	private function textObjectForAction(parts:Array<String>):Null<EditorTextObject> {
+		var index = parseActionIndex(parts[0]);
+		return index >= 0 && index < textObjects.length ? textObjects[index] : null;
+	}
+
+	private static function parseActionIndex(command:String):Int {
+		var parsed = Std.parseInt(command.substr(1));
+		return parsed == null ? -1 : parsed;
+	}
+
+	private static function parseIntPart(parts:Array<String>, index:Int):Int {
+		var parsed = index < parts.length ? Std.parseInt(parts[index]) : null;
+		return parsed == null ? 0 : parsed;
+	}
+
+	private static function parseFloatPart(parts:Array<String>, index:Int):Float {
+		var parsed = index < parts.length ? Std.parseFloat(parts[index]) : Math.NaN;
+		return Math.isNaN(parsed) ? 0 : parsed;
 	}
 
 	private static function createStampDisplay(placed:EditorPlacedObject, size:StampSize):Sprite {
