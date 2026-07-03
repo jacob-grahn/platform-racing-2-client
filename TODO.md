@@ -84,6 +84,9 @@ Port the editor itself, one piece at a time:
     - [x] Port undo/redo for draw layers.
     - [x] Port undo/redo for block layers.
 - [ ] Port camera/zoom.
+  - [x] Wire the authored editor zoom combo box so it scales the editable
+    world and updates stage-to-world placement coordinates.
+  - [ ] Port keyboard camera panning and Flash scroll clamping.
 - [ ] Port editor settings.
 - [ ] Port the hats/items/music menus.
 - [ ] Port the test-course transition.

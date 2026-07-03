@@ -1,6 +1,8 @@
 package pr2.lobby;
 
+import openfl.events.Event;
 import openfl.events.MouseEvent;
+import openfl.geom.Point;
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
 import pr2.lobby.players.PlayerListSort;
@@ -27,6 +29,7 @@ import pr2.page.Page;
 import pr2.page.PageHolder;
 import pr2.lobby.account.StatSlider;
 import pr2.runtime.FlCheckBox;
+import pr2.runtime.FlComboBox;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.TabLayout;
@@ -173,6 +176,18 @@ class LobbyServicesTest {
 		assertEquals(true, editor.getChildIndex(editor.overlayLayer) > editor.getChildIndex(editor.menu), "overlay is above menu");
 		assertNotNull(DisplayUtil.findByName(editor.menu.art, "blocksButton"), "authored editor menu is mounted");
 		assertEquals(3, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "zoomSelect"), "selectedIndex"), "editor zoom defaults to 100%");
+		var zoomSelect = Std.downcast(DisplayUtil.findByName(editor.menu.art, "zoomSelect"), FlComboBox);
+		zoomSelect.selectedIndex = 1;
+		zoomSelect.dispatchEvent(new Event(Event.CHANGE));
+		assertEquals(0.5, editor.zoom, "editor zoom follows authored combo box data");
+		assertEquals(0.5, @:privateAccess editor.layerContainer.scaleX, "editor world scales horizontally with zoom");
+		assertEquals(0.5, @:privateAccess editor.layerContainer.scaleY, "editor world scales vertically with zoom");
+		var zoomedPoint = editor.blockLayer.globalToLocal(new Point(100, 120));
+		assertEquals(200, Std.int(zoomedPoint.x), "zoom changes editor stage-to-world x conversion");
+		assertEquals(240, Std.int(zoomedPoint.y), "zoom changes editor stage-to-world y conversion");
+		zoomSelect.selectedIndex = 3;
+		zoomSelect.dispatchEvent(new Event(Event.CHANGE));
+		assertEquals(1, editor.zoom, "editor zoom returns to 100% before placement tests");
 		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "saveButton"), "enabled"), "guests cannot save");
 		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
 		assertEquals("blocks", editor.menu.sideBar.id, "editor menu starts on blocks sidebar");

@@ -28,6 +28,7 @@ import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.runtime.FlCheckBox;
+import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
@@ -59,6 +60,7 @@ class LevelEditor extends Page {
 	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
 	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
+	public var zoom(default, null):Float = 1;
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 
@@ -97,6 +99,17 @@ class LevelEditor extends Page {
 
 	public function setReportsMode(on:Bool = false):Void {
 		reportsMode = on;
+	}
+
+	public function setZoom(nextZoom:Float):Void {
+		if (Math.isNaN(nextZoom) || nextZoom <= 0) {
+			return;
+		}
+		zoom = nextZoom;
+		if (layerContainer != null) {
+			layerContainer.scaleX = zoom;
+			layerContainer.scaleY = zoom;
+		}
 	}
 
 	public function selectEditorTool(sidebar:String, toolId:String):Void {
@@ -399,7 +412,14 @@ class LevelEditorMenu extends Sprite {
 		bind("layer3Button", function() setLayer(3));
 		bind("undoButton", clickUndo);
 		bind("redoButton", clickRedo);
-		Reflect.setProperty(find("zoomSelect"), "selectedIndex", 3);
+		var zoomSelect = zoomCombo();
+		if (zoomSelect != null) {
+			zoomSelect.addEventListener(Event.CHANGE, chooseZoom);
+			zoomSelect.selectedIndex = 3;
+		} else {
+			Reflect.setProperty(find("zoomSelect"), "selectedIndex", 3);
+		}
+		editor.setZoom(1);
 		updateUndoRedoState();
 		if (pr2.lobby.LobbySession.group <= 0) {
 			Reflect.setProperty(find("saveButton"), "enabled", false);
@@ -429,6 +449,10 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	public function remove():Void {
+		var zoomSelect = zoomCombo();
+		if (zoomSelect != null) {
+			zoomSelect.removeEventListener(Event.CHANGE, chooseZoom);
+		}
 		for (binding in bindings) LobbyArt.unbind(binding);
 		bindings = [];
 		for (side in [blocks, settings, stamps, tools, bg]) {
@@ -440,6 +464,10 @@ class LevelEditorMenu extends Sprite {
 
 	private function find(name:String):Dynamic {
 		return pr2.util.DisplayUtil.findByName(art, name);
+	}
+
+	private function zoomCombo():Null<FlComboBox> {
+		return Std.downcast(find("zoomSelect"), FlComboBox);
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
@@ -472,6 +500,22 @@ class LevelEditorMenu extends Sprite {
 	private function clickRedo():Void {
 		editor.redoActiveObjectLayer();
 		updateUndoRedoState();
+	}
+
+	private function chooseZoom(_):Void {
+		var combo = zoomCombo();
+		if (combo == null || combo.selectedItem == null) {
+			return;
+		}
+		var data = Std.string(Reflect.field(combo.selectedItem, "data"));
+		var percent = Std.parseFloat(data);
+		if (Math.isNaN(percent)) {
+			return;
+		}
+		editor.setZoom(percent / 100);
+		if (editor.stage != null) {
+			editor.stage.focus = editor.stage;
+		}
 	}
 
 	public function updateUndoRedoState():Void {
