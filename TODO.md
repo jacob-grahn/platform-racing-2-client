@@ -18,12 +18,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `com.hurlant.crypto.prng.ARC4` compatibility for Hurlant crypto
-  callers: implement the RC4 key schedule, `next()`, block encrypt/decrypt XOR,
-  pool/block sizes, dispose-time state wiping, and `toString() == "rc4"` so the
-  remaining AES/Random/SecureData ports can preserve the original crypto API
-  surface.
-- [ ] Port `com.hurlant.crypto.prng.Random` / `IPRNG` compatibility: preserve
+- [ ] Port `com.hurlant.crypto.prng.Random` compatibility: preserve
   the ARC4-backed entropy pool, constructor seeding from `Math.random()`,
   `seed()` XOR behavior, `autoSeed()` system/font/timer mixing where available,
   lazy `state.init(pool)`, `nextByte()` / `nextBytes()`, dispose-time pool wiping,
