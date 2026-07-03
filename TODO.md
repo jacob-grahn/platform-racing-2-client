@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `Block.move()` recursive push behavior used by `PushBlock.as` and
-  `MoveBlock.as`: if the destination tile contains a `PushBlock`, move that block
-  first in the same direction before moving the original block, instead of simply
-  treating the occupied destination as blocked.
 - [ ] Port block `onDamage()` activation paths for item/effect hits: damaged
   `BrickBlock`, `CrumbleBlock`, `MineBlock`, and `VanishBlock` should bounce,
   activate, spawn pieces/explosions or vanish, and remove exactly as Flash when

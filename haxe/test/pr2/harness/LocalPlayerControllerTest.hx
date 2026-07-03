@@ -74,9 +74,11 @@ class LocalPlayerControllerTest {
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
 		testStandingOnPushBlockMovesItDown();
+		testPushBlockRecursivelyMovesDestinationPushBlock();
 		testUnconfiguredMoveBlocksUseFlashRandomDirections();
 		testTimedMoveBlockPreviewDirections();
 		testTimedMoveBlockShiftsAfterPreview();
+		testTimedMoveBlockRecursivelyMovesDestinationPushBlock();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
 		testTimedMoveBlockWaitsWhenDestinationOccupied();
 		testBumpingRotateBlockFreezesPlayer();
@@ -1353,6 +1355,29 @@ class LocalPlayerControllerTest {
 		assertEquals(4, events[1].toTileY, "push block display event records destination y");
 	}
 
+	private static function testPushBlockRecursivelyMovesDestinationPushBlock():Void {
+		var level = pushBlockChainLevel();
+		var player = new LocalCharacter(level);
+
+		assertEquals("push", player.debugState().touchedBlockType, "standing on push-chain source reports touched block");
+		assertEquals(null, level.blockAt(2, 3), "source push block leaves original tile");
+		assertEquals(BlockType.Push, level.blockAt(2, 4).type, "source push block moves into destination push tile");
+		assertEquals(BlockType.Push, level.blockAt(2, 5).type, "destination push block recursively moves first");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(3, events.length, "push chain emits activation plus both display movements");
+		assertEquals("LocalActivate", Type.enumConstructor(events[0].kind), "push chain emits source localActivate first");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[1].kind), "push chain moves destination push block");
+		assertEquals(2, events[1].tileX, "destination push display event records source x");
+		assertEquals(4, events[1].tileY, "destination push display event records source y");
+		assertEquals(2, events[1].toTileX, "destination push display event records destination x");
+		assertEquals(5, events[1].toTileY, "destination push display event records destination y");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[2].kind), "push chain moves original push block after destination");
+		assertEquals(2, events[2].tileX, "source push display event records source x");
+		assertEquals(3, events[2].tileY, "source push display event records source y");
+		assertEquals(2, events[2].toTileX, "source push display event records destination x");
+		assertEquals(4, events[2].toTileY, "source push display event records destination y");
+	}
+
 	private static function testTimedMoveBlockShiftsAfterPreview():Void {
 		var level = timedMoveBlockLevel("right", false);
 		var player = new LocalCharacter(level);
@@ -1365,6 +1390,32 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput());
 		assertEquals(null, level.blockAt(2, 3), "move block leaves original tile after one second");
 		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block shifts one tile in chosen direction");
+	}
+
+	private static function testTimedMoveBlockRecursivelyMovesDestinationPushBlock():Void {
+		var level = timedMovePushChainLevel();
+		var player = new LocalCharacter(level);
+
+		for (_ in 0...27) {
+			player.step(new LocalPlayerInput());
+		}
+
+		assertEquals(null, level.blockAt(2, 3), "move block leaves original tile after pushing chain");
+		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block moves into destination push tile");
+		assertEquals(BlockType.Push, level.blockAt(4, 3).type, "destination push block moves one tile right");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(3, events.length, "move block chain emits activation plus both display movements");
+		assertEquals("LocalActivate", Type.enumConstructor(events[0].kind), "move block chain preserves existing activation event");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[1].kind), "move block chain moves push block first");
+		assertEquals(3, events[1].tileX, "move-block destination push source x");
+		assertEquals(3, events[1].tileY, "move-block destination push source y");
+		assertEquals(4, events[1].toTileX, "move-block destination push target x");
+		assertEquals(3, events[1].toTileY, "move-block destination push target y");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[2].kind), "move block chain moves original move block second");
+		assertEquals(2, events[2].tileX, "move-block source x");
+		assertEquals(3, events[2].tileY, "move-block source y");
+		assertEquals(3, events[2].toTileX, "move-block target x");
+		assertEquals(3, events[2].toTileY, "move-block target y");
 	}
 
 	private static function testTimedMoveBlockPreviewDirections():Void {
@@ -2118,6 +2169,25 @@ class LocalPlayerControllerTest {
 		);
 	}
 
+	private static function pushBlockChainLevel():FixtureLevel {
+		return new FixtureLevel(
+			"push-block-chain",
+			"Push Block Chain",
+			5,
+			7,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(4, 5),
+			[
+				new LevelBlock(2, 3, BlockType.Push),
+				new LevelBlock(2, 4, BlockType.Push),
+				new LevelBlock(4, 5, BlockType.Finish)
+			]
+		);
+	}
+
 	private static function timedMoveBlockLevel(direction:String, blocked:Bool):FixtureLevel {
 		var blocks:Array<LevelBlock> = [
 			new LevelBlock(2, 3, BlockType.Move, direction),
@@ -2137,6 +2207,25 @@ class LocalPlayerControllerTest {
 			new TilePosition(2, 2),
 			new TilePosition(4, 4),
 			blocks
+		);
+	}
+
+	private static function timedMovePushChainLevel():FixtureLevel {
+		return new FixtureLevel(
+			"timed-move-push-chain",
+			"Timed Move Push Chain",
+			6,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(1, 2),
+			new TilePosition(5, 4),
+			[
+				new LevelBlock(2, 3, BlockType.Move, "right"),
+				new LevelBlock(3, 3, BlockType.Push),
+				new LevelBlock(5, 4, BlockType.Finish)
+			]
 		);
 	}
 

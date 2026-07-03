@@ -966,13 +966,25 @@ class LocalPlayerController {
 
 		var destX = block.x + dx;
 		var destY = block.y + dy;
-		if (!canMoveBlockTo(destX, destY)) {
+		if (!canMoveBlockChain(block, dx, dy)) {
 			return;
 		}
 
+		moveBlockChain(block, dx, dy, activationPayload);
+	}
+
+	private function moveBlockChain(block:LevelBlock, dx:Int, dy:Int, ?activationPayload:String):Void {
+		var destX = block.x + dx;
+		var destY = block.y + dy;
+		if (activationPayload != null) {
+			emitLocalActivate(block, activationPayload);
+		}
+		var destBlock = level.blockAt(destX, destY);
+		if (destBlock != null && destBlock.type == BlockType.Push) {
+			moveBlockChain(destBlock, dx, dy);
+		}
 		var fromX = block.x;
 		var fromY = block.y;
-		emitLocalActivate(block, activationPayload);
 		block.x = destX;
 		block.y = destY;
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.PushBlockMove, fromX, fromY, 1, destX, destY));
@@ -991,14 +1003,22 @@ class LocalPlayerController {
 		return "left";
 	}
 
-	private function canMoveBlockTo(tileX:Int, tileY:Int):Bool {
-		if (tileX < 0 || tileY < 0 || tileX >= level.widthTiles || tileY >= level.heightTiles) {
+	private function canMoveBlockChain(block:LevelBlock, dx:Int, dy:Int):Bool {
+		var destX = block.x + dx;
+		var destY = block.y + dy;
+		if (destX < 0 || destY < 0 || destX >= level.widthTiles || destY >= level.heightTiles) {
 			return false;
 		}
-		if (level.blockAt(tileX, tileY) != null) {
-			return false;
+		var destBlock = level.blockAt(destX, destY);
+		if (destBlock != null) {
+			if (destBlock.type != BlockType.Push) {
+				return false;
+			}
+			if (!canMoveBlockChain(destBlock, dx, dy)) {
+				return false;
+			}
 		}
-		return !playerOccupiesTile(tileX, tileY);
+		return !playerOccupiesTile(destX, destY);
 	}
 
 	private function hitMine(block:LevelBlock):Void {
