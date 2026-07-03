@@ -47,7 +47,7 @@ Port the editor itself, one piece at a time:
   - [x] Port stamp object placement onto the active art layer, including
     Flash-style centered coordinate rounding and layer-scale conversion.
   - [x] Port brush drawing/erasing.
-  - [ ] Port text placement/editing.
+  - [x] Port text placement/editing.
     - [x] Port initial text placement on the active art layer, including Flash
       cursor offsets, layer-scale conversion, editable input, and `u`/`y`
       action recording.

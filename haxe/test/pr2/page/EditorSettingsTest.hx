@@ -4,11 +4,14 @@ import haxe.crypto.Md5;
 import openfl.display.Sprite;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
+import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerConfig;
 import pr2.page.LevelEditor.EditorBackgroundColorPickerButton;
 import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
 import pr2.page.LevelEditor.EditorMusicSettingsPopup;
+import pr2.page.LevelEditor.EditorObjectLayer;
 
 class EditorSettingsTest {
 	private static var assertions:Int = 0;
@@ -18,6 +21,7 @@ class EditorSettingsTest {
 		testVariablesAndLevelVars();
 		testPasswordHashing();
 		testBackgroundColorPickerCommit();
+		testTextObjectSaveStringUsesDecodedArtFormat();
 		testMusicSettingsPopupCommit();
 		testItemSettingsPopupCommit();
 		testHatsSettingsPopupCommit();
@@ -118,6 +122,25 @@ class EditorSettingsTest {
 		editor.setColor(0xABCDEF);
 		assertEquals(0xABCDEF, picker.pickerColor(), "background picker updates after editor color changes");
 		editor.remove();
+	}
+
+	private static function testTextObjectSaveStringUsesDecodedArtFormat():Void {
+		var layer = new EditorObjectLayer(1, 1);
+		var textObject = layer.addText("Hello #`,&+-;", 105, 116, 0x123456);
+		textObject.moveToLocal(120, 130);
+		textObject.resizeTo(1.23, 0.75);
+
+		var decoded = ServerLevelDecoder.decodeArtObjects("m4", layer.getSaveString());
+		assertEquals(1, decoded.length, "text object save emits one art object");
+		var text = Std.downcast(decoded[0], DecodedTextObject);
+		assertNotNull(text, "text object save decodes as text");
+		assertEquals("Hello #35#96#44#38#43#45#59", text.text, "text object save escapes Flash separators");
+		assertEquals(120, text.x, "text object save exports moved x");
+		assertEquals(130, text.y, "text object save exports moved y");
+		assertEquals(0x123456, text.color, "text object save exports color");
+		assertEquals(1.23, text.scaleX, "text object save exports width scale");
+		assertEquals(0.75, text.scaleY, "text object save exports height scale");
+		layer.remove();
 	}
 
 	private static function testMusicSettingsPopupCommit():Void {

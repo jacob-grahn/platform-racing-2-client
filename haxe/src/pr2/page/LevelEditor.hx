@@ -2428,7 +2428,24 @@ class EditorObjectLayer extends Sprite {
 	}
 
 	public function getSaveString():String {
-		return saveArray.join(",");
+		var entries:Array<String> = [];
+		var lastX = 0;
+		var lastY = 0;
+		for (textObject in textObjects) {
+			if (textObject == null || textObject.text == "" || textObject.text == " ") {
+				continue;
+			}
+			var currentX = Std.int(textObject.x);
+			var currentY = Std.int(textObject.y);
+			var relX = currentX - lastX;
+			var relY = currentY - lastY;
+			lastX = currentX;
+			lastY = currentY;
+			var widthPerc = Std.int(textObject.scaleX * 100);
+			var heightPerc = Std.int(textObject.scaleY * 100);
+			entries.push(relX + ";" + relY + ";t;" + textObject.getEscapedText() + ";" + textObject.color + ";" + widthPerc + ";" + heightPerc);
+		}
+		return entries.join(",");
 	}
 
 	public function remove():Void {
