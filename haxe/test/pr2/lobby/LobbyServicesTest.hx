@@ -308,6 +308,14 @@ class LobbyServicesTest {
 		brickBlock.setOptions("legacy");
 		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;4;legacy", editor.blockLayer.getSaveString(),
 			"block save string uses Flash relative grid coordinates and option suffixes");
+		clickEditorSidebar(editor, "deleteEntry");
+		assertEquals("delete", editor.selectedToolId, "blocks delete entry selects the delete tool");
+		brickBlock.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals(4, editor.blockLayer.blocks.length, "blocks delete tool removes the target block");
+		assertEquals(null, brickBlock.parent, "deleted block is unmounted");
+		assertEquals(null, editor.selectedBlock, "deleted selected block clears selection");
+		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14", editor.blockLayer.getSaveString(),
+			"block save string updates after deleting a placed block");
 		clickEditorSidebar(editor, "happyEntry");
 		var happyBlock = editor.placeSelectedBlockAt(160, 120);
 		happyBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));

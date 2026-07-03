@@ -140,6 +140,28 @@ class LevelEditor extends Page {
 		return blockLayer.addBlockAtStage(spec.code, spec.type, stageX, stageY);
 	}
 
+	public function deleteSelectedBlockAt(stageX:Float, stageY:Float):Bool {
+		if (blockLayer == null || selectedToolSidebar != "blocks" || selectedToolId != "delete") {
+			return false;
+		}
+		var block = blockLayer.getBlockAtStage(stageX, stageY);
+		if (block == null || !block.deleteable) {
+			return false;
+		}
+		deleteBlock(block);
+		return true;
+	}
+
+	public function deleteBlock(block:EditorBlockObject):Void {
+		if (blockLayer == null || !block.deleteable) {
+			return;
+		}
+		if (activeBlockOptionsPopup != null && activeBlockOptionsPopup.block == block) {
+			closeBlockOptionsPopup();
+		}
+		blockLayer.removeBlock(block);
+	}
+
 	public function selectBlock(block:Null<EditorBlockObject>):Void {
 		if (selectedBlock == block) {
 			return;
@@ -264,6 +286,10 @@ class LevelEditor extends Page {
 			return;
 		}
 		if (beginSelectedBrushAt(event.stageX, event.stageY)) {
+			event.stopImmediatePropagation();
+			return;
+		}
+		if (deleteSelectedBlockAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
 			return;
 		}
@@ -453,6 +479,11 @@ class EditorBlockLayer extends Sprite {
 
 	public function getBlockAtSeg(segX:Int, segY:Int):Null<EditorBlockObject> {
 		return blocksBySeg.get(segKey(segX, segY));
+	}
+
+	public function getBlockAtStage(stageX:Float, stageY:Float):Null<EditorBlockObject> {
+		var point = globalToLocal(new Point(stageX - 15, stageY - 15));
+		return getBlockAtSeg(Math.round(point.x / LevelEditor.segSize), Math.round(point.y / LevelEditor.segSize));
 	}
 
 	public function removeBlock(block:EditorBlockObject, record:Bool = true):Void {
@@ -898,6 +929,11 @@ class EditorBlockObject extends Sprite {
 	}
 
 	private function blockPressed(event:MouseEvent):Void {
+		if (editor.selectedToolSidebar == "blocks" && editor.selectedToolId == "delete") {
+			editor.deleteBlock(this);
+			event.stopImmediatePropagation();
+			return;
+		}
 		editor.selectBlock(this);
 		event.stopImmediatePropagation();
 	}

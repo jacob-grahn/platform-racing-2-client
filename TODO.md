@@ -76,6 +76,7 @@ Port the editor itself, one piece at a time:
     - [x] Port the authored teleport option popup.
     - [x] Port the authored custom-stat option popup.
 - [ ] Port selection/deletion.
+  - [x] Port placed-block deletion through the blocks sidebar delete tool.
 - [ ] Port undo-equivalent behavior.
 - [ ] Port camera/zoom.
 - [ ] Port editor settings.
