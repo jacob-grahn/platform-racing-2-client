@@ -2,17 +2,47 @@ package pr2.lobby;
 
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.MouseEvent;
+import pr2.data.ColorUtil;
 import pr2.lobby.account.ColorChoices;
 import pr2.lobby.account.ColorPicker;
+import pr2.lobby.account.ColorPickerPopup;
 
 class ColorPickerTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		testColorUtilCompatibility();
 		testColorChoicesPalette();
 		testColorPickerEventsAndRecents();
 		testPopupOrientationAndDirection();
+		testPopupTextPaletteAndCancel();
+		testPopupSpectrumAndHue();
 		trace('ColorPickerTest passed $assertions assertions');
+	}
+
+	private static function testColorUtilCompatibility():Void {
+		var cyan = ColorUtil.hsbToRGB(180, 100, 100);
+		assertEquals(0, cyan.red, "hsbToRGB red");
+		assertEquals(255, cyan.green, "hsbToRGB green");
+		assertEquals(255, cyan.blue, "hsbToRGB blue");
+		var hsb = ColorUtil.rgbToHSB(153, 0, 0);
+		assertClose(0, hsb.hue, "rgbToHSB hue");
+		assertClose(100, hsb.saturation, "rgbToHSB saturation");
+		assertClose(60, hsb.brightness, "rgbToHSB brightness");
+		assertEquals(0x112233, ColorUtil.rgbToHex24(0x11, 0x22, 0x33), "rgbToHex24");
+		var rgb = ColorUtil.hex24ToRGB(0xABCDEF);
+		assertEquals(0xAB, rgb.red, "hex24 red");
+		assertEquals(0xCD, rgb.green, "hex24 green");
+		assertEquals(0xEF, rgb.blue, "hex24 blue");
+		assertEquals(0x78123456, ColorUtil.argbToHex32(0x12, 0x34, 0x56, 0x78), "argbToHex32");
+		var argb = ColorUtil.hex32ToARGB(0x78123456);
+		assertEquals(0x78, argb.alpha, "hex32 alpha");
+		assertEquals(0x12, argb.red, "hex32 red");
+		assertEquals(0x34, argb.green, "hex32 green");
+		assertEquals(0x56, argb.blue, "hex32 blue");
+		assertEquals(0x00FFFF, ColorUtil.hsbToHex24(180, 100, 100), "hsbToHex24");
+		assertEquals("0x00BEEF", ColorUtil.decimalToHex(0xBEEF), "decimalToHex uppercase six digits");
 	}
 
 	private static function testColorChoicesPalette():Void {
@@ -50,13 +80,14 @@ class ColorPickerTest {
 
 		@:privateAccess picker.openPopup();
 		assertEquals(1, opens, "openPopup dispatches open");
-		@:privateAccess picker.pick(0xABCDEF);
+		@:privateAccess picker.popup.setColor(0xABCDEF);
+		@:privateAccess picker.closePopup();
 		assertEquals(2, changes, "pick changed color dispatches once");
 		assertEquals(1, closes, "pick closes popup");
 		assertEquals(0xABCDEF, ColorPicker.recentColors[0], "new color records at front on close");
 		var snapshot = ColorPicker.recentColors.copy();
 		@:privateAccess picker.openPopup();
-		@:privateAccess picker.pick(0xABCDEF);
+		@:privateAccess picker.closePopup();
 		assertArrayEquals(snapshot, ColorPicker.recentColors, "existing recent color is not moved or duplicated");
 		picker.remove();
 	}
@@ -71,20 +102,62 @@ class ColorPickerTest {
 		picker.direction = ColorPicker.RIGHT;
 		var swatchWidth = picker.width;
 		@:privateAccess picker.openPopup();
-		var popup:Sprite = @:privateAccess picker.popup;
-		assertEquals(231.0, popup.getChildAt(252).x, "popup uses 22 palette columns");
-		assertEquals(121.0, popup.getChildAt(11).y, "popup uses 12 palette rows");
-		assertEquals(264, popup.numChildren, "popup has one cell per color");
-		assertEquals(22.0, popup.getChildAt(24).x, "column index maps to x");
-		assertEquals(0.0, popup.getChildAt(24).y, "row index maps to y");
+		var popup:ColorPickerPopup = @:privateAccess picker.popup;
+		assertEquals(22, @:privateAccess popup.colorChoices.length, "popup uses 22 palette columns");
+		assertEquals(12, @:privateAccess popup.colorChoices[0].length, "popup uses 12 palette rows");
+		assertEquals(15.0, @:privateAccess popup.palette.x, "authored palette x");
+		assertEquals(15.0, @:privateAccess popup.palette.y, "authored palette y");
 		assertEquals(Math.round(picker.x + swatchWidth + 5), popup.x, "right direction places popup to the right");
 		@:privateAccess picker.closePopup();
 
 		picker.direction = ColorPicker.LEFT;
+		picker.x = 400;
 		@:privateAccess picker.openPopup();
 		popup = @:privateAccess picker.popup;
 		assertEquals(Math.round(picker.x - popup.width - 5), popup.x, "left direction places popup to the left");
 		picker.remove();
+	}
+
+	private static function testPopupTextPaletteAndCancel():Void {
+		resetRecents();
+		var popup = new ColorPickerPopup(0x0000FF);
+		assertEquals("#0000FF", @:privateAccess popup.textBox.text, "initial text uses six-digit hex");
+		var changes = 0;
+		var closes = 0;
+		popup.addEventListener(Event.CHANGE, function(_:Event):Void changes++);
+		popup.addEventListener(Event.CLOSE, function(_:Event):Void closes++);
+		@:privateAccess popup.textBox.text = "#123abc";
+		@:privateAccess popup.setColorFromText(new Event(Event.CHANGE));
+		assertEquals(0x123ABC, popup.getColor(), "text accepts # hex");
+		assertEquals("#123ABC", @:privateAccess popup.textBox.text, "text normalizes to uppercase");
+		@:privateAccess popup.textBox.text = "0x00ff00";
+		@:privateAccess popup.setColorFromText(new Event(Event.CHANGE));
+		assertEquals(0x00FF00, popup.getColor(), "text accepts 0x hex");
+		@:privateAccess popup.textBox.text = "x";
+		@:privateAccess popup.setColorFromText(new Event(Event.CHANGE));
+		assertEquals(0, popup.getColor(), "invalid text falls back to black");
+		@:privateAccess popup.hoverOverPalette(mouseEventAt(@:privateAccess popup.palette, 25, 65));
+		assertEquals(0xFF0000, popup.getColor(), "palette hover previews color");
+		@:privateAccess popup.hoverOutPalette(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(0, popup.getColor(), "palette out restores current color");
+		@:privateAccess popup.clickCancel(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(0x0000FF, popup.getColor(), "cancel restores initial color");
+		assertEquals(1, closes, "cancel closes popup");
+		assertEquals(true, changes > 0, "popup changes dispatch while editing");
+	}
+
+	private static function testPopupSpectrumAndHue():Void {
+		var popup = new ColorPickerPopup(0xFF0000);
+		@:privateAccess popup.previewColorAtMouse(mouseEventAt(@:privateAccess popup.spectrum, 60, 60));
+		assertEquals(0x000000, popup.getColor(), "spectrum bottom-right is black");
+		assertEquals(60.0, @:privateAccess popup.crosshairs.x, "spectrum drag clamps x");
+		assertEquals(60.0, @:privateAccess popup.crosshairs.y, "spectrum drag clamps y");
+		@:privateAccess popup.previewColorAtMouse(mouseEventAt(@:privateAccess popup.spectrum, 60, 0));
+		assertEquals(0xFF0000, popup.getColor(), "spectrum top-right uses current hue");
+		@:privateAccess popup.dragHueSlider(mouseEventAt(@:privateAccess popup.hueSlider, 1, 30));
+		assertEquals(180, Math.round(@:privateAccess popup.hue), "hue slider maps midpoint to 180 degrees");
+		assertEquals(0x00FFFF, popup.getColor(), "hue slider updates color");
+		popup.remove();
 	}
 
 	private static function resetRecents():Void {
@@ -110,5 +183,16 @@ class ColorPickerTest {
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertClose(expected:Float, actual:Float, message:String, tolerance:Float = 0.0001):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) {
+			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function mouseEventAt(target:Sprite, localX:Float, localY:Float):MouseEvent {
+		return new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, localX, localY);
 	}
 }

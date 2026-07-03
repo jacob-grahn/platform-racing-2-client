@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the full `ColorPickerPopup.as` HSV picker: authored popup art,
-  OK/cancel behavior, restricted hex text box with `#`/`0x` parsing, current and
-  preview outlines, hue slider, saturation/brightness spectrum, preview box,
-  stage-edge clamping, mouse-hide drag behavior, and recent-color update on
-  close.
 - [ ] Port `CursorEyedropper.as` for the color picker: install the authored
   eyedropper custom cursor, pause/restore any previous `CustomCursor`, maintain
   popup/exclusion hit testing, sample the stage bitmap under the cursor without
@@ -34,10 +29,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   Base64-string `setKey()` / `setIV()` / `encrypt()` / `decrypt()` wrapper, and
   keep cleanup semantics for callers that use `com.jiggmin.data.Encryptor`
   instead of the narrow `PR2Encryptor` helpers.
-- [ ] Port `ColorUtil.as` as a shared utility with Flash's exact HSB/RGB/hex
-  math and rounding: `hsbToRGB`, `rgbToHSB`, `rgbToHex24`, `hex24ToRGB`,
-  `argbToHex32`, `hex32ToARGB`, `hex24ToHSB`, `hsbToHex24`, and uppercase
-  six-digit `decimalToHex()` should match the AS3 results.
 - [ ] Preserve `CommandHandler.as` incoming socket validation and default command
   side effects: buffer EOL-delimited frames, recompute the first-three-character
   MD5 hash with `CommAuth.getToken(server_id)`, reject replayed/out-of-order
