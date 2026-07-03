@@ -236,6 +236,13 @@ class LevelEditor extends Page {
 		return activeObjectLayer.undo();
 	}
 
+	public function redoActiveObjectLayer():Bool {
+		if (activeObjectLayer == null) {
+			return false;
+		}
+		return activeObjectLayer.redo();
+	}
+
 	override public function remove():Void {
 		if (LevelEditor.editor == this) {
 			LevelEditor.editor = null;
@@ -367,8 +374,9 @@ class LevelEditorMenu extends Sprite {
 		bind("layer2Button", function() setLayer(2));
 		bind("layer3Button", function() setLayer(3));
 		bind("undoButton", clickUndo);
+		bind("redoButton", clickRedo);
 		Reflect.setProperty(find("zoomSelect"), "selectedIndex", 3);
-		Reflect.setProperty(find("redoButton"), "enabled", false);
+		updateUndoRedoState();
 		if (pr2.lobby.LobbySession.group <= 0) {
 			Reflect.setProperty(find("saveButton"), "enabled", false);
 			Reflect.setProperty(find("loadButton"), "enabled", false);
@@ -434,6 +442,18 @@ class LevelEditorMenu extends Sprite {
 
 	private function clickUndo():Void {
 		editor.undoActiveObjectLayer();
+		updateUndoRedoState();
+	}
+
+	private function clickRedo():Void {
+		editor.redoActiveObjectLayer();
+		updateUndoRedoState();
+	}
+
+	public function updateUndoRedoState():Void {
+		var activeLayer = editor.activeObjectLayer;
+		Reflect.setProperty(find("undoButton"), "enabled", activeLayer != null && activeLayer.saveArray.length > 0);
+		Reflect.setProperty(find("redoButton"), "enabled", activeLayer != null && activeLayer.redoArray.length > 0);
 	}
 
 	private function setLayer(layerNum:Int):Void {
@@ -441,6 +461,7 @@ class LevelEditorMenu extends Sprite {
 			changeSideBar(stamps);
 		}
 		editor.setActiveObjectLayer(layerNum);
+		updateUndoRedoState();
 		moveGlow(find(switch (layerNum) {
 			case 5: "layer00Button";
 			case 4: "layer0Button";
@@ -1040,6 +1061,7 @@ class EditorObjectLayer extends Sprite {
 	public final placedObjects:Array<EditorPlacedObject> = [];
 	public final textObjects:Array<EditorTextObject> = [];
 	public final saveArray:Array<String> = [];
+	public final redoArray:Array<String> = [];
 
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
@@ -1062,7 +1084,7 @@ class EditorObjectLayer extends Sprite {
 		var point = globalToLocal(new Point(stageX - 5, stageY - 16));
 		var placed = new EditorTextObject(text, Std.int(point.x), Std.int(point.y), color, this);
 		textObjects.push(placed);
-		saveArray.push("u" + placed.getEscapedText() + ";" + placed.x + ";" + placed.y + ";" + color + ";100;100");
+		recordAction("u" + placed.getEscapedText() + ";" + placed.x + ";" + placed.y + ";" + color + ";100;100");
 		addChild(placed);
 		if (startEditing) {
 			placed.startEditing();
@@ -1073,21 +1095,21 @@ class EditorObjectLayer extends Sprite {
 	public function recordChangeText(textObject:EditorTextObject):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId >= 0) {
-			saveArray.push("y" + textId + ";" + textObject.getEscapedText() + ";" + textObject.color);
+			recordAction("y" + textId + ";" + textObject.getEscapedText() + ";" + textObject.color);
 		}
 	}
 
 	public function recordMoveText(textObject:EditorTextObject):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId >= 0) {
-			saveArray.push("m" + textId + ";" + textObject.x + ";" + textObject.y);
+			recordAction("m" + textId + ";" + textObject.x + ";" + textObject.y);
 		}
 	}
 
 	public function recordResizeText(textObject:EditorTextObject):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId >= 0) {
-			saveArray.push("r" + textId + ";" + textObject.scaleX + ";" + textObject.scaleY);
+			recordAction("r" + textId + ";" + textObject.scaleX + ";" + textObject.scaleY);
 		}
 	}
 
@@ -1097,7 +1119,7 @@ class EditorObjectLayer extends Sprite {
 			return;
 		}
 		if (record) {
-			saveArray.push("d" + textId);
+			recordAction("d" + textId);
 		}
 		textObjects.splice(textId, 1);
 		textObject.remove();
@@ -1107,8 +1129,25 @@ class EditorObjectLayer extends Sprite {
 		if (saveArray.length == 0) {
 			return false;
 		}
-		saveArray.pop();
+		var action = saveArray.pop();
+		if (action != null) {
+			redoArray.push(action);
+		}
 		rebuildTextObjects();
+		notifyHistoryChanged();
+		return true;
+	}
+
+	public function redo():Bool {
+		if (redoArray.length == 0) {
+			return false;
+		}
+		var action = redoArray.pop();
+		if (action != null) {
+			saveArray.push(action);
+		}
+		rebuildTextObjects();
+		notifyHistoryChanged();
 		return true;
 	}
 
@@ -1129,6 +1168,20 @@ class EditorObjectLayer extends Sprite {
 		}
 		textObjects.resize(0);
 		saveArray.resize(0);
+		redoArray.resize(0);
+	}
+
+	private function recordAction(action:String):Void {
+		saveArray.push(action);
+		redoArray.resize(0);
+		notifyHistoryChanged();
+	}
+
+	private function notifyHistoryChanged():Void {
+		var editor = LevelEditor.editor;
+		if (editor != null && editor.activeObjectLayer == this && editor.menu != null) {
+			editor.menu.updateUndoRedoState();
+		}
 	}
 
 	private function rebuildTextObjects():Void {

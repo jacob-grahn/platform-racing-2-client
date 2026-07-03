@@ -79,7 +79,7 @@ Port the editor itself, one piece at a time:
   - [x] Port placed-block deletion through the blocks sidebar delete tool.
 - [ ] Port undo-equivalent behavior.
   - [x] Port undo for object-layer text add/edit/delete/move/resize actions.
-  - [ ] Port redo for object-layer text actions.
+  - [x] Port redo for object-layer text actions.
   - [ ] Port undo/redo for block and draw layers.
 - [ ] Port camera/zoom.
 - [ ] Port editor settings.

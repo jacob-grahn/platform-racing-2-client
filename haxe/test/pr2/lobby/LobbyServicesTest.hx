@@ -258,9 +258,17 @@ class LobbyServicesTest {
 		assertEquals(0.75, label.scaleY, "undo rebuilds the previous text scale y");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75",
 			editor.activeObjectLayer.getSaveString(), "undo removes the last Flash text action");
+		clickEditorMenu(editor, "redoButton");
+		assertEquals(0, editor.activeObjectLayer.textObjects.length, "redo reapplies the deleted text action");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
+			editor.activeObjectLayer.getSaveString(), "redo restores the last Flash text action");
+		clickEditorMenu(editor, "undoButton");
+		assertEquals(1, editor.activeObjectLayer.textObjects.length, "undo after redo restores the text object again");
+		label = editor.activeObjectLayer.textObjects[0];
 		editor.activeObjectLayer.removeTextObject(label);
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
 			editor.activeObjectLayer.getSaveString(), "re-deleting restored text records a fresh delete action");
+		assertEquals(0, editor.activeObjectLayer.redoArray.length, "fresh text actions clear the redo stack");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);
 		assertEquals(0, tree.code, "stamp placement stores the selected stamp code");
