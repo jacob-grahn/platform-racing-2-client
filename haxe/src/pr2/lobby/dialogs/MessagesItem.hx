@@ -115,7 +115,7 @@ class MessagesItem extends Sprite {
 
 	private function clickReport():Void {
 		new ConfirmPopup(function():Void owner.doReport(this),
-			"Are you sure you want to report this message to the moderators?");
+			"Are you sure you want to report this message to the moderators? If the sender of this message is asking for your password, being a rather mean jerk, or spamming your inbox, then please do report this message.");
 	}
 
 	private function clickDelete():Void {

@@ -19,6 +19,7 @@ class MessagesItemTest {
 		testMessageBodyLinksStayClickable();
 		testTimestampDisplayAndHover();
 		testActionButtonHoverWrappers();
+		testReportConfirmationCopy();
 		trace('MessagesItemTest passed $assertions assertions');
 	}
 
@@ -57,6 +58,18 @@ class MessagesItemTest {
 	private static function assertButton(button:HoverDelayPopup, title:String, content:String):Void {
 		assertEquals(title, button.title, '$title title');
 		assertEquals(content, button.content, '$title content');
+	}
+
+	private static function testReportConfirmationCopy():Void {
+		var item = new MessagesItem(null, 8, "Sender", "1", "Body", false, 1700000000);
+		@:privateAccess item.clickReport();
+		var open = Popup.getOpen();
+		var popup = open[open.length - 1];
+		var textBox = LobbyArt.text(popup, "textBox");
+		assertNotNull(textBox, "report confirmation has text");
+		assertContains(textBox.htmlText, "asking for your password", "report confirmation includes password warning");
+		assertContains(textBox.htmlText, "spamming your inbox", "report confirmation includes spam warning");
+		item.remove();
 	}
 
 	private static function testFilterSettingAndTrustedHtml():Void {

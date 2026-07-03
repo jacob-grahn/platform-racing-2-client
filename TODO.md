@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve the full `MessagesItem.as` report confirmation copy, including
-  the explanatory warning about password requests, abusive messages, and spam,
-  before posting `message_report.php`.
 - [ ] Provide Flash-compatible MD5 helper surfaces for
   `com.adobe.crypto.MD5`, `com.adobe.utils.IntUtil`, and
   `com.hurlant.crypto.hash.MD5`: keep byte-array hashing, little-endian
