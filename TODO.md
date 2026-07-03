@@ -74,7 +74,7 @@ Port the editor itself, one piece at a time:
       behavior.
     - [x] Port the authored item option popup.
     - [x] Port the authored teleport option popup.
-    - [ ] Port the authored custom-stat option popup.
+    - [x] Port the authored custom-stat option popup.
 - [ ] Port selection/deletion.
 - [ ] Port undo-equivalent behavior.
 - [ ] Port camera/zoom.
