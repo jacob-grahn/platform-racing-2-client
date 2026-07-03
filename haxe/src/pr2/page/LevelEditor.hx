@@ -1470,15 +1470,43 @@ class UploadingLevelPopup extends Popup {
 			new MessagePopup("The client is glitching out. Could not save your level.");
 			return;
 		}
-		uploading = postFactory(ServerConfig.uploadLevelUrl(), fields, "Uploading level...", handleResponse, function(_):Void {});
+		uploading = postFactory(ServerConfig.uploadLevelUrl(), fields, "Uploading level...", handleResponse, handleUploadError);
 	}
 
 	private function handleResponse(ret:Dynamic):Void {
-		if (ret != null && Reflect.field(ret, "status") == "exists") {
+		if (ret == null) {
+			new MessagePopup("Error: The loaded data was not in the expected format.");
+			return;
+		}
+		var message = Reflect.field(ret, "message");
+		if (message != null) {
+			new MessagePopup(Std.string(message));
+		}
+		var status = Reflect.field(ret, "status");
+		if (status == "exists") {
 			new ConfirmPopup(function():Void {
 				new UploadingLevelPopup(editor, overrideBanConfirmed, true);
 			}, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
+		} else if (status != "banned" && failedResponse(ret)) {
+			new MessagePopup("Error: " + errorMessage(ret));
 		}
+	}
+
+	private function handleUploadError(message:String):Void {
+		if (message != null && message != "") {
+			new MessagePopup("Error: " + message);
+		}
+	}
+
+	private static function failedResponse(ret:Dynamic):Bool {
+		return Reflect.hasField(ret, "error") || (Reflect.hasField(ret, "success") && Reflect.field(ret, "success") != true);
+	}
+
+	private static function errorMessage(ret:Dynamic):String {
+		if (Reflect.hasField(ret, "error")) {
+			return Std.string(Reflect.field(ret, "error"));
+		}
+		return "An unknown error occurred. I suspect evil aliens.";
 	}
 
 	public static function buildFields(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false):Map<String, String> {

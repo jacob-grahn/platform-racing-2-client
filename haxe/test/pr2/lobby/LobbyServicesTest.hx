@@ -80,6 +80,7 @@ class LobbyServicesTest {
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
 		testUploadingLevelPopupOverwriteConfirmation();
+		testUploadingLevelPopupResultMessages();
 		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
 		testSocialActionPlan();
@@ -661,6 +662,45 @@ class LobbyServicesTest {
 		closeAllPopups();
 	}
 
+	private static function testUploadingLevelPopupResultMessages():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.userName = "CaseUser";
+		LobbySession.token = "session-token";
+		var previousFactory = UploadingLevelPopup.postFactory;
+		var results:Array<Dynamic> = [
+			{success: true, message: "Level saved!"},
+			{success: false, error: "That title is not allowed."}
+		];
+		UploadingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			onResult(results.shift());
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		editor.title = "Result Messages";
+		new UploadingLevelPopup(editor);
+		var successMessage = lastMessagePopup();
+		assertNotNull(successMessage, "successful save result opens server message");
+		var successText = LobbyArt.text(successMessage, "textBox");
+		assertEquals(true, successText != null && successText.htmlText.indexOf("Level saved!") >= 0, "successful save message uses server text");
+		closeAllPopups();
+
+		new UploadingLevelPopup(editor);
+		var errorMessage = lastMessagePopup();
+		assertNotNull(errorMessage, "failed save result opens error message");
+		var errorText = LobbyArt.text(errorMessage, "textBox");
+		assertEquals(true, errorText != null && errorText.htmlText.indexOf("Error: That title is not allowed.") >= 0, "failed save error uses server error text");
+
+		editor.remove();
+		UploadingLevelPopup.postFactory = previousFactory;
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
 	private static function testLevelEditorTestCourseTransition():Void {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
@@ -1091,6 +1131,17 @@ class LobbyServicesTest {
 			var confirm = Std.downcast(popup, ConfirmPopup);
 			if (confirm != null) {
 				return confirm;
+			}
+		}
+		return null;
+	}
+
+	private static function lastMessagePopup():pr2.lobby.dialogs.MessagePopup {
+		for (i in 0...Popup.getOpen().length) {
+			var popup = Popup.getOpen()[Popup.getOpen().length - 1 - i];
+			var message = Std.downcast(popup, pr2.lobby.dialogs.MessagePopup);
+			if (message != null) {
+				return message;
 			}
 		}
 		return null;
