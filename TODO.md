@@ -16,167 +16,629 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   recording the requested action is not completion.
 - Run only the related test cases for your change, the full suite is a bit slow
 
+## Follow-up Port Gaps
 
-## Bugs
-
-- [x] Player is moving far away during the 321 countdown, then moves back when it is done
-- [x] held items are not visible on the player
-- [x] erase lines seem to not work in the level art layers
-- [x] push blocks don't work right when the map is rotated
-- [x] character dissapears during the rotation animation after hitting a rotate block, and re appears when the rotation animation is done
-- [x] blocks can be seen spawning in on the left edge of the screen when running to the left
-
-## Level Editor and Level Management
-
-The lobby-to-editor handoff (permanent-moderator flag, page change, lobby socket
-close) is wired; the editor itself is unported.
-
-Port the editor itself, one piece at a time:
-
-- [x] Port the `LevelEditor`/`LevelEditorMenu` shell and layout.
-  - [x] Mount a real `LevelEditor` page from the lobby editor button, create the
-    authored `LevelEditorMenuGraphic`, preserve mod/reports mode, guest save/load
-    disabling, overlay ordering, and editor singleton cleanup.
-- [x] Port the editor sidebars.
-  - [x] Mount the five editor sidebars and wire menu/layer buttons to switch the
-    active sidebar.
-- [x] Port the editor tools.
-  - [x] Wire editor sidebar entry clicks into a selected-tool state so later
-    placement/drawing tools can use the active sidebar item.
-  - [x] Port the brush size and color controls so drawing tools record the
-    selected `t`/`c` draw actions before strokes.
-- [x] Port drawing/text/stamp placement.
-  - [x] Port stamp object placement onto the active art layer, including
-    Flash-style centered coordinate rounding and layer-scale conversion.
-    - [x] Export placed stamp objects in the object-layer save string with
-      Flash relative coordinate/code compression.
-  - [x] Port brush drawing/erasing.
-  - [x] Port text placement/editing.
-    - [x] Port initial text placement on the active art layer, including Flash
-      cursor offsets, layer-scale conversion, editable input, and `u`/`y`
-      action recording.
-    - [x] Port selecting existing text objects for re-editing.
-    - [x] Port text color changes, empty-text deletion, and resize/move
-      integration.
-      - [x] Port empty-text deletion after editing.
-      - [x] Port text color changes.
-      - [x] Port resize/move integration.
-        - [x] Record text object move/resize mutations with Flash `m`/`r`
-          action encoding and rounding.
-        - [x] Wire text object drag and resize handle interactions.
-          - [x] Wire text object drag interactions with Flash rounding and `m`
-            action recording.
-          - [x] Wire text object resize handle interactions.
-- [x] Port block options.
-  - [x] Port Flash-compatible block option string normalization for item,
-    teleport, happy/sad stat, and custom-stat blocks.
-  - [x] Port block placement/selection enough to attach option buttons to
-    placed option-capable blocks.
-  - [x] Port the authored item, teleport, stat, and custom-stat option popups
-    and commit their values through the normalized editor option strings.
-    - [x] Port the authored happy/sad stat option popup and commit-on-close
-      behavior.
-    - [x] Port the authored item option popup.
-    - [x] Port the authored teleport option popup.
-    - [x] Port the authored custom-stat option popup.
-- [x] Port selection/deletion.
-  - [x] Port placed-block deletion through the blocks sidebar delete tool.
-  - [x] Port placed-stamp deletion through the stamps sidebar delete tool.
-  - [x] Port placed-text deletion through the stamps sidebar delete tool.
-- [x] Port undo-equivalent behavior.
-  - [x] Port undo for object-layer text add/edit/delete/move/resize actions.
-  - [x] Port redo for object-layer text actions.
-  - [x] Port undo/redo for block and draw layers.
-    - [x] Port undo/redo for draw layers.
-    - [x] Port undo/redo for block layers.
-- [x] Port camera/zoom.
-  - [x] Wire the authored editor zoom combo box so it scales the editable
-    world and updates stage-to-world placement coordinates.
-  - [x] Port keyboard camera panning and Flash scroll clamping.
-- [x] Port editor settings.
-  - [x] Port editor level-setting state setters and exported level variables
-    for song, gravity, time, rank, password, items, hats, mode, cowboy chance,
-    and background color.
-  - [x] Wire the background color picker sidebar entry to update and export the
-    editor background color.
-  - [x] Wire the rank, gravity, time, cowboy-chance, and password value popups
-    to commit through the editor setting setters.
-  - [x] Wire the authored game-mode popup to commit through the editor setting
-    setter.
-- [x] Port the hats/items/music menus.
-  - [x] Port the editor item settings menu.
-  - [x] Port the editor hats settings menu.
-  - [x] Port the editor music settings menu.
-- [x] Port the test-course transition.
-  - [x] Wire the editor test button into an in-memory `TestCourse` page that
-    plays the current serialized editor data and supports authored back/restart
-    controls.
-  - [x] Port the test-course stat picker and hat picker parity controls.
-    - [x] Port the test-course stat picker, saved test-stat loading, live
-      character stat updates, saved stat persistence, and restart restoration.
-    - [x] Port the test-course hat picker.
-
-Then the level-management flows, one at a time:
-
-- [x] Port the load flow with its validation, access rules, popups, server
-  format, loading/errors, and return navigation.
-  - [x] Port the authored My Levels list popup request, listing render, and
-    selected `level_id`/`version` load handoff.
-  - [x] Port the authored My Levels list scrollbar.
-  - [x] Port the Flash loading-level popup around the editor load handoff.
-  - [x] Port strict editor-load response validation and the editor variable /
-    reports-mode handoff.
-  - [x] Hydrate the editor block layer from loaded level data, preserving block
-    option strings.
-  - [x] Hydrate editor draw layers from loaded level data, preserving editable
-    draw actions.
-  - [x] Hydrate editor object/text art layers from loaded level data, preserving
-    stamp/text placement, scale, color, and save-string meaning.
-  - [x] Surface Flash-style loading error popups for failed editor-level fetches.
-- [x] Port the save flow with the same coverage.
-  - [x] Port the authored save dialog, including title/note population and
-    counters, empty-title validation, publish/to-newest checkbox behavior, and
-    the upload-popup launch handoff.
-  - [x] Port `UploadingLevelPopup` request hashing, `upload_level.php` fields,
-    drawing retry wait, banned-user override, overwrite confirmation, and
-    save-result/error handling.
-    - [x] Port request hashing and `upload_level.php` field construction.
-    - [x] Port empty serialized-data upload refusal.
-    - [x] Port drawing retry wait.
-    - [x] Port banned-user override.
-    - [x] Port overwrite confirmation.
-    - [x] Port save-result/error handling.
-- [x] Port the upload flow with the same coverage.
-  - [x] Surface moderator unpublish/restrict upload errors from the authored
-    moderation popup.
-    - [x] Surface non-success JSON responses from moderator unpublish/restrict
-      uploads instead of leaving the moderation popup silent.
-- [x] Port the delete flow with the same coverage.
-- [x] Port the report-management flow with the same coverage.
-  - [x] Port the moderator load-mode chooser and reported-levels list/load
-    handoff into reports mode.
-  - [x] Port the authored report handling popup with archive and social-ban
-    flows.
-
-Acceptance: a user can load, edit, test, save, and reopen a real level with the
-same serialized meaning and visible result as Flash.
-
-## Refactoring / Tech Debt
-
-- [x] (Won't-do) Reconsider whether `ServerLevelRenderer`'s
-  asset-path lookups (`blockAssetPath`/`artBackgroundAssetPath`/`stampAssetPath`/
-  `fallbackFill`) should become `static final Map` tables. Assessed and deferred:
-  the conversion is lateral — the switches are already table-shaped and readable,
-  `blockAssetPath` uses OR-patterns + symbolic `ObjectCodes` constants + comments
-  that a flat Map would lose, and `fallbackFill` is a 2-branch default. No
-  correctness/perf/clarity win, and retyping ~40 entries carries typo risk that
-  the tests don't fully cover. Only worth doing if these tables ever need to be
-  generated or shared with another consumer.
-- [x] Extract race sound handling out of `Course` into a `RaceSounds` helper (the
-  `*_SOUND` path constants plus `playWorldJumpSound`/`playCharacterSound`/
-  block-bump/item/stat-block cues).
-- [x] Collapse `Character`'s four-slot hat handling (`hat1`..`hat4` /
-  `hat1Color`..`hat4Color` / `hat1Color2`..`hat4Color2`) into an array so the
-  repeated switch-on-slot logic in `setHats`/`getHighestHat`/`setHatColors`
-  disappears, while preserving the Flash-shaped `hatN` public properties through
-  array-backed accessors.
+- [ ] Port GP gain notifications from `flash/com/jiggmin/data/GpNotification.as`
+  and `flash/GpNotificationGraphic.as`: register the `gpGain` command, create
+  the authored notification at `(25, 25)`, set `anim.textBox` to `+{gp} GP`, and
+  preserve frame 71 stop/self-removal.
+- [ ] Preserve `flash/EggBlockGraphic.as` for editor egg-minion block display:
+  `Objects.getFromCode(BLOCK_MINION_EGG)` returns the authored graphic and stops
+  the nested color clips, while Haxe `EditorBlockObject.createDisplay` currently
+  falls back to a gray placeholder for `BLOCK_MINION_EGG`.
+- [ ] Preserve the `flash/BrickPieceGraphic.as` constructor frame script for
+  brick block fragments: each `BlockPiece("BrickPieceGraphic", ...)` should pick
+  and stop on a random authored fragment frame instead of auto-playing frame 1
+  onward.
+- [ ] Preserve `flash/EggGraphic.as` timeline scripts for egg-mode visuals:
+  frame 25 jumps back to the `walk` label and frame 46 stops the squash/removal
+  animation, matching the Flash egg walk loop and squash end behavior.
+- [ ] Preserve `flash/GetLevelsPopupItemGraphic.as` frame 1 stop behavior for
+  editor load/report list rows so the 16-frame `up`/`over`/`selected` button
+  timeline does not auto-play through states after construction.
+- [ ] Preserve `flash/LaserShotGraphic.as` timeline scripts wherever laser
+  effects are mounted: the idle shot should stop on frame 2, and the hit
+  animation should stop on frame 18 after `gotoAndPlay("hit")`.
+- [ ] Restore Flash `Keys.as` focus-loss semantics for gameplay input: stage
+  `DEACTIVATE` and `FOCUS_OUT` should clear held movement/item keys so a browser
+  focus change cannot leave the local character moving or using items.
+- [ ] Port the reusable `flash/HoverDelayPopup.as` wrapper behavior for delayed
+  tooltips, including cancel-on-out/down and cleanup; current Haxe controls use
+  ad hoc hover handling and the random-style button still lacks the authored
+  delayed tooltip text.
+- [ ] Port `Main.determineSite()` / `LoginPageGraphic` site-mode behavior:
+  choose the intro sequence and login logo from the loaded domain, show only the
+  Kong/BubbleBox/ArmorGames logo for that site, and preserve the Kong logo click
+  route to the Kong outfit flow.
+- [ ] Port the `KongOutfitPopup` / `awardKongNextLogin` login flow instead of
+  showing the standalone-port placeholder when the login page Kong logo is
+  clicked.
+- [ ] Preserve Flash `Main.onUncaughtError` behavior by surfacing uncaught
+  runtime errors in a `MessagePopup` with escaped stack/debug-log text, not only
+  the current console/body `data-pr2-error` signal.
+- [ ] Port the full mine placement appear effect from `flash/effects/MineAppear.as`
+  and `flash/MineAppearAnimation.as`: rotate the placement point with the course,
+  play the authored 33-frame appear animation and sound, then place the mine
+  block on removal only if the target tile is still empty.
+- [ ] Preserve `flash/MinePieceGraphic.as` constructor frame-script behavior for
+  mine explosion fragments: each `BlockPiece("MinePieceGraphic", ...)` should
+  choose and stop on a random authored fragment frame rather than auto-playing.
+- [ ] Preserve `flash/MineExplodeAnimation.as` frame 14 stop behavior inside the
+  Haxe mine explosion effect, even though the wrapper also removes the effect
+  after the Flash lifetime.
+- [ ] Port `MiniMapDot.as` hover behavior: mouse-over in a live `Game` should
+  show `HoverPopup("Player N", player name, dot)`, mouse-out/remove should
+  dismiss it, and the popup should stay suppressed outside an active game.
+- [ ] Port the full `OutfitPopup` / `OutfitPopupGraphic` confirmation preview:
+  singleton replacement, supplied message text, OK/cancel callbacks, character
+  preview with outfit colors, optional stats display, and stats-hidden layout.
+- [ ] Preserve the nested ArmorGames/BubbleBox intro and login-logo frame scripts
+  from `PR2_Graphics_1_Apr_2014_fla.ag_intro_mc_247`,
+  `bubbleSpin_12`, `bubbleShineSpin_17`, `bubblebox_logo_ro_254`, and
+  `bubblxbox_play_latest_text_252` when site-specific intro/login art is mounted.
+- [ ] Preserve character-state timeline completion scripts from
+  `PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59` and `frozenSolidAnim_65`: bumped
+  animation should set its completion flag on frame 56, and frozen-solid should
+  stop and dispatch `Event.COMPLETE` on frame 48.
+- [ ] Preserve constructor stop-frame scripts for nested character item/color
+  clips `gunFireAnim_40`, `iceWaveFireAnim_55`, `jetPackStates_47`,
+  `swordAnim_53`, `hatColor_24`, and `hatColor2_25` anywhere those authored
+  clips are mounted, so weapons, jet-pack state art, and hat color masks do not
+  auto-play.
+- [ ] Preserve `buttonGlowAnim_182` frame scripts for the in-race quit glow:
+  stop on the off frame and loop the authored `on` glow from frame 37 instead of
+  letting the raw nested clip auto-play without its AS3 loop.
+- [ ] Preserve jump-state timeline stop scripts from
+  `PR2_Graphics_1_Apr_2014_fla.jumpAnim_61` and `superJumpAnim_60`: the regular
+  jump should stop on frame 50 and the super jump should stop on frame 51 instead
+  of looping through raw generated timeline playback.
+- [ ] Preserve `PR2_Graphics_1_Apr_2014_fla.logoAnim_258` constructor scripts:
+  disable mouse input on frame 1 and stop on frame 233 when the Jiggmin intro
+  nested logo animation is mounted.
+- [ ] Preserve `PlayersTabListGraphic.as` constructor `stop()` behavior for the
+  normal Online/Friends/Following/Ignored players list so it stays on the default
+  header frame instead of auto-playing into the guilds frame.
+- [ ] Preserve `Removable.as` semantics for ported display/effect classes:
+  idempotent `safeRemove()`/`remove()`, child cleanup, parent detachment, removed
+  state, and dispatch of the Flash `"remove"` event for callers that chain
+  cleanup from removal.
+- [ ] Port `SuperLoader.as` as a shared request wrapper, or centralize equivalent
+  behavior in the Haxe net clients: append `rand`, `token`, and beta fields,
+  preserve URLVariables/JSON parsed-data success/error dispatch semantics,
+  auto-show server `message` text when requested, and surface Flash-style
+  security/IO/parse `MessagePopup` errors.
+- [ ] Preserve short effect timeline scripts from `PointyStar.as`,
+  `SlashAnimation.as`, and `TeleportAnimation.as`: the star/teleport clips stop
+  on frame 16 and the slash clip stops on frame 6, even when wrapper lifetimes
+  also remove the effect.
+- [ ] Port the `EffectBackground.as` `addEffect` command path for remote/server
+  effects: `Laser`, `Slash`, `Mine`, `Hat`, `IceWave`, and `Teleport` should
+  instantiate the matching Flash effects, including slash/shot collision checks,
+  ice-wave fan-out plus sound, and cleanup/unregistration on removal.
+- [ ] Port `BlockGridLines.as` for the level editor grid overlay: draw the
+  30-pixel gray grid at the current zoom and reposition it by camera offset modulo
+  segment size so block placement stays visually aligned while panning/zooming.
+- [ ] Preserve `Background.as` / `DrawableBackground.as` draw failure and
+  rasterization safety behavior: async draw batches should catch art-loading
+  exceptions, show the Flash warning popup only when appropriate, finish the
+  drawing layer, and notify the player if rasterization had to stop after the
+  Flash retry limit.
+- [ ] Respect Flash `LevelBackground.as` art-background behavior in gameplay:
+  honor `Settings.DRAW_ART` when loading art backgrounds/draw layers, preserve
+  legacy `"BGn"` code normalization, and reproduce BG5's random colored circle
+  grid before drawing the background bitmap.
+- [ ] Port `Map.as` handling for `Objects.BLOCK_MINION_EGG`: collect egg-minion
+  block positions during map load and spawn up to 25 authored egg effects at
+  `startGameplay()` instead of treating code 130 as a generic/basic block.
+- [ ] Port `Map.as`'s server `activate` command registration: incoming
+  `activate` packets should resolve the block by segment and call its
+  `remoteActivate()` / `activate()` path so server-driven block effects stay in
+  sync with Flash.
+- [ ] Preserve `Block.localActivate()` networking for local block activations:
+  blocks that call `localActivate()` should emit `activate\`segX\`segY\`payload`
+  to the game socket before applying the local activation, so other clients see
+  brick/crumble/mine/push/vanish/arrow/etc. effects through the Flash protocol.
+- [ ] Preserve `Block.as` Santa-hat freezing mechanics: safe blocks stood on by
+  Santa should temporarily report as ice, apply ice acceleration, show/fade the
+  ice overlay at the Flash rates, and thaw back after the overlay fades.
+- [ ] Preserve the Flash block-bounce quirk from `Block.onBounceFrame`, including
+  the original return-to-origin math and stop condition, for block bump/damage
+  visuals that should match Flash exactly.
+- [ ] Port `CrumbleBlock.as` cheese-hat behavior: cheese should double standing
+  crumble force, force side/bump crumble damage to 50, and break the head-level
+  adjacent crumble during fast side hits when the Flash open-space checks pass.
+- [ ] Preserve `ItemBlock.as` random item selection semantics: non-empty candidate
+  pools should use the Flash `Math.random()` item choice independently from move
+  block direction randomness, while still respecting `none`, empty-options level
+  item pools, and infinite-item repeat use.
+- [ ] Preserve `SupplyBlock.as` depletion visuals for every one-use supply block
+  in this batch (`FinishBlock`, `HeartBlock`, `CustomStatsBlock`, normal
+  `ItemBlock`, `HappyBlock`, and later supply subclasses), not only item/happy/sad
+  tinting.
+- [ ] Preserve `CustomStatsBlock.as` and `HappyBlock.as` test-course UI sync:
+  after stat changes in a `TestCourse`, the on-screen `StatsSelect` controls
+  should update from the local character just like Flash
+  `statsSelectSetFromCharacter()`.
+- [ ] Port `Block.move()` recursive push behavior used by `PushBlock.as` and
+  `MoveBlock.as`: if the destination tile contains a `PushBlock`, move that block
+  first in the same direction before moving the original block, instead of simply
+  treating the occupied destination as blocked.
+- [ ] Port block `onDamage()` activation paths for item/effect hits: damaged
+  `BrickBlock`, `CrumbleBlock`, `MineBlock`, and `VanishBlock` should bounce,
+  activate, spawn pieces/explosions or vanish, and remove exactly as Flash when
+  hit by shots/slashes/ice waves, not only on direct character collision.
+- [ ] Preserve frozen-block activation guards across `MineBlock`, `PushBlock`,
+  `RotateBlock`, `SafetyBlock`, and `SupplyBlock`: when a block is temporarily
+  frozen, mine hits, push/rotate/safety behavior, and supply use should be
+  suppressed until thawed.
+- [ ] Include `SadBlock.as` in the test-course stat-picker sync path alongside
+  happy/custom stat blocks so negative stat changes immediately update the
+  `StatsSelect` UI in `TestCourse`.
+- [ ] Preserve `TeleportBlock.as` gameplay effects: render the block's option
+  color behind the teleport bitmap, deplete/tint all other same-color teleports
+  during the 3-second cooldown, reset every same-color block together, and keep
+  default-color options equivalent to empty options.
+- [ ] Preserve teleport-block visual/network effects: using a teleport block
+  should spawn `TeleportPop` at both the start and destination positions and emit
+  the two Flash `add_effect\`Teleport\`x\`y` socket messages.
+- [ ] Preserve `TeleportBlock.onBump()` crouch correction: when a crouching player
+  bumps a teleport block from below, restore the pre-bump `y` before teleporting,
+  matching Flash's special-case collision adjustment.
+- [ ] Preserve `TimeBlock.as` sound behavior by playing `TickTockSound` at full
+  configured sound volume when a time block adds 10 seconds.
+- [ ] Port concrete `ArrowSparkleEmitter.as` particles: `arrowSparkle` emitters
+  should create `ArrowEffect` particles with the same randomized
+  `ColorTransform`, rather than only exposing a particle-emitter lifecycle hook.
+- [ ] Port the concrete `ParticleEmitter.as` / `RainbowStarEmitter.as` /
+  `PhysicsParticle.as` / `PositionedParticleEmitter.as` runtime: sparkle,
+  rainbow-heart, and Djinn ice emitters should instantiate the authored
+  `StarEffect` / `DjinnIceGraphic` particles with Flash's interval timing,
+  randomized positions, color transforms, physics, alpha/scale/rotation updates,
+  and cleanup instead of stopping at request hooks.
+- [ ] Preserve April 1 reversed-controls behavior from `Character.as`: local
+  characters should reverse left/right controls when `Data.getDateStr(...)` is
+  `"Apr 1"`, and removing the artifact hat should not clear that date-driven
+  reversal.
+- [ ] Port the local-character command handlers from `LocalCharacter.as`:
+  register and unregister `zap`, `squash{tempID}`, and `sting{tempID}` for the
+  local player, route them through the Flash hurt/immunity rules, and preserve
+  the visual/sound side effects for Zap/Sting/Squash.
+- [ ] Preserve local heart-gain protocol from `LocalCharacter.gainHeart()`:
+  heart pickups should increment local deathmatch life, update the HUD, and emit
+  the Flash `heart\`` socket payload from the gain path, not a different
+  `heart\`tempID\`x\`y` helper payload.
+- [ ] Port `ChatRoomInfoPopup.as` and wire `ChatInstance`/`ChatTab` info-button
+  hover behavior: mouse-over should create the authored popup, register
+  `setChatRoomList`, send `get_chat_rooms\``, render returned room names with
+  the `_sans` font wrapper while hiding the loading graphic, and mouse-out/remove
+  should unregister and dismiss it.
+- [ ] Preserve `MessagesItem.as` private-message body formatting: obey
+  `Settings.FILTER_SWEARS`, escape only low-group messages before parsing rich
+  links, run the Flash `Data.parseLinks()` user/url/level/guild/invite
+  conversions, preserve carriage-return-to-`<br>` handling, and keep clickable
+  links active through `HTMLNameMaker.listenForLink`.
+- [ ] Preserve `MessagesItem.as` timestamp display and hover behavior: the row
+  time should use Flash `Date.toLocaleDateString()`, hover should switch the
+  cursor to button, tint the date gray, and show `Data.getDateTimeStr(time,
+  ["long", "medium"])` in the authored hover text instead of the current fixed
+  ISO date string.
+- [ ] Port the `DeleteMessageButton.as`, `ReplyMessageButton.as`, and
+  `ReportMessageButton.as` `HoverDelayPopup` wrappers so the PM row action
+  buttons show the exact delayed tooltip titles/body copy and clean up their
+  hover timers/popups on removal.
+- [ ] Preserve the full `MessagesItem.as` report confirmation copy, including
+  the explanatory warning about password requests, abusive messages, and spam,
+  before posting `message_report.php`.
+- [ ] Provide Flash-compatible MD5 helper surfaces for
+  `com.adobe.crypto.MD5`, `com.adobe.utils.IntUtil`, and
+  `com.hurlant.crypto.hash.MD5`: keep byte-array hashing, little-endian
+  `IntUtil.toHex()`, `hashBytes()` / static `digest`, `IHash` input/hash sizes,
+  and source `ByteArray` length/endian restoration where callers depend on those
+  APIs, not just string `haxe.crypto.Md5.encode()`.
+- [ ] Port `com.hurlant.crypto.prng.ARC4` compatibility for Hurlant crypto
+  callers: implement the RC4 key schedule, `next()`, block encrypt/decrypt XOR,
+  pool/block sizes, dispose-time state wiping, and `toString() == "rc4"` so the
+  remaining AES/Random/SecureData ports can preserve the original crypto API
+  surface.
+- [ ] Port `com.hurlant.crypto.prng.Random` / `IPRNG` compatibility: preserve
+  the ARC4-backed entropy pool, constructor seeding from `Math.random()`,
+  `seed()` XOR behavior, `autoSeed()` system/font/timer mixing where available,
+  lazy `state.init(pool)`, `nextByte()` / `nextBytes()`, dispose-time pool wiping,
+  and `toString() == "random-{state}"`.
+- [ ] Expose the Hurlant symmetric crypto API around the current AES runtime:
+  `AESKey`, `CBCMode`, `IVMode`, `ICipher`, `IMode`, `IStreamCipher`, and
+  `ISymmetricKey` should support mutable ByteArray block encryption/decryption
+  at offsets, 128/192/256-bit AES key expansion, CBC XOR chaining, forced or
+  generated IVs via the `IV` property, default PKCS5/custom padding, Flash
+  `toString()` values, decrypt-without-IV errors, and dispose-time key/IV/state
+  wiping for callers that still use the as3crypto-style classes instead of
+  `PR2Encryptor`.
+- [ ] Port the remaining Hurlant utility compatibility classes:
+  `PKCS5.pad()` / `unpad()` should add and validate block-size padding with the
+  same Flash errors, `Base64` should expose static string/ByteArray encode and
+  decode APIs with decoded position reset and constructor error, `Hex` should
+  preserve colon/whitespace stripping, odd-length padding, UTF-8 string helpers,
+  and optional colon output, and `Memory.gc()` / `Memory.used` should keep the
+  Flash API surface for crypto dispose paths.
+- [ ] Port `com.jcward.workers.JPEGEncoder` / `BitString` or provide an exact
+  equivalent for drawing uploads: support `encode()`, `encodeNonNative()`,
+  `encodeAsync()` with one outstanding job guard, optional output `ByteArray`,
+  native `BitmapData.encode()` fallback detection, Flash quality scaling,
+  JFIF/DQT/DHT/SOF/SOS marker output, bit stuffing/alignment, and 8x8 RGB to YUV
+  macroblock processing.
+- [ ] Preserve `ColorChoices.as` / `ColorPicker.as` swatch behavior exactly:
+  initialize recent colors to Flash's alternating `0x888888` / `0x555555`
+  values, draw the 22-column by 12-row palette in the same x/y orientation as
+  Flash, keep the suggested colors and RGB cube layout, support `direction`
+  left/right popup placement, dispatch `Event.CHANGE` only on changed colors, and
+  emit `Event.OPEN` / `Event.CLOSE` around popup lifecycle.
+- [ ] Port the full `ColorPickerPopup.as` HSV picker: authored popup art,
+  OK/cancel behavior, restricted hex text box with `#`/`0x` parsing, current and
+  preview outlines, hue slider, saturation/brightness spectrum, preview box,
+  stage-edge clamping, mouse-hide drag behavior, and recent-color update on
+  close.
+- [ ] Port `CursorEyedropper.as` for the color picker: install the authored
+  eyedropper custom cursor, pause/restore any previous `CustomCursor`, maintain
+  popup/exclusion hit testing, sample the stage bitmap under the cursor without
+  including the cursor graphic, dispatch preview `CHANGE` and final `COMPLETE`,
+  and dispose the sampling `BitmapData` on removal.
+- [ ] Preserve `AESPad.as` / `Encryptor.as` compatibility for PR2 encrypted
+  fields: zero-pad by writing NUL UTF bytes until the block boundary, keep the
+  Flash `unpad()` behavior used by the original decrypt path, expose the
+  Base64-string `setKey()` / `setIV()` / `encrypt()` / `decrypt()` wrapper, and
+  keep cleanup semantics for callers that use `com.jiggmin.data.Encryptor`
+  instead of the narrow `PR2Encryptor` helpers.
+- [ ] Port `ColorUtil.as` as a shared utility with Flash's exact HSB/RGB/hex
+  math and rounding: `hsbToRGB`, `rgbToHSB`, `rgbToHex24`, `hex24ToRGB`,
+  `argbToHex32`, `hex32ToARGB`, `hex24ToHSB`, `hsbToHex24`, and uppercase
+  six-digit `decimalToHex()` should match the AS3 results.
+- [ ] Preserve `CommandHandler.as` incoming socket validation and default command
+  side effects: buffer EOL-delimited frames, recompute the first-three-character
+  MD5 hash with `CommAuth.getToken(server_id)`, reject replayed/out-of-order
+  `sendNum`s, handle `resend`, and register the built-in `message`, `setRank`,
+  `setGroup`, `startGame`, `pmNotify`, user-role, captcha, tournament,
+  `guildChange`, `setServerOwner`, and `wearingHat` commands.
+- [ ] Port the full `Data.as` helper surface where UI/protocol code still uses
+  it: exact random swear replacements, `parseLinks()` rich-format conversion
+  for user/url/level/guild/invite/discord/color/bold/italic/underline/size tags,
+  date/time locale formatting, `hash()`, `aOrAn`, `ucfirst`, `formatNumber`,
+  `formatTime`, `padString`, `urlify`, `pythag`, `numLimit`, `scaleToFit`,
+  `rotatePoint`, `getExpBounds`, and `randomString`.
+- [ ] Port `EpicFlash.as` for epic color-cycling display objects: allow items to
+  be registered, start/stop a repeating random `ColorTransform.color` tick at the
+  configured delay, update delay while active, report emptiness, and clear item
+  references on removal.
+- [ ] Preserve `HTMLNameMaker.as` link handling beyond basic user/guild/level/url
+  links: support invite and Discord verification events, use Flash's group color
+  and special-user rules for parsed group strings, keep `encodeURI`-style URL
+  handling, and unregister every listened text field on removal.
+- [ ] Port the full `Objects.as` `getFromCode()` editor/display mapping:
+  tree/rock/spire/building stamps, all block display classes, BG1-BG7 graphics,
+  and `TextObjectGraphic().textBox` should resolve from the same numeric codes as
+  Flash instead of relying only on gameplay block constants or placeholder assets.
+- [ ] Preserve `PR2Socket.as` lifecycle behavior in `LobbySocket`: start the
+  Flash ping interval after connect, handle `receivePing` server-time sync, send
+  `close`` before disconnecting, reset command send counters, clear cached
+  campaign/server role/unread state, and show the Flash disconnect/error popups.
+- [ ] Complete `Random.as` public API compatibility: expose `seed`, `nextInt()`,
+  `nextMax()`, `nextNumber()`, and `nextBytes()` with the same range checks and
+  byte writes as Flash, in addition to the already-ported deterministic
+  `nextMinMax()` sequence.
+- [ ] Port `SWFStats.as` frame-rate watchdog behavior: sample one-second timing
+  deltas, average 30 samples, and force the stage frame rate back to 27 when the
+  Flash client would detect lag/speed changes.
+- [ ] Preserve `SavedAccounts.as` persistence identity exactly: use
+  `pr2hub_dev_logged_in` on dev hosts and `pr2hub_logged_in` elsewhere, keep the
+  stored accounts array shape, trim/case-fold names, update tokens in place, move
+  recent accounts first, and support delete by `"name"` or `"token"` mode.
+- [ ] Preserve `SecureData.as` / `SecureStore.as` obfuscated storage behavior:
+  number/bool values should be stored as hidden value-plus-key pairs, string
+  storage should support `initEncryptor(keyName, salt)` with random AES key/IV,
+  encrypted salt validation, remove semantics, and Flash-compatible getters.
+- [ ] Preserve full `Settings.as` per-user SharedObject behavior: initialize
+  `pr2_{sanitizedName}` stores, mirror cookie values into static settings and
+  session `dataArr`, support partial control/stat updates, keep defaults for
+  presets/disabled songs/art/filter/test-hat, and no-op safely when cookies are
+  blocked or no user is initialized.
+- [ ] Port `Time.as` server clock helper and wire it to socket pings so lobby and
+  listing code can use Flash's offset timestamp/day calculations instead of
+  local `Date.now()` where server time was authoritative.
+- [ ] Port `AdminMenu.as` moderator promotion controls for player popups:
+  temporary/trial/permanent promotion confirmations should send
+  `promote_to_moderator``name``mode`, demotion should send
+  `demote_moderator``name`, and the target popup should fade out after action.
+- [ ] Provide a reusable `AutoDismissPopup.as` equivalent for popup menus: arm the
+  stage mouse-down listener after the Flash 25ms delay, dismiss only on outside
+  clicks using hit-test semantics, and remove the stage listener/timeout on
+  cleanup instead of duplicating partial behavior per popup.
+- [ ] Preserve `BanMenu.as` exact moderation payloads: include the current chat
+  record except in mod/admin rooms, escape the target name in confirmation copy,
+  keep trial-mod duration/scope restrictions, and cleanly detach upload success
+  and error listeners on removal.
+- [ ] Port `ChangePasswordPopup.as`: authored three-field dialog, Enter-key submit,
+  password mismatch/current-password validation, AES-encrypted JSON payload using
+  `Env.LOGIN_KEY`/`Env.LOGIN_IV`, POST to `change_password.php`, and Flash
+  uploading/fade-out behavior.
+- [ ] Port `CreateGuildPopup.as` and its edit flow: load guild info for edits,
+  display/upload/delete emblems through `EmblemLoader`, post create/edit fields
+  to the Flash endpoints, update `Main` guild account state on owner edits, and
+  gate transfer behind remember-me.
+- [ ] Port `DiscordVerificationPopup.as`: POST the verification code and trimmed
+  logged-in PR2 name to `https://jiggmin2.com/discord/verify_pr2.php` through the
+  Flash uploading popup and show the `"Verifying..."` progress text.
+- [ ] Port `GuildJoinPopup.as`: POST `guild_id` to `guild_join.php`, show the
+  `"Joining guild..."` upload state, and on success update the current guild id,
+  emblem, name, and owner flag before dispatching the usual account-state change.
+- [ ] Complete `GuildPopup.as` guild management behavior: load and display the
+  emblem image, wire moderator edit and admin delete buttons, confirm/delete via
+  `guild_delete.php`, open `CreateGuildPopup` for edits, preserve trial-mod
+  restrictions, and clean up loaders/member rows/keyboard listeners exactly.
+- [ ] Port the read-only `ItemMenu.as` and `HatsMenu.as` used by level-info
+  hovers: parse Flash item strings (`all`, blank, numeric and named backtick
+  entries), disable every checkbox, parse disallowed hats, and force artifact hat
+  unavailable for old Hat Attack levels.
+- [ ] Complete `LevelInfoPopup.as` data-load and hover/action behavior: fetch
+  `level_data.php` on construction, store live/pass/user/time/gravity/items/song/
+  mode/cowboy/bad-hat fields, show every Flash hover tooltip/menu, handle share
+  message text, close part popups and route play through `LobbyRight.lookupLevel`,
+  and preserve delayed action-button tooltips.
+- [ ] Port `LogoutPassPopup.as` legacy logout-password flow: require a password,
+  encrypt `{user_name,user_pass}` with `Env.LOGIN_KEY`/`Env.LOGIN_IV`, POST
+  `i` to `logout.php`, show `"Logging out..."`, and clear user data unless the
+  server returns password error type.
+- [ ] Complete `OptionsPopup.as` account/guild buttons and side effects: show and
+  stack change-password, change-email, guild leave/create/edit/transfer buttons
+  based on login/guild/owner state, wire `guild_leave.php` and account-change
+  updates, and preserve hover tooltips plus jump-sound playback on sound slider
+  release.
+- [ ] Preserve `OptionsArtQualityMenu.as` and `OptionsSongsMenu.as` as
+  auto-dismiss singleton popups anchored to their buttons, including the Flash
+  25ms outside-click arm delay, `y -= 45` music offset, disabled-song persistence
+  as numeric ids, and skip of unavailable songs 9 and 16.
+- [ ] Preserve `PMRFCodesPopup.as` link examples through `HTMLNameMaker`: the
+  reference popup should render clickable PR2 Hub URL/text links, a clickable
+  Jiggmin username, Newbieland 2 level link, and PR2 Staff guild link with link
+  listeners cleaned up on removal.
+- [ ] Complete `PlayerPopup.as` parity details: wire `AdminMenu` for admins,
+  show `Server Owner` when the profile user owns the server, use the authored
+  `GuildName` emblem/link clip, display the real `ExpGain` rank supplement, keep
+  delayed Send PM hover, and close guild/part/level popups when viewing a user's
+  levels.
+- [ ] Port `SetEmailPopup.as`: authored email confirmation dialog, Enter-key
+  submit, required-field/mismatch validation, AES-encrypted `{email,pass}` payload
+  using `Env.ACCOUNT_CHANGE_KEY`/`Env.ACCOUNT_CHANGE_IV`, and POST `data` to
+  `account_change_email.php`.
+- [ ] Port `TransferGuildPopup.as`: authored email/password/new-owner dialog,
+  Enter-key submit, required-field validation, encrypted payload including
+  `Main.loggedInAs`, and POST `data` to `guild_transfer.php`.
+- [ ] Preserve `UploadingPopup.as` compatibility surface: accept a Flash-style
+  `URLRequest`, data mode, display text, and auto-error-message flag; expose raw
+  `data`, parsedData, progress updates, `Event.COMPLETE`, SuperLoader success/error
+  events, close button behavior, and listener cleanup matching the Flash popup.
+- [ ] Preserve editor brush/eraser tool quirks from `Brush.as` and `Eraser.as`:
+  custom cursor sizing with zoom, draw only outside menus on drawable/editor/grid
+  targets, restart strokes every 10 seconds or after 400px travel, stop when the
+  drawable layer is busy, rasterize draw strokes, and call erase mode cleanup for
+  eraser strokes.
+- [ ] Preserve editor object placement/deletion quirks from `ObjectPlacer.as`,
+  `BlockObjectPlacer.as`, and `ObjectDeleter.as`: cursor graphics/scaling should
+  follow editor and layer zoom, menu/object-layer clicks cancel placement, stamps
+  center on their authored display bounds, block-object placement should avoid
+  existing blocks and allow drag placement outside the object layer, and deletion
+  should continue while dragging.
+- [ ] Preserve `TextTool.as` placement behavior: use the authored
+  `TextToolCursorGraphic`, hide the system mouse while active, offset drops by
+  `(-5, -16)` before converting to the object layer, select/start-edit the new
+  text object immediately, and remove the cursor tool after placement.
+- [ ] Preserve level-editor sidebars as authored Flash UI: `SideBar` should use
+  the custom scroll bar, mask, 30px column, 10px gaps, and `SidebarEntry` hover
+  titles/descriptions; block/settings/stamp/tool/background entries should use
+  their authored button graphics and exact tooltip copy instead of generic text
+  boxes.
+- [ ] Port background sidebar button behavior from `Backgrounds.as`,
+  `BackgroundButton.as`, and `BackgroundColorPickerButton.as`: BG1-BG7 entries
+  should set both the editor background color and art background code, and the
+  color picker should use the Flash left-opening picker and update stage focus
+  on close.
+- [ ] Preserve `MenuButton.as`, `BrushButton.as`, and `Landscape.as` editor
+  button behavior: menu buttons need the transparent 30x30 hit square, brush
+  should switch to the tools sidebar and focus the current drawing layer, and
+  landscape should switch back to stamps and focus the current object layer.
+- [ ] Preserve `ItemMenu.as` editor side effects: when allowed items are changed,
+  update `GamePage.course.allowedItems` semantics and refresh every item block's
+  authored `updateGameItems()` display so existing item blocks reflect the new
+  allowed item list immediately.
+- [ ] Preserve `ModeMenu.as` dropdown auto-dismiss behavior: track ComboBox
+  open/close state so outside clicks do not dismiss the popup while the dropdown
+  list is open, commit on close/change, and return stage focus on removal.
+- [ ] Port `ArrowEffect.as`: create the `Arrow2Graphic` feedback effect at the
+  activation point, scale it to 0.25, schedule removal after 15 frames, and on
+  each frame apply Flash's upward acceleration/fade (`velY -= 0.1`, `y -= velY`,
+  `alpha -= 0.06`).
+- [ ] Preserve `BlockPiece.as` physics defaults exactly: fragment effects should
+  use Flash's constructor parameters (`gravity=1`, `friction=0.95`,
+  `fadeRate=0.01`, spread/start arguments), random rotation/velocity math, and
+  fade-until-alpha-zero removal unless a caller explicitly overrides them.
+- [ ] Port the shared `Effect.as`, `PhysicsEffect.as`, and `ShotEffect.as`
+  semantics for runtime effects: add effects to `EffectBackground.instance`,
+  schedule removal by Flash frame-to-time conversion, preserve rotated physics
+  collision probes, local-player hit boxes/crouch handling, shot life/collision
+  ordering, inactive-block hit opt-in, player hit/recoil behavior, and cleanup of
+  enter-frame listeners/course references.
+- [ ] Preserve `Egg.as` visual randomization: spawned egg minions should apply
+  Flash's random color transforms to the nested character color clips and egg
+  base/dots, including colorMC/colorMC2 frame stops/visibility, in addition to
+  the already-ported seeded movement/attack lifecycle.
+- [ ] Port concrete `Slash.as`, `StarEffect.as`, and `Sting.as` runtime effects:
+  slash should play `SlashAnimation`, hit the six Flash probe points against
+  blocks/local player, and play `SwishSound`; star should mount `PointyStar` for
+  15 frames; sting should follow its owner, remove the unused side by direction,
+  fade by 0.05 per frame, and play `StingSound` at the owner's position.
+- [ ] Port `CourseTimer.as`: use `TimerGraphic`, server-synchronized
+  `Main.socket.getMS()` timing, countdown/racing modes, `addTime()`, red
+  under-30-second display, under-10-second pulse animation, pause/resume interval
+  behavior, and `Course.outOfTimeHandler()` callback.
+- [ ] Complete `DrawingInfo.as` finish-times behavior: register/unregister
+  `finishTimes`, render up to four results with drawing spinners, objective
+  counts, forfeits/gone suffixes, local-player star and `"Timing for Nerds"`
+  hover, and submit Kongregate stats for the Flash campaign course ids.
+- [ ] Complete `Course.as` race-shell parity around rotation/camera/HUD:
+  preserve background attachment order, per-layer scale/position/color updates,
+  90-degree rotate animation with cache toggling and stage quality changes,
+  spectate/key-scroll switching, countdown ready/go sounds, timer integration,
+  and cleanup of every HUD/background/player command listener.
+- [ ] Preserve `FinishedPage.as` / `Game.as` completion lifecycle details:
+  closing the finish popup should clear the owning game/page `finishedPage`
+  reference, EXP gain should submit the Flash Kongregate `"Exp Gained at Once"`
+  stat when that API is present, return-to-lobby should only emit/change pages
+  while the socket is connected, and game removal should close any active
+  `PlaceArtifact` popup plus Lux/prize/hat-countdown state exactly like Flash.
+- [ ] Preserve `RaceChat.as` `/level` command behavior: pressing Enter with
+  trimmed input `/level` during a live course should open `LevelInfoPopup` for
+  the current course id instead of sending a chat packet, while keeping the
+  Flash focus/clear behavior.
+- [ ] Complete `TestCourse.as` editor-test parity: mount the authored
+  `TestCourseGraphic` in the Flash holder positions, keep stage focus on every
+  frame, support click-to-teleport with `TeleportPop` effects, reset
+  `TeleportBlock` globals/background rotations/timer/effect/background/minimap
+  state on restart, restore saved test stats and hat picker state, spawn egg-mode
+  test eggs, and keep back/restart cleanup identical to Flash.
+- [ ] Port the concrete `items.Item` / `Items.getFromCode()` runtime surface:
+  instantiate per-item classes instead of only integer switches, preserve
+  `SecureData`-backed uses/reload timing and release-before-fire gating, and
+  have local item use emit/mount Flash `add_effect` payloads for laser, mine,
+  lightning, teleport, sword, and ice wave with the same weapon effect positions,
+  rotations, recoil, sounds, ammo updates, and item clearing semantics.
+- [ ] Preserve concrete item subclass side effects from batch 28: Jet Pack should
+  call `beginJet()`/`endJet()` on key transitions and refill fuel on
+  replenishment, Speed Burst should double stats once, start/end sparkles, reset
+  stats on removal, and expire via `setItem(0)`, Laser/Sword/IceWave should play
+  authored weapon timelines, Mine should use `MineAppear`, Teleport should spawn
+  two local `TeleportPop` effects, Lightning should mount local `Zap`, and Super
+  Jump should play `SuperJumpSound` only when not crouching.
+- [ ] Preserve `DrawObject.as` / `BlockObject.as` editor-object interactions:
+  use authored `DeleteButton`, `ResizeButton`, and `BlockOptionsButton` handles,
+  drag with stage move/up listeners and alpha/swap-to-front behavior, record
+  Flash move/delete/resize actions, snap block drags to the 30px grid, keep start
+  blocks non-overwritable and non-deleteable, scale handles against nested parent
+  zoom, draw the white selection outline around the real display dimensions, and
+  remove objects from the editor undo/current-object registries on cleanup.
+- [ ] Preserve level-editor list-row hover parity: `GetLevelsPopupItem` should
+  include Flash's `Updated:` line, `Data.formatNumber()` formatting, full
+  `Modes.getFullName()` names such as `"Alien Eggs"`, escaped multiline note
+  HTML, and `info.width -= 3; info.x = 550 - info.width`; reported-level rows
+  should keep the same creator/version/note/reporter/reason formatting and
+  cleanup.
+- [ ] Complete `LevelEditorMenu.as` parity: bind `newButton` and `exitButton`,
+  show Flash confirmation prompts for clearing/exiting, route exit through
+  `ConnectingPopup`, disable save/load for guests and save in reports mode,
+  choose `ChooseLevelsModePopup` only when level reports are allowed, prevent
+  test-course launch while drawing, update sidebars/focused layers/undo-redo
+  exactly like Flash, and keep zoom changes synced to the tools sidebar.
+- [ ] Preserve `TextObject.as` editing behavior: use authored `EditTextButton`
+  plus `ColorPicker`, keep the display field hidden while editing, only delete on
+  Backspace/Delete when not editing or the edit field is empty, record
+  `recordChangeText()` on deselect, keep `lastColor`, exact escape/parse
+  replacement order, max 500 chars, min edit width 100, blank-text deletion, and
+  scale/position the edit/color/resize controls with the same parent-zoom math as
+  `DrawObject`.
+- [ ] Preserve `Campaign.as` listing behavior: derive the initial page from
+  `Main.server.server_id` and `Main.lastAuthTime.getDay()`, cache and reuse
+  `Memory.memory["campaignInfo" + page]` with the 250ms delayed `showCourses`,
+  and replace the normal navigation with the Flash vertical six-page
+  `PageNavigation` at `(328, 26)`.
+- [ ] Preserve `LevelListing.as` / `LevelItem.as` listing details: delay
+  `showCourses()` while `SecureData.userRank` is still negative, initialize the
+  global/current page number before any slot can emit `fill_slot`, include the
+  Flash `Updated:` line in level info hovers, add the 500ms add/remove-favorite
+  hover popups, keep pass-check controls disabled with `"checking..."` until the
+  response/error path re-enables them, and preserve all access-cover/slot cleanup
+  side effects.
+- [ ] Preserve `Search.as` focus and request quirks: combo `CLOSE` events should
+  return focus to the stage, pressing Enter should also focus the stage before
+  running the search, blank searches should not show loading, and ID searches
+  initialized on page > 1 should reset to page 1 without sending the skipped
+  request.
+- [ ] Preserve `Lobby.as` bottom-button/session behavior: temporary moderators
+  on non-guild servers should get the Flash confirmation/message flows before
+  logout or level-editor entry, logout should POST `/logout.php` when the user is
+  not remembered before clearing user data and closing the socket, the
+  level-editor route should log out temp moderators as Flash does, the
+  Kongregate button should show/remove the `"Kong Hat"` hover popup, and lobby
+  entry/removal should keep the Noodle Town volume and stage quality side effects
+  aligned with Flash.
+- [ ] Preserve `LobbyLeft.as` notification lifecycle: member lobbies should attach
+  the PM unread notification container to the PM tab and remove/unregister any
+  Haxe-side PM notification command or container on pane teardown so stale lobby
+  tabs cannot receive notifications.
+- [ ] Preserve `CheckServers.as` as a login-screen service, not only a pure parser:
+  `activate()` should start the 60-second reload interval and immediately load
+  `/files/server_status_2.txt`, `deactivate()`/`removeBox()` should clear the
+  interval/target, target combo boxes should show `Loading...` and
+  `No servers found. :(` prompts with enabled-state changes, reload should reuse
+  cached servers when possible, and `selectServer()` should append/update server
+  items without duplicating ids while preserving Flash's guild/public/beta
+  selection rules.
+- [ ] Preserve `CommAuth.as` compatibility: initialize the two `SecureStore`
+  encrypted communication tokens and expose `getToken(num)` with Flash's
+  server-10 special case, even if the Haxe socket protocol also keeps constants
+  internally.
+- [ ] Port `ArtifactHint.as` exactly: `/hint`, `/lotw`, and `/arti` should load
+  `/files/level_of_the_week.json`, parse current/first-finder/bubbles-winner/
+  scheduled fields, build Fred the G. Cactus messages with Flash `makeLevel` and
+  `makeName` links, include scheduled `Data.getDateTimeStr(..., ["long",
+  "short"])`, and clean up the loader with the chat room.
+- [ ] Preserve `LoggingInPopup.as` post-login side effects: encrypted `/login.php`
+  payload should include `award_kong`, reset `awardKongNextLogin` after send,
+  combine HTTP and socket success before entering the lobby, apply `lastAuthTime`,
+  unread notification `lastRead`/`lastRecv`, favorites, guild/emblem/email/token
+  fields, delete reset remembered tokens on error, call per-user `Settings.init`
+  and `Presets.load`, and clear user/socket state on close/error like Flash.
+- [ ] Complete `AccountInfo.as` customization parity: render the guild with the
+  authored linked `GuildName` clip/emblem, support `SET_MANUAL_PART` /
+  `partToSet` updates from part-info popups, show the delayed Loadouts hover at
+  the Flash offset, block number hotkeys while `CourseMenu` is open or selectable
+  text has focus, preserve the confirm/apply flow for presets, and dispatch
+  level-access retests after rank/current-hat changes.
+- [ ] Port the `player_profile.PartInfo` catalog flow: info-button hover should
+  appear after Flash's 500ms delay/offset and clicks should open
+  `PartInfoPopup`, populate `Parts.getPartArray()` in the authored store popup
+  with `PartInfoListing` rows, preserve owned/epic/EE state, EpicFlash effects,
+  Djinn/Fred/artifact/cheese special rendering, dynamic obtain links, singleton
+  popup fade-outs, and `PartPopup` Equip dispatch through `SET_MANUAL_PART`.
+- [ ] Preserve `PresetListing.as` / `RandomizeStyleButton.as` UI details: loadout
+  thumbnails should mask second colors through `PartSelector.isPartEpic()` before
+  preview render, and the randomize button should keep the Flash
+  `HoverDelayPopup` title/body and delayed hover behavior rather than only being
+  a clickable graphic.
+- [ ] Preserve Vault/store visual and confirmation parity from
+  `shop.StorePopup` / `StoreListing`: use the authored `CustomScrollBar`, format
+  coin totals with `Data.formatNumber`, start `EpicFlash` for flashing sale title
+  and sale listing titles, render the three random colored characters for the
+  `epic_everything` listing, keep price/coin/sale box sizing/removal identical,
+  include the PR2 Terms of Use link in purchase confirmations, and mirror Flash's
+  cleanup of loaders/listeners on close.
+- [ ] Preserve `social.PlayersTabList` / loader lifecycle quirks: new user rows
+  should set an `updateSort` flag and sort on Flash's 500ms interval, not
+  immediately on every row, and `PlayersTabUserListDataLoader` / `Guilds` should
+  guard or unregister async callbacks on removal so late HTTP responses cannot
+  mutate torn-down list art.
+- [ ] Port `ui.CustomCursor` runtime behavior for editor tools and eyedropper:
+  maintain the singleton `stageRef` cursor instance, hide/show the OS cursor,
+  track mouse/touch move/down/up/focus events, pause vs dispose non-disposable
+  cursors, apply centered cursor graphics, and preserve the Cmd/Ctrl temporary
+  `ObjectDeleter` swap/restore through `Memory.memory` while excluding text,
+  brush, and eyedropper cursors.
+- [ ] Preserve remaining `ui` helper parity from batch 37: port `EmblemLoader`
+  image browse/load/fit-to-canvas/JPEG90 upload events, replace text-only guild
+  names with the authored `GuildNameGraphic` helper (including `makeWidth`,
+  bold/wide modes, hand cursor, GuildPopup click, and emblem surface), provide a
+  reusable `SelectableButton` hover/selected wrapper for popup rows, and restore
+  `PageNavigation`'s stage-focus reset after link clicks plus `GameSound`'s
+  focus reset on combo close.
+- [ ] Restore `StatSlider.as` press-and-save behavior: increment/decrement
+  buttons should use Flash's mouse-down hold acceleration (8/sec for 0-2s,
+  16/sec for 2-4s, 32/sec after 4s), stop on bounds/no remaining points, and
+  persist level-editor test stats only through the original mouse-up /
+  `SliderEvent.THUMB_RELEASE` / `updateSavedLEStats` paths with the `inLE()`
+  guard.
