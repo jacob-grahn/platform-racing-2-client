@@ -87,7 +87,7 @@ Port the editor itself, one piece at a time:
   - [x] Wire the authored editor zoom combo box so it scales the editable
     world and updates stage-to-world placement coordinates.
   - [x] Port keyboard camera panning and Flash scroll clamping.
-- [ ] Port editor settings.
+- [x] Port editor settings.
   - [x] Port editor level-setting state setters and exported level variables
     for song, gravity, time, rank, password, items, hats, mode, cowboy chance,
     and background color.
