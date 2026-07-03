@@ -9,10 +9,13 @@ import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.events.FocusEvent;
+import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
+import openfl.ui.Keyboard;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.app.AppStage;
@@ -44,6 +47,10 @@ import pr2.util.DisplayUtil;
 class LevelEditor extends Page {
 	public static var editor:Null<LevelEditor>;
 	public static inline var segSize:Float = 30;
+	private static inline var LEVEL_WIDTH:Int = 60000;
+	private static inline var LEVEL_HEIGHT:Int = 60000;
+	private static inline var BASE_HALF_STAGE_WIDTH:Float = 275;
+	private static inline var BASE_HALF_STAGE_HEIGHT:Float = 200;
 
 	public final isMod:Bool;
 	public var reportsMode(default, null):Bool;
@@ -61,8 +68,14 @@ class LevelEditor extends Page {
 	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	public var zoom(default, null):Float = 1;
+	public var posX(default, null):Float = 0;
+	public var posY(default, null):Float = 0;
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
+	private var velX:Float = 0;
+	private var velY:Float = 0;
+	private var pressedKeys:Map<Int, Bool> = new Map();
+	private var cameraStarted:Bool = false;
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
 		super();
@@ -85,6 +98,12 @@ class LevelEditor extends Page {
 		addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 		addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
 		addEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
+		addEventListener(Event.ENTER_FRAME, keyScroll);
+		addEventListener(Event.ADDED_TO_STAGE, attachKeyboardListeners);
+		addEventListener(Event.REMOVED_FROM_STAGE, detachKeyboardListeners);
+		if (stage != null) {
+			attachKeyboardListeners();
+		}
 
 		overlayLayer = new Sprite();
 		overlayLayer.mouseEnabled = false;
@@ -110,6 +129,17 @@ class LevelEditor extends Page {
 			layerContainer.scaleX = zoom;
 			layerContainer.scaleY = zoom;
 		}
+		if (cameraStarted) {
+			setPos(posX, posY);
+		} else {
+			applyLayerPositions();
+		}
+	}
+
+	public function setPos(x:Float, y:Float):Void {
+		posX = clampScrollX(x);
+		posY = clampScrollY(y);
+		applyLayerPositions();
 	}
 
 	public function selectEditorTool(sidebar:String, toolId:String):Void {
@@ -283,6 +313,10 @@ class LevelEditor extends Page {
 		removeEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 		removeEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
 		removeEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
+		removeEventListener(Event.ENTER_FRAME, keyScroll);
+		removeEventListener(Event.ADDED_TO_STAGE, attachKeyboardListeners);
+		removeEventListener(Event.REMOVED_FROM_STAGE, detachKeyboardListeners);
+		detachKeyboardListeners();
 		if (menu != null) {
 			menu.remove();
 			menu = null;
@@ -326,6 +360,101 @@ class LevelEditor extends Page {
 		}
 		activeDrawLayer = drawLayers[0];
 		activeObjectLayer = objectLayers[0];
+		applyLayerPositions();
+	}
+
+	private function keyScroll(_:Event):Void {
+		var hasInput = isPressed(Keyboard.DOWN) || isPressed(Keyboard.UP) || isPressed(Keyboard.LEFT) || isPressed(Keyboard.RIGHT);
+		if (!cameraStarted && !hasInput) {
+			return;
+		}
+		cameraStarted = true;
+		if (stage != null && Std.isOfType(stage.focus, TextField)) {
+			setPos(posX, posY);
+			return;
+		}
+		var accel = isPressed(Keyboard.SHIFT) ? 20 : 10;
+		if (isPressed(Keyboard.DOWN)) {
+			velY -= accel;
+		}
+		if (isPressed(Keyboard.UP)) {
+			velY += accel;
+		}
+		if (isPressed(Keyboard.LEFT)) {
+			velX += accel;
+		}
+		if (isPressed(Keyboard.RIGHT)) {
+			velX -= accel;
+		}
+		velX *= 0.6;
+		velY *= 0.6;
+		setPos(posX + velX / zoom, posY + velY / zoom);
+	}
+
+	private function onKeyDown(event:KeyboardEvent):Void {
+		pressedKeys[event.keyCode] = true;
+	}
+
+	private function onKeyUp(event:KeyboardEvent):Void {
+		pressedKeys.remove(event.keyCode);
+	}
+
+	private function clearPressedKeys(_:Event):Void {
+		pressedKeys.clear();
+	}
+
+	private function attachKeyboardListeners(?_:Event):Void {
+		if (stage == null) {
+			return;
+		}
+		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		stage.addEventListener(Event.DEACTIVATE, clearPressedKeys);
+		stage.addEventListener(FocusEvent.FOCUS_OUT, clearPressedKeys);
+	}
+
+	private function detachKeyboardListeners(?_:Event):Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		stage.removeEventListener(Event.DEACTIVATE, clearPressedKeys);
+		stage.removeEventListener(FocusEvent.FOCUS_OUT, clearPressedKeys);
+		pressedKeys.clear();
+	}
+
+	private function isPressed(keyCode:Int):Bool {
+		return pressedKeys.exists(keyCode);
+	}
+
+	private function clampScrollX(value:Float):Float {
+		return clamp(value, -LEVEL_WIDTH + BASE_HALF_STAGE_WIDTH / zoom, -BASE_HALF_STAGE_WIDTH / zoom);
+	}
+
+	private function clampScrollY(value:Float):Float {
+		return clamp(value, -LEVEL_HEIGHT + BASE_HALF_STAGE_HEIGHT / zoom, -BASE_HALF_STAGE_HEIGHT / zoom);
+	}
+
+	private static inline function clamp(value:Float, min:Float, max:Float):Float {
+		return Math.max(min, Math.min(max, value));
+	}
+
+	private function applyLayerPositions():Void {
+		if (blockLayer != null) {
+			positionLayer(blockLayer, 1);
+		}
+		for (layer in drawLayers) {
+			positionLayer(layer, layer.scaleX);
+		}
+		for (layer in objectLayers) {
+			positionLayer(layer, layer.scaleX);
+		}
+	}
+
+	private function positionLayer(layer:Sprite, layerScale:Float):Void {
+		layer.x = Math.round(posX * layerScale);
+		layer.y = Math.round(posY * layerScale);
 	}
 
 	private function placeSelectedToolFromMouse(event:MouseEvent):Void {
