@@ -20,6 +20,8 @@ import openfl.ui.Keyboard;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.app.AppStage;
+import pr2.audio.MusicCatalog;
+import pr2.audio.MusicCatalog.MusicTrack;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedDrawAction;
@@ -71,6 +73,7 @@ class LevelEditor extends Page {
 	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
 	public var activeItemSettingsPopup(default, null):Null<EditorItemSettingsPopup>;
 	public var activeHatsSettingsPopup(default, null):Null<EditorHatsSettingsPopup>;
+	public var activeMusicSettingsPopup(default, null):Null<EditorMusicSettingsPopup>;
 	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	public var badHats(default, null):Array<Int> = [];
@@ -371,6 +374,7 @@ class LevelEditor extends Page {
 
 	public function openItemSettingsMenu(target:DisplayObject):Void {
 		closeHatsSettingsPopup();
+		closeMusicSettingsPopup();
 		closeItemSettingsPopup();
 		activeItemSettingsPopup = new EditorItemSettingsPopup(this, target);
 	}
@@ -391,6 +395,7 @@ class LevelEditor extends Page {
 
 	public function openHatsSettingsMenu(target:DisplayObject):Void {
 		closeItemSettingsPopup();
+		closeMusicSettingsPopup();
 		closeHatsSettingsPopup();
 		activeHatsSettingsPopup = new EditorHatsSettingsPopup(this, target);
 	}
@@ -406,6 +411,27 @@ class LevelEditor extends Page {
 	public function hatsSettingsPopupRemoved(popup:EditorHatsSettingsPopup):Void {
 		if (activeHatsSettingsPopup == popup) {
 			activeHatsSettingsPopup = null;
+		}
+	}
+
+	public function openMusicSettingsMenu(target:DisplayObject):Void {
+		closeItemSettingsPopup();
+		closeHatsSettingsPopup();
+		closeMusicSettingsPopup();
+		activeMusicSettingsPopup = new EditorMusicSettingsPopup(this, target);
+	}
+
+	public function closeMusicSettingsPopup():Void {
+		if (activeMusicSettingsPopup != null) {
+			var popup = activeMusicSettingsPopup;
+			activeMusicSettingsPopup = null;
+			popup.remove();
+		}
+	}
+
+	public function musicSettingsPopupRemoved(popup:EditorMusicSettingsPopup):Void {
+		if (activeMusicSettingsPopup == popup) {
+			activeMusicSettingsPopup = null;
 		}
 	}
 
@@ -500,6 +526,7 @@ class LevelEditor extends Page {
 			closeBlockOptionsPopup();
 			closeItemSettingsPopup();
 			closeHatsSettingsPopup();
+			closeMusicSettingsPopup();
 			layerContainer = null;
 		}
 		drawingLayer = null;
@@ -1525,6 +1552,126 @@ class EditorItemSettingsPopup extends Sprite {
 		var popupBounds = getBounds(this);
 		var popupWidth = popupBounds.width <= 0 ? 180 : popupBounds.width;
 		var popupHeight = popupBounds.height <= 0 ? 150 : popupBounds.height;
+		x = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
+		y = targetBounds.top;
+		if (y < 0) {
+			y = 0;
+		}
+		if (y + popupHeight > 400) {
+			y = 400 - popupHeight;
+		}
+		x = Math.round(x);
+		y = Math.round(y);
+	}
+
+	private function armAutoDismiss():Void {
+		armTimer = null;
+		if (removed || AppStage.stage == null) {
+			return;
+		}
+		armed = true;
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+	}
+
+	private function onStageMouseDown(event:MouseEvent):Void {
+		if (!hitTestPoint(event.stageX, event.stageY, true)) {
+			remove();
+		}
+	}
+}
+
+class EditorMusicSettingsPopup extends Sprite {
+	public final editor:LevelEditor;
+	public final art:PR2MovieClip;
+	public final dropdown:FlComboBox;
+	private final songs:Array<MusicTrack>;
+	private var armTimer:Null<Timer>;
+	private var armed:Bool = false;
+	private var removed:Bool = false;
+
+	public function new(editor:LevelEditor, target:DisplayObject) {
+		super();
+		this.editor = editor;
+		art = PR2MovieClip.fromLinkage("MusicMenuGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		songs = MusicCatalog.enabled([], true);
+		dropdown = new FlComboBox();
+		dropdown.x = -100;
+		dropdown.y = -15;
+		dropdown.setSize(200, 22);
+		dropdown.rowCount = 4;
+		for (song in songs) {
+			dropdown.addItem(song);
+		}
+		selectSong(editor.song == "" ? "random" : editor.song);
+		dropdown.addEventListener(Event.CHANGE, changeSong);
+		addChild(dropdown);
+		mountNear(target);
+		armTimer = Timer.delay(armAutoDismiss, 25);
+	}
+
+	public function selectedSongId():String {
+		var selected:MusicTrack = cast dropdown.selectedItem;
+		return selected == null ? "" : selected.id;
+	}
+
+	public function setSelectedSongId(songId:String):Void {
+		selectSong(songId);
+		changeSong(null);
+	}
+
+	public function remove():Void {
+		if (removed) {
+			return;
+		}
+		removed = true;
+		if (armTimer != null) {
+			armTimer.stop();
+			armTimer = null;
+		}
+		if (armed && AppStage.stage != null) {
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		}
+		dropdown.removeEventListener(Event.CHANGE, changeSong);
+		if (dropdown.parent == this) {
+			removeChild(dropdown);
+		}
+		art.dispose();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		editor.musicSettingsPopupRemoved(this);
+	}
+
+	private function selectSong(songId:String):Void {
+		for (i in 0...songs.length) {
+			if (songs[i].id == songId) {
+				dropdown.selectedIndex = i;
+				return;
+			}
+		}
+		dropdown.selectedIndex = songs.length > 1 ? 1 : 0;
+	}
+
+	private function changeSong(_:Event):Void {
+		var selected:MusicTrack = cast dropdown.selectedItem;
+		if (selected != null) {
+			editor.setSong(selected.id);
+		}
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = AppStage.stage;
+		}
+	}
+
+	private function mountNear(target:DisplayObject):Void {
+		if (AppStage.stage == null) {
+			return;
+		}
+		AppStage.stage.addChild(this);
+		var targetBounds = target.getBounds(AppStage.stage);
+		var popupBounds = getBounds(this);
+		var popupWidth = popupBounds.width <= 0 ? 240 : popupBounds.width;
+		var popupHeight = popupBounds.height <= 0 ? 115 : popupBounds.height;
 		x = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
 		y = targetBounds.top;
 		if (y < 0) {
@@ -2801,6 +2948,10 @@ class EditorSideBar extends Sprite {
 		}
 		if (editor != null && id == "settings" && entry.id == "hats") {
 			editor.openHatsSettingsMenu(entry);
+			return;
+		}
+		if (editor != null && id == "settings" && entry.id == "music") {
+			editor.openMusicSettingsMenu(entry);
 			return;
 		}
 		if (editor != null) {

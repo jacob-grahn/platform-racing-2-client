@@ -91,10 +91,10 @@ Port the editor itself, one piece at a time:
   - [x] Port editor level-setting state setters and exported level variables
     for song, gravity, time, rank, password, items, hats, mode, cowboy chance,
     and background color.
-- [ ] Port the hats/items/music menus.
+- [x] Port the hats/items/music menus.
   - [x] Port the editor item settings menu.
   - [x] Port the editor hats settings menu.
-  - [ ] Port the editor music settings menu.
+  - [x] Port the editor music settings menu.
 - [ ] Port the test-course transition.
 
 Then the level-management flows, one at a time:

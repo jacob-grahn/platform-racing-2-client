@@ -7,6 +7,7 @@ import pr2.gameplay.LevelConfig;
 import pr2.net.ServerConfig;
 import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
+import pr2.page.LevelEditor.EditorMusicSettingsPopup;
 
 class EditorSettingsTest {
 	private static var assertions:Int = 0;
@@ -15,6 +16,7 @@ class EditorSettingsTest {
 		testDefaultSetters();
 		testVariablesAndLevelVars();
 		testPasswordHashing();
+		testMusicSettingsPopupCommit();
 		testItemSettingsPopupCommit();
 		testHatsSettingsPopupCommit();
 		trace('EditorSettingsTest passed $assertions assertions');
@@ -97,6 +99,22 @@ class EditorSettingsTest {
 		levelVars = editor.getLevelVars();
 		assertEquals(0, editor.hasPass, "empty password clears password flag");
 		assertEquals("", levelVars.get("passHash"), "empty password submits no hash");
+	}
+
+	private static function testMusicSettingsPopupCommit():Void {
+		var editor = new LevelEditor();
+		editor.setSong("");
+		var popup = new EditorMusicSettingsPopup(editor, new Sprite());
+
+		assertEquals("random", popup.selectedSongId(), "blank editor song opens as random");
+
+		popup.setSelectedSongId("7");
+		assertEquals("7", editor.song, "music menu commits selected track");
+		assertEquals("7", editor.getLevelVars().get("song"), "committed music selection exports as level vars");
+
+		popup.setSelectedSongId("0");
+		assertEquals("0", editor.song, "music menu commits no-song selection");
+		popup.remove();
 	}
 
 	private static function testItemSettingsPopupCommit():Void {
