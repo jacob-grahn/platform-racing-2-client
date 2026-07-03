@@ -352,6 +352,7 @@ class LobbyServicesTest {
 		assertEquals(34, tree.y, "stamp placement centers by authored display height");
 		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "stamp placement records object on active layer");
 		assertEquals(1, editor.activeObjectLayer.numChildren, "stamp placement mounts a display object after deleted text");
+		assertEquals("-14;34", editor.activeObjectLayer.getSaveString(), "stamp placement exports Flash relative object coordinates");
 		clickEditorSidebar(editor, "deleteEntry");
 		assertEquals("delete", editor.selectedToolId, "stamps delete entry selects the delete tool");
 		assertEquals(true, editor.deleteSelectedObjectAt(100, 120), "stamps delete tool removes touched stamp objects");
@@ -367,6 +368,7 @@ class LobbyServicesTest {
 		assertEquals(5, rock.code, "stamp placement follows the latest selected stamp");
 		assertEquals(156, rock.x, "scaled layers convert stage x through globalToLocal");
 		assertEquals(195, rock.y, "scaled layers convert stage y through globalToLocal");
+		assertEquals("156;195;5", editor.activeObjectLayer.getSaveString(), "nonzero stamp codes export in the object layer save string");
 		editor.selectEditorTool("tools", "eraser");
 		assertEquals(true, editor.beginSelectedBrushAt(100, 120), "eraser starts on the active draw layer");
 		assertEquals(true, editor.continueSelectedBrushAt(105, 120), "eraser extends while drawing");

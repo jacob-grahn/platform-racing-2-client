@@ -46,6 +46,8 @@ Port the editor itself, one piece at a time:
 - [ ] Port drawing/text/stamp placement.
   - [x] Port stamp object placement onto the active art layer, including
     Flash-style centered coordinate rounding and layer-scale conversion.
+    - [x] Export placed stamp objects in the object-layer save string with
+      Flash relative coordinate/code compression.
   - [x] Port brush drawing/erasing.
   - [x] Port text placement/editing.
     - [x] Port initial text placement on the active art layer, including Flash

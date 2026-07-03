@@ -4103,6 +4103,19 @@ class EditorObjectLayer extends Sprite {
 		var entries:Array<String> = [];
 		var lastX = 0;
 		var lastY = 0;
+		var lastCode = 0;
+		for (placed in placedObjects) {
+			var relX = placed.x - lastX;
+			var relY = placed.y - lastY;
+			lastX = placed.x;
+			lastY = placed.y;
+			var entry = relX + ";" + relY;
+			if (placed.code != lastCode) {
+				lastCode = placed.code;
+				entry += ";" + placed.code;
+			}
+			entries.push(entry);
+		}
 		for (textObject in textObjects) {
 			if (textObject == null || textObject.text == "" || textObject.text == " ") {
 				continue;
