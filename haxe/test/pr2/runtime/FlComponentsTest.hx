@@ -229,6 +229,10 @@ class FlComponentsTest {
 		assertEquals("line one", area.text, "text setter writes the field");
 		area.append("\nline two");
 		assertEquals(true, StringTools.contains(area.text, "line two"), "append adds text");
+		area.maxChars = 255;
+		assertEquals(255, area.textField.maxChars, "text area forwards maxChars to the field");
+		area.restrict = "^`";
+		assertEquals("^`", area.textField.restrict, "text area forwards restrict to the field");
 		assertNotNull(area.verticalScrollBar, "text area owns a vertical scrollbar");
 	}
 

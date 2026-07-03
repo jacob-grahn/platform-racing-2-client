@@ -67,6 +67,14 @@ class FlComponentFactory {
 		var area = new FlTextArea(size.width, size.height);
 		area.editable = componentBool(element, "editable", true);
 		area.text = componentString(element, "text", "");
+		var restrict = componentString(element, "restrict", "");
+		if (restrict != "") {
+			area.restrict = restrict;
+		}
+		var maxChars = Std.parseInt(componentString(element, "maxChars", "0"));
+		if (maxChars != null && maxChars > 0) {
+			area.maxChars = maxChars;
+		}
 		area.enabled = componentBool(element, "enabled", true);
 		return area;
 	}

@@ -43,6 +43,8 @@ class FlTextArea extends Sprite {
 	public var htmlText(get, set):String;
 	public var editable(get, set):Bool;
 	public var enabled(get, set):Bool;
+	public var restrict(get, set):String;
+	public var maxChars(get, set):Int;
 	public var textField(get, never):TextField;
 	public var verticalScrollBar(get, never):FlUIScrollBar;
 
@@ -139,6 +141,24 @@ class FlTextArea extends Sprite {
 		field.selectable = value;
 		redraw();
 		return _enabled;
+	}
+
+	private function get_restrict():String {
+		return field.restrict;
+	}
+
+	private function set_restrict(value:String):String {
+		field.restrict = value;
+		return value;
+	}
+
+	private function get_maxChars():Int {
+		return field.maxChars;
+	}
+
+	private function set_maxChars(value:Int):Int {
+		field.maxChars = value;
+		return value;
 	}
 
 	private function get_textField():TextField {

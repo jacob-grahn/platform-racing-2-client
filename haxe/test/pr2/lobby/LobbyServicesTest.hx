@@ -935,6 +935,8 @@ class LobbyServicesTest {
 		assertNotNull(popup, "save button opens the authored save dialog");
 		assertEquals("Old Title", LobbyArt.text(popup.art, "titleBox").text, "save dialog loads title");
 		assertEquals("old note", LobbyArt.text(popup.art, "noteBox").text, "save dialog loads note");
+		assertEquals(50, LobbyArt.text(popup.art, "titleBox").maxChars, "save dialog preserves title input limit");
+		assertEquals(255, LobbyArt.text(popup.art, "noteBox").maxChars, "save dialog preserves note input limit");
 		var publish = Std.downcast(DisplayUtil.findByName(popup.art, "publish_chk"), FlCheckBox);
 		var newest = Std.downcast(DisplayUtil.findByName(popup.art, "newest_chk"), FlCheckBox);
 		assertEquals(true, publish.selected, "save dialog loads published state");
