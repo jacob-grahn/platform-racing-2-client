@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `com.jcward.workers.JPEGEncoder` / `BitString` or provide an exact
-  equivalent for drawing uploads: support `encode()`, `encodeNonNative()`,
-  `encodeAsync()` with one outstanding job guard, optional output `ByteArray`,
-  native `BitmapData.encode()` fallback detection, Flash quality scaling,
-  JFIF/DQT/DHT/SOF/SOS marker output, bit stuffing/alignment, and 8x8 RGB to YUV
-  macroblock processing.
 - [ ] Preserve `ColorChoices.as` / `ColorPicker.as` swatch behavior exactly:
   initialize recent colors to Flash's alternating `0x888888` / `0x555555`
   values, draw the 22-column by 12-row palette in the same x/y orientation as
