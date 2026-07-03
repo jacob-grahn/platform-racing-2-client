@@ -124,7 +124,7 @@ Then the level-management flows, one at a time:
     drawing retry wait, banned-user override, overwrite confirmation, and
     save-result/error handling.
     - [x] Port request hashing and `upload_level.php` field construction.
-    - [ ] Port drawing retry wait.
+    - [x] Port drawing retry wait.
     - [x] Port banned-user override.
     - [x] Port overwrite confirmation.
     - [x] Port save-result/error handling.

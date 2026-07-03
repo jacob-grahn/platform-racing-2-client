@@ -79,6 +79,7 @@ class LobbyServicesTest {
 		testLevelEditorShell();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
+		testUploadingLevelPopupDrawingRetryWait();
 		testUploadingLevelPopupOverwriteConfirmation();
 		testUploadingLevelPopupBannedConfirmation();
 		testUploadingLevelPopupResultMessages();
@@ -617,6 +618,61 @@ class LobbyServicesTest {
 		editor.remove();
 		UploadingLevelPopup.postFactory = previousFactory;
 		ServerConfig.resetHost();
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testUploadingLevelPopupDrawingRetryWait():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.userName = "CaseUser";
+		LobbySession.token = "session-token";
+		var previousPostFactory = UploadingLevelPopup.postFactory;
+		var previousRetryFactory = UploadingLevelPopup.retryFactory;
+		var uploads:Array<UploadLevelCall> = [];
+		var retryCallbacks:Array<Void->Void> = [];
+		var retryDelays:Array<Int> = [];
+		UploadingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult({success: true});
+			return null;
+		};
+		UploadingLevelPopup.retryFactory = function(callback:Void->Void, delayMs:Int):Null<haxe.Timer> {
+			retryCallbacks.push(callback);
+			retryDelays.push(delayMs);
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		editor.title = "Waiting Save";
+		editor.selectEditorTool("tools", "brush");
+		assertEquals(true, editor.beginSelectedBrushAt(10, 12), "brush drawing starts before save");
+		var popup = new UploadingLevelPopup(editor);
+		assertEquals(0, uploads.length, "save upload waits while editor is drawing");
+		assertEquals(false, popup.fadeOutStarted, "waiting save popup stays alive for retry");
+		assertEquals(1, retryDelays.length, "drawing save arms one retry");
+		assertEquals(1000, retryDelays[0], "drawing save retries after Flash one-second wait");
+
+		retryCallbacks.shift()();
+		assertEquals(0, uploads.length, "drawing retry keeps waiting while brush is still active");
+		assertEquals(2, retryDelays.length, "drawing retry re-arms the wait");
+		assertEquals(1000, retryDelays[1], "drawing retry keeps Flash one-second wait");
+		assertEquals(true, editor.endSelectedBrush(), "brush drawing finishes before upload retry");
+		retryCallbacks.shift()();
+		assertEquals(1, uploads.length, "save upload posts after drawing finishes");
+		assertEquals("Waiting Save", uploads[0].fields.get("title"), "deferred upload uses editor level vars");
+		assertEquals(true, popup.fadeOutStarted, "deferred save popup fades after upload posts");
+
+		editor.remove();
+		UploadingLevelPopup.retryFactory = previousRetryFactory;
+		UploadingLevelPopup.postFactory = previousPostFactory;
 		LobbySession.clear();
 		closeAllPopups();
 	}

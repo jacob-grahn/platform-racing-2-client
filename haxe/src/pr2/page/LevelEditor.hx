@@ -559,6 +559,10 @@ class LevelEditor extends Page {
 		return true;
 	}
 
+	public function isDrawing():Bool {
+		return drawingLayer != null && drawingLayer.isDrawing();
+	}
+
 	public function undoActiveObjectLayer():Bool {
 		var changed = false;
 		if (blockLayer != null && isBlockHistoryActive()) {
@@ -1314,6 +1318,7 @@ class LevelEditorMenu extends Sprite {
 
 typedef SaveLevelUploadFactory = LevelEditor->Null<Popup>;
 typedef UploadingLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
+typedef UploadingLevelRetryFactory = (Void->Void)->Int->Null<Timer>;
 
 class SaveLevelPopup extends Popup {
 	public static var uploadFactory:SaveLevelUploadFactory = defaultUpload;
@@ -1450,28 +1455,42 @@ class SaveLevelPopup extends Popup {
 
 class UploadingLevelPopup extends Popup {
 	public static var postFactory:UploadingLevelPostFactory = defaultPost;
+	public static var retryFactory:UploadingLevelRetryFactory = defaultRetry;
 
 	public final editor:LevelEditor;
 	public final overrideBanConfirmed:Bool;
 	public final overwriteExistingConfirmed:Bool;
 	private var uploading:Null<UploadingPopup>;
+	private var waitTimer:Null<Timer>;
 
 	public function new(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false) {
 		super();
 		this.editor = editor;
 		overrideBanConfirmed = overrideBan;
 		overwriteExistingConfirmed = overwriteExisting;
-		uploadLevel();
-		startFadeOut();
+		if (uploadLevel()) {
+			startFadeOut();
+		}
 	}
 
-	private function uploadLevel():Void {
+	private function uploadLevel():Bool {
+		if (editor.isDrawing()) {
+			clearWaitTimer();
+			waitTimer = retryFactory(function():Void {
+				waitTimer = null;
+				if (uploadLevel()) {
+					startFadeOut();
+				}
+			}, 1000);
+			return false;
+		}
 		var fields = buildFields(editor, overrideBanConfirmed, overwriteExistingConfirmed);
 		if (fields.get("data") == null || fields.get("data") == "") {
 			new MessagePopup("The client is glitching out. Could not save your level.");
-			return;
+			return true;
 		}
 		uploading = postFactory(ServerConfig.uploadLevelUrl(), fields, "Uploading level...", handleResponse, handleUploadError);
+		return true;
 	}
 
 	private function handleResponse(ret:Dynamic):Void {
@@ -1546,6 +1565,22 @@ class UploadingLevelPopup extends Popup {
 	public static function defaultPost(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
 			onError:String->Void):Null<UploadingPopup> {
 		return new UploadingPopup(url, fields, label, onResult, onError);
+	}
+
+	public static function defaultRetry(callback:Void->Void, delayMs:Int):Null<Timer> {
+		return Timer.delay(callback, delayMs);
+	}
+
+	private function clearWaitTimer():Void {
+		if (waitTimer != null) {
+			waitTimer.stop();
+			waitTimer = null;
+		}
+	}
+
+	override public function remove():Void {
+		clearWaitTimer();
+		super.remove();
 	}
 }
 
@@ -3255,6 +3290,10 @@ class EditorDrawableLayer extends Sprite {
 		drawing = false;
 		rasterize();
 		notifyHistoryChanged();
+	}
+
+	public function isDrawing():Bool {
+		return drawing;
 	}
 
 	public function getSaveString():String {
