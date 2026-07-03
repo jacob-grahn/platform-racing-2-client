@@ -287,6 +287,25 @@ class LobbyServicesTest {
 		brickBlock.setOptions("legacy");
 		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;4;legacy", editor.blockLayer.getSaveString(),
 			"block save string uses Flash relative grid coordinates and option suffixes");
+		clickEditorSidebar(editor, "happyEntry");
+		var happyBlock = editor.placeSelectedBlockAt(160, 120);
+		happyBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertNotNull(editor.activeBlockOptionsPopup, "happy block opens the stat option popup");
+		assertNotNull(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "slider"), "stat popup uses the authored slider");
+		assertEquals("-- Happy Block --", Reflect.getProperty(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "titleBox"), "text"),
+			"happy stat popup keeps the authored title text");
+		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setStatMagnitude"), [25]);
+		editor.closeBlockOptionsPopup();
+		assertEquals("25", happyBlock.options, "closing the happy stat popup commits normalized options");
+		clickEditorSidebar(editor, "sadEntry");
+		var sadBlock = editor.placeSelectedBlockAt(190, 120);
+		sadBlock.setOptions("-35");
+		sadBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals("-- Sad Block --", Reflect.getProperty(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "titleBox"), "text"),
+			"sad stat popup rewrites the authored title text");
+		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setStatMagnitude"), [5]);
+		editor.closeBlockOptionsPopup();
+		assertEquals("", sadBlock.options, "closing the sad stat popup commits default as empty options");
 		editor.remove();
 		assertEquals(null, LevelEditor.editor, "editor shell clears singleton");
 

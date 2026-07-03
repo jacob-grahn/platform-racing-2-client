@@ -1,5 +1,6 @@
 package pr2.page;
 
+import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
@@ -7,12 +8,14 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
+import pr2.app.AppStage;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
@@ -20,6 +23,9 @@ import pr2.level.ServerLevelRenderer;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.runtime.FlComponents;
+import pr2.runtime.FlSlider;
+import pr2.runtime.FlSliderEvent;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
@@ -46,6 +52,7 @@ class LevelEditor extends Page {
 	public var blockLayer(default, null):Null<EditorBlockLayer>;
 	public var selectedBlock(default, null):Null<EditorBlockObject>;
 	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
+	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 
@@ -143,6 +150,24 @@ class LevelEditor extends Page {
 
 	public function openBlockOptions(block:EditorBlockObject):Void {
 		lastBlockOptionsRequest = block;
+		closeBlockOptionsPopup();
+		if (block.type == BlockType.Happy || block.type == BlockType.Sad) {
+			activeBlockOptionsPopup = new EditorStatBlockOptionsPopup(this, block);
+		}
+	}
+
+	public function closeBlockOptionsPopup():Void {
+		if (activeBlockOptionsPopup != null) {
+			var popup = activeBlockOptionsPopup;
+			activeBlockOptionsPopup = null;
+			popup.remove();
+		}
+	}
+
+	public function blockOptionsPopupRemoved(popup:EditorBlockOptionsPopup):Void {
+		if (activeBlockOptionsPopup == popup) {
+			activeBlockOptionsPopup = null;
+		}
 	}
 
 	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
@@ -199,6 +224,7 @@ class LevelEditor extends Page {
 			blockLayer = null;
 			selectedBlock = null;
 			lastBlockOptionsRequest = null;
+			closeBlockOptionsPopup();
 			layerContainer = null;
 		}
 		drawingLayer = null;
@@ -516,6 +542,137 @@ class EditorBlockLayer extends Sprite {
 			case "time": {code: ObjectCodes.BLOCK_TIME, type: BlockType.Time};
 			case "egg": {code: ObjectCodes.BLOCK_MINION_EGG, type: null};
 			default: null;
+		}
+	}
+}
+
+class EditorBlockOptionsPopup extends Sprite {
+	public final editor:LevelEditor;
+	public final block:EditorBlockObject;
+	public final art:PR2MovieClip;
+	private var armed:Bool = false;
+	private var removed:Bool = false;
+
+	public function new(editor:LevelEditor, block:EditorBlockObject, linkage:String) {
+		super();
+		this.editor = editor;
+		this.block = block;
+		art = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+		addChild(art);
+		mountNearBlock();
+		Timer.delay(armAutoDismiss, 25);
+	}
+
+	public function remove():Void {
+		if (removed) {
+			return;
+		}
+		removed = true;
+		if (armed && AppStage.stage != null) {
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		}
+		art.dispose();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		editor.blockOptionsPopupRemoved(this);
+	}
+
+	private function mountNearBlock():Void {
+		var host:Null<Sprite> = editor.overlayLayer;
+		if (AppStage.stage != null) {
+			AppStage.stage.addChild(this);
+			var blockBounds = block.getBounds(AppStage.stage);
+			placeBeside(blockBounds);
+			return;
+		}
+		if (host != null) {
+			host.addChild(this);
+			var blockBounds = block.getBounds(host);
+			placeBeside(blockBounds);
+		}
+	}
+
+	private function placeBeside(blockBounds:Rectangle):Void {
+		var popupBounds = getBounds(this);
+		var popupWidth = popupBounds.width <= 0 ? 236 : popupBounds.width;
+		var popupHeight = popupBounds.height <= 0 ? 120 : popupBounds.height;
+		x = blockBounds.left > popupWidth ? blockBounds.left - popupWidth - 7 : blockBounds.right + 7;
+		y = blockBounds.top;
+		if (y < 0) {
+			y = 0;
+		}
+		if (y + popupHeight > 400) {
+			y = 400 - popupHeight;
+		}
+		x = Math.round(x);
+		y = Math.round(y);
+	}
+
+	private function armAutoDismiss():Void {
+		if (removed || AppStage.stage == null) {
+			return;
+		}
+		armed = true;
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+	}
+
+	private function onStageMouseDown(event:MouseEvent):Void {
+		if (!hitTestPoint(event.stageX, event.stageY, true)) {
+			remove();
+		}
+	}
+}
+
+class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
+	private var slider:Null<FlSlider>;
+	private var statBox:Null<TextField>;
+
+	public function new(editor:LevelEditor, block:EditorBlockObject) {
+		super(editor, block, "StatBlockOptionsGraphic");
+		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), FlSlider);
+		statBox = FlComponents.asTextField(DisplayUtil.findByName(art, "statBox"));
+		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(art, "titleBox"));
+		var descBox = FlComponents.asTextField(DisplayUtil.findByName(art, "descBox"));
+		var happy = block.type == BlockType.Happy;
+		if (titleBox != null) {
+			titleBox.text = happy ? "-- Happy Block --" : "-- Sad Block --";
+		}
+		if (descBox != null) {
+			descBox.text = "All the stats of players that bump this block will be " + (happy ? "increased" : "decreased") + " by:";
+		}
+		if (slider != null) {
+			slider.minimum = 5;
+			slider.maximum = 100;
+			slider.snapInterval = 5;
+			slider.addEventListener(FlSliderEvent.CHANGE, updateStatDisplay);
+			slider.addEventListener(FlSliderEvent.THUMB_DRAG, updateStatDisplay);
+		}
+		setStatMagnitude(Std.int(Math.abs(EditorBlockOptions.statChange(block.type, block.options))));
+	}
+
+	public function setStatMagnitude(value:Int):Void {
+		if (slider != null) {
+			slider.value = value;
+			updateStatDisplay();
+		} else if (statBox != null) {
+			statBox.text = Std.string(value);
+		}
+	}
+
+	override public function remove():Void {
+		if (slider != null) {
+			slider.removeEventListener(FlSliderEvent.CHANGE, updateStatDisplay);
+			slider.removeEventListener(FlSliderEvent.THUMB_DRAG, updateStatDisplay);
+		}
+		var magnitude = slider == null ? Std.int(Math.abs(EditorBlockOptions.statChange(block.type, block.options))) : Std.int(Math.round(slider.value));
+		block.setOptions(EditorBlockOptions.applyStatChange(block.type, block.type == BlockType.Sad ? -magnitude : magnitude));
+		super.remove();
+	}
+
+	private function updateStatDisplay(?_):Void {
+		if (slider != null && statBox != null) {
+			statBox.text = Std.string(Std.int(Math.round(slider.value)));
 		}
 	}
 }
