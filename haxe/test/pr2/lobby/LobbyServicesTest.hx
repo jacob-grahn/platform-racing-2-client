@@ -623,10 +623,42 @@ class LobbyServicesTest {
 		assertEquals(1, successCallbacks.length, "loading popup stores success callback");
 		assertEquals(1, errorCallbacks.length, "loading popup stores error callback");
 
-		var levelData = "level_id=31&version=4&title=Loaded+Via+Popup&live=1&data=m4`abcdef````````````";
+		var loadedData = [
+			"m4",
+			"abcdef",
+			"",
+			"10;20;0;150;75,5;6;t;hello#44world;16711935;120;80",
+			"",
+			"",
+			"c123456,d1;2",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"",
+			""
+		].join("`");
+		var levelData = "level_id=31&version=4&title=Loaded+Via+Popup&live=1&data=" + loadedData;
 		successCallbacks[0](LevelDataClient.parseEditorLoad(signedLevel(levelData, 31, 4), 31, 4));
 		assertEquals("Loaded Via Popup", editor.title, "loading popup applies validated editor variables");
 		assertEquals(true, editor.reportsMode, "loading popup preserves reported-level mode");
+		assertEquals(1, editor.objectLayers[0].placedObjects.length, "loading popup hydrates placed stamp objects");
+		assertEquals(0, editor.objectLayers[0].placedObjects[0].code, "loaded stamp preserves code");
+		assertEquals(10, editor.objectLayers[0].placedObjects[0].x, "loaded stamp preserves local x");
+		assertEquals(20, editor.objectLayers[0].placedObjects[0].y, "loaded stamp preserves local y");
+		assertEquals(1.5, editor.objectLayers[0].placedObjects[0].scaleX, "loaded stamp preserves width scale");
+		assertEquals(0.75, editor.objectLayers[0].placedObjects[0].scaleY, "loaded stamp preserves height scale");
+		assertEquals(1, editor.objectLayers[0].textObjects.length, "loading popup hydrates text objects");
+		assertEquals("hello,world", editor.objectLayers[0].textObjects[0].text, "loaded text parses escaped content");
+		assertEquals(15, editor.objectLayers[0].textObjects[0].x, "loaded text preserves relative cursor x");
+		assertEquals(26, editor.objectLayers[0].textObjects[0].y, "loaded text preserves relative cursor y");
+		assertEquals(0xFF00FF, editor.objectLayers[0].textObjects[0].color, "loaded text preserves color");
+		assertEquals(1.2, editor.objectLayers[0].textObjects[0].scaleX, "loaded text preserves width scale");
+		assertEquals(0.8, editor.objectLayers[0].textObjects[0].scaleY, "loaded text preserves height scale");
+		assertEquals("10;20;150;75,5;6;t;hello#44world;16711935;120;80", editor.objectLayers[0].getSaveString(),
+			"loaded object layer exports equivalent save string");
+		assertEquals("c123456,d1;2", editor.drawLayers[0].getSaveString(), "loading popup still hydrates draw layers");
 		assertEquals(true, popup.fadeOutStarted, "loading popup fades after level load");
 
 		popup.remove();

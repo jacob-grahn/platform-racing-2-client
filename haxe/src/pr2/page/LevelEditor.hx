@@ -29,7 +29,10 @@ import pr2.gameplay.Course;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedDrawAction;
+import pr2.level.ServerLevel.DecodedArtLayer;
+import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedBlock;
+import pr2.level.ServerLevel.DecodedTextObject;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;
@@ -257,6 +260,7 @@ class LevelEditor extends Page {
 			var level = ServerLevelDecoder.decode(data.data);
 			blockLayer.loadBlocks(level.blocks);
 			loadDrawLayersFromData(data.data);
+			loadObjectLayersFromDecoded(level.artLayers);
 		}
 		if (menu != null) {
 			menu.setReportsMode(report);
@@ -873,6 +877,12 @@ class LevelEditor extends Page {
 			if (i < drawLayers.length) {
 				drawLayers[i].loadDrawString(drawSections[i]);
 			}
+		}
+	}
+
+	private function loadObjectLayersFromDecoded(layers:Array<DecodedArtLayer>):Void {
+		for (i in 0...objectLayers.length) {
+			objectLayers[i].loadArtLayer(i < layers.length ? layers[i] : null);
 		}
 	}
 
@@ -4059,6 +4069,7 @@ class EditorObjectLayer extends Sprite {
 	public final saveArray:Array<String> = [];
 	public final redoArray:Array<String> = [];
 	private final placedDisplays:Array<Sprite> = [];
+	private final initialTextActions:Array<String> = [];
 
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
@@ -4077,6 +4088,25 @@ class EditorObjectLayer extends Sprite {
 		placedDisplays.push(display);
 		addChild(display);
 		return placed;
+	}
+
+	public function loadArtLayer(layer:Null<DecodedArtLayer>):Void {
+		clearPlacedObjects();
+		clearTextObjects();
+		saveArray.resize(0);
+		redoArray.resize(0);
+		initialTextActions.resize(0);
+		if (layer != null) {
+			for (object in layer.objects) {
+				addLoadedStamp(object);
+			}
+			for (text in layer.texts) {
+				var action = encodedTextAction(text);
+				initialTextActions.push(action);
+				replayTextAction(action);
+			}
+		}
+		notifyHistoryChanged();
 	}
 
 	public function addText(text:String, stageX:Float, stageY:Float, color:Int, startEditing:Bool = false):EditorTextObject {
@@ -4182,9 +4212,17 @@ class EditorObjectLayer extends Sprite {
 			lastX = placed.x;
 			lastY = placed.y;
 			var entry = relX + ";" + relY;
+			var widthPerc = Std.int(placed.scaleX * 100);
+			var heightPerc = Std.int(placed.scaleY * 100);
+			var scaled = widthPerc != 100 || heightPerc != 100;
 			if (placed.code != lastCode) {
 				lastCode = placed.code;
 				entry += ";" + placed.code;
+				if (scaled) {
+					entry += ";" + widthPerc + ";" + heightPerc;
+				}
+			} else if (scaled) {
+				entry += ";" + widthPerc + ";" + heightPerc;
 			}
 			entries.push(entry);
 		}
@@ -4213,17 +4251,11 @@ class EditorObjectLayer extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
-		while (numChildren > 0) {
-			removeChildAt(0);
-		}
-		placedObjects.resize(0);
-		placedDisplays.resize(0);
-		for (textObject in textObjects.copy()) {
-			textObject.remove();
-		}
-		textObjects.resize(0);
+		clearPlacedObjects();
+		clearTextObjects();
 		saveArray.resize(0);
 		redoArray.resize(0);
+		initialTextActions.resize(0);
 	}
 
 	private function recordAction(action:String):Void {
@@ -4240,10 +4272,10 @@ class EditorObjectLayer extends Sprite {
 	}
 
 	private function rebuildTextObjects():Void {
-		for (textObject in textObjects.copy()) {
-			textObject.remove();
+		clearTextObjects();
+		for (action in initialTextActions) {
+			replayTextAction(action);
 		}
-		textObjects.resize(0);
 		for (action in saveArray) {
 			replayTextAction(action);
 		}
@@ -4324,6 +4356,32 @@ class EditorObjectLayer extends Sprite {
 		}
 	}
 
+	private function clearPlacedObjects():Void {
+		while (placedObjects.length > 0) {
+			removePlacedObjectAt(placedObjects.length - 1);
+		}
+	}
+
+	private function clearTextObjects():Void {
+		for (textObject in textObjects.copy()) {
+			textObject.remove();
+		}
+		textObjects.resize(0);
+	}
+
+	private function addLoadedStamp(object:DecodedArtObject):Void {
+		var placed = new EditorPlacedObject(object.code, Math.round(object.x), Math.round(object.y), object.scaleX, object.scaleY);
+		var display = createStampDisplay(placed, stampDisplaySize(object.code));
+		placedObjects.push(placed);
+		placedDisplays.push(display);
+		addChild(display);
+	}
+
+	private static function encodedTextAction(text:DecodedTextObject):String {
+		return "u" + text.text + ";" + Math.round(text.x) + ";" + Math.round(text.y) + ";" + text.color + ";"
+			+ Std.int(text.scaleX * 100) + ";" + Std.int(text.scaleY * 100);
+	}
+
 	private function touchesStagePoint(display:DisplayObject, stageX:Float, stageY:Float):Bool {
 		var point = globalToLocal(new Point(stageX, stageY));
 		return display.getBounds(this).contains(point.x, point.y);
@@ -4333,6 +4391,8 @@ class EditorObjectLayer extends Sprite {
 		var holder = new Sprite();
 		holder.x = placed.x;
 		holder.y = placed.y;
+		holder.scaleX = placed.scaleX;
+		holder.scaleY = placed.scaleY;
 		var assetPath = ServerLevelRenderer.stampAssetPath(placed.code);
 		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
 			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
@@ -4609,11 +4669,15 @@ class EditorPlacedObject {
 	public final code:Int;
 	public final x:Int;
 	public final y:Int;
+	public final scaleX:Float;
+	public final scaleY:Float;
 
-	public function new(code:Int, x:Int, y:Int) {
+	public function new(code:Int, x:Int, y:Int, scaleX:Float = 1, scaleY:Float = 1) {
 		this.code = code;
 		this.x = x;
 		this.y = y;
+		this.scaleX = scaleX;
+		this.scaleY = scaleY;
 	}
 }
 

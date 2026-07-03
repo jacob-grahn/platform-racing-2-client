@@ -129,6 +129,8 @@ Then the level-management flows, one at a time:
     option strings.
   - [x] Hydrate editor draw layers from loaded level data, preserving editable
     draw actions.
+  - [x] Hydrate editor object/text art layers from loaded level data, preserving
+    stamp/text placement, scale, color, and save-string meaning.
 - [ ] Port the save flow with the same coverage.
   - [x] Port the authored save dialog, including title/note population and
     counters, empty-title validation, publish/to-newest checkbox behavior, and
