@@ -53,6 +53,12 @@ class ServerLevel {
 			return block.code == ObjectCodes.BLOCK_FINISH;
 		});
 	}
+
+	public function minionEggBlocks():Array<DecodedBlock> {
+		return blocks.filter(function(block) {
+			return block.code == ObjectCodes.BLOCK_MINION_EGG;
+		});
+	}
 }
 
 class DecodedArtLayer {

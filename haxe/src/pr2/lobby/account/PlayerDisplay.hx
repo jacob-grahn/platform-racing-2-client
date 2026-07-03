@@ -6,6 +6,7 @@ import openfl.events.Event;
 import openfl.events.MouseEvent;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.lobby.dialogs.HoverDelayPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.net.CommandHandler;
 import pr2.runtime.PR2MovieClip;
@@ -27,7 +28,8 @@ class PlayerDisplay extends Sprite {
 	public final feetSelect:PartSelector;
 
 	private var charPreview:AccountCharacter;
-	private var randomButton:Null<PR2MovieClip>;
+	private var randomButton:Null<HoverDelayPopup>;
+	private var randomGraphic:Null<PR2MovieClip>;
 	private var randomBinding:Null<Binding>;
 	private var hover:Null<HoverPopup>;
 	private final yStart:Float = 24;
@@ -59,8 +61,11 @@ class PlayerDisplay extends Sprite {
 		bindInfo(bodySelect, "body");
 		bindInfo(feetSelect, "feet");
 
-		randomButton = PR2MovieClip.fromLinkage("RandomizeStyleButtonGraphic", {maxNestedDepth: 4});
-		randomButton.width = randomButton.height = 15;
+		randomButton = new HoverDelayPopup("Randomize Style",
+			"Create a random style for your character. Remember to save your current style if you like it first!");
+		randomGraphic = PR2MovieClip.fromLinkage("RandomizeStyleButtonGraphic", {maxNestedDepth: 4});
+		randomGraphic.width = randomGraphic.height = 15;
+		randomButton.addChild(randomGraphic);
 		randomButton.x = 122.5;
 		randomButton.y = (hasHatRow ? -yStart : 0) + 4.5;
 		randomBinding = LobbyArt.bind(randomButton, onRandomClick);
@@ -135,8 +140,12 @@ class PlayerDisplay extends Sprite {
 			hover = null;
 		}
 		LobbyArt.unbind(randomBinding);
+		if (randomGraphic != null) {
+			randomGraphic.dispose();
+			randomGraphic = null;
+		}
 		if (randomButton != null) {
-			randomButton.dispose();
+			randomButton.remove();
 			randomButton = null;
 		}
 		if (parent != null) {

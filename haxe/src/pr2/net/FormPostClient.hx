@@ -18,9 +18,10 @@ class FormPostClient {
 		var loader = new URLLoader();
 		loader.dataFormat = URLLoaderDataFormat.TEXT;
 
+		var prepared = SuperLoader.prepareFields(fields);
 		var vars = new URLVariables();
-		for (key in fields.keys()) {
-			Reflect.setField(vars, key, fields.get(key));
+		for (key in prepared.keys()) {
+			Reflect.setField(vars, key, prepared.get(key));
 		}
 
 		var request = new URLRequest(url);
@@ -68,7 +69,7 @@ class FormPostClient {
 			succeed(Std.string(loader.data));
 		};
 		onIoError = function(event:IOErrorEvent):Void {
-			fail('request to $url failed' + (status != 0 ? ' (HTTP $status)' : "") + ': ${event.text}');
+			fail(SuperLoader.formatIoError(url, status, event.text));
 		};
 		onSecurityError = function(event:SecurityErrorEvent):Void {
 			fail('request to $url blocked (likely CORS): ${event.text}');

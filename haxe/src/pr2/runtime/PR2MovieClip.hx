@@ -46,6 +46,7 @@ class PR2MovieClip extends Sprite {
 	public var currentFrame(default, null):Int = 1;
 	public var totalFrames(default, null):Int = 1;
 	public var currentLabels(default, null):Array<FrameLabel>;
+	public var var_652:Dynamic = null;
 
 	private var timeline:Null<TimelineDef>;
 	private var frames:Array<RuntimeFrame> = [];
@@ -58,6 +59,7 @@ class PR2MovieClip extends Sprite {
 	private var frameScripts:Map<Int, Array<Void->Void>> = new Map();
 	private var runningFrameScripts:Bool = false;
 	private var isButtonSymbol:Bool = false;
+	private var suppressConstructorAutoPlay:Bool = false;
 
 	// Mask metadata keyed by source layer `index`. `maskLayers` holds layers
 	// flagged `layerType: "mask"`; `maskedLayerParents` maps a masked layer to
@@ -108,6 +110,7 @@ class PR2MovieClip extends Sprite {
 		if (timeline != null) {
 			buildTimeline(timeline);
 		}
+		installAuthoredConstructorFrameScripts();
 
 		gotoFrame(1, false);
 		// Button symbols use their extra frames as up/over/down/hit states, not
@@ -117,8 +120,59 @@ class PR2MovieClip extends Sprite {
 			configureButtonSymbol();
 		} else if (maybeFlattenSubtree()) {
 			// Collapsed into a single cached bitmap; stays stopped, no per-frame work.
-		} else if (totalFrames > 1) {
+		} else if (totalFrames > 1 && !suppressConstructorAutoPlay) {
 			play();
+		}
+	}
+
+	private function installAuthoredConstructorFrameScripts():Void {
+		return switch (symbol.linkageClassName) {
+			case "PR2_Graphics_1_Apr_2014_fla.ag_intro_mc_247":
+				setFrameScript(0, function():Void gotoAndPlay(2));
+				setFrameScript(218, function():Void stop());
+			case "PR2_Graphics_1_Apr_2014_fla.bubbleSpin_12" | "PR2_Graphics_1_Apr_2014_fla.bubbleShineSpin_17":
+				setFrameScript(20, function():Void gotoAndPlay(1));
+			case "PR2_Graphics_1_Apr_2014_fla.bubblebox_logo_ro_254":
+				setFrameScript(0, function():Void stop());
+				suppressConstructorAutoPlay = true;
+			case "PR2_Graphics_1_Apr_2014_fla.bubblxbox_play_latest_text_252":
+				setFrameScript(0, function():Void stop());
+				setFrameScript(9, function():Void stop());
+				suppressConstructorAutoPlay = true;
+			case "PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59":
+				setFrameScript(55, function():Void var_652 = true);
+			case "PR2_Graphics_1_Apr_2014_fla.frozenSolidAnim_65":
+				setFrameScript(47, function():Void {
+					stop();
+					dispatchEvent(new Event(Event.COMPLETE));
+				});
+			case "PR2_Graphics_1_Apr_2014_fla.gunFireAnim_40"
+				| "PR2_Graphics_1_Apr_2014_fla.iceWaveFireAnim_55"
+				| "PR2_Graphics_1_Apr_2014_fla.jetPackStates_47"
+				| "PR2_Graphics_1_Apr_2014_fla.swordAnim_53"
+				| "PR2_Graphics_1_Apr_2014_fla.hatColor_24"
+				| "PR2_Graphics_1_Apr_2014_fla.hatColor2_25"
+				| "PlayersTabListGraphic":
+				setFrameScript(0, function():Void stop());
+				suppressConstructorAutoPlay = true;
+			case "PR2_Graphics_1_Apr_2014_fla.buttonGlowAnim_182":
+				setFrameScript(1, function():Void stop());
+				setFrameScript(36, function():Void gotoAndPlay("on"));
+			case "PR2_Graphics_1_Apr_2014_fla.jumpAnim_61":
+				setFrameScript(49, function():Void stop());
+			case "PR2_Graphics_1_Apr_2014_fla.superJumpAnim_60":
+				setFrameScript(50, function():Void stop());
+			case "PR2_Graphics_1_Apr_2014_fla.logoAnim_258":
+				setFrameScript(0, function():Void {
+					mouseEnabled = false;
+					mouseChildren = false;
+				});
+				setFrameScript(Std.int(Math.min(232, totalFrames - 1)), function():Void stop());
+			case "PointyStar" | "TeleportAnimation":
+				setFrameScript(15, function():Void stop());
+			case "SlashAnimation":
+				setFrameScript(5, function():Void stop());
+			default:
 		}
 	}
 

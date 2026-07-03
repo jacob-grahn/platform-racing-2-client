@@ -1,6 +1,6 @@
 package pr2.page;
 
-import openfl.display.Sprite;
+import pr2.display.Removable;
 
 /**
 	Base class for full-screen pages, ported from the Flash `page.Page`.
@@ -11,7 +11,7 @@ import openfl.display.Sprite;
 	holder so they can request a page change (the Flash client reached the
 	holder through the global `Main.pageHolder`; here it is injected instead).
 **/
-class Page extends Sprite {
+class Page extends Removable {
 	public var pageHolder:Null<PageHolder>;
 
 	public function new() {
@@ -20,9 +20,5 @@ class Page extends Sprite {
 
 	public function initialize():Void {}
 
-	public function remove():Void {
-		if (parent != null) {
-			parent.removeChild(this);
-		}
-	}
+	override public function remove():Void super.remove();
 }

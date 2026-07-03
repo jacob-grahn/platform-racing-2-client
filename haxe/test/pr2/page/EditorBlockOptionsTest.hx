@@ -1,6 +1,10 @@
 package pr2.page;
 
+import openfl.display.DisplayObjectContainer;
 import pr2.level.BlockType;
+import pr2.level.ObjectCodes;
+import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 class EditorBlockOptionsTest {
 	private static var assertions:Int = 0;
@@ -39,8 +43,38 @@ class EditorBlockOptionsTest {
 		assertArrayEquals([50, 50, 50], EditorBlockOptions.customStats(""), "empty custom stats load defaults");
 		assertArrayEquals([50, 50, 50], EditorBlockOptions.customStats("reset"), "reset custom stats keep slider defaults");
 		assertArrayEquals([100, 75, 100], EditorBlockOptions.customStats("105-75-140"), "custom stats load clamped values");
+		testEditorEggBlockUsesAuthoredGraphic();
 
 		trace('EditorBlockOptionsTest passed $assertions assertions');
+	}
+
+	private static function testEditorEggBlockUsesAuthoredGraphic():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		var block = editor.blockLayer.addBlockAtStage(ObjectCodes.BLOCK_MINION_EGG, null, 0, 0);
+		assertNotNull(block, "egg block can be placed");
+
+		var holder = Std.downcast(block.getChildAt(0), DisplayObjectContainer);
+		assertNotNull(holder, "egg block display holder is mounted");
+		var eggBlock = Std.downcast(holder.getChildAt(0), PR2MovieClip);
+		assertNotNull(eggBlock, "egg block uses authored EggBlockGraphic");
+		assertEquals("EggBlockGraphic", eggBlock.symbol.linkageClassName, "egg block linkage");
+
+		var leftFoot = Std.downcast(DisplayUtil.findByName(eggBlock, "var_152"), PR2MovieClip);
+		var rightFoot = Std.downcast(DisplayUtil.findByName(eggBlock, "var_165"), PR2MovieClip);
+		assertStoppedFoot(leftFoot, "var_152");
+		assertStoppedFoot(rightFoot, "var_165");
+	}
+
+	private static function assertStoppedFoot(foot:PR2MovieClip, name:String):Void {
+		assertNotNull(foot, '$name is present');
+		var startFrame = foot.currentFrame;
+		foot.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		assertEquals(startFrame, foot.currentFrame, '$name constructor stop is preserved');
+		var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
+		var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
+		assertNotNull(colorMC, '$name colorMC is present');
+		assertNotNull(colorMC2, '$name colorMC2 is present');
 	}
 
 	private static function assertArrayEquals(expected:Array<Int>, actual:Array<Int>, message:String):Void {
@@ -58,5 +92,10 @@ class EditorBlockOptionsTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertNotNull(value:Dynamic, message:String):Void {
+		assertions++;
+		if (value == null) throw '$message: value was null';
 	}
 }

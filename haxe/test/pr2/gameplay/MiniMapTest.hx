@@ -1,5 +1,7 @@
 package pr2.gameplay;
 
+import openfl.events.MouseEvent;
+
 class MiniMapTest {
 	private static var assertions:Int = 0;
 
@@ -9,6 +11,8 @@ class MiniMapTest {
 		testFitScale();
 		testDotLabels();
 		testDotColors();
+		testDotHoverSuppressedUntilConfigured();
+		testDotHoverCleanup();
 		trace('MiniMapTest passed $assertions assertions');
 	}
 
@@ -44,6 +48,26 @@ class MiniMapTest {
 		assertEquals(0x00FF00, MiniMapDot.colorForTempId(2), "remote 2 colour");
 		assertEquals(0x999999, MiniMapDot.colorForTempId(3), "remote 3 colour");
 		assertEquals(0xFFFF00, MiniMapDot.colorForTempId(4), "out-of-range id falls back to local yellow");
+	}
+
+	private static function testDotHoverSuppressedUntilConfigured():Void {
+		var dot = new MiniMapDot();
+		dot.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(null, dot.hover, "plain minimap dot suppresses hover outside live game");
+		dot.remove();
+	}
+
+	private static function testDotHoverCleanup():Void {
+		var dot = new MiniMapDot();
+		dot.setHoverInfo(2, "Rival", true);
+		dot.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(true, dot.hover != null, "configured minimap dot opens hover popup");
+		dot.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(null, dot.hover, "mouse out removes minimap hover popup");
+		dot.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(true, dot.hover != null, "configured minimap dot can reopen hover popup");
+		dot.remove();
+		assertEquals(null, dot.hover, "remove clears minimap hover popup");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

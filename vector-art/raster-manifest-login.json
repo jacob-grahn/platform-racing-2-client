@@ -130,6 +130,81 @@
       "atlas_group": null,
       "category": "login",
       "drawingBounds": {
+        "height": 403.898,
+        "width": 335.833,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "png": "vector-art/png/login/login_page_armor_games@4x.png",
+      "scale": 4,
+      "slug": "login_page_armor_games",
+      "source": "vector-art/svg/login/login_page_armor_games.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 745,
+        "width": 1318,
+        "x": 19,
+        "y": 846
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 190.69,
+        "width": 333.983,
+        "x": 1.85,
+        "y": 209.567
+      },
+      "png": "vector-art/png/login/login_page_bubble_box@4x.png",
+      "scale": 4,
+      "slug": "login_page_bubble_box",
+      "source": "vector-art/svg/login/login_page_bubble_box.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 733,
+        "width": 1308,
+        "x": 28,
+        "y": 845
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 338.526,
+        "width": 335.833,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "png": "vector-art/png/login/login_page_no_logo@4x.png",
+      "scale": 4,
+      "slug": "login_page_no_logo",
+      "source": "vector-art/svg/login/login_page_no_logo.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 502,
+        "width": 469,
+        "x": 868,
+        "y": 846
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
         "height": 36.3974,
         "width": 59.2617,
         "x": -15.1333,

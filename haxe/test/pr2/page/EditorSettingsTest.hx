@@ -25,6 +25,7 @@ class EditorSettingsTest {
 		testApplyLoadedLevelData();
 		testPasswordHashing();
 		testBackgroundColorPickerCommit();
+		testBlockGridLinesFollowZoomAndCamera();
 		testTextObjectSaveStringUsesDecodedArtFormat();
 		testValueSettingsPopupCommit();
 		testMusicSettingsPopupCommit();
@@ -180,6 +181,37 @@ class EditorSettingsTest {
 		editor.remove();
 	}
 
+	private static function testBlockGridLinesFollowZoomAndCamera():Void {
+		var grid = new BlockGridLines();
+		assertEquals(false, grid.mouseEnabled, "block grid ignores direct mouse input");
+		assertEquals(false, grid.mouseChildren, "block grid ignores child mouse input");
+		assertClose(580, grid.drawnWidth, "default block grid covers the editor viewport plus one segment horizontally");
+		assertClose(430, grid.drawnHeight, "default block grid covers the editor viewport plus one segment vertically");
+
+		grid.setZoom(0.5);
+		assertClose(1130, grid.drawnWidth, "zoomed-out block grid redraws wider in local coordinates");
+		assertClose(830, grid.drawnHeight, "zoomed-out block grid redraws taller in local coordinates");
+		grid.setPos(77, -44);
+		assertClose(expectedGridPos(77, grid.width), grid.x, "block grid x follows camera modulo segment size");
+		assertClose(expectedGridPos(-44, grid.height), grid.y, "block grid y follows camera modulo segment size");
+		grid.remove();
+		assertEquals(null, grid.parent, "block grid remove detaches the overlay");
+
+		var editor = new LevelEditor();
+		editor.initialize();
+		assertNotNull(editor.blockGrid, "level editor mounts block grid overlay");
+		assertTrue(editor.blockGrid.parent == editor.blockLayer.parent, "block grid shares the editor layer container");
+		assertTrue(editor.blockGrid.parent.getChildIndex(editor.blockGrid) < editor.blockGrid.parent.getChildIndex(editor.blockLayer),
+			"block grid sits behind editor blocks");
+		editor.setZoom(0.5);
+		editor.setPos(-900, -720);
+		assertClose(1130, editor.blockGrid.drawnWidth, "editor zoom redraws block grid");
+		assertClose(expectedGridPos(editor.posX, editor.blockGrid.width), editor.blockGrid.x, "editor pan repositions block grid x");
+		assertClose(expectedGridPos(editor.posY, editor.blockGrid.height), editor.blockGrid.y, "editor pan repositions block grid y");
+		editor.remove();
+		assertEquals(null, editor.blockGrid, "editor teardown clears block grid reference");
+	}
+
 	private static function testTextObjectSaveStringUsesDecodedArtFormat():Void {
 		var layer = new EditorObjectLayer(1, 1);
 		var textObject = layer.addText("Hello #`,&+-;", 105, 116, 0x123456);
@@ -325,10 +357,29 @@ class EditorSettingsTest {
 		}
 	}
 
+	private static function expectedGridPos(camera:Float, size:Float):Float {
+		var rem = camera % BlockGridLines.SEG_SIZE;
+		return rem - Math.floor((size / 2) / BlockGridLines.SEG_SIZE) * BlockGridLines.SEG_SIZE;
+	}
+
+	private static function assertClose(expected:Float, actual:Float, message:String, tolerance:Float = 0.01):Void {
+		assertions++;
+		if (Math.isNaN(actual) || Math.abs(expected - actual) > tolerance) {
+			throw '$message: expected $expected, got $actual';
+		}
+	}
+
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertTrue(actual:Bool, message:String):Void {
+		assertions++;
+		if (!actual) {
+			throw '$message: expected true';
 		}
 	}
 

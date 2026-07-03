@@ -25,6 +25,7 @@ class LocalPlayerControllerTest {
 		testPressingUpUnderBlockBumpsIt();
 		testHoldingDownChargesAndLaunchesSuperJump();
 		testIceBlockReducesNextFrameAcceleration();
+		testSantaHatFreezesSafeStandBlock();
 		testArrowStandEffectsMatchAs3Deltas();
 		testFallingIntoWaterEntersSwimMode();
 		testWaterTouchEmitsRippleVisual();
@@ -33,6 +34,9 @@ class LocalPlayerControllerTest {
 		testSafetyBlockReturnsPlayerToLastSafeSpot();
 		testSafetyBlockEmitsPoofVisual();
 		testHighImpactFallBreaksCrumbleBlock();
+		testCheeseHatDoublesStandingCrumbleForce();
+		testCheeseHatForcesBumpCrumbleDamage();
+		testCheeseHatBreaksAdjacentHeadLevelCrumbleOnSideHit();
 		testStandingOnVanishBlockFallsThroughAfterFadeOut();
 		testVanishBlockReappearsAfterDelayWhenUnoccupied();
 		testMineBlockLaunchesPlayerAndRemovesItself();
@@ -52,6 +56,7 @@ class LocalPlayerControllerTest {
 		testLaserGunShotAnimatesBlockFromSide();
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
+		testMineAppearSkipsPlacementWhenTileBecomesOccupied();
 		testLightningEmitsZapAndConsumesItem();
 		testReloadableItemReleaseGateThenHeldRefire();
 		testSwordReloadTiming();
@@ -314,6 +319,27 @@ class LocalPlayerControllerTest {
 		assertBelow(icy.debugState().vx, normal.debugState().vx * 0.2, "ice applies AS3 low accelFactor on next frame");
 	}
 
+	private static function testSantaHatFreezesSafeStandBlock():Void {
+		var normal = new LocalCharacter(singleBlockLevel(BlockType.Basic));
+		var santa = new LocalCharacter(singleBlockLevel(BlockType.Basic));
+		santa.setHats([7, 0xFFFFFF, -1]);
+
+		normal.step(new LocalPlayerInput());
+		santa.step(new LocalPlayerInput());
+		assertClose(0.975, santa.controller.blockIceOverlayAlphaAt(2, 3), "santa stand adds fading ice overlay");
+
+		normal.step(new LocalPlayerInput(false, true));
+		santa.step(new LocalPlayerInput(false, true));
+
+		assertBelow(santa.debugState().vx, normal.debugState().vx * 0.3, "santa-frozen block applies ice acceleration");
+
+		santa.setHats([]);
+		for (_ in 0...38) {
+			santa.step(new LocalPlayerInput());
+		}
+		assertEquals(0.0, santa.controller.blockIceOverlayAlphaAt(2, 3), "santa ice overlay thaws after Flash fade");
+	}
+
 	private static function testArrowStandEffectsMatchAs3Deltas():Void {
 		var up = new LocalCharacter(singleBlockLevel(BlockType.ArrowUp));
 		assertClose(-10, up.debugState().vy, "up arrow stand launches upward");
@@ -473,6 +499,71 @@ class LocalPlayerControllerTest {
 		assertEquals(true, touchedCrumble, "falling player touches crumble platform");
 		assertBelow(240, state.y, "broken crumble block is removed from collision");
 		assertEquals(false, state.grounded, "player is no longer supported by broken crumble");
+		var crumbleActivate:Null<BlockVisualEvent> = null;
+		for (event in player.consumeBlockVisualEvents()) {
+			if (Type.enumConstructor(event.kind) == "LocalActivate" && event.tileX == 2 && event.tileY == 8) {
+				crumbleActivate = event;
+				break;
+			}
+		}
+		assertEquals(true, crumbleActivate != null, "crumble impact emits Flash localActivate event");
+		assertEquals(true, crumbleActivate.activationPayload != "", "crumble localActivate preserves force payload");
+	}
+
+	private static function testCheeseHatDoublesStandingCrumbleForce():Void {
+		var normal = new LocalCharacter(crumbleDropLevel());
+		var cheese = new LocalCharacter(crumbleDropLevel());
+		cheese.setHats([16, 0xC8B040, -1]);
+
+		var normalPayload = firstCrumbleActivationPayload(normal, 2, 8);
+		var cheesePayload = firstCrumbleActivationPayload(cheese, 2, 8);
+
+		assertEquals(Std.parseInt(normalPayload) * 2, Std.parseInt(cheesePayload), "cheese doubles standing crumble force payload");
+	}
+
+	private static function testCheeseHatForcesBumpCrumbleDamage():Void {
+		var player = new LocalCharacter(supplyBlockLevel(BlockType.Crumble));
+		player.setHats([16, 0xC8B040, -1]);
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().touchedBlockType == "crumble") break;
+		}
+
+		assertEquals("50", crumbleActivationPayload(player.consumeBlockVisualEvents(), 2, 1), "cheese bump crumble force is forced to 50");
+	}
+
+	private static function testCheeseHatBreaksAdjacentHeadLevelCrumbleOnSideHit():Void {
+		var player = new LocalCharacter(cheeseSideCrumbleLevel());
+		player.setHats([16, 0xC8B040, -1]);
+		for (_ in 0...80) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.debugState().touchedBlockType == "crumble") break;
+		}
+
+		var events = player.consumeBlockVisualEvents();
+		assertEquals("50", crumbleActivationPayload(events, 4, 4), "cheese side-hit crumble force is forced to 50");
+		assertEquals("50", crumbleActivationPayload(events, 4, 3), "cheese side-hit breaks adjacent head-level crumble");
+		assertEquals(0.0, player.controller.blockAlphaAt(4, 3), "adjacent head-level crumble is removed from collision visuals");
+	}
+
+	private static function firstCrumbleActivationPayload(player:LocalCharacter, tileX:Int, tileY:Int):String {
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput());
+			var payload = crumbleActivationPayload(player.consumeBlockVisualEvents(), tileX, tileY);
+			if (payload != null) {
+				return payload;
+			}
+		}
+		throw 'crumble activation not emitted at $tileX,$tileY';
+	}
+
+	private static function crumbleActivationPayload(events:Array<BlockVisualEvent>, tileX:Int, tileY:Int):Null<String> {
+		for (event in events) {
+			if (Type.enumConstructor(event.kind) == "LocalActivate" && event.tileX == tileX && event.tileY == tileY) {
+				return event.activationPayload;
+			}
+		}
+		return null;
 	}
 
 	private static function testStandingOnVanishBlockFallsThroughAfterFadeOut():Void {
@@ -544,10 +635,12 @@ class LocalPlayerControllerTest {
 		assertEquals("hurt", initialState.mode, "mine hit enters hurt recovery mode");
 		assertEquals("bumped", initialState.animation, "mine hit exposes bumped animation");
 		var visualEvents = player.consumeBlockVisualEvents();
-		assertEquals(2, visualEvents.length, "mine hit emits piece and explosion events");
-		assertEquals("MinePieces", Std.string(visualEvents[0].kind), "mine hit emits authored pieces");
-		assertEquals(10, visualEvents[0].count, "mine hit emits ten pieces");
-		assertEquals("MineExplode", Std.string(visualEvents[1].kind), "mine hit emits explosion event");
+		assertEquals(3, visualEvents.length, "mine hit emits local activation, pieces, and explosion");
+		assertEquals("LocalActivate", Std.string(visualEvents[0].kind), "mine hit emits Flash localActivate event");
+		assertEquals("", visualEvents[0].activationPayload, "mine localActivate payload is empty");
+		assertEquals("MinePieces", Std.string(visualEvents[1].kind), "mine hit emits authored pieces");
+		assertEquals(10, visualEvents[1].count, "mine hit emits ten pieces");
+		assertEquals("MineExplode", Std.string(visualEvents[2].kind), "mine hit emits explosion event");
 		assertEquals(0, player.consumeBlockVisualEvents().length, "visual events are consumed once");
 
 		for (_ in 0...60) {
@@ -919,9 +1012,14 @@ class LocalPlayerControllerTest {
 		var state = player.debugState();
 
 		assertEquals(null, state.itemId, "mine item consumes after placing mine");
+		assertEquals(0, Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine), "mine item waits for appear animation");
+		assertEquals("mine:105,165:0", state.lastItemEffect, "mine item emits centered mine effect");
+		stepFrames(player, 32);
+		assertEquals(0, Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine), "mine does not place before frame 33");
+		player.step(new LocalPlayerInput());
 		var mine = Lambda.find(level.blocks, function(block) return block.type == BlockType.Mine);
-		assertEquals(true, mine != null, "mine item places a mine block");
-		assertEquals('mine:${mine.x * 30 + 15},${mine.y * 30 + 15}:0', state.lastItemEffect, "mine item emits centered mine effect");
+		assertEquals(true, mine != null, "mine item places a mine block after appear animation");
+		assertEquals("mine:105,165:0", 'mine:${mine.x * 30 + 15},${mine.y * 30 + 15}:0', "placed mine matches effect center");
 	}
 
 	private static function testMineItemBlockedByOccupiedTile():Void {
@@ -936,6 +1034,19 @@ class LocalPlayerControllerTest {
 		assertEquals(null, state.lastItemEffect, "blocked mine placement emits no effect");
 		var mineCount = Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine);
 		assertEquals(0, mineCount, "blocked mine placement does not add a mine block");
+	}
+
+	private static function testMineAppearSkipsPlacementWhenTileBecomesOccupied():Void {
+		var level = heldItemLevel(2);
+		var player = collectItem(level, 2);
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		level.blocks.push(new LevelBlock(3, 5, BlockType.Solid));
+		stepFrames(player, 33);
+
+		var mineCount = Lambda.count(level.blocks, function(block) return block.type == BlockType.Mine);
+		assertEquals(0, mineCount, "mine appear skips placement if target tile becomes occupied");
 	}
 
 	private static function testLightningEmitsZapAndConsumesItem():Void {
@@ -1107,10 +1218,12 @@ class LocalPlayerControllerTest {
 		var level = supplyBlockLevel(BlockType.Brick);
 		var player = bumpSupply(level, BlockType.Brick);
 		var visualEvents = player.consumeBlockVisualEvents();
-		assertEquals(2, visualEvents.length, "broken brick emits thump and piece events");
+		assertEquals(3, visualEvents.length, "broken brick emits thump, activation, and piece events");
 		assertEquals("BlockBumpSound", Std.string(visualEvents[0].kind), "broken brick uses base ThumpSound event");
-		assertEquals("BrickPieces", Std.string(visualEvents[1].kind), "broken brick uses brick pieces");
-		assertEquals(6, visualEvents[1].count, "broken brick emits six pieces");
+		assertEquals("LocalActivate", Std.string(visualEvents[1].kind), "broken brick emits Flash localActivate event");
+		assertEquals("", visualEvents[1].activationPayload, "brick localActivate payload is empty");
+		assertEquals("BrickPieces", Std.string(visualEvents[2].kind), "broken brick uses brick pieces");
+		assertEquals(6, visualEvents[2].count, "broken brick emits six pieces");
 		player.step(new LocalPlayerInput(false, false, true));
 		assertEquals(false, player.debugState().touchedBlockType == "brick", "broken brick no longer collides");
 	}
@@ -1197,12 +1310,14 @@ class LocalPlayerControllerTest {
 		assertEquals(null, level.blockAt(2, 3), "push block leaves original tile");
 		assertEquals(BlockType.Push, level.blockAt(2, 4).type, "push block moves one tile down");
 		var events = player.consumeBlockVisualEvents();
-		assertEquals(1, events.length, "push block emits one display movement event");
-		assertEquals("PushBlockMove", Type.enumConstructor(events[0].kind), "push block emits display movement event");
-		assertEquals(2, events[0].tileX, "push block display event records source x");
-		assertEquals(3, events[0].tileY, "push block display event records source y");
-		assertEquals(2, events[0].toTileX, "push block display event records destination x");
-		assertEquals(4, events[0].toTileY, "push block display event records destination y");
+		assertEquals(2, events.length, "push block emits activation and display movement events");
+		assertEquals("LocalActivate", Type.enumConstructor(events[0].kind), "push block emits Flash localActivate event");
+		assertEquals("down", events[0].activationPayload, "standing push payload is down");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[1].kind), "push block emits display movement event");
+		assertEquals(2, events[1].tileX, "push block display event records source x");
+		assertEquals(3, events[1].tileY, "push block display event records source y");
+		assertEquals(2, events[1].toTileX, "push block display event records destination x");
+		assertEquals(4, events[1].toTileY, "push block display event records destination y");
 	}
 
 	private static function testTimedMoveBlockShiftsAfterPreview():Void {
@@ -1497,6 +1612,12 @@ class LocalPlayerControllerTest {
 
 	private static function makeItemAvailable(player:LocalCharacter):Void {
 		player.step(new LocalPlayerInput());
+	}
+
+	private static function stepFrames(player:LocalCharacter, frames:Int):Void {
+		for (_ in 0...frames) {
+			player.step(new LocalPlayerInput());
+		}
 	}
 
 	// Start tile is in open air above a deep water column on a solid floor, so a
@@ -2041,6 +2162,28 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 8, BlockType.Crumble),
 				new LevelBlock(2, 9, BlockType.Solid)
+			]
+		);
+	}
+
+	private static function cheeseSideCrumbleLevel():FixtureLevel {
+		return new FixtureLevel(
+			"cheese-side-crumble",
+			"Cheese Side Crumble",
+			7,
+			7,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 4),
+			new TilePosition(6, 5),
+			[
+				new LevelBlock(2, 5, BlockType.Solid),
+				new LevelBlock(3, 5, BlockType.Solid),
+				new LevelBlock(4, 3, BlockType.Crumble),
+				new LevelBlock(4, 4, BlockType.Crumble),
+				new LevelBlock(4, 5, BlockType.Solid),
+				new LevelBlock(6, 5, BlockType.Finish)
 			]
 		);
 	}

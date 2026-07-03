@@ -9,8 +9,10 @@ import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
 import openfl.events.Event;
 import pr2.Constants;
+import pr2.app.FatalErrorReporter;
 import pr2.app.QueryParams;
 import pr2.app.Screen;
+import pr2.app.SiteMode;
 import pr2.audio.BrowserAudioUnlock;
 import pr2.audio.AudioManager;
 import pr2.net.ServerConfig;
@@ -21,6 +23,7 @@ import pr2.page.LoginPage;
 import pr2.page.PageHolder;
 import pr2.page.SymbolPreview;
 import pr2.page.PopupPreview;
+import pr2.ui.GpNotification;
 import pr2.ui.MuteButton;
 
 /**
@@ -46,6 +49,8 @@ class Main extends Sprite {
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		pr2.app.AppStage.stage = stage;
+		FatalErrorReporter.installGlobalHandlers();
+		GpNotification.init(stage);
 		BrowserAudioUnlock.install();
 		AudioManager.install(this);
 
@@ -56,8 +61,9 @@ class Main extends Sprite {
 			// sys targets, PR2_API_HOST can provide the same local override.
 			ServerConfig.applyLocalOverrides();
 			ServerConfig.setHost(QueryParams.get(query, "apiHost"));
+			var siteMode = resolveSiteMode(query);
 			var screen = Screen.fromQuery(query);
-			addChild(buildScreen(screen, query));
+			addChild(buildScreen(screen, query, siteMode));
 			addGlobalChrome(screen);
 			signalAppReady();
 			#if pr2_leak_probe
@@ -115,12 +121,7 @@ class Main extends Sprite {
 	}
 
 	private function reportFatalError(error:Dynamic):Void {
-		var message = Std.string(error);
-		trace("Fatal error: " + message);
-		#if js
-		Browser.console.error(error);
-		Browser.document.body.setAttribute("data-pr2-error", message);
-		#end
+		FatalErrorReporter.report(error);
 	}
 
 	private function currentQuery():Null<String> {
@@ -131,7 +132,19 @@ class Main extends Sprite {
 		#end
 	}
 
-	private function buildScreen(screen:Screen, query:Null<String>):DisplayObject {
+	private function resolveSiteMode(query:Null<String>):String {
+		var override = QueryParams.get(query, "siteMode");
+		if (override != null && override != "") {
+			return SiteMode.fromDomain(override);
+		}
+		#if js
+		return SiteMode.fromUrl(Browser.location.href);
+		#else
+		return SiteMode.KONGREGATE;
+		#end
+	}
+
+	private function buildScreen(screen:Screen, query:Null<String>, siteMode:String):DisplayObject {
 		return switch (screen) {
 			case Campaign: new CampaignTestScreen(
 				QueryParams.get(query, "page"),
@@ -139,9 +152,9 @@ class Main extends Sprite {
 				null,
 				QueryParams.get(query, "localLevel")
 			);
-			case Login: new PageHolder(new LoginPage(), true);
+			case Login: new PageHolder(new LoginPage(siteMode), true);
 			case Lobby: buildLobby(query);
-			case Intro: new PageHolder(new IntroPage(null, QueryParams.get(query, "intro")), true);
+			case Intro: new PageHolder(new IntroPage(siteMode, QueryParams.get(query, "intro")), true);
 			case Symbol: new SymbolPreview(
 				QueryParams.get(query, "symbol"),
 				parseScale(QueryParams.get(query, "scale")),

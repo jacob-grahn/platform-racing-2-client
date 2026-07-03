@@ -7,6 +7,7 @@ import haxe.crypto.Md5;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
+import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 import pr2.Constants;
@@ -24,6 +25,7 @@ import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.PlayerDisplayPlacement;
 import pr2.lobby.account.AlternateControls;
+import pr2.lobby.LobbySession;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -99,6 +101,7 @@ class Course extends Sprite {
 	public var drawingInfo(default, null):DrawingInfo;
 	public var countdown(default, null):Countdown;
 	public var eggRound(default, null):EggRound;
+	public var effectBackground(default, null):EffectBackground;
 	public var looseHats(default, null):Map<Int, HatEffect> = new Map();
 	public var raceStarted(default, null):Bool = false;
 
@@ -134,6 +137,7 @@ class Course extends Sprite {
 	private var raceSounds:RaceSounds;
 	private var localSetHatsCommandName:Null<String>;
 	private var reachedObjectives:Map<Int, Bool> = new Map();
+	private var minionEggsSpawned:Bool = false;
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -174,6 +178,7 @@ class Course extends Sprite {
 		localCharacter = player;
 		playerArray[player.tempID] = player;
 		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
+		activeCommandHandler().defineCommand("activate", activateCommand);
 		buildStartPositions();
 
 		characterLayer = new Sprite();
@@ -194,7 +199,12 @@ class Course extends Sprite {
 		buildRaceChat();
 		buildDrawingInfo();
 		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, characterLayer, levelRenderer.cameraOffset);
+		effectBackground = new EffectBackground(this, commandHandler != null ? commandHandler : CommandHandler.commandHandler);
 		updatePlayerDisplay();
+	}
+
+	private function activeCommandHandler():CommandHandler {
+		return commandHandler != null ? commandHandler : CommandHandler.commandHandler;
 	}
 
 	private function buildMiniMap():Void {
@@ -211,6 +221,7 @@ class Course extends Sprite {
 		miniMap.rasterize();
 		playerDot = miniMap.getDot();
 		playerDot.setTempID(0, true);
+		playerDot.setHoverInfo(1, LobbySession.userName == "" ? "Guest" : LobbySession.userName, true);
 		miniMap.x = MINIMAP_X;
 		miniMap.y = MINIMAP_Y;
 		addChild(miniMap);
@@ -362,9 +373,19 @@ class Course extends Sprite {
 		}
 	}
 
+	private function activateCommand(args:Array<String>):Void {
+		if (remoteBlockActivation == null || args.length < 2) {
+			return;
+		}
+		remoteBlockActivation.activateSegment(parseIntArg(args[0]), parseIntArg(args[1]), args.length > 2 ? args[2] : "");
+	}
+
 	public function createRemoteCharacter(init:RemoteCharacterInit):RemoteCharacter {
 		removeRemoteCharacter(init.tempId);
 		var dot = miniMap == null ? null : miniMap.getDot();
+		if (dot != null) {
+			dot.setHoverInfo(init.tempId + 1, init.userName, true);
+		}
 		var remote = new RemoteCharacter(init.tempId, dot, init.userName, Std.int(init.hatId), Std.int(init.headId), Std.int(init.bodyId),
 			Std.int(init.feetId), init.group, commandHandler);
 		remote.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
@@ -630,20 +651,43 @@ class Course extends Sprite {
 
 	private function onCountdownFinish():Void {
 		raceStarted = true;
+		spawnMinionEggs();
 		if (localCharacter != null) {
 			localCharacter.initNetworkEmission();
+		}
+	}
+
+	private function spawnMinionEggs():Void {
+		if (minionEggsSpawned || eggRound == null) {
+			return;
+		}
+		minionEggsSpawned = true;
+		var placed = 0;
+		for (block in level.blocks) {
+			if (block.code != ObjectCodes.BLOCK_MINION_EGG) {
+				continue;
+			}
+			if (placed >= 25) {
+				break;
+			}
+			eggRound.addFixedEgg(block.x + 30, block.y + 30, 0);
+			placed++;
 		}
 	}
 
 	private function onAddedToStage(event:Event):Void {
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+		stage.addEventListener(Event.DEACTIVATE, resetInput);
+		stage.addEventListener(FocusEvent.FOCUS_OUT, resetInput);
 	}
 
 	private function onRemovedFromStage(event:Event):Void {
 		if (stage != null) {
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			stage.removeEventListener(Event.DEACTIVATE, resetInput);
+			stage.removeEventListener(FocusEvent.FOCUS_OUT, resetInput);
 		}
 	}
 
@@ -669,8 +713,12 @@ class Course extends Sprite {
 			player.maybeSquash(playerArray);
 			player.tickJellyfishSting(playerArray, Std.random(35) + 1);
 		}
-		if (raceStarted && eggRound != null && config.gameMode == "egg") {
-			eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);
+		if (raceStarted && eggRound != null) {
+			if (config.gameMode == "egg") {
+				eggRound.step(level, Math.round(levelRenderer.rotation), localCharacter.x, localCharacter.y, localCharacter.crouching, localCharacter.removed);
+			} else {
+				eggRound.step(level);
+			}
 		}
 		if (raceStarted && config.gameMode == "hat") {
 			stepLooseHats();
@@ -753,17 +801,36 @@ class Course extends Sprite {
 			return;
 		}
 		var parts = state.lastItemEffect.split(":");
-		if (parts[0] != "slash") {
-			return;
+		switch (parts[0]) {
+			case "slash":
+				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x));
+				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+				var direction = parts.length > 1 ? parts[1] : "right";
+				var payload = 'Slash`$worldX`$worldY`$direction`' + localCharacter.tempID;
+				if (eggRound != null) {
+					eggRound.mountAttackVisual(payload);
+				}
+				LobbySocket.write('add_effect`$payload');
+			case "mine":
+				if (parts.length < 3) {
+					return;
+				}
+				var coords = parts[1].split(",");
+				if (coords.length < 2) {
+					return;
+				}
+				var effectX = Std.parseFloat(coords[0]);
+				var effectY = Std.parseFloat(coords[1]);
+				var rotation = Std.parseFloat(parts[2]);
+				if (Math.isNaN(effectX) || Math.isNaN(effectY) || Math.isNaN(rotation)) {
+					return;
+				}
+				var tileWorldX = Std.int(Math.round((effectX - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
+				var tileWorldY = Std.int(Math.round((effectY - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
+				levelRenderer.showMineAppear(effectX, effectY, tileWorldX, tileWorldY, rotation);
+				LobbySocket.write('add_effect`Mine`$effectX`$effectY`$rotation');
+			default:
 		}
-		var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x));
-		var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
-		var direction = parts.length > 1 ? parts[1] : "right";
-		var payload = 'Slash`$worldX`$worldY`$direction`' + localCharacter.tempID;
-		if (eggRound != null) {
-			eggRound.mountAttackVisual(payload);
-		}
-		LobbySocket.write('add_effect`$payload');
 	}
 
 	private function syncItemDisplay(?itemId:Null<Int>, ?itemUses:Null<Int>):Void {
@@ -837,16 +904,19 @@ class Course extends Sprite {
 			current.set(key, true);
 			var tileX = tileKeyX(key);
 			var tileY = tileKeyY(key);
-			applyBlockVisual(tileX, tileY, player.blockAlphaAt(tileX, tileY), player.blockColorMultiplierAt(tileX, tileY));
+			applyBlockVisual(tileX, tileY, player.blockAlphaAt(tileX, tileY), player.blockColorMultiplierAt(tileX, tileY),
+				player.blockIceOverlayAlphaAt(tileX, tileY));
 		}
 		for (key in activeVisualBlocks.keys()) {
 			if (!current.exists(key)) {
-				applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1);
+				applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1, 0);
 			}
 		}
 		activeVisualBlocks = current;
 		for (event in player.consumeBlockVisualEvents()) {
 			switch (event.kind) {
+				case LocalActivate:
+					emitLocalBlockActivation(event);
 				case ArrowAnimate:
 					levelRenderer.animateArrow(worldXOf(event), worldYOf(event));
 				case MineExplode:
@@ -945,11 +1015,12 @@ class Course extends Sprite {
 		raceSounds.playStatBlockSound(path);
 	}
 
-	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float):Void {
+	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float, iceOverlayAlpha:Float):Void {
 		var worldX = (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
 		var worldY = (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 		levelRenderer.setBlockAlpha(worldX, worldY, alpha);
 		levelRenderer.setBlockColorMultiplier(worldX, worldY, multiplier);
+		levelRenderer.setBlockIceOverlayAlpha(worldX, worldY, iceOverlayAlpha);
 	}
 
 	private static inline function tileKeyX(key:String):Int {
@@ -1003,6 +1074,13 @@ class Course extends Sprite {
 
 	private inline function worldTileY(tileY:Int):Int {
 		return (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+	}
+
+	private function emitLocalBlockActivation(event:BlockVisualEvent):Void {
+		var segX = event.tileX + serverFixture.originTileX;
+		var segY = event.tileY + serverFixture.originTileY;
+		var payload = event.activationPayload == null ? "" : event.activationPayload;
+		LobbySocket.write('activate`$segX`$segY`$payload');
 	}
 
 	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
@@ -1086,6 +1164,10 @@ class Course extends Sprite {
 		if (keyCode == Keyboard.SPACE || AlternateControls.matches("item", keyCode)) input.item = pressed;
 	}
 
+	private function resetInput(_:Event):Void {
+		input.clear();
+	}
+
 	public function remove():Void {
 		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		removeEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
@@ -1093,6 +1175,8 @@ class Course extends Sprite {
 		if (stage != null) {
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
+			stage.removeEventListener(Event.DEACTIVATE, resetInput);
+			stage.removeEventListener(FocusEvent.FOCUS_OUT, resetInput);
 		}
 		if (miniMap != null) {
 			miniMap.remove();
@@ -1131,6 +1215,10 @@ class Course extends Sprite {
 			countdown.remove();
 			countdown = null;
 		}
+		if (effectBackground != null) {
+			effectBackground.remove();
+			effectBackground = null;
+		}
 		if (eggRound != null) {
 			eggRound.clear();
 			eggRound = null;
@@ -1143,6 +1231,7 @@ class Course extends Sprite {
 		}
 		stopAllJetSounds();
 		removeAllRemoteCharacters();
+		activeCommandHandler().defineCommand("activate", null);
 		unregisterLocalSetHatsCommand();
 		if (levelRenderer != null) {
 			levelRenderer.remove();

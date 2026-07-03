@@ -1,9 +1,9 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
-import openfl.display.Sprite;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
+import pr2.display.Removable;
 import pr2.runtime.FontResolver;
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
@@ -16,7 +16,7 @@ import pr2.util.DisplayUtil;
 	text holders form the dark/light item-name treatment, while `a1`-`a3` are
 	the ammo dots.
 **/
-class ItemDisplay extends Sprite {
+class ItemDisplay extends Removable {
 	private var art:Null<PR2MovieClip>;
 	private var darkLabel:TextField;
 	private var lightLabel:TextField;
@@ -99,16 +99,15 @@ class ItemDisplay extends Sprite {
 		};
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		if (art != null) {
 			art.dispose();
 			art = null;
 		}
 		darkLabel = null;
 		lightLabel = null;
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 
 	public static function itemNameFromCode(code:Int):String {

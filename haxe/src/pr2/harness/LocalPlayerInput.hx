@@ -18,4 +18,12 @@ class LocalPlayerInput {
 	public function copy():LocalPlayerInput {
 		return new LocalPlayerInput(left, right, jump, down, item);
 	}
+
+	public function clear():Void {
+		left = false;
+		right = false;
+		jump = false;
+		down = false;
+		item = false;
+	}
 }

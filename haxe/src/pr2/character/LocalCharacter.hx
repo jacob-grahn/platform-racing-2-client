@@ -59,6 +59,7 @@ class LocalCharacter extends Character {
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
 		controller.jellyfishHatActive = hasHatFlag(Character.JELLYFISH);
 		controller.topHatActive = hasHatFlag(Character.TOP);
+		controller.cheeseHatActive = hasHatFlag(Character.CHEESE);
 		if (hadMoon && !hasHatFlag(Character.MOON)) {
 			controller.setGravity(baseGravityMultiplier);
 		}
@@ -114,6 +115,7 @@ class LocalCharacter extends Character {
 		controller.partyHatActive = hasHatFlag(Character.PARTY);
 		controller.jellyfishHatActive = hasHatFlag(Character.JELLYFISH);
 		controller.topHatActive = hasHatFlag(Character.TOP);
+		controller.cheeseHatActive = hasHatFlag(Character.CHEESE);
 		controller.step(input);
 		syncFromController(previousMode);
 	}
@@ -329,6 +331,10 @@ class LocalCharacter extends Character {
 
 	public function blockColorMultiplierAt(tileX:Int, tileY:Int):Float {
 		return controller.blockColorMultiplierAt(tileX, tileY);
+	}
+
+	public function blockIceOverlayAlphaAt(tileX:Int, tileY:Int):Float {
+		return controller.blockIceOverlayAlphaAt(tileX, tileY);
 	}
 
 	public function consumeBlockVisualEvents():Array<pr2.harness.BlockVisualEvent> {

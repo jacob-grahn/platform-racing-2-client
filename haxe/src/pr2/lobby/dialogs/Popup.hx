@@ -1,9 +1,9 @@
 package pr2.lobby.dialogs;
 
-import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import pr2.app.AppStage;
+import pr2.display.Removable;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -14,7 +14,7 @@ import pr2.runtime.PR2MovieClip;
 	removes. Dialogs add their graphic on top of the overlay. The `LOADED` /
 	`REMOVED` events fire at the end of each fade so callers can chain behavior.
 **/
-class Popup extends Sprite {
+class Popup extends Removable {
 	public static inline var LOADED:String = "loaded";
 	public static inline var REMOVED:String = "removed";
 
@@ -71,15 +71,14 @@ class Popup extends Sprite {
 		return openPopups;
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		openPopups.remove(this);
 		removeEventListener(Event.ENTER_FRAME, fadeIn);
 		removeEventListener(Event.ENTER_FRAME, fadeOut);
 		if (stage != null) {
 			stage.focus = stage;
 		}
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 }

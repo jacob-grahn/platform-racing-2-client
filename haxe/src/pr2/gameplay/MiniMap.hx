@@ -5,6 +5,7 @@ import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.geom.Rectangle;
+import pr2.display.Removable;
 import pr2.level.ObjectCodes;
 import pr2.runtime.PR2MovieClip;
 
@@ -22,7 +23,7 @@ import pr2.runtime.PR2MovieClip;
 	`Course` positions the minimap at holder offset (-195, -198); with the game
 	holder at the 550x400 stage centre (275, 200) that is stage (80, 2).
 **/
-class MiniMap extends Sprite {
+class MiniMap extends Removable {
 	public static inline var MAX_SPACE_WIDTH:Int = 400;
 	public static inline var MAX_SPACE_HEIGHT:Int = 44;
 	private static inline var BLOCK_SIZE:Int = 30;
@@ -161,7 +162,8 @@ class MiniMap extends Sprite {
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		clear();
 		while (playerDots != null && playerDots.numChildren > 0) {
 			var dot = Std.downcast(playerDots.getChildAt(0), MiniMapDot);
@@ -181,9 +183,7 @@ class MiniMap extends Sprite {
 		finishSprite = null;
 		playerDots = null;
 		m = null;
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 
 	/**

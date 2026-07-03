@@ -13,7 +13,7 @@ class BlockPiece extends Sprite {
 	public static inline var FRICTION:Float = 0.95;
 	public static inline var FADE_RATE:Float = 0.05;
 
-	private var graphic:PR2MovieClip;
+	public var graphic(default, null):PR2MovieClip;
 	private var velX:Float;
 	private var velY:Float;
 	private var rotVel:Float;
@@ -26,6 +26,7 @@ class BlockPiece extends Sprite {
 		super();
 		var nextRandom = random == null ? Math.random : random;
 		graphic = PR2MovieClip.fromLinkage(linkage);
+		applyConstructorFrameScript(linkage, nextRandom);
 		addChild(graphic);
 		x = startX;
 		y = startY;
@@ -37,6 +38,12 @@ class BlockPiece extends Sprite {
 		velY = nextRandom() * spreadY * 2 - spreadY;
 		rotVel = nextRandom() * spreadRot * 2 - spreadRot;
 		addEventListener(Event.ENTER_FRAME, tick);
+	}
+
+	private function applyConstructorFrameScript(linkage:String, nextRandom:Void->Float):Void {
+		if (linkage == "BrickPieceGraphic" || linkage == "MinePieceGraphic") {
+			graphic.gotoAndStop(Std.int(nextRandom() * graphic.totalFrames) + 1);
+		}
 	}
 
 	private function tick(_:Event):Void {

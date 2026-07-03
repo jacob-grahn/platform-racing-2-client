@@ -82,10 +82,11 @@ class TextLoader {
 		loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 		loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, onHttpStatus);
 
+		var requestUrl = SuperLoader.appendQueryFields(url);
 		try {
-			loader.load(new URLRequest(url));
+			loader.load(new URLRequest(requestUrl));
 		} catch (error:Dynamic) {
-			fail('could not start request to $url: ${Std.string(error)}');
+			fail('could not start request to $requestUrl: ${Std.string(error)}');
 		}
 	}
 }

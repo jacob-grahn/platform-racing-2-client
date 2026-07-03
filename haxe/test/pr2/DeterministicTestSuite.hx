@@ -2,6 +2,7 @@ package pr2;
 
 import pr2.audio.AudioUnlockGateTest;
 import pr2.audio.AudioRuntimeTest;
+import pr2.app.FatalErrorReporterTest;
 import pr2.app.ScreenTest;
 import pr2.character.CharacterAtlasTest;
 import pr2.character.CharacterBaseTest;
@@ -11,6 +12,7 @@ import pr2.character.LocalCharacterEmitTest;
 import pr2.character.LocalCharacterTest;
 import pr2.character.RemoteCharacterConsumeTest;
 import pr2.crypto.PR2EncryptorTest;
+import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
 import pr2.effects.TeleportPopTest;
 import pr2.harness.LocalPlayerControllerTest;
@@ -46,6 +48,7 @@ import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
 import pr2.lobby.LevelInfoPopupTest;
 import pr2.lobby.OptionsPopupTest;
+import pr2.lobby.OutfitPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.SendMessagePopupTest;
 import pr2.lobby.StorePopupTest;
@@ -64,6 +67,7 @@ import pr2.net.LoginSessionGateTest;
 import pr2.net.SavedAccountsTest;
 import pr2.net.ServerConfigTest;
 import pr2.net.ServerStatusClientTest;
+import pr2.net.SuperLoaderTest;
 import pr2.page.EditorBlockOptionsTest;
 import pr2.page.EditorSettingsTest;
 import pr2.page.CampaignTestScreenTest;
@@ -73,11 +77,13 @@ import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
 import pr2.tools.SourceClassCoverageInventoryTest;
+import pr2.ui.GpNotificationTest;
 
 class DeterministicTestSuite {
 	public static function main():Void {
 		AudioUnlockGateTest.main();
 		AudioRuntimeTest.main();
+		FatalErrorReporterTest.main();
 		ScreenTest.main();
 		PR2MovieClipRuntimeTest.main();
 		StaticSubtreeAnalyzerTest.main();
@@ -85,6 +91,8 @@ class DeterministicTestSuite {
 		SourceClassCoverageInventoryTest.main();
 		FlButtonTest.main();
 		FlComponentsTest.main();
+		GpNotificationTest.main();
+		RemovableTest.main();
 		PixelEffect1Test.main();
 		TeleportPopTest.main();
 		CharacterAtlasTest.main();
@@ -130,6 +138,7 @@ class DeterministicTestSuite {
 		LoginSocketProtocolTest.main();
 		LoginSessionGateTest.main();
 		SavedAccountsTest.main();
+		SuperLoaderTest.main();
 		CampaignListClientTest.main();
 		AccountCreationClientTest.main();
 		ForgotPasswordClientTest.main();
@@ -146,6 +155,7 @@ class DeterministicTestSuite {
 		GuildPopupTest.main();
 		LevelInfoPopupTest.main();
 		OptionsPopupTest.main();
+		OutfitPopupTest.main();
 		PlayerPopupTest.main();
 		SendMessagePopupTest.main();
 		StorePopupTest.main();

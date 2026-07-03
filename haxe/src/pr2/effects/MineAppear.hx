@@ -1,0 +1,61 @@
+package pr2.effects;
+
+import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.utils.Assets;
+import pr2.audio.SoundEffects;
+import pr2.runtime.PR2MovieClip;
+
+/**
+	Authored mine placement effect from `effects.MineAppear`.
+**/
+class MineAppear extends Sprite {
+	public static inline var LIFETIME_FRAMES:Int = 33;
+	public static inline var SOUND_PATH:String = "assets/audio/sfx/sound1021.mp3";
+
+	private var animation:PR2MovieClip;
+	private var framesRemaining:Int = LIFETIME_FRAMES;
+	private var onComplete:Null<Void->Void>;
+	private var completed:Bool = false;
+
+	public function new(worldX:Float, worldY:Float, rotationDegrees:Float, cameraX:Float = 0, cameraY:Float = 0, ?onComplete:Void->Void,
+			playSound:Bool = true) {
+		super();
+		x = worldX;
+		y = worldY;
+		rotation = rotationDegrees;
+		this.onComplete = onComplete;
+		animation = PR2MovieClip.fromLinkage("MineAppearAnimation");
+		animation.setFrameScript(32, function():Void animation.stop());
+		addChild(animation);
+		addEventListener(Event.ENTER_FRAME, tick);
+
+		if (playSound && Assets.exists(SOUND_PATH)) {
+			SoundEffects.playGameSound(Assets.getSound(SOUND_PATH), worldX, worldY, cameraX, cameraY);
+		}
+	}
+
+	private function tick(event:Event):Void {
+		framesRemaining--;
+		if (framesRemaining <= 0) {
+			remove(true);
+		}
+	}
+
+	public function remove(runComplete:Bool = false):Void {
+		removeEventListener(Event.ENTER_FRAME, tick);
+		if (runComplete && !completed && onComplete != null) {
+			completed = true;
+			onComplete();
+		}
+		onComplete = null;
+		if (animation != null) {
+			animation.dispose();
+			removeChild(animation);
+			animation = null;
+		}
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+}

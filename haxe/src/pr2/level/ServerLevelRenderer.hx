@@ -13,15 +13,28 @@ import openfl.text.TextFieldAutoSize;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.Constants;
+import pr2.gameplay.PrizePopup;
+import pr2.lobby.account.Settings;
+import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.dialogs.Popup;
 import pr2.level.ServerLevel.DecodedArtLayer;
 import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedTextObject;
 import pr2.effects.BlockPiece;
+import pr2.effects.MineAppear;
 import pr2.effects.MineExplosion;
 import pr2.effects.TeleportPop;
 import pr2.runtime.PR2MovieClip;
+
+typedef ArtRenderOptions = {
+	@:optional var onArtWarning:String->Void;
+	@:optional var suppressArtWarningPopup:Bool;
+	@:optional var artDrawFaultInjector:Int->Void;
+	@:optional var rasterTileLimit:Int;
+	@:optional var editorWarning:Bool;
+}
 
 /**
 	Renders the decoded server block layer in original PR2 pixel units.
@@ -37,10 +50,16 @@ class ServerLevelRenderer extends Sprite {
 	// MAX_TEXTURE_SIZE (8192 on many GPUs, 4096 on some) so a single tile never
 	// fails to upload. See rasterizeBrushInto.
 	public static inline var ART_RASTER_TILE_SIZE:Int = 1024;
+	public static inline var DEFAULT_ART_RASTER_TILE_LIMIT:Int = 750;
 	public static inline var DEFAULT_ART_BRUSH_SIZE:Float = 4.0;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
+	public static inline var BG5_CODE:Int = 205;
+	public static inline var ART_LOAD_WARNING_GAME:String = "Error: Some art didn't load correctly. Don't worry! You can still play the level.\n\nIf this persists, please contact a member of the PR2 staff team.";
+	public static inline var ART_LOAD_WARNING_EDITOR:String = "Error: Some art didn't load correctly. This could be because there's too much art on your level. Saving the level now may cause permanent damage to its playability. Try undoing your recent changes until you don't get this error, and then saving your work.\n\nIf this persists, please contact a member of the PR2 staff team.";
+	public static inline var ART_RASTER_STOP_WARNING:String = "Error: Some art didn't load correctly. Don't worry! You can still play the level.\n\nYou can prevent this in the future by enabling lossless art quality in the options menu.";
+	private static inline var ICE_OVERLAY_NAME:String = "iceOverlay";
 	// View-window culling (mirrors Flash background.Background.updateViewWindow):
 	// only blocks within VIEW_MARGIN_SEGMENTS of the visible stage are attached to
 	// blockLayer. Without this the whole level (18k+ blocks on big maps) stays on
@@ -102,13 +121,25 @@ class ServerLevelRenderer extends Sprite {
 	private var totalArtItems:Int = 0;
 	private var incrementalBlocks:Bool = false;
 	private var blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME;
+	private final drawArtEnabled:Bool;
+	private final artOptions:Null<ArtRenderOptions>;
+	private final artRasterBudget:ArtRasterBudget;
+	private var attemptedArtItems:Int = 0;
+	private var artLoadWarningShown:Bool = false;
+	private var rasterStopNotified:Bool = false;
+	public var artWarningMessage(default, null):Null<String>;
+	public var stoppedRasterizing(default, null):Bool = false;
 
 	public function new(level:ServerLevel, ?focusBlock:DecodedBlock, focusScreenX:Float = DEFAULT_FOCUS_X, focusScreenY:Float = DEFAULT_FOCUS_Y,
-			incrementalBlocks:Bool = false, blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME) {
+			incrementalBlocks:Bool = false, blocksPerFrame:Int = DEFAULT_BLOCKS_PER_FRAME, ?artOptions:ArtRenderOptions) {
 		super();
 		this.level = level;
 		this.incrementalBlocks = incrementalBlocks;
 		this.blocksPerFrame = blocksPerFrame <= 0 ? DEFAULT_BLOCKS_PER_FRAME : blocksPerFrame;
+		this.drawArtEnabled = Settings.getValue(Settings.DRAW_ART, true) != false;
+		this.artOptions = artOptions;
+		this.artRasterBudget = new ArtRasterBudget(artOptions != null && artOptions.rasterTileLimit != null ? artOptions.rasterTileLimit
+			: DEFAULT_ART_RASTER_TILE_LIMIT, notifyRasterStopped);
 
 		var focus = focusBlock == null ? firstRenderableBlock(level) : focusBlock;
 		if (focus == null) {
@@ -284,6 +315,35 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
+	public function setBlockIceOverlayAlpha(worldX:Int, worldY:Int, alpha:Float):Void {
+		var display = blockDisplays.get(blockKey(worldX, worldY));
+		if (display == null) {
+			return;
+		}
+		var overlay = display.getChildByName(ICE_OVERLAY_NAME);
+		if (alpha <= 0) {
+			if (overlay != null) {
+				display.removeChild(overlay);
+			}
+			return;
+		}
+		if (overlay == null) {
+			overlay = createIceOverlay();
+			display.addChild(overlay);
+		}
+		overlay.alpha = alpha;
+	}
+
+	public function blockIceOverlayAlphaAt(worldX:Int, worldY:Int):Float {
+		var display = blockDisplays.get(blockKey(worldX, worldY));
+		var overlay = display == null ? null : display.getChildByName(ICE_OVERLAY_NAME);
+		return overlay == null ? 0 : overlay.alpha;
+	}
+
+	public function blockIsBouncingAt(worldX:Int, worldY:Int):Bool {
+		return blockBounceVelocities.exists(blockKey(worldX, worldY));
+	}
+
 	public function attachBackCharacterLayer(layer:Sprite):Void {
 		if (layer.parent == worldContainer) {
 			return;
@@ -371,6 +431,24 @@ class ServerLevelRenderer extends Sprite {
 		return display == null ? null : display.alpha;
 	}
 
+	public function removeBlockDisplay(worldX:Int, worldY:Int):Bool {
+		var key = blockKey(worldX, worldY);
+		var display = blockDisplays.get(key);
+		if (display == null) {
+			return false;
+		}
+		blockDisplays.remove(key);
+		removeFromBlockGrid(worldX, worldY);
+		arrowDisplays.remove(key);
+		moveArrowDisplays.remove(key);
+		blockBounceVelocities.remove(key);
+		disposeAnimatedChildren(display);
+		if (display.parent != null) {
+			display.parent.removeChild(display);
+		}
+		return true;
+	}
+
 	public function moveBlockDisplay(fromWorldX:Int, fromWorldY:Int, toWorldX:Int, toWorldY:Int):Void {
 		if (fromWorldX == toWorldX && fromWorldY == toWorldY) {
 			return;
@@ -449,6 +527,16 @@ class ServerLevelRenderer extends Sprite {
 		return effect;
 	}
 
+	public function showMineAppear(worldX:Float, worldY:Float, tileWorldX:Int, tileWorldY:Int, rotationDegrees:Float = 0, playSound:Bool = true):MineAppear {
+		var effect = new MineAppear(worldX, worldY, rotationDegrees, offsetX, offsetY, function():Void {
+			if (!blockDisplays.exists(blockKey(tileWorldX, tileWorldY))) {
+				addBlockDisplay(new DecodedBlock(ObjectCodes.BLOCK_MINE, tileWorldX, tileWorldY));
+			}
+		}, playSound);
+		blockLayer.addChild(effect);
+		return effect;
+	}
+
 	public function showTeleportPop(worldX:Float, worldY:Float, playSound:Bool = true):TeleportPop {
 		var effect = new TeleportPop(worldX, worldY, offsetX, offsetY, playSound);
 		blockLayer.addChild(effect);
@@ -474,6 +562,10 @@ class ServerLevelRenderer extends Sprite {
 
 	public static inline function isStartBlockCode(code:Int):Bool {
 		return code >= ObjectCodes.BLOCK_START1 && code <= ObjectCodes.BLOCK_START4;
+	}
+
+	public static inline function isSpawnMarkerBlockCode(code:Int):Bool {
+		return isStartBlockCode(code) || code == ObjectCodes.BLOCK_MINION_EGG;
 	}
 
 	public static function blockAssetPath(code:Int):String {
@@ -588,7 +680,11 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function drawArtBatch(event:Event):Void {
-		drawNextArtItems(blocksPerFrame);
+		try {
+			drawNextArtItems(blocksPerFrame);
+		} catch (error:Dynamic) {
+			handleArtDrawFailure(error);
+		}
 		if (drawnArtItems >= totalArtItems) {
 			removeEventListener(Event.ENTER_FRAME, drawArtBatch);
 		}
@@ -627,7 +723,7 @@ class ServerLevelRenderer extends Sprite {
 			display.x += (origin.x - display.x) * 0.35;
 			display.y += velocity.y;
 			display.y += (origin.y - display.y) * 0.35;
-			if (Math.abs(origin.x - display.x) < 0.25 && Math.abs(origin.y - display.y) < 0.25) {
+			if (Math.abs(origin.y - display.y) < 0.25 && Math.abs(origin.y - display.x) < 0.25) {
 				display.x = origin.x;
 				display.y = origin.y;
 				blockBounceVelocities.remove(key);
@@ -647,12 +743,10 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function addBlockDisplay(block:DecodedBlock):Void {
-		// Start blocks are spawn markers, not scenery. Flash's gameplay Map only
-		// records their position (setStartPos) and never adds them to the display,
-		// so they must stay invisible during a race — Course.buildStartPositions
-		// reads the spawn points independently. Drawing start.png here surfaced a
-		// stray dot the moment the player left the tile that had been covering it.
-		if (isStartBlockCode(block.code)) {
+		// Start and minion-egg blocks are spawn markers, not scenery. Flash's
+		// gameplay Map records their positions and never adds them to the block
+		// display list.
+		if (isSpawnMarkerBlockCode(block.code)) {
 			return;
 		}
 		var display = createBlockDisplay(block);
@@ -817,6 +911,12 @@ class ServerLevelRenderer extends Sprite {
 				i--;
 				continue;
 			}
+			var mineAppear = Std.downcast(child, MineAppear);
+			if (mineAppear != null) {
+				mineAppear.remove();
+				i--;
+				continue;
+			}
 			var blockPiece = Std.downcast(child, BlockPiece);
 			if (blockPiece != null) {
 				blockPiece.remove();
@@ -845,11 +945,17 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function drawArtBackground():Void {
+		if (!drawArtEnabled) {
+			return;
+		}
 		if (level.artBackgroundCode == null) {
 			return;
 		}
 		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
 		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
+			if (level.artBackgroundCode == BG5_CODE) {
+				addChild(createBg5CircleGrid());
+			}
 			return;
 		}
 
@@ -858,9 +964,13 @@ class ServerLevelRenderer extends Sprite {
 		bitmap.width = Constants.STAGE_WIDTH;
 		bitmap.height = Constants.STAGE_HEIGHT;
 		addChild(bitmap);
+		if (level.artBackgroundCode == BG5_CODE) {
+			addChild(createBg5CircleGrid());
+		}
 	}
 
 	private function drawArtLayer(index:Int):Void {
+		if (!drawArtEnabled) return;
 		if (index >= level.artLayers.length) return;
 		var layer = level.artLayers[index];
 		var container = new Sprite();
@@ -880,13 +990,40 @@ class ServerLevelRenderer extends Sprite {
 		container.addChild(rasterCanvas);
 		if (incrementalBlocks) {
 			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
-			artDrawCursors[index] = new ArtDrawCursor(container, rasterCanvas, layer);
+			artDrawCursors[index] = new ArtDrawCursor(container, rasterCanvas, layer, artRasterBudget);
 		} else {
-			renderLayerStrokes(rasterCanvas, layer.drawActions);
-			drawLayerObjects(container, layer.objects, layer.scale);
-			drawLayerTexts(container, layer.texts, layer.scale);
+			try {
+				renderLayerStrokes(rasterCanvas, layer.drawActions, artRasterBudget);
+				drawLayerObjects(container, layer.objects, layer.scale);
+				drawLayerTexts(container, layer.texts, layer.scale);
+			} catch (error:Dynamic) {
+				handleArtDrawFailure(error);
+			}
 		}
 		worldContainer.addChild(container);
+	}
+
+	public static function createBg5CircleGrid(?random:Void->Float):Sprite {
+		var nextRandom = random == null ? Math.random : random;
+		var grid = new Sprite();
+		grid.name = "bg5CircleGrid";
+		grid.mouseEnabled = false;
+		grid.mouseChildren = false;
+		var tileSize = 50;
+		var cols = Std.int(Constants.STAGE_WIDTH / tileSize);
+		var rows = Std.int(Constants.STAGE_HEIGHT / tileSize);
+		for (col in 0...cols) {
+			for (row in 0...rows) {
+				var circle = new Shape();
+				circle.graphics.beginFill(Std.int(nextRandom() * 0xFFFFFF));
+				circle.graphics.drawCircle(0, 0, 12.5);
+				circle.graphics.endFill();
+				circle.x = col * tileSize + 20;
+				circle.y = row * tileSize + 20;
+				grid.addChild(circle);
+			}
+		}
+		return grid;
 	}
 
 	private function drawNextArtItems(limit:Int):Void {
@@ -899,6 +1036,10 @@ class ServerLevelRenderer extends Sprite {
 				return;
 			}
 			var cursor = artDrawCursors[nextArtLayerToDraw];
+			if (artOptions != null && artOptions.artDrawFaultInjector != null) {
+				artOptions.artDrawFaultInjector(attemptedArtItems);
+			}
+			attemptedArtItems++;
 			if (cursor.drawNext()) {
 				drawnArtItems++;
 				remaining--;
@@ -907,6 +1048,47 @@ class ServerLevelRenderer extends Sprite {
 				nextArtLayerToDraw++;
 			}
 		}
+	}
+
+	private function handleArtDrawFailure(error:Dynamic):Void {
+		if (!artLoadWarningShown) {
+			artLoadWarningShown = true;
+			emitArtWarning(artOptions != null && artOptions.editorWarning == true ? ART_LOAD_WARNING_EDITOR : ART_LOAD_WARNING_GAME, true);
+		}
+		finishArtDrawingAfterFailure();
+	}
+
+	private function finishArtDrawingAfterFailure():Void {
+		drawnArtItems = totalArtItems;
+		nextArtLayerToDraw = artDrawCursors.length;
+		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
+	}
+
+	private function notifyRasterStopped():Void {
+		stoppedRasterizing = true;
+		if (!rasterStopNotified) {
+			rasterStopNotified = true;
+			emitArtWarning(ART_RASTER_STOP_WARNING, false);
+		}
+	}
+
+	private function emitArtWarning(message:String, gatePopup:Bool):Void {
+		artWarningMessage = message;
+		if (artOptions != null && artOptions.onArtWarning != null) {
+			artOptions.onArtWarning(message);
+			return;
+		}
+		if (artOptions != null && artOptions.suppressArtWarningPopup == true) {
+			return;
+		}
+		if (!gatePopup || canOpenArtWarningPopup()) {
+			new MessagePopup(message);
+		}
+	}
+
+	private static function canOpenArtWarningPopup():Bool {
+		var open = Popup.getOpen();
+		return open.length == 0 || (open.length == 1 && Std.isOfType(open[0], PrizePopup));
 	}
 
 	public static function drawLayerStrokes(brushCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
@@ -930,8 +1112,8 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<DecodedDrawAction>):Void {
-		var tiles = new ArtRasterTiles(rasterCanvas);
+	public static function renderLayerStrokes(rasterCanvas:Sprite, actions:Array<DecodedDrawAction>, ?budget:ArtRasterBudget):Void {
+		var tiles = new ArtRasterTiles(rasterCanvas, budget);
 		for (action in actions) {
 			tiles.apply(action);
 		}
@@ -1083,6 +1265,22 @@ class ServerLevelRenderer extends Sprite {
 		return container;
 	}
 
+	private function createIceOverlay():Sprite {
+		var overlay = new Sprite();
+		overlay.name = ICE_OVERLAY_NAME;
+		var assetPath = blockAssetPath(ObjectCodes.BLOCK_ICE);
+		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
+			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+			bitmap.smoothing = false;
+			bitmap.width = TILE_SIZE;
+			bitmap.height = TILE_SIZE;
+			overlay.addChild(bitmap);
+		} else {
+			drawFallbackBlock(overlay, ObjectCodes.BLOCK_ICE);
+		}
+		return overlay;
+	}
+
 	/**
 		Adds the rotated arrow graphic over an arrow block, matching ArrowBlock,
 		which places the ArrowBlockGraphic at the tile centre (15,15) and rotates
@@ -1156,11 +1354,11 @@ private class ArtDrawCursor {
 	private var objectIndex:Int = 0;
 	private var textIndex:Int = 0;
 
-	public function new(container:Sprite, rasterCanvas:Sprite, layer:DecodedArtLayer) {
+	public function new(container:Sprite, rasterCanvas:Sprite, layer:DecodedArtLayer, ?budget:ArtRasterBudget) {
 		this.container = container;
 		this.rasterCanvas = rasterCanvas;
 		this.layer = layer;
-		this.strokeTiles = new ArtRasterTiles(rasterCanvas);
+		this.strokeTiles = new ArtRasterTiles(rasterCanvas, budget);
 	}
 
 	public function drawNext():Bool {
@@ -1185,15 +1383,45 @@ private class ArtDrawCursor {
 	}
 }
 
+class ArtRasterBudget {
+	public final limit:Int;
+	public var tileCount(default, null):Int = 0;
+	public var stopped(default, null):Bool = false;
+	private final onStopped:Void->Void;
+
+	public function new(limit:Int, onStopped:Void->Void) {
+		this.limit = limit;
+		this.onStopped = onStopped;
+	}
+
+	public function reserveTile():Bool {
+		if (limit < 0) {
+			tileCount++;
+			return true;
+		}
+		if (tileCount >= limit) {
+			if (!stopped) {
+				stopped = true;
+				onStopped();
+			}
+			return false;
+		}
+		tileCount++;
+		return true;
+	}
+}
+
 private class ArtRasterTiles {
 	private final rasterCanvas:Sprite;
+	private final budget:Null<ArtRasterBudget>;
 	private final tiles:Map<String, Bitmap> = new Map();
 	private var color:Int = 0x000000;
 	private var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 	private var mode:String = "draw";
 
-	public function new(rasterCanvas:Sprite) {
+	public function new(rasterCanvas:Sprite, ?budget:ArtRasterBudget) {
 		this.rasterCanvas = rasterCanvas;
+		this.budget = budget;
 	}
 
 	public function apply(action:DecodedDrawAction):Void {
@@ -1212,11 +1440,14 @@ private class ArtRasterTiles {
 		}
 	}
 
-	private function getOrCreateTile(tileX:Int, tileY:Int):Bitmap {
+	private function getOrCreateTile(tileX:Int, tileY:Int):Null<Bitmap> {
 		var key = tileKey(tileX, tileY);
 		var bitmap = tiles.get(key);
 		if (bitmap != null) {
 			return bitmap;
+		}
+		if (budget != null && !budget.reserveTile()) {
+			return null;
 		}
 		bitmap = new Bitmap(new BitmapData(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, true, 0));
 		bitmap.smoothing = true;

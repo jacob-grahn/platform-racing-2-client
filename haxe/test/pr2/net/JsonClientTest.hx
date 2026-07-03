@@ -4,8 +4,10 @@ class JsonClientTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		SuperLoader.showMessage = function(_:String):Void {};
 		testDecode();
 		testDecodeError();
+		SuperLoader.resetHooks();
 		trace('JsonClientTest passed $assertions assertions');
 	}
 
@@ -25,7 +27,7 @@ class JsonClientTest {
 		JsonClient.decode("fixture", "not-json", _ -> called = true, message -> error = message);
 
 		assertEquals(false, called, "invalid JSON does not call success");
-		assertEquals(true, error != null && error.indexOf("invalid JSON from fixture") == 0, "parse error identifies source");
+		assertEquals(true, error != null && error.indexOf("invalid response from fixture") == 0, "parse error identifies source");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

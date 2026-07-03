@@ -4,6 +4,7 @@ import openfl.display.Sprite;
 import openfl.geom.Point;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
+import pr2.effects.LaserShotTimeline;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -90,6 +91,13 @@ class EggRound {
 			spawn(level);
 			remaining--;
 		}
+	}
+
+	public function addFixedEgg(x:Int, y:Int, rot:Int = 0):Int {
+		var id = nextId++;
+		var velX = rand.nextMinMax(0, 2) == 1 ? 1 : -1;
+		createEgg(id, x, y, rot, velX);
+		return id;
 	}
 
 	public function step(level:ServerLevel, courseRotation:Int = 0, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
@@ -189,9 +197,14 @@ class EggRound {
 		var rot = rand.nextMinMax(-1, 3) * 90;
 		var rotated = RotationMath.rotatePoint(rawX, rawY, -rot);
 		var velX = rand.nextMinMax(0, 2) == 1 ? 1 : -1;
+		createEgg(id, rotated.x, rotated.y, rot, velX);
+	}
+
+	private function createEgg(id:Int, x:Int, y:Int, rot:Int, velX:Float):Void {
 		var display = PR2MovieClip.fromLinkage("EggGraphic", {maxNestedDepth: 8});
-		display.x = rotated.x;
-		display.y = rotated.y;
+		applyEggGraphicFrameScripts(display);
+		display.x = x;
+		display.y = y;
 		display.rotation = rot;
 		display.scaleX = velX > 0 ? 0.12 : -0.12;
 		display.scaleY = 0.12;
@@ -201,10 +214,10 @@ class EggRound {
 		}
 		eggs.set(id, {
 			id: id,
-			posX: rotated.x,
-			posY: rotated.y,
-			x: rotated.x,
-			y: rotated.y,
+			posX: x,
+			posY: y,
+			x: x,
+			y: y,
 			rot: rot,
 			velX: velX,
 			velY: 0,
@@ -217,6 +230,15 @@ class EggRound {
 		});
 		commandHandler.defineCommand('removeEgg$id', function(_:Array<String>):Void {
 			removeEggNow(id);
+		});
+	}
+
+	private static function applyEggGraphicFrameScripts(display:PR2MovieClip):Void {
+		display.setFrameScript(24, function():Void {
+			display.gotoAndPlay("walk");
+		});
+		display.setFrameScript(45, function():Void {
+			display.stop();
 		});
 	}
 
@@ -371,6 +393,9 @@ class EggRound {
 	private function addAttackVisual(linkage:String, x:Int, y:Int, scaleX:Float, scaleY:Float, velX:Float, velY:Float, life:Int,
 			alphaJitter:Bool):EggAttackVisual {
 		var display = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 8});
+		if (linkage == "LaserShotGraphic") {
+			LaserShotTimeline.apply(display);
+		}
 		display.x = x;
 		display.y = y;
 		display.scaleX = scaleX;

@@ -1,8 +1,8 @@
 package pr2.lobby.dialogs;
 
 import openfl.display.DisplayObject;
-import openfl.display.Sprite;
 import pr2.app.AppStage;
+import pr2.display.Removable;
 
 /**
 	Port of Flash `dialogs.InfoPopup`: a small non-modal popup placed beside a
@@ -13,7 +13,7 @@ import pr2.app.AppStage;
 	requires `super()` first, so positioning is exposed as `positionNear`, which the
 	subclass calls once its content is built.
 **/
-class InfoPopup extends Sprite {
+class InfoPopup extends Removable {
 	public function new() {
 		super();
 	}
@@ -38,9 +38,5 @@ class InfoPopup extends Sprite {
 		stage.addChild(this);
 	}
 
-	public function remove():Void {
-		if (parent != null) {
-			parent.removeChild(this);
-		}
-	}
+	override public function remove():Void super.remove();
 }

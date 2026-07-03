@@ -1,6 +1,8 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import openfl.events.MouseEvent;
+import pr2.lobby.dialogs.HoverPopup;
 import pr2.runtime.PR2MovieClip;
 
 /**
@@ -8,10 +10,9 @@ import pr2.runtime.PR2MovieClip;
 	`MiniMapDot` symbol carries five labelled colour frames (`remote0`-`remote3`
 	and `local`); `setTempID` latches one once, exactly as Flash does.
 
-	The hover popup (`infoMouseEvent`/`HoverPopup`) that shows the player name on
-	mouse-over needs `Course.course.playerArray`, which the campaign test screen
-	does not yet build, so it is deferred until the full `Game`/`Course` shell
-	lands (see TODO.md "Port the complete in-game shell").
+	The hover popup (`infoMouseEvent`/`HoverPopup`) is enabled only for live Course
+	dots that have been assigned player metadata, matching Flash's suppression
+	outside an active Game.
 **/
 class MiniMapDot extends Sprite {
 	// MiniMapDot.as colour constants (kept for parity reference; the authored
@@ -24,6 +25,10 @@ class MiniMapDot extends Sprite {
 
 	private final clip:PR2MovieClip;
 	private var tempID:Int = -1;
+	public var hover(default, null):Null<HoverPopup>;
+	private var hoverEnabled:Bool = false;
+	private var hoverTitle:String = "";
+	private var hoverContent:String = "";
 
 	public function new() {
 		super();
@@ -33,6 +38,8 @@ class MiniMapDot extends Sprite {
 		clip = PR2MovieClip.fromLinkage("MiniMapDot");
 		clip.gotoAndStop("remote0");
 		addChild(clip);
+		addEventListener(MouseEvent.MOUSE_OVER, infoMouseEvent);
+		addEventListener(MouseEvent.MOUSE_OUT, infoMouseEvent);
 	}
 
 	/** Latches the dot to one colour frame the first time it is assigned. */
@@ -59,9 +66,32 @@ class MiniMapDot extends Sprite {
 		}
 	}
 
+	public function setHoverInfo(playerNumber:Int, playerName:String, liveGame:Bool = true):Void {
+		hoverEnabled = liveGame;
+		hoverTitle = "Player " + playerNumber;
+		hoverContent = playerName;
+	}
+
+	private function infoMouseEvent(event:MouseEvent = null):Void {
+		if (!hoverEnabled && event != null) {
+			return;
+		}
+		if (hover != null) {
+			hover.remove();
+			hover = null;
+		}
+		if (event == null || event.type == MouseEvent.MOUSE_OUT) {
+			return;
+		}
+		if (event.type == MouseEvent.MOUSE_OVER) {
+			hover = new HoverPopup(hoverTitle, hoverContent, this);
+		}
+	}
+
 	public function remove():Void {
-		// MiniMapDot.remove dispatches MOUSE_OUT to dismiss the hover popup; the
-		// popup is deferred here, so there is nothing to dismiss yet.
+		infoMouseEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		removeEventListener(MouseEvent.MOUSE_OVER, infoMouseEvent);
+		removeEventListener(MouseEvent.MOUSE_OUT, infoMouseEvent);
 		if (parent != null) {
 			parent.removeChild(this);
 		}

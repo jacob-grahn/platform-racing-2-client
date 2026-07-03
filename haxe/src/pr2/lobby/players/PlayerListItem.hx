@@ -1,7 +1,7 @@
 package pr2.lobby.players;
 
-import openfl.display.Sprite;
 import openfl.text.TextField;
+import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.players.PlayerListSort.SortableRow;
@@ -14,7 +14,7 @@ import pr2.runtime.PR2MovieClip;
 	(left = name, middle = the rank/GP column, right = the hats/active column).
 	The name field gets link handling via `HtmlNameMaker`.
 **/
-class PlayerListItem extends Sprite implements SortableRow {
+class PlayerListItem extends Removable implements SortableRow {
 	private var art:PR2MovieClip;
 	private var htmlNameMaker:HtmlNameMaker;
 	private var nameField:Null<TextField>;
@@ -62,16 +62,16 @@ class PlayerListItem extends Sprite implements SortableRow {
 		return "";
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		if (htmlNameMaker != null) {
 			htmlNameMaker.remove();
 			htmlNameMaker = null;
 		}
 		if (art != null) {
 			art.dispose();
+			art = null;
 		}
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 }

@@ -1,8 +1,8 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
-import openfl.display.Sprite;
 import openfl.events.Event;
+import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.NumberFormat;
 import pr2.runtime.PR2MovieClip;
@@ -18,7 +18,7 @@ import pr2.util.DisplayUtil;
 	whose own inner fill is also named `bar` (`m.bar.bar.width` in AS3) and a
 	`textBox` readout.
 **/
-class ExpGain extends Sprite {
+class ExpGain extends Removable {
 	private static inline var STEPS:Float = 45;
 	private static inline var BAR_WIDTH:Float = 200;
 
@@ -74,7 +74,8 @@ class ExpGain extends Sprite {
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		removeEventListener(Event.ENTER_FRAME, go);
 		if (art != null) {
 			art.dispose();
@@ -82,8 +83,6 @@ class ExpGain extends Sprite {
 		}
 		fill = null;
 		textBox = null;
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 }

@@ -16,12 +16,7 @@ class JsonClient {
 
 	/** Exposed for deterministic response parsing tests and cached API bodies. */
 	public static function decode(source:String, body:String, onJson:Dynamic->Void, ?onError:String->Void):Void {
-		try {
-			onJson(Json.parse(body));
-		} catch (error:Dynamic) {
-			if (onError != null) {
-				onError('invalid JSON from $source: ${Std.string(error)}');
-			}
-		}
+		var result = SuperLoader.decodeJson(source, body);
+		if (result.success) onJson(result.data) else if (onError != null) onError(result.message);
 	}
 }

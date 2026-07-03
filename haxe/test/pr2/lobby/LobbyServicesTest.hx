@@ -35,6 +35,7 @@ import pr2.page.LevelEditor;
 import pr2.page.LevelEditor.ChooseLevelsModePopup;
 import pr2.page.LevelEditor.DeletingLevelPopup;
 import pr2.page.LevelEditor.GetLevelsPopup;
+import pr2.page.LevelEditor.GetReportedLevelsPopupItem;
 import pr2.page.LevelEditor.HandleLevelReportPopup;
 import pr2.page.LevelEditor.GetReportedLevelsPopup;
 import pr2.page.LevelEditor.LoadingLevelPopup;
@@ -597,6 +598,23 @@ class LobbyServicesTest {
 		assertEquals(2, popup.listings.length, "load popup renders returned listings");
 		assertEquals("Alpha", LobbyArt.text(popup.listings[0].art, "titleBox").text, "listing renders title");
 		assertEquals("Published", LobbyArt.text(popup.listings[0].art, "statusBox").text, "listing renders published state");
+		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row starts on the authored up frame");
+		popup.listings[0].art.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row does not auto-play through button states");
+
+		var reported = new GetReportedLevelsPopupItem({
+			level_id: "9",
+			version: "1",
+			title: "Reported",
+			report_time: "0",
+			creator: "Case",
+			note: "",
+			reporter: "Mod",
+			reason: "test"
+		}, null);
+		assertEquals(1, reported.art.currentFrame, "reported listing row starts on the authored up frame");
+		reported.art.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, reported.art.currentFrame, "reported listing row does not auto-play through button states");
 
 		popup.selectListing(popup.listings[0]);
 		DisplayUtil.findByName(popup.art, "load_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));

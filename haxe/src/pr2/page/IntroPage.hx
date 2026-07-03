@@ -54,6 +54,7 @@ class IntroPage extends Page {
 	private var skipHitArea:Null<Sprite>;
 	private var listeningStage:Null<Stage>;
 	private var ended:Bool = false;
+	private var siteMode:String;
 
 	/**
 		@param siteMode which host the client thinks it is, picking the intro
@@ -63,6 +64,7 @@ class IntroPage extends Page {
 	**/
 	public function new(?siteMode:String, ?only:String) {
 		super();
+		this.siteMode = siteMode == null ? "kongregate" : siteMode;
 
 		// The original Jiggmin intro played over a full-screen black backdrop
 		// (Symbol 26). Reproduce it here so the window background never shows
@@ -100,7 +102,7 @@ class IntroPage extends Page {
 		if (single != null) {
 			toPlay = [single];
 		} else {
-			var mode = siteMode == null ? "kongregate" : siteMode;
+			var mode = this.siteMode;
 			toPlay = switch (mode) {
 				case "inXile": [JIGG_INTRO];
 				case "bubbleBox": [JIGG_INTRO, BUBBOX_INTRO];
@@ -256,7 +258,7 @@ class IntroPage extends Page {
 		clearCurrentIntro();
 		reportState("login");
 		if (pageHolder != null) {
-			pageHolder.changePage(new LoginPage());
+			pageHolder.changePage(new LoginPage(siteMode));
 		}
 	}
 

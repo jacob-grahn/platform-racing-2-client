@@ -36,6 +36,14 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
 		testLeafVectorShapes();
+		testGeneratedSiteLogoFrameScripts();
+		testGeneratedCharacterStateFrameScripts();
+		testGeneratedCharacterNestedStopFrameScripts();
+		testGeneratedQuitGlowFrameScripts();
+		testGeneratedJumpStateStopFrameScripts();
+		testGeneratedIntroLogoFrameScripts();
+		testGeneratedPlayersTabListConstructorStop();
+		testGeneratedShortEffectStopFrameScripts();
 		testDisposeStopsClipsNestedInGroups();
 		testPrimitiveDrawingObjects();
 		testGeneratedStaticTextAndComponents();
@@ -109,6 +117,142 @@ class PR2MovieClipRuntimeTest {
 
 		assertThrows(function() clip.setFrameScript(-1, function() {}), "negative frame-script indexes are rejected");
 		assertThrows(function() clip.setFrameScript(4, function() {}), "frame-script indexes past totalFrames are rejected");
+	}
+
+	private static function testGeneratedSiteLogoFrameScripts():Void {
+		var armor = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.ag_intro_mc_247", {maxNestedDepth: 6});
+		assertEquals(2, armor.currentFrame, "ArmorGames intro constructor jumps from frame 1 to frame 2");
+		armor.gotoAndPlay(218);
+		armor.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(219, armor.currentFrame, "ArmorGames intro reaches its authored stop frame");
+		armor.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(219, armor.currentFrame, "ArmorGames intro stop frame prevents looping");
+
+		assertLoopsFromFrame21("PR2_Graphics_1_Apr_2014_fla.bubbleSpin_12", "BubbleBox bubble spin");
+		assertLoopsFromFrame21("PR2_Graphics_1_Apr_2014_fla.bubbleShineSpin_17", "BubbleBox shine spin");
+
+		var logo = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.bubblebox_logo_ro_254", {maxNestedDepth: 6});
+		logo.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, logo.currentFrame, "BubbleBox rollover logo stays stopped on frame 1");
+
+		var latest = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.bubblxbox_play_latest_text_252", {maxNestedDepth: 6});
+		latest.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, latest.currentFrame, "BubbleBox latest text stays stopped on frame 1");
+		latest.gotoAndPlay(9);
+		latest.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(10, latest.currentFrame, "BubbleBox latest text reaches frame 10");
+		latest.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(10, latest.currentFrame, "BubbleBox latest text stops on frame 10");
+	}
+
+	private static function testGeneratedCharacterStateFrameScripts():Void {
+		var bumped = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.bumpedAnim_59", {maxNestedDepth: 6});
+		assertEquals(null, bumped.var_652, "bumped animation starts without its completion flag");
+		bumped.gotoAndStop(55);
+		assertEquals(null, bumped.var_652, "bumped animation does not complete before frame 56");
+		bumped.gotoAndStop(56);
+		assertEquals(true, bumped.var_652, "bumped animation sets its frame-56 completion flag");
+
+		var frozen = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.frozenSolidAnim_65", {maxNestedDepth: 6});
+		var completed = 0;
+		frozen.addEventListener(Event.COMPLETE, function(_:Event):Void completed++);
+		frozen.gotoAndPlay(47);
+		frozen.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(48, frozen.currentFrame, "frozen-solid animation reaches its authored completion frame");
+		assertEquals(1, completed, "frozen-solid animation dispatches COMPLETE on frame 48");
+		frozen.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(48, frozen.currentFrame, "frozen-solid animation stops on frame 48");
+		assertEquals(1, completed, "frozen-solid completion dispatches once");
+	}
+
+	private static function testGeneratedCharacterNestedStopFrameScripts():Void {
+		for (linkage in [
+			"PR2_Graphics_1_Apr_2014_fla.gunFireAnim_40",
+			"PR2_Graphics_1_Apr_2014_fla.iceWaveFireAnim_55",
+			"PR2_Graphics_1_Apr_2014_fla.jetPackStates_47",
+			"PR2_Graphics_1_Apr_2014_fla.swordAnim_53",
+			"PR2_Graphics_1_Apr_2014_fla.hatColor_24",
+			"PR2_Graphics_1_Apr_2014_fla.hatColor2_25"
+		]) {
+			var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+			clip.dispatchEvent(new Event(Event.ENTER_FRAME));
+			assertEquals(1, clip.currentFrame, '$linkage constructor stop script holds frame 1');
+		}
+	}
+
+	private static function testGeneratedQuitGlowFrameScripts():Void {
+		var glow = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.buttonGlowAnim_182", {maxNestedDepth: 6});
+		assertEquals(2, labelFrame(glow, "off"), "quit glow off label frame");
+		assertEquals(11, labelFrame(glow, "on"), "quit glow on label frame");
+		glow.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(2, glow.currentFrame, "quit glow reaches off frame on first tick");
+		glow.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(2, glow.currentFrame, "quit glow off frame stops");
+		glow.gotoAndPlay("on");
+		assertEquals(11, glow.currentFrame, "quit glow starts at authored on label");
+		glow.gotoAndPlay(36);
+		glow.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(11, glow.currentFrame, "quit glow frame 37 loops back to on label");
+		glow.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(12, glow.currentFrame, "quit glow continues playing after loop");
+	}
+
+	private static function testGeneratedJumpStateStopFrameScripts():Void {
+		assertStopsOnNextFrame("PR2_Graphics_1_Apr_2014_fla.jumpAnim_61", 49, 50, "jump animation");
+		assertStopsOnNextFrame("PR2_Graphics_1_Apr_2014_fla.superJumpAnim_60", 50, 51, "super-jump animation");
+	}
+
+	private static function testGeneratedIntroLogoFrameScripts():Void {
+		var logo = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.logoAnim_258", {maxNestedDepth: 6});
+		assertEquals(false, logo.mouseEnabled, "Jiggmin intro logo disables mouse input on frame 1");
+		assertEquals(false, logo.mouseChildren, "Jiggmin intro logo disables child mouse input on frame 1");
+		logo.gotoAndPlay(logo.totalFrames - 1);
+		logo.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(logo.totalFrames, logo.currentFrame, "Jiggmin intro logo reaches final generated frame");
+		logo.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(logo.totalFrames, logo.currentFrame, "Jiggmin intro logo stops on final generated frame");
+	}
+
+	private static function testGeneratedPlayersTabListConstructorStop():Void {
+		var list = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
+		assertEquals(1, labelFrame(list, "players"), "players list default label frame");
+		assertEquals(6, labelFrame(list, "guilds"), "players list guilds label frame");
+		assertEquals(1, list.currentFrame, "players list starts on the normal players frame");
+		list.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, list.currentFrame, "players list constructor stop prevents auto-playing to guild headers");
+		list.gotoAndStop("guilds");
+		assertEquals(6, list.currentFrame, "players list can still explicitly enter the guilds frame");
+	}
+
+	private static function testGeneratedShortEffectStopFrameScripts():Void {
+		assertStopsOnNextFrame("PointyStar", 15, 16, "pointy star effect");
+		assertStopsOnNextFrame("TeleportAnimation", 15, 16, "teleport effect");
+		assertStopsOnNextFrame("SlashAnimation", 5, 6, "slash effect");
+	}
+
+	private static function assertLoopsFromFrame21(linkage:String, label:String):Void {
+		var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+		clip.gotoAndPlay(20);
+		clip.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(1, clip.currentFrame, '$label loops frame 21 back to frame 1');
+		clip.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(2, clip.currentFrame, '$label continues playing after its authored loop');
+	}
+
+	private static function assertStopsOnNextFrame(linkage:String, startFrame:Int, stopFrame:Int, label:String):Void {
+		var clip = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
+		clip.gotoAndPlay(startFrame);
+		clip.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(stopFrame, clip.currentFrame, '$label reaches authored stop frame');
+		clip.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(stopFrame, clip.currentFrame, '$label stays stopped on authored stop frame');
+	}
+
+	private static function labelFrame(clip:PR2MovieClip, name:String):Int {
+		for (label in clip.currentLabels) {
+			if (label.name == name) return label.frame;
+		}
+		throw '${clip.symbol.name} missing label $name';
 	}
 
 	private static function testNamedChildAccessAndElementProperties():Void {

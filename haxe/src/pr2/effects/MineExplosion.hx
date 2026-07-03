@@ -13,7 +13,7 @@ class MineExplosion extends Sprite {
 	public static inline var LIFETIME_FRAMES:Int = 14;
 	public static inline var SOUND_PATH:String = "assets/audio/sfx/sound971.mp3";
 
-	private var animation:PR2MovieClip;
+	public var animation(default, null):PR2MovieClip;
 	private var framesRemaining:Int = LIFETIME_FRAMES;
 
 	public function new(worldX:Float, worldY:Float, cameraX:Float = 0, cameraY:Float = 0, playSound:Bool = true) {
@@ -21,6 +21,7 @@ class MineExplosion extends Sprite {
 		x = worldX;
 		y = worldY;
 		animation = PR2MovieClip.fromLinkage("MineExplodeAnimation");
+		animation.setFrameScript(13, function():Void animation.stop());
 		addChild(animation);
 		addEventListener(Event.ENTER_FRAME, tick);
 

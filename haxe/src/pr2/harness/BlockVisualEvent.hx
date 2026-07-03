@@ -14,6 +14,7 @@ enum BlockVisualEventKind {
 	SadBlockSound;
 	SuperJumpSound;
 	PushBlockMove;
+	LocalActivate;
 }
 
 class BlockVisualEvent {
@@ -25,8 +26,10 @@ class BlockVisualEvent {
 	public final count:Int;
 	public final hitX:Float;
 	public final hitY:Float;
+	public final activationPayload:Null<String>;
 
-	public function new(kind:BlockVisualEventKind, tileX:Int, tileY:Int, count:Int = 1, ?toTileX:Int, ?toTileY:Int, hitX:Float = 0, hitY:Float = -15) {
+	public function new(kind:BlockVisualEventKind, tileX:Int, tileY:Int, count:Int = 1, ?toTileX:Int, ?toTileY:Int, hitX:Float = 0, hitY:Float = -15,
+			?activationPayload:String) {
 		this.kind = kind;
 		this.tileX = tileX;
 		this.tileY = tileY;
@@ -35,5 +38,6 @@ class BlockVisualEvent {
 		this.toTileY = toTileY;
 		this.hitX = hitX;
 		this.hitY = hitY;
+		this.activationPayload = activationPayload;
 	}
 }

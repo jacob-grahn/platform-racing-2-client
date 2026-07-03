@@ -2,8 +2,8 @@ package pr2.gameplay;
 
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
-import openfl.display.Sprite;
 import openfl.text.TextField;
+import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.net.CommandHandler;
 import pr2.runtime.PR2MovieClip;
@@ -15,7 +15,7 @@ import pr2.util.DisplayUtil;
 	The full finish-times table is part of the race-lifecycle work; this component
 	covers the live "drawing..." status used while players wait for map drawing.
 **/
-class DrawingInfo extends Sprite {
+class DrawingInfo extends Removable {
 	private static inline final MAX_PLAYERS:Int = 4;
 
 	private var art:Null<PR2MovieClip>;
@@ -66,7 +66,8 @@ class DrawingInfo extends Sprite {
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		commandHandler.defineCommand("finishDrawing", null);
 		if (art != null) {
 			art.dispose();
@@ -75,9 +76,7 @@ class DrawingInfo extends Sprite {
 		info1 = null;
 		info2 = null;
 		names = [];
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 
 	public function playerName(tempID:Int):String {

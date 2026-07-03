@@ -90,6 +90,7 @@ class LevelEditor extends Page {
 	public var objectLayers(default, null):Array<EditorObjectLayer> = [];
 	public var activeDrawLayer(default, null):Null<EditorDrawableLayer>;
 	public var activeObjectLayer(default, null):Null<EditorObjectLayer>;
+	public var blockGrid(default, null):Null<BlockGridLines>;
 	public var blockLayer(default, null):Null<EditorBlockLayer>;
 	public var selectedBlock(default, null):Null<EditorBlockObject>;
 	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
@@ -148,6 +149,8 @@ class LevelEditor extends Page {
 
 		layerContainer = new Sprite();
 		addChild(layerContainer);
+		blockGrid = new BlockGridLines();
+		layerContainer.addChild(blockGrid);
 		blockLayer = new EditorBlockLayer(this);
 		layerContainer.addChild(blockLayer);
 		attachArtLayers();
@@ -328,6 +331,9 @@ class LevelEditor extends Page {
 		if (layerContainer != null) {
 			layerContainer.scaleX = zoom;
 			layerContainer.scaleY = zoom;
+		}
+		if (blockGrid != null) {
+			blockGrid.setZoom(zoom);
 		}
 		if (cameraStarted) {
 			setPos(posX, posY);
@@ -683,6 +689,10 @@ class LevelEditor extends Page {
 				blockLayer.remove();
 			}
 			blockLayer = null;
+			if (blockGrid != null) {
+				blockGrid.remove();
+			}
+			blockGrid = null;
 			selectedBlock = null;
 			lastBlockOptionsRequest = null;
 			closeBlockOptionsPopup();
@@ -794,6 +804,9 @@ class LevelEditor extends Page {
 	}
 
 	private function applyLayerPositions():Void {
+		if (blockGrid != null) {
+			blockGrid.setPos(posX, posY);
+		}
 		if (blockLayer != null) {
 			positionLayer(blockLayer, 1);
 		}
@@ -1715,6 +1728,7 @@ class GetLevelsPopupItem extends Sprite {
 		this.level = level;
 		this.popup = popup;
 		art = PR2MovieClip.fromLinkage("GetLevelsPopupItemGraphic", {maxNestedDepth: 4});
+		art.gotoAndStop(1);
 		addChild(art);
 		levelId = parseInt(field("level_id"), 0);
 		version = parseInt(field("version"), 0);
@@ -1978,6 +1992,7 @@ class GetReportedLevelsPopupItem extends Sprite {
 		this.level = level;
 		this.popup = popup;
 		art = PR2MovieClip.fromLinkage("GetReportedLevelsPopupItemGraphic", {maxNestedDepth: 4});
+		art.gotoAndStop(1);
 		addChild(art);
 		levelId = parseInt(field("level_id"), 0);
 		version = parseInt(field("version"), 0);
@@ -4038,6 +4053,13 @@ class EditorBlockObject extends Sprite {
 
 	private static function createDisplay(code:Int):Sprite {
 		var holder = new Sprite();
+		if (code == ObjectCodes.BLOCK_MINION_EGG) {
+			var eggBlock = PR2MovieClip.fromLinkage("EggBlockGraphic", {maxNestedDepth: 8});
+			stopEggBlockFoot(eggBlock, "var_152");
+			stopEggBlockFoot(eggBlock, "var_165");
+			holder.addChild(eggBlock);
+			return holder;
+		}
 		var assetPath = ServerLevelRenderer.blockAssetPath(code);
 		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
 			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
@@ -4063,6 +4085,22 @@ class EditorBlockObject extends Sprite {
 			holder.addChild(arrow);
 		}
 		return holder;
+	}
+
+	private static function stopEggBlockFoot(root:PR2MovieClip, name:String):Void {
+		var foot = Std.downcast(DisplayUtil.findByName(root, name), PR2MovieClip);
+		if (foot == null) {
+			return;
+		}
+		foot.stop();
+		var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
+		if (colorMC != null) {
+			colorMC.stop();
+		}
+		var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
+		if (colorMC2 != null) {
+			colorMC2.stop();
+		}
 	}
 }
 

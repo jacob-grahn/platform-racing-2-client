@@ -126,6 +126,13 @@ class LoginFlashPopup extends Sprite {
 		}
 	}
 
+	public function setHtmlText(name:String, value:String):Void {
+		var text = FlComponents.asTextField(child(name));
+		if (text != null) {
+			text.htmlText = value;
+		}
+	}
+
 	public function setMessage(message:String):Void {
 		// Some authored popups expose a textBox. Popups without one (notably the
 		// animated connecting/login graphics) communicate through their timeline;

@@ -1,8 +1,8 @@
 package pr2.gameplay;
 
-import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import pr2.display.Removable;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.runtime.PR2MovieClip;
@@ -15,7 +15,7 @@ import pr2.runtime.PR2MovieClip;
 	three values (`Current Stats`); the popup is torn down on mouse-out and on
 	removal, matching Flash dispatching a synthetic `MOUSE_OUT` from `remove`.
 **/
-class StatsDisplay extends Sprite {
+class StatsDisplay extends Removable {
 	static inline var HOVER_DELAY_MS:Int = 250;
 
 	private var art:Null<PR2MovieClip>;
@@ -86,7 +86,8 @@ class StatsDisplay extends Sprite {
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
+		if (isRemoved()) return;
 		cancelHoverTimer();
 		if (pop != null) {
 			pop.remove();
@@ -101,8 +102,6 @@ class StatsDisplay extends Sprite {
 		speedBox = null;
 		accelBox = null;
 		jumpBox = null;
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 }

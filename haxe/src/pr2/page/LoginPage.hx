@@ -29,7 +29,17 @@ import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
 import pr2.audio.AudioManager;
+import pr2.app.KongAward;
+import pr2.app.SiteMode;
+import pr2.lobby.account.Preset.Outfit;
+import pr2.lobby.dialogs.OutfitPopup;
 import pr2.util.RequestGeneration;
+
+private typedef LoginPageArt = {
+	final assetPath:String;
+	final trimX:Int;
+	final trimY:Int;
+}
 
 /**
 	Login menu ported from the Flash `menu.LoginPage`.
@@ -40,12 +50,21 @@ import pr2.util.RequestGeneration;
 **/
 class LoginPage extends Page {
 	private static inline var LOGIN_PAGE_ASSET = "assets/login/login_page@4x.png";
+	private static inline var LOGIN_PAGE_ARMOR_GAMES_ASSET = "assets/login/login_page_armor_games@4x.png";
+	private static inline var LOGIN_PAGE_BUBBLE_BOX_ASSET = "assets/login/login_page_bubble_box@4x.png";
+	private static inline var LOGIN_PAGE_NO_LOGO_ASSET = "assets/login/login_page_no_logo@4x.png";
 	private static inline var LOGIN_PAGE_SCALE = 4;
 	private static inline var LOGIN_PAGE_TRIM_X = 21;
 	// Trim Y dropped from 370 once the Gwibble title (Layer 7) was removed from the
 	// page art; the topmost remaining content is now the menu panel. See raster
 	// manifest entry for login_page (vector-art/raster-manifest-login.json).
 	private static inline var LOGIN_PAGE_TRIM_Y = 846;
+	private static inline var LOGIN_PAGE_ARMOR_GAMES_TRIM_X = 19;
+	private static inline var LOGIN_PAGE_ARMOR_GAMES_TRIM_Y = 846;
+	private static inline var LOGIN_PAGE_BUBBLE_BOX_TRIM_X = 28;
+	private static inline var LOGIN_PAGE_BUBBLE_BOX_TRIM_Y = 845;
+	private static inline var LOGIN_PAGE_NO_LOGO_TRIM_X = 868;
+	private static inline var LOGIN_PAGE_NO_LOGO_TRIM_Y = 846;
 
 	private static inline var MENU_X:Float = 275;
 	private static inline var MENU_Y:Float = 228;
@@ -70,9 +89,11 @@ class LoginPage extends Page {
 	private var serverRefreshTimer:Null<Timer>;
 	private var reloadCooldownTimer:Null<Timer>;
 	private var serverGeneration:RequestGeneration = new RequestGeneration();
+	public final siteMode:String;
 
-	public function new() {
+	public function new(?siteMode:String) {
 		super();
+		this.siteMode = siteMode == null ? "kongregate" : siteMode;
 	}
 
 	override public function initialize():Void {
@@ -80,7 +101,8 @@ class LoginPage extends Page {
 		background = new LoginBackground();
 		addChild(background);
 
-		pageArt = createBitmap(LOGIN_PAGE_ASSET, LOGIN_PAGE_TRIM_X, LOGIN_PAGE_TRIM_Y, LOGIN_PAGE_SCALE);
+		var art = loginPageArtFor(siteMode);
+		pageArt = createBitmap(art.assetPath, art.trimX, art.trimY, LOGIN_PAGE_SCALE);
 		addChild(pageArt);
 
 		titleText = createTitle();
@@ -92,8 +114,10 @@ class LoginPage extends Page {
 		addMenuButton("Instructions", openInstructions);
 		addMenuButton("Credits", openCreditsDialog);
 
-		kongHitArea = createHitArea(5, 364, 183, 31, openKongDialog);
-		addChild(kongHitArea);
+		if (siteMode == SiteMode.KONGREGATE) {
+			kongHitArea = createHitArea(5, 364, 183, 31, openKongDialog);
+			addChild(kongHitArea);
+		}
 
 		loadServers();
 		serverRefreshTimer = new Timer(60000);
@@ -300,9 +324,11 @@ class LoginPage extends Page {
 	}
 
 	private function openKongDialog():Void {
-		var popup = openPopup("LoggingInPopupGraphic");
-		popup.setMessage("Kongregate outfit linking is not available in this standalone port yet.");
-		popup.bindButton("close_bt", closePopup);
+		closePopup();
+		new OutfitPopup(function():Void {
+			KongAward.nextLogin = true;
+			openLoginMessage("Great success! You'll receive the Ant Set and the Kong Hat the next time you log in.");
+		}, kongOutfit(), kongOutfitMessage());
 	}
 
 	private function openServerSelectPopup(guestLogin:Bool, createdAccount:Bool):Void {
@@ -406,6 +432,7 @@ class LoginPage extends Page {
 		// must send an empty name here too. `userName` is still used elsewhere
 		// (connecting message, socket-username fallback).
 		var payloadUserName = loginToken != "" ? "" : userName;
+		var awardKong = KongAward.consumeNextLogin();
 		LoginAuthClient.login(payloadUserName, userPass, server, remember, parsedLoginId, function(result):Void {
 			if (loginGate != gate) return;
 			if (result.success) {
@@ -418,7 +445,7 @@ class LoginPage extends Page {
 		}, function(message:String):Void {
 			if (loginGate != gate) return;
 			failLogin(message);
-		}, loginToken);
+		}, loginToken, awardKong);
 	}
 
 	private function openPopup(linkage:String):LoginFlashPopup {
@@ -632,6 +659,43 @@ class LoginPage extends Page {
 		bitmap.scaleX = 1 / scale;
 		bitmap.scaleY = 1 / scale;
 		return bitmap;
+	}
+
+	private static function loginPageArtFor(siteMode:String):LoginPageArt {
+		return switch (siteMode) {
+			case SiteMode.KONGREGATE:
+				{assetPath: LOGIN_PAGE_ASSET, trimX: LOGIN_PAGE_TRIM_X, trimY: LOGIN_PAGE_TRIM_Y};
+			case SiteMode.BUBBLE_BOX:
+				{assetPath: LOGIN_PAGE_BUBBLE_BOX_ASSET, trimX: LOGIN_PAGE_BUBBLE_BOX_TRIM_X, trimY: LOGIN_PAGE_BUBBLE_BOX_TRIM_Y};
+			case SiteMode.ARMOR_GAMES:
+				{assetPath: LOGIN_PAGE_ARMOR_GAMES_ASSET, trimX: LOGIN_PAGE_ARMOR_GAMES_TRIM_X, trimY: LOGIN_PAGE_ARMOR_GAMES_TRIM_Y};
+			case SiteMode.INXILE:
+				{assetPath: LOGIN_PAGE_NO_LOGO_ASSET, trimX: LOGIN_PAGE_NO_LOGO_TRIM_X, trimY: LOGIN_PAGE_NO_LOGO_TRIM_Y};
+			default:
+				{assetPath: LOGIN_PAGE_NO_LOGO_ASSET, trimX: LOGIN_PAGE_NO_LOGO_TRIM_X, trimY: LOGIN_PAGE_NO_LOGO_TRIM_Y};
+		}
+	}
+
+	private static function kongOutfitMessage():String {
+		return '<a href="https://kongregate.com/">Kongregate</a> sponsored this game way back in 2008. Since then, the game has logged over 30 million plays on Kongregate alone! In honor of all the success PR2 has had in partnership with Kong, will you accept this special outfit?';
+	}
+
+	private static function kongOutfit():Outfit {
+		return {
+			hats: [3, 1, 1, 1],
+			hat: 3,
+			head: 20,
+			body: 17,
+			feet: 16,
+			hatColor: 0x990000,
+			headColor: 0x990000,
+			bodyColor: 0x990000,
+			feetColor: 0x990000,
+			hatColor2: -1,
+			headColor2: -1,
+			bodyColor2: -1,
+			feetColor2: -1
+		};
 	}
 
 	// The "Platform Racing 2" logo. In the original Flash menu this is live

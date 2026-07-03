@@ -4,26 +4,34 @@ import openfl.events.Event;
 import openfl.display.Sprite;
 import openfl.ui.Keyboard;
 import pr2.character.Character;
+import pr2.effects.LaserShotTimeline;
 import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelDecoder;
+import pr2.effects.MineAppear;
+import pr2.effects.TeleportPop;
 import pr2.gameplay.GameCommandShell.GameCommandDelegate;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
+import pr2.harness.BlockVisualEvent;
+import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.lobby.account.Settings;
+import pr2.runtime.PR2MovieClip;
 
 @:access(pr2.gameplay.Course)
+@:access(pr2.level.ServerLevelRenderer)
 class CharacterLifecycleTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
 		Settings.disablePersistenceForTests();
 		testLocalAndRemoteLifecycle();
+		testFocusLossClearsHeldGameplayInput();
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();
 		testRemoteJumpPlaysSound();
@@ -31,7 +39,11 @@ class CharacterLifecycleTest {
 		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
 		testLocalSwordEmitsSlashEffect();
+		testEffectBackgroundAddEffectCommand();
+		testServerActivateCommandLifecycle();
+		testLocalBlockActivationNetworking();
 		testEggRoundCommandLifecycle();
+		testMinionEggBlocksSpawnAuthoredEggs();
 		testHatReturnToStartLifecycle();
 		testLooseHatPhysicsAndPickup();
 		trace('CharacterLifecycleTest passed $assertions assertions');
@@ -123,6 +135,24 @@ class CharacterLifecycleTest {
 		course.remove();
 	}
 
+	private static function testFocusLossClearsHeldGameplayInput():Void {
+		var course = buildCourse(new CommandHandler());
+		@:privateAccess course.setKey(Keyboard.RIGHT, true);
+		@:privateAccess course.setKey(Keyboard.UP, true);
+		@:privateAccess course.setKey(Keyboard.SPACE, true);
+		assertTrue(@:privateAccess course.input.right, "right input is held before focus loss");
+		assertTrue(@:privateAccess course.input.jump, "jump input is held before focus loss");
+		assertTrue(@:privateAccess course.input.item, "item input is held before focus loss");
+
+		@:privateAccess course.resetInput(new Event(Event.DEACTIVATE));
+		assertTrue(!@:privateAccess course.input.left, "focus loss clears left");
+		assertTrue(!@:privateAccess course.input.right, "focus loss clears right");
+		assertTrue(!@:privateAccess course.input.jump, "focus loss clears jump");
+		assertTrue(!@:privateAccess course.input.down, "focus loss clears down");
+		assertTrue(!@:privateAccess course.input.item, "focus loss clears item");
+		course.remove();
+	}
+
 	private static function testLocalJumpPlaysSound():Void {
 		var course = buildCourse(new CommandHandler());
 		while (!course.levelRenderer.isDrawingComplete()) {
@@ -169,6 +199,19 @@ class CharacterLifecycleTest {
 
 		assertEquals("44,55", sounds.join("|"), "remote jump state plays Flash JumpSound once at the remote world position");
 		shell.remove();
+		course.remove();
+	}
+
+	private static function testLocalBlockActivationNetworking():Void {
+		var course = buildCourse(new CommandHandler());
+		var event = new BlockVisualEvent(BlockVisualEventKind.LocalActivate, 6, 7, 1, null, null, 0, -15, "left");
+		var expectedSegX = 6 + course.serverFixture.originTileX;
+		var expectedSegY = 7 + course.serverFixture.originTileY;
+
+		LobbySocket.resetSent();
+		course.emitLocalBlockActivation(event);
+		assertEquals('activate`$expectedSegX`$expectedSegY`left', LobbySocket.lastSent(),
+			"local block activation emits Flash activate command with server segments and payload");
 		course.remove();
 	}
 
@@ -298,6 +341,10 @@ class CharacterLifecycleTest {
 		assertEquals(first.x, Std.int(first.display.x), "egg graphic uses seeded x");
 		assertEquals(first.y, Std.int(first.display.y), "egg graphic uses seeded y");
 		assertEquals(first.rot, Std.int(first.display.rotation), "egg graphic uses seeded rotation");
+		for (_ in 0...24) {
+			first.display.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		}
+		assertEquals(1, first.display.currentFrame, "egg walk animation loops from frame 25 back to walk label");
 
 		assertEquals(true, course.eggRound.collectEgg(1), "collecting active egg succeeds");
 		assertEquals("grab_egg`1", LobbySocket.lastSent(), "collecting egg emits grab_egg");
@@ -307,6 +354,12 @@ class CharacterLifecycleTest {
 		assertTrue(first.display.parent == course.characterLayer, "collected egg graphic remains during squash animation");
 		assertTrue(handler.hasCommand("removeEgg1"), "collected egg keeps remote remove command during squash animation");
 		assertEquals(false, course.eggRound.collectEgg(1), "squashing egg cannot be collected twice");
+		for (_ in 0...16) {
+			first.display.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		}
+		assertEquals(46, first.display.currentFrame, "egg squash animation reaches authored stop frame");
+		first.display.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		assertEquals(46, first.display.currentFrame, "egg squash animation stays stopped on frame 46");
 		var lifecycleLevel = ServerLevelDecoder.decode("m3`ffffff`0;0;11,1;0;8,0;1;0");
 		for (_ in 0...26) {
 			course.eggRound.step(lifecycleLevel);
@@ -431,6 +484,92 @@ class CharacterLifecycleTest {
 		assertEggAttackVisual(9, "Laser", 1, "laser attacks mount the authored laser shot graphic");
 	}
 
+	private static function testEffectBackgroundAddEffectCommand():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "race");
+		assertTrue(handler.hasCommand("addEffect"), "course registers EffectBackground addEffect command");
+
+		var characterChildren = course.characterLayer.numChildren;
+		handler.dispatch("addEffect", ["Slash", "100", "90", "left", "5"]);
+		assertEquals(1, course.eggRound.activeAttackVisualCount(), "remote slash mounts an attack visual");
+		assertEquals(characterChildren + 1, course.characterLayer.numChildren, "remote slash graphic mounts on the character layer");
+
+		handler.dispatch("addEffect", ["Laser", "100", "90", "right", "0", "6"]);
+		assertEquals(2, course.eggRound.activeAttackVisualCount(), "remote laser mounts an attack visual");
+		var laser = Std.downcast(course.characterLayer.getChildAt(characterChildren + 1), PR2MovieClip);
+		assertTrue(laser != null, "remote laser uses a movie clip visual");
+		assertEquals(2, laser.currentFrame, "remote laser starts on the stopped idle frame");
+
+		var iceWaveSounds:Array<String> = [];
+		course.effectBackground.remove();
+		course.effectBackground = new EffectBackground(course, handler, function(x:Int, y:Int):Void {
+			iceWaveSounds.push('$x,$y');
+		});
+		handler.dispatch("addEffect", ["IceWave", "120", "80", "180", "0", "7"]);
+		assertEquals(5, course.eggRound.activeAttackVisualCount(), "remote ice wave fans out three shot visuals");
+		assertEquals("120,80", iceWaveSounds[0], "remote ice wave plays its world-position sound");
+
+		var blockChildren = course.levelRenderer.blockLayer.numChildren;
+		handler.dispatch("addEffect", ["Mine", "75", "75", "90"]);
+		assertEquals(blockChildren + 1, course.levelRenderer.blockLayer.numChildren, "remote mine mounts MineAppear on the block layer");
+		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(blockChildren), MineAppear) != null, "remote mine uses MineAppear");
+
+		handler.dispatch("addEffect", ["Teleport", "90", "60", "0"]);
+		assertEquals(blockChildren + 2, course.levelRenderer.blockLayer.numChildren, "remote teleport mounts TeleportPop on the block layer");
+		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(blockChildren + 1), TeleportPop) != null,
+			"remote teleport uses TeleportPop");
+
+		handler.dispatch("addEffect", ["Hat", "40", "50", "90", "5", "1193046", "-1", "3"]);
+		var hat = course.looseHats.get(3);
+		assertTrue(hat != null, "remote hat creates a loose hat");
+		assertEquals(5, hat.num, "remote hat preserves hat id");
+		assertEquals(0x123456, hat.color, "remote hat preserves primary color");
+		assertEquals(-1, hat.color2, "remote hat preserves secondary color sentinel");
+		assertTrue(handler.hasCommand("removeHat3"), "remote hat registers its removal command");
+
+		finishDrawing(course);
+		course.raceStarted = true;
+		for (_ in 0...6) {
+			course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertTrue(course.eggRound.activeAttackVisualCount() < 5, "race frames tick server effect lifetimes outside egg mode");
+
+		course.remove();
+		assertTrue(!handler.hasCommand("addEffect"), "course teardown unregisters addEffect");
+		assertTrue(!handler.hasCommand("removeHat3"), "course teardown unregisters remote hat removal command");
+	}
+
+	private static function testServerActivateCommandLifecycle():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "race", "m3`ffffff`0;0;11,1;0;8,1;0;18,1;0;20,1;0;4,1;0;9,1;0;23");
+		assertTrue(handler.hasCommand("activate"), "course registers Map activate command");
+		finishDrawing(course);
+
+		var arrowFrame = course.levelRenderer.arrowFrameAt(30, 0);
+		handler.dispatch("activate", ["1", "0", ""]);
+		assertTrue(course.levelRenderer.arrowFrameAt(30, 0) != arrowFrame, "server activate animates arrow blocks by segment");
+
+		handler.dispatch("activate", ["2", "0", ""]);
+		assertEquals(0.0, course.levelRenderer.blockAlphaAt(60, 0), "server activate fades vanish blocks by segment");
+
+		var waterAlpha = course.levelRenderer.blockAlphaAt(90, 0);
+		handler.dispatch("activate", ["3", "0", ""]);
+		assertTrue(course.levelRenderer.blockAlphaAt(90, 0) < waterAlpha, "server activate ripples water blocks by segment");
+
+		handler.dispatch("activate", ["4", "0", ""]);
+		assertEquals(null, course.levelRenderer.blockAlphaAt(120, 0), "server activate removes brick block display");
+
+		handler.dispatch("activate", ["5", "0", ""]);
+		assertEquals(null, course.levelRenderer.blockAlphaAt(150, 0), "server activate removes mine block display");
+
+		handler.dispatch("activate", ["6", "0", "right"]);
+		assertEquals(null, course.levelRenderer.blockAlphaAt(180, 0), "server activate moves push block away from source segment");
+		assertTrue(course.levelRenderer.blockAlphaAt(210, 0) != null, "server activate moves push block to payload direction segment");
+
+		course.remove();
+		assertTrue(!handler.hasCommand("activate"), "course teardown unregisters Map activate command");
+	}
+
 	private static function assertEggAttackVisual(seed:Int, expectedType:String, expectedCount:Int, message:String):Void {
 		var layer = new Sprite();
 		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {});
@@ -449,6 +588,17 @@ class CharacterLifecycleTest {
 		assertEquals(expectedCount, round.activeAttackVisualCount(), message);
 		assertEquals(expectedCount + 1, layer.numChildren, '$message: visuals share the egg display layer');
 		var visual = layer.getChildAt(1);
+		var laserClip = Std.downcast(visual, PR2MovieClip);
+		if (expectedType == "Laser") {
+			assertEquals(2, laserClip.currentFrame, "laser attack visual starts stopped on idle frame 2");
+			laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
+			assertEquals(2, laserClip.currentFrame, "laser attack visual does not auto-play while idle");
+			LaserShotTimeline.playHit(laserClip);
+			for (_ in 0...20) {
+				laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
+			}
+			assertEquals(18, laserClip.currentFrame, "laser hit animation stops on authored frame 18");
+		}
 		var initialX = visual.x;
 		round.step(new ServerLevel(0xffffff, []), 0, probe.x, probe.y + 20, false, false);
 		assertTrue(visual.x != initialX || expectedType == "Slash", '$message: projectile visuals advance after mounting');
@@ -510,6 +660,29 @@ class CharacterLifecycleTest {
 
 		shell.remove();
 		course.remove();
+	}
+
+	private static function testMinionEggBlocksSpawnAuthoredEggs():Void {
+		var eggBlocks = [for (i in 0...26) '$i;1;30'].join(",");
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "race", 'm3`ffffff`0;0;11,$eggBlocks');
+		assertEquals(26, course.level.minionEggBlocks().length, "decoded level exposes minion egg block positions");
+		assertEquals(0, course.eggRound.count(), "minion eggs wait for gameplay start");
+		assertTrue(!course.levelRenderer.blockDisplays.exists("0,30"), "minion egg block is not rendered as a fallback tile");
+
+		course.beginRace();
+		finishCountdown(course);
+
+		assertEquals(25, course.eggRound.count(), "course spawns at most 25 minion eggs at gameplay start");
+		var first = course.eggRound.egg(1);
+		assertTrue(first != null, "first minion egg is registered");
+		assertEquals(30, Std.int(first.posX), "first minion egg uses Flash x offset from block position");
+		assertEquals(60, Std.int(first.posY), "first minion egg uses Flash y offset from block position");
+		assertTrue(handler.hasCommand("removeEgg25"), "last spawned minion egg registers remote removal command");
+		assertTrue(!handler.hasCommand("removeEgg26"), "minion egg placement enforces Flash's 25 egg cap");
+
+		course.remove();
+		assertTrue(!handler.hasCommand("removeEgg25"), "course teardown unregisters minion egg removal command");
 	}
 
 	private static function testLooseHatPhysicsAndPickup():Void {

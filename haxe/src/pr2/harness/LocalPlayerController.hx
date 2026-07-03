@@ -21,6 +21,9 @@ class LocalPlayerController {
 	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
 	private static inline var VANISH_FADE_FRAMES:Int = 10;
 	private static inline var VANISH_REAPPEAR_FRAMES:Int = 54;
+	private static inline var SANTA_ICE_OVERLAY_START_ALPHA:Float = 1;
+	private static inline var SANTA_ICE_OVERLAY_FADE_RATE:Float = 0.025;
+	private static inline var ICE_OVERLAY_REMOVE_ALPHA:Float = 0.05;
 	private static inline var MINE_HIT_SPEED:Float = 50;
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
 	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
@@ -44,6 +47,7 @@ class LocalPlayerController {
 	private static inline var JET_PACK_TOTAL_FUEL:Int = 200;
 	private static inline var FAST_ITEM_RELOAD_FRAMES:Int = 22;
 	private static inline var ICE_WAVE_RELOAD_FRAMES:Int = 27;
+	private static inline var MINE_APPEAR_FRAMES:Int = 33;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -73,6 +77,7 @@ class LocalPlayerController {
 	public var jellyfishHatActive:Bool = false;
 	public var topHatActive:Bool = false;
 	public var crownHatActive:Bool = false;
+	public var cheeseHatActive:Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -127,6 +132,7 @@ class LocalPlayerController {
 	private var itemAvailable:Bool = false;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
+	private var pendingMinePlacements:Array<PendingMinePlacement> = [];
 	// The level's allowed-item pool (GamePage.setItems), used when an item block
 	// carries empty options. Defaults to every code so a standalone controller
 	// still hands out items before Course wires the level config.
@@ -154,6 +160,7 @@ class LocalPlayerController {
 		lastItemEffect = null;
 		animationLeft = input.left;
 		animationRight = input.right;
+		updatePendingMinePlacements();
 		updateItemReload();
 		// LocalCharacter.updateKeys applies RIGHT first and LEFT second, so LEFT
 		// determines the facing direction when both keys are held.
@@ -429,6 +436,11 @@ class LocalPlayerController {
 			&& ((block.type == BlockType.Item && state.depletedItem) || state.depletedVisualSupply) ? 0.5 : 1;
 	}
 
+	public function blockIceOverlayAlphaAt(tileX:Int, tileY:Int):Float {
+		var state = blockStates.get(blockKey(tileX, tileY));
+		return state != null && state.frozenIceAlpha != null ? state.frozenIceAlpha : 0;
+	}
+
 	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
 		var events = blockVisualEvents.copy();
 		blockVisualEvents.resize(0);
@@ -447,7 +459,8 @@ class LocalPlayerController {
 				|| state.vanishFadeInFrames != null
 				|| state.removed
 				|| state.depletedItem
-				|| state.depletedVisualSupply) {
+				|| state.depletedVisualSupply
+				|| state.frozenIceAlpha != null) {
 				keys.push(key);
 			}
 		}
@@ -635,6 +648,7 @@ class LocalPlayerController {
 	private function onStand(block:LevelBlock):Void {
 		touch(block);
 		var standForce = Math.round(vy * 2);
+		maybeFreezeSantaBlock(block);
 		y = rotatedBlockPos(block).y;
 		vy = 0;
 		grounded = true;
@@ -675,7 +689,7 @@ class LocalPlayerController {
 		if (targetVelX > 0) {
 			targetVelX = 0;
 		}
-		applySideHitEffect(block, sideForce);
+		applySideHitEffect(block, sideForce, -1);
 	}
 
 	private function onRightHit(block:LevelBlock):Void {
@@ -688,10 +702,14 @@ class LocalPlayerController {
 		if (targetVelX < 0) {
 			targetVelX = 0;
 		}
-		applySideHitEffect(block, sideForce);
+		applySideHitEffect(block, sideForce, 1);
 	}
 
 	private function applyStandEffect(block:LevelBlock, force:Int):Void {
+		if (isBlockFrozen(block)) {
+			accelFactor = 0.05;
+			return;
+		}
 		if (isArrowBlock(block)) {
 			var rotation = arrowEffectiveRotation(block);
 			if (rotation == 0 && !crouching) {
@@ -704,7 +722,7 @@ class LocalPlayerController {
 		}
 		switch (block.type) {
 			case BlockType.Crumble:
-				applyCrumbleForce(block, force);
+				applyCrumbleForce(block, cheeseCrumbleForce(force, true));
 			case BlockType.Vanish:
 				activateVanish(block);
 			case BlockType.Mine:
@@ -722,6 +740,7 @@ class LocalPlayerController {
 	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int):Void {
 		switch (block.type) {
 			case BlockType.Brick:
+				emitLocalActivate(block);
 				blockState(blockKey(block.x, block.y)).removed = true;
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
 			case BlockType.Finish:
@@ -735,7 +754,7 @@ class LocalPlayerController {
 			case BlockType.Time:
 				if (useSupply(block)) courseTime += 10;
 			case BlockType.Crumble:
-				applyCrumbleForce(block, force);
+				applyCrumbleForce(block, cheeseCrumbleForce(force));
 			case BlockType.Vanish:
 				activateVanish(block);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
@@ -783,10 +802,12 @@ class LocalPlayerController {
 		finishY = block.y * level.tileSize + Std.int(level.tileSize / 2);
 	}
 
-	private function applySideHitEffect(block:LevelBlock, force:Int):Void {
+	private function applySideHitEffect(block:LevelBlock, force:Int, playerTileOffset:Int):Void {
 		switch (block.type) {
 			case BlockType.Crumble:
-				applyCrumbleForce(block, force);
+				var crumbleForce = cheeseCrumbleForce(force);
+				maybeBreakCheeseAdjacentCrumble(block, crumbleForce, playerTileOffset);
+				applyCrumbleForce(block, crumbleForce);
 			case BlockType.Vanish:
 				activateVanish(block);
 			case BlockType.Mine:
@@ -927,6 +948,7 @@ class LocalPlayerController {
 		if (dx == 0 && dy == 0) {
 			return;
 		}
+		var activationPayload = pushActivationPayload(dx, dy);
 		var rotatedDelta = RotationMath.rotatePoint(dx, dy, courseRotation);
 		dx = rotatedDelta.x;
 		dy = rotatedDelta.y;
@@ -939,9 +961,23 @@ class LocalPlayerController {
 
 		var fromX = block.x;
 		var fromY = block.y;
+		emitLocalActivate(block, activationPayload);
 		block.x = destX;
 		block.y = destY;
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.PushBlockMove, fromX, fromY, 1, destX, destY));
+	}
+
+	private function pushActivationPayload(dx:Int, dy:Int):String {
+		if (dy > 0) {
+			return "down";
+		}
+		if (dy < 0) {
+			return "up";
+		}
+		if (dx > 0) {
+			return "right";
+		}
+		return "left";
 	}
 
 	private function canMoveBlockTo(tileX:Int, tileY:Int):Bool {
@@ -968,6 +1004,7 @@ class LocalPlayerController {
 			vx += Math.cos(angle) * MINE_HIT_SPEED;
 			vy += Math.sin(angle) * MINE_HIT_SPEED;
 		}
+		emitLocalActivate(block);
 		blockState(blockKey(block.x, block.y)).removed = true;
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
@@ -1087,10 +1124,28 @@ class LocalPlayerController {
 		if (level.blockAt(tile.x, tile.y) != null) {
 			return;
 		}
-		level.blocks.push(new LevelBlock(tile.x, tile.y, BlockType.Mine));
 		var effectPos = rotatePoint(tile.x * level.tileSize + 15, tile.y * level.tileSize + 15, courseRotation);
 		lastItemEffect = "mine:" + effectPos.x + "," + effectPos.y + ":" + courseRotation;
+		pendingMinePlacements.push({tileX: tile.x, tileY: tile.y, framesRemaining: MINE_APPEAR_FRAMES});
 		consumeHeldItemUse();
+	}
+
+	private function updatePendingMinePlacements():Void {
+		if (pendingMinePlacements.length == 0) {
+			return;
+		}
+		var stillPending:Array<PendingMinePlacement> = [];
+		for (placement in pendingMinePlacements) {
+			placement.framesRemaining--;
+			if (placement.framesRemaining <= 0) {
+				if (level.blockAt(placement.tileX, placement.tileY) == null) {
+					level.blocks.push(new LevelBlock(placement.tileX, placement.tileY, BlockType.Mine));
+				}
+			} else {
+				stillPending.push(placement);
+			}
+		}
+		pendingMinePlacements = stillPending;
 	}
 
 	private function useLightning():Void {
@@ -1344,6 +1399,7 @@ class LocalPlayerController {
 
 	private function applyCrumbleForce(block:LevelBlock, force:Int):Void {
 		var damage = Std.int(Math.floor(force / 4));
+		emitLocalActivate(block, Std.string(force));
 		if (damage <= 0) {
 			return;
 		}
@@ -1359,6 +1415,30 @@ class LocalPlayerController {
 		}
 	}
 
+	private function cheeseCrumbleForce(force:Int, standing:Bool = false):Int {
+		if (cheeseHatActive && force > 1) {
+			return standing ? force * 2 : 50;
+		}
+		return force;
+	}
+
+	private function maybeBreakCheeseAdjacentCrumble(block:LevelBlock, force:Int, playerTileOffset:Int):Void {
+		if (!cheeseHatActive || force != 50 || crouching) {
+			return;
+		}
+		if (level.blockAt(block.x + playerTileOffset, block.y - 1) != null) {
+			return;
+		}
+		var above = level.blockAt(block.x, block.y - 1);
+		if (above != null && above.type == BlockType.Crumble && !isBlockRemoved(above)) {
+			applyCrumbleForce(above, 50);
+		}
+	}
+
+	private function emitLocalActivate(block:LevelBlock, payload:String = ""):Void {
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.LocalActivate, block.x, block.y, 1, null, null, 0, -15, payload));
+	}
+
 	private function activateVanish(block:LevelBlock):Void {
 		var state = blockState(blockKey(block.x, block.y));
 		if (state.vanishReappearFrames == null && state.vanishFadeFrames == null && state.vanishFadeInFrames == null) {
@@ -1368,6 +1448,7 @@ class LocalPlayerController {
 
 	private function updateTimedBlocks():Void {
 		updateSpeedBurst();
+		updateFrozenBlocks();
 		updateVanishBlocks();
 		updateTeleportBlocks();
 		updateMoveBlocks();
@@ -1515,6 +1596,20 @@ class LocalPlayerController {
 		}
 	}
 
+	private function updateFrozenBlocks():Void {
+		for (state in blockStates) {
+			if (state.frozenIceAlpha != null) {
+				var alpha = state.frozenIceAlpha - state.frozenIceFadeRate;
+				if (alpha <= ICE_OVERLAY_REMOVE_ALPHA) {
+					state.frozenIceAlpha = null;
+					state.frozenIceFadeRate = SANTA_ICE_OVERLAY_FADE_RATE;
+				} else {
+					state.frozenIceAlpha = alpha;
+				}
+			}
+		}
+	}
+
 	private function playerOccupiesBlock(key:String):Bool {
 		var parts = key.split(",");
 		if (parts.length != 2) {
@@ -1569,6 +1664,29 @@ class LocalPlayerController {
 	private function isBlockRemoved(block:LevelBlock):Bool {
 		var state = blockStates.get(blockKey(block.x, block.y));
 		return state != null && state.removed;
+	}
+
+	private function isBlockFrozen(block:LevelBlock):Bool {
+		var state = blockStates.get(blockKey(block.x, block.y));
+		return state != null && state.frozenIceAlpha != null;
+	}
+
+	private function maybeFreezeSantaBlock(block:LevelBlock):Void {
+		if (!santaHatActive || !canSantaFreeze(block) || isBlockFrozen(block)) {
+			return;
+		}
+		var state = blockState(blockKey(block.x, block.y));
+		state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
+		state.frozenIceFadeRate = SANTA_ICE_OVERLAY_FADE_RATE;
+	}
+
+	private function canSantaFreeze(block:LevelBlock):Bool {
+		return switch (block.type) {
+			case BlockType.Finish | BlockType.Ice | BlockType.Vanish | BlockType.Crumble | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight | BlockType.ArrowDown | BlockType.Move:
+				false;
+			default:
+				true;
+		}
 	}
 
 	private function blockKey(tileX:Int, tileY:Int):String {
@@ -1642,6 +1760,12 @@ private typedef BlockRefs = {
 	final topBlock:Null<LevelBlock>;
 }
 
+private typedef PendingMinePlacement = {
+	var tileX:Int;
+	var tileY:Int;
+	var framesRemaining:Int;
+}
+
 private class PlayerStats {
 	public final speed:Float;
 	public final acceleration:Float;
@@ -1668,6 +1792,8 @@ private class BlockState {
 	public var depletedItem:Bool = false;
 	public var depletedSupply:Bool = false;
 	public var depletedVisualSupply:Bool = false;
+	public var frozenIceAlpha:Null<Float> = null;
+	public var frozenIceFadeRate:Float = 0.025;
 
 	public function new() {}
 }

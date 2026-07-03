@@ -2,21 +2,22 @@ package pr2.lobby.account;
 
 /** Outfit payload shape consumed by `OutfitPopup`'s preview. */
 typedef Outfit = {
-	var hat:Int;
-	var head:Int;
-	var body:Int;
-	var feet:Int;
-	var hatColor:Int;
-	var headColor:Int;
-	var bodyColor:Int;
-	var feetColor:Int;
-	var hatColor2:Int;
-	var headColor2:Int;
-	var bodyColor2:Int;
-	var feetColor2:Int;
-	var speed:Int;
-	var acceleration:Int;
-	var jumping:Int;
+	?hats:Array<Int>,
+	?hat:Int,
+	?head:Int,
+	?body:Int,
+	?feet:Int,
+	?hatColor:Int,
+	?headColor:Int,
+	?bodyColor:Int,
+	?feetColor:Int,
+	?hatColor2:Int,
+	?headColor2:Int,
+	?bodyColor2:Int,
+	?feetColor2:Int,
+	?speed:Int,
+	?acceleration:Int,
+	?jumping:Int
 };
 
 /**

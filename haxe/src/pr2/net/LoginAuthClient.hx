@@ -15,9 +15,10 @@ class LoginAuthClient {
 		loginId:Int,
 		onResult:LoginAuthResult->Void,
 		?onError:String->Void,
-		?token:String
+		?token:String,
+		?awardKong:Bool = false
 	):Void {
-		FormPostClient.post(ServerConfig.loginUrl(), fields(userName, userPass, server, remember, loginId, token), function(body:String):Void {
+		FormPostClient.post(ServerConfig.loginUrl(), fields(userName, userPass, server, remember, loginId, token, awardKong), function(body:String):Void {
 			try {
 				onResult(parse(body));
 			} catch (error:Dynamic) {
@@ -28,16 +29,16 @@ class LoginAuthClient {
 		}, onError);
 	}
 
-	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?token:String):Map<String, String> {
+	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?token:String, ?awardKong:Bool = false):Map<String, String> {
 		var result = [
-			"i" => encryptPayload(payloadJson(userName, userPass, server, remember, loginId)),
+			"i" => encryptPayload(payloadJson(userName, userPass, server, remember, loginId, awardKong)),
 			"build" => ServerConfig.BUILD,
 		];
 		if (token != null && token != "") result.set("token", token);
 		return result;
 	}
 
-	public static function payloadJson(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int):String {
+	public static function payloadJson(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?awardKong:Bool = false):String {
 		return Json.stringify({
 			user_name: userName,
 			user_pass: userPass,
@@ -46,7 +47,7 @@ class LoginAuthClient {
 			domain: "local",
 			remember: remember,
 			login_id: loginId,
-			award_kong: false,
+			award_kong: awardKong,
 		});
 	}
 

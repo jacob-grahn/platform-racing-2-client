@@ -1,8 +1,11 @@
 package pr2.lobby;
 
+import openfl.events.MouseEvent;
 import pr2.lobby.account.AccountCharacter;
 
 import pr2.lobby.account.AccountCustomizeData;
+import pr2.lobby.account.PlayerDisplay;
+import pr2.lobby.dialogs.HoverDelayPopup;
 import pr2.lobby.tabs.AccountTab;
 
 class AccountTabTest {
@@ -12,6 +15,8 @@ class AccountTabTest {
 		testCharacterGraphicScale();
 		testCustomizePayload();
 		testHotkeys();
+		testHoverDelayPopupCleanup();
+		testRandomizeStyleButtonUsesDelayedHover();
 		trace('AccountTabTest passed $assertions assertions');
 	}
 
@@ -44,8 +49,40 @@ class AccountTabTest {
 		assertEquals(-1, AccountTab.keyToSlot(65), "non-number");
 	}
 
+	private static function testHoverDelayPopupCleanup():Void {
+		var wrapper = new HoverDelayPopup("Title", "Body", 500);
+		@:privateAccess wrapper.showPopup();
+		assertNotNull(wrapper.hover, "direct show creates delayed hover popup");
+		wrapper.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertEquals(null, wrapper.hover, "mouse down hides shown hover popup");
+		@:privateAccess wrapper.showPopup();
+		wrapper.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(null, wrapper.hover, "mouse out hides shown hover popup");
+		@:privateAccess wrapper.showPopup();
+		wrapper.remove();
+		assertEquals(null, wrapper.hover, "remove cleans shown hover popup");
+	}
+
+	private static function testRandomizeStyleButtonUsesDelayedHover():Void {
+		var character = new AccountCharacter();
+		var display = new PlayerDisplay(character, ["1", "2"], ["1", "2"], ["1", "2"], ["1", "2"], 1, 1, 1, 1, 0, 0, 0, 0,
+			["1"], ["1"], ["1"], ["1"], 0, 0, 0, 0);
+		var button = @:privateAccess display.randomButton;
+		assertNotNull(button, "player display mounts randomize button");
+		assertEquals("Randomize Style", button.title, "randomize button hover title");
+		assertEquals("Create a random style for your character. Remember to save your current style if you like it first!", button.content,
+			"randomize button hover copy");
+		display.remove();
+		character.remove();
+	}
+
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertNotNull(value:Dynamic, message:String):Void {
+		assertions++;
+		if (value == null) throw '$message: value was null';
 	}
 }
