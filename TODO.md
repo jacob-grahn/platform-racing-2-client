@@ -95,6 +95,8 @@ Port the editor itself, one piece at a time:
     editor background color.
   - [x] Wire the rank, gravity, time, cowboy-chance, and password value popups
     to commit through the editor setting setters.
+  - [x] Wire the authored game-mode popup to commit through the editor setting
+    setter.
 - [x] Port the hats/items/music menus.
   - [x] Port the editor item settings menu.
   - [x] Port the editor hats settings menu.

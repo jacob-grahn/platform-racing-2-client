@@ -80,6 +80,7 @@ class LevelEditor extends Page {
 	public var activeItemSettingsPopup(default, null):Null<EditorItemSettingsPopup>;
 	public var activeHatsSettingsPopup(default, null):Null<EditorHatsSettingsPopup>;
 	public var activeMusicSettingsPopup(default, null):Null<EditorMusicSettingsPopup>;
+	public var activeModeSettingsPopup(default, null):Null<EditorModeSettingsPopup>;
 	public var activeValueSettingsPopup(default, null):Null<EditorValueSettingsPopup>;
 	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
@@ -405,6 +406,7 @@ class LevelEditor extends Page {
 	public function openItemSettingsMenu(target:DisplayObject):Void {
 		closeHatsSettingsPopup();
 		closeMusicSettingsPopup();
+		closeModeSettingsPopup();
 		closeValueSettingsPopup();
 		closeItemSettingsPopup();
 		activeItemSettingsPopup = new EditorItemSettingsPopup(this, target);
@@ -427,6 +429,7 @@ class LevelEditor extends Page {
 	public function openHatsSettingsMenu(target:DisplayObject):Void {
 		closeItemSettingsPopup();
 		closeMusicSettingsPopup();
+		closeModeSettingsPopup();
 		closeValueSettingsPopup();
 		closeHatsSettingsPopup();
 		activeHatsSettingsPopup = new EditorHatsSettingsPopup(this, target);
@@ -449,6 +452,7 @@ class LevelEditor extends Page {
 	public function openMusicSettingsMenu(target:DisplayObject):Void {
 		closeItemSettingsPopup();
 		closeHatsSettingsPopup();
+		closeModeSettingsPopup();
 		closeValueSettingsPopup();
 		closeMusicSettingsPopup();
 		activeMusicSettingsPopup = new EditorMusicSettingsPopup(this, target);
@@ -468,10 +472,34 @@ class LevelEditor extends Page {
 		}
 	}
 
+	public function openModeSettingsMenu(target:DisplayObject):Void {
+		closeItemSettingsPopup();
+		closeHatsSettingsPopup();
+		closeMusicSettingsPopup();
+		closeValueSettingsPopup();
+		closeModeSettingsPopup();
+		activeModeSettingsPopup = new EditorModeSettingsPopup(this, target);
+	}
+
+	public function closeModeSettingsPopup():Void {
+		if (activeModeSettingsPopup != null) {
+			var popup = activeModeSettingsPopup;
+			activeModeSettingsPopup = null;
+			popup.remove();
+		}
+	}
+
+	public function modeSettingsPopupRemoved(popup:EditorModeSettingsPopup):Void {
+		if (activeModeSettingsPopup == popup) {
+			activeModeSettingsPopup = null;
+		}
+	}
+
 	public function openValueSettingsMenu(settingId:String, target:DisplayObject):Void {
 		closeItemSettingsPopup();
 		closeHatsSettingsPopup();
 		closeMusicSettingsPopup();
+		closeModeSettingsPopup();
 		closeValueSettingsPopup();
 		activeValueSettingsPopup = new EditorValueSettingsPopup(this, target, settingId);
 	}
@@ -582,6 +610,7 @@ class LevelEditor extends Page {
 			closeItemSettingsPopup();
 			closeHatsSettingsPopup();
 			closeMusicSettingsPopup();
+			closeModeSettingsPopup();
 			closeValueSettingsPopup();
 			layerContainer = null;
 		}
@@ -2221,6 +2250,120 @@ class EditorMusicSettingsPopup extends Sprite {
 	}
 }
 
+class EditorModeSettingsPopup extends Sprite {
+	public final editor:LevelEditor;
+	public final art:PR2MovieClip;
+	public final dropdown:Null<FlComboBox>;
+	private var armTimer:Null<Timer>;
+	private var armed:Bool = false;
+	private var removed:Bool = false;
+
+	public function new(editor:LevelEditor, target:DisplayObject) {
+		super();
+		this.editor = editor;
+		art = PR2MovieClip.fromLinkage("ModeMenuGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		dropdown = Std.downcast(DisplayUtil.findByName(art, "modeSelect"), FlComboBox);
+		if (dropdown != null) {
+			selectMode(editor.gameMode);
+			dropdown.addEventListener(Event.CHANGE, changeMode);
+		}
+		mountNear(target);
+		armTimer = Timer.delay(armAutoDismiss, 25);
+	}
+
+	public function selectedMode():String {
+		return dropdown == null || dropdown.selectedItem == null ? "" : Std.string(Reflect.field(dropdown.selectedItem, "data"));
+	}
+
+	public function setSelectedMode(mode:String):Void {
+		selectMode(mode);
+		changeMode(null);
+	}
+
+	public function remove():Void {
+		if (removed) {
+			return;
+		}
+		removed = true;
+		if (armTimer != null) {
+			armTimer.stop();
+			armTimer = null;
+		}
+		if (armed && AppStage.stage != null) {
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		}
+		if (dropdown != null) {
+			dropdown.removeEventListener(Event.CHANGE, changeMode);
+		}
+		art.dispose();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		editor.modeSettingsPopupRemoved(this);
+	}
+
+	private function selectMode(mode:String):Void {
+		if (dropdown == null) {
+			return;
+		}
+		var normalized = mode == "eggs" ? "egg" : (mode == null || mode == "" ? "race" : mode);
+		for (i in 0...dropdown.length) {
+			var item = dropdown.dataProvider.getItemAt(i);
+			if (Std.string(Reflect.field(item, "data")) == normalized) {
+				dropdown.selectedIndex = i;
+				return;
+			}
+		}
+		dropdown.selectedIndex = 0;
+	}
+
+	private function changeMode(_:Event):Void {
+		if (dropdown != null && dropdown.selectedItem != null) {
+			editor.setGameMode(Std.string(Reflect.field(dropdown.selectedItem, "data")));
+		}
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = AppStage.stage;
+		}
+	}
+
+	private function mountNear(target:DisplayObject):Void {
+		if (AppStage.stage == null) {
+			return;
+		}
+		AppStage.stage.addChild(this);
+		var targetBounds = target.getBounds(AppStage.stage);
+		var popupBounds = getBounds(this);
+		var popupWidth = popupBounds.width <= 0 ? 240 : popupBounds.width;
+		var popupHeight = popupBounds.height <= 0 ? 115 : popupBounds.height;
+		x = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
+		y = targetBounds.top;
+		if (y < 0) {
+			y = 0;
+		}
+		if (y + popupHeight > 400) {
+			y = 400 - popupHeight;
+		}
+		x = Math.round(x);
+		y = Math.round(y);
+	}
+
+	private function armAutoDismiss():Void {
+		armTimer = null;
+		if (removed || AppStage.stage == null) {
+			return;
+		}
+		armed = true;
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+	}
+
+	private function onStageMouseDown(event:MouseEvent):Void {
+		if (!hitTestPoint(event.stageX, event.stageY, true)) {
+			remove();
+		}
+	}
+}
+
 class EditorHatsSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
 	public final art:PR2MovieClip;
@@ -3496,6 +3639,10 @@ class EditorSideBar extends Sprite {
 		}
 		if (editor != null && id == "settings" && entry.id == "music") {
 			editor.openMusicSettingsMenu(entry);
+			return;
+		}
+		if (editor != null && id == "settings" && entry.id == "mode") {
+			editor.openModeSettingsMenu(entry);
 			return;
 		}
 		if (editor != null && id == "settings" && EditorValueSettingsPopup.handles(entry.id)) {

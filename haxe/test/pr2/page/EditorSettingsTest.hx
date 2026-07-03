@@ -10,6 +10,7 @@ import pr2.net.ServerConfig;
 import pr2.page.LevelEditor.EditorBackgroundColorPickerButton;
 import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
+import pr2.page.LevelEditor.EditorModeSettingsPopup;
 import pr2.page.LevelEditor.EditorMusicSettingsPopup;
 import pr2.page.LevelEditor.EditorObjectLayer;
 import pr2.page.LevelEditor.EditorValueSettingsPopup;
@@ -25,6 +26,7 @@ class EditorSettingsTest {
 		testTextObjectSaveStringUsesDecodedArtFormat();
 		testValueSettingsPopupCommit();
 		testMusicSettingsPopupCommit();
+		testModeSettingsPopupCommit();
 		testItemSettingsPopupCommit();
 		testHatsSettingsPopupCommit();
 		trace('EditorSettingsTest passed $assertions assertions');
@@ -199,6 +201,22 @@ class EditorSettingsTest {
 
 		popup.setSelectedSongId("0");
 		assertEquals("0", editor.song, "music menu commits no-song selection");
+		popup.remove();
+	}
+
+	private static function testModeSettingsPopupCommit():Void {
+		var editor = new LevelEditor();
+		editor.setGameMode("objective");
+		var popup = new EditorModeSettingsPopup(editor, new Sprite());
+
+		assertEquals("objective", popup.selectedMode(), "mode menu loads editor game mode");
+
+		popup.setSelectedMode("hat");
+		assertEquals("hat", editor.gameMode, "mode menu commits selected game mode");
+		assertEquals("hat", editor.getLevelVars().get("gameMode"), "committed mode menu selection exports as level vars");
+
+		popup.setSelectedMode("eggs");
+		assertEquals("egg", editor.gameMode, "mode menu normalizes legacy eggs mode");
 		popup.remove();
 	}
 
