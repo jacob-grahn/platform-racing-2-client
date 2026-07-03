@@ -935,6 +935,18 @@ class ServerLevelRenderer extends Sprite {
 				i--;
 				continue;
 			}
+			var starEffect = Std.downcast(child, pr2.effects.StarEffect);
+			if (starEffect != null) {
+				starEffect.remove();
+				i--;
+				continue;
+			}
+			var physicsParticle = Std.downcast(child, pr2.character.PhysicsParticle);
+			if (physicsParticle != null) {
+				physicsParticle.remove();
+				i--;
+				continue;
+			}
 			var clip = Std.downcast(child, PR2MovieClip);
 			if (clip != null) {
 				clip.dispose();

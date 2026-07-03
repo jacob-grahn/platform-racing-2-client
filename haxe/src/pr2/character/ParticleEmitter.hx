@@ -4,6 +4,7 @@ import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
+import pr2.effects.StarEffect;
 
 /**
 	Focused port of `character.ParticleEmitter`: a setInterval-style particle
@@ -43,7 +44,9 @@ class ParticleEmitter {
 			return;
 		}
 		var particle = createParticle(makeX(), makeY());
-		parentLayer.addChild(particle);
+		if (particle != null && particle.parent == null) {
+			parentLayer.addChild(particle);
+		}
 		life--;
 		if (life <= 0) {
 			remove();
@@ -58,8 +61,8 @@ class ParticleEmitter {
 		return target.y - random() * 55;
 	}
 
-	private function createParticle(x:Float, y:Float):DisplayObject {
-		return new pr2.effects.ArrowEffect(x, y);
+	private function createParticle(x:Float, y:Float):Null<DisplayObject> {
+		return new StarEffect(x, y);
 	}
 
 	public function remainingLife():Int {

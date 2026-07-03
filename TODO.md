@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the remaining concrete `ParticleEmitter.as` / `RainbowStarEmitter.as` /
-  `PhysicsParticle.as` / `PositionedParticleEmitter.as` runtime: sparkle,
-  rainbow-heart, and Djinn ice emitters should instantiate the authored
-  `StarEffect` / `DjinnIceGraphic` particles with Flash's interval timing,
-  randomized positions, color transforms, physics, alpha/scale/rotation updates,
-  and cleanup instead of stopping at request hooks.
 - [ ] Preserve April 1 reversed-controls behavior from `Character.as`: local
   characters should reverse left/right controls when `Data.getDateStr(...)` is
   `"Apr 1"`, and removing the artifact hat should not clear that date-driven

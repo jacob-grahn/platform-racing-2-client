@@ -5,6 +5,8 @@ import js.Browser;
 #end
 import haxe.crypto.Md5;
 import haxe.ds.ObjectMap;
+import haxe.ds.StringMap;
+import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -13,11 +15,15 @@ import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 import pr2.Constants;
 import pr2.character.Character;
+import pr2.character.Character.DjinnEmitterRequest;
 import pr2.character.Character.ParticleEmitterRequest;
 import pr2.character.ArrowSparkleEmitter;
 import pr2.character.CharacterState;
 import pr2.character.LocalCharacter;
+import pr2.character.PhysicsParticle.PhysicsParticleParams;
 import pr2.character.ParticleEmitter;
+import pr2.character.PositionedParticleEmitter;
+import pr2.character.RainbowStarEmitter;
 import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
@@ -144,6 +150,7 @@ class Course extends Sprite {
 	private var reachedObjectives:Map<Int, Bool> = new Map();
 	private var minionEggsSpawned:Bool = false;
 	private final activeParticleEmitters:ObjectMap<Character, ParticleEmitter> = new ObjectMap();
+	private final activeDjinnEmitters:ObjectMap<Character, StringMap<ParticleEmitter>> = new ObjectMap();
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -630,15 +637,31 @@ class Course extends Sprite {
 		character.onClearParticleEmitter = function():Void {
 			clearParticleEmitter(character);
 		};
+		character.onStartDjinnEmitter = startDjinnEmitter;
+		character.onClearDjinnEmitters = function():Void {
+			clearDjinnEmitters(character);
+		};
 	}
 
 	private function startParticleEmitter(request:ParticleEmitterRequest):Void {
 		clearParticleEmitter(request.target);
-		if (levelRenderer == null || request.kind != "arrowSparkle") {
+		if (levelRenderer == null) {
 			return;
 		}
-		activeParticleEmitters.set(request.target,
-			new ArrowSparkleEmitter(request.intervalMs, request.durationMs, request.target, levelRenderer.worldEffectLayer()));
+		var layer = levelRenderer.worldEffectLayer();
+		var emitter:Null<ParticleEmitter> = switch (request.kind) {
+			case "arrowSparkle":
+				new ArrowSparkleEmitter(request.intervalMs, request.durationMs, request.target, layer);
+			case "rainbowStar":
+				new RainbowStarEmitter(request.intervalMs, request.durationMs, request.target, layer);
+			case "sparkle":
+				new ParticleEmitter(request.intervalMs, request.durationMs, request.target, layer);
+			default:
+				null;
+		};
+		if (emitter != null) {
+			activeParticleEmitters.set(request.target, emitter);
+		}
 	}
 
 	private function clearParticleEmitter(character:Character):Void {
@@ -656,11 +679,118 @@ class Course extends Sprite {
 		}
 	}
 
+	private static inline var DJINN_EMITTER_INTERVAL_MS:Int = 75;
+	private static inline var DJINN_EMITTER_DURATION_MS:Int = 999999999;
+
+	private function startDjinnEmitter(request:DjinnEmitterRequest):Void {
+		clearDjinnEmitterSlot(request.target, request.slot);
+		if (levelRenderer == null) {
+			return;
+		}
+		var part = djinnTargetPart(request);
+		if (part == null) {
+			return;
+		}
+		var emitter = new PositionedParticleEmitter(
+			DJINN_EMITTER_INTERVAL_MS,
+			DJINN_EMITTER_DURATION_MS,
+			part,
+			levelRenderer.worldEffectLayer(),
+			djinnParams(request),
+			request.offsetX,
+			request.offsetY
+		);
+		var emitters = activeDjinnEmitters.get(request.target);
+		if (emitters == null) {
+			emitters = new StringMap();
+			activeDjinnEmitters.set(request.target, emitters);
+		}
+		emitters.set(request.slot, emitter);
+	}
+
+	private function djinnTargetPart(request:DjinnEmitterRequest):Null<DisplayObject> {
+		var stateName = request.target.state == null ? "standAnim" : request.target.state + "Anim";
+		var stateClip = request.target.display.getStateClip(stateName);
+		return stateClip == null ? null : stateClip.getChildByTimelineName(request.slot);
+	}
+
+	private function djinnParams(request:DjinnEmitterRequest):PhysicsParticleParams {
+		return {
+			graphic: request.graphic,
+			colors: request.colors,
+			life: request.life,
+			startAlpha: request.startAlpha,
+			minVelAlpha: request.minVelAlpha,
+			maxVelAlpha: request.maxVelAlpha,
+			minVelX: request.minVelX,
+			maxVelX: request.maxVelX,
+			minVelY: request.minVelY,
+			maxVelY: request.maxVelY,
+			velScaleX: request.velScaleX,
+			velScaleY: request.velScaleY,
+			fricX: request.fricX,
+			fricY: request.fricY,
+			minOffsetX: request.minOffsetX,
+			maxOffsetX: request.maxOffsetX,
+			minOffsetY: request.minOffsetY,
+			maxOffsetY: request.maxOffsetY,
+			minScale: request.minScale,
+			maxScale: request.maxScale
+		};
+	}
+
+	private function clearDjinnEmitterSlot(character:Character, slot:String):Void {
+		var emitters = activeDjinnEmitters.get(character);
+		if (emitters == null) {
+			return;
+		}
+		var emitter = emitters.get(slot);
+		if (emitter != null) {
+			emitter.remove();
+			emitters.remove(slot);
+		}
+		if (!emitters.keys().hasNext()) {
+			activeDjinnEmitters.remove(character);
+		}
+	}
+
+	private function clearDjinnEmitters(character:Character):Void {
+		var emitters = activeDjinnEmitters.get(character);
+		if (emitters == null) {
+			return;
+		}
+		for (slot in [for (slot in emitters.keys()) slot]) {
+			var emitter = emitters.get(slot);
+			if (emitter != null) {
+				emitter.remove();
+			}
+			emitters.remove(slot);
+		}
+		activeDjinnEmitters.remove(character);
+	}
+
+	private function clearAllDjinnEmitters():Void {
+		for (character in [for (character in activeDjinnEmitters.keys()) character]) {
+			clearDjinnEmitters(character);
+		}
+	}
+
 	@:allow(pr2.gameplay.CharacterLifecycleTest)
 	private function activeParticleEmitterCount():Int {
 		var count = 0;
 		for (_ in activeParticleEmitters.keys()) {
 			count++;
+		}
+		return count;
+	}
+
+	@:allow(pr2.gameplay.CharacterLifecycleTest)
+	private function activeDjinnEmitterCount():Int {
+		var count = 0;
+		for (emitters in activeDjinnEmitters) {
+			for (_ in emitters.keys()) {
+				count++;
+			}
 		}
 		return count;
 	}
@@ -1297,6 +1427,7 @@ class Course extends Sprite {
 		}
 		stopAllJetSounds();
 		clearAllParticleEmitters();
+		clearAllDjinnEmitters();
 		removeAllRemoteCharacters();
 		activeCommandHandler().defineCommand("activate", null);
 		unregisterLocalSetHatsCommand();

@@ -3,9 +3,9 @@ package pr2.character;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.geom.ColorTransform;
-import pr2.effects.ArrowEffect;
+import pr2.effects.StarEffect;
 
-class ArrowSparkleEmitter extends ParticleEmitter {
+class RainbowStarEmitter extends ParticleEmitter {
 	private final colorRandom:Void->Float;
 
 	public function new(intervalMs:Int, durationMs:Int, target:DisplayObject, parentLayer:DisplayObjectContainer, ?random:Void->Float) {
@@ -14,8 +14,9 @@ class ArrowSparkleEmitter extends ParticleEmitter {
 	}
 
 	override private function createParticle(x:Float, y:Float):Null<DisplayObject> {
-		var arrow = new ArrowEffect(x, y);
-		arrow.transform.colorTransform = new ColorTransform(
+		var star = new StarEffect(x, y);
+		star.rotation = colorRandom() * 360;
+		star.transform.colorTransform = new ColorTransform(
 			colorRandom(),
 			colorRandom(),
 			colorRandom(),
@@ -25,6 +26,6 @@ class ArrowSparkleEmitter extends ParticleEmitter {
 			colorRandom(),
 			colorRandom()
 		);
-		return arrow;
+		return star;
 	}
 }

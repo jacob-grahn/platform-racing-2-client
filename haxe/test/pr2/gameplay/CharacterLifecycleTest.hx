@@ -297,10 +297,22 @@ class CharacterLifecycleTest {
 	private static function testLocalArrowSparkleEmitterLifecycle():Void {
 		var course = buildCourse(new CommandHandler());
 
+		course.localCharacter.beginSparkles();
+		assertEquals(1, course.activeParticleEmitterCount(), "local sparkles create a concrete star particle emitter");
+		course.localCharacter.endSparkles();
+		assertEquals(0, course.activeParticleEmitterCount(), "ending sparkles clears the concrete star particle emitter");
+		course.localCharacter.gainHeart();
+		assertEquals(1, course.activeParticleEmitterCount(), "local heart recovery creates a concrete rainbow-star emitter");
+		course.localCharacter.endSparkles();
+		assertEquals(0, course.activeParticleEmitterCount(), "ending sparkles clears the concrete rainbow-star emitter");
 		course.localCharacter.beginArrowSparkles();
 		assertEquals(1, course.activeParticleEmitterCount(), "local arrow sparkles create a concrete particle emitter");
 		course.localCharacter.endSparkles();
 		assertEquals(0, course.activeParticleEmitterCount(), "ending sparkles clears the concrete particle emitter");
+		course.localCharacter.setBodyId(35);
+		assertEquals(1, course.activeDjinnEmitterCount(), "Frost Djinn body starts a positioned particle emitter");
+		course.localCharacter.setFeetId(35);
+		assertEquals(3, course.activeDjinnEmitterCount(), "Frost Djinn feet start separate positioned particle emitters");
 		course.remove();
 	}
 
