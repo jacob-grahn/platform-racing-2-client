@@ -1445,6 +1445,7 @@ class LocalPlayerControllerTest {
 		assertClose(30, state.accelerationStat, "sad block lowers acceleration");
 		assertClose(30, state.jumpStat, "sad block lowers jumping");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted sad block uses SupplyBlock grey transform");
+		assertEquals(true, player.consumeStatsSelectSyncRequest(), "sad block requests TestCourse StatsSelect sync");
 		var events = player.consumeBlockVisualEvents();
 		assertEquals(2, events.length, "sad block emits thump and stat sound events");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "sad block keeps base ThumpSound event");

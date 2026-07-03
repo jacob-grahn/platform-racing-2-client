@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Include `SadBlock.as` in the test-course stat-picker sync path alongside
-  happy/custom stat blocks so negative stat changes immediately update the
-  `StatsSelect` UI in `TestCourse`.
 - [ ] Preserve `TeleportBlock.as` gameplay effects: render the block's option
   color behind the teleport bitmap, deplete/tint all other same-color teleports
   during the 3-second cooldown, reset every same-color block together, and keep

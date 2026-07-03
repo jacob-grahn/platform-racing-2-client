@@ -60,7 +60,7 @@ alone is not a class port.
 | `flash/blocks/RotateBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController`, `pr2.gameplay.RotationMath` | ported | Shared rotation tween, frozen activation suppression, coordinate rotation, and character counter-rotation are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/RotateLeftBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Left rotation direction and completion behavior are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/RotateRightBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Right rotation direction and completion behavior are covered by `LocalPlayerControllerTest`. |
-| `flash/blocks/SadBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Supply stat decrease, option clamp behavior, and grey depletion visuals are covered by `LocalPlayerControllerTest`. |
+| `flash/blocks/SadBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Supply stat decrease, option clamp behavior, grey depletion visuals, and TestCourse StatsSelect sync requests are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/SafetyBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Safe-coordinate update without solid collision and frozen return suppression are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/StartBlock.as` | `pr2.level.BlockType`, `pr2.level.ServerLevelFixtureAdapter` | ported | Spawn discovery and non-colliding start-block behavior are covered by `ServerLevelFixtureAdapterTest` and `LocalPlayerControllerTest`. |
 | `flash/blocks/SupplyBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Shared one-use bump-only depletion behavior, frozen supply-use suppression, and grey transform visuals for finish/item/custom-stat/stat/life/time supplies are covered by `LocalPlayerControllerTest`. |
@@ -226,7 +226,7 @@ alone is not a class port.
 | `flash/gameplay/SpecialEvent.as` | `pr2.gameplay.SpecialEvent`, `pr2.page.GamePage` | ported | Privileged G+C artifact placement and C+X prize cancellation dispatch are covered by `SpecialEventTest`. |
 | `flash/gameplay/SpectatePicker.as` | `pr2.gameplay.SpectatePicker`, `pr2.gameplay.Course` | ported | Authored picker UI, player cycling, free-scroll state, visibility gating, name rendering, and course change hook are covered by `SpectatePickerTest`. |
 | `flash/gameplay/StatsDisplay.as` | `pr2.gameplay.StatsDisplay`, `pr2.gameplay.Course` | ported | Authored stat boxes, hover popup delay/removal, and course stat sync are covered by `StatsDisplayTest` and `GameShellMountTest`. |
-| `flash/gameplay/TestCourse.as` | `pr2.page.CampaignTestScreen`, `pr2.page.LevelEditor.TestCoursePage` | partial | Decoded levels run through `Course`; level-editor test-course controls, stat picker, hat picker, editor return, restart persistence, and custom/happy block StatsSelect sync are covered by `LobbyServicesTest`. Report-management variants remain with the level-editor TODO. |
+| `flash/gameplay/TestCourse.as` | `pr2.page.CampaignTestScreen`, `pr2.page.LevelEditor.TestCoursePage` | partial | Decoded levels run through `Course`; level-editor test-course controls, stat picker, hat picker, editor return, restart persistence, and custom/happy/sad block StatsSelect sync are covered by `LobbyServicesTest`. Report-management variants remain with the level-editor TODO. |
 
 ## Level Browser Classes
 
