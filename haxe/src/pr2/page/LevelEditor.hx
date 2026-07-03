@@ -59,6 +59,7 @@ import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
 import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.CustomScrollBar;
 import pr2.util.DisplayUtil;
 
 /**
@@ -1409,11 +1410,20 @@ class GetLevelsPopup extends Popup {
 	public final listings:Array<GetLevelsPopupItem> = [];
 	public var selected(default, null):Null<GetLevelsPopupItem>;
 	private var bindings:Array<Binding> = [];
+	private var scroll:Null<CustomScrollBar>;
 
 	public function new() {
 		super();
 		art = PR2MovieClip.fromLinkage("GetLevelsPopupGraphic", {maxNestedDepth: 6});
 		addChild(art);
+		scroll = new CustomScrollBar();
+		scroll.x = 119;
+		scroll.y = -86;
+		addChild(scroll);
+		var holder = levelsHolder();
+		if (holder != null) {
+			scroll.init(holder, 160, 158);
+		}
 		setText("titleBox", "-- My Levels --");
 		bind("cancel_bt", function():Void startFadeOut());
 		bind("load_bt", clickLoad);
@@ -1519,6 +1529,10 @@ class GetLevelsPopup extends Popup {
 		}
 		listings.resize(0);
 		selected = null;
+		if (scroll != null) {
+			scroll.remove();
+			scroll = null;
+		}
 		art.dispose();
 		super.remove();
 	}

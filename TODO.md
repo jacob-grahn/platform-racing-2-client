@@ -117,6 +117,7 @@ Then the level-management flows, one at a time:
   format, loading/errors, and return navigation.
   - [x] Port the authored My Levels list popup request, listing render, and
     selected `level_id`/`version` load handoff.
+  - [x] Port the authored My Levels list scrollbar.
   - [x] Port the Flash loading-level popup around the editor load handoff.
   - [x] Port strict editor-load response validation and the editor variable /
     reports-mode handoff.

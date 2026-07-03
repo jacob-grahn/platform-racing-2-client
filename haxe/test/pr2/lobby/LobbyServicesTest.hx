@@ -563,6 +563,7 @@ class LobbyServicesTest {
 		clickEditorMenu(editor, "loadButton");
 		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GetLevelsPopup);
 		assertNotNull(popup, "load button opens the editor levels popup");
+		assertNotNull(Reflect.field(popup, "scroll"), "load popup mounts the authored scrollbar");
 		assertEquals("http://example.test/levels_get.php", requestedUrl, "load popup posts to levels_get");
 		assertEquals("load-token", requestedToken, "load popup sends the session token");
 		assertEquals(2, popup.listings.length, "load popup renders returned listings");
