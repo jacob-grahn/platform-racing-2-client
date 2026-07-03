@@ -16,6 +16,7 @@ import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.app.AppStage;
+import pr2.gameplay.Items;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
@@ -23,6 +24,7 @@ import pr2.level.ServerLevelRenderer;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
@@ -53,6 +55,7 @@ class LevelEditor extends Page {
 	public var selectedBlock(default, null):Null<EditorBlockObject>;
 	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
 	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
+	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 
@@ -153,6 +156,8 @@ class LevelEditor extends Page {
 		closeBlockOptionsPopup();
 		if (block.type == BlockType.Happy || block.type == BlockType.Sad) {
 			activeBlockOptionsPopup = new EditorStatBlockOptionsPopup(this, block);
+		} else if (block.type == BlockType.Item || block.type == BlockType.InfiniteItem) {
+			activeBlockOptionsPopup = new EditorItemBlockOptionsPopup(this, block);
 		}
 	}
 
@@ -674,6 +679,41 @@ class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
 		if (slider != null && statBox != null) {
 			statBox.text = Std.string(Std.int(Math.round(slider.value)));
 		}
+	}
+}
+
+class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
+	private final checks:Map<Int, FlCheckBox> = new Map();
+
+	public function new(editor:LevelEditor, block:EditorBlockObject) {
+		super(editor, block, "ItemBlockOptionsGraphic");
+		var selected = EditorBlockOptions.selectedItems(block.options, editor.allowedItems);
+		for (itemId in Items.getAllCodes()) {
+			var check = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
+			if (check != null) {
+				check.selected = selected.indexOf(itemId) >= 0;
+				checks.set(itemId, check);
+			}
+		}
+	}
+
+	public function setItemSelected(itemId:Int, selected:Bool):Void {
+		var check = checks.get(itemId);
+		if (check != null) {
+			check.selected = selected;
+		}
+	}
+
+	override public function remove():Void {
+		var selected:Array<Int> = [];
+		for (itemId in Items.getAllCodes()) {
+			var check = checks.get(itemId);
+			if (check != null && check.selected) {
+				selected.push(itemId);
+			}
+		}
+		block.setOptions(EditorBlockOptions.applyItemOptions(selected, editor.allowedItems));
+		super.remove();
 	}
 }
 

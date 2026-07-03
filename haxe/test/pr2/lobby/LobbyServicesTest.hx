@@ -24,6 +24,7 @@ import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
 import pr2.page.Page;
 import pr2.page.PageHolder;
+import pr2.runtime.FlCheckBox;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.TabLayout;
@@ -278,6 +279,24 @@ class LobbyServicesTest {
 		assertNotNull(itemBlock.getChildByName("optionsButton"), "option-capable selected blocks show the options button");
 		itemBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		assertEquals(itemBlock, editor.lastBlockOptionsRequest, "options button records the selected block for popup wiring");
+		assertNotNull(editor.activeBlockOptionsPopup, "item block opens the item option popup");
+		var itemOneCheck = Std.downcast(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "check1"), FlCheckBox);
+		var itemTwoCheck = Std.downcast(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "check2"), FlCheckBox);
+		var itemFourCheck = Std.downcast(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "check4"), FlCheckBox);
+		assertEquals(true, itemOneCheck.selected, "item popup selects level-default items");
+		for (itemId in 1...10) {
+			Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setItemSelected"), [itemId, false]);
+		}
+		itemOneCheck.selected = true;
+		itemFourCheck.selected = true;
+		editor.closeBlockOptionsPopup();
+		assertEquals("1-4", itemBlock.options, "closing the item popup commits normalized item options");
+		itemBlock.setOptions("none");
+		itemBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		itemTwoCheck = Std.downcast(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "check2"), FlCheckBox);
+		assertEquals(false, itemTwoCheck.selected, "item popup loads none as no selected items");
+		editor.closeBlockOptionsPopup();
+		assertEquals("none", itemBlock.options, "closing an empty item popup preserves the none option");
 		clickEditorSidebar(editor, "brickEntry");
 		var brickBlock = editor.placeSelectedBlockAt(100, 120);
 		assertEquals(104, brickBlock.code, "placing over an editable block replaces it");
