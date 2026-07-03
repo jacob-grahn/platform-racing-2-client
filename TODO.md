@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `ItemBlock.as` random item selection semantics: non-empty candidate
-  pools should use the Flash `Math.random()` item choice independently from move
-  block direction randomness, while still respecting `none`, empty-options level
-  item pools, and infinite-item repeat use.
 - [ ] Preserve `SupplyBlock.as` depletion visuals for every one-use supply block
   in this batch (`FinishBlock`, `HeartBlock`, `CustomStatsBlock`, normal
   `ItemBlock`, `HappyBlock`, and later supply subclasses), not only item/happy/sad

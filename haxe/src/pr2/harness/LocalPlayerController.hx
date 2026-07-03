@@ -116,6 +116,7 @@ class LocalPlayerController {
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
 	private final moveRandom:FlashRandom = new FlashRandom(1);
+	private final itemRandom:FlashRandom = new FlashRandom(1);
 	public var lastSafeX(default, null):Float;
 	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
@@ -1069,7 +1070,7 @@ class LocalPlayerController {
 		if (candidates.length == 0) {
 			return null;
 		}
-		return candidates[nextMoveRandom(candidates.length)];
+		return candidates[nextItemRandom(candidates.length)];
 	}
 
 	private function useHeldItem(input:LocalPlayerInput):Void {
@@ -1536,6 +1537,10 @@ class LocalPlayerController {
 
 	private function nextMoveRandom(maxValue:Int):Int {
 		return moveRandom.nextMinMax(0, maxValue);
+	}
+
+	private function nextItemRandom(maxValue:Int):Int {
+		return itemRandom.nextMinMax(0, maxValue);
 	}
 
 	private function updateVanishBlocks():Void {

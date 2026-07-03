@@ -44,6 +44,7 @@ class LocalPlayerControllerTest {
 		testBumpingItemBlockGrantsConfiguredItem();
 		testBumpingItemBlockEmitsStarSound();
 		testEmptyOptionsItemBlockGrantsAllowedItem();
+		testItemBlockRandomnessDoesNotAffectMoveBlocks();
 		testRegularItemBlockDepletesAfterFirstUse();
 		testNewlyCollectedItemRequiresReleaseBeforeUse();
 		testSuperJumpItemLaunchesPlayerAndConsumesItem();
@@ -733,6 +734,29 @@ class LocalPlayerControllerTest {
 		}
 		noneAllowed.step(new LocalPlayerInput(false, false, true));
 		assertEquals(null, noneAllowed.debugState().itemId, "a level with no allowed items grants nothing");
+	}
+
+	private static function testItemBlockRandomnessDoesNotAffectMoveBlocks():Void {
+		var untouched = new LocalCharacter(itemAndRandomMoveBlockLevel());
+		var itemUser = new LocalCharacter(itemAndRandomMoveBlockLevel());
+
+		for (_ in 0...20) {
+			untouched.step(new LocalPlayerInput());
+			itemUser.step(new LocalPlayerInput());
+		}
+		itemUser.step(new LocalPlayerInput(false, false, true));
+		assertEquals(true, itemUser.debugState().itemId != null, "multi-candidate item block grants an item");
+
+		for (_ in 0...142) {
+			untouched.step(new LocalPlayerInput());
+			itemUser.step(new LocalPlayerInput());
+		}
+
+		var untouchedDirections = untouched.activeMoveBlockDirections();
+		var itemUserDirections = itemUser.activeMoveBlockDirections();
+		for (key in ["1,1", "2,1", "3,1", "4,1", "5,1"]) {
+			assertEquals(untouchedDirections.get(key), itemUserDirections.get(key), 'item random must not advance move random for $key');
+		}
 	}
 
 	private static function testRegularItemBlockDepletesAfterFirstUse():Void {
@@ -2125,6 +2149,35 @@ class LocalPlayerControllerTest {
 				new LevelBlock(4, 1, BlockType.Move),
 				new LevelBlock(5, 1, BlockType.Move),
 				new LevelBlock(6, 4, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function itemAndRandomMoveBlockLevel():FixtureLevel {
+		return new FixtureLevel(
+			"item-and-random-move-blocks",
+			"Item And Random Move Blocks",
+			8,
+			13,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 9),
+			new TilePosition(6, 10),
+			[
+				new LevelBlock(1, 1, BlockType.Move),
+				new LevelBlock(2, 1, BlockType.Move),
+				new LevelBlock(3, 1, BlockType.Move),
+				new LevelBlock(4, 1, BlockType.Move),
+				new LevelBlock(5, 1, BlockType.Move),
+				new LevelBlock(2, 8, BlockType.Item, "3-4-5"),
+				new LevelBlock(0, 10, BlockType.Basic),
+				new LevelBlock(1, 10, BlockType.Basic),
+				new LevelBlock(2, 10, BlockType.Basic),
+				new LevelBlock(3, 10, BlockType.Basic),
+				new LevelBlock(4, 10, BlockType.Basic),
+				new LevelBlock(5, 10, BlockType.Basic),
+				new LevelBlock(6, 10, BlockType.Finish)
 			]
 		);
 	}
