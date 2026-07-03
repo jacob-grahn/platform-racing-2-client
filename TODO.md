@@ -135,7 +135,7 @@ Then the level-management flows, one at a time:
   - [x] Surface moderator unpublish/restrict upload errors from the authored
     moderation popup.
 - [x] Port the delete flow with the same coverage.
-- [ ] Port the report-management flow with the same coverage.
+- [x] Port the report-management flow with the same coverage.
   - [x] Port the moderator load-mode chooser and reported-levels list/load
     handoff into reports mode.
   - [x] Port the authored report handling popup with archive and social-ban
