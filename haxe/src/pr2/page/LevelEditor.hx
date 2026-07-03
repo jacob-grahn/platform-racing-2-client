@@ -69,6 +69,7 @@ class LevelEditor extends Page {
 	public var selectedBlock(default, null):Null<EditorBlockObject>;
 	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
 	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
+	public var activeItemSettingsPopup(default, null):Null<EditorItemSettingsPopup>;
 	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	public var badHats(default, null):Array<Int> = [];
@@ -173,6 +174,10 @@ class LevelEditor extends Page {
 	public function setItems(value:Null<String>):Void {
 		levelConfig.setItems(value);
 		allowedItems = levelConfig.allowedItems.copy();
+	}
+
+	public function setAllowedItems(value:Array<Int>):Void {
+		setItems(value == null || value.length == 0 ? "" : value.join("`"));
 	}
 
 	public function setBadHats(value:Null<String>):Void {
@@ -363,6 +368,25 @@ class LevelEditor extends Page {
 		}
 	}
 
+	public function openItemSettingsMenu(target:DisplayObject):Void {
+		closeItemSettingsPopup();
+		activeItemSettingsPopup = new EditorItemSettingsPopup(this, target);
+	}
+
+	public function closeItemSettingsPopup():Void {
+		if (activeItemSettingsPopup != null) {
+			var popup = activeItemSettingsPopup;
+			activeItemSettingsPopup = null;
+			popup.remove();
+		}
+	}
+
+	public function itemSettingsPopupRemoved(popup:EditorItemSettingsPopup):Void {
+		if (activeItemSettingsPopup == popup) {
+			activeItemSettingsPopup = null;
+		}
+	}
+
 	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
 		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
 			return false;
@@ -452,6 +476,7 @@ class LevelEditor extends Page {
 			selectedBlock = null;
 			lastBlockOptionsRequest = null;
 			closeBlockOptionsPopup();
+			closeItemSettingsPopup();
 			layerContainer = null;
 		}
 		drawingLayer = null;
@@ -1401,6 +1426,106 @@ class EditorCustomStatsBlockOptionsPopup extends EditorBlockOptionsPopup {
 		} else if (resetPop != null) {
 			resetPop.remove();
 			resetPop = null;
+		}
+	}
+}
+
+class EditorItemSettingsPopup extends Sprite {
+	public final editor:LevelEditor;
+	public final art:PR2MovieClip;
+	private final checks:Map<Int, FlCheckBox> = new Map();
+	private var armTimer:Null<Timer>;
+	private var armed:Bool = false;
+	private var removed:Bool = false;
+
+	public function new(editor:LevelEditor, target:DisplayObject) {
+		super();
+		this.editor = editor;
+		art = PR2MovieClip.fromLinkage("ItemMenuGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		for (itemId in Items.getAllCodes()) {
+			var check = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
+			if (check != null) {
+				check.selected = editor.allowedItems.indexOf(itemId) >= 0;
+				checks.set(itemId, check);
+			}
+		}
+		mountNear(target);
+		armTimer = Timer.delay(armAutoDismiss, 25);
+	}
+
+	public function isItemSelected(itemId:Int):Bool {
+		var check = checks.get(itemId);
+		return check != null && check.selected;
+	}
+
+	public function setItemSelected(itemId:Int, selected:Bool):Void {
+		var check = checks.get(itemId);
+		if (check != null) {
+			check.selected = selected;
+		}
+	}
+
+	public function remove():Void {
+		if (removed) {
+			return;
+		}
+		removed = true;
+		if (armTimer != null) {
+			armTimer.stop();
+			armTimer = null;
+		}
+		if (armed && AppStage.stage != null) {
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		}
+		var selected:Array<Int> = [];
+		for (itemId in Items.getAllCodes()) {
+			var check = checks.get(itemId);
+			if (check != null && check.selected) {
+				selected.push(itemId);
+			}
+		}
+		editor.setAllowedItems(selected);
+		art.dispose();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		editor.itemSettingsPopupRemoved(this);
+	}
+
+	private function mountNear(target:DisplayObject):Void {
+		if (AppStage.stage == null) {
+			return;
+		}
+		AppStage.stage.addChild(this);
+		var targetBounds = target.getBounds(AppStage.stage);
+		var popupBounds = getBounds(this);
+		var popupWidth = popupBounds.width <= 0 ? 180 : popupBounds.width;
+		var popupHeight = popupBounds.height <= 0 ? 150 : popupBounds.height;
+		x = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
+		y = targetBounds.top;
+		if (y < 0) {
+			y = 0;
+		}
+		if (y + popupHeight > 400) {
+			y = 400 - popupHeight;
+		}
+		x = Math.round(x);
+		y = Math.round(y);
+	}
+
+	private function armAutoDismiss():Void {
+		armTimer = null;
+		if (removed || AppStage.stage == null) {
+			return;
+		}
+		armed = true;
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+	}
+
+	private function onStageMouseDown(event:MouseEvent):Void {
+		if (!hitTestPoint(event.stageX, event.stageY, true)) {
+			remove();
 		}
 	}
 }
@@ -2484,6 +2609,10 @@ class EditorSideBar extends Sprite {
 		var editor = LevelEditor.editor;
 		if (editor != null && id == "stamps" && entry.id == "brush" && editor.menu != null) {
 			editor.menu.changeSideBar(editor.menu.tools);
+			return;
+		}
+		if (editor != null && id == "settings" && entry.id == "items") {
+			editor.openItemSettingsMenu(entry);
 			return;
 		}
 		if (editor != null) {

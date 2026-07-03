@@ -1,9 +1,11 @@
 package pr2.page;
 
 import haxe.crypto.Md5;
+import openfl.display.Sprite;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.net.ServerConfig;
+import pr2.page.LevelEditor.EditorItemSettingsPopup;
 
 class EditorSettingsTest {
 	private static var assertions:Int = 0;
@@ -12,6 +14,7 @@ class EditorSettingsTest {
 		testDefaultSetters();
 		testVariablesAndLevelVars();
 		testPasswordHashing();
+		testItemSettingsPopupCommit();
 		trace('EditorSettingsTest passed $assertions assertions');
 	}
 
@@ -92,6 +95,23 @@ class EditorSettingsTest {
 		levelVars = editor.getLevelVars();
 		assertEquals(0, editor.hasPass, "empty password clears password flag");
 		assertEquals("", levelVars.get("passHash"), "empty password submits no hash");
+	}
+
+	private static function testItemSettingsPopupCommit():Void {
+		var editor = new LevelEditor();
+		editor.setItems("Laser`Teleport");
+		var popup = new EditorItemSettingsPopup(editor, new Sprite());
+
+		assertEquals(true, popup.isItemSelected(Items.LASER_GUN), "item menu loads allowed item");
+		assertEquals(false, popup.isItemSelected(Items.MINE), "item menu leaves disallowed item unchecked");
+		assertEquals(true, popup.isItemSelected(Items.TELEPORT), "item menu loads second allowed item");
+
+		popup.setItemSelected(Items.LASER_GUN, false);
+		popup.setItemSelected(Items.MINE, true);
+		popup.remove();
+
+		assertArrayEquals([Items.MINE, Items.TELEPORT], editor.allowedItems, "item menu commits selected items in Flash order");
+		assertEquals("2`4", editor.getLevelVars().get("items"), "committed item menu selection exports as level vars");
 	}
 
 	private static function assertArrayEquals(expected:Array<Int>, actual:Array<Int>, message:String):Void {
