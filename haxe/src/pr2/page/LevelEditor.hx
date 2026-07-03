@@ -43,6 +43,7 @@ import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.lobby.dialogs.ProgressBar;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
@@ -1353,6 +1354,7 @@ class LevelEditorMenu extends Sprite {
 typedef SaveLevelUploadFactory = LevelEditor->Null<Popup>;
 typedef GetLevelsPostFactory = String->Map<String, String>->(Dynamic->Void)->(String->Void)->Void;
 typedef GetLevelsLoadFactory = Int->Int->Void;
+typedef LoadingLevelFetchFactory = Int->Int->(ServerLevelData->Void)->(String->Void)->Void;
 typedef UploadingLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 typedef UploadingLevelRetryFactory = (Void->Void)->Int->Null<Timer>;
 typedef DeleteLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
@@ -1542,13 +1544,75 @@ class GetLevelsPopup extends Popup {
 	}
 
 	private static function defaultLoad(levelId:Int, version:Int):Void {
-		LevelDataClient.fetchEditorLoad(levelId, version, function(data:ServerLevelData):Void {
-			if (LevelEditor.editor != null) {
-				LevelEditor.editor.applyLoadedLevelData(data, false);
-			}
-		}, function(message:String):Void {
+		new LoadingLevelPopup(levelId, version);
+	}
+}
+
+class LoadingLevelPopup extends Popup {
+	public static var fetchFactory:LoadingLevelFetchFactory = defaultFetch;
+
+	public var art(default, null):Null<PR2MovieClip>;
+	public final levelId:Int;
+	public final version:Int;
+	public final report:Bool;
+	private var closeBinding:Null<Binding>;
+	private var progressBar:Null<ProgressBar>;
+
+	public function new(levelId:Int, version:Int, report:Bool = false) {
+		super();
+		this.levelId = levelId;
+		this.version = version;
+		this.report = report;
+		art = PR2MovieClip.fromLinkage("UploadingPopupGraphic", {maxNestedDepth: 4});
+		var textBox = LobbyArt.text(art, "textBox");
+		if (textBox != null) {
+			textBox.text = "Loading level...";
+		}
+		addChild(art);
+		progressBar = new ProgressBar();
+		progressBar.x = -100;
+		progressBar.y = -5;
+		addChild(progressBar);
+		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
+		fetchFactory(levelId, version, handleLoad, handleError);
+	}
+
+	private function handleLoad(data:ServerLevelData):Void {
+		if (progressBar != null) {
+			progressBar.setProgress(1);
+		}
+		if (LevelEditor.editor != null) {
+			LevelEditor.editor.applyLoadedLevelData(data, report);
+		}
+		startFadeOut();
+	}
+
+	private function handleError(message:String):Void {
+		if (progressBar != null) {
+			progressBar.setProgress(1);
+		}
+		if (message != null && message != "") {
 			new MessagePopup(message);
-		});
+		}
+		startFadeOut();
+	}
+
+	public static function defaultFetch(levelId:Int, version:Int, onResult:ServerLevelData->Void, onError:String->Void):Void {
+		LevelDataClient.fetchEditorLoad(levelId, version, onResult, onError);
+	}
+
+	override public function remove():Void {
+		LobbyArt.unbind(closeBinding);
+		closeBinding = null;
+		if (progressBar != null) {
+			progressBar.remove();
+			progressBar = null;
+		}
+		if (art != null) {
+			art.dispose();
+			art = null;
+		}
+		super.remove();
 	}
 }
 
@@ -1810,13 +1874,7 @@ class GetReportedLevelsPopup extends Popup {
 	}
 
 	private static function defaultLoad(levelId:Int, version:Int):Void {
-		LevelDataClient.fetchEditorLoad(levelId, version, function(data:ServerLevelData):Void {
-			if (LevelEditor.editor != null) {
-				LevelEditor.editor.applyLoadedLevelData(data, true);
-			}
-		}, function(message:String):Void {
-			new MessagePopup(message);
-		});
+		new LoadingLevelPopup(levelId, version, true);
 	}
 }
 

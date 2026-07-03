@@ -23,6 +23,7 @@ import pr2.lobby.level.LevelLaunch;
 import pr2.lobby.messages.MessagesPaging;
 import pr2.lobby.messages.UnreadNotif;
 import pr2.net.CampaignLevelInfo;
+import pr2.net.LevelDataClient;
 import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
@@ -36,6 +37,7 @@ import pr2.page.LevelEditor.DeletingLevelPopup;
 import pr2.page.LevelEditor.GetLevelsPopup;
 import pr2.page.LevelEditor.HandleLevelReportPopup;
 import pr2.page.LevelEditor.GetReportedLevelsPopup;
+import pr2.page.LevelEditor.LoadingLevelPopup;
 import pr2.page.LevelEditor.SaveLevelPopup;
 import pr2.page.LevelEditor.UploadingLevelPopup;
 import pr2.page.LevelEditor.TestCoursePage;
@@ -83,6 +85,7 @@ class LobbyServicesTest {
 		testLevelEditorRoute();
 		testLevelEditorShell();
 		testLevelEditorLoadListPopup();
+		testLevelEditorLoadingLevelPopup();
 		testLevelEditorReportedLevelsPopup();
 		testLevelEditorReportHandlePopup();
 		testLevelEditorDeleteFlow();
@@ -577,6 +580,39 @@ class LobbyServicesTest {
 		GetLevelsPopup.postFactory = previousPostFactory;
 		ServerConfig.resetHost();
 		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testLevelEditorLoadingLevelPopup():Void {
+		closeAllPopups();
+		var previousFetchFactory = LoadingLevelPopup.fetchFactory;
+		var requested:Null<String> = null;
+		var successCallbacks:Array<pr2.net.ServerLevelData->Void> = [];
+		var errorCallbacks:Array<String->Void> = [];
+		LoadingLevelPopup.fetchFactory = function(levelId:Int, version:Int, onResult:pr2.net.ServerLevelData->Void,
+				onError:String->Void):Void {
+			requested = levelId + ":" + version;
+			successCallbacks.push(onResult);
+			errorCallbacks.push(onError);
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		var popup = new LoadingLevelPopup(31, 4, true);
+		assertEquals("31:4", requested, "loading popup requests selected level version");
+		assertEquals("Loading level...", LobbyArt.text(popup.art, "textBox").text, "loading popup shows Flash copy");
+		assertEquals(1, successCallbacks.length, "loading popup stores success callback");
+		assertEquals(1, errorCallbacks.length, "loading popup stores error callback");
+
+		var levelData = "level_id=31&version=4&title=Loaded+Via+Popup&live=1&data=m4`abcdef````````````";
+		successCallbacks[0](LevelDataClient.parseEditorLoad(signedLevel(levelData, 31, 4), 31, 4));
+		assertEquals("Loaded Via Popup", editor.title, "loading popup applies validated editor variables");
+		assertEquals(true, editor.reportsMode, "loading popup preserves reported-level mode");
+		assertEquals(true, popup.fadeOutStarted, "loading popup fades after level load");
+
+		popup.remove();
+		editor.remove();
+		LoadingLevelPopup.fetchFactory = previousFetchFactory;
 		closeAllPopups();
 	}
 
@@ -1556,6 +1592,10 @@ class LobbyServicesTest {
 	private static function clickPopup(popup:Popup, buttonName:String):Void {
 		var button = Std.downcast(DisplayUtil.findByName(popup, buttonName), InteractiveObject);
 		button.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function signedLevel(levelData:String, levelId:Int, version:Int):String {
+		return levelData + Md5.encode(Std.string(version) + Std.string(levelId) + levelData + ServerConfig.LEVEL_SALT_2);
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
