@@ -118,7 +118,7 @@ Port the editor itself, one piece at a time:
 
 Then the level-management flows, one at a time:
 
-- [ ] Port the load flow with its validation, access rules, popups, server
+- [x] Port the load flow with its validation, access rules, popups, server
   format, loading/errors, and return navigation.
   - [x] Port the authored My Levels list popup request, listing render, and
     selected `level_id`/`version` load handoff.
