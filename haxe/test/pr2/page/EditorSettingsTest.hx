@@ -114,6 +114,7 @@ class EditorSettingsTest {
 		vars.set("badHats", "5");
 		vars.set("gameMode", "objective");
 		vars.set("cowboyChance", "25");
+		vars.set("data", "m4`abcdef`0;0;11,1;0;16,1;0;10;4");
 
 		var editor = new LevelEditor();
 		editor.initialize();
@@ -125,6 +126,8 @@ class EditorSettingsTest {
 		assertEquals(1, editor.hasPass, "loaded password marker applies to editor");
 		assertEquals("objective", editor.gameMode, "loaded game mode applies to editor");
 		assertEquals(true, editor.reportsMode, "loaded report mode applies to editor menu");
+		assertEquals(3, editor.blockLayer.blocks.length, "loaded block data replaces default editor blocks");
+		assertEquals("0;0;11,1;0;16,1;0;10;4", editor.blockLayer.getSaveString(), "loaded blocks export with original options");
 		editor.remove();
 	}
 

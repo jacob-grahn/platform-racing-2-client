@@ -29,6 +29,7 @@ import pr2.gameplay.Course;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedDrawAction;
+import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;
@@ -252,6 +253,9 @@ class LevelEditor extends Page {
 
 	public function applyLoadedLevelData(data:ServerLevelData, report:Bool = false):Void {
 		setVariables(data.vars);
+		if (data.data != "" && blockLayer != null) {
+			blockLayer.loadBlocks(ServerLevelDecoder.decode(data.data).blocks);
+		}
 		if (menu != null) {
 			menu.setReportsMode(report);
 		}
@@ -2681,6 +2685,22 @@ class EditorBlockLayer extends Sprite {
 		if (record) {
 			recordSnapshot();
 		}
+	}
+
+	public function loadBlocks(decodedBlocks:Array<DecodedBlock>):Void {
+		editor.selectBlock(null);
+		while (blocks.length > 0) {
+			removeBlock(blocks[blocks.length - 1], false);
+		}
+		blocksBySeg.clear();
+		for (decoded in decodedBlocks) {
+			var block = addBlockAtLocal(decoded.code, typeForCode(decoded.code), decoded.x, decoded.y, false, decoded.opts);
+			block.deleteable = !isStartBlockCode(decoded.code);
+		}
+		initialSaveString = getSaveString();
+		saveArray.resize(0);
+		redoArray.resize(0);
+		notifyHistoryChanged();
 	}
 
 	public function recordBlockOptionsChanged():Void {
