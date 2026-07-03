@@ -1468,6 +1468,12 @@ class LocalPlayerControllerTest {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Time), BlockType.Time);
 		assertEquals(130, player.debugState().courseTime, "time block adds ten seconds");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted time block uses SupplyBlock grey transform");
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(2, events.length, "time block emits thump and tick-tock sound events");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "time block keeps base ThumpSound event");
+		assertEquals("TimeBlockSound", Std.string(events[1].kind), "time block emits TickTockSound event");
+		player.step(new LocalPlayerInput(false, false, true));
+		assertEquals(0, player.consumeBlockVisualEvents().length, "depleted time block does not replay TickTockSound");
 	}
 
 	private static function bumpSupply(level:FixtureLevel, type:BlockType):LocalCharacter {

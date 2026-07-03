@@ -25,6 +25,8 @@ class RaceSounds {
 	public static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/sound473.mp3";
 	// BumpSadSound -> sound460 (AssetCatalog DOMSoundItem), used by SadBlock.useSupply.
 	public static inline var BUMP_SAD_SOUND:String = "assets/audio/sfx/sound460.mp3";
+	// TickTockSound -> sound453 (AssetCatalog DOMSoundItem), used by TimeBlock.useSupply.
+	public static inline var TICK_TOCK_SOUND:String = "assets/audio/sfx/sound453.mp3";
 	// SquashSound -> sound915, used by the Jiggmin hat stomp.
 	public static inline var SQUASH_SOUND:String = "assets/audio/sfx/sound915.mp3";
 	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
@@ -108,6 +110,10 @@ class RaceSounds {
 
 	public function playStatBlockSound(path:String):Void {
 		playGlobal(path, 0.75);
+	}
+
+	public function playTimeBlockSound():Void {
+		playGlobal(TICK_TOCK_SOUND, 1);
 	}
 
 	private function playSpatial(path:String, worldX:Float, worldY:Float, volume:Float):Void {

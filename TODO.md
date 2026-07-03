@@ -18,8 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `TimeBlock.as` sound behavior by playing `TickTockSound` at full
-  configured sound volume when a time block adds 10 seconds.
 - [ ] Port concrete `ArrowSparkleEmitter.as` particles: `arrowSparkle` emitters
   should create `ArrowEffect` particles with the same randomized
   `ColorTransform`, rather than only exposing a particle-emitter lifecycle hook.

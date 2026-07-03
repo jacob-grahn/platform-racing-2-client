@@ -774,7 +774,10 @@ class LocalPlayerController {
 			case BlockType.Heart:
 				if (useSupply(block)) setLife(lives + 1);
 			case BlockType.Time:
-				if (useSupply(block)) courseTime += 10;
+				if (useSupply(block)) {
+					courseTime += 10;
+					blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.TimeBlockSound, block.x, block.y));
+				}
 			case BlockType.Crumble:
 				applyCrumbleForce(block, cheeseCrumbleForce(force));
 			case BlockType.Vanish:

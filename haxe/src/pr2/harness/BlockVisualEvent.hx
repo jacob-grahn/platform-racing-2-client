@@ -13,6 +13,7 @@ enum BlockVisualEventKind {
 	ItemBlockSound;
 	HappyBlockSound;
 	SadBlockSound;
+	TimeBlockSound;
 	SuperJumpSound;
 	PushBlockMove;
 	LocalActivate;

@@ -946,6 +946,8 @@ class Course extends Sprite {
 					playStatBlockSound(event, RaceSounds.BUMP_HAPPY_SOUND);
 				case SadBlockSound:
 					playStatBlockSound(event, RaceSounds.BUMP_SAD_SOUND);
+				case TimeBlockSound:
+					playTimeBlockSound();
 				case SuperJumpSound:
 					playSuperJumpSound();
 				case PushBlockMove:
@@ -1019,6 +1021,10 @@ class Course extends Sprite {
 
 	private function playStatBlockSound(event:BlockVisualEvent, path:String):Void {
 		raceSounds.playStatBlockSound(path);
+	}
+
+	private function playTimeBlockSound():Void {
+		raceSounds.playTimeBlockSound();
 	}
 
 	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float, iceOverlayAlpha:Float):Void {
