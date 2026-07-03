@@ -70,6 +70,7 @@ class CharacterBaseTest {
 		assertEquals(-1, c.hat1Color2, "slot 1 epic colour preserved");
 		assertEquals(9, c.hat2, "slot 2 takes the second hat id");
 		assertEquals(1, c.hat3, "unfilled slots reset to the empty hat");
+		assertEquals(9, hatClip(c, "hat2").currentFrame, "slot 2 renders from the stacked hat array");
 
 		assertTrue(c.hasHatFlag(Character.CROWN), "crown id raises the crown flag");
 		assertTrue(c.hasHatFlag(Character.TOP), "top-hat id raises the top flag");
@@ -122,6 +123,16 @@ class CharacterBaseTest {
 		var weapon = Std.downcast(state.getChildByTimelineName("weapon"), PR2MovieClip);
 		assertTrue(weapon != null, '$stateName exposes weapon clip');
 		return weapon;
+	}
+
+	private static function hatClip(c:Character, hatName:String):PR2MovieClip {
+		var state = c.display.getStateClip("standAnim");
+		assertTrue(state != null, "stand state exists");
+		var head = Std.downcast(state.getChildByTimelineName("head"), PR2MovieClip);
+		assertTrue(head != null, "stand state exposes head clip");
+		var hat = Std.downcast(head.getChildByTimelineName(hatName), PR2MovieClip);
+		assertTrue(hat != null, 'head exposes $hatName clip');
+		return hat;
 	}
 
 	private static function testJetPackFlameLifecycle():Void {

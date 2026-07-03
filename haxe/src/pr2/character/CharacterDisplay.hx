@@ -43,6 +43,7 @@ class CharacterDisplay extends Sprite {
 	private var secondaryColor:Int;
 	// Optional per-part overrides (hat/head/body/feet). Empty => global colors.
 	private final partColors:Map<String, PartColor> = new Map();
+	private var hatSlotColors:Array<PartColor> = [];
 	private var activeStateName:String = "standAnim";
 	private var activeStateClip:Null<PR2MovieClip>;
 	private var itemFrameName:String = "None";
@@ -98,6 +99,13 @@ class CharacterDisplay extends Sprite {
 	**/
 	public function setPartColor(kind:String, primary:Int, secondary:Int):Void {
 		partColors.set(kind, {primary: primary, secondary: secondary});
+		if (activeStateClip != null) {
+			renderAtlasParts(activeStateClip);
+		}
+	}
+
+	public function setHatSlotColors(colors:Array<PartColor>):Void {
+		hatSlotColors = colors == null ? [] : [for (color in colors) {primary: color.primary, secondary: color.secondary}];
 		if (activeStateClip != null) {
 			renderAtlasParts(activeStateClip);
 		}
@@ -292,15 +300,15 @@ class CharacterDisplay extends Sprite {
 
 		var hatContainer = partIds.body == 29 ? getClipChild(stateClip, "body") : getClipChild(stateClip, "head");
 		if (hatContainer != null) {
-			renderPartSlot(hatContainer, "hat1", "hat", partIds.hat);
-			renderPartSlot(hatContainer, "hat2", "hat", 1);
-			renderPartSlot(hatContainer, "hat3", "hat", 1);
-			renderPartSlot(hatContainer, "hat4", "hat", 1);
+			var hats = partIds.hats != null ? partIds.hats : [partIds.hat, 1, 1, 1];
+			for (slot in 0...4) {
+				renderPartSlot(hatContainer, "hat" + (slot + 1), "hat", hats.length > slot ? hats[slot] : 1, colorForHatSlot(slot));
+			}
 			bringHatSlotsToFront(hatContainer);
 		}
 	}
 
-	private function renderPartSlot(parent:PR2MovieClip, slotName:String, kind:String, partId:Int):Void {
+	private function renderPartSlot(parent:PR2MovieClip, slotName:String, kind:String, partId:Int, ?slotColor:PartColor):Void {
 		var partClip = getClipChild(parent, slotName);
 		if (partClip == null) {
 			return;
@@ -317,7 +325,11 @@ class CharacterDisplay extends Sprite {
 			return;
 		}
 
-		renderLayeredPartSlot(partClip, kind, layeredFrameName, yOffset, colorFor(kind));
+		renderLayeredPartSlot(partClip, kind, layeredFrameName, yOffset, slotColor != null ? slotColor : colorFor(kind));
+	}
+
+	private function colorForHatSlot(slot:Int):PartColor {
+		return hatSlotColors.length > slot ? hatSlotColors[slot] : colorFor("hat");
 	}
 
 	private function renderLayeredPartSlot(partClip:PR2MovieClip, kind:String, frameName:String, yOffset:Float, color:PartColor):Void {
@@ -496,7 +508,8 @@ class CharacterDisplay extends Sprite {
 	}
 
 	private function bringHatSlotsToFront(parent:PR2MovieClip):Void {
-		for (name in ["hat4", "hat3", "hat2", "hat1"]) {
+		for (slot in 0...4) {
+			var name = "hat" + (4 - slot);
 			var child = parent.getChildByTimelineName(name);
 			if (child != null && child.parent == parent) {
 				parent.setChildIndex(child, parent.numChildren - 1);
@@ -529,10 +542,15 @@ class CharacterDisplay extends Sprite {
 	private function isPositioningContainer(name:Null<String>):Bool {
 		return name == "colorMC"
 			|| name == "colorMC2"
-			|| name == "hat1"
-			|| name == "hat2"
-			|| name == "hat3"
-			|| name == "hat4";
+			|| isHatSlotName(name);
+	}
+
+	private function isHatSlotName(name:Null<String>):Bool {
+		if (name == null || !StringTools.startsWith(name, "hat")) {
+			return false;
+		}
+		var slot = Std.parseInt(name.substr(3));
+		return slot != null && slot >= 1 && slot <= 4 && name == "hat" + slot;
 	}
 
 	private static function colorTransformFor(color:Int):ColorTransform {

@@ -98,18 +98,18 @@ class Character extends Sprite {
 	public final display:CharacterDisplay;
 
 	// ---- appearance: hats ------------------------------------------------
-	public var hat1:Int;
-	public var hat2:Int = 1;
-	public var hat3:Int = 1;
-	public var hat4:Int = 1;
-	public var hat1Color:Int = 0;
-	public var hat2Color:Int = 0;
-	public var hat3Color:Int = 0;
-	public var hat4Color:Int = 0;
-	public var hat1Color2:Int = -1;
-	public var hat2Color2:Int = -1;
-	public var hat3Color2:Int = -1;
-	public var hat4Color2:Int = -1;
+	public var hat1(get, set):Int;
+	public var hat2(get, set):Int;
+	public var hat3(get, set):Int;
+	public var hat4(get, set):Int;
+	public var hat1Color(get, set):Int;
+	public var hat2Color(get, set):Int;
+	public var hat3Color(get, set):Int;
+	public var hat4Color(get, set):Int;
+	public var hat1Color2(get, set):Int;
+	public var hat2Color2(get, set):Int;
+	public var hat3Color2(get, set):Int;
+	public var hat4Color2(get, set):Int;
 
 	// ---- appearance: body parts ------------------------------------------
 	public var head:Int;
@@ -150,6 +150,9 @@ class Character extends Sprite {
 
 	// Special-hat flags (replaces the AS3 `SecureStore`).
 	private final hatFlags:Map<String, Bool> = new Map();
+	private final hatIds:Array<Int> = [1, 1, 1, 1];
+	private final hatColors:Array<Int> = [0, 0, 0, 0];
+	private final hatColors2:Array<Int> = [-1, -1, -1, -1];
 
 	// Injectable side-effects deferred from B1 (see class doc). Defaulted to
 	// no-ops so the deterministic base needs no audio/particle subsystem.
@@ -171,7 +174,7 @@ class Character extends Sprite {
 
 	public function new(hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super();
-		this.hat1 = hatId;
+		setHatSlot(1, hatId);
 		this.head = headId;
 		this.body = bodyId;
 		this.feet = feetId;
@@ -204,7 +207,7 @@ class Character extends Sprite {
 
 	private function refreshHatFlags():Void {
 		resetHats();
-		for (hatId in [hat1, hat2, hat3, hat4]) {
+		for (hatId in hatIds) {
 			var flag = hatFlagForId(hatId);
 			if (flag != null) {
 				hatFlags.set(flag, true);
@@ -224,35 +227,18 @@ class Character extends Sprite {
 		the recognised hat ids.
 	**/
 	public function setHats(hatArray:Array<Int>):Void {
-		hat1 = hat2 = hat3 = hat4 = 1;
-		hat1Color = hat2Color = hat3Color = hat4Color = 0xFFFFFF;
-		hat1Color2 = hat2Color2 = hat3Color2 = hat4Color2 = -1;
+		for (slot in 1...5) {
+			setHatSlot(slot, 1, 0xFFFFFF, -1);
+		}
 		resetHats();
 
 		var hatSlot = 1;
 		var i = 0;
-		while (i < hatArray.length) {
+		while (i < hatArray.length && hatSlot <= 4) {
 			var hatId = hatArray[i];
 			var hatColor = hatArray[i + 1] != null ? hatArray[i + 1] : 0;
 			var hatColor2 = hatArray[i + 2] != null ? hatArray[i + 2] : 0;
-			switch (hatSlot) {
-				case 1:
-					hat1 = hatId;
-					hat1Color = hatColor;
-					hat1Color2 = hatColor2;
-				case 2:
-					hat2 = hatId;
-					hat2Color = hatColor;
-					hat2Color2 = hatColor2;
-				case 3:
-					hat3 = hatId;
-					hat3Color = hatColor;
-					hat3Color2 = hatColor2;
-				case 4:
-					hat4 = hatId;
-					hat4Color = hatColor;
-					hat4Color2 = hatColor2;
-			}
+			setHatSlot(hatSlot, hatId, hatColor, hatColor2);
 
 			hatSlot++;
 			i += 3;
@@ -280,7 +266,7 @@ class Character extends Sprite {
 	}
 
 	public function setHatId(id:Int):Void {
-		hat1 = id;
+		setHatSlot(1, id);
 		refreshHatFlags();
 		applyAppearance();
 	}
@@ -301,21 +287,7 @@ class Character extends Sprite {
 	}
 
 	public function setHatColors(color:Int, epic:Int, hatNum:Int = 1):Void {
-		hatNum = numLimit(hatNum, 1, 4);
-		switch (hatNum) {
-			case 1:
-				hat1Color = color;
-				hat1Color2 = epic;
-			case 2:
-				hat2Color = color;
-				hat2Color2 = epic;
-			case 3:
-				hat3Color = color;
-				hat3Color2 = epic;
-			case 4:
-				hat4Color = color;
-				hat4Color2 = epic;
-		}
+		setHatSlotColors(numLimit(hatNum, 1, 4), color, epic);
 		applyAppearance();
 	}
 
@@ -349,32 +321,13 @@ class Character extends Sprite {
 		var hatColor2 = -1;
 		var hatSlot = 4;
 		while (hatSlot >= 1) {
-			switch (hatSlot) {
-				case 4 if (hat4 != 1):
-					hatNum = hat4;
-					hatColor = hat4Color;
-					hatColor2 = hat4Color2;
-					hat4 = 1;
-					break;
-				case 3 if (hat3 != 1):
-					hatNum = hat3;
-					hatColor = hat3Color;
-					hatColor2 = hat3Color2;
-					hat3 = 1;
-					break;
-				case 2 if (hat2 != 1):
-					hatNum = hat2;
-					hatColor = hat2Color;
-					hatColor2 = hat2Color2;
-					hat2 = 1;
-					break;
-				case 1 if (hat1 != 1):
-					hatNum = hat1;
-					hatColor = hat1Color;
-					hatColor2 = hat1Color2;
-					hat1 = 1;
-					break;
-				default:
+			var slotIndex = hatSlot - 1;
+			if (hatIds[slotIndex] != 1) {
+				hatNum = hatIds[slotIndex];
+				hatColor = hatColors[slotIndex];
+				hatColor2 = hatColors2[slotIndex];
+				setHatSlot(hatSlot, 1);
+				break;
 			}
 			hatSlot--;
 		}
@@ -390,7 +343,8 @@ class Character extends Sprite {
 
 	private function applyAppearance():Void {
 		display.setPartIds(currentPartIds());
-		display.setPartColor("hat", hat1Color, hat1Color2);
+		display.setPartColor("hat", hatColors[0], hatColors2[0]);
+		display.setHatSlotColors([for (slot in 0...4) {primary: hatColors[slot], secondary: hatColors2[slot]}]);
 		display.setPartColor("head", headColor, headColor2);
 		display.setPartColor("body", bodyColor, bodyColor2);
 		display.setPartColor("feet", feetColor, feetColor2);
@@ -412,8 +366,54 @@ class Character extends Sprite {
 	public var itemFrameName(default, null):String = "None";
 
 	private inline function currentPartIds():CharacterPartIds {
-		return {hat: hat1, head: head, body: body, feet: feet};
+		return {hat: hatIds[0], hats: hatIds.copy(), head: head, body: body, feet: feet};
 	}
+
+	private function setHatSlot(slot:Int, id:Int, ?color:Int, ?color2:Int):Void {
+		var index = slotIndex(slot);
+		hatIds[index] = id;
+		if (color != null) {
+			hatColors[index] = color;
+		}
+		if (color2 != null) {
+			hatColors2[index] = color2;
+		}
+	}
+
+	private function setHatSlotColors(slot:Int, color:Int, color2:Int):Void {
+		var index = slotIndex(slot);
+		hatColors[index] = color;
+		hatColors2[index] = color2;
+	}
+
+	private inline function slotIndex(slot:Int):Int {
+		return numLimit(slot, 1, 4) - 1;
+	}
+
+	private inline function get_hat1():Int return hatIds[0];
+	private inline function set_hat1(value:Int):Int return hatIds[0] = value;
+	private inline function get_hat2():Int return hatIds[1];
+	private inline function set_hat2(value:Int):Int return hatIds[1] = value;
+	private inline function get_hat3():Int return hatIds[2];
+	private inline function set_hat3(value:Int):Int return hatIds[2] = value;
+	private inline function get_hat4():Int return hatIds[3];
+	private inline function set_hat4(value:Int):Int return hatIds[3] = value;
+	private inline function get_hat1Color():Int return hatColors[0];
+	private inline function set_hat1Color(value:Int):Int return hatColors[0] = value;
+	private inline function get_hat2Color():Int return hatColors[1];
+	private inline function set_hat2Color(value:Int):Int return hatColors[1] = value;
+	private inline function get_hat3Color():Int return hatColors[2];
+	private inline function set_hat3Color(value:Int):Int return hatColors[2] = value;
+	private inline function get_hat4Color():Int return hatColors[3];
+	private inline function set_hat4Color(value:Int):Int return hatColors[3] = value;
+	private inline function get_hat1Color2():Int return hatColors2[0];
+	private inline function set_hat1Color2(value:Int):Int return hatColors2[0] = value;
+	private inline function get_hat2Color2():Int return hatColors2[1];
+	private inline function set_hat2Color2(value:Int):Int return hatColors2[1] = value;
+	private inline function get_hat3Color2():Int return hatColors2[2];
+	private inline function set_hat3Color2(value:Int):Int return hatColors2[2] = value;
+	private inline function get_hat4Color2():Int return hatColors2[3];
+	private inline function set_hat4Color2(value:Int):Int return hatColors2[3] = value;
 
 	public function getName():String {
 		return userName;

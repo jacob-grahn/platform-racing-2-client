@@ -162,15 +162,8 @@ same serialized meaning and visible result as Flash.
 - [x] Extract race sound handling out of `Course` into a `RaceSounds` helper (the
   `*_SOUND` path constants plus `playWorldJumpSound`/`playCharacterSound`/
   block-bump/item/stat-block cues).
-- [ ] Collapse `Character`'s four-slot hat handling (`hat1`..`hat4` /
+- [x] Collapse `Character`'s four-slot hat handling (`hat1`..`hat4` /
   `hat1Color`..`hat4Color` / `hat1Color2`..`hat4Color2`) into an array so the
   repeated switch-on-slot logic in `setHats`/`getHighestHat`/`setHatColors`
-  disappears. Deferred: these are `public var` fields that mirror the Flash
-  `Character` shape and are asserted directly by `CharacterBaseTest`,
-  `LocalCharacterTest`, `RemoteCharacterConsumeTest`, and
-  `CharacterLifecycleTest`. A clean conversion has to change the public API and
-  rewrite those assertions at the same time, so it needs deliberate design (e.g.
-  array-backed `hatN` property accessors to keep the public surface, or a
-  coordinated update of the tests) rather than a mechanical edit. The same
-  discrete-slot pattern also drives `CharacterDisplay.renderAtlasParts`; solve
-  both together.
+  disappears, while preserving the Flash-shaped `hatN` public properties through
+  array-backed accessors.

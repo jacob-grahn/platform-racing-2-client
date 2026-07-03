@@ -4,6 +4,7 @@ import pr2.runtime.PR2MovieClip;
 
 typedef CharacterPartIds = {
 	var hat:Int;
+	@:optional var hats:Array<Int>;
 	var head:Int;
 	var body:Int;
 	var feet:Int;
@@ -34,10 +35,10 @@ class CharacterAppearance {
 			updatePart(stateClip, "foot1", partIds.feet);
 			updatePart(stateClip, "foot2", partIds.feet);
 
-			updateHat(stateClip, "hat1", partIds.hat, partIds.body);
-			updateHat(stateClip, "hat2", 1, partIds.body);
-			updateHat(stateClip, "hat3", 1, partIds.body);
-			updateHat(stateClip, "hat4", 1, partIds.body);
+			var hats = partIds.hats != null ? partIds.hats : [partIds.hat, 1, 1, 1];
+			for (slot in 0...4) {
+				updateHat(stateClip, "hat" + (slot + 1), hats.length > slot ? hats[slot] : 1, partIds.body);
+			}
 
 			hideHeadFeetForFredBody(stateClip, partIds.body);
 		}
