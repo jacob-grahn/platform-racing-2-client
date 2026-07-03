@@ -264,7 +264,7 @@ class LobbyServicesTest {
 		assertEquals(95, Std.int(label.x), "text placement applies Flash cursor x offset");
 		assertEquals(104, Std.int(label.y), "text placement applies Flash cursor y offset");
 		assertEquals("hello, world; #1", label.text, "text editing commits the typed content");
-		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0", editor.activeObjectLayer.getSaveString(), "text placement records Flash add/change actions");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0", editor.activeObjectLayer.getActionString(), "text placement records Flash add/change actions");
 		label.beginDragAt(100, 120);
 		label.endDragAt(100, 120);
 		assertEquals(true, label.isEditing(), "clicking existing text reopens editing");
@@ -273,7 +273,7 @@ class LobbyServicesTest {
 		label.finishEditing();
 		assertEquals("edited text", label.text, "re-editing commits the updated text");
 		assertEquals(0x336699, label.color, "text color edit commits the selected color");
-		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601", editor.activeObjectLayer.getSaveString(),
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601", editor.activeObjectLayer.getActionString(),
 			"text re-edit records a Flash change action with color");
 		label.beginDragAt(100, 120);
 		assertEquals(0.75, label.alpha, "text drag fades the moved object like Flash");
@@ -290,14 +290,14 @@ class LobbyServicesTest {
 		assertEquals(1.24, label.scaleX, "text resize rounds scale x to hundredths");
 		assertEquals(0.75, label.scaleY, "text resize rounds scale y to hundredths");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75",
-			editor.activeObjectLayer.getSaveString(), "text move and resize record Flash object actions");
+			editor.activeObjectLayer.getActionString(), "text move and resize record Flash object actions");
 		label.beginDragAt(112, 131);
 		label.endDragAt(112, 131);
 		label.setEditingText("   ");
 		label.finishEditing();
 		assertEquals(0, editor.activeObjectLayer.textObjects.length, "empty text edit removes the text object");
 		assertEquals(null, label.parent, "empty text edit unmounts the display object");
-		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0", editor.activeObjectLayer.getSaveString(),
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0", editor.activeObjectLayer.getActionString(),
 			"empty text edit records a Flash delete action");
 		clickEditorMenu(editor, "undoButton");
 		assertEquals(1, editor.activeObjectLayer.textObjects.length, "undo restores the deleted text object");
@@ -308,17 +308,17 @@ class LobbyServicesTest {
 		assertEquals(1.24, label.scaleX, "undo rebuilds the previous text scale x");
 		assertEquals(0.75, label.scaleY, "undo rebuilds the previous text scale y");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75",
-			editor.activeObjectLayer.getSaveString(), "undo removes the last Flash text action");
+			editor.activeObjectLayer.getActionString(), "undo removes the last Flash text action");
 		clickEditorMenu(editor, "redoButton");
 		assertEquals(0, editor.activeObjectLayer.textObjects.length, "redo reapplies the deleted text action");
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
-			editor.activeObjectLayer.getSaveString(), "redo restores the last Flash text action");
+			editor.activeObjectLayer.getActionString(), "redo restores the last Flash text action");
 		clickEditorMenu(editor, "undoButton");
 		assertEquals(1, editor.activeObjectLayer.textObjects.length, "undo after redo restores the text object again");
 		label = editor.activeObjectLayer.textObjects[0];
 		editor.activeObjectLayer.removeTextObject(label);
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
-			editor.activeObjectLayer.getSaveString(), "re-deleting restored text records a fresh delete action");
+			editor.activeObjectLayer.getActionString(), "re-deleting restored text records a fresh delete action");
 		assertEquals(0, editor.activeObjectLayer.redoArray.length, "fresh text actions clear the redo stack");
 		clickEditorSidebar(editor, "stamp0Entry");
 		var tree = editor.placeSelectedToolAt(100, 120);

@@ -2448,6 +2448,10 @@ class EditorObjectLayer extends Sprite {
 		return entries.join(",");
 	}
 
+	public function getActionString():String {
+		return saveArray.join(",");
+	}
+
 	public function remove():Void {
 		if (parent != null) {
 			parent.removeChild(this);

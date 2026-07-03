@@ -52,7 +52,7 @@ Port the editor itself, one piece at a time:
       cursor offsets, layer-scale conversion, editable input, and `u`/`y`
       action recording.
     - [x] Port selecting existing text objects for re-editing.
-    - [ ] Port text color changes, empty-text deletion, and resize/move
+    - [x] Port text color changes, empty-text deletion, and resize/move
       integration.
       - [x] Port empty-text deletion after editing.
       - [x] Port text color changes.
