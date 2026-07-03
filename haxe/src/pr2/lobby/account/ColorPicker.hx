@@ -82,6 +82,7 @@ class ColorPicker extends Sprite {
 		popup.y = Math.round(py);
 		popupParent.addChild(popup);
 		popup.init();
+		popup.addExclusion(this);
 		if (AppStage.stage != null) {
 			AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageDown);
 		}

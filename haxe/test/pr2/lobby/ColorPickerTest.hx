@@ -1,12 +1,16 @@
 package pr2.lobby;
 
 import openfl.display.Sprite;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import pr2.data.ColorUtil;
 import pr2.lobby.account.ColorChoices;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.account.ColorPickerPopup;
+import pr2.lobby.account.CursorEyedropper;
+import pr2.ui.CustomCursor;
 
 class ColorPickerTest {
 	private static var assertions:Int = 0;
@@ -18,6 +22,8 @@ class ColorPickerTest {
 		testPopupOrientationAndDirection();
 		testPopupTextPaletteAndCancel();
 		testPopupSpectrumAndHue();
+		testCursorEyedropperSamplingAndExclusions();
+		testPopupRestoresPriorCustomCursor();
 		trace('ColorPickerTest passed $assertions assertions');
 	}
 
@@ -158,6 +164,67 @@ class ColorPickerTest {
 		assertEquals(180, Math.round(@:privateAccess popup.hue), "hue slider maps midpoint to 180 degrees");
 		assertEquals(0x00FFFF, popup.getColor(), "hue slider updates color");
 		popup.remove();
+	}
+
+	private static function testCursorEyedropperSamplingAndExclusions():Void {
+		var stageRoot = new Sprite();
+		var source = new Sprite();
+		var pixels = new BitmapData(40, 20, false, 0xFF0000);
+		pixels.fillRect(new openfl.geom.Rectangle(20, 0, 20, 20), 0x00FF00);
+		var bitmap = new Bitmap(pixels);
+		source.addChild(bitmap);
+		stageRoot.addChild(source);
+		var eyedropper = new CursorEyedropper(bitmap);
+		var changes = 0;
+		var completes = 0;
+		eyedropper.addEventListener(Event.CHANGE, function(_:Event):Void changes++);
+		eyedropper.addEventListener(Event.COMPLETE, function(_:Event):Void completes++);
+		source.addEventListener(MouseEvent.MOUSE_MOVE, @:privateAccess eyedropper.mouseMoveHandler);
+
+		source.dispatchEvent(mouseEventAt(source, 5, 5));
+		@:privateAccess eyedropper.maybeUpdate(new Event(Event.ENTER_FRAME));
+		assertEquals(0xFF0000, eyedropper.color, "eyedropper samples red pixel");
+		assertEquals(true, eyedropper.visible, "eyedropper shows over included targets");
+		source.dispatchEvent(mouseEventAt(source, 25, 5));
+		@:privateAccess eyedropper.maybeUpdate(new Event(Event.ENTER_FRAME));
+		assertEquals(0x00FF00, eyedropper.color, "eyedropper samples green pixel");
+		assertEquals(2, changes, "eyedropper dispatches preview changes");
+
+		eyedropper.addExclusion(source);
+		@:privateAccess eyedropper.maybeUpdate(new Event(Event.ENTER_FRAME));
+		assertEquals(false, eyedropper.visible, "eyedropper hides over excluded ancestors");
+		assertEquals(-1, eyedropper.color, "eyedropper clears color over exclusions");
+
+		var second = new CursorEyedropper(bitmap);
+		source.addEventListener(MouseEvent.MOUSE_MOVE, @:privateAccess second.mouseMoveHandler);
+		source.dispatchEvent(mouseEventAt(source, 5, 5));
+		@:privateAccess second.maybeUpdate(new Event(Event.ENTER_FRAME));
+		@:privateAccess second.mouseDownHandler(mouseEventAt(source, 5, 5));
+		assertEquals(0, completes, "first eyedropper does not receive second complete");
+		var secondCompletes = 0;
+		second.addEventListener(Event.COMPLETE, function(_:Event):Void secondCompletes++);
+		@:privateAccess second.mouseDownHandler(mouseEventAt(source, 5, 5));
+		assertEquals(1, secondCompletes, "visible eyedropper dispatches complete on click");
+		second.remove();
+		assertEquals(null, @:privateAccess second.cursorContainer, "eyedropper disposes sampling bitmap");
+		eyedropper.remove();
+		pixels.dispose();
+	}
+
+	private static function testPopupRestoresPriorCustomCursor():Void {
+		CustomCursor.unsetInstance();
+		var prior = new CustomCursor();
+		prior.disposable = false;
+		CustomCursor.change(prior);
+		assertEquals(true, prior.isActive(), "prior cursor starts active");
+		var popup = new ColorPickerPopup(0x0000FF);
+		popup.init();
+		assertEquals(false, prior.isActive(), "popup pauses prior cursor");
+		assertEquals(true, Std.isOfType(CustomCursor.instance, CursorEyedropper), "popup installs eyedropper cursor");
+		popup.remove();
+		assertEquals(prior, CustomCursor.instance, "popup restores prior cursor instance");
+		assertEquals(true, prior.isActive(), "popup restores prior cursor active state");
+		CustomCursor.unsetInstance();
 	}
 
 	private static function resetRecents():Void {

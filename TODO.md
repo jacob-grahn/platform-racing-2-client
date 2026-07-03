@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `CursorEyedropper.as` for the color picker: install the authored
-  eyedropper custom cursor, pause/restore any previous `CustomCursor`, maintain
-  popup/exclusion hit testing, sample the stage bitmap under the cursor without
-  including the cursor graphic, dispatch preview `CHANGE` and final `COMPLETE`,
-  and dispose the sampling `BitmapData` on removal.
 - [ ] Preserve `AESPad.as` / `Encryptor.as` compatibility for PR2 encrypted
   fields: zero-pad by writing NUL UTF bytes until the block boundary, keep the
   Flash `unpad()` behavior used by the original decrypt path, expose the
@@ -360,12 +355,10 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   immediately on every row, and `PlayersTabUserListDataLoader` / `Guilds` should
   guard or unregister async callbacks on removal so late HTTP responses cannot
   mutate torn-down list art.
-- [ ] Port `ui.CustomCursor` runtime behavior for editor tools and eyedropper:
-  maintain the singleton `stageRef` cursor instance, hide/show the OS cursor,
-  track mouse/touch move/down/up/focus events, pause vs dispose non-disposable
-  cursors, apply centered cursor graphics, and preserve the Cmd/Ctrl temporary
-  `ObjectDeleter` swap/restore through `Memory.memory` while excluding text,
-  brush, and eyedropper cursors.
+- [ ] Preserve remaining `ui.CustomCursor` runtime behavior for editor tools:
+  forward touch events, expose the Flash cursor identity hooks used by editor
+  tools, and preserve the Cmd/Ctrl temporary `ObjectDeleter` swap/restore through
+  `Memory.memory` while excluding text, brush, and eyedropper cursors.
 - [ ] Preserve remaining `ui` helper parity from batch 37: port `EmblemLoader`
   image browse/load/fit-to-canvas/JPEG90 upload events, replace text-only guild
   names with the authored `GuildNameGraphic` helper (including `makeWidth`,

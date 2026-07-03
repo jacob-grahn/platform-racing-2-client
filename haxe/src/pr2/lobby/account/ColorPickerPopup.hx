@@ -17,12 +17,10 @@ import pr2.data.ColorUtil;
 import pr2.runtime.FlButton;
 import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.CustomCursor;
 
 /**
 	HSV colour popup ported from `com.jiggmin.ColorPicker.ColorPickerPopup`.
-	The eyedropper cursor is intentionally left to the separate CursorEyedropper
-	TODO; the authored popup art, palette, text box, spectrum, slider, preview,
-	OK/cancel, clamping, and drag semantics live here.
 **/
 class ColorPickerPopup extends Sprite {
 	private static inline var PALETTE_CELL:Int = 10;
@@ -43,9 +41,12 @@ class ColorPickerPopup extends Sprite {
 	private var spectrum:Sprite;
 	private var hueSlider:Sprite;
 	private var colorPreviewBox:Sprite;
+	private var eyedropper:Null<CursorEyedropper>;
 	private var spectrumBG:BitmapData;
 	private var hueArrow:DisplayObject;
 	private var crosshairs:DisplayObject;
+	private var priorCursor:Null<CustomCursor>;
+	private var priorCursorActive:Bool = false;
 	private var art:PR2MovieClip;
 	private var okButton:FlButton;
 	private var cancelButton:FlButton;
@@ -114,6 +115,16 @@ class ColorPickerPopup extends Sprite {
 	}
 
 	public function init():Void {
+		eyedropper = new CursorEyedropper();
+		eyedropper.addExclusion(this);
+		eyedropper.addEventListener(Event.CHANGE, onEyedropperMove);
+		eyedropper.addEventListener(Event.COMPLETE, applyColor);
+		if (CustomCursor.instance != null) {
+			priorCursor = CustomCursor.instance;
+			priorCursorActive = priorCursor.isActive();
+			priorCursor.pause();
+		}
+		CustomCursor.change(eyedropper);
 		var stage = AppStage.stage != null ? AppStage.stage : this.stage;
 		if (stage != null) {
 			stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
@@ -152,6 +163,12 @@ class ColorPickerPopup extends Sprite {
 		return previewColor != PREVIEW_NONE ? previewColor : color;
 	}
 
+	public function addExclusion(d:DisplayObject):Void {
+		if (eyedropper != null) {
+			eyedropper.addExclusion(d);
+		}
+	}
+
 	public function remove():Void {
 		if (removed) {
 			return;
@@ -168,12 +185,17 @@ class ColorPickerPopup extends Sprite {
 		palette.removeEventListener(MouseEvent.MOUSE_MOVE, hoverOverPalette);
 		palette.removeEventListener(MouseEvent.MOUSE_DOWN, clickPalette);
 		palette.removeEventListener(MouseEvent.MOUSE_OUT, hoverOutPalette);
+		if (eyedropper != null) {
+			eyedropper.removeEventListener(Event.CHANGE, onEyedropperMove);
+			eyedropper.removeEventListener(Event.COMPLETE, applyColor);
+		}
 		okButton.removeEventListener(MouseEvent.CLICK, clickOK);
 		cancelButton.removeEventListener(MouseEvent.CLICK, clickCancel);
 		textBox.removeEventListener(Event.CHANGE, setColorFromText);
 		if (spectrumBG != null) {
 			spectrumBG.dispose();
 		}
+		restorePriorCursor();
 		if (parent != null) {
 			parent.removeChild(this);
 		}
@@ -288,6 +310,22 @@ class ColorPickerPopup extends Sprite {
 		previewColor = PREVIEW_NONE;
 		outlinePC.visible = false;
 		updateColorPreview();
+	}
+
+	private function onEyedropperMove(_:Event):Void {
+		if (eyedropper != null) {
+			previewColor = eyedropper.color;
+			updateColorPreview(previewColor);
+		}
+	}
+
+	private function applyColor(_:Event):Void {
+		if (eyedropper != null) {
+			previewColor = PREVIEW_NONE;
+			setColor(eyedropper.color);
+			updateColorPreview();
+			remove();
+		}
 	}
 
 	private function setColorFromText(_:Event):Void {
@@ -417,6 +455,23 @@ class ColorPickerPopup extends Sprite {
 			throw 'ColorPickerPopupGraphic missing $name';
 		}
 		return typed;
+	}
+
+	private function restorePriorCursor():Void {
+		if (CustomCursor.instance != null) {
+			CustomCursor.unsetInstance();
+			if (priorCursor != null) {
+				CustomCursor.change(priorCursor);
+				priorCursor.init();
+				if (!priorCursorActive) {
+					priorCursor.pause();
+				}
+			}
+		} else if (priorCursor != null) {
+			priorCursor.remove();
+		}
+		eyedropper = null;
+		priorCursor = null;
 	}
 
 	private static function eventPoint(target:DisplayObject, e:MouseEvent):Point {
