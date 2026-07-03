@@ -27,6 +27,7 @@ import pr2.net.LobbySocket;
 import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
+import pr2.page.LevelEditor.TestCoursePage;
 import pr2.page.Page;
 import pr2.page.PageHolder;
 import pr2.lobby.account.StatSlider;
@@ -69,6 +70,7 @@ class LobbyServicesTest {
 		testMemoryAndSecureData();
 		testLevelEditorRoute();
 		testLevelEditorShell();
+		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
 		testSocialActionPlan();
 		testCourseMenuTiming();
@@ -496,6 +498,51 @@ class LobbyServicesTest {
 
 	private static function clickEditorSidebar(editor:LevelEditor, name:String):Void {
 		editor.menu.sideBar.getChildByName(name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function testLevelEditorTestCourseTransition():Void {
+		LobbySession.clear();
+		LobbySession.group = 1;
+		var holder = new PageHolder();
+		var editor = new LevelEditor(null, true, true);
+		holder.changePage(editor);
+		editor.title = "Testable Level";
+		editor.setSong("0");
+		editor.setGravity("2");
+		editor.setMaxTime("90");
+		editor.setGameMode("deathmatch");
+		editor.selectEditorTool("blocks", "brick");
+		var brick = editor.placeSelectedBlockAt(100, 120);
+		assertNotNull(brick, "test-course source editor places a block");
+		var sourceData = editor.getLevelVars().get("data");
+
+		LobbySocket.resetSent();
+		clickEditorMenu(editor, "testButton");
+		var testCourse = Std.downcast(holder.getCurrentPage(), TestCoursePage);
+		assertNotNull(testCourse, "editor test button opens the test-course page");
+		assertEquals(true, testCourse.isMod, "test course preserves editor mod flag");
+		assertEquals(true, testCourse.reportsMode, "test course preserves reports mode");
+		assertEquals(sourceData, testCourse.variables.get("data"), "test course receives serialized editor data");
+		assertNotNull(testCourse.course, "test course mounts a playable Course");
+		assertNotNull(DisplayUtil.findByName(testCourse.art, "back_bt"), "test course mounts authored back button");
+		assertNotNull(DisplayUtil.findByName(testCourse.art, "restart_bt"), "test course mounts authored restart button");
+		assertEquals(true, LobbySocket.sentCommands.length > 0 && StringTools.startsWith(LobbySocket.sentCommands[0], "exact_pos`"),
+			"test course starts the race countdown like Flash");
+
+		var firstCourse = testCourse.course;
+		DisplayUtil.findByName(testCourse.art, "restart_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(true, firstCourse != testCourse.course, "restart rebuilds the test course");
+		assertEquals(null, firstCourse.parent, "restart removes the previous Course display");
+
+		DisplayUtil.findByName(testCourse.art, "back_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		var returnedEditor = Std.downcast(holder.getCurrentPage(), LevelEditor);
+		assertNotNull(returnedEditor, "back button returns to the level editor");
+		assertEquals(true, returnedEditor.isMod, "returned editor preserves mod flag");
+		assertEquals(true, returnedEditor.reportsMode, "returned editor preserves reports mode");
+		assertEquals("Testable Level", returnedEditor.title, "returned editor restores level vars");
+		assertEquals("2.0", returnedEditor.gravity, "returned editor restores normalized gravity");
+		returnedEditor.remove();
+		LobbySession.clear();
 	}
 
 	private static function testCourseMenuTiming():Void {

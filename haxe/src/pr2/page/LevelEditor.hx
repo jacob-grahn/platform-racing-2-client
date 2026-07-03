@@ -22,6 +22,7 @@ import openfl.utils.Assets;
 import pr2.app.AppStage;
 import pr2.audio.MusicCatalog;
 import pr2.audio.MusicCatalog.MusicTrack;
+import pr2.gameplay.Course;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedDrawAction;
@@ -34,6 +35,7 @@ import pr2.lobby.account.StatSlider;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
@@ -98,11 +100,15 @@ class LevelEditor extends Page {
 	private var velY:Float = 0;
 	private var pressedKeys:Map<Int, Bool> = new Map();
 	private var cameraStarted:Bool = false;
+	private var initialVariables:Null<Map<String, String>>;
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
 		super();
 		isMod = mod;
 		reportsMode = report;
+		if (variables != null) {
+			initialVariables = copyVars(cast variables);
+		}
 	}
 
 	override public function initialize():Void {
@@ -136,6 +142,9 @@ class LevelEditor extends Page {
 		addChild(menu);
 		menu.setReportsMode(reportsMode);
 		addChild(overlayLayer);
+		if (initialVariables != null) {
+			setVariables(initialVariables);
+		}
 	}
 
 	public function setReportsMode(on:Bool = false):Void {
@@ -240,6 +249,16 @@ class LevelEditor extends Page {
 		vars.set("cowboyChance", cowboyChance);
 		vars.set("passHash", passHash());
 		return vars;
+	}
+
+	public static function copyVars(vars:Map<String, String>):Map<String, String> {
+		var copied = new Map<String, String>();
+		if (vars != null) {
+			for (key in vars.keys()) {
+				copied.set(key, vars.get(key));
+			}
+		}
+		return copied;
 	}
 
 	public function setZoom(nextZoom:Float):Void {
@@ -734,6 +753,80 @@ class LevelEditor extends Page {
 	}
 }
 
+class TestCoursePage extends Page {
+	public final variables:Map<String, String>;
+	public final isMod:Bool;
+	public final reportsMode:Bool;
+	public var course(default, null):Null<Course>;
+	public var art(default, null):Null<PR2MovieClip>;
+	private var bindings:Array<Binding> = [];
+
+	public function new(variables:Map<String, String>, mod:Bool = false, report:Bool = false) {
+		super();
+		this.variables = LevelEditor.copyVars(variables);
+		isMod = mod;
+		reportsMode = report;
+	}
+
+	override public function initialize():Void {
+		super.initialize();
+		mountCourse();
+		art = PR2MovieClip.fromLinkage("TestCourseGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		bind("back_bt", clickBack);
+		bind("restart_bt", clickRestart);
+	}
+
+	override public function remove():Void {
+		for (binding in bindings) {
+			LobbyArt.unbind(binding);
+		}
+		bindings = [];
+		if (course != null) {
+			course.remove();
+			course = null;
+		}
+		if (art != null) {
+			art.dispose();
+			art = null;
+		}
+		super.remove();
+	}
+
+	private function mountCourse():Void {
+		var data = new ServerLevelData(variables, true);
+		var level = ServerLevelDecoder.decode(data.data);
+		course = new Course(level, data, LevelConfig.fromServerData(data));
+		addChildAt(course, 0);
+		course.beginRace();
+	}
+
+	private function bind(name:String, handler:Void->Void):Void {
+		var target = art == null ? null : DisplayUtil.findByName(art, name);
+		var binding = LobbyArt.bind(target, handler);
+		if (binding != null) {
+			bindings.push(binding);
+		}
+	}
+
+	private function clickBack():Void {
+		if (pageHolder != null) {
+			pageHolder.changePage(new LevelEditor(variables, isMod, reportsMode));
+		}
+	}
+
+	private function clickRestart():Void {
+		if (course != null) {
+			course.remove();
+			course = null;
+		}
+		mountCourse();
+		if (art != null) {
+			addChild(art);
+		}
+	}
+}
+
 typedef EditorBlockSpec = {
 	final code:Int;
 	final type:Null<BlockType>;
@@ -776,6 +869,7 @@ class LevelEditorMenu extends Sprite {
 		bind("layer3Button", function() setLayer(3));
 		bind("undoButton", clickUndo);
 		bind("redoButton", clickRedo);
+		bind("testButton", clickTest);
 		var zoomSelect = zoomCombo();
 		if (zoomSelect != null) {
 			zoomSelect.addEventListener(Event.CHANGE, chooseZoom);
@@ -864,6 +958,12 @@ class LevelEditorMenu extends Sprite {
 	private function clickRedo():Void {
 		editor.redoActiveObjectLayer();
 		updateUndoRedoState();
+	}
+
+	private function clickTest():Void {
+		if (editor.pageHolder != null) {
+			editor.pageHolder.changePage(new TestCoursePage(editor.getLevelVars(), editor.isMod, editor.reportsMode));
+		}
 	}
 
 	private function chooseZoom(_):Void {
