@@ -12,6 +12,7 @@ import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
 import pr2.page.LevelEditor.EditorMusicSettingsPopup;
 import pr2.page.LevelEditor.EditorObjectLayer;
+import pr2.page.LevelEditor.EditorValueSettingsPopup;
 
 class EditorSettingsTest {
 	private static var assertions:Int = 0;
@@ -22,6 +23,7 @@ class EditorSettingsTest {
 		testPasswordHashing();
 		testBackgroundColorPickerCommit();
 		testTextObjectSaveStringUsesDecodedArtFormat();
+		testValueSettingsPopupCommit();
 		testMusicSettingsPopupCommit();
 		testItemSettingsPopupCommit();
 		testHatsSettingsPopupCommit();
@@ -141,6 +143,47 @@ class EditorSettingsTest {
 		assertEquals(1.23, text.scaleX, "text object save exports width scale");
 		assertEquals(0.75, text.scaleY, "text object save exports height scale");
 		layer.remove();
+	}
+
+	private static function testValueSettingsPopupCommit():Void {
+		var editor = new LevelEditor();
+
+		var rankPopup = new EditorValueSettingsPopup(editor, new Sprite(), "rank");
+		assertEquals("0", rankPopup.value(), "rank popup opens with editor minimum rank");
+		rankPopup.setValue("42");
+		assertEquals("42", editor.minRank, "rank popup commits minimum rank");
+		assertEquals("42", editor.getLevelVars().get("min_level"), "rank popup export uses minimum rank");
+		rankPopup.remove();
+
+		var gravityPopup = new EditorValueSettingsPopup(editor, new Sprite(), "gravity");
+		gravityPopup.setValue("2.5");
+		assertEquals("2.5", editor.gravity, "gravity popup commits gravity");
+		assertEquals("2.5", editor.getLevelVars().get("gravity"), "gravity popup export uses gravity");
+		gravityPopup.setValue("");
+		assertEquals("0", editor.getLevelVars().get("gravity"), "empty gravity popup value uses Flash default zero");
+		gravityPopup.remove();
+
+		var timePopup = new EditorValueSettingsPopup(editor, new Sprite(), "time");
+		timePopup.setValue("0");
+		assertEquals("0", editor.maxTime, "time popup commits infinite-time zero");
+		assertEquals("0", editor.getLevelVars().get("max_time"), "time popup export uses committed time");
+		timePopup.remove();
+
+		var cowboyPopup = new EditorValueSettingsPopup(editor, new Sprite(), "sfcm");
+		cowboyPopup.setValue("75");
+		assertEquals("75", editor.cowboyChance, "cowboy chance popup commits chance");
+		assertEquals("75", editor.getLevelVars().get("cowboyChance"), "cowboy chance popup exports chance");
+		cowboyPopup.remove();
+
+		var passPopup = new EditorValueSettingsPopup(editor, new Sprite(), "pass");
+		passPopup.setValue("secret");
+		assertEquals(1, editor.hasPass, "password popup marks level passworded");
+		assertEquals(Md5.encode("secret" + ServerConfig.LEVEL_PASS_SALT), editor.getLevelVars().get("passHash"),
+			"password popup exports salted password hash");
+		passPopup.setValue("");
+		assertEquals(0, editor.hasPass, "empty password popup clears password flag");
+		assertEquals("", editor.getLevelVars().get("passHash"), "empty password popup exports no hash");
+		passPopup.remove();
 	}
 
 	private static function testMusicSettingsPopupCommit():Void {

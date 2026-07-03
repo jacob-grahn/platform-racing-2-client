@@ -93,6 +93,8 @@ Port the editor itself, one piece at a time:
     and background color.
   - [x] Wire the background color picker sidebar entry to update and export the
     editor background color.
+  - [x] Wire the rank, gravity, time, cowboy-chance, and password value popups
+    to commit through the editor setting setters.
 - [x] Port the hats/items/music menus.
   - [x] Port the editor item settings menu.
   - [x] Port the editor hats settings menu.

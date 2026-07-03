@@ -45,6 +45,7 @@ import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
+import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
@@ -79,6 +80,7 @@ class LevelEditor extends Page {
 	public var activeItemSettingsPopup(default, null):Null<EditorItemSettingsPopup>;
 	public var activeHatsSettingsPopup(default, null):Null<EditorHatsSettingsPopup>;
 	public var activeMusicSettingsPopup(default, null):Null<EditorMusicSettingsPopup>;
+	public var activeValueSettingsPopup(default, null):Null<EditorValueSettingsPopup>;
 	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	public var badHats(default, null):Array<Int> = [];
@@ -403,6 +405,7 @@ class LevelEditor extends Page {
 	public function openItemSettingsMenu(target:DisplayObject):Void {
 		closeHatsSettingsPopup();
 		closeMusicSettingsPopup();
+		closeValueSettingsPopup();
 		closeItemSettingsPopup();
 		activeItemSettingsPopup = new EditorItemSettingsPopup(this, target);
 	}
@@ -424,6 +427,7 @@ class LevelEditor extends Page {
 	public function openHatsSettingsMenu(target:DisplayObject):Void {
 		closeItemSettingsPopup();
 		closeMusicSettingsPopup();
+		closeValueSettingsPopup();
 		closeHatsSettingsPopup();
 		activeHatsSettingsPopup = new EditorHatsSettingsPopup(this, target);
 	}
@@ -445,6 +449,7 @@ class LevelEditor extends Page {
 	public function openMusicSettingsMenu(target:DisplayObject):Void {
 		closeItemSettingsPopup();
 		closeHatsSettingsPopup();
+		closeValueSettingsPopup();
 		closeMusicSettingsPopup();
 		activeMusicSettingsPopup = new EditorMusicSettingsPopup(this, target);
 	}
@@ -460,6 +465,28 @@ class LevelEditor extends Page {
 	public function musicSettingsPopupRemoved(popup:EditorMusicSettingsPopup):Void {
 		if (activeMusicSettingsPopup == popup) {
 			activeMusicSettingsPopup = null;
+		}
+	}
+
+	public function openValueSettingsMenu(settingId:String, target:DisplayObject):Void {
+		closeItemSettingsPopup();
+		closeHatsSettingsPopup();
+		closeMusicSettingsPopup();
+		closeValueSettingsPopup();
+		activeValueSettingsPopup = new EditorValueSettingsPopup(this, target, settingId);
+	}
+
+	public function closeValueSettingsPopup():Void {
+		if (activeValueSettingsPopup != null) {
+			var popup = activeValueSettingsPopup;
+			activeValueSettingsPopup = null;
+			popup.remove();
+		}
+	}
+
+	public function valueSettingsPopupRemoved(popup:EditorValueSettingsPopup):Void {
+		if (activeValueSettingsPopup == popup) {
+			activeValueSettingsPopup = null;
 		}
 	}
 
@@ -555,6 +582,7 @@ class LevelEditor extends Page {
 			closeItemSettingsPopup();
 			closeHatsSettingsPopup();
 			closeMusicSettingsPopup();
+			closeValueSettingsPopup();
 			layerContainer = null;
 		}
 		drawingLayer = null;
@@ -1787,6 +1815,188 @@ class EditorCustomStatsBlockOptionsPopup extends EditorBlockOptionsPopup {
 		} else if (resetPop != null) {
 			resetPop.remove();
 			resetPop = null;
+		}
+	}
+}
+
+typedef EditorValueSettingSpec = {
+	final id:String;
+	final title:String;
+	final desc:String;
+	final value:String;
+	final maxChars:Int;
+	final restrict:Null<String>;
+	final defaultVal:String;
+	final displayAsPassword:Bool;
+};
+
+class EditorValueSettingsPopup extends Sprite {
+	public final editor:LevelEditor;
+	public final art:PR2MovieClip;
+	public final settingId:String;
+	private var valueInput:Null<FlTextInput>;
+	private var armTimer:Null<Timer>;
+	private var armed:Bool = false;
+	private var removed:Bool = false;
+	private var defaultVal:String = "0";
+
+	public function new(editor:LevelEditor, target:DisplayObject, settingId:String) {
+		super();
+		this.editor = editor;
+		this.settingId = settingId;
+		art = PR2MovieClip.fromLinkage("ValueMenuGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		configure();
+		mountNear(target);
+		armTimer = Timer.delay(armAutoDismiss, 25);
+	}
+
+	public static function handles(settingId:String):Bool {
+		return switch (settingId) {
+			case "rank" | "gravity" | "time" | "sfcm" | "pass": true;
+			default: false;
+		}
+	}
+
+	public function value():String {
+		return valueInput == null ? "" : valueInput.text;
+	}
+
+	public function setValue(nextValue:String):Void {
+		if (valueInput != null) {
+			valueInput.text = nextValue == null ? "" : nextValue;
+		}
+		commitValue();
+	}
+
+	public function remove():Void {
+		if (removed) {
+			return;
+		}
+		removed = true;
+		if (armTimer != null) {
+			armTimer.stop();
+			armTimer = null;
+		}
+		if (armed && AppStage.stage != null) {
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		}
+		if (valueInput != null) {
+			valueInput.removeEventListener(Event.CHANGE, commitValue);
+		}
+		art.dispose();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		editor.valueSettingsPopupRemoved(this);
+	}
+
+	private function configure():Void {
+		var spec = specFor(settingId);
+		defaultVal = spec.defaultVal;
+		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(art, "titleBox"));
+		var descBox = FlComponents.asTextField(DisplayUtil.findByName(art, "descBox"));
+		if (titleBox != null) {
+			titleBox.htmlText = "<b>-- " + spec.title + " --</b>";
+		}
+		if (descBox != null) {
+			descBox.htmlText = spec.desc;
+		}
+		valueInput = Std.downcast(DisplayUtil.findByName(art, "valueBox"), FlTextInput);
+		if (valueInput != null) {
+			valueInput.text = spec.value;
+			valueInput.maxChars = spec.maxChars;
+			if (spec.restrict != null) {
+				valueInput.restrict = spec.restrict;
+			}
+			valueInput.displayAsPassword = spec.displayAsPassword;
+			valueInput.addEventListener(Event.CHANGE, commitValue);
+			if (AppStage.stage != null) {
+				AppStage.stage.focus = valueInput.textField;
+			}
+		}
+	}
+
+	private function specFor(settingId:String):EditorValueSettingSpec {
+		return switch (settingId) {
+			case "rank":
+				{id: "rank", title: "Minimum Rank", desc: "Players below this rank will not be able to race on this course.",
+					value: editor.minRank, maxChars: 2, restrict: "0123456789", defaultVal: "0", displayAsPassword: false};
+			case "gravity":
+				{id: "gravity", title: "Gravity Multiplier", desc: "Normal gravity will be multiplied by the number you provide.",
+					value: editor.gravity, maxChars: 4, restrict: "-.0123456789", defaultVal: "0", displayAsPassword: false};
+			case "time":
+				{id: "time", title: "Time Limit",
+					desc: "Racers will have this amount of seconds to complete this course. Enter 0 for infinite time.", value: editor.maxTime,
+					maxChars: 4, restrict: "0123456789", defaultVal: "0", displayAsPassword: false};
+			case "sfcm":
+				{id: "sfcm", title: "Chance of Cowboy Mode", desc: "Super Flying Cowboy Mode will appear this often out of 100.",
+					value: editor.cowboyChance, maxChars: 3, restrict: "0123456789", defaultVal: "0", displayAsPassword: false};
+			case "pass":
+				{id: "pass", title: "Secret Password", desc: "This password lets players play your course while unpublished.",
+					value: editor.pass == null ? "" : editor.pass, maxChars: 32, restrict: null, defaultVal: "", displayAsPassword: false};
+			default:
+				{id: settingId, title: settingId, desc: "", value: "", maxChars: 9, restrict: "0123456789", defaultVal: "0",
+					displayAsPassword: false};
+		}
+	}
+
+	private function commitValue(?_):Void {
+		var text = valueInput == null ? "" : valueInput.text;
+		if (text == "") {
+			text = defaultVal;
+		}
+		switch (settingId) {
+			case "rank":
+				editor.setMinRank(text);
+			case "gravity":
+				editor.setGravity(text);
+			case "time":
+				editor.setMaxTime(text);
+			case "sfcm":
+				editor.setCowboyChance(text);
+			case "pass":
+				editor.setPass(text);
+			default:
+		}
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = AppStage.stage;
+		}
+	}
+
+	private function mountNear(target:DisplayObject):Void {
+		if (AppStage.stage == null) {
+			return;
+		}
+		AppStage.stage.addChild(this);
+		var targetBounds = target.getBounds(AppStage.stage);
+		var popupBounds = getBounds(this);
+		var popupWidth = popupBounds.width <= 0 ? 250 : popupBounds.width;
+		var popupHeight = popupBounds.height <= 0 ? 95 : popupBounds.height;
+		x = targetBounds.left > popupWidth ? targetBounds.left - popupWidth - 7 : targetBounds.right + 7;
+		y = targetBounds.top;
+		if (y < 0) {
+			y = 0;
+		}
+		if (y + popupHeight > 400) {
+			y = 400 - popupHeight;
+		}
+		x = Math.round(x);
+		y = Math.round(y);
+	}
+
+	private function armAutoDismiss():Void {
+		armTimer = null;
+		if (removed || AppStage.stage == null) {
+			return;
+		}
+		armed = true;
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+	}
+
+	private function onStageMouseDown(event:MouseEvent):Void {
+		if (!hitTestPoint(event.stageX, event.stageY, true)) {
+			remove();
 		}
 	}
 }
@@ -3286,6 +3496,10 @@ class EditorSideBar extends Sprite {
 		}
 		if (editor != null && id == "settings" && entry.id == "music") {
 			editor.openMusicSettingsMenu(entry);
+			return;
+		}
+		if (editor != null && id == "settings" && EditorValueSettingsPopup.handles(entry.id)) {
+			editor.openValueSettingsMenu(entry.id, entry);
 			return;
 		}
 		if (editor != null) {
