@@ -31,6 +31,18 @@ class LevelDataClient {
 		}, onError);
 	}
 
+	public static function fetchEditorLoad(levelId:Int, version:Int, onResult:ServerLevelData->Void, ?onError:String->Void):Void {
+		TextLoader.load(ServerConfig.levelDataUrl(levelId, version), function(body:String):Void {
+			try {
+				onResult(parseEditorLoad(body, levelId, version));
+			} catch (error:Dynamic) {
+				if (onError != null) {
+					onError(Std.string(error));
+				}
+			}
+		}, onError);
+	}
+
 	public static function parse(body:String, levelId:Int, version:Int):ServerLevelData {
 		if (body == null || StringTools.trim(body) == "") {
 			throw "empty level response";

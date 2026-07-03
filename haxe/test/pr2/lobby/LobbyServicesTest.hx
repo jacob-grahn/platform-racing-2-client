@@ -31,6 +31,7 @@ import pr2.lobby.dialogs.Popup;
 import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
+import pr2.page.LevelEditor.GetLevelsPopup;
 import pr2.page.LevelEditor.SaveLevelPopup;
 import pr2.page.LevelEditor.UploadingLevelPopup;
 import pr2.page.LevelEditor.TestCoursePage;
@@ -77,6 +78,7 @@ class LobbyServicesTest {
 		testMemoryAndSecureData();
 		testLevelEditorRoute();
 		testLevelEditorShell();
+		testLevelEditorLoadListPopup();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
 		testUploadingLevelPopupDrawingRetryWait();
@@ -511,6 +513,56 @@ class LobbyServicesTest {
 
 	private static function clickEditorSidebar(editor:LevelEditor, name:String):Void {
 		editor.menu.sideBar.getChildByName(name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function testLevelEditorLoadListPopup():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.token = "load-token";
+		ServerConfig.setHost("http://example.test");
+		var previousPostFactory = GetLevelsPopup.postFactory;
+		var previousLoadFactory = GetLevelsPopup.loadFactory;
+		var requestedUrl:Null<String> = null;
+		var requestedToken:Null<String> = null;
+		var loaded:Null<String> = null;
+		GetLevelsPopup.postFactory = function(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+			requestedUrl = url;
+			requestedToken = fields.get("token");
+			onResult({
+				levels: [
+					{level_id: "7", version: "3", title: "Alpha", live: "1", type: "r", play_count: "12", rating: "4.5", note: "note"},
+					{level_id: "8", version: "4", title: "Beta", live: "0", type: "d", play_count: "2", rating: "3", note: ""}
+				]
+			});
+		};
+		GetLevelsPopup.loadFactory = function(levelId:Int, version:Int):Void {
+			loaded = levelId + ":" + version;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		clickEditorMenu(editor, "loadButton");
+		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GetLevelsPopup);
+		assertNotNull(popup, "load button opens the editor levels popup");
+		assertEquals("http://example.test/levels_get.php", requestedUrl, "load popup posts to levels_get");
+		assertEquals("load-token", requestedToken, "load popup sends the session token");
+		assertEquals(2, popup.listings.length, "load popup renders returned listings");
+		assertEquals("Alpha", LobbyArt.text(popup.listings[0].art, "titleBox").text, "listing renders title");
+		assertEquals("Published", LobbyArt.text(popup.listings[0].art, "statusBox").text, "listing renders published state");
+
+		popup.selectListing(popup.listings[0]);
+		DisplayUtil.findByName(popup.art, "load_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals("7:3", loaded, "loading a listing hands off id and version");
+		assertEquals(true, popup.fadeOutStarted, "loading a listing closes the list popup");
+
+		popup.remove();
+		editor.remove();
+		GetLevelsPopup.loadFactory = previousLoadFactory;
+		GetLevelsPopup.postFactory = previousPostFactory;
+		ServerConfig.resetHost();
+		LobbySession.clear();
+		closeAllPopups();
 	}
 
 	private static function testLevelEditorSaveDialog():Void {

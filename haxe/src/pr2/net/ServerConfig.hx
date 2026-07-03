@@ -237,6 +237,11 @@ final class ServerConfig {
 		return host + "/level_moderate.php";
 	}
 
+	/** Editor owned-level list POST endpoint, matching `level_management.GetLevels`. */
+	public static function levelsGetUrl():String {
+		return host + "/levels_get.php";
+	}
+
 	/** Level upload POST endpoint, matching `level_management.UploadingLevelPopup`. */
 	public static function uploadLevelUrl():String {
 		return host + "/upload_level.php";

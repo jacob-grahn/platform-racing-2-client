@@ -1,9 +1,11 @@
 package pr2.page;
 
+import haxe.Json;
 import haxe.crypto.Md5;
 import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -44,6 +46,8 @@ import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.net.FormPostClient;
+import pr2.net.LevelDataClient;
 import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
 import pr2.runtime.FlCheckBox;
@@ -1153,6 +1157,7 @@ class LevelEditorMenu extends Sprite {
 		bind("undoButton", clickUndo);
 		bind("redoButton", clickRedo);
 		bind("saveButton", clickSave);
+		bind("loadButton", clickLoad);
 		bind("testButton", clickTest);
 		var zoomSelect = zoomCombo();
 		if (zoomSelect != null) {
@@ -1248,6 +1253,10 @@ class LevelEditorMenu extends Sprite {
 		new SaveLevelPopup(editor);
 	}
 
+	private function clickLoad():Void {
+		new GetLevelsPopup();
+	}
+
 	private function clickTest():Void {
 		if (editor.pageHolder != null) {
 			editor.pageHolder.changePage(new TestCoursePage(editor.getLevelVars(), editor.isMod, editor.reportsMode));
@@ -1317,8 +1326,266 @@ class LevelEditorMenu extends Sprite {
 }
 
 typedef SaveLevelUploadFactory = LevelEditor->Null<Popup>;
+typedef GetLevelsPostFactory = String->Map<String, String>->(Dynamic->Void)->(String->Void)->Void;
+typedef GetLevelsLoadFactory = Int->Int->Void;
 typedef UploadingLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 typedef UploadingLevelRetryFactory = (Void->Void)->Int->Null<Timer>;
+
+class GetLevelsPopup extends Popup {
+	public static var postFactory:GetLevelsPostFactory = defaultPost;
+	public static var loadFactory:GetLevelsLoadFactory = defaultLoad;
+
+	public final art:PR2MovieClip;
+	public final listings:Array<GetLevelsPopupItem> = [];
+	public var selected(default, null):Null<GetLevelsPopupItem>;
+	private var bindings:Array<Binding> = [];
+
+	public function new() {
+		super();
+		art = PR2MovieClip.fromLinkage("GetLevelsPopupGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		setText("titleBox", "-- My Levels --");
+		bind("cancel_bt", function():Void startFadeOut());
+		bind("load_bt", clickLoad);
+		updateButtons();
+		postFactory(ServerConfig.levelsGetUrl(), requestFields(), handleResponse, handleError);
+	}
+
+	public function selectListing(listing:Null<GetLevelsPopupItem>):Void {
+		selected = listing;
+		for (item in listings) {
+			item.setSelected(item == selected);
+		}
+		updateButtons();
+	}
+
+	public function loadSelected():Void {
+		clickLoad();
+	}
+
+	private function handleResponse(ret:Dynamic):Void {
+		var levels:Dynamic = ret == null ? null : Reflect.field(ret, "levels");
+		if (Std.isOfType(levels, Array)) {
+			for (level in cast(levels, Array<Dynamic>)) {
+				addListing(new GetLevelsPopupItem(level, this));
+			}
+		}
+		hideLoadingGraphic();
+	}
+
+	private function handleError(message:String):Void {
+		hideLoadingGraphic();
+		if (message != null && message != "") {
+			new MessagePopup("Error: " + message);
+		}
+	}
+
+	private function addListing(listing:GetLevelsPopupItem):Void {
+		listing.y = listings.length * 18;
+		var holder = levelsHolder();
+		if (holder != null) {
+			holder.addChild(listing);
+		}
+		listings.push(listing);
+	}
+
+	private function clickLoad():Void {
+		if (selected == null) {
+			return;
+		}
+		loadFactory(selected.levelId, selected.version);
+		startFadeOut();
+	}
+
+	private function updateButtons():Void {
+		Reflect.setProperty(DisplayUtil.findByName(art, "load_bt"), "enabled", selected != null);
+		Reflect.setProperty(DisplayUtil.findByName(art, "delete_bt"), "enabled", false);
+	}
+
+	private function hideLoadingGraphic():Void {
+		var loading = DisplayUtil.findByName(art, "loadingGraphic");
+		if (loading != null && loading.parent != null) {
+			loading.parent.removeChild(loading);
+		}
+	}
+
+	private function levelsHolder():Null<DisplayObjectContainer> {
+		return Std.downcast(DisplayUtil.findByName(art, "levelsHolder"), DisplayObjectContainer);
+	}
+
+	private function setText(name:String, value:String):Void {
+		var field = LobbyArt.text(art, name);
+		if (field != null) {
+			field.text = value;
+		}
+	}
+
+	private function bind(name:String, handler:Void->Void):Void {
+		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		if (binding != null) {
+			bindings.push(binding);
+		}
+	}
+
+	override public function remove():Void {
+		for (binding in bindings) {
+			LobbyArt.unbind(binding);
+		}
+		bindings = [];
+		for (listing in listings.copy()) {
+			listing.remove();
+		}
+		listings.resize(0);
+		selected = null;
+		art.dispose();
+		super.remove();
+	}
+
+	private static function requestFields():Map<String, String> {
+		var fields = new Map<String, String>();
+		fields.set("token", LobbySession.token);
+		return fields;
+	}
+
+	private static function defaultPost(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+		FormPostClient.post(url, fields, function(body:String):Void {
+			if (body == null || body == "") {
+				onResult({levels: []});
+				return;
+			}
+			try {
+				onResult(Json.parse(body));
+			} catch (_:Dynamic) {
+				onError("The loaded data was not in the expected format.");
+			}
+		}, onError);
+	}
+
+	private static function defaultLoad(levelId:Int, version:Int):Void {
+		LevelDataClient.fetchEditorLoad(levelId, version, function(data:ServerLevelData):Void {
+			if (LevelEditor.editor != null) {
+				LevelEditor.editor.applyLoadedLevelData(data, false);
+			}
+		}, function(message:String):Void {
+			new MessagePopup(message);
+		});
+	}
+}
+
+class GetLevelsPopupItem extends Sprite {
+	public final level:Dynamic;
+	public final levelId:Int;
+	public final version:Int;
+	public var art(default, null):PR2MovieClip;
+	private var popup:Null<GetLevelsPopup>;
+	private var info:Null<HoverPopup>;
+	private var selected:Bool = false;
+
+	public function new(level:Dynamic, popup:GetLevelsPopup) {
+		super();
+		this.level = level;
+		this.popup = popup;
+		art = PR2MovieClip.fromLinkage("GetLevelsPopupItemGraphic", {maxNestedDepth: 4});
+		addChild(art);
+		levelId = parseInt(field("level_id"), 0);
+		version = parseInt(field("version"), 0);
+		setText("titleBox", field("title"));
+		setText("statusBox", parseInt(field("live"), 0) == 1 ? "Published" : "Unpublished");
+		mouseChildren = false;
+		buttonMode = true;
+		doubleClickEnabled = true;
+		addEventListener(MouseEvent.CLICK, onClick);
+		addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	}
+
+	public function setSelected(on:Bool):Void {
+		selected = on;
+		var glow = DisplayUtil.findByName(art, "selectedGlow");
+		if (glow != null) {
+			glow.visible = on;
+		}
+		alpha = on ? 1 : 0.92;
+	}
+
+	private function onClick(_:MouseEvent):Void {
+		if (popup != null) {
+			popup.selectListing(this);
+		}
+	}
+
+	private function onDoubleClick(_:MouseEvent):Void {
+		if (popup != null) {
+			popup.selectListing(this);
+			popup.loadSelected();
+		}
+	}
+
+	private function onMouseOver(_:MouseEvent):Void {
+		var title = "-- " + ChatText.escapeString(field("title")) + " --";
+		var popText = "Game Mode: " + modeName(field("type")) + "<br/>";
+		popText += "Version: " + version + "<br/>";
+		popText += "Plays: " + field("play_count") + "<br/>";
+		popText += "Rating: " + field("rating");
+		var note = StringTools.trim(field("note"));
+		if (note != "") {
+			popText += "<br/>-----<br/><i>" + ChatText.escapeString(note) + "</i>";
+		}
+		info = new HoverPopup(title, popText, art);
+		info.x = 550 - info.width;
+	}
+
+	private function onMouseOut(_:MouseEvent = null):Void {
+		if (info != null) {
+			info.remove();
+			info = null;
+		}
+	}
+
+	public function remove():Void {
+		onMouseOut();
+		removeEventListener(MouseEvent.CLICK, onClick);
+		removeEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+		removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+		popup = null;
+		if (art != null) {
+			art.dispose();
+			art = null;
+		}
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	private function setText(name:String, value:String):Void {
+		var text = LobbyArt.text(art, name);
+		if (text != null) {
+			text.text = value;
+		}
+	}
+
+	private function field(name:String):String {
+		var value = level == null ? null : Reflect.field(level, name);
+		return value == null ? "" : Std.string(value);
+	}
+
+	private static function parseInt(value:String, fallback:Int):Int {
+		var parsed = Std.parseInt(value);
+		return parsed == null ? fallback : parsed;
+	}
+
+	private static function modeName(mode:String):String {
+		return switch (mode) {
+			case "d", "deathmatch": "Deathmatch";
+			case "o", "objective": "Objective";
+			case "h", "hat": "Hat Attack";
+			case "e", "egg", "eggs": "Egg";
+			default: "Race";
+		}
+	}
+}
 
 class SaveLevelPopup extends Popup {
 	public static var uploadFactory:SaveLevelUploadFactory = defaultUpload;
