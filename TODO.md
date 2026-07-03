@@ -43,6 +43,8 @@ Port the editor itself, one piece at a time:
 - [ ] Port the editor tools.
   - [x] Wire editor sidebar entry clicks into a selected-tool state so later
     placement/drawing tools can use the active sidebar item.
+  - [x] Port the brush size and color controls so drawing tools record the
+    selected `t`/`c` draw actions before strokes.
 - [ ] Port drawing/text/stamp placement.
   - [x] Port stamp object placement onto the active art layer, including
     Flash-style centered coordinate rounding and layer-scale conversion.

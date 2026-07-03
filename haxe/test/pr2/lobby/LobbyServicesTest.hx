@@ -276,6 +276,20 @@ class LobbyServicesTest {
 		assertEquals("d10;12;5;6", editor.activeDrawLayer.getSaveString(), "brush stores Flash draw action deltas");
 		assertEquals(1, editor.activeDrawLayer.drawActions.length, "brush records one draw action");
 		assertEquals(1, editor.activeDrawLayer.rasterCanvas.numChildren, "brush rasterizes visible art");
+		clickEditorSidebar(editor, "sizeEntry");
+		assertEquals("brush", editor.selectedToolId, "brush size picker keeps the active drawing tool");
+		assertNotNull(editor.activeBrushSizeMenu, "brush size entry opens the authored picker menu");
+		Reflect.callMethod(editor.activeBrushSizeMenu, Reflect.field(editor.activeBrushSizeMenu, "setSize"), [12]);
+		assertEquals(12, editor.brushSize, "brush size menu commits the selected brush size");
+		editor.closeBrushSizeMenu();
+		var brushColorEntry = editor.menu.sideBar.getChildByName("colorEntry");
+		Reflect.callMethod(brushColorEntry, Reflect.field(brushColorEntry, "setPickedColor"), [0x336699]);
+		assertEquals(0x336699, editor.brushColor, "brush color picker commits the selected brush color");
+		assertEquals(true, editor.beginSelectedBrushAt(30, 40), "brush still starts after size/color changes");
+		assertEquals(true, editor.continueSelectedBrushAt(35, 47), "customized brush extends while drawing");
+		assertEquals(true, editor.endSelectedBrush(), "customized brush stroke finishes");
+		assertEquals("d10;12;5;6,c336699,t12,d30;40;5;7", editor.activeDrawLayer.getSaveString(),
+			"brush size and color controls record Flash draw actions before the stroke");
 		clickEditorMenu(editor, "bgButton");
 		clickEditorMenu(editor, "layer1Button");
 		clickEditorSidebar(editor, "textEntry");
@@ -373,16 +387,17 @@ class LobbyServicesTest {
 		assertEquals(true, editor.beginSelectedBrushAt(100, 120), "eraser starts on the active draw layer");
 		assertEquals(true, editor.continueSelectedBrushAt(105, 120), "eraser extends while drawing");
 		assertEquals(true, editor.endSelectedBrush(), "eraser stroke finishes");
-		assertEquals("merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(), "eraser stores mode and scaled stroke coordinates");
+		assertEquals("cffffff,t12,merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(),
+			"eraser stores selected size, erase color, mode, and scaled stroke coordinates");
 		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"), "draw stroke enables undo");
 		clickEditorMenu(editor, "undoButton");
-		assertEquals("", editor.activeDrawLayer.getSaveString(), "draw undo removes the last stroke and mode action");
+		assertEquals("", editor.activeDrawLayer.getSaveString(), "draw undo removes the last stroke and setup actions");
 		assertEquals(0, editor.activeDrawLayer.drawActions.length, "draw undo rebuilds decoded actions");
 		assertEquals(0, editor.activeDrawLayer.rasterCanvas.numChildren, "draw undo clears rasterized art");
 		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "redoButton"), "enabled"), "draw undo enables redo");
 		clickEditorMenu(editor, "redoButton");
-		assertEquals("merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(), "draw redo restores the stroke group");
-		assertEquals(2, editor.activeDrawLayer.drawActions.length, "draw redo rebuilds decoded mode and stroke actions");
+		assertEquals("cffffff,t12,merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(), "draw redo restores the stroke group");
+		assertEquals(4, editor.activeDrawLayer.drawActions.length, "draw redo rebuilds decoded setup, mode, and stroke actions");
 		assertEquals(0, editor.activeDrawLayer.redoArray.length, "draw redo consumes the redo stack");
 		assertEquals(1, editor.objectLayers[0].placedObjects.length, "layer 1 does not receive layer 2 stamp");
 		assertEquals(1, editor.objectLayers[1].placedObjects.length, "layer 2 receives its own placed stamp");

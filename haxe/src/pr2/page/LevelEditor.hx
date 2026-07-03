@@ -95,6 +95,7 @@ class LevelEditor extends Page {
 	public var activeMusicSettingsPopup(default, null):Null<EditorMusicSettingsPopup>;
 	public var activeModeSettingsPopup(default, null):Null<EditorModeSettingsPopup>;
 	public var activeValueSettingsPopup(default, null):Null<EditorValueSettingsPopup>;
+	public var activeBrushSizeMenu(default, null):Null<EditorBrushSizePickerMenu>;
 	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	public var badHats(default, null):Array<Int> = [];
@@ -111,6 +112,8 @@ class LevelEditor extends Page {
 	public var gameMode(get, never):String;
 	public var cowboyChance(get, never):String;
 	public var color(get, never):Int;
+	public var brushColor(default, null):Int = 0;
+	public var brushSize(default, null):Float = EditorDrawableLayer.DEFAULT_BRUSH_SIZE;
 	public var zoom(default, null):Float = 1;
 	public var posX(default, null):Float = 0;
 	public var posY(default, null):Float = 0;
@@ -206,6 +209,17 @@ class LevelEditor extends Page {
 
 	public function setGameMode(value:String):Void {
 		levelConfig.setGameMode(value == "eggs" ? "egg" : value);
+	}
+
+	public function setBrushColor(value:Int):Void {
+		brushColor = value & 0xFFFFFF;
+	}
+
+	public function setBrushSize(value:Float):Void {
+		if (Math.isNaN(value)) {
+			return;
+		}
+		brushSize = Math.max(1, Math.min(255, Math.round(value)));
 	}
 
 	public function setItems(value:Null<String>):Void {
@@ -548,12 +562,33 @@ class LevelEditor extends Page {
 		}
 	}
 
+	public function openBrushSizeMenu(target:EditorBrushSizePickerButton):Void {
+		closeBrushSizeMenu();
+		activeBrushSizeMenu = new EditorBrushSizePickerMenu(this, target);
+		addChild(activeBrushSizeMenu);
+	}
+
+	public function closeBrushSizeMenu():Void {
+		if (activeBrushSizeMenu != null) {
+			var menu = activeBrushSizeMenu;
+			activeBrushSizeMenu = null;
+			menu.remove();
+		}
+	}
+
+	public function brushSizeMenuRemoved(menu:EditorBrushSizePickerMenu):Void {
+		if (activeBrushSizeMenu == menu) {
+			activeBrushSizeMenu = null;
+		}
+	}
+
 	public function beginSelectedBrushAt(stageX:Float, stageY:Float):Bool {
 		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
 			return false;
 		}
 		drawingLayer = activeDrawLayer;
-		drawingLayer.beginStroke(stageX, stageY, selectedToolId == "eraser" ? "erase" : "draw");
+		var isEraser = selectedToolId == "eraser";
+		drawingLayer.beginStroke(stageX, stageY, isEraser ? "erase" : "draw", brushSize, isEraser ? 0xFFFFFF : brushColor);
 		return true;
 	}
 
@@ -646,6 +681,7 @@ class LevelEditor extends Page {
 			closeMusicSettingsPopup();
 			closeModeSettingsPopup();
 			closeValueSettingsPopup();
+			closeBrushSizeMenu();
 			layerContainer = null;
 		}
 		drawingLayer = null;
@@ -4321,9 +4357,9 @@ class EditorDrawableLayer extends Sprite {
 		brushCanvas.graphics.lineStyle(brushSize, color);
 	}
 
-	public function beginStroke(stageX:Float, stageY:Float, nextMode:String):Void {
-		recordColor(color);
-		setBrushSize(brushSize);
+	public function beginStroke(stageX:Float, stageY:Float, nextMode:String, nextSize:Float, nextColor:Int):Void {
+		recordColor(nextColor);
+		setBrushSize(nextSize);
 		setMode(nextMode);
 		var start = roundedLocalPoint(stageX, stageY);
 		moveTo(start.x, start.y);
@@ -4956,9 +4992,15 @@ class EditorSideBar extends Sprite {
 		y = -195;
 		var itemY:Float = 4;
 		for (itemId in itemIds) {
-			var entry = id == "backgrounds" && itemId == "color"
-				? new EditorBackgroundColorPickerButton()
-				: new EditorSideBarEntry(itemId);
+			var entry = if (id == "backgrounds" && itemId == "color") {
+				new EditorBackgroundColorPickerButton();
+			} else if (id == "tools" && itemId == "size") {
+				new EditorBrushSizePickerButton();
+			} else if (id == "tools" && itemId == "color") {
+				new EditorBrushColorPickerButton();
+			} else {
+				new EditorSideBarEntry(itemId);
+			}
 			entry.addEventListener(MouseEvent.CLICK, selectEntry);
 			entry.y = itemY;
 			addChild(entry);
@@ -4981,6 +5023,20 @@ class EditorSideBar extends Sprite {
 		var editor = LevelEditor.editor;
 		if (editor != null && id == "stamps" && entry.id == "brush" && editor.menu != null) {
 			editor.menu.changeSideBar(editor.menu.tools);
+			return;
+		}
+		if (editor != null && id == "tools" && entry.id == "landscape" && editor.menu != null) {
+			editor.menu.changeSideBar(editor.menu.stamps);
+			return;
+		}
+		if (editor != null && id == "tools" && entry.id == "size") {
+			var sizeEntry = Std.downcast(entry, EditorBrushSizePickerButton);
+			if (sizeEntry != null) {
+				sizeEntry.openMenu();
+			}
+			return;
+		}
+		if (editor != null && id == "tools" && entry.id == "color") {
 			return;
 		}
 		if (editor != null && id == "settings" && entry.id == "items") {
@@ -5022,6 +5078,14 @@ class EditorSideBar extends Sprite {
 			var colorEntry = Std.downcast(child, EditorBackgroundColorPickerButton);
 			if (colorEntry != null) {
 				colorEntry.remove();
+			}
+			var sizeEntry = Std.downcast(child, EditorBrushSizePickerButton);
+			if (sizeEntry != null) {
+				sizeEntry.remove();
+			}
+			var brushColorEntry = Std.downcast(child, EditorBrushColorPickerButton);
+			if (brushColorEntry != null) {
+				brushColorEntry.remove();
 			}
 		}
 		selectedEntry = null;
@@ -5109,6 +5173,181 @@ class EditorBackgroundColorPickerButton extends EditorSideBarEntry {
 		var editor = LevelEditor.editor;
 		if (editor != null) {
 			editor.setColor(picker.getColor());
+		}
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = AppStage.stage;
+		}
+	}
+}
+
+class EditorBrushSizePickerButton extends EditorSideBarEntry {
+	private final art:PR2MovieClip;
+	private var circle:Null<DisplayObject>;
+
+	public function new() {
+		super("size");
+		art = PR2MovieClip.fromLinkage("SizePickerGraphic", {maxNestedDepth: 4});
+		art.mouseEnabled = false;
+		art.mouseChildren = false;
+		addChild(art);
+		circle = Std.downcast(DisplayUtil.findByName(art, "circle"), DisplayObject);
+		updateCircle();
+	}
+
+	public function openMenu():Void {
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			editor.openBrushSizeMenu(this);
+		}
+	}
+
+	public function setPickedSize(size:Float):Void {
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			editor.setBrushSize(size);
+		}
+		updateCircle();
+	}
+
+	public function updateCircle():Void {
+		if (circle == null) {
+			return;
+		}
+		var editor = LevelEditor.editor;
+		var size = editor == null ? EditorDrawableLayer.DEFAULT_BRUSH_SIZE : editor.brushSize;
+		circle.width = Math.sqrt(size) * 3;
+		circle.height = Math.sqrt(size) * 3;
+	}
+
+	public function remove():Void {
+		var editor = LevelEditor.editor;
+		if (editor != null && editor.activeBrushSizeMenu != null) {
+			editor.closeBrushSizeMenu();
+		}
+		art.dispose();
+	}
+}
+
+class EditorBrushSizePickerMenu extends Sprite {
+	public final editor:LevelEditor;
+	public final target:EditorBrushSizePickerButton;
+	public final art:PR2MovieClip;
+	private var slider:Null<FlSlider>;
+	private var textInput:Null<FlTextInput>;
+
+	public function new(editor:LevelEditor, target:EditorBrushSizePickerButton) {
+		super();
+		this.editor = editor;
+		this.target = target;
+		art = PR2MovieClip.fromLinkage("SizePickerMenuGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		var origin = editor.globalToLocal(target.localToGlobal(new Point(0, 0)));
+		x = origin.x - 85;
+		y = origin.y - 35;
+		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), FlSlider);
+		textInput = Std.downcast(DisplayUtil.findByName(art, "textBox"), FlTextInput);
+		if (slider != null) {
+			slider.minimum = 1;
+			slider.maximum = 255;
+			slider.snapInterval = 1;
+			slider.addEventListener(FlSliderEvent.CHANGE, slideChange);
+			slider.addEventListener(FlSliderEvent.THUMB_DRAG, slideChange);
+		}
+		if (textInput != null) {
+			textInput.restrict = "0-9";
+			textInput.maxChars = 3;
+			textInput.addEventListener(Event.CHANGE, textChange);
+		}
+		setSize(editor.brushSize);
+	}
+
+	public function setSize(size:Float):Void {
+		if (Math.isNaN(size)) {
+			size = EditorDrawableLayer.DEFAULT_BRUSH_SIZE;
+		}
+		size = Math.max(1, Math.min(255, Math.round(size)));
+		editor.setBrushSize(size);
+		target.updateCircle();
+		if (textInput != null) {
+			textInput.text = Std.string(Std.int(editor.brushSize));
+		}
+		if (slider != null) {
+			slider.value = editor.brushSize;
+		}
+	}
+
+	public function remove():Void {
+		if (slider != null) {
+			slider.removeEventListener(FlSliderEvent.CHANGE, slideChange);
+			slider.removeEventListener(FlSliderEvent.THUMB_DRAG, slideChange);
+			slider = null;
+		}
+		if (textInput != null) {
+			textInput.removeEventListener(Event.CHANGE, textChange);
+			textInput = null;
+		}
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+		art.dispose();
+		editor.brushSizeMenuRemoved(this);
+		if (editor.stage != null) {
+			editor.stage.focus = editor.stage;
+		}
+	}
+
+	private function slideChange(event:FlSliderEvent):Void {
+		setSize(event.value);
+	}
+
+	private function textChange(_:Event):Void {
+		if (textInput == null) {
+			return;
+		}
+		var parsed = Std.parseFloat(textInput.text);
+		setSize(Math.isNaN(parsed) ? EditorDrawableLayer.DEFAULT_BRUSH_SIZE : parsed);
+	}
+}
+
+class EditorBrushColorPickerButton extends EditorSideBarEntry {
+	private final picker:ColorPicker;
+
+	public function new() {
+		super("color");
+		picker = new ColorPicker();
+		picker.name = "brushColorPicker";
+		picker.width = 30;
+		picker.height = 30;
+		picker.addEventListener(Event.CHANGE, commitColor);
+		addChild(picker);
+		updateColor();
+	}
+
+	public function updateColor():Void {
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			picker.setColor(editor.brushColor);
+		}
+	}
+
+	public function setPickedColor(color:Int):Void {
+		picker.setColor(color);
+		commitColor();
+	}
+
+	public function pickerColor():Int {
+		return picker.getColor();
+	}
+
+	public function remove():Void {
+		picker.removeEventListener(Event.CHANGE, commitColor);
+		picker.remove();
+	}
+
+	private function commitColor(?_):Void {
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			editor.setBrushColor(picker.getColor());
 		}
 		if (AppStage.stage != null) {
 			AppStage.stage.focus = AppStage.stage;
