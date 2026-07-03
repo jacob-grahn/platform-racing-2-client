@@ -47,9 +47,9 @@ alone is not a class port.
 | `flash/blocks/Blocks.as` | `pr2.level.ObjectCodes`, `pr2.level.BlockType`, `pr2.level.ServerLevelRenderer` | ported | Object-code lookup, type conversion, and 30 px block assets are covered by renderer tests. |
 | `flash/blocks/BrickBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | One-hit break-on-bump behavior, local activation emission, and removal from collision are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/CrumbleBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Ten-frame crumble timing, force-payload local activation emission, cheese-hat force/adjacent-break behavior, and removal are covered by `LocalPlayerControllerTest`. |
-| `flash/blocks/CustomStatsBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Stat-option application, reset semantics, and one-use grey depletion visuals are covered by `LocalPlayerControllerTest`. |
+| `flash/blocks/CustomStatsBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Stat-option application, reset semantics, one-use grey depletion visuals, and TestCourse StatsSelect sync requests are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/FinishBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Finish is a one-use supply block; bump-only completion id/center reporting and grey depletion visuals are covered by `LocalPlayerControllerTest`. |
-| `flash/blocks/HappyBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Supply stat increase, option clamp behavior, and grey depletion visuals are covered by `LocalPlayerControllerTest`. |
+| `flash/blocks/HappyBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Supply stat increase, option clamp behavior, grey depletion visuals, and TestCourse StatsSelect sync requests are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/HeartBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | One-use life supply behavior and grey depletion visuals are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/IceBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController`, `pr2.level.ServerLevelRenderer` | ported | Ice movement friction and Santa-created temporary ice overlays are covered by `LocalPlayerControllerTest` and `ServerLevelRendererTest`. |
 | `flash/blocks/InfItemBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController`, `pr2.gameplay.Items` | ported | Infinite item supply behavior and level allowed-item pool/random candidate selection are covered by `LocalPlayerControllerTest`. |
@@ -226,7 +226,7 @@ alone is not a class port.
 | `flash/gameplay/SpecialEvent.as` | `pr2.gameplay.SpecialEvent`, `pr2.page.GamePage` | ported | Privileged G+C artifact placement and C+X prize cancellation dispatch are covered by `SpecialEventTest`. |
 | `flash/gameplay/SpectatePicker.as` | `pr2.gameplay.SpectatePicker`, `pr2.gameplay.Course` | ported | Authored picker UI, player cycling, free-scroll state, visibility gating, name rendering, and course change hook are covered by `SpectatePickerTest`. |
 | `flash/gameplay/StatsDisplay.as` | `pr2.gameplay.StatsDisplay`, `pr2.gameplay.Course` | ported | Authored stat boxes, hover popup delay/removal, and course stat sync are covered by `StatsDisplayTest` and `GameShellMountTest`. |
-| `flash/gameplay/TestCourse.as` | `pr2.page.CampaignTestScreen`, level-editor test-course gap | partial | The debug campaign/gameplay harness can run decoded levels through `Course`; the authored level-editor test-course controls, stat picker, hat picker, editor return, and report-management variants remain with the level-editor TODO. |
+| `flash/gameplay/TestCourse.as` | `pr2.page.CampaignTestScreen`, `pr2.page.LevelEditor.TestCoursePage` | partial | Decoded levels run through `Course`; level-editor test-course controls, stat picker, hat picker, editor return, restart persistence, and custom/happy block StatsSelect sync are covered by `LobbyServicesTest`. Report-management variants remain with the level-editor TODO. |
 
 ## Level Browser Classes
 
@@ -334,7 +334,7 @@ alone is not a class port.
 | `flash/ui/RatingSelect.as` | `pr2.ui.RatingSelect` | ported | Finished-race star hover math, confirm popup, and `submit_rating.php` upload route are represented by the authored rating control. |
 | `flash/ui/SelectableButton.as` | selectable-button gap | gap | The generic up/over/selected wrapper is not yet a standalone Haxe control; current screens use direct authored button bindings where needed. |
 | `flash/ui/StatSlider.as` | `pr2.lobby.account.StatSlider` | partial | Numeric entry, slider sync, button stepping, point-budget clamp, and display updates are ported; Flash's press-and-hold acceleration and level-editor save hook are intentionally still gaps. |
-| `flash/ui/StatsSelect.as` | `pr2.lobby.account.StatsSelect` | partial | Account stat allocation, remaining-points display, info string, and stat extraction are ported; the level-editor live-character/stat persistence hook remains with editor test-course work. |
+| `flash/ui/StatsSelect.as` | `pr2.lobby.account.StatsSelect` | partial | Account stat allocation, remaining-points display, info string, stat extraction, level-editor live-character updates, persistence, and TestCourse set-from-character sync are covered by `LobbyServicesTest`. |
 | `flash/ui/TabsHolder.as` | `pr2.ui.TabsHolder`, `pr2.ui.TabLayout` | ported | Tab ownership, remembered selected tab, overlap layout, selected-front ordering, and removal persistence are represented by the shared tab holder. |
 
 ## Com Classes

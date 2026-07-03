@@ -1322,6 +1322,16 @@ class LobbyServicesTest {
 		assertEquals(91, Math.round(changedStats.speedStat), "stat picker updates live speed stat");
 		assertEquals(82, Math.round(changedStats.accelerationStat), "stat picker updates live acceleration stat");
 		assertEquals(73, Math.round(changedStats.jumpStat), "stat picker updates live jump stat");
+		var statsSync = testCourse.course.onStatsSelectSyncRequest;
+		assertEquals(true, statsSync != null, "test course wires block stat sync callback");
+		testCourse.course.localCharacter.setStats(44, 55, 66);
+		if (statsSync != null) {
+			statsSync();
+		}
+		var syncedStats = testCourse.statsSelect.getStats();
+		assertEquals(44, syncedStats.speed, "block stat sync updates StatsSelect speed from character");
+		assertEquals(55, syncedStats.acceleration, "block stat sync updates StatsSelect acceleration from character");
+		assertEquals(66, syncedStats.jumping, "block stat sync updates StatsSelect jumping from character");
 		DisplayUtil.findByName(testCourse.art, "restart_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(true, firstCourse != testCourse.course, "restart rebuilds the test course");
 		assertEquals(null, firstCourse.parent, "restart removes the previous Course display");

@@ -333,6 +333,10 @@ class LocalCharacter extends Character {
 		return controller.blockColorMultiplierAt(tileX, tileY);
 	}
 
+	public function consumeStatsSelectSyncRequest():Bool {
+		return controller.consumeStatsSelectSyncRequest();
+	}
+
 	public function blockIceOverlayAlphaAt(tileX:Int, tileY:Int):Float {
 		return controller.blockIceOverlayAlphaAt(tileX, tileY);
 	}

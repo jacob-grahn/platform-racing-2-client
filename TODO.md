@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `CustomStatsBlock.as` and `HappyBlock.as` test-course UI sync:
-  after stat changes in a `TestCourse`, the on-screen `StatsSelect` controls
-  should update from the local character just like Flash
-  `statsSelectSetFromCharacter()`.
 - [ ] Port `Block.move()` recursive push behavior used by `PushBlock.as` and
   `MoveBlock.as`: if the destination tile contains a `PushBlock`, move that block
   first in the same direction before moving the original block, instead of simply

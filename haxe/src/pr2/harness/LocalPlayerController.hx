@@ -131,6 +131,7 @@ class LocalPlayerController {
 	private var jetPackFuelRemaining:Null<Int> = null;
 	private var itemReloadFramesRemaining:Int = 0;
 	private var itemAvailable:Bool = false;
+	private var statsSelectSyncRequested:Bool = false;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
 	private var pendingMinePlacements:Array<PendingMinePlacement> = [];
@@ -196,6 +197,12 @@ class LocalPlayerController {
 
 	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
 		applyStats(speed, acceleration, jump);
+	}
+
+	public function consumeStatsSelectSyncRequest():Bool {
+		var requested = statsSelectSyncRequested;
+		statsSelectSyncRequested = false;
+		return requested;
 	}
 
 	public function ensureCowboyStats():Void {
@@ -1285,11 +1292,13 @@ class LocalPlayerController {
 
 		if (block.options == "reset") {
 			applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+			statsSelectSyncRequested = true;
 			return;
 		}
 
 		var stats = parseCustomStats(block.options);
 		applyStats(stats.speed, stats.acceleration, stats.jump);
+		statsSelectSyncRequested = true;
 	}
 
 	private function useStatSupply(block:LevelBlock, negative:Bool):Void {
@@ -1300,6 +1309,9 @@ class LocalPlayerController {
 		var amount = parsed == null ? (negative ? -5 : 5) : parsed;
 		amount = Std.int(clamp(amount, negative ? -100 : 5, negative ? -5 : 100));
 		applyStats(speedStat + amount, accelerationStat + amount, jumpStat + amount);
+		if (!negative) {
+			statsSelectSyncRequested = true;
+		}
 		blockVisualEvents.push(new BlockVisualEvent(negative ? BlockVisualEventKind.SadBlockSound : BlockVisualEventKind.HappyBlockSound, block.x, block.y));
 	}
 

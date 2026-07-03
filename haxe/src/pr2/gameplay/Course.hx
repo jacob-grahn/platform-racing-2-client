@@ -113,6 +113,7 @@ class Course extends Sprite {
 	public var onPlayCharacterSound:Null<pr2.character.Character.CharacterSoundRequest->Void> = null;
 	public var onStartJetSound:Null<pr2.character.Character.CharacterSoundRequest->Void> = null;
 	public var onStopJetSound:Null<Character->Void> = null;
+	public var onStatsSelectSyncRequest:Null<Void->Void> = null;
 	private var localFinishHandled:Bool = false;
 
 	// Set by GamePage when the player quits (or otherwise leaves the race) so the
@@ -729,6 +730,9 @@ class Course extends Sprite {
 		emitLocalItemEffect(state);
 		maybeHandleLocalFinish(state);
 		syncItemDisplay(state.itemId, state.itemUses);
+		if (player.consumeStatsSelectSyncRequest() && onStatsSelectSyncRequest != null) {
+			onStatsSelectSyncRequest();
+		}
 		syncStatsDisplay(state);
 		syncHearts(state);
 		if (onFrame != null) {

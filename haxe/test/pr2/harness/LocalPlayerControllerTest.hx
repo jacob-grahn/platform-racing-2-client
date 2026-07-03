@@ -1221,6 +1221,8 @@ class LocalPlayerControllerTest {
 		assertClose(0, state.accelerationStat, "custom stats block applies acceleration stat");
 		assertClose(80, state.jumpStat, "custom stats block applies jump stat");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted custom stats block uses SupplyBlock grey transform");
+		assertEquals(true, player.consumeStatsSelectSyncRequest(), "custom stats block requests TestCourse StatsSelect sync");
+		assertEquals(false, player.consumeStatsSelectSyncRequest(), "custom stats sync request is consumed once");
 	}
 
 	private static function testBumpingResetCustomStatsBlockRestoresStartingStats():Void {
@@ -1239,6 +1241,7 @@ class LocalPlayerControllerTest {
 		assertClose(40, state.accelerationStat, "reset custom stats block restores starting acceleration stat");
 		assertClose(20, state.jumpStat, "reset custom stats block restores starting jump stat");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted reset custom stats block uses SupplyBlock grey transform");
+		assertEquals(true, player.consumeStatsSelectSyncRequest(), "reset custom stats block requests TestCourse StatsSelect sync");
 	}
 
 	private static function testBumpingBrickBlockBreaksIt():Void {
@@ -1262,6 +1265,7 @@ class LocalPlayerControllerTest {
 		assertClose(70, state.accelerationStat, "happy block raises acceleration");
 		assertClose(70, state.jumpStat, "happy block raises jumping");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted happy block uses SupplyBlock grey transform");
+		assertEquals(true, player.consumeStatsSelectSyncRequest(), "happy block requests TestCourse StatsSelect sync");
 		var events = player.consumeBlockVisualEvents();
 		assertEquals(2, events.length, "happy block emits thump and stat sound events");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "happy block keeps base ThumpSound event");

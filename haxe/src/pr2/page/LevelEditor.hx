@@ -1009,6 +1009,7 @@ class TestCoursePage extends Page {
 		course = new Course(level, data, LevelConfig.fromServerData(data));
 		addChildAt(course, 0);
 		mountStatsSelect();
+		course.onStatsSelectSyncRequest = statsSelectSetFromCharacter;
 		mountHatPicker();
 		course.beginRace();
 	}
@@ -1030,6 +1031,12 @@ class TestCoursePage extends Page {
 		statsSelect.y = TEST_STATS_Y;
 		statsSelect.scaleX = statsSelect.scaleY = TEST_STATS_SCALE;
 		addChild(statsSelect);
+	}
+
+	public function statsSelectSetFromCharacter():Void {
+		if (statsSelect != null) {
+			statsSelect.setStatsFromCharacter();
+		}
 	}
 
 	private function mountHatPicker():Void {
