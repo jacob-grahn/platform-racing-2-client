@@ -20,6 +20,7 @@ import pr2.net.CampaignLevelInfo;
 import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
+import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
 import pr2.page.Page;
@@ -325,6 +326,20 @@ class LobbyServicesTest {
 		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setStatMagnitude"), [5]);
 		editor.closeBlockOptionsPopup();
 		assertEquals("", sadBlock.options, "closing the sad stat popup commits default as empty options");
+		clickEditorSidebar(editor, "teleportEntry");
+		var teleportBlock = editor.placeSelectedBlockAt(220, 120);
+		teleportBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		assertNotNull(editor.activeBlockOptionsPopup, "teleport block opens the teleport option popup");
+		assertNotNull(DisplayUtil.findByName(editor.activeBlockOptionsPopup, "colorPicker"), "teleport popup mounts the color picker");
+		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setTeleportColor"), [0x00FF00]);
+		editor.closeBlockOptionsPopup();
+		assertEquals("65280", teleportBlock.options, "closing the teleport popup commits normalized color options");
+		teleportBlock.setOptions("65280");
+		teleportBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
+		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setTeleportColor"),
+			[EditorBlockOptions.TELEPORT_DEFAULT_COLOR]);
+		editor.closeBlockOptionsPopup();
+		assertEquals("", teleportBlock.options, "closing the teleport popup stores the default color as empty options");
 		editor.remove();
 		assertEquals(null, LevelEditor.editor, "editor shell clears singleton");
 

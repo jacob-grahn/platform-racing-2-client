@@ -158,6 +158,8 @@ class LevelEditor extends Page {
 			activeBlockOptionsPopup = new EditorStatBlockOptionsPopup(this, block);
 		} else if (block.type == BlockType.Item || block.type == BlockType.InfiniteItem) {
 			activeBlockOptionsPopup = new EditorItemBlockOptionsPopup(this, block);
+		} else if (block.type == BlockType.Teleport) {
+			activeBlockOptionsPopup = new EditorTeleportBlockOptionsPopup(this, block);
 		}
 	}
 
@@ -714,6 +716,38 @@ class EditorItemBlockOptionsPopup extends EditorBlockOptionsPopup {
 		}
 		block.setOptions(EditorBlockOptions.applyItemOptions(selected, editor.allowedItems));
 		super.remove();
+	}
+}
+
+class EditorTeleportBlockOptionsPopup extends EditorBlockOptionsPopup {
+	private var picker:ColorPicker;
+
+	public function new(editor:LevelEditor, block:EditorBlockObject) {
+		super(editor, block, "TeleportBlockOptionsGraphic");
+		picker = new ColorPicker();
+		picker.name = "colorPicker";
+		picker.width = 30;
+		picker.height = 30;
+		picker.x -= 15;
+		picker.y += 30;
+		picker.setColor(EditorBlockOptions.teleportColor(block.options));
+		picker.addEventListener(Event.CHANGE, commitColor);
+		addChild(picker);
+	}
+
+	public function setTeleportColor(color:Int):Void {
+		picker.setColor(color);
+	}
+
+	override public function remove():Void {
+		commitColor();
+		picker.removeEventListener(Event.CHANGE, commitColor);
+		picker.remove();
+		super.remove();
+	}
+
+	private function commitColor(?_):Void {
+		block.setOptions(EditorBlockOptions.applyTeleportColor(picker.getColor()));
 	}
 }
 

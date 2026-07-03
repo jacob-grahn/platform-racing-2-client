@@ -73,7 +73,7 @@ Port the editor itself, one piece at a time:
     - [x] Port the authored happy/sad stat option popup and commit-on-close
       behavior.
     - [x] Port the authored item option popup.
-    - [ ] Port the authored teleport option popup.
+    - [x] Port the authored teleport option popup.
     - [ ] Port the authored custom-stat option popup.
 - [ ] Port selection/deletion.
 - [ ] Port undo-equivalent behavior.
