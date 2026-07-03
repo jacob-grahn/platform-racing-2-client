@@ -37,7 +37,7 @@ Port the editor itself, one piece at a time:
   - [x] Mount a real `LevelEditor` page from the lobby editor button, create the
     authored `LevelEditorMenuGraphic`, preserve mod/reports mode, guest save/load
     disabling, overlay ordering, and editor singleton cleanup.
-- [ ] Port the editor sidebars.
+- [x] Port the editor sidebars.
   - [x] Mount the five editor sidebars and wire menu/layer buttons to switch the
     active sidebar.
 - [ ] Port the editor tools.
