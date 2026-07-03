@@ -35,8 +35,10 @@ import pr2.lobby.account.ColorPicker;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
 import pr2.lobby.account.StatsSelect;
+import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
@@ -1309,6 +1311,7 @@ class LevelEditorMenu extends Sprite {
 }
 
 typedef SaveLevelUploadFactory = LevelEditor->Null<Popup>;
+typedef UploadingLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
 class SaveLevelPopup extends Popup {
 	public static var uploadFactory:SaveLevelUploadFactory = defaultUpload;
@@ -1444,13 +1447,53 @@ class SaveLevelPopup extends Popup {
 }
 
 class UploadingLevelPopup extends Popup {
-	public final editor:LevelEditor;
+	public static var postFactory:UploadingLevelPostFactory = defaultPost;
 
-	public function new(editor:LevelEditor) {
+	public final editor:LevelEditor;
+	public final overrideBanConfirmed:Bool;
+	public final overwriteExistingConfirmed:Bool;
+	private var uploading:Null<UploadingPopup>;
+
+	public function new(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false) {
 		super();
 		this.editor = editor;
-		new MessagePopup("Level upload is not ported yet.");
+		overrideBanConfirmed = overrideBan;
+		overwriteExistingConfirmed = overwriteExisting;
+		uploadLevel();
 		startFadeOut();
+	}
+
+	private function uploadLevel():Void {
+		var fields = buildFields(editor, overrideBanConfirmed, overwriteExistingConfirmed);
+		if (fields.get("data") == null || fields.get("data") == "") {
+			new MessagePopup("The client is glitching out. Could not save your level.");
+			return;
+		}
+		uploading = postFactory(ServerConfig.uploadLevelUrl(), fields, "Uploading level...", function(_):Void {}, function(_):Void {});
+	}
+
+	public static function buildFields(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false):Map<String, String> {
+		var fields = LevelEditor.copyVars(editor.getLevelVars());
+		var data = fields.get("data");
+		if (data == null) {
+			data = "";
+		}
+		var title = fields.get("title");
+		if (title == null) {
+			title = "";
+		}
+		fields.set("hash", Md5.encode(title + LobbySession.userName.toLowerCase() + data + ServerConfig.LEVEL_SALT));
+		fields.set("to_newest", editor.toNewest ? "1" : "0");
+		fields.set("override_banned", overrideBan ? "1" : "0");
+		fields.set("overwrite_existing", overwriteExisting ? "1" : "0");
+		fields.set("rand", Std.string(Std.random(10000000)));
+		fields.set("token", LobbySession.token);
+		return fields;
+	}
+
+	public static function defaultPost(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+			onError:String->Void):Null<UploadingPopup> {
+		return new UploadingPopup(url, fields, label, onResult, onError);
 	}
 }
 

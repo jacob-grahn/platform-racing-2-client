@@ -1,5 +1,6 @@
 package pr2.lobby;
 
+import haxe.crypto.Md5;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -28,6 +29,7 @@ import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
 import pr2.page.LevelEditor.SaveLevelPopup;
+import pr2.page.LevelEditor.UploadingLevelPopup;
 import pr2.page.LevelEditor.TestCoursePage;
 import pr2.page.Page;
 import pr2.page.PageHolder;
@@ -73,6 +75,7 @@ class LobbyServicesTest {
 		testLevelEditorRoute();
 		testLevelEditorShell();
 		testLevelEditorSaveDialog();
+		testUploadingLevelPopupFields();
 		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
 		testSocialActionPlan();
@@ -562,6 +565,56 @@ class LobbyServicesTest {
 		LobbySession.clear();
 	}
 
+	private static function testUploadingLevelPopupFields():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.userName = "CaseUser";
+		LobbySession.token = "session-token";
+		ServerConfig.setHost("http://example.test");
+		var previousFactory = UploadingLevelPopup.postFactory;
+		var uploads:Array<UploadLevelCall> = [];
+		UploadingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult({success: true});
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		editor.title = "Hash Me";
+		editor.note = "saved note";
+		editor.live = 1;
+		editor.toNewest = false;
+		var data = editor.getSaveString();
+		new UploadingLevelPopup(editor, true, true);
+
+		assertEquals(1, uploads.length, "level upload posts once");
+		assertEquals("http://example.test/upload_level.php", uploads[0].url, "level upload endpoint matches Flash");
+		assertEquals("Uploading level...", uploads[0].label, "level upload progress label");
+		assertEquals("Hash Me", uploads[0].fields.get("title"), "level title posts");
+		assertEquals("saved note", uploads[0].fields.get("note"), "level note posts");
+		assertEquals(data, uploads[0].fields.get("data"), "serialized level data posts");
+		assertEquals(Md5.encode("Hash Me" + "caseuser" + data + ServerConfig.LEVEL_SALT), uploads[0].fields.get("hash"), "upload hash matches Flash formula");
+		assertEquals("0", uploads[0].fields.get("to_newest"), "to-newest posts from editor state");
+		assertEquals("1", uploads[0].fields.get("override_banned"), "ban override flag posts");
+		assertEquals("1", uploads[0].fields.get("overwrite_existing"), "overwrite flag posts");
+		assertEquals("session-token", uploads[0].fields.get("token"), "session token posts like SuperLoader");
+		var rand = Std.parseInt(uploads[0].fields.get("rand"));
+		assertEquals(true, rand != null && rand >= 0 && rand < 10000000, "rand field matches SuperLoader range");
+
+		editor.remove();
+		UploadingLevelPopup.postFactory = previousFactory;
+		ServerConfig.resetHost();
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
 	private static function testLevelEditorTestCourseTransition():Void {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
@@ -980,6 +1033,12 @@ class LobbyServicesTest {
 		assertEquals(5.0, SecureData.getNumber("userRank"), "secure stored");
 	}
 
+	private static function closeAllPopups():Void {
+		for (popup in pr2.lobby.dialogs.Popup.getOpen().copy()) {
+			popup.remove();
+		}
+	}
+
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) {
@@ -993,6 +1052,12 @@ class LobbyServicesTest {
 			throw message;
 		}
 	}
+}
+
+private typedef UploadLevelCall = {
+	var url:String;
+	var fields:Map<String, String>;
+	var label:String;
 }
 
 /** Minimal `SortableRow` for exercising the players/guilds sort comparator. */

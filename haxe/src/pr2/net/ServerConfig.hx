@@ -17,6 +17,8 @@ final class ServerConfig {
 	public static inline var LEVEL_LIST_SALT:String = "984cn98c54$";
 	/** Hash salt used when checking level passwords (`Env.LEVEL_PASS_SALT`). **/
 	public static inline var LEVEL_PASS_SALT:String = "WGZSL3JWcUE9L3Q4YipZIQ==";
+	/** Hash salt used when uploading a level (`Env.LEVEL_SALT`). **/
+	public static inline var LEVEL_SALT:String = "84ge5tnr";
 	/** AES key used for encrypted level-password responses (`Env.LEVEL_PASS_KEY`). **/
 	public static inline var LEVEL_PASS_KEY:String = "OWdCREBKUkI9JjEpQCNuYg==";
 	/** AES IV used for encrypted level-password responses (`Env.LEVEL_PASS_IV`). **/
@@ -233,6 +235,11 @@ final class ServerConfig {
 	/** Level moderation POST endpoint, matching `dialogs.ChooseLevelModModePopup`. */
 	public static function levelModerateUrl():String {
 		return host + "/level_moderate.php";
+	}
+
+	/** Level upload POST endpoint, matching `level_management.UploadingLevelPopup`. */
+	public static function uploadLevelUrl():String {
+		return host + "/upload_level.php";
 	}
 
 	/** Artifact placement POST endpoint, matching `gameplay.PlaceArtifact`. */
