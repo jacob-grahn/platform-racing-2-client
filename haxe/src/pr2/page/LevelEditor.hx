@@ -36,6 +36,7 @@ import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
 import pr2.lobby.account.StatsSelect;
 import pr2.lobby.LobbySession;
+import pr2.lobby.chat.ChatText;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
@@ -1487,6 +1488,10 @@ class UploadingLevelPopup extends Popup {
 			new ConfirmPopup(function():Void {
 				new UploadingLevelPopup(editor, overrideBanConfirmed, true);
 			}, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
+		} else if (status == "banned") {
+			new ConfirmPopup(function():Void {
+				new UploadingLevelPopup(editor, true, overwriteExistingConfirmed);
+			}, bannedConfirmationMessage(ret));
 		} else if (status != "banned" && failedResponse(ret)) {
 			new MessagePopup("Error: " + errorMessage(ret));
 		}
@@ -1507,6 +1512,16 @@ class UploadingLevelPopup extends Popup {
 			return Std.string(Reflect.field(ret, "error"));
 		}
 		return "An unknown error occurred. I suspect evil aliens.";
+	}
+
+	private static function bannedConfirmationMessage(ret:Dynamic):String {
+		var banId = Reflect.hasField(ret, "ban_id") ? Std.string(Reflect.field(ret, "ban_id")) : "";
+		var banLang = Reflect.field(ret, "scope") == "s" ? "socially " : "";
+		var url = ServerConfig.getHost() + "/bans/show_record.php?ban_id=" + ChatText.escapeString(banId);
+		var link = '<a href="' + ChatText.escapeString(url) + '" target="_blank"><u><font color="#0000FF">'
+			+ banLang + "banned</font></u></a>";
+		return "Because you are currently " + link
+			+ ", you can only save this level as unpublished without a password. Is it okay to continue with these settings?";
 	}
 
 	public static function buildFields(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false):Map<String, String> {

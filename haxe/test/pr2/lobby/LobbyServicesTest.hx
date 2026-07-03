@@ -80,6 +80,7 @@ class LobbyServicesTest {
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
 		testUploadingLevelPopupOverwriteConfirmation();
+		testUploadingLevelPopupBannedConfirmation();
 		testUploadingLevelPopupResultMessages();
 		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
@@ -658,6 +659,52 @@ class LobbyServicesTest {
 
 		editor.remove();
 		UploadingLevelPopup.postFactory = previousFactory;
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testUploadingLevelPopupBannedConfirmation():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.userName = "CaseUser";
+		LobbySession.token = "session-token";
+		ServerConfig.setHost("http://example.test");
+		var previousFactory = UploadingLevelPopup.postFactory;
+		var uploads:Array<UploadLevelCall> = [];
+		var results:Array<Dynamic> = [{success: false, status: "banned", scope: "s", ban_id: 4321}, {success: true}];
+		UploadingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult(results.shift());
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		editor.title = "Banned Save";
+		new UploadingLevelPopup(editor, false, true);
+		assertEquals(1, uploads.length, "banned response posts once before confirmation");
+		assertEquals("0", uploads[0].fields.get("override_banned"), "first upload does not override ban");
+		assertEquals("1", uploads[0].fields.get("overwrite_existing"), "first upload preserves overwrite confirmation");
+		var confirm = lastConfirmPopup();
+		assertNotNull(confirm, "banned response opens override confirmation");
+		var text = LobbyArt.text(confirm, "textBox");
+		assertEquals(true, text != null && text.htmlText.indexOf("socially banned") >= 0, "ban confirmation includes scoped ban copy");
+		assertEquals(true, text != null && text.htmlText.indexOf("bans/show_record.php?ban_id=4321") >= 0, "ban confirmation links the ban record");
+		clickPopup(confirm, "ok_bt");
+
+		assertEquals(2, uploads.length, "confirming ban override retries upload");
+		assertEquals("1", uploads[1].fields.get("override_banned"), "retry posts ban override flag");
+		assertEquals("1", uploads[1].fields.get("overwrite_existing"), "retry preserves overwrite confirmation");
+
+		editor.remove();
+		UploadingLevelPopup.postFactory = previousFactory;
+		ServerConfig.resetHost();
 		LobbySession.clear();
 		closeAllPopups();
 	}
