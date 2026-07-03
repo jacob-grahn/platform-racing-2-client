@@ -672,6 +672,15 @@ class LobbyServicesTest {
 		assertEquals(true, popup.fadeOutStarted, "loading popup fades after level load");
 
 		popup.remove();
+		popup = new LoadingLevelPopup(32, 5, false);
+		errorCallbacks[1]("network went away");
+		var errorMessage = lastMessagePopup();
+		assertNotNull(errorMessage, "loading popup opens a MessagePopup on fetch errors");
+		assertEquals(true, LobbyArt.text(errorMessage, "textBox").htmlText.indexOf("Error: network went away") >= 0,
+			"loading popup prefixes raw fetch failures like Flash SuperLoader");
+		assertEquals(true, popup.fadeOutStarted, "loading popup fades after fetch error");
+
+		popup.remove();
 		editor.remove();
 		LoadingLevelPopup.fetchFactory = previousFetchFactory;
 		closeAllPopups();

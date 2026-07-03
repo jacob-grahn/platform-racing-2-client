@@ -1672,9 +1672,13 @@ class LoadingLevelPopup extends Popup {
 			progressBar.setProgress(1);
 		}
 		if (message != null && message != "") {
-			new MessagePopup(message);
+			new MessagePopup(formatLoadError(message));
 		}
 		startFadeOut();
+	}
+
+	private static function formatLoadError(message:String):String {
+		return StringTools.startsWith(message, "Error: ") ? message : "Error: " + message;
 	}
 
 	public static function defaultFetch(levelId:Int, version:Int, onResult:ServerLevelData->Void, onError:String->Void):Void {

@@ -132,6 +132,7 @@ Then the level-management flows, one at a time:
     draw actions.
   - [x] Hydrate editor object/text art layers from loaded level data, preserving
     stamp/text placement, scale, color, and save-string meaning.
+  - [x] Surface Flash-style loading error popups for failed editor-level fetches.
 - [x] Port the save flow with the same coverage.
   - [x] Port the authored save dialog, including title/note population and
     counters, empty-title validation, publish/to-newest checkbox behavior, and
