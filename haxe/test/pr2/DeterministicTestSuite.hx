@@ -13,6 +13,7 @@ import pr2.character.LocalCharacterTest;
 import pr2.character.ParticleEmitterTest;
 import pr2.character.RemoteCharacterConsumeTest;
 import pr2.crypto.PR2EncryptorTest;
+import pr2.crypto.MD5CompatTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
 import pr2.effects.TeleportPopTest;
@@ -107,6 +108,7 @@ class DeterministicTestSuite {
 		ParticleEmitterTest.main();
 		RemoteCharacterConsumeTest.main();
 		PR2EncryptorTest.main();
+		MD5CompatTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();
 		ServerLevelFixtureAdapterTest.main();

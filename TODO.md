@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Provide Flash-compatible MD5 helper surfaces for
-  `com.adobe.crypto.MD5`, `com.adobe.utils.IntUtil`, and
-  `com.hurlant.crypto.hash.MD5`: keep byte-array hashing, little-endian
-  `IntUtil.toHex()`, `hashBytes()` / static `digest`, `IHash` input/hash sizes,
-  and source `ByteArray` length/endian restoration where callers depend on those
-  APIs, not just string `haxe.crypto.Md5.encode()`.
 - [ ] Port `com.hurlant.crypto.prng.ARC4` compatibility for Hurlant crypto
   callers: implement the RC4 key schedule, `next()`, block encrypt/decrypt XOR,
   pool/block sizes, dispose-time state wiping, and `toString() == "rc4"` so the

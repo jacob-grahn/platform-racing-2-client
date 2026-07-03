@@ -341,10 +341,10 @@ alone is not a class port.
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
 | --- | --- | --- | --- |
-| `flash/com/adobe/crypto/MD5.as` | Haxe `haxe.crypto.Md5` call sites | ported | Campaign-list and level-data hash validation use the standard Haxe MD5 implementation at the same protocol boundaries instead of carrying the Adobe helper class. |
-| `flash/com/adobe/utils/IntUtil.as` | crypto adapter boundary | gap | The AS3 bit-rotation helpers are only used by the vendored Adobe MD5 implementation; no standalone Haxe adapter is needed while MD5 is supplied by the standard library. |
-| `flash/com/hurlant/crypto/hash/IHash.as` | crypto adapter boundary | gap | The Hurlant hash interface is not ported as an interface; current covered flows use direct MD5/AES adapters. |
-| `flash/com/hurlant/crypto/hash/MD5.as` | Haxe `haxe.crypto.Md5` call sites | ported | The Hurlant MD5 implementation is replaced by the standard Haxe MD5 at login, level-list, and level-data validation boundaries. |
+| `flash/com/adobe/crypto/MD5.as` | `com.adobe.crypto.MD5`, `pr2.crypto.ByteArrayCompat` | ported | String and ByteArray hashing, `hashBytes()`/`hashBinary()`, static raw `digest`, and source ByteArray position/endian/length preservation are covered by `MD5CompatTest`. |
+| `flash/com/adobe/utils/IntUtil.as` | `com.adobe.utils.IntUtil` | ported | Left/right rotates and big/little-endian lowercase 32-bit hex output are covered by `MD5CompatTest`. |
+| `flash/com/hurlant/crypto/hash/IHash.as` | `com.hurlant.crypto.hash.IHash` | ported | The Hurlant hash interface exposes Flash-compatible input/hash size, hash, and `toString()` methods and is exercised through `MD5CompatTest`. |
+| `flash/com/hurlant/crypto/hash/MD5.as` | `com.hurlant.crypto.hash.MD5`, `com.hurlant.crypto.hash.IHash`, `pr2.crypto.ByteArrayCompat` | ported | `IHash` input/hash sizes, `hash()` raw-byte output, source ByteArray position/endian/length restoration, and `toString() == "md5"` are covered by `MD5CompatTest`. |
 | `flash/com/hurlant/crypto/prng/ARC4.as` | crypto adapter boundary | gap | ARC4 is part of the vendored Hurlant crypto bundle and is not represented by a Haxe runtime class. |
 | `flash/com/hurlant/crypto/prng/IPRNG.as` | crypto adapter boundary | gap | The Hurlant PRNG interface has no standalone Haxe equivalent; covered PR2 flows do not consume this interface directly. |
 | `flash/com/hurlant/crypto/prng/Random.as` | `pr2.lobby.Memory`, `pr2.lobby.SecureData` | partial | SecureData-style byte storage is represented for current lobby/account uses, but Hurlant's entropy pool and PRNG API are not ported. |
