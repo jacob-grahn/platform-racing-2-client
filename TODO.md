@@ -134,7 +134,7 @@ Then the level-management flows, one at a time:
     - [x] Port banned-user override.
     - [x] Port overwrite confirmation.
     - [x] Port save-result/error handling.
-- [ ] Port the upload flow with the same coverage.
+- [x] Port the upload flow with the same coverage.
   - [x] Surface moderator unpublish/restrict upload errors from the authored
     moderation popup.
     - [x] Surface non-success JSON responses from moderator unpublish/restrict
