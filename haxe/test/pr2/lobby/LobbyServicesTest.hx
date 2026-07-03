@@ -288,6 +288,16 @@ class LobbyServicesTest {
 		assertEquals(true, editor.continueSelectedBrushAt(105, 120), "eraser extends while drawing");
 		assertEquals(true, editor.endSelectedBrush(), "eraser stroke finishes");
 		assertEquals("merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(), "eraser stores mode and scaled stroke coordinates");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"), "draw stroke enables undo");
+		clickEditorMenu(editor, "undoButton");
+		assertEquals("", editor.activeDrawLayer.getSaveString(), "draw undo removes the last stroke and mode action");
+		assertEquals(0, editor.activeDrawLayer.drawActions.length, "draw undo rebuilds decoded actions");
+		assertEquals(0, editor.activeDrawLayer.rasterCanvas.numChildren, "draw undo clears rasterized art");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "redoButton"), "enabled"), "draw undo enables redo");
+		clickEditorMenu(editor, "redoButton");
+		assertEquals("merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(), "draw redo restores the stroke group");
+		assertEquals(2, editor.activeDrawLayer.drawActions.length, "draw redo rebuilds decoded mode and stroke actions");
+		assertEquals(0, editor.activeDrawLayer.redoArray.length, "draw redo consumes the redo stack");
 		assertEquals(1, editor.objectLayers[0].placedObjects.length, "layer 1 does not receive layer 2 stamp");
 		assertEquals(1, editor.objectLayers[1].placedObjects.length, "layer 2 receives its own placed stamp");
 		clickEditorMenu(editor, "blocksButton");

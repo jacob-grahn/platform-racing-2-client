@@ -20,6 +20,7 @@ import pr2.gameplay.Items;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
+import pr2.level.ServerLevelDecoder;
 import pr2.level.ServerLevelRenderer;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.account.StatSlider;
@@ -101,6 +102,9 @@ class LevelEditor extends Page {
 	public function selectEditorTool(sidebar:String, toolId:String):Void {
 		selectedToolSidebar = sidebar;
 		selectedToolId = toolId;
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
 	}
 
 	public function setActiveObjectLayer(layerNum:Int):Void {
@@ -230,17 +234,29 @@ class LevelEditor extends Page {
 	}
 
 	public function undoActiveObjectLayer():Bool {
-		if (activeObjectLayer == null) {
-			return false;
+		var changed = false;
+		if (activeDrawLayer != null && selectedToolSidebar == "tools") {
+			changed = activeDrawLayer.undo();
+		} else if (activeObjectLayer != null) {
+			changed = activeObjectLayer.undo();
 		}
-		return activeObjectLayer.undo();
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
+		return changed;
 	}
 
 	public function redoActiveObjectLayer():Bool {
-		if (activeObjectLayer == null) {
-			return false;
+		var changed = false;
+		if (activeDrawLayer != null && selectedToolSidebar == "tools") {
+			changed = activeDrawLayer.redo();
+		} else if (activeObjectLayer != null) {
+			changed = activeObjectLayer.redo();
 		}
-		return activeObjectLayer.redo();
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
+		return changed;
 	}
 
 	override public function remove():Void {
@@ -451,6 +467,11 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	public function updateUndoRedoState():Void {
+		if (editor.selectedToolSidebar == "tools" && editor.activeDrawLayer != null) {
+			Reflect.setProperty(find("undoButton"), "enabled", editor.activeDrawLayer.saveArray.length > 0);
+			Reflect.setProperty(find("redoButton"), "enabled", editor.activeDrawLayer.redoArray.length > 0);
+			return;
+		}
 		var activeLayer = editor.activeObjectLayer;
 		Reflect.setProperty(find("undoButton"), "enabled", activeLayer != null && activeLayer.saveArray.length > 0);
 		Reflect.setProperty(find("redoButton"), "enabled", activeLayer != null && activeLayer.redoArray.length > 0);
@@ -1297,6 +1318,7 @@ class EditorDrawableLayer extends Sprite {
 
 	public final layerNum:Int;
 	public final saveArray:Array<String> = [];
+	public final redoArray:Array<String> = [];
 	public final drawActions:Array<DecodedDrawAction> = [];
 	public final rasterCanvas:Sprite;
 	public final brushCanvas:Sprite;
@@ -1346,10 +1368,41 @@ class EditorDrawableLayer extends Sprite {
 		}
 		drawing = false;
 		rasterize();
+		notifyHistoryChanged();
 	}
 
 	public function getSaveString():String {
 		return saveArray.join(",");
+	}
+
+	public function undo():Bool {
+		if (saveArray.length == 0) {
+			return false;
+		}
+		var action = saveArray.pop();
+		redoArray.push(action);
+		while (saveArray.length > 0 && saveArray[saveArray.length - 1].charAt(0) != "d") {
+			redoArray.push(saveArray.pop());
+		}
+		rebuildFromSaveArray();
+		notifyHistoryChanged();
+		return true;
+	}
+
+	public function redo():Bool {
+		if (redoArray.length == 0) {
+			return false;
+		}
+		while (redoArray.length > 0) {
+			var action = redoArray.pop();
+			saveArray.push(action);
+			if (action.charAt(0) == "d") {
+				break;
+			}
+		}
+		rebuildFromSaveArray();
+		notifyHistoryChanged();
+		return true;
 	}
 
 	public function remove():Void {
@@ -1359,6 +1412,7 @@ class EditorDrawableLayer extends Sprite {
 		clearChildren(rasterCanvas);
 		clearChildren(brushCanvas);
 		saveArray.resize(0);
+		redoArray.resize(0);
 		drawActions.resize(0);
 	}
 
@@ -1428,6 +1482,40 @@ class EditorDrawableLayer extends Sprite {
 	private function recordAction(action:DecodedDrawAction, encoded:String):Void {
 		drawActions.push(action);
 		saveArray.push(encoded);
+		redoArray.resize(0);
+	}
+
+	private function rebuildFromSaveArray():Void {
+		drawActions.resize(0);
+		for (action in ServerLevelDecoder.decodeDrawActions(getSaveString())) {
+			drawActions.push(action);
+		}
+		color = 0;
+		brushSize = DEFAULT_BRUSH_SIZE;
+		mode = "draw";
+		for (action in drawActions) {
+			switch (action.kind) {
+				case "c":
+					if (action.values.length > 0) {
+						color = Std.int(action.values[0]);
+					}
+				case "t":
+					if (action.values.length > 0) {
+						brushSize = action.values[0];
+					}
+				case "m":
+					mode = action.text;
+				default:
+			}
+		}
+		rasterize();
+	}
+
+	private function notifyHistoryChanged():Void {
+		var editor = LevelEditor.editor;
+		if (editor != null && editor.activeDrawLayer == this && editor.menu != null) {
+			editor.menu.updateUndoRedoState();
+		}
 	}
 
 	private static function clearChildren(sprite:Sprite):Void {

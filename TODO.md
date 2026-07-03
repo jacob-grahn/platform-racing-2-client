@@ -81,6 +81,8 @@ Port the editor itself, one piece at a time:
   - [x] Port undo for object-layer text add/edit/delete/move/resize actions.
   - [x] Port redo for object-layer text actions.
   - [ ] Port undo/redo for block and draw layers.
+    - [x] Port undo/redo for draw layers.
+    - [ ] Port undo/redo for block layers.
 - [ ] Port camera/zoom.
 - [ ] Port editor settings.
 - [ ] Port the hats/items/music menus.
