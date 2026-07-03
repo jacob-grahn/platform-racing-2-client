@@ -7,6 +7,7 @@ import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedTextObject;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerConfig;
+import pr2.net.ServerLevelData;
 import pr2.page.LevelEditor.EditorBackgroundColorPickerButton;
 import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
@@ -21,6 +22,7 @@ class EditorSettingsTest {
 	public static function main():Void {
 		testDefaultSetters();
 		testVariablesAndLevelVars();
+		testApplyLoadedLevelData();
 		testPasswordHashing();
 		testBackgroundColorPickerCommit();
 		testTextObjectSaveStringUsesDecodedArtFormat();
@@ -96,6 +98,34 @@ class EditorSettingsTest {
 		for (i in 2...saveParts.length) {
 			assertEquals("", saveParts[i], 'empty save layer $i is blank');
 		}
+	}
+
+	private static function testApplyLoadedLevelData():Void {
+		var vars = new Map<String, String>();
+		vars.set("live", "1");
+		vars.set("min_level", "9");
+		vars.set("has_pass", "1");
+		vars.set("title", "Loaded Editor Level");
+		vars.set("note", "loaded note");
+		vars.set("song", "4");
+		vars.set("gravity", "2");
+		vars.set("max_time", "300");
+		vars.set("items", "Sword");
+		vars.set("badHats", "5");
+		vars.set("gameMode", "objective");
+		vars.set("cowboyChance", "25");
+
+		var editor = new LevelEditor();
+		editor.initialize();
+		editor.applyLoadedLevelData(new ServerLevelData(vars, true), true);
+
+		assertEquals("Loaded Editor Level", editor.title, "loaded level title applies to editor");
+		assertEquals("loaded note", editor.note, "loaded level note applies to editor");
+		assertEquals("9", editor.minRank, "loaded level minimum rank applies to editor");
+		assertEquals(1, editor.hasPass, "loaded password marker applies to editor");
+		assertEquals("objective", editor.gameMode, "loaded game mode applies to editor");
+		assertEquals(true, editor.reportsMode, "loaded report mode applies to editor menu");
+		editor.remove();
 	}
 
 	private static function testPasswordHashing():Void {

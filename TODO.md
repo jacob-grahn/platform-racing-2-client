@@ -114,6 +114,8 @@ Then the level-management flows, one at a time:
 
 - [ ] Port the load flow with its validation, access rules, popups, server
   format, loading/errors, and return navigation.
+  - [x] Port strict editor-load response validation and the editor variable /
+    reports-mode handoff.
 - [ ] Port the save flow with the same coverage.
 - [ ] Port the upload flow with the same coverage.
 - [ ] Port the delete flow with the same coverage.

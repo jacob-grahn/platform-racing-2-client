@@ -48,6 +48,22 @@ class LevelDataClient {
 		return new ServerLevelData(parseVars(validated), hashValid, validated);
 	}
 
+	/**
+		Editor load flow variant from `level_management.LoadingLevelPopup`.
+		Unlike race loading, Flash rejects bad hashes and empty level data before
+		passing validated URLVariables into `LevelEditor.setVariables`.
+	**/
+	public static function parseEditorLoad(body:String, levelId:Int, version:Int):ServerLevelData {
+		var data = parse(body, levelId, version);
+		if (!data.hashValid) {
+			throw "Error: The course did not download correctly.";
+		}
+		if (data.saveString == "") {
+			throw "Error: The course did not load.";
+		}
+		return data;
+	}
+
 	/** `MD5(version + courseID + levelData + LEVEL_SALT_2)`, per `Game.loadHandler`. **/
 	public static function computeHash(version:Int, levelId:Int, levelData:String):String {
 		return Md5.encode(Std.string(version) + Std.string(levelId) + levelData + ServerConfig.LEVEL_SALT_2);

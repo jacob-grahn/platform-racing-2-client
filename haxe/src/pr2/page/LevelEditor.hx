@@ -221,6 +221,13 @@ class LevelEditor extends Page {
 		}
 	}
 
+	public function applyLoadedLevelData(data:ServerLevelData, report:Bool = false):Void {
+		setVariables(data.vars);
+		if (menu != null) {
+			menu.setReportsMode(report);
+		}
+	}
+
 	public function getSaveString():String {
 		var blockSave = blockLayer == null ? "" : blockLayer.getSaveString();
 		var objectSave = [for (i in 0...5) objectLayers.length > i ? objectLayers[i].getSaveString() : ""];

@@ -9,6 +9,7 @@ class LevelDataClientTest {
 		testParsesAndVerifiesHash();
 		testAndInsideValueRoundTrips();
 		testHashMismatchReported();
+		testEditorLoadRejectsBadOrEmptyPayloads();
 		trace('LevelDataClientTest passed $assertions assertions');
 	}
 
@@ -47,6 +48,23 @@ class LevelDataClientTest {
 		assertEquals("Test", data.title, "fields still readable on hash mismatch");
 	}
 
+	private static function testEditorLoadRejectsBadOrEmptyPayloads():Void {
+		var levelId = 8;
+		var version = 2;
+		var levelData = "level_id=8&version=2&title=Editor Load&has_pass=1&min_level=7&data=m4`abcdef````````````";
+		var data = LevelDataClient.parseEditorLoad(signed(levelData, version, levelId), levelId, version);
+		assertEquals(true, data.hashValid, "editor load requires a valid hash");
+		assertEquals(levelData, data.saveString, "editor load preserves validated level vars");
+		assertEquals("Editor Load", data.title, "editor load parses level title");
+
+		assertThrows("did not download correctly", function():Void {
+			LevelDataClient.parseEditorLoad(levelData + Md5.encode("garbage"), levelId, version);
+		}, "editor load rejects hash mismatches");
+		assertThrows("did not load", function():Void {
+			LevelDataClient.parseEditorLoad(signed("", version, levelId), levelId, version);
+		}, "editor load rejects empty level data");
+	}
+
 	private static function signed(levelData:String, version:Int, levelId:Int):String {
 		return levelData + Md5.encode(Std.string(version) + Std.string(levelId) + levelData + ServerConfig.LEVEL_SALT_2);
 	}
@@ -56,5 +74,18 @@ class LevelDataClientTest {
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function assertThrows(part:String, fn:Void->Void, message:String):Void {
+		assertions++;
+		try {
+			fn();
+		} catch (error:Dynamic) {
+			if (Std.string(error).indexOf(part) >= 0) {
+				return;
+			}
+			throw '$message: wrong error ${Std.string(error)}';
+		}
+		throw '$message: expected an error containing $part';
 	}
 }
