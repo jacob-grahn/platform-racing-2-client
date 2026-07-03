@@ -34,6 +34,7 @@ import pr2.page.LevelEditor;
 import pr2.page.LevelEditor.ChooseLevelsModePopup;
 import pr2.page.LevelEditor.DeletingLevelPopup;
 import pr2.page.LevelEditor.GetLevelsPopup;
+import pr2.page.LevelEditor.HandleLevelReportPopup;
 import pr2.page.LevelEditor.GetReportedLevelsPopup;
 import pr2.page.LevelEditor.SaveLevelPopup;
 import pr2.page.LevelEditor.UploadingLevelPopup;
@@ -83,6 +84,7 @@ class LobbyServicesTest {
 		testLevelEditorShell();
 		testLevelEditorLoadListPopup();
 		testLevelEditorReportedLevelsPopup();
+		testLevelEditorReportHandlePopup();
 		testLevelEditorDeleteFlow();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
@@ -628,6 +630,107 @@ class LobbyServicesTest {
 		choice.remove();
 		editor.remove();
 		GetReportedLevelsPopup.loadFactory = previousLoadFactory;
+		GetReportedLevelsPopup.postFactory = previousPostFactory;
+		ServerConfig.resetHost();
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testLevelEditorReportHandlePopup():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		ServerConfig.setHost("http://example.test");
+		var previousPostFactory = GetReportedLevelsPopup.postFactory;
+		var previousUploadFactory = HandleLevelReportPopup.uploadFactory;
+		var previousReopenFactory = HandleLevelReportPopup.reopenFactory;
+		var uploads:Array<UploadLevelCall> = [];
+		var reopenCount = 0;
+		GetReportedLevelsPopup.postFactory = function(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+			onResult({
+				levels: [
+					{
+						level_id: "51",
+						version: "6",
+						title: "Reported One",
+						creator: "Maker",
+						creator_group: "1",
+						report_time: "1363478400",
+						reporter: "Concerned",
+						reason: "Bad art",
+						note: "check this"
+					}
+				]
+			});
+		};
+		HandleLevelReportPopup.uploadFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult(url.indexOf("ban_user.php") >= 0 ? {message: "Ban recorded"} : {success: true});
+			return null;
+		};
+		HandleLevelReportPopup.reopenFactory = function():Void {
+			reopenCount++;
+		};
+
+		var reports = new GetReportedLevelsPopup();
+		reports.selectListing(reports.listings[0]);
+		DisplayUtil.findByName(reports.art, "delete_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		var handle = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], HandleLevelReportPopup);
+		assertNotNull(handle, "handle button opens the authored report handling popup");
+		var title = LobbyArt.text(handle.art, "titleBox");
+		assertEquals(true, title != null && title.htmlText.indexOf("Reported One") >= 0 && title.htmlText.indexOf("Maker") >= 0,
+			"report handling title links the level and creator");
+
+		DisplayUtil.findByName(handle.art, "archive_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		var confirm = lastConfirmPopup();
+		assertNotNull(confirm, "archive opens confirmation");
+		clickPopup(confirm, "ok_bt");
+		assertEquals(1, uploads.length, "confirming archive posts once");
+		assertEquals("http://example.test/mod/archive_report.php", uploads[0].url, "archive endpoint matches Flash");
+		assertEquals("51", uploads[0].fields.get("level_id"), "archive posts level id");
+		assertEquals("6", uploads[0].fields.get("version"), "archive posts version");
+		assertEquals("Archiving report...", uploads[0].label, "archive progress label matches Flash");
+		assertEquals(true, reports.fadeOutStarted, "archiving closes the reported list");
+		assertEquals(true, handle.fadeOutStarted, "archiving closes the handling popup");
+		assertEquals(1, reopenCount, "archiving refreshes the reported list");
+		handle.remove();
+		reports.remove();
+
+		uploads = [];
+		reopenCount = 0;
+		reports = new GetReportedLevelsPopup();
+		reports.selectListing(reports.listings[0]);
+		DisplayUtil.findByName(reports.art, "delete_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		handle = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], HandleLevelReportPopup);
+		var duration = Std.downcast(DisplayUtil.findByName(handle.art, "duration"), FlComboBox);
+		duration.selectedIndex = 2;
+		var reason = Std.downcast(DisplayUtil.findByName(handle.art, "reason"), FlComboBox);
+		reason.selectedIndex = 1;
+		DisplayUtil.findByName(handle.art, "ban_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		confirm = lastConfirmPopup();
+		assertNotNull(confirm, "ban opens confirmation");
+		clickPopup(confirm, "ok_bt");
+		assertEquals(2, uploads.length, "confirmed social ban posts ban then archive");
+		assertEquals("http://example.test/ban_user.php", uploads[0].url, "ban endpoint matches Flash");
+		assertEquals("Unpublishing and banning...", uploads[0].label, "ban progress label matches Flash");
+		assertEquals("Maker", uploads[0].fields.get("banned_name"), "ban posts reported level creator");
+		assertEquals("86400", uploads[0].fields.get("duration"), "ban posts selected duration");
+		assertEquals("Inappropriate Level -- Vulgar Language", uploads[0].fields.get("reason"), "ban prefixes the selected reason");
+		assertEquals("social", uploads[0].fields.get("scope"), "ban is social scoped");
+		assertEquals(true, uploads[0].fields.get("record").indexOf("Level ID: 51") >= 0, "ban posts a level record");
+		assertEquals("http://example.test/mod/archive_report.php", uploads[1].url, "ban success archives the report");
+		assertEquals(1, reopenCount, "ban archive refreshes the reported list");
+		assertNotNull(lastMessagePopup(), "ban response message is shown after archive");
+
+		handle.remove();
+		reports.remove();
+		HandleLevelReportPopup.reopenFactory = previousReopenFactory;
+		HandleLevelReportPopup.uploadFactory = previousUploadFactory;
 		GetReportedLevelsPopup.postFactory = previousPostFactory;
 		ServerConfig.resetHost();
 		LobbySession.clear();

@@ -247,6 +247,11 @@ final class ServerConfig {
 		return host + "/levels_get_reported.php";
 	}
 
+	/** Moderator report archive POST endpoint, matching `level_management.HandleLevelReportPopup`. */
+	public static function archiveReportUrl():String {
+		return host + "/mod/archive_report.php";
+	}
+
 	/** Level upload POST endpoint, matching `level_management.UploadingLevelPopup`. */
 	public static function uploadLevelUrl():String {
 		return host + "/upload_level.php";
