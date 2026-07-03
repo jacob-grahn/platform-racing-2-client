@@ -127,6 +127,8 @@ Then the level-management flows, one at a time:
     reports-mode handoff.
   - [x] Hydrate the editor block layer from loaded level data, preserving block
     option strings.
+  - [x] Hydrate editor draw layers from loaded level data, preserving editable
+    draw actions.
 - [ ] Port the save flow with the same coverage.
   - [x] Port the authored save dialog, including title/note population and
     counters, empty-title validation, publish/to-newest checkbox behavior, and

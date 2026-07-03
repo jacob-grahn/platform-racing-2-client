@@ -114,7 +114,22 @@ class EditorSettingsTest {
 		vars.set("badHats", "5");
 		vars.set("gameMode", "objective");
 		vars.set("cowboyChance", "25");
-		vars.set("data", "m4`abcdef`0;0;11,1;0;16,1;0;10;4");
+		vars.set("data", [
+			"m4",
+			"abcdef",
+			"0;0;11,1;0;16,1;0;10;4",
+			"",
+			"",
+			"",
+			"c123456,t8,mdraw,d10;12;5;6",
+			"",
+			"",
+			"",
+			"",
+			"",
+			"c654321,merase,d20;22;3;4",
+			""
+		].join("`"));
 
 		var editor = new LevelEditor();
 		editor.initialize();
@@ -128,6 +143,10 @@ class EditorSettingsTest {
 		assertEquals(true, editor.reportsMode, "loaded report mode applies to editor menu");
 		assertEquals(3, editor.blockLayer.blocks.length, "loaded block data replaces default editor blocks");
 		assertEquals("0;0;11,1;0;16,1;0;10;4", editor.blockLayer.getSaveString(), "loaded blocks export with original options");
+		assertEquals("c123456,t8,mdraw,d10;12;5;6", editor.drawLayers[0].getSaveString(), "loaded draw layer 1 preserves draw actions");
+		assertEquals(4, editor.drawLayers[0].drawActions.length, "loaded draw layer 1 decodes editable draw actions");
+		assertEquals("c654321,merase,d20;22;3;4", editor.drawLayers[3].getSaveString(), "loaded draw layer 4 preserves draw actions");
+		assertEquals(0, editor.drawLayers[0].redoArray.length, "loaded draw layer clears redo state");
 		editor.remove();
 	}
 

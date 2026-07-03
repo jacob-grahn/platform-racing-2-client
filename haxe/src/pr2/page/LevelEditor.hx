@@ -254,7 +254,9 @@ class LevelEditor extends Page {
 	public function applyLoadedLevelData(data:ServerLevelData, report:Bool = false):Void {
 		setVariables(data.vars);
 		if (data.data != "" && blockLayer != null) {
-			blockLayer.loadBlocks(ServerLevelDecoder.decode(data.data).blocks);
+			var level = ServerLevelDecoder.decode(data.data);
+			blockLayer.loadBlocks(level.blocks);
+			loadDrawLayersFromData(data.data);
 		}
 		if (menu != null) {
 			menu.setReportsMode(report);
@@ -864,6 +866,16 @@ class LevelEditor extends Page {
 		return Md5.encode(pass + ServerConfig.LEVEL_PASS_SALT);
 	}
 
+	private function loadDrawLayersFromData(rawData:String):Void {
+		var sections = rawData.split("`");
+		var drawSections = [section(sections, 6), section(sections, 7), section(sections, 8), section(sections, 12), section(sections, 13)];
+		for (i in 0...drawSections.length) {
+			if (i < drawLayers.length) {
+				drawLayers[i].loadDrawString(drawSections[i]);
+			}
+		}
+	}
+
 	private function get_song():String {
 		return levelConfig.song;
 	}
@@ -902,6 +914,10 @@ class LevelEditor extends Page {
 		}
 		var parsed = Std.parseInt(value);
 		return parsed == null ? fallback : parsed;
+	}
+
+	private static function section(sections:Array<String>, index:Int):String {
+		return index < sections.length ? sections[index] : "";
 	}
 }
 
@@ -4414,6 +4430,26 @@ class EditorDrawableLayer extends Sprite {
 		return saveArray.join(",");
 	}
 
+	public function loadDrawString(drawString:String):Void {
+		saveArray.resize(0);
+		redoArray.resize(0);
+		drawActions.resize(0);
+		if (drawString != null && drawString != "") {
+			for (entry in drawString.split(",")) {
+				if (entry != "") {
+					saveArray.push(entry);
+				}
+			}
+		}
+		for (action in ServerLevelDecoder.decodeDrawActions(getSaveString())) {
+			drawActions.push(action);
+		}
+		drawing = false;
+		rebuildBrushState();
+		rasterize();
+		notifyHistoryChanged();
+	}
+
 	public function undo():Bool {
 		if (saveArray.length == 0) {
 			return false;
@@ -4529,6 +4565,11 @@ class EditorDrawableLayer extends Sprite {
 		for (action in ServerLevelDecoder.decodeDrawActions(getSaveString())) {
 			drawActions.push(action);
 		}
+		rebuildBrushState();
+		rasterize();
+	}
+
+	private function rebuildBrushState():Void {
 		color = 0;
 		brushSize = DEFAULT_BRUSH_SIZE;
 		mode = "draw";
@@ -4547,7 +4588,6 @@ class EditorDrawableLayer extends Sprite {
 				default:
 			}
 		}
-		rasterize();
 	}
 
 	private function notifyHistoryChanged():Void {
