@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `com.hurlant.crypto.prng.Random` compatibility: preserve
-  the ARC4-backed entropy pool, constructor seeding from `Math.random()`,
-  `seed()` XOR behavior, `autoSeed()` system/font/timer mixing where available,
-  lazy `state.init(pool)`, `nextByte()` / `nextBytes()`, dispose-time pool wiping,
-  and `toString() == "random-{state}"`.
 - [ ] Expose the Hurlant symmetric crypto API around the current AES runtime:
   `AESKey`, `CBCMode`, `IVMode`, `ICipher`, `IMode`, `IStreamCipher`, and
   `ISymmetricKey` should support mutable ByteArray block encryption/decryption
