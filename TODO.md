@@ -93,7 +93,7 @@ Port the editor itself, one piece at a time:
     and background color.
 - [ ] Port the hats/items/music menus.
   - [x] Port the editor item settings menu.
-  - [ ] Port the editor hats settings menu.
+  - [x] Port the editor hats settings menu.
   - [ ] Port the editor music settings menu.
 - [ ] Port the test-course transition.
 

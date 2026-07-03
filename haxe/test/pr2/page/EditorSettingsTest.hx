@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.net.ServerConfig;
+import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
 
 class EditorSettingsTest {
@@ -15,6 +16,7 @@ class EditorSettingsTest {
 		testVariablesAndLevelVars();
 		testPasswordHashing();
 		testItemSettingsPopupCommit();
+		testHatsSettingsPopupCommit();
 		trace('EditorSettingsTest passed $assertions assertions');
 	}
 
@@ -112,6 +114,30 @@ class EditorSettingsTest {
 
 		assertArrayEquals([Items.MINE, Items.TELEPORT], editor.allowedItems, "item menu commits selected items in Flash order");
 		assertEquals("2`4", editor.getLevelVars().get("items"), "committed item menu selection exports as level vars");
+	}
+
+	private static function testHatsSettingsPopupCommit():Void {
+		var editor = new LevelEditor();
+		editor.setBadHats("5,12");
+		var popup = new EditorHatsSettingsPopup(editor, new Sprite());
+
+		assertEquals(false, popup.isHatAllowed(5), "hats menu loads existing cowboy ban");
+		assertEquals(false, popup.isHatAllowed(12), "hats menu loads existing thief ban");
+		assertEquals(true, popup.isHatAllowed(6), "hats menu leaves other hats allowed");
+
+		popup.setHatAllowed(5, true);
+		popup.setHatAllowed(6, false);
+		popup.remove();
+
+		assertArrayEquals([6, 12], editor.badHats, "hats menu commits unchecked hats in Flash order");
+		assertEquals("6,12", editor.getLevelVars().get("badHats"), "committed hats menu selection exports as level vars");
+
+		editor.setGameMode("hat");
+		editor.setBadHats("");
+		popup = new EditorHatsSettingsPopup(editor, new Sprite());
+		assertEquals(false, popup.isHatAllowed(14), "hat attack forces artifact unchecked");
+		popup.remove();
+		assertArrayEquals([14], editor.badHats, "hat attack artifact state commits as banned");
 	}
 
 	private static function assertArrayEquals(expected:Array<Int>, actual:Array<Int>, message:String):Void {
