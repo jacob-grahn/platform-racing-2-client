@@ -450,7 +450,7 @@ class LocalPlayerController {
 
 	/**
 		Tile keys ("x,y") of blocks whose alpha/tint currently differs from the
-		default: fading/removed vanish blocks and depleted item blocks. Lets the
+		default: fading/removed vanish blocks and depleted supply blocks. Lets the
 		renderer restyle only these instead of every block in the level each frame.
 	**/
 	public function activeVisualBlockKeys():Array<String> {
@@ -470,7 +470,7 @@ class LocalPlayerController {
 
 	private static function depletesAsSupplyVisual(type:BlockType):Bool {
 		return switch (type) {
-			case BlockType.Happy | BlockType.Sad:
+			case BlockType.Finish | BlockType.Item | BlockType.CustomStats | BlockType.Happy | BlockType.Sad | BlockType.Heart | BlockType.Time:
 				true;
 			default:
 				false;
@@ -788,6 +788,9 @@ class LocalPlayerController {
 		if (finished) {
 			return;
 		}
+		if (!useSupply(block)) {
+			return;
+		}
 		finished = true;
 		var id = 0;
 		for (candidate in level.blocks) {
@@ -1035,6 +1038,7 @@ class LocalPlayerController {
 				return;
 			}
 			state.depletedItem = true;
+			state.depletedVisualSupply = true;
 		}
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.ItemBlockSound, block.x, block.y));
 
@@ -1277,6 +1281,7 @@ class LocalPlayerController {
 			return;
 		}
 		state.depletedItem = true;
+		state.depletedVisualSupply = true;
 
 		if (block.options == "reset") {
 			applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);

@@ -181,6 +181,7 @@ class LocalPlayerControllerTest {
 		assertEquals(1, state.finishBlockId, "finish reports Flash-style one-based block id");
 		assertEquals(105, state.finishX, "finish reports block center x");
 		assertEquals(45, state.finishY, "finish reports block center y");
+		assertClose(0.5, player.blockColorMultiplierAt(3, 1), "depleted finish block uses SupplyBlock grey transform");
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
@@ -1219,6 +1220,7 @@ class LocalPlayerControllerTest {
 		assertClose(100, state.speedStat, "custom stats block applies speed stat");
 		assertClose(0, state.accelerationStat, "custom stats block applies acceleration stat");
 		assertClose(80, state.jumpStat, "custom stats block applies jump stat");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted custom stats block uses SupplyBlock grey transform");
 	}
 
 	private static function testBumpingResetCustomStatsBlockRestoresStartingStats():Void {
@@ -1236,6 +1238,7 @@ class LocalPlayerControllerTest {
 		assertClose(70, state.speedStat, "reset custom stats block restores starting speed stat");
 		assertClose(40, state.accelerationStat, "reset custom stats block restores starting acceleration stat");
 		assertClose(20, state.jumpStat, "reset custom stats block restores starting jump stat");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted reset custom stats block uses SupplyBlock grey transform");
 	}
 
 	private static function testBumpingBrickBlockBreaksIt():Void {
@@ -1285,11 +1288,13 @@ class LocalPlayerControllerTest {
 	private static function testBumpingHeartBlockAddsCappedLife():Void {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Heart), BlockType.Heart);
 		assertEquals(4, player.debugState().lives, "heart block adds one life");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted heart block uses SupplyBlock grey transform");
 	}
 
 	private static function testBumpingTimeBlockAddsTenSeconds():Void {
 		var player = bumpSupply(supplyBlockLevel(BlockType.Time), BlockType.Time);
 		assertEquals(130, player.debugState().courseTime, "time block adds ten seconds");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 1), "depleted time block uses SupplyBlock grey transform");
 	}
 
 	private static function bumpSupply(level:FixtureLevel, type:BlockType):LocalCharacter {

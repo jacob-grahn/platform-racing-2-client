@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `SupplyBlock.as` depletion visuals for every one-use supply block
-  in this batch (`FinishBlock`, `HeartBlock`, `CustomStatsBlock`, normal
-  `ItemBlock`, `HappyBlock`, and later supply subclasses), not only item/happy/sad
-  tinting.
 - [ ] Preserve `CustomStatsBlock.as` and `HappyBlock.as` test-course UI sync:
   after stat changes in a `TestCourse`, the on-screen `StatsSelect` controls
   should update from the local character just like Flash
