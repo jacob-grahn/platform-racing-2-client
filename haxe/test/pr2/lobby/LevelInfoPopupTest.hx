@@ -211,8 +211,17 @@ class LevelInfoPopupTest {
 		assertEquals("92", uploads[1].fields.get("level_id"), "restrict level_id field");
 		assertEquals("restrict", uploads[1].fields.get("action"), "restrict action field");
 		assertEquals("Restricting level...", uploads[1].label, "restrict upload label");
-		uploads[1].onError("Moderation failed.");
-		assertNotNull(lastPopup(MessagePopup), "failed moderation upload shows error message");
+		uploads[1].onResult({success: false, error: "Moderation failed."});
+		var responseError = lastPopup(MessagePopup);
+		assertNotNull(responseError, "failed moderation response shows error message");
+		assertEquals(true, LobbyArt.text(responseError, "textBox").htmlText.indexOf("Error: Moderation failed.") >= 0,
+			"failed moderation response includes server error");
+		responseError.remove();
+		uploads[1].onError("Transport failed.");
+		var transportError = lastPopup(MessagePopup);
+		assertNotNull(transportError, "failed moderation upload shows error message");
+		assertEquals(true, LobbyArt.text(transportError, "textBox").htmlText.indexOf("Error: Transport failed.") >= 0,
+			"failed moderation upload includes transport error");
 
 		closeAll();
 		restoreHooks();

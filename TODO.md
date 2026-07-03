@@ -135,6 +135,8 @@ Then the level-management flows, one at a time:
 - [ ] Port the upload flow with the same coverage.
   - [x] Surface moderator unpublish/restrict upload errors from the authored
     moderation popup.
+    - [x] Surface non-success JSON responses from moderator unpublish/restrict
+      uploads instead of leaving the moderation popup silent.
 - [x] Port the delete flow with the same coverage.
 - [x] Port the report-management flow with the same coverage.
   - [x] Port the moderator load-mode chooser and reported-levels list/load

@@ -55,6 +55,12 @@ class ChooseLevelModModePopup extends Popup {
 				LevelInfoPopup.instance.startFadeOut();
 			}
 			startFadeOut();
+			return;
+		}
+		if (parsedData != null) {
+			var error = Reflect.field(parsedData, "error");
+			var message = error == null ? "The level moderation request failed." : Std.string(error);
+			handleUploadError(message);
 		}
 	}
 
