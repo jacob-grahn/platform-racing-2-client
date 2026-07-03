@@ -65,6 +65,7 @@ import pr2.net.SavedAccountsTest;
 import pr2.net.ServerConfigTest;
 import pr2.net.ServerStatusClientTest;
 import pr2.page.EditorBlockOptionsTest;
+import pr2.page.EditorSettingsTest;
 import pr2.page.CampaignTestScreenTest;
 import pr2.runtime.FlButtonTest;
 import pr2.runtime.FlComponentsTest;
@@ -136,6 +137,7 @@ class DeterministicTestSuite {
 		LevelDataClientTest.main();
 		JsonClientTest.main();
 		EditorBlockOptionsTest.main();
+		EditorSettingsTest.main();
 		CampaignTestScreenTest.main();
 		LobbyServicesTest.main();
 		AccountTabTest.main();

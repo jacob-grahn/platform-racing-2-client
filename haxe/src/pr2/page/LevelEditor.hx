@@ -1,5 +1,6 @@
 package pr2.page;
 
+import haxe.crypto.Md5;
 import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
@@ -20,6 +21,7 @@ import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.app.AppStage;
 import pr2.gameplay.Items;
+import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
@@ -30,6 +32,7 @@ import pr2.lobby.account.StatSlider;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
+import pr2.net.ServerConfig;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
@@ -66,7 +69,21 @@ class LevelEditor extends Page {
 	public var selectedBlock(default, null):Null<EditorBlockObject>;
 	public var lastBlockOptionsRequest(default, null):Null<EditorBlockObject>;
 	public var activeBlockOptionsPopup(default, null):Null<EditorBlockOptionsPopup>;
+	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
+	public var badHats(default, null):Array<Int> = [];
+	public var title:String = "";
+	public var note:String = "";
+	public var live(default, null):Float = 0;
+	public var minRank(default, null):String = "0";
+	public var pass(default, null):Null<String> = null;
+	public var hasPass(default, null):Int = 0;
+	public var song(get, never):String;
+	public var gravity(get, never):String;
+	public var maxTime(get, never):String;
+	public var gameMode(get, never):String;
+	public var cowboyChance(get, never):String;
+	public var color(get, never):Int;
 	public var zoom(default, null):Float = 1;
 	public var posX(default, null):Float = 0;
 	public var posY(default, null):Float = 0;
@@ -118,6 +135,102 @@ class LevelEditor extends Page {
 
 	public function setReportsMode(on:Bool = false):Void {
 		reportsMode = on;
+	}
+
+	public function setColor(value:Int = LevelConfig.DEFAULT_COLOR):Void {
+		levelConfig.setColor(value);
+	}
+
+	public function setSong(value:Null<String>):Void {
+		levelConfig.setSong(value);
+	}
+
+	public function setGravity(value:Null<String>):Void {
+		levelConfig.setGravity(value == null || value == "" ? "1" : value);
+	}
+
+	public function setMaxTime(value:Null<String>):Void {
+		levelConfig.setMaxTime(value == null || value == "" ? "120" : value);
+	}
+
+	public function setMinRank(value:Null<String>):Void {
+		minRank = value == null || value == "" ? "0" : value;
+	}
+
+	public function setCowboyChance(value:Null<String>):Void {
+		levelConfig.setCowboyChance(value == null || value == "" ? "5" : value);
+	}
+
+	public function setPass(value:Null<String>):Void {
+		pass = value == null ? "" : value;
+		hasPass = pass != "" ? 1 : 0;
+	}
+
+	public function setGameMode(value:String):Void {
+		levelConfig.setGameMode(value == "eggs" ? "egg" : value);
+	}
+
+	public function setItems(value:Null<String>):Void {
+		levelConfig.setItems(value);
+		allowedItems = levelConfig.allowedItems.copy();
+	}
+
+	public function setBadHats(value:Null<String>):Void {
+		levelConfig.setBadHats(value);
+		badHats = levelConfig.badHats.copy();
+	}
+
+	public function setVariables(vars:Map<String, String>):Void {
+		live = parseFloat(vars.get("live"), 0);
+		setMinRank(vars.get("min_level"));
+		setPass(parseInt(vars.get("has_pass"), 0) == 1 ? "******" : "");
+		levelConfig.setVariables(vars);
+		title = levelConfig.title;
+		note = levelConfig.note;
+		allowedItems = levelConfig.allowedItems.copy();
+		badHats = levelConfig.badHats.copy();
+	}
+
+	public function getSaveString():String {
+		var blockSave = blockLayer == null ? "" : blockLayer.getSaveString();
+		var objectSave = [for (i in 0...5) objectLayers.length > i ? objectLayers[i].getSaveString() : ""];
+		var drawSave = [for (i in 0...5) drawLayers.length > i ? drawLayers[i].getSaveString() : ""];
+		return [
+			"m4",
+			StringTools.hex(color).toLowerCase(),
+			blockSave,
+			objectSave[0],
+			objectSave[1],
+			objectSave[2],
+			drawSave[0],
+			drawSave[1],
+			drawSave[2],
+			"",
+			objectSave[3],
+			objectSave[4],
+			drawSave[3],
+			drawSave[4]
+		].join("`");
+	}
+
+	public function getLevelVars():Map<String, String> {
+		var vars = new Map<String, String>();
+		vars.set("title", title);
+		vars.set("note", note);
+		vars.set("data", getSaveString());
+		vars.set("credits", levelConfig.credits.join("`"));
+		vars.set("live", Std.string(live));
+		vars.set("min_level", minRank);
+		vars.set("song", song);
+		vars.set("gravity", gravity);
+		vars.set("max_time", maxTime);
+		vars.set("items", allowedItems.join("`"));
+		vars.set("badHats", badHats.join(","));
+		vars.set("hasPass", Std.string(hasPass));
+		vars.set("gameMode", gameMode == "eggs" ? "egg" : gameMode);
+		vars.set("cowboyChance", cowboyChance);
+		vars.set("passHash", passHash());
+		return vars;
 	}
 
 	public function setZoom(nextZoom:Float):Void {
@@ -496,6 +609,53 @@ class LevelEditor extends Page {
 
 	private function isBlockHistoryActive():Bool {
 		return selectedToolSidebar == "blocks" || (menu != null && menu.sideBar == menu.blocks);
+	}
+
+	private function passHash():String {
+		if (pass == null || pass == "" || StringTools.replace(pass, "*", "") == "") {
+			return "";
+		}
+		return Md5.encode(pass + ServerConfig.LEVEL_PASS_SALT);
+	}
+
+	private function get_song():String {
+		return levelConfig.song;
+	}
+
+	private function get_gravity():String {
+		return levelConfig.gravity;
+	}
+
+	private function get_maxTime():String {
+		return levelConfig.maxTime;
+	}
+
+	private function get_gameMode():String {
+		return levelConfig.gameMode;
+	}
+
+	private function get_cowboyChance():String {
+		return levelConfig.cowboyChance;
+	}
+
+	private function get_color():Int {
+		return levelConfig.color;
+	}
+
+	private static function parseFloat(value:Null<String>, fallback:Float):Float {
+		if (value == null || value == "") {
+			return fallback;
+		}
+		var parsed = Std.parseFloat(value);
+		return Math.isNaN(parsed) ? fallback : parsed;
+	}
+
+	private static function parseInt(value:Null<String>, fallback:Int):Int {
+		if (value == null || value == "") {
+			return fallback;
+		}
+		var parsed = Std.parseInt(value);
+		return parsed == null ? fallback : parsed;
 	}
 }
 

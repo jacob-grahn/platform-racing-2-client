@@ -88,6 +88,9 @@ Port the editor itself, one piece at a time:
     world and updates stage-to-world placement coordinates.
   - [x] Port keyboard camera panning and Flash scroll clamping.
 - [ ] Port editor settings.
+  - [x] Port editor level-setting state setters and exported level variables
+    for song, gravity, time, rank, password, items, hats, mode, cowboy chance,
+    and background color.
 - [ ] Port the hats/items/music menus.
 - [ ] Port the test-course transition.
 
