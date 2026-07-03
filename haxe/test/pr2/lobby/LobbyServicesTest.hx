@@ -1,6 +1,7 @@
 package pr2.lobby;
 
 import haxe.crypto.Md5;
+import openfl.display.InteractiveObject;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
@@ -25,6 +26,8 @@ import pr2.net.CampaignLevelInfo;
 import pr2.net.ServerConfig;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
+import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.Popup;
 import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
@@ -76,6 +79,7 @@ class LobbyServicesTest {
 		testLevelEditorShell();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
+		testUploadingLevelPopupOverwriteConfirmation();
 		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
 		testSocialActionPlan();
@@ -615,6 +619,48 @@ class LobbyServicesTest {
 		closeAllPopups();
 	}
 
+	private static function testUploadingLevelPopupOverwriteConfirmation():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.userName = "CaseUser";
+		LobbySession.token = "session-token";
+		var previousFactory = UploadingLevelPopup.postFactory;
+		var uploads:Array<UploadLevelCall> = [];
+		var results:Array<Dynamic> = [{success: false, status: "exists"}, {success: true}];
+		UploadingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult(results.shift());
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		editor.title = "Existing Title";
+		new UploadingLevelPopup(editor);
+		assertEquals(1, uploads.length, "existing-title response posts once before confirmation");
+		assertEquals("0", uploads[0].fields.get("overwrite_existing"), "first upload does not overwrite existing level");
+		var confirm = lastConfirmPopup();
+		assertNotNull(confirm, "existing-title response opens overwrite confirmation");
+		var text = LobbyArt.text(confirm, "textBox");
+		assertEquals(true, text != null && text.htmlText.indexOf("overwrite the existing level") >= 0, "overwrite confirmation uses Flash copy");
+		clickPopup(confirm, "ok_bt");
+
+		assertEquals(2, uploads.length, "confirming overwrite retries upload");
+		assertEquals("1", uploads[1].fields.get("overwrite_existing"), "retry posts overwrite confirmation flag");
+		assertEquals("0", uploads[1].fields.get("override_banned"), "retry preserves ban override state");
+
+		editor.remove();
+		UploadingLevelPopup.postFactory = previousFactory;
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
 	private static function testLevelEditorTestCourseTransition():Void {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
@@ -1034,9 +1080,25 @@ class LobbyServicesTest {
 	}
 
 	private static function closeAllPopups():Void {
-		for (popup in pr2.lobby.dialogs.Popup.getOpen().copy()) {
+		for (popup in Popup.getOpen().copy()) {
 			popup.remove();
 		}
+	}
+
+	private static function lastConfirmPopup():ConfirmPopup {
+		for (i in 0...Popup.getOpen().length) {
+			var popup = Popup.getOpen()[Popup.getOpen().length - 1 - i];
+			var confirm = Std.downcast(popup, ConfirmPopup);
+			if (confirm != null) {
+				return confirm;
+			}
+		}
+		return null;
+	}
+
+	private static function clickPopup(popup:Popup, buttonName:String):Void {
+		var button = Std.downcast(DisplayUtil.findByName(popup, buttonName), InteractiveObject);
+		button.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

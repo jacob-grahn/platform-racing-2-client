@@ -36,6 +36,7 @@ import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
 import pr2.lobby.account.StatsSelect;
 import pr2.lobby.LobbySession;
+import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.UploadingPopup;
@@ -1469,7 +1470,15 @@ class UploadingLevelPopup extends Popup {
 			new MessagePopup("The client is glitching out. Could not save your level.");
 			return;
 		}
-		uploading = postFactory(ServerConfig.uploadLevelUrl(), fields, "Uploading level...", function(_):Void {}, function(_):Void {});
+		uploading = postFactory(ServerConfig.uploadLevelUrl(), fields, "Uploading level...", handleResponse, function(_):Void {});
+	}
+
+	private function handleResponse(ret:Dynamic):Void {
+		if (ret != null && Reflect.field(ret, "status") == "exists") {
+			new ConfirmPopup(function():Void {
+				new UploadingLevelPopup(editor, overrideBanConfirmed, true);
+			}, "You have another level with this title. Is it okay to overwrite the existing level with this save?");
+		}
 	}
 
 	public static function buildFields(editor:LevelEditor, overrideBan:Bool = false, overwriteExisting:Bool = false):Map<String, String> {
