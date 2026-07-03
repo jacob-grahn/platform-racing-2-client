@@ -122,7 +122,7 @@ Then the level-management flows, one at a time:
   - [x] Port the authored save dialog, including title/note population and
     counters, empty-title validation, publish/to-newest checkbox behavior, and
     the upload-popup launch handoff.
-  - [ ] Port `UploadingLevelPopup` request hashing, `upload_level.php` fields,
+  - [x] Port `UploadingLevelPopup` request hashing, `upload_level.php` fields,
     drawing retry wait, banned-user override, overwrite confirmation, and
     save-result/error handling.
     - [x] Port request hashing and `upload_level.php` field construction.
