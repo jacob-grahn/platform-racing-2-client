@@ -1,6 +1,8 @@
 package pr2.lobby;
 
 import openfl.events.TextEvent;
+import openfl.events.MouseEvent;
+import openfl.ui.MouseCursor;
 import pr2.lobby.account.Settings;
 import pr2.lobby.dialogs.ExternalLinkPopup;
 import pr2.lobby.dialogs.MessagesItem;
@@ -14,6 +16,7 @@ class MessagesItemTest {
 		testPrivateMessageBodyFormatting();
 		testFilterSettingAndTrustedHtml();
 		testMessageBodyLinksStayClickable();
+		testTimestampDisplayAndHover();
 		trace('MessagesItemTest passed $assertions assertions');
 	}
 
@@ -66,6 +69,24 @@ class MessagesItemTest {
 
 		item.remove();
 		ExternalLinkPopup.resetNavigator();
+	}
+
+	private static function testTimestampDisplayAndHover():Void {
+		var item = new MessagesItem(null, 6, "Sender", "1", "Body", false, 1700000000);
+		var field = @:privateAccess item.timeTextField();
+		assertNotNull(field, "message item exposes a time text field");
+		assertEquals("11/14/2023", field.text, "row time uses locale-style date instead of ISO");
+
+		field.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(MouseCursor.BUTTON, @:privateAccess item.currentCursorState(), "hover switches cursor to button");
+		assertEquals(0x666666, field.textColor, "hover tints date gray");
+		assertEquals("This message was sent on November 14, 2023 5:13:20 PM.", @:privateAccess item.sentTimeHoverContent(),
+			"hover copy uses long date and medium time");
+
+		field.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(MouseCursor.AUTO, @:privateAccess item.currentCursorState(), "hover out restores cursor");
+		assertEquals(0x000000, field.textColor, "hover out restores date color");
+		item.remove();
 	}
 
 	private static function assertContains(value:String, needle:String, message:String):Void {

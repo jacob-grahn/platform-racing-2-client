@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `MessagesItem.as` timestamp display and hover behavior: the row
-  time should use Flash `Date.toLocaleDateString()`, hover should switch the
-  cursor to button, tint the date gray, and show `Data.getDateTimeStr(time,
-  ["long", "medium"])` in the authored hover text instead of the current fixed
-  ISO date string.
 - [ ] Port the `DeleteMessageButton.as`, `ReplyMessageButton.as`, and
   `ReportMessageButton.as` `HoverDelayPopup` wrappers so the PM row action
   buttons show the exact delayed tooltip titles/body copy and clean up their

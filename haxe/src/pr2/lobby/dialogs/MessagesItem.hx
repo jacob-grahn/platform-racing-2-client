@@ -4,6 +4,8 @@ import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.ui.Mouse;
+import openfl.ui.MouseCursor;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.account.Settings;
 import pr2.lobby.chat.ChatText;
@@ -40,6 +42,8 @@ class MessagesItem extends Sprite {
 	private var replyBinding:Null<LobbyArt.Binding>;
 	private var hover:Null<HoverPopup>;
 	private var renderedBodyHtml:String = "";
+	private var hoverContent:String = "";
+	private var cursorState:String = MouseCursor.AUTO;
 
 	public function new(owner:pr2.lobby.tabs.MessagesTab, messageId:Int, name:String, group:String, body:String, guildMessage:Bool, time:Int) {
 		super();
@@ -76,7 +80,7 @@ class MessagesItem extends Sprite {
 				bg.height = textBox.height + 6;
 			}
 			if (timeBox != null) {
-				timeBox.text = formatDate(time);
+				timeBox.text = localeDateString(time);
 				timeBox.y = textBox.height + 32;
 			}
 		}
@@ -127,12 +131,15 @@ class MessagesItem extends Sprite {
 
 	private function hoverTime(_:MouseEvent):Void {
 		if (timeBox != null) {
+			setCursor(MouseCursor.BUTTON);
 			timeBox.textColor = 0x666666;
-			hover = new HoverPopup("Sent Time", "This message was sent on " + formatDate(time) + ".", timeBox);
+			hoverContent = "This message was sent on " + longDateTimeString(time) + ".";
+			hover = new HoverPopup("Sent Time", hoverContent, timeBox);
 		}
 	}
 
 	private function hoverOutTime(?_:MouseEvent):Void {
+		setCursor(MouseCursor.AUTO);
 		if (timeBox != null) {
 			timeBox.textColor = 0x000000;
 		}
@@ -142,8 +149,35 @@ class MessagesItem extends Sprite {
 		}
 	}
 
-	private static function formatDate(time:Int):String {
-		return DateTools.format(Date.fromTime(time * 1000.0), "%Y-%m-%d");
+	private static final MONTHS_LONG:Array<String> = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+		"October", "November", "December"];
+
+	private static function localeDateString(time:Int):String {
+		var date = Date.fromTime(time * 1000.0);
+		return (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
+	}
+
+	private static function longDateTimeString(time:Int):String {
+		var date = Date.fromTime(time * 1000.0);
+		var hour = date.getHours();
+		var ampm = hour >= 12 ? "PM" : "AM";
+		var hour12 = hour % 12;
+		if (hour12 == 0) {
+			hour12 = 12;
+		}
+		var mins = StringTools.lpad(Std.string(date.getMinutes()), "0", 2);
+		var secs = StringTools.lpad(Std.string(date.getSeconds()), "0", 2);
+		return MONTHS_LONG[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear() + " " + hour12 + ":" + mins + ":" + secs
+			+ " " + ampm;
+	}
+
+	private function setCursor(value:String):Void {
+		cursorState = value;
+		try {
+			Mouse.cursor = value;
+		} catch (_:Dynamic) {
+			// Headless tests have no native mouse backend; the live client does.
+		}
 	}
 
 	@:allow(pr2.lobby.MessagesItemTest)
@@ -154,6 +188,21 @@ class MessagesItem extends Sprite {
 	@:allow(pr2.lobby.MessagesItemTest)
 	private function bodyTextField():Null<TextField> {
 		return LobbyArt.text(art, "textBox");
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function timeTextField():Null<TextField> {
+		return timeBox;
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function sentTimeHoverContent():String {
+		return hoverContent;
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function currentCursorState():String {
+		return cursorState;
 	}
 
 	public function remove():Void {
