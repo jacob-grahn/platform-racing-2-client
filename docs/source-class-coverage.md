@@ -64,7 +64,7 @@ alone is not a class port.
 | `flash/blocks/SafetyBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Safe-coordinate update without solid collision and frozen return suppression are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/StartBlock.as` | `pr2.level.BlockType`, `pr2.level.ServerLevelFixtureAdapter` | ported | Spawn discovery and non-colliding start-block behavior are covered by `ServerLevelFixtureAdapterTest` and `LocalPlayerControllerTest`. |
 | `flash/blocks/SupplyBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Shared one-use bump-only depletion behavior, frozen supply-use suppression, and grey transform visuals for finish/item/custom-stat/stat/life/time supplies are covered by `LocalPlayerControllerTest`. |
-| `flash/blocks/TeleportBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | Same-color teleport pairing and disabled reset timing are covered by `LocalPlayerControllerTest`. |
+| `flash/blocks/TeleportBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController`, `pr2.level.ServerLevelRenderer` | ported | Same-color teleport pairing, option/default color rendering, cooldown tint/depletion, and disabled reset timing are covered by `LocalPlayerControllerTest` and `ServerLevelRendererTest`. |
 | `flash/blocks/TimeBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController` | ported | One-use race-time supply behavior and grey depletion visuals are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/VanishBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController`, `pr2.level.ServerLevelRenderer` | ported | Contact and item-damage fade activation, fall-through, reappear, and remote-visible activation are covered by `LocalPlayerControllerTest`, `RemoteCharacterConsumeTest`, and `ServerLevelRendererTest`. |
 | `flash/blocks/WaterBlock.as` | `pr2.level.BlockType`, `pr2.harness.LocalPlayerController`, `pr2.level.ServerLevelRenderer` | ported | Swimming mode and remote ripple effects are covered by `LocalPlayerControllerTest` and `RemoteCharacterConsumeTest`. |
@@ -72,7 +72,7 @@ alone is not a class port.
 | `flash/blocks/options/CustomStatsBlockOptions.as` | `pr2.harness.LocalPlayerController` | ported | Custom stats options and reset token are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/options/ItemBlockOptions.as` | `pr2.gameplay.Items`, `pr2.harness.LocalPlayerController` | ported | Item option parsing and empty-options allowed-pool selection are covered by `LocalPlayerControllerTest`. |
 | `flash/blocks/options/StatBlockOptions.as` | `pr2.harness.LocalPlayerController` | ported | Happy/sad stat option clamps are covered by `LocalPlayerControllerTest`. |
-| `flash/blocks/options/TeleportBlockOptions.as` | `pr2.harness.LocalPlayerController` | ported | Teleport color matching and default color behavior are covered by `LocalPlayerControllerTest`. |
+| `flash/blocks/options/TeleportBlockOptions.as` | `pr2.harness.LocalPlayerController`, `pr2.level.ServerLevelRenderer` | ported | Teleport color matching, rendering, and default color behavior are covered by `LocalPlayerControllerTest` and `ServerLevelRendererTest`. |
 
 ## Character Classes
 

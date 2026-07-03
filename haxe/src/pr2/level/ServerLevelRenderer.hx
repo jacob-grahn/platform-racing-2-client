@@ -45,6 +45,7 @@ typedef ArtRenderOptions = {
 **/
 class ServerLevelRenderer extends Sprite {
 	public static inline var TILE_SIZE:Int = 30;
+	private static inline var TELEPORT_DEFAULT_COLOR:Int = 0xFF7F50;
 	// Edge length of the transparent square that stroke art is rasterized onto,
 	// mirroring DrawableBackground.rasterTileSize. Kept well under the WebGL
 	// MAX_TEXTURE_SIZE (8192 on many GPUs, 4096 on some) so a single tile never
@@ -1243,6 +1244,14 @@ class ServerLevelRenderer extends Sprite {
 		container.x = block.x;
 		container.y = block.y;
 
+		if (block.code == ObjectCodes.BLOCK_TELEPORT) {
+			var background = new Shape();
+			background.graphics.beginFill(teleportBlockColor(block.opts));
+			background.graphics.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+			background.graphics.endFill();
+			container.addChild(background);
+		}
+
 		var assetPath = blockAssetPath(block.code);
 		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
 			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
@@ -1263,6 +1272,11 @@ class ServerLevelRenderer extends Sprite {
 		}
 
 		return container;
+	}
+
+	private static function teleportBlockColor(options:String):Int {
+		var parsed = Std.parseInt(options);
+		return parsed == null ? TELEPORT_DEFAULT_COLOR : parsed;
 	}
 
 	private function createIceOverlay():Sprite {

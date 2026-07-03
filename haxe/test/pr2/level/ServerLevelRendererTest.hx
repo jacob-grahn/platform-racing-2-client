@@ -3,6 +3,7 @@ package pr2.level;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
@@ -25,6 +26,7 @@ class ServerLevelRendererTest {
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
 		testBlockIceOverlayUpdate();
+		testTeleportBlockColorBackground();
 		testBlockBumpAnimation();
 		testMoveBlockDisplay();
 		testMoveBlockArrowDisplay();
@@ -369,6 +371,19 @@ class ServerLevelRendererTest {
 		assertEquals("assets/blocks/teleport_block.png", ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_TELEPORT), "teleport asset");
 		assertEquals("assets/blocks/basic2.png", ServerLevelRenderer.blockAssetPath(ObjectCodes.BLOCK_ARROW_RIGHT), "arrow blocks use the basic2 base tile");
 		testArrowOverlay();
+	}
+
+	private static function testTeleportBlockColorBackground():Void {
+		@:privateAccess assertEquals(0xFF7F50, ServerLevelRenderer.teleportBlockColor(""), "empty teleport options use default color");
+		@:privateAccess assertEquals(0xFF7F50, ServerLevelRenderer.teleportBlockColor("16744272"), "explicit default teleport color matches empty options");
+		@:privateAccess assertEquals(0x123456, ServerLevelRenderer.teleportBlockColor("1193046"), "custom teleport options parse as decimal color");
+
+		var block = new DecodedBlock(ObjectCodes.BLOCK_TELEPORT, 10020, 10050, "1193046");
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
+		var blockLayer = worldLayer(renderer, 1);
+		var blockDisplay = Std.downcast(blockLayer.getChildAt(0), Sprite);
+		assertEquals(2, blockDisplay.numChildren, "teleport block renders option-color background behind bitmap");
+		assertTrue(Std.isOfType(blockDisplay.getChildAt(0), Shape), "teleport background is the bottom child");
 	}
 
 	private static function testArrowOverlay():Void {

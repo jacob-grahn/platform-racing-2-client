@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `TeleportBlock.as` gameplay effects: render the block's option
-  color behind the teleport bitmap, deplete/tint all other same-color teleports
-  during the 3-second cooldown, reset every same-color block together, and keep
-  default-color options equivalent to empty options.
 - [ ] Preserve teleport-block visual/network effects: using a teleport block
   should spawn `TeleportPop` at both the start and destination positions and emit
   the two Flash `add_effect\`Teleport\`x\`y` socket messages.

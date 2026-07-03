@@ -82,6 +82,8 @@ class LocalPlayerControllerTest {
 		testBumpingTimeBlockAddsTenSeconds();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportCooldownPreventsImmediateReturn();
+		testTeleportCooldownTintsAndResetsSameColorBlocks();
+		testTeleportDefaultColorOptionsMatchEmptyOptions();
 		testStandingOnPushBlockMovesItDown();
 		testPushBlockRecursivelyMovesDestinationPushBlock();
 		testUnconfiguredMoveBlocksUseFlashRandomDirections();
@@ -1499,6 +1501,30 @@ class LocalPlayerControllerTest {
 		assertEquals(true, state.grounded, "destination teleport supports player during cooldown");
 	}
 
+	private static function testTeleportCooldownTintsAndResetsSameColorBlocks():Void {
+		var player = new LocalCharacter(teleportPairLevel());
+
+		assertClose(0.5, player.blockColorMultiplierAt(2, 3), "used teleport tints during cooldown");
+		assertClose(0.5, player.blockColorMultiplierAt(4, 3), "same-color destination teleport tints during cooldown");
+		for (_ in 0...80) {
+			player.step(new LocalPlayerInput());
+		}
+		assertClose(0.5, player.blockColorMultiplierAt(2, 3), "teleport cooldown stays tinted before reset");
+		player.step(new LocalPlayerInput());
+		assertClose(1, player.blockColorMultiplierAt(2, 3), "teleport cooldown reset clears used tint");
+		assertClose(1, player.blockColorMultiplierAt(4, 3), "teleport cooldown reset clears destination tint");
+	}
+
+	private static function testTeleportDefaultColorOptionsMatchEmptyOptions():Void {
+		var player = new LocalCharacter(teleportDefaultColorPairLevel());
+		var state = player.debugState();
+
+		assertEquals("teleport", state.touchedBlockType, "standing on empty-option teleport reports touched block");
+		assertClose(135, state.x, "empty and explicit default-color teleports are paired");
+		assertClose(0.5, player.blockColorMultiplierAt(2, 3), "empty default-color teleport tints during cooldown");
+		assertClose(0.5, player.blockColorMultiplierAt(4, 3), "explicit default-color teleport tints during cooldown");
+	}
+
 	private static function testStandingOnPushBlockMovesItDown():Void {
 		var level = pushBlockLevel();
 		var player = new LocalCharacter(level);
@@ -2309,6 +2335,25 @@ class LocalPlayerControllerTest {
 			[
 				new LevelBlock(2, 3, BlockType.Teleport, "255"),
 				new LevelBlock(4, 3, BlockType.Teleport, "255"),
+				new LevelBlock(6, 3, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function teleportDefaultColorPairLevel():FixtureLevel {
+		return new FixtureLevel(
+			"teleport-default-color-pair",
+			"Teleport Default Color Pair",
+			7,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(6, 2),
+			[
+				new LevelBlock(2, 3, BlockType.Teleport, ""),
+				new LevelBlock(4, 3, BlockType.Teleport, "16744272"),
 				new LevelBlock(6, 3, BlockType.Finish)
 			]
 		);

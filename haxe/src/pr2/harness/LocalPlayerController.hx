@@ -1451,6 +1451,11 @@ class LocalPlayerController {
 			index = 0;
 		}
 		var dest = blocks[(index + 1) % blocks.length];
+		for (candidate in blocks) {
+			var state = blockState(blockKey(candidate.x, candidate.y));
+			state.depletedSupply = true;
+			state.depletedVisualSupply = true;
+		}
 		x += (dest.x - block.x) * level.tileSize;
 		y += (dest.y - block.y) * level.tileSize;
 	}
@@ -1681,6 +1686,11 @@ class LocalPlayerController {
 			var frames = disabledTeleportFrames.get(color) - 1;
 			if (frames <= 0) {
 				disabledTeleportFrames.remove(color);
+				for (block in teleportBlocksOfColor(color)) {
+					var state = blockState(blockKey(block.x, block.y));
+					state.depletedSupply = false;
+					state.depletedVisualSupply = false;
+				}
 			} else {
 				disabledTeleportFrames.set(color, frames);
 			}
