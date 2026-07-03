@@ -31,8 +31,10 @@ import pr2.lobby.dialogs.Popup;
 import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
+import pr2.page.LevelEditor.ChooseLevelsModePopup;
 import pr2.page.LevelEditor.DeletingLevelPopup;
 import pr2.page.LevelEditor.GetLevelsPopup;
+import pr2.page.LevelEditor.GetReportedLevelsPopup;
 import pr2.page.LevelEditor.SaveLevelPopup;
 import pr2.page.LevelEditor.UploadingLevelPopup;
 import pr2.page.LevelEditor.TestCoursePage;
@@ -80,6 +82,7 @@ class LobbyServicesTest {
 		testLevelEditorRoute();
 		testLevelEditorShell();
 		testLevelEditorLoadListPopup();
+		testLevelEditorReportedLevelsPopup();
 		testLevelEditorDeleteFlow();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
@@ -542,7 +545,7 @@ class LobbyServicesTest {
 			loaded = levelId + ":" + version;
 		};
 
-		var editor = new LevelEditor(null, true, false);
+		var editor = new LevelEditor(null, false, false);
 		editor.initialize();
 		clickEditorMenu(editor, "loadButton");
 		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GetLevelsPopup);
@@ -562,6 +565,70 @@ class LobbyServicesTest {
 		editor.remove();
 		GetLevelsPopup.loadFactory = previousLoadFactory;
 		GetLevelsPopup.postFactory = previousPostFactory;
+		ServerConfig.resetHost();
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testLevelEditorReportedLevelsPopup():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.token = "report-token";
+		ServerConfig.setHost("http://example.test");
+		var previousPostFactory = GetReportedLevelsPopup.postFactory;
+		var previousLoadFactory = GetReportedLevelsPopup.loadFactory;
+		var requestedUrl:Null<String> = null;
+		var requestedToken:Null<String> = null;
+		var loaded:Null<String> = null;
+		GetReportedLevelsPopup.postFactory = function(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+			requestedUrl = url;
+			requestedToken = fields.get("token");
+			onResult({
+				levels: [
+					{
+						level_id: "51",
+						version: "6",
+						title: "Reported One",
+						creator: "Maker",
+						report_time: "1363478400",
+						reporter: "Concerned",
+						reason: "Bad art",
+						note: "check this"
+					}
+				]
+			});
+		};
+		GetReportedLevelsPopup.loadFactory = function(levelId:Int, version:Int):Void {
+			loaded = levelId + ":" + version;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		clickEditorMenu(editor, "loadButton");
+		var choice = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], ChooseLevelsModePopup);
+		assertNotNull(choice, "moderator load opens the authored level-mode chooser");
+		DisplayUtil.findByName(choice.art, "reports_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(true, choice.fadeOutStarted, "choosing reported levels closes the chooser");
+		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GetReportedLevelsPopup);
+		assertNotNull(popup, "reported-level choice opens the reported levels popup");
+		assertEquals("http://example.test/levels_get_reported.php", requestedUrl, "reported popup posts to levels_get_reported");
+		assertEquals("report-token", requestedToken, "reported popup sends the session token");
+		assertEquals("-- Reported Levels --", LobbyArt.text(popup.art, "titleBox").text, "reported popup title matches Flash");
+		assertEquals(1, popup.listings.length, "reported popup renders returned listings");
+		assertEquals("Reported One", LobbyArt.text(popup.listings[0].art, "titleBox").text, "reported listing renders title");
+		assertEquals("16/Mar/2013", LobbyArt.text(popup.listings[0].art, "timeBox").text, "reported listing renders report date");
+
+		popup.selectListing(popup.listings[0]);
+		DisplayUtil.findByName(popup.art, "load_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals("51:6", loaded, "reported listing load hands off id and version");
+		assertEquals(true, popup.fadeOutStarted, "loading a reported listing closes the list popup");
+
+		popup.remove();
+		choice.remove();
+		editor.remove();
+		GetReportedLevelsPopup.loadFactory = previousLoadFactory;
+		GetReportedLevelsPopup.postFactory = previousPostFactory;
 		ServerConfig.resetHost();
 		LobbySession.clear();
 		closeAllPopups();
@@ -603,7 +670,7 @@ class LobbyServicesTest {
 			return null;
 		};
 
-		var editor = new LevelEditor(null, true, false);
+		var editor = new LevelEditor(null, false, false);
 		editor.initialize();
 		clickEditorMenu(editor, "loadButton");
 		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GetLevelsPopup);

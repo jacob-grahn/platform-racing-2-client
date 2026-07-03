@@ -133,6 +133,10 @@ Then the level-management flows, one at a time:
 - [ ] Port the upload flow with the same coverage.
 - [x] Port the delete flow with the same coverage.
 - [ ] Port the report-management flow with the same coverage.
+  - [x] Port the moderator load-mode chooser and reported-levels list/load
+    handoff into reports mode.
+  - [ ] Port the authored report handling popup with archive and social-ban
+    flows.
 
 Acceptance: a user can load, edit, test, save, and reopen a real level with the
 same serialized meaning and visible result as Flash.

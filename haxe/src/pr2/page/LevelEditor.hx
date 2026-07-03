@@ -1254,7 +1254,11 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	private function clickLoad():Void {
-		new GetLevelsPopup();
+		if (editor.isMod) {
+			new ChooseLevelsModePopup();
+		} else {
+			new GetLevelsPopup();
+		}
 	}
 
 	private function clickTest():Void {
@@ -1331,6 +1335,46 @@ typedef GetLevelsLoadFactory = Int->Int->Void;
 typedef UploadingLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 typedef UploadingLevelRetryFactory = (Void->Void)->Int->Null<Timer>;
 typedef DeleteLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
+
+class ChooseLevelsModePopup extends Popup {
+	public final art:PR2MovieClip;
+	private var bindings:Array<Binding> = [];
+
+	public function new() {
+		super();
+		art = PR2MovieClip.fromLinkage("ChooseLevelsModePopupGraphic", {maxNestedDepth: 5});
+		addChild(art);
+		bind("reports_bt", clickReports);
+		bind("mine_bt", clickMine);
+		bind("cancel_bt", function():Void startFadeOut());
+	}
+
+	private function clickReports():Void {
+		new GetReportedLevelsPopup();
+		startFadeOut();
+	}
+
+	private function clickMine():Void {
+		new GetLevelsPopup();
+		startFadeOut();
+	}
+
+	private function bind(name:String, handler:Void->Void):Void {
+		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		if (binding != null) {
+			bindings.push(binding);
+		}
+	}
+
+	override public function remove():Void {
+		for (binding in bindings) {
+			LobbyArt.unbind(binding);
+		}
+		bindings = [];
+		art.dispose();
+		super.remove();
+	}
+}
 
 class GetLevelsPopup extends Popup {
 	public static var postFactory:GetLevelsPostFactory = defaultPost;
@@ -1599,6 +1643,281 @@ class GetLevelsPopupItem extends Sprite {
 			case "e", "egg", "eggs": "Egg";
 			default: "Race";
 		}
+	}
+}
+
+class GetReportedLevelsPopup extends Popup {
+	public static var postFactory:GetLevelsPostFactory = defaultPost;
+	public static var loadFactory:GetLevelsLoadFactory = defaultLoad;
+
+	public final art:PR2MovieClip;
+	public final listings:Array<GetReportedLevelsPopupItem> = [];
+	public var selected(default, null):Null<GetReportedLevelsPopupItem>;
+	private var bindings:Array<Binding> = [];
+
+	public function new() {
+		super();
+		art = PR2MovieClip.fromLinkage("GetLevelsPopupGraphic", {maxNestedDepth: 6});
+		addChild(art);
+		setText("titleBox", "-- Reported Levels --");
+		var handle = DisplayUtil.findByName(art, "delete_bt");
+		Reflect.setProperty(handle, "label", "Handle");
+		bind("cancel_bt", function():Void startFadeOut());
+		bind("load_bt", clickLoad);
+		bind("delete_bt", clickHandle);
+		updateButtons();
+		postFactory(ServerConfig.levelsGetReportedUrl(), requestFields(), handleResponse, handleError);
+	}
+
+	public function selectListing(listing:Null<GetReportedLevelsPopupItem>):Void {
+		selected = listing;
+		for (item in listings) {
+			item.setSelected(item == selected);
+		}
+		updateButtons();
+	}
+
+	public function loadSelected():Void {
+		clickLoad();
+	}
+
+	private function handleResponse(ret:Dynamic):Void {
+		var levels:Dynamic = ret == null ? null : Reflect.field(ret, "levels");
+		if (Std.isOfType(levels, Array)) {
+			for (level in cast(levels, Array<Dynamic>)) {
+				addListing(new GetReportedLevelsPopupItem(level, this));
+			}
+		}
+		hideLoadingGraphic();
+	}
+
+	private function handleError(message:String):Void {
+		hideLoadingGraphic();
+		if (message != null && message != "") {
+			new MessagePopup("Error: " + message);
+		}
+	}
+
+	private function addListing(listing:GetReportedLevelsPopupItem):Void {
+		listing.y = listings.length * 18;
+		var holder = levelsHolder();
+		if (holder != null) {
+			holder.addChild(listing);
+		}
+		listings.push(listing);
+	}
+
+	private function clickLoad():Void {
+		if (selected == null) {
+			return;
+		}
+		loadFactory(selected.levelId, selected.version);
+		startFadeOut();
+	}
+
+	private function clickHandle():Void {
+		if (selected == null) {
+			return;
+		}
+		new MessagePopup("Report handling is not available yet.");
+	}
+
+	private function updateButtons():Void {
+		Reflect.setProperty(DisplayUtil.findByName(art, "load_bt"), "enabled", selected != null);
+		Reflect.setProperty(DisplayUtil.findByName(art, "delete_bt"), "enabled", selected != null);
+	}
+
+	private function hideLoadingGraphic():Void {
+		var loading = DisplayUtil.findByName(art, "loadingGraphic");
+		if (loading != null && loading.parent != null) {
+			loading.parent.removeChild(loading);
+		}
+	}
+
+	private function levelsHolder():Null<DisplayObjectContainer> {
+		return Std.downcast(DisplayUtil.findByName(art, "levelsHolder"), DisplayObjectContainer);
+	}
+
+	private function setText(name:String, value:String):Void {
+		var field = LobbyArt.text(art, name);
+		if (field != null) {
+			field.text = value;
+		}
+	}
+
+	private function bind(name:String, handler:Void->Void):Void {
+		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
+		if (binding != null) {
+			bindings.push(binding);
+		}
+	}
+
+	override public function remove():Void {
+		for (binding in bindings) {
+			LobbyArt.unbind(binding);
+		}
+		bindings = [];
+		for (listing in listings.copy()) {
+			listing.remove();
+		}
+		listings.resize(0);
+		selected = null;
+		art.dispose();
+		super.remove();
+	}
+
+	private static function requestFields():Map<String, String> {
+		var fields = new Map<String, String>();
+		fields.set("token", LobbySession.token);
+		return fields;
+	}
+
+	private static function defaultPost(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+		FormPostClient.post(url, fields, function(body:String):Void {
+			if (body == null || body == "") {
+				onResult({levels: []});
+				return;
+			}
+			try {
+				onResult(Json.parse(body));
+			} catch (_:Dynamic) {
+				onError("The loaded data was not in the expected format.");
+			}
+		}, onError);
+	}
+
+	private static function defaultLoad(levelId:Int, version:Int):Void {
+		LevelDataClient.fetchEditorLoad(levelId, version, function(data:ServerLevelData):Void {
+			if (LevelEditor.editor != null) {
+				LevelEditor.editor.applyLoadedLevelData(data, true);
+			}
+		}, function(message:String):Void {
+			new MessagePopup(message);
+		});
+	}
+}
+
+class GetReportedLevelsPopupItem extends Sprite {
+	private static final MONTHS:Array<String> = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+
+	public final level:Dynamic;
+	public final levelId:Int;
+	public final version:Int;
+	public final title:String;
+	public var art(default, null):PR2MovieClip;
+	private var popup:Null<GetReportedLevelsPopup>;
+	private var info:Null<HoverPopup>;
+
+	public function new(level:Dynamic, popup:GetReportedLevelsPopup) {
+		super();
+		this.level = level;
+		this.popup = popup;
+		art = PR2MovieClip.fromLinkage("GetReportedLevelsPopupItemGraphic", {maxNestedDepth: 4});
+		addChild(art);
+		levelId = parseInt(field("level_id"), 0);
+		version = parseInt(field("version"), 0);
+		title = field("title");
+		setText("titleBox", title);
+		setText("timeBox", shortDate(parseFloat(field("report_time"), 0)));
+		mouseChildren = false;
+		buttonMode = true;
+		doubleClickEnabled = true;
+		addEventListener(MouseEvent.CLICK, onClick);
+		addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	}
+
+	public function setSelected(on:Bool):Void {
+		alpha = on ? 1 : 0.92;
+		if (art != null) {
+			art.gotoAndStop(on ? "selected" : "up");
+		}
+	}
+
+	private function onClick(_:MouseEvent):Void {
+		if (popup != null) {
+			popup.selectListing(this);
+		}
+	}
+
+	private function onDoubleClick(_:MouseEvent):Void {
+		if (popup != null) {
+			popup.selectListing(this);
+			popup.loadSelected();
+		}
+	}
+
+	private function onMouseOver(_:MouseEvent):Void {
+		var levelTitle = "-- " + ChatText.escapeString(title) + " --";
+		var popText = "Creator: " + ChatText.escapeString(field("creator")) + "<br/>";
+		popText += "Version: " + version;
+		var note = StringTools.trim(field("note"));
+		if (note != "") {
+			popText += "<br/>Note: <i>" + ChatText.escapeString(note) + "</i>";
+		}
+		popText += "<br/>-----<br/>";
+		popText += "Reported: " + fieldText("timeBox") + "<br/>";
+		popText += "^ By: " + ChatText.escapeString(field("reporter")) + "<br/>";
+		popText += "Reason: <i>" + ChatText.escapeString(field("reason")) + "</i>";
+		info = new HoverPopup(levelTitle, popText, art);
+		info.width -= 3;
+		info.x = 550 - info.width;
+	}
+
+	private function onMouseOut(_:MouseEvent = null):Void {
+		if (info != null) {
+			info.remove();
+			info = null;
+		}
+	}
+
+	public function remove():Void {
+		onMouseOut();
+		removeEventListener(MouseEvent.CLICK, onClick);
+		removeEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
+		removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+		popup = null;
+		if (art != null) {
+			art.dispose();
+			art = null;
+		}
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	private function setText(name:String, value:String):Void {
+		var text = LobbyArt.text(art, name);
+		if (text != null) {
+			text.text = value;
+		}
+	}
+
+	private function fieldText(name:String):String {
+		var text = LobbyArt.text(art, name);
+		return text == null ? "" : text.text;
+	}
+
+	private function field(name:String):String {
+		var value = level == null ? null : Reflect.field(level, name);
+		return value == null ? "" : Std.string(value);
+	}
+
+	private static function parseInt(value:String, fallback:Int):Int {
+		var parsed = Std.parseInt(value);
+		return parsed == null ? fallback : parsed;
+	}
+
+	private static function parseFloat(value:String, fallback:Float):Float {
+		var parsed = Std.parseFloat(value);
+		return Math.isNaN(parsed) ? fallback : parsed;
+	}
+
+	private static function shortDate(time:Float):String {
+		var d = Date.fromTime(time * 1000);
+		return d.getDate() + "/" + MONTHS[d.getMonth()] + "/" + d.getFullYear();
 	}
 }
 
