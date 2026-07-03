@@ -34,9 +34,9 @@ class MessagesItem extends Sprite {
 	private var art:PR2MovieClip;
 	private var htmlNameMaker:HtmlNameMaker;
 	private var timeBox:Null<TextField>;
-	private var reportButton:PR2MovieClip;
-	private var deleteButton:PR2MovieClip;
-	private var replyButton:PR2MovieClip;
+	private var reportButton:MessageActionButton;
+	private var deleteButton:MessageActionButton;
+	private var replyButton:MessageActionButton;
 	private var reportBinding:Null<LobbyArt.Binding>;
 	private var deleteBinding:Null<LobbyArt.Binding>;
 	private var replyBinding:Null<LobbyArt.Binding>;
@@ -90,9 +90,11 @@ class MessagesItem extends Sprite {
 		}
 
 		addChild(art);
-		reportButton = makeButton("ReportMessageButtonGraphic", 15, textBox);
-		deleteButton = makeButton("DeleteMessageButtonGraphic", 37, textBox);
-		replyButton = makeButton("ReplyMessageButtonGraphic", 59, textBox);
+		reportButton = makeButton("ReportMessageButtonGraphic", "Report Message",
+			"If this message is inappropriate, you can report it to the moderators.", 15, textBox);
+		deleteButton = makeButton("DeleteMessageButtonGraphic", "Delete Message", "Erase this flimsy correspondence from existence.", 37, textBox);
+		replyButton = makeButton("ReplyMessageButtonGraphic", "Reply to Message",
+			"You've got something to say, and someone's gonna hear it.", 59, textBox);
 		reportBinding = LobbyArt.bind(reportButton, clickReport);
 		deleteBinding = LobbyArt.bind(deleteButton, clickDelete);
 		replyBinding = LobbyArt.bind(replyButton, clickReply);
@@ -103,8 +105,8 @@ class MessagesItem extends Sprite {
 		}
 	}
 
-	private function makeButton(linkage:String, x:Float, textBox:Null<TextField>):PR2MovieClip {
-		var button = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 3});
+	private function makeButton(linkage:String, title:String, content:String, x:Float, textBox:Null<TextField>):MessageActionButton {
+		var button = new MessageActionButton(linkage, title, content);
 		button.x = x;
 		button.y = (textBox != null ? textBox.height : 0) + 42;
 		addChild(button);
@@ -205,6 +207,11 @@ class MessagesItem extends Sprite {
 		return cursorState;
 	}
 
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function actionButtons():Array<HoverDelayPopup> {
+		return [reportButton, deleteButton, replyButton];
+	}
+
 	public function remove():Void {
 		hoverOutTime();
 		if (timeBox != null) {
@@ -214,9 +221,9 @@ class MessagesItem extends Sprite {
 		LobbyArt.unbind(reportBinding);
 		LobbyArt.unbind(deleteBinding);
 		LobbyArt.unbind(replyBinding);
-		reportButton.dispose();
-		deleteButton.dispose();
-		replyButton.dispose();
+		reportButton.remove();
+		deleteButton.remove();
+		replyButton.remove();
 		htmlNameMaker.remove();
 		if (art != null) {
 			art.dispose();
@@ -225,5 +232,23 @@ class MessagesItem extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+}
+
+private class MessageActionButton extends HoverDelayPopup {
+	private var graphic:PR2MovieClip;
+
+	public function new(linkage:String, title:String, content:String) {
+		super(title, content);
+		graphic = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 3});
+		addChild(graphic);
+	}
+
+	override public function remove():Void {
+		if (graphic != null) {
+			graphic.dispose();
+			graphic = null;
+		}
+		super.remove();
 	}
 }

@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the `DeleteMessageButton.as`, `ReplyMessageButton.as`, and
-  `ReportMessageButton.as` `HoverDelayPopup` wrappers so the PM row action
-  buttons show the exact delayed tooltip titles/body copy and clean up their
-  hover timers/popups on removal.
 - [ ] Preserve the full `MessagesItem.as` report confirmation copy, including
   the explanatory warning about password requests, abusive messages, and spam,
   before posting `message_report.php`.

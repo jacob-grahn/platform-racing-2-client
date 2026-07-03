@@ -5,6 +5,7 @@ import openfl.events.MouseEvent;
 import openfl.ui.MouseCursor;
 import pr2.lobby.account.Settings;
 import pr2.lobby.dialogs.ExternalLinkPopup;
+import pr2.lobby.dialogs.HoverDelayPopup;
 import pr2.lobby.dialogs.MessagesItem;
 import pr2.lobby.dialogs.Popup;
 
@@ -17,6 +18,7 @@ class MessagesItemTest {
 		testFilterSettingAndTrustedHtml();
 		testMessageBodyLinksStayClickable();
 		testTimestampDisplayAndHover();
+		testActionButtonHoverWrappers();
 		trace('MessagesItemTest passed $assertions assertions');
 	}
 
@@ -36,6 +38,25 @@ class MessagesItemTest {
 		assertContains(html, "event:url`https://example.com/a?x=1&y=2", "bare URL event unescapes ampersands");
 		assertContains(html, "event:url`https://example.com", "named URL rich link is parsed");
 		item.remove();
+	}
+
+	private static function testActionButtonHoverWrappers():Void {
+		var item = new MessagesItem(null, 7, "Sender", "1", "Body", false, 1700000000);
+		var buttons = @:privateAccess item.actionButtons();
+		assertEquals(3, buttons.length, "message item exposes three action hover wrappers");
+		assertButton(buttons[0], "Report Message", "If this message is inappropriate, you can report it to the moderators.");
+		assertButton(buttons[1], "Delete Message", "Erase this flimsy correspondence from existence.");
+		assertButton(buttons[2], "Reply to Message", "You've got something to say, and someone's gonna hear it.");
+
+		@:privateAccess buttons[0].showPopup();
+		assertNotNull(buttons[0].hover, "report button can show delayed hover popup");
+		item.remove();
+		assertEquals(null, buttons[0].hover, "item remove cleans shown action-button hover popup");
+	}
+
+	private static function assertButton(button:HoverDelayPopup, title:String, content:String):Void {
+		assertEquals(title, button.title, '$title title');
+		assertEquals(content, button.content, '$title content');
 	}
 
 	private static function testFilterSettingAndTrustedHtml():Void {
