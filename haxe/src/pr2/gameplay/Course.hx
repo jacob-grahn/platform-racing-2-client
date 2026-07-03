@@ -935,6 +935,8 @@ class Course extends Sprite {
 					levelRenderer.triggerWaterRipple(worldXOf(event), worldYOf(event));
 				case SafetyPoof:
 					levelRenderer.showTeleportPop(worldXOf(event), worldYOf(event));
+				case TeleportBlockPop:
+					emitLocalTeleportPop(event);
 				case BlockBumpSound:
 					levelRenderer.animateBlockBump(worldXOf(event), worldYOf(event), event.hitX, event.hitY);
 					playBlockBumpSound(event);
@@ -1085,6 +1087,13 @@ class Course extends Sprite {
 		var segY = event.tileY + serverFixture.originTileY;
 		var payload = event.activationPayload == null ? "" : event.activationPayload;
 		LobbySocket.write('activate`$segX`$segY`$payload');
+	}
+
+	private function emitLocalTeleportPop(event:BlockVisualEvent):Void {
+		var worldX = Std.int(Math.round(serverFixture.fixturePixelToWorldX(event.hitX)));
+		var worldY = Std.int(Math.round(serverFixture.fixturePixelToWorldY(event.hitY)));
+		levelRenderer.showTeleportPop(worldX, worldY);
+		LobbySocket.write('add_effect`Teleport`$worldX`$worldY');
 	}
 
 	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {

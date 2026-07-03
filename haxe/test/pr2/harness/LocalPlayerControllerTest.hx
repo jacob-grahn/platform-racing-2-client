@@ -81,6 +81,7 @@ class LocalPlayerControllerTest {
 		testBumpingHeartBlockAddsCappedLife();
 		testBumpingTimeBlockAddsTenSeconds();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
+		testTeleportBlockEmitsStartAndDestinationPops();
 		testTeleportCooldownPreventsImmediateReturn();
 		testTeleportCooldownTintsAndResetsSameColorBlocks();
 		testTeleportDefaultColorOptionsMatchEmptyOptions();
@@ -1486,6 +1487,23 @@ class LocalPlayerControllerTest {
 		assertClose(135, state.x, "teleport moves player by matching block delta");
 		assertClose(90, state.y, "teleport preserves feet offset relative to block");
 		assertEquals(true, state.grounded, "player remains grounded after teleport");
+	}
+
+	private static function testTeleportBlockEmitsStartAndDestinationPops():Void {
+		var player = new LocalCharacter(teleportPairLevel());
+		var events = player.consumeBlockVisualEvents();
+		var pops:Array<BlockVisualEvent> = [];
+		for (event in events) {
+			if (event.kind == TeleportBlockPop) {
+				pops.push(event);
+			}
+		}
+
+		assertEquals(2, pops.length, "teleport block emits start and destination pop events");
+		assertClose(75, pops[0].hitX, "start teleport pop uses pre-teleport player x");
+		assertClose(65, pops[0].hitY, "start teleport pop uses Flash y-25 offset");
+		assertClose(135, pops[1].hitX, "destination teleport pop uses post-teleport player x");
+		assertClose(65, pops[1].hitY, "destination teleport pop preserves Flash y-25 offset");
 	}
 
 	private static function testTeleportCooldownPreventsImmediateReturn():Void {

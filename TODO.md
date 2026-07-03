@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve teleport-block visual/network effects: using a teleport block
-  should spawn `TeleportPop` at both the start and destination positions and emit
-  the two Flash `add_effect\`Teleport\`x\`y` socket messages.
 - [ ] Preserve `TeleportBlock.onBump()` crouch correction: when a crouching player
   bumps a teleport block from below, restore the pre-bump `y` before teleporting,
   matching Flash's special-case collision adjustment.

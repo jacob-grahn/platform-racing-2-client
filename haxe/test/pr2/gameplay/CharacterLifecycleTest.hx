@@ -42,6 +42,7 @@ class CharacterLifecycleTest {
 		testEffectBackgroundAddEffectCommand();
 		testServerActivateCommandLifecycle();
 		testLocalBlockActivationNetworking();
+		testLocalTeleportBlockEffects();
 		testEggRoundCommandLifecycle();
 		testMinionEggBlocksSpawnAuthoredEggs();
 		testHatReturnToStartLifecycle();
@@ -212,6 +213,34 @@ class CharacterLifecycleTest {
 		course.emitLocalBlockActivation(event);
 		assertEquals('activate`$expectedSegX`$expectedSegY`left', LobbySocket.lastSent(),
 			"local block activation emits Flash activate command with server segments and payload");
+		course.remove();
+	}
+
+	private static function testLocalTeleportBlockEffects():Void {
+		var course = buildCourse(new CommandHandler());
+		var startX = 135.0;
+		var startY = 95.0;
+		var destX = 195.0;
+		var destY = 95.0;
+		var expectedStartX = Std.int(Math.round(course.serverFixture.fixturePixelToWorldX(startX)));
+		var expectedStartY = Std.int(Math.round(course.serverFixture.fixturePixelToWorldY(startY)));
+		var expectedDestX = Std.int(Math.round(course.serverFixture.fixturePixelToWorldX(destX)));
+		var expectedDestY = Std.int(Math.round(course.serverFixture.fixturePixelToWorldY(destY)));
+
+		var initialChildren = course.levelRenderer.blockLayer.numChildren;
+		LobbySocket.resetSent();
+		course.emitLocalTeleportPop(new BlockVisualEvent(BlockVisualEventKind.TeleportBlockPop, 0, 0, 1, null, null, startX, startY));
+		course.emitLocalTeleportPop(new BlockVisualEvent(BlockVisualEventKind.TeleportBlockPop, 0, 0, 1, null, null, destX, destY));
+
+		assertEquals(initialChildren + 2, course.levelRenderer.blockLayer.numChildren,
+			"local teleport block mounts start and destination TeleportPop visuals");
+		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(initialChildren), TeleportPop) != null,
+			"local teleport block start visual uses TeleportPop");
+		assertTrue(Std.downcast(course.levelRenderer.blockLayer.getChildAt(initialChildren + 1), TeleportPop) != null,
+			"local teleport block destination visual uses TeleportPop");
+		assertEquals(2, LobbySocket.sentCommands.length, "local teleport block emits two Flash add_effect commands");
+		assertEquals('add_effect`Teleport`$expectedStartX`$expectedStartY|add_effect`Teleport`$expectedDestX`$expectedDestY', LobbySocket.sentCommands.join("|"),
+			"local teleport block emits start and destination world pop positions");
 		course.remove();
 	}
 

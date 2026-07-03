@@ -1451,6 +1451,8 @@ class LocalPlayerController {
 			index = 0;
 		}
 		var dest = blocks[(index + 1) % blocks.length];
+		var startX = x;
+		var startY = y - 25;
 		for (candidate in blocks) {
 			var state = blockState(blockKey(candidate.x, candidate.y));
 			state.depletedSupply = true;
@@ -1458,6 +1460,8 @@ class LocalPlayerController {
 		}
 		x += (dest.x - block.x) * level.tileSize;
 		y += (dest.y - block.y) * level.tileSize;
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.TeleportBlockPop, block.x, block.y, 1, null, null, startX, startY));
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.TeleportBlockPop, dest.x, dest.y, 1, null, null, x, y - 25));
 	}
 
 	private function teleportBlocksOfColor(color:String):Array<LevelBlock> {
