@@ -355,6 +355,16 @@ class LobbyServicesTest {
 		clickEditorMenu(editor, "undoButton");
 		assertEquals(1, editor.activeObjectLayer.textObjects.length, "undo after redo restores the text object again");
 		label = editor.activeObjectLayer.textObjects[0];
+		clickEditorSidebar(editor, "deleteEntry");
+		var textHit = label.localToGlobal(new Point(5, 5));
+		assertEquals(true, editor.deleteSelectedObjectAt(textHit.x, textHit.y), "stamps delete tool removes touched text objects");
+		assertEquals(0, editor.activeObjectLayer.textObjects.length, "text delete tool removes the text object");
+		assertEquals(null, label.parent, "text delete tool unmounts the display object");
+		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
+			editor.activeObjectLayer.getActionString(), "text delete tool records a Flash delete action");
+		clickEditorMenu(editor, "undoButton");
+		assertEquals(1, editor.activeObjectLayer.textObjects.length, "undo restores text deleted with the delete tool");
+		label = editor.activeObjectLayer.textObjects[0];
 		editor.activeObjectLayer.removeTextObject(label);
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601,m0;112;131,r0;1.24;0.75,d0",
 			editor.activeObjectLayer.getActionString(), "re-deleting restored text records a fresh delete action");

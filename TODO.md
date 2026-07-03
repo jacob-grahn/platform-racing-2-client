@@ -79,9 +79,10 @@ Port the editor itself, one piece at a time:
     - [x] Port the authored item option popup.
     - [x] Port the authored teleport option popup.
     - [x] Port the authored custom-stat option popup.
-- [ ] Port selection/deletion.
+- [x] Port selection/deletion.
   - [x] Port placed-block deletion through the blocks sidebar delete tool.
   - [x] Port placed-stamp deletion through the stamps sidebar delete tool.
+  - [x] Port placed-text deletion through the stamps sidebar delete tool.
 - [x] Port undo-equivalent behavior.
   - [x] Port undo for object-layer text add/edit/delete/move/resize actions.
   - [x] Port redo for object-layer text actions.
