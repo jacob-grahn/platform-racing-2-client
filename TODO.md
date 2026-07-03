@@ -18,18 +18,9 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Expose the Hurlant symmetric crypto API around the current AES runtime:
-  `AESKey`, `CBCMode`, `IVMode`, `ICipher`, `IMode`, `IStreamCipher`, and
-  `ISymmetricKey` should support mutable ByteArray block encryption/decryption
-  at offsets, 128/192/256-bit AES key expansion, CBC XOR chaining, forced or
-  generated IVs via the `IV` property, default PKCS5/custom padding, Flash
-  `toString()` values, decrypt-without-IV errors, and dispose-time key/IV/state
-  wiping for callers that still use the as3crypto-style classes instead of
-  `PR2Encryptor`.
 - [ ] Port the remaining Hurlant utility compatibility classes:
-  `PKCS5.pad()` / `unpad()` should add and validate block-size padding with the
-  same Flash errors, `Base64` should expose static string/ByteArray encode and
-  decode APIs with decoded position reset and constructor error, `Hex` should
+  `Base64` should expose static string/ByteArray encode and decode APIs with
+  decoded position reset and constructor error, `Hex` should
   preserve colon/whitespace stripping, odd-length padding, UTF-8 string helpers,
   and optional colon output, and `Memory.gc()` / `Memory.used` should keep the
   Flash API surface for crypto dispose paths.
