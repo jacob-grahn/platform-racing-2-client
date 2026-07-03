@@ -36,6 +36,7 @@ class CharacterLifecycleTest {
 		testLocalJumpPlaysSound();
 		testRemoteJumpPlaysSound();
 		testCharacterEffectSounds();
+		testLocalArrowSparkleEmitterLifecycle();
 		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
 		testLocalSwordEmitsSlashEffect();
@@ -290,6 +291,16 @@ class CharacterLifecycleTest {
 		assertEquals("speedUp:1:265:190|slowDown:1:265:190|bumpHappy:0.75:0:0", sounds.join("|"),
 			"Course routes local and remote character effect sounds through spatial playback");
 		shell.remove();
+		course.remove();
+	}
+
+	private static function testLocalArrowSparkleEmitterLifecycle():Void {
+		var course = buildCourse(new CommandHandler());
+
+		course.localCharacter.beginArrowSparkles();
+		assertEquals(1, course.activeParticleEmitterCount(), "local arrow sparkles create a concrete particle emitter");
+		course.localCharacter.endSparkles();
+		assertEquals(0, course.activeParticleEmitterCount(), "ending sparkles clears the concrete particle emitter");
 		course.remove();
 	}
 

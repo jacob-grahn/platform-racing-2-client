@@ -2,6 +2,7 @@ package pr2.level;
 
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -544,6 +545,10 @@ class ServerLevelRenderer extends Sprite {
 		return effect;
 	}
 
+	public function worldEffectLayer():DisplayObjectContainer {
+		return blockLayer;
+	}
+
 	public function showBlockPieces(linkage:String, worldX:Float, worldY:Float, count:Int, spreadX:Float, spreadY:Float,
 			spreadRot:Float, ?random:Void->Float):Array<BlockPiece> {
 		var nextRandom = random == null ? Math.random : random;
@@ -921,6 +926,12 @@ class ServerLevelRenderer extends Sprite {
 			var blockPiece = Std.downcast(child, BlockPiece);
 			if (blockPiece != null) {
 				blockPiece.remove();
+				i--;
+				continue;
+			}
+			var arrowEffect = Std.downcast(child, pr2.effects.ArrowEffect);
+			if (arrowEffect != null) {
+				arrowEffect.remove();
 				i--;
 				continue;
 			}

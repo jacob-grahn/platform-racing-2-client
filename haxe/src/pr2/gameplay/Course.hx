@@ -4,6 +4,7 @@ package pr2.gameplay;
 import js.Browser;
 #end
 import haxe.crypto.Md5;
+import haxe.ds.ObjectMap;
 import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -12,8 +13,11 @@ import openfl.events.KeyboardEvent;
 import openfl.ui.Keyboard;
 import pr2.Constants;
 import pr2.character.Character;
+import pr2.character.Character.ParticleEmitterRequest;
+import pr2.character.ArrowSparkleEmitter;
 import pr2.character.CharacterState;
 import pr2.character.LocalCharacter;
+import pr2.character.ParticleEmitter;
 import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
@@ -139,6 +143,7 @@ class Course extends Sprite {
 	private var localSetHatsCommandName:Null<String>;
 	private var reachedObjectives:Map<Int, Bool> = new Map();
 	private var minionEggsSpawned:Bool = false;
+	private final activeParticleEmitters:ObjectMap<Character, ParticleEmitter> = new ObjectMap();
 
 	public function new(level:ServerLevel, data:ServerLevelData, config:LevelConfig, ?onChatLine:String->Bool, ?onFrame:LocalPlayerDebugState->Void,
 			?commandHandler:CommandHandler) {
@@ -172,6 +177,7 @@ class Course extends Sprite {
 		player.onArtifactHatActivated = onArtifactHatActivated;
 		player.onStartJetSound = startJetSound;
 		player.onStopJetSound = stopJetSound;
+		installParticleEmitterHooks(player);
 		player.setGameMode(config.gameMode);
 		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
@@ -398,6 +404,7 @@ class Course extends Sprite {
 		remote.onPlayCharacterSound = playCharacterSound;
 		remote.onStartJetSound = startJetSound;
 		remote.onStopJetSound = stopJetSound;
+		installParticleEmitterHooks(remote);
 		remote.onParentChange = function(parentLayer:String):Void {
 			moveCharacterToLayer(remote, parentLayer);
 		};
@@ -616,6 +623,46 @@ class Course extends Sprite {
 		for (character in raceSounds.activeJetCharacters()) {
 			stopJetSound(character);
 		}
+	}
+
+	private function installParticleEmitterHooks(character:Character):Void {
+		character.onStartParticleEmitter = startParticleEmitter;
+		character.onClearParticleEmitter = function():Void {
+			clearParticleEmitter(character);
+		};
+	}
+
+	private function startParticleEmitter(request:ParticleEmitterRequest):Void {
+		clearParticleEmitter(request.target);
+		if (levelRenderer == null || request.kind != "arrowSparkle") {
+			return;
+		}
+		activeParticleEmitters.set(request.target,
+			new ArrowSparkleEmitter(request.intervalMs, request.durationMs, request.target, levelRenderer.worldEffectLayer()));
+	}
+
+	private function clearParticleEmitter(character:Character):Void {
+		var emitter = activeParticleEmitters.get(character);
+		if (emitter == null) {
+			return;
+		}
+		emitter.remove();
+		activeParticleEmitters.remove(character);
+	}
+
+	private function clearAllParticleEmitters():Void {
+		for (character in [for (character in activeParticleEmitters.keys()) character]) {
+			clearParticleEmitter(character);
+		}
+	}
+
+	@:allow(pr2.gameplay.CharacterLifecycleTest)
+	private function activeParticleEmitterCount():Int {
+		var count = 0;
+		for (_ in activeParticleEmitters.keys()) {
+			count++;
+		}
+		return count;
 	}
 
 	private function playSuperJumpSound():Void {
@@ -1249,6 +1296,7 @@ class Course extends Sprite {
 			looseHats = null;
 		}
 		stopAllJetSounds();
+		clearAllParticleEmitters();
 		removeAllRemoteCharacters();
 		activeCommandHandler().defineCommand("activate", null);
 		unregisterLocalSetHatsCommand();

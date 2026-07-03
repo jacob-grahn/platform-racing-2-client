@@ -18,10 +18,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port concrete `ArrowSparkleEmitter.as` particles: `arrowSparkle` emitters
-  should create `ArrowEffect` particles with the same randomized
-  `ColorTransform`, rather than only exposing a particle-emitter lifecycle hook.
-- [ ] Port the concrete `ParticleEmitter.as` / `RainbowStarEmitter.as` /
+- [ ] Port the remaining concrete `ParticleEmitter.as` / `RainbowStarEmitter.as` /
   `PhysicsParticle.as` / `PositionedParticleEmitter.as` runtime: sparkle,
   rainbow-heart, and Djinn ice emitters should instantiate the authored
   `StarEffect` / `DjinnIceGraphic` particles with Flash's interval timing,
