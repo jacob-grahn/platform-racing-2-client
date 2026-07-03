@@ -163,7 +163,7 @@ same serialized meaning and visible result as Flash.
 
 ## Refactoring / Tech Debt
 
-- [ ] (Low priority / maybe won't-do) Reconsider whether `ServerLevelRenderer`'s
+- [x] (Won't-do) Reconsider whether `ServerLevelRenderer`'s
   asset-path lookups (`blockAssetPath`/`artBackgroundAssetPath`/`stampAssetPath`/
   `fallbackFill`) should become `static final Map` tables. Assessed and deferred:
   the conversion is lateral — the switches are already table-shaped and readable,
