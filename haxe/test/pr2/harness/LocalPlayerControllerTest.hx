@@ -55,14 +55,18 @@ class LocalPlayerControllerTest {
 		testJetPackLiftsPlayerThenExpires();
 		testLaserGunReloadTiming();
 		testLaserGunShotAnimatesBlockFromSide();
+		testLaserGunDamageBreaksBrickBlock();
 		testMineItemPlacesMineAndConsumesItem();
 		testMineItemBlockedByOccupiedTile();
 		testMineAppearSkipsPlacementWhenTileBecomesOccupied();
 		testLightningEmitsZapAndConsumesItem();
 		testReloadableItemReleaseGateThenHeldRefire();
 		testSwordReloadTiming();
+		testSwordDamageActivatesVanishBlock();
 		testIceWaveReloadTiming();
 		testIceWaveShotAnimatesBlockFromSide();
+		testIceWaveDamageExplodesMineBlock();
+		testLaserGunDamageChipsCrumbleBlock();
 		testFrozenSolidDisablesMovementAndThaws();
 		testBumpingCustomStatsBlockAppliesConfiguredStats();
 		testBumpingResetCustomStatsBlockRestoresStartingStats();
@@ -1030,6 +1034,21 @@ class LocalPlayerControllerTest {
 		assertEquals(0, events[0].hitY, "side shot does not use the upward bump impulse");
 	}
 
+	private static function testLaserGunDamageBreaksBrickBlock():Void {
+		var player = collectItem(heldItemWithTargetBlockLevel(1, BlockType.Brick), 1);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var events = player.consumeBlockVisualEvents();
+
+		assertEquals(3, events.length, "laser-damaged brick emits bump, activation, and pieces");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "laser damage still bumps the brick");
+		assertEquals("LocalActivate", Std.string(events[1].kind), "laser damage activates the brick");
+		assertEquals("BrickPieces", Std.string(events[2].kind), "laser damage spawns brick pieces");
+		assertEquals(0.0, player.blockAlphaAt(4, 5), "laser-damaged brick is removed");
+	}
+
 	private static function testMineItemPlacesMineAndConsumesItem():Void {
 		var level = heldItemLevel(2);
 		var player = collectItem(level, 2);
@@ -1142,6 +1161,20 @@ class LocalPlayerControllerTest {
 		assertEquals(null, player.debugState().itemId, "sword is consumed after three swings");
 	}
 
+	private static function testSwordDamageActivatesVanishBlock():Void {
+		var player = collectItem(heldItemWithTargetBlockLevel(8, BlockType.Vanish, 3), 8);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(1, events.length, "slash-damaged vanish block emits the base bump event");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "slash damage bumps the vanish block");
+		assertClose(0.9, player.blockAlphaAt(3, 5), "slash-damaged vanish block starts fading on the hit frame");
+		player.step(new LocalPlayerInput());
+		assertClose(0.8, player.blockAlphaAt(3, 5), "slash-damaged vanish block fades like contact activation");
+	}
+
 	private static function testIceWaveReloadTiming():Void {
 		var player = collectItem(heldItemLevel(9), 9);
 
@@ -1185,6 +1218,39 @@ class LocalPlayerControllerTest {
 		assertEquals(5, events[0].tileY, "ice wave side-hit targets the shot-height block row");
 		assertEquals(5, events[0].hitX, "right-facing ice wave bumps the block sideways");
 		assertEquals(0, events[0].hitY, "ice wave side-hit does not use the upward bump impulse");
+	}
+
+	private static function testIceWaveDamageExplodesMineBlock():Void {
+		var player = collectItem(heldItemWithTargetBlockLevel(9, BlockType.Mine), 9);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var events = player.consumeBlockVisualEvents();
+
+		assertEquals(4, events.length, "ice-wave-damaged mine emits bump, activation, pieces, and explosion");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "ice wave damage bumps the mine");
+		assertEquals("LocalActivate", Std.string(events[1].kind), "ice wave damage activates the mine");
+		assertEquals("MinePieces", Std.string(events[2].kind), "ice wave damage spawns mine pieces");
+		assertEquals("MineExplode", Std.string(events[3].kind), "ice wave damage spawns mine explosion");
+		assertEquals(0.0, player.blockAlphaAt(4, 5), "ice-wave-damaged mine is removed");
+	}
+
+	private static function testLaserGunDamageChipsCrumbleBlock():Void {
+		var player = collectItem(heldItemWithTargetBlockLevel(1, BlockType.Crumble), 1);
+		player.consumeBlockVisualEvents();
+
+		makeItemAvailable(player);
+		player.step(new LocalPlayerInput(false, false, false, false, true));
+		var events = player.consumeBlockVisualEvents();
+
+		assertEquals(3, events.length, "laser-damaged crumble emits bump, activation, and chip pieces");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "laser damage bumps the crumble block");
+		assertEquals("LocalActivate", Std.string(events[1].kind), "laser damage activates the crumble block");
+		assertEquals("5", events[1].activationPayload, "crumble onDamage uses Flash force payload 5");
+		assertEquals("CrumblePieces", Std.string(events[2].kind), "laser damage chips crumble pieces");
+		assertEquals(2, events[2].count, "crumble onDamage force 5 removes one life and emits two pieces");
+		assertClose(1, player.blockAlphaAt(4, 5), "single crumble damage hit does not remove the block");
 	}
 
 	private static function testFrozenSolidDisablesMovementAndThaws():Void {
@@ -2025,9 +2091,9 @@ class LocalPlayerControllerTest {
 		);
 	}
 
-	private static function heldItemWithTargetBlockLevel(itemId:Int):FixtureLevel {
+	private static function heldItemWithTargetBlockLevel(itemId:Int, targetType:BlockType = BlockType.Solid, targetX:Int = 4):FixtureLevel {
 		var level = heldItemLevel(itemId);
-		level.blocks.push(new LevelBlock(4, 5, BlockType.Solid));
+		level.blocks.push(new LevelBlock(targetX, 5, targetType));
 		return level;
 	}
 

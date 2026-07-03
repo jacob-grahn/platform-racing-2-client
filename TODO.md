@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port block `onDamage()` activation paths for item/effect hits: damaged
-  `BrickBlock`, `CrumbleBlock`, `MineBlock`, and `VanishBlock` should bounce,
-  activate, spawn pieces/explosions or vanish, and remove exactly as Flash when
-  hit by shots/slashes/ice waves, not only on direct character collision.
 - [ ] Preserve frozen-block activation guards across `MineBlock`, `PushBlock`,
   `RotateBlock`, `SafetyBlock`, and `SupplyBlock`: when a block is temporarily
   frozen, mine hits, push/rotate/safety behavior, and supply use should be

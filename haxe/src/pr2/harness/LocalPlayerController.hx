@@ -1242,6 +1242,7 @@ class LocalPlayerController {
 		var direction = facingDirection < 0 ? "left" : "right";
 		vx += facingDirection < 0 ? -8 : 8;
 		lastItemEffect = "slash:" + direction;
+		animateForwardBlockDamage(facingDirection < 0 ? 180 : 0, facingDirection * 8, 15);
 		consumeHeldItemUse();
 	}
 
@@ -1253,19 +1254,44 @@ class LocalPlayerController {
 	}
 
 	private function animateFirstShotBlockHit(angleDegrees:Float):Void {
+		animateForwardBlockDamage(angleDegrees, Math.cos(angleDegrees * Math.PI / 180) * 5, 100);
+	}
+
+	private function animateForwardBlockDamage(angleDegrees:Float, damageForce:Float, maxSteps:Int):Void {
 		var shotX = x + (angleDegrees == 180 ? -20 : 20);
 		var shotY = y - 25;
 		var radians = angleDegrees * Math.PI / 180;
 		var velX = Math.cos(radians) * 5;
 		var velY = Math.sin(radians) * 5;
-		for (_ in 0...100) {
+		for (_ in 0...maxSteps) {
 			var block = getBlockAtPixel(shotX, shotY);
 			if (block != null) {
-				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, velX, 0));
+				damageBlockFromItem(block, damageForce);
 				return;
 			}
 			shotX += velX;
 			shotY += velY;
+		}
+	}
+
+	private function damageBlockFromItem(block:LevelBlock, damageForce:Float):Void {
+		var clampedHitX = clamp(damageForce, -20, 20);
+		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, clampedHitX, 0));
+		switch (block.type) {
+			case BlockType.Brick:
+				emitLocalActivate(block);
+				blockState(blockKey(block.x, block.y)).removed = true;
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
+			case BlockType.Crumble:
+				applyCrumbleForce(block, 5);
+			case BlockType.Mine:
+				emitLocalActivate(block);
+				blockState(blockKey(block.x, block.y)).removed = true;
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
+			case BlockType.Vanish:
+				activateVanish(block);
+			default:
 		}
 	}
 
