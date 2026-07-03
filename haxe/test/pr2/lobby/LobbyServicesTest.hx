@@ -95,6 +95,7 @@ class LobbyServicesTest {
 		testUploadingLevelPopupOverwriteConfirmation();
 		testUploadingLevelPopupBannedConfirmation();
 		testUploadingLevelPopupResultMessages();
+		testUploadingLevelPopupEmptyDataMessage();
 		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
 		testSocialActionPlan();
@@ -1144,6 +1145,37 @@ class LobbyServicesTest {
 		closeAllPopups();
 	}
 
+	private static function testUploadingLevelPopupEmptyDataMessage():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.userName = "CaseUser";
+		LobbySession.token = "session-token";
+		var previousFactory = UploadingLevelPopup.postFactory;
+		var uploads = 0;
+		UploadingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			uploads++;
+			return null;
+		};
+
+		var editor = new EmptyDataLevelEditor();
+		editor.initialize();
+		new UploadingLevelPopup(editor);
+
+		assertEquals(0, uploads, "empty serialized data does not upload");
+		var message = lastMessagePopup();
+		assertNotNull(message, "empty serialized data opens the Flash client-glitch message");
+		var text = LobbyArt.text(message, "textBox");
+		assertEquals(true, text != null && text.htmlText.indexOf("Could not save your level") >= 0,
+			"empty data message uses Flash copy");
+
+		editor.remove();
+		UploadingLevelPopup.postFactory = previousFactory;
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
 	private static function testLevelEditorTestCourseTransition():Void {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
@@ -1618,6 +1650,18 @@ private typedef UploadLevelCall = {
 	var url:String;
 	var fields:Map<String, String>;
 	var label:String;
+}
+
+private class EmptyDataLevelEditor extends LevelEditor {
+	public function new() {
+		super(null, true, false);
+	}
+
+	override public function getLevelVars():Map<String, String> {
+		var vars = super.getLevelVars();
+		vars.set("data", "");
+		return vars;
+	}
 }
 
 /** Minimal `SortableRow` for exercising the players/guilds sort comparator. */
