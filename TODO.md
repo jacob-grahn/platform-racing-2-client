@@ -131,7 +131,7 @@ Then the level-management flows, one at a time:
     - [x] Port overwrite confirmation.
     - [x] Port save-result/error handling.
 - [ ] Port the upload flow with the same coverage.
-- [ ] Port the delete flow with the same coverage.
+- [x] Port the delete flow with the same coverage.
 - [ ] Port the report-management flow with the same coverage.
 
 Acceptance: a user can load, edit, test, save, and reopen a real level with the

@@ -31,6 +31,7 @@ import pr2.lobby.dialogs.Popup;
 import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
+import pr2.page.LevelEditor.DeletingLevelPopup;
 import pr2.page.LevelEditor.GetLevelsPopup;
 import pr2.page.LevelEditor.SaveLevelPopup;
 import pr2.page.LevelEditor.UploadingLevelPopup;
@@ -79,6 +80,7 @@ class LobbyServicesTest {
 		testLevelEditorRoute();
 		testLevelEditorShell();
 		testLevelEditorLoadListPopup();
+		testLevelEditorDeleteFlow();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
 		testUploadingLevelPopupDrawingRetryWait();
@@ -560,6 +562,77 @@ class LobbyServicesTest {
 		editor.remove();
 		GetLevelsPopup.loadFactory = previousLoadFactory;
 		GetLevelsPopup.postFactory = previousPostFactory;
+		ServerConfig.resetHost();
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testLevelEditorDeleteFlow():Void {
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		LobbySession.token = "delete-token";
+		ServerConfig.setHost("http://example.test");
+		var previousListFactory = GetLevelsPopup.postFactory;
+		var previousLoadFactory = GetLevelsPopup.loadFactory;
+		var previousDeleteFactory = DeletingLevelPopup.postFactory;
+		var listRequests = 0;
+		var requestedToken:Null<String> = null;
+		var loads = 0;
+		var uploads:Array<UploadLevelCall> = [];
+		GetLevelsPopup.postFactory = function(url:String, fields:Map<String, String>, onResult:Dynamic->Void, onError:String->Void):Void {
+			listRequests++;
+			requestedToken = fields.get("token");
+			onResult({
+				levels: [
+					{level_id: "42", version: "5", title: "Delete <Me>", live: "0", type: "r", play_count: "1", rating: "0", note: ""}
+				]
+			});
+		};
+		GetLevelsPopup.loadFactory = function(levelId:Int, version:Int):Void {
+			loads++;
+		};
+		DeletingLevelPopup.postFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):pr2.lobby.dialogs.UploadingPopup {
+			var captured = new Map<String, String>();
+			for (key in fields.keys()) {
+				captured.set(key, fields.get(key));
+			}
+			uploads.push({url: url, fields: captured, label: label});
+			onResult({success: true});
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		clickEditorMenu(editor, "loadButton");
+		var popup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], GetLevelsPopup);
+		assertNotNull(popup, "delete flow opens the editor levels popup");
+		assertEquals("delete-token", requestedToken, "delete flow list request sends the session token");
+		popup.selectListing(popup.listings[0]);
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(popup.art, "delete_bt"), "enabled"), "selecting a level enables delete");
+		DisplayUtil.findByName(popup.art, "delete_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		var confirm = lastConfirmPopup();
+		assertNotNull(confirm, "delete button opens confirmation");
+		var text = LobbyArt.text(confirm, "textBox");
+		assertEquals(true, text != null && text.htmlText.indexOf("Delete &lt;Me&gt;") >= 0, "delete confirmation escapes the title");
+		clickPopup(confirm, "ok_bt");
+
+		assertEquals(0, loads, "deleting does not trigger the load handoff");
+		assertEquals(1, uploads.length, "confirming delete posts once");
+		assertEquals("http://example.test/delete_level.php", uploads[0].url, "delete endpoint matches Flash");
+		assertEquals("Deleting level...", uploads[0].label, "delete progress label matches Flash");
+		assertEquals("42", uploads[0].fields.get("level_id"), "delete posts selected level id");
+		assertEquals("delete-token", uploads[0].fields.get("token"), "delete posts SuperLoader token");
+		var rand = Std.parseInt(uploads[0].fields.get("rand"));
+		assertEquals(true, rand != null && rand >= 0 && rand < 10000000, "delete posts SuperLoader rand");
+		assertEquals(true, popup.fadeOutStarted, "confirmed delete closes the original list popup");
+		assertEquals(2, listRequests, "successful delete reopens the levels list");
+
+		editor.remove();
+		DeletingLevelPopup.postFactory = previousDeleteFactory;
+		GetLevelsPopup.loadFactory = previousLoadFactory;
+		GetLevelsPopup.postFactory = previousListFactory;
 		ServerConfig.resetHost();
 		LobbySession.clear();
 		closeAllPopups();

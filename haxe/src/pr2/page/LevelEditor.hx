@@ -1330,6 +1330,7 @@ typedef GetLevelsPostFactory = String->Map<String, String>->(Dynamic->Void)->(St
 typedef GetLevelsLoadFactory = Int->Int->Void;
 typedef UploadingLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 typedef UploadingLevelRetryFactory = (Void->Void)->Int->Null<Timer>;
+typedef DeleteLevelPostFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
 class GetLevelsPopup extends Popup {
 	public static var postFactory:GetLevelsPostFactory = defaultPost;
@@ -1347,6 +1348,7 @@ class GetLevelsPopup extends Popup {
 		setText("titleBox", "-- My Levels --");
 		bind("cancel_bt", function():Void startFadeOut());
 		bind("load_bt", clickLoad);
+		bind("delete_bt", clickDelete);
 		updateButtons();
 		postFactory(ServerConfig.levelsGetUrl(), requestFields(), handleResponse, handleError);
 	}
@@ -1397,9 +1399,20 @@ class GetLevelsPopup extends Popup {
 		startFadeOut();
 	}
 
+	private function clickDelete():Void {
+		if (selected == null) {
+			return;
+		}
+		var listing = selected;
+		new ConfirmPopup(function():Void {
+			new DeletingLevelPopup(listing.levelId);
+			startFadeOut();
+		}, 'Are you sure you want to delete "' + ChatText.escapeString(listing.title) + '"?');
+	}
+
 	private function updateButtons():Void {
 		Reflect.setProperty(DisplayUtil.findByName(art, "load_bt"), "enabled", selected != null);
-		Reflect.setProperty(DisplayUtil.findByName(art, "delete_bt"), "enabled", false);
+		Reflect.setProperty(DisplayUtil.findByName(art, "delete_bt"), "enabled", selected != null);
 	}
 
 	private function hideLoadingGraphic():Void {
@@ -1476,6 +1489,7 @@ class GetLevelsPopupItem extends Sprite {
 	public final level:Dynamic;
 	public final levelId:Int;
 	public final version:Int;
+	public final title:String;
 	public var art(default, null):PR2MovieClip;
 	private var popup:Null<GetLevelsPopup>;
 	private var info:Null<HoverPopup>;
@@ -1489,7 +1503,8 @@ class GetLevelsPopupItem extends Sprite {
 		addChild(art);
 		levelId = parseInt(field("level_id"), 0);
 		version = parseInt(field("version"), 0);
-		setText("titleBox", field("title"));
+		title = field("title");
+		setText("titleBox", title);
 		setText("statusBox", parseInt(field("live"), 0) == 1 ? "Published" : "Unpublished");
 		mouseChildren = false;
 		buttonMode = true;
@@ -1848,6 +1863,40 @@ class UploadingLevelPopup extends Popup {
 	override public function remove():Void {
 		clearWaitTimer();
 		super.remove();
+	}
+}
+
+class DeletingLevelPopup {
+	public static var postFactory:DeleteLevelPostFactory = defaultPost;
+
+	public final levelId:Int;
+
+	public function new(levelId:Int) {
+		this.levelId = levelId;
+		postFactory(ServerConfig.deleteLevelUrl(), requestFields(levelId), "Deleting level...", handleResponse, handleError);
+	}
+
+	private function handleResponse(_:Dynamic):Void {
+		new GetLevelsPopup();
+	}
+
+	private function handleError(message:String):Void {
+		if (message != null && message != "") {
+			new MessagePopup("Error: " + message);
+		}
+	}
+
+	private static function requestFields(levelId:Int):Map<String, String> {
+		var fields = new Map<String, String>();
+		fields.set("level_id", Std.string(levelId));
+		fields.set("rand", Std.string(Std.random(10000000)));
+		fields.set("token", LobbySession.token);
+		return fields;
+	}
+
+	public static function defaultPost(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+			onError:String->Void):Null<UploadingPopup> {
+		return new UploadingPopup(url, fields, label, onResult, onError);
 	}
 }
 

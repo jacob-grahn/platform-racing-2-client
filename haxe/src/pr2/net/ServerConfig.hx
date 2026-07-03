@@ -247,6 +247,11 @@ final class ServerConfig {
 		return host + "/upload_level.php";
 	}
 
+	/** Level delete POST endpoint, matching `level_management.DeletingLevelPopup`. */
+	public static function deleteLevelUrl():String {
+		return host + "/delete_level.php";
+	}
+
 	/** Artifact placement POST endpoint, matching `gameplay.PlaceArtifact`. */
 	public static function placeArtifactUrl():String {
 		return host + "/place_artifact.php";
