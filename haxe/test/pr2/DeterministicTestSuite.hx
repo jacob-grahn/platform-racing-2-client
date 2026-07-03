@@ -44,6 +44,7 @@ import pr2.gameplay.RaceSessionTranscriptTest;
 import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
+import pr2.lobby.ChatTabTest;
 import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
@@ -152,6 +153,7 @@ class DeterministicTestSuite {
 		CampaignTestScreenTest.main();
 		LobbyServicesTest.main();
 		AccountTabTest.main();
+		ChatTabTest.main();
 		CreditsPopupTest.main();
 		ExternalLinkPopupTest.main();
 		GuildPopupTest.main();

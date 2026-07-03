@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `ChatRoomInfoPopup.as` and wire `ChatInstance`/`ChatTab` info-button
-  hover behavior: mouse-over should create the authored popup, register
-  `setChatRoomList`, send `get_chat_rooms\``, render returned room names with
-  the `_sans` font wrapper while hiding the loading graphic, and mouse-out/remove
-  should unregister and dismiss it.
 - [ ] Preserve `MessagesItem.as` private-message body formatting: obey
   `Settings.FILTER_SWEARS`, escape only low-group messages before parsing rich
   links, run the Flash `Data.parseLinks()` user/url/level/guild/invite

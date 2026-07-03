@@ -1,13 +1,16 @@
 package pr2.lobby.tabs;
 
+import openfl.display.DisplayObject;
 import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
+import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyPopups;
 import pr2.lobby.Memory;
 import pr2.lobby.chat.ChatLog;
 import pr2.lobby.chat.HtmlNameMaker;
+import pr2.lobby.dialogs.ChatRoomInfoPopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
@@ -34,6 +37,8 @@ class ChatTab extends Page {
 	private var updateMessages:Bool = true;
 	private var sendBinding:Null<LobbyArt.Binding>;
 	private var joinBinding:Null<LobbyArt.Binding>;
+	private var infoButton:Null<DisplayObject>;
+	private var infoPopup:Null<ChatRoomInfoPopup>;
 
 	public function new() {
 		super();
@@ -62,9 +67,10 @@ class ChatTab extends Page {
 		}
 		sendBinding = LobbyArt.bind(DisplayUtil.findByName(art, "send_bt"), clickSend);
 		joinBinding = LobbyArt.bind(DisplayUtil.findByName(art, "joinRoom_bt"), changeRoom);
-		var infoButton = DisplayUtil.findByName(art, "infoButton");
+		infoButton = DisplayUtil.findByName(art, "infoButton");
 		if (infoButton != null) {
-			infoButton.addEventListener(KeyboardEvent.KEY_DOWN, function(_) {});
+			infoButton.addEventListener(MouseEvent.MOUSE_OVER, overInfo);
+			infoButton.addEventListener(MouseEvent.MOUSE_OUT, outInfo);
 		}
 
 		addEventListener(KeyboardEvent.KEY_DOWN, pauseListener);
@@ -184,6 +190,23 @@ class ChatTab extends Page {
 		}
 	}
 
+	private function overInfo(_:MouseEvent):Void {
+		if (infoButton != null) {
+			infoPopup = new ChatRoomInfoPopup(infoButton);
+		}
+	}
+
+	private function outInfo(_:MouseEvent):Void {
+		removeInfoPopup();
+	}
+
+	private function removeInfoPopup():Void {
+		if (infoPopup != null) {
+			infoPopup.remove();
+			infoPopup = null;
+		}
+	}
+
 	override public function remove():Void {
 		LobbySocket.write("set_chat_room`none");
 		if (roomBox != null) {
@@ -196,6 +219,12 @@ class ChatTab extends Page {
 		if (textBox != null) {
 			textBox.removeEventListener(FocusEvent.FOCUS_OUT, lockToBottom);
 		}
+		if (infoButton != null) {
+			infoButton.removeEventListener(MouseEvent.MOUSE_OVER, overInfo);
+			infoButton.removeEventListener(MouseEvent.MOUSE_OUT, outInfo);
+			infoButton = null;
+		}
+		removeInfoPopup();
 		LobbyArt.unbind(sendBinding);
 		LobbyArt.unbind(joinBinding);
 		removeEventListener(KeyboardEvent.KEY_DOWN, pauseListener);
