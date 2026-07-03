@@ -67,7 +67,7 @@ Port the editor itself, one piece at a time:
           - [x] Wire text object drag interactions with Flash rounding and `m`
             action recording.
           - [x] Wire text object resize handle interactions.
-- [ ] Port block options.
+- [x] Port block options.
   - [x] Port Flash-compatible block option string normalization for item,
     teleport, happy/sad stat, and custom-stat blocks.
   - [x] Port block placement/selection enough to attach option buttons to
