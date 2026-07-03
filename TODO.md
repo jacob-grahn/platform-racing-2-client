@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the remaining Hurlant utility compatibility classes:
-  `Base64` should expose static string/ByteArray encode and decode APIs with
-  decoded position reset and constructor error, `Hex` should
-  preserve colon/whitespace stripping, odd-length padding, UTF-8 string helpers,
-  and optional colon output, and `Memory.gc()` / `Memory.used` should keep the
-  Flash API surface for crypto dispose paths.
 - [ ] Port `com.jcward.workers.JPEGEncoder` / `BitString` or provide an exact
   equivalent for drawing uploads: support `encode()`, `encodeNonNative()`,
   `encodeAsync()` with one outstanding job guard, optional output `ByteArray`,

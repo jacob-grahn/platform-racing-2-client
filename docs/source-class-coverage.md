@@ -357,9 +357,9 @@ alone is not a class port.
 | `flash/com/hurlant/crypto/symmetric/ISymmetricKey.as` | `com.hurlant.crypto.symmetric.ISymmetricKey` | ported | AES block keys expose the Flash-compatible symmetric-key interface and are exercised through offset block tests. |
 | `flash/com/hurlant/crypto/symmetric/IVMode.as` | `com.hurlant.crypto.symmetric.IVMode` | ported | Forced/generated IV storage, `IV` property behavior, decrypt IV validation, and cleanup are represented by the CBC implementation. |
 | `flash/com/hurlant/crypto/symmetric/PKCS5.as` | `com.hurlant.crypto.symmetric.PKCS5` | ported | PKCS5 pad/unpad behavior and Flash-compatible invalid-padding errors are represented by CBC default padding coverage. |
-| `flash/com/hurlant/util/Base64.as` | `pr2.crypto.PR2Encryptor` | ported | Base64 encoding for encrypted PR2 payloads is handled inside the encryption adapter. |
-| `flash/com/hurlant/util/Hex.as` | crypto adapter boundary | gap | The general Hex helper is not ported; current protocol code does not expose Hurlant hex APIs. |
-| `flash/com/hurlant/util/Memory.as` | `pr2.lobby.Memory`, `pr2.lobby.SecureData` | partial | Byte storage is represented for SecureData-compatible values; Hurlant's full fast-memory adapter is not ported. |
+| `flash/com/hurlant/util/Base64.as` | `com.hurlant.util.Base64`, `pr2.crypto.ByteArrayCompat` | ported | Static string and ByteArray encode/decode APIs, output rewind, version, and constructor error are covered by `HurlantUtilCompatTest`. |
+| `flash/com/hurlant/util/Hex.as` | `com.hurlant.util.Hex`, `pr2.crypto.ByteArrayCompat` | ported | Colon/whitespace stripping, odd-length padding, lower-case output, UTF-8 string helpers, and optional colon output are covered by `HurlantUtilCompatTest`. |
+| `flash/com/hurlant/util/Memory.as` | `com.hurlant.util.Memory` | ported | `Memory.gc()` and `Memory.used` are exposed for Hurlant dispose paths and covered by `HurlantUtilCompatTest`. |
 | `flash/com/jcward/workers/BitString.as` | guild-emblem upload gap | gap | The JPEG bit writer is only needed by the unported local image/JPEG upload path. |
 | `flash/com/jcward/workers/JPEGEncoder.as` | guild-emblem upload gap | gap | JPEG encoding remains with the guild-emblem upload TODO; no Haxe encoder is currently wired. |
 | `flash/com/jiggmin/ColorPicker/ColorChoices.as` | `pr2.lobby.account.ColorChoices` | ported | The authored color palette is represented by the account color picker data. |

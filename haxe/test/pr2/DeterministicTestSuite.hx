@@ -17,6 +17,7 @@ import pr2.crypto.MD5CompatTest;
 import pr2.crypto.ARC4CompatTest;
 import pr2.crypto.RandomCompatTest;
 import pr2.crypto.HurlantSymmetricCompatTest;
+import pr2.crypto.HurlantUtilCompatTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
 import pr2.effects.TeleportPopTest;
@@ -115,6 +116,7 @@ class DeterministicTestSuite {
 		ARC4CompatTest.main();
 		RandomCompatTest.main();
 		HurlantSymmetricCompatTest.main();
+		HurlantUtilCompatTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();
 		ServerLevelFixtureAdapterTest.main();
