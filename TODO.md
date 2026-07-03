@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the local-character command handlers from `LocalCharacter.as`:
-  register and unregister `zap`, `squash{tempID}`, and `sting{tempID}` for the
-  local player, route them through the Flash hurt/immunity rules, and preserve
-  the visual/sound side effects for Zap/Sting/Squash.
 - [ ] Preserve local heart-gain protocol from `LocalCharacter.gainHeart()`:
   heart pickups should increment local deathmatch life, update the HUD, and emit
   the Flash `heart\`` socket payload from the gain path, not a different

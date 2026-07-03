@@ -376,6 +376,16 @@ class LocalCharacter extends Character {
 		syncFromController(previousMode);
 	}
 
+	public function receiveSquash():Void {
+		if (controller.debugState().mode == "hurt") {
+			return;
+		}
+		changeState("crouch");
+		if (onPlayCharacterSound != null) {
+			onPlayCharacterSound({kind: "squash", x: x, y: y, volume: 0.66, target: this});
+		}
+	}
+
 	private function syncFromController(?previousMode:Null<String>):Void {
 		var state = controller.debugState();
 		x = state.x;

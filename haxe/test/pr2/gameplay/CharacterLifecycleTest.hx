@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import openfl.ui.Keyboard;
 import pr2.character.Character;
 import pr2.effects.LaserShotTimeline;
+import pr2.effects.StingEffect;
 import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
@@ -36,6 +37,7 @@ class CharacterLifecycleTest {
 		testLocalJumpPlaysSound();
 		testRemoteJumpPlaysSound();
 		testCharacterEffectSounds();
+		testLocalCharacterCommandHandlers();
 		testLocalArrowSparkleEmitterLifecycle();
 		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
@@ -292,6 +294,47 @@ class CharacterLifecycleTest {
 			"Course routes local and remote character effect sounds through spatial playback");
 		shell.remove();
 		course.remove();
+	}
+
+	private static function testLocalCharacterCommandHandlers():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler);
+		course.createLocalCharacter(localInit(4));
+		var remote = course.createRemoteCharacter(remoteInit(9));
+		remote.setPos(course.localCharacter.x - 20, course.localCharacter.y);
+		var sounds:Array<String> = [];
+		course.onPlayCharacterSound = function(request):Void {
+			sounds.push(request.kind + ":" + request.volume);
+		};
+
+		assertTrue(handler.hasCommand("zap"), "local character registers zap command");
+		assertTrue(handler.hasCommand("setHats4"), "local character keeps local setHats command");
+		assertTrue(handler.hasCommand("squash4"), "local character registers squash command");
+		assertTrue(handler.hasCommand("sting4"), "local character registers sting command");
+
+		handler.dispatch("squash4", []);
+		assertEquals("crouch", course.localCharacter.state, "incoming squash command crouches local character");
+		assertEquals("squash:0.66", sounds.join("|"), "incoming squash command plays squash sound");
+
+		var stingChild = course.characterLayer.numChildren;
+		handler.dispatch("sting4", ["9"]);
+		var sting = Std.downcast(course.characterLayer.getChildAt(stingChild), StingEffect);
+		assertTrue(sting != null, "incoming sting command mounts StingEffect");
+		assertEquals(true, sting.hasTimelineChild("leftSting"), "sting from the left keeps left graphic");
+		assertEquals(false, sting.hasTimelineChild("rightSting"), "sting from the left removes right graphic");
+		assertEquals("hurt", course.localCharacter.debugState().mode, "incoming sting command hurts vulnerable local player");
+
+		var zapChild = course.characterLayer.numChildren;
+		handler.dispatch("zap", ["9"]);
+		assertEquals(zapChild + 2, course.characterLayer.numChildren, "incoming zap mounts one bolt effect and one local flash effect");
+		assertTrue(Std.downcast(course.characterLayer.getChildAt(zapChild), ZapEffect) != null, "incoming zap mounts bolt-only effect");
+		assertTrue(Std.downcast(course.characterLayer.getChildAt(zapChild + 1), ZapEffect) != null, "incoming zap mounts local flash effect");
+
+		course.remove();
+		assertTrue(!handler.hasCommand("zap"), "course teardown unregisters zap command");
+		assertTrue(!handler.hasCommand("setHats4"), "course teardown unregisters local setHats command");
+		assertTrue(!handler.hasCommand("squash4"), "course teardown unregisters squash command");
+		assertTrue(!handler.hasCommand("sting4"), "course teardown unregisters sting command");
 	}
 
 	private static function testLocalArrowSparkleEmitterLifecycle():Void {
@@ -829,6 +872,28 @@ class CharacterLifecycleTest {
 
 		var data = new ServerLevelData(vars, true);
 		return new Course(level, data, LevelConfig.fromServerData(data), null, null, handler);
+	}
+
+	private static function localInit(tempId:Int):LocalCharacterInit {
+		return {
+			tempId: tempId,
+			speed: 80, accel: 70, jump: 60,
+			hatColor: 0xFFFFFF, headColor: 0xFFFFFF, bodyColor: 0xFFFFFF, feetColor: 0xFFFFFF,
+			hatId: 1, headId: 1, bodyId: 1, feetId: 1,
+			hatColor2: -1, headColor2: -1, bodyColor2: -1, feetColor2: -1,
+			group: "0"
+		};
+	}
+
+	private static function remoteInit(tempId:Int):RemoteCharacterInit {
+		return {
+			tempId: tempId,
+			userName: "Rival",
+			hatColor: 0xFFFFFF, headColor: 0xFFFFFF, bodyColor: 0xFFFFFF, feetColor: 0xFFFFFF,
+			hatId: 1, headId: 1, bodyId: 1, feetId: 1,
+			hatColor2: -1, headColor2: -1, bodyColor2: -1, feetColor2: -1,
+			group: "0"
+		};
 	}
 
 	private static function assertEquals<T>(expected:T, actual:T, message:String):Void {

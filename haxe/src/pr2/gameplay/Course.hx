@@ -26,6 +26,7 @@ import pr2.character.PositionedParticleEmitter;
 import pr2.character.RainbowStarEmitter;
 import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
+import pr2.effects.StingEffect;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
@@ -146,7 +147,7 @@ class Course extends Sprite {
 	private var activeVisualBlocks:Map<String, Bool> = new Map();
 	private var startPositions:Array<{x:Int, y:Int}> = [];
 	private var raceSounds:RaceSounds;
-	private var localSetHatsCommandName:Null<String>;
+	private var localCommandNames:Array<String> = [];
 	private var reachedObjectives:Map<Int, Bool> = new Map();
 	private var minionEggsSpawned:Bool = false;
 	private final activeParticleEmitters:ObjectMap<Character, ParticleEmitter> = new ObjectMap();
@@ -351,7 +352,12 @@ class Course extends Sprite {
 		if (localCharacter == null) {
 			return null;
 		}
-		unregisterLocalSetHatsCommand();
+		unregisterLocalCommands();
+		var previousTempId = localCharacter.tempID;
+		if (playerArray != null && previousTempId >= 0 && previousTempId < playerArray.length && playerArray[previousTempId] == localCharacter
+				&& previousTempId != init.tempId) {
+			playerArray[previousTempId] = null;
+		}
 		localCharacter.tempID = init.tempId;
 		localCharacter.groupStr = init.group;
 		localCharacter.setHatId(Std.int(init.hatId));
@@ -362,29 +368,78 @@ class Course extends Sprite {
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
 		localCharacter.setStats(init.speed, init.accel, init.jump);
 		playerArray[init.tempId] = localCharacter;
-		registerLocalSetHatsCommand(init.tempId);
+		registerLocalCommands(init.tempId);
 		return localCharacter;
 	}
 
-	private function registerLocalSetHatsCommand(tempId:Int):Void {
+	private function registerLocalCommands(tempId:Int):Void {
 		if (commandHandler == null) {
 			return;
 		}
-		localSetHatsCommandName = "setHats" + tempId;
-		commandHandler.defineCommand(localSetHatsCommandName, setLocalHatsCommand);
+		localCommandNames = ["zap", "setHats" + tempId, "squash" + tempId, "sting" + tempId];
+		commandHandler.defineCommand("zap", zapCommand);
+		commandHandler.defineCommand("setHats" + tempId, setLocalHatsCommand);
+		commandHandler.defineCommand("squash" + tempId, squashCommand);
+		commandHandler.defineCommand("sting" + tempId, stingCommand);
 	}
 
-	private function unregisterLocalSetHatsCommand():Void {
-		if (commandHandler != null && localSetHatsCommandName != null) {
-			commandHandler.defineCommand(localSetHatsCommandName, null);
+	private function unregisterLocalCommands():Void {
+		if (commandHandler != null) {
+			for (name in localCommandNames) {
+				commandHandler.defineCommand(name, null);
+			}
 		}
-		localSetHatsCommandName = null;
+		localCommandNames = [];
 	}
 
 	private function setLocalHatsCommand(args:Array<String>):Void {
 		if (localCharacter != null) {
 			localCharacter.setHats([for (arg in args) parseIntArg(arg)]);
 		}
+	}
+
+	private function squashCommand(_:Array<String>):Void {
+		if (localCharacter == null) {
+			return;
+		}
+		localCharacter.receiveSquash();
+	}
+
+	private function stingCommand(args:Array<String>):Void {
+		if (localCharacter == null || characterLayer == null || args.length == 0) {
+			return;
+		}
+		var source = playerByTempId(parseIntArg(args[0]));
+		if (source == null || source == localCharacter) {
+			return;
+		}
+		var direction = source.x < localCharacter.x ? "left" : (source.x > localCharacter.x ? "right" : "");
+		characterLayer.addChild(new StingEffect(localCharacter, direction));
+		localCharacter.receiveSting();
+	}
+
+	private function zapCommand(args:Array<String>):Void {
+		if (localCharacter == null || characterLayer == null || args.length == 0) {
+			return;
+		}
+		var sourceId = parseIntArg(args[0]);
+		for (character in playerArray) {
+			if (character != null && character.tempID != sourceId) {
+				characterLayer.addChild(new ZapEffect(character, true, false, false));
+			}
+		}
+		if (sourceId == localCharacter.tempID) {
+			return;
+		}
+		characterLayer.addChild(new ZapEffect(localCharacter, true, true, true));
+		localCharacter.receiveZap();
+	}
+
+	private function playerByTempId(tempId:Int):Null<Character> {
+		if (playerArray == null || tempId < 0 || tempId >= playerArray.length) {
+			return null;
+		}
+		return playerArray[tempId];
 	}
 
 	private function activateCommand(args:Array<String>):Void {
@@ -1430,7 +1485,7 @@ class Course extends Sprite {
 		clearAllDjinnEmitters();
 		removeAllRemoteCharacters();
 		activeCommandHandler().defineCommand("activate", null);
-		unregisterLocalSetHatsCommand();
+		unregisterLocalCommands();
 		if (levelRenderer != null) {
 			levelRenderer.remove();
 			levelRenderer = null;
