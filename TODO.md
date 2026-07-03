@@ -40,7 +40,7 @@ Port the editor itself, one piece at a time:
 - [x] Port the editor sidebars.
   - [x] Mount the five editor sidebars and wire menu/layer buttons to switch the
     active sidebar.
-- [ ] Port the editor tools.
+- [x] Port the editor tools.
   - [x] Wire editor sidebar entry clicks into a selected-tool state so later
     placement/drawing tools can use the active sidebar item.
   - [x] Port the brush size and color controls so drawing tools record the
