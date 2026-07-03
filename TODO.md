@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve frozen-block activation guards across `MineBlock`, `PushBlock`,
-  `RotateBlock`, `SafetyBlock`, and `SupplyBlock`: when a block is temporarily
-  frozen, mine hits, push/rotate/safety behavior, and supply use should be
-  suppressed until thawed.
 - [ ] Include `SadBlock.as` in the test-course stat-picker sync path alongside
   happy/custom stat blocks so negative stat changes immediately update the
   `StatsSelect` UI in `TestCourse`.

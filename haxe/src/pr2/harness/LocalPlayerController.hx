@@ -449,6 +449,16 @@ class LocalPlayerController {
 		return state != null && state.frozenIceAlpha != null ? state.frozenIceAlpha : 0;
 	}
 
+	public function freezeBlockForTest(tileX:Int, tileY:Int, fadeRate:Float = SANTA_ICE_OVERLAY_FADE_RATE):Void {
+		var block = level.blockAt(tileX, tileY);
+		if (block == null) {
+			return;
+		}
+		var state = blockState(blockKey(tileX, tileY));
+		state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
+		state.frozenIceFadeRate = fadeRate;
+	}
+
 	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
 		var events = blockVisualEvents.copy();
 		blockVisualEvents.resize(0);
@@ -619,6 +629,9 @@ class LocalPlayerController {
 				updateSafeSpot(block, true);
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.WaterRipple, block.x, block.y));
 			case BlockType.Safety:
+				if (isBlockFrozen(block)) {
+					return;
+				}
 				if (standingTileX != block.x || standingTileY < block.y || standingTileY > block.y + 2) {
 					returnToLastSafeSpot();
 				}
@@ -905,7 +918,7 @@ class LocalPlayerController {
 	}
 
 	private function startRotate(block:LevelBlock):Void {
-		if (rotateFramesRemaining > 0) {
+		if (rotateFramesRemaining > 0 || isBlockFrozen(block)) {
 			return;
 		}
 		setMode(MODE_FREEZE);
@@ -957,6 +970,9 @@ class LocalPlayerController {
 
 	private function pushBlock(block:LevelBlock, dx:Int, dy:Int):Void {
 		if (dx == 0 && dy == 0) {
+			return;
+		}
+		if (isBlockFrozen(block)) {
 			return;
 		}
 		var activationPayload = pushActivationPayload(dx, dy);
@@ -1011,7 +1027,7 @@ class LocalPlayerController {
 		}
 		var destBlock = level.blockAt(destX, destY);
 		if (destBlock != null) {
-			if (destBlock.type != BlockType.Push) {
+			if (destBlock.type != BlockType.Push || isBlockFrozen(destBlock)) {
 				return false;
 			}
 			if (!canMoveBlockChain(destBlock, dx, dy)) {
@@ -1022,7 +1038,7 @@ class LocalPlayerController {
 	}
 
 	private function hitMine(block:LevelBlock):Void {
-		if (isBlockRemoved(block)) {
+		if (isBlockRemoved(block) || isBlockFrozen(block)) {
 			return;
 		}
 
@@ -1059,6 +1075,9 @@ class LocalPlayerController {
 	}
 
 	private function useItemBlock(block:LevelBlock):Void {
+		if (isBlockFrozen(block)) {
+			return;
+		}
 		if (block.type == BlockType.Item) {
 			var state = blockState(blockKey(block.x, block.y));
 			if (state.depletedItem) {
@@ -1329,6 +1348,9 @@ class LocalPlayerController {
 	}
 
 	private function useCustomStatsBlock(block:LevelBlock):Void {
+		if (isBlockFrozen(block)) {
+			return;
+		}
 		var state = blockState(blockKey(block.x, block.y));
 		if (state.depletedItem) {
 			return;
@@ -1362,6 +1384,9 @@ class LocalPlayerController {
 	}
 
 	private function useSupply(block:LevelBlock):Bool {
+		if (isBlockFrozen(block)) {
+			return false;
+		}
 		var state = blockState(blockKey(block.x, block.y));
 		if (state.depletedSupply) {
 			return false;

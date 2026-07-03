@@ -26,6 +26,11 @@ class LocalPlayerControllerTest {
 		testHoldingDownChargesAndLaunchesSuperJump();
 		testIceBlockReducesNextFrameAcceleration();
 		testSantaHatFreezesSafeStandBlock();
+		testFrozenMineSuppressesHit();
+		testFrozenPushBlockSuppressesMovement();
+		testFrozenRotateBlockSuppressesRotation();
+		testFrozenSafetyBlockSuppressesReturn();
+		testFrozenSupplyBlockSuppressesUse();
 		testArrowStandEffectsMatchAs3Deltas();
 		testFallingIntoWaterEntersSwimMode();
 		testWaterTouchEmitsRippleVisual();
@@ -116,7 +121,7 @@ class LocalPlayerControllerTest {
 
 	private static function testAnimationFollowsDirectionalInput():Void {
 		var player = newPlayer();
-		for (_ in 0...20) {
+		for (_ in 0...40) {
 			player.step(new LocalPlayerInput());
 		}
 
@@ -346,6 +351,97 @@ class LocalPlayerControllerTest {
 			santa.step(new LocalPlayerInput());
 		}
 		assertEquals(0.0, santa.controller.blockIceOverlayAlphaAt(2, 3), "santa ice overlay thaws after Flash fade");
+	}
+
+	private static function testFrozenMineSuppressesHit():Void {
+		var player = new LocalCharacter(delayedMineBlockLevel());
+		player.controller.freezeBlockForTest(2, 3);
+
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+			if (player.debugState().touchedBlockType == "mine") {
+				break;
+			}
+		}
+
+		assertEquals("mine", player.debugState().touchedBlockType, "player touches frozen mine");
+		assertEquals("land", player.debugState().mode, "frozen mine does not hurt player");
+		assertClose(1, player.blockAlphaAt(2, 3), "frozen mine is not removed");
+		assertEquals(0, player.consumeBlockVisualEvents().length, "frozen mine emits no activation visuals");
+	}
+
+	private static function testFrozenPushBlockSuppressesMovement():Void {
+		var level = lowItemCeilingLevel(BlockType.Push);
+		var player = new LocalCharacter(level);
+		player.controller.freezeBlockForTest(2, 8);
+
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+		player.step(new LocalPlayerInput(false, false, true));
+
+		assertEquals(BlockType.Push, level.blockAt(2, 8).type, "frozen push block stays in place");
+		assertEquals(null, level.blockAt(2, 7), "frozen push block does not move to destination");
+		assertEquals(1, player.consumeBlockVisualEvents().length, "frozen push block only emits base bump sound");
+	}
+
+	private static function testFrozenRotateBlockSuppressesRotation():Void {
+		var player = new LocalCharacter(rotateBlockLevel(BlockType.RotateRight));
+		player.controller.freezeBlockForTest(2, 1);
+
+		for (_ in 0...40) {
+			player.step(new LocalPlayerInput(false, false, true));
+			if (player.debugState().touchedBlockType == "rotate_right") {
+				break;
+			}
+		}
+
+		assertEquals("rotate_right", player.debugState().touchedBlockType, "player bumps frozen rotate block");
+		assertEquals("land", player.debugState().mode, "frozen rotate block does not freeze player");
+		assertEquals(0, player.debugState().courseRotation, "frozen rotate block does not start course rotation");
+	}
+
+	private static function testFrozenSafetyBlockSuppressesReturn():Void {
+		var player = new LocalCharacter(safetyDropLevel());
+		for (tileX in 5...9) {
+			player.controller.freezeBlockForTest(tileX, 7, 0);
+		}
+		var touchedSafety = false;
+		var poofEvents = 0;
+
+		for (_ in 0...120) {
+			player.step(new LocalPlayerInput(false, true));
+			if (player.debugState().touchedBlockType == "safety") {
+				touchedSafety = true;
+			}
+			for (event in player.consumeBlockVisualEvents()) {
+				if (event.kind == SafetyPoof) {
+					poofEvents++;
+				}
+			}
+			if (touchedSafety && player.debugState().y > 240) {
+				break;
+			}
+		}
+
+		assertEquals(true, touchedSafety, "player touches frozen safety block");
+		assertEquals(0, poofEvents, "frozen safety block does not emit return poof");
+		assertEquals(true, player.debugState().y > 200, "frozen safety block does not return player to last safe spot");
+	}
+
+	private static function testFrozenSupplyBlockSuppressesUse():Void {
+		var player = new LocalCharacter(lowItemCeilingLevel(BlockType.Item, "3"));
+		player.controller.freezeBlockForTest(2, 8);
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var events = player.consumeBlockVisualEvents();
+		assertEquals(null, player.debugState().itemId, "frozen item block grants no item");
+		assertClose(1, player.blockColorMultiplierAt(2, 8), "frozen item block does not deplete");
+		assertEquals(1, events.length, "frozen item block only emits the base bump");
+		assertEquals("BlockBumpSound", Std.string(events[0].kind), "frozen item block suppresses item sound");
 	}
 
 	private static function testArrowStandEffectsMatchAs3Deltas():Void {
