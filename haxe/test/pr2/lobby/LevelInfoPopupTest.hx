@@ -159,12 +159,13 @@ class LevelInfoPopupTest {
 		LobbySession.group = 2;
 		ServerConfig.setHost("http://example.test");
 		var uploads:Array<ModerateUploadCall> = [];
-		var captureModerationUpload = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
+		var captureModerationUpload = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
 			var captured = new Map<String, String>();
 			for (key in fields.keys()) {
 				captured.set(key, fields.get(key));
 			}
-			uploads.push({url: url, fields: captured, label: label, onResult: onResult});
+			uploads.push({url: url, fields: captured, label: label, onResult: onResult, onError: onError});
 			return null;
 		};
 		ChooseLevelModModePopup.uploadFactory = captureModerationUpload;
@@ -210,6 +211,8 @@ class LevelInfoPopupTest {
 		assertEquals("92", uploads[1].fields.get("level_id"), "restrict level_id field");
 		assertEquals("restrict", uploads[1].fields.get("action"), "restrict action field");
 		assertEquals("Restricting level...", uploads[1].label, "restrict upload label");
+		uploads[1].onError("Moderation failed.");
+		assertNotNull(lastPopup(MessagePopup), "failed moderation upload shows error message");
 
 		closeAll();
 		restoreHooks();
@@ -280,4 +283,5 @@ private typedef ModerateUploadCall = {
 	var fields:Map<String, String>;
 	var label:String;
 	var onResult:Dynamic->Void;
+	var onError:String->Void;
 }

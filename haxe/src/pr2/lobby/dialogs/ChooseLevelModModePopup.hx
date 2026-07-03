@@ -5,7 +5,7 @@ import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
-typedef LevelModerateUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->Null<UploadingPopup>;
+typedef LevelModerateUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->(String->Void)->Null<UploadingPopup>;
 
 /**
 	Port of Flash `dialogs.ChooseLevelModModePopup`: moderators choose whether to
@@ -46,7 +46,7 @@ class ChooseLevelModModePopup extends Popup {
 		uploading = uploadFactory(ServerConfig.levelModerateUrl(), [
 			"level_id" => Std.string(levelId),
 			"action" => action
-		], action == "restrict" ? "Restricting level..." : "Unpublishing level...", returnAction);
+		], action == "restrict" ? "Restricting level..." : "Unpublishing level...", returnAction, handleUploadError);
 	}
 
 	private function returnAction(parsedData:Dynamic):Void {
@@ -55,6 +55,12 @@ class ChooseLevelModModePopup extends Popup {
 				LevelInfoPopup.instance.startFadeOut();
 			}
 			startFadeOut();
+		}
+	}
+
+	private function handleUploadError(message:String):Void {
+		if (message != null && message != "") {
+			new MessagePopup("Error: " + message);
 		}
 	}
 
@@ -73,7 +79,8 @@ class ChooseLevelModModePopup extends Popup {
 		super.remove();
 	}
 
-	public static function defaultUpload(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void):Null<UploadingPopup> {
-		return new UploadingPopup(url, fields, label, onResult);
+	public static function defaultUpload(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+			onError:String->Void):Null<UploadingPopup> {
+		return new UploadingPopup(url, fields, label, onResult, onError);
 	}
 }
