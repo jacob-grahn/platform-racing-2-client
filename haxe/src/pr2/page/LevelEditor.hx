@@ -114,6 +114,7 @@ class LevelEditor extends Page {
 	public var posY(default, null):Float = 0;
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
+	private var deletingObjects:Bool = false;
 	private var velX:Float = 0;
 	private var velY:Float = 0;
 	private var pressedKeys:Map<Int, Bool> = new Map();
@@ -370,6 +371,13 @@ class LevelEditor extends Page {
 		}
 		deleteBlock(block);
 		return true;
+	}
+
+	public function deleteSelectedObjectAt(stageX:Float, stageY:Float):Bool {
+		if (activeObjectLayer == null || selectedToolSidebar != "stamps" || selectedToolId != "delete") {
+			return false;
+		}
+		return activeObjectLayer.removeObjectsTouchingPoint(stageX, stageY);
 	}
 
 	public function deleteBlock(block:EditorBlockObject):Void {
@@ -762,6 +770,13 @@ class LevelEditor extends Page {
 			event.stopImmediatePropagation();
 			return;
 		}
+		if (selectedToolSidebar == "stamps" && selectedToolId == "delete") {
+			deletingObjects = true;
+			if (deleteSelectedObjectAt(event.stageX, event.stageY)) {
+				event.stopImmediatePropagation();
+			}
+			return;
+		}
 		if (deleteSelectedBlockAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
 			return;
@@ -782,6 +797,10 @@ class LevelEditor extends Page {
 	private function continueSelectedToolFromMouse(event:MouseEvent):Void {
 		if (continueSelectedBrushAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
+			return;
+		}
+		if (deletingObjects && deleteSelectedObjectAt(event.stageX, event.stageY)) {
+			event.stopImmediatePropagation();
 		}
 	}
 
@@ -789,6 +808,7 @@ class LevelEditor extends Page {
 		if (endSelectedBrush()) {
 			event.stopImmediatePropagation();
 		}
+		deletingObjects = false;
 	}
 
 	private function isBlockHistoryActive():Bool {
@@ -3894,6 +3914,7 @@ class EditorObjectLayer extends Sprite {
 	public final textObjects:Array<EditorTextObject> = [];
 	public final saveArray:Array<String> = [];
 	public final redoArray:Array<String> = [];
+	private final placedDisplays:Array<Sprite> = [];
 
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
@@ -3907,8 +3928,10 @@ class EditorObjectLayer extends Sprite {
 		var size = stampDisplaySize(code);
 		var point = globalToLocal(new Point(stageX, stageY));
 		var placed = new EditorPlacedObject(code, Math.round(point.x - size.width / 2), Math.round(point.y - size.height / 2));
+		var display = createStampDisplay(placed, size);
 		placedObjects.push(placed);
-		addChild(createStampDisplay(placed, size));
+		placedDisplays.push(display);
+		addChild(display);
 		return placed;
 	}
 
@@ -3955,6 +3978,27 @@ class EditorObjectLayer extends Sprite {
 		}
 		textObjects.splice(textId, 1);
 		textObject.remove();
+	}
+
+	public function removeObjectsTouchingPoint(stageX:Float, stageY:Float):Bool {
+		var removed = false;
+		for (i in 0...placedDisplays.length) {
+			var index = placedDisplays.length - 1 - i;
+			var display = placedDisplays[index];
+			if (display != null && touchesStagePoint(display, stageX, stageY)) {
+				removePlacedObjectAt(index);
+				removed = true;
+			}
+		}
+		for (i in 0...textObjects.length) {
+			var index = textObjects.length - 1 - i;
+			var textObject = textObjects[index];
+			if (textObject != null && touchesStagePoint(textObject, stageX, stageY)) {
+				removeTextObject(textObject);
+				removed = true;
+			}
+		}
+		return removed;
 	}
 
 	public function undo():Bool {
@@ -4016,6 +4060,7 @@ class EditorObjectLayer extends Sprite {
 			removeChildAt(0);
 		}
 		placedObjects.resize(0);
+		placedDisplays.resize(0);
 		for (textObject in textObjects.copy()) {
 			textObject.remove();
 		}
@@ -4108,6 +4153,23 @@ class EditorObjectLayer extends Sprite {
 	private static function parseFloatPart(parts:Array<String>, index:Int):Float {
 		var parsed = index < parts.length ? Std.parseFloat(parts[index]) : Math.NaN;
 		return Math.isNaN(parsed) ? 0 : parsed;
+	}
+
+	private function removePlacedObjectAt(index:Int):Void {
+		if (index < 0 || index >= placedObjects.length) {
+			return;
+		}
+		var display = placedDisplays[index];
+		placedObjects.splice(index, 1);
+		placedDisplays.splice(index, 1);
+		if (display != null && display.parent != null) {
+			display.parent.removeChild(display);
+		}
+	}
+
+	private function touchesStagePoint(display:DisplayObject, stageX:Float, stageY:Float):Bool {
+		var point = globalToLocal(new Point(stageX, stageY));
+		return display.getBounds(this).contains(point.x, point.y);
 	}
 
 	private static function createStampDisplay(placed:EditorPlacedObject, size:StampSize):Sprite {

@@ -348,6 +348,14 @@ class LobbyServicesTest {
 		assertEquals(34, tree.y, "stamp placement centers by authored display height");
 		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "stamp placement records object on active layer");
 		assertEquals(1, editor.activeObjectLayer.numChildren, "stamp placement mounts a display object after deleted text");
+		clickEditorSidebar(editor, "deleteEntry");
+		assertEquals("delete", editor.selectedToolId, "stamps delete entry selects the delete tool");
+		assertEquals(true, editor.deleteSelectedObjectAt(100, 120), "stamps delete tool removes touched stamp objects");
+		assertEquals(0, editor.activeObjectLayer.placedObjects.length, "stamp deletion removes the model object");
+		assertEquals(0, editor.activeObjectLayer.numChildren, "stamp deletion unmounts the display object");
+		clickEditorSidebar(editor, "stamp0Entry");
+		tree = editor.placeSelectedToolAt(100, 120);
+		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "stamp can be placed again after deletion");
 		clickEditorMenu(editor, "layer2Button");
 		clickEditorSidebar(editor, "stamp5Entry");
 		var rock = editor.placeSelectedToolAt(100, 120);
