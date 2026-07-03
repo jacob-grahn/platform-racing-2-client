@@ -117,6 +117,12 @@ Then the level-management flows, one at a time:
   - [x] Port strict editor-load response validation and the editor variable /
     reports-mode handoff.
 - [ ] Port the save flow with the same coverage.
+  - [x] Port the authored save dialog, including title/note population and
+    counters, empty-title validation, publish/to-newest checkbox behavior, and
+    the upload-popup launch handoff.
+  - [ ] Port `UploadingLevelPopup` request hashing, `upload_level.php` fields,
+    drawing retry wait, banned-user override, overwrite confirmation, and
+    save-result/error handling.
 - [ ] Port the upload flow with the same coverage.
 - [ ] Port the delete flow with the same coverage.
 - [ ] Port the report-management flow with the same coverage.

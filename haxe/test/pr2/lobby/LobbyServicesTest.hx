@@ -27,6 +27,7 @@ import pr2.net.LobbySocket;
 import pr2.page.EditorBlockOptions;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
+import pr2.page.LevelEditor.SaveLevelPopup;
 import pr2.page.LevelEditor.TestCoursePage;
 import pr2.page.Page;
 import pr2.page.PageHolder;
@@ -71,6 +72,7 @@ class LobbyServicesTest {
 		testMemoryAndSecureData();
 		testLevelEditorRoute();
 		testLevelEditorShell();
+		testLevelEditorSaveDialog();
 		testLevelEditorTestCourseTransition();
 		testMessagesPaging();
 		testSocialActionPlan();
@@ -499,6 +501,65 @@ class LobbyServicesTest {
 
 	private static function clickEditorSidebar(editor:LevelEditor, name:String):Void {
 		editor.menu.sideBar.getChildByName(name).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+	}
+
+	private static function testLevelEditorSaveDialog():Void {
+		LobbySession.clear();
+		LobbySession.group = 1;
+		var previousFactory = SaveLevelPopup.uploadFactory;
+		var uploadedEditor:Null<LevelEditor> = null;
+		SaveLevelPopup.uploadFactory = function(editor:LevelEditor):Null<pr2.lobby.dialogs.Popup> {
+			uploadedEditor = editor;
+			return null;
+		};
+
+		var editor = new LevelEditor(null, true, false);
+		editor.initialize();
+		editor.title = "Old Title";
+		editor.note = "old note";
+		editor.live = 1;
+		editor.toNewest = false;
+
+		clickEditorMenu(editor, "saveButton");
+		var popup = Std.downcast(pr2.lobby.dialogs.Popup.getOpen()[pr2.lobby.dialogs.Popup.getOpen().length - 1], SaveLevelPopup);
+		assertNotNull(popup, "save button opens the authored save dialog");
+		assertEquals("Old Title", LobbyArt.text(popup.art, "titleBox").text, "save dialog loads title");
+		assertEquals("old note", LobbyArt.text(popup.art, "noteBox").text, "save dialog loads note");
+		var publish = Std.downcast(DisplayUtil.findByName(popup.art, "publish_chk"), FlCheckBox);
+		var newest = Std.downcast(DisplayUtil.findByName(popup.art, "newest_chk"), FlCheckBox);
+		assertEquals(true, publish.selected, "save dialog loads published state");
+		assertEquals(true, newest.enabled, "published levels enable newest checkbox");
+		assertEquals(false, newest.selected, "save dialog loads to-newest state");
+
+		publish.selected = false;
+		publish.dispatchEvent(new Event(Event.CHANGE));
+		assertEquals(false, newest.enabled, "unpublishing disables newest checkbox");
+		assertEquals(false, newest.selected, "unpublishing clears newest checkbox");
+		publish.selected = true;
+		publish.dispatchEvent(new Event(Event.CHANGE));
+		assertEquals(true, newest.enabled, "publishing re-enables newest checkbox");
+		assertEquals(true, newest.selected, "publishing selects newest like Flash");
+
+		LobbyArt.text(popup.art, "titleBox").text = "";
+		DisplayUtil.findByName(popup.art, "save_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(null, uploadedEditor, "empty title blocks save upload");
+		var message = Std.downcast(pr2.lobby.dialogs.Popup.getOpen()[pr2.lobby.dialogs.Popup.getOpen().length - 1], pr2.lobby.dialogs.MessagePopup);
+		assertNotNull(message, "empty title opens the Flash validation message");
+		message.remove();
+
+		LobbyArt.text(popup.art, "titleBox").text = "New Title";
+		LobbyArt.text(popup.art, "noteBox").text = "new note";
+		DisplayUtil.findByName(popup.art, "save_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(editor, uploadedEditor, "valid save launches upload handoff");
+		assertEquals("New Title", editor.title, "save dialog commits title");
+		assertEquals("new note", editor.note, "save dialog commits note");
+		assertEquals(1.0, editor.live, "save dialog commits publish state");
+		assertEquals(true, editor.toNewest, "save dialog commits newest state");
+		assertEquals("1", editor.getLevelVars().get("to_newest"), "editor vars export newest flag");
+		popup.remove();
+		editor.remove();
+		SaveLevelPopup.uploadFactory = previousFactory;
+		LobbySession.clear();
 	}
 
 	private static function testLevelEditorTestCourseTransition():Void {
