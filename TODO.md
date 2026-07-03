@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve local heart-gain protocol from `LocalCharacter.gainHeart()`:
-  heart pickups should increment local deathmatch life, update the HUD, and emit
-  the Flash `heart\`` socket payload from the gain path, not a different
-  `heart\`tempID\`x\`y` helper payload.
 - [ ] Port `ChatRoomInfoPopup.as` and wire `ChatInstance`/`ChatTab` info-button
   hover behavior: mouse-over should create the authored popup, register
   `setChatRoomList`, send `get_chat_rooms\``, render returned room names with

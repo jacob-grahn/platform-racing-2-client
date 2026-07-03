@@ -78,6 +78,7 @@ class LocalPlayerController {
 	public var topHatActive:Bool = false;
 	public var crownHatActive:Bool = false;
 	public var cheeseHatActive:Bool = false;
+	public var onHeartGain:Null<Void->Void> = null;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -772,7 +773,13 @@ class LocalPlayerController {
 			case BlockType.Sad:
 				useStatSupply(block, true);
 			case BlockType.Heart:
-				if (useSupply(block)) setLife(lives + 1);
+				if (useSupply(block)) {
+					if (onHeartGain != null) {
+						onHeartGain();
+					} else {
+						setLife(lives + 1);
+					}
+				}
 			case BlockType.Time:
 				if (useSupply(block)) {
 					courseTime += 10;

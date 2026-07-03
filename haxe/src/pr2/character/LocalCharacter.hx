@@ -43,6 +43,7 @@ class LocalCharacter extends Character {
 		type = "local";
 		baseGravityMultiplier = level.gravity;
 		controller = new LocalPlayerController(level);
+		controller.onHeartGain = gainHeart;
 		syncFromController();
 	}
 
@@ -240,6 +241,12 @@ class LocalCharacter extends Character {
 
 	public function emitHeart(remoteTempId:Int):Void {
 		LobbySocket.write('heart`$remoteTempId`' + Math.round(x) + "`" + Math.round(y));
+	}
+
+	override public function gainHeart():Void {
+		super.gainHeart();
+		setLife(controller.lives + 1);
+		LobbySocket.write("heart`");
 	}
 
 	public function emitLooseHat(hatId:Int, hatColor:Int = 0, hatColor2:Int = -1):Void {

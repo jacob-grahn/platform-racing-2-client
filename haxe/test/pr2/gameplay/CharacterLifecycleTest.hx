@@ -38,6 +38,7 @@ class CharacterLifecycleTest {
 		testRemoteJumpPlaysSound();
 		testCharacterEffectSounds();
 		testLocalCharacterCommandHandlers();
+		testLocalHeartGainUpdatesDeathmatchHud();
 		testLocalArrowSparkleEmitterLifecycle();
 		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
@@ -335,6 +336,19 @@ class CharacterLifecycleTest {
 		assertTrue(!handler.hasCommand("setHats4"), "course teardown unregisters local setHats command");
 		assertTrue(!handler.hasCommand("squash4"), "course teardown unregisters squash command");
 		assertTrue(!handler.hasCommand("sting4"), "course teardown unregisters sting command");
+	}
+
+	private static function testLocalHeartGainUpdatesDeathmatchHud():Void {
+		var course = buildCourse(new CommandHandler(), "deathmatch");
+		LobbySocket.resetSent();
+
+		course.localCharacter.gainHeart();
+		@:privateAccess course.syncHearts(course.localCharacter.debugState());
+
+		assertEquals(4, course.localCharacter.debugState().lives, "local heart gain increments deathmatch lives");
+		assertEquals(4, course.hearts.getHeartCount(), "local heart gain updates deathmatch HUD hearts");
+		assertEquals("heart`", LobbySocket.lastSent(), "local heart gain emits Flash heart payload");
+		course.remove();
 	}
 
 	private static function testLocalArrowSparkleEmitterLifecycle():Void {

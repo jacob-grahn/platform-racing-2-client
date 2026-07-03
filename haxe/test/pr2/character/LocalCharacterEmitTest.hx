@@ -15,6 +15,7 @@ class LocalCharacterEmitTest {
 		testInitAndCadenceGatedPositionEmission();
 		testFallbackCadenceWithoutRemotePlayers();
 		testTrackedVarAndEventEmission();
+		testHeartBlockGainEmitsLocalHeartProtocol();
 		trace('LocalCharacterEmitTest passed $assertions assertions');
 	}
 
@@ -91,6 +92,8 @@ class LocalCharacterEmitTest {
 		character.emitSquash(7);
 		character.emitSting(8);
 		character.emitHeart(9);
+		character.gainHeart();
+		assertEquals(4, character.debugState().lives, "local gainHeart increments local lives");
 		character.emitLooseHat(5, 123, 456);
 		character.emitHatToStart(5);
 		character.emitGrabEgg(3);
@@ -109,6 +112,7 @@ class LocalCharacterEmitTest {
 			"squash`7`66`101",
 			"sting`8`66`101",
 			"heart`9`66`101",
+			"heart`",
 			"loose_hat`5`123`456`66`101",
 			"hat_to_start`5",
 			"grab_egg`3",
@@ -119,6 +123,21 @@ class LocalCharacterEmitTest {
 			"check_hat_countdown`",
 			"set_var`beginRemove`1"
 		], "event command emission");
+	}
+
+	private static function testHeartBlockGainEmitsLocalHeartProtocol():Void {
+		var character = new LocalCharacter(heartSupplyLevel());
+		character.setGameMode("deathmatch");
+		LobbySocket.resetSent();
+		for (_ in 0...40) {
+			character.step(new LocalPlayerInput(false, false, true));
+			if (character.debugState().touchedBlockType == "heart") {
+				break;
+			}
+		}
+		assertEquals("heart", character.debugState().touchedBlockType, "local player bumps the heart block");
+		assertEquals(4, character.debugState().lives, "heart block gain increments local deathmatch lives");
+		assertCommands(["heart`"], "heart block gain protocol");
 	}
 
 	private static function flatLevel():FixtureLevel {
@@ -136,6 +155,25 @@ class LocalCharacterEmitTest {
 				new LevelBlock(2, 4, BlockType.Basic),
 				new LevelBlock(3, 4, BlockType.Basic),
 				new LevelBlock(4, 4, BlockType.Basic)
+			]
+		);
+	}
+
+	private static function heartSupplyLevel():FixtureLevel {
+		return new FixtureLevel(
+			"local-character-heart-supply",
+			"Local Character Heart Supply",
+			5,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 3),
+			new TilePosition(4, 4),
+			[
+				new LevelBlock(2, 1, BlockType.Heart),
+				new LevelBlock(2, 4, BlockType.Solid),
+				new LevelBlock(4, 4, BlockType.Finish)
 			]
 		);
 	}
