@@ -504,6 +504,7 @@ class LobbyServicesTest {
 	private static function testLevelEditorTestCourseTransition():Void {
 		Settings.disablePersistenceForTests();
 		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
+		Settings.setValue(Settings.LE_TEST_HAT, 13);
 		LobbySession.clear();
 		LobbySession.group = 1;
 		var holder = new PageHolder();
@@ -530,18 +531,27 @@ class LobbyServicesTest {
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "back_bt"), "test course mounts authored back button");
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "restart_bt"), "test course mounts authored restart button");
 		assertNotNull(testCourse.statsSelect, "test course mounts the StatsSelect control");
+		assertNotNull(testCourse.hatPicker, "test course mounts the HatPicker control");
 		assertEquals(10.0, testCourse.statsSelect.x, "test course stat picker x matches Flash holder placement");
 		assertEquals(290.0, testCourse.statsSelect.y, "test course stat picker y matches Flash holder placement");
 		assertEquals(0.66, testCourse.statsSelect.scaleX, "test course stat picker scale matches Flash");
+		assertEquals(15.0, testCourse.hatPicker.x, "test course hat picker x matches Flash holder placement");
+		assertEquals(265.0, testCourse.hatPicker.y, "test course hat picker y matches Flash holder placement");
+		assertEquals(0.7, testCourse.hatPicker.scaleX, "test course hat picker scale matches Flash");
 		var initialStats = testCourse.course.localCharacter.debugState();
 		assertEquals(61, Math.round(initialStats.speedStat), "test course applies saved speed stat");
 		assertEquals(72, Math.round(initialStats.accelerationStat), "test course applies saved acceleration stat");
 		assertEquals(83, Math.round(initialStats.jumpStat), "test course applies saved jump stat");
+		assertEquals(13, testCourse.course.localCharacter.hat1, "test course applies saved test hat");
 		assertEquals(true, LobbySocket.sentCommands.length > 0 && StringTools.startsWith(LobbySocket.sentCommands[0], "exact_pos`"),
 			"test course starts the race countdown like Flash");
 
 		var firstCourse = testCourse.course;
 		var firstStatsSelect = testCourse.statsSelect;
+		var firstHatPicker = testCourse.hatPicker;
+		DisplayUtil.findByName(testCourse.hatPicker, "right").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(15, testCourse.course.localCharacter.hat1, "hat picker skips artifact hat moving right");
+		assertEquals(15, Settings.getValue(Settings.LE_TEST_HAT, 2), "hat picker persists the selected hat");
 		testCourse.statsSelect.setStats(91, 82, 73);
 		testCourse.statsSelect.noteUserStatChange();
 		testCourse.statsSelect.saveLEStats();
@@ -553,10 +563,12 @@ class LobbyServicesTest {
 		assertEquals(true, firstCourse != testCourse.course, "restart rebuilds the test course");
 		assertEquals(null, firstCourse.parent, "restart removes the previous Course display");
 		assertEquals(null, firstStatsSelect.parent, "restart removes the previous StatsSelect display");
+		assertEquals(null, firstHatPicker.parent, "restart removes the previous HatPicker display");
 		var restartedStats = testCourse.course.localCharacter.debugState();
 		assertEquals(91, Math.round(restartedStats.speedStat), "restart applies saved speed stat");
 		assertEquals(82, Math.round(restartedStats.accelerationStat), "restart applies saved acceleration stat");
 		assertEquals(73, Math.round(restartedStats.jumpStat), "restart applies saved jump stat");
+		assertEquals(15, testCourse.course.localCharacter.hat1, "restart applies saved test hat");
 
 		DisplayUtil.findByName(testCourse.art, "back_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		var returnedEditor = Std.downcast(holder.getCurrentPage(), LevelEditor);

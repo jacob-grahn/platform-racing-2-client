@@ -95,14 +95,14 @@ Port the editor itself, one piece at a time:
   - [x] Port the editor item settings menu.
   - [x] Port the editor hats settings menu.
   - [x] Port the editor music settings menu.
-- [ ] Port the test-course transition.
+- [x] Port the test-course transition.
   - [x] Wire the editor test button into an in-memory `TestCourse` page that
     plays the current serialized editor data and supports authored back/restart
     controls.
-  - [ ] Port the test-course stat picker and hat picker parity controls.
+  - [x] Port the test-course stat picker and hat picker parity controls.
     - [x] Port the test-course stat picker, saved test-stat loading, live
       character stat updates, saved stat persistence, and restart restoration.
-    - [ ] Port the test-course hat picker.
+    - [x] Port the test-course hat picker.
 
 Then the level-management flows, one at a time:
 

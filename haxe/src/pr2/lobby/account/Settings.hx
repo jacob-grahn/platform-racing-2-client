@@ -17,6 +17,7 @@ class Settings {
 	public static inline var FILTER_SWEARS:String = "filterSwears";
 	public static inline var ALTERNATE_CONTROLS:String = "altCtrl";
 	public static inline var LE_TEST_STATS:String = "leTestStats";
+	public static inline var LE_TEST_HAT:String = "leTestHat";
 	public static final DEFAULT_ALT_CONTROLS:Dynamic = {up: 87, right: 68, down: 83, left: 65, item: 73};
 	public static final DEFAULT_LE_TEST_STATS:Dynamic = {speed: 50, acceleration: 50, jumping: 50};
 
