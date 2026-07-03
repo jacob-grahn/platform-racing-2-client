@@ -31,7 +31,9 @@ import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;
 import pr2.level.ServerLevelRenderer;
 import pr2.lobby.account.ColorPicker;
+import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
+import pr2.lobby.account.StatsSelect;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
@@ -754,11 +756,17 @@ class LevelEditor extends Page {
 }
 
 class TestCoursePage extends Page {
+	private static inline var TEST_STATS_TOTAL:Int = 300;
+	private static inline var TEST_STATS_X:Float = 10;
+	private static inline var TEST_STATS_Y:Float = 290;
+	private static inline var TEST_STATS_SCALE:Float = 0.66;
+
 	public final variables:Map<String, String>;
 	public final isMod:Bool;
 	public final reportsMode:Bool;
 	public var course(default, null):Null<Course>;
 	public var art(default, null):Null<PR2MovieClip>;
+	public var statsSelect(default, null):Null<StatsSelect>;
 	private var bindings:Array<Binding> = [];
 
 	public function new(variables:Map<String, String>, mod:Bool = false, report:Bool = false) {
@@ -775,6 +783,7 @@ class TestCoursePage extends Page {
 		addChild(art);
 		bind("back_bt", clickBack);
 		bind("restart_bt", clickRestart);
+		stackOverlayControls();
 	}
 
 	override public function remove():Void {
@@ -782,6 +791,10 @@ class TestCoursePage extends Page {
 			LobbyArt.unbind(binding);
 		}
 		bindings = [];
+		if (statsSelect != null) {
+			statsSelect.remove();
+			statsSelect = null;
+		}
 		if (course != null) {
 			course.remove();
 			course = null;
@@ -798,7 +811,36 @@ class TestCoursePage extends Page {
 		var level = ServerLevelDecoder.decode(data.data);
 		course = new Course(level, data, LevelConfig.fromServerData(data));
 		addChildAt(course, 0);
+		mountStatsSelect();
 		course.beginRace();
+	}
+
+	private function mountStatsSelect():Void {
+		if (course == null || course.localCharacter == null) {
+			return;
+		}
+		if (statsSelect != null) {
+			statsSelect.remove();
+			statsSelect = null;
+		}
+		var savedStats:Dynamic = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
+		var speed = parseStatField(savedStats, "speed", Settings.DEFAULT_LE_TEST_STATS.speed);
+		var acceleration = parseStatField(savedStats, "acceleration", Settings.DEFAULT_LE_TEST_STATS.acceleration);
+		var jumping = parseStatField(savedStats, "jumping", Settings.DEFAULT_LE_TEST_STATS.jumping);
+		statsSelect = new StatsSelect(TEST_STATS_TOTAL, speed, acceleration, jumping, course.localCharacter);
+		statsSelect.x = TEST_STATS_X;
+		statsSelect.y = TEST_STATS_Y;
+		statsSelect.scaleX = statsSelect.scaleY = TEST_STATS_SCALE;
+		addChild(statsSelect);
+	}
+
+	private function stackOverlayControls():Void {
+		if (art != null) {
+			addChild(art);
+		}
+		if (statsSelect != null) {
+			addChild(statsSelect);
+		}
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
@@ -816,14 +858,22 @@ class TestCoursePage extends Page {
 	}
 
 	private function clickRestart():Void {
+		if (statsSelect != null) {
+			statsSelect.remove();
+			statsSelect = null;
+		}
 		if (course != null) {
 			course.remove();
 			course = null;
 		}
 		mountCourse();
-		if (art != null) {
-			addChild(art);
-		}
+		stackOverlayControls();
+	}
+
+	private static function parseStatField(stats:Dynamic, field:String, fallback:Int):Int {
+		var value:Dynamic = stats == null ? null : Reflect.field(stats, field);
+		var parsed = Std.parseInt(Std.string(value));
+		return parsed == null ? fallback : parsed;
 	}
 }
 

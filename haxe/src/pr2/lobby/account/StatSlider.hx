@@ -59,19 +59,37 @@ class StatSlider extends Sprite {
 	}
 
 	private function step(delta:Int):Void {
+		if (target != null) {
+			target.noteUserStatChange();
+		}
 		setValue(value + delta);
+		if (target != null) {
+			target.saveLEStats();
+		}
 	}
 
 	private function onSliderChange(_:Event):Void {
 		if (slider != null) {
+			if (target != null) {
+				target.noteUserStatChange();
+			}
 			setValue(Std.int(slider.value));
+			if (target != null) {
+				target.saveLEStats();
+			}
 		}
 	}
 
 	private function onTextChange(_:Event):Void {
 		if (textBox != null) {
+			if (target != null) {
+				target.noteUserStatChange();
+			}
 			var parsed = Std.parseInt(textBox.text);
 			setValue(parsed == null ? 0 : parsed);
+			if (target != null) {
+				target.saveLEStats();
+			}
 		}
 	}
 

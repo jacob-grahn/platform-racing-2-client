@@ -30,6 +30,7 @@ import pr2.page.LevelEditor;
 import pr2.page.LevelEditor.TestCoursePage;
 import pr2.page.Page;
 import pr2.page.PageHolder;
+import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
@@ -501,6 +502,8 @@ class LobbyServicesTest {
 	}
 
 	private static function testLevelEditorTestCourseTransition():Void {
+		Settings.disablePersistenceForTests();
+		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
 		LobbySession.clear();
 		LobbySession.group = 1;
 		var holder = new PageHolder();
@@ -526,13 +529,34 @@ class LobbyServicesTest {
 		assertNotNull(testCourse.course, "test course mounts a playable Course");
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "back_bt"), "test course mounts authored back button");
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "restart_bt"), "test course mounts authored restart button");
+		assertNotNull(testCourse.statsSelect, "test course mounts the StatsSelect control");
+		assertEquals(10.0, testCourse.statsSelect.x, "test course stat picker x matches Flash holder placement");
+		assertEquals(290.0, testCourse.statsSelect.y, "test course stat picker y matches Flash holder placement");
+		assertEquals(0.66, testCourse.statsSelect.scaleX, "test course stat picker scale matches Flash");
+		var initialStats = testCourse.course.localCharacter.debugState();
+		assertEquals(61, Math.round(initialStats.speedStat), "test course applies saved speed stat");
+		assertEquals(72, Math.round(initialStats.accelerationStat), "test course applies saved acceleration stat");
+		assertEquals(83, Math.round(initialStats.jumpStat), "test course applies saved jump stat");
 		assertEquals(true, LobbySocket.sentCommands.length > 0 && StringTools.startsWith(LobbySocket.sentCommands[0], "exact_pos`"),
 			"test course starts the race countdown like Flash");
 
 		var firstCourse = testCourse.course;
+		var firstStatsSelect = testCourse.statsSelect;
+		testCourse.statsSelect.setStats(91, 82, 73);
+		testCourse.statsSelect.noteUserStatChange();
+		testCourse.statsSelect.saveLEStats();
+		var changedStats = testCourse.course.localCharacter.debugState();
+		assertEquals(91, Math.round(changedStats.speedStat), "stat picker updates live speed stat");
+		assertEquals(82, Math.round(changedStats.accelerationStat), "stat picker updates live acceleration stat");
+		assertEquals(73, Math.round(changedStats.jumpStat), "stat picker updates live jump stat");
 		DisplayUtil.findByName(testCourse.art, "restart_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(true, firstCourse != testCourse.course, "restart rebuilds the test course");
 		assertEquals(null, firstCourse.parent, "restart removes the previous Course display");
+		assertEquals(null, firstStatsSelect.parent, "restart removes the previous StatsSelect display");
+		var restartedStats = testCourse.course.localCharacter.debugState();
+		assertEquals(91, Math.round(restartedStats.speedStat), "restart applies saved speed stat");
+		assertEquals(82, Math.round(restartedStats.accelerationStat), "restart applies saved acceleration stat");
+		assertEquals(73, Math.round(restartedStats.jumpStat), "restart applies saved jump stat");
 
 		DisplayUtil.findByName(testCourse.art, "back_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		var returnedEditor = Std.downcast(holder.getCurrentPage(), LevelEditor);

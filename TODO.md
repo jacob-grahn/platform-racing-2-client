@@ -100,6 +100,9 @@ Port the editor itself, one piece at a time:
     plays the current serialized editor data and supports authored back/restart
     controls.
   - [ ] Port the test-course stat picker and hat picker parity controls.
+    - [x] Port the test-course stat picker, saved test-stat loading, live
+      character stat updates, saved stat persistence, and restart restoration.
+    - [ ] Port the test-course hat picker.
 
 Then the level-management flows, one at a time:
 

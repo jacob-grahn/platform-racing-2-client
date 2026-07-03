@@ -2,6 +2,7 @@ package pr2.lobby.account;
 
 import openfl.display.Sprite;
 import openfl.text.TextField;
+import pr2.character.LocalCharacter;
 import pr2.lobby.LobbyArt;
 import pr2.runtime.PR2MovieClip;
 
@@ -11,8 +12,9 @@ import pr2.runtime.PR2MovieClip;
 	individual sliders clamp themselves so the three values never exceed the
 	available total (the original `getPointsRemaining` feedback loop).
 
-	The level-editor test-character hookup (`localChar`) is omitted — the lobby
-	Account tab always constructs `StatsSelect` with no live character.
+	The optional level-editor test character mirrors Flash `StatsSelect`: changing
+	the sliders immediately updates the live character and can persist the test
+	stats through `Settings.LE_TEST_STATS`.
 **/
 class StatsSelect extends Sprite {
 	private var m:PR2MovieClip;
@@ -21,10 +23,13 @@ class StatsSelect extends Sprite {
 	private var accelSlider:StatSlider;
 	private var jumpnSlider:StatSlider;
 	private var totalPoints:Int;
+	private var localChar:Null<LocalCharacter>;
+	public var updateSavedLEStats:Bool = false;
 
-	public function new(tot:Int, speed:Int, accel:Int, jumpn:Int) {
+	public function new(tot:Int, speed:Int, accel:Int, jumpn:Int, ?localChar:LocalCharacter) {
 		super();
 		totalPoints = tot;
+		this.localChar = localChar;
 		if (totalPoints < speed + accel + jumpn) {
 			totalPoints = speed + accel + jumpn;
 		}
@@ -56,6 +61,9 @@ class StatsSelect extends Sprite {
 		if (remainingBox != null) {
 			remainingBox.text = Std.string(getPointsRemaining());
 		}
+		if (localChar != null) {
+			localChar.setStats(speedSlider.value, accelSlider.value, jumpnSlider.value);
+		}
 	}
 
 	public function setStats(speed:Int, accel:Int, jumpn:Int):Void {
@@ -63,6 +71,27 @@ class StatsSelect extends Sprite {
 		accelSlider.setValue(accel);
 		jumpnSlider.setValue(jumpn);
 		updateStatsDisplay();
+	}
+
+	public function setStatsFromCharacter():Void {
+		if (localChar == null) {
+			return;
+		}
+		updateSavedLEStats = false;
+		var stats = localChar.debugState();
+		setStats(Math.round(stats.speedStat), Math.round(stats.accelerationStat), Math.round(stats.jumpStat));
+	}
+
+	public function noteUserStatChange():Void {
+		updateSavedLEStats = true;
+	}
+
+	public function saveLEStats():Void {
+		if (localChar == null || !updateSavedLEStats) {
+			return;
+		}
+		Settings.setValue(Settings.LE_TEST_STATS, getStats());
+		updateSavedLEStats = false;
 	}
 
 	public function getInfoStr():String {
@@ -77,6 +106,7 @@ class StatsSelect extends Sprite {
 		speedSlider.remove();
 		accelSlider.remove();
 		jumpnSlider.remove();
+		localChar = null;
 		if (m != null) {
 			m.dispose();
 			m = null;
