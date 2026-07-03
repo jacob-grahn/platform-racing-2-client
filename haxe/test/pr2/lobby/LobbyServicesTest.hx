@@ -336,9 +336,26 @@ class LobbyServicesTest {
 		assertEquals(5, editor.blockLayer.blocks.length, "replacement keeps the four start blocks plus new block");
 		assertEquals(null, itemBlock.parent, "replaced block is unmounted");
 		assertEquals(null, brickBlock.getChildByName("optionsButton"), "plain selected blocks do not show options");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"), "block replacement enables undo");
+		clickEditorMenu(editor, "undoButton");
+		var restoredItemBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		assertNotNull(restoredItemBlock, "block undo restores the replaced item block");
+		assertEquals(110, restoredItemBlock.code, "block undo restores the replaced block code");
+		assertEquals("none", restoredItemBlock.options, "block undo restores the replaced block options");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "redoButton"), "enabled"), "block undo enables redo");
+		clickEditorMenu(editor, "redoButton");
+		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		assertNotNull(brickBlock, "block redo restores the replacement block");
+		assertEquals(104, brickBlock.code, "block redo restores the replacement block code");
 		brickBlock.setOptions("legacy");
 		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;4;legacy", editor.blockLayer.getSaveString(),
 			"block save string uses Flash relative grid coordinates and option suffixes");
+		clickEditorMenu(editor, "undoButton");
+		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		assertEquals("", brickBlock.options, "block undo reverts option changes");
+		clickEditorMenu(editor, "redoButton");
+		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		assertEquals("legacy", brickBlock.options, "block redo restores option changes");
 		clickEditorSidebar(editor, "deleteEntry");
 		assertEquals("delete", editor.selectedToolId, "blocks delete entry selects the delete tool");
 		brickBlock.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
@@ -347,6 +364,13 @@ class LobbyServicesTest {
 		assertEquals(null, editor.selectedBlock, "deleted selected block clears selection");
 		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14", editor.blockLayer.getSaveString(),
 			"block save string updates after deleting a placed block");
+		clickEditorMenu(editor, "undoButton");
+		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		assertNotNull(brickBlock, "block undo restores deleted blocks");
+		assertEquals("legacy", brickBlock.options, "block undo restores deleted block options");
+		clickEditorMenu(editor, "redoButton");
+		assertEquals(null, editor.blockLayer.getBlockAtSeg(3, 4), "block redo reapplies deletion");
+		assertEquals(0, editor.blockLayer.redoArray.length, "block redo consumes the redo stack");
 		clickEditorSidebar(editor, "happyEntry");
 		var happyBlock = editor.placeSelectedBlockAt(160, 120);
 		happyBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));

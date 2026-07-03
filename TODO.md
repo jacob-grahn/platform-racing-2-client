@@ -77,12 +77,12 @@ Port the editor itself, one piece at a time:
     - [x] Port the authored custom-stat option popup.
 - [ ] Port selection/deletion.
   - [x] Port placed-block deletion through the blocks sidebar delete tool.
-- [ ] Port undo-equivalent behavior.
+- [x] Port undo-equivalent behavior.
   - [x] Port undo for object-layer text add/edit/delete/move/resize actions.
   - [x] Port redo for object-layer text actions.
-  - [ ] Port undo/redo for block and draw layers.
+  - [x] Port undo/redo for block and draw layers.
     - [x] Port undo/redo for draw layers.
-    - [ ] Port undo/redo for block layers.
+    - [x] Port undo/redo for block layers.
 - [ ] Port camera/zoom.
 - [ ] Port editor settings.
 - [ ] Port the hats/items/music menus.

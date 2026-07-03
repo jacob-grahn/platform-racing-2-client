@@ -235,7 +235,9 @@ class LevelEditor extends Page {
 
 	public function undoActiveObjectLayer():Bool {
 		var changed = false;
-		if (activeDrawLayer != null && selectedToolSidebar == "tools") {
+		if (blockLayer != null && isBlockHistoryActive()) {
+			changed = blockLayer.undo();
+		} else if (activeDrawLayer != null && selectedToolSidebar == "tools") {
 			changed = activeDrawLayer.undo();
 		} else if (activeObjectLayer != null) {
 			changed = activeObjectLayer.undo();
@@ -248,7 +250,9 @@ class LevelEditor extends Page {
 
 	public function redoActiveObjectLayer():Bool {
 		var changed = false;
-		if (activeDrawLayer != null && selectedToolSidebar == "tools") {
+		if (blockLayer != null && isBlockHistoryActive()) {
+			changed = blockLayer.redo();
+		} else if (activeDrawLayer != null && selectedToolSidebar == "tools") {
 			changed = activeDrawLayer.redo();
 		} else if (activeObjectLayer != null) {
 			changed = activeObjectLayer.redo();
@@ -346,6 +350,10 @@ class LevelEditor extends Page {
 		if (endSelectedBrush()) {
 			event.stopImmediatePropagation();
 		}
+	}
+
+	private function isBlockHistoryActive():Bool {
+		return selectedToolSidebar == "blocks" || (menu != null && menu.sideBar == menu.blocks);
 	}
 }
 
@@ -467,6 +475,11 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	public function updateUndoRedoState():Void {
+		if (editor.blockLayer != null && (editor.selectedToolSidebar == "blocks" || sideBar == blocks)) {
+			Reflect.setProperty(find("undoButton"), "enabled", editor.blockLayer.saveArray.length > 0);
+			Reflect.setProperty(find("redoButton"), "enabled", editor.blockLayer.redoArray.length > 0);
+			return;
+		}
 		if (editor.selectedToolSidebar == "tools" && editor.activeDrawLayer != null) {
 			Reflect.setProperty(find("undoButton"), "enabled", editor.activeDrawLayer.saveArray.length > 0);
 			Reflect.setProperty(find("redoButton"), "enabled", editor.activeDrawLayer.redoArray.length > 0);
@@ -506,7 +519,10 @@ class LevelEditorMenu extends Sprite {
 class EditorBlockLayer extends Sprite {
 	public final editor:LevelEditor;
 	public final blocks:Array<EditorBlockObject> = [];
+	public final saveArray:Array<String> = [];
+	public final redoArray:Array<String> = [];
 	private final blocksBySeg:Map<String, EditorBlockObject> = new Map();
+	private var initialSaveString:String = "";
 
 	public function new(editor:LevelEditor) {
 		super();
@@ -516,6 +532,7 @@ class EditorBlockLayer extends Sprite {
 			var start = addBlockAtLocal(code, BlockType.Start, code * LevelEditor.segSize + 10000, LevelEditor.segSize * 2 + 10000, false);
 			start.deleteable = false;
 		}
+		initialSaveString = getSaveString();
 	}
 
 	public function addBlockAtStage(code:Int, type:Null<BlockType>, stageX:Float, stageY:Float):Null<EditorBlockObject> {
@@ -529,7 +546,9 @@ class EditorBlockLayer extends Sprite {
 		if (existing != null) {
 			removeBlock(existing, false);
 		}
-		return addBlockAtLocal(code, type, point.x, point.y, true);
+		var block = addBlockAtLocal(code, type, point.x, point.y, true);
+		recordSnapshot();
+		return block;
 	}
 
 	public function getBlockAtSeg(segX:Int, segY:Int):Null<EditorBlockObject> {
@@ -552,6 +571,39 @@ class EditorBlockLayer extends Sprite {
 		blocks.splice(index, 1);
 		blocksBySeg.remove(segKey(block.segX, block.segY));
 		block.remove();
+		if (record) {
+			recordSnapshot();
+		}
+	}
+
+	public function recordBlockOptionsChanged():Void {
+		recordSnapshot();
+	}
+
+	public function undo():Bool {
+		if (saveArray.length == 0) {
+			return false;
+		}
+		var snapshot = saveArray.pop();
+		if (snapshot != null) {
+			redoArray.push(snapshot);
+		}
+		rebuildFromSaveString(saveArray.length == 0 ? initialSaveString : saveArray[saveArray.length - 1]);
+		notifyHistoryChanged();
+		return true;
+	}
+
+	public function redo():Bool {
+		if (redoArray.length == 0) {
+			return false;
+		}
+		var snapshot = redoArray.pop();
+		if (snapshot != null) {
+			saveArray.push(snapshot);
+			rebuildFromSaveString(snapshot);
+		}
+		notifyHistoryChanged();
+		return true;
 	}
 
 	public function getSaveString():String {
@@ -583,13 +635,15 @@ class EditorBlockLayer extends Sprite {
 			removeBlock(blocks[blocks.length - 1], false);
 		}
 		blocksBySeg.clear();
+		saveArray.resize(0);
+		redoArray.resize(0);
 		if (parent != null) {
 			parent.removeChild(this);
 		}
 	}
 
-	private function addBlockAtLocal(code:Int, type:Null<BlockType>, localX:Float, localY:Float, select:Bool):EditorBlockObject {
-		var block = new EditorBlockObject(editor, code, type, snap(localX), snap(localY));
+	private function addBlockAtLocal(code:Int, type:Null<BlockType>, localX:Float, localY:Float, select:Bool, options:String = ""):EditorBlockObject {
+		var block = new EditorBlockObject(editor, code, type, snap(localX), snap(localY), options);
 		blocks.push(block);
 		blocksBySeg.set(segKey(block.segX, block.segY), block);
 		addChild(block);
@@ -599,12 +653,106 @@ class EditorBlockLayer extends Sprite {
 		return block;
 	}
 
+	private function recordSnapshot():Void {
+		var snapshot = getSaveString();
+		var previous = saveArray.length == 0 ? initialSaveString : saveArray[saveArray.length - 1];
+		if (snapshot == previous) {
+			return;
+		}
+		saveArray.push(snapshot);
+		redoArray.resize(0);
+		notifyHistoryChanged();
+	}
+
+	private function rebuildFromSaveString(saveString:String):Void {
+		editor.selectBlock(null);
+		while (blocks.length > 0) {
+			removeBlock(blocks[blocks.length - 1], false);
+		}
+		blocksBySeg.clear();
+		for (decoded in ServerLevelDecoder.decodeBlocks("m4", saveString)) {
+			var block = addBlockAtLocal(decoded.code, typeForCode(decoded.code), decoded.x, decoded.y, false, decoded.opts);
+			block.deleteable = !isStartBlockCode(decoded.code);
+		}
+	}
+
+	private function notifyHistoryChanged():Void {
+		if (editor.menu != null) {
+			editor.menu.updateUndoRedoState();
+		}
+	}
+
 	private static inline function snap(value:Float):Int {
 		return Std.int(Math.round(value / LevelEditor.segSize) * LevelEditor.segSize);
 	}
 
 	private static inline function segKey(segX:Int, segY:Int):String {
 		return segX + ":" + segY;
+	}
+
+	private static function isStartBlockCode(code:Int):Bool {
+		return code >= ObjectCodes.BLOCK_START1 && code <= ObjectCodes.BLOCK_START4;
+	}
+
+	private static function typeForCode(code:Int):Null<BlockType> {
+		return switch (code) {
+			case ObjectCodes.BLOCK_START1 | ObjectCodes.BLOCK_START2 | ObjectCodes.BLOCK_START3 | ObjectCodes.BLOCK_START4:
+				BlockType.Start;
+			case ObjectCodes.BLOCK_FINISH:
+				BlockType.Finish;
+			case ObjectCodes.BLOCK_ICE:
+				BlockType.Ice;
+			case ObjectCodes.BLOCK_ARROW_DOWN:
+				BlockType.ArrowDown;
+			case ObjectCodes.BLOCK_ARROW_UP:
+				BlockType.ArrowUp;
+			case ObjectCodes.BLOCK_ARROW_LEFT:
+				BlockType.ArrowLeft;
+			case ObjectCodes.BLOCK_ARROW_RIGHT:
+				BlockType.ArrowRight;
+			case ObjectCodes.BLOCK_MINE:
+				BlockType.Mine;
+			case ObjectCodes.BLOCK_ITEM:
+				BlockType.Item;
+			case ObjectCodes.BLOCK_ITEM_INF:
+				BlockType.InfiniteItem;
+			case ObjectCodes.BLOCK_CRUMBLE:
+				BlockType.Crumble;
+			case ObjectCodes.BLOCK_VANISH:
+				BlockType.Vanish;
+			case ObjectCodes.BLOCK_MOVE:
+				BlockType.Move;
+			case ObjectCodes.BLOCK_WATER:
+				BlockType.Water;
+			case ObjectCodes.BLOCK_ROTATE_RIGHT:
+				BlockType.RotateRight;
+			case ObjectCodes.BLOCK_ROTATE_LEFT:
+				BlockType.RotateLeft;
+			case ObjectCodes.BLOCK_PUSH:
+				BlockType.Push;
+			case ObjectCodes.BLOCK_SAFETY:
+				BlockType.Safety;
+			case ObjectCodes.BLOCK_TELEPORT:
+				BlockType.Teleport;
+			case ObjectCodes.BLOCK_CUSTOM_STATS:
+				BlockType.CustomStats;
+			case ObjectCodes.BLOCK_BRICK:
+				BlockType.Brick;
+			case ObjectCodes.BLOCK_HAPPY:
+				BlockType.Happy;
+			case ObjectCodes.BLOCK_SAD:
+				BlockType.Sad;
+			case ObjectCodes.BLOCK_HEART:
+				BlockType.Heart;
+			case ObjectCodes.BLOCK_TIME:
+				BlockType.Time;
+			case ObjectCodes.BLOCK_BASIC1 | ObjectCodes.BLOCK_BASIC2 | ObjectCodes.BLOCK_BASIC3 | ObjectCodes.BLOCK_BASIC4:
+				BlockType.Basic;
+			case ObjectCodes.BLOCK_MINION_EGG:
+				null;
+			default:
+				BlockType.Solid;
+		}
 	}
 
 	public static function specForTool(toolId:String):Null<EditorBlockSpec> {
@@ -958,8 +1106,15 @@ class EditorBlockObject extends Sprite {
 		return type != null && EditorBlockOptions.hasOptions(type);
 	}
 
-	public function setOptions(nextOptions:String):Void {
-		options = nextOptions == null ? "" : nextOptions;
+	public function setOptions(nextOptions:String, record:Bool = true):Void {
+		var normalized = nextOptions == null ? "" : nextOptions;
+		if (options == normalized) {
+			return;
+		}
+		options = normalized;
+		if (record && deleteable && editor.blockLayer != null && parent == editor.blockLayer) {
+			editor.blockLayer.recordBlockOptionsChanged();
+		}
 	}
 
 	public function setSelected(selected:Bool):Void {
