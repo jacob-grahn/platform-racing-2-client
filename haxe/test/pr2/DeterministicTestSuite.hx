@@ -49,6 +49,7 @@ import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
 import pr2.lobby.LevelInfoPopupTest;
+import pr2.lobby.MessagesItemTest;
 import pr2.lobby.OptionsPopupTest;
 import pr2.lobby.OutfitPopupTest;
 import pr2.lobby.PlayerPopupTest;
@@ -158,6 +159,7 @@ class DeterministicTestSuite {
 		ExternalLinkPopupTest.main();
 		GuildPopupTest.main();
 		LevelInfoPopupTest.main();
+		MessagesItemTest.main();
 		OptionsPopupTest.main();
 		OutfitPopupTest.main();
 		PlayerPopupTest.main();

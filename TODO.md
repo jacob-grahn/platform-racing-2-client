@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `MessagesItem.as` private-message body formatting: obey
-  `Settings.FILTER_SWEARS`, escape only low-group messages before parsing rich
-  links, run the Flash `Data.parseLinks()` user/url/level/guild/invite
-  conversions, preserve carriage-return-to-`<br>` handling, and keep clickable
-  links active through `HTMLNameMaker.listenForLink`.
 - [ ] Preserve `MessagesItem.as` timestamp display and hover behavior: the row
   time should use Flash `Date.toLocaleDateString()`, hover should switch the
   cursor to button, tint the date gray, and show `Data.getDateTimeStr(time,

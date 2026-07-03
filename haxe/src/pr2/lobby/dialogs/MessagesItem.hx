@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.account.Settings;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.runtime.PR2MovieClip;
@@ -16,8 +17,8 @@ import pr2.util.DisplayUtil;
 	buttons. Report and delete route through the owning `MessagesPage` after a
 	`ConfirmPopup`; reply opens a `SendMessagePopup` quoting the message.
 
-	Swear filtering and `Data.parseLinks` URL detection from the original are not
-	yet ported; the body is HTML-escaped and newline-normalized.
+	Message bodies follow Flash's order: optional swear filtering, low-group HTML
+	escaping, BBCode-style rich-link parsing, and carriage-return line breaks.
 **/
 class MessagesItem extends Sprite {
 	public final messageId:Int;
@@ -38,6 +39,7 @@ class MessagesItem extends Sprite {
 	private var deleteBinding:Null<LobbyArt.Binding>;
 	private var replyBinding:Null<LobbyArt.Binding>;
 	private var hover:Null<HoverPopup>;
+	private var renderedBodyHtml:String = "";
 
 	public function new(owner:pr2.lobby.tabs.MessagesTab, messageId:Int, name:String, group:String, body:String, guildMessage:Bool, time:Int) {
 		super();
@@ -46,7 +48,9 @@ class MessagesItem extends Sprite {
 		this.userName = name;
 		this.time = time;
 		this.group = Std.parseInt(group.split(",")[0]) != null ? Std.parseInt(group.split(",")[0]) : 0;
-		body = ChatText.filterSwears(body);
+		if (Settings.getValue(Settings.FILTER_SWEARS, true)) {
+			body = ChatText.filterSwears(body);
+		}
 		this.messageText = body;
 
 		art = PR2MovieClip.fromLinkage("MessagesItemGraphic", {maxNestedDepth: 6});
@@ -61,7 +65,9 @@ class MessagesItem extends Sprite {
 		}
 
 		var html = this.group < 3 ? ChatText.escapeString(body, true) : body;
+		html = ChatText.parseLinks(html);
 		html = StringTools.replace(html, "\r", "<br>");
+		renderedBodyHtml = html;
 		if (textBox != null) {
 			textBox.htmlText = html;
 			htmlNameMaker.listenForLink(textBox);
@@ -138,6 +144,16 @@ class MessagesItem extends Sprite {
 
 	private static function formatDate(time:Int):String {
 		return DateTools.format(Date.fromTime(time * 1000.0), "%Y-%m-%d");
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function bodyHtml():String {
+		return renderedBodyHtml;
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function bodyTextField():Null<TextField> {
+		return LobbyArt.text(art, "textBox");
 	}
 
 	public function remove():Void {
