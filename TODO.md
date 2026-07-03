@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve April 1 reversed-controls behavior from `Character.as`: local
-  characters should reverse left/right controls when `Data.getDateStr(...)` is
-  `"Apr 1"`, and removing the artifact hat should not clear that date-driven
-  reversal.
 - [ ] Port the local-character command handlers from `LocalCharacter.as`:
   register and unregister `zap`, `squash{tempID}`, and `sting{tempID}` for the
   local player, route them through the Flash hurt/immunity rules, and preserve

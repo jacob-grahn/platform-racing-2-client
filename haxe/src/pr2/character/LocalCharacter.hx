@@ -85,11 +85,13 @@ class LocalCharacter extends Character {
 		if (hadArtifact && !hasHatFlag(Character.ARTIFACT)) {
 			controller.clearSpeedBurst();
 			artifactControlsReversed = false;
+			setArtifactReversedControls(false);
 		}
 		if (hasHatFlag(Character.ARTIFACT) && !hadArtifact) {
 			controller.grantSpeedBurst(30000);
 			controller.clampCourseTime(30);
 			artifactControlsReversed = true;
+			setArtifactReversedControls(true);
 			if (onPlayCharacterSound != null) {
 				onPlayCharacterSound({kind: "artifactYeah", x: x, y: y, volume: 1, target: this});
 			}
@@ -101,7 +103,7 @@ class LocalCharacter extends Character {
 	}
 
 	public function step(input:LocalPlayerInput):Void {
-		if (artifactControlsReversed) {
+		if (controlsReversed()) {
 			var reversed = input.copy();
 			reversed.left = input.right;
 			reversed.right = input.left;

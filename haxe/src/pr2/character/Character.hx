@@ -94,8 +94,13 @@ class Character extends Sprite {
 	public static inline var ARTIFACT:String = "b";
 	public static inline var JELLYFISH:String = "f"; // (fish)
 	public static inline var CHEESE:String = "ch";
+	private static final MONTH_NAMES:Array<String> = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+	public static var dateStringNow:Void->String = function():String {
+		return dateString(Date.now());
+	};
 
 	public final display:CharacterDisplay;
+	public var dateControlsReversed(default, null):Bool = false;
 
 	// ---- appearance: hats ------------------------------------------------
 	public var hat1(get, set):Int;
@@ -178,6 +183,8 @@ class Character extends Sprite {
 		this.head = headId;
 		this.body = bodyId;
 		this.feet = feetId;
+		dateControlsReversed = dateStringNow() == "Apr 1";
+		reversedControls = dateControlsReversed;
 
 		display = new CharacterDisplay(currentPartIds());
 		addChild(display);
@@ -672,6 +679,14 @@ class Character extends Sprite {
 		}
 	}
 
+	public function controlsReversed():Bool {
+		return reversedControls;
+	}
+
+	public function setArtifactReversedControls(active:Bool):Void {
+		reversedControls = dateControlsReversed || active;
+	}
+
 	private function clearParticleEmitter():Void {
 		if (activeParticleEmitter == null) {
 			return;
@@ -815,5 +830,9 @@ class Character extends Sprite {
 	/** Mirrors `Data.numLimit`: clamp to the inclusive [min, max] range. */
 	private static inline function numLimit(value:Int, min:Int, max:Int):Int {
 		return value < min ? min : (value > max ? max : value);
+	}
+
+	private static function dateString(date:Date):String {
+		return MONTH_NAMES[date.getMonth()] + " " + date.getDate();
 	}
 }

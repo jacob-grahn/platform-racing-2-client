@@ -24,6 +24,7 @@ class LocalCharacterTest {
 		testCrownHatIgnoresMineHitsExceptDeathmatch();
 		testJumpStartHatGrantsTwoSecondSpeedBurstOnEquip();
 		testArtifactHatGrantsThirtySecondBurstAndReversesControlsUntilRemoved();
+		testAprilFirstReversesControlsUntilArtifactRemoved();
 		testJiggminHatSquashesRemotePlayersWhileFalling();
 		testJellyfishHatStingsNearbyRemotePlayersAndIgnoresStingHurt();
 		testCheeseHatIsCosmeticOnly();
@@ -270,6 +271,28 @@ class LocalCharacterTest {
 		assertAbove(removedFresh.debugState().vx, 0, "right input moves right after artifact removal");
 		assertClose(restored.debugState().speedStat, artifact.debugState().speedStat, "artifact removal restores speed stat");
 		assertClose(restored.debugState().accelerationStat, artifact.debugState().accelerationStat, "artifact removal restores acceleration stat");
+	}
+
+	private static function testAprilFirstReversesControlsUntilArtifactRemoved():Void {
+		var originalDateString = Character.dateStringNow;
+		Character.dateStringNow = function() return "Apr 1";
+		var april = new LocalCharacter(longFlatLevel());
+
+		assertEquals(true, april.dateControlsReversed, "April 1 initializes date-driven reversed controls");
+		assertEquals(false, april.artifactControlsReversed, "April 1 reversal is independent of artifact hat state");
+		for (_ in 0...24) {
+			april.step(new LocalPlayerInput(false, true));
+		}
+		assertBelow(april.debugState().vx, -0.1, "April 1 reversed controls turn right input into left movement");
+
+		april.setHats([14, 0xFFFFFF, -1]);
+		april.setHats([]);
+		assertEquals(false, april.artifactControlsReversed, "artifact removal clears only artifact reversal state");
+		for (_ in 0...24) {
+			april.step(new LocalPlayerInput(false, true));
+		}
+		assertBelow(april.debugState().vx, -0.1, "artifact removal preserves April 1 reversed controls");
+		Character.dateStringNow = originalDateString;
 	}
 
 	private static function testJiggminHatSquashesRemotePlayersWhileFalling():Void {
