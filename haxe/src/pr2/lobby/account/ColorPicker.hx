@@ -1,6 +1,7 @@
 package pr2.lobby.account;
 
 import openfl.display.Sprite;
+import openfl.display.DisplayObjectContainer;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import pr2.app.AppStage;
@@ -16,12 +17,19 @@ import pr2.app.AppStage;
 	reduced to the swatch palette, which is the path the customize UI exercises.
 **/
 class ColorPicker extends Sprite {
-	public static final recentColors:Array<Int> = [for (_ in 0...ColorChoices.ROWS) 0xFFFFFF];
+	public static inline var RIGHT:String = "right";
+	public static inline var LEFT:String = "left";
+	public static final recentColors:Array<Int> = [
+		0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555,
+		0x888888, 0x555555, 0x888888, 0x555555, 0x888888, 0x555555
+	];
 
 	private static inline var SWATCH:Float = 20;
 	private static inline var CELL:Float = 11;
 
-	private var color:Int = 0;
+	public var direction:String = RIGHT;
+
+	private var color:Int = 0x0000FF;
 	private var swatch:Sprite;
 	private var popup:Null<Sprite>;
 
@@ -41,8 +49,11 @@ class ColorPicker extends Sprite {
 	}
 
 	public function setColor(c:Int):Void {
-		color = c;
-		drawSwatch();
+		if (color != c) {
+			color = c;
+			drawSwatch();
+			dispatchEvent(new Event(Event.CHANGE));
+		}
 	}
 
 	private function drawSwatch():Void {
@@ -62,35 +73,34 @@ class ColorPicker extends Sprite {
 	}
 
 	private function openPopup():Void {
-		if (AppStage.stage == null) {
-			return;
-		}
+		var popupParent:DisplayObjectContainer = AppStage.stage != null ? AppStage.stage : this;
 		var grid = ColorChoices.populate(recentColors);
 		popup = new Sprite();
-		var width = ColorChoices.ROWS * CELL;
-		var height = ColorChoices.COLS * CELL;
+		var width = ColorChoices.COLS * CELL;
+		var height = ColorChoices.ROWS * CELL;
 		popup.graphics.lineStyle(1, 0x000000);
 		popup.graphics.beginFill(0x222222);
 		popup.graphics.drawRect(-1, -1, width + 2, height + 2);
 		popup.graphics.endFill();
-		for (row in 0...ColorChoices.COLS) {
-			for (col in 0...ColorChoices.ROWS) {
-				addCell(popup, grid[row][col], col * CELL, row * CELL);
+		for (col in 0...ColorChoices.COLS) {
+			for (row in 0...ColorChoices.ROWS) {
+				addCell(popup, grid[col][row], col * CELL, row * CELL);
 			}
 		}
-		var origin = localToGlobal(new openfl.geom.Point(0, SWATCH + 2));
-		var px = origin.x;
+		var origin = localToGlobal(new openfl.geom.Point(0, 0));
+		var px = direction == RIGHT ? origin.x + this.width + 5 : origin.x - popup.width - 5;
 		var py = origin.y;
-		if (px + width > AppStage.stage.stageWidth) {
-			px = AppStage.stage.stageWidth - width;
+		var stageHeight = AppStage.stage != null ? AppStage.stage.stageHeight : 600;
+		if (py + height > stageHeight) {
+			py = stageHeight - height;
 		}
-		if (py + height > AppStage.stage.stageHeight) {
-			py = AppStage.stage.stageHeight - height;
+		popup.x = Math.round(px);
+		popup.y = Math.round(py);
+		popupParent.addChild(popup);
+		if (AppStage.stage != null) {
+			AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageDown);
 		}
-		popup.x = Math.max(0, px);
-		popup.y = Math.max(0, py);
-		AppStage.stage.addChild(popup);
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageDown);
+		dispatchEvent(new Event(Event.OPEN));
 	}
 
 	private function addCell(into:Sprite, cellColor:Int, x:Float, y:Float):Void {
@@ -110,15 +120,12 @@ class ColorPicker extends Sprite {
 
 	private function pick(c:Int):Void {
 		setColor(c);
-		recordRecent(c);
 		closePopup();
-		dispatchEvent(new Event(Event.CHANGE));
 	}
 
 	private static function recordRecent(c:Int):Void {
-		recentColors.remove(c);
-		recentColors.unshift(c);
-		while (recentColors.length > ColorChoices.ROWS) {
+		if (recentColors.indexOf(c) == -1) {
+			recentColors.unshift(c);
 			recentColors.pop();
 		}
 	}
@@ -130,6 +137,10 @@ class ColorPicker extends Sprite {
 	}
 
 	private function closePopup():Void {
+		if (popup == null) {
+			return;
+		}
+		recordRecent(color);
 		if (AppStage.stage != null) {
 			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageDown);
 		}
@@ -137,6 +148,7 @@ class ColorPicker extends Sprite {
 			popup.parent.removeChild(popup);
 		}
 		popup = null;
+		dispatchEvent(new Event(Event.CLOSE));
 	}
 
 	public function remove():Void {

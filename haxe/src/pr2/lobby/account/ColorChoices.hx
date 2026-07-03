@@ -1,10 +1,10 @@
 package pr2.lobby.account;
 
 /**
-	Port of Flash `com.jiggmin.ColorPicker.ColorChoices`: builds the 22×12 swatch
-	grid shown by the colour picker. Row 0 is the recent-colour strip, row 2 a set
-	of suggested greys/primaries, and the bulk is a 6-step RGB cube laid out in the
-	same column/row order as the original.
+	Port of Flash `com.jiggmin.ColorPicker.ColorChoices`: builds the 22x12 swatch
+	grid shown by the colour picker. Column 0 is the recent-colour strip, column 2
+	a set of suggested greys/primaries, and the bulk is a 6-step RGB cube laid out
+	in the same column/row order as the original.
 **/
 class ColorChoices {
 	public static final COLS:Int = 22;

@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `ColorChoices.as` / `ColorPicker.as` swatch behavior exactly:
-  initialize recent colors to Flash's alternating `0x888888` / `0x555555`
-  values, draw the 22-column by 12-row palette in the same x/y orientation as
-  Flash, keep the suggested colors and RGB cube layout, support `direction`
-  left/right popup placement, dispatch `Event.CHANGE` only on changed colors, and
-  emit `Event.OPEN` / `Event.CLOSE` around popup lifecycle.
 - [ ] Port the full `ColorPickerPopup.as` HSV picker: authored popup art,
   OK/cancel behavior, restricted hex text box with `#`/`0x` parsing, current and
   preview outlines, hue slider, saturation/brightness spectrum, preview box,
