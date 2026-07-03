@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `TeleportBlock.onBump()` crouch correction: when a crouching player
-  bumps a teleport block from below, restore the pre-bump `y` before teleporting,
-  matching Flash's special-case collision adjustment.
 - [ ] Preserve `TimeBlock.as` sound behavior by playing `TickTockSound` at full
   configured sound volume when a time block adds 10 seconds.
 - [ ] Port concrete `ArrowSparkleEmitter.as` particles: `arrowSparkle` emitters

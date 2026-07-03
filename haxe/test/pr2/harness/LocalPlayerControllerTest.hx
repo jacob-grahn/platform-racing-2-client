@@ -82,6 +82,7 @@ class LocalPlayerControllerTest {
 		testBumpingTimeBlockAddsTenSeconds();
 		testTeleportBlockMovesPlayerToNextSameColorBlock();
 		testTeleportBlockEmitsStartAndDestinationPops();
+		testCrouchingTeleportBlockBumpPreservesPreBumpY();
 		testTeleportCooldownPreventsImmediateReturn();
 		testTeleportCooldownTintsAndResetsSameColorBlocks();
 		testTeleportDefaultColorOptionsMatchEmptyOptions();
@@ -1506,6 +1507,23 @@ class LocalPlayerControllerTest {
 		assertClose(65, pops[1].hitY, "destination teleport pop preserves Flash y-25 offset");
 	}
 
+	private static function testCrouchingTeleportBlockBumpPreservesPreBumpY():Void {
+		var player = new LocalCharacter(lowTeleportCeilingLevel());
+		for (_ in 0...20) {
+			player.step(new LocalPlayerInput());
+		}
+		var crouched = player.debugState();
+		assertEquals(true, crouched.crouching, "teleport ceiling block forces crouch before bump");
+		assertClose(300, crouched.y, "crouched player starts with feet on the floor");
+
+		player.step(new LocalPlayerInput(false, false, true));
+		var teleported = player.debugState();
+
+		assertEquals("teleport", teleported.touchedBlockType, "pressing up bumps the teleport ceiling block");
+		assertClose(135, teleported.x, "crouched teleport bump moves to the paired block");
+		assertClose(300, teleported.y, "crouched teleport bump restores pre-bump y before teleporting");
+	}
+
 	private static function testTeleportCooldownPreventsImmediateReturn():Void {
 		var player = new LocalCharacter(teleportPairLevel());
 
@@ -2010,6 +2028,31 @@ class LocalPlayerControllerTest {
 				new LevelBlock(4, 10, BlockType.Basic),
 				new LevelBlock(5, 10, BlockType.Basic),
 				new LevelBlock(4, 9, BlockType.Finish)
+			]
+		);
+	}
+
+	private static function lowTeleportCeilingLevel():FixtureLevel {
+		return new FixtureLevel(
+			"low-teleport-ceiling",
+			"Low Teleport Ceiling",
+			6,
+			13,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 9),
+			new TilePosition(5, 9),
+			[
+				new LevelBlock(2, 8, BlockType.Teleport, "255"),
+				new LevelBlock(4, 8, BlockType.Teleport, "255"),
+				new LevelBlock(0, 10, BlockType.Basic),
+				new LevelBlock(1, 10, BlockType.Basic),
+				new LevelBlock(2, 10, BlockType.Basic),
+				new LevelBlock(3, 10, BlockType.Basic),
+				new LevelBlock(4, 10, BlockType.Basic),
+				new LevelBlock(5, 10, BlockType.Basic),
+				new LevelBlock(5, 9, BlockType.Finish)
 			]
 		);
 	}

@@ -682,13 +682,14 @@ class LocalPlayerController {
 	private function onBump(block:LevelBlock, input:LocalPlayerInput):Void {
 		touch(block);
 		var bumpForce = Math.round(-vy);
+		var preBumpY = y;
 		y = rotatedBlockPos(block).y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
 		vy *= -0.25;
 		jumpVelBoost = 0;
 		if (bumpPlaysThump(block)) {
 			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y));
 		}
-		applyBumpEffect(block, input, bumpForce);
+		applyBumpEffect(block, input, bumpForce, preBumpY);
 	}
 
 	private function bumpPlaysThump(block:LevelBlock):Bool {
@@ -758,7 +759,7 @@ class LocalPlayerController {
 		}
 	}
 
-	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int):Void {
+	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int, preBumpY:Float):Void {
 		switch (block.type) {
 			case BlockType.Brick:
 				emitLocalActivate(block);
@@ -793,6 +794,9 @@ class LocalPlayerController {
 			case BlockType.CustomStats:
 				useCustomStatsBlock(block);
 			case BlockType.Teleport:
+				if (crouching) {
+					y = preBumpY;
+				}
 				maybeTeleport(block);
 			case BlockType.Push:
 				pushBlock(block, 0, -1);
