@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.net.ServerConfig;
+import pr2.page.LevelEditor.EditorBackgroundColorPickerButton;
 import pr2.page.LevelEditor.EditorHatsSettingsPopup;
 import pr2.page.LevelEditor.EditorItemSettingsPopup;
 import pr2.page.LevelEditor.EditorMusicSettingsPopup;
@@ -16,6 +17,7 @@ class EditorSettingsTest {
 		testDefaultSetters();
 		testVariablesAndLevelVars();
 		testPasswordHashing();
+		testBackgroundColorPickerCommit();
 		testMusicSettingsPopupCommit();
 		testItemSettingsPopupCommit();
 		testHatsSettingsPopupCommit();
@@ -101,6 +103,23 @@ class EditorSettingsTest {
 		assertEquals("", levelVars.get("passHash"), "empty password submits no hash");
 	}
 
+	private static function testBackgroundColorPickerCommit():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		editor.menu.changeSideBar(editor.menu.bg);
+		var picker = Std.downcast(editor.menu.bg.getChildByName("colorEntry"), EditorBackgroundColorPickerButton);
+		assertNotNull(picker, "background sidebar mounts a color picker entry");
+		assertEquals(LevelConfig.DEFAULT_COLOR, picker.pickerColor(), "background picker opens with editor color");
+
+		picker.setPickedColor(0x224466);
+		assertEquals(0x224466, editor.color, "background picker commits editor color");
+		assertEquals("224466", editor.getLevelVars().get("data").split("`")[1], "background picker color exports in m4 data");
+
+		editor.setColor(0xABCDEF);
+		assertEquals(0xABCDEF, picker.pickerColor(), "background picker updates after editor color changes");
+		editor.remove();
+	}
+
 	private static function testMusicSettingsPopupCommit():Void {
 		var editor = new LevelEditor();
 		editor.setSong("");
@@ -174,6 +193,13 @@ class EditorSettingsTest {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertNotNull(actual:Dynamic, message:String):Void {
+		assertions++;
+		if (actual == null) {
+			throw '$message: expected non-null';
 		}
 	}
 }

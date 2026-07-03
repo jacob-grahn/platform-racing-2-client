@@ -91,6 +91,8 @@ Port the editor itself, one piece at a time:
   - [x] Port editor level-setting state setters and exported level variables
     for song, gravity, time, rank, password, items, hats, mode, cowboy chance,
     and background color.
+  - [x] Wire the background color picker sidebar entry to update and export the
+    editor background color.
 - [x] Port the hats/items/music menus.
   - [x] Port the editor item settings menu.
   - [x] Port the editor hats settings menu.

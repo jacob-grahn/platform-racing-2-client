@@ -156,6 +156,9 @@ class LevelEditor extends Page {
 
 	public function setColor(value:Int = LevelConfig.DEFAULT_COLOR):Void {
 		levelConfig.setColor(value);
+		if (menu != null) {
+			menu.updateBackgroundColor();
+		}
 	}
 
 	public function setSong(value:Null<String>):Void {
@@ -210,6 +213,9 @@ class LevelEditor extends Page {
 		note = levelConfig.note;
 		allowedItems = levelConfig.allowedItems.copy();
 		badHats = levelConfig.badHats.copy();
+		if (menu != null) {
+			menu.updateBackgroundColor();
+		}
 	}
 
 	public function getSaveString():String {
@@ -1197,6 +1203,10 @@ class LevelEditorMenu extends Sprite {
 		var activeLayer = editor.activeObjectLayer;
 		Reflect.setProperty(find("undoButton"), "enabled", activeLayer != null && activeLayer.saveArray.length > 0);
 		Reflect.setProperty(find("redoButton"), "enabled", activeLayer != null && activeLayer.redoArray.length > 0);
+	}
+
+	public function updateBackgroundColor():Void {
+		bg.updateColor();
 	}
 
 	private function setLayer(layerNum:Int):Void {
@@ -3218,7 +3228,9 @@ class EditorSideBar extends Sprite {
 		y = -195;
 		var itemY:Float = 4;
 		for (itemId in itemIds) {
-			var entry = new EditorSideBarEntry(itemId);
+			var entry = id == "backgrounds" && itemId == "color"
+				? new EditorBackgroundColorPickerButton()
+				: new EditorSideBarEntry(itemId);
 			entry.addEventListener(MouseEvent.CLICK, selectEntry);
 			entry.y = itemY;
 			addChild(entry);
@@ -3271,8 +3283,21 @@ class EditorSideBar extends Sprite {
 		while (numChildren > 0) {
 			var child = removeChildAt(0);
 			child.removeEventListener(MouseEvent.CLICK, selectEntry);
+			var colorEntry = Std.downcast(child, EditorBackgroundColorPickerButton);
+			if (colorEntry != null) {
+				colorEntry.remove();
+			}
 		}
 		selectedEntry = null;
+	}
+
+	public function updateColor():Void {
+		for (i in 0...numChildren) {
+			var colorEntry = Std.downcast(getChildAt(i), EditorBackgroundColorPickerButton);
+			if (colorEntry != null) {
+				colorEntry.updateColor();
+			}
+		}
 	}
 }
 
@@ -3306,5 +3331,51 @@ class EditorSideBarEntry extends Sprite {
 		graphics.lineStyle(selected ? 2 : 1, selected ? 0x1F66CC : 0x666666);
 		graphics.drawRect(0, 0, 30, 30);
 		graphics.endFill();
+	}
+}
+
+class EditorBackgroundColorPickerButton extends EditorSideBarEntry {
+	private final picker:ColorPicker;
+
+	public function new() {
+		super("color");
+		picker = new ColorPicker();
+		picker.name = "colorPicker";
+		picker.width = 30;
+		picker.height = 30;
+		picker.addEventListener(Event.CHANGE, commitColor);
+		addChild(picker);
+		updateColor();
+	}
+
+	public function updateColor():Void {
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			picker.setColor(editor.color);
+		}
+	}
+
+	public function setPickedColor(color:Int):Void {
+		picker.setColor(color);
+		commitColor();
+	}
+
+	public function pickerColor():Int {
+		return picker.getColor();
+	}
+
+	public function remove():Void {
+		picker.removeEventListener(Event.CHANGE, commitColor);
+		picker.remove();
+	}
+
+	private function commitColor(?_):Void {
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			editor.setColor(picker.getColor());
+		}
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = AppStage.stage;
+		}
 	}
 }
