@@ -68,7 +68,7 @@ Port the editor itself, one piece at a time:
     teleport, happy/sad stat, and custom-stat blocks.
   - [x] Port block placement/selection enough to attach option buttons to
     placed option-capable blocks.
-  - [ ] Port the authored item, teleport, stat, and custom-stat option popups
+  - [x] Port the authored item, teleport, stat, and custom-stat option popups
     and commit their values through the normalized editor option strings.
     - [x] Port the authored happy/sad stat option popup and commit-on-close
       behavior.
