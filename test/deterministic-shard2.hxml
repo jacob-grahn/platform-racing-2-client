@@ -1,0 +1,7 @@
+--library lime
+--library openfl
+-cp haxe/src
+-cp haxe/test
+-D pr2_flatten_cache
+--main pr2.DeterministicShard2
+--interp
