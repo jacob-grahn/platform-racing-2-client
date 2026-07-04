@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `AdminMenu.as` moderator promotion controls for player popups:
-  temporary/trial/permanent promotion confirmations should send
-  `promote_to_moderator``name``mode`, demotion should send
-  `demote_moderator``name`, and the target popup should fade out after action.
 - [ ] Provide a reusable `AutoDismissPopup.as` equivalent for popup menus: arm the
   stage mouse-down listener after the Flash 25ms delay, dismiss only on outside
   clicks using hit-test semantics, and remove the stage listener/timeout on
@@ -74,11 +70,10 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   reference popup should render clickable PR2 Hub URL/text links, a clickable
   Jiggmin username, Newbieland 2 level link, and PR2 Staff guild link with link
   listeners cleaned up on removal.
-- [ ] Complete `PlayerPopup.as` parity details: wire `AdminMenu` for admins,
-  show `Server Owner` when the profile user owns the server, use the authored
-  `GuildName` emblem/link clip, display the real `ExpGain` rank supplement, keep
-  delayed Send PM hover, and close guild/part/level popups when viewing a user's
-  levels.
+- [ ] Complete `PlayerPopup.as` parity details: show `Server Owner` when the
+  profile user owns the server, use the authored `GuildName` emblem/link clip,
+  display the real `ExpGain` rank supplement, keep delayed Send PM hover, and
+  close guild/part/level popups when viewing a user's levels.
 - [ ] Port `SetEmailPopup.as`: authored email confirmation dialog, Enter-key
   submit, required-field/mismatch validation, AES-encrypted `{email,pass}` payload
   using `Env.ACCOUNT_CHANGE_KEY`/`Env.ACCOUNT_CHANGE_IV`, and POST `data` to

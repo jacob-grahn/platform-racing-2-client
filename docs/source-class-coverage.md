@@ -104,7 +104,7 @@ alone is not a class port.
 
 | AS3 source | Haxe/OpenFL target | Status | Notes |
 | --- | --- | --- | --- |
-| `flash/dialogs/AdminMenu.as` | admin/moderation popup gap | gap | The authored admin side menu and its role-gated server actions remain under the admin/moderation popup TODO. |
+| `flash/dialogs/AdminMenu.as` | `pr2.lobby.dialogs.AdminMenu`, `PlayerPopup` | ported | Admin-only temporary/trial/permanent moderator promotion confirmations, demotion confirmation, `promote_to_moderator` / `demote_moderator` socket payloads, target popup fade-out, and listener cleanup are covered by `PlayerPopupTest`. |
 | `flash/dialogs/AutoDismissPopup.as` | `pr2.lobby.dialogs.InfoPopup` subclasses | partial | The current hover/info popup base supports explicit popup removal and authored layout, but Flash's generic timed auto-dismiss base is not represented as a standalone reusable class. |
 | `flash/dialogs/BanMenu.as` | admin/moderation popup gap | gap | The authored ban menu, duration/reason controls, and moderation requests are not yet ported. |
 | `flash/dialogs/ChangePasswordPopup.as` | account password-change gap | gap | The password-change form and request flow remain under the account workflow TODO. |
@@ -131,7 +131,7 @@ alone is not a class port.
 | `flash/dialogs/OutfitPopup.as` | `pr2.lobby.account.LoadoutsPopup`, account outfit persistence gap | partial | Loadout preview/listing has an authored Haxe popup, but full Flash outfit persistence and all account variants remain TODOs. |
 | `flash/dialogs/PMRFCodesPopup.as` | `pr2.lobby.dialogs.PMRFCodesPopup`, `pr2.lobby.dialogs.SendMessagePopup` | ported | The PM rich-formatting codes reference opens from the send-message popup as an authored info popup. |
 | `flash/dialogs/PlayerGuestPopup.as` | `pr2.lobby.dialogs.PlayerGuestPopup`, `pr2.lobby.LobbyPopups` | ported | Guest profile links open the authored stripped-down popup, covered by `PlayerPopupTest`. |
-| `flash/dialogs/PlayerPopup.as` | `pr2.lobby.dialogs.PlayerPopup`, `pr2.lobby.players.SocialActions` | partial | Member profile data, social labels/actions, message/guild routes, and guest handoff are represented; admin/temp-mod/ban side menus and complete live refresh parity remain TODOs. |
+| `flash/dialogs/PlayerPopup.as` | `pr2.lobby.dialogs.PlayerPopup`, `pr2.lobby.players.SocialActions`, `AdminMenu`, `BanMenu`, `TempModMenu` | partial | Member profile data, social labels/actions, message/guild routes, guest handoff, and admin/temp-mod/ban side menus are represented; server-owner labeling, authored guild emblem/link clips, ExpGain rank supplement, delayed Send PM hover, and linked-popup cleanup remain TODOs. |
 | `flash/dialogs/Popup.as` | `pr2.lobby.dialogs.Popup` | partial | The Haxe popup base owns singleton open tracking, parent attachment, close controls, and fade-out/removal; exact Flash modal stacking and every subclass lifecycle remain audited per popup. |
 | `flash/dialogs/SendMessagePopup.as` | `pr2.lobby.dialogs.SendMessagePopup`, `pr2.lobby.tabs.MessagesTab` | partial | Compose, validation, quote prefill, character count, PMRF help, and upload routing are represented; swear/link/date parity and live error states remain PM workflow gaps. |
 | `flash/dialogs/SetEmailPopup.as` | account email-change gap | gap | The email-change form and request flow remain under the account workflow TODO. |

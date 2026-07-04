@@ -64,6 +64,7 @@ class PlayerPopup extends Popup {
 	private var expToRank:Int = 0;
 	private var rankValue:Int = 0;
 	private var banMenu:Null<BanMenu>;
+	private var adminMenu:Null<AdminMenu>;
 	private var tempModMenu:Null<TempModMenu>;
 
 	private var cm:CommandHandler = CommandHandler.commandHandler;
@@ -211,6 +212,15 @@ class PlayerPopup extends Popup {
 			banMenu.x = banMenu.width / 2 + 40;
 			if (art != null) {
 				art.x -= 96;
+			}
+			if (LobbySession.group >= 3) {
+				if (art != null) {
+					art.x = -(art.width / 2) - 19;
+				}
+				banMenu.x = banMenu.width / 2 - 19;
+				adminMenu = new AdminMenu(userName, this);
+				adminMenu.x = 215;
+				addChild(adminMenu);
 			}
 		} else if (LobbySession.group == 1 && LobbySession.isTempMod && targetGroup == 1) {
 			tempModMenu = new TempModMenu(userName, this);
@@ -513,6 +523,10 @@ class PlayerPopup extends Popup {
 		if (banMenu != null) {
 			banMenu.remove();
 			banMenu = null;
+		}
+		if (adminMenu != null) {
+			adminMenu.remove();
+			adminMenu = null;
 		}
 		if (tempModMenu != null) {
 			tempModMenu.remove();

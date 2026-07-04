@@ -36,6 +36,7 @@ class PlayerPopupTest {
 		testGuestButtonsDisabled();
 		testTempModMenu();
 		testBanMenu();
+		testAdminMenu();
 
 		LobbySession.group = savedGroup;
 		LobbySession.isTempMod = savedTempMod;
@@ -167,6 +168,46 @@ class PlayerPopupTest {
 		closeAll();
 	}
 
+	private static function testAdminMenu():Void {
+		LobbySession.group = 3;
+		LobbySession.isTempMod = false;
+		LobbySession.isTrialMod = false;
+		LobbySocket.resetSent();
+		closeAll();
+
+		var popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 1, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1
+		});
+		var admin = adminMenu(popup);
+		assertNotNull(admin, "admins see promotion controls");
+		click(admin, "trialMod_bt");
+		var confirm = lastPopup(ConfirmPopup);
+		assertNotNull(confirm, "trial promotion opens confirmation");
+		click(confirm, "ok_bt");
+		assertEquals("promote_to_moderator`Target`trial", LobbySocket.lastSent(), "trial promotion payload");
+		assertEquals(true, popup.fadeOutStarted, "promotion starts closing the player popup");
+		popup.remove();
+
+		popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 2, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1
+		});
+		admin = adminMenu(popup);
+		click(admin, "demote_bt");
+		confirm = lastPopup(ConfirmPopup);
+		assertNotNull(confirm, "demotion opens confirmation");
+		click(confirm, "ok_bt");
+		assertEquals("demote_moderator`Target", LobbySocket.lastSent(), "demotion payload");
+		assertEquals(true, popup.fadeOutStarted, "demotion starts closing the player popup");
+
+		closeAll();
+	}
+
 	private static function testGuestHandoff():Void {
 		LobbySession.group = 1;
 		closeAll();
@@ -236,6 +277,10 @@ class PlayerPopupTest {
 
 	private static function banMenu(container:DisplayObjectContainer):PR2MovieClip {
 		return findSymbol(container, "BanMenuGraphic");
+	}
+
+	private static function adminMenu(container:DisplayObjectContainer):PR2MovieClip {
+		return findSymbol(container, "AdminMenuGraphic");
 	}
 
 	private static function combo(container:DisplayObjectContainer, name:String):FlComboBox {
