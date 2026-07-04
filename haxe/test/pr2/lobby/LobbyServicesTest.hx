@@ -1519,6 +1519,11 @@ class LobbyServicesTest {
 		assertEquals(1, pr2.net.LevelListClient.campaignPage(0, 0), "campaign page base");
 		assertEquals(3, pr2.net.LevelListClient.campaignPage(5, 3), "campaign page wraps within 6");
 		assertEquals(6, pr2.net.LevelListClient.campaignPage(2, 3), "campaign page upper");
+		LobbySocket.resetSent();
+		LobbySocket.nowMs = function():Float return 0;
+		LobbySocket.receivePing(["172800"]);
+		assertEquals(2, pr2.lobby.tabs.ListingTab.currentServerDayForTests(), "campaign day comes from server-synced socket time");
+		LobbySocket.resetSent();
 		// Parsing pulls the levels array; an arbitrary body has an invalid hash.
 		var body = '{"hash":"zzz","levels":[{"level_id":"7","title":"Alpha","user_name":"Jo"},{"level_id":"8","title":"Beta","user_name":"Al"}]}';
 		var result = pr2.net.LevelListClient.parse(body);

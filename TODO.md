@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `Time.as` server clock helper and wire it to socket pings so lobby and
-  listing code can use Flash's offset timestamp/day calculations instead of
-  local `Date.now()` where server time was authoritative.
 - [ ] Port `AdminMenu.as` moderator promotion controls for player popups:
   temporary/trial/permanent promotion confirmations should send
   `promote_to_moderator``name``mode`, demotion should send

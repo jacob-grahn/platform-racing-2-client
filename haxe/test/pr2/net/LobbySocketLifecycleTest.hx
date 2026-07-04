@@ -35,11 +35,14 @@ class LobbySocketLifecycleTest {
 		assertEquals(100000.0, LobbySocket.getMS(), "small ping drift leaves local clock");
 		LobbySocket.receivePing(["130"]);
 		assertEquals(130000.0, LobbySocket.getMS(), "large ping drift updates server clock offset");
+		assertEquals(130.0, LobbySocket.getTimestamp(), "socket exposes server timestamp");
 
 		LobbySocket.nowMs = function():Float return 200000;
 		var handler = new CommandHandler();
 		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(1, "ping", ["250"])), "ping frame handled");
 		assertEquals(250000.0, LobbySocket.getMS(), "default ping command updates socket server clock");
+		LobbySocket.receivePing(["172800"]);
+		assertEquals(2.0, LobbySocket.getDay(), "socket exposes server day");
 	}
 
 	private static function testCloseSendsFlashCloseAndClearsSessionState():Void {

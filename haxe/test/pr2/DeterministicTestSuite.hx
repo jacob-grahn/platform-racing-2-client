@@ -24,6 +24,7 @@ import pr2.data.ObjectsCompatTest;
 import pr2.data.SecureDataCompatTest;
 import pr2.data.SettingsCompatTest;
 import pr2.data.SWFStatsTest;
+import pr2.data.TimeCompatTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
 import pr2.effects.TeleportPopTest;
@@ -135,6 +136,7 @@ class DeterministicTestSuite {
 		SecureDataCompatTest.main();
 		SettingsCompatTest.main();
 		SWFStatsTest.main();
+		TimeCompatTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();
 		ServerLevelFixtureAdapterTest.main();

@@ -69,11 +69,11 @@ class LevelListClient {
 	}
 
 	/**
-		Flash campaign page formula `((server_id + day) % 6) + 1`, where `day` is the
-		weekday (0-6) of the last auth time. Campaign lists have six pages.
+		Flash campaign page formula `((server_id + day) % 6) + 1`, where `day` is
+		`Main.lastAuthTime.getDay()` from the server-synced auth clock.
 	**/
-	public static function campaignPage(serverId:Int, weekday:Int):Int {
-		return ((serverId + weekday) % 6) + 1;
+	public static function campaignPage(serverId:Int, day:Int):Int {
+		return ((serverId + day) % 6) + 1;
 	}
 
 	public static function parse(body:String):LevelListResult {

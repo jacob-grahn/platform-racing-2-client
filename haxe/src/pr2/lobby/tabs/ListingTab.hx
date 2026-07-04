@@ -5,6 +5,7 @@ import pr2.lobby.Memory;
 import pr2.lobby.level.LevelListingPage;
 import pr2.net.LevelListClient;
 import pr2.net.LevelListClient.LevelListResult;
+import pr2.net.LobbySocket;
 
 /**
 	Port of Flash `level_browser.LevelListing` and its mode subclasses
@@ -17,8 +18,8 @@ import pr2.net.LevelListClient.LevelListResult;
 **/
 class ListingTab extends LevelListingPage {
 	/** Flash campaign page formula: `((server_id + day) % 6) + 1`. */
-	public static function campaignPage(serverId:Int, weekday:Int):Int {
-		return LevelListClient.campaignPage(serverId, weekday);
+	public static function campaignPage(serverId:Int, day:Int):Int {
+		return LevelListClient.campaignPage(serverId, day);
 	}
 
 	public function new(mode:String) {
@@ -28,7 +29,9 @@ class ListingTab extends LevelListingPage {
 	private static function initialPageFor(mode:String):Int {
 		if (mode == "campaign") {
 			var serverId = LobbySession.server != null ? LobbySession.server.serverId : 0;
-			return campaignPage(serverId, currentWeekday());
+			var page = campaignPage(serverId, currentServerDay());
+			LobbySocket.campaignPage = page;
+			return page;
 		}
 		var remembered = Memory.getInt("coursePageNum" + mode, 0);
 		return remembered != 0 ? remembered : 1;
@@ -61,7 +64,11 @@ class ListingTab extends LevelListingPage {
 		Memory.set("coursePageNum" + mode, n);
 	}
 
-	private static function currentWeekday():Int {
-		return Std.int(Date.now().getDay());
+	public static function currentServerDayForTests():Int {
+		return currentServerDay();
+	}
+
+	private static function currentServerDay():Int {
+		return Std.int(LobbySocket.getDay());
 	}
 }

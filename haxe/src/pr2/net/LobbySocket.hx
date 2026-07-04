@@ -1,5 +1,6 @@
 package pr2.net;
 
+import com.jiggmin.data.Time;
 import haxe.Timer;
 #if js
 import js.Browser;
@@ -45,7 +46,7 @@ class LobbySocket {
 	private static var connected:Bool = false;
 	private static var pingIntervalActive:Bool = false;
 	private static var pingTimer:Null<Timer>;
-	private static var serverTimeOffsetMs:Float = 0;
+	private static var serverTime:Time = new Time(function():Float return nowMs());
 	#if js
 	private static var socket:Null<WebSocket>;
 	private static var buffer:String = "";
@@ -139,8 +140,8 @@ class LobbySocket {
 		closeCount = 0;
 		connected = false;
 		stopPingInterval();
-		serverTimeOffsetMs = 0;
 		nowMs = defaultNowMs;
+		serverTime = new Time(function():Float return nowMs());
 	}
 
 	/** Last command emitted, or "" if none — convenience for assertions. */
@@ -159,14 +160,22 @@ class LobbySocket {
 		if (Math.isNaN(serverSeconds)) {
 			return;
 		}
-		var localSeconds = getMS() / 1000;
+		var localSeconds = serverTime.getTimestamp();
 		if (Math.abs(serverSeconds - localSeconds) > 2) {
-			serverTimeOffsetMs = serverSeconds * 1000 - nowMs();
+			serverTime.setTime(serverSeconds);
 		}
 	}
 
 	public static function getMS():Float {
-		return nowMs() + serverTimeOffsetMs;
+		return serverTime.getMS();
+	}
+
+	public static function getTimestamp():Float {
+		return serverTime.getTimestamp();
+	}
+
+	public static function getDay():Float {
+		return serverTime.getDay();
 	}
 
 	public static function pingIsActiveForTests():Bool {
