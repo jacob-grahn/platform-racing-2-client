@@ -1,10 +1,9 @@
 package pr2.lobby.level;
 
-import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.app.AppStage;
 import pr2.lobby.LobbyArt;
-import pr2.lobby.dialogs.InfoPopup;
+import pr2.lobby.dialogs.AutoDismissPopup;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
@@ -22,10 +21,9 @@ import pr2.util.DisplayUtil;
 	`--` wait with a 30-second fallback dismiss. Clicking outside the popup, like
 	the original auto-dismiss, removes it.
 
-	The Flash `AutoDismissPopup` base is folded in here (the stage MOUSE_DOWN
-	hit-test). `flash.utils.setInterval/setTimeout` map to `haxe.Timer`.
+	`flash.utils.setInterval/setTimeout` map to `haxe.Timer`.
 **/
-class CourseMenu extends InfoPopup {
+class CourseMenu extends AutoDismissPopup {
 	public static var instance:Null<CourseMenu> = null;
 
 	private var art:Null<PR2MovieClip>;
@@ -40,7 +38,6 @@ class CourseMenu extends InfoPopup {
 	private var timer:Int = 0;
 	private var secondInterval:Null<haxe.Timer>;
 	private var waitTimeout:Null<haxe.Timer>;
-	private var initTimeout:Null<haxe.Timer>;
 
 	public function new(s:Slot) {
 		super();
@@ -69,9 +66,6 @@ class CourseMenu extends InfoPopup {
 		waitTimeout = haxe.Timer.delay(closeMenu, 30000);
 
 		positionNear(s);
-
-		// AutoDismissPopup: arm the click-outside dismiss after layout settles.
-		initTimeout = haxe.Timer.delay(initAutoDismiss, 25);
 	}
 
 	public function forceTime(a:Array<String>):Void {
@@ -139,20 +133,6 @@ class CourseMenu extends InfoPopup {
 		closeMenu();
 	}
 
-	// ---- auto-dismiss (folded-in AutoDismissPopup) -----------------------
-
-	private function initAutoDismiss():Void {
-		if (AppStage.stage != null) {
-			AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, downHandler);
-		}
-	}
-
-	private function downHandler(e:MouseEvent):Void {
-		if (!hitTestPoint(e.stageX, e.stageY, true)) {
-			remove();
-		}
-	}
-
 	override public function remove():Void {
 		if (slot == null) {
 			// Already removed; avoid re-running teardown (and re-clearing the slot).
@@ -170,13 +150,6 @@ class CourseMenu extends InfoPopup {
 		cancelBinding = null;
 		stopInterval();
 		stopWait();
-		if (initTimeout != null) {
-			initTimeout.stop();
-			initTimeout = null;
-		}
-		if (AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, downHandler);
-		}
 		var s = slot;
 		slot = null;
 		s.sendClearSlot();

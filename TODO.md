@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Provide a reusable `AutoDismissPopup.as` equivalent for popup menus: arm the
-  stage mouse-down listener after the Flash 25ms delay, dismiss only on outside
-  clicks using hit-test semantics, and remove the stage listener/timeout on
-  cleanup instead of duplicating partial behavior per popup.
 - [ ] Preserve `BanMenu.as` exact moderation payloads: include the current chat
   record except in mod/admin rooms, escape the target name in confirmation copy,
   keep trial-mod duration/scope restrictions, and cleanly detach upload success

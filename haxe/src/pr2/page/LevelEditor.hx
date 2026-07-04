@@ -50,6 +50,7 @@ import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.ProgressBar;
 import pr2.lobby.dialogs.UploadingPopup;
+import pr2.lobby.dialogs.AutoDismissController;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
@@ -2975,7 +2976,7 @@ class EditorBlockOptionsPopup extends Sprite {
 	public final editor:LevelEditor;
 	public final block:EditorBlockObject;
 	public final art:PR2MovieClip;
-	private var armed:Bool = false;
+	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
 	public function new(editor:LevelEditor, block:EditorBlockObject, linkage:String) {
@@ -2985,7 +2986,7 @@ class EditorBlockOptionsPopup extends Sprite {
 		art = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 6});
 		addChild(art);
 		mountNearBlock();
-		Timer.delay(armAutoDismiss, 25);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public function remove():Void {
@@ -2993,8 +2994,9 @@ class EditorBlockOptionsPopup extends Sprite {
 			return;
 		}
 		removed = true;
-		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
 		}
 		art.dispose();
 		if (parent != null) {
@@ -3034,19 +3036,6 @@ class EditorBlockOptionsPopup extends Sprite {
 		y = Math.round(y);
 	}
 
-	private function armAutoDismiss():Void {
-		if (removed || AppStage.stage == null) {
-			return;
-		}
-		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-	}
-
-	private function onStageMouseDown(event:MouseEvent):Void {
-		if (!hitTestPoint(event.stageX, event.stageY, true)) {
-			remove();
-		}
-	}
 }
 
 class EditorStatBlockOptionsPopup extends EditorBlockOptionsPopup {
@@ -3268,8 +3257,7 @@ class EditorValueSettingsPopup extends Sprite {
 	public final art:PR2MovieClip;
 	public final settingId:String;
 	private var valueInput:Null<FlTextInput>;
-	private var armTimer:Null<Timer>;
-	private var armed:Bool = false;
+	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 	private var defaultVal:String = "0";
 
@@ -3281,7 +3269,7 @@ class EditorValueSettingsPopup extends Sprite {
 		addChild(art);
 		configure();
 		mountNear(target);
-		armTimer = Timer.delay(armAutoDismiss, 25);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public static function handles(settingId:String):Bool {
@@ -3307,12 +3295,9 @@ class EditorValueSettingsPopup extends Sprite {
 			return;
 		}
 		removed = true;
-		if (armTimer != null) {
-			armTimer.stop();
-			armTimer = null;
-		}
-		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
 		}
 		if (valueInput != null) {
 			valueInput.removeEventListener(Event.CHANGE, commitValue);
@@ -3418,28 +3403,13 @@ class EditorValueSettingsPopup extends Sprite {
 		y = Math.round(y);
 	}
 
-	private function armAutoDismiss():Void {
-		armTimer = null;
-		if (removed || AppStage.stage == null) {
-			return;
-		}
-		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-	}
-
-	private function onStageMouseDown(event:MouseEvent):Void {
-		if (!hitTestPoint(event.stageX, event.stageY, true)) {
-			remove();
-		}
-	}
 }
 
 class EditorItemSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
 	public final art:PR2MovieClip;
 	private final checks:Map<Int, FlCheckBox> = new Map();
-	private var armTimer:Null<Timer>;
-	private var armed:Bool = false;
+	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
 	public function new(editor:LevelEditor, target:DisplayObject) {
@@ -3455,7 +3425,7 @@ class EditorItemSettingsPopup extends Sprite {
 			}
 		}
 		mountNear(target);
-		armTimer = Timer.delay(armAutoDismiss, 25);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public function isItemSelected(itemId:Int):Bool {
@@ -3475,12 +3445,9 @@ class EditorItemSettingsPopup extends Sprite {
 			return;
 		}
 		removed = true;
-		if (armTimer != null) {
-			armTimer.stop();
-			armTimer = null;
-		}
-		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
 		}
 		var selected:Array<Int> = [];
 		for (itemId in Items.getAllCodes()) {
@@ -3518,20 +3485,6 @@ class EditorItemSettingsPopup extends Sprite {
 		y = Math.round(y);
 	}
 
-	private function armAutoDismiss():Void {
-		armTimer = null;
-		if (removed || AppStage.stage == null) {
-			return;
-		}
-		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-	}
-
-	private function onStageMouseDown(event:MouseEvent):Void {
-		if (!hitTestPoint(event.stageX, event.stageY, true)) {
-			remove();
-		}
-	}
 }
 
 class EditorMusicSettingsPopup extends Sprite {
@@ -3539,8 +3492,7 @@ class EditorMusicSettingsPopup extends Sprite {
 	public final art:PR2MovieClip;
 	public final dropdown:FlComboBox;
 	private final songs:Array<MusicTrack>;
-	private var armTimer:Null<Timer>;
-	private var armed:Bool = false;
+	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
 	public function new(editor:LevelEditor, target:DisplayObject) {
@@ -3561,7 +3513,7 @@ class EditorMusicSettingsPopup extends Sprite {
 		dropdown.addEventListener(Event.CHANGE, changeSong);
 		addChild(dropdown);
 		mountNear(target);
-		armTimer = Timer.delay(armAutoDismiss, 25);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public function selectedSongId():String {
@@ -3579,12 +3531,9 @@ class EditorMusicSettingsPopup extends Sprite {
 			return;
 		}
 		removed = true;
-		if (armTimer != null) {
-			armTimer.stop();
-			armTimer = null;
-		}
-		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
 		}
 		dropdown.removeEventListener(Event.CHANGE, changeSong);
 		if (dropdown.parent == this) {
@@ -3638,28 +3587,13 @@ class EditorMusicSettingsPopup extends Sprite {
 		y = Math.round(y);
 	}
 
-	private function armAutoDismiss():Void {
-		armTimer = null;
-		if (removed || AppStage.stage == null) {
-			return;
-		}
-		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-	}
-
-	private function onStageMouseDown(event:MouseEvent):Void {
-		if (!hitTestPoint(event.stageX, event.stageY, true)) {
-			remove();
-		}
-	}
 }
 
 class EditorModeSettingsPopup extends Sprite {
 	public final editor:LevelEditor;
 	public final art:PR2MovieClip;
 	public final dropdown:Null<FlComboBox>;
-	private var armTimer:Null<Timer>;
-	private var armed:Bool = false;
+	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 
 	public function new(editor:LevelEditor, target:DisplayObject) {
@@ -3673,7 +3607,7 @@ class EditorModeSettingsPopup extends Sprite {
 			dropdown.addEventListener(Event.CHANGE, changeMode);
 		}
 		mountNear(target);
-		armTimer = Timer.delay(armAutoDismiss, 25);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public function selectedMode():String {
@@ -3690,12 +3624,9 @@ class EditorModeSettingsPopup extends Sprite {
 			return;
 		}
 		removed = true;
-		if (armTimer != null) {
-			armTimer.stop();
-			armTimer = null;
-		}
-		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
 		}
 		if (dropdown != null) {
 			dropdown.removeEventListener(Event.CHANGE, changeMode);
@@ -3752,20 +3683,6 @@ class EditorModeSettingsPopup extends Sprite {
 		y = Math.round(y);
 	}
 
-	private function armAutoDismiss():Void {
-		armTimer = null;
-		if (removed || AppStage.stage == null) {
-			return;
-		}
-		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-	}
-
-	private function onStageMouseDown(event:MouseEvent):Void {
-		if (!hitTestPoint(event.stageX, event.stageY, true)) {
-			remove();
-		}
-	}
 }
 
 class EditorHatsSettingsPopup extends Sprite {
@@ -3774,8 +3691,7 @@ class EditorHatsSettingsPopup extends Sprite {
 	private static inline final LOWEST_HAT_ID:Int = 2;
 	private static inline final HIGHEST_HAT_ID:Int = 16;
 	private final checks:Map<Int, FlCheckBox> = new Map();
-	private var armTimer:Null<Timer>;
-	private var armed:Bool = false;
+	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
 	private var cowboyHover:Null<HoverPopup>;
 	private var artifactHover:Null<HoverPopup>;
@@ -3799,7 +3715,7 @@ class EditorHatsSettingsPopup extends Sprite {
 		bindHover(5);
 		bindHover(14);
 		mountNear(target);
-		armTimer = Timer.delay(armAutoDismiss, 25);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public function isHatAllowed(hatId:Int):Bool {
@@ -3819,12 +3735,9 @@ class EditorHatsSettingsPopup extends Sprite {
 			return;
 		}
 		removed = true;
-		if (armTimer != null) {
-			armTimer.stop();
-			armTimer = null;
-		}
-		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
 		}
 		removeHover();
 		for (hatId in [5, 14]) {
@@ -3913,20 +3826,6 @@ class EditorHatsSettingsPopup extends Sprite {
 		y = Math.round(y);
 	}
 
-	private function armAutoDismiss():Void {
-		armTimer = null;
-		if (removed || AppStage.stage == null) {
-			return;
-		}
-		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
-	}
-
-	private function onStageMouseDown(event:MouseEvent):Void {
-		if (!hitTestPoint(event.stageX, event.stageY, true)) {
-			remove();
-		}
-	}
 }
 
 class EditorBlockObject extends Sprite {

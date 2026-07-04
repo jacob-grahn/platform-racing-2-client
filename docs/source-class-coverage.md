@@ -105,7 +105,7 @@ alone is not a class port.
 | AS3 source | Haxe/OpenFL target | Status | Notes |
 | --- | --- | --- | --- |
 | `flash/dialogs/AdminMenu.as` | `pr2.lobby.dialogs.AdminMenu`, `PlayerPopup` | ported | Admin-only temporary/trial/permanent moderator promotion confirmations, demotion confirmation, `promote_to_moderator` / `demote_moderator` socket payloads, target popup fade-out, and listener cleanup are covered by `PlayerPopupTest`. |
-| `flash/dialogs/AutoDismissPopup.as` | `pr2.lobby.dialogs.InfoPopup` subclasses | partial | The current hover/info popup base supports explicit popup removal and authored layout, but Flash's generic timed auto-dismiss base is not represented as a standalone reusable class. |
+| `flash/dialogs/AutoDismissPopup.as` | `pr2.lobby.dialogs.AutoDismissPopup`, `pr2.lobby.dialogs.AutoDismissController` | ported | The shared base/controller arms the stage mouse-down listener after the Flash 25ms delay, dismisses only when shape hit-testing reports an outside click, and tears down the timer/listener on removal; covered by `AutoDismissPopupTest` and reused by `CourseMenu` plus editor popups. |
 | `flash/dialogs/BanMenu.as` | admin/moderation popup gap | gap | The authored ban menu, duration/reason controls, and moderation requests are not yet ported. |
 | `flash/dialogs/ChangePasswordPopup.as` | account password-change gap | gap | The password-change form and request flow remain under the account workflow TODO. |
 | `flash/dialogs/ChooseLevelModModePopup.as` | level-info moderation gap | gap | Level moderation mode selection is still part of the level-info report/rating/moderation action TODO. |
@@ -119,7 +119,7 @@ alone is not a class port.
 | `flash/dialogs/GuildPopup.as` | `pr2.lobby.dialogs.GuildPopup` | partial | The authored guild profile popup, member rows, link route, and profile request are represented; full guild actions and live error/loading parity remain workflow gaps. |
 | `flash/dialogs/HatsMenu.as` | level-editor/account menu gap | gap | The authored hats picker menu is not yet ported as a dialogs class; hats/loadout persistence and editor hats menu remain separate TODOs. |
 | `flash/dialogs/HoverPopup.as` | `pr2.lobby.dialogs.HoverPopup` | partial | Authored hover-popup framing and text display exist; specialized hover content such as chat room info and exact delay variants remain listed under their feature gaps. |
-| `flash/dialogs/InfoPopup.as` | `pr2.lobby.dialogs.InfoPopup`, `pr2.lobby.level.CourseMenu` | partial | Shared info-popup framing supports current hover/info popups and course-menu placement; generic Flash base behavior is not fully audited. |
+| `flash/dialogs/InfoPopup.as` | `pr2.lobby.dialogs.InfoPopup`, `pr2.lobby.dialogs.AutoDismissPopup`, `pr2.lobby.level.CourseMenu` | partial | Shared info-popup framing supports current hover/info popups and course-menu placement; specialized hover content and remaining dialog subclasses are tracked separately. |
 | `flash/dialogs/ItemMenu.as` | level-editor/account menu gap | gap | The authored item picker menu remains unported outside the generated symbol assets. |
 | `flash/dialogs/LevelInfoPopup.as` | `pr2.lobby.dialogs.LevelInfoPopup`, `pr2.lobby.LobbyPopups` | partial | Level links open the authored singleton popup, covered by `LevelInfoPopupTest`; data population, report, rating, and moderation actions remain TODOs. |
 | `flash/dialogs/LevelReportPopup.as` | level-info report gap | gap | Level report form fields and submission remain under the level-info actions TODO. |

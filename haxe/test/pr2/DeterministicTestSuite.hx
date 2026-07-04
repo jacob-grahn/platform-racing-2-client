@@ -57,6 +57,7 @@ import pr2.gameplay.RaceSessionTranscriptTest;
 import pr2.level.LevelFixtureParserTest;
 import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
+import pr2.lobby.AutoDismissPopupTest;
 import pr2.lobby.ChatTabTest;
 import pr2.lobby.ColorPickerTest;
 import pr2.lobby.CreditsPopupTest;
@@ -184,6 +185,7 @@ class DeterministicTestSuite {
 		EditorBlockOptionsTest.main();
 		EditorSettingsTest.main();
 		CampaignTestScreenTest.main();
+		AutoDismissPopupTest.main();
 		LobbyServicesTest.main();
 		AccountTabTest.main();
 		ChatTabTest.main();
