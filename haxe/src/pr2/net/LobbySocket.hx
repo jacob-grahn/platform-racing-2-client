@@ -23,6 +23,8 @@ import js.html.WebSocket;
 class LobbySocket {
 	/** Commands written since the last `resetSent()` — inspected by tests. */
 	public static var sentCommands:Array<String> = [];
+	public static var sendNum:Int = 0;
+	public static var closeCount:Int = 0;
 
 	/** Login-phase frame interceptor; when null, frames go to `CommandHandler`. */
 	public static var onFrame:Null<String->Void>;
@@ -77,6 +79,10 @@ class LobbySocket {
 
 	public static function write(command:String):Void {
 		sentCommands.push(command);
+		sendNum++;
+		if (sendNum == 12) {
+			sendNum++;
+		}
 		#if js
 		Browser.document.body.setAttribute("data-pr2-last-command", command);
 		if (socket != null && socket.readyState == WebSocket.OPEN && protocol != null) {
@@ -86,6 +92,7 @@ class LobbySocket {
 	}
 
 	public static function close():Void {
+		closeCount++;
 		#if js
 		if (socket != null) {
 			socket.onopen = null;
@@ -111,6 +118,8 @@ class LobbySocket {
 
 	public static function resetSent():Void {
 		sentCommands = [];
+		sendNum = 0;
+		closeCount = 0;
 	}
 
 	/** Last command emitted, or "" if none — convenience for assertions. */

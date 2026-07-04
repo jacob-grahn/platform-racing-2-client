@@ -1666,19 +1666,75 @@ class LobbyServicesTest {
 			captured = args;
 		});
 		// Server layout: hash`num`command`arg1`arg2`
-		var handled = handler.handleServerFrame("abc`5`setChatRoomList`main`speed`");
+		var handled = handler.handleServerFrame(CommandHandler.buildServerFrame(5, "setChatRoomList", ["main", "speed"]));
 		assertEquals(true, handled, "frame handled");
 		assertEquals("main", captured[0], "first arg parsed");
 		assertEquals("speed", captured[1], "second arg parsed");
+		assertEquals(false, handler.handleServerFrame(CommandHandler.buildServerFrame(5, "setChatRoomList", ["replay"])), "replayed send number rejected");
+		assertEquals(false, handler.handleServerFrame("bad`6`setChatRoomList`hash`"), "bad hash rejected");
 		handler.defineCommand("setChatRoomList", null);
-		assertEquals(false, handler.handleServerFrame("abc`6`setChatRoomList`x`"), "cleared command ignored");
+		assertEquals(false, handler.handleServerFrame(CommandHandler.buildServerFrame(7, "setChatRoomList", ["x"])), "cleared command ignored");
+
+		handler.defineCommand("buffered", function(args):Void {
+			captured = args;
+		});
+		var first = CommandHandler.buildServerFrame(8, "buffered", ["one"]);
+		var second = CommandHandler.buildServerFrame(9, "buffered", ["two"]);
+		assertEquals(0, handler.addText(first.substr(0, 5)), "partial frame waits for EOL");
+		assertEquals(2, handler.addText(first.substr(5) + CommandHandler.END_CHAR + second + CommandHandler.END_CHAR), "buffer handles two EOL frames");
+		assertEquals("two", captured[0], "second buffered arg parsed");
 
 		SecureData.clear();
-		assertEquals(true, handler.handleServerFrame("abc`7`setRank`37`"), "default setRank handled");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(10, "setRank", ["37"])), "default setRank handled");
 		assertEquals(37.0, SecureData.getNumber("userRank"), "setRank updates secure rank");
 		handler.clearAll();
-		assertEquals(true, handler.handleServerFrame("abc`8`setRank`38`"), "default setRank survives clearAll");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(11, "setRank", ["38"])), "default setRank survives clearAll");
 		assertEquals(38.0, SecureData.getNumber("userRank"), "setRank remains global");
+
+		LobbySession.clear();
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(12, "setGroup", ["2"])), "setGroup handled");
+		assertEquals(2, LobbySession.group, "setGroup updates session group");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(13, "becomeSpecialUser", [])), "special user handled");
+		assertEquals(true, LobbySession.isSpecialUser, "special user flag set");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(14, "becomePrizer", [])), "prizer handled");
+		assertEquals(true, LobbySession.isPrizer, "prizer flag set");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(15, "demotePrizer", [])), "demote prizer handled");
+		assertEquals(false, LobbySession.isPrizer, "prizer flag cleared");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(16, "becomeTempMod", [])), "temp mod handled");
+		assertEquals(true, LobbySession.isTempMod, "temp mod flag set");
+		assertEquals(false, LobbySession.isTrialMod, "temp mod clears trial flag");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(17, "becomeTrialMod", [])), "trial mod handled");
+		assertEquals(false, LobbySession.isTempMod, "trial mod clears temp flag");
+		assertEquals(true, LobbySession.isTrialMod, "trial mod flag set");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(18, "becomeFullMod", [])), "full mod handled");
+		assertEquals(2, LobbySession.group, "full mod group");
+		assertEquals(false, LobbySession.isTrialMod, "full mod clears trial flag");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(19, "demoteMod", [])), "demote mod handled");
+		assertEquals(1, LobbySession.group, "demote mod group");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(20, "tournamentMode", ["1"])), "tournament handled");
+		assertEquals(true, LobbySession.tournamentMode, "tournament flag set");
+		var accountChanges = 0;
+		LobbySession.onAccountChange(function():Void accountChanges++);
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(21, "guildChange", ['{"guild_id":9,"guild_name":"Racers","is_owner":true}'])), "guildChange handled");
+		assertEquals(9, LobbySession.guildId, "guild id updated");
+		assertEquals("Racers", LobbySession.guildName, "guild name updated");
+		assertEquals(true, LobbySession.guildOwner, "guild owner updated");
+		assertEquals(1, accountChanges, "guild change fires account change");
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(22, "setServerOwner", ["42"])), "server owner handled");
+		assertEquals(42, LobbySession.serverOwner, "server owner updated");
+		pr2.lobby.account.AccountState.currentHat = -1;
+		var levelAccessChecks = 0;
+		handler.defineCommand("testLevelAccess", function(_):Void levelAccessChecks++);
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(23, "wearingHat", ["7"])), "wearingHat handled");
+		assertEquals(7, pr2.lobby.account.AccountState.currentHat, "wearingHat updates current hat");
+		assertEquals(1, levelAccessChecks, "wearingHat dispatches level access check");
+		UnreadNotif.reset();
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(24, "pmNotify", ["100"])), "pmNotify handled");
+		assertEquals(1, UnreadNotif.numUnread(), "pmNotify records unread message");
+		LobbySocket.resetSent();
+		LobbySocket.sendNum = 2;
+		assertEquals(true, handler.handleServerFrame(CommandHandler.buildServerFrame(25, "resend", ["3"])), "resend handled");
+		assertEquals(1, LobbySocket.closeCount, "resend closes stale socket");
 	}
 
 	private static function testMemoryAndSecureData():Void {

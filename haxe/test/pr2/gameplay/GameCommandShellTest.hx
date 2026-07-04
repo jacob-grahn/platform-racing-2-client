@@ -110,16 +110,23 @@ class GameCommandShellTest {
 		assertEquals(false, cm.hasCommand("createLocalCharacter"), "createLocalCharacter cleared on remove");
 		assertEquals(false, cm.hasCommand("beginRace"), "beginRace cleared on remove");
 		assertEquals(false, cm.hasCommand("setLife"), "setLife cleared on remove");
-		assertEquals(false, cm.hasCommand("areYouHuman"), "areYouHuman cleared on remove");
+		assertEquals(true, cm.hasCommand("areYouHuman"), "default areYouHuman survives shell remove");
 		assertEquals(false, cm.hasCommand("forceQuit"), "forceQuit cleared on remove");
 		assertEquals(false, send(cm, "award`coin`50"), "no command routes after remove");
 
 		trace('GameCommandShellTest passed $assertions assertions');
 	}
 
+	private static var sendNum:Int = 0;
+
 	private static function send(cm:CommandHandler, body:String):Bool {
-		// Prepend the gameserver hash/sendNum envelope the dispatcher strips.
-		return cm.handleServerFrame("h`1`" + body);
+		var parts = body.split("`");
+		var command = parts.shift();
+		if (parts.length > 0 && parts[parts.length - 1] == "") {
+			parts.pop();
+		}
+		sendNum++;
+		return cm.handleServerFrame(CommandHandler.buildServerFrame(sendNum, command, parts));
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

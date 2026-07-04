@@ -41,6 +41,8 @@ class LobbySession {
 	public static var isTrialMod:Bool = false;
 	public static var isSpecialUser:Bool = false;
 	public static var isPrizer:Bool = false;
+	public static var tournamentMode:Bool = false;
+	public static var serverOwner:Int = 0;
 
 	/** Favorited level ids (Flash `Main.favoriteLevels`), used by listings. */
 	public static var favoriteLevels:Array<Int> = [];
@@ -87,6 +89,8 @@ class LobbySession {
 		isTrialMod = false;
 		isSpecialUser = false;
 		isPrizer = false;
+		tournamentMode = false;
+		serverOwner = 0;
 		favoriteLevels = [];
 		accountChangeListeners = [];
 	}

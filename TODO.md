@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `CommandHandler.as` incoming socket validation and default command
-  side effects: buffer EOL-delimited frames, recompute the first-three-character
-  MD5 hash with `CommAuth.getToken(server_id)`, reject replayed/out-of-order
-  `sendNum`s, handle `resend`, and register the built-in `message`, `setRank`,
-  `setGroup`, `startGame`, `pmNotify`, user-role, captcha, tournament,
-  `guildChange`, `setServerOwner`, and `wearingHat` commands.
 - [ ] Port the full `Data.as` helper surface where UI/protocol code still uses
   it: exact random swear replacements, `parseLinks()` rich-format conversion
   for user/url/level/guild/invite/discord/color/bold/italic/underline/size tags,
@@ -305,9 +299,8 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   cached servers when possible, and `selectServer()` should append/update server
   items without duplicating ids while preserving Flash's guild/public/beta
   selection rules.
-- [ ] Preserve `CommAuth.as` compatibility: initialize the two `SecureStore`
-  encrypted communication tokens and expose `getToken(num)` with Flash's
-  server-10 special case, even if the Haxe socket protocol also keeps constants
+- [ ] Preserve remaining `CommAuth.as` compatibility: initialize the two
+  `SecureStore` encrypted communication tokens instead of using direct constants
   internally.
 - [ ] Port `ArtifactHint.as` exactly: `/hint`, `/lotw`, and `/arti` should load
   `/files/level_of_the_week.json`, parse current/first-finder/bubbles-winner/
