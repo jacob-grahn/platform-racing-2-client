@@ -84,6 +84,7 @@ import pr2.page.EditorSettingsTest;
 import pr2.page.CampaignTestScreenTest;
 import pr2.runtime.FlButtonTest;
 import pr2.runtime.FlComponentsTest;
+import pr2.runtime.EpicFlashTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
@@ -102,6 +103,7 @@ class DeterministicTestSuite {
 		SourceClassCoverageInventoryTest.main();
 		FlButtonTest.main();
 		FlComponentsTest.main();
+		EpicFlashTest.main();
 		GpNotificationTest.main();
 		RemovableTest.main();
 		PixelEffect1Test.main();

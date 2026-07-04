@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `EpicFlash.as` for epic color-cycling display objects: allow items to
-  be registered, start/stop a repeating random `ColorTransform.color` tick at the
-  configured delay, update delay while active, report emptiness, and clear item
-  references on removal.
 - [ ] Preserve `HTMLNameMaker.as` link handling beyond basic user/guild/level/url
   links: support invite and Discord verification events, use Flash's group color
   and special-user rules for parsed group strings, keep `encodeURI`-style URL
