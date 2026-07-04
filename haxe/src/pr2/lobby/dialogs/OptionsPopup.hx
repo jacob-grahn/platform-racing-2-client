@@ -4,6 +4,7 @@ import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.text.TextField;
 import pr2.audio.AudioManager;
+import pr2.lobby.LobbySession;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.account.Settings;
@@ -56,9 +57,16 @@ class OptionsPopup extends Popup {
 		bind("art_bt", toggleArtMenu);
 		bind("music_bt", toggleSongsMenu);
 		bind("close_bt", startFadeOut);
-		for (name in ["changePass_bt", "changeEmail_bt", "guildLeave_bt", "guildCreate_bt", "guildEdit_bt", "guildTransfer_bt"]) {
+		for (name in ["changeEmail_bt", "guildLeave_bt", "guildCreate_bt", "guildEdit_bt", "guildTransfer_bt"]) {
 			var button = DisplayUtil.findByName(art, name);
 			if (button != null) button.visible = false;
+		}
+		var changePass = DisplayUtil.findByName(art, "changePass_bt");
+		if (changePass != null) {
+			changePass.visible = LobbySession.isMember();
+			if (changePass.visible) {
+				bind("changePass_bt", function():Void new ChangePasswordPopup());
+			}
 		}
 	}
 

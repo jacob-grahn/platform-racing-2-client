@@ -59,6 +59,7 @@ import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.AccountTabTest;
 import pr2.lobby.AutoDismissPopupTest;
 import pr2.lobby.ChatTabTest;
+import pr2.lobby.ChangePasswordPopupTest;
 import pr2.lobby.ColorPickerTest;
 import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
@@ -189,6 +190,7 @@ class DeterministicTestSuite {
 		LobbyServicesTest.main();
 		AccountTabTest.main();
 		ChatTabTest.main();
+		ChangePasswordPopupTest.main();
 		ColorPickerTest.main();
 		CreditsPopupTest.main();
 		ExternalLinkPopupTest.main();

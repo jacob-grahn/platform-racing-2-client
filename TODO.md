@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `ChangePasswordPopup.as`: authored three-field dialog, Enter-key submit,
-  password mismatch/current-password validation, AES-encrypted JSON payload using
-  `Env.LOGIN_KEY`/`Env.LOGIN_IV`, POST to `change_password.php`, and Flash
-  uploading/fade-out behavior.
 - [ ] Port `CreateGuildPopup.as` and its edit flow: load guild info for edits,
   display/upload/delete emblems through `EmblemLoader`, post create/edit fields
   to the Flash endpoints, update `Main` guild account state on owner edits, and
@@ -50,7 +46,7 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   `i` to `logout.php`, show `"Logging out..."`, and clear user data unless the
   server returns password error type.
 - [ ] Complete `OptionsPopup.as` account/guild buttons and side effects: show and
-  stack change-password, change-email, guild leave/create/edit/transfer buttons
+  stack change-email, guild leave/create/edit/transfer buttons
   based on login/guild/owner state, wire `guild_leave.php` and account-change
   updates, and preserve hover tooltips plus jump-sound playback on sound slider
   release.

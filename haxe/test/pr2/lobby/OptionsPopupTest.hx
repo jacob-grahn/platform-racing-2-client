@@ -5,7 +5,9 @@ import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.AlternateControls;
+import pr2.lobby.dialogs.ChangePasswordPopup;
 import pr2.lobby.dialogs.OptionsPopup;
+import pr2.lobby.dialogs.Popup;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlSlider;
 import pr2.util.DisplayUtil;
@@ -14,12 +16,20 @@ class OptionsPopupTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		var savedGroup = LobbySession.group;
+		LobbySession.group = 1;
 		Settings.useMemoryStoreForTests();
 		Settings.init("Options Tester");
 		Settings.setValue(Settings.MUSIC_VOLUME, 35);
 		Settings.setValue(Settings.SOUND_VOLUME, 45);
 		Settings.setValue(Settings.DISABLED_SONGS, ["2", "17"]);
 		var popup = new OptionsPopup();
+		assertEquals(true, DisplayUtil.findByName(popup, "changePass_bt").visible, "members can open change-password dialog");
+		click(popup, "changePass_bt");
+		var open = Popup.getOpen();
+		var changePass = Std.downcast(open[open.length - 1], ChangePasswordPopup);
+		assertNotNull(changePass, "change-password button opens the authored dialog");
+		changePass.remove();
 
 		var music = slider(popup, "musicSlider");
 		var sound = slider(popup, "soundSlider");
@@ -63,6 +73,7 @@ class OptionsPopupTest {
 
 		Settings.setValue(Settings.MUSIC_VOLUME, 100);
 		Settings.setValue(Settings.SOUND_VOLUME, 100);
+		LobbySession.group = savedGroup;
 		trace('OptionsPopupTest passed $assertions assertions');
 	}
 
@@ -87,5 +98,10 @@ class OptionsPopupTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function assertNotNull(value:Dynamic, message:String):Void {
+		assertions++;
+		if (value == null) throw message;
 	}
 }

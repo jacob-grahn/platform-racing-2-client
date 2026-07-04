@@ -123,6 +123,10 @@ final class ServerConfig {
 		return host + "/logout.php";
 	}
 
+	public static function changePasswordUrl():String {
+		return host + "/change_password.php";
+	}
+
 	public static function vaultUrl():String return host + "/vault/vault.php";
 	public static function vaultPurchaseUrl():String return host + "/vault/purchase_item.php";
 	public static function vaultSuperBoosterUrl():String return host + "/vault/use_super_booster.php";
