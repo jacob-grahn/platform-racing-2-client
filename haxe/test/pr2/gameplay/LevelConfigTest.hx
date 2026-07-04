@@ -14,6 +14,7 @@ class LevelConfigTest {
 	public static function main():Void {
 		testDefaults();
 		testItems();
+		testItemRuntimeSurface();
 		testBadHats();
 		testGameMode();
 		testCowboyChance();
@@ -51,6 +52,31 @@ class LevelConfigTest {
 
 		c.setItems("Bogus`0`99");
 		assertEquals(0, c.allowedItems.length, "unknown name, 0, and out-of-range are dropped");
+	}
+
+	private static function testItemRuntimeSurface():Void {
+		var specs = [
+			{code: Items.LASER_GUN, className: "pr2.gameplay.items.LaserGun", name: "Laser", uses: 3, reloadMs: 800, reload: 22},
+			{code: Items.MINE, className: "pr2.gameplay.items.Mine", name: "Mine", uses: 1, reloadMs: 10, reload: 0},
+			{code: Items.LIGHTNING, className: "pr2.gameplay.items.Lightning", name: "Lightning", uses: 1, reloadMs: 10, reload: 0},
+			{code: Items.TELEPORT, className: "pr2.gameplay.items.Teleport", name: "Teleport", uses: 1, reloadMs: 10, reload: 0},
+			{code: Items.SUPER_JUMP, className: "pr2.gameplay.items.SuperJump", name: "Super Jump", uses: 1, reloadMs: 10, reload: 0},
+			{code: Items.JET_PACK, className: "pr2.gameplay.items.JetPack", name: "Jet Pack", uses: 3, reloadMs: 10, reload: 0},
+			{code: Items.SPEED_BURST, className: "pr2.gameplay.items.SpeedBurst", name: "Speed Burst", uses: 1, reloadMs: 10, reload: 0},
+			{code: Items.SWORD, className: "pr2.gameplay.items.Sword", name: "Sword", uses: 3, reloadMs: 800, reload: 22},
+			{code: Items.ICE_WAVE, className: "pr2.gameplay.items.IceWave", name: "Ice Wave", uses: 3, reloadMs: 1000, reload: 27}
+		];
+		for (spec in specs) {
+			var item = Items.getFromCode(spec.code);
+			assertEquals(spec.className, Type.getClassName(Type.getClass(item)), spec.name + " concrete item class");
+			assertEquals(spec.code, Items.getCodeFromItem(item), spec.name + " code round-trips from item instance");
+			assertEquals(spec.name, item.name, spec.name + " runtime name matches Flash name");
+			assertEquals(spec.uses, item.initialUses, spec.name + " initial uses match Flash item");
+			assertEquals(spec.reloadMs, item.reloadTimeMs, spec.name + " reload milliseconds match Flash item");
+			assertEquals(spec.reload, item.reloadFrames, spec.name + " reload frames preserve Flash timing at 27fps");
+		}
+		assertEquals(null, Items.getFromCode(0), "unknown item code creates no item");
+		assertEquals(0, Items.getCodeFromItem(null), "null item maps to code 0");
 	}
 
 	private static function testBadHats():Void {

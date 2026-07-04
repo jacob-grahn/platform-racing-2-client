@@ -18,7 +18,7 @@ import pr2.util.DisplayUtil;
 **/
 class Slot extends Sprite {
 	private var num:Int;
-	private var owner:LevelItem;
+	private var owner:Null<LevelItem>;
 	private var art:PR2MovieClip;
 	private var bg:Null<PR2MovieClip>;
 	private var rankBox:Null<TextField>;
@@ -53,7 +53,7 @@ class Slot extends Sprite {
 			nameBox.text = name;
 		}
 		changeStatus("filled");
-		if (me == "me") {
+		if (me == "me" && owner != null) {
 			owner.selectLevel();
 			courseMenu = new CourseMenu(this);
 		}
@@ -62,12 +62,16 @@ class Slot extends Sprite {
 	/** Confirm/clear route through the owning level item to the gameserver,
 		mirroring Flash `Slot.sendConfirmSlot`/`sendClearSlot`. */
 	public function sendConfirmSlot():Void {
-		owner.sendConfirmSlot();
+		if (owner != null) {
+			owner.sendConfirmSlot();
+		}
 	}
 
 	public function sendClearSlot():Void {
-		owner.sendClearSlot();
-		owner.clearSelectedLevel();
+		if (owner != null) {
+			owner.sendClearSlot();
+			owner.clearSelectedLevel();
+		}
 		courseMenu = null;
 	}
 
@@ -100,7 +104,9 @@ class Slot extends Sprite {
 
 	private function onClick(_:MouseEvent):Void {
 		gotoBg("pending");
-		owner.sendFillSlot(num);
+		if (owner != null) {
+			owner.sendFillSlot(num);
+		}
 	}
 
 	private inline function gotoBg(frame:String):Void {
@@ -114,6 +120,7 @@ class Slot extends Sprite {
 			courseMenu.remove();
 			courseMenu = null;
 		}
+		owner = null;
 		removeEventListener(MouseEvent.MOUSE_OVER, onOver);
 		removeEventListener(MouseEvent.MOUSE_OUT, onOut);
 		removeEventListener(MouseEvent.CLICK, onClick);

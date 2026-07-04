@@ -16,6 +16,7 @@ import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
 import openfl.utils.Assets;
 import openfl.utils.Timer;
+import pr2.Constants;
 import pr2.page.LoginSocketProbe.LoginProbeStatus;
 import pr2.runtime.FontResolver;
 import pr2.net.AccountCreationClient;
@@ -31,9 +32,12 @@ import pr2.runtime.FlComboBox;
 import pr2.audio.AudioManager;
 import pr2.app.KongAward;
 import pr2.app.SiteMode;
+import pr2.lobby.LobbySession;
 import pr2.lobby.account.Settings;
+import pr2.lobby.account.Presets;
 import pr2.lobby.account.Preset.Outfit;
 import pr2.lobby.dialogs.OutfitPopup;
+import pr2.lobby.messages.UnreadNotif;
 import pr2.util.RequestGeneration;
 
 private typedef LoginPageArt = {
@@ -473,9 +477,9 @@ class LoginPage extends Page {
 		setActiveServerCombosLoading();
 		ServerStatusClient.fetch(function(result):Void {
 			if (serverGeneration.isStale(generation)) return;
-			servers = ServerStatusClient.selectList(result.servers);
+			servers = ServerStatusClient.selectList(result.servers, LobbySession.guildId, Constants.BETA);
 			selectedServerIndex = previousServer == null
-				? ServerStatusClient.preferredIndex(servers)
+				? ServerStatusClient.preferredIndex(servers, LobbySession.guildId)
 				: findServerIndex(previousServer);
 			updateActiveServerCombos();
 		}, function(message:String):Void {
@@ -539,7 +543,7 @@ class LoginPage extends Page {
 				}
 			}
 		}
-		return ServerStatusClient.preferredIndex(servers);
+		return ServerStatusClient.preferredIndex(servers, LobbySession.guildId);
 	}
 
 	private function selectServerFromCombo(combo:FlComboBox):Void {
@@ -624,14 +628,14 @@ class LoginPage extends Page {
 		closePopup();
 		var server = loginServer;
 		pr2.lobby.LobbySession.begin(session.userName, session.group, server, session.userId, loginRemember);
-		pr2.lobby.LobbySession.hasEmail = session.hasEmail;
-		pr2.lobby.LobbySession.token = session.token;
-		pr2.lobby.LobbySession.guildId = session.guildId;
-		pr2.lobby.LobbySession.guildOwner = session.guildOwner;
-		pr2.lobby.LobbySession.guildName = session.guildName;
-		pr2.lobby.LobbySession.emblem = session.emblem;
+		pr2.lobby.LobbySession.updateAccountState(session.hasEmail, session.token, false);
+		pr2.lobby.LobbySession.updateGuildState(session.guildId, session.guildName, session.guildOwner, session.emblem, false);
 		pr2.lobby.LobbySession.favoriteLevels = session.favoriteLevels;
+		pr2.lobby.LobbySession.lastAuthTime.setTime(session.authTime);
+		UnreadNotif.setLastRead(session.lastRead);
+		UnreadNotif.notifyUser(session.lastRecv);
 		Settings.init(session.userName);
+		Presets.load();
 		if (loginRemember) SavedAccounts.add(session.userName, session.token);
 		loginToken = "";
 		if (pageHolder != null) {
@@ -643,6 +647,9 @@ class LoginPage extends Page {
 		loginGate = null;
 		loginServer = null;
 		closeSocketProbe();
+		pr2.lobby.LobbySession.clear();
+		Settings.clear();
+		UnreadNotif.reset();
 		openLoginMessage(message == "" ? "Login failed." : message);
 	}
 

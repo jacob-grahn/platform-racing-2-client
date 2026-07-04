@@ -222,10 +222,7 @@ class CommandHandler {
 			return;
 		}
 		var ret:Dynamic = haxe.Json.parse(args[0]);
-		LobbySession.guildId = intField(ret, "guild_id");
-		LobbySession.guildName = stringField(ret, "guild_name");
-		LobbySession.guildOwner = boolField(ret, "is_owner");
-		LobbySession.notifyAccountChange();
+		LobbySession.updateGuildFromData(ret, null, true, false);
 	}
 
 	private function setServerOwner(args:Array<String>):Void {

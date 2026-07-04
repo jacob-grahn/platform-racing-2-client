@@ -4,6 +4,7 @@ package pr2.lobby.dialogs;
 import js.Browser;
 #end
 import haxe.Json;
+import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
@@ -11,6 +12,7 @@ import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import pr2.app.AppStage;
+import pr2.gameplay.ExpGain;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyPopups;
 import pr2.lobby.LobbyRight;
@@ -24,6 +26,8 @@ import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.FlButton;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.GuildName;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 import pr2.util.Dyn;
 
@@ -42,6 +46,7 @@ import pr2.util.Dyn;
 **/
 class PlayerPopup extends Popup {
 	public static var instance:Null<PlayerPopup>;
+	public static var hoverDelayFactory:(Void->Void, Int)->Null<Timer> = defaultHoverDelay;
 
 	private static final MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	private static final MONTHS_LONG = [
@@ -57,22 +62,30 @@ class PlayerPopup extends Popup {
 	private var dataMode:String = "http";
 
 	private var character:Null<AccountCharacter>;
+	private var guildNameClip:Null<GuildName>;
 	private var hover:Null<HoverPopup>;
+	private var sendPmHover:Null<HoverPopup>;
+	private var sendPmHoverTimer:Null<Timer>;
 	private var registerTime:Float = 0;
 	private var activeTime:Float = 0;
 	private var expPoints:Int = 0;
 	private var expToRank:Int = 0;
 	private var rankValue:Int = 0;
+	private var expGain:Null<ExpGain>;
 	private var banMenu:Null<BanMenu>;
 	private var adminMenu:Null<AdminMenu>;
 	private var tempModMenu:Null<TempModMenu>;
 
 	private var cm:CommandHandler = CommandHandler.commandHandler;
 	private var cleanups:Array<Void->Void> = [];
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(name:String, autoLoad:Bool = true) {
 		if (PlayerPopup.instance != null) {
 			PlayerPopup.instance.startFadeOut();
+		}
+		if (GuildPopup.instance != null) {
+			GuildPopup.instance.startFadeOut();
 		}
 		super();
 		PlayerPopup.instance = this;
@@ -118,7 +131,7 @@ class PlayerPopup extends Popup {
 
 	private function playerInfoFromHTTP():Void {
 		dataMode = "http";
-		TextLoader.load(ServerConfig.getPlayerInfoUrl(userName), function(body:String):Void {
+		asyncGuard.watch(TextLoader.load(ServerConfig.getPlayerInfoUrl(userName), asyncGuard.wrap(function(body:String):Void {
 			if (fadeOutStarted) {
 				return;
 			}
@@ -127,9 +140,9 @@ class PlayerPopup extends Popup {
 			} catch (_:Dynamic) {
 				startFadeOut();
 			}
-		}, function(_:String):Void {
+		}), asyncGuard.wrap(function(_:String):Void {
 			startFadeOut();
-		});
+		})));
 	}
 
 	/** Fill the popup from a parsed player-info object (socket or HTTP payload). */
@@ -159,6 +172,9 @@ class PlayerPopup extends Popup {
 			new PlayerGuestPopup(userName);
 			return;
 		}
+		if (LobbySession.serverOwner == userId) {
+			groupText = "Server Owner";
+		}
 
 		setText("statusBox", Dyn.string(ret, "status", ""));
 		setText("groupBox", groupText);
@@ -169,6 +185,7 @@ class PlayerPopup extends Popup {
 		expPoints = Dyn.int(ret, "exp_points");
 		expToRank = Dyn.int(ret, "exp_to_rank");
 		setText("rankBox", Std.string(rankValue));
+		setupExpGain();
 		bindHover("rankBox", showRankSupplement, hideSupplement);
 		setText("hatBox", Dyn.string(ret, "hats", ""));
 
@@ -268,10 +285,13 @@ class PlayerPopup extends Popup {
 			guildBox.text = "none";
 			return;
 		}
-		// The original swaps in a GuildName clip (emblem + linked name); that symbol
-		// is not ported yet, so we keep the authored guildBox as a clickable name.
-		guildBox.text = Dyn.string(ret, "guildName", "");
-		bindClick(guildBox, function():Void LobbyPopups.showGuild(guildId));
+		if (guildBox.parent != null) {
+			guildBox.parent.removeChild(guildBox);
+		}
+		guildNameClip = new GuildName(guildId, Dyn.string(ret, "guildName", ""), Dyn.string(ret, "emblem", ""), true, true);
+		guildNameClip.x = -40;
+		guildNameClip.y = 64;
+		playerInfo.addChild(guildNameClip);
 	}
 
 	private function setupCharacter(ret:Dynamic):Void {
@@ -294,7 +314,9 @@ class PlayerPopup extends Popup {
 
 	private function setupSocialButtons(ret:Dynamic, group:Int):Void {
 		var message = DisplayUtil.findByName(playerInfo, "messageButton");
+		bindSendPmHover(message);
 		bindClick(message, function():Void {
+			clearSendPmHover();
 			startFadeOut();
 			new SendMessagePopup(userName);
 		});
@@ -365,6 +387,12 @@ class PlayerPopup extends Popup {
 		if (LobbyRight.instance != null) {
 			LobbyRight.instance.lookupUser(userName);
 		}
+		if (GuildPopup.instance != null) {
+			GuildPopup.instance.startFadeOut();
+		}
+		if (LevelInfoPopup.instance != null) {
+			LevelInfoPopup.instance.startFadeOut();
+		}
 		startFadeOut();
 	}
 
@@ -377,11 +405,12 @@ class PlayerPopup extends Popup {
 	// --- Supplement (hover) box ----------------------------------------------
 
 	private function showRankSupplement():Void {
-		// The original draws a live EXP progress bar here; that ExpGain symbol is
-		// not ported yet, so we surface the same numbers as text in the meantime.
 		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = true;
-		setText("supplText", "Rank " + rankValue + " — " + expPoints + " / " + expToRank + " EXP");
+		setText("supplText", "");
+		if (expGain != null && expGain.parent == null) {
+			playerInfo.addChild(expGain);
+		}
 	}
 
 	private function showDateSupplement(time:Float):Void {
@@ -393,7 +422,21 @@ class PlayerPopup extends Popup {
 	private function hideSupplement():Void {
 		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
 		if (supplBg != null) supplBg.visible = false;
+		if (expGain != null && expGain.parent == playerInfo) {
+			playerInfo.removeChild(expGain);
+		}
 		setText("supplText", "");
+	}
+
+	private function setupExpGain():Void {
+		if (expGain != null) {
+			expGain.remove();
+		}
+		expGain = new ExpGain();
+		expGain.x = playerInfo.x;
+		var supplBg = DisplayUtil.findByName(playerInfo, "supplBg");
+		expGain.y = (supplBg == null ? 0 : supplBg.y) + 3;
+		expGain.start(expPoints, expPoints, expToRank);
 	}
 
 	private function toggleUserIdShown(e:KeyboardEvent):Void {
@@ -439,6 +482,42 @@ class PlayerPopup extends Popup {
 			hover.remove();
 			hover = null;
 		}
+	}
+
+	private function bindSendPmHover(target:Null<DisplayObject>):Void {
+		if (target == null) {
+			return;
+		}
+		var over = function(_:MouseEvent):Void {
+			clearSendPmHover();
+			sendPmHoverTimer = hoverDelayFactory(function():Void {
+				sendPmHoverTimer = null;
+				clearSendPmHover();
+				sendPmHover = new HoverPopup("Send PM", "Send a PM to this player.", target);
+			}, 500);
+		};
+		var out = function(_:MouseEvent):Void clearSendPmHover();
+		target.addEventListener(MouseEvent.MOUSE_OVER, over);
+		target.addEventListener(MouseEvent.MOUSE_OUT, out);
+		cleanups.push(function():Void {
+			target.removeEventListener(MouseEvent.MOUSE_OVER, over);
+			target.removeEventListener(MouseEvent.MOUSE_OUT, out);
+		});
+	}
+
+	private function clearSendPmHover():Void {
+		if (sendPmHoverTimer != null) {
+			sendPmHoverTimer.stop();
+			sendPmHoverTimer = null;
+		}
+		if (sendPmHover != null) {
+			sendPmHover.remove();
+			sendPmHover = null;
+		}
+	}
+
+	public function hasSendPmHoverForTests():Bool {
+		return sendPmHover != null;
 	}
 
 	private function navigate(url:String):Void {
@@ -516,10 +595,12 @@ class PlayerPopup extends Popup {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
 		if (PlayerPopup.instance == this) {
 			PlayerPopup.instance = null;
 		}
 		clearHover();
+		clearSendPmHover();
 		if (banMenu != null) {
 			banMenu.remove();
 			banMenu = null;
@@ -541,11 +622,23 @@ class PlayerPopup extends Popup {
 			character.remove();
 			character = null;
 		}
+		if (guildNameClip != null) {
+			guildNameClip.remove();
+			guildNameClip = null;
+		}
+		if (expGain != null) {
+			expGain.remove();
+			expGain = null;
+		}
 		if (art != null) {
 			art.dispose();
 			art = null;
 		}
 		playerInfo = null;
 		super.remove();
+	}
+
+	private static function defaultHoverDelay(callback:Void->Void, delayMs:Int):Null<Timer> {
+		return Timer.delay(callback, delayMs);
 	}
 }

@@ -1,15 +1,23 @@
 package pr2.lobby;
 
+import com.jiggmin.data.Data;
 import haxe.crypto.Md5;
 import openfl.display.InteractiveObject;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.events.TimerEvent;
 import openfl.geom.Point;
 import openfl.ui.Keyboard;
+import pr2.app.AppStage;
+import pr2.app.KongAward;
+import pr2.audio.AudioManager;
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
+import pr2.lobby.players.Guilds;
 import pr2.lobby.players.PlayerListSort;
+import pr2.lobby.players.PlayersTabList;
+import pr2.lobby.players.PlayersUserListLoader;
 import pr2.lobby.players.SocialAction;
 import pr2.lobby.players.SocialAction.SocialActionPlan;
 import pr2.lobby.players.PlayerListSort.SortableRow;
@@ -20,26 +28,40 @@ import pr2.lobby.level.LevelAccess.LevelAccessState;
 import pr2.lobby.level.LevelGridLayout;
 import pr2.lobby.level.CourseMenu;
 import pr2.lobby.level.LevelLaunch;
+import pr2.lobby.level.LevelListingState;
 import pr2.lobby.messages.MessagesPaging;
 import pr2.lobby.messages.UnreadNotif;
+import pr2.gameplay.LevelConfig;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
+import pr2.net.LoginAuthClient;
+import pr2.net.LoginAuthClient.LoginAuthResult;
+import pr2.net.LoginSessionGate.LoginSessionResult;
+import pr2.net.SavedAccounts;
 import pr2.net.ServerConfig;
+import pr2.net.ServerInfo;
+import pr2.net.ServerStatusClient;
+import pr2.net.ServerStatusResult;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.Popup;
+import pr2.lobby.account.Presets;
 import pr2.page.EditorBlockOptions;
+import pr2.page.LoginPage;
 import pr2.page.LobbyPage;
 import pr2.page.LevelEditor;
 import pr2.page.LevelEditor.ChooseLevelsModePopup;
 import pr2.page.LevelEditor.DeletingLevelPopup;
 import pr2.page.LevelEditor.GetLevelsPopup;
+import pr2.page.LevelEditor.GetLevelsPopupItem;
 import pr2.page.LevelEditor.GetReportedLevelsPopupItem;
 import pr2.page.LevelEditor.HandleLevelReportPopup;
 import pr2.page.LevelEditor.GetReportedLevelsPopup;
 import pr2.page.LevelEditor.LoadingLevelPopup;
+import pr2.page.LevelEditor.LevelEditorConnectingPopup;
 import pr2.page.LevelEditor.SaveLevelPopup;
+import pr2.page.LevelEditor.EditorSideBarEntry;
 import pr2.page.LevelEditor.UploadingLevelPopup;
 import pr2.page.LevelEditor.TestCoursePage;
 import pr2.page.Page;
@@ -50,6 +72,7 @@ import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
+import pr2.ui.StageFocus;
 import pr2.ui.TabLayout;
 import pr2.ui.TabsHolder;
 import pr2.util.DisplayUtil;
@@ -72,8 +95,14 @@ class LobbyServicesTest {
 		testPageNavigationPositions();
 		testPlayerSortStateMachine();
 		testPlayerSortOrdering();
+		testPlayersTabListSortsOnInterval();
+		testPlayerAndGuildListsIgnoreLateLoadsAfterRemove();
 		testPaneTabLabels();
 		testLevelListParsing();
+		testLevelItemFavoriteFlow();
+		testLevelItemPasswordFlow();
+		testSearchFocusQuirks();
+		testSearchRequestQuirks();
 		testSearchQuery();
 		testLevelAccess();
 		testLevelPassResponse();
@@ -83,7 +112,14 @@ class LobbyServicesTest {
 		testSocketRecording();
 		testCommandDispatch();
 		testMemoryAndSecureData();
+		testPmNotificationLifecycle();
+		testLoginServerActivationLifecycle();
+		testCheckServersComboPrompts();
+		testCheckServersGuildSelectionRules();
+		testLoggingInPayloadAndResetTokenFlow();
+		testLoginPageAppliesPostLoginState();
 		testLevelEditorRoute();
+		testLobbyBottomButtonEffects();
 		testLevelEditorShell();
 		testLevelEditorLoadListPopup();
 		testLevelEditorLoadingLevelPopup();
@@ -98,6 +134,7 @@ class LobbyServicesTest {
 		testUploadingLevelPopupResultMessages();
 		testUploadingLevelPopupEmptyDataMessage();
 		testLevelEditorTestCourseTransition();
+		testLevelEditorEggTestCourseSpawnsEggs();
 		testMessagesPaging();
 		testSocialActionPlan();
 		testCourseMenuTiming();
@@ -165,10 +202,15 @@ class LobbyServicesTest {
 
 	private static function testLevelEditorRoute():Void {
 		var previousFactory = LobbyPage.createLevelEditorPage;
+		var previousLogoutPostFactory = LobbyPage.logoutPostFactory;
 		var launchedAsMod:Null<Bool> = null;
+		var logoutPosts:Array<{url:String, fields:Map<String, String>}> = [];
 		LobbyPage.createLevelEditorPage = function(isMod:Bool):Page {
 			launchedAsMod = isMod;
 			return new TestPage("level-editor");
+		};
+		LobbyPage.logoutPostFactory = function(url:String, fields:Map<String, String>):Void {
+			logoutPosts.push({url: url, fields: fields});
 		};
 
 		LobbySession.clear();
@@ -185,13 +227,113 @@ class LobbyServicesTest {
 		launchedAsMod = null;
 		LobbySession.group = 3;
 		LobbySession.isTempMod = true;
+		LobbySession.server = serverInfo(0);
+		LobbySession.userName = "Temp";
+		LobbySession.remember = false;
+		LobbySocket.resetSent();
 		page = new LobbyPage();
 		page.pageHolder = holder;
 		Reflect.callMethod(page, Reflect.field(page, "clickLevelEditor"), []);
-		assertEquals(false, launchedAsMod, "temporary moderators enter editor without mod privileges");
+		assertEquals(null, launchedAsMod, "non-guild temporary moderators confirm before editor entry");
+		var confirm = lastConfirmPopup();
+		assertNotNull(confirm, "temporary moderator editor entry opens confirmation");
+		assertEquals(true, LobbyArt.text(confirm, "textBox").htmlText.indexOf("Entering the level editor will log you out") >= 0,
+			"temporary moderator editor confirmation copy");
+		clickPopup(confirm, "ok_bt");
+		assertEquals(false, launchedAsMod, "confirmed temporary moderators enter editor without mod privileges");
+		assertEquals(true, Std.isOfType(holder.getCurrentPage(), TestPage), "confirmed temporary moderator editor route changes page");
+		assertEquals(1, LobbySocket.closeCount, "confirmed temporary moderator editor entry closes socket");
+		assertEquals(0, LobbySession.group, "confirmed temporary moderator editor entry logs out session");
+		assertEquals(1, logoutPosts.length, "confirmed non-remembered temporary moderator editor entry posts logout");
+		assertEquals(ServerConfig.logoutUrl(), logoutPosts[0].url, "temporary moderator editor logout endpoint");
+		assertEquals(0, mapSize(logoutPosts[0].fields), "temporary moderator editor logout posts empty fields");
+		assertNotNull(lastMessagePopup(), "confirmed temporary moderator editor entry shows logged-out message");
+		closeAllPopups();
+
+		launchedAsMod = null;
+		LobbySession.group = 3;
+		LobbySession.isTempMod = true;
+		LobbySession.server = serverInfo(77);
+		LobbySocket.resetSent();
+		page = new LobbyPage();
+		page.pageHolder = holder;
+		Reflect.callMethod(page, Reflect.field(page, "clickLevelEditor"), []);
+		assertEquals(false, launchedAsMod, "guild temporary moderators enter editor without demotion confirmation");
+		assertEquals(1, LobbySocket.closeCount, "guild temporary moderator editor entry still closes socket");
+
+		LobbySession.group = 2;
+		LobbySession.isTempMod = true;
+		LobbySession.server = serverInfo(0);
+		LobbySession.userName = "Temp";
+		LobbySession.remember = false;
+		LobbySocket.resetSent();
+		page = new LobbyPage();
+		page.pageHolder = holder;
+		Reflect.callMethod(page, Reflect.field(page, "clickLogout"), []);
+		confirm = lastConfirmPopup();
+		assertNotNull(confirm, "temporary moderator logout opens confirmation");
+		assertEquals(true, LobbyArt.text(confirm, "textBox").htmlText.indexOf("Logging out will automatically demote") >= 0,
+			"temporary moderator logout confirmation copy");
+		clickPopup(confirm, "ok_bt");
+		assertEquals(1, LobbySocket.closeCount, "confirmed temporary moderator logout closes socket");
+		assertEquals(0, LobbySession.group, "confirmed temporary moderator logout clears session");
+		assertEquals(2, logoutPosts.length, "confirmed non-remembered temporary moderator logout posts logout");
+		assertNotNull(lastMessagePopup(), "confirmed temporary moderator logout shows logged-out message");
+
+		LobbySession.group = 1;
+		LobbySession.isTempMod = false;
+		LobbySession.server = serverInfo(0);
+		LobbySession.remember = false;
+		LobbySocket.resetSent();
+		page = new LobbyPage();
+		page.pageHolder = holder;
+		Reflect.callMethod(page, Reflect.field(page, "clickLogout"), []);
+		assertEquals(3, logoutPosts.length, "non-remembered regular logout posts logout");
+		assertEquals(ServerConfig.logoutUrl(), logoutPosts[2].url, "regular logout endpoint");
+		assertEquals(0, mapSize(logoutPosts[2].fields), "regular logout posts empty fields");
+
+		LobbySession.group = 1;
+		LobbySession.isTempMod = false;
+		LobbySession.server = serverInfo(0);
+		LobbySession.remember = true;
+		LobbySocket.resetSent();
+		page = new LobbyPage();
+		page.pageHolder = holder;
+		Reflect.callMethod(page, Reflect.field(page, "clickLogout"), []);
+		assertEquals(3, logoutPosts.length, "remembered regular logout skips logout post");
 
 		LobbyPage.createLevelEditorPage = previousFactory;
+		LobbyPage.logoutPostFactory = previousLogoutPostFactory;
 		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testLobbyBottomButtonEffects():Void {
+		var starts = 0;
+		var targets:Array<Float> = [];
+		AudioManager.startPlayingHook = function():Void starts++;
+		AudioManager.targetVolumeHook = function(value:Float):Void targets.push(value);
+		LobbySession.clear();
+		LobbySession.group = 1;
+		Settings.setValue(Settings.MUSIC_VOLUME, 50);
+
+		var page = new LobbyPage();
+		page.initialize();
+		assertEquals(1, starts, "lobby entry starts Noodle Town when music is enabled");
+		assertEquals(0.3, targets[0], "lobby entry applies Flash Noodle Town volume scale");
+		var moreGames = DisplayUtil.findByName(page, "moreGamesButton");
+		moreGames.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(true, page.hasKongHoverForTests(), "Kongregate button hover opens Kong Hat popup");
+		moreGames.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(false, page.hasKongHoverForTests(), "Kongregate button mouse-out closes Kong Hat popup");
+		moreGames.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		page.remove();
+		assertEquals(false, page.hasKongHoverForTests(), "lobby removal clears Kong Hat popup");
+		assertEquals(0.0, targets[targets.length - 1], "lobby removal mutes Noodle Town");
+
+		AudioManager.resetHooksForTests();
+		Settings.setValue(Settings.MUSIC_VOLUME, 100);
+		closeAllPopups();
 	}
 
 	private static function testLevelEditorShell():Void {
@@ -211,6 +353,7 @@ class LobbyServicesTest {
 		zoomSelect.selectedIndex = 1;
 		zoomSelect.dispatchEvent(new Event(Event.CHANGE));
 		assertEquals(0.5, editor.zoom, "editor zoom follows authored combo box data");
+		assertEquals(0.5, editor.menu.tools.zoom, "editor zoom syncs to tools sidebar");
 		assertEquals(0.5, @:privateAccess editor.layerContainer.scaleX, "editor world scales horizontally with zoom");
 		assertEquals(0.5, @:privateAccess editor.layerContainer.scaleY, "editor world scales vertically with zoom");
 		var zoomedPoint = editor.blockLayer.globalToLocal(new Point(100, 120));
@@ -252,22 +395,86 @@ class LobbyServicesTest {
 		@:privateAccess editor.applyLayerPositions();
 		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "saveButton"), "enabled"), "guests cannot save");
 		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "loadButton"), "enabled"), "guests cannot load");
+		var popupCount = Popup.getOpen().length;
+		clickEditorMenu(editor, "saveButton");
+		clickEditorMenu(editor, "loadButton");
+		assertEquals(popupCount, Popup.getOpen().length, "guest save/load buttons do not open popups");
 		assertEquals("blocks", editor.menu.sideBar.id, "editor menu starts on blocks sidebar");
+		assertEquals("blocks", editor.focusedEditorLayer, "editor starts focused on block layer history");
 		assertEquals(editor.menu, editor.menu.sideBar.parent, "active sidebar is mounted above menu art");
+		assertEquals(222, Std.int(editor.menu.sideBar.x), "editor sidebar x matches Flash");
+		assertEquals(-195, Std.int(editor.menu.sideBar.y), "editor sidebar y matches Flash");
+		assertEquals(4, Std.int(editor.menu.sideBar.scrollHolderForTests().y), "editor sidebar scroll holder y");
+		assertEquals(35, Std.int(editor.menu.sideBar.scrollBarForTests().x), "editor sidebar scroll bar x");
+		assertEquals(2, Std.int(editor.menu.sideBar.scrollBarForTests().y), "editor sidebar scroll bar y");
+		assertEquals(30, Std.int(editor.menu.sideBar.maskWidthForTests()), "editor sidebar mask width");
+		assertEquals(348, Std.int(editor.menu.sideBar.maskHeightForTests()), "editor sidebar mask height");
+		assertEquals(true, editor.menu.sideBar.scrollHolderForTests().mask == editor.menu.sideBar.scrollMaskForTests(), "editor sidebar masks scroll holder");
+		var deleteEntry = editor.menu.sideBar.getChildByName("deleteEntry");
+		var basic1Entry = editor.menu.sideBar.getChildByName("basic1Entry");
+		var brickEntry = editor.menu.sideBar.getChildByName("brickEntry");
+		assertEquals(editor.menu.sideBar.scrollHolderForTests(), brickEntry.parent, "editor sidebar entries live in scroll holder");
+		assertEquals(0, Std.int(deleteEntry.y), "first sidebar entry starts at y0 inside holder");
+		assertEquals(40, Std.int(basic1Entry.y), "sidebar entries use 30px column plus 10px gap");
+		var brickHover = Std.downcast(brickEntry, pr2.lobby.dialogs.HoverDelayPopup);
+		assertEquals("Brick Block", brickHover.title, "block sidebar entry has authored hover title");
+		assertEquals("A block of poorly mortared bricks that will shatter if it is bumped from below.", brickHover.content,
+			"block sidebar entry has authored hover description");
+		var deleteSideBarEntry = Std.downcast(deleteEntry, EditorSideBarEntry);
+		var brickSideBarEntry = Std.downcast(brickEntry, EditorSideBarEntry);
+		assertEquals(true, brickSideBarEntry.hasAuthoredChromeForTests(), "block sidebar entries use authored SquareBG chrome");
+		assertEquals("ObjectDeleterButtonGraphic", deleteSideBarEntry.iconNameForTests(), "delete entry uses authored deleter graphic");
+		assertEquals("BrickBlock", brickSideBarEntry.iconNameForTests(), "block entry uses authored block preview");
+		brickEntry.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER, true));
+		assertEquals(0.5, brickSideBarEntry.iconColorTransformForTests().redMultiplier, "sidebar hover dims icon red channel");
+		assertEquals(128.0, brickSideBarEntry.iconColorTransformForTests().redOffset, "sidebar hover applies Flash red offset");
+		brickEntry.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT, true));
+		assertEquals(1.0, brickSideBarEntry.iconColorTransformForTests().redMultiplier, "sidebar hover out restores icon red channel");
+		assertEquals(0.0, brickSideBarEntry.iconColorTransformForTests().redOffset, "sidebar hover out clears color offset");
 		clickEditorSidebar(editor, "brickEntry");
 		assertEquals("blocks", editor.selectedToolSidebar, "sidebar click records selected tool sidebar");
 		assertEquals("brick", editor.selectedToolId, "sidebar click records selected tool id");
 		clickEditorMenu(editor, "settingsButton");
 		assertEquals("settings", editor.menu.sideBar.id, "settings button switches sidebar");
+		assertEquals("", editor.focusedEditorLayer, "settings button clears focused editor layer");
+		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"),
+			"settings button disables undo");
+		var itemsEntry = Std.downcast(editor.menu.sideBar.getChildByName("itemsEntry"), EditorSideBarEntry);
+		var rankEntry = Std.downcast(editor.menu.sideBar.getChildByName("rankEntry"), EditorSideBarEntry);
+		assertEquals("Items", itemsEntry.title, "settings sidebar entry has authored hover title");
+		assertEquals("These items will be available to players in your course's item boxes.", itemsEntry.content,
+			"settings sidebar entry has authored hover description");
+		assertEquals("ItemButtonGraphic", itemsEntry.iconNameForTests(), "settings item entry uses authored menu graphic");
+		assertEquals("ValueButtonGraphic", rankEntry.iconNameForTests(), "settings value entry uses authored value graphic");
+		itemsEntry.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true));
+		assertNotNull(editor.activeItemSettingsPopup, "settings menu button click opens its authored popup");
+		editor.closeItemSettingsPopup();
 		assertEquals(null, editor.menu.blocks.parent, "old sidebar is removed when switching");
 		assertEquals("", editor.selectedToolId, "switching sidebars clears stale selected tool");
 		clickEditorMenu(editor, "bgButton");
 		assertEquals("backgrounds", editor.menu.sideBar.id, "background button switches sidebar");
+		assertEquals("", editor.focusedEditorLayer, "background button clears focused editor layer");
+		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "redoButton"), "enabled"),
+			"background button disables redo");
+		var bg1Entry = Std.downcast(editor.menu.sideBar.getChildByName("bg1Entry"), EditorSideBarEntry);
+		assertEquals("BG1", bg1Entry.iconNameForTests(), "background entry uses authored background art");
 		clickEditorMenu(editor, "layer1Button");
 		assertEquals("stamps", editor.menu.sideBar.id, "layer buttons switch to stamps sidebar");
 		assertEquals(1, editor.activeObjectLayer.layerNum, "layer 1 selects the matching object layer");
+		assertEquals("objects", editor.focusedEditorLayer, "object layer button focuses current object layer");
+		var stampBrushEntry = Std.downcast(editor.menu.sideBar.getChildByName("brushEntry"), EditorSideBarEntry);
+		var stamp0Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp0Entry"), EditorSideBarEntry);
+		assertEquals("BrushGraphic", stampBrushEntry.iconNameForTests(), "stamp brush entry uses authored brush graphic");
+		assertEquals("Tree", stamp0Entry.iconNameForTests(), "stamp entry uses authored object preview");
 		clickEditorSidebar(editor, "brushEntry");
 		assertEquals("tools", editor.menu.sideBar.id, "stamp brush entry switches to draw tools");
+		assertEquals("draw", editor.focusedEditorLayer, "stamp brush entry focuses current draw layer");
+		var toolBrushEntry = Std.downcast(editor.menu.sideBar.getChildByName("brushEntry"), EditorSideBarEntry);
+		var eraserEntry = Std.downcast(editor.menu.sideBar.getChildByName("eraserEntry"), EditorSideBarEntry);
+		assertEquals("Brush", toolBrushEntry.title, "tools sidebar entry has authored hover title");
+		assertEquals("Draw things, yay!", toolBrushEntry.content, "tools sidebar entry has authored hover description");
+		assertEquals("BrushButtonGraphic", toolBrushEntry.iconNameForTests(), "tools brush entry uses authored button graphic");
+		assertEquals("EraserButtonGraphic", eraserEntry.iconNameForTests(), "tools eraser entry uses authored button graphic");
 		clickEditorSidebar(editor, "brushEntry");
 		assertEquals("tools", editor.selectedToolSidebar, "tools brush entry records selected tool sidebar");
 		assertEquals("brush", editor.selectedToolId, "tools brush entry records selected tool id");
@@ -291,6 +498,9 @@ class LobbyServicesTest {
 		assertEquals(true, editor.endSelectedBrush(), "customized brush stroke finishes");
 		assertEquals("d10;12;5;6,c336699,t12,d30;40;5;7", editor.activeDrawLayer.getSaveString(),
 			"brush size and color controls record Flash draw actions before the stroke");
+		clickEditorSidebar(editor, "landscapeEntry");
+		assertEquals("stamps", editor.menu.sideBar.id, "landscape entry switches back to stamps sidebar");
+		assertEquals("objects", editor.focusedEditorLayer, "landscape entry focuses current object layer");
 		clickEditorMenu(editor, "bgButton");
 		clickEditorMenu(editor, "layer1Button");
 		clickEditorSidebar(editor, "textEntry");
@@ -304,6 +514,7 @@ class LobbyServicesTest {
 		assertEquals(95, Std.int(label.x), "text placement applies Flash cursor x offset");
 		assertEquals(104, Std.int(label.y), "text placement applies Flash cursor y offset");
 		assertEquals("hello, world; #1", label.text, "text editing commits the typed content");
+		editor.activeObjectLayer.selectTextObjectForTests(-1);
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0", editor.activeObjectLayer.getActionString(), "text placement records Flash add/change actions");
 		label.beginDragAt(100, 120);
 		label.endDragAt(100, 120);
@@ -313,14 +524,23 @@ class LobbyServicesTest {
 		label.finishEditing();
 		assertEquals("edited text", label.text, "re-editing commits the updated text");
 		assertEquals(0x336699, label.color, "text color edit commits the selected color");
+		editor.activeObjectLayer.selectTextObjectForTests(-1);
 		assertEquals("u;95;104;0;100;100,y0;hello#44 world#59 #351;0,y0;edited text;3368601", editor.activeObjectLayer.getActionString(),
 			"text re-edit records a Flash change action with color");
+		assertEquals(true, label.hasAuthoredDeleteButtonForTests(), "text draw object uses authored delete button");
+		assertEquals(true, label.hasAuthoredResizeButtonForTests(), "text draw object uses authored resize button");
+		var outlineBounds = label.selectionOutlineBoundsForTests();
+		var displayBounds = label.displayBoundsForTests();
+		assertNear(Std.int(displayBounds.x), Std.int(outlineBounds.x), 2, "text selection outline starts at real display x");
+		assertNear(Std.int(displayBounds.y), Std.int(outlineBounds.y), 2, "text selection outline starts at real display y");
+		assertNear(Std.int(displayBounds.width), Std.int(outlineBounds.width), 8, "text selection outline follows real display width");
+		assertNear(Std.int(displayBounds.height), Std.int(outlineBounds.height), 8, "text selection outline follows real display height");
 		label.beginDragAt(100, 120);
 		assertEquals(0.75, label.alpha, "text drag fades the moved object like Flash");
 		label.dragTo(117.4, 146.6);
 		label.endDragAt(117.4, 146.6);
 		assertEquals(1, label.alpha, "text drag restores alpha on release");
-		var resizeHandle = label.getChildByName("resizeHandle");
+		var resizeHandle = label.getChildByName("ResizeButton");
 		assertNotNull(resizeHandle, "text object exposes a resize handle");
 		label.beginResizeAt(label.x + resizeHandle.x, label.y + resizeHandle.y);
 		label.resizeDragTo(label.x + resizeHandle.x * 1.236, label.y + resizeHandle.y * 0.754);
@@ -378,6 +598,10 @@ class LobbyServicesTest {
 		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "stamp placement records object on active layer");
 		assertEquals(1, editor.activeObjectLayer.numChildren, "stamp placement mounts a display object after deleted text");
 		assertEquals("-14;34", editor.activeObjectLayer.getSaveString(), "stamp placement exports Flash relative object coordinates");
+		editor.activeObjectLayer.selectPlacedStampForTests(0);
+		assertEquals(true, editor.activeObjectLayer.placedStampHasAuthoredHandlesForTests(0), "stamp draw object uses authored delete and resize buttons");
+		var stampOutline = editor.activeObjectLayer.placedStampOutlineBoundsForTests(0);
+		assertEquals(true, stampOutline.width > 0 && stampOutline.height > 0, "stamp draw object shows a selection outline");
 		clickEditorSidebar(editor, "deleteEntry");
 		assertEquals("delete", editor.selectedToolId, "stamps delete entry selects the delete tool");
 		assertEquals(true, editor.deleteSelectedObjectAt(100, 120), "stamps delete tool removes touched stamp objects");
@@ -443,45 +667,56 @@ class LobbyServicesTest {
 		editor.closeBlockOptionsPopup();
 		assertEquals("none", itemBlock.options, "closing an empty item popup preserves the none option");
 		clickEditorSidebar(editor, "brickEntry");
-		var brickBlock = editor.placeSelectedBlockAt(100, 120);
-		assertEquals(104, brickBlock.code, "placing over an editable block replaces it");
-		assertEquals(5, editor.blockLayer.blocks.length, "replacement keeps the four start blocks plus new block");
-		assertEquals(null, itemBlock.parent, "replaced block is unmounted");
+		var rejectedBrick = editor.placeSelectedBlockAt(100, 120);
+		assertEquals(null, rejectedBrick, "placing over an existing block is ignored");
+		assertEquals(5, editor.blockLayer.blocks.length, "ignored occupied placement keeps the existing blocks");
+		assertEquals(itemBlock, editor.blockLayer.getBlockAtSeg(3, 4), "occupied placement preserves the existing block");
+		assertNotNull(itemBlock.parent, "occupied placement leaves the existing block mounted");
+		var brickBlock = editor.placeSelectedBlockAt(130, 120);
+		assertEquals(104, brickBlock.code, "placing on an empty segment creates the selected block");
+		assertEquals(6, editor.blockLayer.blocks.length, "empty placement adds a block beside the item block");
 		assertEquals(null, brickBlock.getChildByName("optionsButton"), "plain selected blocks do not show options");
-		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"), "block replacement enables undo");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"), "block placement enables undo");
+		clickEditorMenu(editor, "settingsButton");
+		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"),
+			"settings sidebar hides block undo state");
+		clickEditorMenu(editor, "blocksButton");
+		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"),
+			"blocks button restores block undo state");
 		clickEditorMenu(editor, "undoButton");
 		var restoredItemBlock = editor.blockLayer.getBlockAtSeg(3, 4);
-		assertNotNull(restoredItemBlock, "block undo restores the replaced item block");
+		assertNotNull(restoredItemBlock, "block undo keeps the existing item block");
 		assertEquals(110, restoredItemBlock.code, "block undo restores the replaced block code");
 		assertEquals("none", restoredItemBlock.options, "block undo restores the replaced block options");
+		assertEquals(null, editor.blockLayer.getBlockAtSeg(4, 4), "block undo removes the newly placed brick block");
 		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "redoButton"), "enabled"), "block undo enables redo");
 		clickEditorMenu(editor, "redoButton");
-		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		brickBlock = editor.blockLayer.getBlockAtSeg(4, 4);
 		assertNotNull(brickBlock, "block redo restores the replacement block");
 		assertEquals(104, brickBlock.code, "block redo restores the replacement block code");
 		brickBlock.setOptions("legacy");
-		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;4;legacy", editor.blockLayer.getSaveString(),
+		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;10;none,1;0;4;legacy", editor.blockLayer.getSaveString(),
 			"block save string uses Flash relative grid coordinates and option suffixes");
 		clickEditorMenu(editor, "undoButton");
-		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		brickBlock = editor.blockLayer.getBlockAtSeg(4, 4);
 		assertEquals("", brickBlock.options, "block undo reverts option changes");
 		clickEditorMenu(editor, "redoButton");
-		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		brickBlock = editor.blockLayer.getBlockAtSeg(4, 4);
 		assertEquals("legacy", brickBlock.options, "block redo restores option changes");
 		clickEditorSidebar(editor, "deleteEntry");
 		assertEquals("delete", editor.selectedToolId, "blocks delete entry selects the delete tool");
 		brickBlock.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
-		assertEquals(4, editor.blockLayer.blocks.length, "blocks delete tool removes the target block");
+		assertEquals(5, editor.blockLayer.blocks.length, "blocks delete tool removes the target block");
 		assertEquals(null, brickBlock.parent, "deleted block is unmounted");
 		assertEquals(null, editor.selectedBlock, "deleted selected block clears selection");
-		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14", editor.blockLayer.getSaveString(),
+		assertEquals("444;335;11,1;0;12,1;0;13,1;0;14,-444;-331;10;none", editor.blockLayer.getSaveString(),
 			"block save string updates after deleting a placed block");
 		clickEditorMenu(editor, "undoButton");
-		brickBlock = editor.blockLayer.getBlockAtSeg(3, 4);
+		brickBlock = editor.blockLayer.getBlockAtSeg(4, 4);
 		assertNotNull(brickBlock, "block undo restores deleted blocks");
 		assertEquals("legacy", brickBlock.options, "block undo restores deleted block options");
 		clickEditorMenu(editor, "redoButton");
-		assertEquals(null, editor.blockLayer.getBlockAtSeg(3, 4), "block redo reapplies deletion");
+		assertEquals(null, editor.blockLayer.getBlockAtSeg(4, 4), "block redo reapplies deletion");
 		assertEquals(0, editor.blockLayer.redoArray.length, "block redo consumes the redo stack");
 		clickEditorSidebar(editor, "happyEntry");
 		var happyBlock = editor.placeSelectedBlockAt(160, 120);
@@ -550,8 +785,39 @@ class LobbyServicesTest {
 		editor.menu.setReportsMode(true);
 		assertEquals(false, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "saveButton"), "enabled"), "reports mode disables save");
 		assertEquals(true, editor.reportsMode, "menu reports mode updates editor");
+		popupCount = Popup.getOpen().length;
+		clickEditorMenu(editor, "saveButton");
+		assertEquals(popupCount, Popup.getOpen().length, "reports mode save button does not open a popup");
+		editor.title = "Dirty";
+		editor.note = "unsaved";
+		editor.setColor(0x123456);
+		editor.menu.setReportsMode(false);
+		editor.selectEditorTool("blocks", "brick");
+		var dirtyBlock = editor.placeSelectedBlockAt(100, 120);
+		assertNotNull(dirtyBlock, "new button setup places a dirty block");
+		clickEditorMenu(editor, "newButton");
+		var confirm = lastConfirmPopup();
+		assertNotNull(confirm, "new button opens a confirmation prompt");
+		assertEquals(true, LobbyArt.text(confirm, "textBox").htmlText.indexOf("clear this level") >= 0,
+			"new button confirmation matches Flash copy");
+		clickPopup(confirm, "ok_bt");
+		assertEquals("", editor.title, "confirmed new clears title");
+		assertEquals("", editor.note, "confirmed new clears note");
+		assertEquals(LevelConfig.DEFAULT_COLOR, editor.color, "confirmed new restores default background color");
+		assertEquals(4, editor.blockLayer.blocks.length, "confirmed new restores only default start blocks");
+		assertEquals(null, editor.blockLayer.getBlockAtSeg(3, 4), "confirmed new removes placed blocks");
+		assertEquals("blocks", editor.focusedEditorLayer, "confirmed new resets focus to block layer");
+		clickEditorMenu(editor, "exitButton");
+		confirm = lastConfirmPopup();
+		assertNotNull(confirm, "exit button opens a confirmation prompt");
+		assertEquals(true, LobbyArt.text(confirm, "textBox").htmlText.indexOf("Are you sure you want exit?") >= 0,
+			"exit button confirmation matches Flash copy");
+		clickPopup(confirm, "ok_bt");
+		assertEquals(true, Std.isOfType(Popup.getOpen()[Popup.getOpen().length - 1], LevelEditorConnectingPopup),
+			"confirmed exit opens the connecting popup");
 		editor.remove();
 		LobbySession.clear();
+		closeAllPopups();
 	}
 
 	private static function clickEditorMenu(editor:LevelEditor, name:String):Void {
@@ -578,7 +844,17 @@ class LobbyServicesTest {
 			requestedToken = fields.get("token");
 			onResult({
 				levels: [
-					{level_id: "7", version: "3", title: "Alpha", live: "1", type: "r", play_count: "12", rating: "4.5", note: "note"},
+					{
+						level_id: "7",
+						version: "1234",
+						title: "Alpha <One>",
+						live: "1",
+						type: "e",
+						time: "1609502400",
+						play_count: "12345",
+						rating: "4.5",
+						note: "line <one>\nsecond & line"
+					},
 					{level_id: "8", version: "4", title: "Beta", live: "0", type: "d", play_count: "2", rating: "3", note: ""}
 				]
 			});
@@ -596,11 +872,22 @@ class LobbyServicesTest {
 		assertEquals("http://example.test/levels_get.php", requestedUrl, "load popup posts to levels_get");
 		assertEquals("load-token", requestedToken, "load popup sends the session token");
 		assertEquals(2, popup.listings.length, "load popup renders returned listings");
-		assertEquals("Alpha", LobbyArt.text(popup.listings[0].art, "titleBox").text, "listing renders title");
+		assertEquals("Alpha <One>", LobbyArt.text(popup.listings[0].art, "titleBox").text, "listing renders title");
 		assertEquals("Published", LobbyArt.text(popup.listings[0].art, "statusBox").text, "listing renders published state");
 		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row starts on the authored up frame");
 		popup.listings[0].art.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row does not auto-play through button states");
+		assertEquals("-- Alpha &lt;One&gt; --", GetLevelsPopupItem.hoverTitleForTests(popup.listings[0].level),
+			"owned listing hover title escapes HTML");
+		assertEquals("Game Mode: Alien Eggs<br/>"
+			+ "Version: 1,234<br/>"
+			+ "Updated: " + Data.getShortDateStr(1609502400.0) + "<br/>"
+			+ "Plays: 12,345<br/>"
+			+ "Rating: 4.5<br/>-----<br/><i>line &lt;one&gt;\nsecond &amp; line</i>",
+			GetLevelsPopupItem.hoverBodyForTests(popup.listings[0].level), "owned listing hover body matches Flash formatting");
+		popup.listings[0].showHoverForTests();
+		assertEquals(550, Std.int(popup.listings[0].hoverXForTests() + popup.listings[0].hoverWidthForTests()),
+			"owned listing hover right-aligns to Flash x position");
 
 		var reported = new GetReportedLevelsPopupItem({
 			level_id: "9",
@@ -618,7 +905,7 @@ class LobbyServicesTest {
 
 		popup.selectListing(popup.listings[0]);
 		DisplayUtil.findByName(popup.art, "load_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		assertEquals("7:3", loaded, "loading a listing hands off id and version");
+		assertEquals("7:1234", loaded, "loading a listing hands off id and version");
 		assertEquals(true, popup.fadeOutStarted, "loading a listing closes the list popup");
 
 		popup.remove();
@@ -722,13 +1009,13 @@ class LobbyServicesTest {
 				levels: [
 					{
 						level_id: "51",
-						version: "6",
-						title: "Reported One",
-						creator: "Maker",
+						version: "12345",
+						title: "Reported <One>",
+						creator: "Maker & Co",
 						report_time: "1363478400",
-						reporter: "Concerned",
-						reason: "Bad art",
-						note: "check this"
+						reporter: "Concerned <Mod>",
+						reason: "Bad <art>",
+						note: "check <this>\nsecond & line"
 					}
 				]
 			});
@@ -750,12 +1037,27 @@ class LobbyServicesTest {
 		assertEquals("report-token", requestedToken, "reported popup sends the session token");
 		assertEquals("-- Reported Levels --", LobbyArt.text(popup.art, "titleBox").text, "reported popup title matches Flash");
 		assertEquals(1, popup.listings.length, "reported popup renders returned listings");
-		assertEquals("Reported One", LobbyArt.text(popup.listings[0].art, "titleBox").text, "reported listing renders title");
+		assertEquals("Reported <One>", LobbyArt.text(popup.listings[0].art, "titleBox").text, "reported listing renders title");
 		assertEquals("16/Mar/2013", LobbyArt.text(popup.listings[0].art, "timeBox").text, "reported listing renders report date");
+		assertEquals("-- Reported &lt;One&gt; --", GetReportedLevelsPopupItem.hoverTitleForTests(popup.listings[0].level),
+			"reported listing hover title escapes HTML");
+		assertEquals("Creator: Maker &amp; Co<br/>"
+			+ "Version: 12,345<br/>"
+			+ "Note: <i>check &lt;this&gt;\nsecond &amp; line</i><br/>"
+			+ "-----<br/>"
+			+ "Reported: " + Data.getShortDateStr(1363478400.0) + "<br/>"
+			+ "^ By: Concerned &lt;Mod&gt;<br/>"
+			+ "Reason: <i>Bad &lt;art&gt;</i>", GetReportedLevelsPopupItem.hoverBodyForTests(popup.listings[0].level),
+			"reported listing hover body matches Flash formatting");
+		popup.listings[0].showHoverForTests();
+		assertEquals(550, Std.int(popup.listings[0].hoverXForTests() + popup.listings[0].hoverWidthForTests()),
+			"reported listing hover right-aligns to Flash x position");
+		popup.listings[0].hideHoverForTests();
+		assertEquals(false, popup.listings[0].hasHoverForTests(), "reported listing hover cleans up on mouse out");
 
 		popup.selectListing(popup.listings[0]);
 		DisplayUtil.findByName(popup.art, "load_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		assertEquals("51:6", loaded, "reported listing load hands off id and version");
+		assertEquals("51:12345", loaded, "reported listing load hands off id and version");
 		assertEquals(true, popup.fadeOutStarted, "loading a reported listing closes the list popup");
 
 		popup.remove();
@@ -1282,6 +1584,11 @@ class LobbyServicesTest {
 		editor.selectEditorTool("blocks", "brick");
 		var brick = editor.placeSelectedBlockAt(100, 120);
 		assertNotNull(brick, "test-course source editor places a block");
+		editor.selectEditorTool("tools", "brush");
+		assertEquals(true, editor.beginSelectedBrushAt(20, 30), "test-course gating setup starts a brush stroke");
+		clickEditorMenu(editor, "testButton");
+		assertEquals(editor, holder.getCurrentPage(), "test button ignores clicks while the editor is drawing");
+		assertEquals(true, editor.endSelectedBrush(), "test-course gating setup finishes the brush stroke");
 		var sourceData = editor.getLevelVars().get("data");
 
 		LobbySocket.resetSent();
@@ -1296,12 +1603,21 @@ class LobbyServicesTest {
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "restart_bt"), "test course mounts authored restart button");
 		assertNotNull(testCourse.statsSelect, "test course mounts the StatsSelect control");
 		assertNotNull(testCourse.hatPicker, "test course mounts the HatPicker control");
-		assertEquals(10.0, testCourse.statsSelect.x, "test course stat picker x matches Flash holder placement");
-		assertEquals(290.0, testCourse.statsSelect.y, "test course stat picker y matches Flash holder placement");
+		assertEquals(testCourse.course, testCourse.art.parent, "test course graphic mounts inside the Course holder");
+		assertEquals(testCourse.course, testCourse.statsSelect.parent, "test course stat picker mounts inside the Course holder");
+		assertEquals(testCourse.course, testCourse.hatPicker.parent, "test course hat picker mounts inside the Course holder");
+		assertEquals(-265.0, testCourse.statsSelect.x, "test course stat picker x matches Flash holder placement");
+		assertEquals(90.0, testCourse.statsSelect.y, "test course stat picker y matches Flash holder placement");
 		assertEquals(0.66, testCourse.statsSelect.scaleX, "test course stat picker scale matches Flash");
-		assertEquals(15.0, testCourse.hatPicker.x, "test course hat picker x matches Flash holder placement");
-		assertEquals(265.0, testCourse.hatPicker.y, "test course hat picker y matches Flash holder placement");
+		assertEquals(-260.0, testCourse.hatPicker.x, "test course hat picker x matches Flash holder placement");
+		assertEquals(65.0, testCourse.hatPicker.y, "test course hat picker y matches Flash holder placement");
 		assertEquals(0.7, testCourse.hatPicker.scaleX, "test course hat picker scale matches Flash");
+		assertEquals(-130.0, testCourse.course.musicSelection.x, "test course music selector x matches Flash");
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = null;
+			testCourse.dispatchEvent(new Event(Event.ENTER_FRAME));
+			assertEquals(AppStage.stage, AppStage.stage.focus, "test course keeps stage focus every frame");
+		}
 		var initialStats = testCourse.course.localCharacter.debugState();
 		assertEquals(61, Math.round(initialStats.speedStat), "test course applies saved speed stat");
 		assertEquals(72, Math.round(initialStats.accelerationStat), "test course applies saved acceleration stat");
@@ -1309,6 +1625,17 @@ class LobbyServicesTest {
 		assertEquals(13, testCourse.course.localCharacter.hat1, "test course applies saved test hat");
 		assertEquals(true, LobbySocket.sentCommands.length > 0 && StringTools.startsWith(LobbySocket.sentCommands[0], "exact_pos`"),
 			"test course starts the race countdown like Flash");
+
+		var clickPoint = new Point(230, 240);
+		var targetWorld = testCourse.course.levelRenderer.screenToWorld(clickPoint.x, clickPoint.y);
+		testCourse.course.levelRenderer.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false, clickPoint.x, clickPoint.y));
+		var teleportedStats = testCourse.course.localCharacter.debugState();
+		var serverFixture = @:privateAccess testCourse.course.serverFixture;
+		var expectedFixtureX = targetWorld.x - serverFixture.originTileX * 30;
+		var expectedFixtureY = targetWorld.y - serverFixture.originTileY * 30;
+		assertEquals(Math.round(expectedFixtureX), Math.round(teleportedStats.x), "test course click teleports local player to clicked x");
+		assertEquals(Math.round(expectedFixtureY), Math.round(teleportedStats.y), "test course click teleports local player to clicked y");
+		assertEquals(2, testCourse.course.levelRenderer.teleportPopCountForTests(), "test course click adds source and destination teleport pops");
 
 		var firstCourse = testCourse.course;
 		var firstStatsSelect = testCourse.statsSelect;
@@ -1333,16 +1660,32 @@ class LobbyServicesTest {
 		assertEquals(44, syncedStats.speed, "block stat sync updates StatsSelect speed from character");
 		assertEquals(55, syncedStats.acceleration, "block stat sync updates StatsSelect acceleration from character");
 		assertEquals(66, syncedStats.jumping, "block stat sync updates StatsSelect jumping from character");
+		testCourse.course.setLife(1);
+		@:privateAccess testCourse.course.localCharacter.controller.courseRotation = 90;
+		@:privateAccess testCourse.course.localCharacter.controller.courseTweenRotation = 12;
+		@:privateAccess testCourse.course.localCharacter.controller.courseTime = 12;
+		testCourse.course.levelRenderer.setCourseRotation(90, 12);
+		if (AppStage.stage != null) {
+			AppStage.stage.focus = null;
+		}
 		DisplayUtil.findByName(testCourse.art, "restart_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
-		assertEquals(true, firstCourse != testCourse.course, "restart rebuilds the test course");
-		assertEquals(null, firstCourse.parent, "restart removes the previous Course display");
-		assertEquals(null, firstStatsSelect.parent, "restart removes the previous StatsSelect display");
-		assertEquals(null, firstHatPicker.parent, "restart removes the previous HatPicker display");
+		assertEquals(firstCourse, testCourse.course, "restart resets the existing test course like Flash");
+		assertEquals(firstStatsSelect, testCourse.statsSelect, "restart keeps the existing StatsSelect control");
+		assertEquals(firstHatPicker, testCourse.hatPicker, "restart keeps the existing HatPicker control");
+		assertEquals(testCourse.course, firstStatsSelect.parent, "restart leaves StatsSelect on the Course holder");
+		assertEquals(testCourse.course, firstHatPicker.parent, "restart leaves HatPicker on the Course holder");
+		assertEquals(0, testCourse.course.levelRenderer.teleportPopCountForTests(), "restart clears teleport pop effects");
 		var restartedStats = testCourse.course.localCharacter.debugState();
+		assertEquals(0, restartedStats.courseRotation, "restart resets course rotation");
+		assertEquals(90, restartedStats.courseTime, "restart resets the course timer to max time");
+		assertEquals(3, restartedStats.lives, "restart resets deathmatch lives");
 		assertEquals(91, Math.round(restartedStats.speedStat), "restart applies saved speed stat");
 		assertEquals(82, Math.round(restartedStats.accelerationStat), "restart applies saved acceleration stat");
 		assertEquals(73, Math.round(restartedStats.jumpStat), "restart applies saved jump stat");
 		assertEquals(15, testCourse.course.localCharacter.hat1, "restart applies saved test hat");
+		if (AppStage.stage != null) {
+			assertEquals(AppStage.stage, AppStage.stage.focus, "restart restores stage focus");
+		}
 
 		DisplayUtil.findByName(testCourse.art, "back_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		var returnedEditor = Std.downcast(holder.getCurrentPage(), LevelEditor);
@@ -1351,6 +1694,35 @@ class LobbyServicesTest {
 		assertEquals(true, returnedEditor.reportsMode, "returned editor preserves reports mode");
 		assertEquals("Testable Level", returnedEditor.title, "returned editor restores level vars");
 		assertEquals("2.0", returnedEditor.gravity, "returned editor restores normalized gravity");
+		returnedEditor.remove();
+		LobbySession.clear();
+	}
+
+	private static function testLevelEditorEggTestCourseSpawnsEggs():Void {
+		Settings.useMemoryStoreForTests();
+		Settings.init("Egg Tester");
+		LobbySession.clear();
+		LobbySession.group = 1;
+		var holder = new PageHolder();
+		var editor = new LevelEditor(null, true, false);
+		holder.changePage(editor);
+		editor.title = "Egg Test";
+		editor.setGameMode("egg");
+
+		clickEditorMenu(editor, "testButton");
+		var testCourse = Std.downcast(holder.getCurrentPage(), TestCoursePage);
+		assertNotNull(testCourse, "egg editor test button opens the test-course page");
+		assertEquals(10, testCourse.course.eggRound.count(), "egg test course spawns Flash's initial ten eggs");
+		var firstEgg = testCourse.course.eggRound.ids()[0];
+		assertEquals(true, testCourse.course.eggRound.collectEgg(firstEgg), "egg test course can collect a spawned egg");
+		assertEquals(11, testCourse.course.eggRound.count(), "egg test course adds one replacement egg on collect");
+		var course = testCourse.course;
+
+		DisplayUtil.findByName(testCourse.art, "back_bt").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(null, course.parent, "egg test course back cleanup removes the Course display");
+		assertEquals(null, course.eggRound, "egg test course back cleanup clears the egg round");
+		var returnedEditor = Std.downcast(holder.getCurrentPage(), LevelEditor);
+		assertNotNull(returnedEditor, "egg test course back returns to the editor");
 		returnedEditor.remove();
 		LobbySession.clear();
 	}
@@ -1497,6 +1869,56 @@ class LobbyServicesTest {
 		assertEquals("dave", rows[3].sortName(), "name asc last");
 	}
 
+	private static function testPlayersTabListSortsOnInterval():Void {
+		var list = new PlayersTabList();
+		list.initialize();
+		@:privateAccess list.addUserEntry("alice", "1", 5, 2);
+		@:privateAccess list.addUserEntry("bob", "1", 9, 1);
+		@:privateAccess list.addUserEntry("carol", "1", 5, 7);
+		assertEquals("alice,bob,carol", @:privateAccess list.listingSortNamesForTests().join(","),
+			"new player rows keep insertion order before interval sort");
+		assertEquals(true, @:privateAccess list.updateSort, "new player rows mark pending sort");
+		@:privateAccess list.sortListener();
+		assertEquals("bob,carol,alice", @:privateAccess list.listingSortNamesForTests().join(","),
+			"interval sort applies current rank sort");
+		assertEquals(false, @:privateAccess list.updateSort, "interval sort clears pending flag");
+		list.remove();
+	}
+
+	private static function testPlayerAndGuildListsIgnoreLateLoadsAfterRemove():Void {
+		var previousUserFetch = PlayersUserListLoader.fetchFactory;
+		var previousGuildFetch = Guilds.fetchFactory;
+		var userSuccess:Null<String->Void> = null;
+		var guildSuccess:Null<String->Void> = null;
+		var userResource = new FakeAsyncListResource();
+		var guildResource = new FakeAsyncListResource();
+		PlayersUserListLoader.fetchFactory = function(url:String, onData:String->Void, onError:String->Void) {
+			userSuccess = onData;
+			return userResource;
+		};
+		Guilds.fetchFactory = function(url:String, onData:String->Void, onError:String->Void) {
+			guildSuccess = onData;
+			return guildResource;
+		};
+
+		var users = new PlayersUserListLoader("friends");
+		users.initialize();
+		users.remove();
+		userSuccess('{"users":[{"name":"Late","group":"1","rank":50,"hats":4,"status":"online"}]}');
+		assertEquals(1, userResource.removes, "removed user list cancels tracked loader");
+		assertEquals("", @:privateAccess users.listingSortNamesForTests().join(","), "removed user list ignores late user response");
+
+		var guilds = new Guilds();
+		guilds.initialize();
+		guilds.remove();
+		guildSuccess('{"guilds":[{"guild_name":"Late Guild","guild_id":7,"active_count":3,"gp_today":99}]}');
+		assertEquals(1, guildResource.removes, "removed guild list cancels tracked loader");
+		assertEquals("", @:privateAccess guilds.listingSortNamesForTests().join(","), "removed guild list ignores late guild response");
+
+		PlayersUserListLoader.fetchFactory = previousUserFetch;
+		Guilds.fetchFactory = previousGuildFetch;
+	}
+
 	private static function testPaneTabLabels():Void {
 		// Members see PMs (left) and Favorites (right); guests don't.
 		var leftMember = LobbyLeft.tabLabels(2);
@@ -1515,15 +1937,131 @@ class LobbyServicesTest {
 	}
 
 	private static function testLevelListParsing():Void {
+		pr2.lobby.tabs.ListingTab.resetHooksForTests();
 		// Campaign page formula `((server_id + day) % 6) + 1`, 1..6.
 		assertEquals(1, pr2.net.LevelListClient.campaignPage(0, 0), "campaign page base");
 		assertEquals(3, pr2.net.LevelListClient.campaignPage(5, 3), "campaign page wraps within 6");
 		assertEquals(6, pr2.net.LevelListClient.campaignPage(2, 3), "campaign page upper");
+		LobbySession.clear();
+		LobbySession.lastAuthTime.setTime(172800);
+		assertEquals(2, pr2.lobby.tabs.ListingTab.currentServerDayForTests(), "campaign day comes from login auth time");
+		LobbySession.server = new ServerInfo("127.0.0.1", 9160, 5, "Campaign Server", "open", 0, 0, false);
+		var campaign = new pr2.lobby.tabs.ListingTab("campaign");
+		assertEquals(2, campaign.getPageNum(), "campaign initial page uses session server id and auth day");
+		assertEquals(2, LobbySocket.campaignPage, "campaign socket cache tracks selected campaign page");
+		LobbySession.clear();
+
+		var freshLevels = [new CampaignLevelInfo(11, 1, "Fresh Campaign", "Tester", 0, 4, 10)];
+		var freshCalls = 0;
+		var freshSuccess:Null<pr2.net.LevelListClient.LevelListResult->Void> = null;
+		pr2.lobby.tabs.ListingTab.fetchFactory = function(mode:String, page:Int, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void) {
+			freshCalls++;
+			assertEquals("campaign", mode, "fresh campaign fetch mode");
+			assertEquals(2, page, "fresh campaign fetch page");
+			freshSuccess = onResult;
+			return new FakeAsyncListResource();
+		};
+		LobbySession.lastAuthTime.setTime(172800);
+		LobbySession.server = new ServerInfo("127.0.0.1", 9160, 5, "Campaign Server", "open", 0, 0, false);
+		Memory.clear();
+		campaign = new pr2.lobby.tabs.ListingTab("campaign");
+		campaign.initialize();
+		var nav = campaign.pageNavigationForTests();
+		assertEquals(6, nav.pageCountForTests(), "campaign uses six-page vertical navigation");
+		assertEquals(328, Std.int(nav.x), "campaign page navigation x");
+		assertEquals(26, Std.int(nav.y), "campaign page navigation y");
+		assertEquals(1, freshCalls, "uncached campaign fetches once");
+		freshSuccess(new pr2.net.LevelListClient.LevelListResult(freshLevels, true));
+		assertEquals(freshLevels, Memory.get("campaignInfo2"), "fresh campaign response is cached by page");
+		assertEquals(1, campaign.levelItemCountForTests(), "fresh campaign response renders immediately");
+		campaign.remove();
+
+		var cachedLevels = [new CampaignLevelInfo(12, 1, "Cached Campaign", "Tester", 0, 5, 20)];
+		var cachedCalls = 0;
+		pr2.lobby.tabs.ListingTab.fetchFactory = function(mode:String, page:Int, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void) {
+			cachedCalls++;
+			return new FakeAsyncListResource();
+		};
+		Memory.clear();
+		Memory.set("campaignInfo2", cachedLevels);
+		campaign = new pr2.lobby.tabs.ListingTab("campaign");
+		campaign.initialize();
+		assertEquals(0, cachedCalls, "cached campaign info avoids a network request");
+		assertEquals(0, campaign.levelItemCountForTests(), "cached campaign info waits before showing courses");
+		@:privateAccess campaign.onCampaignRenderTimer();
+		assertEquals(1, campaign.levelItemCountForTests(), "cached campaign info renders after delayed show");
+		campaign.remove();
+		pr2.lobby.tabs.ListingTab.resetHooksForTests();
+		LobbySession.clear();
+
+		var delayedLevels = [new CampaignLevelInfo(13, 1, "Delayed Rank", "Tester", 0, 5, 30)];
+		var delayedSuccess:Null<pr2.net.LevelListClient.LevelListResult->Void> = null;
+		pr2.lobby.tabs.ListingTab.fetchFactory = function(mode:String, page:Int, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void) {
+			assertEquals("best", mode, "rank-delayed listing fetch mode");
+			assertEquals(1, page, "rank-delayed listing fetch page");
+			delayedSuccess = onResult;
+			return new FakeAsyncListResource();
+		};
+		Memory.clear();
+		SecureData.setNumber("userRank", -1);
+		var delayed = new pr2.lobby.tabs.ListingTab("best");
+		delayed.initialize();
+		delayedSuccess(new pr2.net.LevelListClient.LevelListResult(delayedLevels, true));
+		assertEquals(0, delayed.levelItemCountForTests(), "level listing waits while SecureData userRank is negative");
+		SecureData.setNumber("userRank", 3);
+		@:privateAccess delayed.onShowCoursesTimer();
+		assertEquals(1, delayed.levelItemCountForTests(), "level listing shows courses after delayed rank check passes");
+		delayed.remove();
+		pr2.lobby.tabs.ListingTab.resetHooksForTests();
+		SecureData.clear();
+
+		var lifecycleLevels = [new CampaignLevelInfo(14, 1, "Lifecycle", "Other", 10, 5, 40)];
+		var lifecycleSuccess:Null<pr2.net.LevelListClient.LevelListResult->Void> = null;
+		pr2.lobby.tabs.ListingTab.fetchFactory = function(mode:String, page:Int, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void) {
+			assertEquals("best", mode, "lifecycle listing fetch mode");
+			assertEquals(4, page, "lifecycle listing fetch page");
+			lifecycleSuccess = onResult;
+			return new FakeAsyncListResource();
+		};
+		Memory.clear();
+		Memory.set("coursePageNumbest", 4);
+		SecureData.setNumber("userRank", 3);
+		LobbySession.clear();
+		LobbySession.begin("Player", 1);
+		LevelListingState.currentPageNum = 99;
+		CourseMenu.instance = null;
+		var launched = false;
+		LevelLaunch.handler = function(levelId:Int, version:Int):Void {
+			launched = true;
+		};
+		var lifecycle = new pr2.lobby.tabs.ListingTab("best");
+		lifecycle.initialize();
+		assertEquals(4, LevelListingState.currentPageNum, "listing seeds global page before slots can fill");
+		lifecycleSuccess(new pr2.net.LevelListClient.LevelListResult(lifecycleLevels, true));
+		var lifecycleItem = lifecycle.levelItemForTests(0);
+		assertNotNull(lifecycleItem, "lifecycle listing rendered a level item");
+		assertEquals(true, lifecycleItem.coverShownForTests(), "rank-gated item shows access cover before cleanup");
 		LobbySocket.resetSent();
-		LobbySocket.nowMs = function():Float return 0;
-		LobbySocket.receivePing(["172800"]);
-		assertEquals(2, pr2.lobby.tabs.ListingTab.currentServerDayForTests(), "campaign day comes from server-synced socket time");
-		LobbySocket.resetSent();
+		lifecycleItem.sendFillSlot(2);
+		assertEquals("fill_slot`14_1`2`4", LobbySocket.lastSent(), "slot fill uses initialized listing page");
+		CommandHandler.commandHandler.dispatch("fillSlot14_1", ["0", "Player", "3", "me"]);
+		assertEquals(true, CourseMenu.instance != null, "local slot fill opens a course menu");
+		lifecycle.remove();
+		assertEquals(null, CourseMenu.instance, "listing cleanup removes local course menu");
+		assertEquals("clear_slot`", LobbySocket.lastSent(), "listing cleanup clears the server slot");
+		assertEquals(0, lifecycleItem.slotCountForTests(), "listing cleanup removes item slots");
+		assertEquals(false, lifecycleItem.coverShownForTests(), "listing cleanup detaches access cover state");
+		LevelLaunch.startGame(["14"]);
+		assertEquals(false, launched, "listing cleanup clears selected level launch");
+		LevelLaunch.handler = null;
+		pr2.lobby.tabs.ListingTab.resetHooksForTests();
+		SecureData.clear();
+		LobbySession.clear();
+
 		// Parsing pulls the levels array; an arbitrary body has an invalid hash.
 		var body = '{"hash":"zzz","levels":[{"level_id":"7","title":"Alpha","user_name":"Jo"},{"level_id":"8","title":"Beta","user_name":"Al"}]}';
 		var result = pr2.net.LevelListClient.parse(body);
@@ -1531,6 +2069,207 @@ class LobbyServicesTest {
 		assertEquals(7, result.levels[0].levelId, "first level id");
 		assertEquals("Beta", result.levels[1].title, "second level title");
 		assertEquals(false, result.hashValid, "arbitrary hash is invalid");
+
+		var hoverInfo = new CampaignLevelInfo(15, 12345, "Title <One>", "User & Co", 7, 4.5, 1234567, "0",
+			"Line 1\nLine <2>", false, "r", null, 1609502400);
+		assertEquals("-- Title &lt;One&gt; --", pr2.lobby.level.LevelItem.infoHoverTitleForTests(hoverInfo), "level item hover title escapes HTML");
+		assertEquals("By: User &amp; Co<br/>"
+			+ "Version: 12,345<br/>"
+			+ "Updated: " + Data.getShortDateStr(1609502400) + "<br/>"
+			+ "Min Rank: 7<br/>"
+			+ "Plays: 1,234,567<br/>"
+			+ "Rating: 4.5<br/>"
+			+ "-----<br/><i>Line 1\nLine &lt;2&gt;</i><br/>"
+			+ "-----<br/>(click the \"?\" for more info)", pr2.lobby.level.LevelItem.infoHoverBodyForTests(hoverInfo),
+			"level item hover body matches Flash formatting");
+	}
+
+	private static function testLevelItemFavoriteFlow():Void {
+		pr2.lobby.level.LevelItem.resetHooksForTests();
+		closeAllPopups();
+		LobbySession.clear();
+		LobbySession.begin("Player", 1);
+		LobbySession.favoriteLevels = [];
+
+		var hoverCallback:Null<Void->Void> = null;
+		var hoverDelay = 0;
+		pr2.lobby.level.LevelItem.favoriteHoverDelayFactory = function(callback:Void->Void, delayMs:Int):Null<haxe.Timer> {
+			hoverCallback = callback;
+			hoverDelay = delayMs;
+			return null;
+		};
+
+		var upload = new FakeFavoriteUploadingPopup();
+		var uploadCalls = 0;
+		var uploadResult:Null<Dynamic->Void> = null;
+		pr2.lobby.level.LevelItem.favoriteUploadFactory = function(url:String, fields:Map<String, String>, label:String,
+				onResult:Dynamic->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
+			uploadCalls++;
+			assertEquals(ServerConfig.favoriteModifyUrl(), url, "favorite upload endpoint");
+			assertEquals("add", fields.get("mode"), "favorite add upload mode");
+			assertEquals("16", fields.get("level_id"), "favorite upload level id");
+			assertEquals("Adding to favorites...", label, "favorite add upload label");
+			uploadResult = onResult;
+			return upload;
+		};
+
+		var item = new pr2.lobby.level.LevelItem(new CampaignLevelInfo(16, 1, "Favorite", "Other", 0, 5, 0));
+		assertEquals("Add to Favorites", pr2.lobby.level.LevelItem.favoriteHoverTitleForTests("add"), "favorite add hover title");
+		assertEquals("Add this level to your favorites list.", pr2.lobby.level.LevelItem.favoriteHoverMessageForTests("add"),
+			"favorite add hover message");
+		assertEquals("Remove from Favorites", pr2.lobby.level.LevelItem.favoriteHoverTitleForTests("remove"), "favorite remove hover title");
+		assertEquals("Remove this level from your favorites list.", pr2.lobby.level.LevelItem.favoriteHoverMessageForTests("remove"),
+			"favorite remove hover message");
+
+		@:privateAccess item.overFavorite();
+		assertEquals(500, hoverDelay, "favorite hover waits 500ms");
+		assertEquals(false, item.favoriteHoverVisibleForTests(), "favorite hover is delayed");
+		hoverCallback();
+		assertEquals(true, item.favoriteHoverVisibleForTests(), "favorite hover shows after delay callback");
+		@:privateAccess item.outFavorite();
+		assertEquals(false, item.favoriteHoverVisibleForTests(), "favorite hover clears on mouse out");
+
+		@:privateAccess item.clickFavorite("add");
+		assertEquals(1, uploadCalls, "favorite add starts one upload");
+		assertEquals(true, item.uploadingForTests() == upload, "favorite add tracks pending upload");
+		@:privateAccess item.clickFavorite("add");
+		assertEquals(1, uploadCalls, "favorite click is ignored while upload is pending");
+		uploadResult({mode: "add"});
+		assertEquals("16", LobbySession.favoriteLevels.join(","), "favorite add result updates session favorites");
+		assertEquals(1, upload.fadeOuts, "favorite add result fades upload popup");
+
+		var removeUpload = new FakeFavoriteUploadingPopup();
+		var removeResult:Null<Dynamic->Void> = null;
+		pr2.lobby.level.LevelItem.favoriteUploadFactory = function(url:String, fields:Map<String, String>, label:String,
+				onResult:Dynamic->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
+			assertEquals("remove", fields.get("mode"), "favorite remove upload mode");
+			assertEquals("Removing from favorites...", label, "favorite remove upload label");
+			removeResult = onResult;
+			return removeUpload;
+		};
+		@:privateAccess item.clickFavorite("remove");
+		removeResult({mode: "remove"});
+		assertEquals("", LobbySession.favoriteLevels.join(","), "favorite remove result updates session favorites");
+		assertEquals(1, removeUpload.fadeOuts, "favorite remove result fades upload popup");
+
+		var pendingUpload = new FakeFavoriteUploadingPopup();
+		pr2.lobby.level.LevelItem.favoriteUploadFactory = function(url:String, fields:Map<String, String>, label:String,
+				onResult:Dynamic->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
+			return pendingUpload;
+		};
+		@:privateAccess item.clickFavorite("add");
+		item.remove();
+		assertEquals(1, pendingUpload.removes, "favorite item cleanup removes pending upload popup");
+
+		pr2.lobby.level.LevelItem.resetHooksForTests();
+		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testLevelItemPasswordFlow():Void {
+		pr2.lobby.level.LevelItem.resetHooksForTests();
+		LobbySession.clear();
+		LobbySession.begin("Player", 1);
+		SecureData.setNumber("userRank", 50);
+		var postCalls = 0;
+		var passSuccess:Null<String->Void> = null;
+		var passError:Null<String->Void> = null;
+		pr2.lobby.level.LevelItem.passPostFactory = function(url:String, fields:Map<String, String>, onResult:String->Void,
+				onError:String->Void):pr2.util.AsyncRemovalGuard.AsyncRemovable {
+			postCalls++;
+			assertEquals(ServerConfig.levelPassCheckUrl(), url, "level pass check endpoint");
+			assertEquals("17", fields.get("course_id"), "level pass check course id");
+			assertEquals(Md5.encode("secret" + ServerConfig.LEVEL_PASS_SALT), fields.get("hash"), "level pass check hash");
+			passSuccess = onResult;
+			passError = onError;
+			return new FakeAsyncListResource();
+		};
+
+		var item = new pr2.lobby.level.LevelItem(new CampaignLevelInfo(17, 1, "Password", "Other", 0, 5, 0, "0", "", true));
+		item.setPassTextForTests("secret");
+		assertEquals(true, item.passButtonEnabledForTests(), "pass button starts enabled");
+		assertEquals(true, item.passBoxEnabledForTests(), "pass input starts enabled");
+		@:privateAccess item.clickPassEnter();
+		assertEquals(1, postCalls, "pass click sends one request");
+		assertEquals(true, item.passPendingForTests(), "pass request stays pending");
+		assertEquals("checking...", item.passTextForTests(), "pass input shows checking while pending");
+		assertEquals(false, item.passButtonEnabledForTests(), "pass button disables while pending");
+		assertEquals(false, item.passBoxEnabledForTests(), "pass input disables while pending");
+		@:privateAccess item.clickPassEnter();
+		assertEquals(1, postCalls, "pass click is ignored while pending");
+		passError("network");
+		assertEquals(false, item.passPendingForTests(), "pass error clears pending state");
+		assertEquals("", item.passTextForTests(), "pass error clears checking text");
+		assertEquals(true, item.passButtonEnabledForTests(), "pass error re-enables button");
+		assertEquals(true, item.passBoxEnabledForTests(), "pass error re-enables input");
+
+		item.setPassTextForTests("secret");
+		@:privateAccess item.clickPassEnter();
+		passSuccess('{"success":false}');
+		assertEquals(false, item.passPendingForTests(), "bad pass response clears pending state");
+		assertEquals("nope!", item.passTextForTests(), "bad pass response shows nope");
+		assertEquals(true, item.passButtonEnabledForTests(), "bad pass response re-enables button");
+		assertEquals(true, item.passBoxEnabledForTests(), "bad pass response re-enables input");
+		item.remove();
+		pr2.lobby.level.LevelItem.resetHooksForTests();
+		SecureData.clear();
+		LobbySession.clear();
+	}
+
+	private static function testSearchFocusQuirks():Void {
+		Memory.clear();
+		var focusResets = 0;
+		StageFocus.resetHook = function():Void {
+			focusResets++;
+		};
+		var search = new pr2.lobby.tabs.SearchTab();
+		search.initialize();
+		@:privateAccess search.modeCb.dispatchEvent(new Event(Event.CLOSE));
+		assertEquals(1, focusResets, "search mode combo close returns focus to stage");
+		@:privateAccess search.orderCb.dispatchEvent(new Event(Event.CLOSE));
+		assertEquals(2, focusResets, "search order combo close returns focus to stage");
+		@:privateAccess search.dirCb.dispatchEvent(new Event(Event.CLOSE));
+		assertEquals(3, focusResets, "search direction combo close returns focus to stage");
+		@:privateAccess search.onKeyDown(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, Keyboard.SPACE));
+		assertEquals(3, focusResets, "search non-enter key does not reset focus");
+		@:privateAccess search.onKeyDown(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, Keyboard.ENTER));
+		assertEquals(4, focusResets, "search Enter key returns focus to stage");
+		search.remove();
+		StageFocus.resetHooks();
+		Memory.clear();
+	}
+
+	private static function testSearchRequestQuirks():Void {
+		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		Memory.clear();
+		var searchCalls:Array<Map<String, String>> = [];
+		pr2.lobby.tabs.SearchTab.searchFactory = function(params:Map<String, String>, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void):pr2.util.AsyncRemovalGuard.AsyncRemovable {
+			searchCalls.push(params);
+			return new FakeAsyncListResource();
+		};
+
+		var blank = new pr2.lobby.tabs.SearchTab();
+		blank.initialize();
+		assertEquals(0, searchCalls.length, "blank search sends no request");
+		assertEquals(false, blank.loadingVisibleForTests(), "blank search does not show loading");
+		blank.remove();
+
+		Memory.clear();
+		Memory.set("coursePageNumsearch", 3);
+		var idSearch = new pr2.lobby.tabs.SearchTab("123", "id");
+		idSearch.initialize();
+		assertEquals(1, searchCalls.length, "id search initialized past page 1 sends only reset request");
+		assertEquals("1", searchCalls[0].get("page"), "id search reset request uses page 1");
+		assertEquals("id", searchCalls[0].get("mode"), "id search reset request keeps id mode");
+		assertEquals("123", searchCalls[0].get("search_str"), "id search reset request keeps query");
+		assertEquals(1, idSearch.getPageNum(), "id search initialized past page 1 resets displayed page");
+		assertEquals(1, Memory.getInt("coursePageNumsearch"), "id search reset persists page 1");
+		assertEquals(true, idSearch.loadingVisibleForTests(), "id search shows loading for the sent page 1 request");
+		idSearch.remove();
+
+		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		Memory.clear();
 	}
 
 	private static function testSearchQuery():Void {
@@ -1756,10 +2495,206 @@ class LobbyServicesTest {
 		assertEquals(0.0, SecureData.getNumber("zeroRank", 7), "secure stored zero overrides fallback");
 	}
 
+	private static function testPmNotificationLifecycle():Void {
+		UnreadNotif.reset();
+		CommandHandler.commandHandler.clearAll();
+		LobbySession.clear();
+		LobbySession.group = 1;
+		var left = new LobbyLeft();
+		assertNotNull(UnreadNotif.containerForTests(), "member left pane attaches PM unread container");
+		CommandHandler.commandHandler.dispatch("pmNotify", ["250"]);
+		assertEquals(1, UnreadNotif.numUnread(), "member left pane pmNotify records unread PM");
+		assertEquals(true, UnreadNotif.hasNotificationForTests(), "member left pane displays unread PM badge");
+		left.remove();
+		assertEquals(null, UnreadNotif.containerForTests(), "left pane removal detaches PM unread container");
+		assertEquals(false, UnreadNotif.hasNotificationForTests(), "left pane removal removes unread PM badge");
+
+		CommandHandler.commandHandler.dispatch("pmNotify", ["300"]);
+		assertEquals(2, UnreadNotif.numUnread(), "pmNotify falls back to global handler after left pane removal");
+		assertEquals(false, UnreadNotif.hasNotificationForTests(), "pmNotify after left pane removal has no stale badge parent");
+
+		UnreadNotif.reset();
+		LobbySession.clear();
+		LobbySession.group = 0;
+		left = new LobbyLeft();
+		assertEquals(null, UnreadNotif.containerForTests(), "guest left pane does not attach PM unread container");
+		left.remove();
+		CommandHandler.commandHandler.clearAll();
+		UnreadNotif.reset();
+	}
+
+	private static function testLoginServerActivationLifecycle():Void {
+		var previousFetchFactory = ServerStatusClient.fetchFactory;
+		var fetches:Array<{onResult:ServerStatusResult->Void, onError:Null<String->Void>}> = [];
+		ServerStatusClient.fetchFactory = function(onResult:ServerStatusResult->Void, onError:Null<String->Void>):Void {
+			fetches.push({onResult: onResult, onError: onError});
+		};
+
+		var page = new LoginPage();
+		page.initialize();
+		assertEquals(1, fetches.length, "login server activation immediately fetches server status");
+		Reflect.callMethod(page, Reflect.field(page, "onServerRefreshTimer"), [new TimerEvent(TimerEvent.TIMER)]);
+		assertEquals(2, fetches.length, "login server activation reloads from timer handler");
+		page.remove();
+		fetches[1].onResult(new ServerStatusResult([serverInfo(0)]));
+		var servers:Array<ServerInfo> = Reflect.field(page, "servers");
+		assertEquals(0, servers.length, "login server removal cancels late server status response");
+
+		ServerStatusClient.fetchFactory = previousFetchFactory;
+	}
+
+	private static function testCheckServersComboPrompts():Void {
+		var previousFetchFactory = ServerStatusClient.fetchFactory;
+		var fetches:Array<{onResult:ServerStatusResult->Void, onError:Null<String->Void>}> = [];
+		ServerStatusClient.fetchFactory = function(onResult:ServerStatusResult->Void, onError:Null<String->Void>):Void {
+			fetches.push({onResult: onResult, onError: onError});
+		};
+		var page = new LoginPage();
+		page.initialize();
+		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
+		var popup:Dynamic = Reflect.field(page, "activePopup");
+		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), FlComboBox);
+		assertNotNull(combo, "login credential popup has server dropdown");
+		Reflect.callMethod(page, Reflect.field(page, "loadServers"), []);
+		assertEquals("Loading...", combo.prompt, "server dropdown shows loading prompt during reload");
+		assertEquals(false, combo.enabled, "server dropdown is disabled while loading");
+		fetches[fetches.length - 1].onResult(new ServerStatusResult([]));
+		assertEquals("No servers found. :(", combo.prompt, "server dropdown shows no-servers prompt for empty result");
+		assertEquals(false, combo.enabled, "server dropdown remains disabled for empty result");
+		page.remove();
+		ServerStatusClient.fetchFactory = previousFetchFactory;
+	}
+
+	private static function testCheckServersGuildSelectionRules():Void {
+		var previousFetchFactory = ServerStatusClient.fetchFactory;
+		var fetches:Array<{onResult:ServerStatusResult->Void, onError:Null<String->Void>}> = [];
+		ServerStatusClient.fetchFactory = function(onResult:ServerStatusResult->Void, onError:Null<String->Void>):Void {
+			fetches.push({onResult: onResult, onError: onError});
+		};
+		LobbySession.clear();
+		LobbySession.guildId = 42;
+		var page = new LoginPage();
+		page.initialize();
+		Reflect.callMethod(page, Reflect.field(page, "openCredentialDialog"), []);
+		fetches[0].onResult(new ServerStatusResult([
+			server(2, 9002, 0, 25, "open", "Public"),
+			server(7, 9007, 9, 80, "open", "Other Guild"),
+			server(6, 9006, 42, 10, "open", "Own Guild")
+		]));
+		var popup:Dynamic = Reflect.field(page, "activePopup");
+		var combo = Std.downcast(DisplayUtil.findByName(popup, "dropdown"), FlComboBox);
+		assertEquals(3, combo.length, "guild selection keeps public and private servers");
+		var first:Dynamic = combo.dataProvider.getItemAt(0);
+		assertEquals("* Own Guild (10 online)", Reflect.field(first, "label"), "own guild server is sorted first");
+		var selected:ServerInfo = Reflect.field(combo.selectedItem, "server");
+		assertEquals(6, selected.serverId, "own open guild server is selected by default");
+		page.remove();
+		LobbySession.clear();
+		ServerStatusClient.fetchFactory = previousFetchFactory;
+	}
+
+	private static function testLoggingInPayloadAndResetTokenFlow():Void {
+		var previousLoginFactory = LoginAuthClient.loginFactory;
+		var capturedToken:Null<String> = null;
+		var capturedAwardKong = false;
+		var capturedLoginId = 0;
+		var capturedRemember = false;
+		LoginAuthClient.loginFactory = function(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int,
+				onResult:LoginAuthResult->Void, onError:Null<String->Void>, token:Null<String>, awardKong:Bool):Void {
+			capturedToken = token;
+			capturedAwardKong = awardKong;
+			capturedLoginId = loginId;
+			capturedRemember = remember;
+			onResult(new LoginAuthResult(false, "expired token", {resetToken: true}));
+		};
+		SavedAccounts.disablePersistenceForTests();
+		SavedAccounts.add("Alice", "expired-token");
+		KongAward.nextLogin = true;
+		LobbySession.begin("Stale", 1, serverInfo(0));
+		UnreadNotif.setLastRead(0);
+		UnreadNotif.notifyUser(99);
+		var page = new LoginPage();
+		Reflect.setField(page, "loginToken", "expired-token");
+		Reflect.callMethod(page, Reflect.field(page, "openLoggingInPopup"), ["1234", "Alice", "", true, serverInfo(0)]);
+
+		assertEquals("expired-token", capturedToken, "remembered login sends saved token");
+		assertEquals(true, capturedAwardKong, "logging in payload consumes pending Kong award");
+		assertEquals(false, KongAward.nextLogin, "Kong award flag resets after login send");
+		assertEquals(1234, capturedLoginId, "logging in payload parses login id");
+		assertEquals(true, capturedRemember, "remembered login forwards remember flag");
+		assertEquals(0, SavedAccounts.getAll().length, "resetToken login error deletes remembered token");
+		assertEquals(0, LobbySession.group, "login error clears stale session group");
+		assertEquals("Guest", LobbySession.userName, "login error clears stale session user");
+		assertEquals(0, UnreadNotif.numUnread(), "login error clears unread notifications");
+		page.remove();
+		LoginAuthClient.loginFactory = previousLoginFactory;
+		KongAward.nextLogin = false;
+	}
+
+	private static function testLoginPageAppliesPostLoginState():Void {
+		SavedAccounts.disablePersistenceForTests();
+		LobbySession.clear();
+		UnreadNotif.reset();
+		Settings.clear();
+		Presets.resetForTests();
+		var page = new LoginPage();
+		Reflect.setField(page, "loginServer", serverInfo(42));
+		Reflect.setField(page, "loginRemember", true);
+		var session = new LoginSessionResult(2, "Player", {
+			userId: 77,
+			email: 1,
+			token: "fresh-token",
+			guild: 42,
+			guildOwner: true,
+			guildName: "Racers",
+			emblem: "racing.png",
+			favoriteLevels: ([3, "7"] : Array<Dynamic>),
+			time: 12345,
+			lastRead: 100,
+			lastRecv: 150
+		});
+		Reflect.callMethod(page, Reflect.field(page, "enterLobby"), [session]);
+
+		assertEquals("Player", LobbySession.userName, "post-login stores socket user name");
+		assertEquals(2, LobbySession.group, "post-login stores socket group");
+		assertEquals(77, LobbySession.userId, "post-login stores user id");
+		assertEquals(true, LobbySession.hasEmail, "post-login stores email flag");
+		assertEquals("fresh-token", LobbySession.token, "post-login stores token");
+		assertEquals(42, LobbySession.guildId, "post-login stores guild id");
+		assertEquals(true, LobbySession.guildOwner, "post-login stores guild owner");
+		assertEquals("Racers", LobbySession.guildName, "post-login stores guild name");
+		assertEquals("racing.png", LobbySession.emblem, "post-login stores emblem");
+		assertEquals("3,7", LobbySession.favoriteLevels.join(","), "post-login stores favorite levels");
+		assertEquals(true, Math.abs(LobbySession.lastAuthTime.getTimestamp() - 12345) < 5, "post-login applies server auth time");
+		assertEquals(1, UnreadNotif.numUnread(), "post-login applies unread notification state");
+		assertEquals(true, Settings.isNameSet(), "post-login initializes per-user settings");
+		assertEquals(true, Presets.loadedForTests(), "post-login loads presets after settings");
+		assertEquals("fresh-token", SavedAccounts.getByName("Player").token, "remembered login stores fresh token");
+		page.remove();
+		LobbySession.clear();
+		UnreadNotif.reset();
+		Settings.clear();
+		Presets.resetForTests();
+	}
+
 	private static function closeAllPopups():Void {
 		for (popup in Popup.getOpen().copy()) {
 			popup.remove();
 		}
+	}
+
+	private static function serverInfo(guildId:Int):ServerInfo {
+		return new ServerInfo("127.0.0.1", 9160, 1, "Test Server", "open", 0, guildId, false);
+	}
+
+	private static function server(id:Int, port:Int, guildId:Int, population:Int, status:String, name:String):ServerInfo {
+		return new ServerInfo("127.0.0.1", port, id, name, status, population, guildId, false);
+	}
+
+	private static function mapSize(map:Map<String, String>):Int {
+		var count = 0;
+		for (_ in map.keys()) count++;
+		return count;
 	}
 
 	private static function lastConfirmPopup():ConfirmPopup {
@@ -1797,6 +2732,13 @@ class LobbyServicesTest {
 		assertions++;
 		if (expected != actual) {
 			throw '$message: expected $expected, got $actual';
+		}
+	}
+
+	private static function assertNear(expected:Int, actual:Int, tolerance:Int, message:String):Void {
+		assertions++;
+		if (Math.abs(expected - actual) > tolerance) {
+			throw '$message: expected $expected +/- $tolerance, got $actual';
 		}
 	}
 
@@ -1844,6 +2786,34 @@ private class TestRow implements SortableRow {
 
 	public function sortName():String {
 		return name;
+	}
+}
+
+private class FakeAsyncListResource {
+	public var removes:Int = 0;
+
+	public function new() {}
+
+	public function remove():Void {
+		removes++;
+	}
+}
+
+private class FakeFavoriteUploadingPopup extends pr2.lobby.dialogs.UploadingPopup {
+	public var removes:Int = 0;
+	public var fadeOuts:Int = 0;
+
+	public function new() {
+		super(null);
+	}
+
+	override public function startFadeOut():Void {
+		fadeOuts++;
+	}
+
+	override public function remove():Void {
+		removes++;
+		super.remove();
 	}
 }
 

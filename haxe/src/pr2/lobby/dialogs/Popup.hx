@@ -5,6 +5,7 @@ import openfl.geom.ColorTransform;
 import pr2.app.AppStage;
 import pr2.display.Removable;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.StageFocus;
 
 /**
 	Port of Flash `dialogs.Popup`: the base modal overlay.
@@ -76,9 +77,7 @@ class Popup extends Removable {
 		openPopups.remove(this);
 		removeEventListener(Event.ENTER_FRAME, fadeIn);
 		removeEventListener(Event.ENTER_FRAME, fadeOut);
-		if (stage != null) {
-			stage.focus = stage;
-		}
+		StageFocus.reset();
 		super.remove();
 	}
 }

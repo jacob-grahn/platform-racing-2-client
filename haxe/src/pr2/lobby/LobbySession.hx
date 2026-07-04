@@ -1,5 +1,6 @@
 package pr2.lobby;
 
+import com.jiggmin.data.Time;
 import pr2.net.ServerInfo;
 
 /**
@@ -13,6 +14,8 @@ import pr2.net.ServerInfo;
 	directly to exercise guest/member differences deterministically.
 **/
 class LobbySession {
+	public static inline var REMEMBER_ME_REQUIRED_COPY:String = "Psst... I won't work if you're not logged in with remember me. Log back in with remember me enabled and click me again! :)";
+
 	/** Account access group. 0 = guest, 1 = member, >=2 = moderator/admin. */
 	public static var group:Int = 0;
 
@@ -46,6 +49,7 @@ class LobbySession {
 
 	/** Favorited level ids (Flash `Main.favoriteLevels`), used by listings. */
 	public static var favoriteLevels:Array<Int> = [];
+	public static var lastAuthTime:Time = new Time();
 
 	private static var accountChangeListeners:Array<Void->Void> = [];
 
@@ -72,6 +76,37 @@ class LobbySession {
 		LobbySession.remember = remember;
 	}
 
+	public static function updateAccountState(hasEmail:Bool, token:String, notify:Bool = true):Void {
+		LobbySession.hasEmail = hasEmail;
+		LobbySession.token = token;
+		if (notify) notifyAccountChange();
+	}
+
+	public static function updateGuildState(guildId:Int, guildName:String, guildOwner:Bool, ?emblem:String, notify:Bool = true):Void {
+		LobbySession.guildId = guildId;
+		LobbySession.guildName = guildName;
+		LobbySession.guildOwner = guildOwner;
+		if (emblem != null) {
+			LobbySession.emblem = emblem;
+		}
+		if (notify) notifyAccountChange();
+	}
+
+	public static function updateGuildFromData(data:Dynamic, ?ownerOverride:Null<Bool>, notify:Bool = true, updateEmblem:Bool = true):Void {
+		if (data == null) return;
+		var owner = ownerOverride == null ? boolAny(data, ["is_owner", "guild_owner", "guildOwner"]) : ownerOverride;
+		updateGuildState(intAny(data, ["guild_id", "guildId", "guild"]), strAny(data, ["guild_name", "guildName"]), owner,
+			updateEmblem ? strAny(data, ["emblem"]) : null, notify);
+	}
+
+	public static function clearGuild(notify:Bool = true):Void {
+		updateGuildState(0, "", false, "", notify);
+	}
+
+	public static inline function canUseRememberMeAccountAction():Bool {
+		return remember;
+	}
+
 	/** Clear the session on logout (Flash `Main.clearUserData`). */
 	public static function clear():Void {
 		userName = "Guest";
@@ -92,6 +127,7 @@ class LobbySession {
 		tournamentMode = false;
 		serverOwner = 0;
 		favoriteLevels = [];
+		lastAuthTime = new Time();
 		accountChangeListeners = [];
 	}
 
@@ -113,5 +149,36 @@ class LobbySession {
 
 	public static inline function isFavorite(levelId:Int):Bool {
 		return favoriteLevels.indexOf(levelId) != -1;
+	}
+
+	private static function intAny(data:Dynamic, names:Array<String>):Int {
+		for (name in names) {
+			var value:Dynamic = Reflect.field(data, name);
+			if (value != null) {
+				var parsed = Std.parseInt(Std.string(value));
+				return parsed == null ? 0 : parsed;
+			}
+		}
+		return 0;
+	}
+
+	private static function strAny(data:Dynamic, names:Array<String>):String {
+		for (name in names) {
+			var value:Dynamic = Reflect.field(data, name);
+			if (value != null) return Std.string(value);
+		}
+		return "";
+	}
+
+	private static function boolAny(data:Dynamic, names:Array<String>):Bool {
+		for (name in names) {
+			var value:Dynamic = Reflect.field(data, name);
+			if (value == null) continue;
+			if (Std.isOfType(value, Bool)) return value;
+			if (Std.isOfType(value, Int) || Std.isOfType(value, Float)) return Std.int(value) != 0;
+			var text = Std.string(value).toLowerCase();
+			return text == "1" || text == "true" || text == "yes";
+		}
+		return false;
 	}
 }

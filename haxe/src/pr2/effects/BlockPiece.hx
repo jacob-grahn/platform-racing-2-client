@@ -9,9 +9,9 @@ import pr2.runtime.PR2MovieClip;
 	linear/angular velocity, friction, gravity, and alpha decay.
 **/
 class BlockPiece extends Sprite {
-	public static inline var GRAVITY:Float = 0.75;
+	public static inline var GRAVITY:Float = 1;
 	public static inline var FRICTION:Float = 0.95;
-	public static inline var FADE_RATE:Float = 0.05;
+	public static inline var FADE_RATE:Float = 0.01;
 
 	public var graphic(default, null):PR2MovieClip;
 	private var velX:Float;
@@ -21,8 +21,8 @@ class BlockPiece extends Sprite {
 	private final friction:Float;
 	private final fadeRate:Float;
 
-	public function new(linkage:String, startX:Float, startY:Float, spreadX:Float, spreadY:Float, spreadRot:Float,
-			gravity:Float = GRAVITY, friction:Float = FRICTION, fadeRate:Float = FADE_RATE, ?random:Void->Float) {
+	public function new(linkage:String, gravity:Float = GRAVITY, friction:Float = FRICTION, fadeRate:Float = FADE_RATE, spreadX:Float = 10,
+			spreadY:Float = 10, spreadRot:Float = 10, startX:Float = 0, startY:Float = 0, ?random:Void->Float) {
 		super();
 		var nextRandom = random == null ? Math.random : random;
 		graphic = PR2MovieClip.fromLinkage(linkage);

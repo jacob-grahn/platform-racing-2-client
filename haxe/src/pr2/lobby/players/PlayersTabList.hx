@@ -2,6 +2,8 @@ package pr2.lobby.players;
 
 import openfl.display.DisplayObjectContainer;
 import openfl.events.MouseEvent;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.players.PlayerListSort.SortState;
 import pr2.runtime.PR2MovieClip;
@@ -9,9 +11,10 @@ import pr2.util.DisplayUtil;
 
 /**
 	Port of Flash `social.PlayersTabList`: the Online/Friends/Following/Ignored
-	list with Name / Rank / Hats sortable headers. New rows default to a
-	descending rank sort; clicking a header re-sorts via `PlayerListSort`. Live
-	rows are supplied by subclasses through `addUserEntry`.
+	list with Name / Rank / Hats sortable headers. New rows set a pending sort
+	flag and are sorted on Flash's 500ms interval; clicking a header re-sorts
+	immediately via `PlayerListSort`. Live rows are supplied by subclasses
+	through `addUserEntry`.
 **/
 class PlayersTabList extends PlayersListHolder {
 	private static inline var NAME_MODE:String = "userName";
@@ -22,6 +25,8 @@ class PlayersTabList extends PlayersListHolder {
 	private var hatsButton:Null<DisplayObjectContainer>;
 	private var sortState:SortState = {mode: "rank", order: "desc"};
 	private var names:Array<String> = [];
+	private var sortTimer:Null<Timer>;
+	private var updateSort:Bool = false;
 
 	override public function initialize():Void {
 		graphic = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
@@ -42,6 +47,9 @@ class PlayersTabList extends PlayersListHolder {
 		if (hatsButton != null) {
 			hatsButton.addEventListener(MouseEvent.CLICK, clickHats);
 		}
+		sortTimer = new Timer(500);
+		sortTimer.addEventListener(TimerEvent.TIMER, sortListener);
+		sortTimer.start();
 	}
 
 	private function addUserEntry(name:String, group:String, rank:Int, hats:Int, status:String = ""):Void {
@@ -50,7 +58,14 @@ class PlayersTabList extends PlayersListHolder {
 		}
 		names.push(name);
 		addListing(new PlayerEntry(name, group, rank, hats, status));
-		applySort(sortState, NAME_MODE);
+		updateSort = true;
+	}
+
+	private function sortListener(?_:TimerEvent):Void {
+		if (updateSort) {
+			updateSort = false;
+			applySort(sortState, NAME_MODE);
+		}
 	}
 
 	private function clickName(_:MouseEvent):Void {
@@ -71,6 +86,11 @@ class PlayersTabList extends PlayersListHolder {
 	}
 
 	override public function remove():Void {
+		if (sortTimer != null) {
+			sortTimer.stop();
+			sortTimer.removeEventListener(TimerEvent.TIMER, sortListener);
+			sortTimer = null;
+		}
 		if (nameButton != null) {
 			nameButton.removeEventListener(MouseEvent.CLICK, clickName);
 		}

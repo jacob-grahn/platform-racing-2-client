@@ -20,18 +20,22 @@ import pr2.util.DisplayUtil;
 	and changed the page to the lobby there).
 **/
 class FinishedPage extends Popup {
+	public static var kongStatSubmit:Null<String->Int->Void> = null;
+
 	private var art:Null<PR2MovieClip>;
 	private var stars:Null<RatingSelect>;
 	private var expGain:Null<ExpGain>;
 	private var onReturn:Null<Void->Void>;
+	private var onClose:Null<FinishedPage->Void>;
 	private var curAwardLine:Int = 1;
 
 	private var returnBinding:Null<Binding>;
 	private var closeBinding:Null<Binding>;
 
-	public function new(courseID:Int, ?onReturn:Void->Void) {
+	public function new(courseID:Int, ?onReturn:Void->Void, ?onClose:FinishedPage->Void) {
 		super();
 		this.onReturn = onReturn;
+		this.onClose = onClose;
 
 		art = PR2MovieClip.fromLinkage("FinishedPageGraphic", {maxNestedDepth: 6});
 		returnBinding = LobbyArt.bind(DisplayUtil.findByName(art, "return_bt"), clickReturn);
@@ -76,6 +80,9 @@ class FinishedPage extends Popup {
 		if (expGain != null) {
 			expGain.start(expOld, expNew, expToRank);
 		}
+		if (kongStatSubmit != null) {
+			kongStatSubmit("Exp Gained at Once", expNew - expOld);
+		}
 	}
 
 	private function clickReturn():Void {
@@ -86,6 +93,11 @@ class FinishedPage extends Popup {
 	}
 
 	override public function remove():Void {
+		var close = onClose;
+		onClose = null;
+		if (close != null) {
+			close(this);
+		}
 		LobbyArt.unbind(returnBinding);
 		LobbyArt.unbind(closeBinding);
 		if (expGain != null) {

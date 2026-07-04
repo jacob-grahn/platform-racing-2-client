@@ -10,6 +10,7 @@ import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
 import openfl.ui.Keyboard;
+import pr2.ui.StageFocus;
 
 /**
 	Behavioural coverage for the `fl.controls.*` component ports beyond FlButton:
@@ -91,7 +92,11 @@ class FlComponentsTest {
 		combo.addItem("Two");
 
 		var changes = 0;
+		var closes = 0;
+		var focusResets = 0;
 		combo.addEventListener(Event.CHANGE, function(_) changes++);
+		combo.addEventListener(Event.CLOSE, function(_) closes++);
+		StageFocus.resetHook = function():Void focusResets++;
 
 		// Opening and closing the collapsed control never changes its value.
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
@@ -102,6 +107,8 @@ class FlComponentsTest {
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(null, findOpenDropdown(combo), "a repeated control click closes the list");
 		assertEquals(-1, combo.selectedIndex, "closing by control click leaves selection unchanged");
+		assertEquals(1, closes, "control close dispatches CLOSE");
+		assertEquals(1, focusResets, "control close resets stage focus");
 
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		dropdown = findOpenDropdown(combo);
@@ -116,6 +123,8 @@ class FlComponentsTest {
 		assertEquals(1, changes, "user selection dispatches CHANGE");
 		assertNotNull(findLabelField(combo, "Two"), "caption follows the picked row");
 		assertEquals(null, findOpenDropdown(combo), "picking a row closes the list");
+		assertEquals(2, closes, "row selection close dispatches CLOSE");
+		assertEquals(2, focusResets, "row selection close resets stage focus");
 
 		// Picking the already-selected row is silent but still closes the list.
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
@@ -124,16 +133,19 @@ class FlComponentsTest {
 		row.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, changes, "picking the selected row does not dispatch CHANGE again");
 		assertEquals(null, findOpenDropdown(combo), "picking the selected row closes the list");
+		assertEquals(3, closes, "selected-row close dispatches CLOSE");
 
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		combo.onStageMouseDown(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		assertEquals(null, findOpenDropdown(combo), "an outside press closes the list");
 		assertEquals(1, combo.selectedIndex, "outside-close leaves selection unchanged");
+		assertEquals(4, focusResets, "outside close resets stage focus");
 
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		combo.dispatchEvent(new KeyboardEvent(KeyboardEvent.KEY_DOWN, true, false, 0, Keyboard.ESCAPE));
 		assertEquals(null, findOpenDropdown(combo), "Escape closes the list");
 		assertEquals(1, combo.selectedIndex, "Escape-close leaves selection unchanged");
+		assertEquals(5, closes, "Escape close dispatches CLOSE");
 
 		combo.enabled = false;
 		combo.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
@@ -155,6 +167,7 @@ class FlComponentsTest {
 		assertEquals(true, scrolling.scrollBar.parent == scrolling.dropdown, "rowCount overflow shows the authored scrollbar");
 		assertEquals(48.0, scrolling.dropdownHeight(), "rowCount caps dropdown height");
 		scrolling.closeDropdown();
+		StageFocus.resetHooks();
 	}
 
 	private static function testComboBoxCollectionString():Void {

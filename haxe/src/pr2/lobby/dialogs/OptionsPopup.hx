@@ -3,12 +3,15 @@ package pr2.lobby.dialogs;
 import openfl.display.DisplayObject;
 import openfl.events.Event;
 import openfl.text.TextField;
+import openfl.utils.Assets;
 import pr2.audio.AudioManager;
+import pr2.audio.SoundEffects;
+import pr2.gameplay.RaceSounds;
 import pr2.lobby.LobbySession;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.account.Settings;
-import pr2.runtime.FlCheckBox;
+import pr2.net.ServerConfig;
 import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
 import pr2.runtime.PR2MovieClip;
@@ -19,13 +22,15 @@ class OptionsPopup extends Popup {
 	private static inline var TRUE_Y:Float = -71.5;
 	private static inline var FALSE_Y:Float = -43.5;
 	private static final CONTROL_DEFAULTS = {wasdUp: "W", wasdRight: "D", wasdDown: "S", wasdLeft: "A", wasdItem: "I"};
+	public static var playJumpSound:Float->Void = defaultPlayJumpSound;
 
 	private var art:PR2MovieClip;
 	private var bindings:Array<Binding> = [];
+	private var hoverCleanups:Array<Void->Void> = [];
 	private var filterSwears:Bool;
 	private var drawArt:Bool;
-	private var songsMenu:Null<PR2MovieClip>;
-	private var artMenu:Null<PR2MovieClip>;
+	private var accountButtons:Null<PopupButtonStack>;
+	private var hoverActive:Null<HoverPopup>;
 
 	public function new() {
 		super();
@@ -43,6 +48,7 @@ class OptionsPopup extends Popup {
 		if (sound != null) {
 			sound.value = Settings.soundLevel;
 			sound.addEventListener(Event.CHANGE, soundChanged);
+			sound.addEventListener(FlSliderEvent.THUMB_RELEASE, soundSliderRelease);
 		}
 		setText("musicPercentBox", Settings.musicLevel + "%");
 		setText("soundPercentBox", Settings.soundLevel + "%");
@@ -56,18 +62,10 @@ class OptionsPopup extends Popup {
 		bind("artOff_bt", function() setDrawArt(false));
 		bind("art_bt", toggleArtMenu);
 		bind("music_bt", toggleSongsMenu);
+		bindHover("art_bt", hoverArt, hoverOut);
+		bindHover("music_bt", hoverMusic, hoverOut);
 		bind("close_bt", startFadeOut);
-		for (name in ["changeEmail_bt", "guildLeave_bt", "guildCreate_bt", "guildEdit_bt", "guildTransfer_bt"]) {
-			var button = DisplayUtil.findByName(art, name);
-			if (button != null) button.visible = false;
-		}
-		var changePass = DisplayUtil.findByName(art, "changePass_bt");
-		if (changePass != null) {
-			changePass.visible = LobbySession.isMember();
-			if (changePass.visible) {
-				bind("changePass_bt", function():Void new ChangePasswordPopup());
-			}
-		}
+		setupAccountButtons();
 	}
 
 	private function slider(name:String):Null<FlSlider> return Std.downcast(DisplayUtil.findByName(art, name), FlSlider);
@@ -76,6 +74,75 @@ class OptionsPopup extends Popup {
 	private function bind(name:String, handler:Void->Void):Void {
 		var binding = LobbyArt.bind(DisplayUtil.findByName(art, name), handler);
 		if (binding != null) bindings.push(binding);
+	}
+
+	private function bindHover(name:String, over:Void->Void, out:Void->Void):Void {
+		var target = DisplayUtil.findByName(art, name);
+		if (target == null) return;
+		var onOver = function(_:Event):Void over();
+		var onOut = function(_:Event):Void out();
+		target.addEventListener(openfl.events.MouseEvent.MOUSE_OVER, onOver);
+		target.addEventListener(openfl.events.MouseEvent.MOUSE_OUT, onOut);
+		hoverCleanups.push(function():Void {
+			target.removeEventListener(openfl.events.MouseEvent.MOUSE_OVER, onOver);
+			target.removeEventListener(openfl.events.MouseEvent.MOUSE_OUT, onOut);
+		});
+	}
+
+	public function hasActiveHover():Bool {
+		return hoverActive != null;
+	}
+
+	private function setupAccountButtons():Void {
+		accountButtons = new PopupButtonStack(art, 80, 20);
+		var buttons:Map<String, DisplayObject> = new Map();
+		for (name in ["changePass_bt", "changeEmail_bt", "guildLeave_bt", "guildCreate_bt", "guildEdit_bt", "guildTransfer_bt"]) {
+			var button = DisplayUtil.findByName(art, name);
+			if (button != null) buttons.set(name, button);
+		}
+		for (button in buttons) {
+			accountButtons.hide(button);
+		}
+		if (!LobbySession.isMember()) return;
+		accountButtons.add(buttons.get("changePass_bt"), function():Void {
+			new ChangePasswordPopup();
+			startFadeOut();
+		});
+		accountButtons.add(buttons.get("changeEmail_bt"), function():Void {
+			new SetEmailPopup();
+			LobbySession.hasEmail = true;
+			startFadeOut();
+		});
+		if (LobbySession.guildId == 0) {
+			accountButtons.add(buttons.get("guildCreate_bt"), function():Void {
+				new CreateGuildPopup(0);
+				startFadeOut();
+			});
+		} else if (LobbySession.guildOwner) {
+			accountButtons.add(buttons.get("guildTransfer_bt"), function():Void {
+				new TransferGuildPopup();
+				startFadeOut();
+			});
+			accountButtons.add(buttons.get("guildEdit_bt"), function():Void {
+				new CreateGuildPopup(LobbySession.guildId);
+				startFadeOut();
+			});
+		} else {
+			accountButtons.add(buttons.get("guildLeave_bt"), function():Void {
+				new ConfirmPopup(confirmLeaveGuild, "Are you sure you want to leave your guild?");
+			});
+		}
+	}
+
+	private function confirmLeaveGuild():Void {
+		new UploadingPopup(ServerConfig.guildLeaveUrl(), new Map<String, String>(), "Leaving guild...", doLeaveGuild);
+		startFadeOut();
+	}
+
+	private function doLeaveGuild(ret:Dynamic):Void {
+		if (ret != null && Reflect.field(ret, "success") == true) {
+			LobbySession.clearGuild();
+		}
 	}
 
 	private function musicChanged(_:Event):Void {
@@ -93,6 +160,10 @@ class OptionsPopup extends Popup {
 		setText("soundPercentBox", Settings.soundLevel + "%");
 	}
 
+	private function soundSliderRelease(_:Event):Void {
+		playJumpSound(0.75 * (Settings.soundLevel / 100));
+	}
+
 	private function setFilter(value:Bool):Void { filterSwears = value; setHighlight("filterHighlight", value); }
 	private function setDrawArt(value:Bool):Void {
 		drawArt = value;
@@ -102,8 +173,35 @@ class OptionsPopup extends Popup {
 		if (button != null) button.visible = value;
 		if (offText != null) offText.visible = !value;
 		if (!value) closeArtMenu();
+		if (!value) hoverOut();
 	}
 	private function setHighlight(name:String, value:Bool):Void { var target = DisplayUtil.findByName(art, name); if (target != null) target.y = value ? TRUE_Y : FALSE_Y; }
+
+	private function hoverArt():Void {
+		if (!drawArt) return;
+		hoverOut();
+		var target = DisplayUtil.findByName(art, "art_bt");
+		if (target != null) {
+			hoverActive = new HoverPopup("Choose Art Quality",
+				"Choose whether to draw art with lossless quality. This setting may degrade performance on some systems.", target);
+			hoverActive.x += 5;
+		}
+	}
+
+	private function hoverMusic():Void {
+		hoverOut();
+		var target = DisplayUtil.findByName(art, "music_bt");
+		if (target != null) {
+			hoverActive = new HoverPopup("Choose Music", "Choose which songs are allowed to play in a level.", target);
+		}
+	}
+
+	private function hoverOut():Void {
+		if (hoverActive != null) {
+			hoverActive.remove();
+			hoverActive = null;
+		}
+	}
 
 	private function loadControls():Void {
 		var controls:Dynamic = Settings.getValue(Settings.ALTERNATE_CONTROLS, Settings.DEFAULT_ALT_CONTROLS);
@@ -132,67 +230,64 @@ class OptionsPopup extends Popup {
 
 	private function toggleArtMenu():Void {
 		if (!drawArt) return;
-		if (artMenu != null) { closeArtMenu(); return; }
-		artMenu = PR2MovieClip.fromLinkage("OptionsArtQualityMenuGraphic", {maxNestedDepth: 4});
-		artMenu.x = -105;
-		artMenu.y = -105;
-		var check = Std.downcast(DisplayUtil.findByName(artMenu, "lossless_chk"), FlCheckBox);
-		if (check != null) check.selected = Settings.getValue(Settings.ART_LOSSLESS_QUALITY, false);
-		addChild(artMenu);
+		var target = DisplayUtil.findByName(art, "art_bt");
+		if (target != null) {
+			new OptionsArtQualityMenu(target);
+		}
 	}
 
 	private function closeArtMenu():Void {
-		if (artMenu == null) return;
-		var check = Std.downcast(DisplayUtil.findByName(artMenu, "lossless_chk"), FlCheckBox);
-		if (check != null) Settings.setValue(Settings.ART_LOSSLESS_QUALITY, check.selected);
-		artMenu.dispose();
-		if (artMenu.parent != null) artMenu.parent.removeChild(artMenu);
-		artMenu = null;
+		if (OptionsArtQualityMenu.instance != null) {
+			OptionsArtQualityMenu.instance.remove();
+		}
 	}
 
 	private function toggleSongsMenu():Void {
-		if (songsMenu != null) { closeSongsMenu(); return; }
-		songsMenu = PR2MovieClip.fromLinkage("OptionsSongsMenuGraphic", {maxNestedDepth: 4});
-		songsMenu.x = -205;
-		songsMenu.y = -155;
-		var disabled = Settings.disabledSongs();
-		for (i in 1...22) if (i != 9 && i != 16) {
-			var check = Std.downcast(DisplayUtil.findByName(songsMenu, "song" + i), FlCheckBox);
-			if (check != null) check.selected = disabled.indexOf(Std.string(i)) < 0;
+		var target = DisplayUtil.findByName(art, "music_bt");
+		if (target != null) {
+			new OptionsSongsMenu(target);
 		}
-		addChild(songsMenu);
 	}
 
 	private function closeSongsMenu():Void {
-		if (songsMenu == null) return;
-		var disabled:Array<String> = [];
-		for (i in 1...22) if (i != 9 && i != 16) {
-			var check = Std.downcast(DisplayUtil.findByName(songsMenu, "song" + i), FlCheckBox);
-			if (check != null && !check.selected) disabled.push(Std.string(i));
+		if (OptionsSongsMenu.instance != null) {
+			OptionsSongsMenu.instance.remove();
 		}
-		Settings.setValue(Settings.DISABLED_SONGS, disabled);
-		songsMenu.dispose();
-		if (songsMenu.parent != null) songsMenu.parent.removeChild(songsMenu);
-		songsMenu = null;
 	}
 
 	override public function remove():Void {
+		hoverOut();
 		closeArtMenu();
 		closeSongsMenu();
+		if (accountButtons != null) {
+			accountButtons.remove();
+			accountButtons = null;
+		}
 		saveControls();
 		Settings.setValue(Settings.DRAW_ART, drawArt);
 		Settings.setValue(Settings.FILTER_SWEARS, filterSwears);
+		for (cleanup in hoverCleanups) cleanup();
+		hoverCleanups = [];
 		for (binding in bindings) LobbyArt.unbind(binding);
 		bindings = [];
 		var music = slider("musicSlider");
 		var sound = slider("soundSlider");
 		if (music != null) music.removeEventListener(Event.CHANGE, musicChanged);
-		if (sound != null) sound.removeEventListener(Event.CHANGE, soundChanged);
+		if (sound != null) {
+			sound.removeEventListener(Event.CHANGE, soundChanged);
+			sound.removeEventListener(FlSliderEvent.THUMB_RELEASE, soundSliderRelease);
+		}
 		if (art != null) {
 			art.dispose();
 			if (art.parent != null) art.parent.removeChild(art);
 			art = null;
 		}
 		super.remove();
+	}
+
+	private static function defaultPlayJumpSound(volume:Float):Void {
+		if (Assets.exists(RaceSounds.JUMP_SOUND)) {
+			SoundEffects.playSound(Assets.getSound(RaceSounds.JUMP_SOUND), volume);
+		}
 	}
 }

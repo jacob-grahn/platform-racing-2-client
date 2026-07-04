@@ -29,6 +29,7 @@ class QuitButtonTest {
 		testGamePageCowboyMode();
 		testGamePageHappyHour();
 		testGamePageHatCountdown();
+		testReturnToLobbyRequiresConnectedSocket();
 		closeAll();
 		trace('QuitButtonTest passed $assertions assertions');
 	}
@@ -92,6 +93,7 @@ class QuitButtonTest {
 
 		var finish = Std.downcast(Popup.getOpen()[0], FinishedPage);
 		var returnButton = Std.downcast(DisplayUtil.findByName(finish, "return_bt"), InteractiveObject);
+		LobbySocket.simulateOpenForTests();
 		returnButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(true, LobbySocket.sentCommands.indexOf("set_game_room`none") >= 0, "return clears the game room");
 		assertEquals(true, Std.isOfType(holder.getCurrentPage(), LobbyPage), "return restores the lobby page");
@@ -142,8 +144,10 @@ class QuitButtonTest {
 		game.beginRace();
 		assertEquals(true, preRace.fadeOutStarted, "beginRace fades out the active prize popup");
 
+		var artifact = new PlaceArtifact({levelId: 12345, x: 10, y: 20, rot: 0});
 		game.remove();
 		assertEquals(true, PrizePopup.instance.fadeOutStarted, "GamePage removal fades out the active prize popup");
+		assertEquals(true, artifact.fadeOutStarted, "GamePage removal fades out the active artifact placement popup");
 		closeAll();
 	}
 
@@ -165,6 +169,9 @@ class QuitButtonTest {
 
 		game.award(["Speed Bonus", "+20"]);
 		assertEquals("Speed Bonus", LobbyArt.text(finish, "bonus2").text, "award after finish updates the open popup");
+		assertEquals(finish, game.finishedPage, "game page tracks the open finish popup");
+		finish.remove();
+		assertEquals(null, game.finishedPage, "finished popup removal clears the game page reference");
 
 		game.remove();
 		closeAll();
@@ -209,6 +216,29 @@ class QuitButtonTest {
 		game.startHatCountdown();
 		game.remove();
 		assertEquals(null, game.hatCountdownTimer, "page removal clears the timer");
+		closeAll();
+	}
+
+	private static function testReturnToLobbyRequiresConnectedSocket():Void {
+		LobbySocket.resetSent();
+		var holder = new PageHolder();
+		var game = new GamePage(12345, 7);
+		holder.changePage(game);
+		game.setExpGain(10, 60, 100);
+		var finish = Std.downcast(Popup.getOpen()[0], FinishedPage);
+		var returnButton = Std.downcast(DisplayUtil.findByName(finish, "return_bt"), InteractiveObject);
+		returnButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(false, LobbySocket.sentCommands.indexOf("set_game_room`none") >= 0,
+			"disconnected return does not clear the game room");
+		assertEquals(game, holder.getCurrentPage(), "disconnected return leaves the game page active");
+
+		LobbySocket.simulateOpenForTests();
+		returnButton.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(true, LobbySocket.sentCommands.indexOf("set_game_room`none") >= 0,
+			"connected return clears the game room");
+		assertEquals(true, Std.isOfType(holder.getCurrentPage(), LobbyPage), "connected return restores the lobby page");
+
+		holder.getCurrentPage().remove();
 		closeAll();
 	}
 

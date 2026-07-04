@@ -8,6 +8,8 @@ class ServerStatusClientTest {
 		testFlashLabels();
 		testOrdersAndSelectsServers();
 		testBetaAndInvalidFiltering();
+		testDuplicateServerIdsAreSkipped();
+		testFallbackSelectionUsesFirstSortedServer();
 		trace('ServerStatusClientTest passed $assertions assertions');
 	}
 
@@ -50,6 +52,26 @@ class ServerStatusClientTest {
 		], 0, true);
 		assertEquals(1, selected.length, "beta and invalid filtering count");
 		assertEquals(2, selected[0].serverId, "beta keeps guild 205 server");
+	}
+
+	private static function testDuplicateServerIdsAreSkipped():Void {
+		var selected = ServerStatusClient.selectList([
+			server(2, 9002, 0, 20, "open", false, "First"),
+			server(2, 9001, 0, 30, "open", false, "Duplicate"),
+			server(3, 9003, 0, 10, "open", false, "Third")
+		]);
+		assertEquals("2,3", [for (entry in selected) entry.serverId].join(","), "duplicate server ids are not repeated");
+		assertEquals(9001, selected[0].port, "first sorted duplicate is kept");
+	}
+
+	private static function testFallbackSelectionUsesFirstSortedServer():Void {
+		var selected = ServerStatusClient.selectList([
+			server(5, 9005, 17, 25, "full"),
+			server(3, 9003, 0, 190, "full"),
+			server(4, 9004, 0, 180, "open")
+		], 17);
+		assertEquals("5,3,4", [for (entry in selected) entry.serverId].join(","), "fallback list keeps Flash sorting");
+		assertEquals(0, ServerStatusClient.preferredIndex(selected, 17), "fallback selects first sorted server when no open preference exists");
 	}
 
 	private static function server(id:Int, port:Int, guild:Int, population:Int, status:String = "open", happy:Bool = false, name:String = "Derron"):ServerInfo {

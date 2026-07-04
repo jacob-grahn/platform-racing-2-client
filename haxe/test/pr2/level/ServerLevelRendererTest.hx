@@ -7,6 +7,7 @@ import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.text.TextField;
+import pr2.effects.BlockPiece;
 import pr2.lobby.account.Settings;
 import pr2.level.ServerLevel.DecodedArtLayer;
 import pr2.level.ServerLevel.DecodedArtObject;
@@ -23,6 +24,8 @@ class ServerLevelRendererTest {
 		testDefaultArtStrokeThickness();
 		testArtEraseStrokeClearsRasterTiles();
 		testWorldToScreenFocus();
+		testBackgroundColorTransforms();
+		testArtObjectAndTextLayerScale();
 		testBlockAlphaUpdate();
 		testBlockColorMultiplierUpdate();
 		testBlockIceOverlayUpdate();
@@ -66,9 +69,17 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testBlockPieces():Void {
+		var defaultPiece = new BlockPiece("BrickPieceGraphic", BlockPiece.GRAVITY, BlockPiece.FRICTION, BlockPiece.FADE_RATE, 10, 10, 25, 5,
+			7, function() return 0.5);
+		defaultPiece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
+		assertEquals(8.0, defaultPiece.y, "default block piece gravity matches Flash constructor");
+		assertClose(0.99, defaultPiece.alpha, "default block piece fade rate matches Flash constructor");
+		defaultPiece.remove();
+
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BRICK, 10020, 10050);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block]), block);
-		var pieces = renderer.showBlockPieces("BrickPieceGraphic", block.x, block.y, 1, 10, 10, 25, function() return 0.5);
+		var pieces = renderer.showBlockPieces("BrickPieceGraphic", block.x, block.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
+			function() return 0.5);
 		var piece = pieces[0];
 		var blockLayer = worldLayer(renderer, 1);
 		assertEquals(block.x + 15, piece.x, "piece starts at randomized position inside block");
@@ -79,7 +90,8 @@ class ServerLevelRendererTest {
 		assertEquals(block.y + 15.75, piece.y, "piece applies friction then gravity");
 		assertEquals(3, piece.graphic.currentFrame, "brick fragment frame does not auto-play after construction");
 		assertClose(0.95, piece.alpha, "piece fades by Flash rate");
-		var minePieces = renderer.showBlockPieces("MinePieceGraphic", block.x, block.y, 1, 10, 10, 25, function() return 0.5);
+		var minePieces = renderer.showBlockPieces("MinePieceGraphic", block.x, block.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
+			function() return 0.5);
 		var minePiece = minePieces[0];
 		assertEquals(4, minePiece.graphic.currentFrame, "mine fragment chooses and stops on a random authored frame");
 		minePiece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
@@ -517,6 +529,54 @@ class ServerLevelRendererTest {
 		assertEquals(236.0, moved.y, "camera rounds map y like Background.setPos");
 	}
 
+	private static function testBackgroundColorTransforms():Void {
+		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
+		var layers = [
+			new DecodedArtLayer([], [], [], 1),
+			new DecodedArtLayer([], [], [], 0.5),
+			new DecodedArtLayer([], [], [], 0.25),
+			new DecodedArtLayer([], [], [], 1),
+			new DecodedArtLayer([], [], [], 2)
+		];
+		var renderer = new ServerLevelRenderer(new ServerLevel(0x123456, [focus, new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10050, 10050)], layers),
+			focus, 180, 280);
+
+		var rearTransform = worldLayer(renderer, 1).transform.colorTransform;
+		assertClose(0.6, rearTransform.redMultiplier, "quarter-scale rear art uses Flash tint multiplier");
+		assertClose(0x12 * 0.4, rearTransform.redOffset, "quarter-scale rear art uses Flash red tint offset");
+		assertClose(0x34 * 0.4, rearTransform.greenOffset, "quarter-scale rear art uses Flash green tint offset");
+		assertClose(0x56 * 0.4, rearTransform.blueOffset, "quarter-scale rear art uses Flash blue tint offset");
+
+		var blockTransform = worldLayer(renderer, 4).transform.colorTransform;
+		assertClose(0.9, blockTransform.redMultiplier, "block map uses scale-one Flash tint multiplier");
+		assertClose(0x12 * 0.1, blockTransform.redOffset, "block map uses scale-one red tint offset");
+
+		var foregroundTransform = worldLayer(renderer, 6).transform.colorTransform;
+		assertClose(1.3, foregroundTransform.redMultiplier, "double-scale foreground art uses Flash tint multiplier");
+		assertClose(0x12 * -0.3, foregroundTransform.redOffset, "double-scale foreground art uses Flash red tint offset");
+
+		renderer.setBackgroundColor(0x224466);
+		rearTransform = worldLayer(renderer, 1).transform.colorTransform;
+		assertClose(0x22 * 0.4, rearTransform.redOffset, "setBackgroundColor retints rear layer red offset");
+		assertClose(0x44 * 0.4, rearTransform.greenOffset, "setBackgroundColor retints rear layer green offset");
+		assertClose(0x66 * 0.4, rearTransform.blueOffset, "setBackgroundColor retints rear layer blue offset");
+	}
+
+	private static function testArtObjectAndTextLayerScale():Void {
+		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
+		var layer = new DecodedArtLayer([], [new DecodedArtObject(0, 10, 20, 2, 3)], [new DecodedTextObject("scaled", 15, 25, 0x00FF00, 4, 5)],
+			0.5);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [focus], [layer]), focus, 180, 280);
+		var artLayer = worldLayer(renderer, 1);
+		var object = artLayer.getChildAt(1);
+		var text = Std.downcast(artLayer.getChildAt(2), TextField);
+
+		assertClose(1.0, object.scaleX, "placed art object multiplies object scaleX by layer scale");
+		assertClose(1.5, object.scaleY, "placed art object multiplies object scaleY by layer scale");
+		assertClose(2.0, text.scaleX, "placed text multiplies text scaleX by layer scale");
+		assertClose(2.5, text.scaleY, "placed text multiplies text scaleY by layer scale");
+	}
+
 	private static function testArtLayerDepthAndParallax():Void {
 		var focus = new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050);
 		var layers = [
@@ -556,7 +616,8 @@ class ServerLevelRendererTest {
 		var pivot = Std.downcast(blockDisplay.getChildAt(1), Sprite);
 		var arrowTimeline = pivot.getChildAt(0);
 		var explosion = renderer.showMineExplosion(arrow.x, arrow.y, false);
-		var pieces = renderer.showBlockPieces("BrickPieceGraphic", arrow.x, arrow.y, 1, 10, 10, 25, function() return 0.5);
+		var pieces = renderer.showBlockPieces("BrickPieceGraphic", arrow.x, arrow.y, 1, 10, 10, 25, 0.75, 0.95, 0.05,
+			function() return 0.5);
 		var piece = pieces[0];
 
 		assertEquals(true, arrowTimeline.hasEventListener(Event.ENTER_FRAME), "active arrow has frame listener before renderer removal");

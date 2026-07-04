@@ -86,6 +86,11 @@ final class ServerConfig {
 		return host + "/levels/" + levelId + ".txt?version=" + version;
 	}
 
+	/** Level-info metadata POST endpoint, matching `dialogs.LevelInfoPopup`. */
+	public static function levelInfoUrl():String {
+		return host + "/level_data.php";
+	}
+
 	/** Luna portrait loaded by Flash `gameplay.LuxPopup`. */
 	public static function lunaImageUrl():String {
 		return host + "/img/luna.jpg";
@@ -96,6 +101,13 @@ final class ServerConfig {
 	**/
 	public static function serverStatusUrl():String {
 		return host + "/files/server_status_2.txt";
+	}
+
+	/**
+		Level-of-the-week/artifact hint data, matching `page.ArtifactHint`.
+	**/
+	public static function levelOfTheWeekUrl():String {
+		return host + "/files/level_of_the_week.json";
 	}
 
 	/**
@@ -125,6 +137,10 @@ final class ServerConfig {
 
 	public static function changePasswordUrl():String {
 		return host + "/change_password.php";
+	}
+
+	public static function accountChangeEmailUrl():String {
+		return host + "/account_change_email.php";
 	}
 
 	public static function vaultUrl():String return host + "/vault/vault.php";
@@ -160,8 +176,16 @@ final class ServerConfig {
 		return host + "/guild_edit.php";
 	}
 
+	public static function guildTransferUrl():String {
+		return host + "/guild_transfer.php";
+	}
+
 	public static function guildJoinUrl():String {
 		return host + "/guild_join.php";
+	}
+
+	public static function guildLeaveUrl():String {
+		return host + "/guild_leave.php";
 	}
 
 	public static function emblemUploadUrl():String {
@@ -215,6 +239,11 @@ final class ServerConfig {
 	/** Guild kick POST, matching `PlayerPopup.clickKick`. */
 	public static function guildKickUrl():String {
 		return host + "/guild_kick.php";
+	}
+
+	/** Guild delete POST endpoint, matching `dialogs.GuildPopup.confirmDelete`. */
+	public static function guildDeleteUrl():String {
+		return host + "/guild_delete.php";
 	}
 
 	/** Moderator ban POST endpoint, matching `dialogs.BanMenu`. */

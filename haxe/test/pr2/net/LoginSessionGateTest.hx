@@ -14,7 +14,7 @@ class LoginSessionGateTest {
 		for (socketFirst in [false, true]) {
 			var ready:Null<LoginSessionResult> = null;
 			var gate = new LoginSessionGate(function(result) ready = result);
-			var auth = LoginAuthClient.parse('{"success":true,"userId":42,"email":1,"token":"abc","guild":9,"guildOwner":true,"guildName":"Racers","emblem":"star","favoriteLevels":[3,"7"]}');
+			var auth = LoginAuthClient.parse('{"success":true,"userId":42,"email":1,"token":"abc","guild":9,"guildOwner":true,"guildName":"Racers","emblem":"star","favoriteLevels":[3,"7"],"time":12345,"lastRead":100,"lastRecv":150}');
 			if (socketFirst) gate.acceptSocket(2, "Player") else gate.acceptHttp(auth);
 			assertEquals(null, ready, "one response cannot establish session");
 			if (socketFirst) gate.acceptHttp(auth) else gate.acceptSocket(2, "Player");
@@ -25,6 +25,9 @@ class LoginSessionGateTest {
 			assertEquals("abc", ready.token, "http token");
 			assertEquals(9, ready.guildId, "http guild");
 			assertEquals("3,7", ready.favoriteLevels.join(","), "http favorites");
+			assertEquals(12345.0, ready.authTime, "http auth time");
+			assertEquals(100.0, ready.lastRead, "http last-read time");
+			assertEquals(150.0, ready.lastRecv, "http last-recv time");
 		}
 	}
 

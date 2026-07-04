@@ -8,6 +8,7 @@ import openfl.text.TextField;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyPopups;
 import pr2.lobby.Memory;
+import pr2.lobby.chat.ArtifactHintClient;
 import pr2.lobby.chat.ChatLog;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.dialogs.ChatRoomInfoPopup;
@@ -41,6 +42,8 @@ class ChatTab extends Page {
 	private var joinBinding:Null<LobbyArt.Binding>;
 	private var infoButton:Null<DisplayObject>;
 	private var infoPopup:Null<ChatRoomInfoPopup>;
+	private var artifactHintGeneration:Int = 0;
+	private var artifactHintRemoved:Bool = false;
 
 	public function new() {
 		super();
@@ -146,9 +149,22 @@ class ChatTab extends Page {
 			case OpenLevel(query):
 				LobbyPopups.showLevel(query);
 			case ArtifactHint:
-				LobbySocket.write("get_artifact_hint`");
+				loadArtifactHint();
 			case Ignore:
 		}
+	}
+
+	private function loadArtifactHint():Void {
+		var generation = ++artifactHintGeneration;
+		ArtifactHintClient.load(function(data):Void {
+			if (artifactHintRemoved || generation != artifactHintGeneration) {
+				return;
+			}
+			for (message in ArtifactHintClient.fredMessages(data, nameMaker)) {
+				log.handleMessageFromArray(["Fred the G. Cactus", "3,*", message], true);
+			}
+			showMessages();
+		}, function(_:String):Void {});
 	}
 
 	private function roomBoxListenForEnter(e:KeyboardEvent):Void {
@@ -215,6 +231,8 @@ class ChatTab extends Page {
 	}
 
 	override public function remove():Void {
+		artifactHintRemoved = true;
+		artifactHintGeneration++;
 		LobbySocket.write("set_chat_room`none");
 		if (instance == this) {
 			instance = null;

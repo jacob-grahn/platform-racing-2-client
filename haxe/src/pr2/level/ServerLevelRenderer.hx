@@ -3,6 +3,7 @@ package pr2.level;
 import com.jiggmin.data.Objects;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Shape;
 import openfl.display.Sprite;
@@ -102,6 +103,11 @@ class ServerLevelRenderer extends Sprite {
 	private var tweenRotation:Float = 0;
 	private final blockLayer:Sprite = new Sprite();
 	private final artLayerContainers:Array<Sprite> = [];
+	private var solidBackground:Null<Shape>;
+	private var currentBackgroundColor:Int;
+	private var artBackgroundTintScale:Float = 1;
+	private final artBackgroundChildren:Array<DisplayObject> = [];
+	private var artCachingEnabled:Bool = true;
 	private final blockDisplays:Map<String, Sprite> = new Map();
 	// Block sprites keyed by segment (column -> row -> sprite), mirroring Flash's
 	// blockArray[segX][segY]. Used to attach/detach only the on-screen window
@@ -143,6 +149,7 @@ class ServerLevelRenderer extends Sprite {
 		this.artOptions = artOptions;
 		this.artRasterBudget = new ArtRasterBudget(artOptions != null && artOptions.rasterTileLimit != null ? artOptions.rasterTileLimit
 			: DEFAULT_ART_RASTER_TILE_LIMIT, notifyRasterStopped);
+		this.currentBackgroundColor = level.bgColor;
 
 		var focus = focusBlock == null ? firstRenderableBlock(level) : focusBlock;
 		if (focus == null) {
@@ -170,6 +177,8 @@ class ServerLevelRenderer extends Sprite {
 		drawBlocks();
 		drawArtLayer(3);
 		drawArtLayer(4);
+		applyBackgroundColorTransforms();
+		setArtCaching(true);
 		if (incrementalBlocks && totalArtItems > 0) {
 			addEventListener(Event.ENTER_FRAME, drawArtBatch);
 		}
@@ -302,6 +311,29 @@ class ServerLevelRenderer extends Sprite {
 		offsetY = Math.round(y);
 		applyLayerTransforms();
 		updateViewWindow(false);
+	}
+
+	/** Applies Flash `Course.setColor`/`Background.applyColorTransform` to rendered planes. */
+	public function setBackgroundColor(color:Int):Void {
+		currentBackgroundColor = color;
+		redrawSolidBackground();
+		applyBackgroundColorTransforms();
+	}
+
+	public function setArtCaching(enabled:Bool):Void {
+		artCachingEnabled = enabled;
+		for (container in artLayerContainers) {
+			if (container == null) {
+				continue;
+			}
+			for (i in 0...container.numChildren) {
+				container.getChildAt(i).cacheAsBitmap = enabled;
+			}
+		}
+	}
+
+	public function debugArtCachingEnabled():Bool {
+		return artCachingEnabled;
 	}
 
 	public function setBlockAlpha(worldX:Int, worldY:Int, alpha:Float):Void {
@@ -550,13 +582,47 @@ class ServerLevelRenderer extends Sprite {
 		return blockLayer;
 	}
 
+	public function resetRuntimeState():Void {
+		clearRuntimeEffects();
+		setCourseRotation(0, 0);
+		updateViewWindow(true);
+	}
+
+	public function teleportPopCountForTests():Int {
+		var count = 0;
+		for (i in 0...blockLayer.numChildren) {
+			if (Std.isOfType(blockLayer.getChildAt(i), TeleportPop)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private function clearRuntimeEffects():Void {
+		var i = blockLayer.numChildren - 1;
+		while (i >= 0) {
+			var child = blockLayer.getChildAt(i);
+			if (Std.isOfType(child, TeleportPop)) {
+				(cast child : TeleportPop).remove();
+			} else if (Std.isOfType(child, MineExplosion)) {
+				(cast child : MineExplosion).remove();
+			} else if (Std.isOfType(child, MineAppear)) {
+				(cast child : MineAppear).remove(false);
+			} else if (Std.isOfType(child, BlockPiece)) {
+				(cast child : BlockPiece).remove();
+			}
+			i--;
+		}
+	}
+
 	public function showBlockPieces(linkage:String, worldX:Float, worldY:Float, count:Int, spreadX:Float, spreadY:Float,
-			spreadRot:Float, ?random:Void->Float):Array<BlockPiece> {
+			spreadRot:Float, gravity:Float = BlockPiece.GRAVITY, friction:Float = BlockPiece.FRICTION, fadeRate:Float = BlockPiece.FADE_RATE,
+			?random:Void->Float):Array<BlockPiece> {
 		var nextRandom = random == null ? Math.random : random;
 		var pieces:Array<BlockPiece> = [];
 		for (_ in 0...count) {
-			var piece = new BlockPiece(linkage, worldX + nextRandom() * TILE_SIZE, worldY + nextRandom() * TILE_SIZE, spreadX, spreadY, spreadRot,
-				BlockPiece.GRAVITY, BlockPiece.FRICTION, BlockPiece.FADE_RATE, nextRandom);
+			var piece = new BlockPiece(linkage, gravity, friction, fadeRate, spreadX, spreadY, spreadRot, worldX + nextRandom() * TILE_SIZE,
+				worldY + nextRandom() * TILE_SIZE, nextRandom);
 			blockLayer.addChild(piece);
 			pieces.push(piece);
 		}
@@ -657,11 +723,9 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function drawBackground():Void {
-		var background = new Shape();
-		background.graphics.beginFill(level.bgColor);
-		background.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
-		background.graphics.endFill();
-		addChild(background);
+		solidBackground = new Shape();
+		redrawSolidBackground();
+		addChild(solidBackground);
 	}
 
 	private function drawBlocks():Void {
@@ -979,7 +1043,10 @@ class ServerLevelRenderer extends Sprite {
 		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
 		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
 			if (level.artBackgroundCode == BG5_CODE) {
-				addChild(createBg5CircleGrid());
+				artBackgroundTintScale = 0;
+				var grid = createBg5CircleGrid();
+				addChild(grid);
+				artBackgroundChildren.push(grid);
 			}
 			return;
 		}
@@ -989,8 +1056,12 @@ class ServerLevelRenderer extends Sprite {
 		bitmap.width = Constants.STAGE_WIDTH;
 		bitmap.height = Constants.STAGE_HEIGHT;
 		addChild(bitmap);
+		artBackgroundChildren.push(bitmap);
+		artBackgroundTintScale = level.artBackgroundCode == 204 || level.artBackgroundCode == BG5_CODE ? 0 : 1;
 		if (level.artBackgroundCode == BG5_CODE) {
-			addChild(createBg5CircleGrid());
+			var grid = createBg5CircleGrid();
+			addChild(grid);
+			artBackgroundChildren.push(grid);
 		}
 	}
 
@@ -1026,6 +1097,37 @@ class ServerLevelRenderer extends Sprite {
 			}
 		}
 		worldContainer.addChild(container);
+	}
+
+	private function redrawSolidBackground():Void {
+		if (solidBackground == null) {
+			return;
+		}
+		solidBackground.graphics.clear();
+		solidBackground.graphics.beginFill(currentBackgroundColor);
+		solidBackground.graphics.drawRect(0, 0, Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT);
+		solidBackground.graphics.endFill();
+	}
+
+	private function applyBackgroundColorTransforms():Void {
+		for (child in artBackgroundChildren) {
+			child.transform.colorTransform = backgroundColorTransform(artBackgroundTintScale);
+		}
+		blockLayer.transform.colorTransform = backgroundColorTransform(1);
+		for (i in 0...artLayerContainers.length) {
+			var container = artLayerContainers[i];
+			if (container != null && i < level.artLayers.length) {
+				container.transform.colorTransform = backgroundColorTransform(level.artLayers[i].scale);
+			}
+		}
+	}
+
+	private function backgroundColorTransform(layerScale:Float):ColorTransform {
+		var amount = ((1 - layerScale) * 0.4) + 0.1;
+		var red = (currentBackgroundColor >> 16) & 0xFF;
+		var green = (currentBackgroundColor >> 8) & 0xFF;
+		var blue = currentBackgroundColor & 0xFF;
+		return new ColorTransform(1 - amount, 1 - amount, 1 - amount, 1, red * amount, green * amount, blue * amount, 0);
 	}
 
 	public static function createBg5CircleGrid(?random:Void->Float):Sprite {

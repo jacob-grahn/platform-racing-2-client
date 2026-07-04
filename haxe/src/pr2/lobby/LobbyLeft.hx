@@ -25,10 +25,13 @@ class LobbyLeft extends LobbySide {
 		return group > 0 ? ["Chat", "PMs", "Players", "Account"] : ["Chat", "Players", "Account"];
 	}
 
+	private var pmsTab:Null<LobbyTab>;
+	private var pmCommandRegistered:Bool = false;
+
 	public function new() {
 		super();
 		var chatTab = new LobbyTab(changeTabChat, "Chat");
-		var pmsTab = new LobbyTab(changeTabPMs, "PMs");
+		pmsTab = new LobbyTab(changeTabPMs, "PMs");
 		var playersTab = new LobbyTab(changeTabPlayers, "Players");
 		var accountTab = new LobbyTab(changeTabAccount, "Account");
 
@@ -41,6 +44,7 @@ class LobbyLeft extends LobbySide {
 			lastArrKey = 3;
 			UnreadNotif.addNotifContainer(pmsTab);
 			CommandHandler.commandHandler.defineCommand("pmNotify", onPmNotify);
+			pmCommandRegistered = true;
 		} else {
 			tabArray = [chatTab, playersTab, accountTab];
 			tabKeys = ["chat", "players", "account"];
@@ -83,5 +87,17 @@ class LobbyLeft extends LobbySide {
 		#if js
 		Browser.document.body.setAttribute("data-pr2-lobby-left", tab);
 		#end
+	}
+
+	override public function remove():Void {
+		if (pmCommandRegistered) {
+			CommandHandler.commandHandler.defineCommand("pmNotify", null);
+			pmCommandRegistered = false;
+		}
+		if (pmsTab != null) {
+			UnreadNotif.removeNotifContainer(pmsTab);
+			pmsTab = null;
+		}
+		super.remove();
 	}
 }

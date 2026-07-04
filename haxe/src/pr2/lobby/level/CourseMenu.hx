@@ -124,9 +124,6 @@ class CourseMenu extends AutoDismissPopup {
 	private function closeMenu():Void {
 		confirmed = false;
 		remove();
-		if (AppStage.stage != null) {
-			AppStage.stage.focus = AppStage.stage;
-		}
 	}
 
 	public function staticCloseMenu():Void {

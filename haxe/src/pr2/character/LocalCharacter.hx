@@ -27,6 +27,7 @@ class LocalCharacter extends Character {
 	public var stingCooldown(default, null):Int = 0;
 	public var artifactControlsReversed(default, null):Bool = false;
 	public var onArtifactHatActivated:Null<Void->Void> = null;
+	public var levelEditorStatsEnabled:Bool = false;
 
 	private var lastNetScaleX:Null<Float>;
 	private var exactX:Int = 0;
@@ -37,6 +38,8 @@ class LocalCharacter extends Character {
 	private var exactPosNextUpdate:Bool = false;
 	private final baseGravityMultiplier:Float;
 	private var lastControllerMode:Null<String> = null;
+	private var lastJetPackActive:Bool = false;
+	private var lastSpeedBurstActive:Bool = false;
 
 	public function new(level:FixtureLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super(hatId, headId, bodyId, feetId);
@@ -282,14 +285,14 @@ class LocalCharacter extends Character {
 		LobbySocket.write("check_hat_countdown`");
 	}
 
-	public function beginSparklesNetwork():Void {
+	public function beginSparklesNetwork(durationMs:Int = 5000):Void {
 		LobbySocket.write("set_var`sparkle`1");
-		beginSparkles();
+		beginSparkles(durationMs);
 	}
 
-	public function endSparklesNetwork():Void {
+	public function endSparklesNetwork(used:Bool = false):Void {
 		LobbySocket.write("set_var`sparkle`0");
-		endSparkles();
+		endSparkles(used);
 	}
 
 	public function beginJetNetwork():Void {
@@ -330,6 +333,17 @@ class LocalCharacter extends Character {
 		controller.setLife(lives);
 	}
 
+	public function setControllerPosition(px:Float, py:Float):Void {
+		controller.setPosition(px, py);
+		syncFromController();
+	}
+
+	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
+		controller.resetTestCourseState(startX, startY, maxTime);
+		syncFromController();
+		forceExactPositionOnNextUpdate();
+	}
+
 	public function debugState():LocalPlayerDebugState {
 		return controller.debugState();
 	}
@@ -344,6 +358,10 @@ class LocalCharacter extends Character {
 
 	public function consumeStatsSelectSyncRequest():Bool {
 		return controller.consumeStatsSelectSyncRequest();
+	}
+
+	public function inLE():Bool {
+		return levelEditorStatsEnabled;
 	}
 
 	public function blockIceOverlayAlphaAt(tileX:Int, tileY:Int):Float {
@@ -383,6 +401,12 @@ class LocalCharacter extends Character {
 		syncFromController(previousMode);
 	}
 
+	public function receiveHit(impulseX:Float = 0, impulseY:Float = 0):Void {
+		var previousMode = controller.debugState().mode;
+		controller.receiveHit(impulseX, impulseY);
+		syncFromController(previousMode);
+	}
+
 	public function receiveSquash():Void {
 		if (controller.debugState().mode == "hurt") {
 			return;
@@ -403,6 +427,7 @@ class LocalCharacter extends Character {
 		changeState(state.animation);
 		display.scaleX = 0.9 * controller.facingScaleX;
 		display.scaleY = 0.9;
+		syncMovementItemSideEffects(state);
 		if (previousMode == null) {
 			previousMode = lastControllerMode;
 		}
@@ -410,6 +435,25 @@ class LocalCharacter extends Character {
 			dropHighestHatFromHit();
 		}
 		lastControllerMode = state.mode;
+	}
+
+	private function syncMovementItemSideEffects(state:LocalPlayerDebugState):Void {
+		if (state.jetPackActive != lastJetPackActive) {
+			if (state.jetPackActive) {
+				beginJetNetwork();
+			} else {
+				endJetNetwork();
+			}
+			lastJetPackActive = state.jetPackActive;
+		}
+		if (state.speedBurstActive != lastSpeedBurstActive) {
+			if (state.speedBurstActive) {
+				beginSparklesNetwork(5000);
+			} else {
+				endSparklesNetwork(true);
+			}
+			lastSpeedBurstActive = state.speedBurstActive;
+		}
 	}
 
 	private function dropHighestHatFromHit():Void {

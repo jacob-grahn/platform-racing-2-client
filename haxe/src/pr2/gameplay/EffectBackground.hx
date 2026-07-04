@@ -1,6 +1,9 @@
 package pr2.gameplay;
 
+import openfl.display.DisplayObject;
+import openfl.display.Sprite;
 import openfl.utils.Assets;
+import pr2.display.Removable;
 import pr2.audio.SoundEffects;
 import pr2.level.ServerLevelRenderer;
 import pr2.net.CommandHandler;
@@ -8,7 +11,7 @@ import pr2.net.CommandHandler;
 /**
 	Server-pushed race effects from `background.EffectBackground`.
 **/
-class EffectBackground {
+class EffectBackground extends Sprite {
 	public static inline var ICE_WAVE_SOUND_PATH:String = "assets/audio/sfx/sound914.mp3";
 
 	public static var instance(default, null):Null<EffectBackground>;
@@ -19,6 +22,7 @@ class EffectBackground {
 	private var removed:Bool = false;
 
 	public function new(course:Course, commandHandler:CommandHandler, ?playIceWaveSound:Int->Int->Void) {
+		super();
 		this.course = course;
 		this.commandHandler = commandHandler;
 		this.playIceWaveSound = playIceWaveSound;
@@ -38,7 +42,7 @@ class EffectBackground {
 				mountAttackVisual('Laser`$originX`$originY`' + stringArg(args, 3, "right") + '`' + parseIntArg(args, 4) + '`'
 					+ parseIntArg(args, 5));
 			case "Slash":
-				mountAttackVisual('Slash`$originX`$originY`' + stringArg(args, 3, "right") + '`' + parseIntArg(args, 4));
+				course.mountSlashEffect(originX, originY, stringArg(args, 3, "right"), parseIntArg(args, 4));
 			case "Mine":
 				var rotation = parseIntArg(args, 3);
 				var tileWorldX = mineTileWorld(originX);
@@ -67,9 +71,25 @@ class EffectBackground {
 			return;
 		}
 		removed = true;
+		clear();
 		commandHandler.defineCommand("addEffect", null);
 		if (instance == this) {
 			instance = null;
+		}
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	public function clear():Void {
+		while (numChildren > 0) {
+			var child:DisplayObject = getChildAt(numChildren - 1);
+			var removable = Std.downcast(child, Removable);
+			if (removable != null) {
+				removable.remove();
+			} else {
+				removeChild(child);
+			}
 		}
 	}
 

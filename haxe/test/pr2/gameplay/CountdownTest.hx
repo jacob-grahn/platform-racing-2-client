@@ -1,12 +1,14 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import pr2.lobby.account.Settings;
 
 class CountdownTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
 		testCountdownSequence();
+		testCountdownSounds();
 		trace('CountdownTest passed $assertions assertions');
 	}
 
@@ -31,6 +33,23 @@ class CountdownTest {
 		assertEquals(true, countdown.finished, "finish reached");
 		assertEquals(1, finishCalls, "onFinish invoked exactly once");
 		assertEquals(true, countdown.parent == null, "countdown self-removes after the last frame");
+	}
+
+	private static function testCountdownSounds():Void {
+		var oldSoundLevel = Settings.soundLevel;
+		Settings.soundLevel = 50;
+		var effects:Array<String> = [];
+		var countdown = new Countdown(null, function(path:String, volume:Float):Void {
+			effects.push(path + ":" + volume);
+		});
+
+		for (_ in 0...62) {
+			countdown.advance();
+		}
+
+		assertEquals("assets/audio/sfx/sound432.mp3:0.2|assets/audio/sfx/sound432.mp3:0.2|assets/audio/sfx/sound432.mp3:0.2|assets/audio/sfx/sound431.mp3:0.25",
+			effects.join("|"), "countdown plays three ready sounds and one go sound with Settings.soundLevel scaling");
+		Settings.soundLevel = oldSoundLevel;
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

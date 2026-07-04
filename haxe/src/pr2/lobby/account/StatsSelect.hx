@@ -87,7 +87,7 @@ class StatsSelect extends Sprite {
 	}
 
 	public function saveLEStats():Void {
-		if (localChar == null || !updateSavedLEStats) {
+		if (localChar == null || !localChar.inLE() || !updateSavedLEStats) {
 			return;
 		}
 		Settings.setValue(Settings.LE_TEST_STATS, getStats());

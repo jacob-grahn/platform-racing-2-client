@@ -1,6 +1,7 @@
 package pr2.lobby.tabs;
 
 import openfl.display.DisplayObjectContainer;
+import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
 import openfl.ui.Keyboard;
@@ -12,7 +13,11 @@ import pr2.net.LevelListClient;
 import pr2.net.LevelListClient.LevelListResult;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.StageFocus;
+import pr2.util.AsyncRemovalGuard.AsyncRemovable;
 import pr2.util.DisplayUtil;
+
+typedef SearchFetchFactory = Map<String, String>->(LevelListResult->Void)->(String->Void)->AsyncRemovable;
 
 /**
 	Port of Flash `level_browser.Search`.
@@ -29,6 +34,8 @@ import pr2.util.DisplayUtil;
 	immediately.
 **/
 class SearchTab extends LevelListingPage {
+	public static var searchFactory:SearchFetchFactory = defaultSearch;
+
 	private var art:PR2MovieClip;
 	private var searchBox:Null<TextField>;
 	private var searchButton:Null<openfl.display.DisplayObject>;
@@ -43,9 +50,14 @@ class SearchTab extends LevelListingPage {
 	private var firstRun:Bool = true;
 
 	public function new(?query:String, ?searchMode:String) {
-		super("search", 1);
+		super("search", initialPage());
 		this.seededQuery = query != null ? query : "";
 		this.seededMode = searchMode != null ? searchMode : "user";
+	}
+
+	private static function initialPage():Int {
+		var remembered = Memory.getInt("coursePageNumsearch", 0);
+		return remembered != 0 ? remembered : 1;
 	}
 
 	override private function onInitialized():Void {
@@ -64,6 +76,9 @@ class SearchTab extends LevelListingPage {
 		modeCb = Std.downcast(DisplayUtil.findByName(art, "mode_cb"), FlComboBox);
 		orderCb = Std.downcast(DisplayUtil.findByName(art, "order_cb"), FlComboBox);
 		dirCb = Std.downcast(DisplayUtil.findByName(art, "dir_cb"), FlComboBox);
+		addComboCloseListener(modeCb);
+		addComboCloseListener(orderCb);
+		addComboCloseListener(dirCb);
 
 		// Restore the remembered query + dropdown selections; the base then calls
 		// requestCourses(), which sends only when the box is non-blank.
@@ -116,7 +131,7 @@ class SearchTab extends LevelListingPage {
 		var order = comboData(orderCb, "");
 		var dir = comboData(dirCb, "");
 		var params = SearchQuery.buildPost(query, mode, order, dir, getPageNum());
-		LevelListClient.search(params, onLoaded, onError);
+		watchAsync(searchFactory(params, guardCallback(onLoaded), guardCallback(onError)));
 	}
 
 	private function onLoaded(result:LevelListResult):Void {
@@ -139,7 +154,12 @@ class SearchTab extends LevelListingPage {
 	private function onKeyDown(event:KeyboardEvent):Void {
 		if (event.keyCode == Keyboard.ENTER) {
 			doSearch();
+			StageFocus.reset();
 		}
+	}
+
+	private function focusStage(_:Event):Void {
+		StageFocus.reset();
 	}
 
 	/** `selectedItem.data` for a combo, or the fallback when nothing is selected. */
@@ -165,6 +185,22 @@ class SearchTab extends LevelListingPage {
 		}
 	}
 
+	override private function onPageChanged(n:Int):Void {
+		Memory.set("coursePageNumsearch", n);
+	}
+
+	private function addComboCloseListener(combo:Null<FlComboBox>):Void {
+		if (combo != null) {
+			combo.addEventListener(Event.CLOSE, focusStage);
+		}
+	}
+
+	private function removeComboCloseListener(combo:Null<FlComboBox>):Void {
+		if (combo != null) {
+			combo.removeEventListener(Event.CLOSE, focusStage);
+		}
+	}
+
 	override private function onTeardown():Void {
 		if (searchBox != null) {
 			Memory.set("searchStr", searchBox.text);
@@ -172,12 +208,15 @@ class SearchTab extends LevelListingPage {
 		}
 		if (modeCb != null) {
 			Memory.set("searchModeIndex", modeCb.selectedIndex);
+			removeComboCloseListener(modeCb);
 		}
 		if (orderCb != null) {
 			Memory.set("searchOrderIndex", orderCb.selectedIndex);
+			removeComboCloseListener(orderCb);
 		}
 		if (dirCb != null) {
 			Memory.set("searchDirIndex", dirCb.selectedIndex);
+			removeComboCloseListener(dirCb);
 		}
 		LobbyArt.unbind(searchBinding);
 		if (art != null) {
@@ -189,5 +228,13 @@ class SearchTab extends LevelListingPage {
 	/** Editable field of the SearchGraphic's `searchBox` TextInput component. */
 	private static function firstInputField(container:DisplayObjectContainer):Null<TextField> {
 		return LobbyArt.text(container, "searchBox");
+	}
+
+	private static function defaultSearch(params:Map<String, String>, onResult:LevelListResult->Void, onError:String->Void):AsyncRemovable {
+		return LevelListClient.search(params, onResult, onError);
+	}
+
+	public static function resetHooksForTests():Void {
+		searchFactory = defaultSearch;
 	}
 }

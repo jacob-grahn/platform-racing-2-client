@@ -24,6 +24,9 @@ class ParticleEmitterTest {
 		var arrow = new ArrowEffect(10, 20);
 		parent.addChild(arrow);
 
+		assertClose(0.25, arrow.scaleX, "arrow effect uses Flash scale x");
+		assertClose(0.25, arrow.scaleY, "arrow effect uses Flash scale y");
+		assertEquals("Arrow2Graphic", arrow.graphic.symbol.linkageClassName, "arrow effect uses authored Arrow2Graphic");
 		arrow.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertClose(20.1, arrow.y, "arrow effect applies Flash vertical drift");
 		assertClose(0.94, arrow.alpha, "arrow effect fades by Flash alpha delta");
@@ -47,6 +50,11 @@ class ParticleEmitterTest {
 		assertTrue(star != null, "base particle emitter creates StarEffect particles");
 		assertClose(45, star.x, "base particle emitter randomizes x in Flash's 20px range");
 		assertClose(58, star.y, "base particle emitter randomizes y in Flash's 55px range");
+		assertEquals("PointyStar", star.graphic.symbol.linkageClassName, "star effect uses authored PointyStar");
+		for (_ in 0...StarEffect.LIFETIME_FRAMES) {
+			star.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(0, parent.numChildren, "star effect removes itself after 15 frames");
 		star.remove();
 		emitter.remove();
 	}

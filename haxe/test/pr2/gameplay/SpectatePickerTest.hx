@@ -1,12 +1,14 @@
 package pr2.gameplay;
 
 import openfl.events.MouseEvent;
+import openfl.ui.Keyboard;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.lobby.LobbyArt;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerLevelData;
 import pr2.util.DisplayUtil;
 
+@:access(pr2.gameplay.Course)
 class SpectatePickerTest {
 	private static var assertions:Int = 0;
 
@@ -26,15 +28,27 @@ class SpectatePickerTest {
 		course.toggleSpectatePossible(true);
 		assertEquals(true, course.spectatePicker.isArtVisible(), "picker visible when spectating is possible");
 		assertEquals(null, course.playerSpectating, "visibility reset leaves free scroll");
+		assertEquals(true, course.debugKeyScrollActive(), "free scroll activates when no player is selected");
+		var freeScrollX = course.camera.posX;
+		course.setKey(Keyboard.RIGHT, true);
+		course.updatePlayerDisplay();
+		course.setKey(Keyboard.RIGHT, false);
+		assertEquals(true, course.camera.posX < freeScrollX, "free scroll right key moves camera like Flash keyScroll");
 
 		DisplayUtil.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(0, course.spectatePicker.pickedID, "right arrow starts at local temp id");
 		assertEquals(course.localCharacter, course.playerSpectating, "right arrow selects local character first");
+		assertEquals(false, course.debugKeyScrollActive(), "selecting a player disables free scroll");
 
 		DisplayUtil.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(1, course.spectatePicker.pickedID, "right arrow advances to first remote");
 		assertEquals(course.getRemoteCharacter(1), course.playerSpectating, "right arrow selects remote");
 		assertContains(course.spectatePicker.playerNameHtml(), "Rival", "selected name rendered");
+		var remote = course.getRemoteCharacter(1);
+		remote.setPos(400, 300);
+		var beforeX = course.camera.posX;
+		course.updatePlayerDisplay();
+		assertEquals(true, course.camera.posX < beforeX, "camera starts following selected remote player");
 
 		DisplayUtil.findByName(course.spectatePicker, "arrowRight").dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertEquals(2, course.spectatePicker.pickedID, "right arrow advances to next remote");

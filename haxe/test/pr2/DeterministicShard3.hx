@@ -20,10 +20,14 @@ import pr2.data.SettingsCompatTest;
 import pr2.data.TimeCompatTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
+import pr2.effects.PhysicsEffectTest;
+import pr2.effects.ShotEffectTest;
+import pr2.effects.SlashTest;
 import pr2.effects.TeleportPopTest;
 import pr2.gameplay.CameraFollowTest;
 import pr2.gameplay.CatCaptchaTest;
 import pr2.gameplay.CountdownTest;
+import pr2.gameplay.CourseTimerTest;
 import pr2.gameplay.DrawingInfoTest;
 import pr2.gameplay.FinishedPageTest;
 import pr2.gameplay.GameCommandShellTest;
@@ -57,7 +61,12 @@ import pr2.runtime.FlattenSafetyGateTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.tools.SourceClassCoverageInventoryTest;
+import pr2.ui.EmblemLoaderTest;
+import pr2.ui.GuildNameTest;
 import pr2.ui.GpNotificationTest;
+import pr2.ui.PageNavigationFocusTest;
+import pr2.ui.SelectableButtonTest;
+import pr2.util.AsyncRemovalGuardTest;
 
 class DeterministicShard3 {
 	public static function main():Void {
@@ -73,8 +82,16 @@ class DeterministicShard3 {
 		FlComponentsTest.main();
 		EpicFlashTest.main();
 		GpNotificationTest.main();
+		EmblemLoaderTest.main();
+		GuildNameTest.main();
+		SelectableButtonTest.main();
+		PageNavigationFocusTest.main();
+		AsyncRemovalGuardTest.main();
 		RemovableTest.main();
 		PixelEffect1Test.main();
+		PhysicsEffectTest.main();
+		ShotEffectTest.main();
+		SlashTest.main();
 		TeleportPopTest.main();
 		CharacterAtlasTest.main();
 		PR2EncryptorTest.main();
@@ -106,6 +123,7 @@ class DeterministicShard3 {
 		HeartsTest.main();
 		StatsDisplayTest.main();
 		CountdownTest.main();
+		CourseTimerTest.main();
 		CatCaptchaTest.main();
 		PrizePopupTest.main();
 		SpectatePickerTest.main();

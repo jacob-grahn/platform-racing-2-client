@@ -1,10 +1,14 @@
 package pr2.gameplay;
 
 import openfl.events.Event;
+import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.ui.Keyboard;
 import pr2.character.Character;
+import pr2.display.Removable;
+import pr2.effects.Effect;
 import pr2.effects.LaserShotTimeline;
+import pr2.effects.Slash;
 import pr2.effects.StingEffect;
 import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
@@ -23,6 +27,7 @@ import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
 import pr2.lobby.account.Settings;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 @:access(pr2.gameplay.Course)
 @:access(pr2.level.ServerLevelRenderer)
@@ -42,8 +47,13 @@ class CharacterLifecycleTest {
 		testLocalArrowSparkleEmitterLifecycle();
 		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
+		testMovementItemNetworkSideEffects();
 		testLocalSwordEmitsSlashEffect();
+		testLocalWeaponItemsEmitFlashPayloads();
+		testLocalTeleportAndLightningItemEffects();
 		testEffectBackgroundAddEffectCommand();
+		testSharedEffectLifecycle();
+		testEggVisualRandomization();
 		testServerActivateCommandLifecycle();
 		testLocalBlockActivationNetworking();
 		testLocalTeleportBlockEffects();
@@ -324,6 +334,15 @@ class CharacterLifecycleTest {
 		assertEquals(true, sting.hasTimelineChild("leftSting"), "sting from the left keeps left graphic");
 		assertEquals(false, sting.hasTimelineChild("rightSting"), "sting from the left removes right graphic");
 		assertEquals("hurt", course.localCharacter.debugState().mode, "incoming sting command hurts vulnerable local player");
+		course.localCharacter.setPos(123, 234);
+		sting.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(123.0, sting.x, "sting follows owner x each frame");
+		assertEquals(234.0, sting.y, "sting follows owner y each frame");
+		assertEquals(0.95, sting.alpha, "sting fades by Flash alpha delta");
+		for (_ in 0...19) {
+			sting.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(null, sting.parent, "sting removes after fading out");
 
 		var zapChild = course.characterLayer.numChildren;
 		handler.dispatch("zap", ["9"]);
@@ -403,6 +422,26 @@ class CharacterLifecycleTest {
 		shell.remove();
 	}
 
+	private static function testMovementItemNetworkSideEffects():Void {
+		var jet = collectAndUseLocalItem(6);
+		assertEquals("set_var`jet`1", LobbySocket.lastSent(), "Jet Pack item press starts the Flash jet var");
+		LobbySocket.resetSent();
+		jet.onEnterFrame(new Event(Event.ENTER_FRAME));
+		assertEquals("set_var`jet`0", LobbySocket.lastSent(), "Jet Pack item release stops the Flash jet var");
+		jet.remove();
+
+		var speed = collectAndUseLocalItem(7);
+		assertEquals("set_var`sparkle`1", LobbySocket.lastSent(), "Speed Burst item starts the Flash sparkle var");
+		assertEquals(1, speed.activeParticleEmitterCount(), "Speed Burst item mounts local sparkles");
+		LobbySocket.resetSent();
+		for (_ in 0...135) {
+			speed.onEnterFrame(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals("set_var`sparkle`0", LobbySocket.lastSent(), "Speed Burst expiry stops the Flash sparkle var");
+		assertEquals(0, speed.activeParticleEmitterCount(), "Speed Burst expiry clears local sparkles");
+		speed.remove();
+	}
+
 	private static function testLocalSwordEmitsSlashEffect():Void {
 		var course = buildCourse(new CommandHandler(), "race", "m4`ffffff`2;5;11,0;-2;10;8,0;3;0,1;0;0,1;0;0,1;0;0");
 		finishDrawing(course);
@@ -419,13 +458,68 @@ class CharacterLifecycleTest {
 		LobbySocket.resetSent();
 		course.onEnterFrame(new Event(Event.ENTER_FRAME));
 		course.setKey(Keyboard.SPACE, true);
+		var effectChildren = course.effectBackground.numChildren;
 		course.onEnterFrame(new Event(Event.ENTER_FRAME));
 
 		assertTrue(LobbySocket.lastSent().indexOf("add_effect`Slash`") == 0, "sword emits Slash effect command");
 		assertTrue(LobbySocket.lastSent().indexOf("`right`0") > 0, "sword Slash payload includes direction and temp id");
-		assertEquals(1, course.eggRound.activeAttackVisualCount(), "sword mounts the authored slash visual");
+		assertEquals(effectChildren + 1, course.effectBackground.numChildren, "sword mounts the authored Slash effect");
+		assertTrue(Std.downcast(course.effectBackground.getChildAt(effectChildren), Slash) != null, "sword uses concrete Slash effect");
 		course.setKey(Keyboard.SPACE, false);
 		course.remove();
+	}
+
+	private static function testLocalWeaponItemsEmitFlashPayloads():Void {
+		var laser = collectAndUseLocalItem(1);
+		assertTrue(LobbySocket.lastSent().indexOf("add_effect`Laser`") == 0, "laser emits Flash add_effect payload");
+		assertTrue(LobbySocket.lastSent().indexOf("`right`0`0") > 0, "laser payload includes direction, rotation, and temp id");
+		assertEquals(1, laser.eggRound.activeAttackVisualCount(), "laser mounts the authored local shot visual");
+		var laserClip = Std.downcast(laser.characterLayer.getChildAt(laser.characterLayer.numChildren - 1), PR2MovieClip);
+		assertTrue(laserClip != null, "local laser item uses a movie clip visual");
+		assertEquals("LaserShotGraphic", laserClip.symbol.linkageClassName, "local laser item uses the authored laser graphic");
+		assertEquals(2, laserClip.currentFrame, "local laser item starts stopped on idle frame 2");
+		laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(2, laserClip.currentFrame, "local laser item does not auto-play while idle");
+		LaserShotTimeline.playHit(laserClip);
+		for (_ in 0...20) {
+			laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(18, laserClip.currentFrame, "local laser item hit animation stops on authored frame 18");
+		laser.remove();
+
+		var ice = collectAndUseLocalItem(9);
+		assertTrue(LobbySocket.lastSent().indexOf("add_effect`IceWave`") == 0, "ice wave emits Flash add_effect payload");
+		assertTrue(LobbySocket.lastSent().indexOf("`0`0`0") > 0, "ice wave payload includes angle, rotation, and temp id");
+		assertEquals(3, ice.eggRound.activeAttackVisualCount(), "ice wave mounts the three authored local wave visuals");
+		var firstIce = Std.downcast(ice.characterLayer.getChildAt(ice.characterLayer.numChildren - 3), PR2MovieClip);
+		var secondIce = Std.downcast(ice.characterLayer.getChildAt(ice.characterLayer.numChildren - 2), PR2MovieClip);
+		var thirdIce = Std.downcast(ice.characterLayer.getChildAt(ice.characterLayer.numChildren - 1), PR2MovieClip);
+		assertTrue(firstIce != null && secondIce != null && thirdIce != null, "local ice wave item uses movie clip visuals");
+		assertEquals("IceWaveGraphic", firstIce.symbol.linkageClassName, "local ice wave item uses the authored first graphic");
+		assertEquals("IceWaveGraphic", secondIce.symbol.linkageClassName, "local ice wave item uses the authored second graphic");
+		assertEquals("IceWaveGraphic", thirdIce.symbol.linkageClassName, "local ice wave item uses the authored third graphic");
+		assertEquals(0.0, firstIce.rotation, "local ice wave item centers the first wave");
+		assertEquals(30.0, secondIce.rotation, "local ice wave item angles the second wave up");
+		assertEquals(-30.0, thirdIce.rotation, "local ice wave item angles the third wave down");
+		ice.remove();
+	}
+
+	private static function testLocalTeleportAndLightningItemEffects():Void {
+		var teleport = collectAndUseLocalItem(4);
+		assertEquals(2, LobbySocket.sentCommands.length, "teleport item emits start and destination add_effect payloads");
+		assertTrue(LobbySocket.sentCommands[0].indexOf("add_effect`Teleport`") == 0, "teleport start payload uses Flash command");
+		assertTrue(LobbySocket.sentCommands[1].indexOf("add_effect`Teleport`") == 0, "teleport destination payload uses Flash command");
+		assertTrue(Std.downcast(teleport.levelRenderer.blockLayer.getChildAt(teleport.levelRenderer.blockLayer.numChildren - 2), TeleportPop) != null,
+			"teleport item mounts the start TeleportPop");
+		assertTrue(Std.downcast(teleport.levelRenderer.blockLayer.getChildAt(teleport.levelRenderer.blockLayer.numChildren - 1), TeleportPop) != null,
+			"teleport item mounts the destination TeleportPop");
+		teleport.remove();
+
+		var lightning = collectAndUseLocalItem(3);
+		assertEquals("zap`", LobbySocket.lastSent(), "lightning item emits Flash zap command");
+		assertTrue(Std.downcast(lightning.characterLayer.getChildAt(lightning.characterLayer.numChildren - 1), ZapEffect) != null,
+			"lightning item mounts a local ZapEffect");
+		lightning.remove();
 	}
 
 	private static function testEggRoundCommandLifecycle():Void {
@@ -597,15 +691,18 @@ class CharacterLifecycleTest {
 		var handler = new CommandHandler();
 		var course = buildCourse(handler, "race");
 		assertTrue(handler.hasCommand("addEffect"), "course registers EffectBackground addEffect command");
+		assertTrue(course.effectBackground.parent == course, "effect background is mounted in the course display list");
 
 		var characterChildren = course.characterLayer.numChildren;
+		var effectChildren = course.effectBackground.numChildren;
 		handler.dispatch("addEffect", ["Slash", "100", "90", "left", "5"]);
-		assertEquals(1, course.eggRound.activeAttackVisualCount(), "remote slash mounts an attack visual");
-		assertEquals(characterChildren + 1, course.characterLayer.numChildren, "remote slash graphic mounts on the character layer");
+		assertEquals(effectChildren + 1, course.effectBackground.numChildren, "remote slash mounts an effect visual");
+		assertTrue(Std.downcast(course.effectBackground.getChildAt(effectChildren), Slash) != null, "remote slash uses concrete Slash");
+		assertEquals(characterChildren, course.characterLayer.numChildren, "remote slash no longer mounts the old character-layer placeholder");
 
 		handler.dispatch("addEffect", ["Laser", "100", "90", "right", "0", "6"]);
-		assertEquals(2, course.eggRound.activeAttackVisualCount(), "remote laser mounts an attack visual");
-		var laser = Std.downcast(course.characterLayer.getChildAt(characterChildren + 1), PR2MovieClip);
+		assertEquals(1, course.eggRound.activeAttackVisualCount(), "remote laser mounts an attack visual");
+		var laser = Std.downcast(course.characterLayer.getChildAt(characterChildren), PR2MovieClip);
 		assertTrue(laser != null, "remote laser uses a movie clip visual");
 		assertEquals(2, laser.currentFrame, "remote laser starts on the stopped idle frame");
 
@@ -615,7 +712,7 @@ class CharacterLifecycleTest {
 			iceWaveSounds.push('$x,$y');
 		});
 		handler.dispatch("addEffect", ["IceWave", "120", "80", "180", "0", "7"]);
-		assertEquals(5, course.eggRound.activeAttackVisualCount(), "remote ice wave fans out three shot visuals");
+		assertEquals(4, course.eggRound.activeAttackVisualCount(), "remote ice wave fans out three shot visuals");
 		assertEquals("120,80", iceWaveSounds[0], "remote ice wave plays its world-position sound");
 
 		var blockChildren = course.levelRenderer.blockLayer.numChildren;
@@ -646,6 +743,61 @@ class CharacterLifecycleTest {
 		course.remove();
 		assertTrue(!handler.hasCommand("addEffect"), "course teardown unregisters addEffect");
 		assertTrue(!handler.hasCommand("removeHat3"), "course teardown unregisters remote hat removal command");
+	}
+
+	private static function testSharedEffectLifecycle():Void {
+		var handler = new CommandHandler();
+		var course = buildCourse(handler, "race");
+		var effect = new TestSharedEffect(12, 34);
+		var removes = 0;
+		effect.addEventListener(Removable.REMOVE, function(_:Event):Void removes++);
+
+		assertTrue(effect.parent == course.effectBackground, "shared Effect mounts on EffectBackground.instance");
+		assertEquals(12.0, effect.x, "shared Effect preserves start x");
+		assertEquals(34.0, effect.y, "shared Effect preserves start y");
+		effect.armRemoval(24);
+		assertEquals(1000, effect.lastScheduledMs(), "shared Effect converts Flash frames to milliseconds at 24fps");
+		assertEquals(true, effect.hasRemoveTimer(), "shared Effect stores scheduled removal timer");
+
+		effect.remove();
+		assertEquals(false, effect.hasRemoveTimer(), "shared Effect clears scheduled removal on remove");
+		assertEquals(null, effect.parent, "shared Effect detaches from effect background on remove");
+		assertEquals(1, removes, "shared Effect dispatches Flash remove event once");
+
+		var cleared = new TestSharedEffect(5, 6);
+		assertEquals(1, course.effectBackground.numChildren, "shared Effect remounts after manual remove");
+		course.effectBackground.clear();
+		assertEquals(true, cleared.isRemoved(), "effect background clear removes Removable children");
+		assertEquals(0, course.effectBackground.numChildren, "effect background clear empties display children");
+
+		course.remove();
+		assertEquals(null, EffectBackground.instance, "course teardown clears EffectBackground singleton");
+	}
+
+	private static function testEggVisualRandomization():Void {
+		var layer = new Sprite();
+		var values = [0.10, 0.20, 0.30];
+		var index = 0;
+		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {}, function():Float {
+			return values[index++];
+		});
+		round.initRound(777);
+		round.addEggs(1, new ServerLevel(0xffffff, []));
+		var egg = round.egg(1);
+		assertTrue(egg != null, "visual test egg spawned");
+		var display = egg.display;
+		assertEquals(3, index, "egg visual randomization consumes Flash's three color randoms");
+
+		var footColor = Std.int(Math.floor(0.10 * 0xFFFFFF));
+		var baseColor = Std.int(Math.floor(0.20 * 0xFFFFFF));
+		var dotsColor = Std.int(Math.floor(0.30 * 0xFFFFFF));
+		assertEggFoot(display, "var_165", footColor);
+		assertEggFoot(display, "var_152", footColor);
+		assertDisplayColor(DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(display, "egg"), Sprite), "base"), baseColor,
+			"egg base uses second random color");
+		assertDisplayColor(DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(display, "egg"), Sprite), "dots"), dotsColor,
+			"egg dots use third random color");
+		round.clear();
 	}
 
 	private static function testServerActivateCommandLifecycle():Void {
@@ -713,6 +865,25 @@ class CharacterLifecycleTest {
 		assertTrue(visual.x != initialX || expectedType == "Slash", '$message: projectile visuals advance after mounting');
 		round.clear();
 		assertEquals(0, layer.numChildren, '$message: clear removes mounted visuals');
+	}
+
+	private static function assertEggFoot(display:PR2MovieClip, name:String, expectedColor:Int):Void {
+		var foot = Std.downcast(DisplayUtil.findByName(display, name), PR2MovieClip);
+		assertTrue(foot != null, '$name foot exists');
+		assertEquals(1, foot.currentFrame, '$name foot stops on frame 1');
+		var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
+		assertTrue(colorMC != null, '$name colorMC exists');
+		assertEquals(1, colorMC.currentFrame, '$name colorMC stops on frame 1');
+		assertEquals(expectedColor, colorMC.transform.colorTransform.color, '$name colorMC uses first random color');
+		var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
+		assertTrue(colorMC2 != null, '$name colorMC2 exists');
+		assertEquals(1, colorMC2.currentFrame, '$name colorMC2 stops on frame 1');
+		assertEquals(false, colorMC2.visible, '$name colorMC2 is hidden');
+	}
+
+	private static function assertDisplayColor(target:DisplayObject, expectedColor:Int, message:String):Void {
+		assertTrue(target != null, message + " target exists");
+		assertEquals(expectedColor, target.transform.colorTransform.color, message);
 	}
 
 	private static function testHatReturnToStartLifecycle():Void {
@@ -868,6 +1039,29 @@ class CharacterLifecycleTest {
 		}
 	}
 
+	private static function collectAndUseLocalItem(itemId:Int):Course {
+		var course = buildCourse(new CommandHandler(), "race", 'm4`ffffff`2;5;11,0;-2;10;$itemId,0;3;0,1;0;0,1;0;0,1;0;0');
+		finishDrawing(course);
+		course.beginRace();
+		finishCountdown(course);
+		course.setKey(Keyboard.UP, true);
+		for (_ in 0...40) {
+			course.onEnterFrame(new Event(Event.ENTER_FRAME));
+			if (course.localCharacter.debugState().itemId == itemId) {
+				break;
+			}
+		}
+		course.setKey(Keyboard.UP, false);
+		assertEquals(itemId, course.localCharacter.debugState().itemId, 'local player collects item $itemId');
+
+		LobbySocket.resetSent();
+		course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		course.setKey(Keyboard.SPACE, true);
+		course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		course.setKey(Keyboard.SPACE, false);
+		return course;
+	}
+
 	private static function buildCourse(handler:CommandHandler, gameMode:String = "race", ?dataString:String):Course {
 		if (dataString == null) {
 			dataString = "m3`ffffff`0;0;11,1;0;8,0;1;0";
@@ -922,6 +1116,24 @@ class CharacterLifecycleTest {
 		if (!value) {
 			throw 'assertion failed: $message';
 		}
+	}
+}
+
+private class TestSharedEffect extends Effect {
+	public function new(startX:Float, startY:Float) {
+		super(startX, startY);
+	}
+
+	public function armRemoval(frames:Int):Void {
+		scheduleRemove(frames);
+	}
+
+	public function lastScheduledMs():Int {
+		return scheduledRemoveMsForTests();
+	}
+
+	public function hasRemoveTimer():Bool {
+		return hasScheduledRemoveForTests();
 	}
 }
 

@@ -1,11 +1,18 @@
 package pr2.gameplay;
 
+import pr2.gameplay.items.IceWave;
+import pr2.gameplay.items.Item;
+import pr2.gameplay.items.JetPack;
+import pr2.gameplay.items.LaserGun;
+import pr2.gameplay.items.Lightning;
+import pr2.gameplay.items.Mine;
+import pr2.gameplay.items.SpeedBurst;
+import pr2.gameplay.items.SuperJump;
+import pr2.gameplay.items.Sword;
+import pr2.gameplay.items.Teleport;
+
 /**
 	Port of the static item-code/name table from Flash `items.Items`.
-
-	Only the code <-> name lookups that `GamePage`/`LevelConfig` need to resolve a
-	level's allowed-items list are ported here; the per-item gameplay `Item`
-	subclasses (`getFromCode`) belong with the character/item port (Section B).
 **/
 class Items {
 	public static inline var LASER_GUN:Int = 1;
@@ -21,6 +28,25 @@ class Items {
 	/** Every valid item code, in Flash order. **/
 	public static function getAllCodes():Array<Int> {
 		return [LASER_GUN, MINE, LIGHTNING, TELEPORT, SUPER_JUMP, JET_PACK, SPEED_BURST, SWORD, ICE_WAVE];
+	}
+
+	public static function getFromCode(code:Int):Null<Item> {
+		return switch (code) {
+			case LASER_GUN: new LaserGun();
+			case MINE: new Mine();
+			case LIGHTNING: new Lightning();
+			case TELEPORT: new Teleport();
+			case SUPER_JUMP: new SuperJump();
+			case JET_PACK: new JetPack();
+			case SPEED_BURST: new SpeedBurst();
+			case SWORD: new Sword();
+			case ICE_WAVE: new IceWave();
+			default: null;
+		};
+	}
+
+	public static function getCodeFromItem(item:Null<Item>):Int {
+		return item == null ? 0 : item.code;
 	}
 
 	public static function getNameFromCode(code:Int):String {

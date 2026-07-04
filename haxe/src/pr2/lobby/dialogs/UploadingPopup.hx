@@ -7,6 +7,7 @@ import pr2.lobby.LobbyArt;
 import pr2.net.FormPostClient;
 import pr2.net.SuperLoader;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 
 typedef UploadPostFactory = String->Map<String, String>->(String->Void)->(String->Void)->Void;
@@ -34,6 +35,7 @@ class UploadingPopup extends Popup {
 	private var art:PR2MovieClip;
 	private var progressBar:ProgressBar;
 	private var closeBinding:Null<LobbyArt.Binding>;
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(requestOrUrl:Dynamic = null, ?fieldsOrDataMode:Dynamic = null, dispText:String = "Uploading...", ?aemOrOnResult:Dynamic = true,
 			?onError:String->Void) {
@@ -53,9 +55,11 @@ class UploadingPopup extends Popup {
 
 		if (options.request != null) {
 			prepareRequest(options.request);
-			requestFactory(options.request, function(body:String):Void handleBody(body, options), function(message:String):Void handleError(message, options));
+			requestFactory(options.request, asyncGuard.wrap(function(body:String):Void handleBody(body, options)),
+				asyncGuard.wrap(function(message:String):Void handleError(message, options)));
 		} else if (options.url != null) {
-			postFactory(options.url, options.fields, function(body:String):Void handleBody(body, options), function(message:String):Void handleError(message, options));
+			postFactory(options.url, options.fields, asyncGuard.wrap(function(body:String):Void handleBody(body, options)),
+				asyncGuard.wrap(function(message:String):Void handleError(message, options)));
 		}
 	}
 
@@ -155,6 +159,7 @@ class UploadingPopup extends Popup {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
 		LobbyArt.unbind(closeBinding);
 		if (progressBar != null) {
 			progressBar.remove();

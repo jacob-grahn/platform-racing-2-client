@@ -1,5 +1,6 @@
 package pr2.lobby.account;
 
+import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -18,8 +19,8 @@ import pr2.runtime.PR2MovieClip;
 	`AccountState.currentHat` and re-runs level-access checks (the Flash
 	`testLevelAccess` dispatch), so password/rank/hat gating stays in sync.
 
-	The per-part info button shows a `HoverPopup` (the original's external
-	part-catalog popup is out of scope for the lobby port).
+	The per-part info button uses Flash's delayed hover and opens the singleton
+	part-catalog popup.
 **/
 class PlayerDisplay extends Sprite {
 	public final hatSelect:PartSelector;
@@ -32,6 +33,7 @@ class PlayerDisplay extends Sprite {
 	private var randomGraphic:Null<PR2MovieClip>;
 	private var randomBinding:Null<Binding>;
 	private var hover:Null<HoverPopup>;
+	private var hoverTimer:Null<Timer>;
 	private final yStart:Float = 24;
 	private var hasHatRow:Bool;
 
@@ -84,19 +86,58 @@ class PlayerDisplay extends Sprite {
 	private function bindInfo(selector:PartSelector, partType:String):Void {
 		selector.infoButton.buttonMode = true;
 		selector.infoButton.useHandCursor = true;
-		selector.infoButton.addEventListener(MouseEvent.CLICK, function(_:MouseEvent):Void {
-			showInfo(partType, selector.infoButton);
-		});
+		selector.infoButton.addEventListener(MouseEvent.MOUSE_OVER, onInfoMouseEvent);
+		selector.infoButton.addEventListener(MouseEvent.MOUSE_OUT, onInfoMouseEvent);
+		selector.infoButton.addEventListener(MouseEvent.CLICK, onInfoMouseEvent);
 	}
 
-	private function showInfo(partType:String, target:DisplayObject):Void {
+	private function onInfoMouseEvent(e:MouseEvent):Void {
+		var partType = partTypeForButton(e.currentTarget);
+		clearInfoHover();
+		if (partType == "") {
+			return;
+		}
+		if (e.type == MouseEvent.MOUSE_OVER) {
+			hoverTimer = Timer.delay(function():Void showInfo(partType), 500);
+		} else if (e.type == MouseEvent.CLICK) {
+			new PartInfoPopup(partType, selectorForType(partType).partArray, selectorForType(partType).epicArray);
+		}
+	}
+
+	private function showInfo(partType:String):Void {
+		var plural = partType == "body" ? "bodies" : (partType == "feet" ? partType : partType + "s");
+		var title = partType.charAt(0).toUpperCase() + partType.substr(1) + " Information";
+		hover = new HoverPopup(title, "See and learn how to obtain all the " + plural + " in Platform Racing 2.", selectorForType(partType).infoButton);
+		hover.x += hover.width + 25;
+	}
+
+	private function clearInfoHover():Void {
+		if (hoverTimer != null) {
+			hoverTimer.stop();
+			hoverTimer = null;
+		}
 		if (hover != null) {
 			hover.remove();
 			hover = null;
 		}
-		var plural = partType == "body" ? "bodies" : (partType == "feet" ? partType : partType + "s");
-		var title = partType.charAt(0).toUpperCase() + partType.substr(1) + " Information";
-		hover = new HoverPopup(title, "See and learn how to obtain all the " + plural + " in Platform Racing 2.", target);
+	}
+
+	private function partTypeForButton(target:Dynamic):String {
+		if (target == hatSelect.infoButton) return "hat";
+		if (target == headSelect.infoButton) return "head";
+		if (target == bodySelect.infoButton) return "body";
+		if (target == feetSelect.infoButton) return "feet";
+		return "";
+	}
+
+	private function selectorForType(partType:String):PartSelector {
+		return switch (partType) {
+			case "hat": hatSelect;
+			case "head": headSelect;
+			case "body": bodySelect;
+			case "feet": feetSelect;
+			default: headSelect;
+		}
 	}
 
 	private function onRandomClick():Void {
@@ -135,10 +176,7 @@ class PlayerDisplay extends Sprite {
 		removeSelector(headSelect);
 		removeSelector(bodySelect);
 		removeSelector(feetSelect);
-		if (hover != null) {
-			hover.remove();
-			hover = null;
-		}
+		clearInfoHover();
 		LobbyArt.unbind(randomBinding);
 		if (randomGraphic != null) {
 			randomGraphic.dispose();
@@ -155,6 +193,9 @@ class PlayerDisplay extends Sprite {
 
 	private function removeSelector(ps:PartSelector):Void {
 		ps.removeEventListener(Event.CHANGE, updateDisplay);
+		ps.infoButton.removeEventListener(MouseEvent.MOUSE_OVER, onInfoMouseEvent);
+		ps.infoButton.removeEventListener(MouseEvent.MOUSE_OUT, onInfoMouseEvent);
+		ps.infoButton.removeEventListener(MouseEvent.CLICK, onInfoMouseEvent);
 		ps.remove();
 	}
 }

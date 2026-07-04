@@ -3,6 +3,13 @@ package pr2.lobby.players;
 import haxe.Json;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
+import pr2.util.AsyncRemovalGuard;
+
+typedef PlayersUserListFetchResource = {
+	function remove():Void;
+}
+
+typedef PlayersUserListFetchFactory = String->(String->Void)->(String->Void)->PlayersUserListFetchResource;
 
 /**
 	Port of Flash `social.PlayersTabUserListDataLoader`: loads a player list from
@@ -10,7 +17,10 @@ import pr2.net.TextLoader;
 	Following, and Ignored are thin subclasses that pass their mode.
 **/
 class PlayersUserListLoader extends PlayersTabList {
+	public static var fetchFactory:PlayersUserListFetchFactory = defaultFetch;
+
 	private var mode:String;
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(mode:String) {
 		super();
@@ -19,7 +29,11 @@ class PlayersUserListLoader extends PlayersTabList {
 
 	override public function initialize():Void {
 		super.initialize();
-		TextLoader.load(ServerConfig.userListUrl(mode), onData, onError);
+		asyncGuard.watch(fetchFactory(ServerConfig.userListUrl(mode), asyncGuard.wrap(onData), asyncGuard.wrap(onError)));
+	}
+
+	private static function defaultFetch(url:String, onData:String->Void, onError:String->Void):PlayersUserListFetchResource {
+		return TextLoader.load(url, onData, onError);
 	}
 
 	private function onData(body:String):Void {
@@ -51,5 +65,10 @@ class PlayersUserListLoader extends PlayersTabList {
 		}
 		var parsed = Std.parseInt(Std.string(value));
 		return parsed == null ? 0 : parsed;
+	}
+
+	override public function remove():Void {
+		asyncGuard.remove();
+		super.remove();
 	}
 }

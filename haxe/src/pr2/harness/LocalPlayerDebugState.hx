@@ -26,6 +26,8 @@ class LocalPlayerDebugState {
 	public final finishY:Null<Int>;
 	public final lives:Int;
 	public final courseTime:Int;
+	public final jetPackActive:Bool;
+	public final speedBurstActive:Bool;
 
 	public function new(
 		x:Float,
@@ -49,7 +51,9 @@ class LocalPlayerDebugState {
 		?finishX:Null<Int>,
 		?finishY:Null<Int>,
 		lives:Int = 3,
-		courseTime:Int = 120
+		courseTime:Int = 120,
+		jetPackActive:Bool = false,
+		speedBurstActive:Bool = false
 	) {
 		this.x = x;
 		this.y = y;
@@ -74,6 +78,8 @@ class LocalPlayerDebugState {
 		this.finishY = finishY;
 		this.lives = lives;
 		this.courseTime = courseTime;
+		this.jetPackActive = jetPackActive;
+		this.speedBurstActive = speedBurstActive;
 	}
 
 	public function serialize():String {
@@ -82,7 +88,7 @@ class LocalPlayerDebugState {
 		var uses = itemUses == null ? "none" : Std.string(itemUses);
 		var effect = lastItemEffect == null ? "none" : lastItemEffect;
 		var finish = finishBlockId == null ? "none" : '$finishBlockId,$finishX,$finishY';
-		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation;lives=$lives;time=$courseTime;finished=$finished;finish=$finish';
+		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation;lives=$lives;time=$courseTime;jet=$jetPackActive;sparkle=$speedBurstActive;finished=$finished;finish=$finish';
 	}
 
 	private static function round3(value:Float):Float {

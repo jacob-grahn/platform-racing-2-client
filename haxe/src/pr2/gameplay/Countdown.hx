@@ -6,6 +6,8 @@ import pr2.audio.SoundEffects;
 import pr2.lobby.account.Settings;
 import pr2.runtime.PR2MovieClip;
 
+typedef CountdownEffectPlayer = String->Float->Void;
+
 /**
 	Port of the Flash 3-2-1 race countdown.
 
@@ -26,14 +28,16 @@ class Countdown extends Sprite {
 
 	private var art:Null<PR2MovieClip>;
 	private var onFinish:Null<Void->Void>;
+	private var onPlayEffect:Null<CountdownEffectPlayer>;
 
 	/** Number of "count" ticks seen (3 by the time the race starts). */
 	public var counts(default, null):Int = 0;
 	public var finished(default, null):Bool = false;
 
-	public function new(?onFinish:Void->Void) {
+	public function new(?onFinish:Void->Void, ?onPlayEffect:CountdownEffectPlayer) {
 		super();
 		this.onFinish = onFinish;
+		this.onPlayEffect = onPlayEffect;
 		mouseEnabled = false;
 		mouseChildren = false;
 		art = PR2MovieClip.fromLinkage("CountdownGraphic", {maxNestedDepth: 3});
@@ -76,10 +80,15 @@ class Countdown extends Sprite {
 	}
 
 	private function playEffect(path:String, volume:Float):Void {
+		var scaledVolume = volume * (Settings.soundLevel / 100);
+		if (onPlayEffect != null) {
+			onPlayEffect(path, scaledVolume);
+			return;
+		}
 		if (!Assets.exists(path)) {
 			return;
 		}
-		SoundEffects.playSound(Assets.getSound(path), volume * (Settings.soundLevel / 100));
+		SoundEffects.playSound(Assets.getSound(path), scaledVolume);
 	}
 
 	public function remove():Void {

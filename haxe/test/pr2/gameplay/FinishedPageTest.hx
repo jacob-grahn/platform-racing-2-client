@@ -39,8 +39,14 @@ class FinishedPageTest {
 		page.award("6 (dropped)", "+1");
 		assertEquals("5", LobbyArt.text(page, "bonus5").text, "fifth award fills bonus5");
 
+		var submitted:Array<String> = [];
+		FinishedPage.kongStatSubmit = function(name:String, value:Int):Void {
+			submitted.push(name + ":" + value);
+		};
 		page.setExpGain(10, 60, 100);
 		assertEquals("+ 50", LobbyArt.text(page, "expTotal").text, "exp total is the gain delta");
+		assertEquals("Exp Gained at Once:50", submitted.join("|"), "finished page submits Kong exp gain stat");
+		FinishedPage.kongStatSubmit = null;
 
 		// The rating control is added as a child.
 		var hasStars = false;
@@ -87,6 +93,7 @@ class FinishedPageTest {
 	}
 
 	private static function closeAll():Void {
+		FinishedPage.kongStatSubmit = null;
 		for (popup in Popup.getOpen().copy()) {
 			popup.remove();
 		}

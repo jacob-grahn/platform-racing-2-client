@@ -149,6 +149,7 @@ class PageNavigation extends Sprite {
 		selected = i;
 		draw();
 		target.setPageNum(i);
+		StageFocus.reset();
 	}
 
 	public function addPageHighlight(i:Int):Void {
@@ -189,5 +190,9 @@ class PageNavigation extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	public function pageCountForTests():Int {
+		return count;
 	}
 }

@@ -7,6 +7,7 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.LocalPlayerDebugState;
+import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.BlockType;
 import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.ObjectCodes;
@@ -41,6 +42,9 @@ class GameShellMountTest {
 		assertEquals(false, course.hearts.visible, "hearts hidden until deathmatch lives reported");
 		assertClose(Course.MUSIC_X, course.musicSelection.x, "music x");
 		assertClose(Course.MUSIC_Y, course.musicSelection.y, "music y");
+		assertClose(Course.TIMER_X, course.timer.x, "timer x");
+		assertClose(Course.TIMER_Y, course.timer.y, "timer y");
+		assertEquals("", course.timer.debugText(), "timer starts blank before race init");
 		assertClose(Course.CHAT_X, course.raceChat.x, "chat x");
 		assertClose(Course.CHAT_Y, course.raceChat.y, "chat y");
 		assertClose(Course.DRAWING_X, course.drawingInfo.x, "drawing info x");
@@ -62,6 +66,12 @@ class GameShellMountTest {
 
 		// With no chat interceptor supplied, the shell does not swallow chat.
 		assertEquals(false, course.handleRaceChatLine("/debug"), "no interceptor leaves chat unhandled");
+		LevelInfoPopup.autoLoadOnCreate = false;
+		assertEquals(true, course.handleRaceChatLine(" /level "), "race chat /level opens current level info");
+		assertEquals(false, LevelInfoPopup.instance == null, "race chat /level creates a LevelInfoPopup");
+		assertEquals(42, LevelInfoPopup.instance.levelId, "race chat /level uses the current course id");
+		LevelInfoPopup.instance.remove();
+		LevelInfoPopup.autoLoadOnCreate = true;
 
 		course.remove();
 		assertEquals(true, course.miniMap == null, "minimap torn down");
@@ -69,6 +79,7 @@ class GameShellMountTest {
 		assertEquals(true, course.statsDisplay == null, "stats display torn down");
 		assertEquals(true, course.hearts == null, "hearts torn down");
 		assertEquals(true, course.musicSelection == null, "music selection torn down");
+		assertEquals(true, course.timer == null, "timer torn down");
 		assertEquals(true, course.raceChat == null, "race chat torn down");
 		assertEquals(true, course.drawingInfo == null, "drawing info torn down");
 		assertEquals(true, course.levelRenderer == null, "level renderer torn down");
@@ -80,6 +91,7 @@ class GameShellMountTest {
 		testObjectiveModeReportsEachFinishOnce();
 		testRotateBlockDisplayKeepsLocalCharacterCentered();
 		testCountdownKeepsCameraStill();
+		testTimerBeginRaceAndTimeoutBoundary();
 
 		trace('GameShellMountTest passed $assertions assertions');
 	}
@@ -99,6 +111,17 @@ class GameShellMountTest {
 		@:privateAccess course.maybeHandleLocalFinish(zeroLives);
 		assertEquals("finish_race`-1`0`0|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
 			"deathmatch zero lives emits finish and starts local removal");
+		course.remove();
+	}
+
+	private static function testTimerBeginRaceAndTimeoutBoundary():Void {
+		var course = buildCourse();
+		var timeoutCalls = 0;
+		course.onOutOfTime = function():Void timeoutCalls++;
+		course.beginRace();
+		assertEquals("2:00", course.timer.debugText(), "beginRace initializes the course timer display");
+		course.outOfTimeHandler();
+		assertEquals(1, timeoutCalls, "course outOfTimeHandler routes to the host callback");
 		course.remove();
 	}
 
@@ -239,6 +262,8 @@ class GameShellMountTest {
 		course.localCharacter.step(new LocalPlayerInput());
 		course.updatePlayerDisplay();
 		assertEquals(-3, course.localCharacter.rotation, "local character counter-rotates during course tween");
+		assertEquals(false, course.levelRenderer.debugArtCachingEnabled(), "rotate tween disables background art caching");
+		assertEquals(openfl.display.StageQuality.LOW, course.debugStageQualityForTests(), "rotate tween lowers stage quality");
 		assertEquals(course.characterLayer, course.localCharacter.parent, "local character stays in the rotating front layer during tween");
 		assertBetween(0, 550, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2,
 			"local character x stays on-stage while the world tween is active");
@@ -253,6 +278,8 @@ class GameShellMountTest {
 		var state = course.localCharacter.debugState();
 		assertEquals(90, state.courseRotation, "rotate block commits course rotation");
 		assertEquals(0, course.localCharacter.rotation, "local character rotation resets after tween");
+		assertEquals(true, course.levelRenderer.debugArtCachingEnabled(), "completed rotate restores background art caching");
+		assertEquals(openfl.display.StageQuality.HIGH, course.debugStageQualityForTests(), "completed rotate restores high stage quality");
 		assertClose(275, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2, "camera snaps local x after rotation");
 		assertClose(245, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT, "camera snaps local y after rotation");
 		course.remove();

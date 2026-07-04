@@ -2,30 +2,20 @@ package pr2.ui;
 
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
-import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
+import pr2.app.AppStage;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
-/**
-	Port of Flash `ui.CustomScrollBar`: a draggable thumb plus up/down arrows that
-	scroll a `target` display object vertically within a fixed view height. The
-	arrows scroll continuously while held (one `scrollStep` per frame) and the
-	thumb maps its travel onto the target's overflow (`target.height - viewHeight`).
-
-	The thumb/arrow/track positions math is exposed via the static `thumbToTargetY`
-	helper so the scroll mapping can be unit-tested without real art.
-**/
 class CustomScrollBar extends Sprite {
-	private var art:Null<PR2MovieClip>;
+	private var art:PR2MovieClip;
+	private var target:Null<DisplayObject>;
 	private var thumb:Null<DisplayObject>;
 	private var upArrow:Null<DisplayObject>;
 	private var downArrow:Null<DisplayObject>;
 	private var track:Null<DisplayObject>;
-	private var target:Null<DisplayObject>;
-	private var stageRef:Null<Stage>;
-
 	private var thumbMinY:Float = 0;
 	private var thumbMaxY:Float = 0;
 	private var targetInitialY:Float = 0;
@@ -33,111 +23,64 @@ class CustomScrollBar extends Sprite {
 	private var pos:Float = 0;
 	private var scrollStep:Float = 5;
 	private var scrollDelta:Float = 0;
-	private var scrolling:Bool = false;
+	private var removed:Bool = false;
 
 	public function new() {
 		super();
-		art = PR2MovieClip.fromLinkage("CustomScrollBarGraphic", {maxNestedDepth: 4});
+		art = PR2MovieClip.fromLinkage("CustomScrollBarGraphic", {maxNestedDepth: 5});
 		addChild(art);
-		thumb = findChild("thumb");
-		upArrow = findChild("upArrow");
-		downArrow = findChild("downArrow");
-		track = findChild("track");
-		if (thumb != null) {
-			thumb.addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown);
-		}
-		if (upArrow != null) {
-			upArrow.addEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown);
-		}
-		if (downArrow != null) {
-			downArrow.addEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown);
-		}
-		// Pages are added to the display list after `initialize()`, so `stage` is
-		// null when `init()` runs; capture it once the scrollbar is on stage.
-		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		thumb = DisplayUtil.findByName(art, "thumb");
+		upArrow = DisplayUtil.findByName(art, "upArrow");
+		downArrow = DisplayUtil.findByName(art, "downArrow");
+		track = DisplayUtil.findByName(art, "track");
+		if (thumb != null) thumb.addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
+		if (upArrow != null) upArrow.addEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown, false, 0, true);
+		if (downArrow != null) downArrow.addEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown, false, 0, true);
 	}
 
-	private function onAddedToStage(_:Event):Void {
-		stageRef = stage;
-	}
-
-	/**
-		Map a thumb Y onto a target Y, matching the Flash math. The thumb fraction
-		`(thumbY - minY) / (maxY - minY)` scrolls the target across its overflow,
-		clamped so the target never scrolls below its initial position.
-	**/
-	public static function thumbToTargetY(thumbY:Float, thumbMinY:Float, thumbMaxY:Float, targetInitialY:Float, targetHeight:Float, viewHeight:Float):Float {
-		var clamped = thumbY;
-		if (clamped > thumbMaxY) {
-			clamped = thumbMaxY;
-		}
-		if (clamped < thumbMinY) {
-			clamped = thumbMinY;
-		}
-		var fraction = (clamped - thumbMinY) / (thumbMaxY - thumbMinY);
-		var overflow = targetHeight - viewHeight;
-		var y = targetInitialY - (fraction * overflow);
-		if (y > targetInitialY) {
-			y = targetInitialY;
-		}
-		return Math.round(y);
-	}
-
-	public function init(target:DisplayObject, trackHeight:Float, viewHeight:Float):Void {
-		if (stageRef == null) {
-			stageRef = stage;
-		}
-		if (track != null) {
-			track.height = trackHeight - 15;
-		}
-		if (downArrow != null) {
-			downArrow.y = trackHeight - downArrow.height;
-			thumbMaxY = downArrow.y - (thumb != null ? thumb.height / 2 : 0);
-		}
-		if (upArrow != null) {
-			thumbMinY = upArrow.height + (thumb != null ? thumb.height / 2 : 0);
-		}
-		this.targetInitialY = target.y;
+	public function init(target:DisplayObject, scrollHeight:Float, viewHeight:Float):Void {
+		if (track != null) track.height = scrollHeight - 15;
+		if (downArrow != null) downArrow.y = scrollHeight - downArrow.height;
+		thumbMaxY = downArrow == null || thumb == null ? 0 : downArrow.y - thumb.height / 2;
+		thumbMinY = upArrow == null || thumb == null ? 0 : upArrow.height + thumb.height / 2;
+		targetInitialY = target.y;
 		this.target = target;
 		this.viewHeight = viewHeight;
 		scaleX = scaleY = 1;
+		position(thumbMinY);
 	}
 
-	public function position(thumbY:Float):Void {
-		if (thumb == null || target == null) {
-			return;
-		}
-		var clamped = thumbY;
-		if (clamped > thumbMaxY) {
-			clamped = thumbMaxY;
-		}
-		if (clamped < thumbMinY) {
-			clamped = thumbMinY;
-		}
-		pos = clamped;
-		thumb.y = clamped;
-		target.y = thumbToTargetY(clamped, thumbMinY, thumbMaxY, targetInitialY, target.height, viewHeight);
+	public function position(value:Float):Void {
+		if (target == null || thumb == null) return;
+		if (value > thumbMaxY) value = thumbMaxY;
+		if (value < thumbMinY) value = thumbMinY;
+		thumb.y = pos = value;
+		target.y = thumbToTargetY(thumb.y, thumbMinY, thumbMaxY, targetInitialY, target.height, viewHeight);
+	}
+
+	public static function thumbToTargetY(thumbY:Float, thumbMinY:Float, thumbMaxY:Float, targetInitialY:Float, targetHeight:Float,
+			viewHeight:Float):Float {
+		if (thumbY > thumbMaxY) thumbY = thumbMaxY;
+		if (thumbY < thumbMinY) thumbY = thumbMinY;
+		var range = thumbMaxY - thumbMinY;
+		var fraction = range == 0 ? 0 : (thumbY - thumbMinY) / range;
+		var targetRange = Math.max(0, targetHeight - viewHeight);
+		var y = Math.round(targetInitialY - fraction * targetRange);
+		return y > targetInitialY ? targetInitialY : y;
+	}
+
+	public function thumbMaxYForTests():Float {
+		return thumbMaxY;
+	}
+
+	public function removedForTests():Bool {
+		return removed;
 	}
 
 	private function onThumbDown(_:MouseEvent):Void {
-		if (stageRef == null) {
-			return;
-		}
-		stageRef.addEventListener(MouseEvent.MOUSE_UP, onThumbUp);
-		stageRef.addEventListener(MouseEvent.MOUSE_MOVE, onThumbDrag);
-	}
-
-	private function onThumbUp(_:MouseEvent):Void {
-		if (stageRef == null) {
-			return;
-		}
-		stageRef.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp);
-		stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, onThumbDrag);
-	}
-
-	private function onThumbDrag(event:MouseEvent):Void {
-		var local = globalToLocal(new Point(0, event.stageY));
-		position(local.y);
+		if (AppStage.stage == null) return;
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_UP, onThumbUp, false, 0, true);
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_MOVE, onThumbDrag, false, 0, true);
 	}
 
 	private function onUpArrowDown(_:MouseEvent):Void {
@@ -150,9 +93,9 @@ class CustomScrollBar extends Sprite {
 
 	private function startContinuousScroll(delta:Float):Void {
 		removeEventListener(Event.ENTER_FRAME, scroll);
-		addEventListener(Event.ENTER_FRAME, scroll);
-		if (stageRef != null) {
-			stageRef.addEventListener(MouseEvent.MOUSE_UP, onArrowUp);
+		addEventListener(Event.ENTER_FRAME, scroll, false, 0, true);
+		if (AppStage.stage != null) {
+			AppStage.stage.addEventListener(MouseEvent.MOUSE_UP, onArrowUp, false, 0, true);
 		}
 		scrollDelta = delta;
 	}
@@ -165,29 +108,33 @@ class CustomScrollBar extends Sprite {
 		position(pos + scrollDelta);
 	}
 
-	private function findChild(name:String):Null<DisplayObject> {
-		return pr2.util.DisplayUtil.findByName(art, name);
+	private function onThumbUp(_:MouseEvent):Void {
+		if (AppStage.stage == null) return;
+		AppStage.stage.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp);
+		AppStage.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onThumbDrag);
+	}
+
+	private function onThumbDrag(event:MouseEvent):Void {
+		var point = globalToLocal(new Point(0, event.stageY));
+		position(point.y);
 	}
 
 	public function remove():Void {
-		removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-		if (thumb != null) {
-			thumb.removeEventListener(MouseEvent.MOUSE_DOWN, onThumbDown);
-		}
-		if (upArrow != null) {
-			upArrow.removeEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown);
-		}
-		if (downArrow != null) {
-			downArrow.removeEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown);
-		}
+		removed = true;
+		if (thumb != null) thumb.removeEventListener(MouseEvent.MOUSE_DOWN, onThumbDown);
+		if (upArrow != null) upArrow.removeEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown);
+		if (downArrow != null) downArrow.removeEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown);
 		removeEventListener(Event.ENTER_FRAME, scroll);
-		if (stageRef != null) {
-			stageRef.removeEventListener(MouseEvent.MOUSE_UP, onArrowUp);
-			stageRef.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp);
-			stageRef.removeEventListener(MouseEvent.MOUSE_MOVE, onThumbDrag);
+		if (AppStage.stage != null) {
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_UP, onArrowUp);
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_UP, onThumbUp);
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onThumbDrag);
 		}
 		target = null;
-		stageRef = null;
+		thumb = null;
+		upArrow = null;
+		downArrow = null;
+		track = null;
 		if (art != null) {
 			art.dispose();
 			art = null;

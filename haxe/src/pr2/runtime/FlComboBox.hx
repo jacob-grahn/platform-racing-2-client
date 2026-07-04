@@ -14,6 +14,7 @@ import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
+import pr2.ui.StageFocus;
 
 /**
 	A faithful port of the Flash `fl.controls.ComboBox` component (library item
@@ -281,6 +282,7 @@ class FlComboBox extends Sprite {
 			setChildIndex(dropdown, numChildren - 1);
 		}
 		redraw();
+		dispatchEvent(new Event(Event.OPEN));
 	}
 
 	private function closeDropdown():Void {
@@ -302,6 +304,8 @@ class FlComboBox extends Sprite {
 			dropdown.transform.matrix = new Matrix();
 		}
 		redraw();
+		dispatchEvent(new Event(Event.CLOSE));
+		StageFocus.reset();
 	}
 
 	private function onStageMouseDown(event:MouseEvent):Void {

@@ -66,6 +66,10 @@ class PlayersListHolder extends Page {
 		}
 	}
 
+	private function listingSortNamesForTests():Array<String> {
+		return [for (item in listings) item.sortName()];
+	}
+
 	override public function remove():Void {
 		clearListings();
 		if (scrollBar != null) {

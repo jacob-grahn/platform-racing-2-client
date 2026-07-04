@@ -8,7 +8,14 @@ import pr2.lobby.players.PlayerListSort.SortState;
 import pr2.net.ServerConfig;
 import pr2.net.TextLoader;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
+
+typedef GuildsFetchResource = {
+	function remove():Void;
+}
+
+typedef GuildsFetchFactory = String->(String->Void)->(String->Void)->GuildsFetchResource;
 
 /**
 	Port of Flash `social.Guilds`: the top-guilds list shown to guests. Uses the
@@ -17,12 +24,14 @@ import pr2.util.DisplayUtil;
 **/
 class Guilds extends PlayersListHolder {
 	private static inline var NAME_MODE:String = "guildName";
+	public static var fetchFactory:GuildsFetchFactory = defaultFetch;
 
 	private var graphic:Null<PR2MovieClip>;
 	private var nameButton:Null<DisplayObjectContainer>;
 	private var activeButton:Null<DisplayObjectContainer>;
 	private var gpButton:Null<DisplayObjectContainer>;
 	private var sortState:SortState = {mode: "gpToday", order: "desc"};
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	override public function initialize():Void {
 		graphic = PR2MovieClip.fromLinkage("PlayersTabListGraphic", {maxNestedDepth: 6});
@@ -44,7 +53,11 @@ class Guilds extends PlayersListHolder {
 		if (gpButton != null) {
 			gpButton.addEventListener(MouseEvent.CLICK, clickGP);
 		}
-		TextLoader.load(ServerConfig.guildsTopUrl(), onData, onError);
+		asyncGuard.watch(fetchFactory(ServerConfig.guildsTopUrl(), asyncGuard.wrap(onData), asyncGuard.wrap(onError)));
+	}
+
+	private static function defaultFetch(url:String, onData:String->Void, onError:String->Void):GuildsFetchResource {
+		return TextLoader.load(url, onData, onError);
 	}
 
 	private function onData(body:String):Void {
@@ -94,6 +107,7 @@ class Guilds extends PlayersListHolder {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
 		if (nameButton != null) {
 			nameButton.removeEventListener(MouseEvent.CLICK, clickName);
 		}

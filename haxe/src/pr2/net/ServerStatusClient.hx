@@ -2,11 +2,19 @@ package pr2.net;
 
 import haxe.Json;
 
+typedef ServerStatusFetchFactory = (ServerStatusResult->Void, Null<String->Void>)->Void;
+
 /**
 	Fetches and parses the live server list used by the login screen.
 **/
 class ServerStatusClient {
+	public static var fetchFactory:ServerStatusFetchFactory = defaultFetch;
+
 	public static function fetch(onResult:ServerStatusResult->Void, ?onError:String->Void):Void {
+		fetchFactory(onResult, onError);
+	}
+
+	private static function defaultFetch(onResult:ServerStatusResult->Void, ?onError:String->Void):Void {
 		TextLoader.load(ServerConfig.serverStatusUrl(), function(body:String):Void {
 			try {
 				onResult(parse(body));
@@ -50,7 +58,15 @@ class ServerStatusClient {
 			if (a.guildId != 0 && a.population != b.population) return a.population > b.population ? -1 : 1;
 			return a.serverId - b.serverId;
 		});
-		return servers;
+		var seen:Map<Int, Bool> = new Map();
+		var unique:Array<ServerInfo> = [];
+		for (server in servers) {
+			if (!seen.exists(server.serverId)) {
+				seen.set(server.serverId, true);
+				unique.push(server);
+			}
+		}
+		return unique;
 	}
 
 	/** Chooses the user's open guild server, then a non-full open public server. */

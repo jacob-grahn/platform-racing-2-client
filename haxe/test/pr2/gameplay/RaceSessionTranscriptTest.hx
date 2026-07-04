@@ -108,6 +108,7 @@ class RaceSessionTranscriptTest {
 		assertTrue(finish != null, "quitting opens the finish overlay");
 
 		// ---- 6. Return to lobby without a reload ----------------------------
+		LobbySocket.simulateOpenForTests();
 		returnButton(finish).dispatchEvent(new MouseEvent(MouseEvent.CLICK));
 		assertTrue(LobbySocket.sentCommands.indexOf("set_game_room`none") >= 0, "return clears the game room");
 		assertEquals(true, Std.isOfType(holder.getCurrentPage(), LobbyPage), "return restores the lobby page");

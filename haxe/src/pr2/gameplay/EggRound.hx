@@ -1,6 +1,7 @@
 package pr2.gameplay;
 
 import openfl.display.Sprite;
+import openfl.geom.ColorTransform;
 import openfl.geom.Point;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
@@ -13,6 +14,7 @@ import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
 import pr2.gameplay.RotationMath.RotatedPoint;
 import pr2.util.FlashRandom;
+import pr2.util.DisplayUtil;
 
 typedef EggState = {
 	final id:Int;
@@ -63,16 +65,18 @@ class EggRound {
 	private final displayLayer:Null<Sprite>;
 	private final cameraOffset:Void->Point;
 	private final playCollectSound:Int->Int->Void;
+	private final visualRandom:Void->Float;
 	private var eggs:Map<Int, EggState> = new Map();
 	private var attackVisuals:Array<EggAttackVisual> = [];
 
 	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
-			?playCollectSound:Int->Int->Void) {
+			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
 		this.displayLayer = displayLayer;
 		this.cameraOffset = cameraOffset != null ? cameraOffset : function():Point return new Point();
 		this.playCollectSound = playCollectSound != null ? playCollectSound : playDefaultCollectSound;
+		this.visualRandom = visualRandom != null ? visualRandom : Math.random;
 	}
 
 	public function initRound(seed:Int):Void {
@@ -203,6 +207,7 @@ class EggRound {
 	private function createEgg(id:Int, x:Int, y:Int, rot:Int, velX:Float):Void {
 		var display = PR2MovieClip.fromLinkage("EggGraphic", {maxNestedDepth: 8});
 		applyEggGraphicFrameScripts(display);
+		applyEggVisualRandomization(display, visualRandom);
 		display.x = x;
 		display.y = y;
 		display.rotation = rot;
@@ -240,6 +245,44 @@ class EggRound {
 		display.setFrameScript(45, function():Void {
 			display.stop();
 		});
+	}
+
+	private static function applyEggVisualRandomization(display:PR2MovieClip, nextRandom:Void->Float):Void {
+		var feetColor = randomColorTransform(nextRandom);
+		var baseColor = randomColorTransform(nextRandom);
+		var dotsColor = randomColorTransform(nextRandom);
+		for (name in ["var_165", "var_152"]) {
+			var foot = Std.downcast(DisplayUtil.findByName(display, name), PR2MovieClip);
+			if (foot == null) {
+				continue;
+			}
+			foot.gotoAndStop(1);
+			var colorMC = Std.downcast(DisplayUtil.findByName(foot, "colorMC"), PR2MovieClip);
+			if (colorMC != null) {
+				colorMC.gotoAndStop(1);
+				colorMC.transform.colorTransform = feetColor;
+			}
+			var colorMC2 = Std.downcast(DisplayUtil.findByName(foot, "colorMC2"), PR2MovieClip);
+			if (colorMC2 != null) {
+				colorMC2.gotoAndStop(1);
+				colorMC2.visible = false;
+			}
+		}
+		var egg = Std.downcast(DisplayUtil.findByName(display, "egg"), Sprite);
+		var base = egg == null ? null : DisplayUtil.findByName(egg, "base");
+		if (base != null) {
+			base.transform.colorTransform = baseColor;
+		}
+		var dots = egg == null ? null : DisplayUtil.findByName(egg, "dots");
+		if (dots != null) {
+			dots.transform.colorTransform = dotsColor;
+		}
+	}
+
+	private static function randomColorTransform(nextRandom:Void->Float):ColorTransform {
+		var transform = new ColorTransform();
+		transform.color = Math.floor(nextRandom() * 0xFFFFFF);
+		return transform;
 	}
 
 	private function beginSquash(egg:EggState):Void {

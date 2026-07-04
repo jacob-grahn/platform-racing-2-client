@@ -3,11 +3,38 @@ package pr2.net;
 import haxe.Json;
 import pr2.crypto.PR2Encryptor;
 
+typedef LoginAuthFactory = (
+	String,
+	String,
+	ServerInfo,
+	Bool,
+	Int,
+	LoginAuthResult->Void,
+	Null<String->Void>,
+	Null<String>,
+	Bool
+) -> Void;
+
 class LoginAuthClient {
 	private static inline var LOGIN_KEY:String = "VUovam5GKndSMHFSSy9kSA==";
 	private static inline var LOGIN_IV:String = "JmM5KnkqNXA9MVVOeC9Ucg==";
+	public static var loginFactory:LoginAuthFactory = defaultLogin;
 
 	public static function login(
+		userName:String,
+		userPass:String,
+		server:ServerInfo,
+		remember:Bool,
+		loginId:Int,
+		onResult:LoginAuthResult->Void,
+		?onError:String->Void,
+		?token:String,
+		?awardKong:Bool = false
+	):Void {
+		loginFactory(userName, userPass, server, remember, loginId, onResult, onError, token, awardKong);
+	}
+
+	private static function defaultLogin(
 		userName:String,
 		userPass:String,
 		server:ServerInfo,
@@ -27,6 +54,10 @@ class LoginAuthClient {
 				}
 			}
 		}, onError);
+	}
+
+	public static function resetHooksForTests():Void {
+		loginFactory = defaultLogin;
 	}
 
 	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?token:String, ?awardKong:Bool = false):Map<String, String> {

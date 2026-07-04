@@ -12,9 +12,6 @@ enum LoginSocketMessage {
 class LoginSocketProtocol {
 	public static inline var END_CHAR:String = "\x04";
 
-	private static inline var COMM_PASS:String = "QHE0NSNwKWZZQVEhU19xMA==";
-	private static inline var COMM_PASS_SERVER_10:String = "ayo3JnBGQCZVRiEhVjFAQA==";
-
 	private final serverId:Int;
 	private var sendNum:Int = 0;
 	private var buffer:String = "";
@@ -73,6 +70,6 @@ class LoginSocketProtocol {
 	}
 
 	private static function socketToken(serverId:Int):String {
-		return serverId == 10 ? COMM_PASS_SERVER_10 : COMM_PASS;
+		return CommAuth.getToken(serverId);
 	}
 }

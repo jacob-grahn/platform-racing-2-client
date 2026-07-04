@@ -1,7 +1,10 @@
 package pr2.lobby.tabs;
 
+import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
+import openfl.events.Event;
+import openfl.events.EventDispatcher;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
@@ -18,19 +21,30 @@ import pr2.lobby.account.PlayerDisplay;
 import pr2.lobby.account.Presets;
 import pr2.lobby.account.StatsSelect;
 import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.HoverPopup;
+import pr2.lobby.dialogs.Popup;
+import pr2.lobby.level.CourseMenu;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.page.Page;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.GuildName;
+import pr2.ui.StageFocus;
 import pr2.util.DisplayUtil;
 
 /** Flash-compatible Account customization tab. */
 class AccountTab extends Page {
+	public static inline var SET_MANUAL_PART:String = "manualPart";
+	public static var partToSet:Array<Dynamic> = [];
+
+	private static final manualPartDispatcher:EventDispatcher = new EventDispatcher();
+
 	private var art:Null<PR2MovieClip>;
 	private var character:Null<AccountCharacter>;
 	private var characterHolder:Null<Sprite>;
 	private var stats:Null<StatsSelect>;
 	private var playerDisplay:Null<PlayerDisplay>;
+	private var guildName:Null<GuildName>;
 	private var rank:Int = 0;
 	private var rankTokensUsed:Int = 0;
 	private var rankTokensAvailable:Int = 0;
@@ -41,9 +55,20 @@ class AccountTab extends Page {
 	private var upBinding:Null<Binding>;
 	private var downBinding:Null<Binding>;
 	private var loadoutsBinding:Null<Binding>;
+	private var loadoutsHover:Null<HoverPopup>;
+	private var loadoutsHoverTimer:Null<Timer>;
 
 	public function new() {
 		super();
+	}
+
+	public static function setManualPart(partType:String, partId:Int):Void {
+		partToSet = [partType, partId];
+		dispatchManualPart();
+	}
+
+	public static function dispatchManualPart():Void {
+		manualPartDispatcher.dispatchEvent(new Event(SET_MANUAL_PART));
 	}
 
 	override public function initialize():Void {
@@ -55,12 +80,17 @@ class AccountTab extends Page {
 		upBinding = LobbyArt.bind(rankUp, useRankToken);
 		downBinding = LobbyArt.bind(rankDown, unuseRankToken);
 		loadoutsBinding = LobbyArt.bind(loadouts, openLoadouts);
+		if (loadouts != null) {
+			loadouts.addEventListener(MouseEvent.MOUSE_OVER, loadoutsMouseOver);
+			loadouts.addEventListener(MouseEvent.MOUSE_OUT, loadoutsMouseOut);
+		}
 		CommandHandler.commandHandler.defineCommand("setCustomizeInfo", setCustomizeInfo);
+		manualPartDispatcher.addEventListener(SET_MANUAL_PART, saveManualPart);
 		LobbySession.onAccountChange(refresh);
 		if (AppStage.stage != null) {
 			AppStage.stage.addEventListener(MouseEvent.MOUSE_UP, saveCustomizeInfo);
 			AppStage.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-			AppStage.stage.focus = AppStage.stage;
+			StageFocus.reset();
 		}
 		LobbySocket.write("get_customize_info`");
 	}
@@ -77,7 +107,7 @@ class AccountTab extends Page {
 		SecureData.setNumber("userRank", rank);
 		setHtml("nameBox", "Welcome, <b>" + StringTools.htmlEscape(LobbySession.userName) + "</b>");
 		setHtml("hatBox", "Hats: <b>" + Std.int(Math.max(0, data.hats.length - 1)) + "</b>");
-		setHtml("guildBox", LobbySession.guildId == 0 ? "Guild: <b>none</b>" : "Guild: <b>" + StringTools.htmlEscape(LobbySession.guildName) + "</b>");
+		renderGuild();
 		updateRankControls();
 
 		character = new AccountCharacter(data.hat, data.head, data.body, data.feet);
@@ -102,27 +132,76 @@ class AccountTab extends Page {
 		playerDisplay.y = 95;
 		addChild(playerDisplay);
 		AccountState.currentHat = data.hat;
-		CommandHandler.commandHandler.dispatch("testLevelAccess", []);
+		retestLevelAccess();
 	}
 
 	private function saveCustomizeInfo(?_:MouseEvent):Void {
 		if (character == null || stats == null) {
 			return;
 		}
-		var command = "set_customize_info`" + character.getPartInfoStr() + "`" + stats.getInfoStr();
+		writeCustomizeInfo(character.getPartInfoStr());
+	}
+
+	private function saveManualPart(_:Event):Void {
+		if (character == null || stats == null) {
+			return;
+		}
+		writeCustomizeInfo(partInfoWithManualOverride());
+		refresh();
+	}
+
+	private function writeCustomizeInfo(partInfo:String):Void {
+		var command = "set_customize_info`" + partInfo + "`" + stats.getInfoStr();
 		if (command != customizeInfo) {
 			customizeInfo = command;
 			LobbySocket.write(command);
 		}
 	}
 
+	private function partInfoWithManualOverride():String {
+		var hat = character.hat1;
+		var head = character.head;
+		var body = character.body;
+		var feet = character.feet;
+		if (partToSet.length == 2) {
+			var partId = Std.parseInt(Std.string(partToSet[1]));
+			if (partId != null) {
+				switch (Std.string(partToSet[0])) {
+					case "hat":
+						hat = partId;
+					case "head":
+						head = partId;
+					case "body":
+						body = partId;
+					case "feet":
+						feet = partId;
+					default:
+				}
+			}
+		}
+		return character.hat1Color
+			+ "`" + character.headColor
+			+ "`" + character.bodyColor
+			+ "`" + character.feetColor
+			+ "`" + character.hat1Color2
+			+ "`" + character.headColor2
+			+ "`" + character.bodyColor2
+			+ "`" + character.feetColor2
+			+ "`" + hat
+			+ "`" + head
+			+ "`" + body
+			+ "`" + feet;
+	}
+
 	private function useRankToken():Void {
 		if (rankTokensUsed < rankTokensAvailable) {
 			rankTokensUsed++;
 			rank++;
+			SecureData.setNumber("userRank", rank);
 			LobbySocket.write("use_rank_token`");
 			LobbySocket.write("get_customize_info`");
 			updateRankControls();
+			retestLevelAccess();
 		}
 	}
 
@@ -130,9 +209,11 @@ class AccountTab extends Page {
 		if (rankTokensUsed > 0) {
 			rankTokensUsed--;
 			rank--;
+			SecureData.setNumber("userRank", rank);
 			LobbySocket.write("unuse_rank_token`");
 			LobbySocket.write("get_customize_info`");
 			updateRankControls();
+			retestLevelAccess();
 		}
 	}
 
@@ -148,14 +229,17 @@ class AccountTab extends Page {
 	}
 
 	private function openLoadouts():Void {
+		hideLoadoutsHover();
 		if (character != null && stats != null && playerDisplay != null) {
 			new LoadoutsPopup(character, stats, playerDisplay);
 		}
 	}
 
 	private function onKeyDown(e:KeyboardEvent):Void {
-		if (character == null || stats == null || playerDisplay == null || pr2.lobby.dialogs.Popup.getOpen().length > 0
-			|| Std.isOfType(e.target, TextField)) {
+		var textTarget = Std.downcast(e.target, TextField);
+		if (character == null || stats == null || playerDisplay == null || Popup.getOpen().length > 0
+			|| (textTarget != null && textTarget.selectable) || CourseMenu.instance != null) {
+			e.preventDefault();
 			return;
 		}
 		var slot = keyToSlot(e.keyCode);
@@ -164,6 +248,36 @@ class AccountTab extends Page {
 			new ConfirmPopup(function():Void {
 				Presets.apply(preset, character, stats, playerDisplay);
 			}, "Are you sure you want to apply this loadout? This will clear your current stats and character style.");
+		}
+	}
+
+	private function loadoutsMouseOver(_:MouseEvent):Void {
+		hideLoadoutsHover();
+		loadoutsHoverTimer = Timer.delay(showLoadoutsHover, 500);
+	}
+
+	private function loadoutsMouseOut(_:MouseEvent):Void {
+		hideLoadoutsHover();
+	}
+
+	private function showLoadoutsHover():Void {
+		loadoutsHoverTimer = null;
+		if (loadouts == null) {
+			return;
+		}
+		loadoutsHover = new HoverPopup("Loadouts",
+			"Save up to " + Presets.NUM_PRESETS + " of your favorite styles. Use the numbers on your keyboard for quick switching.", loadouts);
+		loadoutsHover.x += loadoutsHover.width + 27.5;
+	}
+
+	private function hideLoadoutsHover():Void {
+		if (loadoutsHoverTimer != null) {
+			loadoutsHoverTimer.stop();
+			loadoutsHoverTimer = null;
+		}
+		if (loadoutsHover != null) {
+			loadoutsHover.remove();
+			loadoutsHover = null;
 		}
 	}
 
@@ -178,6 +292,10 @@ class AccountTab extends Page {
 		LobbySocket.write("get_customize_info`");
 	}
 
+	private function retestLevelAccess():Void {
+		CommandHandler.commandHandler.dispatch("testLevelAccess", []);
+	}
+
 	private function setHtml(name:String, value:String):Void {
 		var field = LobbyArt.text(art, name);
 		if (field != null) field.htmlText = value;
@@ -189,7 +307,24 @@ class AccountTab extends Page {
 		if (field != null) field.text = Std.string(value);
 	}
 
+	private function renderGuild():Void {
+		if (LobbySession.guildId == 0) {
+			setHtml("guildBox", "Guild: <b>none</b>");
+			return;
+		}
+		setHtml("guildBox", "Guild: ");
+		guildName = new GuildName(LobbySession.guildId, LobbySession.guildName, LobbySession.emblem, true);
+		guildName.makeWidth(145);
+		guildName.x = 40;
+		guildName.y = 54;
+		if (art != null) {
+			art.addChild(guildName);
+		}
+	}
+
 	private function resetControls():Void {
+		partToSet = [];
+		if (guildName != null) guildName.remove();
 		if (playerDisplay != null) playerDisplay.remove();
 		if (stats != null) stats.remove();
 		if (character != null) character.remove();
@@ -198,11 +333,13 @@ class AccountTab extends Page {
 		stats = null;
 		character = null;
 		characterHolder = null;
+		guildName = null;
 	}
 
 	override public function remove():Void {
 		LobbySession.offAccountChange(refresh);
 		CommandHandler.commandHandler.defineCommand("setCustomizeInfo", null);
+		manualPartDispatcher.removeEventListener(SET_MANUAL_PART, saveManualPart);
 		if (AppStage.stage != null) {
 			AppStage.stage.removeEventListener(MouseEvent.MOUSE_UP, saveCustomizeInfo);
 			AppStage.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
@@ -210,6 +347,11 @@ class AccountTab extends Page {
 		LobbyArt.unbind(upBinding);
 		LobbyArt.unbind(downBinding);
 		LobbyArt.unbind(loadoutsBinding);
+		if (loadouts != null) {
+			loadouts.removeEventListener(MouseEvent.MOUSE_OVER, loadoutsMouseOver);
+			loadouts.removeEventListener(MouseEvent.MOUSE_OUT, loadoutsMouseOut);
+		}
+		hideLoadoutsHover();
 		resetControls();
 		if (art != null) art.dispose();
 		art = null;

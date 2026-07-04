@@ -8,6 +8,7 @@ import pr2.display.Removable;
 import pr2.lobby.account.Settings;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.StageFocus;
 
 /**
 	Port of Flash `gameplay.MusicSelection` and its `ui.GameSound` dropdown.
@@ -63,7 +64,7 @@ class MusicSelection extends Removable {
 	private function changeSong(_:Event):Void {
 		var selected:MusicTrack = cast dropdown.selectedItem;
 		if (selected != null) music.setSong(selected);
-		if (stage != null) stage.focus = stage;
+		StageFocus.reset();
 	}
 
 	override public function remove():Void {

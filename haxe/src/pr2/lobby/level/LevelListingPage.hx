@@ -1,6 +1,9 @@
 package pr2.lobby.level;
 
 import openfl.display.Sprite;
+import openfl.events.TimerEvent;
+import openfl.utils.Timer;
+import pr2.lobby.SecureData;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
@@ -8,6 +11,8 @@ import pr2.page.Page;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.PageNavigation;
 import pr2.ui.PageNavigation.Paginated;
+import pr2.util.AsyncRemovalGuard;
+import pr2.util.AsyncRemovalGuard.AsyncRemovable;
 
 /**
 	Shared base for the lobby right-pane listing pages, ported from Flash
@@ -22,18 +27,25 @@ import pr2.ui.PageNavigation.Paginated;
 class LevelListingPage extends Page implements Paginated {
 	private var mode:String;
 	private var pageNum:Int = 1;
+	private var pageCount:Int = 9;
 	private var holder:Sprite;
 	private var loading:Null<PR2MovieClip>;
 	private var pageNavigation:PageNavigation;
 	private var levelItems:Array<LevelItem> = [];
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
+	private var showCoursesTimer:Null<Timer>;
+	private var pendingShowCoursesLevels:Null<Array<CampaignLevelInfo>>;
 
-	public function new(mode:String, initialPage:Int = 1) {
+	public function new(mode:String, initialPage:Int = 1, pageCount:Int = 9) {
 		super();
 		this.mode = mode;
 		this.pageNum = initialPage;
+		this.pageCount = pageCount;
 	}
 
 	override public function initialize():Void {
+		LevelListingState.currentPageNum = pageNum;
+
 		holder = new Sprite();
 		addChild(holder);
 
@@ -42,7 +54,7 @@ class LevelListingPage extends Page implements Paginated {
 		loading.y = 150;
 		addChild(loading);
 
-		pageNavigation = new PageNavigation(this, "vertical", pageNum, 9, 283);
+		pageNavigation = new PageNavigation(this, "vertical", pageNum, pageCount, 283);
 		pageNavigation.x = 328;
 		pageNavigation.y = 26;
 		addChild(pageNavigation);
@@ -64,6 +76,14 @@ class LevelListingPage extends Page implements Paginated {
 	/** Subclasses kick off their list load here (GET or POST). */
 	private function requestCourses():Void {}
 
+	private function watchAsync<T:AsyncRemovable>(resource:T):T {
+		return asyncGuard.watch(resource);
+	}
+
+	private function guardCallback<T>(callback:T->Void):T->Void {
+		return asyncGuard.wrap(callback);
+	}
+
 	private function showLoading():Void {
 		if (loading != null) {
 			loading.visible = true;
@@ -78,6 +98,10 @@ class LevelListingPage extends Page implements Paginated {
 
 	/** Lay the levels out in the three-column grid (Flash `showCourses`). */
 	private function renderCourses(levels:Array<CampaignLevelInfo>):Void {
+		if (SecureData.getNumber("userRank") < 0) {
+			scheduleShowCourses(levels);
+			return;
+		}
 		var spriteHeight = holder.height;
 		if (spriteHeight != 0) {
 			spriteHeight += 20;
@@ -144,6 +168,8 @@ class LevelListingPage extends Page implements Paginated {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
+		cancelShowCoursesTimer();
 		var cm = CommandHandler.commandHandler;
 		cm.defineCommand("addPageHighlight", null);
 		cm.defineCommand("removePageHighlight", null);
@@ -157,4 +183,45 @@ class LevelListingPage extends Page implements Paginated {
 	}
 
 	private function onTeardown():Void {}
+
+	private function scheduleShowCourses(levels:Array<CampaignLevelInfo>):Void {
+		cancelShowCoursesTimer();
+		pendingShowCoursesLevels = levels;
+		showCoursesTimer = new Timer(250, 1);
+		showCoursesTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onShowCoursesTimer);
+		showCoursesTimer.start();
+	}
+
+	private function onShowCoursesTimer(?_:TimerEvent):Void {
+		var levels = pendingShowCoursesLevels;
+		cancelShowCoursesTimer();
+		if (levels != null) {
+			renderCourses(levels);
+		}
+	}
+
+	private function cancelShowCoursesTimer():Void {
+		if (showCoursesTimer != null) {
+			showCoursesTimer.stop();
+			showCoursesTimer.removeEventListener(TimerEvent.TIMER_COMPLETE, onShowCoursesTimer);
+			showCoursesTimer = null;
+		}
+		pendingShowCoursesLevels = null;
+	}
+
+	public function levelItemCountForTests():Int {
+		return levelItems.length;
+	}
+
+	public function pageNavigationForTests():PageNavigation {
+		return pageNavigation;
+	}
+
+	public function levelItemForTests(index:Int):Null<LevelItem> {
+		return index >= 0 && index < levelItems.length ? levelItems[index] : null;
+	}
+
+	public function loadingVisibleForTests():Bool {
+		return loading != null && loading.visible;
+	}
 }

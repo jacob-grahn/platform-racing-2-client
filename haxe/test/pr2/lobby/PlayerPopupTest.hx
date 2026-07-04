@@ -4,6 +4,8 @@ import openfl.display.DisplayObjectContainer;
 import openfl.events.MouseEvent;
 import pr2.lobby.dialogs.BanMenu;
 import pr2.lobby.dialogs.ConfirmPopup;
+import pr2.lobby.dialogs.GuildPopup;
+import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.lobby.dialogs.PlayerGuestPopup;
 import pr2.lobby.dialogs.PlayerPopup;
 import pr2.lobby.dialogs.Popup;
@@ -13,6 +15,7 @@ import pr2.runtime.FlButton;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
+import pr2.ui.GuildName;
 import pr2.util.DisplayUtil;
 
 /**
@@ -28,11 +31,18 @@ class PlayerPopupTest {
 		var savedGroup = LobbySession.group;
 		var savedTempMod = LobbySession.isTempMod;
 		var savedTrialMod = LobbySession.isTrialMod;
+		var savedServerOwner = LobbySession.serverOwner;
 		var savedUploadFactory = BanMenu.uploadFactory;
 		var savedChatRecordProvider = BanMenu.chatRecordProvider;
+		var savedGuildNameFactory = GuildName.popupFactory;
+		var savedHoverDelayFactory = PlayerPopup.hoverDelayFactory;
+		var savedLevelAutoLoad = LevelInfoPopup.autoLoadOnCreate;
 		var savedChatRoom = Memory.get("chatRoom");
 
 		testMemberRender();
+		testServerOwnerAndRankSupplement();
+		testGuildRenderingAndContextCleanup();
+		testDelayedSendPmHoverAndLevelContextCleanup();
 		testGuestHandoff();
 		testChatLinkEntryPoints();
 		testGuestButtonsDisabled();
@@ -43,8 +53,12 @@ class PlayerPopupTest {
 		LobbySession.group = savedGroup;
 		LobbySession.isTempMod = savedTempMod;
 		LobbySession.isTrialMod = savedTrialMod;
+		LobbySession.serverOwner = savedServerOwner;
 		BanMenu.uploadFactory = savedUploadFactory;
 		BanMenu.chatRecordProvider = savedChatRecordProvider;
+		GuildName.popupFactory = savedGuildNameFactory;
+		PlayerPopup.hoverDelayFactory = savedHoverDelayFactory;
+		LevelInfoPopup.autoLoadOnCreate = savedLevelAutoLoad;
 		if (savedChatRoom == null) {
 			Memory.remove("chatRoom");
 		} else {
@@ -56,6 +70,7 @@ class PlayerPopupTest {
 
 	private static function testMemberRender():Void {
 		LobbySession.group = 1;
+		LobbySession.serverOwner = 0;
 		var popup = new PlayerPopup("Jiggmin", false);
 		popup.applyReturnData({
 			userId: 5, group: 1, status: "online", rank: 24, hats: "3",
@@ -79,6 +94,108 @@ class PlayerPopupTest {
 		assertEquals(true, DisplayUtil.findByName(popup, "playerInfo").visible, "info panel becomes visible");
 
 		popup.remove();
+	}
+
+	private static function testServerOwnerAndRankSupplement():Void {
+		LobbySession.group = 1;
+		LobbySession.serverOwner = 5;
+		var popup = new PlayerPopup("Jiggmin", false);
+		popup.applyReturnData({
+			userId: 5, group: 1, status: "online", rank: 24, hats: "3",
+			registerDate: 0, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1,
+			following: 0, friend: 1, ignored: 0,
+			verified: false, hof: false, exp_points: 1234, exp_to_rank: 5000
+		});
+
+		assertEquals("Server Owner", LobbyArt.text(popup, "groupBox").text, "server owner overrides profile group text");
+		var rankBox = DisplayUtil.findByName(popup, "rankBox");
+		rankBox.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(true, DisplayUtil.findByName(popup, "supplBg").visible, "rank hover shows supplement background");
+		assertEquals("", LobbyArt.text(popup, "supplText").text, "rank hover no longer uses text fallback");
+		assertNotNull(findSymbolOrNull(popup, "ExpGainGraphic"), "rank hover shows authored ExpGain supplement");
+		rankBox.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(null, findSymbolOrNull(popup, "ExpGainGraphic"), "rank mouse-out removes ExpGain supplement");
+		popup.remove();
+		LobbySession.serverOwner = 0;
+	}
+
+	private static function testGuildRenderingAndContextCleanup():Void {
+		LobbySession.group = 1;
+		LobbySession.serverOwner = 0;
+		closeAll();
+		var existingGuild = new GuildPopup(9, "", false);
+		var openedGuilds:Array<Int> = [];
+		GuildName.popupFactory = function(id:Int):Void openedGuilds.push(id);
+
+		var popup = new PlayerPopup("Guilded", false);
+		assertEquals(true, existingGuild.fadeOutStarted, "opening player popup fades existing guild popup context");
+		popup.applyReturnData({
+			userId: 8, group: 1, status: "online", rank: 9, hats: "2",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 42,
+			guildName: "Speed <Guild>", emblem: "speed.png",
+			hat: 1, head: 1, body: 1, feet: 1,
+			following: 0, friend: 0, ignored: 0,
+			verified: false, hof: false, exp_points: 10, exp_to_rank: 100
+		});
+
+		assertEquals(null, DisplayUtil.findByName(popup, "guildBox"), "guild text box is replaced by GuildName clip");
+		var guildName = findGuildName(popup);
+		assertNotNull(guildName, "guilded profile renders GuildName clip");
+		assertEquals(-40.0, guildName.x, "GuildName x matches Flash placement");
+		assertEquals(64.0, guildName.y, "GuildName y matches Flash placement");
+		assertEquals(145.0, guildName.nameWidthForTests(), "GuildName uses wide profile width");
+		assertEquals(true, guildName.nameHtmlForTests().indexOf("<b>") >= 0, "GuildName uses bold profile text");
+		assertEquals(true, guildName.nameHtmlForTests().indexOf("&lt;Guild&gt;") >= 0, "GuildName escapes profile guild name");
+		assertEquals("speed.png", guildName.emblemForTests().getFileName(), "GuildName loads profile emblem");
+		guildName.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
+		assertEquals(1, openedGuilds.length, "profile GuildName remains clickable");
+		assertEquals(42, openedGuilds[0], "profile GuildName routes guild id");
+
+		popup.remove();
+		assertEquals(true, guildName.isRemoved(), "player popup removal cleans GuildName clip");
+		closeAll();
+	}
+
+	private static function testDelayedSendPmHoverAndLevelContextCleanup():Void {
+		LobbySession.group = 1;
+		LobbySession.serverOwner = 0;
+		closeAll();
+		var capturedHover:Null<Void->Void> = null;
+		var capturedDelay = 0;
+		PlayerPopup.hoverDelayFactory = function(callback:Void->Void, delayMs:Int):Null<haxe.Timer> {
+			capturedHover = callback;
+			capturedDelay = delayMs;
+			return null;
+		};
+
+		LevelInfoPopup.autoLoadOnCreate = false;
+		var level = new LevelInfoPopup(50815);
+		var popup = new PlayerPopup("Target", false);
+		popup.applyReturnData({
+			userId: 7, group: 1, status: "", rank: 1, hats: "0",
+			registerDate: 1363478400, loginDate: 1363478400, guildId: 0,
+			hat: 1, head: 1, body: 1, feet: 1,
+			following: 0, friend: 0, ignored: 0,
+			verified: false, hof: false, exp_points: 10, exp_to_rank: 100
+		});
+
+		var message = DisplayUtil.findByName(popup, "messageButton");
+		message.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER));
+		assertEquals(500, capturedDelay, "Send PM hover uses Flash delay");
+		assertEquals(false, popup.hasSendPmHoverForTests(), "Send PM hover is delayed");
+		capturedHover();
+		assertEquals(true, popup.hasSendPmHoverForTests(), "Send PM hover appears after delay callback");
+		message.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT));
+		assertEquals(false, popup.hasSendPmHoverForTests(), "Send PM mouse-out clears delayed hover");
+
+		var guild = new GuildPopup(9, "", false);
+		guild.fadeOutStarted = false;
+		click(popup, "levelsButton");
+		assertEquals(true, guild.fadeOutStarted, "view-levels closes open guild popup context");
+		assertEquals(true, level.fadeOutStarted, "view-levels closes open level popup context");
+		assertEquals(true, popup.fadeOutStarted, "view-levels closes player popup");
+		closeAll();
 	}
 
 	private static function testTempModMenu():Void {
@@ -370,8 +487,14 @@ class PlayerPopupTest {
 	}
 
 	private static function findSymbol(container:Dynamic, symbolName:String):PR2MovieClip {
+		var found = findSymbolOrNull(container, symbolName);
+		if (found != null) return found;
+		throw 'missing $symbolName';
+	}
+
+	private static function findSymbolOrNull(container:Dynamic, symbolName:String):Null<PR2MovieClip> {
 		var display = Std.downcast(container, DisplayObjectContainer);
-		if (display == null) throw 'missing $symbolName';
+		if (display == null) return null;
 		for (i in 0...display.numChildren) {
 			var child = display.getChildAt(i);
 			var clip = Std.downcast(child, PR2MovieClip);
@@ -380,12 +503,24 @@ class PlayerPopupTest {
 			}
 			var childContainer = Std.downcast(child, DisplayObjectContainer);
 			if (childContainer != null) {
-				try {
-					return findSymbol(childContainer, symbolName);
-				} catch (_:Dynamic) {}
+				var found = findSymbolOrNull(childContainer, symbolName);
+				if (found != null) return found;
 			}
 		}
-		throw 'missing $symbolName';
+		return null;
+	}
+
+	private static function findGuildName(container:Dynamic):Null<GuildName> {
+		var display = Std.downcast(container, DisplayObjectContainer);
+		if (display == null) return null;
+		for (i in 0...display.numChildren) {
+			var child = display.getChildAt(i);
+			var guild = Std.downcast(child, GuildName);
+			if (guild != null) return guild;
+			var found = findGuildName(child);
+			if (found != null) return found;
+		}
+		return null;
 	}
 
 	private static function lastPopup<T:Popup>(cls:Class<T>):Null<T> {

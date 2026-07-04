@@ -42,6 +42,14 @@ class Presets {
 		return presets;
 	}
 
+	public static function resetForTests():Void {
+		presets = null;
+	}
+
+	public static function loadedForTests():Bool {
+		return presets != null;
+	}
+
 	public static function getPreset(i:Int):Preset {
 		return getPresets()[i - 1];
 	}

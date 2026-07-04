@@ -13,6 +13,7 @@ import pr2.net.TextLoader;
 import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.EmblemLoader;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 
 typedef GuildInfoFactory = Int->(Dynamic->Void)->(String->Void)->Void;
@@ -32,6 +33,7 @@ class CreateGuildPopup extends Popup {
 	private var bindings:Array<Null<Binding>> = [];
 	private var transferBinding:Null<Binding>;
 	private var deleteBinding:Null<Binding>;
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(id:Int = 0) {
 		super();
@@ -54,7 +56,7 @@ class CreateGuildPopup extends Popup {
 		if (guildId != 0) {
 			loading = true;
 			setText("titleBox", "-- Edit Guild --");
-			infoFactory(guildId, populateResult, function(_:String):Void loading = false);
+			infoFactory(guildId, asyncGuard.wrap(populateResult), asyncGuard.wrap(function(_:String):Void loading = false));
 			if (LobbySession.guildId == guildId && LobbySession.guildOwner) {
 				setVisible("transfer_bg", true);
 				setVisible("transfer_bt", true);
@@ -64,11 +66,11 @@ class CreateGuildPopup extends Popup {
 	}
 
 	private function clickTransfer():Void {
-		if (LobbySession.remember) {
+		if (LobbySession.canUseRememberMeAccountAction()) {
 			transferFactory();
 			startFadeOut();
 		} else {
-			new MessagePopup("Psst... I won't work if you're not logged in with remember me. Log back in with remember me enabled and click me again! :)");
+			new MessagePopup(LobbySession.REMEMBER_ME_REQUIRED_COPY);
 		}
 	}
 
@@ -140,7 +142,7 @@ class CreateGuildPopup extends Popup {
 		if (guildId != 0) {
 			fields.set("guild_id", Std.string(guildId));
 		}
-		saveFactory(guildId == 0 ? ServerConfig.guildCreateUrl() : ServerConfig.guildEditUrl(), fields, saveSuccess, saveError);
+		saveFactory(guildId == 0 ? ServerConfig.guildCreateUrl() : ServerConfig.guildEditUrl(), fields, asyncGuard.wrap(saveSuccess), asyncGuard.wrap(saveError));
 	}
 
 	private function saveError(_:String):Void {
@@ -156,11 +158,7 @@ class CreateGuildPopup extends Popup {
 			startFadeOut();
 			return;
 		}
-		LobbySession.guildId = intAny(ret, ["guild_id", "guildId"]);
-		LobbySession.guildName = strAny(ret, ["guild_name", "guildName"]);
-		LobbySession.emblem = strAny(ret, ["emblem"]);
-		LobbySession.guildOwner = true;
-		LobbySession.notifyAccountChange();
+		LobbySession.updateGuildFromData(ret, true);
 		startFadeOut();
 	}
 
@@ -228,6 +226,7 @@ class CreateGuildPopup extends Popup {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
 		for (binding in bindings) {
 			LobbyArt.unbind(binding);
 		}

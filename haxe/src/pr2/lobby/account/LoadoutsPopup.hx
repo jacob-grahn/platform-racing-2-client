@@ -51,7 +51,7 @@ class LoadoutsPopup extends Popup {
 
 	private function addListing(preset:Preset):Void {
 		if (holder == null) return;
-		var listing = new LoadoutListing(preset);
+		var listing = new LoadoutListing(preset, display);
 		listing.y = listings.length * 68;
 		listing.addEventListener(MouseEvent.CLICK, onListingClick);
 		listing.addEventListener(MouseEvent.DOUBLE_CLICK, onListingDoubleClick);
@@ -108,6 +108,15 @@ class LoadoutsPopup extends Popup {
 		startFadeOut();
 	}
 
+	public function previewsForTests():Array<AccountCharacter> {
+		var previews:Array<AccountCharacter> = [];
+		for (listing in listings) {
+			var preview = listing.previewForTests();
+			if (preview != null) previews.push(preview);
+		}
+		return previews;
+	}
+
 	private function onWheel(e:MouseEvent):Void {
 		if (holder == null) return;
 		var minY = Math.min(0, 158 - listings.length * 68);
@@ -142,7 +151,7 @@ private class LoadoutListing extends Sprite {
 	private var preview:Null<AccountCharacter>;
 	private var selected:Bool = false;
 
-	public function new(preset:Preset) {
+	public function new(preset:Preset, playerDisplay:Null<PlayerDisplay>) {
 		super();
 		this.preset = preset;
 		mouseChildren = false;
@@ -156,8 +165,11 @@ private class LoadoutListing extends Sprite {
 		setText("loadoutNum", Std.string(preset.num));
 		addChild(art);
 		preview = new AccountCharacter(preset.hat, preset.head, preset.body, preset.feet);
-		preview.setColors(preset.hatColor, preset.hatColor2, preset.headColor, preset.headColor2,
-			preset.bodyColor, preset.bodyColor2, preset.feetColor, preset.feetColor2);
+		var hatColor2 = playerDisplay != null && playerDisplay.hatSelect.isPartEpic(preset.hat) ? preset.hatColor2 : -1;
+		var headColor2 = playerDisplay != null && playerDisplay.headSelect.isPartEpic(preset.head) ? preset.headColor2 : -1;
+		var bodyColor2 = playerDisplay != null && playerDisplay.bodySelect.isPartEpic(preset.body) ? preset.bodyColor2 : -1;
+		var feetColor2 = playerDisplay != null && playerDisplay.feetSelect.isPartEpic(preset.feet) ? preset.feetColor2 : -1;
+		preview.setColors(preset.hatColor, hatColor2, preset.headColor, headColor2, preset.bodyColor, bodyColor2, preset.feetColor, feetColor2);
 		// PresetListing.as compensates for CharacterGraphic's authored 0.15
 		// animation transform to produce a final thumbnail scale of 0.13.
 		preview.scaleX = preview.scaleY = 0.13 * (1 / AccountCharacter.INTERNAL_GRAPHIC_SCALE);
@@ -176,6 +188,10 @@ private class LoadoutListing extends Sprite {
 	public function setSelected(value:Bool):Void {
 		selected = value;
 		if (art != null) art.gotoAndStop(value ? "selected" : "up");
+	}
+
+	public function previewForTests():Null<AccountCharacter> {
+		return preview;
 	}
 
 	private function onOver(_:MouseEvent):Void {

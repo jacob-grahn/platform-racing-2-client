@@ -9,9 +9,11 @@ import haxe.ds.StringMap;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
+import openfl.display.StageQuality;
 import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
+import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import pr2.Constants;
 import pr2.character.Character;
@@ -26,6 +28,7 @@ import pr2.character.PositionedParticleEmitter;
 import pr2.character.RainbowStarEmitter;
 import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
+import pr2.effects.Slash;
 import pr2.effects.StingEffect;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
@@ -36,7 +39,9 @@ import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.PlayerDisplayPlacement;
 import pr2.lobby.account.AlternateControls;
+import pr2.lobby.chat.ChatText;
 import pr2.lobby.LobbySession;
+import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -75,6 +80,8 @@ class Course extends Sprite {
 	public static inline var CHAT_Y:Float = 249;
 	public static inline var MUSIC_X:Float = 204;
 	public static inline var MUSIC_Y:Float = 362;
+	public static inline var TIMER_X:Float = 490;
+	public static inline var TIMER_Y:Float = 2;
 	public static inline var STATS_X:Float = 490;
 	public static inline var STATS_Y:Float = 34;
 	public static inline var HEARTS_X:Float = 515;
@@ -106,6 +113,7 @@ class Course extends Sprite {
 	public var spectatePicker(default, null):SpectatePicker;
 	public var itemDisplay(default, null):ItemDisplay;
 	public var statsDisplay(default, null):StatsDisplay;
+	public var timer(default, null):CourseTimer;
 	public var hearts(default, null):Hearts;
 	public var musicSelection(default, null):MusicSelection;
 	public var raceChat(default, null):RaceChat;
@@ -115,16 +123,19 @@ class Course extends Sprite {
 	public var effectBackground(default, null):EffectBackground;
 	public var looseHats(default, null):Map<Int, HatEffect> = new Map();
 	public var raceStarted(default, null):Bool = false;
+	public var framesPlaying(default, null):Int = 0;
 
 	// Invoked once when the local player reaches a finish block. The host page
 	// (GamePage) uses it to mark the player done and show the finished page; the
 	// network notification itself is emitted here, mirroring Flash Game.finish.
 	public var onFinish:Null<LocalPlayerDebugState->Void> = null;
+	public var onOutOfTime:Null<Void->Void> = null;
 	public var onPlayJumpSound:Null<Float->Float->Void> = null;
 	public var onPlayCharacterSound:Null<pr2.character.Character.CharacterSoundRequest->Void> = null;
 	public var onStartJetSound:Null<pr2.character.Character.CharacterSoundRequest->Void> = null;
 	public var onStopJetSound:Null<Character->Void> = null;
 	public var onStatsSelectSyncRequest:Null<Void->Void> = null;
+	public var onCollectEgg:Null<Int->Bool> = null;
 	private var localFinishHandled:Bool = false;
 
 	// Set by GamePage when the player quits (or otherwise leaves the race) so the
@@ -150,6 +161,17 @@ class Course extends Sprite {
 	private var localCommandNames:Array<String> = [];
 	private var reachedObjectives:Map<Int, Bool> = new Map();
 	private var minionEggsSpawned:Bool = false;
+	private var frameCounterActive:Bool = false;
+	private var rotationTweenActive:Bool = false;
+	private var currentStageQuality:StageQuality = StageQuality.HIGH;
+	private var keyScrollActive:Bool = false;
+	private var scrollLeft:Bool = false;
+	private var scrollRight:Bool = false;
+	private var scrollUp:Bool = false;
+	private var scrollDown:Bool = false;
+	private var scrollShift:Bool = false;
+	private var scrollVelX:Float = 0;
+	private var scrollVelY:Float = 0;
 	private final activeParticleEmitters:ObjectMap<Character, ParticleEmitter> = new ObjectMap();
 	private final activeDjinnEmitters:ObjectMap<Character, StringMap<ParticleEmitter>> = new ObjectMap();
 
@@ -166,6 +188,18 @@ class Course extends Sprite {
 		addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		addEventListener(Event.REMOVED_FROM_STAGE, onRemovedFromStage);
 		addEventListener(Event.ENTER_FRAME, onEnterFrame);
+	}
+
+	public function allowedItemsForTests():Array<Int> {
+		return config.allowedItems.copy();
+	}
+
+	public function debugStageQualityForTests():StageQuality {
+		return currentStageQuality;
+	}
+
+	public function debugKeyScrollActive():Bool {
+		return keyScrollActive;
 	}
 
 	private function build():Void {
@@ -208,6 +242,7 @@ class Course extends Sprite {
 		buildMiniMap();
 		buildSpectatePicker();
 		buildItemDisplay();
+		buildTimer();
 		buildStatsDisplay();
 		buildHearts();
 		buildMusicSelection();
@@ -215,6 +250,7 @@ class Course extends Sprite {
 		buildDrawingInfo();
 		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, characterLayer, levelRenderer.cameraOffset);
 		effectBackground = new EffectBackground(this, commandHandler != null ? commandHandler : CommandHandler.commandHandler);
+		addChild(effectBackground);
 		updatePlayerDisplay();
 	}
 
@@ -242,6 +278,22 @@ class Course extends Sprite {
 		addChild(miniMap);
 	}
 
+	private function rebuildMiniMap():Void {
+		var index = -1;
+		if (miniMap != null) {
+			if (miniMap.parent == this) {
+				index = getChildIndex(miniMap);
+			}
+			miniMap.remove();
+			miniMap = null;
+			playerDot = null;
+		}
+		buildMiniMap();
+		if (index >= 0 && miniMap != null && miniMap.parent == this) {
+			setChildIndex(miniMap, Std.int(Math.min(index, numChildren - 1)));
+		}
+	}
+
 	private function buildItemDisplay():Void {
 		itemDisplay = new ItemDisplay();
 		itemDisplay.x = ITEM_X;
@@ -259,6 +311,16 @@ class Course extends Sprite {
 		addChild(statsDisplay);
 		displayedStats = null;
 		syncStatsDisplay();
+	}
+
+	private function buildTimer():Void {
+		timer = new CourseTimer({onOutOfTime: outOfTimeHandler});
+		timer.x = TIMER_X;
+		timer.y = TIMER_Y;
+		timer.mouseEnabled = false;
+		timer.mouseChildren = false;
+		timer.setTime(maxCourseTimeSeconds());
+		addChild(timer);
 	}
 
 	private function buildHearts():Void {
@@ -287,7 +349,7 @@ class Course extends Sprite {
 	}
 
 	private function buildDrawingInfo():Void {
-		drawingInfo = new DrawingInfo();
+		drawingInfo = new DrawingInfo(null, config.gameMode, Std.int(config.levelId), function():Int return framesPlaying);
 		drawingInfo.x = DRAWING_X;
 		drawingInfo.y = DRAWING_Y;
 		drawingInfo.addPlayer("You", 0);
@@ -310,6 +372,11 @@ class Course extends Sprite {
 				startPositions.push({x: block.x + 15, y: block.y + 15});
 			}
 		}
+	}
+
+	private function maxCourseTimeSeconds():Int {
+		var parsed = Std.parseFloat(config.maxTime);
+		return Math.isNaN(parsed) ? 0 : Std.int(parsed);
 	}
 
 	private function returnHatToStart(hat:HatEffect):Void {
@@ -339,12 +406,20 @@ class Course extends Sprite {
 		return localFinishHandled || raceEnded;
 	}
 
+	public function gameMode():String {
+		return config.gameMode;
+	}
+
 	private static function isStartBlock(block:DecodedBlock):Bool {
 		return block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4;
 	}
 
 	/** Lets a wrapper (the debug harness) intercept chat lines before display. **/
 	public function handleRaceChatLine(message:String):Bool {
+		if (ChatText.trimWhitespace(message).toLowerCase() == "/level" && config.levelId > 0) {
+			new LevelInfoPopup(Std.int(config.levelId));
+			return true;
+		}
 		return onChatLine != null && onChatLine(message);
 	}
 
@@ -528,6 +603,14 @@ class Course extends Sprite {
 		if (countdown != null) {
 			countdown.remove();
 		}
+		if (drawingInfo != null) {
+			drawingInfo.clear();
+		}
+		framesPlaying = 0;
+		frameCounterActive = true;
+		if (timer != null) {
+			timer.init();
+		}
 		toggleSpectatePossible(false);
 		raceStarted = false;
 		countdown = new Countdown(onCountdownFinish);
@@ -555,6 +638,70 @@ class Course extends Sprite {
 		eggRound.addEggs(count, level);
 	}
 
+	public function teleportLocalToStage(stageX:Float, stageY:Float):Bool {
+		if (localCharacter == null || levelRenderer == null || serverFixture == null) {
+			return false;
+		}
+		var local = globalToLocal(new Point(stageX, stageY));
+		var world = levelRenderer.screenToWorld(local.x, local.y);
+		var state = localCharacter.debugState();
+		levelRenderer.showTeleportPop(serverFixture.fixturePixelToWorldX(state.x), serverFixture.fixturePixelToWorldY(state.y));
+		localCharacter.setControllerPosition(world.x - serverFixture.originTileX * ServerLevelFixtureAdapter.TILE_SIZE,
+			world.y - serverFixture.originTileY * ServerLevelFixtureAdapter.TILE_SIZE);
+		levelRenderer.showTeleportPop(world.x, world.y);
+		updatePlayerDisplay();
+		return true;
+	}
+
+	public function resetTestCourse(speed:Float, acceleration:Float, jumping:Float):Void {
+		if (localCharacter == null || levelRenderer == null || serverFixture == null) {
+			return;
+		}
+		input.clear();
+		stopAllJetSounds();
+		clearAllParticleEmitters();
+		clearAllDjinnEmitters();
+		resetActiveBlockVisuals();
+		resetMovedBlockDisplays();
+		removeAllRemoteCharacters();
+		for (id in [for (id in looseHats.keys()) id]) {
+			removeLooseHat(id);
+		}
+		reachedObjectives.clear();
+		localFinishHandled = false;
+		raceEnded = false;
+		framesPlaying = 0;
+		frameCounterActive = false;
+		rotationTweenActive = false;
+		setStageQuality(StageQuality.HIGH);
+		if (levelRenderer != null) {
+			levelRenderer.setArtCaching(true);
+		}
+		displayedCourseRotation = 0;
+		displayedMoveBlockArrows.clear();
+		levelRenderer.resetRuntimeState();
+		var start = serverFixture.fixture.playerStart;
+		localCharacter.resetTestCourseState(start.x * ServerLevelFixtureAdapter.TILE_SIZE + ServerLevelFixtureAdapter.TILE_SIZE / 2,
+			(start.y + 1) * ServerLevelFixtureAdapter.TILE_SIZE, maxCourseTimeSeconds());
+		localCharacter.setStats(speed, acceleration, jumping);
+		localCharacter.setLife(3);
+		if (timer != null) {
+			timer.setTime(maxCourseTimeSeconds());
+		}
+		if (hearts != null) {
+			hearts.setHearts(3);
+			hearts.visible = config.gameMode == "deathmatch";
+			displayedLives = hearts.getHeartCount();
+		}
+		displayedItemId = null;
+		displayedItemUses = null;
+		syncItemDisplay();
+		displayedStats = null;
+		syncStatsDisplay();
+		rebuildMiniMap();
+		updatePlayerDisplay();
+	}
+
 	public function setLife(lives:Int):Void {
 		if (config.gameMode != "deathmatch") {
 			return;
@@ -566,6 +713,13 @@ class Course extends Sprite {
 			hearts.visible = true;
 			hearts.setHearts(lives);
 			displayedLives = hearts.getHeartCount();
+		}
+	}
+
+	public function outOfTimeHandler():Void {
+		frameCounterActive = false;
+		if (onOutOfTime != null) {
+			onOutOfTime();
 		}
 	}
 
@@ -621,6 +775,9 @@ class Course extends Sprite {
 	}
 
 	public function collectEgg(id:Int):Void {
+		if (onCollectEgg != null && onCollectEgg(id)) {
+			return;
+		}
 		if (localCharacter != null) {
 			localCharacter.emitGrabEgg(id);
 		}
@@ -863,6 +1020,7 @@ class Course extends Sprite {
 		}
 		canSpectate = value;
 		playerSpectating = null;
+		toggleKeyScroll(value);
 	}
 
 	public function changeSpectate(tempId:Int):Void {
@@ -870,6 +1028,7 @@ class Course extends Sprite {
 			return;
 		}
 		playerSpectating = tempId >= 0 && playerArray != null && tempId < playerArray.length ? playerArray[tempId] : null;
+		toggleKeyScroll(canSpectate && playerSpectating == null);
 	}
 
 	public function artifactPlacementAt(stageX:Float, stageY:Float):PlaceArtifactRequest {
@@ -925,6 +1084,9 @@ class Course extends Sprite {
 	}
 
 	private function onEnterFrame(event:Event):Void {
+		if (frameCounterActive) {
+			framesPlaying++;
+		}
 		if (player == null) {
 			return;
 		}
@@ -1021,6 +1183,7 @@ class Course extends Sprite {
 			return;
 		}
 		localFinishHandled = true;
+		frameCounterActive = false;
 		if (localCharacter != null) {
 			localCharacter.emitFinishRace(finishId, finishX, finishY);
 			if (config.gameMode != "hat") {
@@ -1038,15 +1201,36 @@ class Course extends Sprite {
 		}
 		var parts = state.lastItemEffect.split(":");
 		switch (parts[0]) {
+			case "laser":
+				var direction = parts.length > 1 ? parts[1] : "right";
+				var offset = direction == "left" ? -20 : 20;
+				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x + offset));
+				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+				var rotation = Std.int(levelRenderer == null ? 0 : levelRenderer.rotation);
+				if (effectBackground != null) {
+					effectBackground.addEffect(["Laser", Std.string(worldX), Std.string(worldY), direction, Std.string(rotation),
+						Std.string(localCharacter.tempID)]);
+				}
+				LobbySocket.write('add_effect`Laser`$worldX`$worldY`$direction`$rotation`' + localCharacter.tempID);
 			case "slash":
 				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x));
 				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
 				var direction = parts.length > 1 ? parts[1] : "right";
 				var payload = 'Slash`$worldX`$worldY`$direction`' + localCharacter.tempID;
-				if (eggRound != null) {
-					eggRound.mountAttackVisual(payload);
-				}
+				mountSlashEffect(worldX, worldY, direction, localCharacter.tempID);
 				LobbySocket.write('add_effect`$payload');
+			case "ice_wave":
+				var direction = parts.length > 1 ? parts[1] : "right";
+				var offset = direction == "left" ? -20 : 20;
+				var angle = direction == "left" ? 180 : 0;
+				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x + offset));
+				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+				var rotation = Std.int(levelRenderer == null ? 0 : levelRenderer.rotation);
+				if (effectBackground != null) {
+					effectBackground.addEffect(["IceWave", Std.string(worldX), Std.string(worldY), Std.string(angle), Std.string(rotation),
+						Std.string(localCharacter.tempID)]);
+				}
+				LobbySocket.write('add_effect`IceWave`$worldX`$worldY`$angle`$rotation`' + localCharacter.tempID);
 			case "mine":
 				if (parts.length < 3) {
 					return;
@@ -1065,8 +1249,64 @@ class Course extends Sprite {
 				var tileWorldY = Std.int(Math.round((effectY - 15) / ServerLevelRenderer.TILE_SIZE)) * ServerLevelRenderer.TILE_SIZE;
 				levelRenderer.showMineAppear(effectX, effectY, tileWorldX, tileWorldY, rotation);
 				LobbySocket.write('add_effect`Mine`$effectX`$effectY`$rotation');
+			case "teleport":
+				if (parts.length < 3) {
+					return;
+				}
+				emitLocalTeleportItemPop(parts[1]);
+				emitLocalTeleportItemPop(parts[2]);
+			case "zap`":
+				if (characterLayer != null) {
+					characterLayer.addChild(new ZapEffect(localCharacter, true, true, true));
+				}
+				LobbySocket.write("zap`");
 			default:
 		}
+	}
+
+	private function emitLocalTeleportItemPop(coordsText:String):Void {
+		var coords = coordsText.split(",");
+		if (coords.length < 2 || levelRenderer == null) {
+			return;
+		}
+		var fixtureX = Std.parseFloat(coords[0]);
+		var fixtureY = Std.parseFloat(coords[1]);
+		if (Math.isNaN(fixtureX) || Math.isNaN(fixtureY)) {
+			return;
+		}
+		var worldX = Std.int(serverFixture.fixturePixelToWorldX(fixtureX));
+		var worldY = Std.int(serverFixture.fixturePixelToWorldY(fixtureY));
+		levelRenderer.showTeleportPop(worldX, worldY);
+		LobbySocket.write('add_effect`Teleport`$worldX`$worldY');
+	}
+
+	public function mountSlashEffect(worldX:Int, worldY:Int, direction:String, shooterID:Int):Slash {
+		var effect = new Slash(worldX, worldY, direction, shooterID, {
+			level: level,
+			courseRotation: Std.int(levelRenderer == null ? 0 : levelRenderer.rotation),
+			player: localCharacter == null ? null : {
+				tempId: localCharacter.tempID,
+				x: serverFixture.fixturePixelToWorldX(localCharacter.debugState().x),
+				y: serverFixture.fixturePixelToWorldY(localCharacter.debugState().y),
+				removed: localCharacter.removed,
+				hit: function(impulseX:Float, impulseY:Float):Void localCharacter.receiveHit(impulseX, impulseY)
+			},
+			onBlockDamage: function(block, reach):Void {
+				if (levelRenderer != null) {
+					levelRenderer.animateBlockBump(block.x, block.y, reach, 0);
+				}
+			},
+			playSound: playSlashSound
+		});
+		return effect;
+	}
+
+	private function playSlashSound(worldX:Float, worldY:Float):Void {
+		if (levelRenderer == null || !openfl.utils.Assets.exists(Slash.SOUND_PATH)) {
+			return;
+		}
+		var offset = levelRenderer.cameraOffset();
+		pr2.audio.SoundEffects.playGameSound(openfl.utils.Assets.getSound(Slash.SOUND_PATH), worldX, worldY, offset.x, offset.y);
 	}
 
 	private function syncItemDisplay(?itemId:Null<Int>, ?itemUses:Null<Int>):Void {
@@ -1193,6 +1433,27 @@ class Course extends Sprite {
 					}
 			}
 		}
+	}
+
+	private function resetActiveBlockVisuals():Void {
+		for (key in activeVisualBlocks.keys()) {
+			applyBlockVisual(tileKeyX(key), tileKeyY(key), 1, 1, 0);
+		}
+		activeVisualBlocks = new Map();
+	}
+
+	private function resetMovedBlockDisplays():Void {
+		for (i in displayedMoveBlockPositions.keys()) {
+			if (i >= level.blocks.length) {
+				continue;
+			}
+			var displayed = displayedMoveBlockPositions.get(i);
+			var original = level.blocks[i];
+			if (displayed != null && (displayed.worldX != original.x || displayed.worldY != original.y)) {
+				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, original.x, original.y);
+			}
+		}
+		displayedMoveBlockPositions.clear();
 	}
 
 	private function syncMoveBlockDisplays():Void {
@@ -1335,7 +1596,7 @@ class Course extends Sprite {
 	}
 
 	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
-		levelRenderer.showBlockPieces(linkage, worldXOf(event), worldYOf(event), event.count, spreadX, spreadY, spreadRot);
+		levelRenderer.showBlockPieces(linkage, worldXOf(event), worldYOf(event), event.count, spreadX, spreadY, spreadRot, 0.75, 0.95, 0.05);
 	}
 
 	private function updatePlayerDisplay():Void {
@@ -1344,6 +1605,7 @@ class Course extends Sprite {
 		}
 
 		var state = player.debugState();
+		syncRotationLifecycle(localCharacter.courseTweenRotation);
 		// Spin the world to match the controller's rotate-block state: the committed
 		// 90-degree step is baked into the block layer while the in-progress tween
 		// animates the whole course. The minimap snaps to the committed rotation,
@@ -1363,11 +1625,16 @@ class Course extends Sprite {
 		// camera target and make it scroll away, snapping back only at "Go".
 		var worldX = serverFixture.fixturePixelToWorldX(state.x);
 		var worldY = serverFixture.fixturePixelToWorldY(state.y);
-		if (state.courseRotation != displayedCourseRotation) {
-			camera.snapTo(worldX, worldY);
-			displayedCourseRotation = state.courseRotation;
+		var cameraTarget = cameraTargetWorld(worldX, worldY);
+		if (keyScrollActive) {
+			applyKeyScroll();
 		} else {
-			camera.follow(worldX, worldY);
+			if (state.courseRotation != displayedCourseRotation) {
+				camera.snapTo(cameraTarget.x, cameraTarget.y);
+				displayedCourseRotation = state.courseRotation;
+			} else {
+				camera.follow(cameraTarget.x, cameraTarget.y);
+			}
 		}
 		levelRenderer.setCameraOffset(Constants.STAGE_WIDTH / 2 + camera.posX, Constants.STAGE_HEIGHT / 2 + camera.posY);
 		if (playerDot != null) {
@@ -1389,6 +1656,63 @@ class Course extends Sprite {
 		player.display.advanceOneFrame();
 	}
 
+	private function cameraTargetWorld(localWorldX:Float, localWorldY:Float):Point {
+		if (playerSpectating == null || playerSpectating == localCharacter) {
+			return new Point(localWorldX, localWorldY);
+		}
+		var pos = playerSpectating.getPos();
+		return new Point(pos.x, pos.y);
+	}
+
+	private function syncRotationLifecycle(tweenRotation:Int):Void {
+		var active = tweenRotation != 0;
+		if (active == rotationTweenActive) {
+			return;
+		}
+		rotationTweenActive = active;
+		if (levelRenderer != null) {
+			levelRenderer.setArtCaching(!active);
+		}
+		setStageQuality(active ? StageQuality.LOW : StageQuality.HIGH);
+	}
+
+	private function setStageQuality(value:StageQuality):Void {
+		currentStageQuality = value;
+		if (stage != null) {
+			stage.quality = value;
+		}
+	}
+
+	private function toggleKeyScroll(active:Bool):Void {
+		if (keyScrollActive == active) {
+			return;
+		}
+		keyScrollActive = active;
+		if (!active) {
+			scrollVelX = 0;
+			scrollVelY = 0;
+		}
+	}
+
+	private function applyKeyScroll():Void {
+		var accel = scrollShift ? 20 : 10;
+		if (scrollDown) {
+			scrollVelY -= accel;
+		}
+		if (scrollUp) {
+			scrollVelY += accel;
+		}
+		if (scrollLeft) {
+			scrollVelX += accel;
+		}
+		if (scrollRight) {
+			scrollVelX -= accel;
+		}
+		scrollVelX *= 0.6;
+		scrollVelY *= 0.6;
+		camera.scroll(scrollVelX, scrollVelY);
+	}
+
 	private function moveCharacterToLayer(character:Character, parentLayer:String):Void {
 		var target = parentLayer == "backBackground" ? backCharacterLayer : characterLayer;
 		if (target != null && character.parent != target) {
@@ -1408,15 +1732,35 @@ class Course extends Sprite {
 		if (raceChat != null && raceChat.inputHasFocus()) {
 			return;
 		}
-		if (keyCode == Keyboard.LEFT || AlternateControls.matches("left", keyCode)) input.left = pressed;
-		if (keyCode == Keyboard.RIGHT || AlternateControls.matches("right", keyCode)) input.right = pressed;
-		if (keyCode == Keyboard.UP || AlternateControls.matches("up", keyCode)) input.jump = pressed;
-		if (keyCode == Keyboard.DOWN || AlternateControls.matches("down", keyCode)) input.down = pressed;
+		if (keyCode == Keyboard.SHIFT) {
+			scrollShift = pressed;
+		}
+		var left = keyCode == Keyboard.LEFT || AlternateControls.matches("left", keyCode);
+		var right = keyCode == Keyboard.RIGHT || AlternateControls.matches("right", keyCode);
+		var up = keyCode == Keyboard.UP || AlternateControls.matches("up", keyCode);
+		var down = keyCode == Keyboard.DOWN || AlternateControls.matches("down", keyCode);
+		if (left) scrollLeft = pressed;
+		if (right) scrollRight = pressed;
+		if (up) scrollUp = pressed;
+		if (down) scrollDown = pressed;
+		if (!keyScrollActive) {
+			if (left) input.left = pressed;
+			if (right) input.right = pressed;
+			if (up) input.jump = pressed;
+			if (down) input.down = pressed;
+		}
 		if (keyCode == Keyboard.SPACE || AlternateControls.matches("item", keyCode)) input.item = pressed;
 	}
 
 	private function resetInput(_:Event):Void {
 		input.clear();
+		scrollLeft = false;
+		scrollRight = false;
+		scrollUp = false;
+		scrollDown = false;
+		scrollShift = false;
+		scrollVelX = 0;
+		scrollVelY = 0;
 	}
 
 	public function remove():Void {
@@ -1458,6 +1802,10 @@ class Course extends Sprite {
 			raceChat.remove();
 			raceChat = null;
 		}
+		if (timer != null) {
+			timer.remove();
+			timer = null;
+		}
 		if (drawingInfo != null) {
 			drawingInfo.remove();
 			drawingInfo = null;
@@ -1494,6 +1842,8 @@ class Course extends Sprite {
 		player = null;
 		playerSpectating = null;
 		playerArray = null;
+		onCollectEgg = null;
+		onStatsSelectSyncRequest = null;
 		canSpectate = false;
 		characterLayer = null;
 		backCharacterLayer = null;

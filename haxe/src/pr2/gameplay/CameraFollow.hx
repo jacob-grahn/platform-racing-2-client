@@ -30,6 +30,11 @@ class CameraFollow {
 		posY = targetY(characterY);
 	}
 
+	public function scroll(deltaX:Float, deltaY:Float):Void {
+		posX += deltaX;
+		posY += deltaY;
+	}
+
 	static inline function targetX(characterX:Float):Float {
 		return -characterX;
 	}

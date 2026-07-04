@@ -20,6 +20,7 @@ import pr2.gameplay.HappyHour;
 import pr2.gameplay.LevelConfig;
 import pr2.gameplay.LevelEntry;
 import pr2.gameplay.LuxPopup;
+import pr2.gameplay.PlaceArtifact;
 import pr2.gameplay.PrizePopup;
 import pr2.gameplay.QuitButton;
 import pr2.gameplay.SpecialEvent;
@@ -121,6 +122,7 @@ class GamePage extends Page implements GameCommandDelegate {
 			var config = LevelConfig.fromServerData(data);
 			course = new Course(level, data, config);
 			course.onFinish = onLocalFinish;
+			course.onOutOfTime = onCourseOutOfTime;
 			if (pendingLocalInit != null) {
 				course.createLocalCharacter(pendingLocalInit);
 				pendingLocalInit = null;
@@ -184,6 +186,9 @@ class GamePage extends Page implements GameCommandDelegate {
 		prize = null;
 		if (PrizePopup.instance != null) {
 			PrizePopup.instance.startFadeOut();
+		}
+		if (PlaceArtifact.instance != null) {
+			PlaceArtifact.instance.startFadeOut();
 		}
 		if (luxPop != null) {
 			luxPop.remove();
@@ -450,6 +455,16 @@ class GamePage extends Page implements GameCommandDelegate {
 		pr2.app.DebugSignal.set("race-phase", "finished");
 	}
 
+	private function onCourseOutOfTime():Void {
+		cancelHatCountdown();
+		if (course != null && course.gameMode() == "egg") {
+			onLocalFinish(null);
+			maybeShowFinishedPage();
+		} else {
+			quitGame();
+		}
+	}
+
 	private function markPlayerDone():Void {
 		playerDone = true;
 	}
@@ -462,7 +477,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		if (quitButton != null) {
 			quitButton.stopGlow();
 		}
-		finishedPage = new FinishedPage(levelId, returnToLobby);
+		finishedPage = new FinishedPage(levelId, returnToLobby, clearFinishedPage);
 		for (awardArgs in pendingAwards) {
 			applyAwardToFinishedPage(awardArgs);
 		}
@@ -478,11 +493,20 @@ class GamePage extends Page implements GameCommandDelegate {
 		finishedPage.award(arg(args, 0), arg(args, 1));
 	}
 
+	private function clearFinishedPage(page:FinishedPage):Void {
+		if (finishedPage == page) {
+			finishedPage = null;
+		}
+	}
+
 	private static function arg(args:Array<String>, index:Int):String {
 		return index >= 0 && index < args.length && args[index] != null ? args[index] : "";
 	}
 
 	private function returnToLobby():Void {
+		if (!LobbySocket.isConnected()) {
+			return;
+		}
 		LobbySocket.write("set_game_room`none");
 		if (pageHolder != null) {
 			pageHolder.changePage(new LobbyPage(LobbySession.userName, LobbySession.server));

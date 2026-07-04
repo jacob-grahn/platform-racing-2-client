@@ -1,5 +1,6 @@
 package pr2.page;
 
+import com.jiggmin.data.Data;
 import com.jiggmin.data.Objects;
 import haxe.Json;
 import haxe.crypto.Md5;
@@ -7,12 +8,14 @@ import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
+import openfl.geom.ColorTransform;
 import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
@@ -29,6 +32,7 @@ import pr2.character.LocalCharacter;
 import pr2.gameplay.Course;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
+import pr2.gameplay.Modes;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedArtLayer;
 import pr2.level.ServerLevel.DecodedArtObject;
@@ -51,6 +55,7 @@ import pr2.lobby.dialogs.Popup;
 import pr2.lobby.dialogs.ProgressBar;
 import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.dialogs.AutoDismissController;
+import pr2.lobby.dialogs.HoverDelayPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
@@ -66,6 +71,8 @@ import pr2.runtime.FlSliderEvent;
 import pr2.runtime.FlTextInput;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
+import pr2.ui.SelectableButton;
+import pr2.ui.StageFocus;
 import pr2.util.DisplayUtil;
 
 /**
@@ -88,6 +95,7 @@ class LevelEditor extends Page {
 	public var menu(default, null):Null<LevelEditorMenu>;
 	public var selectedToolSidebar(default, null):String = "";
 	public var selectedToolId(default, null):String = "";
+	public var focusedEditorLayer(default, null):String = "blocks";
 	public var drawLayers(default, null):Array<EditorDrawableLayer> = [];
 	public var objectLayers(default, null):Array<EditorObjectLayer> = [];
 	public var activeDrawLayer(default, null):Null<EditorDrawableLayer>;
@@ -103,6 +111,7 @@ class LevelEditor extends Page {
 	public var activeModeSettingsPopup(default, null):Null<EditorModeSettingsPopup>;
 	public var activeValueSettingsPopup(default, null):Null<EditorValueSettingsPopup>;
 	public var activeBrushSizeMenu(default, null):Null<EditorBrushSizePickerMenu>;
+	public var toolCursor(default, null):EditorToolCursorManager;
 	public var levelConfig(default, null):LevelConfig = new LevelConfig();
 	public var allowedItems(default, null):Array<Int> = Items.getAllCodes();
 	public var badHats(default, null):Array<Int> = [];
@@ -119,6 +128,7 @@ class LevelEditor extends Page {
 	public var gameMode(get, never):String;
 	public var cowboyChance(get, never):String;
 	public var color(get, never):Int;
+	public var artBackgroundCode(default, null):Null<Int> = null;
 	public var brushColor(default, null):Int = 0;
 	public var brushSize(default, null):Float = EditorDrawableLayer.DEFAULT_BRUSH_SIZE;
 	public var zoom(default, null):Float = 1;
@@ -127,6 +137,11 @@ class LevelEditor extends Page {
 	private var layerContainer:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 	private var deletingObjects:Bool = false;
+	private var deletingBlocks:Bool = false;
+	private var placingBlocks:Bool = false;
+	private var brushRestartTimer:Null<Timer>;
+	private var brushMouseStageX:Float = 0;
+	private var brushMouseStageY:Float = 0;
 	private var velX:Float = 0;
 	private var velY:Float = 0;
 	private var pressedKeys:Map<Int, Bool> = new Map();
@@ -137,6 +152,7 @@ class LevelEditor extends Page {
 		super();
 		isMod = mod;
 		reportsMode = report;
+		toolCursor = new EditorToolCursorManager(this);
 		if (variables != null) {
 			initialVariables = copyVars(cast variables);
 		}
@@ -184,11 +200,25 @@ class LevelEditor extends Page {
 		reportsMode = on;
 	}
 
+	public function canViewLevelReports():Bool {
+		return isMod;
+	}
+
 	public function setColor(value:Int = LevelConfig.DEFAULT_COLOR):Void {
 		levelConfig.setColor(value);
+		artBackgroundCode = null;
 		if (menu != null) {
 			menu.updateBackgroundColor();
 		}
+	}
+
+	public function setArtBackground(code:Null<Int>):Void {
+		artBackgroundCode = code;
+	}
+
+	public function selectArtBackground(code:Int, color:Int):Void {
+		setColor(color);
+		setArtBackground(code);
 	}
 
 	public function setSong(value:Null<String>):Void {
@@ -222,6 +252,9 @@ class LevelEditor extends Page {
 
 	public function setBrushColor(value:Int):Void {
 		brushColor = value & 0xFFFFFF;
+		if (toolCursor != null) {
+			toolCursor.setBrushColor(brushColor);
+		}
 	}
 
 	public function setBrushSize(value:Float):Void {
@@ -229,15 +262,23 @@ class LevelEditor extends Page {
 			return;
 		}
 		brushSize = Math.max(1, Math.min(255, Math.round(value)));
+		if (toolCursor != null) {
+			toolCursor.setBrushSize(brushSize);
+		}
 	}
 
 	public function setItems(value:Null<String>):Void {
 		levelConfig.setItems(value);
 		allowedItems = levelConfig.allowedItems.copy();
+		refreshItemBlocksForAllowedItems();
 	}
 
 	public function setAllowedItems(value:Array<Int>):Void {
 		setItems(value == null || value.length == 0 ? "" : value.join("`"));
+	}
+
+	public function refreshItemBlocksForAllowedItems():Int {
+		return blockLayer == null ? 0 : blockLayer.refreshItemBlocksForAllowedItems(allowedItems);
 	}
 
 	public function setBadHats(value:Null<String>):Void {
@@ -263,12 +304,49 @@ class LevelEditor extends Page {
 		setVariables(data.vars);
 		if (data.data != "" && blockLayer != null) {
 			var level = ServerLevelDecoder.decode(data.data);
+			setColor(level.bgColor);
+			setArtBackground(level.artBackgroundCode);
 			blockLayer.loadBlocks(level.blocks);
 			loadDrawLayersFromData(data.data);
 			loadObjectLayersFromDecoded(level.artLayers);
 		}
 		if (menu != null) {
 			menu.setReportsMode(report);
+		}
+	}
+
+	public function clear():Void {
+		closeBlockOptionsPopup();
+		closeItemSettingsPopup();
+		closeHatsSettingsPopup();
+		closeMusicSettingsPopup();
+		closeModeSettingsPopup();
+		closeValueSettingsPopup();
+		closeBrushSizeMenu();
+		selectEditorTool("", "");
+		levelConfig = new LevelConfig();
+		title = "";
+		note = "";
+		live = 0;
+		toNewest = true;
+		allowedItems = levelConfig.allowedItems.copy();
+		badHats = levelConfig.badHats.copy();
+		artBackgroundCode = null;
+		if (blockLayer != null) {
+			blockLayer.resetToInitialBlocks();
+		}
+		for (drawLayer in drawLayers) {
+			drawLayer.loadDrawString("");
+		}
+		for (objectLayer in objectLayers) {
+			objectLayer.loadArtLayer(null);
+		}
+		setZoom(1);
+		setPos(0, 0);
+		if (menu != null) {
+			menu.updateBackgroundColor();
+			menu.reset();
+			menu.updateUndoRedoState();
 		}
 	}
 
@@ -286,7 +364,7 @@ class LevelEditor extends Page {
 			drawSave[0],
 			drawSave[1],
 			drawSave[2],
-			"",
+			artBackgroundSaveString(),
 			objectSave[3],
 			objectSave[4],
 			drawSave[3],
@@ -342,6 +420,15 @@ class LevelEditor extends Page {
 		} else {
 			applyLayerPositions();
 		}
+		if (toolCursor != null) {
+			toolCursor.setZoom(zoom);
+		}
+		for (layer in objectLayers) {
+			layer.updateDrawObjectControlsForZoom();
+		}
+		if (blockLayer != null) {
+			blockLayer.updateBlockControlScales();
+		}
 	}
 
 	public function setPos(x:Float, y:Float):Void {
@@ -351,8 +438,25 @@ class LevelEditor extends Page {
 	}
 
 	public function selectEditorTool(sidebar:String, toolId:String):Void {
+		selectEditorToolInternal(sidebar, toolId, true);
+	}
+
+	public function selectEditorToolFromCursor(sidebar:String, toolId:String):Void {
+		selectEditorToolInternal(sidebar, toolId, false);
+	}
+
+	private function selectEditorToolInternal(sidebar:String, toolId:String, updateCursor:Bool):Void {
 		selectedToolSidebar = sidebar;
 		selectedToolId = toolId;
+		switch (sidebar) {
+			case "blocks": focusOnBlocks();
+			case "stamps": focusOnActiveObjectLayer();
+			case "tools": focusOnActiveDrawLayer();
+			default:
+		}
+		if (updateCursor && toolCursor != null) {
+			toolCursor.select(sidebar, toolId);
+		}
 		if (menu != null) {
 			menu.updateUndoRedoState();
 		}
@@ -366,6 +470,34 @@ class LevelEditor extends Page {
 		activeObjectLayer = objectLayers[layerNum - 1];
 	}
 
+	public function focusOnBlocks():Void {
+		focusedEditorLayer = "blocks";
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
+	}
+
+	public function focusOnActiveObjectLayer():Void {
+		focusedEditorLayer = "objects";
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
+	}
+
+	public function focusOnActiveDrawLayer():Void {
+		focusedEditorLayer = "draw";
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
+	}
+
+	public function focusNone():Void {
+		focusedEditorLayer = "";
+		if (menu != null) {
+			menu.updateUndoRedoState();
+		}
+	}
+
 	public function placeSelectedToolAt(stageX:Float, stageY:Float):Null<EditorPlacedObject> {
 		if (activeObjectLayer == null || selectedToolSidebar != "stamps" || !StringTools.startsWith(selectedToolId, "stamp")) {
 			return null;
@@ -377,11 +509,17 @@ class LevelEditor extends Page {
 		return activeObjectLayer.addStamp(code, stageX, stageY);
 	}
 
+	public function canPlaceStampFromTargetForTests(target:DisplayObject, stageX:Float, stageY:Float):Bool {
+		return canPlaceStampFromTarget(target, stageX, stageY);
+	}
+
 	public function placeSelectedTextAt(stageX:Float, stageY:Float):Null<EditorTextObject> {
 		if (activeObjectLayer == null || selectedToolSidebar != "stamps" || selectedToolId != "text") {
 			return null;
 		}
-		return activeObjectLayer.addText("", stageX, stageY, EditorTextObject.lastColor, true);
+		var textObject = activeObjectLayer.addText("", stageX, stageY, EditorTextObject.lastColor, true);
+		selectEditorTool("", "");
+		return textObject;
 	}
 
 	public function placeSelectedBlockAt(stageX:Float, stageY:Float):Null<EditorBlockObject> {
@@ -604,17 +742,47 @@ class LevelEditor extends Page {
 		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
 			return false;
 		}
+		if (activeDrawLayer.isDrawing()) {
+			return false;
+		}
+		brushMouseStageX = stageX;
+		brushMouseStageY = stageY;
 		drawingLayer = activeDrawLayer;
 		var isEraser = selectedToolId == "eraser";
 		drawingLayer.beginStroke(stageX, stageY, isEraser ? "erase" : "draw", brushSize, isEraser ? 0xFFFFFF : brushColor);
+		startBrushRestartTimer();
 		return true;
+	}
+
+	public function canStartBrushFromTargetForTests(target:DisplayObject, stageX:Float, stageY:Float):Bool {
+		return canStartBrushFromTarget(target, stageX, stageY);
+	}
+
+	public function isPointOverMenu(stageX:Float, stageY:Float):Bool {
+		if (menu == null) {
+			return false;
+		}
+		if (menu.hitTestPoint(stageX, stageY, true)) {
+			return true;
+		}
+		var local = menu.globalToLocal(new Point(stageX, stageY));
+		return menu.getBounds(menu).contains(local.x, local.y);
 	}
 
 	public function continueSelectedBrushAt(stageX:Float, stageY:Float):Bool {
 		if (drawingLayer == null) {
 			return false;
 		}
-		drawingLayer.extendStroke(stageX, stageY);
+		if (!drawingLayer.isDrawing()) {
+			drawingLayer = null;
+			stopBrushRestartTimer();
+			return false;
+		}
+		brushMouseStageX = stageX;
+		brushMouseStageY = stageY;
+		if (drawingLayer.extendStroke(stageX, stageY)) {
+			restartSelectedBrushStroke();
+		}
 		return true;
 	}
 
@@ -624,7 +792,12 @@ class LevelEditor extends Page {
 		}
 		drawingLayer.finishStroke();
 		drawingLayer = null;
+		stopBrushRestartTimer();
 		return true;
+	}
+
+	public function restartSelectedBrushStrokeForTests():Bool {
+		return restartSelectedBrushStroke();
 	}
 
 	public function isDrawing():Bool {
@@ -633,11 +806,11 @@ class LevelEditor extends Page {
 
 	public function undoActiveObjectLayer():Bool {
 		var changed = false;
-		if (blockLayer != null && isBlockHistoryActive()) {
+		if (blockLayer != null && focusedEditorLayer == "blocks") {
 			changed = blockLayer.undo();
-		} else if (activeDrawLayer != null && selectedToolSidebar == "tools") {
+		} else if (activeDrawLayer != null && focusedEditorLayer == "draw") {
 			changed = activeDrawLayer.undo();
-		} else if (activeObjectLayer != null) {
+		} else if (activeObjectLayer != null && focusedEditorLayer == "objects") {
 			changed = activeObjectLayer.undo();
 		}
 		if (menu != null) {
@@ -648,11 +821,11 @@ class LevelEditor extends Page {
 
 	public function redoActiveObjectLayer():Bool {
 		var changed = false;
-		if (blockLayer != null && isBlockHistoryActive()) {
+		if (blockLayer != null && focusedEditorLayer == "blocks") {
 			changed = blockLayer.redo();
-		} else if (activeDrawLayer != null && selectedToolSidebar == "tools") {
+		} else if (activeDrawLayer != null && focusedEditorLayer == "draw") {
 			changed = activeDrawLayer.redo();
-		} else if (activeObjectLayer != null) {
+		} else if (activeObjectLayer != null && focusedEditorLayer == "objects") {
 			changed = activeObjectLayer.redo();
 		}
 		if (menu != null) {
@@ -672,6 +845,9 @@ class LevelEditor extends Page {
 		removeEventListener(Event.ADDED_TO_STAGE, attachKeyboardListeners);
 		removeEventListener(Event.REMOVED_FROM_STAGE, detachKeyboardListeners);
 		detachKeyboardListeners();
+		if (toolCursor != null) {
+			toolCursor.remove();
+		}
 		if (menu != null) {
 			menu.remove();
 			menu = null;
@@ -697,6 +873,8 @@ class LevelEditor extends Page {
 			blockGrid = null;
 			selectedBlock = null;
 			lastBlockOptionsRequest = null;
+			deletingBlocks = false;
+			placingBlocks = false;
 			closeBlockOptionsPopup();
 			closeItemSettingsPopup();
 			closeHatsSettingsPopup();
@@ -707,6 +885,9 @@ class LevelEditor extends Page {
 			layerContainer = null;
 		}
 		drawingLayer = null;
+		deletingBlocks = false;
+		placingBlocks = false;
+		stopBrushRestartTimer();
 		overlayLayer = null;
 		super.remove();
 	}
@@ -826,10 +1007,22 @@ class LevelEditor extends Page {
 	}
 
 	private function placeSelectedToolFromMouse(event:MouseEvent):Void {
-		if (menu != null && menu.hitTestPoint(event.stageX, event.stageY, true)) {
+		var target = Std.downcast(event.target, DisplayObject);
+		if (isStampPlacementTool()) {
+			if (target == null || !canPlaceStampFromTarget(target, event.stageX, event.stageY)) {
+				cancelSelectedPlacementTool();
+				event.stopImmediatePropagation();
+				return;
+			}
+			if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
+				event.stopImmediatePropagation();
+			}
 			return;
 		}
-		if (beginSelectedBrushAt(event.stageX, event.stageY)) {
+		if (isPointOverMenu(event.stageX, event.stageY)) {
+			return;
+		}
+		if (target != null && canStartBrushFromTarget(target, event.stageX, event.stageY) && beginSelectedBrushAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
 			return;
 		}
@@ -840,16 +1033,22 @@ class LevelEditor extends Page {
 			}
 			return;
 		}
+		if (selectedToolSidebar == "blocks" && selectedToolId == "delete") {
+			deletingBlocks = true;
+			if (deleteSelectedBlockAt(event.stageX, event.stageY)) {
+				event.stopImmediatePropagation();
+			}
+			return;
+		}
 		if (deleteSelectedBlockAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
 			return;
 		}
-		if (placeSelectedBlockAt(event.stageX, event.stageY) != null) {
-			event.stopImmediatePropagation();
-			return;
-		}
-		if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
-			event.stopImmediatePropagation();
+		if (isBlockPlacementTool()) {
+			placingBlocks = true;
+			if (placeSelectedBlockAt(event.stageX, event.stageY) != null) {
+				event.stopImmediatePropagation();
+			}
 			return;
 		}
 		if (placeSelectedTextAt(event.stageX, event.stageY) != null) {
@@ -864,6 +1063,19 @@ class LevelEditor extends Page {
 		}
 		if (deletingObjects && deleteSelectedObjectAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
+			return;
+		}
+		if (deletingBlocks) {
+			if (deleteSelectedBlockAt(event.stageX, event.stageY)) {
+				event.stopImmediatePropagation();
+			}
+			return;
+		}
+		if (placingBlocks) {
+			if (placeSelectedBlockAt(event.stageX, event.stageY) != null) {
+				event.stopImmediatePropagation();
+			}
+			return;
 		}
 	}
 
@@ -872,10 +1084,94 @@ class LevelEditor extends Page {
 			event.stopImmediatePropagation();
 		}
 		deletingObjects = false;
+		deletingBlocks = false;
+		placingBlocks = false;
 	}
 
 	private function isBlockHistoryActive():Bool {
 		return selectedToolSidebar == "blocks" || (menu != null && menu.sideBar == menu.blocks);
+	}
+
+	private function canStartBrushFromTarget(target:DisplayObject, stageX:Float, stageY:Float):Bool {
+		if (activeDrawLayer == null || selectedToolSidebar != "tools" || (selectedToolId != "brush" && selectedToolId != "eraser")) {
+			return false;
+		}
+		if (activeDrawLayer.isDrawing()) {
+			return false;
+		}
+		if (isPointOverMenu(stageX, stageY)) {
+			return false;
+		}
+		var current:Null<DisplayObject> = target;
+		while (current != null) {
+			if (current == menu) {
+				return false;
+			}
+			if (current == activeDrawLayer || current == blockGrid || current == this) {
+				return true;
+			}
+			current = current.parent;
+		}
+		return false;
+	}
+
+	private function isStampPlacementTool():Bool {
+		return activeObjectLayer != null && selectedToolSidebar == "stamps" && StringTools.startsWith(selectedToolId, "stamp");
+	}
+
+	private function isBlockPlacementTool():Bool {
+		return blockLayer != null && selectedToolSidebar == "blocks" && selectedToolId != "delete" && EditorBlockLayer.specForTool(selectedToolId) != null;
+	}
+
+	private function canPlaceStampFromTarget(target:DisplayObject, stageX:Float, stageY:Float):Bool {
+		if (!isStampPlacementTool()) {
+			return false;
+		}
+		if (isPointOverMenu(stageX, stageY)) {
+			return false;
+		}
+		var current:Null<DisplayObject> = target;
+		while (current != null) {
+			if (current == menu || current == activeObjectLayer) {
+				return false;
+			}
+			current = current.parent;
+		}
+		return true;
+	}
+
+	private function cancelSelectedPlacementTool():Void {
+		if (isStampPlacementTool()) {
+			selectEditorTool("", "");
+		}
+	}
+
+	private function restartSelectedBrushStroke():Bool {
+		if (drawingLayer == null || !drawingLayer.isDrawing()) {
+			stopBrushRestartTimer();
+			return false;
+		}
+		var layer = drawingLayer;
+		var isEraser = selectedToolId == "eraser";
+		layer.finishStroke();
+		layer.beginStroke(brushMouseStageX, brushMouseStageY, isEraser ? "erase" : "draw", brushSize, isEraser ? 0xFFFFFF : brushColor);
+		startBrushRestartTimer();
+		return true;
+	}
+
+	private function startBrushRestartTimer():Void {
+		stopBrushRestartTimer();
+		brushRestartTimer = new Timer(10000);
+		brushRestartTimer.run = function():Void {
+			restartSelectedBrushStroke();
+		};
+	}
+
+	private function stopBrushRestartTimer():Void {
+		if (brushRestartTimer != null) {
+			brushRestartTimer.stop();
+			brushRestartTimer = null;
+		}
 	}
 
 	private function passHash():String {
@@ -925,6 +1221,10 @@ class LevelEditor extends Page {
 		return levelConfig.color;
 	}
 
+	private function artBackgroundSaveString():String {
+		return artBackgroundCode == null ? "" : Std.string(artBackgroundCode);
+	}
+
 	private static function parseFloat(value:Null<String>, fallback:Float):Float {
 		if (value == null || value == "") {
 			return fallback;
@@ -948,12 +1248,13 @@ class LevelEditor extends Page {
 
 class TestCoursePage extends Page {
 	private static inline var TEST_STATS_TOTAL:Int = 300;
-	private static inline var TEST_STATS_X:Float = 10;
-	private static inline var TEST_STATS_Y:Float = 290;
+	private static inline var TEST_STATS_X:Float = -265;
+	private static inline var TEST_STATS_Y:Float = 90;
 	private static inline var TEST_STATS_SCALE:Float = 0.66;
-	private static inline var TEST_HAT_X:Float = 15;
-	private static inline var TEST_HAT_Y:Float = 265;
+	private static inline var TEST_HAT_X:Float = -260;
+	private static inline var TEST_HAT_Y:Float = 65;
 	private static inline var TEST_HAT_SCALE:Float = 0.7;
+	private static inline var TEST_MUSIC_X:Float = -130;
 
 	public final variables:Map<String, String>;
 	public final isMod:Bool;
@@ -975,17 +1276,25 @@ class TestCoursePage extends Page {
 		super.initialize();
 		mountCourse();
 		art = PR2MovieClip.fromLinkage("TestCourseGraphic", {maxNestedDepth: 6});
-		addChild(art);
 		bind("back_bt", clickBack);
 		bind("restart_bt", clickRestart);
 		stackOverlayControls();
+		addEventListener(Event.ENTER_FRAME, focusStageEveryFrame);
 	}
 
 	override public function remove():Void {
+		removeEventListener(Event.ENTER_FRAME, focusStageEveryFrame);
 		for (binding in bindings) {
 			LobbyArt.unbind(binding);
 		}
 		bindings = [];
+		if (art != null) {
+			if (art.parent != null) {
+				art.parent.removeChild(art);
+			}
+			art.dispose();
+			art = null;
+		}
 		if (statsSelect != null) {
 			statsSelect.remove();
 			statsSelect = null;
@@ -995,12 +1304,11 @@ class TestCoursePage extends Page {
 			hatPicker = null;
 		}
 		if (course != null) {
+			if (course.levelRenderer != null) {
+				course.levelRenderer.removeEventListener(MouseEvent.CLICK, teleportToClickPos);
+			}
 			course.remove();
 			course = null;
-		}
-		if (art != null) {
-			art.dispose();
-			art = null;
 		}
 		super.remove();
 	}
@@ -1008,12 +1316,30 @@ class TestCoursePage extends Page {
 	private function mountCourse():Void {
 		var data = new ServerLevelData(variables, true);
 		var level = ServerLevelDecoder.decode(data.data);
-		course = new Course(level, data, LevelConfig.fromServerData(data));
+		var config = LevelConfig.fromServerData(data);
+		course = new Course(level, data, config);
 		addChildAt(course, 0);
+		course.musicSelection.x = TEST_MUSIC_X;
+		course.levelRenderer.addEventListener(MouseEvent.CLICK, teleportToClickPos);
 		mountStatsSelect();
 		course.onStatsSelectSyncRequest = statsSelectSetFromCharacter;
+		configureTestEggs(config);
 		mountHatPicker();
 		course.beginRace();
+	}
+
+	private function configureTestEggs(config:LevelConfig):Void {
+		if (course == null || config.gameMode != "egg") {
+			return;
+		}
+		course.onCollectEgg = function(_:Int):Bool {
+			if (course != null) {
+				course.addEggs(1);
+			}
+			return true;
+		};
+		course.setEggSeed(Std.random(9999));
+		course.addEggs(10);
 	}
 
 	private function mountStatsSelect():Void {
@@ -1028,11 +1354,11 @@ class TestCoursePage extends Page {
 		var speed = parseStatField(savedStats, "speed", Settings.DEFAULT_LE_TEST_STATS.speed);
 		var acceleration = parseStatField(savedStats, "acceleration", Settings.DEFAULT_LE_TEST_STATS.acceleration);
 		var jumping = parseStatField(savedStats, "jumping", Settings.DEFAULT_LE_TEST_STATS.jumping);
+		course.localCharacter.levelEditorStatsEnabled = true;
 		statsSelect = new StatsSelect(TEST_STATS_TOTAL, speed, acceleration, jumping, course.localCharacter);
 		statsSelect.x = TEST_STATS_X;
 		statsSelect.y = TEST_STATS_Y;
 		statsSelect.scaleX = statsSelect.scaleY = TEST_STATS_SCALE;
-		addChild(statsSelect);
 	}
 
 	public function statsSelectSetFromCharacter():Void {
@@ -1053,19 +1379,25 @@ class TestCoursePage extends Page {
 		hatPicker.x = TEST_HAT_X;
 		hatPicker.y = TEST_HAT_Y;
 		hatPicker.scaleX = hatPicker.scaleY = TEST_HAT_SCALE;
-		addChild(hatPicker);
 	}
 
 	private function stackOverlayControls():Void {
+		if (course == null) {
+			return;
+		}
 		if (art != null) {
-			addChild(art);
+			course.addChild(art);
 		}
 		if (statsSelect != null) {
-			addChild(statsSelect);
+			course.addChild(statsSelect);
 		}
 		if (hatPicker != null) {
-			addChild(hatPicker);
+			course.addChild(hatPicker);
 		}
+	}
+
+	private function focusStageEveryFrame(_:Event):Void {
+		focusStage();
 	}
 
 	private function bind(name:String, handler:Void->Void):Void {
@@ -1083,20 +1415,33 @@ class TestCoursePage extends Page {
 	}
 
 	private function clickRestart():Void {
-		if (statsSelect != null) {
-			statsSelect.remove();
-			statsSelect = null;
+		focusStage();
+		if (course == null) {
+			return;
 		}
+		var savedStats:Dynamic = Settings.getValue(Settings.LE_TEST_STATS, Settings.DEFAULT_LE_TEST_STATS);
+		var speed = parseStatField(savedStats, "speed", Settings.DEFAULT_LE_TEST_STATS.speed);
+		var acceleration = parseStatField(savedStats, "acceleration", Settings.DEFAULT_LE_TEST_STATS.acceleration);
+		var jumping = parseStatField(savedStats, "jumping", Settings.DEFAULT_LE_TEST_STATS.jumping);
+		course.resetTestCourse(speed, acceleration, jumping);
 		if (hatPicker != null) {
-			hatPicker.remove();
-			hatPicker = null;
+			hatPicker.resetHat();
 		}
-		if (course != null) {
-			course.remove();
-			course = null;
-		}
-		mountCourse();
+		statsSelectSetFromCharacter();
 		stackOverlayControls();
+	}
+
+	private function teleportToClickPos(e:MouseEvent):Void {
+		if (course != null) {
+			course.teleportLocalToStage(e.stageX, e.stageY);
+		}
+	}
+
+	private function focusStage():Void {
+		var currentStage = AppStage.stage != null ? AppStage.stage : stage;
+		if (currentStage != null) {
+			currentStage.focus = currentStage;
+		}
 	}
 
 	private static function parseStatField(stats:Dynamic, field:String, fallback:Int):Int {
@@ -1270,6 +1615,8 @@ class LevelEditorMenu extends Sprite {
 		bind("saveButton", clickSave);
 		bind("loadButton", clickLoad);
 		bind("testButton", clickTest);
+		bind("newButton", clickNew);
+		bind("exitButton", clickExit);
 		var zoomSelect = zoomCombo();
 		if (zoomSelect != null) {
 			zoomSelect.addEventListener(Event.CHANGE, chooseZoom);
@@ -1337,16 +1684,22 @@ class LevelEditorMenu extends Sprite {
 
 	private function clickBlocks():Void {
 		changeSideBar(blocks);
+		editor.focusOnBlocks();
+		updateUndoRedoState();
 		moveGlow(find("blocksButton"));
 	}
 
 	private function clickSettings():Void {
 		changeSideBar(settings);
+		editor.focusNone();
+		setUndoRedoEnabled(false, false);
 		moveGlow(find("settingsButton"));
 	}
 
 	private function clickBackgrounds():Void {
 		changeSideBar(bg);
+		editor.focusNone();
+		setUndoRedoEnabled(false, false);
 		moveGlow(find("bgButton"));
 	}
 
@@ -1361,11 +1714,17 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	private function clickSave():Void {
+		if (LobbySession.group <= 0 || editor.reportsMode) {
+			return;
+		}
 		new SaveLevelPopup(editor);
 	}
 
 	private function clickLoad():Void {
-		if (editor.isMod) {
+		if (LobbySession.group <= 0) {
+			return;
+		}
+		if (editor.canViewLevelReports()) {
 			new ChooseLevelsModePopup();
 		} else {
 			new GetLevelsPopup();
@@ -1373,9 +1732,26 @@ class LevelEditorMenu extends Sprite {
 	}
 
 	private function clickTest():Void {
-		if (editor.pageHolder != null) {
-			editor.pageHolder.changePage(new TestCoursePage(editor.getLevelVars(), editor.isMod, editor.reportsMode));
+		if (!editor.isDrawing() && editor.pageHolder != null) {
+			editor.pageHolder.changePage(new TestCoursePage(editor.getLevelVars(), editor.canViewLevelReports(), editor.reportsMode));
 		}
+	}
+
+	private function clickNew():Void {
+		new ConfirmPopup(clearEditor, "Are you sure you want to clear this level? All unsaved data will be lost.");
+	}
+
+	public function clearEditor():Void {
+		editor.clear();
+		updateBackgroundColor();
+	}
+
+	private function clickExit():Void {
+		new ConfirmPopup(exitEditor, "Are you sure you want exit? All unsaved data will be lost.");
+	}
+
+	public function exitEditor():Void {
+		new LevelEditorConnectingPopup();
 	}
 
 	private function chooseZoom(_):Void {
@@ -1389,25 +1765,31 @@ class LevelEditorMenu extends Sprite {
 			return;
 		}
 		editor.setZoom(percent / 100);
+		tools.setZoom(editor.zoom);
 		if (editor.stage != null) {
 			editor.stage.focus = editor.stage;
 		}
 	}
 
 	public function updateUndoRedoState():Void {
-		if (editor.blockLayer != null && (editor.selectedToolSidebar == "blocks" || sideBar == blocks)) {
+		if (editor.blockLayer != null && editor.focusedEditorLayer == "blocks") {
 			Reflect.setProperty(find("undoButton"), "enabled", editor.blockLayer.saveArray.length > 0);
 			Reflect.setProperty(find("redoButton"), "enabled", editor.blockLayer.redoArray.length > 0);
 			return;
 		}
-		if (editor.selectedToolSidebar == "tools" && editor.activeDrawLayer != null) {
+		if (editor.focusedEditorLayer == "draw" && editor.activeDrawLayer != null) {
 			Reflect.setProperty(find("undoButton"), "enabled", editor.activeDrawLayer.saveArray.length > 0);
 			Reflect.setProperty(find("redoButton"), "enabled", editor.activeDrawLayer.redoArray.length > 0);
 			return;
 		}
-		var activeLayer = editor.activeObjectLayer;
+		var activeLayer = editor.focusedEditorLayer == "objects" ? editor.activeObjectLayer : null;
 		Reflect.setProperty(find("undoButton"), "enabled", activeLayer != null && activeLayer.saveArray.length > 0);
 		Reflect.setProperty(find("redoButton"), "enabled", activeLayer != null && activeLayer.redoArray.length > 0);
+	}
+
+	private function setUndoRedoEnabled(undo:Bool, redo:Bool):Void {
+		Reflect.setProperty(find("undoButton"), "enabled", undo);
+		Reflect.setProperty(find("redoButton"), "enabled", redo);
 	}
 
 	public function updateBackgroundColor():Void {
@@ -1419,6 +1801,11 @@ class LevelEditorMenu extends Sprite {
 			changeSideBar(stamps);
 		}
 		editor.setActiveObjectLayer(layerNum);
+		if (sideBar == tools) {
+			editor.focusOnActiveDrawLayer();
+		} else {
+			editor.focusOnActiveObjectLayer();
+		}
 		updateUndoRedoState();
 		moveGlow(find(switch (layerNum) {
 			case 5: "layer00Button";
@@ -1437,6 +1824,24 @@ class LevelEditorMenu extends Sprite {
 		}
 		glow.x = target.x + target.width / 2;
 		glow.width = target.width + 6;
+	}
+}
+
+class LevelEditorConnectingPopup extends Popup {
+	public var art(default, null):Null<PR2MovieClip>;
+
+	public function new() {
+		super();
+		art = PR2MovieClip.fromLinkage("ConnectingPopupGraphic", {maxNestedDepth: 4});
+		addChild(art);
+	}
+
+	override public function remove():Void {
+		if (art != null) {
+			art.dispose();
+			art = null;
+		}
+		super.remove();
 	}
 }
 
@@ -1722,7 +2127,7 @@ class LoadingLevelPopup extends Popup {
 	}
 }
 
-class GetLevelsPopupItem extends Sprite {
+class GetLevelsPopupItem extends SelectableButton {
 	public final level:Dynamic;
 	public final levelId:Int;
 	public final version:Int;
@@ -1730,14 +2135,12 @@ class GetLevelsPopupItem extends Sprite {
 	public var art(default, null):PR2MovieClip;
 	private var popup:Null<GetLevelsPopup>;
 	private var info:Null<HoverPopup>;
-	private var selected:Bool = false;
 
 	public function new(level:Dynamic, popup:GetLevelsPopup) {
-		super();
+		super(PR2MovieClip.fromLinkage("GetLevelsPopupItemGraphic", {maxNestedDepth: 4}));
 		this.level = level;
 		this.popup = popup;
-		art = PR2MovieClip.fromLinkage("GetLevelsPopupItemGraphic", {maxNestedDepth: 4});
-		art.gotoAndStop(1);
+		art = cast selectableTarget;
 		addChild(art);
 		levelId = parseInt(field("level_id"), 0);
 		version = parseInt(field("version"), 0);
@@ -1751,15 +2154,6 @@ class GetLevelsPopupItem extends Sprite {
 		addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
 		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-	}
-
-	public function setSelected(on:Bool):Void {
-		selected = on;
-		var glow = DisplayUtil.findByName(art, "selectedGlow");
-		if (glow != null) {
-			glow.visible = on;
-		}
-		alpha = on ? 1 : 0.92;
 	}
 
 	private function onClick(_:MouseEvent):Void {
@@ -1776,16 +2170,8 @@ class GetLevelsPopupItem extends Sprite {
 	}
 
 	private function onMouseOver(_:MouseEvent):Void {
-		var title = "-- " + ChatText.escapeString(field("title")) + " --";
-		var popText = "Game Mode: " + modeName(field("type")) + "<br/>";
-		popText += "Version: " + version + "<br/>";
-		popText += "Plays: " + field("play_count") + "<br/>";
-		popText += "Rating: " + field("rating");
-		var note = StringTools.trim(field("note"));
-		if (note != "") {
-			popText += "<br/>-----<br/><i>" + ChatText.escapeString(note) + "</i>";
-		}
-		info = new HoverPopup(title, popText, art);
+		info = new HoverPopup(hoverTitle(level), hoverBody(level), art);
+		info.width -= 3;
 		info.x = 550 - info.width;
 	}
 
@@ -1796,7 +2182,7 @@ class GetLevelsPopupItem extends Sprite {
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
 		onMouseOut();
 		removeEventListener(MouseEvent.CLICK, onClick);
 		removeEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
@@ -1807,9 +2193,7 @@ class GetLevelsPopupItem extends Sprite {
 			art.dispose();
 			art = null;
 		}
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 
 	private function setText(name:String, value:String):Void {
@@ -1820,6 +2204,47 @@ class GetLevelsPopupItem extends Sprite {
 	}
 
 	private function field(name:String):String {
+		return levelField(level, name);
+	}
+
+	public static function hoverTitleForTests(level:Dynamic):String {
+		return hoverTitle(level);
+	}
+
+	public static function hoverBodyForTests(level:Dynamic):String {
+		return hoverBody(level);
+	}
+
+	public function showHoverForTests():Void {
+		onMouseOver(null);
+	}
+
+	public function hoverXForTests():Float {
+		return info == null ? Math.NaN : info.x;
+	}
+
+	public function hoverWidthForTests():Float {
+		return info == null ? Math.NaN : info.width;
+	}
+
+	private static function hoverTitle(level:Dynamic):String {
+		return "-- " + Data.escapeString(levelField(level, "title")) + " --";
+	}
+
+	private static function hoverBody(level:Dynamic):String {
+		var popText = "Game Mode: " + Modes.getFullName(levelField(level, "type")) + "<br/>";
+		popText += "Version: " + Data.formatNumber(parseFloat(levelField(level, "version"), 0)) + "<br/>";
+		popText += "Updated: " + Data.getShortDateStr(parseFloat(levelField(level, "time"), 0)) + "<br/>";
+		popText += "Plays: " + Data.formatNumber(parseFloat(levelField(level, "play_count"), 0)) + "<br/>";
+		popText += "Rating: " + levelField(level, "rating");
+		var note = StringTools.trim(levelField(level, "note"));
+		if (note != "") {
+			popText += "<br/>-----<br/><i>" + Data.escapeString(note, true) + "</i>";
+		}
+		return popText;
+	}
+
+	private static function levelField(level:Dynamic, name:String):String {
 		var value = level == null ? null : Reflect.field(level, name);
 		return value == null ? "" : Std.string(value);
 	}
@@ -1829,14 +2254,9 @@ class GetLevelsPopupItem extends Sprite {
 		return parsed == null ? fallback : parsed;
 	}
 
-	private static function modeName(mode:String):String {
-		return switch (mode) {
-			case "d", "deathmatch": "Deathmatch";
-			case "o", "objective": "Objective";
-			case "h", "hat": "Hat Attack";
-			case "e", "egg", "eggs": "Egg";
-			default: "Race";
-		}
+	private static function parseFloat(value:String, fallback:Float):Float {
+		var parsed = Std.parseFloat(value);
+		return Math.isNaN(parsed) ? fallback : parsed;
 	}
 }
 
@@ -1985,9 +2405,7 @@ class GetReportedLevelsPopup extends Popup {
 	}
 }
 
-class GetReportedLevelsPopupItem extends Sprite {
-	private static final MONTHS:Array<String> = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
-
+class GetReportedLevelsPopupItem extends SelectableButton {
 	public final level:Dynamic;
 	public final levelId:Int;
 	public final version:Int;
@@ -1997,17 +2415,16 @@ class GetReportedLevelsPopupItem extends Sprite {
 	private var info:Null<HoverPopup>;
 
 	public function new(level:Dynamic, popup:GetReportedLevelsPopup) {
-		super();
+		super(PR2MovieClip.fromLinkage("GetReportedLevelsPopupItemGraphic", {maxNestedDepth: 4}));
 		this.level = level;
 		this.popup = popup;
-		art = PR2MovieClip.fromLinkage("GetReportedLevelsPopupItemGraphic", {maxNestedDepth: 4});
-		art.gotoAndStop(1);
+		art = cast selectableTarget;
 		addChild(art);
 		levelId = parseInt(field("level_id"), 0);
 		version = parseInt(field("version"), 0);
 		title = field("title");
 		setText("titleBox", title);
-		setText("timeBox", shortDate(parseFloat(field("report_time"), 0)));
+		setText("timeBox", Data.getShortDateStr(parseFloat(field("report_time"), 0)));
 		mouseChildren = false;
 		buttonMode = true;
 		doubleClickEnabled = true;
@@ -2015,13 +2432,6 @@ class GetReportedLevelsPopupItem extends Sprite {
 		addEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
 		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-	}
-
-	public function setSelected(on:Bool):Void {
-		alpha = on ? 1 : 0.92;
-		if (art != null) {
-			art.gotoAndStop(on ? "selected" : "up");
-		}
 	}
 
 	private function onClick(_:MouseEvent):Void {
@@ -2038,18 +2448,7 @@ class GetReportedLevelsPopupItem extends Sprite {
 	}
 
 	private function onMouseOver(_:MouseEvent):Void {
-		var levelTitle = "-- " + ChatText.escapeString(title) + " --";
-		var popText = "Creator: " + ChatText.escapeString(field("creator")) + "<br/>";
-		popText += "Version: " + version;
-		var note = StringTools.trim(field("note"));
-		if (note != "") {
-			popText += "<br/>Note: <i>" + ChatText.escapeString(note) + "</i>";
-		}
-		popText += "<br/>-----<br/>";
-		popText += "Reported: " + fieldText("timeBox") + "<br/>";
-		popText += "^ By: " + ChatText.escapeString(field("reporter")) + "<br/>";
-		popText += "Reason: <i>" + ChatText.escapeString(field("reason")) + "</i>";
-		info = new HoverPopup(levelTitle, popText, art);
+		info = new HoverPopup(hoverTitle(level), hoverBody(level, fieldText("timeBox")), art);
 		info.width -= 3;
 		info.x = 550 - info.width;
 	}
@@ -2061,7 +2460,7 @@ class GetReportedLevelsPopupItem extends Sprite {
 		}
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
 		onMouseOut();
 		removeEventListener(MouseEvent.CLICK, onClick);
 		removeEventListener(MouseEvent.DOUBLE_CLICK, onDoubleClick);
@@ -2072,9 +2471,7 @@ class GetReportedLevelsPopupItem extends Sprite {
 			art.dispose();
 			art = null;
 		}
-		if (parent != null) {
-			parent.removeChild(this);
-		}
+		super.remove();
 	}
 
 	private function setText(name:String, value:String):Void {
@@ -2090,6 +2487,56 @@ class GetReportedLevelsPopupItem extends Sprite {
 	}
 
 	private function field(name:String):String {
+		return levelField(level, name);
+	}
+
+	public static function hoverTitleForTests(level:Dynamic):String {
+		return hoverTitle(level);
+	}
+
+	public static function hoverBodyForTests(level:Dynamic):String {
+		return hoverBody(level, Data.getShortDateStr(parseFloat(levelField(level, "report_time"), 0)));
+	}
+
+	public function showHoverForTests():Void {
+		onMouseOver(null);
+	}
+
+	public function hideHoverForTests():Void {
+		onMouseOut();
+	}
+
+	public function hasHoverForTests():Bool {
+		return info != null;
+	}
+
+	public function hoverXForTests():Float {
+		return info == null ? Math.NaN : info.x;
+	}
+
+	public function hoverWidthForTests():Float {
+		return info == null ? Math.NaN : info.width;
+	}
+
+	private static function hoverTitle(level:Dynamic):String {
+		return "-- " + Data.escapeString(levelField(level, "title")) + " --";
+	}
+
+	private static function hoverBody(level:Dynamic, reportedDate:String):String {
+		var popText = "Creator: " + Data.escapeString(levelField(level, "creator")) + "<br/>";
+		popText += "Version: " + Data.formatNumber(parseFloat(levelField(level, "version"), 0));
+		var note = StringTools.trim(levelField(level, "note"));
+		if (note != "") {
+			popText += "<br/>Note: <i>" + Data.escapeString(note, true) + "</i>";
+		}
+		popText += "<br/>-----<br/>";
+		popText += "Reported: " + reportedDate + "<br/>";
+		popText += "^ By: " + Data.escapeString(levelField(level, "reporter")) + "<br/>";
+		popText += "Reason: <i>" + Data.escapeString(levelField(level, "reason")) + "</i>";
+		return popText;
+	}
+
+	private static function levelField(level:Dynamic, name:String):String {
 		var value = level == null ? null : Reflect.field(level, name);
 		return value == null ? "" : Std.string(value);
 	}
@@ -2104,10 +2551,6 @@ class GetReportedLevelsPopupItem extends Sprite {
 		return Math.isNaN(parsed) ? fallback : parsed;
 	}
 
-	private static function shortDate(time:Float):String {
-		var d = Date.fromTime(time * 1000);
-		return d.getDate() + "/" + MONTHS[d.getMonth()] + "/" + d.getFullYear();
-	}
 }
 
 class HandleLevelReportPopup extends Popup {
@@ -2693,11 +3136,28 @@ class EditorBlockLayer extends Sprite {
 		super();
 		this.editor = editor;
 		name = "editorBlockLayer";
+		addInitialStartBlocks();
+		initialSaveString = getSaveString();
+	}
+
+	public function resetToInitialBlocks():Void {
+		editor.selectBlock(null);
+		while (blocks.length > 0) {
+			removeBlock(blocks[blocks.length - 1], false);
+		}
+		blocksBySeg.clear();
+		addInitialStartBlocks();
+		initialSaveString = getSaveString();
+		saveArray.resize(0);
+		redoArray.resize(0);
+		notifyHistoryChanged();
+	}
+
+	private function addInitialStartBlocks():Void {
 		for (code in ObjectCodes.BLOCK_START1...ObjectCodes.BLOCK_START4 + 1) {
 			var start = addBlockAtLocal(code, BlockType.Start, code * LevelEditor.segSize + 10000, LevelEditor.segSize * 2 + 10000, false);
 			start.deleteable = false;
 		}
-		initialSaveString = getSaveString();
 	}
 
 	public function addBlockAtStage(code:Int, type:Null<BlockType>, stageX:Float, stageY:Float):Null<EditorBlockObject> {
@@ -2705,11 +3165,8 @@ class EditorBlockLayer extends Sprite {
 		var segX = Math.round(point.x / LevelEditor.segSize);
 		var segY = Math.round(point.y / LevelEditor.segSize);
 		var existing = getBlockAtSeg(segX, segY);
-		if (existing != null && !existing.deleteable) {
-			return null;
-		}
 		if (existing != null) {
-			removeBlock(existing, false);
+			return null;
 		}
 		var block = addBlockAtLocal(code, type, point.x, point.y, true);
 		recordSnapshot();
@@ -2741,6 +3198,30 @@ class EditorBlockLayer extends Sprite {
 		}
 	}
 
+	public function moveBlockToSeg(block:EditorBlockObject, nextSegX:Int, nextSegY:Int):Bool {
+		if (blocks.indexOf(block) < 0) {
+			return false;
+		}
+		var existing = getBlockAtSeg(nextSegX, nextSegY);
+		if (existing != null && existing != block) {
+			if (!existing.deleteable) {
+				return false;
+			}
+			removeBlock(existing, false);
+		}
+		blocksBySeg.remove(segKey(block.segX, block.segY));
+		block.setSeg(nextSegX, nextSegY);
+		blocksBySeg.set(segKey(block.segX, block.segY), block);
+		recordSnapshot();
+		return true;
+	}
+
+	public function updateBlockControlScales():Void {
+		for (block in blocks) {
+			block.updateControlScale();
+		}
+	}
+
 	public function loadBlocks(decodedBlocks:Array<DecodedBlock>):Void {
 		editor.selectBlock(null);
 		while (blocks.length > 0) {
@@ -2759,6 +3240,16 @@ class EditorBlockLayer extends Sprite {
 
 	public function recordBlockOptionsChanged():Void {
 		recordSnapshot();
+	}
+
+	public function refreshItemBlocksForAllowedItems(allowedItems:Array<Int>):Int {
+		var changed = 0;
+		for (block in blocks) {
+			if (block.refreshItemOptionsForAllowedItems(allowedItems)) {
+				changed++;
+			}
+		}
+		return changed;
 	}
 
 	public function undo():Bool {
@@ -3377,9 +3868,7 @@ class EditorValueSettingsPopup extends Sprite {
 				editor.setPass(text);
 			default:
 		}
-		if (AppStage.stage != null) {
-			AppStage.stage.focus = AppStage.stage;
-		}
+			StageFocus.reset();
 	}
 
 	private function mountNear(target:DisplayObject):Void {
@@ -3561,9 +4050,7 @@ class EditorMusicSettingsPopup extends Sprite {
 		if (selected != null) {
 			editor.setSong(selected.id);
 		}
-		if (AppStage.stage != null) {
-			AppStage.stage.focus = AppStage.stage;
-		}
+			StageFocus.reset();
 	}
 
 	private function mountNear(target:DisplayObject):Void {
@@ -3595,6 +4082,7 @@ class EditorModeSettingsPopup extends Sprite {
 	public final dropdown:Null<FlComboBox>;
 	private var autoDismiss:Null<AutoDismissController>;
 	private var removed:Bool = false;
+	private var dropdownOpen:Bool = false;
 
 	public function new(editor:LevelEditor, target:DisplayObject) {
 		super();
@@ -3604,10 +4092,12 @@ class EditorModeSettingsPopup extends Sprite {
 		dropdown = Std.downcast(DisplayUtil.findByName(art, "modeSelect"), FlComboBox);
 		if (dropdown != null) {
 			selectMode(editor.gameMode);
+			dropdown.addEventListener(Event.OPEN, openDropdown);
 			dropdown.addEventListener(Event.CHANGE, changeMode);
+			dropdown.addEventListener(Event.CLOSE, closeDropdown);
 		}
 		mountNear(target);
-		autoDismiss = new AutoDismissController(this, remove);
+		autoDismiss = new AutoDismissController(this, remove, function() return !dropdownOpen);
 	}
 
 	public function selectedMode():String {
@@ -3629,13 +4119,16 @@ class EditorModeSettingsPopup extends Sprite {
 			autoDismiss = null;
 		}
 		if (dropdown != null) {
+			dropdown.removeEventListener(Event.OPEN, openDropdown);
 			dropdown.removeEventListener(Event.CHANGE, changeMode);
+			dropdown.removeEventListener(Event.CLOSE, closeDropdown);
 		}
 		art.dispose();
 		if (parent != null) {
 			parent.removeChild(this);
 		}
 		editor.modeSettingsPopupRemoved(this);
+		StageFocus.reset();
 	}
 
 	private function selectMode(mode:String):Void {
@@ -3657,9 +4150,15 @@ class EditorModeSettingsPopup extends Sprite {
 		if (dropdown != null && dropdown.selectedItem != null) {
 			editor.setGameMode(Std.string(Reflect.field(dropdown.selectedItem, "data")));
 		}
-		if (AppStage.stage != null) {
-			AppStage.stage.focus = AppStage.stage;
-		}
+	}
+
+	private function openDropdown(_:Event):Void {
+		dropdownOpen = true;
+	}
+
+	private function closeDropdown(event:Event):Void {
+		dropdownOpen = false;
+		changeMode(event);
 	}
 
 	private function mountNear(target:DisplayObject):Void {
@@ -3832,13 +4331,20 @@ class EditorBlockObject extends Sprite {
 	public final editor:LevelEditor;
 	public final code:Int;
 	public final type:Null<BlockType>;
-	public final segX:Int;
-	public final segY:Int;
+	public var segX(default, null):Int;
+	public var segY(default, null):Int;
 	public var options(default, null):String;
 	public var deleteable:Bool = true;
 	private final display:Sprite;
 	private var highlight:Null<Sprite>;
-	private var optionsButton:Null<Sprite>;
+	private var deleteButton:Null<PR2MovieClip>;
+	private var optionsButton:Null<PR2MovieClip>;
+	private var dragging:Bool = false;
+	private var dragMoved:Bool = false;
+	private var dragOffsetX:Float = 0;
+	private var dragOffsetY:Float = 0;
+	private var dragStartX:Float = 0;
+	private var dragStartY:Float = 0;
 
 	public function new(editor:LevelEditor, code:Int, type:Null<BlockType>, x:Int, y:Int, options:String = "") {
 		super();
@@ -3862,6 +4368,14 @@ class EditorBlockObject extends Sprite {
 		return type != null && EditorBlockOptions.hasOptions(type);
 	}
 
+	public function setSeg(nextSegX:Int, nextSegY:Int):Void {
+		segX = nextSegX;
+		segY = nextSegY;
+		x = segX * LevelEditor.segSize;
+		y = segY * LevelEditor.segSize;
+		name = "editorBlock_" + segX + "_" + segY;
+	}
+
 	public function setOptions(nextOptions:String, record:Bool = true):Void {
 		var normalized = nextOptions == null ? "" : nextOptions;
 		if (options == normalized) {
@@ -3873,25 +4387,111 @@ class EditorBlockObject extends Sprite {
 		}
 	}
 
+	public function refreshItemOptionsForAllowedItems(allowedItems:Array<Int>):Bool {
+		if (type != BlockType.Item && type != BlockType.InfiniteItem) {
+			return false;
+		}
+		var normalized = EditorBlockOptions.applyItemOptions(EditorBlockOptions.selectedItems(options, allowedItems), allowedItems);
+		if (normalized == options) {
+			return false;
+		}
+		setOptions(normalized, false);
+		return true;
+	}
+
 	public function setSelected(selected:Bool):Void {
 		if (selected) {
 			showHighlight();
-			if (deleteable && hasOptions()) {
-				showOptionsButton();
+			if (deleteable) {
+				showDeleteButton();
+				if (hasOptions()) {
+					showOptionsButton();
+				}
 			}
 		} else {
 			hideHighlight();
+			hideDeleteButton();
 			hideOptionsButton();
 		}
 	}
 
 	public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_DOWN, blockPressed);
+		removeStageDragListeners();
+		hideDeleteButton();
 		hideOptionsButton();
 		hideHighlight();
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	public function beginDragAt(stageX:Float, stageY:Float):Void {
+		if (dragging || editor.blockLayer == null) {
+			return;
+		}
+		var point = editor.blockLayer.globalToLocal(new Point(stageX, stageY));
+		dragging = true;
+		dragMoved = false;
+		dragOffsetX = x - point.x;
+		dragOffsetY = y - point.y;
+		dragStartX = x;
+		dragStartY = y;
+		alpha = 0.75;
+		if (parent != null && parent.numChildren > 1) {
+			parent.setChildIndex(this, parent.numChildren - 1);
+		}
+	}
+
+	public function dragTo(stageX:Float, stageY:Float):Void {
+		if (!dragging || editor.blockLayer == null) {
+			return;
+		}
+		var point = editor.blockLayer.globalToLocal(new Point(stageX, stageY));
+		var nextX = point.x + dragOffsetX;
+		var nextY = point.y + dragOffsetY;
+		if (x != nextX || y != nextY) {
+			dragMoved = true;
+		}
+		x = nextX;
+		y = nextY;
+	}
+
+	public function endDragAt(stageX:Float, stageY:Float):Void {
+		if (!dragging || editor.blockLayer == null) {
+			return;
+		}
+		dragTo(stageX, stageY);
+		dragging = false;
+		alpha = 1;
+		var nextSegX = Math.round(x / LevelEditor.segSize);
+		var nextSegY = Math.round(y / LevelEditor.segSize);
+		x = dragStartX;
+		y = dragStartY;
+		if (dragMoved || nextSegX != segX || nextSegY != segY) {
+			editor.blockLayer.moveBlockToSeg(this, nextSegX, nextSegY);
+		}
+		editor.selectBlock(this);
+	}
+
+	public function updateControlScale():Void {
+		var scale = 1 / Math.max(0.01, Math.abs((parent == null ? 1 : parent.scaleX) * (parent != null && parent.parent != null ? parent.parent.scaleX : 1)));
+		if (deleteButton != null) {
+			deleteButton.scaleX = scale;
+			deleteButton.scaleY = scale;
+		}
+		if (optionsButton != null) {
+			optionsButton.scaleX = scale;
+			optionsButton.scaleY = scale;
+		}
+	}
+
+	public function optionButtonScaleXForTests():Float {
+		return optionsButton == null ? 0 : optionsButton.scaleX;
+	}
+
+	public function deleteButtonScaleXForTests():Float {
+		return deleteButton == null ? 0 : deleteButton.scaleX;
 	}
 
 	private function blockPressed(event:MouseEvent):Void {
@@ -3901,6 +4501,12 @@ class EditorBlockObject extends Sprite {
 			return;
 		}
 		editor.selectBlock(this);
+		beginDragAt(event.stageX, event.stageY);
+		if (stage != null) {
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
+			stage.addEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
+			stage.focus = stage;
+		}
 		event.stopImmediatePropagation();
 	}
 
@@ -3925,21 +4531,40 @@ class EditorBlockObject extends Sprite {
 		highlight = null;
 	}
 
+	private function showDeleteButton():Void {
+		if (deleteButton != null) {
+			return;
+		}
+		deleteButton = PR2MovieClip.fromLinkage("DeleteButton", {maxNestedDepth: 4});
+		deleteButton.name = "DeleteButton";
+		deleteButton.x = 0;
+		deleteButton.y = LevelEditor.segSize;
+		deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, deletePressed);
+		addChild(deleteButton);
+		updateControlScale();
+	}
+
+	private function hideDeleteButton():Void {
+		if (deleteButton == null) {
+			return;
+		}
+		deleteButton.removeEventListener(MouseEvent.MOUSE_DOWN, deletePressed);
+		deleteButton.dispose();
+		deleteButton = null;
+	}
+
 	private function showOptionsButton():Void {
 		if (optionsButton != null) {
 			return;
 		}
-		optionsButton = new Sprite();
+		optionsButton = PR2MovieClip.fromLinkage("BlockOptionsButton", {maxNestedDepth: 4});
 		optionsButton.name = "optionsButton";
 		optionsButton.buttonMode = true;
-		optionsButton.graphics.lineStyle(1, 0x222222);
-		optionsButton.graphics.beginFill(0xFFFFFF);
-		optionsButton.graphics.drawCircle(0, 0, 5);
-		optionsButton.graphics.endFill();
 		optionsButton.x = LevelEditor.segSize;
 		optionsButton.y = LevelEditor.segSize;
 		optionsButton.addEventListener(MouseEvent.MOUSE_DOWN, optionsPressed);
 		addChild(optionsButton);
+		updateControlScale();
 	}
 
 	private function hideOptionsButton():Void {
@@ -3950,12 +4575,37 @@ class EditorBlockObject extends Sprite {
 		if (optionsButton.parent != null) {
 			optionsButton.parent.removeChild(optionsButton);
 		}
+		optionsButton.dispose();
 		optionsButton = null;
 	}
 
 	private function optionsPressed(event:MouseEvent):Void {
 		editor.openBlockOptions(this);
 		event.stopImmediatePropagation();
+	}
+
+	private function deletePressed(event:MouseEvent):Void {
+		editor.deleteBlock(this);
+		event.stopImmediatePropagation();
+	}
+
+	private function dragMouseMoved(event:MouseEvent):Void {
+		dragTo(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function dragMouseReleased(event:MouseEvent):Void {
+		removeStageDragListeners();
+		endDragAt(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function removeStageDragListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
+		stage.removeEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
 	}
 
 	private static function createDisplay(code:Int):Sprite {
@@ -4017,8 +4667,11 @@ class EditorObjectLayer extends Sprite {
 	public final textObjects:Array<EditorTextObject> = [];
 	public final saveArray:Array<String> = [];
 	public final redoArray:Array<String> = [];
-	private final placedDisplays:Array<Sprite> = [];
+	private final placedDisplays:Array<EditorStampDisplay> = [];
+	private final initialObjectActions:Array<String> = [];
 	private final initialTextActions:Array<String> = [];
+	private var selectedStamp:Null<EditorStampDisplay>;
+	private var selectedText:Null<EditorTextObject>;
 
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
@@ -4031,11 +4684,8 @@ class EditorObjectLayer extends Sprite {
 	public function addStamp(code:Int, stageX:Float, stageY:Float):EditorPlacedObject {
 		var size = stampDisplaySize(code);
 		var point = globalToLocal(new Point(stageX, stageY));
-		var placed = new EditorPlacedObject(code, Math.round(point.x - size.width / 2), Math.round(point.y - size.height / 2));
-		var display = createStampDisplay(placed, size);
-		placedObjects.push(placed);
-		placedDisplays.push(display);
-		addChild(display);
+		var placed = addPlacedStamp(code, Math.round(point.x - size.width / 2), Math.round(point.y - size.height / 2));
+		recordAction("o" + code + ";" + placed.x + ";" + placed.y);
 		return placed;
 	}
 
@@ -4044,10 +4694,13 @@ class EditorObjectLayer extends Sprite {
 		clearTextObjects();
 		saveArray.resize(0);
 		redoArray.resize(0);
+		initialObjectActions.resize(0);
 		initialTextActions.resize(0);
 		if (layer != null) {
 			for (object in layer.objects) {
-				addLoadedStamp(object);
+				var action = encodedObjectAction(object);
+				initialObjectActions.push(action);
+				replayObjectAction(action);
 			}
 			for (text in layer.texts) {
 				var action = encodedTextAction(text);
@@ -4064,6 +4717,7 @@ class EditorObjectLayer extends Sprite {
 		textObjects.push(placed);
 		recordAction("u" + placed.getEscapedText() + ";" + placed.x + ";" + placed.y + ";" + color + ";100;100");
 		addChild(placed);
+		selectTextObject(placed);
 		if (startEditing) {
 			placed.startEditing();
 		}
@@ -4073,21 +4727,21 @@ class EditorObjectLayer extends Sprite {
 	public function recordChangeText(textObject:EditorTextObject):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId >= 0) {
-			recordAction("y" + textId + ";" + textObject.getEscapedText() + ";" + textObject.color);
+			recordAction("y" + drawObjectIndexForText(textId) + ";" + textObject.getEscapedText() + ";" + textObject.color);
 		}
 	}
 
 	public function recordMoveText(textObject:EditorTextObject):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId >= 0) {
-			recordAction("m" + textId + ";" + textObject.x + ";" + textObject.y);
+			recordAction("m" + drawObjectIndexForText(textId) + ";" + textObject.x + ";" + textObject.y);
 		}
 	}
 
 	public function recordResizeText(textObject:EditorTextObject):Void {
 		var textId = textObjects.indexOf(textObject);
 		if (textId >= 0) {
-			recordAction("r" + textId + ";" + textObject.scaleX + ";" + textObject.scaleY);
+			recordAction("r" + drawObjectIndexForText(textId) + ";" + textObject.scaleX + ";" + textObject.scaleY);
 		}
 	}
 
@@ -4096,11 +4750,113 @@ class EditorObjectLayer extends Sprite {
 		if (textId < 0) {
 			return;
 		}
+		if (selectedText == textObject) {
+			selectedText = null;
+		}
 		if (record) {
-			recordAction("d" + textId);
+			recordAction("d" + drawObjectIndexForText(textId));
 		}
 		textObjects.splice(textId, 1);
 		textObject.remove();
+	}
+
+	public function removePlacedDisplay(display:EditorStampDisplay):Void {
+		var index = placedDisplays.indexOf(display);
+		if (index >= 0) {
+			recordAction("d" + drawObjectIndexForStamp(index));
+			removePlacedObjectAt(index);
+		}
+	}
+
+	public function recordMoveStamp(display:EditorStampDisplay):Void {
+		var index = placedDisplays.indexOf(display);
+		if (index >= 0) {
+			recordAction("m" + drawObjectIndexForStamp(index) + ";" + Math.round(display.x) + ";" + Math.round(display.y));
+		}
+	}
+
+	public function recordResizeStamp(display:EditorStampDisplay):Void {
+		var index = placedDisplays.indexOf(display);
+		if (index >= 0) {
+			recordAction("r" + drawObjectIndexForStamp(index) + ";" + display.scaleX + ";" + display.scaleY);
+		}
+	}
+
+	public function selectPlacedStamp(display:Null<EditorStampDisplay>):Void {
+		if (selectedStamp == display) {
+			return;
+		}
+		if (selectedStamp != null) {
+			selectedStamp.setSelected(false);
+		}
+		selectedStamp = display;
+		if (selectedStamp != null) {
+			selectedStamp.setSelected(true);
+		}
+	}
+
+	public function selectTextObject(textObject:Null<EditorTextObject>):Void {
+		if (selectedText == textObject) {
+			return;
+		}
+		if (selectedText != null) {
+			selectedText.deselect();
+		}
+		selectedText = textObject;
+		if (selectedText != null) {
+			selectedText.select();
+		}
+	}
+
+	public function selectTextObjectForTests(index:Int):Void {
+		selectTextObject(index >= 0 && index < textObjects.length ? textObjects[index] : null);
+	}
+
+	public function selectPlacedStampForTests(index:Int):Void {
+		selectPlacedStamp(index >= 0 && index < placedDisplays.length ? placedDisplays[index] : null);
+	}
+
+	public function placedStampHasAuthoredHandlesForTests(index:Int):Bool {
+		if (index < 0 || index >= placedDisplays.length) {
+			return false;
+		}
+		var display = placedDisplays[index];
+		return display.hasAuthoredDeleteButtonForTests() && display.hasAuthoredResizeButtonForTests();
+	}
+
+	public function placedStampOutlineBoundsForTests(index:Int):Rectangle {
+		return index >= 0 && index < placedDisplays.length ? placedDisplays[index].selectionOutlineBoundsForTests() : new Rectangle();
+	}
+
+	public function placedStampResizeHandleScaleXForTests(index:Int):Float {
+		return index >= 0 && index < placedDisplays.length ? placedDisplays[index].resizeHandleScaleXForTests() : 0;
+	}
+
+	public function dragPlacedStampForTests(index:Int, startStageX:Float, startStageY:Float, endStageX:Float, endStageY:Float):Void {
+		if (index < 0 || index >= placedDisplays.length) {
+			return;
+		}
+		var display = placedDisplays[index];
+		display.beginDragAt(startStageX, startStageY);
+		display.endDragAt(endStageX, endStageY);
+	}
+
+	public function resizePlacedStampForTests(index:Int, startStageX:Float, startStageY:Float, endStageX:Float, endStageY:Float):Void {
+		if (index < 0 || index >= placedDisplays.length) {
+			return;
+		}
+		var display = placedDisplays[index];
+		display.beginResizeAt(startStageX, startStageY);
+		display.endResizeAt(endStageX, endStageY);
+	}
+
+	public function updateDrawObjectControlsForZoom():Void {
+		for (display in placedDisplays) {
+			display.refreshControlsForZoom();
+		}
+		for (textObject in textObjects) {
+			textObject.refreshControlsForZoom();
+		}
 	}
 
 	public function removeObjectsTouchingPoint(stageX:Float, stageY:Float):Bool {
@@ -4109,6 +4865,7 @@ class EditorObjectLayer extends Sprite {
 			var index = placedDisplays.length - 1 - i;
 			var display = placedDisplays[index];
 			if (display != null && touchesStagePoint(display, stageX, stageY)) {
+				recordAction("d" + drawObjectIndexForStamp(index));
 				removePlacedObjectAt(index);
 				removed = true;
 			}
@@ -4132,7 +4889,7 @@ class EditorObjectLayer extends Sprite {
 		if (action != null) {
 			redoArray.push(action);
 		}
-		rebuildTextObjects();
+		rebuildObjects();
 		notifyHistoryChanged();
 		return true;
 	}
@@ -4145,7 +4902,7 @@ class EditorObjectLayer extends Sprite {
 		if (action != null) {
 			saveArray.push(action);
 		}
-		rebuildTextObjects();
+		rebuildObjects();
 		notifyHistoryChanged();
 		return true;
 	}
@@ -4204,6 +4961,7 @@ class EditorObjectLayer extends Sprite {
 		clearTextObjects();
 		saveArray.resize(0);
 		redoArray.resize(0);
+		initialObjectActions.resize(0);
 		initialTextActions.resize(0);
 	}
 
@@ -4220,13 +4978,66 @@ class EditorObjectLayer extends Sprite {
 		}
 	}
 
-	private function rebuildTextObjects():Void {
+	private function rebuildObjects():Void {
+		clearPlacedObjects();
 		clearTextObjects();
+		for (action in initialObjectActions) {
+			replayObjectAction(action);
+		}
 		for (action in initialTextActions) {
 			replayTextAction(action);
 		}
 		for (action in saveArray) {
-			replayTextAction(action);
+			replayObjectAction(action);
+		}
+	}
+
+	private function replayObjectAction(action:String):Void {
+		if (action == null || action.length == 0) {
+			return;
+		}
+		switch (action.charAt(0)) {
+			case "o":
+				var parts = action.substr(1).split(";");
+				if (parts.length >= 3) {
+					var placed = addPlacedStamp(parseIntPart(parts, 0), parseIntPart(parts, 1), parseIntPart(parts, 2));
+					if (parts.length >= 5) {
+						placed.scaleX = parseFloatPart(parts, 3) / 100;
+						placed.scaleY = parseFloatPart(parts, 4) / 100;
+						syncPlacedDisplay(placedObjects.length - 1);
+					}
+				}
+			case "m":
+				var parts = action.split(";");
+				var stampIndex = stampIndexForAction(parts);
+				if (stampIndex >= 0 && stampIndex < placedObjects.length && parts.length >= 3) {
+					var placed = placedObjects[stampIndex];
+					placed.x = Math.round(parseFloatPart(parts, 1));
+					placed.y = Math.round(parseFloatPart(parts, 2));
+					syncPlacedDisplay(stampIndex);
+				} else {
+					replayTextAction(action);
+				}
+			case "r":
+				var parts = action.split(";");
+				var stampIndex = stampIndexForAction(parts);
+				if (stampIndex >= 0 && stampIndex < placedObjects.length && parts.length >= 3) {
+					var placed = placedObjects[stampIndex];
+					placed.scaleX = parseFloatPart(parts, 1);
+					placed.scaleY = parseFloatPart(parts, 2);
+					syncPlacedDisplay(stampIndex);
+				} else {
+					replayTextAction(action);
+				}
+			case "d":
+				var stampIndex = stampIndexForAction(action.split(";"));
+				if (stampIndex >= 0 && stampIndex < placedObjects.length) {
+					removePlacedObjectAt(stampIndex);
+				} else {
+					replayTextAction(action);
+				}
+			default:
+				replayTextAction(action);
 		}
 	}
 
@@ -4264,9 +5075,12 @@ class EditorObjectLayer extends Sprite {
 					textObject.resizeTo(parseFloatPart(parts, 1), parseFloatPart(parts, 2), false);
 				}
 			case "d":
-				var index = parseActionIndex(parts[0]);
+				var index = parseActionIndex(parts[0]) - placedObjects.length;
 				if (index >= 0 && index < textObjects.length) {
 					var removed = textObjects.splice(index, 1)[0];
+					if (selectedText == removed) {
+						selectedText = null;
+					}
 					removed.remove();
 				}
 			default:
@@ -4275,7 +5089,21 @@ class EditorObjectLayer extends Sprite {
 
 	private function textObjectForAction(parts:Array<String>):Null<EditorTextObject> {
 		var index = parseActionIndex(parts[0]);
+		index -= placedObjects.length;
 		return index >= 0 && index < textObjects.length ? textObjects[index] : null;
+	}
+
+	private function stampIndexForAction(parts:Array<String>):Int {
+		var index = parseActionIndex(parts[0]);
+		return index >= 0 && index < placedObjects.length ? index : -1;
+	}
+
+	private function drawObjectIndexForStamp(stampIndex:Int):Int {
+		return stampIndex;
+	}
+
+	private function drawObjectIndexForText(textIndex:Int):Int {
+		return placedObjects.length + textIndex;
 	}
 
 	private static function parseActionIndex(command:String):Int {
@@ -4298,20 +5126,44 @@ class EditorObjectLayer extends Sprite {
 			return;
 		}
 		var display = placedDisplays[index];
+		if (selectedStamp == display) {
+			selectedStamp = null;
+		}
 		placedObjects.splice(index, 1);
 		placedDisplays.splice(index, 1);
-		if (display != null && display.parent != null) {
-			display.parent.removeChild(display);
+		if (display != null) {
+			display.remove();
 		}
 	}
 
+	private function addPlacedStamp(code:Int, x:Int, y:Int, scaleX:Float = 1, scaleY:Float = 1):EditorPlacedObject {
+		var placed = new EditorPlacedObject(code, x, y, scaleX, scaleY);
+		var display = createStampDisplay(placed, stampDisplaySize(code));
+		placedObjects.push(placed);
+		placedDisplays.push(display);
+		addChild(display);
+		return placed;
+	}
+
+	private function syncPlacedDisplay(index:Int):Void {
+		if (index < 0 || index >= placedObjects.length || index >= placedDisplays.length) {
+			return;
+		}
+		placedDisplays[index].syncFromModel();
+	}
+
 	private function clearPlacedObjects():Void {
+		selectPlacedStamp(null);
 		while (placedObjects.length > 0) {
 			removePlacedObjectAt(placedObjects.length - 1);
 		}
 	}
 
 	private function clearTextObjects():Void {
+		if (selectedText != null) {
+			selectedText.deselect(false);
+			selectedText = null;
+		}
 		for (textObject in textObjects.copy()) {
 			textObject.remove();
 		}
@@ -4319,11 +5171,17 @@ class EditorObjectLayer extends Sprite {
 	}
 
 	private function addLoadedStamp(object:DecodedArtObject):Void {
-		var placed = new EditorPlacedObject(object.code, Math.round(object.x), Math.round(object.y), object.scaleX, object.scaleY);
-		var display = createStampDisplay(placed, stampDisplaySize(object.code));
-		placedObjects.push(placed);
-		placedDisplays.push(display);
-		addChild(display);
+		addPlacedStamp(object.code, Math.round(object.x), Math.round(object.y), object.scaleX, object.scaleY);
+	}
+
+	private static function encodedObjectAction(object:DecodedArtObject):String {
+		var action = "o" + object.code + ";" + Math.round(object.x) + ";" + Math.round(object.y);
+		var widthPerc = Std.int(object.scaleX * 100);
+		var heightPerc = Std.int(object.scaleY * 100);
+		if (widthPerc != 100 || heightPerc != 100) {
+			action += ";" + widthPerc + ";" + heightPerc;
+		}
+		return action;
 	}
 
 	private static function encodedTextAction(text:DecodedTextObject):String {
@@ -4336,12 +5194,12 @@ class EditorObjectLayer extends Sprite {
 		return display.getBounds(this).contains(point.x, point.y);
 	}
 
-	private static function createStampDisplay(placed:EditorPlacedObject, size:StampSize):Sprite {
+	private function createStampDisplay(placed:EditorPlacedObject, size:StampSize):EditorStampDisplay {
+		return new EditorStampDisplay(this, placed, size);
+	}
+
+	public static function createStampContent(placed:EditorPlacedObject, size:StampSize):Sprite {
 		var holder = new Sprite();
-		holder.x = placed.x;
-		holder.y = placed.y;
-		holder.scaleX = placed.scaleX;
-		holder.scaleY = placed.scaleY;
 		var display = Objects.getFromCode(placed.code);
 		if (display != null) {
 			holder.addChild(display);
@@ -4369,8 +5227,269 @@ class EditorObjectLayer extends Sprite {
 	}
 }
 
+class EditorStampDisplay extends Sprite {
+	private final owner:EditorObjectLayer;
+	private final placed:EditorPlacedObject;
+	private final size:StampSize;
+	private final content:Sprite;
+	private final selectionOutline:Sprite;
+	private final deleteButton:PR2MovieClip;
+	private final resizeButton:PR2MovieClip;
+	private var dragging:Bool = false;
+	private var dragMoved:Bool = false;
+	private var dragOffsetX:Float = 0;
+	private var dragOffsetY:Float = 0;
+	private var dragStartX:Float = 0;
+	private var dragStartY:Float = 0;
+	private var resizing:Bool = false;
+	private var resizeStartScaleX:Float = 1;
+	private var resizeStartScaleY:Float = 1;
+
+	public function new(owner:EditorObjectLayer, placed:EditorPlacedObject, size:StampSize) {
+		super();
+		this.owner = owner;
+		this.placed = placed;
+		this.size = size;
+		x = placed.x;
+		y = placed.y;
+		scaleX = placed.scaleX;
+		scaleY = placed.scaleY;
+		buttonMode = true;
+		useHandCursor = true;
+		content = EditorObjectLayer.createStampContent(placed, size);
+		addChild(content);
+		selectionOutline = new Sprite();
+		selectionOutline.name = "selectionOutline";
+		addChild(selectionOutline);
+		deleteButton = PR2MovieClip.fromLinkage("DeleteButton", {maxNestedDepth: 4});
+		deleteButton.name = "DeleteButton";
+		deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, deletePressed);
+		addChild(deleteButton);
+		resizeButton = PR2MovieClip.fromLinkage("ResizeButton", {maxNestedDepth: 4});
+		resizeButton.name = "ResizeButton";
+		resizeButton.mouseChildren = false;
+		resizeButton.addEventListener(MouseEvent.MOUSE_DOWN, resizePressed);
+		addChild(resizeButton);
+		addEventListener(MouseEvent.MOUSE_DOWN, selectPressed);
+		positionInternals();
+		setSelected(false);
+	}
+
+	public function setSelected(selected:Bool):Void {
+		selectionOutline.visible = selected;
+		deleteButton.visible = selected;
+		resizeButton.visible = selected;
+	}
+
+	public function remove():Void {
+		removeEventListener(MouseEvent.MOUSE_DOWN, selectPressed);
+		removeStageDragListeners();
+		removeStageResizeListeners();
+		deleteButton.removeEventListener(MouseEvent.MOUSE_DOWN, deletePressed);
+		resizeButton.removeEventListener(MouseEvent.MOUSE_DOWN, resizePressed);
+		deleteButton.dispose();
+		resizeButton.dispose();
+		if (parent != null) {
+			parent.removeChild(this);
+		}
+	}
+
+	public function hasAuthoredDeleteButtonForTests():Bool {
+		return deleteButton != null && deleteButton.name == "DeleteButton";
+	}
+
+	public function hasAuthoredResizeButtonForTests():Bool {
+		return resizeButton != null && resizeButton.name == "ResizeButton";
+	}
+
+	public function selectionOutlineBoundsForTests():Rectangle {
+		return selectionOutline.getBounds(this);
+	}
+
+	public function resizeHandleScaleXForTests():Float {
+		return resizeButton.scaleX;
+	}
+
+	public function refreshControlsForZoom():Void {
+		positionInternals();
+	}
+
+	public function syncFromModel():Void {
+		x = placed.x;
+		y = placed.y;
+		scaleX = placed.scaleX;
+		scaleY = placed.scaleY;
+		positionInternals();
+	}
+
+	public function beginDragAt(stageX:Float, stageY:Float):Void {
+		var point = owner.globalToLocal(new Point(stageX, stageY));
+		dragging = true;
+		dragMoved = false;
+		dragOffsetX = x - point.x;
+		dragOffsetY = y - point.y;
+		dragStartX = x;
+		dragStartY = y;
+		alpha = 0.75;
+		if (parent != null && parent.numChildren > 1) {
+			parent.setChildIndex(this, parent.numChildren - 1);
+		}
+	}
+
+	public function dragTo(stageX:Float, stageY:Float):Void {
+		if (!dragging) {
+			return;
+		}
+		var point = owner.globalToLocal(new Point(stageX, stageY));
+		var nextX = point.x + dragOffsetX;
+		var nextY = point.y + dragOffsetY;
+		if (x != nextX || y != nextY) {
+			dragMoved = true;
+		}
+		x = nextX;
+		y = nextY;
+	}
+
+	public function endDragAt(stageX:Float, stageY:Float):Void {
+		if (!dragging) {
+			return;
+		}
+		dragTo(stageX, stageY);
+		dragging = false;
+		alpha = 1;
+		var changed = dragMoved || x != dragStartX || y != dragStartY;
+		x = Math.round(x);
+		y = Math.round(y);
+		placed.x = Std.int(x);
+		placed.y = Std.int(y);
+		if (changed) {
+			owner.recordMoveStamp(this);
+		}
+		owner.selectPlacedStamp(this);
+	}
+
+	public function beginResizeAt(stageX:Float, stageY:Float):Void {
+		resizing = true;
+		resizeStartScaleX = scaleX;
+		resizeStartScaleY = scaleY;
+	}
+
+	public function resizeDragTo(stageX:Float, stageY:Float):Void {
+		if (!resizing) {
+			return;
+		}
+		var point = owner.globalToLocal(new Point(stageX, stageY));
+		scaleX = (point.x - x) / Math.max(size.width, 1);
+		scaleY = (point.y - y) / Math.max(size.height, 1);
+		positionInternals();
+	}
+
+	public function endResizeAt(stageX:Float, stageY:Float):Void {
+		if (!resizing) {
+			return;
+		}
+		resizeDragTo(stageX, stageY);
+		resizing = false;
+		var changed = scaleX != resizeStartScaleX || scaleY != resizeStartScaleY;
+		scaleX = Math.round(scaleX * 100) / 100;
+		scaleY = Math.round(scaleY * 100) / 100;
+		placed.scaleX = scaleX;
+		placed.scaleY = scaleY;
+		positionInternals();
+		if (changed) {
+			owner.recordResizeStamp(this);
+		}
+		owner.selectPlacedStamp(this);
+	}
+
+	private function selectPressed(event:MouseEvent):Void {
+		owner.selectPlacedStamp(this);
+		beginDragAt(event.stageX, event.stageY);
+		if (stage != null) {
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
+			stage.addEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
+			stage.focus = stage;
+		}
+		event.stopImmediatePropagation();
+	}
+
+	private function deletePressed(event:MouseEvent):Void {
+		owner.removePlacedDisplay(this);
+		event.stopImmediatePropagation();
+	}
+
+	private function resizePressed(event:MouseEvent):Void {
+		beginResizeAt(event.stageX, event.stageY);
+		if (stage != null) {
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, resizeMouseMoved);
+			stage.addEventListener(MouseEvent.MOUSE_UP, resizeMouseReleased);
+			stage.focus = stage;
+		}
+		event.stopImmediatePropagation();
+	}
+
+	private function dragMouseMoved(event:MouseEvent):Void {
+		dragTo(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function dragMouseReleased(event:MouseEvent):Void {
+		removeStageDragListeners();
+		endDragAt(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function resizeMouseMoved(event:MouseEvent):Void {
+		resizeDragTo(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function resizeMouseReleased(event:MouseEvent):Void {
+		removeStageResizeListeners();
+		endResizeAt(event.stageX, event.stageY);
+		event.stopImmediatePropagation();
+	}
+
+	private function removeStageDragListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, dragMouseMoved);
+		stage.removeEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
+	}
+
+	private function removeStageResizeListeners():Void {
+		if (stage == null) {
+			return;
+		}
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, resizeMouseMoved);
+		stage.removeEventListener(MouseEvent.MOUSE_UP, resizeMouseReleased);
+	}
+
+	private function positionInternals():Void {
+		var buttonScaleX = 1 / Math.max(0.01, Math.abs(scaleX * owner.scaleX * (owner.parent == null ? 1 : owner.parent.scaleX)));
+		var buttonScaleY = 1 / Math.max(0.01, Math.abs(scaleY * owner.scaleY * (owner.parent == null ? 1 : owner.parent.scaleY)));
+		deleteButton.scaleX = buttonScaleX;
+		deleteButton.scaleY = buttonScaleY;
+		resizeButton.scaleX = buttonScaleX;
+		resizeButton.scaleY = buttonScaleY;
+		deleteButton.x = 0;
+		deleteButton.y = size.height;
+		resizeButton.x = size.width;
+		resizeButton.y = size.height;
+		selectionOutline.graphics.clear();
+		selectionOutline.graphics.lineStyle(3, 0xFFFFFF, 1, false, "none");
+		selectionOutline.graphics.moveTo(0, 0);
+		selectionOutline.graphics.lineTo(0, size.height);
+		selectionOutline.graphics.lineTo(size.width, size.height);
+		selectionOutline.graphics.lineTo(size.width, 0);
+		selectionOutline.graphics.lineTo(0, 0);
+	}
+}
+
 class EditorDrawableLayer extends Sprite {
 	public static inline var DEFAULT_BRUSH_SIZE:Float = 4;
+	private static inline var BRUSH_RESTART_DISTANCE:Float = 400;
 
 	public final layerNum:Int;
 	public final saveArray:Array<String> = [];
@@ -4383,7 +5502,11 @@ class EditorDrawableLayer extends Sprite {
 	private var mode:String = "draw";
 	private var brushX:Float = 0;
 	private var brushY:Float = 0;
+	private var strokeStartX:Float = 0;
+	private var strokeStartY:Float = 0;
 	private var drawing:Bool = false;
+	private var drawRasterizeCount:Int = 0;
+	private var eraseCleanupCount:Int = 0;
 
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
@@ -4404,18 +5527,20 @@ class EditorDrawableLayer extends Sprite {
 		setMode(nextMode);
 		var start = roundedLocalPoint(stageX, stageY);
 		moveTo(start.x, start.y);
+		strokeStartX = start.x;
+		strokeStartY = start.y;
 		drawing = true;
 	}
 
-	public function extendStroke(stageX:Float, stageY:Float):Void {
+	public function extendStroke(stageX:Float, stageY:Float):Bool {
 		if (!drawing) {
-			return;
+			return false;
 		}
 		var point = roundedLocalPoint(stageX, stageY);
-		if (point.x == brushX && point.y == brushY) {
-			return;
+		if (point.x != brushX || point.y != brushY) {
+			lineTo(point.x, point.y);
 		}
-		lineTo(point.x, point.y);
+		return Math.abs(strokeStartX - point.x) > BRUSH_RESTART_DISTANCE || Math.abs(strokeStartY - point.y) > BRUSH_RESTART_DISTANCE;
 	}
 
 	public function finishStroke():Void {
@@ -4423,12 +5548,24 @@ class EditorDrawableLayer extends Sprite {
 			return;
 		}
 		drawing = false;
-		rasterize();
+		if (mode == "erase") {
+			erase();
+		} else {
+			rasterizeDrawStroke();
+		}
 		notifyHistoryChanged();
 	}
 
 	public function isDrawing():Bool {
 		return drawing;
+	}
+
+	public function drawRasterizeCountForTests():Int {
+		return drawRasterizeCount;
+	}
+
+	public function eraseCleanupCountForTests():Int {
+		return eraseCleanupCount;
 	}
 
 	public function getSaveString():String {
@@ -4552,6 +5689,16 @@ class EditorDrawableLayer extends Sprite {
 		brushCanvas.graphics.lineStyle(brushSize, color);
 	}
 
+	private function rasterizeDrawStroke():Void {
+		drawRasterizeCount++;
+		rasterize();
+	}
+
+	private function erase():Void {
+		eraseCleanupCount++;
+		rasterize();
+	}
+
 	private function roundedLocalPoint(stageX:Float, stageY:Float):Point {
 		var point = globalToLocal(new Point(stageX, stageY));
 		point.x = Math.round(point.x);
@@ -4612,10 +5759,10 @@ class EditorDrawableLayer extends Sprite {
 
 class EditorPlacedObject {
 	public final code:Int;
-	public final x:Int;
-	public final y:Int;
-	public final scaleX:Float;
-	public final scaleY:Float;
+	public var x:Int;
+	public var y:Int;
+	public var scaleX:Float;
+	public var scaleY:Float;
 
 	public function new(code:Int, x:Int, y:Int, scaleX:Float = 1, scaleY:Float = 1) {
 		this.code = code;
@@ -4633,11 +5780,15 @@ class EditorTextObject extends Sprite {
 	public var text(default, null):String;
 	private final owner:EditorObjectLayer;
 	private final displayField:TextField;
-	private final resizeHandle:Sprite;
+	private final selectionOutline:Sprite;
+	private final deleteButton:PR2MovieClip;
+	private final resizeHandle:PR2MovieClip;
+	private var editButton:Null<PR2MovieClip>;
 	private var editField:Null<TextField>;
 	private var colorPicker:Null<ColorPicker>;
 	private var originalText:String;
 	private var originalColor:Int;
+	private var selected:Bool = false;
 	private var dragging:Bool = false;
 	private var dragMoved:Bool = false;
 	private var dragOffsetX:Float = 0;
@@ -4663,32 +5814,65 @@ class EditorTextObject extends Sprite {
 		displayField = createTextField();
 		displayField.selectable = false;
 		addChild(displayField);
+		selectionOutline = new Sprite();
+		selectionOutline.name = "selectionOutline";
+		addChild(selectionOutline);
+		deleteButton = PR2MovieClip.fromLinkage("DeleteButton", {maxNestedDepth: 4});
+		deleteButton.name = "DeleteButton";
+		deleteButton.addEventListener(MouseEvent.MOUSE_DOWN, deleteButtonPressed);
+		addChild(deleteButton);
 		resizeHandle = createResizeHandle();
 		addChild(resizeHandle);
+		showEditButton();
+		addColorPicker();
 		setText(parseText(text));
 		addEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
+	}
+
+	public function select():Void {
+		if (selected) {
+			return;
+		}
+		selected = true;
+		originalText = text;
+		originalColor = color;
+		addStageDeleteListener();
+	}
+
+	public function deselect(recordChange:Bool = true):Void {
+		if (!selected) {
+			return;
+		}
+		finishEditing();
+		removeStageDeleteListener();
+		selected = false;
+		if (recordChange && parent != null && (text != originalText || color != originalColor)) {
+			owner.recordChangeText(this);
+		}
 	}
 
 	public function startEditing():Void {
 		if (editField != null) {
 			return;
 		}
-		originalText = text;
-		originalColor = color;
 		displayField.visible = false;
+		hideEditButton();
 		resizeHandle.visible = false;
 		editField = createTextField();
 		editField.type = TextFieldType.INPUT;
 		editField.selectable = true;
+		editField.autoSize = TextFieldAutoSize.NONE;
 		editField.background = true;
 		editField.border = true;
 		editField.maxChars = 500;
 		editField.width = Math.max(displayField.width, 100);
 		editField.height = Math.max(displayField.height, 20);
 		editField.text = text;
+		editField.width = Math.max(editField.textWidth + 8, 100);
+		editField.height = Math.max(editField.textHeight + 5, 20);
 		editField.addEventListener(Event.CHANGE, editTextChanged);
 		addChild(editField);
-		addColorPicker();
+		positionInternals();
 		if (stage != null) {
 			stage.focus = editField;
 		}
@@ -4702,19 +5886,16 @@ class EditorTextObject extends Sprite {
 		editField.removeEventListener(Event.CHANGE, editTextChanged);
 		removeChild(editField);
 		editField = null;
-		removeColorPicker();
 		displayField.visible = true;
+		showEditButton();
 		resizeHandle.visible = true;
-		positionResizeHandle();
+		positionInternals();
 		if (stage != null) {
 			stage.focus = stage;
 		}
 		if (StringTools.trim(text) == "") {
 			owner.removeTextObject(this);
 			return;
-		}
-		if (text != originalText || color != originalColor) {
-			owner.recordChangeText(this);
 		}
 	}
 
@@ -4735,7 +5916,7 @@ class EditorTextObject extends Sprite {
 		text = nextText == null ? "" : nextText;
 		displayField.text = text;
 		displayField.height = Math.max(displayField.textHeight + 5, 20);
-		positionResizeHandle();
+		positionInternals();
 	}
 
 	public function setColor(nextColor:Int):Void {
@@ -4744,7 +5925,6 @@ class EditorTextObject extends Sprite {
 		if (editField != null) {
 			editField.textColor = color;
 		}
-		lastColor = color;
 	}
 
 	public function moveToLocal(nextX:Float, nextY:Float, record:Bool = true):Void {
@@ -4768,6 +5948,7 @@ class EditorTextObject extends Sprite {
 		}
 		scaleX = roundedScaleX;
 		scaleY = roundedScaleY;
+		positionInternals();
 		if (record) {
 			owner.recordResizeText(this);
 		}
@@ -4794,7 +5975,7 @@ class EditorTextObject extends Sprite {
 		var point = owner.globalToLocal(new Point(stageX, stageY));
 		scaleX = (point.x - x) / resizeBaseWidth;
 		scaleY = (point.y - y) / resizeBaseHeight;
-		positionResizeHandle();
+		positionInternals();
 	}
 
 	public function endResizeAt(stageX:Float, stageY:Float):Void {
@@ -4805,7 +5986,7 @@ class EditorTextObject extends Sprite {
 		resizing = false;
 		var changed = scaleX != resizeStartScaleX || scaleY != resizeStartScaleY;
 		resizeTo(scaleX, scaleY, false);
-		positionResizeHandle();
+		positionInternals();
 		if (changed) {
 			owner.recordResizeText(this);
 		}
@@ -4815,6 +5996,7 @@ class EditorTextObject extends Sprite {
 		if (isEditing() || dragging) {
 			return;
 		}
+		owner.selectTextObject(this);
 		var point = owner.globalToLocal(new Point(stageX, stageY));
 		dragging = true;
 		dragMoved = false;
@@ -4862,21 +6044,90 @@ class EditorTextObject extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
+		removeStageDeleteListener();
 		removeStageDragListeners();
 		removeStageResizeListeners();
 		resizeHandle.removeEventListener(MouseEvent.MOUSE_DOWN, resizeHandlePressed);
+		deleteButton.removeEventListener(MouseEvent.MOUSE_DOWN, deleteButtonPressed);
+		hideEditButton();
 		if (editField != null) {
 			editField.removeEventListener(Event.CHANGE, editTextChanged);
 			removeChild(editField);
 			editField = null;
 		}
 		removeColorPicker();
+		resizeHandle.dispose();
+		deleteButton.dispose();
 		if (parent != null) {
 			parent.removeChild(this);
 		}
 	}
 
+	public function hasAuthoredDeleteButtonForTests():Bool {
+		return deleteButton != null && deleteButton.name == "DeleteButton";
+	}
+
+	public function hasAuthoredResizeButtonForTests():Bool {
+		return resizeHandle != null && resizeHandle.name == "ResizeButton";
+	}
+
+	public function hasAuthoredEditButtonForTests():Bool {
+		return editButton != null && editButton.name == "EditTextButton";
+	}
+
+	public function hasColorPickerForTests():Bool {
+		return colorPicker != null && colorPicker.name == "ColorPicker";
+	}
+
+	public function selectionOutlineBoundsForTests():Rectangle {
+		return selectionOutline.getBounds(this);
+	}
+
+	public function refreshControlsForZoom():Void {
+		positionInternals();
+	}
+
+	public function resizeHandleScaleXForTests():Float {
+		return resizeHandle.scaleX;
+	}
+
+	public function editButtonScaleXForTests():Float {
+		return editButton == null ? 0 : editButton.scaleX;
+	}
+
+	public function colorPickerScaleXForTests():Float {
+		return colorPicker == null ? 0 : colorPicker.scaleX;
+	}
+
+	public function displayFieldVisibleForTests():Bool {
+		return displayField.visible;
+	}
+
+	public function editFieldMaxCharsForTests():Int {
+		return editField == null ? 0 : editField.maxChars;
+	}
+
+	public function editFieldWidthForTests():Float {
+		return editField == null ? 0 : editField.width;
+	}
+
+	public function handleDeleteKeyForTests(keyCode:Int):Void {
+		handleDeleteKey(keyCode, null);
+	}
+
+	public function chooseColorForTests(nextColor:Int):Void {
+		if (colorPicker != null) {
+			colorPicker.setColor(nextColor);
+		}
+	}
+
+	public function displayBoundsForTests():Rectangle {
+		var target = editField != null ? editField : displayField;
+		return new Rectangle(0, 0, target.width, target.height);
+	}
+
 	private function selectForEditing(event:MouseEvent):Void {
+		owner.selectTextObject(this);
 		if (isEditing()) {
 			event.stopImmediatePropagation();
 			return;
@@ -4938,26 +6189,74 @@ class EditorTextObject extends Sprite {
 		stage.removeEventListener(MouseEvent.MOUSE_UP, resizeMouseReleased);
 	}
 
+	private function addStageDeleteListener():Void {
+		if (stage != null) {
+			stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteKeyPressed);
+		}
+	}
+
+	private function removeStageDeleteListener():Void {
+		if (stage != null) {
+			stage.removeEventListener(KeyboardEvent.KEY_DOWN, deleteKeyPressed);
+		}
+	}
+
+	private function deleteKeyPressed(event:KeyboardEvent):Void {
+		handleDeleteKey(event.keyCode, event);
+	}
+
+	private function handleDeleteKey(keyCode:Int, event:Null<KeyboardEvent>):Void {
+		if (keyCode != Keyboard.DELETE && keyCode != Keyboard.BACKSPACE) {
+			return;
+		}
+		if (!isEditing() || (editField != null && editField.text == "")) {
+			owner.removeTextObject(this);
+			if (event != null) {
+				event.stopImmediatePropagation();
+			}
+		}
+	}
+
 	private function editTextChanged(_:Event):Void {
 		if (editField != null) {
 			displayField.text = editField.text;
 			displayField.height = Math.max(displayField.textHeight + 5, 20);
 			editField.height = Math.max(editField.textHeight + 5, 20);
 			editField.width = Math.max(editField.textWidth + 8, 100);
-			positionColorPicker();
-			positionResizeHandle();
+			positionInternals();
 		}
+	}
+
+	private function showEditButton():Void {
+		if (editButton != null) {
+			return;
+		}
+		editButton = PR2MovieClip.fromLinkage("EditTextButton", {maxNestedDepth: 4});
+		editButton.name = "EditTextButton";
+		editButton.buttonMode = true;
+		editButton.mouseChildren = false;
+		editButton.addEventListener(MouseEvent.MOUSE_DOWN, editButtonPressed);
+		addChild(editButton);
+		positionInternals();
+	}
+
+	private function hideEditButton():Void {
+		if (editButton == null) {
+			return;
+		}
+		editButton.removeEventListener(MouseEvent.MOUSE_DOWN, editButtonPressed);
+		editButton.dispose();
+		editButton = null;
 	}
 
 	private function addColorPicker():Void {
 		removeColorPicker();
 		colorPicker = new ColorPicker();
+		colorPicker.name = "ColorPicker";
 		colorPicker.setColor(color);
-		colorPicker.width = 14;
-		colorPicker.height = 14;
 		colorPicker.addEventListener(Event.CHANGE, colorPickerChanged);
 		addChild(colorPicker);
-		positionColorPicker();
+		positionInternals();
 	}
 
 	private function removeColorPicker():Void {
@@ -4972,6 +6271,7 @@ class EditorTextObject extends Sprite {
 	private function colorPickerChanged(_:Event):Void {
 		if (colorPicker != null) {
 			setColor(colorPicker.getColor());
+			lastColor = color;
 			if (stage != null) {
 				stage.focus = stage;
 			}
@@ -4983,8 +6283,45 @@ class EditorTextObject extends Sprite {
 			return;
 		}
 		var target = editField != null ? editField : displayField;
-		colorPicker.x = Math.max(target.width, 100) - colorPicker.width / 2;
+		colorPicker.x = target.width - colorPicker.width / 2;
 		colorPicker.y = -colorPicker.height / 2;
+	}
+
+	private function positionInternals():Void {
+		var buttonScaleX = inverseEditorScaleX();
+		var buttonScaleY = inverseEditorScaleY();
+		deleteButton.scaleX = buttonScaleX;
+		deleteButton.scaleY = buttonScaleY;
+		resizeHandle.scaleX = buttonScaleX;
+		resizeHandle.scaleY = buttonScaleY;
+		if (editButton != null) {
+			editButton.scaleX = buttonScaleX;
+			editButton.scaleY = buttonScaleY;
+			editButton.x = 0;
+			editButton.y = 0;
+		}
+		if (colorPicker != null) {
+			colorPicker.scaleX = buttonScaleX * 0.4;
+			colorPicker.scaleY = buttonScaleY * 0.4;
+		}
+		positionDeleteButton();
+		positionResizeHandle();
+		positionColorPicker();
+		drawSelectionOutline();
+	}
+
+	private function inverseEditorScaleX():Float {
+		return 1 / Math.max(0.01, Math.abs(scaleX * owner.scaleX * (owner.parent == null ? 1 : owner.parent.scaleX)));
+	}
+
+	private function inverseEditorScaleY():Float {
+		return 1 / Math.max(0.01, Math.abs(scaleY * owner.scaleY * (owner.parent == null ? 1 : owner.parent.scaleY)));
+	}
+
+	private function positionDeleteButton():Void {
+		var target = editField != null ? editField : displayField;
+		deleteButton.x = 0;
+		deleteButton.y = target.height;
 	}
 
 	private function positionResizeHandle():Void {
@@ -4993,17 +6330,34 @@ class EditorTextObject extends Sprite {
 		resizeHandle.y = target.height;
 	}
 
-	private function createResizeHandle():Sprite {
-		var handle = new Sprite();
-		handle.name = "resizeHandle";
+	private function drawSelectionOutline():Void {
+		var target = editField != null ? editField : displayField;
+		selectionOutline.graphics.clear();
+		selectionOutline.graphics.lineStyle(3, 0xFFFFFF, 1, false, "none");
+		selectionOutline.graphics.moveTo(0, 0);
+		selectionOutline.graphics.lineTo(0, target.height);
+		selectionOutline.graphics.lineTo(target.width, target.height);
+		selectionOutline.graphics.lineTo(target.width, 0);
+		selectionOutline.graphics.lineTo(0, 0);
+	}
+
+	private function createResizeHandle():PR2MovieClip {
+		var handle = PR2MovieClip.fromLinkage("ResizeButton", {maxNestedDepth: 4});
+		handle.name = "ResizeButton";
 		handle.buttonMode = true;
 		handle.mouseChildren = false;
-		handle.graphics.lineStyle(1, 0x333333);
-		handle.graphics.beginFill(0xFFFFFF);
-		handle.graphics.drawRect(-4, -4, 8, 8);
-		handle.graphics.endFill();
 		handle.addEventListener(MouseEvent.MOUSE_DOWN, resizeHandlePressed);
 		return handle;
+	}
+
+	private function deleteButtonPressed(event:MouseEvent):Void {
+		owner.removeTextObject(this);
+		event.stopImmediatePropagation();
+	}
+
+	private function editButtonPressed(event:MouseEvent):Void {
+		startEditing();
+		event.stopImmediatePropagation();
 	}
 
 	private function createTextField():TextField {
@@ -5052,6 +6406,14 @@ private class StampSize {
 class EditorSideBar extends Sprite {
 	public final id:String;
 	public var selectedEntry(default, null):Null<EditorSideBarEntry>;
+	public var zoom(default, null):Float = 1;
+	private var scrollBar:CustomScrollBar;
+	private var scroll:Sprite;
+	private var scrollMask:Sprite;
+	private var posY:Float = 0;
+	private static inline final ITEM_GAP:Float = 10;
+	private static inline final MASK_WIDTH:Float = 30;
+	private static inline final MASK_HEIGHT:Float = 348;
 
 	public function new(id:String, itemIds:Array<String>) {
 		super();
@@ -5059,25 +6421,49 @@ class EditorSideBar extends Sprite {
 		name = id + "SideBar";
 		x = 222;
 		y = -195;
-		var itemY:Float = 4;
+		scrollBar = new CustomScrollBar();
+		scroll = new Sprite();
+		scrollMask = new Sprite();
+		addChild(scrollBar);
+		addChild(scroll);
+		addChild(scrollMask);
+		scroll.y = 4;
+		scrollBar.x = 35;
+		scrollBar.y = 2;
+		scrollBar.init(scroll, 348, 346);
+		drawScrollMask();
 		for (itemId in itemIds) {
+			var hover = hoverInfo(id, itemId);
 			var entry = if (id == "backgrounds" && itemId == "color") {
-				new EditorBackgroundColorPickerButton();
+				new EditorBackgroundColorPickerButton(hover.title, hover.desc);
 			} else if (id == "tools" && itemId == "size") {
-				new EditorBrushSizePickerButton();
+				new EditorBrushSizePickerButton(hover.title, hover.desc);
 			} else if (id == "tools" && itemId == "color") {
-				new EditorBrushColorPickerButton();
+				new EditorBrushColorPickerButton(hover.title, hover.desc);
 			} else {
-				new EditorSideBarEntry(itemId);
+				new EditorSideBarEntry(itemId, hover.title, hover.desc, EditorSideBarIconFactory.create(id, itemId));
 			}
 			entry.addEventListener(MouseEvent.CLICK, selectEntry);
-			entry.y = itemY;
-			addChild(entry);
-			itemY += entry.height + 10;
+			entry.y = posY;
+			scroll.addChild(entry);
+			posY += MASK_WIDTH + ITEM_GAP;
 		}
 	}
 
+	private function drawScrollMask():Void {
+		scrollMask.graphics.beginFill(0);
+		scrollMask.graphics.drawRect(0, 2, MASK_WIDTH, MASK_HEIGHT);
+		scrollMask.graphics.endFill();
+		scroll.mask = scrollMask;
+	}
+
 	public function init():Void {}
+
+	public function setZoom(nextZoom:Float):Void {
+		if (!Math.isNaN(nextZoom) && nextZoom > 0) {
+			zoom = nextZoom;
+		}
+	}
 
 	private function selectEntry(e:MouseEvent):Void {
 		var entry = Std.downcast(e.currentTarget, EditorSideBarEntry);
@@ -5092,10 +6478,12 @@ class EditorSideBar extends Sprite {
 		var editor = LevelEditor.editor;
 		if (editor != null && id == "stamps" && entry.id == "brush" && editor.menu != null) {
 			editor.menu.changeSideBar(editor.menu.tools);
+			editor.focusOnActiveDrawLayer();
 			return;
 		}
 		if (editor != null && id == "tools" && entry.id == "landscape" && editor.menu != null) {
 			editor.menu.changeSideBar(editor.menu.stamps);
+			editor.focusOnActiveObjectLayer();
 			return;
 		}
 		if (editor != null && id == "tools" && entry.id == "size") {
@@ -5107,6 +6495,13 @@ class EditorSideBar extends Sprite {
 		}
 		if (editor != null && id == "tools" && entry.id == "color") {
 			return;
+		}
+		if (editor != null && id == "backgrounds") {
+			var bgSpec = backgroundSpec(entry.id);
+			if (bgSpec != null) {
+				editor.selectArtBackground(bgSpec.code, bgSpec.color);
+				return;
+			}
 		}
 		if (editor != null && id == "settings" && entry.id == "items") {
 			editor.openItemSettingsMenu(entry);
@@ -5141,78 +6536,319 @@ class EditorSideBar extends Sprite {
 
 	public function remove():Void {
 		exit();
-		while (numChildren > 0) {
-			var child = removeChildAt(0);
+		while (scroll.numChildren > 0) {
+			var child = scroll.getChildAt(0);
 			child.removeEventListener(MouseEvent.CLICK, selectEntry);
-			var colorEntry = Std.downcast(child, EditorBackgroundColorPickerButton);
-			if (colorEntry != null) {
-				colorEntry.remove();
-			}
-			var sizeEntry = Std.downcast(child, EditorBrushSizePickerButton);
-			if (sizeEntry != null) {
-				sizeEntry.remove();
-			}
-			var brushColorEntry = Std.downcast(child, EditorBrushColorPickerButton);
-			if (brushColorEntry != null) {
-				brushColorEntry.remove();
+			var entry = Std.downcast(child, EditorSideBarEntry);
+			if (entry != null) {
+				entry.remove();
+			} else {
+				scroll.removeChildAt(0);
 			}
 		}
+		scrollBar.remove();
+		if (scroll.parent == this) removeChild(scroll);
+		if (scrollMask.parent == this) removeChild(scrollMask);
 		selectedEntry = null;
 	}
 
 	public function updateColor():Void {
-		for (i in 0...numChildren) {
-			var colorEntry = Std.downcast(getChildAt(i), EditorBackgroundColorPickerButton);
+		for (i in 0...scroll.numChildren) {
+			var colorEntry = Std.downcast(scroll.getChildAt(i), EditorBackgroundColorPickerButton);
 			if (colorEntry != null) {
 				colorEntry.updateColor();
 			}
 		}
 	}
+
+	override public function getChildByName(name:String):DisplayObject {
+		var direct = super.getChildByName(name);
+		return direct != null ? direct : DisplayUtil.findByName(scroll, name);
+	}
+
+	public function scrollHolderForTests():Sprite {
+		return scroll;
+	}
+
+	public function scrollBarForTests():CustomScrollBar {
+		return scrollBar;
+	}
+
+	public function scrollMaskForTests():Sprite {
+		return scrollMask;
+	}
+
+	public function itemGapForTests():Float {
+		return ITEM_GAP;
+	}
+
+	public function maskWidthForTests():Float {
+		return MASK_WIDTH;
+	}
+
+	public function maskHeightForTests():Float {
+		return MASK_HEIGHT;
+	}
+
+	private static function hoverInfo(sidebar:String, itemId:String):{title:String, desc:String} {
+		return switch (sidebar + ":" + itemId) {
+			case "blocks:delete" | "stamps:delete": {title: "Delete Tool", desc: "Click and drag the mouse to delete things with remarkable speed!"};
+			case "blocks:basic1": {title: "Basic Block 1", desc: "Normal old every day run of the mill squarish thing that you can stand on."};
+			case "blocks:basic2": {title: "Basic Block 2", desc: "Normal old every day run of the mill squarish thing that you can stand on."};
+			case "blocks:basic3": {title: "Basic Block 3", desc: "Normal old every day run of the mill squarish thing that you can stand on."};
+			case "blocks:basic4": {title: "Basic Block 4", desc: "Normal old every day run of the mill squarish thing that you can stand on."};
+			case "blocks:brick": {title: "Brick Block", desc: "A block of poorly mortared bricks that will shatter if it is bumped from below."};
+			case "blocks:finish": {title: "Finish Block", desc: "Bumping this marks the end of the race."};
+			case "blocks:ice": {title: "Ice Block", desc: "Sliperyyyyiiiee."};
+			case "blocks:item": {title: "Item Block", desc: "A block that provides rather lovely and mischievous items when bumped. This can only be used once."};
+			case "blocks:infItem": {title: "Infinite Item Block", desc: "This is an item block that will never run out of items."};
+			case "blocks:left": {title: "Left Block", desc: "Anyone standing on this will be pushed to the left."};
+			case "blocks:right": {title: "Right Block", desc: "Anyone standing on this will be pushed to the right."};
+			case "blocks:up": {title: "Up Block", desc: "Anyone who stands on this will be bumped upwards."};
+			case "blocks:down": {title: "Down Block", desc: "Anyone who stands on this will have difficulty jumping."};
+			case "blocks:teleport": {title: "Teleport Block", desc: "Bump this to be teleported to another one of these with the same color."};
+			case "blocks:mine": {title: "Mine Block", desc: "Mines explode rather painfully if you touch them."};
+			case "blocks:crumble": {title: "Crumble Block", desc: "This will crumble into pieces if it is hit too hard."};
+			case "blocks:vanish": {title: "Vanish Block", desc: "Don't stand for too long, or you'll find yourself falling through the floor."};
+			case "blocks:move": {title: "Move Block", desc: "Where will it end up? Nobody knows! Every so often, this will move one space in a random direction. Use sparingly, too many of these can slow the game down."};
+			case "blocks:water": {title: "Water Block", desc: "Swim!"};
+			case "blocks:rotateR" | "blocks:rotateL": {title: itemId == "rotateR" ? "Rotate Right Block" : "Rotate Left Block", desc: "The wheels on the bus go round and round, round and round, round and round."};
+			case "blocks:push": {title: "Push Block", desc: "This block can be pushed around."};
+			case "blocks:happy": {title: "Happy Block", desc: "Bump this to increase your stats for the rest of the race."};
+			case "blocks:sad": {title: "Sad Block", desc: "Bumping one of these will decrease your stats for the rest of the race."};
+			case "blocks:custom": {title: "Custom Stats Block", desc: "Bumping this will set the player's stats to what you specify. The default is 50-50-50."};
+			case "blocks:safety": {title: "Safety Net", desc: "Touching this will teleport you back to your last safe location. It's the same as falling off of the course."};
+			case "blocks:heart": {title: "Heart Block", desc: "This block grants you one extra heart in Deathmatch mode, and renders you invincible for five fantastic seconds."};
+			case "blocks:time": {title: "Time Block", desc: "Adds 10 seconds to your timer."};
+			case "blocks:egg": {title: "Egg Minion", desc: "Romps about with evil intent."};
+			case "settings:music": {title: "Music", desc: "This song will play by default for users playing your course."};
+			case "settings:items": {title: "Items", desc: "These items will be available to players in your course's item boxes."};
+			case "settings:hats": {title: "Hats Allowed", desc: "Players may use these hats in your level."};
+			case "settings:rank": {title: "Minimum Rank", desc: "Players below this rank will not be able to race on this course."};
+			case "settings:gravity": {title: "Gravity Multiplier", desc: "Normal gravity will be multiplied by the number you provide."};
+			case "settings:time": {title: "Time Limit", desc: "Racers will have this amount of seconds to complete this course. Enter 0 for infinite time."};
+			case "settings:mode": {title: "Game Mode", desc: "Each game mode has a different goal and method of winning."};
+			case "settings:sfcm": {title: "Chance of Cowboy Mode", desc: "Super Flying Cowboy Mode will appear this often out of 100."};
+			case "settings:pass": {title: "Secret Password", desc: "This password lets players play your course while unpublished."};
+			case "stamps:brush": {title: "Draw Menu", desc: "Switch to the draw menu to draw custom backgrounds."};
+			case "stamps:text": {title: "Text", desc: "Compose prose with style."};
+			case "tools:landscape": {title: "Landscape Mode", desc: "Switch to the landscape toolbar."};
+			case "tools:brush": {title: "Brush", desc: "Draw things, yay!"};
+			case "tools:eraser": {title: "Eraser", desc: "Erase the things you have drawn, yay!"};
+			case "tools:size": {title: "Size Picker", desc: "Change the size of the brush and eraser."};
+			case "tools:color": {title: "Color Picker", desc: "Choose your color with wisdom."};
+			default: {title: "", desc: ""};
+		}
+	}
+
+	public static function backgroundSpec(itemId:String):Null<{code:Int, color:Int}> {
+		return switch (itemId) {
+			case "bg1": {code: ObjectCodes.BG1Code, color: 8172673};
+			case "bg2": {code: ObjectCodes.BG2Code, color: 13283754};
+			case "bg3": {code: ObjectCodes.BG3Code, color: 528392};
+			case "bg4": {code: ObjectCodes.BG4Code, color: 14731448};
+			case "bg5": {code: ObjectCodes.BG5Code, color: 0};
+			case "bg6": {code: ObjectCodes.BG6Code, color: 0};
+			case "bg7": {code: ObjectCodes.BG7Code, color: 0};
+			default: null;
+		}
+	}
 }
 
-class EditorSideBarEntry extends Sprite {
-	public final id:String;
+class EditorSideBarIconFactory {
+	private static inline final ICON_BOX:Float = 24;
+	private static inline final ICON_OFFSET:Float = 3;
 
-	public function new(id:String) {
-		super();
+	private function new() {}
+
+	public static function create(sidebar:String, itemId:String):Null<DisplayObject> {
+		return switch (sidebar + ":" + itemId) {
+			case "blocks:delete" | "stamps:delete": linkage("ObjectDeleterButtonGraphic");
+			case "settings:music": linkage("MusicNoteGraphic");
+			case "settings:items": linkage("ItemButtonGraphic");
+			case "settings:hats": linkage("HatsButtonGraphic");
+			case "settings:rank": valueButton("rank", "0");
+			case "settings:gravity": valueButton("grav", "1.0");
+			case "settings:time": valueButton("time", "120");
+			case "settings:mode": valueButton("mode", "race");
+			case "settings:sfcm": valueButton("sfcm", "5");
+			case "settings:pass": valueButton("pass", "");
+			case "stamps:brush": linkage("BrushGraphic");
+			case "stamps:text": linkage("TextToolButtonGraphic");
+			case "tools:landscape": linkage("LandscapeGraphic");
+			case "tools:brush": linkage("BrushButtonGraphic");
+			case "tools:eraser": linkage("EraserButtonGraphic");
+			case "backgrounds:bg1": fittedCode(ObjectCodes.BG1Code);
+			case "backgrounds:bg2": fittedCode(ObjectCodes.BG2Code);
+			case "backgrounds:bg3": fittedCode(ObjectCodes.BG3Code);
+			case "backgrounds:bg4": fittedCode(ObjectCodes.BG4Code);
+			case "backgrounds:bg5": fittedCode(ObjectCodes.BG5Code);
+			case "backgrounds:bg6": fittedCode(ObjectCodes.BG6Code);
+			case "backgrounds:bg7": fittedCode(ObjectCodes.BG7Code);
+			case _ if (sidebar == "blocks"):
+				var spec = EditorBlockLayer.specForTool(itemId);
+				spec == null ? null : Objects.getFromCode(spec.code);
+			case _ if (sidebar == "stamps" && StringTools.startsWith(itemId, "stamp")):
+				var stampId = Std.parseInt(itemId.substr(5));
+				stampId == null ? null : fittedCode(stampId);
+			default:
+				null;
+		}
+	}
+
+	private static function linkage(name:String):PR2MovieClip {
+		var clip = PR2MovieClip.fromLinkage(name, {maxNestedDepth: 6});
+		clip.name = name;
+		return clip;
+	}
+
+	private static function fittedCode(code:Int):Null<DisplayObject> {
+		var icon = Objects.getFromCode(code);
+		if (icon != null) {
+			fit(icon);
+		}
+		return icon;
+	}
+
+	private static function fit(icon:DisplayObject):Void {
+		var bounds = icon.getBounds(icon);
+		if (bounds.width <= 0 || bounds.height <= 0) {
+			icon.x = ICON_OFFSET;
+			icon.y = ICON_OFFSET;
+			return;
+		}
+		var scale = Math.min(ICON_BOX / bounds.width, ICON_BOX / bounds.height);
+		icon.scaleX *= scale;
+		icon.scaleY *= scale;
+		var fittedBounds = icon.getBounds(icon);
+		icon.x = ICON_OFFSET + (ICON_BOX - fittedBounds.width) / 2 - fittedBounds.left * icon.scaleX;
+		icon.y = ICON_OFFSET + (ICON_BOX - fittedBounds.height) / 2 - fittedBounds.top * icon.scaleY;
+	}
+
+	private static function valueButton(title:String, value:String):PR2MovieClip {
+		var clip = linkage("ValueButtonGraphic");
+		var titleBox = FlComponents.asTextField(DisplayUtil.findByName(clip, "titleBox"));
+		if (titleBox != null) {
+			titleBox.text = title;
+		}
+		var valueBox = FlComponents.asTextField(DisplayUtil.findByName(clip, "valueBox"));
+		if (valueBox != null) {
+			valueBox.text = value;
+		}
+		return clip;
+	}
+}
+
+class EditorSideBarEntry extends HoverDelayPopup {
+	public final id:String;
+	private var chrome:Null<PR2MovieClip>;
+	private var icon:Null<DisplayObject>;
+	private var selected:Bool = false;
+
+	public function new(id:String, title:String = "", desc:String = "", ?icon:DisplayObject) {
+		super(title, desc);
 		this.id = id;
+		this.icon = icon;
 		name = id + "Entry";
 		buttonMode = true;
 		useHandCursor = true;
-		draw(false);
-		var label = new TextField();
-		label.defaultTextFormat = new TextFormat("_sans", 6, 0x111111);
-		label.width = 30;
-		label.height = 30;
-		label.selectable = false;
-		label.mouseEnabled = false;
-		label.text = id;
-		addChild(label);
+		chrome = PR2MovieClip.fromLinkage("SquareBG", {maxNestedDepth: 2});
+		chrome.name = "SquareBG";
+		chrome.mouseEnabled = false;
+		chrome.mouseChildren = false;
+		chrome.width = 28;
+		chrome.height = 28;
+		chrome.x = 1;
+		chrome.y = 1;
+		addChild(chrome);
+		if (icon != null) {
+			var iconDisplay:DisplayObject = cast icon;
+			var interactiveIcon = Std.downcast(iconDisplay, InteractiveObject);
+			if (interactiveIcon != null) {
+				interactiveIcon.mouseEnabled = false;
+			}
+			if (Std.isOfType(iconDisplay, DisplayObjectContainer)) {
+				cast(iconDisplay, DisplayObjectContainer).mouseChildren = false;
+			}
+			addChild(iconDisplay);
+		}
+		draw();
+		addEventListener(MouseEvent.MOUSE_OVER, overIcon);
+		addEventListener(MouseEvent.MOUSE_OUT, outIcon);
 	}
 
 	public function setSelected(selected:Bool):Void {
-		draw(selected);
+		this.selected = selected;
+		draw();
+		applyIconHover(selected);
 	}
 
-	private function draw(selected:Bool):Void {
+	override public function remove():Void {
+		removeEventListener(MouseEvent.MOUSE_OVER, overIcon);
+		removeEventListener(MouseEvent.MOUSE_OUT, outIcon);
+		if (Std.isOfType(chrome, PR2MovieClip)) {
+			chrome.dispose();
+		}
+		if (Std.isOfType(icon, PR2MovieClip)) {
+			cast(icon, PR2MovieClip).dispose();
+		}
+		super.remove();
+		chrome = null;
+		icon = null;
+	}
+
+	public function iconNameForTests():String {
+		return icon == null ? "" : icon.name;
+	}
+
+	public function hasAuthoredChromeForTests():Bool {
+		return chrome != null && chrome.name == "SquareBG";
+	}
+
+	public function iconColorTransformForTests():ColorTransform {
+		return icon == null ? new ColorTransform() : icon.transform.colorTransform;
+	}
+
+	private function draw():Void {
 		graphics.clear();
-		graphics.beginFill(0xF4F4F4);
-		graphics.lineStyle(selected ? 2 : 1, selected ? 0x1F66CC : 0x666666);
+		graphics.beginFill(0x000000, 0);
 		graphics.drawRect(0, 0, 30, 30);
 		graphics.endFill();
+		if (selected) {
+			graphics.lineStyle(2, 0x1F66CC);
+			graphics.drawRect(0, 0, 30, 30);
+		}
+	}
+
+	private function overIcon(_:MouseEvent):Void {
+		applyIconHover(true);
+	}
+
+	private function outIcon(_:MouseEvent):Void {
+		applyIconHover(selected);
+	}
+
+	private function applyIconHover(active:Bool):Void {
+		if (icon != null) {
+			icon.transform.colorTransform = active
+				? new ColorTransform(0.5, 0.5, 0.5, 1, 128, 128, 128, 0)
+				: new ColorTransform();
+		}
 	}
 }
 
 class EditorBackgroundColorPickerButton extends EditorSideBarEntry {
 	private final picker:ColorPicker;
 
-	public function new() {
-		super("color");
+	public function new(title:String = "", desc:String = "") {
+		super("color", title, desc);
 		picker = new ColorPicker();
 		picker.name = "colorPicker";
+		picker.direction = ColorPicker.LEFT;
 		picker.width = 30;
 		picker.height = 30;
-		picker.addEventListener(Event.CHANGE, commitColor);
+		picker.addEventListener(Event.CHANGE, liveCommitColor);
+		picker.addEventListener(Event.CLOSE, closeCommitColor);
 		addChild(picker);
 		updateColor();
 	}
@@ -5226,26 +6862,30 @@ class EditorBackgroundColorPickerButton extends EditorSideBarEntry {
 
 	public function setPickedColor(color:Int):Void {
 		picker.setColor(color);
-		commitColor();
+		liveCommitColor();
 	}
 
 	public function pickerColor():Int {
 		return picker.getColor();
 	}
 
-	public function remove():Void {
-		picker.removeEventListener(Event.CHANGE, commitColor);
+	override public function remove():Void {
+		picker.removeEventListener(Event.CHANGE, liveCommitColor);
+		picker.removeEventListener(Event.CLOSE, closeCommitColor);
 		picker.remove();
+		super.remove();
 	}
 
-	private function commitColor(?_):Void {
+	private function liveCommitColor(?_):Void {
 		var editor = LevelEditor.editor;
 		if (editor != null) {
 			editor.setColor(picker.getColor());
 		}
-		if (AppStage.stage != null) {
-			AppStage.stage.focus = AppStage.stage;
-		}
+	}
+
+	private function closeCommitColor(?_):Void {
+		liveCommitColor();
+		StageFocus.reset();
 	}
 }
 
@@ -5253,8 +6893,8 @@ class EditorBrushSizePickerButton extends EditorSideBarEntry {
 	private final art:PR2MovieClip;
 	private var circle:Null<DisplayObject>;
 
-	public function new() {
-		super("size");
+	public function new(title:String = "", desc:String = "") {
+		super("size", title, desc);
 		art = PR2MovieClip.fromLinkage("SizePickerGraphic", {maxNestedDepth: 4});
 		art.mouseEnabled = false;
 		art.mouseChildren = false;
@@ -5288,12 +6928,13 @@ class EditorBrushSizePickerButton extends EditorSideBarEntry {
 		circle.height = Math.sqrt(size) * 3;
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
 		var editor = LevelEditor.editor;
 		if (editor != null && editor.activeBrushSizeMenu != null) {
 			editor.closeBrushSizeMenu();
 		}
 		art.dispose();
+		super.remove();
 	}
 }
 
@@ -5381,8 +7022,8 @@ class EditorBrushSizePickerMenu extends Sprite {
 class EditorBrushColorPickerButton extends EditorSideBarEntry {
 	private final picker:ColorPicker;
 
-	public function new() {
-		super("color");
+	public function new(title:String = "", desc:String = "") {
+		super("color", title, desc);
 		picker = new ColorPicker();
 		picker.name = "brushColorPicker";
 		picker.width = 30;
@@ -5408,9 +7049,10 @@ class EditorBrushColorPickerButton extends EditorSideBarEntry {
 		return picker.getColor();
 	}
 
-	public function remove():Void {
+	override public function remove():Void {
 		picker.removeEventListener(Event.CHANGE, commitColor);
 		picker.remove();
+		super.remove();
 	}
 
 	private function commitColor(?_):Void {

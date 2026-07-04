@@ -7,6 +7,7 @@ import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
+import openfl.events.TouchEvent;
 import openfl.geom.Point;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
@@ -86,6 +87,11 @@ class CustomCursor extends Sprite {
 			stage.addEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			stage.addEventListener(MouseEvent.MOUSE_OVER, mouseFocusHandler);
 			stage.addEventListener(MouseEvent.MOUSE_OUT, mouseFocusHandler);
+			stage.addEventListener(TouchEvent.TOUCH_MOVE, touchHandler);
+			stage.addEventListener(TouchEvent.TOUCH_BEGIN, touchHandler);
+			stage.addEventListener(TouchEvent.TOUCH_END, touchHandler);
+			stage.addEventListener(TouchEvent.TOUCH_ROLL_OVER, touchHandler);
+			stage.addEventListener(TouchEvent.TOUCH_ROLL_OUT, touchHandler);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.addEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 		}
@@ -104,6 +110,11 @@ class CustomCursor extends Sprite {
 			stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUpHandler);
 			stage.removeEventListener(MouseEvent.MOUSE_OVER, mouseFocusHandler);
 			stage.removeEventListener(MouseEvent.MOUSE_OUT, mouseFocusHandler);
+			stage.removeEventListener(TouchEvent.TOUCH_MOVE, touchHandler);
+			stage.removeEventListener(TouchEvent.TOUCH_BEGIN, touchHandler);
+			stage.removeEventListener(TouchEvent.TOUCH_END, touchHandler);
+			stage.removeEventListener(TouchEvent.TOUCH_ROLL_OVER, touchHandler);
+			stage.removeEventListener(TouchEvent.TOUCH_ROLL_OUT, touchHandler);
 			stage.removeEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
 			stage.removeEventListener(KeyboardEvent.KEY_UP, keyUpHandler);
 		}
@@ -119,6 +130,10 @@ class CustomCursor extends Sprite {
 
 	public function isMouseDown():Bool {
 		return mouseDown;
+	}
+
+	public function getID():Int {
+		return -1;
 	}
 
 	public function remove():Void {
@@ -169,6 +184,13 @@ class CustomCursor extends Sprite {
 		me = e;
 	}
 
+	function touchHandler(e:TouchEvent):Void {
+		var mouseType = touchTypeToMouseType(e.type);
+		if (mouseType != null) {
+			dispatchEvent(new MouseEvent(mouseType));
+		}
+	}
+
 	function keyDownHandler(_:KeyboardEvent):Void {}
 
 	function keyUpHandler(_:KeyboardEvent):Void {}
@@ -198,5 +220,16 @@ class CustomCursor extends Sprite {
 			return new Point(e.localX, e.localY);
 		}
 		return new Point(e.stageX, e.stageY);
+	}
+
+	public static function touchTypeToMouseType(type:String):Null<String> {
+		return switch (type) {
+			case TouchEvent.TOUCH_MOVE: MouseEvent.MOUSE_MOVE;
+			case TouchEvent.TOUCH_BEGIN: MouseEvent.MOUSE_DOWN;
+			case TouchEvent.TOUCH_END: MouseEvent.MOUSE_UP;
+			case TouchEvent.TOUCH_ROLL_OVER: MouseEvent.MOUSE_OVER;
+			case TouchEvent.TOUCH_ROLL_OUT: MouseEvent.MOUSE_OUT;
+			default: null;
+		}
 	}
 }

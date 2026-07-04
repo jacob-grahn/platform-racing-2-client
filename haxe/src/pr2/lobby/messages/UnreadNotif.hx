@@ -45,6 +45,21 @@ class UnreadNotif {
 		}
 	}
 
+	public static function removeNotifContainer(d:DisplayObjectContainer):Void {
+		if (pmTab == d) {
+			removeNotif();
+			pmTab = null;
+		}
+	}
+
+	public static function containerForTests():Null<DisplayObjectContainer> {
+		return pmTab;
+	}
+
+	public static function hasNotificationForTests():Bool {
+		return notificationIcon != null && notificationIcon.parent != null;
+	}
+
 	private static function icon():PR2MovieClip {
 		if (notificationIcon == null) {
 			notificationIcon = PR2MovieClip.fromLinkage("UnreadNotifGraphic", {maxNestedDepth: 2});

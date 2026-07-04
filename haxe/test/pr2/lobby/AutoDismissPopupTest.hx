@@ -2,6 +2,8 @@ package pr2.lobby;
 
 import openfl.display.Sprite;
 import pr2.lobby.dialogs.AutoDismissController;
+import pr2.lobby.dialogs.AutoDismissPopup;
+import pr2.ui.StageFocus;
 
 class AutoDismissPopupTest {
 	private static var assertions:Int = 0;
@@ -9,6 +11,8 @@ class AutoDismissPopupTest {
 	public static function main():Void {
 		testHitTestDismissal();
 		testCleanupIsIdempotent();
+		testPopupRemoveResetsFocus();
+		StageFocus.resetHooks();
 		trace('AutoDismissPopupTest passed $assertions assertions');
 	}
 
@@ -31,6 +35,14 @@ class AutoDismissPopupTest {
 		autoDismiss.remove();
 		autoDismiss.remove();
 		assertEquals(true, true, "auto-dismiss cleanup is idempotent");
+	}
+
+	private static function testPopupRemoveResetsFocus():Void {
+		var focusResets = 0;
+		StageFocus.resetHook = function():Void focusResets++;
+		var popup = new AutoDismissPopup();
+		popup.remove();
+		assertEquals(1, focusResets, "popup remove resets stage focus");
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

@@ -1,5 +1,6 @@
 package pr2.harness;
 
+import com.jiggmin.data.SecureData;
 import pr2.character.LocalCharacter;
 import pr2.level.LevelFixtureParser;
 import pr2.level.BlockType;
@@ -1208,22 +1209,28 @@ class LocalPlayerControllerTest {
 
 	private static function testReloadableItemReleaseGateThenHeldRefire():Void {
 		var player = collectItem(heldItemLevel(1), 1);
+		assertEquals(3.0, SecureData.getNumber("uses"), "collecting laser writes Flash SecureData uses");
+		assertEquals(800.0, SecureData.getNumber("reloadTime"), "collecting laser writes Flash SecureData reloadTime");
 
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(3, player.debugState().itemUses, "fresh reloadable item ignores held item key before first release");
+		assertEquals(3.0, SecureData.getNumber("uses"), "blocked first press leaves SecureData uses unchanged");
 		assertEquals(null, player.debugState().lastItemEffect, "fresh reloadable item emits no effect before first release");
 
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(2, player.debugState().itemUses, "released reloadable item fires on the next item press");
+		assertEquals(2.0, SecureData.getNumber("uses"), "first shot decrements SecureData uses");
 
 		for (_ in 0...21) {
 			player.step(new LocalPlayerInput(false, false, false, false, true));
 		}
 		assertEquals(2, player.debugState().itemUses, "held reloadable item waits through its reload timer");
+		assertEquals(2.0, SecureData.getNumber("uses"), "reload wait leaves SecureData uses unchanged");
 
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		assertEquals(1, player.debugState().itemUses, "held reloadable item refires when reload completes without another release");
+		assertEquals(1.0, SecureData.getNumber("uses"), "held refire decrements SecureData uses again");
 	}
 
 	private static function testSwordReloadTiming():Void {

@@ -16,6 +16,7 @@ import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
 import pr2.ui.PageNavigation;
 import pr2.ui.PageNavigation.Paginated;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
 
 /**
@@ -43,6 +44,7 @@ class MessagesTab extends Page implements Paginated {
 	private var sendBinding:Null<LobbyArt.Binding>;
 	private var deleteAllBinding:Null<LobbyArt.Binding>;
 	private var uploading:Null<UploadingPopup>;
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new() {
 		super();
@@ -82,7 +84,7 @@ class MessagesTab extends Page implements Paginated {
 		removeMessages();
 		addChild(loading);
 		var start = MessagesPaging.startIndex(currentPage, ITEMS_PER_PAGE);
-		TextLoader.load(ServerConfig.messagesGetUrl(start, ITEMS_PER_PAGE), handleData, handleError);
+		asyncGuard.watch(TextLoader.load(ServerConfig.messagesGetUrl(start, ITEMS_PER_PAGE), asyncGuard.wrap(handleData), asyncGuard.wrap(handleError)));
 	}
 
 	private function handleData(body:String):Void {
@@ -181,6 +183,7 @@ class MessagesTab extends Page implements Paginated {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
 		removeMessages();
 		LobbyArt.unbind(sendBinding);
 		LobbyArt.unbind(deleteAllBinding);

@@ -5,10 +5,13 @@ import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
 import pr2.level.BlockType;
 import pr2.gameplay.RotationMath;
+import pr2.gameplay.Items;
+import pr2.gameplay.items.Item;
+import pr2.gameplay.items.ItemRuntimeOwner;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
 import pr2.util.FlashRandom;
 
-class LocalPlayerController {
+class LocalPlayerController implements ItemRuntimeOwner {
 	public static inline var STANDING_WIDTH:Float = 20;
 	public static inline var STANDING_HEIGHT:Float = 55;
 	public static inline var CROUCHING_HEIGHT:Float = 30;
@@ -116,8 +119,9 @@ class LocalPlayerController {
 	private final moveBlockDirections:Map<String, Int> = new Map();
 	private var moveBlockTimer:Int = MOVE_PREVIEW_FRAMES;
 	private var moveBlockPhase:String = "shift";
-	private final moveRandom:FlashRandom = new FlashRandom(1);
-	private final itemRandom:FlashRandom = new FlashRandom(1);
+	private var moveRandom:FlashRandom = new FlashRandom(1);
+	private var itemRandom:FlashRandom = new FlashRandom(1);
+	private final originalBlockPositions:Array<{x:Int, y:Int}> = [];
 	public var lastSafeX(default, null):Float;
 	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
@@ -129,9 +133,12 @@ class LocalPlayerController {
 	private var facingDirection:Int = 1;
 	public var facingScaleX(get, never):Int;
 	private var speedBurstFramesRemaining:Int = 0;
+	private var speedBurstFromItem:Bool = false;
 	private var jetPackFuelRemaining:Null<Int> = null;
+	private var jetPackActive:Bool = false;
 	private var itemReloadFramesRemaining:Int = 0;
 	private var itemAvailable:Bool = false;
+	private var heldItem:Null<Item> = null;
 	private var statsSelectSyncRequested:Bool = false;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
@@ -139,10 +146,13 @@ class LocalPlayerController {
 	// The level's allowed-item pool (GamePage.setItems), used when an item block
 	// carries empty options. Defaults to every code so a standalone controller
 	// still hands out items before Course wires the level config.
-	private var allowedItems:Array<Int> = pr2.gameplay.Items.getAllCodes();
+	private var allowedItems:Array<Int> = Items.getAllCodes();
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
+		for (block in level.blocks) {
+			originalBlockPositions.push({x: block.x, y: block.y});
+		}
 		startingSpeedStat = clamp(level.stats.speed, 0, 100);
 		startingAccelerationStat = clamp((level.stats.acceleration - 0.2) * 60, 0, 100);
 		startingJumpStat = clamp((level.stats.jump - 2) * 40, 0, 100);
@@ -156,6 +166,82 @@ class LocalPlayerController {
 		standingTileY = level.playerStart.y + 1;
 		determineMoveBlockDirections();
 		processBlocks(new LocalPlayerInput());
+	}
+
+	public function setPosition(px:Float, py:Float):Void {
+		x = px;
+		y = py;
+	}
+
+	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
+		restoreOriginalBlockPositions();
+		x = startX;
+		y = startY;
+		vx = 0;
+		vy = 0;
+		grounded = false;
+		crouching = false;
+		touchedBlock = null;
+		mode = MODE_LAND;
+		itemId = null;
+		itemUses = null;
+		heldItem = null;
+		itemAvailable = false;
+		lastItemEffect = null;
+		courseRotation = 0;
+		courseTweenRotation = 0;
+		characterRotation = 0;
+		finished = false;
+		finishBlockId = null;
+		finishX = null;
+		finishY = null;
+		lives = 3;
+		courseTime = maxTime;
+		targetVelX = 0;
+		accelFactor = BASE_ACCEL_FACTOR;
+		jumpHeld = false;
+		jumpVelBoost = 0;
+		crouchCharge = 0;
+		waterTicks = 0;
+		standingTileX = Std.int(Math.floor(x / level.tileSize));
+		standingTileY = Std.int(Math.floor(y / level.tileSize));
+		lastSafeX = x;
+		lastSafeY = y;
+		rotateFramesRemaining = 0;
+		rotateDirection = 0;
+		hurtFramesRemaining = 0;
+		frozenSolidFramesRemaining = 0;
+		facingDirection = 1;
+		speedBurstFramesRemaining = 0;
+		speedBurstFromItem = false;
+		jetPackFuelRemaining = null;
+		jetPackActive = false;
+		itemReloadFramesRemaining = 0;
+		statsSelectSyncRequested = false;
+		animationLeft = false;
+		animationRight = false;
+		pendingMinePlacements.resize(0);
+		blockStates.clear();
+		blockVisualEvents.resize(0);
+		disabledTeleportFrames.clear();
+		moveRandom = new FlashRandom(1);
+		itemRandom = new FlashRandom(1);
+		moveBlockPhase = "shift";
+		moveBlockTimer = MOVE_PREVIEW_FRAMES;
+		determineMoveBlockDirections();
+		processBlocks(new LocalPlayerInput());
+	}
+
+	private function restoreOriginalBlockPositions():Void {
+		for (i in 0...level.blocks.length) {
+			if (i >= originalBlockPositions.length) {
+				break;
+			}
+			var block = level.blocks[i];
+			var original = originalBlockPositions[i];
+			block.x = original.x;
+			block.y = original.y;
+		}
 	}
 
 	public function step(input:LocalPlayerInput):Void {
@@ -227,7 +313,9 @@ class LocalPlayerController {
 		}
 		itemId = ITEM_SPEED_BURST;
 		itemUses = null;
+		heldItem = Items.getFromCode(ITEM_SPEED_BURST);
 		itemAvailable = false;
+		speedBurstFromItem = false;
 		activateSpeedBurst(msToFrames(durationMs));
 	}
 
@@ -235,10 +323,13 @@ class LocalPlayerController {
 		if (itemId == ITEM_SPEED_BURST) {
 			itemId = null;
 			itemUses = null;
+			heldItem = null;
+			speedBurstFromItem = false;
 			itemAvailable = false;
 		}
 		if (speedBurstFramesRemaining > 0) {
 			speedBurstFramesRemaining = 0;
+			speedBurstFromItem = false;
 			applyMovementStats();
 		}
 	}
@@ -290,6 +381,18 @@ class LocalPlayerController {
 
 	public function receiveZap():Void {
 		if (!partyHatActive) {
+			receiveHurtEffect();
+		}
+	}
+
+	public function receiveHit(impulseX:Float = 0, impulseY:Float = 0):Void {
+		var crownProtected = crownHatActive && gameMode != "deathmatch" && gameMode != "dm" && gameMode != "hat";
+		if (crownProtected) {
+			return;
+		}
+		vx += impulseX;
+		vy += impulseY;
+		if (!crownHatActive) {
 			receiveHurtEffect();
 		}
 	}
@@ -421,7 +524,7 @@ class LocalPlayerController {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem);
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
@@ -1104,8 +1207,9 @@ class LocalPlayerController {
 
 		var nextItem = itemFromBlockOptions(block.options);
 		if (nextItem != null) {
-			itemId = nextItem;
-			itemUses = initialItemUses(nextItem);
+			heldItem = Items.getFromCode(nextItem);
+			itemId = Items.getCodeFromItem(heldItem);
+			itemUses = heldItem == null ? null : heldItem.initialUses;
 			jetPackFuelRemaining = nextItem == ITEM_JET_PACK ? JET_PACK_TOTAL_FUEL : null;
 			itemAvailable = false;
 		}
@@ -1138,43 +1242,26 @@ class LocalPlayerController {
 	}
 
 	private function useHeldItem(input:LocalPlayerInput):Void {
-		if (!input.item) {
-			itemAvailable = true;
+		if (heldItem == null || itemId == null) {
+			jetPackActive = false;
 			return;
 		}
-		if (itemId == null || itemReloadFramesRemaining > 0) {
-			return;
+		if (itemId == ITEM_JET_PACK && !input.item) {
+			jetPackActive = false;
 		}
-		if (itemId == ITEM_JET_PACK) {
-			useJetPack();
-			return;
-		}
-		if (!itemAvailable) {
-			return;
-		}
-
-		switch (itemId) {
-			case ITEM_LASER_GUN:
-				useLaserGun();
-			case ITEM_MINE:
-				useMineItem();
-			case ITEM_LIGHTNING:
-				useLightning();
-			case ITEM_TELEPORT:
-				useTeleportItem();
-			case ITEM_SUPER_JUMP:
-				useSuperJump();
-			case ITEM_JET_PACK:
-				useJetPack();
-			case ITEM_SPEED_BURST:
-				useSpeedBurst();
-			case ITEM_SWORD:
-				useSword();
-			case ITEM_ICE_WAVE:
-				useIceWave();
-			default:
-		}
+		heldItem.setSpace(input.item, this);
+		itemAvailable = !input.item;
 	}
+
+	public function performLaserGunItem():Void useLaserGun();
+	public function performMineItem():Void useMineItem();
+	public function performLightningItem():Void useLightning();
+	public function performTeleportItem():Void useTeleportItem();
+	public function performSuperJumpItem():Void useSuperJump();
+	public function performJetPackItem():Void useJetPack();
+	public function performSpeedBurstItem():Void useSpeedBurst();
+	public function performSwordItem():Void useSword();
+	public function performIceWaveItem():Void useIceWave();
 
 	private function useLaserGun():Void {
 		var direction = facingDirection < 0 ? "left" : "right";
@@ -1243,6 +1330,7 @@ class LocalPlayerController {
 		if (speedBurstFramesRemaining > 0) {
 			return;
 		}
+		speedBurstFromItem = true;
 		activateSpeedBurst(SPEED_BURST_FRAMES);
 	}
 
@@ -1264,6 +1352,7 @@ class LocalPlayerController {
 			return;
 		}
 		vy -= vy > -5 ? 1.25 : 0.5;
+		jetPackActive = true;
 		jetPackFuelRemaining--;
 		itemUses = Std.int(Math.ceil((jetPackFuelRemaining / JET_PACK_TOTAL_FUEL) * 3));
 		if (jetPackFuelRemaining <= 0) {
@@ -1329,24 +1418,21 @@ class LocalPlayerController {
 	}
 
 	private function consumeHeldItemUse():Void {
+		if (heldItem != null) {
+			if (heldItem.consumeUse()) {
+				consumeHeldItemCompletely();
+			} else {
+				itemUses = heldItem.uses();
+				itemReloadFramesRemaining = heldItem.reloadFramesRemaining;
+			}
+			return;
+		}
 		if (itemUses == null || itemUses <= 1) {
 			consumeHeldItemCompletely();
 			return;
 		}
 		itemUses--;
-		itemReloadFramesRemaining = switch (itemId) {
-			case ITEM_LASER_GUN | ITEM_SWORD: FAST_ITEM_RELOAD_FRAMES;
-			case ITEM_ICE_WAVE: ICE_WAVE_RELOAD_FRAMES;
-			default: 0;
-		}
-	}
-
-	private function initialItemUses(id:Int):Int {
-		return switch (id) {
-			case ITEM_LASER_GUN | ITEM_SWORD | ITEM_ICE_WAVE: 3;
-			case ITEM_JET_PACK: 3;
-			default: 1;
-		}
+		itemReloadFramesRemaining = 0;
 	}
 
 	private function applyJetPackThrust(input:LocalPlayerInput):Void {
@@ -1356,8 +1442,10 @@ class LocalPlayerController {
 	private function consumeHeldItemCompletely():Void {
 		itemId = null;
 		itemUses = null;
+		heldItem = null;
 		itemReloadFramesRemaining = 0;
 		jetPackFuelRemaining = null;
+		jetPackActive = false;
 		itemAvailable = false;
 	}
 
@@ -1565,6 +1653,11 @@ class LocalPlayerController {
 	}
 
 	private function updateItemReload():Void {
+		if (heldItem != null) {
+			heldItem.tickReload();
+			itemReloadFramesRemaining = heldItem.reloadFramesRemaining;
+			return;
+		}
 		if (itemReloadFramesRemaining > 0) {
 			itemReloadFramesRemaining--;
 		}
@@ -1578,6 +1671,8 @@ class LocalPlayerController {
 		if (speedBurstFramesRemaining <= 0) {
 			itemId = null;
 			itemUses = null;
+			heldItem = null;
+			speedBurstFromItem = false;
 			itemAvailable = false;
 			applyMovementStats();
 		}

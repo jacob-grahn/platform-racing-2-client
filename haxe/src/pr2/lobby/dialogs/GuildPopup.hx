@@ -9,11 +9,18 @@ import pr2.app.AppStage;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbySession;
 import pr2.lobby.NumberFormat;
+import pr2.net.FormPostClient;
 import pr2.net.ServerConfig;
+import pr2.net.SuperLoader;
 import pr2.net.TextLoader;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomScrollBar;
+import pr2.ui.EmblemLoader;
+import pr2.ui.StageFocus;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
+
+typedef GuildDeleteFactory = String->Map<String, String>->SuperLoader;
 
 /**
 	Port of Flash `dialogs.GuildPopup`: loads `guild_info.php`, renders the
@@ -22,6 +29,7 @@ import pr2.util.DisplayUtil;
 **/
 class GuildPopup extends Popup {
 	public static var instance:Null<GuildPopup>;
+	public static var deleteFactory:GuildDeleteFactory = defaultDelete;
 
 	private var art:Null<PR2MovieClip>;
 	private var guildMembers:Array<GuildMemberName> = [];
@@ -29,11 +37,14 @@ class GuildPopup extends Popup {
 	private var closeBinding:Null<LobbyArt.Binding>;
 	private var messageBinding:Null<LobbyArt.Binding>;
 	private var editBinding:Null<LobbyArt.Binding>;
+	private var deleteBinding:Null<LobbyArt.Binding>;
 	private var titleBox:Null<TextField>;
 	private var guildName:String = "";
 	private var guildId:Int = 0;
 	private var ownerId:Int = 0;
 	private var guildIdShown:Bool = false;
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
+	private var emblemLoader:Null<EmblemLoader>;
 
 	public function new(id:Int = 0, name:String = "", autoLoad:Bool = true) {
 		if (GuildPopup.instance != null) {
@@ -49,14 +60,14 @@ class GuildPopup extends Popup {
 		addChild(art);
 
 		if (autoLoad) {
-			TextLoader.load(ServerConfig.guildInfoUrl(id, name), function(body:String):Void {
+			asyncGuard.watch(TextLoader.load(ServerConfig.guildInfoUrl(id, name), asyncGuard.wrap(function(body:String):Void {
 				if (fadeOutStarted) return;
 				try {
 					applyReturnData(Json.parse(body));
 				} catch (_:Dynamic) {
 					startFadeOut();
 				}
-			}, function(_:String):Void startFadeOut());
+			}), asyncGuard.wrap(function(_:String):Void startFadeOut())));
 		}
 	}
 
@@ -78,13 +89,17 @@ class GuildPopup extends Popup {
 		setText("gpTotalBox", "GP Total: " + NumberFormat.withCommas(intAny(ret, ["gp_total", "gpTotal"])));
 		setText("membersCount", "Members: " + intAny(ret, ["member_count", "memberCount"]) + " (" + intAny(ret, ["active_count", "activeCount"]) + " active)");
 		setText("guildProse", strField(ret, "note"));
+		addEmblem(strField(ret, "emblem"));
 
 		var loading = DisplayUtil.findByName(art, "loadingGraphic");
 		if (loading != null) loading.visible = false;
 		setVisible("edit_bt", LobbySession.group >= 2 && !LobbySession.isTrialMod);
-		setVisible("delete_bt", LobbySession.group == 3);
+		setVisible("delete_bt", LobbySession.group == 3 && !LobbySession.isTrialMod);
 		if (LobbySession.group >= 2 && !LobbySession.isTrialMod) {
 			editBinding = LobbyArt.bind(DisplayUtil.findByName(art, "edit_bt"), clickEdit);
+			if (LobbySession.group == 3) {
+				deleteBinding = LobbyArt.bind(DisplayUtil.findByName(art, "delete_bt"), clickDelete);
+			}
 		}
 
 		var holder = Std.downcast(DisplayUtil.findByName(art, "membersHolder"), DisplayObjectContainer);
@@ -108,8 +123,12 @@ class GuildPopup extends Popup {
 		}
 		if (AppStage.stage != null) {
 			AppStage.stage.addEventListener(KeyboardEvent.KEY_DOWN, toggleGuildIdShown);
-			AppStage.stage.focus = AppStage.stage;
+			StageFocus.reset();
 		}
+	}
+
+	public function emblemForTests():Null<EmblemLoader> {
+		return emblemLoader;
 	}
 
 	private function clickMessage():Void {
@@ -118,6 +137,21 @@ class GuildPopup extends Popup {
 
 	private function clickEdit():Void {
 		new CreateGuildPopup(guildId);
+	}
+
+	private function clickDelete():Void {
+		var confirmStr = guildName == "" ? "Are you sure you want to delete this guild?"
+			: "Are you sure you want to delete " + StringTools.htmlEscape(guildName) + "?";
+		new ConfirmPopup(confirmDelete, confirmStr);
+	}
+
+	public function confirmDelete():Void {
+		var fields = ["guild_id" => Std.string(guildId)];
+		asyncGuard.watch(deleteFactory(ServerConfig.guildDeleteUrl(), fields));
+		if (LobbySession.guildId == guildId) {
+			LobbySession.clearGuild();
+		}
+		startFadeOut();
 	}
 
 	private function clickClose():Void {
@@ -175,6 +209,7 @@ class GuildPopup extends Popup {
 	}
 
 	override public function remove():Void {
+		asyncGuard.remove();
 		if (GuildPopup.instance == this) {
 			GuildPopup.instance = null;
 		}
@@ -184,9 +219,11 @@ class GuildPopup extends Popup {
 		LobbyArt.unbind(closeBinding);
 		LobbyArt.unbind(messageBinding);
 		LobbyArt.unbind(editBinding);
+		LobbyArt.unbind(deleteBinding);
 		closeBinding = null;
 		messageBinding = null;
 		editBinding = null;
+		deleteBinding = null;
 		for (member in guildMembers.copy()) {
 			member.remove();
 		}
@@ -195,11 +232,32 @@ class GuildPopup extends Popup {
 			scroll.remove();
 			scroll = null;
 		}
+		if (emblemLoader != null) {
+			emblemLoader.remove();
+			emblemLoader = null;
+		}
 		if (art != null) {
 			art.dispose();
 			art = null;
 		}
 		titleBox = null;
 		super.remove();
+	}
+
+	private function addEmblem(fileName:String):Void {
+		if (emblemLoader != null) {
+			emblemLoader.remove();
+		}
+		emblemLoader = new EmblemLoader(100, 50, ServerConfig.emblemUploadUrl(), ServerConfig.emblemsUrl());
+		emblemLoader.x = -140;
+		emblemLoader.y = -109;
+		emblemLoader.mouseEnabled = false;
+		emblemLoader.mouseChildren = false;
+		emblemLoader.getImage(fileName == null || fileName == "" ? "default-emblem.jpg" : fileName);
+		addChild(emblemLoader);
+	}
+
+	private static function defaultDelete(url:String, fields:Map<String, String>):SuperLoader {
+		return FormPostClient.post(url, fields, function(_:String):Void {}, function(_:String):Void {});
 	}
 }

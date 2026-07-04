@@ -1,6 +1,8 @@
 package pr2.lobby.level;
 
+import com.jiggmin.data.Data;
 import haxe.Json;
+import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
@@ -12,16 +14,21 @@ import pr2.lobby.LobbyPopups;
 import pr2.lobby.LobbySession;
 import pr2.lobby.SecureData;
 import pr2.lobby.account.AccountState;
-import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
 import pr2.lobby.dialogs.HoverPopup;
+import pr2.lobby.dialogs.UploadingPopup;
 import pr2.lobby.level.LevelAccess.LevelAccessState;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.FormPostClient;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.AsyncRemovalGuard;
 import pr2.util.DisplayUtil;
+
+typedef FavoriteUploadFactory = String->Map<String, String>->String->(Dynamic->Void)->Null<UploadingPopup>;
+typedef FavoriteHoverDelayFactory = (Void->Void, Int)->Null<Timer>;
+typedef LevelPassPostFactory = String->Map<String, String>->(String->Void)->(String->Void)->AsyncRemovable;
 
 /**
 	Port of Flash `level_browser.LevelItem` — one course tile in a listing grid.
@@ -35,6 +42,10 @@ import pr2.util.DisplayUtil;
 	The password-check response follows Flash's encrypted `result` payload.
 **/
 class LevelItem extends Sprite {
+	public static var favoriteUploadFactory:FavoriteUploadFactory = defaultFavoriteUpload;
+	public static var favoriteHoverDelayFactory:FavoriteHoverDelayFactory = defaultFavoriteHoverDelay;
+	public static var passPostFactory:LevelPassPostFactory = defaultPassPost;
+
 	public final courseID:Int;
 	public final version:Int;
 
@@ -59,6 +70,11 @@ class LevelItem extends Sprite {
 	private var favBinding:Null<LobbyArt.Binding>;
 	private var passBinding:Null<LobbyArt.Binding>;
 	private var infoPopup:Null<HoverPopup>;
+	private var favPopup:Null<HoverPopup>;
+	private var favHoverTimer:Null<Timer>;
+	private var favHoverTarget:Null<DisplayObject>;
+	private var uploading:Null<UploadingPopup>;
+	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(info:CampaignLevelInfo) {
 		super();
@@ -150,10 +166,10 @@ class LevelItem extends Sprite {
 		}
 		if (LobbySession.isFavorite(courseID)) {
 			removeArtChild(plusButton);
-			favBinding = LobbyArt.bind(minusButton, function():Void clickFavorite("remove"));
+			bindFavoriteButton(minusButton, "remove");
 		} else {
 			removeArtChild(minusButton);
-			favBinding = LobbyArt.bind(plusButton, function():Void clickFavorite("add"));
+			bindFavoriteButton(plusButton, "add");
 		}
 	}
 
@@ -215,6 +231,7 @@ class LevelItem extends Sprite {
 			LobbyArt.unbind(passBinding);
 			passBinding = null;
 		}
+		setPassControlsEnabled(true);
 		if (accessCover != null) {
 			removeChildFrom(accessCover, passButton);
 			removeChildFrom(accessCover, passBox);
@@ -227,10 +244,11 @@ class LevelItem extends Sprite {
 		}
 		passPending = true;
 		var entered = passField.text;
+		setPassControlsEnabled(false);
 		passField.text = "checking...";
 		var hash = haxe.crypto.Md5.encode(entered + ServerConfig.LEVEL_PASS_SALT);
 		var fields = ["course_id" => Std.string(courseID), "hash" => hash];
-		FormPostClient.post(ServerConfig.levelPassCheckUrl(), fields, onPassResponse, onPassError);
+		asyncGuard.watch(passPostFactory(ServerConfig.levelPassCheckUrl(), fields, asyncGuard.wrap(onPassResponse), asyncGuard.wrap(onPassError)));
 	}
 
 	private function onPassResponse(body:String):Void {
@@ -246,6 +264,7 @@ class LevelItem extends Sprite {
 			testAccess();
 		} else if (passField != null) {
 			passField.text = "nope!";
+			setPassControlsEnabled(true);
 		}
 	}
 
@@ -277,22 +296,24 @@ class LevelItem extends Sprite {
 		if (passField != null) {
 			passField.text = "";
 		}
+		setPassControlsEnabled(true);
 	}
 
 	// ---- favorites -------------------------------------------------------
 
 	private function clickFavorite(mode:String):Void {
+		if (uploading != null) {
+			return;
+		}
 		var fields = ["mode" => mode, "level_id" => Std.string(courseID)];
-		FormPostClient.post(ServerConfig.favoriteModifyUrl(), fields, function(body:String):Void {
-			onFavoriteResult(mode, body);
+		uploading = favoriteUploadFactory(ServerConfig.favoriteModifyUrl(), fields, favoriteUploadLabel(mode), function(result:Dynamic):Void {
+			var resultMode = result != null && Reflect.field(result, "mode") != null ? Std.string(Reflect.field(result, "mode")) : mode;
+			onFavoriteResult(resultMode);
 		});
 	}
 
-	private function onFavoriteResult(mode:String, _:String):Void {
-		if (favBinding != null) {
-			LobbyArt.unbind(favBinding);
-			favBinding = null;
-		}
+	private function onFavoriteResult(mode:String):Void {
+		clearFavoriteButtonBinding();
 		if (mode == "add") {
 			if (!LobbySession.isFavorite(courseID)) {
 				LobbySession.favoriteLevels.push(courseID);
@@ -301,15 +322,82 @@ class LevelItem extends Sprite {
 			if (minusButton != null && minusButton.parent != art) {
 				art.addChild(minusButton);
 			}
-			favBinding = LobbyArt.bind(minusButton, function():Void clickFavorite("remove"));
+			bindFavoriteButton(minusButton, "remove");
 		} else {
 			LobbySession.favoriteLevels.remove(courseID);
 			removeArtChild(minusButton);
 			if (plusButton != null && plusButton.parent != art) {
 				art.addChild(plusButton);
 			}
-			favBinding = LobbyArt.bind(plusButton, function():Void clickFavorite("add"));
+			bindFavoriteButton(plusButton, "add");
 		}
+		if (uploading != null) {
+			uploading.startFadeOut();
+			uploading = null;
+		}
+	}
+
+	private function bindFavoriteButton(target:Null<DisplayObject>, mode:String):Void {
+		if (target == null) {
+			return;
+		}
+		favHoverTarget = target;
+		target.addEventListener(MouseEvent.MOUSE_OVER, overFavorite);
+		target.addEventListener(MouseEvent.MOUSE_OUT, outFavorite);
+		favBinding = LobbyArt.bind(target, function():Void clickFavorite(mode));
+	}
+
+	private function clearFavoriteButtonBinding():Void {
+		LobbyArt.unbind(favBinding);
+		favBinding = null;
+		if (favHoverTarget != null) {
+			favHoverTarget.removeEventListener(MouseEvent.MOUSE_OVER, overFavorite);
+			favHoverTarget.removeEventListener(MouseEvent.MOUSE_OUT, outFavorite);
+			favHoverTarget = null;
+		}
+		clearFavoriteHover();
+	}
+
+	private function overFavorite(?_:MouseEvent):Void {
+		clearFavoriteHover();
+		favHoverTimer = favoriteHoverDelayFactory(showFavoriteHover, 500);
+	}
+
+	private function outFavorite(?_:MouseEvent):Void {
+		clearFavoriteHover();
+	}
+
+	private function showFavoriteHover():Void {
+		stopFavoriteHoverTimer();
+		var mode = activeFavoriteMode();
+		var target = activeFavoriteButton();
+		if (mode == "" || target == null) {
+			return;
+		}
+		favPopup = new HoverPopup(favoriteHoverTitle(mode), favoriteHoverMessage(mode), target);
+	}
+
+	private function clearFavoriteHover():Void {
+		stopFavoriteHoverTimer();
+		if (favPopup != null) {
+			favPopup.remove();
+			favPopup = null;
+		}
+	}
+
+	private function stopFavoriteHoverTimer():Void {
+		if (favHoverTimer != null) {
+			favHoverTimer.stop();
+			favHoverTimer = null;
+		}
+	}
+
+	private function activeFavoriteMode():String {
+		return plusButton != null && plusButton.parent == art ? "add" : (minusButton != null && minusButton.parent == art ? "remove" : "");
+	}
+
+	private function activeFavoriteButton():Null<DisplayObject> {
+		return activeFavoriteMode() == "add" ? plusButton : (activeFavoriteMode() == "remove" ? minusButton : null);
 	}
 
 	// ---- slots -----------------------------------------------------------
@@ -385,17 +473,7 @@ class LevelItem extends Sprite {
 		if (infoButton == null) {
 			return;
 		}
-		var popupTitle = "-- " + ChatText.escapeString(info.title) + " --";
-		var body = "By: " + ChatText.escapeString(info.userName) + "<br/>"
-			+ "Version: " + info.version + "<br/>"
-			+ "Min Rank: " + info.minLevel + "<br/>"
-			+ "Plays: " + pr2.lobby.NumberFormat.withCommas(info.playCount) + "<br/>"
-			+ "Rating: " + info.rating;
-		if (ChatText.escapeString(info.note) != "") {
-			body += "<br/>-----<br/><i>" + ChatText.escapeString(info.note, true) + "</i>";
-		}
-		body += "<br/>-----<br/>(click the \"?\" for more info)";
-		infoPopup = new HoverPopup(popupTitle, body, infoButton);
+		infoPopup = new HoverPopup(infoHoverTitle(info), infoHoverBody(info), infoButton);
 	}
 
 	private function outInfo(_:MouseEvent):Void {
@@ -417,7 +495,84 @@ class LevelItem extends Sprite {
 		}
 	}
 
+	private static function infoHoverTitle(info:CampaignLevelInfo):String {
+		return "-- " + Data.escapeString(info.title) + " --";
+	}
+
+	private static function infoHoverBody(info:CampaignLevelInfo):String {
+		var noteText = "";
+		if (Data.escapeString(info.note) != "") {
+			noteText = "<br/>-----<br/><i>" + Data.escapeString(info.note, true) + "</i>";
+		}
+		return "By: " + Data.escapeString(info.userName) + "<br/>"
+			+ "Version: " + Data.formatNumber(info.version) + "<br/>"
+			+ "Updated: " + Data.getShortDateStr(info.time) + "<br/>"
+			+ "Min Rank: " + info.minLevel + "<br/>"
+			+ "Plays: " + Data.formatNumber(info.playCount) + "<br/>"
+			+ "Rating: " + info.rating
+			+ noteText
+			+ "<br/>-----<br/>(click the \"?\" for more info)";
+	}
+
+	private static function favoriteUploadLabel(mode:String):String {
+		return (mode == "add" ? "Adding to" : "Removing from") + " favorites...";
+	}
+
+	private static function favoriteHoverTitle(mode:String):String {
+		return mode == "add" ? "Add to Favorites" : "Remove from Favorites";
+	}
+
+	private static function favoriteHoverMessage(mode:String):String {
+		return mode == "add" ? "Add this level to your favorites list." : "Remove this level from your favorites list.";
+	}
+
+	private static function defaultFavoriteUpload(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void):Null<UploadingPopup> {
+		return new UploadingPopup(url, fields, label, onResult);
+	}
+
+	private static function defaultFavoriteHoverDelay(callback:Void->Void, delayMs:Int):Null<Timer> {
+		return Timer.delay(callback, delayMs);
+	}
+
+	private static function defaultPassPost(url:String, fields:Map<String, String>, onResult:String->Void, onError:String->Void):AsyncRemovable {
+		return FormPostClient.post(url, fields, onResult, onError);
+	}
+
+	private function setPassControlsEnabled(enabled:Bool):Void {
+		setControlEnabled(passButton, enabled);
+		setControlEnabled(passBox, enabled);
+	}
+
+	private static function setControlEnabled(control:Null<DisplayObject>, enabled:Bool):Void {
+		if (control == null) {
+			return;
+		}
+		try {
+			Reflect.setProperty(control, "enabled", enabled);
+		} catch (_:Dynamic) {
+			var interactive = Std.downcast(control, openfl.display.InteractiveObject);
+			if (interactive != null) {
+				interactive.mouseEnabled = enabled;
+			}
+		}
+	}
+
+	private static function controlEnabled(control:Null<DisplayObject>):Bool {
+		if (control == null) {
+			return false;
+		}
+		try {
+			var value:Dynamic = Reflect.getProperty(control, "enabled");
+			if (value != null) {
+				return value == true;
+			}
+		} catch (_:Dynamic) {}
+		var interactive = Std.downcast(control, openfl.display.InteractiveObject);
+		return interactive == null || interactive.mouseEnabled;
+	}
+
 	public function remove():Void {
+		asyncGuard.remove();
 		if (infoButton != null) {
 			infoButton.removeEventListener(MouseEvent.MOUSE_OVER, overInfo);
 			infoButton.removeEventListener(MouseEvent.MOUSE_OUT, outInfo);
@@ -427,12 +582,23 @@ class LevelItem extends Sprite {
 			infoPopup = null;
 		}
 		LobbyArt.unbind(infoBinding);
-		LobbyArt.unbind(favBinding);
 		LobbyArt.unbind(passBinding);
+		clearFavoriteButtonBinding();
+		if (uploading != null) {
+			uploading.remove();
+			uploading = null;
+		}
+		detachPassControls();
+		detachCover();
 		for (slot in slots) {
 			slot.remove();
 		}
 		slots = [];
+		accessCover = null;
+		coverText = null;
+		passButton = null;
+		passBox = null;
+		passField = null;
 		if (htmlNameMaker != null) {
 			htmlNameMaker.remove();
 			htmlNameMaker = null;
@@ -448,5 +614,65 @@ class LevelItem extends Sprite {
 		if (parent != null) {
 			parent.removeChild(this);
 		}
+	}
+
+	public function coverShownForTests():Bool {
+		return coverShown;
+	}
+
+	public function slotCountForTests():Int {
+		return slots.length;
+	}
+
+	public static function infoHoverTitleForTests(info:CampaignLevelInfo):String {
+		return infoHoverTitle(info);
+	}
+
+	public static function infoHoverBodyForTests(info:CampaignLevelInfo):String {
+		return infoHoverBody(info);
+	}
+
+	public static function favoriteHoverTitleForTests(mode:String):String {
+		return favoriteHoverTitle(mode);
+	}
+
+	public static function favoriteHoverMessageForTests(mode:String):String {
+		return favoriteHoverMessage(mode);
+	}
+
+	public static function resetHooksForTests():Void {
+		favoriteUploadFactory = defaultFavoriteUpload;
+		favoriteHoverDelayFactory = defaultFavoriteHoverDelay;
+		passPostFactory = defaultPassPost;
+	}
+
+	public function favoriteHoverVisibleForTests():Bool {
+		return favPopup != null;
+	}
+
+	public function uploadingForTests():Null<UploadingPopup> {
+		return uploading;
+	}
+
+	public function setPassTextForTests(value:String):Void {
+		if (passField != null) {
+			passField.text = value;
+		}
+	}
+
+	public function passTextForTests():String {
+		return passField == null ? "" : passField.text;
+	}
+
+	public function passButtonEnabledForTests():Bool {
+		return controlEnabled(passButton);
+	}
+
+	public function passBoxEnabledForTests():Bool {
+		return controlEnabled(passBox);
+	}
+
+	public function passPendingForTests():Bool {
+		return passPending;
 	}
 }

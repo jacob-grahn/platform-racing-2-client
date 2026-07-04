@@ -16,8 +16,8 @@ import haxe.crypto.Md5;
 class CampaignListClient {
 	public static inline var MODE:String = "campaign";
 
-	public static function fetch(page:Int, onResult:CampaignListResult->Void, ?onError:String->Void):Void {
-		TextLoader.load(ServerConfig.listUrl(MODE, page), function(body:String):Void {
+	public static function fetch(page:Int, onResult:CampaignListResult->Void, ?onError:String->Void):SuperLoader {
+		return TextLoader.load(ServerConfig.listUrl(MODE, page), function(body:String):Void {
 			try {
 				onResult(parse(body));
 			} catch (error:Dynamic) {

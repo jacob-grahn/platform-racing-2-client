@@ -53,6 +53,9 @@ class LoginSessionResult {
 	public final guildName:String;
 	public final emblem:String;
 	public final favoriteLevels:Array<Int>;
+	public final authTime:Float;
+	public final lastRead:Float;
+	public final lastRecv:Float;
 
 	public function new(group:Int, userName:String, data:Dynamic) {
 		this.group = group;
@@ -65,6 +68,9 @@ class LoginSessionResult {
 		guildName = stringField(data, "guildName");
 		emblem = stringField(data, "emblem");
 		favoriteLevels = intArrayField(data, "favoriteLevels");
+		authTime = floatField(data, "time");
+		lastRead = floatField(data, "lastRead");
+		lastRecv = floatField(data, "lastRecv");
 	}
 
 	private static function stringField(data:Dynamic, name:String):String {
@@ -75,6 +81,11 @@ class LoginSessionResult {
 	private static function intField(data:Dynamic, name:String):Int {
 		var parsed = Std.parseInt(stringField(data, name));
 		return parsed == null ? 0 : parsed;
+	}
+
+	private static function floatField(data:Dynamic, name:String):Float {
+		var parsed = Std.parseFloat(stringField(data, name));
+		return Math.isNaN(parsed) ? 0 : parsed;
 	}
 
 	private static function boolField(data:Dynamic, name:String):Bool {
