@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `SWFStats.as` frame-rate watchdog behavior: sample one-second timing
-  deltas, average 30 samples, and force the stage frame rate back to 27 when the
-  Flash client would detect lag/speed changes.
 - [ ] Preserve `SavedAccounts.as` persistence identity exactly: use
   `pr2hub_dev_logged_in` on dev hosts and `pr2hub_logged_in` elsewhere, keep the
   stored accounts array shape, trim/case-fold names, update tokens in place, move

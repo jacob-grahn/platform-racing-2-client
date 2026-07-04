@@ -1,5 +1,6 @@
 package;
 
+import com.jiggmin.data.SWFStats;
 #if js
 import js.Browser;
 #end
@@ -32,6 +33,8 @@ import pr2.ui.MuteButton;
 	harness jump straight to any screen.
 **/
 class Main extends Sprite {
+	private var swfStats:Null<SWFStats>;
+
 	public function new() {
 		super();
 
@@ -49,6 +52,7 @@ class Main extends Sprite {
 		stage.align = StageAlign.TOP_LEFT;
 		stage.scaleMode = StageScaleMode.NO_SCALE;
 		pr2.app.AppStage.stage = stage;
+		swfStats = new SWFStats();
 		FatalErrorReporter.installGlobalHandlers();
 		GpNotification.init(stage);
 		BrowserAudioUnlock.install();
