@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `SavedAccounts.as` persistence identity exactly: use
-  `pr2hub_dev_logged_in` on dev hosts and `pr2hub_logged_in` elsewhere, keep the
-  stored accounts array shape, trim/case-fold names, update tokens in place, move
-  recent accounts first, and support delete by `"name"` or `"token"` mode.
 - [ ] Preserve `SecureData.as` / `SecureStore.as` obfuscated storage behavior:
   number/bool values should be stored as hidden value-plus-key pairs, string
   storage should support `initEncryptor(keyName, salt)` with random AES key/IV,

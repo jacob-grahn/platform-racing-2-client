@@ -17,6 +17,7 @@ import pr2.app.SiteMode;
 import pr2.audio.BrowserAudioUnlock;
 import pr2.audio.AudioManager;
 import pr2.net.ServerConfig;
+import pr2.net.SavedAccounts;
 import pr2.page.CampaignTestScreen;
 import pr2.page.CustomizeCharacterScreen;
 import pr2.page.IntroPage;
@@ -65,6 +66,7 @@ class Main extends Sprite {
 			// sys targets, PR2_API_HOST can provide the same local override.
 			ServerConfig.applyLocalOverrides();
 			ServerConfig.setHost(QueryParams.get(query, "apiHost"));
+			SavedAccounts.init();
 			var siteMode = resolveSiteMode(query);
 			var screen = Screen.fromQuery(query);
 			addChild(buildScreen(screen, query, siteMode));
