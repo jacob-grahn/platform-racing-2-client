@@ -6,6 +6,17 @@ package pr2.level;
 	form and gets +100 to become one of these constants (see `resolveBlockCode`).
 **/
 final class ObjectCodes {
+	public static inline var STAMP_TREE:Int = 0;
+	public static inline var STAMP_TREE2:Int = 1;
+	public static inline var STAMP_TREE3:Int = 2;
+	public static inline var STAMP_PETRIFIED_TREE:Int = 3;
+	public static inline var STAMP_CACTUS:Int = 4;
+	public static inline var STAMP_ROCK:Int = 5;
+	public static inline var STAMP_ROCK2:Int = 6;
+	public static inline var STAMP_SPIRE:Int = 7;
+	public static inline var STAMP_SPIRE2:Int = 8;
+	public static inline var STAMP_BUILDING1:Int = 9;
+
 	public static inline var BLOCK_BASIC1:Int = 100;
 	public static inline var BLOCK_BASIC2:Int = 101;
 	public static inline var BLOCK_BASIC3:Int = 102;
@@ -39,6 +50,16 @@ final class ObjectCodes {
 	public static inline var BLOCK_MINION_EGG:Int = 130;
 	public static inline var BLOCK_CUSTOM_STATS:Int = 131;
 	public static inline var BLOCK_TELEPORT:Int = 132;
+
+	public static inline var BG1Code:Int = 201;
+	public static inline var BG2Code:Int = 202;
+	public static inline var BG3Code:Int = 203;
+	public static inline var BG4Code:Int = 204;
+	public static inline var BG5Code:Int = 205;
+	public static inline var BG6Code:Int = 206;
+	public static inline var BG7Code:Int = 207;
+
+	public static inline var TextCode:Int = 300;
 
 	private function new() {}
 

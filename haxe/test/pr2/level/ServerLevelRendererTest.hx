@@ -274,9 +274,10 @@ class ServerLevelRendererTest {
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(5, renderer.drawnArtItemCount(), "second art batch draws final text item");
-		assertEquals(2, artLayer.numChildren, "second art batch attaches text object above the stroke canvas");
+		assertEquals(3, artLayer.numChildren, "second art batch attaches object and text above the stroke canvas");
 		assertEquals(true, renderer.isDrawingComplete(), "renderer completes after blocks and art");
-		var field = Std.downcast(artLayer.getChildAt(1), TextField);
+		assertEquals("Cactus", artLayer.getChildAt(1).name, "incremental art uses Objects factory for stamps");
+		var field = Std.downcast(artLayer.getChildAt(2), TextField);
 		assertEquals("hello,world", field.text, "incremental text uses server text parsing");
 	}
 

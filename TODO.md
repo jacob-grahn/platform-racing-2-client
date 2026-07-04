@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the full `Objects.as` `getFromCode()` editor/display mapping:
-  tree/rock/spire/building stamps, all block display classes, BG1-BG7 graphics,
-  and `TextObjectGraphic().textBox` should resolve from the same numeric codes as
-  Flash instead of relying only on gameplay block constants or placeholder assets.
 - [ ] Preserve `PR2Socket.as` lifecycle behavior in `LobbySocket`: start the
   Flash ping interval after connect, handle `receivePing` server-time sync, send
   `close`` before disconnecting, reset command send counters, clear cached

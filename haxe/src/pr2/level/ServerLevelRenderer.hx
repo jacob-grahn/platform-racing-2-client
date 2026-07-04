@@ -1,5 +1,6 @@
 package pr2.level;
 
+import com.jiggmin.data.Objects;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObjectContainer;
@@ -1233,17 +1234,15 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public static function addLayerObject(container:Sprite, object:DecodedArtObject, layerScale:Float):Void {
-		var assetPath = stampAssetPath(object.code);
-		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
+		var display = Objects.getFromCode(object.code);
+		if (display == null) {
 			return;
 		}
-		var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
-		bitmap.smoothing = true;
-		bitmap.scaleX = object.scaleX * layerScale / 4;
-		bitmap.scaleY = object.scaleY * layerScale / 4;
-		bitmap.x = object.x * layerScale;
-		bitmap.y = object.y * layerScale;
-		container.addChild(bitmap);
+		display.scaleX = object.scaleX * layerScale;
+		display.scaleY = object.scaleY * layerScale;
+		display.x = object.x * layerScale;
+		display.y = object.y * layerScale;
+		container.addChild(display);
 	}
 
 	public static function addLayerText(container:Sprite, text:DecodedTextObject, layerScale:Float):Void {

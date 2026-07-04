@@ -1,5 +1,6 @@
 package pr2.page;
 
+import com.jiggmin.data.Objects;
 import haxe.Json;
 import haxe.crypto.Md5;
 import haxe.Timer;
@@ -4442,13 +4443,9 @@ class EditorObjectLayer extends Sprite {
 		holder.y = placed.y;
 		holder.scaleX = placed.scaleX;
 		holder.scaleY = placed.scaleY;
-		var assetPath = ServerLevelRenderer.stampAssetPath(placed.code);
-		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
-			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
-			bitmap.smoothing = true;
-			bitmap.scaleX = 0.25;
-			bitmap.scaleY = 0.25;
-			holder.addChild(bitmap);
+		var display = Objects.getFromCode(placed.code);
+		if (display != null) {
+			holder.addChild(display);
 		} else {
 			holder.graphics.lineStyle(1, 0x666666);
 			holder.graphics.beginFill(0xEEEEEE, 0.5);
