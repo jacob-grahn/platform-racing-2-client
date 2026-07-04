@@ -1746,6 +1746,8 @@ class LobbyServicesTest {
 		assertEquals(0.0, SecureData.getNumber("userRank"), "secure default");
 		SecureData.setNumber("userRank", 5);
 		assertEquals(5.0, SecureData.getNumber("userRank"), "secure stored");
+		SecureData.setNumber("zeroRank", 0);
+		assertEquals(0.0, SecureData.getNumber("zeroRank", 7), "secure stored zero overrides fallback");
 	}
 
 	private static function closeAllPopups():Void {

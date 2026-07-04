@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `SecureData.as` / `SecureStore.as` obfuscated storage behavior:
-  number/bool values should be stored as hidden value-plus-key pairs, string
-  storage should support `initEncryptor(keyName, salt)` with random AES key/IV,
-  encrypted salt validation, remove semantics, and Flash-compatible getters.
 - [ ] Preserve full `Settings.as` per-user SharedObject behavior: initialize
   `pr2_{sanitizedName}` stores, mirror cookie values into static settings and
   session `dataArr`, support partial control/stat updates, keep defaults for
