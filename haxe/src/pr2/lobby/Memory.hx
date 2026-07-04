@@ -25,6 +25,10 @@ class Memory {
 		return store.exists(key);
 	}
 
+	public static function remove(key:String):Void {
+		store.remove(key);
+	}
+
 	public static function getInt(key:String, fallback:Int = 0):Int {
 		var value = get(key);
 		if (value == null) {

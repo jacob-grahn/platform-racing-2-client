@@ -1,9 +1,14 @@
 package pr2.net;
 
+import haxe.Timer;
 #if js
 import js.Browser;
 import js.html.WebSocket;
 #end
+import pr2.lobby.LobbySession;
+import pr2.lobby.Memory;
+import pr2.lobby.dialogs.MessagePopup;
+import pr2.lobby.messages.UnreadNotif;
 
 /**
 	The single persistent game socket, mirroring Flash `Main.socket`: it is opened
@@ -25,6 +30,8 @@ class LobbySocket {
 	public static var sentCommands:Array<String> = [];
 	public static var sendNum:Int = 0;
 	public static var closeCount:Int = 0;
+	public static var campaignPage:Int = 0;
+	public static var nowMs:Void->Float = defaultNowMs;
 
 	/** Login-phase frame interceptor; when null, frames go to `CommandHandler`. */
 	public static var onFrame:Null<String->Void>;
@@ -35,6 +42,10 @@ class LobbySocket {
 	public static var onConnectionClose:Null<Void->Void>;
 
 	private static var protocol:Null<LoginSocketProtocol>;
+	private static var connected:Bool = false;
+	private static var pingIntervalActive:Bool = false;
+	private static var pingTimer:Null<Timer>;
+	private static var serverTimeOffsetMs:Float = 0;
 	#if js
 	private static var socket:Null<WebSocket>;
 	private static var buffer:String = "";
@@ -50,6 +61,8 @@ class LobbySocket {
 		buffer = "";
 		socket = new WebSocket(server.websocketUrl(secure));
 		socket.onopen = function(_):Void {
+			connected = true;
+			startPingInterval();
 			if (onOpen != null) {
 				onOpen();
 			}
@@ -65,14 +78,10 @@ class LobbySocket {
 			}
 		};
 		socket.onerror = function(_):Void {
-			if (onConnectionError != null) {
-				onConnectionError();
-			}
+			handleConnectionError();
 		};
 		socket.onclose = function(_):Void {
-			if (onConnectionClose != null) {
-				onConnectionClose();
-			}
+			handleConnectionClose();
 		};
 		#end
 	}
@@ -93,6 +102,10 @@ class LobbySocket {
 
 	public static function close():Void {
 		closeCount++;
+		if (connected) {
+			write("close`");
+		}
+		stopPingInterval();
 		#if js
 		if (socket != null) {
 			socket.onopen = null;
@@ -104,15 +117,19 @@ class LobbySocket {
 		}
 		buffer = "";
 		#end
+		connected = false;
 		protocol = null;
+		sendNum = 0;
+		CommandHandler.commandHandler.sendNum = -1;
+		clearRuntimeState();
 	}
 
 	/** True when a real transport is connected (vs. record-only headless mode). */
 	public static function isConnected():Bool {
 		#if js
-		return socket != null && socket.readyState == WebSocket.OPEN;
+		return connected && socket != null && socket.readyState == WebSocket.OPEN;
 		#else
-		return false;
+		return connected;
 		#end
 	}
 
@@ -120,11 +137,121 @@ class LobbySocket {
 		sentCommands = [];
 		sendNum = 0;
 		closeCount = 0;
+		connected = false;
+		stopPingInterval();
+		serverTimeOffsetMs = 0;
+		nowMs = defaultNowMs;
 	}
 
 	/** Last command emitted, or "" if none — convenience for assertions. */
 	public static function lastSent():String {
 		return sentCommands.length == 0 ? "" : sentCommands[sentCommands.length - 1];
+	}
+
+	public static function sendPing():Void {
+		if (isConnected()) {
+			write("ping`");
+		}
+	}
+
+	public static function receivePing(args:Array<String>):Void {
+		var serverSeconds = args.length > 0 ? Std.parseFloat(args[0]) : Math.NaN;
+		if (Math.isNaN(serverSeconds)) {
+			return;
+		}
+		var localSeconds = getMS() / 1000;
+		if (Math.abs(serverSeconds - localSeconds) > 2) {
+			serverTimeOffsetMs = serverSeconds * 1000 - nowMs();
+		}
+	}
+
+	public static function getMS():Float {
+		return nowMs() + serverTimeOffsetMs;
+	}
+
+	public static function pingIsActiveForTests():Bool {
+		return pingIntervalActive;
+	}
+
+	public static function simulateOpenForTests():Void {
+		connected = true;
+		startPingInterval();
+		if (onOpen != null) {
+			onOpen();
+		}
+	}
+
+	public static function simulateConnectionCloseForTests():Void {
+		handleConnectionClose();
+	}
+
+	public static function simulateConnectionErrorForTests():Void {
+		handleConnectionError();
+	}
+
+	public static function remove():Void {
+		onOpen = null;
+		onFrame = null;
+		onConnectionError = null;
+		onConnectionClose = null;
+		close();
+	}
+
+	private static function startPingInterval():Void {
+		stopPingInterval();
+		pingIntervalActive = true;
+		#if js
+		pingTimer = new Timer(10000);
+		pingTimer.run = sendPing;
+		#end
+	}
+
+	private static function stopPingInterval():Void {
+		#if js
+		if (pingTimer != null) {
+			pingTimer.stop();
+		}
+		#end
+		pingTimer = null;
+		pingIntervalActive = false;
+	}
+
+	private static function handleConnectionClose():Void {
+		stopPingInterval();
+		connected = false;
+		clearRuntimeState();
+		if (onConnectionClose != null) {
+			onConnectionClose();
+		} else {
+			new MessagePopup("Disconnected.");
+		}
+	}
+
+	private static function handleConnectionError():Void {
+		stopPingInterval();
+		connected = false;
+		clearRuntimeState();
+		if (onConnectionError != null) {
+			onConnectionError();
+		} else {
+			new MessagePopup("Could not connect. This could be because: \n A: My server is broken. \n B: The internet is broken. \n C: Evil aliens.");
+		}
+	}
+
+	private static function clearRuntimeState():Void {
+		Memory.remove("coursePageNumcampaign");
+		Memory.remove("campaignInfo" + campaignPage);
+		LobbySession.isSpecialUser = false;
+		LobbySession.isPrizer = false;
+		LobbySession.isTempMod = false;
+		LobbySession.isTrialMod = false;
+		LobbySession.tournamentMode = false;
+		LobbySession.serverOwner = 0;
+		UnreadNotif.reset();
+	}
+
+	private static function defaultNowMs():Float {
+		return Date.now().getTime();
 	}
 
 	#if js

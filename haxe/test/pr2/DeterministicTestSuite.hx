@@ -76,6 +76,7 @@ import pr2.net.LevelDataClientTest;
 import pr2.net.JsonClientTest;
 import pr2.net.LoginAuthClientTest;
 import pr2.net.LoginSocketProtocolTest;
+import pr2.net.LobbySocketLifecycleTest;
 import pr2.net.LoginSessionGateTest;
 import pr2.net.SavedAccountsTest;
 import pr2.net.ServerConfigTest;
@@ -160,6 +161,7 @@ class DeterministicTestSuite {
 		ServerConfigTest.main();
 		ServerStatusClientTest.main();
 		LoginSocketProtocolTest.main();
+		LobbySocketLifecycleTest.main();
 		LoginSessionGateTest.main();
 		SavedAccountsTest.main();
 		SuperLoaderTest.main();

@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `PR2Socket.as` lifecycle behavior in `LobbySocket`: start the
-  Flash ping interval after connect, handle `receivePing` server-time sync, send
-  `close`` before disconnecting, reset command send counters, clear cached
-  campaign/server role/unread state, and show the Flash disconnect/error popups.
 - [ ] Complete `Random.as` public API compatibility: expose `seed`, `nextInt()`,
   `nextMax()`, `nextNumber()`, and `nextBytes()` with the same range checks and
   byte writes as Flash, in addition to the already-ported deterministic

@@ -41,6 +41,7 @@ class CommandHandler {
 		defaultCommands.set("setRank", setRank);
 		defaultCommands.set("setGroup", setGroup);
 		defaultCommands.set("startGame", startGame);
+		defaultCommands.set("ping", LobbySocket.receivePing);
 		defaultCommands.set("resend", resend);
 		defaultCommands.set("pmNotify", pmNotify);
 		defaultCommands.set("becomeSpecialUser", becomeSpecialUser);
