@@ -20,6 +20,7 @@ import pr2.lobby.OutfitPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.SendMessagePopupTest;
 import pr2.lobby.StorePopupTest;
+import pr2.lobby.UploadingPopupTest;
 import pr2.net.AccountCreationClientTest;
 import pr2.net.CampaignListClientTest;
 import pr2.net.ForgotPasswordClientTest;
@@ -75,6 +76,7 @@ class DeterministicShard4 {
 		PlayerPopupTest.main();
 		SendMessagePopupTest.main();
 		StorePopupTest.main();
+		UploadingPopupTest.main();
 		trace("DeterministicShard4 passed");
 		Sys.exit(0);
 	}

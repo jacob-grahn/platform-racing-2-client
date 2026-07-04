@@ -15,9 +15,6 @@ import openfl.net.URLVariables;
 **/
 class FormPostClient {
 	public static function post(url:String, fields:Map<String, String>, onText:String->Void, ?onError:String->Void):Void {
-		var loader = new URLLoader();
-		loader.dataFormat = URLLoaderDataFormat.TEXT;
-
 		var prepared = SuperLoader.prepareFields(fields);
 		var vars = new URLVariables();
 		for (key in prepared.keys()) {
@@ -27,6 +24,13 @@ class FormPostClient {
 		var request = new URLRequest(url);
 		request.method = URLRequestMethod.POST;
 		request.data = vars;
+
+		load(request, onText, onError);
+	}
+
+	public static function load(request:URLRequest, onText:String->Void, ?onError:String->Void):Void {
+		var loader = new URLLoader();
+		loader.dataFormat = URLLoaderDataFormat.TEXT;
 
 		var status:Int = 0;
 		var settled = false;
@@ -69,10 +73,10 @@ class FormPostClient {
 			succeed(Std.string(loader.data));
 		};
 		onIoError = function(event:IOErrorEvent):Void {
-			fail(SuperLoader.formatIoError(url, status, event.text));
+			fail(SuperLoader.formatIoError(request.url, status, event.text));
 		};
 		onSecurityError = function(event:SecurityErrorEvent):Void {
-			fail('request to $url blocked (likely CORS): ${event.text}');
+			fail('request to ${request.url} blocked (likely CORS): ${event.text}');
 		};
 
 		loader.addEventListener(Event.COMPLETE, onComplete);
@@ -83,7 +87,7 @@ class FormPostClient {
 		try {
 			loader.load(request);
 		} catch (error:Dynamic) {
-			fail('could not start request to $url: ${Std.string(error)}');
+			fail('could not start request to ${request.url}: ${Std.string(error)}');
 		}
 	}
 }

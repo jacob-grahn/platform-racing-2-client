@@ -75,6 +75,7 @@ import pr2.lobby.OutfitPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.SendMessagePopupTest;
 import pr2.lobby.StorePopupTest;
+import pr2.lobby.UploadingPopupTest;
 import pr2.level.ServerLevelDecoderTest;
 import pr2.level.ServerLevelFixtureAdapterTest;
 import pr2.level.ServerLevelRendererTest;
@@ -209,6 +210,7 @@ class DeterministicTestSuite {
 		PlayerPopupTest.main();
 		SendMessagePopupTest.main();
 		StorePopupTest.main();
+		UploadingPopupTest.main();
 		trace("DeterministicTestSuite passed");
 		// All assertions are synchronous, but pulling in openfl/lime leaves the
 		// eval event loop alive, so the `--interp` process would otherwise hang

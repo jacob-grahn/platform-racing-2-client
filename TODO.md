@@ -20,9 +20,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ### Shared Infrastructure
 
-- [ ] Complete `UploadingPopup.as` Flash compatibility: accept Flash-style
-  `URLRequest`/`URLVariables`, data mode, display text, and auto-error-message
-  flag while preserving the existing string/map constructor.
 - [ ] Add a `SuperLoader` compatibility layer for popup/list loaders: expose raw
   `data`, parsed JSON, progress events, success/error event names, cancellation,
   and listener cleanup so late async responses cannot mutate removed views.

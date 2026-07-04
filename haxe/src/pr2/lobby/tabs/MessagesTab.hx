@@ -153,7 +153,7 @@ class MessagesTab extends Page implements Paginated {
 	}
 
 	public function doDeleteAll():Void {
-		new UploadingPopup(ServerConfig.messagesDeleteAllUrl(), new Map(), "Deleting messages...");
+		new UploadingPopup(ServerConfig.messagesDeleteAllUrl(), new Map<String, String>(), "Deleting messages...");
 		removeMessages();
 	}
 
