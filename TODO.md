@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port the full `Data.as` helper surface where UI/protocol code still uses
-  it: exact random swear replacements, `parseLinks()` rich-format conversion
-  for user/url/level/guild/invite/discord/color/bold/italic/underline/size tags,
-  date/time locale formatting, `hash()`, `aOrAn`, `ucfirst`, `formatNumber`,
-  `formatTime`, `padString`, `urlify`, `pythag`, `numLimit`, `scaleToFit`,
-  `rotatePoint`, `getExpBounds`, and `randomString`.
 - [ ] Port `EpicFlash.as` for epic color-cycling display objects: allow items to
   be registered, start/stop a repeating random `ColorTransform.color` tick at the
   configured delay, update delay while active, report emptiness, and clear item
