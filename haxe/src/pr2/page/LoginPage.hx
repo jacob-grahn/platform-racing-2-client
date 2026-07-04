@@ -31,6 +31,7 @@ import pr2.runtime.FlComboBox;
 import pr2.audio.AudioManager;
 import pr2.app.KongAward;
 import pr2.app.SiteMode;
+import pr2.lobby.account.Settings;
 import pr2.lobby.account.Preset.Outfit;
 import pr2.lobby.dialogs.OutfitPopup;
 import pr2.util.RequestGeneration;
@@ -630,6 +631,7 @@ class LoginPage extends Page {
 		pr2.lobby.LobbySession.guildName = session.guildName;
 		pr2.lobby.LobbySession.emblem = session.emblem;
 		pr2.lobby.LobbySession.favoriteLevels = session.favoriteLevels;
+		Settings.init(session.userName);
 		if (loginRemember) SavedAccounts.add(session.userName, session.token);
 		loginToken = "";
 		if (pageHolder != null) {

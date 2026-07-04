@@ -1265,7 +1265,8 @@ class LobbyServicesTest {
 	}
 
 	private static function testLevelEditorTestCourseTransition():Void {
-		Settings.disablePersistenceForTests();
+		Settings.useMemoryStoreForTests();
+		Settings.init("Editor Tester");
 		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
 		Settings.setValue(Settings.LE_TEST_HAT, 13);
 		LobbySession.clear();

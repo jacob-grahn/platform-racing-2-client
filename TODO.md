@@ -18,11 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve full `Settings.as` per-user SharedObject behavior: initialize
-  `pr2_{sanitizedName}` stores, mirror cookie values into static settings and
-  session `dataArr`, support partial control/stat updates, keep defaults for
-  presets/disabled songs/art/filter/test-hat, and no-op safely when cookies are
-  blocked or no user is initialized.
 - [ ] Port `Time.as` server clock helper and wire it to socket pings so lobby and
   listing code can use Flash's offset timestamp/day calculations instead of
   local `Date.now()` where server time was authoritative.

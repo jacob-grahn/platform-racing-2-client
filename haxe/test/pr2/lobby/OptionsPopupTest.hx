@@ -14,7 +14,8 @@ class OptionsPopupTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
-		Settings.disablePersistenceForTests();
+		Settings.useMemoryStoreForTests();
+		Settings.init("Options Tester");
 		Settings.setValue(Settings.MUSIC_VOLUME, 35);
 		Settings.setValue(Settings.SOUND_VOLUME, 45);
 		Settings.setValue(Settings.DISABLED_SONGS, ["2", "17"]);

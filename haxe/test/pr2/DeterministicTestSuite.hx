@@ -22,6 +22,7 @@ import pr2.data.DataCompatTest;
 import pr2.data.JiggminRandomCompatTest;
 import pr2.data.ObjectsCompatTest;
 import pr2.data.SecureDataCompatTest;
+import pr2.data.SettingsCompatTest;
 import pr2.data.SWFStatsTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
@@ -132,6 +133,7 @@ class DeterministicTestSuite {
 		JiggminRandomCompatTest.main();
 		ObjectsCompatTest.main();
 		SecureDataCompatTest.main();
+		SettingsCompatTest.main();
 		SWFStatsTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();
