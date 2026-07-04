@@ -160,6 +160,10 @@ final class ServerConfig {
 		return host + "/guild_edit.php";
 	}
 
+	public static function guildJoinUrl():String {
+		return host + "/guild_join.php";
+	}
+
 	public static function emblemUploadUrl():String {
 		return host + "/emblem_upload.php";
 	}

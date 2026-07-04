@@ -66,6 +66,7 @@ import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.DiscordVerificationPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
+import pr2.lobby.GuildJoinPopupTest;
 import pr2.lobby.HtmlNameMakerTest;
 import pr2.lobby.LevelInfoPopupTest;
 import pr2.lobby.MessagesItemTest;
@@ -199,6 +200,7 @@ class DeterministicTestSuite {
 		DiscordVerificationPopupTest.main();
 		ExternalLinkPopupTest.main();
 		GuildPopupTest.main();
+		GuildJoinPopupTest.main();
 		HtmlNameMakerTest.main();
 		LevelInfoPopupTest.main();
 		MessagesItemTest.main();

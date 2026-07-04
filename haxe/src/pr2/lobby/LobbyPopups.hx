@@ -31,6 +31,7 @@ class LobbyPopups {
 
 	public static function showGuildJoin(guildId:Int):Void {
 		lastRequest = "invite:" + guildId;
+		new pr2.lobby.dialogs.GuildJoinPopup(guildId);
 	}
 
 	public static function showGuildByName(name:String):Void {

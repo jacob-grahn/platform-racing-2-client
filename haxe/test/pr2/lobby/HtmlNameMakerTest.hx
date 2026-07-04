@@ -3,6 +3,8 @@ package pr2.lobby;
 import openfl.events.TextEvent;
 import openfl.text.TextField;
 import pr2.lobby.chat.HtmlNameMaker;
+import pr2.lobby.dialogs.Popup;
+import pr2.lobby.dialogs.UploadingPopup;
 
 class HtmlNameMakerTest {
 	private static var assertions:Int = 0;
@@ -38,6 +40,10 @@ class HtmlNameMakerTest {
 	}
 
 	private static function testInviteAndDiscordRoutes():Void {
+		var savedPostFactory = UploadingPopup.postFactory;
+		UploadingPopup.postFactory = function(url:String, fields:Map<String, String>, onResult:String->Void, onError:String->Void):Void {
+			onResult("{}");
+		};
 		var maker = new HtmlNameMaker();
 		var field = new TextField();
 		maker.listenForLink(field);
@@ -49,6 +55,8 @@ class HtmlNameMakerTest {
 		field.dispatchEvent(new TextEvent(TextEvent.LINK, false, false, "discordverify`abc123"));
 		assertEquals("discordverify:abc123", LobbyPopups.lastRequest, "Discord verification links route to verification popup boundary");
 		maker.remove();
+		UploadingPopup.postFactory = savedPostFactory;
+		closeAll();
 	}
 
 	private static function testRemoveUnregistersEveryField():Void {
@@ -68,5 +76,11 @@ class HtmlNameMakerTest {
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {
 		assertions++;
 		if (expected != actual) throw '$message: expected $expected, got $actual';
+	}
+
+	private static function closeAll():Void {
+		for (popup in Popup.getOpen().copy()) {
+			popup.remove();
+		}
 	}
 }

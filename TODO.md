@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `GuildJoinPopup.as`: POST `guild_id` to `guild_join.php`, show the
-  `"Joining guild..."` upload state, and on success update the current guild id,
-  emblem, name, and owner flag before dispatching the usual account-state change.
 - [ ] Complete `GuildPopup.as` guild management behavior: load and display the
   emblem image, wire admin delete buttons, confirm/delete via
   `guild_delete.php`, preserve trial-mod
