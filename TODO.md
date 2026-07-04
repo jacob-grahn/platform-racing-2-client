@@ -18,12 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `AESPad.as` / `Encryptor.as` compatibility for PR2 encrypted
-  fields: zero-pad by writing NUL UTF bytes until the block boundary, keep the
-  Flash `unpad()` behavior used by the original decrypt path, expose the
-  Base64-string `setKey()` / `setIV()` / `encrypt()` / `decrypt()` wrapper, and
-  keep cleanup semantics for callers that use `com.jiggmin.data.Encryptor`
-  instead of the narrow `PR2Encryptor` helpers.
 - [ ] Preserve `CommandHandler.as` incoming socket validation and default command
   side effects: buffer EOL-delimited frames, recompute the first-three-character
   MD5 hash with `CommAuth.getToken(server_id)`, reject replayed/out-of-order
