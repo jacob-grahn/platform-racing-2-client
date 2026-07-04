@@ -28,6 +28,7 @@ class GuildPopup extends Popup {
 	private var scroll:Null<CustomScrollBar>;
 	private var closeBinding:Null<LobbyArt.Binding>;
 	private var messageBinding:Null<LobbyArt.Binding>;
+	private var editBinding:Null<LobbyArt.Binding>;
 	private var titleBox:Null<TextField>;
 	private var guildName:String = "";
 	private var guildId:Int = 0;
@@ -82,6 +83,9 @@ class GuildPopup extends Popup {
 		if (loading != null) loading.visible = false;
 		setVisible("edit_bt", LobbySession.group >= 2 && !LobbySession.isTrialMod);
 		setVisible("delete_bt", LobbySession.group == 3);
+		if (LobbySession.group >= 2 && !LobbySession.isTrialMod) {
+			editBinding = LobbyArt.bind(DisplayUtil.findByName(art, "edit_bt"), clickEdit);
+		}
 
 		var holder = Std.downcast(DisplayUtil.findByName(art, "membersHolder"), DisplayObjectContainer);
 		if (holder != null) {
@@ -110,6 +114,10 @@ class GuildPopup extends Popup {
 
 	private function clickMessage():Void {
 		new SendMessagePopup("guild", "", true);
+	}
+
+	private function clickEdit():Void {
+		new CreateGuildPopup(guildId);
 	}
 
 	private function clickClose():Void {
@@ -175,8 +183,10 @@ class GuildPopup extends Popup {
 		}
 		LobbyArt.unbind(closeBinding);
 		LobbyArt.unbind(messageBinding);
+		LobbyArt.unbind(editBinding);
 		closeBinding = null;
 		messageBinding = null;
+		editBinding = null;
 		for (member in guildMembers.copy()) {
 			member.remove();
 		}

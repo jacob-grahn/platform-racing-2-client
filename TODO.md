@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `CreateGuildPopup.as` and its edit flow: load guild info for edits,
-  display/upload/delete emblems through `EmblemLoader`, post create/edit fields
-  to the Flash endpoints, update `Main` guild account state on owner edits, and
-  gate transfer behind remember-me.
 - [ ] Port `DiscordVerificationPopup.as`: POST the verification code and trimmed
   logged-in PR2 name to `https://jiggmin2.com/discord/verify_pr2.php` through the
   Flash uploading popup and show the `"Verifying..."` progress text.
@@ -29,8 +25,8 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   `"Joining guild..."` upload state, and on success update the current guild id,
   emblem, name, and owner flag before dispatching the usual account-state change.
 - [ ] Complete `GuildPopup.as` guild management behavior: load and display the
-  emblem image, wire moderator edit and admin delete buttons, confirm/delete via
-  `guild_delete.php`, open `CreateGuildPopup` for edits, preserve trial-mod
+  emblem image, wire admin delete buttons, confirm/delete via
+  `guild_delete.php`, preserve trial-mod
   restrictions, and clean up loaders/member rows/keyboard listeners exactly.
 - [ ] Port the read-only `ItemMenu.as` and `HatsMenu.as` used by level-info
   hovers: parse Flash item strings (`all`, blank, numeric and named backtick
@@ -284,8 +280,8 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   forward touch events, expose the Flash cursor identity hooks used by editor
   tools, and preserve the Cmd/Ctrl temporary `ObjectDeleter` swap/restore through
   `Memory.memory` while excluding text, brush, and eyedropper cursors.
-- [ ] Preserve remaining `ui` helper parity from batch 37: port `EmblemLoader`
-  image browse/load/fit-to-canvas/JPEG90 upload events, replace text-only guild
+- [ ] Preserve remaining `ui` helper parity from batch 37: complete `EmblemLoader`
+  local image browse/load/fit-to-canvas/JPEG90 upload events, replace text-only guild
   names with the authored `GuildNameGraphic` helper (including `makeWidth`,
   bold/wide modes, hand cursor, GuildPopup click, and emblem surface), provide a
   reusable `SelectableButton` hover/selected wrapper for popup rows, and restore

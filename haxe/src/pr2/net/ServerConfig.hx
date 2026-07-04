@@ -152,6 +152,22 @@ final class ServerConfig {
 		return host + "/guild_info.php?id=" + id + "&name=" + StringTools.urlEncode(name) + "&getMembers=yes";
 	}
 
+	public static function guildCreateUrl():String {
+		return host + "/guild_create.php";
+	}
+
+	public static function guildEditUrl():String {
+		return host + "/guild_edit.php";
+	}
+
+	public static function emblemUploadUrl():String {
+		return host + "/emblem_upload.php";
+	}
+
+	public static function emblemsUrl():String {
+		return host + "/emblems/";
+	}
+
 	/** Private-message list GET, matching `chat.Messages.getMessages`. */
 	public static function messagesGetUrl(start:Int, count:Int):String {
 		return host + "/messages_get.php?start=" + start + "&count=" + count;
