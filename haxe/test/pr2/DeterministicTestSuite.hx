@@ -19,6 +19,7 @@ import pr2.crypto.RandomCompatTest;
 import pr2.crypto.HurlantSymmetricCompatTest;
 import pr2.crypto.HurlantUtilCompatTest;
 import pr2.data.DataCompatTest;
+import pr2.data.JiggminRandomCompatTest;
 import pr2.data.ObjectsCompatTest;
 import pr2.display.RemovableTest;
 import pr2.effects.PixelEffect1Test;
@@ -126,6 +127,7 @@ class DeterministicTestSuite {
 		HurlantSymmetricCompatTest.main();
 		HurlantUtilCompatTest.main();
 		DataCompatTest.main();
+		JiggminRandomCompatTest.main();
 		ObjectsCompatTest.main();
 		LevelFixtureParserTest.main();
 		ServerLevelDecoderTest.main();

@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Complete `Random.as` public API compatibility: expose `seed`, `nextInt()`,
-  `nextMax()`, `nextNumber()`, and `nextBytes()` with the same range checks and
-  byte writes as Flash, in addition to the already-ported deterministic
-  `nextMinMax()` sequence.
 - [ ] Port `SWFStats.as` frame-rate watchdog behavior: sample one-second timing
   deltas, average 30 samples, and force the stage frame rate back to 27 when the
   Flash client would detect lag/speed changes.
