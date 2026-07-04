@@ -3,6 +3,7 @@ package pr2.lobby.chat;
 import openfl.events.TextEvent;
 import openfl.text.TextField;
 import pr2.lobby.LobbyPopups;
+import haxe.io.Bytes;
 
 /**
 	Port of Flash `com.jiggmin.data.HTMLNameMaker`.
@@ -64,8 +65,31 @@ class HtmlNameMaker {
 
 	public function makeLink(disp:String, url:String):String {
 		disp = ChatText.escapeString(disp);
-		url = StringTools.urlEncode(ChatText.escapeString(url));
+		url = encodeURICompat(ChatText.escapeString(url));
 		return '<u><font color="#0000FF"><a href="event:url`' + url + '">' + disp + "</a></font></u>";
+	}
+
+	private static function encodeURICompat(value:String):String {
+		var bytes = Bytes.ofString(value);
+		var out = new StringBuf();
+		for (i in 0...bytes.length) {
+			var code = bytes.get(i);
+			if (isEncodeURIUnescaped(code)) {
+				out.addChar(code);
+			} else {
+				out.add("%");
+				out.add(StringTools.hex(code, 2));
+			}
+		}
+		return out.toString();
+	}
+
+	private static function isEncodeURIUnescaped(code:Int):Bool {
+		return (code >= "A".code && code <= "Z".code)
+			|| (code >= "a".code && code <= "z".code)
+			|| (code >= "0".code && code <= "9".code)
+			|| "-_.!~*'()".indexOf(String.fromCharCode(code)) >= 0
+			|| ";/?:@&=+$,#[]".indexOf(String.fromCharCode(code)) >= 0;
 	}
 
 	public function listenForLink(field:TextField):Void {
@@ -89,10 +113,14 @@ class HtmlNameMaker {
 				}
 			case "guild":
 				LobbyPopups.showGuild(Std.parseInt(arr[1]) == null ? 0 : Std.parseInt(arr[1]));
+			case "invite":
+				LobbyPopups.showGuildJoin(Std.parseInt(arr[1]) == null ? 0 : Std.parseInt(arr[1]));
 			case "level":
 				LobbyPopups.showLevel(arr.length > 1 ? arr[1] : "");
 			case "url":
 				LobbyPopups.openUrl(arr.length > 1 ? arr[1] : "");
+			case "discordverify":
+				LobbyPopups.showDiscordVerification(arr.length > 1 ? arr[1] : "");
 			default:
 		}
 	}

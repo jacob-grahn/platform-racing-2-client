@@ -56,6 +56,7 @@ import pr2.lobby.ColorPickerTest;
 import pr2.lobby.CreditsPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
+import pr2.lobby.HtmlNameMakerTest;
 import pr2.lobby.LevelInfoPopupTest;
 import pr2.lobby.MessagesItemTest;
 import pr2.lobby.OptionsPopupTest;
@@ -176,6 +177,7 @@ class DeterministicTestSuite {
 		CreditsPopupTest.main();
 		ExternalLinkPopupTest.main();
 		GuildPopupTest.main();
+		HtmlNameMakerTest.main();
 		LevelInfoPopupTest.main();
 		MessagesItemTest.main();
 		OptionsPopupTest.main();

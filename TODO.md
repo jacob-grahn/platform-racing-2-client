@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `HTMLNameMaker.as` link handling beyond basic user/guild/level/url
-  links: support invite and Discord verification events, use Flash's group color
-  and special-user rules for parsed group strings, keep `encodeURI`-style URL
-  handling, and unregister every listened text field on removal.
 - [ ] Port the full `Objects.as` `getFromCode()` editor/display mapping:
   tree/rock/spire/building stamps, all block display classes, BG1-BG7 graphics,
   and `TextObjectGraphic().textBox` should resolve from the same numeric codes as

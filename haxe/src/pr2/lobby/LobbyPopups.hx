@@ -29,6 +29,10 @@ class LobbyPopups {
 		new pr2.lobby.dialogs.GuildPopup(guildId);
 	}
 
+	public static function showGuildJoin(guildId:Int):Void {
+		lastRequest = "invite:" + guildId;
+	}
+
 	public static function showGuildByName(name:String):Void {
 		new pr2.lobby.dialogs.GuildPopup(0, name);
 	}
@@ -44,5 +48,9 @@ class LobbyPopups {
 
 	public static function openUrl(url:String):Void {
 		new ExternalLinkPopup(url);
+	}
+
+	public static function showDiscordVerification(code:String):Void {
+		lastRequest = "discordverify:" + code;
 	}
 }
