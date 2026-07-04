@@ -18,10 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Preserve `BanMenu.as` exact moderation payloads: include the current chat
-  record except in mod/admin rooms, escape the target name in confirmation copy,
-  keep trial-mod duration/scope restrictions, and cleanly detach upload success
-  and error listeners on removal.
 - [ ] Port `ChangePasswordPopup.as`: authored three-field dialog, Enter-key submit,
   password mismatch/current-password validation, AES-encrypted JSON payload using
   `Env.LOGIN_KEY`/`Env.LOGIN_IV`, POST to `change_password.php`, and Flash

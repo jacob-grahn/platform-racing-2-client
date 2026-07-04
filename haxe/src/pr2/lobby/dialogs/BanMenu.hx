@@ -4,6 +4,9 @@ import openfl.display.Sprite;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.LobbySession;
+import pr2.lobby.Memory;
+import pr2.lobby.chat.ChatText;
+import pr2.lobby.tabs.ChatTab;
 import pr2.net.LobbySocket;
 import pr2.net.ServerConfig;
 import pr2.runtime.FlComboBox;
@@ -19,12 +22,14 @@ typedef BanUploadFactory = String->Map<String, String>->String->(Dynamic->Void)-
 **/
 class BanMenu extends Sprite {
 	public static var uploadFactory:BanUploadFactory = defaultUpload;
+	public static var chatRecordProvider:Void->String = defaultChatRecord;
 
 	private var art:Null<PR2MovieClip>;
 	private var target:Popup;
 	private var userName:String;
 	private var banSecs:Int = 0;
 	private var uploading:Null<UploadingPopup>;
+	private var uploadActive:Bool = false;
 	private var bindings:Array<Null<Binding>> = [];
 
 	public function new(name:String, popup:Popup) {
@@ -34,7 +39,9 @@ class BanMenu extends Sprite {
 		art = PR2MovieClip.fromLinkage("BanMenuGraphic", {maxNestedDepth: 4});
 		addChild(art);
 
-		if (!LobbySession.isTrialMod) {
+		if (LobbySession.isTrialMod) {
+			restrictTrialModOptions();
+		} else {
 			addDuration("Three Days", 259200);
 			addDuration("One Week", 604800);
 			addDuration("Two Weeks", 1209600);
@@ -63,6 +70,39 @@ class BanMenu extends Sprite {
 		}
 	}
 
+	private function restrictTrialModOptions():Void {
+		var duration = combo("duration");
+		if (duration != null) {
+			var allowed:Array<Dynamic> = [];
+			for (i in 0...duration.length) {
+				var item = duration.dataProvider.getItemAt(i);
+				var seconds = Std.parseInt(Std.string(Reflect.field(item, "data")));
+				if (seconds != null && seconds <= 86400) {
+					allowed.push(item);
+				}
+			}
+			duration.removeAll();
+			for (item in allowed) {
+				duration.addItem({label: Reflect.field(item, "label"), data: Reflect.field(item, "data")});
+			}
+		}
+		var scope = combo("scope");
+		if (scope != null) {
+			var allowedScopes:Array<Dynamic> = [];
+			for (i in 0...scope.length) {
+				var item = scope.dataProvider.getItemAt(i);
+				if (Reflect.field(item, "data") != "game") {
+					allowedScopes.push(item);
+				}
+			}
+			scope.removeAll();
+			for (item in allowedScopes) {
+				scope.addItem({label: Reflect.field(item, "label"), data: Reflect.field(item, "data")});
+			}
+			scope.enabled = false;
+		}
+	}
+
 	private function bind(name:String, handler:Void->Void):Void {
 		bindings.push(LobbyArt.bind(DisplayUtil.findByName(art, name), handler));
 	}
@@ -83,7 +123,7 @@ class BanMenu extends Sprite {
 		}
 		var scope = selectedData(combo("scope"), "social");
 		var scopeText = scope == "game" ? "ban" : "socially ban";
-		var message = "Are you sure you want to " + scopeText + " " + userName + "?";
+		var message = "Are you sure you want to " + scopeText + " " + ChatText.escapeString(userName) + "?";
 		if (scope == "game") {
 			message += " They won't be able to log onto PR2 or use any of the pages on pr2hub.com.";
 		} else {
@@ -98,17 +138,35 @@ class BanMenu extends Sprite {
 			"duration" => Std.string(banSecs),
 			"reason" => reasonText(),
 			"type" => selectedData(combo("type"), "both"),
-			"scope" => selectedData(combo("scope"), "social"),
-			"record" => ""
+			"scope" => selectedData(combo("scope"), "social")
 		];
-		uploading = uploadFactory(ServerConfig.banUserUrl(), fields, "Banning...", onBanSuccess, onBanError);
+		if (shouldIncludeChatRecord()) {
+			fields.set("record", chatRecordProvider());
+		}
+		uploadActive = true;
+		var popup = uploadFactory(ServerConfig.banUserUrl(), fields, "Banning...", onBanSuccess, onBanError);
+		if (uploadActive) {
+			uploading = popup;
+		} else if (popup != null) {
+			popup.startFadeOut();
+		}
 	}
 
 	private function onBanError(_:String):Void {
+		if (!uploadActive) {
+			return;
+		}
+		uploadActive = false;
+		uploading = null;
 		target.startFadeOut();
 	}
 
 	private function onBanSuccess(parsedData:Dynamic):Void {
+		if (!uploadActive) {
+			return;
+		}
+		uploadActive = false;
+		uploading = null;
 		var banId = 0;
 		if (parsedData != null) {
 			var raw:Dynamic = Reflect.field(parsedData, "ban_id");
@@ -134,6 +192,15 @@ class BanMenu extends Sprite {
 	private function kickUser():Void {
 		LobbySocket.write("kick`" + userName);
 		target.startFadeOut();
+	}
+
+	private static function shouldIncludeChatRecord():Bool {
+		var room = Memory.getString("chatRoom", "");
+		return room != "mod" && room != "admin";
+	}
+
+	public static function defaultChatRecord():String {
+		return ChatTab.instance == null ? "" : ChatTab.instance.getChatRecord();
 	}
 
 	private function combo(name:String):Null<FlComboBox> {
@@ -163,6 +230,7 @@ class BanMenu extends Sprite {
 			LobbyArt.unbind(binding);
 		}
 		bindings = [];
+		uploadActive = false;
 		if (uploading != null) {
 			uploading.startFadeOut();
 			uploading = null;

@@ -29,6 +29,8 @@ class PlayerPopupTest {
 		var savedTempMod = LobbySession.isTempMod;
 		var savedTrialMod = LobbySession.isTrialMod;
 		var savedUploadFactory = BanMenu.uploadFactory;
+		var savedChatRecordProvider = BanMenu.chatRecordProvider;
+		var savedChatRoom = Memory.get("chatRoom");
 
 		testMemberRender();
 		testGuestHandoff();
@@ -42,6 +44,12 @@ class PlayerPopupTest {
 		LobbySession.isTempMod = savedTempMod;
 		LobbySession.isTrialMod = savedTrialMod;
 		BanMenu.uploadFactory = savedUploadFactory;
+		BanMenu.chatRecordProvider = savedChatRecordProvider;
+		if (savedChatRoom == null) {
+			Memory.remove("chatRoom");
+		} else {
+			Memory.set("chatRoom", savedChatRoom);
+		}
 		closeAll();
 		trace('PlayerPopupTest passed $assertions assertions');
 	}
@@ -114,9 +122,11 @@ class PlayerPopupTest {
 		LobbySession.isTempMod = false;
 		LobbySession.isTrialMod = false;
 		LobbySocket.resetSent();
+		Memory.set("chatRoom", "main");
 		closeAll();
 
 		var uploads:Array<{url:String, fields:Map<String, String>, label:String}> = [];
+		BanMenu.chatRecordProvider = function():String return "chat transcript";
 		BanMenu.uploadFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
 				onError:String->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
 			uploads.push({url: url, fields: fields, label: label});
@@ -159,12 +169,61 @@ class PlayerPopupTest {
 		assertEquals("spam", uploads[0].fields.get("reason"), "ban reason field");
 		assertEquals("both", uploads[0].fields.get("type"), "ban type field");
 		assertEquals("social", uploads[0].fields.get("scope"), "ban scope field");
+		assertEquals("chat transcript", uploads[0].fields.get("record"), "ban includes current chat record outside mod rooms");
 		assertEquals("Banning...", uploads[0].label, "ban upload label");
 		assertEquals("ban`Target`86400`social`123`spam", LobbySocket.lastSent(), "ban success emits socket command");
 		assertEquals(true, popup.fadeOutStarted, "ban success closes the player popup");
 
 		popup.remove();
+
+		Memory.set("chatRoom", "mod");
+		uploads = [];
+		var direct = directBanMenu("Bad <Name>");
+		FlComponents.asTextField(DisplayUtil.findByName(direct.art, "reason")).text = "mod room";
+		combo(direct.art, "duration").selectedIndex = 2;
+		click(direct.art, "banButton");
+		confirm = lastPopup(ConfirmPopup);
+		assertNotNull(confirm, "ban confirmation opens for escaped-name check");
+		var confirmText = LobbyArt.text(confirm, "textBox").htmlText;
+		assertEquals(true, confirmText.indexOf("Bad &lt;Name&gt;") >= 0, "ban confirmation escapes target name");
+		click(confirm, "ok_bt");
+		assertEquals(false, uploads[0].fields.exists("record"), "ban omits chat record in mod room");
+		direct.popup.remove();
+
+		LobbySession.isTrialMod = true;
+		direct = directBanMenu("Target");
+		assertTrialDurations(combo(direct.art, "duration"));
+		assertTrialScope(combo(direct.art, "scope"));
+		direct.popup.remove();
+		LobbySession.isTrialMod = false;
+
+		var capturedResult:Null<Dynamic->Void> = null;
+		var capturedError:Null<String->Void> = null;
+		uploads = [];
+		Memory.set("chatRoom", "main");
+		BanMenu.uploadFactory = function(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
+				onError:String->Void):Null<pr2.lobby.dialogs.UploadingPopup> {
+			uploads.push({url: url, fields: fields, label: label});
+			capturedResult = onResult;
+			capturedError = onError;
+			return null;
+		};
+		direct = directBanMenu("Target");
+		FlComponents.asTextField(DisplayUtil.findByName(direct.art, "reason")).text = "late";
+		combo(direct.art, "duration").selectedIndex = 2;
+		click(direct.art, "banButton");
+		confirm = lastPopup(ConfirmPopup);
+		click(confirm, "ok_bt");
+		LobbySocket.resetSent();
+		direct.menu.remove();
+		direct.popup.remove();
+		capturedResult({ban_id: 999});
+		capturedError("late error");
+		assertEquals("", LobbySocket.lastSent(), "removed ban menu ignores late upload callbacks");
+		assertEquals(false, direct.popup.fadeOutStarted, "removed ban menu does not fade target after late upload callbacks");
+
 		BanMenu.uploadFactory = BanMenu.defaultUpload;
+		BanMenu.chatRecordProvider = BanMenu.defaultChatRecord;
 		closeAll();
 	}
 
@@ -287,6 +346,27 @@ class PlayerPopupTest {
 		var combo = Std.downcast(DisplayUtil.findByName(container, name), FlComboBox);
 		if (combo == null) throw name + " is not an FlComboBox";
 		return combo;
+	}
+
+	private static function directBanMenu(name:String):{popup:Popup, menu:BanMenu, art:PR2MovieClip} {
+		var popup = new Popup(false);
+		var menu = new BanMenu(name, popup);
+		popup.addChild(menu);
+		return {popup: popup, menu: menu, art: banMenu(menu)};
+	}
+
+	private static function assertTrialDurations(duration:FlComboBox):Void {
+		for (i in 0...duration.length) {
+			var seconds = Std.parseInt(Std.string(Reflect.field(duration.dataProvider.getItemAt(i), "data")));
+			assertEquals(true, seconds != null && seconds <= 86400, "trial moderator duration stays at one day or less");
+		}
+	}
+
+	private static function assertTrialScope(scope:FlComboBox):Void {
+		assertEquals(false, scope.enabled, "trial moderators cannot change ban scope");
+		for (i in 0...scope.length) {
+			assertEquals(false, Reflect.field(scope.dataProvider.getItemAt(i), "data") == "game", "trial moderators do not get game bans");
+		}
 	}
 
 	private static function findSymbol(container:Dynamic, symbolName:String):PR2MovieClip {

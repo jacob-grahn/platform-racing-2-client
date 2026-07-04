@@ -27,6 +27,8 @@ import pr2.util.DisplayUtil;
 	`chat` / `systemChat` frames are routed in through `CommandHandler`.
 **/
 class ChatTab extends Page {
+	public static var instance(default, null):Null<ChatTab> = null;
+
 	private var art:Null<PR2MovieClip>;
 	private var roomBox:Null<TextField>;
 	private var chatInput:Null<TextField>;
@@ -42,8 +44,13 @@ class ChatTab extends Page {
 
 	public function new() {
 		super();
+		instance = this;
 		nameMaker = new HtmlNameMaker();
 		log = new ChatLog(nameMaker);
+	}
+
+	public function getChatRecord():String {
+		return textBox == null ? "" : textBox.text;
 	}
 
 	override public function initialize():Void {
@@ -209,6 +216,9 @@ class ChatTab extends Page {
 
 	override public function remove():Void {
 		LobbySocket.write("set_chat_room`none");
+		if (instance == this) {
+			instance = null;
+		}
 		if (roomBox != null) {
 			roomBox.removeEventListener(KeyboardEvent.KEY_DOWN, roomBoxListenForEnter);
 		}
