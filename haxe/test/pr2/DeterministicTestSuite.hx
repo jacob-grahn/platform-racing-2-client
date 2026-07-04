@@ -63,6 +63,7 @@ import pr2.lobby.ChangePasswordPopupTest;
 import pr2.lobby.ColorPickerTest;
 import pr2.lobby.CreateGuildPopupTest;
 import pr2.lobby.CreditsPopupTest;
+import pr2.lobby.DiscordVerificationPopupTest;
 import pr2.lobby.ExternalLinkPopupTest;
 import pr2.lobby.GuildPopupTest;
 import pr2.lobby.HtmlNameMakerTest;
@@ -195,6 +196,7 @@ class DeterministicTestSuite {
 		ColorPickerTest.main();
 		CreateGuildPopupTest.main();
 		CreditsPopupTest.main();
+		DiscordVerificationPopupTest.main();
 		ExternalLinkPopupTest.main();
 		GuildPopupTest.main();
 		HtmlNameMakerTest.main();

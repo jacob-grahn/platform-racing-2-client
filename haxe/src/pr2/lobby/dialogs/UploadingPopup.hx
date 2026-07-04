@@ -7,6 +7,8 @@ import pr2.net.FormPostClient;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
+typedef UploadPostFactory = String->Map<String, String>->(String->Void)->(String->Void)->Void;
+
 /**
 	Port of Flash `dialogs.UploadingPopup`: a modal that POSTs a request, shows a
 	progress message with a close button, and dispatches `DONE` (with `parsedData`)
@@ -18,6 +20,7 @@ import pr2.util.DisplayUtil;
 class UploadingPopup extends Popup {
 	public static inline var DONE:String = "uploadDone";
 	public static inline var ERROR:String = "uploadError";
+	public static var postFactory:UploadPostFactory = defaultPost;
 
 	public var parsedData:Dynamic = null;
 
@@ -39,7 +42,7 @@ class UploadingPopup extends Popup {
 		addChild(progressBar);
 		closeBinding = LobbyArt.bind(DisplayUtil.findByName(art, "close_bt"), function():Void startFadeOut());
 
-		FormPostClient.post(url, fields, function(body:String):Void {
+		postFactory(url, fields, function(body:String):Void {
 			progressBar.setProgress(1);
 			try {
 				parsedData = Json.parse(body);
@@ -59,6 +62,10 @@ class UploadingPopup extends Popup {
 			dispatchEvent(new Event(ERROR));
 			startFadeOut();
 		});
+	}
+
+	private static function defaultPost(url:String, fields:Map<String, String>, onResult:String->Void, onError:String->Void):Void {
+		FormPostClient.post(url, fields, onResult, onError);
 	}
 
 	override public function remove():Void {

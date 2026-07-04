@@ -52,5 +52,6 @@ class LobbyPopups {
 
 	public static function showDiscordVerification(code:String):Void {
 		lastRequest = "discordverify:" + code;
+		new pr2.lobby.dialogs.DiscordVerificationPopup(code);
 	}
 }

@@ -18,9 +18,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ## Follow-up Port Gaps
 
-- [ ] Port `DiscordVerificationPopup.as`: POST the verification code and trimmed
-  logged-in PR2 name to `https://jiggmin2.com/discord/verify_pr2.php` through the
-  Flash uploading popup and show the `"Verifying..."` progress text.
 - [ ] Port `GuildJoinPopup.as`: POST `guild_id` to `guild_join.php`, show the
   `"Joining guild..."` upload state, and on success update the current guild id,
   emblem, name, and owner flag before dispatching the usual account-state change.
