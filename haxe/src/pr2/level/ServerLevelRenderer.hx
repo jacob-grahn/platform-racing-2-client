@@ -54,7 +54,7 @@ class ServerLevelRenderer extends Sprite {
 	// mirroring DrawableBackground.rasterTileSize. Kept well under the WebGL
 	// MAX_TEXTURE_SIZE (8192 on many GPUs, 4096 on some) so a single tile never
 	// fails to upload. See rasterizeBrushInto.
-	public static inline var ART_RASTER_TILE_SIZE:Int = 1024;
+	public static inline var ART_RASTER_TILE_SIZE:Int = 512;
 	public static inline var DEFAULT_ART_RASTER_TILE_LIMIT:Int = 750;
 	public static inline var DEFAULT_ART_BRUSH_SIZE:Float = 4.0;
 	private static inline var ART_DRAW_FRAME_BUDGET_SECONDS:Float = 0.008;
