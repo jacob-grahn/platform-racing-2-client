@@ -141,9 +141,9 @@ class Main extends Sprite {
 	}
 
 	private function resolveSiteMode(query:Null<String>):String {
-		var override = QueryParams.get(query, "siteMode");
-		if (override != null && override != "") {
-			return SiteMode.fromDomain(override);
+		var siteModeOverride = QueryParams.get(query, "siteMode");
+		if (siteModeOverride != null && siteModeOverride != "") {
+			return SiteMode.fromDomain(siteModeOverride);
 		}
 		#if js
 		return SiteMode.fromUrl(Browser.location.href);

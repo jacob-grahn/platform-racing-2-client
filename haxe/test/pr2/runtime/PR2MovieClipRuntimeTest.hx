@@ -1241,6 +1241,9 @@ class PR2MovieClipRuntimeTest {
 		var oval = requireChild(clip, "oval");
 		assertClose(60, oval.width, "DOMOvalObject renders its objectWidth");
 		assertClose(40, oval.height, "DOMOvalObject renders its objectHeight");
+
+		var hairline = requireChild(clip, "hairline");
+		assertClose(40, hairline.width, "Flash hairline stroke does not inflate authoring-space bounds");
 	}
 
 	private static function makePrimitiveSymbol():SymbolAssetDef {
@@ -1265,8 +1268,8 @@ class PR2MovieClipRuntimeTest {
 					frames: [{
 						index: 0,
 						duration: 1,
-						elementCount: 2,
-						elementTypes: ["DOMRectangleObject", "DOMOvalObject"],
+						elementCount: 3,
+						elementTypes: ["DOMRectangleObject", "DOMOvalObject", "DOMRectangleObject"],
 						elements: [
 							{
 								type: "DOMRectangleObject",
@@ -1301,6 +1304,20 @@ class PR2MovieClipRuntimeTest {
 								objectWidth: 60,
 								objectHeight: 40,
 								fill: {type: "SolidColor", color: "#00FF00"}
+							},
+							{
+								type: "DOMRectangleObject",
+								name: "hairline",
+								x: 0,
+								y: 0,
+								objectWidth: 40,
+								objectHeight: 30,
+								stroke: {
+									type: "SolidStroke",
+									weight: 0.05,
+									solidStyle: "hairline",
+									fill: {type: "SolidColor", color: "#333333"}
+								}
 							}
 						]
 					}]

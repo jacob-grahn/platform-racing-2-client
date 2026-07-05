@@ -101,6 +101,12 @@ class NineSliceSymbol extends Sprite {
 		}
 	}
 
+	public function setTargetSize(width:Float, height:Float):Void {
+		var scaleX = source.boundsWidth == 0 ? 1 : width / source.boundsWidth;
+		var scaleY = source.boundsHeight == 0 ? 1 : height / source.boundsHeight;
+		applyPlacementScale(scaleX, scaleY);
+	}
+
 	/**
 		Pure nine-slice layout: returns the nine display rects (row-major
 		top/middle/bottom × left/center/right) in symbol-local space for a content

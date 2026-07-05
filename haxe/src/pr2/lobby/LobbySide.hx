@@ -3,9 +3,12 @@ package pr2.lobby;
 #if js
 import js.Browser;
 #end
+import openfl.display.DisplayObject;
 import pr2.app.QueryParams;
 import pr2.page.Page;
 import pr2.page.PageHolder;
+import pr2.runtime.AssetLibrary;
+import pr2.runtime.NineSliceSymbol;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.LobbyTab;
 import pr2.ui.TabsHolder;
@@ -22,15 +25,22 @@ import pr2.ui.TabsHolder;
 	`configure(...)` once their `this`-bound tab handlers can be created.
 **/
 class LobbySide extends PageHolder {
-	private var bg:Null<PR2MovieClip>;
+	private var bg:Null<DisplayObject>;
+	private var bgSlice:Null<NineSliceSymbol>;
+	private var bgExtraW:Float = 0;
+	private var bgExtraH:Float = 0;
 	private var tabsHolder:Null<TabsHolder>;
 
 	public function new() {
 		super();
 	}
 
-	private function configure(tabs:Array<LobbyTab>, hId:String = "", tabSel:Int = 0, maxW:Float = 100, h:Float = 100):Void {
-		bg = PR2MovieClip.fromLinkage("HalfSquareBG", {maxNestedDepth: 4});
+	private function configure(tabs:Array<LobbyTab>, hId:String = "", tabSel:Int = 0, maxW:Float = 100, h:Float = 100, bgExtraW:Float = 0,
+			bgExtraH:Float = 0):Void {
+		this.bgExtraW = bgExtraW;
+		this.bgExtraH = bgExtraH;
+		bgSlice = NineSliceSymbol.tryCreate(AssetLibrary.requireSymbolByLinkage("HalfSquareBG"), {maxNestedDepth: 4});
+		bg = bgSlice != null ? bgSlice : PR2MovieClip.fromLinkage("HalfSquareBG", {maxNestedDepth: 4});
 		bg.y = 15;
 		addChild(bg);
 		tabsHolder = new TabsHolder(tabs, hId, tabSel, maxW);
@@ -59,8 +69,14 @@ class LobbySide extends PageHolder {
 
 	public function setSize(w:Float, h:Float):Void {
 		if (bg != null) {
-			bg.height = h - 15;
-			bg.width = w;
+			var bgW = w + bgExtraW;
+			var bgH = h - 15 + bgExtraH;
+			if (bgSlice != null) {
+				bgSlice.setTargetSize(bgW, bgH);
+			} else {
+				bg.height = bgH;
+				bg.width = bgW;
+			}
 		}
 		if (tabsHolder != null) {
 			tabsHolder.populateTabs(w);
@@ -88,8 +104,12 @@ class LobbySide extends PageHolder {
 			if (bg.parent != null) {
 				bg.parent.removeChild(bg);
 			}
-			bg.dispose();
+			var bgClip = Std.downcast(bg, PR2MovieClip);
+			if (bgClip != null) {
+				bgClip.dispose();
+			}
 			bg = null;
+			bgSlice = null;
 		}
 		if (parent != null) {
 			parent.removeChild(this);

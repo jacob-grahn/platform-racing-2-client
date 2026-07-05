@@ -113,6 +113,7 @@ class LobbyServicesTest {
 		testCommandDispatch();
 		testMemoryAndSecureData();
 		testPmNotificationLifecycle();
+		testLobbySidePanelDimensions();
 		testLoginServerActivationLifecycle();
 		testCheckServersComboPrompts();
 		testCheckServersGuildSelectionRules();
@@ -2521,6 +2522,23 @@ class LobbyServicesTest {
 		left.remove();
 		CommandHandler.commandHandler.clearAll();
 		UnreadNotif.reset();
+	}
+
+	private static function testLobbySidePanelDimensions():Void {
+		LobbySession.clear();
+		LobbySession.group = 1;
+		var left = new LobbyLeft();
+		var leftBg = left.getChildAt(0);
+		assertEquals(194, Math.round(leftBg.width), "left lobby panel renders background width");
+		assertEquals(379, Math.round(leftBg.height), "left lobby panel renders background height");
+		left.remove();
+
+		var right = new LobbyRight();
+		var rightBg = right.getChildAt(0);
+		assertEquals(347, Math.round(rightBg.width), "right lobby panel renders background width");
+		assertEquals(341, Math.round(rightBg.height), "right lobby panel renders background height");
+		right.remove();
+		LobbySession.clear();
 	}
 
 	private static function testLoginServerActivationLifecycle():Void {

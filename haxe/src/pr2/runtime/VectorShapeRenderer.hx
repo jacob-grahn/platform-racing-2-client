@@ -5,6 +5,7 @@ import openfl.display.GraphicsPath;
 import openfl.display.GraphicsPathWinding;
 import openfl.display.GradientType;
 import openfl.display.InterpolationMethod;
+import openfl.display.LineScaleMode;
 import openfl.display.Shape;
 import openfl.display.SpreadMethod;
 import openfl.geom.Matrix;
@@ -69,7 +70,7 @@ class VectorShapeRenderer {
 				}
 				var strokeFill = stroke.value.fill != null ? stroke.value.fill : stroke.value;
 				var strokeColor = colorForStyle(strokeFill);
-				shape.graphics.lineStyle(stroke.value.weight == null ? 1 : stroke.value.weight, strokeColor.color, strokeColor.alpha);
+				applyLineStyle(shape.graphics, stroke.value, strokeColor.color, strokeColor.alpha);
 				if (drawStrokes(shape.graphics, element.edges, stroke.index)) {
 					drew = true;
 				}
@@ -142,8 +143,24 @@ class VectorShapeRenderer {
 	private static function applyStrokeStyle(graphics:Graphics, stroke:StyleValueDef):Void {
 		var strokeFill = stroke.fill != null ? stroke.fill : stroke;
 		var color = colorForStyle(strokeFill);
-		var weight:Float = stroke.weight == null ? 1.0 : stroke.weight;
-		graphics.lineStyle(weight, color.color, color.alpha);
+		applyLineStyle(graphics, stroke, color.color, color.alpha);
+	}
+
+	private static function applyLineStyle(graphics:Graphics, stroke:StyleValueDef, color:Int, alpha:Float):Void {
+		var isHairline = stroke.solidStyle == "hairline";
+		var weight = isHairline ? 0.0 : (stroke.weight == null ? 1.0 : stroke.weight);
+		var pixelHinting = stroke.pixelHinting == true || isHairline;
+		var scaleMode = isHairline ? LineScaleMode.NONE : lineScaleMode(stroke.scaleMode);
+		graphics.lineStyle(weight, color, alpha, pixelHinting, scaleMode);
+	}
+
+	private static function lineScaleMode(value:Dynamic):LineScaleMode {
+		return switch (value) {
+			case "horizontal": LineScaleMode.HORIZONTAL;
+			case "none": LineScaleMode.NONE;
+			case "vertical": LineScaleMode.VERTICAL;
+			default: LineScaleMode.NORMAL;
+		}
 	}
 
 	// Gather all contour pieces touching the given fill style, reversing those
