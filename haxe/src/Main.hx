@@ -157,7 +157,7 @@ class Main extends Sprite {
 			case Campaign: new CampaignTestScreen(
 				QueryParams.get(query, "page"),
 				campaignLevelQuery(query),
-				null,
+				campaignLevelVersionQuery(query),
 				QueryParams.get(query, "localLevel")
 			);
 			case Login: new PageHolder(new LoginPage(siteMode), true);
@@ -213,5 +213,14 @@ class Main extends Sprite {
 	private function campaignLevelQuery(query:Null<String>):Null<String> {
 		var levelId = QueryParams.get(query, "levelId");
 		return levelId != null ? levelId : QueryParams.get(query, "level");
+	}
+
+	private function campaignLevelVersionQuery(query:Null<String>):Null<Int> {
+		var version = QueryParams.get(query, "version");
+		if (version == null) {
+			return null;
+		}
+		var parsed = Std.parseInt(StringTools.trim(version));
+		return parsed == null || parsed < 1 ? null : parsed;
 	}
 }

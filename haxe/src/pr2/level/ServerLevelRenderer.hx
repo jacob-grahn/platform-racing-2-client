@@ -1,6 +1,7 @@
 package pr2.level;
 
 import com.jiggmin.data.Objects;
+import haxe.Timer;
 import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
@@ -56,6 +57,7 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var ART_RASTER_TILE_SIZE:Int = 1024;
 	public static inline var DEFAULT_ART_RASTER_TILE_LIMIT:Int = 750;
 	public static inline var DEFAULT_ART_BRUSH_SIZE:Float = 4.0;
+	private static inline var ART_DRAW_FRAME_BUDGET_SECONDS:Float = 0.008;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
@@ -64,6 +66,7 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var ART_LOAD_WARNING_EDITOR:String = "Error: Some art didn't load correctly. This could be because there's too much art on your level. Saving the level now may cause permanent damage to its playability. Try undoing your recent changes until you don't get this error, and then saving your work.\n\nIf this persists, please contact a member of the PR2 staff team.";
 	public static inline var ART_RASTER_STOP_WARNING:String = "Error: Some art didn't load correctly. Don't worry! You can still play the level.\n\nYou can prevent this in the future by enabling lossless art quality in the options menu.";
 	private static inline var ICE_OVERLAY_NAME:String = "iceOverlay";
+	private static inline var ART_RASTER_CANVAS_NAME:String = "artRasterCanvas";
 	// View-window culling (mirrors Flash background.Background.updateViewWindow):
 	// only blocks within VIEW_MARGIN_SEGMENTS of the visible stage are attached to
 	// blockLayer. Without this the whole level (18k+ blocks on big maps) stays on
@@ -327,7 +330,12 @@ class ServerLevelRenderer extends Sprite {
 				continue;
 			}
 			for (i in 0...container.numChildren) {
-				container.getChildAt(i).cacheAsBitmap = enabled;
+				var child = container.getChildAt(i);
+				if (child.name == ART_RASTER_CANVAS_NAME) {
+					child.cacheAsBitmap = false;
+				} else {
+					child.cacheAsBitmap = enabled;
+				}
 			}
 		}
 	}
@@ -752,12 +760,25 @@ class ServerLevelRenderer extends Sprite {
 
 	private function drawArtBatch(event:Event):Void {
 		try {
-			drawNextArtItems(blocksPerFrame);
+			drawNextArtItemsForFrame();
 		} catch (error:Dynamic) {
 			handleArtDrawFailure(error);
 		}
 		if (drawnArtItems >= totalArtItems) {
 			removeEventListener(Event.ENTER_FRAME, drawArtBatch);
+		}
+	}
+
+	private function drawNextArtItemsForFrame():Void {
+		var deadline = Timer.stamp() + ART_DRAW_FRAME_BUDGET_SECONDS;
+		var drawnThisFrame = 0;
+		while (drawnArtItems < totalArtItems && (drawnThisFrame == 0 || Timer.stamp() < deadline)) {
+			var before = drawnArtItems;
+			drawNextArtItems(1);
+			if (drawnArtItems == before) {
+				return;
+			}
+			drawnThisFrame++;
 		}
 	}
 
@@ -1083,6 +1104,7 @@ class ServerLevelRenderer extends Sprite {
 		// vector graphics instead would make OpenFL's HTML5 backend rasterize the
 		// whole (potentially level-spanning) layer into one offscreen texture.
 		var rasterCanvas = new Sprite();
+		rasterCanvas.name = ART_RASTER_CANVAS_NAME;
 		container.addChild(rasterCanvas);
 		if (incrementalBlocks) {
 			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
@@ -1553,6 +1575,7 @@ private class ArtRasterTiles {
 	private final rasterCanvas:Sprite;
 	private final budget:Null<ArtRasterBudget>;
 	private final tiles:Map<String, Bitmap> = new Map();
+	private var lockedBitmapData:Null<Array<BitmapData>>;
 	private var color:Int = 0x000000;
 	private var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 	private var mode:String = "draw";
@@ -1572,7 +1595,7 @@ private class ArtRasterTiles {
 				mode = action.text;
 			case "d":
 				if (action.values.length >= 2) {
-					rasterStroke(action, mode == "erase");
+					drawRasterStroke(action, mode == "erase");
 				}
 			default:
 		}
@@ -1594,6 +1617,39 @@ private class ArtRasterTiles {
 		tiles.set(key, bitmap);
 		rasterCanvas.addChild(bitmap);
 		return bitmap;
+	}
+
+	private function drawRasterStroke(action:DecodedDrawAction, erase:Bool):Void {
+		lockedBitmapData = [];
+		try {
+			rasterStroke(action, erase);
+		} catch (error:Dynamic) {
+			unlockStrokeTiles();
+			throw error;
+		}
+		unlockStrokeTiles();
+	}
+
+	private function lockStrokeTile(bitmap:Bitmap):Void {
+		if (lockedBitmapData == null) {
+			return;
+		}
+		var data = bitmap.bitmapData;
+		if (lockedBitmapData.indexOf(data) >= 0) {
+			return;
+		}
+		data.lock();
+		lockedBitmapData.push(data);
+	}
+
+	private function unlockStrokeTiles():Void {
+		if (lockedBitmapData == null) {
+			return;
+		}
+		for (data in lockedBitmapData) {
+			data.unlock();
+		}
+		lockedBitmapData = null;
 	}
 
 	private function rasterStroke(action:DecodedDrawAction, erase:Bool):Void {
@@ -1645,6 +1701,7 @@ private class ArtRasterTiles {
 				if (bitmap == null) {
 					continue;
 				}
+				lockStrokeTile(bitmap);
 				bitmap.bitmapData.setPixel32(px - tileX, py - tileY, erase ? 0 : (0xFF000000 | color));
 			}
 		}
