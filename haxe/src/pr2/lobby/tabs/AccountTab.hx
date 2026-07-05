@@ -105,8 +105,8 @@ class AccountTab extends Page {
 		rankTokensUsed = data.rankTokensUsed;
 		rankTokensAvailable = data.rankTokensAvailable;
 		SecureData.setNumber("userRank", rank);
-		setHtml("nameBox", "Welcome, <b>" + StringTools.htmlEscape(LobbySession.userName) + "</b>");
-		setHtml("hatBox", "Hats: <b>" + Std.int(Math.max(0, data.hats.length - 1)) + "</b>");
+		setHtml("nameBox", "Welcome, " + StringTools.htmlEscape(LobbySession.userName));
+		setHtml("hatBox", "Hats: " + Std.int(Math.max(0, data.hats.length - 1)));
 		renderGuild();
 		updateRankControls();
 
@@ -218,7 +218,7 @@ class AccountTab extends Page {
 	}
 
 	private function updateRankControls():Void {
-		setHtml("rankBox", "Rank: <b>" + rank + "</b>");
+		setHtml("rankBox", "Rank: " + rank);
 		var unused = rankTokensAvailable - rankTokensUsed;
 		if (rankUp != null) rankUp.visible = unused > 0;
 		if (rankDown != null) rankDown.visible = rankTokensUsed > 0;
@@ -309,11 +309,11 @@ class AccountTab extends Page {
 
 	private function renderGuild():Void {
 		if (LobbySession.guildId == 0) {
-			setHtml("guildBox", "Guild: <b>none</b>");
+			setHtml("guildBox", "Guild: none");
 			return;
 		}
 		setHtml("guildBox", "Guild: ");
-		guildName = new GuildName(LobbySession.guildId, LobbySession.guildName, LobbySession.emblem, true);
+		guildName = new GuildName(LobbySession.guildId, LobbySession.guildName, LobbySession.emblem);
 		guildName.makeWidth(145);
 		guildName.x = 40;
 		guildName.y = 54;

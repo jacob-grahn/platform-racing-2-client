@@ -1,10 +1,12 @@
 package pr2.lobby.account;
 
+import com.jiggmin.data.Objects;
 import haxe.Timer;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
+import pr2.level.ObjectCodes;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.LobbyArt.Binding;
 import pr2.lobby.dialogs.HoverDelayPopup;
@@ -30,7 +32,7 @@ class PlayerDisplay extends Sprite {
 
 	private var charPreview:AccountCharacter;
 	private var randomButton:Null<HoverDelayPopup>;
-	private var randomGraphic:Null<PR2MovieClip>;
+	private var randomGraphic:Null<DisplayObject>;
 	private var randomBinding:Null<Binding>;
 	private var hover:Null<HoverPopup>;
 	private var hoverTimer:Null<Timer>;
@@ -65,9 +67,11 @@ class PlayerDisplay extends Sprite {
 
 		randomButton = new HoverDelayPopup("Randomize Style",
 			"Create a random style for your character. Remember to save your current style if you like it first!");
-		randomGraphic = PR2MovieClip.fromLinkage("RandomizeStyleButtonGraphic", {maxNestedDepth: 4});
-		randomGraphic.width = randomGraphic.height = 15;
-		randomButton.addChild(randomGraphic);
+		randomGraphic = Objects.getFromCode(ObjectCodes.BLOCK_ITEM);
+		if (randomGraphic != null) {
+			randomGraphic.width = randomGraphic.height = 15;
+			randomButton.addChild(randomGraphic);
+		}
 		randomButton.x = 122.5;
 		randomButton.y = (hasHatRow ? -yStart : 0) + 4.5;
 		randomBinding = LobbyArt.bind(randomButton, onRandomClick);
@@ -179,7 +183,10 @@ class PlayerDisplay extends Sprite {
 		clearInfoHover();
 		LobbyArt.unbind(randomBinding);
 		if (randomGraphic != null) {
-			randomGraphic.dispose();
+			var clip = Std.downcast(randomGraphic, PR2MovieClip);
+			if (clip != null) {
+				clip.dispose();
+			}
 			randomGraphic = null;
 		}
 		if (randomButton != null) {

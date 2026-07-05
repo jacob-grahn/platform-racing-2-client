@@ -22,6 +22,7 @@ import pr2.lobby.dialogs.Popup;
 import pr2.lobby.level.CourseMenu;
 import pr2.lobby.tabs.AccountTab;
 import pr2.ui.GuildName;
+import pr2.util.DisplayUtil;
 
 class AccountTabTest {
 	private static var assertions:Int = 0;
@@ -30,8 +31,10 @@ class AccountTabTest {
 		testCharacterGraphicScale();
 		testCustomizePayload();
 		testGuildRenderingUsesLinkedClipAndEmblem();
+		testAccountSummaryValuesArePlainText();
 		testManualPartDispatchSavesOverrideAndRefreshes();
 		testRankTokenChangesRetestLevelAccess();
+		testStatSlidersDoNotRunUnderRightArrow();
 		testLoadoutsHoverPlacementAndCleanup();
 		testPresetListingThumbnailsMaskNonEpicSecondColors();
 		testHotkeyBlockingMatchesFlash();
@@ -85,7 +88,7 @@ class AccountTabTest {
 		assertEquals(40.0, guildName.x, "account GuildName x matches Flash placement");
 		assertEquals(54.0, guildName.y, "account GuildName y matches Flash placement");
 		assertEquals(145.0, guildName.nameWidthForTests(), "account GuildName uses wide account width");
-		assertEquals(true, guildName.nameHtmlForTests().indexOf("<b>") >= 0, "account GuildName uses bold text");
+		assertEquals(false, guildName.nameHtmlForTests().indexOf("<b>") >= 0, "account GuildName uses plain text");
 		assertEquals(true, guildName.nameHtmlForTests().indexOf("&lt;Guild&gt;") >= 0, "account GuildName escapes guild name");
 		assertEquals("speed.png", guildName.emblemForTests().getFileName(), "account GuildName loads emblem");
 		guildName.dispatchEvent(new MouseEvent(MouseEvent.CLICK));
@@ -98,6 +101,24 @@ class AccountTabTest {
 		LobbySession.guildId = 0;
 		LobbySession.guildName = "";
 		LobbySession.emblem = "";
+	}
+
+	private static function testAccountSummaryValuesArePlainText():Void {
+		var handler = new CommandHandler();
+		LobbySession.userName = "Tester";
+		LobbySession.guildId = 0;
+		LobbySession.guildName = "";
+		LobbySession.emblem = "";
+		var tab = new AccountTab();
+		tab.initialize();
+		handler.dispatch("setCustomizeInfo", customizeArgs());
+		var art = @:privateAccess tab.art;
+
+		assertNotContains(fieldHtml(art, "nameBox"), "<b>", "account username is not bold");
+		assertNotContains(fieldHtml(art, "rankBox"), "<b>", "account rank is not bold");
+		assertNotContains(fieldHtml(art, "hatBox"), "<b>", "account hats count is not bold");
+		assertNotContains(fieldHtml(art, "guildBox"), "<b>", "account empty guild value is not bold");
+		tab.remove();
 	}
 
 	private static function testLoadoutsHoverPlacementAndCleanup():Void {
@@ -257,6 +278,18 @@ class AccountTabTest {
 		tab.remove();
 	}
 
+	private static function testStatSlidersDoNotRunUnderRightArrow():Void {
+		var stats = new StatsSelect(150, 40, 50, 60);
+		var speedSlider = @:privateAccess stats.speedSlider;
+		var accelSlider = @:privateAccess stats.accelSlider;
+		var jumpSlider = @:privateAccess stats.jumpnSlider;
+
+		assertEquals(80.0, @:privateAccess speedSlider.slider.trackWidth, "speed slider track ends before right arrow");
+		assertEquals(80.0, @:privateAccess accelSlider.slider.trackWidth, "acceleration slider track ends before right arrow");
+		assertEquals(80.0, @:privateAccess jumpSlider.slider.trackWidth, "jumping slider track ends before right arrow");
+		stats.remove();
+	}
+
 	private static function testHotkeys():Void {
 		assertEquals(1, AccountTab.keyToSlot(49), "number one");
 		assertEquals(10, AccountTab.keyToSlot(48), "number zero");
@@ -393,8 +426,18 @@ class AccountTabTest {
 		assertEquals("Randomize Style", button.title, "randomize button hover title");
 		assertEquals("Create a random style for your character. Remember to save your current style if you like it first!", button.content,
 			"randomize button hover copy");
+		var randomGraphic = @:privateAccess display.randomGraphic;
+		assertNotNull(randomGraphic, "randomize button mounts item-block graphic");
+		assertEquals("ItemBlock", randomGraphic.name, "randomize button uses item block art");
+		assertEquals(15.0, randomGraphic.width, "randomize item block is small");
+		assertEquals(15.0, randomGraphic.height, "randomize item block stays square");
 		display.remove();
 		character.remove();
+	}
+
+	private static function fieldHtml(container:Dynamic, name:String):String {
+		var field = Std.downcast(DisplayUtil.findByName(container, name), TextField);
+		return field == null ? "" : field.htmlText;
 	}
 
 	private static function customizeArgs():Array<String> {
@@ -421,5 +464,10 @@ class AccountTabTest {
 	private static function assertContains(haystack:String, needle:String, message:String):Void {
 		assertions++;
 		if (haystack == null || haystack.indexOf(needle) < 0) throw '$message: expected to find $needle in $haystack';
+	}
+
+	private static function assertNotContains(haystack:String, needle:String, message:String):Void {
+		assertions++;
+		if (haystack != null && haystack.indexOf(needle) >= 0) throw '$message: did not expect to find $needle in $haystack';
 	}
 }

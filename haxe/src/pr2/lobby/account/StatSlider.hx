@@ -23,6 +23,8 @@ import pr2.util.DisplayUtil;
 	paths: arrow mouse-up and slider thumb release.
 **/
 class StatSlider extends Sprite {
+	private static inline final STAT_SLIDER_TRACK_WIDTH:Float = 80;
+
 	public var value:Int = 0;
 
 	private var m:PR2MovieClip;
@@ -54,6 +56,7 @@ class StatSlider extends Sprite {
 		}
 		slider = Std.downcast(DisplayUtil.findByName(m, "slider"), FlSlider);
 		if (slider != null) {
+			slider.setSize(STAT_SLIDER_TRACK_WIDTH, slider.height);
 			slider.minimum = 0;
 			slider.maximum = 100;
 			slider.addEventListener(Event.CHANGE, onSliderChange);

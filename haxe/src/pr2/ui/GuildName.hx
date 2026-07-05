@@ -30,7 +30,7 @@ class GuildName extends Removable {
 			if (boldText) {
 				nameBox.htmlText = "<b>" + StringTools.htmlEscape(name) + "</b>";
 			} else {
-				nameBox.text = name;
+				nameBox.htmlText = StringTools.htmlEscape(name);
 			}
 			nameBox.width = wide ? 145 : 110;
 		}
