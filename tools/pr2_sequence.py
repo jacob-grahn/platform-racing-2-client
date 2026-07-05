@@ -30,7 +30,11 @@ def load_sequence(script_path, *, normalize_hold=False, allow_query=True):
 
 
 def common_step_query(steps):
-    queries = {step.get("query", "") for step in steps if step.get("query", "")}
+    queries = {
+        step.get("query", "")
+        for step in steps
+        if step.get("query", "") and step.get("action") != "navigate"
+    }
     if len(queries) > 1:
         raise SystemExit("Sequence can only use one query string per browser session.")
     return next(iter(queries), "")

@@ -2,7 +2,7 @@
   "query": "screen=lobby&user=Tester&apiHost=/api",
   "steps": [
     {"time": 2.0, "action": "body-attribute", "name": "data-pr2-page", "value": "lobby:Tester"},
-    {"time": 2.1, "action": "click", "x": 440, "y": 10},
+    {"time": 2.1, "action": "click", "x": 515, "y": 10},
     {"time": 2.3, "action": "body-attribute", "name": "data-pr2-lobby-right", "value": "search"},
     {"time": 2.5, "action": "shot", "out": "test/output/openfl-combo-search-closed.png"},
 

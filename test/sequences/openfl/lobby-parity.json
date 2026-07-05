@@ -16,7 +16,7 @@
     {"time": 3.4, "action": "body-attribute", "name": "data-pr2-lobby-left", "value": "chat"},
     {"time": 3.5, "action": "body-attribute", "name": "data-pr2-last-command", "value": "set_chat_room`main"},
 
-    {"time": 3.6, "action": "click", "x": 440, "y": 10},
+    {"time": 3.6, "action": "click", "x": 515, "y": 10},
     {"time": 3.8, "action": "body-attribute", "name": "data-pr2-lobby-right", "value": "search"},
     {"time": 3.9, "action": "click", "x": 320, "y": 102},
     {"time": 4.0, "action": "typeText", "text": "Tester"},

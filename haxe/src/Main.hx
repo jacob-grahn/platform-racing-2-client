@@ -19,6 +19,10 @@ import pr2.audio.AudioManager;
 import pr2.net.ServerConfig;
 import pr2.net.CommAuth;
 import pr2.net.SavedAccounts;
+import pr2.net.CampaignLevelInfo;
+import pr2.net.LevelListClient.LevelListResult;
+import pr2.lobby.tabs.ListingTab;
+import pr2.lobby.tabs.SearchTab;
 import pr2.page.CampaignTestScreen;
 import pr2.page.CustomizeCharacterScreen;
 import pr2.page.IntroPage;
@@ -73,7 +77,7 @@ class Main extends Sprite {
 			var screen = Screen.fromQuery(query);
 			addChild(buildScreen(screen, query, siteMode));
 			addGlobalChrome(screen);
-			signalAppReady();
+			signalAppReady(screen);
 			#if pr2_leak_probe
 			installLeakProbe();
 			#end
@@ -88,8 +92,9 @@ class Main extends Sprite {
 	// sent earlier hit the preloader, not the game, and are silently dropped.
 	// Sequences gate their first step on this attribute instead of guessing a
 	// fixed preload time (see tools/openfl_driver.py).
-	private function signalAppReady():Void {
+	private function signalAppReady(screen:Screen):Void {
 		#if js
+		Browser.document.body.setAttribute("data-pr2-screen", screen);
 		Browser.document.body.setAttribute("data-pr2-app-ready", "1");
 		// Expose the live stage so automated harnesses can hit-test the display
 		// list for authored buttons whose on-stage position is hard to predict
@@ -182,6 +187,9 @@ class Main extends Sprite {
 		if (userName == null) {
 			userName = guest ? "Guest" : "Tester";
 		}
+		if (QueryParams.get(query, "offlineLists") == "1") {
+			installOfflineLobbyListFixtures();
+		}
 		pr2.lobby.LobbySession.begin(userName, guest ? 0 : 1);
 		var holder = new PageHolder(new pr2.page.LobbyPage(userName), true);
 		#if js
@@ -192,6 +200,30 @@ class Main extends Sprite {
 		};
 		#end
 		return holder;
+	}
+
+	private function installOfflineLobbyListFixtures():Void {
+		ListingTab.fetchFactory = function(mode:String, page:Int, onResult:LevelListResult->Void, onError:String->Void) {
+			onResult(new LevelListResult(offlineLevels(mode, page), true));
+			return {remove: function():Void {}};
+		};
+		ListingTab.fetchFavoritesFactory = function(userId:Int, page:Int, token:String, onResult:LevelListResult->Void, onError:String->Void) {
+			onResult(new LevelListResult(offlineLevels("favorites", page), true));
+			return {remove: function():Void {}};
+		};
+		SearchTab.searchFactory = function(params:Map<String, String>, onResult:LevelListResult->Void, onError:String->Void) {
+			onResult(new LevelListResult(offlineLevels("search", 1), true));
+			return {remove: function():Void {}};
+		};
+	}
+
+	private static function offlineLevels(mode:String, page:Int):Array<CampaignLevelInfo> {
+		var label = mode == null || mode == "" ? "Level" : mode;
+		return [
+			new CampaignLevelInfo(1000 + page * 10, 1, '$label Test 1', "Tester", 0, 4.2, 120),
+			new CampaignLevelInfo(1001 + page * 10, 1, '$label Test 2', "Jiggmin", 3, 3.8, 98),
+			new CampaignLevelInfo(1002 + page * 10, 1, '$label Test 3', "Guest", 0, 5.0, 42)
+		];
 	}
 
 	private function parseScale(value:Null<String>):Float {

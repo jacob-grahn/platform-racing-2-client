@@ -24,6 +24,10 @@ run_step() {
 run_step deterministic haxe test/deterministic.hxml
 run_step protocol haxe test/protocol.hxml
 run_step html5-build haxelib run openfl build html5
+run_step browser-navigation \
+  python3 tools/openfl_driver.py \
+    --metrics-out test/output/browser-navigation-metrics.json \
+    sequence test/sequences/openfl/navigation.json
 run_step lobby-interactions \
   python3 tools/openfl_driver.py sequence test/sequences/openfl/lobby-flow.json
 run_step lobby-flatten-capture \

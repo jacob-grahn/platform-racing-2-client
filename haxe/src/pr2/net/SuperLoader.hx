@@ -232,7 +232,7 @@ class SuperLoader extends EventDispatcher {
 		active = false;
 		errorMessage = message;
 		removeTransportListeners();
-		if (show && message != "" && toURL.indexOf("server_status_2.txt") == -1) showMessage(message);
+		if (show && autoEchoMessage && message != "" && toURL.indexOf("server_status_2.txt") == -1) showMessage(message);
 		if (sourceEvent != null) dispatchEvent(sourceEvent.clone());
 		dispatchEvent(new Event(e));
 	}

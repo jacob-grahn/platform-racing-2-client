@@ -6,7 +6,7 @@ Commands:
   shot <out.png>                serve export/html5/bin and capture a screenshot
   fps                           run the build and validate logged FPS samples
   debug-state                   read and optionally validate harness debug state
-  sequence <script.json>        replay timed screenshot actions
+  sequence <script.json>        replay timed screenshot/navigation actions
 
 Shot options:
   --root <dir>                  HTML root, default export/html5/bin
@@ -18,6 +18,7 @@ Shot options:
   --fps-target <fps>            FPS validation target, default 27
   --fps-tolerance <fps>         FPS validation tolerance, default 5
   --expect <key=value>          expected debug-state field, repeatable
+  --metrics-out <path>          write JSON metrics collected by sequence metrics steps
 
 Sequence script format:
   {
@@ -31,8 +32,8 @@ Sequence script format:
   }
 
   A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
-  tap, hold, mouseMove, click, typeText, rebuild-lobby, shot, debug-state,
-  body-attribute.
+  tap, hold, mouseMove, click, typeText, rebuild-lobby, navigate, metrics, shot,
+  debug-state, body-attribute.
 
   Sequences wait for the app to boot past the OpenFL preloader before the
   clock starts: step `time` offsets are measured from the moment `Main` sets
@@ -88,6 +89,23 @@ KEY_DEFINITIONS = {
     "c": {"key": "c", "code": "KeyC", "windowsVirtualKeyCode": 67, "text": "c"},
 }
 
+SEQUENCE_METRIC_KEYS = [
+    "Timestamp",
+    "JSHeapUsedSize",
+    "JSHeapTotalSize",
+    "Nodes",
+    "JSEventListeners",
+    "Documents",
+    "Frames",
+    "LayoutObjects",
+    "LayoutCount",
+    "RecalcStyleCount",
+    "TaskDuration",
+    "ScriptDuration",
+    "LayoutDuration",
+    "RecalcStyleDuration",
+]
+
 
 def gpu_flags(use_gpu):
     # Default: software compositing (SwiftShader) for reproducible, machine-independent
@@ -95,6 +113,10 @@ def gpu_flags(use_gpu):
     # real GPU path, useful for the e2e physics run where a higher/steadier framerate
     # matters more than pixel-identical output.
     return [] if use_gpu else ["--disable-gpu"]
+
+
+def browser_harness_flags():
+    return ["--disable-features=BackForwardCache"]
 
 
 class QuietHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
@@ -157,6 +179,8 @@ def capture_shot(out_path, root, delay, browser_path, query="", use_gpu=False):
         command = [
             browser,
             "--headless=new",
+            *browser_harness_flags(),
+            "--js-flags=--expose-gc",
             *gpu_flags(use_gpu),
             "--hide-scrollbars",
             "--window-size=550,400",
@@ -239,6 +263,8 @@ def run_browser_and_read_debug_state(browser, url, delay, use_gpu=False):
     command = [
         browser,
         "--headless=new",
+        *browser_harness_flags(),
+        "--js-flags=--expose-gc",
         *gpu_flags(use_gpu),
         "--hide-scrollbars",
         "--window-size=550,400",
@@ -271,6 +297,8 @@ def browser_devtools_session(browser, url, use_gpu=False):
     command = [
         browser,
         "--headless=new",
+        *browser_harness_flags(),
+        "--js-flags=--expose-gc",
         *gpu_flags(use_gpu),
         "--hide-scrollbars",
         "--window-size=550,400",
@@ -505,15 +533,18 @@ class WebSocket:
             self.socket.close()
 
 
-def run_sequence(script_path, root, browser_path, base_url=None, use_gpu=False):
+def run_sequence(script_path, root, browser_path, base_url=None, use_gpu=False, metrics_out=None):
     browser = resolve_browser(browser_path)
     query, steps = load_pr2_sequence(script_path, normalize_hold=True)
 
     server = contextlib.nullcontext(base_url) if base_url else serve(root)
     with server as url:
-        url = append_query(url, query)
-        with browser_devtools_session(browser, url, use_gpu) as devtools:
-            run_sequence_steps(devtools, steps)
+        base_page_url = url
+        initial_url = append_query(base_page_url, query)
+        with browser_devtools_session(browser, initial_url, use_gpu) as devtools:
+            context = SequenceContext(devtools, base_page_url, metrics_out)
+            run_sequence_steps(devtools, steps, context)
+            context.write_metrics()
 
 
 # The OpenFL preloader runs for a variable amount of time before `Main` boots.
@@ -539,17 +570,135 @@ def wait_for_app_ready(devtools, timeout=APP_READY_TIMEOUT):
     )
 
 
-def run_sequence_steps(devtools, steps):
+class SequenceContext:
+    def __init__(self, devtools, base_page_url, metrics_out=None):
+        self.devtools = devtools
+        self.base_page_url = base_page_url
+        self.metrics_out = metrics_out
+        self.samples = []
+        self.last_metric_time = None
+        self.performance_enabled = False
+
+    def after_app_ready(self):
+        if self.metrics_out is None:
+            return
+        if not self.performance_enabled:
+            self.devtools.request("Performance.enable")
+            self.performance_enabled = True
+        self.install_frame_counter()
+        self.last_metric_time = time.monotonic()
+
+    def install_frame_counter(self):
+        self.devtools.evaluate(
+            """
+(() => {
+  window.__pr2SequenceFrames = 0;
+  if (!window.__pr2SequenceFrameCounterInstalled) {
+    window.__pr2SequenceFrameCounterInstalled = true;
+    const tick = () => {
+      window.__pr2SequenceFrames = (window.__pr2SequenceFrames || 0) + 1;
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+})()
+"""
+        )
+
+    def navigate(self, query):
+        url = append_query(self.base_page_url, query)
+        self.devtools.request("Page.navigate", {"url": url})
+        wait_for_app_ready(self.devtools)
+        self.after_app_ready()
+        print(f"navigate: {query}")
+
+    def sample_metrics(self, label, seconds=0.5):
+        if self.metrics_out is None:
+            print(f"metrics: {label} (no --metrics-out path; skipped)")
+            return
+        try:
+            seconds = float(seconds)
+        except (TypeError, ValueError):
+            raise SystemExit(f"Invalid metrics seconds value: {seconds}")
+        if seconds <= 0:
+            raise SystemExit(f"metrics seconds must be positive: {seconds}")
+        self.install_frame_counter()
+        self.devtools.evaluate("window.__pr2SequenceFrames = 0")
+        time.sleep(seconds)
+        frames = self.devtools.evaluate("window.__pr2SequenceFrames || 0")
+        try:
+            fps = float(frames) / seconds
+        except (TypeError, ValueError):
+            fps = 0.0
+        self.devtools.evaluate("window.gc && window.gc()")
+        time.sleep(0.05)
+        metrics = read_performance_metrics(self.devtools)
+        attrs = read_sequence_attributes(self.devtools)
+        url = self.devtools.evaluate("location.href")
+        selected = {key: metrics.get(key) for key in SEQUENCE_METRIC_KEYS if key in metrics}
+        sample = {
+            "label": label,
+            "url": url,
+            "sampleWindowSec": seconds,
+            "fps": fps,
+            "attributes": attrs,
+            "metrics": selected,
+        }
+        self.samples.append(sample)
+        heap_mb = selected.get("JSHeapUsedSize", 0) / 1e6
+        nodes = int(selected.get("Nodes", 0))
+        layouts = int(selected.get("LayoutCount", 0))
+        recalcs = int(selected.get("RecalcStyleCount", 0))
+        print(f"metrics: {label} fps={fps:.1f} heapMB={heap_mb:.1f} nodes={nodes} layouts={layouts} recalcs={recalcs}")
+        self.last_metric_time = time.monotonic()
+
+    def write_metrics(self):
+        if self.metrics_out is None:
+            return
+        os.makedirs(os.path.dirname(os.path.abspath(self.metrics_out)), exist_ok=True)
+        with open(self.metrics_out, "w", encoding="utf-8") as file:
+            json.dump(self.samples, file, indent=2, sort_keys=True)
+        print(f"Metrics saved: {self.metrics_out} ({len(self.samples)} samples)")
+
+
+def read_performance_metrics(devtools):
+    response = devtools.request("Performance.getMetrics")
+    metrics = {}
+    for metric in response.get("result", {}).get("metrics", []):
+        metrics[metric["name"]] = metric["value"]
+    return metrics
+
+
+def read_sequence_attributes(devtools):
+    text = devtools.evaluate(
+        """
+JSON.stringify({
+  screen: document.body.getAttribute("data-pr2-screen") || "",
+  page: document.body.getAttribute("data-pr2-page") || "",
+  introState: document.body.getAttribute("data-pr2-intro-state") || "",
+  lobbyLeft: document.body.getAttribute("data-pr2-lobby-left") || "",
+  lobbyRight: document.body.getAttribute("data-pr2-lobby-right") || "",
+  debugState: document.body.getAttribute("data-pr2-debug-state") || "",
+  error: document.body.getAttribute("data-pr2-error") || ""
+})
+"""
+    )
+    return json.loads(text)
+
+
+def run_sequence_steps(devtools, steps, context=None):
     wait_for_app_ready(devtools)
+    if context is not None:
+        context.after_app_ready()
     start = time.monotonic()
     for step in steps:
         wait = start + step["time"] - time.monotonic()
         if wait > 0:
             time.sleep(wait)
-        run_sequence_step(devtools, step)
+        run_sequence_step(devtools, step, context)
 
 
-def run_sequence_step(devtools, step):
+def run_sequence_step(devtools, step, context=None):
     action = step["action"]
     if action == "keyDown":
         dispatch_key(devtools, "keyDown", require_key(step))
@@ -577,6 +726,14 @@ def run_sequence_step(devtools, step):
         if rebuilt is not True:
             raise SystemExit("Lobby rebuild hook is unavailable.")
         print("rebuild-lobby")
+    elif action == "navigate":
+        if context is None:
+            raise SystemExit("Sequence navigate step requires a sequence context.")
+        context.navigate(require_field(step, "query"))
+    elif action == "metrics":
+        if context is None:
+            raise SystemExit("Sequence metrics step requires a sequence context.")
+        context.sample_metrics(str(step.get("label", "metrics")), step.get("seconds", 0.5))
     elif action in ("launch", "quit"):
         # Lifecycle steps for the Flash projector; the browser session manages
         # its own launch/teardown, so these are no-ops for parity sequences.
@@ -870,6 +1027,7 @@ def main():
     parser.add_argument("--fps-target", type=int, default=27)
     parser.add_argument("--fps-tolerance", type=int, default=5)
     parser.add_argument("--expect", action="append", default=[])
+    parser.add_argument("--metrics-out")
     parser.add_argument(
         "--gpu",
         action="store_true",
@@ -892,7 +1050,7 @@ def main():
     if args.command == "shot":
         capture_shot(args.out, args.root, args.delay, args.browser, args.query, args.gpu)
     elif args.command == "sequence":
-        run_sequence(args.script, args.root, args.browser, args.base_url, args.gpu)
+        run_sequence(args.script, args.root, args.browser, args.base_url, args.gpu, args.metrics_out)
     elif args.command == "fps":
         check_fps(args.root, args.fps_duration, args.fps_target, args.fps_tolerance, args.browser, args.query, args.gpu)
     elif args.command == "debug-state":

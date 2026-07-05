@@ -152,7 +152,7 @@ class SuperLoaderTest {
 		assertEquals(1, ioErrors, "underlying IO error is forwarded");
 		assertEquals(1, errors, "anyError dispatched");
 		assertEquals("Error: timeout (HTTP 503)", loader.errorMessage, "error message exposed");
-		assertEquals("Error: timeout (HTTP 503)", messages[0], "IO error displayed");
+		assertEquals(0, messages.length, "autoEchoMessage=false suppresses IO error display");
 
 		fake = new FakeTransport();
 		SuperLoader.transportFactory = function():Dynamic return fake;

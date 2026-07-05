@@ -1,5 +1,5 @@
 {
-  "query": "screen=lobby&user=Tester",
+  "query": "screen=lobby&user=Tester&offlineLists=1",
   "steps": [
     {
       "time": 2.0,
@@ -39,7 +39,7 @@
     {
       "time": 2.7,
       "action": "click",
-      "x": 440,
+      "x": 515,
       "y": 10
     },
     {

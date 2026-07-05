@@ -514,8 +514,18 @@ python3 tools/openfl_driver.py --base-url http://127.0.0.1:8000 sequence test/se
 ```
 
 Sequence files keep one browser session open and can combine `keyDown`,
-`keyUp`, `tap`, `hold`, `mouseMove`, `debug-state`, and `shot` actions. Screenshots and
-diff output should go under ignored `test/output/`.
+`keyUp`, `tap`, `hold`, `mouseMove`, `navigate`, `metrics`, `debug-state`, and
+`shot` actions. Screenshots, metrics, and diff output should go under ignored
+`test/output/`.
+
+Run the broad browser navigation smoke suite, including route reloads, member
+and guest lobby tabs, and per-checkpoint Chrome metrics:
+
+```sh
+tools/test_browser_navigation.sh
+```
+
+The metrics JSON is written to `test/output/browser-navigation-metrics.json`.
 
 Sequences wait for the app to boot past the OpenFL preloader before the clock
 starts: step `time` offsets are measured from when `Main` sets the
