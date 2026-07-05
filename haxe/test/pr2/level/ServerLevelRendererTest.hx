@@ -36,6 +36,7 @@ class ServerLevelRendererTest {
 		testIncrementalBlockDrawing();
 		testViewWindowRefreshesBeforeLeftEdgeExposure();
 		testIncrementalArtDrawing();
+		testArtRasterTilesCullToViewWindow();
 		testIncrementalArtFailureCompletesAndWarns();
 		testRasterTileLimitStopsAndWarns();
 		testArtBatchLimitsRejectHugeSpans();
@@ -269,7 +270,7 @@ class ServerLevelRendererTest {
 		var art = new DecodedArtLayer([
 			new DecodedDrawAction("c", [0xFF0000]),
 			new DecodedDrawAction("t", [3]),
-			new DecodedDrawAction("d", [0, 0, 10, 10])
+			new DecodedDrawAction("d", [10020, 10050, 10, 10])
 		], [new DecodedArtObject(4, 10, 20)], [new DecodedTextObject("hello|world", 15, 25, 0x00FF00)], 1);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, true, 3);
 		var artLayer = worldLayer(renderer, 1);
@@ -282,16 +283,42 @@ class ServerLevelRendererTest {
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(3, renderer.drawnArtItemCount(), "first art batch counts the initial stroke commands");
 		assertEquals(1, artLayer.numChildren, "first art batch has not reached text object");
-		assertTrue(strokeRaster(artLayer).numChildren > 0, "first art batch shows in-progress stroke tiles");
+		assertTrue(strokeRaster(artLayer).numChildren > 0, "first art batch refreshes one visible stroke tile");
 		assertEquals(false, renderer.isDrawingComplete(), "renderer waits for remaining art item");
 
 		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(5, renderer.drawnArtItemCount(), "second art batch draws final text item");
 		assertEquals(3, artLayer.numChildren, "second art batch attaches object and text above the stroke canvas");
+		assertTrue(strokeRaster(artLayer).numChildren > 0, "completed art rendering attaches visible stroke tiles");
 		assertEquals(true, renderer.isDrawingComplete(), "renderer completes after blocks and art");
 		assertEquals("Cactus", artLayer.getChildAt(1).name, "incremental art uses Objects factory for stamps");
 		var field = Std.downcast(artLayer.getChildAt(2), TextField);
 		assertEquals("hello,world", field.text, "incremental text uses server text parsing");
+	}
+
+	private static function testArtRasterTilesCullToViewWindow():Void {
+		var focus = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
+		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var farX = focus.x + tile * 6;
+		var nearTileX = Std.int(Math.floor(focus.x / tile)) * tile;
+		var farTileX = Std.int(Math.floor(farX / tile)) * tile;
+		var art = new DecodedArtLayer([
+			new DecodedDrawAction("d", [focus.x, focus.y]),
+			new DecodedDrawAction("d", [farX, focus.y])
+		], [], [], 1);
+		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [focus], [art]), focus, 180, 280);
+		var raster = strokeRaster(worldLayer(renderer, 1));
+
+		assertEquals(1, raster.numChildren, "art raster culling starts with only visible tiles attached");
+		var visible = Std.downcast(raster.getChildAt(0), Bitmap);
+		assertEquals(nearTileX, Std.int(visible.x), "initial art raster tile is the focused tile");
+
+		renderer.setCameraOffset(180 - farX, 280 - focus.y);
+		renderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+
+		assertEquals(1, raster.numChildren, "art raster culling keeps off-screen tiles detached after scroll");
+		visible = Std.downcast(raster.getChildAt(0), Bitmap);
+		assertEquals(farTileX, Std.int(visible.x), "scrolling attaches the newly visible raster tile");
 	}
 
 	private static function testIncrementalArtFailureCompletesAndWarns():Void {
@@ -325,8 +352,8 @@ class ServerLevelRendererTest {
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
 		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
 		var art = new DecodedArtLayer([
-			new DecodedDrawAction("d", [10, 10]),
-			new DecodedDrawAction("d", [tile + 20, 10])
+			new DecodedDrawAction("d", [block.x, block.y]),
+			new DecodedDrawAction("d", [block.x + tile + 20, block.y])
 		], [], [], 1);
 		var warnings:Array<String> = [];
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [art]), block, 180, 280, false,

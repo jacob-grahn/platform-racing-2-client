@@ -61,6 +61,9 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var ART_DRAW_BATCH_MAX_TILE_COUNT:Int = 24;
 	public static inline var ART_DRAW_BATCH_MAX_TILE_SPAN:Int = 2;
 	private static inline var ART_DRAW_FRAME_BUDGET_SECONDS:Float = 0.008;
+	public static inline var ART_RASTER_VIEW_MARGIN_TILES:Int = 1;
+	public static inline var ART_RASTER_VIEW_REBUILD_THRESHOLD:Int = 1;
+	public static inline var ART_RASTER_ATTACH_TILES_PER_FRAME:Int = 1;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
 	public static inline var DEFAULT_BLOCKS_PER_FRAME:Int = 50;
@@ -109,6 +112,7 @@ class ServerLevelRenderer extends Sprite {
 	private var tweenRotation:Float = 0;
 	private final blockLayer:Sprite = new Sprite();
 	private final artLayerContainers:Array<Sprite> = [];
+	private final artRasterTileLayers:Array<ArtRasterTiles> = [];
 	private var solidBackground:Null<Shape>;
 	private var currentBackgroundColor:Int;
 	private var artBackgroundTintScale:Float = 1;
@@ -142,6 +146,7 @@ class ServerLevelRenderer extends Sprite {
 	private var attemptedArtItems:Int = 0;
 	private var artLoadWarningShown:Bool = false;
 	private var rasterStopNotified:Bool = false;
+	private var artRasterAttachActive:Bool = false;
 	public var artWarningMessage(default, null):Null<String>;
 	public var stoppedRasterizing(default, null):Bool = false;
 
@@ -250,10 +255,13 @@ class ServerLevelRenderer extends Sprite {
 			this.courseRotation = courseRotation;
 			applyLayerTransforms();
 			updateViewWindow(true);
+			updateArtViewWindows(true);
 		}
 		if (this.tweenRotation != tweenRotation) {
 			this.tweenRotation = tweenRotation;
 			applyTweenRotation();
+			updateViewWindow(false);
+			updateArtViewWindows(false);
 		}
 	}
 
@@ -272,6 +280,7 @@ class ServerLevelRenderer extends Sprite {
 		if (courseRotation != 0) {
 			applyLayerTransforms();
 			updateViewWindow(true);
+			updateArtViewWindows(true);
 		}
 	}
 
@@ -321,6 +330,7 @@ class ServerLevelRenderer extends Sprite {
 		offsetY = Math.round(y);
 		applyLayerTransforms();
 		updateViewWindow(false);
+		updateArtViewWindows(false);
 	}
 
 	/** Applies Flash `Course.setColor`/`Background.applyColorTransform` to rendered planes. */
@@ -768,11 +778,13 @@ class ServerLevelRenderer extends Sprite {
 	private function drawArtBatch(event:Event):Void {
 		try {
 			drawNextArtItemsForFrame();
+			attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME);
 		} catch (error:Dynamic) {
 			handleArtDrawFailure(error);
 		}
 		if (drawnArtItems >= totalArtItems) {
 			removeEventListener(Event.ENTER_FRAME, drawArtBatch);
+			finishArtRasterAttaching();
 		}
 	}
 
@@ -973,15 +985,65 @@ class ServerLevelRenderer extends Sprite {
 		viewInitialized = true;
 	}
 
+	private function updateArtViewWindows(force:Bool):Void {
+		for (tiles in artRasterTileLayers) {
+			if (tiles != null) {
+				updateArtViewWindow(tiles, force);
+			}
+		}
+		if (drawnArtItems >= totalArtItems) {
+			finishArtRasterAttaching();
+		}
+	}
+
+	private function updateArtViewWindow(tiles:ArtRasterTiles, force:Bool):Void {
+		var rasterCanvas = tiles.rasterCanvas;
+		if (rasterCanvas.parent == null) {
+			return;
+		}
+		var toLocal = rasterCanvas.transform.matrix.clone();
+		toLocal.concat(rasterCanvas.parent.transform.matrix);
+		toLocal.concat(worldContainer.transform.matrix);
+		toLocal.invert();
+		var minX = Math.POSITIVE_INFINITY;
+		var minY = Math.POSITIVE_INFINITY;
+		var maxX = Math.NEGATIVE_INFINITY;
+		var maxY = Math.NEGATIVE_INFINITY;
+		for (corner in [new Point(0, 0), new Point(Constants.STAGE_WIDTH, 0), new Point(0, Constants.STAGE_HEIGHT),
+			new Point(Constants.STAGE_WIDTH, Constants.STAGE_HEIGHT)]) {
+			var local = toLocal.transformPoint(corner);
+			if (local.x < minX) minX = local.x;
+			if (local.x > maxX) maxX = local.x;
+			if (local.y < minY) minY = local.y;
+			if (local.y > maxY) maxY = local.y;
+		}
+		var tile = ART_RASTER_TILE_SIZE;
+		var margin = ART_RASTER_VIEW_MARGIN_TILES * tile;
+		tiles.setVisibleTileWindow(
+			artTileOrigin(Std.int(Math.floor(minX))) - margin,
+			artTileOrigin(Std.int(Math.floor(maxX))) + margin,
+			artTileOrigin(Std.int(Math.floor(minY))) - margin,
+			artTileOrigin(Std.int(Math.floor(maxY))) + margin,
+			force
+		);
+	}
+
 	private static inline function intAbs(value:Int):Int {
 		return value < 0 ? -value : value;
+	}
+
+	private static inline function artTileOrigin(pixel:Int):Int {
+		var tile = ART_RASTER_TILE_SIZE;
+		return Std.int(Math.floor(pixel / tile)) * tile;
 	}
 
 	public function remove():Void {
 		removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
 		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
+		removeEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
 		removeEventListener(Event.ENTER_FRAME, onWaterRippleFrame);
 		removeEventListener(Event.ENTER_FRAME, onBlockBounceFrame);
+		artRasterAttachActive = false;
 		waterRippleFrames.clear();
 		blockBounceVelocities.clear();
 		// Dispose every arrow movie clip, including off-screen ones that culling left
@@ -1115,12 +1177,17 @@ class ServerLevelRenderer extends Sprite {
 		var rasterCanvas = new Sprite();
 		rasterCanvas.name = ART_RASTER_CANVAS_NAME;
 		container.addChild(rasterCanvas);
+		var strokeTiles = new ArtRasterTiles(rasterCanvas, artRasterBudget);
+		artRasterTileLayers[index] = strokeTiles;
 		if (incrementalBlocks) {
 			totalArtItems += layer.drawActions.length + layer.objects.length + layer.texts.length;
-			artDrawCursors[index] = new ArtDrawCursor(container, rasterCanvas, layer, artRasterBudget);
+			artDrawCursors[index] = new ArtDrawCursor(container, strokeTiles, layer);
 		} else {
 			try {
-				renderLayerStrokes(rasterCanvas, layer.drawActions, artRasterBudget);
+				for (action in layer.drawActions) {
+					strokeTiles.apply(action);
+				}
+				strokeTiles.flush();
 				drawLayerObjects(container, layer.objects, layer.scale);
 				drawLayerTexts(container, layer.texts, layer.scale);
 			} catch (error:Dynamic) {
@@ -1128,6 +1195,10 @@ class ServerLevelRenderer extends Sprite {
 			}
 		}
 		worldContainer.addChild(container);
+		updateArtViewWindow(strokeTiles, true);
+		if (!incrementalBlocks) {
+			strokeTiles.attachQueuedTiles(1000000);
+		}
 	}
 
 	private function redrawSolidBackground():Void {
@@ -1221,6 +1292,44 @@ class ServerLevelRenderer extends Sprite {
 		drawnArtItems = totalArtItems;
 		nextArtLayerToDraw = artDrawCursors.length;
 		removeEventListener(Event.ENTER_FRAME, drawArtBatch);
+		finishArtRasterAttaching();
+	}
+
+	private function finishArtRasterAttaching():Void {
+		if (hasQueuedVisibleArtRasterTiles() && !artRasterAttachActive) {
+			artRasterAttachActive = true;
+			addEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
+		}
+	}
+
+	private function onArtRasterAttachFrame(event:Event):Void {
+		attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME);
+		if (!hasQueuedVisibleArtRasterTiles()) {
+			artRasterAttachActive = false;
+			removeEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
+		}
+	}
+
+	private function attachArtRasterTiles(limit:Int):Int {
+		var remaining = limit;
+		for (tiles in artRasterTileLayers) {
+			if (remaining <= 0) {
+				break;
+			}
+			if (tiles != null) {
+				remaining -= tiles.attachQueuedTiles(remaining);
+			}
+		}
+		return limit - remaining;
+	}
+
+	private function hasQueuedVisibleArtRasterTiles():Bool {
+		for (tiles in artRasterTileLayers) {
+			if (tiles != null && tiles.hasQueuedVisibleTiles()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private function notifyRasterStopped():Void {
@@ -1276,6 +1385,8 @@ class ServerLevelRenderer extends Sprite {
 		for (action in actions) {
 			tiles.apply(action);
 		}
+		tiles.flush();
+		tiles.attachQueuedTiles(1000000);
 	}
 
 	/**
@@ -1524,11 +1635,11 @@ private class ArtDrawCursor {
 	private var objectIndex:Int = 0;
 	private var textIndex:Int = 0;
 
-	public function new(container:Sprite, rasterCanvas:Sprite, layer:DecodedArtLayer, ?budget:ArtRasterBudget) {
+	public function new(container:Sprite, strokeTiles:ArtRasterTiles, layer:DecodedArtLayer) {
 		this.container = container;
-		this.rasterCanvas = rasterCanvas;
+		this.rasterCanvas = strokeTiles.rasterCanvas;
 		this.layer = layer;
-		this.strokeTiles = new ArtRasterTiles(rasterCanvas, budget);
+		this.strokeTiles = strokeTiles;
 	}
 
 	public function drawNext(maxActions:Int = 1):Int {
@@ -1641,10 +1752,12 @@ class ArtRasterBudget {
 }
 
 private class ArtRasterTiles {
-	private final rasterCanvas:Sprite;
+	public final rasterCanvas:Sprite;
 	private final budget:Null<ArtRasterBudget>;
 	private final tiles:Map<String, Bitmap> = new Map();
 	private var lockedBitmapData:Null<Array<BitmapData>>;
+	private var attachQueue:Array<String> = [];
+	private var attachQueueSeen:Map<String, Bool> = new Map();
 	private var pendingShape:Null<Shape>;
 	private var pendingTileKeys:Array<String> = [];
 	private var pendingTileKeySeen:Map<String, Bool> = new Map();
@@ -1654,6 +1767,11 @@ private class ArtRasterTiles {
 	private var pendingMaxTileX:Int = 0;
 	private var pendingMinTileY:Int = 0;
 	private var pendingMaxTileY:Int = 0;
+	private var viewInitialized:Bool = false;
+	private var viewMinTileX:Int = 0;
+	private var viewMaxTileX:Int = 0;
+	private var viewMinTileY:Int = 0;
+	private var viewMaxTileY:Int = 0;
 	private var color:Int = 0x000000;
 	private var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 	private var mode:String = "draw";
@@ -1717,6 +1835,7 @@ private class ArtRasterTiles {
 			matrix.identity();
 			matrix.translate(-pendingTileXs[i], -pendingTileYs[i]);
 			bitmap.bitmapData.draw(shape, matrix, null, null, null, true);
+			queueTileAttach(pendingTileKeys[i]);
 		}
 		pendingShape = null;
 		pendingTileKeys = [];
@@ -1724,6 +1843,76 @@ private class ArtRasterTiles {
 		pendingTileXs = [];
 		pendingTileYs = [];
 		pendingMinTileX = pendingMaxTileX = pendingMinTileY = pendingMaxTileY = 0;
+	}
+
+	public function setVisibleTileWindow(minTileX:Int, maxTileX:Int, minTileY:Int, maxTileY:Int, force:Bool):Void {
+		var threshold = ServerLevelRenderer.ART_RASTER_VIEW_REBUILD_THRESHOLD * ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		if (!force
+			&& viewInitialized
+			&& intAbs(minTileX - viewMinTileX) <= threshold
+			&& intAbs(maxTileX - viewMaxTileX) <= threshold
+			&& intAbs(minTileY - viewMinTileY) <= threshold
+			&& intAbs(maxTileY - viewMaxTileY) <= threshold) {
+			return;
+		}
+		viewMinTileX = minTileX;
+		viewMaxTileX = maxTileX;
+		viewMinTileY = minTileY;
+		viewMaxTileY = maxTileY;
+		viewInitialized = true;
+		for (key in tiles.keys()) {
+			var bitmap = tiles.get(key);
+			if (bitmap == null) {
+				continue;
+			}
+			if (isTileVisible(Std.int(bitmap.x), Std.int(bitmap.y))) {
+				queueTileAttach(key);
+			} else {
+				setTileAttached(bitmap, false);
+			}
+		}
+	}
+
+	public function attachQueuedTiles(limit:Int):Int {
+		if (limit <= 0 || attachQueue.length == 0) {
+			return 0;
+		}
+		var attached = 0;
+		var remainingKeys:Array<String> = [];
+		var remainingSeen:Map<String, Bool> = new Map();
+		for (key in attachQueue) {
+			var bitmap = tiles.get(key);
+			if (bitmap == null) {
+				continue;
+			}
+			if (!isTileVisible(Std.int(bitmap.x), Std.int(bitmap.y))) {
+				setTileAttached(bitmap, false);
+				continue;
+			}
+			if (bitmap.parent == rasterCanvas) {
+				continue;
+			}
+			if (attached < limit) {
+				setTileAttached(bitmap, true);
+				attached++;
+			} else if (!remainingSeen.exists(key)) {
+				remainingSeen.set(key, true);
+				remainingKeys.push(key);
+			}
+		}
+		attachQueue = remainingKeys;
+		attachQueueSeen = remainingSeen;
+		return attached;
+	}
+
+	public function hasQueuedVisibleTiles():Bool {
+		for (key in attachQueue) {
+			var bitmap = tiles.get(key);
+			if (bitmap != null && bitmap.parent != rasterCanvas && isTileVisible(Std.int(bitmap.x), Std.int(bitmap.y))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private function getOrCreateTile(tileX:Int, tileY:Int):Null<Bitmap> {
@@ -1740,8 +1929,38 @@ private class ArtRasterTiles {
 		bitmap.x = tileX;
 		bitmap.y = tileY;
 		tiles.set(key, bitmap);
-		rasterCanvas.addChild(bitmap);
+		queueTileAttach(key);
 		return bitmap;
+	}
+
+	private function isTileVisible(tileX:Int, tileY:Int):Bool {
+		return !viewInitialized || (tileX >= viewMinTileX && tileX <= viewMaxTileX && tileY >= viewMinTileY && tileY <= viewMaxTileY);
+	}
+
+	private function setTileAttached(bitmap:Bitmap, attach:Bool):Void {
+		if (attach) {
+			if (bitmap.parent != rasterCanvas) {
+				rasterCanvas.addChild(bitmap);
+			}
+		} else if (bitmap.parent == rasterCanvas) {
+			rasterCanvas.removeChild(bitmap);
+		}
+	}
+
+	private function queueTileAttach(key:String):Void {
+		if (attachQueueSeen.exists(key)) {
+			return;
+		}
+		var bitmap = tiles.get(key);
+		if (bitmap == null || bitmap.parent == rasterCanvas || !isTileVisible(Std.int(bitmap.x), Std.int(bitmap.y))) {
+			return;
+		}
+		attachQueueSeen.set(key, true);
+		attachQueue.push(key);
+	}
+
+	private static inline function intAbs(value:Int):Int {
+		return value < 0 ? -value : value;
 	}
 
 	private function drawRasterStroke(action:DecodedDrawAction, erase:Bool):Void {
@@ -1963,12 +2182,14 @@ private class ArtRasterTiles {
 				}
 				var tileX = tileOrigin(px);
 				var tileY = tileOrigin(py);
-				var bitmap = erase ? tiles.get(tileKey(tileX, tileY)) : getOrCreateTile(tileX, tileY);
+				var key = tileKey(tileX, tileY);
+				var bitmap = erase ? tiles.get(key) : getOrCreateTile(tileX, tileY);
 				if (bitmap == null) {
 					continue;
 				}
 				lockStrokeTile(bitmap);
 				bitmap.bitmapData.setPixel32(px - tileX, py - tileY, erase ? 0 : (0xFF000000 | color));
+				queueTileAttach(key);
 			}
 		}
 	}
