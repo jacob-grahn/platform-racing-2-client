@@ -38,6 +38,7 @@ class ServerLevelRendererTest {
 		testIncrementalArtDrawing();
 		testIncrementalArtFailureCompletesAndWarns();
 		testRasterTileLimitStopsAndWarns();
+		testArtBatchLimitsRejectHugeSpans();
 		testDrawArtSettingSkipsGameplayArt();
 		testBg5CircleGrid();
 		testArrowAnimation();
@@ -340,6 +341,29 @@ class ServerLevelRendererTest {
 		assertTrue(warnings[0].indexOf("lossless art quality") >= 0, "raster stop warning uses Flash lossless-quality hint");
 		assertEquals(1, strokeRaster(artLayer).numChildren, "raster tile budget stops creating new tiles after the limit");
 		assertEquals(true, renderer.isDrawingComplete(), "raster stop does not leave renderer stuck drawing");
+	}
+
+	private static function testArtBatchLimitsRejectHugeSpans():Void {
+		assertEquals(true, ServerLevelRenderer.isArtDrawBatchWithinLimits(
+			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_COUNT,
+			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN,
+			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN
+		), "art batch accepts the configured maximum");
+		assertEquals(false, ServerLevelRenderer.isArtDrawBatchWithinLimits(
+			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_COUNT + 1,
+			1,
+			1
+		), "art batch rejects too many touched tiles");
+		assertEquals(false, ServerLevelRenderer.isArtDrawBatchWithinLimits(
+			2,
+			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN + 1,
+			1
+		), "art batch rejects far-apart horizontal strokes");
+		assertEquals(false, ServerLevelRenderer.isArtDrawBatchWithinLimits(
+			2,
+			1,
+			ServerLevelRenderer.ART_DRAW_BATCH_MAX_TILE_SPAN + 1
+		), "art batch rejects far-apart vertical strokes");
 	}
 
 	private static function testDrawArtSettingSkipsGameplayArt():Void {

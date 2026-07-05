@@ -57,6 +57,9 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var ART_RASTER_TILE_SIZE:Int = 512;
 	public static inline var DEFAULT_ART_RASTER_TILE_LIMIT:Int = 750;
 	public static inline var DEFAULT_ART_BRUSH_SIZE:Float = 4.0;
+	private static inline var ART_DRAW_ACTION_BATCH_LIMIT:Int = 96;
+	public static inline var ART_DRAW_BATCH_MAX_TILE_COUNT:Int = 24;
+	public static inline var ART_DRAW_BATCH_MAX_TILE_SPAN:Int = 4;
 	private static inline var ART_DRAW_FRAME_BUDGET_SECONDS:Float = 0.008;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
@@ -189,6 +192,10 @@ class ServerLevelRenderer extends Sprite {
 
 	public function isBlockDrawingComplete():Bool {
 		return nextBlockToDraw >= level.blocks.length;
+	}
+
+	public static inline function isArtDrawBatchWithinLimits(tileCount:Int, tileSpanX:Int, tileSpanY:Int):Bool {
+		return tileCount <= ART_DRAW_BATCH_MAX_TILE_COUNT && tileSpanX <= ART_DRAW_BATCH_MAX_TILE_SPAN && tileSpanY <= ART_DRAW_BATCH_MAX_TILE_SPAN;
 	}
 
 	public function isDrawingComplete():Bool {
@@ -772,13 +779,15 @@ class ServerLevelRenderer extends Sprite {
 	private function drawNextArtItemsForFrame():Void {
 		var deadline = Timer.stamp() + ART_DRAW_FRAME_BUDGET_SECONDS;
 		var drawnThisFrame = 0;
-		while (drawnArtItems < totalArtItems && (drawnThisFrame == 0 || Timer.stamp() < deadline)) {
+		var actionBatchLimit = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? ART_DRAW_ACTION_BATCH_LIMIT : 1;
+		var maxItemsThisFrame = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? 1000000 : blocksPerFrame;
+		while (drawnArtItems < totalArtItems && drawnThisFrame < maxItemsThisFrame && (drawnThisFrame == 0 || Timer.stamp() < deadline)) {
 			var before = drawnArtItems;
-			drawNextArtItems(1);
+			drawNextArtItems(actionBatchLimit);
 			if (drawnArtItems == before) {
 				return;
 			}
-			drawnThisFrame++;
+			drawnThisFrame += drawnArtItems - before;
 		}
 	}
 
@@ -1188,10 +1197,11 @@ class ServerLevelRenderer extends Sprite {
 			if (artOptions != null && artOptions.artDrawFaultInjector != null) {
 				artOptions.artDrawFaultInjector(attemptedArtItems);
 			}
-			attemptedArtItems++;
-			if (cursor.drawNext()) {
-				drawnArtItems++;
-				remaining--;
+			var drawn = cursor.drawNext(artOptions != null && artOptions.artDrawFaultInjector != null ? 1 : remaining);
+			if (drawn > 0) {
+				attemptedArtItems += drawn;
+				drawnArtItems += drawn;
+				remaining -= drawn;
 			}
 			if (cursor.isComplete()) {
 				nextArtLayerToDraw++;
@@ -1521,25 +1531,84 @@ private class ArtDrawCursor {
 		this.strokeTiles = new ArtRasterTiles(rasterCanvas, budget);
 	}
 
-	public function drawNext():Bool {
+	public function drawNext(maxActions:Int = 1):Int {
 		if (actionIndex < layer.drawActions.length) {
-			var action = layer.drawActions[actionIndex++];
-			strokeTiles.apply(action);
-			return true;
+			var drawn = 0;
+			var batchDrawStrokes = maxActions > 1;
+			while (drawn < maxActions && actionIndex < layer.drawActions.length) {
+				var action = layer.drawActions[actionIndex++];
+				if (batchDrawStrokes) {
+					strokeTiles.applyBatched(action);
+				} else {
+					strokeTiles.apply(action);
+				}
+				drawn++;
+			}
+			if (batchDrawStrokes) {
+				strokeTiles.flush();
+			}
+			return drawn;
 		}
+		strokeTiles.flush();
 		if (objectIndex < layer.objects.length) {
 			ServerLevelRenderer.addLayerObject(container, layer.objects[objectIndex++], layer.scale);
-			return true;
+			return 1;
 		}
 		if (textIndex < layer.texts.length) {
 			ServerLevelRenderer.addLayerText(container, layer.texts[textIndex++], layer.scale);
-			return true;
+			return 1;
 		}
-		return false;
+		return 0;
 	}
 
 	public function isComplete():Bool {
 		return actionIndex >= layer.drawActions.length && objectIndex >= layer.objects.length && textIndex >= layer.texts.length;
+	}
+}
+
+private class ArtStrokeTileSet {
+	public final keys:Array<String> = [];
+	public final tileXs:Array<Int> = [];
+	public final tileYs:Array<Int> = [];
+	public final seen:Map<String, Bool> = new Map();
+	public var minTileX:Int = 0;
+	public var maxTileX:Int = 0;
+	public var minTileY:Int = 0;
+	public var maxTileY:Int = 0;
+
+	public function new() {}
+
+	public function add(key:String, tileX:Int, tileY:Int):Void {
+		if (seen.exists(key)) {
+			return;
+		}
+		seen.set(key, true);
+		keys.push(key);
+		tileXs.push(tileX);
+		tileYs.push(tileY);
+		if (keys.length == 1) {
+			minTileX = maxTileX = tileX;
+			minTileY = maxTileY = tileY;
+			return;
+		}
+		if (tileX < minTileX) minTileX = tileX;
+		if (tileX > maxTileX) maxTileX = tileX;
+		if (tileY < minTileY) minTileY = tileY;
+		if (tileY > maxTileY) maxTileY = tileY;
+	}
+
+	public function tileSpanX():Int {
+		if (keys.length == 0) {
+			return 0;
+		}
+		return Std.int((maxTileX - minTileX) / ServerLevelRenderer.ART_RASTER_TILE_SIZE) + 1;
+	}
+
+	public function tileSpanY():Int {
+		if (keys.length == 0) {
+			return 0;
+		}
+		return Std.int((maxTileY - minTileY) / ServerLevelRenderer.ART_RASTER_TILE_SIZE) + 1;
 	}
 }
 
@@ -1576,6 +1645,15 @@ private class ArtRasterTiles {
 	private final budget:Null<ArtRasterBudget>;
 	private final tiles:Map<String, Bitmap> = new Map();
 	private var lockedBitmapData:Null<Array<BitmapData>>;
+	private var pendingShape:Null<Shape>;
+	private var pendingTileKeys:Array<String> = [];
+	private var pendingTileKeySeen:Map<String, Bool> = new Map();
+	private var pendingTileXs:Array<Int> = [];
+	private var pendingTileYs:Array<Int> = [];
+	private var pendingMinTileX:Int = 0;
+	private var pendingMaxTileX:Int = 0;
+	private var pendingMinTileY:Int = 0;
+	private var pendingMaxTileY:Int = 0;
 	private var color:Int = 0x000000;
 	private var size:Float = ServerLevelRenderer.DEFAULT_ART_BRUSH_SIZE;
 	private var mode:String = "draw";
@@ -1601,6 +1679,53 @@ private class ArtRasterTiles {
 		}
 	}
 
+	public function applyBatched(action:DecodedDrawAction):Void {
+		switch (action.kind) {
+			case "c":
+				color = Std.int(action.values[0]);
+			case "t":
+				size = action.values[0];
+			case "m":
+				if (action.text == "erase") {
+					flush();
+				}
+				mode = action.text;
+			case "d":
+				if (action.values.length >= 2) {
+					if (mode == "erase") {
+						flush();
+						drawRasterStroke(action, true);
+					} else {
+						addDrawStrokeToBatch(action);
+					}
+				}
+			default:
+		}
+	}
+
+	public function flush():Void {
+		if (pendingShape == null) {
+			return;
+		}
+		var shape = pendingShape;
+		var matrix = new Matrix();
+		for (i in 0...pendingTileKeys.length) {
+			var bitmap = getOrCreateTile(pendingTileXs[i], pendingTileYs[i]);
+			if (bitmap == null) {
+				continue;
+			}
+			matrix.identity();
+			matrix.translate(-pendingTileXs[i], -pendingTileYs[i]);
+			bitmap.bitmapData.draw(shape, matrix, null, null, null, true);
+		}
+		pendingShape = null;
+		pendingTileKeys = [];
+		pendingTileKeySeen = new Map();
+		pendingTileXs = [];
+		pendingTileYs = [];
+		pendingMinTileX = pendingMaxTileX = pendingMinTileY = pendingMaxTileY = 0;
+	}
+
 	private function getOrCreateTile(tileX:Int, tileY:Int):Null<Bitmap> {
 		var key = tileKey(tileX, tileY);
 		var bitmap = tiles.get(key);
@@ -1620,6 +1745,7 @@ private class ArtRasterTiles {
 	}
 
 	private function drawRasterStroke(action:DecodedDrawAction, erase:Bool):Void {
+		flush();
 		lockedBitmapData = [];
 		try {
 			rasterStroke(action, erase);
@@ -1628,6 +1754,146 @@ private class ArtRasterTiles {
 			throw error;
 		}
 		unlockStrokeTiles();
+	}
+
+	private function addDrawStrokeToBatch(action:DecodedDrawAction):Void {
+		var radius = Math.max(0.5, size / 2);
+		var strokeTiles = collectStrokeTiles(action, radius);
+		if (strokeTiles == null) {
+			drawRasterStroke(action, false);
+			return;
+		}
+		if (!canAddStrokeTilesToBatch(strokeTiles)) {
+			flush();
+		}
+		if (!canAddStrokeTilesToBatch(strokeTiles)) {
+			drawRasterStroke(action, false);
+			return;
+		}
+		if (pendingShape == null) {
+			pendingShape = new Shape();
+		}
+		var graphics = pendingShape.graphics;
+		graphics.lineStyle(size, color);
+		var x = action.values[0];
+		var y = action.values[1];
+		graphics.moveTo(x, y);
+		graphics.lineTo(x - 0.15, y);
+		graphics.moveTo(x, y);
+		var i = 2;
+		while (i + 1 < action.values.length) {
+			var nextX = x + action.values[i];
+			var nextY = y + action.values[i + 1];
+			graphics.lineTo(nextX, nextY);
+			x = nextX;
+			y = nextY;
+			i += 2;
+		}
+		addPendingStrokeTiles(strokeTiles);
+	}
+
+	private function collectStrokeTiles(action:DecodedDrawAction, radius:Float):Null<ArtStrokeTileSet> {
+		var tiles = new ArtStrokeTileSet();
+		var x = action.values[0];
+		var y = action.values[1];
+		addTilesForBounds(tiles, x - radius - 1, y - radius - 1, x + radius + 1, y + radius + 1);
+		if (!isStrokeTileSetBatchable(tiles)) {
+			return null;
+		}
+		var i = 2;
+		while (i + 1 < action.values.length) {
+			var nextX = x + action.values[i];
+			var nextY = y + action.values[i + 1];
+			addTilesForBounds(tiles,
+				Math.min(x, nextX) - radius - 1,
+				Math.min(y, nextY) - radius - 1,
+				Math.max(x, nextX) + radius + 1,
+				Math.max(y, nextY) + radius + 1
+			);
+			if (!isStrokeTileSetBatchable(tiles)) {
+				return null;
+			}
+			x = nextX;
+			y = nextY;
+			i += 2;
+		}
+		return tiles;
+	}
+
+	private function addTilesForBounds(tiles:ArtStrokeTileSet, minX:Float, minY:Float, maxX:Float, maxY:Float):Void {
+		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		var tileY = tileOrigin(Std.int(Math.floor(minY)));
+		var endY = tileOrigin(Std.int(Math.floor(maxY)));
+		while (tileY <= endY) {
+			var tileX = tileOrigin(Std.int(Math.floor(minX)));
+			var endX = tileOrigin(Std.int(Math.floor(maxX)));
+			while (tileX <= endX) {
+				var key = tileKey(tileX, tileY);
+				tiles.add(key, tileX, tileY);
+				tileX += tile;
+			}
+			tileY += tile;
+		}
+	}
+
+	private function isStrokeTileSetBatchable(tiles:ArtStrokeTileSet):Bool {
+		return ServerLevelRenderer.isArtDrawBatchWithinLimits(tiles.keys.length, tiles.tileSpanX(), tiles.tileSpanY());
+	}
+
+	private function canAddStrokeTilesToBatch(strokeTiles:ArtStrokeTileSet):Bool {
+		var count = pendingTileKeys.length;
+		var minTileX = pendingMinTileX;
+		var maxTileX = pendingMaxTileX;
+		var minTileY = pendingMinTileY;
+		var maxTileY = pendingMaxTileY;
+		if (pendingShape == null) {
+			count = 0;
+			minTileX = strokeTiles.minTileX;
+			maxTileX = strokeTiles.maxTileX;
+			minTileY = strokeTiles.minTileY;
+			maxTileY = strokeTiles.maxTileY;
+		}
+		for (i in 0...strokeTiles.keys.length) {
+			var key = strokeTiles.keys[i];
+			var tileX = strokeTiles.tileXs[i];
+			var tileY = strokeTiles.tileYs[i];
+			if (!pendingTileKeySeen.exists(key)) {
+				count++;
+			}
+			if (tileX < minTileX) minTileX = tileX;
+			if (tileX > maxTileX) maxTileX = tileX;
+			if (tileY < minTileY) minTileY = tileY;
+			if (tileY > maxTileY) maxTileY = tileY;
+		}
+		var tile = ServerLevelRenderer.ART_RASTER_TILE_SIZE;
+		return ServerLevelRenderer.isArtDrawBatchWithinLimits(
+			count,
+			Std.int((maxTileX - minTileX) / tile) + 1,
+			Std.int((maxTileY - minTileY) / tile) + 1
+		);
+	}
+
+	private function addPendingStrokeTiles(strokeTiles:ArtStrokeTileSet):Void {
+		for (i in 0...strokeTiles.keys.length) {
+			var key = strokeTiles.keys[i];
+			if (!pendingTileKeySeen.exists(key)) {
+				var tileX = strokeTiles.tileXs[i];
+				var tileY = strokeTiles.tileYs[i];
+				pendingTileKeySeen.set(key, true);
+				pendingTileKeys.push(key);
+				pendingTileXs.push(tileX);
+				pendingTileYs.push(tileY);
+				if (pendingTileKeys.length == 1) {
+					pendingMinTileX = pendingMaxTileX = tileX;
+					pendingMinTileY = pendingMaxTileY = tileY;
+				} else {
+					if (tileX < pendingMinTileX) pendingMinTileX = tileX;
+					if (tileX > pendingMaxTileX) pendingMaxTileX = tileX;
+					if (tileY < pendingMinTileY) pendingMinTileY = tileY;
+					if (tileY > pendingMaxTileY) pendingMaxTileY = tileY;
+				}
+			}
+		}
 	}
 
 	private function lockStrokeTile(bitmap:Bitmap):Void {
