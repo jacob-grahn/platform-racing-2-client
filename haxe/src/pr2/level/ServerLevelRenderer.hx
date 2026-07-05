@@ -59,7 +59,7 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var DEFAULT_ART_BRUSH_SIZE:Float = 4.0;
 	private static inline var ART_DRAW_ACTION_BATCH_LIMIT:Int = 96;
 	public static inline var ART_DRAW_BATCH_MAX_TILE_COUNT:Int = 24;
-	public static inline var ART_DRAW_BATCH_MAX_TILE_SPAN:Int = 4;
+	public static inline var ART_DRAW_BATCH_MAX_TILE_SPAN:Int = 2;
 	private static inline var ART_DRAW_FRAME_BUDGET_SECONDS:Float = 0.008;
 	public static inline var DEFAULT_FOCUS_X:Float = 180;
 	public static inline var DEFAULT_FOCUS_Y:Float = 280;
