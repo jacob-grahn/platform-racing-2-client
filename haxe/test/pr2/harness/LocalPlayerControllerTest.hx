@@ -1126,12 +1126,15 @@ class LocalPlayerControllerTest {
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var events = player.consumeBlockVisualEvents();
+		assertEquals(0, events.length, "laser shot does not damage distant blocks on the firing frame");
 
+		stepFrames(player, 2);
+		events = player.consumeBlockVisualEvents();
 		assertEquals(1, events.length, "laser shot side-hit emits one block visual event");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "laser side-hit uses block bump animation event");
 		assertEquals(4, events[0].tileX, "laser side-hit targets the first solid block in the shot path");
 		assertEquals(5, events[0].tileY, "laser side-hit targets the shot-height block row");
-		assertEquals(5, events[0].hitX, "right-facing laser bumps the block sideways");
+		assertEquals(20, events[0].hitX, "right-facing laser bumps the block with Flash's clamped impulse");
 		assertEquals(0, events[0].hitY, "side shot does not use the upward bump impulse");
 	}
 
@@ -1142,7 +1145,10 @@ class LocalPlayerControllerTest {
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var events = player.consumeBlockVisualEvents();
+		assertEquals(0, events.length, "laser shot does not break a distant brick on the firing frame");
 
+		stepFrames(player, 2);
+		events = player.consumeBlockVisualEvents();
 		assertEquals(3, events.length, "laser-damaged brick emits bump, activation, and pieces");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "laser damage still bumps the brick");
 		assertEquals("LocalActivate", Std.string(events[1].kind), "laser damage activates the brick");
@@ -1350,7 +1356,10 @@ class LocalPlayerControllerTest {
 		makeItemAvailable(player);
 		player.step(new LocalPlayerInput(false, false, false, false, true));
 		var events = player.consumeBlockVisualEvents();
+		assertEquals(0, events.length, "laser shot does not chip a distant crumble block on the firing frame");
 
+		stepFrames(player, 2);
+		events = player.consumeBlockVisualEvents();
 		assertEquals(3, events.length, "laser-damaged crumble emits bump, activation, and chip pieces");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "laser damage bumps the crumble block");
 		assertEquals("LocalActivate", Std.string(events[1].kind), "laser damage activates the crumble block");

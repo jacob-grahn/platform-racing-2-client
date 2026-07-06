@@ -51,6 +51,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var FAST_ITEM_RELOAD_FRAMES:Int = 22;
 	private static inline var ICE_WAVE_RELOAD_FRAMES:Int = 27;
 	private static inline var MINE_APPEAR_FRAMES:Int = 33;
+	private static inline var SHOT_EFFECT_DEFAULT_SPEED:Float = 5;
+	private static inline var LASER_SHOT_SPEED:Float = 29;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -144,6 +146,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
 	private var pendingMinePlacements:Array<PendingMinePlacement> = [];
+	private var pendingProjectileDamages:Array<PendingProjectileDamage> = [];
 	// The level's allowed-item pool (GamePage.setItems), used when an item block
 	// carries empty options. Defaults to every code so a standalone controller
 	// still hands out items before Course wires the level config.
@@ -222,6 +225,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		animationLeft = false;
 		animationRight = false;
 		pendingMinePlacements.resize(0);
+		pendingProjectileDamages.resize(0);
 		blockStates.clear();
 		blockVisualEvents.resize(0);
 		disabledTeleportFrames.clear();
@@ -251,6 +255,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		animationLeft = input.left;
 		animationRight = input.right;
 		updatePendingMinePlacements();
+		updatePendingProjectileDamages();
 		updateItemReload();
 		// LocalCharacter.updateKeys applies RIGHT first and LEFT second, so LEFT
 		// determines the facing direction when both keys are held.
@@ -1268,7 +1273,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		var direction = facingDirection < 0 ? "left" : "right";
 		vx += facingDirection < 0 ? 15 : -15;
 		lastItemEffect = "laser:" + direction;
-		animateFirstShotBlockHit(facingDirection < 0 ? 180 : 0);
+		queueProjectileBlockDamage(facingDirection < 0 ? 180 : 0, facingDirection * LASER_SHOT_SPEED, 100);
 		consumeHeldItemUse();
 	}
 
@@ -1299,6 +1304,44 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			}
 		}
 		pendingMinePlacements = stillPending;
+	}
+
+	private function queueProjectileBlockDamage(angleDegrees:Float, damageForce:Float, maxFrames:Int):Void {
+		var radians = angleDegrees * Math.PI / 180;
+		var shotX = x + (angleDegrees == 180 ? -20 : 20);
+		var shotY = y - 25;
+		var immediateBlock = getBlockAtPixel(shotX, shotY);
+		if (immediateBlock != null) {
+			damageBlockFromItem(immediateBlock, Math.cos(radians) * SHOT_EFFECT_DEFAULT_SPEED);
+			return;
+		}
+		pendingProjectileDamages.push({
+			shotX: shotX,
+			shotY: shotY,
+			velX: Math.cos(radians) * LASER_SHOT_SPEED,
+			velY: Math.sin(radians) * LASER_SHOT_SPEED,
+			damageForce: damageForce,
+			framesRemaining: maxFrames
+		});
+	}
+
+	private function updatePendingProjectileDamages():Void {
+		if (pendingProjectileDamages.length == 0) {
+			return;
+		}
+		var stillPending:Array<PendingProjectileDamage> = [];
+		for (projectile in pendingProjectileDamages) {
+			projectile.shotX += projectile.velX;
+			projectile.shotY += projectile.velY;
+			projectile.framesRemaining--;
+			var block = getBlockAtPixel(projectile.shotX, projectile.shotY);
+			if (block != null) {
+				damageBlockFromItem(block, projectile.damageForce);
+			} else if (projectile.framesRemaining > 0) {
+				stillPending.push(projectile);
+			}
+		}
+		pendingProjectileDamages = stillPending;
 	}
 
 	private function useLightning():Void {
@@ -1978,6 +2021,15 @@ private typedef BlockRefs = {
 private typedef PendingMinePlacement = {
 	var tileX:Int;
 	var tileY:Int;
+	var framesRemaining:Int;
+}
+
+private typedef PendingProjectileDamage = {
+	var shotX:Float;
+	var shotY:Float;
+	var velX:Float;
+	var velY:Float;
+	var damageForce:Float;
 	var framesRemaining:Int;
 }
 

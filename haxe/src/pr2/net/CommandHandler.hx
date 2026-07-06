@@ -91,9 +91,6 @@ class CommandHandler {
 	**/
 	public function handleServerFrame(frame:String):Bool {
 		var parts = frame.split("`");
-		if (parts.length > 0 && parts[parts.length - 1] == "") {
-			parts.pop();
-		}
 		if (parts.length < 3) {
 			return false;
 		}

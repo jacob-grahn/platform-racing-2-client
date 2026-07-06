@@ -51,6 +51,10 @@ class GameCommandShellTest {
 		assertEquals(120, rec.expOld, "expOld parsed");
 		assertEquals(180, rec.expNew, "expNew parsed");
 		assertEquals(200, rec.expToRank, "expToRank parsed");
+		assertEquals(true, send(cm, "setExpGain`121`181`201`", true), "trailing-delimited exp gain frame routes");
+		assertEquals(121, rec.expOld, "trailing frame expOld parsed");
+		assertEquals(181, rec.expNew, "trailing frame expNew parsed");
+		assertEquals(201, rec.expToRank, "trailing frame expToRank parsed");
 
 		send(cm, "setLuxGain`25");
 		assertEquals(25, rec.luxAmount, "lux amount parsed");
@@ -119,10 +123,10 @@ class GameCommandShellTest {
 
 	private static var sendNum:Int = 0;
 
-	private static function send(cm:CommandHandler, body:String):Bool {
+	private static function send(cm:CommandHandler, body:String, preserveTrailing:Bool = false):Bool {
 		var parts = body.split("`");
 		var command = parts.shift();
-		if (parts.length > 0 && parts[parts.length - 1] == "") {
+		if (!preserveTrailing && parts.length > 0 && parts[parts.length - 1] == "") {
 			parts.pop();
 		}
 		sendNum++;
