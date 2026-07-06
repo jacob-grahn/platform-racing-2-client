@@ -12,6 +12,7 @@ import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import openfl.geom.Matrix;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
 import openfl.utils.AssetType;
@@ -801,7 +802,7 @@ class ServerLevelRenderer extends Sprite {
 		var maxItemsThisFrame = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? 1000000 : blocksPerFrame;
 		while (drawnArtItems < totalArtItems && drawnThisFrame < maxItemsThisFrame && (drawnThisFrame == 0 || Timer.stamp() < deadline)) {
 			var before = drawnArtItems;
-			drawNextArtItems(actionBatchLimit);
+			drawNextArtItems(actionBatchLimit, deadline);
 			if (drawnArtItems == before) {
 				return;
 			}
@@ -1266,7 +1267,7 @@ class ServerLevelRenderer extends Sprite {
 		return grid;
 	}
 
-	private function drawNextArtItems(limit:Int):Void {
+	private function drawNextArtItems(limit:Int, ?deadline:Null<Float>):Void {
 		var remaining = limit;
 		while (remaining > 0 && drawnArtItems < totalArtItems) {
 			while (nextArtLayerToDraw < artDrawCursors.length && artDrawCursors[nextArtLayerToDraw] == null) {
@@ -1279,7 +1280,7 @@ class ServerLevelRenderer extends Sprite {
 			if (artOptions != null && artOptions.artDrawFaultInjector != null) {
 				artOptions.artDrawFaultInjector(attemptedArtItems);
 			}
-			var drawn = cursor.drawNext(artOptions != null && artOptions.artDrawFaultInjector != null ? 1 : remaining);
+			var drawn = cursor.drawNext(artOptions != null && artOptions.artDrawFaultInjector != null ? 1 : remaining, deadline);
 			if (drawn > 0) {
 				attemptedArtItems += drawn;
 				drawnArtItems += drawn;
@@ -1287,6 +1288,9 @@ class ServerLevelRenderer extends Sprite {
 			}
 			if (cursor.isComplete()) {
 				nextArtLayerToDraw++;
+			}
+			if (deadline != null && Timer.stamp() >= deadline) {
+				return;
 			}
 		}
 	}
@@ -1656,7 +1660,7 @@ private class ArtDrawCursor {
 		this.strokeTiles = strokeTiles;
 	}
 
-	public function drawNext(maxActions:Int = 1):Int {
+	public function drawNext(maxActions:Int = 1, ?deadline:Null<Float>):Int {
 		if (actionIndex < layer.drawActions.length) {
 			var drawn = 0;
 			var batchDrawStrokes = maxActions > 1;
@@ -1668,6 +1672,9 @@ private class ArtDrawCursor {
 					strokeTiles.apply(action);
 				}
 				drawn++;
+				if (deadline != null && drawn > 0 && Timer.stamp() >= deadline) {
+					break;
+				}
 			}
 			if (batchDrawStrokes) {
 				strokeTiles.flush();
@@ -1773,6 +1780,8 @@ private class ArtRasterTiles {
 	private var attachQueue:Array<String> = [];
 	private var attachQueueSeen:Map<String, Bool> = new Map();
 	private var pendingShape:Null<Shape>;
+	private var pendingErase:Bool = false;
+	private var pendingBounds:Null<Rectangle>;
 	private var pendingTileKeys:Array<String> = [];
 	private var pendingTileKeySeen:Map<String, Bool> = new Map();
 	private var pendingTileXs:Array<Int> = [];
@@ -1818,15 +1827,14 @@ private class ArtRasterTiles {
 			case "t":
 				size = action.values[0];
 			case "m":
-				if (action.text == "erase") {
+				if (mode != action.text) {
 					flush();
 				}
 				mode = action.text;
 			case "d":
 				if (action.values.length >= 2) {
 					if (mode == "erase") {
-						flush();
-						drawRasterStroke(action, true);
+						addEraseStrokeToBatch(action);
 					} else {
 						addDrawStrokeToBatch(action);
 					}
@@ -1841,17 +1849,57 @@ private class ArtRasterTiles {
 		}
 		var shape = pendingShape;
 		var matrix = new Matrix();
+		if (pendingErase) {
+			flushEraseShape(shape, matrix);
+		} else {
+			for (i in 0...pendingTileKeys.length) {
+				var bitmap = getOrCreateTile(pendingTileXs[i], pendingTileYs[i]);
+				if (bitmap == null) {
+					continue;
+				}
+				matrix.identity();
+				matrix.translate(-pendingTileXs[i], -pendingTileYs[i]);
+				bitmap.bitmapData.draw(shape, matrix, null, null, null, true);
+				queueTileAttach(pendingTileKeys[i]);
+			}
+		}
+		resetPendingBatch();
+	}
+
+	private function flushEraseShape(shape:Shape, matrix:Matrix):Void {
+		if (pendingBounds == null) {
+			return;
+		}
+		var tileSize = ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1;
 		for (i in 0...pendingTileKeys.length) {
-			var bitmap = getOrCreateTile(pendingTileXs[i], pendingTileYs[i]);
+			var bitmap = tiles.get(pendingTileKeys[i]);
 			if (bitmap == null) {
 				continue;
 			}
+			var tileX = pendingTileXs[i];
+			var tileY = pendingTileYs[i];
+			var rectX = Std.int(Math.max(0, Math.floor(pendingBounds.x - tileX)));
+			var rectY = Std.int(Math.max(0, Math.floor(pendingBounds.y - tileY)));
+			var rectRight = Std.int(Math.min(tileSize, Math.ceil(pendingBounds.right - tileX)));
+			var rectBottom = Std.int(Math.min(tileSize, Math.ceil(pendingBounds.bottom - tileY)));
+			if (rectRight <= rectX || rectBottom <= rectY) {
+				continue;
+			}
+			var targetRect = new Rectangle(rectX, rectY, rectRight - rectX, rectBottom - rectY);
+			var mask = new BitmapData(Std.int(targetRect.width), Std.int(targetRect.height), true, 0);
 			matrix.identity();
-			matrix.translate(-pendingTileXs[i], -pendingTileYs[i]);
-			bitmap.bitmapData.draw(shape, matrix, null, null, null, true);
+			matrix.translate(-(tileX + rectX), -(tileY + rectY));
+			mask.draw(shape, matrix, null, null, null, true);
+			clearMaskedPixels(bitmap.bitmapData, targetRect, mask);
+			mask.dispose();
 			queueTileAttach(pendingTileKeys[i]);
 		}
+	}
+
+	private function resetPendingBatch():Void {
 		pendingShape = null;
+		pendingErase = false;
+		pendingBounds = null;
 		pendingTileKeys = [];
 		pendingTileKeySeen = new Map();
 		pendingTileXs = [];
@@ -1979,9 +2027,13 @@ private class ArtRasterTiles {
 
 	private function drawRasterStroke(action:DecodedDrawAction, erase:Bool):Void {
 		flush();
+		if (erase) {
+			eraseRasterStroke(action);
+			return;
+		}
 		lockedBitmapData = [];
 		try {
-			rasterStroke(action, erase);
+			rasterStroke(action, false);
 		} catch (error:Dynamic) {
 			unlockStrokeTiles();
 			throw error;
@@ -1989,25 +2041,66 @@ private class ArtRasterTiles {
 		unlockStrokeTiles();
 	}
 
-	private function addDrawStrokeToBatch(action:DecodedDrawAction):Void {
+	private function eraseRasterStroke(action:DecodedDrawAction):Void {
 		var radius = Math.max(0.5, size / 2);
-		var strokeTiles = collectStrokeTiles(action, radius);
-		if (strokeTiles == null) {
-			drawRasterStroke(action, false);
+		var strokeTiles = collectStrokeTilesForErase(action, radius);
+		if (strokeTiles.keys.length == 0) {
 			return;
 		}
-		if (!canAddStrokeTilesToBatch(strokeTiles)) {
-			flush();
+		var shape = strokeShape(action);
+		var bounds = strokeBounds(action, radius);
+		var tileSize = ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1;
+		var matrix = new Matrix();
+		for (i in 0...strokeTiles.keys.length) {
+			var bitmap = tiles.get(strokeTiles.keys[i]);
+			if (bitmap == null) {
+				continue;
+			}
+			var tileX = strokeTiles.tileXs[i];
+			var tileY = strokeTiles.tileYs[i];
+			var rectX = Std.int(Math.max(0, Math.floor(bounds.x - tileX)));
+			var rectY = Std.int(Math.max(0, Math.floor(bounds.y - tileY)));
+			var rectRight = Std.int(Math.min(tileSize, Math.ceil(bounds.right - tileX)));
+			var rectBottom = Std.int(Math.min(tileSize, Math.ceil(bounds.bottom - tileY)));
+			if (rectRight <= rectX || rectBottom <= rectY) {
+				continue;
+			}
+			var targetRect = new Rectangle(rectX, rectY, rectRight - rectX, rectBottom - rectY);
+			var mask = new BitmapData(Std.int(targetRect.width), Std.int(targetRect.height), true, 0);
+			matrix.identity();
+			matrix.translate(-(tileX + rectX), -(tileY + rectY));
+			mask.draw(shape, matrix, null, null, null, true);
+			clearMaskedPixels(bitmap.bitmapData, targetRect, mask);
+			mask.dispose();
+			queueTileAttach(strokeTiles.keys[i]);
 		}
-		if (!canAddStrokeTilesToBatch(strokeTiles)) {
-			drawRasterStroke(action, false);
+	}
+
+	private function clearMaskedPixels(target:BitmapData, targetRect:Rectangle, mask:BitmapData):Void {
+		var maskPixels = mask.getPixels(mask.rect);
+		if (maskPixels == null) {
 			return;
 		}
-		if (pendingShape == null) {
-			pendingShape = new Shape();
+		var width = Std.int(targetRect.width);
+		var height = Std.int(targetRect.height);
+		var targetX = Std.int(targetRect.x);
+		var targetY = Std.int(targetRect.y);
+		maskPixels.position = 0;
+		target.lock();
+		for (y in 0...height) {
+			for (x in 0...width) {
+				if (maskPixels.readUnsignedInt() != 0) {
+					target.setPixel32(targetX + x, targetY + y, 0);
+				}
+			}
 		}
-		var graphics = pendingShape.graphics;
-		graphics.lineStyle(size, color);
+		target.unlock(targetRect);
+	}
+
+	private function strokeShape(action:DecodedDrawAction):Shape {
+		var shape = new Shape();
+		var graphics = shape.graphics;
+		graphics.lineStyle(size, 0xFFFFFF);
 		var x = action.values[0];
 		var y = action.values[1];
 		graphics.moveTo(x, y);
@@ -2022,7 +2115,100 @@ private class ArtRasterTiles {
 			y = nextY;
 			i += 2;
 		}
+		return shape;
+	}
+
+	private function strokeBounds(action:DecodedDrawAction, radius:Float):Rectangle {
+		var x = action.values[0];
+		var y = action.values[1];
+		var minX = x - radius - 1;
+		var minY = y - radius - 1;
+		var maxX = x + radius + 1;
+		var maxY = y + radius + 1;
+		var i = 2;
+		while (i + 1 < action.values.length) {
+			x += action.values[i];
+			y += action.values[i + 1];
+			minX = Math.min(minX, x - radius - 1);
+			minY = Math.min(minY, y - radius - 1);
+			maxX = Math.max(maxX, x + radius + 1);
+			maxY = Math.max(maxY, y + radius + 1);
+			i += 2;
+		}
+		return new Rectangle(minX, minY, maxX - minX, maxY - minY);
+	}
+
+	private function addDrawStrokeToBatch(action:DecodedDrawAction):Void {
+		var radius = Math.max(0.5, size / 2);
+		var strokeTiles = collectStrokeTiles(action, radius);
+		if (strokeTiles == null) {
+			drawRasterStroke(action, false);
+			return;
+		}
+		if (pendingShape != null && pendingErase) {
+			flush();
+		}
+		if (!canAddStrokeTilesToBatch(strokeTiles)) {
+			flush();
+		}
+		if (!canAddStrokeTilesToBatch(strokeTiles)) {
+			drawRasterStroke(action, false);
+			return;
+		}
+		if (pendingShape == null) {
+			pendingShape = new Shape();
+			pendingErase = false;
+		}
+		var graphics = pendingShape.graphics;
+		graphics.lineStyle(size, color);
+		appendStrokeToGraphics(graphics, action);
 		addPendingStrokeTiles(strokeTiles);
+	}
+
+	private function addEraseStrokeToBatch(action:DecodedDrawAction):Void {
+		var radius = Math.max(0.5, size / 2);
+		var strokeTiles = collectStrokeTiles(action, radius);
+		if (strokeTiles == null) {
+			flush();
+			eraseRasterStroke(action);
+			return;
+		}
+		if (pendingShape != null && !pendingErase) {
+			flush();
+		}
+		if (!canAddStrokeTilesToBatch(strokeTiles)) {
+			flush();
+		}
+		if (!canAddStrokeTilesToBatch(strokeTiles)) {
+			eraseRasterStroke(action);
+			return;
+		}
+		if (pendingShape == null) {
+			pendingShape = new Shape();
+			pendingErase = true;
+		}
+		var graphics = pendingShape.graphics;
+		graphics.lineStyle(size, 0xFFFFFF);
+		appendStrokeToGraphics(graphics, action);
+		addPendingStrokeTiles(strokeTiles);
+		addPendingBounds(strokeBounds(action, radius));
+	}
+
+	private function appendStrokeToGraphics(graphics:openfl.display.Graphics, action:DecodedDrawAction):Void {
+		var x = action.values[0];
+		var y = action.values[1];
+		graphics.moveTo(x, y);
+		graphics.lineTo(x - 0.15, y);
+		graphics.moveTo(x, y);
+		var i = 2;
+		while (i + 1 < action.values.length) {
+			var nextX = x + action.values[i];
+			var nextY = y + action.values[i + 1];
+			graphics.lineTo(nextX, nextY);
+			x = nextX;
+			y = nextY;
+			i += 2;
+		}
 	}
 
 	private function collectStrokeTiles(action:DecodedDrawAction, radius:Float):Null<ArtStrokeTileSet> {
@@ -2046,6 +2232,28 @@ private class ArtRasterTiles {
 			if (!isStrokeTileSetBatchable(tiles)) {
 				return null;
 			}
+			x = nextX;
+			y = nextY;
+			i += 2;
+		}
+		return tiles;
+	}
+
+	private function collectStrokeTilesForErase(action:DecodedDrawAction, radius:Float):ArtStrokeTileSet {
+		var tiles = new ArtStrokeTileSet();
+		var x = action.values[0];
+		var y = action.values[1];
+		addTilesForBounds(tiles, x - radius - 1, y - radius - 1, x + radius + 1, y + radius + 1);
+		var i = 2;
+		while (i + 1 < action.values.length) {
+			var nextX = x + action.values[i];
+			var nextY = y + action.values[i + 1];
+			addTilesForBounds(tiles,
+				Math.min(x, nextX) - radius - 1,
+				Math.min(y, nextY) - radius - 1,
+				Math.max(x, nextX) + radius + 1,
+				Math.max(y, nextY) + radius + 1
+			);
 			x = nextX;
 			y = nextY;
 			i += 2;
@@ -2127,6 +2335,18 @@ private class ArtRasterTiles {
 				}
 			}
 		}
+	}
+
+	private function addPendingBounds(bounds:Rectangle):Void {
+		if (pendingBounds == null) {
+			pendingBounds = bounds;
+			return;
+		}
+		var minX = Math.min(pendingBounds.x, bounds.x);
+		var minY = Math.min(pendingBounds.y, bounds.y);
+		var maxX = Math.max(pendingBounds.right, bounds.right);
+		var maxY = Math.max(pendingBounds.bottom, bounds.bottom);
+		pendingBounds.setTo(minX, minY, maxX - minX, maxY - minY);
 	}
 
 	private function lockStrokeTile(bitmap:Bitmap):Void {
