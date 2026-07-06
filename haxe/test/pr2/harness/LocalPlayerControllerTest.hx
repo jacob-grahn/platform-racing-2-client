@@ -95,7 +95,7 @@ class LocalPlayerControllerTest {
 		testTimedMoveBlockRecursivelyMovesDestinationPushBlock();
 		testTimedMoveBlockWaitsWhenDestinationBlocked();
 		testTimedMoveBlockWaitsWhenDestinationOccupied();
-		testBumpingRotateBlockFreezesPlayer();
+		testBumpingRotateBlockPutsPlayerInJumpState();
 		testRotateRightCompletesCourseRotation();
 		testRotateLeftCompletesCourseRotation();
 		testRotationTweenMatchesCourseFrames();
@@ -1666,7 +1666,7 @@ class LocalPlayerControllerTest {
 		}
 		assertEquals(false, player.activeMoveBlockDirections().exists("2,3"), "move block arrow clears after shifting");
 
-		for (_ in 0...135) {
+		for (_ in 0...27) {
 			player.step(new LocalPlayerInput());
 		}
 		assertEquals(2, player.activeMoveBlockDirections().get("3,3"), "move block exposes arrow again after reselect");
@@ -1707,20 +1707,20 @@ class LocalPlayerControllerTest {
 		assertEquals(null, level.blockAt(2, 2), "occupied destination stays free of moving blocks");
 	}
 
-	private static function testBumpingRotateBlockFreezesPlayer():Void {
+	private static function testBumpingRotateBlockPutsPlayerInJumpState():Void {
 		var player = new LocalCharacter(rotateBlockLevel(BlockType.RotateRight));
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "freeze") {
+			if (player.debugState().mode == "jump") {
 				break;
 			}
 		}
 
 		var state = player.debugState();
 		assertEquals("rotate_right", state.touchedBlockType, "debug state reports rotate block touch");
-		assertEquals("freeze", state.mode, "rotate block bump enters freeze mode");
-		assertEquals("freeze", state.animation, "freeze mode exposes freeze animation state");
+		assertEquals("jump", state.mode, "rotate block bump enters jump mode");
+		assertEquals("jump", state.animation, "jump mode exposes jump animation state");
 		assertClose(0, state.vx, "rotate block clears horizontal velocity");
 		assertClose(0, state.vy, "rotate block clears vertical velocity");
 	}
@@ -1732,7 +1732,7 @@ class LocalPlayerControllerTest {
 		for (_ in 0...29) {
 			player.step(new LocalPlayerInput());
 		}
-		assertEquals("freeze", player.debugState().mode, "right rotation keeps player frozen before final frame");
+		assertEquals("jump", player.debugState().mode, "right rotation keeps player in jump mode before final frame");
 
 		player.step(new LocalPlayerInput());
 		var state = player.debugState();
@@ -1793,7 +1793,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "freeze") {
+			if (player.debugState().mode == "jump") {
 				break;
 			}
 		}
@@ -1826,7 +1826,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "freeze") {
+			if (player.debugState().mode == "jump") {
 				break;
 			}
 		}
@@ -1849,7 +1849,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "freeze") {
+			if (player.debugState().mode == "jump") {
 				break;
 			}
 		}
@@ -1877,7 +1877,7 @@ class LocalPlayerControllerTest {
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "freeze") {
+			if (player.debugState().mode == "jump") {
 				break;
 			}
 		}
@@ -1902,15 +1902,15 @@ class LocalPlayerControllerTest {
 		assertEquals("PushBlockMove", Type.enumConstructor(pushEvent.kind), "rotated push block emits movement");
 		assertEquals(3, pushEvent.tileX, "rotated push block source x");
 		assertEquals(4, pushEvent.tileY, "rotated push block source y");
-		assertEquals(3, pushEvent.toTileX, "right-rotated right push keeps x");
-		assertEquals(3, pushEvent.toTileY, "right-rotated right push maps to -y");
+		assertEquals(3, pushEvent.toTileX, "right-rotated left push keeps x");
+		assertEquals(5, pushEvent.toTileY, "right-rotated left push maps to +y");
 	}
 
 	private static function bumpRotateBlock(type:BlockType):LocalCharacter {
 		var player = new LocalCharacter(rotateBlockLevel(type));
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput(false, false, true));
-			if (player.debugState().mode == "freeze") {
+			if (player.debugState().mode == "jump") {
 				return player;
 			}
 		}

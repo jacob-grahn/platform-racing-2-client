@@ -86,6 +86,7 @@ class GameShellMountTest {
 		assertEquals(true, course.localCharacter == null, "local character torn down");
 
 		testDeathmatchHeartsShowInitialLives();
+		testRenderingUsesFreeMoveCamera();
 		testFinishDrawingReadinessEmission();
 		testLocalFinishBeginsCharacterRemoval();
 		testObjectiveModeReportsEachFinishOnce();
@@ -122,6 +123,19 @@ class GameShellMountTest {
 		assertEquals("2:00", course.timer.debugText(), "beginRace initializes the course timer display");
 		course.outOfTimeHandler();
 		assertEquals(1, timeoutCalls, "course outOfTimeHandler routes to the host callback");
+		course.remove();
+	}
+
+	private static function testRenderingUsesFreeMoveCamera():Void {
+		var course = buildLargeCourse();
+		assertEquals(false, course.levelRenderer.isDrawingComplete(), "large course starts in incremental render mode");
+		@:privateAccess course.scrollRight = true;
+		var beforeX = @:privateAccess course.camera.posX;
+
+		course.dispatchEvent(new Event(Event.ENTER_FRAME));
+
+		assertEquals(true, course.debugKeyScrollActive(), "rendering course enables free-move camera");
+		assertBelow(@:privateAccess course.camera.posX, beforeX, "right arrow free-scrolls the loading level");
 		course.remove();
 	}
 
@@ -184,6 +198,25 @@ class GameShellMountTest {
 		return new Course(level, data, config);
 	}
 
+	private static function buildLargeCourse():Course {
+		var blocks:Array<DecodedBlock> = [new DecodedBlock(ObjectCodes.BLOCK_START1, 0, 0)];
+		for (i in 0...120) {
+			blocks.push(new DecodedBlock(ObjectCodes.BLOCK_BASIC1, i * 30, 90));
+		}
+		var level = new ServerLevel(0xFFFFFF, blocks);
+		var vars:Map<String, String> = new Map();
+		vars.set("level_id", "44");
+		vars.set("title", "Large Render Test");
+		vars.set("song", "song1");
+		vars.set("gravity", "1");
+		vars.set("max_time", "120");
+		vars.set("gameMode", "race");
+		vars.set("items", "all");
+		vars.set("data", "large-render-test");
+		var data = new ServerLevelData(vars, true);
+		return new Course(level, data, LevelConfig.fromServerData(data));
+	}
+
 	private static function testFinishDrawingReadinessEmission():Void {
 		var dataString = "m3`e0c8b8`0;0;11,1;0;16";
 		var level = ServerLevelDecoder.decode(dataString);
@@ -230,6 +263,13 @@ class GameShellMountTest {
 		assertEquals("finish_race`1`45`15|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
 			"race finish emits finish and starts local removal");
 		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
+		assertEquals(true, course.debugKeyScrollActive(), "finish switches camera to free-move mode");
+		var x = course.localCharacter.debugState().x;
+		var y = course.localCharacter.debugState().y;
+		@:privateAccess course.input.right = true;
+		course.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertClose(x, course.localCharacter.debugState().x, "finished character no longer steps horizontally");
+		assertClose(y, course.localCharacter.debugState().y, "finished character no longer steps vertically");
 		course.remove();
 	}
 
@@ -253,11 +293,11 @@ class GameShellMountTest {
 		var course = buildRotateCourse();
 		for (_ in 0...40) {
 			course.localCharacter.step(new LocalPlayerInput(false, false, true));
-			if (course.localCharacter.debugState().mode == "freeze") {
+			if (course.localCharacter.debugState().mode == "jump") {
 				break;
 			}
 		}
-		assertEquals("freeze", course.localCharacter.debugState().mode, "local character reaches rotate freeze");
+		assertEquals("jump", course.localCharacter.debugState().mode, "local character reaches rotate jump state");
 
 		course.localCharacter.step(new LocalPlayerInput());
 		course.updatePlayerDisplay();

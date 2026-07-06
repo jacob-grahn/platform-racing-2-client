@@ -1091,8 +1091,13 @@ class Course extends Sprite {
 			return;
 		}
 		if (levelRenderer != null && !levelRenderer.isDrawingComplete()) {
+			toggleKeyScroll(true);
+			updatePlayerDisplay();
 			pr2.app.DebugSignal.set("race-phase", "loading");
 			return;
+		}
+		if (!localFinishHandled && !raceEnded) {
+			toggleKeyScroll(false);
 		}
 		reportRacePhase();
 		if (!drawingInfoFinished) {
@@ -1103,7 +1108,7 @@ class Course extends Sprite {
 			drawingInfoFinished = true;
 		}
 
-		if (raceStarted) {
+		if (raceStarted && !localFinishHandled) {
 			player.step(input.copy());
 			player.maybeSquash(playerArray);
 			player.tickJellyfishSting(playerArray, Std.random(35) + 1);
@@ -1184,6 +1189,7 @@ class Course extends Sprite {
 		}
 		localFinishHandled = true;
 		frameCounterActive = false;
+		toggleKeyScroll(true);
 		if (localCharacter != null) {
 			localCharacter.emitFinishRace(finishId, finishX, finishY);
 			if (config.gameMode != "hat") {
@@ -1834,6 +1840,9 @@ class Course extends Sprite {
 		removeAllRemoteCharacters();
 		activeCommandHandler().defineCommand("activate", null);
 		unregisterLocalCommands();
+		if (localCharacter != null) {
+			localCharacter.remove();
+		}
 		if (levelRenderer != null) {
 			levelRenderer.remove();
 			levelRenderer = null;

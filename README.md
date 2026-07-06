@@ -475,6 +475,57 @@ python3 tools/openfl_driver.py --delay 2.0 --query 'screen=campaign&debug=1&loca
   debug-state
 ```
 
+Measure real-level art drawing performance through the campaign harness. Build
+first, then serve the HTML5 export through the local API proxy so browser fetches
+for `pr2hub.com` stay same-origin:
+
+```sh
+haxelib run openfl build html5
+python3 tools/dev_proxy.py --port 8000 --dir export/html5/bin
+```
+
+Run the metric harness from another terminal. It records drawing/playable timing,
+per-sample FPS, art/block progress, heap usage, and Chrome performance metrics:
+
+```sh
+python3 tools/measure_art_render.py \
+  --base-url http://127.0.0.1:8000 \
+  --label current-candyland \
+  --level-id 3460484 --version 13 \
+  --out test/output/art-render-candyland.json \
+  --timeout 180 --print-every 16
+```
+
+Useful art-render stress cases:
+
+```text
+3460484 v13  Candyland          Fast-ish, visible parity check, lots of strokes
+4866546 v15  Volcanic Inferno   Medium-heavy art and block mix
+5877893 v18  Apocalypse         Extreme art case; old builds may not finish
+5821108 v92  Smog               Earlier baseline candidate
+```
+
+To compare an older revision against the current build, keep each export in a
+separate directory and run two proxy ports:
+
+```sh
+git worktree add /private/tmp/pr2-baseline add6470
+haxelib run openfl build html5
+cd /private/tmp/pr2-baseline
+haxelib run openfl build html5
+
+python3 tools/dev_proxy.py --port 8001 --dir /private/tmp/pr2-baseline/export/html5/bin
+python3 tools/dev_proxy.py --port 8002 --dir /path/to/current/export/html5/bin
+
+python3 tools/measure_art_render.py --base-url http://127.0.0.1:8001 \
+  --label baseline-apocalypse --level-id 5877893 --version 18 \
+  --out test/output/art-render-baseline-apocalypse.json --timeout 300
+
+python3 tools/measure_art_render.py --base-url http://127.0.0.1:8002 \
+  --label current-apocalypse --level-id 5877893 --version 18 \
+  --out test/output/art-render-current-apocalypse.json --timeout 180
+```
+
 Compare two stage screenshots and write diff artifacts:
 
 ```sh

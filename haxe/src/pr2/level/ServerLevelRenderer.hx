@@ -61,6 +61,7 @@ class ServerLevelRenderer extends Sprite {
 	public static inline var ART_DRAW_BATCH_MAX_TILE_COUNT:Int = 24;
 	public static inline var ART_DRAW_BATCH_MAX_TILE_SPAN:Int = 2;
 	private static inline var ART_DRAW_FRAME_BUDGET_SECONDS:Float = 0.008;
+	private static inline var RENDER_FRAME_ESCAPE_SECONDS:Float = 0.1;
 	public static inline var ART_RASTER_VIEW_MARGIN_TILES:Int = 1;
 	public static inline var ART_RASTER_VIEW_REBUILD_THRESHOLD:Int = 1;
 	public static inline var ART_RASTER_ATTACH_TILES_PER_FRAME:Int = 1;
@@ -769,16 +770,19 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function drawBlockBatch(event:Event):Void {
-		drawNextBlocks(blocksPerFrame);
+		drawNextBlocks(blocksPerFrame, Timer.stamp() + RENDER_FRAME_ESCAPE_SECONDS);
 		if (isBlockDrawingComplete()) {
 			removeEventListener(Event.ENTER_FRAME, drawBlockBatch);
 		}
 	}
 
 	private function drawArtBatch(event:Event):Void {
+		var deadline = Timer.stamp() + RENDER_FRAME_ESCAPE_SECONDS;
 		try {
-			drawNextArtItemsForFrame();
-			attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME);
+			drawNextArtItemsForFrame(deadline);
+			if (Timer.stamp() < deadline) {
+				attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME, deadline);
+			}
 		} catch (error:Dynamic) {
 			handleArtDrawFailure(error);
 		}
@@ -788,8 +792,10 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	private function drawNextArtItemsForFrame():Void {
-		var deadline = Timer.stamp() + ART_DRAW_FRAME_BUDGET_SECONDS;
+	private function drawNextArtItemsForFrame(escapeDeadline:Float):Void {
+		var deadline = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME
+			? Math.min(Timer.stamp() + ART_DRAW_FRAME_BUDGET_SECONDS, escapeDeadline)
+			: escapeDeadline;
 		var drawnThisFrame = 0;
 		var actionBatchLimit = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? ART_DRAW_ACTION_BATCH_LIMIT : 1;
 		var maxItemsThisFrame = blocksPerFrame == DEFAULT_BLOCKS_PER_FRAME ? 1000000 : blocksPerFrame;
@@ -847,11 +853,16 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	private function drawNextBlocks(limit:Int):Void {
+	private function drawNextBlocks(limit:Int, ?deadline:Null<Float>):Void {
 		var end = Std.int(Math.min(level.blocks.length, nextBlockToDraw + limit));
+		var drawn = 0;
 		while (nextBlockToDraw < end) {
+			if (deadline != null && drawn > 0 && Timer.stamp() >= deadline) {
+				break;
+			}
 			var block = level.blocks[nextBlockToDraw++];
 			addBlockDisplay(block);
+			drawn++;
 		}
 	}
 
@@ -1303,17 +1314,20 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	private function onArtRasterAttachFrame(event:Event):Void {
-		attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME);
+		attachArtRasterTiles(ART_RASTER_ATTACH_TILES_PER_FRAME, Timer.stamp() + RENDER_FRAME_ESCAPE_SECONDS);
 		if (!hasQueuedVisibleArtRasterTiles()) {
 			artRasterAttachActive = false;
 			removeEventListener(Event.ENTER_FRAME, onArtRasterAttachFrame);
 		}
 	}
 
-	private function attachArtRasterTiles(limit:Int):Int {
+	private function attachArtRasterTiles(limit:Int, ?deadline:Null<Float>):Int {
 		var remaining = limit;
 		for (tiles in artRasterTileLayers) {
 			if (remaining <= 0) {
+				break;
+			}
+			if (deadline != null && remaining < limit && Timer.stamp() >= deadline) {
 				break;
 			}
 			if (tiles != null) {

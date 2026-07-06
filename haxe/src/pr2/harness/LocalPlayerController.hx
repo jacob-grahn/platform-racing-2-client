@@ -31,7 +31,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
 	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
-	private static inline var MOVE_RESELECT_FRAMES:Int = 135;
+	private static inline var MOVE_RESELECT_FRAMES:Int = 27;
 	private static inline var ROTATE_FRAMES:Int = 30;
 	private static inline var HURT_FRAMES:Int = 60;
 	private static inline var FROZEN_SOLID_FRAMES:Int = 54;
@@ -86,6 +86,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
 	public static inline var MODE_FREEZE:String = "freeze";
+	public static inline var MODE_JUMP:String = "jump";
 	public static inline var MODE_FROZEN_SOLID:String = "frozenSolid";
 	public static inline var MODE_HURT:String = "hurt";
 
@@ -264,7 +265,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			setMode(MODE_WATER);
 			waterTicks = 2;
 		}
-		if (mode == MODE_FREEZE) {
+		if (mode == MODE_FREEZE || mode == MODE_JUMP) {
 			updateRotation();
 		} else if (mode == MODE_FROZEN_SOLID) {
 			frozenSolidStep(input);
@@ -956,7 +957,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			case BlockType.Teleport:
 				maybeTeleport(block);
 			case BlockType.Push:
-				pushBlock(block, vx >= 0 ? 1 : -1, 0);
+				pushBlock(block, -playerTileOffset, 0);
 			case BlockType.ArrowDown | BlockType.ArrowUp | BlockType.ArrowLeft | BlockType.ArrowRight:
 				pushArrow(arrowEffectiveRotation(block));
 				animateArrow(block);
@@ -1038,7 +1039,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (rotateFramesRemaining > 0 || isBlockFrozen(block)) {
 			return;
 		}
-		setMode(MODE_FREEZE);
+		setMode(MODE_JUMP);
 		vx = 0;
 		vy = 0;
 		targetVelX = 0;
