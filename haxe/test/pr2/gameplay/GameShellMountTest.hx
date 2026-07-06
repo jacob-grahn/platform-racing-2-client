@@ -2,6 +2,7 @@ package pr2.gameplay;
 
 import haxe.crypto.Md5;
 import openfl.events.Event;
+import openfl.geom.Point;
 import pr2.character.CharacterState;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.harness.LocalPlayerController;
@@ -305,6 +306,7 @@ class GameShellMountTest {
 		assertEquals(false, course.levelRenderer.debugArtCachingEnabled(), "rotate tween disables background art caching");
 		assertEquals(openfl.display.StageQuality.LOW, course.debugStageQualityForTests(), "rotate tween lowers stage quality");
 		assertEquals(course.characterLayer, course.localCharacter.parent, "local character stays in the rotating front layer during tween");
+		assertLocalCharacterFeetAnchored(course, "rotate tween keeps local character feet as the visual pivot");
 		assertBetween(0, 550, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2,
 			"local character x stays on-stage while the world tween is active");
 		assertBetween(0, 400, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT,
@@ -323,6 +325,17 @@ class GameShellMountTest {
 		assertClose(275, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2, "camera snaps local x after rotation");
 		assertClose(245, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT, "camera snaps local y after rotation");
 		course.remove();
+	}
+
+	private static function assertLocalCharacterFeetAnchored(course:Course, message:String):Void {
+		var state = course.localCharacter.debugState();
+		var worldX = @:privateAccess course.serverFixture.fixturePixelToWorldX(state.x);
+		var worldY = @:privateAccess course.serverFixture.fixturePixelToWorldY(state.y);
+		var expected = course.levelRenderer.worldToCharacterLayer(worldX, worldY);
+		var actual = course.localCharacter.transform.matrix.transformPoint(new Point(LocalPlayerController.STANDING_WIDTH / 2,
+			LocalPlayerController.STANDING_HEIGHT));
+		assertClose(expected.x, actual.x, '$message x');
+		assertClose(expected.y, actual.y, '$message y');
 	}
 
 	// Regression: during the 3-2-1 countdown the race has not started, so the

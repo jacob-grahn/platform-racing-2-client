@@ -23,6 +23,7 @@ class FlButtonTest {
 		testToggleFlipsSelectedOnClick();
 		testClickReachesExternalListeners();
 		testGeneratedPlayerInfoButtons();
+		testGeneratedVaultButtonKeepsBlankComponentLabel();
 		trace('FlButtonTest passed $assertions assertions');
 	}
 
@@ -142,6 +143,15 @@ class FlButtonTest {
 		// Guests get the social buttons disabled in the source.
 		follow.enabled = false;
 		assertEquals(false, follow.mouseEnabled, "followButton can be disabled like the source does for guests");
+	}
+
+	private static function testGeneratedVaultButtonKeepsBlankComponentLabel():Void {
+		var vault = PR2MovieClip.fromLinkage("PR2_Graphics_1_Apr_2014_fla.vualtButton_317", {maxNestedDepth: 8});
+		var button = Std.downcast(vault.getChildByTimelineName("var_155"), FlButton);
+		assertNotNull(button, "vault button nested component is rendered as a real FlButton");
+		assertEquals("", button.label, "vault button component label matches Flash's blank label");
+		assertEquals(null, findLabelField(button, "Button"), "vault button does not render the default Button caption");
+		vault.dispose();
 	}
 
 	private static function firstSkin(button:FlButton):Null<DisplayObject> {

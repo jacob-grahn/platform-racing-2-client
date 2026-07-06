@@ -1649,8 +1649,7 @@ class Course extends Sprite {
 		}
 		var screen = levelRenderer.worldToCharacterLayer(worldX, worldY);
 		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
-		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX);
-		player.rotation = localCharacter.characterRotation;
+		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX, localCharacter.characterRotation);
 		// Until the countdown finishes the race has not started and the local
 		// player is never stepped (Flash keeps it in mode="wait"/state="stand"
 		// with its physics ENTER_FRAME not yet attached). Show the idle stand pose

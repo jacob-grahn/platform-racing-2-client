@@ -80,7 +80,7 @@ class FlComponentFactory {
 	}
 
 	private static function createButtonComponent(element:DisplayElementDef):DisplayObject {
-		var button = new FlButton(componentString(element, "label", "Button"));
+		var button = new FlButton(componentString(element, "label", "Button", true));
 		// Flash components interpret an instance scale as component dimensions;
 		// their labels remain unscaled. Bake that authored scale into the ported
 		// button's layout before PR2MovieClip normalizes its display transform.
@@ -209,14 +209,14 @@ class FlComponentFactory {
 		return text;
 	}
 
-	private static function componentString(element:DisplayElementDef, name:String, fallback:String):String {
+	private static function componentString(element:DisplayElementDef, name:String, fallback:String, blankWhenValueMissing:Bool = false):String {
 		var params:Dynamic = element.componentParams;
 		if (params == null) {
 			return fallback;
 		}
 		var param:Dynamic = Reflect.field(params, name);
 		if (param == null || !Reflect.hasField(param, "value")) {
-			return fallback;
+			return blankWhenValueMissing && param != null ? "" : fallback;
 		}
 		var value:Dynamic = Reflect.field(param, "value");
 		return value == null ? fallback : Std.string(value);

@@ -10,7 +10,8 @@ class PlayerDisplayPlacement {
 		characterDisplay:DisplayObject,
 		feetX:Float,
 		feetY:Float,
-		facingScaleX:Int
+		facingScaleX:Int,
+		rotationDegrees:Float = 0
 	):Void {
 		// The character art is feet-anchored: the inner display is offset down by
 		// the standing charHeight so its origin lands exactly on the feet. The
@@ -19,8 +20,14 @@ class PlayerDisplayPlacement {
 		// (Flash keeps scaleY = 1 and the feet pinned); using the shorter crouch
 		// height here drops the display origin below the feet and sinks the
 		// character into the floor.
-		playerDisplay.x = feetX - LocalPlayerController.STANDING_WIDTH / 2;
-		playerDisplay.y = feetY - LocalPlayerController.STANDING_HEIGHT;
+		var pivotX = LocalPlayerController.STANDING_WIDTH / 2;
+		var pivotY = LocalPlayerController.STANDING_HEIGHT;
+		var radians = rotationDegrees * Math.PI / 180;
+		var cos = Math.cos(radians);
+		var sin = Math.sin(radians);
+		playerDisplay.x = feetX - (pivotX * cos - pivotY * sin);
+		playerDisplay.y = feetY - (pivotX * sin + pivotY * cos);
+		playerDisplay.rotation = rotationDegrees;
 		playerDisplay.scaleY = 1;
 		characterDisplay.scaleX = CHARACTER_SCALE * facingScaleX;
 		characterDisplay.scaleY = CHARACTER_SCALE;
