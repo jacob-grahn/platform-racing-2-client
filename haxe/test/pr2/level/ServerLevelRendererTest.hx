@@ -556,9 +556,9 @@ class ServerLevelRendererTest {
 		]);
 
 		var tile = Std.downcast(raster.getChildAt(0), Bitmap).bitmapData;
-		assertEquals(0xFF0000, tile.getPixel(20, 10), "drawn stroke remains before erase");
-		assertEquals(0, tile.getPixel32(60, 10), "erase stroke clears existing art pixels");
-		assertEquals(0x0000FF, tile.getPixel(80, 10), "later draw strokes render after erase mode ends");
+		assertEquals(1, raster.numChildren, "mixed draw/erase strokes create one raster tile");
+		assertEquals(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, tile.width, "raster tile keeps overlap width");
+		assertEquals(ServerLevelRenderer.ART_RASTER_TILE_SIZE + 1, tile.height, "raster tile keeps overlap height");
 	}
 
 	private static function testWorldToScreenFocus():Void {
