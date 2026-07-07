@@ -30,5 +30,6 @@
 	     define to A/B against the un-flattened render. -->
 	<haxedef name="pr2_flatten_cache" />
 
-	<window width="550" height="400" fps="27" background="#242A3A" resizable="false" />
+	<window width="550" height="400" fps="27" background="#242A3A" resizable="true" if="html5" />
+	<window width="550" height="400" fps="27" background="#242A3A" resizable="false" unless="html5" />
 </project>
