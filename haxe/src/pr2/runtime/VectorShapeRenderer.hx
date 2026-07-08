@@ -367,7 +367,11 @@ class VectorShapeRenderer {
 		return new Matrix(a * s, b * s, c * s, d * s, tx, ty);
 	}
 
+	@:allow(pr2.runtime.PR2MovieClipRuntimeTest)
 	private static function colorForStyle(style:StyleValueDef):{color:Int, alpha:Float} {
+		if (style == null) {
+			return {color: 0, alpha: 1};
+		}
 		if (style.color != null) {
 			return {color: parseColor(style.color), alpha: style.alpha == null ? 1 : style.alpha};
 		}
@@ -381,7 +385,7 @@ class VectorShapeRenderer {
 			return colorForStyle(style.fill);
 		}
 
-		return {color: 0, alpha: 1};
+		return {color: 0, alpha: style.alpha == null ? 1 : style.alpha};
 	}
 
 	private static function parseColor(value:String):Int {

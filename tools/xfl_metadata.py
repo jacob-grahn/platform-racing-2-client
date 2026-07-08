@@ -15,6 +15,7 @@ import xml.etree.ElementTree as ET
 
 
 DEFAULT_XFL_DIR = os.path.join("flash", "platform-racing-2-xfl")
+RAW_TEXT_Y_CORRECTION = -2.0
 EDGE_NUMBER_RE = re.compile(r"(?<![#A-Za-z])-?\d+(?:\.\d+)?")
 
 
@@ -414,6 +415,9 @@ def parse_text_attrs(text_run):
 
 def parse_text(element):
     record = parse_common_display_attrs(element)
+    matrix = dict(record.get("matrix") or {})
+    matrix["ty"] = matrix.get("ty", 0.0) + RAW_TEXT_Y_CORRECTION
+    record["matrix"] = compact_record(matrix)
     text_runs = first_direct_child(element, "textRuns")
     if text_runs is None:
         return compact_record(record)

@@ -290,7 +290,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {a: 1.00167846679688, tx: 130.05, ty: 2.0},
+												matrix: {a: 1.00167846679688, tx: 130.05, ty: 0.0},
 												name: "textBox",
 												text: "100",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
@@ -315,7 +315,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 0.999557495117188, tx: 2.0, ty: 2.0},
+												matrix: {a: 0.999557495117188, tx: 2.0, ty: 0.0},
 												text: "Points Remaining:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -375,7 +375,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {a: 1.00131225585938, tx: 93.0, ty: 2.0},
+												matrix: {a: 1.00131225585938, tx: 93.0, ty: 0.0},
 												name: "textBox",
 												text: "100",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -400,7 +400,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 1.85, ty: 2.0},
+												matrix: {tx: 1.85, ty: 0.0},
 												name: "nameBox",
 												text: "Speed",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -478,7 +478,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 5.0, ty: 383.15},
+												matrix: {tx: 5.0, ty: 381.15},
 												text: "Click anywhere to skip",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#999999", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -9008,7 +9008,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 31.1,
-												matrix: {tx: -103.0, ty: -80.6},
+												matrix: {tx: -103.0, ty: -82.6},
 												text: "Players that bump this block will have their stats set to:",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -9036,7 +9036,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -79.45, ty: -103.15},
+												matrix: {a: 1.00047302246094, tx: -79.45, ty: -105.15},
 												text: "-- Custom Stats Block --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -9115,7 +9115,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 31.1,
-												matrix: {tx: -104.55, ty: -70.6},
+												matrix: {tx: -104.55, ty: -72.6},
 												text: "This block will be able to give\rthe following items:",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -9423,7 +9423,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -57.1, ty: -92.6},
+												matrix: {a: 1.00047302246094, tx: -57.1, ty: -94.6},
 												text: "-- Item Block --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -9483,7 +9483,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 31.1,
-												matrix: {tx: -103.0, ty: -23.0},
+												matrix: {tx: -103.0, ty: -25.0},
 												name: "descBox",
 												text: "All the stats of players that bump this block will be increased by:",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -9510,7 +9510,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
-												matrix: {tx: -12.95, ty: 46.5},
+												matrix: {tx: -12.95, ty: 44.5},
 												name: "statBox",
 												text: "5",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -9539,7 +9539,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -56.0, ty: -49.0},
+												matrix: {a: 1.00047302246094, tx: -56.0, ty: -51.0},
 												name: "titleBox",
 												text: "-- Happy Block --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
@@ -9609,7 +9609,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 47.65,
-												matrix: {tx: -103.0, ty: -28.0},
+												matrix: {tx: -103.0, ty: -30.0},
 												text: "Choose the background color of this block. Blocks with the same color will be linked to this one.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -9637,7 +9637,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -68.0, ty: -49.0},
+												matrix: {a: 1.00047302246094, tx: -68.0, ty: -51.0},
 												text: "-- Teleport Block --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -9711,7 +9711,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -39.65,
-												matrix: {tx: -68.3, ty: -58.2},
+												matrix: {tx: -68.3, ty: -60.2},
 												text: "-- Choose Mode --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -9756,7 +9756,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -17.65,
-												matrix: {tx: -90.3, ty: -33.2},
+												matrix: {tx: -90.3, ty: -35.2},
 												text: "Which do you want to view?",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -9825,7 +9825,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -39.65,
-												matrix: {tx: -68.35, ty: -118.0},
+												matrix: {tx: -68.35, ty: -120.0},
 												text: "-- Handle Report --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -9834,7 +9834,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.55,
-												matrix: {tx: -75.05, ty: 67.5},
+												matrix: {tx: -75.05, ty: 65.5},
 												text: "OR",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -9843,7 +9843,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 48.85,
-												matrix: {tx: -136.85, ty: -54.0},
+												matrix: {tx: -136.85, ty: -56.0},
 												text: "Unpublish Level and Ban User",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -9852,7 +9852,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -93.5,
-												matrix: {tx: -44.5, ty: -33.85},
+												matrix: {tx: -44.5, ty: -35.85},
 												text: "All reasons start with \"Inappropriate Level -- \"",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Italic", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -9861,7 +9861,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 10.05,
-												matrix: {tx: -92.05, ty: -76.15},
+												matrix: {tx: -92.05, ty: -78.15},
 												text: "Report details:",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Italic", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -10015,7 +10015,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 10.05,
-												matrix: {tx: -153.05, ty: -88.0},
+												matrix: {tx: -153.05, ty: -90.0},
 												name: "titleBox",
 												text: "Newbieland 2 by Jiggmin",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
@@ -10838,7 +10838,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -50.95, ty: -49.0},
+												matrix: {a: 1.00047302246094, tx: -50.95, ty: -51.0},
 												text: "-- Brush Size --",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -11346,7 +11346,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -24.2,
-												matrix: {a: 1.00047302246094, tx: -36.3, ty: -72.8},
+												matrix: {a: 1.00047302246094, tx: -36.3, ty: -74.8},
 												text: "-- Hats Allowed --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -11754,7 +11754,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -35.6, ty: -49.0},
+												matrix: {a: 1.00047302246094, tx: -35.6, ty: -51.0},
 												text: "-- Items --",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -11847,7 +11847,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -54.95, ty: -49.0},
+												matrix: {a: 1.00047302246094, tx: -54.95, ty: -51.0},
 												text: "-- Game Mode --",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -11855,7 +11855,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 31.1,
-												matrix: {tx: -103.5, ty: -23.0},
+												matrix: {tx: -103.5, ty: -25.0},
 												name: "var_283",
 												text: "Each game mode has a different goal and method of winning.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -11922,7 +11922,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -34.8, ty: -39.0},
+												matrix: {a: 1.00047302246094, tx: -34.8, ty: -41.0},
 												text: "-- Music --",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -11948,7 +11948,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 64.2,
 												left: -8.95,
-												matrix: {tx: -100.55, ty: 19.0},
+												matrix: {tx: -100.55, ty: 17.0},
 												text: "This song will play by default for players playing your course. Choose none for no song and random for a random one from the list.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
 												type: "DOMDynamicText",
@@ -12031,7 +12031,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -104.5, ty: -137.55},
+												matrix: {a: 1.00047302246094, tx: -104.5, ty: -139.55},
 												text: "-- Rich Formatting --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -12039,7 +12039,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -38.0, ty: -119.0},
+												matrix: {tx: -38.0, ty: -121.0},
 												text: "Text Sizing",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12048,7 +12048,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -19.45,
-												matrix: {tx: -18.55, ty: -30.05},
+												matrix: {tx: -18.55, ty: -32.05},
 												text: "Text Styling",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12056,7 +12056,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -40.0, ty: 38.25},
+												matrix: {tx: -40.0, ty: 36.25},
 												text: "Links",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12106,7 +12106,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 24.3,
 												left: -10.45,
-												matrix: {tx: -127.55, ty: -105.25},
+												matrix: {tx: -127.55, ty: -107.25},
 												text: "[tiny]text[/tiny]\r[small]text[/small]",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12115,7 +12115,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 18.25,
 												left: 28.4,
-												matrix: {tx: -16.4, ty: -102.25},
+												matrix: {tx: -16.4, ty: -104.25},
 												text: "tiny text!small text!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 120.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 7.3, lineSpacing: 0.0, rotation: true, size: 6.0},
 												type: "DOMStaticText",
@@ -12124,7 +12124,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 23.15,
-												matrix: {tx: -161.15, ty: -76.95},
+												matrix: {tx: -161.15, ty: -78.95},
 												text: "[medium]text[/medium]",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12133,7 +12133,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 31.65,
-												matrix: {tx: -19.65, ty: -79.35},
+												matrix: {tx: -19.65, ty: -81.35},
 												text: "medium text!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -12142,7 +12142,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 24.3,
 												left: 23.15,
-												matrix: {tx: -161.15, ty: -60.25},
+												matrix: {tx: -161.15, ty: -62.25},
 												text: "[big]text[/big]\r[large]text[/large]",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12151,7 +12151,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 29.2,
 												left: 31.65,
-												matrix: {tx: -19.65, ty: -63.25},
+												matrix: {tx: -19.65, ty: -65.25},
 												text: "BIG!!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 480.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 29.2, lineSpacing: 0.0, rotation: true, size: 24.0},
 												type: "DOMStaticText",
@@ -12160,7 +12160,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 48.6,
 												left: -65.4,
-												matrix: {tx: -72.6, ty: -15.75},
+												matrix: {tx: -72.6, ty: -17.75},
 												text: "[b]text[/b]\r[i]text[/i]\r[u]text[/u]\r[color=#hex]text[/color]",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12169,7 +12169,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 48.6,
 												left: 1.05,
-												matrix: {tx: 10.95, ty: -15.75},
+												matrix: {tx: 10.95, ty: -17.75},
 												text: "bold text!italic text!underlined text!colored text!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12178,7 +12178,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 60.75,
 												left: 25.1,
-												matrix: {tx: -163.1, ty: 52.25},
+												matrix: {tx: -163.1, ty: 50.25},
 												text: "[url]link[/url]\r[url=link]text[/url]\r[user]username[/user]\r[level=id]text[/level]\r[guild]guild name[/guild]",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -12187,7 +12187,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 60.75,
 												left: -9.9,
-												matrix: {tx: 21.9, ty: 52.25},
+												matrix: {tx: 21.9, ty: 50.25},
 												name: "linksBox",
 												text: "https://pr2hub.com\rPR2 Hub Website\rJiggmin\rNewbieland 2\rPR2 Staff",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
@@ -12254,7 +12254,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00177001953125, tx: 0.75, ty: 4.0},
+												matrix: {d: 1.00177001953125, tx: 0.75, ty: 2.0},
 												name: "titleBox",
 												text: "title",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -12279,7 +12279,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00177001953125, tx: 0.75, ty: 13.75},
+												matrix: {d: 1.00177001953125, tx: 0.75, ty: 11.75},
 												name: "valueBox",
 												text: "val",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#024775", lineHeight: 14.55, rotation: true},
@@ -12322,7 +12322,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00047302246094, tx: -113.45, ty: -61.0},
+												matrix: {a: 1.00047302246094, tx: -113.45, ty: -63.0},
 												name: "titleBox",
 												text: "-- Time Limit --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
@@ -12380,7 +12380,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 31.1,
-												matrix: {tx: -102.5, ty: -35.05},
+												matrix: {tx: -102.5, ty: -37.05},
 												name: "descBox",
 												text: "The amount of seconds racers will have to complete this course.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -12447,7 +12447,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 16.3,
-												matrix: {tx: 7.25, ty: 8.55},
+												matrix: {tx: 7.25, ty: 6.550000000000001},
 												name: "textBox",
 												text: "1",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", fillColor: "#FFFFFF", lineHeight: 14.55, rotation: true},
@@ -12589,7 +12589,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 29.2,
-												matrix: {d: 1.00286865234375, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00286865234375, tx: 2.0, ty: 0.0},
 												name: "textBox",
 												textAttrs: {aliasText: false, bitmapSize: 360.0, face: "Verdana", lineHeight: 21.9, rotation: true, size: 18.0},
 												type: "DOMDynamicText",
@@ -12631,7 +12631,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -32.0, ty: -6.0},
+												matrix: {tx: -32.0, ty: -8.0},
 												name: "textBox2",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -12655,7 +12655,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -33.0, ty: -7.0},
+												matrix: {tx: -33.0, ty: -9.0},
 												name: "textBox1",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#FFFFFF", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -19963,7 +19963,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 100.0, ty: 7.95},
+												matrix: {tx: 100.0, ty: 5.95},
 												name: "textBox",
 												text: "+1 Lux",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -20371,7 +20371,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 68.9,
-												matrix: {tx: -98.35, ty: -46.25},
+												matrix: {tx: -98.35, ty: -48.25},
 												text: ":",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -20426,7 +20426,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 60.35,
-												matrix: {tx: -113.35, ty: -19.25},
+												matrix: {tx: -113.35, ty: -21.25},
 												text: "OR:",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -20435,7 +20435,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 68.9,
-												matrix: {tx: -114.9, ty: -76.3},
+												matrix: {tx: -114.9, ty: -78.3},
 												text: "/",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -20444,7 +20444,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 68.9,
-												matrix: {tx: -33.05, ty: -76.3},
+												matrix: {tx: -33.05, ty: -78.3},
 												text: "/",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -20469,7 +20469,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 11.15,
-												matrix: {tx: -74.15, ty: -105.25},
+												matrix: {tx: -74.15, ty: -107.25},
 												text: "-- Place Artifact --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", fillColor: "#333333", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -20543,7 +20543,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 64.2,
 												left: -41.6,
-												matrix: {tx: -66.4, ty: 3.4},
+												matrix: {tx: -66.4, ty: 1.4},
 												text: "The next artifact will be placed in the location you chose. Choose a time for it to take effect. This level will become the Level of the Week.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -20696,7 +20696,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 38.05,
-												matrix: {tx: 101.0, ty: -129.05},
+												matrix: {tx: 101.0, ty: -131.05},
 												name: "textBox",
 												text: "The winner of this race\rwill earn an:",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -20721,7 +20721,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 101.0, ty: -87.0},
+												matrix: {tx: 101.0, ty: -89.0},
 												name: "titleBox",
 												text: "--- EXP Hat! ---",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
@@ -20794,7 +20794,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 51.95,
-												matrix: {tx: 103.95, ty: 60.0},
+												matrix: {tx: 103.95, ty: 58.0},
 												name: "flavor",
 												text: "If you finish a race with this hat, it will increase your exp gain by 100%!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -20982,7 +20982,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 0.999664306640625, tx: 4.0, ty: 129.9},
+												matrix: {d: 0.999664306640625, tx: 4.0, ty: 127.9},
 												text: "Chat:",
 												textAttrs: {aliasText: false, alpha: 0.498039215686275, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -21006,7 +21006,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 0.999664306640625, tx: 45.0, ty: 129.7},
+												matrix: {d: 0.999664306640625, tx: 45.0, ty: 127.69999999999999},
 												name: "chatInput",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMInputText",
@@ -21030,7 +21030,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 0.999664306640625, tx: 5.0, ty: 130.9},
+												matrix: {d: 0.999664306640625, tx: 5.0, ty: 128.9},
 												text: "Chat:",
 												textAttrs: {aliasText: false, alpha: 0.498039215686275, bitmapSize: 240.0, face: "Verdana", fillColor: "#FFFFFF", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -21224,7 +21224,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 9.75,
 												left: -0.9,
-												matrix: {tx: 2.4, ty: 3.75},
+												matrix: {tx: 2.4, ty: 1.75},
 												name: "speedBox",
 												text: "100",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", lineHeight: 9.75, rotation: true, size: 8.0},
@@ -21234,7 +21234,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 9.75,
 												left: 0.8,
-												matrix: {tx: 20.25, ty: 3.75},
+												matrix: {tx: 20.25, ty: 1.75},
 												name: "accelBox",
 												text: "100",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", lineHeight: 9.75, rotation: true, size: 8.0},
@@ -21244,7 +21244,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 9.75,
 												left: 1.35,
-												matrix: {tx: 38.35, ty: 3.75},
+												matrix: {tx: 38.35, ty: 1.75},
 												name: "jumpBox",
 												text: "100",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", lineHeight: 9.75, rotation: true, size: 8.0},
@@ -21722,7 +21722,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 146.0, ty: 2.0},
+												matrix: {tx: 146.0, ty: 0.0},
 												name: "hatBox",
 												text: "5",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -21747,7 +21747,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 106.0, ty: 2.0},
+												matrix: {tx: 106.0, ty: 0.0},
 												name: "rankBox",
 												text: "12",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -21772,7 +21772,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.05,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												name: "nameBox",
 												text: "ok some name",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -21940,7 +21940,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: 52.0, ty: 88.75},
+												matrix: {tx: 52.0, ty: 86.75},
 												name: "timeBox",
 												text: "5/4/2007",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -21965,7 +21965,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 291.7,
-												matrix: {tx: 5.0, ty: 29.95},
+												matrix: {tx: 5.0, ty: 27.95},
 												name: "textBox",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#010101", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -21989,7 +21989,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 6.95},
+												matrix: {tx: 2.0, ty: 4.95},
 												name: "nameBox",
 												text: "name yeagh",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -22649,7 +22649,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -39.65,
-												matrix: {tx: -68.3, ty: -58.2},
+												matrix: {tx: -68.3, ty: -60.2},
 												text: "-- Moderate Level --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -22694,7 +22694,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -17.65,
-												matrix: {tx: -90.3, ty: -33.2},
+												matrix: {tx: -90.3, ty: -35.2},
 												text: "Do what to this level?",
 												textAttrs: {aliasText: false, alignment: "center", face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -22886,7 +22886,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {a: 0.999801635742188, d: 1.00311279296875, tx: 4.0, ty: 36.0},
+												matrix: {a: 0.999801635742188, d: 1.00311279296875, tx: 4.0, ty: 34.0},
 												text: "Sort By:",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -22910,7 +22910,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {a: 0.999801635742188, d: 1.00311279296875, tx: 35.85, ty: 5.0},
+												matrix: {a: 0.999801635742188, d: 1.00311279296875, tx: 35.85, ty: 3.0},
 												text: "Search By:",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -22985,7 +22985,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 21.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 21.0, ty: 0.0},
 												name: "nameBox",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMDynamicText",
@@ -23009,7 +23009,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 3.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 3.0, ty: 0.0},
 												name: "rankBox",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMDynamicText",
@@ -23066,7 +23066,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 5.0, ty: 2.0},
+												matrix: {tx: 5.0, ty: 0.0},
 												name: "textBox",
 												text: "text",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -23124,7 +23124,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -97.95, ty: 4.0},
+												matrix: {tx: -97.95, ty: 2.0},
 												text: "server:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -23200,7 +23200,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 11.6,
-												matrix: {tx: -97.95, ty: -27.7},
+												matrix: {tx: -97.95, ty: -29.7},
 												text: "user:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -23257,7 +23257,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -43.0, ty: -64.15},
+												matrix: {tx: -43.0, ty: -66.15},
 												text: "-- Login --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -23356,7 +23356,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -37.4, ty: -28.2},
+												matrix: {tx: -37.4, ty: -30.2},
 												text: "Logging In...",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -23892,7 +23892,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -98.0, ty: 43.8},
+												matrix: {tx: -98.0, ty: 41.8},
 												text: "server:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -24064,7 +24064,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -68.3, ty: -46.25},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -68.3, ty: -48.25},
 												text: "pass:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -24088,7 +24088,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: -74.3, ty: -74.25},
+												matrix: {d: 1.00286865234375, tx: -74.3, ty: -76.25},
 												text: "name:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -24112,7 +24112,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -43.0, ty: -109.45},
+												matrix: {tx: -43.0, ty: -111.45},
 												text: "-- Login --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -24208,7 +24208,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -39.65,
-												matrix: {tx: -68.3, ty: -68.0},
+												matrix: {tx: -68.3, ty: -70.0},
 												text: "-- Almost Done! --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -24216,7 +24216,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -86.3, ty: 2.0},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -86.3, ty: 0.0},
 												text: "pass:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -24276,7 +24276,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 29.1,
 												left: -17.65,
-												matrix: {tx: -90.3, ty: -43.0},
+												matrix: {tx: -90.3, ty: -45.0},
 												text: "For your security, please enter your password to log out.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -24379,7 +24379,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 0.15,
-												matrix: {tx: -92.9, ty: 2.0},
+												matrix: {tx: -92.9, ty: 0.0},
 												text: "Happy/Sad Blocks",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24388,7 +24388,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 8.2,
-												matrix: {tx: -32.05, ty: 31.0},
+												matrix: {tx: -32.05, ty: 29.0},
 												text: "Jigg Hat",
 												textAttrs: {
 													aliasText: false,
@@ -24408,7 +24408,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 8.5,
-												matrix: {tx: -34.2, ty: 45.5},
+												matrix: {tx: -34.2, ty: 43.5},
 												text: "Taco Set",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24417,7 +24417,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 12.75,
-												matrix: {tx: -60.25, ty: 60.0},
+												matrix: {tx: -60.25, ty: 58.0},
 												text: "Reindeer Set",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24425,7 +24425,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -49.55, ty: 74.5},
+												matrix: {tx: -49.55, ty: 72.5},
 												text: "Crocodile Set",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24433,7 +24433,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -34.25, ty: 89.0},
+												matrix: {tx: -34.25, ty: 87.0},
 												text: "Gecko Set",
 												textAttrs: {
 													aliasText: false,
@@ -24453,7 +24453,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 2.0},
+												matrix: {tx: -37.85, ty: 0.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24461,7 +24461,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 2.0},
+												matrix: {tx: 46.75, ty: 0.0},
 												text: "Jacob K.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24470,7 +24470,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 31.0},
+												matrix: {tx: -37.85, ty: 29.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24479,7 +24479,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 45.5},
+												matrix: {tx: -37.85, ty: 43.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24487,7 +24487,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 45.5},
+												matrix: {tx: 46.75, ty: 43.5},
 												text: "Tacchi",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24496,7 +24496,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 60.0},
+												matrix: {tx: -37.85, ty: 58.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24505,7 +24505,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 74.5},
+												matrix: {tx: -37.85, ty: 72.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24514,7 +24514,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 89.0},
+												matrix: {tx: -37.85, ty: 87.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24522,7 +24522,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 31.0},
+												matrix: {tx: 46.75, ty: 29.0},
 												text: "Tommy 8",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24530,7 +24530,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 60.0},
+												matrix: {tx: 46.75, ty: 58.0},
 												text: "Ktost",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24538,7 +24538,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 74.5},
+												matrix: {tx: 46.75, ty: 72.5},
 												text: "Ktost",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24546,7 +24546,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 89.0},
+												matrix: {tx: 46.75, ty: 87.0},
 												text: "Mr.Black",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24555,7 +24555,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 11.7,
-												matrix: {tx: -32.05, ty: 16.5},
+												matrix: {tx: -32.05, ty: 14.5},
 												text: "Cat Set",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24564,7 +24564,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 16.5},
+												matrix: {tx: -37.85, ty: 14.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24572,7 +24572,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 16.5},
+												matrix: {tx: 46.75, ty: 14.5},
 												text: "Mfdom",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#244388", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24580,7 +24580,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -20.25, ty: 103.5},
+												matrix: {tx: -20.25, ty: 101.5},
 												text: "Bat Set",
 												textAttrs: {
 													aliasText: false,
@@ -24599,7 +24599,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 103.5},
+												matrix: {tx: 46.75, ty: 101.5},
 												text: "Dexterity",
 												textAttrs: {
 													aliasText: false,
@@ -24618,7 +24618,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 103.5},
+												matrix: {tx: -37.85, ty: 101.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24627,7 +24627,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -37.85, ty: 118.0},
+												matrix: {tx: -37.85, ty: 116.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24635,7 +24635,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -21.9, ty: 118.0},
+												matrix: {tx: -21.9, ty: 116.0},
 												text: "Sea Set",
 												textAttrs: {
 													aliasText: false,
@@ -24656,7 +24656,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 46.75, ty: 118.0},
+												matrix: {tx: 46.75, ty: 116.0},
 												text: "Magyar",
 												textAttrs: {
 													aliasText: false,
@@ -24706,7 +24706,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: -40.8, ty: 16.5},
+												matrix: {tx: -40.8, ty: 14.5},
 												text: "Brew Set",
 												textAttrs: {
 													aliasText: false,
@@ -24726,7 +24726,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 16.5},
+												matrix: {tx: -49.95, ty: 14.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24734,7 +24734,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 16.5},
+												matrix: {tx: 34.65, ty: 14.5},
 												text: "Northadox",
 												textAttrs: {
 													aliasText: false,
@@ -24753,7 +24753,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 12.15,
-												matrix: {tx: -67.95, ty: 2.0},
+												matrix: {tx: -67.95, ty: 0.0},
 												text: "Jellyfish Hat",
 												textAttrs: {
 													aliasText: false,
@@ -24773,7 +24773,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 2.0},
+												matrix: {tx: -49.95, ty: 0.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24781,7 +24781,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 2.0},
+												matrix: {tx: 34.65, ty: 0.0},
 												text: "Magyar",
 												textAttrs: {
 													aliasText: false,
@@ -24800,7 +24800,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -28.7,
-												matrix: {tx: -71.95, ty: 31.0},
+												matrix: {tx: -71.95, ty: 29.0},
 												text: "Jack-o'-Lantern Head",
 												textAttrs: {
 													aliasText: false,
@@ -24820,7 +24820,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 31.0},
+												matrix: {tx: 34.65, ty: 29.0},
 												text: "Zelante",
 												textAttrs: {
 													aliasText: false,
@@ -24839,7 +24839,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 31.0},
+												matrix: {tx: -49.95, ty: 29.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24848,7 +24848,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 6.8,
-												matrix: {tx: -71.95, ty: 45.5},
+												matrix: {tx: -71.95, ty: 43.5},
 												text: "Christmas Set",
 												textAttrs: {
 													aliasText: false,
@@ -24869,7 +24869,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 45.5},
+												matrix: {tx: 34.65, ty: 43.5},
 												text: "platform guy",
 												textAttrs: {
 													aliasText: false,
@@ -24888,7 +24888,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 45.5},
+												matrix: {tx: -49.95, ty: 43.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24896,7 +24896,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 60.0},
+												matrix: {tx: 34.65, ty: 58.0},
 												text: "platform guy",
 												textAttrs: {
 													aliasText: false,
@@ -24915,7 +24915,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 7.6,
-												matrix: {tx: -71.95, ty: 60.0},
+												matrix: {tx: -71.95, ty: 58.0},
 												text: "Snowman Set",
 												textAttrs: {
 													aliasText: false,
@@ -24937,7 +24937,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 60.0},
+												matrix: {tx: -49.95, ty: 58.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24945,7 +24945,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 74.5},
+												matrix: {tx: 34.65, ty: 72.5},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -24964,7 +24964,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 19.8,
-												matrix: {tx: -71.95, ty: 74.5},
+												matrix: {tx: -71.95, ty: 72.5},
 												text: "Cheese Hat",
 												textAttrs: {
 													aliasText: false,
@@ -24986,7 +24986,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 74.5},
+												matrix: {tx: -49.95, ty: 72.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -24994,7 +24994,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 89.0},
+												matrix: {tx: 34.65, ty: 87.0},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -25013,7 +25013,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 8.5,
-												matrix: {tx: -71.95, ty: 89.0},
+												matrix: {tx: -71.95, ty: 87.0},
 												text: "Blobfish Head",
 												textAttrs: {
 													aliasText: false,
@@ -25035,7 +25035,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 89.0},
+												matrix: {tx: -49.95, ty: 87.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25043,7 +25043,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 103.5},
+												matrix: {tx: 34.65, ty: 101.5},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -25062,7 +25062,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 23.5,
-												matrix: {tx: -71.95, ty: 103.5},
+												matrix: {tx: -71.95, ty: 101.5},
 												text: "Turkey Set",
 												textAttrs: {
 													aliasText: false,
@@ -25083,7 +25083,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 103.5},
+												matrix: {tx: -49.95, ty: 101.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25091,7 +25091,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 118.0},
+												matrix: {tx: 34.65, ty: 116.0},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -25110,7 +25110,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -16.25,
-												matrix: {tx: -71.95, ty: 118.0},
+												matrix: {tx: -71.95, ty: 116.0},
 												text: "Block Options Icon",
 												textAttrs: {
 													aliasText: false,
@@ -25131,7 +25131,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 118.0},
+												matrix: {tx: -49.95, ty: 116.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25172,7 +25172,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -25.1,
-												matrix: {tx: -67.95, ty: 2.0},
+												matrix: {tx: -67.95, ty: 0.0},
 												text: "Custom Stats Block",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank"},
 												type: "DOMStaticText",
@@ -25181,7 +25181,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 2.0},
+												matrix: {tx: -49.95, ty: 0.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25189,7 +25189,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 2.0},
+												matrix: {tx: 34.65, ty: 0.0},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -25208,7 +25208,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 32.4,
-												matrix: {tx: -67.95, ty: 16.5},
+												matrix: {tx: -67.95, ty: 14.5},
 												text: "Dog Set",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#254489", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank"},
 												type: "DOMStaticText",
@@ -25217,7 +25217,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 16.5},
+												matrix: {tx: -49.95, ty: 14.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25225,7 +25225,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 16.5},
+												matrix: {tx: 34.65, ty: 14.5},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -25244,7 +25244,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 6.8,
-												matrix: {tx: -67.95, ty: 31.0},
+												matrix: {tx: -67.95, ty: 29.0},
 												text: "Gladiator Set",
 												textAttrs: {
 													aliasText: false,
@@ -25264,7 +25264,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -49.95, ty: 31.0},
+												matrix: {tx: -49.95, ty: 29.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25272,7 +25272,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 34.65, ty: 31.0},
+												matrix: {tx: 34.65, ty: 29.0},
 												text: "~JBG~",
 												textAttrs: {
 													aliasText: false,
@@ -25325,7 +25325,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: 101.0,
-												matrix: {tx: 7.0, ty: -153.0},
+												matrix: {tx: 7.0, ty: -155.0},
 												text: "-- Art --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -25334,7 +25334,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -3.3,
-												matrix: {tx: -158.9, ty: -153.0},
+												matrix: {tx: -158.9, ty: -155.0},
 												text: "-- Music --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -25343,7 +25343,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: 24.0,
-												matrix: {tx: 40.05, ty: 45.95},
+												matrix: {tx: 40.05, ty: 43.95},
 												text: "-- Programming --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -25424,7 +25424,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 9.45,
-												matrix: {tx: -226.9, ty: 103.65},
+												matrix: {tx: -226.9, ty: 101.65},
 												text: "PR2 Menu Music",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25432,7 +25432,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -109.1, ty: 103.65},
+												matrix: {tx: -109.1, ty: 101.65},
 												text: "Jiggmin",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "http://jiggmin.com"},
 												type: "DOMStaticText",
@@ -25441,7 +25441,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -193.7, ty: 103.65},
+												matrix: {tx: -193.7, ty: 101.65},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25449,7 +25449,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 10.95,
-												matrix: {tx: -150.25, ty: 89.15},
+												matrix: {tx: -150.25, ty: 87.15},
 												name: "music_nav_bt",
 												text: "(more ->)",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 180.0, face: "Verdana-Italic", fillColor: "#234287", lineHeight: 10.95, rotation: true, size: 9.0, target: "_blank"},
@@ -25474,7 +25474,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 179.85, ty: 67.0},
+												matrix: {tx: 179.85, ty: 65.0},
 												text: "Jiggmin",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "http://jiggmin.com"},
 												type: "DOMStaticText",
@@ -25482,7 +25482,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 179.85, ty: 81.5},
+												matrix: {tx: 179.85, ty: 79.5},
 												text: "bls1999",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://jiggmin2.com"},
 												type: "DOMStaticText",
@@ -25491,7 +25491,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 65.8,
-												matrix: {tx: 93.0, ty: 67.0},
+												matrix: {tx: 93.0, ty: 65.0},
 												text: "by",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25500,7 +25500,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 65.8,
-												matrix: {tx: 93.0, ty: 81.5},
+												matrix: {tx: 93.0, ty: 79.5},
 												text: "by",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25509,7 +25509,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 35.55,
-												matrix: {tx: -4.95, ty: 67.0},
+												matrix: {tx: -4.95, ty: 65.0},
 												text: "Game/Dev 2008 – 2015",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25518,7 +25518,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 31.8,
-												matrix: {tx: -1.2, ty: 81.5},
+												matrix: {tx: -1.2, ty: 79.5},
 												text: "Dev 2019 – 2026",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25527,7 +25527,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 23.9,
 												left: 61.3,
-												matrix: {tx: -3.75, ty: 99.5},
+												matrix: {tx: -3.75, ty: 97.5},
 												text: "Interested in contributing to PR2?Client|Server",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 180.0, face: "Verdana-Italic", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -25536,7 +25536,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 9.75,
 												left: -67.1,
-												matrix: {tx: 127.65, ty: 145.0},
+												matrix: {tx: 127.65, ty: 143.0},
 												name: "versionBox",
 												text: "PR2 v156.0",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 120.0, face: "Verdana", fillColor: "#666666", lineHeight: 7.3, rotation: true, size: 6.0},
@@ -25546,7 +25546,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 9.75,
 												left: -79.15,
-												matrix: {tx: 139.7, ty: 153.25},
+												matrix: {tx: 139.7, ty: 151.25},
 												name: "buildBox",
 												text: "Build: 22-apr-2019-v155",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 120.0, face: "Verdana", fillColor: "#666666", lineHeight: 7.3, rotation: true, size: 6.0},
@@ -25618,7 +25618,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 152.1, ty: 14.5},
+												matrix: {tx: 152.1, ty: 12.5},
 												text: "Jiggmin",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "http://jiggmin.com"},
 												type: "DOMStaticText",
@@ -25626,7 +25626,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 45.5, ty: 14.5},
+												matrix: {tx: 45.5, ty: 12.5},
 												text: "Everything Else",
 												textAttrs: {
 													aliasText: false,
@@ -25647,7 +25647,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: 67.5, ty: 14.5},
+												matrix: {tx: 67.5, ty: 12.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25656,7 +25656,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 10.95,
 												left: -60.55,
-												matrix: {tx: 138.55, ty: 2.0},
+												matrix: {tx: 138.55, ty: 0.0},
 												name: "art_nav_bts",
 												text: "(<- back) (next ->)",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 180.0, face: "Verdana-Italic", fillColor: "#234287", lineHeight: 10.95, rotation: true, size: 9.0, target: "_blank"},
@@ -25746,7 +25746,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: -119.5, ty: 2.0},
+												matrix: {tx: -119.5, ty: 0.0},
 												text: "Orbital Trance",
 												textAttrs: {
 													aliasText: false,
@@ -25766,7 +25766,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 2.0},
+												matrix: {tx: -59.9, ty: 0.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25774,7 +25774,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 2.0},
+												matrix: {tx: 24.7, ty: 0.0},
 												text: "Space Planet",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://www.discogs.com/artist/20846-Space-Planet"},
 												type: "DOMStaticText",
@@ -25782,7 +25782,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -72.25, ty: 16.5},
+												matrix: {tx: -72.25, ty: 14.5},
 												text: "Code",
 												textAttrs: {
 													aliasText: false,
@@ -25801,7 +25801,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 16.5},
+												matrix: {tx: 24.7, ty: 14.5},
 												text: "Stefano Maccarelli",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://stefanomaccarelli.com/"},
 												type: "DOMStaticText",
@@ -25810,7 +25810,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 16.5},
+												matrix: {tx: -59.9, ty: 14.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25818,7 +25818,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -92.45, ty: 31.0},
+												matrix: {tx: -92.45, ty: 29.0},
 												text: "Paradise on E",
 												textAttrs: {
 													aliasText: false,
@@ -25837,7 +25837,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 31.0},
+												matrix: {tx: 24.7, ty: 29.0},
 												text: "API",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://apimusic.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -25846,7 +25846,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 31.0},
+												matrix: {tx: -59.9, ty: 29.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25855,7 +25855,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -42.95,
-												matrix: {tx: -79.5, ty: 45.5},
+												matrix: {tx: -79.5, ty: 43.5},
 												text: "Crying Soul (FL Mix)",
 												textAttrs: {
 													aliasText: false,
@@ -25874,7 +25874,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 45.5},
+												matrix: {tx: 24.7, ty: 43.5},
 												text: "Pyroific",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://pyroific.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -25883,7 +25883,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 45.5},
+												matrix: {tx: -59.9, ty: 43.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25891,7 +25891,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -66.4, ty: 60.0},
+												matrix: {tx: -66.4, ty: 58.0},
 												text: "My Vision",
 												textAttrs: {
 													aliasText: false,
@@ -25910,7 +25910,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 60.0},
+												matrix: {tx: 24.7, ty: 58.0},
 												text: "David Orr",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "http://davidorr.net/"},
 												type: "DOMStaticText",
@@ -25919,7 +25919,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 60.0},
+												matrix: {tx: -59.9, ty: 58.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25927,7 +25927,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -82.6, ty: 74.5},
+												matrix: {tx: -82.6, ty: 72.5},
 												text: "Switchblade",
 												textAttrs: {
 													aliasText: false,
@@ -25946,7 +25946,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 74.5},
+												matrix: {tx: 24.7, ty: 72.5},
 												text: "Detective Jabsco",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://myspace.com/detectivejabsco"},
 												type: "DOMStaticText",
@@ -25955,7 +25955,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 74.5},
+												matrix: {tx: -59.9, ty: 72.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25963,7 +25963,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -69.3, ty: 89.0},
+												matrix: {tx: -69.3, ty: 87.0},
 												text: "The Wires",
 												textAttrs: {
 													aliasText: false,
@@ -25982,7 +25982,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 89.0},
+												matrix: {tx: 24.7, ty: 87.0},
 												text: "Cheez-R-Us",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://cheez-r-us.newgrounds.com/audio"},
 												type: "DOMStaticText",
@@ -25991,7 +25991,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 89.0},
+												matrix: {tx: -59.9, ty: 87.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -25999,7 +25999,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -102.1, ty: 103.5},
+												matrix: {tx: -102.1, ty: 101.5},
 												text: "Before Mydnite",
 												textAttrs: {
 													aliasText: false,
@@ -26018,7 +26018,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 103.5},
+												matrix: {tx: 24.7, ty: 101.5},
 												text: "F-777",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://f-777.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -26027,7 +26027,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 103.5},
+												matrix: {tx: -59.9, ty: 101.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26035,7 +26035,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -65.45, ty: 118.0},
+												matrix: {tx: -65.45, ty: 116.0},
 												text: "Broked It",
 												textAttrs: {
 													aliasText: false,
@@ -26054,7 +26054,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 118.0},
+												matrix: {tx: 24.7, ty: 116.0},
 												text: "SWiTCH",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://switch.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -26063,7 +26063,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 118.0},
+												matrix: {tx: -59.9, ty: 116.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26071,7 +26071,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -44.45, ty: 132.5},
+												matrix: {tx: -44.45, ty: 130.5},
 												text: "Hello?",
 												textAttrs: {
 													aliasText: false,
@@ -26090,7 +26090,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 132.5},
+												matrix: {tx: 24.7, ty: 130.5},
 												text: "TMM43",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://tmm43.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -26099,7 +26099,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 132.5},
+												matrix: {tx: -59.9, ty: 130.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26107,7 +26107,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -77.4, ty: 147.0},
+												matrix: {tx: -77.4, ty: 145.0},
 												text: "Pyrokinesis",
 												textAttrs: {
 													aliasText: false,
@@ -26126,7 +26126,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 147.0},
+												matrix: {tx: 24.7, ty: 145.0},
 												text: "Sean Tucker",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://billtog.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -26135,7 +26135,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 147.0},
+												matrix: {tx: -59.9, ty: 145.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26143,7 +26143,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -115.2, ty: 161.5},
+												matrix: {tx: -115.2, ty: 159.5},
 												text: "Flowerz 'n' Herbz",
 												textAttrs: {
 													aliasText: false,
@@ -26162,7 +26162,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 161.5},
+												matrix: {tx: 24.7, ty: 159.5},
 												text: "Brunzolaitis",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://brunzolaitis.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -26171,7 +26171,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 161.5},
+												matrix: {tx: -59.9, ty: 159.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26179,7 +26179,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -104.6, ty: 176.0},
+												matrix: {tx: -104.6, ty: 174.0},
 												text: "Instrumental #4",
 												textAttrs: {
 													aliasText: false,
@@ -26198,7 +26198,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.7, ty: 176.0},
+												matrix: {tx: 24.7, ty: 174.0},
 												text: "Reasoner",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://reasoner.newgrounds.com/"},
 												type: "DOMStaticText",
@@ -26207,7 +26207,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -59.9, ty: 176.0},
+												matrix: {tx: -59.9, ty: 174.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26216,7 +26216,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 52.0,
-												matrix: {tx: -100.8, ty: 190.5},
+												matrix: {tx: -100.8, ty: 188.5},
 												text: "Prismatic",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26225,7 +26225,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -60.15, ty: 190.5},
+												matrix: {tx: -60.15, ty: 188.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26233,7 +26233,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.45, ty: 190.5},
+												matrix: {tx: 24.45, ty: 188.5},
 												text: "Lunanova",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://www.youtube.com/user/Colorfulnova"},
 												type: "DOMStaticText",
@@ -26242,7 +26242,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -60.15, ty: 205.0},
+												matrix: {tx: -60.15, ty: 203.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26251,7 +26251,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 43.55,
-												matrix: {tx: -109.95, ty: 205.0},
+												matrix: {tx: -109.95, ty: 203.0},
 												text: "We Are Loud",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26259,7 +26259,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 24.45, ty: 205.0},
+												matrix: {tx: 24.45, ty: 203.0},
 												text: "Dynamedion",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://dynamedion.com/home/"},
 												type: "DOMStaticText",
@@ -26300,7 +26300,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 53.45,
-												matrix: {tx: -124.75, ty: 2.0},
+												matrix: {tx: -124.75, ty: 0.0},
 												text: "Toodaloo",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26309,7 +26309,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -84.1, ty: 2.0},
+												matrix: {tx: -84.1, ty: 0.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26317,7 +26317,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 0.5, ty: 2.0},
+												matrix: {tx: 0.5, ty: 0.0},
 												text: "mustangman",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://soundcloud.com/jonathan-mack-lofi"},
 												type: "DOMStaticText",
@@ -26326,7 +26326,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 29.05,
-												matrix: {tx: -117.3, ty: 16.5},
+												matrix: {tx: -117.3, ty: 14.5},
 												text: "Night Shade",
 												textAttrs: {
 													aliasText: false,
@@ -26347,7 +26347,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 0.5, ty: 16.5},
+												matrix: {tx: 0.5, ty: 14.5},
 												text: "Goliathe",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://musescore.com/user/293816"},
 												type: "DOMStaticText",
@@ -26356,7 +26356,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -84.1, ty: 16.5},
+												matrix: {tx: -84.1, ty: 14.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26365,7 +26365,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 47.15,
-												matrix: {tx: -117.3, ty: 31.0},
+												matrix: {tx: -117.3, ty: 29.0},
 												text: "Blizzard!",
 												textAttrs: {
 													aliasText: false,
@@ -26386,7 +26386,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 0.5, ty: 31.0},
+												matrix: {tx: 0.5, ty: 29.0},
 												text: "Majicke",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://www.youtube.com/user/Colorfulnova"},
 												type: "DOMStaticText",
@@ -26395,7 +26395,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -84.1, ty: 31.0},
+												matrix: {tx: -84.1, ty: 29.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26404,7 +26404,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -23.65,
-												matrix: {tx: -117.3, ty: 45.5},
+												matrix: {tx: -117.3, ty: 43.5},
 												text: "Pasture (Instrumental)",
 												textAttrs: {
 													aliasText: false,
@@ -26425,7 +26425,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 0.5, ty: 45.5},
+												matrix: {tx: 0.5, ty: 43.5},
 												text: "Damon Bass",
 												textAttrs: {
 													aliasText: false,
@@ -26444,7 +26444,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -84.1, ty: 45.5},
+												matrix: {tx: -84.1, ty: 43.5},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26453,7 +26453,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 15.5,
-												matrix: {tx: -117.3, ty: 60.0},
+												matrix: {tx: -117.3, ty: 58.0},
 												text: "Sunset Raiders",
 												textAttrs: {
 													aliasText: false,
@@ -26474,7 +26474,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: 0.5, ty: 60.0},
+												matrix: {tx: 0.5, ty: 58.0},
 												text: "Adulock Van Liovick",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#234287", lineHeight: 12.15, rotation: true, size: 10.0, target: "_blank", url: "https://soundcloud.com/adulock77"},
 												type: "DOMStaticText",
@@ -26483,7 +26483,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 64.6,
-												matrix: {tx: -84.1, ty: 60.0},
+												matrix: {tx: -84.1, ty: 58.0},
 												text: "by",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -26992,7 +26992,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.5,
 												left: -77.4,
-												matrix: {tx: -79.65, ty: -100.25},
+												matrix: {tx: -79.65, ty: -102.25},
 												name: "author",
 												text: "by: Author",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -27002,7 +27002,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -110.95,
-												matrix: {tx: -41.1, ty: -118.8},
+												matrix: {tx: -41.1, ty: -120.8},
 												name: "title",
 												text: "Level Name",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55},
@@ -27012,7 +27012,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: -21.45,
-												matrix: {tx: -141.1, ty: -39.8},
+												matrix: {tx: -141.1, ty: -41.8},
 												text: "Last Updated:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 220.0, face: "Verdana-Bold", lineHeight: 13.35, size: 11.0},
 												type: "DOMStaticText",
@@ -27021,7 +27021,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 2.55,
-												matrix: {tx: -165.1, ty: -59.8},
+												matrix: {tx: -165.1, ty: -61.8},
 												text: "Version:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 220.0, face: "Verdana-Bold", lineHeight: 13.35, size: 11.0},
 												type: "DOMStaticText",
@@ -27030,7 +27030,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 136.85,
-												matrix: {tx: -200.95, ty: -39.8},
+												matrix: {tx: -200.95, ty: -41.8},
 												name: "updated",
 												text: "17/Mar/2020",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -27040,7 +27040,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 136.85,
-												matrix: {tx: -200.95, ty: -59.8},
+												matrix: {tx: -200.95, ty: -61.8},
 												name: "version",
 												text: "21",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -27050,7 +27050,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 8.25,
-												matrix: {tx: -170.8, ty: -19.8},
+												matrix: {tx: -170.8, ty: -21.8},
 												text: "Min. Rank:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 220.0, face: "Verdana-Bold", lineHeight: 13.35, size: 11.0},
 												type: "DOMStaticText",
@@ -27059,7 +27059,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 136.85,
-												matrix: {tx: -200.95, ty: -19.8},
+												matrix: {tx: -200.95, ty: -21.8},
 												name: "minRank",
 												text: "99",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -27069,7 +27069,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 2.55,
-												matrix: {tx: -165.1, ty: 0.2},
+												matrix: {tx: -165.1, ty: -1.8},
 												text: "Play Count:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 220.0, face: "Verdana-Bold", lineHeight: 13.35, size: 11.0},
 												type: "DOMStaticText",
@@ -27078,7 +27078,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 136.85,
-												matrix: {tx: -200.95, ty: 0.2},
+												matrix: {tx: -200.95, ty: -1.8},
 												name: "plays",
 												text: "999,999,999",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -27088,7 +27088,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 120.65,
 												left: -68.9,
-												matrix: {tx: 91.45, ty: -0.95},
+												matrix: {tx: 91.45, ty: -2.95},
 												name: "note",
 												text: "my description\r\rbla\r\rweeeeeeeeeee",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana-Italic", fillColor: "#666666", lineHeight: 9.75, size: 8.0},
@@ -27098,7 +27098,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 13.35,
 												left: 2.55,
-												matrix: {tx: -165.1, ty: 20.2},
+												matrix: {tx: -165.1, ty: 18.2},
 												text: "Rating:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 220.0, face: "Verdana-Bold", lineHeight: 13.35, size: 11.0},
 												type: "DOMStaticText",
@@ -27278,7 +27278,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -39.65,
-												matrix: {tx: -68.35, ty: -68.0},
+												matrix: {tx: -68.35, ty: -70.0},
 												text: "-- Report Level --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -27287,7 +27287,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -20.3,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -86.3, ty: 2.0},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -86.3, ty: 0.0},
 												text: "Reason:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -27347,7 +27347,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 29.1,
 												left: -17.65,
-												matrix: {tx: -90.3, ty: -43.0},
+												matrix: {tx: -90.3, ty: -45.0},
 												text: "Please let the moderators know what's wrong with this level.",
 												textAttrs: {aliasText: false, alignment: "center", face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -27490,7 +27490,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "art",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -27507,7 +27507,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "art",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -27579,7 +27579,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 80.75,
 												left: -8.95,
-												matrix: {tx: -96.05, ty: 32.5},
+												matrix: {tx: -96.05, ty: 30.5},
 												text: "This setting maximizes art quality but may increase drawing time. That may annoy your friends. Art in the Level Editor will always be drawn at lossless quality.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
 												type: "DOMDynamicText",
@@ -27604,7 +27604,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -3.3,
-												matrix: {a: 1.00094604492188, tx: -59.7, ty: -24.4},
+												matrix: {a: 1.00094604492188, tx: -59.7, ty: -26.4},
 												text: "-- Art Quality --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -27669,7 +27669,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "music",
 												textAttrs: {aliasText: false, alignment: "center", face: "Verdana", fillColor: "#4E4EFE", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -27686,7 +27686,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "music",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -27728,7 +27728,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -53.0, ty: -133.0},
+												matrix: {tx: -53.0, ty: -135.0},
 												text: "-- Options --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -27753,7 +27753,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -106.1, ty: -104.5},
+												matrix: {tx: -106.1, ty: -106.5},
 												name: "artOffText",
 												text: "art",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -27854,7 +27854,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
-												matrix: {tx: -63.4, ty: -104.5},
+												matrix: {tx: -63.4, ty: -106.5},
 												text: "swear filter",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -27932,7 +27932,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 50.75,
-												matrix: {tx: 20.5, ty: -104.5},
+												matrix: {tx: 20.5, ty: -106.5},
 												text: "sounds",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -27941,7 +27941,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 54.05,
-												matrix: {tx: -33.55, ty: -92.2},
+												matrix: {tx: -33.55, ty: -94.2},
 												name: "musicPercentBox",
 												text: "100%",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -27951,7 +27951,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 54.05,
-												matrix: {tx: 17.2, ty: -92.2},
+												matrix: {tx: 17.2, ty: -94.2},
 												name: "soundPercentBox",
 												text: "100%",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -28064,7 +28064,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -17.95,
-												matrix: {tx: -69.55, ty: -18.0},
+												matrix: {tx: -69.55, ty: -20.0},
 												text: "alt keys",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMStaticText",
@@ -28090,7 +28090,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -56.0, ty: 70.5},
+												matrix: {tx: -56.0, ty: 68.5},
 												name: "wasdItem",
 												text: "I",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -28133,7 +28133,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -91.25, ty: 35.45},
+												matrix: {tx: -91.25, ty: 33.45},
 												name: "wasdLeft",
 												text: "A",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -28160,7 +28160,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.6,
 												left: 86.6,
-												matrix: {tx: -195.3, ty: 35.45},
+												matrix: {tx: -195.3, ty: 33.45},
 												text: "←",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.15, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -28186,7 +28186,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -46.35, ty: 35.5},
+												matrix: {tx: -46.35, ty: 33.5},
 												name: "wasdRight",
 												text: "D",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -28213,7 +28213,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.6,
 												left: 85.45,
-												matrix: {tx: -111.8, ty: 35.5},
+												matrix: {tx: -111.8, ty: 33.5},
 												text: "→",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.15, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -28239,7 +28239,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -68.8, ty: 35.5},
+												matrix: {tx: -68.8, ty: 33.5},
 												name: "wasdDown",
 												text: "S",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -28266,7 +28266,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.6,
 												left: 83.65,
-												matrix: {tx: -152.4, ty: 51.95},
+												matrix: {tx: -152.4, ty: 49.95},
 												text: "↓",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.15, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -28292,7 +28292,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -68.75, ty: 14.5},
+												matrix: {tx: -68.75, ty: 12.5},
 												name: "wasdUp",
 												text: "W",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -28319,7 +28319,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.6,
 												left: 62.55,
-												matrix: {tx: -131.3, ty: -2.8},
+												matrix: {tx: -131.3, ty: -4.8},
 												text: "↑",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.15, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -29045,7 +29045,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -3.3,
-												matrix: {a: 1.00094604492188, tx: -44.7, ty: -113.0},
+												matrix: {a: 1.00094604492188, tx: -44.7, ty: -115.0},
 												text: "-- Songs --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -29211,7 +29211,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.5,
 												left: -77.4,
-												matrix: {tx: -103.55, ty: -66.45},
+												matrix: {tx: -103.55, ty: -68.45},
 												name: "descBox",
 												text: "Ahh! Girls have cooties!! And it's Valentine's Day!!!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -29221,7 +29221,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -110.95,
-												matrix: {tx: -65.0, ty: -85.0},
+												matrix: {tx: -65.0, ty: -87.0},
 												name: "titleBox",
 												text: "-- Valentine Feet --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55},
@@ -29230,7 +29230,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
-												matrix: {tx: -46.3, ty: -43.75},
+												matrix: {tx: -46.3, ty: -45.75},
 												name: "ownedBox",
 												text: "You don't own this part.",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -29239,7 +29239,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 13.35,
-												matrix: {tx: -46.3, ty: -25.2},
+												matrix: {tx: -46.3, ty: -27.2},
 												name: "epicBox",
 												text: "Epic Upgrade included with EE purchase!",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -29249,7 +29249,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 47.65,
 												left: -7.0,
-												matrix: {tx: -39.3, ty: -7.85},
+												matrix: {tx: -39.3, ty: -9.85},
 												name: "obtainBox",
 												text: "How to Obtain: Log in on Valentine's Day!",
 												textAttrs: {aliasText: false, bitmapSize: 220.0, face: "Verdana", lineHeight: 13.35, size: 11.0},
@@ -29376,7 +29376,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -3.0,
-												matrix: {tx: 65.05, ty: 77.35},
+												matrix: {tx: 65.05, ty: 75.35},
 												name: "epicBox",
 												text: "Purchased!",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 200.0, face: "Verdana", fillColor: "#006600", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -29401,7 +29401,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 10.0, ty: 25.55},
+												matrix: {tx: 10.0, ty: 23.55},
 												name: "ownedBox",
 												text: "Owned!",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#006600", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -29426,7 +29426,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 65.65,
-												matrix: {tx: 10.0, ty: 96.0},
+												matrix: {tx: 10.0, ty: 94.0},
 												name: "descBox",
 												text: "Rock it old school.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -29451,7 +29451,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 10.05, ty: 5.0},
+												matrix: {tx: 10.05, ty: 3.0},
 												name: "titleBox",
 												text: "Classic",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -29643,7 +29643,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -40.85, ty: -25.05},
+												matrix: {tx: -40.85, ty: -27.05},
 												text: "Group: Guest",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -29700,7 +29700,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -94.0, ty: -52.5},
+												matrix: {tx: -94.0, ty: -54.5},
 												name: "nameBox",
 												text: "-- Character Name --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, rotation: true, size: 14.0},
@@ -29758,7 +29758,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -92.5, ty: -133.2},
+												matrix: {tx: -92.5, ty: -135.2},
 												name: "nameBox",
 												text: "-- Character Name --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, rotation: true, size: 14.0},
@@ -29889,7 +29889,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.75,
 												left: 36.25,
-												matrix: {tx: -170.25, ty: -29.0},
+												matrix: {tx: -170.25, ty: -31.0},
 												name: "noteCharsRemaining",
 												text: "255 / 255",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", fillColor: "#AAAAAA", lineHeight: 9.75, size: 8.0},
@@ -29899,7 +29899,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.75,
 												left: 36.25,
-												matrix: {tx: -170.25, ty: -68.0},
+												matrix: {tx: -170.25, ty: -70.0},
 												name: "titleCharsRemaining",
 												text: "50 / 50",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 160.0, face: "Verdana", fillColor: "#AAAAAA", lineHeight: 9.75, size: 8.0},
@@ -29962,7 +29962,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 26.3,
 												left: -51.75,
-												matrix: {tx: -53.7, ty: 54.0},
+												matrix: {tx: -53.7, ty: 52.0},
 												text: "If you publish a level, it must not contain\rprofanity orobscene content.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana-Italic", letterSpacing: -0.05, lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -30023,7 +30023,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 52.3,
-												matrix: {d: 1.00286865234375, tx: -154.75, ty: 28.0},
+												matrix: {d: 1.00286865234375, tx: -154.75, ty: 26.0},
 												text: "Publish?",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30032,7 +30032,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 52.3,
-												matrix: {d: 1.00286865234375, tx: -12.4, ty: 28.0},
+												matrix: {d: 1.00286865234375, tx: -12.4, ty: 26.0},
 												text: "To Newest?",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30123,7 +30123,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 46.3,
-												matrix: {d: 1.00286865234375, tx: -180.3, ty: -41.0},
+												matrix: {d: 1.00286865234375, tx: -180.3, ty: -43.0},
 												text: "Note",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30148,7 +30148,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 48.85,
-												matrix: {d: 1.00286865234375, tx: -182.85, ty: -80.0},
+												matrix: {d: 1.00286865234375, tx: -182.85, ty: -82.0},
 												text: "Title",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30206,7 +30206,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 20.45,
-												matrix: {tx: -73.45, ty: -109.15},
+												matrix: {tx: -73.45, ty: -111.15},
 												text: "-- Save Level --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30369,7 +30369,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: -26.6,
-												matrix: {tx: -125.65, ty: 39.0},
+												matrix: {tx: -125.65, ty: 37.0},
 												text: "NEVER give your password to ANYONE.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -30378,7 +30378,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.75,
 												left: 30.05,
-												matrix: {tx: 55.5, ty: 39.5},
+												matrix: {tx: 55.5, ty: 37.5},
 												name: "messageCharsRemaining",
 												text: "1000 / 1000",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 160.0, face: "Verdana", fillColor: "#AAAAAA", lineHeight: 9.75, size: 8.0},
@@ -30387,7 +30387,7 @@ final class AssetCatalogSymbolsUI {
 											},
 											{
 												height: 14.55,
-												matrix: {tx: -72.0, ty: -97.25},
+												matrix: {tx: -72.0, ty: -99.25},
 												text: "To:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30486,7 +30486,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: -69.85, ty: -41.0},
+												matrix: {d: 1.00286865234375, tx: -69.85, ty: -43.0},
 												text: "password:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30543,7 +30543,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -124.55, ty: 15.0},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -124.55, ty: 13.0},
 												text: "confirm new email:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30666,7 +30666,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: -74.65, ty: -13.0},
+												matrix: {d: 1.00286865234375, tx: -74.65, ty: -15.0},
 												text: "new email:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30690,7 +30690,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -73.0, ty: -76.25},
+												matrix: {tx: -73.0, ty: -78.25},
 												text: "-- Change Email --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -30764,7 +30764,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -39.65,
-												matrix: {tx: -68.3, ty: -79.0},
+												matrix: {tx: -68.3, ty: -81.0},
 												text: "-- Quantity --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -30773,7 +30773,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -145.9,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: 25.7, ty: 23.45},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: 25.7, ty: 21.45},
 												name: "costBox",
 												text: "Cost: 999,999 Coins",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
@@ -30817,7 +30817,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 29.1,
 												left: -17.65,
-												matrix: {tx: -90.3, ty: -55.05},
+												matrix: {tx: -90.3, ty: -57.05},
 												text: "How many of this item would\ryou like to purchase?",
 												textAttrs: {aliasText: false, alignment: "center", face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30844,7 +30844,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -42.45,
-												matrix: {tx: -78.0, ty: 4.9},
+												matrix: {tx: -78.0, ty: 2.9000000000000004},
 												name: "numSelectedBox",
 												text: "Selected: 9,999",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
@@ -30854,7 +30854,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 68.15,
-												matrix: {tx: -173.6, ty: -18.65},
+												matrix: {tx: -173.6, ty: -20.65},
 												text: "1",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -30863,7 +30863,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: 71.0,
-												matrix: {tx: 26.05, ty: -19.15},
+												matrix: {tx: 26.05, ty: -21.15},
 												name: "maxBox",
 												text: "99",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
@@ -30938,7 +30938,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -211.75, ty: -162.05},
+												matrix: {tx: -211.75, ty: -164.05},
 												name: "titleBox",
 												text: "-- Vault of Magics --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana-Bold", lineHeight: 14.55, rotation: true},
@@ -30948,7 +30948,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -142.8,
-												matrix: {tx: -79.95, ty: 133.5},
+												matrix: {tx: -79.95, ty: 131.5},
 												name: "coinsLeftBox",
 												text: "You have 999,999 Jigg Coins remaining. Need more?",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana Bold*", fillColor: "#BB0000", lineHeight: 14.55},
@@ -31076,7 +31076,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.05,
-												matrix: {tx: 52.0, ty: 72.0},
+												matrix: {tx: 52.0, ty: 70.0},
 												name: "saleBox",
 												text: "25% off",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#339900", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -31101,7 +31101,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 13.0, ty: 72.0},
+												matrix: {tx: 13.0, ty: 70.0},
 												name: "priceBox",
 												text: "1",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -31156,7 +31156,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 57.95,
-												matrix: {tx: 10.0, ty: 96.0},
+												matrix: {tx: 10.0, ty: 94.0},
 												name: "descBox",
 												text: "You and everyone in your guild gains an artifact hat for one hour.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -31181,7 +31181,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 10.05, ty: 7.0},
+												matrix: {tx: 10.05, ty: 5.0},
 												name: "titleBox",
 												text: "Guild de Artifact",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -31295,7 +31295,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 108.2,
-												matrix: {tx: 17.15, ty: 54.35},
+												matrix: {tx: 17.15, ty: 52.35},
 												name: "speedBox",
 												text: "Speed:",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, size: 10.0},
@@ -31305,7 +31305,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 78.5,
-												matrix: {tx: 46.85, ty: 70.5},
+												matrix: {tx: 46.85, ty: 68.5},
 												name: "accelBox",
 												text: "Acceleration:",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, size: 10.0},
@@ -31315,7 +31315,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 12.15,
 												left: 97.4,
-												matrix: {tx: 27.95, ty: 86.65},
+												matrix: {tx: 27.95, ty: 84.65},
 												name: "jumpnBox",
 												text: "Jumping:",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, size: 10.0},
@@ -31524,7 +31524,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: 39.8,
-												matrix: {tx: -72.0, ty: -88.1},
+												matrix: {tx: -72.0, ty: -90.1},
 												text: "-- Mod --",
 												textAttrs: {aliasText: false, bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -31648,7 +31648,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 14.55,
 												left: -6.65,
-												matrix: {d: 1.00286865234375, tx: -69.75, ty: -68.75},
+												matrix: {d: 1.00286865234375, tx: -69.75, ty: -70.75},
 												text: "your email:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -31705,7 +31705,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -126.05, ty: -12.75},
+												matrix: {tx: -126.05, ty: -14.75},
 												text: "new owner's name:",
 												textAttrs: {aliasText: false, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -31828,7 +31828,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: -71.65, ty: -40.75},
+												matrix: {d: 1.00286865234375, tx: -71.65, ty: -42.75},
 												text: "your pass:",
 												textAttrs: {aliasText: false, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -31853,7 +31853,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 17.05,
 												left: -0.65,
-												matrix: {tx: -77.35, ty: -104.0},
+												matrix: {tx: -77.35, ty: -106.0},
 												text: "-- Transfer Guild --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -31862,7 +31862,7 @@ final class AssetCatalogSymbolsUI {
 											{
 												height: 29.1,
 												left: -61.05,
-												matrix: {tx: -56.2, ty: 76.15},
+												matrix: {tx: -56.2, ty: 74.15},
 												text: "This lets you transfer ownership of your guild to a fellow guild member.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -31936,7 +31936,7 @@ final class AssetCatalogSymbolsUI {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -98.0, ty: -38.15},
+												matrix: {tx: -98.0, ty: -40.15},
 												name: "textBox",
 												text: "Uploading...",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},

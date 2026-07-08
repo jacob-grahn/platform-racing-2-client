@@ -19,8 +19,11 @@ import pr2.util.DisplayUtil;
 	to the front so its label is never clipped by neighbours.
 **/
 class LobbyTab extends Sprite {
+	private static inline var SELECTED_HEIGHT_REDUCTION:Float = 2;
+
 	private var art:Null<PR2MovieClip>;
 	private var bg:Null<PR2MovieClip>;
+	private var bgNormalHeight:Float = 0;
 	private var tabsHolder:Null<TabsHolder>;
 	private var tabFunction:Void->Void;
 
@@ -37,6 +40,7 @@ class LobbyTab extends Sprite {
 		bg = Std.downcast(DisplayUtil.findByName(art, "bg"), PR2MovieClip);
 		if (bg != null && textBox != null) {
 			bg.width = textBox.width + 10;
+			bgNormalHeight = bg.height;
 		}
 		addChild(art);
 		activate();
@@ -54,6 +58,7 @@ class LobbyTab extends Sprite {
 	private function onHover(_:MouseEvent):Void {
 		if (bg != null) {
 			bg.gotoAndStop("over");
+			restoreBgHeight();
 		}
 		if (tabsHolder != null) {
 			tabsHolder.moveToFront(this);
@@ -63,6 +68,7 @@ class LobbyTab extends Sprite {
 	private function onHoverOut(_:MouseEvent):Void {
 		if (bg != null) {
 			bg.gotoAndStop("up");
+			restoreBgHeight();
 		}
 	}
 
@@ -74,6 +80,7 @@ class LobbyTab extends Sprite {
 		deactivate();
 		if (bg != null) {
 			bg.gotoAndStop("selected");
+			bg.height = Math.max(1, bg.height - SELECTED_HEIGHT_REDUCTION);
 		}
 	}
 
@@ -87,10 +94,17 @@ class LobbyTab extends Sprite {
 	private function deactivate():Void {
 		if (bg != null) {
 			bg.gotoAndStop("up");
+			restoreBgHeight();
 		}
 		removeEventListener(MouseEvent.CLICK, onClick);
 		removeEventListener(MouseEvent.MOUSE_OVER, onHover);
 		removeEventListener(MouseEvent.MOUSE_OUT, onHoverOut);
+	}
+
+	private function restoreBgHeight():Void {
+		if (bg != null && bgNormalHeight > 0) {
+			bg.height = bgNormalHeight;
+		}
 	}
 
 	public function remove():Void {

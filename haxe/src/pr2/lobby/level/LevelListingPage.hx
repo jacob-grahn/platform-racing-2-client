@@ -1,6 +1,7 @@
 package pr2.lobby.level;
 
 import openfl.display.Sprite;
+import openfl.display.DisplayObject;
 import openfl.events.TimerEvent;
 import openfl.utils.Timer;
 import pr2.lobby.SecureData;
@@ -94,6 +95,10 @@ class LevelListingPage extends Page implements Paginated {
 		if (loading != null) {
 			loading.visible = false;
 		}
+	}
+
+	private function addToListingHolder(child:DisplayObject):Void {
+		holder.addChild(child);
 	}
 
 	/** Lay the levels out in the three-column grid (Flash `showCourses`). */

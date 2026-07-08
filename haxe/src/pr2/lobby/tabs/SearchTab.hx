@@ -64,7 +64,7 @@ class SearchTab extends LevelListingPage {
 		art = PR2MovieClip.fromLinkage("SearchGraphic", {maxNestedDepth: 8});
 		art.x = 36;
 		art.y = 8;
-		addChild(art);
+		addToListingHolder(art);
 
 		searchBox = firstInputField(art);
 		searchButton = DisplayUtil.findByName(art, "search_bt");

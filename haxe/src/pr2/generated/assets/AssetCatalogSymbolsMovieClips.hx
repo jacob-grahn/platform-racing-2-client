@@ -214,7 +214,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 17.05,
 												left: 39.85,
-												matrix: {tx: -72.0, ty: -172.1},
+												matrix: {tx: -72.0, ty: -174.1},
 												text: "-- Mod --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -239,7 +239,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 17.05,
 												left: -10.95,
-												matrix: {tx: -73.05, ty: -17.55},
+												matrix: {tx: -73.05, ty: -19.55},
 												text: "-- Ban --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -297,7 +297,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 50.15,
-												matrix: {tx: -128.15, ty: 23.25},
+												matrix: {tx: -128.15, ty: 21.25},
 												text: "Reason",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -337,7 +337,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 47.05,
-												matrix: {tx: -125.05, ty: 51.75},
+												matrix: {tx: -125.05, ty: 49.75},
 												text: "Type",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -362,7 +362,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 47.05,
-												matrix: {tx: -125.05, ty: 80.25},
+												matrix: {tx: -125.05, ty: 78.25},
 												text: "Scope",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -403,7 +403,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 47.05,
-												matrix: {tx: -125.05, ty: 108.75},
+												matrix: {tx: -125.05, ty: 106.75},
 												text: "Length",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -1041,7 +1041,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -94.0, ty: -31.0},
+												matrix: {tx: -94.0, ty: -33.0},
 												text: "-- External Website --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -1050,7 +1050,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 29.1,
 												left: -50.9,
-												matrix: {tx: -84.05, ty: -3.0},
+												matrix: {tx: -84.05, ty: -5.0},
 												text: "You just clicked a link that is taking you to the website in the box above.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -1059,7 +1059,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 58.2,
 												left: -44.6,
-												matrix: {tx: -85.35, ty: 38.1},
+												matrix: {tx: -85.35, ty: 36.1},
 												text: "The world is a scary place, and that link\rmay harm your computer. If you trust the\rsender and recognize the link, proceed at\ryour own risk. If not, report the PM.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -1168,7 +1168,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -4.45,
-												matrix: {a: 0.999191284179688, tx: 171.0, ty: 2.5},
+												matrix: {a: 0.999191284179688, tx: 171.0, ty: 0.5},
 												name: "timeBox",
 												text: "14/Jun/2020",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
@@ -1194,7 +1194,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.5},
+												matrix: {tx: 2.0, ty: 0.5},
 												name: "titleBox",
 												text: "Title goes here",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
@@ -13570,7 +13570,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -145.5, ty: -8.0},
+												matrix: {tx: -145.5, ty: -10.0},
 												name: "textBox",
 												text: "Logged in as Someone",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#C0F1CA", lineHeight: 14.55, rotation: true},
@@ -30306,7 +30306,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 10.95,
 												left: -52.15,
-												matrix: {tx: 64.15, ty: 86.0},
+												matrix: {tx: 64.15, ty: 84.0},
 												text: "Joined",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 180.0, face: "Verdana", fillColor: "#666666", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -30315,7 +30315,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 10.95,
 												left: -52.15,
-												matrix: {tx: 64.15, ty: 118.0},
+												matrix: {tx: 64.15, ty: 116.0},
 												text: "Active",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 180.0, face: "Verdana", fillColor: "#666666", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -30323,7 +30323,7 @@ final class AssetCatalogSymbolsMovieClips {
 											},
 											{
 												height: 10.95,
-												matrix: {tx: -38.0, ty: 86.0},
+												matrix: {tx: -38.0, ty: 84.0},
 												text: "Rank",
 												textAttrs: {aliasText: false, bitmapSize: 180.0, face: "Verdana", fillColor: "#666666", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -30331,7 +30331,7 @@ final class AssetCatalogSymbolsMovieClips {
 											},
 											{
 												height: 10.95,
-												matrix: {tx: -38.0, ty: 118.0},
+												matrix: {tx: -38.0, ty: 116.0},
 												text: "Hats",
 												textAttrs: {aliasText: false, bitmapSize: 180.0, face: "Verdana", fillColor: "#666666", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -30339,7 +30339,7 @@ final class AssetCatalogSymbolsMovieClips {
 											},
 											{
 												height: 10.95,
-												matrix: {tx: -38.0, ty: 54.0},
+												matrix: {tx: -38.0, ty: 52.0},
 												text: "Guild",
 												textAttrs: {aliasText: false, bitmapSize: 180.0, face: "Verdana", fillColor: "#666666", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -30347,7 +30347,7 @@ final class AssetCatalogSymbolsMovieClips {
 											},
 											{
 												height: 10.95,
-												matrix: {tx: -37.75, ty: 22.0},
+												matrix: {tx: -37.75, ty: 20.0},
 												text: "Group",
 												textAttrs: {aliasText: false, bitmapSize: 180.0, face: "Verdana", fillColor: "#666666", lineHeight: 10.95, rotation: true, size: 9.0},
 												type: "DOMStaticText",
@@ -30413,7 +30413,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -61.1,
-												matrix: {tx: -49.85, ty: 267.15},
+												matrix: {tx: -49.85, ty: 265.15},
 												name: "supplText",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -30453,7 +30453,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.95,
 												left: -11.95,
-												matrix: {tx: 23.95, ty: 130.0},
+												matrix: {tx: 23.95, ty: 128.0},
 												name: "activeBox",
 												text: "17/Mar/2013",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
@@ -30478,7 +30478,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -38.0, ty: 66.0},
+												matrix: {tx: -38.0, ty: 64.0},
 												name: "guildBox",
 												text: "none",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
@@ -30504,7 +30504,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.85,
 												left: -6.4,
-												matrix: {tx: 18.4, ty: 98.0},
+												matrix: {tx: 18.4, ty: 96.0},
 												name: "registerBox",
 												text: "17/Sep/2013",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
@@ -30529,7 +30529,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: -106.75, ty: 1.0},
+												matrix: {tx: -106.75, ty: -1.0},
 												name: "statusBox",
 												text: "offline",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -30554,7 +30554,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -38.0, ty: 98.0},
+												matrix: {tx: -38.0, ty: 96.0},
 												name: "rankBox",
 												text: "24",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
@@ -30579,7 +30579,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -38.0, ty: 130.0},
+												matrix: {tx: -38.0, ty: 128.0},
 												name: "hatBox",
 												text: "2",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
@@ -30604,7 +30604,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -38.0, ty: 34.0},
+												matrix: {tx: -38.0, ty: 32.0},
 												name: "groupBox",
 												text: "Temporary Moderator",
 												textAttrs: {aliasText: false, face: "Verdana", fillColor: "#151515", lineHeight: 14.55, rotation: true},
@@ -30796,7 +30796,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 12.15,
 												left: 30.8,
-												matrix: {d: 1.00311279296875, tx: -24.0, ty: 13.0},
+												matrix: {d: 1.00311279296875, tx: -24.0, ty: 11.0},
 												text: "Kongregate.com",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#B10101", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -30822,7 +30822,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 12.15,
 												left: 15.95,
-												matrix: {d: 1.00311279296875, tx: -0.55, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: -0.55, ty: 0.0},
 												text: "Get a Hat at",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", leftMargin: 2.0, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -31595,7 +31595,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 12.15,
 												left: 48.45,
-												matrix: {d: 1.00311279296875, tx: -35.45, ty: 13.0},
+												matrix: {d: 1.00311279296875, tx: -35.45, ty: 11.0},
 												text: "of Magics",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#B10101", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -31620,7 +31620,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 12.15,
 												left: 34.0,
-												matrix: {d: 1.00311279296875, tx: -12.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: -12.0, ty: 0.0},
 												text: "Vault",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", leftMargin: 2.0, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -32059,7 +32059,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {ty: 21.95},
+												matrix: {ty: 19.95},
 												name: "textBox",
 												text: "Rank 99 needed.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -32107,7 +32107,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 116.0,
-												matrix: {d: 0.999664306640625, tx: 2.0, ty: 2.0},
+												matrix: {d: 0.999664306640625, tx: 2.0, ty: 0.0},
 												name: "textBox2",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -32147,7 +32147,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 116.05,
-												matrix: {d: 0.999664306640625, tx: 2.0, ty: 2.0},
+												matrix: {d: 0.999664306640625, tx: 2.0, ty: 0.0},
 												name: "textBox1",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -34946,7 +34946,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -65.65, ty: -6.45},
+												matrix: {tx: -65.65, ty: -8.45},
 												text: "www.kongregate.com",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#FFFFFF", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -36469,7 +36469,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: 5.0, ty: 9.0},
+												matrix: {tx: 5.0, ty: 7.0},
 												name: "textBox",
 												text: "+10 GP",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana", fillColor: "#333333", lineHeight: 17.05, rotation: true, size: 14.0},
@@ -68212,7 +68212,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.75,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "3",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Gwibble", lineHeight: 12.75, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -68252,7 +68252,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.75,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "2",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Gwibble", lineHeight: 12.75, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -68292,7 +68292,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.75,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "1",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Gwibble", lineHeight: 12.75, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -68332,7 +68332,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.75,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "GO!",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Gwibble", lineHeight: 12.75, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -69515,7 +69515,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 26.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Super Flying Cowboy Mode: Activate!!!!!",
 												textAttrs: {aliasText: false, bitmapSize: 500.0, face: "Gwibble", fillColor: "#FFFFFF", leftMargin: 11.0, letterSpacing: -0.05, lineHeight: 26.55, lineSpacing: 0.0, rotation: true, size: 25.0},
 												type: "DOMStaticText",
@@ -70840,7 +70840,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 34.0,
-												matrix: {a: 1.32939147949219, d: 1.32939147949219, tx: -127.85, ty: -20.0},
+												matrix: {a: 1.32939147949219, d: 1.32939147949219, tx: -127.85, ty: -22.0},
 												text: "Happy Hour!",
 												textAttrs: {aliasText: false, bitmapSize: 640.0, face: "Gwibble", fillColor: "#FFFFFF", lineHeight: 34.0, lineSpacing: 0.0, rotation: true, size: 32.0},
 												type: "DOMStaticText",
@@ -70957,7 +70957,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 17.05,
 												left: 12.25,
-												matrix: {tx: -85.25, ty: -120.0},
+												matrix: {tx: -85.25, ty: -122.0},
 												text: "-- Pick the Cat --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -71669,7 +71669,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -109.8, ty: 1.75},
+												matrix: {tx: -109.8, ty: -0.25},
 												text: "email (optional):",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -71759,7 +71759,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00057983398438, tx: -90.55, ty: -27.0},
+												matrix: {a: 1.00057983398438, tx: -90.55, ty: -29.0},
 												text: "confirm pass:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -71882,7 +71882,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -41.45, ty: -55.0},
+												matrix: {tx: -41.45, ty: -57.0},
 												text: "pass:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -71906,7 +71906,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00115966796875, d: 1.00559997558594, tx: -48.1, ty: -83.0},
+												matrix: {a: 1.00115966796875, d: 1.00559997558594, tx: -48.1, ty: -85.0},
 												text: "name:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -71930,7 +71930,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -78.0, ty: -118.25},
+												matrix: {tx: -78.0, ty: -120.25},
 												text: "-- Create Account --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -71954,7 +71954,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 40.45,
-												matrix: {tx: -97.1, ty: 39.0},
+												matrix: {tx: -97.1, ty: 37.0},
 												text: "The only time your email will ever beused is if you forget your password \rand need to recover it.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", letterSpacing: -0.05, lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -79760,7 +79760,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -49.0, ty: 2.0},
+												matrix: {tx: -49.0, ty: 0.0},
 												name: "nameBox",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -79785,7 +79785,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -50.0, ty: 3.0},
+												matrix: {tx: -50.0, ty: 1.0},
 												name: "nameBox2",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -81878,7 +81878,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 15.0,
-												matrix: {tx: -38.95, ty: 2.0},
+												matrix: {tx: -38.95, ty: 0.0},
 												name: "timeBox",
 												text: "60:00",
 												textAttrs: {aliasText: false, alignment: "center", face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -81992,7 +81992,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												name: "textBox",
 												text: "None",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82110,7 +82110,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 1.5,
-												matrix: {tx: -99.45, ty: 90.0},
+												matrix: {tx: -99.45, ty: 88.0},
 												text: "Rate This Level:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82167,7 +82167,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -127.95, ty: 19.5},
+												matrix: {tx: -127.95, ty: 17.5},
 												text: "Total Experience Points:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", leftMargin: 17.0, letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82191,7 +82191,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: -127.95, ty: -12.5},
+												matrix: {tx: -127.95, ty: -14.5},
 												name: "bonus5",
 												text: "--",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82216,7 +82216,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: -127.95, ty: -34.5},
+												matrix: {tx: -127.95, ty: -36.5},
 												name: "bonus4",
 												text: "--",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82241,7 +82241,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: -127.95, ty: -56.5},
+												matrix: {tx: -127.95, ty: -58.5},
 												name: "bonus3",
 												text: "--",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82266,7 +82266,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: -127.95, ty: -78.5},
+												matrix: {tx: -127.95, ty: -80.5},
 												name: "bonus2",
 												text: "--",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82291,7 +82291,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 50.25, ty: 19.5},
+												matrix: {tx: 50.25, ty: 17.5},
 												name: "expTotal",
 												text: "--",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82316,7 +82316,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 50.25, ty: -12.5},
+												matrix: {tx: 50.25, ty: -14.5},
 												name: "exp5",
 												text: "--",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82341,7 +82341,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 50.25, ty: -56.5},
+												matrix: {tx: 50.25, ty: -58.5},
 												name: "exp3",
 												text: "--",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82366,7 +82366,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 50.25, ty: -78.5},
+												matrix: {tx: 50.25, ty: -80.5},
 												name: "exp2",
 												text: "--",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82391,7 +82391,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 50.25, ty: -100.5},
+												matrix: {tx: 50.25, ty: -102.5},
 												name: "exp1",
 												text: "--",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82416,7 +82416,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 50.25, ty: -34.5},
+												matrix: {tx: 50.25, ty: -36.5},
 												name: "exp4",
 												text: "--",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82441,7 +82441,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: -127.95, ty: -100.5},
+												matrix: {tx: -127.95, ty: -102.5},
 												name: "bonus1",
 												text: "--",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -82466,7 +82466,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -69.15, ty: -129.75},
+												matrix: {tx: -69.15, ty: -131.75},
 												text: "-- Race Complete! --",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana-Bold", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82547,7 +82547,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 68.75,
 												left: 3.05,
-												matrix: {tx: -1.05, ty: 11.95},
+												matrix: {tx: -1.05, ty: 9.95},
 												name: "textBox",
 												text: "You already have this prize, so here are 5 experience points instead!",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.1, lineHeight: 12.15, rotation: true, size: 10.0},
@@ -82589,7 +82589,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "drawing",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82606,7 +82606,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "drawing.",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82623,7 +82623,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "drawing..",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82640,7 +82640,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "drawing...",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -82740,7 +82740,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00057983398438, tx: 93.0, ty: 68.0},
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 66.0},
 												name: "timeBox3",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82764,7 +82764,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00057983398438, tx: 93.0, ty: 46.0},
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 44.0},
 												name: "timeBox2",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82788,7 +82788,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00057983398438, tx: 93.0, ty: 24.0},
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 22.0},
 												name: "timeBox1",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82812,7 +82812,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00057983398438, tx: 93.0, ty: 2.0},
+												matrix: {a: 1.00057983398438, tx: 93.0, ty: 0.0},
 												name: "timeBox0",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82836,7 +82836,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 15.0,
-												matrix: {a: 1.0003662109375, tx: 2.0, ty: 68.0},
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 66.0},
 												name: "nameBox3",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82860,7 +82860,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.0003662109375, tx: 2.0, ty: 46.0},
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 44.0},
 												name: "nameBox2",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82884,7 +82884,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.0003662109375, tx: 2.0, ty: 24.0},
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 22.0},
 												name: "nameBox1",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -82908,7 +82908,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.0003662109375, tx: 2.0, ty: 2.0},
+												matrix: {a: 1.0003662109375, tx: 2.0, ty: 0.0},
 												name: "nameBox0",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -83184,7 +83184,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -1.55,
-												matrix: {tx: -37.0, ty: -28.2},
+												matrix: {tx: -37.0, ty: -30.2},
 												text: "Connecting...",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -83241,7 +83241,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 54.6,
-												matrix: {tx: -83.0, ty: 2.0},
+												matrix: {tx: -83.0, ty: 0.0},
 												text: "If you entered an email address \rwhen you registered, then youcan have a new password sentto that email address.",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#444444", letterSpacing: -0.05, lineHeight: 12.15, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -83299,7 +83299,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -83.9, ty: -32.0},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -83.9, ty: -34.0},
 												text: "email:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -83423,7 +83423,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: -83.9, ty: -60.0},
+												matrix: {d: 1.00286865234375, tx: -83.9, ty: -62.0},
 												text: "name:",
 												textAttrs: {aliasText: false, alignment: "right", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -83447,7 +83447,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -85.5, ty: -95.25},
+												matrix: {tx: -85.5, ty: -97.25},
 												text: "-- Forgot Password --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -83856,7 +83856,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -16.05,
-												matrix: {tx: -131.9, ty: -140.0},
+												matrix: {tx: -131.9, ty: -142.0},
 												name: "titleBox",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
 												type: "DOMDynamicText",
@@ -83908,7 +83908,7 @@ final class AssetCatalogSymbolsMovieClips {
 										duration: 11,
 										elementCount: 1,
 										elementTypes: ["DOMDynamicText"],
-										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -91.0}, name: "gpTotalBox", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
+										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -93.0}, name: "gpTotalBox", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
 										index: 5,
 										keyMode: 9728
 									}
@@ -83925,7 +83925,7 @@ final class AssetCatalogSymbolsMovieClips {
 										duration: 11,
 										elementCount: 1,
 										elementTypes: ["DOMDynamicText"],
-										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -110.0}, name: "gpTodayBox", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
+										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -112.0}, name: "gpTodayBox", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
 										index: 5,
 										keyMode: 9728
 									}
@@ -83942,7 +83942,7 @@ final class AssetCatalogSymbolsMovieClips {
 										duration: 11,
 										elementCount: 1,
 										elementTypes: ["DOMDynamicText"],
-										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -72.0}, name: "membersCount", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
+										elements: [{height: 14.55, matrix: {tx: -30.0, ty: -74.0}, name: "membersCount", textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55}, type: "DOMDynamicText", width: 173.0}],
 										index: 5,
 										keyMode: 9728
 									}
@@ -84015,7 +84015,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 53.0, ty: -46.0},
+												matrix: {tx: 53.0, ty: -48.0},
 												text: "GP total",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84023,7 +84023,7 @@ final class AssetCatalogSymbolsMovieClips {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -18.0, ty: -46.0},
+												matrix: {tx: -18.0, ty: -48.0},
 												text: "GP today",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84031,7 +84031,7 @@ final class AssetCatalogSymbolsMovieClips {
 											},
 											{
 												height: 12.15,
-												matrix: {tx: -138.0, ty: -46.0},
+												matrix: {tx: -138.0, ty: -48.0},
 												text: "Name",
 												textAttrs: {aliasText: false, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84057,7 +84057,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 40.45,
-												matrix: {tx: -138.0, ty: 77.0},
+												matrix: {tx: -138.0, ty: 75.0},
 												name: "guildProse",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, size: 10.0},
 												type: "DOMDynamicText",
@@ -84482,7 +84482,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Loading...",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84499,7 +84499,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Loading",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84516,7 +84516,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Loading.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84533,7 +84533,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Loading..",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -84912,7 +84912,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: -92.75, ty: 13.95},
+												matrix: {tx: -92.75, ty: 11.95},
 												name: "textBox",
 												text: "/",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -85171,7 +85171,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 81.0,
-												matrix: {tx: -112.5, ty: -8.25},
+												matrix: {tx: -112.5, ty: -10.25},
 												text: "Drawing...",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -85463,7 +85463,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -84.15, ty: -117.0},
+												matrix: {tx: -84.15, ty: -119.0},
 												name: "titleBox",
 												text: "-- Load --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, rotation: true, size: 14.0},
@@ -85888,7 +85888,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 193.0, ty: 2.0},
+												matrix: {tx: 193.0, ty: 0.0},
 												name: "gpTotalBox",
 												text: "1,659",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -85913,7 +85913,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 122.0, ty: 2.0},
+												matrix: {tx: 122.0, ty: 0.0},
 												name: "gpTodayBox",
 												text: "15",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -85938,7 +85938,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												name: "nameBox",
 												text: "User Name",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -85981,7 +85981,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00286865234375, tx: 2.0, ty: 0.0},
 												name: "nameBox",
 												text: "Guild Name",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -86024,7 +86024,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: -38.0, ty: -67.0},
+												matrix: {tx: -38.0, ty: -69.0},
 												text: "-- Admin --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55},
 												type: "DOMStaticText",
@@ -86384,7 +86384,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {a: 0.999191284179688, tx: 171.0, ty: 2.0},
+												matrix: {a: 0.999191284179688, tx: 171.0, ty: 0.0},
 												name: "statusBox",
 												text: "Unpublished",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
@@ -86410,7 +86410,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.5,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												name: "titleBox",
 												text: "Title goes here",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#333333", lineHeight: 14.55, rotation: true},
@@ -86816,7 +86816,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 70.0, ty: 358.0},
+												matrix: {tx: 70.0, ty: 356.0},
 												text: "No flooding.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -86840,7 +86840,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {ty: 358.0},
+												matrix: {ty: 356.0},
 												text: "No swearing.",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -86864,7 +86864,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 136.0, ty: 358.0},
+												matrix: {tx: 136.0, ty: 356.0},
 												text: "Be nice :)",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -87124,7 +87124,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -49.45,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.35, ty: 15.0},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.35, ty: 13.0},
 												text: "confirm new password:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -87181,7 +87181,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.75, ty: -13.0},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.75, ty: -15.0},
 												text: "new password:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -87304,7 +87304,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: -100.3, ty: -41.0},
+												matrix: {d: 1.00286865234375, tx: -100.3, ty: -43.0},
 												text: "current password:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -87328,7 +87328,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 17.05,
-												matrix: {tx: -88.0, ty: -76.25},
+												matrix: {tx: -88.0, ty: -78.25},
 												text: "-- Change Password --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -87466,7 +87466,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 62.0, ty: -28.0},
+												matrix: {tx: 62.0, ty: -30.0},
 												text: "100x50",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#666666", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -87543,7 +87543,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -6.05,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.3, ty: 33.95},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.3, ty: 31.950000000000003},
 												text: "prose:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -87601,7 +87601,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: -21.2,
-												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.3, ty: -30.05},
+												matrix: {a: 1.00152587890625, d: 1.00286865234375, tx: -81.3, ty: -32.05},
 												text: "emblem:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -87626,7 +87626,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 14.55,
 												left: 33.4,
-												matrix: {d: 1.00286865234375, tx: -121.3, ty: -58.05},
+												matrix: {d: 1.00286865234375, tx: -121.3, ty: -60.05},
 												text: "name:",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -87651,7 +87651,7 @@ final class AssetCatalogSymbolsMovieClips {
 											{
 												height: 17.05,
 												left: -37.5,
-												matrix: {tx: -60.5, ty: -95.5},
+												matrix: {tx: -60.5, ty: -97.5},
 												name: "titleBox",
 												text: "-- Create Guild --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 280.0, face: "Verdana-Bold", lineHeight: 17.05, rotation: true, size: 14.0},
@@ -88090,7 +88090,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 16.0, ty: 2.0},
+												matrix: {tx: 16.0, ty: 0.0},
 												name: "textBox",
 												text: "(1)",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#737373", lineHeight: 14.55, rotation: true},
@@ -88185,7 +88185,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 0.999725341796875, tx: 2.0, ty: 56.0},
+												matrix: {a: 0.999725341796875, tx: 2.0, ty: 54.0},
 												name: "guildBox",
 												text: "Guild:PR2 Staff",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -88210,7 +88210,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 0.999725341796875, tx: 2.0, ty: 38.0},
+												matrix: {a: 0.999725341796875, tx: 2.0, ty: 36.0},
 												name: "hatBox",
 												text: "Hats:13",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -88235,7 +88235,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 0.999725341796875, tx: 2.0, ty: 20.0},
+												matrix: {a: 0.999725341796875, tx: 2.0, ty: 18.0},
 												name: "rankBox",
 												text: "Rank:45",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -88260,7 +88260,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {a: 0.999618530273438, tx: 2.0, ty: 2.0},
+												matrix: {a: 0.999618530273438, tx: 2.0, ty: 0.0},
 												name: "nameBox",
 												text: "Welcome,Jiggmin",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -88485,7 +88485,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {d: 1.00286865234375, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00286865234375, tx: 2.0, ty: 0.0},
 												name: "textBox",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
 												type: "DOMDynamicText",
@@ -88586,7 +88586,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 1.0},
+												matrix: {tx: 2.0, ty: -1.0},
 												name: "titleBox",
 												text: "Title",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana", fillColor: "#325638", lineHeight: 14.55, rotation: true},
@@ -88611,7 +88611,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.05,
-												matrix: {tx: 2.0, ty: 15.0},
+												matrix: {tx: 2.0, ty: 13.0},
 												name: "authorBox",
 												text: "by: Jiggmin",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#698D70", lineHeight: 12.15, rotation: true, size: 10.0},
@@ -89083,7 +89083,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 19.45,
-												matrix: {tx: 10.0, ty: 25.0},
+												matrix: {tx: 10.0, ty: 23.0},
 												name: "loadoutNum",
 												text: "10",
 												textAttrs: {aliasText: false, bitmapSize: 320.0, face: "Verdana", lineHeight: 19.45, rotation: true, size: 16.0},
@@ -89109,7 +89109,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 92.0, ty: 47.0},
+												matrix: {tx: 92.0, ty: 45.0},
 												name: "loadoutJump",
 												text: "jumping: 50",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -89135,7 +89135,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 92.0, ty: 27.0},
+												matrix: {tx: 92.0, ty: 25.0},
 												name: "loadoutAccel",
 												text: "acceleration: 50",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -89161,7 +89161,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 92.0, ty: 7.0},
+												matrix: {tx: 92.0, ty: 5.0},
 												name: "loadoutSpeed",
 												text: "speed: 50",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, rotation: true},
@@ -89302,7 +89302,7 @@ final class AssetCatalogSymbolsMovieClips {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 33.6, ty: 39.05},
+												matrix: {tx: 33.6, ty: 37.05},
 												name: "textBox",
 												text: "--",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, rotation: true, size: 10.0},

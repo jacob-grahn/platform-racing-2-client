@@ -292,7 +292,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "cancel",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -309,7 +309,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "cancel",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -350,7 +350,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 21.25,
-												matrix: {tx: -7.75, ty: -10.6},
+												matrix: {tx: -7.75, ty: -12.6},
 												text: "G",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 400.0, face: "gwibble*", lineHeight: 21.25, size: 20.0},
 												type: "DOMStaticText",
@@ -366,7 +366,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 21.25,
-												matrix: {tx: -7.75, ty: -10.6},
+												matrix: {tx: -7.75, ty: -12.6},
 												text: "G",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 400.0, face: "gwibble*", fillColor: "#666666", lineHeight: 21.25, size: 20.0},
 												type: "DOMStaticText",
@@ -382,7 +382,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 21.25,
-												matrix: {tx: -7.75, ty: -10.6},
+												matrix: {tx: -7.75, ty: -12.6},
 												text: "G",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 400.0, face: "gwibble*", fillColor: "#666666", lineHeight: 21.25, size: 20.0},
 												type: "DOMStaticText",
@@ -830,7 +830,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Forget your password?",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -846,7 +846,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Forget your password?",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -862,7 +862,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Forget your password?",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -878,7 +878,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Forget your password?",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1138,7 +1138,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "delete",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1154,7 +1154,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "delete",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1170,7 +1170,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "delete",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1186,7 +1186,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "delete",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1227,7 +1227,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "invite",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1243,7 +1243,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "invite",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1259,7 +1259,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "invite",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1275,7 +1275,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "invite",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1316,7 +1316,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "kick from guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1332,7 +1332,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "kick from guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1348,7 +1348,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "kick from guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1364,7 +1364,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "kick from guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1562,7 +1562,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Change Password",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1578,7 +1578,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Change Password",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1594,7 +1594,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Change Password",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1610,7 +1610,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Change Password",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1651,7 +1651,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Change Email",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1667,7 +1667,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Change Email",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1683,7 +1683,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Change Email",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1699,7 +1699,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Change Email",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1740,7 +1740,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Leave Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1756,7 +1756,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Leave Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1772,7 +1772,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Leave Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1788,7 +1788,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Leave Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1829,7 +1829,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Create Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1845,7 +1845,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Create Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1861,7 +1861,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Create Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1877,7 +1877,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Create Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1918,7 +1918,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Edit Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1934,7 +1934,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Edit Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1950,7 +1950,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Edit Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -1966,7 +1966,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Edit Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2009,7 +2009,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 14.55,
 												left: 46.65,
-												matrix: {a: 0.906539916992188, d: 0.731430053710938, tx: -40.2, ty: -0.2},
+												matrix: {a: 0.906539916992188, d: 0.731430053710938, tx: -40.2, ty: -2.2},
 												text: "?",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -2027,7 +2027,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 14.55,
 												left: 46.65,
-												matrix: {a: 0.906539916992188, d: 0.731430053710938, tx: -40.2, ty: -0.2},
+												matrix: {a: 0.906539916992188, d: 0.731430053710938, tx: -40.2, ty: -2.2},
 												text: "?",
 												textAttrs: {aliasText: false, bitmapSize: 240.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 14.55, lineSpacing: 0.0, rotation: true},
 												type: "DOMStaticText",
@@ -2102,7 +2102,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "change",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2118,7 +2118,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "change",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2134,7 +2134,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "change",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2150,7 +2150,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "change",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2192,7 +2192,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: -14.55,
-												matrix: {tx: 16.55, ty: 2.0},
+												matrix: {tx: 16.55, ty: 0.0},
 												text: "Transfer Guild",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2210,7 +2210,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: -14.55,
-												matrix: {tx: 16.55, ty: 2.0},
+												matrix: {tx: 16.55, ty: 0.0},
 												text: "Transfer Guild",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2251,7 +2251,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "edit",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2268,7 +2268,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "edit",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2310,7 +2310,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 16.75,
 												left: 65.0,
-												matrix: {tx: -63.0, ty: 2.0},
+												matrix: {tx: -63.0, ty: 0.0},
 												text: "",
 												textAttrs: {bitmapSize: 280.0, face: "FontAwesome", lineHeight: 16.75, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -2327,7 +2327,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 16.75,
 												left: 66.0,
-												matrix: {tx: -64.0, ty: 2.0},
+												matrix: {tx: -64.0, ty: 0.0},
 												text: "",
 												textAttrs: {bitmapSize: 280.0, face: "FontAwesome", fillColor: "#FFFF00", lineHeight: 16.75, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -2344,7 +2344,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 16.75,
 												left: 66.0,
-												matrix: {tx: -64.0, ty: 2.0},
+												matrix: {tx: -64.0, ty: 0.0},
 												text: "",
 												textAttrs: {bitmapSize: 280.0, face: "FontAwesome", fillColor: "#FFCC33", lineHeight: 16.75, lineSpacing: 0.0, rotation: true, size: 14.0},
 												type: "DOMStaticText",
@@ -2440,7 +2440,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Rank",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2456,7 +2456,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Rank",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2472,7 +2472,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Rank",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2488,7 +2488,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Rank",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2529,7 +2529,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Hats",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2545,7 +2545,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Hats",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2561,7 +2561,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Hats",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2577,7 +2577,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												text: "Hats",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2619,7 +2619,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Name",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2636,7 +2636,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Name",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2653,7 +2653,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Name",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2670,7 +2670,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Name",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2712,7 +2712,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Active",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2729,7 +2729,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Active",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2746,7 +2746,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Active",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2763,7 +2763,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "Active",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2805,7 +2805,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "GP",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2822,7 +2822,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "GP",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2839,7 +2839,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "GP",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -2856,7 +2856,7 @@ final class AssetCatalogSymbolsButtons {
 											{
 												height: 12.15,
 												left: 55.1,
-												matrix: {tx: -53.1, ty: 2.0},
+												matrix: {tx: -53.1, ty: 0.0},
 												text: "GP",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#FFFF00", letterSpacing: -0.05, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -3017,7 +3017,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Transfer Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -3034,7 +3034,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "Transfer Guild",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", letterSpacing: -0.1, lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -3075,7 +3075,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "View Priors",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", fillColor: "#4E4EFE", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -3091,7 +3091,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "View Priors",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -3107,7 +3107,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "View Priors",
 												textAttrs: {aliasText: false, bitmapSize: 200.0, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",
@@ -3123,7 +3123,7 @@ final class AssetCatalogSymbolsButtons {
 										elements: [
 											{
 												height: 12.15,
-												matrix: {d: 1.00311279296875, tx: 2.0, ty: 2.0},
+												matrix: {d: 1.00311279296875, tx: 2.0, ty: 0.0},
 												text: "View Priors",
 												textAttrs: {aliasText: false, face: "Verdana", lineHeight: 12.15, lineSpacing: 0.0, rotation: true, size: 10.0},
 												type: "DOMStaticText",

@@ -74,7 +74,7 @@ final class AssetCatalogSymbolsMisc {
 											{
 												height: 14.55,
 												left: 10.55,
-												matrix: {tx: -8.55, ty: 2.0},
+												matrix: {tx: -8.55, ty: 0.0},
 												name: "box",
 												text: "Fred the G. Cactus",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana*", fillColor: "#666666", lineHeight: 14.55},
@@ -115,7 +115,7 @@ final class AssetCatalogSymbolsMisc {
 										elements: [
 											{
 												height: 14.55,
-												matrix: {tx: 2.0, ty: 2.0},
+												matrix: {tx: 2.0, ty: 0.0},
 												name: "box",
 												text: "-- Spectating --",
 												textAttrs: {aliasText: false, alignment: "center", bitmapSize: 240.0, face: "Verdana*", fillColor: "#666666", lineHeight: 14.55},

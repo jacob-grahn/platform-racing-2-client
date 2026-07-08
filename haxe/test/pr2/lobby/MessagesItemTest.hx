@@ -15,6 +15,7 @@ class MessagesItemTest {
 	public static function main():Void {
 		Settings.disablePersistenceForTests();
 		testPrivateMessageBodyFormatting();
+		testMessageTextStaysInsidePmPane();
 		testFilterSettingAndTrustedHtml();
 		testMessageBodyLinksStayClickable();
 		testTimestampDisplayAndHover();
@@ -38,6 +39,17 @@ class MessagesItemTest {
 		assertContains(html, "event:user`2,1`Mod`1", "user rich link is parsed");
 		assertContains(html, "event:url`https://example.com/a?x=1&y=2", "bare URL event unescapes ampersands");
 		assertContains(html, "event:url`https://example.com", "named URL rich link is parsed");
+		item.remove();
+	}
+
+	private static function testMessageTextStaysInsidePmPane():Void {
+		Settings.setValue(Settings.FILTER_SWEARS, false);
+		var item = new MessagesItem(null, 9, "Sender", "1",
+			"averyveryveryveryveryveryveryveryveryverylongunbrokenmessage that should stay out of the scrollbar column", false, 1700000000);
+
+		assertEquals(true, @:privateAccess item.bodyWordWrapEnabled(), "PM body text wraps inside the authored text field");
+		assertEquals(1595, Math.round(@:privateAccess item.bodyTextWidth() * 10), "PM body keeps the authored text width");
+		assertEquals(true, @:privateAccess item.messageBackgroundIsNineSlice(), "PM message background uses scale-grid art");
 		item.remove();
 	}
 

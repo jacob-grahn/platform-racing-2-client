@@ -80,7 +80,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 310.2,
-												matrix: {tx: 141.95, ty: 9.7},
+												matrix: {tx: 141.95, ty: 7.699999999999999},
 												text: "selected_up\rselected_over\rselected_disabled\rselected_down\rdown\rover\rup\remphasized\rdisabled\rfocusRectSkin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -190,7 +190,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 277.7,
-												matrix: {tx: 98.95, ty: 10.0},
+												matrix: {tx: 98.95, ty: 8.0},
 												text: "selected_up\rup\rselected_over\rover\rselected_disabled\rdisabled\rselected_down\rdown\rfocusRectSkin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -352,7 +352,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 1.003173828125, tx: 427.65, ty: 44.3},
+												matrix: {d: 1.003173828125, tx: 427.65, ty: 42.3},
 												text: "Background Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -360,7 +360,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 1.003173828125, tx: 427.65, ty: 178.25},
+												matrix: {d: 1.003173828125, tx: 427.65, ty: 176.25},
 												text: "Panel Background Shadow",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -368,7 +368,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 31.0,
-												matrix: {d: 1.003173828125, tx: 427.65, ty: 259.05},
+												matrix: {d: 1.003173828125, tx: 427.65, ty: 257.05},
 												text: "Panel Background Base",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -376,7 +376,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999893188476562, tx: 126.55, ty: 43.3},
+												matrix: {d: 0.999893188476562, tx: 126.55, ty: 41.3},
 												text: "Up Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -384,7 +384,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999893188476562, tx: 128.05, ty: 142.4},
+												matrix: {d: 0.999893188476562, tx: 128.05, ty: 140.4},
 												text: "Disable Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -392,7 +392,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999893188476562, tx: 128.05, ty: 178.3},
+												matrix: {d: 0.999893188476562, tx: 128.05, ty: 176.3},
 												text: "Color Well",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -400,7 +400,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 1.003173828125, tx: 128.05, ty: 216.3},
+												matrix: {d: 1.003173828125, tx: 128.05, ty: 214.3},
 												text: "Swatch Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -408,7 +408,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 1.003173828125, tx: 128.05, ty: 256.3},
+												matrix: {d: 1.003173828125, tx: 128.05, ty: 254.3},
 												text: "Swatch Selected",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -416,7 +416,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999893188476562, tx: 126.55, ty: 73.2},
+												matrix: {d: 0.999893188476562, tx: 126.55, ty: 71.2},
 												text: "Over Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -424,7 +424,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999893188476562, tx: 127.75, ty: 107.15},
+												matrix: {d: 0.999893188476562, tx: 127.75, ty: 105.15},
 												text: "Down Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -432,7 +432,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 1.003173828125, tx: 127.75, ty: 294.15},
+												matrix: {d: 1.003173828125, tx: 127.75, ty: 292.15},
 												text: "Text Field",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -595,7 +595,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 177.45, ty: 103.3},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 177.45, ty: 101.3},
 												text: "Down Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -603,7 +603,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.05, ty: 149.45},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.05, ty: 147.45},
 												text: "Disable Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -611,7 +611,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 177.45, ty: 26.55},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 177.45, ty: 24.55},
 												text: "Up Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -619,7 +619,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.55, ty: 64.0},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.55, ty: 62.0},
 												text: "Over Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -627,7 +627,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.05, ty: 192.45},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.05, ty: 190.45},
 												text: "Focus Rect Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -635,7 +635,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.55, ty: 279.8},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.55, ty: 277.8},
 												text: "List Component",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -643,7 +643,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.05, ty: 229.8},
+												matrix: {a: 0.999893188476562, d: 0.999801635742188, tx: 178.05, ty: 227.8},
 												text: "TextInput",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -1973,7 +1973,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 21.4},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 19.4},
 												text: "Disabled_Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -1981,7 +1981,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 47.9},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 45.9},
 												text: "Up_Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -1989,7 +1989,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 77.9},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 75.9},
 												text: "Over_Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -1997,7 +1997,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 108.35},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 106.35},
 												text: "Down_Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -2005,7 +2005,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 136.35},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 134.35},
 												text: "Selected_Disable",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -2013,7 +2013,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 169.55},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 167.55},
 												text: "Selected_Down",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -2021,7 +2021,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 197.35},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 195.35},
 												text: "Selected_Over",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -2029,7 +2029,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 227.35},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 210.45, ty: 225.35},
 												text: "Selected_Up",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -5316,7 +5316,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 192.45, ty: 183.5},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 192.45, ty: 181.5},
 												text: "Disabled",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -5324,7 +5324,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 36.0, ty: 185.45},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 36.0, ty: 183.45},
 												text: "Up",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -5332,7 +5332,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 118.45, ty: 183.5},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 118.45, ty: 181.5},
 												text: "Over",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -5340,7 +5340,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 280.45, ty: 183.5},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 280.45, ty: 181.5},
 												text: "Down",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -5348,7 +5348,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {tx: 197.55, ty: 225.0},
+												matrix: {tx: 197.55, ty: 223.0},
 												text: "Focus Rect Skin",
 												textAttrs: {aliasText: false, autoKern: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, lineSpacing: 10.0, size: 13.0},
 												type: "DOMStaticText",
@@ -7683,7 +7683,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999862670898438, tx: 243.1, ty: 135.3},
+												matrix: {d: 0.999862670898438, tx: 243.1, ty: 133.3},
 												text: "ScrollBar Skins",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -7691,7 +7691,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999862670898438, tx: 243.1, ty: 32.4},
+												matrix: {d: 0.999862670898438, tx: 243.1, ty: 30.4},
 												text: "List_Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -7699,7 +7699,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999862670898438, tx: 243.1, ty: 268.25},
+												matrix: {d: 0.999862670898438, tx: 243.1, ty: 266.25},
 												text: "Cell Renderer Skins",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -7707,7 +7707,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {d: 0.999862670898438, tx: 243.1, ty: 316.75},
+												matrix: {d: 0.999862670898438, tx: 243.1, ty: 314.75},
 												text: "Focus Rect Skin",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -7815,7 +7815,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 245.2,
-												matrix: {tx: 145.85, ty: 23.15},
+												matrix: {tx: 145.85, ty: 21.15},
 												text: "up\rdisabled\rtick\rthumb_up\rthumb_over\rthumb_down\rthumb_disabled\rfocusRectSkin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -7930,7 +7930,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 222.0, ty: 176.15},
+												matrix: {d: 0.999847412109375, tx: 222.0, ty: 174.15},
 												text: "UIScrollBar Component",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -7938,7 +7938,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 222.0, ty: 126.1},
+												matrix: {d: 0.999847412109375, tx: 222.0, ty: 124.1},
 												text: "Focus Rect Skin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -7946,7 +7946,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 222.0, ty: 82.45},
+												matrix: {d: 0.999847412109375, tx: 222.0, ty: 80.45},
 												text: "Disabled Skin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -7954,7 +7954,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 222.0, ty: 35.0},
+												matrix: {d: 0.999847412109375, tx: 222.0, ty: 33.0},
 												text: "Normal Skin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -8058,7 +8058,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 204.05, ty: 111.3},
+												matrix: {d: 0.999847412109375, tx: 204.05, ty: 109.3},
 												text: "Focus Rect Skin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -8066,7 +8066,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 204.05, ty: 67.65},
+												matrix: {d: 0.999847412109375, tx: 204.05, ty: 65.65},
 												text: "Disabled Skin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -8074,7 +8074,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 17.7,
-												matrix: {d: 0.999847412109375, tx: 204.05, ty: 20.2},
+												matrix: {d: 0.999847412109375, tx: 204.05, ty: 18.2},
 												text: "Normal Skin",
 												textAttrs: {aliasText: false, face: "TimesNewRomanPSMT", fillColor: "#666666", lineHeight: 17.7, lineSpacing: 14.8, size: 16.0},
 												type: "DOMStaticText",
@@ -8194,7 +8194,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 192.45, ty: 183.5},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 192.45, ty: 181.5},
 												text: "Down",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -8202,7 +8202,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 36.0, ty: 185.45},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 36.0, ty: 183.45},
 												text: "Up",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -8210,7 +8210,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 118.45, ty: 183.5},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 118.45, ty: 181.5},
 												text: "Over",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -8218,7 +8218,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 280.45, ty: 183.5},
+												matrix: {a: 0.999893188476562, d: 0.999832153320312, tx: 280.45, ty: 181.5},
 												text: "Disabled",
 												textAttrs: {aliasText: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, size: 13.0},
 												type: "DOMStaticText",
@@ -8226,7 +8226,7 @@ final class AssetCatalogSymbolsComponents {
 											},
 											{
 												height: 14.5,
-												matrix: {tx: 197.55, ty: 225.0},
+												matrix: {tx: 197.55, ty: 223.0},
 												text: "Focus Rect Skin",
 												textAttrs: {aliasText: false, autoKern: false, face: "ArialMT", fillColor: "#333333", lineHeight: 14.5, lineSpacing: 10.0, size: 13.0},
 												type: "DOMStaticText",

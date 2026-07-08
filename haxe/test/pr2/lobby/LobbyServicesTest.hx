@@ -103,6 +103,7 @@ class LobbyServicesTest {
 		testLevelItemPasswordFlow();
 		testSearchFocusQuirks();
 		testSearchRequestQuirks();
+		testSearchResultsStartBelowControls();
 		testSearchQuery();
 		testLevelAccess();
 		testLevelPassResponse();
@@ -2270,6 +2271,27 @@ class LobbyServicesTest {
 		idSearch.remove();
 
 		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		Memory.clear();
+	}
+
+	private static function testSearchResultsStartBelowControls():Void {
+		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		Memory.clear();
+		SecureData.setNumber("userRank", 3);
+		pr2.lobby.tabs.SearchTab.searchFactory = function(params:Map<String, String>, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void):pr2.util.AsyncRemovalGuard.AsyncRemovable {
+			onResult(new pr2.net.LevelListClient.LevelListResult([new CampaignLevelInfo(18, 1, "Search Result", "Other", 0, 5, 0)], true));
+			return new FakeAsyncListResource();
+		};
+
+		var search = new pr2.lobby.tabs.SearchTab("search terms", "user");
+		search.initialize();
+		var item = search.levelItemForTests(0);
+		assertNotNull(item, "search renders returned level");
+		assertEquals(true, item.y >= 90, "search result starts below the search controls");
+		search.remove();
+		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		SecureData.clear();
 		Memory.clear();
 	}
 

@@ -4,12 +4,14 @@ import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.MouseEvent;
 import openfl.text.TextField;
+import openfl.text.TextFieldAutoSize;
 import openfl.ui.Mouse;
 import openfl.ui.MouseCursor;
 import pr2.lobby.LobbyArt;
 import pr2.lobby.account.Settings;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.chat.HtmlNameMaker;
+import pr2.runtime.NineSliceSymbol;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 
@@ -23,6 +25,8 @@ import pr2.util.DisplayUtil;
 	escaping, BBCode-style rich-link parsing, and carriage-return line breaks.
 **/
 class MessagesItem extends Sprite {
+	private static inline var BODY_TEXT_WIDTH:Float = 159.5;
+
 	public final messageId:Int;
 
 	private var owner:pr2.lobby.tabs.MessagesTab;
@@ -73,11 +77,13 @@ class MessagesItem extends Sprite {
 		html = StringTools.replace(html, "\r", "<br>");
 		renderedBodyHtml = html;
 		if (textBox != null) {
+			prepareBodyTextField(textBox);
 			textBox.htmlText = html;
 			htmlNameMaker.listenForLink(textBox);
+			fitBodyTextField(textBox);
 			var bg = Std.downcast(DisplayUtil.findByName(art, "bg"), DisplayObject);
 			if (bg != null) {
-				bg.height = textBox.height + 6;
+				resizeMessageBackground(bg, textBox.height + 6);
 			}
 			if (timeBox != null) {
 				timeBox.text = localeDateString(time);
@@ -111,6 +117,27 @@ class MessagesItem extends Sprite {
 		button.y = (textBox != null ? textBox.height : 0) + 42;
 		addChild(button);
 		return button;
+	}
+
+	private static function prepareBodyTextField(field:TextField):Void {
+		field.multiline = true;
+		field.wordWrap = true;
+		field.width = BODY_TEXT_WIDTH;
+		field.autoSize = TextFieldAutoSize.LEFT;
+	}
+
+	private static function fitBodyTextField(field:TextField):Void {
+		field.width = BODY_TEXT_WIDTH;
+		field.height = Math.max(field.height, field.textHeight + 4);
+	}
+
+	private static function resizeMessageBackground(bg:DisplayObject, targetHeight:Float):Void {
+		var sliced = Std.downcast(bg, NineSliceSymbol);
+		if (sliced != null) {
+			sliced.setTargetSize(bg.width, targetHeight);
+		} else {
+			bg.height = targetHeight;
+		}
 	}
 
 	private function clickReport():Void {
@@ -210,6 +237,23 @@ class MessagesItem extends Sprite {
 	@:allow(pr2.lobby.MessagesItemTest)
 	private function actionButtons():Array<HoverDelayPopup> {
 		return [reportButton, deleteButton, replyButton];
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function bodyTextWidth():Float {
+		var field = bodyTextField();
+		return field == null ? 0 : field.width;
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function bodyWordWrapEnabled():Bool {
+		var field = bodyTextField();
+		return field != null && field.wordWrap;
+	}
+
+	@:allow(pr2.lobby.MessagesItemTest)
+	private function messageBackgroundIsNineSlice():Bool {
+		return Std.downcast(DisplayUtil.findByName(art, "bg"), NineSliceSymbol) != null;
 	}
 
 	public function remove():Void {

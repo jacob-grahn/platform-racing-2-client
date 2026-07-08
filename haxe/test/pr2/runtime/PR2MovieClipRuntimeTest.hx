@@ -33,6 +33,7 @@ class PR2MovieClipRuntimeTest {
 		testBlendModes();
 		testFilters();
 		testScale9Grids();
+		testAlphaOnlySolidFills();
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
 		testLeafVectorShapes();
@@ -483,6 +484,12 @@ class PR2MovieClipRuntimeTest {
 		var squashed = NineSliceSymbol.computeCells(0, 0, 100, 100, 10, 10, 10, 10, 0.1, 0.1);
 		assertClose(0, squashed[4].width, "over-squashed center collapses to zero width");
 		assertClose(10, squashed[8].x + squashed[8].width, "squashed slices still fit the 10px box");
+	}
+
+	private static function testAlphaOnlySolidFills():Void {
+		var solid = @:privateAccess VectorShapeRenderer.colorForStyle({type: "SolidColor", alpha: 0.25});
+		assertEquals(0, solid.color, "alpha-only solid fill defaults to black");
+		assertClose(0.25, solid.alpha, "alpha-only solid fill preserves authored opacity");
 	}
 
 	private static function testGeneratedSoundFrameMetadata():Void {
