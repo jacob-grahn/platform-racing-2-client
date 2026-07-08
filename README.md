@@ -105,131 +105,6 @@ Current foundation:
 - The `?screen=campaign&localLevel=<name>` sandbox can run synthetic levels
   without login/lobby/server flow and exposes deterministic debug state for
   movement checks.
-- `LocalCharacter` has Flash-derived land movement/collision, with additional
-  tested behavior for water, crumble, vanish, mine, teleport, item/stat supply,
-  push, timed move, ice, arrow, and safety blocks.
-- `CharacterDisplay` uses the generated `CharacterGraphic` timeline skeleton and
-  atlas-backed hat/head/body/feet parts, including primary/secondary layer
-  rendering and a composite debug/fallback mode.
-- Intro pages run through the MovieClip timeline runtime, with Jiggmin and
-  Kongregate intro coverage and a stub login page.
-
-Completed subsystems (parity-relevant facts worth keeping):
-
-- Login and accounts: full login/session establishment handles `loginSuccessful`
-  and the login failure/socket-close commands, hands the live socket off to normal
-  command routing, and enters `LobbyPage` for both account and guest login.
-  Remembered accounts persist only server-issued tokens in SharedObject storage
-  with Flash's recency and case-insensitive replacement, confirmed deletion/logout,
-  and invalidated-token removal. Account creation, server refresh/selection
-  (`CheckServers` ordering/labels, public/private/guild order, preferred open
-  server, beta filtering, 60s refresh, 10s manual reload cooldown), the authored
-  login combo boxes/popups, and forgot-password recovery (`forgot_password.php`,
-  `name`/`email` form, JSON success/error) are all functional.
-- Gameplay fidelity: character-part vertical registration is corrected against the
-  feet line. `LocalCharacter` physics is audited against `character/LocalCharacter.as`
-  (accel/decel and stat formulas, jump/crouch, water/ice, collision probe ordering
-  and rotated resolution, moving-block timing, item durations, hurt/freeze recovery).
-  Gravity uses Flash's exact `0.7 * level multiplier` update and supports runtime
-  multiplier changes.
-  Block collision behavior covers every authored block code, including one-hit
-  brick destruction and the one-use happy, sad, heart, and time supply blocks
-  with their original option clamps and stat/life/timer limits.
-  Start blocks mark spawn positions but are excluded from character collision, as
-  in `background/Map.as`.
-  Rotate blocks use Flash's 30-frame, 3-degree course tween, counter-rotate the
-  local character each frame, rotate character and safe coordinates on completion,
-  and preserve `Data.rotatePoint` integer coercion and single-wrap quirks.
-  Character animation state follows the Flash input-driven conditions: grounded
-  run/crouch-walk require a held direction, coasting stands, and all airborne
-  land movement uses the jump state. Crouch is forced only by a low ceiling (a
-  solid block above the head with the body tile clear), never by the down key;
-  holding down on open ground charges a super jump (`crouchCharge` grows by 2 per
-  frame, clamped at 100) that launches at `-crouchCharge * 0.24` on release once
-  it passes 25, matching `LocalCharacter.landGo`/`processBlocks`.
-  Note: `FinishBlock` is a one-use `SupplyBlock`, so only a bump from below latches
-  completion and reports its one-based id and pixel center; side/stand/touch
-  collisions do not finish the race. Server level decoding is validated across
-  m1-m4 formats, legacy/malformed payloads, art backgrounds, drawings, text, stamps,
-  and m4 block options. The five authored art planes render around the block
-  layer with Flash's rounded 0.25x/0.5x/1x/1x/2x parallax movement.
-- Lobby popups: the external-link warning popup (explicit confirm before opening a
-  tab), the Options popup (`OptionsPopupGraphic` — music/sound sliders, filter/art
-  toggles, alternate controls saved as Flash key codes, persisted quality/song
-  blacklist), and the Credits popup (`CreditsPopupGraphic`, three art pages and two
-  music pages per `menu/CreditsPopup.as`) are functional.
-  The Vault of Magics also loads the authenticated live catalog, renders authored
-  listings and quantity selection, and supports FAQ, sale, coin, and purchase flows.
-- Audio: the runtime reproduces Flash's 700 px game-sound attenuation/panning,
-  independent effect channels, clamped music/sound persistence, the full track
-  catalog (editor random selection and the artifact track), looping race music, the
-  two-layer Noodle Town menu crossfade across login/lobby transitions, and global
-  mute via `SoundMixer`. `BrowserAudioUnlock` primes Howler at boot and resumes Web
-  Audio on the first pointer/touch/click/keyboard gesture, then removes its
-  listeners. Assets come from `tools/extract_xfl_audio.py` (35 embedded sounds plus
-  20 streamed tracks in `docs/audio-inventory.json`).
-- Runtime/visual: `PR2MovieClip.createStaticText` honors authored `fillColor`,
-  `letterSpacing`, `lineSpacing` (mapped to leading), and left/right margins, and
-  composes the XFL local `left` offset into the element matrix (`matrix * translate(
-  left, 0)`) so transforms do not discard it. Authored-symbol fallbacks are removed:
-  `PR2MovieClip` fails explicitly on an unresolved or over-nested symbol instead of
-  drawing a placeholder. `FlattenPolicy` flattens proven-static top-level subtrees
-  with `cacheAsBitmap` (enabled by default; lobby GPU frame rate improved from
-  ~18.7fps to the 60fps vsync cap). `PR2MovieClip` also applies authored element
-  blend modes (including Animate's `layer` mode), Blur/Glow/DropShadow filters in
-  source order with Flash-compatible omitted-attribute defaults, and symbol
-  nine-slice `scale9Grid` from XFL `scaleGrid*`. The timeline audio runtime plays
-  authored sound frames with Flash-compatible event/start/stop/stream sync,
-  in/out-point seeking (44.1 kHz markers → ms), linear left/right volume
-  envelopes, repeat-count/continuous loop semantics, and stop/disposal cleanup.
-- In-game race shell and multiplayer: `GamePage` mounts the real `Course` shell
-  (the old `CampaignTestScreen` route is debug-only), resolving level loads
-  through the pure `LevelEntry` state machine and registering the full `Game`
-  command table via `GameCommandShell` behind a typed `GameCommandDelegate`. The
-  Flash `Character`/`LocalCharacter`/`RemoteCharacter` hierarchy is ported:
-  appearance/hat-stack model and `changeState` machine, `LocalCharacter`'s
-  position/var/exact-pos emission gated by `updateInterval`, and `RemoteCharacter`
-  consume with the `catchupRate` interpolation model and remote block activation
-  (`ArrowBlock`/`VanishBlock`/`WaterBlock`). `createLocalCharacter`/
-  `createRemoteCharacter`, duplicate-temp-id replacement, and teardown are wired
-  through `Course`. The HUD widgets render from authored symbols — `SpectatePicker`,
-  `Countdown` (3-2-1 with `Ready`/`Go` sounds), `DrawingInfo`, `StatsDisplay`,
-  `Hearts`, `MiniMap`, `RaceChat`, `ItemDisplay`, `MusicSelection`, `QuitButton`,
-  `FinishedPage`, and `ExpGain` — and `PrizePopup` (with the `EpicFlash` port)
-  renders the prize/epic-upgrade announcement. `SpecialEvent` dispatches the G+C
-  artifact-placement and C+X prize-cancel hotkeys; `PlaceArtifact` handles the
-  full date/time scheduling and `place_artifact.php` upload; cowboy-mode,
-  happy-hour, hat-countdown, and the egg-round command boundary are wired live.
-  Server levels draw incrementally (blocks and authored art lines/objects/text in
-  per-frame batches) and gameplay holds in a drawing phase until every layer is
-  present, emitting Flash's `finish_drawing` payload exactly once.
-  The full login-to-race flow is accepted end to end: `tools/race_session.py`
-  runs two headless-Chrome clients against the live server (an account and a guest
-  co-join a campaign level, race with at least one synchronized remote player,
-  quit, and return to the lobby without a page reload, capturing level-entry,
-  countdown, racing, and finished screenshots per role). Its CI-runnable
-  counterpart, `RaceSessionTranscriptTest` in the deterministic suite, drives the
-  production `LevelItem`/`GamePage`/`Course` objects through the same join → race
-  → quit → return lifecycle (including the `pendingLocalInit`/`pendingBeginRace`
-  frame buffering before the level payload arrives) and asserts the ordered
-  wire-command transcript plus the level-entry/race-phase state at each transition.
-- Item physics: the local controller mirrors `items.JetPack` fuel/thrust timing,
-  the authored multi-use reload windows (Laser Gun/Sword 800ms, Ice Wave 1000ms),
-  teleport and mine effect-coordinate emission, super-jump crouch suppression,
-  speed-burst expiry stat reset, lightning's `zap` payload, mine blocked-placement,
-  and the base `items.Item` availability/release gates.
-
-Server level support:
-
-- `CampaignListClient` fetches and validates campaign lists; `LevelDataClient`
-  fetches and validates level data.
-- `ServerLevelDecoder` decodes block strings in modes `m1`-`m4` into original
-  pixel coordinates, and `ServerLevelRenderer` renders the decoded block layer at
-  the original 30 px block scale.
-- `ServerLevelFixtureAdapter` converts decoded server geometry into fixture
-  collision data so local movement can run in real level layouts.
-- Browser builds need a same-origin API proxy for pr2hub.com requests. The dev
-  proxy is `tools/dev_proxy.py`; use `?apiHost=/api` with that proxy.
 
 Campaign payload reference:
 
@@ -240,16 +115,6 @@ Campaign payload reference:
 - The decoded `levelData` is `&`-joined URL-encoded vars passed through
   `validateSaveString`; `data` is backtick-delimited with read mode in
   `data[0]` and the relative-coordinate block string in `data[1]`.
-
-Networking status:
-
-- Browser OpenFL cannot open the original raw TCP gameserver socket directly, so
-  browser deployment must use the gameserver WebSocket path.
-- The minimal networking spike opens the selected server WebSocket, sends
-  `request_login_id` with the Flash `chr(0x04)` delimiter, and parses
-  `setLoginID`.
-- Local config and credentials should stay in ignored env/local files. Sys-target
-  API calls can use `PR2_API_HOST` for a proxy or local endpoint.
 
 ## Haxe/OpenFL Commands
 
@@ -369,13 +234,6 @@ open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/exp
 python3 tools/generate_block_bitmap_jsfl.py
 open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-block-bitmaps.jsfl
 ```
-
-Animated effects are intentionally not exported as per-frame SVG sequences.
-The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested
-symbols, transforms, visibility, and customization. The exported effect SVGs
-are reusable symbol images for runtime composition and fallback rendering.
-This includes the countdown, egg, heart, ice-wave, Djinn-ice, and character
-item/state animation symbols; their generated XFL metadata drives playback.
 
 ## SVG To PNG Rasterization
 
@@ -584,10 +442,3 @@ starts: step `time` offsets are measured from when `Main` sets the
 from being dispatched into the preloader (where it is silently dropped), so
 `time` values only need to cover in-app settling, not a guessed preload
 duration.
-
-## Useful References
-
-- `TODO.md`: active migration plan and resume notes.
-- `docs/vector-art-export-plan.md`: vector export and rasterization details.
-- `docs/initial-playable-scope.md`: initial playable target.
-- `docs/networking-inventory.md`: Flash networking inventory.
