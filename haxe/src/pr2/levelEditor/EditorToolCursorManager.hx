@@ -1,4 +1,4 @@
-package pr2.page;
+package pr2.levelEditor;
 
 import com.jiggmin.data.Objects;
 import openfl.display.DisplayObject;
@@ -9,7 +9,7 @@ import openfl.geom.ColorTransform;
 import openfl.ui.Keyboard;
 import pr2.lobby.Memory;
 import pr2.level.ObjectCodes;
-import pr2.page.LevelEditor.EditorBlockLayer;
+import pr2.levelEditor.LevelEditor.EditorBlockLayer;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomCursor;
 

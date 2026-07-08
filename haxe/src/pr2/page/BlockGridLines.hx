@@ -28,10 +28,8 @@ class BlockGridLines extends Sprite {
 	}
 
 	public function setPos(remX:Float, remY:Float):Void {
-		remX %= SEG_SIZE;
-		remY %= SEG_SIZE;
-		x = remX - Math.floor((width / 2) / SEG_SIZE) * SEG_SIZE;
-		y = remY - Math.floor((height / 2) / SEG_SIZE) * SEG_SIZE;
+		x = gridOffsetForCamera(remX);
+		y = gridOffsetForCamera(remY);
 	}
 
 	public function remove():Void {
@@ -47,7 +45,7 @@ class BlockGridLines extends Sprite {
 		drawnWidth = maxSegsX;
 		drawnHeight = maxSegsY;
 		graphics.clear();
-		graphics.lineStyle(1, 0x777777, 0.25);
+		graphics.lineStyle(1 / zoom, 0x777777, 0.25);
 		var curX:Float = 0;
 		while (curX <= maxSegsX) {
 			graphics.moveTo(curX, 0);
@@ -60,5 +58,10 @@ class BlockGridLines extends Sprite {
 			graphics.lineTo(maxSegsX, curY);
 			curY += SEG_SIZE;
 		}
+	}
+
+	private static function gridOffsetForCamera(camera:Float):Float {
+		var rem = camera % SEG_SIZE;
+		return rem > 0 ? rem - SEG_SIZE : rem;
 	}
 }

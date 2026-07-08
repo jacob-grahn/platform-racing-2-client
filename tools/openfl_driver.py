@@ -32,8 +32,9 @@ Sequence script format:
   }
 
   A bare list of steps is also accepted. Sequence actions: keyDown, keyUp,
-  tap, hold, mouseMove, click, typeText, rebuild-lobby, navigate, metrics, shot,
-  debug-state, body-attribute.
+  tap, hold, mouseMove, click, click-display-object, dragPath, typeText,
+  rebuild-lobby, open-level-editor, level-editor-e2e, assert-level-editor-state,
+  navigate, metrics, shot, debug-state, body-attribute.
 
   Sequences wait for the app to boot past the OpenFL preloader before the
   clock starts: step `time` offsets are measured from the moment `Main` sets
@@ -575,6 +576,7 @@ class SequenceContext:
         self.devtools = devtools
         self.base_page_url = base_page_url
         self.metrics_out = metrics_out
+        self.run_id = str(int(time.time()))
         self.samples = []
         self.last_metric_time = None
         self.performance_enabled = False
@@ -710,12 +712,24 @@ def run_sequence_step(devtools, step, context=None):
         dispatch_key(devtools, "keyUp", key)
     elif action == "click":
         dispatch_click(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
+    elif action == "click-display-object":
+        click_display_object(
+            devtools,
+            require_field(step, "name"),
+            int(step.get("index", 0)),
+            float(step.get("timeout", 5.0)),
+            int(step.get("clickCount", 1)),
+            bool(step.get("optional", False)),
+        )
+    elif action == "dragPath":
+        dispatch_drag_path(devtools, require_points(step))
     elif action == "mouseMove":
         dispatch_mouse_move(devtools, require_coordinate(step, "x"), require_coordinate(step, "y"))
     elif action == "typeText":
         value = require_field(step, "text")
         if not isinstance(value, str):
             raise SystemExit("Sequence typeText step requires a string text field.")
+        value = render_sequence_text(value, context)
         devtools.request("Input.insertText", {"text": value})
         print(f"typeText: {value}")
     elif action == "rebuild-lobby":
@@ -726,6 +740,12 @@ def run_sequence_step(devtools, step, context=None):
         if rebuilt is not True:
             raise SystemExit("Lobby rebuild hook is unavailable.")
         print("rebuild-lobby")
+    elif action == "open-level-editor":
+        open_level_editor(devtools)
+    elif action == "level-editor-e2e":
+        run_level_editor_e2e(devtools)
+    elif action == "assert-level-editor-state":
+        assert_level_editor_state(devtools, step, context)
     elif action == "navigate":
         if context is None:
             raise SystemExit("Sequence navigate step requires a sequence context.")
@@ -746,6 +766,163 @@ def run_sequence_step(devtools, step, context=None):
         validate_sequence_body_attribute(devtools, require_field(step, "name"), require_field(step, "value"))
     else:
         raise SystemExit(f"Unsupported OpenFL sequence action: {action}")
+
+
+def render_sequence_text(value, context=None):
+    run_id = context.run_id if context is not None else str(int(time.time()))
+    return value.replace("{run_id}", run_id)
+
+
+def click_display_object(devtools, name, index=0, timeout=5.0, click_count=1, optional=False):
+    deadline = time.monotonic() + timeout
+    target = None
+    while time.monotonic() < deadline:
+        raw = devtools.evaluate(
+            """
+((name, index) => {
+  if (typeof window.__pr2DisplayBoundsForTests === "function") {
+    const rawBounds = window.__pr2DisplayBoundsForTests(name, index);
+    const parsed = JSON.parse(rawBounds);
+    if (parsed.ok) {
+      parsed.x = parsed.x + parsed.width / 2;
+      parsed.y = parsed.y + parsed.height / 2;
+      return JSON.stringify(parsed);
+    }
+  }
+  const stage = window.__pr2Stage;
+  if (!stage) return JSON.stringify({ok: false, error: "stage unavailable"});
+  const matches = [];
+  const visit = (node) => {
+    if (!node || node.visible === false) return;
+    if (node.name === name) matches.push(node);
+    const count = Number(node.numChildren || 0);
+    for (let i = 0; i < count; i++) {
+      try { visit(node.getChildAt(i)); } catch (_) {}
+    }
+  };
+  visit(stage);
+  const target = matches[index];
+  if (!target) return JSON.stringify({ok: false, count: matches.length});
+  try {
+    const bounds = target.getBounds(stage);
+    return JSON.stringify({
+      ok: true,
+      count: matches.length,
+      x: bounds.x + bounds.width / 2,
+      y: bounds.y + bounds.height / 2,
+      width: bounds.width,
+      height: bounds.height
+    });
+  } catch (error) {
+    return JSON.stringify({ok: false, count: matches.length, error: String(error)});
+  }
+})(%s, %d)
+"""
+            % (json.dumps(name), index)
+        )
+        target = json.loads(raw)
+        if target.get("ok"):
+            break
+        time.sleep(0.1)
+    if not target or not target.get("ok"):
+        if optional:
+            print(f"click-display-object: {name}[{index}] unavailable (optional)")
+            return
+        raise SystemExit(f"Display object {name}[{index}] unavailable: {target}")
+    dispatch_click(devtools, float(target["x"]), float(target["y"]), click_count)
+    print(
+        f"click-display-object: {name}[{index}] "
+        f"at {target['x']:.1f},{target['y']:.1f} "
+        f"size={target.get('width', 0):.1f}x{target.get('height', 0):.1f}"
+    )
+
+
+def open_level_editor(devtools):
+    opened = devtools.evaluate(
+        """
+(() => {
+  if (typeof window.__pr2OpenLevelEditorForTests !== "function") {
+    return false;
+  }
+  window.__pr2OpenLevelEditorForTests();
+  return true;
+})()
+"""
+    )
+    if opened is not True:
+        raise SystemExit("Lobby level-editor hook is unavailable.")
+    print("open-level-editor")
+
+
+def run_level_editor_e2e(devtools):
+    raw = devtools.evaluate(
+        """
+(() => {
+  if (typeof window.__pr2RunLevelEditorE2E !== "function") {
+    return JSON.stringify({ok: false, error: "level editor e2e hook is unavailable"});
+  }
+  return window.__pr2RunLevelEditorE2E();
+})()
+"""
+    )
+    try:
+        result = json.loads(raw)
+    except Exception as error:
+        raise SystemExit(f"Level editor e2e hook returned invalid JSON: {raw!r} ({error})")
+    print(
+        "level-editor-e2e: "
+        f"ok={result.get('ok')} floorBlocks={result.get('floorBlocks')} "
+        f"artActions={result.get('artActions')} stamps={result.get('stamps')} "
+        f"savedLength={result.get('savedLength')}"
+    )
+    if result.get("ok") is not True:
+        raise SystemExit(f"Level editor e2e failed: {json.dumps(result, sort_keys=True)}")
+
+
+def assert_level_editor_state(devtools, step, context=None):
+    raw = devtools.evaluate(
+        """
+(() => {
+  if (typeof window.__pr2GetLevelEditorStateForTests !== "function") {
+    return JSON.stringify({ok: false, error: "level editor state hook is unavailable"});
+  }
+  return window.__pr2GetLevelEditorStateForTests();
+})()
+"""
+    )
+    try:
+        state = json.loads(raw)
+    except Exception as error:
+        raise SystemExit(f"Level editor state hook returned invalid JSON: {raw!r} ({error})")
+    if state.get("ok") is not True:
+        raise SystemExit(f"Level editor state unavailable: {json.dumps(state, sort_keys=True)}")
+
+    failures = []
+    expected_title = step.get("title")
+    if expected_title is not None:
+        expected_title = render_sequence_text(str(expected_title), context)
+        if state.get("title") != expected_title:
+            failures.append(f"title expected {expected_title!r}, got {state.get('title')!r}")
+    for field, key in (
+        ("minBasicBlocks", "basicBlocks"),
+        ("minArtActions", "artActions"),
+        ("minStamps", "stamps"),
+    ):
+        if field in step:
+            expected = int(step[field])
+            actual = int(state.get(key, 0))
+            if actual < expected:
+                failures.append(f"{key} expected >= {expected}, got {actual}")
+    print(
+        "assert-level-editor-state: "
+        f"title={state.get('title')!r} selected={state.get('selectedToolSidebar')!r}:{state.get('selectedToolId')!r} "
+        f"mouseDowns={state.get('mouseDownEvents')} lastMouse={state.get('lastMouseDownTarget')!r}@"
+        f"{state.get('lastMouseDownX')},{state.get('lastMouseDownY')} "
+        f"basicBlocks={state.get('basicBlocks')} "
+        f"artActions={state.get('artActions')} stamps={state.get('stamps')}"
+    )
+    if failures:
+        raise SystemExit("Level editor state assertion failed: " + "; ".join(failures))
 
 
 def dispatch_key(devtools, event_type, key_name):
@@ -814,17 +991,31 @@ def dispatch_dom_key(devtools, event_type, definition):
     devtools.evaluate(expression)
 
 
-def dispatch_click(devtools, x, y):
+def dispatch_click(devtools, x, y, click_count=1):
     base_params = {
         "x": x,
         "y": y,
         "button": "left",
-        "clickCount": 1,
+        "clickCount": click_count,
     }
     devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mouseMoved", button="none", buttons=0))
     devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mousePressed", buttons=1))
     devtools.request("Input.dispatchMouseEvent", dict(base_params, type="mouseReleased", buttons=0))
     print(f"click: {x},{y}")
+
+
+def dispatch_drag_path(devtools, points):
+    if len(points) < 2:
+        raise SystemExit("dragPath requires at least two points.")
+    first = points[0]
+    last = points[-1]
+    devtools.request("Input.dispatchMouseEvent", {"type": "mouseMoved", "x": first["x"], "y": first["y"], "button": "none", "buttons": 0})
+    devtools.request("Input.dispatchMouseEvent", {"type": "mousePressed", "x": first["x"], "y": first["y"], "button": "left", "buttons": 1, "clickCount": 1})
+    for point in points[1:]:
+        devtools.request("Input.dispatchMouseEvent", {"type": "mouseMoved", "x": point["x"], "y": point["y"], "button": "left", "buttons": 1})
+        time.sleep(0.03)
+    devtools.request("Input.dispatchMouseEvent", {"type": "mouseReleased", "x": last["x"], "y": last["y"], "button": "left", "buttons": 0, "clickCount": 1})
+    print("dragPath: " + " -> ".join(f"{point['x']},{point['y']}" for point in points))
 
 
 def dispatch_mouse_move(devtools, x, y):
@@ -922,6 +1113,21 @@ def require_coordinate(step, field):
         return float(value)
     except (TypeError, ValueError):
         raise SystemExit(f"Sequence {step.get('action')} step requires numeric {field}: {step}")
+
+
+def require_points(step):
+    raw = require_field(step, "points")
+    if not isinstance(raw, list):
+        raise SystemExit(f"Sequence {step.get('action')} step requires points array: {step}")
+    points = []
+    for point in raw:
+        if not isinstance(point, dict) or "x" not in point or "y" not in point:
+            raise SystemExit(f"Invalid drag point: {point}")
+        try:
+            points.append({"x": float(point["x"]), "y": float(point["y"])})
+        except (TypeError, ValueError):
+            raise SystemExit(f"Invalid drag point coordinates: {point}")
+    return points
 
 
 def append_query(url, query):

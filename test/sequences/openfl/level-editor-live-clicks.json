@@ -1,0 +1,69 @@
+{
+  "query": "apiHost=/api",
+  "steps": [
+    { "time": 0.0, "action": "click", "x": 275, "y": 200 },
+    { "time": 2.5, "action": "click", "x": 275, "y": 200 },
+    { "time": 4.0, "action": "click", "x": 275, "y": 230 },
+    { "time": 5.0, "action": "click", "x": 376, "y": 178 },
+    { "time": 6.0, "action": "click", "x": 213, "y": 253 },
+    { "time": 6.5, "action": "click", "x": 290, "y": 135 },
+    { "time": 7.0, "action": "typeText", "text": "haxe-port-test" },
+    { "time": 7.5, "action": "click", "x": 290, "y": 163 },
+    { "time": 8.0, "action": "typeText", "text": "haxe-port-test" },
+    { "time": 8.5, "action": "click", "x": 232, "y": 300 },
+    { "time": 14.0, "action": "shot", "out": "test/output/level-editor-live/01-lobby.png" },
+    { "time": 14.5, "action": "click-display-object", "name": "levelEditorButton" },
+    { "time": 18.0, "action": "shot", "out": "test/output/level-editor-live/02-editor.png" },
+
+    { "time": 18.2, "action": "click-display-object", "name": "basic1Entry" },
+    { "time": 18.3, "action": "click", "x": 260, "y": 245 },
+    { "time": 18.4, "action": "click", "x": 290, "y": 245 },
+    { "time": 18.5, "action": "click", "x": 320, "y": 245 },
+    { "time": 18.6, "action": "click", "x": 350, "y": 245 },
+    { "time": 18.7, "action": "click", "x": 380, "y": 245 },
+    { "time": 18.8, "action": "click", "x": 410, "y": 245 },
+    { "time": 18.9, "action": "assert-level-editor-state", "minBasicBlocks": 6 },
+    { "time": 19.0, "action": "shot", "out": "test/output/level-editor-live/03-floor.png" },
+
+    { "time": 19.2, "action": "click-display-object", "name": "layer3Button" },
+    { "time": 19.4, "action": "click-display-object", "name": "brushEntry" },
+    { "time": 19.6, "action": "click-display-object", "name": "brushEntry" },
+    {
+      "time": 19.8,
+      "action": "dragPath",
+      "points": [
+        { "x": 245, "y": 285 },
+        { "x": 305, "y": 285 },
+        { "x": 305, "y": 345 },
+        { "x": 245, "y": 345 },
+        { "x": 245, "y": 285 }
+      ]
+    },
+    { "time": 20.2, "action": "assert-level-editor-state", "minArtActions": 1 },
+
+    { "time": 20.4, "action": "click-display-object", "name": "landscapeEntry" },
+    { "time": 20.6, "action": "click-display-object", "name": "stamp0Entry" },
+    { "time": 20.8, "action": "click", "x": 430, "y": 280 },
+    { "time": 21.0, "action": "assert-level-editor-state", "minStamps": 1 },
+    { "time": 21.2, "action": "shot", "out": "test/output/level-editor-live/04-art-stamp.png" },
+
+    { "time": 21.4, "action": "click-display-object", "name": "saveButton" },
+    { "time": 22.0, "action": "click-display-object", "name": "titleBox" },
+    { "time": 22.2, "action": "typeText", "text": "Codex E2E {run_id}" },
+    { "time": 22.4, "action": "click-display-object", "name": "noteBox" },
+    { "time": 22.6, "action": "typeText", "text": "Real endpoint level editor e2e {run_id}" },
+    { "time": 22.8, "action": "click-display-object", "name": "save_bt" },
+    { "time": 28.0, "action": "click-display-object", "name": "ok_bt", "optional": true, "timeout": 1 },
+    { "time": 28.4, "action": "shot", "out": "test/output/level-editor-live/05-after-save.png" },
+
+    { "time": 28.6, "action": "click-display-object", "name": "newButton" },
+    { "time": 29.0, "action": "click-display-object", "name": "ok_bt" },
+    { "time": 29.5, "action": "shot", "out": "test/output/level-editor-live/06-cleared.png" },
+
+    { "time": 29.8, "action": "click-display-object", "name": "loadButton" },
+    { "time": 33.0, "action": "click-display-object", "name": "getLevelsPopupItem", "index": 0, "timeout": 8 },
+    { "time": 33.3, "action": "click-display-object", "name": "load_bt" },
+    { "time": 38.0, "action": "assert-level-editor-state", "title": "Codex E2E {run_id}", "minBasicBlocks": 6, "minArtActions": 1, "minStamps": 1 },
+    { "time": 38.2, "action": "shot", "out": "test/output/level-editor-live/07-loaded.png" }
+  ]
+}

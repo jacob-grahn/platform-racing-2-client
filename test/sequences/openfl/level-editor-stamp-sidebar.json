@@ -1,0 +1,10 @@
+{
+  "query": "screen=lobby&offlineLists=1&user=StampSidebar",
+  "steps": [
+    { "time": 0.1, "action": "body-attribute", "name": "data-pr2-page", "value": "lobby:StampSidebar" },
+    { "time": 0.2, "action": "open-level-editor" },
+    { "time": 0.5, "action": "body-attribute", "name": "data-pr2-page", "value": "level-editor" },
+    { "time": 0.6, "action": "click-display-object", "name": "layer1Button" },
+    { "time": 0.9, "action": "shot", "out": "test/output/level-editor-stamp-sidebar.png" }
+  ]
+}

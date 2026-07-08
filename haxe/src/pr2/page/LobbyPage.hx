@@ -22,6 +22,7 @@ import pr2.lobby.dialogs.ConfirmPopup;
 import pr2.lobby.dialogs.HoverPopup;
 import pr2.lobby.dialogs.MessagePopup;
 import pr2.lobby.store.StorePopup;
+import pr2.levelEditor.LevelEditor;
 import pr2.util.DisplayUtil;
 
 typedef LobbyLogoutPostFactory = String->Map<String, String>->Void;
@@ -91,11 +92,13 @@ class LobbyPage extends Page {
 		bind(bottom, "creditsButton", clickCredits);
 		bindHover(bottom, "moreGamesButton", hoverKong, hoverOutKong);
 		addChild(bottom);
+		installBrowserHarness();
 
 		reportState('lobby:${LobbySession.userName}');
 	}
 
 	override public function remove():Void {
+		clearBrowserHarness();
 		AudioManager.leaveMenu();
 		hoverOutKong();
 		for (cleanup in hoverCleanups) {
@@ -174,6 +177,21 @@ class LobbyPage extends Page {
 		if (pageHolder != null) {
 			pageHolder.changePage(createLevelEditorPage(isMod));
 		}
+	}
+
+	private function installBrowserHarness():Void {
+		#if js
+		var self = this;
+		untyped Browser.window.__pr2OpenLevelEditorForTests = function():Void {
+			self.clickLevelEditor();
+		};
+		#end
+	}
+
+	private function clearBrowserHarness():Void {
+		#if js
+		untyped Browser.window.__pr2OpenLevelEditorForTests = null;
+		#end
 	}
 
 	private function needsTempModDemotionWarning():Bool {

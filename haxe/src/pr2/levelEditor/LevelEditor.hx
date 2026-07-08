@@ -1,10 +1,13 @@
-package pr2.page;
+package pr2.levelEditor;
 
 import com.jiggmin.data.Data;
 import com.jiggmin.data.Objects;
 import haxe.Json;
 import haxe.crypto.Md5;
 import haxe.Timer;
+#if js
+import js.Browser;
+#end
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
@@ -63,6 +66,9 @@ import pr2.net.FormPostClient;
 import pr2.net.LevelDataClient;
 import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
+import pr2.page.BlockGridLines;
+import pr2.page.EditorBlockOptions;
+import pr2.page.Page;
 import pr2.runtime.FlCheckBox;
 import pr2.runtime.FlComboBox;
 import pr2.runtime.FlComponents;
@@ -135,6 +141,7 @@ class LevelEditor extends Page {
 	public var posX(default, null):Float = 0;
 	public var posY(default, null):Float = 0;
 	private var layerContainer:Null<Sprite>;
+	private var editorMousePlane:Null<Sprite>;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 	private var deletingObjects:Bool = false;
 	private var deletingBlocks:Bool = false;
@@ -146,6 +153,11 @@ class LevelEditor extends Page {
 	private var velY:Float = 0;
 	private var pressedKeys:Map<Int, Bool> = new Map();
 	private var cameraStarted:Bool = false;
+	private var stageInputListenersAttached:Bool = false;
+	private var mouseDownEventsForTests:Int = 0;
+	private var lastMouseDownTargetForTests:String = "";
+	private var lastMouseDownXForTests:Float = 0;
+	private var lastMouseDownYForTests:Float = 0;
 	private var initialVariables:Null<Map<String, String>>;
 
 	public function new(?variables:Dynamic, mod:Bool = false, report:Bool = false) {
@@ -165,6 +177,11 @@ class LevelEditor extends Page {
 			stage.quality = StageQuality.HIGH;
 		}
 
+		editorMousePlane = createEditorMousePlane();
+		editorMousePlane.addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
+		editorMousePlane.addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
+		editorMousePlane.addEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
+		addChild(editorMousePlane);
 		layerContainer = new Sprite();
 		addChild(layerContainer);
 		blockGrid = new BlockGridLines();
@@ -172,6 +189,7 @@ class LevelEditor extends Page {
 		blockLayer = new EditorBlockLayer(this);
 		layerContainer.addChild(blockLayer);
 		attachArtLayers();
+		centerOnStart();
 		addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 		addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
 		addEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
@@ -187,6 +205,8 @@ class LevelEditor extends Page {
 		overlayLayer.mouseChildren = false;
 
 		menu = new LevelEditorMenu(this);
+		menu.x = 255;
+		menu.y = 195;
 		menu.init();
 		addChild(menu);
 		menu.setReportsMode(reportsMode);
@@ -194,6 +214,17 @@ class LevelEditor extends Page {
 		if (initialVariables != null) {
 			setVariables(initialVariables);
 		}
+		installBrowserHarness();
+	}
+
+	private function createEditorMousePlane():Sprite {
+		var plane = new Sprite();
+		plane.name = "editorMousePlane";
+		plane.mouseChildren = false;
+		plane.graphics.beginFill(0x000000, 0.01);
+		plane.graphics.drawRect(0, 0, BASE_HALF_STAGE_WIDTH * 2, BASE_HALF_STAGE_HEIGHT * 2);
+		plane.graphics.endFill();
+		return plane;
 	}
 
 	public function setReportsMode(on:Bool = false):Void {
@@ -309,6 +340,7 @@ class LevelEditor extends Page {
 			blockLayer.loadBlocks(level.blocks);
 			loadDrawLayersFromData(data.data);
 			loadObjectLayersFromDecoded(level.artLayers);
+			centerOnStart();
 		}
 		if (menu != null) {
 			menu.setReportsMode(report);
@@ -342,7 +374,7 @@ class LevelEditor extends Page {
 			objectLayer.loadArtLayer(null);
 		}
 		setZoom(1);
-		setPos(0, 0);
+		centerOnStart();
 		if (menu != null) {
 			menu.updateBackgroundColor();
 			menu.reset();
@@ -762,11 +794,25 @@ class LevelEditor extends Page {
 		if (menu == null) {
 			return false;
 		}
-		if (menu.hitTestPoint(stageX, stageY, true)) {
+		return displayShapeHitTest(menu, stageX, stageY);
+	}
+
+	private static function displayShapeHitTest(display:DisplayObject, stageX:Float, stageY:Float):Bool {
+		if (display == null || !display.visible) {
+			return false;
+		}
+		if (display.hitTestPoint(stageX, stageY, true)) {
 			return true;
 		}
-		var local = menu.globalToLocal(new Point(stageX, stageY));
-		return menu.getBounds(menu).contains(local.x, local.y);
+		var container = Std.downcast(display, DisplayObjectContainer);
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				if (displayShapeHitTest(container.getChildAt(i), stageX, stageY)) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public function continueSelectedBrushAt(stageX:Float, stageY:Float):Bool {
@@ -834,7 +880,105 @@ class LevelEditor extends Page {
 		return changed;
 	}
 
+	public function runBrowserE2EForTests():String {
+		var result:Dynamic = {
+			ok: false,
+			floorPresent: false,
+			artPresent: false,
+			stampPresent: false,
+			floorBlocks: 0,
+			artActions: 0,
+			stamps: 0,
+			clearedBlocks: 0,
+			clearedArtActions: 0,
+			clearedStamps: 0,
+			savedLength: 0,
+			error: ""
+		};
+		try {
+			if (blockLayer == null || activeDrawLayer == null || activeObjectLayer == null) {
+				throw "editor layers are not ready";
+			}
+			var start = firstStartBlock();
+			if (start == null) {
+				throw "start block is missing";
+			}
+
+			selectEditorTool("blocks", "basic1");
+			var floorSegY = start.segY + 1;
+			for (dx in -2...3) {
+				var point = stagePointForBlockSeg(start.segX + dx, floorSegY);
+				placeSelectedBlockAt(point.x, point.y);
+			}
+
+			selectEditorTool("tools", "brush");
+			setBrushColor(0x00AAFF);
+			setBrushSize(6);
+			var left = (start.segX - 1) * segSize;
+			var top = (start.segY + 3) * segSize;
+			var right = left + segSize * 2;
+			var bottom = top + segSize * 2;
+			drawBrushPolyline([
+				new Point(left, top),
+				new Point(right, top),
+				new Point(right, bottom),
+				new Point(left, bottom),
+				new Point(left, top)
+			]);
+
+			selectEditorTool("stamps", "stamp0");
+			var stampPoint = stagePointForObjectLayerLocal((start.segX + 4) * segSize, (start.segY + 3) * segSize);
+			placeSelectedToolAt(stampPoint.x, stampPoint.y);
+
+			title = "Codex Level Editor E2E";
+			note = "Saved by the deterministic headless editor scenario.";
+			var savedVars = getLevelVars();
+			savedVars.set("level_id", "900001");
+			savedVars.set("version", "1");
+			var savedData = savedVars.get("data");
+			result.savedLength = savedData == null ? 0 : savedData.length;
+
+			clear();
+			result.clearedBlocks = blockLayer.blocks.length;
+			result.clearedArtActions = activeDrawLayer.saveArray.length;
+			result.clearedStamps = activeObjectLayer.placedObjects.length;
+
+			applyLoadedLevelData(new ServerLevelData(savedVars, true), false);
+			result.floorBlocks = countBlocksOnFloor(start.segX, floorSegY);
+			result.artActions = activeDrawLayer == null ? 0 : activeDrawLayer.drawActions.length;
+			result.stamps = activeObjectLayer == null ? 0 : activeObjectLayer.placedObjects.length;
+			result.floorPresent = result.floorBlocks == 5;
+			result.artPresent = result.artActions > 0;
+			result.stampPresent = result.stamps > 0;
+			centerOnStart();
+			result.ok = result.floorPresent && result.artPresent && result.stampPresent && result.savedLength > 0
+				&& result.clearedBlocks == 4 && result.clearedArtActions == 0 && result.clearedStamps == 0;
+		} catch (error:Dynamic) {
+			result.error = Std.string(error);
+		}
+		reportBrowserE2EState(result);
+		return Json.stringify(result);
+	}
+
+	public function getBrowserStateForTests():String {
+		return Json.stringify({
+			ok: true,
+			title: title,
+			selectedToolSidebar: selectedToolSidebar,
+			selectedToolId: selectedToolId,
+			mouseDownEvents: mouseDownEventsForTests,
+			lastMouseDownTarget: lastMouseDownTargetForTests,
+			lastMouseDownX: lastMouseDownXForTests,
+			lastMouseDownY: lastMouseDownYForTests,
+			blocks: blockLayer == null ? 0 : blockLayer.blocks.length,
+			basicBlocks: countBlocksByCode(ObjectCodes.BLOCK_BASIC1),
+			artActions: totalArtActions(),
+			stamps: totalPlacedStamps()
+		});
+	}
+
 	override public function remove():Void {
+		clearBrowserHarness();
 		if (LevelEditor.editor == this) {
 			LevelEditor.editor = null;
 		}
@@ -884,6 +1028,15 @@ class LevelEditor extends Page {
 			closeBrushSizeMenu();
 			layerContainer = null;
 		}
+		if (editorMousePlane != null) {
+			editorMousePlane.removeEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
+			editorMousePlane.removeEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
+			editorMousePlane.removeEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse);
+			if (editorMousePlane.parent != null) {
+				editorMousePlane.parent.removeChild(editorMousePlane);
+			}
+			editorMousePlane = null;
+		}
 		drawingLayer = null;
 		deletingBlocks = false;
 		placingBlocks = false;
@@ -907,6 +1060,127 @@ class LevelEditor extends Page {
 		activeDrawLayer = drawLayers[0];
 		activeObjectLayer = objectLayers[0];
 		applyLayerPositions();
+	}
+
+	private function firstStartBlock():Null<EditorBlockObject> {
+		if (blockLayer == null) {
+			return null;
+		}
+		for (block in blockLayer.blocks) {
+			if (block.code >= ObjectCodes.BLOCK_START1 && block.code <= ObjectCodes.BLOCK_START4) {
+				return block;
+			}
+		}
+		return null;
+	}
+
+	private function stagePointForBlockSeg(segX:Int, segY:Int):Point {
+		if (blockLayer == null) {
+			return new Point();
+		}
+		var point = blockLayer.localToGlobal(new Point(segX * segSize, segY * segSize));
+		point.x += segSize / 2;
+		point.y += segSize / 2;
+		return point;
+	}
+
+	private function stagePointForDrawLayerLocal(localX:Float, localY:Float):Point {
+		return activeDrawLayer == null ? new Point() : activeDrawLayer.localToGlobal(new Point(localX, localY));
+	}
+
+	private function stagePointForObjectLayerLocal(localX:Float, localY:Float):Point {
+		return activeObjectLayer == null ? new Point() : activeObjectLayer.localToGlobal(new Point(localX, localY));
+	}
+
+	private function drawBrushPolyline(points:Array<Point>):Void {
+		if (points.length == 0) {
+			return;
+		}
+		var first = stagePointForDrawLayerLocal(points[0].x, points[0].y);
+		beginSelectedBrushAt(first.x, first.y);
+		for (i in 1...points.length) {
+			var point = stagePointForDrawLayerLocal(points[i].x, points[i].y);
+			continueSelectedBrushAt(point.x, point.y);
+		}
+		endSelectedBrush();
+	}
+
+	private function countBlocksOnFloor(startSegX:Int, floorSegY:Int):Int {
+		if (blockLayer == null) {
+			return 0;
+		}
+		var count = 0;
+		for (dx in -2...3) {
+			var block = blockLayer.getBlockAtSeg(startSegX + dx, floorSegY);
+			if (block != null && block.code == ObjectCodes.BLOCK_BASIC1) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private function countBlocksByCode(code:Int):Int {
+		if (blockLayer == null) {
+			return 0;
+		}
+		var count = 0;
+		for (block in blockLayer.blocks) {
+			if (block.code == code) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private function totalArtActions():Int {
+		var count = 0;
+		for (layer in drawLayers) {
+			count += layer.drawActions.length;
+		}
+		return count;
+	}
+
+	private function totalPlacedStamps():Int {
+		var count = 0;
+		for (layer in objectLayers) {
+			count += layer.placedObjects.length;
+		}
+		return count;
+	}
+
+	private function centerOnStart():Void {
+		var start = firstStartBlock();
+		if (start == null) {
+			return;
+		}
+		setPos(BASE_HALF_STAGE_WIDTH - (start.segX * segSize), BASE_HALF_STAGE_HEIGHT - (start.segY * segSize));
+	}
+
+	private function installBrowserHarness():Void {
+		#if js
+		Browser.document.body.setAttribute("data-pr2-page", "level-editor");
+		Browser.document.body.setAttribute("data-pr2-editor-e2e", "");
+		var self = this;
+		untyped Browser.window.__pr2RunLevelEditorE2E = function():String {
+			return self.runBrowserE2EForTests();
+		};
+		untyped Browser.window.__pr2GetLevelEditorStateForTests = function():String {
+			return self.getBrowserStateForTests();
+		};
+		#end
+	}
+
+	private function clearBrowserHarness():Void {
+		#if js
+		untyped Browser.window.__pr2RunLevelEditorE2E = null;
+		untyped Browser.window.__pr2GetLevelEditorStateForTests = null;
+		#end
+	}
+
+	private function reportBrowserE2EState(result:Dynamic):Void {
+		#if js
+		Browser.document.body.setAttribute("data-pr2-editor-e2e", Json.stringify(result));
+		#end
 	}
 
 	private function keyScroll(_:Event):Void {
@@ -950,9 +1224,13 @@ class LevelEditor extends Page {
 	}
 
 	private function attachKeyboardListeners(?_:Event):Void {
-		if (stage == null) {
+		if (stage == null || stageInputListenersAttached) {
 			return;
 		}
+		stageInputListenersAttached = true;
+		stage.addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse, true);
+		stage.addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse, true);
+		stage.addEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse, true);
 		stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		stage.addEventListener(Event.DEACTIVATE, clearPressedKeys);
@@ -960,9 +1238,13 @@ class LevelEditor extends Page {
 	}
 
 	private function detachKeyboardListeners(?_:Event):Void {
-		if (stage == null) {
+		if (stage == null || !stageInputListenersAttached) {
 			return;
 		}
+		stageInputListenersAttached = false;
+		stage.removeEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse, true);
+		stage.removeEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse, true);
+		stage.removeEventListener(MouseEvent.MOUSE_UP, stopSelectedToolFromMouse, true);
 		stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 		stage.removeEventListener(Event.DEACTIVATE, clearPressedKeys);
@@ -1008,6 +1290,10 @@ class LevelEditor extends Page {
 
 	private function placeSelectedToolFromMouse(event:MouseEvent):Void {
 		var target = Std.downcast(event.target, DisplayObject);
+		mouseDownEventsForTests++;
+		lastMouseDownTargetForTests = target == null ? "" : target.name;
+		lastMouseDownXForTests = event.stageX;
+		lastMouseDownYForTests = event.stageY;
 		if (isStampPlacementTool()) {
 			if (target == null || !canPlaceStampFromTarget(target, event.stageX, event.stageY)) {
 				cancelSelectedPlacementTool();
@@ -1107,7 +1393,7 @@ class LevelEditor extends Page {
 			if (current == menu) {
 				return false;
 			}
-			if (current == activeDrawLayer || current == blockGrid || current == this) {
+			if (current == activeDrawLayer || current == activeObjectLayer || current == blockGrid || current == this) {
 				return true;
 			}
 			current = current.parent;
@@ -1132,7 +1418,7 @@ class LevelEditor extends Page {
 		}
 		var current:Null<DisplayObject> = target;
 		while (current != null) {
-			if (current == menu || current == activeObjectLayer) {
+			if (current == menu) {
 				return false;
 			}
 			current = current.parent;
@@ -2145,6 +2431,7 @@ class GetLevelsPopupItem extends SelectableButton {
 		levelId = parseInt(field("level_id"), 0);
 		version = parseInt(field("version"), 0);
 		title = field("title");
+		name = "getLevelsPopupItem";
 		setText("titleBox", title);
 		setText("statusBox", parseInt(field("live"), 0) == 1 ? "Published" : "Unpublished");
 		mouseChildren = false;
@@ -6690,7 +6977,7 @@ class EditorSideBarIconFactory {
 				spec == null ? null : Objects.getFromCode(spec.code);
 			case _ if (sidebar == "stamps" && StringTools.startsWith(itemId, "stamp")):
 				var stampId = Std.parseInt(itemId.substr(5));
-				stampId == null ? null : fittedCode(stampId);
+				stampId == null ? null : stampIcon(stampId);
 			default:
 				null;
 		}
@@ -6708,6 +6995,43 @@ class EditorSideBarIconFactory {
 			fit(icon);
 		}
 		return icon;
+	}
+
+	private static function stampIcon(code:Int):Null<DisplayObject> {
+		var assetPath = ServerLevelRenderer.stampAssetPath(code);
+		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
+			return null;
+		}
+		var data = Assets.getBitmapData(assetPath);
+		var bitmap = new Bitmap(data);
+		bitmap.smoothing = true;
+		var scale = Math.min(ICON_BOX / data.width, ICON_BOX / data.height);
+		bitmap.scaleX = scale;
+		bitmap.scaleY = scale;
+		bitmap.x = ICON_OFFSET + (ICON_BOX - data.width * scale) / 2;
+		bitmap.y = ICON_OFFSET + (ICON_BOX - data.height * scale) / 2;
+		var holder = new Sprite();
+		holder.name = stampLinkageName(code);
+		holder.mouseEnabled = false;
+		holder.mouseChildren = false;
+		holder.addChild(bitmap);
+		return holder;
+	}
+
+	private static function stampLinkageName(code:Int):String {
+		return switch (code) {
+			case ObjectCodes.STAMP_TREE: "Tree";
+			case ObjectCodes.STAMP_TREE2: "Tree2";
+			case ObjectCodes.STAMP_TREE3: "Tree3";
+			case ObjectCodes.STAMP_PETRIFIED_TREE: "PetrifiedTree";
+			case ObjectCodes.STAMP_CACTUS: "Cactus";
+			case ObjectCodes.STAMP_ROCK: "Rock";
+			case ObjectCodes.STAMP_ROCK2: "Rock2";
+			case ObjectCodes.STAMP_SPIRE: "Spire";
+			case ObjectCodes.STAMP_SPIRE2: "Spire2";
+			case ObjectCodes.STAMP_BUILDING1: "Building1";
+			default: 'Stamp$code';
+		}
 	}
 
 	private static function fit(icon:DisplayObject):Void {
@@ -6807,6 +7131,15 @@ class EditorSideBarEntry extends HoverDelayPopup {
 
 	public function iconColorTransformForTests():ColorTransform {
 		return icon == null ? new ColorTransform() : icon.transform.colorTransform;
+	}
+
+	public function iconBoundsForTests():Rectangle {
+		return icon == null ? new Rectangle() : icon.getBounds(this);
+	}
+
+	public function iconVisibleInButtonForTests():Bool {
+		var bounds = iconBoundsForTests();
+		return bounds.width > 1 && bounds.height > 1 && bounds.intersects(new Rectangle(0, 0, 30, 30));
 	}
 
 	private function draw():Void {

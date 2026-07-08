@@ -73,16 +73,16 @@ class Objects {
 
 	public static function getFromCode(code:Int):Null<DisplayObject> {
 		return switch (code) {
-			case ObjectCodes.STAMP_TREE: fromLinkage("Tree");
-			case ObjectCodes.STAMP_TREE2: fromLinkage("Tree2");
-			case ObjectCodes.STAMP_TREE3: fromLinkage("Tree3");
-			case ObjectCodes.STAMP_PETRIFIED_TREE: fromLinkage("PetrifiedTree");
-			case ObjectCodes.STAMP_CACTUS: fromLinkage("Cactus");
-			case ObjectCodes.STAMP_ROCK: fromLinkage("Rock");
-			case ObjectCodes.STAMP_ROCK2: fromLinkage("Rock2");
-			case ObjectCodes.STAMP_SPIRE: fromLinkage("Spire");
-			case ObjectCodes.STAMP_SPIRE2: fromLinkage("Spire2");
-			case ObjectCodes.STAMP_BUILDING1: fromLinkage("Building1");
+			case ObjectCodes.STAMP_TREE: stampDisplay(code, "Tree");
+			case ObjectCodes.STAMP_TREE2: stampDisplay(code, "Tree2");
+			case ObjectCodes.STAMP_TREE3: stampDisplay(code, "Tree3");
+			case ObjectCodes.STAMP_PETRIFIED_TREE: stampDisplay(code, "PetrifiedTree");
+			case ObjectCodes.STAMP_CACTUS: stampDisplay(code, "Cactus");
+			case ObjectCodes.STAMP_ROCK: stampDisplay(code, "Rock");
+			case ObjectCodes.STAMP_ROCK2: stampDisplay(code, "Rock2");
+			case ObjectCodes.STAMP_SPIRE: stampDisplay(code, "Spire");
+			case ObjectCodes.STAMP_SPIRE2: stampDisplay(code, "Spire2");
+			case ObjectCodes.STAMP_BUILDING1: stampDisplay(code, "Building1");
 			case ObjectCodes.BG1Code: fromLinkage("BG1");
 			case ObjectCodes.BG2Code: fromLinkage("BG2");
 			case ObjectCodes.BG3Code: fromLinkage("BG3");
@@ -106,6 +106,34 @@ class Objects {
 		var clip = PR2MovieClip.fromLinkage(linkage);
 		clip.name = linkage;
 		return clip;
+	}
+
+	private static function stampDisplay(code:Int, linkage:String):DisplayObject {
+		var assetPath = ServerLevelRenderer.stampAssetPath(code);
+		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {
+			var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
+			var size = stampSize(code);
+			bitmap.name = linkage;
+			bitmap.smoothing = true;
+			bitmap.width = size.width;
+			bitmap.height = size.height;
+			return bitmap;
+		}
+		return fromLinkage(linkage);
+	}
+
+	private static function stampSize(code:Int):{width:Float, height:Float} {
+		return switch (code) {
+			case ObjectCodes.STAMP_TREE: {width: 228, height: 172.75};
+			case ObjectCodes.STAMP_TREE2: {width: 188, height: 249.25};
+			case ObjectCodes.STAMP_TREE3: {width: 194, height: 236.5};
+			case ObjectCodes.STAMP_PETRIFIED_TREE: {width: 77.25, height: 101.75};
+			case ObjectCodes.STAMP_ROCK: {width: 87.25, height: 91};
+			case ObjectCodes.STAMP_ROCK2: {width: 125.75, height: 118.5};
+			case ObjectCodes.STAMP_SPIRE: {width: 114, height: 319.75};
+			case ObjectCodes.STAMP_SPIRE2: {width: 294.25, height: 268.5};
+			default: {width: 30, height: 30};
+		}
 	}
 
 	private static function textObjectTextBox():Null<DisplayObject> {

@@ -1,0 +1,10 @@
+{
+  "query": "screen=lobby&offlineLists=1&user=EditorE2E",
+  "steps": [
+    { "time": 0.1, "action": "body-attribute", "name": "data-pr2-page", "value": "lobby:EditorE2E" },
+    { "time": 0.2, "action": "open-level-editor" },
+    { "time": 0.5, "action": "body-attribute", "name": "data-pr2-page", "value": "level-editor" },
+    { "time": 0.6, "action": "level-editor-e2e" },
+    { "time": 0.8, "action": "shot", "out": "test/output/level-editor-save-load.png" }
+  ]
+}

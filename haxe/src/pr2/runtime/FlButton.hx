@@ -34,6 +34,7 @@ class FlButton extends Sprite {
 	private static inline final SKIN_NATIVE_WIDTH:Float = 82;
 	private static inline final SKIN_NATIVE_HEIGHT:Float = 22;
 	private static final SKIN_GRID = new Rectangle(7, 5, 68, 11);
+	private static inline final DISABLED_LABEL_COLOR:Int = 0x555555;
 
 	private static inline final SKIN_PREFIX:String = "Components/Component Assets/ButtonSkins/Button_";
 
@@ -241,7 +242,7 @@ class FlButton extends Sprite {
 
 	private function layoutLabel():Void {
 		var format = new TextFormat(
-			FontResolver.resolve("Arial"), 11, _enabled ? 0x000000 : 0x999999, false, false, false, null, null, TextFormatAlign.CENTER
+			FontResolver.resolve("Arial"), 11, _enabled ? 0x000000 : DISABLED_LABEL_COLOR, false, false, false, null, null, TextFormatAlign.CENTER
 		);
 		textField.defaultTextFormat = format;
 		textField.setTextFormat(format);

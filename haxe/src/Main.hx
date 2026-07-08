@@ -1,14 +1,17 @@
 package;
 
 import com.jiggmin.data.SWFStats;
+import haxe.Json;
 #if js
 import js.Browser;
 #end
 import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
 import openfl.display.StageAlign;
 import openfl.display.StageScaleMode;
 import openfl.events.Event;
+import openfl.geom.Point;
 import pr2.Constants;
 import pr2.app.FatalErrorReporter;
 import pr2.app.QueryParams;
@@ -100,7 +103,47 @@ class Main extends Sprite {
 		// list for authored buttons whose on-stage position is hard to predict
 		// from the symbol registration point (e.g. the in-race Quit button).
 		untyped Browser.window.__pr2Stage = stage;
+		untyped Browser.window.__pr2DisplayBoundsForTests = function(name:String, index:Int = 0):String {
+			return displayBoundsForTests(name, index);
+		};
 		#end
+	}
+
+	private function displayBoundsForTests(name:String, index:Int):String {
+		var matches:Array<DisplayObject> = [];
+		collectNamedDisplayObjects(stage, name, matches);
+		if (index < 0 || index >= matches.length) {
+			return Json.stringify({ok: false, count: matches.length});
+		}
+		var target = matches[index];
+		var bounds = target.getBounds(target);
+		var center = StringTools.endsWith(name, "Entry")
+			? target.localToGlobal(new Point(15, 15))
+			: target.localToGlobal(new Point(bounds.left + bounds.width / 2, bounds.top + bounds.height / 2));
+		return Json.stringify({
+			ok: true,
+			count: matches.length,
+			x: center.x - (StringTools.endsWith(name, "Entry") ? 15 : bounds.width / 2),
+			y: center.y - (StringTools.endsWith(name, "Entry") ? 15 : bounds.height / 2),
+			width: StringTools.endsWith(name, "Entry") ? 30 : bounds.width,
+			height: StringTools.endsWith(name, "Entry") ? 30 : bounds.height
+		});
+	}
+
+	private function collectNamedDisplayObjects(node:DisplayObject, name:String, matches:Array<DisplayObject>):Void {
+		if (node == null || !node.visible) {
+			return;
+		}
+		if (node.name == name) {
+			matches.push(node);
+		}
+		var container = Std.downcast(node, DisplayObjectContainer);
+		if (container == null) {
+			return;
+		}
+		for (i in 0...container.numChildren) {
+			collectNamedDisplayObjects(container.getChildAt(i), name, matches);
+		}
 	}
 
 	// Leak/perf probe (only compiled in with `-Dpr2_leak_probe`): exposes a global

@@ -3,6 +3,7 @@ package pr2.page;
 import openfl.display.DisplayObjectContainer;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
+import pr2.levelEditor.LevelEditor;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
 

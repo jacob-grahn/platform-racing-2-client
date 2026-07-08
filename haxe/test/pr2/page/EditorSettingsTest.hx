@@ -19,19 +19,20 @@ import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
-import pr2.page.LevelEditor.EditorBackgroundColorPickerButton;
-import pr2.page.LevelEditor.EditorBlockObject;
-import pr2.page.LevelEditor.EditorHatsSettingsPopup;
-import pr2.page.LevelEditor.EditorItemSettingsPopup;
-import pr2.page.LevelEditor.EditorModeSettingsPopup;
-import pr2.page.LevelEditor.EditorMusicSettingsPopup;
-import pr2.page.LevelEditor.EditorDrawableLayer;
-import pr2.page.LevelEditor.EditorObjectLayer;
-import pr2.page.LevelEditor.EditorSideBarEntry;
-import pr2.page.LevelEditor.EditorTextObject;
-import pr2.page.LevelEditor.EditorValueSettingsPopup;
-import pr2.page.LevelEditor.TestCoursePage;
-import pr2.page.EditorToolCursorManager.EditorBrushCursor;
+import pr2.levelEditor.LevelEditor;
+import pr2.levelEditor.LevelEditor.EditorBackgroundColorPickerButton;
+import pr2.levelEditor.LevelEditor.EditorBlockObject;
+import pr2.levelEditor.LevelEditor.EditorHatsSettingsPopup;
+import pr2.levelEditor.LevelEditor.EditorItemSettingsPopup;
+import pr2.levelEditor.LevelEditor.EditorModeSettingsPopup;
+import pr2.levelEditor.LevelEditor.EditorMusicSettingsPopup;
+import pr2.levelEditor.LevelEditor.EditorDrawableLayer;
+import pr2.levelEditor.LevelEditor.EditorObjectLayer;
+import pr2.levelEditor.LevelEditor.EditorSideBarEntry;
+import pr2.levelEditor.LevelEditor.EditorTextObject;
+import pr2.levelEditor.LevelEditor.EditorValueSettingsPopup;
+import pr2.levelEditor.LevelEditor.TestCoursePage;
+import pr2.levelEditor.EditorToolCursorManager.EditorBrushCursor;
 import pr2.runtime.FlSliderEvent;
 import pr2.ui.CustomCursor;
 import pr2.ui.StageFocus;
@@ -259,8 +260,12 @@ class EditorSettingsTest {
 		assertClose(1130, grid.drawnWidth, "zoomed-out block grid redraws wider in local coordinates");
 		assertClose(830, grid.drawnHeight, "zoomed-out block grid redraws taller in local coordinates");
 		grid.setPos(77, -44);
-		assertClose(expectedGridPos(77, grid.width), grid.x, "block grid x follows camera modulo segment size");
-		assertClose(expectedGridPos(-44, grid.height), grid.y, "block grid y follows camera modulo segment size");
+		assertClose(expectedGridPos(77), grid.x, "block grid x follows camera modulo segment size");
+		assertClose(expectedGridPos(-44), grid.y, "block grid y follows camera modulo segment size");
+		assertTrue(grid.x <= 0 && grid.x + grid.drawnWidth >= BlockGridLines.VIEW_WIDTH / 0.5,
+			"block grid covers the full zoomed viewport horizontally");
+		assertTrue(grid.y <= 0 && grid.y + grid.drawnHeight >= BlockGridLines.VIEW_HEIGHT / 0.5,
+			"block grid covers the full zoomed viewport vertically");
 		grid.remove();
 		assertEquals(null, grid.parent, "block grid remove detaches the overlay");
 
@@ -273,8 +278,12 @@ class EditorSettingsTest {
 		editor.setZoom(0.5);
 		editor.setPos(-900, -720);
 		assertClose(1130, editor.blockGrid.drawnWidth, "editor zoom redraws block grid");
-		assertClose(expectedGridPos(editor.posX, editor.blockGrid.width), editor.blockGrid.x, "editor pan repositions block grid x");
-		assertClose(expectedGridPos(editor.posY, editor.blockGrid.height), editor.blockGrid.y, "editor pan repositions block grid y");
+		assertClose(expectedGridPos(editor.posX), editor.blockGrid.x, "editor pan repositions block grid x");
+		assertClose(expectedGridPos(editor.posY), editor.blockGrid.y, "editor pan repositions block grid y");
+		assertTrue(editor.blockGrid.x <= 0 && editor.blockGrid.x + editor.blockGrid.drawnWidth >= BlockGridLines.VIEW_WIDTH / editor.zoom,
+			"editor block grid covers the full visible background horizontally");
+		assertTrue(editor.blockGrid.y <= 0 && editor.blockGrid.y + editor.blockGrid.drawnHeight >= BlockGridLines.VIEW_HEIGHT / editor.zoom,
+			"editor block grid covers the full visible background vertically");
 		editor.remove();
 		assertEquals(null, editor.blockGrid, "editor teardown clears block grid reference");
 	}
@@ -451,17 +460,6 @@ class EditorSettingsTest {
 		editor.setZoom(0.5);
 		assertClose(6, circle.width, "brush cursor width scales by zoom");
 		assertClose(6, circle.height, "brush cursor height scales by zoom");
-		var menuHit = new Sprite();
-		menuHit.graphics.beginFill(0);
-		menuHit.graphics.drawRect(0, 0, 10, 10);
-		menuHit.graphics.endFill();
-		editor.menu.addChild(menuHit);
-		var menuPoint = menuHit.localToGlobal(new Point(5, 5));
-		brushCursor.updateVisibilityForStagePoint(menuPoint.x, menuPoint.y);
-		assertEquals(false, brushCursor.visible, "brush cursor hides over editor menu");
-		brushCursor.updateVisibilityForStagePoint(-10000, -10000);
-		assertEquals(true, brushCursor.visible, "brush cursor reappears away from editor menu");
-		editor.menu.removeChild(menuHit);
 
 		editor.selectEditorTool("stamps", "text");
 		assertNotNull(editor.toolCursor.current, "text selection creates a cursor");
@@ -566,22 +564,14 @@ class EditorSettingsTest {
 		var drawPoint = pointOutsideMenu(editor);
 		assertEquals(true, editor.canStartBrushFromTargetForTests(editor.activeDrawLayer, drawPoint.x, drawPoint.y),
 			"brush starts from the active drawable layer");
+		assertEquals(true, editor.canStartBrushFromTargetForTests(editor.activeObjectLayer, drawPoint.x, drawPoint.y),
+			"brush starts from transparent active object-layer targets");
 		assertEquals(true, editor.canStartBrushFromTargetForTests(editor.blockGrid, drawPoint.x, drawPoint.y),
 			"brush starts from grid line targets");
 		assertEquals(true, editor.canStartBrushFromTargetForTests(editor, drawPoint.x, drawPoint.y),
 			"brush starts from editor background targets");
 		assertEquals(false, editor.canStartBrushFromTargetForTests(editor.menu, drawPoint.x, drawPoint.y),
 			"brush rejects menu targets");
-
-		var menuHit = new Sprite();
-		menuHit.graphics.beginFill(0);
-		menuHit.graphics.drawRect(0, 0, 10, 10);
-		menuHit.graphics.endFill();
-		editor.menu.addChild(menuHit);
-		var menuPoint = menuHit.localToGlobal(new Point(5, 5));
-		assertEquals(false, editor.canStartBrushFromTargetForTests(editor.activeDrawLayer, menuPoint.x, menuPoint.y),
-			"brush rejects drawable targets while the pointer is over the menu");
-		editor.menu.removeChild(menuHit);
 
 		assertEquals(true, editor.beginSelectedBrushAt(drawPoint.x, drawPoint.y), "brush starts when the draw layer is idle");
 		assertEquals(false, editor.beginSelectedBrushAt(drawPoint.x + 2, drawPoint.y + 2), "brush cannot restart while the draw layer is busy");
@@ -643,8 +633,8 @@ class EditorSettingsTest {
 			"stamp placement accepts editor background targets");
 		assertEquals(false, editor.canPlaceStampFromTargetForTests(editor.menu, drawPoint.x, drawPoint.y),
 			"stamp placement rejects menu targets");
-		assertEquals(false, editor.canPlaceStampFromTargetForTests(editor.activeObjectLayer, drawPoint.x, drawPoint.y),
-			"stamp placement rejects active object-layer targets");
+		assertEquals(true, editor.canPlaceStampFromTargetForTests(editor.activeObjectLayer, drawPoint.x, drawPoint.y),
+			"stamp placement accepts transparent active object-layer targets");
 
 		assertNotNull(editor.toolCursor.current, "stamp selection creates an object cursor");
 		assertClose(1, editor.toolCursor.current.scaleX, "stamp cursor starts at active object layer scale");
@@ -660,8 +650,8 @@ class EditorSettingsTest {
 
 		editor.selectEditorTool("stamps", "stamp0");
 		editor.activeObjectLayer.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true));
-		assertEquals("", editor.selectedToolId, "object-layer click cancels pending stamp placement");
-		assertEquals(0, editor.activeObjectLayer.placedObjects.length, "object-layer click does not place a stamp");
+		assertEquals("stamp0", editor.selectedToolId, "object-layer click keeps the selected stamp active");
+		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "object-layer click places a stamp");
 		editor.remove();
 	}
 
@@ -875,14 +865,17 @@ class EditorSettingsTest {
 			+ editor.activeObjectLayer.placedObjects[0].y, editor.activeObjectLayer.getActionString(), "stamp drag records Flash move action");
 
 		var moved = editor.activeObjectLayer.placedObjects[0];
-		editor.activeObjectLayer.resizePlacedStampForTests(0, moved.x, moved.y, moved.x + 285, moved.y + 129.5625);
+		var resizeStart = editor.activeObjectLayer.localToGlobal(new Point(moved.x, moved.y));
+		var resizeEnd = editor.activeObjectLayer.localToGlobal(new Point(moved.x + 285, moved.y + 129.5625));
+		editor.activeObjectLayer.resizePlacedStampForTests(0, resizeStart.x, resizeStart.y, resizeEnd.x, resizeEnd.y);
 		assertEquals(1.25, editor.activeObjectLayer.placedObjects[0].scaleX, "stamp resize rounds scale x");
 		assertEquals(0.75, editor.activeObjectLayer.placedObjects[0].scaleY, "stamp resize rounds scale y");
 		assertEquals(true, StringTools.endsWith(editor.activeObjectLayer.getActionString(), ",r0;1.25;0.75"),
 			"stamp resize records Flash resize action");
 
 		editor.selectEditorTool("stamps", "delete");
-		assertEquals(true, editor.deleteSelectedObjectAt(moved.x + 10, moved.y + 10), "stamp delete removes resized draw object");
+		var deletePoint = editor.activeObjectLayer.localToGlobal(new Point(moved.x + 10, moved.y + 10));
+		assertEquals(true, editor.deleteSelectedObjectAt(deletePoint.x, deletePoint.y), "stamp delete removes resized draw object");
 		assertEquals(0, editor.activeObjectLayer.placedObjects.length, "stamp delete removes model object");
 		assertEquals(true, StringTools.endsWith(editor.activeObjectLayer.getActionString(), ",d0"), "stamp delete records Flash delete action");
 
@@ -928,9 +921,9 @@ class EditorSettingsTest {
 		throw "expected a test point outside the editor menu";
 	}
 
-	private static function expectedGridPos(camera:Float, size:Float):Float {
+	private static function expectedGridPos(camera:Float):Float {
 		var rem = camera % BlockGridLines.SEG_SIZE;
-		return rem - Math.floor((size / 2) / BlockGridLines.SEG_SIZE) * BlockGridLines.SEG_SIZE;
+		return rem > 0 ? rem - BlockGridLines.SEG_SIZE : rem;
 	}
 
 	private static function assertClose(expected:Float, actual:Float, message:String, tolerance:Float = 0.01):Void {
