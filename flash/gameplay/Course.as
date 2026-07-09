@@ -10,6 +10,7 @@ package gameplay
     import blocks.FinishBlock;
     import com.jiggmin.data.CommandHandler;
     import com.jiggmin.data.Data;
+    import com.jiggmin.data.PhysicsTrace;
     import com.jiggmin.data.Settings;
     import flash.display.Sprite;
     import flash.display.StageQuality;
@@ -62,6 +63,8 @@ package gameplay
         private var rotateDirection:String;
         private var varsSet:Boolean = false;
         public var countdownFinished:Boolean = false;
+        public var physicsTraceEnabled:Boolean = false;
+        public var physicsTraceFrame:int = 0;
         protected var playerDone:Boolean = false; // true when finished OR forfeited
         public var looseHats:Array = [];
 
@@ -253,6 +256,7 @@ package gameplay
         public function beginRace(a:Array)
         {
             removeEventListener(Event.ENTER_FRAME, this.maybeEndIntro);
+            PhysicsTrace.pollEnabled();
             if (!this.playerDone) {
                 this.toggleSpectatePossible(false);
                 this.toggleKeyScroll(false);
@@ -283,6 +287,9 @@ package gameplay
             }
             this.blockBackground.startGameplay();
             this.countdownFinished = true;
+            PhysicsTrace.pollEnabled();
+            this.physicsTraceEnabled = true;
+            this.physicsTraceFrame = 0;
         }
 
         override public function setVariables(v:URLVariables)

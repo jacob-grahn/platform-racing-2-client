@@ -1,38 +1,29 @@
 {
-  "_comment": "End-to-end feature/physics-parity test, run against BOTH the original Flash projector (tools/pr2driver.py) and the OpenFL HTML5 port (tools/openfl_driver.py) from this one file. Identical inputs for both clients (no per-client branching). Flow: preloader/intro skip -> open Login -> clear any saved session via the '-' button so both clients land on the same name/pass form -> type testjun6/testjun6 -> Log In -> favorites (heart) tab -> 'Don't Move JV' -> Play -> idle while the level's blocks push the character through the course on their own -> Race Complete! popup. The '-' (delete saved user) + confirm-OK clicks are no-ops on the fresh name/pass form (they land on empty dialog area), so the sequence works whether or not a session is saved. Shot 'out' paths use {target} (replaced with 'flash' or 'openfl' by each driver) so both runs land in separate dirs as comparable 550x400 PNGs. The gameplay shotSeries writes one screenshot per second under dmjv-{target}/gameplay/ so the Flash baseline and OpenFL run can be compared step-by-step through the level. Times are seconds from app start (Flash window-ready after launch / OpenFL data-pr2-app-ready). 'launch'/'quit' are no-ops on the OpenFL driver. The port must be served through tools/dev_proxy.py (apiHost=/api) so the server list and login reach pr2hub.com. Assert the final shot with tools/check_race_complete.py.",
+  "_comment": "End-to-end feature/physics-parity test, run against BOTH the original Flash projector (tools/pr2driver.py) and the OpenFL HTML5 port (tools/openfl_driver.py) from this one file. Identical inputs for both clients (no per-client branching). Flow: preloader/intro skip -> open Login -> clear any saved session via the '-' button so both clients land on the same name/pass form -> type testjun6/testjun6 -> Log In -> favorites (heart) tab -> 'Don't Move JV' -> Play -> idle while the level's blocks push the character through the course on their own -> Race Complete! popup. The '-' (delete saved user) + confirm-OK clicks are no-ops on the fresh name/pass form, so the sequence works whether or not a session is saved. Times are seconds from app start (Flash window-ready after launch / OpenFL data-pr2-app-ready). 'launch'/'quit' are no-ops on the OpenFL driver. The port must be served through tools/dev_proxy.py (apiHost=/api) so the server list and login reach pr2hub.com. Assert the final shot with tools/check_race_complete.py.",
   "steps": [
     { "time": 0.0,   "action": "launch" },
 
     { "time": 4.0,   "action": "click", "x": 275, "y": 200, "_note": "skip Kongregate preloader/intro" },
     { "time": 6.5,   "action": "click", "x": 275, "y": 200, "_note": "skip Jiggmin intro anim if present (harmless empty click otherwise)" },
-    { "time": 7.0,   "action": "shot",  "out": "test/output/dmjv-{target}/01-menu.png" },
 
     { "time": 8.5,   "action": "click", "x": 275, "y": 230, "_note": "main menu: Log In" },
-    { "time": 9.0,   "action": "shot",  "out": "test/output/dmjv-{target}/02-login-dialog.png" },
 
     { "time": 9.5,   "action": "click", "x": 376, "y": 178, "_note": "'-' delete saved user (drops a remembered session so both clients show the name/pass form); no-op on the fresh form" },
     { "time": 10.5,  "action": "click", "x": 213, "y": 253, "_note": "confirm OK on the delete-account dialog; harmless stray click on empty dialog area when no confirm appeared" },
-    { "time": 11.0,  "action": "shot",  "out": "test/output/dmjv-{target}/03-login-form.png" },
 
     { "time": 11.5,  "action": "click",    "x": 290, "y": 135, "_note": "focus name field" },
     { "time": 12.0,  "action": "typeText", "text": "testjun6" },
     { "time": 13.0,  "action": "click",    "x": 290, "y": 163, "_note": "focus pass field" },
     { "time": 13.5,  "action": "typeText", "text": "testjun6" },
-    { "time": 14.0,  "action": "shot",     "out": "test/output/dmjv-{target}/04-credentials.png" },
     { "time": 14.5,  "action": "click",    "x": 232, "y": 300, "_note": "Log In (name/pass form button)" },
-    { "time": 19.0,  "action": "shot",     "out": "test/output/dmjv-{target}/05-after-login.png" },
 
     { "time": 21.0,  "action": "click", "x": 538, "y": 8,   "_note": "lobby: favorites (heart) tab, far top-right" },
-    { "time": 21.6,  "action": "shot",  "out": "test/output/dmjv-{target}/06-favorites.png" },
 
     { "time": 23.0,  "action": "click", "x": 255, "y": 70,  "_note": "favorites: 'Don't Move JV' level slot (below the byline -> Cancel/Play popup)" },
-    { "time": 23.6,  "action": "shot",  "out": "test/output/dmjv-{target}/07-popup.png" },
     { "time": 24.0,  "action": "click", "x": 185, "y": 85,  "_note": "level popup: Play" },
-    { "time": 26.0,  "action": "shot",  "out": "test/output/dmjv-{target}/08-play.png" },
-    { "time": 26.0,  "action": "shotSeries", "out": "test/output/dmjv-{target}/gameplay/{elapsed03}s.png", "duration": 94, "interval": 1, "startSecond": 26, "_note": "one screenshot per second through the level, from level entry to the expected Race Complete window" },
 
-    { "time": 120.0, "action": "shot",  "out": "test/output/dmjv-{target}/10-complete.png", "_note": "~96s after Play: Race Complete! popup should be up" },
-
-    { "time": 121.0, "action": "quit",  "_note": "close the projector (no-op on OpenFL; final shot already saved)" }
+    { "time": 37.0,  "action": "shot", "out": "test/output/dmjv-{target}/09-racing.png", "_note": "race underway after countdown" },
+    { "time": 120.0, "action": "shot", "out": "test/output/dmjv-{target}/10-complete.png", "_note": "Race Complete! popup should be visible" },
+    { "time": 121.0, "action": "quit" }
   ]
 }

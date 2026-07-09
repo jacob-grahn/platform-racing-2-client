@@ -6,6 +6,7 @@ import js.Browser;
 import haxe.crypto.Md5;
 import haxe.ds.ObjectMap;
 import haxe.ds.StringMap;
+import StringTools;
 import openfl.display.DisplayObject;
 import openfl.display.Shape;
 import openfl.display.Sprite;
@@ -162,6 +163,7 @@ class Course extends Sprite {
 	private var reachedObjectives:Map<Int, Bool> = new Map();
 	private var minionEggsSpawned:Bool = false;
 	private var frameCounterActive:Bool = false;
+	private var physicsTraceFrame:Int = 0;
 	private var rotationTweenActive:Bool = false;
 	private var currentStageQuality:StageQuality = StageQuality.HIGH;
 	private var keyScrollActive:Bool = false;
@@ -1060,6 +1062,7 @@ class Course extends Sprite {
 
 	private function onCountdownFinish():Void {
 		raceStarted = true;
+		physicsTraceFrame = 0;
 		spawnMinionEggs();
 		if (localCharacter != null) {
 			localCharacter.initNetworkEmission();
@@ -1126,9 +1129,17 @@ class Course extends Sprite {
 		}
 
 		if (raceStarted && !localFinishHandled) {
+			if (physicsTraceRuntimeEnabled() && physicsTraceFrame < physicsTraceFrameLimit()) {
+				player.controller.beginDetailedTraceFrame(physicsTraceFrame);
+			} else {
+				player.controller.stopDetailedTrace();
+			}
 			player.step(input.copy());
 			player.maybeSquash(playerArray);
 			player.tickJellyfishSting(playerArray, Std.random(35) + 1);
+			physicsTraceFrame++;
+		} else {
+			player.controller.stopDetailedTrace();
 		}
 		if (raceStarted && eggRound != null) {
 			if (config.gameMode == "egg") {
@@ -1174,6 +1185,95 @@ class Course extends Sprite {
 		pr2.app.DebugSignal.set("race-phase", phase);
 		pr2.app.DebugSignal.set("remote-count", Std.string(remoteCharacterCount()));
 	}
+
+	private function physicsTraceRuntimeEnabled():Bool {
+		#if js
+		var queryValue = physicsTraceQueryValue();
+		if (queryValue != null) {
+			return isEnabledFlag(queryValue);
+		}
+		var windowValue = untyped Browser.window.__PR2_PHYSICS_TRACE;
+		if (windowValue != null) {
+			return isEnabledFlag(Std.string(windowValue));
+		}
+		try {
+			var storage = Browser.window.localStorage;
+			if (storage != null) {
+				for (key in ["pr2PhysicsTrace", "PR2_PHYSICS_TRACE", "physicsTrace"]) {
+					var value = storage.getItem(key);
+					if (value != null) {
+						return isEnabledFlag(value);
+					}
+				}
+			}
+		} catch (error:Dynamic) {}
+		#end
+		return false;
+	}
+
+	private function physicsTraceFrameLimit():Int {
+		#if js
+		var value = runtimeValue("physicsTraceFrames", ["pr2PhysicsTraceFrames", "PR2_PHYSICS_TRACE_FRAMES", "physicsTraceFrames"]);
+		if (value != null) {
+			var parsed = Std.parseInt(value);
+			if (parsed != null && parsed > 0) {
+				return parsed;
+			}
+		}
+		#end
+		return 2500;
+	}
+
+	private static function isEnabledFlag(value:String):Bool {
+		var normalized = value == null ? "" : value.toLowerCase();
+		return normalized == "1" || normalized == "true" || normalized == "yes" || normalized == "on";
+	}
+
+	#if js
+	private static function physicsTraceQueryValue():Null<String> {
+		for (name in ["physicsTrace", "pr2PhysicsTrace", "tracePhysics"]) {
+			var value = queryValue(name);
+			if (value != null) {
+				return value;
+			}
+		}
+		return null;
+	}
+
+	private static function runtimeValue(queryName:String, storageNames:Array<String>):Null<String> {
+		var value = queryValue(queryName);
+		if (value != null) {
+			return value;
+		}
+		try {
+			var storage = Browser.window.localStorage;
+			if (storage != null) {
+				for (name in storageNames) {
+					value = storage.getItem(name);
+					if (value != null) {
+						return value;
+					}
+				}
+			}
+		} catch (error:Dynamic) {}
+		return null;
+	}
+
+	private static function queryValue(name:String):Null<String> {
+		var query = Browser.window.location.search;
+		if (query == null || query.length <= 1) {
+			return null;
+		}
+		for (part in query.substr(1).split("&")) {
+			var pieces = part.split("=");
+			var key = StringTools.urlDecode(pieces[0]);
+			if (key == name) {
+				return pieces.length > 1 ? StringTools.urlDecode(pieces[1]) : "1";
+			}
+		}
+		return null;
+	}
+	#end
 
 	// Port of the local side of Game.finish: when the player bumps a finish block
 	// the controller latches `finished`; objective mode reports each objective and

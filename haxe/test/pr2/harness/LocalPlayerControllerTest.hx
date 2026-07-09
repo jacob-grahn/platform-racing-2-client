@@ -216,8 +216,10 @@ class LocalPlayerControllerTest {
 		player.step(new LocalPlayerInput(false, false, true));
 		var jumpState = player.debugState();
 		assertEquals(false, jumpState.grounded, "jump leaves ground");
-		assertEquals("jump", jumpState.animation, "jump animation");
+		assertEquals("stand", jumpState.animation, "jump input keeps previous ground animation until Flash's next land frame");
 		assertBelow(jumpState.y, 300, "jump moves player up");
+		player.step(new LocalPlayerInput());
+		assertEquals("jump", player.debugState().animation, "airborne land frame changes to jump animation");
 
 		for (_ in 0...40) {
 			player.step(new LocalPlayerInput());
@@ -246,9 +248,9 @@ class LocalPlayerControllerTest {
 		var acceleration = 0.2 + 50 / 60;
 		var expectedVx = acceleration * 0.985 * 0.35;
 		assertClose(expectedVx, state.vx, "horizontal integration applies input, friction, then acceleration factor");
-		assertClose(75 + expectedVx, state.x, "horizontal position uses the integrated velocity");
+		assertClose(flashCoordinate(75 + expectedVx), state.x, "horizontal position uses Flash twip-quantized integrated velocity");
 		assertClose(0.7, state.vy, "vertical integration applies gravity before movement");
-		assertClose(90.7, state.y, "vertical position uses velocity after gravity");
+		assertClose(flashCoordinate(90.7), state.y, "vertical position uses Flash twip-quantized velocity after gravity");
 
 		player = new LocalCharacter(emptyLevel(100));
 		player.step(new LocalPlayerInput());
@@ -693,6 +695,8 @@ class LocalPlayerControllerTest {
 
 		assertClose(1, player.blockAlphaAt(2, 3), "vanish block starts opaque");
 		player.step(new LocalPlayerInput());
+		assertClose(1, player.blockAlphaAt(2, 3), "vanish block stays opaque until the next frame");
+		player.step(new LocalPlayerInput());
 		assertClose(0.9, player.blockAlphaAt(2, 3), "vanish block fades by one tenth per frame");
 
 		for (_ in 0...9) {
@@ -710,7 +714,7 @@ class LocalPlayerControllerTest {
 	private static function testVanishBlockReappearsAfterDelayWhenUnoccupied():Void {
 		var player = new LocalCharacter(vanishReappearLevel());
 
-		for (_ in 0...11) {
+		for (_ in 0...12) {
 			player.step(new LocalPlayerInput());
 		}
 		assertEquals(false, player.debugState().grounded, "vanish block is inactive after fade-out");
@@ -1001,8 +1005,9 @@ class LocalPlayerControllerTest {
 
 		assertEquals(null, afterUse.itemId, "teleport item consumes after a clear teleport");
 		assertClose(120, afterUse.x - afterUse.vx - Math.round(beforeUse.x), "teleport item moves 120 px in facing direction");
+		var expectedTeleportX = flashCoordinate(beforeUse.x + 120);
 		assertEquals(
-			"teleport:" + Std.int(beforeUse.x) + "," + Std.int(beforeUse.y - 25) + ":" + Std.int(afterUse.x - afterUse.vx) + "," + Std.int(beforeUse.y - 25),
+			"teleport:" + Std.int(beforeUse.x) + "," + Std.int(beforeUse.y - 25) + ":" + Std.int(expectedTeleportX) + "," + Std.int(beforeUse.y - 25),
 			afterUse.lastItemEffect,
 			"teleport item emits Flash start and end pop effect positions"
 		);
@@ -1296,9 +1301,9 @@ class LocalPlayerControllerTest {
 		var events = player.consumeBlockVisualEvents();
 		assertEquals(1, events.length, "slash-damaged vanish block emits the base bump event");
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "slash damage bumps the vanish block");
-		assertClose(0.9, player.blockAlphaAt(3, 5), "slash-damaged vanish block starts fading on the hit frame");
+		assertClose(1, player.blockAlphaAt(3, 5), "slash-damaged vanish block waits until the next frame to fade");
 		player.step(new LocalPlayerInput());
-		assertClose(0.8, player.blockAlphaAt(3, 5), "slash-damaged vanish block fades like contact activation");
+		assertClose(0.9, player.blockAlphaAt(3, 5), "slash-damaged vanish block fades like contact activation");
 	}
 
 	private static function testIceWaveReloadTiming():Void {
@@ -2685,6 +2690,10 @@ class LocalPlayerControllerTest {
 		if (Math.abs(expected - actual) > tolerance) {
 			throw '$message: expected $expected, got $actual';
 		}
+	}
+
+	private static function flashCoordinate(value:Float):Float {
+		return Math.floor(value * 20) / 20;
 	}
 
 	private static function assertBelow(actual:Float, maximum:Float, message:String):Void {

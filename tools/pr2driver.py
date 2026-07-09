@@ -27,7 +27,7 @@ Sequence script format:
 Key names: left right up down space
 """
 
-import subprocess, sys, os, time, tempfile, shutil, textwrap
+import subprocess, sys, os, time, tempfile, shutil, textwrap, contextlib
 
 from pr2_sequence import load_sequence as load_pr2_sequence
 
@@ -35,6 +35,7 @@ APP_NAME   = "Platform Racing 2"
 APP_PATH   = None        # overridden by --app flag
 PROC_NAME  = "Flash Player"
 TITLE_H    = 28          # Flash Projector title bar height (points)
+TRACE_FLAG = "physics-trace.flag"
 
 KEY_MAP = {
     "left":  123,
@@ -56,7 +57,10 @@ def _win_rect():
         'tell application "System Events" to tell process "' + PROC_NAME + '" '
         'to get {position, size} of window 1'
     )
-    raw = subprocess.check_output(["osascript", "-e", script], text=True).strip()
+    try:
+        raw = subprocess.check_output(["osascript", "-e", script], text=True, stderr=subprocess.DEVNULL).strip()
+    except Exception:
+        raw = _run_swift_output(_SWIFT_WIN_RECT)
     nums = [int(n.strip()) for n in raw.split(",")]
     return nums[0], nums[1], nums[2], nums[3]  # x, y, w, h
 
@@ -68,6 +72,28 @@ def _stage_to_screen(sx, sy):
 # ---------------------------------------------------------------------------
 # Swift one-liners compiled on the fly
 # ---------------------------------------------------------------------------
+
+_SWIFT_WIN_RECT = textwrap.dedent("""\
+    import CoreGraphics
+    import Foundation
+
+    let options = CGWindowListOption(arrayLiteral: .optionOnScreenOnly, .excludeDesktopElements)
+    let windows = CGWindowListCopyWindowInfo(options, kCGNullWindowID)! as NSArray
+    for case let window as NSDictionary in windows {
+        let owner = window[kCGWindowOwnerName as String] as? String ?? ""
+        let layer = window[kCGWindowLayer as String] as? Int ?? -1
+        guard owner == "Flash Player", layer == 0 else { continue }
+        guard let bounds = window[kCGWindowBounds as String] as? NSDictionary else { continue }
+        let x = bounds["X"] as? Int ?? 0
+        let y = bounds["Y"] as? Int ?? 0
+        let width = bounds["Width"] as? Int ?? 0
+        let height = bounds["Height"] as? Int ?? 0
+        guard width > 0, height > 0 else { continue }
+        print("\\(x),\\(y),\\(width),\\(height)")
+        exit(0)
+    }
+    exit(1)
+""")
 
 _SWIFT_CLICK = textwrap.dedent("""\
     import CoreGraphics
@@ -143,6 +169,16 @@ def _run_swift(code, *args):
             if result.stdout:
                 print(result.stdout, file=sys.stderr, end="")
             result.check_returncode()
+    finally:
+        os.unlink(path)
+
+def _run_swift_output(code, *args):
+    path = _write_swift(code)
+    try:
+        swift = os.environ.get("PR2DRIVER_SWIFT")
+        if not swift:
+            swift = XCODE_SWIFT if os.path.exists(XCODE_SWIFT) else "swift"
+        return subprocess.check_output([swift, path, *[str(a) for a in args]], text=True).strip()
     finally:
         os.unlink(path)
 
@@ -269,44 +305,72 @@ def cmd_key_up(key):
 
 def cmd_sequence(script_path):
     _, steps = load_pr2_sequence(script_path, allow_query=False)
-    t0 = None  # set on first non-launch action
-    for step in steps:
-        action = step["action"]
-        if action == "launch":
-            cmd_launch()
-            t0 = time.monotonic()
-            continue
-        if t0 is None:
-            t0 = time.monotonic()
-        target = t0 + step["time"]
-        wait = target - time.monotonic()
-        if wait > 0:
-            time.sleep(wait)
-        if action == "click":
-            cmd_click(step["x"], step["y"])
-        elif action == "keyDown":
-            cmd_key_down(step["key"])
-        elif action == "keyUp":
-            cmd_key_up(step["key"])
-        elif action == "tap":
-            cmd_tap(step["key"])
-        elif action == "typeText":
-            cmd_type(step["text"])
-        elif action == "hold":
-            cmd_hold(step["key"], step["seconds"])
-        elif action == "shot":
-            cmd_shot(step["out"])
-        elif action == "shotSeries":
-            cmd_shot_series(
-                step["out"],
-                _parse_seconds(step.get("duration", 0)),
-                _parse_seconds(step.get("interval", 1.0)),
-                int(step.get("startSecond", step["time"])),
-            )
-        elif action == "quit":
-            cmd_quit()
-        else:
-            print(f"Unknown action: {action}", file=sys.stderr)
+    trace_flag = flash_trace_flag_path() if sequence_uses_console_trace(steps) else None
+    if trace_flag:
+        os.makedirs(os.path.dirname(trace_flag), exist_ok=True)
+        with open(trace_flag, "w", encoding="utf-8") as file:
+            file.write("1\n")
+        print(f"physics trace flag enabled: {trace_flag}")
+    try:
+        t0 = None  # set on first non-launch action
+        for step in steps:
+            action = step["action"]
+            if action == "launch":
+                cmd_launch()
+                t0 = time.monotonic()
+                continue
+            if t0 is None:
+                t0 = time.monotonic()
+            target = t0 + step["time"]
+            wait = target - time.monotonic()
+            if wait > 0:
+                time.sleep(wait)
+            if action == "click":
+                cmd_click(step["x"], step["y"])
+            elif action == "keyDown":
+                cmd_key_down(step["key"])
+            elif action == "keyUp":
+                cmd_key_up(step["key"])
+            elif action == "tap":
+                cmd_tap(step["key"])
+            elif action == "typeText":
+                cmd_type(step["text"])
+            elif action == "hold":
+                cmd_hold(step["key"], step["seconds"])
+            elif action == "shot":
+                cmd_shot(step["out"])
+            elif action == "shotSeries":
+                cmd_shot_series(
+                    step["out"],
+                    _parse_seconds(step.get("duration", 0)),
+                    _parse_seconds(step.get("interval", 1.0)),
+                    int(step.get("startSecond", step["time"])),
+                )
+            elif action == "saveConsoleTrace":
+                print("saveConsoleTrace: Flash PR2TRACE lines are captured by tools/dmjv_trace_server.py")
+            elif action == "saveConsoleTraceWindow":
+                seconds = _parse_seconds(step.get("duration", 5.0))
+                print(f"saveConsoleTraceWindow: waiting {seconds:.3f}s; Flash PR2TRACE lines are captured by tools/dmjv_trace_server.py")
+                time.sleep(seconds)
+            elif action == "quit":
+                cmd_quit()
+            else:
+                print(f"Unknown action: {action}", file=sys.stderr)
+    finally:
+        if trace_flag:
+            with contextlib.suppress(FileNotFoundError):
+                os.remove(trace_flag)
+            print(f"physics trace flag disabled: {trace_flag}")
+
+def sequence_uses_console_trace(steps):
+    return any(step.get("action") in ("saveConsoleTrace", "saveConsoleTraceWindow") for step in steps)
+
+def flash_trace_flag_path():
+    if APP_PATH:
+        if APP_PATH.endswith(".app"):
+            return os.path.join(APP_PATH, "Contents", "Resources", TRACE_FLAG)
+        return os.path.join(os.path.dirname(os.path.abspath(APP_PATH)), TRACE_FLAG)
+    return os.path.abspath(TRACE_FLAG)
 
 def _resolve_key(name):
     kc = KEY_MAP.get(name.lower())

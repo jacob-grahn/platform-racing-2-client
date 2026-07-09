@@ -1,5 +1,8 @@
 package pr2.harness;
 
+#if js
+import js.Browser;
+#end
 import pr2.character.CharacterState;
 import pr2.level.FixtureLevel;
 import pr2.level.FixtureLevel.LevelBlock;
@@ -28,6 +31,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var SANTA_ICE_OVERLAY_FADE_RATE:Float = 0.025;
 	private static inline var ICE_OVERLAY_REMOVE_ALPHA:Float = 0.05;
 	private static inline var MINE_HIT_SPEED:Float = 50;
+	private static inline var FLASH_TWIPS_PER_PIXEL:Float = 20;
 	private static inline var TELEPORT_DEFAULT_COLOR:String = "16744272";
 	private static inline var TELEPORT_RESET_FRAMES:Int = 81;
 	private static inline var MOVE_PREVIEW_FRAMES:Int = 27;
@@ -84,6 +88,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var crownHatActive:Bool = false;
 	public var cheeseHatActive:Bool = false;
 	public var onHeartGain:Null<Void->Void> = null;
+	public var detailedTraceEnabled(default, null):Bool = false;
 
 	public static inline var MODE_LAND:String = "land";
 	public static inline var MODE_WATER:String = "water";
@@ -134,6 +139,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var hurtFramesRemaining:Int = 0;
 	private var frozenSolidFramesRemaining:Int = 0;
 	private var facingDirection:Int = 1;
+	private var animationState:CharacterState = CharacterState.Stand;
 	private var touchedBlockX:Null<Int> = null;
 	private var touchedBlockY:Null<Int> = null;
 	private var lastCollisionEvent:Null<String> = null;
@@ -145,6 +151,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var itemReloadFramesRemaining:Int = 0;
 	private var itemAvailable:Bool = false;
 	private var heldItem:Null<Item> = null;
+	private var detailedTraceFrame:Int = 0;
 	private var statsSelectSyncRequested:Bool = false;
 	private var animationLeft:Bool = false;
 	private var animationRight:Bool = false;
@@ -165,8 +172,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		startingJumpStat = clamp((level.stats.jump - 2) * 40, 0, 100);
 		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
 		setGravity(level.gravity);
-		x = level.playerStart.x * level.tileSize + level.tileSize / 2;
-		y = (level.playerStart.y + 1) * level.tileSize;
+		setPlayerPos(level.playerStart.x * level.tileSize + level.tileSize / 2, (level.playerStart.y + 1) * level.tileSize);
 		lastSafeX = x;
 		lastSafeY = y;
 		standingTileX = level.playerStart.x;
@@ -176,13 +182,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function setPosition(px:Float, py:Float):Void {
-		x = px;
-		y = py;
+		setPlayerPos(px, py);
 	}
 
 	public function resetPreRacePosition(px:Float, py:Float):Void {
-		x = px;
-		y = py;
+		setPlayerPos(px, py);
 		vx = 0;
 		vy = 0;
 		grounded = false;
@@ -193,6 +197,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		lastCollisionEvent = null;
 		lastItemEffect = null;
 		mode = MODE_LAND;
+		animationState = CharacterState.Stand;
 		targetVelX = 0;
 		accelFactor = BASE_ACCEL_FACTOR;
 		jumpHeld = false;
@@ -216,14 +221,14 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
 		restoreOriginalBlockPositions();
-		x = startX;
-		y = startY;
+		setPlayerPos(startX, startY);
 		vx = 0;
 		vy = 0;
 		grounded = false;
 		crouching = false;
 		touchedBlock = null;
 		mode = MODE_LAND;
+		animationState = CharacterState.Stand;
 		itemId = null;
 		itemUses = null;
 		heldItem = null;
@@ -286,9 +291,18 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 	}
 
+	public function beginDetailedTraceFrame(frame:Int):Void {
+		detailedTraceEnabled = true;
+		detailedTraceFrame = frame;
+	}
+
+	public function stopDetailedTrace():Void {
+		detailedTraceEnabled = false;
+	}
+
 	public function step(input:LocalPlayerInput):Void {
-		x = Math.round(x);
-		y = Math.round(y);
+		setPlayerPos(Math.round(x), Math.round(y));
+		traceCharacterFrame("before");
 		hurtFramesRemaining--;
 		touchedBlock = null;
 		lastItemEffect = null;
@@ -322,10 +336,13 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			landStep(input);
 		}
 		updateTimedBlocks();
+		traceCharacterFrame("after");
 	}
 
 	public function setGravity(multiplier:Float):Void {
+		var before = gravity;
 		gravity = DEFAULT_GRAVITY * multiplier;
+		traceGravityChange("setGravity", before, gravity, multiplier);
 	}
 
 	public function setStats(speed:Float, acceleration:Float, jump:Float):Void {
@@ -524,6 +541,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 		applyJetPackThrust(input);
 		position(input);
+		updateLandAnimationState(input);
 		processBlocks(input);
 	}
 
@@ -542,13 +560,14 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (input.jump) {
 			vy -= accel * 0.65;
 		}
-		vy += DEFAULT_GRAVITY * 0.25;
+		var waterGravity = DEFAULT_GRAVITY * 0.25;
+		vy += waterGravity;
+		traceGravityChange("water", waterGravity, waterGravity, waterGravity);
 		vx *= 0.92;
 		vy *= 0.92;
 		vx = clamp(vx, -MAX_SPEED, MAX_SPEED);
 		vy = clamp(vy, -MAX_SPEED, MAX_SPEED);
-		x += vx;
-		y += vy;
+		movePlayerBy(vx, vy);
 		processBlocks(input);
 		waterTicks--;
 		if (waterTicks <= 0) {
@@ -561,15 +580,39 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 	}
 
+	private function updateLandAnimationState(input:LocalPlayerInput):Void {
+		if (!grounded) {
+			animationState = CharacterState.Jump;
+		} else if (crouchCharge > 25) {
+			animationState = CharacterState.SuperJump;
+		} else if (input.left || input.right) {
+			animationState = crouching ? CharacterState.CrouchWalk : CharacterState.Run;
+		} else {
+			animationState = crouching ? CharacterState.Crouch : CharacterState.Stand;
+		}
+	}
+
 	private function setMode(newMode:String):Void {
 		if (mode != newMode) {
 			mode = newMode;
 			targetVelX = 0;
+			if (mode == MODE_HURT) {
+				animationState = CharacterState.Bumped;
+			}
+			if (mode == MODE_WATER && animationState != CharacterState.Bumped) {
+				animationState = CharacterState.Swim;
+			}
+			if (mode == MODE_FREEZE || mode == MODE_FROZEN_SOLID) {
+				animationState = CharacterState.Freeze;
+			}
+			if (mode == MODE_JUMP) {
+				animationState = CharacterState.Jump;
+			}
 		}
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationState, touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent);
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
@@ -578,7 +621,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return 1;
 		}
 		if (state.vanishFadeFrames != null) {
-			return state.vanishFadeFrames / VANISH_FADE_FRAMES;
+			return Math.min(1, state.vanishFadeFrames / VANISH_FADE_FRAMES);
 		}
 		if (state.vanishFadeInFrames != null) {
 			return 1 - state.vanishFadeInFrames / VANISH_FADE_FRAMES;
@@ -665,7 +708,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function position(input:LocalPlayerInput):Void {
-		vy += gravity;
+		var gravityBefore = gravity;
+		vy += gravityBefore;
+		traceGravityChange("position", gravityBefore, gravity, gravityBefore);
 		if (input.jump && propellerHatActive && vy > 0) {
 			vy *= 0.85;
 		}
@@ -681,14 +726,13 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		vx += (targetVelX - vx) * effectiveAccelFactor;
 		vx = clamp(vx, -MAX_SPEED, MAX_SPEED);
 		vy = clamp(vy, -MAX_SPEED, MAX_SPEED);
-		x += vx;
-		y += vy;
+		movePlayerBy(vx, vy);
 		accelFactor = BASE_ACCEL_FACTOR;
 	}
 
 	private function processBlocks(input:LocalPlayerInput):Void {
 		var refs = refreshBlockRefs();
-		if (updateGrounded(refs)) {
+		if (updateGrounded(refs, "floorCenter")) {
 			refs = refreshBlockRefs();
 		}
 		if (santaHatActive) {
@@ -696,17 +740,17 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			var floorBlock = level.blockAt(floorTile.x, floorTile.y);
 			if (floorBlock != null && !isBlockRemoved(floorBlock)
 					&& ((floorBlock.type == BlockType.Water && mode != MODE_WATER) || floorBlock.type == BlockType.Safety)) {
-				onStand(floorBlock);
+				onStand(floorBlock, "santaFloor");
 				refs = refreshBlockRefs();
 			}
 		}
 
 		if (vx >= -1 && refs.wallRight != null && getBlockLeftOf(refs.wallRight) == null) {
-			onLeftHit(refs.wallRight);
+			onLeftHit(refs.wallRight, "wallRight");
 			refs = refreshBlockRefs();
 		}
 		if (vx <= 1 && refs.wallLeft != null && getBlockRightOf(refs.wallLeft) == null) {
-			onRightHit(refs.wallLeft);
+			onRightHit(refs.wallLeft, "wallLeft");
 			refs = refreshBlockRefs();
 		}
 
@@ -722,13 +766,13 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				bumpBlock = blockWithOpenSpaceBelow(refs.topBlock);
 			}
 			if (bumpBlock != null) {
-				onBump(bumpBlock, input);
+				onBump(bumpBlock, input, "upward");
 				refs = refreshBlockRefs();
 			}
 		}
 
 		if (!grounded) {
-			if (updateGrounded(refs)) {
+			if (updateGrounded(refs, "floorCenterRetry")) {
 				refs = refreshBlockRefs();
 			}
 		}
@@ -741,9 +785,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				crouching = true;
 				if (input.jump) {
 					var yPriorToBump = y;
-					onBump(topBlock, input);
+					onBump(topBlock, input, "crouchTop");
 					if (topBlock.type != BlockType.Teleport) {
-						y = yPriorToBump;
+						setPlayerY(yPriorToBump);
 					}
 					vy = 0;
 				}
@@ -753,26 +797,27 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			}
 		}
 
-		touchAt(x, y - 15);
+		touchAt(x, y - 15, "bodyTouch");
 		if (!crouching) {
-			touchAt(x, y - 45);
+			touchAt(x, y - 45, "headTouch");
 		}
 	}
 
 	// Mirrors Block.onTouch dispatch: unlike the solid-collision lookups, this
 	// sees non-solid blocks (water/safety) so their touch effects can fire.
-	private function touchAt(pixelX:Float, pixelY:Float):Void {
+	private function touchAt(pixelX:Float, pixelY:Float, source:String):Void {
 		var tile = rotatedTileAtPixel(pixelX, pixelY);
 		var block = level.blockAt(tile.x, tile.y);
 		if (block == null || isBlockRemoved(block)) {
 			return;
 		}
+		var trace = beginBlockTrace(block, "touch", source);
 		touch(block);
 		switch (block.type) {
 			case BlockType.Mine:
 				hitMine(block);
 			case BlockType.Water:
-				if (!grounded) {
+				if (!grounded && mode != MODE_FREEZE && mode != MODE_HURT) {
 					setMode(MODE_WATER);
 					waterTicks = 2;
 				} else {
@@ -783,6 +828,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.WaterRipple, block.x, block.y));
 			case BlockType.Safety:
 				if (isBlockFrozen(block)) {
+					endBlockTrace(trace);
 					return;
 				}
 				if (standingTileX != block.x || standingTileY < block.y || standingTileY > block.y + 2) {
@@ -790,11 +836,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				}
 			default:
 		}
+		endBlockTrace(trace);
 	}
 
 	private function refreshBlockRefs():BlockRefs {
 		if (y < 0) {
-			y += 0.001;
+			movePlayerBy(0, 0.001);
 		}
 		return {
 			floorLeft: getBlockAtPixel(x - HALF_WIDTH, y, true),
@@ -811,9 +858,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		};
 	}
 
-	private function updateGrounded(refs:BlockRefs):Bool {
+	private function updateGrounded(refs:BlockRefs, source:String):Bool {
 		if (refs.floorCenter != null && refs.ceiling == null) {
-			onStand(refs.floorCenter);
+			onStand(refs.floorCenter, source);
 			return true;
 		} else {
 			grounded = false;
@@ -821,32 +868,36 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 	}
 
-	private function onStand(block:LevelBlock):Void {
+	private function onStand(block:LevelBlock, source:String):Void {
+		var trace = beginBlockTrace(block, "stand", source);
 		recordCollision(block, "stand");
 		touch(block);
 		var standForce = Math.round(vy * 2);
 		maybeFreezeSantaBlock(block);
-		y = rotatedBlockPos(block).y;
+		setPlayerY(rotatedBlockPos(block).y);
 		vy = 0;
 		grounded = true;
 		if (isSafeStandBlock(block)) {
 			updateSafeSpot(block, false);
 		}
 		applyStandEffect(block, standForce);
+		endBlockTrace(trace);
 	}
 
-	private function onBump(block:LevelBlock, input:LocalPlayerInput):Void {
+	private function onBump(block:LevelBlock, input:LocalPlayerInput, source:String):Void {
+		var trace = beginBlockTrace(block, "bump", source);
 		recordCollision(block, "bump");
 		touch(block);
 		var bumpForce = Math.round(-vy);
 		var preBumpY = y;
-		y = rotatedBlockPos(block).y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT);
+		setPlayerY(rotatedBlockPos(block).y + level.tileSize + (crouching ? STANDING_HEIGHT / 2 : STANDING_HEIGHT));
 		vy *= -0.25;
 		jumpVelBoost = 0;
 		if (bumpPlaysThump(block)) {
 			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y));
 		}
 		applyBumpEffect(block, input, bumpForce, preBumpY);
+		endBlockTrace(trace);
 	}
 
 	private function bumpPlaysThump(block:LevelBlock):Bool {
@@ -858,11 +909,12 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 	}
 
-	private function onLeftHit(block:LevelBlock):Void {
+	private function onLeftHit(block:LevelBlock, source:String):Void {
+		var trace = beginBlockTrace(block, "leftHit", source);
 		recordCollision(block, "leftHit");
 		touch(block);
 		var sideForce = Math.round(Math.abs(vx) * 1.75);
-		x = rotatedBlockPos(block).x - HALF_WIDTH;
+		setPlayerX(rotatedBlockPos(block).x - HALF_WIDTH);
 		if (vx > 0) {
 			vx *= -0.05;
 		}
@@ -870,13 +922,15 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			targetVelX = 0;
 		}
 		applySideHitEffect(block, sideForce, -1);
+		endBlockTrace(trace);
 	}
 
-	private function onRightHit(block:LevelBlock):Void {
+	private function onRightHit(block:LevelBlock, source:String):Void {
+		var trace = beginBlockTrace(block, "rightHit", source);
 		recordCollision(block, "rightHit");
 		touch(block);
 		var sideForce = Math.round(Math.abs(vx) * 1.75);
-		x = rotatedBlockPos(block).x + level.tileSize + HALF_WIDTH;
+		setPlayerX(rotatedBlockPos(block).x + level.tileSize + HALF_WIDTH);
 		if (vx < 0) {
 			vx *= -0.05;
 		}
@@ -884,6 +938,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			targetVelX = 0;
 		}
 		applySideHitEffect(block, sideForce, 1);
+		endBlockTrace(trace);
 	}
 
 	private function applyStandEffect(block:LevelBlock, force:Int):Void {
@@ -963,7 +1018,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				useCustomStatsBlock(block);
 			case BlockType.Teleport:
 				if (crouching) {
-					y = preBumpY;
+					setPlayerY(preBumpY);
 				}
 				maybeTeleport(block);
 			case BlockType.Push:
@@ -1077,8 +1132,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	private function returnToLastSafeSpot():Void {
 		var poofTile = rotatedTileAtPixel(lastSafeX, lastSafeY);
-		x = lastSafeX;
-		y = lastSafeY;
+		setPlayerPos(lastSafeX, lastSafeY);
 		vx = 0;
 		vy = 0;
 		targetVelX = 0;
@@ -1118,17 +1172,17 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	private function finishRotation():Void {
 		if (rotateDirection > 0) {
+			var previousX = x;
 			var nextX = -y;
-			y = x;
-			x = nextX;
+			setPlayerPos(nextX, previousX);
 			var safeX = -lastSafeY;
 			lastSafeY = lastSafeX;
 			lastSafeX = safeX;
 			courseRotation = RotationMath.normalizeDisplayRotation(courseRotation + 90);
 		} else {
+			var previousX = x;
 			var nextX = y;
-			y = -x;
-			x = nextX;
+			setPlayerPos(nextX, -previousX);
 			var safeX = lastSafeY;
 			lastSafeY = -lastSafeX;
 			lastSafeX = safeX;
@@ -1216,8 +1270,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 		var mineCenterX = block.x * level.tileSize + level.tileSize / 2;
 		var mineCenterY = block.y * level.tileSize + level.tileSize / 2;
-		var charHeight = crouching ? CROUCHING_HEIGHT : STANDING_HEIGHT;
-		var angle = Math.atan2((y - charHeight / 2) - mineCenterY, x - mineCenterX);
+		// Flash's LocalCharacter.charHeight remains 55 while crouching; MineBlock
+		// uses that field directly when calculating the blast angle.
+		var angle = Math.atan2((y - STANDING_HEIGHT / 2) - mineCenterY, x - mineCenterX);
 		var crownProtected = crownHatActive && gameMode != "deathmatch" && gameMode != "dm" && gameMode != "hat";
 		if (!crownProtected) {
 			vx += Math.cos(angle) * MINE_HIT_SPEED;
@@ -1405,7 +1460,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (getBlockAtPixel(destX, y - 5) != null) {
 			return;
 		}
-		x = destX;
+		setPlayerX(destX);
 		lastItemEffect = "teleport:" + Std.int(startX) + "," + Std.int(startY) + ":" + Std.int(x) + "," + Std.int(y - 25);
 		consumeHeldItemUse();
 	}
@@ -1653,8 +1708,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			state.depletedSupply = true;
 			state.depletedVisualSupply = true;
 		}
-		x += (dest.x - block.x) * level.tileSize;
-		y += (dest.y - block.y) * level.tileSize;
+		movePlayerBy((dest.x - block.x) * level.tileSize, (dest.y - block.y) * level.tileSize);
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.TeleportBlockPop, block.x, block.y, 1, null, null, startX, startY));
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.TeleportBlockPop, dest.x, dest.y, 1, null, null, x, y - 25));
 	}
@@ -1733,7 +1787,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function activateVanish(block:LevelBlock):Void {
 		var state = blockState(blockKey(block.x, block.y));
 		if (state.vanishReappearFrames == null && state.vanishFadeFrames == null && state.vanishFadeInFrames == null) {
-			state.vanishFadeFrames = VANISH_FADE_FRAMES;
+			// Flash attaches fadeOut during onStand/onBump, then the listener starts
+			// ticking on a later ENTER_FRAME. This controller ticks timed blocks at
+			// the end of the same deterministic step, so seed one extra frame.
+			state.vanishFadeFrames = VANISH_FADE_FRAMES + 1;
 		}
 	}
 
@@ -1957,8 +2014,102 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		lastCollisionEvent = event + ":" + Std.string(block.type) + "@" + block.x + "," + block.y;
 	}
 
+	private function traceCharacterFrame(phase:String):Void {
+		if (!detailedTraceEnabled) {
+			return;
+		}
+		emitTraceLine("PR2TRACE|client=haxe|frame=" + detailedTraceFrame + "|event=frame|phase=" + phase + "|state=" + characterTraceState());
+	}
+
+	private function traceGravityChange(kind:String, before:Float, after:Float, input:Float):Void {
+		if (!detailedTraceEnabled) {
+			return;
+		}
+		emitTraceLine("PR2TRACE|client=haxe|frame=" + detailedTraceFrame + "|event=gravity|kind=" + kind + "|input=" + traceNum(input)
+			+ "|before=" + traceNum(before) + "|after=" + traceNum(after) + "|state=" + characterTraceState());
+	}
+
+	private function beginBlockTrace(block:LevelBlock, kind:String, source:String):Null<PhysicsBlockTrace> {
+		if (!detailedTraceEnabled) {
+			return null;
+		}
+		return {
+			kind: kind,
+			source: source,
+			beforeState: characterTraceState(),
+			beforeBlock: blockTraceState(block)
+		};
+	}
+
+	private function endBlockTrace(info:Null<PhysicsBlockTrace>):Void {
+		if (info == null) {
+			return;
+		}
+		var block = touchedBlock;
+		var afterBlock = block == null ? "null" : blockTraceState(block);
+		emitTraceLine("PR2TRACE|client=haxe|frame=" + detailedTraceFrame + "|event=block|kind=" + info.kind + "|source=" + info.source
+			+ "|blockBefore=" + info.beforeBlock + "|blockAfter=" + afterBlock + "|before=" + info.beforeState + "|after=" + characterTraceState());
+	}
+
+	private function emitTraceLine(line:String):Void {
+		#if js
+		Browser.console.log(line);
+		#else
+		trace(line);
+		#end
+	}
+
+	private function blockTraceState(block:LevelBlock):String {
+		return "type=" + Std.string(block.type)
+			+ ";code=" + Std.string(block.type)
+			+ ";seg=" + block.x + "," + block.y
+			+ ";pos=" + traceNum(block.x * level.tileSize) + "," + traceNum(block.y * level.tileSize)
+			+ ";active=" + (!isBlockRemoved(block))
+			+ ";removed=" + isBlockRemoved(block)
+			+ ";alpha=" + traceNum(blockAlphaAt(block.x, block.y))
+			+ ";options=" + block.options;
+	}
+
+	private function characterTraceState():String {
+		return "x=" + traceNum(x)
+			+ ";y=" + traceNum(y)
+			+ ";velX=" + traceNum(vx)
+			+ ";velY=" + traceNum(vy)
+			+ ";targetVelX=" + traceNum(targetVelX)
+			+ ";targetVelY=0"
+			+ ";grounded=" + grounded
+			+ ";crouching=" + crouching
+			+ ";mode=" + mode
+			+ ";state=" + Std.string(characterState())
+			+ ";gravity=" + traceNum(gravity)
+			+ ";defaultGravity=" + traceNum(DEFAULT_GRAVITY)
+			+ ";jumpVel=" + traceNum(jumpVelBoost)
+			+ ";superJump=" + traceNum(jumpVelocity)
+			+ ";accel=" + traceNum(accel)
+			+ ";maxVelX=" + traceNum(maxVelX)
+			+ ";accelFactor=" + traceNum(accelFactor)
+			+ ";waterTicks=" + traceNum(waterTicks)
+			+ ";hurtTime=" + hurtFramesRemaining
+			+ ";lastSafe=" + traceNum(lastSafeX) + "," + traceNum(lastSafeY)
+			+ ";standingSeg=" + standingTileX + "," + standingTileY
+			+ ";rotation=" + characterRotation
+			+ ";mapRotation=" + courseRotation
+			+ ";scaleX=" + facingDirection
+			+ ";item=" + (itemId == null ? 0 : itemId);
+	}
+
+	private static function traceNum(value:Float):String {
+		if (Math.isNaN(value)) {
+			return "NaN";
+		}
+		if (!Math.isFinite(value)) {
+			return value > 0 ? "Infinity" : "-Infinity";
+		}
+		return Std.string(Math.round(value * 1000000) / 1000000);
+	}
+
 	private function characterState():CharacterState {
-		return CharacterState.fromMotion(mode, grounded, crouching, crouchCharge, animationLeft, animationRight);
+		return animationState;
 	}
 
 	private function getBlockAtPixel(pixelX:Float, pixelY:Float, allowTopHatVanishCollision:Bool = false):Null<LevelBlock> {
@@ -2037,6 +2188,29 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		return new PixelPoint(point.x, point.y);
 	}
 
+	private function setPlayerX(value:Float):Void {
+		x = flashCoordinate(value);
+	}
+
+	private function setPlayerY(value:Float):Void {
+		y = flashCoordinate(value);
+	}
+
+	private function setPlayerPos(px:Float, py:Float):Void {
+		setPlayerX(px);
+		setPlayerY(py);
+	}
+
+	private function movePlayerBy(dx:Float, dy:Float):Void {
+		setPlayerPos(x + dx, y + dy);
+	}
+
+	private static function flashCoordinate(value:Float):Float {
+		// Flash stores DisplayObject coordinates in twips, so LocalCharacter.x/y
+		// lose sub-1/20px precision even though velocity fields keep full precision.
+		return Math.floor(value * FLASH_TWIPS_PER_PIXEL) / FLASH_TWIPS_PER_PIXEL;
+	}
+
 	private static function clamp(value:Float, min:Float, max:Float):Float {
 		return Math.max(min, Math.min(max, value));
 	}
@@ -2089,6 +2263,13 @@ private typedef PendingProjectileDamage = {
 	var velY:Float;
 	var damageForce:Float;
 	var framesRemaining:Int;
+}
+
+private typedef PhysicsBlockTrace = {
+	var kind:String;
+	var source:String;
+	var beforeState:String;
+	var beforeBlock:String;
 }
 
 private class PlayerStats {

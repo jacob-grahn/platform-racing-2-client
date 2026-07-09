@@ -537,6 +537,8 @@ class WebSocket:
 def run_sequence(script_path, root, browser_path, base_url=None, use_gpu=False, metrics_out=None):
     browser = resolve_browser(browser_path)
     query, steps = load_pr2_sequence(script_path, normalize_hold=True)
+    if sequence_uses_console_trace(steps):
+        query = append_query(query, "physicsTrace=1")
 
     server = contextlib.nullcontext(base_url) if base_url else serve(root)
     with server as url:
@@ -546,6 +548,10 @@ def run_sequence(script_path, root, browser_path, base_url=None, use_gpu=False, 
             context = SequenceContext(devtools, base_page_url, metrics_out)
             run_sequence_steps(devtools, steps, context)
             context.write_metrics()
+
+
+def sequence_uses_console_trace(steps):
+    return any(step.get("action") in ("saveConsoleTrace", "saveConsoleTraceWindow") for step in steps)
 
 
 # The OpenFL preloader runs for a variable amount of time before `Main` boots.
@@ -582,6 +588,7 @@ class SequenceContext:
         self.performance_enabled = False
 
     def after_app_ready(self):
+        self.install_console_trace()
         if self.metrics_out is None:
             return
         if not self.performance_enabled:
@@ -603,9 +610,47 @@ class SequenceContext:
     };
     requestAnimationFrame(tick);
   }
+	})()
+	"""
+        )
+
+    def install_console_trace(self):
+        self.devtools.evaluate(
+            """
+(() => {
+  window.__pr2ConsoleTrace = window.__pr2ConsoleTrace || [];
+  if (window.__pr2ConsoleTraceInstalled) return;
+  window.__pr2ConsoleTraceInstalled = true;
+  for (const name of ["log", "info", "debug", "warn"]) {
+    const original = console[name] ? console[name].bind(console) : console.log.bind(console);
+    console[name] = (...args) => {
+      const line = args.map((arg) => {
+        try {
+          return typeof arg === "string" ? arg : JSON.stringify(arg);
+        } catch (_) {
+          return String(arg);
+        }
+      }).join(" ");
+      if (line.includes("PR2TRACE")) {
+        window.__pr2ConsoleTrace.push(line);
+      }
+      original(...args);
+    };
+  }
 })()
 """
         )
+
+    def write_console_trace(self, out_path):
+        out_path = out_path.replace("{target}", "openfl")
+        raw = self.devtools.evaluate("JSON.stringify(window.__pr2ConsoleTrace || [])")
+        lines = json.loads(raw)
+        os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
+        with open(out_path, "w", encoding="utf-8") as file:
+            for line in lines:
+                file.write(line)
+                file.write("\n")
+        print(f"Console trace saved: {out_path} ({len(lines)} lines)")
 
     def navigate(self, query):
         url = append_query(self.base_page_url, query)
@@ -777,6 +822,16 @@ def run_sequence_step(devtools, step, context=None):
             float(step.get("interval", 1.0)),
             step.get("label", "debug"),
         )
+    elif action == "saveConsoleTrace":
+        if context is None:
+            raise SystemExit("Sequence saveConsoleTrace step requires a sequence context.")
+        context.write_console_trace(require_field(step, "out"))
+    elif action == "saveConsoleTraceWindow":
+        if context is None:
+            raise SystemExit("Sequence saveConsoleTraceWindow step requires a sequence context.")
+        wait_for_body_attribute(devtools, "race-phase", "racing")
+        time.sleep(float(step.get("duration", 5.0)))
+        context.write_console_trace(require_field(step, "out"))
     elif action == "body-attribute":
         validate_sequence_body_attribute(devtools, require_field(step, "name"), require_field(step, "value"))
     else:

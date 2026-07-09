@@ -10,6 +10,7 @@ package character
     import blocks.WaterBlock;
     import com.jiggmin.data.Data;
     import com.jiggmin.data.CommandHandler;
+    import com.jiggmin.data.PhysicsTrace;
     import com.jiggmin.data.PR2Socket;
     import com.jiggmin.data.Settings;
     import flash.display.DisplayObject;
@@ -22,6 +23,7 @@ package character
     import flash.ui.Keyboard;
     import flash.utils.clearInterval;
     import flash.utils.clearTimeout;
+    import flash.utils.getQualifiedClassName;
     import flash.utils.setInterval;
     import flash.utils.setTimeout;
     import items.Item;
@@ -214,7 +216,9 @@ package character
 
         public function setGravity(_arg_1:Number)
         {
+            var before:Number = store.getNumber(GravityMultiplied);
             store.setNumber(GravityMultiplied, store.getNumber(DefaultGravity) * _arg_1);
+            this.traceGravityChange("setGravity", before, store.getNumber(GravityMultiplied), _arg_1);
         }
 
         private function resetGravity()
@@ -272,6 +276,7 @@ package character
         {
             var curX:int = x = Math.round(x);
             var curY:int = y = Math.round(y);
+            this.traceCharacterFrame("before");
             if (this.map != null) {
                 var curPos:Point = Data.rotatePoint(curX, curY, this.map.rotation);
                 this.mapDot.x = curPos.x;
@@ -331,6 +336,187 @@ package character
         }
 
         // tells the game to send the exact player coordinates next update (in this.go)
+        private function physicsTraceActive():Boolean
+        {
+            return this.course != null && this.course.physicsTraceEnabled && this.course.countdownFinished && this.course.physicsTraceFrame < 2500 && PhysicsTrace.isEnabled();
+        }
+
+        private function physicsTraceFrame():int
+        {
+            return this.course != null ? this.course.physicsTraceFrame : -1;
+        }
+
+        private function traceCharacterFrame(phase:String)
+        {
+            if (this.physicsTraceActive()) {
+                PhysicsTrace.log("PR2TRACE|client=flash|frame=" + this.physicsTraceFrame() + "|event=frame|phase=" + phase + "|state=" + this.characterTraceState());
+            }
+        }
+
+        private function finishPhysicsTraceFrame()
+        {
+            if (this.physicsTraceActive()) {
+                this.traceCharacterFrame("after");
+            }
+            if (this.course != null && this.course.countdownFinished && this.course.physicsTraceFrame < 2500) {
+                this.course.physicsTraceFrame++;
+            }
+        }
+
+        private function traceGravityChange(kind:String, before:Number, after:Number, input:Number)
+        {
+            if (this.physicsTraceActive()) {
+                PhysicsTrace.log("PR2TRACE|client=flash|frame=" + this.physicsTraceFrame() + "|event=gravity|kind=" + kind + "|input=" + this.traceNum(input) + "|before=" + this.traceNum(before) + "|after=" + this.traceNum(after) + "|state=" + this.characterTraceState());
+            }
+        }
+
+        private function traceOnStand(block:Block, source:String)
+        {
+            if (block == null) {
+                return;
+            }
+            var enabled:Boolean = this.physicsTraceActive();
+            var beforeState:String;
+            var beforeBlock:String;
+            if (enabled) {
+                beforeState = this.characterTraceState();
+                beforeBlock = this.blockTraceState(block);
+            }
+            block.onStand(this);
+            if (enabled) {
+                this.traceBlockInteraction("stand", source, beforeState, this.characterTraceState(), beforeBlock, this.blockTraceState(block));
+            }
+        }
+
+        private function traceOnBump(block:Block, source:String)
+        {
+            if (block == null) {
+                return;
+            }
+            var enabled:Boolean = this.physicsTraceActive();
+            var beforeState:String;
+            var beforeBlock:String;
+            if (enabled) {
+                beforeState = this.characterTraceState();
+                beforeBlock = this.blockTraceState(block);
+            }
+            block.onBump(this);
+            if (enabled) {
+                this.traceBlockInteraction("bump", source, beforeState, this.characterTraceState(), beforeBlock, this.blockTraceState(block));
+            }
+        }
+
+        private function traceOnLeftHit(block:Block, source:String)
+        {
+            if (block == null) {
+                return;
+            }
+            var enabled:Boolean = this.physicsTraceActive();
+            var beforeState:String;
+            var beforeBlock:String;
+            if (enabled) {
+                beforeState = this.characterTraceState();
+                beforeBlock = this.blockTraceState(block);
+            }
+            block.onLeftHit(this);
+            if (enabled) {
+                this.traceBlockInteraction("leftHit", source, beforeState, this.characterTraceState(), beforeBlock, this.blockTraceState(block));
+            }
+        }
+
+        private function traceOnRightHit(block:Block, source:String)
+        {
+            if (block == null) {
+                return;
+            }
+            var enabled:Boolean = this.physicsTraceActive();
+            var beforeState:String;
+            var beforeBlock:String;
+            if (enabled) {
+                beforeState = this.characterTraceState();
+                beforeBlock = this.blockTraceState(block);
+            }
+            block.onRightHit(this);
+            if (enabled) {
+                this.traceBlockInteraction("rightHit", source, beforeState, this.characterTraceState(), beforeBlock, this.blockTraceState(block));
+            }
+        }
+
+        private function traceOnTouch(block:Block, source:String)
+        {
+            if (block == null) {
+                return;
+            }
+            var enabled:Boolean = this.physicsTraceActive();
+            var beforeState:String;
+            var beforeBlock:String;
+            if (enabled) {
+                beforeState = this.characterTraceState();
+                beforeBlock = this.blockTraceState(block);
+            }
+            block.onTouch(this);
+            if (enabled) {
+                this.traceBlockInteraction("touch", source, beforeState, this.characterTraceState(), beforeBlock, this.blockTraceState(block));
+            }
+        }
+
+        private function traceBlockInteraction(kind:String, source:String, beforeState:String, afterState:String, beforeBlock:String, afterBlock:String)
+        {
+            PhysicsTrace.log("PR2TRACE|client=flash|frame=" + this.physicsTraceFrame() + "|event=block|kind=" + kind + "|source=" + source + "|blockBefore=" + beforeBlock + "|blockAfter=" + afterBlock + "|before=" + beforeState + "|after=" + afterState);
+        }
+
+        private function blockTraceState(block:Block):String
+        {
+            var seg:Point = block.getSeg();
+            return "type=" + getQualifiedClassName(block)
+                + ";code=" + block.getCode()
+                + ";seg=" + int(seg.x) + "," + int(seg.y)
+                + ";pos=" + this.traceNum(block.getPosX()) + "," + this.traceNum(block.getPosY())
+                + ";active=" + block.isActive()
+                + ";removed=" + block.isRemoved()
+                + ";options=" + String(block.options);
+        }
+
+        private function characterTraceState():String
+        {
+            return "x=" + this.traceNum(x)
+                + ";y=" + this.traceNum(y)
+                + ";velX=" + this.traceNum(velX)
+                + ";velY=" + this.traceNum(velY)
+                + ";targetVelX=" + this.traceNum(this.targetVelX)
+                + ";targetVelY=" + this.traceNum(this.targetVelY)
+                + ";grounded=" + this.grounded
+                + ";crouching=" + this.crouching
+                + ";mode=" + this.mode
+                + ";state=" + this.state
+                + ";gravity=" + this.traceNum(store.getNumber(GravityMultiplied))
+                + ";defaultGravity=" + this.traceNum(store.getNumber(DefaultGravity))
+                + ";jumpVel=" + this.traceNum(store.getNumber(JUMP_VEL))
+                + ";superJump=" + this.traceNum(store.getNumber(SuperJump))
+                + ";accel=" + this.traceNum(this.accel)
+                + ";maxVelX=" + this.traceNum(this.maxVelX)
+                + ";accelFactor=" + this.traceNum(this.accelFactor)
+                + ";waterTicks=" + this.traceNum(this.waterTicks)
+                + ";hurtTime=" + this.traceNum(this.hurtTime)
+                + ";lastSafe=" + this.traceNum(this.lastSafeX) + "," + this.traceNum(this.lastSafeY)
+                + ";standingSeg=" + this.standingSegX + "," + this.standingSegY
+                + ";rotation=" + this.traceNum(rotation)
+                + ";mapRotation=" + (this.map != null ? this.traceNum(this.map.rotation) : "null")
+                + ";scaleX=" + this.traceNum(scaleX)
+                + ";item=" + Items.getCodeFromItem(this.curItem);
+        }
+
+        private function traceNum(value:Number):String
+        {
+            if (isNaN(value)) {
+                return "NaN";
+            }
+            if (!isFinite(value)) {
+                return value > 0 ? "Infinity" : "-Infinity";
+            }
+            return String(Math.round(value * 1000000) / 1000000);
+        }
+
         private function setEPNU()
         {
             this.exactPosNextUpdate = true;
@@ -364,6 +550,7 @@ package character
         {
             this.position();
             this.processBlocks();
+            this.finishPhysicsTraceFrame();
         }
 
         private function hurtGo(e:Event)
@@ -374,6 +561,7 @@ package character
             if (this.hurtTime <= 0) {
                 this.setMode("land");
             }
+            this.finishPhysicsTraceFrame();
         }
 
         private function frozenSolidGo(_arg_1:Event)
@@ -392,6 +580,7 @@ package character
                     changeState("frozenSolid");
                 }
             }
+            this.finishPhysicsTraceFrame();
         }
 
         private function squashedGo(e:Event)
@@ -403,10 +592,12 @@ package character
                 velY = -5;
                 this.setMode("land");
             }
+            this.finishPhysicsTraceFrame();
         }
 
         private function freezeGo(e:Event)
         {
+            this.finishPhysicsTraceFrame();
         }
 
         private function waterGo(_arg_1:Event)
@@ -424,7 +615,9 @@ package character
             if (this.up) {
                 velY -= this.accel * 0.65;
             }
-            velY += store.getNumber(DefaultGravity) * 0.25;
+            var waterGravity:Number = store.getNumber(DefaultGravity) * 0.25;
+            velY += waterGravity;
+            this.traceGravityChange("water", waterGravity, waterGravity, waterGravity);
             velX *= 0.92;
             velY *= 0.92;
             velX = Data.numLimit(velX, -this.maxSpeed, this.maxSpeed);
@@ -444,6 +637,7 @@ package character
                 }
                 this.setMode("land");
             }
+            this.finishPhysicsTraceFrame();
         }
 
         private function landGo(e:Event)
@@ -515,6 +709,7 @@ package character
                 this.setMode("water");
                 changeState("swim");
             }
+            this.finishPhysicsTraceFrame();
         }
 
         private function updateKeys()
@@ -555,7 +750,9 @@ package character
                 if (this.course != null && parent != this.course.frontBackground) {
                     this.course.frontBackground.addChild(this);
                 }
-                velY += store.getNumber(GravityMultiplied);
+                var gravityBefore:Number = store.getNumber(GravityMultiplied);
+                velY += gravityBefore;
+                this.traceGravityChange("position", gravityBefore, store.getNumber(GravityMultiplied), gravityBefore);
                 if (this.up && store.getBool(PROP) && velY > 0) {
                     velY *= 0.85;
                 }
@@ -628,18 +825,18 @@ package character
                 if (store.getBool(SANTA)) {
                     var _local_3:Block = this.map.getBlockFromPos(x, y, true);
                     if (_local_3 != null && ((_local_3 is WaterBlock && this.mode != "water") || _local_3 is SafetyBlock)) {
-                        _local_3.onStand(this);
+                        this.traceOnStand(_local_3, "santaFloor");
                     }
                 }
                 if (velX >= -1) {
                     if (this.wallRight != null && this.getBlock(this.wallRight.getPosX() - 30, this.wallRight.getPosY()) == null) {
-                        this.wallRight.onLeftHit(this);
+                        this.traceOnLeftHit(this.wallRight, "wallRight");
                         this.refreshBlockRefs();
                     }
                 }
                 if (velX <= 1) {
                     if (this.wallLeft != null && this.getBlock(this.wallLeft.getPosX() + 30, this.wallLeft.getPosY()) == null) {
-                        this.wallLeft.onRightHit(this);
+                        this.traceOnRightHit(this.wallLeft, "wallLeft");
                         this.refreshBlockRefs();
                     }
                 }
@@ -648,15 +845,15 @@ package character
                         this.crouching = true;
                     }
                     if (this.mode != "water" && this.ceiling != null && this.getBlock(this.ceiling.getPosX(), this.ceiling.getPosY() + 30) == null) {
-                        this.ceiling.onBump(this);
+                        this.traceOnBump(this.ceiling, "ceiling");
                         this.refreshBlockRefs();
                     } else {
                         if (this.mode != "water" && this.headBlock != null && this.getBlock(this.headBlock.getPosX(), this.headBlock.getPosY() + 30) == null) {
-                            this.headBlock.onBump(this);
+                            this.traceOnBump(this.headBlock, "headBlock");
                             this.refreshBlockRefs();
                         } else {
                             if (this.topBlock != null && this.getBlock(this.topBlock.getPosX(), this.topBlock.getPosY() + 30) == null) {
-                                this.topBlock.onBump(this);
+                                this.traceOnBump(this.topBlock, "topBlock");
                                 this.refreshBlockRefs();
                             }
                         }
@@ -675,7 +872,7 @@ package character
                         this.crouching = true;
                         if (this.up) {
                             var yPriorToBump:Number = y;
-                            topBlock.onBump(this);
+                            this.traceOnBump(topBlock, "crouchTop");
                             y = !(topBlock is TeleportBlock) ? yPriorToBump : y;
                             velY = 0;
                         }
@@ -686,12 +883,12 @@ package character
                 }
                 topBlock = this.map.getBlockFromPos(x, y - 15, true);
                 if (topBlock != null) {
-                    topBlock.onTouch(this);
+                    this.traceOnTouch(topBlock, "bodyTouch");
                 }
                 if (!this.crouching) {
                     topBlock = this.map.getBlockFromPos(x, y - 45, true);
                     if (topBlock != null) {
-                        topBlock.onTouch(this);
+                        this.traceOnTouch(topBlock, "headTouch");
                     }
                 }
             }
@@ -700,7 +897,7 @@ package character
         private function updateGrounded()
         {
             if (this.floorCenter != null && this.ceiling == null) {
-                this.floorCenter.onStand(this);
+                this.traceOnStand(this.floorCenter, "floorCenter");
                 this.refreshBlockRefs();
                 this.grounded = true;
             } else {
