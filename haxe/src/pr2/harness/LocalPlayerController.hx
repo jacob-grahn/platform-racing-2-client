@@ -134,6 +134,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var hurtFramesRemaining:Int = 0;
 	private var frozenSolidFramesRemaining:Int = 0;
 	private var facingDirection:Int = 1;
+	private var touchedBlockX:Null<Int> = null;
+	private var touchedBlockY:Null<Int> = null;
+	private var lastCollisionEvent:Null<String> = null;
 	public var facingScaleX(get, never):Int;
 	private var speedBurstFramesRemaining:Int = 0;
 	private var speedBurstFromItem:Bool = false;
@@ -175,6 +178,40 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public function setPosition(px:Float, py:Float):Void {
 		x = px;
 		y = py;
+	}
+
+	public function resetPreRacePosition(px:Float, py:Float):Void {
+		x = px;
+		y = py;
+		vx = 0;
+		vy = 0;
+		grounded = false;
+		crouching = false;
+		touchedBlock = null;
+		touchedBlockX = null;
+		touchedBlockY = null;
+		lastCollisionEvent = null;
+		lastItemEffect = null;
+		mode = MODE_LAND;
+		targetVelX = 0;
+		accelFactor = BASE_ACCEL_FACTOR;
+		jumpHeld = false;
+		jumpVelBoost = 0;
+		crouchCharge = 0;
+		waterTicks = 0;
+		standingTileX = tileIndex(x);
+		standingTileY = tileIndex(y);
+		lastSafeX = x;
+		lastSafeY = y;
+		rotateFramesRemaining = 0;
+		rotateDirection = 0;
+		hurtFramesRemaining = 0;
+		frozenSolidFramesRemaining = 0;
+		blockStates.clear();
+		blockVisualEvents.resize(0);
+		disabledTeleportFrames.clear();
+		pendingMinePlacements.resize(0);
+		pendingProjectileDamages.resize(0);
 	}
 
 	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
@@ -250,6 +287,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function step(input:LocalPlayerInput):Void {
+		x = Math.round(x);
+		y = Math.round(y);
+		hurtFramesRemaining--;
 		touchedBlock = null;
 		lastItemEffect = null;
 		animationLeft = input.left;
@@ -430,7 +470,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		targetVelX = 0;
 		position(input);
 		processBlocks(input);
-		hurtFramesRemaining--;
 		if (hurtFramesRemaining <= 0) {
 			setMode(MODE_LAND);
 		}
@@ -530,7 +569,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, characterState(), touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent);
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
@@ -649,7 +688,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	private function processBlocks(input:LocalPlayerInput):Void {
 		var refs = refreshBlockRefs();
-		updateGrounded(refs);
+		if (updateGrounded(refs)) {
+			refs = refreshBlockRefs();
+		}
 		if (santaHatActive) {
 			var floorTile = rotatedTileAtPixel(x, y);
 			var floorBlock = level.blockAt(floorTile.x, floorTile.y);
@@ -687,7 +728,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		}
 
 		if (!grounded) {
-			updateGrounded(refs);
+			if (updateGrounded(refs)) {
+				refs = refreshBlockRefs();
+			}
 		}
 
 		crouching = false;
@@ -768,15 +811,18 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		};
 	}
 
-	private function updateGrounded(refs:BlockRefs):Void {
+	private function updateGrounded(refs:BlockRefs):Bool {
 		if (refs.floorCenter != null && refs.ceiling == null) {
 			onStand(refs.floorCenter);
+			return true;
 		} else {
 			grounded = false;
+			return false;
 		}
 	}
 
 	private function onStand(block:LevelBlock):Void {
+		recordCollision(block, "stand");
 		touch(block);
 		var standForce = Math.round(vy * 2);
 		maybeFreezeSantaBlock(block);
@@ -790,6 +836,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function onBump(block:LevelBlock, input:LocalPlayerInput):Void {
+		recordCollision(block, "bump");
 		touch(block);
 		var bumpForce = Math.round(-vy);
 		var preBumpY = y;
@@ -812,6 +859,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function onLeftHit(block:LevelBlock):Void {
+		recordCollision(block, "leftHit");
 		touch(block);
 		var sideForce = Math.round(Math.abs(vx) * 1.75);
 		x = rotatedBlockPos(block).x - HALF_WIDTH;
@@ -825,6 +873,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function onRightHit(block:LevelBlock):Void {
+		recordCollision(block, "rightHit");
 		touch(block);
 		var sideForce = Math.round(Math.abs(vx) * 1.75);
 		x = rotatedBlockPos(block).x + level.tileSize + HALF_WIDTH;
@@ -1896,7 +1945,16 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function touch(block:Null<LevelBlock>):Void {
 		if (block != null) {
 			touchedBlock = block;
+			touchedBlockX = block.x;
+			touchedBlockY = block.y;
 		}
+	}
+
+	private function recordCollision(block:LevelBlock, event:String):Void {
+		touchedBlock = block;
+		touchedBlockX = block.x;
+		touchedBlockY = block.y;
+		lastCollisionEvent = event + ":" + Std.string(block.type) + "@" + block.x + "," + block.y;
 	}
 
 	private function characterState():CharacterState {

@@ -9,6 +9,8 @@ class ServerLevelFixtureAdapterTest {
 	public static function main():Void {
 		testConvertsServerCoordinatesToFixtureTiles();
 		testPreservesBlockOptions();
+		testOverlappingStartMarkerUsesRuntimeCollisionBlock();
+		testOverlappingRuntimeBlocksUseLastLoadedBlock();
 		testBlockTypesMatchInitialCollisionBehavior();
 		trace('ServerLevelFixtureAdapterTest passed $assertions assertions');
 	}
@@ -29,7 +31,7 @@ class ServerLevelFixtureAdapterTest {
 		assertEquals(3, fixture.playerStart.y, "start tile is air above start block");
 		assertEquals(7, fixture.finish.x, "finish tile x");
 		assertEquals(3, fixture.finish.y, "finish tile is air above finish block");
-		assertEquals(3, fixture.blocks.length, "block count preserved");
+		assertEquals(2, fixture.blocks.length, "spawn marker omitted from runtime blocks");
 
 		var playerStartWorldX = converted.fixturePixelToWorldX(fixture.playerStart.x * fixture.tileSize);
 		var playerFeetWorldY = converted.fixturePixelToWorldY((fixture.playerStart.y + 1) * fixture.tileSize);
@@ -51,6 +53,30 @@ class ServerLevelFixtureAdapterTest {
 
 		assertEquals(BlockType.Teleport, teleport.type, "teleport type preserved");
 		assertEquals("255", teleport.options, "teleport options preserved");
+	}
+
+	private static function testOverlappingStartMarkerUsesRuntimeCollisionBlock():Void {
+		var level = new ServerLevel(0xFFFFFF, [
+			new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_TELEPORT, 10020, 10050, "255")
+		]);
+		var fixture = ServerLevelFixtureAdapter.convert(level, 1).fixture;
+		var block = fixture.blockAt(4, 4);
+
+		assertEquals(BlockType.Teleport, block.type, "spawn marker skipped before collision lookup");
+		assertEquals("255", block.options, "overlapping runtime block preserves options");
+	}
+
+	private static function testOverlappingRuntimeBlocksUseLastLoadedBlock():Void {
+		var level = new ServerLevel(0xFFFFFF, [
+			new DecodedBlock(ObjectCodes.BLOCK_START1, 10020, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10050, 10050),
+			new DecodedBlock(ObjectCodes.BLOCK_MINE, 10050, 10050)
+		]);
+		var fixture = ServerLevelFixtureAdapter.convert(level, 1).fixture;
+		var block = fixture.blockAt(5, 4);
+
+		assertEquals(BlockType.Mine, block.type, "later runtime block overwrites earlier block");
 	}
 
 	private static function testBlockTypesMatchInitialCollisionBehavior():Void {

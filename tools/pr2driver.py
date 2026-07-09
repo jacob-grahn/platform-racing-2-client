@@ -194,6 +194,32 @@ def cmd_shot(out_path):
     os.unlink(raw)
     print(f"Shot saved: {out_path}")
 
+def _series_out_path(pattern, label_second, index):
+    return (
+        pattern
+        .replace("{elapsed}", str(label_second))
+        .replace("{elapsed03}", f"{label_second:03d}")
+        .replace("{index}", str(index))
+        .replace("{index03}", f"{index:03d}")
+    )
+
+def cmd_shot_series(pattern, duration, interval=1.0, start_second=0):
+    if duration < 0:
+        print("Shot series duration must be non-negative.", file=sys.stderr)
+        sys.exit(1)
+    if interval <= 0:
+        print("Shot series interval must be positive.", file=sys.stderr)
+        sys.exit(1)
+    started = time.monotonic()
+    count = int(duration / interval) + 1
+    for index in range(count):
+        due = started + index * interval
+        wait = due - time.monotonic()
+        if wait > 0:
+            time.sleep(wait)
+        label_second = int(round(start_second + index * interval))
+        cmd_shot(_series_out_path(pattern, label_second, index))
+
 def _flash_is_frontmost():
     script = 'tell application "System Events" to get frontmost of process "' + PROC_NAME + '"'
     return subprocess.check_output(["osascript", "-e", script], text=True).strip() == "true"
@@ -270,6 +296,13 @@ def cmd_sequence(script_path):
             cmd_hold(step["key"], step["seconds"])
         elif action == "shot":
             cmd_shot(step["out"])
+        elif action == "shotSeries":
+            cmd_shot_series(
+                step["out"],
+                _parse_seconds(step.get("duration", 0)),
+                _parse_seconds(step.get("interval", 1.0)),
+                int(step.get("startSecond", step["time"])),
+            )
         elif action == "quit":
             cmd_quit()
         else:

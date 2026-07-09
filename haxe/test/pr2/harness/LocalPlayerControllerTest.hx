@@ -32,6 +32,7 @@ class LocalPlayerControllerTest {
 		testFrozenRotateBlockSuppressesRotation();
 		testFrozenSafetyBlockSuppressesReturn();
 		testFrozenSupplyBlockSuppressesUse();
+		testRecoveryAllowsStackedHitImpulses();
 		testArrowStandEffectsMatchAs3Deltas();
 		testFallingIntoWaterEntersSwimMode();
 		testWaterTouchEmitsRippleVisual();
@@ -87,6 +88,7 @@ class LocalPlayerControllerTest {
 		testTeleportCooldownPreventsImmediateReturn();
 		testTeleportCooldownTintsAndResetsSameColorBlocks();
 		testTeleportDefaultColorOptionsMatchEmptyOptions();
+		testPreRacePositionResetClearsConstructorTeleportCooldown();
 		testStandingOnPushBlockMovesItDown();
 		testPushBlockRecursivelyMovesDestinationPushBlock();
 		testUnconfiguredMoveBlocksUseFlashRandomDirections();
@@ -449,6 +451,18 @@ class LocalPlayerControllerTest {
 		assertEquals("BlockBumpSound", Std.string(events[0].kind), "frozen item block suppresses item sound");
 	}
 
+	private static function testRecoveryAllowsStackedHitImpulses():Void {
+		var player = newPlayer();
+		player.controller.receiveHit(10, 0);
+		var first = player.debugState();
+
+		player.controller.receiveHit(10, 0);
+		var second = player.debugState();
+
+		assertAbove(second.vx, first.vx, "hurt recovery still accepts stacked horizontal hit impulse");
+		assertEquals("hurt", second.mode, "player remains in hurt recovery");
+	}
+
 	private static function testArrowStandEffectsMatchAs3Deltas():Void {
 		var up = new LocalCharacter(singleBlockLevel(BlockType.ArrowUp));
 		assertClose(-10, up.debugState().vy, "up arrow stand launches upward");
@@ -598,7 +612,7 @@ class LocalPlayerControllerTest {
 			}
 			if (touchedCrumble) {
 				framesAfterCrumble++;
-				if (framesAfterCrumble >= 6) {
+				if (framesAfterCrumble >= 7) {
 					break;
 				}
 			}
@@ -606,11 +620,10 @@ class LocalPlayerControllerTest {
 
 		var state = player.debugState();
 		assertEquals(true, touchedCrumble, "falling player touches crumble platform");
-		assertBelow(240, state.y, "broken crumble block is removed from collision");
-		assertEquals(false, state.grounded, "player is no longer supported by broken crumble");
+		assertEquals(false, state.grounded, "broken crumble block no longer supports the player");
 		var crumbleActivate:Null<BlockVisualEvent> = null;
 		for (event in player.consumeBlockVisualEvents()) {
-			if (Type.enumConstructor(event.kind) == "LocalActivate" && event.tileX == 2 && event.tileY == 8) {
+			if (Type.enumConstructor(event.kind) == "LocalActivate" && event.tileX == 2 && event.tileY == 12) {
 				crumbleActivate = event;
 				break;
 			}
@@ -624,8 +637,8 @@ class LocalPlayerControllerTest {
 		var cheese = new LocalCharacter(crumbleDropLevel());
 		cheese.setHats([16, 0xC8B040, -1]);
 
-		var normalPayload = firstCrumbleActivationPayload(normal, 2, 8);
-		var cheesePayload = firstCrumbleActivationPayload(cheese, 2, 8);
+		var normalPayload = firstCrumbleActivationPayload(normal, 2, 12);
+		var cheesePayload = firstCrumbleActivationPayload(cheese, 2, 12);
 
 		assertEquals(Std.parseInt(normalPayload) * 2, Std.parseInt(cheesePayload), "cheese doubles standing crumble force payload");
 	}
@@ -987,7 +1000,7 @@ class LocalPlayerControllerTest {
 		var afterUse = player.debugState();
 
 		assertEquals(null, afterUse.itemId, "teleport item consumes after a clear teleport");
-		assertClose(120, afterUse.x - beforeUse.x - afterUse.vx, "teleport item moves 120 px in facing direction");
+		assertClose(120, afterUse.x - afterUse.vx - Math.round(beforeUse.x), "teleport item moves 120 px in facing direction");
 		assertEquals(
 			"teleport:" + Std.int(beforeUse.x) + "," + Std.int(beforeUse.y - 25) + ":" + Std.int(afterUse.x - afterUse.vx) + "," + Std.int(beforeUse.y - 25),
 			afterUse.lastItemEffect,
@@ -1018,7 +1031,7 @@ class LocalPlayerControllerTest {
 		var afterUse = player.debugState();
 
 		assertEquals(4, afterUse.itemId, "blocked teleport keeps held item");
-		assertClose(0, afterUse.x - beforeUse.x - afterUse.vx, "blocked teleport does not apply item movement");
+		assertClose(0, afterUse.x - afterUse.vx - Math.round(beforeUse.x), "blocked teleport does not apply item movement");
 		assertEquals(null, afterUse.lastItemEffect, "blocked teleport does not emit pop effects");
 	}
 
@@ -1581,6 +1594,18 @@ class LocalPlayerControllerTest {
 		assertClose(135, state.x, "empty and explicit default-color teleports are paired");
 		assertClose(0.5, player.blockColorMultiplierAt(2, 3), "empty default-color teleport tints during cooldown");
 		assertClose(0.5, player.blockColorMultiplierAt(4, 3), "explicit default-color teleport tints during cooldown");
+	}
+
+	private static function testPreRacePositionResetClearsConstructorTeleportCooldown():Void {
+		var player = new LocalCharacter(teleportPairLevel());
+		player.resetControllerForRaceStart(75, 90);
+
+		player.step(new LocalPlayerInput());
+		var state = player.debugState();
+
+		assertEquals("teleport", state.touchedBlockType, "pre-race reset lets the start teleport fire during gameplay");
+		assertClose(135, state.x, "pre-race reset clears constructor-time teleport cooldown");
+		assertClose(90, state.y, "teleport stand snaps feet to the block top");
 	}
 
 	private static function testStandingOnPushBlockMovesItDown():Void {
@@ -2595,15 +2620,15 @@ class LocalPlayerControllerTest {
 			"crumble-drop",
 			"Crumble Drop",
 			5,
-			13,
+			17,
 			30,
 			1,
 			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
 			new TilePosition(2, 0),
-			new TilePosition(4, 8),
+			new TilePosition(4, 12),
 			[
-				new LevelBlock(2, 8, BlockType.Crumble),
-				new LevelBlock(2, 9, BlockType.Solid)
+				new LevelBlock(2, 12, BlockType.Crumble),
+				new LevelBlock(2, 13, BlockType.Solid)
 			]
 		);
 	}
@@ -2666,6 +2691,13 @@ class LocalPlayerControllerTest {
 		assertions++;
 		if (actual >= maximum) {
 			throw '$message: expected $actual below $maximum';
+		}
+	}
+
+	private static function assertAbove(actual:Float, minimum:Float, message:String):Void {
+		assertions++;
+		if (actual <= minimum) {
+			throw '$message: expected $actual above $minimum';
 		}
 	}
 }

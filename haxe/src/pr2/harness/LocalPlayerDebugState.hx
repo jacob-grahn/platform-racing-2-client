@@ -28,6 +28,9 @@ class LocalPlayerDebugState {
 	public final courseTime:Int;
 	public final jetPackActive:Bool;
 	public final speedBurstActive:Bool;
+	public final touchedBlockX:Null<Int>;
+	public final touchedBlockY:Null<Int>;
+	public final lastCollisionEvent:Null<String>;
 
 	public function new(
 		x:Float,
@@ -53,7 +56,10 @@ class LocalPlayerDebugState {
 		lives:Int = 3,
 		courseTime:Int = 120,
 		jetPackActive:Bool = false,
-		speedBurstActive:Bool = false
+		speedBurstActive:Bool = false,
+		?touchedBlockX:Null<Int>,
+		?touchedBlockY:Null<Int>,
+		?lastCollisionEvent:Null<String>
 	) {
 		this.x = x;
 		this.y = y;
@@ -80,15 +86,20 @@ class LocalPlayerDebugState {
 		this.courseTime = courseTime;
 		this.jetPackActive = jetPackActive;
 		this.speedBurstActive = speedBurstActive;
+		this.touchedBlockX = touchedBlockX;
+		this.touchedBlockY = touchedBlockY;
+		this.lastCollisionEvent = lastCollisionEvent;
 	}
 
 	public function serialize():String {
 		var touched = touchedBlockType == null ? "none" : touchedBlockType;
+		var touchedPos = touchedBlockX == null || touchedBlockY == null ? "none" : '$touchedBlockX,$touchedBlockY';
+		var event = lastCollisionEvent == null ? "none" : lastCollisionEvent;
 		var item = itemId == null ? "none" : Std.string(itemId);
 		var uses = itemUses == null ? "none" : Std.string(itemUses);
 		var effect = lastItemEffect == null ? "none" : lastItemEffect;
 		var finish = finishBlockId == null ? "none" : '$finishBlockId,$finishX,$finishY';
-		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation;lives=$lives;time=$courseTime;jet=$jetPackActive;sparkle=$speedBurstActive;finished=$finished;finish=$finish';
+		return 'x=${round3(x)};y=${round3(y)};vx=${round3(vx)};vy=${round3(vy)};grounded=$grounded;crouching=$crouching;animation=$animation;touched=$touched;touchedPos=$touchedPos;event=$event;mode=$mode;item=$item;itemUses=$uses;itemEffect=$effect;speed=${round3(speedStat)};accel=${round3(accelerationStat)};jump=${round3(jumpStat)};rotation=$courseRotation;lives=$lives;time=$courseTime;jet=$jetPackActive;sparkle=$speedBurstActive;finished=$finished;finish=$finish';
 	}
 
 	private static function round3(value:Float):Float {

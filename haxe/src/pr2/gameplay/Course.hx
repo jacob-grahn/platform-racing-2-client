@@ -229,6 +229,7 @@ class Course extends Sprite {
 		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
 		activeCommandHandler().defineCommand("activate", activateCommand);
 		buildStartPositions();
+		positionLocalAtStartCenter();
 
 		characterLayer = new Sprite();
 		characterLayer.addChild(player);
@@ -374,6 +375,21 @@ class Course extends Sprite {
 		}
 	}
 
+	private function positionLocalAtStartCenter():Void {
+		if (localCharacter == null || serverFixture == null || startPositions.length == 0) {
+			return;
+		}
+		var startIndex = LobbySession.tournamentMode ? 0 : localCharacter.tempID;
+		if (startIndex < 0 || startIndex >= startPositions.length) {
+			startIndex = 0;
+		}
+		var start = startPositions[startIndex];
+		localCharacter.resetControllerForRaceStart(
+			start.x - serverFixture.originTileX * ServerLevelFixtureAdapter.TILE_SIZE,
+			start.y - serverFixture.originTileY * ServerLevelFixtureAdapter.TILE_SIZE
+		);
+	}
+
 	private function maxCourseTimeSeconds():Int {
 		var parsed = Std.parseFloat(config.maxTime);
 		return Math.isNaN(parsed) ? 0 : Std.int(parsed);
@@ -444,6 +460,7 @@ class Course extends Sprite {
 		localCharacter.setStats(init.speed, init.accel, init.jump);
 		playerArray[init.tempId] = localCharacter;
 		registerLocalCommands(init.tempId);
+		positionLocalAtStartCenter();
 		return localCharacter;
 	}
 

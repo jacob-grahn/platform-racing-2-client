@@ -8,6 +8,7 @@ import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
 import pr2.harness.LocalPlayerDebugState;
+import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.BlockType;
 import pr2.level.FixtureLevel.LevelBlock;
@@ -56,6 +57,12 @@ class GameShellMountTest {
 		assertEquals(true, course.backCharacterLayer != null, "back character layer present");
 		assertEquals(true, course.localCharacter != null, "local character bridge mounted");
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
+		var start = @:privateAccess course.level.startBlocks()[0];
+		var initialState = course.localCharacter.debugState();
+		assertClose(start.x + 15, @:privateAccess course.serverFixture.fixturePixelToWorldX(initialState.x),
+			"local character spawns at Flash start center x");
+		assertClose(start.y + 15, @:privateAccess course.serverFixture.fixturePixelToWorldY(initialState.y),
+			"local character spawns at Flash start center y");
 		assertEquals(true, course.levelRenderer.worldChildDepth(course.backCharacterLayer) >= 0,
 			"back character layer sits inside the rotating world (above the background art)");
 		assertBelow(course.levelRenderer.worldChildDepth(course.backCharacterLayer), course.levelRenderer.blockLayerDepth(),
@@ -93,6 +100,7 @@ class GameShellMountTest {
 		testObjectiveModeReportsEachFinishOnce();
 		testRotateBlockDisplayKeepsLocalCharacterCentered();
 		testCountdownKeepsCameraStill();
+		testTournamentStartForcesFirstStartPosition();
 		testTimerBeginRaceAndTimeoutBoundary();
 
 		trace('GameShellMountTest passed $assertions assertions');
@@ -216,6 +224,52 @@ class GameShellMountTest {
 		vars.set("data", "large-render-test");
 		var data = new ServerLevelData(vars, true);
 		return new Course(level, data, LevelConfig.fromServerData(data));
+	}
+
+	private static function testTournamentStartForcesFirstStartPosition():Void {
+		var previousTournamentMode = LobbySession.tournamentMode;
+		LobbySession.tournamentMode = true;
+		var level = new ServerLevel(0xFFFFFF, [
+			new DecodedBlock(ObjectCodes.BLOCK_START1, 0, 0),
+			new DecodedBlock(ObjectCodes.BLOCK_START2, 210, 0),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 0, 30),
+			new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 210, 30)
+		]);
+		var vars:Map<String, String> = new Map();
+		vars.set("level_id", "45");
+		vars.set("title", "Tournament Start Test");
+		vars.set("song", "song1");
+		vars.set("gravity", "1");
+		vars.set("max_time", "120");
+		vars.set("gameMode", "race");
+		vars.set("items", "all");
+		vars.set("data", "tournament-start-test");
+		var data = new ServerLevelData(vars, true);
+		var course = new Course(level, data, LevelConfig.fromServerData(data));
+		course.createLocalCharacter({
+			tempId: 1,
+			speed: 50,
+			accel: 50,
+			jump: 50,
+			hatColor: 1,
+			headColor: 2,
+			bodyColor: 3,
+			feetColor: 4,
+			hatId: 1,
+			headId: 1,
+			bodyId: 1,
+			feetId: 1,
+			hatColor2: 5,
+			headColor2: 6,
+			bodyColor2: 7,
+			feetColor2: 8,
+			group: ""
+		});
+		var state = course.localCharacter.debugState();
+		assertClose(15, @:privateAccess course.serverFixture.fixturePixelToWorldX(state.x), "tournament local temp 1 uses first start x");
+		assertClose(15, @:privateAccess course.serverFixture.fixturePixelToWorldY(state.y), "tournament local temp 1 uses first start y");
+		course.remove();
+		LobbySession.tournamentMode = previousTournamentMode;
 	}
 
 	private static function testFinishDrawingReadinessEmission():Void {

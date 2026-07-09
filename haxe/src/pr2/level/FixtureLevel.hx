@@ -37,7 +37,10 @@ class FixtureLevel {
 	}
 
 	public function blockAt(x:Int, y:Int):Null<LevelBlock> {
-		for (block in blocks) {
+		var index = blocks.length;
+		while (index > 0) {
+			index--;
+			var block = blocks[index];
 			if (block.x == x && block.y == y) {
 				return block;
 			}

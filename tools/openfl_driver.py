@@ -760,8 +760,23 @@ def run_sequence_step(devtools, step, context=None):
         print(action)
     elif action == "shot":
         capture_devtools_shot(devtools, require_field(step, "out"))
+    elif action == "shotSeries":
+        capture_devtools_shot_series(
+            devtools,
+            require_field(step, "out"),
+            step.get("duration", 0),
+            step.get("interval", 1.0),
+            step.get("startSecond", int(step["time"])),
+        )
     elif action == "debug-state":
         validate_sequence_debug_state(devtools, step.get("expect", {}))
+    elif action == "debugStateSeries":
+        capture_debug_state_series(
+            devtools,
+            float(step.get("duration", 0)),
+            float(step.get("interval", 1.0)),
+            step.get("label", "debug"),
+        )
     elif action == "body-attribute":
         validate_sequence_body_attribute(devtools, require_field(step, "name"), require_field(step, "value"))
     else:
@@ -1049,6 +1064,37 @@ def capture_devtools_shot(devtools, out_path):
     )
 
 
+def series_out_path(pattern, label_second, index):
+    return (
+        pattern
+        .replace("{elapsed}", str(label_second))
+        .replace("{elapsed03}", f"{label_second:03d}")
+        .replace("{index}", str(index))
+        .replace("{index03}", f"{index:03d}")
+    )
+
+
+def capture_devtools_shot_series(devtools, pattern, duration, interval=1.0, start_second=0):
+    try:
+        duration = float(duration)
+        interval = float(interval)
+        start_second = int(start_second)
+    except (TypeError, ValueError):
+        raise SystemExit("shotSeries requires numeric duration, interval, and startSecond fields.")
+    if duration < 0:
+        raise SystemExit("shotSeries duration must be non-negative.")
+    if interval <= 0:
+        raise SystemExit("shotSeries interval must be positive.")
+    started = time.monotonic()
+    count = int(duration / interval) + 1
+    for index in range(count):
+        wait = started + index * interval - time.monotonic()
+        if wait > 0:
+            time.sleep(wait)
+        label_second = int(round(start_second + index * interval))
+        capture_devtools_shot(devtools, series_out_path(pattern, label_second, index))
+
+
 def validate_sequence_debug_state(devtools, expected):
     if not isinstance(expected, dict):
         raise SystemExit("debug-state expect must be an object of key/value pairs.")
@@ -1071,6 +1117,27 @@ def validate_sequence_debug_state(devtools, expected):
         raise SystemExit("Debug-state validation failed.")
     if expected:
         print(f"Debug-state validation passed ({len(expected)} expectations).")
+
+
+def capture_debug_state_series(devtools, duration, interval, label):
+    if duration < 0:
+        raise SystemExit("debugStateSeries duration must be non-negative.")
+    if interval <= 0:
+        raise SystemExit("debugStateSeries interval must be positive.")
+    started = time.monotonic()
+    count = int(duration / interval) + 1
+    last_state = None
+    for index in range(count):
+        wait = started + index * interval - time.monotonic()
+        if wait > 0:
+            time.sleep(wait)
+        state_text = wait_for_sequence_debug_state(devtools)
+        if not state_text:
+            print(f"Debug series {label} +{index * interval:.2f}s: <none>")
+            continue
+        if state_text != last_state:
+            print(f"Debug series {label} +{index * interval:.2f}s: {state_text}")
+            last_state = state_text
 
 
 def validate_sequence_body_attribute(devtools, name, expected_value):

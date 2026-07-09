@@ -338,6 +338,12 @@ class LocalCharacter extends Character {
 		syncFromController();
 	}
 
+	public function resetControllerForRaceStart(px:Float, py:Float):Void {
+		controller.resetPreRacePosition(px, py);
+		syncFromController();
+		forceExactPositionOnNextUpdate();
+	}
+
 	public function resetTestCourseState(startX:Float, startY:Float, maxTime:Int):Void {
 		controller.resetTestCourseState(startX, startY, maxTime);
 		syncFromController();

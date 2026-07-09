@@ -31,4 +31,16 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ### Gameplay, Effects, And Items
 
+- Finish "Don't Move JV" race parity. The shared e2e now captures one gameplay
+  screenshot per second for both clients under `test/output/dmjv-{target}/gameplay/`,
+  and the old Flash baseline screenshots show the race completing. Current Haxe
+  parity fixes include Flash-centered race start positioning, immediate collision
+  probe refresh after `onStand()`, Flash-style hurt-frame decrement timing,
+  runtime omission of start markers, and last-loaded block lookup for overlapping
+  tiles. The Haxe route still diverges in the first mine/arrow stack: after
+  `bump:mine@12,27`, the port side-collides with `basic@11,30`, snaps to
+  `x=370`, lands on `basic@12,31`, and never reaches Race Complete. The current
+  published Flash app launches headless in the harness, so a fresh frame trace
+  past this point still needs a working projector publish or another tracing path.
+
 ### Player Profile, Store, And UI Polish

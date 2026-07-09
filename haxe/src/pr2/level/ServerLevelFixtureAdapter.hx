@@ -21,6 +21,9 @@ class ServerLevelFixtureAdapter {
 
 		var blocks:Array<LevelBlock> = [];
 		for (block in level.blocks) {
+			if (isSpawnMarkerBlock(block.code)) {
+				continue;
+			}
 			blocks.push(new LevelBlock(
 				tileFloor(block.x) - minTileX,
 				tileFloor(block.y) - minTileY,
@@ -104,6 +107,10 @@ class ServerLevelFixtureAdapter {
 			default:
 				BlockType.Solid;
 		}
+	}
+
+	private static function isSpawnMarkerBlock(code:Int):Bool {
+		return (code >= ObjectCodes.BLOCK_START1 && code <= ObjectCodes.BLOCK_START4) || code == ObjectCodes.BLOCK_MINION_EGG;
 	}
 
 	private static function normalizedPosition(block:DecodedBlock, originTileX:Int, originTileY:Int):TilePosition {

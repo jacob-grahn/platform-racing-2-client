@@ -24,6 +24,7 @@ import pr2.gameplay.PlaceArtifact;
 import pr2.gameplay.PrizePopup;
 import pr2.gameplay.QuitButton;
 import pr2.gameplay.SpecialEvent;
+import pr2.harness.LocalPlayerDebugState;
 import pr2.lobby.LobbySession;
 import pr2.net.LobbySocket;
 import pr2.net.LevelDataClient;
@@ -120,7 +121,7 @@ class GamePage extends Page implements GameCommandDelegate {
 		try {
 			var level = ServerLevelDecoder.decode(data.data);
 			var config = LevelConfig.fromServerData(data);
-			course = new Course(level, data, config);
+			course = new Course(level, data, config, null, onCourseFrame);
 			course.onFinish = onLocalFinish;
 			course.onOutOfTime = onCourseOutOfTime;
 			if (pendingLocalInit != null) {
@@ -159,9 +160,14 @@ class GamePage extends Page implements GameCommandDelegate {
 		showError('Could not load level $levelId:\n$message');
 	}
 
+	private function onCourseFrame(state:LocalPlayerDebugState):Void {
+		pr2.app.DebugSignal.set("debug-state", 'phase=playable;${state.serialize()}');
+	}
+
 	override public function remove():Void {
 		pr2.app.DebugSignal.clear("race-phase");
 		pr2.app.DebugSignal.clear("remote-count");
+		pr2.app.DebugSignal.clear("debug-state");
 		if (commandShell != null) {
 			commandShell.remove();
 			commandShell = null;
