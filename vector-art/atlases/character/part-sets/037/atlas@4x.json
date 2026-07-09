@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/037/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 507,
+        "width": 564,
+        "x": 1253,
+        "y": 2
+      },
+      "id": 37,
+      "kind": "body",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/body/037_crocodile/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 507,
+        "width": 564,
+        "x": -508,
+        "y": -85
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 591,
+        "width": 504,
+        "x": 747,
+        "y": 2
+      },
+      "id": 37,
+      "kind": "body",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/body/037_crocodile/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 591,
+        "width": 504,
+        "x": -319,
+        "y": -95
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 621,
+        "width": 743,
+        "x": 2,
+        "y": 2
+      },
+      "id": 37,
+      "kind": "body",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/body/037_crocodile/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 621,
+        "width": 743,
+        "x": -544,
+        "y": -110
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 172,
+        "width": 354,
+        "x": 802,
+        "y": 625
+      },
+      "id": 37,
+      "kind": "feet",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/feet/037_crocodile/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 172,
+        "width": 354,
+        "x": -174,
+        "y": -41
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 207,
+        "width": 398,
+        "x": 2,
+        "y": 625
+      },
+      "id": 37,
+      "kind": "feet",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/feet/037_crocodile/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 207,
+        "width": 398,
+        "x": -181,
+        "y": -49
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 207,
+        "width": 398,
+        "x": 402,
+        "y": 625
+      },
+      "id": 37,
+      "kind": "feet",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/feet/037_crocodile/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 207,
+        "width": 398,
+        "x": -181,
+        "y": -49
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 354,
+        "width": 642,
+        "x": 2498,
+        "y": 2
+      },
+      "id": 37,
+      "kind": "head",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/head/037_crocodile/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 354,
+        "width": 642,
+        "x": -171,
+        "y": 84
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 255,
+        "width": 574,
+        "x": 3142,
+        "y": 2
+      },
+      "id": 37,
+      "kind": "head",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/head/037_crocodile/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 255,
+        "width": 574,
+        "x": -111,
+        "y": 210
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 414,
+        "width": 677,
+        "x": 1819,
+        "y": 2
+      },
+      "id": 37,
+      "kind": "head",
+      "part": "037_crocodile",
+      "png": "vector-art/png/character/head/037_crocodile/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 414,
+        "width": 677,
+        "x": -192,
+        "y": 67
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/037/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 37,
+  "size": {
+    "height": 834,
+    "width": 3718
+  }
+}

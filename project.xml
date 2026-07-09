@@ -14,16 +14,16 @@
 	     real outlines instead of browser faux-synthesis. -->
 	<assets path="assets/fonts" rename="assets/fonts" include="*.ttf" embed="true" />
 	<assets path="vector-art/png/blocks" rename="assets/blocks" />
-	<assets path="vector-art/atlases/character" rename="assets/character/atlases" />
+	<assets path="vector-art/atlases/character/hats" rename="assets/character/atlases/hats" embed="false" preload="false" />
+	<assets path="vector-art/atlases/character/part-sets" rename="assets/character/atlases/part-sets" embed="false" preload="false" />
 	<assets path="vector-art/atlases/intro" rename="assets/intro/atlases" />
 	<assets path="vector-art/png/login" rename="assets/login" />
-	<assets path="vector-art/png/backgrounds" rename="assets/backgrounds" />
+	<assets path="vector-art/png/backgrounds" rename="assets/backgrounds" include="*.webp" embed="false" preload="false" />
 	<assets path="vector-art/png/stamps" rename="assets/stamps" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />
 	<postbuild command="python3 tools/prune_html5_fonts.py" if="html5" />
-	<postbuild command="python3 tools/prune_html5_duplicate_atlases.py" if="html5" />
 	<postbuild command="python3 tools/minify_html5_js.py" if="html5" />
 
 	<!-- Flatten static, render-safe display subtrees into one cached GPU quad

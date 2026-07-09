@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/034/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 505,
+        "width": 338,
+        "x": 2234,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "body",
+      "part": "034_santa",
+      "png": "vector-art/png/character/body/034_santa/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 505,
+        "width": 338,
+        "x": -150,
+        "y": -55
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 565,
+        "width": 490,
+        "x": 1742,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "body",
+      "part": "034_santa",
+      "png": "vector-art/png/character/body/034_santa/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 565,
+        "width": 490,
+        "x": -187,
+        "y": -39
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 626,
+        "width": 530,
+        "x": 1210,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "body",
+      "part": "034_santa",
+      "png": "vector-art/png/character/body/034_santa/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 626,
+        "width": 530,
+        "x": -207,
+        "y": -78
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 233,
+        "width": 353,
+        "x": 3373,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "feet",
+      "part": "034_santa",
+      "png": "vector-art/png/character/feet/034_santa/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 233,
+        "width": 353,
+        "x": -144,
+        "y": -140
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 55,
+        "width": 255,
+        "x": 3728,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "feet",
+      "part": "034_santa",
+      "png": "vector-art/png/character/feet/034_santa/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 55,
+        "width": 255,
+        "x": -170,
+        "y": -173
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 296,
+        "width": 408,
+        "x": 2963,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "feet",
+      "part": "034_santa",
+      "png": "vector-art/png/character/feet/034_santa/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 296,
+        "width": 408,
+        "x": -182,
+        "y": -182
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 366,
+        "width": 387,
+        "x": 2574,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "head",
+      "part": "034_santa",
+      "png": "vector-art/png/character/head/034_santa/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 366,
+        "width": 387,
+        "x": -171,
+        "y": 118
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 635,
+        "width": 590,
+        "x": 618,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "head",
+      "part": "034_santa",
+      "png": "vector-art/png/character/head/034_santa/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 635,
+        "width": 590,
+        "x": -187,
+        "y": 98
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 655,
+        "width": 614,
+        "x": 2,
+        "y": 2
+      },
+      "id": 34,
+      "kind": "head",
+      "part": "034_santa",
+      "png": "vector-art/png/character/head/034_santa/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 655,
+        "width": 614,
+        "x": -198,
+        "y": 88
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/034/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 34,
+  "size": {
+    "height": 659,
+    "width": 3985
+  }
+}

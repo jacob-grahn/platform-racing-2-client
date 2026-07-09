@@ -1,0 +1,78 @@
+{
+  "atlasGroup": "character/part-sets/047/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 563,
+        "width": 548,
+        "x": 589,
+        "y": 2
+      },
+      "id": 47,
+      "kind": "head",
+      "part": "047_blobfish",
+      "png": "vector-art/png/character/head/047_blobfish/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 563,
+        "width": 548,
+        "x": -238,
+        "y": 73
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 195,
+        "width": 230,
+        "x": 1139,
+        "y": 2
+      },
+      "id": 47,
+      "kind": "head",
+      "part": "047_blobfish",
+      "png": "vector-art/png/character/head/047_blobfish/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 195,
+        "width": 230,
+        "x": 114,
+        "y": 296
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 571,
+        "width": 585,
+        "x": 2,
+        "y": 2
+      },
+      "id": 47,
+      "kind": "head",
+      "part": "047_blobfish",
+      "png": "vector-art/png/character/head/047_blobfish/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 571,
+        "width": 585,
+        "x": -240,
+        "y": 68
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/047/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 47,
+  "size": {
+    "height": 575,
+    "width": 1371
+  }
+}

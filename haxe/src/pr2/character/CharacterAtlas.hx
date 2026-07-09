@@ -4,8 +4,6 @@ import haxe.Json;
 import openfl.utils.Assets;
 
 class CharacterAtlas {
-	public final kind:String;
-	public final channel:String;
 	public final imagePath:String;
 	public final assetImagePath:String;
 	public final page:Int;
@@ -14,8 +12,6 @@ class CharacterAtlas {
 	public final frames:Map<String, CharacterAtlasFrame>;
 
 	public function new(
-		kind:String,
-		channel:String,
 		imagePath:String,
 		assetImagePath:String,
 		page:Int,
@@ -23,8 +19,6 @@ class CharacterAtlas {
 		size:AtlasSize,
 		frames:Map<String, CharacterAtlasFrame>
 	) {
-		this.kind = kind;
-		this.channel = channel;
 		this.imagePath = imagePath;
 		this.assetImagePath = assetImagePath;
 		this.page = page;
@@ -43,8 +37,6 @@ class CharacterAtlas {
 		var frames = parseFrames(requiredObject(data, "frames"));
 
 		return new CharacterAtlas(
-			requiredString(data, "kind"),
-			requiredString(data, "channel"),
 			imagePath,
 			resolveSiblingAssetPath(assetPath, imagePath),
 			requiredInt(data, "page"),
@@ -68,6 +60,16 @@ class CharacterAtlas {
 		return null;
 	}
 
+	public function getFrameName(kind:String, channel:String, id:Int):Null<String> {
+		for (name in frames.keys()) {
+			var frame = frames.get(name);
+			if (frame != null && frame.kind == kind && frame.channel == channel && frame.id == id) {
+				return name;
+			}
+		}
+		return null;
+	}
+
 	private static function parseFrames(data:Dynamic):Map<String, CharacterAtlasFrame> {
 		var frames:Map<String, CharacterAtlasFrame> = new Map();
 		for (name in Reflect.fields(data)) {
@@ -75,6 +77,8 @@ class CharacterAtlas {
 			frames.set(name, new CharacterAtlasFrame(
 				name,
 				requiredInt(frameData, "id", name),
+				requiredString(frameData, "kind", name),
+				requiredString(frameData, "channel", name),
 				requiredString(frameData, "png", name),
 				requiredInt(frameData, "scale", name),
 				parseRect(requiredObject(frameData, "frame", name), '$name.frame'),
@@ -176,14 +180,18 @@ class CharacterAtlas {
 class CharacterAtlasFrame {
 	public final name:String;
 	public final id:Int;
+	public final kind:String;
+	public final channel:String;
 	public final pngPath:String;
 	public final scale:Int;
 	public final frame:AtlasRect;
 	public final sourceTrim:AtlasSourceTrim;
 
-	public function new(name:String, id:Int, pngPath:String, scale:Int, frame:AtlasRect, sourceTrim:AtlasSourceTrim) {
+	public function new(name:String, id:Int, kind:String, channel:String, pngPath:String, scale:Int, frame:AtlasRect, sourceTrim:AtlasSourceTrim) {
 		this.name = name;
 		this.id = id;
+		this.kind = kind;
+		this.channel = channel;
 		this.pngPath = pngPath;
 		this.scale = scale;
 		this.frame = frame;

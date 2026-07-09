@@ -22,7 +22,7 @@ Shot options:
 
 Sequence script format:
   {
-    "query": "hat=16&render=composite",
+    "query": "hat=16",
     "steps": [
       {"time": 0.0, "action": "keyDown", "key": "right"},
       {"time": 1.0, "action": "keyUp", "key": "right"},

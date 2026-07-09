@@ -36,7 +36,7 @@ python3 tools/compare_screenshots.py test/baselines/openfl/lobby.png test/output
 ```sh
 haxelib run openfl build html5
 python3 tools/openfl_driver.py --delay 1.6 shot test/baselines/openfl/run_harness.png
-python3 tools/openfl_driver.py --delay 2.0 --query 'hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11&render=composite' shot test/output/openfl-character-outfit.png
+python3 tools/openfl_driver.py --delay 2.0 --query 'hat=16&head=37&body=29&feet=40&primary=aa00ff&secondary=00cc11' shot test/output/openfl-character-outfit.png
 python3 tools/openfl_driver.py --fps-duration 30 --fps-target 27 --fps-tolerance 5 fps
 python3 tools/compare_screenshots.py test/baselines/flash/07_gameplay_start.jpg test/baselines/openfl/run_harness.png --diff test/output/openfl-vs-flash-diff.png --metrics test/output/openfl-vs-flash-metrics.json --threshold-percent 100 --threshold-rms 255
 ```

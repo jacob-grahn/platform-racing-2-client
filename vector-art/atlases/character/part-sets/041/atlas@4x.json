@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/041/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 644,
+        "width": 637,
+        "x": 704,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "body",
+      "part": "041_bat",
+      "png": "vector-art/png/character/body/041_bat/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 644,
+        "width": 637,
+        "x": -474,
+        "y": -146
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 549,
+        "width": 650,
+        "x": 1343,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "body",
+      "part": "041_bat",
+      "png": "vector-art/png/character/body/041_bat/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 549,
+        "width": 650,
+        "x": -438,
+        "y": -89
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 661,
+        "width": 700,
+        "x": 2,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "body",
+      "part": "041_bat",
+      "png": "vector-art/png/character/body/041_bat/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 661,
+        "width": 700,
+        "x": -480,
+        "y": -161
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 240,
+        "width": 225,
+        "x": 3663,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "feet",
+      "part": "041_bat",
+      "png": "vector-art/png/character/feet/041_bat/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 240,
+        "width": 225,
+        "x": -122,
+        "y": -148
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 81,
+        "width": 161,
+        "x": 3890,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "feet",
+      "part": "041_bat",
+      "png": "vector-art/png/character/feet/041_bat/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 81,
+        "width": 161,
+        "x": -61,
+        "y": 54
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 302,
+        "width": 241,
+        "x": 3420,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "feet",
+      "part": "041_bat",
+      "png": "vector-art/png/character/feet/041_bat/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 302,
+        "width": 241,
+        "x": -130,
+        "y": -161
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 530,
+        "width": 489,
+        "x": 2492,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "head",
+      "part": "041_bat",
+      "png": "vector-art/png/character/head/041_bat/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 530,
+        "width": 489,
+        "x": -234,
+        "y": -11
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 397,
+        "width": 435,
+        "x": 2983,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "head",
+      "part": "041_bat",
+      "png": "vector-art/png/character/head/041_bat/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 397,
+        "width": 435,
+        "x": -202,
+        "y": 67
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 546,
+        "width": 495,
+        "x": 1995,
+        "y": 2
+      },
+      "id": 41,
+      "kind": "head",
+      "part": "041_bat",
+      "png": "vector-art/png/character/head/041_bat/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 546,
+        "width": 495,
+        "x": -237,
+        "y": -22
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/041/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 41,
+  "size": {
+    "height": 665,
+    "width": 4053
+  }
+}

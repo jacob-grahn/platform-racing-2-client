@@ -1,0 +1,1022 @@
+{
+  "atlasGroup": "character/hats/atlas",
+  "category": "character",
+  "characterAtlas": "hats",
+  "frames": {
+    "001_none/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 2553,
+        "y": 2378
+      },
+      "id": 1,
+      "kind": "hat",
+      "part": "001_none",
+      "png": "vector-art/png/character/hat/001_none/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "001_none/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 2556,
+        "y": 2378
+      },
+      "id": 1,
+      "kind": "hat",
+      "part": "001_none",
+      "png": "vector-art/png/character/hat/001_none/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "001_none/static": {
+      "channel": "static",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 2559,
+        "y": 2378
+      },
+      "id": 1,
+      "kind": "hat",
+      "part": "001_none",
+      "png": "vector-art/png/character/hat/001_none/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "002_exp/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 482,
+        "width": 588,
+        "x": 1305,
+        "y": 764
+      },
+      "id": 2,
+      "kind": "hat",
+      "part": "002_exp",
+      "png": "vector-art/png/character/hat/002_exp/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 482,
+        "width": 588,
+        "x": -356,
+        "y": -351
+      }
+    },
+    "002_exp/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 352,
+        "width": 167,
+        "x": 3042,
+        "y": 1699
+      },
+      "id": 2,
+      "kind": "hat",
+      "part": "002_exp",
+      "png": "vector-art/png/character/hat/002_exp/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 352,
+        "width": 167,
+        "x": -89,
+        "y": -340
+      }
+    },
+    "002_exp/static": {
+      "channel": "static",
+      "frame": {
+        "height": 516,
+        "width": 612,
+        "x": 2864,
+        "y": 2
+      },
+      "id": 2,
+      "kind": "hat",
+      "part": "002_exp",
+      "png": "vector-art/png/character/hat/002_exp/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 516,
+        "width": 612,
+        "x": -368,
+        "y": -373
+      }
+    },
+    "003_kong/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 407,
+        "width": 504,
+        "x": 2292,
+        "y": 1272
+      },
+      "id": 3,
+      "kind": "hat",
+      "part": "003_kong",
+      "png": "vector-art/png/character/hat/003_kong/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 407,
+        "width": 504,
+        "x": -255,
+        "y": -364
+      }
+    },
+    "003_kong/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 253,
+        "width": 258,
+        "x": 3165,
+        "y": 2087
+      },
+      "id": 3,
+      "kind": "hat",
+      "part": "003_kong",
+      "png": "vector-art/png/character/hat/003_kong/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 253,
+        "width": 258,
+        "x": -157,
+        "y": -285
+      }
+    },
+    "003_kong/static": {
+      "channel": "static",
+      "frame": {
+        "height": 431,
+        "width": 540,
+        "x": 2456,
+        "y": 764
+      },
+      "id": 3,
+      "kind": "hat",
+      "part": "003_kong",
+      "png": "vector-art/png/character/hat/003_kong/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 431,
+        "width": 540,
+        "x": -271,
+        "y": -375
+      }
+    },
+    "004_prop/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 383,
+        "width": 615,
+        "x": 558,
+        "y": 1699
+      },
+      "id": 4,
+      "kind": "hat",
+      "part": "004_prop",
+      "png": "vector-art/png/character/hat/004_prop/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 383,
+        "width": 615,
+        "x": -197,
+        "y": -346
+      }
+    },
+    "004_prop/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 325,
+        "width": 194,
+        "x": 3211,
+        "y": 1699
+      },
+      "id": 4,
+      "kind": "hat",
+      "part": "004_prop",
+      "png": "vector-art/png/character/hat/004_prop/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 325,
+        "width": 194,
+        "x": -75,
+        "y": -332
+      }
+    },
+    "004_prop/static": {
+      "channel": "static",
+      "frame": {
+        "height": 506,
+        "width": 766,
+        "x": 2,
+        "y": 764
+      },
+      "id": 4,
+      "kind": "hat",
+      "part": "004_prop",
+      "png": "vector-art/png/character/hat/004_prop/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 506,
+        "width": 766,
+        "x": -337,
+        "y": -458
+      }
+    },
+    "005_cowboy/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 386,
+        "width": 554,
+        "x": 2,
+        "y": 1699
+      },
+      "id": 5,
+      "kind": "hat",
+      "part": "005_cowboy",
+      "png": "vector-art/png/character/hat/005_cowboy/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 386,
+        "width": 554,
+        "x": -270,
+        "y": -371
+      }
+    },
+    "005_cowboy/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 418,
+        "width": 584,
+        "x": 516,
+        "y": 1272
+      },
+      "id": 5,
+      "kind": "hat",
+      "part": "005_cowboy",
+      "png": "vector-art/png/character/hat/005_cowboy/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 418,
+        "width": 584,
+        "x": -286,
+        "y": -390
+      }
+    },
+    "005_cowboy/static": {
+      "channel": "static",
+      "frame": {
+        "height": 418,
+        "width": 584,
+        "x": 1102,
+        "y": 1272
+      },
+      "id": 5,
+      "kind": "hat",
+      "part": "005_cowboy",
+      "png": "vector-art/png/character/hat/005_cowboy/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 418,
+        "width": 584,
+        "x": -286,
+        "y": -390
+      }
+    },
+    "006_crown/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 267,
+        "width": 397,
+        "x": 2305,
+        "y": 2087
+      },
+      "id": 6,
+      "kind": "hat",
+      "part": "006_crown",
+      "png": "vector-art/png/character/hat/006_crown/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 267,
+        "width": 397,
+        "x": -228,
+        "y": -302
+      }
+    },
+    "006_crown/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 136,
+        "width": 456,
+        "x": 1530,
+        "y": 2378
+      },
+      "id": 6,
+      "kind": "hat",
+      "part": "006_crown",
+      "png": "vector-art/png/character/hat/006_crown/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 136,
+        "width": 456,
+        "x": -266,
+        "y": -386
+      }
+    },
+    "006_crown/static": {
+      "channel": "static",
+      "frame": {
+        "height": 376,
+        "width": 476,
+        "x": 1175,
+        "y": 1699
+      },
+      "id": 6,
+      "kind": "hat",
+      "part": "006_crown",
+      "png": "vector-art/png/character/hat/006_crown/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 376,
+        "width": 476,
+        "x": -273,
+        "y": -394
+      }
+    },
+    "007_santa/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 271,
+        "width": 444,
+        "x": 840,
+        "y": 2087
+      },
+      "id": 7,
+      "kind": "hat",
+      "part": "007_santa",
+      "png": "vector-art/png/character/hat/007_santa/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 271,
+        "width": 444,
+        "x": -319,
+        "y": -344
+      }
+    },
+    "007_santa/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 235,
+        "width": 571,
+        "x": 2,
+        "y": 2378
+      },
+      "id": 7,
+      "kind": "hat",
+      "part": "007_santa",
+      "png": "vector-art/png/character/hat/007_santa/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 235,
+        "width": 571,
+        "x": -340,
+        "y": -193
+      }
+    },
+    "007_santa/static": {
+      "channel": "static",
+      "frame": {
+        "height": 413,
+        "width": 602,
+        "x": 1688,
+        "y": 1272
+      },
+      "id": 7,
+      "kind": "hat",
+      "part": "007_santa",
+      "png": "vector-art/png/character/hat/007_santa/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 413,
+        "width": 602,
+        "x": -351,
+        "y": -362
+      }
+    },
+    "008_party/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 365,
+        "width": 269,
+        "x": 2216,
+        "y": 1699
+      },
+      "id": 8,
+      "kind": "hat",
+      "part": "008_party",
+      "png": "vector-art/png/character/hat/008_party/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 365,
+        "width": 269,
+        "x": -120,
+        "y": -364
+      }
+    },
+    "008_party/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 441,
+        "width": 260,
+        "x": 2194,
+        "y": 764
+      },
+      "id": 8,
+      "kind": "hat",
+      "part": "008_party",
+      "png": "vector-art/png/character/hat/008_party/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 441,
+        "width": 260,
+        "x": -131,
+        "y": -450
+      }
+    },
+    "008_party/static": {
+      "channel": "static",
+      "frame": {
+        "height": 460,
+        "width": 297,
+        "x": 1895,
+        "y": 764
+      },
+      "id": 8,
+      "kind": "hat",
+      "part": "008_party",
+      "png": "vector-art/png/character/hat/008_party/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 460,
+        "width": 297,
+        "x": -132,
+        "y": -450
+      }
+    },
+    "009_top/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 157,
+        "width": 263,
+        "x": 903,
+        "y": 2378
+      },
+      "id": 9,
+      "kind": "hat",
+      "part": "009_top",
+      "png": "vector-art/png/character/hat/009_top/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 157,
+        "width": 263,
+        "x": -152,
+        "y": -192
+      }
+    },
+    "009_top/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 401,
+        "width": 386,
+        "x": 3304,
+        "y": 1272
+      },
+      "id": 9,
+      "kind": "hat",
+      "part": "009_top",
+      "png": "vector-art/png/character/hat/009_top/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 401,
+        "width": 386,
+        "x": -242,
+        "y": -401
+      }
+    },
+    "009_top/static": {
+      "channel": "static",
+      "frame": {
+        "height": 501,
+        "width": 533,
+        "x": 770,
+        "y": 764
+      },
+      "id": 9,
+      "kind": "hat",
+      "part": "009_top",
+      "png": "vector-art/png/character/hat/009_top/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 501,
+        "width": 533,
+        "x": -287,
+        "y": -439
+      }
+    },
+    "010_jump_start/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 268,
+        "width": 465,
+        "x": 1838,
+        "y": 2087
+      },
+      "id": 10,
+      "kind": "hat",
+      "part": "010_jump_start",
+      "png": "vector-art/png/character/hat/010_jump_start/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 268,
+        "width": 465,
+        "x": -214,
+        "y": -240
+      }
+    },
+    "010_jump_start/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 231,
+        "width": 326,
+        "x": 575,
+        "y": 2378
+      },
+      "id": 10,
+      "kind": "hat",
+      "part": "010_jump_start",
+      "png": "vector-art/png/character/hat/010_jump_start/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 231,
+        "width": 326,
+        "x": -263,
+        "y": -233
+      }
+    },
+    "010_jump_start/static": {
+      "channel": "static",
+      "frame": {
+        "height": 760,
+        "width": 583,
+        "x": 2,
+        "y": 2
+      },
+      "id": 10,
+      "kind": "hat",
+      "part": "010_jump_start",
+      "png": "vector-art/png/character/hat/010_jump_start/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 760,
+        "width": 583,
+        "x": -318,
+        "y": -443
+      }
+    },
+    "011_moon/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 554,
+        "width": 433,
+        "x": 2429,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "hat",
+      "part": "011_moon",
+      "png": "vector-art/png/character/hat/011_moon/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 554,
+        "width": 433,
+        "x": -255,
+        "y": -268
+      }
+    },
+    "011_moon/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 108,
+        "width": 95,
+        "x": 2456,
+        "y": 2378
+      },
+      "id": 11,
+      "kind": "hat",
+      "part": "011_moon",
+      "png": "vector-art/png/character/hat/011_moon/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 108,
+        "width": 95,
+        "x": -159,
+        "y": -172
+      }
+    },
+    "011_moon/static": {
+      "channel": "static",
+      "frame": {
+        "height": 589,
+        "width": 482,
+        "x": 1945,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "hat",
+      "part": "011_moon",
+      "png": "vector-art/png/character/hat/011_moon/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 589,
+        "width": 482,
+        "x": -275,
+        "y": -286
+      }
+    },
+    "012_thief/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 271,
+        "width": 550,
+        "x": 1286,
+        "y": 2087
+      },
+      "id": 12,
+      "kind": "hat",
+      "part": "012_thief",
+      "png": "vector-art/png/character/hat/012_thief/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 271,
+        "width": 550,
+        "x": -239,
+        "y": -210
+      }
+    },
+    "012_thief/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 125,
+        "width": 466,
+        "x": 1988,
+        "y": 2378
+      },
+      "id": 12,
+      "kind": "hat",
+      "part": "012_thief",
+      "png": "vector-art/png/character/hat/012_thief/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 125,
+        "width": 466,
+        "x": -516,
+        "y": -180
+      }
+    },
+    "012_thief/static": {
+      "channel": "static",
+      "frame": {
+        "height": 289,
+        "width": 836,
+        "x": 2,
+        "y": 2087
+      },
+      "id": 12,
+      "kind": "hat",
+      "part": "012_thief",
+      "png": "vector-art/png/character/hat/012_thief/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 289,
+        "width": 836,
+        "x": -516,
+        "y": -219
+      }
+    },
+    "013_jigg/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 407,
+        "width": 504,
+        "x": 2798,
+        "y": 1272
+      },
+      "id": 13,
+      "kind": "hat",
+      "part": "013_jigg",
+      "png": "vector-art/png/character/hat/013_jigg/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 407,
+        "width": 504,
+        "x": -255,
+        "y": -364
+      }
+    },
+    "013_jigg/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 431,
+        "width": 540,
+        "x": 2998,
+        "y": 764
+      },
+      "id": 13,
+      "kind": "hat",
+      "part": "013_jigg",
+      "png": "vector-art/png/character/hat/013_jigg/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 431,
+        "width": 540,
+        "x": -271,
+        "y": -375
+      }
+    },
+    "013_jigg/static": {
+      "channel": "static",
+      "frame": {
+        "height": 431,
+        "width": 540,
+        "x": 3540,
+        "y": 764
+      },
+      "id": 13,
+      "kind": "hat",
+      "part": "013_jigg",
+      "png": "vector-art/png/character/hat/013_jigg/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 431,
+        "width": 540,
+        "x": -271,
+        "y": -375
+      }
+    },
+    "014_artifact/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 2562,
+        "y": 2378
+      },
+      "id": 14,
+      "kind": "hat",
+      "part": "014_artifact",
+      "png": "vector-art/png/character/hat/014_artifact/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "014_artifact/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 140,
+        "width": 360,
+        "x": 1168,
+        "y": 2378
+      },
+      "id": 14,
+      "kind": "hat",
+      "part": "014_artifact",
+      "png": "vector-art/png/character/hat/014_artifact/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 140,
+        "width": 360,
+        "x": -190,
+        "y": -382
+      }
+    },
+    "014_artifact/static": {
+      "channel": "static",
+      "frame": {
+        "height": 707,
+        "width": 773,
+        "x": 587,
+        "y": 2
+      },
+      "id": 14,
+      "kind": "hat",
+      "part": "014_artifact",
+      "png": "vector-art/png/character/hat/014_artifact/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 707,
+        "width": 773,
+        "x": -455,
+        "y": -655
+      }
+    },
+    "015_jellyfish/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 425,
+        "width": 512,
+        "x": 2,
+        "y": 1272
+      },
+      "id": 15,
+      "kind": "hat",
+      "part": "015_jellyfish",
+      "png": "vector-art/png/character/hat/015_jellyfish/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 425,
+        "width": 512,
+        "x": -252,
+        "y": -334
+      }
+    },
+    "015_jellyfish/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 253,
+        "width": 364,
+        "x": 3425,
+        "y": 2087
+      },
+      "id": 15,
+      "kind": "hat",
+      "part": "015_jellyfish",
+      "png": "vector-art/png/character/hat/015_jellyfish/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 253,
+        "width": 364,
+        "x": -176,
+        "y": -172
+      }
+    },
+    "015_jellyfish/static": {
+      "channel": "static",
+      "frame": {
+        "height": 698,
+        "width": 581,
+        "x": 1362,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "hat",
+      "part": "015_jellyfish",
+      "png": "vector-art/png/character/hat/015_jellyfish/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 698,
+        "width": 581,
+        "x": -253,
+        "y": -335
+      }
+    },
+    "016_cheese/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 361,
+        "width": 553,
+        "x": 2487,
+        "y": 1699
+      },
+      "id": 16,
+      "kind": "hat",
+      "part": "016_cheese",
+      "png": "vector-art/png/character/hat/016_cheese/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 361,
+        "width": 553,
+        "x": -253,
+        "y": -286
+      }
+    },
+    "016_cheese/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 266,
+        "width": 459,
+        "x": 2704,
+        "y": 2087
+      },
+      "id": 16,
+      "kind": "hat",
+      "part": "016_cheese",
+      "png": "vector-art/png/character/hat/016_cheese/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 266,
+        "width": 459,
+        "x": -185,
+        "y": -284
+      }
+    },
+    "016_cheese/static": {
+      "channel": "static",
+      "frame": {
+        "height": 376,
+        "width": 561,
+        "x": 1653,
+        "y": 1699
+      },
+      "id": 16,
+      "kind": "hat",
+      "part": "016_cheese",
+      "png": "vector-art/png/character/hat/016_cheese/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 376,
+        "width": 561,
+        "x": -257,
+        "y": -292
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/hats/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "size": {
+    "height": 2615,
+    "width": 4082
+  }
+}

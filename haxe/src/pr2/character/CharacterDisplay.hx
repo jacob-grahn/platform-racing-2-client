@@ -4,7 +4,6 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
 import pr2.character.CharacterAppearance.CharacterPartIds;
-import pr2.character.CharacterRenderMode;
 import pr2.runtime.PR2MovieClip;
 import StringTools;
 
@@ -35,9 +34,7 @@ class CharacterDisplay extends Sprite {
 	private static inline var ATLAS_LAYER_NAME:String = "__atlasLayer";
 
 	public final clip:PR2MovieClip;
-	public var renderMode(default, null):CharacterRenderMode;
 
-	private final atlases:Map<String, CharacterAtlasCollection> = new Map();
 	private var partIds:CharacterPartIds;
 	private var primaryColor:Int;
 	private var secondaryColor:Int;
@@ -55,12 +52,11 @@ class CharacterDisplay extends Sprite {
 	private var idleTicking:Bool = false;
 	private var superJumpWobbleRandom:Void->Float = Math.random;
 
-	public function new(?partIds:CharacterPartIds, ?colors:CharacterColors, ?initialRenderMode:CharacterRenderMode) {
+	public function new(?partIds:CharacterPartIds, ?colors:CharacterColors) {
 		super();
 		this.partIds = partIds == null ? {hat: 1, head: 1, body: 1, feet: 1} : partIds;
 		primaryColor = colors != null && colors.primary != null ? colors.primary : 0x2E8BFF;
 		secondaryColor = colors != null && colors.secondary != null ? colors.secondary : 0xFFD24A;
-		renderMode = initialRenderMode == null ? CharacterRenderMode.Layered : initialRenderMode;
 
 		// The authored CharacterGraphic keeps the frozenSolidAnim state on an
 		// eye-hidden layer. PR2MovieClip renders every layer regardless of its
@@ -78,6 +74,7 @@ class CharacterDisplay extends Sprite {
 
 	public function setPartIds(partIds:CharacterPartIds):Void {
 		this.partIds = partIds;
+		requestPartAtlases();
 		CharacterAppearance.applyPartIds(clip, partIds);
 		if (activeStateClip != null) {
 			renderAtlasParts(activeStateClip);
@@ -116,15 +113,23 @@ class CharacterDisplay extends Sprite {
 		return partOverride != null ? partOverride : {primary: primaryColor, secondary: secondaryColor};
 	}
 
-	public function setRenderMode(renderMode:CharacterRenderMode):Void {
-		if (this.renderMode == renderMode) {
-			return;
-		}
+	private function requestPartAtlases():Void {
+		requestPartAtlas("head", partIds.head);
+		requestPartAtlas("body", partIds.body);
+		requestPartAtlas("feet", partIds.feet);
 
-		this.renderMode = renderMode;
-		if (activeStateClip != null) {
-			renderAtlasParts(activeStateClip);
+		var hats = partIds.hats != null ? partIds.hats : [partIds.hat, 1, 1, 1];
+		for (hatId in hats) {
+			requestPartAtlas("hat", hatId);
 		}
+	}
+
+	private function requestPartAtlas(kind:String, partId:Int):Void {
+		CharacterPartSetLoader.requestPart(kind, partId, function():Void {
+			if (activeStateClip != null) {
+				renderAtlasParts(activeStateClip);
+			}
+		});
 	}
 
 	public function setState(stateName:String):Void {
@@ -270,15 +275,6 @@ class CharacterDisplay extends Sprite {
 		scaleY = (superJumpWobbleRandom() * amount + (100 - amount / 2)) / 100;
 	}
 
-	private function renderAtlasPartsForAllStates():Void {
-		for (name in STATE_NAMES) {
-			var stateClip = getClipChild(clip, name);
-			if (stateClip != null) {
-				renderAtlasParts(stateClip);
-			}
-		}
-	}
-
 	private function applyItemFrame():Void {
 		for (name in STATE_NAMES) {
 			var stateClip = getClipChild(clip, name);
@@ -317,30 +313,42 @@ class CharacterDisplay extends Sprite {
 		hideExistingChildren(partClip);
 
 		var yOffset = kind == "hat" ? -partClip.transform.matrix.ty : 0;
-		var layeredFrameName = frameNameForChannels(kind, partId, ["static", "primary", "secondary"]);
-		var compositeFrameName = frameNameForChannels(kind, partId, ["composite"]);
+		var layeredFrameName = frameNameForChannel(kind, partId, "static");
 
-		if (renderMode == CharacterRenderMode.Composite || layeredFrameName == null) {
-			renderCompositePartSlot(partClip, kind, compositeFrameName, yOffset);
+		if (layeredFrameName == null) {
+			renderWireframePartSlot(partClip, kind, yOffset);
 			return;
 		}
 
-		renderLayeredPartSlot(partClip, kind, layeredFrameName, yOffset, slotColor != null ? slotColor : colorFor(kind));
+		renderLayeredPartSlot(partClip, kind, partId, yOffset, slotColor != null ? slotColor : colorFor(kind));
 	}
 
 	private function colorForHatSlot(slot:Int):PartColor {
 		return hatSlotColors.length > slot ? hatSlotColors[slot] : colorFor("hat");
 	}
 
-	private function renderLayeredPartSlot(partClip:PR2MovieClip, kind:String, frameName:String, yOffset:Float, color:PartColor):Void {
-		ensureAtlasLayer(partClip, kind, "static", frameName, null, yOffset);
-		ensureChannelAtlasLayer(partClip, kind, "colorMC", "primary", frameName, color.primary, yOffset);
+	private function renderLayeredPartSlot(partClip:PR2MovieClip, kind:String, partId:Int, yOffset:Float, color:PartColor):Void {
+		var staticFrameName = frameNameForChannel(kind, partId, "static");
+		var primaryFrameName = frameNameForChannel(kind, partId, "primary");
+		var secondaryFrameName = frameNameForChannel(kind, partId, "secondary");
+
+		if (staticFrameName == null || primaryFrameName == null) {
+			renderWireframePartSlot(partClip, kind, yOffset);
+			return;
+		}
+
+		ensureAtlasLayer(partClip, kind, "static", staticFrameName, null, yOffset);
+		ensureChannelAtlasLayer(partClip, kind, "colorMC", "primary", primaryFrameName, color.primary, yOffset);
 		if (color.secondary >= 0) {
-			ensureChannelAtlasLayer(partClip, kind, "colorMC2", "secondary", frameName, color.secondary, yOffset);
+			if (secondaryFrameName != null) {
+				ensureChannelAtlasLayer(partClip, kind, "colorMC2", "secondary", secondaryFrameName, color.secondary, yOffset);
+			} else {
+				hideChannelAtlasLayer(partClip, kind, "colorMC2", "secondary");
+			}
 		} else {
 			hideChannelAtlasLayer(partClip, kind, "colorMC2", "secondary");
 		}
-		removeAtlasLayer(partClip, kind, "composite");
+		removeAtlasLayer(partClip, kind, "wireframe");
 		removeUnusedAtlasLayers(partClip, kind, ["static", "primary", "secondary"]);
 
 		// The static line art must sit in front of the colorMC/colorMC2 fill
@@ -356,20 +364,11 @@ class CharacterDisplay extends Sprite {
 		}
 	}
 
-	private function renderCompositePartSlot(partClip:PR2MovieClip, kind:String, frameName:Null<String>, yOffset:Float):Void {
+	private function renderWireframePartSlot(partClip:PR2MovieClip, kind:String, yOffset:Float):Void {
 		hideChannelAtlasLayer(partClip, kind, "colorMC", "primary");
 		hideChannelAtlasLayer(partClip, kind, "colorMC2", "secondary");
-
-		if (frameName == null) {
-			removeAtlasLayers(partClip);
-			return;
-		}
-
-		ensureAtlasLayer(partClip, kind, "composite", frameName, null, yOffset);
-		removeAtlasLayer(partClip, kind, "static");
-		removeAtlasLayer(partClip, kind, "primary");
-		removeAtlasLayer(partClip, kind, "secondary");
-		removeUnusedAtlasLayers(partClip, kind, ["composite"]);
+		removeAtlasLayers(partClip);
+		ensureWireframeLayer(partClip, kind, yOffset);
 	}
 
 	private function ensureChannelAtlasLayer(
@@ -426,29 +425,67 @@ class CharacterDisplay extends Sprite {
 		partClip.addChildAt(sprite, atlasLayerCount(partClip));
 	}
 
-	private function frameNameForChannels(kind:String, partId:Int, channels:Array<String>):Null<String> {
-		for (channel in channels) {
-			var collection = atlasCollection(kind, channel);
-			var frameName = collection.getFrameNameById(partId);
-			if (frameName != null) {
-				return frameName;
-			}
+	private function ensureWireframeLayer(partClip:PR2MovieClip, kind:String, yOffset:Float):Void {
+		var existing = findWireframeLayer(partClip, kind);
+		if (existing != null) {
+			existing.visible = true;
+			existing.y = yOffset;
+			return;
 		}
-		return null;
+
+		var sprite = new Sprite();
+		sprite.name = atlasLayerName(kind, "wireframe");
+		sprite.y = yOffset;
+		drawWireframe(sprite, kind);
+		partClip.addChildAt(sprite, atlasLayerCount(partClip));
+	}
+
+	private function drawWireframe(sprite:Sprite, kind:String):Void {
+		var width = switch (kind) {
+			case "hat": 34;
+			case "head": 46;
+			case "body": 52;
+			case "feet": 34;
+			default: 40;
+		}
+		var height = switch (kind) {
+			case "hat": 20;
+			case "head": 46;
+			case "body": 58;
+			case "feet": 18;
+			default: 40;
+		}
+		sprite.graphics.lineStyle(1, 0x00FFFF, 0.75);
+		sprite.graphics.beginFill(0x00FFFF, 0.08);
+		sprite.graphics.drawRect(-width / 2, -height / 2, width, height);
+		sprite.graphics.endFill();
+		sprite.graphics.moveTo(-width / 2, -height / 2);
+		sprite.graphics.lineTo(width / 2, height / 2);
+		sprite.graphics.moveTo(width / 2, -height / 2);
+		sprite.graphics.lineTo(-width / 2, height / 2);
+	}
+
+	private function frameNameForChannel(kind:String, partId:Int, channel:String):Null<String> {
+		var atlas = CharacterPartSetLoader.atlasForPart(kind, partId);
+		if (atlas == null) {
+			return null;
+		}
+		return atlas.getFrameName(kind, channel, partId);
 	}
 
 	private function atlasForFrame(kind:String, channel:String, frameName:String):Null<CharacterAtlas> {
-		return atlasCollection(kind, channel).getAtlasForFrame(frameName);
-	}
-
-	private function atlasCollection(kind:String, channel:String):CharacterAtlasCollection {
-		var key = kind + "/" + channel;
-		var collection = atlases.get(key);
-		if (collection == null) {
-			collection = CharacterAtlasCollection.load(kind, channel);
-			atlases.set(key, collection);
+		var partId = switch (kind) {
+			case "head": partIds.head;
+			case "body": partIds.body;
+			case "feet": partIds.feet;
+			case "hat": 1;
+			default: 1;
 		}
-		return collection;
+		var atlas = CharacterPartSetLoader.atlasForPart(kind, partId);
+		if (atlas != null && atlas.getFrame(frameName) != null) {
+			return atlas;
+		}
+		return null;
 	}
 
 	// Walk children back-to-front removing every atlas layer for which `keep`
@@ -493,6 +530,17 @@ class CharacterDisplay extends Sprite {
 			var child = parent.getChildAt(i);
 			if (child.name == layerName) {
 				return Std.downcast(child, CharacterAtlasFrameSprite);
+			}
+		}
+		return null;
+	}
+
+	private function findWireframeLayer(parent:PR2MovieClip, kind:String):Null<Sprite> {
+		var layerName = atlasLayerName(kind, "wireframe");
+		for (i in 0...parent.numChildren) {
+			var child = parent.getChildAt(i);
+			if (child.name == layerName) {
+				return Std.downcast(child, Sprite);
 			}
 		}
 		return null;

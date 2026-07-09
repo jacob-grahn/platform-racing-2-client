@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/039/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 446,
+        "width": 498,
+        "x": 1531,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "body",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/body/039_bunny/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 446,
+        "width": 498,
+        "x": -172,
+        "y": -6
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 261,
+        "width": 478,
+        "x": 2754,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "body",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/body/039_bunny/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 261,
+        "width": 478,
+        "x": 80,
+        "y": -48
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 497,
+        "width": 747,
+        "x": 2,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "body",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/body/039_bunny/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 497,
+        "width": 747,
+        "x": -189,
+        "y": -48
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 410,
+        "width": 264,
+        "x": 2488,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "feet",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/feet/039_bunny/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 410,
+        "width": 264,
+        "x": -186,
+        "y": -303
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 133,
+        "width": 197,
+        "x": 3234,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "feet",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/feet/039_bunny/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 133,
+        "width": 197,
+        "x": -141,
+        "y": -78
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 456,
+        "width": 285,
+        "x": 1244,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "feet",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/feet/039_bunny/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 456,
+        "width": 285,
+        "x": -198,
+        "y": -338
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 430,
+        "width": 455,
+        "x": 2031,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "head",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/head/039_bunny/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 430,
+        "width": 455,
+        "x": -205,
+        "y": 74
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 59,
+        "width": 71,
+        "x": 3433,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "head",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/head/039_bunny/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 59,
+        "width": 71,
+        "x": -208,
+        "y": 411
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 466,
+        "width": 491,
+        "x": 751,
+        "y": 2
+      },
+      "id": 39,
+      "kind": "head",
+      "part": "039_bunny",
+      "png": "vector-art/png/character/head/039_bunny/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 466,
+        "width": 491,
+        "x": -221,
+        "y": 54
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/039/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 39,
+  "size": {
+    "height": 501,
+    "width": 3506
+  }
+}

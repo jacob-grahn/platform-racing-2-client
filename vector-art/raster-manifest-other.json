@@ -24,12 +24,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 400.0,
-        "width": 550.0,
-        "x": 0.0,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg1@4x.png",
+      "png": "vector-art/png/backgrounds/bg1@4x.webp",
       "scale": 4,
       "slug": "bg1",
       "source": "vector-art/svg/backgrounds/bg1.svg",
@@ -49,12 +49,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 400.0,
-        "width": 550.0,
-        "x": 0.0,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg2@4x.png",
+      "png": "vector-art/png/backgrounds/bg2@4x.webp",
       "scale": 4,
       "slug": "bg2",
       "source": "vector-art/svg/backgrounds/bg2.svg",
@@ -74,12 +74,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 400.0,
-        "width": 550.0,
-        "x": 0.0,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg3@4x.png",
+      "png": "vector-art/png/backgrounds/bg3@4x.webp",
       "scale": 4,
       "slug": "bg3",
       "source": "vector-art/svg/backgrounds/bg3.svg",
@@ -99,12 +99,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 406.1,
-        "width": 558.05,
-        "x": -3.05,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg4@4x.png",
+      "png": "vector-art/png/backgrounds/bg4@4x.webp",
       "scale": 4,
       "slug": "bg4",
       "source": "vector-art/svg/backgrounds/bg4.svg",
@@ -114,9 +114,9 @@
       },
       "trim": {
         "empty": false,
-        "height": 1625,
-        "width": 2233,
-        "x": -13,
+        "height": 1600,
+        "width": 2200,
+        "x": 0,
         "y": 0
       }
     },
@@ -124,12 +124,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 400.0,
-        "width": 550.0,
-        "x": 0.0,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg5@4x.png",
+      "png": "vector-art/png/backgrounds/bg5@4x.webp",
       "scale": 4,
       "slug": "bg5",
       "source": "vector-art/svg/backgrounds/bg5.svg",
@@ -149,12 +149,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 463.01,
-        "width": 591.0,
-        "x": -21.5,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg6@4x.png",
+      "png": "vector-art/png/backgrounds/bg6@4x.webp",
       "scale": 4,
       "slug": "bg6",
       "source": "vector-art/svg/backgrounds/bg6.svg",
@@ -164,9 +164,9 @@
       },
       "trim": {
         "empty": false,
-        "height": 1852,
-        "width": 2364,
-        "x": -86,
+        "height": 1600,
+        "width": 2200,
+        "x": 0,
         "y": 0
       }
     },
@@ -174,12 +174,12 @@
       "atlas_group": null,
       "category": "backgrounds",
       "drawingBounds": {
-        "height": 425.85,
-        "width": 623.85,
-        "x": -48.0,
-        "y": 0.0
+        "height": 400,
+        "width": 550,
+        "x": 0,
+        "y": 0
       },
-      "png": "vector-art/png/backgrounds/bg7@4x.png",
+      "png": "vector-art/png/backgrounds/bg7@4x.webp",
       "scale": 4,
       "slug": "bg7",
       "source": "vector-art/svg/backgrounds/bg7.svg",
@@ -189,9 +189,9 @@
       },
       "trim": {
         "empty": false,
-        "height": 1704,
-        "width": 2496,
-        "x": -192,
+        "height": 1600,
+        "width": 2200,
+        "x": 0,
         "y": 0
       }
     },
@@ -224,9 +224,9 @@
       "atlas_group": null,
       "category": "effects",
       "drawingBounds": {
-        "height": 194.051,
-        "width": 122.736,
-        "x": -50.5507,
+        "height": 193.801,
+        "width": 122.986,
+        "x": -51.927,
         "y": -90.8667
       },
       "png": "vector-art/png/effects/countdown@4x.png",

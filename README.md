@@ -80,7 +80,7 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `flash/platform-racing-2-xfl/`: extracted Animate/XFL migration source.
 - `tools/`: asset extraction, generation, rasterization, and harness helpers.
 - `vector-art/svg/`: SVG exports from Animate.
-- `vector-art/png/`: generated 4x PNGs from SVG vector art.
+- `vector-art/png/`: generated 4x rasters from SVG vector art.
 - `vector-art/atlases/`: generated sprite sheets and frame JSON.
 - `docs/`: migration notes and inventories.
 - `docs/browser-platform-differences.md`: audited, platform-required HTML5
@@ -235,9 +235,12 @@ python3 tools/generate_block_bitmap_jsfl.py
 open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-block-bitmaps.jsfl
 ```
 
-## SVG To PNG Rasterization
+## SVG To Rasterization
 
-Rasterize committed SVGs to 4x PNGs and sprite sheets:
+Rasterize committed SVGs to 4x rasters and sprite sheets. Character sprite
+sheets are emitted as on-demand lossless WebP atlases grouped by part ID, level
+backgrounds are emitted as standalone lossless WebP files, and the intermediate
+per-channel character rasters remain PNGs:
 
 ```sh
 python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
@@ -249,9 +252,9 @@ Rasterize only character art:
 python3 tools/rasterize_vector_art.py --sheets --category character --manifest vector-art/raster-manifest.json
 ```
 
-Rasterize the exported non-character SVGs. Backgrounds, block overlays, effect
-symbols, and login page components remain standalone PNGs; stamps and item icons
-are packed into separate atlases:
+Rasterize the exported non-character SVGs. Backgrounds remain standalone WebP
+files; block overlays, effect symbols, and login page components remain
+standalone PNGs; stamps and item icons are packed into separate atlases:
 
 ```sh
 python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category blocks --category stamps --category effects --category items --category login --manifest vector-art/raster-manifest-other.json
@@ -291,18 +294,19 @@ from PIL import Image
 with open('vector-art/raster-manifest.json') as f:
     manifest = json.load(f)
 
-pngs = sorted(Path('vector-art/png').rglob('*.png'))
-atlas_pngs = sorted(Path('vector-art/atlases').rglob('*.png'))
-atlas_jsons = sorted(Path('vector-art/atlases').rglob('*.json'))
-assert len(manifest['pngs']) == 632
-assert len(pngs) == 632
-assert len(manifest['atlases']) == len(atlas_pngs)
-assert len(atlas_pngs) == len(atlas_jsons)
-for path in atlas_pngs:
+pngs = sorted(Path('vector-art/png/character').rglob('*.png'))
+atlas_webps = sorted(Path('vector-art/atlases/character').rglob('*.webp'))
+atlas_jsons = sorted(Path('vector-art/atlases/character').rglob('*.json'))
+assert len(manifest['pngs']) == 474
+assert len(pngs) == 474
+assert len(manifest['atlases']) == 51
+assert len(atlas_webps) == 51
+assert len(atlas_webps) == len(atlas_jsons)
+for path in atlas_webps:
     image = Image.open(path)
     assert image.width <= 4096 and image.height <= 4096, (path, image.size)
     assert image.getbbox() is not None, path
-print('verified', len(pngs), 'pngs,', len(atlas_pngs), 'atlas pages')
+print('verified', len(pngs), 'character pngs,', len(atlas_webps), 'character webp atlases')
 PY
 ```
 

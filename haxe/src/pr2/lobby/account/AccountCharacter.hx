@@ -2,7 +2,6 @@ package pr2.lobby.account;
 
 import openfl.display.Sprite;
 import pr2.character.CharacterDisplay;
-import pr2.character.CharacterRenderMode;
 
 /**
 	Editable customize-preview character, the slice of Flash `character.Character`
@@ -41,7 +40,7 @@ class AccountCharacter extends Sprite {
 		this.head = headId;
 		this.body = bodyId;
 		this.feet = feetId;
-		display = new CharacterDisplay({hat: hatId, head: headId, body: bodyId, feet: feetId}, null, CharacterRenderMode.Layered);
+		display = new CharacterDisplay({hat: hatId, head: headId, body: bodyId, feet: feetId});
 		// CharacterDisplay instantiates the exported CharacterGraphic. Its state
 		// children already retain their authored ~0.15 matrices, so the wrapper
 		// itself remains at scale 1 exactly like Flash's Character instance.

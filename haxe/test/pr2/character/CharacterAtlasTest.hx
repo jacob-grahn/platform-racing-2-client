@@ -6,76 +6,74 @@ class CharacterAtlasTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
-		testParsesHatPrimaryAtlas();
+		testParsesPartSetAtlas();
 		testLayeredChannelsCoverEveryExportedPart();
-		testParsesRenderMode();
 		trace('CharacterAtlasTest passed $assertions assertions');
 	}
 
-	private static function testParsesHatPrimaryAtlas():Void {
+	private static function testParsesPartSetAtlas():Void {
 		var atlas = CharacterAtlas.parse(
-			File.getContent("vector-art/atlases/character/hat/primary@4x.json"),
-			"assets/character/atlases/hat/primary@4x.json"
+			File.getContent("vector-art/atlases/character/part-sets/001/atlas@4x.json"),
+			"assets/character/atlases/part-sets/001/atlas@4x.json"
 		);
-		var exp = atlas.getFrame("002_exp");
+		var headStatic = atlas.getFrame("head/static");
 
-		assertEquals("hat", atlas.kind, "kind");
-		assertEquals("primary", atlas.channel, "channel");
 		assertEquals(1, atlas.page, "page");
 		assertEquals(1, atlas.pages, "pages");
-		assertEquals("assets/character/atlases/hat/primary@4x.png", atlas.assetImagePath, "asset image path");
-		assertNotNull(exp, "002_exp frame");
-		assertEquals(2, exp.id, "002_exp id");
-		assertEquals(4, exp.scale, "002_exp scale");
-		assertEquals(437, exp.frame.x, "002_exp frame x");
-		assertEquals(482, exp.frame.height, "002_exp frame height");
-		assertEquals(false, exp.sourceTrim.empty, "002_exp sourceTrim empty");
-		assertEquals(-356, exp.sourceTrim.x, "002_exp sourceTrim x");
-		assertEquals(-351, exp.sourceTrim.y, "002_exp sourceTrim y");
-		assertEquals("002_exp", atlas.getFrameNameById(2), "frame name by id");
-		assertEquals(null, atlas.getFrameNameById(999), "missing frame name by id");
-	}
-
-	private static function testParsesRenderMode():Void {
-		assertEquals(CharacterRenderMode.Layered, CharacterRenderMode.parse(null), "null render mode defaults to layered");
-		assertEquals(CharacterRenderMode.Layered, CharacterRenderMode.parse("layered"), "layered render mode");
-		assertEquals(CharacterRenderMode.Composite, CharacterRenderMode.parse(" composite "), "composite render mode");
-		assertEquals(CharacterRenderMode.Composite, CharacterRenderMode.parse("debug"), "debug render mode alias");
-		assertEquals("composite", CharacterRenderMode.Composite.toLabel(), "render mode label");
+		assertEquals("assets/character/atlases/part-sets/001/atlas@4x.webp", atlas.assetImagePath, "asset image path");
+		assertNotNull(headStatic, "head/static frame");
+		assertEquals(1, headStatic.id, "head/static id");
+		assertEquals("head", headStatic.kind, "head/static kind");
+		assertEquals("static", headStatic.channel, "head/static channel");
+		assertEquals(4, headStatic.scale, "head/static scale");
+		assertEquals("head/static", atlas.getFrameName("head", "static", 1), "frame name by kind/channel/id");
+		assertEquals(null, atlas.getFrameName("head", "static", 999), "missing frame name by kind/channel/id");
 	}
 
 	private static function testLayeredChannelsCoverEveryExportedPart():Void {
-		for (kind in ["hat", "head", "body", "feet"]) {
-			var staticAtlases = loadAtlases(kind, "static");
-			var primaryAtlases = loadAtlases(kind, "primary");
-			var secondaryAtlases = loadAtlases(kind, "secondary");
-			for (id in 1...51) {
-				var exported = hasFrame(staticAtlases, id);
-				assertEquals(exported, hasFrame(primaryAtlases, id), '$kind $id primary coverage');
-				assertEquals(exported, hasFrame(secondaryAtlases, id), '$kind $id secondary coverage');
+		for (atlas in loadCharacterAtlases()) {
+			var parts = new Map<String, Map<String, Bool>>();
+			for (name in atlas.frames.keys()) {
+				var frame = atlas.frames.get(name);
+				var key = frame.kind + ":" + frame.id;
+				var channels = parts.get(key);
+				if (channels == null) {
+					channels = new Map();
+					parts.set(key, channels);
+				}
+				channels.set(frame.channel, true);
+			}
+			for (key in parts.keys()) {
+				var channels = parts.get(key);
+				assertEquals(true, channels.exists("static"), '$key static coverage');
+				assertEquals(true, channels.exists("primary"), '$key primary coverage');
+				assertEquals(true, channels.exists("secondary"), '$key secondary coverage');
 			}
 		}
 	}
 
-	private static function loadAtlases(kind:String, channel:String):Array<CharacterAtlas> {
-		var base = 'vector-art/atlases/character/$kind/$channel@4x';
-		var paths = [base + "-p01.json", base + "-p02.json", base + ".json"];
+	private static function loadCharacterAtlases():Array<CharacterAtlas> {
 		var atlases:Array<CharacterAtlas> = [];
-		for (path in paths) {
-			if (sys.FileSystem.exists(path)) {
-				atlases.push(CharacterAtlas.parse(File.getContent(path), path));
-			}
+		for (path in jsonPaths("vector-art/atlases/character")) {
+			atlases.push(CharacterAtlas.parse(File.getContent(path), path));
 		}
 		return atlases;
 	}
 
-	private static function hasFrame(atlases:Array<CharacterAtlas>, id:Int):Bool {
-		for (atlas in atlases) {
-			if (atlas.getFrameNameById(id) != null) {
-				return true;
+	private static function jsonPaths(path:String):Array<String> {
+		var paths:Array<String> = [];
+		if (!sys.FileSystem.exists(path)) {
+			return paths;
+		}
+		for (name in sys.FileSystem.readDirectory(path)) {
+			var child = path + "/" + name;
+			if (sys.FileSystem.isDirectory(child)) {
+				paths = paths.concat(jsonPaths(child));
+			} else if (StringTools.endsWith(name, ".json")) {
+				paths.push(child);
 			}
 		}
-		return false;
+		return paths;
 	}
 
 	private static function assertNotNull(value:Dynamic, message:String):Void {

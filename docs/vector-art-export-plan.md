@@ -46,7 +46,6 @@ Examples:
 character/hat/005_cowboy/static.svg
 character/hat/005_cowboy/primary.svg
 character/hat/005_cowboy/secondary.svg
-character/hat/005_cowboy/composite.svg
 ```
 
 Channel meanings:
@@ -54,7 +53,6 @@ Channel meanings:
 - `static`: fixed artwork after hiding `colorMC` and `colorMC2`; this includes lines, shading, eyes, highlights, and other non-recolored details.
 - `primary`: the `colorMC` clip for the same part ID.
 - `secondary`: the `colorMC2` clip for the same part ID.
-- `composite`: the full part with static, primary, and secondary channels visible.
 
 Character containers:
 
@@ -159,8 +157,7 @@ vector-art/svg/
 ```
 
 The smoke batch has been validated with `hat/002_exp`: the generated SVGs
-contain real `<path>` data for `static`, `primary`, `secondary`, and synthesized
-`composite` exports.
+contain real `<path>` data for `static`, `primary`, and `secondary` exports.
 
 ## Rasterization
 
@@ -172,23 +169,24 @@ python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-mani
 
 The rasterizer queries each SVG's drawing bounds with Inkscape before exporting.
 This is important because some Animate SVGs contain negative coordinates outside
-the nominal stage viewBox. The output PNGs are transparent-trimmed 4x rasters,
+the nominal stage viewBox. The output files are transparent-trimmed 4x rasters,
 and the manifest records the original drawing bounds plus the trim rectangle.
 
-Sprite sheets are grouped by character kind and channel:
+Character sprite sheets are grouped for on-demand loading. Hats share one atlas,
+and head/body/feet art is packed by independent part ID:
 
 ```text
-vector-art/atlases/character/<kind>/<channel>@4x.png
-vector-art/atlases/character/<kind>/<channel>@4x.json
+vector-art/atlases/character/hats/atlas@4x.webp
+vector-art/atlases/character/hats/atlas@4x.json
+vector-art/atlases/character/part-sets/<id>/atlas@4x.webp
+vector-art/atlases/character/part-sets/<id>/atlas@4x.json
 ```
 
-Large groups are split into page-suffixed files, such as
-`composite@4x-p01.png`, when a single 4096px atlas would be too large.
-
-This grouping is intentional for the character renderer: `static`, `primary`,
-and `secondary` can be drawn or tinted independently, while `composite` is useful
-for previews, debugging, and non-tinted fallbacks. Non-character exports use
-separate asset groups by gameplay area or screen. The current raster pass leaves
-backgrounds, block overlays, and effect symbols standalone, and packs stamps
-plus item display icons into their own atlases. Static block bitmaps are exported
-directly to `vector-art/png/blocks/`.
+Each atlas frame records its own `kind`, `channel`, and part `id`, so `static`,
+`primary`, and `secondary` can still be drawn or tinted independently after the
+part-set WebP is loaded. Composite character exports are intentionally omitted.
+Non-character exports use separate asset groups by gameplay area or screen. The
+current raster pass leaves backgrounds as standalone WebP files, leaves block
+overlays and effect symbols standalone PNGs, and packs stamps plus item display
+icons into their own atlases.
+Static block bitmaps are exported directly to `vector-art/png/blocks/`.

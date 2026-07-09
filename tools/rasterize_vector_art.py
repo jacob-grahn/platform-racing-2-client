@@ -4,7 +4,9 @@ Rasterize committed PR2 SVG vector art to trimmed 4x PNGs and sprite sheets.
 
 The SVGs exported from Animate keep the original 550x400 stage. This tool
 renders each SVG at 4x, trims transparent pixels, records the trim rectangle,
-and optionally packs related character assets into PNG atlases.
+and optionally packs related assets into atlases. Character atlases and level
+backgrounds are written as lossless WebP so they can be loaded on demand
+without carrying the full PNG payload up front.
 """
 
 import argparse
@@ -28,7 +30,7 @@ DEFAULT_SCALE = 4
 DEFAULT_STAGE_WIDTH = 550
 DEFAULT_STAGE_HEIGHT = 400
 DEFAULT_MAX_ATLAS_SIZE = 4096
-CHANNELS = ("static", "primary", "secondary", "composite")
+CHANNELS = ("static", "primary", "secondary")
 # Animate exports Flash hairline strokes as 0.05 SVG units. Flash renders a
 # hairline at one screen pixel regardless of that nominal width, but a literal
 # SVG renderer makes it sub-pixel. A non-scaling stroke as wide as the raster
@@ -67,15 +69,23 @@ def parse_svg_path(svg_root, path):
         channel = path.stem
         if channel not in CHANNELS:
             return None
+        part_id = int(part.split("_", 1)[0]) if part[:3].isdigit() else None
+        if kind == "hat":
+            atlas_group = "character/hats/atlas"
+        elif part_id is not None:
+            atlas_group = f"character/part-sets/{part_id:03d}/atlas"
+        else:
+            atlas_group = None
         return {
             "category": "character",
             "rel": rel,
             "kind": kind,
             "part": part,
             "channel": channel,
-            "id": int(part.split("_", 1)[0]) if part[:3].isdigit() else None,
-            # atlas group key: one atlas per (kind, channel)
-            "atlas_group": f"character/{kind}/{channel}",
+            "id": part_id,
+            # Character art is packed into on-demand sheets: one atlas per
+            # non-hat part id, and one shared hat atlas.
+            "atlas_group": atlas_group,
         }
 
     if category == "backgrounds":
@@ -242,10 +252,11 @@ def prepare_svg(svg_path, temp_dir, index, scale):
     return prepared_path
 
 
-def run_inkscape(inkscape, svg_path, out_path, width):
+def run_inkscape(inkscape, svg_path, out_path, width, export_area=None):
+    area_arg = "--export-area-drawing" if export_area is None else f"--export-area={export_area}"
     cmd = [
         inkscape,
-        "--export-area-drawing",
+        area_arg,
         f"--export-filename={out_path}",
         f"--export-width={width}",
         str(svg_path),
@@ -253,7 +264,27 @@ def run_inkscape(inkscape, svg_path, out_path, width):
     subprocess.run(cmd, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
-def trim_image(source_path, out_path, bounds, scale):
+def save_raster(image, out_path, category):
+    if category in ("backgrounds", "character") and out_path.suffix == ".webp":
+        image.save(out_path, lossless=True, method=6)
+    else:
+        image.save(out_path)
+
+
+def save_untrimmed_image(source_path, out_path, bounds, scale, category):
+    image = Image.open(source_path).convert("RGBA")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    save_raster(image, out_path, category)
+    return {
+        "x": math.floor(bounds["x"] * scale),
+        "y": math.floor(bounds["y"] * scale),
+        "width": image.width,
+        "height": image.height,
+        "empty": image.getchannel("A").getbbox() is None,
+    }
+
+
+def trim_image(source_path, out_path, bounds, scale, category):
     image = Image.open(source_path).convert("RGBA")
     alpha = image.getchannel("A")
     bbox = alpha.getbbox()
@@ -270,11 +301,11 @@ def trim_image(source_path, out_path, bounds, scale):
             "empty": False,
         }
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    trimmed.save(out_path)
+    save_raster(trimmed, out_path, category)
     return trim
 
 
-def rasterize_with_batik(svg_path, out_path, temp_path, stage_width, stage_height, scale, centered):
+def rasterize_with_batik(svg_path, out_path, temp_path, stage_width, stage_height, scale, centered, category, trim=True):
     """Fallback for systems where the configured Inkscape cannot run."""
     lime_path = subprocess.run(
         ["haxelib", "libpath", "lime"],
@@ -322,13 +353,28 @@ def rasterize_with_batik(svg_path, out_path, temp_path, stage_width, stage_heigh
     )
 
     image = Image.open(temp_path).convert("RGBA")
+    if not trim:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        save_raster(image, out_path, category)
+        return {
+            "x": x,
+            "y": y,
+            "width": stage_width,
+            "height": stage_height,
+        }, {
+            "x": math.floor(x * scale),
+            "y": math.floor(y * scale),
+            "width": image.width,
+            "height": image.height,
+            "empty": image.getchannel("A").getbbox() is None,
+        }
     bbox = image.getchannel("A").getbbox()
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if bbox is None:
-        Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(out_path)
+        save_raster(Image.new("RGBA", (1, 1), (0, 0, 0, 0)), out_path, category)
         return None, {"x": 0, "y": 0, "width": 0, "height": 0, "empty": True}
 
-    image.crop(bbox).save(out_path)
+    save_raster(image.crop(bbox), out_path, category)
     bounds = {
         "x": x + bbox[0] / scale,
         "y": y + bbox[1] / scale,
@@ -350,7 +396,7 @@ def png_path_for(png_root, job, scale):
     if cat == "character":
         return png_root / "character" / job["kind"] / job["part"] / f"{job['channel']}@{scale}x.png"
     if cat == "backgrounds":
-        return png_root / "backgrounds" / f"{job['slug']}@{scale}x.png"
+        return png_root / "backgrounds" / f"{job['slug']}@{scale}x.webp"
     if cat == "blocks":
         return png_root / "blocks" / f"{job['slug']}@{scale}x.png"
     if cat == "stamps":
@@ -379,31 +425,58 @@ def rasterize_jobs(jobs, args):
             raw_path = temp_path / f"{index}.png"
             render_svg = prepare_svg(job["svg"], temp_path, index, args.scale)
             print(f"[{index}/{len(jobs)}] {job['svg']} -> {out_path}", file=sys.stderr)
-            try:
-                bounds = query_drawing_bounds(args.inkscape, render_svg)
-            except (FileNotFoundError, subprocess.CalledProcessError):
-                bounds, trim = rasterize_with_batik(
-                    render_svg,
-                    out_path,
-                    raw_path,
-                    args.stage_width,
-                    args.stage_height,
-                    args.scale,
-                    job["category"] not in ("backgrounds", "login"),
-                )
+            if job["category"] == "backgrounds":
+                bounds = {"x": 0, "y": 0, "width": args.stage_width, "height": args.stage_height}
+                try:
+                    run_inkscape(
+                        args.inkscape,
+                        render_svg,
+                        raw_path,
+                        args.stage_width * args.scale,
+                        f"0:0:{args.stage_width}:{args.stage_height}",
+                    )
+                except (FileNotFoundError, subprocess.CalledProcessError):
+                    bounds, trim = rasterize_with_batik(
+                        render_svg,
+                        out_path,
+                        raw_path,
+                        args.stage_width,
+                        args.stage_height,
+                        args.scale,
+                        False,
+                        job["category"],
+                        False,
+                    )
+                else:
+                    trim = save_untrimmed_image(raw_path, out_path, bounds, args.scale, job["category"])
                 used_fallback = True
             else:
-                used_fallback = False
+                try:
+                    bounds = query_drawing_bounds(args.inkscape, render_svg)
+                except (FileNotFoundError, subprocess.CalledProcessError):
+                    bounds, trim = rasterize_with_batik(
+                        render_svg,
+                        out_path,
+                        raw_path,
+                        args.stage_width,
+                        args.stage_height,
+                        args.scale,
+                        job["category"] not in ("backgrounds", "login"),
+                        job["category"],
+                    )
+                    used_fallback = True
+                else:
+                    used_fallback = False
             if used_fallback:
                 pass
             elif bounds is None or bounds["width"] <= 0 or bounds["height"] <= 0:
                 out_path.parent.mkdir(parents=True, exist_ok=True)
-                Image.new("RGBA", (1, 1), (0, 0, 0, 0)).save(out_path)
+                save_raster(Image.new("RGBA", (1, 1), (0, 0, 0, 0)), out_path, job["category"])
                 trim = {"x": 0, "y": 0, "width": 0, "height": 0, "empty": True}
             else:
                 width = max(1, math.ceil(bounds["width"] * args.scale))
                 run_inkscape(args.inkscape, render_svg, raw_path, width)
-                trim = trim_image(raw_path, out_path, bounds, args.scale)
+                trim = trim_image(raw_path, out_path, bounds, args.scale, job["category"])
             if job["category"] == "character" and not trim.get("empty"):
                 nudge = CHARACTER_Y_NUDGE.get(job["kind"])
                 if nudge:
@@ -495,7 +568,7 @@ def pack_pages(entries, padding, max_size):
 def entry_sort_key(record):
     """Stable sort key for atlas packing: character parts by id, others by slug."""
     if record.get("category") == "character":
-        return (record.get("id") or 0, record.get("part", ""), record.get("channel", ""))
+        return (record.get("id") or 0, record.get("kind", ""), record.get("channel", ""), record.get("part", ""))
     return (0, record.get("frame") or record.get("slug", ""), "")
 
 
@@ -503,7 +576,9 @@ def entry_name(record):
     """Human-readable name for an atlas frame entry."""
     cat = record.get("category")
     if cat == "character":
-        return record["part"]
+        if record["kind"] == "hat":
+            return f"{record['part']}/{record['channel']}"
+        return f"{record['kind']}/{record['channel']}"
     if cat in ("backgrounds", "blocks", "stamps"):
         return record["slug"]
     if cat == "effects":
@@ -541,10 +616,9 @@ def build_atlases(records, atlas_root, padding, max_size):
                 }
             )
         pages = pack_pages(entries, padding, max_size)
-        # The atlas_group is a slash-separated path like "character/body/composite"
-        # or "effects/laser_shot".  We put the file in the parent directory and use
-        # the last component as the filename stem, which preserves the legacy
-        # character atlas naming (e.g. atlases/character/body/composite@4x.png).
+        # The atlas_group is a slash-separated path like
+        # "character/part-sets/001/atlas" or "effects/laser_shot". We put the
+        # file in the parent directory and use the last component as the stem.
         group_path = Path(atlas_group)
         out_dir = atlas_root / group_path.parent
         file_stem = group_path.name
@@ -570,12 +644,21 @@ def build_atlases(records, atlas_root, padding, max_size):
                 }
                 if record.get("id") is not None:
                     frame_entry["id"] = record["id"]
+                if record.get("category") == "character":
+                    frame_entry["kind"] = record["kind"]
+                    frame_entry["part"] = record["part"]
+                    frame_entry["channel"] = record["channel"]
                 frames[placement["name"]] = frame_entry
 
             page_suffix = "" if len(pages) == 1 else f"-p{page_index:02d}"
-            image_path = out_dir / f"{file_stem}@{scale}x{page_suffix}.png"
+            is_character_atlas = group[0].get("category") == "character"
+            image_ext = "webp" if is_character_atlas else "png"
+            image_path = out_dir / f"{file_stem}@{scale}x{page_suffix}.{image_ext}"
             json_path = out_dir / f"{file_stem}@{scale}x{page_suffix}.json"
-            atlas.save(image_path)
+            if is_character_atlas:
+                atlas.save(image_path, lossless=True, method=6)
+            else:
+                atlas.save(image_path)
 
             # Build atlas metadata, preserving character-specific fields where present.
             sample = group[0]
@@ -589,8 +672,9 @@ def build_atlases(records, atlas_root, padding, max_size):
                 "frames": frames,
             }
             if sample.get("category") == "character":
-                atlas_meta["kind"] = sample["kind"]
-                atlas_meta["channel"] = sample["channel"]
+                atlas_meta["characterAtlas"] = "hats" if sample.get("kind") == "hat" else "part-set"
+                if sample.get("kind") != "hat":
+                    atlas_meta["partSetId"] = sample.get("id")
 
             with open(json_path, "w", encoding="utf-8", newline="\n") as handle:
                 json.dump(atlas_meta, handle, indent=2, sort_keys=True)
@@ -659,7 +743,7 @@ def main(argv=None):
     records = rasterize_jobs(jobs, args)
     atlas_records = build_atlases(records, args.atlas_root, args.padding, args.max_atlas_size) if args.sheets else []
     write_manifest(args.manifest, records, atlas_records)
-    print(f"wrote {len(records)} PNGs and {len(atlas_records)} atlases", file=sys.stderr)
+    print(f"wrote {len(records)} rasters and {len(atlas_records)} atlases", file=sys.stderr)
     return 0
 
 

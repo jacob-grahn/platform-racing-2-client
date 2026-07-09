@@ -23,7 +23,6 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -37,7 +36,6 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -51,37 +49,7 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/001_none/composite.svg",
-    "frame": 0,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 1,
-    "kind": "hat",
-    "name": "none",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -100,7 +68,6 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -114,7 +81,6 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -128,14 +94,13 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
   },
   {
-    "channel": "composite",
+    "channel": "static",
     "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/002_exp/composite.svg",
-    "frame": 1,
+    "exportPath": "character/hat/003_kong/static.svg",
+    "frame": 2,
     "hiddenInstances": [
       "colorMC",
       "colorMC2"
@@ -144,21 +109,24 @@ var JOBS = [
       "colorMC",
       "colorMC2"
     ],
-    "id": 2,
+    "id": 3,
     "kind": "hat",
-    "name": "exp",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
+    "name": "kong",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/003_kong/static.svg",
     "symbolName": "Parts/Hats/hatsMC"
+  },
+  {
+    "channel": "primary",
+    "containerSymbol": "Parts/Hats/hatsMC",
+    "exportPath": "character/hat/003_kong/primary.svg",
+    "frame": 2,
+    "hiddenInstances": [],
+    "hiddenLayers": [],
+    "id": 3,
+    "kind": "hat",
+    "name": "kong",
+    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/003_kong/primary.svg",
+    "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   }
 ];
 
@@ -235,7 +203,7 @@ function prepareLibraryItem(doc, job) {
 	var editDoc = fl.getDocumentDOM();
 	var timeline = editDoc.getTimeline();
 	selectFrame(timeline, job.frame);
-	if (job.channel == "static" || job.channel == "composite") {
+	if (job.channel == "static") {
 		setLibraryVisibility(timeline, job, false);
 		editDoc.exitEditMode();
 		return;
@@ -248,7 +216,7 @@ function restoreLibraryItem(doc, job) {
 		throw new Error("Could not re-edit library item for restore: " + job.symbolName);
 	}
 	var timeline = fl.getDocumentDOM().getTimeline();
-	if (job.channel == "static" || job.channel == "composite") {
+	if (job.channel == "static") {
 		setLibraryVisibility(timeline, job, true);
 		fl.getDocumentDOM().exitEditMode();
 		return;
@@ -310,11 +278,8 @@ function exportJob(doc, job) {
 	} catch (e) {
 	}
 	var matrix = null;
-	if (job.channel == "primary" || job.channel == "secondary" || job.channel == "composite") {
+	if (job.channel == "primary" || job.channel == "secondary") {
 		matrix = registrationMatrix(doc, job.containerSymbol);
-	}
-	for (var i = 0; i < job.overlays.length; i++) {
-		stageSymbol(doc, job.overlays[i].symbolName, job.frame, matrix);
 	}
 	stageSymbol(doc, job.symbolName, job.frame, matrix);
 	exportCurrentView(job.outputUri);

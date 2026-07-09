@@ -105,8 +105,8 @@ class ServerLevelRenderer extends Sprite {
 	// when a rotate block fires. Mirrors Flash, which rotates the whole Course
 	// during the tween (worldContainer here) and bakes the committed 90-degree
 	// step into blockBackground/bg* (blockLayer + art layer rotation here). The
-	// solid background and themed art-background bitmap stay direct children of
-	// `this` so they remain upright, like Flash's counter-rotated `bg`.
+	// solid background and themed art-background container stay direct children
+	// of `this` so they remain upright, like Flash's counter-rotated `bg`.
 	private final worldContainer:Sprite = new Sprite();
 	// Committed course rotation (a multiple of 90), baked about the block layer's
 	// own origin. `tweenRotation` is the in-progress smooth spin applied to the
@@ -117,6 +117,7 @@ class ServerLevelRenderer extends Sprite {
 	private final artLayerContainers:Array<Sprite> = [];
 	private final artRasterTileLayers:Array<ArtRasterTiles> = [];
 	private var solidBackground:Null<Shape>;
+	private var artBackgroundContainer:Null<Sprite>;
 	private var currentBackgroundColor:Int;
 	private var artBackgroundTintScale:Float = 1;
 	private final artBackgroundChildren:Array<DisplayObject> = [];
@@ -775,13 +776,13 @@ class ServerLevelRenderer extends Sprite {
 
 	public static function artBackgroundAssetPath(code:Int):String {
 		return switch (code) {
-			case 201: "assets/backgrounds/bg1@4x.png";
-			case 202: "assets/backgrounds/bg2@4x.png";
-			case 203: "assets/backgrounds/bg3@4x.png";
-			case 204: "assets/backgrounds/bg4@4x.png";
-			case 205: "assets/backgrounds/bg5@4x.png";
-			case 206: "assets/backgrounds/bg6@4x.png";
-			case 207: "assets/backgrounds/bg7@4x.png";
+			case 201: "assets/backgrounds/bg1@4x.webp";
+			case 202: "assets/backgrounds/bg2@4x.webp";
+			case 203: "assets/backgrounds/bg3@4x.webp";
+			case 204: "assets/backgrounds/bg4@4x.webp";
+			case 205: "assets/backgrounds/bg5@4x.webp";
+			case 206: "assets/backgrounds/bg6@4x.webp";
+			case 207: "assets/backgrounds/bg7@4x.webp";
 			default: "";
 		}
 	}
@@ -1199,29 +1200,40 @@ class ServerLevelRenderer extends Sprite {
 		if (level.artBackgroundCode == null) {
 			return;
 		}
+		var backgroundCode = level.artBackgroundCode;
+		artBackgroundContainer = new Sprite();
+		addChild(artBackgroundContainer);
+		artBackgroundTintScale = backgroundCode == 204 || backgroundCode == BG5_CODE ? 0 : 1;
 		var assetPath = artBackgroundAssetPath(level.artBackgroundCode);
-		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
-			if (level.artBackgroundCode == BG5_CODE) {
-				artBackgroundTintScale = 0;
-				var grid = createBg5CircleGrid();
-				addChild(grid);
-				artBackgroundChildren.push(grid);
-			}
+		if (assetPath != "") {
+			ArtBackgroundLoader.request(assetPath, function(bitmapData:Null<BitmapData>):Void {
+				if (bitmapData == null || artBackgroundContainer == null) {
+					return;
+				}
+				var bitmap = new Bitmap(bitmapData);
+				bitmap.smoothing = true;
+				bitmap.width = Constants.STAGE_WIDTH;
+				bitmap.height = Constants.STAGE_HEIGHT;
+				addArtBackgroundChild(bitmap, 0);
+			});
+		}
+		if (backgroundCode == BG5_CODE) {
+			var grid = createBg5CircleGrid();
+			addArtBackgroundChild(grid);
+		}
+	}
+
+	private function addArtBackgroundChild(child:DisplayObject, ?index:Int):Void {
+		if (artBackgroundContainer == null) {
 			return;
 		}
-
-		var bitmap = new Bitmap(Assets.getBitmapData(assetPath));
-		bitmap.smoothing = true;
-		bitmap.width = Constants.STAGE_WIDTH;
-		bitmap.height = Constants.STAGE_HEIGHT;
-		addChild(bitmap);
-		artBackgroundChildren.push(bitmap);
-		artBackgroundTintScale = level.artBackgroundCode == 204 || level.artBackgroundCode == BG5_CODE ? 0 : 1;
-		if (level.artBackgroundCode == BG5_CODE) {
-			var grid = createBg5CircleGrid();
-			addChild(grid);
-			artBackgroundChildren.push(grid);
+		if (index != null && index >= 0 && index < artBackgroundContainer.numChildren) {
+			artBackgroundContainer.addChildAt(child, index);
+		} else {
+			artBackgroundContainer.addChild(child);
 		}
+		child.transform.colorTransform = backgroundColorTransform(artBackgroundTintScale);
+		artBackgroundChildren.push(child);
 	}
 
 	private function drawArtLayer(index:Int):Void {

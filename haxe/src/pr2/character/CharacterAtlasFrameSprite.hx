@@ -28,7 +28,7 @@ class CharacterAtlasFrameSprite extends Sprite {
 		this.frameName = frameName;
 		var atlasFrame = atlas.getFrame(frameName);
 		if (atlasFrame == null) {
-			throw 'Missing character atlas frame: ${atlas.kind}/${atlas.channel}/$frameName';
+			throw 'Missing character atlas frame: $frameName';
 		}
 		frame = atlasFrame;
 

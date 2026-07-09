@@ -423,7 +423,7 @@ class ServerLevelRendererTest {
 		Settings.setValue(Settings.DRAW_ART, true);
 		var block = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10020, 10050);
 		var renderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [block], [], ServerLevelRenderer.BG5_CODE), block);
-		var mounted = Std.downcast(renderer.getChildByName("bg5CircleGrid"), Sprite);
+		var mounted = Std.downcast(findChildByName(renderer, "bg5CircleGrid"), Sprite);
 		assertTrue(mounted != null, "BG5 renderer mounts colored circle grid over the art background");
 		assertEquals(88, mounted.numChildren, "mounted BG5 grid preserves Flash circle count");
 		renderer.remove();
@@ -525,8 +525,8 @@ class ServerLevelRendererTest {
 	}
 
 	private static function testArtAssetMappings():Void {
-		assertEquals("assets/backgrounds/bg1@4x.png", ServerLevelRenderer.artBackgroundAssetPath(201), "bg1 asset");
-		assertEquals("assets/backgrounds/bg7@4x.png", ServerLevelRenderer.artBackgroundAssetPath(207), "bg7 asset");
+		assertEquals("assets/backgrounds/bg1@4x.webp", ServerLevelRenderer.artBackgroundAssetPath(201), "bg1 asset");
+		assertEquals("assets/backgrounds/bg7@4x.webp", ServerLevelRenderer.artBackgroundAssetPath(207), "bg7 asset");
 		assertEquals("", ServerLevelRenderer.artBackgroundAssetPath(999), "unknown background asset");
 		assertEquals("assets/stamps/tree1@4x.png", ServerLevelRenderer.stampAssetPath(0), "tree stamp asset");
 		assertEquals("assets/stamps/spire2@4x.png", ServerLevelRenderer.stampAssetPath(8), "spire stamp asset");
@@ -736,5 +736,23 @@ class ServerLevelRendererTest {
 			n += deepChildCount(container.getChildAt(i));
 		}
 		return n;
+	}
+
+	private static function findChildByName(root:DisplayObjectContainer, name:String):Null<DisplayObject> {
+		var direct = root.getChildByName(name);
+		if (direct != null) {
+			return direct;
+		}
+		for (i in 0...root.numChildren) {
+			var container = Std.downcast(root.getChildAt(i), DisplayObjectContainer);
+			if (container == null) {
+				continue;
+			}
+			var child = findChildByName(container, name);
+			if (child != null) {
+				return child;
+			}
+		}
+		return null;
 	}
 }

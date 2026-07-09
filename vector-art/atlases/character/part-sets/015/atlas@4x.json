@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/015/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 831,
+        "width": 1144,
+        "x": 1174,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "body",
+      "part": "015_car",
+      "png": "vector-art/png/character/body/015_car/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 831,
+        "width": 1144,
+        "x": -466,
+        "y": -104
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 282,
+        "width": 296,
+        "x": 3592,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "body",
+      "part": "015_car",
+      "png": "vector-art/png/character/body/015_car/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 282,
+        "width": 296,
+        "x": -55,
+        "y": 115
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 896,
+        "width": 1170,
+        "x": 2,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "body",
+      "part": "015_car",
+      "png": "vector-art/png/character/body/015_car/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 896,
+        "width": 1170,
+        "x": -483,
+        "y": -160
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 273,
+        "width": 271,
+        "x": 2,
+        "y": 900
+      },
+      "id": 15,
+      "kind": "feet",
+      "part": "015_elephant",
+      "png": "vector-art/png/character/feet/015_elephant/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 273,
+        "width": 271,
+        "x": -192,
+        "y": -173
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 77,
+        "width": 241,
+        "x": 466,
+        "y": 900
+      },
+      "id": 15,
+      "kind": "feet",
+      "part": "015_elephant",
+      "png": "vector-art/png/character/feet/015_elephant/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 77,
+        "width": 241,
+        "x": -127,
+        "y": 22
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 294,
+        "width": 326,
+        "x": 3264,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "feet",
+      "part": "015_elephant",
+      "png": "vector-art/png/character/feet/015_elephant/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 294,
+        "width": 326,
+        "x": -203,
+        "y": -185
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 410,
+        "width": 411,
+        "x": 2851,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "head",
+      "part": "015_football_helmet",
+      "png": "vector-art/png/character/head/015_football_helmet/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 410,
+        "width": 411,
+        "x": -181,
+        "y": 108
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 101,
+        "width": 189,
+        "x": 275,
+        "y": 900
+      },
+      "id": 15,
+      "kind": "head",
+      "part": "015_football_helmet",
+      "png": "vector-art/png/character/head/015_football_helmet/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 101,
+        "width": 189,
+        "x": 140,
+        "y": 352
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 421,
+        "width": 529,
+        "x": 2320,
+        "y": 2
+      },
+      "id": 15,
+      "kind": "head",
+      "part": "015_football_helmet",
+      "png": "vector-art/png/character/head/015_football_helmet/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 421,
+        "width": 529,
+        "x": -191,
+        "y": 104
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/015/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 15,
+  "size": {
+    "height": 1175,
+    "width": 3890
+  }
+}

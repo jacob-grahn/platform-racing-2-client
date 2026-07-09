@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/038/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 566,
+        "width": 361,
+        "x": 628,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "body",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/body/038_valentine/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 566,
+        "width": 361,
+        "x": -131,
+        "y": -61
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 130,
+        "width": 608,
+        "x": 3229,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "body",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/body/038_valentine/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 130,
+        "width": 608,
+        "x": -255,
+        "y": 113
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 590,
+        "width": 624,
+        "x": 2,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "body",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/body/038_valentine/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 590,
+        "width": 624,
+        "x": -255,
+        "y": -78
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 176,
+        "width": 256,
+        "x": 2971,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "feet",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/feet/038_valentine/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 176,
+        "width": 256,
+        "x": -125,
+        "y": -73
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 76,
+        "width": 265,
+        "x": 2,
+        "y": 594
+      },
+      "id": 38,
+      "kind": "feet",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/feet/038_valentine/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 76,
+        "width": 265,
+        "x": -198,
+        "y": -44
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 204,
+        "width": 352,
+        "x": 2617,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "feet",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/feet/038_valentine/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 204,
+        "width": 352,
+        "x": -210,
+        "y": -88
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 464,
+        "width": 526,
+        "x": 2089,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "head",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/head/038_valentine/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 464,
+        "width": 526,
+        "x": -215,
+        "y": 52
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 497,
+        "width": 547,
+        "x": 991,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "head",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/head/038_valentine/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 497,
+        "width": 547,
+        "x": -224,
+        "y": 42
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 497,
+        "width": 547,
+        "x": 1540,
+        "y": 2
+      },
+      "id": 38,
+      "kind": "head",
+      "part": "038_valentine",
+      "png": "vector-art/png/character/head/038_valentine/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 497,
+        "width": 547,
+        "x": -224,
+        "y": 42
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/038/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 38,
+  "size": {
+    "height": 672,
+    "width": 3839
+  }
+}

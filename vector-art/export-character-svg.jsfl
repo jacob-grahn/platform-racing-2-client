@@ -23,7 +23,6 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -37,7 +36,6 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -51,37 +49,7 @@ var JOBS = [
     "kind": "hat",
     "name": "none",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/001_none/composite.svg",
-    "frame": 0,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 1,
-    "kind": "hat",
-    "name": "none",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/001_none/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -100,7 +68,6 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -114,7 +81,6 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -128,37 +94,7 @@ var JOBS = [
     "kind": "hat",
     "name": "exp",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/002_exp/composite.svg",
-    "frame": 1,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 2,
-    "kind": "hat",
-    "name": "exp",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/002_exp/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -177,7 +113,6 @@ var JOBS = [
     "kind": "hat",
     "name": "kong",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/003_kong/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -191,7 +126,6 @@ var JOBS = [
     "kind": "hat",
     "name": "kong",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/003_kong/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -205,37 +139,7 @@ var JOBS = [
     "kind": "hat",
     "name": "kong",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/003_kong/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/003_kong/composite.svg",
-    "frame": 2,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 3,
-    "kind": "hat",
-    "name": "kong",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/003_kong/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -254,7 +158,6 @@ var JOBS = [
     "kind": "hat",
     "name": "prop",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/004_prop/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -268,7 +171,6 @@ var JOBS = [
     "kind": "hat",
     "name": "prop",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/004_prop/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -282,37 +184,7 @@ var JOBS = [
     "kind": "hat",
     "name": "prop",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/004_prop/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/004_prop/composite.svg",
-    "frame": 3,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 4,
-    "kind": "hat",
-    "name": "prop",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/004_prop/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -331,7 +203,6 @@ var JOBS = [
     "kind": "hat",
     "name": "cowboy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/005_cowboy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -345,7 +216,6 @@ var JOBS = [
     "kind": "hat",
     "name": "cowboy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/005_cowboy/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -359,37 +229,7 @@ var JOBS = [
     "kind": "hat",
     "name": "cowboy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/005_cowboy/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/005_cowboy/composite.svg",
-    "frame": 4,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 5,
-    "kind": "hat",
-    "name": "cowboy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/005_cowboy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -408,7 +248,6 @@ var JOBS = [
     "kind": "hat",
     "name": "crown",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/006_crown/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -422,7 +261,6 @@ var JOBS = [
     "kind": "hat",
     "name": "crown",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/006_crown/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -436,37 +274,7 @@ var JOBS = [
     "kind": "hat",
     "name": "crown",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/006_crown/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/006_crown/composite.svg",
-    "frame": 5,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 6,
-    "kind": "hat",
-    "name": "crown",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/006_crown/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -485,7 +293,6 @@ var JOBS = [
     "kind": "hat",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/007_santa/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -499,7 +306,6 @@ var JOBS = [
     "kind": "hat",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/007_santa/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -513,37 +319,7 @@ var JOBS = [
     "kind": "hat",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/007_santa/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/007_santa/composite.svg",
-    "frame": 6,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 7,
-    "kind": "hat",
-    "name": "santa",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/007_santa/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -562,7 +338,6 @@ var JOBS = [
     "kind": "hat",
     "name": "party",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/008_party/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -576,7 +351,6 @@ var JOBS = [
     "kind": "hat",
     "name": "party",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/008_party/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -590,37 +364,7 @@ var JOBS = [
     "kind": "hat",
     "name": "party",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/008_party/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/008_party/composite.svg",
-    "frame": 7,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 8,
-    "kind": "hat",
-    "name": "party",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/008_party/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -639,7 +383,6 @@ var JOBS = [
     "kind": "hat",
     "name": "top",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/009_top/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -653,7 +396,6 @@ var JOBS = [
     "kind": "hat",
     "name": "top",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/009_top/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -667,37 +409,7 @@ var JOBS = [
     "kind": "hat",
     "name": "top",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/009_top/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/009_top/composite.svg",
-    "frame": 8,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 9,
-    "kind": "hat",
-    "name": "top",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/009_top/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -716,7 +428,6 @@ var JOBS = [
     "kind": "hat",
     "name": "jump_start",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/010_jump_start/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -730,7 +441,6 @@ var JOBS = [
     "kind": "hat",
     "name": "jump_start",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/010_jump_start/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -744,37 +454,7 @@ var JOBS = [
     "kind": "hat",
     "name": "jump_start",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/010_jump_start/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/010_jump_start/composite.svg",
-    "frame": 9,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 10,
-    "kind": "hat",
-    "name": "jump_start",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/010_jump_start/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -793,7 +473,6 @@ var JOBS = [
     "kind": "hat",
     "name": "moon",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/011_moon/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -807,7 +486,6 @@ var JOBS = [
     "kind": "hat",
     "name": "moon",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/011_moon/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -821,37 +499,7 @@ var JOBS = [
     "kind": "hat",
     "name": "moon",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/011_moon/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/011_moon/composite.svg",
-    "frame": 10,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 11,
-    "kind": "hat",
-    "name": "moon",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/011_moon/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -870,7 +518,6 @@ var JOBS = [
     "kind": "hat",
     "name": "thief",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/012_thief/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -884,7 +531,6 @@ var JOBS = [
     "kind": "hat",
     "name": "thief",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/012_thief/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -898,37 +544,7 @@ var JOBS = [
     "kind": "hat",
     "name": "thief",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/012_thief/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/012_thief/composite.svg",
-    "frame": 11,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 12,
-    "kind": "hat",
-    "name": "thief",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/012_thief/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -947,7 +563,6 @@ var JOBS = [
     "kind": "hat",
     "name": "jigg",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/013_jigg/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -961,7 +576,6 @@ var JOBS = [
     "kind": "hat",
     "name": "jigg",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/013_jigg/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -975,37 +589,7 @@ var JOBS = [
     "kind": "hat",
     "name": "jigg",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/013_jigg/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/013_jigg/composite.svg",
-    "frame": 12,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 13,
-    "kind": "hat",
-    "name": "jigg",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/013_jigg/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -1024,7 +608,6 @@ var JOBS = [
     "kind": "hat",
     "name": "artifact",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/014_artifact/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -1038,7 +621,6 @@ var JOBS = [
     "kind": "hat",
     "name": "artifact",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/014_artifact/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -1052,37 +634,7 @@ var JOBS = [
     "kind": "hat",
     "name": "artifact",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/014_artifact/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/014_artifact/composite.svg",
-    "frame": 13,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 14,
-    "kind": "hat",
-    "name": "artifact",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/014_artifact/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -1101,7 +653,6 @@ var JOBS = [
     "kind": "hat",
     "name": "jellyfish",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/015_jellyfish/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -1115,7 +666,6 @@ var JOBS = [
     "kind": "hat",
     "name": "jellyfish",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/015_jellyfish/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -1129,37 +679,7 @@ var JOBS = [
     "kind": "hat",
     "name": "jellyfish",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/015_jellyfish/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/015_jellyfish/composite.svg",
-    "frame": 14,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 15,
-    "kind": "hat",
-    "name": "jellyfish",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/015_jellyfish/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -1178,7 +698,6 @@ var JOBS = [
     "kind": "hat",
     "name": "cheese",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/016_cheese/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Hats/hatsMC"
   },
   {
@@ -1192,7 +711,6 @@ var JOBS = [
     "kind": "hat",
     "name": "cheese",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/016_cheese/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
   },
   {
@@ -1206,37 +724,7 @@ var JOBS = [
     "kind": "hat",
     "name": "cheese",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/016_cheese/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Hats/hatsMC",
-    "exportPath": "character/hat/016_cheese/composite.svg",
-    "frame": 15,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 16,
-    "kind": "hat",
-    "name": "cheese",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/hat/016_cheese/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 667"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 684"
-      }
-    ],
-    "symbolName": "Parts/Hats/hatsMC"
   },
   {
     "channel": "static",
@@ -1255,7 +743,6 @@ var JOBS = [
     "kind": "head",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/001_classic/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1269,7 +756,6 @@ var JOBS = [
     "kind": "head",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/001_classic/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1283,37 +769,7 @@ var JOBS = [
     "kind": "head",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/001_classic/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/001_classic/composite.svg",
-    "frame": 0,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 1,
-    "kind": "head",
-    "name": "classic",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/001_classic/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1332,7 +788,6 @@ var JOBS = [
     "kind": "head",
     "name": "tired",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/002_tired/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1346,7 +801,6 @@ var JOBS = [
     "kind": "head",
     "name": "tired",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/002_tired/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1360,37 +814,7 @@ var JOBS = [
     "kind": "head",
     "name": "tired",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/002_tired/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/002_tired/composite.svg",
-    "frame": 1,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 2,
-    "kind": "head",
-    "name": "tired",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/002_tired/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1409,7 +833,6 @@ var JOBS = [
     "kind": "head",
     "name": "smiler",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/003_smiler/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1423,7 +846,6 @@ var JOBS = [
     "kind": "head",
     "name": "smiler",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/003_smiler/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1437,37 +859,7 @@ var JOBS = [
     "kind": "head",
     "name": "smiler",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/003_smiler/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/003_smiler/composite.svg",
-    "frame": 2,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 3,
-    "kind": "head",
-    "name": "smiler",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/003_smiler/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1486,7 +878,6 @@ var JOBS = [
     "kind": "head",
     "name": "flower",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/004_flower/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1500,7 +891,6 @@ var JOBS = [
     "kind": "head",
     "name": "flower",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/004_flower/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1514,37 +904,7 @@ var JOBS = [
     "kind": "head",
     "name": "flower",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/004_flower/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/004_flower/composite.svg",
-    "frame": 3,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 4,
-    "kind": "head",
-    "name": "flower",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/004_flower/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1563,7 +923,6 @@ var JOBS = [
     "kind": "head",
     "name": "classic_girl",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/005_classic_girl/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1577,7 +936,6 @@ var JOBS = [
     "kind": "head",
     "name": "classic_girl",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/005_classic_girl/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1591,37 +949,7 @@ var JOBS = [
     "kind": "head",
     "name": "classic_girl",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/005_classic_girl/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/005_classic_girl/composite.svg",
-    "frame": 4,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 5,
-    "kind": "head",
-    "name": "classic_girl",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/005_classic_girl/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1640,7 +968,6 @@ var JOBS = [
     "kind": "head",
     "name": "goof",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/006_goof/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1654,7 +981,6 @@ var JOBS = [
     "kind": "head",
     "name": "goof",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/006_goof/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1668,37 +994,7 @@ var JOBS = [
     "kind": "head",
     "name": "goof",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/006_goof/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/006_goof/composite.svg",
-    "frame": 5,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 6,
-    "kind": "head",
-    "name": "goof",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/006_goof/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1717,7 +1013,6 @@ var JOBS = [
     "kind": "head",
     "name": "downer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/007_downer/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1731,7 +1026,6 @@ var JOBS = [
     "kind": "head",
     "name": "downer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/007_downer/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1745,37 +1039,7 @@ var JOBS = [
     "kind": "head",
     "name": "downer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/007_downer/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/007_downer/composite.svg",
-    "frame": 6,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 7,
-    "kind": "head",
-    "name": "downer",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/007_downer/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1794,7 +1058,6 @@ var JOBS = [
     "kind": "head",
     "name": "balloon",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/008_balloon/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1808,7 +1071,6 @@ var JOBS = [
     "kind": "head",
     "name": "balloon",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/008_balloon/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1822,37 +1084,7 @@ var JOBS = [
     "kind": "head",
     "name": "balloon",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/008_balloon/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/008_balloon/composite.svg",
-    "frame": 7,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 8,
-    "kind": "head",
-    "name": "balloon",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/008_balloon/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1871,7 +1103,6 @@ var JOBS = [
     "kind": "head",
     "name": "worm",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/009_worm/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1885,7 +1116,6 @@ var JOBS = [
     "kind": "head",
     "name": "worm",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/009_worm/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1899,37 +1129,7 @@ var JOBS = [
     "kind": "head",
     "name": "worm",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/009_worm/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/009_worm/composite.svg",
-    "frame": 8,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 9,
-    "kind": "head",
-    "name": "worm",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/009_worm/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -1948,7 +1148,6 @@ var JOBS = [
     "kind": "head",
     "name": "unicorn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/010_unicorn/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -1962,7 +1161,6 @@ var JOBS = [
     "kind": "head",
     "name": "unicorn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/010_unicorn/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -1976,37 +1174,7 @@ var JOBS = [
     "kind": "head",
     "name": "unicorn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/010_unicorn/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/010_unicorn/composite.svg",
-    "frame": 9,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 10,
-    "kind": "head",
-    "name": "unicorn",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/010_unicorn/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2025,7 +1193,6 @@ var JOBS = [
     "kind": "head",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/011_bird/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2039,7 +1206,6 @@ var JOBS = [
     "kind": "head",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/011_bird/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2053,37 +1219,7 @@ var JOBS = [
     "kind": "head",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/011_bird/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/011_bird/composite.svg",
-    "frame": 10,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 11,
-    "kind": "head",
-    "name": "bird",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/011_bird/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2102,7 +1238,6 @@ var JOBS = [
     "kind": "head",
     "name": "sun",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/012_sun/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2116,7 +1251,6 @@ var JOBS = [
     "kind": "head",
     "name": "sun",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/012_sun/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2130,37 +1264,7 @@ var JOBS = [
     "kind": "head",
     "name": "sun",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/012_sun/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/012_sun/composite.svg",
-    "frame": 11,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 12,
-    "kind": "head",
-    "name": "sun",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/012_sun/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2179,7 +1283,6 @@ var JOBS = [
     "kind": "head",
     "name": "candy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/013_candy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2193,7 +1296,6 @@ var JOBS = [
     "kind": "head",
     "name": "candy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/013_candy/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2207,37 +1309,7 @@ var JOBS = [
     "kind": "head",
     "name": "candy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/013_candy/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/013_candy/composite.svg",
-    "frame": 12,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 13,
-    "kind": "head",
-    "name": "candy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/013_candy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2256,7 +1328,6 @@ var JOBS = [
     "kind": "head",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/014_invisible/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2270,7 +1341,6 @@ var JOBS = [
     "kind": "head",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/014_invisible/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2284,37 +1354,7 @@ var JOBS = [
     "kind": "head",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/014_invisible/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/014_invisible/composite.svg",
-    "frame": 13,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 14,
-    "kind": "head",
-    "name": "invisible",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/014_invisible/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2333,7 +1373,6 @@ var JOBS = [
     "kind": "head",
     "name": "football_helmet",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/015_football_helmet/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2347,7 +1386,6 @@ var JOBS = [
     "kind": "head",
     "name": "football_helmet",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/015_football_helmet/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2361,37 +1399,7 @@ var JOBS = [
     "kind": "head",
     "name": "football_helmet",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/015_football_helmet/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/015_football_helmet/composite.svg",
-    "frame": 14,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 15,
-    "kind": "head",
-    "name": "football_helmet",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/015_football_helmet/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2410,7 +1418,6 @@ var JOBS = [
     "kind": "head",
     "name": "basketball",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/016_basketball/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2424,7 +1431,6 @@ var JOBS = [
     "kind": "head",
     "name": "basketball",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/016_basketball/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2438,37 +1444,7 @@ var JOBS = [
     "kind": "head",
     "name": "basketball",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/016_basketball/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/016_basketball/composite.svg",
-    "frame": 15,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 16,
-    "kind": "head",
-    "name": "basketball",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/016_basketball/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2487,7 +1463,6 @@ var JOBS = [
     "kind": "head",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/017_stick/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2501,7 +1476,6 @@ var JOBS = [
     "kind": "head",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/017_stick/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2515,37 +1489,7 @@ var JOBS = [
     "kind": "head",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/017_stick/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/017_stick/composite.svg",
-    "frame": 16,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 17,
-    "kind": "head",
-    "name": "stick",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/017_stick/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2564,7 +1508,6 @@ var JOBS = [
     "kind": "head",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/018_cat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2578,7 +1521,6 @@ var JOBS = [
     "kind": "head",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/018_cat/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2592,37 +1534,7 @@ var JOBS = [
     "kind": "head",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/018_cat/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/018_cat/composite.svg",
-    "frame": 17,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 18,
-    "kind": "head",
-    "name": "cat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/018_cat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2641,7 +1553,6 @@ var JOBS = [
     "kind": "head",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/019_elephant/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2655,7 +1566,6 @@ var JOBS = [
     "kind": "head",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/019_elephant/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2669,37 +1579,7 @@ var JOBS = [
     "kind": "head",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/019_elephant/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/019_elephant/composite.svg",
-    "frame": 18,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 19,
-    "kind": "head",
-    "name": "elephant",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/019_elephant/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2718,7 +1598,6 @@ var JOBS = [
     "kind": "head",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/020_ant/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2732,7 +1611,6 @@ var JOBS = [
     "kind": "head",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/020_ant/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2746,37 +1624,7 @@ var JOBS = [
     "kind": "head",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/020_ant/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/020_ant/composite.svg",
-    "frame": 19,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 20,
-    "kind": "head",
-    "name": "ant",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/020_ant/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2795,7 +1643,6 @@ var JOBS = [
     "kind": "head",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/021_astronaut/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2809,7 +1656,6 @@ var JOBS = [
     "kind": "head",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/021_astronaut/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2823,37 +1669,7 @@ var JOBS = [
     "kind": "head",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/021_astronaut/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/021_astronaut/composite.svg",
-    "frame": 20,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 21,
-    "kind": "head",
-    "name": "astronaut",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/021_astronaut/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2872,7 +1688,6 @@ var JOBS = [
     "kind": "head",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/022_alien/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2886,7 +1701,6 @@ var JOBS = [
     "kind": "head",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/022_alien/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2900,37 +1714,7 @@ var JOBS = [
     "kind": "head",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/022_alien/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/022_alien/composite.svg",
-    "frame": 21,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 22,
-    "kind": "head",
-    "name": "alien",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/022_alien/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -2949,7 +1733,6 @@ var JOBS = [
     "kind": "head",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/023_dino/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -2963,7 +1746,6 @@ var JOBS = [
     "kind": "head",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/023_dino/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -2977,37 +1759,7 @@ var JOBS = [
     "kind": "head",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/023_dino/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/023_dino/composite.svg",
-    "frame": 22,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 23,
-    "kind": "head",
-    "name": "dino",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/023_dino/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3026,7 +1778,6 @@ var JOBS = [
     "kind": "head",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/024_armor/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3040,7 +1791,6 @@ var JOBS = [
     "kind": "head",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/024_armor/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3054,37 +1804,7 @@ var JOBS = [
     "kind": "head",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/024_armor/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/024_armor/composite.svg",
-    "frame": 23,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 24,
-    "kind": "head",
-    "name": "armor",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/024_armor/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3103,7 +1823,6 @@ var JOBS = [
     "kind": "head",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/025_fairy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3117,7 +1836,6 @@ var JOBS = [
     "kind": "head",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/025_fairy/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3131,37 +1849,7 @@ var JOBS = [
     "kind": "head",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/025_fairy/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/025_fairy/composite.svg",
-    "frame": 24,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 25,
-    "kind": "head",
-    "name": "fairy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/025_fairy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3180,7 +1868,6 @@ var JOBS = [
     "kind": "head",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/026_gingerbread/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3194,7 +1881,6 @@ var JOBS = [
     "kind": "head",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/026_gingerbread/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3208,37 +1894,7 @@ var JOBS = [
     "kind": "head",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/026_gingerbread/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/026_gingerbread/composite.svg",
-    "frame": 25,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 26,
-    "kind": "head",
-    "name": "gingerbread",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/026_gingerbread/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3257,7 +1913,6 @@ var JOBS = [
     "kind": "head",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/027_bubble/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3271,7 +1926,6 @@ var JOBS = [
     "kind": "head",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/027_bubble/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3285,37 +1939,7 @@ var JOBS = [
     "kind": "head",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/027_bubble/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/027_bubble/composite.svg",
-    "frame": 26,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 27,
-    "kind": "head",
-    "name": "bubble",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/027_bubble/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3334,7 +1958,6 @@ var JOBS = [
     "kind": "head",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/028_king/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3348,7 +1971,6 @@ var JOBS = [
     "kind": "head",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/028_king/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3362,37 +1984,7 @@ var JOBS = [
     "kind": "head",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/028_king/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/028_king/composite.svg",
-    "frame": 27,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 28,
-    "kind": "head",
-    "name": "king",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/028_king/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3411,7 +2003,6 @@ var JOBS = [
     "kind": "head",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/029_queen/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3425,7 +2016,6 @@ var JOBS = [
     "kind": "head",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/029_queen/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3439,37 +2029,7 @@ var JOBS = [
     "kind": "head",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/029_queen/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/029_queen/composite.svg",
-    "frame": 28,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 29,
-    "kind": "head",
-    "name": "queen",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/029_queen/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3488,7 +2048,6 @@ var JOBS = [
     "kind": "head",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/030_sir/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3502,7 +2061,6 @@ var JOBS = [
     "kind": "head",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/030_sir/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3516,37 +2074,7 @@ var JOBS = [
     "kind": "head",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/030_sir/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/030_sir/composite.svg",
-    "frame": 29,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 30,
-    "kind": "head",
-    "name": "sir",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/030_sir/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3565,7 +2093,6 @@ var JOBS = [
     "kind": "head",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/031_very_invisible/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3579,7 +2106,6 @@ var JOBS = [
     "kind": "head",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/031_very_invisible/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3593,37 +2119,7 @@ var JOBS = [
     "kind": "head",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/031_very_invisible/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/031_very_invisible/composite.svg",
-    "frame": 30,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 31,
-    "kind": "head",
-    "name": "very_invisible",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/031_very_invisible/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3642,7 +2138,6 @@ var JOBS = [
     "kind": "head",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/032_taco/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3656,7 +2151,6 @@ var JOBS = [
     "kind": "head",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/032_taco/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3670,37 +2164,7 @@ var JOBS = [
     "kind": "head",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/032_taco/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/032_taco/composite.svg",
-    "frame": 31,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 32,
-    "kind": "head",
-    "name": "taco",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/032_taco/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3719,7 +2183,6 @@ var JOBS = [
     "kind": "head",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/033_slender/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3733,7 +2196,6 @@ var JOBS = [
     "kind": "head",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/033_slender/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3747,37 +2209,7 @@ var JOBS = [
     "kind": "head",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/033_slender/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/033_slender/composite.svg",
-    "frame": 32,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 33,
-    "kind": "head",
-    "name": "slender",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/033_slender/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3796,7 +2228,6 @@ var JOBS = [
     "kind": "head",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/034_santa/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3810,7 +2241,6 @@ var JOBS = [
     "kind": "head",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/034_santa/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3824,37 +2254,7 @@ var JOBS = [
     "kind": "head",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/034_santa/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/034_santa/composite.svg",
-    "frame": 33,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 34,
-    "kind": "head",
-    "name": "santa",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/034_santa/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3873,7 +2273,6 @@ var JOBS = [
     "kind": "head",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/035_frost_djinn/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3887,7 +2286,6 @@ var JOBS = [
     "kind": "head",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/035_frost_djinn/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3901,37 +2299,7 @@ var JOBS = [
     "kind": "head",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/035_frost_djinn/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/035_frost_djinn/composite.svg",
-    "frame": 34,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 35,
-    "kind": "head",
-    "name": "frost_djinn",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/035_frost_djinn/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -3950,7 +2318,6 @@ var JOBS = [
     "kind": "head",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/036_reindeer/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -3964,7 +2331,6 @@ var JOBS = [
     "kind": "head",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/036_reindeer/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -3978,37 +2344,7 @@ var JOBS = [
     "kind": "head",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/036_reindeer/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/036_reindeer/composite.svg",
-    "frame": 35,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 36,
-    "kind": "head",
-    "name": "reindeer",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/036_reindeer/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4027,7 +2363,6 @@ var JOBS = [
     "kind": "head",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/037_crocodile/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4041,7 +2376,6 @@ var JOBS = [
     "kind": "head",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/037_crocodile/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4055,37 +2389,7 @@ var JOBS = [
     "kind": "head",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/037_crocodile/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/037_crocodile/composite.svg",
-    "frame": 36,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 37,
-    "kind": "head",
-    "name": "crocodile",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/037_crocodile/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4104,7 +2408,6 @@ var JOBS = [
     "kind": "head",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/038_valentine/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4118,7 +2421,6 @@ var JOBS = [
     "kind": "head",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/038_valentine/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4132,37 +2434,7 @@ var JOBS = [
     "kind": "head",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/038_valentine/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/038_valentine/composite.svg",
-    "frame": 37,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 38,
-    "kind": "head",
-    "name": "valentine",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/038_valentine/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4181,7 +2453,6 @@ var JOBS = [
     "kind": "head",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/039_bunny/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4195,7 +2466,6 @@ var JOBS = [
     "kind": "head",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/039_bunny/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4209,37 +2479,7 @@ var JOBS = [
     "kind": "head",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/039_bunny/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/039_bunny/composite.svg",
-    "frame": 38,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 39,
-    "kind": "head",
-    "name": "bunny",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/039_bunny/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4258,7 +2498,6 @@ var JOBS = [
     "kind": "head",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/040_gecko/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4272,7 +2511,6 @@ var JOBS = [
     "kind": "head",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/040_gecko/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4286,37 +2524,7 @@ var JOBS = [
     "kind": "head",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/040_gecko/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/040_gecko/composite.svg",
-    "frame": 39,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 40,
-    "kind": "head",
-    "name": "gecko",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/040_gecko/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4335,7 +2543,6 @@ var JOBS = [
     "kind": "head",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/041_bat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4349,7 +2556,6 @@ var JOBS = [
     "kind": "head",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/041_bat/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4363,37 +2569,7 @@ var JOBS = [
     "kind": "head",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/041_bat/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/041_bat/composite.svg",
-    "frame": 40,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 41,
-    "kind": "head",
-    "name": "bat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/041_bat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4412,7 +2588,6 @@ var JOBS = [
     "kind": "head",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/042_sea/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4426,7 +2601,6 @@ var JOBS = [
     "kind": "head",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/042_sea/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4440,37 +2614,7 @@ var JOBS = [
     "kind": "head",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/042_sea/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/042_sea/composite.svg",
-    "frame": 41,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 42,
-    "kind": "head",
-    "name": "sea",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/042_sea/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4489,7 +2633,6 @@ var JOBS = [
     "kind": "head",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/043_brew/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4503,7 +2646,6 @@ var JOBS = [
     "kind": "head",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/043_brew/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4517,37 +2659,7 @@ var JOBS = [
     "kind": "head",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/043_brew/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/043_brew/composite.svg",
-    "frame": 42,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 43,
-    "kind": "head",
-    "name": "brew",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/043_brew/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4566,7 +2678,6 @@ var JOBS = [
     "kind": "head",
     "name": "jackolantern",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/044_jackolantern/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4580,7 +2691,6 @@ var JOBS = [
     "kind": "head",
     "name": "jackolantern",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/044_jackolantern/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4594,37 +2704,7 @@ var JOBS = [
     "kind": "head",
     "name": "jackolantern",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/044_jackolantern/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/044_jackolantern/composite.svg",
-    "frame": 43,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 44,
-    "kind": "head",
-    "name": "jackolantern",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/044_jackolantern/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4643,7 +2723,6 @@ var JOBS = [
     "kind": "head",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/045_xmas/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4657,7 +2736,6 @@ var JOBS = [
     "kind": "head",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/045_xmas/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4671,37 +2749,7 @@ var JOBS = [
     "kind": "head",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/045_xmas/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/045_xmas/composite.svg",
-    "frame": 44,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 45,
-    "kind": "head",
-    "name": "xmas",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/045_xmas/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4720,7 +2768,6 @@ var JOBS = [
     "kind": "head",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/046_snowman/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4734,7 +2781,6 @@ var JOBS = [
     "kind": "head",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/046_snowman/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4748,37 +2794,7 @@ var JOBS = [
     "kind": "head",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/046_snowman/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/046_snowman/composite.svg",
-    "frame": 45,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 46,
-    "kind": "head",
-    "name": "snowman",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/046_snowman/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4797,7 +2813,6 @@ var JOBS = [
     "kind": "head",
     "name": "blobfish",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/047_blobfish/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4811,7 +2826,6 @@ var JOBS = [
     "kind": "head",
     "name": "blobfish",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/047_blobfish/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4825,37 +2839,7 @@ var JOBS = [
     "kind": "head",
     "name": "blobfish",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/047_blobfish/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/047_blobfish/composite.svg",
-    "frame": 46,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 47,
-    "kind": "head",
-    "name": "blobfish",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/047_blobfish/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4874,7 +2858,6 @@ var JOBS = [
     "kind": "head",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/048_turkey/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4888,7 +2871,6 @@ var JOBS = [
     "kind": "head",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/048_turkey/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4902,37 +2884,7 @@ var JOBS = [
     "kind": "head",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/048_turkey/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/048_turkey/composite.svg",
-    "frame": 47,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 48,
-    "kind": "head",
-    "name": "turkey",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/048_turkey/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -4951,7 +2903,6 @@ var JOBS = [
     "kind": "head",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/049_dog/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -4965,7 +2916,6 @@ var JOBS = [
     "kind": "head",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/049_dog/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -4979,37 +2929,7 @@ var JOBS = [
     "kind": "head",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/049_dog/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/049_dog/composite.svg",
-    "frame": 48,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 49,
-    "kind": "head",
-    "name": "dog",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/049_dog/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -5028,7 +2948,6 @@ var JOBS = [
     "kind": "head",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/050_gladiator/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headsMC"
   },
   {
@@ -5042,7 +2961,6 @@ var JOBS = [
     "kind": "head",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/050_gladiator/primary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC"
   },
   {
@@ -5056,37 +2974,7 @@ var JOBS = [
     "kind": "head",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/050_gladiator/secondary.svg",
-    "overlays": [],
     "symbolName": "Parts/Heads/headColorMC2"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Heads/headsMC",
-    "exportPath": "character/head/050_gladiator/composite.svg",
-    "frame": 49,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 50,
-    "kind": "head",
-    "name": "gladiator",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/head/050_gladiator/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "Parts/Heads/headColorMC"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "Parts/Heads/headColorMC2"
-      }
-    ],
-    "symbolName": "Parts/Heads/headsMC"
   },
   {
     "channel": "static",
@@ -5105,7 +2993,6 @@ var JOBS = [
     "kind": "body",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/001_classic/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5119,7 +3006,6 @@ var JOBS = [
     "kind": "body",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/001_classic/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5133,37 +3019,7 @@ var JOBS = [
     "kind": "body",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/001_classic/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/001_classic/composite.svg",
-    "frame": 0,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 1,
-    "kind": "body",
-    "name": "classic",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/001_classic/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5182,7 +3038,6 @@ var JOBS = [
     "kind": "body",
     "name": "strap",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/002_strap/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5196,7 +3051,6 @@ var JOBS = [
     "kind": "body",
     "name": "strap",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/002_strap/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5210,37 +3064,7 @@ var JOBS = [
     "kind": "body",
     "name": "strap",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/002_strap/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/002_strap/composite.svg",
-    "frame": 1,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 2,
-    "kind": "body",
-    "name": "strap",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/002_strap/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5259,7 +3083,6 @@ var JOBS = [
     "kind": "body",
     "name": "dress",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/003_dress/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5273,7 +3096,6 @@ var JOBS = [
     "kind": "body",
     "name": "dress",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/003_dress/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5287,37 +3109,7 @@ var JOBS = [
     "kind": "body",
     "name": "dress",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/003_dress/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/003_dress/composite.svg",
-    "frame": 2,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 3,
-    "kind": "body",
-    "name": "dress",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/003_dress/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5336,7 +3128,6 @@ var JOBS = [
     "kind": "body",
     "name": "pec",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/004_pec/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5350,7 +3141,6 @@ var JOBS = [
     "kind": "body",
     "name": "pec",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/004_pec/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5364,37 +3154,7 @@ var JOBS = [
     "kind": "body",
     "name": "pec",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/004_pec/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/004_pec/composite.svg",
-    "frame": 3,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 4,
-    "kind": "body",
-    "name": "pec",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/004_pec/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5413,7 +3173,6 @@ var JOBS = [
     "kind": "body",
     "name": "gut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/005_gut/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5427,7 +3186,6 @@ var JOBS = [
     "kind": "body",
     "name": "gut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/005_gut/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5441,37 +3199,7 @@ var JOBS = [
     "kind": "body",
     "name": "gut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/005_gut/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/005_gut/composite.svg",
-    "frame": 4,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 5,
-    "kind": "body",
-    "name": "gut",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/005_gut/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5490,7 +3218,6 @@ var JOBS = [
     "kind": "body",
     "name": "collar",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/006_collar/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5504,7 +3231,6 @@ var JOBS = [
     "kind": "body",
     "name": "collar",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/006_collar/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5518,37 +3244,7 @@ var JOBS = [
     "kind": "body",
     "name": "collar",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/006_collar/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/006_collar/composite.svg",
-    "frame": 5,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 6,
-    "kind": "body",
-    "name": "collar",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/006_collar/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5567,7 +3263,6 @@ var JOBS = [
     "kind": "body",
     "name": "miss_pr2",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/007_miss_pr2/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5581,7 +3276,6 @@ var JOBS = [
     "kind": "body",
     "name": "miss_pr2",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/007_miss_pr2/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5595,37 +3289,7 @@ var JOBS = [
     "kind": "body",
     "name": "miss_pr2",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/007_miss_pr2/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/007_miss_pr2/composite.svg",
-    "frame": 6,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 7,
-    "kind": "body",
-    "name": "miss_pr2",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/007_miss_pr2/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5644,7 +3308,6 @@ var JOBS = [
     "kind": "body",
     "name": "belt",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/008_belt/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5658,7 +3321,6 @@ var JOBS = [
     "kind": "body",
     "name": "belt",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/008_belt/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5672,37 +3334,7 @@ var JOBS = [
     "kind": "body",
     "name": "belt",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/008_belt/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/008_belt/composite.svg",
-    "frame": 7,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 8,
-    "kind": "body",
-    "name": "belt",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/008_belt/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5721,7 +3353,6 @@ var JOBS = [
     "kind": "body",
     "name": "snake",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/009_snake/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5735,7 +3366,6 @@ var JOBS = [
     "kind": "body",
     "name": "snake",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/009_snake/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5749,37 +3379,7 @@ var JOBS = [
     "kind": "body",
     "name": "snake",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/009_snake/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/009_snake/composite.svg",
-    "frame": 8,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 9,
-    "kind": "body",
-    "name": "snake",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/009_snake/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5798,7 +3398,6 @@ var JOBS = [
     "kind": "body",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/010_bird/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5812,7 +3411,6 @@ var JOBS = [
     "kind": "body",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/010_bird/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5826,37 +3424,7 @@ var JOBS = [
     "kind": "body",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/010_bird/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/010_bird/composite.svg",
-    "frame": 9,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 10,
-    "kind": "body",
-    "name": "bird",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/010_bird/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5875,7 +3443,6 @@ var JOBS = [
     "kind": "body",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/011_invisible/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5889,7 +3456,6 @@ var JOBS = [
     "kind": "body",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/011_invisible/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5903,37 +3469,7 @@ var JOBS = [
     "kind": "body",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/011_invisible/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/011_invisible/composite.svg",
-    "frame": 10,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 11,
-    "kind": "body",
-    "name": "invisible",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/011_invisible/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -5952,7 +3488,6 @@ var JOBS = [
     "kind": "body",
     "name": "bee",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/012_bee/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -5966,7 +3501,6 @@ var JOBS = [
     "kind": "body",
     "name": "bee",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/012_bee/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -5980,37 +3514,7 @@ var JOBS = [
     "kind": "body",
     "name": "bee",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/012_bee/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/012_bee/composite.svg",
-    "frame": 11,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 12,
-    "kind": "body",
-    "name": "bee",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/012_bee/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6029,7 +3533,6 @@ var JOBS = [
     "kind": "body",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/013_stick/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6043,7 +3546,6 @@ var JOBS = [
     "kind": "body",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/013_stick/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6057,37 +3559,7 @@ var JOBS = [
     "kind": "body",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/013_stick/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/013_stick/composite.svg",
-    "frame": 12,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 13,
-    "kind": "body",
-    "name": "stick",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/013_stick/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6106,7 +3578,6 @@ var JOBS = [
     "kind": "body",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/014_cat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6120,7 +3591,6 @@ var JOBS = [
     "kind": "body",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/014_cat/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6134,37 +3604,7 @@ var JOBS = [
     "kind": "body",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/014_cat/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/014_cat/composite.svg",
-    "frame": 13,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 14,
-    "kind": "body",
-    "name": "cat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/014_cat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6183,7 +3623,6 @@ var JOBS = [
     "kind": "body",
     "name": "car",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/015_car/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6197,7 +3636,6 @@ var JOBS = [
     "kind": "body",
     "name": "car",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/015_car/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6211,37 +3649,7 @@ var JOBS = [
     "kind": "body",
     "name": "car",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/015_car/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/015_car/composite.svg",
-    "frame": 14,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 15,
-    "kind": "body",
-    "name": "car",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/015_car/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6260,7 +3668,6 @@ var JOBS = [
     "kind": "body",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/016_elephant/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6274,7 +3681,6 @@ var JOBS = [
     "kind": "body",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/016_elephant/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6288,37 +3694,7 @@ var JOBS = [
     "kind": "body",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/016_elephant/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/016_elephant/composite.svg",
-    "frame": 15,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 16,
-    "kind": "body",
-    "name": "elephant",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/016_elephant/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6337,7 +3713,6 @@ var JOBS = [
     "kind": "body",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/017_ant/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6351,7 +3726,6 @@ var JOBS = [
     "kind": "body",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/017_ant/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6365,37 +3739,7 @@ var JOBS = [
     "kind": "body",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/017_ant/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/017_ant/composite.svg",
-    "frame": 16,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 17,
-    "kind": "body",
-    "name": "ant",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/017_ant/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6414,7 +3758,6 @@ var JOBS = [
     "kind": "body",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/018_astronaut/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6428,7 +3771,6 @@ var JOBS = [
     "kind": "body",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/018_astronaut/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6442,37 +3784,7 @@ var JOBS = [
     "kind": "body",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/018_astronaut/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/018_astronaut/composite.svg",
-    "frame": 17,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 18,
-    "kind": "body",
-    "name": "astronaut",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/018_astronaut/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6491,7 +3803,6 @@ var JOBS = [
     "kind": "body",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/019_alien/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6505,7 +3816,6 @@ var JOBS = [
     "kind": "body",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/019_alien/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6519,37 +3829,7 @@ var JOBS = [
     "kind": "body",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/019_alien/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/019_alien/composite.svg",
-    "frame": 18,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 19,
-    "kind": "body",
-    "name": "alien",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/019_alien/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6568,7 +3848,6 @@ var JOBS = [
     "kind": "body",
     "name": "galaxy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/020_galaxy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6582,7 +3861,6 @@ var JOBS = [
     "kind": "body",
     "name": "galaxy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/020_galaxy/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6596,37 +3874,7 @@ var JOBS = [
     "kind": "body",
     "name": "galaxy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/020_galaxy/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/020_galaxy/composite.svg",
-    "frame": 19,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 20,
-    "kind": "body",
-    "name": "galaxy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/020_galaxy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6645,7 +3893,6 @@ var JOBS = [
     "kind": "body",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/021_bubble/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6659,7 +3906,6 @@ var JOBS = [
     "kind": "body",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/021_bubble/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6673,37 +3919,7 @@ var JOBS = [
     "kind": "body",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/021_bubble/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/021_bubble/composite.svg",
-    "frame": 20,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 21,
-    "kind": "body",
-    "name": "bubble",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/021_bubble/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6722,7 +3938,6 @@ var JOBS = [
     "kind": "body",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/022_dino/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6736,7 +3951,6 @@ var JOBS = [
     "kind": "body",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/022_dino/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6750,37 +3964,7 @@ var JOBS = [
     "kind": "body",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/022_dino/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/022_dino/composite.svg",
-    "frame": 21,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 22,
-    "kind": "body",
-    "name": "dino",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/022_dino/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6799,7 +3983,6 @@ var JOBS = [
     "kind": "body",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/023_armor/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6813,7 +3996,6 @@ var JOBS = [
     "kind": "body",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/023_armor/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6827,37 +4009,7 @@ var JOBS = [
     "kind": "body",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/023_armor/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/023_armor/composite.svg",
-    "frame": 22,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 23,
-    "kind": "body",
-    "name": "armor",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/023_armor/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6876,7 +4028,6 @@ var JOBS = [
     "kind": "body",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/024_fairy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6890,7 +4041,6 @@ var JOBS = [
     "kind": "body",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/024_fairy/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6904,37 +4054,7 @@ var JOBS = [
     "kind": "body",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/024_fairy/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/024_fairy/composite.svg",
-    "frame": 23,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 24,
-    "kind": "body",
-    "name": "fairy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/024_fairy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -6953,7 +4073,6 @@ var JOBS = [
     "kind": "body",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/025_gingerbread/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -6967,7 +4086,6 @@ var JOBS = [
     "kind": "body",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/025_gingerbread/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -6981,37 +4099,7 @@ var JOBS = [
     "kind": "body",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/025_gingerbread/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/025_gingerbread/composite.svg",
-    "frame": 24,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 25,
-    "kind": "body",
-    "name": "gingerbread",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/025_gingerbread/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7030,7 +4118,6 @@ var JOBS = [
     "kind": "body",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/026_king/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7044,7 +4131,6 @@ var JOBS = [
     "kind": "body",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/026_king/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7058,37 +4144,7 @@ var JOBS = [
     "kind": "body",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/026_king/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/026_king/composite.svg",
-    "frame": 25,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 26,
-    "kind": "body",
-    "name": "king",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/026_king/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7107,7 +4163,6 @@ var JOBS = [
     "kind": "body",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/027_queen/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7121,7 +4176,6 @@ var JOBS = [
     "kind": "body",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/027_queen/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7135,37 +4189,7 @@ var JOBS = [
     "kind": "body",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/027_queen/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/027_queen/composite.svg",
-    "frame": 26,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 27,
-    "kind": "body",
-    "name": "queen",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/027_queen/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7184,7 +4208,6 @@ var JOBS = [
     "kind": "body",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/028_sir/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7198,7 +4221,6 @@ var JOBS = [
     "kind": "body",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/028_sir/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7212,37 +4234,7 @@ var JOBS = [
     "kind": "body",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/028_sir/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/028_sir/composite.svg",
-    "frame": 27,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 28,
-    "kind": "body",
-    "name": "sir",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/028_sir/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7261,7 +4253,6 @@ var JOBS = [
     "kind": "body",
     "name": "fred",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/029_fred/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7275,7 +4266,6 @@ var JOBS = [
     "kind": "body",
     "name": "fred",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/029_fred/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7289,37 +4279,7 @@ var JOBS = [
     "kind": "body",
     "name": "fred",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/029_fred/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/029_fred/composite.svg",
-    "frame": 28,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 29,
-    "kind": "body",
-    "name": "fred",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/029_fred/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7338,7 +4298,6 @@ var JOBS = [
     "kind": "body",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/030_very_invisible/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7352,7 +4311,6 @@ var JOBS = [
     "kind": "body",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/030_very_invisible/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7366,37 +4324,7 @@ var JOBS = [
     "kind": "body",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/030_very_invisible/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/030_very_invisible/composite.svg",
-    "frame": 29,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 30,
-    "kind": "body",
-    "name": "very_invisible",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/030_very_invisible/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7415,7 +4343,6 @@ var JOBS = [
     "kind": "body",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/031_taco/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7429,7 +4356,6 @@ var JOBS = [
     "kind": "body",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/031_taco/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7443,37 +4369,7 @@ var JOBS = [
     "kind": "body",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/031_taco/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/031_taco/composite.svg",
-    "frame": 30,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 31,
-    "kind": "body",
-    "name": "taco",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/031_taco/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7492,7 +4388,6 @@ var JOBS = [
     "kind": "body",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/032_slender/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7506,7 +4401,6 @@ var JOBS = [
     "kind": "body",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/032_slender/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7520,37 +4414,7 @@ var JOBS = [
     "kind": "body",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/032_slender/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/032_slender/composite.svg",
-    "frame": 31,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 32,
-    "kind": "body",
-    "name": "slender",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/032_slender/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7569,7 +4433,6 @@ var JOBS = [
     "kind": "body",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/034_santa/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7583,7 +4446,6 @@ var JOBS = [
     "kind": "body",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/034_santa/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7597,37 +4459,7 @@ var JOBS = [
     "kind": "body",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/034_santa/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/034_santa/composite.svg",
-    "frame": 33,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 34,
-    "kind": "body",
-    "name": "santa",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/034_santa/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7646,7 +4478,6 @@ var JOBS = [
     "kind": "body",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/035_frost_djinn/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7660,7 +4491,6 @@ var JOBS = [
     "kind": "body",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/035_frost_djinn/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7674,37 +4504,7 @@ var JOBS = [
     "kind": "body",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/035_frost_djinn/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/035_frost_djinn/composite.svg",
-    "frame": 34,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 35,
-    "kind": "body",
-    "name": "frost_djinn",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/035_frost_djinn/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7723,7 +4523,6 @@ var JOBS = [
     "kind": "body",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/036_reindeer/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7737,7 +4536,6 @@ var JOBS = [
     "kind": "body",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/036_reindeer/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7751,37 +4549,7 @@ var JOBS = [
     "kind": "body",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/036_reindeer/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/036_reindeer/composite.svg",
-    "frame": 35,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 36,
-    "kind": "body",
-    "name": "reindeer",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/036_reindeer/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7800,7 +4568,6 @@ var JOBS = [
     "kind": "body",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/037_crocodile/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7814,7 +4581,6 @@ var JOBS = [
     "kind": "body",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/037_crocodile/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7828,37 +4594,7 @@ var JOBS = [
     "kind": "body",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/037_crocodile/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/037_crocodile/composite.svg",
-    "frame": 36,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 37,
-    "kind": "body",
-    "name": "crocodile",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/037_crocodile/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7877,7 +4613,6 @@ var JOBS = [
     "kind": "body",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/038_valentine/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7891,7 +4626,6 @@ var JOBS = [
     "kind": "body",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/038_valentine/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7905,37 +4639,7 @@ var JOBS = [
     "kind": "body",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/038_valentine/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/038_valentine/composite.svg",
-    "frame": 37,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 38,
-    "kind": "body",
-    "name": "valentine",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/038_valentine/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -7954,7 +4658,6 @@ var JOBS = [
     "kind": "body",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/039_bunny/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -7968,7 +4671,6 @@ var JOBS = [
     "kind": "body",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/039_bunny/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -7982,37 +4684,7 @@ var JOBS = [
     "kind": "body",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/039_bunny/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/039_bunny/composite.svg",
-    "frame": 38,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 39,
-    "kind": "body",
-    "name": "bunny",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/039_bunny/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8031,7 +4703,6 @@ var JOBS = [
     "kind": "body",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/040_gecko/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8045,7 +4716,6 @@ var JOBS = [
     "kind": "body",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/040_gecko/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8059,37 +4729,7 @@ var JOBS = [
     "kind": "body",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/040_gecko/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/040_gecko/composite.svg",
-    "frame": 39,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 40,
-    "kind": "body",
-    "name": "gecko",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/040_gecko/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8108,7 +4748,6 @@ var JOBS = [
     "kind": "body",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/041_bat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8122,7 +4761,6 @@ var JOBS = [
     "kind": "body",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/041_bat/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8136,37 +4774,7 @@ var JOBS = [
     "kind": "body",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/041_bat/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/041_bat/composite.svg",
-    "frame": 40,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 41,
-    "kind": "body",
-    "name": "bat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/041_bat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8185,7 +4793,6 @@ var JOBS = [
     "kind": "body",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/042_sea/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8199,7 +4806,6 @@ var JOBS = [
     "kind": "body",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/042_sea/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8213,37 +4819,7 @@ var JOBS = [
     "kind": "body",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/042_sea/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/042_sea/composite.svg",
-    "frame": 41,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 42,
-    "kind": "body",
-    "name": "sea",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/042_sea/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8262,7 +4838,6 @@ var JOBS = [
     "kind": "body",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/043_brew/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8276,7 +4851,6 @@ var JOBS = [
     "kind": "body",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/043_brew/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8290,37 +4864,7 @@ var JOBS = [
     "kind": "body",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/043_brew/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/043_brew/composite.svg",
-    "frame": 42,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 43,
-    "kind": "body",
-    "name": "brew",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/043_brew/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8339,7 +4883,6 @@ var JOBS = [
     "kind": "body",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/045_xmas/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8353,7 +4896,6 @@ var JOBS = [
     "kind": "body",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/045_xmas/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8367,37 +4909,7 @@ var JOBS = [
     "kind": "body",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/045_xmas/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/045_xmas/composite.svg",
-    "frame": 44,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 45,
-    "kind": "body",
-    "name": "xmas",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/045_xmas/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8416,7 +4928,6 @@ var JOBS = [
     "kind": "body",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/046_snowman/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8430,7 +4941,6 @@ var JOBS = [
     "kind": "body",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/046_snowman/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8444,37 +4954,7 @@ var JOBS = [
     "kind": "body",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/046_snowman/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/046_snowman/composite.svg",
-    "frame": 45,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 46,
-    "kind": "body",
-    "name": "snowman",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/046_snowman/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8493,7 +4973,6 @@ var JOBS = [
     "kind": "body",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/048_turkey/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8507,7 +4986,6 @@ var JOBS = [
     "kind": "body",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/048_turkey/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8521,37 +4999,7 @@ var JOBS = [
     "kind": "body",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/048_turkey/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/048_turkey/composite.svg",
-    "frame": 47,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 48,
-    "kind": "body",
-    "name": "turkey",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/048_turkey/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8570,7 +5018,6 @@ var JOBS = [
     "kind": "body",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/049_dog/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8584,7 +5031,6 @@ var JOBS = [
     "kind": "body",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/049_dog/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8598,37 +5044,7 @@ var JOBS = [
     "kind": "body",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/049_dog/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/049_dog/composite.svg",
-    "frame": 48,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 49,
-    "kind": "body",
-    "name": "dog",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/049_dog/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8647,7 +5063,6 @@ var JOBS = [
     "kind": "body",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/050_gladiator/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Bodies/bodyMC"
   },
   {
@@ -8661,7 +5076,6 @@ var JOBS = [
     "kind": "body",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/050_gladiator/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 585"
   },
   {
@@ -8675,37 +5089,7 @@ var JOBS = [
     "kind": "body",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/050_gladiator/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 621"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Bodies/bodyMC",
-    "exportPath": "character/body/050_gladiator/composite.svg",
-    "frame": 49,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 50,
-    "kind": "body",
-    "name": "gladiator",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/body/050_gladiator/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 585"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 621"
-      }
-    ],
-    "symbolName": "Parts/Bodies/bodyMC"
   },
   {
     "channel": "static",
@@ -8724,7 +5108,6 @@ var JOBS = [
     "kind": "feet",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/001_classic/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -8738,7 +5121,6 @@ var JOBS = [
     "kind": "feet",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/001_classic/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -8752,37 +5134,7 @@ var JOBS = [
     "kind": "feet",
     "name": "classic",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/001_classic/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/001_classic/composite.svg",
-    "frame": 0,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 1,
-    "kind": "feet",
-    "name": "classic",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/001_classic/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -8801,7 +5153,6 @@ var JOBS = [
     "kind": "feet",
     "name": "heel",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/002_heel/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -8815,7 +5166,6 @@ var JOBS = [
     "kind": "feet",
     "name": "heel",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/002_heel/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -8829,37 +5179,7 @@ var JOBS = [
     "kind": "feet",
     "name": "heel",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/002_heel/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/002_heel/composite.svg",
-    "frame": 1,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 2,
-    "kind": "feet",
-    "name": "heel",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/002_heel/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -8878,7 +5198,6 @@ var JOBS = [
     "kind": "feet",
     "name": "loafer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/003_loafer/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -8892,7 +5211,6 @@ var JOBS = [
     "kind": "feet",
     "name": "loafer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/003_loafer/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -8906,37 +5224,7 @@ var JOBS = [
     "kind": "feet",
     "name": "loafer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/003_loafer/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/003_loafer/composite.svg",
-    "frame": 2,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 3,
-    "kind": "feet",
-    "name": "loafer",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/003_loafer/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -8955,7 +5243,6 @@ var JOBS = [
     "kind": "feet",
     "name": "cleat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/004_cleat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -8969,7 +5256,6 @@ var JOBS = [
     "kind": "feet",
     "name": "cleat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/004_cleat/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -8983,37 +5269,7 @@ var JOBS = [
     "kind": "feet",
     "name": "cleat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/004_cleat/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/004_cleat/composite.svg",
-    "frame": 3,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 4,
-    "kind": "feet",
-    "name": "cleat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/004_cleat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9032,7 +5288,6 @@ var JOBS = [
     "kind": "feet",
     "name": "magnet",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/005_magnet/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9046,7 +5301,6 @@ var JOBS = [
     "kind": "feet",
     "name": "magnet",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/005_magnet/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9060,37 +5314,7 @@ var JOBS = [
     "kind": "feet",
     "name": "magnet",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/005_magnet/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/005_magnet/composite.svg",
-    "frame": 4,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 5,
-    "kind": "feet",
-    "name": "magnet",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/005_magnet/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9109,7 +5333,6 @@ var JOBS = [
     "kind": "feet",
     "name": "tiny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/006_tiny/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9123,7 +5346,6 @@ var JOBS = [
     "kind": "feet",
     "name": "tiny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/006_tiny/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9137,37 +5359,7 @@ var JOBS = [
     "kind": "feet",
     "name": "tiny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/006_tiny/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/006_tiny/composite.svg",
-    "frame": 5,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 6,
-    "kind": "feet",
-    "name": "tiny",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/006_tiny/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9186,7 +5378,6 @@ var JOBS = [
     "kind": "feet",
     "name": "sandal",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/007_sandal/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9200,7 +5391,6 @@ var JOBS = [
     "kind": "feet",
     "name": "sandal",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/007_sandal/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9214,37 +5404,7 @@ var JOBS = [
     "kind": "feet",
     "name": "sandal",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/007_sandal/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/007_sandal/composite.svg",
-    "frame": 6,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 7,
-    "kind": "feet",
-    "name": "sandal",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/007_sandal/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9263,7 +5423,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bare",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/008_bare/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9277,7 +5436,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bare",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/008_bare/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9291,37 +5449,7 @@ var JOBS = [
     "kind": "feet",
     "name": "bare",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/008_bare/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/008_bare/composite.svg",
-    "frame": 7,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 8,
-    "kind": "feet",
-    "name": "bare",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/008_bare/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9340,7 +5468,6 @@ var JOBS = [
     "kind": "feet",
     "name": "nice",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/009_nice/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9354,7 +5481,6 @@ var JOBS = [
     "kind": "feet",
     "name": "nice",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/009_nice/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9368,37 +5494,7 @@ var JOBS = [
     "kind": "feet",
     "name": "nice",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/009_nice/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/009_nice/composite.svg",
-    "frame": 8,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 9,
-    "kind": "feet",
-    "name": "nice",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/009_nice/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9417,7 +5513,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/010_bird/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9431,7 +5526,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/010_bird/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9445,37 +5539,7 @@ var JOBS = [
     "kind": "feet",
     "name": "bird",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/010_bird/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/010_bird/composite.svg",
-    "frame": 9,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 10,
-    "kind": "feet",
-    "name": "bird",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/010_bird/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9494,7 +5558,6 @@ var JOBS = [
     "kind": "feet",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/011_invisible/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9508,7 +5571,6 @@ var JOBS = [
     "kind": "feet",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/011_invisible/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9522,37 +5584,7 @@ var JOBS = [
     "kind": "feet",
     "name": "invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/011_invisible/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/011_invisible/composite.svg",
-    "frame": 10,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 11,
-    "kind": "feet",
-    "name": "invisible",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/011_invisible/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9571,7 +5603,6 @@ var JOBS = [
     "kind": "feet",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/012_stick/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9585,7 +5616,6 @@ var JOBS = [
     "kind": "feet",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/012_stick/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9599,37 +5629,7 @@ var JOBS = [
     "kind": "feet",
     "name": "stick",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/012_stick/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/012_stick/composite.svg",
-    "frame": 11,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 12,
-    "kind": "feet",
-    "name": "stick",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/012_stick/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9648,7 +5648,6 @@ var JOBS = [
     "kind": "feet",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/013_cat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9662,7 +5661,6 @@ var JOBS = [
     "kind": "feet",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/013_cat/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9676,37 +5674,7 @@ var JOBS = [
     "kind": "feet",
     "name": "cat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/013_cat/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/013_cat/composite.svg",
-    "frame": 12,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 13,
-    "kind": "feet",
-    "name": "cat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/013_cat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9725,7 +5693,6 @@ var JOBS = [
     "kind": "feet",
     "name": "tire",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/014_tire/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9739,7 +5706,6 @@ var JOBS = [
     "kind": "feet",
     "name": "tire",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/014_tire/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9753,37 +5719,7 @@ var JOBS = [
     "kind": "feet",
     "name": "tire",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/014_tire/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/014_tire/composite.svg",
-    "frame": 13,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 14,
-    "kind": "feet",
-    "name": "tire",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/014_tire/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9802,7 +5738,6 @@ var JOBS = [
     "kind": "feet",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/015_elephant/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9816,7 +5751,6 @@ var JOBS = [
     "kind": "feet",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/015_elephant/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9830,37 +5764,7 @@ var JOBS = [
     "kind": "feet",
     "name": "elephant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/015_elephant/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/015_elephant/composite.svg",
-    "frame": 14,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 15,
-    "kind": "feet",
-    "name": "elephant",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/015_elephant/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9879,7 +5783,6 @@ var JOBS = [
     "kind": "feet",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/016_ant/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9893,7 +5796,6 @@ var JOBS = [
     "kind": "feet",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/016_ant/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9907,37 +5809,7 @@ var JOBS = [
     "kind": "feet",
     "name": "ant",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/016_ant/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/016_ant/composite.svg",
-    "frame": 15,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 16,
-    "kind": "feet",
-    "name": "ant",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/016_ant/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -9956,7 +5828,6 @@ var JOBS = [
     "kind": "feet",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/017_astronaut/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -9970,7 +5841,6 @@ var JOBS = [
     "kind": "feet",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/017_astronaut/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -9984,37 +5854,7 @@ var JOBS = [
     "kind": "feet",
     "name": "astronaut",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/017_astronaut/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/017_astronaut/composite.svg",
-    "frame": 16,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 17,
-    "kind": "feet",
-    "name": "astronaut",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/017_astronaut/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10033,7 +5873,6 @@ var JOBS = [
     "kind": "feet",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/018_alien/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10047,7 +5886,6 @@ var JOBS = [
     "kind": "feet",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/018_alien/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10061,37 +5899,7 @@ var JOBS = [
     "kind": "feet",
     "name": "alien",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/018_alien/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/018_alien/composite.svg",
-    "frame": 17,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 18,
-    "kind": "feet",
-    "name": "alien",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/018_alien/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10110,7 +5918,6 @@ var JOBS = [
     "kind": "feet",
     "name": "galaxy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/019_galaxy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10124,7 +5931,6 @@ var JOBS = [
     "kind": "feet",
     "name": "galaxy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/019_galaxy/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10138,37 +5944,7 @@ var JOBS = [
     "kind": "feet",
     "name": "galaxy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/019_galaxy/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/019_galaxy/composite.svg",
-    "frame": 18,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 19,
-    "kind": "feet",
-    "name": "galaxy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/019_galaxy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10187,7 +5963,6 @@ var JOBS = [
     "kind": "feet",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/020_dino/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10201,7 +5976,6 @@ var JOBS = [
     "kind": "feet",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/020_dino/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10215,37 +5989,7 @@ var JOBS = [
     "kind": "feet",
     "name": "dino",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/020_dino/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/020_dino/composite.svg",
-    "frame": 19,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 20,
-    "kind": "feet",
-    "name": "dino",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/020_dino/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10264,7 +6008,6 @@ var JOBS = [
     "kind": "feet",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/021_armor/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10278,7 +6021,6 @@ var JOBS = [
     "kind": "feet",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/021_armor/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10292,37 +6034,7 @@ var JOBS = [
     "kind": "feet",
     "name": "armor",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/021_armor/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/021_armor/composite.svg",
-    "frame": 20,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 21,
-    "kind": "feet",
-    "name": "armor",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/021_armor/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10341,7 +6053,6 @@ var JOBS = [
     "kind": "feet",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/022_fairy/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10355,7 +6066,6 @@ var JOBS = [
     "kind": "feet",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/022_fairy/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10369,37 +6079,7 @@ var JOBS = [
     "kind": "feet",
     "name": "fairy",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/022_fairy/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/022_fairy/composite.svg",
-    "frame": 21,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 22,
-    "kind": "feet",
-    "name": "fairy",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/022_fairy/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10418,7 +6098,6 @@ var JOBS = [
     "kind": "feet",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/023_gingerbread/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10432,7 +6111,6 @@ var JOBS = [
     "kind": "feet",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/023_gingerbread/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10446,37 +6124,7 @@ var JOBS = [
     "kind": "feet",
     "name": "gingerbread",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/023_gingerbread/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/023_gingerbread/composite.svg",
-    "frame": 22,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 23,
-    "kind": "feet",
-    "name": "gingerbread",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/023_gingerbread/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10495,7 +6143,6 @@ var JOBS = [
     "kind": "feet",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/024_king/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10509,7 +6156,6 @@ var JOBS = [
     "kind": "feet",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/024_king/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10523,37 +6169,7 @@ var JOBS = [
     "kind": "feet",
     "name": "king",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/024_king/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/024_king/composite.svg",
-    "frame": 23,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 24,
-    "kind": "feet",
-    "name": "king",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/024_king/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10572,7 +6188,6 @@ var JOBS = [
     "kind": "feet",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/025_queen/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10586,7 +6201,6 @@ var JOBS = [
     "kind": "feet",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/025_queen/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10600,37 +6214,7 @@ var JOBS = [
     "kind": "feet",
     "name": "queen",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/025_queen/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/025_queen/composite.svg",
-    "frame": 24,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 25,
-    "kind": "feet",
-    "name": "queen",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/025_queen/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10649,7 +6233,6 @@ var JOBS = [
     "kind": "feet",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/026_sir/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10663,7 +6246,6 @@ var JOBS = [
     "kind": "feet",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/026_sir/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10677,37 +6259,7 @@ var JOBS = [
     "kind": "feet",
     "name": "sir",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/026_sir/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/026_sir/composite.svg",
-    "frame": 25,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 26,
-    "kind": "feet",
-    "name": "sir",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/026_sir/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10726,7 +6278,6 @@ var JOBS = [
     "kind": "feet",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/027_very_invisible/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10740,7 +6291,6 @@ var JOBS = [
     "kind": "feet",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/027_very_invisible/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10754,37 +6304,7 @@ var JOBS = [
     "kind": "feet",
     "name": "very_invisible",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/027_very_invisible/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/027_very_invisible/composite.svg",
-    "frame": 26,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 27,
-    "kind": "feet",
-    "name": "very_invisible",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/027_very_invisible/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10803,7 +6323,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/028_bubble/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10817,7 +6336,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/028_bubble/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10831,37 +6349,7 @@ var JOBS = [
     "kind": "feet",
     "name": "bubble",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/028_bubble/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/028_bubble/composite.svg",
-    "frame": 27,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 28,
-    "kind": "feet",
-    "name": "bubble",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/028_bubble/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10880,7 +6368,6 @@ var JOBS = [
     "kind": "feet",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/029_taco/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10894,7 +6381,6 @@ var JOBS = [
     "kind": "feet",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/029_taco/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10908,37 +6394,7 @@ var JOBS = [
     "kind": "feet",
     "name": "taco",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/029_taco/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/029_taco/composite.svg",
-    "frame": 28,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 29,
-    "kind": "feet",
-    "name": "taco",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/029_taco/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -10957,7 +6413,6 @@ var JOBS = [
     "kind": "feet",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/030_slender/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -10971,7 +6426,6 @@ var JOBS = [
     "kind": "feet",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/030_slender/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -10985,37 +6439,7 @@ var JOBS = [
     "kind": "feet",
     "name": "slender",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/030_slender/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/030_slender/composite.svg",
-    "frame": 29,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 30,
-    "kind": "feet",
-    "name": "slender",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/030_slender/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11034,7 +6458,6 @@ var JOBS = [
     "kind": "feet",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/034_santa/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11048,7 +6471,6 @@ var JOBS = [
     "kind": "feet",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/034_santa/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11062,37 +6484,7 @@ var JOBS = [
     "kind": "feet",
     "name": "santa",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/034_santa/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/034_santa/composite.svg",
-    "frame": 33,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 34,
-    "kind": "feet",
-    "name": "santa",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/034_santa/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11111,7 +6503,6 @@ var JOBS = [
     "kind": "feet",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/035_frost_djinn/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11125,7 +6516,6 @@ var JOBS = [
     "kind": "feet",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/035_frost_djinn/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11139,37 +6529,7 @@ var JOBS = [
     "kind": "feet",
     "name": "frost_djinn",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/035_frost_djinn/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/035_frost_djinn/composite.svg",
-    "frame": 34,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 35,
-    "kind": "feet",
-    "name": "frost_djinn",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/035_frost_djinn/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11188,7 +6548,6 @@ var JOBS = [
     "kind": "feet",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/036_reindeer/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11202,7 +6561,6 @@ var JOBS = [
     "kind": "feet",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/036_reindeer/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11216,37 +6574,7 @@ var JOBS = [
     "kind": "feet",
     "name": "reindeer",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/036_reindeer/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/036_reindeer/composite.svg",
-    "frame": 35,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 36,
-    "kind": "feet",
-    "name": "reindeer",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/036_reindeer/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11265,7 +6593,6 @@ var JOBS = [
     "kind": "feet",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/037_crocodile/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11279,7 +6606,6 @@ var JOBS = [
     "kind": "feet",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/037_crocodile/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11293,37 +6619,7 @@ var JOBS = [
     "kind": "feet",
     "name": "crocodile",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/037_crocodile/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/037_crocodile/composite.svg",
-    "frame": 36,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 37,
-    "kind": "feet",
-    "name": "crocodile",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/037_crocodile/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11342,7 +6638,6 @@ var JOBS = [
     "kind": "feet",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/038_valentine/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11356,7 +6651,6 @@ var JOBS = [
     "kind": "feet",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/038_valentine/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11370,37 +6664,7 @@ var JOBS = [
     "kind": "feet",
     "name": "valentine",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/038_valentine/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/038_valentine/composite.svg",
-    "frame": 37,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 38,
-    "kind": "feet",
-    "name": "valentine",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/038_valentine/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11419,7 +6683,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/039_bunny/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11433,7 +6696,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/039_bunny/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11447,37 +6709,7 @@ var JOBS = [
     "kind": "feet",
     "name": "bunny",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/039_bunny/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/039_bunny/composite.svg",
-    "frame": 38,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 39,
-    "kind": "feet",
-    "name": "bunny",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/039_bunny/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11496,7 +6728,6 @@ var JOBS = [
     "kind": "feet",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/040_gecko/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11510,7 +6741,6 @@ var JOBS = [
     "kind": "feet",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/040_gecko/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11524,37 +6754,7 @@ var JOBS = [
     "kind": "feet",
     "name": "gecko",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/040_gecko/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/040_gecko/composite.svg",
-    "frame": 39,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 40,
-    "kind": "feet",
-    "name": "gecko",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/040_gecko/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11573,7 +6773,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/041_bat/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11587,7 +6786,6 @@ var JOBS = [
     "kind": "feet",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/041_bat/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11601,37 +6799,7 @@ var JOBS = [
     "kind": "feet",
     "name": "bat",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/041_bat/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/041_bat/composite.svg",
-    "frame": 40,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 41,
-    "kind": "feet",
-    "name": "bat",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/041_bat/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11650,7 +6818,6 @@ var JOBS = [
     "kind": "feet",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/042_sea/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11664,7 +6831,6 @@ var JOBS = [
     "kind": "feet",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/042_sea/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11678,37 +6844,7 @@ var JOBS = [
     "kind": "feet",
     "name": "sea",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/042_sea/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/042_sea/composite.svg",
-    "frame": 41,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 42,
-    "kind": "feet",
-    "name": "sea",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/042_sea/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11727,7 +6863,6 @@ var JOBS = [
     "kind": "feet",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/043_brew/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11741,7 +6876,6 @@ var JOBS = [
     "kind": "feet",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/043_brew/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11755,37 +6889,7 @@ var JOBS = [
     "kind": "feet",
     "name": "brew",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/043_brew/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/043_brew/composite.svg",
-    "frame": 42,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 43,
-    "kind": "feet",
-    "name": "brew",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/043_brew/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11804,7 +6908,6 @@ var JOBS = [
     "kind": "feet",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/045_xmas/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11818,7 +6921,6 @@ var JOBS = [
     "kind": "feet",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/045_xmas/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11832,37 +6934,7 @@ var JOBS = [
     "kind": "feet",
     "name": "xmas",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/045_xmas/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/045_xmas/composite.svg",
-    "frame": 44,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 45,
-    "kind": "feet",
-    "name": "xmas",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/045_xmas/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11881,7 +6953,6 @@ var JOBS = [
     "kind": "feet",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/046_snowman/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11895,7 +6966,6 @@ var JOBS = [
     "kind": "feet",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/046_snowman/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11909,37 +6979,7 @@ var JOBS = [
     "kind": "feet",
     "name": "snowman",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/046_snowman/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/046_snowman/composite.svg",
-    "frame": 45,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 46,
-    "kind": "feet",
-    "name": "snowman",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/046_snowman/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -11958,7 +6998,6 @@ var JOBS = [
     "kind": "feet",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/048_turkey/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -11972,7 +7011,6 @@ var JOBS = [
     "kind": "feet",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/048_turkey/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -11986,37 +7024,7 @@ var JOBS = [
     "kind": "feet",
     "name": "turkey",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/048_turkey/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/048_turkey/composite.svg",
-    "frame": 47,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 48,
-    "kind": "feet",
-    "name": "turkey",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/048_turkey/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -12035,7 +7043,6 @@ var JOBS = [
     "kind": "feet",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/049_dog/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -12049,7 +7056,6 @@ var JOBS = [
     "kind": "feet",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/049_dog/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -12063,37 +7069,7 @@ var JOBS = [
     "kind": "feet",
     "name": "dog",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/049_dog/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/049_dog/composite.svg",
-    "frame": 48,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 49,
-    "kind": "feet",
-    "name": "dog",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/049_dog/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   },
   {
     "channel": "static",
@@ -12112,7 +7088,6 @@ var JOBS = [
     "kind": "feet",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/050_gladiator/static.svg",
-    "overlays": [],
     "symbolName": "Parts/Feet/footMC"
   },
   {
@@ -12126,7 +7101,6 @@ var JOBS = [
     "kind": "feet",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/050_gladiator/primary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 228"
   },
   {
@@ -12140,37 +7114,7 @@ var JOBS = [
     "kind": "feet",
     "name": "gladiator",
     "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/050_gladiator/secondary.svg",
-    "overlays": [],
     "symbolName": "MovieClips/Symbol 264"
-  },
-  {
-    "channel": "composite",
-    "containerSymbol": "Parts/Feet/footMC",
-    "exportPath": "character/feet/050_gladiator/composite.svg",
-    "frame": 49,
-    "hiddenInstances": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "hiddenLayers": [
-      "colorMC",
-      "colorMC2"
-    ],
-    "id": 50,
-    "kind": "feet",
-    "name": "gladiator",
-    "outputUri": "file:///Users/jacobgrahn/Documents/platform-racing-2-client/vector-art/svg/character/feet/050_gladiator/composite.svg",
-    "overlays": [
-      {
-        "channel": "primary",
-        "symbolName": "MovieClips/Symbol 228"
-      },
-      {
-        "channel": "secondary",
-        "symbolName": "MovieClips/Symbol 264"
-      }
-    ],
-    "symbolName": "Parts/Feet/footMC"
   }
 ];
 
@@ -12247,7 +7191,7 @@ function prepareLibraryItem(doc, job) {
 	var editDoc = fl.getDocumentDOM();
 	var timeline = editDoc.getTimeline();
 	selectFrame(timeline, job.frame);
-	if (job.channel == "static" || job.channel == "composite") {
+	if (job.channel == "static") {
 		setLibraryVisibility(timeline, job, false);
 		editDoc.exitEditMode();
 		return;
@@ -12260,7 +7204,7 @@ function restoreLibraryItem(doc, job) {
 		throw new Error("Could not re-edit library item for restore: " + job.symbolName);
 	}
 	var timeline = fl.getDocumentDOM().getTimeline();
-	if (job.channel == "static" || job.channel == "composite") {
+	if (job.channel == "static") {
 		setLibraryVisibility(timeline, job, true);
 		fl.getDocumentDOM().exitEditMode();
 		return;
@@ -12322,11 +7266,8 @@ function exportJob(doc, job) {
 	} catch (e) {
 	}
 	var matrix = null;
-	if (job.channel == "primary" || job.channel == "secondary" || job.channel == "composite") {
+	if (job.channel == "primary" || job.channel == "secondary") {
 		matrix = registrationMatrix(doc, job.containerSymbol);
-	}
-	for (var i = 0; i < job.overlays.length; i++) {
-		stageSymbol(doc, job.overlays[i].symbolName, job.frame, matrix);
 	}
 	stageSymbol(doc, job.symbolName, job.frame, matrix);
 	exportCurrentView(job.outputUri);

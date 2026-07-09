@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/050/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 428,
+        "width": 308,
+        "x": 1484,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "body",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/body/050_gladiator/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 428,
+        "width": 308,
+        "x": -126,
+        "y": -50
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 481,
+        "width": 256,
+        "x": 1226,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "body",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/body/050_gladiator/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 481,
+        "width": 256,
+        "x": -81,
+        "y": -56
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 607,
+        "width": 419,
+        "x": 2,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "body",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/body/050_gladiator/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 607,
+        "width": 419,
+        "x": -230,
+        "y": -66
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 137,
+        "width": 300,
+        "x": 2421,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "feet",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/feet/050_gladiator/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 137,
+        "width": 300,
+        "x": -126,
+        "y": -34
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 127,
+        "width": 273,
+        "x": 2723,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "feet",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/feet/050_gladiator/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 127,
+        "width": 273,
+        "x": -131,
+        "y": -25
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 217,
+        "width": 315,
+        "x": 2104,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "feet",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/feet/050_gladiator/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 217,
+        "width": 315,
+        "x": -135,
+        "y": -101
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 501,
+        "width": 395,
+        "x": 829,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "head",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/head/050_gladiator/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 501,
+        "width": 395,
+        "x": -156,
+        "y": 23
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 275,
+        "width": 308,
+        "x": 1794,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "head",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/head/050_gladiator/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 275,
+        "width": 308,
+        "x": -141,
+        "y": 159
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 510,
+        "width": 404,
+        "x": 423,
+        "y": 2
+      },
+      "id": 50,
+      "kind": "head",
+      "part": "050_gladiator",
+      "png": "vector-art/png/character/head/050_gladiator/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 510,
+        "width": 404,
+        "x": -159,
+        "y": 19
+      }
+    }
+  },
+  "image": "vector-art/atlases/character/part-sets/050/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 50,
+  "size": {
+    "height": 611,
+    "width": 2998
+  }
+}

@@ -39,12 +39,6 @@ def load_jobs(manifest_path, channels, kinds, limit):
     with open(manifest_path, encoding="utf-8") as handle:
         manifest = json.load(handle)
 
-    channel_sources = {}
-    for entry in manifest["characterExports"]:
-        source_symbol = entry["source"].get("symbolName")
-        if source_symbol:
-            channel_sources[(entry["kind"], entry["id"], entry["channel"])] = source_symbol
-
     jobs = []
     for entry in manifest["characterExports"]:
         if channels and entry["channel"] not in channels:
@@ -53,12 +47,6 @@ def load_jobs(manifest_path, channels, kinds, limit):
             continue
         source = entry["source"]
         source_symbol = source.get("symbolName")
-        overlays = []
-        if entry["channel"] == "composite":
-            for overlay_channel in ("primary", "secondary"):
-                overlay_symbol = channel_sources.get((entry["kind"], entry["id"], overlay_channel))
-                if overlay_symbol:
-                    overlays.append({"channel": overlay_channel, "symbolName": overlay_symbol})
         jobs.append(
             {
                 "id": entry["id"],
@@ -69,9 +57,8 @@ def load_jobs(manifest_path, channels, kinds, limit):
                 "exportPath": entry["exportPath"],
                 "symbolName": source_symbol if entry["channel"] in ("primary", "secondary") and source_symbol else source["containerSymbol"],
                 "containerSymbol": source["containerSymbol"],
-                "hiddenInstances": ["colorMC", "colorMC2"] if entry["channel"] in ("static", "composite") else [],
-                "hiddenLayers": ["colorMC", "colorMC2"] if entry["channel"] in ("static", "composite") else [],
-                "overlays": overlays,
+                "hiddenInstances": ["colorMC", "colorMC2"] if entry["channel"] == "static" else [],
+                "hiddenLayers": ["colorMC", "colorMC2"] if entry["channel"] == "static" else [],
             }
         )
 
@@ -173,7 +160,7 @@ function prepareLibraryItem(doc, job) {{
 \tvar editDoc = fl.getDocumentDOM();
 \tvar timeline = editDoc.getTimeline();
 \tselectFrame(timeline, job.frame);
-\tif (job.channel == "static" || job.channel == "composite") {{
+\tif (job.channel == "static") {{
 \t\tsetLibraryVisibility(timeline, job, false);
 \t\teditDoc.exitEditMode();
 \t\treturn;
@@ -186,7 +173,7 @@ function restoreLibraryItem(doc, job) {{
 \t\tthrow new Error("Could not re-edit library item for restore: " + job.symbolName);
 \t}}
 \tvar timeline = fl.getDocumentDOM().getTimeline();
-\tif (job.channel == "static" || job.channel == "composite") {{
+\tif (job.channel == "static") {{
 \t\tsetLibraryVisibility(timeline, job, true);
 \t\tfl.getDocumentDOM().exitEditMode();
 \t\treturn;
@@ -248,11 +235,8 @@ function exportJob(doc, job) {{
 \t}} catch (e) {{
 \t}}
 \tvar matrix = null;
-\tif (job.channel == "primary" || job.channel == "secondary" || job.channel == "composite") {{
+\tif (job.channel == "primary" || job.channel == "secondary") {{
 \t\tmatrix = registrationMatrix(doc, job.containerSymbol);
-\t}}
-\tfor (var i = 0; i < job.overlays.length; i++) {{
-\t\tstageSymbol(doc, job.overlays[i].symbolName, job.frame, matrix);
 \t}}
 \tstageSymbol(doc, job.symbolName, job.frame, matrix);
 \texportCurrentView(job.outputUri);
@@ -298,7 +282,7 @@ def parse_args(argv):
     parser.add_argument("--out", default=DEFAULT_OUT, help=f"default: {DEFAULT_OUT}; use - for stdout")
     parser.add_argument("--svg-exporter", default=DEFAULT_ADOBE_SVG_EXPORTER, help="Animate Export SVG.jsfl path")
     parser.add_argument("--limit", type=int, help="only include the first N matching jobs")
-    parser.add_argument("--channel", action="append", choices=("static", "primary", "secondary", "composite"), help="repeatable channel filter")
+    parser.add_argument("--channel", action="append", choices=("static", "primary", "secondary"), help="repeatable channel filter")
     parser.add_argument("--kind", action="append", choices=("hat", "head", "body", "feet"), help="repeatable character kind filter")
     return parser.parse_args(argv)
 

@@ -34,7 +34,7 @@ PART_TYPE_MAP = {
     "FEET": "feet",
 }
 
-CHANNELS = ("static", "primary", "secondary", "composite")
+CHANNELS = ("static", "primary", "secondary")
 PART_CONST_RE = re.compile(r"public\s+static\s+const\s+(HAT|HEAD|BODY|FEET)_([A-Z0-9_]+)\s*:\s*int\s*=\s*(\d+)")
 
 
