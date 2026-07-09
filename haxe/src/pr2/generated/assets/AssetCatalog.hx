@@ -320,7 +320,7 @@ final class AssetCatalog {
 			},
 			{
 				format: "22kHz 16bit Stereo",
-				href: "Sounds/sound103.wav",
+				href: "Sounds/sound103.mp3",
 				itemID: "5c1d51a4-00000567",
 				linkageClassName: "NoodleTown3",
 				name: "Sounds/sound103.mp3",
@@ -330,7 +330,7 @@ final class AssetCatalog {
 			},
 			{
 				format: "22kHz 16bit Stereo",
-				href: "Sounds/sound104.wav",
+				href: "Sounds/sound104.mp3",
 				itemID: "5c1d5192-00000565",
 				linkageClassName: "NoodleTown2",
 				name: "Sounds/sound104.mp3",

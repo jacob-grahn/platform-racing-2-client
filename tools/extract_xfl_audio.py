@@ -50,6 +50,10 @@ def wav_bytes(payload, description):
 
 
 def extracted_sound(xfl_dir, item):
+    library_payload = xfl_dir / "LIBRARY" / item["name"]
+    if library_payload.suffix.lower() == ".mp3" and library_payload.exists():
+        return library_payload.read_bytes(), "mp3", None
+
     payload = (xfl_dir / "bin" / item["soundDataHRef"]).read_bytes()
     if len(payload) >= 2 and payload[0] == 0xFF and payload[1] & 0xE0 == 0xE0:
         return payload, "mp3", None

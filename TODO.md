@@ -20,6 +20,14 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ### Shared Infrastructure
 
+#### Build Size And HTML5 Payload
+
+- Further reduce HTML5 payload size by splitting, lazy-loading, or lowering the
+  default scale of character atlases. After the first payload pass,
+  `export/html5/bin` is about `33.86 MB` raw and `23.71 MB` with gzip; character
+  atlas PNGs remain the largest binary bucket and gzip does not reduce them
+  meaningfully.
+
 ### Lobby Dialogs And Account Workflows
 
 ### Login, Lobby, And Social Lists

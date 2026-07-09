@@ -19,8 +19,12 @@
 	<assets path="vector-art/png/login" rename="assets/login" />
 	<assets path="vector-art/png/backgrounds" rename="assets/backgrounds" />
 	<assets path="vector-art/png/stamps" rename="assets/stamps" />
+	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />
+	<postbuild command="python3 tools/prune_html5_fonts.py" if="html5" />
+	<postbuild command="python3 tools/prune_html5_duplicate_atlases.py" if="html5" />
+	<postbuild command="python3 tools/minify_html5_js.py" if="html5" />
 
 	<!-- Flatten static, render-safe display subtrees into one cached GPU quad
 	     (pr2.runtime.FlattenPolicy gate + PR2MovieClip.maybeFlattenSubtree).

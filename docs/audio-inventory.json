@@ -93,8 +93,8 @@
     },
     {
       "libraryName": "Sounds/sound103.mp3",
-      "output": "assets/audio/sfx/sound103.wav",
-      "sha256": "3689da39d47d96e37d6cfab4718ff9091edc8c13d36480c54e209107086b63d2",
+      "output": "assets/audio/sfx/sound103.mp3",
+      "sha256": "34b6854c2ba8a23d5e143bcd01113b9cbdbb2f190c31c2b3b48c1fecdabe189f",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 546216,
       "durationSeconds": 24.771701,
@@ -107,17 +107,12 @@
           "expression": "private var song2:Sound = new NoodleTown3();"
         }
       ],
-      "timelineUsages": [],
-      "decodedPcm": {
-        "sampleRate": 22050,
-        "bitsPerSample": 16,
-        "channels": 2
-      }
+      "timelineUsages": []
     },
     {
       "libraryName": "Sounds/sound104.mp3",
-      "output": "assets/audio/sfx/sound104.wav",
-      "sha256": "1fa9c1b42e7a648631f733a28fed1c746d298cc1cfb52151ff476bc97f313b79",
+      "output": "assets/audio/sfx/sound104.mp3",
+      "sha256": "ce46aad14b150a70425f71f18f446dd837d1dcf7fab2b49c188b37b1caf47d0c",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 546216,
       "durationSeconds": 24.771701,
@@ -130,12 +125,7 @@
           "expression": "private var song1:Sound = new NoodleTown2();"
         }
       ],
-      "timelineUsages": [],
-      "decodedPcm": {
-        "sampleRate": 22050,
-        "bitsPerSample": 16,
-        "channels": 2
-      }
+      "timelineUsages": []
     },
     {
       "libraryName": "Sounds/sound1110.mp3",
@@ -167,7 +157,7 @@
       "sourceUsages": [
         {
           "source": "flash/gameplay/Course.as",
-          "line": 280,
+          "line": 284,
           "expression": "SoundEffects.playSound(new GoSound(), 0.5 * (Settings.soundLevel / 100));"
         }
       ],
@@ -185,7 +175,7 @@
       "sourceUsages": [
         {
           "source": "flash/gameplay/Course.as",
-          "line": 275,
+          "line": 279,
           "expression": "SoundEffects.playSound(new ReadySound(), 0.4 * (Settings.soundLevel / 100));"
         }
       ],
@@ -638,7 +628,7 @@
     {
       "libraryName": "Sounds/sound81.mp3",
       "output": "assets/audio/sfx/sound81.mp3",
-      "sha256": "cb00e0e1a83fbe8232e1be385dd69a843d630be0c799b231591551e8a2353d00",
+      "sha256": "98fa352642fcbe05697050adcc0954dcbe5108805676a6f92bdcf61ace315c94",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 204480,
       "durationSeconds": 9.273469,
@@ -694,12 +684,12 @@
       "sourceUsages": [
         {
           "source": "flash/character/LocalCharacter.as",
-          "line": 229,
+          "line": 233,
           "expression": "SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);"
         },
         {
           "source": "flash/character/LocalCharacter.as",
-          "line": 344,
+          "line": 530,
           "expression": "SoundEffects.playGameSound(new SquashSound(), x, y, 0.66);"
         }
       ],
@@ -717,7 +707,7 @@
       "sourceUsages": [
         {
           "source": "flash/character/LocalCharacter.as",
-          "line": 493,
+          "line": 687,
           "expression": "SoundEffects.playSound(new SuperJumpSound(), 1 * (Settings.soundLevel / 100));"
         },
         {
@@ -799,7 +789,7 @@
       "sourceUsages": [
         {
           "source": "flash/character/LocalCharacter.as",
-          "line": 1010,
+          "line": 1207,
           "expression": "SoundEffects.playSound(new YeahSound(), 1 * (Settings.soundLevel / 100));"
         }
       ],
