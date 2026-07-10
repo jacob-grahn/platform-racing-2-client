@@ -1315,6 +1315,11 @@ class Course extends Sprite {
 		localFinishHandled = true;
 		frameCounterActive = false;
 		toggleKeyScroll(true);
+		// Flash freezes the HUD clock when a normal race finishes. Hat mode keeps
+		// running until its separate finish flow resolves.
+		if (config.gameMode != "hat" && timer != null) {
+			timer.pause();
+		}
 		if (localCharacter != null) {
 			localCharacter.emitFinishRace(finishId, finishX, finishY);
 			if (config.gameMode != "hat") {
