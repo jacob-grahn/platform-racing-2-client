@@ -36,8 +36,8 @@ class LocalCharacterEmitTest {
 		character.emitNetworkUpdate("backBackground");
 		assertCommands([
 			"p`0`0",
-			"p`84`101",
-			"exact_pos`84`101",
+			"p`83`101",
+			"exact_pos`83`101",
 			"set_var`scaleX`0.9",
 			"set_var`state`jump",
 			"set_var`parent`backBackground"
@@ -109,11 +109,11 @@ class LocalCharacterEmitTest {
 			"set_var`sparkle`0",
 			"set_var`jet`1",
 			"set_var`jet`0",
-			"squash`7`66`101",
-			"sting`8`66`101",
-			"heart`9`66`101",
+			"squash`7`67`101",
+			"sting`8`67`101",
+			"heart`9`67`101",
 			"heart`",
-			"loose_hat`5`123`456`66`101",
+			"loose_hat`5`123`456`67`101",
 			"hat_to_start`5",
 			"grab_egg`3",
 			"objective_reached`2`45`75",
