@@ -85,7 +85,6 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `docs/`: migration notes and inventories.
 - `docs/browser-platform-differences.md`: audited, platform-required HTML5
   differences and their parity boundaries.
-- `docs/source-class-coverage.md`: AS3 source-class → Haxe coverage inventory.
 - `TODO.md`: current porting plan and next steps.
 
 ## Porting Status

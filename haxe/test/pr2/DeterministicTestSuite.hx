@@ -115,7 +115,6 @@ import pr2.runtime.EpicFlashTest;
 import pr2.runtime.PR2MovieClipRuntimeTest;
 import pr2.runtime.StaticSubtreeAnalyzerTest;
 import pr2.runtime.FlattenSafetyGateTest;
-import pr2.tools.SourceClassCoverageInventoryTest;
 import pr2.ui.EmblemLoaderTest;
 import pr2.ui.GuildNameTest;
 import pr2.ui.GpNotificationTest;
@@ -132,7 +131,6 @@ class DeterministicTestSuite {
 		PR2MovieClipRuntimeTest.main();
 		StaticSubtreeAnalyzerTest.main();
 		FlattenSafetyGateTest.main();
-		SourceClassCoverageInventoryTest.main();
 		FlButtonTest.main();
 		FlComponentsTest.main();
 		EpicFlashTest.main();

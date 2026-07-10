@@ -229,4 +229,8 @@ class LevelListingPage extends Page implements Paginated {
 	public function loadingVisibleForTests():Bool {
 		return loading != null && loading.visible;
 	}
+
+	public function loadingGraphicForTests():Null<PR2MovieClip> {
+		return loading;
+	}
 }

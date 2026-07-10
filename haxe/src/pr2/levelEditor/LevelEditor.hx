@@ -205,14 +205,15 @@ class LevelEditor extends Page {
 		overlayLayer.mouseChildren = false;
 
 		menu = new LevelEditorMenu(this);
-		menu.x = 255;
-		menu.y = 195;
+		menu.x = BASE_HALF_STAGE_WIDTH;
+		menu.y = BASE_HALF_STAGE_HEIGHT;
 		menu.init();
 		addChild(menu);
 		menu.setReportsMode(reportsMode);
 		addChild(overlayLayer);
 		if (initialVariables != null) {
-			setVariables(initialVariables);
+			applyLoadedLevelData(new ServerLevelData(initialVariables, true), reportsMode);
+			initialVariables = null;
 		}
 		installBrowserHarness();
 	}
@@ -554,7 +555,7 @@ class LevelEditor extends Page {
 		return textObject;
 	}
 
-	public function placeSelectedBlockAt(stageX:Float, stageY:Float):Null<EditorBlockObject> {
+	public function placeSelectedBlockAt(stageX:Float, stageY:Float, select:Bool = true):Null<EditorBlockObject> {
 		if (blockLayer == null || selectedToolSidebar != "blocks" || selectedToolId == "delete") {
 			return null;
 		}
@@ -562,7 +563,7 @@ class LevelEditor extends Page {
 		if (spec == null) {
 			return null;
 		}
-		return blockLayer.addBlockAtStage(spec.code, spec.type, stageX, stageY);
+		return blockLayer.addBlockAtStage(spec.code, spec.type, stageX, stageY, select);
 	}
 
 	public function deleteSelectedBlockAt(stageX:Float, stageY:Float):Bool {
@@ -1332,7 +1333,7 @@ class LevelEditor extends Page {
 		}
 		if (isBlockPlacementTool()) {
 			placingBlocks = true;
-			if (placeSelectedBlockAt(event.stageX, event.stageY) != null) {
+			if (placeSelectedBlockAt(event.stageX, event.stageY, false) != null) {
 				event.stopImmediatePropagation();
 			}
 			return;
@@ -1358,7 +1359,7 @@ class LevelEditor extends Page {
 			return;
 		}
 		if (placingBlocks) {
-			if (placeSelectedBlockAt(event.stageX, event.stageY) != null) {
+			if (placeSelectedBlockAt(event.stageX, event.stageY, false) != null) {
 				event.stopImmediatePropagation();
 			}
 			return;
@@ -3447,7 +3448,7 @@ class EditorBlockLayer extends Sprite {
 		}
 	}
 
-	public function addBlockAtStage(code:Int, type:Null<BlockType>, stageX:Float, stageY:Float):Null<EditorBlockObject> {
+	public function addBlockAtStage(code:Int, type:Null<BlockType>, stageX:Float, stageY:Float, select:Bool = true):Null<EditorBlockObject> {
 		var point = globalToLocal(new Point(stageX - 15, stageY - 15));
 		var segX = Math.round(point.x / LevelEditor.segSize);
 		var segY = Math.round(point.y / LevelEditor.segSize);
@@ -3455,7 +3456,7 @@ class EditorBlockLayer extends Sprite {
 		if (existing != null) {
 			return null;
 		}
-		var block = addBlockAtLocal(code, type, point.x, point.y, true);
+		var block = addBlockAtLocal(code, type, point.x, point.y, select);
 		recordSnapshot();
 		return block;
 	}

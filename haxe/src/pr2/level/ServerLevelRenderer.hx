@@ -1594,8 +1594,10 @@ class ServerLevelRenderer extends Sprite {
 		if (display == null) {
 			return;
 		}
-		display.scaleX = object.scaleX * layerScale;
-		display.scaleY = object.scaleY * layerScale;
+		// Bitmap stamps are exported at 4x and normalized by Objects.getFromCode.
+		// Compose with that intrinsic scale instead of replacing it in gameplay.
+		display.scaleX *= object.scaleX * layerScale;
+		display.scaleY *= object.scaleY * layerScale;
 		display.x = object.x * layerScale;
 		display.y = object.y * layerScale;
 		container.addChild(display);

@@ -2,11 +2,13 @@ package pr2.lobby;
 
 import com.jiggmin.data.Data;
 import haxe.crypto.Md5;
+import openfl.display.DisplayObjectContainer;
 import openfl.display.InteractiveObject;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.MouseEvent;
 import openfl.events.TimerEvent;
+import openfl.text.TextField;
 import openfl.geom.Point;
 import openfl.ui.Keyboard;
 import openfl.utils.AssetType;
@@ -107,6 +109,7 @@ class LobbyServicesTest {
 		testLevelItemPasswordFlow();
 		testSearchFocusQuirks();
 		testSearchRequestQuirks();
+		testSearchPendingShowsLoadingGraphic();
 		testSearchResultsStartBelowControls();
 		testSearchQuery();
 		testLevelAccess();
@@ -418,6 +421,8 @@ class LobbyServicesTest {
 		assertEquals("blocks", editor.menu.sideBar.id, "editor menu starts on blocks sidebar");
 		assertEquals("blocks", editor.focusedEditorLayer, "editor starts focused on block layer history");
 		assertEquals(editor.menu, editor.menu.sideBar.parent, "active sidebar is mounted above menu art");
+		assertEquals(275, Std.int(editor.menu.x), "editor menu x matches Flash stage center");
+		assertEquals(200, Std.int(editor.menu.y), "editor menu y matches Flash stage center");
 		assertEquals(222, Std.int(editor.menu.sideBar.x), "editor sidebar x matches Flash");
 		assertEquals(-195, Std.int(editor.menu.sideBar.y), "editor sidebar y matches Flash");
 		assertEquals(4, Std.int(editor.menu.sideBar.scrollHolderForTests().y), "editor sidebar scroll holder y");
@@ -1717,6 +1722,8 @@ class LobbyServicesTest {
 		assertEquals(true, returnedEditor.reportsMode, "returned editor preserves reports mode");
 		assertEquals("Testable Level", returnedEditor.title, "returned editor restores level vars");
 		assertEquals("2.0", returnedEditor.gravity, "returned editor restores normalized gravity");
+		assertEquals(sourceData, returnedEditor.getLevelVars().get("data"), "returned editor re-stages serialized level data");
+		assertNotNull(returnedEditor.blockLayer.getBlockAtSeg(brick.segX, brick.segY), "returned editor re-stages placed blocks");
 		returnedEditor.remove();
 		LobbySession.clear();
 	}
@@ -2295,6 +2302,26 @@ class LobbyServicesTest {
 		Memory.clear();
 	}
 
+	private static function testSearchPendingShowsLoadingGraphic():Void {
+		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		Memory.clear();
+		pr2.lobby.tabs.SearchTab.searchFactory = function(params:Map<String, String>, onResult:pr2.net.LevelListClient.LevelListResult->Void,
+				onError:String->Void):pr2.util.AsyncRemovalGuard.AsyncRemovable {
+			return new FakeAsyncListResource();
+		};
+
+		var search = new pr2.lobby.tabs.SearchTab("pending", "user");
+		search.initialize();
+		var loading = search.loadingGraphicForTests();
+		assertEquals(true, search.loadingVisibleForTests(), "pending search shows loading");
+		assertNotNull(loading, "pending search creates loading graphic");
+		assertEquals(true, loading.numChildren > 0, "loading graphic renders child art");
+		assertNotNull(findTextDescendant(loading, "Loading"), "loading graphic renders Loading text");
+		search.remove();
+		pr2.lobby.tabs.SearchTab.resetHooksForTests();
+		Memory.clear();
+	}
+
 	private static function testSearchResultsStartBelowControls():Void {
 		pr2.lobby.tabs.SearchTab.resetHooksForTests();
 		Memory.clear();
@@ -2787,6 +2814,24 @@ class LobbyServicesTest {
 
 	private static function signedLevel(levelData:String, levelId:Int, version:Int):String {
 		return levelData + Md5.encode(Std.string(version) + Std.string(levelId) + levelData + ServerConfig.LEVEL_SALT_2);
+	}
+
+	private static function findTextDescendant(container:DisplayObjectContainer, text:String):Null<TextField> {
+		for (i in 0...container.numChildren) {
+			var child = container.getChildAt(i);
+			var field = Std.downcast(child, TextField);
+			if (field != null && field.text.indexOf(text) >= 0) {
+				return field;
+			}
+			var nested = Std.downcast(child, DisplayObjectContainer);
+			if (nested != null) {
+				var found = findTextDescendant(nested, text);
+				if (found != null) {
+					return found;
+				}
+			}
+		}
+		return null;
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

@@ -671,6 +671,7 @@ class EditorSettingsTest {
 		var draggedBlock = editor.blockLayer.getBlockAtStage(nextPoint.x, nextPoint.y);
 		assertNotNull(draggedBlock, "block drag placement continues on mouse move");
 		assertEquals(ObjectCodes.BLOCK_BRICK, draggedBlock.code, "block drag placement creates blocks while dragging");
+		assertEquals(null, editor.selectedBlock, "block drag placement does not select each created block");
 
 		var count = editor.blockLayer.blocks.length;
 		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, nextPoint.x, nextPoint.y));

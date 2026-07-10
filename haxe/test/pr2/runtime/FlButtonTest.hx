@@ -64,7 +64,7 @@ class FlButtonTest {
 		button.enabled = false;
 		var label = findLabelField(button, "Continue");
 		assertNotNull(label, "disabled button retains its label");
-		assertEquals(0x999999, label.getTextFormat().color, "disabled label uses the Flash component color");
+		assertEquals(0x555555, label.getTextFormat().color, "disabled label uses the readable Flash component color");
 	}
 
 	private static function testSkinSwapsWithMouseState():Void {

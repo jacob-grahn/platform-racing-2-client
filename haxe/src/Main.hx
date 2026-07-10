@@ -1,6 +1,7 @@
 package;
 
 import com.jiggmin.data.SWFStats;
+import haxe.Timer;
 import haxe.Json;
 #if js
 import js.Browser;
@@ -35,6 +36,7 @@ import pr2.page.SymbolPreview;
 import pr2.page.PopupPreview;
 import pr2.ui.GpNotification;
 import pr2.ui.MuteButton;
+import pr2.util.AsyncRemovalGuard.AsyncRemovable;
 
 /**
 	Application entry point. Boots into a screen selected by the `?screen=`
@@ -42,6 +44,8 @@ import pr2.ui.MuteButton;
 	harness jump straight to any screen.
 **/
 class Main extends Sprite {
+	private static inline var OFFLINE_LIST_DELAY_MS:Int = 20;
+
 	private var swfStats:Null<SWFStats>;
 
 	public function new() {
@@ -247,16 +251,28 @@ class Main extends Sprite {
 
 	private function installOfflineLobbyListFixtures():Void {
 		ListingTab.fetchFactory = function(mode:String, page:Int, onResult:LevelListResult->Void, onError:String->Void) {
-			onResult(new LevelListResult(offlineLevels(mode, page), true));
-			return {remove: function():Void {}};
+			return delayedOfflineLevelResult(offlineLevels(mode, page), onResult);
 		};
 		ListingTab.fetchFavoritesFactory = function(userId:Int, page:Int, token:String, onResult:LevelListResult->Void, onError:String->Void) {
-			onResult(new LevelListResult(offlineLevels("favorites", page), true));
-			return {remove: function():Void {}};
+			return delayedOfflineLevelResult(offlineLevels("favorites", page), onResult);
 		};
 		SearchTab.searchFactory = function(params:Map<String, String>, onResult:LevelListResult->Void, onError:String->Void) {
-			onResult(new LevelListResult(offlineLevels("search", 1), true));
-			return {remove: function():Void {}};
+			return delayedOfflineLevelResult(offlineLevels("search", 1), onResult);
+		};
+	}
+
+	private static function delayedOfflineLevelResult(levels:Array<CampaignLevelInfo>, onResult:LevelListResult->Void):AsyncRemovable {
+		var cancelled = false;
+		var timer = Timer.delay(function():Void {
+			if (!cancelled) {
+				onResult(new LevelListResult(levels, true));
+			}
+		}, OFFLINE_LIST_DELAY_MS);
+		return {
+			remove: function():Void {
+				cancelled = true;
+				timer.stop();
+			}
 		};
 	}
 

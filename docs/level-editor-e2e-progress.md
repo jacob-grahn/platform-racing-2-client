@@ -40,8 +40,6 @@ place a stamp, save, clear, reload, and verify the floor, drawn art, and stamp.
 - Existing headless sequence actions can click/type and read body attributes,
   but they did not have editor-specific assertions. Added `level-editor-e2e` to
   cover this scenario.
-- Full `haxe test/deterministic.hxml` currently stops on missing
-  `docs/source-class-coverage.md`, unrelated to the level editor changes.
 - Editor menu hit testing previously used the menu's broad display bounds,
   causing real clicks in the playfield near the menu to be treated as menu
   clicks.

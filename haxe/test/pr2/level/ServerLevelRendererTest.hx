@@ -622,8 +622,8 @@ class ServerLevelRendererTest {
 		var object = artLayer.getChildAt(1);
 		var text = Std.downcast(artLayer.getChildAt(2), TextField);
 
-		assertClose(1.0, object.scaleX, "placed art object multiplies object scaleX by layer scale");
-		assertClose(1.5, object.scaleY, "placed art object multiplies object scaleY by layer scale");
+		assertWithin(228.0, object.width, 0.02, "placed bitmap stamp keeps its authored width after object and layer scaling");
+		assertWithin(259.125, object.height, 0.03, "placed bitmap stamp keeps its authored height after object and layer scaling");
 		assertClose(2.0, text.scaleX, "placed text multiplies text scaleX by layer scale");
 		assertClose(2.5, text.scaleY, "placed text multiplies text scaleY by layer scale");
 	}
