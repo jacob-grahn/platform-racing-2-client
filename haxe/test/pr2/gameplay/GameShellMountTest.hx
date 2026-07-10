@@ -315,8 +315,8 @@ class GameShellMountTest {
 		var finish = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
 			50, 0, true, 1, 45, 15);
 		@:privateAccess course.maybeHandleLocalFinish(finish);
-		assertEquals("finish_race`1`45`15|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
-			"race finish emits finish and starts local removal");
+		assertEquals("finish_race`1`9945`9945|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
+			"race finish reports world coordinates and starts local removal");
 		assertEquals(false, course.localCharacter.removed, "finish starts fade-out instead of immediate removal");
 		assertEquals(true, course.debugKeyScrollActive(), "finish switches camera to free-move mode");
 		var x = course.localCharacter.debugState().x;
@@ -338,8 +338,8 @@ class GameShellMountTest {
 		@:privateAccess course.maybeHandleLocalFinish(first);
 		@:privateAccess course.maybeHandleLocalFinish(first);
 		@:privateAccess course.maybeHandleLocalFinish(second);
-		assertEquals("objective_reached`1`45`15|objective_reached`2`75`15", LobbySocket.sentCommands.join("|"),
-			"objective mode reports each objective once without ending race");
+		assertEquals("objective_reached`1`9945`9945|objective_reached`2`9975`9945", LobbySocket.sentCommands.join("|"),
+			"objective mode reports each objective in world coordinates once without ending race");
 		assertEquals(false, course.localFinishHandled, "objective mode does not latch the race finished");
 		course.remove();
 	}

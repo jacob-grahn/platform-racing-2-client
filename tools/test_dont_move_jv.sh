@@ -2,7 +2,7 @@
 # End-to-end feature/physics-parity test: drive the SAME sequence
 # (test/sequences/parity/dont-move-jv.json) through the full flow
 # (preloader -> intro -> login -> favorites -> "Don't Move JV" -> Play ->
-# idle ~75s -> Race Complete!) and assert the popup opened.
+# idle ~75s -> Race Complete!) and assert the popup opened with EXP gain.
 #
 # Usage:
 #   tools/test_dont_move_jv.sh flash [path-to-app]   # original Flash projector (default)
@@ -50,5 +50,5 @@ case "$TARGET" in
     ;;
 esac
 
-echo "==> Checking for Race Complete! popup..."
+echo "==> Checking for Race Complete! popup with EXP gain..."
 python3 tools/check_race_complete.py "$FINAL"

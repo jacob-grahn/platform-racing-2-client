@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-check_race_complete.py — assert the Flash "Race Complete!" popup is open.
+check_race_complete.py — assert the "Race Complete!" popup and EXP gain are visible.
 
 Crops the static "-- Race Complete! --" title region out of a full PR2 stage
 screenshot (550x400, captured by pr2driver.py shot) and compares it against
@@ -9,8 +9,9 @@ test/baselines/flash/race-complete-title.png. Exits 0 on match, 1 on mismatch.
 Usage:
   python3 tools/check_race_complete.py <stage-screenshot.jpg> [--threshold N]
 
-The title text is static (unlike the timer / EXP figures elsewhere in the popup),
-so this deliberately ignores the rest of the popup.
+The title is compared to the Flash baseline. The EXP total is intentionally
+value-agnostic: it checks for dark text in the part of the value field that is
+empty when the authored "--" placeholder is still showing.
 """
 
 import sys
@@ -26,6 +27,10 @@ BASELINE = os.path.join(
 DEFAULT_THRESHOLD = 30.0  # mean abs diff per channel (0-255)
 SEARCH_RADIUS_X = 3
 SEARCH_RADIUS_Y = 3
+# The placeholder's two dashes end left of this box. Any real "+ N" value puts
+# digits here, even when the popup shifts by the title search tolerance.
+EXP_GAIN_INK_BOX = (338, 215, 390, 240)
+MIN_EXP_GAIN_DARK_PIXELS = 8
 
 
 def main():
@@ -70,11 +75,26 @@ def main():
                 best_mean = mean
                 best_offset = (dx, dy)
 
-    if best_mean <= threshold:
-        print(f"PASS: Race Complete! popup detected (mean diff {best_mean:.2f} <= {threshold}, offset {best_offset})")
-        sys.exit(0)
-    print(f"FAIL: Race Complete! popup NOT detected (mean diff {best_mean:.2f} > {threshold}, offset {best_offset})")
-    sys.exit(1)
+    if best_mean > threshold:
+        print(f"FAIL: Race Complete! popup NOT detected (mean diff {best_mean:.2f} > {threshold}, offset {best_offset})")
+        sys.exit(1)
+
+    dx, dy = best_offset
+    exp_box = tuple(value + (dx if index % 2 == 0 else dy) for index, value in enumerate(EXP_GAIN_INK_BOX))
+    exp_crop = shot.crop(exp_box)
+    dark_pixels = sum(1 for pixel in exp_crop.getdata() if max(pixel) < 120)
+    if dark_pixels < MIN_EXP_GAIN_DARK_PIXELS:
+        print(
+            "FAIL: Race Complete! popup detected, but EXP gain is still blank "
+            f"({dark_pixels} dark pixels < {MIN_EXP_GAIN_DARK_PIXELS})"
+        )
+        sys.exit(1)
+
+    print(
+        f"PASS: Race Complete! popup and EXP gain detected "
+        f"(title diff {best_mean:.2f}, EXP ink {dark_pixels} pixels, offset {best_offset})"
+    )
+    sys.exit(0)
 
 
 if __name__ == "__main__":

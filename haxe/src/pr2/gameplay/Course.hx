@@ -1284,8 +1284,16 @@ class Course extends Sprite {
 			return;
 		}
 		var finishId = state.finishBlockId == null ? -1 : state.finishBlockId;
-		var finishX = state.finishX == null ? 0 : state.finishX;
-		var finishY = state.finishY == null ? 0 : state.finishY;
+		// The controller runs in a compact fixture translated from the original
+		// level. Flash reports the authored/world-space finish-block centre to the
+		// server, which validates it before sending award and setExpGain. Preserve
+		// the -1/0/0 sentinel for finishes without a block (deathmatch/time-out).
+		var finishX = state.finishBlockId == null || state.finishX == null
+			? 0
+			: Std.int(serverFixture.fixturePixelToWorldX(state.finishX));
+		var finishY = state.finishBlockId == null || state.finishY == null
+			? 0
+			: Std.int(serverFixture.fixturePixelToWorldY(state.finishY));
 		if (config.gameMode == "objective") {
 			if (state.finishBlockId == null || reachedObjectives.exists(finishId)) {
 				return;
