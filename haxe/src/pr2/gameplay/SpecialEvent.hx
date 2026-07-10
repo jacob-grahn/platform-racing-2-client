@@ -11,6 +11,8 @@ typedef PlaceArtifactRequest = {
 	final rot:Int;
 }
 
+typedef ArtifactPlacementResolver = Float->Float->Null<Course>->Null<PlaceArtifactRequest>;
+
 enum SpecialEventAction {
 	NoAction;
 	PlaceArtifactAction(request:PlaceArtifactRequest);
@@ -26,11 +28,15 @@ enum SpecialEventAction {
 class SpecialEvent {
 	private final writeCommand:String->Void;
 	private final openPlaceArtifact:PlaceArtifactRequest->Void;
+	private final resolveArtifactPlacement:ArtifactPlacementResolver;
 	private final pressed:Map<UInt, Bool> = new Map();
 
-	public function new(?writeCommand:String->Void, ?openPlaceArtifact:PlaceArtifactRequest->Void) {
+	public function new(?writeCommand:String->Void, ?openPlaceArtifact:PlaceArtifactRequest->Void, ?resolveArtifactPlacement:ArtifactPlacementResolver) {
 		this.writeCommand = writeCommand == null ? LobbySocket.write : writeCommand;
 		this.openPlaceArtifact = openPlaceArtifact == null ? function(request:PlaceArtifactRequest):Void new PlaceArtifact(request) : openPlaceArtifact;
+		this.resolveArtifactPlacement = resolveArtifactPlacement == null ? function(stageX, stageY, course) {
+			return course == null ? null : course.artifactPlacementAt(stageX, stageY);
+		} : resolveArtifactPlacement;
 	}
 
 	public function keyDown(keyCode:UInt):Void {
@@ -46,10 +52,10 @@ class SpecialEvent {
 			return NoAction;
 		}
 		if (isPressed(Keyboard.G) && isPressed(Keyboard.C)) {
-			if (course == null) {
+			var request = resolveArtifactPlacement(stageX, stageY, course);
+			if (request == null) {
 				return NoAction;
 			}
-			var request = course.artifactPlacementAt(stageX, stageY);
 			openPlaceArtifact(request);
 			return PlaceArtifactAction(request);
 		}

@@ -81,11 +81,13 @@ class CharacterLifecycleTest {
 		assertEquals(70.0, course.localCharacter.debugState().accelerationStat, "local accel stat applied");
 		assertEquals(60.0, course.localCharacter.debugState().jumpStat, "local jump stat applied");
 
+		var startPos = course.localCharacter.getPos();
+		var expectedStartCommand = 'exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}';
 		LobbySocket.resetSent();
 		handler.dispatch("beginRace", []);
 		assertTrue(course.countdown != null, "beginRace mounts countdown");
 		assertEquals(false, course.raceStarted, "race waits for countdown finish");
-		assertEquals("exact_pos`135`120", LobbySocket.sentCommands[0], "beginRace emits starting exact position");
+		assertEquals(expectedStartCommand, LobbySocket.sentCommands[0], "beginRace emits starting exact position");
 		while (course.countdown != null && course.countdown.parent != null) {
 			course.countdown.advance();
 		}

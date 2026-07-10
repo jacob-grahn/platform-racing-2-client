@@ -12,6 +12,7 @@ class SpecialEventTest {
 	public static function main():Void {
 		testPermissions();
 		testPlaceArtifactHotkey();
+		testArtifactPlacementCoordinates();
 		testCancelPrizeHotkey();
 		trace('SpecialEventTest passed $assertions assertions');
 	}
@@ -40,26 +41,37 @@ class SpecialEventTest {
 	private static function testPlaceArtifactHotkey():Void {
 		LobbySession.clear();
 		LobbySession.group = 3;
-		var course = buildCourse();
+		var expected:PlaceArtifactRequest = {levelId: 42, x: 600, y: 800, rot: 90};
 		var opened:Array<PlaceArtifactRequest> = [];
-		var special = new SpecialEvent(null, function(request) opened.push(request));
+		var special = new SpecialEvent(null, function(request) opened.push(request), function(_, _, _) return expected);
 		special.keyDown(Keyboard.G);
 		special.keyDown(Keyboard.C);
-		var action = special.click(200, 300, course, null);
+		var action = special.click(200, 300, null, null);
 
 		assertEquals(1, opened.length, "G+C click opens artifact prompt");
-		assertEquals(42, opened[0].levelId, "request uses course id");
-		assertEquals(9960, opened[0].x, "request converts stage x to course x");
-		assertEquals(10105, opened[0].y, "request converts stage y to course y");
-		assertEquals(0, opened[0].rot, "request carries block-layer rotation");
+		assertEquals(expected, opened[0], "G+C click forwards the resolved placement request");
 		switch (action) {
 			case PlaceArtifactAction(request):
-				assertEquals(opened[0].x, request.x, "action returns placement request");
+				assertEquals(expected, request, "action returns placement request");
 			default:
 				throw "expected PlaceArtifactAction";
 		}
-		course.remove();
 		LobbySession.clear();
+	}
+
+	private static function testArtifactPlacementCoordinates():Void {
+		var course = buildCourse();
+		course.x = 10;
+		course.y = 20;
+		course.levelRenderer.setCameraOffset(-400, -500);
+		course.levelRenderer.rotation = 90;
+		var request = course.artifactPlacementAt(210, 320);
+
+		assertEquals(42, request.levelId, "placement uses course id");
+		assertEquals(600, request.x, "placement converts stage x with explicit course and camera offsets");
+		assertEquals(800, request.y, "placement converts stage y with explicit course and camera offsets");
+		assertEquals(90, request.rot, "placement carries block-layer rotation");
+		course.remove();
 	}
 
 	private static function testCancelPrizeHotkey():Void {

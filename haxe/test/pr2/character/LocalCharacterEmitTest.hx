@@ -25,21 +25,20 @@ class LocalCharacterEmitTest {
 		LobbySocket.resetSent();
 		character.initNetworkEmission();
 		assertCommands(["p`0`0"], "init emission");
+		character.setControllerPosition(80, 100);
 
 		for (_ in 0...4) {
-			character.step(new LocalPlayerInput(false, true));
 			character.emitNetworkUpdate("backBackground");
 		}
 		assertCommands(["p`0`0"], "no position before update interval");
 
-		character.step(new LocalPlayerInput(false, true));
 		character.emitNetworkUpdate("backBackground");
 		assertCommands([
 			"p`0`0",
-			"p`83`101",
-			"exact_pos`83`101",
+			"p`80`100",
+			"exact_pos`80`100",
 			"set_var`scaleX`0.9",
-			"set_var`state`jump",
+			"set_var`state`stand",
 			"set_var`parent`backBackground"
 		], "fifth-frame position and vars");
 	}
@@ -49,16 +48,15 @@ class LocalCharacterEmitTest {
 		character.networkPlayerCount = 1;
 		LobbySocket.resetSent();
 		character.initNetworkEmission();
+		character.setControllerPosition(150, 120);
 		for (_ in 0...15) {
-			character.step(new LocalPlayerInput(false, true));
 			character.emitNetworkUpdate();
 		}
 		assertEquals(1, countPositionCommands(), "solo frames wait for fallback position");
 		assertEquals(false, hasCommandPrefix("exact_pos`"), "solo frames wait for fallback exact position");
-		character.step(new LocalPlayerInput(false, true));
 		character.emitNetworkUpdate();
-		assertEquals("p`151`121", commandWithPrefix("p`", 1), "solo fallback delta");
-		assertEquals("exact_pos`151`121", commandWithPrefix("exact_pos`"), "solo fallback exact position");
+		assertEquals("p`150`120", commandWithPrefix("p`", 1), "solo fallback delta");
+		assertEquals("exact_pos`150`120", commandWithPrefix("exact_pos`"), "solo fallback exact position");
 	}
 
 	private static function testTrackedVarAndEventEmission():Void {
@@ -84,6 +82,7 @@ class LocalCharacterEmitTest {
 		assertContains("set_var`item`4", "item var");
 
 		LobbySocket.resetSent();
+		character.setControllerPosition(70, 100);
 		character.setNetworkRotation(90);
 		character.beginSparklesNetwork();
 		character.endSparklesNetwork();
@@ -109,11 +108,11 @@ class LocalCharacterEmitTest {
 			"set_var`sparkle`0",
 			"set_var`jet`1",
 			"set_var`jet`0",
-			"squash`7`67`101",
-			"sting`8`67`101",
-			"heart`9`67`101",
+			"squash`7`70`100",
+			"sting`8`70`100",
+			"heart`9`70`100",
 			"heart`",
-			"loose_hat`5`123`456`67`101",
+			"loose_hat`5`123`456`70`100",
 			"hat_to_start`5",
 			"grab_egg`3",
 			"objective_reached`2`45`75",

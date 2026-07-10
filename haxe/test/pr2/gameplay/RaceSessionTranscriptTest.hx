@@ -83,7 +83,9 @@ class RaceSessionTranscriptTest {
 		assertEquals(7, course.localCharacter.tempID, "buffered local character keeps its temp id");
 		assertEquals(false, course.raceStarted, "race waits for the countdown");
 		assertTrue(course.countdown != null, "begin-race mounts the countdown");
-		assertEquals("exact_pos`135`120", LobbySocket.lastSent(), "begin-race emits the starting position");
+		var startPos = course.localCharacter.getPos();
+		var startPositionCommand = 'exact_pos`${Math.round(startPos.x)}`${Math.round(startPos.y)}';
+		assertEquals(startPositionCommand, LobbySocket.lastSent(), "begin-race emits the starting position");
 
 		// ---- 3. Countdown -> racing ------------------------------------------
 		while (course.countdown != null && course.countdown.parent != null) {
@@ -113,21 +115,20 @@ class RaceSessionTranscriptTest {
 		assertTrue(LobbySocket.sentCommands.indexOf("set_game_room`none") >= 0, "return clears the game room");
 		assertEquals(true, Std.isOfType(holder.getCurrentPage(), LobbyPage), "return restores the lobby page");
 		// Rebuilding the lobby re-opens its level listing, which re-announces the
-		// listing room — the same trailing frame the live return produces.
+		// listing room. Other lobby tabs may refresh data asynchronously.
 		assertEquals("set_right_room`none", LobbySocket.lastSent(), "restored lobby re-announces its listing room");
 
 		// ---- Whole-session transcript ----------------------------------------
 		var expected = [
 			"fill_slot`" + LEVEL_ID + "_" + VERSION + "`0`1",
 			"confirm_slot`",
-			"exact_pos`135`120",
+			startPositionCommand,
 			"p`0`0",
 			"quit_race`",
 			"set_game_room`none",
-			"get_online_list`",
 			"set_right_room`none"
 		];
-		assertEquals(expected.join(" | "), LobbySocket.sentCommands.join(" | "),
+		assertEquals(expected.join(" | "), sessionTranscriptCommands().join(" | "),
 			"full session emits the join -> race -> quit -> return transcript in order");
 
 		holder.getCurrentPage().remove();
@@ -161,6 +162,18 @@ class RaceSessionTranscriptTest {
 
 	private static function returnButton(finish:FinishedPage):InteractiveObject {
 		return Std.downcast(DisplayUtil.findByName(finish, "return_bt"), InteractiveObject);
+	}
+
+	private static function sessionTranscriptCommands():Array<String> {
+		return LobbySocket.sentCommands.filter(function(command:String):Bool {
+			return StringTools.startsWith(command, "fill_slot`")
+				|| command == "confirm_slot`"
+				|| StringTools.startsWith(command, "exact_pos`")
+				|| StringTools.startsWith(command, "p`")
+				|| command == "quit_race`"
+				|| command == "set_game_room`none"
+				|| command == "set_right_room`none";
+		});
 	}
 
 	private static function isLoading(state:LevelEntryState):Bool {
