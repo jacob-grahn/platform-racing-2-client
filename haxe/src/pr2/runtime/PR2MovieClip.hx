@@ -107,6 +107,12 @@ class PR2MovieClip extends Sprite {
 		timeline = symbol.timelines.length > 0 ? symbol.timelines[0] : null;
 		currentLabels = [];
 
+		var rootBaked = symbol.name == null ? null : BakedSymbolAtlas.create(symbol.name);
+		if (rootBaked != null) {
+			addChild(rootBaked);
+			return;
+		}
+
 		if (timeline != null) {
 			buildTimeline(timeline);
 		}

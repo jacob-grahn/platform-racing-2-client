@@ -37,6 +37,7 @@ class PR2MovieClipRuntimeTest {
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
 		testLeafVectorShapes();
+		testBakedSymbolStubsUseAtlasDirectly();
 		testGeneratedSiteLogoFrameScripts();
 		testGeneratedCharacterStateFrameScripts();
 		testGeneratedCharacterNestedStopFrameScripts();
@@ -549,6 +550,17 @@ class PR2MovieClipRuntimeTest {
 		assertNotNull(group, "DOMGroup renders as a sprite");
 		assertEquals(1, group.numChildren, "DOMGroup renders member shapes");
 		assertAtLeast(9, group.getChildAt(0).width, "DOMGroup member shape renders vector width");
+	}
+
+	private static function testBakedSymbolStubsUseAtlasDirectly():Void {
+		var symbol = AssetLibrary.requireSymbol("MovieClips/Symbol 30");
+		assertEquals(0, symbol.timelines.length, "baked atlas symbol omits generated vector timelines");
+
+		var clip = PR2MovieClip.fromSymbolName("MovieClips/Symbol 30");
+		assertEquals(1, clip.totalFrames, "direct baked symbol construction stays single-frame");
+		assertEquals(1, clip.numChildren, "direct baked symbol mounts atlas sprite instead of vector timeline");
+		assertAtLeast(1, clip.width, "direct baked symbol keeps non-empty atlas bounds");
+		assertAtLeast(1, clip.height, "direct baked symbol keeps non-empty atlas bounds");
 	}
 
 	private static function testDisposeStopsClipsNestedInGroups():Void {

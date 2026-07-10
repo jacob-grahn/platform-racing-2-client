@@ -8,9 +8,14 @@ import openfl.display.Sprite;
 import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.utils.Assets;
+#if sys
+import sys.FileSystem;
+import sys.io.File;
+#end
 
 class BakedSymbolAtlas {
 	private static final KONGREGATE_ATLAS = "assets/intro/atlases/kongregate@4x.json";
+	private static final LOCAL_KONGREGATE_ATLAS = "vector-art/atlases/intro/kongregate@4x.json";
 	private static final KONGREGATE_SYMBOLS:Map<String, String> = [
 		"MovieClips/Symbol 27" => "symbol_27",
 		"MovieClips/Symbol 30" => "symbol_30",
@@ -40,11 +45,14 @@ class BakedSymbolAtlas {
 
 	public static function create(symbolName:String):Null<Sprite> {
 		var frameName = KONGREGATE_SYMBOLS.get(symbolName);
-		if (frameName == null || !Assets.exists(KONGREGATE_ATLAS)) {
+		if (frameName == null) {
 			return null;
 		}
 
 		var atlas = loadKongregateAtlas();
+		if (atlas == null) {
+			return null;
+		}
 		var frame = atlas.frames.get(frameName);
 		if (frame == null) {
 			return null;
@@ -52,11 +60,27 @@ class BakedSymbolAtlas {
 		return new BakedSymbolSprite(atlas, frame);
 	}
 
-	private static function loadKongregateAtlas():GenericAtlas {
+	private static function loadKongregateAtlas():Null<GenericAtlas> {
 		if (kongregateAtlas == null) {
-			kongregateAtlas = GenericAtlas.parse(Assets.getText(KONGREGATE_ATLAS), KONGREGATE_ATLAS);
+			var json = readAtlasText();
+			if (json == null) {
+				return null;
+			}
+			kongregateAtlas = GenericAtlas.parse(json, KONGREGATE_ATLAS);
 		}
 		return kongregateAtlas;
+	}
+
+	private static function readAtlasText():Null<String> {
+		if (Assets.exists(KONGREGATE_ATLAS)) {
+			return Assets.getText(KONGREGATE_ATLAS);
+		}
+		#if sys
+		if (FileSystem.exists(LOCAL_KONGREGATE_ATLAS)) {
+			return File.getContent(LOCAL_KONGREGATE_ATLAS);
+		}
+		#end
+		return null;
 	}
 }
 
@@ -69,19 +93,35 @@ private class BakedSymbolSprite extends Sprite {
 			return;
 		}
 
-		var bitmap = new Bitmap(bitmapDataForFrame(atlas, frame), PixelSnapping.AUTO, true);
-		bitmap.x = frame.sourceTrim.x / frame.scale;
-		bitmap.y = frame.sourceTrim.y / frame.scale;
-		bitmap.scaleX = 1 / frame.scale;
-		bitmap.scaleY = 1 / frame.scale;
-		addChild(bitmap);
+		var bitmapData = bitmapDataForFrame(atlas, frame);
+		if (bitmapData != null) {
+			var bitmap = new Bitmap(bitmapData, PixelSnapping.AUTO, true);
+			bitmap.x = frame.sourceTrim.x / frame.scale;
+			bitmap.y = frame.sourceTrim.y / frame.scale;
+			bitmap.scaleX = 1 / frame.scale;
+			bitmap.scaleY = 1 / frame.scale;
+			addChild(bitmap);
+			return;
+		}
+
+		graphics.beginFill(0, 0);
+		graphics.drawRect(
+			frame.sourceTrim.x / frame.scale,
+			frame.sourceTrim.y / frame.scale,
+			frame.sourceTrim.width / frame.scale,
+			frame.sourceTrim.height / frame.scale
+		);
+		graphics.endFill();
 	}
 
-	private static function bitmapDataForFrame(atlas:GenericAtlas, frame:GenericAtlasFrame):BitmapData {
+	private static function bitmapDataForFrame(atlas:GenericAtlas, frame:GenericAtlasFrame):Null<BitmapData> {
 		var key = atlas.assetImagePath + ":" + frame.name + ":" + frame.rect.x + "," + frame.rect.y + "," + frame.rect.width + "," + frame.rect.height;
 		var cached = bitmapDataByFrame.get(key);
 		if (cached != null) {
 			return cached;
+		}
+		if (!Assets.exists(atlas.assetImagePath)) {
+			return null;
 		}
 
 		var source = Assets.getBitmapData(atlas.assetImagePath);

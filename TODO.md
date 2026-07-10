@@ -27,6 +27,19 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   `export/html5/bin` is about `33.86 MB` raw and `23.71 MB` with gzip; character
   atlas PNGs remain the largest binary bucket and gzip does not reduce them
   meaningfully.
+- Investigate removing unused generated asset metadata from the final JS.
+  `AssetCatalog.media()` and `AssetCatalog.linkageClasses()` do not appear to
+  have runtime callers, but their bitmap/sound/linkage literals still survive
+  into `PlatformRacing2.js`.
+- Investigate excluding test-only fixtures from the HTML5 export. The broad
+  `assets/` include currently ships `assets/fixtures/flat-level.json`, even
+  though local campaign test levels are built in code.
+- Investigate dropping `assets/fonts/DejaVuSans-BoldOblique.ttf`. Current
+  generated text faces include Verdana, Verdana-Bold, and Verdana-Italic, but no
+  Verdana-BoldItalic; the file is about 632 KB raw / 329 KB gzipped.
+- Investigate making audio assets non-preloaded. The audio files are needed at
+  runtime, but the broad `assets/` include appears to preload about 1.5 MB raw /
+  1.28 MB gzipped of sounds up front.
 
 ### Lobby Dialogs And Account Workflows
 
