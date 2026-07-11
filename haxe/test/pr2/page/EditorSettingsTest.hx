@@ -20,19 +20,20 @@ import pr2.level.ServerLevelDecoder;
 import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
 import pr2.levelEditor.LevelEditor;
-import pr2.levelEditor.LevelEditor.EditorBackgroundColorPickerButton;
-import pr2.levelEditor.LevelEditor.EditorBlockObject;
-import pr2.levelEditor.LevelEditor.EditorHatsSettingsPopup;
-import pr2.levelEditor.LevelEditor.EditorItemSettingsPopup;
-import pr2.levelEditor.LevelEditor.EditorModeSettingsPopup;
-import pr2.levelEditor.LevelEditor.EditorMusicSettingsPopup;
-import pr2.levelEditor.LevelEditor.EditorDrawableLayer;
-import pr2.levelEditor.LevelEditor.EditorObjectLayer;
-import pr2.levelEditor.LevelEditor.EditorSideBarEntry;
-import pr2.levelEditor.LevelEditor.EditorTextObject;
-import pr2.levelEditor.LevelEditor.EditorValueSettingsPopup;
-import pr2.levelEditor.LevelEditor.TestCoursePage;
-import pr2.levelEditor.EditorToolCursorManager.EditorBrushCursor;
+import pr2.levelEditor.EditorSideBarCatalog;
+import pr2.levelEditor.EditorBackgroundColorPickerButton;
+import pr2.levelEditor.EditorBlockObject;
+import pr2.levelEditor.EditorHatsSettingsPopup;
+import pr2.levelEditor.EditorItemSettingsPopup;
+import pr2.levelEditor.EditorModeSettingsPopup;
+import pr2.levelEditor.EditorMusicSettingsPopup;
+import pr2.levelEditor.EditorDrawableLayer;
+import pr2.levelEditor.EditorObjectLayer;
+import pr2.levelEditor.EditorSideBarEntry;
+import pr2.levelEditor.EditorTextObject;
+import pr2.levelEditor.EditorValueSettingsPopup;
+import pr2.levelEditor.TestCoursePage;
+import pr2.levelEditor.EditorBrushCursor;
 import pr2.runtime.FlSliderEvent;
 import pr2.ui.CustomCursor;
 import pr2.ui.StageFocus;
@@ -41,6 +42,7 @@ class EditorSettingsTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
+		testSideBarCatalog();
 		testDefaultSetters();
 		testVariablesAndLevelVars();
 		testApplyLoadedLevelData();
@@ -67,6 +69,17 @@ class EditorSettingsTest {
 		testCustomCursorRuntimeHooks();
 		testStatSliderHoldAccelerationAndSavePaths();
 		trace('EditorSettingsTest passed $assertions assertions');
+	}
+
+	private static function testSideBarCatalog():Void {
+		var rotateLeft = EditorSideBarCatalog.hoverInfo("blocks", "rotateL");
+		assertEquals("Rotate Left Block", rotateLeft.title, "sidebar catalog preserves conditional block titles");
+		assertTrue(rotateLeft.desc.indexOf("round and round") != -1, "sidebar catalog preserves authored descriptions");
+
+		var background = EditorSideBarCatalog.backgroundSpec("bg3");
+		assertNotNull(background, "sidebar catalog resolves known backgrounds");
+		assertEquals(ObjectCodes.BG3Code, background.code, "sidebar catalog maps background linkage codes");
+		assertEquals(null, EditorSideBarCatalog.backgroundSpec("unknown"), "sidebar catalog rejects unknown backgrounds");
 	}
 
 	private static function testDefaultSetters():Void {

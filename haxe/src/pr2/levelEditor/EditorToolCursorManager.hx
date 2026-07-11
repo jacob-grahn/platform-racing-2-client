@@ -1,22 +1,9 @@
 package pr2.levelEditor;
 
 import com.jiggmin.data.Objects;
-import openfl.display.DisplayObject;
-import openfl.events.Event;
-import openfl.events.KeyboardEvent;
-import openfl.events.MouseEvent;
-import openfl.geom.ColorTransform;
-import openfl.ui.Keyboard;
 import pr2.lobby.Memory;
-import pr2.level.ObjectCodes;
-import pr2.levelEditor.LevelEditor.EditorBlockLayer;
 import pr2.runtime.PR2MovieClip;
 import pr2.ui.CustomCursor;
-
-typedef EditorToolSelection = {
-	final sidebar:String;
-	final toolId:String;
-}
 
 class EditorToolCursorManager {
 	public var current(default, null):Null<EditorToolCursor>;
@@ -160,132 +147,5 @@ class EditorToolCursorManager {
 		} catch (_:Dynamic) {
 			return null;
 		}
-	}
-}
-
-class EditorToolCursor extends CustomCursor {
-	public final manager:EditorToolCursorManager;
-	public final sidebar:String;
-	public final toolId:String;
-	public final ignoresTemporaryDelete:Bool;
-
-	public function new(manager:EditorToolCursorManager, sidebar:String, toolId:String, ignoresTemporaryDelete:Bool = false) {
-		super();
-		this.manager = manager;
-		this.sidebar = sidebar;
-		this.toolId = toolId;
-		this.ignoresTemporaryDelete = ignoresTemporaryDelete;
-	}
-
-	override function keyDownHandler(e:KeyboardEvent):Void {
-		if (e.keyCode == Keyboard.COMMAND || e.keyCode == Keyboard.CONTROL) {
-			manager.beginTemporaryDelete();
-		}
-	}
-
-	override function keyUpHandler(e:KeyboardEvent):Void {
-		if (e.keyCode == Keyboard.COMMAND || e.keyCode == Keyboard.CONTROL) {
-			manager.endTemporaryDelete();
-		}
-	}
-}
-
-class EditorBrushCursor extends EditorToolCursor {
-	public final eraseMode:Bool;
-
-	private var circle:PR2MovieClip;
-	private var size:Float = 4;
-	private var zoom:Float = 1;
-
-	public function new(manager:EditorToolCursorManager, sidebar:String, toolId:String, eraseMode:Bool) {
-		super(manager, sidebar, toolId, true);
-		this.eraseMode = eraseMode;
-		disposable = false;
-		circle = PR2MovieClip.fromLinkage("Circle", {maxNestedDepth: 2});
-		applyCursorGraphic(circle);
-		setSize(size);
-	}
-
-	public function setSize(nextSize:Float):Void {
-		size = Math.max(1, nextSize);
-		if (circle != null) {
-			circle.width = size * zoom;
-			circle.height = size * zoom;
-		}
-	}
-
-	public function setZoom(nextZoom:Float):Void {
-		zoom = Math.max(0.01, nextZoom);
-		setSize(size);
-	}
-
-	public function setColor(color:Int):Void {
-		if (circle == null) {
-			return;
-		}
-		var transform = new ColorTransform();
-		transform.color = color & 0xFFFFFF;
-		circle.transform.colorTransform = transform;
-	}
-
-	public function updateVisibilityForStagePoint(stageX:Float, stageY:Float):Void {
-		visible = !manager.isOverEditorMenu(stageX, stageY);
-	}
-
-	override function mouseMoveHandler(e:MouseEvent):Void {
-		super.mouseMoveHandler(e);
-		updateVisibilityForStagePoint(e.stageX, e.stageY);
-	}
-
-	override public function remove():Void {
-		if (circle != null) {
-			circle.dispose();
-			circle = null;
-		}
-		super.remove();
-	}
-}
-
-class EditorGraphicCursor extends EditorToolCursor {
-	private var graphic:Null<DisplayObject>;
-	private final scaleWithObjectLayer:Bool;
-	private final cursorId:Int;
-
-	public function new(manager:EditorToolCursorManager, sidebar:String, toolId:String, graphic:DisplayObject, hideSystemMouse:Bool = false,
-			ignoresTemporaryDelete:Bool = false, scaleWithObjectLayer:Bool = false, cursorId:Int = -1) {
-		super(manager, sidebar, toolId, ignoresTemporaryDelete);
-		this.graphic = graphic;
-		this.scaleWithObjectLayer = scaleWithObjectLayer;
-		this.cursorId = cursorId;
-		applyCursorGraphic(graphic);
-		if (hideSystemMouse) {
-			hideMouse();
-		}
-		if (scaleWithObjectLayer) {
-			updateObjectLayerScale();
-			addEventListener(Event.ENTER_FRAME, updateObjectLayerScale);
-		}
-	}
-
-	override public function remove():Void {
-		removeEventListener(Event.ENTER_FRAME, updateObjectLayerScale);
-		var clip = Std.downcast(graphic, PR2MovieClip);
-		if (clip != null) {
-			clip.dispose();
-		}
-		graphic = null;
-		super.remove();
-	}
-
-	override public function getID():Int {
-		return cursorId;
-	}
-
-	private function updateObjectLayerScale(?_:Event):Void {
-		if (!scaleWithObjectLayer) {
-			return;
-		}
-		scaleX = manager.objectCursorScaleX();
-		scaleY = manager.objectCursorScaleY();
 	}
 }
