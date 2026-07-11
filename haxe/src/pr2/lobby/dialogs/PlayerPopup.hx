@@ -45,6 +45,7 @@ import pr2.util.Dyn;
 	moderator ban menu and temporary moderator warning/kick menu.
 **/
 class PlayerPopup extends Popup {
+	public static var lookupUserHandler:Null<String->Void> = null;
 	public static var instance:Null<PlayerPopup>;
 	public static var hoverDelayFactory:(Void->Void, Int)->Null<Timer> = defaultHoverDelay;
 
@@ -384,7 +385,9 @@ class PlayerPopup extends Popup {
 	}
 
 	private function clickViewLevels():Void {
-		if (LobbyRight.instance != null) {
+		if (lookupUserHandler != null) {
+			lookupUserHandler(userName);
+		} else if (LobbyRight.instance != null) {
 			LobbyRight.instance.lookupUser(userName);
 		}
 		if (GuildPopup.instance != null) {

@@ -114,42 +114,10 @@ and XFL sources. Completed work belongs in git history and `README.md`.
 
 ##### Proper Mobile Lobby
 
-- Build a separate mobile lobby shell rather than scaling or merely enlarging
-  the authored two-pane desktop lobby. Reuse the existing session, networking,
-  level-list, account, chat, command, and level-launch logic while leaving the
-  desktop `LobbyPage`, `LobbyLeft`, `LobbyRight`, and overlapping tab strip
-  unchanged.
-- Use one primary full-screen pane at a time with large top- or bottom-level
-  navigation for Play, Chat, Players, and Account. Within Play, provide large
-  secondary navigation for Campaign, All Time Best, Week's Best, Newest,
-  Search, and Favorites when available.
-- Present level listings as full-width touch-friendly cards with scrolling,
-  clear selection/launch actions, password entry, paging or incremental loading,
-  and the same information and permissions as the desktop listings.
-- Replace small floating dialogs with mobile sheets or full-screen panels where
-  appropriate. All interactive controls must have at least a 44-48 point touch
-  target and must remain reachable around display cutouts and the soft keyboard.
-- Replace hover-only discovery with visible actions, tap-to-show information, or
-  another touch interaction. Audit every mobile lobby flow for mouse-over,
-  mouse-out, double-click, tiny close buttons, and keyboard-only shortcuts.
-- Make Chat, Search, login/account forms, private messages, and popup forms react
-  correctly when the soft keyboard opens. Preserve the active field, keep the
-  send/confirm action visible, and prevent gameplay controls from receiving text
-  entry touches or key events.
-- Add responsive layouts for narrow phones, wide phones, and tablets without
-  changing the desktop lobby's visual-parity tests. Evaluate Feathers UI for the
-  mobile lobby's scrolling lists, navigation, form controls, and density scaling;
-  use plain OpenFL controls if that keeps the new shell smaller and easier to skin.
-- Preserve lobby behavior and state across the mobile presentation: remembered
-  tabs, unread notifications, guest/member differences, favorites, lookup-user
-  and lookup-level jumps, popups, logout, options, store, and race return flow.
-- Treat the level editor as desktop-only for the first mobile release. Hide or
-  clearly disable its entry point on mobile until dragging, drawing, resizing,
-  tool selection, cursor workflows, and keyboard shortcuts have a deliberate
-  touch design and device coverage.
-- Add mobile lobby unit, layout, and end-to-end coverage, plus screenshots on
-  representative phone/tablet aspect ratios and real-device tests on both iOS
-  and Android.
+- Run the completed mobile lobby through native login, soft-keyboard, safe-area,
+  popup, race-return, and rotation tests on representative physical iOS and
+  Android phones/tablets before release. Browser coverage is available with
+  `?screen=lobby&mobile=1` (and `offlineLists=1` for deterministic level data).
 
 ### Lobby Dialogs And Account Workflows
 

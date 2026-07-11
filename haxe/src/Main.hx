@@ -31,6 +31,7 @@ import pr2.page.CampaignTestScreen;
 import pr2.page.CustomizeCharacterScreen;
 import pr2.page.IntroPage;
 import pr2.page.LoginPage;
+import pr2.page.MobileLobbyPage;
 import pr2.page.PageHolder;
 import pr2.page.SymbolPreview;
 import pr2.page.PopupPreview;
@@ -83,7 +84,7 @@ class Main extends Sprite {
 			var siteMode = resolveSiteMode(query);
 			var screen = Screen.fromQuery(query);
 			addChild(buildScreen(screen, query, siteMode));
-			addGlobalChrome(screen);
+			addGlobalChrome(screen, query);
 			signalAppReady(screen);
 			#if pr2_leak_probe
 			installLeakProbe();
@@ -169,7 +170,10 @@ class Main extends Sprite {
 	// pure dev tooling screens (symbol preview / customize / popup preview) are
 	// not part of the real game chrome and would corrupt visual diffs, so they
 	// skip it.
-	private function addGlobalChrome(screen:Screen):Void {
+	private function addGlobalChrome(screen:Screen, query:Null<String>):Void {
+		if (screen == Lobby && mobileLobbyRequested(query)) {
+			return;
+		}
 		switch (screen) {
 			case Login | Lobby | Intro | Campaign:
 				var muteButton = new MuteButton();
@@ -238,15 +242,25 @@ class Main extends Sprite {
 			installOfflineLobbyListFixtures();
 		}
 		pr2.lobby.LobbySession.begin(userName, guest ? 0 : 1);
-		var holder = new PageHolder(new pr2.page.LobbyPage(userName), true);
+		var mobile = mobileLobbyRequested(query);
+		var holder = new PageHolder(mobile ? new MobileLobbyPage(userName) : new pr2.page.LobbyPage(userName), true);
 		#if js
 		// Runtime parity sequences rebuild the lobby in-place to verify that the
 		// static TabsHolder selection memory survives a real page teardown.
 		untyped Browser.window.__pr2RebuildLobby = function():Void {
-			holder.changePage(new pr2.page.LobbyPage(userName));
+			holder.changePage(mobile ? new MobileLobbyPage(userName) : new pr2.page.LobbyPage(userName));
 		};
 		#end
 		return holder;
+	}
+
+	private static function mobileLobbyRequested(query:Null<String>):Bool {
+		var value = QueryParams.get(query, "mobile");
+		return value == "1" || value == "true" || value == "lobby"
+			#if pr2_mobile_ui
+				|| true
+			#end
+		;
 	}
 
 	private function installOfflineLobbyListFixtures():Void {

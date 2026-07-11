@@ -22,11 +22,12 @@ class Popup extends Removable {
 	private static var openPopups:Array<Popup> = [];
 
 	public var fadeOutStarted:Bool = false;
+	private var overlay:Null<PR2MovieClip>;
 
 	public function new(addOverlay:Bool = true) {
 		super();
 		if (addOverlay) {
-			var overlay = PR2MovieClip.fromLinkage("Square", {maxNestedDepth: 1});
+			overlay = PR2MovieClip.fromLinkage("Square", {maxNestedDepth: 1});
 			overlay.width = 550;
 			overlay.height = 400;
 			var ct = new ColorTransform();
@@ -40,9 +41,28 @@ class Popup extends Removable {
 		alpha = 0;
 		if (AppStage.stage != null) {
 			AppStage.stage.addChild(this);
+			AppStage.stage.addEventListener(Event.RESIZE, onStageResize);
 		}
+		layoutForStage();
 		addEventListener(Event.ENTER_FRAME, fadeIn);
 		openPopups.push(this);
+	}
+
+	/** Keep authored dialogs centered and comfortably sized in the mobile shell. */
+	private function onStageResize(_:Event):Void layoutForStage();
+
+	private function layoutForStage():Void {
+		if (AppStage.stage == null) return;
+		var stageW = AppStage.stage.stageWidth;
+		var stageH = AppStage.stage.stageHeight;
+		var density = Math.max(1, Math.min(stageW / 550, stageH / 400));
+		scaleX = scaleY = density;
+		x = stageW / 2;
+		y = stageH / 2;
+		if (overlay != null) {
+			overlay.width = stageW / density;
+			overlay.height = stageH / density;
+		}
 	}
 
 	private function fadeIn(_:Event):Void {
@@ -75,6 +95,7 @@ class Popup extends Removable {
 	override public function remove():Void {
 		if (isRemoved()) return;
 		openPopups.remove(this);
+		if (AppStage.stage != null) AppStage.stage.removeEventListener(Event.RESIZE, onStageResize);
 		removeEventListener(Event.ENTER_FRAME, fadeIn);
 		removeEventListener(Event.ENTER_FRAME, fadeOut);
 		StageFocus.reset();

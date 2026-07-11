@@ -85,7 +85,11 @@
 	<div id="openfl-content"></div>
 	
 	<script type="text/javascript">
-		lime.embed ("::APP_FILE::", "openfl-content", ::WIN_WIDTH::, ::WIN_HEIGHT::, { parameters: {} });
+		var pr2MobileLobby = /(?:^|[?&])mobile=(?:1|true|lobby)(?:&|$)/i.test(window.location.search);
+		lime.embed ("::APP_FILE::", "openfl-content",
+			pr2MobileLobby ? window.innerWidth : ::WIN_WIDTH::,
+			pr2MobileLobby ? window.innerHeight : ::WIN_HEIGHT::,
+			{ parameters: {} });
 	</script>
 	
 </body>
