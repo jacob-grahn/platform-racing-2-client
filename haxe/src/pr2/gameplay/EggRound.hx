@@ -6,13 +6,10 @@ import openfl.geom.Point;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
 import pr2.effects.LaserShotTimeline;
-import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
-import pr2.gameplay.RotationMath.RotatedPoint;
 import pr2.util.FlashRandom;
 import pr2.util.DisplayUtil;
 
@@ -117,7 +114,8 @@ class EggRound {
 				continue;
 			}
 			stepEgg(egg, level, courseRotation, playerX, playerY, playerCrouching, playerRemoved);
-			if (playerX != null && playerY != null && isNearLocalPlayer(egg.x, egg.y, playerX, playerY, playerCrouching, playerRemoved)) {
+			if (playerX != null && playerY != null
+				&& BlockCollision.isNearLocalPlayer(egg.x, egg.y, playerX, playerY, playerCrouching, playerRemoved)) {
 				collectEgg(id);
 			}
 		}
@@ -310,9 +308,9 @@ class EggRound {
 		var rotatedPos = RotationMath.rotatePoint(egg.posX, egg.posY, -displayRotation);
 		if (egg.velX != 0) {
 			var wallProbe = RotationMath.rotatePoint(egg.posX + egg.velX, egg.posY - 10, -displayRotation);
-			var wallBlock = blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
-			if (isActiveBlock(wallBlock)) {
-				var blockPos = rotatedBlockPos(wallBlock, egg.rot);
+			var wallBlock = BlockCollision.blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
+			if (BlockCollision.isActiveBlock(wallBlock)) {
+				var blockPos = BlockCollision.rotatedBlockPos(wallBlock, egg.rot);
 				if (egg.velX < 0) {
 					egg.posX = blockPos.x + 31;
 				} else {
@@ -327,10 +325,10 @@ class EggRound {
 				}
 			}
 		}
-		var groundBlock = blockFromPos(level, rotatedPos.x, rotatedPos.y, courseRotation);
-		if (isActiveBlock(groundBlock)) {
+		var groundBlock = BlockCollision.blockFromPos(level, rotatedPos.x, rotatedPos.y, courseRotation);
+		if (BlockCollision.isActiveBlock(groundBlock)) {
 			egg.grounded = true;
-			var blockPos = rotatedBlockPos(groundBlock, egg.rot);
+			var blockPos = BlockCollision.rotatedBlockPos(groundBlock, egg.rot);
 			if (egg.velY < 0) {
 				egg.velY *= -0.5;
 				egg.posY = blockPos.y + 31;
@@ -364,7 +362,7 @@ class EggRound {
 		var probeX = egg.posX + (egg.velX * (Math.random() * 100)) + 50;
 		var probe = RotationMath.rotatePoint(probeX, egg.posY, -displayRotation);
 		var nearLocalPlayer = playerX != null && playerY != null
-			&& isNearLocalPlayer(probe.x, probe.y, playerX, playerY, playerCrouching, playerRemoved);
+			&& BlockCollision.isNearLocalPlayer(probe.x, probe.y, playerX, playerY, playerCrouching, playerRemoved);
 		if (egg.attackCooldown <= 0 && nearLocalPlayer) {
 			egg.attackCooldown = ATTACK_COOLDOWN_FRAMES;
 			var angle = 0;
@@ -500,7 +498,7 @@ class EggRound {
 	}
 
 	private static function wrapPosition(egg:EggState, level:ServerLevel):Void {
-		var limits = movementLimits(level, egg.rot);
+		var limits = BlockCollision.movementLimits(level, egg.rot);
 		if (egg.posX > limits.maxX) {
 			egg.posX = limits.minX;
 		}
@@ -513,84 +511,6 @@ class EggRound {
 		if (egg.posY < limits.minY) {
 			egg.posY = limits.maxY;
 		}
-	}
-
-	private static function blockFromPos(level:ServerLevel, posX:Int, posY:Int, rotation:Int):Null<DecodedBlock> {
-		var probeX = posX;
-		var probeY = posY;
-		if (rotation != 0) {
-			var pos = RotationMath.rotatePoint(posX, posY, rotation);
-			probeX = pos.x;
-			probeY = pos.y;
-		}
-		var tileX = Math.floor(probeX / 30);
-		var tileY = Math.floor(probeY / 30);
-		for (block in level.blocks) {
-			if (Math.floor(block.x / 30) == tileX && Math.floor(block.y / 30) == tileY) {
-				return block;
-			}
-		}
-		return null;
-	}
-
-	private static function isActiveBlock(block:Null<DecodedBlock>):Bool {
-		if (block == null) {
-			return false;
-		}
-		return switch (block.code) {
-			case ObjectCodes.BLOCK_START1 | ObjectCodes.BLOCK_START2 | ObjectCodes.BLOCK_START3 | ObjectCodes.BLOCK_START4
-				| ObjectCodes.BLOCK_WATER | ObjectCodes.BLOCK_SAFETY:
-				false;
-			default:
-				true;
-		}
-	}
-
-	private static function rotatedBlockPos(block:DecodedBlock, rot:Int):RotatedPoint {
-		var offsetX = 0;
-		var offsetY = 0;
-		if (rot == 90) {
-			offsetY = 30;
-		} else if (Math.abs(rot) == 180) {
-			offsetX = 30;
-			offsetY = 30;
-		} else if (rot == -90) {
-			offsetX = 30;
-		}
-		return RotationMath.rotatePoint(block.x + offsetX, block.y + offsetY, -rot);
-	}
-
-	private static function movementLimits(level:ServerLevel, rot:Int):{minX:Int, maxX:Int, minY:Int, maxY:Int} {
-		var minX = level.minX - 300;
-		var maxX = level.maxX + 300;
-		var minY = level.minY - 300;
-		var maxY = level.maxY + 300;
-		var minPoint = RotationMath.rotatePoint(minX, minY, -rot);
-		var maxPoint = RotationMath.rotatePoint(maxX, maxY, -rot);
-		var resultMinX = minPoint.x;
-		var resultMinY = minPoint.y;
-		var resultMaxX = maxPoint.x;
-		var resultMaxY = maxPoint.y;
-		if (resultMaxX < resultMinX) {
-			var tmp = resultMaxX;
-			resultMaxX = resultMinX;
-			resultMinX = tmp;
-		}
-		if (resultMaxY < resultMinY) {
-			var tmp = resultMaxY;
-			resultMaxY = resultMinY;
-			resultMinY = tmp;
-		}
-		return {minX: resultMinX, maxX: resultMaxX, minY: resultMinY, maxY: resultMaxY};
-	}
-
-	private static function isNearLocalPlayer(px:Int, py:Int, playerX:Float, playerY:Float, playerCrouching:Bool, playerRemoved:Bool):Bool {
-		if (playerRemoved) {
-			return false;
-		}
-		return Math.abs(playerX - px) < 25
-			&& playerY > py - 5
-			&& ((!playerCrouching && playerY < py + 65) || (playerCrouching && playerY < py + 25));
 	}
 
 	private function playDefaultCollectSound(x:Int, y:Int):Void {

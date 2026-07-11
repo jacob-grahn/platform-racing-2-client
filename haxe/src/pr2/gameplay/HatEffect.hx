@@ -3,13 +3,10 @@ package pr2.gameplay;
 import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
-import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
-import pr2.level.ServerLevel.DecodedBlock;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.runtime.PR2MovieClip;
-import pr2.gameplay.RotationMath.RotatedPoint;
 
 typedef HatEffectInfo = {
 	final x:Float;
@@ -82,16 +79,16 @@ class HatEffect {
 		var rotatedPos = RotationMath.rotatePoint(posX, posY, -displayRotation);
 		if (velX != 0) {
 			var wallProbe = RotationMath.rotatePoint(posX + velX, posY - 10, -displayRotation);
-			var wallBlock = blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
-			if (isActiveBlock(wallBlock)) {
-				var blockPos = rotatedBlockPos(wallBlock, rot);
+			var wallBlock = BlockCollision.blockFromPos(level, wallProbe.x, wallProbe.y, courseRotation);
+			if (BlockCollision.isActiveBlock(wallBlock)) {
+				var blockPos = BlockCollision.rotatedBlockPos(wallBlock, rot);
 				posX = velX < 0 ? blockPos.x + 31 : blockPos.x - 1;
 			}
 		}
-		var groundBlock = blockFromPos(level, rotatedPos.x, rotatedPos.y, courseRotation);
-		if (isActiveBlock(groundBlock)) {
+		var groundBlock = BlockCollision.blockFromPos(level, rotatedPos.x, rotatedPos.y, courseRotation);
+		if (BlockCollision.isActiveBlock(groundBlock)) {
 			grounded = true;
-			var blockPos = rotatedBlockPos(groundBlock, rot);
+			var blockPos = BlockCollision.rotatedBlockPos(groundBlock, rot);
 			if (velY < 0) {
 				velY *= -0.5;
 				posY = blockPos.y + 31;
@@ -109,7 +106,7 @@ class HatEffect {
 		if (!donePlaying
 			&& playerX != null
 			&& playerY != null
-			&& isNearLocalPlayer(rotatedPos.x, rotatedPos.y, playerX, playerY, playerCrouching, playerRemoved)) {
+			&& BlockCollision.isNearLocalPlayer(rotatedPos.x, rotatedPos.y, playerX, playerY, playerCrouching, playerRemoved)) {
 			remove();
 			LobbySocket.write('get_hat`$id');
 		}
@@ -173,57 +170,4 @@ class HatEffect {
 		return new ColorTransform(0, 0, 0, 1, (color >> 16) & 0xFF, (color >> 8) & 0xFF, color & 0xFF, 0);
 	}
 
-	private static function blockFromPos(level:ServerLevel, posX:Int, posY:Int, rotation:Int):Null<DecodedBlock> {
-		var probeX = posX;
-		var probeY = posY;
-		if (rotation != 0) {
-			var pos = RotationMath.rotatePoint(posX, posY, rotation);
-			probeX = pos.x;
-			probeY = pos.y;
-		}
-		var tileX = Math.floor(probeX / 30);
-		var tileY = Math.floor(probeY / 30);
-		for (block in level.blocks) {
-			if (Math.floor(block.x / 30) == tileX && Math.floor(block.y / 30) == tileY) {
-				return block;
-			}
-		}
-		return null;
-	}
-
-	private static function isActiveBlock(block:Null<DecodedBlock>):Bool {
-		if (block == null) {
-			return false;
-		}
-		return switch (block.code) {
-			case ObjectCodes.BLOCK_START1 | ObjectCodes.BLOCK_START2 | ObjectCodes.BLOCK_START3 | ObjectCodes.BLOCK_START4
-				| ObjectCodes.BLOCK_WATER | ObjectCodes.BLOCK_SAFETY:
-				false;
-			default:
-				true;
-		}
-	}
-
-	private static function rotatedBlockPos(block:DecodedBlock, rot:Int):RotatedPoint {
-		var offsetX = 0;
-		var offsetY = 0;
-		if (rot == 90) {
-			offsetY = 30;
-		} else if (Math.abs(rot) == 180) {
-			offsetX = 30;
-			offsetY = 30;
-		} else if (rot == -90) {
-			offsetX = 30;
-		}
-		return RotationMath.rotatePoint(block.x + offsetX, block.y + offsetY, -rot);
-	}
-
-	private static function isNearLocalPlayer(px:Int, py:Int, playerX:Float, playerY:Float, playerCrouching:Bool, playerRemoved:Bool):Bool {
-		if (playerRemoved) {
-			return false;
-		}
-		return Math.abs(playerX - px) < 25
-			&& playerY > py - 5
-			&& ((!playerCrouching && playerY < py + 65) || (playerCrouching && playerY < py + 25));
-	}
 }

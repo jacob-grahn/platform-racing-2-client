@@ -1,8 +1,5 @@
 package pr2.net;
 
-import haxe.Json;
-import haxe.crypto.Md5;
-
 /**
 	Fetches a course list for any lobby listing mode (`best`, `best_week`,
 	`newest`, `favorites`, `campaign`, `search`) and parses it into
@@ -77,35 +74,13 @@ class LevelListClient {
 	}
 
 	public static function parse(body:String):LevelListResult {
-		if (body == null || StringTools.trim(body) == "") {
-			throw "empty response";
-		}
-
-		var obj:Dynamic = Json.parse(body);
-		var rawLevels:Dynamic = Reflect.field(obj, "levels");
-		if (rawLevels == null || !Std.isOfType(rawLevels, Array)) {
-			throw "response had no levels array";
-		}
-
-		var levels:Array<CampaignLevelInfo> = [];
-		for (entry in (rawLevels : Array<Dynamic>)) {
-			levels.push(CampaignLevelInfo.fromDynamic(entry));
-		}
-
-		var expectedHash:Dynamic = Reflect.field(obj, "hash");
-		var hashValid = expectedHash != null && Std.string(expectedHash) == computeHash(body);
-
-		return new LevelListResult(levels, hashValid);
+		var payload = LevelListPayload.parse(body);
+		return new LevelListResult(payload.levels, payload.hashValid);
 	}
 
 	/** Replicates the integrity slice hashed by `LevelListing.loadHandler`. */
 	public static function computeHash(body:String):String {
-		var sliceLength = body.length - 53;
-		if (sliceLength <= 0) {
-			return "";
-		}
-		var levelsStr = body.substr(10, sliceLength);
-		return Md5.encode(levelsStr + ServerConfig.LEVEL_LIST_SALT);
+		return LevelListPayload.computeHash(body);
 	}
 }
 

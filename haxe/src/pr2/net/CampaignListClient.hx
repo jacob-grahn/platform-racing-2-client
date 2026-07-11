@@ -1,8 +1,5 @@
 package pr2.net;
 
-import haxe.Json;
-import haxe.crypto.Md5;
-
 /**
 	Fetches a campaign course list from the live server and parses it into
 	`CampaignLevelInfo` entries, mirroring `LevelListing.requestCourses` /
@@ -29,25 +26,8 @@ class CampaignListClient {
 	}
 
 	public static function parse(body:String):CampaignListResult {
-		if (body == null || StringTools.trim(body) == "") {
-			throw "empty response";
-		}
-
-		var obj:Dynamic = Json.parse(body);
-		var rawLevels:Dynamic = Reflect.field(obj, "levels");
-		if (rawLevels == null || !Std.isOfType(rawLevels, Array)) {
-			throw "response had no levels array";
-		}
-
-		var levels:Array<CampaignLevelInfo> = [];
-		for (entry in (rawLevels : Array<Dynamic>)) {
-			levels.push(CampaignLevelInfo.fromDynamic(entry));
-		}
-
-		var expectedHash:Dynamic = Reflect.field(obj, "hash");
-		var hashValid = expectedHash != null && Std.string(expectedHash) == computeHash(body);
-
-		return new CampaignListResult(levels, hashValid);
+		var payload = LevelListPayload.parse(body);
+		return new CampaignListResult(payload.levels, payload.hashValid);
 	}
 
 	/**
@@ -55,12 +35,7 @@ class CampaignListClient {
 		`ret.substr(10, ret.length - 53)` plus `LEVEL_LIST_SALT`.
 	**/
 	private static function computeHash(body:String):String {
-		var sliceLength = body.length - 53;
-		if (sliceLength <= 0) {
-			return "";
-		}
-		var levelsStr = body.substr(10, sliceLength);
-		return Md5.encode(levelsStr + ServerConfig.LEVEL_LIST_SALT);
+		return LevelListPayload.computeHash(body);
 	}
 }
 
