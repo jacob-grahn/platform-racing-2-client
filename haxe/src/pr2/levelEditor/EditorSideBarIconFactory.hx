@@ -1,13 +1,8 @@
 package pr2.levelEditor;
 
 import com.jiggmin.data.Objects;
-import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
-import openfl.display.Sprite;
-import openfl.utils.AssetType;
-import openfl.utils.Assets;
 import pr2.level.ObjectCodes;
-import pr2.level.ServerLevelRenderer;
 import pr2.levelEditor.EditorBlockLayer;
 import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
@@ -77,24 +72,13 @@ class EditorSideBarIconFactory {
 	}
 
 	private static function stampIcon(code:Int):Null<DisplayObject> {
-		var assetPath = ServerLevelRenderer.stampAssetPath(code);
-		if (assetPath == "" || !Assets.exists(assetPath, AssetType.IMAGE)) {
+		var icon = Objects.getFromCode(code);
+		if (icon == null) {
 			return null;
 		}
-		var data = Assets.getBitmapData(assetPath);
-		var bitmap = new Bitmap(data);
-		bitmap.smoothing = true;
-		var scale = Math.min(ICON_BOX / data.width, ICON_BOX / data.height);
-		bitmap.scaleX = scale;
-		bitmap.scaleY = scale;
-		bitmap.x = ICON_OFFSET + (ICON_BOX - data.width * scale) / 2;
-		bitmap.y = ICON_OFFSET + (ICON_BOX - data.height * scale) / 2;
-		var holder = new Sprite();
-		holder.name = stampLinkageName(code);
-		holder.mouseEnabled = false;
-		holder.mouseChildren = false;
-		holder.addChild(bitmap);
-		return holder;
+		icon.name = stampLinkageName(code);
+		fit(icon);
+		return icon;
 	}
 
 	private static function stampLinkageName(code:Int):String {
@@ -123,9 +107,10 @@ class EditorSideBarIconFactory {
 		var scale = Math.min(ICON_BOX / bounds.width, ICON_BOX / bounds.height);
 		icon.scaleX *= scale;
 		icon.scaleY *= scale;
-		var fittedBounds = icon.getBounds(icon);
-		icon.x = ICON_OFFSET + (ICON_BOX - fittedBounds.width) / 2 - fittedBounds.left * icon.scaleX;
-		icon.y = ICON_OFFSET + (ICON_BOX - fittedBounds.height) / 2 - fittedBounds.top * icon.scaleY;
+		var fittedWidth = bounds.width * Math.abs(icon.scaleX);
+		var fittedHeight = bounds.height * Math.abs(icon.scaleY);
+		icon.x = ICON_OFFSET + (ICON_BOX - fittedWidth) / 2 - bounds.left * icon.scaleX;
+		icon.y = ICON_OFFSET + (ICON_BOX - fittedHeight) / 2 - bounds.top * icon.scaleY;
 	}
 
 	private static function valueButton(title:String, value:String):PR2MovieClip {

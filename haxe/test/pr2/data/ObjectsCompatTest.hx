@@ -26,12 +26,12 @@ class ObjectsCompatTest {
 		assertLinkage("Tree2", ObjectCodes.STAMP_TREE2, "tree2 stamp");
 		assertLinkage("Tree3", ObjectCodes.STAMP_TREE3, "tree3 stamp");
 		assertLinkage("PetrifiedTree", ObjectCodes.STAMP_PETRIFIED_TREE, "petrified tree stamp");
-		assertLinkage("Cactus", ObjectCodes.STAMP_CACTUS, "cactus stamp");
+		assertNormalizedLinkage("Cactus", ObjectCodes.STAMP_CACTUS, "cactus stamp");
 		assertLinkage("Rock", ObjectCodes.STAMP_ROCK, "rock stamp");
 		assertLinkage("Rock2", ObjectCodes.STAMP_ROCK2, "rock2 stamp");
 		assertLinkage("Spire", ObjectCodes.STAMP_SPIRE, "spire stamp");
 		assertLinkage("Spire2", ObjectCodes.STAMP_SPIRE2, "spire2 stamp");
-		assertLinkage("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
+		assertNormalizedLinkage("Building1", ObjectCodes.STAMP_BUILDING1, "building stamp");
 	}
 
 	private static function testBlockMappings():Void {
@@ -122,6 +122,15 @@ class ObjectsCompatTest {
 	private static function assertLinkage(linkage:String, code:Int, message:String):Void {
 		var clip = Std.downcast(Objects.getFromCode(code), PR2MovieClip);
 		assertNotNull(clip, message);
+		assertEquals(linkage, clip.symbol.linkageClassName, '$message linkage');
+	}
+
+	private static function assertNormalizedLinkage(linkage:String, code:Int, message:String):Void {
+		var holder = Std.downcast(Objects.getFromCode(code), Sprite);
+		assertNotNull(holder, message);
+		assertEquals(linkage, holder.name, '$message holder name');
+		var clip = holder == null || holder.numChildren == 0 ? null : Std.downcast(holder.getChildAt(0), PR2MovieClip);
+		assertNotNull(clip, '$message authored child');
 		assertEquals(linkage, clip.symbol.linkageClassName, '$message linkage');
 	}
 

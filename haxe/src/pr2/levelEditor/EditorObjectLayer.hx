@@ -8,6 +8,7 @@ import openfl.geom.Rectangle;
 import pr2.level.ServerLevel.DecodedArtLayer;
 import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.runtime.PR2MovieClip;
 
 class EditorObjectLayer extends Sprite {
 	public final layerNum:Int;
@@ -561,16 +562,16 @@ class EditorObjectLayer extends Sprite {
 	}
 
 	private static function stampDisplaySize(code:Int):StampSize {
-		return switch (code) {
-			case 0: new StampSize(228, 172.75);
-			case 1: new StampSize(188, 249.25);
-			case 2: new StampSize(194, 236.5);
-			case 3: new StampSize(77.25, 101.75);
-			case 5: new StampSize(87.25, 91);
-			case 6: new StampSize(125.75, 118.5);
-			case 7: new StampSize(114, 319.75);
-			case 8: new StampSize(294.25, 268.5);
-			default: new StampSize(30, 30);
+		var display = Objects.getFromCode(code);
+		if (display == null) {
+			return new StampSize(30, 30);
 		}
+		var bounds = display.getBounds(display);
+		var size = new StampSize(Math.max(1, bounds.width), Math.max(1, bounds.height));
+		var clip = Std.downcast(display, PR2MovieClip);
+		if (clip != null) {
+			clip.dispose();
+		}
+		return size;
 	}
 }

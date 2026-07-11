@@ -6,6 +6,7 @@ import openfl.events.MouseEvent;
 import pr2.app.AppStage;
 
 class AutoDismissController {
+	private static inline var CAPTURE_PRIORITY:Int = 1000;
 	private final owner:DisplayObject;
 	private final removeOwner:Void->Void;
 	private final canDismiss:Void->Bool;
@@ -30,7 +31,7 @@ class AutoDismissController {
 			armTimer = null;
 		}
 		if (armed && AppStage.stage != null) {
-			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			AppStage.stage.removeEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown, true);
 		}
 		armed = false;
 	}
@@ -61,7 +62,7 @@ class AutoDismissController {
 		}
 		armed = true;
 		if (AppStage.stage != null) {
-			AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+			AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown, true, CAPTURE_PRIORITY);
 		}
 	}
 
@@ -71,7 +72,7 @@ class AutoDismissController {
 			return;
 		}
 		armed = true;
-		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown);
+		AppStage.stage.addEventListener(MouseEvent.MOUSE_DOWN, onStageMouseDown, true, CAPTURE_PRIORITY);
 	}
 
 	private function onStageMouseDown(event:MouseEvent):Void {

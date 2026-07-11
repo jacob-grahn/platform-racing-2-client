@@ -119,7 +119,20 @@ class Objects {
 			bitmap.height = size.height;
 			return bitmap;
 		}
-		return fromLinkage(linkage);
+		var clip = fromLinkage(linkage);
+		if (code != ObjectCodes.STAMP_CACTUS && code != ObjectCodes.STAMP_BUILDING1) {
+			return clip;
+		}
+		var bounds = clip.getBounds(clip);
+		// The two stamps without raster exports have authored positive bounds.
+		// Normalize those bounds so saved x/y denotes the visual top-left just as
+		// it does for the raster-backed stamps and in the Flash bitmap canvas.
+		clip.x = -bounds.left;
+		clip.y = -bounds.top;
+		var holder = new Sprite();
+		holder.name = linkage;
+		holder.addChild(clip);
+		return holder;
 	}
 
 	private static function stampSize(code:Int):{width:Float, height:Float} {

@@ -14,6 +14,8 @@ class EditorBlockLayer extends Sprite {
 	public final redoArray:Array<String> = [];
 	private final blocksBySeg:Map<String, EditorBlockObject> = new Map();
 	private var initialSaveString:String = "";
+	private var historyBatchDepth:Int = 0;
+	private var historyBatchDirty:Bool = false;
 
 	public function new(editor:LevelEditor) {
 		super();
@@ -24,6 +26,8 @@ class EditorBlockLayer extends Sprite {
 	}
 
 	public function resetToInitialBlocks():Void {
+		historyBatchDepth = 0;
+		historyBatchDirty = false;
 		editor.selectBlock(null);
 		while (blocks.length > 0) {
 			removeBlock(blocks[blocks.length - 1], false);
@@ -58,6 +62,21 @@ class EditorBlockLayer extends Sprite {
 
 	public function getBlockAtSeg(segX:Int, segY:Int):Null<EditorBlockObject> {
 		return blocksBySeg.get(segKey(segX, segY));
+	}
+
+	public function beginHistoryBatch():Void {
+		historyBatchDepth++;
+	}
+
+	public function endHistoryBatch():Void {
+		if (historyBatchDepth <= 0) {
+			return;
+		}
+		historyBatchDepth--;
+		if (historyBatchDepth == 0 && historyBatchDirty) {
+			historyBatchDirty = false;
+			recordSnapshot();
+		}
 	}
 
 	public function getBlockAtStage(stageX:Float, stageY:Float):Null<EditorBlockObject> {
@@ -106,6 +125,8 @@ class EditorBlockLayer extends Sprite {
 	}
 
 	public function loadBlocks(decodedBlocks:Array<DecodedBlock>):Void {
+		historyBatchDepth = 0;
+		historyBatchDirty = false;
 		editor.selectBlock(null);
 		while (blocks.length > 0) {
 			removeBlock(blocks[blocks.length - 1], false);
@@ -209,6 +230,10 @@ class EditorBlockLayer extends Sprite {
 	}
 
 	private function recordSnapshot():Void {
+		if (historyBatchDepth > 0) {
+			historyBatchDirty = true;
+			return;
+		}
 		var snapshot = getSaveString();
 		var previous = saveArray.length == 0 ? initialSaveString : saveArray[saveArray.length - 1];
 		if (snapshot == previous) {

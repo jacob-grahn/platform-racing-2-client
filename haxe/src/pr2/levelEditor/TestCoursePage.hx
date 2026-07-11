@@ -24,6 +24,8 @@ class TestCoursePage extends Page {
 	private static inline var TEST_HAT_Y:Float = 65;
 	private static inline var TEST_HAT_SCALE:Float = 0.7;
 	private static inline var TEST_MUSIC_X:Float = -130;
+	private static inline var HOLDER_X:Float = 275;
+	private static inline var HOLDER_Y:Float = 200;
 
 	public final variables:Map<String, String>;
 	public final isMod:Bool;
@@ -88,7 +90,7 @@ class TestCoursePage extends Page {
 		var config = LevelConfig.fromServerData(data);
 		course = new Course(level, data, config);
 		addChildAt(course, 0);
-		course.musicSelection.x = TEST_MUSIC_X;
+		course.musicSelection.x = HOLDER_X + TEST_MUSIC_X;
 		course.levelRenderer.addEventListener(MouseEvent.CLICK, teleportToClickPos);
 		mountStatsSelect();
 		course.onStatsSelectSyncRequest = statsSelectSetFromCharacter;
@@ -125,8 +127,8 @@ class TestCoursePage extends Page {
 		var jumping = parseStatField(savedStats, "jumping", Settings.DEFAULT_LE_TEST_STATS.jumping);
 		course.localCharacter.levelEditorStatsEnabled = true;
 		statsSelect = new StatsSelect(TEST_STATS_TOTAL, speed, acceleration, jumping, course.localCharacter);
-		statsSelect.x = TEST_STATS_X;
-		statsSelect.y = TEST_STATS_Y;
+		statsSelect.x = HOLDER_X + TEST_STATS_X;
+		statsSelect.y = HOLDER_Y + TEST_STATS_Y;
 		statsSelect.scaleX = statsSelect.scaleY = TEST_STATS_SCALE;
 	}
 
@@ -145,8 +147,8 @@ class TestCoursePage extends Page {
 			hatPicker = null;
 		}
 		hatPicker = new TestCourseHatPicker(course.localCharacter);
-		hatPicker.x = TEST_HAT_X;
-		hatPicker.y = TEST_HAT_Y;
+		hatPicker.x = HOLDER_X + TEST_HAT_X;
+		hatPicker.y = HOLDER_Y + TEST_HAT_Y;
 		hatPicker.scaleX = hatPicker.scaleY = TEST_HAT_SCALE;
 	}
 
@@ -155,6 +157,8 @@ class TestCoursePage extends Page {
 			return;
 		}
 		if (art != null) {
+			art.x = HOLDER_X;
+			art.y = HOLDER_Y;
 			course.addChild(art);
 		}
 		if (statsSelect != null) {

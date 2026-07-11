@@ -3,6 +3,7 @@ package pr2.levelEditor;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.Point;
+import pr2.lobby.dialogs.AutoDismissController;
 import pr2.runtime.FlSlider;
 import pr2.runtime.FlSliderEvent;
 import pr2.runtime.FlTextInput;
@@ -15,6 +16,8 @@ class EditorBrushSizePickerMenu extends Sprite {
 	public final art:PR2MovieClip;
 	private var slider:Null<FlSlider>;
 	private var textInput:Null<FlTextInput>;
+	private var autoDismiss:Null<AutoDismissController>;
+	private var removed:Bool = false;
 
 	public function new(editor:LevelEditor, target:EditorBrushSizePickerButton) {
 		super();
@@ -28,6 +31,9 @@ class EditorBrushSizePickerMenu extends Sprite {
 		slider = Std.downcast(DisplayUtil.findByName(art, "slider"), FlSlider);
 		textInput = Std.downcast(DisplayUtil.findByName(art, "textBox"), FlTextInput);
 		if (slider != null) {
+			// Flash's Slider component has an 80px authored track. The instance is
+			// scaled to 150px in SizePickerMenuGraphic and centered at x = 0.
+			slider.setSize(80, 16);
 			slider.minimum = 1;
 			slider.maximum = 255;
 			slider.snapInterval = 1;
@@ -40,6 +46,7 @@ class EditorBrushSizePickerMenu extends Sprite {
 			textInput.addEventListener(Event.CHANGE, textChange);
 		}
 		setSize(editor.brushSize);
+		autoDismiss = new AutoDismissController(this, remove);
 	}
 
 	public function setSize(size:Float):Void {
@@ -58,6 +65,14 @@ class EditorBrushSizePickerMenu extends Sprite {
 	}
 
 	public function remove():Void {
+		if (removed) {
+			return;
+		}
+		removed = true;
+		if (autoDismiss != null) {
+			autoDismiss.remove();
+			autoDismiss = null;
+		}
 		if (slider != null) {
 			slider.removeEventListener(FlSliderEvent.CHANGE, slideChange);
 			slider.removeEventListener(FlSliderEvent.THUMB_DRAG, slideChange);

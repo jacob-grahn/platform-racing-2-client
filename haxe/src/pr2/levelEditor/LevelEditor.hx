@@ -8,11 +8,14 @@ import js.Browser;
 #end
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.Bitmap;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.display.StageQuality;
 import openfl.geom.Point;
+import openfl.geom.ColorTransform;
 import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
 import openfl.text.TextField;
@@ -21,9 +24,11 @@ import pr2.audio.MusicCatalog;
 import pr2.gameplay.Items;
 import pr2.gameplay.LevelConfig;
 import pr2.level.ServerLevel.DecodedArtLayer;
+import pr2.level.ArtBackgroundLoader;
 import pr2.level.BlockType;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;
+import pr2.level.ServerLevelRenderer;
 import pr2.lobby.LobbyArt;
 import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
@@ -91,6 +96,9 @@ class LevelEditor extends Page {
 	public var posY(default, null):Float = 0;
 	private var layerContainer:Null<Sprite>;
 	private var editorMousePlane:Null<Sprite>;
+	private var solidBackground:Null<Shape>;
+	private var artBackgroundContainer:Null<Sprite>;
+	private var backgroundLoadGeneration:Int = 0;
 	private var drawingLayer:Null<EditorDrawableLayer>;
 	private var deletingObjects:Bool = false;
 	private var deletingBlocks:Bool = false;
@@ -126,6 +134,7 @@ class LevelEditor extends Page {
 			stage.quality = StageQuality.HIGH;
 		}
 
+		attachEditorBackground();
 		editorMousePlane = createEditorMousePlane();
 		editorMousePlane.addEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 		editorMousePlane.addEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
@@ -188,6 +197,9 @@ class LevelEditor extends Page {
 	public function setColor(value:Int = LevelConfig.DEFAULT_COLOR):Void {
 		levelConfig.setColor(value);
 		artBackgroundCode = null;
+		redrawEditorBackground();
+		renderArtBackground();
+		applyEditorColorTransforms();
 		if (menu != null) {
 			menu.updateBackgroundColor();
 		}
@@ -195,6 +207,7 @@ class LevelEditor extends Page {
 
 	public function setArtBackground(code:Null<Int>):Void {
 		artBackgroundCode = code;
+		renderArtBackground();
 	}
 
 	public function selectArtBackground(code:Int, color:Int):Void {
@@ -315,6 +328,9 @@ class LevelEditor extends Page {
 		allowedItems = levelConfig.allowedItems.copy();
 		badHats = levelConfig.badHats.copy();
 		artBackgroundCode = null;
+		redrawEditorBackground();
+		renderArtBackground();
+		applyEditorColorTransforms();
 		if (blockLayer != null) {
 			blockLayer.resetToInitialBlocks();
 		}
@@ -948,6 +964,9 @@ class LevelEditor extends Page {
 			menu = null;
 		}
 		if (layerContainer != null) {
+			if (placingBlocks && blockLayer != null) {
+				blockLayer.endHistoryBatch();
+			}
 			for (layer in drawLayers) {
 				layer.remove();
 			}
@@ -979,6 +998,14 @@ class LevelEditor extends Page {
 			closeBrushSizeMenu();
 			layerContainer = null;
 		}
+		backgroundLoadGeneration++;
+		if (artBackgroundContainer != null) {
+			while (artBackgroundContainer.numChildren > 0) {
+				artBackgroundContainer.removeChildAt(0);
+			}
+			artBackgroundContainer = null;
+		}
+		solidBackground = null;
 		if (editorMousePlane != null) {
 			editorMousePlane.removeEventListener(MouseEvent.MOUSE_DOWN, placeSelectedToolFromMouse);
 			editorMousePlane.removeEventListener(MouseEvent.MOUSE_MOVE, continueSelectedToolFromMouse);
@@ -1003,14 +1030,123 @@ class LevelEditor extends Page {
 		for (scale in [1.0, 0.5, 0.25, 1.0, 2.0]) {
 			var drawLayer = new EditorDrawableLayer(drawLayers.length + 1, scale);
 			drawLayers.push(drawLayer);
-			layerContainer.addChild(drawLayer);
 			var layer = new EditorObjectLayer(objectLayers.length + 1, scale);
 			objectLayers.push(layer);
-			layerContainer.addChild(layer);
+		}
+		if (blockGrid != null && blockGrid.parent == layerContainer) {
+			layerContainer.removeChild(blockGrid);
+		}
+		if (blockLayer != null && blockLayer.parent == layerContainer) {
+			layerContainer.removeChild(blockLayer);
+		}
+		// Flash depth order: the three parallax layers sit behind the map,
+		// while layers four and five sit in front. Drawing is below stamps on
+		// back layers and above stamps on front layers.
+		for (index in [2, 1, 0]) {
+			layerContainer.addChild(drawLayers[index]);
+			layerContainer.addChild(objectLayers[index]);
+		}
+		if (blockGrid != null) {
+			layerContainer.addChild(blockGrid);
+		}
+		if (blockLayer != null) {
+			layerContainer.addChild(blockLayer);
+		}
+		for (index in [3, 4]) {
+			layerContainer.addChild(objectLayers[index]);
+			layerContainer.addChild(drawLayers[index]);
 		}
 		activeDrawLayer = drawLayers[0];
 		activeObjectLayer = objectLayers[0];
 		applyLayerPositions();
+		applyEditorColorTransforms();
+	}
+
+	private function attachEditorBackground():Void {
+		solidBackground = new Shape();
+		solidBackground.name = "editorSolidBackground";
+		addChild(solidBackground);
+		artBackgroundContainer = new Sprite();
+		artBackgroundContainer.name = "editorArtBackground";
+		artBackgroundContainer.mouseEnabled = false;
+		artBackgroundContainer.mouseChildren = false;
+		addChild(artBackgroundContainer);
+		redrawEditorBackground();
+		renderArtBackground();
+	}
+
+	private function redrawEditorBackground():Void {
+		if (solidBackground == null) {
+			return;
+		}
+		solidBackground.graphics.clear();
+		solidBackground.graphics.beginFill(color);
+		solidBackground.graphics.drawRect(0, 0, BASE_HALF_STAGE_WIDTH * 2, BASE_HALF_STAGE_HEIGHT * 2);
+		solidBackground.graphics.endFill();
+	}
+
+	private function renderArtBackground():Void {
+		backgroundLoadGeneration++;
+		var generation = backgroundLoadGeneration;
+		if (artBackgroundContainer == null) {
+			return;
+		}
+		while (artBackgroundContainer.numChildren > 0) {
+			artBackgroundContainer.removeChildAt(0);
+		}
+		var code = artBackgroundCode;
+		if (code == null) {
+			return;
+		}
+		if (code == ObjectCodes.BG5Code) {
+			artBackgroundContainer.addChild(ServerLevelRenderer.createBg5CircleGrid());
+		}
+		var assetPath = ServerLevelRenderer.artBackgroundAssetPath(code);
+		if (assetPath == "") {
+			applyArtBackgroundTransform(code);
+			return;
+		}
+		ArtBackgroundLoader.request(assetPath, function(bitmapData):Void {
+			if (bitmapData == null || artBackgroundContainer == null || generation != backgroundLoadGeneration || artBackgroundCode != code) {
+				return;
+			}
+			var bitmap = new Bitmap(bitmapData);
+			bitmap.smoothing = true;
+			bitmap.width = BASE_HALF_STAGE_WIDTH * 2;
+			bitmap.height = BASE_HALF_STAGE_HEIGHT * 2;
+			artBackgroundContainer.addChildAt(bitmap, 0);
+			applyArtBackgroundTransform(code);
+		});
+		applyArtBackgroundTransform(code);
+	}
+
+	private function applyEditorColorTransforms():Void {
+		if (blockLayer != null) {
+			blockLayer.transform.colorTransform = backgroundColorTransform(1);
+		}
+		for (layer in drawLayers) {
+			layer.transform.colorTransform = backgroundColorTransform(layer.scaleX);
+		}
+		for (layer in objectLayers) {
+			layer.transform.colorTransform = backgroundColorTransform(layer.scaleX);
+		}
+		if (artBackgroundCode != null) {
+			applyArtBackgroundTransform(artBackgroundCode);
+		}
+	}
+
+	private function applyArtBackgroundTransform(code:Int):Void {
+		if (artBackgroundContainer != null) {
+			artBackgroundContainer.transform.colorTransform = backgroundColorTransform(code == ObjectCodes.BG4Code || code == ObjectCodes.BG5Code ? 0 : 1);
+		}
+	}
+
+	private function backgroundColorTransform(layerScale:Float):ColorTransform {
+		var amount = ((1 - layerScale) * 0.4) + 0.1;
+		var red = (color >> 16) & 0xFF;
+		var green = (color >> 8) & 0xFF;
+		var blue = color & 0xFF;
+		return new ColorTransform(1 - amount, 1 - amount, 1 - amount, 1, red * amount, green * amount, blue * amount, 0);
 	}
 
 	private function firstStartBlock():Null<EditorBlockObject> {
@@ -1282,6 +1418,9 @@ class LevelEditor extends Page {
 			return;
 		}
 		if (isBlockPlacementTool()) {
+			if (!placingBlocks && blockLayer != null) {
+				blockLayer.beginHistoryBatch();
+			}
 			placingBlocks = true;
 			if (placeSelectedBlockAt(event.stageX, event.stageY, false) != null) {
 				event.stopImmediatePropagation();
@@ -1322,6 +1461,9 @@ class LevelEditor extends Page {
 		}
 		deletingObjects = false;
 		deletingBlocks = false;
+		if (placingBlocks && blockLayer != null) {
+			blockLayer.endHistoryBatch();
+		}
 		placingBlocks = false;
 	}
 

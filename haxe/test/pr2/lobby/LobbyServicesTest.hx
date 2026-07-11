@@ -479,6 +479,7 @@ class LobbyServicesTest {
 			"background button disables redo");
 		var bg1Entry = Std.downcast(editor.menu.sideBar.getChildByName("bg1Entry"), EditorSideBarEntry);
 		assertEquals("BG1", bg1Entry.iconNameForTests(), "background entry uses authored background art");
+		assertEquals(true, bg1Entry.iconVisibleInButtonForTests(), "background entry art is fitted inside its button");
 		clickEditorMenu(editor, "layer1Button");
 		assertEquals("stamps", editor.menu.sideBar.id, "layer buttons switch to stamps sidebar");
 		assertEquals(1, editor.activeObjectLayer.layerNum, "layer 1 selects the matching object layer");
@@ -487,6 +488,8 @@ class LobbyServicesTest {
 		var stamp0Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp0Entry"), EditorSideBarEntry);
 		var stamp1Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp1Entry"), EditorSideBarEntry);
 		var stamp5Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp5Entry"), EditorSideBarEntry);
+		var stamp4Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp4Entry"), EditorSideBarEntry);
+		var stamp9Entry = Std.downcast(editor.menu.sideBar.getChildByName("stamp9Entry"), EditorSideBarEntry);
 		assertEquals("BrushGraphic", stampBrushEntry.iconNameForTests(), "stamp brush entry uses authored brush graphic");
 		if (Assets.exists(ServerLevelRenderer.stampAssetPath(0), AssetType.IMAGE)) {
 			assertEquals("Tree", stamp0Entry.iconNameForTests(), "stamp entry uses bitmap object preview");
@@ -494,6 +497,8 @@ class LobbyServicesTest {
 			assertEquals(true, stamp1Entry.iconVisibleInButtonForTests(), "second tree stamp entry renders inside the button");
 			assertEquals(true, stamp5Entry.iconVisibleInButtonForTests(), "rock stamp entry renders inside the button");
 		}
+		assertEquals(true, stamp4Entry.iconVisibleInButtonForTests(), "Fred stamp linkage renders inside the button");
+		assertEquals(true, stamp9Entry.iconVisibleInButtonForTests(), "building stamp linkage renders inside the button");
 		clickEditorSidebar(editor, "brushEntry");
 		assertEquals("tools", editor.menu.sideBar.id, "stamp brush entry switches to draw tools");
 		assertEquals("draw", editor.focusedEditorLayer, "stamp brush entry focuses current draw layer");
@@ -517,7 +522,13 @@ class LobbyServicesTest {
 		assertNotNull(editor.activeBrushSizeMenu, "brush size entry opens the authored picker menu");
 		Reflect.callMethod(editor.activeBrushSizeMenu, Reflect.field(editor.activeBrushSizeMenu, "setSize"), [12]);
 		assertEquals(12, editor.brushSize, "brush size menu commits the selected brush size");
-		editor.closeBrushSizeMenu();
+		var sizeMenu = editor.activeBrushSizeMenu;
+		var sizeSlider = @:privateAccess sizeMenu.slider;
+		var sliderBounds = sizeSlider.getBounds(sizeMenu);
+		assertNear(0, Std.int(sliderBounds.x + sliderBounds.width / 2), 4, "brush size slider stays centered in its popup");
+		@:privateAccess sizeMenu.autoDismiss.armForTests();
+		@:privateAccess sizeMenu.autoDismiss.stageMouseDownForTests(-1000, -1000);
+		assertEquals(null, editor.activeBrushSizeMenu, "brush size popup closes on an outside click");
 		var brushColorEntry = editor.menu.sideBar.getChildByName("colorEntry");
 		Reflect.callMethod(brushColorEntry, Reflect.field(brushColorEntry, "setPickedColor"), [0x336699]);
 		assertEquals(0x336699, editor.brushColor, "brush color picker commits the selected brush color");
@@ -1634,13 +1645,13 @@ class LobbyServicesTest {
 		assertEquals(testCourse.course, testCourse.art.parent, "test course graphic mounts inside the Course holder");
 		assertEquals(testCourse.course, testCourse.statsSelect.parent, "test course stat picker mounts inside the Course holder");
 		assertEquals(testCourse.course, testCourse.hatPicker.parent, "test course hat picker mounts inside the Course holder");
-		assertEquals(-265.0, testCourse.statsSelect.x, "test course stat picker x matches Flash holder placement");
-		assertEquals(90.0, testCourse.statsSelect.y, "test course stat picker y matches Flash holder placement");
+		assertEquals(10.0, testCourse.statsSelect.x, "test course stat picker x includes the Flash holder offset");
+		assertEquals(290.0, testCourse.statsSelect.y, "test course stat picker y includes the Flash holder offset");
 		assertEquals(0.66, testCourse.statsSelect.scaleX, "test course stat picker scale matches Flash");
-		assertEquals(-260.0, testCourse.hatPicker.x, "test course hat picker x matches Flash holder placement");
-		assertEquals(65.0, testCourse.hatPicker.y, "test course hat picker y matches Flash holder placement");
+		assertEquals(15.0, testCourse.hatPicker.x, "test course hat picker x includes the Flash holder offset");
+		assertEquals(265.0, testCourse.hatPicker.y, "test course hat picker y includes the Flash holder offset");
 		assertEquals(0.7, testCourse.hatPicker.scaleX, "test course hat picker scale matches Flash");
-		assertEquals(-130.0, testCourse.course.musicSelection.x, "test course music selector x matches Flash");
+		assertEquals(145.0, testCourse.course.musicSelection.x, "test course music selector x includes the Flash holder offset");
 		if (AppStage.stage != null) {
 			AppStage.stage.focus = null;
 			testCourse.dispatchEvent(new Event(Event.ENTER_FRAME));

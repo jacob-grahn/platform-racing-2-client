@@ -49,6 +49,7 @@ class EditorSettingsTest {
 		testPasswordHashing();
 		testBackgroundColorPickerCommit();
 		testBackgroundButtonCommit();
+		testEditorBackgroundAndLayerParity();
 		testBlockGridLinesFollowZoomAndCamera();
 		testTextObjectSaveStringUsesDecodedArtFormat();
 		testValueSettingsPopupCommit();
@@ -65,6 +66,7 @@ class EditorSettingsTest {
 		testTextToolDropLifecycle();
 		testTextObjectEditSemantics();
 		testStampDrawObjectActions();
+		testAuthoredStampDimensions();
 		testEditorToolCursorLifecycle();
 		testCustomCursorRuntimeHooks();
 		testStatSliderHoldAccelerationAndSavePaths();
@@ -694,8 +696,52 @@ class EditorSettingsTest {
 		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, nextPoint.x, nextPoint.y));
 		assertEquals(count, editor.blockLayer.blocks.length, "block drag placement skips occupied segments");
 		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, true, false, nextPoint.x, nextPoint.y));
+		assertEquals(1, editor.blockLayer.saveArray.length, "one block drag records one history snapshot instead of serializing every mouse move");
 		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_MOVE, true, false, nextPoint.x + LevelEditor.segSize, nextPoint.y));
 		assertEquals(count, editor.blockLayer.blocks.length, "block drag placement stops on mouse up");
+		editor.remove();
+	}
+
+	private static function testEditorBackgroundAndLayerParity():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		var layers = @:privateAccess editor.layerContainer;
+		assertEquals(0, layers.getChildIndex(editor.drawLayers[2]), "draw layer 3 is the rearmost editable layer");
+		assertEquals(1, layers.getChildIndex(editor.objectLayers[2]), "stamp layer 3 sits above its drawing layer");
+		assertEquals(6, layers.getChildIndex(editor.blockGrid), "block grid follows the three rear art layers");
+		assertEquals(7, layers.getChildIndex(editor.blockLayer), "blocks sit between rear and front art layers");
+		assertEquals(8, layers.getChildIndex(editor.objectLayers[3]), "stamp layer 4 sits immediately in front of blocks");
+		assertEquals(9, layers.getChildIndex(editor.drawLayers[3]), "front drawing layer 4 sits above its stamps");
+
+		editor.setColor(0x336699);
+		assertClose(0.9, editor.objectLayers[0].transform.colorTransform.redMultiplier,
+			"layer 1 receives the Flash background tint");
+		assertClose(0.6, editor.objectLayers[2].transform.colorTransform.redMultiplier,
+			"parallax layer 3 receives the stronger Flash tint");
+		editor.selectArtBackground(ObjectCodes.BG5Code, 0);
+		assertEquals(ObjectCodes.BG5Code, editor.artBackgroundCode, "editor tracks the selected authored background");
+		assertEquals(true, @:privateAccess editor.artBackgroundContainer.numChildren > 0,
+			"selected authored background is visible in the editor");
+		editor.remove();
+	}
+
+	private static function testAuthoredStampDimensions():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		var point = pointOutsideMenu(editor);
+		var localPoint = editor.activeObjectLayer.globalToLocal(point);
+		var fred = editor.activeObjectLayer.addStamp(ObjectCodes.STAMP_CACTUS, point.x, point.y);
+		var fredBounds = editor.activeObjectLayer.placedStampOutlineBoundsForTests(0);
+		assertEquals(true, fredBounds.width > 30 && fredBounds.height > 30, "Fred uses authored dimensions instead of a 30px placeholder");
+		assertClose(localPoint.x, fred.x + fredBounds.x + fredBounds.width / 2, "Fred is centered on its drop point", 2);
+
+		var buildingPoint = new Point(point.x + 250, point.y + 100);
+		var buildingLocal = editor.activeObjectLayer.globalToLocal(buildingPoint);
+		var building = editor.activeObjectLayer.addStamp(ObjectCodes.STAMP_BUILDING1, buildingPoint.x, buildingPoint.y);
+		var buildingBounds = editor.activeObjectLayer.placedStampOutlineBoundsForTests(1);
+		assertEquals(true, buildingBounds.width > 30 && buildingBounds.height > 30,
+			"building uses authored dimensions instead of a 30px placeholder");
+		assertClose(buildingLocal.x, building.x + buildingBounds.x + buildingBounds.width / 2, "building is centered on its drop point", 2);
 		editor.remove();
 	}
 
