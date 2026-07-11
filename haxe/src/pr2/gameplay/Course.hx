@@ -15,6 +15,8 @@ import openfl.events.Event;
 import openfl.events.FocusEvent;
 import openfl.events.KeyboardEvent;
 import openfl.geom.Point;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 import pr2.Constants;
 import pr2.character.Character;
@@ -52,6 +54,7 @@ import pr2.level.ServerLevelRenderer;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
+import pr2.runtime.FontResolver;
 
 /**
 	The in-game race shell: a decoded `ServerLevel` rendered with the authored HUD
@@ -116,6 +119,7 @@ class Course extends Sprite {
 	public var statsDisplay(default, null):StatsDisplay;
 	public var timer(default, null):CourseTimer;
 	public var hearts(default, null):Hearts;
+	public var roguelikeProgressText(default, null):TextField;
 	public var musicSelection(default, null):MusicSelection;
 	public var raceChat(default, null):RaceChat;
 	public var drawingInfo(default, null):DrawingInfo;
@@ -223,6 +227,7 @@ class Course extends Sprite {
 		player.onStopJetSound = stopJetSound;
 		installParticleEmitterHooks(player);
 		player.setGameMode(config.gameMode);
+		player.setHatsAllowed(config.gameMode != Modes.roguelike);
 		player.setAllowedItems(config.allowedItems);
 		player.display.x = player.halfWidth;
 		player.display.y = player.charHeight;
@@ -332,6 +337,17 @@ class Course extends Sprite {
 		hearts.y = HEARTS_Y;
 		hearts.visible = false;
 		addChild(hearts);
+		if (config.gameMode == Modes.roguelike) {
+			roguelikeProgressText = new TextField();
+			roguelikeProgressText.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 10, 0x000000);
+			roguelikeProgressText.x = HEARTS_X - 67;
+			roguelikeProgressText.y = HEARTS_Y;
+			roguelikeProgressText.width = 63;
+			roguelikeProgressText.height = 18;
+			roguelikeProgressText.selectable = false;
+			roguelikeProgressText.mouseEnabled = false;
+			addChild(roguelikeProgressText);
+		}
 		displayedLives = null;
 		syncHearts();
 	}
@@ -459,7 +475,11 @@ class Course extends Sprite {
 		localCharacter.setFeetId(Std.int(init.feetId));
 		localCharacter.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
-		localCharacter.setStats(init.speed, init.accel, init.jump);
+		if (config.gameMode == Modes.roguelike) {
+			localCharacter.setStats(0, 0, 0);
+		} else {
+			localCharacter.setStats(init.speed, init.accel, init.jump);
+		}
 		playerArray[init.tempId] = localCharacter;
 		registerLocalCommands(init.tempId);
 		positionLocalAtStartCenter();
@@ -551,6 +571,7 @@ class Course extends Sprite {
 		}
 		var remote = new RemoteCharacter(init.tempId, dot, init.userName, Std.int(init.hatId), Std.int(init.headId), Std.int(init.bodyId),
 			Std.int(init.feetId), init.group, commandHandler);
+		remote.setHatsAllowed(config.gameMode != Modes.roguelike);
 		remote.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
 		if (remoteBlockActivation != null) {
@@ -702,14 +723,15 @@ class Course extends Sprite {
 		var start = serverFixture.fixture.playerStart;
 		localCharacter.resetTestCourseState(start.x * ServerLevelFixtureAdapter.TILE_SIZE + ServerLevelFixtureAdapter.TILE_SIZE / 2,
 			(start.y + 1) * ServerLevelFixtureAdapter.TILE_SIZE, maxCourseTimeSeconds());
-		localCharacter.setStats(speed, acceleration, jumping);
-		localCharacter.setLife(3);
+		var roguelike = config.gameMode == Modes.roguelike;
+		localCharacter.setStats(roguelike ? 0 : speed, roguelike ? 0 : acceleration, roguelike ? 0 : jumping);
+		localCharacter.setLife(roguelike ? 1 : 3);
 		if (timer != null) {
 			timer.setTime(maxCourseTimeSeconds());
 		}
 		if (hearts != null) {
-			hearts.setHearts(3);
-			hearts.visible = config.gameMode == "deathmatch";
+			hearts.setHearts(roguelike ? 1 : 3);
+			hearts.visible = config.gameMode == "deathmatch" || roguelike;
 			displayedLives = hearts.getHeartCount();
 		}
 		displayedItemId = null;
@@ -722,7 +744,7 @@ class Course extends Sprite {
 	}
 
 	public function setLife(lives:Int):Void {
-		if (config.gameMode != "deathmatch") {
+		if (config.gameMode != "deathmatch" && config.gameMode != Modes.roguelike) {
 			return;
 		}
 		if (localCharacter != null) {
@@ -1494,13 +1516,16 @@ class Course extends Sprite {
 		if (state == null) {
 			return;
 		}
-		if (config.gameMode != "deathmatch") {
+		if (config.gameMode != "deathmatch" && config.gameMode != Modes.roguelike) {
 			return;
 		}
 		if (state.lives != displayedLives) {
 			hearts.visible = true;
 			hearts.setHearts(state.lives);
 			displayedLives = state.lives;
+		}
+		if (roguelikeProgressText != null) {
+			roguelikeProgressText.text = 'Finish: ${state.roguelikeFinishHits}/${pr2.harness.LocalPlayerController.ROGUELIKE_REQUIRED_FINISH_HITS}';
 		}
 	}
 
@@ -1928,6 +1953,12 @@ class Course extends Sprite {
 		if (hearts != null) {
 			hearts.remove();
 			hearts = null;
+		}
+		if (roguelikeProgressText != null) {
+			if (roguelikeProgressText.parent != null) {
+				roguelikeProgressText.parent.removeChild(roguelikeProgressText);
+			}
+			roguelikeProgressText = null;
 		}
 		if (musicSelection != null) {
 			musicSelection.remove();

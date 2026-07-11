@@ -51,6 +51,7 @@ import pr2.gameplay.SpecialEventTest;
 import pr2.gameplay.PlaceArtifactTest;
 import pr2.gameplay.LevelConfigTest;
 import pr2.gameplay.ModesTest;
+import pr2.gameplay.RoguelikeModeTest;
 import pr2.graphics.JPEGEncoderCompatTest;
 import pr2.gameplay.GameShellMountTest;
 import pr2.gameplay.CharacterLifecycleTest;
@@ -191,6 +192,7 @@ class DeterministicTestSuite {
 		SpecialEventTest.main();
 		PlaceArtifactTest.main();
 		ModesTest.main();
+		RoguelikeModeTest.main();
 		JPEGEncoderCompatTest.main();
 		LevelConfigTest.main();
 		GameShellMountTest.main();

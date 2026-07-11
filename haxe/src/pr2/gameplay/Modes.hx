@@ -7,6 +7,7 @@ class Modes {
 	public static inline var race:String = "race";
 	public static inline var obj:String = "objective";
 	public static inline var hat:String = "hat";
+	public static inline var roguelike:String = "roguelike";
 
 	public static function getFullName(str:String):String {
 		if (str == "e" || str == "eggs" || str == egg) {
@@ -17,6 +18,8 @@ class Modes {
 			return "Objective";
 		} else if (str == "h" || str == hat) {
 			return "Hat Attack";
+		} else if (str == "l" || str == "rl" || str == roguelike) {
+			return "Roguelike";
 		}
 		return "Race";
 	}

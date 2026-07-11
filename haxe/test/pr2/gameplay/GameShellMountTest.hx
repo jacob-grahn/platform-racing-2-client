@@ -94,6 +94,8 @@ class GameShellMountTest {
 		assertEquals(true, course.localCharacter == null, "local character torn down");
 
 		testDeathmatchHeartsShowInitialLives();
+		testRoguelikeHudAndInitialState();
+		testRoguelikeOnlyEmitsTerminalFinishOnNinthHit();
 		testRenderingUsesFreeMoveCamera();
 		testFinishDrawingReadinessEmission();
 		testLocalFinishBeginsCharacterRemoval();
@@ -121,6 +123,41 @@ class GameShellMountTest {
 		@:privateAccess course.maybeHandleLocalFinish(zeroLives);
 		assertEquals("finish_race`-1`0`0|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
 			"deathmatch zero lives emits finish and starts local removal");
+		course.remove();
+	}
+
+	private static function testRoguelikeHudAndInitialState():Void {
+		var course = buildCourse("roguelike");
+		var state = course.localCharacter.debugState();
+		assertEquals(true, course.hearts.visible, "roguelike course shows hearts immediately");
+		assertEquals(1, course.hearts.getHeartCount(), "roguelike course starts with one heart");
+		assertClose(0, state.speedStat, "roguelike live character starts with zero speed");
+		assertClose(0, state.accelerationStat, "roguelike live character starts with zero acceleration");
+		assertClose(0, state.jumpStat, "roguelike live character starts with zero jumping");
+		assertEquals("Finish: 0/9", course.roguelikeProgressText.text, "roguelike HUD shows finish progress");
+		course.localCharacter.setHats([6, 0xFFFFFF, -1]);
+		assertEquals(1, course.localCharacter.hat1, "roguelike rejects local hat updates");
+		var remote = course.createRemoteCharacter(remoteInit(9));
+		remote.setHats([7, 0xFFFFFF, -1]);
+		assertEquals(1, remote.hat1, "roguelike rejects remote hat updates");
+		course.remove();
+		assertEquals(true, course.roguelikeProgressText == null, "roguelike progress HUD tears down");
+	}
+
+	private static function testRoguelikeOnlyEmitsTerminalFinishOnNinthHit():Void {
+		var course = buildCourse("roguelike");
+		var finishBlock = new LevelBlock(1, 1, BlockType.Finish);
+		course.localCharacter.setLife(9);
+		LobbySocket.resetSent();
+		for (_ in 1...LocalPlayerController.ROGUELIKE_REQUIRED_FINISH_HITS) {
+			@:privateAccess course.localCharacter.controller.finish(finishBlock);
+			@:privateAccess course.maybeHandleLocalFinish(course.localCharacter.debugState());
+		}
+		assertEquals("", LobbySocket.sentCommands.join("|"), "first eight roguelike hits emit no finish event");
+		@:privateAccess course.localCharacter.controller.finish(finishBlock);
+		@:privateAccess course.maybeHandleLocalFinish(course.localCharacter.debugState());
+		assertEquals(true, StringTools.startsWith(LobbySocket.sentCommands.join("|"), "finish_race`"),
+			"ninth roguelike hit emits the existing finish event");
 		course.remove();
 	}
 

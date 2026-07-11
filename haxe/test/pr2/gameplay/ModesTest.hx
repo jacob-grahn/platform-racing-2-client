@@ -15,6 +15,7 @@ class ModesTest {
 		assertEquals("race", Modes.race, "race constant");
 		assertEquals("objective", Modes.obj, "objective constant");
 		assertEquals("hat", Modes.hat, "hat constant");
+		assertEquals("roguelike", Modes.roguelike, "roguelike constant");
 	}
 
 	private static function testFullNames():Void {
@@ -29,6 +30,9 @@ class ModesTest {
 		assertEquals("Objective", Modes.getFullName("objective"), "objective label");
 		assertEquals("Hat Attack", Modes.getFullName("h"), "short hat label");
 		assertEquals("Hat Attack", Modes.getFullName("hat"), "hat label");
+		assertEquals("Roguelike", Modes.getFullName("rl"), "short roguelike label");
+		assertEquals("Roguelike", Modes.getFullName("l"), "listing roguelike label");
+		assertEquals("Roguelike", Modes.getFullName("roguelike"), "roguelike label");
 		assertEquals("Race", Modes.getFullName("race"), "race label");
 		assertEquals("Race", Modes.getFullName(""), "empty defaults to race");
 		assertEquals("Race", Modes.getFullName("bogus"), "unknown defaults to race");

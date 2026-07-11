@@ -38,6 +38,7 @@ import pr2.gameplay.LevelConfigTest;
 import pr2.gameplay.LevelEntryStateTest;
 import pr2.gameplay.MiniMapTest;
 import pr2.gameplay.ModesTest;
+import pr2.gameplay.RoguelikeModeTest;
 import pr2.gameplay.MusicSelectionTest;
 import pr2.gameplay.PlaceArtifactTest;
 import pr2.gameplay.PrizePopupTest;
@@ -128,6 +129,7 @@ class DeterministicShard3 {
 		SpecialEventTest.main();
 		PlaceArtifactTest.main();
 		ModesTest.main();
+		RoguelikeModeTest.main();
 		JPEGEncoderCompatTest.main();
 		LevelConfigTest.main();
 		GameShellMountTest.main();

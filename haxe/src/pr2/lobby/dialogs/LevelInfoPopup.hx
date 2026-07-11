@@ -624,6 +624,10 @@ class LevelInfoPopup extends Popup {
 			frame = 4;
 		} else if (mode == "hat" || mode == "h") {
 			frame = 5;
+		} else if (mode == "roguelike" || mode == "rl" || mode == "l") {
+			// The legacy mode symbol has no roguelike frame yet; use the race icon
+			// while still showing the correct full mode name.
+			frame = 1;
 		}
 		var modeSym = Std.downcast(DisplayUtil.findByName(Std.downcast(DisplayUtil.findByName(levelInfo, "gameMode"), DisplayObjectContainer), "modeSym"), PR2MovieClip);
 		if (modeSym != null) {

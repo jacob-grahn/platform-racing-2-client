@@ -25,6 +25,7 @@ class LocalPlayerDebugState {
 	public final finishX:Null<Int>;
 	public final finishY:Null<Int>;
 	public final lives:Int;
+	public final roguelikeFinishHits:Int;
 	public final courseTime:Int;
 	public final jetPackActive:Bool;
 	public final speedBurstActive:Bool;
@@ -59,7 +60,8 @@ class LocalPlayerDebugState {
 		speedBurstActive:Bool = false,
 		?touchedBlockX:Null<Int>,
 		?touchedBlockY:Null<Int>,
-		?lastCollisionEvent:Null<String>
+		?lastCollisionEvent:Null<String>,
+		roguelikeFinishHits:Int = 0
 	) {
 		this.x = x;
 		this.y = y;
@@ -83,6 +85,7 @@ class LocalPlayerDebugState {
 		this.finishX = finishX;
 		this.finishY = finishY;
 		this.lives = lives;
+		this.roguelikeFinishHits = roguelikeFinishHits;
 		this.courseTime = courseTime;
 		this.jetPackActive = jetPackActive;
 		this.speedBurstActive = speedBurstActive;

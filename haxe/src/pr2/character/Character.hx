@@ -227,6 +227,15 @@ class Character extends Sprite {
 		return hatFlags.exists(flag) && hatFlags.get(flag);
 	}
 
+	public var hatsAllowed(default, null):Bool = true;
+
+	public function setHatsAllowed(allowed:Bool):Void {
+		hatsAllowed = allowed;
+		if (!allowed) {
+			setHats([]);
+		}
+	}
+
 	/**
 		Apply a flat hat array (`[hatId, hatColor, hatColor2, hatId, ...]`) into the
 		four hat slots, mirroring `Character.setHats`: reset every slot to the empty
@@ -234,6 +243,9 @@ class Character extends Sprite {
 		the recognised hat ids.
 	**/
 	public function setHats(hatArray:Array<Int>):Void {
+		if (!hatsAllowed) {
+			hatArray = [];
+		}
 		for (slot in 1...5) {
 			setHatSlot(slot, 1, 0xFFFFFF, -1);
 		}
@@ -273,7 +285,7 @@ class Character extends Sprite {
 	}
 
 	public function setHatId(id:Int):Void {
-		setHatSlot(1, id);
+		setHatSlot(1, hatsAllowed ? id : 1);
 		refreshHatFlags();
 		applyAppearance();
 	}

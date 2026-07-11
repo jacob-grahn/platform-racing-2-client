@@ -378,6 +378,10 @@ class EditorSettingsTest {
 		popup.setSelectedMode("eggs");
 		assertEquals("egg", editor.gameMode, "mode menu normalizes legacy eggs mode");
 
+		popup.setSelectedMode("roguelike");
+		assertEquals("roguelike", editor.gameMode, "mode menu commits roguelike mode");
+		assertEquals(15, editor.badHats.length, "roguelike mode disables every selectable hat");
+
 		var focusResets = 0;
 		StageFocus.resetHook = function():Void focusResets++;
 		@:privateAccess popup.autoDismiss.armForTests();

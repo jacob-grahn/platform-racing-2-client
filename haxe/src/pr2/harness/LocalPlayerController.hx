@@ -57,6 +57,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var MINE_APPEAR_FRAMES:Int = 33;
 	private static inline var SHOT_EFFECT_DEFAULT_SPEED:Float = 5;
 	private static inline var LASER_SHOT_SPEED:Float = 29;
+	public static inline var ROGUELIKE_MAX_LIVES:Int = 10;
+	public static inline var ROGUELIKE_REQUIRED_FINISH_HITS:Int = 9;
 
 	public var x(default, null):Float;
 	public var y(default, null):Float;
@@ -77,6 +79,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public var finishX(default, null):Null<Int> = null;
 	public var finishY(default, null):Null<Int> = null;
 	public var lives(default, null):Int = 3;
+	public var roguelikeFinishHits(default, null):Int = 0;
 	public var courseTime(default, null):Int = 120;
 	public var gameMode(default, null):String = "race";
 	public var propellerHatActive:Bool = false;
@@ -161,6 +164,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	// carries empty options. Defaults to every code so a standalone controller
 	// still hands out items before Course wires the level config.
 	private var allowedItems:Array<Int> = Items.getAllCodes();
+	private var roguelikeStartX:Float;
+	private var roguelikeStartY:Float;
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
@@ -173,6 +178,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
 		setGravity(level.gravity);
 		setPlayerPos(level.playerStart.x * level.tileSize + level.tileSize / 2, (level.playerStart.y + 1) * level.tileSize);
+		roguelikeStartX = x;
+		roguelikeStartY = y;
 		lastSafeX = x;
 		lastSafeY = y;
 		standingTileX = level.playerStart.x;
@@ -187,6 +194,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	public function resetPreRacePosition(px:Float, py:Float):Void {
 		setPlayerPos(px, py);
+		roguelikeStartX = px;
+		roguelikeStartY = py;
 		vx = 0;
 		vy = 0;
 		grounded = false;
@@ -366,7 +375,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function resetStats():Void {
-		applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+		if (gameMode == "roguelike") {
+			applyStats(0, 0, 0);
+		} else {
+			applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+		}
 	}
 
 	public function grantSpeedBurst(durationMs:Int):Void {
@@ -413,11 +426,14 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		gameMode = mode == "eggs" ? "egg" : (mode == null || mode == "" ? "race" : mode);
 		if (gameMode == "deathmatch") {
 			setLife(3);
+		} else if (gameMode == "roguelike") {
+			initializeRoguelikeRun();
 		}
 	}
 
 	public function setLife(value:Int):Void {
-		lives = Std.int(clamp(value, 0, 15));
+		var maxLives = gameMode == "roguelike" ? ROGUELIKE_MAX_LIVES : 15;
+		lives = Std.int(clamp(value, 0, maxLives));
 	}
 
 	private function get_facingScaleX():Int {
@@ -612,7 +628,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	public function debugState():LocalPlayerDebugState {
-		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationState, touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent);
+		return new LocalPlayerDebugState(x, y, vx, vy, grounded, crouching, animationState, touchedBlock == null ? null : touchedBlock.type, mode, itemId, itemUses, lastItemEffect, speedStat, accelerationStat, jumpStat, courseRotation, finished, finishBlockId, finishX, finishY, lives, courseTime, jetPackActive, speedBurstFramesRemaining > 0 && speedBurstFromItem, touchedBlockX, touchedBlockY, lastCollisionEvent, roguelikeFinishHits);
 	}
 
 	public function blockAlphaAt(tileX:Int, tileY:Int):Float {
@@ -1038,7 +1054,26 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (!useSupply(block)) {
 			return;
 		}
+		if (gameMode == "roguelike") {
+			// A finish must be reusable, but the bump response pushes the character
+			// away before another collision can occur, preventing per-frame repeats.
+			resetSupplyState(block);
+			roguelikeFinishHits++;
+			if (roguelikeFinishHits < ROGUELIKE_REQUIRED_FINISH_HITS) {
+				applyRoguelikeDamage();
+				return;
+			}
+			// The ninth hit wins before a last-heart death can restart the run.
+			finished = true;
+			setLife(lives - 1);
+			setFinishLocation(block);
+			return;
+		}
 		finished = true;
+		setFinishLocation(block);
+	}
+
+	private function setFinishLocation(block:LevelBlock):Void {
 		var id = 0;
 		for (candidate in level.blocks) {
 			if (candidate.type == BlockType.Finish) {
@@ -1293,11 +1328,95 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return;
 		}
 		hurtFramesRemaining = HURT_FRAMES;
-		if (gameMode == "deathmatch") {
+		if (gameMode == "deathmatch" || gameMode == "roguelike") {
 			setLife(lives - 1);
 			if (lives <= 0) {
-				finished = true;
+				if (gameMode == "roguelike") {
+					resetRoguelikeRun();
+				} else {
+					finished = true;
+				}
 			}
+		}
+	}
+
+	private function applyRoguelikeDamage():Void {
+		setLife(lives - 1);
+		if (lives <= 0) {
+			resetRoguelikeRun();
+		}
+	}
+
+	private function initializeRoguelikeRun():Void {
+		roguelikeFinishHits = 0;
+		setLife(1);
+		applyStats(0, 0, 0);
+	}
+
+	private function resetRoguelikeRun():Void {
+		roguelikeFinishHits = 0;
+		finished = false;
+		finishBlockId = null;
+		finishX = null;
+		finishY = null;
+		// Course rotation is shared run state, so preserve it and rotate the
+		// original start coordinate into the controller's current physics axes.
+		var rotatedStart = RotationMath.rotatePoint(roguelikeStartX, roguelikeStartY, -courseRotation);
+		setPlayerPos(rotatedStart.x, rotatedStart.y);
+		vx = 0;
+		vy = 0;
+		grounded = false;
+		crouching = false;
+		touchedBlock = null;
+		touchedBlockX = null;
+		touchedBlockY = null;
+		mode = MODE_LAND;
+		animationState = CharacterState.Stand;
+		targetVelX = 0;
+		jumpHeld = false;
+		jumpVelBoost = 0;
+		crouchCharge = 0;
+		waterTicks = 0;
+		hurtFramesRemaining = 0;
+		frozenSolidFramesRemaining = 0;
+		rotateFramesRemaining = 0;
+		rotateDirection = 0;
+		standingTileX = tileIndex(x);
+		standingTileY = tileIndex(y);
+		lastSafeX = x;
+		lastSafeY = y;
+		clearHeldItemAndEffects();
+		resetRoguelikeProgressionBlocks();
+		setLife(1);
+		applyStats(0, 0, 0);
+		statsSelectSyncRequested = true;
+	}
+
+	private function clearHeldItemAndEffects():Void {
+		consumeHeldItemCompletely();
+		speedBurstFramesRemaining = 0;
+		speedBurstFromItem = false;
+		pendingMinePlacements.resize(0);
+		pendingProjectileDamages.resize(0);
+		lastItemEffect = null;
+	}
+
+	private function resetRoguelikeProgressionBlocks():Void {
+		for (block in level.blocks) {
+			switch (block.type) {
+				case BlockType.Happy | BlockType.Sad | BlockType.Heart | BlockType.Item | BlockType.CustomStats:
+					resetSupplyState(block);
+				default:
+			}
+		}
+	}
+
+	private function resetSupplyState(block:LevelBlock):Void {
+		var state = blockStates.get(blockKey(block.x, block.y));
+		if (state != null) {
+			state.depletedItem = false;
+			state.depletedSupply = false;
+			state.depletedVisualSupply = false;
 		}
 	}
 
@@ -1609,7 +1728,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		state.depletedVisualSupply = true;
 
 		if (block.options == "reset") {
-			applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+			if (gameMode == "roguelike") {
+				applyStats(0, 0, 0);
+			} else {
+				applyStats(startingSpeedStat, startingAccelerationStat, startingJumpStat);
+			}
 			statsSelectSyncRequested = true;
 			return;
 		}

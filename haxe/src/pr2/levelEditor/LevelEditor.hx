@@ -280,6 +280,7 @@ class LevelEditor extends Page {
 
 	public function setGameMode(value:String):Void {
 		levelConfig.setGameMode(value == "eggs" ? "egg" : value);
+		badHats = levelConfig.badHats.copy();
 	}
 
 	public function setBrushColor(value:Int):Void {
@@ -4379,6 +4380,16 @@ class EditorModeSettingsPopup extends Sprite {
 		addChild(art);
 		dropdown = Std.downcast(DisplayUtil.findByName(art, "modeSelect"), FlComboBox);
 		if (dropdown != null) {
+			var hasRoguelike = false;
+			for (i in 0...dropdown.length) {
+				if (Std.string(Reflect.field(dropdown.dataProvider.getItemAt(i), "data")) == Modes.roguelike) {
+					hasRoguelike = true;
+					break;
+				}
+			}
+			if (!hasRoguelike) {
+				dropdown.addItem({label: "Roguelike", data: Modes.roguelike});
+			}
 			selectMode(editor.gameMode);
 			dropdown.addEventListener(Event.OPEN, openDropdown);
 			dropdown.addEventListener(Event.CHANGE, changeMode);

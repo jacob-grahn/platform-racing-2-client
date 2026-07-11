@@ -103,6 +103,9 @@ class LevelConfig {
 	/** Port of `GamePage.setGameMode`: legacy `eggs` normalizes to `egg`. **/
 	public function setGameMode(mode:String):Void {
 		gameMode = mode == "eggs" ? "egg" : mode;
+		if (gameMode == Modes.roguelike) {
+			banAllHats();
+		}
 	}
 
 	/** Port of `GamePage.setCowboyChance`: default 5, clamp 0..100. **/
@@ -149,6 +152,10 @@ class LevelConfig {
 		<= the number of selectable hats + 1 (i.e. the greatest hat id).
 	**/
 	public function setBadHats(hatsStr:Null<String>):Void {
+		if (gameMode == Modes.roguelike) {
+			banAllHats();
+			return;
+		}
 		badHats = [];
 		if (hatsStr == "" || hatsStr == null) {
 			return;
@@ -160,6 +167,15 @@ class LevelConfig {
 			if (hatCode > 1 && hatCode <= maxHat) {
 				badHats.push(hatCode);
 			}
+		}
+	}
+
+	private function banAllHats():Void {
+		badHats = [];
+		var hatArray = Parts.getPartArray("HAT");
+		var maxHat = (hatArray == null ? 0 : hatArray.length) + 1;
+		for (hatId in 2...maxHat + 1) {
+			badHats.push(hatId);
 		}
 	}
 
