@@ -423,7 +423,7 @@ class GamePage extends Page implements GameCommandDelegate {
 	}
 
 	private static function boolField(value:Dynamic, field:String):Bool {
-		var raw = Reflect.field(value, field);
+		var raw:Dynamic = Reflect.field(value, field);
 		if (raw == true) {
 			return true;
 		}

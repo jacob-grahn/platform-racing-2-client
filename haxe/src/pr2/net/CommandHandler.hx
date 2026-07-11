@@ -247,7 +247,7 @@ class CommandHandler {
 	}
 
 	private static function boolField(data:Dynamic, name:String):Bool {
-		var value = Reflect.field(data, name);
+		var value:Dynamic = Reflect.field(data, name);
 		if (Std.isOfType(value, Bool)) {
 			return value;
 		}

@@ -127,7 +127,7 @@ class Random {
 
 	private static function usedMemoryCompat():Int {
 		#if cpp
-		return Std.int(cpp.vm.Gc.memInfo64(cpp.vm.Gc.MEM_INFO_USAGE) & 0x7FFFFFFF);
+		return cpp.vm.Gc.memInfo(cpp.vm.Gc.MEM_INFO_USAGE) & 0x7FFFFFFF;
 		#else
 		return 0;
 		#end

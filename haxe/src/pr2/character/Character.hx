@@ -255,8 +255,8 @@ class Character extends Sprite {
 		var i = 0;
 		while (i < hatArray.length && hatSlot <= 4) {
 			var hatId = hatArray[i];
-			var hatColor = hatArray[i + 1] != null ? hatArray[i + 1] : 0;
-			var hatColor2 = hatArray[i + 2] != null ? hatArray[i + 2] : 0;
+			var hatColor = i + 1 < hatArray.length ? hatArray[i + 1] : 0;
+			var hatColor2 = i + 2 < hatArray.length ? hatArray[i + 2] : 0;
 			setHatSlot(hatSlot, hatId, hatColor, hatColor2);
 
 			hatSlot++;

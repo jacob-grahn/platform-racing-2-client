@@ -117,6 +117,30 @@ Campaign payload reference:
 
 ## Haxe/OpenFL Commands
 
+### Pinned Native Toolchain
+
+The repository currently uses Haxe 4.3.7, OpenFL 9.5.2, Lime 8.3.2, and the
+official hxcpp `v4.3.146` GitHub release. Do not use hxcpp 4.3.2 from Haxelib
+for Android builds: it can produce an application that packages successfully
+but fails at startup because `__atomic_compare_exchange_4` cannot be resolved.
+
+The `.haxelib/` directory is repository-local and ignored by Git. Install the
+pinned hxcpp tag and compile its command-line tool from the repository root:
+
+```sh
+tools/setup_hxcpp.sh
+```
+
+Confirm that the local Git checkout is on the expected release before making a
+native build:
+
+```sh
+git -C .haxelib/hxcpp/git describe --tags --exact-match
+```
+
+This should print `v4.3.146`. The Git checkout's `haxelib.json` reports the
+API-series version `4.3.0`; the Git tag is the authoritative pinned release.
+
 Browser development path:
 
 ```sh

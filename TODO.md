@@ -41,6 +41,116 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   runtime, but the broad `assets/` include appears to preload about 1.5 MB raw /
   1.28 MB gzipped of sounds up front.
 
+#### Native Mobile Targets
+
+- Add an explicit mobile build configuration for the native `ios` and `android`
+  targets. Define `pr2_mobile_ui` when Lime's `mobile` condition is active, use
+  the device's full resolution, force landscape orientation, and keep the
+  existing desktop/HTML5 presentation unchanged.
+- Replace the current fixed `550 x 400`, `NO_SCALE` behavior on mobile with a
+  root viewport that:
+  - lays out inside the iOS/Android safe area;
+  - preserves a centered `550 x 400` logical game area without cropping;
+  - uses the extra landscape width as control gutters where possible; and
+  - falls back to translucent controls over the course on narrower displays.
+- Add resize/orientation/lifecycle handling. Recompute the viewport when the
+  usable bounds change and clear all held input when the app is deactivated,
+  interrupted, backgrounded, or covered by a modal screen.
+- Build an offline native mobile smoke-test route first. It must load a course,
+  render all assets and HUD elements, play audio, and complete a race on real
+  iOS and Android devices before native login/lobby work is considered stable.
+- Validate the pinned hxcpp `v4.3.146` upgrade on physical Android devices,
+  including an affected older device/architecture that would expose the hxcpp
+  4.3.2 `__atomic_compare_exchange_4` startup failure. Pin and document the
+  remaining known-working JDK, Android SDK, and NDK versions.
+- Add target-specific app metadata and packaging: icons, launch screens, bundle
+  identifiers, supported orientations, permissions, Android signing, iOS
+  provisioning, and release build instructions.
+- Audit native behavior for HTTP GET/POST requests, cookies and sessions,
+  `SharedObject` persistence, saved accounts, dynamic audio loading, embedded
+  fonts, soft-keyboard text entry, external links, and fatal-error reporting.
+
+##### Native Multiplayer Transport
+
+- Extract `LobbySocket`'s JS WebSocket implementation behind a shared transport
+  interface so login, frame buffering, pinging, command dispatch, disconnects,
+  and reconnection policy do not depend on a specific socket implementation.
+- Implement the native transport with a direct TCP socket unless device testing
+  reveals a material platform or TLS disadvantage. The multiplayer server
+  supports direct socket connections as well as WebSockets, so prefer the direct
+  connection to avoid adding a native WebSocket dependency.
+- Run socket I/O away from the render thread, marshal received frames back to
+  the OpenFL thread, preserve the protocol's `\x04` frame delimiter across
+  partial reads, and make writes safe when lifecycle callbacks race a close.
+- Verify native login, lobby reuse of the login connection, ping timing,
+  clean/unclean disconnects, background/resume behavior, and reconnect failure
+  states against a live server on both iOS and Android.
+- Decide and document whether native release connections require encryption or
+  another transport security layer. Do not silently send credentials over an
+  untrusted plaintext TCP connection merely because direct sockets are easier.
+
+##### Mobile Gameplay Controls
+
+- Introduce a shared player-input aggregator instead of synthesizing keyboard
+  events. Keyboard and touch sources should independently contribute to the
+  existing `LocalPlayerInput` actions without changing character physics,
+  item behavior, or network emission.
+- Add a mobile-only six-button race overlay:
+  - left side: move left, jump, and item;
+  - right side: move right, jump, and item; and
+  - duplicate jump/item buttons should support either hand and simultaneous
+    presses without one button's release cancelling the other button's hold.
+- Handle touch input explicitly with `TOUCH_BEGIN`, `TOUCH_MOVE`, `TOUCH_END`,
+  and stable `touchPointID` ownership. Support sliding between controls and
+  release touches that end outside their original button.
+- Give controls large adjustable hit areas, clear pressed feedback, safe-area
+  padding, and configurable size, opacity, handedness, and position. Ensure the
+  overlay sits above the course/HUD but below modal and finished-race screens.
+- Add deterministic tests for multi-finger input aggregation, duplicated
+  jump/item holds, touch cancellation, focus loss, reversed controls, item
+  press/release semantics, and course rotation.
+- Add device tests for common play combinations, including run+jump, run+item,
+  changing direction while jumping, and holding jetpack/item input.
+
+##### Proper Mobile Lobby
+
+- Build a separate mobile lobby shell rather than scaling or merely enlarging
+  the authored two-pane desktop lobby. Reuse the existing session, networking,
+  level-list, account, chat, command, and level-launch logic while leaving the
+  desktop `LobbyPage`, `LobbyLeft`, `LobbyRight`, and overlapping tab strip
+  unchanged.
+- Use one primary full-screen pane at a time with large top- or bottom-level
+  navigation for Play, Chat, Players, and Account. Within Play, provide large
+  secondary navigation for Campaign, All Time Best, Week's Best, Newest,
+  Search, and Favorites when available.
+- Present level listings as full-width touch-friendly cards with scrolling,
+  clear selection/launch actions, password entry, paging or incremental loading,
+  and the same information and permissions as the desktop listings.
+- Replace small floating dialogs with mobile sheets or full-screen panels where
+  appropriate. All interactive controls must have at least a 44-48 point touch
+  target and must remain reachable around display cutouts and the soft keyboard.
+- Replace hover-only discovery with visible actions, tap-to-show information, or
+  another touch interaction. Audit every mobile lobby flow for mouse-over,
+  mouse-out, double-click, tiny close buttons, and keyboard-only shortcuts.
+- Make Chat, Search, login/account forms, private messages, and popup forms react
+  correctly when the soft keyboard opens. Preserve the active field, keep the
+  send/confirm action visible, and prevent gameplay controls from receiving text
+  entry touches or key events.
+- Add responsive layouts for narrow phones, wide phones, and tablets without
+  changing the desktop lobby's visual-parity tests. Evaluate Feathers UI for the
+  mobile lobby's scrolling lists, navigation, form controls, and density scaling;
+  use plain OpenFL controls if that keeps the new shell smaller and easier to skin.
+- Preserve lobby behavior and state across the mobile presentation: remembered
+  tabs, unread notifications, guest/member differences, favorites, lookup-user
+  and lookup-level jumps, popups, logout, options, store, and race return flow.
+- Treat the level editor as desktop-only for the first mobile release. Hide or
+  clearly disable its entry point on mobile until dragging, drawing, resizing,
+  tool selection, cursor workflows, and keyboard shortcuts have a deliberate
+  touch design and device coverage.
+- Add mobile lobby unit, layout, and end-to-end coverage, plus screenshots on
+  representative phone/tablet aspect ratios and real-device tests on both iOS
+  and Android.
+
 ### Lobby Dialogs And Account Workflows
 
 ### Login, Lobby, And Social Lists
