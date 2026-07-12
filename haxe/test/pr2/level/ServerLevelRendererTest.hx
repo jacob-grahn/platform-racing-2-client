@@ -104,6 +104,9 @@ class ServerLevelRendererTest {
 			piece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
 		}
 		assertEquals(1, blockLayer.numChildren, "piece removes itself after 20 frames");
+		assertEquals(false, piece.hasEventListener(openfl.events.Event.ENTER_FRAME), "expired piece clears its frame listener");
+		assertEquals(null, piece.parent, "expired piece is detached from the effect layer");
+		assertEquals(null, piece.graphic, "expired piece disposes its authored graphic");
 	}
 
 	private static function testBlockAlphaUpdate():Void {

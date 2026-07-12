@@ -20,7 +20,9 @@ class RemoteBlockActivation {
 	}
 
 	public function touch(tileX:Int, tileY:Int):Void {
-		var block = fixture.fixture.blockAt(tileX, tileY);
+		// RemoteCharacter follows Flash and reports map segments. The local physics
+		// fixture is cropped, so translate only at this boundary.
+		var block = fixture.fixture.blockAt(tileX - fixture.originTileX, tileY - fixture.originTileY);
 		if (block == null) {
 			return;
 		}

@@ -1,6 +1,8 @@
 package pr2.gameplay;
 
 import pr2.lobby.dialogs.Popup;
+import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 /**
 	Covers the prize announcement the way Flash `gameplay.PrizePopup` assembled
@@ -43,6 +45,11 @@ class PrizePopupTest {
 		var universal = new PrizePopup("head", 3, "Eye Patch", "", true, false);
 		assertEquals("head", universal.targetName, "head type selects head clip");
 		assertEquals("Anyone who finishes this race wins an:", universal.bodyText, "universal body line");
+		var head = Std.downcast(DisplayUtil.findByName(universal, "head"), PR2MovieClip);
+		assertEquals(3, head.currentFrame, "head preview is stopped on the awarded head");
+		for (i in 1...5) {
+			assertEquals(false, DisplayUtil.findByName(head, "hat" + i).visible, 'head preview hides hat $i after selecting its frame');
+		}
 		universal.remove();
 
 		var winner = new PrizePopup("body", 3, "Cape", "", false, false);

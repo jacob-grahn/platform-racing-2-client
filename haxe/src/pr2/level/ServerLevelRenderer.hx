@@ -116,6 +116,8 @@ class ServerLevelRenderer extends Sprite {
 	private var courseRotation:Int = 0;
 	private var tweenRotation:Float = 0;
 	private final blockLayer:Sprite = new Sprite();
+	private var backCharacterLayer:Null<Sprite>;
+	private var frontCharacterLayer:Null<Sprite>;
 	private final artLayerContainers:Array<Sprite> = [];
 	private final artRasterTileLayers:Array<ArtRasterTiles> = [];
 	private var solidBackground:Null<Shape>;
@@ -282,7 +284,10 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function worldToCharacterLayer(x:Float, y:Float):Point {
-		return new Point(x + offsetX, y + offsetY);
+		// Character planes now mirror Flash frontBackground/backBackground and
+		// carry the camera translation themselves, so their local coordinates are
+		// the unchanged map/world coordinates.
+		return new Point(x, y);
 	}
 
 	public function screenToWorld(x:Float, y:Float):Point {
@@ -342,9 +347,9 @@ class ServerLevelRenderer extends Sprite {
 
 	// Builds the block/art layer matrix: turn the original-frame content about the
 	// committed rotation pivot, then apply the (per-plane) camera translation.
-	private function layerMatrix(translateX:Float, translateY:Float):Matrix {
+	private function layerMatrix(translateX:Float, translateY:Float, includeCourseRotation:Bool = true):Matrix {
 		var matrix = new Matrix();
-		if (courseRotation != 0) {
+		if (includeCourseRotation && courseRotation != 0) {
 			matrix.translate(-rotationPivotX, -rotationPivotY);
 			matrix.rotate(courseRotation * Math.PI / 180);
 			matrix.translate(rotationPivotX, rotationPivotY);
@@ -355,6 +360,14 @@ class ServerLevelRenderer extends Sprite {
 
 	private function applyLayerTransforms():Void {
 		blockLayer.transform.matrix = layerMatrix(offsetX, offsetY);
+		// Match Flash Background.setPos: characters retain map/world coordinates
+		// while their front/back parent planes carry the camera translation.
+		if (backCharacterLayer != null) {
+			backCharacterLayer.transform.matrix = layerMatrix(offsetX, offsetY, false);
+		}
+		if (frontCharacterLayer != null) {
+			frontCharacterLayer.transform.matrix = layerMatrix(offsetX, offsetY, false);
+		}
 		for (i in 0...artLayerContainers.length) {
 			if (artLayerContainers[i] == null) {
 				continue;
@@ -461,6 +474,7 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function attachBackCharacterLayer(layer:Sprite):Void {
+		backCharacterLayer = layer;
 		if (layer.parent == worldContainer) {
 			return;
 		}
@@ -488,6 +502,7 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function attachFrontCharacterLayer(layer:Sprite):Void {
+		frontCharacterLayer = layer;
 		if (layer.parent == worldContainer) {
 			return;
 		}

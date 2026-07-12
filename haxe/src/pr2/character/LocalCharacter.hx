@@ -378,6 +378,14 @@ class LocalCharacter extends Character {
 		return controller.consumeBlockVisualEvents();
 	}
 
+	public function applyRemoteBlockActivation(tileX:Int, tileY:Int, payload:String = ""):Bool {
+		return controller.applyRemoteBlockActivation(tileX, tileY, payload);
+	}
+
+	public function applyRemoteBlockTouch(tileX:Int, tileY:Int):Bool {
+		return controller.applyRemoteBlockTouch(tileX, tileY);
+	}
+
 	public function activeVisualBlockKeys():Array<String> {
 		return controller.activeVisualBlockKeys();
 	}

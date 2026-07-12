@@ -42,6 +42,7 @@ class LocalPlayerControllerTest {
 		testSafetyBlockEmitsPoofVisual();
 		testFallingPastMapReturnsPlayerToLastSafeSpot();
 		testHighImpactFallBreaksCrumbleBlock();
+		testSettledCrumbleStandDoesNotEmitPieces();
 		testCheeseHatDoublesStandingCrumbleForce();
 		testCheeseHatForcesBumpCrumbleDamage();
 		testCheeseHatBreaksAdjacentHeadLevelCrumbleOnSideHit();
@@ -653,6 +654,42 @@ class LocalPlayerControllerTest {
 		}
 		assertEquals(true, crumbleActivate != null, "crumble impact emits Flash localActivate event");
 		assertEquals(true, crumbleActivate.activationPayload != "", "crumble localActivate preserves force payload");
+	}
+
+	private static function testSettledCrumbleStandDoesNotEmitPieces():Void {
+		var level = new FixtureLevel(
+			"settled-crumble",
+			"Settled Crumble",
+			6,
+			6,
+			30,
+			1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40),
+			new TilePosition(2, 2),
+			new TilePosition(4, 4),
+			[new LevelBlock(2, 3, BlockType.Crumble), new LevelBlock(4, 4, BlockType.Finish)]
+		);
+		var player = new LocalCharacter(level);
+		for (_ in 0...8) {
+			player.step(new LocalPlayerInput());
+		}
+		player.consumeBlockVisualEvents();
+		for (_ in 0...10) {
+			player.step(new LocalPlayerInput());
+		}
+		var pieceEvents = 0;
+		var activationEvents = 0;
+		for (event in player.consumeBlockVisualEvents()) {
+			if (Type.enumConstructor(event.kind) == "CrumblePieces") {
+				pieceEvents++;
+			}
+			if (Type.enumConstructor(event.kind) == "LocalActivate") {
+				activationEvents++;
+			}
+		}
+		assertEquals(0, pieceEvents, "settled crumble contact emits no particle showers");
+		assertEquals(0, activationEvents, "settled crumble contact emits no redundant network activations");
+		assertClose(1, player.blockAlphaAt(2, 3), "settled crumble contact does not consume block life");
 	}
 
 	private static function testCheeseHatDoublesStandingCrumbleForce():Void {
@@ -1702,18 +1739,17 @@ class LocalPlayerControllerTest {
 		assertEquals(BlockType.Move, level.blockAt(3, 3).type, "move block moves into destination push tile");
 		assertEquals(BlockType.Push, level.blockAt(4, 3).type, "destination push block moves one tile right");
 		var events = player.consumeBlockVisualEvents();
-		assertEquals(3, events.length, "move block chain emits activation plus both display movements");
-		assertEquals("LocalActivate", Type.enumConstructor(events[0].kind), "move block chain preserves existing activation event");
-		assertEquals("PushBlockMove", Type.enumConstructor(events[1].kind), "move block chain moves push block first");
-		assertEquals(3, events[1].tileX, "move-block destination push source x");
-		assertEquals(3, events[1].tileY, "move-block destination push source y");
-		assertEquals(4, events[1].toTileX, "move-block destination push target x");
-		assertEquals(3, events[1].toTileY, "move-block destination push target y");
-		assertEquals("PushBlockMove", Type.enumConstructor(events[2].kind), "move block chain moves original move block second");
-		assertEquals(2, events[2].tileX, "move-block source x");
-		assertEquals(3, events[2].tileY, "move-block source y");
-		assertEquals(3, events[2].toTileX, "move-block target x");
-		assertEquals(3, events[2].toTileY, "move-block target y");
+		assertEquals(2, events.length, "Flash move chain emits only the two display movements");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[0].kind), "move block chain moves push block first");
+		assertEquals(3, events[0].tileX, "move-block destination push source x");
+		assertEquals(3, events[0].tileY, "move-block destination push source y");
+		assertEquals(4, events[0].toTileX, "move-block destination push target x");
+		assertEquals(3, events[0].toTileY, "move-block destination push target y");
+		assertEquals("PushBlockMove", Type.enumConstructor(events[1].kind), "move block chain moves original move block second");
+		assertEquals(2, events[1].tileX, "move-block source x");
+		assertEquals(3, events[1].tileY, "move-block source y");
+		assertEquals(3, events[1].toTileX, "move-block target x");
+		assertEquals(3, events[1].toTileY, "move-block target y");
 	}
 
 	private static function testTimedMoveBlockPreviewDirections():Void {

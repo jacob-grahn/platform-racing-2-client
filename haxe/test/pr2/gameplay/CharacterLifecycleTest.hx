@@ -12,6 +12,7 @@ import pr2.effects.Slash;
 import pr2.effects.StingEffect;
 import pr2.effects.ZapEffect;
 import pr2.level.ObjectCodes;
+import pr2.level.BlockType;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevelDecoder;
@@ -22,6 +23,7 @@ import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.harness.BlockVisualEvent;
 import pr2.harness.BlockVisualEvent.BlockVisualEventKind;
+import pr2.harness.LocalPlayerInput;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -55,6 +57,7 @@ class CharacterLifecycleTest {
 		testSharedEffectLifecycle();
 		testEggVisualRandomization();
 		testServerActivateCommandLifecycle();
+		testMoveBlockDisplayTracksFixtureCoordinates();
 		testLocalBlockActivationNetworking();
 		testLocalTeleportBlockEffects();
 		testEggRoundCommandLifecycle();
@@ -107,7 +110,7 @@ class CharacterLifecycleTest {
 
 		course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
 		var arrow = course.levelRenderer.arrowFrameAt(30, 0);
-		remote.onBlockTouch(5, 4);
+		remote.onBlockTouch(1, 0);
 		assertTrue(course.levelRenderer.arrowFrameAt(30, 0) != arrow, "remote block activation adapter wired");
 
 		course.removeRemoteCharacter(9);
@@ -303,7 +306,7 @@ class CharacterLifecycleTest {
 		handler.dispatch("createRemoteCharacter", ["9", "Rival", "1", "1", "1", "1", "1", "1", "1", "1", "-1", "-1", "-1", "-1", "0"]);
 		handler.dispatch("heart9", []);
 
-		assertEquals("speedUp:1:265:190|slowDown:1:265:190|bumpHappy:0.75:0:0", sounds.join("|"),
+		assertEquals("speedUp:1:15:15|slowDown:1:15:15|bumpHappy:0.75:15:15", sounds.join("|"),
 			"Course routes local and remote character effect sounds through spatial playback");
 		shell.remove();
 		course.remove();
@@ -418,7 +421,7 @@ class CharacterLifecycleTest {
 		remote.beginJet();
 		course.remove();
 
-		assertEquals("engine:0.6:7:265:190|engine:0.6:9:44:55", starts.join("|"),
+		assertEquals("engine:0.6:7:15:15|engine:0.6:9:44:55", starts.join("|"),
 			"Course routes local and remote Jet Pack EngineSound start requests");
 		assertEquals("7,9", [for (id in stops) Std.string(id)].join(","), "endJet and Course teardown stop active EngineSound loops");
 		shell.remove();
@@ -439,7 +442,7 @@ class CharacterLifecycleTest {
 		for (_ in 0...135) {
 			speed.onEnterFrame(new Event(Event.ENTER_FRAME));
 		}
-		assertEquals("set_var`sparkle`0", LobbySocket.lastSent(), "Speed Burst expiry stops the Flash sparkle var");
+		assertTrue(LobbySocket.sentCommands.indexOf("set_var`sparkle`0") != -1, "Speed Burst expiry stops the Flash sparkle var");
 		assertEquals(0, speed.activeParticleEmitterCount(), "Speed Burst expiry clears local sparkles");
 		speed.remove();
 	}
@@ -508,9 +511,10 @@ class CharacterLifecycleTest {
 
 	private static function testLocalTeleportAndLightningItemEffects():Void {
 		var teleport = collectAndUseLocalItem(4);
-		assertEquals(2, LobbySocket.sentCommands.length, "teleport item emits start and destination add_effect payloads");
-		assertTrue(LobbySocket.sentCommands[0].indexOf("add_effect`Teleport`") == 0, "teleport start payload uses Flash command");
-		assertTrue(LobbySocket.sentCommands[1].indexOf("add_effect`Teleport`") == 0, "teleport destination payload uses Flash command");
+		var teleportCommands = [for (command in LobbySocket.sentCommands) if (command.indexOf("add_effect`Teleport`") == 0) command];
+		assertEquals(2, teleportCommands.length, "teleport item emits start and destination add_effect payloads");
+		assertTrue(teleportCommands[0].indexOf("add_effect`Teleport`") == 0, "teleport start payload uses Flash command");
+		assertTrue(teleportCommands[1].indexOf("add_effect`Teleport`") == 0, "teleport destination payload uses Flash command");
 		assertTrue(Std.downcast(teleport.levelRenderer.blockLayer.getChildAt(teleport.levelRenderer.blockLayer.numChildren - 2), TeleportPop) != null,
 			"teleport item mounts the start TeleportPop");
 		assertTrue(Std.downcast(teleport.levelRenderer.blockLayer.getChildAt(teleport.levelRenderer.blockLayer.numChildren - 1), TeleportPop) != null,
@@ -806,33 +810,62 @@ class CharacterLifecycleTest {
 
 	private static function testServerActivateCommandLifecycle():Void {
 		var handler = new CommandHandler();
-		var course = buildCourse(handler, "race", "m3`ffffff`0;0;11,1;0;8,1;0;18,1;0;20,1;0;4,1;0;9,1;0;23");
+		var course = buildCourse(handler, "race", "m3`ffffff`0;0;11,1;0;8,1;0;18,1;0;20,1;0;4,1;0;9,1;0;23,2;0;17");
 		assertTrue(handler.hasCommand("activate"), "course registers Map activate command");
 		finishDrawing(course);
+		var originX = @:privateAccess course.serverFixture.originTileX;
+		var originY = @:privateAccess course.serverFixture.originTileY;
 
 		var arrowFrame = course.levelRenderer.arrowFrameAt(30, 0);
 		handler.dispatch("activate", ["1", "0", ""]);
 		assertTrue(course.levelRenderer.arrowFrameAt(30, 0) != arrowFrame, "server activate animates arrow blocks by segment");
 
 		handler.dispatch("activate", ["2", "0", ""]);
-		assertEquals(0.0, course.levelRenderer.blockAlphaAt(60, 0), "server activate fades vanish blocks by segment");
+		assertEquals(1.0, course.localCharacter.blockAlphaAt(2 - originX, -originY), "remote vanish activation enters shared fade state");
+		course.localCharacter.step(new LocalPlayerInput());
+		course.localCharacter.step(new LocalPlayerInput());
+		@:privateAccess course.syncBlockVisuals();
+		assertEquals(0.9, course.levelRenderer.blockAlphaAt(60, 0), "remote vanish follows Flash's frame-by-frame fade");
 
 		var waterAlpha = course.levelRenderer.blockAlphaAt(90, 0);
 		handler.dispatch("activate", ["3", "0", ""]);
 		assertTrue(course.levelRenderer.blockAlphaAt(90, 0) < waterAlpha, "server activate ripples water blocks by segment");
 
 		handler.dispatch("activate", ["4", "0", ""]);
-		assertEquals(null, course.levelRenderer.blockAlphaAt(120, 0), "server activate removes brick block display");
+		assertEquals(0.0, course.levelRenderer.blockAlphaAt(120, 0), "server activate hides brick block display");
+		assertEquals(0.0, course.localCharacter.blockAlphaAt(4 - originX, -originY), "remote brick removal updates local collision state");
 
 		handler.dispatch("activate", ["5", "0", ""]);
-		assertEquals(null, course.levelRenderer.blockAlphaAt(150, 0), "server activate removes mine block display");
+		assertEquals(0.0, course.levelRenderer.blockAlphaAt(150, 0), "server activate hides mine block display");
+		assertEquals(0.0, course.localCharacter.blockAlphaAt(5 - originX, -originY), "remote mine removal updates local collision state");
 
 		handler.dispatch("activate", ["6", "0", "right"]);
 		assertEquals(null, course.levelRenderer.blockAlphaAt(180, 0), "server activate moves push block away from source segment");
 		assertTrue(course.levelRenderer.blockAlphaAt(210, 0) != null, "server activate moves push block to payload direction segment");
+		assertEquals(null, @:privateAccess course.serverFixture.fixture.blockAt(6 - originX, -originY), "remote push leaves the source collision tile");
+		assertEquals(BlockType.Push, @:privateAccess course.serverFixture.fixture.blockAt(7 - originX, -originY).type,
+			"remote push updates the destination collision tile");
+
+		handler.dispatch("activate", ["8", "0", "20"]);
+		assertEquals(1.0, course.localCharacter.blockAlphaAt(8 - originX, -originY), "first remote crumble hit retains remaining life");
+		handler.dispatch("activate", ["8", "0", "20"]);
+		assertEquals(0.0, course.localCharacter.blockAlphaAt(8 - originX, -originY), "cumulative remote crumble damage removes collision state");
+		assertEquals(0.0, course.levelRenderer.blockAlphaAt(240, 0), "cumulative remote crumble damage hides the display");
+		var effectsAfterRemoval = course.levelRenderer.worldEffectLayer().numChildren;
+		handler.dispatch("activate", ["8", "0", "20"]);
+		assertEquals(effectsAfterRemoval, course.levelRenderer.worldEffectLayer().numChildren,
+			"late crumble activation cannot spawn particles after Map removal");
 
 		course.remove();
 		assertTrue(!handler.hasCommand("activate"), "course teardown unregisters Map activate command");
+	}
+
+	private static function testMoveBlockDisplayTracksFixtureCoordinates():Void {
+		var course = buildCourse(new CommandHandler(), "race", "m3`ffffff`0;0;11,1;0;19,1;0;0");
+		course.syncMoveBlockDisplays();
+		var tracked = course.displayedMoveBlockPositions.get(0);
+		assertEquals(30, tracked.worldX, "move display tracking starts at the move block, not the omitted start-marker index");
+		course.remove();
 	}
 
 	private static function assertEggAttackVisual(seed:Int, expectedType:String, expectedCount:Int, message:String):Void {
@@ -1012,6 +1045,9 @@ class CharacterLifecycleTest {
 		handler.dispatch("setHats4", ["6", "1193046", "-1"]);
 		assertEquals(6, course.localCharacter.hat1, "server pickup reply equips the collected hat locally");
 		assertTrue(course.localCharacter.hasHatFlag(Character.CROWN), "server pickup reply refreshes local hat powers");
+		handler.dispatch("setHats4", [""]);
+		assertEquals(1, course.localCharacter.hat1, "blank server hat stack restores the empty hat frame locally");
+		assertTrue(!course.localCharacter.hasHatFlag(Character.CROWN), "blank server hat stack clears local hat powers");
 
 		var finishedPickup = course.addLooseHat(15, 0, 0, 6, 0x123456, -1, 3);
 		LobbySocket.resetSent();

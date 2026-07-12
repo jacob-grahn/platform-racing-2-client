@@ -33,6 +33,7 @@ import pr2.character.RemoteCharacter;
 import pr2.effects.ZapEffect;
 import pr2.effects.Slash;
 import pr2.effects.StingEffect;
+import pr2.effects.BlockPiece;
 import pr2.gameplay.GameCommandShell.LocalCharacterInit;
 import pr2.gameplay.GameCommandShell.RemoteCharacterInit;
 import pr2.gameplay.SpecialEvent.PlaceArtifactRequest;
@@ -130,6 +131,9 @@ class Course extends Sprite {
 	public var raceStarted(default, null):Bool = false;
 	public var framesPlaying(default, null):Int = 0;
 	public var testMode:Bool = false;
+	public var debugLastCrumbleForce(default, null):String = "";
+	public var debugCrumbleActivations(default, null):Int = 0;
+	public var debugCrumblePiecesSpawned(default, null):Int = 0;
 
 	// Invoked once when the local player reaches a finish block. The host page
 	// (GamePage) uses it to mark the player done and show the finished page; the
@@ -157,7 +161,7 @@ class Course extends Sprite {
 	private var displayedLives:Null<Int>;
 	private var finishDrawingEmitted:Bool = false;
 	private var displayedCourseRotation:Int = 0;
-	private final displayedMoveBlockPositions:Map<Int, {worldX:Int, worldY:Int}> = new Map();
+	private final displayedMoveBlockPositions:Map<Int, {worldX:Int, worldY:Int, originalWorldX:Int, originalWorldY:Int}> = new Map();
 	private var displayedMoveBlockArrows:Map<String, Bool> = new Map();
 	// Tile keys ("x,y") whose block visual was non-default last frame, so they can
 	// be reset to alpha/tint 1 once they return to default. See syncBlockVisuals.
@@ -230,8 +234,6 @@ class Course extends Sprite {
 		player.setGameMode(config.gameMode);
 		player.setHatsAllowed(config.gameMode != Modes.roguelike);
 		player.setAllowedItems(config.allowedItems);
-		player.display.x = player.halfWidth;
-		player.display.y = player.charHeight;
 		localCharacter = player;
 		playerArray[player.tempID] = player;
 		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
@@ -518,7 +520,7 @@ class Course extends Sprite {
 
 	private function setLocalHatsCommand(args:Array<String>):Void {
 		if (localCharacter != null) {
-			localCharacter.setHats([for (arg in args) parseIntArg(arg)]);
+			localCharacter.setHats(args.length == 1 && args[0] == "" ? [] : [for (arg in args) parseIntArg(arg)]);
 		}
 	}
 
@@ -567,10 +569,27 @@ class Course extends Sprite {
 	}
 
 	private function activateCommand(args:Array<String>):Void {
-		if (remoteBlockActivation == null || args.length < 2) {
+		if (remoteBlockActivation == null || localCharacter == null || serverFixture == null || args.length < 2) {
 			return;
 		}
-		remoteBlockActivation.activateSegment(parseIntArg(args[0]), parseIntArg(args[1]), args.length > 2 ? args[2] : "");
+		var segX = parseIntArg(args[0]);
+		var segY = parseIntArg(args[1]);
+		var payload = args.length > 2 ? args[2] : "";
+		recordCrumbleActivation(segX - serverFixture.originTileX, segY - serverFixture.originTileY, payload);
+		if (localCharacter.applyRemoteBlockActivation(segX - serverFixture.originTileX, segY - serverFixture.originTileY, payload)) {
+			syncBlockVisuals();
+		} else {
+			remoteBlockActivation.activateSegment(segX, segY, payload);
+		}
+	}
+
+	private function remoteBlockTouch(segX:Int, segY:Int):Void {
+		if (localCharacter != null && serverFixture != null
+			&& localCharacter.applyRemoteBlockTouch(segX - serverFixture.originTileX, segY - serverFixture.originTileY)) {
+			syncBlockVisuals();
+		} else if (remoteBlockActivation != null) {
+			remoteBlockActivation.touch(segX, segY);
+		}
 	}
 
 	public function createRemoteCharacter(init:RemoteCharacterInit):RemoteCharacter {
@@ -585,7 +604,7 @@ class Course extends Sprite {
 		remote.setColors(Std.int(init.hatColor), Std.int(init.hatColor2), Std.int(init.headColor), Std.int(init.headColor2),
 			Std.int(init.bodyColor), Std.int(init.bodyColor2), Std.int(init.feetColor), Std.int(init.feetColor2));
 		if (remoteBlockActivation != null) {
-			remote.onBlockTouch = remoteBlockActivation.touch;
+			remote.onBlockTouch = remoteBlockTouch;
 		}
 		remote.onPlayJumpSound = playRemoteJumpSound;
 		remote.onPlayCharacterSound = playCharacterSound;
@@ -597,10 +616,26 @@ class Course extends Sprite {
 		};
 		remoteCharacters.set(init.tempId, remote);
 		playerArray[init.tempId] = remote;
+		syncNetworkPlayerCount();
 		if (characterLayer != null) {
 			characterLayer.addChild(remote);
 		}
+		positionRemoteAtStartCenter(remote);
 		return remote;
+	}
+
+	private function positionRemoteAtStartCenter(remote:RemoteCharacter):Void {
+		if (remote == null || serverFixture == null || levelRenderer == null || startPositions.length == 0) {
+			return;
+		}
+		var startIndex = LobbySession.tournamentMode ? 0 : remote.tempID;
+		if (startIndex < 0 || startIndex >= startPositions.length) {
+			startIndex = 0;
+		}
+		var start = startPositions[startIndex];
+		// Flash stores every Character in map/world coordinates and lets
+		// frontBackground/backBackground supply the camera translation.
+		remote.setPos(start.x, start.y);
 	}
 
 	public function getRemoteCharacter(tempId:Int):Null<RemoteCharacter> {
@@ -628,6 +663,7 @@ class Course extends Sprite {
 		}
 		remote.remove();
 		remoteCharacters.remove(tempId);
+		syncNetworkPlayerCount();
 		if (playerArray != null && tempId >= 0 && tempId < playerArray.length) {
 			playerArray[tempId] = null;
 		}
@@ -636,6 +672,12 @@ class Course extends Sprite {
 			if (spectatePicker != null) {
 				spectatePicker.stopSpectating();
 			}
+		}
+	}
+
+	private function syncNetworkPlayerCount():Void {
+		if (localCharacter != null) {
+			localCharacter.networkPlayerCount = remoteCharacterCount() + 1;
 		}
 	}
 
@@ -1184,8 +1226,15 @@ class Course extends Sprite {
 			stepLooseHats();
 		}
 		syncBlockVisuals();
-		updatePlayerDisplay();
 		var state = player.debugState();
+		if (raceStarted && !localFinishHandled) {
+			// The controller simulates a cropped fixture, but Flash's Character and
+			// multiplayer protocol use full map coordinates.
+			player.x = serverFixture.fixturePixelToWorldX(state.x);
+			player.y = serverFixture.fixturePixelToWorldY(state.y);
+			localCharacter.emitNetworkUpdate(state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
+		}
+		updatePlayerDisplay();
 		emitLocalItemEffect(state);
 		maybeHandleLocalFinish(state);
 		syncItemDisplay(state.itemId, state.itemUses);
@@ -1614,6 +1663,7 @@ class Course extends Sprite {
 					}
 			}
 		}
+		publishMultiplayerDiagnostics();
 	}
 
 	private function resetActiveBlockVisuals():Void {
@@ -1625,13 +1675,9 @@ class Course extends Sprite {
 
 	private function resetMovedBlockDisplays():Void {
 		for (i in displayedMoveBlockPositions.keys()) {
-			if (i >= level.blocks.length) {
-				continue;
-			}
 			var displayed = displayedMoveBlockPositions.get(i);
-			var original = level.blocks[i];
-			if (displayed != null && (displayed.worldX != original.x || displayed.worldY != original.y)) {
-				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, original.x, original.y);
+			if (displayed != null && (displayed.worldX != displayed.originalWorldX || displayed.worldY != displayed.originalWorldY)) {
+				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, displayed.originalWorldX, displayed.originalWorldY);
 			}
 		}
 		displayedMoveBlockPositions.clear();
@@ -1651,13 +1697,25 @@ class Course extends Sprite {
 			var currentWorldY = (fixtureBlock.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
 			var displayed = displayedMoveBlockPositions.get(i);
 			if (displayed == null) {
-				var original = level.blocks[i];
-				displayedMoveBlockPositions.set(i, {worldX: original.x, worldY: original.y});
+				// Fixture conversion omits spawn-marker blocks, so its indices do not
+				// correspond to ServerLevel.blocks. Capture this move block's own initial
+				// coordinate rather than moving whichever decoded block shares its index.
+				displayedMoveBlockPositions.set(i, {
+					worldX: currentWorldX,
+					worldY: currentWorldY,
+					originalWorldX: currentWorldX,
+					originalWorldY: currentWorldY
+				});
 				displayed = displayedMoveBlockPositions.get(i);
 			}
 			if (displayed.worldX != currentWorldX || displayed.worldY != currentWorldY) {
 				levelRenderer.moveBlockDisplay(displayed.worldX, displayed.worldY, currentWorldX, currentWorldY);
-				displayedMoveBlockPositions.set(i, {worldX: currentWorldX, worldY: currentWorldY});
+				displayedMoveBlockPositions.set(i, {
+					worldX: currentWorldX,
+					worldY: currentWorldY,
+					originalWorldX: displayed.originalWorldX,
+					originalWorldY: displayed.originalWorldY
+				});
 			}
 		}
 	}
@@ -1766,6 +1824,7 @@ class Course extends Sprite {
 		var segX = event.tileX + serverFixture.originTileX;
 		var segY = event.tileY + serverFixture.originTileY;
 		var payload = event.activationPayload == null ? "" : event.activationPayload;
+		recordCrumbleActivation(event.tileX, event.tileY, payload);
 		LobbySocket.write('activate`$segX`$segY`$payload');
 	}
 
@@ -1777,7 +1836,47 @@ class Course extends Sprite {
 	}
 
 	private function showBlockPieces(event:BlockVisualEvent, linkage:String, spreadX:Float, spreadY:Float, spreadRot:Float):Void {
+		if (linkage == "CrumblePieceGraphic") {
+			debugCrumblePiecesSpawned += event.count;
+		}
 		levelRenderer.showBlockPieces(linkage, worldXOf(event), worldYOf(event), event.count, spreadX, spreadY, spreadRot, 0.75, 0.95, 0.05);
+	}
+
+	public function debugActiveBlockPieces():Int {
+		if (levelRenderer == null) {
+			return 0;
+		}
+		var count = 0;
+		var layer = levelRenderer.worldEffectLayer();
+		for (i in 0...layer.numChildren) {
+			if (Std.isOfType(layer.getChildAt(i), BlockPiece)) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	private function recordCrumbleActivation(tileX:Int, tileY:Int, payload:String):Void {
+		if (serverFixture == null) {
+			return;
+		}
+		var block = serverFixture.fixture.blockAt(tileX, tileY);
+		if (block != null && block.type == pr2.level.BlockType.Crumble) {
+			debugLastCrumbleForce = payload;
+			debugCrumbleActivations++;
+		}
+	}
+
+	private function publishMultiplayerDiagnostics():Void {
+		#if js
+		if (Browser.location.search.indexOf("multiplayerDebug=1") < 0 || Browser.document.body == null) {
+			return;
+		}
+		Browser.document.body.setAttribute("data-pr2-crumble-force", debugLastCrumbleForce);
+		Browser.document.body.setAttribute("data-pr2-crumble-activations", Std.string(debugCrumbleActivations));
+		Browser.document.body.setAttribute("data-pr2-crumble-pieces-spawned", Std.string(debugCrumblePiecesSpawned));
+		Browser.document.body.setAttribute("data-pr2-active-block-pieces", Std.string(debugActiveBlockPieces()));
+		#end
 	}
 
 	private function updatePlayerDisplay():Void {
@@ -1798,7 +1897,7 @@ class Course extends Sprite {
 		}
 		// Use the controller's authoritative position, not player.x/player.y: the
 		// PlayerDisplayPlacement.place() call below overwrites player.x/player.y
-		// with the on-screen (feet) coordinate every frame. During the race that
+		// with the world-space display coordinate every frame. During the race that
 		// is harmless because step()->syncFromController rewrites player.x/y back
 		// to the controller position before the next updatePlayerDisplay. During
 		// the 3-2-1 countdown, though, step() never runs, so reading player.x/y
@@ -1822,9 +1921,8 @@ class Course extends Sprite {
 			playerDot.x = worldX;
 			playerDot.y = worldY;
 		}
-		var screen = levelRenderer.worldToCharacterLayer(worldX, worldY);
 		moveCharacterToLayer(player, state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
-		PlayerDisplayPlacement.place(player, player.display, screen.x, screen.y, player.facingScaleX, localCharacter.characterRotation);
+		PlayerDisplayPlacement.place(player, player.display, worldX, worldY, player.facingScaleX, localCharacter.characterRotation);
 		// Until the countdown finishes the race has not started and the local
 		// player is never stepped (Flash keeps it in mode="wait"/state="stand"
 		// with its physics ENTER_FRAME not yet attached). Show the idle stand pose

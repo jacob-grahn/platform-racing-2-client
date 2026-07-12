@@ -13,22 +13,16 @@ class PlayerDisplayPlacement {
 		facingScaleX:Int,
 		rotationDegrees:Float = 0
 	):Void {
-		// The character art is feet-anchored: the inner display is offset down by
-		// the standing charHeight so its origin lands exactly on the feet. The
-		// container must therefore always subtract STANDING_HEIGHT, regardless of
-		// crouch state. Crouching is conveyed purely by the crouch animation frame
-		// (Flash keeps scaleY = 1 and the feet pinned); using the shorter crouch
-		// height here drops the display origin below the feet and sinks the
-		// character into the floor.
-		var pivotX = LocalPlayerController.STANDING_WIDTH / 2;
-		var pivotY = LocalPlayerController.STANDING_HEIGHT;
-		var radians = rotationDegrees * Math.PI / 180;
-		var cos = Math.cos(radians);
-		var sin = Math.sin(radians);
-		playerDisplay.x = feetX - (pivotX * cos - pivotY * sin);
-		playerDisplay.y = feetY - (pivotX * sin + pivotY * cos);
+		// Match Flash Character: the display object's registration point and x/y
+		// are the character's feet. The authored CharacterGraphic is already drawn
+		// relative to that registration point, so camera and network code never
+		// need to substitute a top-left display coordinate for Character.x/y.
+		playerDisplay.x = feetX;
+		playerDisplay.y = feetY;
 		playerDisplay.rotation = rotationDegrees;
 		playerDisplay.scaleY = 1;
+		characterDisplay.x = 0;
+		characterDisplay.y = 0;
 		characterDisplay.scaleX = CHARACTER_SCALE * facingScaleX;
 		characterDisplay.scaleY = CHARACTER_SCALE;
 	}

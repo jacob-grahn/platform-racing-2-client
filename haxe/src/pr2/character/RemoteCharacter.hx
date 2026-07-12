@@ -54,11 +54,11 @@ class RemoteCharacter extends Character {
 		this.catchupRate = updateInterval + 1;
 		commandHandler = handler != null ? handler : CommandHandler.commandHandler;
 		registerCommands();
-		addEventListener(Event.ENTER_FRAME, go);
+		addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 
 	public function stepFrame():Void {
-		go(null);
+		go(null, true);
 	}
 
 	public function pos(args:Array<String>):Void {
@@ -127,7 +127,7 @@ class RemoteCharacter extends Character {
 	}
 
 	override public function remove():Void {
-		removeEventListener(Event.ENTER_FRAME, go);
+		removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		unregisterCommands();
 		commandHandler = null;
 		updateQueue = [];
@@ -138,7 +138,11 @@ class RemoteCharacter extends Character {
 		super.remove();
 	}
 
-	private function go(_:Event):Void {
+	private function onEnterFrame(event:Event):Void {
+		go(event, true);
+	}
+
+	private function go(_:Event, advanceAnimation:Bool):Void {
 		if (updateQueue.length > 0) {
 			catchupRate -= 0.01;
 			var i = 0;
@@ -171,7 +175,9 @@ class RemoteCharacter extends Character {
 			rotation = mapRotation + remoteRotation + rotMod;
 			applyQueuedUpdate(updateQueue.shift());
 			if (updateQueue.length > catchupRate) {
-				go(null);
+				// Flash recursively consumes excess network frames here, but the
+				// CharacterGraphic timeline still advances only once per stage frame.
+				go(null, false);
 			}
 		} else {
 			catchupRate += 0.08;
@@ -180,6 +186,9 @@ class RemoteCharacter extends Character {
 			catchupRate = 10;
 		}
 		processBlockTouches();
+		if (advanceAnimation) {
+			display.advanceOneFrame();
+		}
 	}
 
 	private function applyQueuedUpdate(update:Dynamic):Void {
@@ -269,6 +278,13 @@ class RemoteCharacter extends Character {
 	}
 
 	private function setHatsCommand(args:Array<String>):Void {
+		// A no-hat server frame ends immediately after the command delimiter, so
+		// splitting it produces `[""]`. Treat that as an empty hat stack instead
+		// of parsing the blank field as frame 0.
+		if (args.length == 1 && args[0] == "") {
+			setHats([]);
+			return;
+		}
 		setHats([for (arg in args) Std.parseInt(arg)]);
 	}
 

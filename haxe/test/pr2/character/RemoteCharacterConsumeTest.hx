@@ -19,6 +19,7 @@ class RemoteCharacterConsumeTest {
 		testConsumesPositionVarsAndExactPosition();
 		testCatchupClampAndBlockTouches();
 		testRemoteBlockTouchesActivateRealMapEffects();
+		testRemoteAnimationAdvancesEachStageFrame();
 		testHeartStingAndHatCommands();
 		trace('RemoteCharacterConsumeTest passed $assertions assertions');
 	}
@@ -127,6 +128,10 @@ class RemoteCharacterConsumeTest {
 		assertEquals("1,70,90", stingArgs, "sting command reaches hook args");
 		assertEquals(6, remote.hat1, "setHats command applies hat stack");
 		assertTrue(remote.hasHatFlag(Character.CROWN), "setHats command raises special hat flags");
+
+		handler.dispatch("setHats3", [""]);
+		assertEquals(1, remote.hat1, "blank no-hat command restores the empty hat frame");
+		assertTrue(!remote.hasHatFlag(Character.CROWN), "blank no-hat command clears special hat flags");
 	}
 
 	private static function testRemoteBlockTouchesActivateRealMapEffects():Void {
@@ -141,7 +146,7 @@ class RemoteCharacterConsumeTest {
 		var remote = new RemoteCharacter(4, null, "Remote", 1, 1, 1, 1, "0", new CommandHandler());
 		remote.onBlockTouch = activation.touch;
 
-		remote.setPos((fixture.originTileX * -1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
+		remote.setPos(15, -1);
 		remote.stepFrame();
 		assertEquals(2, renderer.arrowFrameAt(arrow.x, arrow.y), "remote touch animates arrow block");
 		var world = Std.downcast(renderer.getChildAt(1), Sprite);
@@ -154,13 +159,25 @@ class RemoteCharacterConsumeTest {
 		}
 		assertEquals(1, renderer.arrowFrameAt(arrow.x, arrow.y), "remote arrow activation leaves the overlay stopped");
 
-		remote.setPos((fixture.originTileX * -1 + 1) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
+		remote.setPos(45, -1);
 		remote.stepFrame();
 		assertEquals(0.0, renderer.blockAlphaAt(vanish.x, vanish.y), "remote touch activates vanish block");
 
-		remote.setPos((fixture.originTileX * -1 + 2) * 30 + 15, (fixture.originTileY * -1) * 30 - 1);
+		remote.setPos(75, -1);
 		remote.stepFrame();
 		assertClose(0.9, renderer.blockAlphaAt(water.x, water.y), "remote touch triggers water ripple");
+	}
+
+	private static function testRemoteAnimationAdvancesEachStageFrame():Void {
+		var remote = new RemoteCharacter(5, null, "Runner", 1, 1, 1, 1, "0", new CommandHandler());
+		remote.setVar(["state", "run"]);
+		remote.stepFrame();
+		var run = remote.display.getStateClip("runAnim");
+		assertTrue(run != null && run.totalFrames > 1, "run animation has authored timeline frames");
+		var firstFrame = run.currentFrame;
+		remote.stepFrame();
+		assertTrue(run.currentFrame != firstFrame, "remote run animation advances without another network state update");
+		remote.remove();
 	}
 
 	private static function assertEquals<T>(expected:T, actual:T, message:String):Void {

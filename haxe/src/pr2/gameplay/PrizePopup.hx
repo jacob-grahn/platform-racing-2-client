@@ -62,8 +62,6 @@ class PrizePopup extends Popup {
 				true);
 		}
 
-		hideHeadHats();
-
 		if (type == "hat" || type == "eHat") {
 			target = container("hat");
 			targetName = "hat";
@@ -122,6 +120,15 @@ class PrizePopup extends Popup {
 			gotoChild(target, id);
 			gotoChild(child(target, "colorMC"), id);
 			gotoChild(child(target, "colorMC2"), id);
+			// `headsMC.gotoAndStop()` reapplies the authored properties of its
+			// selected frame. In Flash, the four hat instances retain the visibility
+			// assigned above the frame change; our timeline renderer reapplies their
+			// authored `visible` value while rendering that frame. Hide them after
+			// selecting the head so their auto-playing hatsMC timelines cannot show
+			// through the prize preview.
+			if (type == "head" || type == "eHead") {
+				hideHeadHats();
+			}
 		}
 
 		var aOrAn = type == "feet" ? "a pair of" : aOrAnFor(prizeName);

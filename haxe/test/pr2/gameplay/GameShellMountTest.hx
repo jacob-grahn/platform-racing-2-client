@@ -113,6 +113,7 @@ class GameShellMountTest {
 		testCountdownKeepsCameraStill();
 		testTournamentStartForcesFirstStartPosition();
 		testTimerBeginRaceAndTimeoutBoundary();
+		testLiveRaceEmitsMultiplayerUpdates();
 
 		trace('GameShellMountTest passed $assertions assertions');
 	}
@@ -181,6 +182,34 @@ class GameShellMountTest {
 		course.remove();
 	}
 
+	private static function testLiveRaceEmitsMultiplayerUpdates():Void {
+		var course = buildCourse();
+		while (!course.levelRenderer.isDrawingComplete()) {
+			course.levelRenderer.dispatchEvent(new Event(Event.ENTER_FRAME));
+		}
+		course.createRemoteCharacter(remoteInit(9));
+		assertEquals(2, course.localCharacter.networkPlayerCount, "remote creation enables multiplayer update cadence");
+		@:privateAccess course.onCountdownFinish();
+		LobbySocket.resetSent();
+		for (_ in 0...5) {
+			@:privateAccess course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		}
+		assertEquals(true, hasSentCommand("p`"), "live race loop emits local position updates for remote players");
+		assertEquals(true, hasSentCommand("set_var`state`"), "live race loop emits local appearance state for remote players");
+		course.removeRemoteCharacter(9);
+		assertEquals(1, course.localCharacter.networkPlayerCount, "remote removal restores solo update cadence");
+		course.remove();
+	}
+
+	private static function hasSentCommand(prefix:String):Bool {
+		for (command in LobbySocket.sentCommands) {
+			if (StringTools.startsWith(command, prefix)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private static function testRenderingUsesFreeMoveCamera():Void {
 		var course = buildLargeCourse();
 		assertEquals(false, course.levelRenderer.isDrawingComplete(), "large course starts in incremental render mode");
@@ -197,6 +226,15 @@ class GameShellMountTest {
 	private static function testRemoteParentLayerSwitch(course:Course):Void {
 		var remote = course.createRemoteCharacter(remoteInit(9));
 		assertEquals(course.characterLayer, remote.parent, "remote character starts in front character layer");
+		var start = @:privateAccess course.startPositions[0];
+		assertClose(start.x, remote.x, "remote character keeps its world start x before Go");
+		assertClose(start.y, remote.y, "remote character keeps its world start y before Go");
+		remote.pos(["30", "15"]);
+		for (_ in 0...5) {
+			remote.stepFrame();
+		}
+		assertClose(remote.posX, remote.x, "live remote x remains in Flash-compatible world coordinates");
+		assertClose(remote.posY, remote.y, "live remote y remains in Flash-compatible world coordinates");
 		remote.onParentChange("backBackground");
 		assertEquals(course.backCharacterLayer, remote.parent, "remote water parent moves behind blocks");
 		remote.onParentChange("frontBackground");
@@ -430,9 +468,10 @@ class GameShellMountTest {
 		assertEquals(openfl.display.StageQuality.LOW, course.debugStageQualityForTests(), "rotate tween lowers stage quality");
 		assertEquals(course.characterLayer, course.localCharacter.parent, "local character stays in the rotating front layer during tween");
 		assertLocalCharacterFeetAnchored(course, "rotate tween keeps local character feet as the visual pivot");
-		assertBetween(0, 550, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2,
+		var tweenFeet = localCharacterFeetOnStage(course);
+		assertBetween(0, 550, tweenFeet.x,
 			"local character x stays on-stage while the world tween is active");
-		assertBetween(0, 400, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT,
+		assertBetween(0, 400, tweenFeet.y,
 			"local character y stays on-stage while the world tween is active");
 
 		for (_ in 0...29) {
@@ -445,18 +484,22 @@ class GameShellMountTest {
 		assertEquals(0, course.localCharacter.rotation, "local character rotation resets after tween");
 		assertEquals(true, course.levelRenderer.debugArtCachingEnabled(), "completed rotate restores background art caching");
 		assertEquals(openfl.display.StageQuality.HIGH, course.debugStageQualityForTests(), "completed rotate restores high stage quality");
-		assertClose(275, course.localCharacter.x + LocalPlayerController.STANDING_WIDTH / 2, "camera snaps local x after rotation");
-		assertClose(245, course.localCharacter.y + LocalPlayerController.STANDING_HEIGHT, "camera snaps local y after rotation");
+		var settledFeet = localCharacterFeetOnStage(course);
+		assertClose(275, settledFeet.x, "camera snaps local x after rotation");
+		assertClose(245, settledFeet.y, "camera snaps local y after rotation");
 		course.remove();
+	}
+
+	private static function localCharacterFeetOnStage(course:Course):Point {
+		return course.localCharacter.localToGlobal(new Point());
 	}
 
 	private static function assertLocalCharacterFeetAnchored(course:Course, message:String):Void {
 		var state = course.localCharacter.debugState();
 		var worldX = @:privateAccess course.serverFixture.fixturePixelToWorldX(state.x);
 		var worldY = @:privateAccess course.serverFixture.fixturePixelToWorldY(state.y);
-		var expected = course.levelRenderer.worldToCharacterLayer(worldX, worldY);
-		var actual = course.localCharacter.transform.matrix.transformPoint(new Point(LocalPlayerController.STANDING_WIDTH / 2,
-			LocalPlayerController.STANDING_HEIGHT));
+		var expected = course.levelRenderer.worldToScreen(worldX, worldY);
+		var actual = localCharacterFeetOnStage(course);
 		assertClose(expected.x, actual.x, '$message x');
 		assertClose(expected.y, actual.y, '$message y');
 	}

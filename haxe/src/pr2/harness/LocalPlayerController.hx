@@ -690,6 +690,93 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		return events;
 	}
 
+	/** Apply Flash Block.remoteActivate to the shared local map model. */
+	public function applyRemoteBlockActivation(tileX:Int, tileY:Int, payload:String = ""):Bool {
+		var block = level.blockAt(tileX, tileY);
+		return block != null && activateBlock(block, payload, false);
+	}
+
+	private function activateBlock(block:LevelBlock, payload:String, local:Bool):Bool {
+		var state = blockState(blockKey(block.x, block.y));
+		switch (block.type) {
+			case BlockType.Push:
+				if (local) {
+					emitLocalActivate(block, payload);
+				}
+				var dx = 0;
+				var dy = 0;
+				switch (payload) {
+					case "down": dy = 1;
+					case "up": dy = -1;
+					case "right": dx = 1;
+					case "left": dx = -1;
+					default: return true;
+				}
+				var rotated = RotationMath.rotatePoint(dx, dy, courseRotation);
+				moveBlockChain(block, rotated.x, rotated.y);
+			case BlockType.Mine:
+				if (state.removed) {
+					return true;
+				}
+				if (local) {
+					emitLocalActivate(block, payload);
+				}
+				state.removed = true;
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
+			case BlockType.Brick:
+				if (state.removed) {
+					return true;
+				}
+				if (local) {
+					emitLocalActivate(block, payload);
+				}
+				state.removed = true;
+				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
+			case BlockType.Crumble:
+				// Flash removes a spent crumble from Map, so subsequent queued activate
+				// commands cannot find it. FixtureLevel retains its LevelBlock; explicitly
+				// ignore those late commands instead of spawning another final shower.
+				if (state.removed) {
+					return true;
+				}
+				var force = Std.parseInt(payload);
+				var damage = Std.int(Math.floor((force == null ? 0 : force) / 4));
+				if (damage > 0) {
+					// Deliberate multiplayer divergence from Flash: Flash sends every
+					// onStand activation, including settled force 1 (damage 0). Replicate
+					// only an actual state transition so idle standing cannot flood the
+					// room with redundant crumble commands.
+					if (local) {
+						emitLocalActivate(block, payload);
+					}
+					var life = state.crumbleLife != null ? state.crumbleLife : CRUMBLE_INITIAL_LIFE;
+					life -= damage;
+					state.crumbleLife = life;
+					blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y,
+						Std.int(Math.min(damage * 2, 20))));
+					if (life <= 0) {
+						blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, 10));
+						state.removed = true;
+					}
+				}
+			case BlockType.Vanish:
+				activateVanish(block);
+			default:
+				return false;
+		}
+		return true;
+	}
+
+	/** Flash RemoteCharacter directly activates vanish blocks it visibly touches. */
+	public function applyRemoteBlockTouch(tileX:Int, tileY:Int):Bool {
+		var block = level.blockAt(tileX, tileY);
+		if (block == null || block.type != BlockType.Vanish) {
+			return false;
+		}
+		return activateBlock(block, "", false);
+	}
+
 	/**
 		Tile keys ("x,y") of blocks whose alpha/tint currently differs from the
 		default: fading/removed vanish blocks and depleted supply blocks. Lets the
@@ -1018,11 +1105,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function applyBumpEffect(block:LevelBlock, input:LocalPlayerInput, force:Int, preBumpY:Float):Void {
-		switch (block.type) {
+			switch (block.type) {
 			case BlockType.Brick:
-				emitLocalActivate(block);
-				blockState(blockKey(block.x, block.y)).removed = true;
-				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
+				activateBlock(block, "", true);
 			case BlockType.Finish:
 				finish(block);
 			case BlockType.Happy:
@@ -1275,15 +1360,18 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			return;
 		}
 
-		moveBlockChain(block, dx, dy, activationPayload);
+		if (block.type == BlockType.Push) {
+			activateBlock(block, activationPayload, true);
+		} else {
+			// Flash MoveBlock.shift calls Block.move directly. Only PushBlock uses
+			// localActivate/remoteActivate replication when a player moves it.
+			moveBlockChain(block, dx, dy);
+		}
 	}
 
-	private function moveBlockChain(block:LevelBlock, dx:Int, dy:Int, ?activationPayload:String):Void {
+	private function moveBlockChain(block:LevelBlock, dx:Int, dy:Int):Void {
 		var destX = block.x + dx;
 		var destY = block.y + dy;
-		if (activationPayload != null) {
-			emitLocalActivate(block, activationPayload);
-		}
 		var destBlock = level.blockAt(destX, destY);
 		if (destBlock != null && destBlock.type == BlockType.Push) {
 			moveBlockChain(destBlock, dx, dy);
@@ -1341,10 +1429,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 			vx += Math.cos(angle) * MINE_HIT_SPEED;
 			vy += Math.sin(angle) * MINE_HIT_SPEED;
 		}
-		emitLocalActivate(block);
-		blockState(blockKey(block.x, block.y)).removed = true;
-		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
-		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
+		activateBlock(block, "", true);
 		if (!crownProtected && mode != MODE_FREEZE) {
 			setMode(MODE_HURT);
 			beginHurtRecovery();
@@ -1694,18 +1779,13 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function damageBlockFromItem(block:LevelBlock, damageForce:Float):Void {
 		var clampedHitX = clamp(damageForce, -20, 20);
 		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BlockBumpSound, block.x, block.y, 1, null, null, clampedHitX, 0));
-		switch (block.type) {
+			switch (block.type) {
 			case BlockType.Brick:
-				emitLocalActivate(block);
-				blockState(blockKey(block.x, block.y)).removed = true;
-				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
+				activateBlock(block, "", true);
 			case BlockType.Crumble:
 				applyCrumbleForce(block, 5);
 			case BlockType.Mine:
-				emitLocalActivate(block);
-				blockState(blockKey(block.x, block.y)).removed = true;
-				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MinePieces, block.x, block.y, 10));
-				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.MineExplode, block.x, block.y));
+				activateBlock(block, "", true);
 			case BlockType.Vanish:
 				activateVanish(block);
 			default:
@@ -1893,22 +1973,8 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		return getBlockAtPixel(block.x * level.tileSize, block.y * level.tileSize + level.tileSize);
 	}
 
-	private function applyCrumbleForce(block:LevelBlock, force:Int):Void {
-		var damage = Std.int(Math.floor(force / 4));
-		emitLocalActivate(block, Std.string(force));
-		if (damage <= 0) {
-			return;
-		}
-
-		var state = blockState(blockKey(block.x, block.y));
-		var life = state.crumbleLife != null ? state.crumbleLife : CRUMBLE_INITIAL_LIFE;
-		life -= damage;
-		state.crumbleLife = life;
-		blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, Std.int(Math.min(damage * 2, 20))));
-		if (life <= 0) {
-			blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.CrumblePieces, block.x, block.y, 10));
-			state.removed = true;
-		}
+	private function applyCrumbleForce(block:LevelBlock, force:Int, emitActivation:Bool = true):Void {
+		activateBlock(block, Std.string(force), emitActivation);
 	}
 
 	private function cheeseCrumbleForce(force:Int, standing:Bool = false):Int {
