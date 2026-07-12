@@ -36,16 +36,18 @@ CHANNELS = ("static", "primary", "secondary")
 # SVG renderer makes it sub-pixel. A non-scaling stroke as wide as the raster
 # scale preserves one pixel when the resulting bitmap is displayed at 1x.
 FLASH_HAIRLINE_RE = re.compile(r'stroke-width="0\.05"')
-# Empirical vertical-registration correction for character parts, in unscaled
+# Empirical registration corrections for character parts, in unscaled authored
 # stage units (the same units as the runtime slot-local coordinate space, since
-# parts are exported at scale 1). Against test/baselines/flash/08_standing.jpg,
-# normalized to the feet line, the head and body atlas frames render ~7px too
-# high while the feet line up. The root cause (some registration-point vs slot
-# mismatch in the Animate export staging) is not yet understood, so this nudges
-# sourceTrim.y downward to match Flash. Calibrated by sweeping the runtime
-# slot-local Y offset until head/body matched the baseline, then carried here
-# (sourceTrim.y += nudge * scale). Feet/hat = 0.
-CHARACTER_Y_NUDGE = {"head": 55, "body": 55}
+# parts are exported at scale 1). The original Flash symbols use substantially
+# different registration translations for head/body/feet, while hats are
+# nested in transformed slots inside each head. Animate's staged SVG export and
+# the runtime's symbol-local placement do not preserve those origins identically.
+# These values were calibrated live against the assembled in-game character.
+CHARACTER_REGISTRATION_OFFSET = {
+    "head": (35, 55),
+    "body": (0, 55),
+    "hat": (-20, 50),
+}
 # Categories that produce individual PNGs with no atlas. Large timeline-driven
 # effect symbols can exceed the default atlas page and are animated by metadata
 # rather than by atlas frame sequencing.
@@ -478,9 +480,10 @@ def rasterize_jobs(jobs, args):
                 run_inkscape(args.inkscape, render_svg, raw_path, width)
                 trim = trim_image(raw_path, out_path, bounds, args.scale, job["category"])
             if job["category"] == "character" and not trim.get("empty"):
-                nudge = CHARACTER_Y_NUDGE.get(job["kind"])
-                if nudge:
-                    trim["y"] += int(round(nudge * args.scale))
+                offset = CHARACTER_REGISTRATION_OFFSET.get(job["kind"])
+                if offset:
+                    trim["x"] += int(round(offset[0] * args.scale))
+                    trim["y"] += int(round(offset[1] * args.scale))
             record = {
                 "source": str(job["svg"]),
                 "png": str(out_path),

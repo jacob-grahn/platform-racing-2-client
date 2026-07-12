@@ -89,6 +89,7 @@ class TestCoursePage extends Page {
 		var level = ServerLevelDecoder.decode(data.data);
 		var config = LevelConfig.fromServerData(data);
 		course = new Course(level, data, config);
+		course.removeRaceChat();
 		course.testMode = true;
 		course.onFinish = function(_):Void clickRestart();
 		addChildAt(course, 0);

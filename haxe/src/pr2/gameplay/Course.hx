@@ -369,6 +369,14 @@ class Course extends Sprite {
 		addChild(raceChat);
 	}
 
+	public function removeRaceChat():Void {
+		if (raceChat == null) {
+			return;
+		}
+		raceChat.remove();
+		raceChat = null;
+	}
+
 	private function buildDrawingInfo():Void {
 		drawingInfo = new DrawingInfo(null, config.gameMode, Std.int(config.levelId), function():Int return framesPlaying);
 		drawingInfo.x = DRAWING_X;
@@ -1976,10 +1984,7 @@ class Course extends Sprite {
 			musicSelection.remove();
 			musicSelection = null;
 		}
-		if (raceChat != null) {
-			raceChat.remove();
-			raceChat = null;
-		}
+		removeRaceChat();
 		if (timer != null) {
 			timer.remove();
 			timer = null;

@@ -1701,6 +1701,7 @@ class LobbyServicesTest {
 		assertEquals(true, testCourse.reportsMode, "test course preserves reports mode");
 		assertEquals(sourceData, testCourse.variables.get("data"), "test course receives serialized editor data");
 		assertNotNull(testCourse.course, "test course mounts a playable Course");
+		assertEquals(null, testCourse.course.raceChat, "test course omits the race chat UI");
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "back_bt"), "test course mounts authored back button");
 		assertNotNull(DisplayUtil.findByName(testCourse.art, "restart_bt"), "test course mounts authored restart button");
 		assertNotNull(testCourse.statsSelect, "test course mounts the StatsSelect control");
