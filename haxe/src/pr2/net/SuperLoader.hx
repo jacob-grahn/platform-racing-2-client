@@ -262,11 +262,11 @@ class SuperLoader extends EventDispatcher {
 			if (ok) return {success: true, data: parsed, message: message};
 
 			var error = hasError ? stringField(parsed, "error") : "An unknown error occurred. I suspect evil aliens.";
-			showMessage("Error: " + error);
+			if (autoEchoMessage) showMessage("Error: " + error);
 			return {success: false, data: parsed, message: error};
 		} catch (error:Dynamic) {
 			var message = 'Error: The loaded data was not in the expected format. \n\nlocation: SuperLoader::onComplete \nreadMode: $readMode\ndata: $body';
-			showMessage(message);
+			if (autoEchoMessage) showMessage(message);
 			return {success: false, data: null, message: 'invalid response from $source: ${Std.string(error)}'};
 		}
 	}

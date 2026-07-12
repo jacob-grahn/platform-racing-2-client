@@ -14,10 +14,33 @@ class UploadingPopupTest {
 	public static function main():Void {
 		testStringMapConstructor();
 		testFlashUrlRequestConstructor();
+		testCallbackCanOwnMessages();
 		SuperLoader.resetHooks();
 		LobbySession.token = "";
 		closeAll();
 		trace('UploadingPopupTest passed $assertions assertions');
+	}
+
+	private static function testCallbackCanOwnMessages():Void {
+		var savedPostFactory = UploadingPopup.postFactory;
+		var savedShowMessage = SuperLoader.showMessage;
+		var messages:Array<String> = [];
+		var parsedMessage = "";
+		SuperLoader.showMessage = function(message:String):Void messages.push(message);
+		UploadingPopup.postFactory = function(url:String, fields:Map<String, String>, onResult:String->Void, onError:String->Void):Void {
+			onResult('{"success":true,"message":"Level saved!"}');
+		};
+
+		new UploadingPopup("https://example.test/save", new Map<String, String>(), "Saving...", function(result:Dynamic):Void {
+			parsedMessage = Std.string(Reflect.field(result, "message"));
+		}, null, false);
+
+		assertEquals("Level saved!", parsedMessage, "callback receives server message");
+		assertEquals(0, messages.length, "explicit aem false suppresses callback response echo");
+
+		UploadingPopup.postFactory = savedPostFactory;
+		SuperLoader.showMessage = savedShowMessage;
+		closeAll();
 	}
 
 	private static function testStringMapConstructor():Void {

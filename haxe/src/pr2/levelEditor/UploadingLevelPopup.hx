@@ -135,7 +135,9 @@ class UploadingLevelPopup extends Popup {
 			Reflect.setField(variables, key, fields.get(key));
 		}
 		request.data = variables;
-		return new UploadingPopup(request, "url", label, onResult, onError);
+		// This handler owns the result message. Disable UploadingPopup's automatic
+		// echo so the server's save confirmation is not displayed a second time.
+		return new UploadingPopup(request, "url", label, onResult, onError, false);
 	}
 
 	public static function defaultRetry(callback:Void->Void, delayMs:Int):Null<Timer> {

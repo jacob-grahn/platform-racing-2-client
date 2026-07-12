@@ -1435,8 +1435,11 @@ class LobbyServicesTest {
 
 	private static function testUploadingLevelPopupDecodesUrlResponse():Void {
 		var previousRequestFactory = pr2.lobby.dialogs.UploadingPopup.requestFactory;
+		var previousShowMessage = pr2.net.SuperLoader.showMessage;
 		var capturedRequest:Dynamic = null;
 		var parsed:Dynamic = null;
+		var autoMessages:Array<String> = [];
+		pr2.net.SuperLoader.showMessage = function(message:String):Void autoMessages.push(message);
 		pr2.lobby.dialogs.UploadingPopup.requestFactory = function(request, onResult, onError):Void {
 			capturedRequest = request;
 			onResult("status=exists&message=Level%20already%20exists");
@@ -1450,8 +1453,10 @@ class LobbyServicesTest {
 		assertEquals("URL response", Std.string(Reflect.field(capturedRequest.data, "title")), "level upload posts URL variables");
 		assertEquals("exists", Std.string(Reflect.field(parsed, "status")), "level upload decodes URL-variable status responses");
 		assertEquals("Level already exists", Std.string(Reflect.field(parsed, "message")), "level upload decodes URL-variable messages");
+		assertEquals(0, autoMessages.length, "level upload leaves response messages to its result handler");
 		popup.remove();
 		pr2.lobby.dialogs.UploadingPopup.requestFactory = previousRequestFactory;
+		pr2.net.SuperLoader.showMessage = previousShowMessage;
 		closeAllPopups();
 	}
 

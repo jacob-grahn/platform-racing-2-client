@@ -64,6 +64,11 @@ class SuperLoaderTest {
 		var invalid = SuperLoader.decodeJson("json", "not json");
 		assertEquals(false, invalid.success, "invalid JSON rejected");
 		assertEquals(true, invalid.message.indexOf("invalid response from json") == 0, "invalid JSON reports source");
+
+		var messageCount = messages.length;
+		SuperLoader.decodeJson("json", '{"success":false,"error":"Quiet"}', false);
+		SuperLoader.decodeJson("json", "still not json", false);
+		assertEquals(messageCount, messages.length, "autoEchoMessage=false suppresses decoded errors");
 	}
 
 	private static function testDecodeUrlVariables():Void {

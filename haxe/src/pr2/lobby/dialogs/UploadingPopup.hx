@@ -38,9 +38,9 @@ class UploadingPopup extends Popup {
 	private var asyncGuard:AsyncRemovalGuard = new AsyncRemovalGuard();
 
 	public function new(requestOrUrl:Dynamic = null, ?fieldsOrDataMode:Dynamic = null, dispText:String = "Uploading...", ?aemOrOnResult:Dynamic = true,
-			?onError:String->Void) {
+			?onError:String->Void, ?autoEchoMessage:Bool) {
 		super();
-		var options = parseOptions(requestOrUrl, fieldsOrDataMode, dispText, aemOrOnResult, onError);
+		var options = parseOptions(requestOrUrl, fieldsOrDataMode, dispText, aemOrOnResult, onError, autoEchoMessage);
 		art = PR2MovieClip.fromLinkage("UploadingPopupGraphic", {maxNestedDepth: 4});
 		var textBox = LobbyArt.text(art, "textBox");
 		if (textBox != null) {
@@ -105,7 +105,7 @@ class UploadingPopup extends Popup {
 	}
 
 	private static function parseOptions(requestOrUrl:Dynamic, fieldsOrDataMode:Dynamic, dispText:String, aemOrOnResult:Dynamic,
-			onError:String->Void):UploadOptions {
+			onError:String->Void, autoEchoMessage:Null<Bool>):UploadOptions {
 		var options:UploadOptions = {
 			request: null,
 			url: null,
@@ -121,6 +121,9 @@ class UploadingPopup extends Popup {
 			options.onResult = cast aemOrOnResult;
 		} else if (aemOrOnResult != null) {
 			options.autoEchoMessage = aemOrOnResult == true;
+		}
+		if (autoEchoMessage != null) {
+			options.autoEchoMessage = autoEchoMessage;
 		}
 		if (Std.isOfType(requestOrUrl, URLRequest)) {
 			options.request = cast requestOrUrl;
