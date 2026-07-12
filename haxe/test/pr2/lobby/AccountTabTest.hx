@@ -151,7 +151,7 @@ class AccountTabTest {
 		var blockedByText = new KeyboardEvent(KeyboardEvent.KEY_DOWN, false, true, 0, 49);
 		selectable.dispatchEvent(blockedByText);
 		assertEquals(0, Popup.getOpen().length, "selectable text blocks loadout hotkeys");
-		assertEquals(true, blockedByText.isDefaultPrevented(), "selectable text hotkey prevents default");
+		assertEquals(false, blockedByText.isDefaultPrevented() == true, "selectable text remains free to handle typed input");
 
 		var nonSelectable = new TextField();
 		nonSelectable.selectable = false;

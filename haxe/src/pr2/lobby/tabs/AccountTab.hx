@@ -237,8 +237,15 @@ class AccountTab extends Page {
 
 	private function onKeyDown(e:KeyboardEvent):Void {
 		var textTarget = Std.downcast(e.target, TextField);
+		// The account tab listens on the stage so its numeric loadout shortcuts also
+		// see key events from the other lobby pane. Ignore editable/selectable text
+		// without cancelling the event, otherwise OpenFL never inserts the typed
+		// character into fields such as the level-search box.
+		if (textTarget != null && textTarget.selectable) {
+			return;
+		}
 		if (character == null || stats == null || playerDisplay == null || Popup.getOpen().length > 0
-			|| (textTarget != null && textTarget.selectable) || CourseMenu.instance != null) {
+			|| CourseMenu.instance != null) {
 			e.preventDefault();
 			return;
 		}
