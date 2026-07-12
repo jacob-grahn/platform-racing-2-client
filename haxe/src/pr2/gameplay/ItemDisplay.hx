@@ -1,6 +1,7 @@
 package pr2.gameplay;
 
 import openfl.display.DisplayObject;
+import openfl.display.Shape;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import pr2.display.Removable;
@@ -20,6 +21,7 @@ class ItemDisplay extends Removable {
 	private var art:Null<PR2MovieClip>;
 	private var darkLabel:TextField;
 	private var lightLabel:TextField;
+	private var snakeIcon:Shape;
 
 	public var itemCode(default, null):Int = 0;
 	public var itemName(default, null):String = "None";
@@ -35,6 +37,8 @@ class ItemDisplay extends Removable {
 		lightLabel = createLabel(3, 56, 0xFFFFFF);
 		addChild(darkLabel);
 		addChild(lightLabel);
+		snakeIcon = createSnakeIcon();
+		addChild(snakeIcon);
 		setItemCode(0);
 	}
 
@@ -48,7 +52,8 @@ class ItemDisplay extends Removable {
 			return;
 		}
 		itemName = name;
-		art.gotoAndStop(name);
+		art.gotoAndStop(name == "Snake" ? "None" : name);
+		snakeIcon.visible = name == "Snake";
 		hideAuthoredTextHolder("holder1");
 		hideAuthoredTextHolder("holder2");
 		darkLabel.text = name;
@@ -86,6 +91,22 @@ class ItemDisplay extends Removable {
 		return field;
 	}
 
+	private function createSnakeIcon():Shape {
+		var icon = new Shape();
+		icon.x = 17;
+		icon.y = 15;
+		icon.graphics.lineStyle(2, 0x174D20);
+		icon.graphics.beginFill(0x42C95A);
+		icon.graphics.drawRoundRect(0, 4, 34, 25, 8, 8);
+		icon.graphics.endFill();
+		icon.graphics.beginFill(0xE8FFE8);
+		icon.graphics.drawCircle(10, 12, 3);
+		icon.graphics.drawCircle(24, 12, 3);
+		icon.graphics.endFill();
+		icon.visible = false;
+		return icon;
+	}
+
 	public function ammoVisible(index:Int):Bool {
 		var dot:Null<DisplayObject> = DisplayUtil.findByName(art, "a" + index);
 		return dot != null && dot.visible;
@@ -107,6 +128,7 @@ class ItemDisplay extends Removable {
 		}
 		darkLabel = null;
 		lightLabel = null;
+		snakeIcon = null;
 		super.remove();
 	}
 
@@ -121,6 +143,7 @@ class ItemDisplay extends Removable {
 			case 7: "Speed Burst";
 			case 8: "Sword";
 			case 9: "Ice Wave";
+			case 10: "Snake";
 			default: "None";
 		};
 	}

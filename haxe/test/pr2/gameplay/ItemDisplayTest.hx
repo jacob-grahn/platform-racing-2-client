@@ -20,7 +20,8 @@ class ItemDisplayTest {
 			"Jet Pack",
 			"Speed Burst",
 			"Sword",
-			"Ice Wave"
+			"Ice Wave",
+			"Snake"
 		];
 		for (code in 0...expected.length) {
 			assertEquals(expected[code], ItemDisplay.itemNameFromCode(code), 'item code $code name');

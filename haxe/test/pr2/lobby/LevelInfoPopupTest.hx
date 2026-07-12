@@ -91,7 +91,7 @@ class LevelInfoPopupTest {
 		assertEquals(0, popup.time, "default time");
 		assertEquals(1.0, popup.gravity, "default gravity");
 		assertEquals(120, popup.maxTime, "default max time");
-		assertEquals("Laser Gun`Mine`Lightning`Teleport`Super Jump`Jet Pack`Speed Burst`Sword`Ice Wave", popup.items, "default items");
+		assertEquals("Laser Gun`Mine`Lightning`Teleport`Super Jump`Jet Pack`Speed Burst`Sword`Ice Wave`Snake", popup.items, "default items");
 		assertEquals("", popup.song, "default raw song before data");
 		assertEquals("Race", popup.gameMode, "default display mode");
 		assertEquals(5, popup.cowboyChance, "default cowboy chance");

@@ -28,6 +28,8 @@ enum abstract BlockType(String) from String to String {
 	var Sad = "sad";
 	var Heart = "heart";
 	var Time = "time";
+	/** Runtime-only solid laid by the Snake item; never serialized in level data. */
+	var SnakeTrail = "snake_trail";
 
 	public static function parse(value:String):BlockType {
 		return switch (value) {
@@ -58,13 +60,14 @@ enum abstract BlockType(String) from String to String {
 			case Sad: Sad;
 			case Heart: Heart;
 			case Time: Time;
+			case SnakeTrail: SnakeTrail;
 			default: throw 'unknown block type "$value"';
 		}
 	}
 
 	public inline function isSolid():Bool {
 		return switch (this) {
-			case Basic | Brick | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats | Happy | Sad | Heart | Time: true;
+			case Basic | Brick | Finish | Solid | Ice | ArrowDown | ArrowUp | ArrowLeft | ArrowRight | Mine | Item | InfiniteItem | Crumble | Vanish | Move | RotateRight | RotateLeft | Push | Teleport | CustomStats | Happy | Sad | Heart | Time | SnakeTrail: true;
 			case Start | Water | Safety: false;
 			default: false;
 		}

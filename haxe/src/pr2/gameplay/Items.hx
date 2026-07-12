@@ -10,6 +10,7 @@ import pr2.gameplay.items.SpeedBurst;
 import pr2.gameplay.items.SuperJump;
 import pr2.gameplay.items.Sword;
 import pr2.gameplay.items.Teleport;
+import pr2.gameplay.items.Snake;
 
 /**
 	Port of the static item-code/name table from Flash `items.Items`.
@@ -24,10 +25,11 @@ class Items {
 	public static inline var SPEED_BURST:Int = 7;
 	public static inline var SWORD:Int = 8;
 	public static inline var ICE_WAVE:Int = 9;
+	public static inline var SNAKE:Int = 10;
 
 	/** Every valid item code, in Flash order. **/
 	public static function getAllCodes():Array<Int> {
-		return [LASER_GUN, MINE, LIGHTNING, TELEPORT, SUPER_JUMP, JET_PACK, SPEED_BURST, SWORD, ICE_WAVE];
+		return [LASER_GUN, MINE, LIGHTNING, TELEPORT, SUPER_JUMP, JET_PACK, SPEED_BURST, SWORD, ICE_WAVE, SNAKE];
 	}
 
 	public static function getFromCode(code:Int):Null<Item> {
@@ -41,6 +43,7 @@ class Items {
 			case SPEED_BURST: new SpeedBurst();
 			case SWORD: new Sword();
 			case ICE_WAVE: new IceWave();
+			case SNAKE: new Snake();
 			default: null;
 		};
 	}
@@ -60,6 +63,7 @@ class Items {
 			case SPEED_BURST: "Speed Burst";
 			case SWORD: "Sword";
 			case ICE_WAVE: "Ice Wave";
+			case SNAKE: "Snake";
 			default: "None";
 		};
 	}
@@ -76,6 +80,7 @@ class Items {
 			case "Speed Burst": SPEED_BURST;
 			case "Sword": SWORD;
 			case "Ice Wave": ICE_WAVE;
+			case "Snake": SNAKE;
 			default: 0;
 		};
 	}

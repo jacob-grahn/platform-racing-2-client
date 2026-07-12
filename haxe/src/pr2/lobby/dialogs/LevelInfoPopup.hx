@@ -725,7 +725,7 @@ class LevelInfoPopup extends Popup {
 		return Timer.delay(callback, delayMs);
 	}
 
-	private static inline var DEFAULT_ITEMS:String = "Laser Gun`Mine`Lightning`Teleport`Super Jump`Jet Pack`Speed Burst`Sword`Ice Wave";
+	private static inline var DEFAULT_ITEMS:String = "Laser Gun`Mine`Lightning`Teleport`Super Jump`Jet Pack`Speed Burst`Sword`Ice Wave`Snake";
 	private static final MONTHS:Array<String> = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 	private static final MONTHS_LONG:Array<String> = [
 		"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"

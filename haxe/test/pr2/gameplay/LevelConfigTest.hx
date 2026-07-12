@@ -26,7 +26,7 @@ class LevelConfigTest {
 
 	private static function testDefaults():Void {
 		var c = new LevelConfig();
-		assertEquals(9, c.allowedItems.length, "default items is all 9");
+		assertEquals(10, c.allowedItems.length, "default items is all 10");
 		assertEquals(0, c.badHats.length, "default has no banned hats");
 		assertEquals("1", c.gravity, "default gravity");
 		assertEquals("120", c.maxTime, "default max time");
@@ -40,9 +40,9 @@ class LevelConfigTest {
 		c.setItems("");
 		assertEquals(0, c.allowedItems.length, "empty string clears items");
 		c.setItems("all");
-		assertEquals(9, c.allowedItems.length, "'all' selects every code");
+		assertEquals(10, c.allowedItems.length, "'all' selects every code");
 		c.setItems(null);
-		assertEquals(9, c.allowedItems.length, "null selects every code");
+		assertEquals(10, c.allowedItems.length, "null selects every code");
 
 		c.setItems("Laser`Sword");
 		assertEquals("1,8", c.allowedItems.join(","), "names resolve to codes");
@@ -64,7 +64,8 @@ class LevelConfigTest {
 			{code: Items.JET_PACK, className: "pr2.gameplay.items.JetPack", name: "Jet Pack", uses: 3, reloadMs: 10, reload: 0},
 			{code: Items.SPEED_BURST, className: "pr2.gameplay.items.SpeedBurst", name: "Speed Burst", uses: 1, reloadMs: 10, reload: 0},
 			{code: Items.SWORD, className: "pr2.gameplay.items.Sword", name: "Sword", uses: 3, reloadMs: 800, reload: 22},
-			{code: Items.ICE_WAVE, className: "pr2.gameplay.items.IceWave", name: "Ice Wave", uses: 3, reloadMs: 1000, reload: 27}
+			{code: Items.ICE_WAVE, className: "pr2.gameplay.items.IceWave", name: "Ice Wave", uses: 3, reloadMs: 1000, reload: 27},
+			{code: Items.SNAKE, className: "pr2.gameplay.items.Snake", name: "Snake", uses: 1, reloadMs: 10, reload: 0}
 		];
 		for (spec in specs) {
 			var item = Items.getFromCode(spec.code);

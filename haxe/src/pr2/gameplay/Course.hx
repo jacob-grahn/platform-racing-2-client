@@ -112,6 +112,7 @@ class Course extends Sprite {
 	private var serverFixture:ServerFixtureLevel;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
+	private var snakeManager:SnakeManager;
 	private var remoteBlockActivation:RemoteBlockActivation;
 
 	public var miniMap(default, null):MiniMap;
@@ -225,6 +226,7 @@ class Course extends Sprite {
 		// each rotate step, so the block layer must turn about that same point.
 		levelRenderer.setRotationPivot(serverFixture.originTileX * ServerLevelRenderer.TILE_SIZE, serverFixture.originTileY * ServerLevelRenderer.TILE_SIZE);
 		player = new LocalCharacter(serverFixture.fixture);
+		snakeManager = new SnakeManager(serverFixture, levelRenderer, player.controller);
 		player.onPlayJumpSound = playJumpSound;
 		player.onPlayCharacterSound = playCharacterSound;
 		player.onArtifactHatActivated = onArtifactHatActivated;
@@ -660,6 +662,9 @@ class Course extends Sprite {
 		var remote = remoteCharacters.get(tempId);
 		if (remote == null) {
 			return;
+		}
+		if (snakeManager != null) {
+			snakeManager.stopOwner(tempId);
 		}
 		remote.remove();
 		remoteCharacters.remove(tempId);
@@ -1208,12 +1213,27 @@ class Course extends Sprite {
 			} else {
 				player.controller.stopDetailedTrace();
 			}
-			player.step(input.copy());
+			var playerInput = input.copy();
+			var beforeStep = player.debugState();
+			if ((snakeManager != null && snakeManager.localActive()) || (input.item && beforeStep.itemId == Items.SNAKE)) {
+				playerInput.left = false;
+				playerInput.right = false;
+				playerInput.jump = false;
+				playerInput.down = false;
+			}
+			player.step(playerInput);
 			player.maybeSquash(playerArray);
 			player.tickJellyfishSting(playerArray, Std.random(35) + 1);
 			physicsTraceFrame++;
 		} else {
 			player.controller.stopDetailedTrace();
+		}
+		var state = player.debugState();
+		if (raceStarted && !localFinishHandled && state.lastItemEffect == "snake_start" && snakeManager != null) {
+			snakeManager.startLocal(localCharacter.tempID, state.x, state.y, localCharacter.facingScaleX);
+		}
+		if (snakeManager != null) {
+			snakeManager.step(raceStarted && !localFinishHandled && input.item);
 		}
 		if (raceStarted && eggRound != null) {
 			if (config.gameMode == "egg") {
@@ -1226,7 +1246,7 @@ class Course extends Sprite {
 			stepLooseHats();
 		}
 		syncBlockVisuals();
-		var state = player.debugState();
+		state = player.debugState();
 		if (raceStarted && !localFinishHandled) {
 			// The controller simulates a cropped fixture, but Flash's Character and
 			// multiplayer protocol use full map coordinates.
@@ -1526,6 +1546,12 @@ class Course extends Sprite {
 			playSound: playSlashSound
 		});
 		return effect;
+	}
+
+	public function applySnakeNetwork(args:Array<String>):Void {
+		if (snakeManager != null) {
+			snakeManager.applyNetwork(args);
+		}
 	}
 
 	private function playSlashSound(worldX:Float, worldY:Float):Void {
@@ -1935,6 +1961,12 @@ class Course extends Sprite {
 	}
 
 	private function cameraTargetWorld(localWorldX:Float, localWorldY:Float):Point {
+		if (snakeManager != null) {
+			var snakeHead = snakeManager.localHeadWorld();
+			if (snakeHead != null) {
+				return snakeHead;
+			}
+		}
 		if (playerSpectating == null || playerSpectating == localCharacter) {
 			return new Point(localWorldX, localWorldY);
 		}
@@ -2017,6 +2049,12 @@ class Course extends Sprite {
 		var right = keyCode == Keyboard.RIGHT || AlternateControls.matches("right", keyCode);
 		var up = keyCode == Keyboard.UP || AlternateControls.matches("up", keyCode);
 		var down = keyCode == Keyboard.DOWN || AlternateControls.matches("down", keyCode);
+		if (pressed && snakeManager != null && (snakeManager.localActive() || input.item)) {
+			if (left) snakeManager.setLocalDirection(-1, 0);
+			if (right) snakeManager.setLocalDirection(1, 0);
+			if (up) snakeManager.setLocalDirection(0, -1);
+			if (down) snakeManager.setLocalDirection(0, 1);
+		}
 		if (left) scrollLeft = pressed;
 		if (right) scrollRight = pressed;
 		if (up) scrollUp = pressed;
@@ -2113,6 +2151,10 @@ class Course extends Sprite {
 		clearAllParticleEmitters();
 		clearAllDjinnEmitters();
 		removeAllRemoteCharacters();
+		if (snakeManager != null) {
+			snakeManager.clear();
+			snakeManager = null;
+		}
 		activeCommandHandler().defineCommand("activate", null);
 		unregisterLocalCommands();
 		if (localCharacter != null) {

@@ -49,6 +49,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var ITEM_SPEED_BURST:Int = 7;
 	private static inline var ITEM_SWORD:Int = 8;
 	private static inline var ITEM_ICE_WAVE:Int = 9;
+	private static inline var ITEM_SNAKE:Int = 10;
 	private static inline var TELEPORT_ITEM_DISTANCE:Float = 120;
 	private static inline var SPEED_BURST_FRAMES:Int = 135;
 	private static inline var FRAME_RATE:Int = 27;
@@ -126,6 +127,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	// Teleport cooldowns are keyed by color (not tile) and move-block directions
 	// are rebuilt wholesale each cycle, so those two stay as their own maps.
 	private final blockStates:Map<String, BlockState> = new Map();
+	// Snake trails are runtime-only solids. Keep them separate from authored
+	// blocks so a trail over a freshly dug (removed) block does not inherit that
+	// authored block's coordinate-keyed removed state.
+	private final snakeTrailBlocks:Map<String, LevelBlock> = new Map();
 	private final blockVisualEvents:Array<BlockVisualEvent> = [];
 	private final disabledTeleportFrames:Map<String, Int> = new Map();
 	private final moveBlockDirections:Map<String, Int> = new Map();
@@ -239,6 +244,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		hurtFramesRemaining = 0;
 		frozenSolidFramesRemaining = 0;
 		blockStates.clear();
+		snakeTrailBlocks.clear();
 		blockVisualEvents.resize(0);
 		disabledTeleportFrames.clear();
 		pendingMinePlacements.resize(0);
@@ -295,6 +301,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		pendingMinePlacements.resize(0);
 		pendingProjectileDamages.resize(0);
 		blockStates.clear();
+		snakeTrailBlocks.clear();
 		blockVisualEvents.resize(0);
 		disabledTeleportFrames.clear();
 		moveRandom = new FlashRandom(1);
@@ -699,6 +706,14 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function activateBlock(block:LevelBlock, payload:String, local:Bool):Bool {
 		var state = blockState(blockKey(block.x, block.y));
 		switch (block.type) {
+			case BlockType.Basic:
+				if (state.removed) {
+					return true;
+				}
+				if (local) {
+					emitLocalActivate(block, payload);
+				}
+				state.removed = true;
 			case BlockType.Push:
 				if (local) {
 					emitLocalActivate(block, payload);
@@ -1604,6 +1619,66 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public function performSpeedBurstItem():Void useSpeedBurst();
 	public function performSwordItem():Void useSword();
 	public function performIceWaveItem():Void useIceWave();
+	public function performSnakeItem():Void useSnake();
+
+	private function useSnake():Void {
+		lastItemEffect = "snake_start";
+		consumeHeldItemUse();
+	}
+
+	public function addSnakeTrail(tileX:Int, tileY:Int):Void {
+		var key = blockKey(tileX, tileY);
+		if (!snakeTrailBlocks.exists(key)) {
+			snakeTrailBlocks.set(key, new LevelBlock(tileX, tileY, BlockType.SnakeTrail));
+		}
+	}
+
+	public function removeSnakeTrail(tileX:Int, tileY:Int):Void {
+		snakeTrailBlocks.remove(blockKey(tileX, tileY));
+	}
+
+	public function clearSnakeTrails():Void {
+		snakeTrailBlocks.clear();
+	}
+
+	public function snakeTileAtPixel(pixelX:Float, pixelY:Float):{x:Int, y:Int} {
+		var tile = rotatedTileAtPixel(pixelX, pixelY);
+		return {x: tile.x, y: tile.y};
+	}
+
+	public function snakeGridDirection(dx:Int, dy:Int):{x:Int, y:Int} {
+		var rotated = RotationMath.rotatePoint(dx, dy, courseRotation);
+		return {x: Math.round(rotated.x), y: Math.round(rotated.y)};
+	}
+
+	/**
+		Resolve an owner-authoritative Snake head entering a fixture tile.
+		Returns "clear" when movement may continue and "hazard" otherwise.
+	**/
+	public function enterSnakeTile(tileX:Int, tileY:Int):String {
+		if (snakeTrailBlocks.exists(blockKey(tileX, tileY))) {
+			return "hazard";
+		}
+		var block = level.blockAt(tileX, tileY);
+		if (block == null || isBlockRemoved(block)) {
+			return "clear";
+		}
+		switch (block.type) {
+			case BlockType.Basic | BlockType.Brick:
+				activateBlock(block, "", true);
+				return "clear";
+			case BlockType.Crumble:
+				activateBlock(block, "50", true);
+				return "clear";
+			case BlockType.Mine:
+				activateBlock(block, "", true);
+				return "hazard";
+			case BlockType.Water:
+				return "hazard";
+			default:
+				return block.type.isSolid() ? "hazard" : "clear";
+		}
+	}
 
 	private function useLaserGun():Void {
 		var direction = facingDirection < 0 ? "left" : "right";
@@ -2335,6 +2410,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function getBlockAtTile(tileX:Int, tileY:Int, allowTopHatVanishCollision:Bool = false):Null<LevelBlock> {
+		var trail = snakeTrailBlocks.get(blockKey(tileX, tileY));
+		if (trail != null) {
+			return trail;
+		}
 		var block = level.blockAt(tileX, tileY);
 		if (block == null || isBlockRemoved(block) || !block.type.isSolid()) {
 			return null;
@@ -2346,6 +2425,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function isBlockRemoved(block:LevelBlock):Bool {
+		if (block.type == BlockType.SnakeTrail) {
+			return false;
+		}
 		var state = blockStates.get(blockKey(block.x, block.y));
 		return state != null && state.removed;
 	}

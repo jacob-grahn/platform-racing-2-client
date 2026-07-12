@@ -10,4 +10,5 @@ interface ItemRuntimeOwner {
 	public function performSpeedBurstItem():Void;
 	public function performSwordItem():Void;
 	public function performIceWaveItem():Void;
+	public function performSnakeItem():Void;
 }

@@ -62,6 +62,8 @@ class EffectBackground extends Sprite {
 				if (course.levelRenderer != null) {
 					course.levelRenderer.showTeleportPop(originX, originY);
 				}
+			case "SnakeStart" | "SnakeStep" | "SnakeStop":
+				course.applySnakeNetwork(args);
 			default:
 		}
 	}

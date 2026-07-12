@@ -21,6 +21,7 @@ class LocalPlayerControllerTest {
 		testGravityUsesFlashMultiplierAndSupportsRuntimeChanges();
 		testVelocityIntegrationOrderAndTerminalClamp();
 		testFacingFollowsPressedDirection();
+		testSnakeTrailAndDiggingInteractions();
 		testAnimationFollowsDirectionalInput();
 		testLowCeilingForcesCrouchAndBlocksJump();
 		testPressingUpUnderBlockBumpsIt();
@@ -126,6 +127,34 @@ class LocalPlayerControllerTest {
 
 		player.step(new LocalPlayerInput(true, true));
 		assertEquals(-1, player.facingScaleX, "left wins when both directions are held like AS3 updateKeys");
+	}
+
+	private static function testSnakeTrailAndDiggingInteractions():Void {
+		var level = new FixtureLevel("snake", "Snake", 10, 6, 30, 1,
+			new StatDefaults(50, 0.2 + 50 / 60, 2 + 50 / 40), new TilePosition(1, 3), new TilePosition(9, 4), [
+				new LevelBlock(2, 2, BlockType.Basic),
+				new LevelBlock(3, 2, BlockType.Brick),
+				new LevelBlock(4, 2, BlockType.Crumble),
+				new LevelBlock(5, 2, BlockType.Water),
+				new LevelBlock(6, 2, BlockType.Mine)
+			]);
+		var controller = new LocalPlayerController(level);
+		assertEquals("clear", controller.enterSnakeTile(2, 2), "Snake digs through a basic block");
+		assertEquals(0.0, controller.blockAlphaAt(2, 2), "dug basic block is removed from collision and rendering");
+		assertEquals("clear", controller.enterSnakeTile(3, 2), "Snake destroys a brick block");
+		assertEquals(0.0, controller.blockAlphaAt(3, 2), "destroyed brick is removed");
+		assertEquals("clear", controller.enterSnakeTile(4, 2), "Snake destroys a crumble block in one step");
+		assertEquals(0.0, controller.blockAlphaAt(4, 2), "destroyed crumble is removed");
+		assertEquals("hazard", controller.enterSnakeTile(5, 2), "water destroys the Snake");
+		assertEquals("hazard", controller.enterSnakeTile(6, 2), "mine activation destroys the Snake");
+		assertEquals(0.0, controller.blockAlphaAt(6, 2), "Snake-triggered mine explodes and is removed");
+
+		controller.addSnakeTrail(7, 2);
+		assertEquals("hazard", controller.enterSnakeTile(7, 2), "own or remote Snake trail destroys a Snake head");
+		var trail = @:privateAccess controller.getBlockAtTile(7, 2);
+		assertEquals(BlockType.SnakeTrail, trail.type, "Snake trail enters normal solid player collision lookup");
+		controller.removeSnakeTrail(7, 2);
+		assertEquals(null, @:privateAccess controller.getBlockAtTile(7, 2), "expired Snake trail leaves player collision lookup");
 	}
 
 	private static function testAnimationFollowsDirectionalInput():Void {

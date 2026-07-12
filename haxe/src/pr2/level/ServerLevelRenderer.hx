@@ -304,6 +304,11 @@ class ServerLevelRenderer extends Sprite {
 		return new Point(offsetX, offsetY);
 	}
 
+	/** Convert an original-frame block point into the committed rotated world frame. */
+	public function blockWorldToRotatedWorld(x:Float, y:Float):Point {
+		return layerMatrix(0, 0).transformPoint(new Point(x, y));
+	}
+
 	/**
 		Applies the rotate-block course rotation. `courseRotation` is the committed
 		multiple of 90 degrees, baked into the block and parallax layers about their

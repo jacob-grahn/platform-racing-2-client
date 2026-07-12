@@ -50,6 +50,7 @@ class CharacterLifecycleTest {
 		testArtifactHatMountsSilentFlashOnlyZapEffect();
 		testJetEngineSoundLifecycle();
 		testMovementItemNetworkSideEffects();
+		testSnakeLifecycleAndNetworking();
 		testLocalSwordEmitsSlashEffect();
 		testLocalWeaponItemsEmitFlashPayloads();
 		testLocalTeleportAndLightningItemEffects();
@@ -445,6 +446,47 @@ class CharacterLifecycleTest {
 		assertTrue(LobbySocket.sentCommands.indexOf("set_var`sparkle`0") != -1, "Speed Burst expiry stops the Flash sparkle var");
 		assertEquals(0, speed.activeParticleEmitterCount(), "Speed Burst expiry clears local sparkles");
 		speed.remove();
+	}
+
+	private static function testSnakeLifecycleAndNetworking():Void {
+		assertEquals(135, SnakeManager.USE_FRAMES, "Snake has five seconds of use at 27 FPS");
+		assertEquals(135, SnakeManager.TRAIL_FRAMES, "Snake trails remain five seconds behind the head");
+		var course = collectAndUseLocalItem(Items.SNAKE);
+		assertTrue(course.snakeManager.localActive(), "Snake item press starts a local snake");
+		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStart`") >= 0,
+			"Snake start uses the existing add_effect relay");
+		assertEquals(null, course.localCharacter.debugState().itemId, "starting Snake consumes the held item");
+
+		course.setKey(Keyboard.SPACE, true);
+		var playerFacing = course.localCharacter.facingScaleX;
+		course.setKey(playerFacing < 0 ? Keyboard.RIGHT : Keyboard.LEFT, true);
+		course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		assertEquals(playerFacing, course.localCharacter.facingScaleX, "arrow keys steer Snake without steering the player");
+		for (_ in 0...SnakeManager.MOVE_FRAMES_PER_TILE) course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		assertEquals(1, course.snakeManager.trailCount(), "first Snake tile step lays one solid trail tile");
+		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStep`") >= 0,
+			"Snake movement sends authoritative tile steps");
+
+		course.setKey(Keyboard.SPACE, false);
+		course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		assertTrue(!course.snakeManager.localActive(), "releasing Space removes the local snake head");
+		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStop`") >= 0,
+			"Snake release relays a stop event");
+
+		var worldX = course.serverFixture.originTileX + 2;
+		var worldY = course.serverFixture.originTileY + 2;
+		course.applySnakeNetwork(["SnakeStart", "8", "0", Std.string(worldX), Std.string(worldY), "1", "0"]);
+		assertEquals(1, course.snakeManager.activeSnakeCount(), "remote SnakeStart mounts a remote head");
+		course.applySnakeNetwork(["SnakeStep", "8", "1", Std.string(worldX + 1), Std.string(worldY), "1", "0"]);
+		assertTrue(course.snakeManager.hasTrail(2, 2), "remote SnakeStep reconstructs its vacated trail tile");
+		var trailCount = course.snakeManager.trailCount();
+		course.applySnakeNetwork(["SnakeStep", "8", "1", Std.string(worldX + 2), Std.string(worldY), "1", "0"]);
+		assertEquals(trailCount, course.snakeManager.trailCount(), "duplicate SnakeStep sequence is ignored");
+		course.applySnakeNetwork(["SnakeStop", "8", "2"]);
+		assertEquals(0, course.snakeManager.activeSnakeCount(), "remote SnakeStop removes its head but leaves timed trails");
+		for (_ in 0...SnakeManager.TRAIL_FRAMES) course.snakeManager.step(false);
+		assertEquals(0, course.snakeManager.trailCount(), "Snake trails expire after five seconds");
+		course.remove();
 	}
 
 	private static function testLocalSwordEmitsSlashEffect():Void {

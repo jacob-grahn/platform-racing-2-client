@@ -22,7 +22,15 @@ class EditorItemSettingsPopup extends Sprite {
 		art = PR2MovieClip.fromLinkage("ItemMenuGraphic", {maxNestedDepth: 6});
 		addChild(art);
 		for (itemId in Items.getAllCodes()) {
-			var check = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
+			var check:Null<FlCheckBox> = Std.downcast(DisplayUtil.findByName(art, "check" + itemId), FlCheckBox);
+			if (check == null && itemId == Items.SNAKE) {
+				check = new FlCheckBox("Snake");
+				check.name = "check" + itemId;
+				var previous = Std.downcast(DisplayUtil.findByName(art, "check" + Items.ICE_WAVE), FlCheckBox);
+				check.x = previous == null ? 8 : previous.x;
+				check.y = previous == null ? 142 : previous.y + 18;
+				art.addChild(check);
+			}
 			if (check != null) {
 				check.selected = editor.allowedItems.indexOf(itemId) >= 0;
 				checks.set(itemId, check);
