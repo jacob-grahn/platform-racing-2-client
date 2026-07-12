@@ -23,6 +23,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private static inline var FRICTION:Float = 0.985;
 	private static inline var HALF_WIDTH:Float = STANDING_WIDTH / 2;
 	private static inline var MAX_SPEED:Float = 28;
+	private static inline var MAP_RETURN_MARGIN:Float = 500;
 	private static inline var DEFAULT_GRAVITY:Float = 0.7;
 	private static inline var CRUMBLE_INITIAL_LIFE:Int = 10;
 	private static inline var VANISH_FADE_FRAMES:Int = 10;
@@ -133,6 +134,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var moveRandom:FlashRandom = new FlashRandom(1);
 	private var itemRandom:FlashRandom = new FlashRandom(1);
 	private final originalBlockPositions:Array<{x:Int, y:Int}> = [];
+	private var mapMinX:Float = 0;
+	private var mapMinY:Float = 0;
+	private var mapMaxX:Float = 0;
+	private var mapMaxY:Float = 0;
 	public var lastSafeX(default, null):Float;
 	public var lastSafeY(default, null):Float;
 	private var standingTileX:Int;
@@ -169,8 +174,20 @@ class LocalPlayerController implements ItemRuntimeOwner {
 
 	public function new(level:FixtureLevel) {
 		this.level = level;
-		for (block in level.blocks) {
+		for (i in 0...level.blocks.length) {
+			var block = level.blocks[i];
 			originalBlockPositions.push({x: block.x, y: block.y});
+			var blockX = block.x * level.tileSize;
+			var blockY = block.y * level.tileSize;
+			if (i == 0) {
+				mapMinX = mapMaxX = blockX;
+				mapMinY = mapMaxY = blockY;
+			} else {
+				mapMinX = Math.min(mapMinX, blockX);
+				mapMinY = Math.min(mapMinY, blockY);
+				mapMaxX = Math.max(mapMaxX, blockX);
+				mapMaxY = Math.max(mapMaxY, blockY);
+			}
 		}
 		startingSpeedStat = clamp(level.stats.speed, 0, 100);
 		startingAccelerationStat = clamp((level.stats.acceleration - 0.2) * 60, 0, 100);
@@ -743,7 +760,18 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		vx = clamp(vx, -MAX_SPEED, MAX_SPEED);
 		vy = clamp(vy, -MAX_SPEED, MAX_SPEED);
 		movePlayerBy(vx, vy);
+		if (isPastMapReturnBoundary()) {
+			returnToLastSafeSpot();
+		}
 		accelFactor = BASE_ACCEL_FACTOR;
+	}
+
+	private function isPastMapReturnBoundary():Bool {
+		var position = RotationMath.rotatePoint(x, y, courseRotation);
+		return (courseRotation == 0 && position.y > mapMaxY + MAP_RETURN_MARGIN)
+			|| (Math.abs(courseRotation) == 180 && position.y < mapMinY - MAP_RETURN_MARGIN)
+			|| (courseRotation == 90 && position.x > mapMaxX + MAP_RETURN_MARGIN)
+			|| (courseRotation == -90 && position.x < mapMinX - MAP_RETURN_MARGIN);
 	}
 
 	private function processBlocks(input:LocalPlayerInput):Void {

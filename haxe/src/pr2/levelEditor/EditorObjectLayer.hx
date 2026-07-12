@@ -157,6 +157,11 @@ class EditorObjectLayer extends Sprite {
 		}
 	}
 
+	public function deselectItem():Void {
+		selectPlacedStamp(null);
+		selectTextObject(null);
+	}
+
 	public function selectTextObjectForTests(index:Int):Void {
 		selectTextObject(index >= 0 && index < textObjects.length ? textObjects[index] : null);
 	}
@@ -566,8 +571,9 @@ class EditorObjectLayer extends Sprite {
 		if (display == null) {
 			return new StampSize(30, 30);
 		}
-		var bounds = display.getBounds(display);
-		var size = new StampSize(Math.max(1, bounds.width), Math.max(1, bounds.height));
+		// Bitmap exports retain high-resolution source bounds but are scaled to
+		// the authored Flash size. Placement centers the displayed footprint.
+		var size = new StampSize(Math.max(1, Math.abs(display.width)), Math.max(1, Math.abs(display.height)));
 		var clip = Std.downcast(display, PR2MovieClip);
 		if (clip != null) {
 			clip.dispose();

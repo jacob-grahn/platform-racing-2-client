@@ -1,10 +1,12 @@
 package pr2.ui;
 
 import openfl.display.DisplayObject;
+import openfl.display.InteractiveObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.Point;
+import openfl.geom.Rectangle;
 import pr2.app.AppStage;
 import pr2.runtime.PR2MovieClip;
 import pr2.util.DisplayUtil;
@@ -24,23 +26,38 @@ class CustomScrollBar extends Sprite {
 	private var scrollStep:Float = 5;
 	private var scrollDelta:Float = 0;
 	private var removed:Bool = false;
+	private var thumbHitArea:Null<Sprite>;
+	private var upArrowHitArea:Null<Sprite>;
+	private var downArrowHitArea:Null<Sprite>;
 
 	public function new() {
 		super();
 		art = PR2MovieClip.fromLinkage("CustomScrollBarGraphic", {maxNestedDepth: 5});
+		// The Flash children are button symbols whose states are mouse-driven.
+		// Leaving their imported timelines playing cycles hit shapes and cursors.
+		art.stopAll();
 		addChild(art);
 		thumb = DisplayUtil.findByName(art, "thumb");
 		upArrow = DisplayUtil.findByName(art, "upArrow");
 		downArrow = DisplayUtil.findByName(art, "downArrow");
 		track = DisplayUtil.findByName(art, "track");
-		if (thumb != null) thumb.addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
-		if (upArrow != null) upArrow.addEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown, false, 0, true);
-		if (downArrow != null) downArrow.addEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown, false, 0, true);
+		var interactiveTrack = Std.downcast(track, InteractiveObject);
+		if (interactiveTrack != null) {
+			interactiveTrack.mouseEnabled = false;
+		}
+		thumbHitArea = installStableHitArea(thumb, 15, 20);
+		upArrowHitArea = installStableHitArea(upArrow, 15, 14);
+		downArrowHitArea = installStableHitArea(downArrow, 15, 14);
+		if (thumbHitArea != null) thumbHitArea.addEventListener(MouseEvent.MOUSE_DOWN, onThumbDown, false, 0, true);
+		if (upArrowHitArea != null) upArrowHitArea.addEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown, false, 0, true);
+		if (downArrowHitArea != null) downArrowHitArea.addEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown, false, 0, true);
 	}
 
 	public function init(target:DisplayObject, scrollHeight:Float, viewHeight:Float):Void {
 		if (track != null) track.height = scrollHeight - 15;
 		if (downArrow != null) downArrow.y = scrollHeight - downArrow.height;
+		syncStableHitArea(upArrowHitArea, upArrow, 15, 14);
+		syncStableHitArea(downArrowHitArea, downArrow, 15, 14);
 		thumbMaxY = downArrow == null || thumb == null ? 0 : downArrow.y - thumb.height / 2;
 		thumbMinY = upArrow == null || thumb == null ? 0 : upArrow.height + thumb.height / 2;
 		targetInitialY = target.y;
@@ -55,6 +72,7 @@ class CustomScrollBar extends Sprite {
 		if (value > thumbMaxY) value = thumbMaxY;
 		if (value < thumbMinY) value = thumbMinY;
 		thumb.y = pos = value;
+		syncStableHitArea(thumbHitArea, thumb, 15, 20);
 		target.y = thumbToTargetY(thumb.y, thumbMinY, thumbMaxY, targetInitialY, target.height, viewHeight);
 	}
 
@@ -75,6 +93,56 @@ class CustomScrollBar extends Sprite {
 
 	public function removedForTests():Bool {
 		return removed;
+	}
+
+	public function timelinesPlayingForTests():Bool {
+		return art != null && @:privateAccess art.playing;
+	}
+
+	public function hasStableButtonHitAreasForTests():Bool {
+		return thumbHitArea != null && upArrowHitArea != null && downArrowHitArea != null;
+	}
+
+	public function thumbHitBoundsForTests():Rectangle {
+		return thumbHitArea == null ? new Rectangle() : thumbHitArea.getBounds(thumbHitArea);
+	}
+
+	public function trackMouseEnabledForTests():Bool {
+		var interactiveTrack = Std.downcast(track, InteractiveObject);
+		return interactiveTrack != null && interactiveTrack.mouseEnabled;
+	}
+
+	private function installStableHitArea(display:Null<DisplayObject>, minWidth:Float, minHeight:Float):Null<Sprite> {
+		var interactive = Std.downcast(display, InteractiveObject);
+		if (interactive == null) {
+			return null;
+		}
+		// The authored Flash button changes its vector silhouette between up/over
+		// states. Keep it visual-only and put one invariant overlay above the whole
+		// scrollbar art so HTML5 always resolves the same mouse target.
+		interactive.mouseEnabled = false;
+		var stable = new Sprite();
+		stable.buttonMode = true;
+		stable.useHandCursor = true;
+		stable.mouseChildren = false;
+		art.addChild(stable);
+		syncStableHitArea(stable, display, minWidth, minHeight);
+		return stable;
+	}
+
+	private function syncStableHitArea(stable:Null<Sprite>, display:Null<DisplayObject>, minWidth:Float, minHeight:Float):Void {
+		if (stable == null || display == null || art == null) {
+			return;
+		}
+		var bounds = display.getBounds(art);
+		var width = Math.max(minWidth, bounds.width);
+		var height = Math.max(minHeight, bounds.height);
+		var centerX = bounds.x + bounds.width / 2;
+		var centerY = bounds.y + bounds.height / 2;
+		stable.graphics.clear();
+		stable.graphics.beginFill(0, 0.01);
+		stable.graphics.drawRect(centerX - width / 2, centerY - height / 2, width, height);
+		stable.graphics.endFill();
 	}
 
 	private function onThumbDown(_:MouseEvent):Void {
@@ -121,9 +189,9 @@ class CustomScrollBar extends Sprite {
 
 	public function remove():Void {
 		removed = true;
-		if (thumb != null) thumb.removeEventListener(MouseEvent.MOUSE_DOWN, onThumbDown);
-		if (upArrow != null) upArrow.removeEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown);
-		if (downArrow != null) downArrow.removeEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown);
+		if (thumbHitArea != null) thumbHitArea.removeEventListener(MouseEvent.MOUSE_DOWN, onThumbDown);
+		if (upArrowHitArea != null) upArrowHitArea.removeEventListener(MouseEvent.MOUSE_DOWN, onUpArrowDown);
+		if (downArrowHitArea != null) downArrowHitArea.removeEventListener(MouseEvent.MOUSE_DOWN, onDownArrowDown);
 		removeEventListener(Event.ENTER_FRAME, scroll);
 		if (AppStage.stage != null) {
 			AppStage.stage.removeEventListener(MouseEvent.MOUSE_UP, onArrowUp);
@@ -135,6 +203,9 @@ class CustomScrollBar extends Sprite {
 		upArrow = null;
 		downArrow = null;
 		track = null;
+		thumbHitArea = null;
+		upArrowHitArea = null;
+		downArrowHitArea = null;
 		if (art != null) {
 			art.dispose();
 			art = null;

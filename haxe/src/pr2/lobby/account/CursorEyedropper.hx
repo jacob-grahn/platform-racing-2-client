@@ -3,6 +3,7 @@ package pr2.lobby.account;
 import openfl.display.BitmapData;
 import openfl.display.Bitmap;
 import openfl.display.DisplayObject;
+import openfl.display.Stage;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
 import openfl.geom.Matrix;
@@ -77,6 +78,14 @@ class CursorEyedropper extends CustomCursor {
 				hideMouse();
 				drawEyedropper();
 			}
+			#if html5
+			// Reading one pixel from WebGL synchronizes the GPU. Doing that from
+			// ENTER_FRAME (as Flash did with its already-cached BitmapData) stalls
+			// the whole editor while the picker is open. Sample once on click below.
+			if (Std.isOfType(currentSampleSource(), Stage)) {
+				return;
+			}
+			#end
 			updateColor();
 			dispatchEvent(new Event(Event.CHANGE));
 		} else if (visible) {
@@ -105,6 +114,14 @@ class CursorEyedropper extends CustomCursor {
 		if (source == null) {
 			return;
 		}
+		#if html5
+		// The browser already has the completed game frame in its canvas. Drawing
+		// the Stage into BitmapData makes OpenFL walk the editor's full 60,000px
+		// display tree and can stall indefinitely on art-heavy levels.
+		if (Std.isOfType(source, Stage)) {
+			return;
+		}
+		#end
 		ensureBitmap();
 		visible = false;
 		cursorContainer.fillRect(cursorContainer.rect, 0);
@@ -113,11 +130,16 @@ class CursorEyedropper extends CustomCursor {
 			cursorContainer.copyPixels(bitmap.bitmapData, bitmap.bitmapData.rect, new Point());
 		} else {
 			var matrix = new Matrix();
-			var bounds = source.getBounds(source);
-			if (bounds.left != 0 || bounds.top != 0) {
-				matrix.translate(-bounds.left, -bounds.top);
+			if (!Std.isOfType(source, Stage)) {
+				var bounds = source.getBounds(source);
+				if (bounds.left != 0 || bounds.top != 0) {
+					matrix.translate(-bounds.left, -bounds.top);
+				}
 			}
-			cursorContainer.draw(source, matrix);
+			// Flash captures exactly stageWidth x stageHeight. The editor's stage
+			// bounds include its 60,000px world, so an unclipped HTML5 draw can try
+			// to allocate a world-sized intermediate canvas and appear to freeze.
+			cursorContainer.draw(source, matrix, null, null, cursorContainer.rect);
 		}
 		visible = true;
 	}
@@ -128,12 +150,23 @@ class CursorEyedropper extends CustomCursor {
 
 	private function updateColor():Void {
 		var me = getMouse();
-		if (me == null || cursorContainer == null) {
+		if (me == null) {
 			color = -1;
 			return;
 		}
 		var source = currentSampleSource();
 		if (source == null) {
+			color = -1;
+			return;
+		}
+		#if html5
+		if (Std.isOfType(source, Stage)) {
+			var sampled = sampleHtml5StagePixel(CustomCursor.eventStagePoint(me));
+			color = sampled == null ? -1 : sampled;
+			return;
+		}
+		#end
+		if (cursorContainer == null) {
 			color = -1;
 			return;
 		}
@@ -144,20 +177,48 @@ class CursorEyedropper extends CustomCursor {
 		color = cursorContainer.getPixel(px, py);
 	}
 
+	#if html5
+	private function sampleHtml5StagePixel(stagePoint:Point):Null<Int> {
+		try {
+			var canvas:Dynamic = js.Browser.document.querySelector("canvas");
+			var sourceStage = currentStage();
+			if (canvas == null || sourceStage == null || sourceStage.stageWidth <= 0 || sourceStage.stageHeight <= 0) {
+				return null;
+			}
+			var px = Std.int(Math.max(0, Math.min(canvas.width - 1, Math.floor(stagePoint.x / sourceStage.stageWidth * canvas.width))));
+			var py = Std.int(Math.max(0, Math.min(canvas.height - 1, Math.floor(stagePoint.y / sourceStage.stageHeight * canvas.height))));
+			var context2d:Dynamic = canvas.getContext("2d");
+			if (context2d != null) {
+				var data:Dynamic = context2d.getImageData(px, py, 1, 1).data;
+				return (data[0] << 16) | (data[1] << 8) | data[2];
+			}
+			var gl:Dynamic = canvas.getContext("webgl2");
+			if (gl == null) gl = canvas.getContext("webgl");
+			if (gl == null) gl = canvas.getContext("experimental-webgl");
+			if (gl == null) {
+				return null;
+			}
+			var pixels = new js.lib.Uint8Array(4);
+			gl.readPixels(px, canvas.height - 1 - py, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+			return (pixels[0] << 16) | (pixels[1] << 8) | pixels[2];
+		} catch (_:Dynamic) {
+			return null;
+		}
+	}
+	#end
+
 	private function ensureBitmap():Void {
 		var source = currentSampleSource();
 		var width = 1;
 		var height = 1;
-		if (source != null) {
+		var sourceStage = Std.downcast(source, Stage);
+		if (sourceStage != null) {
+			width = Std.int(Math.max(1, sourceStage.stageWidth));
+			height = Std.int(Math.max(1, sourceStage.stageHeight));
+		} else if (source != null) {
 			var bounds = source.getBounds(source);
 			width = Std.int(Math.max(1, Math.ceil(bounds.width)));
 			height = Std.int(Math.max(1, Math.ceil(bounds.height)));
-		} else {
-			var stage = currentStage();
-			if (stage != null) {
-				width = Std.int(Math.max(1, stage.stageWidth));
-				height = Std.int(Math.max(1, stage.stageHeight));
-			}
 		}
 		if (cursorContainer == null || cursorContainer.width != width || cursorContainer.height != height) {
 			if (cursorContainer != null) {
@@ -165,6 +226,14 @@ class CursorEyedropper extends CustomCursor {
 			}
 			cursorContainer = new BitmapData(width, height, false, 0);
 		}
+	}
+
+	public function captureWidthForTests():Int {
+		return cursorContainer == null ? 0 : cursorContainer.width;
+	}
+
+	public function captureHeightForTests():Int {
+		return cursorContainer == null ? 0 : cursorContainer.height;
 	}
 
 	private function currentSampleSource():Null<DisplayObject> {

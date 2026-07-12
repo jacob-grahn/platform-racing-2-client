@@ -14,6 +14,7 @@ import pr2.level.ServerLevel.DecodedArtObject;
 import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel.DecodedDrawAction;
 import pr2.level.ServerLevel.DecodedTextObject;
+import pr2.runtime.FontResolver;
 
 class ServerLevelRendererTest {
 	private static var assertions:Int = 0;
@@ -293,6 +294,8 @@ class ServerLevelRendererTest {
 		assertEquals(true, renderer.isDrawingComplete(), "renderer completes after blocks and art");
 		assertEquals("Cactus", artLayer.getChildAt(1).name, "incremental art uses Objects factory for stamps");
 		var field = Std.downcast(artLayer.getChildAt(2), TextField);
+		assertEquals(FontResolver.resolve("Verdana"), field.defaultTextFormat.font, "level preview text uses authored Verdana font");
+		assertClose(18, field.defaultTextFormat.size, "level preview text uses authored 18px font size");
 		assertEquals("hello,world", field.text, "incremental text uses server text parsing");
 	}
 

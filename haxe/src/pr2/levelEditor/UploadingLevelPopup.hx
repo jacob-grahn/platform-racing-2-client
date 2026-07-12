@@ -2,6 +2,9 @@ package pr2.levelEditor;
 
 import haxe.crypto.Md5;
 import haxe.Timer;
+import openfl.net.URLRequest;
+import openfl.net.URLRequestMethod;
+import openfl.net.URLVariables;
 import pr2.lobby.LobbySession;
 import pr2.lobby.chat.ChatText;
 import pr2.lobby.dialogs.ConfirmPopup;
@@ -123,7 +126,16 @@ class UploadingLevelPopup extends Popup {
 
 	public static function defaultPost(url:String, fields:Map<String, String>, label:String, onResult:Dynamic->Void,
 			onError:String->Void):Null<UploadingPopup> {
-		return new UploadingPopup(url, fields, label, onResult, onError);
+		// Flash constructs SuperLoader() without a read-mode argument here, so
+		// upload_level.php is decoded as URLVariables rather than JSON.
+		var request = new URLRequest(url);
+		request.method = URLRequestMethod.POST;
+		var variables = new URLVariables();
+		for (key in fields.keys()) {
+			Reflect.setField(variables, key, fields.get(key));
+		}
+		request.data = variables;
+		return new UploadingPopup(request, "url", label, onResult, onError);
 	}
 
 	public static function defaultRetry(callback:Void->Void, delayMs:Int):Null<Timer> {

@@ -7,7 +7,9 @@ import openfl.events.MouseEvent;
 import openfl.geom.Rectangle;
 import openfl.geom.ColorTransform;
 import pr2.lobby.dialogs.HoverDelayPopup;
+import pr2.runtime.FlComponents;
 import pr2.runtime.PR2MovieClip;
+import pr2.util.DisplayUtil;
 
 class EditorSideBarEntry extends HoverDelayPopup {
 	public final id:String;
@@ -24,6 +26,7 @@ class EditorSideBarEntry extends HoverDelayPopup {
 		useHandCursor = true;
 		chrome = PR2MovieClip.fromLinkage("SquareBG", {maxNestedDepth: 2});
 		chrome.name = "SquareBG";
+		chrome.stopAll();
 		chrome.mouseEnabled = false;
 		chrome.mouseChildren = false;
 		chrome.width = 28;
@@ -33,6 +36,7 @@ class EditorSideBarEntry extends HoverDelayPopup {
 		addChild(chrome);
 		if (icon != null) {
 			var iconDisplay:DisplayObject = cast icon;
+			freezeTimelines(iconDisplay);
 			var interactiveIcon = Std.downcast(iconDisplay, InteractiveObject);
 			if (interactiveIcon != null) {
 				interactiveIcon.mouseEnabled = false;
@@ -51,6 +55,26 @@ class EditorSideBarEntry extends HoverDelayPopup {
 		this.selected = selected;
 		draw();
 		applyIconHover(selected);
+	}
+
+	public function setDisplayedValue(value:String):Void {
+		var container = Std.downcast(icon, DisplayObjectContainer);
+		if (container == null) {
+			return;
+		}
+		var valueBox = FlComponents.asTextField(DisplayUtil.findByName(container, "valueBox"));
+		if (valueBox != null) {
+			valueBox.text = value;
+		}
+	}
+
+	public function displayedValueForTests():String {
+		var container = Std.downcast(icon, DisplayObjectContainer);
+		if (container == null) {
+			return "";
+		}
+		var valueBox = FlComponents.asTextField(DisplayUtil.findByName(container, "valueBox"));
+		return valueBox == null ? "" : valueBox.text;
 	}
 
 	override public function remove():Void {
@@ -112,6 +136,20 @@ class EditorSideBarEntry extends HoverDelayPopup {
 			icon.transform.colorTransform = active
 				? new ColorTransform(0.5, 0.5, 0.5, 1, 128, 128, 128, 0)
 				: new ColorTransform();
+		}
+	}
+
+	private static function freezeTimelines(display:DisplayObject):Void {
+		var clip = Std.downcast(display, PR2MovieClip);
+		if (clip != null) {
+			clip.stopAll();
+			return;
+		}
+		var container = Std.downcast(display, DisplayObjectContainer);
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				freezeTimelines(container.getChildAt(i));
+			}
 		}
 	}
 }

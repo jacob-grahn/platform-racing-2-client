@@ -7,6 +7,7 @@ import openfl.events.MouseEvent;
 import openfl.events.TouchEvent;
 import openfl.geom.Point;
 import openfl.ui.Keyboard;
+import pr2.app.AppStage;
 import pr2.lobby.account.ColorPicker;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.StatSlider;
@@ -22,6 +23,7 @@ import pr2.net.ServerLevelData;
 import pr2.levelEditor.LevelEditor;
 import pr2.levelEditor.EditorSideBarCatalog;
 import pr2.levelEditor.EditorBackgroundColorPickerButton;
+import pr2.levelEditor.EditorBrushColorPickerButton;
 import pr2.levelEditor.EditorBlockObject;
 import pr2.levelEditor.EditorHatsSettingsPopup;
 import pr2.levelEditor.EditorItemSettingsPopup;
@@ -35,6 +37,7 @@ import pr2.levelEditor.EditorValueSettingsPopup;
 import pr2.levelEditor.TestCoursePage;
 import pr2.levelEditor.EditorBrushCursor;
 import pr2.runtime.FlSliderEvent;
+import pr2.runtime.FontResolver;
 import pr2.ui.CustomCursor;
 import pr2.ui.StageFocus;
 
@@ -44,10 +47,12 @@ class EditorSettingsTest {
 	public static function main():Void {
 		testSideBarCatalog();
 		testDefaultSetters();
+		testSettingButtonValuesRefresh();
 		testVariablesAndLevelVars();
 		testApplyLoadedLevelData();
 		testPasswordHashing();
 		testBackgroundColorPickerCommit();
+		testBrushColorPickerStageCapture();
 		testBackgroundButtonCommit();
 		testEditorBackgroundAndLayerParity();
 		testBlockGridLinesFollowZoomAndCamera();
@@ -60,7 +65,9 @@ class EditorSettingsTest {
 		testBrushTargetGating();
 		testBrushStrokeSegmentation();
 		testStampPlacementCancellationAndCursorScale();
+		testArtLayerSwitchDeselectsItem();
 		testBlockDragPlacement();
+		testModalPopupBlocksEditorInput();
 		testBlockObjectInteractions();
 		testObjectDeleterLifecycle();
 		testTextToolDropLifecycle();
@@ -70,6 +77,7 @@ class EditorSettingsTest {
 		testEditorToolCursorLifecycle();
 		testCustomCursorRuntimeHooks();
 		testStatSliderHoldAccelerationAndSavePaths();
+		testRoguelikeTestCourseStartsWithZeroStats();
 		trace('EditorSettingsTest passed $assertions assertions');
 	}
 
@@ -105,6 +113,29 @@ class EditorSettingsTest {
 		assertArrayEquals([Items.LASER_GUN, Items.SWORD], editor.allowedItems, "allowed item names resolve");
 		assertEquals("2,16", editor.badHats.join(","), "bad hats filter no-hat and out-of-range ids");
 		assertEquals(0x123456, editor.color, "background color is tracked");
+	}
+
+	private static function testSettingButtonValuesRefresh():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		editor.setMinRank("12");
+		editor.setGravity("2.5");
+		editor.setMaxTime("90");
+		editor.setGameMode("deathmatch");
+		editor.setCowboyChance("25");
+		editor.setPass("secret");
+
+		assertEquals("12", settingEntry(editor, "rank").displayedValueForTests(), "minimum-rank button refreshes after editing");
+		assertEquals("2.5", settingEntry(editor, "gravity").displayedValueForTests(), "gravity button refreshes after editing");
+		assertEquals("90", settingEntry(editor, "time").displayedValueForTests(), "time button refreshes after editing");
+		assertEquals("deathmatch", settingEntry(editor, "mode").displayedValueForTests(), "mode button refreshes after editing");
+		assertEquals("25", settingEntry(editor, "sfcm").displayedValueForTests(), "cowboy-chance button refreshes after editing");
+		assertEquals("secret", settingEntry(editor, "pass").displayedValueForTests(), "password button refreshes after editing");
+		editor.remove();
+	}
+
+	private static function settingEntry(editor:LevelEditor, id:String):EditorSideBarEntry {
+		return cast editor.menu.settings.getChildByName(id + "Entry");
 	}
 
 	private static function testVariablesAndLevelVars():Void {
@@ -264,6 +295,34 @@ class EditorSettingsTest {
 		editor.remove();
 	}
 
+	private static function testBrushColorPickerStageCapture():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		editor.menu.changeSideBar(editor.menu.tools);
+		var button = Std.downcast(editor.menu.tools.getChildByName("colorEntry"), EditorBrushColorPickerButton);
+		assertNotNull(button, "draw tools mount a brush color picker");
+		assertEquals(ColorPicker.LEFT, @:privateAccess button.picker.direction, "draw color picker opens to the left like Flash");
+
+		@:privateAccess button.picker.openPopup();
+		var popup = @:privateAccess button.picker.popup;
+		var eyedropper = @:privateAccess popup.eyedropper;
+		var stage = AppStage.stage;
+		if (stage != null) {
+			assertEquals(stage.stageWidth, eyedropper.captureWidthForTests(),
+				"draw eyedropper capture is limited to stage width instead of editor world bounds");
+			assertEquals(stage.stageHeight, eyedropper.captureHeightForTests(),
+				"draw eyedropper capture is limited to stage height instead of editor world bounds");
+		} else {
+			assertEquals(1, eyedropper.captureWidthForTests(), "headless draw eyedropper uses its minimal fallback capture");
+			assertEquals(1, eyedropper.captureHeightForTests(), "headless draw eyedropper uses its minimal fallback capture");
+		}
+		popup.setColor(0x123456);
+		assertEquals(0, editor.brushColor, "draw color preview does not repeatedly commit or steal focus");
+		@:privateAccess button.picker.closePopup();
+		assertEquals(0x123456, editor.brushColor, "draw color commits when the picker closes like Flash");
+		editor.remove();
+	}
+
 	private static function testBlockGridLinesFollowZoomAndCamera():Void {
 		var grid = new BlockGridLines();
 		assertEquals(false, grid.mouseEnabled, "block grid ignores direct mouse input");
@@ -341,10 +400,17 @@ class EditorSettingsTest {
 		gravityPopup.remove();
 
 		var timePopup = new EditorValueSettingsPopup(editor, new Sprite(), "time");
+		var focusResets = 0;
+		StageFocus.resetHook = function():Void focusResets++;
+		timePopup.setValue("9");
+		timePopup.setValue("99");
+		assertEquals(0, focusResets, "typing multiple time-limit characters keeps focus in the value field");
 		timePopup.setValue("0");
 		assertEquals("0", editor.maxTime, "time popup commits infinite-time zero");
 		assertEquals("0", editor.getLevelVars().get("max_time"), "time popup export uses committed time");
 		timePopup.remove();
+		assertEquals(1, focusResets, "closing the value popup returns focus to the stage");
+		StageFocus.resetHooks();
 
 		var cowboyPopup = new EditorValueSettingsPopup(editor, new Sprite(), "sfcm");
 		cowboyPopup.setValue("75");
@@ -479,6 +545,9 @@ class EditorSettingsTest {
 		editor.setZoom(0.5);
 		assertClose(6, circle.width, "brush cursor width scales by zoom");
 		assertClose(6, circle.height, "brush cursor height scales by zoom");
+		var circleBounds = circle.getBounds(editor.toolCursor.current);
+		assertClose(0, circleBounds.x + circleBounds.width / 2, "brush cursor remains centered horizontally on the mouse");
+		assertClose(0, circleBounds.y + circleBounds.height / 2, "brush cursor remains centered vertically on the mouse");
 
 		editor.selectEditorTool("stamps", "text");
 		assertNotNull(editor.toolCursor.current, "text selection creates a cursor");
@@ -575,6 +644,31 @@ class EditorSettingsTest {
 		Settings.disablePersistenceForTests();
 	}
 
+	private static function testRoguelikeTestCourseStartsWithZeroStats():Void {
+		Settings.useMemoryStoreForTests();
+		Settings.init("Tester");
+		Settings.setValue(Settings.LE_TEST_STATS, {speed: 61, acceleration: 72, jumping: 83});
+		var editor = new LevelEditor();
+		editor.initialize();
+		var variables = editor.getLevelVars();
+		variables.set("gameMode", "roguelike");
+		var testCourse = new TestCoursePage(variables);
+		testCourse.initialize();
+		var characterStats = testCourse.course.localCharacter.debugState();
+		assertEquals(0, Math.round(characterStats.speedStat), "roguelike test course starts character speed at zero");
+		assertEquals(0, Math.round(characterStats.accelerationStat), "roguelike test course starts character acceleration at zero");
+		assertEquals(0, Math.round(characterStats.jumpStat), "roguelike test course starts character jumping at zero");
+		var selectedStats = testCourse.statsSelect.getStats();
+		assertEquals(0, selectedStats.speed, "roguelike test course starts speed slider at zero");
+		assertEquals(0, selectedStats.acceleration, "roguelike test course starts acceleration slider at zero");
+		assertEquals(0, selectedStats.jumping, "roguelike test course starts jumping slider at zero");
+		var savedStats:Dynamic = Settings.getValue(Settings.LE_TEST_STATS);
+		assertEquals(61, Reflect.field(savedStats, "speed"), "roguelike start preserves saved test stats for other modes");
+		testCourse.remove();
+		editor.remove();
+		Settings.disablePersistenceForTests();
+	}
+
 	private static function testBrushTargetGating():Void {
 		var editor = new LevelEditor();
 		editor.initialize();
@@ -593,15 +687,19 @@ class EditorSettingsTest {
 			"brush rejects menu targets");
 
 		assertEquals(true, editor.beginSelectedBrushAt(drawPoint.x, drawPoint.y), "brush starts when the draw layer is idle");
+		var brushCursor = Std.downcast(editor.toolCursor.current, EditorBrushCursor);
+		assertEquals(false, brushCursor.visible, "brush preview hides while a stroke is being drawn");
 		assertEquals(false, editor.beginSelectedBrushAt(drawPoint.x + 2, drawPoint.y + 2), "brush cannot restart while the draw layer is busy");
 		assertEquals(false, editor.canStartBrushFromTargetForTests(editor.activeDrawLayer, drawPoint.x + 2, drawPoint.y + 2),
 			"target gate rejects busy draw layers");
 		assertEquals(true, editor.endSelectedBrush(), "brush stroke finishes after busy-layer check");
+		assertEquals(true, brushCursor.visible, "brush preview returns after a stroke finishes");
 		assertEquals(true, editor.beginSelectedBrushAt(drawPoint.x, drawPoint.y), "brush can start again after finishing");
 		editor.activeDrawLayer.finishStroke();
 		assertEquals(false, editor.continueSelectedBrushAt(drawPoint.x + 4, drawPoint.y + 4),
 			"brush stroke stops if the drawable layer is no longer drawing");
 		assertEquals(false, editor.isDrawing(), "editor clears drawing state when the drawable layer stops");
+		assertEquals(true, brushCursor.visible, "brush preview returns when drawing is interrupted");
 
 		editor.selectEditorTool("tools", "eraser");
 		assertEquals(true, editor.canStartBrushFromTargetForTests(editor.activeDrawLayer, drawPoint.x, drawPoint.y),
@@ -636,7 +734,11 @@ class EditorSettingsTest {
 		layer = editor.activeDrawLayer;
 		assertEquals(true, editor.beginSelectedBrushAt(drawPoint.x, drawPoint.y), "eraser segmentation stroke starts");
 		assertEquals(true, editor.continueSelectedBrushAt(drawPoint.x + 20, drawPoint.y), "eraser segmentation stroke extends");
+		var erasePreviewBounds = layer.brushCanvas.getBounds(layer);
+		assertEquals(true, erasePreviewBounds.width > 0 && erasePreviewBounds.height > 0,
+			"eraser displays its temporary white stroke while dragging");
 		assertEquals(true, editor.endSelectedBrush(), "eraser segmentation stroke finishes");
+		assertEquals(0.0, layer.brushCanvas.getBounds(layer).width, "eraser clears its temporary stroke after applying the erase");
 		assertEquals(0, layer.drawRasterizeCountForTests(), "eraser finish skips draw rasterize path");
 		assertEquals(1, layer.eraseCleanupCountForTests(), "eraser finish calls erase cleanup path");
 		editor.remove();
@@ -671,6 +773,33 @@ class EditorSettingsTest {
 		editor.activeObjectLayer.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true));
 		assertEquals("stamp0", editor.selectedToolId, "object-layer click keeps the selected stamp active");
 		assertEquals(1, editor.activeObjectLayer.placedObjects.length, "object-layer click places a stamp");
+		var existingStamp = @:privateAccess editor.activeObjectLayer.placedDisplays[0];
+		assertEquals(false, editor.canPlaceStampFromTargetForTests(existingStamp, drawPoint.x, drawPoint.y),
+			"stamp placement rejects existing stamps so their resize controls can receive the click");
+		editor.remove();
+	}
+
+	private static function testArtLayerSwitchDeselectsItem():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		editor.selectEditorTool("stamps", "stamp0");
+		var firstLayer = editor.activeObjectLayer;
+		firstLayer.addStamp(0, 100, 100);
+		firstLayer.selectPlacedStampForTests(0);
+		assertNotNull(@:privateAccess firstLayer.selectedStamp, "stamp starts selected on active art layer");
+
+		editor.setActiveObjectLayer(1);
+		assertNotNull(@:privateAccess firstLayer.selectedStamp, "reselecting the same art layer keeps its selected item");
+		editor.setActiveObjectLayer(2);
+		assertEquals(null, @:privateAccess firstLayer.selectedStamp, "switching art layers deselects the selected stamp");
+		assertEquals(false, firstLayer.mouseChildren, "inactive art layer stamps cannot steal placement clicks");
+		assertEquals(true, editor.activeObjectLayer.mouseChildren, "active art layer stamps remain interactive");
+
+		editor.setActiveObjectLayer(1);
+		firstLayer.addText("layer text", 100, 100, 0);
+		assertNotNull(@:privateAccess firstLayer.selectedText, "text starts selected on active art layer");
+		editor.setActiveObjectLayer(3);
+		assertEquals(null, @:privateAccess firstLayer.selectedText, "switching art layers deselects the selected text");
 		editor.remove();
 	}
 
@@ -712,6 +841,14 @@ class EditorSettingsTest {
 		assertEquals(7, layers.getChildIndex(editor.blockLayer), "blocks sit between rear and front art layers");
 		assertEquals(8, layers.getChildIndex(editor.objectLayers[3]), "stamp layer 4 sits immediately in front of blocks");
 		assertEquals(9, layers.getChildIndex(editor.drawLayers[3]), "front drawing layer 4 sits above its stamps");
+		assertClose(1, editor.drawLayers[0].scaleX, "art 1 brush canvas remains unscaled");
+		assertClose(1, editor.drawLayers[1].scaleX, "art 2 brush canvas remains unscaled");
+		assertClose(1, editor.drawLayers[2].scaleX, "art 3 brush canvas remains unscaled");
+		assertClose(1, editor.drawLayers[3].scaleX, "art 0 brush canvas remains unscaled");
+		assertClose(1, editor.drawLayers[4].scaleX, "art 00 brush canvas remains unscaled");
+		assertClose(0.5, editor.drawLayers[1].layerScale, "art 2 retains its Flash parallax factor separately");
+		assertClose(0.25, editor.drawLayers[2].layerScale, "art 3 retains its Flash parallax factor separately");
+		assertClose(2, editor.drawLayers[4].layerScale, "art 00 retains its Flash parallax factor separately");
 
 		editor.setColor(0x336699);
 		assertClose(0.9, editor.objectLayers[0].transform.colorTransform.redMultiplier,
@@ -722,6 +859,23 @@ class EditorSettingsTest {
 		assertEquals(ObjectCodes.BG5Code, editor.artBackgroundCode, "editor tracks the selected authored background");
 		assertEquals(true, @:privateAccess editor.artBackgroundContainer.numChildren > 0,
 			"selected authored background is visible in the editor");
+
+		var paintPoint = pointOutsideMenu(editor);
+		editor.selectEditorTool("tools", "brush");
+		for (layerNum in 1...6) {
+			editor.setActiveObjectLayer(layerNum);
+			assertEquals(true, editor.beginSelectedBrushAt(paintPoint.x, paintPoint.y), 'art $layerNum accepts a brush stroke');
+			assertEquals(true, editor.endSelectedBrush(), 'art $layerNum finishes its brush stroke');
+		}
+		var previewLevel = ServerLevelDecoder.decode(editor.getSaveString());
+		for (i in 0...previewLevel.artLayers.length) {
+			var stroke = previewLevel.artLayers[i].drawActions[0];
+			var parallax = previewLevel.artLayers[i].scale;
+			assertClose(paintPoint.x, stroke.values[0] + Math.round(editor.posX * parallax),
+				'art ${i + 1} paint keeps its tester screen x');
+			assertClose(paintPoint.y, stroke.values[1] + Math.round(editor.posY * parallax),
+				'art ${i + 1} paint keeps its tester screen y');
+		}
 		editor.remove();
 	}
 
@@ -735,10 +889,22 @@ class EditorSettingsTest {
 		assertEquals(true, fredBounds.width > 30 && fredBounds.height > 30, "Fred uses authored dimensions instead of a 30px placeholder");
 		assertClose(localPoint.x, fred.x + fredBounds.x + fredBounds.width / 2, "Fred is centered on its drop point", 2);
 
+		var treePoint = new Point(point.x + 125, point.y);
+		var treeLocal = editor.activeObjectLayer.globalToLocal(treePoint);
+		var tree = editor.activeObjectLayer.addStamp(ObjectCodes.STAMP_TREE, treePoint.x, treePoint.y);
+		var treeBounds = editor.activeObjectLayer.placedStampOutlineBoundsForTests(1);
+		assertClose(treeLocal.x, tree.x + treeBounds.x + treeBounds.width / 2, "raster tree is centered on its drop point", 2);
+		assertClose(treeLocal.y, tree.y + treeBounds.y + treeBounds.height / 2, "raster tree is vertically centered on its drop point", 2);
+		var treeEntry = Std.downcast(editor.menu.stamps.getChildByName("stamp0Entry"), EditorSideBarEntry);
+		var treeIconBounds = treeEntry.iconBoundsForTests();
+		assertEquals(true, Math.max(treeIconBounds.width, treeIconBounds.height) >= 23,
+			"raster stamp preview fills the authored 24px button box");
+		assertEquals(false, @:privateAccess treeEntry.chrome.playing, "sidebar button chrome is frozen instead of advancing every frame");
+
 		var buildingPoint = new Point(point.x + 250, point.y + 100);
 		var buildingLocal = editor.activeObjectLayer.globalToLocal(buildingPoint);
 		var building = editor.activeObjectLayer.addStamp(ObjectCodes.STAMP_BUILDING1, buildingPoint.x, buildingPoint.y);
-		var buildingBounds = editor.activeObjectLayer.placedStampOutlineBoundsForTests(1);
+		var buildingBounds = editor.activeObjectLayer.placedStampOutlineBoundsForTests(2);
 		assertEquals(true, buildingBounds.width > 30 && buildingBounds.height > 30,
 			"building uses authored dimensions instead of a 30px placeholder");
 		assertClose(buildingLocal.x, building.x + buildingBounds.x + buildingBounds.width / 2, "building is centered on its drop point", 2);
@@ -827,6 +993,22 @@ class EditorSettingsTest {
 		editor.remove();
 	}
 
+	private static function testModalPopupBlocksEditorInput():Void {
+		var editor = new LevelEditor();
+		editor.initialize();
+		editor.selectEditorTool("blocks", "brick");
+		var point = pointOutsideMenu(editor);
+		var popup = new pr2.lobby.dialogs.MessagePopup("Save failed");
+
+		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false, point.x, point.y));
+		assertEquals(null, editor.blockLayer.getBlockAtStage(point.x, point.y), "modal popup prevents block placement underneath its cover");
+		popup.remove();
+		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false, point.x, point.y));
+		assertNotNull(editor.blockLayer.getBlockAtStage(point.x, point.y), "editor input resumes after the modal popup closes");
+		editor.dispatchEvent(new MouseEvent(MouseEvent.MOUSE_UP, true, false, point.x, point.y));
+		editor.remove();
+	}
+
 	private static function testTextToolDropLifecycle():Void {
 		var editor = new LevelEditor();
 		editor.initialize();
@@ -846,6 +1028,8 @@ class EditorSettingsTest {
 		assertEquals(true, label.editFieldWidthForTests() >= 100, "text edit field preserves Flash minimum edit width");
 		assertEquals(false, label.hasAuthoredEditButtonForTests(), "text edit button is removed while editing");
 		assertEquals(true, label.hasColorPickerForTests(), "text object mounts the color picker control while editing");
+		assertEquals(FontResolver.resolve("Verdana"), label.fontNameForTests(), "editor text uses the authored Verdana font");
+		assertClose(18, label.fontSizeForTests(), "editor text uses the authored 18px font size");
 		label.setEditingText("label");
 		label.finishEditing();
 		assertEquals(false, label.isEditing(), "text edit controls stop editing on finish");

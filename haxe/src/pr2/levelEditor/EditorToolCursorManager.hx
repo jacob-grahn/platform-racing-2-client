@@ -42,6 +42,13 @@ class EditorToolCursorManager {
 		applyBrushState();
 	}
 
+	public function setBrushDrawing(drawing:Bool):Void {
+		var brush = Std.downcast(current, EditorBrushCursor);
+		if (brush != null) {
+			brush.setDrawing(drawing);
+		}
+	}
+
 	public function pause():Void {
 		CustomCursor.pauseCurrent();
 	}

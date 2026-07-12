@@ -1,5 +1,6 @@
 package pr2.levelEditor;
 
+import openfl.display.DisplayObject;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.MouseEvent;
@@ -13,6 +14,7 @@ import openfl.text.TextFormat;
 import openfl.ui.Keyboard;
 import pr2.lobby.account.ColorPicker;
 import pr2.runtime.PR2MovieClip;
+import pr2.runtime.FontResolver;
 
 class EditorTextObject extends Sprite {
 	public static var lastColor:Int = 0;
@@ -68,6 +70,8 @@ class EditorTextObject extends Sprite {
 		addColorPicker();
 		setText(parseText(text));
 		addEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
+		addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+		addEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
 	}
 
 	public function select():Void {
@@ -78,6 +82,7 @@ class EditorTextObject extends Sprite {
 		originalText = text;
 		originalColor = color;
 		addStageDeleteListener();
+		addStageDeselectListener();
 	}
 
 	public function deselect(recordChange:Bool = true):Void {
@@ -86,6 +91,7 @@ class EditorTextObject extends Sprite {
 		}
 		finishEditing();
 		removeStageDeleteListener();
+		removeStageDeselectListener();
 		selected = false;
 		if (recordChange && parent != null && (text != originalText || color != originalColor)) {
 			owner.recordChangeText(this);
@@ -285,7 +291,10 @@ class EditorTextObject extends Sprite {
 
 	public function remove():Void {
 		removeEventListener(MouseEvent.MOUSE_DOWN, selectForEditing);
+		removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
+		removeEventListener(Event.REMOVED_FROM_STAGE, removedFromStage);
 		removeStageDeleteListener();
+		removeStageDeselectListener();
 		removeStageDragListeners();
 		removeStageResizeListeners();
 		resizeHandle.removeEventListener(MouseEvent.MOUSE_DOWN, resizeHandlePressed);
@@ -434,6 +443,41 @@ class EditorTextObject extends Sprite {
 		if (stage != null) {
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, deleteKeyPressed);
 		}
+	}
+
+	private function addedToStage(_:Event):Void {
+		if (selected) {
+			addStageDeleteListener();
+			addStageDeselectListener();
+		}
+	}
+
+	private function removedFromStage(_:Event):Void {
+		removeStageDeleteListener();
+		removeStageDeselectListener();
+	}
+
+	private function addStageDeselectListener():Void {
+		if (stage != null) {
+			stage.addEventListener(MouseEvent.MOUSE_DOWN, stageMousePressed);
+		}
+	}
+
+	private function removeStageDeselectListener():Void {
+		if (stage != null) {
+			stage.removeEventListener(MouseEvent.MOUSE_DOWN, stageMousePressed);
+		}
+	}
+
+	private function stageMousePressed(event:MouseEvent):Void {
+		var current = Std.downcast(event.target, DisplayObject);
+		while (current != null) {
+			if (current == this) {
+				return;
+			}
+			current = current.parent;
+		}
+		owner.selectTextObject(null);
 	}
 
 	private function removeStageDeleteListener():Void {
@@ -603,12 +647,20 @@ class EditorTextObject extends Sprite {
 
 	private function createTextField():TextField {
 		var field = new TextField();
-		field.defaultTextFormat = new TextFormat("_sans", 12, color);
+		field.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 18, color);
 		field.wordWrap = false;
 		field.multiline = true;
 		field.autoSize = TextFieldAutoSize.LEFT;
 		field.textColor = color;
 		return field;
+	}
+
+	public function fontNameForTests():String {
+		return displayField.defaultTextFormat.font;
+	}
+
+	public function fontSizeForTests():Float {
+		return displayField.defaultTextFormat.size;
 	}
 
 	public static function escapeText(value:String):String {

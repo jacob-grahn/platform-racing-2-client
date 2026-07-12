@@ -66,6 +66,7 @@ class EditorValueSettingsPopup extends Sprite {
 			parent.removeChild(this);
 		}
 		editor.valueSettingsPopupRemoved(this);
+		StageFocus.reset();
 	}
 
 	private function configure():Void {
@@ -136,7 +137,6 @@ class EditorValueSettingsPopup extends Sprite {
 				editor.setPass(text);
 			default:
 		}
-			StageFocus.reset();
 	}
 
 	private function mountNear(target:DisplayObject):Void {

@@ -476,7 +476,7 @@ class CharacterLifecycleTest {
 		assertTrue(LobbySocket.lastSent().indexOf("add_effect`Laser`") == 0, "laser emits Flash add_effect payload");
 		assertTrue(LobbySocket.lastSent().indexOf("`right`0`0") > 0, "laser payload includes direction, rotation, and temp id");
 		assertEquals(1, laser.eggRound.activeAttackVisualCount(), "laser mounts the authored local shot visual");
-		var laserClip = Std.downcast(laser.characterLayer.getChildAt(laser.characterLayer.numChildren - 1), PR2MovieClip);
+		var laserClip = Std.downcast(laser.effectBackground.getChildAt(laser.effectBackground.numChildren - 1), PR2MovieClip);
 		assertTrue(laserClip != null, "local laser item uses a movie clip visual");
 		assertEquals("LaserShotGraphic", laserClip.symbol.linkageClassName, "local laser item uses the authored laser graphic");
 		assertEquals(2, laserClip.currentFrame, "local laser item starts stopped on idle frame 2");
@@ -493,9 +493,9 @@ class CharacterLifecycleTest {
 		assertTrue(LobbySocket.lastSent().indexOf("add_effect`IceWave`") == 0, "ice wave emits Flash add_effect payload");
 		assertTrue(LobbySocket.lastSent().indexOf("`0`0`0") > 0, "ice wave payload includes angle, rotation, and temp id");
 		assertEquals(3, ice.eggRound.activeAttackVisualCount(), "ice wave mounts the three authored local wave visuals");
-		var firstIce = Std.downcast(ice.characterLayer.getChildAt(ice.characterLayer.numChildren - 3), PR2MovieClip);
-		var secondIce = Std.downcast(ice.characterLayer.getChildAt(ice.characterLayer.numChildren - 2), PR2MovieClip);
-		var thirdIce = Std.downcast(ice.characterLayer.getChildAt(ice.characterLayer.numChildren - 1), PR2MovieClip);
+		var firstIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 3), PR2MovieClip);
+		var secondIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 2), PR2MovieClip);
+		var thirdIce = Std.downcast(ice.effectBackground.getChildAt(ice.effectBackground.numChildren - 1), PR2MovieClip);
 		assertTrue(firstIce != null && secondIce != null && thirdIce != null, "local ice wave item uses movie clip visuals");
 		assertEquals("IceWaveGraphic", firstIce.symbol.linkageClassName, "local ice wave item uses the authored first graphic");
 		assertEquals("IceWaveGraphic", secondIce.symbol.linkageClassName, "local ice wave item uses the authored second graphic");
@@ -541,8 +541,8 @@ class CharacterLifecycleTest {
 		assertEquals(3, course.eggRound.currentMode(), "seeded mode clamps Flash random value");
 		var first = course.eggRound.egg(1);
 		assertTrue(first != null, "first egg state stored");
-		assertEquals(3, course.characterLayer.numChildren, "egg graphics mount beside characters");
-		assertTrue(first.display.parent == course.characterLayer, "egg graphic is added to course layer");
+		assertEquals(2, course.effectBackground.numChildren, "egg graphics mount on the Flash effect layer");
+		assertTrue(first.display.parent == course.effectBackground, "egg graphic is added to the effect layer");
 		assertEquals(first.x, Std.int(first.display.x), "egg graphic uses seeded x");
 		assertEquals(first.y, Std.int(first.display.y), "egg graphic uses seeded y");
 		assertEquals(first.rot, Std.int(first.display.rotation), "egg graphic uses seeded rotation");
@@ -556,7 +556,7 @@ class CharacterLifecycleTest {
 		assertEquals(2, course.eggRound.count(), "collected egg remains during squash animation");
 		assertTrue(first.removing, "collected egg enters squash removal state");
 		assertEquals(30, first.display.currentFrame, "collected egg starts authored squash animation");
-		assertTrue(first.display.parent == course.characterLayer, "collected egg graphic remains during squash animation");
+		assertTrue(first.display.parent == course.effectBackground, "collected egg graphic remains during squash animation");
 		assertTrue(handler.hasCommand("removeEgg1"), "collected egg keeps remote remove command during squash animation");
 		assertEquals(false, course.eggRound.collectEgg(1), "squashing egg cannot be collected twice");
 		for (_ in 0...16) {
@@ -569,7 +569,7 @@ class CharacterLifecycleTest {
 		for (_ in 0...26) {
 			course.eggRound.step(lifecycleLevel);
 		}
-		assertTrue(first.display.parent == course.characterLayer, "squash animation persists before Flash timeout");
+		assertTrue(first.display.parent == course.effectBackground, "squash animation persists before Flash timeout");
 		course.eggRound.step(lifecycleLevel);
 		assertEquals(1, course.eggRound.count(), "collected egg removed after squash timeout");
 		assertTrue(first.display.parent == null, "squashed egg graphic removed");
@@ -693,7 +693,8 @@ class CharacterLifecycleTest {
 		var handler = new CommandHandler();
 		var course = buildCourse(handler, "race");
 		assertTrue(handler.hasCommand("addEffect"), "course registers EffectBackground addEffect command");
-		assertTrue(course.effectBackground.parent == course, "effect background is mounted in the course display list");
+		assertTrue(course.effectBackground.parent != null && course.effectBackground.parent != course,
+			"effect background is mounted in the renderer's rotating world");
 
 		var characterChildren = course.characterLayer.numChildren;
 		var effectChildren = course.effectBackground.numChildren;
@@ -704,9 +705,10 @@ class CharacterLifecycleTest {
 
 		handler.dispatch("addEffect", ["Laser", "100", "90", "right", "0", "6"]);
 		assertEquals(1, course.eggRound.activeAttackVisualCount(), "remote laser mounts an attack visual");
-		var laser = Std.downcast(course.characterLayer.getChildAt(characterChildren), PR2MovieClip);
+		var laser = Std.downcast(course.effectBackground.getChildAt(course.effectBackground.numChildren - 1), PR2MovieClip);
 		assertTrue(laser != null, "remote laser uses a movie clip visual");
 		assertEquals(2, laser.currentFrame, "remote laser starts on the stopped idle frame");
+		assertTrue(laser.getBounds(laser).width > 1, "remote laser travel frame has visible authored artwork");
 
 		var iceWaveSounds:Array<String> = [];
 		course.effectBackground.remove();

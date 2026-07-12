@@ -627,16 +627,7 @@ class LoginPage extends Page {
 		}
 		closePopup();
 		var server = loginServer;
-		pr2.lobby.LobbySession.begin(session.userName, session.group, server, session.userId, loginRemember);
-		pr2.lobby.LobbySession.updateAccountState(session.hasEmail, session.token, false);
-		pr2.lobby.LobbySession.updateGuildState(session.guildId, session.guildName, session.guildOwner, session.emblem, false);
-		pr2.lobby.LobbySession.favoriteLevels = session.favoriteLevels;
-		pr2.lobby.LobbySession.lastAuthTime.setTime(session.authTime);
-		UnreadNotif.setLastRead(session.lastRead);
-		UnreadNotif.notifyUser(session.lastRecv);
-		Settings.init(session.userName);
-		Presets.load();
-		if (loginRemember) SavedAccounts.add(session.userName, session.token);
+		LoginSessionInstaller.install(session, server, loginRemember);
 		loginToken = "";
 		if (pageHolder != null) {
 			pageHolder.changePage(new LobbyPage(session.userName, server));

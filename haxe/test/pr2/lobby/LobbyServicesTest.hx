@@ -67,6 +67,7 @@ import pr2.levelEditor.LoadingLevelPopup;
 import pr2.levelEditor.LevelEditorConnectingPopup;
 import pr2.levelEditor.SaveLevelPopup;
 import pr2.levelEditor.EditorSideBarEntry;
+import pr2.levelEditor.EditorBrushSizePickerButton;
 import pr2.levelEditor.UploadingLevelPopup;
 import pr2.levelEditor.TestCoursePage;
 import pr2.page.Page;
@@ -137,6 +138,7 @@ class LobbyServicesTest {
 		testLevelEditorDeleteFlow();
 		testLevelEditorSaveDialog();
 		testUploadingLevelPopupFields();
+		testUploadingLevelPopupDecodesUrlResponse();
 		testUploadingLevelPopupDrawingRetryWait();
 		testUploadingLevelPopupOverwriteConfirmation();
 		testUploadingLevelPopupBannedConfirmation();
@@ -428,6 +430,16 @@ class LobbyServicesTest {
 		assertEquals(4, Std.int(editor.menu.sideBar.scrollHolderForTests().y), "editor sidebar scroll holder y");
 		assertEquals(35, Std.int(editor.menu.sideBar.scrollBarForTests().x), "editor sidebar scroll bar x");
 		assertEquals(2, Std.int(editor.menu.sideBar.scrollBarForTests().y), "editor sidebar scroll bar y");
+		assertEquals(false, editor.menu.sideBar.scrollBarForTests().timelinesPlayingForTests(), "editor scrollbar button timelines stay static");
+		assertEquals(true, editor.menu.sideBar.scrollBarForTests().hasStableButtonHitAreasForTests(), "editor scrollbar buttons use stable hit areas across authored states");
+		assertEquals(true, editor.menu.sideBar.scrollBarForTests().thumbHitBoundsForTests().width >= 15, "editor scrollbar thumb keeps a full-width grab target");
+		assertEquals(false, editor.menu.sideBar.scrollBarForTests().trackMouseEnabledForTests(),
+			"editor scrollbar track cannot steal hover or drag input from the thumb");
+		editor.selectEditorTool("blocks", "brick");
+		var blocksBeforeScrollbarClick = editor.blockLayer.blocks.length;
+		editor.menu.sideBar.scrollBarForTests().dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN, true, false, 0, 0));
+		assertEquals(blocksBeforeScrollbarClick, editor.blockLayer.blocks.length, "scrollbar targets never leak clicks into block placement");
+		editor.selectEditorTool("", "");
 		assertEquals(30, Std.int(editor.menu.sideBar.maskWidthForTests()), "editor sidebar mask width");
 		assertEquals(348, Std.int(editor.menu.sideBar.maskHeightForTests()), "editor sidebar mask height");
 		assertEquals(true, editor.menu.sideBar.scrollHolderForTests().mask == editor.menu.sideBar.scrollMaskForTests(), "editor sidebar masks scroll holder");
@@ -502,12 +514,15 @@ class LobbyServicesTest {
 		clickEditorSidebar(editor, "brushEntry");
 		assertEquals("tools", editor.menu.sideBar.id, "stamp brush entry switches to draw tools");
 		assertEquals("draw", editor.focusedEditorLayer, "stamp brush entry focuses current draw layer");
+		assertEquals("tools", editor.selectedToolSidebar, "draw mode selects the tools sidebar by default");
+		assertEquals("brush", editor.selectedToolId, "draw mode selects the brush by default");
 		var toolBrushEntry = Std.downcast(editor.menu.sideBar.getChildByName("brushEntry"), EditorSideBarEntry);
 		var eraserEntry = Std.downcast(editor.menu.sideBar.getChildByName("eraserEntry"), EditorSideBarEntry);
 		assertEquals("Brush", toolBrushEntry.title, "tools sidebar entry has authored hover title");
 		assertEquals("Draw things, yay!", toolBrushEntry.content, "tools sidebar entry has authored hover description");
 		assertEquals("BrushButtonGraphic", toolBrushEntry.iconNameForTests(), "tools brush entry uses authored button graphic");
 		assertEquals("EraserButtonGraphic", eraserEntry.iconNameForTests(), "tools eraser entry uses authored button graphic");
+		assertEquals(toolBrushEntry, editor.menu.tools.selectedEntry, "draw mode highlights the brush button by default");
 		clickEditorSidebar(editor, "brushEntry");
 		assertEquals("tools", editor.selectedToolSidebar, "tools brush entry records selected tool sidebar");
 		assertEquals("brush", editor.selectedToolId, "tools brush entry records selected tool id");
@@ -526,6 +541,17 @@ class LobbyServicesTest {
 		var sizeSlider = @:privateAccess sizeMenu.slider;
 		var sliderBounds = sizeSlider.getBounds(sizeMenu);
 		assertNear(0, Std.int(sliderBounds.x + sliderBounds.width / 2), 4, "brush size slider stays centered in its popup");
+		var popupBounds = sizeMenu.getBounds(editor);
+		var popupX = popupBounds.x + popupBounds.width / 2;
+		var popupY = popupBounds.y + popupBounds.height / 2;
+		assertEquals(true, editor.isPointOverMenu(popupX, popupY), "brush popup counts as editor chrome for drawing input");
+		assertEquals(false, editor.canStartBrushFromTargetForTests(editor, popupX, popupY), "brush cannot start through its size popup");
+		var sizeEntry = Std.downcast(editor.menu.sideBar.getChildByName("sizeEntry"), EditorBrushSizePickerButton);
+		editor.setBrushSize(255);
+		sizeEntry.updateCircle();
+		assertEquals(true, sizeEntry.previewSizeForTests() < 29, "maximum Flash brush size stays inside its button preview");
+		editor.setBrushSize(12);
+		sizeEntry.updateCircle();
 		@:privateAccess sizeMenu.autoDismiss.armForTests();
 		@:privateAccess sizeMenu.autoDismiss.stageMouseDownForTests(-1000, -1000);
 		assertEquals(null, editor.activeBrushSizeMenu, "brush size popup closes on an outside click");
@@ -661,8 +687,8 @@ class LobbyServicesTest {
 		assertEquals(true, editor.beginSelectedBrushAt(100, 120), "eraser starts on the active draw layer");
 		assertEquals(true, editor.continueSelectedBrushAt(105, 120), "eraser extends while drawing");
 		assertEquals(true, editor.endSelectedBrush(), "eraser stroke finishes");
-		assertEquals("cffffff,t12,merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(),
-			"eraser stores selected size, erase color, mode, and scaled stroke coordinates");
+		assertEquals("cffffff,t12,merase,d100;120;5;0", editor.activeDrawLayer.getSaveString(),
+			"eraser stores selected size, erase color, mode, and unscaled drawable coordinates");
 		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "undoButton"), "enabled"), "draw stroke enables undo");
 		clickEditorMenu(editor, "undoButton");
 		assertEquals("", editor.activeDrawLayer.getSaveString(), "draw undo removes the last stroke and setup actions");
@@ -670,7 +696,7 @@ class LobbyServicesTest {
 		assertEquals(0, editor.activeDrawLayer.rasterCanvas.numChildren, "draw undo clears rasterized art");
 		assertEquals(true, Reflect.getProperty(DisplayUtil.findByName(editor.menu.art, "redoButton"), "enabled"), "draw undo enables redo");
 		clickEditorMenu(editor, "redoButton");
-		assertEquals("cffffff,t12,merase,d200;240;10;0", editor.activeDrawLayer.getSaveString(), "draw redo restores the stroke group");
+		assertEquals("cffffff,t12,merase,d100;120;5;0", editor.activeDrawLayer.getSaveString(), "draw redo restores the stroke group");
 		assertEquals(4, editor.activeDrawLayer.drawActions.length, "draw redo rebuilds decoded setup, mode, and stroke actions");
 		assertEquals(0, editor.activeDrawLayer.redoArray.length, "draw redo consumes the redo stack");
 		assertEquals(1, editor.objectLayers[0].placedObjects.length, "layer 1 does not receive layer 2 stamp");
@@ -778,12 +804,16 @@ class LobbyServicesTest {
 		assertEquals("", sadBlock.options, "closing the sad stat popup commits default as empty options");
 		clickEditorSidebar(editor, "teleportEntry");
 		var teleportBlock = editor.placeSelectedBlockAt(220, 120);
+		assertEquals(true, teleportBlock.teleportBackgroundVisibleForTests(), "editor teleport block renders its solid color backing");
+		assertEquals(EditorBlockOptions.TELEPORT_DEFAULT_COLOR, teleportBlock.teleportColorForTests(),
+			"editor teleport block starts with the Flash coral backing color");
 		teleportBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		assertNotNull(editor.activeBlockOptionsPopup, "teleport block opens the teleport option popup");
 		assertNotNull(DisplayUtil.findByName(editor.activeBlockOptionsPopup, "colorPicker"), "teleport popup mounts the color picker");
 		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setTeleportColor"), [0x00FF00]);
 		editor.closeBlockOptionsPopup();
 		assertEquals("65280", teleportBlock.options, "closing the teleport popup commits normalized color options");
+		assertEquals(0x00FF00, teleportBlock.teleportColorForTests(), "editor teleport backing refreshes after changing options");
 		teleportBlock.setOptions("65280");
 		teleportBlock.getChildByName("optionsButton").dispatchEvent(new MouseEvent(MouseEvent.MOUSE_DOWN));
 		Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setTeleportColor"),
@@ -815,6 +845,10 @@ class LobbyServicesTest {
 		assertEquals(null, LevelEditor.editor, "editor shell clears singleton");
 
 		LobbySession.group = 1;
+		LobbySession.userName = "EditorUser";
+		LobbySession.token = "editor-token";
+		LobbySession.remember = true;
+		LobbySession.server = serverInfo(0);
 		editor = new LevelEditor(null, true, false);
 		editor.initialize();
 		assertEquals(true, editor.isMod, "editor shell stores permanent mod flag");
@@ -852,8 +886,10 @@ class LobbyServicesTest {
 		assertEquals(true, LobbyArt.text(confirm, "textBox").htmlText.indexOf("Are you sure you want exit?") >= 0,
 			"exit button confirmation matches Flash copy");
 		clickPopup(confirm, "ok_bt");
-		assertEquals(true, Std.isOfType(Popup.getOpen()[Popup.getOpen().length - 1], LevelEditorConnectingPopup),
+		var connectingPopup = Std.downcast(Popup.getOpen()[Popup.getOpen().length - 1], LevelEditorConnectingPopup);
+		assertEquals(true, connectingPopup != null,
 			"confirmed exit opens the connecting popup");
+		assertEquals(true, connectingPopup.connectionAttempted, "editor exit starts the Flash lobby reconnection handshake");
 		editor.remove();
 		LobbySession.clear();
 		closeAllPopups();
@@ -916,6 +952,11 @@ class LobbyServicesTest {
 		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row starts on the authored up frame");
 		popup.listings[0].art.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(1, popup.listings[0].art.currentFrame, "load listing row does not auto-play through button states");
+		popup.listings[0].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OVER, true));
+		assertEquals("Alpha <One>", popup.listings[0].titleTextForTests(), "hover state preserves the saved level title");
+		assertEquals("Published", popup.listings[0].statusTextForTests(), "hover state preserves the saved level status");
+		popup.listings[0].dispatchEvent(new MouseEvent(MouseEvent.MOUSE_OUT, true));
+		assertEquals("Alpha <One>", popup.listings[0].titleTextForTests(), "mouse out restores data instead of the authored placeholder");
 		assertEquals("-- Alpha &lt;One&gt; --", GetLevelsPopupItem.hoverTitleForTests(popup.listings[0].level),
 			"owned listing hover title escapes HTML");
 		assertEquals("Game Mode: Alien Eggs<br/>"
@@ -1389,6 +1430,28 @@ class LobbyServicesTest {
 		UploadingLevelPopup.postFactory = previousFactory;
 		ServerConfig.resetHost();
 		LobbySession.clear();
+		closeAllPopups();
+	}
+
+	private static function testUploadingLevelPopupDecodesUrlResponse():Void {
+		var previousRequestFactory = pr2.lobby.dialogs.UploadingPopup.requestFactory;
+		var capturedRequest:Dynamic = null;
+		var parsed:Dynamic = null;
+		pr2.lobby.dialogs.UploadingPopup.requestFactory = function(request, onResult, onError):Void {
+			capturedRequest = request;
+			onResult("status=exists&message=Level%20already%20exists");
+		};
+		var fields = ["title" => "URL response"];
+		var popup = UploadingLevelPopup.defaultPost("/api/upload_level.php", fields, "Uploading level...", function(result):Void {
+			parsed = result;
+		}, function(_):Void {});
+
+		assertEquals("POST", Std.string(capturedRequest.method), "level upload keeps the Flash POST method");
+		assertEquals("URL response", Std.string(Reflect.field(capturedRequest.data, "title")), "level upload posts URL variables");
+		assertEquals("exists", Std.string(Reflect.field(parsed, "status")), "level upload decodes URL-variable status responses");
+		assertEquals("Level already exists", Std.string(Reflect.field(parsed, "message")), "level upload decodes URL-variable messages");
+		popup.remove();
+		pr2.lobby.dialogs.UploadingPopup.requestFactory = previousRequestFactory;
 		closeAllPopups();
 	}
 

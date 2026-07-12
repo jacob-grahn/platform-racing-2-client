@@ -129,6 +129,7 @@ class Course extends Sprite {
 	public var looseHats(default, null):Map<Int, HatEffect> = new Map();
 	public var raceStarted(default, null):Bool = false;
 	public var framesPlaying(default, null):Int = 0;
+	public var testMode:Bool = false;
 
 	// Invoked once when the local player reaches a finish block. The host page
 	// (GamePage) uses it to mark the player done and show the finished page; the
@@ -256,9 +257,10 @@ class Course extends Sprite {
 		buildMusicSelection();
 		buildRaceChat();
 		buildDrawingInfo();
-		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, characterLayer, levelRenderer.cameraOffset);
 		effectBackground = new EffectBackground(this, commandHandler != null ? commandHandler : CommandHandler.commandHandler);
-		addChild(effectBackground);
+		levelRenderer.attachEffectLayer(effectBackground);
+		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, effectBackground,
+			levelRenderer.cameraOffset);
 		updatePlayerDisplay();
 	}
 
@@ -1328,6 +1330,16 @@ class Course extends Sprite {
 			}
 			if (localCharacter != null) {
 				localCharacter.emitObjectiveReached(finishId, finishX, finishY);
+			}
+			return;
+		}
+		if (testMode) {
+			if (localFinishHandled) {
+				return;
+			}
+			localFinishHandled = true;
+			if (onFinish != null) {
+				onFinish(state);
 			}
 			return;
 		}

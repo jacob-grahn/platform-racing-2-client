@@ -89,6 +89,8 @@ class TestCoursePage extends Page {
 		var level = ServerLevelDecoder.decode(data.data);
 		var config = LevelConfig.fromServerData(data);
 		course = new Course(level, data, config);
+		course.testMode = true;
+		course.onFinish = function(_):Void clickRestart();
 		addChildAt(course, 0);
 		course.musicSelection.x = HOLDER_X + TEST_MUSIC_X;
 		course.levelRenderer.addEventListener(MouseEvent.CLICK, teleportToClickPos);
@@ -125,6 +127,9 @@ class TestCoursePage extends Page {
 		var speed = parseStatField(savedStats, "speed", Settings.DEFAULT_LE_TEST_STATS.speed);
 		var acceleration = parseStatField(savedStats, "acceleration", Settings.DEFAULT_LE_TEST_STATS.acceleration);
 		var jumping = parseStatField(savedStats, "jumping", Settings.DEFAULT_LE_TEST_STATS.jumping);
+		if (course.gameMode() == "roguelike") {
+			speed = acceleration = jumping = 0;
+		}
 		course.localCharacter.levelEditorStatsEnabled = true;
 		statsSelect = new StatsSelect(TEST_STATS_TOTAL, speed, acceleration, jumping, course.localCharacter);
 		statsSelect.x = HOLDER_X + TEST_STATS_X;

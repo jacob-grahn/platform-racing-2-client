@@ -52,16 +52,23 @@ class GetLevelsPopupItem extends SelectableButton {
 	}
 
 	private function onMouseOver(_:MouseEvent):Void {
+		refreshListingText();
 		info = new HoverPopup(hoverTitle(level), hoverBody(level), art);
 		info.width -= 3;
 		info.x = 550 - info.width;
 	}
 
 	private function onMouseOut(_:MouseEvent = null):Void {
+		refreshListingText();
 		if (info != null) {
 			info.remove();
 			info = null;
 		}
+	}
+
+	override public function setSelected(on:Bool):Void {
+		super.setSelected(on);
+		refreshListingText();
 	}
 
 	override public function remove():Void {
@@ -83,6 +90,24 @@ class GetLevelsPopupItem extends SelectableButton {
 		if (text != null) {
 			text.text = value;
 		}
+	}
+
+	private function refreshListingText():Void {
+		if (art == null || level == null) {
+			return;
+		}
+		setText("titleBox", title);
+		setText("statusBox", parseInt(field("live"), 0) == 1 ? "Published" : "Unpublished");
+	}
+
+	public function titleTextForTests():String {
+		var text = LobbyArt.text(art, "titleBox");
+		return text == null ? "" : text.text;
+	}
+
+	public function statusTextForTests():String {
+		var text = LobbyArt.text(art, "statusBox");
+		return text == null ? "" : text.text;
 	}
 
 	private function field(name:String):String {

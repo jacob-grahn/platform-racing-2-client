@@ -11,9 +11,12 @@ class EditorBrushColorPickerButton extends EditorSideBarEntry {
 		super("color", title, desc);
 		picker = new ColorPicker();
 		picker.name = "brushColorPicker";
+		picker.direction = ColorPicker.LEFT;
 		picker.width = 30;
 		picker.height = 30;
-		picker.addEventListener(Event.CHANGE, commitColor);
+		// Flash's draw Tools listens for CLOSE, not the popup's live CHANGE
+		// previews. This also avoids stealing stage focus on every eyedropper frame.
+		picker.addEventListener(Event.CLOSE, commitColor);
 		addChild(picker);
 		updateColor();
 	}
@@ -35,7 +38,7 @@ class EditorBrushColorPickerButton extends EditorSideBarEntry {
 	}
 
 	override public function remove():Void {
-		picker.removeEventListener(Event.CHANGE, commitColor);
+		picker.removeEventListener(Event.CLOSE, commitColor);
 		picker.remove();
 		super.remove();
 	}

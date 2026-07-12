@@ -10,13 +10,18 @@ class EditorBrushCursor extends EditorToolCursor {
 	private var circle:PR2MovieClip;
 	private var size:Float = 4;
 	private var zoom:Float = 1;
+	private var drawing:Bool = false;
 
 	public function new(manager:EditorToolCursorManager, sidebar:String, toolId:String, eraseMode:Bool) {
 		super(manager, sidebar, toolId, true);
 		this.eraseMode = eraseMode;
 		disposable = false;
 		circle = PR2MovieClip.fromLinkage("Circle", {maxNestedDepth: 2});
-		applyCursorGraphic(circle);
+		// Circle is authored around (0, 0), exactly as Flash's Brush expects.
+		// Generic cursor centering shifts an already-centered symbol up-left.
+		circle.mouseEnabled = false;
+		circle.mouseChildren = false;
+		addChild(circle);
 		setSize(size);
 	}
 
@@ -43,7 +48,16 @@ class EditorBrushCursor extends EditorToolCursor {
 	}
 
 	public function updateVisibilityForStagePoint(stageX:Float, stageY:Float):Void {
-		visible = !manager.isOverEditorMenu(stageX, stageY);
+		visible = !drawing && !manager.isOverEditorMenu(stageX, stageY);
+	}
+
+	public function setDrawing(nextDrawing:Bool):Void {
+		drawing = nextDrawing;
+		if (drawing) {
+			visible = false;
+		} else {
+			updateVisibilityForStagePoint(x, y);
+		}
 	}
 
 	override function mouseMoveHandler(e:MouseEvent):Void {

@@ -30,6 +30,7 @@ import pr2.level.ObjectCodes;
 import pr2.level.ServerLevelDecoder;
 import pr2.level.ServerLevelRenderer;
 import pr2.lobby.LobbyArt;
+import pr2.lobby.dialogs.Popup;
 import pr2.net.ServerLevelData;
 import pr2.net.ServerConfig;
 import pr2.page.BlockGridLines;
@@ -221,28 +222,40 @@ class LevelEditor extends Page {
 
 	public function setGravity(value:Null<String>):Void {
 		levelConfig.setGravity(value == null || value == "" ? "1" : value);
+		updateSettingValue("gravity", gravity);
 	}
 
 	public function setMaxTime(value:Null<String>):Void {
 		levelConfig.setMaxTime(value == null || value == "" ? "120" : value);
+		updateSettingValue("time", maxTime);
 	}
 
 	public function setMinRank(value:Null<String>):Void {
 		minRank = value == null || value == "" ? "0" : value;
+		updateSettingValue("rank", minRank);
 	}
 
 	public function setCowboyChance(value:Null<String>):Void {
 		levelConfig.setCowboyChance(value == null || value == "" ? "5" : value);
+		updateSettingValue("sfcm", cowboyChance);
 	}
 
 	public function setPass(value:Null<String>):Void {
 		pass = value == null ? "" : value;
 		hasPass = pass != "" ? 1 : 0;
+		updateSettingValue("pass", pass);
 	}
 
 	public function setGameMode(value:String):Void {
 		levelConfig.setGameMode(value == "eggs" ? "egg" : value);
 		badHats = levelConfig.badHats.copy();
+		updateSettingValue("mode", gameMode);
+	}
+
+	private function updateSettingValue(itemId:String, value:String):Void {
+		if (menu != null) {
+			menu.settings.setEntryValue(itemId, value);
+		}
 	}
 
 	public function setBrushColor(value:Int):Void {
@@ -465,12 +478,18 @@ class LevelEditor extends Page {
 		if (layerNum < 1 || layerNum > objectLayers.length) {
 			return;
 		}
+		var nextObjectLayer = objectLayers[layerNum - 1];
+		if (activeObjectLayer != null && activeObjectLayer != nextObjectLayer) {
+			activeObjectLayer.deselectItem();
+		}
 		activeDrawLayer = drawLayers[layerNum - 1];
-		activeObjectLayer = objectLayers[layerNum - 1];
+		activeObjectLayer = nextObjectLayer;
+		updateObjectLayerInteractivity();
 	}
 
 	public function focusOnBlocks():Void {
 		focusedEditorLayer = "blocks";
+		updateObjectLayerInteractivity();
 		if (menu != null) {
 			menu.updateUndoRedoState();
 		}
@@ -478,6 +497,7 @@ class LevelEditor extends Page {
 
 	public function focusOnActiveObjectLayer():Void {
 		focusedEditorLayer = "objects";
+		updateObjectLayerInteractivity();
 		if (menu != null) {
 			menu.updateUndoRedoState();
 		}
@@ -485,6 +505,7 @@ class LevelEditor extends Page {
 
 	public function focusOnActiveDrawLayer():Void {
 		focusedEditorLayer = "draw";
+		updateObjectLayerInteractivity();
 		if (menu != null) {
 			menu.updateUndoRedoState();
 		}
@@ -492,6 +513,7 @@ class LevelEditor extends Page {
 
 	public function focusNone():Void {
 		focusedEditorLayer = "";
+		updateObjectLayerInteractivity();
 		if (menu != null) {
 			menu.updateUndoRedoState();
 		}
@@ -749,6 +771,9 @@ class LevelEditor extends Page {
 		drawingLayer = activeDrawLayer;
 		var isEraser = selectedToolId == "eraser";
 		drawingLayer.beginStroke(stageX, stageY, isEraser ? "erase" : "draw", brushSize, isEraser ? 0xFFFFFF : brushColor);
+		if (toolCursor != null) {
+			toolCursor.setBrushDrawing(true);
+		}
 		startBrushRestartTimer();
 		return true;
 	}
@@ -758,10 +783,16 @@ class LevelEditor extends Page {
 	}
 
 	public function isPointOverMenu(stageX:Float, stageY:Float):Bool {
-		if (menu == null) {
+		return (menu != null && displayShapeHitTest(menu, stageX, stageY))
+			|| (activeBrushSizeMenu != null && displayBoundsHitTest(activeBrushSizeMenu, stageX, stageY));
+	}
+
+	private static function displayBoundsHitTest(display:DisplayObject, stageX:Float, stageY:Float):Bool {
+		if (display == null || !display.visible) {
 			return false;
 		}
-		return displayShapeHitTest(menu, stageX, stageY);
+		var point = display.globalToLocal(new Point(stageX, stageY));
+		return display.getBounds(display).contains(point.x, point.y);
 	}
 
 	private static function displayShapeHitTest(display:DisplayObject, stageX:Float, stageY:Float):Bool {
@@ -788,6 +819,9 @@ class LevelEditor extends Page {
 		}
 		if (!drawingLayer.isDrawing()) {
 			drawingLayer = null;
+			if (toolCursor != null) {
+				toolCursor.setBrushDrawing(false);
+			}
 			stopBrushRestartTimer();
 			return false;
 		}
@@ -805,6 +839,9 @@ class LevelEditor extends Page {
 		}
 		drawingLayer.finishStroke();
 		drawingLayer = null;
+		if (toolCursor != null) {
+			toolCursor.setBrushDrawing(false);
+		}
 		stopBrushRestartTimer();
 		return true;
 	}
@@ -1058,8 +1095,17 @@ class LevelEditor extends Page {
 		}
 		activeDrawLayer = drawLayers[0];
 		activeObjectLayer = objectLayers[0];
+		updateObjectLayerInteractivity();
 		applyLayerPositions();
 		applyEditorColorTransforms();
+	}
+
+	private function updateObjectLayerInteractivity():Void {
+		for (layer in objectLayers) {
+			var active = focusedEditorLayer == "objects" && layer == activeObjectLayer;
+			layer.mouseEnabled = active;
+			layer.mouseChildren = active;
+		}
 	}
 
 	private function attachEditorBackground():Void {
@@ -1125,7 +1171,7 @@ class LevelEditor extends Page {
 			blockLayer.transform.colorTransform = backgroundColorTransform(1);
 		}
 		for (layer in drawLayers) {
-			layer.transform.colorTransform = backgroundColorTransform(layer.scaleX);
+			layer.transform.colorTransform = backgroundColorTransform(layer.layerScale);
 		}
 		for (layer in objectLayers) {
 			layer.transform.colorTransform = backgroundColorTransform(layer.scaleX);
@@ -1363,7 +1409,7 @@ class LevelEditor extends Page {
 			positionLayer(blockLayer, 1);
 		}
 		for (layer in drawLayers) {
-			positionLayer(layer, layer.scaleX);
+			positionLayer(layer, layer.layerScale);
 		}
 		for (layer in objectLayers) {
 			positionLayer(layer, layer.scaleX);
@@ -1376,15 +1422,32 @@ class LevelEditor extends Page {
 	}
 
 	private function placeSelectedToolFromMouse(event:MouseEvent):Void {
+		if (Popup.getOpen().length > 0) {
+			// Modal dialogs live directly on the stage, above the editor. Let their
+			// controls receive the click without mutating the level underneath.
+			return;
+		}
 		var target = Std.downcast(event.target, DisplayObject);
+		var targetInMenu = target != null && isTargetWithinEditorMenu(target);
+		var targetInPlacedObject = target != null && isTargetWithinPlacedEditorObject(target);
 		mouseDownEventsForTests++;
 		lastMouseDownTargetForTests = target == null ? "" : target.name;
 		lastMouseDownXForTests = event.stageX;
 		lastMouseDownYForTests = event.stageY;
 		if (isStampPlacementTool()) {
+			if (targetInPlacedObject) {
+				// Flash's ObjectPlacer removes itself when the current object layer
+				// is hit, then lets the stamp's drag/resize handler receive the click.
+				cancelSelectedPlacementTool();
+				return;
+			}
 			if (target == null || !canPlaceStampFromTarget(target, event.stageX, event.stageY)) {
 				cancelSelectedPlacementTool();
-				event.stopImmediatePropagation();
+				// Flash removes a one-shot placer when editor chrome is clicked, but
+				// lets the click continue to the menu/scrollbar control underneath.
+				if (!targetInMenu && !isPointOverMenu(event.stageX, event.stageY)) {
+					event.stopImmediatePropagation();
+				}
 				return;
 			}
 			if (placeSelectedToolAt(event.stageX, event.stageY) != null) {
@@ -1392,7 +1455,7 @@ class LevelEditor extends Page {
 			}
 			return;
 		}
-		if (isPointOverMenu(event.stageX, event.stageY)) {
+		if (targetInMenu || isPointOverMenu(event.stageX, event.stageY)) {
 			return;
 		}
 		if (target != null && canStartBrushFromTarget(target, event.stageX, event.stageY) && beginSelectedBrushAt(event.stageX, event.stageY)) {
@@ -1433,6 +1496,9 @@ class LevelEditor extends Page {
 	}
 
 	private function continueSelectedToolFromMouse(event:MouseEvent):Void {
+		if (Popup.getOpen().length > 0) {
+			return;
+		}
 		if (continueSelectedBrushAt(event.stageX, event.stageY)) {
 			event.stopImmediatePropagation();
 			return;
@@ -1483,10 +1549,32 @@ class LevelEditor extends Page {
 		}
 		var current:Null<DisplayObject> = target;
 		while (current != null) {
-			if (current == menu) {
+			if (current == menu || current == activeBrushSizeMenu) {
 				return false;
 			}
 			if (current == activeDrawLayer || current == activeObjectLayer || current == blockGrid || current == this) {
+				return true;
+			}
+			current = current.parent;
+		}
+		return false;
+	}
+
+	private function isTargetWithinEditorMenu(target:DisplayObject):Bool {
+		var current:Null<DisplayObject> = target;
+		while (current != null) {
+			if (current == menu || current == activeBrushSizeMenu) {
+				return true;
+			}
+			current = current.parent;
+		}
+		return false;
+	}
+
+	private function isTargetWithinPlacedEditorObject(target:DisplayObject):Bool {
+		var current:Null<DisplayObject> = target;
+		while (current != null && current != activeObjectLayer) {
+			if (Std.isOfType(current, EditorStampDisplay) || Std.isOfType(current, EditorTextObject)) {
 				return true;
 			}
 			current = current.parent;
@@ -1504,6 +1592,9 @@ class LevelEditor extends Page {
 
 	private function canPlaceStampFromTarget(target:DisplayObject, stageX:Float, stageY:Float):Bool {
 		if (!isStampPlacementTool()) {
+			return false;
+		}
+		if (isTargetWithinPlacedEditorObject(target)) {
 			return false;
 		}
 		if (isPointOverMenu(stageX, stageY)) {

@@ -61,7 +61,23 @@ class EditorSideBar extends Sprite {
 		scroll.mask = scrollMask;
 	}
 
-	public function init():Void {}
+	public function init():Void {
+		if (id != "tools") {
+			return;
+		}
+		var brushEntry = Std.downcast(getChildByName("brushEntry"), EditorSideBarEntry);
+		if (brushEntry != null) {
+			if (selectedEntry != null) {
+				selectedEntry.setSelected(false);
+			}
+			selectedEntry = brushEntry;
+			selectedEntry.setSelected(true);
+		}
+		var editor = LevelEditor.editor;
+		if (editor != null) {
+			editor.selectEditorTool("tools", "brush");
+		}
+	}
 
 	public function setZoom(nextZoom:Float):Void {
 		if (!Math.isNaN(nextZoom) && nextZoom > 0) {
@@ -162,6 +178,13 @@ class EditorSideBar extends Sprite {
 			if (colorEntry != null) {
 				colorEntry.updateColor();
 			}
+		}
+	}
+
+	public function setEntryValue(itemId:String, value:String):Void {
+		var entry = Std.downcast(getChildByName(itemId + "Entry"), EditorSideBarEntry);
+		if (entry != null) {
+			entry.setDisplayedValue(value);
 		}
 	}
 

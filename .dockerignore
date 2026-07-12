@@ -1,0 +1,7 @@
+*
+!Dockerfile
+!export/
+!export/html5/
+!export/html5/bin/
+!export/html5/bin/**
+

@@ -11,6 +11,7 @@ class EditorDrawableLayer extends Sprite {
 	private static inline var BRUSH_RESTART_DISTANCE:Float = 400;
 
 	public final layerNum:Int;
+	public final layerScale:Float;
 	public final saveArray:Array<String> = [];
 	public final redoArray:Array<String> = [];
 	public final drawActions:Array<DecodedDrawAction> = [];
@@ -30,9 +31,11 @@ class EditorDrawableLayer extends Sprite {
 	public function new(layerNum:Int, layerScale:Float) {
 		super();
 		this.layerNum = layerNum;
+		this.layerScale = layerScale;
 		name = 'editorDrawableLayer$layerNum';
-		scaleX = layerScale;
-		scaleY = layerScale;
+		// Flash's DrawableBackground.setScale() stores the parallax factor but,
+		// unlike Background.setScale(), deliberately leaves drawing unscaled.
+		// Only this plane's camera offset uses the scale.
 		rasterCanvas = new Sprite();
 		brushCanvas = new Sprite();
 		addChild(rasterCanvas);
@@ -180,11 +183,9 @@ class EditorDrawableLayer extends Sprite {
 		brushY = y;
 		var action = new DecodedDrawAction("d", [x, y]);
 		recordAction(action, "d" + x + ";" + y);
-		if (mode != "erase") {
-			brushCanvas.graphics.moveTo(x, y);
-			brushCanvas.graphics.lineTo(x - 0.15, y);
-			brushCanvas.graphics.moveTo(x, y);
-		}
+		brushCanvas.graphics.moveTo(x, y);
+		brushCanvas.graphics.lineTo(x - 0.15, y);
+		brushCanvas.graphics.moveTo(x, y);
 	}
 
 	private function lineTo(x:Float, y:Float):Void {
@@ -196,9 +197,7 @@ class EditorDrawableLayer extends Sprite {
 		action.values.push(dx);
 		action.values.push(dy);
 		saveArray[saveArray.length - 1] += ";" + dx + ";" + dy;
-		if (mode != "erase") {
-			brushCanvas.graphics.lineTo(x, y);
-		}
+		brushCanvas.graphics.lineTo(x, y);
 	}
 
 	private function rasterize():Void {

@@ -40,6 +40,7 @@ class LocalPlayerControllerTest {
 		testLeavingWaterReturnsToLand();
 		testSafetyBlockReturnsPlayerToLastSafeSpot();
 		testSafetyBlockEmitsPoofVisual();
+		testFallingPastMapReturnsPlayerToLastSafeSpot();
 		testHighImpactFallBreaksCrumbleBlock();
 		testCheeseHatDoublesStandingCrumbleForce();
 		testCheeseHatForcesBumpCrumbleDamage();
@@ -599,6 +600,26 @@ class LocalPlayerControllerTest {
 		}
 
 		assertEquals(1, poofEvents, "safety return emits one teleport poof visual event");
+	}
+
+	private static function testFallingPastMapReturnsPlayerToLastSafeSpot():Void {
+		var player = newPlayer();
+		var safeX = player.lastSafeX;
+		var safeY = player.lastSafeY;
+		player.setControllerPosition(safeX, 10000);
+		player.step(new LocalPlayerInput());
+
+		var state = player.debugState();
+		assertClose(safeX, state.x, "falling 500px past the map restores last safe x");
+		assertClose(safeY, state.y, "falling 500px past the map restores last safe y");
+		assertClose(0, state.vy, "map return clears falling velocity");
+		var sawPoof = false;
+		for (event in player.consumeBlockVisualEvents()) {
+			if (event.kind == SafetyPoof) {
+				sawPoof = true;
+			}
+		}
+		assertEquals(true, sawPoof, "map return emits the Flash safety poof");
 	}
 
 	private static function testHighImpactFallBreaksCrumbleBlock():Void {

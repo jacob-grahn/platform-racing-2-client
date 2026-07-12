@@ -15,6 +15,7 @@ import openfl.geom.Point;
 import openfl.geom.Rectangle;
 import openfl.text.TextField;
 import openfl.text.TextFieldAutoSize;
+import openfl.text.TextFormat;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.Constants;
@@ -32,6 +33,7 @@ import pr2.effects.MineAppear;
 import pr2.effects.MineExplosion;
 import pr2.effects.TeleportPop;
 import pr2.runtime.PR2MovieClip;
+import pr2.runtime.FontResolver;
 
 typedef ArtRenderOptions = {
 	@:optional var onArtWarning:String->Void;
@@ -489,7 +491,36 @@ class ServerLevelRenderer extends Sprite {
 		if (layer.parent == worldContainer) {
 			return;
 		}
-		worldContainer.addChild(layer);
+		// Flash order is blockBackground, frontBackground, effectBackground,
+		// bg4, bg5. Keep the player above the blocks but below art 0 and art 00.
+		var firstForegroundArt = artLayerContainers.length > 3 ? artLayerContainers[3] : null;
+		if (firstForegroundArt != null && firstForegroundArt.parent == worldContainer) {
+			worldContainer.addChildAt(layer, worldContainer.getChildIndex(firstForegroundArt));
+		} else {
+			worldContainer.addChild(layer);
+		}
+	}
+
+	public function attachEffectLayer(layer:Sprite):Void {
+		if (layer.parent == worldContainer) {
+			return;
+		}
+		// Effects sit above frontBackground (characters) but remain below the two
+		// foreground art planes, matching Course.attachBackgrounds in Flash.
+		var firstForegroundArt = artLayerContainers.length > 3 ? artLayerContainers[3] : null;
+		if (firstForegroundArt != null && firstForegroundArt.parent == worldContainer) {
+			worldContainer.addChildAt(layer, worldContainer.getChildIndex(firstForegroundArt));
+		} else {
+			worldContainer.addChild(layer);
+		}
+	}
+
+	@:allow(pr2.gameplay.GameShellMountTest)
+	private function artLayerDepth(index:Int):Int {
+		if (index < 0 || index >= artLayerContainers.length) {
+			return -1;
+		}
+		return worldChildDepth(artLayerContainers[index]);
 	}
 
 	public function animateArrow(worldX:Int, worldY:Int):Void {
@@ -1605,6 +1636,7 @@ class ServerLevelRenderer extends Sprite {
 
 	public static function addLayerText(container:Sprite, text:DecodedTextObject, layerScale:Float):Void {
 		var field = new TextField();
+		field.defaultTextFormat = new TextFormat(FontResolver.resolve("Verdana"), 18, text.color);
 		field.selectable = false;
 		field.wordWrap = false;
 		field.multiline = true;

@@ -31,6 +31,7 @@ class EditorBlockObject extends Sprite {
 	private var dragOffsetY:Float = 0;
 	private var dragStartX:Float = 0;
 	private var dragStartY:Float = 0;
+	private var teleportColor:Int = EditorBlockOptions.TELEPORT_DEFAULT_COLOR;
 
 	public function new(editor:LevelEditor, code:Int, type:Null<BlockType>, x:Int, y:Int, options:String = "") {
 		super();
@@ -45,7 +46,8 @@ class EditorBlockObject extends Sprite {
 		name = "editorBlock_" + segX + "_" + segY;
 		buttonMode = true;
 		useHandCursor = true;
-		display = createDisplay(code);
+		display = createDisplay(code, options);
+		refreshTeleportBackground();
 		addChild(display);
 		addEventListener(MouseEvent.MOUSE_DOWN, blockPressed);
 	}
@@ -68,6 +70,7 @@ class EditorBlockObject extends Sprite {
 			return;
 		}
 		options = normalized;
+		refreshTeleportBackground();
 		if (record && deleteable && editor.blockLayer != null && parent == editor.blockLayer) {
 			editor.blockLayer.recordBlockOptionsChanged();
 		}
@@ -178,6 +181,14 @@ class EditorBlockObject extends Sprite {
 
 	public function deleteButtonScaleXForTests():Float {
 		return deleteButton == null ? 0 : deleteButton.scaleX;
+	}
+
+	public function teleportBackgroundVisibleForTests():Bool {
+		return display.getChildByName("teleportColor") != null;
+	}
+
+	public function teleportColorForTests():Int {
+		return teleportColor;
 	}
 
 	private function blockPressed(event:MouseEvent):Void {
@@ -294,7 +305,22 @@ class EditorBlockObject extends Sprite {
 		stage.removeEventListener(MouseEvent.MOUSE_UP, dragMouseReleased);
 	}
 
-	private static function createDisplay(code:Int):Sprite {
+	private function refreshTeleportBackground():Void {
+		if (code != ObjectCodes.BLOCK_TELEPORT) {
+			return;
+		}
+		teleportColor = EditorBlockOptions.teleportColor(options);
+		var background = Std.downcast(display.getChildByName("teleportColor"), Sprite);
+		if (background == null) {
+			return;
+		}
+		background.graphics.clear();
+		background.graphics.beginFill(teleportColor);
+		background.graphics.drawRect(0, 0, LevelEditor.segSize, LevelEditor.segSize);
+		background.graphics.endFill();
+	}
+
+	private static function createDisplay(code:Int, options:String):Sprite {
 		var holder = new Sprite();
 		if (code == ObjectCodes.BLOCK_MINION_EGG) {
 			var eggBlock = PR2MovieClip.fromLinkage("EggBlockGraphic", {maxNestedDepth: 8});
@@ -302,6 +328,11 @@ class EditorBlockObject extends Sprite {
 			stopEggBlockFoot(eggBlock, "var_165");
 			holder.addChild(eggBlock);
 			return holder;
+		}
+		if (code == ObjectCodes.BLOCK_TELEPORT) {
+			var teleportBackground = new Sprite();
+			teleportBackground.name = "teleportColor";
+			holder.addChild(teleportBackground);
 		}
 		var assetPath = ServerLevelRenderer.blockAssetPath(code);
 		if (assetPath != "" && Assets.exists(assetPath, AssetType.IMAGE)) {

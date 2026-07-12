@@ -69,6 +69,14 @@ class GameShellMountTest {
 			"back character layer renders below the blocks");
 		assertEquals(true, course.levelRenderer.worldChildDepth(course.characterLayer) > course.levelRenderer.blockLayerDepth(),
 			"front character layer sits inside the rotating world above the blocks");
+		assertBelow(course.levelRenderer.worldChildDepth(course.characterLayer), course.levelRenderer.artLayerDepth(3),
+			"front character layer renders below art 0");
+		assertBelow(course.levelRenderer.worldChildDepth(course.characterLayer), course.levelRenderer.artLayerDepth(4),
+			"front character layer renders below art 00");
+		assertEquals(true, course.levelRenderer.worldChildDepth(course.effectBackground) > course.levelRenderer.worldChildDepth(course.characterLayer),
+			"effect layer renders above the characters");
+		assertBelow(course.levelRenderer.worldChildDepth(course.effectBackground), course.levelRenderer.artLayerDepth(3),
+			"effect layer renders below art 0 like Flash");
 		testRemoteParentLayerSwitch(course);
 		testLocalWaterParentLayerSwitch(course);
 
@@ -99,6 +107,7 @@ class GameShellMountTest {
 		testRenderingUsesFreeMoveCamera();
 		testFinishDrawingReadinessEmission();
 		testLocalFinishBeginsCharacterRemoval();
+		testTestModeFinishDelegatesWithoutRaceRemoval();
 		testObjectiveModeReportsEachFinishOnce();
 		testRotateBlockDisplayKeepsLocalCharacterCentered();
 		testCountdownKeepsCameraStill();
@@ -365,6 +374,24 @@ class GameShellMountTest {
 		course.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertClose(x, course.localCharacter.debugState().x, "finished character no longer steps horizontally");
 		assertClose(y, course.localCharacter.debugState().y, "finished character no longer steps vertically");
+		course.remove();
+	}
+
+	private static function testTestModeFinishDelegatesWithoutRaceRemoval():Void {
+		var course = buildCourse("race");
+		course.testMode = true;
+		var callbacks = 0;
+		course.onFinish = function(_):Void callbacks++;
+		LobbySocket.resetSent();
+		var finish = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
+			50, 0, true, 1, 45, 15);
+		@:privateAccess course.maybeHandleLocalFinish(finish);
+
+		assertEquals(1, callbacks, "test-mode finish delegates to the level tester once");
+		assertEquals("", LobbySocket.sentCommands.join("|"), "test-mode finish emits no race network commands");
+		var alphaBefore = course.localCharacter.alpha;
+		course.localCharacter.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertClose(alphaBefore, course.localCharacter.alpha, "test-mode finish does not fade out the character");
 		course.remove();
 	}
 

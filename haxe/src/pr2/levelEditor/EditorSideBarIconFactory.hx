@@ -99,12 +99,17 @@ class EditorSideBarIconFactory {
 
 	private static function fit(icon:DisplayObject):Void {
 		var bounds = icon.getBounds(icon);
-		if (bounds.width <= 0 || bounds.height <= 0) {
+		var visualWidth = Math.abs(icon.width);
+		var visualHeight = Math.abs(icon.height);
+		if (visualWidth <= 0 || visualHeight <= 0 || bounds.width <= 0 || bounds.height <= 0) {
 			icon.x = ICON_OFFSET;
 			icon.y = ICON_OFFSET;
 			return;
 		}
-		var scale = Math.min(ICON_BOX / bounds.width, ICON_BOX / bounds.height);
+		// Raster stamps are exported at a higher bitmap resolution and scaled to
+		// their authored Flash dimensions. `getBounds(icon)` reports those source
+		// pixels, whereas width/height report the actual displayed footprint.
+		var scale = Math.min(ICON_BOX / visualWidth, ICON_BOX / visualHeight);
 		icon.scaleX *= scale;
 		icon.scaleY *= scale;
 		var fittedWidth = bounds.width * Math.abs(icon.scaleX);

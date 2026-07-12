@@ -39,8 +39,13 @@ class EditorBrushSizePickerButton extends EditorSideBarEntry {
 		}
 		var editor = LevelEditor.editor;
 		var size = editor == null ? EditorDrawableLayer.DEFAULT_BRUSH_SIZE : editor.brushSize;
-		circle.width = Math.sqrt(size) * 3;
-		circle.height = Math.sqrt(size) * 3;
+		var previewSize = Math.min(Math.sqrt(size) * 3, 28);
+		circle.width = previewSize;
+		circle.height = previewSize;
+	}
+
+	public function previewSizeForTests():Float {
+		return circle == null ? 0 : Math.max(circle.width, circle.height);
 	}
 
 	override public function remove():Void {
