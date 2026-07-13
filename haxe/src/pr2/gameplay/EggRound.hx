@@ -1,11 +1,14 @@
 package pr2.gameplay;
 
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.geom.ColorTransform;
 import openfl.geom.Point;
 import openfl.utils.Assets;
 import pr2.audio.SoundEffects;
 import pr2.effects.LaserShotTimeline;
+import pr2.effects.PhysicsEffect;
+import pr2.level.ServerLevel.DecodedBlock;
 import pr2.level.ServerLevel;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
@@ -37,6 +40,10 @@ typedef EggAttackVisual = {
 	var velY:Float;
 	var life:Int;
 	var alphaJitter:Bool;
+	var effectType:String;
+	var shooterId:Int;
+	var hitPlayer:Bool;
+	var hitBlock:Bool;
 	var display:PR2MovieClip;
 }
 
@@ -63,17 +70,21 @@ class EggRound {
 	private final cameraOffset:Void->Point;
 	private final playCollectSound:Int->Int->Void;
 	private final visualRandom:Void->Float;
+	private final onIcePlayerHit:Int->Void;
+	private final onIceBlockHit:DecodedBlock->Void;
 	private var eggs:Map<Int, EggState> = new Map();
 	private var attackVisuals:Array<EggAttackVisual> = [];
 
 	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
-			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float) {
+			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float, ?onIcePlayerHit:Int->Void, ?onIceBlockHit:DecodedBlock->Void) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
 		this.displayLayer = displayLayer;
 		this.cameraOffset = cameraOffset != null ? cameraOffset : function():Point return new Point();
 		this.playCollectSound = playCollectSound != null ? playCollectSound : playDefaultCollectSound;
 		this.visualRandom = visualRandom != null ? visualRandom : Math.random;
+		this.onIcePlayerHit = onIcePlayerHit != null ? onIcePlayerHit : function(_:Int):Void {};
+		this.onIceBlockHit = onIceBlockHit != null ? onIceBlockHit : function(_:DecodedBlock):Void {};
 	}
 
 	public function initRound(seed:Int):Void {
@@ -103,7 +114,7 @@ class EggRound {
 
 	public function step(level:ServerLevel, courseRotation:Int = 0, ?playerX:Float, ?playerY:Float, playerCrouching:Bool = false,
 			playerRemoved:Bool = false):Void {
-		stepAttackVisuals();
+		stepAttackVisuals(level, courseRotation, playerX, playerY, playerCrouching, playerRemoved);
 		for (id in ids()) {
 			var egg = eggs.get(id);
 			if (egg == null) {
@@ -416,23 +427,26 @@ class EggRound {
 				var dir = parts.length > 3 ? parts[3] : "right";
 				var angle = dir == "left" ? 180 : 0;
 				var rot = parsePartInt(parts, 4);
+				var shooterId = parsePartInt(parts, 5);
 				var laser = addAttackVisual("LaserShotGraphic", x, y, 1, 1, Math.cos(angle * Math.PI / 180) * 29,
-					Math.sin(angle * Math.PI / 180) * 29, 100, false);
+					Math.sin(angle * Math.PI / 180) * 29, 100, false, "Laser", shooterId);
 				laser.display.rotation = angle - rot;
 			case "IceWave":
 				var base = parsePartInt(parts, 3);
 				var rot = parsePartInt(parts, 4);
+				var shooterId = parsePartInt(parts, 5);
 				for (angle in [base, base + 30, base - 30]) {
 					var shot = addAttackVisual("IceWaveGraphic", x, y, 1, 1, Math.cos(angle * Math.PI / 180) * 5,
-						Math.sin(angle * Math.PI / 180) * 5, 75, true);
+						Math.sin(angle * Math.PI / 180) * 5, 75, true, "IceWave", shooterId);
 					shot.display.rotation = angle - rot;
+					addIceWaveCore(shot.display);
 				}
 			default:
 		}
 	}
 
 	private function addAttackVisual(linkage:String, x:Int, y:Int, scaleX:Float, scaleY:Float, velX:Float, velY:Float, life:Int,
-			alphaJitter:Bool):EggAttackVisual {
+			alphaJitter:Bool, effectType:String = "", shooterId:Int = -1):EggAttackVisual {
 		var display = PR2MovieClip.fromLinkage(linkage, {maxNestedDepth: 8});
 		if (linkage == "LaserShotGraphic") {
 			LaserShotTimeline.apply(display);
@@ -449,13 +463,18 @@ class EggRound {
 			velY: velY,
 			life: life,
 			alphaJitter: alphaJitter,
+			effectType: effectType,
+			shooterId: shooterId,
+			hitPlayer: false,
+			hitBlock: false,
 			display: display
 		};
 		attackVisuals.push(visual);
 		return visual;
 	}
 
-	private function stepAttackVisuals():Void {
+	private function stepAttackVisuals(level:ServerLevel, courseRotation:Int, ?playerX:Float, ?playerY:Float, playerCrouching:Bool,
+			playerRemoved:Bool):Void {
 		var remaining:Array<EggAttackVisual> = [];
 		for (visual in attackVisuals) {
 			visual.posX += visual.velX;
@@ -465,6 +484,20 @@ class EggRound {
 			if (visual.alphaJitter) {
 				visual.display.alpha = (Math.random() * visual.life / 100) + 0.25;
 			}
+			if (visual.effectType == "IceWave") {
+				if (!visual.hitPlayer && playerX != null && playerY != null
+					&& BlockCollision.isNearLocalPlayer(Std.int(visual.posX), Std.int(visual.posY), playerX, playerY, playerCrouching, playerRemoved)) {
+					visual.hitPlayer = true;
+					onIcePlayerHit(visual.shooterId);
+				}
+				if (!visual.hitBlock) {
+					var block = PhysicsEffect.blockFromPos(level, Std.int(visual.posX), Std.int(visual.posY), courseRotation);
+					if (block != null) {
+						visual.hitBlock = true;
+						onIceBlockHit(block);
+					}
+				}
+			}
 			visual.life--;
 			if (visual.life <= 0) {
 				removeAttackVisual(visual);
@@ -473,6 +506,16 @@ class EggRound {
 			}
 		}
 		attackVisuals = remaining;
+	}
+
+	private static function addIceWaveCore(display:PR2MovieClip):Void {
+		var core = new Shape();
+		core.name = "iceWaveCore";
+		core.graphics.lineStyle(1, 0x8ACBFF, 1);
+		core.graphics.beginFill(0xDCEAF3, 0.92);
+		core.graphics.drawEllipse(-51, -8, 65, 16);
+		core.graphics.endFill();
+		display.addChild(core);
 	}
 
 	private function clearAttackVisuals():Void {

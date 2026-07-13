@@ -11,7 +11,7 @@ import pr2.harness.LocalPlayerDebugState;
 import pr2.lobby.LobbySession;
 import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.BlockType;
-import pr2.level.FixtureLevel.LevelBlock;
+import pr2.level.WorldLevel.LevelBlock;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -59,9 +59,9 @@ class GameShellMountTest {
 		assertEquals(course.localCharacter, course.characterLayer.getChildAt(0), "local character owns display-list slot");
 		var start = @:privateAccess course.level.startBlocks()[0];
 		var initialState = course.localCharacter.debugState();
-		assertClose(start.x + 15, @:privateAccess course.serverFixture.fixturePixelToWorldX(initialState.x),
+		assertClose(start.x + 15, initialState.x,
 			"local character spawns at Flash start center x");
-		assertClose(start.y + 15, @:privateAccess course.serverFixture.fixturePixelToWorldY(initialState.y),
+		assertClose(start.y + 15, initialState.y,
 			"local character spawns at Flash start center y");
 		assertEquals(true, course.levelRenderer.worldChildDepth(course.backCharacterLayer) >= 0,
 			"back character layer sits inside the rotating world (above the background art)");
@@ -350,8 +350,8 @@ class GameShellMountTest {
 			group: ""
 		});
 		var state = course.localCharacter.debugState();
-		assertClose(15, @:privateAccess course.serverFixture.fixturePixelToWorldX(state.x), "tournament local temp 1 uses first start x");
-		assertClose(15, @:privateAccess course.serverFixture.fixturePixelToWorldY(state.y), "tournament local temp 1 uses first start y");
+		assertClose(15, state.x, "tournament local temp 1 uses first start x");
+		assertClose(15, state.y, "tournament local temp 1 uses first start y");
 		course.remove();
 		LobbySession.tournamentMode = previousTournamentMode;
 	}
@@ -399,7 +399,7 @@ class GameShellMountTest {
 		assertEquals(false, course.timer.debugPaused(), "race timer runs once beginRace arrives");
 		LobbySocket.resetSent();
 		var finish = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
-			50, 0, true, 1, 45, 15);
+			50, 0, true, 1, 9945, 9945);
 		@:privateAccess course.maybeHandleLocalFinish(finish);
 		assertEquals("finish_race`1`9945`9945|set_var`beginRemove`1", LobbySocket.sentCommands.join("|"),
 			"race finish reports world coordinates and starts local removal");
@@ -438,9 +438,9 @@ class GameShellMountTest {
 		course.beginRace();
 		LobbySocket.resetSent();
 		var first = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
-			50, 0, true, 1, 45, 15);
+			50, 0, true, 1, 9945, 9945);
 		var second = new LocalPlayerDebugState(0, 0, 0, 0, false, false, CharacterState.Stand, null, "land", null, null, null, 50, 50,
-			50, 0, true, 2, 75, 15);
+			50, 0, true, 2, 9975, 9945);
 		@:privateAccess course.maybeHandleLocalFinish(first);
 		@:privateAccess course.maybeHandleLocalFinish(first);
 		@:privateAccess course.maybeHandleLocalFinish(second);
@@ -496,8 +496,8 @@ class GameShellMountTest {
 
 	private static function assertLocalCharacterFeetAnchored(course:Course, message:String):Void {
 		var state = course.localCharacter.debugState();
-		var worldX = @:privateAccess course.serverFixture.fixturePixelToWorldX(state.x);
-		var worldY = @:privateAccess course.serverFixture.fixturePixelToWorldY(state.y);
+		var worldX = state.x;
+		var worldY = state.y;
 		var expected = course.levelRenderer.worldToScreen(worldX, worldY);
 		var actual = localCharacterFeetOnStage(course);
 		assertClose(expected.x, actual.x, '$message x');

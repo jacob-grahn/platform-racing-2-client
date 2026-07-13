@@ -3,7 +3,7 @@ package pr2.character;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerDebugState;
 import pr2.harness.LocalPlayerInput;
-import pr2.level.FixtureLevel;
+import pr2.level.WorldLevel;
 import pr2.net.LobbySocket;
 
 /**
@@ -41,7 +41,7 @@ class LocalCharacter extends Character {
 	private var lastJetPackActive:Bool = false;
 	private var lastSpeedBurstActive:Bool = false;
 
-	public function new(level:FixtureLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
+	public function new(level:WorldLevel, hatId:Int = 1, headId:Int = 1, bodyId:Int = 1, feetId:Int = 1) {
 		super(hatId, headId, bodyId, feetId);
 		type = "local";
 		baseGravityMultiplier = level.gravity;
@@ -401,6 +401,15 @@ class LocalCharacter extends Character {
 
 	public function isFrozen():Bool {
 		return controller.isFrozen();
+	}
+
+	public function freezeBlock(tileX:Int, tileY:Int):Void {
+		controller.freezeBlock(tileX, tileY);
+	}
+
+	public function grantItemForDebug(itemCode:Int):Void {
+		controller.grantItemForDebug(itemCode);
+		syncFromController();
 	}
 
 	public function receiveSting():Void {

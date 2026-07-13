@@ -97,12 +97,6 @@ class ServerLevelRenderer extends Sprite {
 	// rounded per-plane offset whenever the committed rotation changes.
 	private var rawOffsetX:Float;
 	private var rawOffsetY:Float;
-	// Pivot (in block-layer local/level-pixel coords) that the committed rotation
-	// turns about. The controller swaps the player's coordinates about the fixture
-	// origin (originTile*TILE_SIZE), so the blocks must turn about that same point
-	// or they land hundreds of pixels off-screen and culling drops them all.
-	private var rotationPivotX:Float = 0;
-	private var rotationPivotY:Float = 0;
 	// Holds the parallax art layers and the block layer — everything that spins
 	// when a rotate block fires. Mirrors Flash, which rotates the whole Course
 	// during the tween (worldContainer here) and bakes the committed 90-degree
@@ -118,6 +112,7 @@ class ServerLevelRenderer extends Sprite {
 	private final blockLayer:Sprite = new Sprite();
 	private var backCharacterLayer:Null<Sprite>;
 	private var frontCharacterLayer:Null<Sprite>;
+	private var effectLayer:Null<Sprite>;
 	private final artLayerContainers:Array<Sprite> = [];
 	private final artRasterTileLayers:Array<ArtRasterTiles> = [];
 	private var solidBackground:Null<Shape>;
@@ -331,33 +326,12 @@ class ServerLevelRenderer extends Sprite {
 		}
 	}
 
-	/**
-		Sets the point the committed course rotation turns about, in block-layer
-		local (level-pixel) coordinates. Course passes the fixture origin so the
-		blocks turn about the same pivot the controller uses when it swaps the
-		player's coordinates on each rotate step.
-	**/
-	public function setRotationPivot(x:Float, y:Float):Void {
-		if (rotationPivotX == x && rotationPivotY == y) {
-			return;
-		}
-		rotationPivotX = x;
-		rotationPivotY = y;
-		if (courseRotation != 0) {
-			applyLayerTransforms();
-			updateViewWindow(true);
-			updateArtViewWindows(true);
-		}
-	}
-
-	// Builds the block/art layer matrix: turn the original-frame content about the
-	// committed rotation pivot, then apply the (per-plane) camera translation.
+	// Builds the block/art layer matrix in the same authored world frame used by
+	// gameplay. Committed course rotation turns about world (0, 0).
 	private function layerMatrix(translateX:Float, translateY:Float, includeCourseRotation:Bool = true):Matrix {
 		var matrix = new Matrix();
 		if (includeCourseRotation && courseRotation != 0) {
-			matrix.translate(-rotationPivotX, -rotationPivotY);
 			matrix.rotate(courseRotation * Math.PI / 180);
-			matrix.translate(rotationPivotX, rotationPivotY);
 		}
 		matrix.translate(translateX, translateY);
 		return matrix;
@@ -372,6 +346,12 @@ class ServerLevelRenderer extends Sprite {
 		}
 		if (frontCharacterLayer != null) {
 			frontCharacterLayer.transform.matrix = layerMatrix(offsetX, offsetY, false);
+		}
+		if (effectLayer != null) {
+			// Attack effects use the same already-rotated world coordinates as the
+			// character plane. They still need the camera translation, especially
+			// for editor levels whose authored coordinates are far from (0, 0).
+			effectLayer.transform.matrix = layerMatrix(offsetX, offsetY, false);
 		}
 		for (i in 0...artLayerContainers.length) {
 			if (artLayerContainers[i] == null) {
@@ -522,6 +502,8 @@ class ServerLevelRenderer extends Sprite {
 	}
 
 	public function attachEffectLayer(layer:Sprite):Void {
+		effectLayer = layer;
+		layer.transform.matrix = layerMatrix(offsetX, offsetY, false);
 		if (layer.parent == worldContainer) {
 			return;
 		}

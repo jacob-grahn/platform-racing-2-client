@@ -1,20 +1,20 @@
 package pr2.level;
 
-import pr2.level.FixtureLevel.LevelBlock;
+import pr2.level.WorldLevel.LevelBlock;
 import sys.io.File;
 
-class LevelFixtureParserTest {
+class WorldLevelParserTest {
 	private static var assertions:Int = 0;
 
 	public static function main():Void {
 		testFlatFixture();
 		testValidationRejectsBadBlockTypes();
 		testValidationRejectsOutOfBoundsPositions();
-		trace('LevelFixtureParserTest passed $assertions assertions');
+		trace('WorldLevelParserTest passed $assertions assertions');
 	}
 
 	private static function testFlatFixture():Void {
-		var fixture = LevelFixtureParser.parse(File.getContent("assets/fixtures/flat-level.json"));
+		var fixture = WorldLevelParser.parse(File.getContent("assets/fixtures/flat-level.json"));
 
 		assertEquals("flat-level", fixture.id, "fixture id");
 		assertEquals(18, fixture.widthTiles, "fixture width");
@@ -34,27 +34,27 @@ class LevelFixtureParserTest {
 		assertBlock(fixture.blockAt(16, 9), Finish, "finish block");
 		assertBlock(fixture.blockAt(0, 10), Basic, "ground block");
 		assertEquals(null, fixture.blockAt(0, 0), "empty tile lookup");
-		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"crumble"')).blockAt(1, 2), Crumble, "crumble block");
-		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"item","options":"4"')).blockAt(1, 2), Item, "item block");
-		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"infinite_item","options":"4"')).blockAt(1, 2), InfiniteItem, "infinite item block");
-		assertBlock(LevelFixtureParser.parse(minimalFixture('"type":"vanish"')).blockAt(1, 2), Vanish, "vanish block");
-		var teleport = LevelFixtureParser.parse(minimalFixture('"type":"teleport","options":"255"')).blockAt(1, 2);
+		assertBlock(WorldLevelParser.parse(minimalFixture('"type":"crumble"')).blockAt(1, 2), Crumble, "crumble block");
+		assertBlock(WorldLevelParser.parse(minimalFixture('"type":"item","options":"4"')).blockAt(1, 2), Item, "item block");
+		assertBlock(WorldLevelParser.parse(minimalFixture('"type":"infinite_item","options":"4"')).blockAt(1, 2), InfiniteItem, "infinite item block");
+		assertBlock(WorldLevelParser.parse(minimalFixture('"type":"vanish"')).blockAt(1, 2), Vanish, "vanish block");
+		var teleport = WorldLevelParser.parse(minimalFixture('"type":"teleport","options":"255"')).blockAt(1, 2);
 		assertBlock(teleport, Teleport, "teleport block");
 		assertEquals("255", teleport.options, "teleport options");
 	}
 
 	private static function testValidationRejectsBadBlockTypes():Void {
 		assertThrows(function() {
-			LevelFixtureParser.parse(minimalFixture('"type":"mystery"'));
+			WorldLevelParser.parse(minimalFixture('"type":"mystery"'));
 		}, "unknown block types are rejected");
 	}
 
 	private static function testValidationRejectsOutOfBoundsPositions():Void {
 		assertThrows(function() {
-			LevelFixtureParser.parse(minimalFixture('"type":"basic","x":99'));
+			WorldLevelParser.parse(minimalFixture('"type":"basic","x":99'));
 		}, "out-of-bounds blocks are rejected");
 		assertThrows(function() {
-			LevelFixtureParser.parse(minimalFixture('"type":"basic"', '"playerStart":{"x":99,"y":1},'));
+			WorldLevelParser.parse(minimalFixture('"type":"basic"', '"playerStart":{"x":99,"y":1},'));
 		}, "out-of-bounds starts are rejected");
 	}
 

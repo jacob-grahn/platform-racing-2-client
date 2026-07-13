@@ -381,6 +381,10 @@ class Character extends Sprite {
 		display.setItemFrameName(itemFrameName);
 	}
 
+	public function playItemUseAnimation(itemName:String):Bool {
+		return display.playItemUseAnimation(itemName);
+	}
+
 	/** Last resolved held-item frame name (e.g. "Laser", "None"). */
 	public var itemFrameName(default, null):String = "None";
 

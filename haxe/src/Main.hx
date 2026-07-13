@@ -214,7 +214,8 @@ class Main extends Sprite {
 				QueryParams.get(query, "page"),
 				campaignLevelQuery(query),
 				campaignLevelVersionQuery(query),
-				QueryParams.get(query, "localLevel")
+				QueryParams.get(query, "localLevel"),
+				Std.parseInt(QueryParams.get(query, "debugItem"))
 			);
 			case Login: new PageHolder(new LoginPage(siteMode), true);
 			case Lobby: buildLobby(query);

@@ -26,10 +26,10 @@ class MultiplayerRaceStageTest {
 
 	private static function testRepeatedDamageStopsAfterRemovalAndParticlesExpire():Void {
 		var stage = new MultiplayerRaceStage(2, "m3`ffffff`0;0;11,0;1;17");
-		var fixture = @:privateAccess stage.clients[0].course.serverFixture;
-		var crumble = fixture.fixture.blocks[0];
-		var segX = crumble.x + fixture.originTileX;
-		var segY = crumble.y + fixture.originTileY;
+		var world = @:privateAccess stage.clients[0].course.worldLevel;
+		var crumble = world.blocks[0];
+		var segX = crumble.x;
+		var segY = crumble.y;
 		for (_ in 0...30) {
 			stage.broadcastActivate(segX, segY, "20");
 		}

@@ -143,6 +143,9 @@ class CharacterDisplay extends Sprite {
 			return;
 		}
 
+		if (activeStateClip != null) {
+			resetItemUseAnimation(activeStateClip);
+		}
 		if (activeStateName == "superJumpAnim") {
 			endSuperJumpWobble();
 		}
@@ -177,6 +180,28 @@ class CharacterDisplay extends Sprite {
 	public function setItemFrameName(frameName:String):Void {
 		itemFrameName = frameName == null || frameName == "" ? "None" : frameName;
 		applyItemFrame();
+	}
+
+	public function playItemUseAnimation(itemName:String):Bool {
+		if (activeStateClip == null) {
+			return false;
+		}
+		var weapon = getClipChild(activeStateClip, "weapon");
+		if (weapon == null) {
+			return false;
+		}
+		applyWeaponItemFrame(weapon);
+		var childName = itemName == "Laser" ? "gun" : itemName == "Sword" ? "sword" : null;
+		var label = itemName == "Laser" ? "shoot" : itemName == "Sword" ? "swing" : null;
+		if (childName == null || label == null) {
+			return false;
+		}
+		var animation = getClipChild(weapon, childName);
+		if (animation == null) {
+			return false;
+		}
+		animation.gotoAndPlay(label);
+		return true;
 	}
 
 	// States whose animation plays once and holds on its final frame instead of
@@ -289,15 +314,47 @@ class CharacterDisplay extends Sprite {
 			}
 			var weapon = getClipChild(stateClip, "weapon");
 			if (weapon != null) {
-				if (itemFrameName == "Snake") {
-					weapon.gotoAndStop("None");
-					var existing = weapon.getChildByName(SNAKE_ITEM_NAME);
-					if (existing == null) weapon.addChild(createSnakeHeldItem());
-				} else {
-					weapon.gotoAndStop(itemFrameName);
-					var existing = weapon.getChildByName(SNAKE_ITEM_NAME);
-					if (existing != null) weapon.removeChild(existing);
-				}
+				applyWeaponItemFrame(weapon);
+			}
+		}
+	}
+
+	private function applyWeaponItemFrame(weapon:PR2MovieClip):Void {
+		var targetName = itemFrameName == "Snake" ? "None" : itemFrameName;
+		var targetFrame = frameNumberForLabel(weapon, targetName);
+		// Re-selecting an unchanged weapon frame reconstructs its unnamed nested
+		// clips. That reset prevented the gun recoil and sword swing timelines from
+		// advancing past their first frame.
+		if (targetFrame == null || weapon.currentFrame != targetFrame) {
+			weapon.gotoAndStop(targetName);
+		}
+		if (itemFrameName == "Snake") {
+			var existing = weapon.getChildByName(SNAKE_ITEM_NAME);
+			if (existing == null) weapon.addChild(createSnakeHeldItem());
+		} else {
+			var existing = weapon.getChildByName(SNAKE_ITEM_NAME);
+			if (existing != null) weapon.removeChild(existing);
+		}
+	}
+
+	private static function frameNumberForLabel(clip:PR2MovieClip, label:String):Null<Int> {
+		for (frameLabel in clip.currentLabels) {
+			if (frameLabel.name == label) {
+				return frameLabel.frame;
+			}
+		}
+		return null;
+	}
+
+	private static function resetItemUseAnimation(stateClip:PR2MovieClip):Void {
+		var weapon = getClipChild(stateClip, "weapon");
+		if (weapon == null) {
+			return;
+		}
+		for (childName in ["gun", "sword"]) {
+			var animation = getClipChild(weapon, childName);
+			if (animation != null) {
+				animation.gotoAndStop(1);
 			}
 		}
 	}

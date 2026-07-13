@@ -1739,11 +1739,8 @@ class LobbyServicesTest {
 		var targetWorld = testCourse.course.levelRenderer.screenToWorld(clickPoint.x, clickPoint.y);
 		testCourse.course.levelRenderer.dispatchEvent(new MouseEvent(MouseEvent.CLICK, true, false, clickPoint.x, clickPoint.y));
 		var teleportedStats = testCourse.course.localCharacter.debugState();
-		var serverFixture = @:privateAccess testCourse.course.serverFixture;
-		var expectedFixtureX = targetWorld.x - serverFixture.originTileX * 30;
-		var expectedFixtureY = targetWorld.y - serverFixture.originTileY * 30;
-		assertEquals(Math.round(expectedFixtureX), Math.round(teleportedStats.x), "test course click teleports local player to clicked x");
-		assertEquals(Math.round(expectedFixtureY), Math.round(teleportedStats.y), "test course click teleports local player to clicked y");
+		assertEquals(Math.round(targetWorld.x), Math.round(teleportedStats.x), "test course click teleports local player to clicked x");
+		assertEquals(Math.round(targetWorld.y), Math.round(teleportedStats.y), "test course click teleports local player to clicked y");
 		assertEquals(2, testCourse.course.levelRenderer.teleportPopCountForTests(), "test course click adds source and destination teleport pops");
 
 		var firstCourse = testCourse.course;

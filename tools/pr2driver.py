@@ -327,6 +327,12 @@ def cmd_sequence(script_path):
                 time.sleep(wait)
             if action == "click":
                 cmd_click(step["x"], step["y"])
+            elif action == "click-display-object":
+                # Flash projector automation cannot inspect the AS3 display list.
+                # Shared parity sequences therefore provide authored stage
+                # coordinates as a fallback while OpenFL resolves the named live
+                # display object and clicks its measured center.
+                cmd_click(step["x"], step["y"])
             elif action == "keyDown":
                 cmd_key_down(step["key"])
             elif action == "keyUp":

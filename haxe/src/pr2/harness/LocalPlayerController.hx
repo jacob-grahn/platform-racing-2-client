@@ -4,8 +4,8 @@ package pr2.harness;
 import js.Browser;
 #end
 import pr2.character.CharacterState;
-import pr2.level.FixtureLevel;
-import pr2.level.FixtureLevel.LevelBlock;
+import pr2.level.WorldLevel;
+import pr2.level.WorldLevel.LevelBlock;
 import pr2.level.BlockType;
 import pr2.gameplay.RotationMath;
 import pr2.gameplay.Items;
@@ -102,7 +102,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public static inline var MODE_FROZEN_SOLID:String = "frozenSolid";
 	public static inline var MODE_HURT:String = "hurt";
 
-	private final level:FixtureLevel;
+	private final level:WorldLevel;
 	private var accel:Float;
 	private var maxVelX:Float;
 	private var jumpVelocity:Float;
@@ -177,7 +177,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private var roguelikeStartX:Float;
 	private var roguelikeStartY:Float;
 
-	public function new(level:FixtureLevel) {
+	public function new(level:WorldLevel) {
 		this.level = level;
 		for (i in 0...level.blocks.length) {
 			var block = level.blocks[i];
@@ -681,7 +681,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		return state != null && state.frozenIceAlpha != null ? state.frozenIceAlpha : 0;
 	}
 
-	public function freezeBlockForTest(tileX:Int, tileY:Int, fadeRate:Float = SANTA_ICE_OVERLAY_FADE_RATE):Void {
+	public function freezeBlock(tileX:Int, tileY:Int, fadeRate:Float = SANTA_ICE_OVERLAY_FADE_RATE):Void {
 		var block = level.blockAt(tileX, tileY);
 		if (block == null) {
 			return;
@@ -689,6 +689,10 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		var state = blockState(blockKey(tileX, tileY));
 		state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
 		state.frozenIceFadeRate = fadeRate;
+	}
+
+	public inline function freezeBlockForTest(tileX:Int, tileY:Int, fadeRate:Float = SANTA_ICE_OVERLAY_FADE_RATE):Void {
+		freezeBlock(tileX, tileY, fadeRate);
 	}
 
 	public function consumeBlockVisualEvents():Array<BlockVisualEvent> {
@@ -753,7 +757,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 				blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BrickPieces, block.x, block.y, 6));
 			case BlockType.Crumble:
 				// Flash removes a spent crumble from Map, so subsequent queued activate
-				// commands cannot find it. FixtureLevel retains its LevelBlock; explicitly
+				// commands cannot find it. WorldLevel retains its LevelBlock; explicitly
 				// ignore those late commands instead of spawning another final shower.
 				if (state.removed) {
 					return true;
@@ -989,9 +993,6 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	private function refreshBlockRefs():BlockRefs {
-		if (y < 0) {
-			movePlayerBy(0, 0.001);
-		}
 		return {
 			floorLeft: getBlockAtPixel(x - HALF_WIDTH, y, true),
 			floorCenter: getBlockAtPixel(x, y, true),
@@ -1417,7 +1418,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function canMoveBlockChain(block:LevelBlock, dx:Int, dy:Int):Bool {
 		var destX = block.x + dx;
 		var destY = block.y + dy;
-		if (destX < 0 || destY < 0 || destX >= level.widthTiles || destY >= level.heightTiles) {
+		if (!level.containsTile(destX, destY)) {
 			return false;
 		}
 		var destBlock = level.blockAt(destX, destY);
@@ -1624,6 +1625,14 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	public function performIceWaveItem():Void useIceWave();
 	public function performSnakeItem():Void useSnake();
 
+	public function grantItemForDebug(itemCode:Int):Void {
+		heldItem = Items.getFromCode(itemCode);
+		itemId = heldItem == null ? null : Items.getCodeFromItem(heldItem);
+		itemUses = heldItem == null ? null : heldItem.initialUses;
+		jetPackFuelRemaining = itemCode == ITEM_JET_PACK ? JET_PACK_TOTAL_FUEL : null;
+		itemAvailable = true;
+	}
+
 	private function useSnake():Void {
 		lastItemEffect = "snake_start";
 		consumeHeldItemUse();
@@ -1655,7 +1664,7 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	}
 
 	/**
-		Resolve an owner-authoritative Snake head entering a fixture tile.
+		Resolve an owner-authoritative Snake head entering a world tile.
 		Returns "clear" when movement may continue and "hazard" otherwise.
 	**/
 	public function enterSnakeTile(tileX:Int, tileY:Int):String {
@@ -1832,12 +1841,29 @@ class LocalPlayerController implements ItemRuntimeOwner {
 	private function useIceWave():Void {
 		var direction = facingDirection < 0 ? "left" : "right";
 		lastItemEffect = "ice_wave:" + direction;
-		animateFirstShotBlockHit(facingDirection < 0 ? 180 : 0);
+		freezeFirstShotBlockHit(facingDirection < 0 ? 180 : 0);
 		consumeHeldItemUse();
 	}
 
-	private function animateFirstShotBlockHit(angleDegrees:Float):Void {
-		animateForwardBlockDamage(angleDegrees, Math.cos(angleDegrees * Math.PI / 180) * 5, 100);
+	private function freezeFirstShotBlockHit(angleDegrees:Float):Void {
+		var shotX = x + (angleDegrees == 180 ? -20 : 20);
+		var shotY = y - 25;
+		var radians = angleDegrees * Math.PI / 180;
+		var velX = Math.cos(radians) * 5;
+		var velY = Math.sin(radians) * 5;
+		for (_ in 0...100) {
+			var block = getBlockAtPixel(shotX, shotY);
+			if (block != null) {
+				if (block.type != BlockType.Ice) {
+					var state = blockState(blockKey(block.x, block.y));
+					state.frozenIceAlpha = SANTA_ICE_OVERLAY_START_ALPHA;
+					state.frozenIceFadeRate = SANTA_ICE_OVERLAY_FADE_RATE;
+				}
+				return;
+			}
+			shotX += velX;
+			shotY += velY;
+		}
 	}
 
 	private function animateForwardBlockDamage(angleDegrees:Float, damageForce:Float, maxSteps:Int):Void {

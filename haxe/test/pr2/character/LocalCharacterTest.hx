@@ -3,10 +3,10 @@ package pr2.character;
 import pr2.harness.LocalPlayerController;
 import pr2.harness.LocalPlayerInput;
 import pr2.level.BlockType;
-import pr2.level.FixtureLevel;
-import pr2.level.FixtureLevel.LevelBlock;
-import pr2.level.FixtureLevel.StatDefaults;
-import pr2.level.FixtureLevel.TilePosition;
+import pr2.level.WorldLevel;
+import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.WorldLevel.StatDefaults;
+import pr2.level.WorldLevel.TilePosition;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 
@@ -433,8 +433,8 @@ class LocalCharacterTest {
 		assertClose(0.9 * controller.facingScaleX, character.display.scaleX, '$label facing scale');
 	}
 
-	private static function flatLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function flatLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-flat",
 			"Local Character Flat",
 			8,
@@ -452,8 +452,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function airborneLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function airborneLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-airborne",
 			"Local Character Airborne",
 			8,
@@ -467,8 +467,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function heavyGravityAirborneLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function heavyGravityAirborneLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-heavy-airborne",
 			"Local Character Heavy Airborne",
 			8,
@@ -482,8 +482,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function nonSolidFloorLevel(type:BlockType):FixtureLevel {
-		return new FixtureLevel(
+	private static function nonSolidFloorLevel(type:BlockType):WorldLevel {
+		return new WorldLevel(
 			"local-character-non-solid-floor",
 			"Local Character Non-solid Floor",
 			8,
@@ -497,12 +497,12 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function longFlatLevel():FixtureLevel {
+	private static function longFlatLevel():WorldLevel {
 		var blocks:Array<LevelBlock> = [];
 		for (tileX in 0...38) {
 			blocks.push(new LevelBlock(tileX, 4, BlockType.Basic));
 		}
-		return new FixtureLevel(
+		return new WorldLevel(
 			"local-character-long-flat",
 			"Local Character Long Flat",
 			40,
@@ -516,8 +516,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function vanishWallLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function vanishWallLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-vanish-wall",
 			"Local Character Vanish Wall",
 			8,
@@ -537,8 +537,8 @@ class LocalCharacterTest {
 		);
 	}
 
-	private static function delayedMineBlockLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function delayedMineBlockLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-delayed-mine-block",
 			"Local Character Delayed Mine Block",
 			5,

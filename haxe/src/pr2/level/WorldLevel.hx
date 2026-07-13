@@ -1,10 +1,13 @@
 package pr2.level;
 
-class FixtureLevel {
+/** Collision/gameplay level whose tile coordinates are authored world coordinates. */
+class WorldLevel {
 	public final id:String;
 	public final name:String;
-	public final widthTiles:Int;
-	public final heightTiles:Int;
+	public final minTileX:Int;
+	public final minTileY:Int;
+	public final maxTileX:Int;
+	public final maxTileY:Int;
 	public final tileSize:Int;
 	public final gravity:Float;
 	public final stats:StatDefaults;
@@ -22,18 +25,32 @@ class FixtureLevel {
 		stats:StatDefaults,
 		playerStart:TilePosition,
 		finish:TilePosition,
-		blocks:Array<LevelBlock>
+		blocks:Array<LevelBlock>,
+		minTileX:Int = 0,
+		minTileY:Int = 0
 	) {
 		this.id = id;
 		this.name = name;
-		this.widthTiles = widthTiles;
-		this.heightTiles = heightTiles;
+		this.minTileX = minTileX;
+		this.minTileY = minTileY;
+		this.maxTileX = minTileX + widthTiles - 1;
+		this.maxTileY = minTileY + heightTiles - 1;
 		this.tileSize = tileSize;
 		this.gravity = gravity;
 		this.stats = stats;
 		this.playerStart = playerStart;
 		this.finish = finish;
 		this.blocks = blocks;
+	}
+
+	public var widthTiles(get, never):Int;
+	private inline function get_widthTiles():Int return maxTileX - minTileX + 1;
+
+	public var heightTiles(get, never):Int;
+	private inline function get_heightTiles():Int return maxTileY - minTileY + 1;
+
+	public inline function containsTile(x:Int, y:Int):Bool {
+		return x >= minTileX && y >= minTileY && x <= maxTileX && y <= maxTileY;
 	}
 
 	public function blockAt(x:Int, y:Int):Null<LevelBlock> {

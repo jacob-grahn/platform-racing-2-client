@@ -1,6 +1,8 @@
 package pr2.runtime;
 
 import openfl.display.BlendMode;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.Sprite;
@@ -12,6 +14,7 @@ import openfl.geom.Point;
 import openfl.text.TextField;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormatAlign;
+import openfl.utils.Assets;
 import pr2.character.CharacterAppearance;
 import pr2.generated.assets.AssetCatalog;
 import pr2.generated.assets.AssetTypes.FrameDef;
@@ -34,6 +37,8 @@ class PR2MovieClipRuntimeTest {
 		testFilters();
 		testScale9Grids();
 		testAlphaOnlySolidFills();
+		testGradientStrokeUsesVisibleStop();
+		testAuthoredMineBitmapResolution();
 		testGeneratedSoundFrameMetadata();
 		testTimelineEventSounds();
 		testLeafVectorShapes();
@@ -491,6 +496,41 @@ class PR2MovieClipRuntimeTest {
 		var solid = @:privateAccess VectorShapeRenderer.colorForStyle({type: "SolidColor", alpha: 0.25});
 		assertEquals(0, solid.color, "alpha-only solid fill defaults to black");
 		assertClose(0.25, solid.alpha, "alpha-only solid fill preserves authored opacity");
+	}
+
+	private static function testGradientStrokeUsesVisibleStop():Void {
+		var color = @:privateAccess VectorShapeRenderer.strongestGradientColor({
+			type: "LinearGradient",
+			entries: [
+				{color: "#FFFFFF", alpha: 0.0, ratio: 0.0},
+				{color: "#FDFD02", alpha: 0.65, ratio: 0.5},
+				{color: "#FFFFFF", ratio: 1.0}
+			]
+		});
+		assertEquals(0xFFFFFF, color.color, "gradient stroke uses its strongest visible authored color");
+		assertClose(1, color.alpha, "gradient stroke does not flatten to a transparent first stop");
+	}
+
+	private static function testAuthoredMineBitmapResolution():Void {
+		Assets.cache.setBitmapData("assets/blocks/mine_block.png", new BitmapData(30, 30, false, 0x6A6250));
+		var mine = PR2MovieClip.fromSymbolName("MovieClips/Symbol 859");
+		assertEquals(true, containsBitmap(mine), "MineBitmap resolves to the exported mine PNG instead of a placeholder");
+		Assets.cache.removeBitmapData("assets/blocks/mine_block.png");
+	}
+
+	private static function containsBitmap(root:DisplayObject):Bool {
+		if (Std.isOfType(root, Bitmap)) {
+			return true;
+		}
+		var container = Std.downcast(root, DisplayObjectContainer);
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				if (containsBitmap(container.getChildAt(i))) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	private static function testGeneratedSoundFrameMetadata():Void {

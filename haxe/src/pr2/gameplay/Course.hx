@@ -49,9 +49,9 @@ import pr2.lobby.dialogs.LevelInfoPopup;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelFixtureAdapter;
-import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
+import pr2.level.ServerLevelWorldAdapter;
 import pr2.level.ServerLevelRenderer;
+import pr2.level.WorldLevel;
 import pr2.net.CommandHandler;
 import pr2.net.LobbySocket;
 import pr2.net.ServerLevelData;
@@ -109,7 +109,7 @@ class Course extends Sprite {
 	public var playerArray(default, null):Array<Character> = [];
 	public var playerSpectating(default, null):Null<Character>;
 	public var canSpectate(default, null):Bool = false;
-	private var serverFixture:ServerFixtureLevel;
+	private var worldLevel:WorldLevel;
 	private var player:LocalCharacter;
 	private var camera:CameraFollow;
 	private var snakeManager:SnakeManager;
@@ -221,12 +221,9 @@ class Course extends Sprite {
 		addChild(levelRenderer);
 		raceSounds = new RaceSounds(levelRenderer.cameraOffset);
 
-		serverFixture = ServerLevelFixtureAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
-		// The controller swaps the player's coordinates about the fixture origin on
-		// each rotate step, so the block layer must turn about that same point.
-		levelRenderer.setRotationPivot(serverFixture.originTileX * ServerLevelRenderer.TILE_SIZE, serverFixture.originTileY * ServerLevelRenderer.TILE_SIZE);
-		player = new LocalCharacter(serverFixture.fixture);
-		snakeManager = new SnakeManager(serverFixture, levelRenderer, player.controller);
+		worldLevel = ServerLevelWorldAdapter.convert(level, data.gravity, Std.string(config.levelId), config.title);
+		player = new LocalCharacter(worldLevel);
+		snakeManager = new SnakeManager(worldLevel, levelRenderer, player.controller);
 		player.onPlayJumpSound = playJumpSound;
 		player.onPlayCharacterSound = playCharacterSound;
 		player.onArtifactHatActivated = onArtifactHatActivated;
@@ -238,7 +235,7 @@ class Course extends Sprite {
 		player.setAllowedItems(config.allowedItems);
 		localCharacter = player;
 		playerArray[player.tempID] = player;
-		remoteBlockActivation = new RemoteBlockActivation(serverFixture, levelRenderer);
+		remoteBlockActivation = new RemoteBlockActivation(worldLevel, levelRenderer);
 		activeCommandHandler().defineCommand("activate", activateCommand);
 		buildStartPositions();
 		positionLocalAtStartCenter();
@@ -250,7 +247,7 @@ class Course extends Sprite {
 		levelRenderer.attachFrontCharacterLayer(characterLayer);
 
 		camera = new CameraFollow(0, 0);
-		camera.snapTo(serverFixture.fixturePixelToWorldX(player.x), serverFixture.fixturePixelToWorldY(player.y));
+		camera.snapTo(player.x, player.y);
 
 		buildMiniMap();
 		buildSpectatePicker();
@@ -264,7 +261,17 @@ class Course extends Sprite {
 		effectBackground = new EffectBackground(this, commandHandler != null ? commandHandler : CommandHandler.commandHandler);
 		levelRenderer.attachEffectLayer(effectBackground);
 		eggRound = new EggRound(commandHandler != null ? commandHandler : CommandHandler.commandHandler, collectEgg, effectBackground,
-			levelRenderer.cameraOffset);
+			levelRenderer.cameraOffset, null, null, function(shooterId:Int):Void {
+				if (localCharacter != null && shooterId != localCharacter.tempID && !localCharacter.isFrozen()) {
+					localCharacter.freeze();
+				}
+			}, function(block:DecodedBlock):Void {
+				if (localCharacter == null || block.code == ObjectCodes.BLOCK_ICE) {
+					return;
+				}
+				localCharacter.freezeBlock(Std.int(Math.round(block.x / ServerLevelRenderer.TILE_SIZE)),
+					Std.int(Math.round(block.y / ServerLevelRenderer.TILE_SIZE)));
+			});
 		updatePlayerDisplay();
 	}
 
@@ -408,7 +415,7 @@ class Course extends Sprite {
 	}
 
 	private function positionLocalAtStartCenter():Void {
-		if (localCharacter == null || serverFixture == null || startPositions.length == 0) {
+		if (localCharacter == null || worldLevel == null || startPositions.length == 0) {
 			return;
 		}
 		var startIndex = LobbySession.tournamentMode ? 0 : localCharacter.tempID;
@@ -416,10 +423,7 @@ class Course extends Sprite {
 			startIndex = 0;
 		}
 		var start = startPositions[startIndex];
-		localCharacter.resetControllerForRaceStart(
-			start.x - serverFixture.originTileX * ServerLevelFixtureAdapter.TILE_SIZE,
-			start.y - serverFixture.originTileY * ServerLevelFixtureAdapter.TILE_SIZE
-		);
+		localCharacter.resetControllerForRaceStart(start.x, start.y);
 	}
 
 	private function maxCourseTimeSeconds():Int {
@@ -571,14 +575,14 @@ class Course extends Sprite {
 	}
 
 	private function activateCommand(args:Array<String>):Void {
-		if (remoteBlockActivation == null || localCharacter == null || serverFixture == null || args.length < 2) {
+		if (remoteBlockActivation == null || localCharacter == null || worldLevel == null || args.length < 2) {
 			return;
 		}
 		var segX = parseIntArg(args[0]);
 		var segY = parseIntArg(args[1]);
 		var payload = args.length > 2 ? args[2] : "";
-		recordCrumbleActivation(segX - serverFixture.originTileX, segY - serverFixture.originTileY, payload);
-		if (localCharacter.applyRemoteBlockActivation(segX - serverFixture.originTileX, segY - serverFixture.originTileY, payload)) {
+		recordCrumbleActivation(segX, segY, payload);
+		if (localCharacter.applyRemoteBlockActivation(segX, segY, payload)) {
 			syncBlockVisuals();
 		} else {
 			remoteBlockActivation.activateSegment(segX, segY, payload);
@@ -586,8 +590,8 @@ class Course extends Sprite {
 	}
 
 	private function remoteBlockTouch(segX:Int, segY:Int):Void {
-		if (localCharacter != null && serverFixture != null
-			&& localCharacter.applyRemoteBlockTouch(segX - serverFixture.originTileX, segY - serverFixture.originTileY)) {
+		if (localCharacter != null && worldLevel != null
+			&& localCharacter.applyRemoteBlockTouch(segX, segY)) {
 			syncBlockVisuals();
 		} else if (remoteBlockActivation != null) {
 			remoteBlockActivation.touch(segX, segY);
@@ -627,7 +631,7 @@ class Course extends Sprite {
 	}
 
 	private function positionRemoteAtStartCenter(remote:RemoteCharacter):Void {
-		if (remote == null || serverFixture == null || levelRenderer == null || startPositions.length == 0) {
+		if (remote == null || worldLevel == null || levelRenderer == null || startPositions.length == 0) {
 			return;
 		}
 		var startIndex = LobbySession.tournamentMode ? 0 : remote.tempID;
@@ -736,22 +740,21 @@ class Course extends Sprite {
 	}
 
 	public function teleportLocalToStage(stageX:Float, stageY:Float):Bool {
-		if (localCharacter == null || levelRenderer == null || serverFixture == null) {
+		if (localCharacter == null || levelRenderer == null || worldLevel == null) {
 			return false;
 		}
 		var local = globalToLocal(new Point(stageX, stageY));
 		var world = levelRenderer.screenToWorld(local.x, local.y);
 		var state = localCharacter.debugState();
-		levelRenderer.showTeleportPop(serverFixture.fixturePixelToWorldX(state.x), serverFixture.fixturePixelToWorldY(state.y));
-		localCharacter.setControllerPosition(world.x - serverFixture.originTileX * ServerLevelFixtureAdapter.TILE_SIZE,
-			world.y - serverFixture.originTileY * ServerLevelFixtureAdapter.TILE_SIZE);
+		levelRenderer.showTeleportPop(state.x, state.y);
+		localCharacter.setControllerPosition(world.x, world.y);
 		levelRenderer.showTeleportPop(world.x, world.y);
 		updatePlayerDisplay();
 		return true;
 	}
 
 	public function resetTestCourse(speed:Float, acceleration:Float, jumping:Float):Void {
-		if (localCharacter == null || levelRenderer == null || serverFixture == null) {
+		if (localCharacter == null || levelRenderer == null || worldLevel == null) {
 			return;
 		}
 		input.clear();
@@ -777,9 +780,9 @@ class Course extends Sprite {
 		displayedCourseRotation = 0;
 		displayedMoveBlockArrows.clear();
 		levelRenderer.resetRuntimeState();
-		var start = serverFixture.fixture.playerStart;
-		localCharacter.resetTestCourseState(start.x * ServerLevelFixtureAdapter.TILE_SIZE + ServerLevelFixtureAdapter.TILE_SIZE / 2,
-			(start.y + 1) * ServerLevelFixtureAdapter.TILE_SIZE, maxCourseTimeSeconds());
+		var start = worldLevel.playerStart;
+		localCharacter.resetTestCourseState(start.x * ServerLevelWorldAdapter.TILE_SIZE + ServerLevelWorldAdapter.TILE_SIZE / 2,
+			(start.y + 1) * ServerLevelWorldAdapter.TILE_SIZE, maxCourseTimeSeconds());
 		var roguelike = config.gameMode == Modes.roguelike;
 		localCharacter.setStats(roguelike ? 0 : speed, roguelike ? 0 : acceleration, roguelike ? 0 : jumping);
 		localCharacter.setLife(roguelike ? 1 : 3);
@@ -881,9 +884,7 @@ class Course extends Sprite {
 		}
 	}
 
-	private function playJumpSound(fixtureX:Float, fixtureY:Float):Void {
-		var worldX = serverFixture.fixturePixelToWorldX(fixtureX);
-		var worldY = serverFixture.fixturePixelToWorldY(fixtureY);
+	private function playJumpSound(worldX:Float, worldY:Float):Void {
 		playWorldJumpSound(worldX, worldY);
 	}
 
@@ -1248,10 +1249,8 @@ class Course extends Sprite {
 		syncBlockVisuals();
 		state = player.debugState();
 		if (raceStarted && !localFinishHandled) {
-			// The controller simulates a cropped fixture, but Flash's Character and
-			// multiplayer protocol use full map coordinates.
-			player.x = serverFixture.fixturePixelToWorldX(state.x);
-			player.y = serverFixture.fixturePixelToWorldY(state.y);
+			player.x = state.x;
+			player.y = state.y;
 			localCharacter.emitNetworkUpdate(state.touchedBlockType == "water" ? "backBackground" : "frontBackground");
 		}
 		updatePlayerDisplay();
@@ -1385,16 +1384,14 @@ class Course extends Sprite {
 			return;
 		}
 		var finishId = state.finishBlockId == null ? -1 : state.finishBlockId;
-		// The controller runs in a compact fixture translated from the original
-		// level. Flash reports the authored/world-space finish-block centre to the
-		// server, which validates it before sending award and setExpGain. Preserve
-		// the -1/0/0 sentinel for finishes without a block (deathmatch/time-out).
+		// Preserve the -1/0/0 sentinel for finishes without a block
+		// (deathmatch/time-out).
 		var finishX = state.finishBlockId == null || state.finishX == null
 			? 0
-			: Std.int(serverFixture.fixturePixelToWorldX(state.finishX));
+			: Std.int(state.finishX);
 		var finishY = state.finishBlockId == null || state.finishY == null
 			? 0
-			: Std.int(serverFixture.fixturePixelToWorldY(state.finishY));
+			: Std.int(state.finishY);
 		if (config.gameMode == "objective") {
 			if (state.finishBlockId == null || reachedObjectives.exists(finishId)) {
 				return;
@@ -1449,10 +1446,11 @@ class Course extends Sprite {
 		var parts = state.lastItemEffect.split(":");
 		switch (parts[0]) {
 			case "laser":
+				localCharacter.playItemUseAnimation("Laser");
 				var direction = parts.length > 1 ? parts[1] : "right";
 				var offset = direction == "left" ? -20 : 20;
-				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x + offset));
-				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+				var worldX = Std.int(state.x + offset);
+				var worldY = Std.int(state.y - 25);
 				var rotation = Std.int(levelRenderer == null ? 0 : levelRenderer.rotation);
 				if (effectBackground != null) {
 					effectBackground.addEffect(["Laser", Std.string(worldX), Std.string(worldY), direction, Std.string(rotation),
@@ -1460,8 +1458,9 @@ class Course extends Sprite {
 				}
 				LobbySocket.write('add_effect`Laser`$worldX`$worldY`$direction`$rotation`' + localCharacter.tempID);
 			case "slash":
-				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x));
-				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+				localCharacter.playItemUseAnimation("Sword");
+				var worldX = Std.int(state.x);
+				var worldY = Std.int(state.y - 25);
 				var direction = parts.length > 1 ? parts[1] : "right";
 				var payload = 'Slash`$worldX`$worldY`$direction`' + localCharacter.tempID;
 				mountSlashEffect(worldX, worldY, direction, localCharacter.tempID);
@@ -1470,8 +1469,8 @@ class Course extends Sprite {
 				var direction = parts.length > 1 ? parts[1] : "right";
 				var offset = direction == "left" ? -20 : 20;
 				var angle = direction == "left" ? 180 : 0;
-				var worldX = Std.int(serverFixture.fixturePixelToWorldX(state.x + offset));
-				var worldY = Std.int(serverFixture.fixturePixelToWorldY(state.y - 25));
+				var worldX = Std.int(state.x + offset);
+				var worldY = Std.int(state.y - 25);
 				var rotation = Std.int(levelRenderer == null ? 0 : levelRenderer.rotation);
 				if (effectBackground != null) {
 					effectBackground.addEffect(["IceWave", Std.string(worldX), Std.string(worldY), Std.string(angle), Std.string(rotation),
@@ -1516,14 +1515,12 @@ class Course extends Sprite {
 		if (coords.length < 2 || levelRenderer == null) {
 			return;
 		}
-		var fixtureX = Std.parseFloat(coords[0]);
-		var fixtureY = Std.parseFloat(coords[1]);
-		if (Math.isNaN(fixtureX) || Math.isNaN(fixtureY)) {
+		var worldX = Std.parseFloat(coords[0]);
+		var worldY = Std.parseFloat(coords[1]);
+		if (Math.isNaN(worldX) || Math.isNaN(worldY)) {
 			return;
 		}
-		var worldX = Std.int(serverFixture.fixturePixelToWorldX(fixtureX));
-		var worldY = Std.int(serverFixture.fixturePixelToWorldY(fixtureY));
-		levelRenderer.showTeleportPop(worldX, worldY);
+		levelRenderer.showTeleportPop(Std.int(worldX), Std.int(worldY));
 		LobbySocket.write('add_effect`Teleport`$worldX`$worldY');
 	}
 
@@ -1533,8 +1530,8 @@ class Course extends Sprite {
 			courseRotation: Std.int(levelRenderer == null ? 0 : levelRenderer.rotation),
 			player: localCharacter == null ? null : {
 				tempId: localCharacter.tempID,
-				x: serverFixture.fixturePixelToWorldX(localCharacter.debugState().x),
-				y: serverFixture.fixturePixelToWorldY(localCharacter.debugState().y),
+				x: localCharacter.debugState().x,
+				y: localCharacter.debugState().y,
 				removed: localCharacter.removed,
 				hit: function(impulseX:Float, impulseY:Float):Void localCharacter.receiveHit(impulseX, impulseY)
 			},
@@ -1712,20 +1709,20 @@ class Course extends Sprite {
 	}
 
 	private function syncMoveBlockDisplays():Void {
-		if (levelRenderer == null || serverFixture == null || serverFixture.fixture == null) {
+		if (levelRenderer == null || worldLevel == null) {
 			return;
 		}
-		var fixtureBlocks = serverFixture.fixture.blocks;
-		for (i in 0...fixtureBlocks.length) {
-			var fixtureBlock = fixtureBlocks[i];
-			if (fixtureBlock.type != pr2.level.BlockType.Move || i >= level.blocks.length) {
+		var worldBlocks = worldLevel.blocks;
+		for (i in 0...worldBlocks.length) {
+			var worldBlock = worldBlocks[i];
+			if (worldBlock.type != pr2.level.BlockType.Move || i >= level.blocks.length) {
 				continue;
 			}
-			var currentWorldX = (fixtureBlock.x + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-			var currentWorldY = (fixtureBlock.y + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var currentWorldX = worldBlock.x * ServerLevelWorldAdapter.TILE_SIZE;
+			var currentWorldY = worldBlock.y * ServerLevelWorldAdapter.TILE_SIZE;
 			var displayed = displayedMoveBlockPositions.get(i);
 			if (displayed == null) {
-				// Fixture conversion omits spawn-marker blocks, so its indices do not
+				// World conversion omits spawn-marker blocks, so its indices do not
 				// correspond to ServerLevel.blocks. Capture this move block's own initial
 				// coordinate rather than moving whichever decoded block shares its index.
 				displayedMoveBlockPositions.set(i, {
@@ -1749,7 +1746,7 @@ class Course extends Sprite {
 	}
 
 	private function syncMoveBlockArrows():Void {
-		if (levelRenderer == null || serverFixture == null || player == null) {
+		if (levelRenderer == null || worldLevel == null || player == null) {
 			return;
 		}
 		var current:Map<String, Bool> = new Map();
@@ -1757,8 +1754,8 @@ class Course extends Sprite {
 		for (tileKey in directions.keys()) {
 			var tileX = tileKeyX(tileKey);
 			var tileY = tileKeyY(tileKey);
-			var worldX = (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-			var worldY = (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+			var worldX = tileX * ServerLevelWorldAdapter.TILE_SIZE;
+			var worldY = tileY * ServerLevelWorldAdapter.TILE_SIZE;
 			var worldKey = '$worldX,$worldY';
 			current.set(worldKey, true);
 			levelRenderer.showMoveBlockArrow(worldX, worldY, directions.get(tileKey));
@@ -1788,8 +1785,8 @@ class Course extends Sprite {
 	}
 
 	private function applyBlockVisual(tileX:Int, tileY:Int, alpha:Float, multiplier:Float, iceOverlayAlpha:Float):Void {
-		var worldX = (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
-		var worldY = (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+		var worldX = tileX * ServerLevelWorldAdapter.TILE_SIZE;
+		var worldY = tileY * ServerLevelWorldAdapter.TILE_SIZE;
 		levelRenderer.setBlockAlpha(worldX, worldY, alpha);
 		levelRenderer.setBlockColorMultiplier(worldX, worldY, multiplier);
 		levelRenderer.setBlockIceOverlayAlpha(worldX, worldY, iceOverlayAlpha);
@@ -1833,32 +1830,32 @@ class Course extends Sprite {
 	}
 
 	private inline function worldXOf(event:BlockVisualEvent):Int {
-		return (event.tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+		return event.tileX * ServerLevelWorldAdapter.TILE_SIZE;
 	}
 
 	private inline function worldYOf(event:BlockVisualEvent):Int {
-		return (event.tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+		return event.tileY * ServerLevelWorldAdapter.TILE_SIZE;
 	}
 
 	private inline function worldTileX(tileX:Int):Int {
-		return (tileX + serverFixture.originTileX) * ServerLevelFixtureAdapter.TILE_SIZE;
+		return tileX * ServerLevelWorldAdapter.TILE_SIZE;
 	}
 
 	private inline function worldTileY(tileY:Int):Int {
-		return (tileY + serverFixture.originTileY) * ServerLevelFixtureAdapter.TILE_SIZE;
+		return tileY * ServerLevelWorldAdapter.TILE_SIZE;
 	}
 
 	private function emitLocalBlockActivation(event:BlockVisualEvent):Void {
-		var segX = event.tileX + serverFixture.originTileX;
-		var segY = event.tileY + serverFixture.originTileY;
+		var segX = event.tileX;
+		var segY = event.tileY;
 		var payload = event.activationPayload == null ? "" : event.activationPayload;
 		recordCrumbleActivation(event.tileX, event.tileY, payload);
 		LobbySocket.write('activate`$segX`$segY`$payload');
 	}
 
 	private function emitLocalTeleportPop(event:BlockVisualEvent):Void {
-		var worldX = Std.int(Math.round(serverFixture.fixturePixelToWorldX(event.hitX)));
-		var worldY = Std.int(Math.round(serverFixture.fixturePixelToWorldY(event.hitY)));
+		var worldX = Std.int(Math.round(event.hitX));
+		var worldY = Std.int(Math.round(event.hitY));
 		levelRenderer.showTeleportPop(worldX, worldY);
 		LobbySocket.write('add_effect`Teleport`$worldX`$worldY');
 	}
@@ -1885,10 +1882,10 @@ class Course extends Sprite {
 	}
 
 	private function recordCrumbleActivation(tileX:Int, tileY:Int, payload:String):Void {
-		if (serverFixture == null) {
+		if (worldLevel == null) {
 			return;
 		}
-		var block = serverFixture.fixture.blockAt(tileX, tileY);
+		var block = worldLevel.blockAt(tileX, tileY);
 		if (block != null && block.type == pr2.level.BlockType.Crumble) {
 			debugLastCrumbleForce = payload;
 			debugCrumbleActivations++;
@@ -1908,7 +1905,7 @@ class Course extends Sprite {
 	}
 
 	private function updatePlayerDisplay():Void {
-		if (player == null || levelRenderer == null || serverFixture == null) {
+		if (player == null || levelRenderer == null || worldLevel == null) {
 			return;
 		}
 
@@ -1931,8 +1928,8 @@ class Course extends Sprite {
 		// the 3-2-1 countdown, though, step() never runs, so reading player.x/y
 		// here would feed the previous frame's screen coordinate back into the
 		// camera target and make it scroll away, snapping back only at "Go".
-		var worldX = serverFixture.fixturePixelToWorldX(state.x);
-		var worldY = serverFixture.fixturePixelToWorldY(state.y);
+		var worldX = state.x;
+		var worldY = state.y;
 		var cameraTarget = cameraTargetWorld(worldX, worldY);
 		if (keyScrollActive) {
 			applyKeyScroll();
@@ -2069,6 +2066,7 @@ class Course extends Sprite {
 		}
 		if (keyCode == Keyboard.SPACE || AlternateControls.matches("item", keyCode)) input.item = pressed;
 	}
+
 
 	private function resetInput(_:Event):Void {
 		input.clear();

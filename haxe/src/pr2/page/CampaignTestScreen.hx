@@ -49,16 +49,18 @@ class CampaignTestScreen extends Sprite {
 	private final requestedLevelId:Null<Int>;
 	private final directVersion:Null<Int>;
 	private final localLevel:Null<String>;
+	private final debugItem:Null<Int>;
 	private var statusText:TextField;
 	private var course:Course;
 	private var lastStatusText:String = "";
 
-	public function new(?page:String, ?levelId:String, ?version:Int, ?localLevel:String) {
+	public function new(?page:String, ?levelId:String, ?version:Int, ?localLevel:String, ?debugItem:Int) {
 		super();
 		this.page = parsePage(page);
 		this.requestedLevelId = parseRequestedLevelId(levelId);
 		this.directVersion = version;
 		this.localLevel = localLevel;
+		this.debugItem = debugItem;
 
 		drawBackground();
 		createStatusText();
@@ -203,6 +205,9 @@ class CampaignTestScreen extends Sprite {
 		vars.set("gameMode", "race");
 		var data = new ServerLevelData(vars, true);
 		mountCourse(level, data);
+		if (debugItem != null && debugItem > 0) {
+			course.localCharacter.grantItemForDebug(debugItem);
+		}
 		// The real flow calls beginRace from GamePage once the character exists; the
 		// local harness has no GamePage, so start the countdown/race here so physics
 		// actually runs offline.

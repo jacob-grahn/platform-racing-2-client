@@ -1,14 +1,14 @@
 package pr2.level;
 
 import haxe.Json;
-import pr2.level.FixtureLevel.LevelBlock;
-import pr2.level.FixtureLevel.StatDefaults;
-import pr2.level.FixtureLevel.TilePosition;
+import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.WorldLevel.StatDefaults;
+import pr2.level.WorldLevel.TilePosition;
 
-class LevelFixtureParser {
-	public static function parse(json:String):FixtureLevel {
+class WorldLevelParser {
+	public static function parse(json:String):WorldLevel {
 		var data:Dynamic = Json.parse(json);
-		var level = new FixtureLevel(
+		var level = new WorldLevel(
 			requiredString(data, "id"),
 			requiredString(data, "name"),
 			requiredInt(data, "widthTiles"),
@@ -18,7 +18,9 @@ class LevelFixtureParser {
 			parseStats(requiredObject(data, "stats")),
 			parseTilePosition(requiredObject(data, "playerStart"), "playerStart"),
 			parseTilePosition(requiredObject(data, "finish"), "finish"),
-			parseBlocks(requiredArray(data, "blocks"))
+			parseBlocks(requiredArray(data, "blocks")),
+			optionalInt(data, "minTileX"),
+			optionalInt(data, "minTileY")
 		);
 		validate(level);
 		return level;
@@ -50,26 +52,26 @@ class LevelFixtureParser {
 		return blocks;
 	}
 
-	private static function validate(level:FixtureLevel):Void {
+	private static function validate(level:WorldLevel):Void {
 		if (level.widthTiles <= 0 || level.heightTiles <= 0) {
-			throw "fixture dimensions must be positive";
+			throw "world dimensions must be positive";
 		}
 		if (level.tileSize <= 0) {
-			throw "fixture tileSize must be positive";
+			throw "world tileSize must be positive";
 		}
 		if (level.gravity <= 0) {
-			throw "fixture gravity must be positive";
+			throw "world gravity must be positive";
 		}
 		if (level.stats.speed <= 0 || level.stats.acceleration <= 0 || level.stats.jump <= 0) {
-			throw "fixture stat defaults must be positive";
+			throw "world stat defaults must be positive";
 		}
 		requireInBounds(level.playerStart, level, "playerStart");
 		requireInBounds(level.finish, level, "finish");
 
 		var occupied:Map<String, Bool> = new Map();
 		for (block in level.blocks) {
-			if (block.x < 0 || block.y < 0 || block.x >= level.widthTiles || block.y >= level.heightTiles) {
-				throw 'block ${block.x},${block.y} is outside fixture bounds';
+			if (!level.containsTile(block.x, block.y)) {
+				throw 'block ${block.x},${block.y} is outside world bounds';
 			}
 
 			var key = block.x + "," + block.y;
@@ -80,9 +82,9 @@ class LevelFixtureParser {
 		}
 	}
 
-	private static function requireInBounds(position:TilePosition, level:FixtureLevel, field:String):Void {
-		if (position.x < 0 || position.y < 0 || position.x >= level.widthTiles || position.y >= level.heightTiles) {
-			throw '$field ${position.x},${position.y} is outside fixture bounds';
+	private static function requireInBounds(position:TilePosition, level:WorldLevel, field:String):Void {
+		if (!level.containsTile(position.x, position.y)) {
+			throw '$field ${position.x},${position.y} is outside world bounds';
 		}
 	}
 
@@ -127,6 +129,13 @@ class LevelFixtureParser {
 			throw missingMessage(name, path) + " must be an integer";
 		}
 		return Std.int(value);
+	}
+
+	private static function optionalInt(data:Dynamic, name:String):Int {
+		if (data == null || !Reflect.hasField(data, name)) {
+			return 0;
+		}
+		return requiredInt(data, name);
 	}
 
 	private static function requiredFloat(data:Dynamic, name:String, ?path:String):Float {

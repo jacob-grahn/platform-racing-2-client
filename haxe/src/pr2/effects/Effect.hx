@@ -1,15 +1,15 @@
 package pr2.effects;
 
-import haxe.Timer;
 import pr2.display.Removable;
 import pr2.gameplay.EffectBackground;
+import openfl.events.Event;
 
 /**
 	Shared Flash `effects.Effect` base: starts at world coordinates, mounts on
 	the active `EffectBackground`, and owns frame-counted delayed removal.
 **/
 class Effect extends Removable {
-	private var removeTimer:Null<Timer>;
+	private var removeFramesRemaining:Int = 0;
 	private var scheduledRemoveMs:Int = 0;
 
 	public function new(startX:Float = 0, startY:Float = 0) {
@@ -24,7 +24,15 @@ class Effect extends Removable {
 	function scheduleRemove(frames:Int):Void {
 		clearRemoveTimer();
 		scheduledRemoveMs = Std.int(frames * (1 / 24) * 1000);
-		removeTimer = Timer.delay(remove, scheduledRemoveMs);
+		removeFramesRemaining = frames;
+		addEventListener(Event.ENTER_FRAME, onRemoveFrame);
+	}
+
+	private function onRemoveFrame(_:Event):Void {
+		removeFramesRemaining--;
+		if (removeFramesRemaining <= 0) {
+			remove();
+		}
 	}
 
 	public function scheduledRemoveMsForTests():Int {
@@ -32,7 +40,7 @@ class Effect extends Removable {
 	}
 
 	public function hasScheduledRemoveForTests():Bool {
-		return removeTimer != null;
+		return removeFramesRemaining > 0;
 	}
 
 	override public function remove():Void {
@@ -41,10 +49,7 @@ class Effect extends Removable {
 	}
 
 	private function clearRemoveTimer():Void {
-		if (removeTimer == null) {
-			return;
-		}
-		removeTimer.stop();
-		removeTimer = null;
+		removeEventListener(Event.ENTER_FRAME, onRemoveFrame);
+		removeFramesRemaining = 0;
 	}
 }

@@ -50,7 +50,7 @@ class MultiplayerRaceStage {
 	public function placeAllOnFirstBlock(type:BlockType):Void {
 		for (client in clients) {
 			var target = null;
-			for (block in client.course.serverFixture.fixture.blocks) {
+			for (block in client.course.worldLevel.blocks) {
 				if (block.type == type) {
 					target = block;
 					break;
@@ -60,8 +60,8 @@ class MultiplayerRaceStage {
 				throw 'multiplayer stage has no $type block';
 			}
 			client.course.localCharacter.setControllerPosition(
-				target.x * client.course.serverFixture.fixture.tileSize + client.course.serverFixture.fixture.tileSize / 2,
-				target.y * client.course.serverFixture.fixture.tileSize
+				target.x * client.course.worldLevel.tileSize + client.course.worldLevel.tileSize / 2,
+				target.y * client.course.worldLevel.tileSize
 			);
 		}
 	}

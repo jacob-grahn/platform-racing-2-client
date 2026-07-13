@@ -2,7 +2,10 @@ package pr2.character;
 
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.events.Event;
+import openfl.utils.Assets;
 import pr2.runtime.PR2MovieClip;
 
 class CharacterDisplayTest {
@@ -11,6 +14,8 @@ class CharacterDisplayTest {
 	public static function main():Void {
 		testSuperJumpWobbleUsesCurrentFrame();
 		testHeldWeaponFrameAppliesToCharacterStates();
+		testHeldItemUseAnimationsSurviveCharacterTicks();
+		testHeldMineUsesExportedBitmap();
 		testSnakeHeldGraphicUsesEyedVanishBlock();
 		trace('CharacterDisplayTest passed $assertions assertions');
 	}
@@ -70,6 +75,52 @@ class CharacterDisplayTest {
 		assertEquals(null, weaponClip(display, "standAnim").getChildByName("__snakeHeldItem"), "clearing the item removes the Snake held graphic");
 	}
 
+	private static function testHeldItemUseAnimationsSurviveCharacterTicks():Void {
+		var display = new CharacterDisplay();
+		display.setItemFrameName("Laser");
+		assertTrue(display.playItemUseAnimation("Laser"), "laser starts its authored gun recoil");
+		var gun = Std.downcast(weaponClip(display, "standAnim").getChildByTimelineName("gun"), PR2MovieClip);
+		assertTrue(gun != null, "laser frame exposes the gun animation");
+		assertEquals(2, gun.currentFrame, "laser recoil starts on the shoot label");
+		display.advanceOneFrame();
+		assertEquals(gun, Std.downcast(weaponClip(display, "standAnim").getChildByTimelineName("gun"), PR2MovieClip),
+			"character ticks preserve the active gun clip");
+		assertEquals(2, gun.currentFrame, "character ticks do not reset the gun recoil");
+		gun.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(3, gun.currentFrame, "gun recoil advances after the character tick");
+
+		display.setItemFrameName("Sword");
+		assertTrue(display.playItemUseAnimation("Sword"), "sword starts its authored swing");
+		var sword = Std.downcast(weaponClip(display, "standAnim").getChildByTimelineName("sword"), PR2MovieClip);
+		assertTrue(sword != null, "sword frame exposes the swing animation");
+		assertEquals(2, sword.currentFrame, "sword swing starts on the swing label");
+		display.advanceOneFrame();
+		assertEquals(sword, Std.downcast(weaponClip(display, "standAnim").getChildByTimelineName("sword"), PR2MovieClip),
+			"character ticks preserve the active sword clip");
+		sword.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(3, sword.currentFrame, "sword swing advances after the character tick");
+
+		display.setState("runAnim");
+		assertTrue(display.playItemUseAnimation("Sword"), "running sword starts a fresh swing");
+		var runningSword = Std.downcast(weaponClip(display, "runAnim").getChildByTimelineName("sword"), PR2MovieClip);
+		runningSword.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(3, runningSword.currentFrame, "running sword reaches the middle of its swing");
+		display.setState("standAnim");
+		assertEquals(1, runningSword.currentFrame, "leaving a state resets its unfinished sword animation");
+		display.setState("runAnim");
+		assertEquals(1, Std.downcast(weaponClip(display, "runAnim").getChildByTimelineName("sword"), PR2MovieClip).currentFrame,
+			"returning to the original state does not restore a stuck half-swing");
+	}
+
+	private static function testHeldMineUsesExportedBitmap():Void {
+		Assets.cache.setBitmapData("assets/blocks/mine_block.png", new BitmapData(30, 30, false, 0x6A6250));
+		var display = new CharacterDisplay();
+		display.setItemFrameName("Mine");
+		assertTrue(bitmapDescendantCount(weaponClip(display, "standAnim")) > 0,
+			"held mine resolves Flash's embedded MineBitmap to the exported PNG");
+		Assets.cache.removeBitmapData("assets/blocks/mine_block.png");
+	}
+
 	private static function weaponClip(display:CharacterDisplay, stateName:String):PR2MovieClip {
 		var state = display.getStateClip(stateName);
 		assertTrue(state != null, '$stateName exists');
@@ -89,6 +140,17 @@ class CharacterDisplayTest {
 		var count = 0;
 		for (i in 0...container.numChildren) {
 			count += visibleDescendantCount(container.getChildAt(i));
+		}
+		return count;
+	}
+
+	private static function bitmapDescendantCount(root:DisplayObject):Int {
+		var count = Std.isOfType(root, Bitmap) ? 1 : 0;
+		var container = Std.downcast(root, DisplayObjectContainer);
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				count += bitmapDescendantCount(container.getChildAt(i));
+			}
 		}
 		return count;
 	}

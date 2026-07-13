@@ -7,7 +7,7 @@ import pr2.gameplay.RemoteBlockActivation;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
-import pr2.level.ServerLevelFixtureAdapter;
+import pr2.level.ServerLevelWorldAdapter;
 import pr2.level.ServerLevelRenderer;
 import pr2.net.CommandHandler;
 
@@ -139,7 +139,7 @@ class RemoteCharacterConsumeTest {
 		var vanish = new DecodedBlock(ObjectCodes.BLOCK_VANISH, 30, 0);
 		var water = new DecodedBlock(ObjectCodes.BLOCK_WATER, 60, 0);
 		var level = new ServerLevel(0xFFFFFF, [arrow, vanish, water]);
-		var fixture = ServerLevelFixtureAdapter.convert(level, 0.7);
+		var fixture = ServerLevelWorldAdapter.convert(level, 0.7);
 		var renderer = new ServerLevelRenderer(level, arrow);
 		var activation = new RemoteBlockActivation(fixture, renderer);
 

@@ -1,5 +1,11 @@
 package pr2.gameplay;
 
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
+import openfl.display.DisplayObject;
+import openfl.display.DisplayObjectContainer;
+import openfl.utils.Assets;
+
 class ItemDisplayTest {
 	private static var assertions:Int = 0;
 
@@ -51,7 +57,23 @@ class ItemDisplayTest {
 		assertEquals(false, display.ammoVisible(3), "one ammo hides third dot");
 		assertEquals(3, ItemDisplay.clampAmmo(8), "ammo clamps to authored dots");
 		assertEquals(0, ItemDisplay.clampAmmo(-1), "ammo clamps at zero");
+
+		Assets.cache.setBitmapData("assets/blocks/mine_block.png", new BitmapData(30, 30, false, 0x6A6250));
+		display.setItemCode(2);
+		assertEquals(true, containsBitmap(@:privateAccess display.art), "mine HUD frame uses the exported MineBitmap");
+		Assets.cache.removeBitmapData("assets/blocks/mine_block.png");
 		display.remove();
+	}
+
+	private static function containsBitmap(root:DisplayObject):Bool {
+		if (Std.isOfType(root, Bitmap)) return true;
+		var container = Std.downcast(root, DisplayObjectContainer);
+		if (container != null) {
+			for (i in 0...container.numChildren) {
+				if (containsBitmap(container.getChildAt(i))) return true;
+			}
+		}
+		return false;
 	}
 
 	private static function assertEquals(expected:Dynamic, actual:Dynamic, message:String):Void {

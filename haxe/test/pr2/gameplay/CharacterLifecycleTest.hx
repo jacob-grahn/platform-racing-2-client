@@ -189,7 +189,7 @@ class CharacterLifecycleTest {
 		course.localCharacter.changeState("jump");
 		assertEquals(1, sounds.length, "entering local jump state plays the local jump sound");
 		assertEquals(
-			'${Math.round(course.serverFixture.fixturePixelToWorldX(start.x))},${Math.round(course.serverFixture.fixturePixelToWorldY(start.y))}',
+			'${Math.round(start.x)},${Math.round(start.y)}',
 			sounds[0],
 			"jump sound uses the local character world position"
 		);
@@ -226,8 +226,8 @@ class CharacterLifecycleTest {
 	private static function testLocalBlockActivationNetworking():Void {
 		var course = buildCourse(new CommandHandler());
 		var event = new BlockVisualEvent(BlockVisualEventKind.LocalActivate, 6, 7, 1, null, null, 0, -15, "left");
-		var expectedSegX = 6 + course.serverFixture.originTileX;
-		var expectedSegY = 7 + course.serverFixture.originTileY;
+		var expectedSegX = 6;
+		var expectedSegY = 7;
 
 		LobbySocket.resetSent();
 		course.emitLocalBlockActivation(event);
@@ -242,10 +242,10 @@ class CharacterLifecycleTest {
 		var startY = 95.0;
 		var destX = 195.0;
 		var destY = 95.0;
-		var expectedStartX = Std.int(Math.round(course.serverFixture.fixturePixelToWorldX(startX)));
-		var expectedStartY = Std.int(Math.round(course.serverFixture.fixturePixelToWorldY(startY)));
-		var expectedDestX = Std.int(Math.round(course.serverFixture.fixturePixelToWorldX(destX)));
-		var expectedDestY = Std.int(Math.round(course.serverFixture.fixturePixelToWorldY(destY)));
+		var expectedStartX = Std.int(Math.round(startX));
+		var expectedStartY = Std.int(Math.round(startY));
+		var expectedDestX = Std.int(Math.round(destX));
+		var expectedDestY = Std.int(Math.round(destY));
 
 		var initialChildren = course.levelRenderer.blockLayer.numChildren;
 		LobbySocket.resetSent();
@@ -489,8 +489,8 @@ class CharacterLifecycleTest {
 		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStop`") >= 0,
 			"Snake end relays a stop event");
 
-		var worldX = course.serverFixture.originTileX + 2;
-		var worldY = course.serverFixture.originTileY + 2;
+		var worldX = 2;
+		var worldY = 2;
 		course.applySnakeNetwork(["SnakeStart", "8", "0", Std.string(worldX), Std.string(worldY), "1", "0"]);
 		assertEquals(1, course.snakeManager.activeSnakeCount(), "remote SnakeStart mounts a remote head");
 		course.applySnakeNetwork(["SnakeStep", "8", "1", Std.string(worldX + 1), Std.string(worldY), "1", "0"]);
@@ -541,6 +541,13 @@ class CharacterLifecycleTest {
 		assertTrue(laserClip != null, "local laser item uses a movie clip visual");
 		assertEquals("LaserShotGraphic", laserClip.symbol.linkageClassName, "local laser item uses the authored laser graphic");
 		assertEquals(2, laserClip.currentFrame, "local laser item starts stopped on idle frame 2");
+		assertTrue(laserClip.getChildByName(LaserShotTimeline.TRAVEL_BEAM_NAME) != null,
+			"local laser item has a guaranteed visible travel beam");
+		var laserCameraOffset = laser.levelRenderer.cameraOffset();
+		assertEquals(laserCameraOffset.x, laser.effectBackground.transform.matrix.tx,
+			"attack effect layer follows the editor/world camera x offset");
+		assertEquals(laserCameraOffset.y, laser.effectBackground.transform.matrix.ty,
+			"attack effect layer follows the editor/world camera y offset");
 		laserClip.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(2, laserClip.currentFrame, "local laser item does not auto-play while idle");
 		LaserShotTimeline.playHit(laserClip);
@@ -561,10 +568,23 @@ class CharacterLifecycleTest {
 		assertEquals("IceWaveGraphic", firstIce.symbol.linkageClassName, "local ice wave item uses the authored first graphic");
 		assertEquals("IceWaveGraphic", secondIce.symbol.linkageClassName, "local ice wave item uses the authored second graphic");
 		assertEquals("IceWaveGraphic", thirdIce.symbol.linkageClassName, "local ice wave item uses the authored third graphic");
+		assertTrue(firstIce.getChildByName("iceWaveCore") != null && secondIce.getChildByName("iceWaveCore") != null
+			&& thirdIce.getChildByName("iceWaveCore") != null, "local ice wave shots have visible beam cores");
 		assertEquals(0.0, firstIce.rotation, "local ice wave item centers the first wave");
 		assertEquals(30.0, secondIce.rotation, "local ice wave item angles the second wave up");
 		assertEquals(-30.0, thirdIce.rotation, "local ice wave item angles the third wave down");
 		ice.remove();
+
+		var mine = collectAndUseLocalItem(2);
+		var mineEffect = Std.downcast(mine.levelRenderer.blockLayer.getChildAt(mine.levelRenderer.blockLayer.numChildren - 1), MineAppear);
+		assertTrue(mineEffect != null, "local mine mounts its placement animation");
+		var mineParts = mine.localCharacter.debugState().lastItemEffect.split(":");
+		var mineWorldCoords = mineParts[1].split(",");
+		assertEquals(Std.parseFloat(mineWorldCoords[0]), mineEffect.x,
+			"local mine uses authored world x");
+		assertEquals(Std.parseFloat(mineWorldCoords[1]), mineEffect.y,
+			"local mine uses authored world y");
+		mine.remove();
 	}
 
 	private static function testLocalTeleportAndLightningItemEffects():Void {
@@ -871,15 +891,12 @@ class CharacterLifecycleTest {
 		var course = buildCourse(handler, "race", "m3`ffffff`0;0;11,1;0;8,1;0;18,1;0;20,1;0;4,1;0;9,1;0;23,2;0;17");
 		assertTrue(handler.hasCommand("activate"), "course registers Map activate command");
 		finishDrawing(course);
-		var originX = @:privateAccess course.serverFixture.originTileX;
-		var originY = @:privateAccess course.serverFixture.originTileY;
-
 		var arrowFrame = course.levelRenderer.arrowFrameAt(30, 0);
 		handler.dispatch("activate", ["1", "0", ""]);
 		assertTrue(course.levelRenderer.arrowFrameAt(30, 0) != arrowFrame, "server activate animates arrow blocks by segment");
 
 		handler.dispatch("activate", ["2", "0", ""]);
-		assertEquals(1.0, course.localCharacter.blockAlphaAt(2 - originX, -originY), "remote vanish activation enters shared fade state");
+		assertEquals(1.0, course.localCharacter.blockAlphaAt(2, 0), "remote vanish activation enters shared fade state");
 		course.localCharacter.step(new LocalPlayerInput());
 		course.localCharacter.step(new LocalPlayerInput());
 		@:privateAccess course.syncBlockVisuals();
@@ -891,23 +908,23 @@ class CharacterLifecycleTest {
 
 		handler.dispatch("activate", ["4", "0", ""]);
 		assertEquals(0.0, course.levelRenderer.blockAlphaAt(120, 0), "server activate hides brick block display");
-		assertEquals(0.0, course.localCharacter.blockAlphaAt(4 - originX, -originY), "remote brick removal updates local collision state");
+		assertEquals(0.0, course.localCharacter.blockAlphaAt(4, 0), "remote brick removal updates local collision state");
 
 		handler.dispatch("activate", ["5", "0", ""]);
 		assertEquals(0.0, course.levelRenderer.blockAlphaAt(150, 0), "server activate hides mine block display");
-		assertEquals(0.0, course.localCharacter.blockAlphaAt(5 - originX, -originY), "remote mine removal updates local collision state");
+		assertEquals(0.0, course.localCharacter.blockAlphaAt(5, 0), "remote mine removal updates local collision state");
 
 		handler.dispatch("activate", ["6", "0", "right"]);
 		assertEquals(null, course.levelRenderer.blockAlphaAt(180, 0), "server activate moves push block away from source segment");
 		assertTrue(course.levelRenderer.blockAlphaAt(210, 0) != null, "server activate moves push block to payload direction segment");
-		assertEquals(null, @:privateAccess course.serverFixture.fixture.blockAt(6 - originX, -originY), "remote push leaves the source collision tile");
-		assertEquals(BlockType.Push, @:privateAccess course.serverFixture.fixture.blockAt(7 - originX, -originY).type,
+		assertEquals(null, @:privateAccess course.worldLevel.blockAt(6, 0), "remote push leaves the source collision tile");
+		assertEquals(BlockType.Push, @:privateAccess course.worldLevel.blockAt(7, 0).type,
 			"remote push updates the destination collision tile");
 
 		handler.dispatch("activate", ["8", "0", "20"]);
-		assertEquals(1.0, course.localCharacter.blockAlphaAt(8 - originX, -originY), "first remote crumble hit retains remaining life");
+		assertEquals(1.0, course.localCharacter.blockAlphaAt(8, 0), "first remote crumble hit retains remaining life");
 		handler.dispatch("activate", ["8", "0", "20"]);
-		assertEquals(0.0, course.localCharacter.blockAlphaAt(8 - originX, -originY), "cumulative remote crumble damage removes collision state");
+		assertEquals(0.0, course.localCharacter.blockAlphaAt(8, 0), "cumulative remote crumble damage removes collision state");
 		assertEquals(0.0, course.levelRenderer.blockAlphaAt(240, 0), "cumulative remote crumble damage hides the display");
 		var effectsAfterRemoval = course.levelRenderer.worldEffectLayer().numChildren;
 		handler.dispatch("activate", ["8", "0", "20"]);

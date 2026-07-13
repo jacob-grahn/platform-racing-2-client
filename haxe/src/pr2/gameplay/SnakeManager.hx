@@ -7,8 +7,8 @@ import openfl.geom.Point;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.harness.LocalPlayerController;
-import pr2.level.ServerLevelFixtureAdapter.ServerFixtureLevel;
 import pr2.level.ServerLevelRenderer;
+import pr2.level.WorldLevel;
 import pr2.net.LobbySocket;
 
 private class SnakeState {
@@ -58,7 +58,7 @@ class SnakeManager {
 	public static inline var MOVE_FRAMES_PER_TILE:Int = 6;
 	private static inline var TRAIL_ASSET:String = "assets/blocks/vanish.png";
 
-	private final fixture:ServerFixtureLevel;
+	private final level:WorldLevel;
 	private final renderer:ServerLevelRenderer;
 	private final controller:LocalPlayerController;
 	private final snakes:Map<Int, SnakeState> = new Map();
@@ -67,8 +67,8 @@ class SnakeManager {
 	private var frame:Int = 0;
 	private var localOwnerId:Null<Int> = null;
 
-	public function new(fixture:ServerFixtureLevel, renderer:ServerLevelRenderer, controller:LocalPlayerController) {
-		this.fixture = fixture;
+	public function new(level:WorldLevel, renderer:ServerLevelRenderer, controller:LocalPlayerController) {
+		this.level = level;
 		this.renderer = renderer;
 		this.controller = controller;
 	}
@@ -115,10 +115,10 @@ class SnakeManager {
 		return renderer.blockWorldToRotatedWorld(snake.sprite.x, snake.sprite.y);
 	}
 
-	public function startLocal(ownerId:Int, fixturePixelX:Float, fixturePixelY:Float, facingScaleX:Int):Void {
+	public function startLocal(ownerId:Int, worldPixelX:Float, worldPixelY:Float, facingScaleX:Int):Void {
 		if (localActive()) return;
 		localOwnerId = ownerId;
-		var tile = controller.snakeTileAtPixel(fixturePixelX, fixturePixelY - 30);
+		var tile = controller.snakeTileAtPixel(worldPixelX, worldPixelY - 30);
 		var direction = controller.snakeGridDirection(facingScaleX < 0 ? -1 : 1, 0);
 		tile.x += direction.x;
 		tile.y += direction.y;
@@ -195,7 +195,7 @@ class SnakeManager {
 				var last = lastSequences.get(ownerId);
 				if (last != null && sequence <= last) return;
 				stopOwner(ownerId, false);
-				var snake = createSnake(ownerId, fixtureTileX(intArg(args, 3)), fixtureTileY(intArg(args, 4)), intArg(args, 5), intArg(args, 6));
+				var snake = createSnake(ownerId, intArg(args, 3), intArg(args, 4), intArg(args, 5), intArg(args, 6));
 				snake.sequence = sequence;
 				lastSequences.set(ownerId, sequence);
 				snakes.set(ownerId, snake);
@@ -206,8 +206,8 @@ class SnakeManager {
 				var snake = snakes.get(ownerId);
 				if (snake == null || sequence <= snake.sequence) return;
 				setHead(snake.tileX, snake.tileY, false, snake.dx, snake.dy);
-				snake.tileX = fixtureTileX(intArg(args, 3));
-				snake.tileY = fixtureTileY(intArg(args, 4));
+				snake.tileX = intArg(args, 3);
+				snake.tileY = intArg(args, 4);
 				snake.dx = snake.pendingDx = intArg(args, 5);
 				snake.dy = snake.pendingDy = intArg(args, 6);
 				snake.sequence = sequence;
@@ -342,19 +342,15 @@ class SnakeManager {
 	}
 
 	private function sendStart(snake:SnakeState):Void {
-		LobbySocket.write('add_effect`SnakeStart`${snake.ownerId}`${snake.sequence}`${worldTileX(snake.tileX)}`${worldTileY(snake.tileY)}`${snake.dx}`${snake.dy}');
+		LobbySocket.write('add_effect`SnakeStart`${snake.ownerId}`${snake.sequence}`${snake.tileX}`${snake.tileY}`${snake.dx}`${snake.dy}');
 	}
 
 	private function sendStep(snake:SnakeState):Void {
-		LobbySocket.write('add_effect`SnakeStep`${snake.ownerId}`${snake.sequence}`${worldTileX(snake.tileX)}`${worldTileY(snake.tileY)}`${snake.dx}`${snake.dy}');
+		LobbySocket.write('add_effect`SnakeStep`${snake.ownerId}`${snake.sequence}`${snake.tileX}`${snake.tileY}`${snake.dx}`${snake.dy}');
 	}
 
-	private inline function worldPixelX(tileX:Int):Int return worldTileX(tileX) * ServerLevelRenderer.TILE_SIZE;
-	private inline function worldPixelY(tileY:Int):Int return worldTileY(tileY) * ServerLevelRenderer.TILE_SIZE;
-	private inline function worldTileX(tileX:Int):Int return tileX + fixture.originTileX;
-	private inline function worldTileY(tileY:Int):Int return tileY + fixture.originTileY;
-	private inline function fixtureTileX(tileX:Int):Int return tileX - fixture.originTileX;
-	private inline function fixtureTileY(tileY:Int):Int return tileY - fixture.originTileY;
+	private inline function worldPixelX(tileX:Int):Int return tileX * ServerLevelRenderer.TILE_SIZE;
+	private inline function worldPixelY(tileY:Int):Int return tileY * ServerLevelRenderer.TILE_SIZE;
 	private static inline function key(tileX:Int, tileY:Int):String return tileX + "," + tileY;
 	private static function intArg(args:Array<String>, index:Int):Int {
 		var parsed = index < args.length ? Std.parseInt(args[index]) : null;

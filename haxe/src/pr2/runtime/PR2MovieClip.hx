@@ -2,6 +2,8 @@ package pr2.runtime;
 
 import haxe.ds.ObjectMap;
 import openfl.display.BlendMode;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.DisplayObject;
 import openfl.display.DisplayObjectContainer;
 import openfl.display.FrameLabel;
@@ -16,6 +18,8 @@ import openfl.text.TextFieldAutoSize;
 import openfl.text.TextFieldType;
 import openfl.text.TextFormat;
 import openfl.text.TextFormatAlign;
+import openfl.utils.AssetType;
+import openfl.utils.Assets;
 import pr2.audio.TimelineSound;
 import pr2.generated.assets.AssetTypes.DisplayElementDef;
 import pr2.generated.assets.AssetTypes.FilterDef;
@@ -787,6 +791,11 @@ class PR2MovieClip extends Sprite {
 		}
 
 		if (element.libraryItemName != null) {
+			var bitmap = createAuthoredBitmap(element);
+			if (bitmap != null) {
+				return bitmap;
+			}
+
 			var baked = BakedSymbolAtlas.create(element.libraryItemName);
 			if (baked != null) {
 				return baked;
@@ -847,6 +856,31 @@ class PR2MovieClip extends Sprite {
 		}
 
 		return createPlaceholder(element);
+	}
+
+	private function createAuthoredBitmap(element:DisplayElementDef):Null<Bitmap> {
+		if (element.type != "DOMBitmapInstance") {
+			return null;
+		}
+		var assetPath = switch (element.libraryItemName) {
+			// Flash's MineBitmap is the same 30x30 source used by the mine block.
+			// The XFL references its embedded JPEG, while the port ships the
+			// lossless exported PNG under the block asset path.
+			case "Images/bitmap19.jpg": "assets/blocks/mine_block.png";
+			default: null;
+		};
+		if (assetPath == null) {
+			return null;
+		}
+		var bitmapData:Null<BitmapData> = Assets.cache.hasBitmapData(assetPath)
+			? Assets.cache.getBitmapData(assetPath)
+			: Assets.exists(assetPath, AssetType.IMAGE) ? Assets.getBitmapData(assetPath) : null;
+		if (bitmapData == null) {
+			return null;
+		}
+		var bitmap = new Bitmap(bitmapData);
+		bitmap.smoothing = true;
+		return bitmap;
 	}
 
 	private function createStaticText(element:DisplayElementDef):DisplayObject {

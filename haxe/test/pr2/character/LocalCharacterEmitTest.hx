@@ -2,10 +2,10 @@ package pr2.character;
 
 import pr2.harness.LocalPlayerInput;
 import pr2.level.BlockType;
-import pr2.level.FixtureLevel;
-import pr2.level.FixtureLevel.LevelBlock;
-import pr2.level.FixtureLevel.StatDefaults;
-import pr2.level.FixtureLevel.TilePosition;
+import pr2.level.WorldLevel;
+import pr2.level.WorldLevel.LevelBlock;
+import pr2.level.WorldLevel.StatDefaults;
+import pr2.level.WorldLevel.TilePosition;
 import pr2.net.LobbySocket;
 
 class LocalCharacterEmitTest {
@@ -139,8 +139,8 @@ class LocalCharacterEmitTest {
 		assertCommands(["heart`"], "heart block gain protocol");
 	}
 
-	private static function flatLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function flatLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-emit-flat",
 			"Local Character Emit Flat",
 			8,
@@ -158,8 +158,8 @@ class LocalCharacterEmitTest {
 		);
 	}
 
-	private static function heartSupplyLevel():FixtureLevel {
-		return new FixtureLevel(
+	private static function heartSupplyLevel():WorldLevel {
+		return new WorldLevel(
 			"local-character-heart-supply",
 			"Local Character Heart Supply",
 			5,

@@ -13,6 +13,7 @@ import pr2.net.CommandHandler;
 **/
 class EffectBackground extends Sprite {
 	public static inline var ICE_WAVE_SOUND_PATH:String = "assets/audio/sfx/sound914.mp3";
+	public static inline var LASER_SOUND_PATH:String = "assets/audio/sfx/sound1014.mp3";
 
 	public static var instance(default, null):Null<EffectBackground>;
 
@@ -41,6 +42,7 @@ class EffectBackground extends Sprite {
 			case "Laser":
 				mountAttackVisual('Laser`$originX`$originY`' + stringArg(args, 3, "right") + '`' + parseIntArg(args, 4) + '`'
 					+ parseIntArg(args, 5));
+				playLaser(originX, originY);
 			case "Slash":
 				course.mountSlashEffect(originX, originY, stringArg(args, 3, "right"), parseIntArg(args, 4));
 			case "Mine":
@@ -111,6 +113,14 @@ class EffectBackground extends Sprite {
 		}
 		var offset = course.levelRenderer.cameraOffset();
 		SoundEffects.playGameSound(Assets.getSound(ICE_WAVE_SOUND_PATH), worldX, worldY, offset.x, offset.y, 1.5);
+	}
+
+	private function playLaser(worldX:Int, worldY:Int):Void {
+		if (course.levelRenderer == null || !Assets.exists(LASER_SOUND_PATH)) {
+			return;
+		}
+		var offset = course.levelRenderer.cameraOffset();
+		SoundEffects.playGameSound(Assets.getSound(LASER_SOUND_PATH), worldX, worldY, offset.x, offset.y, 1.5);
 	}
 
 	private static function mineTileWorld(world:Int):Int {

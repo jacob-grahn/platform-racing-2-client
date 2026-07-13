@@ -1,5 +1,7 @@
 package pr2.effects;
 
+import openfl.display.Sprite;
+import openfl.events.Event;
 import pr2.level.ObjectCodes;
 import pr2.level.ServerLevel;
 import pr2.level.ServerLevel.DecodedBlock;
@@ -47,9 +49,14 @@ class SlashTest {
 		assertEquals(250, slash.scheduledRemoveMsForTests(), "slash schedules six Flash frames at 24fps");
 		assertEquals(true, slash.hasScheduledRemoveForTests(), "slash owns its removal timer");
 
-		slash.remove();
+		var holder = new Sprite();
+		holder.addChild(slash);
+		for (_ in 0...5) slash.dispatchEvent(new Event(Event.ENTER_FRAME));
+		assertEquals(slash, holder.getChildAt(0), "slash remains visible for its first five authored frames");
+		slash.dispatchEvent(new Event(Event.ENTER_FRAME));
 		assertEquals(false, slash.hasScheduledRemoveForTests(), "slash removal clears scheduled timer");
 		assertEquals(0, slash.numChildren, "slash removal disposes authored animation");
+		assertEquals(0, holder.numChildren, "slash removes after its sixth rendered frame");
 	}
 
 	private static function testLeftSlashShooterFilteringAndScale():Void {

@@ -68,9 +68,7 @@ class VectorShapeRenderer {
 				if (stroke.index == null || stroke.value == null) {
 					continue;
 				}
-				var strokeFill = stroke.value.fill != null ? stroke.value.fill : stroke.value;
-				var strokeColor = colorForStyle(strokeFill);
-				applyLineStyle(shape.graphics, stroke.value, strokeColor.color, strokeColor.alpha);
+				applyStrokeStyle(shape.graphics, stroke.value);
 				if (drawStrokes(shape.graphics, element.edges, stroke.index)) {
 					drew = true;
 				}
@@ -142,8 +140,28 @@ class VectorShapeRenderer {
 	// and resolve it to a single line color/alpha.
 	private static function applyStrokeStyle(graphics:Graphics, stroke:StyleValueDef):Void {
 		var strokeFill = stroke.fill != null ? stroke.fill : stroke;
-		var color = colorForStyle(strokeFill);
+		// OpenFL's HTML5 gradient strokes are unstable for long, thin XFL paths.
+		// Preserve the authored stroke geometry and use its strongest visible stop
+		// instead of colorForStyle's first stop (which is commonly transparent for
+		// glows such as the laser beam).
+		var color = strongestGradientColor(strokeFill);
 		applyLineStyle(graphics, stroke, color.color, color.alpha);
+	}
+
+	private static function strongestGradientColor(style:StyleValueDef):{color:Int, alpha:Float} {
+		if (style == null || style.entries == null || style.entries.length == 0) {
+			return colorForStyle(style);
+		}
+		var strongest:Dynamic = style.entries[0];
+		var strongestAlpha:Float = strongest.alpha == null ? 1.0 : strongest.alpha;
+		for (entry in (style.entries : Array<Dynamic>)) {
+			var alpha:Float = entry.alpha == null ? 1.0 : entry.alpha;
+			if (alpha > strongestAlpha) {
+				strongest = entry;
+				strongestAlpha = alpha;
+			}
+		}
+		return {color: strongest.color == null ? 0 : parseColor(strongest.color), alpha: strongestAlpha};
 	}
 
 	private static function applyLineStyle(graphics:Graphics, stroke:StyleValueDef, color:Int, alpha:Float):Void {
