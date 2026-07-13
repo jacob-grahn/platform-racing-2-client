@@ -28,6 +28,10 @@ class Slot extends Sprite {
 
 	public function new(num:Int, owner:LevelItem) {
 		super();
+		// Give browser automation a stable target that only exists after the
+		// asynchronous level listing has rendered. Multiple listings may contain
+		// slots, so the driver selects by display-list index.
+		name = "levelSlot";
 		this.num = num;
 		this.owner = owner;
 		art = PR2MovieClip.fromLinkage("SlotGraphic", {maxNestedDepth: 4});

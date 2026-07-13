@@ -112,8 +112,9 @@ def gpu_flags(use_gpu):
     # Default: software compositing (SwiftShader) for reproducible, machine-independent
     # rendering, which the committed screenshot baselines depend on. --gpu opts into the
     # real GPU path, useful for the e2e physics run where a higher/steadier framerate
-    # matters more than pixel-identical output.
-    return [] if use_gpu else ["--disable-gpu"]
+    # matters more than pixel-identical output. Explicitly request the high-performance
+    # adapter so dual-GPU Macs do not leave headless rendering on the integrated GPU.
+    return ["--force-high-performance-gpu"] if use_gpu else ["--disable-gpu"]
 
 
 def browser_harness_flags():

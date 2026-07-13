@@ -19,7 +19,7 @@
 
     { "time": 21.0,  "action": "click", "x": 538, "y": 8,   "_note": "lobby: favorites (heart) tab, far top-right" },
 
-    { "time": 23.0,  "action": "click", "x": 255, "y": 70,  "_note": "favorites: 'Don't Move JV' level slot (below the byline -> Cancel/Play popup)" },
+    { "time": 23.0,  "action": "click-display-object", "name": "levelSlot", "index": 0, "x": 255, "y": 70, "timeout": 30, "_note": "OpenFL waits for the favorites response and clicks the first rendered slot; Flash uses the stage-coordinate fallback" },
     { "time": 24.0,  "action": "click-display-object", "name": "play_bt", "x": 160, "y": 85, "timeout": 15, "_note": "OpenFL clicks as soon as the live Play button exists; Flash uses the stage-coordinate fallback" },
 
     { "time": 37.0,  "action": "shot", "out": "test/output/dmjv-{target}/09-racing.png", "_note": "race underway after countdown" },
