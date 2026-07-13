@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/003/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 594,
+        "width": 409,
+        "x": 442,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "body",
+      "part": "003_dress",
+      "png": "art/png/character/body/003_dress/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 594,
+        "width": 409,
+        "x": -177,
+        "y": -39
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 552,
+        "width": 340,
+        "x": 853,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "body",
+      "part": "003_dress",
+      "png": "art/png/character/body/003_dress/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 552,
+        "width": 340,
+        "x": -154,
+        "y": -14
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 618,
+        "width": 438,
+        "x": 2,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "body",
+      "part": "003_dress",
+      "png": "art/png/character/body/003_dress/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 618,
+        "width": 438,
+        "x": -191,
+        "y": -53
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 117,
+        "width": 320,
+        "x": 2866,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "feet",
+      "part": "003_loafer",
+      "png": "art/png/character/feet/003_loafer/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 117,
+        "width": 320,
+        "x": -196,
+        "y": -38
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 125,
+        "width": 334,
+        "x": 2530,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "feet",
+      "part": "003_loafer",
+      "png": "art/png/character/feet/003_loafer/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 125,
+        "width": 334,
+        "x": -194,
+        "y": -8
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 171,
+        "width": 348,
+        "x": 2180,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "feet",
+      "part": "003_loafer",
+      "png": "art/png/character/feet/003_loafer/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 171,
+        "width": 348,
+        "x": -203,
+        "y": -48
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 377,
+        "width": 478,
+        "x": 1700,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "head",
+      "part": "003_smiler",
+      "png": "art/png/character/head/003_smiler/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 377,
+        "width": 478,
+        "x": -124,
+        "y": 113
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 87,
+        "width": 103,
+        "x": 3188,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "head",
+      "part": "003_smiler",
+      "png": "art/png/character/head/003_smiler/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 87,
+        "width": 103,
+        "x": 144,
+        "y": 189
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 397,
+        "width": 503,
+        "x": 1195,
+        "y": 2
+      },
+      "id": 3,
+      "kind": "head",
+      "part": "003_smiler",
+      "png": "art/png/character/head/003_smiler/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 397,
+        "width": 503,
+        "x": -137,
+        "y": 106
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/003/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 3,
+  "size": {
+    "height": 622,
+    "width": 3293
+  }
+}

@@ -14,7 +14,6 @@ import openfl.ui.Keyboard;
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import pr2.app.AppStage;
-import pr2.app.KongAward;
 import pr2.audio.AudioManager;
 import pr2.lobby.LobbyLeft;
 import pr2.lobby.LobbyRight;
@@ -2762,20 +2761,17 @@ class LobbyServicesTest {
 	private static function testLoggingInPayloadAndResetTokenFlow():Void {
 		var previousLoginFactory = LoginAuthClient.loginFactory;
 		var capturedToken:Null<String> = null;
-		var capturedAwardKong = false;
 		var capturedLoginId = 0;
 		var capturedRemember = false;
 		LoginAuthClient.loginFactory = function(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int,
-				onResult:LoginAuthResult->Void, onError:Null<String->Void>, token:Null<String>, awardKong:Bool):Void {
+				onResult:LoginAuthResult->Void, onError:Null<String->Void>, token:Null<String>):Void {
 			capturedToken = token;
-			capturedAwardKong = awardKong;
 			capturedLoginId = loginId;
 			capturedRemember = remember;
 			onResult(new LoginAuthResult(false, "expired token", {resetToken: true}));
 		};
 		SavedAccounts.disablePersistenceForTests();
 		SavedAccounts.add("Alice", "expired-token");
-		KongAward.nextLogin = true;
 		LobbySession.begin("Stale", 1, serverInfo(0));
 		UnreadNotif.setLastRead(0);
 		UnreadNotif.notifyUser(99);
@@ -2784,8 +2780,6 @@ class LobbyServicesTest {
 		Reflect.callMethod(page, Reflect.field(page, "openLoggingInPopup"), ["1234", "Alice", "", true, serverInfo(0)]);
 
 		assertEquals("expired-token", capturedToken, "remembered login sends saved token");
-		assertEquals(true, capturedAwardKong, "logging in payload consumes pending Kong award");
-		assertEquals(false, KongAward.nextLogin, "Kong award flag resets after login send");
 		assertEquals(1234, capturedLoginId, "logging in payload parses login id");
 		assertEquals(true, capturedRemember, "remembered login forwards remember flag");
 		assertEquals(0, SavedAccounts.getAll().length, "resetToken login error deletes remembered token");
@@ -2794,7 +2788,6 @@ class LobbyServicesTest {
 		assertEquals(0, UnreadNotif.numUnread(), "login error clears unread notifications");
 		page.remove();
 		LoginAuthClient.loginFactory = previousLoginFactory;
-		KongAward.nextLogin = false;
 	}
 
 	private static function testLoginPageAppliesPostLoginState():Void {

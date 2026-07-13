@@ -81,7 +81,6 @@ import pr2.lobby.LobbySessionTest;
 import pr2.lobby.LogoutPassPopupTest;
 import pr2.lobby.MessagesItemTest;
 import pr2.lobby.OptionsPopupTest;
-import pr2.lobby.OutfitPopupTest;
 import pr2.lobby.PMRFCodesPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.SendMessagePopupTest;
@@ -239,7 +238,6 @@ class DeterministicTestSuite {
 		LogoutPassPopupTest.main();
 		MessagesItemTest.main();
 		OptionsPopupTest.main();
-		OutfitPopupTest.main();
 		PMRFCodesPopupTest.main();
 		PlayerPopupTest.main();
 		SendMessagePopupTest.main();

@@ -66,7 +66,7 @@ class LevelEditorConnectingPopup extends Popup {
 				LoginAuthClient.login(payloadUserName, "", server, remember, parsed, function(result):Void {
 					if (reconnectStopped || gate == null) return;
 					if (result.success) gate.acceptHttp(result); else fail(result.message == "" ? "Login failed." : result.message);
-				}, fail, token, false);
+				}, fail, token);
 			case LoginSuccessful(group, socketUserName):
 				if (gate != null) gate.acceptSocket(group, socketUserName == "" ? userName : socketUserName);
 			case LoginFailed(message), ConnectionClosed(message):

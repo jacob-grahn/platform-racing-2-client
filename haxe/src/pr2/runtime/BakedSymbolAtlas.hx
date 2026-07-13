@@ -15,7 +15,7 @@ import sys.io.File;
 
 class BakedSymbolAtlas {
 	private static final KONGREGATE_ATLAS = "assets/intro/atlases/kongregate@4x.json";
-	private static final LOCAL_KONGREGATE_ATLAS = "vector-art/atlases/intro/kongregate@4x.json";
+	private static final LOCAL_KONGREGATE_ATLAS = "assets/intro/atlases/kongregate@4x.json";
 	private static final KONGREGATE_SYMBOLS:Map<String, String> = [
 		"MovieClips/Symbol 27" => "symbol_27",
 		"MovieClips/Symbol 30" => "symbol_30",

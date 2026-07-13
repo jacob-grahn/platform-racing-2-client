@@ -1,6 +1,6 @@
 package pr2.lobby.account;
 
-/** Outfit payload shape consumed by `OutfitPopup`'s preview. */
+/** Saved character outfit payload shape. */
 typedef Outfit = {
 	?hats:Array<Int>,
 	?hat:Int,

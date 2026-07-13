@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/011/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 562,
+        "width": 244,
+        "x": 272,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "body",
+      "part": "011_invisible",
+      "png": "art/png/character/body/011_invisible/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 562,
+        "width": 244,
+        "x": -112,
+        "y": -55
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 562,
+        "width": 244,
+        "x": 518,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "body",
+      "part": "011_invisible",
+      "png": "art/png/character/body/011_invisible/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 562,
+        "width": 244,
+        "x": -114,
+        "y": -61
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 581,
+        "width": 268,
+        "x": 2,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "body",
+      "part": "011_invisible",
+      "png": "art/png/character/body/011_invisible/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 581,
+        "width": 268,
+        "x": -134,
+        "y": -71
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 216,
+        "width": 351,
+        "x": 2096,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "feet",
+      "part": "011_invisible",
+      "png": "art/png/character/feet/011_invisible/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 216,
+        "width": 351,
+        "x": -176,
+        "y": -108
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 216,
+        "width": 351,
+        "x": 2449,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "feet",
+      "part": "011_invisible",
+      "png": "art/png/character/feet/011_invisible/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 216,
+        "width": 351,
+        "x": -177,
+        "y": -109
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 233,
+        "width": 361,
+        "x": 1733,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "feet",
+      "part": "011_invisible",
+      "png": "art/png/character/feet/011_invisible/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 233,
+        "width": 361,
+        "x": -181,
+        "y": -117
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 352,
+        "width": 418,
+        "x": 1313,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "head",
+      "part": "011_bird",
+      "png": "art/png/character/head/011_bird/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 352,
+        "width": 418,
+        "x": -31,
+        "y": 116
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 71,
+        "width": 245,
+        "x": 2802,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "head",
+      "part": "011_bird",
+      "png": "art/png/character/head/011_bird/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 71,
+        "width": 245,
+        "x": 220,
+        "y": 196
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 373,
+        "width": 547,
+        "x": 764,
+        "y": 2
+      },
+      "id": 11,
+      "kind": "head",
+      "part": "011_bird",
+      "png": "art/png/character/head/011_bird/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 373,
+        "width": 547,
+        "x": -42,
+        "y": 106
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/011/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 11,
+  "size": {
+    "height": 585,
+    "width": 3049
+  }
+}

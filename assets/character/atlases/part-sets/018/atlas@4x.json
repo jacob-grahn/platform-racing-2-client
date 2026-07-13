@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/018/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 657,
+        "width": 424,
+        "x": 448,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "body",
+      "part": "018_astronaut",
+      "png": "art/png/character/body/018_astronaut/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 657,
+        "width": 424,
+        "x": -266,
+        "y": -154
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 484,
+        "width": 351,
+        "x": 1597,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "body",
+      "part": "018_astronaut",
+      "png": "art/png/character/body/018_astronaut/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 484,
+        "width": 351,
+        "x": -218,
+        "y": -147
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 682,
+        "width": 444,
+        "x": 2,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "body",
+      "part": "018_astronaut",
+      "png": "art/png/character/body/018_astronaut/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 682,
+        "width": 444,
+        "x": -277,
+        "y": -172
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 265,
+        "width": 280,
+        "x": 3537,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "feet",
+      "part": "018_alien",
+      "png": "art/png/character/feet/018_alien/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 265,
+        "width": 280,
+        "x": -163,
+        "y": -165
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 53,
+        "width": 375,
+        "x": 2,
+        "y": 686
+      },
+      "id": 18,
+      "kind": "feet",
+      "part": "018_alien",
+      "png": "art/png/character/feet/018_alien/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 53,
+        "width": 375,
+        "x": -199,
+        "y": 43
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 283,
+        "width": 392,
+        "x": 3143,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "feet",
+      "part": "018_alien",
+      "png": "art/png/character/feet/018_alien/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 283,
+        "width": 392,
+        "x": -208,
+        "y": -177
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 472,
+        "width": 468,
+        "x": 1950,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "head",
+      "part": "018_cat",
+      "png": "art/png/character/head/018_cat/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 472,
+        "width": 468,
+        "x": -89,
+        "y": 31
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 366,
+        "width": 721,
+        "x": 2420,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "head",
+      "part": "018_cat",
+      "png": "art/png/character/head/018_cat/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 366,
+        "width": 721,
+        "x": -148,
+        "y": 248
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 596,
+        "width": 721,
+        "x": 874,
+        "y": 2
+      },
+      "id": 18,
+      "kind": "head",
+      "part": "018_cat",
+      "png": "art/png/character/head/018_cat/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 596,
+        "width": 721,
+        "x": -148,
+        "y": 19
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/018/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 18,
+  "size": {
+    "height": 741,
+    "width": 3819
+  }
+}

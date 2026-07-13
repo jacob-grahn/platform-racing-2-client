@@ -14,7 +14,7 @@ class WorldLevelParserTest {
 	}
 
 	private static function testFlatFixture():Void {
-		var fixture = WorldLevelParser.parse(File.getContent("assets/fixtures/flat-level.json"));
+		var fixture = WorldLevelParser.parse(File.getContent("test/fixtures/flat-level.json"));
 
 		assertEquals("flat-level", fixture.id, "fixture id");
 		assertEquals(18, fixture.widthTiles, "fixture width");

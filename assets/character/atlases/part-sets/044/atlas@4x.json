@@ -1,0 +1,78 @@
+{
+  "atlasGroup": "character/part-sets/044/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 445,
+        "width": 483,
+        "x": 491,
+        "y": 2
+      },
+      "id": 44,
+      "kind": "head",
+      "part": "044_jackolantern",
+      "png": "art/png/character/head/044_jackolantern/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 445,
+        "width": 483,
+        "x": -75,
+        "y": 56
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 229,
+        "width": 268,
+        "x": 976,
+        "y": 2
+      },
+      "id": 44,
+      "kind": "head",
+      "part": "044_jackolantern",
+      "png": "art/png/character/head/044_jackolantern/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 229,
+        "width": 268,
+        "x": 110,
+        "y": 183
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 449,
+        "width": 487,
+        "x": 2,
+        "y": 2
+      },
+      "id": 44,
+      "kind": "head",
+      "part": "044_jackolantern",
+      "png": "art/png/character/head/044_jackolantern/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 449,
+        "width": 487,
+        "x": -77,
+        "y": 55
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/044/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 44,
+  "size": {
+    "height": 453,
+    "width": 1246
+  }
+}

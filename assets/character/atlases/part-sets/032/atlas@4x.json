@@ -1,0 +1,141 @@
+{
+  "atlasGroup": "character/part-sets/032/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 523,
+        "width": 253,
+        "x": 2814,
+        "y": 2
+      },
+      "id": 32,
+      "kind": "body",
+      "part": "032_slender",
+      "png": "art/png/character/body/032_slender/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 523,
+        "width": 253,
+        "x": -128,
+        "y": -24
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 444,
+        "width": 553,
+        "x": 3069,
+        "y": 2
+      },
+      "id": 32,
+      "kind": "body",
+      "part": "032_slender",
+      "png": "art/png/character/body/032_slender/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 444,
+        "width": 553,
+        "x": -329,
+        "y": -64
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 577,
+        "width": 553,
+        "x": 2259,
+        "y": 2
+      },
+      "id": 32,
+      "kind": "body",
+      "part": "032_slender",
+      "png": "art/png/character/body/032_slender/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 577,
+        "width": 553,
+        "x": -329,
+        "y": -71
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 699,
+        "width": 738,
+        "x": 1519,
+        "y": 2
+      },
+      "id": 32,
+      "kind": "head",
+      "part": "032_taco",
+      "png": "art/png/character/head/032_taco/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 699,
+        "width": 738,
+        "x": -302,
+        "y": -208
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 716,
+        "width": 755,
+        "x": 762,
+        "y": 2
+      },
+      "id": 32,
+      "kind": "head",
+      "part": "032_taco",
+      "png": "art/png/character/head/032_taco/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 716,
+        "width": 755,
+        "x": -313,
+        "y": -217
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 729,
+        "width": 758,
+        "x": 2,
+        "y": 2
+      },
+      "id": 32,
+      "kind": "head",
+      "part": "032_taco",
+      "png": "art/png/character/head/032_taco/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 729,
+        "width": 758,
+        "x": -313,
+        "y": -217
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/032/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 32,
+  "size": {
+    "height": 733,
+    "width": 3624
+  }
+}

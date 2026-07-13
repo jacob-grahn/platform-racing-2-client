@@ -37,10 +37,10 @@ class ScreenTest {
 	}
 
 	private static function testLoginPageAssetMatchesSiteMode():Void {
-		assertLoginPageArt("assets/login/login_page@4x.png", 21, 846, SiteMode.KONGREGATE, "kongregate login logo");
-		assertLoginPageArt("assets/login/login_page_bubble_box@4x.png", 28, 845, SiteMode.BUBBLE_BOX, "bubblebox login logo");
-		assertLoginPageArt("assets/login/login_page_armor_games@4x.png", 19, 846, SiteMode.ARMOR_GAMES, "armorgames login logo");
-		assertLoginPageArt("assets/login/login_page_no_logo@4x.png", 868, 846, SiteMode.INXILE, "inxile has no login logo");
+		assertLoginPageArt("assets/login/login_page_no_logo@4x.png", 868, 846, SiteMode.KONGREGATE, "kongregate uses unbranded login art");
+		assertLoginPageArt("assets/login/login_page_no_logo@4x.png", 868, 846, SiteMode.BUBBLE_BOX, "bubblebox uses unbranded login art");
+		assertLoginPageArt("assets/login/login_page_no_logo@4x.png", 868, 846, SiteMode.ARMOR_GAMES, "armorgames uses unbranded login art");
+		assertLoginPageArt("assets/login/login_page_no_logo@4x.png", 868, 846, SiteMode.INXILE, "inxile uses unbranded login art");
 	}
 
 	private static function assertStringEquals(expected:String, actual:String, message:String):Void {

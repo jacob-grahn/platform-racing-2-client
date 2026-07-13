@@ -6,8 +6,6 @@ import js.Browser;
 import openfl.display.Bitmap;
 import openfl.display.InteractiveObject;
 import openfl.display.PixelSnapping;
-import openfl.display.Sprite;
-import openfl.events.MouseEvent;
 import openfl.events.TimerEvent;
 import openfl.filters.GlowFilter;
 import openfl.text.TextField;
@@ -30,13 +28,9 @@ import pr2.net.ServerInfo;
 import pr2.net.ServerStatusClient;
 import pr2.runtime.FlComboBox;
 import pr2.audio.AudioManager;
-import pr2.app.KongAward;
-import pr2.app.SiteMode;
 import pr2.lobby.LobbySession;
 import pr2.lobby.account.Settings;
 import pr2.lobby.account.Presets;
-import pr2.lobby.account.Preset.Outfit;
-import pr2.lobby.dialogs.OutfitPopup;
 import pr2.lobby.messages.UnreadNotif;
 import pr2.util.RequestGeneration;
 
@@ -54,20 +48,8 @@ private typedef LoginPageArt = {
 	areas are rebuilt in Haxe.
 **/
 class LoginPage extends Page {
-	private static inline var LOGIN_PAGE_ASSET = "assets/login/login_page@4x.png";
-	private static inline var LOGIN_PAGE_ARMOR_GAMES_ASSET = "assets/login/login_page_armor_games@4x.png";
-	private static inline var LOGIN_PAGE_BUBBLE_BOX_ASSET = "assets/login/login_page_bubble_box@4x.png";
 	private static inline var LOGIN_PAGE_NO_LOGO_ASSET = "assets/login/login_page_no_logo@4x.png";
 	private static inline var LOGIN_PAGE_SCALE = 4;
-	private static inline var LOGIN_PAGE_TRIM_X = 21;
-	// Trim Y dropped from 370 once the Gwibble title (Layer 7) was removed from the
-	// page art; the topmost remaining content is now the menu panel. See raster
-	// manifest entry for login_page (vector-art/raster-manifest-login.json).
-	private static inline var LOGIN_PAGE_TRIM_Y = 846;
-	private static inline var LOGIN_PAGE_ARMOR_GAMES_TRIM_X = 19;
-	private static inline var LOGIN_PAGE_ARMOR_GAMES_TRIM_Y = 846;
-	private static inline var LOGIN_PAGE_BUBBLE_BOX_TRIM_X = 28;
-	private static inline var LOGIN_PAGE_BUBBLE_BOX_TRIM_Y = 845;
 	private static inline var LOGIN_PAGE_NO_LOGO_TRIM_X = 868;
 	private static inline var LOGIN_PAGE_NO_LOGO_TRIM_Y = 846;
 
@@ -79,7 +61,6 @@ class LoginPage extends Page {
 	private var pageArt:Null<Bitmap>;
 	private var titleText:Null<TextField>;
 	private var buttons:Array<LoginPageMenuButton> = [];
-	private var kongHitArea:Null<Sprite>;
 	private var activePopup:Null<LoginFlashPopup>;
 	private var servers:Array<ServerInfo> = [];
 	private var selectedServerIndex:Int = 0;
@@ -119,11 +100,6 @@ class LoginPage extends Page {
 		addMenuButton("Instructions", openInstructions);
 		addMenuButton("Credits", openCreditsDialog);
 
-		if (siteMode == SiteMode.KONGREGATE) {
-			kongHitArea = createHitArea(5, 364, 183, 31, openKongDialog);
-			addChild(kongHitArea);
-		}
-
 		loadServers();
 		serverRefreshTimer = new Timer(60000);
 		serverRefreshTimer.addEventListener(TimerEvent.TIMER, onServerRefreshTimer);
@@ -143,11 +119,6 @@ class LoginPage extends Page {
 			}
 		}
 		buttons = [];
-
-		if (kongHitArea != null && kongHitArea.parent != null) {
-			kongHitArea.parent.removeChild(kongHitArea);
-		}
-		kongHitArea = null;
 
 		if (titleText != null && titleText.parent != null) {
 			titleText.parent.removeChild(titleText);
@@ -328,14 +299,6 @@ class LoginPage extends Page {
 		popup.bindButton("close_bt", closePopup);
 	}
 
-	private function openKongDialog():Void {
-		closePopup();
-		new OutfitPopup(function():Void {
-			KongAward.nextLogin = true;
-			openLoginMessage("Great success! You'll receive the Ant Set and the Kong Hat the next time you log in.");
-		}, kongOutfit(), kongOutfitMessage());
-	}
-
 	private function openServerSelectPopup(guestLogin:Bool, createdAccount:Bool):Void {
 		var popup = openPopup("ServerSelectPopupGraphic");
 		populateServerCombo(popup.comboBox("serverSelect"));
@@ -437,7 +400,6 @@ class LoginPage extends Page {
 		// must send an empty name here too. `userName` is still used elsewhere
 		// (connecting message, socket-username fallback).
 		var payloadUserName = loginToken != "" ? "" : userName;
-		var awardKong = KongAward.consumeNextLogin();
 		LoginAuthClient.login(payloadUserName, userPass, server, remember, parsedLoginId, function(result):Void {
 			if (loginGate != gate) return;
 			if (result.success) {
@@ -450,7 +412,7 @@ class LoginPage extends Page {
 		}, function(message:String):Void {
 			if (loginGate != gate) return;
 			failLogin(message);
-		}, loginToken, awardKong);
+		}, loginToken);
 	}
 
 	private function openPopup(linkage:String):LoginFlashPopup {
@@ -661,41 +623,8 @@ class LoginPage extends Page {
 		return bitmap;
 	}
 
-	private static function loginPageArtFor(siteMode:String):LoginPageArt {
-		return switch (siteMode) {
-			case SiteMode.KONGREGATE:
-				{assetPath: LOGIN_PAGE_ASSET, trimX: LOGIN_PAGE_TRIM_X, trimY: LOGIN_PAGE_TRIM_Y};
-			case SiteMode.BUBBLE_BOX:
-				{assetPath: LOGIN_PAGE_BUBBLE_BOX_ASSET, trimX: LOGIN_PAGE_BUBBLE_BOX_TRIM_X, trimY: LOGIN_PAGE_BUBBLE_BOX_TRIM_Y};
-			case SiteMode.ARMOR_GAMES:
-				{assetPath: LOGIN_PAGE_ARMOR_GAMES_ASSET, trimX: LOGIN_PAGE_ARMOR_GAMES_TRIM_X, trimY: LOGIN_PAGE_ARMOR_GAMES_TRIM_Y};
-			case SiteMode.INXILE:
-				{assetPath: LOGIN_PAGE_NO_LOGO_ASSET, trimX: LOGIN_PAGE_NO_LOGO_TRIM_X, trimY: LOGIN_PAGE_NO_LOGO_TRIM_Y};
-			default:
-				{assetPath: LOGIN_PAGE_NO_LOGO_ASSET, trimX: LOGIN_PAGE_NO_LOGO_TRIM_X, trimY: LOGIN_PAGE_NO_LOGO_TRIM_Y};
-		}
-	}
-
-	private static function kongOutfitMessage():String {
-		return '<a href="https://kongregate.com/">Kongregate</a> sponsored this game way back in 2008. Since then, the game has logged over 30 million plays on Kongregate alone! In honor of all the success PR2 has had in partnership with Kong, will you accept this special outfit?';
-	}
-
-	private static function kongOutfit():Outfit {
-		return {
-			hats: [3, 1, 1, 1],
-			hat: 3,
-			head: 20,
-			body: 17,
-			feet: 16,
-			hatColor: 0x990000,
-			headColor: 0x990000,
-			bodyColor: 0x990000,
-			feetColor: 0x990000,
-			hatColor2: -1,
-			headColor2: -1,
-			bodyColor2: -1,
-			feetColor2: -1
-		};
+	private static function loginPageArtFor(_siteMode:String):LoginPageArt {
+		return {assetPath: LOGIN_PAGE_NO_LOGO_ASSET, trimX: LOGIN_PAGE_NO_LOGO_TRIM_X, trimY: LOGIN_PAGE_NO_LOGO_TRIM_Y};
 	}
 
 	// The "Platform Racing 2" logo. In the original Flash menu this is live
@@ -720,21 +649,6 @@ class LoginPage extends Page {
 		text.setTextFormat(format);
 		text.filters = [new GlowFilter(0xFFFFFF, 1, 6, 6, 2, 3)];
 		return text;
-	}
-
-	private static function createHitArea(x:Float, y:Float, width:Float, height:Float, clickHandler:Void->Void):Sprite {
-		var hitArea = new Sprite();
-		hitArea.x = x;
-		hitArea.y = y;
-		hitArea.buttonMode = true;
-		hitArea.useHandCursor = true;
-		hitArea.graphics.beginFill(0xFFFFFF, 0);
-		hitArea.graphics.drawRect(0, 0, width, height);
-		hitArea.graphics.endFill();
-		hitArea.addEventListener(MouseEvent.CLICK, function(_):Void {
-			clickHandler();
-		});
-		return hitArea;
 	}
 
 }

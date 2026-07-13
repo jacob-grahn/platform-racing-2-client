@@ -1,0 +1,78 @@
+{
+  "atlasGroup": "character/part-sets/033/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 388,
+        "width": 330,
+        "x": 730,
+        "y": 2
+      },
+      "id": 33,
+      "kind": "head",
+      "part": "033_slender",
+      "png": "art/png/character/head/033_slender/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 388,
+        "width": 330,
+        "x": -21,
+        "y": 125
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 421,
+        "width": 362,
+        "x": 2,
+        "y": 2
+      },
+      "id": 33,
+      "kind": "head",
+      "part": "033_slender",
+      "png": "art/png/character/head/033_slender/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 421,
+        "width": 362,
+        "x": -36,
+        "y": 109
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 421,
+        "width": 362,
+        "x": 366,
+        "y": 2
+      },
+      "id": 33,
+      "kind": "head",
+      "part": "033_slender",
+      "png": "art/png/character/head/033_slender/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 421,
+        "width": 362,
+        "x": -36,
+        "y": 109
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/033/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 33,
+  "size": {
+    "height": 425,
+    "width": 1062
+  }
+}

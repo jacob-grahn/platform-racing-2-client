@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/009/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 633,
+        "width": 454,
+        "x": 476,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "body",
+      "part": "009_snake",
+      "png": "art/png/character/body/009_snake/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 633,
+        "width": 454,
+        "x": -260,
+        "y": -106
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 598,
+        "width": 380,
+        "x": 932,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "body",
+      "part": "009_snake",
+      "png": "art/png/character/body/009_snake/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 598,
+        "width": 380,
+        "x": -227,
+        "y": -105
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 656,
+        "width": 472,
+        "x": 2,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "body",
+      "part": "009_snake",
+      "png": "art/png/character/body/009_snake/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 656,
+        "width": 472,
+        "x": -273,
+        "y": -124
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 133,
+        "width": 317,
+        "x": 2815,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "feet",
+      "part": "009_nice",
+      "png": "art/png/character/feet/009_nice/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 133,
+        "width": 317,
+        "x": -167,
+        "y": -25
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 77,
+        "width": 119,
+        "x": 3134,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "feet",
+      "part": "009_nice",
+      "png": "art/png/character/feet/009_nice/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 77,
+        "width": 119,
+        "x": -35,
+        "y": -56
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 171,
+        "width": 325,
+        "x": 2488,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "feet",
+      "part": "009_nice",
+      "png": "art/png/character/feet/009_nice/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 171,
+        "width": 325,
+        "x": -171,
+        "y": -56
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 447,
+        "width": 413,
+        "x": 1743,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "head",
+      "part": "009_worm",
+      "png": "art/png/character/head/009_worm/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 447,
+        "width": 413,
+        "x": -64,
+        "y": 63
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 412,
+        "width": 328,
+        "x": 2158,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "head",
+      "part": "009_worm",
+      "png": "art/png/character/head/009_worm/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 412,
+        "width": 328,
+        "x": -22,
+        "y": 91
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 463,
+        "width": 427,
+        "x": 1314,
+        "y": 2
+      },
+      "id": 9,
+      "kind": "head",
+      "part": "009_worm",
+      "png": "art/png/character/head/009_worm/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 463,
+        "width": 427,
+        "x": -74,
+        "y": 53
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/009/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 9,
+  "size": {
+    "height": 660,
+    "width": 3255
+  }
+}

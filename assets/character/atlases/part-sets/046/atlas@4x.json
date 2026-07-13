@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/046/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 538,
+        "width": 593,
+        "x": 608,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "body",
+      "part": "046_snowman",
+      "png": "art/png/character/body/046_snowman/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 538,
+        "width": 593,
+        "x": -281,
+        "y": 5
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 299,
+        "width": 394,
+        "x": 2174,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "body",
+      "part": "046_snowman",
+      "png": "art/png/character/body/046_snowman/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 299,
+        "width": 394,
+        "x": -164,
+        "y": -72
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 633,
+        "width": 604,
+        "x": 2,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "body",
+      "part": "046_snowman",
+      "png": "art/png/character/body/046_snowman/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 633,
+        "width": 604,
+        "x": -287,
+        "y": -91
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 185,
+        "width": 185,
+        "x": 2978,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "feet",
+      "part": "046_snowman",
+      "png": "art/png/character/feet/046_snowman/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 185,
+        "width": 185,
+        "x": -130,
+        "y": -80
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 207,
+        "width": 203,
+        "x": 2570,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "feet",
+      "part": "046_snowman",
+      "png": "art/png/character/feet/046_snowman/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 207,
+        "width": 203,
+        "x": -143,
+        "y": -88
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 201,
+        "width": 201,
+        "x": 2775,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "feet",
+      "part": "046_snowman",
+      "png": "art/png/character/feet/046_snowman/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 201,
+        "width": 201,
+        "x": -141,
+        "y": -85
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 426,
+        "width": 426,
+        "x": 1746,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "head",
+      "part": "046_snowman",
+      "png": "art/png/character/head/046_snowman/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 426,
+        "width": 426,
+        "x": -59,
+        "y": 80
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 117,
+        "width": 160,
+        "x": 3165,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "head",
+      "part": "046_snowman",
+      "png": "art/png/character/head/046_snowman/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 117,
+        "width": 160,
+        "x": 273,
+        "y": 170
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 442,
+        "width": 541,
+        "x": 1203,
+        "y": 2
+      },
+      "id": 46,
+      "kind": "head",
+      "part": "046_snowman",
+      "png": "art/png/character/head/046_snowman/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 442,
+        "width": 541,
+        "x": -69,
+        "y": 72
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/046/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 46,
+  "size": {
+    "height": 637,
+    "width": 3327
+  }
+}

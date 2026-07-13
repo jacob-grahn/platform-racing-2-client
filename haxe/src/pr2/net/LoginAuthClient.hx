@@ -11,8 +11,7 @@ typedef LoginAuthFactory = (
 	Int,
 	LoginAuthResult->Void,
 	Null<String->Void>,
-	Null<String>,
-	Bool
+	Null<String>
 ) -> Void;
 
 class LoginAuthClient {
@@ -28,10 +27,9 @@ class LoginAuthClient {
 		loginId:Int,
 		onResult:LoginAuthResult->Void,
 		?onError:String->Void,
-		?token:String,
-		?awardKong:Bool = false
+		?token:String
 	):Void {
-		loginFactory(userName, userPass, server, remember, loginId, onResult, onError, token, awardKong);
+		loginFactory(userName, userPass, server, remember, loginId, onResult, onError, token);
 	}
 
 	private static function defaultLogin(
@@ -42,10 +40,9 @@ class LoginAuthClient {
 		loginId:Int,
 		onResult:LoginAuthResult->Void,
 		?onError:String->Void,
-		?token:String,
-		?awardKong:Bool = false
+		?token:String
 	):Void {
-		FormPostClient.post(ServerConfig.loginUrl(), fields(userName, userPass, server, remember, loginId, token, awardKong), function(body:String):Void {
+		FormPostClient.post(ServerConfig.loginUrl(), fields(userName, userPass, server, remember, loginId, token), function(body:String):Void {
 			try {
 				onResult(parse(body));
 			} catch (error:Dynamic) {
@@ -60,16 +57,16 @@ class LoginAuthClient {
 		loginFactory = defaultLogin;
 	}
 
-	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?token:String, ?awardKong:Bool = false):Map<String, String> {
+	public static function fields(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?token:String):Map<String, String> {
 		var result = [
-			"i" => encryptPayload(payloadJson(userName, userPass, server, remember, loginId, awardKong)),
+			"i" => encryptPayload(payloadJson(userName, userPass, server, remember, loginId)),
 			"build" => ServerConfig.BUILD,
 		];
 		if (token != null && token != "") result.set("token", token);
 		return result;
 	}
 
-	public static function payloadJson(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int, ?awardKong:Bool = false):String {
+	public static function payloadJson(userName:String, userPass:String, server:ServerInfo, remember:Bool, loginId:Int):String {
 		return Json.stringify({
 			user_name: userName,
 			user_pass: userPass,
@@ -78,7 +75,6 @@ class LoginAuthClient {
 			domain: "local",
 			remember: remember,
 			login_id: loginId,
-			award_kong: awardKong,
 		});
 	}
 

@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/004/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 525,
+        "width": 259,
+        "x": 814,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "body",
+      "part": "004_pec",
+      "png": "art/png/character/body/004_pec/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 525,
+        "width": 259,
+        "x": -112,
+        "y": -58
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 34,
+        "width": 112,
+        "x": 2768,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "body",
+      "part": "004_pec",
+      "png": "art/png/character/body/004_pec/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 34,
+        "width": 112,
+        "x": 7,
+        "y": 66
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 550,
+        "width": 285,
+        "x": 2,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "body",
+      "part": "004_pec",
+      "png": "art/png/character/body/004_pec/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 550,
+        "width": 285,
+        "x": -134,
+        "y": -70
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 124,
+        "width": 350,
+        "x": 1931,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "feet",
+      "part": "004_cleat",
+      "png": "art/png/character/feet/004_cleat/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 124,
+        "width": 350,
+        "x": -217,
+        "y": -48
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 94,
+        "width": 395,
+        "x": 2283,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "feet",
+      "part": "004_cleat",
+      "png": "art/png/character/feet/004_cleat/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 94,
+        "width": 395,
+        "x": -221,
+        "y": 10
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 278,
+        "width": 410,
+        "x": 1519,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "feet",
+      "part": "004_cleat",
+      "png": "art/png/character/feet/004_cleat/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 278,
+        "width": 410,
+        "x": -231,
+        "y": -138
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 424,
+        "width": 442,
+        "x": 1075,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "head",
+      "part": "004_flower",
+      "png": "art/png/character/head/004_flower/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 424,
+        "width": 442,
+        "x": -57,
+        "y": 104
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 85,
+        "width": 86,
+        "x": 2680,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "head",
+      "part": "004_flower",
+      "png": "art/png/character/head/004_flower/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 85,
+        "width": 86,
+        "x": 110,
+        "y": 249
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 529,
+        "width": 523,
+        "x": 289,
+        "y": 2
+      },
+      "id": 4,
+      "kind": "head",
+      "part": "004_flower",
+      "png": "art/png/character/head/004_flower/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 529,
+        "width": 523,
+        "x": -129,
+        "y": 12
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/004/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 4,
+  "size": {
+    "height": 554,
+    "width": 2882
+  }
+}

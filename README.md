@@ -79,9 +79,9 @@ PR2_API_HOST=/api haxe test/real-server.hxml
 - `assets/`: OpenFL app assets.
 - `flash/platform-racing-2-xfl/`: extracted Animate/XFL migration source.
 - `tools/`: asset extraction, generation, rasterization, and harness helpers.
-- `vector-art/svg/`: SVG exports from Animate.
-- `vector-art/png/`: generated 4x rasters from SVG vector art.
-- `vector-art/atlases/`: generated sprite sheets and frame JSON.
+- `art/svg/`: SVG exports from Animate.
+- `art/png/`: generated 4x rasters from SVG vector art.
+- `art/atlases/`: generated sprite sheets and frame JSON.
 - `docs/`: migration notes and inventories.
 - `docs/browser-platform-differences.md`: audited, platform-required HTML5
   differences and their parity boundaries.
@@ -228,20 +228,20 @@ python3 tools/generate_animate_svg_export_jsfl.py
 Generate a small smoke-test JSFL:
 
 ```sh
-python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out vector-art/export-character-svg-smoke.jsfl
+python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out art/export-character-svg-smoke.jsfl
 ```
 
 Run a JSFL file through Adobe Animate on macOS:
 
 ```sh
-open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-character-svg.jsfl
-open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-character-svg-smoke.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" art/export-character-svg.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" art/export-character-svg-smoke.jsfl
 ```
 
 The direct Animate executable also runs JSFL scripts:
 
 ```sh
-"/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-character-svg-smoke.jsfl
+"/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" art/export-character-svg-smoke.jsfl
 ```
 
 This was verified with the smoke export. The command stays attached while
@@ -252,10 +252,10 @@ Other generated JSFL entry points:
 
 ```sh
 python3 tools/generate_other_assets_jsfl.py
-open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-other-assets-svg.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" art/export-other-assets-svg.jsfl
 
 python3 tools/generate_block_bitmap_jsfl.py
-open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-block-bitmaps.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" art/export-block-bitmaps.jsfl
 ```
 
 ## SVG To Rasterization
@@ -266,13 +266,13 @@ backgrounds are emitted as standalone lossless WebP files, and the intermediate
 per-channel character rasters remain PNGs:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
+python3 tools/rasterize_vector_art.py --sheets --manifest art/raster-manifest.json
 ```
 
 Rasterize only character art:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category character --manifest vector-art/raster-manifest.json
+python3 tools/rasterize_vector_art.py --sheets --category character --manifest art/raster-manifest.json
 ```
 
 Rasterize the exported non-character SVGs. Backgrounds remain standalone WebP
@@ -280,7 +280,7 @@ files; block overlays, effect symbols, and login page components remain
 standalone PNGs; stamps and item icons are packed into separate atlases:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category blocks --category stamps --category effects --category items --category login --manifest vector-art/raster-manifest-other.json
+python3 tools/rasterize_vector_art.py --sheets --category backgrounds --category blocks --category stamps --category effects --category items --category login --manifest art/raster-manifest-other.json
 ```
 
 Rasterize the baked intro symbols. The Kongregate intro keeps its original
@@ -288,7 +288,7 @@ timeline transforms in Haxe, while the difficult nested vector symbols are
 loaded from this atlas:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --category intro --manifest vector-art/raster-manifest-intro.json
+python3 tools/rasterize_vector_art.py --sheets --category intro --manifest art/raster-manifest-intro.json
 ```
 
 The rasterizer uses Inkscape when available and falls back to Lime's bundled
@@ -314,12 +314,12 @@ import json
 from pathlib import Path
 from PIL import Image
 
-with open('vector-art/raster-manifest.json') as f:
+with open('art/raster-manifest.json') as f:
     manifest = json.load(f)
 
-pngs = sorted(Path('vector-art/png/character').rglob('*.png'))
-atlas_webps = sorted(Path('vector-art/atlases/character').rglob('*.webp'))
-atlas_jsons = sorted(Path('vector-art/atlases/character').rglob('*.json'))
+pngs = sorted(Path('art/png/character').rglob('*.png'))
+atlas_webps = sorted(Path('assets/character/atlases').rglob('*.webp'))
+atlas_jsons = sorted(Path('assets/character/atlases').rglob('*.json'))
 assert len(manifest['pngs']) == 474
 assert len(pngs) == 474
 assert len(manifest['atlases']) == 51
@@ -425,7 +425,7 @@ per-case thresholds):
 
 ```sh
 python3 tools/compare_symbol_render.py --diff-dir test/output/symbol-diffs --metrics test/output/symbol-metrics.json
-python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton --reference vector-art/png/login/mute_button@4x.png
+python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton --reference assets/login/mute_button@4x.png
 ```
 
 Check approximate OpenFL frame rate:

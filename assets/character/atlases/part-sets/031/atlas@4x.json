@@ -1,0 +1,141 @@
+{
+  "atlasGroup": "character/part-sets/031/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 560,
+        "width": 333,
+        "x": 817,
+        "y": 2
+      },
+      "id": 31,
+      "kind": "body",
+      "part": "031_taco",
+      "png": "art/png/character/body/031_taco/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 560,
+        "width": 333,
+        "x": -113,
+        "y": -60
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 640,
+        "width": 360,
+        "x": 455,
+        "y": 2
+      },
+      "id": 31,
+      "kind": "body",
+      "part": "031_taco",
+      "png": "art/png/character/body/031_taco/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 640,
+        "width": 360,
+        "x": -78,
+        "y": -117
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 682,
+        "width": 451,
+        "x": 2,
+        "y": 2
+      },
+      "id": 31,
+      "kind": "body",
+      "part": "031_taco",
+      "png": "art/png/character/body/031_taco/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 682,
+        "width": 451,
+        "x": -140,
+        "y": -146
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 1152,
+        "y": 2
+      },
+      "id": 31,
+      "kind": "head",
+      "part": "031_very_invisible",
+      "png": "art/png/character/head/031_very_invisible/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 1155,
+        "y": 2
+      },
+      "id": 31,
+      "kind": "head",
+      "part": "031_very_invisible",
+      "png": "art/png/character/head/031_very_invisible/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 1158,
+        "y": 2
+      },
+      "id": 31,
+      "kind": "head",
+      "part": "031_very_invisible",
+      "png": "art/png/character/head/031_very_invisible/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/031/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 31,
+  "size": {
+    "height": 686,
+    "width": 1161
+  }
+}

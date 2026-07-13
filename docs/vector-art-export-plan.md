@@ -36,8 +36,8 @@ out of the game-facing export set.
 Export paths follow this pattern:
 
 ```text
-vector-art/svg/character/<kind>/<id>_<name>/<channel>.svg
-vector-art/png/character/<kind>/<id>_<name>/<channel>@4x.png
+art/svg/character/<kind>/<id>_<name>/<channel>.svg
+art/png/character/<kind>/<id>_<name>/<channel>@4x.png
 ```
 
 Examples:
@@ -83,7 +83,6 @@ asset families:
   - stamps: 8 SVGs
   - effect symbols: 23 SVGs, one reusable symbol image each
   - item display icons: 10 SVGs
-  - editor/menu graphics: 3 SVGs
 - `tools/generate_block_bitmap_jsfl.py`
   - block bitmap tiles: 26 PNGs
 
@@ -91,8 +90,6 @@ Animated effects are intentionally not exported as per-frame SVG sequences.
 The Haxe/OpenFL timeline runtime should own labels, frame scripts, nested
 symbols, transforms, visibility, and customization. The exported effect SVGs
 are reusable symbol images for runtime composition and fallback rendering.
-Editor/menu exports are written to `vector-art/svg/menus/` and rasterized as
-standalone PNGs.
 
 ## Animate Automation Contract
 
@@ -105,13 +102,13 @@ python3 tools/generate_animate_svg_export_jsfl.py
 This writes the full character export script to:
 
 ```text
-vector-art/export-character-svg.jsfl
+art/export-character-svg.jsfl
 ```
 
 For a small proof run:
 
 ```sh
-python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out vector-art/export-character-svg-smoke.jsfl
+python3 tools/generate_animate_svg_export_jsfl.py --limit 8 --out art/export-character-svg-smoke.jsfl
 ```
 
 The generated JSFL consumes `characterExports` from the JSON manifest and
@@ -137,23 +134,23 @@ At a high level:
 To run a generated JSFL file through Animate on macOS:
 
 ```sh
-open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" vector-art/export-character-svg-smoke.jsfl
+open -a "/Applications/Adobe Animate 2024/Adobe Animate 2024.app" art/export-character-svg-smoke.jsfl
 ```
 
 The direct Animate executable also works:
 
 ```sh
-"/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" vector-art/export-character-svg-smoke.jsfl
+"/Applications/Adobe Animate 2024/Adobe Animate 2024.app/Contents/MacOS/Adobe Animate 2024" art/export-character-svg-smoke.jsfl
 ```
 
-The direct command executes the JSFL and writes outputs into `vector-art/svg/`,
+The direct command executes the JSFL and writes outputs into `art/svg/`,
 but it stays attached while Animate remains open.
 
 The full export uses the same command with `export-character-svg.jsfl`. The SVG
 outputs are committed under:
 
 ```text
-vector-art/svg/
+art/svg/
 ```
 
 The smoke batch has been validated with `hat/002_exp`: the generated SVGs
@@ -164,7 +161,7 @@ contain real `<path>` data for `static`, `primary`, and `secondary` exports.
 Rasterize the committed SVGs with Inkscape:
 
 ```sh
-python3 tools/rasterize_vector_art.py --sheets --manifest vector-art/raster-manifest.json
+python3 tools/rasterize_vector_art.py --sheets --manifest art/raster-manifest.json
 ```
 
 The rasterizer queries each SVG's drawing bounds with Inkscape before exporting.
@@ -176,10 +173,10 @@ Character sprite sheets are grouped for on-demand loading. Hats share one atlas,
 and head/body/feet art is packed by independent part ID:
 
 ```text
-vector-art/atlases/character/hats/atlas@4x.webp
-vector-art/atlases/character/hats/atlas@4x.json
-vector-art/atlases/character/part-sets/<id>/atlas@4x.webp
-vector-art/atlases/character/part-sets/<id>/atlas@4x.json
+assets/character/atlases/hats/atlas@4x.webp
+assets/character/atlases/hats/atlas@4x.json
+assets/character/atlases/part-sets/<id>/atlas@4x.webp
+assets/character/atlases/part-sets/<id>/atlas@4x.json
 ```
 
 Each atlas frame records its own `kind`, `channel`, and part `id`, so `static`,
@@ -189,4 +186,4 @@ Non-character exports use separate asset groups by gameplay area or screen. The
 current raster pass leaves backgrounds as standalone WebP files, leaves block
 overlays and effect symbols standalone PNGs, and packs stamps plus item display
 icons into their own atlases.
-Static block bitmaps are exported directly to `vector-art/png/blocks/`.
+Static block bitmaps are exported directly to `assets/blocks/`.

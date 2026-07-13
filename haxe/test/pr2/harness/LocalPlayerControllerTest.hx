@@ -2052,7 +2052,7 @@ class LocalPlayerControllerTest {
 	}
 
 	private static function newPlayer():LocalCharacter {
-		return new LocalCharacter(WorldLevelParser.parse(File.getContent("assets/fixtures/flat-level.json")));
+		return new LocalCharacter(WorldLevelParser.parse(File.getContent("test/fixtures/flat-level.json")));
 	}
 
 	private static function collectItem(level:WorldLevel, itemId:Int):LocalCharacter {

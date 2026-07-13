@@ -22,7 +22,6 @@ import pr2.lobby.LobbyServicesTest;
 import pr2.lobby.MessagesItemTest;
 import pr2.lobby.MobileLobbyLayoutTest;
 import pr2.lobby.OptionsPopupTest;
-import pr2.lobby.OutfitPopupTest;
 import pr2.lobby.PMRFCodesPopupTest;
 import pr2.lobby.PlayerPopupTest;
 import pr2.lobby.SendMessagePopupTest;
@@ -89,7 +88,6 @@ class DeterministicShard4 {
 		MessagesItemTest.main();
 		MobileLobbyLayoutTest.main();
 		OptionsPopupTest.main();
-		OutfitPopupTest.main();
 		PMRFCodesPopupTest.main();
 		PlayerPopupTest.main();
 		SendMessagePopupTest.main();

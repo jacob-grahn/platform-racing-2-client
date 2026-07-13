@@ -8,8 +8,8 @@ from PIL import Image, ImageChops
 
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "vector-art/raster-manifest-intro.json"
-ATLAS_JSON = ROOT / "vector-art/atlases/intro/kongregate@4x.json"
+MANIFEST = ROOT / "art/raster-manifest-intro.json"
+ATLAS_JSON = ROOT / "assets/intro/atlases/kongregate@4x.json"
 BITMAP_379 = ROOT / "flash/platform-racing-2-xfl/LIBRARY/Images/bitmap379.jpg"
 
 

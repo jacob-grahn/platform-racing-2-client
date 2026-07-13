@@ -31,9 +31,6 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   `AssetCatalog.media()` and `AssetCatalog.linkageClasses()` do not appear to
   have runtime callers, but their bitmap/sound/linkage literals still survive
   into `PlatformRacing2.js`.
-- Investigate excluding test-only fixtures from the HTML5 export. The broad
-  `assets/` include currently ships `assets/fixtures/flat-level.json`, even
-  though local campaign test levels are built in code.
 - Investigate dropping `assets/fonts/DejaVuSans-BoldOblique.ttf`. Current
   generated text faces include Verdana, Verdana-Bold, and Verdana-Italic, but no
   Verdana-BoldItalic; the file is about 632 KB raw / 329 KB gzipped.

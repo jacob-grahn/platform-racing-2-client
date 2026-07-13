@@ -22,7 +22,7 @@ Cases come from a small committed manifest (default
   python3 tools/compare_symbol_render.py --cases tools/symbol_render_cases.json \
       --diff-dir test/output/symbol-diffs --metrics test/output/symbol-metrics.json
   python3 tools/compare_symbol_render.py --symbol UI/Global/MuteButton \
-      --reference vector-art/png/login/mute_button@4x.png
+      --reference assets/login/mute_button@4x.png
 """
 
 import argparse
@@ -48,7 +48,7 @@ DEFAULT_ROOT = os.path.join("export", "html5", "bin")
 DEFAULT_CASES = os.path.join("tools", "symbol_render_cases.json")
 DEFAULT_SCALE = 4
 DEFAULT_BG = "FFFFFF"
-# The reference rasters under vector-art/png are exported at this scale.
+# Adobe reference rasters are exported at this scale.
 REFERENCE_SCALE = 4
 # Stage size and the SymbolPreview inset; a symbol drawn at INSET must still fit.
 STAGE_WIDTH = 550

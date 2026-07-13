@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/025/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 392,
+        "width": 255,
+        "x": 597,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "body",
+      "part": "025_gingerbread",
+      "png": "art/png/character/body/025_gingerbread/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 392,
+        "width": 255,
+        "x": -120,
+        "y": -78
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 504,
+        "width": 273,
+        "x": 322,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "body",
+      "part": "025_gingerbread",
+      "png": "art/png/character/body/025_gingerbread/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 504,
+        "width": 273,
+        "x": -121,
+        "y": -53
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 552,
+        "width": 318,
+        "x": 2,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "body",
+      "part": "025_gingerbread",
+      "png": "art/png/character/body/025_gingerbread/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 552,
+        "width": 318,
+        "x": -141,
+        "y": -82
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 160,
+        "width": 268,
+        "x": 2047,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "feet",
+      "part": "025_queen",
+      "png": "art/png/character/feet/025_queen/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 160,
+        "width": 268,
+        "x": -153,
+        "y": -61
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 143,
+        "width": 246,
+        "x": 2317,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "feet",
+      "part": "025_queen",
+      "png": "art/png/character/feet/025_queen/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 143,
+        "width": 246,
+        "x": -142,
+        "y": -48
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 168,
+        "width": 276,
+        "x": 1769,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "feet",
+      "part": "025_queen",
+      "png": "art/png/character/feet/025_queen/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 168,
+        "width": 276,
+        "x": -158,
+        "y": -66
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 320,
+        "width": 265,
+        "x": 1202,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "head",
+      "part": "025_fairy",
+      "png": "art/png/character/head/025_fairy/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 320,
+        "width": 265,
+        "x": -2,
+        "y": 159
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 282,
+        "width": 298,
+        "x": 1469,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "head",
+      "part": "025_fairy",
+      "png": "art/png/character/head/025_fairy/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 282,
+        "width": 298,
+        "x": 29,
+        "y": 208
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 347,
+        "width": 346,
+        "x": 854,
+        "y": 2
+      },
+      "id": 25,
+      "kind": "head",
+      "part": "025_fairy",
+      "png": "art/png/character/head/025_fairy/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 347,
+        "width": 346,
+        "x": -11,
+        "y": 152
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/025/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 25,
+  "size": {
+    "height": 556,
+    "width": 2565
+  }
+}

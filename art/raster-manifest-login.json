@@ -1,0 +1,156 @@
+{
+  "atlases": [],
+  "pngs": [
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 39.65,
+        "width": 1291.55,
+        "x": 11.65,
+        "y": 0.0
+      },
+      "png": "assets/login/bg_far@4x.png",
+      "scale": 4,
+      "slug": "bg_far",
+      "source": "art/svg/login/bg_far.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 159,
+        "width": 5167,
+        "x": 46,
+        "y": 0
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 205.0,
+        "width": 2545.0,
+        "x": -8.0,
+        "y": -3.0
+      },
+      "png": "assets/login/bg_front@2x.png",
+      "scale": 2,
+      "slug": "bg_front",
+      "source": "art/svg/login/bg_front.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 398,
+        "width": 5078,
+        "x": -10,
+        "y": 1
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 215.182,
+        "width": 1241.55,
+        "x": 29.75,
+        "y": -153.732
+      },
+      "png": "assets/login/bg_mid@4x.png",
+      "scale": 4,
+      "slug": "bg_mid",
+      "source": "art/svg/login/bg_mid.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 861,
+        "width": 4967,
+        "x": 119,
+        "y": -615
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 440.328,
+        "width": 786.689,
+        "x": -61.1,
+        "y": -40.3285
+      },
+      "png": "assets/login/bg_sky@4x.png",
+      "scale": 4,
+      "slug": "bg_sky",
+      "source": "art/svg/login/bg_sky.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 1761,
+        "width": 3147,
+        "x": -245,
+        "y": -162
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 338.526,
+        "width": 335.833,
+        "x": 0.0,
+        "y": 0.0
+      },
+      "png": "assets/login/login_page_no_logo@4x.png",
+      "scale": 4,
+      "slug": "login_page_no_logo",
+      "source": "art/svg/login/login_page_no_logo.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 502,
+        "width": 469,
+        "x": 868,
+        "y": 846
+      }
+    },
+    {
+      "atlas_group": null,
+      "category": "login",
+      "drawingBounds": {
+        "height": 36.3974,
+        "width": 59.2617,
+        "x": -15.1333,
+        "y": -18.6866
+      },
+      "png": "assets/login/mute_button@4x.png",
+      "scale": 4,
+      "slug": "mute_button",
+      "source": "art/svg/login/mute_button.svg",
+      "stage": {
+        "height": 400,
+        "width": 550
+      },
+      "trim": {
+        "empty": false,
+        "height": 146,
+        "width": 234,
+        "x": -59,
+        "y": -75
+      }
+    }
+  ],
+  "schema": "pr2-rasterized-vector-art-v1"
+}

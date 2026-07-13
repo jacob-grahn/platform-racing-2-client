@@ -5,21 +5,21 @@
 	<app main="Main" path="export" file="PlatformRacing2" />
 
 	<source path="haxe/src" />
-	<assets path="assets" rename="assets" exclude="fonts/*" if="html5" />
-	<assets path="assets" rename="assets" exclude="fonts/*" unless="html5" />
+	<assets path="assets" rename="assets" exclude="fonts|blocks|character|intro|login|backgrounds|stamps" if="html5" />
+	<assets path="assets" rename="assets" exclude="fonts|blocks|character|intro|login|backgrounds|stamps" unless="html5" />
 
 	<!-- Embedded fonts. Mapped to the original PR2 face names by pr2.runtime.FontResolver.
 	     DejaVu Sans (Verdana stand-in, metric-compatible) is split into distinct family
 	     names per weight so OpenFL's __fontByName variant lookup resolves bold/italic to the
 	     real outlines instead of browser faux-synthesis. -->
 	<assets path="assets/fonts" rename="assets/fonts" include="*.ttf" embed="true" />
-	<assets path="vector-art/png/blocks" rename="assets/blocks" />
-	<assets path="vector-art/atlases/character/hats" rename="assets/character/atlases/hats" embed="false" preload="false" />
-	<assets path="vector-art/atlases/character/part-sets" rename="assets/character/atlases/part-sets" embed="false" preload="false" />
-	<assets path="vector-art/atlases/intro" rename="assets/intro/atlases" />
-	<assets path="vector-art/png/login" rename="assets/login" />
-	<assets path="vector-art/png/backgrounds" rename="assets/backgrounds" include="*.webp" embed="false" preload="false" />
-	<assets path="vector-art/png/stamps" rename="assets/stamps" />
+	<assets path="assets/blocks" rename="assets/blocks" />
+	<assets path="assets/character/atlases/hats" rename="assets/character/atlases/hats" embed="false" preload="false" />
+	<assets path="assets/character/atlases/part-sets" rename="assets/character/atlases/part-sets" embed="false" preload="false" />
+	<assets path="assets/intro/atlases" rename="assets/intro/atlases" />
+	<assets path="assets/login" rename="assets/login" />
+	<assets path="assets/backgrounds" rename="assets/backgrounds" include="*.webp" embed="false" preload="false" />
+	<assets path="assets/stamps" rename="assets/stamps" />
 	<template path="templates/html5/template/index.html" rename="index.html" if="html5" />
 
 	<haxelib name="openfl" />

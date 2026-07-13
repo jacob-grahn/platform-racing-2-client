@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/023/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 561,
+        "width": 376,
+        "x": 397,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "body",
+      "part": "023_armor",
+      "png": "art/png/character/body/023_armor/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 561,
+        "width": 376,
+        "x": -172,
+        "y": -67
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 200,
+        "width": 376,
+        "x": 2102,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "body",
+      "part": "023_armor",
+      "png": "art/png/character/body/023_armor/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 200,
+        "width": 376,
+        "x": -175,
+        "y": -72
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 583,
+        "width": 393,
+        "x": 2,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "body",
+      "part": "023_armor",
+      "png": "art/png/character/body/023_armor/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 583,
+        "width": 393,
+        "x": -183,
+        "y": -81
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 55,
+        "width": 217,
+        "x": 2811,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "feet",
+      "part": "023_gingerbread",
+      "png": "art/png/character/feet/023_gingerbread/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 55,
+        "width": 217,
+        "x": -162,
+        "y": -136
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 272,
+        "width": 198,
+        "x": 1902,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "feet",
+      "part": "023_gingerbread",
+      "png": "art/png/character/feet/023_gingerbread/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 272,
+        "width": 198,
+        "x": -153,
+        "y": -185
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 320,
+        "width": 246,
+        "x": 775,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "feet",
+      "part": "023_gingerbread",
+      "png": "art/png/character/feet/023_gingerbread/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 320,
+        "width": 246,
+        "x": -178,
+        "y": -210
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 292,
+        "width": 428,
+        "x": 1472,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "head",
+      "part": "023_dino",
+      "png": "art/png/character/head/023_dino/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 292,
+        "width": 428,
+        "x": 58,
+        "y": 126
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 67,
+        "width": 329,
+        "x": 2480,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "head",
+      "part": "023_dino",
+      "png": "art/png/character/head/023_dino/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 67,
+        "width": 329,
+        "x": 150,
+        "y": 344
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 304,
+        "width": 447,
+        "x": 1023,
+        "y": 2
+      },
+      "id": 23,
+      "kind": "head",
+      "part": "023_dino",
+      "png": "art/png/character/head/023_dino/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 304,
+        "width": 447,
+        "x": 47,
+        "y": 123
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/023/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 23,
+  "size": {
+    "height": 587,
+    "width": 3030
+  }
+}

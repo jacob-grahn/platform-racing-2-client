@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/028/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 104,
+        "width": 154,
+        "x": 2678,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "body",
+      "part": "028_sir",
+      "png": "art/png/character/body/028_sir/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 104,
+        "width": 154,
+        "x": -17,
+        "y": -56
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 305,
+        "width": 222,
+        "x": 1660,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "body",
+      "part": "028_sir",
+      "png": "art/png/character/body/028_sir/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 305,
+        "width": 222,
+        "x": -38,
+        "y": -69
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 691,
+        "width": 338,
+        "x": 2,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "body",
+      "part": "028_sir",
+      "png": "art/png/character/body/028_sir/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 691,
+        "width": 338,
+        "x": -142,
+        "y": -76
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 255,
+        "width": 398,
+        "x": 1884,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "feet",
+      "part": "028_bubble",
+      "png": "art/png/character/feet/028_bubble/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 255,
+        "width": 398,
+        "x": -169,
+        "y": -137
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 107,
+        "width": 195,
+        "x": 2284,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "feet",
+      "part": "028_bubble",
+      "png": "art/png/character/feet/028_bubble/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 107,
+        "width": 195,
+        "x": -148,
+        "y": -94
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 107,
+        "width": 195,
+        "x": 2481,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "feet",
+      "part": "028_bubble",
+      "png": "art/png/character/feet/028_bubble/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 107,
+        "width": 195,
+        "x": -148,
+        "y": -94
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 401,
+        "width": 368,
+        "x": 1290,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "head",
+      "part": "028_king",
+      "png": "art/png/character/head/028_king/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 401,
+        "width": 368,
+        "x": -30,
+        "y": 111
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 429,
+        "width": 465,
+        "x": 823,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "head",
+      "part": "028_king",
+      "png": "art/png/character/head/028_king/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 429,
+        "width": 465,
+        "x": -39,
+        "y": 105
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 441,
+        "width": 479,
+        "x": 342,
+        "y": 2
+      },
+      "id": 28,
+      "kind": "head",
+      "part": "028_king",
+      "png": "art/png/character/head/028_king/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 441,
+        "width": 479,
+        "x": -44,
+        "y": 97
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/028/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 28,
+  "size": {
+    "height": 695,
+    "width": 2834
+  }
+}

@@ -23,9 +23,10 @@ from PIL import Image
 
 
 DEFAULT_INKSCAPE = "/Applications/Inkscape.app/Contents/MacOS/inkscape"
-DEFAULT_SVG_ROOT = Path("vector-art/svg")
-DEFAULT_PNG_ROOT = Path("vector-art/png")
-DEFAULT_ATLAS_ROOT = Path("vector-art/atlases")
+DEFAULT_SVG_ROOT = Path("art/svg")
+DEFAULT_PNG_ROOT = Path("art/png")
+DEFAULT_ATLAS_ROOT = Path("art/atlases")
+DEFAULT_RUNTIME_ROOT = Path("assets")
 DEFAULT_SCALE = 4
 DEFAULT_STAGE_WIDTH = 550
 DEFAULT_STAGE_HEIGHT = 400
@@ -393,16 +394,16 @@ def rasterize_with_batik(svg_path, out_path, temp_path, stage_width, stage_heigh
     return bounds, trim
 
 
-def png_path_for(png_root, job, scale):
+def png_path_for(png_root, runtime_root, job, scale):
     cat = job["category"]
     if cat == "character":
         return png_root / "character" / job["kind"] / job["part"] / f"{job['channel']}@{scale}x.png"
     if cat == "backgrounds":
-        return png_root / "backgrounds" / f"{job['slug']}@{scale}x.webp"
+        return runtime_root / "backgrounds" / f"{job['slug']}@{scale}x.webp"
     if cat == "blocks":
-        return png_root / "blocks" / f"{job['slug']}@{scale}x.png"
+        return runtime_root / "blocks" / f"{job['slug']}@{scale}x.png"
     if cat == "stamps":
-        return png_root / "stamps" / f"{job['slug']}@{scale}x.png"
+        return runtime_root / "stamps" / f"{job['slug']}@{scale}x.png"
     if cat == "effects":
         if job.get("frame") is None:
             return png_root / "effects" / f"{job['slug']}@{scale}x.png"
@@ -412,7 +413,7 @@ def png_path_for(png_root, job, scale):
     if cat == "intro":
         return png_root / "intro" / job["group"] / f"{job['slug']}@{scale}x.png"
     if cat == "login":
-        return png_root / "login" / f"{job['slug']}@{scale}x.png"
+        return runtime_root / "login" / f"{job['slug']}@{scale}x.png"
     if cat == "menus":
         return png_root / "menus" / f"{job['slug']}@{scale}x.png"
     raise ValueError(f"Unknown category: {cat}")
@@ -423,7 +424,7 @@ def rasterize_jobs(jobs, args):
     with tempfile.TemporaryDirectory(prefix="pr2-raster-") as temp_dir:
         temp_path = Path(temp_dir)
         for index, job in enumerate(jobs, start=1):
-            out_path = png_path_for(args.png_root, job, args.scale)
+            out_path = png_path_for(args.png_root, args.runtime_root, job, args.scale)
             raw_path = temp_path / f"{index}.png"
             render_svg = prepare_svg(job["svg"], temp_path, index, args.scale)
             print(f"[{index}/{len(jobs)}] {job['svg']} -> {out_path}", file=sys.stderr)
@@ -595,7 +596,7 @@ def entry_name(record):
     return record.get("slug", "unknown")
 
 
-def build_atlases(records, atlas_root, padding, max_size):
+def build_atlases(records, atlas_root, runtime_root, padding, max_size):
     # Skip records with no atlas_group (e.g. backgrounds).
     groups = {}
     for record in records:
@@ -623,7 +624,12 @@ def build_atlases(records, atlas_root, padding, max_size):
         # "character/part-sets/001/atlas" or "effects/laser_shot". We put the
         # file in the parent directory and use the last component as the stem.
         group_path = Path(atlas_group)
-        out_dir = atlas_root / group_path.parent
+        category = group_path.parts[0]
+        if category in ("character", "intro"):
+            relative_parent = Path(*group_path.parent.parts[1:])
+            out_dir = runtime_root / category / "atlases" / relative_parent
+        else:
+            out_dir = atlas_root / group_path.parent
         file_stem = group_path.name
         out_dir.mkdir(parents=True, exist_ok=True)
         scale = group[0]["scale"]
@@ -717,6 +723,7 @@ def parse_args(argv):
     parser.add_argument("--svg-root", type=Path, default=DEFAULT_SVG_ROOT)
     parser.add_argument("--png-root", type=Path, default=DEFAULT_PNG_ROOT)
     parser.add_argument("--atlas-root", type=Path, default=DEFAULT_ATLAS_ROOT)
+    parser.add_argument("--runtime-root", type=Path, default=DEFAULT_RUNTIME_ROOT)
     parser.add_argument("--inkscape", default=DEFAULT_INKSCAPE)
     parser.add_argument("--scale", type=int, default=DEFAULT_SCALE)
     parser.add_argument("--stage-width", type=int, default=DEFAULT_STAGE_WIDTH)
@@ -733,7 +740,7 @@ def parse_args(argv):
     parser.add_argument("--sheets", action="store_true", help="pack converted PNGs into per-kind/per-channel atlases")
     parser.add_argument("--padding", type=int, default=2)
     parser.add_argument("--max-atlas-size", type=int, default=DEFAULT_MAX_ATLAS_SIZE)
-    parser.add_argument("--manifest", type=Path, default=Path("vector-art/raster-manifest.json"))
+    parser.add_argument("--manifest", type=Path, default=Path("art/raster-manifest.json"))
     return parser.parse_args(argv)
 
 
@@ -744,7 +751,7 @@ def main(argv=None):
         print("No SVG jobs matched.", file=sys.stderr)
         return 1
     records = rasterize_jobs(jobs, args)
-    atlas_records = build_atlases(records, args.atlas_root, args.padding, args.max_atlas_size) if args.sheets else []
+    atlas_records = build_atlases(records, args.atlas_root, args.runtime_root, args.padding, args.max_atlas_size) if args.sheets else []
     write_manifest(args.manifest, records, atlas_records)
     print(f"wrote {len(records)} rasters and {len(atlas_records)} atlases", file=sys.stderr)
     return 0

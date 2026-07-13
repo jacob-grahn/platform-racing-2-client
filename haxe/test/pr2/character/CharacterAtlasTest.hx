@@ -13,7 +13,7 @@ class CharacterAtlasTest {
 
 	private static function testParsesPartSetAtlas():Void {
 		var atlas = CharacterAtlas.parse(
-			File.getContent("vector-art/atlases/character/part-sets/001/atlas@4x.json"),
+			File.getContent("assets/character/atlases/part-sets/001/atlas@4x.json"),
 			"assets/character/atlases/part-sets/001/atlas@4x.json"
 		);
 		var headStatic = atlas.getFrame("head/static");
@@ -54,7 +54,7 @@ class CharacterAtlasTest {
 
 	private static function loadCharacterAtlases():Array<CharacterAtlas> {
 		var atlases:Array<CharacterAtlas> = [];
-		for (path in jsonPaths("vector-art/atlases/character")) {
+		for (path in jsonPaths("assets/character/atlases")) {
 			atlases.push(CharacterAtlas.parse(File.getContent(path), path));
 		}
 		return atlases;

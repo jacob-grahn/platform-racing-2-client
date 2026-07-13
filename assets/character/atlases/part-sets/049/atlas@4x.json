@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/049/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 608,
+        "width": 470,
+        "x": 479,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "body",
+      "part": "049_dog",
+      "png": "art/png/character/body/049_dog/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 608,
+        "width": 470,
+        "x": -285,
+        "y": -75
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 510,
+        "width": 472,
+        "x": 951,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "body",
+      "part": "049_dog",
+      "png": "art/png/character/body/049_dog/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 510,
+        "width": 472,
+        "x": -289,
+        "y": -12
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 628,
+        "width": 475,
+        "x": 2,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "body",
+      "part": "049_dog",
+      "png": "art/png/character/body/049_dog/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 628,
+        "width": 475,
+        "x": -291,
+        "y": -85
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 178,
+        "width": 305,
+        "x": 2835,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "feet",
+      "part": "049_dog",
+      "png": "art/png/character/feet/049_dog/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 178,
+        "width": 305,
+        "x": -178,
+        "y": -70
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 136,
+        "width": 194,
+        "x": 3428,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "feet",
+      "part": "049_dog",
+      "png": "art/png/character/feet/049_dog/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 136,
+        "width": 194,
+        "x": -68,
+        "y": -30
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 196,
+        "width": 308,
+        "x": 2525,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "feet",
+      "part": "049_dog",
+      "png": "art/png/character/feet/049_dog/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 196,
+        "width": 308,
+        "x": -181,
+        "y": -79
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 427,
+        "width": 546,
+        "x": 1977,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "head",
+      "part": "049_dog",
+      "png": "art/png/character/head/049_dog/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 427,
+        "width": 546,
+        "x": -90,
+        "y": 70
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 158,
+        "width": 284,
+        "x": 3142,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "head",
+      "part": "049_dog",
+      "png": "art/png/character/head/049_dog/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 158,
+        "width": 284,
+        "x": 168,
+        "y": 299
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 446,
+        "width": 550,
+        "x": 1425,
+        "y": 2
+      },
+      "id": 49,
+      "kind": "head",
+      "part": "049_dog",
+      "png": "art/png/character/head/049_dog/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 446,
+        "width": 550,
+        "x": -94,
+        "y": 63
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/049/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 49,
+  "size": {
+    "height": 632,
+    "width": 3624
+  }
+}

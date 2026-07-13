@@ -11,8 +11,7 @@ import openfl.text.TextFormatAlign;
 
 /**
 	A faithful port of the Flash `fl.controls.TextArea` component (library item
-	`Components/TextArea`, linkage `fl.controls.TextArea`). Used by RaceChat and
-	the OutfitPopup.
+	`Components/TextArea`, linkage `fl.controls.TextArea`). Used by RaceChat.
 
 	A multiline, word-wrapping `TextField` drawn over the `TextArea_upSkin`
 	background with an attached `FlUIScrollBar` down the right edge. Mirrors the

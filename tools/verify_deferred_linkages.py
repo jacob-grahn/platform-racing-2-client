@@ -50,7 +50,7 @@ def main(argv=None):
         default="docs/vector-art-inventory.json",
         help="generated vector inventory",
     )
-    parser.add_argument("--svg-dir", default="vector-art/svg", help="SVG export root")
+    parser.add_argument("--svg-dir", default="art/svg", help="SVG export root")
     args = parser.parse_args(argv)
 
     actual = deferred_counts(Path(args.inventory), Path(args.svg_dir))

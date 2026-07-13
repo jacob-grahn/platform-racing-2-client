@@ -1,14 +1,10 @@
 package pr2.net;
 
-import pr2.app.KongAward;
-
 class LoginAuthClientTest {
 	private static var assertions = 0;
 
 	public static function main():Void {
 		testPayloadContainsFlashFields();
-		testPayloadCanRequestKongAward();
-		testKongAwardFlagConsumesOnce();
 		testEncryptedFields();
 		testRememberedTokenField();
 		testParsesError();
@@ -28,19 +24,7 @@ class LoginAuthClientTest {
 		assertContains(payload, "\"build\":\"29-oct-2023-v168_2_1\"", "build field");
 		assertContains(payload, "\"login_id\":1234", "login id field");
 		assertContains(payload, "\"server_id\":2", "server id field");
-		assertContains(payload, "\"award_kong\":false", "kong award defaults false");
-	}
-
-	private static function testPayloadCanRequestKongAward():Void {
-		var payload = LoginAuthClient.payloadJson("Alice", "secret", server(), true, 4321, true);
-		assertContains(payload, "\"award_kong\":true", "kong award can be requested");
-	}
-
-	private static function testKongAwardFlagConsumesOnce():Void {
-		KongAward.nextLogin = true;
-		assertEquals(true, KongAward.consumeNextLogin(), "accepted kong award consumed for next login");
-		assertEquals(false, KongAward.nextLogin, "consume clears kong award flag");
-		assertEquals(false, KongAward.consumeNextLogin(), "second consume is false");
+		assertEquals(false, payload.indexOf("award_kong") >= 0, "removed Kong award field is omitted");
 	}
 
 	private static function testEncryptedFields():Void {

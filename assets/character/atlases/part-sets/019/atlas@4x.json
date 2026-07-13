@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/019/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 515,
+        "width": 136,
+        "x": 2339,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "body",
+      "part": "019_alien",
+      "png": "art/png/character/body/019_alien/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 515,
+        "width": 136,
+        "x": -59,
+        "y": -45
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 170,
+        "width": 139,
+        "x": 3150,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "body",
+      "part": "019_alien",
+      "png": "art/png/character/body/019_alien/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 170,
+        "width": 139,
+        "x": -24,
+        "y": 103
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 537,
+        "width": 195,
+        "x": 2142,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "body",
+      "part": "019_alien",
+      "png": "art/png/character/body/019_alien/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 537,
+        "width": 195,
+        "x": -71,
+        "y": -66
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 180,
+        "width": 324,
+        "x": 2824,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "feet",
+      "part": "019_galaxy",
+      "png": "art/png/character/feet/019_galaxy/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 180,
+        "width": 324,
+        "x": -165,
+        "y": -86
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 108,
+        "width": 110,
+        "x": 3291,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "feet",
+      "part": "019_galaxy",
+      "png": "art/png/character/feet/019_galaxy/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 108,
+        "width": 110,
+        "x": -166,
+        "y": -16
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 204,
+        "width": 345,
+        "x": 2477,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "feet",
+      "part": "019_galaxy",
+      "png": "art/png/character/feet/019_galaxy/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 204,
+        "width": 345,
+        "x": -174,
+        "y": -98
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 698,
+        "width": 1060,
+        "x": 1080,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "head",
+      "part": "019_elephant",
+      "png": "art/png/character/head/019_elephant/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 698,
+        "width": 1060,
+        "x": -298,
+        "y": 27
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 79,
+        "width": 73,
+        "x": 3403,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "head",
+      "part": "019_elephant",
+      "png": "art/png/character/head/019_elephant/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 79,
+        "width": 73,
+        "x": 172,
+        "y": 170
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 724,
+        "width": 1076,
+        "x": 2,
+        "y": 2
+      },
+      "id": 19,
+      "kind": "head",
+      "part": "019_elephant",
+      "png": "art/png/character/head/019_elephant/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 724,
+        "width": 1076,
+        "x": -306,
+        "y": 13
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/019/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 19,
+  "size": {
+    "height": 728,
+    "width": 3478
+  }
+}

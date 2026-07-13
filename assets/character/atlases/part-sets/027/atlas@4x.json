@@ -1,0 +1,204 @@
+{
+  "atlasGroup": "character/part-sets/027/atlas",
+  "category": "character",
+  "characterAtlas": "part-set",
+  "frames": {
+    "body/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 615,
+        "width": 373,
+        "x": 410,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "body",
+      "part": "027_queen",
+      "png": "art/png/character/body/027_queen/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 615,
+        "width": 373,
+        "x": -178,
+        "y": -11
+      }
+    },
+    "body/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 377,
+        "width": 300,
+        "x": 1187,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "body",
+      "part": "027_queen",
+      "png": "art/png/character/body/027_queen/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 377,
+        "width": 300,
+        "x": -176,
+        "y": -108
+      }
+    },
+    "body/static": {
+      "channel": "static",
+      "frame": {
+        "height": 728,
+        "width": 406,
+        "x": 2,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "body",
+      "part": "027_queen",
+      "png": "art/png/character/body/027_queen/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 728,
+        "width": 406,
+        "x": -197,
+        "y": -118
+      }
+    },
+    "feet/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 2093,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "feet",
+      "part": "027_very_invisible",
+      "png": "art/png/character/feet/027_very_invisible/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "feet/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 1,
+        "width": 1,
+        "x": 2096,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "feet",
+      "part": "027_very_invisible",
+      "png": "art/png/character/feet/027_very_invisible/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": true,
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      }
+    },
+    "feet/static": {
+      "channel": "static",
+      "frame": {
+        "height": 108,
+        "width": 314,
+        "x": 1721,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "feet",
+      "part": "027_very_invisible",
+      "png": "art/png/character/feet/027_very_invisible/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 108,
+        "width": 314,
+        "x": -154,
+        "y": -7
+      }
+    },
+    "head/primary": {
+      "channel": "primary",
+      "frame": {
+        "height": 400,
+        "width": 400,
+        "x": 785,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "head",
+      "part": "027_bubble",
+      "png": "art/png/character/head/027_bubble/primary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 400,
+        "width": 400,
+        "x": -55,
+        "y": 114
+      }
+    },
+    "head/secondary": {
+      "channel": "secondary",
+      "frame": {
+        "height": 306,
+        "width": 230,
+        "x": 1489,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "head",
+      "part": "027_bubble",
+      "png": "art/png/character/head/027_bubble/secondary@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 306,
+        "width": 230,
+        "x": 7,
+        "y": 182
+      }
+    },
+    "head/static": {
+      "channel": "static",
+      "frame": {
+        "height": 54,
+        "width": 54,
+        "x": 2037,
+        "y": 2
+      },
+      "id": 27,
+      "kind": "head",
+      "part": "027_bubble",
+      "png": "art/png/character/head/027_bubble/static@4x.png",
+      "scale": 4,
+      "sourceTrim": {
+        "empty": false,
+        "height": 54,
+        "width": 54,
+        "x": 7,
+        "y": 182
+      }
+    }
+  },
+  "image": "assets/character/atlases/part-sets/027/atlas@4x.webp",
+  "page": 1,
+  "pages": 1,
+  "partSetId": 27,
+  "size": {
+    "height": 732,
+    "width": 2099
+  }
+}
