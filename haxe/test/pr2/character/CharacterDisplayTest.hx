@@ -11,6 +11,7 @@ class CharacterDisplayTest {
 	public static function main():Void {
 		testSuperJumpWobbleUsesCurrentFrame();
 		testHeldWeaponFrameAppliesToCharacterStates();
+		testSnakeHeldGraphicUsesEyedVanishBlock();
 		trace('CharacterDisplayTest passed $assertions assertions');
 	}
 
@@ -48,6 +49,25 @@ class CharacterDisplayTest {
 		assertEquals(1, weaponClip(display, "runAnim").currentFrame, "None resets the active weapon clip");
 		assertEquals(1, weaponClip(display, "standAnim").currentFrame, "None resets inactive weapon clips too");
 		assertEquals(0, visibleDescendantCount(weaponClip(display, "runAnim")), "None frame hides held-item art");
+	}
+
+	private static function testSnakeHeldGraphicUsesEyedVanishBlock():Void {
+		var display = new CharacterDisplay();
+		display.setItemFrameName("Snake");
+		for (stateName in ["standAnim", "runAnim", "jumpAnim", "swimAnim"]) {
+			var weapon = weaponClip(display, stateName);
+			assertEquals(1, weapon.currentFrame, '$stateName Snake uses the empty authored weapon frame');
+			var snake = weapon.getChildByName("__snakeHeldItem");
+			assertTrue(snake != null, '$stateName mounts the eyed vanish-block held graphic');
+			assertTrue(visibleDescendantCount(snake) > 0, '$stateName Snake held graphic is visible');
+			assertClose(2, snake.scaleX, '$stateName held Snake is twice its original width');
+			assertClose(2, snake.scaleY, '$stateName held Snake is twice its original height');
+		}
+		display.advanceOneFrame();
+		assertTrue(weaponClip(display, "standAnim").getChildByName("__snakeHeldItem") != null,
+			"animation ticks preserve the Snake held graphic");
+		display.setItemFrameName("None");
+		assertEquals(null, weaponClip(display, "standAnim").getChildByName("__snakeHeldItem"), "clearing the item removes the Snake held graphic");
 	}
 
 	private static function weaponClip(display:CharacterDisplay, stateName:String):PR2MovieClip {

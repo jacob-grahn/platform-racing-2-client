@@ -22,15 +22,15 @@ private class SnakeState {
 	public var moveFrames:Int = SnakeManager.MOVE_FRAMES_PER_TILE;
 	public var remainingFrames:Int = SnakeManager.USE_FRAMES;
 	public var sequence:Int = 0;
-	public var head:Sprite;
+	public final sprite:Sprite;
 
-	public function new(ownerId:Int, tileX:Int, tileY:Int, dx:Int, dy:Int, head:Sprite) {
+	public function new(ownerId:Int, tileX:Int, tileY:Int, dx:Int, dy:Int, sprite:Sprite) {
 		this.ownerId = ownerId;
 		this.tileX = tileX;
 		this.tileY = tileY;
 		this.dx = pendingDx = dx;
 		this.dy = pendingDy = dy;
-		this.head = head;
+		this.sprite = sprite;
 	}
 }
 
@@ -39,12 +39,14 @@ private class SnakeTrailSegment {
 	public final tileY:Int;
 	public final expiresAt:Int;
 	public final display:Sprite;
+	public final eyes:Shape;
 
-	public function new(tileX:Int, tileY:Int, expiresAt:Int, display:Sprite) {
+	public function new(tileX:Int, tileY:Int, expiresAt:Int, display:Sprite, eyes:Shape) {
 		this.tileX = tileX;
 		this.tileY = tileY;
 		this.expiresAt = expiresAt;
 		this.display = display;
+		this.eyes = eyes;
 	}
 }
 
@@ -91,11 +93,26 @@ class SnakeManager {
 		return trails.exists(key(tileX, tileY));
 	}
 
+	public function trailHasEyes(tileX:Int, tileY:Int):Bool {
+		var trail = trails.get(key(tileX, tileY));
+		return trail != null && trail.eyes.width > 0 && trail.eyes.height > 0;
+	}
+
+	public function localHeadTile():Null<{x:Int, y:Int}> {
+		if (!localActive()) return null;
+		var snake = snakes.get(localOwnerId);
+		return {x: snake.tileX, y: snake.tileY};
+	}
+
+	public function localSpriteIsEmpty():Bool {
+		if (!localActive()) return false;
+		return snakes.get(localOwnerId).sprite.numChildren == 0;
+	}
+
 	public function localHeadWorld():Null<Point> {
 		if (!localActive()) return null;
 		var snake = snakes.get(localOwnerId);
-		return renderer.blockWorldToRotatedWorld(worldPixelX(snake.tileX) + ServerLevelRenderer.TILE_SIZE / 2,
-			worldPixelY(snake.tileY) + ServerLevelRenderer.TILE_SIZE / 2);
+		return renderer.blockWorldToRotatedWorld(snake.sprite.x, snake.sprite.y);
 	}
 
 	public function startLocal(ownerId:Int, fixturePixelX:Float, fixturePixelY:Float, facingScaleX:Int):Void {
@@ -103,9 +120,16 @@ class SnakeManager {
 		localOwnerId = ownerId;
 		var tile = controller.snakeTileAtPixel(fixturePixelX, fixturePixelY - 30);
 		var direction = controller.snakeGridDirection(facingScaleX < 0 ? -1 : 1, 0);
+		tile.x += direction.x;
+		tile.y += direction.y;
+		if (trails.exists(key(tile.x, tile.y)) || controller.enterSnakeTile(tile.x, tile.y) == "hazard") {
+			localOwnerId = null;
+			return;
+		}
 		var snake = createSnake(ownerId, tile.x, tile.y, direction.x, direction.y);
 		snake.sequence = nextSequence(ownerId);
 		snakes.set(ownerId, snake);
+		addSnakeBlock(tile.x, tile.y, true, direction.x, direction.y);
 		sendStart(snake);
 	}
 
@@ -117,40 +141,43 @@ class SnakeManager {
 		snake.pendingDy = direction.y;
 	}
 
-	public function step(spaceHeld:Bool):Void {
+	public function step():Void {
 		frame++;
 		updateTrails();
 		if (localActive()) {
 			var snake = snakes.get(localOwnerId);
-			if (!spaceHeld) {
+			snake.remainingFrames--;
+			if (snake.remainingFrames <= 0) {
 				stopSnake(snake, true);
 			} else {
-				snake.remainingFrames--;
-				if (snake.remainingFrames <= 0) {
-					stopSnake(snake, true);
-				} else {
-					stepLocalSnake(snake);
-				}
+				stepLocalSnake(snake);
 			}
 		}
 	}
 
 	private function stepLocalSnake(snake:SnakeState):Void {
+		if (snake.moveFrames == MOVE_FRAMES_PER_TILE) {
+			snake.dx = snake.pendingDx;
+			snake.dy = snake.pendingDy;
+			setHead(snake.tileX, snake.tileY, true, snake.dx, snake.dy);
+		}
+		var pixelsPerFrame = ServerLevelRenderer.TILE_SIZE / MOVE_FRAMES_PER_TILE;
+		snake.sprite.x += snake.dx * pixelsPerFrame;
+		snake.sprite.y += snake.dy * pixelsPerFrame;
 		snake.moveFrames--;
 		if (snake.moveFrames > 0) return;
 		snake.moveFrames = MOVE_FRAMES_PER_TILE;
-		snake.dx = snake.pendingDx;
-		snake.dy = snake.pendingDy;
 		var nextX = snake.tileX + snake.dx;
 		var nextY = snake.tileY + snake.dy;
 		if (trails.exists(key(nextX, nextY)) || controller.enterSnakeTile(nextX, nextY) == "hazard") {
 			stopSnake(snake, true);
 			return;
 		}
-		addTrail(snake.tileX, snake.tileY);
+		setHead(snake.tileX, snake.tileY, false, snake.dx, snake.dy);
 		snake.tileX = nextX;
 		snake.tileY = nextY;
-		positionHead(snake);
+		positionSnake(snake);
+		addSnakeBlock(nextX, nextY, true, snake.dx, snake.dy);
 		snake.sequence++;
 		lastSequences.set(snake.ownerId, snake.sequence);
 		sendStep(snake);
@@ -172,18 +199,22 @@ class SnakeManager {
 				snake.sequence = sequence;
 				lastSequences.set(ownerId, sequence);
 				snakes.set(ownerId, snake);
+				destroyLocalSnakeAt(snake.tileX, snake.tileY);
+				addSnakeBlock(snake.tileX, snake.tileY, true, snake.dx, snake.dy);
 			case "SnakeStep":
 				if (args.length < 7) return;
 				var snake = snakes.get(ownerId);
 				if (snake == null || sequence <= snake.sequence) return;
-				addTrail(snake.tileX, snake.tileY);
+				setHead(snake.tileX, snake.tileY, false, snake.dx, snake.dy);
 				snake.tileX = fixtureTileX(intArg(args, 3));
 				snake.tileY = fixtureTileY(intArg(args, 4));
 				snake.dx = snake.pendingDx = intArg(args, 5);
 				snake.dy = snake.pendingDy = intArg(args, 6);
 				snake.sequence = sequence;
 				lastSequences.set(ownerId, sequence);
-				positionHead(snake);
+				positionSnake(snake);
+				destroyLocalSnakeAt(snake.tileX, snake.tileY);
+				addSnakeBlock(snake.tileX, snake.tileY, true, snake.dx, snake.dy);
 			case "SnakeStop":
 				var snake = snakes.get(ownerId);
 				if (snake != null && sequence >= snake.sequence) {
@@ -205,17 +236,22 @@ class SnakeManager {
 			lastSequences.set(snake.ownerId, snake.sequence);
 			LobbySocket.write('add_effect`SnakeStop`${snake.ownerId}`${snake.sequence}');
 		}
+		setHead(snake.tileX, snake.tileY, false, snake.dx, snake.dy);
 		snakes.remove(snake.ownerId);
-		if (snake.head != null && snake.head.parent != null) snake.head.parent.removeChild(snake.head);
+		if (snake.sprite.parent != null) snake.sprite.parent.removeChild(snake.sprite);
 		if (localOwnerId == snake.ownerId) localOwnerId = null;
 	}
 
-	private function addTrail(tileX:Int, tileY:Int):Void {
+	private function addSnakeBlock(tileX:Int, tileY:Int, isHead:Bool, dx:Int, dy:Int):Void {
 		var trailKey = key(tileX, tileY);
 		if (trails.exists(trailKey)) return;
-		var display = createTrailDisplay(tileX, tileY);
-		trails.set(trailKey, new SnakeTrailSegment(tileX, tileY, frame + TRAIL_FRAMES, display));
+		var trail = createTrailSegment(tileX, tileY);
+		trails.set(trailKey, trail);
 		controller.addSnakeTrail(tileX, tileY);
+		setHead(tileX, tileY, isHead, dx, dy);
+	}
+
+	private function destroyLocalSnakeAt(tileX:Int, tileY:Int):Void {
 		var local = localActive() ? snakes.get(localOwnerId) : null;
 		if (local != null && local.tileX == tileX && local.tileY == tileY) stopSnake(local, true);
 	}
@@ -240,7 +276,7 @@ class SnakeManager {
 	}
 
 	public function clear():Void {
-		for (snake in snakes) if (snake.head != null && snake.head.parent != null) snake.head.parent.removeChild(snake.head);
+		for (snake in snakes) if (snake.sprite.parent != null) snake.sprite.parent.removeChild(snake.sprite);
 		for (trail in trails) if (trail.display.parent != null) trail.display.parent.removeChild(trail.display);
 		snakes.clear();
 		trails.clear();
@@ -250,22 +286,19 @@ class SnakeManager {
 	}
 
 	private function createSnake(ownerId:Int, tileX:Int, tileY:Int, dx:Int, dy:Int):SnakeState {
-		var head = new Sprite();
-		head.graphics.lineStyle(2, 0x174D20);
-		head.graphics.beginFill(0x42C95A);
-		head.graphics.drawRoundRect(-12, -10, 24, 20, 7, 7);
-		head.graphics.endFill();
-		head.graphics.beginFill(0xE8FFE8);
-		head.graphics.drawCircle(-5, -3, 2);
-		head.graphics.drawCircle(5, -3, 2);
-		head.graphics.endFill();
-		renderer.worldEffectLayer().addChild(head);
-		var snake = new SnakeState(ownerId, tileX, tileY, dx, dy, head);
-		positionHead(snake);
+		var sprite = new Sprite();
+		renderer.worldEffectLayer().addChild(sprite);
+		var snake = new SnakeState(ownerId, tileX, tileY, dx, dy, sprite);
+		positionSnake(snake);
 		return snake;
 	}
 
-	private function createTrailDisplay(tileX:Int, tileY:Int):Sprite {
+	private function positionSnake(snake:SnakeState):Void {
+		snake.sprite.x = worldPixelX(snake.tileX) + ServerLevelRenderer.TILE_SIZE / 2;
+		snake.sprite.y = worldPixelY(snake.tileY) + ServerLevelRenderer.TILE_SIZE / 2;
+	}
+
+	private function createTrailSegment(tileX:Int, tileY:Int):SnakeTrailSegment {
 		var display = new Sprite();
 		display.x = worldPixelX(tileX);
 		display.y = worldPixelY(tileY);
@@ -281,14 +314,31 @@ class SnakeManager {
 			fallback.graphics.endFill();
 			display.addChild(fallback);
 		}
+		var eyes = new Shape();
+		display.addChild(eyes);
 		renderer.worldEffectLayer().addChild(display);
-		return display;
+		return new SnakeTrailSegment(tileX, tileY, frame + TRAIL_FRAMES, display, eyes);
 	}
 
-	private function positionHead(snake:SnakeState):Void {
-		snake.head.x = worldPixelX(snake.tileX) + ServerLevelRenderer.TILE_SIZE / 2;
-		snake.head.y = worldPixelY(snake.tileY) + ServerLevelRenderer.TILE_SIZE / 2;
-		snake.head.rotation = snake.dx > 0 ? 0 : (snake.dy > 0 ? 90 : (snake.dx < 0 ? 180 : -90));
+	private function setHead(tileX:Int, tileY:Int, visible:Bool, dx:Int, dy:Int):Void {
+		var trail = trails.get(key(tileX, tileY));
+		if (trail == null) return;
+		trail.eyes.graphics.clear();
+		if (!visible) return;
+		var firstX = dx == 0 ? 10 : (dx > 0 ? 22 : 8);
+		var firstY = dy == 0 ? 10 : (dy > 0 ? 22 : 8);
+		var secondX = dx == 0 ? 20 : firstX;
+		var secondY = dy == 0 ? 20 : firstY;
+		var pupilX = dx * 1.5;
+		var pupilY = dy * 1.5;
+		trail.eyes.graphics.beginFill(0xFFFFFF);
+		trail.eyes.graphics.drawCircle(firstX, firstY, 4);
+		trail.eyes.graphics.drawCircle(secondX, secondY, 4);
+		trail.eyes.graphics.endFill();
+		trail.eyes.graphics.beginFill(0x102010);
+		trail.eyes.graphics.drawCircle(firstX + pupilX, firstY + pupilY, 2);
+		trail.eyes.graphics.drawCircle(secondX + pupilX, secondY + pupilY, 2);
+		trail.eyes.graphics.endFill();
 	}
 
 	private function sendStart(snake:SnakeState):Void {

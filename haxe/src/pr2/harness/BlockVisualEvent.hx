@@ -4,6 +4,7 @@ enum BlockVisualEventKind {
 	ArrowAnimate;
 	MineExplode;
 	BrickPieces;
+	BasicDigPieces;
 	CrumblePieces;
 	MinePieces;
 	WaterRipple;

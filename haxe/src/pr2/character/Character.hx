@@ -378,10 +378,7 @@ class Character extends Sprite {
 	**/
 	private function applyItem():Void {
 		itemFrameName = Items.getNameFromCode(item);
-		// The authored character weapon timelines predate Snake. The deployable
-		// robot is rendered in the world, so characters intentionally show empty
-		// hands while holding it instead of asking the timeline for a missing label.
-		display.setItemFrameName(item == Items.SNAKE ? "None" : itemFrameName);
+		display.setItemFrameName(itemFrameName);
 	}
 
 	/** Last resolved held-item frame name (e.g. "Laser", "None"). */

@@ -1233,7 +1233,7 @@ class Course extends Sprite {
 			snakeManager.startLocal(localCharacter.tempID, state.x, state.y, localCharacter.facingScaleX);
 		}
 		if (snakeManager != null) {
-			snakeManager.step(raceStarted && !localFinishHandled && input.item);
+			snakeManager.step();
 		}
 		if (raceStarted && eggRound != null) {
 			if (config.gameMode == "egg") {
@@ -1655,6 +1655,8 @@ class Course extends Sprite {
 					levelRenderer.showMineExplosion(worldXOf(event), worldYOf(event));
 				case BrickPieces:
 					showBlockPieces(event, "BrickPieceGraphic", 10, 10, 25);
+				case BasicDigPieces:
+					levelRenderer.showBasicBlockPieces(worldXOf(event), worldYOf(event), event.count, 10, 10, 25);
 				case CrumblePieces:
 					showBlockPieces(event, "CrumblePieceGraphic", 5, 5, 15);
 				case MinePieces:

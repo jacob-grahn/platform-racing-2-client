@@ -714,6 +714,9 @@ class LocalPlayerController implements ItemRuntimeOwner {
 					emitLocalActivate(block, payload);
 				}
 				state.removed = true;
+				if (payload == "snake") {
+					blockVisualEvents.push(new BlockVisualEvent(BlockVisualEventKind.BasicDigPieces, block.x, block.y, 6));
+				}
 			case BlockType.Push:
 				if (local) {
 					emitLocalActivate(block, payload);
@@ -1663,8 +1666,11 @@ class LocalPlayerController implements ItemRuntimeOwner {
 		if (block == null || isBlockRemoved(block)) {
 			return "clear";
 		}
-		switch (block.type) {
-			case BlockType.Basic | BlockType.Brick:
+			switch (block.type) {
+			case BlockType.Basic:
+				activateBlock(block, "snake", true);
+				return "clear";
+			case BlockType.Brick:
 				activateBlock(block, "", true);
 				return "clear";
 			case BlockType.Crumble:

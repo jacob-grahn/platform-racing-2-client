@@ -139,12 +139,20 @@ class LocalPlayerControllerTest {
 				new LevelBlock(6, 2, BlockType.Mine)
 			]);
 		var controller = new LocalPlayerController(level);
+		controller.consumeBlockVisualEvents();
 		assertEquals("clear", controller.enterSnakeTile(2, 2), "Snake digs through a basic block");
 		assertEquals(0.0, controller.blockAlphaAt(2, 2), "dug basic block is removed from collision and rendering");
+		assertBasicSnakeDigEvents(controller.consumeBlockVisualEvents());
 		assertEquals("clear", controller.enterSnakeTile(3, 2), "Snake destroys a brick block");
 		assertEquals(0.0, controller.blockAlphaAt(3, 2), "destroyed brick is removed");
+		var brickEvents = controller.consumeBlockVisualEvents();
+		assertEquals("", brickEvents[0].activationPayload, "brick Snake dig uses normal brick activation");
+		assertEquals("BrickPieces", Type.enumConstructor(brickEvents[1].kind), "brick Snake dig retains authored brick fragments");
 		assertEquals("clear", controller.enterSnakeTile(4, 2), "Snake destroys a crumble block in one step");
 		assertEquals(0.0, controller.blockAlphaAt(4, 2), "destroyed crumble is removed");
+		var crumbleEvents = controller.consumeBlockVisualEvents();
+		assertEquals("50", crumbleEvents[0].activationPayload, "crumble Snake dig uses normal force-50 activation");
+		assertEquals("CrumblePieces", Type.enumConstructor(crumbleEvents[1].kind), "crumble Snake dig retains authored crumble fragments");
 		assertEquals("hazard", controller.enterSnakeTile(5, 2), "water destroys the Snake");
 		assertEquals("hazard", controller.enterSnakeTile(6, 2), "mine activation destroys the Snake");
 		assertEquals(0.0, controller.blockAlphaAt(6, 2), "Snake-triggered mine explodes and is removed");
@@ -155,6 +163,14 @@ class LocalPlayerControllerTest {
 		assertEquals(BlockType.SnakeTrail, trail.type, "Snake trail enters normal solid player collision lookup");
 		controller.removeSnakeTrail(7, 2);
 		assertEquals(null, @:privateAccess controller.getBlockAtTile(7, 2), "expired Snake trail leaves player collision lookup");
+	}
+
+	private static function assertBasicSnakeDigEvents(events:Array<BlockVisualEvent>):Void {
+		assertEquals(2, events.length, "basic Snake dig emits activation and one particle event");
+		assertEquals("LocalActivate", Type.enumConstructor(events[0].kind), "basic Snake dig replicates removal first");
+		assertEquals("snake", events[0].activationPayload, "basic Snake dig carries its network marker");
+		assertEquals("BasicDigPieces", Type.enumConstructor(events[1].kind), "basic Snake dig uses cropped bitmap fragments");
+		assertEquals(6, events[1].count, "basic Snake dig emits six fragments like BrickBlock");
 	}
 
 	private static function testAnimationFollowsDirectionalInput():Void {

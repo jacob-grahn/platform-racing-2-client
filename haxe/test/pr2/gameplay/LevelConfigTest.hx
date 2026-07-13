@@ -49,6 +49,8 @@ class LevelConfigTest {
 
 		c.setItems("3`5");
 		assertEquals("3,5", c.allowedItems.join(","), "numeric tokens kept as codes");
+		c.setItems("10");
+		assertEquals("10", c.allowedItems.join(","), "two-digit Snake code survives editor serialization");
 
 		c.setItems("Bogus`0`99");
 		assertEquals(0, c.allowedItems.length, "unknown name, 0, and out-of-range are dropped");

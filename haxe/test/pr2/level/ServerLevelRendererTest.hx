@@ -100,6 +100,15 @@ class ServerLevelRendererTest {
 		minePiece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
 		assertEquals(4, minePiece.graphic.currentFrame, "mine fragment frame does not auto-play after construction");
 		minePiece.remove();
+		var basic = new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 10110, 10050);
+		var basicRenderer = new ServerLevelRenderer(new ServerLevel(0xFFFFFF, [basic]), basic);
+		var sliced = basicRenderer.showBasicBlockPieces(basic.x, basic.y, 6, 10, 10, 25, function() return 0.5);
+		assertEquals(6, sliced.length, "basic Snake dig creates the six brick-style fragments");
+		var firstSlice = Std.downcast(sliced[0].visual, openfl.display.Bitmap);
+		assertTrue(firstSlice != null, "basic Snake fragment is a bitmap crop rather than authored brick art");
+		assertEquals(10.0, firstSlice.width, "basic Snake fragment is one third of a block wide");
+		assertEquals(15.0, firstSlice.height, "basic Snake fragment is one half of a block tall");
+		for (slice in sliced) slice.remove();
 		for (_ in 0...19) {
 			piece.dispatchEvent(new openfl.events.Event(openfl.events.Event.ENTER_FRAME));
 		}

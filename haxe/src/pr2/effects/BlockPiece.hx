@@ -1,5 +1,7 @@
 package pr2.effects;
 
+import openfl.display.DisplayObject;
+import openfl.display.Bitmap;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import pr2.runtime.PR2MovieClip;
@@ -13,21 +15,30 @@ class BlockPiece extends Sprite {
 	public static inline var FRICTION:Float = 0.95;
 	public static inline var FADE_RATE:Float = 0.01;
 
-	public var graphic(default, null):PR2MovieClip;
+	public var graphic(default, null):Null<PR2MovieClip>;
+	public var visual(default, null):DisplayObject;
 	private var velX:Float;
 	private var velY:Float;
 	private var rotVel:Float;
 	private final gravity:Float;
 	private final friction:Float;
 	private final fadeRate:Float;
+	private var ownsCustomVisual:Bool = false;
 
-	public function new(linkage:String, gravity:Float = GRAVITY, friction:Float = FRICTION, fadeRate:Float = FADE_RATE, spreadX:Float = 10,
-			spreadY:Float = 10, spreadRot:Float = 10, startX:Float = 0, startY:Float = 0, ?random:Void->Float) {
+	public function new(linkage:Null<String>, gravity:Float = GRAVITY, friction:Float = FRICTION, fadeRate:Float = FADE_RATE, spreadX:Float = 10,
+			spreadY:Float = 10, spreadRot:Float = 10, startX:Float = 0, startY:Float = 0, ?random:Void->Float,
+			?customVisual:DisplayObject) {
 		super();
 		var nextRandom = random == null ? Math.random : random;
-		graphic = PR2MovieClip.fromLinkage(linkage);
-		applyConstructorFrameScript(linkage, nextRandom);
-		addChild(graphic);
+		if (customVisual != null) {
+			visual = customVisual;
+			ownsCustomVisual = true;
+		} else {
+			graphic = PR2MovieClip.fromLinkage(linkage);
+			applyConstructorFrameScript(linkage, nextRandom);
+			visual = graphic;
+		}
+		addChild(visual);
 		x = startX;
 		y = startY;
 		this.gravity = gravity;
@@ -64,9 +75,20 @@ class BlockPiece extends Sprite {
 		removeEventListener(Event.ENTER_FRAME, tick);
 		if (graphic != null) {
 			graphic.dispose();
-			removeChild(graphic);
 			graphic = null;
 		}
+		if (visual != null && visual.parent == this) {
+			removeChild(visual);
+		}
+		if (ownsCustomVisual) {
+			var bitmap = Std.downcast(visual, Bitmap);
+			if (bitmap != null && bitmap.bitmapData != null) {
+				bitmap.bitmapData.dispose();
+				bitmap.bitmapData = null;
+			}
+		}
+		visual = null;
+		ownsCustomVisual = false;
 		if (parent != null) {
 			parent.removeChild(this);
 		}

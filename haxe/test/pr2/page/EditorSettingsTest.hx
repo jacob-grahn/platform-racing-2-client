@@ -483,24 +483,26 @@ class EditorSettingsTest {
 		editor.initialize();
 		editor.setItems("Laser`Teleport");
 		var itemBlock = editor.blockLayer.addBlockAtStage(ObjectCodes.BLOCK_ITEM, BlockType.Item, 120, 120);
-		itemBlock.setOptions(Items.MINE + "-" + Items.TELEPORT);
+		itemBlock.setOptions(Items.MINE + "-" + Items.TELEPORT + "-" + Items.SNAKE);
 		var popup = new EditorItemSettingsPopup(editor, new Sprite());
 
 		assertEquals(true, popup.isItemSelected(Items.LASER_GUN), "item menu loads allowed item");
 		assertEquals(false, popup.isItemSelected(Items.MINE), "item menu leaves disallowed item unchecked");
 		assertEquals(true, popup.isItemSelected(Items.TELEPORT), "item menu loads second allowed item");
+		assertEquals(false, popup.isItemSelected(Items.SNAKE), "item menu initially leaves Snake unchecked");
 
 		popup.setItemSelected(Items.LASER_GUN, false);
 		popup.setItemSelected(Items.MINE, true);
+		popup.setItemSelected(Items.SNAKE, true);
 		popup.remove();
 
-		assertArrayEquals([Items.MINE, Items.TELEPORT], editor.allowedItems, "item menu commits selected items in Flash order");
-		assertEquals("2`4", editor.getLevelVars().get("items"), "committed item menu selection exports as level vars");
+		assertArrayEquals([Items.MINE, Items.TELEPORT, Items.SNAKE], editor.allowedItems, "item menu commits selected items in code order");
+		assertEquals("2`4`10", editor.getLevelVars().get("items"), "committed item menu selection exports Snake as a numeric code");
 		assertEquals("", itemBlock.options, "item menu refresh clears item-block options matching new allowed items");
 
 		var testCourse = new TestCoursePage(editor.getLevelVars());
 		testCourse.initialize();
-		assertArrayEquals([Items.MINE, Items.TELEPORT], testCourse.course.allowedItemsForTests(),
+		assertArrayEquals([Items.MINE, Items.TELEPORT, Items.SNAKE], testCourse.course.allowedItemsForTests(),
 			"test course receives item menu allowed-items semantics");
 		testCourse.remove();
 		editor.remove();

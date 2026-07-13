@@ -453,25 +453,41 @@ class CharacterLifecycleTest {
 		assertEquals(135, SnakeManager.TRAIL_FRAMES, "Snake trails remain five seconds behind the head");
 		var course = collectAndUseLocalItem(Items.SNAKE);
 		assertTrue(course.snakeManager.localActive(), "Snake item press starts a local snake");
+		assertTrue(course.snakeManager.localSpriteIsEmpty(), "the in-use Snake controller sprite has no visual children");
+		assertEquals(1, course.snakeManager.trailCount(), "Snake starts as an eyed Snake block in the adjacent tile");
+		var firstHead = course.snakeManager.localHeadTile();
+		assertTrue(course.snakeManager.trailHasEyes(firstHead.x, firstHead.y), "the newest Snake block is the head and has eyes");
 		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStart`") >= 0,
 			"Snake start uses the existing add_effect relay");
 		assertEquals(null, course.localCharacter.debugState().itemId, "starting Snake consumes the held item");
 
-		course.setKey(Keyboard.SPACE, true);
 		var playerFacing = course.localCharacter.facingScaleX;
+		var cameraTargetBeforeMove = course.snakeManager.localHeadWorld();
 		course.setKey(playerFacing < 0 ? Keyboard.RIGHT : Keyboard.LEFT, true);
 		course.onEnterFrame(new Event(Event.ENTER_FRAME));
 		assertEquals(playerFacing, course.localCharacter.facingScaleX, "arrow keys steer Snake without steering the player");
+		var cameraTargetDuringMove = course.snakeManager.localHeadWorld();
+		assertTrue(cameraTargetDuringMove.x != cameraTargetBeforeMove.x || cameraTargetDuringMove.y != cameraTargetBeforeMove.y,
+			"the empty Snake sprite moves smoothly every frame for camera follow");
+		assertEquals(1, course.snakeManager.trailCount(), "moving between tile centers does not run a block-entry check early");
 		for (_ in 0...SnakeManager.MOVE_FRAMES_PER_TILE) course.onEnterFrame(new Event(Event.ENTER_FRAME));
-		assertEquals(1, course.snakeManager.trailCount(), "first Snake tile step lays one solid trail tile");
+		assertEquals(2, course.snakeManager.trailCount(), "entering the next tile adds a new Snake block and leaves the old block as trail");
+		var secondHead = course.snakeManager.localHeadTile();
+		assertTrue(!course.snakeManager.trailHasEyes(firstHead.x, firstHead.y), "the previous head loses its eyes after the Snake enters a new tile");
+		assertTrue(course.snakeManager.trailHasEyes(secondHead.x, secondHead.y), "the most recent Snake block receives the head eyes");
 		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStep`") >= 0,
 			"Snake movement sends authoritative tile steps");
 
 		course.setKey(Keyboard.SPACE, false);
 		course.onEnterFrame(new Event(Event.ENTER_FRAME));
-		assertTrue(!course.snakeManager.localActive(), "releasing Space removes the local snake head");
+		assertTrue(course.snakeManager.localActive(), "releasing Space leaves the launched snake running");
+		for (_ in 0...SnakeManager.USE_FRAMES) {
+			if (!course.snakeManager.localActive()) break;
+			course.onEnterFrame(new Event(Event.ENTER_FRAME));
+		}
+		assertTrue(!course.snakeManager.localActive(), "Snake runs until its timeout or collision end condition");
 		assertTrue(LobbySocket.sentCommands.join("|").indexOf("add_effect`SnakeStop`") >= 0,
-			"Snake release relays a stop event");
+			"Snake end relays a stop event");
 
 		var worldX = course.serverFixture.originTileX + 2;
 		var worldY = course.serverFixture.originTileY + 2;
@@ -484,7 +500,7 @@ class CharacterLifecycleTest {
 		assertEquals(trailCount, course.snakeManager.trailCount(), "duplicate SnakeStep sequence is ignored");
 		course.applySnakeNetwork(["SnakeStop", "8", "2"]);
 		assertEquals(0, course.snakeManager.activeSnakeCount(), "remote SnakeStop removes its head but leaves timed trails");
-		for (_ in 0...SnakeManager.TRAIL_FRAMES) course.snakeManager.step(false);
+		for (_ in 0...SnakeManager.TRAIL_FRAMES) course.snakeManager.step();
 		assertEquals(0, course.snakeManager.trailCount(), "Snake trails expire after five seconds");
 		course.remove();
 	}

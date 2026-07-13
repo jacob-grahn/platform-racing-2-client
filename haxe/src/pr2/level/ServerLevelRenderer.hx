@@ -759,6 +759,51 @@ class ServerLevelRenderer extends Sprite {
 		return pieces;
 	}
 
+	/** Brick-break motion using six actual cropped sections of a basic-block bitmap. */
+	public function showBasicBlockPieces(worldX:Int, worldY:Int, count:Int = 6, spreadX:Float = 10, spreadY:Float = 10,
+			spreadRot:Float = 25, ?random:Void->Float):Array<BlockPiece> {
+		var source = blockDisplays.get(blockKey(worldX, worldY));
+		if (source == null) {
+			return showBlockPieces("BrickPieceGraphic", worldX, worldY, count, spreadX, spreadY, spreadRot, 0.75, 0.95, 0.05, random);
+		}
+		// Snapshot the actual rendered basic tile. This works for both the bitmap
+		// assets used by HTML5 and the vector fallback used by headless tests, and
+		// still works after collision state has hidden the source display.
+		var oldX = source.x;
+		var oldY = source.y;
+		var oldAlpha = source.alpha;
+		source.x = 0;
+		source.y = 0;
+		source.alpha = 1;
+		var data = new BitmapData(TILE_SIZE, TILE_SIZE, true, 0);
+		data.draw(source);
+		source.x = oldX;
+		source.y = oldY;
+		source.alpha = oldAlpha;
+		var nextRandom = random == null ? Math.random : random;
+		var pieces:Array<BlockPiece> = [];
+		for (i in 0...count) {
+			var section = i % 6;
+			var column = section % 3;
+			var row = Std.int(section / 3);
+			var left = Std.int(Math.floor(data.width * column / 3));
+			var top = Std.int(Math.floor(data.height * row / 2));
+			var right = Std.int(Math.floor(data.width * (column + 1) / 3));
+			var bottom = Std.int(Math.floor(data.height * (row + 1) / 2));
+			var fragmentData = new BitmapData(right - left, bottom - top, true, 0);
+			fragmentData.copyPixels(data, new Rectangle(left, top, right - left, bottom - top), new Point());
+			var fragment = new Bitmap(fragmentData);
+			fragment.width = TILE_SIZE / 3;
+			fragment.height = TILE_SIZE / 2;
+			var piece = new BlockPiece(null, 0.75, 0.95, 0.05, spreadX, spreadY, spreadRot,
+				worldX + nextRandom() * TILE_SIZE, worldY + nextRandom() * TILE_SIZE, nextRandom, fragment);
+			blockLayer.addChild(piece);
+			pieces.push(piece);
+		}
+		data.dispose();
+		return pieces;
+	}
+
 	private static inline function parallaxOffset(screenOffset:Float, scale:Float):Float {
 		return Math.round(screenOffset * scale);
 	}

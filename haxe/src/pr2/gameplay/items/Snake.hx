@@ -1,6 +1,6 @@
 package pr2.gameplay.items;
 
-/** A single, hold-to-maintain Snake deployment. */
+/** A single press-to-launch Snake deployment. */
 class Snake extends Item {
 	public function new() {
 		super(pr2.gameplay.Items.SNAKE, "Snake");

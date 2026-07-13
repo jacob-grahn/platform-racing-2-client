@@ -1,8 +1,12 @@
 package pr2.character;
 
+import openfl.display.Bitmap;
+import openfl.display.Shape;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.geom.ColorTransform;
+import openfl.utils.AssetType;
+import openfl.utils.Assets;
 import pr2.character.CharacterAppearance.CharacterPartIds;
 import pr2.runtime.PR2MovieClip;
 import StringTools;
@@ -32,6 +36,8 @@ class CharacterDisplay extends Sprite {
 	];
 
 	private static inline var ATLAS_LAYER_NAME:String = "__atlasLayer";
+	private static inline var SNAKE_ITEM_NAME:String = "__snakeHeldItem";
+	private static inline var VANISH_ASSET:String = "assets/blocks/vanish.png";
 
 	public final clip:PR2MovieClip;
 
@@ -283,9 +289,51 @@ class CharacterDisplay extends Sprite {
 			}
 			var weapon = getClipChild(stateClip, "weapon");
 			if (weapon != null) {
-				weapon.gotoAndStop(itemFrameName);
+				if (itemFrameName == "Snake") {
+					weapon.gotoAndStop("None");
+					var existing = weapon.getChildByName(SNAKE_ITEM_NAME);
+					if (existing == null) weapon.addChild(createSnakeHeldItem());
+				} else {
+					weapon.gotoAndStop(itemFrameName);
+					var existing = weapon.getChildByName(SNAKE_ITEM_NAME);
+					if (existing != null) weapon.removeChild(existing);
+				}
 			}
 		}
+	}
+
+	private function createSnakeHeldItem():Sprite {
+		var item = new Sprite();
+		item.name = SNAKE_ITEM_NAME;
+		// The synthetic held Snake is authored at 22px. Present it at 2x while
+		// keeping the same hand-centered registration point.
+		item.x = -22;
+		item.y = -22;
+		item.scaleX = 2;
+		item.scaleY = 2;
+		if (Assets.exists(VANISH_ASSET, AssetType.IMAGE)) {
+			var bitmap = new Bitmap(Assets.getBitmapData(VANISH_ASSET));
+			bitmap.width = 22;
+			bitmap.height = 22;
+			item.addChild(bitmap);
+		} else {
+			var fallback = new Shape();
+			fallback.graphics.beginFill(0x38B84A);
+			fallback.graphics.drawRect(0, 0, 22, 22);
+			fallback.graphics.endFill();
+			item.addChild(fallback);
+		}
+		var eyes = new Shape();
+		eyes.graphics.beginFill(0xFFFFFF);
+		eyes.graphics.drawCircle(7, 8, 3);
+		eyes.graphics.drawCircle(15, 8, 3);
+		eyes.graphics.endFill();
+		eyes.graphics.beginFill(0x102010);
+		eyes.graphics.drawCircle(7, 8, 1.5);
+		eyes.graphics.drawCircle(15, 8, 1.5);
+		eyes.graphics.endFill();
+		item.addChild(eyes);
+		return item;
 	}
 
 	private function renderAtlasParts(stateClip:PR2MovieClip):Void {

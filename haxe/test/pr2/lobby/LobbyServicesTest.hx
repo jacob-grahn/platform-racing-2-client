@@ -36,6 +36,7 @@ import pr2.lobby.level.LevelListingState;
 import pr2.lobby.messages.MessagesPaging;
 import pr2.lobby.messages.UnreadNotif;
 import pr2.gameplay.LevelConfig;
+import pr2.gameplay.Items;
 import pr2.level.ServerLevelRenderer;
 import pr2.net.CampaignLevelInfo;
 import pr2.net.LevelDataClient;
@@ -718,7 +719,7 @@ class LobbyServicesTest {
 		var itemTwoCheck = Std.downcast(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "check2"), FlCheckBox);
 		var itemFourCheck = Std.downcast(DisplayUtil.findByName(editor.activeBlockOptionsPopup.art, "check4"), FlCheckBox);
 		assertEquals(true, itemOneCheck.selected, "item popup selects level-default items");
-		for (itemId in 1...10) {
+		for (itemId in Items.getAllCodes()) {
 			Reflect.callMethod(editor.activeBlockOptionsPopup, Reflect.field(editor.activeBlockOptionsPopup, "setItemSelected"), [itemId, false]);
 		}
 		itemOneCheck.selected = true;

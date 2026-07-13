@@ -140,7 +140,12 @@ class LevelConfig {
 		allowedItems = [];
 		var count = Items.getAllCodes().length;
 		for (itemName in itemsStr.split("`")) {
-			var itemCode = itemName.length > 1 ? Items.getCodeFromName(itemName) : Std.int(numberOf(itemName, 0));
+			// Flash's original length heuristic worked while every item code was a
+			// single digit. Snake is code 10, so an editor round-trip serialized
+			// "10" and then misread it as an item name. Prefer an all-digit token as
+			// a numeric code; retain name parsing for legacy level strings.
+			var numericToken = ~/^[0-9]+$/.match(itemName);
+			var itemCode = numericToken ? Std.int(numberOf(itemName, 0)) : Items.getCodeFromName(itemName);
 			if (itemCode >= 1 && itemCode <= count) {
 				allowedItems.push(itemCode);
 			}
