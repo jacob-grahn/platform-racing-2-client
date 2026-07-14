@@ -15,16 +15,14 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#5085FC",
-								frameCount: 4,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1179", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1180", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1181", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1182", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 1179", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1180", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1181", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1182", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
@@ -45,20 +43,15 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 3,
 						layers: [
-							{color: "#FF4FFF", frameCount: 1, frames: [{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 0, name: "Layer_4"},
+							{color: "#FF4FFF", frames: [{duration: 2, index: 0, keyMode: 9728}], index: 0, name: "Layer_4"},
 							{
 								color: "#73ACE0",
-								frameCount: 3,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 108.0, left: -108.0, right: 107.0, top: -107.0},
-												edgeCount: 2,
 												edges: [
 													{
 														edges: "!47 -107|-48 -107!-48 -107[-108 -107 -108 -47!-108 -47|-108 48!-108 48[-108 108 -48 108!-48 108|47 108!47 108[107 108 107 48!107 48|107 -47!107 -47[107 -107 47 -107",
@@ -67,9 +60,7 @@ final class AssetCatalogSymbolsButtons {
 													},
 													{edges: "!50 -50|50 50!50 50|-50 50!-50 50|-50 -50!-50 -50|50 -50", fillStyle0: 1, fillStyle1: 1, strokeStyle: 2}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 2,
 												strokes: [
 													{index: 1, value: {fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}},
 													{index: 2, value: {fill: {color: "#FF9900", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke", weight: 2.0}}
@@ -81,12 +72,9 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 140.0, left: -140.0, right: 140.0, top: -140.0},
-												edgeCount: 2,
 												edges: [
 													{
 														edges: "!62 -140|-62 -140!-62 -140[-140 -140 -140 -62!-140 -62|-140 62!-140 62[-140 140 -62 140!-62 140|62 140!62 140[140 140 140 62!140 62|140 -62!140 -62[140 -140 62 -140",
@@ -99,9 +87,7 @@ final class AssetCatalogSymbolsButtons {
 														fillStyle1: 1
 													}
 												],
-												fillStyleCount: 2,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 2, value: {color: "#010101", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#FF9900", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke", weight: 2.0}}],
 												type: "DOMShape"
 											}
@@ -110,12 +96,9 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 140.0, left: -140.0, right: 140.0, top: -140.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: " !62 -140|-62 -140!-62 -140[-140 -140 -140 -62!-140 -62|-140 62!-140 62[-140 140 -62 140!-62 140|62 140!62 140[140 140 140 62!140 62|140 -62!140 -62[140 -140 62 -140",
@@ -123,9 +106,7 @@ final class AssetCatalogSymbolsButtons {
 														strokeStyle: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#FF9900", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke", weight: 2.0}}],
 												type: "DOMShape"
 											}
@@ -139,11 +120,7 @@ final class AssetCatalogSymbolsButtons {
 							},
 							{
 								color: "#F2C240",
-								frameCount: 2,
-								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
-								],
+								frames: [{duration: 3, index: 0, keyMode: 9728}, {elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}],
 								index: 2,
 								name: "Layer 2"
 							}
@@ -162,20 +139,15 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 3,
 						layers: [
-							{color: "#FF4FFF", frameCount: 1, frames: [{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 0, name: "Layer_4"},
+							{color: "#FF4FFF", frames: [{duration: 2, index: 0, keyMode: 9728}], index: 0, name: "Layer_4"},
 							{
 								color: "#73ACE0",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 108.0, left: -108.0, right: 107.0, top: -107.0},
-												edgeCount: 2,
 												edges: [
 													{
 														edges: "!47 -107|-48 -107!-48 -107[-108 -107 -108 -47!-108 -47|-108 48!-108 48[-108 108 -48 108!-48 108|47 108!47 108[107 108 107 48!107 48|107 -47!107 -47[107 -107 47 -107",
@@ -184,9 +156,7 @@ final class AssetCatalogSymbolsButtons {
 													},
 													{edges: "!50 -50|50 50!50 50|-50 50!-50 50|-50 -50!-50 -50|50 -50", fillStyle0: 1, fillStyle1: 1, strokeStyle: 2}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 2,
 												strokes: [
 													{index: 1, value: {fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}},
 													{index: 2, value: {fill: {color: "#FF9900", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke", weight: 2.0}}
@@ -199,12 +169,9 @@ final class AssetCatalogSymbolsButtons {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 140.0, left: -140.0, right: 140.0, top: -140.0},
-												edgeCount: 10,
 												edges: [
 													{
 														edges: "!-27 -105|-26 -105!-26 -105[-23.625 -105 -21 -105!-21 -105|-15 -105!-15 -105[#FFFFF2.75 -105 -12 -105!-12 -105|-11.5 -105!-11.5 -105[#FFFFF7.F5 -105 -4 -105!-4 -105[1 -105 5 -105!5 -105[8 -105 11 -104!11 -104|13 -104!13 -104[14 -104 14  -103!14 -103|18 -103!18 -103|18 -102!18 -102|21 -102!21 -102|21 -101!21 -101|24 -101!24 -101|25 -100!25 -100[26 -100 27 -100!27 -100[28 -99 29 -99!29 -99|30 -98!30 -98|32 -98!32 -98|32 -97!32 -97|34 -97!34 -97[34 -96 35 -96!35 -96[36  -96 36 -95!36 -95[37 -95 38 -95!38 -95[38 -94 39 -94!39 -94[40 -93 41 -93!41 -93[41 -92 42 -92!42 -92[42 -91 43 -91!43 -91|45 -89!45 -89|46 -89!46 -89|46 -88!46 -88[47 -88 47 -87!47 -87|49 -85!49 -85[49 -84 50 -84!50 -84|51 -83!51 -83 |51 -82!51 -82|52 -82!52 -82[52 -81 53 -81!53 -81[53 -80 54 -80!54 -80|54 -79!54 -79|55 -79!55 -79|55 -78!55 -78[56 -78 56 -77!56 -77|58 -75!58 -75|58 -74!58 -74|59 -74!59 -74|59 -72!59 -72|60 -72!60 -72|60 -71!60 -71|61 -70!61 -70|61  -69!61 -69[62 -69 62 -68!62 -68[62 -67 63 -67!63 -67|63 -65!63 -65[65 -62 66 -59!66 -59[68 -55 68 -51!68 -51[68 -47 68 -43!68 -43[68 -40 68 -36!68 -36[67 -34 67 -32!67 -32[66 -31 66 -29!66 -29[65 -28 65 -27!65 -27[64 -25 63 -23!63 -23 [62 -22 61 -21!61 -21[60 -19 59 -18!59 -18|58 -17!58 -17[57 -15 56 -14!56 -14[54 -11 52 -8!52 -8[51 -7 49 -5!49 -5[47 -3 45 -2!45 -2[43 0 40 1!40 1|39 2!39 2[38 2 38 3!38 3[37 3 37 4!37 4|36 4!36 4|35 5!35 5|34 5!34 5|33 6!33 6|32 6!32  6|31 7!31 7|30 7!30 7|30 8!30 8|29 8!29 8|29 9!29 9|28 9!28 9|26 11!26 11|25 11!25 11|25 12!25 12[24 12 24 13!24 13[23 13 23 14!23 14[22 14 22 15!22 15[25 21 26 27!26 27[27 33 24 39!24 39[21 43 16 46!16 46[12 49 6 49!6 49[#1.13 49 -2.5  47",
@@ -241,9 +208,7 @@ final class AssetCatalogSymbolsButtons {
 													{edges: " !-5.5 105.5[#FFFFF3.6B #66.35 -16 94!-16 94[-20 86 -15 77!-15 77[#FFFFF4.1E #47.64 -6.5 69", fillStyle1: 2},
 													{edges: " !-6.5 69[-3.140625 #43.6 1 67!1 67[14 67 20 78!20 78[25 86 21 95!21 95[17 105 6 107!6 107[4 107 2 107!2 107[-2.109375 #6A.AF -5.5 105.5", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 2, value: {type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#FF9900", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke", weight: 2.0}}],
 												type: "DOMShape"
 											}
@@ -257,11 +222,7 @@ final class AssetCatalogSymbolsButtons {
 							},
 							{
 								color: "#F2C240",
-								frameCount: 2,
-								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
-								],
+								frames: [{duration: 3, index: 0, keyMode: 9728}, {elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}],
 								index: 2,
 								name: "Layer 2"
 							}
@@ -280,15 +241,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -304,8 +261,6 @@ final class AssetCatalogSymbolsButtons {
 									},
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -338,15 +293,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 21.25,
@@ -361,8 +312,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 21.25,
@@ -377,8 +326,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 21.25,
@@ -393,16 +340,11 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 174.0, left: -205.0, right: 212.0, top: -232.0},
-												edgeCount: 1,
 												edges: [{edges: "!-205 -232|212 -232!212 -232|212 174!212 174|-205 174!-205 174|-205 -232", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -428,41 +370,28 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#8F6DA0",
-								frameCount: 2,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Minus", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Minus", loop: "loop", matrix: {a: 1.24444580078125}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "Graphics/Minus", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Minus", loop: "loop", matrix: {a: 1.24444580078125}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#C65791", frameCount: 0, frames: [], index: 1, name: "Layer 2"},
+							{color: "#C65791", frames: [], index: 1, name: "Layer 2"},
 							{
 								color: "#96EB2B",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -486,41 +415,28 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#8F6DA0",
-								frameCount: 2,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Plus", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Plus", loop: "loop", matrix: {a: 1.24444580078125, d: 1.24444580078125}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "Graphics/Plus", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Plus", loop: "loop", matrix: {a: 1.24444580078125, d: 1.24444580078125}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#C65791", frameCount: 0, frames: [], index: 1, name: "Layer 2"},
+							{color: "#C65791", frames: [], index: 1, name: "Layer 2"},
 							{
 								color: "#96EB2B",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -544,31 +460,24 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 100.0, left: -100.0, right: 100.0, top: -100.0},
-														edgeCount: 1,
 														edges: [
 															{
 																edges: "!95 -91[90 -93 86 -89!86 -89|69 -72!69 -72[55 -86 37 -93!37 -93[19 -100 0 -100!0 -100[-20 -100 -39 -92!-39 -92[-57 -84 -71 -71!-71 -71[-84 -57 -92 -39!-92 -39[-100 -20 -100 0!-100 0[-100 20 -92 39!-92 39[-84 58 -71 71!-71 71[-57 84 -39  92!-39 92[-20 100 0 100!0 100[23 100 43 91!43 91[63 81 77 64!77 64[78 63 78 61!78 61[78 60 77 59!77 59|59 41!59 41[58 39 56 39!56 39[54 40 53 41!53 41[43 53 30 60!30 60[16 67 0 67!0 67[-13 67 -26 62!-26 62[-38 56 -47 47!-47 47[-56 38  -61 26!-61 26[-67 14 -67 0!-67 0[-67 -13 -61 -26!-61 -26[-56 -38 -47 -47!-47 -47[-38 -56 -26 -61!-26 -61[-13 -67 0 -67!0 -67[26 -67 46 -49!46 -49|28 -31!28 -31[24 -27 26 -22!26 -22[28 -17 34 -17!34 -17|92 -17!92 -17[95 -17 98 -19!98  -19[100 -21 100 -25!100 -25|100 -83!100 -83[100 -89 95 -91",
 																fillStyle0: 1
 															}
 														],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {color: "#00CCFF", type: "SolidColor"}}],
 														matrix: {a: 0.999984741210938, d: 0.999984741210938, ty: -0.1},
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -579,24 +488,19 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 100.0, left: -100.0, right: 100.0, top: -100.0},
-														edgeCount: 1,
 														edges: [
 															{
 																edges: " !95 -91[90 -93 86 -89!86 -89|69 -72!69 -72[55 -86 37 -93!37 -93[19 -100 0 -100!0 -100[-20 -100 -39 -92!-39 -92[-57 -84 -71 -71!-71 -71[-84 -57 -92 -39!-92 -39[-100 -20 -100 0!-100 0[-100 20 -92 39!-92 39[-84 58 -71 71!-71 71[-57 84 -39  92!-39 92[-20 100 0 100!0 100[23 100 43 91!43 91[63 81 77 64!77 64[78 63 78 61!78 61[78 60 77 59!77 59|59 41!59 41[58 39 56 39!56 39[54 40 53 41!53 41[43 53 30 60!30 60[16 67 0 67!0 67[-13 67 -26 62!-26 62[-38 56 -47 47!-47 47[-56 38  -61 26!-61 26[-67 14 -67 0!-67 0[-67 -13 -61 -26!-61 -26[-56 -38 -47 -47!-47 -47[-38 -56 -26 -61!-26 -61[-13 -67 0 -67!0 -67[26 -67 46 -49!46 -49|28 -31!28 -31[24 -27 26 -22!26 -22[28 -17 34 -17!34 -17|92 -17!92 -17[95 -17 98 -19!98  -19[100 -21 100 -25!100 -25|100 -83!100 -83[100 -89 95 -91",
 																fillStyle0: 1
 															}
 														],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {color: "#00CCFF", type: "SolidColor"}}],
 														matrix: {a: 1.125, d: 1.125, ty: -0.15},
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -612,23 +516,9 @@ final class AssetCatalogSymbolsButtons {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 0.999984741210938, d: 0.999984741210938, tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 0.999984741210938, d: 0.999984741210938, tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{duration: 3, elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
 								],
 								index: 1,
 								name: "Layer_2"
@@ -649,22 +539,15 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 382.0, left: -339.0, right: 35.0, top: -39.0},
-												edgeCount: 1,
 												edges: [{edges: "!-339 -2|-303 -39!-339 -2|-2 -2!-2 -2|-2 382!-2 382|-39 346!-339 -2|-302 35!-2 382|35 345", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -673,15 +556,10 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 382.0, left: -339.0, right: 35.0, top: -39.0},
-												edgeCount: 1,
 												edges: [{edges: "!-339 -2|-303 -39!-339 -2|-2 -2!-2 -2|-2 382!-2 382|-39 346!-339 -2|-302 35!-2 382|35 345", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#444444", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -690,15 +568,10 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 382.0, left: -339.0, right: 35.0, top: -39.0},
-												edgeCount: 1,
 												edges: [{edges: "!-339 -2|-303 -39!-339 -2|-2 -2!-2 -2|-2 382!-2 382|-39 346!-339 -2|-302 35!-2 382|35 345", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -707,16 +580,11 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 433.0, left: -379.0, right: 112.0, top: -67.0},
-												edgeCount: 1,
 												edges: [{edges: "!112 -67|112 433!112 433|-113 433!-113 433|-113 53!-113 53|-379 53!-379 53|-379 -67!-379 -67|112 -67", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.917647058823529, color: "#000066", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -742,16 +610,14 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#E5318D",
-								frameCount: 4,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 65", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
@@ -771,34 +637,13 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#8AD8F4",
-								frameCount: 3,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 91.5, centerPoint3DY: 12.5, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 381", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 91.5, centerPoint3DY: 12.5, libraryItemName: "MovieClips/Symbol 381", type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									},
-									{
-										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 91.5, centerPoint3DY: 12.5, libraryItemName: "MovieClips/Symbol 381", type: "DOMSymbolInstance"}],
-										index: 2,
-										keyMode: 9728
-									}
+									{elements: [{centerPoint3DX: 91.5, centerPoint3DY: 12.5, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 381", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{centerPoint3DX: 91.5, centerPoint3DY: 12.5, libraryItemName: "MovieClips/Symbol 381", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{duration: 2, elements: [{centerPoint3DX: 91.5, centerPoint3DY: 12.5, libraryItemName: "MovieClips/Symbol 381", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
@@ -818,15 +663,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#BBCEB1",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -841,8 +682,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -857,8 +696,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -873,8 +710,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -909,15 +744,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#FA81A2",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -932,8 +763,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -948,8 +777,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -964,16 +791,11 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 2800.0, left: 0.0, right: 2440.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!2440 0|2440 2800!2440 2800|0 2800!0 2800|0 0!0 0|2440 0", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#F2FFB6", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1001,32 +823,23 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9173B8",
-								frameCount: 2,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 988", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 990", loop: "loop", matrix: {a: 0.888885498046875, d: 0.888885498046875}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "Graphics/Symbol 988", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 990", loop: "loop", matrix: {a: 0.888885498046875, d: 0.888885498046875}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#E75E4E",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 989", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 989", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
+									{index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 989", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 989", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
 								],
 								index: 1,
 								name: "Layer 2"
@@ -1048,26 +861,20 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#73ACE0",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 993", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 994", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 994", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 993", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 994", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 994", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#F2C240",
-								frameCount: 2,
-								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
-								],
+								frames: [{duration: 3, index: 0, keyMode: 9728}, {elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							}
@@ -1088,26 +895,20 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#EF009C",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 996", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 997", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 997", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 996", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 997", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 997", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#61E43E",
-								frameCount: 2,
-								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
-								],
+								frames: [{duration: 3, index: 0, keyMode: 9728}, {elements: [{libraryItemName: "Graphics/Symbol 991", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							}
@@ -1126,15 +927,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#AEEE3F",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1149,8 +946,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1165,8 +960,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1181,8 +974,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1215,15 +1006,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#BE76CC",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1238,8 +1025,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1254,8 +1039,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1270,8 +1053,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1304,15 +1085,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#31A9F5",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1327,8 +1104,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1343,8 +1118,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1359,8 +1132,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1393,30 +1164,18 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#D0CF09",
-								frameCount: 3,
 								frames: [
+									{elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_upSkin", transformationPoint: {x: 7.5, y: 7.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_upSkin", transformationPoint: {x: 7.5, y: 7.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 7.5, centerPoint3DY: 7.0, libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_overSkin", transformationPoint: {x: 7.5, y: 7.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_downSkin", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -1440,30 +1199,18 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#96F62F",
-								frameCount: 3,
 								frames: [
+									{elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_upSkin", transformationPoint: {x: 7.5, y: 7.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_upSkin", transformationPoint: {x: 7.5, y: 7.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 7.5, centerPoint3DY: 7.0, libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_overSkin", transformationPoint: {x: 7.5, y: 7.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_downSkin", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -1487,16 +1234,12 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#F607A8",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollBar_thumbIcon", loop: "loop", matrix: {tx: 4.0, ty: -4.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -1507,26 +1250,19 @@ final class AssetCatalogSymbolsButtons {
 							},
 							{
 								color: "#F4CD63",
-								frameCount: 3,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollThumb_upSkin", matrix: {ty: -26.0}, transformationPoint: {x: 8.5, y: 26.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollThumb_overSkin", matrix: {ty: -26.0}, transformationPoint: {x: 8.5, y: 26.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollThumb_downSkin", loop: "loop", matrix: {ty: -26.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -1550,15 +1286,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#456BD6",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1573,8 +1305,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1589,8 +1319,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1605,8 +1333,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1639,15 +1365,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#E7E7A0",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1662,8 +1384,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1678,8 +1398,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1694,8 +1412,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1728,15 +1444,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#BEBEB7",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1751,8 +1463,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1767,8 +1477,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1783,8 +1491,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1817,15 +1523,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#CBA64A",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1840,8 +1542,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1856,8 +1556,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1872,8 +1570,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1906,15 +1602,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#3982DC",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1929,8 +1621,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1945,8 +1635,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1961,8 +1649,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -1996,15 +1682,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#A345D9",
-								frameCount: 3,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -2021,8 +1703,6 @@ final class AssetCatalogSymbolsButtons {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -2038,8 +1718,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Graphics/Symbol 1212",
@@ -2059,18 +1737,11 @@ final class AssetCatalogSymbolsButtons {
 							},
 							{
 								color: "#B997F9",
-								frameCount: 4,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1208", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1210", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1208", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 1210", loop: "loop", matrix: {a: 1.00119018554688, d: 1.00119018554688}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 3,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "Graphics/Symbol 1208", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1210", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1208", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1210", loop: "loop", matrix: {a: 1.00119018554688, d: 1.00119018554688}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
 								],
 								index: 1,
 								name: "Layer 2"
@@ -2090,15 +1761,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#7879B5",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2113,8 +1780,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2129,8 +1794,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2145,8 +1808,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2179,15 +1840,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2204,8 +1861,6 @@ final class AssetCatalogSymbolsButtons {
 									},
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2239,15 +1894,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2263,8 +1914,6 @@ final class AssetCatalogSymbolsButtons {
 									},
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2297,15 +1946,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#66BBEE",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 16.75,
@@ -2321,8 +1966,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 16.75,
@@ -2338,8 +1981,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 16.75,
@@ -2354,7 +1995,7 @@ final class AssetCatalogSymbolsButtons {
 										index: 2,
 										keyMode: 9728
 									},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1212", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 1212", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 3, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
@@ -2376,35 +2017,28 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#8F6DA0",
-								frameCount: 2,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1318", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1319", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 1318", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1319", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#C65791", frameCount: 0, frames: [], index: 1, name: "Layer 2"},
+							{color: "#C65791", frames: [], index: 1, name: "Layer 2"},
 							{
 								color: "#96EB2B",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -2428,15 +2062,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#59F24A",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2451,8 +2081,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2467,8 +2095,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2483,8 +2109,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2517,15 +2141,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#E879C5",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2540,8 +2160,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2556,8 +2174,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2572,8 +2188,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2606,15 +2220,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#A1B2FB",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2630,8 +2240,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2647,8 +2255,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2664,8 +2270,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2699,15 +2303,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#5998AB",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2723,8 +2323,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2740,8 +2338,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2757,8 +2353,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2792,15 +2386,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#912DCC",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2816,8 +2406,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2833,8 +2421,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2850,8 +2436,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -2887,47 +2471,32 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#D2D6B4",
-								frameCount: 3,
 								frames: [
+									{elements: [{centerPoint3DY: -0.2, libraryItemName: "MovieClips/Symbol 1356", matrix: {tx: -1.7, ty: -6.7}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DY: -0.2, libraryItemName: "MovieClips/Symbol 1356", matrix: {tx: -1.7, ty: -6.7}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -0.55, centerPoint3DY: -2.1, libraryItemName: "MovieClips/Symbol 1356", matrix: {a: 1.30987548828125, d: 1.30987548828125, tx: -2.25, ty: -8.6}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
-									{duration: 2, elementCount: 0, elementTypes: [], index: 2, keyMode: 9728}
+									{duration: 2, index: 2, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#A5BF25",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -2953,35 +2522,28 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#C33DE7",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1358", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1359", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
-									{duration: 2, elementCount: 0, elementTypes: [], index: 2, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 1358", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 1359", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{duration: 2, index: 2, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#EF679A",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "MovieClips/Symbol 1317", matrix: {tx: -8.0, ty: -8.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -1.0, centerPoint3DY: -1.0, libraryItemName: "MovieClips/Symbol 1317", matrix: {a: 1.125, d: 1.125, tx: -9.0, ty: -9.0}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
@@ -3005,15 +2567,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#BEBEB7",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -3029,8 +2587,6 @@ final class AssetCatalogSymbolsButtons {
 									},
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -3063,15 +2619,11 @@ final class AssetCatalogSymbolsButtons {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#E7E7A0",
-								frameCount: 4,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -3086,8 +2638,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -3102,8 +2652,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -3118,8 +2666,6 @@ final class AssetCatalogSymbolsButtons {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,

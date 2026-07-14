@@ -6,6 +6,11 @@ The current migration source is the extracted Adobe Animate XFL under
 Haxe/OpenFL source and committed generated assets, without requiring Adobe
 Animate.
 
+## License
+Art: Rights belong to credited artits, otherwise https://creativecommons.org/licenses/by-nc/4.0/
+Music: Rights belong to credited artists
+Code: MIT
+
 ## Quick Start
 
 Run the browser build from the repository root:

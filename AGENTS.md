@@ -10,3 +10,13 @@
 - Available domain flags are `--audio`, `--blocks`, `--character`, `--crypto`, `--data`, `--effects`, `--gameplay`, `--items`, `--level-editor`, `--level-rendering`, `--lobby`, `--network`, `--physics`, `--runtime`, and `--ui`. Run `./test.sh --help` to see the current list.
 - NEVER run the full deterministic suite unless the user explicitly requests it. The full suite is invoked with `./test.sh --full`.
 - Do not run `tools/test_all.sh` unless the user explicitly requests full local verification; it includes the full deterministic suite.
+
+## Parity Rules
+- Treat `flash/**/*.as` and `flash/platform-racing-2-xfl/` as the behavioral and
+  visual specification. Do not silently simplify a workflow because the happy
+  path works.
+- Temporary drawings, record-only actions, harness redirects, hard-coded data,
+  and unsupported buttons are parity gaps and must remain listed here.
+- A task is complete only when the real user flow works. Rendering the art or
+  recording the requested action is not completion.
+- Run only the related test cases for your change, the full suite is a bit slow

@@ -81,11 +81,11 @@ python3 tools/generate_haxe_assets.py
 ```
 
 This writes deterministic source under `haxe/src/pr2/generated/assets/`. The
-generated catalog includes media records, linkage classes, symbols, timelines,
-layers, frames, labels, display instances, transforms, color transforms, and
-shape summary bounds/counts. Raw vector fill/stroke/edge streams are still
-available from `tools/xfl_metadata.py`; they are intentionally deferred until
-the vector rendering milestone.
+runtime catalog includes symbols, timelines, layers, frames, labels, display
+instances, transforms, color transforms, and vector shape data. Media
+inventory, standalone linkage summaries, and redundant array counts remain
+available from `tools/xfl_metadata.py` but are not serialized into the runtime
+catalog.
 
 To compile-check the generated package directly:
 

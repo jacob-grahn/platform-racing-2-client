@@ -15,16 +15,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 10,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/ButtonSkins/Button_disabledSkin",
@@ -56,12 +52,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 2,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 20.0,
@@ -98,29 +91,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FFFF4F",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FFFF4F", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "Button"
 					}
@@ -136,16 +115,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#808080",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 9,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Components/Component Assets/CheckBoxSkins/CheckBox_upIcon", matrix: {tx: 75.35, ty: 45.9}, transformationPoint: {x: 7.0, y: 7.0}, type: "DOMSymbolInstance"},
 											{libraryItemName: "Components/Component Assets/CheckBoxSkins/CheckBox_overIcon", matrix: {tx: 75.35, ty: 112.0}, transformationPoint: {x: 7.0, y: 7.0}, type: "DOMSymbolInstance"},
@@ -166,12 +141,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 2,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 20.0,
@@ -208,29 +180,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#4FFFFF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#4FFFFF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "CheckBox"
 					}
@@ -246,16 +204,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#4F80FF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 11,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/ColorPickerSkins/ColorPicker_upSkin",
@@ -328,12 +282,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#808080",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 12,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 10.0,
@@ -450,28 +401,19 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 0.300003051757812, d: 1.09091186523438}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FF4FFF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								name: "ComponentShim"
-							}
+							{color: "#FF4FFF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, name: "ComponentShim"}
 						],
 						name: "ColorPicker"
 					}
@@ -487,16 +429,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 7,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/Shared/focusRectSkin",
@@ -571,12 +509,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4F80FF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 8,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 6.0,
@@ -660,29 +595,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FF4FFF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FF4FFF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "ComboBox"
 					}
@@ -697,23 +618,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 1600.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!1600 440|0 440!0 440|0 0!0 0|1600 0!1600 0|1600 440", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -745,21 +659,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 3.0, right: 1620.5, top: 3.0},
-												edgeCount: 1,
 												edges: [{edges: "!1620.5 240|20.5 240!20.5 240|20 79.5!20 79.5[#13.FB #13.F3 80 20!80 20|1560 20!1560 20[#654.04 #13.F3 1620 79.5!1620 79.5|1620.5 240", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -770,7 +678,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -784,22 +691,17 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1563.0, left: 4.7, right: 1620.5, top: 4.7},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360",
 														fillStyle1: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -810,7 +712,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -824,15 +725,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1620.5, left: 0.5, right: 1640.5, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{edges: "!820 440|1560.5 440!1560.5 440[#668.86 440 1640.5 360!1640.5 360|1640.5 80!1640.5 80[#668.86 0 1560.5 0!1560.5 0|820 0", fillStyle0: 1},
 													{edges: "!820 420|1563 420!1563 420[#654.84 #1A2.BC 1620.5 360!1620.5 360|1620.5 80!1620.5 80[#654.84 #15.44 1563 20!1563 20|820 20", fillStyle1: 1},
@@ -840,7 +737,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!820 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|820 440", fillStyle0: 2},
 													{edges: "!820 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|820 420", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -859,7 +755,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -890,25 +785,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 20.0, right: 1620.0, top: 20.0},
-												edgeCount: 3,
 												edges: [
 													{edges: "!820 20|1560 20!1560 20[1619 20 1620 80!1620 80|1620 240!1620 240|820 240", fillStyle1: 1},
 													{edges: "!820 240|820 20", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!820 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|820 240", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -927,7 +816,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -940,21 +828,16 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 420.0, left: 20.0, right: 1621.0, top: 20.0},
-												edgeCount: 3,
 												edges: [
 													{edges: "!821 420|1563 420!1563 420[1621 419 1621 360!1621 360|1621 80!1621 80[1621 21 1563 20!1563 20|821 20", fillStyle0: 1},
 													{edges: "!821 420|821 20", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!821 20|78 20!78 20[20 21 21 80!21 80|21 360!21 360[20 419 78 420!78 420|821 420", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -965,7 +848,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -978,15 +860,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 1640.0, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{edges: "!820 20|1563 20!1563 20[1620 21 1620 80!1620 80|1620 360!1620 360[1620 419 1563 420!1563 420|820 420", fillStyle0: 1},
 													{edges: "!820 0|1560 0!1560 0[1640 0 1640 80!1640 80|1640 360!1640 360[1640 440 1560 440!1560 440|820 440", fillStyle1: 1},
@@ -994,7 +872,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!820 420|78 420!78 420[20 419 20 360!20 360|20 80!20 80[20 21 78 20!78 20|820 20", fillStyle0: 2},
 													{edges: "!820 440|81 440!81 440[0 440 0 360!0 360|0 80!0 80[0 0 81 0!81 0|820 0", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1013,7 +890,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1044,15 +920,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMRectangleObject"],
 										elements: [
 											{
 												bottomLeftRadius: 3.0,
@@ -1076,22 +948,17 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1563.0, left: 0.5, right: 1640.5, top: 0.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360!1640.5 80[#668.86 0 1560.5 0!1560.5 0 |80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|1560.5 440!1560.5 440[#668.86 440 1640.5 360!1640.5 360|1640.5 80",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -1102,7 +969,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1133,25 +999,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 20.0, right: 1620.0, top: 20.0},
-												edgeCount: 3,
 												edges: [
 													{edges: "!820 20|1560 20!1560 20[1619 20 1620 80!1620 80|1620 240!1620 240|820 240", fillStyle1: 1},
 													{edges: "!820 240|820 20", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!820 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|820 240", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1170,7 +1030,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1183,17 +1042,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 420.0, left: 20.0, right: 1621.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!1621 360[1621 419 1563 420!1563 420|78 420!78 420[20 419 21 360!21 360|21 80!21 80[20 21 78 20!78 20|1563 20!1563 20[1621 21 1621 80!1621 80|1621 360", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -1204,7 +1058,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1217,15 +1070,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 1640.0, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{edges: "!820 20|1563 20!1563 20[1620 21 1620 80!1620 80|1620 360!1620 360[1620 419 1563 420!1563 420|820 420", fillStyle0: 1},
 													{edges: "!820 0|1560 0!1560 0[1640 0 1640 80!1640 80|1640 360!1640 360[1640 440 1560 440!1560 440|820 440", fillStyle1: 1},
@@ -1233,7 +1082,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!820 420|78 420!78 420[20 419 20 360!20 360|20 80!20 80[20 21 78 20!78 20|820 20", fillStyle0: 2},
 													{edges: "!820 440|81 440!81 440[0 440 0 360!0 360|0 80!0 80[0 0 81 0!81 0|820 0", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1252,7 +1100,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1283,25 +1130,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 4.7},
-												edgeCount: 3,
 												edges: [
 													{edges: "!821 20|821 420", fillStyle0: 1, fillStyle1: 2},
 													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 1},
 													{edges: "!821 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|821 20", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1320,7 +1161,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1333,15 +1173,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edgeCount: 4,
 												edges: [
 													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
 													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
@@ -1351,7 +1187,6 @@ final class AssetCatalogSymbolsComponents {
 														fillStyle0: 2
 													}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1370,7 +1205,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1401,25 +1235,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 5.44},
-												edgeCount: 3,
 												edges: [
 													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 1},
 													{edges: "!821 20|821 420", fillStyle0: 1, fillStyle1: 2},
 													{edges: "!821 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|821 420", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1438,7 +1266,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1451,15 +1278,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edgeCount: 4,
 												edges: [
 													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
 													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
@@ -1469,7 +1292,6 @@ final class AssetCatalogSymbolsComponents {
 														fillStyle0: 2
 													}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1480,7 +1302,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1511,25 +1332,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 4.7},
-												edgeCount: 3,
 												edges: [
 													{edges: "!821 20|821 420", fillStyle0: 1, fillStyle1: 2},
 													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 1},
 													{edges: "!821 420|78 420!78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|821 20", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1548,7 +1363,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1561,15 +1375,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edgeCount: 4,
 												edges: [
 													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
 													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
@@ -1579,7 +1389,6 @@ final class AssetCatalogSymbolsComponents {
 														fillStyle0: 2
 													}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1590,7 +1399,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1621,25 +1429,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 821.0, left: 4.7, right: 1260.0, top: 5.44},
-												edgeCount: 3,
 												edges: [
 													{edges: "!821 420|1202 420!1202 420[1260 419 1260 360!1260 360|1260 80!1260 80[1260 22 1202 20!1202 20|821 20", fillStyle0: 2},
 													{edges: "!821 20|821 420", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!821 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|821 420", fillStyle0: 1}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1658,7 +1460,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1671,15 +1472,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 820.0, left: 0.5, right: 1280.0, top: 0.0},
-												edgeCount: 4,
 												edges: [
 													{edges: "!820 20|1202 20!1202 20[1260 22 1260 80!1260 80|1260 360!1260 360[1260 419 1202 420!1202 420|820 420", fillStyle0: 1},
 													{edges: "!820 0|1200 0!1200 0[1280 0 1280 80!1280 80|1280 360!1280 360[1280 440 1200 440!1200 440|820 440", fillStyle1: 1},
@@ -1689,7 +1486,6 @@ final class AssetCatalogSymbolsComponents {
 														fillStyle0: 2
 													}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1700,7 +1496,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1731,25 +1526,19 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 3.0, right: 1620.5, top: 3.0},
-												edgeCount: 3,
 												edges: [
 													{edges: "!820 20|1560 20!1560 20[#654.04 #13.F3 1620 79.5!1620 79.5|1620.5 240!1620.5 240|820 240", fillStyle1: 1},
 													{edges: "!820 240|820 20", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!820 20|80 20!80 20[#13.FB #13.F3 20 79.5!20 79.5|20.5 240!20.5 240|820 240", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1768,7 +1557,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1781,21 +1569,16 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1563.0, left: 4.7, right: 1620.5, top: 5.44},
-												edgeCount: 3,
 												edges: [
 													{edges: "!821 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|821 420", fillStyle1: 1},
 													{edges: "!821 420|821 20", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!821 20|78 20!78 20[#14.7B #15.44 20.5 80!20.5 80|20.5 360!20.5 360[#14.7B #1A2.BC 78 420!78 420|821 420", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1814,7 +1597,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1827,15 +1609,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 1640.0, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{edges: "!820 440|1560 440!1560 440[1640 440 1640 360!1640 360|1640 80!1640 80[1640 0 1560 0!1560 0|820 0", fillStyle0: 1},
 													{edges: "!820 420|1563 420!1563 420[1620 419 1620 360!1620 360|1620 80!1620 80[1620 21 1563 20!1563 20|820 20", fillStyle1: 1},
@@ -1843,7 +1621,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!820 0|81 0!81 0[0 0 0 80!0 80|0 360!0 360[0 440 81 440!81 440|820 440", fillStyle0: 2},
 													{edges: "!820 20|78 20!78 20[20 21 20 80!20 80|20 360!20 360[20 419 78 420!78 420|820 420", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -1854,7 +1631,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.0134429931640625, d: 0.0, tx: 11.05, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -1880,16 +1656,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 8,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/CellRendererSkins/CellRenderer_disabledSkin",
@@ -1949,12 +1721,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFFFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 9,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 10.0,
@@ -2047,29 +1816,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/CellRendererSkins/CellRenderer_upSkin", transformationPoint: {x: 76.0, y: 11.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Components/Component Assets/CellRendererSkins/CellRenderer_upSkin", transformationPoint: {x: 76.0, y: 11.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FF4FFF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FF4FFF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "CellRenderer"
 					}
@@ -2089,21 +1844,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2114,7 +1863,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2127,19 +1875,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.298039215686275, color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2169,21 +1911,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2194,7 +1930,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2207,19 +1942,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#9AD8FF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2249,21 +1978,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2274,7 +1997,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2287,19 +2009,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5S2|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#DAF1FF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2330,23 +2046,17 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 240.0, left: 20.0, right: 3020.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!3020 240|20 240!20 240|20 20!20 20|3020 20!3020 20|3020 240", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -2357,7 +2067,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -2373,17 +2082,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 2,
 												edges: [{edges: "!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1, fillStyle1: 2}, {edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0", fillStyle0: 1}],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -2402,7 +2106,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2432,23 +2135,17 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -2459,7 +2156,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -2475,19 +2171,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#9AD8FF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2517,23 +2207,17 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 240.0, left: 20.0, right: 3020.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!3020 240|20 240!20 240|20 20!20 20|3020 20!3020 20|3020 240", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -2544,7 +2228,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -2560,17 +2243,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 2,
 												edges: [{edges: "!3020 420|20 420!20 420|20 20!20 20|3020 20!3020 20|3020 420", fillStyle0: 1, fillStyle1: 2}, {edges: "!3040 0|0 0!0 0|0 440!0 440|3040 440!3040 440|3040 0", fillStyle0: 1}],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -2589,7 +2267,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2602,19 +2279,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#DAF1FF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2644,19 +2315,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 12,
 												edges: [
 													{edges: "!20 25|20 20!20 20|3020 20!3020 20|3020 25", fillStyle0: 2},
 													{edges: "!3020 25|3040 25", fillStyle0: 2, fillStyle1: 1},
@@ -2671,7 +2337,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!0 25|0 420", fillStyle0: 1},
 													{edges: "!3020 420|20 420", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{index: 1, value: {color: "#B7BABC", type: "SolidColor"}},
 													{
@@ -2679,7 +2344,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 14.45}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2692,19 +2356,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5S2|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#9AD8FF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2734,19 +2392,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 9,
 												edges: [
 													{edges: "!3020 415|3020 420!3020 420|20 420!20 420|20 415", fillStyle0: 2},
 													{edges: "!3020 415|3040 415", fillStyle0: 1, fillStyle1: 2},
@@ -2758,7 +2411,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!20 415|20 20!0 20|0 415", fillStyle0: 1},
 													{edges: "!20 20|3020 20", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{index: 1, value: {color: "#B7BABC", type: "SolidColor"}},
 													{
@@ -2766,7 +2418,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: 0.00787353515625, c: -0.00787353515625, d: 0.0, tx: 143.5, ty: 7.55}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2779,19 +2430,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.5, left: -0.5, right: 3039.5, top: 0.5},
-												edgeCount: 1,
 												edges: [{edges: "!3039.5 440.5|-0.5 440.5!-0.5 440.5|-0.5 0.5!-0.5 0.5|3039.5 0.5!3039.5 0.5|3039.5 440.5", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2818,21 +2463,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2843,7 +2482,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2856,17 +2494,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2877,7 +2510,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2890,17 +2522,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMGroup", "DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!0 280|280 280!280 280|280 0!280 0|0 0!0 0|0 280!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2911,16 +2538,13 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											},
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!260 260|20 260!20 260|20 20!20 20|260 20!260 20|260 260", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -2931,7 +2555,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -2961,21 +2584,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -2986,7 +2603,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -2999,24 +2615,18 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
 														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3029,17 +2639,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20!280 280|280 0!280 0|0 0!0 0|0 280!0 280|280 280", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3050,7 +2655,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3077,21 +2681,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3102,7 +2700,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3115,17 +2712,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3136,7 +2728,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3149,17 +2740,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3170,7 +2756,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3197,15 +2782,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												color: {alphaMultiplier: 0.30078125},
@@ -3224,17 +2805,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3245,7 +2821,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3258,17 +2833,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 260|20 260!20 260|20 20!20 20|260 20!260 20|260 260", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3279,7 +2849,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3292,17 +2861,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 260|20 260!20 260|20 20!20 20|260 20!260 20|260 260!0 280|280 280!280 280|280 0!280 0|0 0!0 0|0 280", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3313,7 +2877,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3340,15 +2903,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/CheckBoxSkins/CheckBox_selectedIcon", matrix: {tx: 3.0, ty: 1.0}, transformationPoint: {x: 5.0, y: 4.5}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -3359,17 +2918,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3380,7 +2934,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3393,24 +2946,18 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
 														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3423,17 +2970,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3444,7 +2986,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3469,23 +3010,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 180.0, left: 0.0, right: 200.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!0 76|39 73!39 73|70 135!70 135|157 0!157 0|200 0!200 0|177 28!177 28|90 180!90 180|45 180!45 180|0 76", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3512,15 +3046,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/CheckBoxSkins/CheckBox_selectedIcon", matrix: {tx: 3.0, ty: 1.0}, transformationPoint: {x: 5.0, y: 4.5}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -3531,17 +3061,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3552,7 +3077,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3565,17 +3089,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3586,7 +3105,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3599,17 +3117,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!20 260|20 20!20 20|260 20!260 20|260 260!260 260|20 260!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3620,7 +3133,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3647,15 +3159,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/CheckBoxSkins/CheckBox_selectedIcon", matrix: {tx: 3.0, ty: 1.0}, transformationPoint: {x: 5.0, y: 4.5}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -3666,17 +3174,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3687,7 +3190,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3700,17 +3202,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!20 20|260 20!260 20|260 260!260 260|20 260!20 260|20 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3721,7 +3218,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3734,24 +3230,18 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!0 0|0 280!0 280|280 280!280 280|280 0!280 0|0 0!20 20|260 20!260 20|260 260!260 260|20 260!20 260|20 20", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
 														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3778,21 +3268,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 150.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 150|20 150!20 150|20 20!20 20|260 20!260 20|260 150", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3803,7 +3287,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3816,17 +3299,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 20.0, right: 260.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -3837,7 +3315,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3850,24 +3327,18 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 280.0, left: 0.0, right: 280.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!260 20|260 260!260 260|20 260!20 260|20 20!20 20|260 20!0 280|280 280!280 280|280 0!280 0|0 0!0 0|0 280", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
 														value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3897,15 +3368,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												filters: [{alpha: 0.6, angle: 90.0, blurX: 3.0, blurY: 3.0, distance: 2.0, hideObject: true, knockout: true, quality: 2, type: "DropShadowFilter"}],
@@ -3937,23 +3404,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 380.0, left: 0.0, right: 380.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!0 0|380 0!380 0|380 380!380 380|0 380!0 380|0 0", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#999999", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -3984,19 +3444,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edgeCount: 15,
 												edges: [
 													{edges: "!420 20|420 420!420 420|20 420", fillStyle0: 3, fillStyle1: 4},
 													{edges: "!420 20|420 0", fillStyle0: 5, fillStyle1: 3},
@@ -4014,7 +3469,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!20 420|20 20!20 20|420 20", fillStyle0: 5, fillStyle1: 4},
 													{edges: "!380 40|40 40!40 40|40 380", fillStyle0: 3, fillStyle1: 4}
 												],
-												fillStyleCount: 5,
 												fills: [
 													{index: 1, value: {alpha: 0.498039215686275, type: "SolidColor"}},
 													{index: 2, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}},
@@ -4022,7 +3476,6 @@ final class AssetCatalogSymbolsComponents {
 													{index: 4, value: {alpha: 0.498039215686275, color: "#E5E6E7", type: "SolidColor"}},
 													{index: 5, value: {alpha: 0.498039215686275, color: "#FFFFFF", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4053,19 +3506,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edgeCount: 16,
 												edges: [
 													{edges: "!420 20S3|420 420!420 420|20 420", fillStyle0: 1, fillStyle1: 2},
 													{edges: "!420 20S3|420 0", fillStyle0: 3, fillStyle1: 1},
@@ -4084,7 +3532,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!380 60S3|60 60!60 60|60 380", fillStyle0: 5, fillStyle1: 4},
 													{edges: "!60 380S3|280 380", fillStyle0: 5, fillStyle1: 3}
 												],
-												fillStyleCount: 6,
 												fills: [
 													{index: 1, value: {color: "#CCCCCC", type: "SolidColor"}},
 													{index: 2, value: {color: "#E5E6E7", type: "SolidColor"}},
@@ -4093,7 +3540,6 @@ final class AssetCatalogSymbolsComponents {
 													{index: 5, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}},
 													{index: 6, value: {type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4124,19 +3570,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edgeCount: 15,
 												edges: [
 													{edges: "!420 20S3|420 420!420 420|20 420", fillStyle0: 1, fillStyle1: 2},
 													{edges: "!420 20S3|420 0", fillStyle0: 3, fillStyle1: 1},
@@ -4154,7 +3595,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!20 420S3|20 20!20 20|420 20", fillStyle0: 3, fillStyle1: 2},
 													{edges: "!380 40S3|40 40!40 40|40 380", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 5,
 												fills: [
 													{index: 1, value: {color: "#9A9B9D", type: "SolidColor"}},
 													{index: 2, value: {color: "#E5E6E7", type: "SolidColor"}},
@@ -4162,7 +3602,6 @@ final class AssetCatalogSymbolsComponents {
 													{index: 4, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}},
 													{index: 5, value: {type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4192,22 +3631,15 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 230.0, left: 9.0, right: 229.0, top: 10.0},
-												edgeCount: 1,
 												edges: [{edges: "!229 230S4|9 230!9 230|9 10!9 10|229 10!229 10|229 230", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {caps: "square", fill: {color: "#FFFFFF", type: "SolidColor"}, joints: "miter", scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -4234,23 +3666,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#FF4F4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 160.0, left: 0.0, right: 160.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!160 160|0 160!0 160|0 0!0 0|160 0!160 0|160 160", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#00CCFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4280,19 +3705,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1507.0, left: 1.0, right: 1510.0, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{edges: "!1490 21|1490 11!1490 11[#5D2.09 #6.E5 1493 4!1493 4[#5D7.CE #1.21 1499.5 1", fillStyle0: 2, fillStyle1: 1},
 													{
@@ -4303,7 +3723,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: " !2 699.5[#2.21 #2B7.CE 5 693!5 693[#7.E5 #2B2.09 12 690!12 690|22 690", fillStyle0: 2, fillStyle1: 1},
 													{edges: " !1490 21|22 21!22 21|22 690", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -4322,7 +3741,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4335,22 +3753,17 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1498.0, left: -10.0, right: 1495.0, top: -10.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: " !1488 -10|0 -10!0 -10[#FFFFFB.E5 #FFFFF6.09 -7 -7!-7 -7[#FFFFF6.09 #FFFFFB.E5 -10 0!-10 0|-10 689!-10 689[-9.96875 #2B5.1B -7 696!-7 696[-4.09375 #2BA.F9 0 699!0 699|1488 699!1488 699[#5D4.1A #2BA.F6 1495 696!1495 696[#5D9.F7 #2B5.16  1498 689!1498 689|1498 0!1498 0[#5D9.F7 #FFFFFB.E5 1495 -7!1495 -7[#5D4.1B #FFFFF6.09 1488 -10!1478 679|10 679!10 679|10 10!10 10|1478 10!1478 10|1478 679",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4361,7 +3774,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4392,23 +3804,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 391.0, left: 309.0, right: 389.5, top: 351.0},
-												edgeCount: 1,
 												edges: [{edges: "!309 351|389.5 351!389.5 351|349.5 391!349.5 391|309 351", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4421,15 +3826,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 440.0, top: 0.0},
-												edgeCount: 14,
 												edges: [
 													{edges: "!420 20|420 420!420 420|20 420", fillStyle0: 2, fillStyle1: 3},
 													{edges: "!420 20|420 0", fillStyle0: 1, fillStyle1: 2},
@@ -4446,9 +3847,7 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!20 420|20 20!20 20|420 20", fillStyle0: 1, fillStyle1: 3},
 													{edges: "!380 40|40 40!40 40|40 380", fillStyle0: 2, fillStyle1: 3}
 												],
-												fillStyleCount: 3,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 2, value: {color: "#9A9B9D", type: "SolidColor"}}, {index: 3, value: {color: "#E5E6E7", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4461,19 +3860,13 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 380.0, left: 60.0, right: 380.0, top: 60.0},
-												edgeCount: 1,
 												edges: [{edges: "!60 380|60 60!60 60|380 60!380 60|380 380!380 380|60 380", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.0, color: "#333333", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4503,28 +3896,21 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.4, type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4537,17 +3923,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 7.0, right: 2940.0, top: 3.0},
-												edgeCount: 1,
 												edges: [{edges: " !2940 240|20 240!20 240|19.5 79.5!19.5 79.5[19.5 #13.F3 79.5 20!79.5 20|2879.5 20!2879.5 20[#B7B.7F #13.F3 2939.5 79.5!2939.5 79.5|2940 240", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4558,7 +3939,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4571,22 +3951,17 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 2882.5, left: 20.0, right: 2940.0, top: 5.44},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: " !2940 80|2940 360!2940 360[2940 #1A2.BC 2882.5 420!2882.5 420|77.5 420!77.5 420[20 #1A2.BC 20 360!20 360|20 80!20 80[20 #15.44 77.5 20!77.5 20|2882.5 20!2882.5 20[2940 #15.44 2940 80",
 														fillStyle1: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4597,7 +3972,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4610,22 +3984,17 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 2882.5, left: 0.0, right: 2960.0, top: 0.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: " !2940 80|2940 360!2940 360[2940 #1A2.BC 2882.5 420!2882.5 420|77.5 420!77.5 420[20 #1A2.BC 20 360!20 360|20 80!20 80[20 #15.44 77.5 20!77.5 20|2882.5 20!2882.5 20[2940 #15.44 2940 80!2880 0|80 0!80 0[0 0 0 80!0 80|0 360!0 360[0 440 80  440!80 440|2880 440!2880 440[2960 440 2960 360!2960 360|2960 80!2960 80[2960 0 2880 0",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4636,14 +4005,11 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											},
 											{
 												bounds: {bottom: 420.0, left: 2500.0, right: 2520.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: " !2500 20|2520 20!2520 20|2520 420!2520 420|2500 420!2500 420|2500 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4654,7 +4020,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												transformationPoint: {x: 125.5, y: 11.0},
 												type: "DOMShape"
 											}
@@ -4685,28 +4050,21 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4719,20 +4077,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 20.0, right: 2940.0, top: 20.0},
-												edgeCount: 2,
 												edges: [
 													{edges: " !2940 240S2|2520 240!2520 240|2520 20!2520 20|2880 20!2880 20[2939 20 2940 80!2940 80|2940 240", fillStyle1: 1},
 													{edges: " !2500 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|2500 240!2500 240|2500 20", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -4751,7 +4104,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4765,24 +4117,18 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 2500.0, left: 5.3, right: 2500.0, top: 5.3},
-												edgeCount: 1,
 												edges: [{edges: " !2500 20|77.5 20!77.5 20[#15.3D #15.3D 20 77.5!20 77.5|20 363!20 363[#15.66 #1A2.C4 77.5 420!77.5 420|2500 420!2500 420|2500 20", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
 														value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: -0.013427734375, d: 0.0, tx: 11.0, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4795,15 +4141,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 2960.0, left: 0.0, right: 2960.0, top: 0.0},
-												edgeCount: 6,
 												edges: [
 													{
 														edges: " !2960 68[2954 0 2880 0!2880 0|80 0!80 0[40 0 20 20!20 20[#8.ED #1E.FB 4 48!4 48[0 #3D.FA 0 80!0 80|0 360!0 360[0 440 80 440!80 440|2880 440!2880 440[2954 440 2960 372!2960 372[2960 366 2960 360!2960 360|2960 80!2960 80[2960 74 2960 68",
@@ -4815,7 +4157,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: " !2520 420|2520 20", fillStyle0: 3, fillStyle1: 2},
 													{edges: " !2500 20|78 20!78 20[#15.3E #14.FB 20 77.5!20 77.5|20 360!20 360[20 419 78 420!78 420|2500 420", fillStyle1: 1}
 												],
-												fillStyleCount: 3,
 												fills: [
 													{
 														index: 1,
@@ -4838,7 +4179,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4868,28 +4208,21 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4902,20 +4235,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 20.0, right: 2940.0, top: 20.0},
-												edgeCount: 2,
 												edges: [
 													{edges: " !2940 240S2|2520 240!2520 240|2520 20!2520 20|2880 20!2880 20[2939 20 2940 80!2940 80|2940 240", fillStyle1: 1},
 													{edges: " !2500 20|80 20!80 20[20 20 20 80!20 80|20 240!20 240|2500 240!2500 240|2500 20", fillStyle0: 1}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4926,7 +4254,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4940,20 +4267,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 420.0, left: 20.0, right: 2940.0, top: 20.0},
-												edgeCount: 2,
 												edges: [
 													{edges: " !2940 360[2940 419 2883 420!2883 420|2520 420!2520 420|2520 20!2520 20|2883 20!2883 20[2940 21 2940 80!2940 80|2940 360", fillStyle1: 1},
 													{edges: " !2500 20|78 20!78 20[21 21 20 78!20 78|20 363!20 363[21 419 78 420!78 420|2500 420!2500 420|2500 20", fillStyle0: 1}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -4964,7 +4286,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -4977,15 +4298,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 2960.0, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{
 														edges: " !2960 372[2960 366 2960 360!2960 360|2960 80!2960 80[2960 74 2960 68!2960 68[2954 0 2880 0!2880 0|80 0!80 0[#4A.06 0 68.5 0.5!68.5 0.5[0 #5.F9 0 80!0 80|0 360!0 360[0 #171.EB 1 378.5!1 378.5[#1.7F #17D.F 2 385!2 385[#2.2F #181.DC 2.5  386.5!2.5 386.5[#2.B1 #183.54 3 388!3 388[#3.3 #184.C4 3.5 389.5!3.5 389.5[#3.DF #186.E8 4.5 392.5!4.5 392.5[#8.A9 #196.97 17 416.5!17 416.5|53.5 437.5!53.5 437.5[#41.81 440 80 440!80 440|2880 440!2880 440[2954 440 2960 372!2520 20|2883  20!2883 20[2940 21 2940 80!2940 80|2940 360!2940 360[2940 419 2883 420!2883 420|2520 420",
@@ -4996,7 +4313,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: " !2520 420|2520 20", fillStyle0: 2},
 													{edges: " !2500 20|78 20!78 20[#15.3E #14.FB 20 77.5!20 77.5|20 363!20 363[#15.67 #1A3.06 78 420!78 420|2500 420", fillStyle1: 1}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -5011,7 +4327,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -5041,28 +4356,21 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: 2640.0, right: 2780.0, top: 180.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!2700 240|2700 260!2700 260|2720 260!2720 260|2720 240!2720 240|2740 240!2740 240|2740 220!2740 220|2760 220!2760 220|2760 200!2760 200|2780 200!2780 200|2780 180!2780 180|2640 180!2640 180|2640 200!2640 200|2660 200!2660 200|2660 220 !2660 220|2680 220!2680 220|2680 240!2680 240|2700 240",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -5075,17 +4383,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 240.0, left: 20.0, right: 2940.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: " !2940 240S2|20 240!20 240|20 80!20 80[20 20 80 20!80 20|2880 20!2880 20[2939 20 2940 80!2940 80|2940 240", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -5096,7 +4399,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -5110,17 +4412,12 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 420.0, left: 20.0, right: 2940.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: " !2940 80|2940 360!2940 360[2940 419 2883 420!2883 420|78 420!78 420[20 419 20 360!20 360|20 80!20 80[20 21 78 20!78 20|2883 20!2883 20[2940 21 2940 80", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -5131,7 +4428,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -5144,15 +4440,11 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 2960.0, top: 0.0},
-												edgeCount: 5,
 												edges: [
 													{
 														edges: " !2960 80[2960 0 2880 0!2880 0|80 0!80 0[0 0 0 80!0 80|0 360!0 360[0 440 80 440!80 440|2880 440!2880 440[2960 440 2960 360!2960 360|2960 80!2520 20|2883 20!2883 20[2940 21 2940 80!2940 80|2940 360!2940 360[2940 419 2883 420!2883 420|2520  420",
@@ -5163,7 +4455,6 @@ final class AssetCatalogSymbolsComponents {
 													{edges: " !2520 420|2520 20", fillStyle0: 1},
 													{edges: " !2500 20|78 20!78 20[20 21 20 80!20 80|20 360!20 360[20 419 78 420!78 420|2500 420", fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -5174,7 +4465,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 137.0, ty: 11.0}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -5204,19 +4494,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 3840.0, left: 0.0, right: 5460.0, top: 0.0},
-												edgeCount: 2,
 												edges: [
 													{edges: "!5420 40[5440 60 5440 90!5440 90|5440 3820!5440 3820|20 3820!20 3820|20 90!20 90[20 60 40 40!40 40[60 20 90 20!90 20|5370 20!5370 20[5399 20 5420 40", fillStyle0: 2, fillStyle1: 1},
 													{
@@ -5224,9 +4509,7 @@ final class AssetCatalogSymbolsComponents {
 														fillStyle0: 2
 													}
 												],
-												fillStyleCount: 2,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 2, value: {color: "#CCCCCC", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -5252,16 +4535,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#808080",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 19,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Components/Component Assets/Shared/focusRectSkin", matrix: {tx: 66.8, ty: 223.0}, transformationPoint: {x: 41.05, y: 11.0}, type: "DOMSymbolInstance"},
 											{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollTrack_skin", matrix: {tx: 285.0, ty: 18.0}, transformationPoint: {x: 7.5, y: 74.0}, type: "DOMSymbolInstance"},
@@ -5292,12 +4571,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 6,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 10.0,
@@ -5366,29 +4642,19 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollTrack_skin", matrix: {d: 0.675674438476562}, transformationPoint: {x: 7.5, y: 74.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#4F80FF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#4F80FF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "ScrollBar"
 					}
@@ -5404,15 +4670,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
@@ -5420,16 +4682,13 @@ final class AssetCatalogSymbolsComponents {
 														children: [
 															{
 																bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-																edgeCount: 1,
 																edges: [{edges: "!280 20S2|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-																fillStyleCount: 1,
 																fills: [
 																	{
 																		index: 1,
 																		value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 																	}
 																],
-																strokeStyleCount: 0,
 																type: "DOMShape"
 															}
 														],
@@ -5439,9 +4698,7 @@ final class AssetCatalogSymbolsComponents {
 														children: [
 															{
 																bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-																edgeCount: 1,
 																edges: [{edges: "!20 260S1|20 20!20 20|280 20!280 20|280 260!280 260|20 260!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280", fillStyle0: 1}],
-																fillStyleCount: 1,
 																fills: [
 																	{
 																		index: 1,
@@ -5452,7 +4709,6 @@ final class AssetCatalogSymbolsComponents {
 																		}
 																	}
 																],
-																strokeStyleCount: 0,
 																type: "DOMShape"
 															}
 														],
@@ -5462,9 +4718,7 @@ final class AssetCatalogSymbolsComponents {
 														children: [
 															{
 																bounds: {bottom: 145.0, left: 20.0, right: 280.0, top: 15.0},
-																edgeCount: 1,
 																edges: [{edges: "!20 145S2|20 15!20 15|280 15!280 15|280 145!280 145|20 145", fillStyle1: 1}],
-																fillStyleCount: 1,
 																fills: [
 																	{
 																		index: 1,
@@ -5475,7 +4729,6 @@ final class AssetCatalogSymbolsComponents {
 																		}
 																	}
 																],
-																strokeStyleCount: 0,
 																type: "DOMShape"
 															}
 														],
@@ -5508,15 +4761,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_icon", loop: "single frame", matrix: {tx: 4.0, ty: 5.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -5527,26 +4776,20 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!20 20|280 20!280 20|280 260!280 260|20 260!20 260|20 20", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5556,9 +4799,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!20 20|280 20!280 20|280 260!280 260|20 260!20 260|20 20!0 280|300 280!300 280|300 0!300 0|0 0!0 0|0 280", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -5569,7 +4810,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5579,9 +4819,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -5592,7 +4830,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5621,20 +4858,10 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/Shared/arrowIcon", loop: "single frame", symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Components/Component Assets/Shared/arrowIcon", loop: "single frame", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "icon"
 							}
@@ -5654,15 +4881,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_icon", loop: "single frame", matrix: {tx: 4.0, ty: 5.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -5673,26 +4896,20 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5702,9 +4919,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -5715,7 +4930,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5725,9 +4939,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -5738,7 +4950,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5768,15 +4979,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowDown_icon", loop: "single frame", matrix: {tx: 4.0, ty: 5.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -5787,26 +4994,20 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5816,16 +5017,13 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5835,9 +5033,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -5848,7 +5044,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -5878,15 +5073,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
@@ -5894,16 +5085,13 @@ final class AssetCatalogSymbolsComponents {
 														children: [
 															{
 																bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-																edgeCount: 1,
 																edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-																fillStyleCount: 1,
 																fills: [
 																	{
 																		index: 1,
 																		value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 																	}
 																],
-																strokeStyleCount: 0,
 																type: "DOMShape"
 															}
 														],
@@ -5913,9 +5101,7 @@ final class AssetCatalogSymbolsComponents {
 														children: [
 															{
 																bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-																edgeCount: 1,
 																edges: [{edges: "!20 260|20 20!20 20|280 20!280 20|280 260!280 260|20 260!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280", fillStyle0: 1}],
-																fillStyleCount: 1,
 																fills: [
 																	{
 																		index: 1,
@@ -5926,7 +5112,6 @@ final class AssetCatalogSymbolsComponents {
 																		}
 																	}
 																],
-																strokeStyleCount: 0,
 																type: "DOMShape"
 															}
 														],
@@ -5936,9 +5121,7 @@ final class AssetCatalogSymbolsComponents {
 														children: [
 															{
 																bounds: {bottom: 145.0, left: 20.0, right: 280.0, top: 15.0},
-																edgeCount: 1,
 																edges: [{edges: "!20 145|20 15!20 15|280 15!280 15|280 145!280 145|20 145", fillStyle1: 1}],
-																fillStyleCount: 1,
 																fills: [
 																	{
 																		index: 1,
@@ -5949,7 +5132,6 @@ final class AssetCatalogSymbolsComponents {
 																		}
 																	}
 																],
-																strokeStyleCount: 0,
 																type: "DOMShape"
 															}
 														],
@@ -5982,15 +5164,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_icon", loop: "single frame", matrix: {tx: 4.0, ty: 4.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -6001,26 +5179,20 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!280 260|20 260!20 260|20 20!20 20|280 20!280 20|280 260", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6030,9 +5202,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 260|20 260!20 260|20 20!20 20|280 20!280 20|280 260", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -6043,7 +5213,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6053,9 +5222,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 150.0, left: 21.0, right: 281.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!281 150|21 150!21 150|21 20!21 20|281 20!281 20|281 150", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -6066,7 +5233,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6095,15 +5261,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/Shared/arrowIcon", matrix: {a: -1.0, d: -1.0, tx: 7.0, ty: 4.0}, transformationPoint: {x: 3.5, y: 2.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -6128,15 +5290,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_icon", loop: "single frame", matrix: {tx: 4.0, ty: 4.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -6147,26 +5305,20 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6176,9 +5328,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -6189,7 +5339,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6199,9 +5348,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 150.0, left: 21.0, right: 281.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!21 150|21 20!21 20|281 20!281 20|281 150!281 150|21 150", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -6212,7 +5359,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6242,15 +5388,11 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollArrowUp_icon", loop: "single frame", matrix: {tx: 4.0, ty: 4.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -6261,26 +5403,20 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 260.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0083160400390625, c: 0.0083160400390625, d: 0.0, tx: 6.0, ty: 7.15}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6290,16 +5426,13 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 280.0, left: 0.0, right: 300.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!300 280|300 0!300 0|0 0!0 0|0 280!0 280|300 280!280 20|280 260!280 260|20 260!20 260|20 20!20 20|280 20", fillStyle0: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.00787353515625, c: 0.00787353515625, d: 0.0, tx: 8.5, ty: 6.45}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6309,9 +5442,7 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 150.0, left: 20.0, right: 280.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!20 150|20 20!20 20|280 20!280 20|280 150!280 150|20 150", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -6322,7 +5453,6 @@ final class AssetCatalogSymbolsComponents {
 																}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6351,54 +5481,38 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 4,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 140.0, left: -60.0, right: 40.0, top: 120.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 140S2|-60 140!-60 140|-60 120!-60 120|40 120!40 120|40 140", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
 												matrix: {tx: 3.0},
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											},
 											{
 												bounds: {bottom: 100.0, left: -60.0, right: 40.0, top: 80.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 100S2|-60 100!-60 100|-60 80!-60 80|40 80!40 80|40 100", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
 												matrix: {tx: 3.0},
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											},
 											{
 												bounds: {bottom: 20.0, left: -60.0, right: 40.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 20S2|-60 20!-60 20|-60 0!-60 0|40 0!40 0|40 20", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
 												matrix: {tx: 3.0},
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											},
 											{
 												bounds: {bottom: 60.0, left: -60.0, right: 40.0, top: 40.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 60S2|-60 60!-60 60|-60 40!-60 40|40 40!40 40|40 60", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#5A6165", type: "SolidColor"}}],
 												matrix: {tx: 3.0},
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -6428,25 +5542,18 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 1040.0, left: 260.0, right: 320.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!320 0|320 1040!320 1040|260 1040!260 1040|260 0!260 0|320 0", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {alpha: 0.0, color: "#FF0000", type: "SolidColor"}}],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6456,13 +5563,11 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 1040.0, left: 20.0, right: 260.0, top: 0.0},
-														edgeCount: 3,
 														edges: [
 															{edges: "!260 927|260 80!260 80[260 0 180 0!180 0|20 0!20 0|20 20!20 20|183 20!183 20[240 22 240 80!240 80|240 927", fillStyle0: 1},
 															{edges: "!240 927|240 960!240 960[240 1019 183 1020!183 1020|20 1020!20 1020|20 1040!20 1040|180 1040!180 1040[260 1040 260 960!260 960|260 927", fillStyle0: 2},
 															{edges: "!240 927|260 927", fillStyle0: 1, fillStyle1: 2}
 														],
-														fillStyleCount: 2,
 														fills: [
 															{
 																index: 1,
@@ -6473,7 +5578,6 @@ final class AssetCatalogSymbolsComponents {
 																value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.0}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6483,16 +5587,13 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 1021.0, left: 20.0, right: 240.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!183 21[240 23 240 81!240 81|240 960!240 960[240 1020 183 1021!183 1021|20 1019.5!20 1019.5|20 20!20 20|183 21", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 32.85, ty: 31.0}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6526,30 +5627,23 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 1020.0, left: 20.0, right: 240.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!240 80|240 959!240 959[240 1018 183 1020!183 1020|20 1020!20 1020|20 20!20 20|183 20!183 20[240 21 240 80", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 32.85, ty: 31.0}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6559,13 +5653,11 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 1040.0, left: 20.0, right: 260.0, top: 0.0},
-														edgeCount: 3,
 														edges: [
 															{edges: "!260 927|260 80!260 80[260 0 180 0!180 0|20 0!20 0|20 20!20 20|183 20!183 20[240 22 240 80!240 80|240 927", fillStyle0: 1},
 															{edges: "!240 927|240 960!240 960[240 1019 183 1020!183 1020|20 1020!20 1020|20 1040!20 1040|180 1040!180 1040[260 1040 260 960!260 960|260 927", fillStyle0: 2},
 															{edges: "!240 927|260 927", fillStyle0: 1, fillStyle1: 2}
 														],
-														fillStyleCount: 2,
 														fills: [
 															{
 																index: 1,
@@ -6576,7 +5668,6 @@ final class AssetCatalogSymbolsComponents {
 																value: {entries: [{color: "#0075BF", ratio: 0.0}, {color: "#009DFF", ratio: 0.992156862745098}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.0}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6586,11 +5677,8 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 1040.0, left: 260.0, right: 320.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!320 0|320 1040!320 1040|260 1040!260 1040|260 0!260 0|320 0", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {alpha: 0.0, color: "#FF0000", type: "SolidColor"}}],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6623,25 +5711,18 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 1040.0, left: 260.0, right: 320.0, top: 0.0},
-														edgeCount: 1,
 														edges: [{edges: "!320 0|320 1040!320 1040|260 1040!260 1040|260 0!260 0|320 0", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {alpha: 0.0, color: "#FF0000", type: "SolidColor"}}],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6651,13 +5732,11 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 1040.0, left: 20.0, right: 260.0, top: 0.0},
-														edgeCount: 3,
 														edges: [
 															{edges: "!260 927|260 80!260 80[260 0 180 0!180 0|20 0!20 0|20 20!20 20|183 20!183 20[240 22 240 80!240 80|240 927", fillStyle0: 1},
 															{edges: "!240 927|240 960!240 960[240 1019 183 1020!183 1020|20 1020!20 1020|20 1040!20 1040|180 1040!180 1040[260 1040 260 960!260 960|260 927", fillStyle0: 2},
 															{edges: "!240 927|260 927", fillStyle0: 1, fillStyle1: 2}
 														],
-														fillStyleCount: 2,
 														fills: [
 															{
 																index: 1,
@@ -6668,7 +5747,6 @@ final class AssetCatalogSymbolsComponents {
 																value: {entries: [{color: "#585F63", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 2.0, ty: 41.0}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6678,16 +5756,13 @@ final class AssetCatalogSymbolsComponents {
 												children: [
 													{
 														bounds: {bottom: 1021.0, left: 20.0, right: 240.0, top: 20.0},
-														edgeCount: 1,
 														edges: [{edges: "!240 960[240 1020 183 1021!183 1021|20 1019.5!20 1019.5|20 20!20 20|183 21!183 21[240 23 240 81!240 81|240 960", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
 																value: {entries: [{color: "#E6E6E6", ratio: 0.0}, {color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.013427734375, c: 0.013427734375, d: 0.0, tx: 32.85, ty: 31.0}, type: "LinearGradient"}
 															}
 														],
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6716,33 +5791,24 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMGroup"],
 										elements: [
 											{
 												children: [
 													{
 														bounds: {bottom: 16540.0, left: 13460.0, right: 13480.0, top: 13580.0},
-														edgeCount: 1,
 														edges: [{edges: "!13480 13580|13480 16540!13480 16540|13460 16540!13460 16540|13460 13580!13460 13580|13480 13580", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {color: "#585F63", type: "SolidColor"}}],
 														matrix: {tx: -659.0, ty: -679.0},
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													},
 													{
 														bounds: {bottom: 16540.0, left: 13200.0, right: 13460.0, top: 13580.0},
-														edgeCount: 1,
 														edges: [{edges: "!13460 13580|13460 16540!13460 16540|13200 16540!13200 16540|13200 13580!13200 13580|13460 13580", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [
 															{
 																index: 1,
@@ -6754,17 +5820,13 @@ final class AssetCatalogSymbolsComponents {
 															}
 														],
 														matrix: {tx: -659.0, ty: -679.0},
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													},
 													{
 														bounds: {bottom: 16540.0, left: 13180.0, right: 13200.0, top: 13580.0},
-														edgeCount: 1,
 														edges: [{edges: "!13200 13580|13200 16540!13200 16540|13180 16540!13180 16540|13180 13580!13180 13580|13200 13580", fillStyle1: 1}],
-														fillStyleCount: 1,
 														fills: [{index: 1, value: {color: "#585F63", type: "SolidColor"}}],
 														matrix: {tx: -659.0, ty: -679.0},
-														strokeStyleCount: 0,
 														type: "DOMShape"
 													}
 												],
@@ -6793,28 +5855,21 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 80.0, left: 0.0, right: 140.0, top: 0.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!140 0|0 0!0 0|0 20!0 20|20 20!20 20|20 40!20 40|40 40!40 40|40 60!40 60|60 60!60 60|60 80!60 80|80 80!80 80|80 60!80 60|100 60!100 60|100 40!100 40|120 40!120 40|120 20!120 20|140 20!140 20|140 0",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -6844,26 +5899,20 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 1563.0, left: 0.5, right: 1640.5, top: 0.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!1640.5 80[#668.86 0 1560.5 0!1560.5 0|80.5 0!80.5 0[#0.7A 0 0.5 80!0.5 80|0.5 360!0.5 360[#0.7A 440 80.5 440!80.5 440|1560.5 440!1560.5 440[#668.86 440 1640.5 360!1640.5 360|1640.5 80!1620.5 360[#654.84 #1A2.BC 1563 420!1563 420|78 420 !78 420[#14.7B #1A2.BC 20.5 360!20.5 360|20.5 80!20.5 80[#14.7B #15.44 78 20!78 20|1563 20!1563 20[#654.84 #15.44 1620.5 80!1620.5 80|1620.5 360",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
@@ -6874,7 +5923,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -6899,23 +5947,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 3820.0, left: 0.0, right: 5440.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!5360 0|80 0!80 0[46 0 23 23!23 23[0 46 0 80!0 80|0 3820!0 3820|5440 3820!5440 3820|5440 80!5440 80[5440 46 5417 23!5417 23[5393 0 5360 0", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.6, color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -6940,23 +5981,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 3840.0, left: 60.0, right: 5500.0, top: 20.0},
-												edgeCount: 1,
 												edges: [{edges: "!5420 20|140 20!140 20[106 20 83 43!83 43[60 66 60 100!60 100|60 3840!60 3840|5500 3840!5500 3840|5500 100!5500 100[5500 66 5477 43!5477 43[5453 20 5420 20", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -6982,24 +6016,18 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edgeCount: 2,
 												edges: [
 													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
 													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -7018,7 +6046,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7044,24 +6071,18 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edgeCount: 2,
 												edges: [
 													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
 													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -7069,7 +6090,6 @@ final class AssetCatalogSymbolsComponents {
 													},
 													{index: 2, value: {entries: [{color: "#99D7FE", ratio: 0.0}, {color: "#D9F0FE", ratio: 1.0}], matrix: {a: 0.0, b: -0.0067138671875, c: 0.0067138671875, d: 0.0, ty: 6.5}, type: "LinearGradient"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7095,24 +6115,18 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edgeCount: 2,
 												edges: [
 													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
 													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{
 														index: 1,
@@ -7127,7 +6141,6 @@ final class AssetCatalogSymbolsComponents {
 														}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7153,24 +6166,18 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: -130.0, right: 130.0, top: 0.0},
-												edgeCount: 2,
 												edges: [
 													{edges: "!22 0|-22 0!-22 0|-130 200!-130 200|-90 260!-90 260|90 260!90 260|130 200!130 200|22 0", fillStyle0: 1},
 													{edges: "!110 200|70 240!70 240|-70 240!-70 240|-110 200!-110 200|-21 20!-21 20|21 20!21 20|110 200", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 2,
 												fills: [
 													{index: 1, value: {entries: [{color: "#5B5D5E", ratio: 0.0}, {color: "#B7BABC", ratio: 1.0}], matrix: {a: 0.0, b: -0.0079345703125, c: 0.0079345703125, d: 0.0, ty: 6.5}, type: "LinearGradient"}},
 													{
@@ -7178,7 +6185,6 @@ final class AssetCatalogSymbolsComponents {
 														value: {entries: [{alpha: 0.4, color: "#CCCCCC", ratio: 0.0}, {alpha: 0.6, color: "#FFFFFF", ratio: 1.0}], matrix: {a: 0.0, b: -0.0067138671875, c: 0.0067138671875, d: 0.0, ty: 6.5}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7204,23 +6210,16 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 40.0, left: -10.0, right: 10.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!10 40|-10 40!-10 40|-10 0!-10 0|10 0!10 0|10 40", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#919999", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7250,19 +6249,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 60.0, left: 0.0, right: 1600.0, top: 0.0},
-												edgeCount: 14,
 												edges: [
 													{edges: "!20 20|20 0!20 0|1580 0!1580 0|1580 20", fillStyle1: 2},
 													{edges: "!1581 40|1580 40!1580 40|1580 60", fillStyle0: 3, fillStyle1: 4},
@@ -7279,14 +6273,12 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!1560 40|40 40", fillStyle0: 3, fillStyle1: 1},
 													{edges: "!1580 20|20 20", fillStyle0: 1, fillStyle1: 2}
 												],
-												fillStyleCount: 4,
 												fills: [
 													{index: 1, value: {color: "#EBEBEB", type: "SolidColor"}},
 													{index: 2, value: {color: "#999999", type: "SolidColor"}},
 													{index: 3, value: {color: "#CCCCCC", type: "SolidColor"}},
 													{index: 4, value: {color: "#BBBBBB", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7316,19 +6308,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 60.0, left: 0.0, right: 1600.0, top: 0.0},
-												edgeCount: 11,
 												edges: [
 													{edges: "!1560 60|1580 60!1580 60|1580 40!1580 40|1600 40!1600 40|1600 20!1600 20|1580 20", fillStyle0: 3},
 													{edges: "!1580 20|1580 40", fillStyle0: 3, fillStyle1: 2},
@@ -7342,14 +6329,12 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!1560 60|40 60", fillStyle1: 1},
 													{edges: "!1580 20|20 20", fillStyle0: 2, fillStyle1: 4}
 												],
-												fillStyleCount: 4,
 												fills: [
 													{index: 1, value: {color: "#AEB2B4", type: "SolidColor"}},
 													{index: 2, value: {color: "#EBEBEB", type: "SolidColor"}},
 													{index: 3, value: {color: "#8C9295", type: "SolidColor"}},
 													{index: 4, value: {color: "#575E62", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7379,19 +6364,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 12,
 												edges: [
 													{edges: "!3020 20|3020 0", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!3020 420|3020 20", fillStyle0: 4, fillStyle1: 1},
@@ -7406,14 +6386,12 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 2},
 													{edges: "!20 420|3020 420", fillStyle0: 4, fillStyle1: 3}
 												],
-												fillStyleCount: 4,
 												fills: [
 													{index: 1, value: {alpha: 0.298039215686275, color: "#C9CBCC", type: "SolidColor"}},
 													{index: 2, value: {alpha: 0.298039215686275, color: "#6D6F70", type: "SolidColor"}},
 													{index: 3, value: {alpha: 0.298039215686275, color: "#D3D5D6", type: "SolidColor"}},
 													{index: 4, value: {alpha: 0.298039215686275, color: "#FFFFFF", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7443,19 +6421,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 12,
 												edges: [
 													{edges: "!3020 420|3020 20", fillStyle0: 4, fillStyle1: 1},
 													{edges: "!3020 0|3020 20", fillStyle0: 1, fillStyle1: 3},
@@ -7470,14 +6443,12 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!20 420|3020 420", fillStyle0: 4, fillStyle1: 2},
 													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 3}
 												],
-												fillStyleCount: 4,
 												fills: [
 													{index: 1, value: {color: "#C9CBCC", type: "SolidColor"}},
 													{index: 2, value: {color: "#D3D5D6", type: "SolidColor"}},
 													{index: 3, value: {color: "#6D6F70", type: "SolidColor"}},
 													{index: 4, value: {color: "#FFFFFF", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7507,19 +6478,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 11,
 												edges: [
 													{edges: "!3020 440|3040 440!3040 440|3040 0!3040 0|3020 0", fillStyle0: 1},
 													{edges: "!3020 20|3020 420", fillStyle0: 1, fillStyle1: 4},
@@ -7533,14 +6499,12 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 2},
 													{edges: "!3020 420|20 420", fillStyle0: 3, fillStyle1: 4}
 												],
-												fillStyleCount: 4,
 												fills: [
 													{index: 1, value: {alpha: 0.298039215686275, color: "#C9CBCC", type: "SolidColor"}},
 													{index: 2, value: {alpha: 0.298039215686275, color: "#6D6F70", type: "SolidColor"}},
 													{index: 3, value: {alpha: 0.298039215686275, color: "#D3D5D6", type: "SolidColor"}},
 													{index: 4, value: {alpha: 0.298039215686275, color: "#FFFFFF", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7570,19 +6534,14 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 440.0, left: 0.0, right: 3040.0, top: 0.0},
-												edgeCount: 12,
 												edges: [
 													{edges: "!3020 20|3020 0", fillStyle0: 2, fillStyle1: 1},
 													{edges: "!3020 420|3020 20", fillStyle0: 4, fillStyle1: 1},
@@ -7597,14 +6556,12 @@ final class AssetCatalogSymbolsComponents {
 													{edges: "!3020 20|20 20", fillStyle0: 4, fillStyle1: 2},
 													{edges: "!20 440|3020 440", fillStyle0: 3}
 												],
-												fillStyleCount: 4,
 												fills: [
 													{index: 1, value: {color: "#C9CBCC", type: "SolidColor"}},
 													{index: 2, value: {color: "#6D6F70", type: "SolidColor"}},
 													{index: 3, value: {color: "#D3D5D6", type: "SolidColor"}},
 													{index: 4, value: {color: "#FFFFFF", type: "SolidColor"}}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -7630,16 +6587,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FFFF4F",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 4,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/ListSkins/List_skin",
@@ -7660,12 +6613,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFFFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 5,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 20.0,
@@ -7725,29 +6675,19 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25, d: 4.54545593261719, tx: 0.1}, transformationPoint: {x: 50.0, y: 11.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FF4FFF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FF4FFF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "List"
 					}
@@ -7763,16 +6703,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 8,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Components/Component Assets/SliderSkins/SliderThumb_upSkin", matrix: {tx: 103.5, ty: 121.5}, transformationPoint: {x: 6.5, y: 6.5}, type: "DOMSymbolInstance"},
 											{libraryItemName: "Components/Component Assets/SliderSkins/SliderThumb_overSkin", matrix: {tx: 103.5, ty: 157.75}, transformationPoint: {x: 6.5, y: 6.5}, type: "DOMSymbolInstance"},
@@ -7792,12 +6728,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFFFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 2,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 20.0,
@@ -7833,28 +6766,18 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {d: 0.136367797851562}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								name: "avatar"
 							},
-							{
-								color: "#FF4FFF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FF4FFF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "Slider"
 					}
@@ -7870,16 +6793,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 4,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/TextAreaSkins/TextArea_disabledSkin",
@@ -7906,12 +6825,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 5,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 20.0,
@@ -7972,29 +6888,19 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25, d: 2.0}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FFFF4F",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FFFF4F", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "TextArea"
 					}
@@ -8010,16 +6916,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 3,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Components/Component Assets/TextInputSkins/TextInput_disabledSkin", matrix: {tx: 15.45, ty: 65.65}, transformationPoint: {x: 76.0, y: 11.0}, type: "DOMSymbolInstance"},
 											{libraryItemName: "Components/Component Assets/TextInputSkins/TextInput_upSkin", matrix: {tx: 15.45, ty: 18.2}, transformationPoint: {x: 76.0, y: 11.0}, type: "DOMSymbolInstance"},
@@ -8034,12 +6936,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 4,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 20.0,
@@ -8092,29 +6991,15 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 1.25}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#FFFF4F",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#FFFF4F", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "TextInput"
 					}
@@ -8130,16 +7015,12 @@ final class AssetCatalogSymbolsComponents {
 					{
 						frameCount: 2,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#808080",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 19,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Components/Component Assets/Shared/focusRectSkin", matrix: {tx: 66.8, ty: 223.0}, transformationPoint: {x: 41.05, y: 11.0}, type: "DOMSymbolInstance"},
 											{libraryItemName: "Components/Component Assets/ScrollBarSkins/ScrollTrack_skin", matrix: {tx: 285.0, ty: 18.0}, transformationPoint: {x: 7.5, y: 74.0}, type: "DOMSymbolInstance"},
@@ -8170,12 +7051,9 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 2,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
-										elementCount: 6,
-										elementTypes: ["DOMRectangleObject", "DOMStaticText"],
 										elements: [
 											{
 												bottomLeftRadius: 10.0,
@@ -8243,29 +7121,19 @@ final class AssetCatalogSymbolsComponents {
 							},
 							{
 								color: "#4FFF4F",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Components/Component Assets/_private/Component_avatar", matrix: {a: 0.1875, d: 4.54545593261719}, transformationPoint: {x: 40.0, y: 11.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728}
+									{index: 1, keyMode: 9728}
 								],
 								index: 2,
 								locked: true,
 								name: "avatar"
 							},
-							{
-								color: "#4F80FF",
-								frameCount: 2,
-								frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 1, elementTypes: ["DOMCompiledClipInstance"], index: 1, keyMode: 9728}],
-								index: 3,
-								locked: true,
-								name: "ComponentShim"
-							}
+							{color: "#4F80FF", frames: [{index: 0, keyMode: 9728}, {index: 1, keyMode: 9728}], index: 3, locked: true, name: "ComponentShim"}
 						],
 						name: "UIScrollBar"
 					}

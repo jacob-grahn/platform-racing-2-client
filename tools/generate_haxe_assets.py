@@ -38,6 +38,11 @@ BAKED_SYMBOL_NAMES = {
 def prune_display_element(element):
     pruned = {}
     for key, value in element.items():
+        # These are summaries of the arrays emitted below. The runtime consumes
+        # the arrays directly, so serializing the counts only bloats every
+        # generated display element.
+        if key in ("fillStyleCount", "strokeStyleCount", "edgeCount"):
+            continue
         if key == "children":
             pruned[key] = [prune_display_element(child) for child in value]
         else:
@@ -47,6 +52,10 @@ def prune_display_element(element):
 
 def prune_frame(frame):
     pruned = dict(frame)
+    # `elements` is authoritative; these XFL inventory summaries are not used
+    # by the runtime.
+    pruned.pop("elementCount", None)
+    pruned.pop("elementTypes", None)
     if "elements" in pruned:
         pruned["elements"] = [prune_display_element(element) for element in pruned["elements"]]
     return pruned
@@ -54,12 +63,16 @@ def prune_frame(frame):
 
 def prune_layer(layer):
     pruned = dict(layer)
+    # The runtime iterates `frames` and does not consume this summary count.
+    pruned.pop("frameCount", None)
     pruned["frames"] = [prune_frame(frame) for frame in layer.get("frames", [])]
     return pruned
 
 
 def prune_timeline(timeline):
     pruned = dict(timeline)
+    # The runtime iterates `layers` and does not consume this summary count.
+    pruned.pop("layerCount", None)
     pruned["layers"] = [prune_layer(layer) for layer in timeline.get("layers", [])]
     return pruned
 
@@ -154,11 +167,6 @@ def write_file(path, content):
 
 def schema_source():
     return GENERATED_NOTICE + """package pr2.generated.assets;
-
-typedef StageDef = {
-\t@:optional var width:Int;
-\t@:optional var height:Int;
-}
 
 typedef MatrixDef = {
 \t@:optional var a:Float;
@@ -281,8 +289,8 @@ typedef FrameDef = {
 \t@:optional var inPoint44:Int;
 \t@:optional var outPoint44:Int;
 \t@:optional var soundEnvelope:Array<SoundEnvelopePointDef>;
-\tvar elementCount:Int;
-\tvar elementTypes:Array<String>;
+\t@:optional var elementCount:Int;
+\t@:optional var elementTypes:Array<String>;
 \t@:optional var elements:Array<DisplayElementDef>;
 }
 
@@ -300,7 +308,7 @@ typedef LayerDef = {
 \t@:optional var locked:Bool;
 \t@:optional var layerType:String;
 \t@:optional var parentLayerIndex:Int;
-\tvar frameCount:Int;
+\t@:optional var frameCount:Int;
 \tvar frames:Array<FrameDef>;
 }
 
@@ -313,25 +321,10 @@ typedef LabelDef = {
 
 typedef TimelineDef = {
 \t@:optional var name:String;
-\tvar layerCount:Int;
+\t@:optional var layerCount:Int;
 \tvar frameCount:Int;
 \tvar labels:Array<LabelDef>;
 \tvar layers:Array<LayerDef>;
-}
-
-typedef MediaAssetDef = {
-\tvar type:String;
-\t@:optional var name:String;
-\t@:optional var href:String;
-\t@:optional var itemID:String;
-\t@:optional var linkageClassName:String;
-\t@:optional var linkageIdentifier:String;
-\t@:optional var bitmapDataHRef:String;
-\t@:optional var soundDataHRef:String;
-\t@:optional var frameRight:Int;
-\t@:optional var frameBottom:Int;
-\t@:optional var format:String;
-\t@:optional var sampleCount:Int;
 }
 
 typedef SymbolAssetDef = {
@@ -348,30 +341,6 @@ typedef SymbolAssetDef = {
 \t@:optional var scaleGridBottom:Float;
 \tvar timelines:Array<TimelineDef>;
 }
-"""
-
-
-def constants_source(metadata):
-    counts = metadata["counts"]
-    document = metadata["document"]
-    stage = metadata["stage"]
-    return GENERATED_NOTICE + f"""package pr2.generated.assets;
-
-final class AssetConstants {{
-\tpublic static inline var XFL_DIR:String = {haxe_string(metadata["xflDir"])};
-\tpublic static inline var STAGE_WIDTH:Int = {stage["width"]};
-\tpublic static inline var STAGE_HEIGHT:Int = {stage["height"]};
-\tpublic static inline var FRAME_RATE:Int = {document["frameRate"]};
-\tpublic static inline var SYMBOL_COUNT:Int = {counts["symbolFiles"]};
-\tpublic static inline var MEDIA_COUNT:Int = {counts["media"]};
-\tpublic static inline var LINKAGE_CLASS_COUNT:Int = {counts["linkageClasses"]};
-\tpublic static inline var TIMELINE_LAYER_COUNT:Int = {counts["timelineLayers"]};
-\tpublic static inline var TIMELINE_FRAME_COUNT:Int = {counts["timelineFrames"]};
-\tpublic static inline var TIMELINE_LABEL_COUNT:Int = {counts["timelineLabels"]};
-\tpublic static inline var MAX_TIMELINE_FRAMES:Int = {counts["maxTimelineFrames"]};
-
-\tprivate function new() {{}}
-}}
 """
 
 
@@ -408,9 +377,7 @@ final class """ + class_name + """ {
 
 
 def catalog_sources(metadata):
-    media = metadata["media"]
     symbols = [prune_symbol(symbol) for symbol in metadata["symbols"]]
-    linkage_classes = metadata["linkageClasses"]
 
     by_category = {}
     for symbol in symbols:
@@ -432,20 +399,11 @@ def catalog_sources(metadata):
 
     sources["AssetCatalog.hx"] = GENERATED_NOTICE + """package pr2.generated.assets;
 
-import pr2.generated.assets.AssetTypes.MediaAssetDef;
 import pr2.generated.assets.AssetTypes.SymbolAssetDef;
 
 final class AssetCatalog {
-\tpublic static function media():Array<MediaAssetDef> {
-\t\treturn """ + haxe_literal(media, 2) + """;
-\t}
-
 \tpublic static function symbols():Array<SymbolAssetDef> {
 \t\treturn """ + symbols_body + """;
-\t}
-
-\tpublic static function linkageClasses():Array<String> {
-\t\treturn """ + haxe_literal(linkage_classes, 2) + """;
 \t}
 
 \tprivate function new() {}
@@ -471,7 +429,6 @@ def main(argv=None):
         return 1
 
     write_file(os.path.join(args.out_dir, "AssetTypes.hx"), schema_source())
-    write_file(os.path.join(args.out_dir, "AssetConstants.hx"), constants_source(metadata))
     for filename, content in catalog_sources(metadata).items():
         write_file(os.path.join(args.out_dir, filename), content)
 

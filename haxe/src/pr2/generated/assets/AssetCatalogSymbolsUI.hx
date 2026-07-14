@@ -16,15 +16,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#C65592",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 6.3,
@@ -44,11 +40,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B4D39E",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 26.75, centerPoint3DY: 26.7, libraryItemName: "MovieClips/Symbol 1052", matrix: {a: 0.785232543945312, d: 0.785232543945312, tx: -34.0, ty: -34.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -73,30 +66,19 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#52EAC0",
-								frameCount: 1,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 15.0, centerPoint3DY: 10.05, libraryItemName: "MovieClips/Symbol 110", matrix: {tx: -1.5, ty: 0.05}, name: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{centerPoint3DX: 15.0, centerPoint3DY: 10.05, libraryItemName: "MovieClips/Symbol 110", matrix: {tx: -1.5, ty: 0.05}, name: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#EBD099",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 36.0, centerPoint3DY: 32.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 0.56982421875, d: 0.349990844726562, tx: -14.0, ty: -18.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -121,15 +103,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#D57A63",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 52.0, centerPoint3DY: 52.0, libraryItemName: "MovieClips/Symbol 1073", matrix: {d: 0.05999755859375, tx: 2.0, ty: 2.0}, name: "bar", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -140,18 +118,12 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#33D8CB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 180.0, left: 0.0, right: 4000.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!60 0|3940 0!3940 0[4000 0 4000 60!4000 60|4000 120!4000 120[4000 180 3940 180!3940 180|60 180!60 180[0 180 0 120!0 120|0 60!0 60[0 0 60 0", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#FFFFFF", type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -179,35 +151,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#A0B4B5",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 27.6, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 1068", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 27.6, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 1068", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#7D3CFF",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 27.6, centerPoint3DY: 5.35, libraryItemName: "MovieClips/Symbol 1065", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 27.6, centerPoint3DY: 5.35, libraryItemName: "MovieClips/Symbol 1065", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								layerType: "mask",
 								locked: true,
@@ -215,16 +168,7 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9FFF6D",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 27.6, centerPoint3DY: 5.5, libraryItemName: "MovieClips/Symbol 1068", name: "bar", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 27.6, centerPoint3DY: 5.5, libraryItemName: "MovieClips/Symbol 1068", name: "bar", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								locked: true,
 								name: "Layer 3",
@@ -232,24 +176,18 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9217FD",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 220.0, left: 0.0, right: 1104.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!1104 220|0 220!0 220|0 0!0 0|1104 0!1104 0|1104 220", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [
 													{
 														index: 1,
 														value: {entries: [{color: "#8C8C8C", ratio: 0.0}, {color: "#474E29", ratio: 1.0}], matrix: {a: 0.0, b: 0.0067138671875, c: -0.03369140625, d: 0.0, tx: 27.6, ty: 5.5}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -278,15 +216,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#42CABA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.5,
@@ -307,11 +241,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E16EA2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -345,15 +276,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Buttons/ArrowButton", matrix: {a: -1.0, d: -1.0, tx: -8.7, ty: 23.0}, name: "decBtn", symbolType: "button", type: "DOMSymbolInstance"},
 											{libraryItemName: "Buttons/ArrowButton", matrix: {tx: 133.3, ty: 7.0}, name: "incBtn", symbolType: "button", type: "DOMSymbolInstance"}
@@ -367,11 +294,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D45EA6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.5,
@@ -392,11 +316,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AEDECF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -417,11 +338,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#17B8B5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 57.0,
@@ -466,15 +384,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#67F960",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -492,25 +406,10 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "Layer 1"
 							},
-							{
-								color: "#E98173",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 72", name: "introHolder", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 1,
-								name: "Layer 2"
-							},
+							{color: "#E98173", frames: [{elements: [{libraryItemName: "MovieClips/Symbol 72", name: "introHolder", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
 							{
 								color: "#FD714F",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 5.5, d: 4.0, tx: 275.0, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 5.5, d: 4.0, tx: 275.0, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "Layer 3"
 							}
@@ -530,16 +429,12 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 249,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#B562FD",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 249,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 625.55, centerPoint3DY: 492.2, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 80", matrix: {tx: 124.95, ty: 161.0}, name: "logo", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -550,12 +445,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E89962",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 249,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 5.5, d: 4.0, tx: 275.0, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -580,22 +472,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 153,
 						labels: [],
-						layerCount: 36,
 						layers: [
 							{
 								color: "#9437B7",
-								frameCount: 8,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 400.9, centerPoint3DY: 294.5, libraryItemName: "MovieClips/Symbol 27", matrix: {a: 0.999908447265625, tx: 280.4, ty: 177.75}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 401.45,
@@ -610,8 +496,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 402.05,
@@ -626,8 +510,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 402.6,
@@ -642,8 +524,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 403.2,
@@ -658,8 +538,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 403.75,
@@ -674,8 +552,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 404.35,
@@ -691,8 +567,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 404.9,
@@ -712,12 +586,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#72DCFF",
-								frameCount: 77,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.9,
@@ -732,8 +603,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.9,
@@ -748,8 +617,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.9,
@@ -764,8 +631,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.9,
@@ -780,8 +645,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -796,8 +659,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -812,8 +673,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -828,8 +687,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -844,8 +701,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -860,8 +715,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -876,8 +729,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -892,8 +743,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.85,
@@ -908,8 +757,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -924,8 +771,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -940,8 +785,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -956,8 +799,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -972,8 +813,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -988,8 +827,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -1004,8 +841,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.8,
@@ -1020,8 +855,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1036,8 +869,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1052,8 +883,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1068,8 +897,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1084,8 +911,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1100,8 +925,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1116,8 +939,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1132,8 +953,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.75,
@@ -1148,8 +967,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1164,8 +981,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1180,8 +995,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1196,8 +1009,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1212,8 +1023,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1228,8 +1037,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1244,8 +1051,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.7,
@@ -1260,8 +1065,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1276,8 +1079,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1292,8 +1093,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1308,8 +1107,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1324,8 +1121,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1340,8 +1135,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1356,8 +1149,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1372,8 +1163,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.65,
@@ -1388,8 +1177,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1404,8 +1191,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1420,8 +1205,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1436,8 +1219,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1452,8 +1233,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1468,8 +1247,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1484,8 +1261,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1500,8 +1275,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.6,
@@ -1516,8 +1289,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1532,8 +1303,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1548,8 +1317,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1564,8 +1331,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1580,8 +1345,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1596,8 +1359,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1612,8 +1373,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.55,
@@ -1628,8 +1387,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1644,8 +1401,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1660,8 +1415,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1676,8 +1429,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1692,8 +1443,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1708,8 +1457,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1724,8 +1471,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1740,8 +1485,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.5,
@@ -1756,8 +1499,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1772,8 +1513,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1788,8 +1527,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1804,8 +1541,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1820,8 +1555,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1836,8 +1569,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1852,8 +1583,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1868,8 +1597,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.45,
@@ -1884,8 +1611,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.4,
@@ -1900,8 +1625,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.4,
@@ -1916,8 +1639,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 347.4,
@@ -1937,13 +1658,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6788CD",
-								frameCount: 2,
 								frames: [
-									{duration: 37, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 37, index: 0, keyMode: 9728},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 37,
 										keyMode: 9728
@@ -1954,13 +1672,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2ABBDE",
-								frameCount: 9,
 								frames: [
-									{duration: 37, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 37, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.25,
@@ -1975,8 +1690,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.6,
@@ -1991,8 +1704,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 315.75,
@@ -2007,8 +1718,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 316.3,
@@ -2023,8 +1732,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.0,
@@ -2039,8 +1746,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.35,
@@ -2055,8 +1760,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 315.35,
@@ -2071,8 +1774,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 315.75,
@@ -2091,13 +1792,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6E7EAD",
-								frameCount: 7,
 								frames: [
-									{duration: 41, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 41, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 326.6,
@@ -2112,8 +1810,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 327.15,
@@ -2128,8 +1824,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 317.45,
@@ -2144,8 +1838,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 320.95,
@@ -2160,8 +1852,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 323.55,
@@ -2176,8 +1866,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 326.6,
@@ -2196,21 +1884,16 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F26FD3",
-								frameCount: 9,
 								frames: [
-									{duration: 29, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 29, index: 0, keyMode: 9728},
 									{
 										duration: 8,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 29,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 323.4,
@@ -2225,8 +1908,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 323.55,
@@ -2241,8 +1922,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 266.2,
@@ -2257,8 +1936,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 266.2,
@@ -2273,8 +1950,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 267.6,
@@ -2289,8 +1964,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 269.0,
@@ -2305,8 +1978,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 269.95,
@@ -2325,13 +1996,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D0DE02",
-								frameCount: 11,
 								frames: [
-									{duration: 29, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 29, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 298.35,
@@ -2346,8 +2014,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 302.1,
@@ -2362,8 +2028,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 306.85,
@@ -2378,8 +2042,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 311.15,
@@ -2394,8 +2056,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 278.55,
@@ -2410,8 +2070,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.85,
@@ -2426,8 +2084,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.6,
@@ -2442,8 +2098,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.05,
@@ -2458,8 +2112,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.35,
@@ -2474,8 +2126,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 269.45,
@@ -2494,21 +2144,16 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C6F528",
-								frameCount: 15,
 								frames: [
-									{duration: 23, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 23, index: 0, keyMode: 9728},
 									{
 										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 23,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 306.55,
@@ -2523,8 +2168,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 310.3,
@@ -2539,8 +2182,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 315.05,
@@ -2555,8 +2196,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 318.3,
@@ -2571,8 +2210,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 253.35,
@@ -2587,8 +2224,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 251.6,
@@ -2603,8 +2238,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 246.2,
@@ -2619,8 +2252,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 245.95,
@@ -2635,8 +2266,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 245.2,
@@ -2651,8 +2280,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 247.3,
@@ -2667,8 +2294,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 248.85,
@@ -2683,8 +2308,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 249.9,
@@ -2699,8 +2322,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 53,
 										keyMode: 9728
@@ -2711,13 +2332,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#81DFB5",
-								frameCount: 16,
 								frames: [
-									{duration: 23, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 23, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 295.45,
@@ -2732,8 +2350,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 297.05,
@@ -2748,8 +2364,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 296.6,
@@ -2764,8 +2378,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 283.05,
@@ -2780,8 +2392,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 280.85,
@@ -2796,8 +2406,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 279.55,
@@ -2812,8 +2420,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 279.5,
@@ -2828,8 +2434,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 278.2,
@@ -2844,8 +2448,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 281.05,
@@ -2860,8 +2462,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 287.75,
@@ -2876,8 +2476,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 289.8,
@@ -2892,8 +2490,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 292.05,
@@ -2908,8 +2504,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 291.05,
@@ -2924,8 +2518,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 288.95,
@@ -2940,8 +2532,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.5,
@@ -2960,13 +2550,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A59B65",
-								frameCount: 3,
 								frames: [
-									{duration: 53, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 53, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 322.3,
@@ -2981,8 +2568,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 8,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 55,
 										keyMode: 9728
@@ -2993,21 +2578,16 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#09A0F2",
-								frameCount: 20,
 								frames: [
-									{duration: 19, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 19, index: 0, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 19,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 307.35,
@@ -3022,8 +2602,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 303.85,
@@ -3038,8 +2616,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 303.7,
@@ -3054,8 +2630,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 271.7,
@@ -3070,8 +2644,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.25,
@@ -3086,8 +2658,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 262.1,
@@ -3102,8 +2672,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 261.75,
@@ -3118,8 +2686,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 258.75,
@@ -3134,8 +2700,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 261.55,
@@ -3150,8 +2714,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.55,
@@ -3166,8 +2728,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 271.7,
@@ -3182,8 +2742,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 275.0,
@@ -3198,8 +2756,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 274.0,
@@ -3214,8 +2770,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 272.5,
@@ -3230,8 +2784,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.65,
@@ -3246,8 +2798,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 319.9,
@@ -3262,8 +2812,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 319.25,
@@ -3278,8 +2826,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 319.9,
@@ -3298,13 +2844,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D25A5A",
-								frameCount: 20,
 								frames: [
-									{duration: 19, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 19, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 257.7,
@@ -3319,8 +2862,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 285.9,
@@ -3335,8 +2876,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 285.8,
@@ -3351,8 +2890,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 287.6,
@@ -3367,8 +2904,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 285.6,
@@ -3383,8 +2918,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 259.85,
@@ -3399,8 +2932,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 261.5,
@@ -3415,8 +2946,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.55,
@@ -3431,8 +2960,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.2,
@@ -3447,8 +2974,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 269.25,
@@ -3463,8 +2988,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 272.2,
@@ -3479,8 +3002,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 272.95,
@@ -3495,8 +3016,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 275.65,
@@ -3511,8 +3030,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 278.75,
@@ -3527,8 +3044,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 277.75,
@@ -3543,8 +3058,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 276.2,
@@ -3559,8 +3072,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 269.15,
@@ -3573,11 +3084,9 @@ final class AssetCatalogSymbolsUI {
 										index: 53,
 										keyMode: 9728
 									},
-									{duration: 8, elementCount: 0, elementTypes: [], index: 55, keyMode: 9728},
+									{duration: 8, index: 55, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 63,
 										keyMode: 9728
@@ -3588,13 +3097,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F54BF5",
-								frameCount: 7,
 								frames: [
-									{duration: 53, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 53, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 250.6,
@@ -3609,8 +3115,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.7,
@@ -3625,8 +3129,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.2,
@@ -3641,8 +3143,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.7,
@@ -3657,8 +3157,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 319.9,
@@ -3673,8 +3171,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 12,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 67,
 										keyMode: 9728
@@ -3685,13 +3181,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E6BA98",
-								frameCount: 5,
 								frames: [
-									{duration: 55, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 55, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 271.2,
@@ -3706,8 +3199,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.4,
@@ -3722,8 +3213,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.7,
@@ -3738,8 +3227,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 291.6,
@@ -3758,13 +3245,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#CEC8B2",
-								frameCount: 2,
 								frames: [
-									{duration: 67, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 67, index: 0, keyMode: 9728},
 									{
 										duration: 12,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 307.35,
@@ -3783,13 +3267,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D5C17F",
-								frameCount: 2,
 								frames: [
-									{duration: 67, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 67, index: 0, keyMode: 9728},
 									{
 										duration: 12,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 310.3,
@@ -3808,13 +3289,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#99E2A2",
-								frameCount: 3,
 								frames: [
-									{duration: 63, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 63, index: 0, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 307.35,
@@ -3829,8 +3307,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 12,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 299.65,
@@ -3849,29 +3325,22 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DA89AB",
-								frameCount: 23,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 15,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 240.2, centerPoint3DY: 248.15, libraryItemName: "MovieClips/Symbol 38", matrix: {a: 0.63775634765625, d: 0.819717407226562, tx: 225.0, ty: 228.05}, type: "DOMSymbolInstance"}],
 										index: 19,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 275.65,
@@ -3886,8 +3355,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 277.6,
@@ -3902,8 +3369,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 279.4,
@@ -3918,8 +3383,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 276.3,
@@ -3934,8 +3397,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 242.05,
@@ -3950,8 +3411,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 242.9,
@@ -3966,8 +3425,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 249.2,
@@ -3982,8 +3439,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 250.95,
@@ -3998,8 +3453,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 256.95,
@@ -4014,8 +3467,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 260.25,
@@ -4030,8 +3481,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 260.1,
@@ -4046,8 +3495,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.35,
@@ -4062,8 +3509,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 266.95,
@@ -4078,8 +3523,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.95,
@@ -4094,8 +3537,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.7,
@@ -4110,8 +3551,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 272.5,
@@ -4126,8 +3565,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 254.35,
@@ -4142,8 +3579,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 242.2,
@@ -4158,8 +3593,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 236.7,
@@ -4174,8 +3607,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.7,
@@ -4194,13 +3625,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEB681",
-								frameCount: 24,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 284.1,
@@ -4215,8 +3643,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 283.95,
@@ -4231,8 +3657,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 283.3,
@@ -4247,8 +3671,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.65,
@@ -4263,8 +3685,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.8,
@@ -4279,8 +3699,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 267.35,
@@ -4295,8 +3713,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.55,
@@ -4311,8 +3727,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 295.8,
@@ -4327,8 +3741,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 297.25,
@@ -4343,8 +3755,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 302.9,
@@ -4359,8 +3769,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 305.8,
@@ -4375,8 +3783,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 305.8,
@@ -4391,8 +3797,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 300.8,
@@ -4407,8 +3811,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 301.55,
@@ -4423,8 +3825,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 299.8,
@@ -4439,8 +3839,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 296.3,
@@ -4455,8 +3853,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 296.35,
@@ -4471,8 +3867,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 293.1,
@@ -4487,8 +3881,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 294.75,
@@ -4503,8 +3895,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 294.9,
@@ -4519,8 +3909,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 293.65,
@@ -4535,8 +3923,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 291.6,
@@ -4551,8 +3937,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.7,
@@ -4571,13 +3955,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#50CACE",
-								frameCount: 2,
 								frames: [
-									{duration: 63, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 63, index: 0, keyMode: 9728},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 236.7,
@@ -4596,13 +3977,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EECCB6",
-								frameCount: 23,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 271.45,
@@ -4617,8 +3995,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.4,
@@ -4633,8 +4009,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.65,
@@ -4649,8 +4023,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 256.9,
@@ -4665,8 +4037,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 253.25,
@@ -4681,8 +4051,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 249.75,
@@ -4697,8 +4065,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 245.1,
@@ -4713,8 +4079,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 304.25,
@@ -4729,8 +4093,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 311.15,
@@ -4745,8 +4107,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 320.35,
@@ -4761,8 +4121,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 323.0,
@@ -4777,8 +4135,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 319.85,
@@ -4793,8 +4149,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.85,
@@ -4809,8 +4163,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 315.6,
@@ -4825,8 +4177,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.35,
@@ -4841,8 +4191,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 309.75,
@@ -4857,8 +4205,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 308.85,
@@ -4873,8 +4219,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 306.5,
@@ -4889,8 +4233,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 305.65,
@@ -4905,8 +4247,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 304.4,
@@ -4921,8 +4261,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 307.35,
@@ -4937,8 +4275,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 319.9,
@@ -4957,13 +4293,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F48A15",
-								frameCount: 22,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 275.15,
@@ -4978,8 +4311,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 273.9,
@@ -4994,8 +4325,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 272.4,
@@ -5010,8 +4339,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 254.65,
@@ -5026,8 +4353,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 255.65,
@@ -5042,8 +4367,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 255.4,
@@ -5058,8 +4381,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 253.55,
@@ -5074,8 +4395,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 256.55,
@@ -5090,8 +4409,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 258.05,
@@ -5106,8 +4423,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 262.2,
@@ -5122,8 +4437,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.45,
@@ -5138,8 +4451,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.05,
@@ -5154,8 +4465,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 266.05,
@@ -5170,8 +4479,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.0,
@@ -5186,8 +4493,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.35,
@@ -5202,8 +4507,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.1,
@@ -5218,8 +4521,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 260.85,
@@ -5234,8 +4535,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.8,
@@ -5250,8 +4549,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.4,
@@ -5266,8 +4563,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.3,
@@ -5282,8 +4577,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 20,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.4,
@@ -5302,13 +4595,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#10CBE5",
-								frameCount: 23,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.75,
@@ -5323,8 +4613,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.15,
@@ -5339,8 +4627,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 261.0,
@@ -5355,8 +4641,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 235.4,
@@ -5371,8 +4655,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 231.6,
@@ -5387,16 +4669,12 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 231.45, centerPoint3DY: 238.9, libraryItemName: "MovieClips/Symbol 38", matrix: {a: 0.722381591796875, d: 0.819717407226562, tx: 216.25, ty: 218.8}, type: "DOMSymbolInstance"}],
 										index: 25,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 229.6,
@@ -5411,8 +4689,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 225.7,
@@ -5427,8 +4703,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 227.2,
@@ -5443,8 +4717,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 227.45,
@@ -5459,8 +4731,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 229.7,
@@ -5475,8 +4745,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 232.7,
@@ -5491,8 +4759,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 235.15,
@@ -5507,8 +4773,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 238.2,
@@ -5523,8 +4787,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 239.5,
@@ -5539,8 +4801,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 241.0,
@@ -5555,8 +4815,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 234.1,
@@ -5571,8 +4829,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 237.15,
@@ -5587,8 +4843,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 237.5,
@@ -5603,8 +4857,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 236.25,
@@ -5619,8 +4871,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 237.0,
@@ -5635,8 +4885,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 20,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 237.5,
@@ -5655,13 +4903,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F66A8A",
-								frameCount: 14,
 								frames: [
-									{duration: 29, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 29, index: 0, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 246.95,
@@ -5676,8 +4921,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 249.0,
@@ -5692,8 +4935,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 253.25,
@@ -5708,8 +4949,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 257.25,
@@ -5724,8 +4963,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 256.75,
@@ -5740,8 +4977,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 259.1,
@@ -5756,8 +4991,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 258.7,
@@ -5770,11 +5003,9 @@ final class AssetCatalogSymbolsUI {
 										index: 43,
 										keyMode: 9728
 									},
-									{duration: 10, elementCount: 0, elementTypes: [], index: 45, keyMode: 9728},
+									{duration: 10, index: 45, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 258.7,
@@ -5789,8 +5020,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 252.4,
@@ -5805,8 +5034,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 251.3,
@@ -5821,8 +5048,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 249.2,
@@ -5837,8 +5062,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 247.55,
@@ -5857,13 +5080,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#70CEB3",
-								frameCount: 14,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.0,
@@ -5878,8 +5098,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 262.5,
@@ -5894,8 +5112,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 12,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 262.5,
@@ -5910,8 +5126,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.2,
@@ -5926,8 +5140,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.7,
@@ -5942,8 +5154,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.9,
@@ -5958,8 +5168,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.7,
@@ -5972,11 +5180,9 @@ final class AssetCatalogSymbolsUI {
 										index: 43,
 										keyMode: 9728
 									},
-									{duration: 10, elementCount: 0, elementTypes: [], index: 45, keyMode: 9728},
+									{duration: 10, index: 45, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.65,
@@ -5991,8 +5197,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.15,
@@ -6007,8 +5211,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 261.95,
@@ -6023,8 +5225,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.75,
@@ -6039,8 +5239,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 16,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 267.2,
@@ -6059,13 +5257,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E40ECB",
-								frameCount: 12,
 								frames: [
-									{duration: 21, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 21, index: 0, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 293.6,
@@ -6080,8 +5275,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 296.6,
@@ -6096,8 +5289,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 296.1,
@@ -6112,8 +5303,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 299.85,
@@ -6128,8 +5317,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 305.2,
@@ -6144,8 +5331,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 306.45,
@@ -6160,8 +5345,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 312.2,
@@ -6176,8 +5359,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 317.7,
@@ -6192,8 +5373,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 314.7,
@@ -6208,8 +5387,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.95,
@@ -6224,8 +5401,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 20,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 312.2,
@@ -6244,13 +5419,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B8C92A",
-								frameCount: 11,
 								frames: [
-									{duration: 21, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 21, index: 0, keyMode: 9728},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 292.2,
@@ -6265,8 +5437,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 292.7,
@@ -6281,8 +5451,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 291.2,
@@ -6297,8 +5465,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 291.45,
@@ -6313,8 +5479,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 295.8,
@@ -6329,8 +5493,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 299.3,
@@ -6345,8 +5507,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 299.3,
@@ -6361,8 +5521,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 296.3,
@@ -6377,8 +5535,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 295.25,
@@ -6393,8 +5549,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 20,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 293.8,
@@ -6413,13 +5567,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FB1081",
-								frameCount: 22,
 								frames: [
-									{duration: 15, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 15, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 282.75,
@@ -6434,8 +5585,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 282.25,
@@ -6450,8 +5599,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 282.0,
@@ -6466,8 +5613,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 282.25,
@@ -6482,8 +5627,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 282.25,
@@ -6498,8 +5641,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 283.75,
@@ -6514,8 +5655,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 281.75,
@@ -6530,8 +5669,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 281.25,
@@ -6546,8 +5683,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 281.5,
@@ -6562,8 +5697,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 283.85,
@@ -6578,8 +5711,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 285.35,
@@ -6594,8 +5725,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 287.35,
@@ -6610,8 +5739,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 288.0,
@@ -6626,8 +5753,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 288.75,
@@ -6642,8 +5767,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 288.8,
@@ -6658,8 +5781,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 287.3,
@@ -6674,8 +5795,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 285.8,
@@ -6690,8 +5809,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 286.7,
@@ -6706,8 +5823,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 286.8,
@@ -6722,8 +5837,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 284.9,
@@ -6738,8 +5851,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 20,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 283.85,
@@ -6758,12 +5869,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D6EF24",
-								frameCount: 10,
 								frames: [
-									{duration: 127, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 127, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 400.9, centerPoint3DY: 294.5, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 27", matrix: {a: 0.999908447265625, tx: 280.4, ty: 177.75}, type: "DOMSymbolInstance"}
 										],
@@ -6771,8 +5879,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 401.4,
@@ -6787,8 +5893,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 401.9,
@@ -6803,8 +5907,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 402.4,
@@ -6819,8 +5921,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 402.9, centerPoint3DY: 293.5, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 27", matrix: {a: 0.999908447265625, tx: 282.4, ty: 176.75}, type: "DOMSymbolInstance"}
 										],
@@ -6828,8 +5928,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 403.4,
@@ -6844,8 +5942,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 403.9,
@@ -6860,8 +5956,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 404.4,
@@ -6877,8 +5971,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 18,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 404.9, centerPoint3DY: 292.5, libraryItemName: "MovieClips/Symbol 27", matrix: {a: 0.999908447265625, tx: 284.4, ty: 175.75}, type: "DOMSymbolInstance"}],
 										index: 135,
 										keyMode: 9728
@@ -6889,13 +5981,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A498AD",
-								frameCount: 10,
 								frames: [
-									{duration: 79, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 79, index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												color: {blueMultiplier: 0.44921875, greenMultiplier: 0.44921875, redMultiplier: 0.44921875, redOffset: 112.0},
@@ -6909,10 +5998,8 @@ final class AssetCatalogSymbolsUI {
 										index: 79,
 										keyMode: 9728
 									},
-									{duration: 2, elementCount: 0, elementTypes: [], index: 81, keyMode: 9728},
+									{duration: 2, index: 81, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 340.0, centerPoint3DY: 281.4, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 52", matrix: {a: 0.999908447265625, tx: 268.95, ty: 274.1}, type: "DOMSymbolInstance"}
 										],
@@ -6920,8 +6007,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 340.0,
@@ -6936,8 +6021,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 340.0,
@@ -6952,8 +6035,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 340.0, centerPoint3DY: 281.4, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 52", matrix: {a: 0.999908447265625, tx: 268.95, ty: 274.1}, type: "DOMSymbolInstance"}
 										],
@@ -6961,8 +6042,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 340.0,
@@ -6977,8 +6056,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 340.0,
@@ -6994,8 +6071,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 64,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 340.0, centerPoint3DY: 281.4, libraryItemName: "MovieClips/Symbol 52", matrix: {a: 0.999908447265625, tx: 268.95, ty: 274.1}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
@@ -7006,12 +6081,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EF95AE",
-								frameCount: 6,
 								frames: [
-									{duration: 79, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 79, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 349.95,
@@ -7026,8 +6098,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 349.95,
@@ -7042,8 +6112,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 349.95,
@@ -7058,8 +6126,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 349.95,
@@ -7075,8 +6141,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 70,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 349.95, centerPoint3DY: 266.5, libraryItemName: "MovieClips/Symbol 49", matrix: {a: 0.999908447265625, tx: 268.95, ty: 178.25}, type: "DOMSymbolInstance"}],
 										index: 83,
 										keyMode: 9728
@@ -7087,21 +6151,16 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E09D27",
-								frameCount: 12,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
 										duration: 12,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 42", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 3,
 										keyMode: 9728
 									},
-									{duration: 20, elementCount: 0, elementTypes: [], index: 15, keyMode: 9728},
+									{duration: 20, index: 15, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 368.7,
@@ -7115,8 +6174,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 368.5,
@@ -7130,8 +6187,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 368.4,
@@ -7145,8 +6200,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 368.2,
@@ -7160,8 +6213,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 368.0,
@@ -7175,8 +6226,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 367.8,
@@ -7190,8 +6239,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 367.65,
@@ -7205,8 +6252,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 367.45,
@@ -7221,8 +6266,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 34,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 367.2,
@@ -7241,19 +6284,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F32CCC",
-								frameCount: 14,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 270.9, centerPoint3DY: 279.45, libraryItemName: "MovieClips/Symbol 41", matrix: {a: 0.32879638671875, d: 0.328826904296875, tx: 219.05, ty: 239.9}, type: "DOMSymbolInstance"}],
 										index: 3,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 270.2,
@@ -7267,8 +6305,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 269.5,
@@ -7282,8 +6318,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.8,
@@ -7297,8 +6331,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 268.1,
@@ -7312,8 +6344,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 267.35,
@@ -7327,8 +6357,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 266.65,
@@ -7342,8 +6370,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 266.0,
@@ -7357,8 +6383,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 265.35,
@@ -7372,8 +6396,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 264.6,
@@ -7387,8 +6409,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.8,
@@ -7402,8 +6422,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 263.15,
@@ -7418,8 +6436,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 64,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 262.45,
@@ -7438,13 +6454,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B984AF",
-								frameCount: 2,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
 										duration: 76,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 437.9,
@@ -7463,12 +6476,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#4FE260",
-								frameCount: 74,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7483,8 +6493,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7499,8 +6507,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7515,8 +6521,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7531,8 +6535,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7547,8 +6549,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7563,8 +6563,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7579,8 +6577,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7595,8 +6591,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7611,8 +6605,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7627,8 +6619,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7643,8 +6633,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7659,8 +6647,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7675,8 +6661,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7691,8 +6675,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7707,8 +6689,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7723,8 +6703,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7739,8 +6717,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7755,8 +6731,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7771,8 +6745,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7787,8 +6759,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7803,8 +6773,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7819,8 +6787,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7835,8 +6801,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7851,8 +6815,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7867,8 +6829,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7883,8 +6843,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7899,8 +6857,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7915,8 +6871,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7931,8 +6885,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7947,8 +6899,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7963,8 +6913,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7979,8 +6927,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -7995,8 +6941,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8011,8 +6955,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8027,8 +6969,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8043,8 +6983,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8059,8 +6997,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8075,8 +7011,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8091,8 +7025,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8107,8 +7039,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8123,8 +7053,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8139,8 +7067,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8155,8 +7081,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8171,8 +7095,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8187,8 +7109,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8203,8 +7123,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8219,8 +7137,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8235,8 +7151,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8251,8 +7165,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8267,8 +7179,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8283,8 +7193,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8299,8 +7207,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8315,8 +7221,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8331,8 +7235,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8347,8 +7249,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8363,8 +7263,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8379,8 +7277,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8395,8 +7291,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8411,8 +7305,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8427,8 +7319,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8443,8 +7333,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8459,8 +7347,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8475,8 +7361,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8491,8 +7375,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8507,8 +7389,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8523,8 +7403,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8539,8 +7417,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8555,8 +7431,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8571,8 +7445,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8587,8 +7459,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8603,8 +7473,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8620,8 +7488,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 4,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 313.3,
@@ -8641,21 +7507,16 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#02E8BC",
-								frameCount: 3,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
 										duration: 76,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 28", loop: "loop", matrix: {a: 0.999908447265625, tx: 274.95, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 3,
 										keyMode: 9728
 									},
 									{
 										duration: 74,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 483.1, centerPoint3DY: 408.45, libraryItemName: "MovieClips/Symbol 47", matrix: {a: 0.553314208984375, d: 0.553146362304688, tx: 281.65, ty: 213.5}, type: "DOMSymbolInstance"}],
 										index: 79,
 										keyMode: 9728
@@ -8680,15 +7541,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#82A2A5",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 327", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#82A2A5", frames: [{elements: [{libraryItemName: "Graphics/Symbol 327", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "bg1"
 					}
@@ -8705,19 +7559,14 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#DBB419",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 8000.0, left: 0.0, right: 11000.0, top: 0.0},
-												edgeCount: 11,
 												edges: [
 													{edges: "!11000 2812|11000 2918!11000 2997|11000 3618", fillStyle1: 1},
 													{edges: "!11000 2918[10988 2948 10999 2997!10999 2997|11000 2997", fillStyle0: 2, fillStyle1: 1},
@@ -8739,7 +7588,6 @@ final class AssetCatalogSymbolsUI {
 													{edges: "!0 4662|0 0", fillStyle1: 1},
 													{edges: "!11000 3618|11000 8000!11000 8000|0 8000!0 8000|0 4856", fillStyle1: 3}
 												],
-												fillStyleCount: 3,
 												fills: [
 													{
 														index: 1,
@@ -8751,7 +7599,6 @@ final class AssetCatalogSymbolsUI {
 														value: {entries: [{color: "#FDF7BD", ratio: 0.0}, {color: "#6F8B41", ratio: 1.0}], matrix: {a: 0.0, b: 0.15142822265625, c: 0.154327392578125, d: 0.0, tx: 270.65, ty: 301.9}, type: "LinearGradient"}
 													}
 												],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -8778,15 +7625,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#E469AC",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 335", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#E469AC", frames: [{elements: [{libraryItemName: "Graphics/Symbol 335", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "bg3"
 					}
@@ -8803,15 +7643,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#83B762",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 337", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#83B762", frames: [{elements: [{libraryItemName: "Graphics/Symbol 337", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "bg4"
 					}
@@ -8828,20 +7661,10 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#D8956F",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 5.5, d: 4.0, tx: 275.0, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 5.5, d: 4.0, tx: 275.0, ty: 200.0}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							}
@@ -8861,22 +7684,12 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 6,
 						layers: [
-							{
-								color: "#7F50D3",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 322", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							},
+							{color: "#7F50D3", frames: [{elements: [{libraryItemName: "Graphics/Symbol 322", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
 							{
 								color: "#F1BA20",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 468.0, centerPoint3DY: 115.0, libraryItemName: "MovieClips/Symbol 320", matrix: {a: 0.200149536132812, d: 0.200149536132812, tx: 418.0, ty: 65.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -8887,11 +7700,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C7F2A6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 148.0, centerPoint3DY: 220.0, libraryItemName: "MovieClips/Symbol 320", matrix: {a: 0.199996948242188, d: 0.199996948242188, tx: 98.0, ty: 170.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -8902,24 +7712,18 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#5384ED",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 4620.0, left: 620.0, right: 8640.0, top: 2210.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!8640 2920[8621 2949 8590 2955!8590 2955[8580 2940 8580 2910!8580 2910|8601 2904!8601 2904|8630 2905!8630 2905|8640 2920!7120 4580[7111 4608 7080 4620!7080 4620[7055 4610 7040 4595!7040 4595[7058 4569 7075 4559!7075 4559|7105 4550!7105  4550|7120 4580!4780 2255[4798 2229 4815 2219!4815 2219|4845 2210!4845 2210|4860 2240!4860 2240[4851 2268 4820 2280!4820 2280[4795 2270 4780 2255!650 2791[628 2791 620 2780!620 2780[629 2754 680 2780!680 2780[673 2791 650 2791",
 														fillStyle1: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -8932,11 +7736,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F8564C",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 76.0, centerPoint3DY: 296.0, libraryItemName: "MovieClips/Symbol 320", matrix: {a: 0.220001220703125, d: 0.220001220703125, tx: 26.0, ty: 246.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -8945,13 +7746,7 @@ final class AssetCatalogSymbolsUI {
 								index: 4,
 								name: "Layer 5"
 							},
-							{
-								color: "#88DFE2",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 318", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 5,
-								name: "Layer 6"
-							}
+							{color: "#88DFE2", frames: [{elements: [{libraryItemName: "Graphics/Symbol 318", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"}
 						],
 						name: "bg6"
 					}
@@ -8968,15 +7763,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#3182ED",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 325", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#3182ED", frames: [{elements: [{libraryItemName: "Graphics/Symbol 325", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "bg7"
 					}
@@ -8992,19 +7780,15 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 11,
 						layers: [
-							{color: "#3BF35A", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#68C7CF", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#E550E8", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
-							{color: "#BA4FBB", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
+							{color: "#3BF35A", frames: [{index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{color: "#68C7CF", frames: [{index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{color: "#E550E8", frames: [{index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{color: "#BA4FBB", frames: [{index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 31.1,
@@ -9022,17 +7806,14 @@ final class AssetCatalogSymbolsUI {
 								index: 4,
 								name: "Layer 5"
 							},
-							{color: "#2FB1C2", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#8C99D6", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
-							{color: "#F12B73", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
-							{color: "#EC9521", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
+							{color: "#2FB1C2", frames: [{index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
+							{color: "#8C99D6", frames: [{index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
+							{color: "#F12B73", frames: [{index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
+							{color: "#EC9521", frames: [{index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -9052,11 +7833,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 17.65,
@@ -9103,15 +7881,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 12,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 31.1,
@@ -9131,11 +7905,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3BF35A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -51.05,
@@ -9163,11 +7934,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#68C7CF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.95,
@@ -9194,11 +7962,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E550E8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.95,
@@ -9225,11 +7990,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BA4FBB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.95,
@@ -9256,11 +8018,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.95,
@@ -9287,11 +8046,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2FB1C2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -51.05,
@@ -9319,11 +8075,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8C99D6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -51.05,
@@ -9351,11 +8104,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F12B73",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -51.05,
@@ -9383,11 +8133,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EC9521",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -51.05,
@@ -9415,11 +8162,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -9439,11 +8183,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 18.05, centerPoint3DY: 1.65, libraryItemName: "UI/ShadowBG", matrix: {a: 0.86767578125, d: 1.09947204589844, tx: -118.0, ty: -105.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -9467,19 +8208,15 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 11,
 						layers: [
-							{color: "#3BF35A", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#68C7CF", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#E550E8", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
-							{color: "#BA4FBB", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
+							{color: "#3BF35A", frames: [{index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{color: "#68C7CF", frames: [{index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{color: "#E550E8", frames: [{index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{color: "#BA4FBB", frames: [{index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMComponentInstance", "DOMDynamicText"],
 										elements: [
 											{
 												height: 31.1,
@@ -9525,17 +8262,14 @@ final class AssetCatalogSymbolsUI {
 								index: 4,
 								name: "Layer 5"
 							},
-							{color: "#2FB1C2", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#8C99D6", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
-							{color: "#F12B73", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
-							{color: "#EC9521", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
+							{color: "#2FB1C2", frames: [{index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
+							{color: "#8C99D6", frames: [{index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
+							{color: "#F12B73", frames: [{index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
+							{color: "#EC9521", frames: [{index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -9556,11 +8290,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 17.95,
@@ -9593,19 +8324,15 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 11,
 						layers: [
-							{color: "#3BF35A", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
-							{color: "#68C7CF", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#E550E8", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
-							{color: "#BA4FBB", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
+							{color: "#3BF35A", frames: [{index: 0, keyMode: 9728}], index: 0, name: "Layer 1"},
+							{color: "#68C7CF", frames: [{index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{color: "#E550E8", frames: [{index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{color: "#BA4FBB", frames: [{index: 0, keyMode: 9728}], index: 3, name: "Layer 4"},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 47.65,
@@ -9623,17 +8350,14 @@ final class AssetCatalogSymbolsUI {
 								index: 4,
 								name: "Layer 5"
 							},
-							{color: "#2FB1C2", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
-							{color: "#8C99D6", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
-							{color: "#F12B73", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
-							{color: "#EC9521", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
+							{color: "#2FB1C2", frames: [{index: 0, keyMode: 9728}], index: 5, name: "Layer 6"},
+							{color: "#8C99D6", frames: [{index: 0, keyMode: 9728}], index: 6, name: "Layer 7"},
+							{color: "#F12B73", frames: [{index: 0, keyMode: 9728}], index: 7, name: "Layer 8"},
+							{color: "#EC9521", frames: [{index: 0, keyMode: 9728}], index: 8, name: "Layer 9"},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -9653,11 +8377,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 17.95,
@@ -9690,15 +8411,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 6,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 27.55,
@@ -9803,22 +8520,15 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 6,
-										elementTypes: ["DOMShape", "DOMStaticText"],
 										elements: [
 											{
 												bounds: {bottom: 1100.0, left: -2500.0, right: 2500.0, top: 1100.0},
-												edgeCount: 1,
 												edges: [{edges: "!-2500 1100|2500 1100", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											},
@@ -9877,11 +8587,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												componentParams: {
@@ -9920,11 +8627,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 7,
-										elementTypes: ["DOMComponentInstance", "DOMDynamicText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 77.4,
@@ -10033,11 +8737,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 33.7,
@@ -10072,15 +8773,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 21,
 						layers: [
 							{
 								color: "#A157AB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -199.5,
@@ -10109,11 +8806,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6B67E9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -143.5,
@@ -10142,11 +8836,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9218F6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.5,
@@ -10175,11 +8866,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#CFE940",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 192.5,
@@ -10208,11 +8896,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2FF58F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 80.5,
@@ -10241,11 +8926,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D7DEEB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 24.5,
@@ -10274,11 +8956,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#58F196",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -31.5,
@@ -10307,11 +8986,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BFD512",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -87.5,
@@ -10340,11 +9016,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F32769",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 8.5,
@@ -10373,11 +9046,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8B26ED",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -147.1,
@@ -10406,11 +9076,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2EF9C0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -42.9,
@@ -10439,11 +9106,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B7BBC7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 290.1,
@@ -10472,11 +9136,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B6DA4E",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 201.65,
@@ -10505,11 +9166,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D3E7BC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 150.15,
@@ -10538,11 +9196,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BCA0C3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -95.4,
@@ -10571,11 +9226,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D9624F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -199.1,
@@ -10604,11 +9256,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F93FEB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -165.85, centerPoint3DY: -167.0, libraryItemName: "MovieClips/Symbol 986", matrix: {tx: -198.9, ty: -180.0}, name: "selectedGlow", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -10619,11 +9268,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F385CA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -215.0,
@@ -10642,11 +9288,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B004E5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 71.0, centerPoint3DY: 212.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 1.7998046875, d: 0.350006103515625, tx: 21.0, ty: 162.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -10657,11 +9300,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#7BEE84",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 266.0, centerPoint3DY: -148.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 0.560043334960938, d: 3.56997680664063, tx: 216.0, ty: -198.0}, type: "DOMSymbolInstance"}
 										],
@@ -10674,11 +9314,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D39BBE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -215.0, centerPoint3DY: 212.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 2.72998046875, d: 0.350006103515625, tx: -265.0, ty: 162.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -10703,12 +9340,10 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#74BEC7",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1190", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
+								frames: [{elements: [{libraryItemName: "Graphics/Symbol 1190", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							}
@@ -10728,15 +9363,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#CD71A6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/ColorPickerSkins/ColorPicker_upSkin",
@@ -10754,11 +9385,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C848A5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 65.0,
@@ -10793,15 +9421,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#ED957F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 54.7,
@@ -10830,11 +9454,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DC3B9F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -10854,11 +9475,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D19A66",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -18.0,
@@ -10889,11 +9507,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6A42EF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 39.1, centerPoint3DY: 34.1, libraryItemName: "UI/ShadowBG", matrix: {a: 0.705459594726562, d: 0.62823486328125, tx: -96.9, ty: -61.4}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -10917,15 +9532,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "expMC", matrix: {a: 0.137466430664062, d: 0.137405395507812, tx: 5.0, ty: 6.0}, transformationPoint: {x: 76.0, y: 64.4}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -10949,15 +9560,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 11,
 						layers: [
 							{
 								color: "#3BF35A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -85.9,
@@ -10985,11 +9592,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#68C7CF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 7,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 4.05,
@@ -11113,11 +9717,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E550E8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 4.1,
@@ -11145,11 +9746,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BA4FBB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 4.15,
@@ -11177,11 +9775,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 4.1,
@@ -11209,11 +9804,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2FB1C2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -85.9,
@@ -11241,11 +9833,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8C99D6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -85.9,
@@ -11273,11 +9862,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F12B73",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -85.9,
@@ -11305,11 +9891,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EC9521",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -86.15,
@@ -11337,11 +9920,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -11362,11 +9942,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 22.55,
@@ -11400,50 +9977,22 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#66F791",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.5, d: 0.5, tx: 22.5, ty: 22.5}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.5, d: 0.5, tx: 22.5, ty: 22.5}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#CE2891",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.5, d: 0.5, tx: 16.5, ty: 15.75}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.5, d: 0.5, tx: 16.5, ty: 15.75}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							},
 							{
 								color: "#19FFF7",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.5, d: 0.5, tx: 10.5, ty: 8.5}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.5, d: 0.5, tx: 10.5, ty: 8.5}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "Layer 3"
 							}
@@ -11463,15 +10012,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 11,
 						layers: [
 							{
 								color: "#3BF35A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -52.0,
@@ -11498,11 +10043,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#68C7CF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.0,
@@ -11529,11 +10071,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E550E8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.0,
@@ -11560,11 +10099,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BA4FBB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.0,
@@ -11591,11 +10127,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 56.0,
@@ -11622,11 +10155,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2FB1C2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -52.0,
@@ -11653,11 +10183,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8C99D6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -52.0,
@@ -11684,11 +10211,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F12B73",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -52.0,
@@ -11715,11 +10239,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EC9521",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -52.0,
@@ -11746,11 +10267,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -11770,11 +10288,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 17.1, centerPoint3DY: 34.1, libraryItemName: "UI/ShadowBG", matrix: {a: 0.8673095703125, d: 0.984298706054688, tx: -118.9, ty: -61.4}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -11799,15 +10314,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#4A8BE7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 210.1,
@@ -11839,11 +10350,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8E22D9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMDynamicText", "DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -11872,11 +10380,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BFE61B",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.45,
@@ -11910,15 +10415,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#E52BFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -11938,11 +10439,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D751C6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMDynamicText", "DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 21.95, centerPoint3DY: 41.75, libraryItemName: "UI/ShadowBG", matrix: {a: 0.882400512695312, d: 0.785186767578125, tx: -120.0, ty: -50.0}, type: "DOMSymbolInstance"},
 											{
@@ -11978,20 +10476,10 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#998B73",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 1174", loop: "loop", matrix: {tx: 1.5}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Graphics/Symbol 1174", loop: "loop", matrix: {tx: 1.5}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							}
@@ -12010,22 +10498,15 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 6,
-										elementTypes: ["DOMComponentInstance", "DOMShape", "DOMStaticText"],
 										elements: [
 											{
 												bounds: {bottom: 2256.0, left: 0.0, right: 0.0, top: -2045.0},
-												edgeCount: 1,
 												edges: [{edges: "!0 -2045|0 -765!0 1076|0 2256!0 -286|0 654", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											},
@@ -12088,18 +10569,12 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 11,
-										elementTypes: ["DOMDynamicText", "DOMShape", "DOMStaticText"],
 										elements: [
 											{
 												bounds: {bottom: 396.0, left: 751.0, right: 2291.0, top: 396.0},
-												edgeCount: 1,
 												edges: [{edges: "!751 396|2291 396", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											},
@@ -12204,11 +10679,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 22.8,
@@ -12242,15 +10714,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#DC8C87",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -12271,11 +10739,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D086FA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -12310,15 +10775,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#56CFC2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -12339,11 +10800,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F6A802",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 44.7,
@@ -12372,11 +10830,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#04B5E7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 31.1,
@@ -12397,11 +10852,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DFC5FD",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 21.05,
@@ -12435,15 +10887,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#6DF2C4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 16.3,
@@ -12478,15 +10926,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#2CD6CA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 149.5,
@@ -12515,11 +10959,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C3C24A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 208.5,
@@ -12548,11 +10989,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B727CF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 137.0, centerPoint3DY: 212.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 1.24981689453125, d: 0.349990844726562, tx: 87.0, ty: 162.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -12577,15 +11015,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#A7FE30",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 29.2,
@@ -12619,15 +11053,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#BCC486",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -12647,11 +11077,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B632FA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -12685,12 +11112,10 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#90ADD7",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1186", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
+								frames: [{elements: [{libraryItemName: "Graphics/Symbol 1186", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							}
@@ -12710,30 +11135,17 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#D4BD3D",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 5.0, centerPoint3DY: 7.5, libraryItemName: "MovieClips/Symbol 1298", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 5.0, centerPoint3DY: 7.5, libraryItemName: "MovieClips/Symbol 1298", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#C0D086",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 6.0,
@@ -12767,30 +11179,18 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 18,
 						labels: [{frame: 2, layer: 0, name: "hit", type: "name"}],
-						layerCount: 6,
 						layers: [
-							{
-								color: "#64BDEE",
-								frameCount: 2,
-								frames: [{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}, {elementCount: 0, elementTypes: [], index: 2, keyMode: 9728, label: "hit", labelType: "name"}],
-								index: 0,
-								name: "Labels Layer"
-							},
+							{color: "#64BDEE", frames: [{duration: 2, index: 0, keyMode: 9728}, {index: 2, keyMode: 9728, label: "hit", labelType: "name"}], index: 0, name: "Labels Layer"},
 							{
 								color: "#E6DFCC",
-								frameCount: 16,
 								frames: [
-									{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 2, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 5.5, centerPoint3DY: 5.5, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 7.28594970703125, d: 7.28594970703125}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 6.54652404785156, d: 6.54652404785156}, type: "DOMSymbolInstance"}
 										],
@@ -12798,8 +11198,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.73046875}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 5.8616943359375, d: 5.8616943359375}, type: "DOMSymbolInstance"}
 										],
@@ -12807,8 +11205,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -12823,8 +11219,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -12839,8 +11233,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -12855,8 +11247,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.328125}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 3.67031860351563, d: 3.67031860351563}, type: "DOMSymbolInstance"}
 										],
@@ -12864,15 +11254,11 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.25}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 3.25953674316406, d: 3.25953674316406}, type: "DOMSymbolInstance"}],
 										index: 9,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.1796875}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 2.9034423828125, d: 2.9034423828125}, type: "DOMSymbolInstance"}
 										],
@@ -12880,8 +11266,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -12896,8 +11280,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.078125}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 2.35568237304688, d: 2.35568237304688}, type: "DOMSymbolInstance"}
 										],
@@ -12905,8 +11287,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -12921,8 +11301,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -12937,16 +11315,12 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 1.94467163085938, d: 1.94467163085938}, type: "DOMSymbolInstance"}],
 										index: 15,
 										keyMode: 9728
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 5.5, centerPoint3DY: 5.5, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 1012", matrix: {a: 1.91732788085938, d: 1.91732788085938}, type: "DOMSymbolInstance"}],
 										index: 16,
 										keyMode: 9728
@@ -12957,19 +11331,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BEBE46",
-								frameCount: 16,
 								frames: [
-									{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 2, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 35.4, centerPoint3DY: 12.75, libraryItemName: "MovieClips/Symbol 1010", matrix: {a: 0.559906005859375, tx: -0.35, ty: 0.25}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.4,
@@ -12984,8 +11353,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.4,
@@ -13000,8 +11367,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.45,
@@ -13016,8 +11381,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.45,
@@ -13032,8 +11395,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.45,
@@ -13048,8 +11409,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.45,
@@ -13064,8 +11423,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.45,
@@ -13080,8 +11437,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.5,
@@ -13096,8 +11451,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.5,
@@ -13112,8 +11465,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.5,
@@ -13128,8 +11479,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.55,
@@ -13144,8 +11493,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.55,
@@ -13160,8 +11507,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.55,
@@ -13177,8 +11522,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 35.5,
@@ -13198,58 +11541,37 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#92D7A4",
-								frameCount: 2,
-								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 1006", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
-								],
+								frames: [{index: 0, keyMode: 9728}, {elements: [{libraryItemName: "Graphics/Symbol 1006", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}],
 								index: 3,
 								name: "Layer 4"
 							},
 							{
 								color: "#F0C075",
-								frameCount: 7,
 								frames: [
-									{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 2, index: 0, keyMode: 9728},
+									{elements: [{centerPoint3DX: 1.5, centerPoint3DY: 1.5, libraryItemName: "MovieClips/Symbol 1008", matrix: {tx: -20.0}, type: "DOMSymbolInstance"}], index: 2, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 1.5, centerPoint3DY: 1.5, libraryItemName: "MovieClips/Symbol 1008", matrix: {tx: -20.0}, type: "DOMSymbolInstance"}],
-										index: 2,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 7.55, centerPoint3DY: 1.5, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 1008", matrix: {a: 0.698501586914062, tx: -13.95}, type: "DOMSymbolInstance"}],
 										index: 3,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 12.2, centerPoint3DY: 1.5, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 1008", matrix: {a: 0.464004516601562, tx: -9.3}, type: "DOMSymbolInstance"}],
 										index: 4,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 15.55, centerPoint3DY: 1.5, color: {alphaMultiplier: 0.16015625}, libraryItemName: "MovieClips/Symbol 1008", matrix: {a: 0.296493530273438, tx: -5.95}, type: "DOMSymbolInstance"}],
 										index: 5,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 17.6, centerPoint3DY: 1.5, color: {alphaMultiplier: 0.0390625}, libraryItemName: "MovieClips/Symbol 1008", matrix: {a: 0.195999145507812, tx: -3.9}, type: "DOMSymbolInstance"}],
 										index: 6,
 										keyMode: 9728
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 18.25, centerPoint3DY: 1.5, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 1008", matrix: {a: 0.162506103515625, tx: -3.25}, type: "DOMSymbolInstance"}],
 										index: 7,
 										keyMode: 9728
@@ -13260,26 +11582,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8736CC",
-								frameCount: 7,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 64.75, centerPoint3DY: 108.0, libraryItemName: "MovieClips/Symbol 869", matrix: {a: 0.182510375976562, d: 0.294174194335938, tx: -43.25}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
+									{duration: 2, elements: [{centerPoint3DY: 10.5, libraryItemName: "MovieClips/Symbol 1005", matrix: {tx: -21.6}, type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
 									{
-										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DY: 10.5, libraryItemName: "MovieClips/Symbol 1005", matrix: {tx: -21.6}, type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 4.25,
@@ -13294,8 +11604,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 7.5,
@@ -13310,8 +11618,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.85,
@@ -13326,8 +11632,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 11.35,
@@ -13343,8 +11647,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 11.75,
@@ -13378,15 +11680,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#43DC61",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 133.3, centerPoint3DY: 194.35, libraryItemName: "MovieClips/lightningStrike", matrix: {tx: -0.2, ty: 1.35}, name: "lightning", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -13397,11 +11695,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF58E1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 1015", matrix: {a: 6.32182312011719, d: 2.28561401367188, tx: -550.0, ty: -401.0}, name: "bg", transformationPoint: {y: -0.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -13426,49 +11721,37 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 6,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#D53FD4",
-								frameCount: 2,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 467", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 468", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
+									{elements: [{libraryItemName: "Graphics/Symbol 467", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{elements: [{libraryItemName: "Graphics/Symbol 468", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 1, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#9094D4",
-								frameCount: 2,
-								frames: [
-									{duration: 2, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 469", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}
-								],
+								frames: [{duration: 2, index: 0, keyMode: 9728}, {elements: [{libraryItemName: "Graphics/Symbol 469", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 2, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							},
 							{
 								color: "#FAE107",
-								frameCount: 4,
 								frames: [
-									{duration: 3, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 3, index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 70.0, left: -40.0, right: 52.0, top: -55.0},
-												edgeCount: 4,
 												edges: [
 													{edges: "!-35 45|-35 -55!-35 -55|52 -55!52 -55|52 70!52 70|-35 56", fillStyle1: 3},
 													{edges: "!-35 56|-40 56!-40 56|-35 45", fillStyle1: 1},
 													{edges: "!-35 45|20 -50!20 -50|46 38!46 38|-35 56", fillStyle0: 3, fillStyle1: 1},
 													{edges: "!33 27|16 -17!16 -17|-24 44!-24 44|33 27", fillStyle0: 2, fillStyle1: 1}
 												],
-												fillStyleCount: 3,
 												fills: [{index: 1, value: {color: "#FFFF00", type: "SolidColor"}}, {index: 2, value: {color: "#FFFFFF", type: "SolidColor"}}, {index: 3, value: {color: "#FF6600", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -13476,12 +11759,9 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 127.0, left: -102.0, right: 127.0, top: -100.0},
-												edgeCount: 27,
 												edges: [
 													{edges: "!11 -35|11 -51", fillStyle0: 3, fillStyle1: 2},
 													{edges: "!11 -51[10 -100 1 -77!1 -77|-4 -52", fillStyle0: 3},
@@ -13511,9 +11791,7 @@ final class AssetCatalogSymbolsUI {
 													{edges: "!-11 59|-8 127!-8 127|11 59", fillStyle0: 3},
 													{edges: "!-4 -52[0 5 -29 7!-29 7|-47 -1", fillStyle0: 3, fillStyle1: 2}
 												],
-												fillStyleCount: 3,
 												fills: [{index: 1, value: {color: "#FFFF00", type: "SolidColor"}}, {index: 2, value: {color: "#FF6600", type: "SolidColor"}}, {index: 3, value: {color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -13521,8 +11799,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 414", loop: "loop", matrix: {a: 0.050994873046875, d: 0.050994873046875, tx: -2.4, ty: -2.35}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 5,
 										keyMode: 9728
@@ -13547,57 +11823,41 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 14,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#D7BC37",
-								frameCount: 14,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 229.4, centerPoint3DY: 197.7, libraryItemName: "MovieClips/Symbol 975", matrix: {a: 0.081787109375, d: 0.20928955078125, tx: -20.6, ty: -52.3}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 136.2, centerPoint3DY: 205.5, libraryItemName: "MovieClips/Symbol 975", matrix: {a: 0.45465087890625, d: 0.178009033203125, tx: -113.8, ty: -44.5}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 69.6, centerPoint3DY: 222.6, libraryItemName: "MovieClips/Symbol 975", matrix: {a: 0.720932006835938, d: 0.109603881835938, tx: -180.4, ty: -27.4}, type: "DOMSymbolInstance"}],
 										index: 2,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 22.05, centerPoint3DY: 234.8, libraryItemName: "MovieClips/Symbol 975", matrix: {a: 0.9111328125, d: 0.0607452392578125, tx: -227.95, ty: -15.2}, type: "DOMSymbolInstance"}],
 										index: 3,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -6.5, centerPoint3DY: 242.15, libraryItemName: "MovieClips/Symbol 975", matrix: {a: 1.02525329589844, d: 0.0314178466796875, tx: -256.5, ty: -7.85}, type: "DOMSymbolInstance"}],
 										index: 4,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -16.0, centerPoint3DY: 244.6, libraryItemName: "MovieClips/Symbol 975", matrix: {a: 1.06329345703125, d: 0.0216522216796875, tx: -266.0, ty: -5.4}, type: "DOMSymbolInstance"}],
 										index: 5,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -11.5,
@@ -13612,8 +11872,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -6.95,
@@ -13628,8 +11886,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -2.4,
@@ -13644,8 +11900,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 2.1,
@@ -13660,8 +11914,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 6.6,
@@ -13676,8 +11928,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 11.15,
@@ -13692,8 +11942,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 15.65,
@@ -13708,8 +11956,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 20.1,
@@ -13729,18 +11975,13 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D978C5",
-								frameCount: 9,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 222.8, centerPoint3DY: 222.95, libraryItemName: "MovieClips/Symbol 973", matrix: {a: 0.108230590820312, d: 0.108230590820312, tx: -27.2, ty: -27.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 206.9,
@@ -13755,8 +11996,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 193.05,
@@ -13771,8 +12010,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 181.35,
@@ -13787,8 +12024,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 171.8,
@@ -13803,8 +12038,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 164.35,
@@ -13819,8 +12052,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 159.0,
@@ -13835,8 +12066,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 155.85,
@@ -13851,8 +12080,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 154.75,
@@ -13886,15 +12113,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 33,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#E48ABB",
-								frameCount: 33,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -47.6,
@@ -13909,8 +12132,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -43.3,
@@ -13925,8 +12146,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -39.2,
@@ -13941,8 +12160,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -35.4,
@@ -13957,8 +12174,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -31.9,
@@ -13973,8 +12188,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -28.65,
@@ -13989,8 +12202,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -25.7,
@@ -14005,8 +12216,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -23.05,
@@ -14021,8 +12230,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -20.65,
@@ -14037,8 +12244,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -18.5,
@@ -14053,8 +12258,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -16.75,
@@ -14069,8 +12272,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -15.15,
@@ -14085,8 +12286,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -13.9,
@@ -14101,8 +12300,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -12.9,
@@ -14117,8 +12314,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -12.2,
@@ -14133,8 +12328,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -11.75,
@@ -14149,8 +12342,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -11.6,
@@ -14165,8 +12356,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -10.8,
@@ -14181,8 +12370,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -10.05,
@@ -14197,8 +12384,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -9.3,
@@ -14213,8 +12398,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -8.55,
@@ -14229,8 +12412,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -7.8,
@@ -14245,8 +12426,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -7.05,
@@ -14261,8 +12440,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -6.3,
@@ -14277,8 +12454,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -5.55,
@@ -14293,8 +12468,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -4.8,
@@ -14309,8 +12482,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -4.05,
@@ -14325,8 +12496,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -3.3,
@@ -14341,8 +12510,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -2.55,
@@ -14357,8 +12524,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -1.8,
@@ -14373,8 +12538,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -1.05,
@@ -14389,8 +12552,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -0.3,
@@ -14404,13 +12565,7 @@ final class AssetCatalogSymbolsUI {
 										index: 31,
 										keyMode: 9728
 									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 0.45, libraryItemName: "MovieClips/Symbol 859", matrix: {tx: -14.55, ty: -15.0}, type: "DOMSymbolInstance"}],
-										index: 32,
-										keyMode: 9728
-									}
+									{elements: [{centerPoint3DX: 0.45, libraryItemName: "MovieClips/Symbol 859", matrix: {tx: -14.55, ty: -15.0}, type: "DOMSymbolInstance"}], index: 32, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
@@ -14431,22 +12586,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 6,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#F56CC8",
-								frameCount: 6,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 134.4, centerPoint3DY: 132.5, libraryItemName: "MovieClips/Symbol 1000", matrix: {a: 0.21478271484375, d: 0.211151123046875, tx: -1.0, ty: -29.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 147.4,
@@ -14461,8 +12610,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 156.9,
@@ -14477,8 +12624,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 163.5,
@@ -14493,8 +12638,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 167.45,
@@ -14509,8 +12652,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 168.65,
@@ -14543,15 +12684,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 16,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#A91CF8",
-								frameCount: 16,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14567,8 +12704,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14584,8 +12719,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14601,8 +12734,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14618,8 +12749,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14635,8 +12764,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14652,8 +12779,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14669,8 +12794,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14686,8 +12809,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14703,8 +12824,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14720,8 +12839,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14737,8 +12854,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14754,8 +12869,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14771,8 +12884,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14788,8 +12899,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14805,8 +12914,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 9.25,
@@ -14841,28 +12948,21 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#69A0F1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 185.0, left: -185.0, right: 185.0, top: -184.0},
-												edgeCount: 1,
 												edges: [
 													{
 														edges: "!59 59[111 6 185 1!185 1|185 0!185 0[111 -5 59 -58!59 -58[5 -111 0 -184!0 -184|-1 -184!-1 -184[-6 -111 -58 -58!-58 -58[-112 -5 -185 0!-185 0|-185 1!-185 1[-112 6 -58 59!-58 59[-6 112 -1 185!-1 185|0 185!0 185[5 112 59 59",
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#999999", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -14888,15 +12988,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Parts/Hats/Jellyfish/jellyfishSting",
@@ -14936,22 +13032,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 16,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#9F32B3",
-								frameCount: 16,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 46.8, centerPoint3DY: 46.4, libraryItemName: "MovieClips/Symbol 1108", matrix: {a: 1.11198425292969, d: 1.11198425292969, tx: -0.7, ty: -1.1}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -14966,8 +13056,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -14982,8 +13070,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -14998,8 +13084,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.85,
@@ -15014,8 +13098,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.85,
@@ -15030,8 +13112,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15046,8 +13126,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15062,8 +13140,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15078,8 +13154,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15094,8 +13168,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15110,8 +13182,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.85,
@@ -15126,8 +13196,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15142,8 +13210,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15158,8 +13224,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15174,8 +13238,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15195,18 +13257,13 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#5E94C6",
-								frameCount: 16,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 46.8, centerPoint3DY: 46.4, libraryItemName: "MovieClips/Symbol 1108", matrix: {a: 0.4613037109375, d: 0.665252685546875, tx: -0.7, ty: -1.1}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.75,
@@ -15221,8 +13278,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15237,8 +13292,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15253,8 +13306,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15269,8 +13320,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15285,8 +13334,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.75,
@@ -15301,8 +13348,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15317,8 +13362,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15333,8 +13376,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.75,
@@ -15349,8 +13390,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.75,
@@ -15365,8 +13404,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15381,8 +13418,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15397,8 +13432,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15413,8 +13446,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.75,
@@ -15429,8 +13460,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.8,
@@ -15450,18 +13479,13 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9E77A8",
-								frameCount: 9,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 47.3, centerPoint3DY: 47.25, libraryItemName: "MovieClips/Symbol 900", matrix: {a: 0.322113037109375, d: 0.322113037109375, tx: 0.95, ty: 1.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.35,
@@ -15476,8 +13500,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.35,
@@ -15492,8 +13514,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.25,
@@ -15508,8 +13528,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.35,
@@ -15524,8 +13542,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.3,
@@ -15540,8 +13556,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.3,
@@ -15556,8 +13570,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.3,
@@ -15572,8 +13584,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 47.3,
@@ -15607,115 +13617,83 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 100,
 						labels: [],
-						layerCount: 9,
 						layers: [
 							{
 								color: "#87E0FB",
-								frameCount: 16,
 								frames: [
-									{duration: 79, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 79, index: 0, keyMode: 9728},
 									{
 										duration: 7,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 79,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.9296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 86,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 87,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.7890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 88,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.7109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 90,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.5703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 91,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 92,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.4296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 93,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 94,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.2890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 95,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.2109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 96,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.140625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 97,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.0703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 98,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 242.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 227.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -15726,111 +13704,80 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E509D8",
-								frameCount: 16,
 								frames: [
-									{duration: 69, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 69, index: 0, keyMode: 9728},
 									{
 										duration: 17,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 69,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.9296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 86,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 87,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.7890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 88,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.7109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 90,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.5703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 91,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 92,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.4296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 93,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 94,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.2890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 95,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.2109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 96,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.140625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 97,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.0703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 98,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 197.0, centerPoint3DY: -107.0, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 182.0, ty: -122.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -15841,111 +13788,80 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8A66E7",
-								frameCount: 16,
 								frames: [
-									{duration: 59, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 59, index: 0, keyMode: 9728},
 									{
 										duration: 27,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 59,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.9296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 86,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 87,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.7890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 88,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.7109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 90,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.5703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 91,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 92,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.4296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 93,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 94,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.2890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 95,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.2109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 96,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.140625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 97,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.0703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 98,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 153.0, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: 138.0, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -15956,111 +13872,80 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E767AD",
-								frameCount: 16,
 								frames: [
-									{duration: 49, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 49, index: 0, keyMode: 9728},
 									{
 										duration: 37,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 49,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.9296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 86,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 87,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.7890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 88,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.7109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 90,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.5703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 91,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 92,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.4296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 93,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 94,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.2890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 95,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.2109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 96,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.140625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 97,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.0703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 98,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -157.0, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -172.0, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -16071,111 +13956,80 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6181FD",
-								frameCount: 16,
 								frames: [
-									{duration: 39, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 39, index: 0, keyMode: 9728},
 									{
 										duration: 47,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 39,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.9296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 86,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 87,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.7890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 88,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.7109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 90,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.5703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 91,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 92,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.4296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 93,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 94,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.2890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 95,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.2109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 96,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.140625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 97,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.0703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 98,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -199.95, centerPoint3DY: -103.0, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -214.95, ty: -118.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -16186,111 +14040,80 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#CD9436",
-								frameCount: 16,
 								frames: [
-									{duration: 29, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 29, index: 0, keyMode: 9728},
 									{
 										duration: 57,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 29,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.9296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 86,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.859375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 87,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.7890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 88,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.7109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 89,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.640625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 90,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.5703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 91,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 92,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.4296875}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 93,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.359375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 94,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.2890625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 95,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.2109375}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 96,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.140625}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 97,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.0703125}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 98,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -242.95, centerPoint3DY: -106.0, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 440", matrix: {tx: -257.95, ty: -121.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -16301,18 +14124,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#0DF895",
-								frameCount: 100,
 								frames: [
+									{elements: [{centerPoint3DX: 136.2, centerPoint3DY: -84.35, libraryItemName: "MovieClips/Symbol 439", matrix: {ty: -105.0}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 136.2, centerPoint3DY: -84.35, libraryItemName: "MovieClips/Symbol 439", matrix: {ty: -105.0}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16327,8 +14141,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16343,8 +14155,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16359,8 +14169,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16375,8 +14183,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16391,8 +14197,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16407,8 +14211,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16423,8 +14225,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16439,8 +14239,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16455,8 +14253,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16471,8 +14267,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16487,8 +14281,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16503,8 +14295,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16519,8 +14309,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16535,8 +14323,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16551,8 +14337,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16567,8 +14351,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16583,8 +14365,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16599,8 +14379,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16615,8 +14393,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16631,8 +14407,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16647,8 +14421,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16663,8 +14435,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16679,8 +14449,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16695,8 +14463,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16711,8 +14477,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16727,8 +14491,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16743,8 +14505,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16759,8 +14519,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16775,8 +14533,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16791,8 +14547,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16807,8 +14561,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16823,8 +14575,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16839,8 +14589,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16855,8 +14603,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16871,8 +14617,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16887,8 +14631,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16903,8 +14645,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16919,8 +14659,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16935,8 +14673,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16951,8 +14687,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16967,8 +14701,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16983,8 +14715,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -16999,8 +14729,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17015,8 +14743,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17031,8 +14757,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17047,8 +14771,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17063,8 +14785,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17079,8 +14799,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17095,8 +14813,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17111,8 +14827,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17127,8 +14841,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17143,8 +14855,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17159,8 +14869,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17175,8 +14883,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17191,8 +14897,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17207,8 +14911,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17223,8 +14925,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17239,8 +14939,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17255,8 +14953,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17271,8 +14967,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17287,8 +14981,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17303,8 +14995,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17319,8 +15009,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17335,8 +15023,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17351,8 +15037,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17367,8 +15051,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17383,8 +15065,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17399,8 +15079,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17415,8 +15093,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17431,8 +15107,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17447,8 +15121,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17463,8 +15135,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17479,8 +15149,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17495,8 +15163,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17511,8 +15177,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17527,8 +15191,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17543,8 +15205,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17559,8 +15219,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17575,8 +15233,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17591,8 +15247,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17607,8 +15261,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17623,8 +15275,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17639,8 +15289,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17655,8 +15303,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17671,8 +15317,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17687,8 +15331,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17703,8 +15345,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17719,8 +15359,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17735,8 +15373,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17751,8 +15387,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17767,8 +15401,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17783,8 +15415,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17799,8 +15429,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17815,8 +15443,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17831,8 +15457,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17847,8 +15471,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17863,8 +15485,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.2,
@@ -17879,8 +15499,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 136.2, centerPoint3DY: -84.35, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 439", matrix: {ty: -105.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -17891,12 +15509,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9C9AAA",
-								frameCount: 15,
 								frames: [
 									{
 										duration: 86,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 138.2,
@@ -17911,8 +15526,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 138.15,
@@ -17927,8 +15540,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 138.05,
@@ -17943,8 +15554,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 138.0,
@@ -17959,8 +15568,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.9,
@@ -17975,8 +15582,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.85,
@@ -17991,8 +15596,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.75,
@@ -18007,8 +15610,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.7,
@@ -18023,8 +15624,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.65,
@@ -18039,8 +15638,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.55,
@@ -18055,8 +15652,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.5,
@@ -18071,8 +15666,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.4,
@@ -18087,8 +15680,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.35,
@@ -18103,8 +15694,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.25,
@@ -18119,8 +15708,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 137.2, centerPoint3DY: -83.35, color: {alphaMultiplier: 0.0}, libraryItemName: "MovieClips/Symbol 439", matrix: {tx: 1.0, ty: -104.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -18131,18 +15718,13 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DFD529",
-								frameCount: 100,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -80.7, centerPoint3DY: 306.0, libraryItemName: "MovieClips/Symbol 349", matrix: {a: 2.01315307617188, d: 2.01315307617188, tx: -144.05, ty: 230.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -40.75,
@@ -18156,8 +15738,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 3.1,
@@ -18171,8 +15751,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 49.2,
@@ -18186,8 +15764,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 94.35,
@@ -18201,8 +15777,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 135.55,
@@ -18216,8 +15790,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 171.45,
@@ -18231,8 +15803,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 200.35,
@@ -18246,8 +15816,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 221.8,
@@ -18261,8 +15829,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 235.1,
@@ -18276,8 +15842,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 240.25,
@@ -18291,8 +15855,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 237.5,
@@ -18306,8 +15868,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 227.5,
@@ -18321,8 +15881,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 211.4,
@@ -18336,8 +15894,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 190.1,
@@ -18351,8 +15907,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 165.2,
@@ -18366,8 +15920,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.7,
@@ -18381,8 +15933,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 106.95,
@@ -18396,8 +15946,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 75.75,
@@ -18411,8 +15959,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 45.4,
@@ -18426,8 +15972,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 15.85,
@@ -18441,8 +15985,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -12.15,
@@ -18456,8 +15998,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -38.05,
@@ -18471,8 +16011,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -61.45,
@@ -18486,8 +16024,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -81.6,
@@ -18501,8 +16037,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -99.0,
@@ -18516,8 +16050,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -113.45,
@@ -18531,8 +16063,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -125.05,
@@ -18546,8 +16076,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -134.0,
@@ -18561,8 +16089,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -140.2,
@@ -18576,8 +16102,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -144.3,
@@ -18591,8 +16115,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -146.35,
@@ -18606,8 +16128,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -146.45,
@@ -18621,8 +16141,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -145.1,
@@ -18636,8 +16154,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -142.4,
@@ -18651,8 +16167,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -138.65,
@@ -18666,8 +16180,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -134.1,
@@ -18681,8 +16193,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -129.2,
@@ -18696,8 +16206,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -123.65,
@@ -18711,8 +16219,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -118.2,
@@ -18726,8 +16232,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -112.65,
@@ -18741,8 +16245,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -107.25,
@@ -18756,8 +16258,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -102.0,
@@ -18771,8 +16271,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -97.5,
@@ -18786,8 +16284,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -92.95,
@@ -18801,8 +16297,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -89.4,
@@ -18816,8 +16310,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -86.3,
@@ -18831,8 +16323,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -83.9,
@@ -18846,8 +16336,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -82.0,
@@ -18861,8 +16349,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -80.8,
@@ -18876,15 +16362,11 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -80.7, centerPoint3DY: 36.05, libraryItemName: "MovieClips/Symbol 349", matrix: {a: 2.01315307617188, d: 2.01315307617188, tx: -144.05, ty: -39.95}, type: "DOMSymbolInstance"}],
 										index: 50,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -80.6,
@@ -18898,8 +16380,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -79.4,
@@ -18913,8 +16393,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -77.4,
@@ -18928,8 +16406,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -74.7,
@@ -18943,8 +16419,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -71.35,
@@ -18958,8 +16432,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -66.7,
@@ -18973,8 +16445,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -61.2,
@@ -18988,8 +16458,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -54.8,
@@ -19003,8 +16471,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -47.35,
@@ -19018,8 +16484,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -39.1,
@@ -19033,8 +16497,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -29.2,
@@ -19048,8 +16510,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -18.15,
@@ -19063,8 +16523,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -6.05,
@@ -19078,8 +16536,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 7.15,
@@ -19093,8 +16549,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 21.4,
@@ -19108,8 +16562,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 37.3,
@@ -19123,8 +16575,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 54.3,
@@ -19138,8 +16588,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 72.0,
@@ -19153,8 +16601,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 90.35,
@@ -19168,8 +16614,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 109.15,
@@ -19183,8 +16627,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 128.65,
@@ -19198,8 +16640,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 148.05,
@@ -19213,8 +16653,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 166.8,
@@ -19228,8 +16666,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 184.5,
@@ -19243,8 +16679,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 200.3,
@@ -19258,8 +16692,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 214.7,
@@ -19273,8 +16705,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 226.45,
@@ -19288,8 +16718,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 234.9,
@@ -19303,8 +16731,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 239.55,
@@ -19318,8 +16744,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 239.85,
@@ -19333,8 +16757,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 235.35,
@@ -19348,8 +16770,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 225.7,
@@ -19363,8 +16783,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 210.6,
@@ -19378,8 +16796,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 190.1,
@@ -19393,8 +16809,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 165.15,
@@ -19408,8 +16822,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 134.4,
@@ -19423,8 +16835,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 99.8,
@@ -19438,8 +16848,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 62.35,
@@ -19453,8 +16861,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 23.45,
@@ -19468,8 +16874,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -15.3,
@@ -19483,8 +16887,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -52.85,
@@ -19498,8 +16900,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -86.1,
@@ -19513,8 +16913,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -113.5,
@@ -19528,8 +16926,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -134.05,
@@ -19543,8 +16939,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -144.95,
@@ -19558,8 +16952,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -145.45,
@@ -19573,8 +16965,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -134.9,
@@ -19588,8 +16978,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -113.1,
@@ -19603,8 +16991,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -80.7, centerPoint3DY: 306.0, libraryItemName: "MovieClips/Symbol 349", matrix: {a: 2.01315307617188, d: 2.01315307617188, tx: -144.05, ty: 230.0}, type: "DOMSymbolInstance"}],
 										index: 99,
 										keyMode: 9728
@@ -19640,92 +17026,75 @@ final class AssetCatalogSymbolsUI {
 							{frame: 40, layer: 0, name: "Sword", type: "name"},
 							{frame: 45, layer: 0, name: "Ice Wave", type: "name"}
 						],
-						layerCount: 8,
 						layers: [
 							{
 								color: "#96CD43",
-								frameCount: 19,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728, label: "None", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 1, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 5, keyMode: 9728, label: "Jet Pack", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 6, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 10, keyMode: 9728, label: "Mine", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 11, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 15, keyMode: 9728, label: "Speed Burst", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 16, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 20, keyMode: 9728, label: "Super Jump", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 21, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 25, keyMode: 9728, label: "Teleport", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 26, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 30, keyMode: 9728, label: "Lightning", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 31, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 35, keyMode: 9728, label: "Laser", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 36, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 40, keyMode: 9728, label: "Sword", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 41, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 45, keyMode: 9728, label: "Ice Wave", labelType: "name"}
+									{index: 0, keyMode: 9728, label: "None", labelType: "name"},
+									{duration: 4, index: 1, keyMode: 9728},
+									{index: 5, keyMode: 9728, label: "Jet Pack", labelType: "name"},
+									{duration: 4, index: 6, keyMode: 9728},
+									{index: 10, keyMode: 9728, label: "Mine", labelType: "name"},
+									{duration: 4, index: 11, keyMode: 9728},
+									{index: 15, keyMode: 9728, label: "Speed Burst", labelType: "name"},
+									{duration: 4, index: 16, keyMode: 9728},
+									{index: 20, keyMode: 9728, label: "Super Jump", labelType: "name"},
+									{duration: 4, index: 21, keyMode: 9728},
+									{index: 25, keyMode: 9728, label: "Teleport", labelType: "name"},
+									{duration: 4, index: 26, keyMode: 9728},
+									{index: 30, keyMode: 9728, label: "Lightning", labelType: "name"},
+									{duration: 4, index: 31, keyMode: 9728},
+									{index: 35, keyMode: 9728, label: "Laser", labelType: "name"},
+									{duration: 4, index: 36, keyMode: 9728},
+									{index: 40, keyMode: 9728, label: "Sword", labelType: "name"},
+									{duration: 4, index: 41, keyMode: 9728},
+									{index: 45, keyMode: 9728, label: "Ice Wave", labelType: "name"}
 								],
 								index: 0,
 								name: "Labels Layer"
 							},
 							{
 								color: "#AFB740",
-								frameCount: 10,
 								frames: [
-									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{duration: 5, index: 0, keyMode: 9728},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 47.65, centerPoint3DY: 52.05, libraryItemName: "MovieClips/Symbol 867", matrix: {a: 0.725051879882812, d: 0.724609375, tx: 25.6, ty: 25.1}, type: "DOMSymbolInstance"}],
 										index: 5,
 										keyMode: 9728
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 26.6, centerPoint3DY: 26.2, libraryItemName: "MovieClips/Symbol 859", matrix: {a: 0.952133178710938, d: 0.952713012695312, tx: 11.6, ty: 11.2}, type: "DOMSymbolInstance"}],
 										index: 10,
 										keyMode: 9728
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 71.5, centerPoint3DY: 71.5, libraryItemName: "MovieClips/Symbol 875", matrix: {a: 0.388885498046875, d: 0.388885498046875, tx: 25.0, ty: 25.0}, type: "DOMSymbolInstance"}],
 										index: 15,
 										keyMode: 9728
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 71.5, centerPoint3DY: 71.5, libraryItemName: "MovieClips/Symbol 865", matrix: {a: 0.388885498046875, d: 0.388885498046875, tx: 25.0, ty: 25.0}, type: "DOMSymbolInstance"}],
 										index: 20,
 										keyMode: 9728
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 71.5, centerPoint3DY: 71.5, libraryItemName: "MovieClips/Symbol 863", matrix: {a: 0.388885498046875, d: 0.388885498046875, tx: 25.0, ty: 25.0}, type: "DOMSymbolInstance"}],
 										index: 25,
 										keyMode: 9728
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 71.5, centerPoint3DY: 71.5, libraryItemName: "MovieClips/Symbol 861", matrix: {a: 0.388885498046875, d: 0.388885498046875, tx: 25.0, ty: 25.0}, type: "DOMSymbolInstance"}],
 										index: 30,
 										keyMode: 9728
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 87.3,
@@ -19740,8 +17109,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 74.25,
@@ -19756,8 +17123,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 100.1,
@@ -19776,12 +17141,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D87C3F",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 51,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 108.0,
@@ -19802,12 +17164,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E0A01D",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 51,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 108.0,
@@ -19828,12 +17187,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DE05FE",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 51,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 108.0,
@@ -19854,12 +17210,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E8F001",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 51,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 52.0, centerPoint3DY: 62.25, color: {alphaMultiplier: 0.5}, libraryItemName: "MovieClips/Symbol 920", matrix: {ty: 53.0}, name: "holder1", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -19870,12 +17223,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8BF837",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 51,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 50.0, centerPoint3DY: 50.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 0.749847412109375, d: 0.499862670898438}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -19886,12 +17236,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F0B052",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 51,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 53.0,
@@ -19926,23 +17273,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#F15C7C",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: -100.0, left: 1900.0, right: 5340.0, top: -1300.0},
-												edgeCount: 1,
 												edges: [{edges: "!1900 -1300|5340 -1300!5340 -1300|5340 -100!5340 -100|1900 -100!1900 -100|1900 -1300", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#999999", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -19955,11 +17295,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#CF80E1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -19980,11 +17317,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E06FAA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 199.5,
@@ -20013,11 +17347,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#65F134",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 231.0, centerPoint3DY: 21.35, libraryItemName: "UI/ShadowBG", matrix: {a: 0.632369995117188, d: 0.768997192382812, tx: 95.0, ty: -74.15}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -20042,23 +17373,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#73AD9A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 40.0, left: -40.0, right: 40.0, top: -40.0},
-												edgeCount: 1,
 												edges: [{edges: "!-40 40|-40 -40!-40 -40|40 -40!40 -40|40 40!40 40|-40 40", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#00CC00", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#FFFFFF", type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -20092,37 +17416,29 @@ final class AssetCatalogSymbolsUI {
 							{frame: 15, layer: 0, name: "remote3", type: "name"},
 							{frame: 20, layer: 0, name: "local", type: "name"}
 						],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9BF869",
-								frameCount: 5,
 								frames: [
-									{duration: 5, elementCount: 0, elementTypes: [], index: 0, keyMode: 9728, label: "remote0", labelType: "name"},
-									{duration: 5, elementCount: 0, elementTypes: [], index: 5, keyMode: 9728, label: "remote1", labelType: "name"},
-									{duration: 5, elementCount: 0, elementTypes: [], index: 10, keyMode: 9728, label: "remote2", labelType: "name"},
-									{duration: 5, elementCount: 0, elementTypes: [], index: 15, keyMode: 9728, label: "remote3", labelType: "name"},
-									{duration: 5, elementCount: 0, elementTypes: [], index: 20, keyMode: 9728, label: "local", labelType: "name"}
+									{duration: 5, index: 0, keyMode: 9728, label: "remote0", labelType: "name"},
+									{duration: 5, index: 5, keyMode: 9728, label: "remote1", labelType: "name"},
+									{duration: 5, index: 10, keyMode: 9728, label: "remote2", labelType: "name"},
+									{duration: 5, index: 15, keyMode: 9728, label: "remote3", labelType: "name"},
+									{duration: 5, index: 20, keyMode: 9728, label: "local", labelType: "name"}
 								],
 								index: 0,
 								name: "Labels Layer"
 							},
 							{
 								color: "#92D685",
-								frameCount: 5,
 								frames: [
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 0.0, left: -40.0, right: 40.0, top: -80.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 -80|40 0!40 0|-40 0!-40 0|-40 -80!-40 -80|40 -80", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#10B6DE", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -20132,16 +17448,11 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 0.0, left: -40.0, right: 40.0, top: -80.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 -80|40 0!40 0|-40 0!-40 0|-40 -80!-40 -80|40 -80", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FF0000", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -20151,16 +17462,11 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 0.0, left: -40.0, right: 40.0, top: -80.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 -80|40 0!40 0|-40 0!-40 0|-40 -80!-40 -80|40 -80", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#00FF00", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -20170,16 +17476,11 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 0.0, left: -40.0, right: 40.0, top: -80.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 -80|40 0!40 0|-40 0!-40 0|-40 -80!-40 -80|40 -80", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#999999", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -20189,16 +17490,11 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 0.0, left: -40.0, right: 40.0, top: -80.0},
-												edgeCount: 1,
 												edges: [{edges: "!40 0|-40 0!-40 0|-40 -80!-40 -80|40 -80!40 -80|40 0", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#FFFF00", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", solidStyle: "hairline", type: "SolidStroke", weight: 0.05}}],
 												type: "DOMShape"
 											}
@@ -20226,19 +17522,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#B428DC",
-								frameCount: 1,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 50.0, centerPoint3DY: 50.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 4.07011413574219, d: 0.5}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{centerPoint3DX: 50.0, centerPoint3DY: 50.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 4.07011413574219, d: 0.5}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
@@ -20259,15 +17547,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#90E782",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 50.0, centerPoint3DY: 50.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 2.14022827148438, d: 0.349990844726562}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -20291,15 +17575,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 11,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText"],
 										elements: [
 											{
 												componentParams: {
@@ -20460,11 +17740,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -20485,11 +17762,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												componentParams: {
@@ -20533,11 +17807,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "UI/ShadowBG", matrix: {a: 0.919097900390625, d: 1.19357299804688, tx: -125.0, ty: -114.0}, transformationPoint: {x: 134.5, y: 94.6}, type: "DOMSymbolInstance"},
 											{
@@ -20573,30 +17844,19 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 11,
 						layers: [
 							{
 								color: "#E86AF1",
-								frameCount: 1,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 169.5, centerPoint3DY: -43.55, libraryItemName: "MovieClips/Symbol 948", matrix: {tx: 115.4, ty: -70.0}, name: "exp", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{centerPoint3DX: 169.5, centerPoint3DY: -43.55, libraryItemName: "MovieClips/Symbol 948", matrix: {tx: 115.4, ty: -70.0}, name: "exp", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#E1CA05",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 302.15,
@@ -20616,11 +17876,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D626F5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 222.75,
@@ -20640,11 +17897,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#82FB23",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 398.8,
@@ -20664,11 +17918,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#4EEE50",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 357.35,
@@ -20688,11 +17939,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D7AFF3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 38.05,
@@ -20713,11 +17961,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#66ECCF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -20738,11 +17983,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8175BB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 199.5,
@@ -20771,11 +18013,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F378A4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 231.4, centerPoint3DY: -42.6, libraryItemName: "UI/ShadowBG", matrix: {a: 0.63568115234375, d: 0.947372436523438, tx: 95.4, ty: -138.1}, name: "bg", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -20786,11 +18025,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9E78E2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 51.95,
@@ -20811,11 +18047,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FB65F5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 231.4, centerPoint3DY: 145.45, libraryItemName: "UI/ShadowBG", matrix: {a: 0.63568115234375, d: 0.33013916015625, tx: 95.4, ty: 49.95}, name: "flavorBg", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -20840,15 +18073,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#83ABC3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 208.5,
@@ -20877,11 +18106,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C7CEE3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 180.0, centerPoint3DY: 180.0, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 931", matrix: {tx: 153.0, ty: 169.0}, name: "glow", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -20892,11 +18118,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3FAAA2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 196.0, centerPoint3DY: 212.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 0.66021728515625, d: 0.349990844726562, tx: 146.0, ty: 162.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -20921,15 +18144,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 5,
 						layers: [
 							{
 								color: "#62AF95",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 72.5,
@@ -20949,11 +18168,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EAB9B2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 73.5,
@@ -20974,11 +18190,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D0EE8B",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -20998,11 +18211,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F93C9E",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.55,
@@ -21022,11 +18232,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B4CBA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -21060,30 +18267,19 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#76B2AF",
-								frameCount: 1,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 69.45, centerPoint3DY: 15.25, libraryItemName: "MovieClips/Symbol 903", matrix: {tx: 41.0, ty: 5.75}, name: "holder", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{centerPoint3DX: 69.45, centerPoint3DY: 15.25, libraryItemName: "MovieClips/Symbol 903", matrix: {tx: 41.0, ty: 5.75}, name: "holder", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 0,
 								name: "Layer 1"
 							},
 							{
 								color: "#F74AF7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 50.0, centerPoint3DY: 42.85, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 0.56982421875, d: 0.299972534179688}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -21107,15 +18303,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#FF4D42",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												filters: [{angle: 89.9993784528028, blurX: 2.0, blurY: 2.0, distance: 3.0, strength: 0.25, type: "DropShadowFilter"}],
@@ -21143,30 +18335,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "SpectatingText", matrix: {tx: 23.0, ty: -16.55}, name: "spectatingText", transformationPoint: {x: 52.5, y: 9.75}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "SpectatingText", matrix: {tx: 23.0, ty: -16.55}, name: "spectatingText", transformationPoint: {x: 52.5, y: 9.75}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "Layer_3"
 							},
 							{
 								color: "#B6CF5B",
-								frameCount: 1,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "SpectatingNameTextBox", matrix: {tx: 15.0, ty: -2.05}, name: "playerName", transformationPoint: {x: 59.4, y: 9.75}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "SpectatingNameTextBox", matrix: {tx: 15.0, ty: -2.05}, name: "playerName", transformationPoint: {x: 59.4, y: 9.75}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 2,
 								name: "Layer 2"
@@ -21186,22 +18362,15 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 265.0, left: 380.0, right: 765.0, top: 105.0},
-												edgeCount: 1,
 												edges: [{edges: "!380 105|380 265!765 105|765 265", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {caps: "none", fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -21215,11 +18384,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 9.75,
@@ -21262,11 +18428,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F74AF7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 50.0, centerPoint3DY: 25.7, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 0.56982421875, d: 0.179977416992188}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -21292,15 +18455,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#EA5E99",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 354", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#EA5E99", frames: [{elements: [{libraryItemName: "Graphics/Symbol 354", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "PetrifiedTree"
 					}
@@ -21317,15 +18473,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#FBA664",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 329", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#FBA664", frames: [{elements: [{libraryItemName: "Graphics/Symbol 329", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "rock1"
 					}
@@ -21342,15 +18491,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#F6DBFB",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 350", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#F6DBFB", frames: [{elements: [{libraryItemName: "Graphics/Symbol 350", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "rock2"
 					}
@@ -21367,15 +18509,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#C163F3",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 187", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#C163F3", frames: [{elements: [{libraryItemName: "Graphics/Symbol 187", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "spire1"
 					}
@@ -21392,15 +18527,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#C5AFA2",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 341", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#C5AFA2", frames: [{elements: [{libraryItemName: "Graphics/Symbol 341", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "spire2"
 					}
@@ -21417,15 +18545,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#9DF9F1",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 333", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#9DF9F1", frames: [{elements: [{libraryItemName: "Graphics/Symbol 333", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "tree1"
 					}
@@ -21442,15 +18563,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#7A9ADB",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 185", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#7A9ADB", frames: [{elements: [{libraryItemName: "Graphics/Symbol 185", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "tree2"
 					}
@@ -21467,15 +18581,8 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
-							{
-								color: "#5269CF",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "Graphics/Symbol 189", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
-								index: 0,
-								name: "Layer 1"
-							}
+							{color: "#5269CF", frames: [{elements: [{libraryItemName: "Graphics/Symbol 189", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}], index: 0, name: "Layer 1"}
 						],
 						name: "tree3"
 					}
@@ -21492,17 +18599,13 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 3,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "MovieClips/transparentCover (ModeSymbolMC)",
@@ -21515,16 +18618,11 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 487.0, left: -5.0, right: 495.0, top: -28.0},
-												edgeCount: 1,
 												edges: [{edges: "!-5 -28|495 -28!495 -28|495 487!495 487|-5 487!-5 487|-5 -28", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.749019607843137, type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -21537,12 +18635,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "MovieClips/Symbol 7", matrix: {a: 0.833328247070312, d: 0.833328247070312, tx: 12.5, ty: 12.5}, transformationPoint: {x: 0.05, y: 0.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -21567,91 +18662,42 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 11,
 						labels: [{frame: 0, layer: 0, name: "players", type: "name"}, {frame: 5, layer: 0, name: "guilds", type: "name"}],
-						layerCount: 7,
 						layers: [
 							{
 								color: "#F78A0D",
-								frameCount: 3,
-								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728, label: "players", labelType: "name"},
-									{duration: 4, elementCount: 0, elementTypes: [], index: 1, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 5, keyMode: 9728, label: "guilds", labelType: "name"}
-								],
+								frames: [{index: 0, keyMode: 9728, label: "players", labelType: "name"}, {duration: 4, index: 1, keyMode: 9728}, {index: 5, keyMode: 9728, label: "guilds", labelType: "name"}],
 								index: 0,
 								name: "Labels Layer"
 							},
 							{
 								color: "#DDDA27",
-								frameCount: 1,
-								frames: [
-									{
-										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1336", name: "name_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{duration: 11, elements: [{libraryItemName: "Buttons/Symbol 1336", name: "name_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							},
 							{
 								color: "#D19997",
-								frameCount: 2,
 								frames: [
-									{
-										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1333", matrix: {tx: 140.8}, name: "hats_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1342", matrix: {tx: 102.0}, name: "gp_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 5,
-										keyMode: 9728
-									}
+									{duration: 5, elements: [{libraryItemName: "Buttons/Symbol 1333", matrix: {tx: 140.8}, name: "hats_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{duration: 6, elements: [{libraryItemName: "Buttons/Symbol 1342", matrix: {tx: 102.0}, name: "gp_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 5, keyMode: 9728}
 								],
 								index: 2,
 								name: "Layer 3"
 							},
 							{
 								color: "#878AC2",
-								frameCount: 2,
 								frames: [
-									{
-										duration: 5,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1330", matrix: {tx: 101.8}, name: "rank_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									},
-									{
-										duration: 6,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1339", matrix: {tx: 141.0}, name: "active_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 5,
-										keyMode: 9728
-									}
+									{duration: 5, elements: [{libraryItemName: "Buttons/Symbol 1330", matrix: {tx: 101.8}, name: "rank_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{duration: 6, elements: [{libraryItemName: "Buttons/Symbol 1339", matrix: {tx: 141.0}, name: "active_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 5, keyMode: 9728}
 								],
 								index: 3,
 								name: "Layer 4"
 							},
 							{
 								color: "#D9C7EF",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 1.74000549316406, d: 3.33000183105469, tx: 87.0, ty: 183.5}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -21663,34 +18709,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#77E2E5",
-								frameCount: 1,
-								frames: [
-									{
-										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DY: 17.0, libraryItemName: "MovieClips/Symbol 72", matrix: {ty: 17.0}, name: "listHolder", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{duration: 11, elements: [{centerPoint3DY: 17.0, libraryItemName: "MovieClips/Symbol 72", matrix: {ty: 17.0}, name: "listHolder", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 5,
 								name: "Layer 6",
 								parentLayerIndex: 4
 							},
 							{
 								color: "#BEBCC3",
-								frameCount: 1,
-								frames: [
-									{
-										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 1015", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{duration: 11, elements: [{libraryItemName: "Graphics/Symbol 1015", loop: "loop", symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 6,
 								name: "Layer 7"
 							}
@@ -21710,15 +18736,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#9C19FC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -21739,11 +18761,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B7709B",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -21764,11 +18783,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#CEFF80",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.05,
@@ -21803,15 +18819,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 5,
 						layers: [
 							{
 								color: "#55ACC9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 59.5,
@@ -21840,11 +18852,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C7C3F2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 136.5,
@@ -21873,11 +18882,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#76AC66",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 26", loop: "loop", matrix: {a: 1.843994140625, d: 3.39999389648438, tx: 92.2, ty: 170.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -21890,8 +18896,7 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C8A82E",
-								frameCount: 1,
-								frames: [{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/Symbol 72", name: "var_295", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
+								frames: [{elements: [{libraryItemName: "MovieClips/Symbol 72", name: "var_295", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								locked: true,
 								name: "Layer 4",
@@ -21899,16 +18904,7 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F7D4F9",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Graphics/Symbol 1015", loop: "loop", matrix: {a: 1.01148986816406, d: 0.971389770507812}, symbolType: "graphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Graphics/Symbol 1015", loop: "loop", matrix: {a: 1.01148986816406, d: 0.971389770507812}, symbolType: "graphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 4,
 								name: "Layer 5"
 							}
@@ -21928,15 +18924,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 5,
 						layers: [
 							{
 								color: "#25FE9A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.5,
@@ -21957,11 +18949,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8552BD",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 291.7,
@@ -21981,11 +18970,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C3F0A5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -22006,11 +18992,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#009999",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Images/everyone_icon.svg",
@@ -22029,11 +19012,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FE18F6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Components/Component Assets/TextAreaSkins/TextArea_upSkin",
@@ -22066,20 +19046,10 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#E4AF75",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 7.35, centerPoint3DY: 7.05, libraryItemName: "MovieClips/Symbol 444", matrix: {tx: 3.3, ty: 3.15}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 7.35, centerPoint3DY: 7.05, libraryItemName: "MovieClips/Symbol 444", matrix: {tx: 3.3, ty: 3.15}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer 1"
 							}
@@ -22099,16 +19069,12 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 11,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#099AF7",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 250.0, centerPoint3DY: 412.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 2.8712158203125, d: 0.349990844726562, tx: 200.0, ty: 362.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -22119,12 +19085,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B1EC30",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 443.85, centerPoint3DY: 332.35, libraryItemName: "MovieClips/Symbol 1087", matrix: {d: 1.00006103515625}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -22149,31 +19112,26 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 31,
 						labels: [{frame: 1, layer: 0, name: "miscSite", type: "name"}, {frame: 10, layer: 0, name: "sponsoredSite", type: "name"}, {frame: 20, layer: 0, name: "kongregateSite", type: "name"}],
-						layerCount: 7,
 						layers: [
 							{
 								color: "#B7ED1C",
-								frameCount: 6,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 1, keyMode: 9728, label: "miscSite", labelType: "name"},
-									{duration: 8, elementCount: 0, elementTypes: [], index: 2, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 10, keyMode: 9728, label: "sponsoredSite", labelType: "name"},
-									{duration: 9, elementCount: 0, elementTypes: [], index: 11, keyMode: 9728},
-									{elementCount: 0, elementTypes: [], index: 20, keyMode: 9728, label: "kongregateSite", labelType: "name"}
+									{index: 0, keyMode: 9728},
+									{index: 1, keyMode: 9728, label: "miscSite", labelType: "name"},
+									{duration: 8, index: 2, keyMode: 9728},
+									{index: 10, keyMode: 9728, label: "sponsoredSite", labelType: "name"},
+									{duration: 9, index: 11, keyMode: 9728},
+									{index: 20, keyMode: 9728, label: "kongregateSite", labelType: "name"}
 								],
 								index: 0,
 								name: "Labels Layer"
 							},
 							{
 								color: "#F7F49D",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 9,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 379.35, centerPoint3DY: 626.15, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1085", matrix: {tx: 338.3, ty: 421.3}, name: "vaultButton", type: "DOMSymbolInstance"}
 										],
@@ -22182,8 +19140,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 296.05, centerPoint3DY: 625.85, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1085", matrix: {tx: 255.0, ty: 421.0}, name: "vaultButton", type: "DOMSymbolInstance"}
 										],
@@ -22192,8 +19148,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: 247.05, centerPoint3DY: 570.85, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1085", matrix: {tx: 206.0, ty: 366.0}, name: "vaultButton", type: "DOMSymbolInstance"}
 										],
@@ -22206,13 +19160,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF2C80",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 9,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 293.45,
@@ -22237,8 +19188,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 262.5,
@@ -22263,8 +19212,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 302.4,
@@ -22293,13 +19240,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DB37D6",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 9,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 258.3,
@@ -22315,8 +19259,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 387.45,
@@ -22332,8 +19274,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 416.75,
@@ -22353,13 +19293,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FD64C7",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 9,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 489.65,
@@ -22385,8 +19322,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 478.5,
@@ -22411,8 +19346,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 478.5,
@@ -22441,13 +19374,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F74AF2",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 9,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 360.5,
@@ -22472,8 +19402,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 327.5,
@@ -22498,8 +19426,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 340.5,
@@ -22528,13 +19454,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F8CFFD",
-								frameCount: 4,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 9,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 437.2,
@@ -22559,8 +19482,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 10,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 416.5,
@@ -22585,8 +19506,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 11,
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 418.5,
@@ -22628,15 +19547,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 6,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 27.55,
@@ -22742,15 +19657,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 7,
 						layers: [
 							{
 								color: "#FB5E4D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 412.9,
@@ -22779,11 +19690,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6290BC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 216.3,
@@ -22812,11 +19720,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D10AC5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 94.55,
@@ -22845,11 +19750,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3FA0D2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 312.9,
@@ -22878,11 +19780,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A9BC96",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -22902,11 +19801,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#7691C3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -22926,11 +19822,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#ACA7CB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 358.85,
@@ -22973,15 +19866,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#F8A5C0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -23001,11 +19890,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A7EECB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -23025,16 +19911,7 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9E95FD",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 50.5, centerPoint3DY: 8.5, libraryItemName: "MovieClips/Symbol 1351", matrix: {ty: 1.0}, name: "bg", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 50.5, centerPoint3DY: 8.5, libraryItemName: "MovieClips/Symbol 1351", matrix: {ty: 1.0}, name: "bg", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 2,
 								name: "Layer 3"
 							}
@@ -23054,15 +19931,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#E975C1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -23083,16 +19956,7 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EAB191",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 26.5, centerPoint3DY: 9.75, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1224", name: "bg", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 26.5, centerPoint3DY: 9.75, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1224", name: "bg", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							}
@@ -23112,15 +19976,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 5,
 						layers: [
 							{
 								color: "#8840E9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -23140,11 +20000,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#1EA5D5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 6,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 62.5,
@@ -23216,11 +20073,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BBCD85",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -24.5,
@@ -23249,11 +20103,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C61CDE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -23273,11 +20124,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#84CF3F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 18.0,
@@ -23311,15 +20159,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#64F14B",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 7.1,
@@ -23348,11 +20192,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F164B2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -23372,11 +20213,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#0DC7BE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 54.6, centerPoint3DY: 47.5, libraryItemName: "UI/ShadowBG", matrix: {a: 0.604461669921875, d: 0.505264282226562, tx: -81.4, ty: -48.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -23401,15 +20239,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 26,
 						labels: [],
-						layerCount: 7,
 						layers: [
 							{
 								color: "#B86E9F",
-								frameCount: 19,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23424,8 +20258,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23440,8 +20272,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23456,8 +20286,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23472,8 +20300,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23488,8 +20314,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23504,8 +20328,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23520,8 +20342,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23536,8 +20356,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23552,8 +20370,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23568,8 +20384,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23584,8 +20398,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23600,8 +20412,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23616,8 +20426,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23632,8 +20440,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23648,8 +20454,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23664,8 +20468,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23680,8 +20482,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23696,8 +20496,6 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 325.0,
@@ -23717,12 +20515,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#4BFDC6",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 26,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 544.8, centerPoint3DY: 178.95, libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 413", matrix: {tx: 394.45, ty: 18.0}, name: "loggedInAs", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -23733,12 +20528,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#5EACF2",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 26,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 105.8,
@@ -23760,12 +20552,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AEF3D4",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 26,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 192.85,
@@ -23788,28 +20577,15 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BBD6D8",
-								frameCount: 1,
-								frames: [
-									{
-										duration: 26,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 382", matrix: {tx: 5.45, ty: 364.45}, name: "kongLogo", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{duration: 26, elements: [{libraryItemName: "Buttons/Symbol 382", matrix: {tx: 5.45, ty: 364.45}, name: "kongLogo", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 4,
 								name: "Layer 5"
 							},
 							{
 								color: "#904DC1",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 26,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 267.5, centerPoint3DY: 262.0, libraryItemName: "UI/Popups (outside levels)/BG", matrix: {a: 1.16000366210938, d: 1.239990234375, tx: 217.5, ty: 212.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -23820,12 +20596,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#882DF0",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 26,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 1921.55, centerPoint3DY: 260.2, libraryItemName: "MovieClips/Symbol 376", matrix: {tx: -0.2, ty: 0.3}, name: "bg", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -23850,45 +20623,25 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 12,
 						layers: [
 							{
 								color: "#0000FF",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/reloadButton", matrix: {tx: 94.85, ty: 50.85}, name: "reload_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Buttons/reloadButton", matrix: {tx: 94.85, ty: 50.85}, name: "reload_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Capa 1"
 							},
 							{
 								color: "#7791D2",
-								frameCount: 1,
 								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 543", matrix: {a: 0.9820556640625, tx: -34.0, ty: -24.25}, name: "forgotPass", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
+									{elements: [{libraryItemName: "Buttons/Symbol 543", matrix: {a: 0.9820556640625, tx: -34.0, ty: -24.25}, name: "forgotPass", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}
 								],
 								index: 1,
 								name: "Layer 1"
 							},
 							{
 								color: "#B659E5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -23908,11 +20661,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8B58C2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 62.5,
@@ -23941,11 +20691,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C3834B",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 52.7,
@@ -23990,11 +20737,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#58E8FA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 52.7,
@@ -24023,11 +20767,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#656CB8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -24.5,
@@ -24056,11 +20797,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DDF195",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -24080,11 +20818,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#ED46D8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -24104,11 +20839,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AECF9D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -24128,11 +20860,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#87BF5D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 33.0,
@@ -24159,11 +20888,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#77D074",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 25.0, centerPoint3DY: -26.0, libraryItemName: "UI/ShadowBG", matrix: {a: 0.8162841796875, d: 1.27224731445312, tx: -111.0, ty: -121.5}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -24187,15 +20913,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 7,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 27.6,
@@ -24309,15 +21031,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#EC89F1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMRectangleObject"],
 										elements: [
 											{
 												bottomLeftRadius: 5.0,
@@ -24366,15 +21084,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 27,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -24694,15 +21408,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 27,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -25159,15 +21869,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 9,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -25312,15 +22018,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 12,
 						layers: [
 							{
 								color: "#C5F2D1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -25359,18 +22061,12 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B732D2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 2591.0, left: 0.0, right: 3518.0, top: -3009.0},
-												edgeCount: 1,
 												edges: [{edges: "!3518 750|2019 750!0 -3009|0 2591", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#999999", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -25384,11 +22080,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Popups (outside levels)/Credits/musicPg2", matrix: {tx: -109.3, ty: -130.85}, name: "musicPg2", transformationPoint: {x: -0.5, y: 37.25}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -25399,11 +22092,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D7B164",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Popups (outside levels)/Credits/musicPg1", matrix: {tx: -133.5, ty: -130.85}, name: "musicPg1", transformationPoint: {y: 95.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -25415,11 +22105,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 4,
-										elementTypes: ["DOMDynamicText", "DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -25466,11 +22153,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 9,
-										elementTypes: ["DOMDynamicText", "DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -25563,11 +22247,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Popups (outside levels)/Credits/artPg3", matrix: {tx: 117.5, ty: -130.85}, name: "artPg3", transformationPoint: {y: -0.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -25578,11 +22259,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Popups (outside levels)/Credits/artPg2", matrix: {tx: 117.5, ty: -130.85}, name: "artPg2", transformationPoint: {y: -0.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -25594,11 +22272,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Popups (outside levels)/Credits/artPg1", matrix: {tx: 105.4, ty: -130.85}, name: "artPg1", transformationPoint: {y: 51.55}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -25610,11 +22285,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C5B4D0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 4,
-										elementTypes: ["DOMDynamicText", "DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -25673,11 +22345,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9FA0EC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -25706,11 +22375,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9D35DE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -127.1, centerPoint3DY: -79.65, libraryItemName: "UI/ShadowBG", matrix: {a: 1.95262145996094, d: 1.83905029296875, tx: -263.1, ty: -175.15}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -25734,15 +22400,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 45,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -26287,15 +22949,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 15,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -26512,25 +23170,18 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 3,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 208.0, left: -260.0, right: 260.0, top: -207.0},
-												edgeCount: 1,
 												edges: [{edges: "!-260 -207|260 -207!260 -207|260 208!260 208|-260 208!-260 208|-260 -207", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.2, color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -26538,16 +23189,11 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 208.0, left: -260.0, right: 260.0, top: -207.0},
-												edgeCount: 1,
 												edges: [{edges: "!-260 -207|260 -207!260 -207|260 208!260 208|-260 208!-260 208|-260 -207", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -26560,18 +23206,10 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 3,
 								frames: [
-									{elementCount: 1, elementTypes: ["DOMSymbolInstance"], elements: [{libraryItemName: "MovieClips/cowboyMC", transformationPoint: {x: 8.55}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
-									{
-										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "MovieClips/cowboyMC", transformationPoint: {x: 8.55}, type: "DOMSymbolInstance"}],
-										index: 1,
-										keyMode: 9728
-									},
-									{elementCount: 0, elementTypes: [], index: 3, keyMode: 9728}
+									{elements: [{libraryItemName: "MovieClips/cowboyMC", transformationPoint: {x: 8.55}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728},
+									{duration: 2, elements: [{libraryItemName: "MovieClips/cowboyMC", transformationPoint: {x: 8.55}, type: "DOMSymbolInstance"}], index: 1, keyMode: 9728},
+									{index: 3, keyMode: 9728}
 								],
 								index: 1,
 								name: "Layer_1"
@@ -26591,32 +23229,23 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 3,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "MovieClips/transparentCover (ModeSymbolMC)", matrix: {a: 0.675308227539062, d: 1.03790283203125}, transformationPoint: {x: 0.05, y: 0.05}, type: "DOMSymbolInstance"}],
 										index: 1,
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 260.0, left: -260.0, right: 260.0, top: -260.0},
-												edgeCount: 1,
 												edges: [{edges: "!-260 -260|260 -260!260 -260|260 260!260 260|-260 260!-260 260|-260 -260", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.749019607843137, type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -26629,12 +23258,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "expMC", matrix: {a: 0.147262573242188, d: 0.146713256835938, tx: -11.25, ty: -9.45}, transformationPoint: {x: 73.7, y: 61.35}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -26658,17 +23284,13 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 3,
 								frames: [
-									{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728},
+									{index: 0, keyMode: 9728},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "MovieClips/transparentCover (ModeSymbolMC)",
@@ -26681,16 +23303,11 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 487.0, left: -5.0, right: 495.0, top: -28.0},
-												edgeCount: 1,
 												edges: [{edges: "!-5 -28|495 -28!495 -28|495 487!495 487|-5 487!-5 487|-5 -28", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.749019607843137, type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -26703,12 +23320,9 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Pages/Levels/Editor/Settings/ItemButton", matrix: {a: 0.74072265625, d: 0.739654541015625}, transformationPoint: {x: 16.6, y: 15.5}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -26731,15 +23345,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "MovieClips/transparentCover (ModeSymbolMC)",
@@ -26758,11 +23368,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "MovieClips/PR2_Graphics_1_Apr_2014_fla/Symbol 1312",
@@ -26781,19 +23388,13 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 243.0, left: -347.0, right: 337.0, top: -258.0},
-												edgeCount: 1,
 												edges: [{edges: "!-347 -258|337 -258!337 -258|337 243!337 243|-347 243!-347 243|-347 -258", fillStyle1: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.749019607843137, color: "#CCCCCC", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -26819,19 +23420,14 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 3,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 188.0, left: -149.0, right: 160.0, top: -181.0},
-												edgeCount: 4,
 												edges: [
 													{edges: "!-32 157|-36 132", fillStyle0: 1, fillStyle1: 1, strokeStyle: 1},
 													{edges: "!-36 132|-36 -106!-36 -106[-4 -96 53 -115!53 -115[118 -137 150 -181!150 -181|150 46", strokeStyle: 1},
@@ -26841,9 +23437,7 @@ final class AssetCatalogSymbolsUI {
 														fillStyle0: 1
 													}
 												],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -26853,12 +23447,9 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 2,
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 188.0, left: -149.0, right: 160.0, top: -181.0},
-												edgeCount: 6,
 												edges: [
 													{edges: " !-32 157|-36 132", fillStyle0: 2, fillStyle1: 1, strokeStyle: 1},
 													{edges: " !-36 132|-36 -106!-36 -106[-4 -96 53 -115!53 -115[118 -137 150 -181!150 -181|150 46", strokeStyle: 1},
@@ -26870,9 +23461,7 @@ final class AssetCatalogSymbolsUI {
 													{edges: " !-32 157[-31 153 -31 148!-31 148[-31 139 -36 132", fillStyle0: 1},
 													{edges: " !-36 132[-40 125 -48 120!-48 120[-66 108 -90 108!-90 108[-114 108 -131 120", fillStyle0: 2}
 												],
-												fillStyleCount: 2,
 												fills: [{index: 1, value: {type: "SolidColor"}}, {index: 2, value: {color: "#666666", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#666666", type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -26881,16 +23470,11 @@ final class AssetCatalogSymbolsUI {
 										keyMode: 9728
 									},
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 242.0, left: -215.0, right: 235.0, top: -218.0},
-												edgeCount: 1,
 												edges: [{edges: " !-215 -218|235 -218!235 -218|235 242!235 242|-215 242!-215 242|-215 -218", fillStyle1: 1, strokeStyle: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {color: "#666666", type: "SolidColor"}}],
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#666666", type: "SolidColor"}, pixelHinting: true, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -26916,15 +23500,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "MovieClips/transparentCover (ModeSymbolMC)", matrix: {a: 1.71427917480469, d: 0.558883666992188}, name: "cover", transformationPoint: {x: 2.45, y: 0.2}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -26935,11 +23515,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "UI/Global/RatingStars", matrix: {a: 1.18113708496094, d: 1.18180847167969, tx: -32.6, ty: -6.5}, name: "stars", transformationPoint: {x: 27.65, y: 5.65}, type: "DOMSymbolInstance"}
 										],
@@ -26964,30 +23541,17 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1320", matrix: {tx: 150.8, ty: 112.8}, name: "unpublish_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Buttons/Symbol 1320", matrix: {tx: 150.8, ty: 112.8}, name: "unpublish_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "Layer_2"
 							},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 22,
-										elementTypes: ["DOMDynamicText", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												height: 14.5,
@@ -27151,30 +23715,17 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 6,
 						layers: [
 							{
 								color: "#FF0000",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "UI/Global/Loading", name: "loading", transformationPoint: {y: -0.05}, type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "UI/Global/Loading", name: "loading", transformationPoint: {y: -0.05}, type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 0,
 								name: "loading"
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "UI/Popups (outside levels)/LevelInfo/dataDisplay", matrix: {tx: -1.5, ty: -2.75}, name: "levelInfo", transformationPoint: {y: 0.5}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -27183,16 +23734,13 @@ final class AssetCatalogSymbolsUI {
 								index: 1,
 								name: "graphics"
 							},
-							{color: "#009999", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 2, name: "button"},
-							{color: "#FF4FFF", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 3, name: "Layer_4"},
-							{color: "#669900", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 4, name: "text"},
+							{color: "#009999", frames: [{index: 0, keyMode: 9728}], index: 2, name: "button"},
+							{color: "#FF4FFF", frames: [{index: 0, keyMode: 9728}], index: 3, name: "Layer_4"},
+							{color: "#669900", frames: [{index: 0, keyMode: 9728}], index: 4, name: "text"},
 							{
 								color: "#C022E1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 281.35,
@@ -27257,15 +23805,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 7,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 27.6,
@@ -27377,15 +23921,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#AE47F5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 78.15,
@@ -27418,11 +23958,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F4543A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -27451,11 +23988,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#809FB9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -30.5, centerPoint3DY: 20.5, libraryItemName: "UI/ShadowBG", matrix: {a: 1.2242431640625, d: 0.785232543945312, tx: -166.5, ty: -75.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -27478,15 +24012,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -27502,8 +24032,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -27536,15 +24064,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												componentParams: {
@@ -27570,11 +24094,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 80.75,
@@ -27595,11 +24116,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -27620,11 +24138,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 17.4,
@@ -27657,15 +24172,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 4,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 2,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -27681,8 +24192,6 @@ final class AssetCatalogSymbolsUI {
 									},
 									{
 										duration: 3,
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -27716,15 +24225,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 31,
 						layers: [
 							{
 								color: "#60EFAF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -27742,14 +24247,11 @@ final class AssetCatalogSymbolsUI {
 								index: 0,
 								name: "Layer 1"
 							},
-							{color: "#FF0000", frameCount: 0, frames: [], index: 1, layerType: "folder", locked: true, name: "artControls"},
+							{color: "#FF0000", frames: [], index: 1, layerType: "folder", locked: true, name: "artControls"},
 							{
 								color: "#669900",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -27772,11 +24274,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#4CFCF0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												componentParams: {
@@ -27830,11 +24329,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AFFBD7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMComponentInstance", "DOMStaticText"],
 										elements: [
 											{
 												componentParams: {
@@ -27887,11 +24383,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#76AEC9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 6,
-										elementTypes: ["DOMComponentInstance", "DOMDynamicText", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												componentParams: {
@@ -27976,11 +24469,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8ECDC5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "Buttons/Symbol 1164", matrix: {tx: 41.0}, name: "guildEdit_bt", symbolType: "button", type: "DOMSymbolInstance"},
 											{libraryItemName: "Buttons/TransferGuildBtn", matrix: {a: 1.00068664550781, tx: 30.2, ty: -20.0}, name: "guildTransfer_bt", symbolType: "button", type: "DOMSymbolInstance"}
@@ -27994,72 +24484,33 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#91AAC8",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1161", matrix: {tx: 33.5, ty: 20.0}, name: "guildCreate_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Buttons/Symbol 1161", matrix: {tx: 33.5, ty: 20.0}, name: "guildCreate_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 7,
 								name: "Layer 6"
 							},
 							{
 								color: "#86F8A6",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1158", matrix: {tx: 36.5, ty: 40.0}, name: "guildLeave_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Buttons/Symbol 1158", matrix: {tx: 36.5, ty: 40.0}, name: "guildLeave_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 8,
 								name: "Layer 7"
 							},
 							{
 								color: "#BA6C8C",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1155", matrix: {tx: 30.0, ty: 60.0}, name: "changeEmail_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Buttons/Symbol 1155", matrix: {tx: 30.0, ty: 60.0}, name: "changeEmail_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 9,
 								name: "Layer 8"
 							},
 							{
 								color: "#6C8BEA",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{libraryItemName: "Buttons/Symbol 1152", matrix: {tx: 21.0, ty: 80.0}, name: "changePass_bt", symbolType: "button", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Buttons/Symbol 1152", matrix: {tx: 21.0, ty: 80.0}, name: "changePass_bt", symbolType: "button", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 10,
 								name: "Layer 9"
 							},
-							{color: "#FF0000", frameCount: 0, frames: [], index: 11, layerType: "folder", name: "altkeys"},
+							{color: "#FF0000", frames: [], index: 11, layerType: "folder", name: "altkeys"},
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -28079,14 +24530,11 @@ final class AssetCatalogSymbolsUI {
 								name: "title",
 								parentLayerIndex: 11
 							},
-							{color: "#FF4FFF", frameCount: 0, frames: [], index: 13, layerType: "folder", name: "items", parentLayerIndex: 11},
+							{color: "#FF4FFF", frames: [], index: 13, layerType: "folder", name: "items", parentLayerIndex: 11},
 							{
 								color: "#9844E8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.55,
@@ -28108,28 +24556,16 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E8B1D6",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMBitmapInstance"],
-										elements: [{libraryItemName: "Images/bitmap7.png", matrix: {a: 0.6666259765625, d: 0.6666259765625, tx: -83.0, ty: 68.0}, type: "DOMBitmapInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{libraryItemName: "Images/bitmap7.png", matrix: {a: 0.6666259765625, d: 0.6666259765625, tx: -83.0, ty: 68.0}, type: "DOMBitmapInstance"}], index: 0, keyMode: 9728}],
 								index: 15,
 								name: "Layer 11",
 								parentLayerIndex: 13
 							},
-							{color: "#FF800A", frameCount: 0, frames: [], index: 16, layerType: "folder", name: "left", parentLayerIndex: 11},
+							{color: "#FF800A", frames: [], index: 16, layerType: "folder", name: "left", parentLayerIndex: 11},
 							{
 								color: "#DE663D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.55,
@@ -28151,11 +24587,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E607D4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.6,
@@ -28175,14 +24608,11 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 19",
 								parentLayerIndex: 16
 							},
-							{color: "#9933CC", frameCount: 0, frames: [], index: 19, layerType: "folder", name: "right", parentLayerIndex: 11},
+							{color: "#9933CC", frames: [], index: 19, layerType: "folder", name: "right", parentLayerIndex: 11},
 							{
 								color: "#F989B7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.55,
@@ -28204,11 +24634,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#5279FD",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.6,
@@ -28228,14 +24655,11 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 17",
 								parentLayerIndex: 19
 							},
-							{color: "#FF4F4F", frameCount: 0, frames: [], index: 22, layerType: "folder", name: "down", parentLayerIndex: 11},
+							{color: "#FF4F4F", frames: [], index: 22, layerType: "folder", name: "down", parentLayerIndex: 11},
 							{
 								color: "#AF53DF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.55,
@@ -28257,11 +24681,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A1AAF4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.6,
@@ -28281,14 +24702,11 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 16",
 								parentLayerIndex: 22
 							},
-							{color: "#669900", frameCount: 0, frames: [], index: 25, layerType: "folder", name: "up", parentLayerIndex: 11},
+							{color: "#669900", frames: [], index: 25, layerType: "folder", name: "up", parentLayerIndex: 11},
 							{
 								color: "#C94F6D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMInputText"],
 										elements: [
 											{
 												height: 14.55,
@@ -28310,11 +24728,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#7163FE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.6,
@@ -28336,11 +24751,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF0000",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{libraryItemName: "MovieClips/Symbol 986", matrix: {a: 0.90771484375, d: 1.0191650390625, tx: -93.05, ty: -71.5}, name: "artHighlight", transformationPoint: {y: -0.1}, type: "DOMSymbolInstance"},
 											{libraryItemName: "MovieClips/Symbol 986", matrix: {a: 0.90771484375, d: 1.0191650390625, tx: -28.15, ty: -71.5}, name: "filterHighlight", transformationPoint: {y: -0.1}, type: "DOMSymbolInstance"}
@@ -28354,11 +24766,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F59E2D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -28387,11 +24796,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AF837B",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 6.25,
@@ -28424,15 +24830,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 21,
 						layers: [
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.05,
@@ -28460,11 +24862,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.05,
@@ -28492,11 +24891,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.05,
@@ -28524,11 +24920,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.05,
@@ -28556,11 +24949,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9933CC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.0,
@@ -28588,11 +24978,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4F4F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.0,
@@ -28620,11 +25007,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#669900",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.0,
@@ -28652,11 +25036,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF0000",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.1,
@@ -28684,11 +25065,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#009999",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.1,
@@ -28716,11 +25094,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.5,
@@ -28748,11 +25123,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3BF35A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.5,
@@ -28780,11 +25152,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E550E8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.5,
@@ -28812,11 +25181,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DE0FA4",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.4,
@@ -28844,11 +25210,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F12B73",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.4,
@@ -28876,11 +25239,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BA4FBB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -64.75,
@@ -28908,11 +25268,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#2FB1C2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.3,
@@ -28940,11 +25297,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8C99D6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -64.65,
@@ -28972,11 +25326,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#68C7CF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -65.5,
@@ -29004,11 +25355,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EC9521",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -62.75,
@@ -29036,11 +25384,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EDB002",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -29061,11 +25406,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EEC6B8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 20.8,
@@ -29098,15 +25440,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 6,
 						layers: [
 							{
 								color: "#009999",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -23.7,
@@ -29127,11 +25465,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -82.85,
@@ -29152,11 +25487,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3FE06D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.9,
@@ -29177,11 +25509,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#0BD2A6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 46.75,
@@ -29202,11 +25531,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#669900",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 5,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.5,
@@ -29266,11 +25592,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C022E1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 322.6,
@@ -29335,15 +25658,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 13,
 						layers: [
 							{
 								color: "#9039BC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -29363,15 +25682,12 @@ final class AssetCatalogSymbolsUI {
 								name: "Layer 1",
 								visible: false
 							},
-							{color: "#89CDD9", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
-							{color: "#1BABFB", frameCount: 1, frames: [{elementCount: 0, elementTypes: [], index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
+							{color: "#89CDD9", frames: [{index: 0, keyMode: 9728}], index: 1, name: "Layer 2"},
+							{color: "#1BABFB", frames: [{index: 0, keyMode: 9728}], index: 2, name: "Layer 3"},
 							{
 								color: "#FEC142",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -29393,11 +25709,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6793B2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -29418,11 +25731,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8277D3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 65.65,
@@ -29443,11 +25753,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EBAA8D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -29468,11 +25775,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#009999",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 137.7,
@@ -29493,11 +25797,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B66287",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 88.1,
@@ -29518,11 +25819,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF800A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 199.75,
@@ -29543,11 +25841,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 173.6,
@@ -29568,11 +25863,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E9ABBE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												libraryItemName: "Graphics/Symbol 1015",
@@ -29592,11 +25884,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9C20FF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -29631,15 +25920,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#DDFED8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -29659,11 +25944,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A2FB0C",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -29692,11 +25974,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#50F1F1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 17.05,
@@ -29717,11 +25996,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D79CA5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 19.8, centerPoint3DY: 29.6, libraryItemName: "UI/ShadowBG", matrix: {a: 0.854537963867188, d: 0.68524169921875, tx: -116.2, ty: -65.9}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -29746,15 +26022,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 5,
 						layers: [
 							{
 								color: "#47E660",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 17.05,
@@ -29775,26 +26047,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B2A568",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 47.7, centerPoint3DY: 30.5, libraryItemName: "UI/Global/Loading", matrix: {ty: -17.2}, name: "loadingGraphic", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 47.7, centerPoint3DY: 30.5, libraryItemName: "UI/Global/Loading", matrix: {ty: -17.2}, name: "loadingGraphic", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 1,
 								name: "Layer 2"
 							},
 							{
 								color: "#CBB063",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 122.5,
@@ -29814,11 +26074,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FFE50F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -29847,11 +26104,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#18DBE0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 13.5, centerPoint3DY: -51.7, libraryItemName: "UI/ShadowBG", matrix: {a: 0.900802612304688, d: 1.49203491210938, tx: -122.5, ty: -147.2}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -29876,15 +26130,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 12,
 						layers: [
 							{
 								color: "#FF4FFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.75,
@@ -29916,11 +26166,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#56A5B2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 154.15,
@@ -29953,11 +26200,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#7432FE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 26.3,
@@ -29978,11 +26222,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C757E3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -66.8,
@@ -30014,11 +26255,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#F06689",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30048,11 +26286,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#27EFBE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -58.5,
@@ -30081,11 +26316,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#189DE8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 68.5,
@@ -30114,11 +26346,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#5DF3CF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30139,11 +26368,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D7994D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30164,11 +26390,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#67E4F5",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 4.7,
@@ -30197,11 +26420,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8B61A6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30222,11 +26442,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E1C5FF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DY: -31.95, libraryItemName: "UI/ShadowBG", matrix: {d: 1.33515930175781, tx: -136.0, ty: -120.4}, transformationPoint: {y: -0.05}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -30251,15 +26468,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 4,
 						layers: [
 							{
 								color: "#4AFBB0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMComponentInstance", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -59.5,
@@ -30306,11 +26519,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#4FD08F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 78.15,
@@ -30360,11 +26570,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8CE06F",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMDynamicText", "DOMStaticText"],
 										elements: [
 											{
 												height: 12.15,
@@ -30403,11 +26610,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6EAAC8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -30.5,
@@ -30441,15 +26645,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 10,
 						layers: [
 							{
 								color: "#14D2DE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 84.9,
@@ -30478,11 +26678,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3F7BE8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30502,11 +26699,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6A7FA2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 84.9,
@@ -30535,11 +26729,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AD15BE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30559,11 +26750,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#68CB8A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 62.5,
@@ -30592,11 +26780,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#957877",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 84.9,
@@ -30625,11 +26810,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#77E725",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -24.5,
@@ -30658,11 +26840,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DF1BF8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30682,11 +26861,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E9C4AE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -30706,11 +26882,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#21A8E7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -9.0,
@@ -30743,15 +26916,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 1,
 						layers: [
 							{
 								color: "#00FFFF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 10,
-										elementTypes: ["DOMComponentInstance", "DOMDynamicText", "DOMStaticText", "DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 27.6,
@@ -30894,15 +27063,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 5,
 						layers: [
 							{
 								color: "#FCD40A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 1032", loop: "loop", matrix: {a: 4.10000610351562, d: 4.5, tx: 361.05, ty: 355.5}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -30914,11 +27079,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#7874D3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: -213.0, centerPoint3DY: -135.0, libraryItemName: "MovieClips/Symbol 72", matrix: {tx: -213.0, ty: -135.0}, name: "itemsHolder", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -30930,11 +27092,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3DF2E3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -30965,11 +27124,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#5A6BDA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -30998,11 +27154,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C73E93",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{centerPoint3DX: -89.0, centerPoint3DY: -79.5, libraryItemName: "UI/ShadowBG", matrix: {a: 1.65446472167969, d: 1.62315368652344, tx: -225.0, ty: -175.0}, type: "DOMSymbolInstance"},
 											{
@@ -31038,15 +27191,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 10,
 						layers: [
 							{
 								color: "#9039BC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -31068,11 +27217,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#89CDD9",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.05,
@@ -31093,11 +27239,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#1BABFB",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -31118,26 +27261,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#FEC142",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 36.0, centerPoint3DY: 78.0, libraryItemName: "MovieClips/Symbol 1251", matrix: {tx: 30.0, ty: 72.0}, name: "coin", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 36.0, centerPoint3DY: 78.0, libraryItemName: "MovieClips/Symbol 1251", matrix: {tx: 30.0, ty: 72.0}, name: "coin", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 3,
 								name: "Layer 4"
 							},
 							{
 								color: "#6793B2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 24.0, centerPoint3DY: 79.0, libraryItemName: "MovieClips/Symbol 1248", matrix: {a: 2.88955688476563, tx: 8.0, ty: 70.0}, name: "priceBG", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -31148,11 +27279,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8277D3",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 57.95,
@@ -31173,11 +27301,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#EBAA8D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -31198,26 +27323,14 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#B66287",
-								frameCount: 1,
-								frames: [
-									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
-										elements: [{centerPoint3DX: 8.0, centerPoint3DY: 25.0, libraryItemName: "MovieClips/Symbol 72", matrix: {tx: 8.0, ty: 25.0}, name: "picHolder", type: "DOMSymbolInstance"}],
-										index: 0,
-										keyMode: 9728
-									}
-								],
+								frames: [{elements: [{centerPoint3DX: 8.0, centerPoint3DY: 25.0, libraryItemName: "MovieClips/Symbol 72", matrix: {tx: 8.0, ty: 25.0}, name: "picHolder", type: "DOMSymbolInstance"}], index: 0, keyMode: 9728}],
 								index: 7,
 								name: "Layer 8"
 							},
 							{
 								color: "#E9ABBE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{libraryItemName: "Graphics/Symbol 1015", loop: "loop", matrix: {a: 0.6436767578125, d: 0.17999267578125, tx: 8.0, ty: 25.0}, symbolType: "graphic", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -31228,11 +27341,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9C20FF",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 61.0,
@@ -31267,15 +27377,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#3FE06D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 671.5, centerPoint3DY: 488.2, libraryItemName: "MovieClips/Symbol 1093", matrix: {a: 1.0010986328125, tx: -55.8}, name: "main", type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -31286,11 +27392,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#0BD2A6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 3,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 12.15,
@@ -31332,11 +27435,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C022E1",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 253.55,
@@ -31379,15 +27479,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 7,
 						layers: [
 							{
 								color: "#7AB57D",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -31416,11 +27512,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AF6EFC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -31449,11 +27542,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#67E788",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -31482,11 +27572,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#C95D78",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -31515,11 +27602,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A2F5A0",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -31540,18 +27624,12 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#A9796E",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 710.0, left: -1330.0, right: 1330.0, top: 710.0},
-												edgeCount: 1,
 												edges: [{edges: "!1330 710S4|-1330 710", strokeStyle: 1}],
-												fillStyleCount: 0,
-												strokeStyleCount: 1,
 												strokes: [{index: 1, value: {fill: {color: "#CCCCCC", type: "SolidColor"}, scaleMode: "normal", type: "SolidStroke"}}],
 												type: "DOMShape"
 											}
@@ -31565,11 +27643,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#9B31B6",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 50.0,
@@ -31602,15 +27677,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 10,
 						layers: [
 							{
 								color: "#14D2DE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 87.7,
@@ -31639,11 +27710,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#3F7BE8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -31664,11 +27732,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#6A7FA2",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 87.7,
@@ -31697,11 +27762,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#AD15BE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -31721,11 +27783,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#68CB8A",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 62.5,
@@ -31754,11 +27813,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#957877",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 87.7,
@@ -31787,11 +27843,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#77E725",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: -24.5,
@@ -31820,11 +27873,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#DF1BF8",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 14.55,
@@ -31844,11 +27894,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#E9C4AE",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMStaticText"],
 										elements: [
 											{
 												height: 17.05,
@@ -31878,11 +27925,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#21A8E7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 2,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: -9.0,
@@ -31924,15 +27968,11 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 3,
 						layers: [
 							{
 								color: "#E7D593",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMDynamicText"],
 										elements: [
 											{
 												height: 14.55,
@@ -31953,11 +27993,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#8853BA",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMComponentInstance"],
 										elements: [
 											{
 												centerPoint3DX: 5.5,
@@ -31986,11 +28023,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#D89E73",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [{centerPoint3DX: 11.0, centerPoint3DY: 43.5, libraryItemName: "UI/ShadowBG", matrix: {a: 0.919113159179688, d: 0.544708251953125, tx: -125.0, ty: -52.0}, type: "DOMSymbolInstance"}],
 										index: 0,
 										keyMode: 9728
@@ -32018,23 +28052,16 @@ final class AssetCatalogSymbolsUI {
 					{
 						frameCount: 1,
 						labels: [],
-						layerCount: 2,
 						layers: [
 							{
 								color: "#F702D7",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMShape"],
 										elements: [
 											{
 												bounds: {bottom: 3820.0, left: 0.0, right: 5440.0, top: 0.0},
-												edgeCount: 1,
 												edges: [{edges: "!5360 0|80 0!80 0[46 0 23 23!23 23[0 46 0 80!0 80|0 3820!0 3820|5440 3820!5440 3820|5440 80!5440 80[5440 46 5417 23!5417 23[5393 0 5360 0", fillStyle0: 1}],
-												fillStyleCount: 1,
 												fills: [{index: 1, value: {alpha: 0.901960784313726, color: "#FFFFFF", type: "SolidColor"}}],
-												strokeStyleCount: 0,
 												type: "DOMShape"
 											}
 										],
@@ -32047,11 +28074,8 @@ final class AssetCatalogSymbolsUI {
 							},
 							{
 								color: "#BA5BBC",
-								frameCount: 1,
 								frames: [
 									{
-										elementCount: 1,
-										elementTypes: ["DOMSymbolInstance"],
 										elements: [
 											{
 												centerPoint3DX: 133.0,
