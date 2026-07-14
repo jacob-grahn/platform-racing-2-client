@@ -22,8 +22,8 @@ class RealServerTestSuite {
 		assertEquals(9160, server.port, "server port");
 		assertEquals(2, server.serverId, "server id");
 		assertEquals("Derron (12 online)", server.label(), "server label");
-		assertEquals("ws://derrn.example.com:9160", server.websocketUrl(false), "plain websocket URL");
-		assertEquals("wss://derrn.example.com:9160", server.websocketUrl(true), "secure websocket URL");
+		assertEquals("wss://pr2hub.com/gameservers/2", server.websocketUrl(false), "gameserver relay URL");
+		assertEquals("wss://pr2hub.com/gameservers/2", server.websocketUrl(true), "gameserver relay URL is always secure");
 	}
 
 	private static function testBuildsConnectHandshake():Void {

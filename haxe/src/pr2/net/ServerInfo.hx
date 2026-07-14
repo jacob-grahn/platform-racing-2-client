@@ -50,7 +50,9 @@ class ServerInfo {
 	}
 
 	public function websocketUrl(?secure:Bool):String {
-		return (secure == true ? "wss://" : "ws://") + address + ":" + port;
+		// Temporary compatibility hack: the browser cannot connect directly to the
+		// host/port advertised by the legacy server list. Route by stable server ID.
+		return "wss://pr2hub.com/gameservers/" + serverId;
 	}
 
 	public function toLoginObject():Dynamic {

@@ -24,6 +24,13 @@ and XFL sources. Completed work belongs in git history and `README.md`.
   runtime, but the broad `assets/` include appears to preload about 1.5 MB raw /
   1.28 MB gzipped of sounds up front.
 
+#### HTML5 Multiplayer Transport
+
+- Replace the temporary hard-coded `wss://pr2hub.com/gameservers/{server_id}`
+  browser routing hack with a configured, server-advertised WebSocket endpoint.
+  `ServerInfo.websocketUrl()` currently discards the advertised address and port
+  so the HTML5 client can connect through the PR2Hub relay.
+
 #### Native Mobile Targets
 
 - Add an explicit mobile build configuration for the native `ios` and `android`

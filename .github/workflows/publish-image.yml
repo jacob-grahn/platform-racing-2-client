@@ -37,7 +37,7 @@ jobs:
         shell: bash
         run: |
           echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
-          echo "tag=$(date -u +%F)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          echo "tag=$(date -u +%F-%H-%M)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v4

@@ -25,6 +25,7 @@ class ServerStatusClientTest {
 		assertEquals(12, result.servers[0].population, "population");
 		assertEquals(true, result.servers[0].happyHour, "happy hour");
 		assertEquals("!! Derron (online)", result.servers[0].label(), "label");
+		assertEquals("wss://pr2hub.com/gameservers/2", result.servers[0].websocketUrl(false), "gameserver relay ignores advertised host and port");
 	}
 
 	private static function testFlashLabels():Void {
