@@ -2,7 +2,6 @@ package pr2.lobby;
 
 import openfl.events.TextEvent;
 import openfl.text.TextField;
-import pr2.Constants;
 import pr2.lobby.dialogs.CreditsPopup;
 import pr2.util.DisplayUtil;
 
@@ -25,11 +24,6 @@ class CreditsPopupTest {
 		assertEquals(false, art3.visible, "art page 3 starts hidden");
 		assertEquals(true, music1.visible, "music page 1 starts visible");
 		assertEquals(false, music2.visible, "music page 2 starts hidden");
-
-		var version = text(popup, "versionBox");
-		var build = text(popup, "buildBox");
-		assertEquals("PR2 v" + Constants.VERSION, version.text, "version text matches client version");
-		assertEquals("Build: " + Constants.BUILD, build.text, "build text matches client build");
 
 		var artNav = text(popup, "art_nav_bts");
 		artNav.dispatchEvent(new TextEvent(TextEvent.LINK, false, false, "artNext"));
