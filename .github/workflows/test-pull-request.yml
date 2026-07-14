@@ -1,0 +1,32 @@
+name: Test pull request
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Haxe
+        uses: krdlab/setup-haxe@v2
+        with:
+          haxe-version: 4.3.7
+
+      - name: Install OpenFL toolchain
+        shell: bash
+        run: |
+          haxelib setup "$GITHUB_WORKSPACE/.haxelib"
+          haxelib install lime 8.3.2 --quiet
+          haxelib install openfl 9.5.2 --quiet
+
+      - name: Run full deterministic test suite
+        run: ./test.sh --full
