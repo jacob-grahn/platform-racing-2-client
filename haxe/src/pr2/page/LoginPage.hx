@@ -295,8 +295,11 @@ class LoginPage extends Page {
 	}
 
 	private function openCreditsDialog():Void {
-		var popup = openPopup("CreditsPopupGraphic");
-		popup.bindButton("close_bt", closePopup);
+		// Credits is not a passive authored graphic: its art and music columns each
+		// have page state and TextEvent-driven navigation. Use the dedicated popup
+		// here just as the lobby does, rather than displaying the raw linkage (which
+		// leaves every authored page visible at once).
+		new pr2.lobby.dialogs.CreditsPopup();
 	}
 
 	private function openServerSelectPopup(guestLogin:Bool, createdAccount:Bool):Void {
