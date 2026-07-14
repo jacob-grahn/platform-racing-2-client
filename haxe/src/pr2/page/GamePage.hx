@@ -28,7 +28,6 @@ import pr2.gameplay.player.LocalPlayerState;
 import pr2.lobby.LobbySession;
 import pr2.net.LobbySocket;
 import pr2.net.LevelDataClient;
-import pr2.net.ServerConfig;
 import pr2.net.ServerLevelData;
 import pr2.runtime.FontResolver;
 import pr2.level.ServerLevelDecoder;
@@ -99,12 +98,6 @@ class GamePage extends Page implements GameCommandDelegate {
 			attachSpecialEventListeners();
 		}
 
-		#if html5
-		if (!ServerConfig.hasProxyHost()) {
-			showError('Level fetch requires a same-origin API proxy on HTML5.');
-			return;
-		}
-		#end
 		LevelDataClient.fetch(levelId, version, onLevelData, onLevelError);
 	}
 
