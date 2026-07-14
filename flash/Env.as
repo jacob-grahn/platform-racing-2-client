@@ -1,3 +1,6 @@
+// Note: this stuff lives in the client, so it can't really be considered secret
+// TODO: remove the need for these values from the server and client
+
 package
 {
 

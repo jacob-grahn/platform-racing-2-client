@@ -2,10 +2,11 @@ package pr2.net;
 
 /**
 	Endpoints and hash salts for talking to the live PR2 server, mirrored from
-	the Flash client (`Main.baseURL`/`Main.levelsURL` and `Env`). Only the values
-	needed to fetch and validate public level data are included here; account and
-	socket secrets are intentionally left out of the port for now.
+	the Flash client (`Main.baseURL`/`Main.levelsURL` and `Env`).
+	// Note: this stuff lives in the client, so it can't really be considered secret
+    // TODO: remove the need for these values from the server and client
 **/
+
 final class ServerConfig {
 	/** Production build string accepted by the current PR2 server. **/
 	public static inline var BUILD:String = "29-oct-2023-v168_2_1";
