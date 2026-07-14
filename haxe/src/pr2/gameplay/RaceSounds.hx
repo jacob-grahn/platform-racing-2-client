@@ -14,28 +14,30 @@ typedef RaceCameraOffset = {
 
 class RaceSounds {
 	// JumpSound -> sound552 (AssetCatalog DOMSoundItem).
-	public static inline var JUMP_SOUND:String = "assets/audio/sfx/sound552.mp3";
+	public static inline var JUMP_SOUND:String = "assets/audio/sfx/jump.mp3";
 	// SuperJumpSound -> sound913 (AssetCatalog DOMSoundItem).
-	public static inline var SUPER_JUMP_SOUND:String = "assets/audio/sfx/sound913.mp3";
+	public static inline var SUPER_JUMP_SOUND:String = "assets/audio/sfx/super_jump.mp3";
 	// ThumpSound -> sound448 (AssetCatalog DOMSoundItem), used by Block.hit.
-	public static inline var BLOCK_BUMP_SOUND:String = "assets/audio/sfx/sound448.mp3";
+	public static inline var BLOCK_BUMP_SOUND:String = "assets/audio/sfx/block_thump.mp3";
 	// StarSound -> sound452 (AssetCatalog DOMSoundItem), used by ItemBlock.useSupply.
-	public static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/sound452.mp3";
+	public static inline var ITEM_BLOCK_SOUND:String = "assets/audio/sfx/star.mp3";
 	// BumpHappySound -> sound473 (AssetCatalog DOMSoundItem), used by Character.gainHeart.
-	public static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/sound473.mp3";
+	public static inline var BUMP_HAPPY_SOUND:String = "assets/audio/sfx/bump_happy.mp3";
 	// BumpSadSound -> sound460 (AssetCatalog DOMSoundItem), used by SadBlock.useSupply.
-	public static inline var BUMP_SAD_SOUND:String = "assets/audio/sfx/sound460.mp3";
+	public static inline var BUMP_SAD_SOUND:String = "assets/audio/sfx/bump_sad.mp3";
 	// TickTockSound -> sound453 (AssetCatalog DOMSoundItem), used by TimeBlock.useSupply.
-	public static inline var TICK_TOCK_SOUND:String = "assets/audio/sfx/sound453.mp3";
-	// SquashSound -> sound915, used by the Jiggmin hat stomp.
-	public static inline var SQUASH_SOUND:String = "assets/audio/sfx/sound915.mp3";
+	public static inline var TICK_TOCK_SOUND:String = "assets/audio/sfx/tick_tock.mp3";
+	// SquashSound -> sound912, used by the Jiggmin hat stomp.
+	public static inline var SQUASH_SOUND:String = "assets/audio/sfx/squash.mp3";
+	// VictorySound -> sound442, played whenever the local player finishes.
+	public static inline var VICTORY_SOUND:String = "assets/audio/sfx/victory.mp3";
 	// SpeedUpSound -> sound550; SlowDownSound -> sound551, used by Character sparkles.
-	public static inline var SPEED_UP_SOUND:String = "assets/audio/sfx/sound550.mp3";
-	public static inline var SLOW_DOWN_SOUND:String = "assets/audio/sfx/sound551.mp3";
+	public static inline var SPEED_UP_SOUND:String = "assets/audio/sfx/speed_up.mp3";
+	public static inline var SLOW_DOWN_SOUND:String = "assets/audio/sfx/slow_down.mp3";
 	// YeahSound -> yeah, used by Artifact hat activation.
-	public static inline var YEAH_SOUND:String = "assets/audio/sfx/yeah.wav";
+	public static inline var YEAH_SOUND:String = "assets/audio/sfx/artifact_yeah.wav";
 	// EngineSound -> sound549, looped while Character.beginJet is active.
-	public static inline var ENGINE_SOUND:String = "assets/audio/sfx/sound549.wav";
+	public static inline var ENGINE_SOUND:String = "assets/audio/sfx/jet_engine.wav";
 
 	private final cameraOffset:Void->RaceCameraOffset;
 	private var activeJetSounds:ObjectMap<Character, Bool> = new ObjectMap();
@@ -114,6 +116,10 @@ class RaceSounds {
 
 	public function playTimeBlockSound():Void {
 		playGlobal(TICK_TOCK_SOUND, 1);
+	}
+
+	public function playVictorySound():Void {
+		playGlobal(VICTORY_SOUND, 1);
 	}
 
 	private function playSpatial(path:String, worldX:Float, worldY:Float, volume:Float):Void {

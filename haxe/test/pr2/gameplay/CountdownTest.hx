@@ -48,7 +48,7 @@ class CountdownTest {
 			countdown.advance();
 		}
 
-		assertEquals("assets/audio/sfx/sound432.mp3:0.2|assets/audio/sfx/sound432.mp3:0.2|assets/audio/sfx/sound432.mp3:0.2|assets/audio/sfx/sound431.mp3:0.25",
+		assertEquals("assets/audio/sfx/countdown_ready.mp3:0.2|assets/audio/sfx/countdown_ready.mp3:0.2|assets/audio/sfx/countdown_ready.mp3:0.2|assets/audio/sfx/countdown_go.mp3:0.25",
 			effects.join("|"), "countdown plays three ready sounds and one go sound with Settings.soundLevel scaling");
 		Settings.soundLevel = oldSoundLevel;
 	}

@@ -11,7 +11,7 @@ import pr2.runtime.PR2MovieClip;
 **/
 class MineExplosion extends Sprite {
 	public static inline var LIFETIME_FRAMES:Int = 14;
-	public static inline var SOUND_PATH:String = "assets/audio/sfx/sound971.mp3";
+	public static inline var SOUND_PATH:String = "assets/audio/sfx/mine_explosion.mp3";
 
 	public var animation(default, null):PR2MovieClip;
 	private var framesRemaining:Int = LIFETIME_FRAMES;

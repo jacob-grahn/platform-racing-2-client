@@ -28,7 +28,7 @@ class Slash extends Effect {
 	public static inline var LIFETIME_FRAMES:Int = 6;
 	public static inline var RIGHT_REACH:Int = 29;
 	public static inline var HIT_VEL_Y:Int = -9;
-	public static inline var SOUND_PATH:String = "assets/audio/sfx/sound1002.mp3";
+	public static inline var SOUND_PATH:String = "assets/audio/sfx/slash_swish.mp3";
 
 	public var animation(default, null):PR2MovieClip;
 	public var reach(default, null):Int = RIGHT_REACH;

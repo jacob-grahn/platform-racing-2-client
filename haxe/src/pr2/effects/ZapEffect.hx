@@ -9,7 +9,7 @@ import pr2.character.Character;
 	and fades out over ten frames.
 **/
 class ZapEffect extends FollowFadeEffect {
-	public static inline var SOUND_PATH:String = "assets/audio/sfx/sound914.mp3";
+	public static inline var SOUND_PATH:String = "assets/audio/sfx/zap.mp3";
 
 	public function new(owner:Character, showBolt:Bool = true, playSound:Bool = true, showFlash:Bool = true) {
 		super(owner, "ZapGraphic", 0.1);

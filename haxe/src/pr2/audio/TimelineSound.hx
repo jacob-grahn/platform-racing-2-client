@@ -267,7 +267,18 @@ class TimelineSound {
 	public static function assetPath(libraryName:String):String {
 		var slash = libraryName.lastIndexOf("/");
 		var fileName = slash < 0 ? libraryName : libraryName.substr(slash + 1);
-		return "assets/audio/sfx/" + fileName;
+		var runtimeFileName = switch (fileName) {
+			case "sound57.mp3": "intro_timeline_sound_01.mp3";
+			case "sound58.mp3": "intro_timeline_sound_02.mp3";
+			case "sound62.mp3": "intro_timeline_sound_03.mp3";
+			case "sound63.mp3": "intro_timeline_sound_04.mp3";
+			case "sound64.mp3": "intro_timeline_sound_05.mp3";
+			case "sound67.mp3": "intro_timeline_sound_06.mp3";
+			case "sound68.mp3": "intro_timeline_sound_07.mp3";
+			case "sound81.mp3": "logo_theme.mp3";
+			default: fileName;
+		}
+		return "assets/audio/sfx/" + runtimeFileName;
 	}
 
 	private static function monitor(

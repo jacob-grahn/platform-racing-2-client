@@ -23,8 +23,8 @@ typedef CountdownEffectPlayer = String->Float->Void;
 **/
 class Countdown extends Sprite {
 	// GoSound -> sound431, ReadySound -> sound432 (AssetCatalog DOMSoundItems).
-	static inline var READY_SOUND:String = "assets/audio/sfx/sound432.mp3";
-	static inline var GO_SOUND:String = "assets/audio/sfx/sound431.mp3";
+	static inline var READY_SOUND:String = "assets/audio/sfx/countdown_ready.mp3";
+	static inline var GO_SOUND:String = "assets/audio/sfx/countdown_go.mp3";
 
 	private var art:Null<PR2MovieClip>;
 	private var onFinish:Null<Void->Void>;

@@ -56,6 +56,7 @@ class CharacterLifecycleTest {
 		testLocalWeaponItemsEmitFlashPayloads();
 		testLocalTeleportAndLightningItemEffects();
 		testEffectBackgroundAddEffectCommand();
+		testLaserStopsOnBlockAndPlaysHitSound();
 		testSharedEffectLifecycle();
 		testEggVisualRandomization();
 		testServerActivateCommandLifecycle();
@@ -830,6 +831,35 @@ class CharacterLifecycleTest {
 		course.remove();
 		assertTrue(!handler.hasCommand("addEffect"), "course teardown unregisters addEffect");
 		assertTrue(!handler.hasCommand("removeHat3"), "course teardown unregisters remote hat removal command");
+	}
+
+	private static function testLaserStopsOnBlockAndPlaysHitSound():Void {
+		var layer = new Sprite();
+		var hitSounds:Array<String> = [];
+		var round = new EggRound(new CommandHandler(), function(_):Void {}, layer, null, function(_, _):Void {}, null, null, null,
+			function(x:Int, y:Int):Void hitSounds.push('$x,$y'));
+		var level = new ServerLevel(0xffffff, [new DecodedBlock(ObjectCodes.BLOCK_BASIC1, 30, 0)]);
+		round.mountAttackVisual("Laser`0`15`right`0`7");
+		var laser = Std.downcast(layer.getChildAt(0), PR2MovieClip);
+
+		round.step(level);
+		assertEquals(29.0, laser.x, "laser continues travelling before reaching a block");
+		assertEquals(0, hitSounds.length, "laser does not play its hit sound before impact");
+		round.step(level);
+		assertEquals(58.0, laser.x, "laser stops at its detected block impact position");
+		assertTrue(laser.currentFrame > 2, "laser starts the authored hit animation on block impact");
+		assertEquals("58,15", hitSounds[0], "laser block impact plays Flash's hit sound at the collision position");
+
+		round.step(level);
+		assertEquals(58.0, laser.x, "laser remains stopped while its hit animation finishes");
+		assertEquals(1, hitSounds.length, "laser hit sound only plays once");
+		for (_ in 0...15) {
+			round.step(level);
+		}
+		assertEquals(1, round.activeAttackVisualCount(), "laser impact remains mounted through Flash's 18-frame timeout");
+		round.step(level);
+		assertEquals(0, round.activeAttackVisualCount(), "laser impact is removed after Flash's 18-frame timeout");
+		assertTrue(laser.parent == null, "removed laser impact leaves the effect layer");
 	}
 
 	private static function testSharedEffectLifecycle():Void {

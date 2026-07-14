@@ -16,8 +16,15 @@ class AudioRuntimeTest {
 		var outside = SoundEffects.spatialMix(900, 0, 0, 0);
 		assertNear(0, outside.volume, "effects past 700 pixels are silent"); assertions++;
 		assertNear(1, outside.pan, "pan is clamped to the SoundTransform range"); assertions++;
+		assert(pr2.effects.ZapEffect.SOUND_PATH == "assets/audio/sfx/zap.mp3", "ZapEffect uses the named exported Flash ZapSound"); assertions++;
+		assert(pr2.gameplay.RaceSounds.SQUASH_SOUND == "assets/audio/sfx/squash.mp3", "squash uses the named exported Flash SquashSound"); assertions++;
+		assert(pr2.gameplay.RaceSounds.VICTORY_SOUND == "assets/audio/sfx/victory.mp3", "finishing uses the named exported Flash VictorySound"); assertions++;
 
 		assertNear(1000, TimelineSound.sample44ToMilliseconds(44100), "timeline sound sample points convert to milliseconds"); assertions++;
+		assert(TimelineSound.assetPath("Sounds/sound57.mp3") == "assets/audio/sfx/intro_timeline_sound_01.mp3",
+			"opaque intro library names resolve to descriptive runtime assets"); assertions++;
+		assert(TimelineSound.assetPath("Sounds/sound81.mp3") == "assets/audio/sfx/logo_theme.mp3",
+			"opaque logo library name resolves to its descriptive runtime asset"); assertions++;
 		var fade = [
 			{mark44: 0, level0: 0, level1: 32768},
 			{mark44: 44100, level0: 32768, level1: 0}

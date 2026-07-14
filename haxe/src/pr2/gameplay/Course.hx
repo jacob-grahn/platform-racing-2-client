@@ -1032,6 +1032,7 @@ class Course extends Sprite {
 			if (localCharacter != null) {
 				localCharacter.emitObjectiveReached(finishId, finishX, finishY);
 			}
+			raceSounds.playVictorySound();
 			return;
 		}
 		if (offlineMode) {
@@ -1039,6 +1040,7 @@ class Course extends Sprite {
 				return;
 			}
 			localFinishHandled = true;
+			raceSounds.playVictorySound();
 			if (onFinish != null) {
 				onFinish(state);
 			}
@@ -1048,6 +1050,7 @@ class Course extends Sprite {
 			return;
 		}
 		localFinishHandled = true;
+		raceSounds.playVictorySound();
 		frameCounterActive = false;
 		toggleKeyScroll(true);
 		// Flash freezes the HUD clock when a normal race finishes. Hat mode keeps

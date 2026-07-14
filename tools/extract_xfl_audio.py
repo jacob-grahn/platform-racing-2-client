@@ -16,6 +16,46 @@ DEFAULT_AS = Path("flash")
 DEFAULT_OUTPUT = Path("assets/audio/sfx")
 DEFAULT_MANIFEST = Path("docs/audio-inventory.json")
 
+# Keep the XFL's opaque library names in generated metadata while giving the
+# extracted runtime files names that describe their actual role.
+RUNTIME_SOUND_STEMS = {
+    "sound57": "intro_timeline_sound_01",
+    "sound58": "intro_timeline_sound_02",
+    "sound62": "intro_timeline_sound_03",
+    "sound63": "intro_timeline_sound_04",
+    "sound64": "intro_timeline_sound_05",
+    "sound67": "intro_timeline_sound_06",
+    "sound68": "intro_timeline_sound_07",
+    "sound81": "logo_theme",
+    "sound103": "menu_noodle_town_3",
+    "sound104": "menu_noodle_town_2",
+    "sound431": "countdown_go",
+    "sound432": "countdown_ready",
+    "sound442": "victory",
+    "sound448": "block_thump",
+    "sound452": "star",
+    "sound453": "tick_tock",
+    "sound460": "bump_sad",
+    "sound473": "bump_happy",
+    "sound549": "jet_engine",
+    "sound550": "speed_up",
+    "sound551": "slow_down",
+    "sound552": "jump",
+    "sound898": "egg_collect",
+    "sound912": "squash",
+    "sound913": "super_jump",
+    "sound914": "ice_wave",
+    "sound971": "mine_explosion",
+    "sound1002": "slash_swish",
+    "sound1003": "laser_hit",
+    "sound1014": "laser_fire",
+    "sound1019": "zap",
+    "sound1021": "mine_appear",
+    "sound1110": "teleport",
+    "stingSound": "sting",
+    "yeah": "artifact_yeah",
+}
+
 
 def local_name(tag):
     return tag.rsplit("}", 1)[-1]
@@ -109,7 +149,8 @@ def build(xfl_dir, as_dir, output_dir):
     sounds = []
     for item in sound_items(xfl_dir):
         encoded, extension, pcm = extracted_sound(xfl_dir, item)
-        stem = Path(item["name"]).stem
+        source_stem = Path(item["name"]).stem
+        stem = RUNTIME_SOUND_STEMS.get(source_stem, source_stem)
         target = output_dir / f"{stem}.{extension}"
         files[target] = encoded
         entry = {

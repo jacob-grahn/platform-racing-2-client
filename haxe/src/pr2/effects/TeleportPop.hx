@@ -11,7 +11,7 @@ import pr2.runtime.PR2MovieClip;
 **/
 class TeleportPop extends Sprite {
 	public static inline var LIFETIME_FRAMES:Int = 15;
-	public static inline var SOUND_PATH:String = "assets/audio/sfx/sound1110.mp3";
+	public static inline var SOUND_PATH:String = "assets/audio/sfx/teleport.mp3";
 
 	private var animation:PR2MovieClip;
 	private var framesRemaining:Int = LIFETIME_FRAMES;

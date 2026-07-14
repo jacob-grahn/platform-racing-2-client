@@ -53,7 +53,8 @@ typedef EggAttackVisual = {
 	removal, per-egg remote removal commands, and the egg attack protocol/cooldown.
 **/
 class EggRound {
-	public static inline var COLLECT_SOUND_PATH:String = "assets/audio/sfx/sound898.mp3";
+	public static inline var COLLECT_SOUND_PATH:String = "assets/audio/sfx/egg_collect.mp3";
+	public static inline var LASER_HIT_SOUND_PATH:String = "assets/audio/sfx/laser_hit.mp3";
 	private static inline var SQUASH_REMOVE_FRAMES:Int = 27;
 	private static inline var ATTACK_COOLDOWN_FRAMES:Int = 120;
 	private static inline var MODE_ICE:Int = 0;
@@ -72,11 +73,13 @@ class EggRound {
 	private final visualRandom:Void->Float;
 	private final onIcePlayerHit:Int->Void;
 	private final onIceBlockHit:DecodedBlock->Void;
+	private final playLaserHitSound:Int->Int->Void;
 	private var eggs:Map<Int, EggState> = new Map();
 	private var attackVisuals:Array<EggAttackVisual> = [];
 
 	public function new(commandHandler:CommandHandler, onCollect:Int->Void, ?displayLayer:Sprite, ?cameraOffset:Void->Point,
-			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float, ?onIcePlayerHit:Int->Void, ?onIceBlockHit:DecodedBlock->Void) {
+			?playCollectSound:Int->Int->Void, ?visualRandom:Void->Float, ?onIcePlayerHit:Int->Void, ?onIceBlockHit:DecodedBlock->Void,
+			?playLaserHitSound:Int->Int->Void) {
 		this.commandHandler = commandHandler;
 		this.onCollect = onCollect;
 		this.displayLayer = displayLayer;
@@ -85,6 +88,7 @@ class EggRound {
 		this.visualRandom = visualRandom != null ? visualRandom : Math.random;
 		this.onIcePlayerHit = onIcePlayerHit != null ? onIcePlayerHit : function(_:Int):Void {};
 		this.onIceBlockHit = onIceBlockHit != null ? onIceBlockHit : function(_:DecodedBlock):Void {};
+		this.playLaserHitSound = playLaserHitSound != null ? playLaserHitSound : playDefaultLaserHitSound;
 	}
 
 	public function initRound(seed:Int):Void {
@@ -497,6 +501,16 @@ class EggRound {
 						onIceBlockHit(block);
 					}
 				}
+			} else if (visual.effectType == "Laser" && !visual.hitBlock) {
+				var block = PhysicsEffect.blockFromPos(level, Std.int(visual.posX), Std.int(visual.posY), courseRotation);
+				if (block != null && PhysicsEffect.isActiveBlock(block)) {
+					visual.hitBlock = true;
+					visual.velX = 0;
+					visual.velY = 0;
+					visual.life = 18;
+					LaserShotTimeline.playHit(visual.display);
+					playLaserHitSound(Std.int(visual.posX), Std.int(visual.posY));
+				}
 			}
 			visual.life--;
 			if (visual.life <= 0) {
@@ -562,5 +576,13 @@ class EggRound {
 		}
 		var offset = cameraOffset();
 		SoundEffects.playGameSound(Assets.getSound(COLLECT_SOUND_PATH), x, y, offset.x, offset.y, 1.5);
+	}
+
+	private function playDefaultLaserHitSound(x:Int, y:Int):Void {
+		if (!Assets.exists(LASER_HIT_SOUND_PATH)) {
+			return;
+		}
+		var offset = cameraOffset();
+		SoundEffects.playGameSound(Assets.getSound(LASER_HIT_SOUND_PATH), x, y, offset.x, offset.y, 1.5);
 	}
 }

@@ -26,8 +26,8 @@ class MenuMusic extends Sprite {
 		if (channel1 != null) return;
 		if (Math.random() > 0.5) { percentage1 = 0; percentage2 = 1; }
 		else { percentage1 = 1; percentage2 = 0; }
-		channel1 = Assets.getSound("assets/audio/sfx/sound104.mp3").play(0, 9999);
-		channel2 = Assets.getSound("assets/audio/sfx/sound103.mp3").play(0, 9999);
+		channel1 = Assets.getSound("assets/audio/sfx/menu_noodle_town_2.mp3").play(0, 9999);
+		channel2 = Assets.getSound("assets/audio/sfx/menu_noodle_town_3.mp3").play(0, 9999);
 		applyVolume(volume);
 		scheduleCrossfade();
 	}

@@ -5,7 +5,7 @@ import pr2.audio.SoundEffects;
 import pr2.character.Character;
 
 class StingEffect extends FollowFadeEffect {
-	public static inline var SOUND_PATH:String = "assets/audio/sfx/stingSound.wav";
+	public static inline var SOUND_PATH:String = "assets/audio/sfx/sting.wav";
 
 	public function new(owner:Character, direction:String = "") {
 		super(owner, "StingGraphic", 0.05);

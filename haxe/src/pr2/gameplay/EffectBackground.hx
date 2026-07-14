@@ -12,8 +12,8 @@ import pr2.net.CommandHandler;
 	Server-pushed race effects from `background.EffectBackground`.
 **/
 class EffectBackground extends Sprite {
-	public static inline var ICE_WAVE_SOUND_PATH:String = "assets/audio/sfx/sound914.mp3";
-	public static inline var LASER_SOUND_PATH:String = "assets/audio/sfx/sound1014.mp3";
+	public static inline var ICE_WAVE_SOUND_PATH:String = "assets/audio/sfx/ice_wave.mp3";
+	public static inline var LASER_SOUND_PATH:String = "assets/audio/sfx/laser_fire.mp3";
 
 	public static var instance(default, null):Null<EffectBackground>;
 

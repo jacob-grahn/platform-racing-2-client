@@ -3,7 +3,7 @@
   "soundEffects": [
     {
       "libraryName": "Sounds/sound1002.mp3",
-      "output": "assets/audio/sfx/sound1002.mp3",
+      "output": "assets/audio/sfx/slash_swish.mp3",
       "sha256": "0857413197248e421a335fc21b61afea6087dd59fe5855d495810b9bae465cc9",
       "format": "22kHz 16bit Mono",
       "sampleCount": 8064,
@@ -21,7 +21,7 @@
     },
     {
       "libraryName": "Sounds/sound1003.mp3",
-      "output": "assets/audio/sfx/sound1003.mp3",
+      "output": "assets/audio/sfx/laser_hit.mp3",
       "sha256": "2872d49a1919d8ec2ea92adb8d183179aae587f57bbaf86d36b662df4b227a89",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 20736,
@@ -39,7 +39,7 @@
     },
     {
       "libraryName": "Sounds/sound1014.mp3",
-      "output": "assets/audio/sfx/sound1014.mp3",
+      "output": "assets/audio/sfx/laser_fire.mp3",
       "sha256": "47175d36169c6b2a07df11e51dd499113870ae94f53cd11dd281c3e0fb9286d1",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 19584,
@@ -57,7 +57,7 @@
     },
     {
       "libraryName": "Sounds/sound1019.mp3",
-      "output": "assets/audio/sfx/sound1019.mp3",
+      "output": "assets/audio/sfx/zap.mp3",
       "sha256": "c46c1337e0d149da6ec2ea5e86e6bac428a945c37c70f4a8602bcb77b4ca5cd7",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 17856,
@@ -75,7 +75,7 @@
     },
     {
       "libraryName": "Sounds/sound1021.mp3",
-      "output": "assets/audio/sfx/sound1021.mp3",
+      "output": "assets/audio/sfx/mine_appear.mp3",
       "sha256": "a995a7191c83ebb0c5ac48c98261b1c141ea0670d67c929560dd45f08b16f4be",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 42048,
@@ -93,7 +93,7 @@
     },
     {
       "libraryName": "Sounds/sound103.mp3",
-      "output": "assets/audio/sfx/sound103.mp3",
+      "output": "assets/audio/sfx/menu_noodle_town_3.mp3",
       "sha256": "34b6854c2ba8a23d5e143bcd01113b9cbdbb2f190c31c2b3b48c1fecdabe189f",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 546216,
@@ -111,7 +111,7 @@
     },
     {
       "libraryName": "Sounds/sound104.mp3",
-      "output": "assets/audio/sfx/sound104.mp3",
+      "output": "assets/audio/sfx/menu_noodle_town_2.mp3",
       "sha256": "ce46aad14b150a70425f71f18f446dd837d1dcf7fab2b49c188b37b1caf47d0c",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 546216,
@@ -129,7 +129,7 @@
     },
     {
       "libraryName": "Sounds/sound1110.mp3",
-      "output": "assets/audio/sfx/sound1110.mp3",
+      "output": "assets/audio/sfx/teleport.mp3",
       "sha256": "00e21d726ca4103ea085fbd6d432d8115b6da9cf8d86a1c654dc31dcb4e79934",
       "format": "22kHz 16bit Mono",
       "sampleCount": 25920,
@@ -147,7 +147,7 @@
     },
     {
       "libraryName": "Sounds/sound431.mp3",
-      "output": "assets/audio/sfx/sound431.mp3",
+      "output": "assets/audio/sfx/countdown_go.mp3",
       "sha256": "f4f2998bfe59aea216ed9460474b63cf86bdffa25e287fec3cec2b2b8e45a858",
       "format": "11kHz 16bit Stereo",
       "sampleCount": 21888,
@@ -165,7 +165,7 @@
     },
     {
       "libraryName": "Sounds/sound432.mp3",
-      "output": "assets/audio/sfx/sound432.mp3",
+      "output": "assets/audio/sfx/countdown_ready.mp3",
       "sha256": "8dd3ede3c367da5f1a20694620fa778f722f07cc0013f3d3e4e699d6fe04f402",
       "format": "11kHz 16bit Stereo",
       "sampleCount": 21888,
@@ -183,7 +183,7 @@
     },
     {
       "libraryName": "Sounds/sound442.mp3",
-      "output": "assets/audio/sfx/sound442.mp3",
+      "output": "assets/audio/sfx/victory.mp3",
       "sha256": "ff34604bddd0f1356d2e7d196896871824d857078326a688a5ad9f32388bfcf2",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 35712,
@@ -206,7 +206,7 @@
     },
     {
       "libraryName": "Sounds/sound448.mp3",
-      "output": "assets/audio/sfx/sound448.mp3",
+      "output": "assets/audio/sfx/block_thump.mp3",
       "sha256": "8eb6a09be370b8daee4558285fdffb79c5a03a3fc2d62149222c064b01ffce43",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 40896,
@@ -224,7 +224,7 @@
     },
     {
       "libraryName": "Sounds/sound452.mp3",
-      "output": "assets/audio/sfx/sound452.mp3",
+      "output": "assets/audio/sfx/star.mp3",
       "sha256": "8f655560e607ddad0c41c73207a2929112a0ee5c94267494a9efbc011f0ef934",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 33408,
@@ -247,7 +247,7 @@
     },
     {
       "libraryName": "Sounds/sound453.mp3",
-      "output": "assets/audio/sfx/sound453.mp3",
+      "output": "assets/audio/sfx/tick_tock.mp3",
       "sha256": "7f4109fd53f755f6c272db277896c054df8591c96fbfe7b35daa8875c64a38b2",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 42048,
@@ -265,7 +265,7 @@
     },
     {
       "libraryName": "Sounds/sound460.mp3",
-      "output": "assets/audio/sfx/sound460.mp3",
+      "output": "assets/audio/sfx/bump_sad.mp3",
       "sha256": "7f9452965174d5ba2af02cddeb21311aa4a176b6616bf089e3a6063dde807537",
       "format": "22kHz 16bit Mono",
       "sampleCount": 21312,
@@ -283,7 +283,7 @@
     },
     {
       "libraryName": "Sounds/sound473.mp3",
-      "output": "assets/audio/sfx/sound473.mp3",
+      "output": "assets/audio/sfx/bump_happy.mp3",
       "sha256": "5269a962b8342141a4d9362e87b2ed0d2277b7b1a059e271dc67659f5d39695f",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 27648,
@@ -306,7 +306,7 @@
     },
     {
       "libraryName": "Sounds/sound549.mp3",
-      "output": "assets/audio/sfx/sound549.wav",
+      "output": "assets/audio/sfx/jet_engine.wav",
       "sha256": "1440b8b2acc26fff2253e7670913f77572e391d455b113741765eadf4a5d382f",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 46634,
@@ -329,7 +329,7 @@
     },
     {
       "libraryName": "Sounds/sound550.mp3",
-      "output": "assets/audio/sfx/sound550.mp3",
+      "output": "assets/audio/sfx/speed_up.mp3",
       "sha256": "c6661c9ed672132f4496a56c4570dfc1665d9c571ff516b71d9d03b9ac425851",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 44352,
@@ -347,7 +347,7 @@
     },
     {
       "libraryName": "Sounds/sound551.mp3",
-      "output": "assets/audio/sfx/sound551.mp3",
+      "output": "assets/audio/sfx/slow_down.mp3",
       "sha256": "a436222226febe8f721766cad6ce8030c49c5dcb7c0d7f9542a4f9389988d789",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 50112,
@@ -365,7 +365,7 @@
     },
     {
       "libraryName": "Sounds/sound552.mp3",
-      "output": "assets/audio/sfx/sound552.mp3",
+      "output": "assets/audio/sfx/jump.mp3",
       "sha256": "a369a2f7f0108a231a17cd98934c835c5af1f22d564f9707fd058ccf636eca74",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 6912,
@@ -388,7 +388,7 @@
     },
     {
       "libraryName": "Sounds/sound57.mp3",
-      "output": "assets/audio/sfx/sound57.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_01.mp3",
       "sha256": "e255832e16d126c59ae995c02c87a3d9371a03daf7dd18d7fcdc1ef27a00321f",
       "format": "22kHz 16bit Mono",
       "sampleCount": 12672,
@@ -441,7 +441,7 @@
     },
     {
       "libraryName": "Sounds/sound58.mp3",
-      "output": "assets/audio/sfx/sound58.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_02.mp3",
       "sha256": "587c793619a0fd5037d1d131ac05ab13443a39c7beb2e261fa7918aadbd04f0e",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 100800,
@@ -472,7 +472,7 @@
     },
     {
       "libraryName": "Sounds/sound62.mp3",
-      "output": "assets/audio/sfx/sound62.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_03.mp3",
       "sha256": "2ebc2cc4975f0d8707914af80d39155087e2eeb5827bebc22440364fa8a3b725",
       "format": "22kHz 16bit Mono",
       "sampleCount": 23616,
@@ -503,7 +503,7 @@
     },
     {
       "libraryName": "Sounds/sound63.mp3",
-      "output": "assets/audio/sfx/sound63.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_04.mp3",
       "sha256": "75d24ae8c57d30d5dfa31cf4bccb7f5b8c8e82fed4499955ff18ca511c41c5df",
       "format": "22kHz 16bit Mono",
       "sampleCount": 37440,
@@ -534,7 +534,7 @@
     },
     {
       "libraryName": "Sounds/sound64.mp3",
-      "output": "assets/audio/sfx/sound64.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_05.mp3",
       "sha256": "a4349bfcf3dc39ad8cc0d66f475dc8beac70f40755cd6bdb378867ab99749157",
       "format": "22kHz 16bit Mono",
       "sampleCount": 16128,
@@ -565,7 +565,7 @@
     },
     {
       "libraryName": "Sounds/sound67.mp3",
-      "output": "assets/audio/sfx/sound67.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_06.mp3",
       "sha256": "85ca6a7ec45f30d75555fe6cc39aaa61529fb14e5ffd80436d5be6cf9b88a246",
       "format": "22kHz 16bit Mono",
       "sampleCount": 8640,
@@ -596,7 +596,7 @@
     },
     {
       "libraryName": "Sounds/sound68.mp3",
-      "output": "assets/audio/sfx/sound68.mp3",
+      "output": "assets/audio/sfx/intro_timeline_sound_07.mp3",
       "sha256": "7e28de949e76d3e26bcc388d407cecb848a5581e141ab82202bce7b7b59fe629",
       "format": "22kHz 16bit Mono",
       "sampleCount": 9216,
@@ -627,7 +627,7 @@
     },
     {
       "libraryName": "Sounds/sound81.mp3",
-      "output": "assets/audio/sfx/sound81.mp3",
+      "output": "assets/audio/sfx/logo_theme.mp3",
       "sha256": "98fa352642fcbe05697050adcc0954dcbe5108805676a6f92bdcf61ace315c94",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 204480,
@@ -656,7 +656,7 @@
     },
     {
       "libraryName": "Sounds/sound898.mp3",
-      "output": "assets/audio/sfx/sound898.mp3",
+      "output": "assets/audio/sfx/egg_collect.mp3",
       "sha256": "c33faff3998f6ee7edb812e7101efb3905a8f762d03404983031a2b436765a85",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 12672,
@@ -674,7 +674,7 @@
     },
     {
       "libraryName": "Sounds/sound912.mp3",
-      "output": "assets/audio/sfx/sound912.mp3",
+      "output": "assets/audio/sfx/squash.mp3",
       "sha256": "684e134fd8695782e29d5d53b03fe9dfba810d67862ac45ba27b67eff6736940",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 16704,
@@ -697,7 +697,7 @@
     },
     {
       "libraryName": "Sounds/sound913.mp3",
-      "output": "assets/audio/sfx/sound913.mp3",
+      "output": "assets/audio/sfx/super_jump.mp3",
       "sha256": "2f1747453a45111218d10487af4735c9fb02e14da39f4c76b3ff06e93bec23f4",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 14400,
@@ -720,7 +720,7 @@
     },
     {
       "libraryName": "Sounds/sound914.mp3",
-      "output": "assets/audio/sfx/sound914.mp3",
+      "output": "assets/audio/sfx/ice_wave.mp3",
       "sha256": "e8bb8f46b1b64625c07d2c5d579e68ab4b51698e2551cbf7da05c2c4f9059fea",
       "format": "22kHz 16bit Stereo",
       "sampleCount": 39744,
@@ -738,7 +738,7 @@
     },
     {
       "libraryName": "Sounds/sound971.mp3",
-      "output": "assets/audio/sfx/sound971.mp3",
+      "output": "assets/audio/sfx/mine_explosion.mp3",
       "sha256": "3a86ea1b80ee7bea2f843f74b354c6d49c2381d1b633c31344e0156ba004835f",
       "format": "22kHz 16bit Mono",
       "sampleCount": 47232,
@@ -756,7 +756,7 @@
     },
     {
       "libraryName": "Sounds/stingSound",
-      "output": "assets/audio/sfx/stingSound.wav",
+      "output": "assets/audio/sfx/sting.wav",
       "sha256": "2ccd22c7e9ed18c9b3992bd3b11253d7aeec2fee4f0c16625805a748ca22e2f4",
       "format": "22kHz 16bit Mono",
       "sampleCount": 37158,
@@ -779,7 +779,7 @@
     },
     {
       "libraryName": "Sounds/yeah.wav",
-      "output": "assets/audio/sfx/yeah.wav",
+      "output": "assets/audio/sfx/artifact_yeah.wav",
       "sha256": "d6f0740298144db9a74b628844be47af547beca4a77008dfa539106e8dd69262",
       "format": "44kHz 16bit Stereo",
       "sampleCount": 64562,
