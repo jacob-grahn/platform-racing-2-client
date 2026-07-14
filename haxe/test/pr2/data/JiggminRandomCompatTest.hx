@@ -9,6 +9,7 @@ class JiggminRandomCompatTest {
 
 	public static function main():Void {
 		testSeedAndPublicSequence();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("JiggminRandomCompatTest")) return;
 		testNextBytes();
 		testRangeErrors();
 		testFlashRandomWrapper();

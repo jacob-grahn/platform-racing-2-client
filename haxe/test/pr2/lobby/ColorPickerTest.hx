@@ -17,6 +17,7 @@ class ColorPickerTest {
 
 	public static function main():Void {
 		testColorUtilCompatibility();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ColorPickerTest")) return;
 		testColorChoicesPalette();
 		testColorPickerEventsAndRecents();
 		testPopupOrientationAndDirection();

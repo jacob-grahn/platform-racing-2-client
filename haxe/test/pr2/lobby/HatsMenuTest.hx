@@ -8,6 +8,7 @@ class HatsMenuTest {
 
 	public static function main():Void {
 		testBlankAndNullAllowAllHats();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("HatsMenuTest")) return;
 		testCommaDelimitedBadHats();
 		testHatAttackForcesArtifactUnavailable();
 		trace('HatsMenuTest passed $assertions assertions');

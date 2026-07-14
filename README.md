@@ -43,9 +43,24 @@ haxelib run openfl build html5
 Run the lightweight runtime tests:
 
 ```sh
-haxe test/deterministic.hxml
-haxe test/real-server.hxml
+./test.sh
+./test.sh real-server
 ```
+
+The deterministic suite runs one representative test from every test class by
+default. Run `./test.sh --full` to execute every deterministic test.
+
+Run complete tests for one or more related domains by passing flags; multiple
+flags select their union:
+
+```sh
+./test.sh --physics --blocks
+./test.sh --level-rendering
+./test.sh --lobby --items
+./test.sh --level-editor
+```
+
+Use `./test.sh --help` to list every domain flag.
 
 Run the complete local verification gate (deterministic and protocol tests,
 HTML5 build, and required character parity sequences):

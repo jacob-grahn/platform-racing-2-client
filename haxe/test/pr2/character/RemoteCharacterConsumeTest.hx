@@ -16,6 +16,7 @@ class RemoteCharacterConsumeTest {
 
 	public static function main():Void {
 		testRegistersAndTearsDownTempCommands();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("RemoteCharacterConsumeTest")) return;
 		testConsumesPositionVarsAndExactPosition();
 		testCatchupClampAndBlockTouches();
 		testRemoteBlockTouchesActivateRealMapEffects();

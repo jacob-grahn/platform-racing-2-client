@@ -11,6 +11,7 @@ class LobbySocketLifecycleTest {
 
 	public static function main():Void {
 		testPingIntervalAndSend();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LobbySocketLifecycleTest")) return;
 		testReceivePingSyncsServerTime();
 		testCloseSendsFlashCloseAndClearsSessionState();
 		testTransportCloseAndErrorPopups();

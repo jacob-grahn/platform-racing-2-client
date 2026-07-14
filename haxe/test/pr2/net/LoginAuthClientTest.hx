@@ -5,6 +5,7 @@ class LoginAuthClientTest {
 
 	public static function main():Void {
 		testPayloadContainsFlashFields();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LoginAuthClientTest")) return;
 		testEncryptedFields();
 		testRememberedTokenField();
 		testParsesError();

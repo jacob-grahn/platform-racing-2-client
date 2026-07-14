@@ -14,6 +14,7 @@ class ObjectsCompatTest {
 
 	public static function main():Void {
 		testStampMappings();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ObjectsCompatTest")) return;
 		testBlockMappings();
 		testBackgroundAndTextMappings();
 		testUnknownCodeReturnsNull();

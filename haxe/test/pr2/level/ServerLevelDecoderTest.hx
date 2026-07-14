@@ -7,6 +7,7 @@ class ServerLevelDecoderTest {
 
 	public static function main():Void {
 		testM3RelativeWalk();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ServerLevelDecoderTest")) return;
 		testM3ArtBackgroundAndLayers();
 		testM2SegMultOne();
 		testM4Options();

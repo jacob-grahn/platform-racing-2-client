@@ -13,6 +13,7 @@ class LevelConfigTest {
 
 	public static function main():Void {
 		testDefaults();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LevelConfigTest")) return;
 		testItems();
 		testItemRuntimeSurface();
 		testBadHats();

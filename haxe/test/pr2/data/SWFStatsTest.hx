@@ -7,6 +7,7 @@ class SWFStatsTest {
 
 	public static function main():Void {
 		testAverageStartsAfterThirtySamples();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SWFStatsTest")) return;
 		testFrameRateDriftResetsBeforeFullWindow();
 		testFastThirtySampleAverageResetsFrameRate();
 		testNormalAverageDoesNotResetFrameRate();

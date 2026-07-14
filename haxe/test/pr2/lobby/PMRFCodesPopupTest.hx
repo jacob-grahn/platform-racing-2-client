@@ -11,6 +11,7 @@ class PMRFCodesPopupTest {
 
 	public static function main():Void {
 		testReferenceLinksUseHtmlNameMakerPayloads();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PMRFCodesPopupTest")) return;
 		testRemoveUnregistersLinkListener();
 		trace('PMRFCodesPopupTest passed $assertions assertions');
 	}

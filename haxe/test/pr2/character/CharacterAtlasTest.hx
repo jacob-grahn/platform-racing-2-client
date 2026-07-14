@@ -7,6 +7,7 @@ class CharacterAtlasTest {
 
 	public static function main():Void {
 		testParsesPartSetAtlas();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterAtlasTest")) return;
 		testLayeredChannelsCoverEveryExportedPart();
 		trace('CharacterAtlasTest passed $assertions assertions');
 	}

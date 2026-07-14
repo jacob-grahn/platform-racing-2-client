@@ -9,6 +9,7 @@ class SecureDataCompatTest {
 
 	public static function main():Void {
 		testNumberEntriesUseHiddenValuePlusKey();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SecureDataCompatTest")) return;
 		testBoolRoundTrip();
 		testEncryptedStringSaltRoundTrip();
 		testStaticSecureDataFacade();

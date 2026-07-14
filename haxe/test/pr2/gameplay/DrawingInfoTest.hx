@@ -8,6 +8,7 @@ class DrawingInfoTest {
 
 	public static function main():Void {
 		testPlayerDrawingRows();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("DrawingInfoTest")) return;
 		testFinishDrawingCommand();
 		testFinishTimesCommandAndRaceRows();
 		testObjectiveRowsAndKongStats();

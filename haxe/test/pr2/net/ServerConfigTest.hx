@@ -5,6 +5,7 @@ class ServerConfigTest {
 
 	public static function main():Void {
 		testDefaultsToProductionHost();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ServerConfigTest")) return;
 		testProxyHostBuildsSameOriginUrls();
 		testLocalOverrideUsesExplicitEnvValue();
 		testBlankHostDoesNotReplaceCurrentHost();

@@ -39,6 +39,7 @@ class CharacterLifecycleTest {
 	public static function main():Void {
 		Settings.disablePersistenceForTests();
 		testLocalAndRemoteLifecycle();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterLifecycleTest")) return;
 		testFocusLossClearsHeldGameplayInput();
 		testCountdownLocksLocalMovement();
 		testLocalJumpPlaysSound();

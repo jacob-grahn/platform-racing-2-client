@@ -7,6 +7,7 @@ class CampaignTestScreenTest {
 
 	public static function main():Void {
 		testParsesCampaignQueryValues();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CampaignTestScreenTest")) return;
 		testSelectsRequestedLevelFromCampaignPage();
 		testDebugTextHiddenByDefault();
 		testDebugChatCommandTogglesOverlay();

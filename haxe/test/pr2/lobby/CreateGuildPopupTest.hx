@@ -25,6 +25,7 @@ class CreateGuildPopupTest {
 		ServerConfig.setHost("http://example.test");
 
 		testCreateUpdatesAccount();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CreateGuildPopupTest")) return;
 		testEditLoadsDeletesAndPosts();
 		testModEditDoesNotUpdateAccount();
 		testTransferGate();

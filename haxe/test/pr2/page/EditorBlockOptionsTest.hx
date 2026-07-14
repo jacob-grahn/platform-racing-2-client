@@ -12,6 +12,7 @@ class EditorBlockOptionsTest {
 
 	public static function main():Void {
 		assertEquals(true, EditorBlockOptions.hasOptions(BlockType.Item), "item blocks expose options");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("EditorBlockOptionsTest")) return;
 		assertEquals(true, EditorBlockOptions.hasOptions(BlockType.InfiniteItem), "infinite item blocks expose options");
 		assertEquals(true, EditorBlockOptions.hasOptions(BlockType.Teleport), "teleport blocks expose options");
 		assertEquals(true, EditorBlockOptions.hasOptions(BlockType.Happy), "happy blocks expose options");

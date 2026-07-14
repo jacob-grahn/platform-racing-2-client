@@ -7,6 +7,7 @@ class MiniMapTest {
 
 	public static function main():Void {
 		testNumLimit();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("MiniMapTest")) return;
 		testRasterizeScale();
 		testFitScale();
 		testDotLabels();

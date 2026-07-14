@@ -11,6 +11,7 @@ class HtmlNameMakerTest {
 
 	public static function main():Void {
 		testGroupColors();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("HtmlNameMakerTest")) return;
 		testHtmlRendering();
 		testInviteAndDiscordRoutes();
 		testRemoveUnregistersEveryField();

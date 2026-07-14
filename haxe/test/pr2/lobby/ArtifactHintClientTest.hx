@@ -10,6 +10,7 @@ class ArtifactHintClientTest {
 
 	public static function main():Void {
 		testParsesCurrentAndScheduledHintData();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ArtifactHintClientTest")) return;
 		testMissingCurrentIsAllowed();
 		testBuildsFredMessages();
 		testLoadUsesLevelOfTheWeekUrl();

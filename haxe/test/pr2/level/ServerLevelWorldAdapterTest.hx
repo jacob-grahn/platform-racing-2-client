@@ -8,6 +8,7 @@ class ServerLevelWorldAdapterTest {
 
 	public static function main():Void {
 		testPreservesServerWorldTiles();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ServerLevelWorldAdapterTest")) return;
 		testPreservesNegativeWorldTiles();
 		testRotationUsesWorldOrigin();
 		testPreservesBlockOptions();

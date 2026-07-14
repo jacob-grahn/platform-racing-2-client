@@ -23,6 +23,7 @@ class GameCommandShellTest {
 		// parts, 4 secondary colors, group).
 		send(cm, "createLocalCharacter`7`6.5`0.3`13`100`200`300`400`1`2`3`4`11`12`13`14`g");
 		assertEquals(7, rec.localInit.tempId, "local tempId parsed");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("GameCommandShellTest")) return;
 		assertClose(6.5, rec.localInit.speed, "local speed parsed");
 		assertClose(0.3, rec.localInit.accel, "local accel parsed");
 		assertClose(13, rec.localInit.jump, "local jump parsed");

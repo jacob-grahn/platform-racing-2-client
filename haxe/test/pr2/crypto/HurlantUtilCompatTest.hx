@@ -9,6 +9,7 @@ class HurlantUtilCompatTest {
 
 	public static function main():Void {
 		testBase64Surface();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("HurlantUtilCompatTest")) return;
 		testHexSurface();
 		testMemorySurface();
 		trace('HurlantUtilCompatTest passed $assertions assertions');

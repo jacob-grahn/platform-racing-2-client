@@ -7,6 +7,7 @@ class MultiplayerRaceStageTest {
 
 	public static function main():Void {
 		testTwoPlayersStandingOnCrumble();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("MultiplayerRaceStageTest")) return;
 		testRepeatedDamageStopsAfterRemovalAndParticlesExpire();
 		trace('MultiplayerRaceStageTest passed $assertions assertions');
 	}

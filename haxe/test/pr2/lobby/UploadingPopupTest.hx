@@ -13,6 +13,7 @@ class UploadingPopupTest {
 
 	public static function main():Void {
 		testStringMapConstructor();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("UploadingPopupTest")) return;
 		testFlashUrlRequestConstructor();
 		testCallbackCanOwnMessages();
 		SuperLoader.resetHooks();

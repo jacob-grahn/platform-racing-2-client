@@ -9,6 +9,7 @@ class PixelEffect1Test {
 
 	public static function main():Void {
 		testSegmentGridCoversPartialEdges();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PixelEffect1Test")) return;
 		testDrawPixelConsumesSegmentsAndUsesConfiguredBackground();
 		testSegPixelSettlesIntoProductAndRemovesItself();
 		trace('PixelEffect1Test passed $assertions assertions');

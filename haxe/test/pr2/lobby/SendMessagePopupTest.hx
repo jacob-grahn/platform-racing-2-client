@@ -12,6 +12,7 @@ class SendMessagePopupTest {
 
 	public static function main():Void {
 		testEntryPoint();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SendMessagePopupTest")) return;
 		closeAll();
 		trace('SendMessagePopupTest passed $assertions assertions');
 	}

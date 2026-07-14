@@ -17,6 +17,7 @@ class ExternalLinkPopupTest {
 		var open = Popup.getOpen();
 		var popup = Std.downcast(open[open.length - 1], ExternalLinkPopup);
 		assertNotNull(popup, "external URL opens the authored warning popup");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ExternalLinkPopupTest")) return;
 		assertEquals("https://pr2hub.com/path?q=one%20two", LobbyArt.text(popup, "linkBox").text, "link is shown verbatim");
 		assertEquals("sentinel", LobbyPopups.lastRequest, "external URL route is no longer record-only");
 		assertEquals(0, navigated.length, "opening the popup does not navigate");

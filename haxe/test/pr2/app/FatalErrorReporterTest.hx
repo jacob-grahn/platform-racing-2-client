@@ -5,6 +5,7 @@ class FatalErrorReporterTest {
 
 	public static function main():Void {
 		testFormatEscapesMessageAndDebugLog();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("FatalErrorReporterTest")) return;
 		testReportPassesEscapedMessageToPopupFactory();
 		trace('FatalErrorReporterTest passed $assertions assertions');
 	}

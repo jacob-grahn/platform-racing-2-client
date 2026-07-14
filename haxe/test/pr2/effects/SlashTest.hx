@@ -11,6 +11,7 @@ class SlashTest {
 
 	public static function main():Void {
 		testRightSlashAnimationProbesSoundAndRemoval();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SlashTest")) return;
 		testLeftSlashShooterFilteringAndScale();
 		trace('SlashTest passed $assertions assertions');
 	}

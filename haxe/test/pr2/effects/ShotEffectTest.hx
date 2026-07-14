@@ -12,6 +12,7 @@ class ShotEffectTest {
 
 	public static function main():Void {
 		testMovementCollisionOrderingAndLife();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ShotEffectTest")) return;
 		testPlayerHitFilteringAndRecoil();
 		testInactiveBlocksAndFrameCleanup();
 		trace('ShotEffectTest passed $assertions assertions');

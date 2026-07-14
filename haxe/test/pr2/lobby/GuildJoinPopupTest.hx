@@ -31,6 +31,7 @@ class GuildJoinPopupTest {
 		var open = Popup.getOpen();
 		var popup = Std.downcast(open[open.length - 1], GuildJoinPopup);
 		assertNotNull(popup, "invite route opens GuildJoinPopup");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("GuildJoinPopupTest")) return;
 		assertEquals("invite:42", LobbyPopups.lastRequest, "invite route records request");
 		assertEquals(1, posts.length, "guild join posts once");
 		assertEquals(ServerConfig.guildJoinUrl(), posts[0].url, "guild join endpoint");

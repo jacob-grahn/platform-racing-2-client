@@ -5,6 +5,7 @@ class AccountCreationClientTest {
 
 	public static function main():Void {
 		testBuildsFlashCompatibleFields();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("AccountCreationClientTest")) return;
 		testParsesSuccess();
 		testParsesErrorMessage();
 		testParsesFlashBooleanValues();

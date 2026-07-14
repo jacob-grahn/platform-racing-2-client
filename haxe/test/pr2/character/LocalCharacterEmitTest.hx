@@ -13,6 +13,7 @@ class LocalCharacterEmitTest {
 
 	public static function main():Void {
 		testInitAndCadenceGatedPositionEmission();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LocalCharacterEmitTest")) return;
 		testFallbackCadenceWithoutRemotePlayers();
 		testTrackedVarAndEventEmission();
 		testHeartBlockGainEmitsLocalHeartProtocol();

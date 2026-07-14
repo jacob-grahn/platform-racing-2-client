@@ -5,6 +5,7 @@ class LobbySessionTest {
 
 	public static function main():Void {
 		testAccountStateDispatch();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LobbySessionTest")) return;
 		testGuildStateHelpers();
 		testRememberMeAccountGate();
 		LobbySession.clear();

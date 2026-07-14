@@ -9,6 +9,7 @@ class ItemMenuTest {
 
 	public static function main():Void {
 		testAllAndBlankParsing();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ItemMenuTest")) return;
 		testNumericAndNamedParsing();
 		trace('ItemMenuTest passed $assertions assertions');
 	}

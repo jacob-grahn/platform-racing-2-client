@@ -5,6 +5,7 @@ class ServerStatusClientTest {
 
 	public static function main():Void {
 		testParsesServerList();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ServerStatusClientTest")) return;
 		testFlashLabels();
 		testOrdersAndSelectsServers();
 		testBetaAndInvalidFiltering();

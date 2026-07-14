@@ -95,6 +95,7 @@ class LobbyServicesTest {
 
 	public static function main():Void {
 		testTabLayoutNoCompression();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LobbyServicesTest")) return;
 		testTabLayoutCompression();
 		testTabLayoutSingleTab();
 		testTabMemory();

@@ -11,6 +11,7 @@ class PageNavigationFocusTest {
 
 	public static function main():Void {
 		testLinkClickResetsFocus();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PageNavigationFocusTest")) return;
 		StageFocus.resetHooks();
 		trace('PageNavigationFocusTest passed $assertions assertions');
 	}

@@ -13,6 +13,7 @@ class RoguelikeModeTest {
 
 	public static function main():Void {
 		testInitialStateAndHeartCap();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("RoguelikeModeTest")) return;
 		testConfigurationBansEveryHat();
 		testNinthFinishWinsBeforeLastHeartDeath();
 		testDeathResetsProgressionResources();

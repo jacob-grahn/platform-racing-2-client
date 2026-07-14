@@ -15,6 +15,7 @@ class PrizePopupTest {
 
 	public static function main():Void {
 		testAOrAn();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PrizePopupTest")) return;
 		testWonPart();
 		testUniversalAndWinner();
 		testFeet();

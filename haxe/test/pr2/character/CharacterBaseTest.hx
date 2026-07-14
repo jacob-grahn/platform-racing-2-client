@@ -14,6 +14,7 @@ class CharacterBaseTest {
 
 	public static function main():Void {
 		testStateTransitions();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterBaseTest")) return;
 		testJumpSoundHook();
 		testHatStack();
 		testGetHighestHat();

@@ -8,6 +8,7 @@ class AudioUnlockGateTest {
 			attempts++;
 			return false;
 		}), "a rejected resume remains locked");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("AudioUnlockGateTest")) return;
 		assert(gate.attempt(function() {
 			attempts++;
 			return true;

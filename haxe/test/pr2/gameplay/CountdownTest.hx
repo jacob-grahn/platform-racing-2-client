@@ -8,6 +8,7 @@ class CountdownTest {
 
 	public static function main():Void {
 		testCountdownSequence();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CountdownTest")) return;
 		testCountdownSounds();
 		trace('CountdownTest passed $assertions assertions');
 	}

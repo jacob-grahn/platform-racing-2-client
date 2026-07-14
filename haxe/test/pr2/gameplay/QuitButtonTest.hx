@@ -19,6 +19,7 @@ class QuitButtonTest {
 
 	public static function main():Void {
 		testMouseQuitsImmediately();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("QuitButtonTest")) return;
 		testSpaceConfirmsWhileRacing();
 		testSpaceQuitsWhenDone();
 		testGlowControls();

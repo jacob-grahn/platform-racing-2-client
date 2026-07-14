@@ -5,6 +5,7 @@ class StatsDisplayTest {
 
 	public static function main():Void {
 		testStatsAndHoverContent();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("StatsDisplayTest")) return;
 		trace('StatsDisplayTest passed $assertions assertions');
 	}
 

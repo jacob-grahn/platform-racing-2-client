@@ -12,6 +12,7 @@ class FlattenSafetyGateTest {
 
 	public static function main():Void {
 		testPlainSubtreeIsSafe();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("FlattenSafetyGateTest")) return;
 		testLayerBlendModeIsSafe();
 		testColorBlendModeIsRisk();
 		testFilterIsRisk();

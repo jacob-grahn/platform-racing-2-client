@@ -11,6 +11,7 @@ class SpecialEventTest {
 
 	public static function main():Void {
 		testPermissions();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SpecialEventTest")) return;
 		testPlaceArtifactHotkey();
 		testArtifactPlacementCoordinates();
 		testCancelPrizeHotkey();

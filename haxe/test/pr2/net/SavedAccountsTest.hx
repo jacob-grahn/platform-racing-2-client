@@ -5,6 +5,7 @@ class SavedAccountsTest {
 
 	public static function main():Void {
 		testStoreIdMatchesFlashBaseUrl();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SavedAccountsTest")) return;
 		testLoadsFlashArrayShape();
 		testAddUpdatesTokenAndMovesAccountFirst();
 		testDeleteByNameAndTokenMode();

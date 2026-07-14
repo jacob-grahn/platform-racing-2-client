@@ -21,6 +21,7 @@ class ServerLevelRendererTest {
 
 	public static function main():Void {
 		testBlockAssetMapping();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ServerLevelRendererTest")) return;
 		testArtAssetMappings();
 		testDefaultArtStrokeThickness();
 		testArtEraseStrokeClearsRasterTiles();

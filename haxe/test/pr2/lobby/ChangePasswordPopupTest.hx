@@ -24,6 +24,7 @@ class ChangePasswordPopupTest {
 		LobbySession.userName = "Password Tester";
 
 		testValidation();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ChangePasswordPopupTest")) return;
 		testEncryptedUploadFromEnterKey();
 		testCancel();
 

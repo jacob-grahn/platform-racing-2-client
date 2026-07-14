@@ -12,6 +12,7 @@ class PhysicsEffectTest {
 
 	public static function main():Void {
 		testGravityLandingWallAndPlayerProbe();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PhysicsEffectTest")) return;
 		testRotatedCollisionAndInactiveOptIn();
 		testEnterFrameDriverAndRemovalCleanup();
 		trace('PhysicsEffectTest passed $assertions assertions');

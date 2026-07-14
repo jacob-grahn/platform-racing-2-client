@@ -8,6 +8,7 @@ class CourseTimerTest {
 
 	public static function main():Void {
 		testCountdownModeUsesServerClockAndAddTime();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CourseTimerTest")) return;
 		testRacingModeCountsUpAndAddTimeMovesStartTime();
 		testUrgencyPauseAndTimeoutBehavior();
 		trace('CourseTimerTest passed $assertions assertions');

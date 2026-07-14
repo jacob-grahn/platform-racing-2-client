@@ -21,6 +21,7 @@ class SetEmailPopupTest {
 		var savedUploadFactory = SetEmailPopup.uploadFactory;
 		ServerConfig.setHost("http://example.test");
 		testValidation();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SetEmailPopupTest")) return;
 		testEncryptedUploadFromEnterKey();
 		testCancel();
 		SetEmailPopup.uploadFactory = savedUploadFactory;

@@ -14,6 +14,7 @@ class PlaceArtifactTest {
 
 	public static function main():Void {
 		testInitialTimeSelection();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PlaceArtifactTest")) return;
 		testVariableMonthLengths();
 		testTextValidationAndSetTime();
 		testPlaceNowDisablesDateControls();

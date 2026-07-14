@@ -7,6 +7,7 @@ class LoginSocketProtocolTest {
 
 	public static function main():Void {
 		testBuildsLoginIdRequestFrame();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LoginSocketProtocolTest")) return;
 		testUsesServerTenSocketToken();
 		testSkipsSendNumberTwelve();
 		testParsesBufferedLoginId();

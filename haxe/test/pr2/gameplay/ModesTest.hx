@@ -5,6 +5,7 @@ class ModesTest {
 
 	public static function main():Void {
 		testConstants();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ModesTest")) return;
 		testFullNames();
 		trace('ModesTest passed $assertions assertions');
 	}

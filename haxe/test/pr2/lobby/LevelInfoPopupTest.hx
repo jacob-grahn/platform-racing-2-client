@@ -27,6 +27,7 @@ class LevelInfoPopupTest {
 
 	public static function main():Void {
 		testLinkRouteOpensAuthoredShell();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LevelInfoPopupTest")) return;
 		testLoadFailureFadesPopup();
 		testFlashDefaultsBeforeData();
 		testApplyReturnDataPopulatesAuthoredFields();

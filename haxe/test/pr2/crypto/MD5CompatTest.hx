@@ -10,6 +10,7 @@ class MD5CompatTest {
 
 	public static function main():Void {
 		testAdobeMd5Surface();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("MD5CompatTest")) return;
 		testHurlantMd5Surface();
 		testIntUtilEndianAndRotates();
 		trace('MD5CompatTest passed $assertions assertions');

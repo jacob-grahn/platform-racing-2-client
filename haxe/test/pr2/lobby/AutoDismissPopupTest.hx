@@ -10,6 +10,7 @@ class AutoDismissPopupTest {
 
 	public static function main():Void {
 		testHitTestDismissal();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("AutoDismissPopupTest")) return;
 		testCleanupIsIdempotent();
 		testPopupRemoveResetsFocus();
 		StageFocus.resetHooks();

@@ -7,6 +7,7 @@ class ScreenTest {
 
 	public static function main():Void {
 		testCampaignHarnessRequiresDebugFlag();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ScreenTest")) return;
 		testSiteModeMatchesFlashDomainRules();
 		testLoginPageAssetMatchesSiteMode();
 		trace('ScreenTest passed $assertions assertions');

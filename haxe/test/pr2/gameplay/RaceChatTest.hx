@@ -8,6 +8,7 @@ class RaceChatTest {
 
 	public static function main():Void {
 		testAuthoredInputAndSubmitCallback();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("RaceChatTest")) return;
 		testIncomingChatFormatting();
 		testMessageWindow();
 		trace('RaceChatTest passed $assertions assertions');

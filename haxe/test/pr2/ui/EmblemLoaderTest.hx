@@ -15,6 +15,7 @@ class EmblemLoaderTest {
 
 	public static function main():Void {
 		testLocalImageFitsUploadsAndAppliesFilename();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("EmblemLoaderTest")) return;
 		testUploadErrorFinishesWithoutChangingFilename();
 		testRemoveCleansUploadAndIgnoresLateCompletion();
 		SuperLoader.resetHooks();

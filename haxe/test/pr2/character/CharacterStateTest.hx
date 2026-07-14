@@ -5,6 +5,7 @@ class CharacterStateTest {
 
 	public static function main():Void {
 		testFromMotionPriorities();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterStateTest")) return;
 		testClipNames();
 		trace('CharacterStateTest passed $assertions assertions');
 	}

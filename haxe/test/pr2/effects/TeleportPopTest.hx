@@ -16,6 +16,7 @@ class TeleportPopTest {
 
 	public static function main():Void {
 		testConstructsAndSelfRemoves();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("TeleportPopTest")) return;
 		trace('TeleportPopTest passed $assertions assertions');
 	}
 

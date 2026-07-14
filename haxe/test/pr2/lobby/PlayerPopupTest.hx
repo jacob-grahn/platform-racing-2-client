@@ -40,6 +40,7 @@ class PlayerPopupTest {
 		var savedChatRoom = Memory.get("chatRoom");
 
 		testMemberRender();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PlayerPopupTest")) return;
 		testServerOwnerAndRankSupplement();
 		testGuildRenderingAndContextCleanup();
 		testDelayedSendPmHoverAndLevelContextCleanup();

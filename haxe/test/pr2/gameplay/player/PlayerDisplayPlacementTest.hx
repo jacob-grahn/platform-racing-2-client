@@ -8,6 +8,7 @@ class PlayerDisplayPlacementTest {
 
 	public static function main():Void {
 		testCrouchDoesNotSquashCharacterDisplay();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PlayerDisplayPlacementTest")) return;
 		testRotationUsesFeetPivot();
 		trace('PlayerDisplayPlacementTest passed $assertions assertions');
 	}

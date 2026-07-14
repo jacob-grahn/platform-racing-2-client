@@ -17,6 +17,7 @@ class CreditsPopupTest {
 		var music2 = DisplayUtil.findByName(popup, "musicPg2");
 
 		assertNotNull(art1, "hidden art page 1 is instantiated");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CreditsPopupTest")) return;
 		assertNotNull(art2, "hidden art page 2 is instantiated");
 		assertNotNull(music1, "hidden music page 1 is instantiated");
 		assertEquals(true, art1.visible, "art page 1 starts visible");

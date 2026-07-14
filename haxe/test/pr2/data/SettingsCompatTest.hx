@@ -7,6 +7,7 @@ class SettingsCompatTest {
 
 	public static function main():Void {
 		testStoreNameAndRawLoad();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SettingsCompatTest")) return;
 		testDefaultsPopulateSessionData();
 		testPartialControlsAndStatsPersist();
 		testNoUserOrBlockedCookiesDoNotThrow();

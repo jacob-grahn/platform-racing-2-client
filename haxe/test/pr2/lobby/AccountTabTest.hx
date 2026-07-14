@@ -29,6 +29,7 @@ class AccountTabTest {
 
 	public static function main():Void {
 		testCharacterGraphicScale();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("AccountTabTest")) return;
 		testCustomizePayload();
 		testGuildRenderingUsesLinkedClipAndEmblem();
 		testAccountSummaryValuesArePlainText();

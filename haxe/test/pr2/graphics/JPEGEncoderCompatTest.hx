@@ -10,6 +10,7 @@ class JPEGEncoderCompatTest {
 
 	public static function main():Void {
 		testQualityClampAndBitString();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("JPEGEncoderCompatTest")) return;
 		testEncodeProducesJpegMarkers();
 		testEncodeNonNativeUsesOptionalOutput();
 		testEncodeAsyncGuardAndOutput();

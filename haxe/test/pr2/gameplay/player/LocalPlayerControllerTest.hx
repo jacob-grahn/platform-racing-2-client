@@ -15,6 +15,7 @@ class LocalPlayerControllerTest {
 
 	public static function main():Void {
 		testStartBlockHasNoCollision();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LocalPlayerControllerTest")) return;
 		testSideCollisionDoesNotFinishRace();
 		testBumpingFinishBlockFinishesRaceOnce();
 		testJumpAndLandOnFlatFixture();

@@ -24,6 +24,7 @@ class DiscordVerificationPopupTest {
 		var open = Popup.getOpen();
 		var popup = Std.downcast(open[open.length - 1], DiscordVerificationPopup);
 		assertNotNull(popup, "discord verification route opens uploading popup");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("DiscordVerificationPopupTest")) return;
 		assertEquals("discordverify:abc123", LobbyPopups.lastRequest, "route records verification request");
 		assertEquals(1, posts.length, "verification posts once");
 		assertEquals(DiscordVerificationPopup.VERIFY_URL, posts[0].url, "verification endpoint");

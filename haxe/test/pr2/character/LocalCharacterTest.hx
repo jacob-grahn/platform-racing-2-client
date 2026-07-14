@@ -15,6 +15,7 @@ class LocalCharacterTest {
 
 	public static function main():Void {
 		testDelegatesPhysicsAndMirrorsCharacterState();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LocalCharacterTest")) return;
 		testPropellerHatSlowsFallWhenHoldingJump();
 		testCowboyHatBoostsStatsAndForcesAirborneWaterModeUntilRemoved();
 		testMoonHatReducesGravityUntilRemoved();

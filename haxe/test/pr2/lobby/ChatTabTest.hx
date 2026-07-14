@@ -14,6 +14,7 @@ class ChatTabTest {
 
 	public static function main():Void {
 		testChatRoomInfoPopupCommandLifecycle();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ChatTabTest")) return;
 		testChatTabInfoHoverLifecycle();
 		testArtifactHintCommandLifecycle();
 		trace('ChatTabTest passed $assertions assertions');

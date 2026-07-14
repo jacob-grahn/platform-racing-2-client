@@ -7,6 +7,7 @@ class EpicFlashTest {
 
 	public static function main():Void {
 		testLifecycleAndColorTick();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("EpicFlashTest")) return;
 		trace('EpicFlashTest passed $assertions assertions');
 	}
 

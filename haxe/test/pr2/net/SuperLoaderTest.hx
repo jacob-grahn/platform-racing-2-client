@@ -15,6 +15,7 @@ class SuperLoaderTest {
 
 	public static function main():Void {
 		testPrepareFields();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SuperLoaderTest")) return;
 		testAppendQueryFields();
 		testDecodeJsonMessagesAndErrors();
 		testDecodeUrlVariables();

@@ -10,6 +10,7 @@ class PR2EncryptorTest {
 
 	public static function main():Void {
 		testOpenSslFixture();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PR2EncryptorTest")) return;
 		testDecryptRoundTrip();
 		testAESPadCompatibility();
 		testEncryptorWrapper();

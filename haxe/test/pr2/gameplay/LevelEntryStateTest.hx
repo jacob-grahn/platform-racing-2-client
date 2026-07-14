@@ -20,6 +20,7 @@ class LevelEntryStateTest {
 
 	public static function main():Void {
 		testSelectionHandoff();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LevelEntryStateTest")) return;
 		testReadyEnablesSpectate();
 		testDownloadCorruptionError();
 		testEmptyPayloadError();

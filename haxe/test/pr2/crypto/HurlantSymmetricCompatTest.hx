@@ -11,6 +11,7 @@ class HurlantSymmetricCompatTest {
 
 	public static function main():Void {
 		testAesBlockVectors();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("HurlantSymmetricCompatTest")) return;
 		testCbcPkcs5WithForcedIV();
 		testCustomPaddingAndInterfaces();
 		testDecryptRequiresIVAndDispose();

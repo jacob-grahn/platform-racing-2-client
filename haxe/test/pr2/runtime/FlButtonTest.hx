@@ -16,6 +16,7 @@ class FlButtonTest {
 
 	public static function main():Void {
 		testDefaultsAndLabel();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("FlButtonTest")) return;
 		testEnabledTogglesInteractivity();
 		testDisabledAndEmphasizedAppearance();
 		testSkinSwapsWithMouseState();

@@ -7,6 +7,7 @@ class TimeCompatTest {
 
 	public static function main():Void {
 		testServerTimeOffset();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("TimeCompatTest")) return;
 		testDayCalculation();
 		trace('TimeCompatTest passed $assertions assertions');
 	}

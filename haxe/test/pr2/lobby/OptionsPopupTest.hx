@@ -30,6 +30,7 @@ class OptionsPopupTest {
 		Settings.useMemoryStoreForTests();
 		Settings.init("Options Tester");
 		testAccountButtonStacks();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("OptionsPopupTest")) return;
 		testAccountButtonsOpenAuthoredDialogs();
 		testGuildLeaveFlow();
 		testHoverPopups();

@@ -8,6 +8,7 @@ class DataCompatTest {
 
 	public static function main():Void {
 		testStringAndNumberHelpers();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("DataCompatTest")) return;
 		testParseLinks();
 		testGeometryAndRandomHelpers();
 		trace('DataCompatTest passed $assertions assertions');

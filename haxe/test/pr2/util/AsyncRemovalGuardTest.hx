@@ -5,6 +5,7 @@ class AsyncRemovalGuardTest {
 
 	public static function main():Void {
 		testWrapNoopsAfterRemove();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("AsyncRemovalGuardTest")) return;
 		testWatchRemovesTrackedResources();
 		trace('AsyncRemovalGuardTest passed $assertions assertions');
 	}

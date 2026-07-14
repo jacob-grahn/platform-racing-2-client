@@ -21,6 +21,7 @@ class LogoutPassPopupTest {
 		var savedUploadFactory = LogoutPassPopup.uploadFactory;
 		ServerConfig.setHost("http://example.test");
 		testValidationAndCancel();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LogoutPassPopupTest")) return;
 		testEncryptedUploadFromEnterKey();
 		testPasswordErrorDoesNotClearSession();
 		LogoutPassPopup.uploadFactory = savedUploadFactory;

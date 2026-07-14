@@ -7,6 +7,7 @@ class LevelDataClientTest {
 
 	public static function main():Void {
 		testParsesAndVerifiesHash();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("LevelDataClientTest")) return;
 		testAndInsideValueRoundTrips();
 		testHashMismatchReported();
 		testEditorLoadRejectsBadOrEmptyPayloads();

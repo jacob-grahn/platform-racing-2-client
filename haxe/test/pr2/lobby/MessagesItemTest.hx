@@ -15,6 +15,7 @@ class MessagesItemTest {
 	public static function main():Void {
 		Settings.disablePersistenceForTests();
 		testPrivateMessageBodyFormatting();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("MessagesItemTest")) return;
 		testMessageTextStaysInsidePmPane();
 		testFilterSettingAndTrustedHtml();
 		testMessageBodyLinksStayClickable();

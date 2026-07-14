@@ -13,6 +13,7 @@ class CharacterDisplayTest {
 
 	public static function main():Void {
 		testSuperJumpWobbleUsesCurrentFrame();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CharacterDisplayTest")) return;
 		testHeldWeaponFrameAppliesToCharacterStates();
 		testHeldItemUseAnimationsSurviveCharacterTicks();
 		testHeldMineUsesExportedBitmap();

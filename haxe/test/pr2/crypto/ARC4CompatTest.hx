@@ -9,6 +9,7 @@ class ARC4CompatTest {
 
 	public static function main():Void {
 		testStreamVectorAndInterfaces();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ARC4CompatTest")) return;
 		testMutableBlockEncryptDecrypt();
 		testDisposeWipesState();
 		trace('ARC4CompatTest passed $assertions assertions');

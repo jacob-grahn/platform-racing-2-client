@@ -22,6 +22,7 @@ class FlComponentsTest {
 
 	public static function main():Void {
 		testCheckBox();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("FlComponentsTest")) return;
 		testComboBoxModel();
 		testComboBoxInteraction();
 		testComboBoxCollectionString();

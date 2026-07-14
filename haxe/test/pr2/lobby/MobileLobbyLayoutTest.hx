@@ -7,6 +7,7 @@ class MobileLobbyLayoutTest {
 
 	public static function main():Void {
 		testNarrowPhone();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("MobileLobbyLayoutTest")) return;
 		testWidePhone();
 		testTablet();
 		trace('MobileLobbyLayoutTest passed $assertions assertions');

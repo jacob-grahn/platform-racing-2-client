@@ -9,6 +9,7 @@ class GuildNameTest {
 	public static function main():Void {
 		var savedFactory = GuildName.popupFactory;
 		testTextWidthEmblemAndCursor();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("GuildNameTest")) return;
 		testClickRoutingAndCleanup();
 		GuildName.popupFactory = savedFactory;
 		trace('GuildNameTest passed $assertions assertions');

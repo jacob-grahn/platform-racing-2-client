@@ -14,6 +14,7 @@ class SpectatePickerTest {
 
 	public static function main():Void {
 		testVisibilityAndSelection();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("SpectatePickerTest")) return;
 		trace('SpectatePickerTest passed $assertions assertions');
 	}
 

@@ -21,7 +21,7 @@ run_step() {
   exit "$status"
 }
 
-run_step deterministic haxe test/deterministic.hxml
+run_step deterministic env PR2_TEST_MODE=full PR2_TEST_GROUPS= haxe test/deterministic.hxml
 run_step protocol haxe test/protocol.hxml
 run_step html5-build haxelib run openfl build html5
 run_step browser-navigation \

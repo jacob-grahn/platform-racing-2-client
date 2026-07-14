@@ -8,6 +8,7 @@ class WorldLevelParserTest {
 
 	public static function main():Void {
 		testFlatFixture();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("WorldLevelParserTest")) return;
 		testValidationRejectsBadBlockTypes();
 		testValidationRejectsOutOfBoundsPositions();
 		trace('WorldLevelParserTest passed $assertions assertions');

@@ -16,6 +16,7 @@ class FinishedPageTest {
 
 	public static function main():Void {
 		testAwardsAndExpTotal();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("FinishedPageTest")) return;
 		testExpGainAnimation();
 		testExpGainClamp();
 		testRatingFromOffset();

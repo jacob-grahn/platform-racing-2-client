@@ -9,6 +9,7 @@ class StaticSubtreeAnalyzerTest {
 
 	public static function main():Void {
 		testLeafShapesAreStatic();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("StaticSubtreeAnalyzerTest")) return;
 		testMultiKeyframeLayerIsAnimated();
 		testHeldKeyframeAcrossFramesIsStatic();
 		testComponentInstanceIsAnimated();

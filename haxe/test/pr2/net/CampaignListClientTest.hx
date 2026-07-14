@@ -8,6 +8,7 @@ class CampaignListClientTest {
 
 	public static function main():Void {
 		testParsesCampaignListAndValidatesHash();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CampaignListClientTest")) return;
 		testRejectsMissingLevels();
 		trace('CampaignListClientTest passed $assertions assertions');
 	}

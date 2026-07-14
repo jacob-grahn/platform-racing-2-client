@@ -5,6 +5,7 @@ class ForgotPasswordClientTest {
 
 	public static function main():Void {
 		testBuildsFlashCompatibleFields();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ForgotPasswordClientTest")) return;
 		testParsesSuccessMessage();
 		testParsesServerError();
 		testRejectsFailedResponseWithoutError();

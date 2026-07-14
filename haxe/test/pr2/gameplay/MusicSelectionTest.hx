@@ -12,6 +12,7 @@ class MusicSelectionTest {
 	public static function main():Void {
 		Settings.disablePersistenceForTests();
 		testLevelSongSelection();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("MusicSelectionTest")) return;
 		testUserSongSwitching();
 		testStreamingEndpoint();
 		testArtifactSong();

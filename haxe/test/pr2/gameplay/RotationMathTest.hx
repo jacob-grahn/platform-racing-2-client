@@ -7,6 +7,7 @@ class RotationMathTest {
 
 	public static function main():Void {
 		assertPoint(12, -8, RotationMath.rotatePoint(12.9, -8.9, 0), "unrotated values truncate toward zero");
+		if (pr2.DeterministicTestMode.finishSmokeSuite("RotationMathTest")) return;
 		assertPoint(-8, -12, RotationMath.rotatePoint(12.9, -8.9, 90), "right-angle values truncate after rotation");
 		assertPoint(8, 12, RotationMath.rotatePoint(12.9, -8.9, -90), "negative right angle matches AS3");
 		assertPoint(-12, 8, RotationMath.rotatePoint(12.9, -8.9, 180), "half turn matches AS3");

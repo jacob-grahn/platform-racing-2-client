@@ -15,6 +15,7 @@ class CatCaptchaTest {
 
 	public static function main():Void {
 		testChallengeShowsTwoAnswers();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("CatCaptchaTest")) return;
 		testClickSubmitsAndFades();
 		restoreFactories();
 		trace('CatCaptchaTest passed $assertions assertions');

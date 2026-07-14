@@ -9,6 +9,7 @@ class RemovableTest {
 
 	public static function main():Void {
 		testBaseRemoveContract();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("RemovableTest")) return;
 		testMigratedClassRemoveContract();
 		trace('RemovableTest passed $assertions assertions');
 	}

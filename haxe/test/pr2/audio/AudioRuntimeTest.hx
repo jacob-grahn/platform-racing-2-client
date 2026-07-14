@@ -8,6 +8,7 @@ class AudioRuntimeTest {
 		var assertions = 0;
 		var center = SoundEffects.spatialMix(0, 0, 0, 0, 1, 0, 80);
 		assertNear(0.8, center.volume, "sound setting scales centered effect"); assertions++;
+		if (pr2.DeterministicTestMode.finishSmokeSuite("AudioRuntimeTest")) return;
 		assertNear(0, center.pan, "centered effect is not panned"); assertions++;
 		var edge = SoundEffects.spatialMix(350, 0, 0, 0, 1, 0, 100);
 		assertNear(0.5, edge.volume, "distance attenuates linearly"); assertions++;

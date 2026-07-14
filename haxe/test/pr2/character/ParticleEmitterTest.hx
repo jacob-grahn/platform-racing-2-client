@@ -11,6 +11,7 @@ class ParticleEmitterTest {
 
 	public static function main():Void {
 		testArrowEffectDriftsFadesAndRemoves();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ParticleEmitterTest")) return;
 		testBaseParticleEmitterCreatesStarEffect();
 		testArrowSparkleEmitterCreatesColoredArrowEffect();
 		testRainbowStarEmitterCreatesColoredRotatedStarEffect();

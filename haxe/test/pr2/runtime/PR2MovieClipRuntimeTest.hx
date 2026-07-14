@@ -26,6 +26,7 @@ class PR2MovieClipRuntimeTest {
 
 	public static function main():Void {
 		testTimelineControls();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("PR2MovieClipRuntimeTest")) return;
 		testAuthoredSymbolFailuresAreExplicit();
 		testFrameScriptHooks();
 		testNamedChildAccessAndElementProperties();

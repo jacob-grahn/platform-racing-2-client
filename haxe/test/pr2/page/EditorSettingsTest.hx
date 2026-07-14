@@ -46,6 +46,7 @@ class EditorSettingsTest {
 
 	public static function main():Void {
 		testSideBarCatalog();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("EditorSettingsTest")) return;
 		testDefaultSetters();
 		testSettingButtonValuesRefresh();
 		testVariablesAndLevelVars();

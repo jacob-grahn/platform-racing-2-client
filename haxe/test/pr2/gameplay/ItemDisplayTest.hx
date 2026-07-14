@@ -11,6 +11,7 @@ class ItemDisplayTest {
 
 	public static function main():Void {
 		testItemNames();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("ItemDisplayTest")) return;
 		testAuthoredDisplayState();
 		trace('ItemDisplayTest passed $assertions assertions');
 	}

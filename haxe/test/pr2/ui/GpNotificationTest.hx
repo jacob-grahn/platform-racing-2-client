@@ -11,6 +11,7 @@ class GpNotificationTest {
 
 	public static function main():Void {
 		testGpGainCommandMountsAuthoredNotification();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("GpNotificationTest")) return;
 		trace('GpNotificationTest passed $assertions assertions');
 	}
 

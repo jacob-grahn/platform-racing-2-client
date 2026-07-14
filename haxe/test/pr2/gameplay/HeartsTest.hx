@@ -5,6 +5,7 @@ class HeartsTest {
 
 	public static function main():Void {
 		testNumLimit();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("HeartsTest")) return;
 		testGrowAndShrink();
 		trace('HeartsTest passed $assertions assertions');
 	}

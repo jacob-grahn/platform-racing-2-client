@@ -39,6 +39,19 @@ class GuildPopupTest {
 		ServerConfig.setHost("http://example.test");
 
 		run("render non-member", testRenderNonMember);
+		if (pr2.DeterministicTestMode.isSmoke()) {
+			LobbySession.group = savedGroup;
+			LobbySession.guildId = savedGuildId;
+			LobbySession.guildName = savedGuildName;
+			LobbySession.guildOwner = savedGuildOwner;
+			LobbySession.isTrialMod = savedTrialMod;
+			GuildPopup.deleteFactory = savedDeleteFactory;
+			SuperLoader.resetHooks();
+			ServerConfig.resetHost();
+			closeAll();
+			pr2.DeterministicTestMode.finishSmokeSuite("GuildPopupTest");
+			return;
+		}
 		run("member entry and shift", testMemberEntryPointAndShiftToggle);
 		run("admin delete", testAdminDeleteClearsCurrentGuild);
 		run("async cleanup", testRemoveCancelsAsyncGuildInfoLoad);

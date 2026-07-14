@@ -8,6 +8,7 @@ class RandomCompatTest {
 
 	public static function main():Void {
 		testConstructorAndSeedSurface();
+		if (pr2.DeterministicTestMode.finishSmokeSuite("RandomCompatTest")) return;
 		testLazyInitAndNextBytes();
 		testAutoSeedAndDispose();
 		testDefaultArc4ToString();
